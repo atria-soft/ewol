@@ -121,7 +121,8 @@ MAKE_DEPENDENCE=Makefile
 ###############################################################################
 
 # tiny XML (extern OPEN Sources) :
-CXXFILES =		Main.cpp
+CXXFILES =		Main.cpp \
+				ewol.cpp
 
 
 ###############################################################################
