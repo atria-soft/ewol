@@ -53,25 +53,27 @@ DEBUG:=1
 ### Compilation Define                                                      ###
 ###############################################################################
 ifeq ("$(DEBUG)", "0")
-    DEFINE= -DEDN_DEBUG_LEVEL=1 -DNDEBUG -DVERSION_TAG_NAME="\"$(VERSION_TAG)-release\""
+    DEFINE= -DETK_DEBUG_LEVEL=1 -DNDEBUG -DETK_VERSION_TAG_NAME="\"$(VERSION_TAG)-release\""
 else
-    DEFINE= -DEDN_DEBUG_LEVEL=3 -DVERSION_TAG_NAME="\"$(VERSION_TAG)-debug\""
+    DEFINE= -DETK_DEBUG_LEVEL=3 -DETK_VERSION_TAG_NAME="\"$(VERSION_TAG)-debug\""
 endif
 DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
 X11FLAGS= -lX11 -lGL -lGLU -lXrandr
 
 ###############################################################################
-### Basic Cfags                                                             ###
+### Basic C flags                                                           ###
 ###############################################################################
 
-# basic GTK librairy
+# basic X11 librairy ==> show if we can une under lib ...
 CXXFLAGS=  $(X11FLAGS)
-# Linux thread system
-#CXXFLAGS+= -lpthread
-# Enable debug (cgdb edn)
-CXXFLAGS+= -g -O0
-#CXXFLAGS+= -O2
+
+ifeq ("$(DEBUG)", "0")
+	# Enable debug (cgdb ***)
+	CXXFLAGS+= -g -O0
+else
+	CXXFLAGS+= -O2
+endif
 # display all flags
 CXXFLAGS+= -Wall
 # ...
@@ -81,10 +83,9 @@ CXXFLAGS+= $(DEFINE)
 
 CFLAGS=    $(CXXFLAGS) -std=c99
 
-# basic GTK librairy
+# basic X11 librairy
 LDFLAGS=  $(X11FLAGS)
-# Linux thread system
-#LDFLAGS+= -lpthread
+
 # Dynamic connection of the CALLBACK of the GUI
 LDFLAGS+= -Wl,--export-dynamic
 
@@ -120,15 +121,30 @@ MAKE_DEPENDENCE=Makefile
 ### Files Listes                                                            ###
 ###############################################################################
 
-# tiny XML (extern OPEN Sources) :
-CXXFILES =		Main.cpp \
-				ewol.cpp
+# Ewol Tool Kit :
+CXXFILES =		etk/etkDebug.cpp \
+				etk/etkDebugInternal.cpp \
+				etk/etkMemory.cpp \
+				etk/etkString.cpp \
+				etk/etkFile.cpp \
+				etk/etkRegExp.cpp
+
+# Ewol Sources :
+CXXFILES +=		ewol.cpp \
+				ewolDebug.cpp \
+				ewolWidget.cpp
+
+
+# Ewol Test Software :
+CXXFILES +=		Main.cpp
+
 
 
 ###############################################################################
 ### Liste of folder where .h can be                                         ###
 ###############################################################################
 LISTE_MODULES = $(dir $(CXXFILES))
+$(info listeModule=$(LISTE_MODULES))
 INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) 
 
 ###############################################################################

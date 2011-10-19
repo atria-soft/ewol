@@ -22,15 +22,19 @@
  *******************************************************************************
  */
 
-#include "ewolWidget.h"
+#include <ewolWidget.h>
 
 
 ewol::Widget::Widget(void)
 {
-	m_origin = {0.0, 0.0};
-	m_minSize = {-1.0, -1.0};
-	m_size = {10.0, 10.0};
-	m_maxSize = {-1.0, -1.0};
+	m_origin.x = 0.0;
+	m_origin.y = 0.0;
+	m_minSize.x = -1.0;
+	m_minSize.y = -1.0;
+	m_size.x = 10.0;
+	m_size.y = 10.0;
+	m_maxSize.x = -1.0;
+	m_maxSize.y = -1.0;
 	m_expendX = false;
 	m_expendY = false;
 }
@@ -90,4 +94,8 @@ bool ewol::Widget::GenericDraw(void)
 {
 	return true;
 }
+
+
+//} // ???
+
 

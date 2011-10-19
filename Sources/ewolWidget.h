@@ -22,6 +22,9 @@
  *******************************************************************************
  */
 
+#include <etkTypes.h>
+#include <etkVectorType.h>
+#include <ewolDebug.h>
 
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
@@ -32,54 +35,32 @@ namespace ewol {
 			double x;
 			double y;
 		} coord;
-	
+	}
 	typedef enum {
-		EVENT_INPUT_TYPE_DOWN;
-		EVENT_INPUT_TYPE_DOUBLE;
-		EVENT_INPUT_TYPE_TRIPLE;
-		EVENT_INPUT_TYPE_MOVE;
-		EVENT_INPUT_TYPE_UP;
+		EVENT_INPUT_TYPE_DOWN,
+		EVENT_INPUT_TYPE_DOUBLE,
+		EVENT_INPUT_TYPE_TRIPLE,
+		EVENT_INPUT_TYPE_MOVE,
+		EVENT_INPUT_TYPE_UP,
 	} eventInputType_te;
 	
 	typedef enum {
-		EVENT_KB_TYPE_DOWN;
-		EVENT_KB_TYPE_UP;
+		EVENT_KB_TYPE_DOWN,
+		EVENT_KB_TYPE_UP,
 	} eventKbType_te;
 	
 	typedef enum {
-		EVENT_KB_MOVE_TYPE_LEFT;
-		EVENT_KB_MOVE_TYPE_RIGHT;
-		EVENT_KB_MOVE_TYPE_UP;
-		EVENT_KB_MOVE_TYPE_DOWN;
-		EVENT_KB_MOVE_TYPE_PAGE_UP;
-		EVENT_KB_MOVE_TYPE_PAGE_DOWN;
-		EVENT_KB_MOVE_TYPE_START;
-		EVENT_KB_MOVE_TYPE_END;
+		EVENT_KB_MOVE_TYPE_LEFT,
+		EVENT_KB_MOVE_TYPE_RIGHT,
+		EVENT_KB_MOVE_TYPE_UP,
+		EVENT_KB_MOVE_TYPE_DOWN,
+		EVENT_KB_MOVE_TYPE_PAGE_UP,
+		EVENT_KB_MOVE_TYPE_PAGE_DOWN,
+		EVENT_KB_MOVE_TYPE_START,
+		EVENT_KB_MOVE_TYPE_END,
 	} eventKbMoveType_te;
 	
-	#define UTF8_MAX_SIZE    (8)
-	/*
-	extern "C" {
-		typedef struct {
-			bool shift;
-			bool control;
-			bool alt;
-			bool pomme;
-			char UTF8_data[UTF8_MAX_SIZE];
-			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			int32_t widgetCall; //!< unique ID of the widget
-		} shortCut_ts;
-	}
-	extern "C" {
-		typedef struct {
-			coord origin; // widget specific
-			coord size;   // widget specific
-			uint32_t flags; // widget specific
-			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			int32_t widgetCall; //!< unique ID of the widget
-		} eventArea_ts;
-	}
-	*/
+	#define UTF8_MAX_SIZE          (8)
 	#define EWOL_EVENT_UNION       (0)
 	#define EWOL_EVENT_SHORTCUT    (1)
 	extern "C" {
@@ -88,20 +69,21 @@ namespace ewol {
 			int32_t widgetCall; //!< unique ID of the widget
 			int32_t mode; //!< EWOL_EVENT_UNION or EWOL_EVENT_SHORTCUT
 			union {
-				struct shortCut{
+				struct {
 					bool shift;
 					bool control;
 					bool alt;
 					bool pomme;
 					char UTF8_data[UTF8_MAX_SIZE];
-				};
-				struct Area{
+				} shortCut;
+				struct {
 					coord origin; // widget specific
 					coord size;   // widget specific
 					uint32_t flags; // widget specific
-				};
+				} area;
+			};
 		} event_ts;
-	}
+	};
 	
 	class Widget;
 	
@@ -111,7 +93,7 @@ namespace ewol {
 			virtual ~Widget(void);
 		private:
 			int32_t m_uniqueId;        //!< UniqueId to identify the widget unicly
-		public;
+		public:
 			int32_t GetUniqueId(void) { return m_uniqueId; };
 		
 		private:
@@ -134,12 +116,12 @@ namespace ewol {
 			void  SetMinSise(double x=-1, double y=-1) { m_minSize.x = x; m_minSize.y = y; };
 			void  SetMaxSise(double x=-1, double y=-1) { m_maxSize.x = x; m_maxSize.y = y; };
 			void  SetCurrentSise(double x=-1, double y=-1) { m_size.x = x; m_size.y = y; };
-		public
+		public:
 			void  SetOrigin(double x, double y) { m_origin.x=x; m_origin.y=y; };
 			virtual bool CalculateSize(double availlableX, double availlableY); // this generate the current size ...
-			coord GetMinSize(void) { return m_minSize };
-			coord GetMaxSize(void) { return m_maxSize };
-			coord GetCurrentSize(void) { return m_size };
+			coord GetMinSize(void) { return m_minSize; };
+			coord GetMaxSize(void) { return m_maxSize; };
+			coord GetCurrentSize(void) { return m_size; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area
@@ -184,7 +166,7 @@ namespace ewol {
 		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			estd::VectorType<event_ts> m_inputEvent;     //!< generic area and short-cut event
+			etk::VectorType<event_ts> m_inputEvent;     //!< generic area and short-cut event
 		public:
 			// external acces to set an input event on this widget.
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y); // call when input event arrive and call OnEventInput, if no event detected
@@ -232,9 +214,9 @@ namespace ewol {
 				} else {
 					return OnDraw();
 				}
-			}
-		
-	}
-};
+			};
+
+	}; // end of the class Widget declaration
+};// end of nameSpace
 
 #endif
