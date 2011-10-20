@@ -46,13 +46,13 @@
 #   define __uint8_t_defined
 	typedef unsigned char                   uint8_t;
 	typedef unsigned short int              uint16_t;
-	typedef unsigned long int               uint32_t;
+	typedef unsigned int                    uint32_t;
 	typedef unsigned long long int          uint64_t;
 #endif
 
-#define etk_min(elemA, elemB)					((elemA)<(elemB)) ? (elemA) : (elemB)
-#define etk_max(elemA, elemB)					((elemA)<(elemB)) ? (elemB) : (elemA)
-#define etk_average(minimim, elem, maximum)		((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem)
+#define etk_min(elemA, elemB)               ((elemA)<(elemB)) ? (elemA) : (elemB)
+#define etk_max(elemA, elemB)               ((elemA)<(elemB)) ? (elemB) : (elemA)
+#define etk_avg(minimim, elem, maximum)     ((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem)
 
 extern "C"
 {
@@ -60,9 +60,9 @@ extern "C"
 		double x;
 		double y;
 	};
-	typedef etkPointAndPosition		point_ts;
-	typedef etkPointAndPosition		position_ts;
-	typedef etkPointAndPosition		size_ts;
+	typedef etkPointAndPosition     point_ts;
+	typedef etkPointAndPosition     position_ts;
+	typedef etkPointAndPosition     size_ts;
 }
 
 

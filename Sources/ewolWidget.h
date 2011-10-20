@@ -22,12 +22,12 @@
  *******************************************************************************
  */
 
-#include <etkTypes.h>
-#include <etkVectorType.h>
-#include <ewolDebug.h>
-
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
+
+#include <etkTypes.h>
+#include <ewolDebug.h>
+#include <etkVectorType.h>
 
 namespace ewol {
 	extern "C" {
@@ -42,6 +42,8 @@ namespace ewol {
 		EVENT_INPUT_TYPE_TRIPLE,
 		EVENT_INPUT_TYPE_MOVE,
 		EVENT_INPUT_TYPE_UP,
+		EVENT_INPUT_TYPE_ENTER,
+		EVENT_INPUT_TYPE_LEAVE,
 	} eventInputType_te;
 	
 	typedef enum {

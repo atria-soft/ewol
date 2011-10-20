@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol.h
- * @brief Main include of ewol (header)
+ * @file ewolWindows.h
+ * @brief ewol window system (header)
  * @author Edouard DUPIN
- * @date 17/10/2011
+ * @date 20/10/2011
  * @par Project
  * ewol
  *
@@ -22,19 +22,34 @@
  *******************************************************************************
  */
 
-
-#ifndef __EWOL_H__
-#define __EWOL_H__
+#ifndef __EWOL_WINDOWS_H__
+#define __EWOL_WINDOWS_H__
 
 #include <etkTypes.h>
+#include <ewolDebug.h>
+#include <etkVectorType.h>
+#include <etkSingleton.h>
 #include <ewolWidget.h>
 
 namespace ewol {
-	void Init(int32_t argc, char *argv[]);
-	void Run(void);
-	void UnInit(void);
+	class Windows :public ewol::Widget
+	{
+		public:
+			Windows(void);
+			virtual ~Windows(void);
+		// internal event at ewol system : 
+		public:
+			void SysOnShow(void);
+			void SysOnHide(void);
+			void SysOnKill(void);
+		public:
+			virtual void OnShow(void) { };
+			virtual void OnHide(void) { };
+			virtual bool OnKill(void) { return true; };
+			virtual void OnReduce(void) { };
+			virtual void On(void) { };
+	};
 };
 
-
-
 #endif
+

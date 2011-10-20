@@ -22,17 +22,7 @@
  *******************************************************************************
  */
 
-/*
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
-#include <GL/glx.h>
-#include <X11/Xatom.h>
-#include <X11/extensions/Xrender.h>
-*/
+
 #include "ewol.h"
 
 // need to run xcompmgr to have transparency

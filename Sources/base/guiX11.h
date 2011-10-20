@@ -27,12 +27,15 @@
 #define __GUI_ABSTRACTION_H__
 
 #include <etkTypes.h>
+#include <ewolWindows.h>
 
 namespace guiAbstraction
 {
 	void Init(int32_t argc, char *argv[]);
 	void Run(void);
+	void Stop(void);
 	void UnInit(void);
+	void SetDisplayOnWindows(ewol::Windows & newOne);
 };
 
 

@@ -1,11 +1,11 @@
 /**
  *******************************************************************************
- * @file Main.cpp
- * @brief main fonction
+ * @file ewolWindows.cpp
+ * @brief ewol window system (sources)
  * @author Edouard DUPIN
- * @date 13/10/2011
+ * @date 20/10/2011
  * @par Project
- * ewol 
+ * ewol
  *
  * @par Copyright
  * Copyright 2011 Edouard DUPIN, all right reserved
@@ -23,26 +23,4 @@
  */
 
 
-#include "ewol.h"
 
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-/**
- * @brief main input fonction
- */
-int main(int argc, char *argv[])
-{
-	ewol::Init(argc, argv);
-	
-	// create the windows
-	//ewol::Windows myWindows(ewol::WINDOWS_MAIN);
-	
-	ewol::Run();
-	
-	ewol::UnInit();
-	
-	return 0;
-}

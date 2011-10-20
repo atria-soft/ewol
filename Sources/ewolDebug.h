@@ -22,8 +22,8 @@
  *******************************************************************************
  */
 
-#ifndef __ETK_DEBUG_INTERNAL_H__
-#define __ETK_DEBUG_INTERNAL_H__
+#ifndef __EWOL_DEBUG_H__
+#define __EWOL_DEBUG_H__
 
 #include <etkTypes.h>
 #include <etkDebug.h>
