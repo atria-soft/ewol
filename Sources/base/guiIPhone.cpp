@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol.h
- * @brief Main include of ewol (header)
+ * @file guiIPhone.cpp
+ * @brief Gui abstraction layer (Sources)
  * @author Edouard DUPIN
- * @date 17/10/2011
+ * @date 20/10/2011
  * @par Project
  * ewol
  *
@@ -23,17 +23,24 @@
  */
 
 
-#ifndef __EWOL_H__
-#define __EWOL_H__
+#include <ewolDebug.h>
+#include <guiIPhone.h>
 
-#include <etkTypes.h>
+#undef __class__
+#define __class__ "guiAbstraction"
 
-namespace ewol {
-	void Init(int32_t argc, char *argv[]);
-	void Run(void);
-	void UnInit(void);
-};
+void guiAbstraction::Init(int32_t argc, char *argv[])
+{
+	EWOL_INFO("INIT for IPhone environement");
+}
 
+void guiAbstraction::Run(void)
+{
+	EWOL_INFO("Start Running");
+	EWOL_INFO("Stop Running");
+}
 
-
-#endif
+void guiAbstraction::UnInit(void)
+{
+	EWOL_INFO("UN-INIT for IPhone environement");
+}

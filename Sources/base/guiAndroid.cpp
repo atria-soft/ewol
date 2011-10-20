@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol.h
- * @brief Main include of ewol (header)
+ * @file guiAndroid.cpp
+ * @brief Gui abstraction layer (Sources)
  * @author Edouard DUPIN
- * @date 17/10/2011
+ * @date 20/10/2011
  * @par Project
  * ewol
  *
@@ -23,17 +23,26 @@
  */
 
 
-#ifndef __EWOL_H__
-#define __EWOL_H__
-
-#include <etkTypes.h>
-
-namespace ewol {
-	void Init(int32_t argc, char *argv[]);
-	void Run(void);
-	void UnInit(void);
-};
 
 
+#include <ewolDebug.h>
+#include <guiAndroid.h>
 
-#endif
+#undef __class__
+#define __class__ "guiAbstraction"
+
+void guiAbstraction::Init(int32_t argc, char *argv[])
+{
+	EWOL_INFO("INIT for Android environement");
+}
+
+void guiAbstraction::Run(void)
+{
+	EWOL_INFO("Start Running");
+	EWOL_INFO("Stop Running");
+}
+
+void guiAbstraction::UnInit(void)
+{
+	EWOL_INFO("UN-INIT for Android environement");
+}

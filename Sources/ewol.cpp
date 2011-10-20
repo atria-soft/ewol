@@ -22,23 +22,21 @@
  *******************************************************************************
  */
 
-
+/*
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
-#include <math.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/Xrender.h>
-
+*/
 #include "ewol.h"
 
 // need to run xcompmgr to have transparency
-
+#if 0
 static Atom del_atom;
 static Display *Xdisplay;
 static GLXFBConfig fbconfig;
@@ -243,16 +241,33 @@ static void Draw(void)
 	/* Swapbuffers */
 	glXSwapBuffers(Xdisplay, GLXWindowHandle);
 }
+#endif
+
+
+#if __PLATFORM__ == X11
+	#include "guiX11.h"
+#elif __PLATFORM__ == DoubleBuffer
+	#include "guiDoubleBuffer.h"
+#elif __PLATFORM__ == Android
+	#include "guiAndroid.h"
+#elif __PLATFORM__ == IPhone
+	#include "guiIPhone.h"
+#else
+	#error you need to specify a platform ...
+#endif
+
 
 void ewol::Init(int argc, char *argv[])
 {
-	createX11Window();
-	
-	createTheRenderContext();
+	guiAbstraction::Init(argc, argv);
+	//createX11Window();
+	//createTheRenderContext();
 }
 
 void ewol::Run(void)
 {
+	guiAbstraction::Run();
+/*
 	// main cycle
 	while(1) {
 		XEvent event;
@@ -279,11 +294,12 @@ void ewol::Run(void)
 		Draw();
 		usleep( 100000 );
 	}
+*/
 }
 
 void ewol::UnInit(void)
 {
-	
+	guiAbstraction::UnInit();
 }
 
 

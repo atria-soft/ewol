@@ -41,6 +41,29 @@ VERSION_BUILD_TIME=$(shell date)
 #$(info $(VERSION_BUILD_TIME))
 
 ###############################################################################
+### Platform specificity :                                                  ###
+###############################################################################
+SUPPORTED_PLATFORM=X11 DoubleBuffer IPhone Android
+DEFAULT_PLATFORM=X11
+
+# default platform can be overridden
+PLATFORM?=$(DEFAULT_PLATFORM)
+
+ifeq ($(PLATFORM), X11)
+    CXXFILES += base/guiX11.cpp
+else ifeq ($(PLATFORM), DoubleBuffer)
+    CXXFILES += base/guiDoubleBuffer.cpp
+else ifeq ($(PLATFORM), IPhone)
+    CXXFILES += base/guiIPhone.cpp
+else ifeq ($(PLATFORM), Android)
+    CXXFILES += base/guiAndroid.cpp
+else
+    $(error you must specify a corect platform : make PLATFORM=$(SUPPORTED_PLATFORM))
+endif
+
+$(info Build for $(PLATFORM))
+
+###############################################################################
 ### Compilateur base system                                                 ###
 ###############################################################################
 CXX=g++
@@ -53,9 +76,14 @@ DEBUG:=1
 ### Compilation Define                                                      ###
 ###############################################################################
 ifeq ("$(DEBUG)", "0")
-    DEFINE= -DETK_DEBUG_LEVEL=1 -DNDEBUG -DETK_VERSION_TAG_NAME="\"$(VERSION_TAG)-release\""
+    DEFINE = -DETK_DEBUG_LEVEL=1
+    DEFINE+= -DEWOL_DEBUG_LEVEL=1
+    DEFINE+= -DNDEBUG
+    DEFINE+= -DEWOL_VERSION_TAG_NAME="\"$(VERSION_TAG)-release\""
 else
-    DEFINE= -DETK_DEBUG_LEVEL=3 -DETK_VERSION_TAG_NAME="\"$(VERSION_TAG)-debug\""
+    DEFINE = -DETK_DEBUG_LEVEL=3
+    DEFINE+= -DEWOL_DEBUG_LEVEL=3
+    DEFINE+= -DEWOL_VERSION_TAG_NAME="\"$(VERSION_TAG)-debug\""
 endif
 DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
@@ -66,7 +94,7 @@ X11FLAGS= -lX11 -lGL -lGLU -lXrandr
 ###############################################################################
 
 # basic X11 librairy ==> show if we can une under lib ...
-CXXFLAGS=  $(X11FLAGS)
+CXXFLAGS=  $(X11FLAGS) -D__PLATFORM__=$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
 	# Enable debug (cgdb ***)
@@ -100,7 +128,7 @@ PROG_NAME=ewol
 FILE_DIRECTORY=Sources
 OUTPUT_NAME_RELEASE=$(PROG_NAME)_release
 OUTPUT_NAME_DEBUG=$(PROG_NAME)_debug
-OBJECT_DIR=Object
+OBJECT_DIR=Object_$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
     OBJECT_DIRECTORY=$(OBJECT_DIR)/release
@@ -122,7 +150,7 @@ MAKE_DEPENDENCE=Makefile
 ###############################################################################
 
 # Ewol Tool Kit :
-CXXFILES =		etk/etkDebug.cpp \
+CXXFILES +=		etk/etkDebug.cpp \
 				etk/etkDebugInternal.cpp \
 				etk/etkMemory.cpp \
 				etk/etkString.cpp \

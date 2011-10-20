@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol.h
- * @brief Main include of ewol (header)
+ * @file guiX11.h
+ * @brief Gui abstraction layer (header)
  * @author Edouard DUPIN
- * @date 17/10/2011
+ * @date 20/10/2011
  * @par Project
  * ewol
  *
@@ -23,12 +23,13 @@
  */
 
 
-#ifndef __EWOL_H__
-#define __EWOL_H__
+#ifndef __GUI_ABSTRACTION_H__
+#define __GUI_ABSTRACTION_H__
 
 #include <etkTypes.h>
 
-namespace ewol {
+namespace guiAbstraction
+{
 	void Init(int32_t argc, char *argv[]);
 	void Run(void);
 	void UnInit(void);

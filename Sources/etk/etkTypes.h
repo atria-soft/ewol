@@ -33,6 +33,7 @@
 #include <string.h>
 #include <assert.h>
 
+
 #ifndef __int8_t_defined
 #   define __int8_t_defined
     typedef   signed char                    int8_t;
@@ -41,11 +42,13 @@
     typedef   signed long long int           int64_t;
 #endif
 
-typedef unsigned char                   uint8_t;
-typedef unsigned short int              uint16_t;
-typedef unsigned long int               uint32_t;
-typedef unsigned long long int          uint64_t;
-
+#ifndef __uint8_t_defined
+#   define __uint8_t_defined
+	typedef unsigned char                   uint8_t;
+	typedef unsigned short int              uint16_t;
+	typedef unsigned long int               uint32_t;
+	typedef unsigned long long int          uint64_t;
+#endif
 
 #define etk_min(elemA, elemB)					((elemA)<(elemB)) ? (elemA) : (elemB)
 #define etk_max(elemA, elemB)					((elemA)<(elemB)) ? (elemB) : (elemA)
