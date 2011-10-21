@@ -35,7 +35,7 @@ namespace guiAbstraction
 	void Run(void);
 	void Stop(void);
 	void UnInit(void);
-	void SetDisplayOnWindows(ewol::Windows & newOne);
+	void SetDisplayOnWindows(ewol::Windows * newOne);
 };
 
 

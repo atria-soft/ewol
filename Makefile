@@ -43,7 +43,7 @@ VERSION_BUILD_TIME=$(shell date)
 ###############################################################################
 ### Platform specificity :                                                  ###
 ###############################################################################
-SUPPORTED_PLATFORM=X11 DoubleBuffer IPhone Android
+SUPPORTED_PLATFORM=X11 DoubleBuffer IPhone IPad Android AndroidTablet
 DEFAULT_PLATFORM=X11
 
 # default platform can be overridden
@@ -55,8 +55,12 @@ else ifeq ($(PLATFORM), DoubleBuffer)
     CXXFILES += base/guiDoubleBuffer.cpp
 else ifeq ($(PLATFORM), IPhone)
     CXXFILES += base/guiIPhone.cpp
+else ifeq ($(PLATFORM), IPad)
+    CXXFILES += base/guiIPad.cpp
 else ifeq ($(PLATFORM), Android)
     CXXFILES += base/guiAndroid.cpp
+else ifeq ($(PLATFORM), AndroidTablet)
+    CXXFILES += base/guiAndroidTablet.cpp
 else
     $(error you must specify a corect platform : make PLATFORM=$(SUPPORTED_PLATFORM))
 endif
@@ -160,7 +164,8 @@ CXXFILES +=		etk/etkDebug.cpp \
 # Ewol Sources :
 CXXFILES +=		ewol.cpp \
 				ewolDebug.cpp \
-				ewolWidget.cpp
+				ewolWidget.cpp \
+				ewolWindows.cpp
 
 
 # Ewol Test Software :

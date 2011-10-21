@@ -27,12 +27,16 @@
 #define __EWOL_H__
 
 #include <etkTypes.h>
+#include <etkString.h>
 #include <ewolWidget.h>
+#include <ewolWindows.h>
 
 namespace ewol {
 	void Init(int32_t argc, char *argv[]);
 	void Run(void);
+	void Stop(void);
 	void UnInit(void);
+	void DisplayWindows(ewol::Windows * windows);
 };
 
 

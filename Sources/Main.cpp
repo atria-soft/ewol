@@ -23,26 +23,49 @@
  */
 
 
-#include "ewol.h"
+#include <ewol.h>
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
+// need to run xcompmgr to have transparency
+
+class Plop :public ewol::Windows
+{
+	public:
+		Plop(void)
+		{
+			
+		};
+		
+		~Plop(void)
+		{
+			
+		};
+};
+
 /**
  * @brief main input fonction
  */
 int main(int argc, char *argv[])
 {
+	Plop * myWindowsExample = new Plop();
+	
 	ewol::Init(argc, argv);
 	
-	// create the windows
-	//ewol::Windows myWindows(ewol::WINDOWS_MAIN);
+	// create the specific windows
+	ewol::DisplayWindows(myWindowsExample);
 	
 	ewol::Run();
 	
+	ewol::DisplayWindows(NULL);
+	
+	delete(myWindowsExample);
+	
 	ewol::UnInit();
+	
 	
 	return 0;
 }

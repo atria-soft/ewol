@@ -35,19 +35,23 @@ namespace ewol {
 	class Windows :public ewol::Widget
 	{
 		public:
-			Windows(void);
-			virtual ~Windows(void);
+			Windows(void) {};
+			virtual ~Windows(void) {};
 		// internal event at ewol system : 
 		public:
-			void SysOnShow(void);
-			void SysOnHide(void);
-			void SysOnKill(void);
+			void SysDraw(void);
+			void SysOnShow(void) {};
+			void SysOnHide(void) {};
+			void SysOnKill(void) {};
+			void SysOnExpose(void) {};
 		public:
 			virtual void OnShow(void) { };
 			virtual void OnHide(void) { };
 			virtual bool OnKill(void) { return true; };
 			virtual void OnReduce(void) { };
 			virtual void On(void) { };
+		// from Widget management : 
+			virtual bool CalculateSize(double availlableX, double availlableY);
 	};
 };
 
