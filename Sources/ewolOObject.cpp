@@ -46,6 +46,7 @@ void ewol::OObject2DColored::Draw(void)
 	glColorPointer(4, GL_FLOAT, 0, &m_coordColor[0] );
 	// Render : draw all of the triangles at once
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+	//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("Draw ..." << m_coord.Size()/3 << " triangle(s)");
 
 	// Disable Pointers
