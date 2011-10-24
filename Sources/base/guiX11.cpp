@@ -39,238 +39,18 @@
 
 //#define TEST_MODE_1
 
-/*
-bool guiAbstraction(Display *d, XEvent *e, char *arg)
-{
-	return (e->type == MapNotify) && (e->xmap.window == *(Window*)arg);
-}
-*/
-
 namespace guiAbstraction {
-#ifdef TEST_MODE_1
 
-	#undef __class__
-	#define __class__ "guiAbstraction::X11display"
-	class X11display
-	{
-		public:
-			X11display( etk::String name ) {
-				m_display = XOpenDisplay( name.c_str() );
-				if(NULL == m_display) {
-					EWOL_CRITICAL("Could not open display named='" << name << "'.");
-				} else {
-					EWOL_INFO("Display opened named='" << name << "'.");
-				}
-			}
-			~X11display() {
-				if( NULL != m_display ) {
-					XCloseDisplay ( m_display );
-					m_display = 0;
-				}
-			}
-			Display * GetDisplay(void)
-			{
-				return m_display;
-			}
-		private:
-			Display* m_display;
-	};
-
-	#undef __class__
-	#define __class__ "guiAbstraction::X11eventMng"
-	class X11eventMng
-	{
-		private:
-			ewol::Windows* m_uniqueWindows;
-			Display * m_display;
-			bool m_run;
-		public:
-			X11eventMng(X11display& d) : m_run(true), m_display(d.GetDisplay() )
-			{
-				m_uniqueWindows = NULL;
-			}
-			
-			~X11eventMng()
-			{
-				
-			}
-			
-			void Setwindow(ewol::Windows* newWindows)
-			{
-				m_uniqueWindows = newWindows;
-			}
-			
-			void Run()
-			{
-				m_run = true;
-				XEvent event;
-				while (m_run) {
-					while (XPending(m_display)) {
-						//...
-						// draw the current windows in every case ... 
-						m_uniqueWindows->SysDraw();
-						// For test, otherwithe the display leach all the CPU
-						usleep( 100000 );
-					}//end if m_uniqueWindows
-				}
-			}
-			
-			void Stop()
-			{
-				m_run = false;
-			}
-			
-			Display * GetDisplay(void)
-			{
-				return m_display;
-			}
-		
-	};
-
-	const int event_mask =   ExposureMask
-	                       | ButtonPressMask
-	                       | ButtonReleaseMask
-	                       | EnterWindowMask
-	                       | LeaveWindowMask
-	                       | PointerMotionMask
-	                       | FocusChangeMask
-	                       | KeyPressMask
-	                       | KeyReleaseMask
-	                       | SubstructureNotifyMask
-	                       | StructureNotifyMask
-	                       | SubstructureRedirectMask;
-	
-
-	#undef __class__
-	#define __class__ "guiAbstraction::X11Windows"
-	class X11Windows
-	{
-		private:
-			Display * m_display;
-			Window m_window;
-			X11eventMng& m_event_dispatcher;
-			Atom m_atom[1];
-			
-			size_ts      m_size;
-			position_ts  m_position;
-		private:
-			// Not copyable
-			X11Windows(const X11Windows&);
-			void operator=(X11Windows&);
-		public:
-			X11Windows(X11eventMng& e)
-			    : m_display(e.GetDisplay()),
-			      m_event_dispatcher(e)
-			{
-				m_window = 0;
-				m_atom[0] = 0;
-				if(!m_window) {
-					int Xscreen = DefaultScreen((void*)m_display);
-					Window Xroot = RootWindow((void*)m_display, Xscreen);
-					//RootWindow((void*)m_display,0)
-					
-					m_window = XCreateSimpleWindow(m_display,
-					                               Xroot,
-					                               20, // origin X
-					                               20, // origin Y
-					                               300, // Width
-					                               200, //Height
-					                               0,
-					                               WhitePixel((void*)m_display,0),
-					                               WhitePixel((void*)m_display,0));
-					//set_background ( m_background );
-					if(0==m_window) {
-						EWOL_CRITICAL("Could not create the basic window");
-					}
-				}
-				//m_event_dispatcher.Setwindow(this);
-				Show();
-			}
-			
-			~X11Windows(void)
-			{
-				Hide();
-				if(m_window) {
-					XDestroyWindow(m_display, m_window);
-					m_window = 0;
-				}
-				m_event_dispatcher.Setwindow(NULL);
-			}
-		private:
-			//
-			// From window_base:
-			//
-			virtual void Show(void)
-			{
-				XSelectInput(m_display, m_window, guiAbstraction::event_mask);
-				XMapWindow(m_display, m_window);
-				XFlush(m_display);
-			}
-			
-			virtual void Hide(void)
-			{
-				XUnmapWindow(m_display, m_window);
-				XFlush(m_display);
-			}
-			
-			/*
-			
-			virtual void set_background(color& c)
-			{
-				// hold a ref to the alloc'ed color
-				m_background.set(c);
-				XSetWindowBackground(m_display, m_window, c.pixel());
-				refresh();
-			}
-			
-			virtual void set_focus(void)
-			{
-				XSetInputFocus(m_display, id(), RevertToParent, CurrentTime );
-				refresh();
-			}
-			virtual void refresh(void)
-			{
-				XClearWindow(m_display, m_window);
-				XFlush(m_display);
-				on_expose();
-			}
-			
-			virtual rectangle get_rect(void)
-			{
-				Window root;
-				int x = 0, y = 0;
-				unsigned int width = 0, height = 0, border_width = 0, depth = 0;
-				XGetGeometry(m_display,
-				             m_window,
-				             &root,
-				             &x,
-				             &y,
-				             &width,
-				             &height,
-				             &border_width,
-				             &depth);
-				return rectangle(point(x,y), width, height );
-			}
-			*/
-			virtual long Id(void)
-			{
-				return m_window;
-			}
-			
-			
-			Display * GetDisplay(void)
-			{
-				return m_display;
-			}
-			
-			virtual X11eventMng& get_event_dispatcher(void)
-			{
-				return m_event_dispatcher;
-			}
-			
-	};
-#else
-
+	extern "C" {
+		typedef struct Hints
+		{
+			unsigned long   flags;
+			unsigned long   functions;
+			unsigned long   decorations;
+			long            inputMode;
+			unsigned long   status;
+		} Hints;
+	}
 	class X11systemInterface
 	{
 		private:
@@ -285,13 +65,12 @@ namespace guiAbstraction {
 			
 			bool CreateX11Context(void)
 			{
-				XEvent event;
 				int x,y, attr_mask;
 				XSizeHints hints;
 				XWMHints *StartupState;
 				XTextProperty textprop;
 				XSetWindowAttributes attr;
-				static char *title = (char*)"FTB's little OpenGL example";
+				static char *title = (char*)"APPLICATION Title ... (todo)";
 				
 				// Connect to the X server
 				m_display = XOpenDisplay(NULL);
@@ -316,7 +95,7 @@ namespace guiAbstraction {
 					GLX_DEPTH_SIZE, 1,
 					None
 				};
-				XVisualInfo *visual;
+				XVisualInfo *visual = NULL;
 				GLXFBConfig *fbconfigs = glXChooseFBConfig(m_display, Xscreen, VisualData, &numfbconfigs);
 				for(int i = 0; i<numfbconfigs; i++) {
 					visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
@@ -341,6 +120,7 @@ namespace guiAbstraction {
 				
 				attr.border_pixel = 0;
 				attr.event_mask =   StructureNotifyMask
+				                  | SubstructureNotifyMask
 				                  | EnterWindowMask
 				                  | LeaveWindowMask
 				                  | ExposureMask
@@ -348,7 +128,10 @@ namespace guiAbstraction {
 				                  | ButtonReleaseMask
 				                  | OwnerGrabButtonMask
 				                  | KeyPressMask
-				                  | KeyReleaseMask;
+				                  | KeyReleaseMask
+				                  | PointerMotionMask
+				                  | FocusChangeMask
+				                  | SubstructureRedirectMask;
 				
 				// set no background at the gui
 				attr.background_pixmap = None;
@@ -408,6 +191,24 @@ namespace guiAbstraction {
 				if ((del_atom = XInternAtom(m_display, "WM_DELETE_WINDOW", 0)) != None) {
 					XSetWMProtocols(m_display, WindowHandle, &del_atom, 1);
 				}
+				
+				//code to remove decoration
+				/*
+				{
+					
+					Hints hints;
+					Atom property;
+					hints.flags = 2;// Specify that we're changing the window decorations.
+					hints.decorations = 0;// 0 (false) means that window decorations should go bye-bye
+					property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
+					if (0 != property) {
+						XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+						XMapWindow(m_display, WindowHandle);
+					} else {
+						EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
+					}
+				}
+				*/
 				return true;
 			}
 			
@@ -439,7 +240,7 @@ namespace guiAbstraction {
 			
 			void Draw(void)
 			{
-				EWOL_DEBUG("redraw (" << width << "," << height << ")");
+				//EWOL_DEBUG("redraw (" << width << "," << height << ")");
 				if(NULL == m_uniqueWindows) {
 					//EWOL_DEBUG("Has No Windows set...");
 					
@@ -497,8 +298,7 @@ namespace guiAbstraction {
 				// main cycle
 				while(true == m_run) {
 					XEvent event;
-					XConfigureEvent *xc;
-					// main X boucle : 
+					// main X boucle :
 					while (XPending(m_display)) {
 						XNextEvent(m_display, &event);
 						
@@ -507,7 +307,7 @@ namespace guiAbstraction {
 							case ClientMessage:
 								{
 									Atom atom = XInternAtom(m_display, "WM_DELETE_WINDOW", false);
-									if(atom == event.xclient.data.l[0]) {
+									if((int64_t)atom == (int64_t)event.xclient.data.l[0]) {
 										if (NULL != m_uniqueWindows) {
 											m_uniqueWindows->SysOnKill();
 										}
@@ -527,13 +327,15 @@ namespace guiAbstraction {
 							switch (event.type)
 							{
 								case ConfigureNotify:
-									EWOL_DEBUG("Change Windows Size : (" << event.xconfigure.width << "," << event.xconfigure.height << ")");
+									EWOL_DEBUG("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
 									m_uniqueWindows->CalculateSize((double)event.xconfigure.width, (double)event.xconfigure.height);
 									break;
 								case Expose:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"Expose\"");
 									m_uniqueWindows->SysOnExpose();
 									break;
 								case ButtonPress:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 									if ( event.xbutton.button & Button2 ) {
 										m_uniqueWindows->GenEventInput(2, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
 									} else if (event.xbutton.button & Button1) {
@@ -541,6 +343,7 @@ namespace guiAbstraction {
 									}
 									break;
 								case ButtonRelease:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 									if(event.xbutton.button & Button2) {
 										m_uniqueWindows->GenEventInput(2, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
 									} else if (event.xbutton.button & Button1) {
@@ -548,22 +351,28 @@ namespace guiAbstraction {
 									}
 									break;
 								case EnterNotify:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case MotionNotify:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (double)event.xmotion.x, (double)event.xmotion.y);
 									break;
 								case LeaveNotify:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case FocusIn:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusIn\"");
 									m_uniqueWindows->SetFocus();
 									break;
 								case FocusOut:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusOut\"");
 									m_uniqueWindows->RmFocus();
 									break;
 								case KeyPress:
 								case KeyRelease:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 									{
 										char buf[11];
 										KeySym keysym;
@@ -580,11 +389,15 @@ namespace guiAbstraction {
 								//case DestroyNotify:
 								//	break;
 								case MapNotify:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"MapNotify\"");
 									m_uniqueWindows->SysOnShow();
 									break;
 								case UnmapNotify:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"UnmapNotify\"");
 									m_uniqueWindows->SysOnHide();
 									break;
+								default:
+									EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
 							}
 						}
 					}
@@ -598,11 +411,6 @@ namespace guiAbstraction {
 				m_run = false;
 			}
 	};
-	
-#endif
-
-
-
 };
 
 

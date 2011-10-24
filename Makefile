@@ -164,6 +164,7 @@ CXXFILES +=		etk/etkDebug.cpp \
 # Ewol Sources :
 CXXFILES +=		ewol.cpp \
 				ewolDebug.cpp \
+				ewolOObject.cpp \
 				ewolWidget.cpp \
 				ewolWindows.cpp
 

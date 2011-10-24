@@ -26,10 +26,9 @@
 #include <etkString.h>
 #include <ewolWidget.h>
 #include <ewolWindows.h>
-#include <ewolWindows.h>
+#include <ewolOObject.h>
+
 #include <GL/gl.h>
-
-
 
 bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 {
@@ -38,12 +37,10 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 	return true;
 }
 
-
-
 void ewol::Windows::SysDraw(void)
 {
-	static double ploppp = 0.1;
-	EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
+
+	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
 	
@@ -58,6 +55,34 @@ void ewol::Windows::SysDraw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0, 0, -5);
+
+
+	static bool initDone = false;
+	static GLuint indexListe;
+	if (false == initDone) {
+		initDone = true;
+		// create one display list
+		indexListe = glGenLists(1);
+		// compile the display list, store a triangle in it
+		glNewList(indexListe, GL_COMPILE);
+			glBegin(GL_QUADS);
+				float plop2 = 0.2;
+				//glVertex3fv(v0);
+				glColor3f(1., 0., 0.); glVertex3f( plop2*m_size.x,       plop2*m_size.y, 0.);
+				glColor3f(0., 1., 0.); glVertex3f( (1.0-plop2)*m_size.x, plop2*m_size.y, 0.);
+				glColor3f(0., 0., 1.); glVertex3f( (1.0-plop2)*m_size.x, (1.0-plop2)*m_size.y, 0.);
+				glColor3f(1., 1., 0.); glVertex3f( plop2*m_size.x,       (1.0-plop2)*m_size.y, 0.);
+			glEnd();
+		glEndList();
+		
+	}
+	// destroy : glDeleteLists(indexListe, 1);
+
+	
+	// draw the display list
+	glCallList(indexListe);
+
+	static double ploppp = 0.1;
 	
 	//EWOL_DEBUG("plop is " << ploppp << " devient " << (1.0-ploppp) );
 	
@@ -71,4 +96,15 @@ void ewol::Windows::SysDraw(void)
 	if (ploppp>0.5) {
 		ploppp = 0;
 	}
+
+	ewol::OObject2DColored myOObject;
+	
+	myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
+	myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
+	myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
+	myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
+	
+	myOObject.Draw();
+
+
 }
