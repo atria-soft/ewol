@@ -50,14 +50,17 @@ void ewol::Windows::SysDraw(void)
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(0., m_size.x, 0., m_size.y, 1., 20.);
+	glOrtho(0., m_size.x, 0., -m_size.y, 1., 20.);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(0, 0, -5);
+	glTranslatef(0, -m_size.y, -5);
 	
+	//http://www.khronos.org/opengles/documentation/opengles1_0/html/glBlendFunc.html
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 	
 
 
@@ -107,6 +110,9 @@ void ewol::Windows::SysDraw(void)
 	myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
 	myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
 	myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
+	
+	
+	myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
 	
 	myOObject.Draw();
 
