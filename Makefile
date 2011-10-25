@@ -92,7 +92,9 @@ endif
 DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
 X11FLAGS= -lX11 -lGL -lGLU -lXrandr
-
+# remove xrender configuration management
+X11FLAGS+= -DEWOL_NO_VISUAL_CONFIG
+X11FLAGS+= -lXxf86vm
 ###############################################################################
 ### Basic C flags                                                           ###
 ###############################################################################

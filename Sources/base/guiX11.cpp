@@ -35,12 +35,51 @@
 #include <GL/glut.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/Xrender.h>
-
+#ifdef EWOL_NO_VISUAL_CONFIG
+#	include <X11/extensions/xf86vmode.h> 
+#else
+#	include <X11/extensions/Xrender.h>
+#endif
 //#define TEST_MODE_1
 
-namespace guiAbstraction {
+typedef struct {
+	Display *dpy;
+	int screen;
+	Window win;
+	GLXContext ctx;
+	XSetWindowAttributes attr;
+	Bool fs;
+	Bool doubleBuffered;
+	XF86VidModeModeInfo deskMode;
+	int x, y;
+	unsigned int width, height;
+	unsigned int depth;
+} GLWindow;
 
+GLWindow GLWin;
+//original desktop mode which we save so we can restore it later
+XF86VidModeModeInfo desktopMode;
+
+// attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
+static int attrListSgl[] = {
+	GLX_RGBA, GLX_RED_SIZE, 4,
+	GLX_GREEN_SIZE, 4,
+	GLX_BLUE_SIZE, 4,
+	GLX_DEPTH_SIZE, 16,
+	None
+};
+
+// attributes for a double buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
+static int attrListDbl[] = {
+	GLX_RGBA, GLX_DOUBLEBUFFER,
+	GLX_RED_SIZE, 4,
+	GLX_GREEN_SIZE, 4,
+	GLX_BLUE_SIZE, 4,
+	GLX_DEPTH_SIZE, 16,
+	None
+};
+
+namespace guiAbstraction {
 	extern "C" {
 		typedef struct Hints
 		{
@@ -59,7 +98,8 @@ namespace guiAbstraction {
 			GLXFBConfig fbconfig;
 			Window WindowHandle, GLXWindowHandle;
 			int width, height;
-			
+					XVisualInfo *visual;
+			bool doubleBuffered;
 			bool           m_run;
 			ewol::Windows* m_uniqueWindows;
 			
@@ -82,40 +122,77 @@ namespace guiAbstraction {
 				}
 				int Xscreen = DefaultScreen(m_display);
 				Window Xroot = RootWindow(m_display, Xscreen);
-				
-				int numfbconfigs;
-				int VisualData[] = {
-					GLX_RENDER_TYPE, GLX_RGBA_BIT,
-					GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-					GLX_DOUBLEBUFFER, True,
-					GLX_RED_SIZE, 1,
-					GLX_GREEN_SIZE, 1,
-					GLX_BLUE_SIZE, 1,
-					GLX_ALPHA_SIZE, 1,
-					GLX_DEPTH_SIZE, 1,
-					None
-				};
-				XVisualInfo *visual = NULL;
-				GLXFBConfig *fbconfigs = glXChooseFBConfig(m_display, Xscreen, VisualData, &numfbconfigs);
-				for(int i = 0; i<numfbconfigs; i++) {
-					visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
-					if(!visual) {
-						continue;
+				#ifdef EWOL_NO_VISUAL_CONFIG
+					int glxMajor, glxMinor, vmMajor, vmMinor;
+					XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
+					printf("XF86 VideoMode extension version %d.%d\n", vmMajor, vmMinor);
+					XF86VidModeModeInfo **modes;
+					int modeNum, bestMode;
+					XF86VidModeGetAllModeLines(m_display, Xscreen, &modeNum, &modes);
+					/* save desktop-resolution before switching modes */
+					GLWin.deskMode = *modes[0];
+					desktopMode = *modes[0];
+					/* look for mode with requested resolution */
+					for (int32_t i = 0; i < modeNum; i++)
+					{
+						if(    (modes[i]->hdisplay == width)
+						    && (modes[i]->vdisplay == height))
+						{
+							bestMode = i;
+						}
 					}
+					/* get an appropriate visual */
+					visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
 					
-					XRenderPictFormat * pictFormat = XRenderFindVisualFormat(m_display, visual->visual);
-					if(!pictFormat) {
-						continue;
+					if (visual == NULL)
+					{
+						visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
+						doubleBuffered = false;
+						printf("singlebuffered rendering will be used, no doublebuffering available\n");
 					}
+					else
+					{
+						doubleBuffered = true;
+						printf("doublebuffered rendering available\n");
+					}
+					glXQueryVersion(m_display, &glxMajor, &glxMinor);
+					printf("GLX-Version %d.%d\n", glxMajor, glxMinor);
 					
-					if(pictFormat->direct.alphaMask > 0) {
-						fbconfig = fbconfigs[i];
-						break;
+					attr.colormap = XCreateColormap(m_display, Xroot, visual->visual, AllocNone);
+				#else
+					int numfbconfigs;
+					int VisualData[] = {
+						GLX_RENDER_TYPE, GLX_RGBA_BIT,
+						GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+						GLX_DOUBLEBUFFER, True,
+						GLX_RED_SIZE, 1,
+						GLX_GREEN_SIZE, 1,
+						GLX_BLUE_SIZE, 1,
+						GLX_ALPHA_SIZE, 1,
+						GLX_DEPTH_SIZE, 1,
+						None
+					};
+					GLXFBConfig *fbconfigs = glXChooseFBConfig(m_display, Xscreen, VisualData, &numfbconfigs);
+					EWOL_DEBUG("get glx format config =" << numfbconfigs);
+					for(int i = 0; i<numfbconfigs; i++) {
+						visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
+						if(!visual) {
+							continue;
+						}
+						XRenderPictFormat * pictFormat = XRenderFindVisualFormat(m_display, visual->visual);
+						if(!pictFormat) {
+							continue;
+						}
+						
+						if(pictFormat->direct.alphaMask > 0) {
+							fbconfig = fbconfigs[i];
+							EWOL_DEBUG("SELECT fbconfig id=" << i);
+							break;
+						}
 					}
-				}
-				
-				// Create a colormap - only needed on some X clients, eg. IRIX
-				attr.colormap = XCreateColormap(m_display, Xroot, visual->visual, AllocNone);
+					// Create a colormap - only needed on some X clients, eg. IRIX
+					attr.colormap = XCreateColormap(m_display, Xroot, visual->visual, AllocNone);
+				#endif
 				
 				
 				attr.border_pixel = 0;
@@ -214,27 +291,50 @@ namespace guiAbstraction {
 			
 			bool CreateOGlContext(void)
 			{
-				/* See if we can do OpenGL on this visual */
-				int dummy;
-				if (!glXQueryExtension(m_display, &dummy, &dummy)) {
-					EWOL_CRITICAL("OpenGL not supported by X server");
-					exit(-1);
-				}
-				
-				/* Create the OpenGL rendering context */
-				GLXContext RenderContext = glXCreateNewContext(m_display, fbconfig, GLX_RGBA_TYPE, 0, True);
-				if (!RenderContext) {
-					EWOL_CRITICAL("Failed to create a GL context");
-					exit(-1);
-				}
-				
-				GLXWindowHandle = glXCreateWindow(m_display, fbconfig, WindowHandle, NULL);
-				
-				/* Make it current */
-				if (!glXMakeContextCurrent(m_display, GLXWindowHandle, GLXWindowHandle, RenderContext)) {
-					EWOL_CRITICAL("glXMakeCurrent failed for window");
-					exit(-1);
-				}
+				#ifndef EWOL_NO_VISUAL_CONFIG
+					/* See if we can do OpenGL on this visual */
+					int dummy;
+					if (!glXQueryExtension(m_display, &dummy, &dummy)) {
+						EWOL_CRITICAL("OpenGL not supported by X server");
+						exit(-1);
+					}
+					
+					/* Create the OpenGL rendering context */
+					GLXContext RenderContext = glXCreateNewContext(m_display, fbconfig, GLX_RGBA_TYPE, 0, True);
+					if (!RenderContext) {
+						EWOL_CRITICAL("Failed to create a GL context");
+						exit(-1);
+					}
+					
+					GLXWindowHandle = glXCreateWindow(m_display, fbconfig, WindowHandle, NULL);
+					
+					/* Make it current */
+					if (!glXMakeContextCurrent(m_display, GLXWindowHandle, GLXWindowHandle, RenderContext)) {
+						EWOL_CRITICAL("glXMakeCurrent failed for window");
+						exit(-1);
+					}
+				#else
+					/* create a GLX context */
+					GLXContext RenderContext = glXCreateContext(m_display, visual, 0, GL_TRUE);
+						/* connect the glx-context to the window */
+						glXMakeCurrent(m_display, WindowHandle, RenderContext);
+						if (glXIsDirect(m_display, RenderContext)) {
+							printf("DRI enabled\n");
+						} else {
+							printf("no DRI available\n");
+						}
+						glShadeModel(GL_SMOOTH);
+						glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+						glClearDepth(1.0f);
+						glEnable(GL_DEPTH_TEST);
+						glDepthFunc(GL_LEQUAL);
+						glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+						// we use resizeGL once to set up our initial perspective
+						//resizeGL(width, height);
+						//Reset the rotation angle of our object
+						//rotQuad = 0;
+						glFlush();
+				#endif
 				return true;
 			}
 			
@@ -269,12 +369,21 @@ namespace guiAbstraction {
 					m_uniqueWindows->SysDraw();
 				}
 				/* Swapbuffers */
-				glXSwapBuffers(m_display, GLXWindowHandle);
+				#ifndef EWOL_NO_VISUAL_CONFIG
+					glXSwapBuffers(m_display, GLXWindowHandle);
+				#else
+					glFlush();
+					// swap the buffers if we have doublebuffered
+					if (doubleBuffered) {
+						glXSwapBuffers(m_display, WindowHandle);
+					}
+				#endif
 			}
 		
 		public:
 			X11systemInterface(void)
 			{
+				visual = NULL;
 				CreateX11Context();
 				CreateOGlContext();
 				m_run = true;
