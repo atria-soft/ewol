@@ -91,10 +91,11 @@ else
 endif
 DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
-X11FLAGS= -lX11 -lGL -lGLU -lXrandr
-# remove xrender configuration management
-X11FLAGS+= -DEWOL_NO_VISUAL_CONFIG
-X11FLAGS+= -lXxf86vm
+X11FLAGS= -lX11 -lGL -lGLU
+# some X11 mode availlable : 
+X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
+#X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
+
 ###############################################################################
 ### Basic C flags                                                           ###
 ###############################################################################
@@ -179,8 +180,8 @@ CXXFILES +=		Main.cpp
 ###############################################################################
 ### Liste of folder where .h can be                                         ###
 ###############################################################################
-LISTE_MODULES = $(dir $(CXXFILES))
-$(info listeModule=$(LISTE_MODULES))
+LISTE_MODULES = $(sort $(dir $(CXXFILES)))
+#$(info listeModule=$(LISTE_MODULES))
 INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) 
 
 ###############################################################################
@@ -195,10 +196,9 @@ OBJ =	$(addprefix $(OBJECT_DIRECTORY)/, $(CXXFILES:.cpp=.o))
 ###############################################################################
 all: build
 
--include $(OBJ:.o=.d) 
+-include $(OBJ:.o=.d)
 
 build: .encadrer .versionFile $(OUTPUT_NAME)
-
 
 .encadrer:
 	@echo $(CADRE_HAUT_BAS)
@@ -211,25 +211,8 @@ build: .encadrer .versionFile $(OUTPUT_NAME)
 	@echo $(CADRE_HAUT_BAS)
 	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
 
-
-FILE_IMAGES=	data/imagesSources/*.png
-
-
-.versionFile :
-	@rm -f $(OBJECT_DIRECTORY)/GuiTools/WindowsManager/WindowsManager.o
-
-
-# Tool used to create a binary version of every element png or other needed by the application
-pngToCpp: tools/pngToCpp/pngToCpp.c
-	@echo $(F_ROUGE)"          (bin) $@"$(F_NORMALE)
-	@$(CXX) $< -o $@
-	@strip -s $@
-
-# Generate basic 
-$(FILE_DIRECTORY)/GuiTools/myImage.cpp: $(FILE_IMAGES) $(MAKE_DEPENDENCE) pngToCpp
-	@echo $(F_BLUE)"          (.cpp)  *.png ==> $@"$(F_NORMALE)
-	@./pngToCpp $@ $(FILE_IMAGES)
-
+.versionFile:
+	@rm -f $(OBJECT_DIRECTORY)/ewol.o
 
 # build C++
 $(OBJECT_DIRECTORY)/%.o: $(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)

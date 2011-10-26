@@ -35,34 +35,19 @@
 #include <GL/glut.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
-#ifdef EWOL_NO_VISUAL_CONFIG
-#	include <X11/extensions/xf86vmode.h> 
-#else
+#if defined(EWOL_X11_MODE__XF86V)
+#	include <X11/extensions/xf86vmode.h>
+#elif defined(EWOL_X11_MODE__XRENDER)
 #	include <X11/extensions/Xrender.h>
+#else
+#	error you might define an EWOL_X11_MODE in EWOL_X11_XF86V / EWOL_X11_XRENDER
 #endif
-//#define TEST_MODE_1
 
-typedef struct {
-	Display *dpy;
-	int screen;
-	Window win;
-	GLXContext ctx;
-	XSetWindowAttributes attr;
-	Bool fs;
-	Bool doubleBuffered;
-	XF86VidModeModeInfo deskMode;
-	int x, y;
-	unsigned int width, height;
-	unsigned int depth;
-} GLWindow;
-
-GLWindow GLWin;
-//original desktop mode which we save so we can restore it later
-XF86VidModeModeInfo desktopMode;
-
+#if defined(EWOL_X11_MODE__XF86V)
 // attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListSgl[] = {
-	GLX_RGBA, GLX_RED_SIZE, 4,
+	GLX_RGBA,
+	GLX_RED_SIZE, 4,
 	GLX_GREEN_SIZE, 4,
 	GLX_BLUE_SIZE, 4,
 	GLX_DEPTH_SIZE, 16,
@@ -71,13 +56,27 @@ static int attrListSgl[] = {
 
 // attributes for a double buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListDbl[] = {
-	GLX_RGBA, GLX_DOUBLEBUFFER,
+	GLX_RGBA,
+	GLX_DOUBLEBUFFER,
 	GLX_RED_SIZE, 4,
 	GLX_GREEN_SIZE, 4,
 	GLX_BLUE_SIZE, 4,
 	GLX_DEPTH_SIZE, 16,
 	None
 };
+#elif defined(EWOL_X11_MODE__XRENDER)
+static int VisualData[] = {
+	GLX_RENDER_TYPE, GLX_RGBA_BIT,
+	GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+	GLX_DOUBLEBUFFER, True,
+	GLX_RED_SIZE, 1,
+	GLX_GREEN_SIZE, 1,
+	GLX_BLUE_SIZE, 1,
+	GLX_ALPHA_SIZE, 1,
+	GLX_DEPTH_SIZE, 1,
+	None
+};
+#endif
 
 namespace guiAbstraction {
 	extern "C" {
@@ -93,13 +92,17 @@ namespace guiAbstraction {
 	class X11systemInterface
 	{
 		private:
-			Atom del_atom;
-			Display *m_display;
-			GLXFBConfig fbconfig;
-			Window WindowHandle, GLXWindowHandle;
-			int width, height;
-					XVisualInfo *visual;
-			bool doubleBuffered;
+			Atom           m_delAtom;
+			Display *      m_display;
+			Window         WindowHandle;
+			#if defined(EWOL_X11_MODE__XRENDER)
+			GLXFBConfig    m_fbConfig;
+			Window         m_GLXWindowHandle;
+			#endif
+			int32_t        m_width;
+			int32_t        m_height;
+			XVisualInfo *  m_visual;
+			bool           m_doubleBuffered;
 			bool           m_run;
 			ewol::Windows* m_uniqueWindows;
 			
@@ -112,6 +115,12 @@ namespace guiAbstraction {
 				XSetWindowAttributes attr;
 				static char *title = (char*)"APPLICATION Title ... (todo)";
 				
+				#if defined(EWOL_X11_MODE__XF86V)
+					EWOL_INFO("X11 Mode XF86 Video");
+				#elif defined(EWOL_X11_MODE__XRENDER)
+					EWOL_INFO("X11 Mode XRendrer Video");
+				#endif
+				
 				// Connect to the X server
 				m_display = XOpenDisplay(NULL);
 				if(NULL == m_display) {
@@ -121,79 +130,51 @@ namespace guiAbstraction {
 					EWOL_INFO("Display opened.");
 				}
 				int Xscreen = DefaultScreen(m_display);
-				Window Xroot = RootWindow(m_display, Xscreen);
-				#ifdef EWOL_NO_VISUAL_CONFIG
-					int glxMajor, glxMinor, vmMajor, vmMinor;
-					XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
-					printf("XF86 VideoMode extension version %d.%d\n", vmMajor, vmMinor);
-					XF86VidModeModeInfo **modes;
-					int modeNum, bestMode;
-					XF86VidModeGetAllModeLines(m_display, Xscreen, &modeNum, &modes);
-					/* save desktop-resolution before switching modes */
-					GLWin.deskMode = *modes[0];
-					desktopMode = *modes[0];
-					/* look for mode with requested resolution */
-					for (int32_t i = 0; i < modeNum; i++)
+				#if defined(EWOL_X11_MODE__XF86V)
 					{
-						if(    (modes[i]->hdisplay == width)
-						    && (modes[i]->vdisplay == height))
-						{
-							bestMode = i;
-						}
+						int32_t vmMajor, vmMinor;
+						XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
+						EWOL_INFO("XF86 VideoMode extension version " << vmMajor << "." << vmMinor);
 					}
-					/* get an appropriate visual */
-					visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
-					
-					if (visual == NULL)
-					{
-						visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
-						doubleBuffered = false;
-						printf("singlebuffered rendering will be used, no doublebuffering available\n");
+					// get an appropriate visual
+					m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
+					if (NULL == m_visual) {
+						m_visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
+						m_doubleBuffered = false;
+						EWOL_INFO("XF86 singlebuffered rendering will be used, no doublebuffering available");
+					} else {
+						m_doubleBuffered = true;
+						EWOL_INFO("XF86 doublebuffered rendering available");
 					}
-					else
-					{
-						doubleBuffered = true;
-						printf("doublebuffered rendering available\n");
-					}
-					glXQueryVersion(m_display, &glxMajor, &glxMinor);
-					printf("GLX-Version %d.%d\n", glxMajor, glxMinor);
-					
-					attr.colormap = XCreateColormap(m_display, Xroot, visual->visual, AllocNone);
-				#else
+				#elif defined(EWOL_X11_MODE__XRENDER)
 					int numfbconfigs;
-					int VisualData[] = {
-						GLX_RENDER_TYPE, GLX_RGBA_BIT,
-						GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-						GLX_DOUBLEBUFFER, True,
-						GLX_RED_SIZE, 1,
-						GLX_GREEN_SIZE, 1,
-						GLX_BLUE_SIZE, 1,
-						GLX_ALPHA_SIZE, 1,
-						GLX_DEPTH_SIZE, 1,
-						None
-					};
+					m_doubleBuffered = true;
 					GLXFBConfig *fbconfigs = glXChooseFBConfig(m_display, Xscreen, VisualData, &numfbconfigs);
 					EWOL_DEBUG("get glx format config =" << numfbconfigs);
 					for(int i = 0; i<numfbconfigs; i++) {
-						visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
-						if(!visual) {
+						m_visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
+						if(!m_visual) {
 							continue;
 						}
-						XRenderPictFormat * pictFormat = XRenderFindVisualFormat(m_display, visual->visual);
+						XRenderPictFormat * pictFormat = XRenderFindVisualFormat(m_display, m_visual->visual);
 						if(!pictFormat) {
 							continue;
 						}
-						
 						if(pictFormat->direct.alphaMask > 0) {
-							fbconfig = fbconfigs[i];
+							m_fbConfig = fbconfigs[i];
 							EWOL_DEBUG("SELECT fbconfig id=" << i);
 							break;
 						}
 					}
-					// Create a colormap - only needed on some X clients, eg. IRIX
-					attr.colormap = XCreateColormap(m_display, Xroot, visual->visual, AllocNone);
 				#endif
-				
+				{
+					int32_t glxMajor, glxMinor;
+					glXQueryVersion(m_display, &glxMajor, &glxMinor);
+					EWOL_INFO("GLX-Version " << glxMajor << "." << glxMinor);
+				}
+				// Create a colormap - only needed on some X clients, eg. IRIX
+				Window Xroot = RootWindow(m_display, Xscreen);
+				attr.colormap = XCreateColormap(m_display, Xroot, m_visual->visual, AllocNone);
 				
 				attr.border_pixel = 0;
 				attr.event_mask =   StructureNotifyMask
@@ -216,19 +197,19 @@ namespace guiAbstraction {
 				// select internal attribute
 				attr_mask = CWBackPixmap | CWColormap | CWBorderPixel | CWEventMask;
 				// Create the window
-				width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
-				height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
-				x=width/2;
-				y=height/4;
+				m_width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
+				m_height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
+				x=m_width/2;
+				y=m_height/4;
 				
 				// Real create of the window
 				WindowHandle = XCreateWindow(m_display,
 				                             Xroot,
-				                             x, y, width, height,
+				                             x, y, m_width, m_height,
 				                             1,
-				                             visual->depth,
+				                             m_visual->depth,
 				                             InputOutput,
-				                             visual->visual,
+				                             m_visual->visual,
 				                             attr_mask, &attr);
 				
 				if( !WindowHandle ) {
@@ -244,8 +225,8 @@ namespace guiAbstraction {
 				
 				hints.x = x;
 				hints.y = y;
-				hints.width = width;
-				hints.height = height;
+				hints.width = m_width;
+				hints.height = m_height;
 				hints.flags = USPosition|USSize;
 				
 				StartupState = XAllocWMHints();
@@ -265,8 +246,8 @@ namespace guiAbstraction {
 				//XIfEvent(m_display, &event, WaitForMapNotify, (char*)&WindowHandle);
 				
 				// Set the kill atom so we get a message when the user tries to close the window
-				if ((del_atom = XInternAtom(m_display, "WM_DELETE_WINDOW", 0)) != None) {
-					XSetWMProtocols(m_display, WindowHandle, &del_atom, 1);
+				if ((m_delAtom = XInternAtom(m_display, "WM_DELETE_WINDOW", 0)) != None) {
+					XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 				}
 				
 				//code to remove decoration
@@ -291,7 +272,7 @@ namespace guiAbstraction {
 			
 			bool CreateOGlContext(void)
 			{
-				#ifndef EWOL_NO_VISUAL_CONFIG
+				#if defined(EWOL_X11_MODE__XRENDER)
 					/* See if we can do OpenGL on this visual */
 					int dummy;
 					if (!glXQueryExtension(m_display, &dummy, &dummy)) {
@@ -300,52 +281,39 @@ namespace guiAbstraction {
 					}
 					
 					/* Create the OpenGL rendering context */
-					GLXContext RenderContext = glXCreateNewContext(m_display, fbconfig, GLX_RGBA_TYPE, 0, True);
+					GLXContext RenderContext = glXCreateNewContext(m_display, m_fbConfig, GLX_RGBA_TYPE, 0, GL_TRUE);
 					if (!RenderContext) {
 						EWOL_CRITICAL("Failed to create a GL context");
 						exit(-1);
 					}
-					
-					GLXWindowHandle = glXCreateWindow(m_display, fbconfig, WindowHandle, NULL);
-					
+					m_GLXWindowHandle = glXCreateWindow(m_display, m_fbConfig, WindowHandle, NULL);
 					/* Make it current */
-					if (!glXMakeContextCurrent(m_display, GLXWindowHandle, GLXWindowHandle, RenderContext)) {
+					if (!glXMakeContextCurrent(m_display, m_GLXWindowHandle, m_GLXWindowHandle, RenderContext)) {
 						EWOL_CRITICAL("glXMakeCurrent failed for window");
 						exit(-1);
 					}
-				#else
+				#elif defined(EWOL_X11_MODE__XF86V)
 					/* create a GLX context */
-					GLXContext RenderContext = glXCreateContext(m_display, visual, 0, GL_TRUE);
-						/* connect the glx-context to the window */
-						glXMakeCurrent(m_display, WindowHandle, RenderContext);
-						if (glXIsDirect(m_display, RenderContext)) {
-							printf("DRI enabled\n");
-						} else {
-							printf("no DRI available\n");
-						}
-						glShadeModel(GL_SMOOTH);
-						glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-						glClearDepth(1.0f);
-						glEnable(GL_DEPTH_TEST);
-						glDepthFunc(GL_LEQUAL);
-						glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-						// we use resizeGL once to set up our initial perspective
-						//resizeGL(width, height);
-						//Reset the rotation angle of our object
-						//rotQuad = 0;
-						glFlush();
+					GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
+					/* connect the glx-context to the window */
+					glXMakeCurrent(m_display, WindowHandle, RenderContext);
+					if (glXIsDirect(m_display, RenderContext)) {
+						EWOL_INFO("XF86 DRI enabled\n");
+					} else {
+						EWOL_INFO("XF86 DRI NOT available\n");
+					}
 				#endif
 				return true;
 			}
 			
 			void Draw(void)
 			{
-				//EWOL_DEBUG("redraw (" << width << "," << height << ")");
+				//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
 				if(NULL == m_uniqueWindows) {
 					//EWOL_DEBUG("Has No Windows set...");
 					
 					// set the size of the open GL system
-					glViewport(0,0,width,height);
+					glViewport(0,0,m_width,m_height);
 					
 					// Clear the screen with transparency ...
 					glClearColor(0.750, 0.750, 0.750, 0.5);
@@ -353,28 +321,27 @@ namespace guiAbstraction {
 					
 					glMatrixMode(GL_PROJECTION);
 					glLoadIdentity();
-					glOrtho(0., (float)width, 0., (float)height, 1., 20.);
+					glOrtho(0., (float)m_width, 0., (float)m_height, 1., 20.);
 					
 					glMatrixMode(GL_MODELVIEW);
 					glLoadIdentity();
 					glTranslatef(0, 0, -5);
 					
 					glBegin(GL_QUADS);
-						glColor3f(1., 0., 0.); glVertex3f( .25*(float)width, .25*(float)height, 0.);
-						glColor3f(0., 1., 0.); glVertex3f( .75*(float)width, .25*(float)height, 0.);
-						glColor3f(0., 0., 1.); glVertex3f( .75*(float)width, .75*(float)height, 0.);
-						glColor3f(1., 1., 0.); glVertex3f( .25*(float)width, .75*(float)height, 0.);
+						glColor3f(1., 0., 0.); glVertex3f( .25*(float)m_width, .25*(float)m_height, 0.);
+						glColor3f(0., 1., 0.); glVertex3f( .75*(float)m_width, .25*(float)m_height, 0.);
+						glColor3f(0., 0., 1.); glVertex3f( .75*(float)m_width, .75*(float)m_height, 0.);
+						glColor3f(1., 1., 0.); glVertex3f( .25*(float)m_width, .75*(float)m_height, 0.);
 					glEnd();
 				} else {
 					m_uniqueWindows->SysDraw();
 				}
-				/* Swapbuffers */
-				#ifndef EWOL_NO_VISUAL_CONFIG
-					glXSwapBuffers(m_display, GLXWindowHandle);
-				#else
+				// swap the buffers if we have doublebuffered
+				#if defined(EWOL_X11_MODE__XRENDER)
+					glXSwapBuffers(m_display, m_GLXWindowHandle);
+				#elif defined(EWOL_X11_MODE__XF86V)
 					glFlush();
-					// swap the buffers if we have doublebuffered
-					if (doubleBuffered) {
+					if (m_doubleBuffered) {
 						glXSwapBuffers(m_display, WindowHandle);
 					}
 				#endif
@@ -383,7 +350,7 @@ namespace guiAbstraction {
 		public:
 			X11systemInterface(void)
 			{
-				visual = NULL;
+				m_visual = NULL;
 				CreateX11Context();
 				CreateOGlContext();
 				m_run = true;
@@ -398,7 +365,7 @@ namespace guiAbstraction {
 			{
 				m_uniqueWindows = newWindows;
 				if (NULL != m_uniqueWindows) {
-					m_uniqueWindows->CalculateSize((double)width, (double)height);
+					m_uniqueWindows->CalculateSize((double)m_width, (double)m_height);
 				}
 			}
 			
@@ -425,8 +392,8 @@ namespace guiAbstraction {
 								}
 								break;
 							case ConfigureNotify:
-								width  = event.xconfigure.width;
-								height = event.xconfigure.height;
+								m_width  = event.xconfigure.width;
+								m_height = event.xconfigure.height;
 								break;
 						}
 						// parse event
@@ -528,24 +495,16 @@ namespace guiAbstraction {
 #define __class__ "guiAbstraction"
 
 static bool guiAbstractionIsInit = false;
-#ifdef TEST_MODE_1
-static guiAbstraction::X11display * myDisplay = NULL;
-static guiAbstraction::X11eventMng * myEventManager = NULL;
-#else
 static guiAbstraction::X11systemInterface * myX11Access = NULL;
-#endif
+
+
 void guiAbstraction::Init(int32_t argc, char *argv[])
 {
 	if (false == guiAbstractionIsInit) {
 		// set the gui is init :
 		guiAbstractionIsInit = true;
 		EWOL_INFO("INIT for X11 environement");
-		#ifdef TEST_MODE_1
-			myDisplay = new guiAbstraction::X11display("");
-			myEventManager = new guiAbstraction::X11eventMng(*myDisplay);
-		#else
-			myX11Access = new guiAbstraction::X11systemInterface();
-		#endif
+		myX11Access = new guiAbstraction::X11systemInterface();
 	} else {
 		EWOL_CRITICAL("Can not INIT X11 ==> already init before");
 	}
@@ -556,11 +515,7 @@ void guiAbstraction::Run(void)
 {
 	if (true == guiAbstractionIsInit) {
 		EWOL_INFO("Start Running");
-		#ifdef TEST_MODE_1
-			myEventManager->Run();
-		#else
-			myX11Access->Run();
-		#endif
+		myX11Access->Run();
 		EWOL_INFO("Stop Running");
 	} else {
 		EWOL_CRITICAL("Can not Run X11 ==> not init ... ");
@@ -570,11 +525,7 @@ void guiAbstraction::Run(void)
 void guiAbstraction::Stop(void)
 {
 	if (true == guiAbstractionIsInit) {
-		#ifdef TEST_MODE_1
-			myEventManager->Stop();
-		#else
-			myX11Access->Stop();
-		#endif
+		myX11Access->Stop();
 	} else {
 		EWOL_CRITICAL("Can not Stop X11 ==> not init ... ");
 	}
@@ -583,11 +534,7 @@ void guiAbstraction::Stop(void)
 void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
 {
 	if (true == guiAbstractionIsInit) {
-		#ifdef TEST_MODE_1
-			myEventManager->Setwindow(newOne);
-		#else
-			myX11Access->Setwindow(newOne);
-		#endif
+		myX11Access->Setwindow(newOne);
 	} else {
 		EWOL_CRITICAL("Can not set Windows X11 ==> not init ... ");
 	}
@@ -597,18 +544,9 @@ void guiAbstraction::UnInit(void)
 {
 	if (true == guiAbstractionIsInit) {
 		EWOL_INFO("UN-INIT for X11 environement");
-		#ifdef TEST_MODE_1
-			if (NULL != myEventManager) {
-				delete(myEventManager);
-			}
-			if (NULL != myDisplay) {
-				delete(myDisplay);
-			}
-		#else
-			if (NULL != myX11Access) {
-				delete(myX11Access);
-			}
-		#endif
+		if (NULL != myX11Access) {
+			delete(myX11Access);
+		}
 		guiAbstractionIsInit = false;
 	} else {
 		EWOL_CRITICAL("Can not Un-Init X11 ==> not init ... ");
