@@ -53,6 +53,9 @@ namespace ewol {
 		// from Widget management : 
 			virtual bool CalculateSize(double availlableX, double availlableY);
 			virtual bool OnEventArea(const char * generateEventId, double x, double y);
+		// Widget overwrite function
+		public:
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y);
 	};
 };
 

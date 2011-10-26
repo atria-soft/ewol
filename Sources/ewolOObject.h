@@ -60,10 +60,26 @@ namespace ewol {
 	class OObject
 	{
 		public:
-			OObject(void) {};
+			OObject(void) { m_name=""; };
 			virtual ~OObject(void) {};
 		public:
 			virtual void Draw(void) = 0;
+			void SetName(etk::String & name)
+			{
+				m_name = name;
+			}
+			void SetName(const char * name)
+			{
+				if (NULL != name) {
+					m_name = name;
+				}
+			}
+			etk::String GetName(void)
+			{
+				return m_name;
+			}
+		private:
+			etk::String m_name;
 	};
 	
 	class OObject2DColored :public ewol::OObject
@@ -80,6 +96,21 @@ namespace ewol {
 		public:
 			void Rectangle(float x, float y, float w, float h, float red, float green, float blue, float alpha);
 	};
+	/*
+	class OObjectFile :public ewol::OObject
+	{
+		public:
+			OObjectFile(etk::File fileName) {};
+			virtual ~OObject2DColored(void) {};
+		public:
+			void Draw(void);
+			bool Save(etk::File fileName) { return false; };
+		protected:
+			etk::VectorType<OObject*>   m_listsubObject;   //!< an object file contain more than one object...
+			bool                        m_isBinaryFile;    //!< to know th mode of saving the file
+	};
+	*/
+	
 	/*
 	class OObject2DTextured :public ewol::OObject
 	{

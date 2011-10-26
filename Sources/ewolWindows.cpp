@@ -40,6 +40,28 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 	return true;
 }
 
+// TODO : Rewrite this with common event ...
+bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+{
+	if(    EVENT_INPUT_TYPE_UP == typeEvent
+	    && 1 == IdInput)
+	{
+		if (y <= 20.0) {
+			if (x <= 20.0) {
+				EWOL_INFO("Request close");
+			} else if (x <= 40.0) {
+				EWOL_INFO("Request Minimize");
+			} else if (x <= 60.0) {
+				EWOL_INFO("Request Expend/unExpend");
+			}
+		}
+	}
+	return true;
+}
+
+
+
+
 void ewol::Windows::SysDraw(void)
 {
 
@@ -67,54 +89,37 @@ void ewol::Windows::SysDraw(void)
 	
 
 
-	static bool initDone = false;
-	static GLuint indexListe;
-	if (false == initDone) {
-		initDone = true;
-		// create one display list
-		indexListe = glGenLists(1);
-		// compile the display list, store a triangle in it
-		glNewList(indexListe, GL_COMPILE);
-			glBegin(GL_QUADS);
-				float plop2 = 0.2;
-				//glVertex3fv(v0);
-				glColor3f(1., 0., 0.); glVertex3f( plop2*m_size.x,       plop2*m_size.y, 0.);
-				glColor3f(0., 1., 0.); glVertex3f( (1.0-plop2)*m_size.x, plop2*m_size.y, 0.);
-				glColor3f(0., 0., 1.); glVertex3f( (1.0-plop2)*m_size.x, (1.0-plop2)*m_size.y, 0.);
-				glColor3f(1., 1., 0.); glVertex3f( plop2*m_size.x,       (1.0-plop2)*m_size.y, 0.);
-			glEnd();
-		glEndList();
-		
-	}
-	// destroy : glDeleteLists(indexListe, 1);
+	/*
+	// create one display list
+	indexListe = glGenLists(1);
+	// compile the display list, store a triangle in it
+	glNewList(indexListe, GL_COMPILE);
+		glBegin(GL_QUADS);
+			float plop2 = 0.2;
+			//glVertex3fv(v0);
+			glColor3f(1., 0., 0.); glVertex3f( plop2*m_size.x,       plop2*m_size.y, 0.);
+			glColor3f(0., 1., 0.); glVertex3f( (1.0-plop2)*m_size.x, plop2*m_size.y, 0.);
+			glColor3f(0., 0., 1.); glVertex3f( (1.0-plop2)*m_size.x, (1.0-plop2)*m_size.y, 0.);
+			glColor3f(1., 1., 0.); glVertex3f( plop2*m_size.x,       (1.0-plop2)*m_size.y, 0.);
+		glEnd();
+	glEndList();
+	*/
 
-	
-	// draw the display list
-	glCallList(indexListe);
-
-	static double ploppp = 0.1;
-	
-	//EWOL_DEBUG("plop is " << ploppp << " devient " << (1.0-ploppp) );
-	
-	glBegin(GL_QUADS);
-		glColor3f(1., 0., 0.); glVertex3f( ploppp*m_size.x,       ploppp*m_size.y, 0.);
-		glColor3f(0., 1., 0.); glVertex3f( (1.0-ploppp)*m_size.x, ploppp*m_size.y, 0.);
-		glColor3f(0., 0., 1.); glVertex3f( (1.0-ploppp)*m_size.x, (1.0-ploppp)*m_size.y, 0.);
-		glColor3f(1., 1., 0.); glVertex3f( ploppp*m_size.x,       (1.0-ploppp)*m_size.y, 0.);
-	glEnd();
-	ploppp += 0.05;
-	if (ploppp>0.5) {
-		ploppp = 0;
-	}
 
 	ewol::OObject2DColored myOObject;
-	
-	myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
 	static bool isinit = false;
+	
+	myOObject.Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
 	if (false == isinit) {
 		isinit=true;
-		AddEventArea({20.0,30.0}, {100, 50}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_CLICKED, eventClose);
+		AddEventArea({0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_CLICKED, eventClose);
 	}
+	
+	myOObject.Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
+	myOObject.Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
+	
+	// Other ...
+	myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
 	myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
 	myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
 	myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
