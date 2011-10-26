@@ -52,9 +52,41 @@ bool ewol::Widget::CalculateSize(double availlableX, double availlableY)
 }
 
 
-bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y)
+bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
 {
-	return true;
+	bool ended = false;
+	for(int32_t iii=m_inputEvent.Size()-1; iii>=0; iii--) {
+		if (EWOL_EVENT_AREA == m_inputEvent[iii].mode) {
+			if(    m_inputEvent[iii].area.origin.x <= x
+			    && m_inputEvent[iii].area.origin.y <= y
+			    && m_inputEvent[iii].area.origin.x + m_inputEvent[iii].area.size.x > x
+			    && m_inputEvent[iii].area.origin.y + m_inputEvent[iii].area.size.y > y )
+			{
+				// TODO : What is the flags for ??? how can we use it...
+				if(    FLAG_EVENT_INPUT_1 && m_inputEvent[iii].area.flags
+				    && 1 == IdInput)
+				{
+					ended = OnEventArea(m_inputEvent[iii].generateEventId, x, y);
+					if (true == ended) {
+						break;
+					}
+					// todo : call other link widget :
+					if (-1 != m_inputEvent[iii].widgetCall) {
+						ewol::Widget * tmpWidget = NULL;
+						//tmpWidget = ewol::GetWidgetWithID(newEvent.widgetCall);
+						ended = tmpWidget->OnEventAreaExternal(m_uniqueId, m_inputEvent[iii].generateEventId, x, y);
+						if (true == ended) {
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	if (false == ended) {
+		return OnEventInput(IdInput, typeEvent, x, y);
+	}
+	return ended;
 }
 
 
@@ -64,8 +96,42 @@ bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool pom
 }
 
 
-bool ewol::Widget::AddEventArea(coord origin, coord size, uint32_t flags, const char * generateEventId)
+bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId)
 {
+	if(    origin.x < 0.0
+	    || origin.y < 0.0)
+	{
+		EWOL_WARNING("origin under 0.0 ... out of range");
+		return false;
+	}
+	if(    size.x < 0.0
+	    || size.y < 0.0)
+	{
+		EWOL_WARNING("size under 0.0 ... out of range");
+		return false;
+	}
+	if(    origin.x > m_size.x
+	    || origin.y > m_size.y)
+	{
+		EWOL_WARNING("origin out of range");
+		return false;
+	}
+	if(    origin.x + size.x > m_size.x
+	    || origin.y + size.y > m_size.y)
+	{
+		EWOL_WARNING("end area out of size");
+		return false;
+	}
+	
+	event_ts newEvent;
+	newEvent.generateEventId = generateEventId;
+	newEvent.widgetCall = -1; // by default no widget is called
+	newEvent.mode = EWOL_EVENT_AREA;
+	newEvent.area.origin = origin;
+	newEvent.area.size = size;
+	newEvent.area.flags = flags;
+	m_inputEvent.PushBack(newEvent);
+	EWOL_DEBUG("Add an area event...");
 	return true;
 }
 

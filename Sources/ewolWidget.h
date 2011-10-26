@@ -62,8 +62,25 @@ namespace ewol {
 		EVENT_KB_MOVE_TYPE_END,
 	} eventKbMoveType_te;
 	
+	enum {
+		FLAG_EVENT_INPUT_1         = 1 << 0,
+		FLAG_EVENT_INPUT_2         = 1 << 1,
+		FLAG_EVENT_INPUT_3         = 1 << 2,
+		FLAG_EVENT_INPUT_4         = 1 << 3,
+		FLAG_EVENT_INPUT_5         = 1 << 4,
+		FLAG_EVENT_INPUT_MOTION    = 1 << 5,
+		FLAG_EVENT_ENTER           = 1 << 6,
+		FLAG_EVENT_LEAVE           = 1 << 7,
+		FLAG_EVENT_DOWN            = 1 << 8,
+		FLAG_EVENT_UP              = 1 << 9,
+		FLAG_EVENT_MOVE            = 1 << 10,
+		FLAG_EVENT_CLICKED         = 1 << 11,
+		FLAG_EVENT_CLICKED_DOUBLE  = 1 << 12,
+		FLAG_EVENT_CLICKED_TRIPLE  = 1 << 13,
+	};
+	
 	#define UTF8_MAX_SIZE          (8)
-	#define EWOL_EVENT_UNION       (0)
+	#define EWOL_EVENT_AREA        (0)
 	#define EWOL_EVENT_SHORTCUT    (1)
 	extern "C" {
 		typedef struct {
@@ -81,7 +98,7 @@ namespace ewol {
 				struct {
 					coord origin; // widget specific
 					coord size;   // widget specific
-					uint32_t flags; // widget specific
+					uint64_t flags; // widget specific
 				} area;
 			};
 		} event_ts;
@@ -174,7 +191,7 @@ namespace ewol {
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE]);
 		protected:
-			bool AddEventArea(coord origin, coord size, uint32_t flags, const char * generateEventId);
+			bool AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId);
 			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId);
 			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);
 		public:
@@ -182,9 +199,9 @@ namespace ewol {
 			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId);
 		protected:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y) { return false; };
-			virtual bool OnEventArea(const char * generateEventId) { return false; };
+			virtual bool OnEventArea(const char * generateEventId, double x, double y) { return false; };
 			// when an event arrive from an other widget, it will arrive here:
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId) { return false; };
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, double x, double y) { return false; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present

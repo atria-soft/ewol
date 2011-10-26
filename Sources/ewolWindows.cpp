@@ -30,6 +30,9 @@
 
 #include <GL/gl.h>
 
+//list of local events : 
+const char * eventClose = "Close Windows";
+
 bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 {
 	m_size.x = availlableX;
@@ -107,14 +110,28 @@ void ewol::Windows::SysDraw(void)
 	ewol::OObject2DColored myOObject;
 	
 	myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
+	static bool isinit = false;
+	if (false == isinit) {
+		isinit=true;
+		AddEventArea({20.0,30.0}, {100, 50}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_CLICKED, eventClose);
+	}
 	myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
 	myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
 	myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
 	
 	
-	myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
+	//myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
 	
 	myOObject.Draw();
 
 
 }
+
+
+bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y)
+{
+	if(eventClose == generateEventId) {
+		EWOL_DEBUG("Request close of the windows");
+	}
+}
+
