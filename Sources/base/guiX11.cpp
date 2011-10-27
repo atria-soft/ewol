@@ -434,13 +434,8 @@ namespace guiAbstraction {
 									break;
 								case ButtonPress:
 									{
-										int32_t btId = 0;
-										//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-										if ( event.xbutton.button & Button2 ) {
-											btId = 2;
-										} else if (event.xbutton.button & Button1) {
-											btId = 1;
-										}
+										int32_t btId = event.xbutton.button;
+										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 										// Send Down message
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
 										// Check double or triple click event ...
@@ -468,13 +463,9 @@ namespace guiAbstraction {
 									break;
 								case ButtonRelease:
 									{
-										int32_t btId = 0;
-										//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-										if(event.xbutton.button & Button2) {
-											btId = 2;
-										} else if (event.xbutton.button & Button1) {
-											btId = 1;
-										}
+										int32_t btId = event.xbutton.button;
+										
+										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 										// send Up event ...
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
 										
