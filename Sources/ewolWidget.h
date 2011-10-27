@@ -38,9 +38,10 @@ namespace ewol {
 	}
 	typedef enum {
 		EVENT_INPUT_TYPE_DOWN,
+		EVENT_INPUT_TYPE_MOVE,
+		EVENT_INPUT_TYPE_SINGLE,
 		EVENT_INPUT_TYPE_DOUBLE,
 		EVENT_INPUT_TYPE_TRIPLE,
-		EVENT_INPUT_TYPE_MOVE,
 		EVENT_INPUT_TYPE_UP,
 		EVENT_INPUT_TYPE_ENTER,
 		EVENT_INPUT_TYPE_LEAVE,
@@ -63,20 +64,19 @@ namespace ewol {
 	} eventKbMoveType_te;
 	
 	enum {
-		FLAG_EVENT_INPUT_1         = 1 << 0,
-		FLAG_EVENT_INPUT_2         = 1 << 1,
-		FLAG_EVENT_INPUT_3         = 1 << 2,
-		FLAG_EVENT_INPUT_4         = 1 << 3,
-		FLAG_EVENT_INPUT_5         = 1 << 4,
-		FLAG_EVENT_INPUT_MOTION    = 1 << 5,
-		FLAG_EVENT_ENTER           = 1 << 6,
-		FLAG_EVENT_LEAVE           = 1 << 7,
-		FLAG_EVENT_DOWN            = 1 << 8,
-		FLAG_EVENT_UP              = 1 << 9,
-		FLAG_EVENT_MOVE            = 1 << 10,
-		FLAG_EVENT_CLICKED         = 1 << 11,
-		FLAG_EVENT_CLICKED_DOUBLE  = 1 << 12,
-		FLAG_EVENT_CLICKED_TRIPLE  = 1 << 13,
+		FLAG_EVENT_INPUT_1               = 1 << 0,
+		FLAG_EVENT_INPUT_2               = 1 << 1,
+		FLAG_EVENT_INPUT_3               = 1 << 2,
+		FLAG_EVENT_INPUT_4               = 1 << 3,
+		FLAG_EVENT_INPUT_5               = 1 << 4,
+		FLAG_EVENT_INPUT_MOTION          = 1 << 5,
+		FLAG_EVENT_INPUT_ENTER           = 1 << 6,
+		FLAG_EVENT_INPUT_LEAVE           = 1 << 7,
+		FLAG_EVENT_INPUT_DOWN            = 1 << 8,
+		FLAG_EVENT_INPUT_UP              = 1 << 9,
+		FLAG_EVENT_INPUT_CLICKED         = 1 << 10,
+		FLAG_EVENT_INPUT_CLICKED_DOUBLE  = 1 << 11,
+		FLAG_EVENT_INPUT_CLICKED_TRIPLE  = 1 << 12,
 	};
 	
 	#define UTF8_MAX_SIZE          (8)

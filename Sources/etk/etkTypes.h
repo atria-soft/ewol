@@ -47,9 +47,8 @@
 	typedef unsigned char                   uint8_t;
 	typedef unsigned short int              uint16_t;
 	typedef unsigned int                    uint32_t;
-	#ifndef __uint64_t_defined
-	typedef unsigned long int          uint64_t;
-	#endif
+	//typedef unsigned long int               uint64_t;
+	typedef unsigned long long int          uint64_t;
 #endif
 
 #define etk_min(elemA, elemB)               ((elemA)<(elemB)) ? (elemA) : (elemB)

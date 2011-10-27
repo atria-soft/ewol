@@ -43,6 +43,9 @@
 #	error you might define an EWOL_X11_MODE in EWOL_X11_XF86V / EWOL_X11_XRENDER
 #endif
 
+#include <sys/times.h>
+
+
 #if defined(EWOL_X11_MODE__XF86V)
 // attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListSgl[] = {
@@ -78,6 +81,9 @@ static int VisualData[] = {
 };
 #endif
 
+
+#define SEPARATED_CLICK_TIME          (30)
+
 namespace guiAbstraction {
 	extern "C" {
 		typedef struct Hints
@@ -91,6 +97,15 @@ namespace guiAbstraction {
 	}
 	class X11systemInterface
 	{
+		private:
+			// for double and triple click selection, we need to save the previous click up and down position , and the previous time ...
+			int32_t m_previousBouttonId;
+			int32_t m_previousDown_x;
+			int32_t m_previousDown_y;
+			int32_t m_previous_x;
+			int32_t m_previous_y;
+			int64_t m_previousTime;
+			bool    m_previousDouble;
 		private:
 			Atom           m_delAtom;
 			Display *      m_display;
@@ -351,6 +366,13 @@ namespace guiAbstraction {
 			X11systemInterface(void)
 			{
 				m_visual = NULL;
+				m_previousBouttonId = 0;
+				m_previousDown_x = -1;
+				m_previousDown_y = -1;
+				m_previous_x = -1;
+				m_previous_y = -1;
+				m_previousTime = 0;
+				m_previousDouble = false;
 				CreateX11Context();
 				CreateOGlContext();
 				m_run = true;
@@ -411,31 +433,132 @@ namespace guiAbstraction {
 									m_uniqueWindows->SysOnExpose();
 									break;
 								case ButtonPress:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-									if ( event.xbutton.button & Button2 ) {
-										m_uniqueWindows->GenEventInput(2, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
-									} else if (event.xbutton.button & Button1) {
-										m_uniqueWindows->GenEventInput(1, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
+									{
+										int32_t btId = 0;
+										//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+										if ( event.xbutton.button & Button2 ) {
+											btId = 2;
+										} else if (event.xbutton.button & Button1) {
+											btId = 1;
+										}
+										// Send Down message
+										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
+										// Check double or triple click event ...
+										m_previousDown_x = event.xbutton.x;
+										m_previousDown_y = event.xbutton.y;
+										if (m_previousBouttonId != btId) {
+											m_previousBouttonId = btId;
+											m_previous_x = -1;
+											m_previous_y = -1;
+											m_previousTime = 0;
+											m_previousDouble = false;
+										} else {
+											if(    abs(m_previous_x - event.xbutton.x) < 5
+											    && abs(m_previous_y - event.xbutton.y) < 5 )
+											{
+												// nothink to do ... wait up ...
+											} else {
+												m_previous_x = -1;
+												m_previous_y = -1;
+												m_previousTime = 0;
+												m_previousDouble = false;
+											}
+										}
 									}
 									break;
 								case ButtonRelease:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-									if(event.xbutton.button & Button2) {
-										m_uniqueWindows->GenEventInput(2, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
-									} else if (event.xbutton.button & Button1) {
-										m_uniqueWindows->GenEventInput(1, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
+									{
+										int32_t btId = 0;
+										//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+										if(event.xbutton.button & Button2) {
+											btId = 2;
+										} else if (event.xbutton.button & Button1) {
+											btId = 1;
+										}
+										// send Up event ...
+										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
+										
+										if (m_previousBouttonId != btId) {
+											m_previousDown_x = -1;
+											m_previousDown_y = -1;
+											m_previousBouttonId = 0;
+											m_previous_x = -1;
+											m_previous_y = -1;
+											m_previousTime = 0;
+											m_previousDouble = false;
+										} else {
+											int64_t currentTime = times(NULL); // return the tic in 10ms
+											//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
+											if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
+												//check if the same area click : 
+												if(    abs(m_previousDown_x - event.xbutton.x) < 5
+												    && abs(m_previousDown_y - event.xbutton.y) < 5 )
+												{
+													// might generate an sigle event :
+													//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedSingle\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+													m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_SINGLE, (double)event.xbutton.x, (double)event.xbutton.y);
+													m_previous_x = m_previousDown_x;
+													m_previous_y = m_previousDown_y;
+													m_previousTime = currentTime;
+												} else {
+													// reset values ...
+													m_previousDown_x = -1;
+													m_previousDown_y = -1;
+													m_previousBouttonId = 0;
+													m_previous_x = -1;
+													m_previous_y = -1;
+													m_previousTime = 0;
+												}
+												m_previousDouble = false;
+											} else {
+												//check if the same area click : 
+												if(    abs(m_previous_x - event.xbutton.x) < 5
+												    && abs(m_previous_y - event.xbutton.y) < 5 )
+												{
+													// might generate an sigle event :
+													if (false == m_previousDouble) {
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedDouble\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOUBLE, (double)event.xbutton.x, (double)event.xbutton.y);
+														m_previousTime = currentTime;
+														m_previousDouble = true;
+													} else {
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedTriple\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_TRIPLE, (double)event.xbutton.x, (double)event.xbutton.y);
+														// reset values ...
+														m_previousDown_x = -1;
+														m_previousDown_y = -1;
+														m_previousBouttonId = 0;
+														m_previous_x = -1;
+														m_previous_y = -1;
+														m_previousTime = 0;
+														m_previousDouble = false;
+													}
+												} else {
+													// reset values ...
+													m_previousDown_x = -1;
+													m_previousDown_y = -1;
+													m_previousBouttonId = 0;
+													m_previous_x = -1;
+													m_previous_y = -1;
+													m_previousTime = 0;
+													m_previousDouble = false;
+												}
+											}
+											
+											//int64_t currentTime = 
+										}
 									}
 									break;
 								case EnterNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case MotionNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (double)event.xmotion.x, (double)event.xmotion.y);
 									break;
 								case LeaveNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case FocusIn:

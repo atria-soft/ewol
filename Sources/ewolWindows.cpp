@@ -31,7 +31,9 @@
 #include <GL/gl.h>
 
 //list of local events : 
-const char * eventClose = "Close Windows";
+const char * ewolEventWindowsClose    = "ewol Windows close";
+const char * ewolEventWindowsMinimize = "ewol Windows minimize";
+const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
 
 bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 {
@@ -40,23 +42,18 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 	return true;
 }
 
-// TODO : Rewrite this with common event ...
+
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
 {
+/*
 	if(    EVENT_INPUT_TYPE_UP == typeEvent
 	    && 1 == IdInput)
 	{
-		if (y <= 20.0) {
-			if (x <= 20.0) {
-				EWOL_INFO("Request close");
-			} else if (x <= 40.0) {
-				EWOL_INFO("Request Minimize");
-			} else if (x <= 60.0) {
-				EWOL_INFO("Request Expend/unExpend");
-			}
-		}
+		EWOL_INFO("Request ???");
 	}
 	return true;
+*/
+	return false;
 }
 
 
@@ -106,26 +103,29 @@ void ewol::Windows::SysDraw(void)
 	*/
 
 
-	ewol::OObject2DColored myOObject;
+	static ewol::OObject2DColored myOObject;
 	static bool isinit = false;
 	
-	myOObject.Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
+	
 	if (false == isinit) {
 		isinit=true;
-		AddEventArea({0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_CLICKED, eventClose);
+		myOObject.Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
+		myOObject.Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
+		myOObject.Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
+		
+		AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsClose);
+		AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsMinimize);
+		AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsExpend);
+		
+		// Other ...
+		myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
+		myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
+		myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
+		myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
+		
+		//myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
 	}
 	
-	myOObject.Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
-	myOObject.Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
-	
-	// Other ...
-	myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
-	myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
-	myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
-	myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
-	
-	
-	//myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
 	
 	myOObject.Draw();
 
@@ -135,8 +135,18 @@ void ewol::Windows::SysDraw(void)
 
 bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y)
 {
-	if(eventClose == generateEventId) {
-		EWOL_DEBUG("Request close of the windows");
+	bool eventIsOK = false;
+	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
+	if(ewolEventWindowsClose == generateEventId) {
+		EWOL_INFO("Request close of the windows");
+		eventIsOK = true;
+	} else if(ewolEventWindowsMinimize == generateEventId) {
+		EWOL_INFO("Request Minimize of the windows");
+		eventIsOK = true;
+	} else if(ewolEventWindowsExpend == generateEventId) {
+		EWOL_INFO("Request Expend of the windows");
+		eventIsOK = true;
 	}
+	return eventIsOK;
 }
 

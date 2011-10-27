@@ -93,8 +93,8 @@ DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
 X11FLAGS= -lX11 -lGL -lGLU
 # some X11 mode availlable : 
-X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
-#X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
+#X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
+X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
 
 ###############################################################################
 ### Basic C flags                                                           ###

@@ -63,8 +63,22 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, d
 			    && m_inputEvent[iii].area.origin.y + m_inputEvent[iii].area.size.y > y )
 			{
 				// TODO : What is the flags for ??? how can we use it...
-				if(    FLAG_EVENT_INPUT_1 && m_inputEvent[iii].area.flags
-				    && 1 == IdInput)
+				if(    (    (    (FLAG_EVENT_INPUT_1 & m_inputEvent[iii].area.flags)  && 1 == IdInput )
+				         || (    (FLAG_EVENT_INPUT_2 & m_inputEvent[iii].area.flags)  && 2 == IdInput)
+				         || (    (FLAG_EVENT_INPUT_3 & m_inputEvent[iii].area.flags)  && 3 == IdInput)
+				         || (    (FLAG_EVENT_INPUT_4 & m_inputEvent[iii].area.flags)  && 4 == IdInput)
+				         || (    (FLAG_EVENT_INPUT_5 & m_inputEvent[iii].area.flags)  && 5 == IdInput)
+				       )
+				    && (    (    (FLAG_EVENT_INPUT_MOTION          & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_MOVE   == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_ENTER           & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_ENTER  == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_LEAVE           & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_LEAVE  == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_DOWN            & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_DOWN   == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_UP              & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_UP     == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_CLICKED         & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_SINGLE == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_CLICKED_DOUBLE  & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_DOUBLE == typeEvent)
+				         || (    (FLAG_EVENT_INPUT_CLICKED_TRIPLE  & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_TRIPLE == typeEvent)
+				       )
+				  )
 				{
 					ended = OnEventArea(m_inputEvent[iii].generateEventId, x, y);
 					if (true == ended) {

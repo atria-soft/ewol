@@ -63,8 +63,8 @@ void TOOLS_DisplayTime(void)
 	struct tm * timeinfo;
 	char tmpdata[50];
 	
-	time ( &rawtime );
-	timeinfo = localtime ( &rawtime );
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
 	sprintf(tmpdata, " %2dh %2dmin %2ds | ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
 	std::cout << tmpdata ;
 }
