@@ -51,6 +51,12 @@ extern const char * etkLibName;
 #	define TK_DEBUG(data)			do {}while(0)
 #endif
 
+#if ETK_DEBUG_LEVEL > 3
+#	define TK_VERBOSE(data)			ETK_VERBOSE(etkLibName, data)
+#else
+#	define TK_VERBOSE(data)			do {}while(0)
+#endif
+
 #define TK_ASSERT(cond, data)		ETK_ASSERT(etkLibName, cond, data)
 
 #if ETK_DEBUG_LEVEL > 1

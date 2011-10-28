@@ -27,6 +27,7 @@
 #include <ewolWidget.h>
 #include <ewolWindows.h>
 #include <ewolOObject.h>
+#include <ewolTexture.h>
 
 #include <GL/gl.h>
 
@@ -58,6 +59,16 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, d
 
 
 
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glx.h>
+#include <GL/glut.h>
+#if defined(EWOL_X11_MODE__XF86V)
+#	include <X11/extensions/xf86vmode.h>
+#elif defined(EWOL_X11_MODE__XRENDER)
+#	include <X11/extensions/Xrender.h>
+#endif
+
 
 void ewol::Windows::SysDraw(void)
 {
@@ -84,6 +95,7 @@ void ewol::Windows::SysDraw(void)
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
 	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 	
+	
 
 
 	/*
@@ -105,7 +117,12 @@ void ewol::Windows::SysDraw(void)
 
 	static ewol::OObject2DColored myOObject;
 	static bool isinit = false;
-	
+	static int32_t texID1 = -1;
+	static int32_t texID2 = -1;
+	static int32_t texID3 = -1;
+	static int32_t texID4 = -1;
+	static int32_t texID5 = -1;
+	static int32_t texID6 = -1;
 	
 	if (false == isinit) {
 		isinit=true;
@@ -124,10 +141,131 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
 		
 		//myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
+		
+		
+		etk::File myFile("dataTest/test_16b_r5g6b5.bmp");
+		texID1 = LoadTexture(myFile);
+		myFile = "dataTest/test_16b_x1r5g5b5.bmp";
+		texID2 = LoadTexture(myFile);
+		myFile = "dataTest/test_24b_r8g8b8.bmp";
+		//texID3 = LoadTexture(myFile);
+		myFile = "dataTest/test_32b_x8r8g8b8.bmp";
+		//texID4 = LoadTexture(myFile);
+		myFile = "dataTest/test_16b_a1r5g5b5.bmp";
+		texID5 = LoadTexture(myFile);
+		myFile = "dataTest/test_32b_a8r8g8b8.bmp";
+		//texID6 = LoadTexture(myFile);
+		
+		myOObject.Rectangle(300, 300, 50, 50, 1.0, 1.0, 1.0, 1.0);
+		myOObject.Rectangle(350, 350, 50, 50, 1.0, 0.0, 0.0, 1.0);
+		myOObject.Rectangle(400, 400, 50, 50, 0.0, 1.0, 0.0, 1.0);
+		myOObject.Rectangle(450, 450, 50, 50, 0.0, 0.0, 1.0, 1.0);
+		myOObject.Rectangle(500, 500, 50, 50, 0.0, 0.0, 0.0, 1.0);
+		
+	}
+	myOObject.Draw();
+	
+	if (texID3 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 0.5);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID3);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(300.0, 300.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(550.0, 300.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(550.0, 550.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(300.0, 550.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
 	}
 	
 	
-	myOObject.Draw();
+	if (texID1 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID1);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(300.0, 0.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(400.0, 0.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(400.0, 100.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(300.0, 100.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
+	
+	if (texID2 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID2);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(300.0, 100.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(400.0, 100.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(400.0, 200.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(300.0, 200.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
+	
+	if (texID4 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID4);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(300.0, 200.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(400.0, 200.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(400.0, 300.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(300.0, 300.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
+
+	if (texID5 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID5);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(400.0, 0.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(500.0, 0.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(500.0, 100.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(400.0, 100.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
+	if (texID6 > -1) {
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, texID6);
+		glBegin(GL_QUADS);
+			glTexCoord2f(0.0, 0.0);
+			glVertex3f(400.0, 100.0, 0.0);
+			glTexCoord2f(1.0, 0.0);
+			glVertex3f(500.0, 100.0, 0.0);
+			glTexCoord2f(1.0, 1.0);
+			glVertex3f(500.0, 200.0, 0.0);
+			glTexCoord2f(0.0, 1.0);
+			glVertex3f(400.0, 200.0, 0.0);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+	}
 
 
 }

@@ -24,6 +24,7 @@
 
 
 #include <etkTypes.h>
+#include <etkDebugInternal.h>
 #include <etkFile.h>
 
 
@@ -144,14 +145,14 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 	m_folder = "";
 	m_shortFilename = "";
 	m_lineNumberOpen = 0;
-	TK_DEBUG("1 :Set Name : " << newFilename );
+	TK_VERBOSE("1 :Set Name : " << newFilename );
 	etk::String destFilename;
 	if (newFilename.Size() == 0) {
 		destFilename = "no-name";
 	} else {
 		destFilename = newFilename;
 	}
-	TK_DEBUG("2 : Get file Name : " << destFilename );
+	TK_VERBOSE("2 : Get file Name : " << destFilename );
 	if ('/' != *destFilename.c_str()) {
 		// Get the command came from the running of the program : 
 		char cCurrentPath[FILENAME_MAX];
@@ -164,7 +165,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 		destFilename += '/';
 		destFilename += tmpFilename;
 	}
-	TK_DEBUG("3 : Get file Name : " << destFilename );
+	TK_VERBOSE("3 : Get file Name : " << destFilename );
 	
 	// Get the real Path of the current File
 	ok = realpath(destFilename.c_str(), buf);
@@ -174,10 +175,10 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 			// Get the FileName
 			etk::String tmpFilename = destFilename.Extract(lastPos+1);
 			destFilename.Remove(lastPos, destFilename.Size() - lastPos);
-			TK_DEBUG("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
+			TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
 			ok = realpath(destFilename.c_str(), buf);
 			if (!ok) {
-				TK_ERROR("Can not find real Path name of \"" << destFilename << "\"");
+				TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
 				m_shortFilename = tmpFilename;
 				m_folder        = destFilename;
 			} else {
@@ -202,7 +203,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 			m_shortFilename = destFilename;
 		}
 	}
-	TK_DEBUG("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" ");
+	TK_VERBOSE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" ");
 }
 
 int32_t etk::File::GetLineNumber(void)
@@ -241,4 +242,36 @@ etk::String etk::File::GetExtention(void)
 		tmpExt = m_shortFilename.Extract(lastPos+1);
 	}
 	return tmpExt;
+}
+
+
+
+int32_t etk::File::Size(void)
+{
+	FILE *myFile=NULL;
+	etk::String myCompleateName = GetCompleateName();
+	myFile=fopen(myCompleateName.c_str(),"rb");
+	if(NULL == myFile) {
+		//EWOL_ERROR("Can not find the file name=\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
+		return -1;
+	}
+	int32_t size = 0;
+	fseek(myFile, 0, SEEK_END);
+	size = ftell(myFile);
+	fseek(myFile, 0, SEEK_SET);
+	fclose(myFile);
+	return size;
+}
+
+
+bool etk::File::Exist(void)
+{
+	FILE *myFile=NULL;
+	etk::String myCompleateName = GetCompleateName();
+	myFile=fopen(myCompleateName.c_str(),"rb");
+	if(NULL == myFile) {
+		return false;
+	}
+	fclose(myFile);
+	return true;
 }

@@ -74,11 +74,12 @@ void TOOLS_DisplayTime(void);
 														std::cout << "[" << info << "] " << data; \
 														std::cout << ETK_BASH_COLOR_NORMAL <<std::endl; \
 													}while(0)
-#define ETK_CRITICAL(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_BOLD_RED, "CC", data)
-#define ETK_WARNING(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_MAGENTA, "WW", data)
-#define ETK_ERROR(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_BOLD_RED, "EE", data)
-#define ETK_INFO(libName, data)						ETK_DBG_COMMON(libName, ETK_BASH_COLOR_CYAN, "II", data)
-#define ETK_DEBUG(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_YELLOW, "DD", data)
+#define ETK_CRITICAL(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_BOLD_RED, 'C', data)
+#define ETK_WARNING(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_MAGENTA,  'W', data)
+#define ETK_ERROR(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_BOLD_RED, 'E', data)
+#define ETK_INFO(libName, data)						ETK_DBG_COMMON(libName, ETK_BASH_COLOR_CYAN,     'I', data)
+#define ETK_DEBUG(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_YELLOW,   'D', data)
+#define ETK_VERBOSE(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_WHITE,    'V', data)
 #define ETK_ASSERT(libName, cond, data)				do { \
 														if (!(cond)) { \
 															ETK_CRITICAL(libName, data); \

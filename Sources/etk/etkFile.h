@@ -44,6 +44,8 @@ namespace etk
 			etk::String GetCompleateName(void) const;
 			bool        HasExtention(void);
 			etk::String GetExtention(void);
+			int32_t     Size(void);
+			bool        Exist(void);
 			int32_t     GetLineNumber(void);
 			void        SetLineNumber(int32_t newline);
 			void        SetCompleateName(etk::String &newFilename);

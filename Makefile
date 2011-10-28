@@ -168,6 +168,7 @@ CXXFILES +=		etk/etkDebug.cpp \
 CXXFILES +=		ewol.cpp \
 				ewolDebug.cpp \
 				ewolOObject.cpp \
+				ewolTexture.cpp \
 				ewolWidget.cpp \
 				ewolWindows.cpp
 

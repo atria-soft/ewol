@@ -50,8 +50,8 @@ void ewol::OObject2DColored::Draw(void)
 	//EWOL_DEBUG("Draw ..." << m_coord.Size()/3 << " triangle(s)");
 
 	// Disable Pointers
-	glDisableClientState( GL_VERTEX_ARRAY );
 	glDisableClientState( GL_COLOR_ARRAY );
+	glDisableClientState( GL_VERTEX_ARRAY );
 
 }
 
