@@ -260,7 +260,7 @@ class Bitmap
 				return;
 			}
 			EWOL_DEBUG(" -----------------------------------------------------------");
-			if (true) {
+			if (false) {
 				EWOL_DEBUG("Display caracteristic of the bitmap : ");
 				EWOL_DEBUG("    Header of file :");
 				EWOL_DEBUG("        bfType    =" << m_FileHeader.bfType << "      19778 : must always be set to 'BM' to declare that this is a .bmp-file.");
@@ -295,6 +295,9 @@ class Bitmap
 				case BITS_32_X8R8G8B8:
 					EWOL_DEBUG("        mode = 32 bits X8R8G8B8");
 					break;
+				case BITS_32_A8R8G8B8:
+					EWOL_DEBUG("        mode = 32 bits A8R8G8B8");
+					break;
 				default:
 					EWOL_DEBUG("        mode = ERROR");
 					break;
@@ -305,7 +308,7 @@ class Bitmap
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-int32_t ewol::LoadTexture(etk::File & fileName)
+int32_t ewol::LoadTexture(etk::File fileName)
 {
 	etk::String fileExtention = fileName.GetExtention();
 	if (fileExtention ==  "bmp") {

@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewolTexture.h
- * @brief ewol Texture loading system (header)
+ * @file ewolFont.h
+ * @brief ewol Font system (header)
  * @author Edouard DUPIN
- * @date 28/10/2011
+ * @date 29/10/2011
  * @par Project
  * ewol
  *
@@ -22,17 +22,18 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEXTURE_H__
-#define __EWOL_TEXTURE_H__
+#ifndef __EWOL_FONT_H__
+#define __EWOL_FONT_H__
 
 #include <etkTypes.h>
 #include <ewolDebug.h>
 #include <etkFile.h>
 
+
 namespace ewol
 {
-	int32_t LoadTexture(etk::File fileName);
-	void    UnLoadTexture(int32_t textureID);
+	int32_t LoadFont(etk::File fontFileName);
+	void    DrawText(double x, double y, const char * myString);
 };
 
 #endif

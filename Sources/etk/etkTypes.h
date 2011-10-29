@@ -47,8 +47,8 @@
 	typedef unsigned char                   uint8_t;
 	typedef unsigned short int              uint16_t;
 	typedef unsigned int                    uint32_t;
-	//typedef unsigned long int               uint64_t;
-	typedef unsigned long long int          uint64_t;
+	typedef unsigned long int               uint64_t;
+	//typedef unsigned long long int          uint64_t;
 #endif
 
 #define etk_min(elemA, elemB)               ((elemA)<(elemB)) ? (elemA) : (elemB)
@@ -57,13 +57,20 @@
 
 extern "C"
 {
-	struct etkPointAndPosition{
+	struct etkPointAndPositionDouble{
 		double x;
 		double y;
 	};
-	typedef etkPointAndPosition     point_ts;
-	typedef etkPointAndPosition     position_ts;
-	typedef etkPointAndPosition     size_ts;
+	
+	struct etkPointAndPositionInt{
+		int32_t x;
+		int32_t y;
+	};
+	
+	typedef etkPointAndPositionDouble     point_ts;
+	typedef etkPointAndPositionDouble     position_ts;
+	typedef etkPointAndPositionDouble     size_ts;
+	typedef etkPointAndPositionInt        intSize_ts;
 }
 
 

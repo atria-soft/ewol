@@ -28,6 +28,7 @@
 #include <ewolWindows.h>
 #include <ewolOObject.h>
 #include <ewolTexture.h>
+#include <ewolFont.h>
 
 #include <GL/gl.h>
 
@@ -130,9 +131,9 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
 		myOObject.Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
 		
-		AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsClose);
-		AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsMinimize);
-		AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED, ewolEventWindowsExpend);
+		AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
+		AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
+		AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
 		
 		// Other ...
 		myOObject.Rectangle(20, 30, 100, 50,  1.0, 0.0, 0.0, 1.0);
@@ -148,19 +149,22 @@ void ewol::Windows::SysDraw(void)
 		myFile = "dataTest/test_16b_x1r5g5b5.bmp";
 		texID2 = LoadTexture(myFile);
 		myFile = "dataTest/test_24b_r8g8b8.bmp";
-		//texID3 = LoadTexture(myFile);
+		texID3 = LoadTexture(myFile);
 		myFile = "dataTest/test_32b_x8r8g8b8.bmp";
-		//texID4 = LoadTexture(myFile);
+		texID4 = LoadTexture(myFile);
 		myFile = "dataTest/test_16b_a1r5g5b5.bmp";
 		texID5 = LoadTexture(myFile);
 		myFile = "dataTest/test_32b_a8r8g8b8.bmp";
-		//texID6 = LoadTexture(myFile);
+		texID6 = LoadTexture(myFile);
 		
 		myOObject.Rectangle(300, 300, 50, 50, 1.0, 1.0, 1.0, 1.0);
 		myOObject.Rectangle(350, 350, 50, 50, 1.0, 0.0, 0.0, 1.0);
 		myOObject.Rectangle(400, 400, 50, 50, 0.0, 1.0, 0.0, 1.0);
 		myOObject.Rectangle(450, 450, 50, 50, 0.0, 0.0, 1.0, 1.0);
 		myOObject.Rectangle(500, 500, 50, 50, 0.0, 0.0, 0.0, 1.0);
+		
+		int32_t fontID = ewol::LoadFont("dataTest/TextMonospace.ebt");
+		
 		
 	}
 	myOObject.Draw();
@@ -266,6 +270,10 @@ void ewol::Windows::SysDraw(void)
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 	}
+	
+	
+	ewol::DrawText(200, 300, "Ma chere Aurelie, je T'aime");
+	
 
 
 }
