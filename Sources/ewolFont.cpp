@@ -177,11 +177,10 @@ void ewol::DrawText(double x, double y, const char * myString)
 	glBindTexture(GL_TEXTURE_2D, TextureIdBold);
 	
 	while(*tmpVal != '\0') {
-		char tmpChar = *tmpVal;
+		int32_t tmpChar = (int32_t)*tmpVal;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
-		
 		glBegin(GL_QUADS);
 			glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);
 			glVertex3f(x,                             y, 0.0);

@@ -163,6 +163,9 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(450, 450, 50, 50, 0.0, 0.0, 1.0, 1.0);
 		myOObject.Rectangle(500, 500, 50, 50, 0.0, 0.0, 0.0, 1.0);
 		
+		myOObject.Rectangle(200, 300, 900, 54, 0.0, 0.0, 0.0, 1.0);
+		myOObject.Rectangle(200, 300, 900, 13, 0.0, 1.0, 0.0, 1.0);
+		myOObject.Rectangle(200, 343, 900, 11, 1.0, 0.0, 0.0, 1.0);
 		int32_t fontID = ewol::LoadFont("dataTest/TextMonospace.ebt");
 		
 		
@@ -272,7 +275,7 @@ void ewol::Windows::SysDraw(void)
 	}
 	
 	
-	ewol::DrawText(200, 300, "Ma chere Aurelie, je T'aime");
+	ewol::DrawText(200, 300, "APet9_$*µ:/?,>< \"#',;KkgGyYf");
 	
 
 
