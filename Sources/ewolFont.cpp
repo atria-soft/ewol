@@ -49,6 +49,8 @@ extern "C"
 		position_ts posStart;
 		position_ts posStop;
 		intSize_ts size;
+		float ratio;
+		
 	}UTF8Element_ts;
 }
 
@@ -154,6 +156,7 @@ namespace ewol
 					m_listOfElement[iii].posStop.y = (double)(y+h) / 512.0;
 					m_listOfElement[iii].size.x = w;
 					m_listOfElement[iii].size.y = h;
+					m_listOfElement[iii].ratio = (float)w/(float)h;
 				}
 			};
 			void SetGlyphID(int32_t utf8Value, int32_t lineID, int32_t x, int32_t y, int32_t w, int32_t h)
@@ -166,6 +169,7 @@ namespace ewol
 					m_listOfElement[utf8Value].posStop.y = (double)(y+h) / 512.0;
 					m_listOfElement[utf8Value].size.x = w;
 					m_listOfElement[utf8Value].size.y = h;
+					m_listOfElement[utf8Value].ratio = (float)w/(float)h;
 				} else {
 					EWOL_ERROR("not manage glyph with ID > 0x7F line : " << lineID);
 				}
@@ -342,12 +346,13 @@ void ewol::DrawText(int32_t            fontID,
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, listLoadedFonts[fontID]->GetOglId(displayMode));
-	
+	float posDrawX = drawPosition.x;
 	while(*tmpVal != '\0') {
 		int32_t tmpChar = (int32_t)*tmpVal;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
+		float sizeWidth = size * listOfElement[tmpChar].ratio;
 		if (tmpChar != 0x20) {
 			/*
 			EWOL_DEBUG(" Draw  TEX      (" << listOfElement[tmpChar].posStart.x*512 << "," << listOfElement[tmpChar].posStart.y*512 << ")");
@@ -356,15 +361,17 @@ void ewol::DrawText(int32_t            fontID,
 			EWOL_DEBUG("                (" << drawPosition.x + listOfElement[tmpChar].size.x << "," << drawPosition.y + listOfElement[tmpChar].size.y << ")");
 			*/
 			glBegin(GL_QUADS);
-				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);				glVertex3f(drawPosition.x,                                 drawPosition.y,                                 0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStart.y);				glVertex3f(drawPosition.x + listOfElement[tmpChar].size.x, drawPosition.y,                                 0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStop.y);				glVertex3f(drawPosition.x + listOfElement[tmpChar].size.x, drawPosition.y + listOfElement[tmpChar].size.y, 0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStop.y);				glVertex3f(drawPosition.x,                                 drawPosition.y + listOfElement[tmpChar].size.y, 0.0);
+				//m_listOfElement[utf8Value].ratio = (float)w/(float)h;
+				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);	glVertex3f(posDrawX,             drawPosition.y,             0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStart.y);	glVertex3f(posDrawX + sizeWidth, drawPosition.y,             0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStop.y);	glVertex3f(posDrawX + sizeWidth, drawPosition.y + size, 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStop.y);	glVertex3f(posDrawX,             drawPosition.y + size, 0.0);
 			glEnd();
 		}
 		tmpVal++;
-		drawPosition.x += listOfElement[tmpChar].size.x;
+		posDrawX += sizeWidth;
 	}
+	drawPosition.x = posDrawX;
 	glDisable(GL_TEXTURE_2D);
 }
 // draw the text with a sp\Ufffffffffy background

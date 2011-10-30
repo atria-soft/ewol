@@ -288,15 +288,15 @@ void ewol::Windows::SysDraw(void)
 	
 	drawPosition = { 200.0, 350.0, 0.0};
 	textColorFg  = { 1.0, 0.0, 0.0, 1.0};
-	ewol::DrawText(fontID, FONT_MODE_BOLD, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
+	ewol::DrawText(fontID, FONT_MODE_BOLD, 25, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
 	
 	drawPosition = { 200.0, 400.0, 0.0};
 	textColorFg  = { 0.0, 1.0, 0.0, 1.0};
-	ewol::DrawText(fontID, FONT_MODE_ITALIC, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
+	ewol::DrawText(fontID, FONT_MODE_ITALIC, 15, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
 	
 	drawPosition = { 200.0, 450.0, 0.0};
 	textColorFg  = { 0.0, 0.0, 1.0, 1.0};
-	ewol::DrawText(fontID, FONT_MODE_BOLD_ITALIC, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
+	ewol::DrawText(fontID, FONT_MODE_BOLD_ITALIC, 105, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
 
 
 }
