@@ -26,6 +26,7 @@
 #define __EWOL_O_OBJECT_H__
 
 #include <etkTypes.h>
+#include <etkFile.h>
 #include <ewolDebug.h>
 #include <etkVectorType.h>
 
@@ -92,21 +93,19 @@ namespace ewol {
 	};
 	*/
 	
-	/*
 	class OObject2DTextured :public ewol::OObject
 	{
 		public:
-			OObject2DTextured(void) {};
-			virtual ~OObject2DTextured(void) {};
+			OObject2DTextured(etk::File textureName);
+			virtual ~OObject2DTextured(void);
 		public:
 			virtual void Draw(void);
+			void Rectangle(float x, float y, float w, float h, float texX=0.0, float texY=0.0, float texSX=1.0, float texSY=1.0);
 		protected:
 			uint32_t                      m_textureId;   //!< texture internal ID
 			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
-			etk::VectorType<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
 	};
-	*/
 };
 
 #endif

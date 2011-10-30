@@ -29,7 +29,7 @@
 #define EDN_LOG_MAX_LENGTH 250
 
 
-#define FUNCTION_NAME_SIZE	(50)
+#define FUNCTION_NAME_SIZE	(70)
 
 void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* funcName, const char* libName)
 {

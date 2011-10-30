@@ -121,14 +121,13 @@ void ewol::Windows::SysDraw(void)
 
 
 	static ewol::OObject2DColored myOObject;
+	static ewol::OObject2DTextured myOObjectTex_r5g6b5  ("dataTest/test_16b_r5g6b5.bmp");
+	static ewol::OObject2DTextured myOObjectTex_x1r5g5b5("dataTest/test_16b_x1r5g5b5.bmp");
+	static ewol::OObject2DTextured myOObjectTex_r8g8b8  ("dataTest/test_24b_r8g8b8.bmp");
+	static ewol::OObject2DTextured myOObjectTex_x8r8g8b8("dataTest/test_32b_x8r8g8b8.bmp");
+	static ewol::OObject2DTextured myOObjectTex_a8r8g8b8("dataTest/test_32b_a8r8g8b8.bmp");
 	static bool isinit = false;
-	static int32_t texID1 = -1;
-	static int32_t texID2 = -1;
-	static int32_t texID3 = -1;
-	static int32_t texID4 = -1;
-	static int32_t texID5 = -1;
-	static int32_t texID6 = -1;
-	static int32_t fontID = -1;
+	static int32_t fontID = 0;
 	
 	if (false == isinit) {
 		isinit=true;
@@ -145,32 +144,20 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(50, 50, 50,  50,  0.0, 1.0, 0.0, 1.0);
 		myOObject.Rectangle(80, 80, 100, 50,  0.0, 0.0, 1.0, 1.0);
 		myOObject.Rectangle(50, 00, 300, 300, 0.2, 0.2, 0.2, 0.5);
-		
-		//myOObject.Rectangle(-50, -50, 120, 120,  0.0, 1.0, 1.0, 0.5);
-		
-		
-		etk::File myFile("dataTest/test_16b_r5g6b5.bmp");
-		texID1 = LoadTexture(myFile);
-		myFile = "dataTest/test_16b_x1r5g5b5.bmp";
-		texID2 = LoadTexture(myFile);
-		myFile = "dataTest/test_24b_r8g8b8.bmp";
-		texID3 = LoadTexture(myFile);
-		myFile = "dataTest/test_32b_x8r8g8b8.bmp";
-		texID4 = LoadTexture(myFile);
-		myFile = "dataTest/test_16b_a1r5g5b5.bmp";
-		texID5 = LoadTexture(myFile);
-		myFile = "dataTest/test_32b_a8r8g8b8.bmp";
-		texID6 = LoadTexture(myFile);
-		
-		myOObject.Rectangle(300, 300, 50, 50, 1.0, 1.0, 1.0, 1.0);
-		myOObject.Rectangle(350, 350, 50, 50, 1.0, 0.0, 0.0, 1.0);
-		myOObject.Rectangle(400, 400, 50, 50, 0.0, 1.0, 0.0, 1.0);
-		myOObject.Rectangle(450, 450, 50, 50, 0.0, 0.0, 1.0, 1.0);
-		myOObject.Rectangle(500, 500, 50, 50, 0.0, 0.0, 0.0, 1.0);
-		
+		/*
 		myOObject.Rectangle(200, 300, 900, 54, 0.0, 0.0, 0.0, 1.0);
 		myOObject.Rectangle(200, 300, 900, 13, 0.0, 1.0, 0.0, 1.0);
 		myOObject.Rectangle(200, 343, 900, 11, 1.0, 0.0, 0.0, 1.0);
+		*/
+		
+		myOObjectTex_r5g6b5.Rectangle(  300, 0, 100, 100);
+		myOObjectTex_x1r5g5b5.Rectangle(300, 100, 100, 100);
+		myOObjectTex_r8g8b8.Rectangle(  300, 200, 100, 100);
+		myOObjectTex_x8r8g8b8.Rectangle(400, 0, 100, 100);
+		myOObjectTex_a8r8g8b8.Rectangle(400, 100, 100, 100);
+		
+		
+		
 		if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
 			fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 		}
@@ -178,108 +165,11 @@ void ewol::Windows::SysDraw(void)
 		
 	}
 	myOObject.Draw();
-	
-	if (texID3 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 0.5);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID3);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(300.0, 300.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(550.0, 300.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(550.0, 550.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(300.0, 550.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
-	
-	
-	if (texID1 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID1);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(300.0, 0.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(400.0, 0.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(400.0, 100.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(300.0, 100.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
-	
-	if (texID2 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID2);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(300.0, 100.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(400.0, 100.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(400.0, 200.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(300.0, 200.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
-	
-	if (texID4 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID4);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(300.0, 200.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(400.0, 200.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(400.0, 300.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(300.0, 300.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
-
-	if (texID5 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID5);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(400.0, 0.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(500.0, 0.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(500.0, 100.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(400.0, 100.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
-	if (texID6 > -1) {
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texID6);
-		glBegin(GL_QUADS);
-			glTexCoord2f(0.0, 0.0);
-			glVertex3f(400.0, 100.0, 0.0);
-			glTexCoord2f(1.0, 0.0);
-			glVertex3f(500.0, 100.0, 0.0);
-			glTexCoord2f(1.0, 1.0);
-			glVertex3f(500.0, 200.0, 0.0);
-			glTexCoord2f(0.0, 1.0);
-			glVertex3f(400.0, 200.0, 0.0);
-		glEnd();
-		glDisable(GL_TEXTURE_2D);
-	}
+	myOObjectTex_r5g6b5.Draw();
+	myOObjectTex_x1r5g5b5.Draw();
+	myOObjectTex_r8g8b8.Draw();
+	myOObjectTex_x8r8g8b8.Draw();
+	myOObjectTex_a8r8g8b8.Draw();
 	
 	
 	coord3D_ts drawPosition = { 200.0, 300.0, 0.0};

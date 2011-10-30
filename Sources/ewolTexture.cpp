@@ -383,19 +383,17 @@ int32_t ewol::LoadTexture(etk::File fileName)
 
 void ewol::UnLoadTexture(uint32_t textureID)
 {
-	if (listLoadedTexture.Size()!=0) {
-		for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
-			if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
-				listLoadedTexture[iii]->m_nbTimeLoaded--;
-				if (0 == listLoadedTexture[iii]->m_nbTimeLoaded) {
-					EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[iii]->m_filename);
-					glDeleteTextures(1,&listLoadedTexture[iii]->m_openGlTextureID);
-					delete(listLoadedTexture[iii]);
-					listLoadedTexture[iii] = NULL;
-					listLoadedTexture.Erase(iii);
-					return;
-				}
+	for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+		if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
+			listLoadedTexture[iii]->m_nbTimeLoaded--;
+			if (0 == listLoadedTexture[iii]->m_nbTimeLoaded) {
+				EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[iii]->m_filename);
+				glDeleteTextures(1,&listLoadedTexture[iii]->m_openGlTextureID);
+				delete(listLoadedTexture[iii]);
+				listLoadedTexture[iii] = NULL;
+				listLoadedTexture.Erase(iii);
 			}
+			return;
 		}
 	}
 	EWOL_CRITICAL("Can not find TextureId=" << textureID << " in the list of texture loaded...==> to remove it ...");
@@ -404,11 +402,9 @@ void ewol::UnLoadTexture(uint32_t textureID)
 
 int32_t ewol::GetTextureSize(uint32_t textureID)
 {
-	if (listLoadedTexture.Size()!=0) {
-		for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
-			if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
-				return listLoadedTexture[iii]->m_imageSize;
-			}
+	for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+		if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
+			return listLoadedTexture[iii]->m_imageSize;
 		}
 	}
 	EWOL_ERROR("Can not find TextureId=" << textureID << " in the list of texture loaded...");
