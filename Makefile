@@ -104,10 +104,10 @@ X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
 CXXFLAGS=  $(X11FLAGS) -D__PLATFORM__=$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
+	CXXFLAGS+= -O2
+else
 	# Enable debug (cgdb ***)
 	CXXFLAGS+= -g -O0
-else
-	CXXFLAGS+= -O2
 endif
 # display all flags
 CXXFLAGS+= -Wall

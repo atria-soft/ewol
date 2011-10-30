@@ -32,25 +32,6 @@
 namespace ewol {
 	extern "C" {
 		typedef struct {
-			float x;
-			float y;
-			float z;
-		}coord3D_ts;
-		typedef struct {
-			float x;
-			float y;
-		}coord2D_ts;
-		typedef struct {
-			float u;
-			float v;
-		}texCoord_ts;
-		typedef struct {
-			float red;
-			float green;
-			float blue;
-			float alpha;
-		}color_ts;
-		typedef struct {
 			int32_t f;
 			int32_t s;
 			int32_t t;

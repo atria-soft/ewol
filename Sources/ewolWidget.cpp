@@ -24,6 +24,8 @@
 
 #include <ewolWidget.h>
 
+#undef __class__
+#define __class__	"ewol::Widget"
 
 ewol::Widget::Widget(void)
 {

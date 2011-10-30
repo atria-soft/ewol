@@ -46,6 +46,9 @@
 #include <sys/times.h>
 
 
+#undef __class__
+#define __class__	"guiAbstraction"
+
 #if defined(EWOL_X11_MODE__XF86V)
 // attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListSgl[] = {

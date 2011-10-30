@@ -27,136 +27,6 @@
 #include <ewolTexture.h>
 #include <etkVectorType.h>
 
-extern "C"
-{
-	typedef struct {
-		position_ts posStart;
-		position_ts posStop;
-		intSize_ts size;
-	}UTF8Element_ts;
-}
-
-static UTF8Element_ts listOfElement[0x80];
-
-static int32_t TextureIdNormal = -1;
-static int32_t TextureIdBold = -1;
-static int32_t TextureIdBoldItalic = -1;
-static int32_t TextureIdItalic = -1;
-
-static bool isInit = false;
-
-int32_t ewol::LoadFont(etk::File fontFileName)
-{
-	if (true == isInit) {
-		EWOL_ERROR("Font is already loaded...");
-		return 0;
-	}
-	if (fontFileName.GetExtention() != "ebt") {
-		EWOL_ERROR("Not the coorect extention of the file" << fontFileName);
-		return 0;
-	}
-	if (false == fontFileName.Exist()) {
-		EWOL_ERROR("File does not Exist ... " << fontFileName);
-		return 0;
-	}
-	
-	FILE* File=fopen(fontFileName.GetCompleateName().c_str(),"r");
-	if(NULL == File) {
-		EWOL_ERROR("Can not find the file name=\"" << fontFileName << "\"");
-		return 0;
-	}
-	
-	char elementLine[2048];
-	int32_t lineID=1;
-	while (NULL != fgets(elementLine, 2048, File) )
-	{
-		if (    '\n' != elementLine[0] // EOL
-		     && '\0' != elementLine[0] // EOF
-		     && '#'  != elementLine[0] // Comment line
-		   )
-		{
-			if (0 == strncmp("name:", elementLine, 5)) {
-				char extractString[256] = "";
-				sscanf(elementLine, "name:%s", extractString);
-				EWOL_INFO("Find font name : \"" << extractString << "\"");
-			} else if (0 == strncmp("normal:", elementLine, 7)) {
-				char extractString[256] = "";
-				sscanf(elementLine, "normal:%s", extractString);
-				etk::String elementName = fontFileName.GetFolder();
-				elementName += '/';
-				elementName += extractString;
-				EWOL_INFO("Find normal font image : \"" << elementName << "\"");
-				TextureIdNormal = ewol::LoadTexture(elementName);
-			} else if (0 == strncmp("bold-italic:", elementLine, 12)) {
-				char extractString[256] = "";
-				sscanf(elementLine, "bold-italic:%s", extractString);
-				etk::String elementName = fontFileName.GetFolder();
-				elementName += '/';
-				elementName += extractString;
-				EWOL_INFO("Find bold-italic font image : \"" << elementName << "\"");
-				TextureIdBoldItalic = ewol::LoadTexture(elementName);
-			} else if (0 == strncmp("bold:", elementLine, 5)) {
-				char extractString[256] = "";
-				sscanf(elementLine, "bold:%s", extractString);
-				etk::String elementName = fontFileName.GetFolder();
-				elementName += '/';
-				elementName += extractString;
-				EWOL_INFO("Find bold font image : \"" << elementName << "\"");
-				TextureIdBold = ewol::LoadTexture(elementName);
-			} else if (0 == strncmp("italic:", elementLine, 7)) {
-				char extractString[256] = "";
-				sscanf(elementLine, "italic:%s", extractString);
-				etk::String elementName = fontFileName.GetFolder();
-				elementName += '/';
-				elementName += extractString;
-				EWOL_INFO("Find italic font image : \"" << elementName << "\"");
-				TextureIdItalic = ewol::LoadTexture(elementName);
-			} else if (0 == strncmp("0x00", elementLine, 4)) {
-				int32_t GlyphPositionX;
-				int32_t GlyphPositionY;
-				int32_t GlyphSizeX;
-				int32_t GlyphSizeY;
-				sscanf(elementLine, "0x00 (%d,%d) (%d,%d)", &GlyphPositionX, &GlyphPositionY, &GlyphSizeX, &GlyphSizeY);
-				EWOL_INFO("Find default font glyph : (" << GlyphPositionX << "," << GlyphPositionY << ") (" << GlyphSizeX << "," << GlyphSizeY << ") ");
-				for (int32_t iii=0; iii< 0x80; iii++) {
-					listOfElement[iii].posStart.x = (double)GlyphPositionX / 512.0;
-					listOfElement[iii].posStart.y = (double)GlyphPositionY / 512.0;
-					listOfElement[iii].posStop.x = (double)(GlyphPositionX+GlyphSizeX) / 512.0;
-					listOfElement[iii].posStop.y = (double)(GlyphPositionY+GlyphSizeY) / 512.0;
-					listOfElement[iii].size.x = GlyphSizeX;
-					listOfElement[iii].size.y = GlyphSizeY;
-				}
-			} else if (0 == strncmp("0x", elementLine, 2)) {
-				uint32_t utf8Value;
-				int32_t GlyphPositionX;
-				int32_t GlyphPositionY;
-				int32_t GlyphSizeX;
-				int32_t GlyphSizeY;
-				sscanf(elementLine, "0x%x (%d,%d) (%d,%d)", &utf8Value, &GlyphPositionX, &GlyphPositionY, &GlyphSizeX, &GlyphSizeY);
-				//EWOL_INFO("Find pos font glyph : " << utf8Value << " (" << GlyphPositionX << "," << GlyphPositionY << ") (" << GlyphSizeX << "," << GlyphSizeY << ") ");
-				if (utf8Value < 0x80) {
-					listOfElement[utf8Value].posStart.x = (double)GlyphPositionX / 512.0;
-					listOfElement[utf8Value].posStart.y = (double)GlyphPositionY / 512.0;
-					listOfElement[utf8Value].posStop.x = (double)(GlyphPositionX+GlyphSizeX) / 512.0;
-					listOfElement[utf8Value].posStop.y = (double)(GlyphPositionY+GlyphSizeY) / 512.0;
-					listOfElement[utf8Value].size.x = GlyphSizeX;
-					listOfElement[utf8Value].size.y = GlyphSizeY;
-				} else {
-					EWOL_ERROR("not manage glyph with ID > 0x7F line : " << lineID << "\"" << elementLine << "\"");
-				}
-			} else {
-				EWOL_ERROR("error when parsing the line : " << lineID << "\"" << elementLine << "\"");
-			}
-		}
-		
-		lineID++;
-	}
-	
-	isInit = true;
-	// return the font Id :
-	return 0;
-}
-
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -168,32 +38,349 @@ int32_t ewol::LoadFont(etk::File fontFileName)
 #	include <X11/extensions/Xrender.h>
 #endif
 
-void ewol::DrawText(double x, double y, const char * myString)
+
+#undef __class__
+#define __class__	"ewol::Font"
+
+
+extern "C"
 {
-	char * tmpVal = (char*)myString;
-	glColor4f(1.0, 1.0, 1.0, 1.0);
+	typedef struct {
+		position_ts posStart;
+		position_ts posStop;
+		intSize_ts size;
+	}UTF8Element_ts;
+}
+
+
+namespace ewol
+{
+	class Font
+	{
+		public:
+			Font(etk::File newFile)
+			{
+				m_loadedOK = false;
+				m_filename = newFile;
+				for (int32_t iii; iii<FONT_MODE_NUMBER; iii++) {
+					m_textureId[iii] = 0;
+					m_textureLoaded[iii] = false;
+				}
+				if (m_filename.GetExtention() != "ebt") {
+					EWOL_ERROR("Not the coorect extention of the file" << m_filename);
+					return;
+				}
+				if (false == m_filename.Exist()) {
+					EWOL_ERROR("File does not Exist ... " << m_filename);
+					return;
+				}
+				
+				FILE* File=fopen(m_filename.GetCompleateName().c_str(),"r");
+				if(NULL == File) {
+					EWOL_ERROR("Can not find the file name=\"" << m_filename << "\"");
+					return;
+				}
+				// load all element of the file ...
+				char elementLine[2048];
+				int32_t lineID=1;
+				while (NULL != fgets(elementLine, 2048, File) )
+				{
+					if (    '\n' != elementLine[0] // EOL
+					     && '\0' != elementLine[0] // EOF
+					     && '#'  != elementLine[0] // Comment line
+					   )
+					{
+						if (0 == strncmp("name:", elementLine, 5)) {
+							char extractString[256] = "";
+							sscanf(elementLine, "name:%s", extractString);
+							m_fontName = extractString;
+							EWOL_INFO("Find font named : \"" << m_fontName << "\"");
+						} else if (0 == strncmp("normal:", elementLine, 7)) {
+							char extractString[256] = "";
+							sscanf(elementLine, "normal:%s", extractString);
+							SetModeFile(FONT_MODE_NORMAL, extractString);
+							LoadMode(FONT_MODE_NORMAL);
+						} else if (0 == strncmp("bold-italic:", elementLine, 12)) {
+							char extractString[256] = "";
+							sscanf(elementLine, "bold-italic:%s", extractString);
+							SetModeFile(FONT_MODE_BOLD_ITALIC, extractString);
+						} else if (0 == strncmp("bold:", elementLine, 5)) {
+							char extractString[256] = "";
+							sscanf(elementLine, "bold:%s", extractString);
+							SetModeFile(FONT_MODE_BOLD, extractString);
+						} else if (0 == strncmp("italic:", elementLine, 7)) {
+							char extractString[256] = "";
+							sscanf(elementLine, "italic:%s", extractString);
+							SetModeFile(FONT_MODE_ITALIC, extractString);
+						} else if (0 == strncmp("0x00", elementLine, 4)) {
+							int32_t GlyphPositionX;
+							int32_t GlyphPositionY;
+							int32_t GlyphSizeX;
+							int32_t GlyphSizeY;
+							sscanf(elementLine, "0x00 (%d,%d) (%d,%d)", &GlyphPositionX, &GlyphPositionY, &GlyphSizeX, &GlyphSizeY);
+							ClearAll(GlyphPositionX, GlyphPositionY, GlyphSizeX, GlyphSizeY);
+						} else if (0 == strncmp("0x", elementLine, 2)) {
+							uint32_t utf8Value;
+							int32_t GlyphPositionX;
+							int32_t GlyphPositionY;
+							int32_t GlyphSizeX;
+							int32_t GlyphSizeY;
+							sscanf(elementLine, "0x%x (%d,%d) (%d,%d)", &utf8Value, &GlyphPositionX, &GlyphPositionY, &GlyphSizeX, &GlyphSizeY);
+							SetGlyphID(utf8Value, lineID, GlyphPositionX, GlyphPositionY, GlyphSizeX, GlyphSizeY);
+						} else {
+							EWOL_ERROR("error when parsing the line : " << lineID << "\"" << elementLine << "\"");
+						}
+					}
+					lineID++;
+				}
+				// close the file at end of reading...
+				fclose(File);
+				m_loadedOK = true;
+			};
+			
+			~Font(void)
+			{
+				
+			};
+			bool loadedOK(void) { return m_loadedOK; };
+		private:
+			void ClearAll(int32_t x, int32_t y, int32_t w, int32_t h)
+			{
+				EWOL_DEBUG("Find default font glyph : (" << x << "," << y << ") (" << w << "," << h << ") ");
+				for (int32_t iii=0; iii< 0x80; iii++) {
+					m_listOfElement[iii].posStart.x = (double)x / 512.0;
+					m_listOfElement[iii].posStart.y = (double)y / 512.0;
+					m_listOfElement[iii].posStop.x = (double)(x+w) / 512.0;
+					m_listOfElement[iii].posStop.y = (double)(y+h) / 512.0;
+					m_listOfElement[iii].size.x = w;
+					m_listOfElement[iii].size.y = h;
+				}
+			};
+			void SetGlyphID(int32_t utf8Value, int32_t lineID, int32_t x, int32_t y, int32_t w, int32_t h)
+			{
+				EWOL_DEBUG("Add font glyph : "<< utf8Value << " (" << x << "," << y << ") (" << w << "," << h << ") ");
+				if (utf8Value < 0x80) {
+					m_listOfElement[utf8Value].posStart.x = (double)x / 512.0;
+					m_listOfElement[utf8Value].posStart.y = (double)y / 512.0;
+					m_listOfElement[utf8Value].posStop.x = (double)(x+w) / 512.0;
+					m_listOfElement[utf8Value].posStop.y = (double)(y+h) / 512.0;
+					m_listOfElement[utf8Value].size.x = w;
+					m_listOfElement[utf8Value].size.y = h;
+				} else {
+					EWOL_ERROR("not manage glyph with ID > 0x7F line : " << lineID);
+				}
+			};
+			
+		public:
+			void SetModeFile(ewol::fontMode_te displayMode, etk::String newFile)
+			{
+				if (displayMode < FONT_MODE_NUMBER) {
+					m_bitmapName[displayMode] = newFile;
+				}
+			};
+			
+			void LoadMode(ewol::fontMode_te displayMode)
+			{
+				if (displayMode < FONT_MODE_NUMBER) {
+					if (m_bitmapName[displayMode] == "") {
+						EWOL_ERROR("Can not load en empty file for the Font : " << m_filename );
+						return;
+					}
+					if (m_textureLoaded[displayMode] == true) {
+						EWOL_WARNING("Mode of font is alredy loaded : " << m_filename );
+						return;
+					}
+					etk::String elementName = m_filename.GetFolder();
+					elementName += '/';
+					elementName += m_bitmapName[displayMode];
+					EWOL_INFO("load text font image : \"" << elementName << "\"");
+					m_textureId[displayMode] = ewol::LoadTexture(elementName);
+					m_textureLoaded[displayMode] = true;
+				}
+			};
+			
+			etk::File GetFileName(void)
+			{
+				return m_filename;
+			};
+			etk::String GetName(void)
+			{
+				return m_fontName;
+			};
+			bool IsLoaded(ewol::fontMode_te displayMode)
+			{
+				return m_textureLoaded[displayMode];
+			};
+		private:
+			etk::File      m_filename;
+			bool           m_loadedOK;
+			etk::String    m_fontName;
+			uint32_t       m_textureId[FONT_MODE_NUMBER];
+			bool           m_textureLoaded[FONT_MODE_NUMBER];
+			etk::String    m_bitmapName[FONT_MODE_NUMBER];
+			UTF8Element_ts m_listOfElement[0x80];
+		public:
+			UTF8Element_ts * GetPointerOnElement(void)
+			{
+				return m_listOfElement;
+			};
+			uint32_t GetOglId(ewol::fontMode_te displayMode)
+			{
+				return m_textureId[displayMode];
+			};
+	};
+};
+
+static etk::VectorType<ewol::Font*> listLoadedFonts;
+
+
+
+// load a font in momory, can be done many time for a specific fontname, if you specify true the font will be loaded in memory, otherwise, font is loaded only when needed the first time
+bool ewol::AddFont(etk::File fontFileName, bool bold, bool italic, bool boldItalic)
+{
+	for (int32_t iii=0; iii<listLoadedFonts.Size(); iii++) {
+		if (listLoadedFonts[iii]->GetFileName() == fontFileName) {
+			if (true == bold) {
+				listLoadedFonts[iii]->LoadMode(FONT_MODE_BOLD);
+			}
+			if (true == italic) {
+				listLoadedFonts[iii]->LoadMode(FONT_MODE_ITALIC);
+			}
+			if (true == boldItalic) {
+				listLoadedFonts[iii]->LoadMode(FONT_MODE_BOLD_ITALIC);
+			}
+			return true;
+		}
+	}
+	if (fontFileName.GetExtention() != "ebt") {
+		EWOL_ERROR("Not the correct extention of the file" << fontFileName << "supported only *.ebt" );
+		return false;
+	}
+	ewol::Font * tmpFont = new ewol::Font(fontFileName);
+	if (false == tmpFont->loadedOK()) {
+		EWOL_ERROR("An error apear when loading Font file : " << fontFileName);
+		return false;
+	}
+	if (true == bold) {
+		tmpFont->LoadMode(FONT_MODE_BOLD);
+	}
+	if (true == italic) {
+		tmpFont->LoadMode(FONT_MODE_ITALIC);
+	}
+	if (true == boldItalic) {
+		tmpFont->LoadMode(FONT_MODE_BOLD_ITALIC);
+	}
+	listLoadedFonts.PushBack(tmpFont);
+	return true;
+}
+
+
+// get the name of the font 
+etk::String ewol::GetFontName(int32_t Id)
+{
+	if(Id<listLoadedFonts.Size() && Id>=0) {
+		return listLoadedFonts[Id]->GetName();
+	}
+	return "No-Name";
+}
+
+int32_t ewol::GetFontIdWithFileName(etk::File fontFileName)
+{
+	for (int32_t iii=0; iii<listLoadedFonts.Size(); iii++) {
+		if (listLoadedFonts[iii]->GetFileName() == fontFileName) {
+			return iii;
+		}
+	}
+	return -1;
+}
+
+int32_t ewol::GetFontIdWithName(etk::String fontName)
+{
+	for (int32_t iii=0; iii<listLoadedFonts.Size(); iii++) {
+		if (listLoadedFonts[iii]->GetName() == fontName) {
+			return iii;
+		}
+	}
+	return -1;
+}
+
+// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
+int32_t ewol::GetStringWidth(int32_t fontID, ewol::fontMode_te displayMode, int32_t size, const char * utf8String)
+{
+	return 0;
+}
+
+// get the size of a specific char in UTF8
+int32_t ewol::GetCharWidth(int32_t fontID, ewol::fontMode_te displayMode, int32_t size, const char * utf8String)
+{
+	return 0;
+}
+
+// draw the text without background
+void ewol::DrawText(int32_t            fontID,
+                    ewol::fontMode_te  displayMode,
+                    int32_t            size,
+                    coord3D_ts &       drawPosition,
+                    color_ts           textColorFg,
+                    const char *       utf8String)
+{
+	if(fontID>=listLoadedFonts.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return;
+	}
+	if (false == listLoadedFonts[fontID]->IsLoaded(displayMode)) {
+		listLoadedFonts[fontID]->LoadMode(displayMode);
+		if (false == listLoadedFonts[fontID]->IsLoaded(displayMode)) {
+			EWOL_ERROR("Can not load Font mode : " << displayMode << "of font " << listLoadedFonts[fontID]->GetName() );
+			return;
+		}
+	}
+	UTF8Element_ts * listOfElement = listLoadedFonts[fontID]->GetPointerOnElement();
+	char * tmpVal = (char*)utf8String;
+	
+	glColor4f(textColorFg.red, textColorFg.green, textColorFg.blue, textColorFg.alpha);
 	
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, TextureIdBold);
+	glBindTexture(GL_TEXTURE_2D, listLoadedFonts[fontID]->GetOglId(displayMode));
 	
 	while(*tmpVal != '\0') {
 		int32_t tmpChar = (int32_t)*tmpVal;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
-		glBegin(GL_QUADS);
-			glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);
-			glVertex3f(x,                             y, 0.0);
-			glTexCoord2f(listOfElement[tmpChar].posStop.x, listOfElement[tmpChar].posStart.y);
-			glVertex3f(x + listOfElement[tmpChar].size.x, y, 0.0);
-			glTexCoord2f(listOfElement[tmpChar].posStop.x, listOfElement[tmpChar].posStop.y);
-			glVertex3f(x + listOfElement[tmpChar].size.x, y + listOfElement[tmpChar].size.y, 0.0);
-			glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStop.y);
-			glVertex3f(x                            , y + listOfElement[tmpChar].size.y, 0.0);
-		glEnd();
+		if (tmpChar != 0x20) {
+			/*
+			EWOL_DEBUG(" Draw  TEX      (" << listOfElement[tmpChar].posStart.x*512 << "," << listOfElement[tmpChar].posStart.y*512 << ")");
+			EWOL_DEBUG("                (" << listOfElement[tmpChar].posStop.x*512 << "," << listOfElement[tmpChar].posStop.y*512 << ")");
+			EWOL_DEBUG("       display  (" << drawPosition.x <<                                 "," << drawPosition.y << ")");
+			EWOL_DEBUG("                (" << drawPosition.x + listOfElement[tmpChar].size.x << "," << drawPosition.y + listOfElement[tmpChar].size.y << ")");
+			*/
+			glBegin(GL_QUADS);
+				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);				glVertex3f(drawPosition.x,                                 drawPosition.y,                                 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStart.y);				glVertex3f(drawPosition.x + listOfElement[tmpChar].size.x, drawPosition.y,                                 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStop.y);				glVertex3f(drawPosition.x + listOfElement[tmpChar].size.x, drawPosition.y + listOfElement[tmpChar].size.y, 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStop.y);				glVertex3f(drawPosition.x,                                 drawPosition.y + listOfElement[tmpChar].size.y, 0.0);
+			glEnd();
+		}
 		tmpVal++;
-		x += listOfElement[tmpChar].size.x;
+		drawPosition.x += listOfElement[tmpChar].size.x;
 	}
 	glDisable(GL_TEXTURE_2D);
 }
+// draw the text with a sp\Ufffffffffy background
+void ewol::DrawTextWithBg( int32_t            fontID,
+                           ewol::fontMode_te  displayMode,
+                           int32_t            size,
+                           coord3D_ts &       drawPosition,
+                           color_ts           textColorFg,
+                           color_ts           textColorBg,
+                           const char *       utf8String)
+{
+	
+}
+
+
+
+
+
 

@@ -71,6 +71,26 @@ extern "C"
 	typedef etkPointAndPositionDouble     position_ts;
 	typedef etkPointAndPositionDouble     size_ts;
 	typedef etkPointAndPositionInt        intSize_ts;
+	
+	typedef struct {
+		float x;
+		float y;
+		float z;
+	}coord3D_ts;
+	typedef struct {
+		float x;
+		float y;
+	}coord2D_ts;
+	typedef struct {
+		float u;
+		float v;
+	}texCoord_ts;
+	typedef struct {
+		float red;
+		float green;
+		float blue;
+		float alpha;
+	}color_ts;
 }
 
 

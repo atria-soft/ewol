@@ -6,7 +6,7 @@ italic:TextMonospaceItalic.bmp
 # comment line ...
 # size 54 largeur 33 space between letter 12
 # unknow UTF8 code of the letter and start coordonate and size ==> 0x54 (33,45) (33,54)
-0x00 (99,458) (33,54) # Error : Unknow the UTF8 element ...
+0x00 (99,453) (33,54) # Error : Unknow the UTF8 element ...
 # hexa UTF8 code of the letter and start coordonate and size ==> 0x54 (33,45) (33,54)
 # ABCDEFGHIJKLMN
 0x20 (0,7) (33,54) # space ...
@@ -100,10 +100,10 @@ italic:TextMonospaceItalic.bmp
 0x5D (264,335) (33,54) # ]
 0x3D (297,335) (33,54) # =
 0x7D (330,335) (33,54) # }
-#0x (363,335) (33,54) # 
-#0x (396,335) (33,54) # 
-#0x (429,335) (33,54) # 
-#0x (462,335) (33,54) # 
+#0x (363,335) (33,54) # o chap
+#0x (396,335) (33,54) # u chap
+#0x (429,335) (33,54) # e chap
+#0x (462,335) (33,54) # a chap
 #$£*µ%!§:/
 #0x (0,391) (33,54) # i chap
 #0x (33,391) (33,54) # o trema

@@ -41,6 +41,8 @@
 	#error you need to specify a platform ...
 #endif
 
+#undef __class__
+#define __class__	"ewol"
 
 void ewol::Init(int argc, char *argv[])
 {

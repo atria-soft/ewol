@@ -62,6 +62,10 @@ extern "C"
 	} modeBitmap_te;
 };
 
+
+#undef __class__
+#define __class__	"ewol::Bitmap"
+
 class Bitmap
 {
 	private:
@@ -83,11 +87,10 @@ class Bitmap
 
 			FILE *File=NULL;
 			// Get the fileSize ...
-			if (fileName.Size() < sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) {
+			if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
 				EWOL_ERROR("not enought data in the file named=\"" << fileName << "\"");
 				return;
 			}
-			unsigned int ImageIdx=0;
 			File=fopen(fileName.GetCompleateName().c_str(),"rb");
 			if(NULL == File) {
 				EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
@@ -153,7 +156,9 @@ class Bitmap
 			if(0 != m_InfoHeader.biSizeImage)
 			{
 				m_data=new uint8_t[m_InfoHeader.biSizeImage];
-				fread(m_data,m_InfoHeader.biSizeImage,1,File);
+				if (fread(m_data,m_InfoHeader.biSizeImage,1,File) != 1){
+					EWOL_CRITICAL("Can not read the file with the good size...");
+				}
 				// allocate the destination data ...
 				m_dataGenerate=new uint8_t[m_width*m_height*4];
 			}
@@ -164,7 +169,6 @@ class Bitmap
 				case BITS_16_R5G6B5:
 					{
 						uint16_t * pointer = (uint16_t*)m_data;
-						uint8_t * pointerdst = m_dataGenerate;
 						for(int32_t yyy=0; yyy<m_height; yyy++) {
 							for(int32_t xxx=0; xxx<m_width; xxx++) {
 								m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = (int8_t)((*pointer & 0xF800) >> 8);
@@ -179,7 +183,6 @@ class Bitmap
 				case BITS_16_X1R5G5B5:
 					{
 						uint16_t * pointer = (uint16_t*)m_data;
-						uint8_t * pointerdst = m_dataGenerate;
 						for(int32_t yyy=0; yyy<m_height; yyy++) {
 							for(int32_t xxx=0; xxx<m_width; xxx++) {
 								m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = (int8_t)((*pointer & 0x7C00) >> 7);
@@ -308,8 +311,31 @@ class Bitmap
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+class LoadedTexture
+{
+	public:
+		etk::File m_filename;
+		int32_t   m_nbTimeLoaded;
+		int32_t   m_imageSize; // must be x=y ...
+		uint32_t  m_openGlTextureID;
+};
+
+etk::VectorType<LoadedTexture*> listLoadedTexture;
+
+
+#undef __class__
+#define __class__	"ewol"
+
 int32_t ewol::LoadTexture(etk::File fileName)
 {
+	if (listLoadedTexture.Size()!=0) {
+		for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+			if (listLoadedTexture[iii]->m_filename == fileName) {
+				listLoadedTexture[iii]->m_nbTimeLoaded++;
+				return listLoadedTexture[iii]->m_openGlTextureID;
+			}
+		}
+	}
 	etk::String fileExtention = fileName.GetExtention();
 	if (fileExtention ==  "bmp") {
 		if (false == fileName.Exist()) {
@@ -319,6 +345,10 @@ int32_t ewol::LoadTexture(etk::File fileName)
 		Bitmap myBitmap(fileName);
 		myBitmap.Display();
 		if (myBitmap.LoadOK() == true) {
+			if (myBitmap.Width()!= myBitmap.Height()) {
+				EWOL_ERROR("Texture can not have Width=" << myBitmap.Width() << "px different of height=" << myBitmap.Height() << "px in file:" << fileName);
+				return -1;
+			}
 			GLuint textureid;
 			glGenTextures(1, &textureid);
 			glBindTexture(GL_TEXTURE_2D, textureid);
@@ -331,18 +361,56 @@ int32_t ewol::LoadTexture(etk::File fileName)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap.Width(), myBitmap.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap.Data());
+			LoadedTexture *tmpTex = new LoadedTexture();
+			if (NULL != tmpTex) {
+				tmpTex->m_filename = fileName;
+				tmpTex->m_nbTimeLoaded = 1;
+				tmpTex->m_imageSize = myBitmap.Width();
+				tmpTex->m_openGlTextureID = textureid;
+				listLoadedTexture.PushBack(tmpTex);
+			} else {
+				EWOL_ERROR("Allocation ERROR... ");
+			}
 			return textureid;
 		} else {
 			return -1;
 		}
 	} else {
-		EWOL_ERROR("Extention not manage " << fileName);
+		EWOL_ERROR("Extention not managed " << fileName << " Sopported extention : .bmp");
 		return -1;
 	}
 }
 
-void ewol::UnLoadTexture(int32_t textureID)
+void ewol::UnLoadTexture(uint32_t textureID)
 {
-	
+	if (listLoadedTexture.Size()!=0) {
+		for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+			if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
+				listLoadedTexture[iii]->m_nbTimeLoaded--;
+				if (0 == listLoadedTexture[iii]->m_nbTimeLoaded) {
+					EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[iii]->m_filename);
+					glDeleteTextures(1,&listLoadedTexture[iii]->m_openGlTextureID);
+					delete(listLoadedTexture[iii]);
+					listLoadedTexture[iii] = NULL;
+					listLoadedTexture.Erase(iii);
+					return;
+				}
+			}
+		}
+	}
+	EWOL_CRITICAL("Can not find TextureId=" << textureID << " in the list of texture loaded...==> to remove it ...");
 }
 
+
+int32_t ewol::GetTextureSize(uint32_t textureID)
+{
+	if (listLoadedTexture.Size()!=0) {
+		for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+			if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
+				return listLoadedTexture[iii]->m_imageSize;
+			}
+		}
+	}
+	EWOL_ERROR("Can not find TextureId=" << textureID << " in the list of texture loaded...");
+	return -1;
+}

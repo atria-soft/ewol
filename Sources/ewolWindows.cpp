@@ -32,6 +32,10 @@
 
 #include <GL/gl.h>
 
+#undef __class__
+#define __class__	"ewol::Windows"
+
+
 //list of local events : 
 const char * ewolEventWindowsClose    = "ewol Windows close";
 const char * ewolEventWindowsMinimize = "ewol Windows minimize";
@@ -124,6 +128,7 @@ void ewol::Windows::SysDraw(void)
 	static int32_t texID4 = -1;
 	static int32_t texID5 = -1;
 	static int32_t texID6 = -1;
+	static int32_t fontID = -1;
 	
 	if (false == isinit) {
 		isinit=true;
@@ -166,7 +171,9 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(200, 300, 900, 54, 0.0, 0.0, 0.0, 1.0);
 		myOObject.Rectangle(200, 300, 900, 13, 0.0, 1.0, 0.0, 1.0);
 		myOObject.Rectangle(200, 343, 900, 11, 1.0, 0.0, 0.0, 1.0);
-		int32_t fontID = ewol::LoadFont("dataTest/TextMonospace.ebt");
+		if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
+			fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
+		}
 		
 		
 	}
@@ -275,8 +282,21 @@ void ewol::Windows::SysDraw(void)
 	}
 	
 	
-	ewol::DrawText(200, 300, "APet9_$*µ:/?,>< \"#',;KkgGyYf");
+	coord3D_ts drawPosition = { 200.0, 300.0, 0.0};
+	color_ts   textColorFg  = { 1.0, 1.0, 1.0, 1.0};
+	ewol::DrawText(fontID, FONT_MODE_NORMAL, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
 	
+	drawPosition = { 200.0, 350.0, 0.0};
+	textColorFg  = { 1.0, 0.0, 0.0, 1.0};
+	ewol::DrawText(fontID, FONT_MODE_BOLD, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
+	
+	drawPosition = { 200.0, 400.0, 0.0};
+	textColorFg  = { 0.0, 1.0, 0.0, 1.0};
+	ewol::DrawText(fontID, FONT_MODE_ITALIC, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
+	
+	drawPosition = { 200.0, 450.0, 0.0};
+	textColorFg  = { 0.0, 0.0, 1.0, 1.0};
+	ewol::DrawText(fontID, FONT_MODE_BOLD_ITALIC, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
 
 
 }
