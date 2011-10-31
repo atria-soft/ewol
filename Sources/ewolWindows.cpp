@@ -29,8 +29,27 @@
 #include <ewolOObject.h>
 #include <ewolTexture.h>
 #include <ewolFont.h>
+#include <ewol.h>
+
+#if __PLATFORM__ == X11
+	#include "guiX11.h"
+#elif __PLATFORM__ == DoubleBuffer
+	#include "guiDoubleBuffer.h"
+#elif __PLATFORM__ == Android
+	#include "guiAndroid.h"
+#elif __PLATFORM__ == AndroidTablet
+	#include "guiAndroidTablet.h"
+#elif __PLATFORM__ == IPhone
+	#include "guiIPhone.h"
+#elif __PLATFORM__ == IPad
+	#include "guiIPad.h"
+#else
+	#error you need to specify a platform ...
+#endif
 
 #include <GL/gl.h>
+
+
 
 #undef __class__
 #define __class__	"ewol::Windows"
@@ -76,15 +95,33 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
 {
-/*
-	if(    EVENT_INPUT_TYPE_UP == typeEvent
-	    && 1 == IdInput)
+	if(    x >= 60
+	    && y <=20)
 	{
-		EWOL_INFO("Request ???");
+		static int32_t test=0;
+		static int32_t lastX=x;
+		static int32_t lastY=x;
+		if(    1 == IdInput
+		    && EVENT_INPUT_TYPE_DOWN == typeEvent) {
+			test = 1;
+			lastX=x;
+			lastY=y;
+			EWOL_DEBUG("EVENT DOWN ... ");
+		} else if(    1 == IdInput
+		           && EVENT_INPUT_TYPE_UP == typeEvent) {
+			test = 0;
+			EWOL_DEBUG("EVENT UP ... ");
+		} else if(EVENT_INPUT_TYPE_MOVE == typeEvent) {
+			EWOL_DEBUG("EVENT MOVE ... ");
+			if (test==1) {
+				EWOL_DEBUG("change POS ... ");
+				guiAbstraction::ChangePos(m_origin.x + (x - lastX), m_origin.y + (y - lastY));
+				lastX=x;
+				lastY=y;
+			}
+		} 
 	}
 	return true;
-*/
-	return false;
 }
 
 
@@ -137,6 +174,7 @@ bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
 	if(ewolEventWindowsClose == generateEventId) {
 		EWOL_INFO("Request close of the windows");
+		ewol::Stop();
 		eventIsOK = true;
 	} else if(ewolEventWindowsMinimize == generateEventId) {
 		EWOL_INFO("Request Minimize of the windows");

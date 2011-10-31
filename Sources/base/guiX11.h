@@ -36,6 +36,8 @@ namespace guiAbstraction
 	void Stop(void);
 	void UnInit(void);
 	void SetDisplayOnWindows(ewol::Windows * newOne);
+	void ChangeSize(int32_t w, int32_t h);
+	void ChangePos(int32_t x, int32_t y);
 };
 
 

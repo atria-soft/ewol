@@ -70,4 +70,9 @@ void ewol::DisplayWindows(ewol::Windows * windows)
 }
 
 
+void ewol::Stop(void)
+{
+	guiAbstraction::Stop();
+}
+
 

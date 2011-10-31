@@ -269,7 +269,6 @@ namespace guiAbstraction {
 				}
 				
 				//code to remove decoration
-				/*
 				{
 					
 					Hints hints;
@@ -284,7 +283,6 @@ namespace guiAbstraction {
 						EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
 					}
 				}
-				*/
 				return true;
 			}
 			
@@ -430,6 +428,7 @@ namespace guiAbstraction {
 								case ConfigureNotify:
 									EWOL_DEBUG("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
 									m_uniqueWindows->CalculateSize((double)event.xconfigure.width, (double)event.xconfigure.height);
+									m_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
 									break;
 								case Expose:
 									EWOL_DEBUG("X11 event : " << event.type << " = \"Expose\"");
@@ -603,6 +602,16 @@ namespace guiAbstraction {
 			{
 				m_run = false;
 			}
+			
+			void ChangeSize(int32_t w, int32_t h)
+			{
+				XResizeWindow(m_display, WindowHandle, w, h);
+			}
+			
+			void ChangePos(int32_t x, int32_t y)
+			{
+				XMoveWindow(m_display, WindowHandle, x, y);
+			}
 	};
 };
 
@@ -670,4 +679,22 @@ void guiAbstraction::UnInit(void)
 	}
 }
 
+
+void guiAbstraction::ChangeSize(int32_t w, int32_t h)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->ChangeSize(w, h);
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
+
+void guiAbstraction::ChangePos(int32_t x, int32_t y)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->ChangePos(x, y);
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
 
