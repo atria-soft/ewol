@@ -188,3 +188,67 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 }
 
 
+#undef __class__
+#define __class__	"ewol::OObject2DText"
+
+ewol::OObject2DText::OObject2DText(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String)
+{
+	Text(x, y, FontName, size, mode, textColorFg, utf8String);
+}
+
+ewol::OObject2DText::~OObject2DText(void)
+{
+	
+}
+
+void ewol::OObject2DText::Draw(void)
+{
+	if (m_coord.Size()<=0) {
+		EWOL_WARNING("Nothink to draw...");
+		return;
+	}
+	
+	glColor4f(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, m_FontTextureId);
+	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
+	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
+	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
+	glDrawArrays( GL_QUADS, 0, m_coord.Size());
+	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
+	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
+	glDisableClientState( GL_TEXTURE_COORD_ARRAY );				// Disable Texture Coord Arrays
+	glDisable(GL_TEXTURE_2D);
+}
+
+void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String)
+{
+	m_FontTextureId = 0;
+	m_coord.Clear();
+	m_coordTex.Clear();
+	// get font Name : 
+	m_FontId = GetFontIdWithName(FontName);
+	if (m_FontId == -1) {
+		EWOL_ERROR("Can not find the font with the name : " << FontName);
+	}
+	EWOL_DEBUG("Font name : " << FontName << " id=" << m_FontId);
+	m_textColorFg = textColorFg;
+	coord2D_ts drawPosition;
+	drawPosition.x = x;
+	drawPosition.y = y;
+	ewol::DrawText(m_FontId, mode, size, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
+}
+
+
+/*
+uint32_t                      m_FontId;        //!< font internal ID
+uint32_t                      m_FontTextureId; //!< font internal Texture ID
+etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
+etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+*/
+
+
+
+
+

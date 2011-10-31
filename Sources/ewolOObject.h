@@ -28,6 +28,7 @@
 #include <etkTypes.h>
 #include <etkFile.h>
 #include <ewolDebug.h>
+#include <ewolFont.h>
 #include <etkVectorType.h>
 
 namespace ewol {
@@ -106,6 +107,43 @@ namespace ewol {
 			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
 	};
+	
+	
+	class OObject2DText :public ewol::OObject
+	{
+		public:
+			OObject2DText(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+			virtual ~OObject2DText(void);
+		public:
+			virtual void Draw(void);
+			// set a specific text
+			void Text(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+		protected:
+			int32_t                       m_FontId;        //!< font internal ID
+			color_ts                      m_textColorFg;   //!< text color ...
+			uint32_t                      m_FontTextureId; //!< font internal Texture ID
+			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
+			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+	};
+	
+	/*
+	class OObject2DTextMultiple :public ewol::OObject
+	{
+		public:
+			OObject2DText(etk::String FontName);
+			virtual ~OObject2DText(void);
+		public:
+			virtual void Draw(void);
+			// set a specific text
+			void TextAdd(float x, float y, int32_t size, fontMode_te mode, const char* utf8String);
+			void Clear(void);
+		protected:
+			int32_t                       m_FontId;                          //!< font internal ID
+			uint32_t                      m_FontTextureId[FONT_MODE_NUMBER]; //!< font internal Texture ID
+			etk::VectorType<coord2D_ts>   m_coord[FONT_MODE_NUMBER];         //!< internal coord of the object
+			etk::VectorType<texCoord_ts>  m_coordTex[FONT_MODE_NUMBER];      //!< internal texture coordinate for every point
+	};
+	*/
 };
 
 #endif

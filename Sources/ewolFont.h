@@ -40,6 +40,7 @@ namespace ewol
 		FONT_MODE_NUMBER,
 	}fontMode_te;
 	
+	void       UnInitFont(void);
 	// load a font in momory, can be done many time for a specific fontname, if you specify true the font will be loaded in memory, otherwise, font is loaded only when needed the first time
 	bool        AddFont(etk::File fontFileName, bool bold=false, bool italic=false, bool boldItalic=false);
 	// get the name of the font 
@@ -67,6 +68,15 @@ namespace ewol
 	                           color_ts           textColorBg,
 	                           const char *       utf8String);
 	
+	// draw the text without background
+	void        DrawText(      int32_t                        fontID,
+	                           ewol::fontMode_te              displayMode,
+	                           int32_t                        size,
+	                           coord2D_ts &                   drawPosition,
+	                           const char *                   utf8String,
+	                           uint32_t &                     fontTextureId,
+	                           etk::VectorType<coord2D_ts> &  coord,
+	                           etk::VectorType<texCoord_ts> & coordTex);
 	
 	int32_t LoadFont(etk::File fontFileName);
 	void    DrawText(double x, double y, const char * myString);

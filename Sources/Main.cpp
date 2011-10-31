@@ -24,6 +24,7 @@
 
 
 #include <ewol.h>
+#include <ewolFont.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -54,6 +55,11 @@ int main(int argc, char *argv[])
 	Plop * myWindowsExample = new Plop();
 	
 	ewol::Init(argc, argv);
+	
+	
+	if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
+		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
+	}
 	
 	// create the specific windows
 	ewol::DisplayWindows(myWindowsExample);

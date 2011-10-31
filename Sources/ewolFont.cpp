@@ -46,11 +46,9 @@
 extern "C"
 {
 	typedef struct {
-		position_ts posStart;
-		position_ts posStop;
-		intSize_ts size;
+		texCoord_ts posStart;
+		texCoord_ts posStop;
 		float ratio;
-		
 	}UTF8Element_ts;
 }
 
@@ -64,7 +62,7 @@ namespace ewol
 			{
 				m_loadedOK = false;
 				m_filename = newFile;
-				for (int32_t iii; iii<FONT_MODE_NUMBER; iii++) {
+				for (int32_t iii=0; iii<FONT_MODE_NUMBER; iii++) {
 					m_textureId[iii] = 0;
 					m_textureLoaded[iii] = false;
 				}
@@ -142,7 +140,11 @@ namespace ewol
 			
 			~Font(void)
 			{
-				
+				for(int32_t iii=0; iii<FONT_MODE_NUMBER; iii++) {
+					if (true == m_textureLoaded[iii]) {
+						ewol::UnLoadTexture(m_textureId[iii]);
+					}
+				}
 			};
 			bool loadedOK(void) { return m_loadedOK; };
 		private:
@@ -150,12 +152,10 @@ namespace ewol
 			{
 				EWOL_DEBUG("Find default font glyph : (" << x << "," << y << ") (" << w << "," << h << ") ");
 				for (int32_t iii=0; iii< 0x80; iii++) {
-					m_listOfElement[iii].posStart.x = (double)x / 512.0;
-					m_listOfElement[iii].posStart.y = (double)y / 512.0;
-					m_listOfElement[iii].posStop.x = (double)(x+w) / 512.0;
-					m_listOfElement[iii].posStop.y = (double)(y+h) / 512.0;
-					m_listOfElement[iii].size.x = w;
-					m_listOfElement[iii].size.y = h;
+					m_listOfElement[iii].posStart.u = (double)x / 512.0;
+					m_listOfElement[iii].posStart.v = (double)y / 512.0;
+					m_listOfElement[iii].posStop.u = (double)(x+w) / 512.0;
+					m_listOfElement[iii].posStop.v = (double)(y+h) / 512.0;
 					m_listOfElement[iii].ratio = (float)w/(float)h;
 				}
 			};
@@ -163,12 +163,10 @@ namespace ewol
 			{
 				EWOL_DEBUG("Add font glyph : "<< utf8Value << " (" << x << "," << y << ") (" << w << "," << h << ") ");
 				if (utf8Value < 0x80) {
-					m_listOfElement[utf8Value].posStart.x = (double)x / 512.0;
-					m_listOfElement[utf8Value].posStart.y = (double)y / 512.0;
-					m_listOfElement[utf8Value].posStop.x = (double)(x+w) / 512.0;
-					m_listOfElement[utf8Value].posStop.y = (double)(y+h) / 512.0;
-					m_listOfElement[utf8Value].size.x = w;
-					m_listOfElement[utf8Value].size.y = h;
+					m_listOfElement[utf8Value].posStart.u = (double)x / 512.0;
+					m_listOfElement[utf8Value].posStart.v = (double)y / 512.0;
+					m_listOfElement[utf8Value].posStop.u = (double)(x+w) / 512.0;
+					m_listOfElement[utf8Value].posStop.v = (double)(y+h) / 512.0;
 					m_listOfElement[utf8Value].ratio = (float)w/(float)h;
 				} else {
 					EWOL_ERROR("not manage glyph with ID > 0x7F line : " << lineID);
@@ -237,7 +235,14 @@ namespace ewol
 
 static etk::VectorType<ewol::Font*> listLoadedFonts;
 
-
+void ewol::UnInitFont(void)
+{
+	for (int32_t iii=0; iii<listLoadedFonts.Size(); iii++) {
+		delete(listLoadedFonts[iii]);
+		listLoadedFonts[iii] = NULL;
+	}
+	listLoadedFonts.Clear();
+}
 
 // load a font in momory, can be done many time for a specific fontname, if you specify true the font will be loaded in memory, otherwise, font is loaded only when needed the first time
 bool ewol::AddFont(etk::File fontFileName, bool bold, bool italic, bool boldItalic)
@@ -354,18 +359,13 @@ void ewol::DrawText(int32_t            fontID,
 		}
 		float sizeWidth = size * listOfElement[tmpChar].ratio;
 		if (tmpChar != 0x20) {
-			/*
-			EWOL_DEBUG(" Draw  TEX      (" << listOfElement[tmpChar].posStart.x*512 << "," << listOfElement[tmpChar].posStart.y*512 << ")");
-			EWOL_DEBUG("                (" << listOfElement[tmpChar].posStop.x*512 << "," << listOfElement[tmpChar].posStop.y*512 << ")");
-			EWOL_DEBUG("       display  (" << drawPosition.x <<                                 "," << drawPosition.y << ")");
-			EWOL_DEBUG("                (" << drawPosition.x + listOfElement[tmpChar].size.x << "," << drawPosition.y + listOfElement[tmpChar].size.y << ")");
-			*/
+			// TODO : this is really not availlable in the OpenGL ES ==> make with vertex system ...
 			glBegin(GL_QUADS);
 				//m_listOfElement[utf8Value].ratio = (float)w/(float)h;
-				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStart.y);	glVertex3f(posDrawX,             drawPosition.y,             0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStart.y);	glVertex3f(posDrawX + sizeWidth, drawPosition.y,             0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStop.x,  listOfElement[tmpChar].posStop.y);	glVertex3f(posDrawX + sizeWidth, drawPosition.y + size, 0.0);
-				glTexCoord2f(listOfElement[tmpChar].posStart.x, listOfElement[tmpChar].posStop.y);	glVertex3f(posDrawX,             drawPosition.y + size, 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStart.u, listOfElement[tmpChar].posStart.v);	glVertex3f(posDrawX,             drawPosition.y,             0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.u,  listOfElement[tmpChar].posStart.v);	glVertex3f(posDrawX + sizeWidth, drawPosition.y,             0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStop.u,  listOfElement[tmpChar].posStop.v);	glVertex3f(posDrawX + sizeWidth, drawPosition.y + size, 0.0);
+				glTexCoord2f(listOfElement[tmpChar].posStart.u, listOfElement[tmpChar].posStop.v);	glVertex3f(posDrawX,             drawPosition.y + size, 0.0);
 			glEnd();
 		}
 		tmpVal++;
@@ -374,7 +374,7 @@ void ewol::DrawText(int32_t            fontID,
 	drawPosition.x = posDrawX;
 	glDisable(GL_TEXTURE_2D);
 }
-// draw the text with a sp\Ufffffffffy background
+// draw the text with a specify background
 void ewol::DrawTextWithBg( int32_t            fontID,
                            ewol::fontMode_te  displayMode,
                            int32_t            size,
@@ -386,7 +386,65 @@ void ewol::DrawTextWithBg( int32_t            fontID,
 	
 }
 
-
+void ewol::DrawText(int32_t                        fontID,
+                    ewol::fontMode_te              displayMode,
+                    int32_t                        size,
+                    coord2D_ts &                   drawPosition,
+                    const char *                   utf8String,
+                    uint32_t &                     fontTextureId,
+                    etk::VectorType<coord2D_ts> &  coord,
+                    etk::VectorType<texCoord_ts> & coordTex)
+{
+	if(fontID>=listLoadedFonts.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return;
+	}
+	if (false == listLoadedFonts[fontID]->IsLoaded(displayMode)) {
+		listLoadedFonts[fontID]->LoadMode(displayMode);
+		if (false == listLoadedFonts[fontID]->IsLoaded(displayMode)) {
+			EWOL_ERROR("Can not load Font mode : " << displayMode << "of font " << listLoadedFonts[fontID]->GetName() );
+			return;
+		}
+	}
+	UTF8Element_ts * listOfElement = listLoadedFonts[fontID]->GetPointerOnElement();
+	char * tmpVal = (char*)utf8String;
+	
+	// set id of texture ... (i kwnow it was a little dangerous, but this ID is never remove while the program is running...
+	fontTextureId = listLoadedFonts[fontID]->GetOglId(displayMode);
+	
+	float posDrawX = drawPosition.x;
+	while(*tmpVal != '\0') {
+		int32_t tmpChar = (int32_t)*tmpVal;
+		if (tmpChar >= 0x80) {
+			tmpChar = 0;
+		}
+		float sizeWidth = size * listOfElement[tmpChar].ratio;
+		if (tmpChar != 0x20) {
+			coordTex.PushBack(listOfElement[tmpChar].posStart);
+			texCoord_ts tmpTex;
+			tmpTex.u = listOfElement[tmpChar].posStop.u;
+			tmpTex.v = listOfElement[tmpChar].posStart.v;
+			coordTex.PushBack(tmpTex);
+			coordTex.PushBack(listOfElement[tmpChar].posStop);
+			tmpTex.u = listOfElement[tmpChar].posStart.u;
+			tmpTex.v = listOfElement[tmpChar].posStop.v;
+			coordTex.PushBack(tmpTex);
+			coord2D_ts tmpCoord;
+			tmpCoord.x = posDrawX;
+			tmpCoord.y = drawPosition.y;
+			coord.PushBack(tmpCoord);
+			tmpCoord.x = posDrawX + sizeWidth;
+			coord.PushBack(tmpCoord);
+			tmpCoord.y = drawPosition.y + size;
+			coord.PushBack(tmpCoord);
+			tmpCoord.x = posDrawX;
+			coord.PushBack(tmpCoord);
+		}
+		tmpVal++;
+		posDrawX += sizeWidth;
+	}
+	drawPosition.x = posDrawX;
+}
 
 
 

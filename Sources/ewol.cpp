@@ -24,6 +24,7 @@
 
 
 #include "ewol.h"
+#include "ewolFont.h"
 
 #if __PLATFORM__ == X11
 	#include "guiX11.h"
@@ -59,6 +60,7 @@ void ewol::Run(void)
 void ewol::UnInit(void)
 {
 	guiAbstraction::UnInit();
+	ewol::UnInitFont();
 }
 
 

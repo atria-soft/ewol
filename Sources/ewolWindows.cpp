@@ -126,6 +126,12 @@ void ewol::Windows::SysDraw(void)
 	static ewol::OObject2DTextured myOObjectTex_r8g8b8  ("dataTest/test_24b_r8g8b8.bmp");
 	static ewol::OObject2DTextured myOObjectTex_x8r8g8b8("dataTest/test_32b_x8r8g8b8.bmp");
 	static ewol::OObject2DTextured myOObjectTex_a8r8g8b8("dataTest/test_32b_a8r8g8b8.bmp");
+	color_ts textColorFg;
+	textColorFg.red = .0;
+	textColorFg.green = .0;
+	textColorFg.blue = .0;
+	textColorFg.alpha = 1.0;
+	static ewol::OObject2DText     myOObjectText(200, 300, "Monospace", 22, FONT_MODE_NORMAL, textColorFg, "Exemple de test ...");
 	static bool isinit = false;
 	static int32_t fontID = 0;
 	
@@ -150,17 +156,14 @@ void ewol::Windows::SysDraw(void)
 		myOObject.Rectangle(200, 343, 900, 11, 1.0, 0.0, 0.0, 1.0);
 		*/
 		
-		myOObjectTex_r5g6b5.Rectangle(  300, 0, 100, 100);
+		myOObjectTex_r5g6b5.Rectangle(  300,   0, 100, 100);
 		myOObjectTex_x1r5g5b5.Rectangle(300, 100, 100, 100);
 		myOObjectTex_r8g8b8.Rectangle(  300, 200, 100, 100);
-		myOObjectTex_x8r8g8b8.Rectangle(400, 0, 100, 100);
+		myOObjectTex_x8r8g8b8.Rectangle(400,   0, 100, 100);
 		myOObjectTex_a8r8g8b8.Rectangle(400, 100, 100, 100);
 		
 		
 		
-		if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
-			fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
-		}
 		
 		
 	}
@@ -170,8 +173,8 @@ void ewol::Windows::SysDraw(void)
 	myOObjectTex_r8g8b8.Draw();
 	myOObjectTex_x8r8g8b8.Draw();
 	myOObjectTex_a8r8g8b8.Draw();
-	
-	
+	myOObjectText.Draw();
+	/*
 	coord3D_ts drawPosition = { 200.0, 300.0, 0.0};
 	color_ts   textColorFg  = { 1.0, 1.0, 1.0, 1.0};
 	ewol::DrawText(fontID, FONT_MODE_NORMAL, 54, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
@@ -187,7 +190,7 @@ void ewol::Windows::SysDraw(void)
 	drawPosition = { 200.0, 450.0, 0.0};
 	textColorFg  = { 0.0, 0.0, 1.0, 1.0};
 	ewol::DrawText(fontID, FONT_MODE_BOLD_ITALIC, 105, drawPosition, textColorFg,"APet9_$*:/?,>< \"#',;KkgGyYf");
-
+	*/
 
 }
 
