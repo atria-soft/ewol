@@ -35,7 +35,7 @@ namespace ewol {
 	class Windows :public ewol::Widget
 	{
 		public:
-			Windows(void) {};
+			Windows(void);
 			virtual ~Windows(void) {};
 		// internal event at ewol system : 
 		public:

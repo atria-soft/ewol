@@ -52,7 +52,6 @@ class Plop :public ewol::Windows
  */
 int main(int argc, char *argv[])
 {
-	Plop * myWindowsExample = new Plop();
 	
 	ewol::Init(argc, argv);
 	
@@ -60,6 +59,10 @@ int main(int argc, char *argv[])
 	if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 	}
+	
+	
+	Plop * myWindowsExample = new Plop();
+	
 	
 	// create the specific windows
 	ewol::DisplayWindows(myWindowsExample);

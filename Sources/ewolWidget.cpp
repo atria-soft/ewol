@@ -39,6 +39,7 @@ ewol::Widget::Widget(void)
 	m_maxSize.y = -1.0;
 	m_expendX = false;
 	m_expendY = false;
+	m_genericDraw = true;
 }
 
 ewol::Widget::~Widget(void)
@@ -108,6 +109,7 @@ bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool pom
 
 bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId)
 {
+	/*
 	if(    origin.x < 0.0
 	    || origin.y < 0.0)
 	{
@@ -132,7 +134,7 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 		EWOL_WARNING("end area out of size");
 		return false;
 	}
-	
+	*/
 	event_ts newEvent;
 	newEvent.generateEventId = generateEventId;
 	newEvent.widgetCall = -1; // by default no widget is called
@@ -166,8 +168,55 @@ bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId)
 
 
 
+void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
+{
+	if (NULL == newObject) {
+		EWOL_ERROR("Try to add an empty object in the Widget generic display system : name=\"" << name << "\"");
+		return;
+	}
+	newObject->SetName(name);
+	m_listOObject.PushBack(newObject);
+}
+
+
+ewol::OObject* ewol::Widget::GetOObject(etk::String name)
+{
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		if (m_listOObject[iii]->GetName() == name) {
+			return m_listOObject[iii];
+		}
+	}
+	return NULL;
+}
+
+void ewol::Widget::RmOObjectElem(etk::String name)
+{
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		if (m_listOObject[iii]->GetName() == name) {
+			delete(m_listOObject[iii]);
+			m_listOObject[iii] = NULL;
+			m_listOObject.Erase(iii);
+			return;
+		}
+	}
+}
+
+void ewol::Widget::ClearOObjectList(void)
+{
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		delete(m_listOObject[iii]);
+		m_listOObject[iii] = NULL;
+	}
+	m_listOObject.Clear();
+}
+
 bool ewol::Widget::GenericDraw(void)
 {
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		if (NULL != m_listOObject[iii]) {
+			m_listOObject[iii]->Draw();
+		}
+	}
 	return true;
 }
 

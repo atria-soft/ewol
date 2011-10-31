@@ -27,6 +27,7 @@
 
 #include <etkTypes.h>
 #include <ewolDebug.h>
+#include <ewolOObject.h>
 #include <etkVectorType.h>
 
 namespace ewol {
@@ -237,21 +238,25 @@ namespace ewol {
 		// --           this will automaticly regenerate the same view in openGL
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			int32_t MultipleDisplayCurrentId;
-			//estd::VectorType<event_ts> m_inputEvent;
 			bool m_genericDraw;
+			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
 			bool GenericDraw(void);
 		protected:
+			void AddOObject(ewol::OObject* newObject, etk::String name = "");
+			ewol::OObject* GetOObject(etk::String name);
+			void RmOObjectElem(etk::String name);
+			void ClearOObjectList(void);
 			void SetNotGenericDraw(void) { m_genericDraw = false; };
 			void SetGenericDraw(void) { m_genericDraw = true; };
-			//void FlipFlopNext(void); //!< jump at the next display registered
 			virtual bool OnDraw(void) { return true; };
 		public:
 			bool GenDraw(void)
 			{
 				if (true == m_genericDraw) {
+					//EWOL_DEBUG("Draw generic...");
 					return GenericDraw();
 				} else {
+					//EWOL_DEBUG("Draw Custum...");
 					return OnDraw();
 				}
 			};

@@ -150,7 +150,7 @@ namespace ewol
 		private:
 			void ClearAll(int32_t x, int32_t y, int32_t w, int32_t h)
 			{
-				EWOL_DEBUG("Find default font glyph : (" << x << "," << y << ") (" << w << "," << h << ") ");
+				//EWOL_DEBUG("Find default font glyph : (" << x << "," << y << ") (" << w << "," << h << ") ");
 				for (int32_t iii=0; iii< 0x80; iii++) {
 					m_listOfElement[iii].posStart.u = (double)x / 512.0;
 					m_listOfElement[iii].posStart.v = (double)y / 512.0;
@@ -161,7 +161,7 @@ namespace ewol
 			};
 			void SetGlyphID(int32_t utf8Value, int32_t lineID, int32_t x, int32_t y, int32_t w, int32_t h)
 			{
-				EWOL_DEBUG("Add font glyph : "<< utf8Value << " (" << x << "," << y << ") (" << w << "," << h << ") ");
+				//EWOL_DEBUG("Add font glyph : "<< utf8Value << " (" << x << "," << y << ") (" << w << "," << h << ") ");
 				if (utf8Value < 0x80) {
 					m_listOfElement[utf8Value].posStart.u = (double)x / 512.0;
 					m_listOfElement[utf8Value].posStart.v = (double)y / 512.0;
