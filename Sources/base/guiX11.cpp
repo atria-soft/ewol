@@ -84,7 +84,7 @@ static int VisualData[] = {
 };
 #endif
 
-
+#define NB_MAX_INPUT                  (20)
 #define SEPARATED_CLICK_TIME          (30)
 
 namespace guiAbstraction {
@@ -119,6 +119,10 @@ namespace guiAbstraction {
 			#endif
 			int32_t        m_width;
 			int32_t        m_height;
+			int32_t        m_originX;
+			int32_t        m_originY;
+			int32_t        m_cursorEventX;
+			int32_t        m_cursorEventY;
 			XVisualInfo *  m_visual;
 			bool           m_doubleBuffered;
 			bool           m_run;
@@ -374,6 +378,15 @@ namespace guiAbstraction {
 				m_previous_y = -1;
 				m_previousTime = 0;
 				m_previousDouble = false;
+				m_resizeMode=false;
+				m_moveMode=false;
+				m_originX = 0;
+				m_originY = 0;
+				m_cursorEventX = 0;
+				m_cursorEventY = 0;
+				for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
+					inputIsPressed[iii] = false;
+				}
 				CreateX11Context();
 				CreateOGlContext();
 				m_run = true;
@@ -417,6 +430,31 @@ namespace guiAbstraction {
 							case ConfigureNotify:
 								m_width  = event.xconfigure.width;
 								m_height = event.xconfigure.height;
+								m_originX = event.xconfigure.x;
+								m_originY = event.xconfigure.y;
+								break;
+							case ButtonPress:
+								m_cursorEventX = event.xbutton.x;
+								m_cursorEventY = event.xbutton.y;
+								if (event.xbutton.button < NB_MAX_INPUT) {
+									inputIsPressed[event.xbutton.button] = true;
+								}
+								break;
+							case ButtonRelease:
+								m_cursorEventX = event.xbutton.x;
+								m_cursorEventY = event.xbutton.y;
+								if (event.xbutton.button < NB_MAX_INPUT) {
+									inputIsPressed[event.xbutton.button] = false;
+								}
+								break;
+							case EnterNotify:
+							case LeaveNotify:
+								m_cursorEventX = event.xcrossing.x;
+								m_cursorEventY = event.xcrossing.y;
+								break;
+							case MotionNotify:
+								m_cursorEventX = event.xmotion.x;
+								m_cursorEventY = event.xmotion.y;
 								break;
 						}
 						// parse event
@@ -436,6 +474,8 @@ namespace guiAbstraction {
 									break;
 								case ButtonPress:
 									{
+										m_moveMode = false;
+										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
 										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 										// Send Down message
@@ -465,8 +505,9 @@ namespace guiAbstraction {
 									break;
 								case ButtonRelease:
 									{
+										m_moveMode = false;
+										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										
 										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
 										// send Up event ...
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
@@ -543,22 +584,42 @@ namespace guiAbstraction {
 									}
 									break;
 								case EnterNotify:
+									m_resizeMode = false;
+									m_moveMode = false;
 									//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case MotionNotify:
-									//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
-									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (double)event.xmotion.x, (double)event.xmotion.y);
+									if (true == m_resizeMode) {
+										ChangeSize(m_cursorEventX, m_cursorEventY);
+									} else if (true == m_moveMode) {
+										int32_t tmpX, tmpY;
+										this->GetAbsPos(tmpX, tmpY);
+										//EWOL_DEBUG("Current absolute position : " << tmpX << "x" << tmpY);
+										int32_t newPosX = (m_startX - m_screenOffsetX) - (m_startX - tmpX);
+										int32_t newPosY = (m_startY - m_screenOffsetY) - (m_startY - tmpY);
+										//EWOL_DEBUG("Change POS : (" << (m_startY - m_screenOffsetX) << "," << (m_startY - m_screenOffsetY) << ") ==> (" << newPosX << "," << newPosY << ")");
+										this->ChangePos(newPosX, newPosY);
+									} else {
+										//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
+										m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (double)event.xmotion.x, (double)event.xmotion.y);
+									}
 									break;
 								case LeaveNotify:
+									m_resizeMode = false;
+									m_moveMode = false;
 									//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
 									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (double)event.xcrossing.x, (double)event.xcrossing.y);
 									break;
 								case FocusIn:
+									m_resizeMode = false;
+									m_moveMode = false;
 									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusIn\"");
 									m_uniqueWindows->SetFocus();
 									break;
 								case FocusOut:
+									m_resizeMode = false;
+									m_moveMode = false;
 									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusOut\"");
 									m_uniqueWindows->RmFocus();
 									break;
@@ -596,21 +657,72 @@ namespace guiAbstraction {
 					Draw();
 					usleep( 100000 );
 				}
-			}
+			};
 			
 			void Stop(void)
 			{
 				m_run = false;
-			}
+			};
 			
 			void ChangeSize(int32_t w, int32_t h)
 			{
 				XResizeWindow(m_display, WindowHandle, w, h);
-			}
+			};
 			
 			void ChangePos(int32_t x, int32_t y)
 			{
 				XMoveWindow(m_display, WindowHandle, x, y);
+			};
+			
+			void GetAbsPos(int32_t & x, int32_t & y)
+			{
+				int tmp;
+				unsigned int tmp2;
+				Window fromroot, tmpwin;
+				XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
+			};
+		
+		private:
+			bool m_resizeMode;
+			bool m_moveMode;
+			int32_t m_startX;
+			int32_t m_startY;
+			int32_t m_screenOffsetX;
+			int32_t m_screenOffsetY;
+			
+		public:
+			void StartResizeSystem(void)
+			{
+				EWOL_INFO("Start Resizing the windows");
+				m_resizeMode = true;
+				this->GetAbsPos(m_startX, m_startY);
+				m_screenOffsetX = m_cursorEventX;
+				m_screenOffsetY = m_cursorEventY;
+			};
+		public:
+			// TODO : need to Check all of this... to write a better code... if needed...
+			void StartMoveSystem(void)
+			{
+				EWOL_INFO("Start Moving the windows");
+				m_moveMode=true;
+				this->GetAbsPos(m_startX, m_startY);
+				EWOL_DEBUG("ref pos : (" << m_startX << "," << m_startY << ") (" << m_cursorEventX << "," << m_cursorEventY << ")");
+				m_screenOffsetX = m_cursorEventX;
+				m_screenOffsetY = m_cursorEventY;
+			};
+		private:
+			bool inputIsPressed[20];
+		public:
+			bool IsPressedInput(int32_t inputID)
+			{
+				if(    NB_MAX_INPUT > inputID
+				    && 0 <= inputID)
+				{
+					return inputIsPressed[inputID];
+				} else {
+					EWOL_WARNING("Wrong input ID : " << inputID);
+					return false;
+				}
 			}
 	};
 };
@@ -695,6 +807,43 @@ void guiAbstraction::ChangePos(int32_t x, int32_t y)
 		myX11Access->ChangePos(x, y);
 	} else {
 		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
+
+void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->GetAbsPos(x, y);
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
+
+void guiAbstraction::StartResizeSystem(void)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->StartResizeSystem();
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
+
+void guiAbstraction::StartMoveSystem(void)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->StartMoveSystem();
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+	}
+}
+
+bool guiAbstraction::IsPressedInput(int32_t inputID)
+{
+	if (true == guiAbstractionIsInit) {
+		return myX11Access->IsPressedInput(inputID);
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
+		return false;
 	}
 }
 

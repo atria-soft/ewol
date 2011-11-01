@@ -76,3 +76,39 @@ void ewol::Stop(void)
 }
 
 
+void ewol::ChangeSize(int32_t w, int32_t h)
+{
+	guiAbstraction::ChangeSize(w, h);
+}
+
+void ewol::ChangePos(int32_t x, int32_t y)
+{
+	guiAbstraction::ChangePos(x, y);
+}
+
+void ewol::GetAbsPos(int32_t & x, int32_t & y)
+{
+	guiAbstraction::GetAbsPos(x, y);
+}
+
+
+void ewol::StartResizeSystem(void)
+{
+#if __PLATFORM__ == X11
+	guiAbstraction::StartResizeSystem();
+#endif
+}
+
+void ewol::StartMoveSystem(void)
+{
+#if __PLATFORM__ == X11
+	guiAbstraction::StartMoveSystem();
+#endif
+}
+
+
+bool ewol::IsPressedInput(int32_t inputID)
+{
+	return guiAbstraction::IsPressedInput(inputID);
+}
+
