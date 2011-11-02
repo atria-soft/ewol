@@ -591,7 +591,9 @@ namespace guiAbstraction {
 									break;
 								case MotionNotify:
 									if (true == m_resizeMode) {
-										ChangeSize(m_cursorEventX, m_cursorEventY);
+										if (m_cursorEventX >=50 && m_cursorEventY >=50) {
+											ChangeSize(m_cursorEventX, m_cursorEventY);
+										}
 									} else if (true == m_moveMode) {
 										int32_t tmpX, tmpY;
 										this->GetAbsPos(tmpX, tmpY);

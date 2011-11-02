@@ -47,9 +47,16 @@
 	typedef unsigned char                   uint8_t;
 	typedef unsigned short int              uint16_t;
 	typedef unsigned int                    uint32_t;
-	typedef unsigned long int               uint64_t;
-	//typedef unsigned long long int          uint64_t;
+#	if __WORDSIZE == 64
+		typedef unsigned long int               uint64_t;
+#	else
+		typedef unsigned long long int          uint64_t;
+#	endif
 #endif
+
+
+
+
 
 #define etk_min(elemA, elemB)               ((elemA)<(elemB)) ? (elemA) : (elemB)
 #define etk_max(elemA, elemB)               ((elemA)<(elemB)) ? (elemB) : (elemA)
