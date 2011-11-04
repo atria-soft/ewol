@@ -96,12 +96,22 @@ X11FLAGS= -lX11 -lGL -lGLU
 X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
 #X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
 
+
+ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
+    FREETYPE_CFLAGS=  `pkg-config --cflags freetype2` -DEWOL_USE_FREE_TYPE
+    FREETYPE_LDFLAGS= `pkg-config --libs freetype2` -DEWOL_USE_FREE_TYPE
+else
+    FREETYPE_CFLAGS=
+    FREETYPE_LDFLAGS=
+    $(Info  libFreeType-dev is not installed)
+endif
+
 ###############################################################################
 ### Basic C flags                                                           ###
 ###############################################################################
 
 # basic X11 librairy ==> show if we can une under lib ...
-CXXFLAGS=  $(X11FLAGS) -D__PLATFORM__=$(PLATFORM)
+CXXFLAGS=  $(X11FLAGS) $(FREETYPE_CFLAGS) -D__PLATFORM__=$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
 	CXXFLAGS+= -O2
@@ -118,8 +128,8 @@ CXXFLAGS+= $(DEFINE)
 
 CFLAGS=    $(CXXFLAGS) -std=c99
 
-# basic X11 librairy
-LDFLAGS=  $(X11FLAGS)
+# basic extern librairy
+LDFLAGS=  $(X11FLAGS) $(FREETYPE_LDFLAGS)
 
 # Dynamic connection of the CALLBACK of the GUI
 LDFLAGS+= -Wl,--export-dynamic
