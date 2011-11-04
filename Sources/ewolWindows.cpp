@@ -239,12 +239,11 @@ void ewol::Windows::SysDraw(void)
 				EWOL_INFO("    Current size         = " << face->size);
 				
 				// set size : 
-				error = FT_Set_Char_Size(face, /* handle to face object */
-				                         0, /* char_width in 1/64th of points */
-				                         16*64, /* char_height in 1/64th of points */
-				                         300, /* horizontal device resolution */
-				                         300 ); /* vertical device resolution */ 
-				
+				int32_t fontSize = 12;
+				int32_t fontQuality = 96; // 300dpi (hight quality) 96 dpi (normal quality)
+				error = FT_Set_Char_Size(face, fontSize<<6, fontSize<<6, fontQuality, fontQuality); // note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+				float lineHeight = fontSize*1.43f; // the line height to have a correct display
+
 				/* retrieve glyph index from character code */
 				int32_t glyph_index = FT_Get_Char_Index(face, 'A' );
 				/* load glyph image into the slot (erase previous one) */
@@ -314,18 +313,18 @@ void ewol::Windows::SysDraw(void)
 	*/
 
 
-	glColor4f(1.0, 1.0, 1.0, 1.0);
+	glColor4f(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, TMPtextureid);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 0.0);
 		glVertex3f(300.0, 100.0, 0.0);
 		glTexCoord2f(1.0, 0.0);
-		glVertex3f(338.0, 100.0, 0.0);
+		glVertex3f(310.0, 100.0, 0.0);
 		glTexCoord2f(1.0, 1.0);
-		glVertex3f(338.0, 140.0, 0.0);
+		glVertex3f(310.0, 112.0, 0.0);
 		glTexCoord2f(0.0, 1.0);
-		glVertex3f(300.0, 140.0, 0.0);
+		glVertex3f(300.0, 112.0, 0.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
