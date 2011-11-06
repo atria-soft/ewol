@@ -30,36 +30,38 @@
 
 extern const char * ewolLibName;
 
-#define EWOL_CRITICAL(data)			ETK_CRITICAL(ewolLibName, data)
+#define EWOL_CRITICAL(data)         ETK_CRITICAL(ewolLibName, data)
 // General 
 #if EWOL_DEBUG_LEVEL > 0
-#	define EWOL_WARNING(data)		ETK_WARNING(ewolLibName, data)
-#	define EWOL_ERROR(data)			ETK_ERROR(ewolLibName, data)
+#	define EWOL_WARNING(data)       ETK_WARNING(ewolLibName, data)
+#	define EWOL_ERROR(data)         ETK_ERROR(ewolLibName, data)
 #else
-#	define EWOL_WARNING(data)		do {}while(0)
-#	define EWOL_ERROR(data)			do {}while(0)
+#	define EWOL_WARNING(data)       do {}while(0)
+#	define EWOL_ERROR(data)         do {}while(0)
 #endif
 
 #if EWOL_DEBUG_LEVEL > 1
-#	define EWOL_INFO(data)			ETK_INFO(ewolLibName, data)
+#	define EWOL_INFO(data)          ETK_INFO(ewolLibName, data)
 #else
-#	define EWOL_INFO(data)			do {}while(0)
+#	define EWOL_INFO(data)          do {}while(0)
 #endif
 
 #if EWOL_DEBUG_LEVEL > 2
-#	define EWOL_DEBUG(data)			ETK_DEBUG(ewolLibName, data)
+#	define EWOL_DEBUG(data)         ETK_DEBUG(ewolLibName, data)
 #else
-#	define EWOL_DEBUG(data)			do {}while(0)
+#	define EWOL_DEBUG(data)         do {}while(0)
 #endif
 
-#define EWOL_ASSERT(cond, data)		ETK_ASSERT(ewolLibName, cond, data)
+#define EWOL_TODO(data)             EWOL_WARNING("TODO : " << data)
+
+#define EWOL_ASSERT(cond, data)     ETK_ASSERT(ewolLibName, cond, data)
 
 #if EWOL_DEBUG_LEVEL > 1
-#   define EWOL_CHECK_INOUT(cond)	ETK_CHECK_INOUT_ASSERT(ewolLibName, cond)
+#	define EWOL_CHECK_INOUT(cond)   ETK_CHECK_INOUT_ASSERT(ewolLibName, cond)
 #elif EWOL_DEBUG_LEVEL > 0
-#   define EWOL_CHECK_INOUT(cond)	ETK_CHECK_INOUT_WARNING(ewolLibName, cond)
+#	define EWOL_CHECK_INOUT(cond)   ETK_CHECK_INOUT_WARNING(ewolLibName, cond)
 #else
-#   define EWOL_CHECK_INOUT(cond)	do { } while (0)
+#	define EWOL_CHECK_INOUT(cond)   do { } while (0)
 #endif
 
 #endif

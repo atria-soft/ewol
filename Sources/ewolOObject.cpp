@@ -228,7 +228,8 @@ void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t s
 	m_coord.Clear();
 	m_coordTex.Clear();
 	// get font Name : 
-	m_FontId = GetFontIdWithName(FontName);
+	//m_FontId = GetFontIdWithName(FontName);
+	m_FontId = GetDefaultFontId();
 	if (m_FontId == -1) {
 		EWOL_ERROR("Can not find the font with the name : " << FontName);
 	}
@@ -237,7 +238,7 @@ void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t s
 	coord2D_ts drawPosition;
 	drawPosition.x = x;
 	drawPosition.y = y;
-	ewol::DrawText(m_FontId, mode, size, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
+	ewol::DrawText(m_FontId, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
 }
 
 

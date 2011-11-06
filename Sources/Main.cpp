@@ -54,11 +54,13 @@ int main(int argc, char *argv[])
 {
 	
 	ewol::Init(argc, argv);
-	
-	
+	/*
 	if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 	}
+	*/
+	ewol::SetFontFolder("Font");
+	ewol::SetDefaultFont("freefont/FreeMono", 16);
 	
 	
 	Plop * myWindowsExample = new Plop();

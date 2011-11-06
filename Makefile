@@ -178,9 +178,13 @@ CXXFILES +=		etk/etkDebug.cpp \
 CXXFILES +=		ewol.cpp \
 				ewolDebug.cpp \
 				ewolOObject.cpp \
-				ewolTexture.cpp \
-				ewolFont.cpp \
-				ewolWidget.cpp \
+				ewolTexture.cpp
+ifeq ("$(FREETYPE_CFLAGS)", "")
+    CXXFILES +=	ewolFontBitmap.cpp
+else
+    CXXFILES +=	ewolFontFreeType.cpp
+endif
+CXXFILES +=		ewolWidget.cpp \
 				ewolWindows.cpp
 
 

@@ -53,7 +53,7 @@
 		typedef unsigned long long int          uint64_t;
 #	endif
 #endif
-
+typedef int32_t       uniChar_t;
 
 
 

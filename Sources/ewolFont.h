@@ -32,6 +32,7 @@
 
 namespace ewol
 {
+	// deprecated...
 	typedef enum {
 		FONT_MODE_NORMAL=0,
 		FONT_MODE_BOLD,
@@ -40,43 +41,41 @@ namespace ewol
 		FONT_MODE_NUMBER,
 	}fontMode_te;
 	
-	void       UnInitFont(void);
-	// load a font in momory, can be done many time for a specific fontname, if you specify true the font will be loaded in memory, otherwise, font is loaded only when needed the first time
-	bool        AddFont(etk::File fontFileName, bool bold=false, bool italic=false, bool boldItalic=false);
-	// get the name of the font 
-	etk::String GetFontName(int32_t Id);
-	int32_t     GetFontIdWithFileName(etk::File fontFileName);
-	int32_t     GetFontIdWithName(etk::String fontName);
+	
+	//typedef char*         Utf8Char_t;
+	
+	// set default folder name of the font : 
+	void        SetFontFolder(etk::String folderName);
+	void        SetDefaultFont(etk::String fontName, int32_t size);
+	// unload all font loaded
+	void        InitFont(void);
+	void        UnInitFont(void);
+	// load the fonts...
+	int32_t     LoadFont(etk::String fontName, int32_t size); // return ID of font
+	int32_t     GetDefaultFontId(void);
+	void        UnloadFont(int32_t id);
 	
 	// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
-	int32_t     GetStringWidth(int32_t fontID, ewol::fontMode_te displayMode, int32_t size, const char * utf8String);
-	// get the size of a specific char in UTF8
-	int32_t     GetCharWidth(  int32_t fontID, ewol::fontMode_te displayMode, int32_t size, const char * utf8String);// only one element in the UTF8 string ...
-	// draw the text without background
-	void        DrawText(      int32_t            fontID,
-	                           ewol::fontMode_te  displayMode,
-	                           int32_t            size,
-	                           coord3D_ts &       drawPosition,
-	                           color_ts           textColorFg,
-	                           const char *       utf8String);
-	// draw the text with a spécify background
-	void        DrawTextWithBg(int32_t            fontID,
-	                           ewol::fontMode_te  displayMode,
-	                           int32_t            size,
-	                           coord3D_ts &       drawPosition,
-	                           color_ts           textColorFg,
-	                           color_ts           textColorBg,
-	                           const char *       utf8String);
+	int32_t     GetWidth(int32_t fontID, const uniChar_t * unicodeString);
+	int32_t     GetWidth(int32_t fontID, const char *      utf8String);
+	int32_t     GetWidth(int32_t fontID, const uniChar_t  unicodeChar);
+	int32_t     GetWidth(int32_t fontID, const char       utf8Char);
+	int32_t     GetHeight(int32_t fontID);
 	
-	// draw the text without background
-	void        DrawText(      int32_t                        fontID,
-	                           ewol::fontMode_te              displayMode,
-	                           int32_t                        size,
-	                           coord2D_ts &                   drawPosition,
-	                           const char *                   utf8String,
-	                           uint32_t &                     fontTextureId,
-	                           etk::VectorType<coord2D_ts> &  coord,
-	                           etk::VectorType<texCoord_ts> & coordTex);
+	
+	void        DrawText(int32_t                        fontID,
+	                     coord2D_ts &                   drawPosition,
+	                     const char *                   utf8String,
+	                     uint32_t &                     fontTextureId,
+	                     etk::VectorType<coord2D_ts> &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
+	
+	void        DrawText(int32_t                        fontID,
+	                     coord2D_ts &                   drawPosition,
+	                     const uniChar_t *              unicodeString,
+	                     uint32_t &                     fontTextureId,
+	                     etk::VectorType<coord2D_ts> &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	
 	int32_t LoadFont(etk::File fontFileName);
 	void    DrawText(double x, double y, const char * myString);

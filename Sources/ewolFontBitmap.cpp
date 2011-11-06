@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolFont.cpp
+ * @file ewolFontBitmap.cpp
  * @brief ewol Font system (sources)
  * @author Edouard DUPIN
  * @date 29/10/2011
@@ -40,7 +40,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::Font"
+#define __class__	"ewol::FontBitmap"
 
 
 extern "C"
@@ -374,17 +374,8 @@ void ewol::DrawText(int32_t            fontID,
 	drawPosition.x = posDrawX;
 	glDisable(GL_TEXTURE_2D);
 }
-// draw the text with a specify background
-void ewol::DrawTextWithBg( int32_t            fontID,
-                           ewol::fontMode_te  displayMode,
-                           int32_t            size,
-                           coord3D_ts &       drawPosition,
-                           color_ts           textColorFg,
-                           color_ts           textColorBg,
-                           const char *       utf8String)
-{
-	
-}
+
+
 
 void ewol::DrawText(int32_t                        fontID,
                     ewol::fontMode_te              displayMode,

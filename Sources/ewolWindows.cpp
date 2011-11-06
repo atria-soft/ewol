@@ -140,191 +140,23 @@ void ewol::Windows::SysDraw(void)
 	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 	
 	GenDraw();
-	
-	static bool initTest = false;
-	static uint32_t TMPtextureid;
-	if (false == initTest) {
-		initTest = true;
-		int32_t error = FT_Init_FreeType( &library );
-		if(0 != error) {
-			EWOL_CRITICAL("... an error occurred during library initialization ...");
-		} else {
-			etk::File myFile = "Font/freefont/FreeMono.ttf";
-			
-			error = FT_New_Face( library, myFile.GetCompleateName().c_str(), 0, &face );
-			if( FT_Err_Unknown_File_Format == error) {
-				EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
-			} else if (0 != error) {
-				EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
-			} else {
-				// all OK
-				EWOL_INFO("load font : \"" << myFile << "\" ");
-				EWOL_INFO("    nuber of glyph       = " << face->num_glyphs);
-				if ((FT_FACE_FLAG_SCALABLE & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_SCALABLE (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_SCALABLE (disable)");
-				}
-				if ((FT_FACE_FLAG_FIXED_SIZES & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_FIXED_SIZES (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_FIXED_SIZES (disable)");
-				}
-				if ((FT_FACE_FLAG_FIXED_WIDTH & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_FIXED_WIDTH (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_FIXED_WIDTH (disable)");
-				}
-				if ((FT_FACE_FLAG_SFNT & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_SFNT (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_SFNT (disable)");
-				}
-				if ((FT_FACE_FLAG_HORIZONTAL & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_HORIZONTAL (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_HORIZONTAL (disable)");
-				}
-				if ((FT_FACE_FLAG_VERTICAL & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_VERTICAL (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_VERTICAL (disable)");
-				}
-				if ((FT_FACE_FLAG_KERNING & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_KERNING (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_KERNING (disable)");
-				}
-				/* Deprecated flag
-				if ((FT_FACE_FLAG_FAST_GLYPHS & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_FAST_GLYPHS (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_FAST_GLYPHS (disable)");
-				}
-				*/
-				if ((FT_FACE_FLAG_MULTIPLE_MASTERS & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_MULTIPLE_MASTERS (disable)");
-				}
-				if ((FT_FACE_FLAG_GLYPH_NAMES & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_GLYPH_NAMES (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_GLYPH_NAMES (disable)");
-				}
-				if ((FT_FACE_FLAG_EXTERNAL_STREAM & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_EXTERNAL_STREAM (disable)");
-				}
-				if ((FT_FACE_FLAG_HINTER & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_HINTER (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_HINTER (disable)");
-				}
-				if ((FT_FACE_FLAG_CID_KEYED & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_CID_KEYED (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_CID_KEYED (disable)");
-				}
-				if ((FT_FACE_FLAG_TRICKY & face->face_flags) != 0) {
-					EWOL_INFO("    flags                = FT_FACE_FLAG_TRICKY (enable)");
-				} else {
-					EWOL_DEBUG("    flags                = FT_FACE_FLAG_TRICKY (disable)");
-				}
-				EWOL_INFO("    unit per EM          = " << face->units_per_EM);
-				EWOL_INFO("    num of fixed sizes   = " << face->num_fixed_sizes);
-				EWOL_INFO("    Availlable sizes     = " << face->available_sizes);
-				
-				EWOL_INFO("    Current size         = " << face->size);
-				
-				// set size : 
-				int32_t fontSize = 12;
-				int32_t fontQuality = 96; // 300dpi (hight quality) 96 dpi (normal quality)
-				error = FT_Set_Char_Size(face, fontSize<<6, fontSize<<6, fontQuality, fontQuality); // note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
-				float lineHeight = fontSize*1.43f; // the line height to have a correct display
 
-				/* retrieve glyph index from character code */
-				int32_t glyph_index = FT_Get_Char_Index(face, 'A' );
-				/* load glyph image into the slot (erase previous one) */
-				error = FT_Load_Glyph(face, /* handle to face object */
-				                      glyph_index, /* glyph index */
-				                      FT_LOAD_DEFAULT );
-				if ( error ) {
-					EWOL_ERROR("FT_Load_Glyph");
-				}
-				/* a small shortcut */
-				FT_GlyphSlot slot = face->glyph;
-				
-				/* convert to an anti-aliased bitmap */
-				error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
-				if ( error ) {
-					EWOL_ERROR("FT_Render_Glyph");
-				}
-				int32_t tmpWidth=slot->bitmap.width;
-				int32_t tmpHeight=slot->bitmap.rows;
-				
-				EWOL_DEBUG("Width=" << tmpWidth);
-				EWOL_DEBUG("Height=" << tmpHeight);
-				/*
-				my_draw_bitmap(&slot->bitmap,
-				               pen_x + slot->bitmap_left,
-				               pen_y - slot->bitmap_top);
-				glEnable(GL_TEXTURE_2D);
-				*/
-				// Allocate Memory For The Texture Data.
-				GLubyte* expanded_data = new GLubyte[ 2 * tmpWidth * tmpHeight];
-				
-				/*
-					Here We Fill In The Data For The Expanded Bitmap.
-					Notice That We Are Using A Two Channel Bitmap (One For
-					Channel Luminosity And One For Alpha), But We Assign
-					Both Luminosity And Alpha To The Value That We
-					Find In The FreeType Bitmap.
-					We Use The ?: Operator To Say That Value Which We Use
-					Will Be 0 If We Are In The Padding Zone, And Whatever
-					Is The FreeType Bitmap Otherwise.
-				*/
-				for(int j=0; j <tmpHeight;j++) {
-					for(int i=0; i < tmpWidth; i++){
-						expanded_data[2*(i+j*tmpWidth)]= expanded_data[2*(i+j*tmpWidth)+1] = (i>=tmpWidth || j>=tmpHeight) ? 0 : slot->bitmap.buffer[i + tmpWidth*j];
-					}
-				}
-				
-				// Now We Just Setup Some Texture Parameters.
-				glGenTextures(1, &TMPtextureid);
-				glBindTexture( GL_TEXTURE_2D, TMPtextureid);
-				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-				
-				// Here We Actually Create The Texture Itself, Notice That We Are Using GL_LUMINANCE_ALPHA To Indicate That we Are Using 2 Channel Data.
-				glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, tmpWidth, tmpHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data );
-				
-				// With The Texture Created, We Don't Need The Expanded Data Anymore.
-				delete [] expanded_data;
-			}
-		}
-	}
-
-	/*
 	ewol::OObject2DColored tmpOObjects;
-	tmpOObjects.Rectangle( 290, 90, 60, 60,  1.0, 0.0, 0.0, 1.0);
+	tmpOObjects.Rectangle( 50, 50, 200, 300,  1.0, 0.0, 0.0, 1.0);
 	tmpOObjects.Draw();
-	*/
-
 
 	glColor4f(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, TMPtextureid);
+	glBindTexture(GL_TEXTURE_2D, 1);
 	glBegin(GL_QUADS);
 		glTexCoord2f(0.0, 0.0);
-		glVertex3f(300.0, 100.0, 0.0);
+		glVertex3f(50.0, 50.0, 0.0);
 		glTexCoord2f(1.0, 0.0);
-		glVertex3f(310.0, 100.0, 0.0);
+		glVertex3f(250.0, 50.0, 0.0);
 		glTexCoord2f(1.0, 1.0);
-		glVertex3f(310.0, 112.0, 0.0);
+		glVertex3f(250.0, 350.0, 0.0);
 		glTexCoord2f(0.0, 1.0);
-		glVertex3f(300.0, 112.0, 0.0);
+		glVertex3f(50.0, 350.0, 0.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 

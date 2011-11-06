@@ -50,6 +50,7 @@ void ewol::Init(int argc, char *argv[])
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
 	guiAbstraction::Init(argc, argv);
+	ewol::InitFont();
 }
 
 void ewol::Run(void)
