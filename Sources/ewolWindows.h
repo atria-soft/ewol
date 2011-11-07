@@ -56,6 +56,18 @@ namespace ewol {
 		// Widget overwrite function
 		public:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y);
+		private:
+			bool m_hasDecoration;
+		public:
+			void SetDecorationDisable(void)
+			{
+				m_hasDecoration = false;
+			}
+			
+			void SetDecorationEnable(void)
+			{
+				m_hasDecoration = true;
+			}
 	};
 };
 

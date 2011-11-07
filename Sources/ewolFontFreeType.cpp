@@ -344,7 +344,10 @@ class FTFont{
 			}
 			// set the bassic charset:
 			m_elements.Clear();
-			for (int32_t iii=0; iii<127; iii++) {
+			freeTypeFontElement_ts tmpchar1;
+			tmpchar1.unicodeCharVal = 0;
+			m_elements.PushBack(tmpchar1);
+			for (int32_t iii=0x20; iii<127; iii++) {
 				freeTypeFontElement_ts tmpchar;
 				tmpchar.unicodeCharVal = iii;
 				m_elements.PushBack(tmpchar);
@@ -556,20 +559,35 @@ void ewol::DrawText(int32_t                        fontID,
 	float posDrawX = drawPosition.x;
 	while(*tmpVal != 0) {
 		int32_t tmpChar = *tmpVal++;
+		int32_t charIndex;
 		if (tmpChar >= 0x80) {
-			tmpChar = 0;
+			charIndex = 0;
+		} else if (tmpChar < 0x20) {
+			charIndex = 0;
+		} else if (tmpChar < 0x80) {
+			charIndex = tmpChar - 0x1F;
+		} else {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+				if (listOfElement[iii].unicodeCharVal == tmpChar) {
+					charIndex = iii;
+					break;
+				}
+			}
+			// TODO : Update if possible the mapping
+			charIndex = 0;
 		}
-		float sizeWidth = listOfElement[tmpChar].width;
-		if (tmpChar != 0x20) {
+		float sizeWidth = listOfElement[charIndex].width;
+		// 0x01 == 0x20 == ' ';
+		if (tmpChar != 0x01) {
 			// set texture coordonates :
-			coordTex.PushBack(listOfElement[tmpChar].posStart);
+			coordTex.PushBack(listOfElement[charIndex].posStart);
 			texCoord_ts tmpTex;
-			tmpTex.u = listOfElement[tmpChar].posStop.u;
-			tmpTex.v = listOfElement[tmpChar].posStart.v;
+			tmpTex.u = listOfElement[charIndex].posStop.u;
+			tmpTex.v = listOfElement[charIndex].posStart.v;
 			coordTex.PushBack(tmpTex);
-			coordTex.PushBack(listOfElement[tmpChar].posStop);
-			tmpTex.u = listOfElement[tmpChar].posStart.u;
-			tmpTex.v = listOfElement[tmpChar].posStop.v;
+			coordTex.PushBack(listOfElement[charIndex].posStop);
+			tmpTex.u = listOfElement[charIndex].posStart.u;
+			tmpTex.v = listOfElement[charIndex].posStop.v;
 			coordTex.PushBack(tmpTex);
 			// set display positions :
 			coord2D_ts tmpCoord;

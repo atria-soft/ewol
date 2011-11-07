@@ -46,24 +46,27 @@ const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
 
 ewol::Windows::Windows(void)
 {
-	ewol::OObject2DColored * myOObject = new ewol::OObject2DColored();
-	myOObject->Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
-	myOObject->Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
-	myOObject->Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
-	
-	AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
-	AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
-	AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
-	
-	AddOObject(myOObject, "leftBoutton");
-	
-	color_ts textColorFg;
-	textColorFg.red = .0;
-	textColorFg.green = .0;
-	textColorFg.blue = .0;
-	textColorFg.alpha = 1.0;
-	ewol::OObject2DText * myOObjectText = new ewol::OObject2DText(62, 2, "Monospace", 17 , FONT_MODE_BOLD, textColorFg, "My Title ...");
-	AddOObject(myOObjectText, "Title");
+	SetDecorationDisable();
+	if (true == m_hasDecoration) {
+		ewol::OObject2DColored * myOObject = new ewol::OObject2DColored();
+		myOObject->Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
+		myOObject->Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
+		myOObject->Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
+		
+		AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
+		AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
+		AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
+		
+		AddOObject(myOObject, "leftBoutton");
+		
+		color_ts textColorFg;
+		textColorFg.red = .0;
+		textColorFg.green = .0;
+		textColorFg.blue = .0;
+		textColorFg.alpha = 1.0;
+		ewol::OObject2DText * myOObjectText = new ewol::OObject2DText(62, 2, "Monospace", 17 , FONT_MODE_BOLD, textColorFg, "My Title ...");
+		AddOObject(myOObjectText, "Title");
+	}
 }
 
 
@@ -78,18 +81,20 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
 {
-	if(    x >= 60
-	    && y <=20)
-	{
-		if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
-			ewol::StartMoveSystem();
+	if (true == m_hasDecoration) {
+		if(    x >= 60
+		    && y <=20)
+		{
+			if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
+				ewol::StartMoveSystem();
+			}
 		}
-	}
-	if(    x >= m_size.x - 20
-	    && y >= m_size.y - 20)
-	{
-		if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
-			ewol::StartResizeSystem();
+		if(    x >= m_size.x - 20
+		    && y >= m_size.y - 20)
+		{
+			if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
+				ewol::StartResizeSystem();
+			}
 		}
 	}
 	return true;

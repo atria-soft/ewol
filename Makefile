@@ -186,6 +186,13 @@ else
 endif
 CXXFILES +=		ewolWidget.cpp \
 				ewolWindows.cpp
+# list of widgets :
+CXXFILES +=		widget/ewolButton.cpp \
+				widget/ewolCheckBox.cpp \
+				widget/ewolEntry.cpp \
+				widget/ewolList.cpp \
+				widget/ewolSizerHori.cpp \
+				widget/ewolSizerVert.cpp
 
 
 # Ewol Test Software :

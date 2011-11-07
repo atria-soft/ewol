@@ -272,22 +272,37 @@ namespace guiAbstraction {
 					XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 				}
 				
-				//code to remove decoration
-				{
-					
-					Hints hints;
-					Atom property;
-					hints.flags = 2;// Specify that we're changing the window decorations.
-					hints.decorations = 0;// 0 (false) means that window decorations should go bye-bye
-					property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
-					if (0 != property) {
-						XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
-						XMapWindow(m_display, WindowHandle);
-					} else {
-						EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
-					}
-				}
 				return true;
+			}
+			
+			void RemoveDecoration(void)
+			{
+				Hints hints;
+				Atom property;
+				hints.flags = 2;// Specify that we're changing the window decorations.
+				hints.decorations = 0;// 0 (false) means that window decorations should go bye-bye
+				property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
+				if (0 != property) {
+					XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+					XMapWindow(m_display, WindowHandle);
+				} else {
+					EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
+				}
+			}
+			
+			void AddDecoration(void)
+			{
+				Hints hints;
+				Atom property;
+				hints.flags = 2;// Specify that we're changing the window decorations.
+				hints.decorations = 1;// 1 (true) means that window decorations should enable
+				property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
+				if (0 != property) {
+					XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+					XMapWindow(m_display, WindowHandle);
+				} else {
+					EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
+				}
 			}
 			
 			bool CreateOGlContext(void)
