@@ -55,7 +55,7 @@ namespace ewol {
 			virtual bool OnEventArea(const char * generateEventId, double x, double y);
 		// Widget overwrite function
 		public:
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y);
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y);
 		private:
 			bool m_hasDecoration;
 		public:

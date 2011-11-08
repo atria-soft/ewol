@@ -143,7 +143,8 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 	newEvent.generateEventId = generateEventId;
 	newEvent.widgetCall = -1; // by default no widget is called
 	newEvent.mode = EWOL_EVENT_AREA;
-	newEvent.area.origin = origin;
+	newEvent.area.origin.x = origin.x + m_origin.x;
+	newEvent.area.origin.y = origin.y + m_origin.y;
 	newEvent.area.size = size;
 	newEvent.area.flags = flags;
 	m_inputEvent.PushBack(newEvent);
@@ -179,7 +180,7 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
 		return;
 	}
 	newObject->SetName(name);
-	EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," <<  m_origin.y << ")");
+	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," <<  m_origin.y << ")");
 	newObject->UpdateOrigin(m_origin.x, m_origin.y);
 	m_listOObject.PushBack(newObject);
 }

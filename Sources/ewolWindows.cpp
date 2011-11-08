@@ -122,6 +122,9 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, d
 			}
 		}
 	}
+	if (NULL != m_subWidget) {
+		m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
+	}
 	return true;
 }
 
@@ -181,27 +184,6 @@ bool ewol::Windows::OnDraw(void)
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw();
 	}
-	/*
-	// Test AREA : 
-	ewol::OObject2DColored tmpOObjects;
-	tmpOObjects.Rectangle( 50, 50, 200, 300,  1.0, 0.0, 0.0, 1.0);
-	tmpOObjects.Draw();
-	
-	glColor4f(0.0, 0.0, 0.0, 1.0);
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 1);
-	glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0);
-		glVertex3f(50.0, 50.0, 0.0);
-		glTexCoord2f(1.0, 0.0);
-		glVertex3f(250.0, 50.0, 0.0);
-		glTexCoord2f(1.0, 1.0);
-		glVertex3f(250.0, 350.0, 0.0);
-		glTexCoord2f(0.0, 1.0);
-		glVertex3f(50.0, 350.0, 0.0);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-	*/
 	return true;
 }
 
@@ -220,6 +202,7 @@ bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y
 		EWOL_INFO("Request Expend of the windows");
 		eventIsOK = true;
 	}
+	
 	return eventIsOK;
 }
 

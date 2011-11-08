@@ -156,6 +156,7 @@ namespace ewol {
 			bool           m_userExpendY;
 		public:
 			void           SetOrigin(double x, double y) { m_origin.x=x; m_origin.y=y; };
+			coord          GetOrigin(void) { return m_origin; };
 			virtual bool   CalculateSize(double availlableX, double availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; }; //update the min Size ... and the expend parameters for the sizer
 			virtual void   SetMinSise(double x=-1, double y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
@@ -217,6 +218,7 @@ namespace ewol {
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE]);
 		protected:
+			void EventAreaRemoveAll(void) { m_inputEvent.Clear(); };
 			bool AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId);
 			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId);
 			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);

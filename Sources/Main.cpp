@@ -53,10 +53,10 @@ class Plop :public ewol::Windows
 			
 			myButton = new ewol::Button("BT 3");
 			myButton->SetExpendX(true);
-			myButton->SetExpendY(true);
+			//myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);
 			myButton = new ewol::Button(" 4 4 BT");
-			myButton->SetExpendY(true);
+			//myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);
 			
 			myButton = new ewol::Button("Exemple 2");

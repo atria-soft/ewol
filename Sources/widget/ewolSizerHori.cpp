@@ -213,3 +213,20 @@ void ewol::SizerHori::OnRegenerateDisplay(void)
 }
 
 
+bool ewol::SizerHori::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+{
+	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+		if (NULL != m_subWidget[iii]) {
+			coord tmpSize = m_subWidget[iii]->GetSize();
+			coord tmpOrigin = m_subWidget[iii]->GetOrigin();
+			if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
+			    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
+			{
+				return m_subWidget[iii]->GenEventInput(IdInput, typeEvent, x, y);
+			}
+		}
+	}
+	return true;
+}
+
+

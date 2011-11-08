@@ -26,6 +26,12 @@
 
 #include <ewolOObject.h>
 
+
+
+const char * ewolEventButtonPressed    = "ewol Button Pressed";
+
+
+
 #undef __class__
 #define __class__	"ewol::Button"
 
@@ -91,8 +97,41 @@ void ewol::Button::OnRegenerateDisplay(void)
 	
 	int32_t fontId = GetDefaultFontId();
 	int32_t fontHeight = ewol::GetHeight(fontId);
-	int32_t pos = (m_size.y - fontHeight)/2;
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText(5, pos, "", -1, FONT_MODE_BOLD, textColorFg, m_label.c_str());
+	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
+	int32_t posx = (m_size.x - fontWidth - 6)/2 + 3;
+	ewol::OObject2DText * tmpText = new ewol::OObject2DText(posx, posy, "", -1, FONT_MODE_BOLD, textColorFg, m_label.c_str());
 	
 	AddOObject(tmpText, "BouttonText");
+	
+	
+	// Regenerate the event Area:
+	EventAreaRemoveAll();
+	coord origin;
+	coord size;
+	origin.x = 3.0;
+	origin.y = 3.0;
+	size.x = m_size.x-6;
+	size.y = m_size.y-6;
+	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
+}
+
+/*
+bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+{
+	EWOL_DEBUG("Event on BT ...");
+	return true;
+}
+*/
+
+bool ewol::Button::OnEventArea(const char * generateEventId, double x, double y)
+{
+	bool eventIsOK = false;
+	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
+	if(ewolEventButtonPressed == generateEventId) {
+		EWOL_INFO("BT pressed ... " << m_label);
+		eventIsOK = true;
+	}
+	
+	return eventIsOK;
 }

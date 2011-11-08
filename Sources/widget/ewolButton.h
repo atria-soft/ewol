@@ -48,6 +48,9 @@ namespace ewol {
 			etk::String    m_label;
 		public:
 			virtual void   OnRegenerateDisplay(void);
+		public:
+			//virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y);
+			virtual bool OnEventArea(const char * generateEventId, double x, double y);
 	};
 };
 

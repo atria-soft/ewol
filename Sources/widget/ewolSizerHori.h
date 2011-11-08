@@ -52,6 +52,8 @@ namespace ewol {
 			virtual bool   OnDraw(void);
 		public:
 			virtual void   OnRegenerateDisplay(void);
+		public:
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y);
 	};
 };
 
