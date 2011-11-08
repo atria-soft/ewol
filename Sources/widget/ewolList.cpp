@@ -24,3 +24,7 @@
 
 
 #include <widget/ewolList.h>
+
+#undef __class__
+#define __class__	"ewol::List"
+

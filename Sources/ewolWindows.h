@@ -36,7 +36,7 @@ namespace ewol {
 	{
 		public:
 			Windows(void);
-			virtual ~Windows(void) {};
+			virtual ~Windows(void);
 		// internal event at ewol system : 
 		public:
 			void SysDraw(void);
@@ -68,6 +68,14 @@ namespace ewol {
 			{
 				m_hasDecoration = true;
 			}
+		private:
+			ewol::Widget *  m_subWidget;
+		public:
+			void SetSubWidget(ewol::Widget * widget);
+		protected:
+			virtual bool   OnDraw(void);
+		public:
+			virtual void OnRegenerateDisplay(void);
 	};
 };
 

@@ -33,8 +33,21 @@ namespace ewol {
 	class Button :public ewol::Widget
 	{
 		public:
-			Button(void) { };
-			virtual ~Button(void) { };
+			Button(void);
+			Button(etk::String newLabel);
+			virtual ~Button(void);
+			virtual bool   CalculateMinSize(void);
+			void           SetLabel(etk::String newLabel);
+			// TODO : 
+			//void           SetSize(int32_t size);
+			//void           SetFont(etk::String fontName);
+			//void           ResetDefaultParameters(void);
+			void           SetValue(bool val);
+			bool           GetValue(void);
+		private:
+			etk::String    m_label;
+		public:
+			virtual void   OnRegenerateDisplay(void);
 	};
 };
 

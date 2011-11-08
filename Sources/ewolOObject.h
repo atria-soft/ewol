@@ -61,6 +61,8 @@ namespace ewol {
 			{
 				return m_name;
 			}
+		public:
+			virtual void UpdateOrigin(float x, float y) {};
 		private:
 			etk::String m_name;
 	};
@@ -78,6 +80,8 @@ namespace ewol {
 			//etk::VectorType<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
 		public:
 			void Rectangle(float x, float y, float w, float h, float red, float green, float blue, float alpha);
+		public:
+			virtual void UpdateOrigin(float x, float y);
 	};
 	/*
 	class OObjectFile :public ewol::OObject
@@ -106,6 +110,8 @@ namespace ewol {
 			uint32_t                      m_textureId;   //!< texture internal ID
 			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
+		public:
+			virtual void UpdateOrigin(float x, float y);
 	};
 	
 	
@@ -124,6 +130,8 @@ namespace ewol {
 			uint32_t                      m_FontTextureId; //!< font internal Texture ID
 			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+		public:
+			virtual void UpdateOrigin(float x, float y);
 	};
 	
 	/*

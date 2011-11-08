@@ -25,6 +25,9 @@
 
 #include <ewol.h>
 #include <ewolFont.h>
+#include <widget/ewolButton.h>
+#include <widget/ewolSizerHori.h>
+#include <widget/ewolSizerVert.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -38,7 +41,27 @@ class Plop :public ewol::Windows
 	public:
 		Plop(void)
 		{
+			// generate the display : 
+			ewol::SizerHori * mySizer = new ewol::SizerHori();
+			SetSubWidget(mySizer);
 			
+			ewol::Button * myButton = new ewol::Button("Mon Labell 1");
+			mySizer->SubWidgetAdd(myButton);
+			
+			ewol::SizerVert * mySizerVert = new ewol::SizerVert();
+			mySizer->SubWidgetAdd(mySizerVert);
+			
+			myButton = new ewol::Button("BT 3");
+			myButton->SetExpendX(true);
+			myButton->SetExpendY(true);
+			mySizerVert->SubWidgetAdd(myButton);
+			myButton = new ewol::Button(" 4 4 BT");
+			myButton->SetExpendY(true);
+			mySizerVert->SubWidgetAdd(myButton);
+			
+			myButton = new ewol::Button("Exemple 2");
+			myButton->SetExpendX(true);
+			mySizer->SubWidgetAdd(myButton);
 		};
 		
 		~Plop(void)
@@ -60,7 +83,7 @@ int main(int argc, char *argv[])
 	}
 	*/
 	ewol::SetFontFolder("Font");
-	ewol::SetDefaultFont("freefont/FreeMono", 16);
+	ewol::SetDefaultFont("freefont/FreeMono", 14);
 	
 	
 	Plop * myWindowsExample = new Plop();

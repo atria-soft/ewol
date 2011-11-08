@@ -202,15 +202,16 @@ class FTFontInternal
 		}
 	public:
 		etk::String GetFontName(void) {return m_fontName;};
-		bool GenerateBitmapFont(int32_t size, int32_t textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
+		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
 		{
 			// 300dpi (hight quality) 96 dpi (normal quality)
 			int32_t fontQuality = 96;
+			//int32_t fontQuality = 300;
 			// Select Size ...
 			// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
 			int32_t error = FT_Set_Char_Size(m_fftFace, size<<6, size<<6, fontQuality, fontQuality);
 			// the line height to have a correct display
-			//float lineHeight = size*1.43f;
+			height = size*1.43f;
 
 			// a small shortcut
 			FT_GlyphSlot slot = m_fftFace->glyph;
@@ -355,7 +356,7 @@ class FTFont{
 			m_size = size;
 			//generate font
 			glGenTextures(1, &m_textureId);
-			m_listLoadedTTFont[m_trueTypeFontId]->GenerateBitmapFont(m_size, m_textureId, m_elements);
+			m_listLoadedTTFont[m_trueTypeFontId]->GenerateBitmapFont(m_size, m_lineHeight, m_textureId, m_elements);
 		}
 		~FTFont(void)
 		{
@@ -389,10 +390,16 @@ class FTFont{
 			return m_size;
 		};
 		
+		int32_t GetHeight(void)
+		{
+			return m_lineHeight;
+		};
+		
 	private:
 		int32_t                                   m_trueTypeFontId;
 		uint32_t                                  m_textureId;   // internal texture ID
 		int32_t                                   m_size;        // nb pixel height
+		int32_t                                   m_lineHeight;  // nb pixel height
 		int32_t                                   m_interline;   // nb pixel between 2 lines
 		etk::VectorType<freeTypeFontElement_ts>   m_elements;    // 
 		
@@ -605,4 +612,47 @@ void ewol::DrawText(int32_t                        fontID,
 	}
 	drawPosition.x = posDrawX;
 	
+}
+
+int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
+{
+	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return 0;
+	}
+	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	char * tmpVal = (char*)utf8String;
+	
+	float posDrawX = 0.0;
+	while(*tmpVal != 0) {
+		int32_t tmpChar = *tmpVal++;
+		int32_t charIndex;
+		if (tmpChar >= 0x80) {
+			charIndex = 0;
+		} else if (tmpChar < 0x20) {
+			charIndex = 0;
+		} else if (tmpChar < 0x80) {
+			charIndex = tmpChar - 0x1F;
+		} else {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+				if (listOfElement[iii].unicodeCharVal == tmpChar) {
+					charIndex = iii;
+					break;
+				}
+			}
+			// TODO : Update if possible the mapping
+			charIndex = 0;
+		}
+		posDrawX += listOfElement[charIndex].width;
+	}
+	return posDrawX;
+}
+
+int32_t ewol::GetHeight(int32_t fontID)
+{
+	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return 10;
+	}
+	return m_listLoadedFont[fontID]->GetHeight();
 }

@@ -146,23 +146,27 @@ namespace ewol {
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			coord m_origin;
-			coord m_minSize;
-			coord m_size;
-			coord m_maxSize;
-			bool  m_expendX;
-			bool  m_expendY;
-			void  SetExpendX(bool newExpend=false) { m_expendX = newExpend; };
-			void  SetExpendY(bool newExpend=false) { m_expendY = newExpend; };
-			void  SetMinSise(double x=-1, double y=-1) { m_minSize.x = x; m_minSize.y = y; };
-			void  SetMaxSise(double x=-1, double y=-1) { m_maxSize.x = x; m_maxSize.y = y; };
-			void  SetCurrentSise(double x=-1, double y=-1) { m_size.x = x; m_size.y = y; };
+			// internal element calculated by the system
+			coord          m_origin;        //!< internal ... I do not really known how i can use it ...
+			coord          m_size;          //!< internal : current size of the widget
+			coord          m_minSize;       //!< user define the minimum size of the widget
+			// user configuaration
+			coord          m_userMinSize;   //!< user define the minimum size of the widget
+			bool           m_userExpendX;
+			bool           m_userExpendY;
 		public:
-			void  SetOrigin(double x, double y) { m_origin.x=x; m_origin.y=y; };
-			virtual bool CalculateSize(double availlableX, double availlableY); // this generate the current size ...
-			coord GetMinSize(void) { return m_minSize; };
-			coord GetMaxSize(void) { return m_maxSize; };
-			coord GetCurrentSize(void) { return m_size; };
+			void           SetOrigin(double x, double y) { m_origin.x=x; m_origin.y=y; };
+			virtual bool   CalculateSize(double availlableX, double availlableY); // this generate the current size ...
+			virtual bool   CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; }; //update the min Size ... and the expend parameters for the sizer
+			virtual void   SetMinSise(double x=-1, double y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
+			coord          GetMinSize(void) { return m_minSize; };
+			coord          GetSize(void) { return m_size; };
+			void           SetCurrentSise(double x=-1, double y=-1) { m_size.x = x; m_size.y = y; };
+			coord          GetCurrentSize(void) { return m_size; };
+			virtual void   SetExpendX(bool newExpend=false) { m_userExpendX = newExpend; };
+			bool           CanExpentX(void) { return m_userExpendX; };
+			virtual void   SetExpendY(bool newExpend=false) { m_userExpendY = newExpend; };
+			bool           CanExpentY(void) { return m_userExpendY; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area
@@ -239,6 +243,7 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			bool m_genericDraw;
+			bool m_specificDraw;
 			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
 			bool GenericDraw(void);
 		protected:
@@ -246,19 +251,24 @@ namespace ewol {
 			ewol::OObject* GetOObject(etk::String name);
 			void RmOObjectElem(etk::String name);
 			void ClearOObjectList(void);
-			void SetNotGenericDraw(void) { m_genericDraw = false; };
-			void SetGenericDraw(void) { m_genericDraw = true; };
-			virtual bool OnDraw(void) { return true; };
+			void GenericDrawDisable(void) { m_genericDraw = false; };
+			void GenericDrawEnable(void) { m_genericDraw = true; };
+			void SpecificDrawDisable(void) { m_specificDraw = false; };
+			void SpecificDrawEnable(void) { m_specificDraw = true; };
+			virtual bool OnDraw(void) { /*EWOL_ERROR("plop");*/ return true; };
 		public:
+			virtual void OnRegenerateDisplay(void) { };
 			bool GenDraw(void)
 			{
 				if (true == m_genericDraw) {
 					//EWOL_DEBUG("Draw generic...");
-					return GenericDraw();
-				} else {
-					//EWOL_DEBUG("Draw Custum...");
-					return OnDraw();
+					GenericDraw();
 				}
+				if (true == m_specificDraw) {
+					//EWOL_DEBUG("Draw Custum...");
+					OnDraw();
+				}
+				return true;
 			};
 
 	}; // end of the class Widget declaration

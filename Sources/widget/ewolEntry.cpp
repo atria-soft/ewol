@@ -24,3 +24,6 @@
 
 
 #include <widget/ewolEntry.h>
+
+#undef __class__
+#define __class__	"ewol::Entry"

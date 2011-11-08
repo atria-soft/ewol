@@ -24,3 +24,6 @@
 
 
 #include <widget/ewolCheckBox.h>
+
+#undef __class__
+#define __class__	"ewol::CheckBox"

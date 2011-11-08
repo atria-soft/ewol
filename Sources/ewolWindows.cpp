@@ -46,16 +46,27 @@ const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
 
 ewol::Windows::Windows(void)
 {
+	m_subWidget = NULL;
+	// enable specific drawing system ...
+	SpecificDrawEnable();
+	
 	SetDecorationDisable();
 	if (true == m_hasDecoration) {
 		ewol::OObject2DColored * myOObject = new ewol::OObject2DColored();
 		myOObject->Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
 		myOObject->Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
 		myOObject->Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
-		
-		AddEventArea({ 0.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
-		AddEventArea({20.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
-		AddEventArea({40.0,0.0}, {20, 20}, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
+		coord origin;
+		coord size;
+		origin.x = 0.0;
+		origin.y = 0.0;
+		size.x = 20;
+		size.y = 20;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
+		origin.x = 20.0;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
+		origin.x = 40.0;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
 		
 		AddOObject(myOObject, "leftBoutton");
 		
@@ -69,12 +80,26 @@ ewol::Windows::Windows(void)
 	}
 }
 
-
+ewol::Windows::~Windows(void)
+{
+	if (NULL != m_subWidget) {
+		delete(m_subWidget);
+		m_subWidget=NULL;
+	}
+}
 
 bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
+	if (NULL != m_subWidget) {
+		m_subWidget->CalculateMinSize();
+		// TODO : Check if min Size is possible ...
+		// TODO : Herited from MinSize .. and expand ???
+		m_subWidget->CalculateSize(m_size.x, m_size.y);
+	}
+	// regenerate all the display ...
+	OnRegenerateDisplay();
 	return true;
 }
 
@@ -112,17 +137,10 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, d
 #	include <X11/extensions/Xrender.h>
 #endif
 
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-FT_Library library; // handle to library
-FT_Face face; // handle to face object
-
 void ewol::Windows::SysDraw(void)
 {
 
-	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
+	EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
 	
@@ -146,10 +164,29 @@ void ewol::Windows::SysDraw(void)
 	
 	GenDraw();
 
+	glDisable(GL_BLEND);
+	return;
+}
+
+void ewol::Windows::OnRegenerateDisplay(void)
+{
+	if (NULL != m_subWidget) {
+		m_subWidget->OnRegenerateDisplay();
+	}
+}
+
+
+bool ewol::Windows::OnDraw(void)
+{
+	if (NULL != m_subWidget) {
+		m_subWidget->GenDraw();
+	}
+	/*
+	// Test AREA : 
 	ewol::OObject2DColored tmpOObjects;
 	tmpOObjects.Rectangle( 50, 50, 200, 300,  1.0, 0.0, 0.0, 1.0);
 	tmpOObjects.Draw();
-
+	
 	glColor4f(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 1);
@@ -164,12 +201,9 @@ void ewol::Windows::SysDraw(void)
 		glVertex3f(50.0, 350.0, 0.0);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
-
-	glDisable(GL_BLEND);
-	return;
+	*/
+	return true;
 }
-
 
 bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y)
 {
@@ -187,5 +221,19 @@ bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y
 		eventIsOK = true;
 	}
 	return eventIsOK;
+}
+
+
+
+void ewol::Windows::SetSubWidget(ewol::Widget * widget)
+{
+	if (NULL != m_subWidget) {
+		EWOL_INFO("Remove current main windows Widget...");
+		delete(m_subWidget);
+		m_subWidget = NULL;
+	}
+	m_subWidget = widget;
+	// Regenerate the size calculation :
+	CalculateSize(m_size.x, m_size.y);
 }
 

@@ -101,6 +101,15 @@ void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h, float
 }
 
 
+void ewol::OObject2DColored::UpdateOrigin(float x, float y)
+{
+	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
+		m_coord[iii].x += x;
+		m_coord[iii].y += y;
+	}
+}
+
+
 
 
 #undef __class__
@@ -187,6 +196,15 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	m_coordTex.PushBack(tex);
 }
 
+void ewol::OObject2DTextured::UpdateOrigin(float x, float y)
+{
+	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
+		m_coord[iii].x += x;
+		m_coord[iii].y += y;
+	}
+}
+
+
 
 #undef __class__
 #define __class__	"ewol::OObject2DText"
@@ -228,8 +246,13 @@ void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t s
 	m_coord.Clear();
 	m_coordTex.Clear();
 	// get font Name : 
-	//m_FontId = GetFontIdWithName(FontName);
-	m_FontId = GetDefaultFontId();
+	if (FontName == "") {
+		m_FontId = GetDefaultFontId();
+	} else {
+		EWOL_TODO("pas encore fait...");
+		//m_FontId = GetFontIdWithName(FontName);
+		return;
+	}
 	if (m_FontId == -1) {
 		EWOL_ERROR("Can not find the font with the name : " << FontName);
 	}
@@ -241,6 +264,13 @@ void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t s
 	ewol::DrawText(m_FontId, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
 }
 
+void ewol::OObject2DText::UpdateOrigin(float x, float y)
+{
+	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
+		m_coord[iii].x += x;
+		m_coord[iii].y += y;
+	}
+}
 
 /*
 uint32_t                      m_FontId;        //!< font internal ID

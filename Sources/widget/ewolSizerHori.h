@@ -36,14 +36,22 @@ namespace ewol {
 			SizerHori(void);
 			virtual ~SizerHori(void);
 		public:
-			virtual bool CalculateSize(double availlableX, double availlableY); // this generate the current size ...
+			virtual bool   CalculateSize(double availlableX, double availlableY); // this generate the current size ...
+			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
+			virtual void   SetMinSise(double x=-1, double y=-1);
+			virtual void   SetExpendX(bool newExpend=false);
+			virtual void   SetExpendY(bool newExpend=false);
 		private:
-			etk::VectorType<ewol::Widget*> m_SubWidget;
+			etk::VectorType<ewol::Widget*> m_subWidget;
 		public:
-			void SubWidgetRemoveAll(void);
-			void SubWidgetAdd(ewol::Widget* newWidget);
-			void SubWidgetRemove(ewol::Widget* newWidget);
-			void SubWidgetUnLink(ewol::Widget* newWidget);
+			void           SubWidgetRemoveAll(void);
+			void           SubWidgetAdd(ewol::Widget* newWidget);
+			void           SubWidgetRemove(ewol::Widget* newWidget);
+			void           SubWidgetUnLink(ewol::Widget* newWidget);
+		protected:
+			virtual bool   OnDraw(void);
+		public:
+			virtual void   OnRegenerateDisplay(void);
 	};
 };
 

@@ -58,8 +58,6 @@ namespace ewol
 	// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
 	int32_t     GetWidth(int32_t fontID, const uniChar_t * unicodeString);
 	int32_t     GetWidth(int32_t fontID, const char *      utf8String);
-	int32_t     GetWidth(int32_t fontID, const uniChar_t  unicodeChar);
-	int32_t     GetWidth(int32_t fontID, const char       utf8Char);
 	int32_t     GetHeight(int32_t fontID);
 	
 	

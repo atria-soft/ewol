@@ -31,15 +31,17 @@ ewol::Widget::Widget(void)
 {
 	m_origin.x = 0.0;
 	m_origin.y = 0.0;
-	m_minSize.x = -1.0;
-	m_minSize.y = -1.0;
 	m_size.x = 10.0;
 	m_size.y = 10.0;
-	m_maxSize.x = -1.0;
-	m_maxSize.y = -1.0;
-	m_expendX = false;
-	m_expendY = false;
+	m_minSize.x = -1.0;
+	m_minSize.y = -1.0;
+	// user settings :
+	m_userMinSize.x = -1.0;
+	m_userMinSize.y = -1.0;
+	m_userExpendX = false;
+	m_userExpendY = false;
 	m_genericDraw = true;
+	m_specificDraw = false;
 }
 
 ewol::Widget::~Widget(void)
@@ -51,6 +53,8 @@ ewol::Widget::~Widget(void)
 
 bool ewol::Widget::CalculateSize(double availlableX, double availlableY)
 {
+	m_size.x = availlableX;
+	m_size.y = availlableY;
 	return true;
 }
 
@@ -175,6 +179,8 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
 		return;
 	}
 	newObject->SetName(name);
+	EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," <<  m_origin.y << ")");
+	newObject->UpdateOrigin(m_origin.x, m_origin.y);
 	m_listOObject.PushBack(newObject);
 }
 
