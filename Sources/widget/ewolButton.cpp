@@ -85,8 +85,10 @@ void ewol::Button::OnRegenerateDisplay(void)
 	ClearOObjectList();
 	
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-	tmpOObjects->Rectangle( 2, 2, m_size.x-4, m_size.y-4,  0.0, 0.0, 0.0, 1.0);
-	tmpOObjects->Rectangle( 3, 3, m_size.x-6, m_size.y-6,  1.0, 1.0, 1.0, 1.0);
+	tmpOObjects->SetColor(0.0, 0.0, 0.0, 1.0);
+	tmpOObjects->Rectangle( 2, 2, m_size.x-4, m_size.y-4);
+	tmpOObjects->SetColor(1.0, 1.0, 1.0, 1.0);
+	tmpOObjects->Rectangle( 3, 3, m_size.x-6, m_size.y-6);
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
 	color_ts textColorFg;

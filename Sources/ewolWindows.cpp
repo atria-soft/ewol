@@ -53,9 +53,15 @@ ewol::Windows::Windows(void)
 	SetDecorationDisable();
 	if (true == m_hasDecoration) {
 		ewol::OObject2DColored * myOObject = new ewol::OObject2DColored();
-		myOObject->Rectangle( 0, 0, 20, 20,  1.0, 0.0, 0.0, 1.0); // Close
-		myOObject->Rectangle(20, 0, 20, 20,  0.0, 1.0, 0.0, 1.0); // Reduce
-		myOObject->Rectangle(40, 0, 20, 20,  0.0, 0.0, 1.0, 1.0); // Expend - Un-expend
+		// Close
+		myOObject->SetColor(1.0, 0.0, 0.0, 1.0);
+		myOObject->Rectangle( 0, 0, 20, 20);
+		// Reduce
+		myOObject->SetColor(0.0, 1.0, 0.0, 1.0);
+		myOObject->Rectangle(20, 0, 20, 20);
+		// Expend - Un-expend
+		myOObject->SetColor(0.0, 0.0, 1.0, 1.0);
+		myOObject->Rectangle(40, 0, 20, 20);
 		coord origin;
 		coord size;
 		origin.x = 0.0;

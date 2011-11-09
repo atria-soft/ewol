@@ -28,7 +28,7 @@
 
 
 
-//const char * ewolEventButtonPressed    = "ewol Button Pressed";
+const char * ewolEventTestPressed    = "ewol Test Pressed";
 
 
 
@@ -37,7 +37,7 @@
 
 ewol::Test::Test(void)
 {
-	
+	m_elementID = 0;
 }
 
 
@@ -59,8 +59,57 @@ void ewol::Test::OnRegenerateDisplay(void)
 	ClearOObjectList();
 	
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-	tmpOObjects->Rectangle( 0, 0, m_size.x, m_size.y,  1.0, 0.0, 0.0, 1.0);
-	tmpOObjects->Rectangle( 3, 3, m_size.x-6, m_size.y-6,  1.0, 1.0, 1.0, 1.0);
+	tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
+	tmpOObjects->Rectangle( 0, 0, m_size.x, m_size.y);
+	tmpOObjects->SetColor(1.0, 1.0, 1.0, 1.0);
+	tmpOObjects->Rectangle( 3, 3, m_size.x-6, m_size.y-6);
+	
+	tmpOObjects->SetColor(0.0, 0.0, 1.0, 1.0);
+	
+	if (0 == m_elementID) {
+		tmpOObjects->Line(50, 50, 100,  50, 10); // 0°
+	} else if (1 == m_elementID) {
+		tmpOObjects->Line(50, 50, 100, 100, 15); // 45°
+	} else if (2 == m_elementID) {
+		tmpOObjects->Line(50, 50,  50, 100, 20); // 90°
+	} else if (3 == m_elementID) {
+		tmpOObjects->Line(50, 50,   0, 100, 5); // 135°
+	} else if (4 == m_elementID) {
+		tmpOObjects->Line(50, 50,   0,  50, 3); // 180°
+	} else if (5 == m_elementID) {
+		tmpOObjects->Line(50, 50,   0,   0, 2); // 225°
+	} else if (6 == m_elementID) {
+		tmpOObjects->Line(50, 50,  50,   0, 1); // °
+	} else {
+		tmpOObjects->Line(50, 50, 100,   0, 0.5); // °
+	}
+	
+	if (0 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 1.0);
+		tmpOObjects->Disc(200, 100, 5);
+	} else if (1 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 1.0);
+		tmpOObjects->Disc(200, 100, 10);
+	} else if (2 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 1.0);
+		tmpOObjects->Disc(200, 100, 15);
+	} else if (3 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 1.0);
+		tmpOObjects->Disc(200, 100, 20);
+	} else if (4 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 1.0);
+		tmpOObjects->Disc(200, 100, 25);
+	} else if (5 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 0.75);
+		tmpOObjects->Disc(200, 100, 100);
+	} else if (6 == m_elementID) {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 0.75);
+		tmpOObjects->Disc(200, 100, 200);
+	} else {
+		tmpOObjects->SetColor(0.0, 1.0, 0.0, 0.5);
+		tmpOObjects->Disc(200, 100, 300);
+	}
+	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
 	color_ts textColorFg;
@@ -69,9 +118,7 @@ void ewol::Test::OnRegenerateDisplay(void)
 	textColorFg.blue = 0.0;
 	textColorFg.alpha = 1.0;
 	
-	
 	// Regenerate the event Area:
-	/*
 	EventAreaRemoveAll();
 	coord origin;
 	coord size;
@@ -79,19 +126,20 @@ void ewol::Test::OnRegenerateDisplay(void)
 	origin.y = 3.0;
 	size.x = m_size.x-6;
 	size.y = m_size.y-6;
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
-	*/
+	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventTestPressed);
 }
 
 bool ewol::Test::OnEventArea(const char * generateEventId, double x, double y)
 {
 	bool eventIsOK = false;
-/*
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventButtonPressed == generateEventId) {
-		EWOL_INFO("BT pressed ... " << m_label);
+	if(ewolEventTestPressed == generateEventId) {
+		m_elementID++;
+		if (m_elementID > 7 ) {
+			m_elementID = 0;
+		}
+		OnRegenerateDisplay();
 		eventIsOK = true;
 	}
-*/
 	return eventIsOK;
 }
