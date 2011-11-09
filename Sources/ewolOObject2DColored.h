@@ -43,10 +43,16 @@ namespace ewol {
 		public:
 			void SetColor(float red, float green, float blue, float alpha = 1.0);
 			void SetColor(color_ts color);
+			//void SetPoint(coord2D_ts point); //==> for direct adding custum element ...
 			void Line(float sx, float sy, float ex, float ey, float thickness);
 			void Rectangle(float x, float y, float w, float h);
+			//void RectangleAngle(float x, float y, float w, float h, float angle);
+			//void RectangleBorder(float x, float y, float w, float h, float thickness);
+			//void RectangleBorder(float x, float y, float w, float h, float thickness, float angle);
 			void Circle(float x, float y, float radius, float thickness);
+			//void CirclePart(float x, float y, float radius, float thickness, float angleStart, float angleStop);
 			void Disc(float x, float y, float radius);
+			//void DiscPart(float x, float y, float radius, float angleStart, float angleStop);
 		public:
 			// Ewol internal ... : done to update at the origin of the widget ...
 			virtual void UpdateOrigin(float x, float y);
