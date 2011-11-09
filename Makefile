@@ -178,6 +178,9 @@ CXXFILES +=		etk/etkDebug.cpp \
 CXXFILES +=		ewol.cpp \
 				ewolDebug.cpp \
 				ewolOObject.cpp \
+				ewolOObject2DText.cpp \
+				ewolOObject2DColored.cpp \
+				ewolOObject2DTextured.cpp \
 				ewolTexture.cpp
 ifeq ("$(FREETYPE_CFLAGS)", "")
     CXXFILES +=	ewolFontBitmap.cpp
@@ -193,6 +196,8 @@ CXXFILES +=		widget/ewolButton.cpp \
 				widget/ewolList.cpp \
 				widget/ewolSizerHori.cpp \
 				widget/ewolSizerVert.cpp
+# only to test  son internal element ...
+CXXFILES +=		widget/ewolTest.cpp
 
 
 # Ewol Test Software :

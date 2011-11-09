@@ -28,6 +28,7 @@
 #include <widget/ewolButton.h>
 #include <widget/ewolSizerHori.h>
 #include <widget/ewolSizerVert.h>
+#include <widget/ewolTest.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -55,6 +56,10 @@ class Plop :public ewol::Windows
 			myButton->SetExpendX(true);
 			//myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);
+			
+			ewol::Test * myTest = new ewol::Test();
+			mySizerVert->SubWidgetAdd(myTest);
+			
 			myButton = new ewol::Button(" 4 4 BT");
 			//myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);

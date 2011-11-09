@@ -1,0 +1,52 @@
+/**
+ *******************************************************************************
+ * @file ewolOObject2DText.h
+ * @brief ewol OpenGl Object system (header)
+ * @author Edouard DUPIN
+ * @date 09/11/2011
+ * @par Project
+ * ewol
+ *
+ * @par Copyright
+ * Copyright 2011 Edouard DUPIN, all right reserved
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY.
+ *
+ * Licence summary : 
+ *    You can modify and redistribute the sources code and binaries.
+ *    You can send me the bug-fix
+ *
+ * Term of the licence in in the file licence.txt.
+ *
+ *******************************************************************************
+ */
+
+#ifndef __EWOL_O_OBJECT_2D_TEXT_H__
+#define __EWOL_O_OBJECT_2D_TEXT_H__
+
+#include <ewolOObject.h>
+
+namespace ewol {
+	class OObject2DText :public ewol::OObject
+	{
+		public:
+			OObject2DText(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+			virtual ~OObject2DText(void);
+		public:
+			virtual void Draw(void);
+			// set a specific text
+			void Text(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+		protected:
+			int32_t                       m_FontId;        //!< font internal ID
+			color_ts                      m_textColorFg;   //!< text color ...
+			uint32_t                      m_FontTextureId; //!< font internal Texture ID
+			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
+			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+		public:
+			virtual void UpdateOrigin(float x, float y);
+	};
+};
+
+#endif
+

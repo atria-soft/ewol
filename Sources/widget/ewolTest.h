@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewolOObject.cpp
- * @brief ewol OpenGl Object system (Sources)
+ * @file ewolTest.h
+ * @brief ewol test widget system (header)
  * @author Edouard DUPIN
- * @date 24/10/2011
+ * @date 07/11/2011
  * @par Project
  * ewol
  *
@@ -22,42 +22,25 @@
  *******************************************************************************
  */
 
+#ifndef __EWOL_TEST_H__
+#define __EWOL_TEST_H__
+
 #include <etkTypes.h>
-#include <etkString.h>
-#include <ewolOObject.h>
-#include <GL/gl.h>
+#include <ewolDebug.h>
+#include <ewolWidget.h>
 
+namespace ewol {
+	class Test :public ewol::Widget
+	{
+		public:
+			Test(void);
+			virtual ~Test(void);
+			virtual bool   CalculateMinSize(void);
+		public:
+			virtual void   OnRegenerateDisplay(void);
+		public:
+			virtual bool OnEventArea(const char * generateEventId, double x, double y);
+	};
+};
 
-#undef __class__
-#define __class__	"ewol::OObject"
-
-
-ewol::OObject::OObject(void)
-{
-	m_name="";
-}
-
-
-ewol::OObject::~OObject(void)
-{
-	
-}
-
-void ewol::OObject::SetName(etk::String & name)
-{
-	m_name = name;
-}
-
-void ewol::OObject::SetName(const char * name)
-{
-	if (NULL != name) {
-		m_name = name;
-	}
-}
-
-etk::String ewol::OObject::GetName(void)
-{
-	return m_name;
-}
-
-
+#endif
