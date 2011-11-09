@@ -33,6 +33,7 @@
 
 ewol::OObject2DColored::OObject2DColored(void)
 {
+	m_triElement = 0;
 	SetColor(1.0, 1.0, 1.0, 1.0);
 }
 
@@ -68,6 +69,7 @@ void ewol::OObject2DColored::Draw(void)
 
 }
 
+
 void ewol::OObject2DColored::UpdateOrigin(float x, float y)
 {
 	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
@@ -77,18 +79,86 @@ void ewol::OObject2DColored::UpdateOrigin(float x, float y)
 }
 
 
-
-void ewol::OObject2DColored::SetColor( float red, float green, float blue, float alpha)
+void ewol::OObject2DColored::GenerateTriangle(void)
 {
-	m_Color.red = red;
-	m_Color.green = green;
-	m_Color.blue = blue;
-	m_Color.alpha = alpha;
+	m_triElement = 0;
+	
+	m_coord.PushBack(m_triangle[0]);
+	m_coordColor.PushBack(m_color[0]);
+	m_coord.PushBack(m_triangle[1]);
+	m_coordColor.PushBack(m_color[1]);
+	m_coord.PushBack(m_triangle[2]);
+	m_coordColor.PushBack(m_color[2]);
 }
 
 
+void ewol::OObject2DColored::SetColor(color_ts color)
+{
+	if (m_triElement < 1) {
+		m_color[0] = color;
+	}
+	if (m_triElement < 2) {
+		m_color[1] = color;
+	}
+	if (m_triElement < 3) {
+		m_color[2] = color;
+	}
+}
+
+
+void ewol::OObject2DColored::SetColor(float red, float green, float blue, float alpha)
+{
+	if (m_triElement < 1) {
+		m_color[0].red = red;
+		m_color[0].green = green;
+		m_color[0].blue = blue;
+		m_color[0].alpha = alpha;
+	}
+	if (m_triElement < 2) {
+		m_color[1].red = red;
+		m_color[1].green = green;
+		m_color[1].blue = blue;
+		m_color[1].alpha = alpha;
+	}
+	if (m_triElement < 3) {
+		m_color[2].red = red;
+		m_color[2].green = green;
+		m_color[2].blue = blue;
+		m_color[2].alpha = alpha;
+	}
+	
+}
+
+void ewol::OObject2DColored::SetPoint(coord2D_ts point)
+{
+	m_triangle[m_triElement] = point;
+	m_triElement++;
+	if (m_triElement>=3) {
+		GenerateTriangle();
+	}
+}
+
+void ewol::OObject2DColored::SetPoint(float x, float y)
+{
+	m_triangle[m_triElement].x = x;
+	m_triangle[m_triElement].y = y;
+	m_triElement++;
+	if (m_triElement>=3) {
+		GenerateTriangle();
+	}
+}
+
+
+void ewol::OObject2DColored::ResetCount(void)
+{
+	m_triElement = 0;
+	m_color[1] = m_color[0];
+	m_color[2] = m_color[0];
+}
+
 void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float thickness)
 {
+	ResetCount();
 	if (sx == ex && sy == ey) {
 		EWOL_WARNING("Try to draw an line width 0");
 		return;
@@ -108,84 +178,34 @@ void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float 
 	//EWOL_DEBUG("teta = " << (teta*180/(M_PI)) << " deg." );
 	double offsety = sin(teta-M_PI/2) * (thickness/2);
 	double offsetx = cos(teta-M_PI/2) * (thickness/2);
-	// just for debug ...
-	/*if (offsetx <= 0.001 && offsetx >= -0.001) {
-		offsetx = 0;
-	}
-	if (offsety <= 0.001 && offsety >= -0.001) {
-		offsety = 0;
-	}
-	EWOL_DEBUG("ofset (" << offsetx << "," << offsety << ")");
-	*/
-	coord2D_ts point;
 
-	point.x = sx - offsetx;
-	point.y = sy - offsety;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
+	SetPoint(sx - offsetx, sy - offsety);
+	SetPoint(sx + offsetx, sy + offsety);
+	SetPoint(ex + offsetx, ey + offsety);
 	
-	point.x = sx + offsetx;
-	point.y = sy + offsety;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = ex + offsetx;
-	point.y = ey + offsety;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = ex - offsetx;
-	point.y = ey - offsety;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = sx - offsetx;
-	point.y = sy - offsety;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
+	SetPoint(ex + offsetx, ey + offsety);
+	SetPoint(ex - offsetx, ey - offsety);
+	SetPoint(sx - offsetx, sy - offsety);
 }
 
 
 void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h)
 {
-	coord2D_ts point;
+	ResetCount();
 
-	point.x = x;
-	point.y = y + h;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = x;
-	point.y = y;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = x + w;
-	point.y = y;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
+	SetPoint(x    , y + h);
+	SetPoint(x    , y);
+	SetPoint(x + w, y);
 
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = x + w;
-	point.y = y + h;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
-	
-	point.x = x;
-	point.y = y + h;
-	m_coord.PushBack(point);
-	m_coordColor.PushBack(m_Color);
+	SetPoint(x + w, y);
+	SetPoint(x + w, y + h);
+	SetPoint(x    , y + h);
 }
 
 
 void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickness)
 {
-	coord2D_ts point;
+	ResetCount();
 	if (radius<0) {
 		radius *= -1;
 	}
@@ -211,38 +231,19 @@ void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickn
 		double offsetInt2y = sin(angleTwo) * (radius-thickness/2);
 		double offsetInt2x = cos(angleTwo) * (radius-thickness/2);
 		
-		point.x = x + offsetIntx;
-		point.y = y + offsetInty;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
+		SetPoint(x + offsetIntx,  y + offsetInty);
+		SetPoint(x + offsetExtx,  y + offsetExty);
+		SetPoint(x + offsetExt2x, y + offsetExt2y);
 		
-		point.x = x + offsetExtx;
-		point.y = y + offsetExty;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
-		
-		point.x = x + offsetExt2x;
-		point.y = y + offsetExt2y;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
-		
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
-		
-		point.x = x + offsetInt2x;
-		point.y = y + offsetInt2y;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
-		
-		point.x = x + offsetIntx;
-		point.y = y + offsetInty;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
+		SetPoint(x + offsetExt2x, y + offsetExt2y);
+		SetPoint(x + offsetInt2x, y + offsetInt2y);
+		SetPoint(x + offsetIntx,  y + offsetInty);
 	}
 }
 
 void ewol::OObject2DColored::Disc(float x, float y, float radius)
 {
+	ResetCount();
 	coord2D_ts point;
 	if (radius<0) {
 		radius *= -1;
@@ -254,28 +255,19 @@ void ewol::OObject2DColored::Disc(float x, float y, float radius)
 	}
 
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
-		point.x = x;
-		point.y = y;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
+		SetPoint(x, y);
 		
 		double angleOne = 2*M_PI* iii / nbOcurence ;
 		double offsety = sin(angleOne) * radius;
 		double offsetx = cos(angleOne) * radius;
 		
-		point.x = x + offsetx;
-		point.y = y + offsety;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
+		SetPoint(x + offsetx, y + offsety);
 		
 		double angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
 		offsety = sin(angleTwo) * radius;
 		offsetx = cos(angleTwo) * radius;
 		
-		point.x = x + offsetx;
-		point.y = y + offsety;
-		m_coord.PushBack(point);
-		m_coordColor.PushBack(m_Color);
+		SetPoint(x + offsetx, y + offsety);
 	}
 }
 
