@@ -109,6 +109,25 @@ void ewol::Test::OnRegenerateDisplay(void)
 		tmpOObjects->SetColor(0.0, 1.0, 0.0, 0.5);
 		tmpOObjects->Disc(200, 100, 300);
 	}
+	tmpOObjects->SetColor(0.0, 0.0, 0.0, 1.0);
+	if (0 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 10, 3);
+	} else if (1 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 20, 3);
+	} else if (2 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 30, 2);
+	} else if (3 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 40, 1);
+	} else if (4 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 50, 0.5);
+	} else if (5 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 100, 25);
+	} else if (6 == m_elementID) {
+		tmpOObjects->Circle(100, 100, 100, 35);
+	} else {
+		tmpOObjects->Circle(100, 100, 100, 50);
+	}
+	
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	

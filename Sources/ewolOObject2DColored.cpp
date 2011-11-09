@@ -185,7 +185,60 @@ void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h)
 
 void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickness)
 {
-	
+	coord2D_ts point;
+	if (radius<0) {
+		radius *= -1;
+	}
+	if (radius < thickness/2) {
+		Disc(x, y, thickness/2 + radius);
+	}
+	int32_t nbOcurence = radius*2;
+	if (nbOcurence < 10)
+	{
+		nbOcurence = 10;
+	}
+	for (int32_t iii=0; iii<nbOcurence; iii++) {
+		
+		double angleOne = 2*M_PI* iii     / nbOcurence ;
+		double offsetExty = sin(angleOne) * (radius+thickness/2);
+		double offsetExtx = cos(angleOne) * (radius+thickness/2);
+		double offsetInty = sin(angleOne) * (radius-thickness/2);
+		double offsetIntx = cos(angleOne) * (radius-thickness/2);
+		
+		double angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
+		double offsetExt2y = sin(angleTwo) * (radius+thickness/2);
+		double offsetExt2x = cos(angleTwo) * (radius+thickness/2);
+		double offsetInt2y = sin(angleTwo) * (radius-thickness/2);
+		double offsetInt2x = cos(angleTwo) * (radius-thickness/2);
+		
+		point.x = x + offsetIntx;
+		point.y = y + offsetInty;
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+		
+		point.x = x + offsetExtx;
+		point.y = y + offsetExty;
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+		
+		point.x = x + offsetExt2x;
+		point.y = y + offsetExt2y;
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+		
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+		
+		point.x = x + offsetInt2x;
+		point.y = y + offsetInt2y;
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+		
+		point.x = x + offsetIntx;
+		point.y = y + offsetInty;
+		m_coord.PushBack(point);
+		m_coordColor.PushBack(m_Color);
+	}
 }
 
 void ewol::OObject2DColored::Disc(float x, float y, float radius)
@@ -194,7 +247,11 @@ void ewol::OObject2DColored::Disc(float x, float y, float radius)
 	if (radius<0) {
 		radius *= -1;
 	}
-	int32_t nbOcurence = radius*5;
+	int32_t nbOcurence = radius*2;
+	if (nbOcurence < 10)
+	{
+		nbOcurence = 10;
+	}
 
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		point.x = x;
