@@ -32,18 +32,6 @@
 
 namespace ewol
 {
-	// deprecated...
-	typedef enum {
-		FONT_MODE_NORMAL=0,
-		FONT_MODE_BOLD,
-		FONT_MODE_ITALIC,
-		FONT_MODE_BOLD_ITALIC,
-		FONT_MODE_NUMBER,
-	}fontMode_te;
-	
-	
-	//typedef char*         Utf8Char_t;
-	
 	// set default folder name of the font : 
 	void        SetFontFolder(etk::String folderName);
 	void        SetDefaultFont(etk::String fontName, int32_t size);

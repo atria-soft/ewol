@@ -28,9 +28,26 @@
 #undef __class__
 #define __class__	"ewol::OObject2DText"
 
-ewol::OObject2DText::OObject2DText(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String)
+ewol::OObject2DText::OObject2DText(etk::String FontName, int32_t size, color_ts textColorFg)
 {
-	Text(x, y, FontName, size, mode, textColorFg, utf8String);
+	m_textColorFg = textColorFg;
+	if (FontName == "") {
+		m_FontId = GetDefaultFontId();
+	} else {
+		EWOL_TODO("pas encore fait...");
+		//m_FontId = GetFontIdWithName(FontName);
+		m_FontId = -1;
+		return;
+	}
+}
+// open with default font ...
+ewol::OObject2DText::OObject2DText(void)
+{
+	m_textColorFg.red = 0.0;
+	m_textColorFg.green = 0.0;
+	m_textColorFg.blue = 0.0;
+	m_textColorFg.alpha = 1.0;
+	m_FontId = GetDefaultFontId();
 }
 
 ewol::OObject2DText::~OObject2DText(void)
@@ -59,24 +76,14 @@ void ewol::OObject2DText::Draw(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ewol::OObject2DText::Text(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String)
+void ewol::OObject2DText::Text(float x, float y, const char* utf8String)
 {
 	m_FontTextureId = 0;
 	m_coord.Clear();
 	m_coordTex.Clear();
-	// get font Name : 
-	if (FontName == "") {
-		m_FontId = GetDefaultFontId();
-	} else {
-		EWOL_TODO("pas encore fait...");
-		//m_FontId = GetFontIdWithName(FontName);
-		return;
-	}
 	if (m_FontId == -1) {
-		EWOL_ERROR("Can not find the font with the name : " << FontName);
+		EWOL_ERROR("Font Id is not corectly defined");
 	}
-	EWOL_DEBUG("Font name : " << FontName << " id=" << m_FontId);
-	m_textColorFg = textColorFg;
 	coord2D_ts drawPosition;
 	drawPosition.x = x;
 	drawPosition.y = y;

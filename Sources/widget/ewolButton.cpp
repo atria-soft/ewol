@@ -95,13 +95,15 @@ void ewol::Button::OnRegenerateDisplay(void)
 	textColorFg.blue = 0.0;
 	textColorFg.alpha = 1.0;
 	
+	
+	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, textColorFg);
+	
 	int32_t fontId = GetDefaultFontId();
 	int32_t fontHeight = ewol::GetHeight(fontId);
 	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
 	int32_t posx = (m_size.x - fontWidth - 6)/2 + 3;
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText(posx, posy, "", -1, FONT_MODE_BOLD, textColorFg, m_label.c_str());
-	
+	tmpText->Text(posx, posy, m_label.c_str());
 	AddOObject(tmpText, "BouttonText");
 	
 	

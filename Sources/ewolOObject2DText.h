@@ -31,12 +31,13 @@ namespace ewol {
 	class OObject2DText :public ewol::OObject
 	{
 		public:
-			OObject2DText(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+			OObject2DText(etk::String FontName, int32_t size, color_ts textColorFg);
+			OObject2DText(void);
 			virtual ~OObject2DText(void);
 		public:
 			virtual void Draw(void);
 			// set a specific text
-			void Text(float x, float y, etk::String FontName, int32_t size, fontMode_te mode, color_ts textColorFg, const char* utf8String);
+			void Text(float x, float y, const char* utf8String);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...

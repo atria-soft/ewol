@@ -70,12 +70,8 @@ ewol::Windows::Windows(void)
 		
 		AddOObject(myOObject, "leftBoutton");
 		
-		color_ts textColorFg;
-		textColorFg.red = .0;
-		textColorFg.green = .0;
-		textColorFg.blue = .0;
-		textColorFg.alpha = 1.0;
-		ewol::OObject2DText * myOObjectText = new ewol::OObject2DText(62, 2, "Monospace", 17 , FONT_MODE_BOLD, textColorFg, "My Title ...");
+		ewol::OObject2DText * myOObjectText = new ewol::OObject2DText();
+		myOObjectText->Text(62, 2, "My Title ...");
 		AddOObject(myOObjectText, "Title");
 	}
 }
