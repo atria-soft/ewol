@@ -180,7 +180,9 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
 		return;
 	}
 	newObject->SetName(name);
-	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," <<  m_origin.y << ")");
+	//EWOL_INFO("UPDATE AT size : (" << m_size.x << "," << m_size.y << ")");
+	newObject->UpdateSize(m_size.x, m_size.y);
+	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," << m_origin.y << ")");
 	newObject->UpdateOrigin(m_origin.x, m_origin.y);
 	m_listOObject.PushBack(newObject);
 }

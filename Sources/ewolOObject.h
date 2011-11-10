@@ -51,7 +51,10 @@ namespace ewol {
 			void SetName(const char * name);
 			etk::String GetName(void);
 		public:
-			virtual void UpdateOrigin(float x, float y) {};
+			// use to crop element outside the display
+			virtual void UpdateSize(float sizeX, float sizeY) { };
+			// Move to the correct position display
+			virtual void UpdateOrigin(float x, float y) { };
 		private:
 			etk::String m_name;
 	};

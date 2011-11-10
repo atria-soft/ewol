@@ -78,6 +78,125 @@ void ewol::OObject2DColored::UpdateOrigin(float x, float y)
 	}
 }
 
+void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output )
+{
+	if (input.Size()<3) {
+		return;
+	}
+	coord2D_ts basePoint = input[0];
+	for (int32_t iii=1; iii<input.Size()-1; iii++) {
+		output.PushBack(basePoint);
+		output.PushBack(input[iii]);
+		output.PushBack(input[iii+1]);
+	}
+}
+
+void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output, float sx, float sy, float ex, float ey)
+{
+	// with Sutherland-Hodgman-Algorithm
+	if (input.Size() <0) {
+		return;
+	}
+	// last element :
+	coord2D_ts destPoint;
+	coord2D_ts lastElement = input[input.Size()-1];
+	bool inside = true;
+	if (lastElement.x < 0) {
+		inside = false;
+	}
+	EWOL_DEBUG("generate an crop : ");
+	for(int32_t iii=0; iii<input.Size(); iii++) {
+		if(input[iii].x < 0) {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> OUT ");
+				//new point intersection ...
+				//y=aaax+bbb
+				//EWOL_DEBUG("    A (" << lastElement.x << "," << lastElement.y << ")  A(" << input[iii].x << "," << input[iii].y << ")");
+				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				float bbb = lastElement.y - (aaa*lastElement.x);
+				//EWOL_DEBUG("    y=" << aaa << "*x + " << bbb << ";");
+				//==> intersection en x=0 : 
+				destPoint.y = bbb;
+				destPoint.x = 0;
+				//EWOL_DEBUG("    ADD (" << destPoint.x << "," << destPoint.y << ")");
+				output.PushBack(destPoint);
+			} else {
+				//EWOL_DEBUG("element OUT ==> OUT ");
+			}
+			inside = false;
+		} else {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> IN ");
+				//EWOL_DEBUG("    ADD (" << input[iii].x << "," << input[iii].y << ")");
+				output.PushBack(input[iii]);
+			} else {
+				//EWOL_DEBUG("element OUT ==> IN ");
+				//new point intersection ...
+				//y=aaax+bbb
+				//EWOL_DEBUG("    A (" << lastElement.x << "," << lastElement.y << ")  A(" << input[iii].x << "," << input[iii].y << ")");
+				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				float bbb = lastElement.y - (aaa*lastElement.x);
+				//EWOL_DEBUG("    y=" << aaa << "*x + " << bbb << ";");
+				//==> intersection en x=0 :
+				destPoint.y = bbb;
+				destPoint.x = 0;
+				//EWOL_DEBUG("    ADD (" << destPoint.x << "," << destPoint.y << ")");
+				output.PushBack(destPoint);
+				//EWOL_DEBUG("    ADD (" << input[iii].x << "," << input[iii].y << ")");
+				output.PushBack(input[iii]);
+			}
+			inside = true;
+		}
+		// update the last point position :
+		lastElement.x = input[iii].x;
+		lastElement.y = input[iii].y;
+	}
+	EWOL_DEBUG("generate an crop on element : " << input.Size()<< " ==> " << output.Size() );
+}
+
+
+void ewol::OObject2DColored::UpdateSize(float sizeX, float sizeY)
+{
+	// copy the data
+	etk::VectorType<coord2D_ts>   coord = m_coord;
+	etk::VectorType<color_ts>     color = m_coordColor;
+	// Clear the generated display ...
+	m_coord.Clear();
+	m_coordColor.Clear();
+	// Check if the triangle is in the area...
+	int32_t nbTriangle = coord.Size()/3;
+	for (int32_t iii=0; iii<nbTriangle; iii++) {
+		if(    coord[iii*3+0].x >= 0.0 && coord[iii*3+0].x < sizeX
+		    && coord[iii*3+0].y >= 0.0 && coord[iii*3+0].y < sizeY
+		    && coord[iii*3+1].x >= 0.0 && coord[iii*3+1].x < sizeX
+		    && coord[iii*3+1].y >= 0.0 && coord[iii*3+1].y < sizeY
+		    && coord[iii*3+2].x >= 0.0 && coord[iii*3+2].x < sizeX
+		    && coord[iii*3+2].y >= 0.0 && coord[iii*3+2].y < sizeY)
+		{
+			// point 1-2-3 inside
+			m_coord.PushBack(coord[iii*3+0]);
+			m_coordColor.PushBack(color[iii*3+0]);
+			m_coord.PushBack(coord[iii*3+1]);
+			m_coordColor.PushBack(color[iii*3+1]);
+			m_coord.PushBack(coord[iii*3+2]);
+			m_coordColor.PushBack(color[iii*3+2]);
+		} else {
+			etk::VectorType<coord2D_ts>   tmpCoord;
+			etk::VectorType<coord2D_ts>   tmpCoordOut;
+			tmpCoord.PushBack(coord[iii*3+0]);
+			tmpCoord.PushBack(coord[iii*3+1]);
+			tmpCoord.PushBack(coord[iii*3+2]);
+			
+			SutherlandHodgman(tmpCoord, tmpCoordOut, 0, 0, sizeX, sizeY);
+			tmpCoord.Clear();
+			generatePolyGone(tmpCoordOut, tmpCoord);
+			for (int32_t jjj=0; jjj<tmpCoord.Size(); jjj++) {
+				m_coord.PushBack(tmpCoord[jjj]);
+				m_coordColor.PushBack(color[iii*3+0]);
+			}
+		}
+	}
+}
 
 void ewol::OObject2DColored::GenerateTriangle(void)
 {
@@ -244,7 +363,6 @@ void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickn
 void ewol::OObject2DColored::Disc(float x, float y, float radius)
 {
 	ResetCount();
-	coord2D_ts point;
 	if (radius<0) {
 		radius *= -1;
 	}

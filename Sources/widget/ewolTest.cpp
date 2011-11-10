@@ -57,8 +57,8 @@ void ewol::Test::OnRegenerateDisplay(void)
 {
 	// clean the object list ...
 	ClearOObjectList();
-	
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+	
 	tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
 	tmpOObjects->Rectangle( 0, 0, m_size.x, m_size.y);
 	tmpOObjects->SetColor(1.0, 1.0, 1.0, 1.0);
@@ -146,6 +146,21 @@ void ewol::Test::OnRegenerateDisplay(void)
 	size.x = m_size.x-6;
 	size.y = m_size.y-6;
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventTestPressed);
+	
+	//tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
+	/*
+	tmpOObjects->SetPoint(-20, -20);
+	tmpOObjects->SetPoint(50, 50);
+	tmpOObjects->SetPoint(-20, 100);
+	*/
+	/*
+	tmpOObjects->SetPoint(20, -20);
+	tmpOObjects->SetPoint(50, 50);
+	tmpOObjects->SetPoint(-20, 100);
+	
+	AddOObject(tmpOObjects, "BouttonDecoration");
+	*/
+	
 }
 
 bool ewol::Test::OnEventArea(const char * generateEventId, double x, double y)

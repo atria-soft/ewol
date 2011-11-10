@@ -60,6 +60,7 @@ namespace ewol {
 			//void DiscPart(float x, float y, float radius, float angleStart, float angleStop);
 		public:
 			// Ewol internal ... : done to update at the origin of the widget ...
+			virtual void UpdateSize(float sizeX, float sizeY);
 			virtual void UpdateOrigin(float x, float y);
 	};
 };
