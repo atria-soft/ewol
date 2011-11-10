@@ -164,7 +164,7 @@ void ewol::Test::OnRegenerateDisplay(void)
 	
 }
 
-bool ewol::Test::OnEventArea(const char * generateEventId, double x, double y)
+bool ewol::Test::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
 {
 	bool eventIsOK = false;
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");

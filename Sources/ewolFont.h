@@ -64,7 +64,7 @@ namespace ewol
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	
 	int32_t LoadFont(etk::File fontFileName);
-	void    DrawText(double x, double y, const char * myString);
+	void    DrawText(etkFloat_t x, etkFloat_t y, const char * myString);
 };
 
 #endif

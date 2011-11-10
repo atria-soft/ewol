@@ -33,8 +33,8 @@
 namespace ewol {
 	extern "C" {
 		typedef struct {
-			double x;
-			double y;
+			etkFloat_t x;
+			etkFloat_t y;
 		} coord;
 	}
 	typedef enum {
@@ -155,14 +155,14 @@ namespace ewol {
 			bool           m_userExpendX;
 			bool           m_userExpendY;
 		public:
-			void           SetOrigin(double x, double y) { m_origin.x=x; m_origin.y=y; };
+			void           SetOrigin(etkFloat_t x, etkFloat_t y) { m_origin.x=x; m_origin.y=y; };
 			coord          GetOrigin(void) { return m_origin; };
-			virtual bool   CalculateSize(double availlableX, double availlableY); // this generate the current size ...
+			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; }; //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(double x=-1, double y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
+			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
 			coord          GetMinSize(void) { return m_minSize; };
 			coord          GetSize(void) { return m_size; };
-			void           SetCurrentSise(double x=-1, double y=-1) { m_size.x = x; m_size.y = y; };
+			void           SetCurrentSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_size.x = x; m_size.y = y; };
 			coord          GetCurrentSize(void) { return m_size; };
 			virtual void   SetExpendX(bool newExpend=false) { m_userExpendX = newExpend; };
 			bool           CanExpentX(void) { return m_userExpendX; };
@@ -215,7 +215,7 @@ namespace ewol {
 			etk::VectorType<event_ts> m_inputEvent;     //!< generic area and short-cut event
 		public:
 			// external acces to set an input event on this widget.
-			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y); // call when input event arrive and call OnEventInput, if no event detected
+			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE]);
 		protected:
 			void EventAreaRemoveAll(void) { m_inputEvent.Clear(); };
@@ -226,10 +226,10 @@ namespace ewol {
 			// to link an extern widget at the internal event of this one it will access by here :
 			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId);
 		protected:
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double X, double Y) { return false; };
-			virtual bool OnEventArea(const char * generateEventId, double x, double y) { return false; };
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y) { return false; };
+			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
 			// when an event arrive from an other widget, it will arrive here:
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, double x, double y) { return false; };
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present

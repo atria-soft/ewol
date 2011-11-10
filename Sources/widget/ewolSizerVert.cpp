@@ -42,13 +42,13 @@ ewol::SizerVert::~SizerVert(void)
 }
 
 
-bool ewol::SizerVert::CalculateSize(double availlableX, double availlableY)
+bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	// calculate unExpendable Size :
-	double unexpendableSize=0.0;
+	etkFloat_t unexpendableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
@@ -63,7 +63,7 @@ bool ewol::SizerVert::CalculateSize(double availlableX, double availlableY)
 		}
 	}
 	// 2 cases : 1 or more can Expend, or all is done ...
-	double sizeToAddAtEveryOne = 0;
+	etkFloat_t sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expend, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
 		sizeToAddAtEveryOne = (m_size.y - unexpendableSize) / nbWidgetNotFixedSize;
@@ -122,7 +122,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerVert::SetMinSise(double x, double y)
+void ewol::SizerVert::SetMinSise(etkFloat_t x, etkFloat_t y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }
@@ -212,7 +212,7 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {

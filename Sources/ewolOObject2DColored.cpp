@@ -56,8 +56,8 @@ void ewol::OObject2DColored::Draw(void)
 
 	
 	// Set the vertex pointer to our vertex data
-	glVertexPointer(2, GL_FLOAT, 0, &m_coord[0] );
-	glColorPointer(4, GL_FLOAT, 0, &m_coordColor[0] );
+	glVertexPointer(2, oglTypeFloat_t, 0, &m_coord[0] );
+	glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
 	// Render : draw all of the triangles at once
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
@@ -70,7 +70,7 @@ void ewol::OObject2DColored::Draw(void)
 }
 
 
-void ewol::OObject2DColored::UpdateOrigin(float x, float y)
+void ewol::OObject2DColored::UpdateOrigin(etkFloat_t x, etkFloat_t y)
 {
 	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
 		m_coord[iii].x += x;
@@ -92,7 +92,7 @@ void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output, float sx, float sy, float ex, float ey)
+void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output, etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.Size() <0) {
@@ -113,8 +113,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element IN ==> OUT ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
-				float bbb = lastElement.y - (aaa*lastElement.x);
+				etkFloat_t aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				etkFloat_t bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
 				output.PushBack(destPoint);
@@ -130,8 +130,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
-				float bbb = lastElement.y - (aaa*lastElement.x);
+				etkFloat_t aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				etkFloat_t bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
 				output.PushBack(destPoint);
@@ -158,8 +158,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element IN ==> OUT ");
 				//new point intersection ...
 				//x=aaay+bbb
-				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
-				float bbb = lastElement.x - (aaa*lastElement.y);
+				etkFloat_t aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				etkFloat_t bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
 				output.PushBack(destPoint);
@@ -175,8 +175,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
-				float bbb = lastElement.x - (aaa*lastElement.y);
+				etkFloat_t aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				etkFloat_t bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
 				output.PushBack(destPoint);
@@ -203,8 +203,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element IN ==> OUT ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
-				float bbb = lastElement.y - (aaa*lastElement.x);
+				etkFloat_t aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				etkFloat_t bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
 				output.PushBack(destPoint);
@@ -220,8 +220,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
-				float bbb = lastElement.y - (aaa*lastElement.x);
+				etkFloat_t aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				etkFloat_t bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
 				output.PushBack(destPoint);
@@ -247,8 +247,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element IN ==> OUT ");
 				//new point intersection ...
 				//x=aaay+bbb
-				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
-				float bbb = lastElement.x - (aaa*lastElement.y);
+				etkFloat_t aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				etkFloat_t bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
 				output.PushBack(destPoint);
@@ -264,8 +264,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
 				//y=aaax+bbb
-				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
-				float bbb = lastElement.x - (aaa*lastElement.y);
+				etkFloat_t aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				etkFloat_t bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
 				output.PushBack(destPoint);
@@ -283,7 +283,7 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 }
 
 
-void ewol::OObject2DColored::UpdateSize(float sizeX, float sizeY)
+void ewol::OObject2DColored::UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	// copy the data
 	etk::VectorType<coord2D_ts>   coord = m_coord;
@@ -353,7 +353,7 @@ void ewol::OObject2DColored::SetColor(color_ts color)
 }
 
 
-void ewol::OObject2DColored::SetColor(float red, float green, float blue, float alpha)
+void ewol::OObject2DColored::SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha)
 {
 	if (m_triElement < 1) {
 		m_color[0].red = red;
@@ -385,7 +385,7 @@ void ewol::OObject2DColored::SetPoint(coord2D_ts point)
 	}
 }
 
-void ewol::OObject2DColored::SetPoint(float x, float y)
+void ewol::OObject2DColored::SetPoint(etkFloat_t x, etkFloat_t y)
 {
 	m_triangle[m_triElement].x = x;
 	m_triangle[m_triElement].y = y;
@@ -403,7 +403,7 @@ void ewol::OObject2DColored::ResetCount(void)
 	m_color[2] = m_color[0];
 }
 
-void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float thickness)
+void ewol::OObject2DColored::Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness)
 {
 	ResetCount();
 	if (sx == ex && sy == ey) {
@@ -411,7 +411,7 @@ void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float 
 		return;
 	}
 	//teta = tan-1(oposer/adjacent)
-	double teta = 0;
+	etkFloat_t teta = 0;
 	if (sx <= ex) {
 		teta = atan((ey-sy)/(ex-sx));
 	} else {
@@ -423,8 +423,8 @@ void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float 
 		teta -= 2*M_PI;
 	}
 	//EWOL_DEBUG("teta = " << (teta*180/(M_PI)) << " deg." );
-	double offsety = sin(teta-M_PI/2) * (thickness/2);
-	double offsetx = cos(teta-M_PI/2) * (thickness/2);
+	etkFloat_t offsety = sin(teta-M_PI/2) * (thickness/2);
+	etkFloat_t offsetx = cos(teta-M_PI/2) * (thickness/2);
 
 	SetPoint(sx - offsetx, sy - offsety);
 	SetPoint(sx + offsetx, sy + offsety);
@@ -436,7 +436,7 @@ void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float 
 }
 
 
-void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h)
+void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h)
 {
 	ResetCount();
 
@@ -450,7 +450,7 @@ void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h)
 }
 
 
-void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickness)
+void ewol::OObject2DColored::Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness)
 {
 	ResetCount();
 	if (radius<0) {
@@ -466,17 +466,17 @@ void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickn
 	}
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		
-		double angleOne = 2*M_PI* iii     / nbOcurence ;
-		double offsetExty = sin(angleOne) * (radius+thickness/2);
-		double offsetExtx = cos(angleOne) * (radius+thickness/2);
-		double offsetInty = sin(angleOne) * (radius-thickness/2);
-		double offsetIntx = cos(angleOne) * (radius-thickness/2);
+		etkFloat_t angleOne = 2*M_PI* iii     / nbOcurence ;
+		etkFloat_t offsetExty = sin(angleOne) * (radius+thickness/2);
+		etkFloat_t offsetExtx = cos(angleOne) * (radius+thickness/2);
+		etkFloat_t offsetInty = sin(angleOne) * (radius-thickness/2);
+		etkFloat_t offsetIntx = cos(angleOne) * (radius-thickness/2);
 		
-		double angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
-		double offsetExt2y = sin(angleTwo) * (radius+thickness/2);
-		double offsetExt2x = cos(angleTwo) * (radius+thickness/2);
-		double offsetInt2y = sin(angleTwo) * (radius-thickness/2);
-		double offsetInt2x = cos(angleTwo) * (radius-thickness/2);
+		etkFloat_t angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
+		etkFloat_t offsetExt2y = sin(angleTwo) * (radius+thickness/2);
+		etkFloat_t offsetExt2x = cos(angleTwo) * (radius+thickness/2);
+		etkFloat_t offsetInt2y = sin(angleTwo) * (radius-thickness/2);
+		etkFloat_t offsetInt2x = cos(angleTwo) * (radius-thickness/2);
 		
 		SetPoint(x + offsetIntx,  y + offsetInty);
 		SetPoint(x + offsetExtx,  y + offsetExty);
@@ -488,7 +488,7 @@ void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickn
 	}
 }
 
-void ewol::OObject2DColored::Disc(float x, float y, float radius)
+void ewol::OObject2DColored::Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius)
 {
 	ResetCount();
 	if (radius<0) {
@@ -503,13 +503,13 @@ void ewol::OObject2DColored::Disc(float x, float y, float radius)
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		SetPoint(x, y);
 		
-		double angleOne = 2*M_PI* iii / nbOcurence ;
-		double offsety = sin(angleOne) * radius;
-		double offsetx = cos(angleOne) * radius;
+		etkFloat_t angleOne = 2*M_PI* iii / nbOcurence ;
+		etkFloat_t offsety = sin(angleOne) * radius;
+		etkFloat_t offsetx = cos(angleOne) * radius;
 		
 		SetPoint(x + offsetx, y + offsety);
 		
-		double angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
+		etkFloat_t angleTwo = 2*M_PI* (iii+1) / nbOcurence ;
 		offsety = sin(angleTwo) * radius;
 		offsetx = cos(angleTwo) * radius;
 		

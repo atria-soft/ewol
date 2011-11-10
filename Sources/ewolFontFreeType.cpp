@@ -54,7 +54,7 @@ extern "C"
 		int32_t     width;
 		texCoord_ts posStart;
 		texCoord_ts posStop;
-		float ratio;
+		etkFloat_t ratio;
 	}freeTypeFontElement_ts;
 };
 
@@ -296,10 +296,10 @@ class FTFontInternal
 					}
 				}
 				listElement[iii].width = glyphMaxWidth;
-				listElement[iii].posStart.u = (double)(tmpRowId *glyphMaxWidth) / (double)textureWidth;
-				listElement[iii].posStart.v = (double)(tmpLineId*glyphMaxHeight) / (double)textureHeight;
-				listElement[iii].posStop.u = (double)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (double)textureWidth;;
-				listElement[iii].posStop.v = (double)(tmpLineId*glyphMaxHeight + glyphMaxHeight) / (double)textureHeight;
+				listElement[iii].posStart.u = (etkFloat_t)(tmpRowId *glyphMaxWidth) / (etkFloat_t)textureWidth;
+				listElement[iii].posStart.v = (etkFloat_t)(tmpLineId*glyphMaxHeight) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (etkFloat_t)textureWidth;;
+				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight) / (etkFloat_t)textureHeight;
 			}
 			// Now We Just Setup Some Texture Parameters.
 			glBindTexture( GL_TEXTURE_2D, textureId);
@@ -495,13 +495,13 @@ void ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t size = m_listLoadedFont[fontID]->GetSize();
 	
-	float posDrawX = drawPosition.x;
+	etkFloat_t posDrawX = drawPosition.x;
 	while(*unicodeString != 0) {
 		int32_t tmpChar = *unicodeString++;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
-		float sizeWidth = listOfElement[tmpChar].width;
+		etkFloat_t sizeWidth = listOfElement[tmpChar].width;
 		if (tmpChar != 0x20) {
 			// set texture coordonates :
 			coordTex.PushBack(listOfElement[tmpChar].posStart);
@@ -563,7 +563,7 @@ void ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t size = m_listLoadedFont[fontID]->GetSize();
 	
-	float posDrawX = drawPosition.x;
+	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != 0) {
 		int32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
@@ -583,7 +583,7 @@ void ewol::DrawText(int32_t                        fontID,
 			// TODO : Update if possible the mapping
 			charIndex = 0;
 		}
-		float sizeWidth = listOfElement[charIndex].width;
+		etkFloat_t sizeWidth = listOfElement[charIndex].width;
 		// 0x01 == 0x20 == ' ';
 		if (tmpChar != 0x01) {
 			// set texture coordonates :
@@ -623,7 +623,7 @@ int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
 	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	char * tmpVal = (char*)utf8String;
 	
-	float posDrawX = 0.0;
+	etkFloat_t posDrawX = 0.0;
 	while(*tmpVal != 0) {
 		int32_t tmpChar = *tmpVal++;
 		int32_t charIndex;

@@ -37,7 +37,7 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 			// set a specific text
-			void Text(float x, float y, const char* utf8String);
+			void Text(etkFloat_t x, etkFloat_t y, const char* utf8String);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...
@@ -45,7 +45,7 @@ namespace ewol {
 			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
 		public:
-			virtual void UpdateOrigin(float x, float y);
+			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};
 };
 

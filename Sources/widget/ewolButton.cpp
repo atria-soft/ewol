@@ -121,14 +121,14 @@ void ewol::Button::OnRegenerateDisplay(void)
 }
 
 /*
-bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	EWOL_DEBUG("Event on BT ...");
 	return true;
 }
 */
 
-bool ewol::Button::OnEventArea(const char * generateEventId, double x, double y)
+bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
 {
 	bool eventIsOK = false;
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");

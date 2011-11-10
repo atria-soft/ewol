@@ -64,9 +64,17 @@ typedef int32_t       uniChar_t;
 
 extern "C"
 {
+	#ifdef EWOL_PECISION_DOUBLE
+		typedef double       etkFloat_t;
+		#define oglTypeFloat_t   GL_DOUBLE
+	#else
+		typedef float        etkFloat_t;
+		#define oglTypeFloat_t   GL_FLOAT
+	#endif
+	
 	struct etkPointAndPositionDouble{
-		double x;
-		double y;
+		etkFloat_t x;
+		etkFloat_t y;
 	};
 	
 	struct etkPointAndPositionInt{
@@ -80,23 +88,23 @@ extern "C"
 	typedef etkPointAndPositionInt        intSize_ts;
 	
 	typedef struct {
-		float x;
-		float y;
-		float z;
+		etkFloat_t x;
+		etkFloat_t y;
+		etkFloat_t z;
 	}coord3D_ts;
 	typedef struct {
-		float x;
-		float y;
+		etkFloat_t x;
+		etkFloat_t y;
 	}coord2D_ts;
 	typedef struct {
-		float u;
-		float v;
+		etkFloat_t u;
+		etkFloat_t v;
 	}texCoord_ts;
 	typedef struct {
-		float red;
-		float green;
-		float blue;
-		float alpha;
+		etkFloat_t red;
+		etkFloat_t green;
+		etkFloat_t blue;
+		etkFloat_t alpha;
 	}color_ts;
 }
 

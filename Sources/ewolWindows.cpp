@@ -90,7 +90,7 @@ ewol::Windows::~Windows(void)
 	}
 }
 
-bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
+bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
@@ -106,7 +106,7 @@ bool ewol::Windows::CalculateSize(double availlableX, double availlableY)
 }
 
 
-bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	if (true == m_hasDecoration) {
 		if(    x >= 60
@@ -189,7 +189,7 @@ bool ewol::Windows::OnDraw(void)
 	return true;
 }
 
-bool ewol::Windows::OnEventArea(const char * generateEventId, double x, double y)
+bool ewol::Windows::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
 {
 	bool eventIsOK = false;
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");

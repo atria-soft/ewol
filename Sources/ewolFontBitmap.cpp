@@ -48,7 +48,7 @@ extern "C"
 	typedef struct {
 		texCoord_ts posStart;
 		texCoord_ts posStop;
-		float ratio;
+		etkFloat_t ratio;
 	}UTF8Element_ts;
 }
 
@@ -152,22 +152,22 @@ namespace ewol
 			{
 				//EWOL_DEBUG("Find default font glyph : (" << x << "," << y << ") (" << w << "," << h << ") ");
 				for (int32_t iii=0; iii< 0x80; iii++) {
-					m_listOfElement[iii].posStart.u = (double)x / 512.0;
-					m_listOfElement[iii].posStart.v = (double)y / 512.0;
-					m_listOfElement[iii].posStop.u = (double)(x+w) / 512.0;
-					m_listOfElement[iii].posStop.v = (double)(y+h) / 512.0;
-					m_listOfElement[iii].ratio = (float)w/(float)h;
+					m_listOfElement[iii].posStart.u = (etkFloat_t)x / 512.0;
+					m_listOfElement[iii].posStart.v = (etkFloat_t)y / 512.0;
+					m_listOfElement[iii].posStop.u = (etkFloat_t)(x+w) / 512.0;
+					m_listOfElement[iii].posStop.v = (etkFloat_t)(y+h) / 512.0;
+					m_listOfElement[iii].ratio = (etkFloat_t)w/(etkFloat_t)h;
 				}
 			};
 			void SetGlyphID(int32_t utf8Value, int32_t lineID, int32_t x, int32_t y, int32_t w, int32_t h)
 			{
 				//EWOL_DEBUG("Add font glyph : "<< utf8Value << " (" << x << "," << y << ") (" << w << "," << h << ") ");
 				if (utf8Value < 0x80) {
-					m_listOfElement[utf8Value].posStart.u = (double)x / 512.0;
-					m_listOfElement[utf8Value].posStart.v = (double)y / 512.0;
-					m_listOfElement[utf8Value].posStop.u = (double)(x+w) / 512.0;
-					m_listOfElement[utf8Value].posStop.v = (double)(y+h) / 512.0;
-					m_listOfElement[utf8Value].ratio = (float)w/(float)h;
+					m_listOfElement[utf8Value].posStart.u = (etkFloat_t)x / 512.0;
+					m_listOfElement[utf8Value].posStart.v = (etkFloat_t)y / 512.0;
+					m_listOfElement[utf8Value].posStop.u = (etkFloat_t)(x+w) / 512.0;
+					m_listOfElement[utf8Value].posStop.v = (etkFloat_t)(y+h) / 512.0;
+					m_listOfElement[utf8Value].ratio = (etkFloat_t)w/(etkFloat_t)h;
 				} else {
 					EWOL_ERROR("not manage glyph with ID > 0x7F line : " << lineID);
 				}
@@ -351,17 +351,17 @@ void ewol::DrawText(int32_t            fontID,
 	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, listLoadedFonts[fontID]->GetOglId(displayMode));
-	float posDrawX = drawPosition.x;
+	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != '\0') {
 		int32_t tmpChar = (int32_t)*tmpVal;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
-		float sizeWidth = size * listOfElement[tmpChar].ratio;
+		etkFloat_t sizeWidth = size * listOfElement[tmpChar].ratio;
 		if (tmpChar != 0x20) {
 			// TODO : this is really not availlable in the OpenGL ES ==> make with vertex system ...
 			glBegin(GL_QUADS);
-				//m_listOfElement[utf8Value].ratio = (float)w/(float)h;
+				//m_listOfElement[utf8Value].ratio = (etkFloat_t)w/(etkFloat_t)h;
 				glTexCoord2f(listOfElement[tmpChar].posStart.u, listOfElement[tmpChar].posStart.v);	glVertex3f(posDrawX,             drawPosition.y,             0.0);
 				glTexCoord2f(listOfElement[tmpChar].posStop.u,  listOfElement[tmpChar].posStart.v);	glVertex3f(posDrawX + sizeWidth, drawPosition.y,             0.0);
 				glTexCoord2f(listOfElement[tmpChar].posStop.u,  listOfElement[tmpChar].posStop.v);	glVertex3f(posDrawX + sizeWidth, drawPosition.y + size, 0.0);
@@ -403,13 +403,13 @@ void ewol::DrawText(int32_t                        fontID,
 	// set id of texture ... (i kwnow it was a little dangerous, but this ID is never remove while the program is running...
 	fontTextureId = listLoadedFonts[fontID]->GetOglId(displayMode);
 	
-	float posDrawX = drawPosition.x;
+	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != '\0') {
 		int32_t tmpChar = (int32_t)*tmpVal;
 		if (tmpChar >= 0x80) {
 			tmpChar = 0;
 		}
-		float sizeWidth = size * listOfElement[tmpChar].ratio;
+		etkFloat_t sizeWidth = size * listOfElement[tmpChar].ratio;
 		if (tmpChar != 0x20) {
 			coordTex.PushBack(listOfElement[tmpChar].posStart);
 			texCoord_ts tmpTex;

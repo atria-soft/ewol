@@ -51,7 +51,7 @@ ewol::Widget::~Widget(void)
 
 
 
-bool ewol::Widget::CalculateSize(double availlableX, double availlableY)
+bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
@@ -59,7 +59,7 @@ bool ewol::Widget::CalculateSize(double availlableX, double availlableY)
 }
 
 
-bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y)
+bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	bool ended = false;
 	for(int32_t iii=m_inputEvent.Size()-1; iii>=0; iii--) {

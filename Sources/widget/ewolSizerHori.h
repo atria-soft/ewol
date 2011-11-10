@@ -36,9 +36,9 @@ namespace ewol {
 			SizerHori(void);
 			virtual ~SizerHori(void);
 		public:
-			virtual bool   CalculateSize(double availlableX, double availlableY); // this generate the current size ...
+			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(double x=-1, double y=-1);
+			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
 		private:
@@ -53,7 +53,7 @@ namespace ewol {
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, double x, double y);
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 	};
 };
 

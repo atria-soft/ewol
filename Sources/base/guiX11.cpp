@@ -356,17 +356,17 @@ namespace guiAbstraction {
 					
 					glMatrixMode(GL_PROJECTION);
 					glLoadIdentity();
-					glOrtho(0., (float)m_width, 0., (float)m_height, 1., 20.);
+					glOrtho(0., (etkFloat_t)m_width, 0., (etkFloat_t)m_height, 1., 20.);
 					
 					glMatrixMode(GL_MODELVIEW);
 					glLoadIdentity();
 					glTranslatef(0, 0, -5);
 					
 					glBegin(GL_QUADS);
-						glColor3f(1., 0., 0.); glVertex3f( .25*(float)m_width, .25*(float)m_height, 0.);
-						glColor3f(0., 1., 0.); glVertex3f( .75*(float)m_width, .25*(float)m_height, 0.);
-						glColor3f(0., 0., 1.); glVertex3f( .75*(float)m_width, .75*(float)m_height, 0.);
-						glColor3f(1., 1., 0.); glVertex3f( .25*(float)m_width, .75*(float)m_height, 0.);
+						glColor3f(1., 0., 0.); glVertex3f( .25*(etkFloat_t)m_width, .25*(etkFloat_t)m_height, 0.);
+						glColor3f(0., 1., 0.); glVertex3f( .75*(etkFloat_t)m_width, .25*(etkFloat_t)m_height, 0.);
+						glColor3f(0., 0., 1.); glVertex3f( .75*(etkFloat_t)m_width, .75*(etkFloat_t)m_height, 0.);
+						glColor3f(1., 1., 0.); glVertex3f( .25*(etkFloat_t)m_width, .75*(etkFloat_t)m_height, 0.);
 					glEnd();
 				} else {
 					m_uniqueWindows->SysDraw();
@@ -416,7 +416,7 @@ namespace guiAbstraction {
 			{
 				m_uniqueWindows = newWindows;
 				if (NULL != m_uniqueWindows) {
-					m_uniqueWindows->CalculateSize((double)m_width, (double)m_height);
+					m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 				}
 			}
 			
@@ -480,7 +480,7 @@ namespace guiAbstraction {
 							{
 								case ConfigureNotify:
 									EWOL_DEBUG("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
-									m_uniqueWindows->CalculateSize((double)event.xconfigure.width, (double)event.xconfigure.height);
+									m_uniqueWindows->CalculateSize((etkFloat_t)event.xconfigure.width, (etkFloat_t)event.xconfigure.height);
 									m_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
 									break;
 								case Expose:
@@ -492,9 +492,9 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// Send Down message
-										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (double)event.xbutton.x, (double)event.xbutton.y);
+										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										// Check double or triple click event ...
 										m_previousDown_x = event.xbutton.x;
 										m_previousDown_y = event.xbutton.y;
@@ -523,9 +523,9 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
+										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// send Up event ...
-										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (double)event.xbutton.x, (double)event.xbutton.y);
+										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										
 										if (m_previousBouttonId != btId) {
 											m_previousDown_x = -1;
@@ -544,8 +544,8 @@ namespace guiAbstraction {
 												    && abs(m_previousDown_y - event.xbutton.y) < 5 )
 												{
 													// might generate an sigle event :
-													//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedSingle\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-													m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_SINGLE, (double)event.xbutton.x, (double)event.xbutton.y);
+													//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedSingle\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+													m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 													m_previous_x = m_previousDown_x;
 													m_previous_y = m_previousDown_y;
 													m_previousTime = currentTime;
@@ -566,13 +566,13 @@ namespace guiAbstraction {
 												{
 													// might generate an sigle event :
 													if (false == m_previousDouble) {
-														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedDouble\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOUBLE, (double)event.xbutton.x, (double)event.xbutton.y);
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedDouble\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 														m_previousTime = currentTime;
 														m_previousDouble = true;
 													} else {
-														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedTriple\" (" << (double)event.xbutton.x << "," << (double)event.xbutton.y << ")");
-														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_TRIPLE, (double)event.xbutton.x, (double)event.xbutton.y);
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedTriple\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 														// reset values ...
 														m_previousDown_x = -1;
 														m_previousDown_y = -1;
@@ -601,8 +601,8 @@ namespace guiAbstraction {
 								case EnterNotify:
 									m_resizeMode = false;
 									m_moveMode = false;
-									//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
-									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (double)event.xcrossing.x, (double)event.xcrossing.y);
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
+									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
 									break;
 								case MotionNotify:
 									if (true == m_resizeMode) {
@@ -618,15 +618,15 @@ namespace guiAbstraction {
 										//EWOL_DEBUG("Change POS : (" << (m_startY - m_screenOffsetX) << "," << (m_startY - m_screenOffsetY) << ") ==> (" << newPosX << "," << newPosY << ")");
 										this->ChangePos(newPosX, newPosY);
 									} else {
-										//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (double)event.xmotion.x << "," << (double)event.xmotion.y << ")");
-										m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (double)event.xmotion.x, (double)event.xmotion.y);
+										//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+										m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
 									}
 									break;
 								case LeaveNotify:
 									m_resizeMode = false;
 									m_moveMode = false;
-									//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (double)event.xcrossing.x << "," << (double)event.xcrossing.y << ")");
-									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (double)event.xcrossing.x, (double)event.xcrossing.y);
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
+									m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
 									break;
 								case FocusIn:
 									m_resizeMode = false;

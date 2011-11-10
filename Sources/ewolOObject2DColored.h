@@ -45,23 +45,23 @@ namespace ewol {
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
-			void SetColor(float red, float green, float blue, float alpha = 1.0);
+			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
 			void SetColor(color_ts color);
 			void SetPoint(coord2D_ts point);
-			void SetPoint(float x, float y);
-			void Line(float sx, float sy, float ex, float ey, float thickness);
-			void Rectangle(float x, float y, float w, float h);
-			//void RectangleAngle(float x, float y, float w, float h, float angle);
-			//void RectangleBorder(float x, float y, float w, float h, float thickness);
-			//void RectangleBorder(float x, float y, float w, float h, float thickness, float angle);
-			void Circle(float x, float y, float radius, float thickness);
-			//void CirclePart(float x, float y, float radius, float thickness, float angleStart, float angleStop);
-			void Disc(float x, float y, float radius);
-			//void DiscPart(float x, float y, float radius, float angleStart, float angleStop);
+			void SetPoint(etkFloat_t x, etkFloat_t y);
+			void Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness);
+			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h);
+			//void RectangleAngle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t angle);
+			//void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness);
+			//void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness, etkFloat_t angle);
+			void Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness);
+			//void CirclePart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness, etkFloat_t angleStart, etkFloat_t angleStop);
+			void Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius);
+			//void DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t angleStart, etkFloat_t angleStop);
 		public:
 			// Ewol internal ... : done to update at the origin of the widget ...
-			virtual void UpdateSize(float sizeX, float sizeY);
-			virtual void UpdateOrigin(float x, float y);
+			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY);
+			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};
 };
 

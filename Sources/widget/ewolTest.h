@@ -39,7 +39,7 @@ namespace ewol {
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
-			virtual bool OnEventArea(const char * generateEventId, double x, double y);
+			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 		private:
 			int32_t m_elementID;
 	};

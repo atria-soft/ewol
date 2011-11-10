@@ -67,8 +67,8 @@ void ewol::OObject2DText::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, m_FontTextureId);
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
-	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
-	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
+	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
+	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
 	glDrawArrays( GL_QUADS, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
@@ -76,7 +76,7 @@ void ewol::OObject2DText::Draw(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ewol::OObject2DText::Text(float x, float y, const char* utf8String)
+void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8String)
 {
 	m_FontTextureId = 0;
 	m_coord.Clear();
@@ -90,7 +90,7 @@ void ewol::OObject2DText::Text(float x, float y, const char* utf8String)
 	ewol::DrawText(m_FontId, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
 }
 
-void ewol::OObject2DText::UpdateOrigin(float x, float y)
+void ewol::OObject2DText::UpdateOrigin(etkFloat_t x, etkFloat_t y)
 {
 	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
 		m_coord[iii].x += x;
