@@ -89,6 +89,7 @@ void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord
 		output.PushBack(input[iii]);
 		output.PushBack(input[iii+1]);
 	}
+	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
 void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output, float sx, float sy, float ex, float ey)
@@ -97,28 +98,25 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 	if (input.Size() <0) {
 		return;
 	}
+	int32_t sizeInit=input.Size();
 	// last element :
 	coord2D_ts destPoint;
 	coord2D_ts lastElement = input[input.Size()-1];
 	bool inside = true;
-	if (lastElement.x < 0) {
+	if (lastElement.x < sx) {
 		inside = false;
 	}
-	EWOL_DEBUG("generate an crop : ");
+	//EWOL_DEBUG("generate an crop : ");
 	for(int32_t iii=0; iii<input.Size(); iii++) {
-		if(input[iii].x < 0) {
+		if(input[iii].x < sx) {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> OUT ");
 				//new point intersection ...
 				//y=aaax+bbb
-				//EWOL_DEBUG("    A (" << lastElement.x << "," << lastElement.y << ")  A(" << input[iii].x << "," << input[iii].y << ")");
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
 				float bbb = lastElement.y - (aaa*lastElement.x);
-				//EWOL_DEBUG("    y=" << aaa << "*x + " << bbb << ";");
-				//==> intersection en x=0 : 
-				destPoint.y = bbb;
-				destPoint.x = 0;
-				//EWOL_DEBUG("    ADD (" << destPoint.x << "," << destPoint.y << ")");
+				destPoint.y = aaa*sx + bbb;
+				destPoint.x = sx;
 				output.PushBack(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT ==> OUT ");
@@ -127,22 +125,16 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> IN ");
-				//EWOL_DEBUG("    ADD (" << input[iii].x << "," << input[iii].y << ")");
 				output.PushBack(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
 				//y=aaax+bbb
-				//EWOL_DEBUG("    A (" << lastElement.x << "," << lastElement.y << ")  A(" << input[iii].x << "," << input[iii].y << ")");
 				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
 				float bbb = lastElement.y - (aaa*lastElement.x);
-				//EWOL_DEBUG("    y=" << aaa << "*x + " << bbb << ";");
-				//==> intersection en x=0 :
-				destPoint.y = bbb;
-				destPoint.x = 0;
-				//EWOL_DEBUG("    ADD (" << destPoint.x << "," << destPoint.y << ")");
+				destPoint.y = aaa*sx + bbb;
+				destPoint.x = sx;
 				output.PushBack(destPoint);
-				//EWOL_DEBUG("    ADD (" << input[iii].x << "," << input[iii].y << ")");
 				output.PushBack(input[iii]);
 			}
 			inside = true;
@@ -151,7 +143,143 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 		lastElement.x = input[iii].x;
 		lastElement.y = input[iii].y;
 	}
-	EWOL_DEBUG("generate an crop on element : " << input.Size()<< " ==> " << output.Size() );
+	
+	//EWOL_DEBUG("generate an crop on element : " << sizeInit << " ==> " << output.Size() << "intermediate (1)");
+	input = output;
+	output.Clear();
+	lastElement = input[input.Size()-1];
+	inside = true;
+	if (lastElement.y < sy) {
+		inside = false;
+	}
+	for(int32_t iii=0; iii<input.Size(); iii++) {
+		if(input[iii].y < sy) {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> OUT ");
+				//new point intersection ...
+				//x=aaay+bbb
+				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				float bbb = lastElement.x - (aaa*lastElement.y);
+				destPoint.y = sy;
+				destPoint.x = sy*aaa + bbb;
+				output.PushBack(destPoint);
+			} else {
+				//EWOL_DEBUG("element OUT ==> OUT ");
+			}
+			inside = false;
+		} else {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> IN ");
+				output.PushBack(input[iii]);
+			} else {
+				//EWOL_DEBUG("element OUT ==> IN ");
+				//new point intersection ...
+				//y=aaax+bbb
+				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				float bbb = lastElement.x - (aaa*lastElement.y);
+				destPoint.y = sy;
+				destPoint.x = sy*aaa + bbb;
+				output.PushBack(destPoint);
+				output.PushBack(input[iii]);
+			}
+			inside = true;
+		}
+		// update the last point position :
+		lastElement.x = input[iii].x;
+		lastElement.y = input[iii].y;
+	}
+	
+	input = output;
+	output.Clear();
+	lastElement = input[input.Size()-1];
+	inside = true;
+	if (lastElement.x > ex) {
+		inside = false;
+	}
+	//EWOL_DEBUG("generate an crop : ");
+	for(int32_t iii=0; iii<input.Size(); iii++) {
+		if(input[iii].x > ex) {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> OUT ");
+				//new point intersection ...
+				//y=aaax+bbb
+				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				float bbb = lastElement.y - (aaa*lastElement.x);
+				destPoint.y = aaa*ex + bbb;
+				destPoint.x = ex;
+				output.PushBack(destPoint);
+			} else {
+				//EWOL_DEBUG("element OUT ==> OUT ");
+			}
+			inside = false;
+		} else {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> IN ");
+				output.PushBack(input[iii]);
+			} else {
+				//EWOL_DEBUG("element OUT ==> IN ");
+				//new point intersection ...
+				//y=aaax+bbb
+				float aaa = (lastElement.y-input[iii].y) / (lastElement.x-input[iii].x);
+				float bbb = lastElement.y - (aaa*lastElement.x);
+				destPoint.y = aaa*ex + bbb;
+				destPoint.x = ex;
+				output.PushBack(destPoint);
+				output.PushBack(input[iii]);
+			}
+			inside = true;
+		}
+		// update the last point position :
+		lastElement.x = input[iii].x;
+		lastElement.y = input[iii].y;
+	}
+	
+	input = output;
+	output.Clear();
+	lastElement = input[input.Size()-1];
+	inside = true;
+	if (lastElement.y > ey) {
+		inside = false;
+	}
+	for(int32_t iii=0; iii<input.Size(); iii++) {
+		if(input[iii].y > ey) {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> OUT ");
+				//new point intersection ...
+				//x=aaay+bbb
+				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				float bbb = lastElement.x - (aaa*lastElement.y);
+				destPoint.y = ey;
+				destPoint.x = ey*aaa + bbb;
+				output.PushBack(destPoint);
+			} else {
+				//EWOL_DEBUG("element OUT ==> OUT ");
+			}
+			inside = false;
+		} else {
+			if(true == inside) {
+				//EWOL_DEBUG("element IN ==> IN ");
+				output.PushBack(input[iii]);
+			} else {
+				//EWOL_DEBUG("element OUT ==> IN ");
+				//new point intersection ...
+				//y=aaax+bbb
+				float aaa = (lastElement.x-input[iii].x) / (lastElement.y-input[iii].y);
+				float bbb = lastElement.x - (aaa*lastElement.y);
+				destPoint.y = ey;
+				destPoint.x = ey*aaa + bbb;
+				output.PushBack(destPoint);
+				output.PushBack(input[iii]);
+			}
+			inside = true;
+		}
+		// update the last point position :
+		lastElement.x = input[iii].x;
+		lastElement.y = input[iii].y;
+	}
+	
+	
+	//EWOL_DEBUG("generate an crop on element : " << sizeInit << " ==> " << output.Size() );
 }
 
 
@@ -331,7 +459,7 @@ void ewol::OObject2DColored::Circle(float x, float y, float radius, float thickn
 	if (radius < thickness/2) {
 		Disc(x, y, thickness/2 + radius);
 	}
-	int32_t nbOcurence = radius*2;
+	int32_t nbOcurence = radius;
 	if (nbOcurence < 10)
 	{
 		nbOcurence = 10;
@@ -366,10 +494,10 @@ void ewol::OObject2DColored::Disc(float x, float y, float radius)
 	if (radius<0) {
 		radius *= -1;
 	}
-	int32_t nbOcurence = radius*2;
-	if (nbOcurence < 10)
+	int32_t nbOcurence = radius*0.50;
+	if (nbOcurence < 15)
 	{
-		nbOcurence = 10;
+		nbOcurence = 15;
 	}
 
 	for (int32_t iii=0; iii<nbOcurence; iii++) {

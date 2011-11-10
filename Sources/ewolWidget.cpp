@@ -148,7 +148,7 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 	newEvent.area.size = size;
 	newEvent.area.flags = flags;
 	m_inputEvent.PushBack(newEvent);
-	EWOL_DEBUG("Add an area event...");
+	//EWOL_DEBUG("Add an area event...");
 	return true;
 }
 

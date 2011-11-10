@@ -44,7 +44,7 @@ ewol::SizerVert::~SizerVert(void)
 
 bool ewol::SizerVert::CalculateSize(double availlableX, double availlableY)
 {
-	EWOL_DEBUG("Update Size");
+	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	// calculate unExpendable Size :
@@ -78,7 +78,7 @@ bool ewol::SizerVert::CalculateSize(double availlableX, double availlableY)
 		if (NULL != m_subWidget[iii]) {
 			coord tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
-			EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
+			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (true == m_subWidget[iii]->CanExpentY()) {
@@ -96,7 +96,7 @@ bool ewol::SizerVert::CalculateSize(double availlableX, double availlableY)
 
 bool ewol::SizerVert::CalculateMinSize(void)
 {
-	EWOL_DEBUG("Update minimum Size");
+	//EWOL_DEBUG("Update minimum Size");
 	m_userExpendX=false;
 	m_userExpendY=false;
 	m_minSize.x = 0.0;
@@ -117,8 +117,8 @@ bool ewol::SizerVert::CalculateMinSize(void)
 			}
 		}
 	}
-	EWOL_DEBUG("Result : expend  X="<< m_userExpendX << " Y=" << m_userExpendY);
-	EWOL_DEBUG("         minSize ("<< m_minSize.x << "," << m_minSize.y << ")");
+	//EWOL_DEBUG("Result : expend  X="<< m_userExpendX << " Y=" << m_userExpendY);
+	//EWOL_DEBUG("         minSize ("<< m_minSize.x << "," << m_minSize.y << ")");
 	return true;
 }
 

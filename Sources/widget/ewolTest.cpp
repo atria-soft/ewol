@@ -146,8 +146,9 @@ void ewol::Test::OnRegenerateDisplay(void)
 	size.x = m_size.x-6;
 	size.y = m_size.y-6;
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventTestPressed);
-	
+
 	//tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
+	//tmpOObjects->Circle(100, 100, 100, 35);
 	/*
 	tmpOObjects->SetPoint(-20, -20);
 	tmpOObjects->SetPoint(50, 50);
