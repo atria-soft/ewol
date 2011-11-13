@@ -35,6 +35,7 @@ namespace ewol {
 		public:
 			Button(void);
 			Button(etk::String newLabel);
+			void Init(void);
 			virtual ~Button(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::String newLabel);
@@ -46,6 +47,8 @@ namespace ewol {
 			bool           GetValue(void);
 		private:
 			etk::String    m_label;
+			color_ts       m_textColorFg;  //!< Text color
+			color_ts       m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

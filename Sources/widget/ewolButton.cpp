@@ -29,20 +29,38 @@
 
 
 const char * ewolEventButtonPressed    = "ewol Button Pressed";
+const char * ewolEventButtonEnter      = "ewol Button Enter";
+const char * ewolEventButtonLeave      = "ewol Button Leave";
 
 
 
 #undef __class__
 #define __class__	"ewol::Button"
 
+
+void ewol::Button::Init(void)
+{
+	m_textColorFg.red   = 0.0;
+	m_textColorFg.green = 0.0;
+	m_textColorFg.blue  = 0.0;
+	m_textColorFg.alpha = 1.0;
+	
+	m_textColorBg.red   = 0.0;
+	m_textColorBg.green = 0.0;
+	m_textColorBg.blue  = 0.0;
+	m_textColorBg.alpha = 0.25;
+}
+
 ewol::Button::Button(void)
 {
 	m_label = "No Label";
+	Init();
 }
 
 ewol::Button::Button(etk::String newLabel)
 {
 	m_label = newLabel;
+	Init();
 }
 
 
@@ -53,7 +71,6 @@ ewol::Button::~Button(void)
 
 bool ewol::Button::CalculateMinSize(void)
 {
-	//SetMinSise(55, 24);
 	int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
@@ -84,6 +101,9 @@ void ewol::Button::OnRegenerateDisplay(void)
 	// clean the object list ...
 	ClearOObjectList();
 	
+	
+	
+	/*
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 	tmpOObjects->SetColor(0.0, 0.0, 0.0, 1.0);
 	tmpOObjects->Rectangle( 2, 2, m_size.x-4, m_size.y-4);
@@ -91,24 +111,37 @@ void ewol::Button::OnRegenerateDisplay(void)
 	tmpOObjects->Rectangle( 3, 3, m_size.x-6, m_size.y-6);
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
-	color_ts textColorFg;
-	textColorFg.red = 0.0;
-	textColorFg.green = 0.0;
-	textColorFg.blue = 0.0;
-	textColorFg.alpha = 1.0;
-	
-	
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, textColorFg);
+	*/
+	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 	
 	int32_t fontId = GetDefaultFontId();
 	int32_t fontHeight = ewol::GetHeight(fontId);
 	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
 	int32_t posx = (m_size.x - fontWidth - 6)/2 + 3;
-	tmpText->Text(posx, posy, m_label.c_str());
+	tmpText->Text(posx+2, posy+3, m_label.c_str());
+	
+	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+	int32_t radius = fontHeight / 2;
+	tmpOObjects->SetColor(m_textColorBg);
+	tmpOObjects->Rectangle( ((m_size.x-fontWidth-10)/2)+radius, posy, fontWidth-radius, radius*2);
+	tmpOObjects->SetColor(m_textColorFg);
+	EWOL_DEBUG("m_textColorFg=(" << m_textColorFg.red << " " << m_textColorFg.green << " " << m_textColorFg.blue << " " << m_textColorFg.alpha << ")" );
+	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy, ((m_size.x-fontWidth-10)/2)+fontWidth, posy, 1);
+	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy+fontHeight, ((m_size.x-fontWidth-10)/2)+fontWidth, posy+fontHeight, 1);
+	posy += fontHeight/2;
+	tmpOObjects->SetColor(m_textColorBg);
+	tmpOObjects->DiscPart(((m_size.x-fontWidth-10)/2)+radius, posy, radius, 180, 360);
+	tmpOObjects->SetColor(m_textColorFg);
+	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+radius, posy, radius, 1, 180, 360);
+	tmpOObjects->SetColor(m_textColorBg);
+	tmpOObjects->DiscPart(((m_size.x-fontWidth-10)/2)+fontWidth, posy, radius, 0, 180);
+	tmpOObjects->SetColor(m_textColorFg);
+	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+fontWidth, posy, radius, 1, 0, 180);
+	
+	AddOObject(tmpOObjects, "BouttonDecoration");
 	AddOObject(tmpText, "BouttonText");
-	
-	
+
 	// Regenerate the event Area:
 	EventAreaRemoveAll();
 	coord origin;
@@ -118,6 +151,9 @@ void ewol::Button::OnRegenerateDisplay(void)
 	size.x = m_size.x-6;
 	size.y = m_size.y-6;
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
+	AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventButtonEnter);
+	AddEventArea(origin, size, FLAG_EVENT_INPUT_LEAVE, ewolEventButtonLeave);
+
 }
 
 /*
@@ -135,7 +171,8 @@ bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFl
 	if(ewolEventButtonPressed == generateEventId) {
 		EWOL_INFO("BT pressed ... " << m_label);
 		eventIsOK = true;
+	} else if(ewolEventButtonEnter == generateEventId) {
+		OnRegenerateDisplay();
 	}
-	
 	return eventIsOK;
 }

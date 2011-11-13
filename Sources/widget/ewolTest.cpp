@@ -127,7 +127,10 @@ void ewol::Test::OnRegenerateDisplay(void)
 	} else {
 		tmpOObjects->Circle(100, 100, 100, 50);
 	}
-	
+	tmpOObjects->SetColor(1.0, 1.0, 0.0, 1.0);
+	tmpOObjects->DiscPart(150, 60, 60, 45, 180);
+	tmpOObjects->SetColor(0.0, 0.0, 0.0, 1.0);
+	tmpOObjects->CirclePart(150, 60, 60, 2, 45, 180);
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	

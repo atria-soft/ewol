@@ -85,7 +85,7 @@ namespace ewol {
 		
 		FLAG_EVENT_INPUT_MOTION          = 1 << 20,
 		FLAG_EVENT_INPUT_ENTER           = 1 << 21,
-		FLAG_EVENT_INPUT_LEAVE           = 1 << 21,
+		FLAG_EVENT_INPUT_LEAVE           = 1 << 22,
 		FLAG_EVENT_INPUT_DOWN            = 1 << 23,
 		FLAG_EVENT_INPUT_UP              = 1 << 24,
 		FLAG_EVENT_INPUT_CLICKED         = 1 << 25,
@@ -154,6 +154,8 @@ namespace ewol {
 			coord          m_userMinSize;   //!< user define the minimum size of the widget
 			bool           m_userExpendX;
 			bool           m_userExpendY;
+			bool           m_userFillX;
+			bool           m_userFillY;
 		public:
 			void           SetOrigin(etkFloat_t x, etkFloat_t y) { m_origin.x=x; m_origin.y=y; };
 			coord          GetOrigin(void) { return m_origin; };
@@ -168,6 +170,10 @@ namespace ewol {
 			bool           CanExpentX(void) { return m_userExpendX; };
 			virtual void   SetExpendY(bool newExpend=false) { m_userExpendY = newExpend; };
 			bool           CanExpentY(void) { return m_userExpendY; };
+			virtual void   SetFillX(bool newFill=false) { m_userFillX = newFill; };
+			bool           CanFillX(void) { return m_userFillX; };
+			virtual void   SetFillY(bool newFill=false) { m_userFillY = newFill; };
+			bool           CanFillY(void) { return m_userFillY; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area

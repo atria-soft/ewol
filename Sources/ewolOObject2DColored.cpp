@@ -488,6 +488,51 @@ void ewol::OObject2DColored::Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radiu
 	}
 }
 
+void ewol::OObject2DColored::CirclePart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness, etkFloat_t angleStart, etkFloat_t angleStop)
+{
+	ResetCount();
+	if (radius<0) {
+		radius *= -1;
+	}
+	if (radius < thickness/2) {
+		Disc(x, y, thickness/2 + radius);
+	}
+	
+	angleStart -= 90;
+	angleStop  -= 90;
+	etkFloat_t AStart = angleStart * (M_PI)/180;
+	etkFloat_t AStop  = angleStop  * (M_PI)/180;
+	etkFloat_t angleLinear = (angleStop-angleStart)* (M_PI)/180;
+	
+	int32_t nbOcurence = radius;
+	if (nbOcurence < 10)
+	{
+		nbOcurence = 10;
+	}
+	for (int32_t iii=0; iii<nbOcurence; iii++) {
+		
+		etkFloat_t angleOne =  AStart + (angleLinear* iii     / nbOcurence) ;
+		etkFloat_t offsetExty = sin(angleOne) * (radius+thickness/2);
+		etkFloat_t offsetExtx = cos(angleOne) * (radius+thickness/2);
+		etkFloat_t offsetInty = sin(angleOne) * (radius-thickness/2);
+		etkFloat_t offsetIntx = cos(angleOne) * (radius-thickness/2);
+		
+		etkFloat_t angleTwo =  AStart + (angleLinear*  (iii+1) / nbOcurence );
+		etkFloat_t offsetExt2y = sin(angleTwo) * (radius+thickness/2);
+		etkFloat_t offsetExt2x = cos(angleTwo) * (radius+thickness/2);
+		etkFloat_t offsetInt2y = sin(angleTwo) * (radius-thickness/2);
+		etkFloat_t offsetInt2x = cos(angleTwo) * (radius-thickness/2);
+		
+		SetPoint(x + offsetIntx,  y + offsetInty);
+		SetPoint(x + offsetExtx,  y + offsetExty);
+		SetPoint(x + offsetExt2x, y + offsetExt2y);
+		
+		SetPoint(x + offsetExt2x, y + offsetExt2y);
+		SetPoint(x + offsetInt2x, y + offsetInt2y);
+		SetPoint(x + offsetIntx,  y + offsetInty);
+	}
+}
+
 void ewol::OObject2DColored::Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius)
 {
 	ResetCount();
@@ -517,4 +562,39 @@ void ewol::OObject2DColored::Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius)
 	}
 }
 
+void ewol::OObject2DColored::DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t angleStart, etkFloat_t angleStop)
+{
+	ResetCount();
+	if (radius<0) {
+		radius *= -1;
+	}
+	angleStart -= 90;
+	angleStop  -= 90;
+	etkFloat_t AStart = angleStart * (M_PI)/180;
+	etkFloat_t AStop  = angleStop  * (M_PI)/180;
+	etkFloat_t angleLinear = (angleStop-angleStart)* (M_PI)/180;
+	//EWOL_DEBUG("Write a part of disk " << angleStart << " -> " << angleStop << "  ocurence=" << (angleLinear*180/(M_PI)) );
+	
+	int32_t nbOcurence = radius*0.50;
+	if (nbOcurence < 15)
+	{
+		nbOcurence = 15;
+	}
+	
 
+	for (int32_t iii=0; iii<nbOcurence; iii++) {
+		SetPoint(x, y);
+		
+		etkFloat_t angleOne = AStart + (angleLinear* iii / nbOcurence) ;
+		etkFloat_t offsety = sin(angleOne) * radius;
+		etkFloat_t offsetx = cos(angleOne) * radius;
+		
+		SetPoint(x + offsetx, y + offsety);
+		
+		etkFloat_t angleTwo = AStart + (angleLinear* (iii+1) / nbOcurence) ;
+		offsety = sin(angleTwo) * radius;
+		offsetx = cos(angleTwo) * radius;
+		
+		SetPoint(x + offsetx, y + offsety);
+	}
+}

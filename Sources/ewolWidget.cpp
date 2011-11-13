@@ -38,8 +38,10 @@ ewol::Widget::Widget(void)
 	// user settings :
 	m_userMinSize.x = -1.0;
 	m_userMinSize.y = -1.0;
-	m_userExpendX = false;
-	m_userExpendY = false;
+	SetExpendX();
+	SetExpendY();
+	SetFillX();
+	SetFillY();
 	m_genericDraw = true;
 	m_specificDraw = false;
 }
