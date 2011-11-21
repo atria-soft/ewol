@@ -33,8 +33,28 @@ namespace ewol {
 	class CheckBox :public ewol::Widget
 	{
 		public:
-			CheckBox(void) { };
-			virtual ~CheckBox(void) { };
+			CheckBox(void);
+			CheckBox(etk::String newLabel);
+			void Init(void);
+			virtual ~CheckBox(void);
+			virtual bool   CalculateMinSize(void);
+			void           SetLabel(etk::String newLabel);
+			// TODO : 
+			//void           SetSize(int32_t size);
+			//void           SetFont(etk::String fontName);
+			//void           ResetDefaultParameters(void);
+			void           SetValue(bool val);
+			bool           GetValue(void);
+		private:
+			etk::String    m_label;
+			bool           m_value;
+			color_ts       m_textColorFg;  //!< Text color
+			color_ts       m_textColorBg;  //!< Background color
+		public:
+			virtual void   OnRegenerateDisplay(void);
+		public:
+			//virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 	};
 };
 

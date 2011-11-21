@@ -112,6 +112,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
 	*/
+	int32_t borderWidth = 2;
 	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 	
 	int32_t fontId = GetDefaultFontId();
@@ -126,18 +127,18 @@ void ewol::Button::OnRegenerateDisplay(void)
 	tmpOObjects->SetColor(m_textColorBg);
 	tmpOObjects->Rectangle( ((m_size.x-fontWidth-10)/2)+radius, posy, fontWidth-radius, radius*2);
 	tmpOObjects->SetColor(m_textColorFg);
-	EWOL_DEBUG("m_textColorFg=(" << m_textColorFg.red << " " << m_textColorFg.green << " " << m_textColorFg.blue << " " << m_textColorFg.alpha << ")" );
-	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy, ((m_size.x-fontWidth-10)/2)+fontWidth, posy, 1);
-	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy+fontHeight, ((m_size.x-fontWidth-10)/2)+fontWidth, posy+fontHeight, 1);
+	//EWOL_DEBUG("m_textColorFg=(" << m_textColorFg.red << " " << m_textColorFg.green << " " << m_textColorFg.blue << " " << m_textColorFg.alpha << ")" );
+	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy, ((m_size.x-fontWidth-10)/2)+fontWidth, posy, borderWidth);
+	tmpOObjects->Line( ((m_size.x-fontWidth-10)/2)+radius, posy+fontHeight, ((m_size.x-fontWidth-10)/2)+fontWidth, posy+fontHeight, borderWidth);
 	posy += fontHeight/2;
 	tmpOObjects->SetColor(m_textColorBg);
 	tmpOObjects->DiscPart(((m_size.x-fontWidth-10)/2)+radius, posy, radius, 180, 360);
 	tmpOObjects->SetColor(m_textColorFg);
-	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+radius, posy, radius, 1, 180, 360);
+	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+radius, posy, radius, borderWidth, 180, 360);
 	tmpOObjects->SetColor(m_textColorBg);
 	tmpOObjects->DiscPart(((m_size.x-fontWidth-10)/2)+fontWidth, posy, radius, 0, 180);
 	tmpOObjects->SetColor(m_textColorFg);
-	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+fontWidth, posy, radius, 1, 0, 180);
+	tmpOObjects->CirclePart(((m_size.x-fontWidth-10)/2)+fontWidth, posy, radius, borderWidth, 0, 180);
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	AddOObject(tmpText, "BouttonText");

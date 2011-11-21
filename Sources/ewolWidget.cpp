@@ -44,6 +44,7 @@ ewol::Widget::Widget(void)
 	SetFillY();
 	m_genericDraw = true;
 	m_specificDraw = false;
+	
 }
 
 ewol::Widget::~Widget(void)

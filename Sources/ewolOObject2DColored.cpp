@@ -449,6 +449,13 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 	SetPoint(x    , y + h);
 }
 
+void ewol::OObject2DColored::RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness)
+{
+	Line(x,   y,   x+w, y,   thickness);
+	Line(x+w, y,   x+w, y+h, thickness);
+	Line(x+w, y+h, x,   y+h, thickness);
+	Line(x,   y+h, x,   y,   thickness);
+}
 
 void ewol::OObject2DColored::Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness)
 {

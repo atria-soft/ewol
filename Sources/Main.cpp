@@ -26,6 +26,7 @@
 #include <ewol.h>
 #include <ewolFont.h>
 #include <widget/ewolButton.h>
+#include <widget/ewolCheckBox.h>
 #include <widget/ewolSizerHori.h>
 #include <widget/ewolSizerVert.h>
 #include <widget/ewolTest.h>
@@ -60,6 +61,15 @@ class Plop :public ewol::Windows
 			ewol::Test * myTest = new ewol::Test();
 			mySizerVert->SubWidgetAdd(myTest);
 			
+			ewol::CheckBox * myCheckBox = new ewol::CheckBox("mon label d'exemple de test");
+			mySizerVert->SubWidgetAdd(myCheckBox);
+			myCheckBox = new ewol::CheckBox("Exemple 2");
+			mySizerVert->SubWidgetAdd(myCheckBox);
+			myCheckBox = new ewol::CheckBox("Exemple 3 et plus si afinité");
+			mySizerVert->SubWidgetAdd(myCheckBox);
+			
+			myTest = new ewol::Test();
+			mySizerVert->SubWidgetAdd(myTest);
 			myButton = new ewol::Button("4 4 BT");
 			//myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);
