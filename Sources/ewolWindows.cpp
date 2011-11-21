@@ -145,7 +145,7 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 void ewol::Windows::SysDraw(void)
 {
 
-	EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
+	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
 	

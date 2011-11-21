@@ -69,9 +69,10 @@ class Plop :public ewol::Windows
 			mySizerVert->SubWidgetAdd(myCheckBox);
 			
 			myTest = new ewol::Test();
+			myTest->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myTest);
 			myButton = new ewol::Button("4 4 BT");
-			//myButton->SetExpendY(true);
+			myButton->SetExpendY(true);
 			mySizerVert->SubWidgetAdd(myButton);
 			
 			myButton = new ewol::Button("Exemple 2");
