@@ -31,6 +31,14 @@
 
 namespace ewol
 {
+	// TODO : Create a subNameSpace:
+	/*
+	namespace texture {
+		int32_t Load(etk::File fileName);
+		void    UnLoad(uint32_t textureID);
+		int32_t GetSize(uint32_t textureID);
+	};
+	*/
 	int32_t LoadTexture(etk::File fileName);
 	void    UnLoadTexture(uint32_t textureID);
 	int32_t GetTextureSize(uint32_t textureID);
