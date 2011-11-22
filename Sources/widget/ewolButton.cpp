@@ -28,9 +28,9 @@
 
 
 
-const char * ewolEventButtonPressed    = "ewol Button Pressed";
-const char * ewolEventButtonEnter      = "ewol Button Enter";
-const char * ewolEventButtonLeave      = "ewol Button Leave";
+const char * const ewolEventButtonPressed    = "ewol Button Pressed";
+const char * const ewolEventButtonEnter      = "ewol Button Enter";
+const char * const ewolEventButtonLeave      = "ewol Button Leave";
 
 
 

@@ -46,6 +46,8 @@ ewol::Widget::Widget(void)
 	m_genericDraw = true;
 	m_specificDraw = false;
 	ewol::widgetManager::Add(this);
+	m_canFocus = false;
+	m_hasFocus = false;
 }
 
 ewol::Widget::~Widget(void)

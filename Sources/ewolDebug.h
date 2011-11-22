@@ -52,6 +52,12 @@ extern const char * ewolLibName;
 #	define EWOL_DEBUG(data)         do {}while(0)
 #endif
 
+#if EWOL_DEBUG_LEVEL > 3
+#	define EWOL_VERBOSE(data)         ETK_VERBOSE(ewolLibName, data)
+#else
+#	define EWOL_VERBOSE(data)         do {}while(0)
+#endif
+
 #define EWOL_TODO(data)             EWOL_WARNING("TODO : " << data)
 
 #define EWOL_ASSERT(cond, data)     ETK_ASSERT(ewolLibName, cond, data)

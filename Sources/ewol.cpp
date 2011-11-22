@@ -70,7 +70,13 @@ void ewol::UnInit(void)
 
 void ewol::DisplayWindows(ewol::Windows * windows)
 {
+	// Remove current Focus :
+	ewol::widgetManager::FocusSetDefault(NULL);
+	ewol::widgetManager::FocusRelease();
+	// set display of the windows :
 	guiAbstraction::SetDisplayOnWindows(windows);
+	// Set the new default Focus :
+	ewol::widgetManager::FocusSetDefault(windows);
 }
 
 

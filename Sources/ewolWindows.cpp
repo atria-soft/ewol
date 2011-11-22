@@ -46,6 +46,7 @@ const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
 
 ewol::Windows::Windows(void)
 {
+	SetCanHaveFocus(true);
 	m_subWidget = NULL;
 	// enable specific drawing system ...
 	SpecificDrawEnable();

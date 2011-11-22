@@ -40,6 +40,11 @@ namespace ewol {
 			void           Rm(    int32_t widgetId);
 			int32_t        GetId( ewol::Widget * newWidget);
 			ewol::Widget * Get(   int32_t widgetId);
+			
+			void           FocusKeep(      ewol::Widget * newWidget); // set the focus at the specific widget
+			void           FocusSetDefault(ewol::Widget * newWidget); // select the default focus getter
+			void           FocusRelease(   void); // Release focus from the current widget to the default
+			ewol::Widget * FocusGet(       void);
 	};
 };
 
