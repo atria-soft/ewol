@@ -132,10 +132,6 @@ namespace ewol {
 		public:
 			Widget(void);
 			virtual ~Widget(void);
-		private:
-			int32_t m_uniqueId;        //!< UniqueId to identify the widget unicly
-		public:
-			int32_t GetUniqueId(void) { return m_uniqueId; };
 		
 		private:
 			ewol::Widget *  m_parrent;   //!< parrent of the current widget (if NULL ==> this is the main node(root))

@@ -1,18 +1,69 @@
 eol
-2DColor
-text
+# Mode of reading file: "Text" / "Bin"
+Mode=Text
+# type of the file : "Single" / "Multiple"
+FileType=Single
+# Version : 
+version=1.0
 
-elem="myLine"
-type=line
-a=0.0
-c=#51625351
-p=0.2562;0.4532
-c=#51625351
-p=0.5245;0.5356
-
-elem="myrect"
-type=retangle
-a=56.0
-c=#536254FF
-p=0.53;0.56
-s=0.22;0.12
+<element=plop>
+	# Number of sub frame of the element (default 1)
+	NbFrame=2
+	# Element display Ratio : ratio = x/y (default 1.0)
+	Ratio=1.0
+	# Clipping mode of the element
+	ClipX=false
+	ClipY=false
+	# Position of internal Elements ... (use only if clipping is enable
+	internalElemXStart=0.25
+	internalElemXStop=0.75
+	internalElemYStart=0.25
+	internalElemYStop=0.75
+	# note we have 5 methode to reference a color : 
+	#    - #RRGGBB          ==> in hexa 0x00<=x<=0xFF
+	#    - #RRGGBBAA        ==> in hexa 0x00<=x<=0xFF
+	#    - R.R;G.G;B.B      ==> in double 0<=x<=1
+	#    - R.R;G.G;B.B;A.A  ==> in double 0<=x<=1
+	#    - &NameColor       ==> searche internal color of the element and after global color ...
+	[Colors]
+		colorName=1.0;1.0;1.0;1.0
+		Background=0.0;0.000512;1.0;0.755562535
+		Border=#536254FF
+	[grp=basicRect]
+		{Rect}
+			color=#536254FF
+			position=0.53;0.56
+			size=0.22;0.12
+		{Rect}
+			color=&Background
+			position=0.10;0.10
+			size=0.22;0.22
+	#decription of the object:
+	[Frame=0=basic]
+		{Circle}
+			name=plop et plop
+			thickness=0.01
+			# Start
+			color=#51625351
+			point=0.2562;0.4532
+			# Stop
+			color=#51625351
+			point=0.5245;0.5356
+		{Rect}
+			color=#536254FF
+			position=0.53;0.56
+			size=0.22;0.12
+	[Frame=1=clicked]
+		{Circle}
+			thickness=0.01
+			color=#51625351
+			point=0.2562;0.4532
+			color=#51625351
+			point=0.5245;0.5356
+		{Rect}
+			color=&Border
+			position=0.53;0.56
+			size=0.22;0.12
+		# load a generic group of the object or the theme
+		{grp}
+			name=basicRect

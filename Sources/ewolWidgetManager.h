@@ -29,11 +29,19 @@
 #include <ewolDebug.h>
 #include <ewolOObject.h>
 #include <etkVectorType.h>
-#include <etkSingleton.h>
+#include <ewolWidget.h>
 
 namespace ewol {
-	class widgetManager: public etk::Singleton
-	{
-		friend 
+	namespace widgetManager {
+			void           Init(  void);
+			void           UnInit(void);
+			void           Add(   ewol::Widget * newWidget);
+			void           Rm(    ewol::Widget * newWidget);
+			void           Rm(    int32_t widgetId);
+			int32_t        GetId( ewol::Widget * newWidget);
+			ewol::Widget * Get(   int32_t widgetId);
 	};
 };
+
+#endif
+

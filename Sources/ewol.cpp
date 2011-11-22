@@ -25,6 +25,7 @@
 
 #include "ewol.h"
 #include "ewolFont.h"
+#include "ewolWidgetManager.h"
 
 #if __PLATFORM__ == X11
 	#include "guiX11.h"
@@ -50,6 +51,7 @@ void ewol::Init(int argc, char *argv[])
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
 	guiAbstraction::Init(argc, argv);
+	ewol::widgetManager::Init();
 	ewol::InitFont();
 }
 
@@ -62,6 +64,7 @@ void ewol::UnInit(void)
 {
 	guiAbstraction::UnInit();
 	ewol::UnInitFont();
+	ewol::widgetManager::UnInit();
 }
 
 

@@ -188,6 +188,7 @@ else
     CXXFILES +=	ewolFontFreeType.cpp
 endif
 CXXFILES +=		ewolWidget.cpp \
+				ewolWidgetManager.cpp \
 				ewolWindows.cpp
 # list of widgets :
 CXXFILES +=		widget/ewolButton.cpp \

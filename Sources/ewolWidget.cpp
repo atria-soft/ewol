@@ -23,6 +23,7 @@
  */
 
 #include <ewolWidget.h>
+#include <ewolWidgetManager.h>
 
 #undef __class__
 #define __class__	"ewol::Widget"
@@ -44,12 +45,12 @@ ewol::Widget::Widget(void)
 	SetFillY();
 	m_genericDraw = true;
 	m_specificDraw = false;
-	
+	ewol::widgetManager::Add(this);
 }
 
 ewol::Widget::~Widget(void)
 {
-	
+	ewol::widgetManager::Rm(this);
 }
 
 
@@ -92,7 +93,7 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 					if (-1 != m_inputEvent[iii].widgetCall) {
 						ewol::Widget * tmpWidget = NULL;
 						//tmpWidget = ewol::GetWidgetWithID(newEvent.widgetCall);
-						ended = tmpWidget->OnEventAreaExternal(m_uniqueId, m_inputEvent[iii].generateEventId, x, y);
+						ended = tmpWidget->OnEventAreaExternal(ewol::widgetManager::GetId(this), m_inputEvent[iii].generateEventId, x, y);
 						if (true == ended) {
 							break;
 						}
