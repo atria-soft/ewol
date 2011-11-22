@@ -99,7 +99,7 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 	if (input.Size() <0) {
 		return;
 	}
-	int32_t sizeInit=input.Size();
+	//int32_t sizeInit=input.Size();
 	// last element :
 	coord2D_ts destPoint;
 	coord2D_ts lastElement = input[input.Size()-1];
@@ -510,7 +510,7 @@ void ewol::OObject2DColored::CirclePart(etkFloat_t x, etkFloat_t y, etkFloat_t r
 	angleStart -= 90;
 	angleStop  -= 90;
 	etkFloat_t AStart = angleStart * (M_PI)/180;
-	etkFloat_t AStop  = angleStop  * (M_PI)/180;
+	//etkFloat_t AStop  = angleStop  * (M_PI)/180;
 	etkFloat_t angleLinear = (angleStop-angleStart)* (M_PI)/180;
 	
 	int32_t nbOcurence = radius;
@@ -581,7 +581,7 @@ void ewol::OObject2DColored::DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t rad
 	angleStart -= 90;
 	angleStop  -= 90;
 	etkFloat_t AStart = angleStart * (M_PI)/180;
-	etkFloat_t AStop  = angleStop  * (M_PI)/180;
+	//etkFloat_t AStop  = angleStop  * (M_PI)/180;
 	etkFloat_t angleLinear = (angleStop-angleStart)* (M_PI)/180;
 	//EWOL_DEBUG("Write a part of disk " << angleStart << " -> " << angleStop << "  ocurence=" << (angleLinear*180/(M_PI)) );
 	

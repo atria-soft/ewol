@@ -134,12 +134,6 @@ void ewol::Test::OnRegenerateDisplay(void)
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
-	color_ts textColorFg;
-	textColorFg.red = 0.0;
-	textColorFg.green = 0.0;
-	textColorFg.blue = 0.0;
-	textColorFg.alpha = 1.0;
-	
 	// Regenerate the event Area:
 	EventAreaRemoveAll();
 	coord origin;
