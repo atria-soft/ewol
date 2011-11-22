@@ -25,7 +25,7 @@
 #include <widget/ewolButton.h>
 
 #include <ewolOObject.h>
-
+#include <ewolWidgetManager.h>
 
 
 const char * const ewolEventButtonPressed    = "ewol Button Pressed";
@@ -49,6 +49,7 @@ void ewol::Button::Init(void)
 	m_textColorBg.green = 0.0;
 	m_textColorBg.blue  = 0.0;
 	m_textColorBg.alpha = 0.25;
+	SetCanHaveFocus(true);
 }
 
 ewol::Button::Button(void)
@@ -172,8 +173,23 @@ bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFl
 	if(ewolEventButtonPressed == generateEventId) {
 		EWOL_INFO("BT pressed ... " << m_label);
 		eventIsOK = true;
+		ewol::widgetManager::FocusKeep(this);
 	} else if(ewolEventButtonEnter == generateEventId) {
 		OnRegenerateDisplay();
 	}
 	return eventIsOK;
 }
+
+
+bool ewol::Button::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+{
+	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
+	if(    UTF8_data != NULL
+	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	    && UTF8_data[0] == '\r') {
+		return OnEventArea(ewolEventButtonPressed, -1, -1);
+	}
+	return false;
+}
+
+

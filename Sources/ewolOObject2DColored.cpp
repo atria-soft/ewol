@@ -84,6 +84,7 @@ void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord
 		return;
 	}
 	coord2D_ts basePoint = input[0];
+	// TODO : Regenerate a linear poligone generation
 	for (int32_t iii=1; iii<input.Size()-1; iii++) {
 		output.PushBack(basePoint);
 		output.PushBack(input[iii]);
@@ -451,6 +452,7 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 
 void ewol::OObject2DColored::RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness)
 {
+	// TODO : This did not manage the thickness of the line ...
 	Line(x,   y,   x+w, y,   thickness);
 	Line(x+w, y,   x+w, y+h, thickness);
 	Line(x+w, y+h, x,   y+h, thickness);
@@ -552,6 +554,7 @@ void ewol::OObject2DColored::Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius)
 		nbOcurence = 15;
 	}
 
+	// TODO : Generate a poligone instead if this ...
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		SetPoint(x, y);
 		
@@ -588,7 +591,7 @@ void ewol::OObject2DColored::DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t rad
 		nbOcurence = 15;
 	}
 	
-
+	// TODO : Generate a poligone instead if this ...
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		SetPoint(x, y);
 		

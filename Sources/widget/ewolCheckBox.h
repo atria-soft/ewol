@@ -55,6 +55,7 @@ namespace ewol {
 		public:
 			//virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]);
 	};
 };
 

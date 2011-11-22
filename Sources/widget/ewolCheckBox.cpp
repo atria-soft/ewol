@@ -26,6 +26,8 @@
 #include <widget/ewolCheckBox.h>
 
 #include <ewolOObject.h>
+#include <ewolWidgetManager.h>
+
 
 const char * ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 
@@ -45,6 +47,7 @@ void ewol::CheckBox::Init(void)
 	m_textColorBg.blue  = 1.0;
 	m_textColorBg.alpha = 1.0;
 	m_value = false;
+	SetCanHaveFocus(true);
 }
 
 ewol::CheckBox::CheckBox(void)
@@ -109,7 +112,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 	int32_t fontHeight = ewol::GetHeight(fontId);
 	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
-	int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
+	//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 	tmpText->Text(25, posy+3, m_label.c_str());
 	
 	
@@ -151,6 +154,7 @@ bool ewol::CheckBox::OnEventArea(const char * generateEventId, etkFloat_t x, etk
 	bool eventIsOK = false;
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
 	if(ewolEventCheckBoxClicked == generateEventId) {
+		ewol::widgetManager::FocusKeep(this);
 		EWOL_INFO("CB pressed ... " << m_label);
 		if(true == m_value) {
 			m_value = false;
@@ -162,3 +166,17 @@ bool ewol::CheckBox::OnEventArea(const char * generateEventId, etkFloat_t x, etk
 	}
 	return eventIsOK;
 }
+
+bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+{
+	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
+	if(    UTF8_data != NULL
+	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	    && (    UTF8_data[0] == '\r'
+	         || UTF8_data[0] == ' ')
+	       ) {
+		return OnEventArea(ewolEventCheckBoxClicked, -1, -1);
+	}
+	return false;
+}
+

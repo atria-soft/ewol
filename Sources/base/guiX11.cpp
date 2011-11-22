@@ -25,6 +25,7 @@
 
 #include <ewolDebug.h>
 #include <etkString.h>
+#include <ewolWidgetManager.h>
 #include <guiX11.h>
 
 #include <stdlib.h>
@@ -642,17 +643,25 @@ namespace guiAbstraction {
 									break;
 								case KeyPress:
 								case KeyRelease:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+									//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 									{
 										char buf[11];
 										KeySym keysym;
 										XComposeStatus status;
 										int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
 										buf[count] = '\0';
-										if(event.type == KeyPress) {
-											// TODO : set the char here...
-										} else {
-											// TODO : set the char here...
+										// Get the current Focused Widget :
+										ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+										if (NULL != tmpWidget) {
+											if(event.type == KeyPress) {
+												// TODO : set the char here...
+												EWOL_DEBUG("X11 PRESSED : \"" << buf << "\" size=" << count);
+												tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, buf);
+											} else {
+												// TODO : set the char here...
+												EWOL_DEBUG("X11 Release : \"" << buf << "\" size=" << count);
+												tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, buf);
+											}
 										}
 										break;
 									}
