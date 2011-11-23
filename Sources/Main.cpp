@@ -25,6 +25,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/Font.h>
+#include <ewol/themeManager.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/SizerHori.h>
@@ -100,7 +101,7 @@ int main(int argc, char *argv[])
 	*/
 	ewol::SetFontFolder("Font");
 	ewol::SetDefaultFont("freefont/FreeMono", 14);
-	
+	ewol::theme::LoadDefault("dataTest/exemple.eol");
 	
 	Plop * myWindowsExample = new Plop();
 	

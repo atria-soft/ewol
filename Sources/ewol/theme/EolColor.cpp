@@ -23,7 +23,65 @@
  */
 
 
+#include <ewol/theme/EolColor.h>
+
 #undef __class__
 #define __class__	"ewol::theme::EolColor"
 
 
+
+ewol::theme::EolColor::EolColor(void)
+{
+	
+}
+
+
+ewol::theme::EolColor::~EolColor(void)
+{
+	
+}
+
+
+void ewol::theme::EolColor::Load(const char * data, int32_t len)
+{
+	
+}
+
+
+etk::String ewol::theme::EolColor::GetName(void)
+{
+	return m_name;
+}
+
+
+void ewol::theme::EolColor::SetName(etk::String & newName)
+{
+	m_name = newName;
+}
+
+
+bool ewol::theme::EolColor::HasName(etk::String & newName)
+{
+	return m_name == newName;
+}
+
+
+color_ts ewol::theme::EolColor::Get(void)
+{
+	return m_color;
+}
+
+
+void ewol::theme::EolColor::Set(color_ts newColor)
+{
+	m_color = newColor;
+}
+
+
+void ewol::theme::EolColor::Set(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha)
+{
+	m_color.red = red;
+	m_color.green = green;
+	m_color.blue = blue;
+	m_color.alpha = alpha;
+}

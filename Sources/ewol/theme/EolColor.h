@@ -26,5 +26,34 @@
 #ifndef __EWOL_THEME_EOL_COLOR_H__
 #define __EWOL_THEME_EOL_COLOR_H__
 
+
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <etk/File.h>
+#include <ewol/OObject.h>
+
+
+namespace ewol {
+	namespace theme {
+		class EolColor {
+			public:
+				EolColor(void);
+				virtual ~EolColor(void);
+				void Load(const char * data, int32_t len);
+				
+				etk::String GetName(void);
+				void SetName(etk::String & newName);
+				bool HasName(etk::String & newName);
+				color_ts Get(void);
+				void Set(color_ts newColor);
+				void Set(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1);
+			private:
+				color_ts    m_color;
+				etk::String m_name;
+		};
+	};
+};
+
+
 #endif
 

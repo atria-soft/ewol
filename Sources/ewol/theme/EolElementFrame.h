@@ -27,5 +27,35 @@
 #ifndef __EWOL_THEME_EOL_ELEMENT_FRAME_H__
 #define __EWOL_THEME_EOL_ELEMENT_FRAME_H__
 
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <etk/File.h>
+#include <ewol/OObject.h>
+#include <ewol/theme/EolColor.h>
+
+
+namespace ewol {
+	namespace theme {
+		class EolElementFrame {
+			public:
+				EolElementFrame(void) { };
+				virtual ~EolElementFrame(void) { };
+				/*
+				void Load(etk::File & newFile) { };
+				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) {};
+				int32_t GetNbFrame(int32_t id) {return 0;};
+				int32_t GetFrameId(int32_t id, etk::String & frameName) {return 0;};
+				int32_t GetObjectId(etk::String name) { return -1; };
+				*/
+			private:
+				etk::VectorType<ewol::theme::EolBase*> m_description; // all element to draw the image ...
+			public:
+				// acces to manage and create object ==> drawing system 
+				
+		};
+	};
+};
+
+
 #endif
 

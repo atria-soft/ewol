@@ -6,7 +6,7 @@ FileType=Single
 # Version : 
 version=1.0
 
-<element=plop>
+<plop> # name of the ELEMENT ....
 	# Number of sub frame of the element (default 1)
 	NbFrame=2
 	# Element display Ratio : ratio = x/y (default 1.0)
@@ -24,7 +24,7 @@ version=1.0
 	#    - #RRGGBBAA        ==> in hexa 0x00<=x<=0xFF
 	#    - R.R;G.G;B.B      ==> in double 0<=x<=1
 	#    - R.R;G.G;B.B;A.A  ==> in double 0<=x<=1
-	#    - &NameColor       ==> searche internal color of the element and after global color ...
+	#    - &NameColor       ==> search internal color of the element and after global color ...
 	[Colors]
 		colorName=1.0;1.0;1.0;1.0
 		Background=0.0;0.000512;1.0;0.755562535

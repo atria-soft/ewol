@@ -41,17 +41,17 @@ namespace ewol {
 	namespace theme {
 		class Theme {
 			public:
-				Theme(void) { };
-				virtual ~Theme(void) { };
-				void Load(etk::File & newFile) { };
-				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) {};
-				int32_t GetNbFrame(int32_t id) {return 0;};
-				int32_t GetFrameId(int32_t id, etk::String & frameName) {return 0;};
-				int32_t GetObjectId(etk::String name) { return -1; };
+				Theme(void);
+				virtual ~Theme(void);
+				void Load(etk::File & newFile, bool defaultTheme=false);
+				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				int32_t GetNbFrame(int32_t id);
+				int32_t GetFrameId(int32_t id, etk::String & frameName);
+				int32_t GetObjectId(etk::String name);
 			private:
-				//etk::VectorType<ewol::theme::EolColor*>    m_listColor;
-				//etk::VectorType<ewol::theme::EolBase*>     m_listGroup;
-				//etk::VectorType<ewol::theme::EolElement*>  m_listElement;
+				etk::VectorType<ewol::theme::EolColor*>    m_listColor;
+				etk::VectorType<ewol::theme::EolBase*>     m_listGroup;
+				etk::VectorType<ewol::theme::EolElement*>  m_listElement;
 			public:
 				// acces to manage and create object ==> drawing system 
 				

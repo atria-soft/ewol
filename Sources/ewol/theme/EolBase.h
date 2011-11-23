@@ -27,5 +27,21 @@
 #ifndef __EWOL_THEME_EOL_BASE__H__
 #define __EWOL_THEME_EOL_BASE__H__
 
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <ewol/OObject.h>
+
+
+namespace ewol {
+	namespace theme {
+		class EolBase {
+			public:
+				EolBase(void) { };
+				virtual ~EolBase(void) { };
+		};
+	};
+};
+
+
 #endif
 

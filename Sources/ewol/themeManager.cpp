@@ -27,49 +27,39 @@
 
 
 #undef __class__
-#define __class__	"ewol::theme::"
+#define __class__	"ewol::theme"
 
-static ewol::theme::Theme defaultTheme;
-static ewol::theme::Theme userTheme;
+static ewol::theme::Theme localTheme;
 
 void ewol::theme::Init(void)
 {
-	
+	EWOL_INFO("Init theme system");
 }
 
 
 void ewol::theme::UnInit(void)
 {
-	
+	EWOL_INFO("Un-Init theme system");
 }
 
 
 void ewol::theme::LoadDefault(etk::File filename)
 {
-	defaultTheme.Load(filename);
+	EWOL_INFO("Load default Theme : " << filename);
+	localTheme.Load(filename, true);
 }
 
 
 void ewol::theme::Load(etk::File filename)
 {
-	userTheme.Load(filename);
+	EWOL_INFO("Add personal theme : " << filename);
+	localTheme.Load(filename, false);
 }
 
-// if 0 ==> error not fined ...
-// if <0 ==> default theme
-// if >0 ==> user theme
+
 int32_t ewol::theme::GetObjectId(etk::String name)
 {
-	int32_t val = userTheme.GetObjectId(name);
-	if (-1 == val) {
-		val = defaultTheme.GetObjectId(name);
-		if (-1 == val) {
-			return 0;
-		} else {
-			return val*(-1);
-		}
-	}
-	return val+1;
+	return localTheme.GetObjectId(name);
 }
 
 // ???? GetObjectType(int32_t id);
@@ -77,37 +67,27 @@ int32_t ewol::theme::GetObjectId(etk::String name)
 
 void ewol::theme::Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
-	if (id<=0) {
-		id *= -1;
-		defaultTheme.Generate(id, frameId, newObject, posX, posY, sizeX, sizeY);
-	} else {
-		userTheme.Generate(id+1, frameId, newObject, posX, posY, sizeX, sizeY);
+	if (id<0) {
+		return;
 	}
+	localTheme.Generate(id, frameId, newObject, posX, posY, sizeX, sizeY);
 }
 
 
 int32_t ewol::theme::GetNbFrame(int32_t id)
 {
-	if (id==0) {
+	if (id<0) {
 		return 0;
-	} else if (id<=0) {
-		id *= -1;
-		return defaultTheme.GetNbFrame(id);
-	} else {
-		return userTheme.GetNbFrame(id+1);
 	}
+	return localTheme.GetNbFrame(id);
 }
 
 
 int32_t ewol::theme::GetFrameId(int32_t id, etk::String & frameName)
 {
-	if (id==0) {
+	if (id<0) {
 		return 0;
-	} else if (id<=0) {
-		id *= -1;
-		return defaultTheme.GetFrameId(id, frameName);
-	} else {
-		return userTheme.GetFrameId(id+1, frameName);
 	}
+	return localTheme.GetFrameId(id, frameName);
 }
 

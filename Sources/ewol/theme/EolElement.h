@@ -27,7 +27,14 @@
 #ifndef __EWOL_THEME_EOL_ELEMENT_H__
 #define __EWOL_THEME_EOL_ELEMENT_H__
 
-/*
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <etk/File.h>
+#include <ewol/OObject.h>
+#include <ewol/theme/EolColor.h>
+#include <ewol/theme/EolElementFrame.h>
+
+
 namespace ewol {
 	namespace theme {
 		class EolElement {
@@ -40,17 +47,21 @@ namespace ewol {
 				int32_t GetNbFrame(int32_t id) {return 0;};
 				int32_t GetFrameId(int32_t id, etk::String & frameName) {return 0;};
 				int32_t GetObjectId(etk::String name) { return -1; };
-				* /
+				*/
 			private:
-				//etk::VectorType<ewol::theme::EolColor*>         m_listColor;
-				//etk::VectorType<ewol::theme::EolBase*>          m_listGroup;
-				//etk::VectorType<ewol::theme::EolElementFrame*>  m_listElement;
+				etk::VectorType<ewol::theme::EolColor*>         m_listColor;
+				etk::VectorType<ewol::theme::EolBase*>          m_listGroup;
+				etk::VectorType<ewol::theme::EolElementFrame*>  m_listElement;
+				etkFloat_t    m_ratio;
+				bool          m_clipX;
+				bool          m_clipY;
+				coord2D_ts    m_internalElemX;
+				coord2D_ts    m_internalElemY;
 			public:
 				// acces to manage and create object ==> drawing system 
 				
 		};
 	};
 };
-*/
 #endif
 
