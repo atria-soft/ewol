@@ -199,6 +199,20 @@ CXXFILES +=		ewol/widget/Button.cpp \
 				ewol/widget/SizerVert.cpp
 # only to test  son internal element ...
 CXXFILES +=		ewol/widget/Test.cpp
+# theme management :
+CXXFILES +=		ewol/themeManager.cpp \
+				ewol/theme/Theme.cpp \
+				ewol/theme/EolElement.cpp \
+				ewol/theme/EolElementFrame.cpp \
+				ewol/theme/EolColor.cpp \
+				ewol/theme/EolBase.cpp \
+				ewol/theme/EolBaseCircle.cpp \
+				ewol/theme/EolBaseCirclePart.cpp \
+				ewol/theme/EolBaseLine.cpp \
+				ewol/theme/EolBasePolygone.cpp \
+				ewol/theme/EolBaseRect.cpp \
+				ewol/theme/EolBaseTriangle.cpp
+
 
 
 # Ewol Test Software :
@@ -244,7 +258,7 @@ build: .encadrer .versionFile $(OUTPUT_NAME)
 
 
 .versionFile:
-	@rm -f $(OBJECT_DIRECTORY)/ewol.o
+	@rm -f $(OBJECT_DIRECTORY)/ewol/ewol.o
 
 # build C++
 $(OBJECT_DIRECTORY)/%.o: $(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)

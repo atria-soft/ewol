@@ -23,22 +23,23 @@
  */
 
 
-#include "ewol/ewol.h"
-#include "ewol/Font.h"
-#include "ewol/WidgetManager.h"
+#include <ewol/ewol.h>
+#include <ewol/Font.h>
+#include <ewol/WidgetManager.h>
+#include <ewol/themeManager.h>
 
 #if __PLATFORM__ == X11
-	#include "base/guiX11.h"
+	#include <base/guiX11.h>
 #elif __PLATFORM__ == DoubleBuffer
-	#include "base/guiDoubleBuffer.h"
+	#include <base/guiDoubleBuffer.h>
 #elif __PLATFORM__ == Android
-	#include "base/guiAndroid.h"
+	#include <base/guiAndroid.h>
 #elif __PLATFORM__ == AndroidTablet
-	#include "base/guiAndroidTablet.h"
+	#include <base/guiAndroidTablet.h>
 #elif __PLATFORM__ == IPhone
-	#include "base/guiIPhone.h"
+	#include <base/guiIPhone.h>
 #elif __PLATFORM__ == IPad
-	#include "base/guiIPad.h"
+	#include <base/guiIPad.h>
 #else
 	#error you need to specify a platform ...
 #endif
@@ -51,6 +52,7 @@ void ewol::Init(int argc, char *argv[])
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
 	guiAbstraction::Init(argc, argv);
+	ewol::theme::Init();
 	ewol::widgetManager::Init();
 	ewol::InitFont();
 }
@@ -65,6 +67,7 @@ void ewol::UnInit(void)
 	guiAbstraction::UnInit();
 	ewol::UnInitFont();
 	ewol::widgetManager::UnInit();
+	ewol::theme::UnInit();
 }
 
 
