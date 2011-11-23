@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkDebugInternal.cpp
+ * @file etk/DebugInternal.cpp
  * @brief Ewol Tool Kit : log wrapper (sources)
  * @author Edouard DUPIN
  * @date 19/10/2011

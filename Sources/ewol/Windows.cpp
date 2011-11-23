@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolWindows.cpp
+ * @file ewol/Windows.cpp
  * @brief ewol window system (sources)
  * @author Edouard DUPIN
  * @date 20/10/2011
@@ -22,14 +22,14 @@
  *******************************************************************************
  */
 
-#include <etkTypes.h>
-#include <etkString.h>
-#include <ewolWidget.h>
-#include <ewolWindows.h>
-#include <ewolOObject.h>
-#include <ewolTexture.h>
-#include <ewolFont.h>
-#include <ewol.h>
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <ewol/Widget.h>
+#include <ewol/Windows.h>
+#include <ewol/OObject.h>
+#include <ewol/Texture.h>
+#include <ewol/Font.h>
+#include <ewol/ewol.h>
 #include <GL/gl.h>
 
 

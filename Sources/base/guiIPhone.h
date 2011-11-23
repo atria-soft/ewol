@@ -26,7 +26,7 @@
 #ifndef __GUI_ABSTRACTION_H__
 #define __GUI_ABSTRACTION_H__
 
-#include <etkTypes.h>
+#include <etk/Types.h>
 
 namespace guiAbstraction
 {

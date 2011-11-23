@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject2DTextured.cpp
+ * @file ewol/OObject/2DTextured.cpp
  * @brief ewol OpenGl Object system (Sources)
  * @author Edouard DUPIN
  * @date 09/11/2011
@@ -22,8 +22,8 @@
  *******************************************************************************
  */
 
-#include <ewolOObject2DTextured.h>
-#include <ewolTexture.h>
+#include <ewol/OObject/2DTextured.h>
+#include <ewol/Texture.h>
 #include <GL/gl.h>
 
 #undef __class__

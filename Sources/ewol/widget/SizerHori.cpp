@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolSizerHori.cpp
+ * @file ewol/widget/SizerHori.cpp
  * @brief ewol hirisantal sizer widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -24,7 +24,7 @@
 
 
 
-#include <widget/ewolSizerHori.h>
+#include <ewol/widget/SizerHori.h>
 
 #undef __class__
 #define __class__	"ewol::SizerHori"

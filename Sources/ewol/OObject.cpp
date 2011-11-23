@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject.cpp
+ * @file ewol/OObject.cpp
  * @brief ewol OpenGl Object system (Sources)
  * @author Edouard DUPIN
  * @date 24/10/2011
@@ -22,9 +22,9 @@
  *******************************************************************************
  */
 
-#include <etkTypes.h>
-#include <etkString.h>
-#include <ewolOObject.h>
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <ewol/OObject.h>
 #include <GL/gl.h>
 
 

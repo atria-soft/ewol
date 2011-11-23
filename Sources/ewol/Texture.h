@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolTexture.h
+ * @file ewol/Texture.h
  * @brief ewol Texture loading system (header)
  * @author Edouard DUPIN
  * @date 28/10/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_TEXTURE_H__
 #define __EWOL_TEXTURE_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <etkFile.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <etk/File.h>
 
 namespace ewol
 {

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkFile.h
+ * @file etk/File.h
  * @brief Ewol Tool Kit : File folder and name abstraction (header)
  * @author Edouard DUPIN
  * @date 16/07/2011
@@ -25,7 +25,7 @@
 #ifndef __ETK_FILE_H__
 #define __ETK_FILE_H__
 
-#include <etkString.h>
+#include <etk/String.h>
 
 #define MAX_FILE_NAME      (10240)
 

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolSizerVert.cpp
+ * @file ewol/widget/SizerVert.cpp
  * @brief ewol vertical sizer widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -23,7 +23,7 @@
  */
 
 
-#include <widget/ewolSizerVert.h>
+#include <ewol/widget/SizerVert.h>
 
 
 #undef __class__

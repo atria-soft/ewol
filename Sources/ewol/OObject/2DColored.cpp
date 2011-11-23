@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject2DColored.cpp
+ * @file ewol/OObject/2DColored.cpp
  * @brief ewol OpenGl Object system (Sources)
  * @author Edouard DUPIN
  * @date 09/11/2011
@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <ewolOObject2DColored.h>
+#include <ewol/OObject/2DColored.h>
 #include <GL/gl.h>
 #include <math.h>
 

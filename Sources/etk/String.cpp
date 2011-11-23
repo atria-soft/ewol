@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkString.cpp
+ * @file etk/String.cpp
  * @brief Ewol Tool Kit : normal sting management... (sources)
  * @author Edouard DUPIN
  * @date 26/01/2011
@@ -22,8 +22,8 @@
  *******************************************************************************
  */
 
-#include <etkString.h>
-#include <etkMemory.h>
+#include <etk/String.h>
+#include <etk/Memory.h>
 
 
 #undef __class__

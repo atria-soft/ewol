@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkDebug.h
+ * @file etk/Debug.h
  * @brief Ewol Tool Kit : log implementation
  * @author Edouard DUPIN
  * @date 08/06/2010
@@ -26,7 +26,7 @@
 #define __ETK_DEBUG_H__
 
 #include <iostream>
-#include <etkTypes.h>
+#include <etk/Types.h>
 
 // Log Message System For EDN
 void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* funcName, const char* libName);

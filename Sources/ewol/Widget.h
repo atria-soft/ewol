@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolWidget.h
+ * @file ewol/Widget.h
  * @brief basic ewol Widget (header)
  * @author Edouard DUPIN
  * @date 18/10/2011
@@ -25,10 +25,10 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolOObject.h>
-#include <etkVectorType.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/OObject.h>
+#include <etk/VectorType.h>
 
 namespace ewol {
 	extern "C" {

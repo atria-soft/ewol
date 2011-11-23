@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkExp.cpp
+ * @file etk/RegExp.cpp
  * @brief Ewol Tool Kit : Regular expression annalyser (sources)
  * @author Edouard DUPIN
  * @date 04/04/2011
@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <etkRegExp.h>
+#include <etk/RegExp.h>
 
 
 

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkVectorType.h
+ * @file etk/VectorType.h
  * @brief Ewol Tool Kit : Basic VectorType for direct data insertion (template)
  * @author Edouard DUPIN
  * @date 07/04/2011
@@ -25,9 +25,9 @@
 #ifndef __ETK_VECTOR_TYPE_H__
 #define __ETK_VECTOR_TYPE_H__
 
-#include <etkTypes.h>
-#include <etkDebugInternal.h>
-#include <etkMemory.h>
+#include <etk/Types.h>
+#include <etk/DebugInternal.h>
+#include <etk/Memory.h>
 
 #undef __class__
 #define __class__	"etk::VectorType"

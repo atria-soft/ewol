@@ -23,8 +23,8 @@
  */
 
 
-#include <ewolDebug.h>
-#include <guiDoubleBuffer.h>
+#include <ewol/Debug.h>
+#include <base/guiDoubleBuffer.h>
 
 #undef __class__
 #define __class__ "guiAbstraction"

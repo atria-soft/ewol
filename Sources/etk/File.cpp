@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkFile.cpp
+ * @file etk/File.cpp
  * @brief Ewol Tool Kit : File folder and name abstraction (Sources)
  * @author Edouard DUPIN
  * @date 16/07/2011
@@ -23,9 +23,9 @@
  */
 
 
-#include <etkTypes.h>
-#include <etkDebugInternal.h>
-#include <etkFile.h>
+#include <etk/Types.h>
+#include <etk/DebugInternal.h>
+#include <etk/File.h>
 
 
 #undef __class__

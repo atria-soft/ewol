@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolWindows.h
+ * @file ewol/Windows.h
  * @brief ewol window system (header)
  * @author Edouard DUPIN
  * @date 20/10/2011
@@ -25,11 +25,11 @@
 #ifndef __EWOL_WINDOWS_H__
 #define __EWOL_WINDOWS_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <etkVectorType.h>
-#include <etkSingleton.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <etk/VectorType.h>
+#include <etk/Singleton.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class Windows :public ewol::Widget

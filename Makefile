@@ -167,38 +167,38 @@ MAKE_DEPENDENCE=Makefile
 ###############################################################################
 
 # Ewol Tool Kit :
-CXXFILES +=		etk/etkDebug.cpp \
-				etk/etkDebugInternal.cpp \
-				etk/etkMemory.cpp \
-				etk/etkString.cpp \
-				etk/etkFile.cpp \
-				etk/etkRegExp.cpp
+CXXFILES +=		etk/Debug.cpp \
+				etk/DebugInternal.cpp \
+				etk/Memory.cpp \
+				etk/String.cpp \
+				etk/File.cpp \
+				etk/RegExp.cpp
 
 # Ewol Sources :
-CXXFILES +=		ewol.cpp \
-				ewolDebug.cpp \
-				ewolOObject.cpp \
-				ewolOObject2DText.cpp \
-				ewolOObject2DColored.cpp \
-				ewolOObject2DTextured.cpp \
-				ewolTexture.cpp
+CXXFILES +=		ewol/ewol.cpp \
+				ewol/Debug.cpp \
+				ewol/OObject.cpp \
+				ewol/OObject/2DText.cpp \
+				ewol/OObject/2DColored.cpp \
+				ewol/OObject/2DTextured.cpp \
+				ewol/Texture.cpp
 ifeq ("$(FREETYPE_CFLAGS)", "")
-    CXXFILES +=	ewolFontBitmap.cpp
+    CXXFILES +=	ewol/FontBitmap.cpp
 else
-    CXXFILES +=	ewolFontFreeType.cpp
+    CXXFILES +=	ewol/FontFreeType.cpp
 endif
-CXXFILES +=		ewolWidget.cpp \
-				ewolWidgetManager.cpp \
-				ewolWindows.cpp
+CXXFILES +=		ewol/Widget.cpp \
+				ewol/WidgetManager.cpp \
+				ewol/Windows.cpp
 # list of widgets :
-CXXFILES +=		widget/ewolButton.cpp \
-				widget/ewolCheckBox.cpp \
-				widget/ewolEntry.cpp \
-				widget/ewolList.cpp \
-				widget/ewolSizerHori.cpp \
-				widget/ewolSizerVert.cpp
+CXXFILES +=		ewol/widget/Button.cpp \
+				ewol/widget/CheckBox.cpp \
+				ewol/widget/Entry.cpp \
+				ewol/widget/List.cpp \
+				ewol/widget/SizerHori.cpp \
+				ewol/widget/SizerVert.cpp
 # only to test  son internal element ...
-CXXFILES +=		widget/ewolTest.cpp
+CXXFILES +=		ewol/widget/Test.cpp
 
 
 # Ewol Test Software :
@@ -212,6 +212,8 @@ CXXFILES +=		Main.cpp
 LISTE_MODULES = $(sort $(dir $(CXXFILES)))
 #$(info listeModule=$(LISTE_MODULES))
 INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) 
+# overwrite if needed the directory folder : 
+INCLUDE_DIRECTORY = -I$(FILE_DIRECTORY)/
 
 ###############################################################################
 ### Build Object Files List                                                 ###
@@ -239,6 +241,7 @@ build: .encadrer .versionFile $(OUTPUT_NAME)
 	@echo $(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
 	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
+
 
 .versionFile:
 	@rm -f $(OBJECT_DIRECTORY)/ewol.o

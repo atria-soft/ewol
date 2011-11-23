@@ -23,8 +23,8 @@
  */
 
 
-#include <ewolDebug.h>
-#include <guiIPhone.h>
+#include <ewol/Debug.h>
+#include <base/guiIPhone.h>
 
 #undef __class__
 #define __class__ "guiAbstraction"

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolList.cpp
+ * @file ewol/widget/List.cpp
  * @brief ewol list widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -23,7 +23,7 @@
  */
 
 
-#include <widget/ewolList.h>
+#include <ewol/widget/List.h>
 
 #undef __class__
 #define __class__	"ewol::List"

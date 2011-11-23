@@ -23,10 +23,10 @@
  */
 
 
-#include <ewolDebug.h>
-#include <etkString.h>
-#include <ewolWidgetManager.h>
-#include <guiX11.h>
+#include <ewol/Debug.h>
+#include <etk/String.h>
+#include <ewol/WidgetManager.h>
+#include <base/guiX11.h>
 
 #include <stdlib.h>
 #include <stdio.h>

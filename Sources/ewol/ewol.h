@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewol.h
+ * @file ewol/ewol.h
  * @brief Main include of ewol (header)
  * @author Edouard DUPIN
  * @date 17/10/2011
@@ -26,10 +26,10 @@
 #ifndef __EWOL_H__
 #define __EWOL_H__
 
-#include <etkTypes.h>
-#include <etkString.h>
-#include <ewolWidget.h>
-#include <ewolWindows.h>
+#include <etk/Types.h>
+#include <etk/String.h>
+#include <ewol/Widget.h>
+#include <ewol/Windows.h>
 
 namespace ewol {
 	void Init(int32_t argc, char *argv[]);

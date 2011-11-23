@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkTypes.h
+ * @file etk/Types.h
  * @brief Ewol Tool Kit : generique define type
  * @author Edouard DUPIN
  * @date 08/06/2010

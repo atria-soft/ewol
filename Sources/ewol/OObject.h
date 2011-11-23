@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject.h
+ * @file ewol/OObject.h
  * @brief ewol OpenGl Object system (header)
  * @author Edouard DUPIN
  * @date 24/10/2011
@@ -25,11 +25,11 @@
 #ifndef __EWOL_O_OBJECT_H__
 #define __EWOL_O_OBJECT_H__
 
-#include <etkTypes.h>
-#include <etkFile.h>
-#include <ewolDebug.h>
-#include <ewolFont.h>
-#include <etkVectorType.h>
+#include <etk/Types.h>
+#include <etk/File.h>
+#include <ewol/Debug.h>
+#include <ewol/Font.h>
+#include <etk/VectorType.h>
 
 namespace ewol {
 	extern "C" {
@@ -78,7 +78,7 @@ namespace ewol {
 #endif
 
 
-#include <ewolOObject2DTextured.h>
-#include <ewolOObject2DColored.h>
-#include <ewolOObject2DText.h>
+#include <ewol/OObject/2DTextured.h>
+#include <ewol/OObject/2DColored.h>
+#include <ewol/OObject/2DText.h>
 

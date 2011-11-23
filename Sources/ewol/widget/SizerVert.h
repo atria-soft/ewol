@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolSizerVert.h
+ * @file ewol/widget/SizerVert.h
  * @brief ewol vertical sizer widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_SIZER_VERT_H__
 #define __EWOL_SIZER_VERT_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class SizerVert :public ewol::Widget

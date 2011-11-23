@@ -26,8 +26,8 @@
 #ifndef __GUI_ABSTRACTION_H__
 #define __GUI_ABSTRACTION_H__
 
-#include <etkTypes.h>
-#include <ewolWindows.h>
+#include <etk/Types.h>
+#include <ewol/Windows.h>
 
 namespace guiAbstraction
 {

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolSizerHori.h
+ * @file ewol/widget/SizerHori.h
  * @brief ewol hirisantal sizer widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_SIZER_HORI_H__
 #define __EWOL_SIZER_HORI_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class SizerHori :public ewol::Widget

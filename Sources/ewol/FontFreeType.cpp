@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolFontFreeType.cpp
+ * @file ewol/FontFreeType.cpp
  * @brief ewol Font system wrapper on freetype(sources)
  * @author Edouard DUPIN
  * @date 05/11/2011
@@ -23,9 +23,9 @@
  */
 
 
-#include <ewolFont.h>
-#include <ewolTexture.h>
-#include <etkVectorType.h>
+#include <ewol/Font.h>
+#include <ewol/Texture.h>
+#include <etk/VectorType.h>
 
 
 #include <GL/gl.h>

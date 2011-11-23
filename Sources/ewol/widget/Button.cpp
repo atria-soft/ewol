@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolButton.cpp
+ * @file ewol/widget/Button.cpp
  * @brief ewol Button widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -22,10 +22,10 @@
  *******************************************************************************
  */
 
-#include <widget/ewolButton.h>
+#include <ewol/widget/Button.h>
 
-#include <ewolOObject.h>
-#include <ewolWidgetManager.h>
+#include <ewol/OObject.h>
+#include <ewol/WidgetManager.h>
 
 
 const char * const ewolEventButtonPressed    = "ewol Button Pressed";

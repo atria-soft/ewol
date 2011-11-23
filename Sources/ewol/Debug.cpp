@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolDebug.h
+ * @file ewol/Debug.h
  * @brief Ewol : log wrapper (Sources)
  * @author Edouard DUPIN
  * @date 19/10/2010
@@ -23,6 +23,6 @@
  */
 
 
-#include <ewolDebug.h>
+#include <ewol/Debug.h>
 
 const char * ewolLibName = "ewol    ";

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolTest.cpp
+ * @file ewol/widget/Test.cpp
  * @brief ewol Test widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -22,9 +22,9 @@
  *******************************************************************************
  */
 
-#include <widget/ewolTest.h>
+#include <ewol/widget/Test.h>
 
-#include <ewolOObject.h>
+#include <ewol/OObject.h>
 
 
 

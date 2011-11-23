@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolDebug.h
+ * @file ewol/Debug.h
  * @brief Ewol : log wrapper (header)
  * @author Edouard DUPIN
  * @date 19/10/2010
@@ -25,8 +25,8 @@
 #ifndef __EWOL_DEBUG_H__
 #define __EWOL_DEBUG_H__
 
-#include <etkTypes.h>
-#include <etkDebug.h>
+#include <etk/Types.h>
+#include <etk/Debug.h>
 
 extern const char * ewolLibName;
 

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkDebugInternal.h
+ * @file etk/DebugInternal.h
  * @brief Ewol Tool Kit : log wrapper (header)
  * @author Edouard DUPIN
  * @date 19/10/2011
@@ -25,7 +25,7 @@
 #ifndef __ETK_DEBUG_INTERNAL_H__
 #define __ETK_DEBUG_INTERNAL_H__
 
-#include "etkDebug.h"
+#include "etk/Debug.h"
 
 extern const char * etkLibName;
 

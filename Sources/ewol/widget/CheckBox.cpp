@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolCheckBox.cpp
+ * @file ewol/widget/CheckBox.cpp
  * @brief ewol check-box widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -23,10 +23,10 @@
  */
 
 
-#include <widget/ewolCheckBox.h>
+#include <ewol/widget/CheckBox.h>
 
-#include <ewolOObject.h>
-#include <ewolWidgetManager.h>
+#include <ewol/OObject.h>
+#include <ewol/WidgetManager.h>
 
 
 const char * ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";

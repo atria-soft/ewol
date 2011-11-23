@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkVector.h
+ * @file etk/Vector.h
  * @brief Ewol Tool Kit : Basic etk::Vector (template)
  * @author Edouard DUPIN
  * @date 07/04/2011
@@ -25,8 +25,8 @@
 #ifndef __ETK_VECTOR_H__
 #define __ETK_VECTOR_H__
 
-#include <etkType.h>
-#include <etkMemory.h>
+#include <etk/Type.h>
+#include <etk/Memory.h>
 
 #undef __class__
 #define __class__	"etk::Vector"

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolButton.h
+ * @file ewol/widget/Button.h
  * @brief ewol Button widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_BUTTON_H__
 #define __EWOL_BUTTON_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class Button :public ewol::Widget

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolTexture.cpp
+ * @file ewol/Texture.cpp
  * @brief ewol Texture loading system (sources)
  * @author Edouard DUPIN
  * @date 28/10/2011
@@ -24,7 +24,7 @@
 
 
 
-#include <ewolTexture.h>
+#include <ewol/Texture.h>
 
 extern "C"
 {

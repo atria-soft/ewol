@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolFont.h
+ * @file ewol/Font.h
  * @brief ewol Font system (header)
  * @author Edouard DUPIN
  * @date 29/10/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_FONT_H__
 #define __EWOL_FONT_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <etkFile.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <etk/File.h>
 
 
 namespace ewol

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkSingleton.h
+ * @file etk/Singleton.h
  * @brief ewol : singleton system class
  * @author Edouard DUPIN
  * @date 04/12/2010

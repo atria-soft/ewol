@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolTest.h
+ * @file ewol/widget/Test.h
  * @brief ewol test widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_TEST_H__
 #define __EWOL_TEST_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class Test :public ewol::Widget

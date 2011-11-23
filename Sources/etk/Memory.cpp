@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkMemory.cpp
+ * @file etk/Memory.cpp
  * @brief Ewol Tool Kit : Memory implementation (Sources)
  * @author Edouard DUPIN
  * @date 19/10/2011
@@ -22,8 +22,8 @@
  *******************************************************************************
  */
 
-#include <etkTypes.h>
-#include <etkMemory.h>
+#include <etk/Types.h>
+#include <etk/Memory.h>
 
 // General 
 #if ETK_MEMORY_CHECKER > 0

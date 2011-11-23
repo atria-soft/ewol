@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolEntry.cpp
+ * @file ewol/widget/Entry.cpp
  * @brief ewol entry widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -23,7 +23,7 @@
  */
 
 
-#include <widget/ewolEntry.h>
+#include <ewol/widget/Entry.h>
 
 #undef __class__
 #define __class__	"ewol::Entry"

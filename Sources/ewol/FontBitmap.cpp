@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolFontBitmap.cpp
+ * @file ewol/FontBitmap.cpp
  * @brief ewol Font system (sources)
  * @author Edouard DUPIN
  * @date 29/10/2011
@@ -23,9 +23,9 @@
  */
 
 
-#include <ewolFont.h>
-#include <ewolTexture.h>
-#include <etkVectorType.h>
+#include <ewol/Font.h>
+#include <ewol/Texture.h>
+#include <etk/VectorType.h>
 
 
 #include <GL/gl.h>

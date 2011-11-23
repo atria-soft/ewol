@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkDebug.h
+ * @file etk/Debug.h
  * @brief Ewol Tool Kit : log implementation
  * @author Edouard DUPIN
  * @date 08/06/2010
@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <etkDebug.h>
+#include <etk/Debug.h>
 #include <time.h>
 
 // Max string size : (wide screan console nb caractere)

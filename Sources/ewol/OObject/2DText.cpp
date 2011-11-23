@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject2DText.cpp
+ * @file ewol/OObject/2DText.cpp
  * @brief ewol OpenGl Object system (Sources)
  * @author Edouard DUPIN
  * @date 09/11/2011
@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <ewolOObject2DText.h>
+#include <ewol/OObject/2DText.h>
 #include <GL/gl.h>
 
 #undef __class__

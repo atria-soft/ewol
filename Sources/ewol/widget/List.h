@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolList.h
+ * @file ewol/widget/List.h
  * @brief ewol list widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
@@ -25,9 +25,9 @@
 #ifndef __EWOL_LIST_H__
 #define __EWOL_LIST_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	class List :public ewol::Widget

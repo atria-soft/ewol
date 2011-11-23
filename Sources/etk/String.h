@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkString.h
+ * @file etk/String.h
  * @brief Ewol Tool Kit : normal sting management... (header)
  * @author Edouard DUPIN
  * @date 26/01/2011
@@ -26,7 +26,7 @@
 #define __ETK_STRING_H__
 
 #include <iostream>
-#include <etkVectorType.h>
+#include <etk/VectorType.h>
 
 namespace etk
 {

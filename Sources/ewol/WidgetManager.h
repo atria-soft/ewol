@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolWidgetManager.h
+ * @file ewol/WidgetManager.h
  * @brief basic ewol Widget Manager (Header)
  * @author Edouard DUPIN
  * @date 13/11/2011
@@ -25,11 +25,11 @@
 #ifndef __EWOL_WIDGET_MANAGER_H__
 #define __EWOL_WIDGET_MANAGER_H__
 
-#include <etkTypes.h>
-#include <ewolDebug.h>
-#include <ewolOObject.h>
-#include <etkVectorType.h>
-#include <ewolWidget.h>
+#include <etk/Types.h>
+#include <ewol/Debug.h>
+#include <ewol/OObject.h>
+#include <etk/VectorType.h>
+#include <ewol/Widget.h>
 
 namespace ewol {
 	namespace widgetManager {

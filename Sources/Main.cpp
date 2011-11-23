@@ -23,13 +23,13 @@
  */
 
 
-#include <ewol.h>
-#include <ewolFont.h>
-#include <widget/ewolButton.h>
-#include <widget/ewolCheckBox.h>
-#include <widget/ewolSizerHori.h>
-#include <widget/ewolSizerVert.h>
-#include <widget/ewolTest.h>
+#include <ewol/ewol.h>
+#include <ewol/Font.h>
+#include <ewol/widget/Button.h>
+#include <ewol/widget/CheckBox.h>
+#include <ewol/widget/SizerHori.h>
+#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/Test.h>
 
 #include <unistd.h>
 #include <stdlib.h>

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etkExp.h
+ * @file etk/RegExp.h
  * @brief Ewol Tool Kit : Regular expression annalyser (header)
  * @author Edouard DUPIN
  * @date 04/04/2011
@@ -25,11 +25,11 @@
 #ifndef __TK_REG_EXP_H__
 #define __TK_REG_EXP_H__
 
-#include <etkTypes.h>
-#include <etkDebugInternal.h>
-#include <etkMemory.h>
-#include <etkString.h>
-#include <etkVectorType.h>
+#include <etk/Types.h>
+#include <etk/DebugInternal.h>
+#include <etk/Memory.h>
+#include <etk/String.h>
+#include <etk/VectorType.h>
 
 namespace etk {
 

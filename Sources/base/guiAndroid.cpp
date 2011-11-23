@@ -25,8 +25,8 @@
 
 
 
-#include <ewolDebug.h>
-#include <guiAndroid.h>
+#include <ewol/Debug.h>
+#include <base/guiAndroid.h>
 
 #undef __class__
 #define __class__ "guiAbstraction"

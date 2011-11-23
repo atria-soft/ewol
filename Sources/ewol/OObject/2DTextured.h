@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolOObject2DTextured.h
+ * @file ewol/OObject/2DTextured.h
  * @brief ewol OpenGl Object system (header)
  * @author Edouard DUPIN
  * @date 09/11/2011
@@ -25,7 +25,7 @@
 #ifndef __EWOL_O_OBJECT_2D_TEXTURED_H__
 #define __EWOL_O_OBJECT_2D_TEXTURED_H__
 
-#include <ewolOObject.h>
+#include <ewol/OObject.h>
 
 namespace ewol {
 	class OObject2DTextured :public ewol::OObject

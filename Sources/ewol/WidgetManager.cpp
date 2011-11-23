@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewolWidgetManager.cpp
+ * @file ewol/WidgetManager.cpp
  * @brief basic ewol Widget Manager (Sources)
  * @author Edouard DUPIN
  * @date 13/11/2011
@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <ewolWidgetManager.h>
+#include <ewol/WidgetManager.h>
 
 #undef __class__
 #define __class__	"ewol::WidgetManager"

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewol.cpp
+ * @file ewol/ewol.cpp
  * @brief Main code of ewol (sources)
  * @author Edouard DUPIN
  * @date 17/10/2011
@@ -23,22 +23,22 @@
  */
 
 
-#include "ewol.h"
-#include "ewolFont.h"
-#include "ewolWidgetManager.h"
+#include "ewol/ewol.h"
+#include "ewol/Font.h"
+#include "ewol/WidgetManager.h"
 
 #if __PLATFORM__ == X11
-	#include "guiX11.h"
+	#include "base/guiX11.h"
 #elif __PLATFORM__ == DoubleBuffer
-	#include "guiDoubleBuffer.h"
+	#include "base/guiDoubleBuffer.h"
 #elif __PLATFORM__ == Android
-	#include "guiAndroid.h"
+	#include "base/guiAndroid.h"
 #elif __PLATFORM__ == AndroidTablet
-	#include "guiAndroidTablet.h"
+	#include "base/guiAndroidTablet.h"
 #elif __PLATFORM__ == IPhone
-	#include "guiIPhone.h"
+	#include "base/guiIPhone.h"
 #elif __PLATFORM__ == IPad
-	#include "guiIPad.h"
+	#include "base/guiIPad.h"
 #else
 	#error you need to specify a platform ...
 #endif
