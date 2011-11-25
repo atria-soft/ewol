@@ -93,7 +93,9 @@ DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
 X11FLAGS= -lX11 -lGL -lGLU
 # some X11 mode availlable : 
+# install package : libxxf86vm-dev
 X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
+# install package : libxrender-dev 
 #X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
 
 

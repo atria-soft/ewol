@@ -94,6 +94,7 @@ int main(int argc, char *argv[])
 {
 	
 	ewol::Init(argc, argv);
+	ewol::ChangeSize(800, 600);
 	/*
 	if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");

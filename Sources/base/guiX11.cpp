@@ -273,6 +273,8 @@ namespace guiAbstraction {
 					XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 				}
 				
+				ChangeSize(400, 300);
+				
 				return true;
 			}
 			

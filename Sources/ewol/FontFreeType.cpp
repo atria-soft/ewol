@@ -206,6 +206,7 @@ class FTFontInternal
 		{
 			// 300dpi (hight quality) 96 dpi (normal quality)
 			int32_t fontQuality = 96;
+			//int32_t fontQuality = 150;
 			//int32_t fontQuality = 300;
 			// Select Size ...
 			// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
@@ -291,6 +292,7 @@ class FTFontInternal
 					for(int32_t i=0; i < tmpWidth; i++){
 						int32_t position = 2*(   (tmpRowId *glyphMaxWidth  + i /*+ (slot->metrics.horiBearingX>>6)*/ )
 						                       + (tmpLineId*glyphMaxHeight + j + (size-(slot->metrics.horiBearingY>>6)) ) * textureWidth);
+						//EWOL_DEBUG(" BEARING=(" << i << "," << j << ") pos=" << position);
 						expanded_data[position+0] = slot->bitmap.buffer[i + tmpWidth*j];
 						expanded_data[position+1] = slot->bitmap.buffer[i + tmpWidth*j];
 					}
@@ -298,8 +300,8 @@ class FTFontInternal
 				listElement[iii].width = glyphMaxWidth;
 				listElement[iii].posStart.u = (etkFloat_t)(tmpRowId *glyphMaxWidth) / (etkFloat_t)textureWidth;
 				listElement[iii].posStart.v = (etkFloat_t)(tmpLineId*glyphMaxHeight) / (etkFloat_t)textureHeight;
-				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (etkFloat_t)textureWidth;;
-				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth ) / (etkFloat_t)textureWidth;
+				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight ) / (etkFloat_t)textureHeight;
 			}
 			// Now We Just Setup Some Texture Parameters.
 			glBindTexture( GL_TEXTURE_2D, textureId);
