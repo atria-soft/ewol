@@ -32,9 +32,11 @@
 
 ewol::theme::EolColor::EolColor(void)
 {
-	
+	m_color.red = 0.0;
+	m_color.green = 0.0;
+	m_color.blue = 0.0;
+	m_color.alpha = 1.0;
 }
-
 
 ewol::theme::EolColor::~EolColor(void)
 {
@@ -42,9 +44,47 @@ ewol::theme::EolColor::~EolColor(void)
 }
 
 
-void ewol::theme::EolColor::Load(const char * data, int32_t len)
+void ewol::theme::EolColor::Parse(TiXmlNode * pNode)
 {
-	
+	m_name = pNode->ToElement()->Attribute("name");
+	const char *color = pNode->ToElement()->Attribute("val");
+	if (NULL != color) {
+		if (color[0] == '#') {
+			// Find a direct Color
+			unsigned int r=0;
+			unsigned int v=0;
+			unsigned int b=0;
+			unsigned int a=0xFF;
+			sscanf(color, "#%02x%02x%02x%02x", &r,&v,&b,&a);
+			m_color.red = (etkFloat_t)r/255.0;
+			m_color.green = (etkFloat_t)v/255.0;
+			m_color.blue = (etkFloat_t)b/255.0;
+			m_color.alpha = (etkFloat_t)a/255.0;
+		} else if (color[0] == '&') {
+			//find a reference Color
+			
+		} else {
+			// must be a float color
+			double r=0.0;
+			double v=0.0;
+			double b=0.0;
+			double a=1.0;
+			sscanf(color, "%lf;%lf;%lf;%lf", &r,&v,&b,&a);
+			m_color.red = (etkFloat_t)r;
+			m_color.green = (etkFloat_t)v;
+			m_color.blue = (etkFloat_t)b;
+			m_color.alpha = (etkFloat_t)a;
+			if (m_color.red>1.0) { m_color.red = 1.0; }
+			if (m_color.green>1.0) { m_color.green = 1.0; }
+			if (m_color.blue>1.0) { m_color.blue = 1.0; }
+			if (m_color.alpha>1.0) { m_color.alpha = 1.0; }
+		}
+	}
+	if (NULL != color) {
+		EWOL_INFO("COLOR name=\"" << m_name << "\" \"" << color << "\" ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
+	} else {
+		EWOL_INFO("COLOR name=\"" << m_name << "\" \"\"???? ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
+	}
 }
 
 

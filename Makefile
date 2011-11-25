@@ -168,6 +168,12 @@ MAKE_DEPENDENCE=Makefile
 ### Files Listes                                                            ###
 ###############################################################################
 
+# tiny XML (extern OPEN Sources) :
+CXXFILES +=		tinyXML/tinyxml.cpp \
+				tinyXML/tinyxmlparser.cpp \
+				tinyXML/tinyxmlerror.cpp \
+				tinyXML/tinystr.cpp
+
 # Ewol Tool Kit :
 CXXFILES +=		etk/Debug.cpp \
 				etk/DebugInternal.cpp \

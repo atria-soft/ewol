@@ -31,6 +31,7 @@
 #include <etk/String.h>
 #include <etk/File.h>
 #include <ewol/OObject.h>
+#include <tinyXML/tinyxml.h>
 
 
 namespace ewol {
@@ -39,8 +40,8 @@ namespace ewol {
 			public:
 				EolColor(void);
 				virtual ~EolColor(void);
-				void Load(const char * data, int32_t len);
 				
+				void Parse(TiXmlNode * pNode);
 				etk::String GetName(void);
 				void SetName(etk::String & newName);
 				bool HasName(etk::String & newName);

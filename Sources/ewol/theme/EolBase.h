@@ -30,14 +30,22 @@
 #include <etk/Types.h>
 #include <etk/String.h>
 #include <ewol/OObject.h>
+#include <tinyXML/tinyxml.h>
 
 
 namespace ewol {
 	namespace theme {
 		class EolBase {
 			public:
-				EolBase(void) { };
-				virtual ~EolBase(void) { };
+				EolBase(void);
+				virtual ~EolBase(void);
+				
+				void Parse(TiXmlNode * pNode);
+				etk::String GetName(void);
+				void SetName(etk::String & newName);
+				bool HasName(etk::String & newName);
+			private:
+				etk::String m_name;
 		};
 	};
 };

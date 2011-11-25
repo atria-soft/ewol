@@ -50,7 +50,7 @@ namespace ewol {
 				int32_t GetObjectId(etk::String name);
 			private:
 				etk::VectorType<ewol::theme::EolColor*>    m_listColor;
-				etk::VectorType<ewol::theme::EolBase*>     m_listGroup;
+				etk::VectorType<ewol::theme::EolBase*>     m_listGroup; // TODO : we need really to star a frame here ...
 				etk::VectorType<ewol::theme::EolElement*>  m_listElement;
 			public:
 				// acces to manage and create object ==> drawing system 

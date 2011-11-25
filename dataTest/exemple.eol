@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eol>
 	<!-- can have "color" and "group" that is consider as global ... -->
+	<color/>
+	<color name="MEGAMERDIQUE"/>
+	<color name="GenBG"			val="#FF0000"/>
+	<color name="GenFG"			val="#FF000055"/>
+	<color name="GenBorder"		val="1.0;0.000512;1.0;0.755562535"/>
+	<color name="GenBorder"		val="5.0;0.000512;1.0"/>
+	
+	<group name="Gen Rect system ... ">
+		<rect color="..."
+		      position="0.53;0.56"
+		      size="0.22;0.11"
+		/>
+		<Line color="..."
+		      positionStart="0.53;0.56"
+		      positionStop="0.22;0.11"
+		      thickness="0.05"
+		/>
+		<!-- and more basic display -->
+	</group>
 	
 	<!-- example of a single element -->
 	<element name="plop"

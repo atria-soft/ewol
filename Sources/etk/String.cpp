@@ -98,6 +98,10 @@ etk::String::String(const char* inputData, int32_t len)
 
 void etk::String::Set(const char * inputData, int32_t len)
 {
+	if (NULL == inputData) {
+		// nothing to add ... 
+		return;
+	}
 	// overwrite the len if needed : 
 	if ((-1) == len) {
 		len = strlen(inputData);
@@ -190,6 +194,9 @@ const etk::String& etk::String::operator= (const char * inputData)
 {
 	m_data.Clear();
 	m_data.PushBack('\0');
+	if (NULL == inputData) {
+		return *this;
+	}
 	// calculate the size : 
 	uint32_t len = strlen(inputData);
 	// check the new size ...
