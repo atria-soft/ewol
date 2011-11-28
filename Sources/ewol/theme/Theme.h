@@ -26,6 +26,12 @@
 
 #ifndef __EWOL_EOL_THEME_H__
 #define __EWOL_EOL_THEME_H__
+namespace ewol {
+	namespace theme {
+		class Theme;
+		class EolElement;
+	}
+}
 
 #include <etk/Types.h>
 #include <etk/String.h>
@@ -44,14 +50,16 @@ namespace ewol {
 				Theme(void);
 				virtual ~Theme(void);
 				void Load(etk::File & newFile, bool defaultTheme=false);
-				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				void Generate(int32_t id, int32_t frameId, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GenerateGroup(etk::String groupName,  ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GetColor(etk::String colorName, color_ts & selectedColor);
 				int32_t GetNbFrame(int32_t id);
 				int32_t GetFrameId(int32_t id, etk::String & frameName);
 				int32_t GetObjectId(etk::String name);
 			private:
-				etk::VectorType<ewol::theme::EolColor*>    m_listColor;
-				etk::VectorType<ewol::theme::EolBase*>     m_listGroup; // TODO : we need really to star a frame here ...
-				etk::VectorType<ewol::theme::EolElement*>  m_listElement;
+				etk::VectorType<ewol::theme::EolColor*>        m_listColor;
+				etk::VectorType<ewol::theme::EolElementFrame*> m_listGroup;
+				etk::VectorType<ewol::theme::EolElement*>      m_listElement;
 			public:
 				// acces to manage and create object ==> drawing system 
 				

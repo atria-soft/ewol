@@ -32,22 +32,27 @@
 #include <etk/File.h>
 #include <ewol/OObject.h>
 #include <ewol/theme/EolColor.h>
+#include <ewol/theme/EolBase.h>
+#include <ewol/theme/EolBaseLine.h>
+#include <ewol/theme/EolBaseRect.h>
 
 
 namespace ewol {
 	namespace theme {
 		class EolElementFrame {
 			public:
-				EolElementFrame(void) { };
-				virtual ~EolElementFrame(void) { };
-				/*
-				void Load(etk::File & newFile) { };
-				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) {};
-				int32_t GetNbFrame(int32_t id) {return 0;};
-				int32_t GetFrameId(int32_t id, etk::String & frameName) {return 0;};
-				int32_t GetObjectId(etk::String name) { return -1; };
-				*/
+				EolElementFrame(void);
+				virtual ~EolElementFrame(void);
+				
+				void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				
+				void Parse(TiXmlNode * pNode);
+				etk::String GetName(void);
+				void SetName(etk::String & newName);
+				bool HasName(etk::String & newName);
 			private:
+				void RemoveAll(void);
+				etk::String m_name;
 				etk::VectorType<ewol::theme::EolBase*> m_description; // all element to draw the image ...
 			public:
 				// acces to manage and create object ==> drawing system 

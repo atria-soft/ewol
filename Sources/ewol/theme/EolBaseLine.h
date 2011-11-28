@@ -24,9 +24,34 @@
 
 
 #include <ewol/theme/EolBase.h>
+#include <ewol/theme/EolColor.h>
 
 #ifndef __EWOL_THEME_EOL_BASE_LINE_H__
 #define __EWOL_THEME_EOL_BASE_LINE_H__
+
+namespace ewol {
+	namespace theme {
+		class EolBaseLine : public EolBase {
+			public:
+				EolBaseLine(void);
+				virtual ~EolBaseLine(void);
+				/*
+					<Line color="..."
+					      positionStart="0.53;0.56"
+					      positionStop="0.22;0.11"
+					      thickness="0.05"
+					/>
+				*/
+				virtual void Parse(TiXmlNode * pNode);
+			private:
+				etk::String     m_color;
+				coord2D_ts      m_posStart;
+				coord2D_ts      m_posStop;
+				etkFloat_t      m_thickness;
+		};
+	};
+};
+
 
 #endif
 

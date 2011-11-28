@@ -24,9 +24,31 @@
 
 
 #include <ewol/theme/EolBase.h>
+#include <ewol/theme/EolColor.h>
 
 #ifndef __EWOL_THEME_EOL_BASE_RECT_H__
 #define __EWOL_THEME_EOL_BASE_RECT_H__
+
+namespace ewol {
+	namespace theme {
+		class EolBaseRect : public EolBase {
+			public:
+				EolBaseRect(void);
+				virtual ~EolBaseRect(void);
+				/*
+					<rect color="..."
+					      position="0.53;0.56"
+					      size="0.22;0.11"
+					/>
+				*/
+				virtual void Parse(TiXmlNode * pNode);
+			private:
+				etk::String     m_color;
+				coord2D_ts      m_position;
+				coord2D_ts      m_size;
+		};
+	};
+};
 
 #endif
 

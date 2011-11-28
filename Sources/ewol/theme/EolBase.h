@@ -39,13 +39,7 @@ namespace ewol {
 			public:
 				EolBase(void);
 				virtual ~EolBase(void);
-				
-				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void);
-				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName);
-			private:
-				etk::String m_name;
+				virtual void Parse(TiXmlNode * pNode);
 		};
 	};
 };

@@ -39,8 +39,22 @@ namespace ewol {
 	namespace theme {
 		class EolElement {
 			public:
-				EolElement(void) { };
-				virtual ~EolElement(void) { };
+				EolElement(void);
+				virtual ~EolElement(void);
+				void Parse(TiXmlNode * pNode);
+				etk::String GetName(void);
+				void SetName(etk::String & newName);
+				bool HasName(etk::String & newName);
+				
+				void Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GenerateGroup(const ewol::theme::Theme * myTheme, etk::String groupName, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GetColor(etk::String colorName, color_ts & selectedColor);
+				
+				int32_t GetNbFrame(void);
+				int32_t GetFrameId(etk::String & frameName);
+			private:
+				void RemoveAll(void);
+				etk::String m_name;
 				/*
 				void Load(etk::File & newFile) { };
 				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) {};
@@ -50,13 +64,13 @@ namespace ewol {
 				*/
 			private:
 				etk::VectorType<ewol::theme::EolColor*>         m_listColor;
-				etk::VectorType<ewol::theme::EolBase*>          m_listGroup;
+				etk::VectorType<ewol::theme::EolElementFrame*>  m_listGroup;
 				etk::VectorType<ewol::theme::EolElementFrame*>  m_listElement;
 				etkFloat_t    m_ratio;
 				bool          m_clipX;
 				bool          m_clipY;
-				coord2D_ts    m_internalElemX;
-				coord2D_ts    m_internalElemY;
+				coord2D_ts    m_internalElemStart;
+				coord2D_ts    m_internalElemStop;
 			public:
 				// acces to manage and create object ==> drawing system 
 				

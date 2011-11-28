@@ -13,7 +13,7 @@
 		      position="0.53;0.56"
 		      size="0.22;0.11"
 		/>
-		<Line color="..."
+		<line color="..."
 		      positionStart="0.53;0.56"
 		      positionStop="0.22;0.11"
 		      thickness="0.05"
@@ -26,10 +26,8 @@
 	         ratio="1.0"
 	         ClipX="false"
 	         ClipY="false"
-	         internalElemXStart="0.25"
-	         internalElemXStop="0.75"
-	         internalElemYStart="0.25"
-	         internalElemYStop="0.75">
+	         internalElemStart="0.25;0.75"
+	         internalElemStop="0.75;0.75">
 		<!--
 			note we have 5 methode to reference a color : 
 				- #RRGGBB          ==> in hexa 0x00<=x<=0xFF
@@ -48,7 +46,7 @@
 			      position="0.53;0.56"
 			      size="0.22;0.11"
 			/>
-			<Line color="..."
+			<line color="..."
 			      positionStart="0.53;0.56"
 			      positionStop="0.22;0.11"
 			      thickness="0.05"
@@ -57,18 +55,18 @@
 		</group>
 		<!--...-->
 		
-		<frame id=0 name="basic">
+		<frame id="0" name="basic">
 			<rect color="..."
 			      position="0.53;0.56"
 			      size="0.22;0.11"
 			/>
 		</frame>
-		<frame id=0 name="hover">
+		<frame id="0" name="hover">
 			<rect color="..."
 			      position="0.53;0.56"
 			      size="0.22;0.11"
 			/>
-			<group name="basicRect"/>
+			<link name="basicRect"/>
 		</frame>
 		<!--...-->
 		

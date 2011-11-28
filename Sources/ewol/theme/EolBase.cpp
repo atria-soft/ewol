@@ -30,7 +30,7 @@
 
 ewol::theme::EolBase::EolBase(void)
 {
-	
+	//EWOL_DEBUG("new...");
 }
 
 ewol::theme::EolBase::~EolBase(void)
@@ -41,25 +41,5 @@ ewol::theme::EolBase::~EolBase(void)
 
 void ewol::theme::EolBase::Parse(TiXmlNode * pNode)
 {
-	m_name = pNode->ToElement()->Attribute("name");
-	EWOL_INFO("Group name=\"" << m_name << "\" " );
+	EWOL_INFO("Element Base .. Generic ... nothing to parse..." );
 }
-
-
-etk::String ewol::theme::EolBase::GetName(void)
-{
-	return m_name;
-}
-
-
-void ewol::theme::EolBase::SetName(etk::String & newName)
-{
-	m_name = newName;
-}
-
-
-bool ewol::theme::EolBase::HasName(etk::String & newName)
-{
-	return m_name == newName;
-}
-

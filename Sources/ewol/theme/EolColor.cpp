@@ -81,9 +81,9 @@ void ewol::theme::EolColor::Parse(TiXmlNode * pNode)
 		}
 	}
 	if (NULL != color) {
-		EWOL_INFO("COLOR name=\"" << m_name << "\" \"" << color << "\" ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
+		EWOL_INFO("(l " << pNode->Row() << ") color name=\"" << m_name << "\" \"" << color << "\" ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
 	} else {
-		EWOL_INFO("COLOR name=\"" << m_name << "\" \"\"???? ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
+		EWOL_INFO("(l " << pNode->Row() << ") color name=\"" << m_name << "\" \"\"???? ==> red="<< m_color.red <<" green="<< m_color.green <<" blue="<< m_color.blue <<" alpha="<< m_color.alpha );
 	}
 }
 
