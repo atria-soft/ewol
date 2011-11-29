@@ -83,7 +83,11 @@ void ewol::theme::EolElementFrame::Parse(TiXmlNode * root)
 		} else if (nodeValue == "polygone") {
 			EWOL_WARNING("(l " << pNode->Row() << ")     Not Parsed now : \"" << nodeValue <<"\"");
 		}  else if (nodeValue == "circle") {
-			EWOL_WARNING("(l " << pNode->Row() << ")     Not Parsed now : \"" << nodeValue <<"\"");
+			//EWOL_INFO("Find baseElement Rectangle");
+			myBaseTmp = new ewol::theme::EolBaseCircle();
+			if (NULL == myBaseTmp) {
+				EWOL_ERROR("(l " << pNode->Row() << ")     Error Allocation : \"" << nodeValue <<"\"");
+			}
 		}  else if (nodeValue == "circlePart") {
 			EWOL_WARNING("(l " << pNode->Row() << ")     Not Parsed now : \"" << nodeValue <<"\"");
 		} else {

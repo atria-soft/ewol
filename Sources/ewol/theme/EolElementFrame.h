@@ -35,6 +35,10 @@
 #include <ewol/theme/EolBase.h>
 #include <ewol/theme/EolBaseLine.h>
 #include <ewol/theme/EolBaseRect.h>
+#include <ewol/theme/EolBaseCircle.h>
+#include <ewol/theme/EolBaseCirclePart.h>
+#include <ewol/theme/EolBaseTriangle.h>
+#include <ewol/theme/EolBasePolygone.h>
 
 
 namespace ewol {

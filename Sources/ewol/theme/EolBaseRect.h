@@ -36,17 +36,21 @@ namespace ewol {
 				EolBaseRect(void);
 				virtual ~EolBaseRect(void);
 				/*
-					<rect color="..."
+					<rect colorBG="..."    ==> generate condition to display background ...
+					      colorBorder="..."    ==> generate condition to display border ...
 					      position="0.53;0.56"
 					      size="0.22;0.11"
+					      thickness="0.05"  ==> only if neededd by border, default 0.01
 					/>
 				*/
 				virtual void Parse(TiXmlNode * pNode);
 				virtual void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 			private:
-				etk::String     m_color;
+				etk::String     m_colorBG;
+				etk::String     m_colorBorder;
 				coord2D_ts      m_position;
 				coord2D_ts      m_size;
+				etkFloat_t      m_thickness;
 		};
 	};
 };

@@ -68,12 +68,12 @@ void ewol::theme::EolBaseLine::Parse(TiXmlNode * pNode)
 	}
 	tmp = pNode->ToElement()->Attribute("thickness");
 	if (NULL == tmp) {
-		m_thickness=0;
+		m_thickness=0.01;
 	} else {
-		double th;
+		double tmpVal;
 		// optimize for multiple type input ...
-		sscanf(tmp, "%lf", &th);
-		m_thickness=th;
+		sscanf(tmp, "%lf", &tmpVal);
+		m_thickness=tmpVal;
 	}
 	EWOL_DEBUG("(l " << pNode->Row() << ")     Parse Base Element : \"line\" : pos(" << m_posStart.x << "," << m_posStart.y << ") to pos(" << m_posStop.x << "," << m_posStop.y << ") thickness=" << m_thickness);
 }

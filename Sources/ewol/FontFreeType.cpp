@@ -300,8 +300,8 @@ class FTFontInternal
 				listElement[iii].width = glyphMaxWidth;
 				listElement[iii].posStart.u = (etkFloat_t)(tmpRowId *glyphMaxWidth) / (etkFloat_t)textureWidth;
 				listElement[iii].posStart.v = (etkFloat_t)(tmpLineId*glyphMaxHeight) / (etkFloat_t)textureHeight;
-				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth ) / (etkFloat_t)textureWidth;
-				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight ) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (etkFloat_t)textureWidth;
+				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight + 1) / (etkFloat_t)textureHeight;
 			}
 			// Now We Just Setup Some Texture Parameters.
 			glBindTexture( GL_TEXTURE_2D, textureId);
@@ -495,7 +495,7 @@ void ewol::DrawText(int32_t                        fontID,
 	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t size = m_listLoadedFont[fontID]->GetSize();
+	int32_t size = m_listLoadedFont[fontID]->GetHeight();
 	
 	etkFloat_t posDrawX = drawPosition.x;
 	while(*unicodeString != 0) {
@@ -533,7 +533,6 @@ void ewol::DrawText(int32_t                        fontID,
 }
 
 
-
 void ewol::DrawText(int32_t                        fontID,
                     coord2D_ts &                   drawPosition,
                     const char *                   utf8String,
@@ -563,7 +562,7 @@ void ewol::DrawText(int32_t                        fontID,
 	char * tmpVal = (char*)utf8String;
 	
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t size = m_listLoadedFont[fontID]->GetSize();
+	int32_t size = m_listLoadedFont[fontID]->GetHeight();
 	
 	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != 0) {
@@ -599,6 +598,8 @@ void ewol::DrawText(int32_t                        fontID,
 			tmpTex.v = listOfElement[charIndex].posStop.v;
 			coordTex.PushBack(tmpTex);
 			// set display positions :
+			/*int32_t xxxx = posDrawX;
+			int32_t yyyy = drawPosition.y;*/
 			coord2D_ts tmpCoord;
 			tmpCoord.x = posDrawX;
 			tmpCoord.y = drawPosition.y;

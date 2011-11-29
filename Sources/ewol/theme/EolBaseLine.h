@@ -36,7 +36,7 @@ namespace ewol {
 				EolBaseLine(void);
 				virtual ~EolBaseLine(void);
 				/*
-					<Line color="..."
+					<line color="..."
 					      positionStart="0.53;0.56"
 					      positionStop="0.22;0.11"
 					      thickness="0.05"

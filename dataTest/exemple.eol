@@ -39,6 +39,7 @@
 		-->
 		<color name="Background"		val="#EEEEEEFF"/>
 		<color name="Red"				val="#FF0000FF"/>
+		<color name="Green"				val="#00FF00FF"/>
 		<color name="Border"			val="0.0;0.000512;1.0;0.755562535"/>
 		<!--...-->
 		
@@ -58,18 +59,23 @@
 		<!--...-->
 		
 		<frame id="0" name="basic">
-			<rect color="Background"
+			<rect colorBG="Background"
 			      position="0.0;0.0"
 			      size="1.0;1.0"
 			/>
-			<rect color="Red"
-			      position="0.53;0.56"
-			      size="0.22;0.11"
+			<rect colorBorder="Red"
+			      position="0.1;0.1"
+			      size="0.25;0.25"
+			      thickness="0.01"
 			/>
 			<line color="TestPlop"
 			      positionStart="0.53;0.56"
 			      positionStop="0.22;0.11"
 			      thickness="0.01"
+			/>
+			<circle colorBG="Green"
+			        position="0.75;0.75"
+			        radius="0.25"
 			/>
 		</frame>
 		<frame id="0" name="hover">
