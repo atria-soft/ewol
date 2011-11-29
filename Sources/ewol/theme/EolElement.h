@@ -42,16 +42,16 @@ namespace ewol {
 				EolElement(void);
 				virtual ~EolElement(void);
 				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void);
+				etk::String GetName(void) const;
 				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName);
+				bool HasName(etk::String & newName) const;
 				
-				void Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GenerateGroup(const ewol::theme::Theme * myTheme, etk::String groupName, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GetColor(etk::String colorName, color_ts & selectedColor);
+				void Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GenerateGroup(const ewol::theme::Theme * myTheme, etk::String groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GetColor(etk::String colorName, color_ts & selectedColor) const;
 				
-				int32_t GetNbFrame(void);
-				int32_t GetFrameId(etk::String & frameName);
+				int32_t GetNbFrame(void) const;
+				int32_t GetFrameId(etk::String & frameName) const;
 			private:
 				void RemoveAll(void);
 				etk::String m_name;

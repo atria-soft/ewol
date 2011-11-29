@@ -5,6 +5,7 @@
 	<color name="MEGAMERDIQUE"/>
 	<color name="GenBG"			val="#FF0000"/>
 	<color name="GenFG"			val="#FF000055"/>
+	<color name="TestPlop"			val="#0000FF55"/>
 	<color name="GenBorder"		val="1.0;0.000512;1.0;0.755562535"/>
 	<color name="GenBorder"		val="5.0;0.000512;1.0"/>
 	
@@ -36,7 +37,8 @@
 				- R.R;G.G;B.B;A.A  ==> in double 0<=x<=1
 				- &NameColor       ==> search internal color of the element and after global color ...
 		-->
-		<color name="Background"		val="#151515"/>
+		<color name="Background"		val="#EEEEEEFF"/>
+		<color name="Red"				val="#FF0000FF"/>
 		<color name="Border"			val="0.0;0.000512;1.0;0.755562535"/>
 		<!--...-->
 		
@@ -56,9 +58,18 @@
 		<!--...-->
 		
 		<frame id="0" name="basic">
-			<rect color="..."
+			<rect color="Background"
+			      position="0.0;0.0"
+			      size="1.0;1.0"
+			/>
+			<rect color="Red"
 			      position="0.53;0.56"
 			      size="0.22;0.11"
+			/>
+			<line color="TestPlop"
+			      positionStart="0.53;0.56"
+			      positionStop="0.22;0.11"
+			      thickness="0.01"
 			/>
 		</frame>
 		<frame id="0" name="hover">

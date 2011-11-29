@@ -39,7 +39,8 @@ namespace ewol {
 			public:
 				EolBase(void);
 				virtual ~EolBase(void);
-				virtual void Parse(TiXmlNode * pNode);
+				virtual void Parse(TiXmlNode * pNode) = 0;
+				virtual void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) = 0;
 		};
 	};
 };

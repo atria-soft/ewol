@@ -218,7 +218,7 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 
 
 
-bool ewol::theme::EolElement::GetColor(etk::String colorName, color_ts & selectedColor)
+bool ewol::theme::EolElement::GetColor(etk::String colorName, color_ts & selectedColor) const
 {
 	for (int32_t iii=0; iii < m_listColor.Size(); iii++) {
 		if(NULL!=m_listColor[iii]) {
@@ -235,13 +235,13 @@ bool ewol::theme::EolElement::GetColor(etk::String colorName, color_ts & selecte
 	return false;
 }
 
-int32_t ewol::theme::EolElement::GetNbFrame(void)
+int32_t ewol::theme::EolElement::GetNbFrame(void) const
 {
 	return m_listElement.Size();
 }
 
 
-int32_t ewol::theme::EolElement::GetFrameId(etk::String & frameName)
+int32_t ewol::theme::EolElement::GetFrameId(etk::String & frameName) const
 {
 	for (int32_t iii=0; iii < m_listElement.Size(); iii++) {
 		if(NULL!=m_listElement[iii]) {
@@ -254,7 +254,7 @@ int32_t ewol::theme::EolElement::GetFrameId(etk::String & frameName)
 }
 
 
-etk::String ewol::theme::EolElement::GetName(void)
+etk::String ewol::theme::EolElement::GetName(void) const
 {
 	return m_name;
 }
@@ -266,13 +266,13 @@ void ewol::theme::EolElement::SetName(etk::String & newName)
 }
 
 
-bool ewol::theme::EolElement::HasName(etk::String & newName)
+bool ewol::theme::EolElement::HasName(etk::String & newName) const
 {
 	return m_name == newName;
 }
 
 
-void ewol::theme::EolElement::Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+void ewol::theme::EolElement::Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	if (0 > frameId || frameId > m_listElement.Size()) {
 		EWOL_ERROR("Did not find the frame id=" << frameId);
@@ -281,6 +281,7 @@ void ewol::theme::EolElement::Generate(const ewol::theme::Theme * myTheme, int32
 	if (NULL != m_listElement[frameId]) {
 		m_listElement[frameId]->Generate(myTheme, this, newObject, posX, posY, sizeX, sizeY);
 	}
+	
 }
 
 

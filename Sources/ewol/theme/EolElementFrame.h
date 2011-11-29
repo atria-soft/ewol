@@ -44,7 +44,7 @@ namespace ewol {
 				EolElementFrame(void);
 				virtual ~EolElementFrame(void);
 				
-				void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 				
 				void Parse(TiXmlNode * pNode);
 				etk::String GetName(void);

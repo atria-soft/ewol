@@ -42,10 +42,10 @@ namespace ewol {
 				virtual ~EolColor(void);
 				
 				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void);
+				etk::String GetName(void) const;
 				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName);
-				color_ts Get(void);
+				bool HasName(etk::String & newName) const;
+				color_ts Get(void) const;
 				void Set(color_ts newColor);
 				void Set(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1);
 			private:

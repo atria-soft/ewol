@@ -184,7 +184,7 @@ bool ewol::theme::Theme::GetColor(etk::String colorName, color_ts & selectedColo
 	return false;
 }
 
-void ewol::theme::Theme::Generate(int32_t id, int32_t frameId, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+void ewol::theme::Theme::Generate(int32_t id, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	if (0 > id || id > m_listElement.Size()) {
 		return;
@@ -194,7 +194,7 @@ void ewol::theme::Theme::Generate(int32_t id, int32_t frameId, ewol::OObject2DTe
 	}
 }
 
-bool ewol::theme::Theme::GenerateGroup(etk::String groupName, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+bool ewol::theme::Theme::GenerateGroup(etk::String groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	if (groupName == "") {
 		EWOL_ERROR("Did not find the group name=" << groupName);

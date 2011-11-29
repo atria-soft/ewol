@@ -40,7 +40,7 @@ namespace ewol {
 		void Load(etk::File filename); // add a user theme at the list ==> this remove previous declaration by the user...
 		int32_t GetObjectId(etk::String name);
 		// ???? GetObjectType(int32_t id);
-		void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+		void Generate(int32_t id, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 		int32_t GetNbFrame(int32_t id);
 		int32_t GetFrameId(int32_t id, etk::String & frameName);
 		

@@ -22,6 +22,7 @@
  *******************************************************************************
  */
 
+#include <ewol/theme/Theme.h>
 #include <ewol/theme/EolBase.h>
 
 #undef __class__
@@ -38,8 +39,9 @@ ewol::theme::EolBase::~EolBase(void)
 	
 }
 
-
+/*
 void ewol::theme::EolBase::Parse(TiXmlNode * pNode)
 {
 	EWOL_INFO("Element Base .. Generic ... nothing to parse..." );
 }
+*/

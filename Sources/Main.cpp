@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 	ewol::SetDefaultFont("freefont/FreeMono", 14);
 	ewol::theme::LoadDefault("dataTest/exemple.eol");
 	//ewol::theme::LoadDefault("dataTest/exemple.eol");
-	exit(0);
+	//exit(0);
 	
 	Plop * myWindowsExample = new Plop();
 	

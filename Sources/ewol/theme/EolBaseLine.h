@@ -43,6 +43,7 @@ namespace ewol {
 					/>
 				*/
 				virtual void Parse(TiXmlNode * pNode);
+				virtual void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 			private:
 				etk::String     m_color;
 				coord2D_ts      m_posStart;

@@ -65,7 +65,7 @@ int32_t ewol::theme::GetObjectId(etk::String name)
 // ???? GetObjectType(int32_t id);
 
 
-void ewol::theme::Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+void ewol::theme::Generate(int32_t id, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	if (id<0) {
 		return;

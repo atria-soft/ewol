@@ -25,6 +25,7 @@
 #include <ewol/widget/Test.h>
 
 #include <ewol/OObject.h>
+#include <ewol/themeManager.h>
 
 
 
@@ -57,7 +58,9 @@ void ewol::Test::OnRegenerateDisplay(void)
 {
 	// clean the object list ...
 	ClearOObjectList();
-	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+	ewol::OObject2DColored * tmpOObjects = NULL;
+	
+	tmpOObjects = new ewol::OObject2DColored;
 	
 	tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
 	tmpOObjects->Rectangle( 0, 0, m_size.x, m_size.y);
@@ -133,6 +136,15 @@ void ewol::Test::OnRegenerateDisplay(void)
 	tmpOObjects->CirclePart(150, 60, 60, 2, 45, 180);
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
+	
+	tmpOObjects = new ewol::OObject2DColored;
+	
+	ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
+	
+	AddOObject(tmpOObjects, "themeObject");
+	
+	
+	
 	
 	// Regenerate the event Area:
 	EventAreaRemoveAll();

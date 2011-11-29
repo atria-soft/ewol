@@ -116,9 +116,11 @@ bool ewol::theme::EolElementFrame::HasName(etk::String & newName)
 }
 
 
-void ewol::theme::EolElementFrame::Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+void ewol::theme::EolElementFrame::Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
-	
+	for (int32_t iii=0; iii<m_description.Size(); iii++) {
+		m_description[iii]->Generate(myTheme, myElement, newObject, posX, posY, sizeX, sizeY);
+	}
 }
 
 

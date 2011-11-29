@@ -22,6 +22,7 @@
  *******************************************************************************
  */
 
+#include <ewol/theme/Theme.h>
 #include <ewol/theme/EolBaseLine.h>
 
 #undef __class__
@@ -76,3 +77,25 @@ void ewol::theme::EolBaseLine::Parse(TiXmlNode * pNode)
 	}
 	EWOL_DEBUG("(l " << pNode->Row() << ")     Parse Base Element : \"line\" : pos(" << m_posStart.x << "," << m_posStart.y << ") to pos(" << m_posStop.x << "," << m_posStop.y << ") thickness=" << m_thickness);
 }
+
+
+void ewol::theme::EolBaseLine::Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+{
+	bool res = false;
+	color_ts selectedColor = {0.0, 0.0, 0.0, 1.0};
+	// try get color for current element
+	if (NULL != myElement) {
+		res = myElement->GetColor(m_color, selectedColor);
+	}
+	// try from theme if not existed
+	if(    false == res
+	    && NULL != myTheme ) {
+		myElement->GetColor(m_color, selectedColor);
+	}
+	newObject.SetColor(selectedColor);
+	newObject.Line(posX + m_posStart.x*sizeX, posY + m_posStart.y*sizeY, posX + m_posStop.x*sizeX, posY + m_posStop.y*sizeY, m_thickness*(sizeX+sizeY)/2);
+}
+
+
+
+
