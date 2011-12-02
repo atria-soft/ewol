@@ -27,9 +27,7 @@
 #include <ewol/Texture.h>
 #include <etk/VectorType.h>
 
-
-#include <GL/gl.h>
-#include <GL/glu.h>
+/*
 #include <GL/glx.h>
 #include <GL/glut.h>
 #if defined(EWOL_X11_MODE__XF86V)
@@ -37,9 +35,14 @@
 #elif defined(EWOL_X11_MODE__XRENDER)
 #	include <X11/extensions/Xrender.h>
 #endif
+*/
+#include <importgl.h>
+#if defined(__PLATFORM__X11)
+#	include <ft2build.h>
+#else
+#	include <freetype/ft2build.h>
+#endif
 
-
-#include <ft2build.h>
 #include FT_FREETYPE_H
 
 #undef __class__
@@ -101,7 +104,7 @@ class FTFontInternal
 	private:
 		void Display(void)
 		{
-			EWOL_INFO("    nuber of glyph       = " << m_fftFace->num_glyphs);
+			EWOL_INFO("    nuber of glyph       = " << (int)m_fftFace->num_glyphs);
 			if ((FT_FACE_FLAG_SCALABLE & m_fftFace->face_flags) != 0) {
 				EWOL_INFO("    flags                = FT_FACE_FLAG_SCALABLE (enable)");
 			} else {
@@ -176,9 +179,9 @@ class FTFontInternal
 			}
 			EWOL_INFO("    unit per EM          = " << m_fftFace->units_per_EM);
 			EWOL_INFO("    num of fixed sizes   = " << m_fftFace->num_fixed_sizes);
-			EWOL_INFO("    Availlable sizes     = " << m_fftFace->available_sizes);
+			EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
 			
-			EWOL_INFO("    Current size         = " << m_fftFace->size);
+			EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
 		}
 	public:
 		FTFontInternal(etk::File fontFileName, etk::String fontName)

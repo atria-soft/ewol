@@ -1,11 +1,11 @@
 /**
  *******************************************************************************
- * @file ewol/OObject.cpp
- * @brief ewol OpenGl Object system (Sources)
+ * @file etk/Stream.cpp
+ * @brief Ewol Tool Kit : Basic etk::Stream for Log system ... (Sources)
  * @author Edouard DUPIN
- * @date 24/10/2011
+ * @date 02/12/2011
  * @par Project
- * ewol
+ * Ewol TK
  *
  * @par Copyright
  * Copyright 2011 Edouard DUPIN, all right reserved
@@ -22,42 +22,10 @@
  *******************************************************************************
  */
 
-#include <etk/Types.h>
-#include <etk/String.h>
-#include <ewol/OObject.h>
-#include <importgl.h>
 
+#include <etk/Stream.h>
 
-#undef __class__
-#define __class__	"ewol::OObject"
-
-
-ewol::OObject::OObject(void)
-{
-	m_name="";
-}
-
-
-ewol::OObject::~OObject(void)
-{
-	
-}
-
-void ewol::OObject::SetName(etk::String & name)
-{
-	m_name = name;
-}
-
-void ewol::OObject::SetName(const char * name)
-{
-	if (NULL != name) {
-		m_name = name;
-	}
-}
-
-etk::String ewol::OObject::GetName(void)
-{
-	return m_name;
-}
-
+etk::CCout etk::cout;
+etk::CEndl etk::endl;
+etk::CHex etk::hex;
 

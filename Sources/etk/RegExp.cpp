@@ -92,7 +92,7 @@ void etk::DisplayData(etk::VectorType<char> &data)
 {
 	int32_t i;
 	for (i=0; i<(int32_t)data.Size() ; i++) {
-		std::cout<< (char)(data[i]&0x00FF );
+		etk::cout<< (char)(data[i]&0x00FF );
 	}
 }
 
@@ -109,36 +109,36 @@ void etk::DisplayData(etk::VectorType<char> &data)
 void etk::DisplayElem(etk::VectorType<int16_t> &data, int32_t start, int32_t stop)
 {
 	int32_t i;
-	std::cout<< ETK_BASH_COLOR_NORMAL;
+	etk::cout<< ETK_BASH_COLOR_NORMAL;
 	for (i=start; i<(int32_t)data.Size() && i<stop ; i++) {
 		switch(data[i])
 		{
-			case REGEXP_OPCODE_PTHESE_IN:		std::cout<<ETK_BASH_COLOR_RED		<< (char*)"(" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_PTHESE_OUT:		std::cout<<ETK_BASH_COLOR_RED		<< (char*)")" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_BRACKET_IN:		std::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"[" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_BRACKET_OUT:		std::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"]" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_TO:				std::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"-" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_BRACE_IN:		std::cout<<ETK_BASH_COLOR_GREEN		<< (char*)"{" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_BRACE_OUT:		std::cout<<ETK_BASH_COLOR_GREEN		<< (char*)"}" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_STAR:			std::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"*" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_DOT:				std::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"." << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_QUESTION:		std::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"?" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_PLUS:			std::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"+" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_PIPE:			std::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"|" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_NO_CHAR:			std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"@" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_START_OF_LINE:	std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"^" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_END_OF_LINE:		std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"$" << ETK_BASH_COLOR_NORMAL;		break;
-			case REGEXP_OPCODE_DIGIT:			std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\d" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_DIGIT_NOT:		std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\D" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_LETTER:			std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\l" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_LETTER_NOT:		std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\L" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_SPACE:			std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\s" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_SPACE_NOT:		std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\S" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_WORD:			std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\w" << ETK_BASH_COLOR_NORMAL;	break;
-			case REGEXP_OPCODE_WORD_NOT:		std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\W" << ETK_BASH_COLOR_NORMAL;	break;
-			case '\n':							std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\n" << ETK_BASH_COLOR_NORMAL;	break;
-			case '\t':							std::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\t" << ETK_BASH_COLOR_NORMAL;	break;
-			default:							std::cout<< (char)(data[i]&0x00FF );											break;
+			case REGEXP_OPCODE_PTHESE_IN:		etk::cout<<ETK_BASH_COLOR_RED		<< (char*)"(" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_PTHESE_OUT:		etk::cout<<ETK_BASH_COLOR_RED		<< (char*)")" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_BRACKET_IN:		etk::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"[" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_BRACKET_OUT:		etk::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"]" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_TO:				etk::cout<<ETK_BASH_COLOR_YELLOW	<< (char*)"-" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_BRACE_IN:		etk::cout<<ETK_BASH_COLOR_GREEN		<< (char*)"{" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_BRACE_OUT:		etk::cout<<ETK_BASH_COLOR_GREEN		<< (char*)"}" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_STAR:			etk::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"*" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_DOT:				etk::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"." << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_QUESTION:		etk::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"?" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_PLUS:			etk::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"+" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_PIPE:			etk::cout<<ETK_BASH_COLOR_BLUE		<< (char*)"|" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_NO_CHAR:			etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"@" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_START_OF_LINE:	etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"^" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_END_OF_LINE:		etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"$" << ETK_BASH_COLOR_NORMAL;		break;
+			case REGEXP_OPCODE_DIGIT:			etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\d" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_DIGIT_NOT:		etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\D" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_LETTER:			etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\l" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_LETTER_NOT:		etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\L" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_SPACE:			etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\s" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_SPACE_NOT:		etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\S" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_WORD:			etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\w" << ETK_BASH_COLOR_NORMAL;	break;
+			case REGEXP_OPCODE_WORD_NOT:		etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\W" << ETK_BASH_COLOR_NORMAL;	break;
+			case '\n':							etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\n" << ETK_BASH_COLOR_NORMAL;	break;
+			case '\t':							etk::cout<<ETK_BASH_COLOR_MAGENTA	<< (char*)"\\t" << ETK_BASH_COLOR_NORMAL;	break;
+			default:							etk::cout<< (char)(data[i]&0x00FF );											break;
 		}
 	}
 }

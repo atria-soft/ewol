@@ -28,17 +28,17 @@
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
 
-#if __PLATFORM__ == X11
+#if defined(__PLATFORM__X11)
 	#include <base/guiX11.h>
-#elif __PLATFORM__ == DoubleBuffer
+#elif defined(__PLATFORM__DoubleBuffer)
 	#include <base/guiDoubleBuffer.h>
-#elif __PLATFORM__ == Android
+#elif defined(__PLATFORM__Android)
 	#include <base/guiAndroid.h>
-#elif __PLATFORM__ == AndroidTablet
+#elif defined(__PLATFORM__AndroidTablet)
 	#include <base/guiAndroidTablet.h>
-#elif __PLATFORM__ == IPhone
+#elif defined(__PLATFORM__IPhone)
 	#include <base/guiIPhone.h>
-#elif __PLATFORM__ == IPad
+#elif defined(__PLATFORM__IPad)
 	#include <base/guiIPad.h>
 #else
 	#error you need to specify a platform ...

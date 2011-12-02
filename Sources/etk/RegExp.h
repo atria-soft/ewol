@@ -299,7 +299,7 @@ template<class CLASS_TYPE> class RegExpNodeValue : public RegExpNode<CLASS_TYPE>
 		 */
 		void Display(int32_t level)
 		{
-			TK_INFO("Find NODE : " << levelSpace(level) << "@Value@ {" << RegExpNode<CLASS_TYPE>::m_multipleMin << "," << RegExpNode<CLASS_TYPE>::m_multipleMax << "}  subdata="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData); std::cout<< " data: "; DisplayData(m_data); );
+			TK_INFO("Find NODE : " << levelSpace(level) << "@Value@ {" << RegExpNode<CLASS_TYPE>::m_multipleMin << "," << RegExpNode<CLASS_TYPE>::m_multipleMax << "}  subdata="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData); etk::cout<< " data: "; DisplayData(m_data); );
 		};
 	protected :
 		// SubNodes :
@@ -417,7 +417,7 @@ template<class CLASS_TYPE> class RegExpNodeBracket : public RegExpNode<CLASS_TYP
 		 */
 		void Display(int32_t level)
 		{
-			TK_INFO("Find NODE : " << levelSpace(level) << "@[...]@ {" << RegExpNode<CLASS_TYPE>::m_multipleMin << "," << RegExpNode<CLASS_TYPE>::m_multipleMax << "}  subdata="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData); std::cout<< " data: "; DisplayData(m_data); );
+			TK_INFO("Find NODE : " << levelSpace(level) << "@[...]@ {" << RegExpNode<CLASS_TYPE>::m_multipleMin << "," << RegExpNode<CLASS_TYPE>::m_multipleMax << "}  subdata="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData); etk::cout<< " data: "; DisplayData(m_data); );
 		};
 	protected :
 		// SubNodes :

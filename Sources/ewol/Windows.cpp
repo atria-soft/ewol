@@ -30,7 +30,7 @@
 #include <ewol/Texture.h>
 #include <ewol/Font.h>
 #include <ewol/ewol.h>
-#include <GL/gl.h>
+#include <importgl.h>
 
 
 
@@ -130,18 +130,6 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 	}
 	return true;
 }
-
-
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glx.h>
-#include <GL/glut.h>
-#if defined(EWOL_X11_MODE__XF86V)
-#	include <X11/extensions/xf86vmode.h>
-#elif defined(EWOL_X11_MODE__XRENDER)
-#	include <X11/extensions/Xrender.h>
-#endif
 
 void ewol::Windows::SysDraw(void)
 {

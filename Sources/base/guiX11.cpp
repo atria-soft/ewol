@@ -28,6 +28,7 @@
 #include <ewol/WidgetManager.h>
 #include <base/guiX11.h>
 
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

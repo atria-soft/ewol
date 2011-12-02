@@ -53,7 +53,7 @@ void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* fun
 	tmpName[FUNCTION_NAME_SIZE-3] = '|';
 	tmpName[FUNCTION_NAME_SIZE-2] = ' ';
 	tmpName[FUNCTION_NAME_SIZE-1] = '\0';
-	std::cout << tmpName;
+	etk::cout << tmpName;
 }
 
 
@@ -66,6 +66,6 @@ void TOOLS_DisplayTime(void)
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	sprintf(tmpdata, " %2dh %2dmin %2ds | ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-	std::cout << tmpdata ;
+	etk::cout << tmpdata ;
 }
 

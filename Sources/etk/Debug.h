@@ -25,7 +25,7 @@
 #ifndef __ETK_DEBUG_H__
 #define __ETK_DEBUG_H__
 
-#include <iostream>
+#include <etk/Stream.h>
 #include <etk/Types.h>
 
 // Log Message System For EDN
@@ -68,11 +68,11 @@ void TOOLS_DisplayTime(void);
 #define __class__				(NULL)
 
 #define ETK_DBG_COMMON(libName, color, info, data)	do { \
-														std::cout << color; \
+														etk::cout << color; \
 														TOOLS_DisplayTime(); \
 														TOOLS_DisplayFuncName(__LINE__, __class__, __func__, libName); \
-														std::cout << "[" << info << "] " << data; \
-														std::cout << ETK_BASH_COLOR_NORMAL <<std::endl; \
+														etk::cout << "[" << info << "] " << data; \
+														etk::cout << ETK_BASH_COLOR_NORMAL <<etk::endl; \
 													}while(0)
 #define ETK_CRITICAL(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_BOLD_RED, 'C', data)
 #define ETK_WARNING(libName, data)					ETK_DBG_COMMON(libName, ETK_BASH_COLOR_MAGENTA,  'W', data)

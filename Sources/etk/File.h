@@ -53,7 +53,7 @@ namespace etk
 			const etk::File& operator=  (const etk::File &etkF );
 			bool             operator== (const etk::File &etkF ) const;
 			bool             operator!= (const etk::File &etkF ) const;
-			friend std::ostream& operator <<( std::ostream &os,const etk::File &obj);
+			friend etk::CCout& operator <<( etk::CCout &os,const etk::File &obj);
 			
 		private :
 			etk::String m_folder;
@@ -61,7 +61,7 @@ namespace etk
 			int32_t     m_lineNumberOpen;
 	};
 	
-	std::ostream& operator <<(std::ostream &os, const etk::File &obj);
+	etk::CCout& operator <<(etk::CCout &os, const etk::File &obj);
 	
 }
 

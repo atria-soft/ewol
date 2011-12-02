@@ -23,7 +23,7 @@
  */
 
 #include <ewol/OObject/2DColored.h>
-#include <GL/gl.h>
+#include <importgl.h>
 #include <math.h>
 
 

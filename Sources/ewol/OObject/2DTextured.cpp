@@ -24,7 +24,7 @@
 
 #include <ewol/OObject/2DTextured.h>
 #include <ewol/Texture.h>
-#include <GL/gl.h>
+#include <importgl.h>
 
 #undef __class__
 #define __class__	"ewol::OObject2DTextured"

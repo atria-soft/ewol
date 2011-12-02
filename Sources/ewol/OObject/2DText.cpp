@@ -23,7 +23,7 @@
  */
 
 #include <ewol/OObject/2DText.h>
-#include <GL/gl.h>
+#include <importgl.h>
 
 #undef __class__
 #define __class__	"ewol::OObject2DText"
@@ -61,7 +61,8 @@ void ewol::OObject2DText::Draw(void)
 		EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	
+	// TODO : Android does not support GL_QUADS ...
+	#if !defined(__PLATFORM__Android)
 	glColor4f(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, m_FontTextureId);
@@ -74,6 +75,7 @@ void ewol::OObject2DText::Draw(void)
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );				// Disable Texture Coord Arrays
 	glDisable(GL_TEXTURE_2D);
+	#endif
 }
 
 void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8String)

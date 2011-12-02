@@ -25,7 +25,7 @@
 #ifndef __ETK_STRING_H__
 #define __ETK_STRING_H__
 
-#include <iostream>
+#include <etk/Stream.h>
 #include <etk/VectorType.h>
 
 namespace etk
@@ -58,7 +58,7 @@ namespace etk
 			etk::String operator+ (const etk::String &etkS);			// + operator
 			etk::String operator+ (const char * inputData);
 			//operator const char *()
-			friend std::ostream& operator <<( std::ostream &os,const etk::String &obj);
+			friend etk::CCout& operator <<( etk::CCout &os,const etk::String &obj);
 	
 			bool          IsEmpty(void) const;
 			int32_t       Size(void) const;
@@ -81,7 +81,7 @@ namespace etk
 
 	void TestUntaire_String(void);
 	
-	std::ostream& operator <<(std::ostream &os, const etk::String &obj);
+	etk::CCout& operator <<(etk::CCout &os, const etk::String &obj);
 	
 }
 

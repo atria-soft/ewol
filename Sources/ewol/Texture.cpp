@@ -25,6 +25,7 @@
 
 
 #include <ewol/Texture.h>
+#include <importgl.h>
 
 extern "C"
 {
@@ -308,8 +309,7 @@ class Bitmap
 		}
 };
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+
 
 class LoadedTexture
 {
@@ -396,7 +396,7 @@ void ewol::UnLoadTexture(uint32_t textureID)
 			return;
 		}
 	}
-	EWOL_CRITICAL("Can not find TextureId=" << textureID << " in the list of texture loaded...==> to remove it ...");
+	EWOL_CRITICAL("Can not find TextureId=" << (int)textureID << " in the list of texture loaded...==> to remove it ...");
 }
 
 

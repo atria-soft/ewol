@@ -26,22 +26,12 @@
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
 #include <etk/VectorType.h>
-
-
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glx.h>
-#include <GL/glut.h>
-#if defined(EWOL_X11_MODE__XF86V)
-#	include <X11/extensions/xf86vmode.h>
-#elif defined(EWOL_X11_MODE__XRENDER)
-#	include <X11/extensions/Xrender.h>
-#endif
+#include <importgl.h>
 
 
 #undef __class__
 #define __class__	"ewol::FontBitmap"
-
+#if 0
 
 extern "C"
 {
@@ -436,7 +426,95 @@ void ewol::DrawText(int32_t                        fontID,
 	}
 	drawPosition.x = posDrawX;
 }
+#endif
 
+
+
+// set default folder name of the font : 
+void ewol::SetFontFolder(etk::String folderName)
+{
+	
+}
+
+void ewol::SetDefaultFont(etk::String fontName, int32_t size)
+{
+	
+}
+
+// unload all font loaded
+void ewol::InitFont(void)
+{
+	
+}
+
+void ewol::UnInitFont(void)
+{
+	
+}
+
+// load the fonts...
+int32_t ewol::LoadFont(etk::String fontName, int32_t size)
+{
+	return 0;
+}
+
+int32_t ewol::GetDefaultFontId(void)
+{
+	return 0;
+}
+
+void ewol::UnloadFont(int32_t id)
+{
+	
+}
+
+// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
+int32_t ewol::GetWidth(int32_t fontID, const uniChar_t * unicodeString)
+{
+	return 20;
+}
+
+
+int32_t ewol::GetWidth(int32_t fontID, const char *      utf8String)
+{
+	return 20;
+}
+
+int32_t ewol::GetHeight(int32_t fontID)
+{
+	return 25;
+}
+
+
+void ewol::DrawText(int32_t                        fontID,
+                     coord2D_ts &                   drawPosition,
+                     const char *                   utf8String,
+                     uint32_t &                     fontTextureId,
+                     etk::VectorType<coord2D_ts> &  coord,
+                     etk::VectorType<texCoord_ts> & coordTex)
+{
+	
+}
+
+void ewol::DrawText(int32_t                        fontID,
+                     coord2D_ts &                   drawPosition,
+                     const uniChar_t *              unicodeString,
+                     uint32_t &                     fontTextureId,
+                     etk::VectorType<coord2D_ts> &  coord,
+                     etk::VectorType<texCoord_ts> & coordTex)
+{
+	
+}
+
+int32_t ewol::LoadFont(etk::File fontFileName)
+{
+	
+}
+
+void ewol::DrawText(etkFloat_t x, etkFloat_t y, const char * myString)
+{
+	
+}
 
 
 

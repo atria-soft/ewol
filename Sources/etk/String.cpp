@@ -29,7 +29,7 @@
 #undef __class__
 #define __class__	"etk::String"
 
-std::ostream& etk::operator <<(std::ostream &os, const etk::String &obj)
+etk::CCout& etk::operator <<(etk::CCout &os, const etk::String &obj)
 {
 	os << (char*)&obj.m_data[0];
 	return os;
@@ -608,30 +608,30 @@ void etk::TestUntaire_String(void)
 	
 	int32_t iddd = 0;
 	etk::String * monString = new etk::String();
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	monString = new etk::String("test de direct data");
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	monString = new etk::String("test de direct data", 7);
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	int32_t testId = -6789;
 	monString = new etk::String(testId);
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	uint32_t testId2 = 12345;
 	monString = new etk::String((unsigned int)testId2);
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	etk::String plop = "otherString";
 	monString = new etk::String(plop);
-	TK_INFO("phase : " << iddd++ << " : \"" << monString << "\"");
+	TK_INFO("phase : " << iddd++ << " : \"" << *monString << "\"");
 	delete(monString);
 	
 	

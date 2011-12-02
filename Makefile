@@ -91,12 +91,12 @@ else
 endif
 DEFINE+= -DVERSION_BUILD_TIME="\"$(VERSION_BUILD_TIME)\""
 
-X11FLAGS= -lX11 -lGL -lGLU
+X11FLAGS= -lGL -lGLU
 # some X11 mode availlable : 
 # install package : libxxf86vm-dev
-X11FLAGS+= -DEWOL_X11_MODE__XF86V -lXxf86vm
+X11FLAGS+= -lX11 -DEWOL_X11_MODE__XF86V -lXxf86vm
 # install package : libxrender-dev 
-#X11FLAGS+= -DEWOL_X11_MODE__XRENDER -lXrandr
+#X11FLAGS+= -lX11 -DEWOL_X11_MODE__XRENDER -lXrandr
 
 
 ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
@@ -108,12 +108,22 @@ else
     $(Info  libFreeType-dev is not installed)
 endif
 
+
+###############################################################################
+### Android Area                                                            ###
+###############################################################################
+ifeq ($(PLATFORM), Android)
+    PROJECT_NDK=$(realpath ../android/ndk-r7/)
+    PROJECT_SDK=$(realpath ../android/sdk-r15/)
+endif
+
+
 ###############################################################################
 ### Basic C flags                                                           ###
 ###############################################################################
 
 # basic X11 librairy ==> show if we can une under lib ...
-CXXFLAGS=  $(X11FLAGS) $(FREETYPE_CFLAGS) -D__PLATFORM__=$(PLATFORM)
+CXXFLAGS=  $(X11FLAGS) $(FREETYPE_CFLAGS) -D__PLATFORM__$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
 	CXXFLAGS+= -O2
@@ -127,6 +137,8 @@ CXXFLAGS+= -Wall
 CXXFLAGS+= -D_REENTRANT
 # internal defines
 CXXFLAGS+= $(DEFINE)
+# remove warning from the convertion char*
+CXXFLAGS+= -Wno-write-strings
 
 CFLAGS=    $(CXXFLAGS) -std=c99
 
@@ -179,6 +191,7 @@ CXXFILES +=		etk/Debug.cpp \
 				etk/DebugInternal.cpp \
 				etk/Memory.cpp \
 				etk/String.cpp \
+				etk/Stream.cpp \
 				etk/File.cpp \
 				etk/RegExp.cpp
 
@@ -280,10 +293,17 @@ $(OUTPUT_NAME_RELEASE): $(OBJ) $(MAKE_DEPENDENCE)
 	@cp $@ $(PROG_NAME)
 
 # build binary Debug Mode
+ifeq ($(PLATFORM), Android)
+$(OUTPUT_NAME_DEBUG): $(MAKE_DEPENDENCE)
+	cd $(PROJECT_NDK) ; NDK_PROJECT_PATH=$(shell pwd) ./ndk-build
+	# V=1
+	PATH=$(PROJECT_SDK)/tools/:$(PROJECT_SDK)/platform-tools/:$(PATH) ant -Dsdk.dir=$(PROJECT_SDK) debug
+else
 $(OUTPUT_NAME_DEBUG): $(OBJ) $(MAKE_DEPENDENCE)
 	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
 	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
 	@cp $@ $(PROG_NAME)
+endif
 
 clean:
 	@echo $(CADRE_HAUT_BAS)

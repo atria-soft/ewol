@@ -27,12 +27,21 @@
 #define __GUI_ABSTRACTION_H__
 
 #include <etk/Types.h>
+#include <ewol/Windows.h>
 
 namespace guiAbstraction
 {
 	void Init(int32_t argc, char *argv[]);
 	void Run(void);
+	void Stop(void);
 	void UnInit(void);
+	void SetDisplayOnWindows(ewol::Windows * newOne);
+	void ChangeSize(int32_t w, int32_t h);
+	void ChangePos(int32_t x, int32_t y);
+	void GetAbsPos(int32_t & x, int32_t & y);
+	void StartResizeSystem(void);
+	void StartMoveSystem(void);
+	bool IsPressedInput(int32_t inputID);
 };
 
 

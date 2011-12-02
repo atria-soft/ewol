@@ -32,7 +32,7 @@
 #define __class__	"etk::File"
 
 
-std::ostream& etk::operator <<(std::ostream &os, const etk::File &obj)
+etk::CCout& etk::operator <<(etk::CCout &os, const etk::File &obj)
 {
 	os << obj.m_folder;
 	os << "/";
@@ -156,9 +156,13 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 	if ('/' != *destFilename.c_str()) {
 		// Get the command came from the running of the program : 
 		char cCurrentPath[FILENAME_MAX];
+		#if __PLATFORM__ == Android
+			strcpy(cCurrentPath, "./");
+		#else
 		if (!getcwd(cCurrentPath, FILENAME_MAX)) {
 			return;
 		}
+		#endif
 		cCurrentPath[FILENAME_MAX - 1] = '\0';
 		etk::String tmpFilename = destFilename;
 		destFilename = cCurrentPath;
