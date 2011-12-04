@@ -87,13 +87,13 @@ class Plop :public ewol::Windows
 		};
 };
 
+static Plop * myWindowsExample = NULL;
+
 /**
- * @brief main input fonction
+ * @brief main application function Initialisation
  */
-int main(int argc, char *argv[])
+void APP_Init(int argc, char *argv[])
 {
-	
-	ewol::Init(argc, argv);
 	ewol::ChangeSize(800, 600);
 	/*
 	if (true == ewol::AddFont("dataTest/TextMonospace.ebt", true, true, true) ) {
@@ -103,23 +103,18 @@ int main(int argc, char *argv[])
 	ewol::SetFontFolder("Font");
 	ewol::SetDefaultFont("freefont/FreeMono", 14);
 	ewol::theme::LoadDefault("dataTest/exemple.eol");
-	//ewol::theme::LoadDefault("dataTest/exemple.eol");
-	//exit(0);
 	
-	Plop * myWindowsExample = new Plop();
+	myWindowsExample = new Plop();
 	
 	
 	// create the specific windows
 	ewol::DisplayWindows(myWindowsExample);
-	
-	ewol::Run();
-	
-	ewol::DisplayWindows(NULL);
-	
+}
+
+/**
+ * @brief main application function Un-Initialisation
+ */
+void APP_UnInit(void)
+{
 	delete(myWindowsExample);
-	
-	ewol::UnInit();
-	
-	
-	return 0;
 }

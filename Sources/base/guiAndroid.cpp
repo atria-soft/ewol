@@ -33,8 +33,10 @@
 #include <ewol/Debug.h>
 #include <etk/String.h>
 #include <ewol/WidgetManager.h>
-#include <base/guiAndroid.h>
+#include <base/gui.h>
+#include <ewol/ewol.h>
 
+#include <importgl.h>
 
 
 #include <app.h>
@@ -50,9 +52,10 @@ static long sTimeOffset   = 0;
 static int  sTimeOffsetInit = 0;
 static long sTimeStopped  = 0;
 
-static int32_t currentWidth = 320;
-static int32_t currentHeight = 480;
+static etkFloat_t m_width = 320;
+static etkFloat_t m_height = 480;
 
+ewol::Windows* m_uniqueWindows = NULL;
 
 static long _getTime(void)
 {
@@ -61,6 +64,9 @@ static long _getTime(void)
     return (long)(now.tv_sec*1000 + now.tv_usec/1000);
 }
 
+
+void Draw(void);
+
 extern "C"
 {
 	
@@ -68,7 +74,8 @@ extern "C"
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeInit( JNIEnv*  env )
 	{
 		EWOL_INFO("Init : Start All Application");
-		appInit();
+		ewol::Init(0, NULL);
+		APP_Init(0, NULL);
 		gAppAlive    = 1;
 		sDemoStopped = 0;
 		sTimeOffsetInit = 0;
@@ -77,16 +84,24 @@ extern "C"
 	
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
 	{
-		currentWidth = w;
-		currentHeight = h;
+		m_width = w;
+		m_height = h;
 		EWOL_INFO("Resize w=" << w << " h=" << h);
+		if (NULL != m_uniqueWindows) {
+			m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+		}
 	}
 	
 	/* Call to finalize the graphics state */
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
 	{
 		EWOL_INFO("Renderer : Close All Application");
-		appDeinit();
+		// unset all windows
+		ewol::DisplayWindows(NULL);
+		// call application to uninit
+		APP_UnInit();
+		// uninit Ewol
+		ewol::UnInit();
 	}
 	
 	/* This is called to indicate to the render loop that it should
@@ -111,7 +126,13 @@ extern "C"
 	{
 		EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
 		if (0 == pointerID) {
-			appMove(x,y);
+			//appMove(x,y);
+			if(NULL != m_uniqueWindows) {
+				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
+				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1 | ewol::FLAG_EVENT_INPUT_CLICKED, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
+				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
+				m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+			}
 		}
 	}
 	
@@ -148,7 +169,7 @@ extern "C"
 			}
 		}
 	
-		appRender(curTime, currentWidth, currentHeight);
+		Draw();
 	}
 
 }
@@ -156,6 +177,121 @@ extern "C"
 
 
 
+static void Setwindow(ewol::Windows* newWindows)
+{
+	m_uniqueWindows = newWindows;
+	if (NULL != m_uniqueWindows) {
+		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+	}
+}
+
+
+
+static etkFloat_t gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
+static etkFloat_t gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
+                                           200.0f, 200.0f, 300.0f, 200.0f, 200.0f, 300.0f };
+
+void Draw(void)
+{
+	//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
+	if(NULL == m_uniqueWindows) {
+		// set the size of the open GL system
+		glViewport(0,0,m_width,m_height);
+		
+		// Clear the screen with transparency ...
+		glClearColor(0.0,0.0,0.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		//glOrtho(0., width, 0., -height, 1., 20.);
+		glOrtho(-m_width/2, m_width/2, m_height/2, -m_height/2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		
+		//glTranslatef(0, -height/2, -5);
+		glTranslatef(-m_width/2, -m_height/2, -1.0);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+		
+		glEnableClientState( GL_VERTEX_ARRAY );
+		
+		//LOGI("engine_draw_frame (%d,%d)",width,height);
+		
+		glColor4f(0.0, 1.0, 1.0, 1.0);
+		glVertexPointer(2, oglTypeFloat_t, 0, gTriangleVertices5 );
+		glDrawArrays( GL_TRIANGLES, 0, 6);
+		static int vallllll = 0;
+		static float transparency = 0.0;
+		if (vallllll <= 1) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(1.0, 0.0, 0.0, 1.0);
+			} else {
+				glColor4f(1.0, 0.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 2) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(1.0, 1.0, 0.0, 1.0);
+			} else {
+				glColor4f(1.0, 1.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 3) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 1.0, 0.0, 1.0);
+			} else {
+				glColor4f(0.0, 1.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 4) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 1.0, 1.0, 1.0);
+			} else {
+				glColor4f(0.0, 1.0, 1.0, transparency);
+			}
+		} else if (vallllll <= 5) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 0.0, 1.0, 1.0);
+			} else {
+				glColor4f(0.0, 0.0, 1.0, transparency);
+			}
+		} else {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll = 0;
+				transparency = 0.0;
+				glColor4f(1.0, 0.0, 1.0, 1.0);
+			} else {
+				glColor4f(1.0, 0.0, 1.0, transparency);
+			}
+		}
+		glVertexPointer(2, oglTypeFloat_t, 0, gTriangleVertices );
+		glDrawArrays( GL_TRIANGLES, 0, 3);
+		
+		glDisableClientState( GL_VERTEX_ARRAY );
+	
+		glDisable(GL_BLEND);
+	} else {
+		m_uniqueWindows->SysDraw();
+	}
+	glFlush();
+}
 
 
 
@@ -182,13 +318,7 @@ void guiAbstraction::Init(int32_t argc, char *argv[])
 
 void guiAbstraction::Run(void)
 {
-	if (true == guiAbstractionIsInit) {
-		EWOL_INFO("Start Running");
-		//myX11Access->Run();
-		EWOL_INFO("Stop Running");
-	} else {
-		EWOL_CRITICAL("Can not Run X11 ==> not init ... ");
-	}
+	EWOL_INFO("Noting to run in android mode ...");
 }
 
 void guiAbstraction::Stop(void)
@@ -203,7 +333,7 @@ void guiAbstraction::Stop(void)
 void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
 {
 	if (true == guiAbstractionIsInit) {
-		//myX11Access->Setwindow(newOne);
+		Setwindow(newOne);
 	} else {
 		EWOL_CRITICAL("Can not set Windows X11 ==> not init ... ");
 	}
@@ -276,4 +406,44 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	//	EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
 	//}
+}
+
+// never had main in android ...
+/*
+int main(int argc, char *argv[])
+{
+	return -1;
+}
+*/
+
+void glOrtho(GLfloat left,
+             GLfloat right,
+             GLfloat bottom,
+             GLfloat top,
+             GLfloat nearVal,
+             GLfloat farVal)
+{
+	GLfloat myMatrix[4*4];
+	int iii;
+	for(iii=0; iii<4*4 ; iii++) {
+		myMatrix[iii] = 0;
+	}
+	myMatrix[0] = 2.0 / (right - left);
+	myMatrix[5] = 2.0 / (top - bottom);
+	myMatrix[10] = -2.0 / (farVal - nearVal);
+#if 1
+	myMatrix[3]  = -1*(right + left) / (right - left);
+	myMatrix[7]  = -1*(top + bottom) / (top - bottom);
+	myMatrix[11] = -1*(farVal + nearVal) / (farVal - nearVal);
+#else
+	// test if matrix is not corectly instanciate ...
+	myMatrix[12]  = -1*(right + left) / (right - left);
+	myMatrix[13]  = -1*(top + bottom) / (top - bottom);
+	myMatrix[14] = -1*(farVal + nearVal) / (farVal - nearVal);
+#endif
+	myMatrix[15] = 1;
+
+	glLoadMatrixf(myMatrix);
+
+
 }

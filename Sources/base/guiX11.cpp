@@ -26,7 +26,7 @@
 #include <ewol/Debug.h>
 #include <etk/String.h>
 #include <ewol/WidgetManager.h>
-#include <base/guiX11.h>
+#include <base/gui.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -874,5 +874,29 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 		EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
 	}
+}
+
+#include <ewol/ewol.h>
+
+
+
+
+
+int main(int argc, char *argv[])
+{
+	// init Ewol
+	ewol::Init(argc, argv);
+	// Init Application ...
+	APP_Init(argc, argv);
+	// Start Ewol diwplay while
+	ewol::Run();
+	// unset all windows
+	ewol::DisplayWindows(NULL);
+	// call application to uninit
+	APP_UnInit();
+	// uninit Ewol
+	ewol::UnInit();
+	
+	return 0;
 }
 

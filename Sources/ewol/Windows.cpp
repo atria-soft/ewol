@@ -134,6 +134,24 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 void ewol::Windows::SysDraw(void)
 {
 
+#if defined(__PLATFORM__Android)
+		// set the size of the open GL system
+		glViewport(0,0,m_size.x,m_size.y);
+		
+		// Clear the screen with transparency ...
+		glClearColor(0.0,0.0,0.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		//glOrtho(0., width, 0., -height, 1., 20.);
+		glOrtho(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		
+		//glTranslatef(0, -height/2, -5);
+		glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+#else
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
@@ -149,13 +167,13 @@ void ewol::Windows::SysDraw(void)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0, -m_size.y, -5);
-	
+#endif
 	//http://www.khronos.org/opengles/documentation/opengles1_0/html/glBlendFunc.html
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
 	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-	
+
 	GenDraw();
 
 	glDisable(GL_BLEND);

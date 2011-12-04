@@ -311,7 +311,7 @@ clean:
 	@echo '           CLEANING : $(F_VIOLET)$(OUTPUT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
 ifeq ($(PLATFORM), Android)
-	rm -r bin libs gen obj
+	rm -rf bin libs gen obj
 else 
 	@echo Remove Folder : $(OBJECT_DIR)
 	@rm -rf $(OBJECT_DIR) 

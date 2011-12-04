@@ -28,21 +28,7 @@
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
 
-#if defined(__PLATFORM__X11)
-	#include <base/guiX11.h>
-#elif defined(__PLATFORM__DoubleBuffer)
-	#include <base/guiDoubleBuffer.h>
-#elif defined(__PLATFORM__Android)
-	#include <base/guiAndroid.h>
-#elif defined(__PLATFORM__AndroidTablet)
-	#include <base/guiAndroidTablet.h>
-#elif defined(__PLATFORM__IPhone)
-	#include <base/guiIPhone.h>
-#elif defined(__PLATFORM__IPad)
-	#include <base/guiIPad.h>
-#else
-	#error you need to specify a platform ...
-#endif
+#include <base/gui.h>
 
 #undef __class__
 #define __class__	"ewol"

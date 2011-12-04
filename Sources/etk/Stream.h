@@ -29,6 +29,14 @@
 #include <cstdio>
 #include <typeinfo>
 
+#if defined(__PLATFORM__Android)
+#	include <string.h>
+#	include <android/log.h>
+#	define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "====> EWOL", __VA_ARGS__))
+#	define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "====> EWOL", __VA_ARGS__))
+#	define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "====> EWOL", __VA_ARGS__))
+#endif
+
 namespace etk{
 	class CEndl{};
 	class CHex{};
@@ -36,12 +44,75 @@ namespace etk{
 		private:
 			bool hex;
 		public:
+#if defined(__PLATFORM__Android)
+	private:
+		char m_tmpChar[2048];
+	public:
+		CCout(){
+			hex=false;
+			memset(m_tmpChar, 0, 2048*sizeof(char));
+		};
+		~CCout() { };
+		CCout& operator << (int t) {
+			char tmp[256];
+			sprintf(tmp,"%d", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (unsigned int t) {
+			char tmp[256];
+			sprintf(tmp, "%d", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (long t) {
+			char tmp[256];
+			sprintf(tmp, "%ld", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (double t) {
+			char tmp[256];
+			sprintf(tmp, "%f", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (float t) {
+			char tmp[256];
+			sprintf(tmp, "%f", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (char * t) {
+			char tmp[256];
+			sprintf(tmp, "%s", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (const char * t) {
+			char tmp[256];
+			sprintf(tmp, "%s", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (char t) {
+			char tmp[256];
+			sprintf(tmp, "%c", t);
+			strcat(m_tmpChar, tmp);
+			return *this;
+		}
+		CCout& operator << (etk::CEndl t) {
+			strcat(m_tmpChar, "\n");
+			LOGI("%s", m_tmpChar);
+			memset(m_tmpChar, 0, 2048*sizeof(char));
+			return *this;
+		}
+#else
 		CCout(){
 			hex=false;
 		};
 		
 		~CCout() { };
-		
 		CCout& operator << (int t) {
 			printf("%d", t);
 			return *this;
@@ -78,6 +149,7 @@ namespace etk{
 			printf("\n");
 			return *this;
 		}
+#endif
 	};
 	extern etk::CCout cout;
 	extern etk::CEndl endl;

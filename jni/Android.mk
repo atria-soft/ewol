@@ -8,7 +8,7 @@ LOCAL_MODULE := ewolabstraction
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../Sources
 
-LOCAL_CFLAGS := -D__PLATFORM__Android -Wno-write-strings
+LOCAL_CFLAGS := -D__PLATFORM__Android -Wno-write-strings -DETK_DEBUG_LEVEL=3 -DEWOL_DEBUG_LEVEL=3 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" -DVERSION_BUILD_TIME="\"pasd_heure\""
 
 #enable io stream in the STL ...
 #APP_STL := gnustl_static
@@ -16,6 +16,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android -Wno-write-strings
 
 LOCAL_SRC_FILES := \
     ../Sources/demo.cpp \
+    ../Sources/Main.cpp \
     ../Sources/base/guiAndroid.cpp \
     ../Sources/tinyXML/tinyxml.cpp \
     ../Sources/tinyXML/tinyxmlparser.cpp \

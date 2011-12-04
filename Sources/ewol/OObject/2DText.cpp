@@ -58,7 +58,8 @@ ewol::OObject2DText::~OObject2DText(void)
 void ewol::OObject2DText::Draw(void)
 {
 	if (m_coord.Size()<=0) {
-		EWOL_WARNING("Nothink to draw...");
+		// TODO : a remètre ...
+		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
 	// TODO : Android does not support GL_QUADS ...

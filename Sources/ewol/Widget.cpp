@@ -68,6 +68,7 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	bool ended = false;
+	EWOL_WARNING("Input event : " << IdInput << " pos(" << x << "," << y << ")");
 	for(int32_t iii=m_inputEvent.Size()-1; iii>=0; iii--) {
 		if (EWOL_EVENT_AREA == m_inputEvent[iii].mode) {
 			if(    m_inputEvent[iii].area.origin.x <= x

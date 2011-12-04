@@ -137,11 +137,11 @@ void ewol::Test::OnRegenerateDisplay(void)
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
-	tmpOObjects = new ewol::OObject2DColored;
+	//tmpOObjects = new ewol::OObject2DColored;
 	
-	ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
+	//ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
 	
-	AddOObject(tmpOObjects, "themeObject");
+	//AddOObject(tmpOObjects, "themeObject");
 	
 	
 	
