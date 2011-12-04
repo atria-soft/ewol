@@ -24,6 +24,11 @@
 
 
 
+#include <jni.h>
+#include <sys/time.h>
+#include <time.h>
+#include <android/log.h>
+#include <stdint.h>
 
 #include <ewol/Debug.h>
 #include <etk/String.h>
@@ -31,11 +36,6 @@
 #include <base/guiAndroid.h>
 
 
-#include <jni.h>
-#include <sys/time.h>
-#include <time.h>
-#include <android/log.h>
-#include <stdint.h>
 
 #include <app.h>
 
@@ -61,98 +61,97 @@ static long _getTime(void)
     return (long)(now.tv_sec*1000 + now.tv_usec/1000);
 }
 
-/* Call to initialize the graphics state */
-void Java_com_example_ewolAbstraction_EwolRenderer_nativeInit( JNIEnv*  env )
+extern "C"
 {
-	EWOL_INFO("Init : Start All Application");
-	appInit();
-	gAppAlive    = 1;
-	sDemoStopped = 0;
-	sTimeOffsetInit = 0;
-}
-
-
-void Java_com_example_ewolAbstraction_EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
-{
-	currentWidth = w;
-	currentHeight = h;
-	EWOL_INFO("Resize w=" << w << " h=" << h);
-}
-
-/* Call to finalize the graphics state */
-void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
-{
-	EWOL_INFO("Renderer : Close All Application");
-	appDeinit();
-}
-
-/* This is called to indicate to the render loop that it should
- * stop as soon as possible.
- */
-void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativePause( JNIEnv* env )
-{
-	sDemoStopped = !sDemoStopped;
-	if (sDemoStopped) {
-		/* we paused the animation, so store the current
-		 * time in sTimeStopped for future nativeRender calls */
-		sTimeStopped = _getTime();
-	} else {
-		/* we resumed the animation, so adjust the time offset
-		 * to take care of the pause interval. */
-		sTimeOffset -= _getTime() - sTimeStopped;
+	
+	/* Call to initialize the graphics state */
+	void Java_com_example_ewolAbstraction_EwolRenderer_nativeInit( JNIEnv*  env )
+	{
+		EWOL_INFO("Init : Start All Application");
+		appInit();
+		gAppAlive    = 1;
+		sDemoStopped = 0;
+		sTimeOffsetInit = 0;
 	}
-}
-
-
-void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
-{
-	EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
-	if (0 == pointerID) {
-		appMove(x,y);
+	
+	
+	void Java_com_example_ewolAbstraction_EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
+	{
+		currentWidth = w;
+		currentHeight = h;
+		EWOL_INFO("Resize w=" << w << " h=" << h);
 	}
-}
-
-void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp)
-{
-	if (isUp) {
-		__android_log_print(ANDROID_LOG_INFO, "EWOL", "Event : Input ID=%d [DOWN]", pointerID);
-		EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN]");
-	} else {
-		__android_log_print(ANDROID_LOG_INFO, "EWOL", "Event : Input ID=%d [UP]", pointerID);
-		EWOL_INFO("Event : Input ID=" << pointerID << " [UP]");
+	
+	/* Call to finalize the graphics state */
+	void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
+	{
+		EWOL_INFO("Renderer : Close All Application");
+		appDeinit();
 	}
+	
+	/* This is called to indicate to the render loop that it should
+	 * stop as soon as possible.
+	 */
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativePause( JNIEnv* env )
+	{
+		sDemoStopped = !sDemoStopped;
+		if (sDemoStopped) {
+			/* we paused the animation, so store the current
+			 * time in sTimeStopped for future nativeRender calls */
+			sTimeStopped = _getTime();
+		} else {
+			/* we resumed the animation, so adjust the time offset
+			 * to take care of the pause interval. */
+			sTimeOffset -= _getTime() - sTimeStopped;
+		}
+	}
+	
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
+	{
+		EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
+		if (0 == pointerID) {
+			appMove(x,y);
+		}
+	}
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp)
+	{
+		if (isUp) {
+			EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN]");
+		} else {
+			EWOL_INFO("Event : Input ID=" << pointerID << " [UP]");
+		}
+	}
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint eventID)
+	{
+		EWOL_WARNING("Event : Unknow ID=" << eventID);
+	}
+	
+	/* Call to render the next GL frame */
+	void Java_com_example_ewolAbstraction_EwolRenderer_nativeRender( JNIEnv*  env )
+	{
+		long   curTime;
+	
+		/* NOTE: if sDemoStopped is TRUE, then we re-render the same frame
+		 *       on each iteration.
+		 */
+		if (sDemoStopped) {
+			curTime = sTimeStopped + sTimeOffset;
+		} else {
+			curTime = _getTime() + sTimeOffset;
+			if (sTimeOffsetInit == 0) {
+				sTimeOffsetInit = 1;
+				sTimeOffset     = -curTime;
+				curTime         = 0;
+			}
+		}
+	
+		appRender(curTime, currentWidth, currentHeight);
+	}
+
 }
-
-void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint eventID)
-{
-	EWOL_WARNING("Event : Unknow ID=" << eventID);
-}
-
-/* Call to render the next GL frame */
-void Java_com_example_ewolAbstraction_EwolRenderer_nativeRender( JNIEnv*  env )
-{
-    long   curTime;
-
-    /* NOTE: if sDemoStopped is TRUE, then we re-render the same frame
-     *       on each iteration.
-     */
-    if (sDemoStopped) {
-        curTime = sTimeStopped + sTimeOffset;
-    } else {
-        curTime = _getTime() + sTimeOffset;
-        if (sTimeOffsetInit == 0) {
-            sTimeOffsetInit = 1;
-            sTimeOffset     = -curTime;
-            curTime         = 0;
-        }
-    }
-
-    //__android_log_print(ANDROID_LOG_INFO, "EWOL", "curTime=%ld", curTime);
-
-    appRender(curTime, currentWidth, currentHeight);
-}
-
-
 
 
 

@@ -65,7 +65,7 @@ else
     $(error you must specify a corect platform : make PLATFORM=$(SUPPORTED_PLATFORM))
 endif
 
-$(info Build for $(PLATFORM))
+$(info Build for PLATFORM=$(PLATFORM))
 
 ###############################################################################
 ### Compilateur base system                                                 ###
@@ -305,10 +305,14 @@ $(OUTPUT_NAME_DEBUG): $(OBJ) $(MAKE_DEPENDENCE)
 	@cp $@ $(PROG_NAME)
 endif
 
+
 clean:
 	@echo $(CADRE_HAUT_BAS)
 	@echo '           CLEANING : $(F_VIOLET)$(OUTPUT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
+ifeq ($(PLATFORM), Android)
+	rm -r bin libs gen obj
+else 
 	@echo Remove Folder : $(OBJECT_DIR)
 	@rm -rf $(OBJECT_DIR) 
 	@echo Remove File : $(PROG_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
@@ -322,10 +326,15 @@ clean:
 	@rm -f doxygen.log
 	@echo Remove temporary files *.bck
 	@rm -f `find . -name "*.bck"`
+endif
 
 count:
 	wc -l Makefile `find $(FILE_DIRECTORY)/ -name "*.cpp"` `find $(FILE_DIRECTORY)/ -name "*.h"` 
 
+ifeq ($(PLATFORM), Android)
+install:
+	sudo $(PROJECT_SDK)/platform-tools/adb  install -r ./bin/EwolActivity-debug.apk
+else
 install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
 	@echo $(CADRE_HAUT_BAS)
 	@echo '           INSTALL : $(F_VIOLET)$(OUTPUT_NAME_RELEASE)=>$(PROG_NAME)$(F_NORMALE)'$(CADRE_COTERS)
@@ -342,7 +351,7 @@ install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
 	@mkdir -p /usr/share/edn/images/
 	@cp -vf data/imagesSources/icone.png /usr/share/edn/images/
 	@cp -vf data/imagesSources/delete-24px.png /usr/share/edn/images/
-
+endif
 
 # http://alp.developpez.com/tutoriels/debian/creer-paquet/
 package: .encadrer

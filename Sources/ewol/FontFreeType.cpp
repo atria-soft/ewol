@@ -179,9 +179,9 @@ class FTFontInternal
 			}
 			EWOL_INFO("    unit per EM          = " << m_fftFace->units_per_EM);
 			EWOL_INFO("    num of fixed sizes   = " << m_fftFace->num_fixed_sizes);
-			EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
+			//EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
 			
-			EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
+			//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
 		}
 	public:
 		FTFontInternal(etk::File fontFileName, etk::String fontName)
