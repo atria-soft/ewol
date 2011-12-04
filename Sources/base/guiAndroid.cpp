@@ -74,8 +74,6 @@ extern "C"
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeInit( JNIEnv*  env )
 	{
 		EWOL_INFO("Init : Start All Application");
-		ewol::Init(0, NULL);
-		APP_Init(0, NULL);
 		gAppAlive    = 1;
 		sDemoStopped = 0;
 		sTimeOffsetInit = 0;
@@ -96,12 +94,6 @@ extern "C"
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
 	{
 		EWOL_INFO("Renderer : Close All Application");
-		// unset all windows
-		ewol::DisplayWindows(NULL);
-		// call application to uninit
-		APP_UnInit();
-		// uninit Ewol
-		ewol::UnInit();
 	}
 	
 	/* This is called to indicate to the render loop that it should
@@ -131,7 +123,7 @@ extern "C"
 				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
 				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1 | ewol::FLAG_EVENT_INPUT_CLICKED, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
 				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
-				m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+				//m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 			}
 		}
 	}
@@ -148,6 +140,29 @@ extern "C"
 	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint eventID)
 	{
 		EWOL_WARNING("Event : Unknow ID=" << eventID);
+	}
+	
+	static bool isAlreadyInit = false;
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeApplicationInit( JNIEnv* env)
+	{
+		EWOL_WARNING("Event : Init Application");
+		if (false == isAlreadyInit) {
+			ewol::Init(0, NULL);
+			APP_Init(0, NULL);
+			isAlreadyInit = true;
+		}
+	}
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeApplicationUnInit( JNIEnv* env)
+	{
+		EWOL_WARNING("Event : UnInit application");
+		// unset all windows
+		ewol::DisplayWindows(NULL);
+		// call application to uninit
+		APP_UnInit();
+		// uninit Ewol
+		ewol::UnInit();
 	}
 	
 	/* Call to render the next GL frame */

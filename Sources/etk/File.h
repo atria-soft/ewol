@@ -29,6 +29,8 @@
 
 #define MAX_FILE_NAME      (10240)
 
+//http://developer.android.com/guide/topics/data/data-storage.html
+
 namespace etk
 {
 	class File

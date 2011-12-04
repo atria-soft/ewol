@@ -17,7 +17,9 @@ import android.view.MotionEvent;
  *
  */
 class EwolGLSurfaceView extends GLSurfaceView {
+	private static native void nativeApplicationInit();
 	private static native void nativePause();
+	private static native void nativeApplicationUnInit();
 	private static native void nativeEventInputMotion(int pointerID, float x, float y);
 	private static native void nativeEventInputState(int pointerID, boolean isDown);
 	private static native void nativeEventUnknow(int eventID);
@@ -26,6 +28,7 @@ class EwolGLSurfaceView extends GLSurfaceView {
 		super(context);
 		mRenderer = new EwolRenderer();
 		setRenderer(mRenderer);
+		nativeApplicationInit();
 	}
 
 	private boolean InputDown1 = false;
