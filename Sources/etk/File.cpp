@@ -26,7 +26,7 @@
 #include <etk/Types.h>
 #include <etk/DebugInternal.h>
 #include <etk/File.h>
-
+#include <unistd.h>
 
 #undef __class__
 #define __class__	"etk::File"
@@ -156,7 +156,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 	if ('/' != *destFilename.c_str()) {
 		// Get the command came from the running of the program : 
 		char cCurrentPath[FILENAME_MAX];
-		#if __PLATFORM__ == Android
+		#ifdef __PLATFORM__Android
 			strcpy(cCurrentPath, "/data/" PACKAGE_NAME "/raw/");
 		#else
 		if (!getcwd(cCurrentPath, FILENAME_MAX)) {

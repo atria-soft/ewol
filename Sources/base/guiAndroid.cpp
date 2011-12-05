@@ -38,9 +38,6 @@
 
 #include <importgl.h>
 
-
-#include <app.h>
-
 #undef __class__
 #define __class__ "AndroidJNI"
 

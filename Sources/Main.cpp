@@ -101,7 +101,8 @@ void APP_Init(int argc, char *argv[])
 	}
 	*/
 	ewol::SetFontFolder("Font");
-	ewol::SetDefaultFont("freefont/FreeMono", 14);
+	//ewol::SetDefaultFont("freefont/FreeMono", 14);
+	ewol::SetDefaultFont("ebtfont/Monospace", 14);
 	ewol::theme::LoadDefault("dataTest/exemple.eol");
 	
 	myWindowsExample = new Plop();

@@ -99,14 +99,14 @@ X11FLAGS+= -lX11 -DEWOL_X11_MODE__XF86V -lXxf86vm
 #X11FLAGS+= -lX11 -DEWOL_X11_MODE__XRENDER -lXrandr
 
 
-ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
-    FREETYPE_CFLAGS=  `pkg-config --cflags freetype2` -DEWOL_USE_FREE_TYPE
-    FREETYPE_LDFLAGS= `pkg-config --libs freetype2` -DEWOL_USE_FREE_TYPE
-else
+#ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
+#    FREETYPE_CFLAGS=  `pkg-config --cflags freetype2` -DEWOL_USE_FREE_TYPE
+#    FREETYPE_LDFLAGS= `pkg-config --libs freetype2` -DEWOL_USE_FREE_TYPE
+#else
     FREETYPE_CFLAGS=
     FREETYPE_LDFLAGS=
     $(Info  libFreeType-dev is not installed)
-endif
+#endif
 
 
 ###############################################################################
