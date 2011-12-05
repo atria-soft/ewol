@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eol>
+	<!-- can have "color" and "group" that is consider as global ... -->
+	<color/>
+	<color name="MEGAMERDIQUE"/>
+	<color name="GenBG"			val="#FF0000"/>
+	<color name="GenFG"			val="#FF000055"/>
+	<color name="TestPlop"			val="#0000FF55"/>
+	<color name="GenBorder"		val="1.0;0.000512;1.0;0.755562535"/>
+	<color name="GenBorder"		val="5.0;0.000512;1.0"/>
+	
+	<group name="Gen Rect system ... ">
+		<rect color="..."
+		      position="0.53;0.56"
+		      size="0.22;0.11"
+		/>
+		<line color="..."
+		      positionStart="0.53;0.56"
+		      positionStop="0.22;0.11"
+		      thickness="0.05"
+		/>
+		<!-- and more basic display -->
+	</group>
+	
+	<!-- example of a single element -->
+	<element name="plop"
+	         ratio="1.0"
+	         ClipX="false"
+	         ClipY="false"
+	         internalElemStart="0.25;0.75"
+	         internalElemStop="0.75;0.75">
+		<!--
+			note we have 5 methode to reference a color : 
+				- #RRGGBB          ==> in hexa 0x00<=x<=0xFF
+				- #RRGGBBAA        ==> in hexa 0x00<=x<=0xFF
+				- R.R;G.G;B.B      ==> in double 0<=x<=1
+				- R.R;G.G;B.B;A.A  ==> in double 0<=x<=1
+				- &NameColor       ==> search internal color of the element and after global color ...
+		-->
+		<color name="Background"		val="#EEEEEEFF"/>
+		<color name="Red"				val="#FF0000FF"/>
+		<color name="Green"				val="#00FF00FF"/>
+		<color name="Border"			val="0.0;0.000512;1.0;0.755562535"/>
+		<!--...-->
+		
+		
+		<group name="basicRect">
+			<rect color="..."
+			      position="0.53;0.56"
+			      size="0.22;0.11"
+			/>
+			<line color="..."
+			      positionStart="0.53;0.56"
+			      positionStop="0.22;0.11"
+			      thickness="0.05"
+			/>
+			<!-- and more basic display -->
+		</group>
+		<!--...-->
+		
+		<frame id="0" name="basic">
+			<rect colorBG="Background"
+			      position="0.0;0.0"
+			      size="1.0;1.0"
+			/>
+			<rect colorBorder="Red"
+			      position="0.1;0.1"
+			      size="0.25;0.25"
+			      thickness="0.01"
+			/>
+			<line color="TestPlop"
+			      positionStart="0.53;0.56"
+			      positionStop="0.22;0.11"
+			      thickness="0.01"
+			/>
+			<circle colorBG="Green"
+			        position="0.75;0.75"
+			        radius="0.25"
+			/>
+		</frame>
+		<frame id="0" name="hover">
+			<rect color="..."
+			      position="0.53;0.56"
+			      size="0.22;0.11"
+			/>
+			<link name="basicRect"/>
+		</frame>
+		<!--...-->
+		
+	</element>
+	<!--...-->
+</eol>

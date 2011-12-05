@@ -157,7 +157,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 		// Get the command came from the running of the program : 
 		char cCurrentPath[FILENAME_MAX];
 		#ifdef __PLATFORM__Android
-			strcpy(cCurrentPath, "/data/" PACKAGE_NAME "/raw/");
+			strcpy(cCurrentPath, "/data/data/" PACKAGE_NAME "/assets//");
 		#else
 		if (!getcwd(cCurrentPath, FILENAME_MAX)) {
 			return;

@@ -100,10 +100,46 @@ void APP_Init(int argc, char *argv[])
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 	}
 	*/
-	ewol::SetFontFolder("Font");
+	ewol::SetFontFolder("Font/");
 	//ewol::SetDefaultFont("freefont/FreeMono", 14);
 	ewol::SetDefaultFont("ebtfont/Monospace", 14);
-	ewol::theme::LoadDefault("dataTest/exemple.eol");
+	//ewol::theme::LoadDefault("dataTest/exemple.eol");
+	ewol::theme::LoadDefault("theme/exemple.eol");
+	
+	etk::File tmpFile("/data/data/com.example.EwolActivity.app/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile = ("/data/data/com.example.EwolActivity/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/com.example.EwolActivity.app/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/com.example.EwolActivity/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/data/com.example.ewolactivity.app/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/data/com.example.ewolactivity/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/com.example.ewolactivity.app/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	tmpFile=("/data/com.example.ewolactivity/assets/theme/exemple.eol");
+	if (tmpFile.Exist() ) {
+		EWOL_WARNING("file existed : " << tmpFile);
+	}
+	
+	
 	
 	myWindowsExample = new Plop();
 	
