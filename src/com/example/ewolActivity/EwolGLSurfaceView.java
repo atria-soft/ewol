@@ -11,6 +11,8 @@ import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import java.io.File;
+import android.content.Context;
 
 /**
  * @brief Class : 
@@ -23,9 +25,18 @@ class EwolGLSurfaceView extends GLSurfaceView {
 	private static native void nativeEventInputMotion(int pointerID, float x, float y);
 	private static native void nativeEventInputState(int pointerID, boolean isDown);
 	private static native void nativeEventUnknow(int eventID);
+	private static native void nativeParamSetArchiveDir(int mode, String myString);
 	
 	public EwolGLSurfaceView(Context context) {
+		// super must be first statement in constructor
 		super(context);
+		// Load the application directory
+		nativeParamSetArchiveDir(0, context.getFilesDir().toString());
+		nativeParamSetArchiveDir(1, context.getCacheDir().toString());
+		// to enable extarnal storage: add in the manifest the restriction needed ...
+		//nativeParamSetArchiveDir(2, context.getExternalCacheDir().toString());
+		
+		// je n'ai pas compris ...
 		mRenderer = new EwolRenderer();
 		setRenderer(mRenderer);
 		nativeApplicationInit();

@@ -65,6 +65,8 @@ namespace etk
 	
 	etk::CCout& operator <<(etk::CCout &os, const etk::File &obj);
 	
+	void SetBaseFolder(const char * folder);
+	
 }
 
 #endif

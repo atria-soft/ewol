@@ -136,6 +136,15 @@ bool etk::File::operator!= (const etk::File &etkF) const
 }
 
 
+etk::String baseFolderMobile = "/data/data/com.example.ewolAbstraction/assets/";
+// for specific device contraint : 
+void etk::SetBaseFolder(const char * folder)
+{
+	//baseFolderMobile = folder;
+}
+
+
+
 void etk::File::SetCompleateName(etk::String &newFilename)
 {
 	char buf[MAX_FILE_NAME];
@@ -157,7 +166,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 		// Get the command came from the running of the program : 
 		char cCurrentPath[FILENAME_MAX];
 		#ifdef __PLATFORM__Android
-			strcpy(cCurrentPath, "/data/data/" PACKAGE_NAME "/assets//");
+			strcpy(cCurrentPath, baseFolderMobile.c_str() );
 		#else
 		if (!getcwd(cCurrentPath, FILENAME_MAX)) {
 			return;

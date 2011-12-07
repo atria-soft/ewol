@@ -139,6 +139,31 @@ extern "C"
 		EWOL_WARNING("Event : Unknow ID=" << eventID);
 	}
 	
+	
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
+	{
+		const char* str = env->GetStringUTFChars(myString,0);
+		switch(mode)
+		{
+			case 0:
+				EWOL_WARNING("Directory mode=FILE path=" << str);
+				etk::SetBaseFolder(str);
+				break;
+			case 1:
+				EWOL_WARNING("Directory mode=CACHE path=" << str);
+				break;
+			case 2:
+				EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
+				break;
+			default:
+				EWOL_WARNING("Directory mode=???? path=" << str);
+				break;
+		}
+		//env->ReleaseStringUTFChars(str,myString,0);
+	}
+	
+	
+	
 	static bool isAlreadyInit = false;
 	
 	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeApplicationInit( JNIEnv* env)

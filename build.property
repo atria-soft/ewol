@@ -12,3 +12,9 @@
 
 # The name of the output folder.
 #out-folder=Object_Android/bin
+
+# asset config
+assets.dir = ${basedir}/assets
+assets.relativeDir = assets
+assets.extension = png eol bmp ebt
+

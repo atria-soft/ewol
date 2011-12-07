@@ -14,7 +14,6 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
-                -DPACKAGE_NAME="\"com.example.EwolActivity.app\""
 
 LOCAL_SRC_FILES := \
     ../Sources/Main.cpp \

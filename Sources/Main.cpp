@@ -100,7 +100,7 @@ void APP_Init(int argc, char *argv[])
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 	}
 	*/
-	ewol::SetFontFolder("Font/");
+	ewol::SetFontFolder("Font");
 	//ewol::SetDefaultFont("freefont/FreeMono", 14);
 	ewol::SetDefaultFont("ebtfont/Monospace", 14);
 	//ewol::theme::LoadDefault("dataTest/exemple.eol");
