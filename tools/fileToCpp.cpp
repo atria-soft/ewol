@@ -115,13 +115,14 @@ void process(const char *ifname)
 		fprintf(ofile, "0x%02x,", c);
 		n++;
 	}
+	
+	fprintf(ofile, "\n\t\t0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00");
 	fprintf(ofile, "\n};\n");
-	fprintf(ofile, "long int %s_size = sizeof(%s);\n", buf, buf);
 	
 	//fprintf(ofileH, "extern unsigned char %s[];\n", buf);
 	//fprintf(ofileH, "extern unsigned long int %s_size;\n", buf);
 	char tmpVar[4096];
-	sprintf(tmpVar, "	{\"%s\", %s_size , %s},\n", ifname, buf, buf);
+	sprintf(tmpVar, "	{\"%s\", %d , %s},\n", ifname, n, buf);
 	strcat (endTable, tmpVar);
 	
 	fclose(ifile);

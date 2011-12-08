@@ -164,7 +164,13 @@ etk::String baseFolderCache = "~/.tmp/cache";
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
-	baseFolderData = folder;
+	#ifdef DATA_INTERNAL_BINARY
+		for(int32_t iii=0; iii<internalDataFilesSize; iii++) {
+			TK_DEBUG("Internal date : \"" << internalDataFiles[iii].filename << "\" size=" << internalDataFiles[iii].fileLenght);
+		}
+	#else
+		baseFolderData = folder;
+	#endif
 }
 void etk::SetBaseFolderDataUser(const char * folder)
 {
@@ -416,7 +422,7 @@ bool etk::File::fOpenRead(void)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		m_readingOffset = 0;
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			TK_DEBUG("Open file : " << GetCompleateName() << " with size=" << internalDataFilesSize << " Octets");
+			TK_DEBUG("Open file : " << GetCompleateName() << " with size=" << internalDataFiles[m_idInternal].fileLenght << " Octets");
 			return true;
 		}
 		return false;
@@ -478,11 +484,12 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 {
 	#ifdef DATA_INTERNAL_BINARY
 	char * element = elementLine;
+	memset(elementLine, 0, maxData);
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
 			// TODO ...
 			//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
-			if (m_readingOffset>internalDataFilesSize) {
+			if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
 				element[0] = '\0';
 				return NULL;
 			}
@@ -500,12 +507,13 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 				element++;
 				m_readingOffset++;
 				// TODO : Understand why this does not work
-				/*if (m_readingOffset>internalDataFilesSize) {
+				if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
 					*element = '\0';
 					return elementLine;
-				}*/
+				}
 			}
 		}
+		elementLine[0] = '\0';
 		return NULL;
 	}
 	#endif
@@ -518,8 +526,8 @@ int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
 			int32_t dataToRead = blockSize * nbBlock;
-			if (dataToRead + m_readingOffset > internalDataFilesSize) {
-				nbBlock = ((internalDataFilesSize - m_readingOffset) / blockSize);
+			if (dataToRead + m_readingOffset > internalDataFiles[m_idInternal].fileLenght) {
+				nbBlock = ((internalDataFiles[m_idInternal].fileLenght - m_readingOffset) / blockSize);
 				dataToRead = blockSize * nbBlock;
 			}
 			memcpy(data, &internalDataFiles[m_idInternal].data[m_readingOffset], dataToRead);
@@ -541,6 +549,39 @@ int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 	}
 	#endif
 	return fwrite(data, blockSize, nbBlock, m_PointerFile);
+}
+
+
+bool etk::File::fSeek(long int offset, int origin)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			int32_t positionEnd = 0;
+			switch(origin) {
+				case SEEK_END:
+					positionEnd = internalDataFiles[m_idInternal].fileLenght;
+					break;
+				case SEEK_CUR:
+					positionEnd = m_readingOffset;
+					break;
+				default:
+					positionEnd = 0;
+					break;
+			}
+			positionEnd += offset;
+			if (positionEnd < 0) {
+				positionEnd = 0;
+			} else if (positionEnd > internalDataFiles[m_idInternal].fileLenght) {
+				positionEnd = internalDataFiles[m_idInternal].fileLenght;
+			}
+			m_readingOffset = positionEnd;
+			return true;
+		}
+		return false;
+	}
+	#endif
+	return fseek(m_PointerFile, offset, origin);
 }
 
 

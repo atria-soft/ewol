@@ -76,7 +76,7 @@ namespace ewol
 				int32_t lineID=1;
 				while (NULL != m_filename.fGets(elementLine, 2048) )
 				{
-					EWOL_DEBUG(" Read file Line : " << elementLine);
+					//EWOL_DEBUG(" Read file Line : " << elementLine);
 					if (    '\n' != elementLine[0] // EOL
 					     && '\0' != elementLine[0] // EOF
 					     && '#'  != elementLine[0] // Comment line

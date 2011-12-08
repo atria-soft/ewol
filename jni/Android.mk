@@ -14,8 +14,10 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DDATA_INTERNAL_BINARY
 
 LOCAL_SRC_FILES := \
+    ../Sources/GeneratedData.cpp \
     ../Sources/Main.cpp \
     ../Sources/base/guiAndroid.cpp \
     ../Sources/tinyXML/tinyxml.cpp \

@@ -307,7 +307,7 @@ fileToCpp: tools/fileToCpp.cpp
 $(FILE_DIRECTORY)/GeneratedData.cpp: $(DATA_FILE) $(MAKE_DEPENDENCE) fileToCpp
 	@echo $(F_BLUE)"          (.cpp)  "$(DATA_FOLDER)" ==> $@"$(F_NORMALE)
 	@#echo ./pngToCpp $@ $(DATA_FILE)
-	@./fileToCpp $@ $(DATA_FILE)
+	./fileToCpp $@ $(DATA_FILE)
 
 
 .versionFile:

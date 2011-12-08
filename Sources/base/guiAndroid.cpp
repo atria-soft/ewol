@@ -147,10 +147,11 @@ extern "C"
 		{
 			case 0:
 				EWOL_WARNING("Directory mode=FILE path=" << str);
-				etk::SetBaseFolder(str);
+				etk::SetBaseFolderData(str);
 				break;
 			case 1:
 				EWOL_WARNING("Directory mode=CACHE path=" << str);
+				etk::SetBaseFolderCache(str);
 				break;
 			case 2:
 				EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
@@ -161,7 +162,6 @@ extern "C"
 		}
 		//env->ReleaseStringUTFChars(str,myString,0);
 	}
-	
 	
 	
 	static bool isAlreadyInit = false;

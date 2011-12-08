@@ -90,6 +90,7 @@ namespace etk
 			char *      fGets(char * elementLine, int32_t maxData);
 			int32_t     fRead(void * data, int32_t blockSize, int32_t nbBlock);
 			int32_t     fWrite(void * data, int32_t blockSize, int32_t nbBlock);
+			bool        fSeek(long int offset, int origin);
 		private :
 			etk::FileType_te m_type;
 			FILE *           m_PointerFile;

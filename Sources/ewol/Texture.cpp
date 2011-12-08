@@ -86,44 +86,40 @@ class Bitmap
 			m_height = 0;
 			m_size = 0;
 
-			FILE *File=NULL;
 			// Get the fileSize ...
 			/*if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
 				EWOL_ERROR("not enought data in the file named=\"" << fileName << "\"");
 				return;
 			}*/
-			File=fopen(fileName.GetCompleateName().c_str(),"rb");
-			if(NULL == File) {
+			if(false == fileName.fOpenRead() ) {
 				EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
 				return;
 			}
 			// get the data : 
-			if (fread(&m_FileHeader,sizeof(bitmapFileHeader_ts),1,File) != 1) {
+			if (fileName.fRead(&m_FileHeader,sizeof(bitmapFileHeader_ts),1) != 1) {
 				EWOL_ERROR("error loading file header");
-				fclose(File);
+				fileName.fClose();
 				return;
 			}
-			if (fread(&m_InfoHeader,sizeof(bitmapInfoHeader_ts),1,File) != 1) {
+			if (fileName.fRead(&m_InfoHeader,sizeof(bitmapInfoHeader_ts),1) != 1) {
 				EWOL_ERROR("error loading file header");
-				fclose(File);
+				fileName.fClose();
 				return;
 			}
-			// TODO : do otherwise ...
-			fseek(File,m_FileHeader.bfOffBits,SEEK_SET);
-			if(ferror(File)) {
+			if(false == fileName.fSeek(m_FileHeader.bfOffBits, SEEK_SET)) {
 				EWOL_ERROR("error with the 'bfOffBits' in the file named=\"" << fileName << "\"");
-				fclose(File);
+				fileName.fClose();
 				return;
 			}
 			// Check the header error : 
 			if (m_FileHeader.bfType != 0x4D42) {
 				EWOL_ERROR("the file=\"" << fileName << "\" is not a bitmap file ...");
-				fclose(File);
+				fileName.fClose();
 				return;
 			}
 			if (m_FileHeader.bfReserved != 0x00000000) {
 				EWOL_ERROR("the bfReserved feald is not at 0 ==> not supported format ...");
-				fclose(File);
+				fileName.fClose();
 				return;
 			}
 			if(    m_InfoHeader.biBitCount == 16
@@ -148,7 +144,7 @@ class Bitmap
 				m_dataMode = BITS_32_A8R8G8B8;
 			} else {
 				EWOL_ERROR("the biBitCount & biCompression fealds are unknow ==> not supported format ...");
-				fclose(File);
+				fileName.fClose();;
 				return;
 			}
 			m_width = m_InfoHeader.biWidth;
@@ -157,13 +153,13 @@ class Bitmap
 			if(0 != m_InfoHeader.biSizeImage)
 			{
 				m_data=new uint8_t[m_InfoHeader.biSizeImage];
-				if (fread(m_data,m_InfoHeader.biSizeImage,1,File) != 1){
+				if (fileName.fRead(m_data,m_InfoHeader.biSizeImage,1) != 1){
 					EWOL_CRITICAL("Can not read the file with the good size...");
 				}
 				// allocate the destination data ...
 				m_dataGenerate=new uint8_t[m_width*m_height*4];
 			}
-			fclose(File);
+			fileName.fClose();
 			// need now to generate RGBA data ...
 			switch(m_dataMode)
 			{
@@ -358,8 +354,11 @@ int32_t ewol::LoadTexture(etk::File fileName)
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			//--- Mode linear
+			
+			#ifdef __PLATFORM__X11
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			#endif
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap.Width(), myBitmap.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap.Data());
 			LoadedTexture *tmpTex = new LoadedTexture();
 			if (NULL != tmpTex) {
