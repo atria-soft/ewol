@@ -58,7 +58,15 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 	} else {
 		TiXmlDocument XmlDocument;
 		// open the curent File
-		XmlDocument.LoadFile(newFile.GetCompleateName().c_str());
+		#ifdef DATA_INTERNAL_BINARY
+			if (etk::FILE_TYPE_DATA == newFile.GetTypeAccess()) {
+				XmlDocument.Parse(newFile.GetDirectPointer());
+			} else {
+				XmlDocument.LoadFile(newFile.GetCompleateName().c_str());
+			}
+		#else
+			XmlDocument.LoadFile(newFile.GetCompleateName().c_str());
+		#endif
 		TiXmlElement* root = XmlDocument.FirstChildElement( "eol" );
 		if (NULL == root ) {
 			EWOL_ERROR("(l ?) main node not find: \"eol\" in \"" << newFile << "\"");

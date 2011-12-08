@@ -100,12 +100,13 @@ void APP_Init(int argc, char *argv[])
 		//fontID = GetFontIdWithFileName("dataTest/TextMonospace.ebt");
 	}
 	*/
-	ewol::SetFontFolder("Font");
+	ewol::SetFontFolder("dataTest/Font");
 	//ewol::SetDefaultFont("freefont/FreeMono", 14);
 	ewol::SetDefaultFont("ebtfont/Monospace", 14);
 	//ewol::theme::LoadDefault("dataTest/exemple.eol");
-	ewol::theme::LoadDefault("theme/exemple.eol");
-	
+	etk::File fileTmp("dataTest/exemple.eol", etk::FILE_TYPE_DATA);
+	ewol::theme::LoadDefault(fileTmp);
+	/*
 	etk::File tmpFile("/data/data/com.example.EwolActivity.app/assets/theme/exemple.eol");
 	if (tmpFile.Exist() ) {
 		EWOL_WARNING("file existed : " << tmpFile);
@@ -138,7 +139,7 @@ void APP_Init(int argc, char *argv[])
 	if (tmpFile.Exist() ) {
 		EWOL_WARNING("file existed : " << tmpFile);
 	}
-	
+	*/
 	
 	
 	myWindowsExample = new Plop();

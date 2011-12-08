@@ -67,16 +67,16 @@ namespace ewol
 					tmpchar.ratio = 0;
 					m_elements.PushBack(tmpchar);
 				}
-				FILE* File=fopen(m_filename.GetCompleateName().c_str(),"r");
-				if(NULL == File) {
+				if(false == m_filename.fOpenRead()) {
 					EWOL_ERROR("Can not find the file name=\"" << m_filename << "\"");
 					return;
 				}
 				// load all element of the file ...
 				char elementLine[2048];
 				int32_t lineID=1;
-				while (NULL != fgets(elementLine, 2048, File) )
+				while (NULL != m_filename.fGets(elementLine, 2048) )
 				{
+					EWOL_DEBUG(" Read file Line : " << elementLine);
 					if (    '\n' != elementLine[0] // EOL
 					     && '\0' != elementLine[0] // EOF
 					     && '#'  != elementLine[0] // Comment line
@@ -113,11 +113,12 @@ namespace ewol
 					lineID++;
 				}
 				// close the file at end of reading...
-				fclose(File);
+				m_filename.fClose();
 				// Load Bitmap : 
 				etk::String bitmapRealFile = m_filename.GetFolder() + "/" + m_bitmapName;
 				EWOL_INFO("load text font image : \"" << bitmapRealFile << "\"");
-				m_textureId = ewol::LoadTexture(bitmapRealFile);
+				etk::File tmpFile(bitmapRealFile, m_filename.GetTypeAccess());
+				m_textureId = ewol::LoadTexture(tmpFile);
 				m_textureLoaded = true;
 				m_loadedOK = true;
 			};
@@ -270,7 +271,7 @@ int32_t ewol::LoadFont(etk::String fontName, int32_t size)
 {
 	// check if folder file
 	etk::String tmpFileName = s_currentFolderName + "/" + fontName + ".ebt";
-	etk::File fileName(tmpFileName);
+	etk::File fileName(tmpFileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("Font does not exist: \"" << fileName.GetCompleateName() << "\"");
 		return -1;

@@ -28,6 +28,12 @@
 #include <etk/File.h>
 #include <unistd.h>
 
+#ifdef DATA_INTERNAL_BINARY
+#	include "GeneratedData.h"
+#endif
+
+
+
 #undef __class__
 #define __class__	"etk::File"
 
@@ -40,33 +46,40 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::File &obj)
 	return os;
 }
 
-etk::File::File(etk::String &filename, int32_t LineNumber)
+etk::File::File(etk::String &filename, etk::FileType_te type, int32_t LineNumber)
 {
 	m_lineNumberOpen = LineNumber;
-	SetCompleateName(filename);
+	m_PointerFile = NULL;
+	SetCompleateName(filename, type);
 }
 
 
-etk::File::File(const char  *filename, int32_t LineNumber)
+etk::File::File(const char  *filename, etk::FileType_te type, int32_t LineNumber)
 {
 	etk::String tmpString = filename;
 	m_lineNumberOpen = LineNumber;
-	SetCompleateName(tmpString);
+	m_PointerFile = NULL;
+	SetCompleateName(tmpString, type);
 }
 
 
-etk::File::File(etk::String &filename, etk::String &folder, int32_t lineNumber)
+etk::File::File(etk::String &filename, etk::String &folder, etk::FileType_te type, int32_t lineNumber)
 {
 	etk::String tmpString = folder;
 	tmpString += '/';
 	tmpString += filename;
-	SetCompleateName(tmpString);
+	m_PointerFile = NULL;
+	SetCompleateName(tmpString, type);
 	m_lineNumberOpen = lineNumber;
 }
 
 etk::File::~File(void)
 {
 	// nothing to do ...
+	if (NULL != m_PointerFile) {
+		TK_ERROR("Missing close the file : \"" << GetCompleateName() << "\"");
+		fClose();
+	}
 }
 
 
@@ -96,6 +109,15 @@ const etk::File& etk::File::operator= (const etk::File &etkF )
 		m_folder = etkF.m_folder;
 		m_shortFilename = etkF.m_shortFilename;
 		m_lineNumberOpen = etkF.m_lineNumberOpen;
+		m_type = etkF.m_type;
+		if (NULL != m_PointerFile) {
+			TK_ERROR("Missing close the file : \"" << GetCompleateName() << "\"");
+			fClose();
+		}
+		#ifdef DATA_INTERNAL_BINARY
+			m_idInternal = etkF.m_idInternal;
+			m_readingOffset = 0;
+		#endif
 	}
 	return *this;
 }
@@ -136,20 +158,32 @@ bool etk::File::operator!= (const etk::File &etkF) const
 }
 
 
-etk::String baseFolderMobile = "/data/data/com.example.ewolAbstraction/assets/";
+etk::String baseFolderData = "./";
+etk::String baseFolderDataUser = "~/.tmp/userData";
+etk::String baseFolderCache = "~/.tmp/cache";
 // for specific device contraint : 
-void etk::SetBaseFolder(const char * folder)
+void etk::SetBaseFolderData(const char * folder)
 {
-	//baseFolderMobile = folder;
+	baseFolderData = folder;
+}
+void etk::SetBaseFolderDataUser(const char * folder)
+{
+	baseFolderDataUser = folder;
+}
+void etk::SetBaseFolderCache(const char * folder)
+{
+	baseFolderCache = folder;
 }
 
 
-
-void etk::File::SetCompleateName(etk::String &newFilename)
+void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type)
 {
 	char buf[MAX_FILE_NAME];
 	memset(buf, 0, MAX_FILE_NAME);
 	char * ok;
+	#ifdef DATA_INTERNAL_BINARY
+	m_idInternal = -1;
+	#endif
 	// Reset ALL DATA : 
 	m_folder = "";
 	m_shortFilename = "";
@@ -162,50 +196,119 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 		destFilename = newFilename;
 	}
 	TK_VERBOSE("2 : Get file Name : " << destFilename );
-	if ('/' != *destFilename.c_str()) {
-		// Get the command came from the running of the program : 
-		char cCurrentPath[FILENAME_MAX];
-		#ifdef __PLATFORM__Android
-			strcpy(cCurrentPath, baseFolderMobile.c_str() );
-		#else
-		if (!getcwd(cCurrentPath, FILENAME_MAX)) {
-			return;
-		}
-		#endif
-		cCurrentPath[FILENAME_MAX - 1] = '\0';
-		etk::String tmpFilename = destFilename;
-		destFilename = cCurrentPath;
-		destFilename += '/';
-		destFilename += tmpFilename;
-	}
-	TK_VERBOSE("3 : Get file Name : " << destFilename );
-	
-	// Get the real Path of the current File
-	ok = realpath(destFilename.c_str(), buf);
-	if (!ok) {
-		int32_t lastPos = destFilename.FindBack('/');
-		if (-1 != lastPos) {
-			// Get the FileName
-			etk::String tmpFilename = destFilename.Extract(lastPos+1);
-			destFilename.Remove(lastPos, destFilename.Size() - lastPos);
-			TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
-			ok = realpath(destFilename.c_str(), buf);
-			if (!ok) {
-				TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
-				m_shortFilename = tmpFilename;
-				m_folder        = destFilename;
-			} else {
-				// ALL is OK ...
-				m_shortFilename = tmpFilename;
-				m_folder        = destFilename;
-			}
-		} else {
-			TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
-			// Basic ERROR ...
-			m_shortFilename = destFilename;
+	if ('/' == *destFilename.c_str()) {
+		m_type = etk::FILE_TYPE_DIRECT;
+		if (type != etk::FILE_TYPE_DIRECT) {
+			TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
 		}
 	} else {
-		destFilename = buf;
+		if (type == etk::FILE_TYPE_DIRECT) {
+			TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in FILE_TYPE_DATA mode ...");
+			m_type = etk::FILE_TYPE_DATA;
+		} else {
+			m_type = type;
+		}
+	}
+	bool needUnpack = false;
+	#if ETK_DEBUG_LEVEL > 3
+	char *mode = NULL;
+	#endif
+	switch (m_type)
+	{
+		case etk::FILE_TYPE_DATA:
+			{
+				#if ETK_DEBUG_LEVEL > 3
+				mode = "FILE_TYPE_DATA";
+				#endif
+				#ifdef DATA_INTERNAL_BINARY
+					for(int32_t iii=0; iii<internalDataFilesSize; iii++) {
+						if (destFilename == internalDataFiles[iii].filename) {
+							m_idInternal = iii;
+							break;
+						}
+					}
+					if (-1 == m_idInternal) {
+						TK_ERROR("File Does not existed ... in memory : \"" << destFilename << "\"");
+					}
+				#else
+					etk::String tmpFilename = destFilename;
+					destFilename = baseFolderData;
+					destFilename += '/';
+					destFilename += tmpFilename;
+				#endif
+			}
+			break;
+		case etk::FILE_TYPE_USER_DATA:
+			{
+				#if ETK_DEBUG_LEVEL > 3
+				mode = "FILE_TYPE_USER_DATA";
+				#endif
+				etk::String tmpFilename = destFilename;
+				destFilename = baseFolderDataUser;
+				destFilename += '/';
+				destFilename += tmpFilename;
+			}
+			needUnpack = true;
+			break;
+		case etk::FILE_TYPE_CACHE:
+			{
+				#if ETK_DEBUG_LEVEL > 3
+				mode = "FILE_TYPE_CACHE";
+				#endif
+				etk::String tmpFilename = destFilename;
+				destFilename = baseFolderCache;
+				destFilename += '/';
+				destFilename += tmpFilename;
+			}
+			needUnpack = true;
+			break;
+		default:
+			// nothing to do ...
+			#if ETK_DEBUG_LEVEL > 3
+			mode = "FILE_TYPE_DIRECT";
+			#endif
+			needUnpack = true;
+			break;
+	}
+	TK_VERBOSE("3 : Get file Name : " << destFilename );
+	if (true == needUnpack) {
+		// Get the real Path of the current File
+		ok = realpath(destFilename.c_str(), buf);
+		if (!ok) {
+			int32_t lastPos = destFilename.FindBack('/');
+			if (-1 != lastPos) {
+				// Get the FileName
+				etk::String tmpFilename = destFilename.Extract(lastPos+1);
+				destFilename.Remove(lastPos, destFilename.Size() - lastPos);
+				TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
+				ok = realpath(destFilename.c_str(), buf);
+				if (!ok) {
+					TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
+					m_shortFilename = tmpFilename;
+					m_folder        = destFilename;
+				} else {
+					// ALL is OK ...
+					m_shortFilename = tmpFilename;
+					m_folder        = destFilename;
+				}
+			} else {
+				TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
+				// Basic ERROR ...
+				m_shortFilename = destFilename;
+			}
+		} else {
+			destFilename = buf;
+			int32_t lastPos = destFilename.FindBack('/');
+			if (-1 != lastPos) {
+				m_shortFilename = destFilename.Extract(lastPos+1);
+				m_folder        = destFilename.Extract(0, lastPos);
+			} else {
+				// Basic ERROR ...
+				TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
+				m_shortFilename = destFilename;
+			}
+		}
+	} else {
 		int32_t lastPos = destFilename.FindBack('/');
 		if (-1 != lastPos) {
 			m_shortFilename = destFilename.Extract(lastPos+1);
@@ -216,7 +319,7 @@ void etk::File::SetCompleateName(etk::String &newFilename)
 			m_shortFilename = destFilename;
 		}
 	}
-	TK_VERBOSE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" ");
+	TK_VERBOSE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" mode=" << mode);
 }
 
 int32_t etk::File::GetLineNumber(void)
@@ -261,6 +364,14 @@ etk::String etk::File::GetExtention(void)
 
 int32_t etk::File::Size(void)
 {
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			return internalDataFiles[m_idInternal].fileLenght;
+		}
+		return 0;
+	}
+	#endif
 	FILE *myFile=NULL;
 	etk::String myCompleateName = GetCompleateName();
 	myFile=fopen(myCompleateName.c_str(),"rb");
@@ -279,6 +390,14 @@ int32_t etk::File::Size(void)
 
 bool etk::File::Exist(void)
 {
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			return true;
+		}
+		return false;
+	}
+	#endif
 	FILE *myFile=NULL;
 	etk::String myCompleateName = GetCompleateName();
 	myFile=fopen(myCompleateName.c_str(),"rb");
@@ -287,4 +406,152 @@ bool etk::File::Exist(void)
 	}
 	fclose(myFile);
 	return true;
+}
+
+
+
+bool etk::File::fOpenRead(void)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		m_readingOffset = 0;
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			TK_DEBUG("Open file : " << GetCompleateName() << " with size=" << internalDataFilesSize << " Octets");
+			return true;
+		}
+		return false;
+	}
+	#endif
+	if (NULL != m_PointerFile) {
+		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
+		return true;
+	}
+	m_PointerFile=fopen(GetCompleateName().c_str(),"rb");
+	if(NULL == m_PointerFile) {
+		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
+		return false;
+	}
+	return true;
+}
+
+bool etk::File::fOpenWrite(void)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		m_readingOffset = 0;
+		return false;
+	}
+	#endif
+	if (NULL != m_PointerFile) {
+		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
+		return true;
+	}
+	m_PointerFile=fopen(GetCompleateName().c_str(),"wb");
+	if(NULL == m_PointerFile) {
+		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
+		return false;
+	}
+	return true;
+}
+
+bool etk::File::fClose(void)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		m_readingOffset = 0;
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			return true;
+		}
+		return false;
+	}
+	#endif
+	if (NULL == m_PointerFile) {
+		TK_CRITICAL("File Already closed : \"" << GetCompleateName() << "\"");
+		return false;
+	}
+	fclose(m_PointerFile);
+	m_PointerFile = NULL;
+	return true;
+}
+
+char * etk::File::fGets(char * elementLine, int32_t maxData)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	char * element = elementLine;
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			// TODO ...
+			//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
+			if (m_readingOffset>internalDataFilesSize) {
+				element[0] = '\0';
+				return NULL;
+			}
+			while (internalDataFiles[m_idInternal].data[m_readingOffset] != '\0') {
+				if(    internalDataFiles[m_idInternal].data[m_readingOffset] == '\n'
+				    || internalDataFiles[m_idInternal].data[m_readingOffset] == '\r')
+				{
+					*element = internalDataFiles[m_idInternal].data[m_readingOffset];
+					element++;
+					m_readingOffset++;
+					*element = '\0';
+					return elementLine;
+				}
+				*element = internalDataFiles[m_idInternal].data[m_readingOffset];
+				element++;
+				m_readingOffset++;
+				// TODO : Understand why this does not work
+				/*if (m_readingOffset>internalDataFilesSize) {
+					*element = '\0';
+					return elementLine;
+				}*/
+			}
+		}
+		return NULL;
+	}
+	#endif
+	return fgets(elementLine, maxData, m_PointerFile);
+}
+
+int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			int32_t dataToRead = blockSize * nbBlock;
+			if (dataToRead + m_readingOffset > internalDataFilesSize) {
+				nbBlock = ((internalDataFilesSize - m_readingOffset) / blockSize);
+				dataToRead = blockSize * nbBlock;
+			}
+			memcpy(data, &internalDataFiles[m_idInternal].data[m_readingOffset], dataToRead);
+			m_readingOffset +=dataToRead;
+			return nbBlock;
+		}
+		return 0;
+	}
+	#endif
+	return fread(data, blockSize, nbBlock, m_PointerFile);
+}
+
+int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		TK_CRITICAL("Can not write on data inside memory : \"" << GetCompleateName() << "\"");
+		return 0;
+	}
+	#endif
+	return fwrite(data, blockSize, nbBlock, m_PointerFile);
+}
+
+
+char * etk::File::GetDirectPointer(void)
+{
+	#ifdef DATA_INTERNAL_BINARY
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
+			return (char*)internalDataFiles[m_idInternal].data;
+		}
+	}
+	#endif
+	return NULL;
 }

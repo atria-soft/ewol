@@ -49,18 +49,24 @@ DEFAULT_PLATFORM=X11
 # default platform can be overridden
 PLATFORM?=$(DEFAULT_PLATFORM)
 
+DATA_MODE=MEMORY
+
 ifeq ($(PLATFORM), X11)
     CXXFILES += base/guiX11.cpp
 else ifeq ($(PLATFORM), DoubleBuffer)
     CXXFILES += base/guiDoubleBuffer.cpp
 else ifeq ($(PLATFORM), IPhone)
     CXXFILES += base/guiIPhone.cpp
+    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), IPad)
     CXXFILES += base/guiIPad.cpp
+    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), Android)
     CXXFILES += base/guiAndroid.cpp
+    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), AndroidTablet)
     CXXFILES += base/guiAndroidTablet.cpp
+    DATA_MODE=MEMORY
 else
     $(error you must specify a corect platform : make PLATFORM=$(SUPPORTED_PLATFORM))
 endif
@@ -139,6 +145,10 @@ CXXFLAGS+= -D_REENTRANT
 CXXFLAGS+= $(DEFINE)
 # remove warning from the convertion char*
 CXXFLAGS+= -Wno-write-strings
+#set data in memory
+ifeq ($(DATA_MODE), MEMORY)
+CXXFLAGS+= -DDATA_INTERNAL_BINARY
+endif
 
 CFLAGS=    $(CXXFLAGS) -std=c99
 
@@ -179,6 +189,12 @@ MAKE_DEPENDENCE=Makefile
 ###############################################################################
 ### Files Listes                                                            ###
 ###############################################################################
+
+#data File of the program :
+ifeq ($(DATA_MODE), MEMORY)
+CXXFILES +=		GeneratedData.cpp
+endif
+
 
 # tiny XML (extern OPEN Sources) :
 CXXFILES +=		tinyXML/tinyxml.cpp \
@@ -236,10 +252,13 @@ CXXFILES +=		ewol/themeManager.cpp \
 
 
 
+
 # Ewol Test Software :
 CXXFILES +=		Main.cpp
 
-
+# get all data file in the specific folder
+DATA_FOLDER=dataTest
+DATA_FILE=$(shell find $(DATA_FOLDER)/*)
 
 ###############################################################################
 ### Liste of folder where .h can be                                         ###
@@ -276,6 +295,19 @@ build: .encadrer .versionFile $(OUTPUT_NAME)
 	@echo $(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
 	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
+
+
+# Tool used to create a binary version of every element png or other needed by the application
+fileToCpp: tools/fileToCpp.cpp
+	@echo $(F_ROUGE)"          (bin) $@"$(F_NORMALE)
+	@$(CXX) $< -o $@
+	@strip -s $@
+
+# Generate basic user Data
+$(FILE_DIRECTORY)/GeneratedData.cpp: $(DATA_FILE) $(MAKE_DEPENDENCE) fileToCpp
+	@echo $(F_BLUE)"          (.cpp)  "$(DATA_FOLDER)" ==> $@"$(F_NORMALE)
+	@#echo ./pngToCpp $@ $(DATA_FILE)
+	@./fileToCpp $@ $(DATA_FILE)
 
 
 .versionFile:

@@ -88,10 +88,10 @@ class Bitmap
 
 			FILE *File=NULL;
 			// Get the fileSize ...
-			if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
+			/*if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
 				EWOL_ERROR("not enought data in the file named=\"" << fileName << "\"");
 				return;
-			}
+			}*/
 			File=fopen(fileName.GetCompleateName().c_str(),"rb");
 			if(NULL == File) {
 				EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
