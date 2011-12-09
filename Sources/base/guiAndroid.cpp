@@ -64,6 +64,12 @@ static long _getTime(void)
 
 
 void Draw(void);
+#define MAX_INPUT         (3)
+
+etkFloat_t inputX[MAX_INPUT] = {0.0, 0.0, 0.0}
+etkFloat_t inputY[MAX_INPUT] = {0.0, 0.0, 0.0}
+bool       inputIsPressed[MAX_INPUT] = {false, false, false};
+
 
 extern "C"
 {
@@ -88,6 +94,7 @@ extern "C"
 		ewol::TextureOGLContext(true);
 		if (NULL != m_uniqueWindows) {
 			m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+			m_uniqueWindows->SetOrigin(0.0, 0.0);
 		}
 	}
 	
@@ -123,8 +130,8 @@ extern "C"
 			//appMove(x,y);
 			if(NULL != m_uniqueWindows) {
 				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
-				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1 | ewol::FLAG_EVENT_INPUT_CLICKED, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
 				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
+				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1 | ewol::FLAG_EVENT_INPUT_CLICKED, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
 				//m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 			}
 		}

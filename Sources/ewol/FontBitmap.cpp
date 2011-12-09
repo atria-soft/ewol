@@ -378,7 +378,7 @@ void ewol::DrawText(int32_t                        fontID,
 	char * tmpVal = (char*)utf8String;
 	
 	fontTextureId = s_listLoadedFonts[fontID]->GetOglId();
-	EWOL_DEBUG("****************    plop2 " << fontTextureId);
+	//EWOL_DEBUG("****************    plop2 " << fontTextureId);
 	int32_t size = s_listLoadedFonts[fontID]->GetHeight();
 	
 	etkFloat_t posDrawX = drawPosition.x;

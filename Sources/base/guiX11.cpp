@@ -501,7 +501,7 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+										EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// Send Down message
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										// Check double or triple click event ...
@@ -532,7 +532,7 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										//EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+										EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// send Up event ...
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										
@@ -627,8 +627,19 @@ namespace guiAbstraction {
 										//EWOL_DEBUG("Change POS : (" << (m_startY - m_screenOffsetX) << "," << (m_startY - m_screenOffsetY) << ") ==> (" << newPosX << "," << newPosY << ")");
 										this->ChangePos(newPosX, newPosY);
 									} else {
-										//EWOL_DEBUG("X11 event : " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-										m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+										// For compatibility of the Android system : 
+										bool findOne = false;
+										for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
+											if (true == inputIsPressed[iii]) {
+												EWOL_DEBUG("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+												m_uniqueWindows->GenEventInput(iii+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+												findOne = true;
+											}
+										}
+										if (false == findOne) {
+											EWOL_DEBUG("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+											m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+										}
 									}
 									break;
 								case LeaveNotify:
@@ -714,6 +725,13 @@ namespace guiAbstraction {
 				unsigned int tmp2;
 				Window fromroot, tmpwin;
 				XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
+			};
+			
+			void ForceRedrawAll(void)
+			{
+				if (NULL != m_uniqueWindows) {
+					m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+				}
 			};
 		
 		private:
@@ -878,6 +896,15 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	} else {
 		EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
+	}
+}
+
+void guiAbstraction::ForceRedrawAll(void)
+{
+	if (true == guiAbstractionIsInit) {
+		myX11Access->ForceRedrawAll();
+	} else {
+		EWOL_CRITICAL("X11 ==> not init ... ");
 	}
 }
 

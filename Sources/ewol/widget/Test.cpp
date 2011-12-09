@@ -136,15 +136,11 @@ void ewol::Test::OnRegenerateDisplay(void)
 	tmpOObjects->CirclePart(150, 60, 60, 2, 45, 180);
 	
 	AddOObject(tmpOObjects, "BouttonDecoration");
-	
-	//tmpOObjects = new ewol::OObject2DColored;
-	
-	//ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
-	
-	//AddOObject(tmpOObjects, "themeObject");
-	
-	
-	
+	/*
+	tmpOObjects = new ewol::OObject2DColored;
+	ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
+	AddOObject(tmpOObjects, "themeObject");
+	*/
 	
 	// Regenerate the event Area:
 	EventAreaRemoveAll();
@@ -155,22 +151,6 @@ void ewol::Test::OnRegenerateDisplay(void)
 	size.x = m_size.x-6;
 	size.y = m_size.y-6;
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventTestPressed);
-
-	//tmpOObjects->SetColor(1.0, 0.0, 0.0, 1.0);
-	//tmpOObjects->Circle(100, 100, 100, 35);
-	/*
-	tmpOObjects->SetPoint(-20, -20);
-	tmpOObjects->SetPoint(50, 50);
-	tmpOObjects->SetPoint(-20, 100);
-	*/
-	/*
-	tmpOObjects->SetPoint(20, -20);
-	tmpOObjects->SetPoint(50, 50);
-	tmpOObjects->SetPoint(-20, 100);
-	
-	AddOObject(tmpOObjects, "BouttonDecoration");
-	*/
-	
 }
 
 bool ewol::Test::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)

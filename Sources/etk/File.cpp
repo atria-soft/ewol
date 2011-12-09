@@ -158,9 +158,9 @@ bool etk::File::operator!= (const etk::File &etkF) const
 }
 
 
-etk::String baseFolderData = "./";
-etk::String baseFolderDataUser = "~/.tmp/userData";
-etk::String baseFolderCache = "~/.tmp/cache";
+etk::String baseFolderData = "";
+etk::String baseFolderDataUser = "~/.tmp/userData/";
+etk::String baseFolderCache = "~/.tmp/cache/";
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
@@ -239,7 +239,6 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#else
 					etk::String tmpFilename = destFilename;
 					destFilename = baseFolderData;
-					destFilename += '/';
 					destFilename += tmpFilename;
 				#endif
 			}
@@ -251,7 +250,6 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#endif
 				etk::String tmpFilename = destFilename;
 				destFilename = baseFolderDataUser;
-				destFilename += '/';
 				destFilename += tmpFilename;
 			}
 			needUnpack = true;
@@ -263,7 +261,6 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#endif
 				etk::String tmpFilename = destFilename;
 				destFilename = baseFolderCache;
-				destFilename += '/';
 				destFilename += tmpFilename;
 			}
 			needUnpack = true;
@@ -581,7 +578,12 @@ bool etk::File::fSeek(long int offset, int origin)
 		return false;
 	}
 	#endif
-	return fseek(m_PointerFile, offset, origin);
+	fseek(m_PointerFile, offset, origin);
+	if(ferror(m_PointerFile)) {
+		return false;
+	} else {
+		return true;
+	}
 }
 
 

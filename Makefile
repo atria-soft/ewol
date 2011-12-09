@@ -49,7 +49,7 @@ DEFAULT_PLATFORM=X11
 # default platform can be overridden
 PLATFORM?=$(DEFAULT_PLATFORM)
 
-DATA_MODE=MEMORY
+#DATA_MODE=MEMORY
 
 ifeq ($(PLATFORM), X11)
     CXXFILES += base/guiX11.cpp
