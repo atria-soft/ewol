@@ -39,9 +39,11 @@ namespace ewol
 		int32_t GetSize(uint32_t textureID);
 	};
 	*/
-	int32_t LoadTexture(etk::File fileName);
-	void    UnLoadTexture(uint32_t textureID);
-	int32_t GetTextureSize(uint32_t textureID);
+	int32_t  LoadTexture(etk::File fileName);
+	void     UnLoadTexture(uint32_t textureID);
+	int32_t  GetTextureSize(uint32_t textureID);
+	uint32_t GetTextureGLID(uint32_t textureID);
+	void     TextureOGLContext(bool enable);
 };
 
 #endif

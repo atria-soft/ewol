@@ -37,6 +37,7 @@
 #include <ewol/ewol.h>
 
 #include <importgl.h>
+#include <ewol/Texture.h>
 
 #undef __class__
 #define __class__ "AndroidJNI"
@@ -74,6 +75,7 @@ extern "C"
 		gAppAlive    = 1;
 		sDemoStopped = 0;
 		sTimeOffsetInit = 0;
+		ewol::TextureOGLContext(true);
 	}
 	
 	
@@ -82,6 +84,8 @@ extern "C"
 		m_width = w;
 		m_height = h;
 		EWOL_INFO("Resize w=" << w << " h=" << h);
+		ewol::TextureOGLContext(false);
+		ewol::TextureOGLContext(true);
 		if (NULL != m_uniqueWindows) {
 			m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 		}
@@ -91,6 +95,7 @@ extern "C"
 	void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
 	{
 		EWOL_INFO("Renderer : Close All Application");
+		ewol::TextureOGLContext(false);
 	}
 	
 	/* This is called to indicate to the render loop that it should
@@ -205,7 +210,7 @@ extern "C"
 				curTime         = 0;
 			}
 		}
-	
+		
 		Draw();
 	}
 
@@ -443,6 +448,13 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	//	EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
 	//}
+}
+
+void guiAbstraction::ForceRedrawAll(void)
+{
+	if (NULL != m_uniqueWindows) {
+		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+	}
 }
 
 // never had main in android ...

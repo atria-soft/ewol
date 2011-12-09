@@ -28,6 +28,8 @@
 #include <ewol/WidgetManager.h>
 #include <base/gui.h>
 
+#include <ewol/Texture.h>
+
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -342,11 +344,14 @@ namespace guiAbstraction {
 						EWOL_INFO("XF86 DRI NOT available\n");
 					}
 				#endif
+				//ewol::TextureOGLContext(true);
 				return true;
 			}
 			
 			void Draw(void)
 			{
+				// TODO : set this otherwise
+				ewol::TextureOGLContext(true);
 				//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
 				if(NULL == m_uniqueWindows) {
 					//EWOL_DEBUG("Has No Windows set...");

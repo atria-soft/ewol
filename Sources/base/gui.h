@@ -42,6 +42,7 @@ namespace guiAbstraction
 	void StartResizeSystem(void);
 	void StartMoveSystem(void);
 	bool IsPressedInput(int32_t inputID);
+	void ForceRedrawAll(void);
 };
 
 //!< must be define in CPP by the application ...

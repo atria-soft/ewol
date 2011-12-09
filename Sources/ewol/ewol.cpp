@@ -111,3 +111,8 @@ bool ewol::IsPressedInput(int32_t inputID)
 	return guiAbstraction::IsPressedInput(inputID);
 }
 
+void ewol::ForceRedrawAll(void)
+{
+	guiAbstraction::ForceRedrawAll();
+}
+

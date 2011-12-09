@@ -26,6 +26,7 @@
 
 #include <ewol/Texture.h>
 #include <importgl.h>
+#include <ewol/ewol.h>
 
 extern "C"
 {
@@ -314,13 +315,62 @@ class LoadedTexture
 		int32_t   m_nbTimeLoaded;
 		int32_t   m_imageSize; // must be x=y ...
 		uint32_t  m_openGlTextureID;
+		Bitmap*   m_imageData;
+		bool      m_loaded;
 };
 
 etk::VectorType<LoadedTexture*> listLoadedTexture;
 
+static bool OGLContextLoaded=false;
 
 #undef __class__
 #define __class__	"ewol"
+
+void ewol::TextureOGLContext(bool enable)
+{
+	if (OGLContextLoaded != enable) {
+		OGLContextLoaded = enable;
+		if (true == OGLContextLoaded) {
+			EWOL_WARNING("POST loading the Texture");
+			for (int32_t iii=0; iii < listLoadedTexture.Size(); iii++) {
+				GLuint textureid;
+				glGenTextures(1, &textureid);
+				glBindTexture(GL_TEXTURE_2D, textureid);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+				//--- mode nearest
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				//#ifdef __PLATFORM__X11
+				//--- Mode linear
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				//#endif
+				EWOL_WARNING("Set in OpenGl texture =" << listLoadedTexture[iii]->m_imageData->Width() 
+				             << "px different of height=" << listLoadedTexture[iii]->m_imageData->Height() 
+				             << "px in file:" << listLoadedTexture[iii]->m_filename << " in id OGL : " << textureid);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+				             listLoadedTexture[iii]->m_imageData->Width(),
+				             listLoadedTexture[iii]->m_imageData->Height(),
+				             0, GL_RGBA, GL_UNSIGNED_BYTE,
+				             listLoadedTexture[iii]->m_imageData->Data());
+				listLoadedTexture[iii]->m_openGlTextureID = textureid;
+				listLoadedTexture[iii]->m_loaded = true;
+			}
+			ewol::ForceRedrawAll();
+		} else {
+			for (int32_t iii=0; iii < listLoadedTexture.Size(); iii++) {
+				EWOL_DEBUG("unlink openGL texture ID=" << iii << " file:" << listLoadedTexture[iii]->m_filename);
+				glDeleteTextures(1,&listLoadedTexture[iii]->m_openGlTextureID);
+				listLoadedTexture[iii]->m_loaded = false;
+				listLoadedTexture[iii]->m_openGlTextureID = -1;
+			}
+		}
+	}
+}
+
+
+
 
 int32_t ewol::LoadTexture(etk::File fileName)
 {
@@ -338,39 +388,47 @@ int32_t ewol::LoadTexture(etk::File fileName)
 			EWOL_ERROR("File does not Exist ... " << fileName);
 			return -1;
 		}
-		Bitmap myBitmap(fileName);
-		myBitmap.Display();
-		if (myBitmap.LoadOK() == true) {
-			if (myBitmap.Width()!= myBitmap.Height()) {
-				EWOL_ERROR("Texture can not have Width=" << myBitmap.Width() << "px different of height=" << myBitmap.Height() << "px in file:" << fileName);
+		Bitmap * myBitmap = new Bitmap(fileName);
+		myBitmap->Display();
+		if (myBitmap->LoadOK() == true) {
+			if (myBitmap->Width()!= myBitmap->Height()) {
+				EWOL_ERROR("Texture can not have Width=" << myBitmap->Width() << "px different of height=" << myBitmap->Height() << "px in file:" << fileName);
 				return -1;
 			}
-			GLuint textureid;
-			glGenTextures(1, &textureid);
-			glBindTexture(GL_TEXTURE_2D, textureid);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			//--- mode nearest
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-			//--- Mode linear
-			
-			#ifdef __PLATFORM__X11
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			#endif
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap.Width(), myBitmap.Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap.Data());
 			LoadedTexture *tmpTex = new LoadedTexture();
+			int32_t outTextureID = -1;
+			GLuint textureid = 0;
 			if (NULL != tmpTex) {
-				tmpTex->m_filename = fileName;
-				tmpTex->m_nbTimeLoaded = 1;
-				tmpTex->m_imageSize = myBitmap.Width();
-				tmpTex->m_openGlTextureID = textureid;
+				tmpTex->m_filename        = fileName;
+				tmpTex->m_nbTimeLoaded    = 1;
+				tmpTex->m_imageSize       = myBitmap->Width();
+				tmpTex->m_openGlTextureID = -1;
+				tmpTex->m_imageData       = myBitmap;
+				tmpTex->m_loaded          = false;
+				if (true == OGLContextLoaded) {
+					glGenTextures(1, &textureid);
+					glBindTexture(GL_TEXTURE_2D, textureid);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+					//--- mode nearest
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+					//#ifdef __PLATFORM__X11
+					//--- Mode linear
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					//#endif
+					EWOL_WARNING("Set in OpenGl texture =" << myBitmap->Width() << "px different of height=" << myBitmap->Height() << "px in file:" << fileName << " in id OGL : " <<textureid);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap->Width(), myBitmap->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap->Data());
+					tmpTex->m_openGlTextureID = textureid;
+					tmpTex->m_loaded = true;
+				}
 				listLoadedTexture.PushBack(tmpTex);
+				outTextureID = listLoadedTexture.Size()-1;
 			} else {
 				EWOL_ERROR("Allocation ERROR... ");
 			}
-			return textureid;
+			return outTextureID;
 		} else {
 			return -1;
 		}
@@ -382,20 +440,28 @@ int32_t ewol::LoadTexture(etk::File fileName)
 
 void ewol::UnLoadTexture(uint32_t textureID)
 {
-	for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
-		if (listLoadedTexture[iii]->m_openGlTextureID == textureID) {
-			listLoadedTexture[iii]->m_nbTimeLoaded--;
-			if (0 == listLoadedTexture[iii]->m_nbTimeLoaded) {
-				EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[iii]->m_filename);
-				glDeleteTextures(1,&listLoadedTexture[iii]->m_openGlTextureID);
-				delete(listLoadedTexture[iii]);
-				listLoadedTexture[iii] = NULL;
-				listLoadedTexture.Erase(iii);
+	if (textureID>=0 &&  textureID<listLoadedTexture.Size()) {
+		listLoadedTexture[textureID]->m_nbTimeLoaded--;
+		if (0 == listLoadedTexture[textureID]->m_nbTimeLoaded) {
+			EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[textureID]->m_filename);
+			if (true == listLoadedTexture[textureID]->m_loaded) {
+				glDeleteTextures(1,&listLoadedTexture[textureID]->m_openGlTextureID);
 			}
-			return;
+			delete(listLoadedTexture[textureID]);
+			listLoadedTexture[textureID] = NULL;
+			listLoadedTexture.Erase(textureID);
 		}
+		return;
 	}
 	EWOL_CRITICAL("Can not find TextureId=" << (int)textureID << " in the list of texture loaded...==> to remove it ...");
+}
+
+uint32_t ewol::GetTextureGLID(uint32_t textureID)
+{
+	if (textureID>=0 &&  textureID<listLoadedTexture.Size()) {
+		return listLoadedTexture[textureID]->m_openGlTextureID;
+	}
+	return -1;
 }
 
 

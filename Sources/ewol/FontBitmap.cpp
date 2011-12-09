@@ -203,7 +203,7 @@ namespace ewol
 			};
 			uint32_t GetOglId(void)
 			{
-				return m_textureId;
+				return GetTextureGLID(m_textureId);
 			};
 			int32_t GetHeight(void)
 			{
@@ -286,6 +286,8 @@ int32_t ewol::LoadFont(etk::String fontName, int32_t size)
 	return s_listLoadedFonts.Size()-1;
 }
 
+
+
 void ewol::UnloadFont(int32_t id)
 {
 	EWOL_TODO("I do not think it was a good idea... will be done later");
@@ -308,6 +310,7 @@ void ewol::DrawText(int32_t                        fontID,
 	etk::VectorType<UTF8Element_ts> & listOfElement = s_listLoadedFonts[fontID]->GetRefOnElement();
 	
 	fontTextureId = s_listLoadedFonts[fontID]->GetOglId();
+	EWOL_DEBUG("****************    plop " << fontTextureId);
 	int32_t size = s_listLoadedFonts[fontID]->GetHeight();
 	
 	etkFloat_t posDrawX = drawPosition.x;
@@ -375,6 +378,7 @@ void ewol::DrawText(int32_t                        fontID,
 	char * tmpVal = (char*)utf8String;
 	
 	fontTextureId = s_listLoadedFonts[fontID]->GetOglId();
+	EWOL_DEBUG("****************    plop2 " << fontTextureId);
 	int32_t size = s_listLoadedFonts[fontID]->GetHeight();
 	
 	etkFloat_t posDrawX = drawPosition.x;
@@ -400,29 +404,81 @@ void ewol::DrawText(int32_t                        fontID,
 		etkFloat_t sizeWidth = listOfElement[charIndex].width;
 		// 0x01 == 0x20 == ' ';
 		if (tmpChar != 0x01) {
-			// set texture coordonates :
-			coordTex.PushBack(listOfElement[charIndex].posStart);
-			texCoord_ts tmpTex;
-			tmpTex.u = listOfElement[charIndex].posStop.u;
-			tmpTex.v = listOfElement[charIndex].posStart.v;
-			coordTex.PushBack(tmpTex);
-			coordTex.PushBack(listOfElement[charIndex].posStop);
-			tmpTex.u = listOfElement[charIndex].posStart.u;
-			tmpTex.v = listOfElement[charIndex].posStop.v;
-			coordTex.PushBack(tmpTex);
-			// set display positions :
-			/*int32_t xxxx = posDrawX;
-			int32_t yyyy = drawPosition.y;*/
-			coord2D_ts tmpCoord;
-			tmpCoord.x = posDrawX;
-			tmpCoord.y = drawPosition.y;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX + sizeWidth;
-			coord.PushBack(tmpCoord);
-			tmpCoord.y = drawPosition.y + size;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX;
-			coord.PushBack(tmpCoord);
+			#if !defined(__PLATFORM__Android)
+				// set texture coordonates :
+				coordTex.PushBack(listOfElement[charIndex].posStart);
+				texCoord_ts tmpTex;
+				tmpTex.u = listOfElement[charIndex].posStop.u;
+				tmpTex.v = listOfElement[charIndex].posStart.v;
+				coordTex.PushBack(tmpTex);
+				coordTex.PushBack(listOfElement[charIndex].posStop);
+				tmpTex.u = listOfElement[charIndex].posStart.u;
+				tmpTex.v = listOfElement[charIndex].posStop.v;
+				coordTex.PushBack(tmpTex);
+				// set display positions :
+				/*int32_t xxxx = posDrawX;
+				int32_t yyyy = drawPosition.y;*/
+				coord2D_ts tmpCoord;
+				tmpCoord.x = posDrawX;
+				tmpCoord.y = drawPosition.y;
+				coord.PushBack(tmpCoord);
+				tmpCoord.x = posDrawX + sizeWidth;
+				coord.PushBack(tmpCoord);
+				tmpCoord.y = drawPosition.y + size;
+				coord.PushBack(tmpCoord);
+				tmpCoord.x = posDrawX;
+				coord.PushBack(tmpCoord);
+			#else
+				// NOTE : Android does not support the Quads elements ...
+				/* Step 1 : 
+				 *   ********     
+				 *     ******     
+				 *       ****     
+				 *         **     
+				 *                
+				 */
+				// set texture coordonates :
+				coordTex.PushBack(listOfElement[charIndex].posStart);
+				texCoord_ts tmpTex;
+				tmpTex.u = listOfElement[charIndex].posStop.u;
+				tmpTex.v = listOfElement[charIndex].posStart.v;
+				coordTex.PushBack(tmpTex);
+				coordTex.PushBack(listOfElement[charIndex].posStop);
+				// set display positions :
+				coord2D_ts tmpCoord;
+				tmpCoord.x = posDrawX;
+				tmpCoord.y = drawPosition.y;
+				coord.PushBack(tmpCoord);
+				tmpCoord.x = posDrawX + sizeWidth;
+				coord.PushBack(tmpCoord);
+				tmpCoord.y = drawPosition.y + size;
+				coord.PushBack(tmpCoord);
+				
+				/* Step 2 : 
+				 *              
+				 *   **         
+				 *   ****       
+				 *   ******     
+				 *   ********   
+				 */
+				
+				// set texture coordonates :
+				coordTex.PushBack(listOfElement[charIndex].posStart);
+				coordTex.PushBack(listOfElement[charIndex].posStop);
+				tmpTex.u = listOfElement[charIndex].posStart.u;
+				tmpTex.v = listOfElement[charIndex].posStop.v;
+				coordTex.PushBack(tmpTex);
+				
+				// set display positions :
+				tmpCoord.x = posDrawX;
+				tmpCoord.y = drawPosition.y;
+				coord.PushBack(tmpCoord);
+				tmpCoord.x = posDrawX + sizeWidth;
+				tmpCoord.y = drawPosition.y + size;
+				coord.PushBack(tmpCoord);
+				tmpCoord.x = posDrawX;
+				coord.PushBack(tmpCoord);
+			#endif
 		}
 		posDrawX += sizeWidth;
 	}

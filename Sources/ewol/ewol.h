@@ -43,6 +43,7 @@ namespace ewol {
 	void StartResizeSystem(void);
 	void StartMoveSystem(void);
 	bool IsPressedInput(int32_t inputID);
+	void ForceRedrawAll(void);
 };
 
 
