@@ -49,4 +49,7 @@ namespace guiAbstraction
 void APP_Init(int argc, char *argv[]);
 void APP_UnInit(void);
 
+#define NB_MAX_INPUT                  (20)
+#define SEPARATED_CLICK_TIME          (30)
+
 #endif

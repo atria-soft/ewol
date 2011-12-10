@@ -55,7 +55,7 @@ static etkFloat_t m_height = 480;
 
 ewol::Windows* m_uniqueWindows = NULL;
 
-static long _getTime(void)
+static int32_t times(char* tmpVar)
 {
     struct timeval  now;
     gettimeofday(&now, NULL);
@@ -64,12 +64,17 @@ static long _getTime(void)
 
 
 void Draw(void);
-#define MAX_INPUT         (3)
+#define OFFSET_MOVE_CLICKED             (20)
+#define OFFSET_MOVE_CLICKED_DOUBLE      (40)
 
-etkFloat_t inputX[MAX_INPUT] = {0.0, 0.0, 0.0}
-etkFloat_t inputY[MAX_INPUT] = {0.0, 0.0, 0.0}
-bool       inputIsPressed[MAX_INPUT] = {false, false, false};
-
+bool    inputIsPressed[NB_MAX_INPUT];// = {false, false, false};
+int32_t m_previousBouttonId = -1;
+int32_t m_previousDown_x = -1;
+int32_t m_previousDown_y = -1;
+int32_t m_previous_x = -1;
+int32_t m_previous_y = -1;
+int64_t m_previousTime = 0;
+bool    m_previousDouble = false;
 
 extern "C"
 {
@@ -105,44 +110,128 @@ extern "C"
 		ewol::TextureOGLContext(false);
 	}
 	
-	/* This is called to indicate to the render loop that it should
-	 * stop as soon as possible.
-	 */
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativePause( JNIEnv* env )
-	{
-		sDemoStopped = !sDemoStopped;
-		if (sDemoStopped) {
-			/* we paused the animation, so store the current
-			 * time in sTimeStopped for future nativeRender calls */
-			sTimeStopped = _getTime();
-		} else {
-			/* we resumed the animation, so adjust the time offset
-			 * to take care of the pause interval. */
-			sTimeOffset -= _getTime() - sTimeStopped;
-		}
-	}
-	
-	
 	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
-		if (0 == pointerID) {
-			//appMove(x,y);
-			if(NULL != m_uniqueWindows) {
-				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
-				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
-				m_uniqueWindows->GenEventInput(ewol::FLAG_EVENT_INPUT_1 | ewol::FLAG_EVENT_INPUT_CLICKED, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
-				//m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+		//EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
+		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+			if (true == inputIsPressed[pointerID]) {
+				if(NULL != m_uniqueWindows) {
+					//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
+				}
 			}
 		}
 	}
 	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp)
+	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
 		if (isUp) {
-			EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN]");
+			//EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
+			if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+				// Send Down message
+				if (NULL != m_uniqueWindows) {
+					//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonPress\"        (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
+				}
+				// Check double or triple click event ...
+				m_previousDown_x = x;
+				m_previousDown_y = y;
+				if (m_previousBouttonId != pointerID+1) {
+					m_previousBouttonId = pointerID+1;
+					m_previous_x = -1;
+					m_previous_y = -1;
+					m_previousTime = 0;
+					m_previousDouble = false;
+				} else {
+					if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED
+					    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED )
+					{
+						// nothink to do ... wait up ...
+					} else {
+						m_previous_x = -1;
+						m_previous_y = -1;
+						m_previousTime = 0;
+						m_previousDouble = false;
+					}
+				}
+			}
 		} else {
-			EWOL_INFO("Event : Input ID=" << pointerID << " [UP]");
+			//EWOL_INFO("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
+			if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+				// Send Down message
+				if (NULL != m_uniqueWindows) {
+					//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonRelease\"      (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
+				}
+				if (m_previousBouttonId != pointerID+1) {
+					m_previousDown_x = -1;
+					m_previousDown_y = -1;
+					m_previousBouttonId = 0;
+					m_previous_x = -1;
+					m_previous_y = -1;
+					m_previousTime = 0;
+					m_previousDouble = false;
+				} else {
+					int64_t currentTime = times(NULL); // return the tic in 10ms
+					//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
+					if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
+						//check if the same area click : 
+						if(    abs(m_previousDown_x - x) < OFFSET_MOVE_CLICKED
+						    && abs(m_previousDown_y - y) < OFFSET_MOVE_CLICKED )
+						{
+							// might generate an sigle event :
+							//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedSingle\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
+							m_previous_x = m_previousDown_x;
+							m_previous_y = m_previousDown_y;
+							m_previousTime = currentTime;
+						} else {
+							// reset values ...
+							m_previousDown_x = -1;
+							m_previousDown_y = -1;
+							m_previousBouttonId = 0;
+							m_previous_x = -1;
+							m_previous_y = -1;
+							m_previousTime = 0;
+						}
+						m_previousDouble = false;
+					} else {
+						// TODO : the double ckick does not work, I need to check this later ... if needed
+						//check if the same area click : 
+						if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED_DOUBLE
+						    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED_DOUBLE )
+						{
+							// might generate an sigle event :
+							if (false == m_previousDouble) {
+								//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedDouble\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+								m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
+								m_previousTime = currentTime;
+								m_previousDouble = true;
+							} else {
+								//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedTriple\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+								m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
+								// reset values ...
+								m_previousDown_x = -1;
+								m_previousDown_y = -1;
+								m_previousBouttonId = 0;
+								m_previous_x = -1;
+								m_previous_y = -1;
+								m_previousTime = 0;
+								m_previousDouble = false;
+							}
+						} else {
+							// reset values ...
+							m_previousDown_x = -1;
+							m_previousDown_y = -1;
+							m_previousBouttonId = 0;
+							m_previous_x = -1;
+							m_previous_y = -1;
+							m_previousTime = 0;
+							m_previousDouble = false;
+						}
+					}
+				}
+			}
 		}
 	}
 	
@@ -210,7 +299,7 @@ extern "C"
 		if (sDemoStopped) {
 			curTime = sTimeStopped + sTimeOffset;
 		} else {
-			curTime = _getTime() + sTimeOffset;
+			curTime =times(NULL) + sTimeOffset;
 			if (sTimeOffsetInit == 0) {
 				sTimeOffsetInit = 1;
 				sTimeOffset     = -curTime;

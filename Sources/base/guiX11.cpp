@@ -88,8 +88,6 @@ static int VisualData[] = {
 };
 #endif
 
-#define NB_MAX_INPUT                  (20)
-#define SEPARATED_CLICK_TIME          (30)
 
 namespace guiAbstraction {
 	extern "C" {
@@ -553,7 +551,7 @@ namespace guiAbstraction {
 												    && abs(m_previousDown_y - event.xbutton.y) < 5 )
 												{
 													// might generate an sigle event :
-													//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedSingle\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+													//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedSingle\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 													m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 													m_previous_x = m_previousDown_x;
 													m_previous_y = m_previousDown_y;
@@ -575,12 +573,12 @@ namespace guiAbstraction {
 												{
 													// might generate an sigle event :
 													if (false == m_previousDouble) {
-														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedDouble\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedDouble\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 														m_previousTime = currentTime;
 														m_previousDouble = true;
 													} else {
-														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClockedTriple\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+														//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedTriple\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 														m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 														// reset values ...
 														m_previousDown_x = -1;

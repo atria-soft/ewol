@@ -48,7 +48,7 @@ class Plop :public ewol::Windows
 			ewol::SizerHori * mySizer = new ewol::SizerHori();
 			SetSubWidget(mySizer);
 			
-			ewol::Button * myButton = new ewol::Button("Mon Labell 1");
+			ewol::Button * myButton = new ewol::Button("LB");
 			mySizer->SubWidgetAdd(myButton);
 			
 			ewol::SizerVert * mySizerVert = new ewol::SizerVert();
@@ -62,11 +62,11 @@ class Plop :public ewol::Windows
 			ewol::Test * myTest = new ewol::Test();
 			mySizerVert->SubWidgetAdd(myTest);
 			
-			ewol::CheckBox * myCheckBox = new ewol::CheckBox("mon label d'exemple de test");
+			ewol::CheckBox * myCheckBox = new ewol::CheckBox("mon label d'eK");
 			mySizerVert->SubWidgetAdd(myCheckBox);
 			myCheckBox = new ewol::CheckBox("Exemple 2");
 			mySizerVert->SubWidgetAdd(myCheckBox);
-			myCheckBox = new ewol::CheckBox("Exemple 3 et plus si afinité");
+			myCheckBox = new ewol::CheckBox("Exemple 3 et éà$");
 			mySizerVert->SubWidgetAdd(myCheckBox);
 			
 			myTest = new ewol::Test();
@@ -102,7 +102,8 @@ void APP_Init(int argc, char *argv[])
 	*/
 	ewol::SetFontFolder("dataTest/Font");
 	//ewol::SetDefaultFont("freefont/FreeMono", 14);
-	ewol::SetDefaultFont("ebtfont/Monospace", 14);
+	//ewol::SetDefaultFont("ebtfont/Monospace", 14);
+	ewol::SetDefaultFont("ebtfont/Monospace", 33);
 	//ewol::theme::LoadDefault("dataTest/exemple.eol");
 	etk::File fileTmp("dataTest/exemple.eol", etk::FILE_TYPE_DATA);
 	ewol::theme::LoadDefault(fileTmp);

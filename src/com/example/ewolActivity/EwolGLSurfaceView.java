@@ -20,10 +20,9 @@ import android.content.Context;
  */
 class EwolGLSurfaceView extends GLSurfaceView {
 	private static native void nativeApplicationInit();
-	private static native void nativePause();
 	private static native void nativeApplicationUnInit();
 	private static native void nativeEventInputMotion(int pointerID, float x, float y);
-	private static native void nativeEventInputState(int pointerID, boolean isDown);
+	private static native void nativeEventInputState(int pointerID, boolean isDown, float x, float y);
 	private static native void nativeEventUnknow(int eventID);
 	private static native void nativeParamSetArchiveDir(int mode, String myString);
 	
@@ -41,16 +40,12 @@ class EwolGLSurfaceView extends GLSurfaceView {
 		setRenderer(mRenderer);
 		nativeApplicationInit();
 	}
-
+	
 	private boolean InputDown1 = false;
 	private boolean InputDown2 = false;
 	private boolean InputDown3 = false;
 	
 	public boolean onTouchEvent(final MotionEvent event) {
-		// TODO : unneed code : 
-		if (event.getAction() == MotionEvent.ACTION_DOWN) {
-			nativePause();
-		}
 		// Wrapper on input events : 
 		int tmpActionType = event.getAction();
 		
@@ -61,35 +56,32 @@ class EwolGLSurfaceView extends GLSurfaceView {
 			}
 		} else if(    tmpActionType == MotionEvent.ACTION_POINTER_1_DOWN 
 		           || tmpActionType == MotionEvent.ACTION_DOWN) {
-			nativeEventInputState(0, true);
+			nativeEventInputState(0, true, (float)event.getX(0), (float)event.getY(0));
 			InputDown1 = true;
-			nativeEventInputMotion(event.getPointerId(0), event.getX(0), event.getY(0));
 		} else if(tmpActionType == MotionEvent.ACTION_POINTER_1_UP) {
-			nativeEventInputState(0, false);
+			nativeEventInputState(0, false, (float)event.getX(0), (float)event.getY(0));
 			InputDown1 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_DOWN) {
-			nativeEventInputState(1, true);
+			nativeEventInputState(1, true, (float)event.getX(1), (float)event.getY(1));
 			InputDown2 = true;
-			nativeEventInputMotion(event.getPointerId(1), event.getX(1), event.getY(1));
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_UP) {
-			nativeEventInputState(1, false);
+			nativeEventInputState(1, false, (float)event.getX(1), (float)event.getY(1));
 			InputDown2 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_DOWN) {
-			nativeEventInputState(2, true);
+			nativeEventInputState(2, true, (float)event.getX(2), (float)event.getY(2));
 			InputDown3 = true;
-			nativeEventInputMotion(event.getPointerId(2), event.getX(2), event.getY(2));
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_UP) {
-			nativeEventInputState(2, false);
+			nativeEventInputState(2, false, (float)event.getX(2), (float)event.getY(2));
 			InputDown3 = false;
 		} else if(tmpActionType == MotionEvent.ACTION_UP){
 			if (InputDown1) {
-				nativeEventInputState(0, false);
+				nativeEventInputState(0, false, (float)event.getX(0), (float)event.getY(0));
 				InputDown1 = false;
 			} else if (InputDown2) {
-				nativeEventInputState(1, false);
+				nativeEventInputState(1, false, (float)event.getX(1), (float)event.getY(1));
 				InputDown2 = false;
 			} else {
-				nativeEventInputState(2, false);
+				nativeEventInputState(2, false, (float)event.getX(2), (float)event.getY(2));
 				InputDown3 = false;
 			}
 		} else {
