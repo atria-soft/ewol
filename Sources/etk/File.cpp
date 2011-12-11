@@ -29,7 +29,10 @@
 #include <unistd.h>
 
 #ifdef DATA_INTERNAL_BINARY
-#	include "GeneratedData.h"
+#	include <GeneratedData.h>
+#elif defined(DATA_IN_APK)
+#	include <stdio.h>
+#	include <zip.h>
 #endif
 
 
@@ -117,6 +120,12 @@ const etk::File& etk::File::operator= (const etk::File &etkF )
 		#ifdef DATA_INTERNAL_BINARY
 			m_idInternal = etkF.m_idInternal;
 			m_readingOffset = 0;
+		#elif defined(DATA_IN_APK)
+			m_idZipFile = etkF.m_idZipFile;
+			m_zipData = NULL;
+			m_zipDataSize = 0;
+			m_zipReadingOffset = 0;
+			//m_zipPointerFile = NULL;
 		#endif
 	}
 	return *this;
@@ -159,6 +168,31 @@ bool etk::File::operator!= (const etk::File &etkF) const
 
 
 etk::String baseFolderData = "";
+#ifdef DATA_IN_APK
+static etk::String s_fileAPK = "";
+
+static struct zip * s_APKArchive = NULL;
+static int32_t      s_APKnbFiles = 0;
+
+
+static void loadAPK (const char* apkPath)
+{
+	TK_DEBUG("Loading APK \"" << apkPath << "\"");
+	s_APKArchive = zip_open(apkPath, 0, NULL);
+	TK_ASSERT(s_APKArchive != NULL, "Error loading APK ...  \"" << apkPath << "\"");
+	//Just for debug, print APK contents
+	s_APKnbFiles = zip_get_num_files(s_APKArchive);
+	TK_INFO("List all files in the APK : " << s_APKnbFiles << " files");
+	for (int iii=0; iii<s_APKnbFiles; iii++) {
+		const char* name = zip_get_name(s_APKArchive, iii, 0);
+		if (name == NULL) {
+			TK_ERROR("Error reading zip file name at index " << iii << " : \"" << zip_strerror(s_APKArchive) << "\"");
+			return;
+		}
+		TK_INFO("    File " << iii << " : \"" << name << "\"");
+	}
+}
+#endif
 etk::String baseFolderDataUser = "~/.tmp/userData/";
 etk::String baseFolderCache = "~/.tmp/cache/";
 // for specific device contraint : 
@@ -168,6 +202,10 @@ void etk::SetBaseFolderData(const char * folder)
 		for(int32_t iii=0; iii<internalDataFilesSize; iii++) {
 			TK_DEBUG("Internal date : \"" << internalDataFiles[iii].filename << "\" size=" << internalDataFiles[iii].fileLenght);
 		}
+	#elif defined(DATA_IN_APK)
+		baseFolderData = "assets/";
+		s_fileAPK = folder;
+		loadAPK(s_fileAPK.c_str());
 	#else
 		baseFolderData = folder;
 	#endif
@@ -189,6 +227,12 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 	char * ok;
 	#ifdef DATA_INTERNAL_BINARY
 	m_idInternal = -1;
+	#elif defined(DATA_IN_APK)
+	m_idZipFile = -1;
+	m_zipData = NULL;
+	m_zipDataSize = 0;
+	m_zipReadingOffset = 0;
+	//m_zipPointerFile = NULL;
 	#endif
 	// Reset ALL DATA : 
 	m_folder = "";
@@ -235,6 +279,21 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 					}
 					if (-1 == m_idInternal) {
 						TK_ERROR("File Does not existed ... in memory : \"" << destFilename << "\"");
+					}
+				#elif defined(DATA_IN_APK)
+					etk::String tmpFilename = baseFolderData + destFilename;
+					for (int iii=0; iii<s_APKnbFiles; iii++) {
+						const char* name = zip_get_name(s_APKArchive, iii, 0);
+						if (name == NULL) {
+							return;
+						}
+						if (tmpFilename == name) {
+							m_idZipFile = iii;
+							break;
+						}
+					}
+					if (-1 == m_idZipFile) {
+						TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
 					}
 				#else
 					etk::String tmpFilename = destFilename;
@@ -363,7 +422,51 @@ etk::String etk::File::GetExtention(void)
 	return tmpExt;
 }
 
-
+#ifdef DATA_IN_APK
+bool etk::File::LoadDataZip(void)
+{
+	if (NULL != m_zipData) {
+		return true;
+	} else {
+		struct zip_file * m_zipPointerFile= zip_fopen_index(s_APKArchive, m_idZipFile, 0);
+		if (NULL == m_zipPointerFile) {
+			TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
+			return false;
+		}
+		// get the fileSize .... end read all the data from the zip files
+		struct zip_stat zipFileProperty;
+		zip_stat_init(&zipFileProperty);
+		zip_stat_index(s_APKArchive, m_idZipFile, 0, &zipFileProperty);
+		TK_DEBUG("LOAD data from the files : \"" << GetCompleateName() << "\"");
+		TK_DEBUG("         name=" << zipFileProperty.name);
+		TK_DEBUG("         index=" << zipFileProperty.index);
+		TK_DEBUG("         crc=" << zipFileProperty.crc);
+		TK_DEBUG("         mtime=" << zipFileProperty.mtime);
+		TK_DEBUG("         size=" << zipFileProperty.size);
+		TK_DEBUG("         comp_size=" << zipFileProperty.comp_size);
+		TK_DEBUG("         comp_method=" << zipFileProperty.comp_method);
+		TK_DEBUG("         encryption_method=" << zipFileProperty.encryption_method);
+		m_zipDataSize = zipFileProperty.size;
+		m_zipData = new char[m_zipDataSize +10];
+		if (NULL == m_zipData) {
+			TK_ERROR("File allocation ERROR : \"" << GetCompleateName() << "\"");
+			zip_fclose(m_zipPointerFile);
+			return false;
+		}
+		memset(m_zipData, 0, m_zipDataSize +10);
+		int32_t sizeTmp = zip_fread(m_zipPointerFile, m_zipData, m_zipDataSize);
+		if (sizeTmp != m_zipDataSize) {
+			TK_ERROR("File load data ERROR : \"" << GetCompleateName() << "\"");
+			zip_fclose(m_zipPointerFile);
+			delete[] m_zipData;
+			return false;
+		}
+		zip_fclose(m_zipPointerFile);
+		m_zipPointerFile = NULL;
+		return true;
+	}
+}
+#endif
 
 int32_t etk::File::Size(void)
 {
@@ -371,6 +474,13 @@ int32_t etk::File::Size(void)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
 			return internalDataFiles[m_idInternal].fileLenght;
+		}
+		return 0;
+	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (true == LoadDataZip()) {
+			return m_zipDataSize;
 		}
 		return 0;
 	}
@@ -400,6 +510,13 @@ bool etk::File::Exist(void)
 		}
 		return false;
 	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (m_idZipFile >= -1  && m_idZipFile < s_APKnbFiles) {
+			return true;
+		}
+		return false;
+	}
 	#endif
 	FILE *myFile=NULL;
 	etk::String myCompleateName = GetCompleateName();
@@ -424,6 +541,10 @@ bool etk::File::fOpenRead(void)
 		}
 		return false;
 	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		return LoadDataZip();
+	}
 	#endif
 	if (NULL != m_PointerFile) {
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
@@ -442,6 +563,10 @@ bool etk::File::fOpenWrite(void)
 	#ifdef DATA_INTERNAL_BINARY
 	if (etk::FILE_TYPE_DATA == m_type) {
 		m_readingOffset = 0;
+		return false;
+	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
 		return false;
 	}
 	#endif
@@ -467,6 +592,18 @@ bool etk::File::fClose(void)
 		}
 		return false;
 	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (NULL == m_zipData) {
+			TK_CRITICAL("File Already closed : \"" << GetCompleateName() << "\"");
+			return false;
+		}
+		delete[] m_zipData;
+		m_zipData = NULL;
+		m_zipDataSize = 0;
+		m_zipReadingOffset = 0;
+		return true;
+	}
 	#endif
 	if (NULL == m_PointerFile) {
 		TK_CRITICAL("File Already closed : \"" << GetCompleateName() << "\"");
@@ -479,12 +616,11 @@ bool etk::File::fClose(void)
 
 char * etk::File::fGets(char * elementLine, int32_t maxData)
 {
-	#ifdef DATA_INTERNAL_BINARY
 	char * element = elementLine;
 	memset(elementLine, 0, maxData);
+	#ifdef DATA_INTERNAL_BINARY
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			// TODO ...
 			//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 			if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
 				element[0] = '\0';
@@ -503,7 +639,6 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 				*element = internalDataFiles[m_idInternal].data[m_readingOffset];
 				element++;
 				m_readingOffset++;
-				// TODO : Understand why this does not work
 				if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
 					*element = '\0';
 					return elementLine;
@@ -511,6 +646,36 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 			}
 		}
 		elementLine[0] = '\0';
+		return NULL;
+	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
+		if (NULL == m_zipData) {
+			element[0] = '\0';
+			return NULL;
+		}
+		if (m_zipReadingOffset>m_zipDataSize) {
+			element[0] = '\0';
+			return NULL;
+		}
+		while (m_zipData[m_zipReadingOffset] != '\0') {
+			if(    m_zipData[m_zipReadingOffset] == '\n'
+			    || m_zipData[m_zipReadingOffset] == '\r')
+			{
+				*element = m_zipData[m_zipReadingOffset];
+				element++;
+				m_zipReadingOffset++;
+				*element = '\0';
+				return elementLine;
+			}
+			*element = m_zipData[m_zipReadingOffset];
+			element++;
+			m_zipReadingOffset++;
+			if (m_zipReadingOffset>m_zipDataSize) {
+				*element = '\0';
+				return elementLine;
+			}
+		}
 		return NULL;
 	}
 	#endif
@@ -533,6 +698,21 @@ int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 		}
 		return 0;
 	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (NULL == m_zipData) {
+			((char*)data)[0] = '\0';
+			return 0;
+		}
+		int32_t dataToRead = blockSize * nbBlock;
+		if (dataToRead + m_zipReadingOffset > m_zipDataSize) {
+			nbBlock = ((m_zipDataSize - m_zipReadingOffset) / blockSize);
+			dataToRead = blockSize * nbBlock;
+		}
+		memcpy(data, &m_zipData[m_zipReadingOffset], dataToRead);
+		m_zipReadingOffset += dataToRead;
+		return nbBlock;
+	}
 	#endif
 	return fread(data, blockSize, nbBlock, m_PointerFile);
 }
@@ -542,6 +722,11 @@ int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 	#ifdef DATA_INTERNAL_BINARY
 	if (etk::FILE_TYPE_DATA == m_type) {
 		TK_CRITICAL("Can not write on data inside memory : \"" << GetCompleateName() << "\"");
+		return 0;
+	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		TK_CRITICAL("Can not write on data inside APK : \"" << GetCompleateName() << "\"");
 		return 0;
 	}
 	#endif
@@ -577,6 +762,32 @@ bool etk::File::fSeek(long int offset, int origin)
 		}
 		return false;
 	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (NULL == m_zipData) {
+			return false;
+		}
+		int32_t positionEnd = 0;
+		switch(origin) {
+			case SEEK_END:
+				positionEnd = m_zipDataSize;
+				break;
+			case SEEK_CUR:
+				positionEnd = m_zipReadingOffset;
+				break;
+			default:
+				positionEnd = 0;
+				break;
+		}
+		positionEnd += offset;
+		if (positionEnd < 0) {
+			positionEnd = 0;
+		} else if (positionEnd > m_zipDataSize) {
+			positionEnd = m_zipDataSize;
+		}
+		m_zipReadingOffset = positionEnd;
+		return true;
+	}
 	#endif
 	fseek(m_PointerFile, offset, origin);
 	if(ferror(m_PointerFile)) {
@@ -594,6 +805,13 @@ char * etk::File::GetDirectPointer(void)
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
 			return (char*)internalDataFiles[m_idInternal].data;
 		}
+	}
+	#elif defined(DATA_IN_APK)
+	if (etk::FILE_TYPE_DATA == m_type) {
+		if (NULL == m_zipData) {
+			return NULL;
+		}
+		return m_zipData;
 	}
 	#endif
 	return NULL;

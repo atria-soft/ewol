@@ -17,6 +17,7 @@ import android.view.Window;
 // For the full screen : 
 import android.view.WindowManager;
 
+
 /**
  * @brief Class : 
  *
@@ -35,6 +36,8 @@ public class EwolActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// set full screen Mode : 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		//Force landscape
+		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		// create bsurface system
 		mGLView = new EwolGLSurfaceView(this);
 		setContentView(mGLView);

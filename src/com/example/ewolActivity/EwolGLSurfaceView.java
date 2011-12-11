@@ -14,6 +14,14 @@ import android.view.MotionEvent;
 import java.io.File;
 import android.content.Context;
 
+// For the getting apk name : 
+import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+
 /**
  * @brief Class : 
  *
@@ -30,10 +38,23 @@ class EwolGLSurfaceView extends GLSurfaceView {
 		// super must be first statement in constructor
 		super(context);
 		// Load the application directory
-		nativeParamSetArchiveDir(0, context.getFilesDir().toString());
-		nativeParamSetArchiveDir(1, context.getCacheDir().toString());
+		nativeParamSetArchiveDir(1, context.getFilesDir().toString());
+		nativeParamSetArchiveDir(2, context.getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
-		//nativeParamSetArchiveDir(2, context.getExternalCacheDir().toString());
+		//nativeParamSetArchiveDir(3, context.getExternalCacheDir().toString());
+		
+		// return apk file path (or null on error)
+		String apkFilePath = null;
+		ApplicationInfo appInfo = null;
+		PackageManager packMgmr = context.getPackageManager();
+		try {
+			appInfo = packMgmr.getApplicationInfo("com.example.ewolAbstraction", 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Unable to locate assets, aborting...");
+		}
+		apkFilePath = appInfo.sourceDir;
+		nativeParamSetArchiveDir(0, apkFilePath);
 		
 		// je n'ai pas compris ...
 		mRenderer = new EwolRenderer();

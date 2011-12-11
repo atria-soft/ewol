@@ -68,7 +68,7 @@ namespace ewol
 					m_elements.PushBack(tmpchar);
 				}
 				if(false == m_filename.fOpenRead()) {
-					EWOL_ERROR("Can not find the file name=\"" << m_filename << "\"");
+					EWOL_ERROR("Can not Open the file named=\"" << m_filename << "\"");
 					return;
 				}
 				// load all element of the file ...

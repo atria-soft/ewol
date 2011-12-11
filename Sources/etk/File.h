@@ -97,6 +97,12 @@ namespace etk
 			#ifdef DATA_INTERNAL_BINARY
 			int32_t          m_idInternal;
 			int32_t          m_readingOffset;
+			#elif defined(DATA_IN_APK)
+			bool             LoadDataZip(void);
+			int32_t          m_idZipFile;
+			char *           m_zipData;
+			int32_t          m_zipDataSize;
+			int32_t          m_zipReadingOffset;
 			#endif
 			etk::String      m_folder;
 			etk::String      m_shortFilename;

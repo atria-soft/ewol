@@ -247,14 +247,18 @@ extern "C"
 		switch(mode)
 		{
 			case 0:
-				EWOL_WARNING("Directory mode=FILE path=" << str);
+				EWOL_WARNING("Directory APK : path=" << str);
 				etk::SetBaseFolderData(str);
 				break;
 			case 1:
+				EWOL_WARNING("Directory mode=FILE path=" << str);
+				etk::SetBaseFolderDataUser(str);
+				break;
+			case 2:
 				EWOL_WARNING("Directory mode=CACHE path=" << str);
 				etk::SetBaseFolderCache(str);
 				break;
-			case 2:
+			case 3:
 				EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
 				break;
 			default:
