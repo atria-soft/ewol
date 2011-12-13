@@ -49,7 +49,6 @@ DEFAULT_PLATFORM=X11
 # default platform can be overridden
 PLATFORM?=$(DEFAULT_PLATFORM)
 
-#DATA_MODE=MEMORY
 
 ifeq ($(PLATFORM), X11)
     CXXFILES += base/guiX11.cpp
@@ -57,16 +56,12 @@ else ifeq ($(PLATFORM), DoubleBuffer)
     CXXFILES += base/guiDoubleBuffer.cpp
 else ifeq ($(PLATFORM), IPhone)
     CXXFILES += base/guiIPhone.cpp
-    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), IPad)
     CXXFILES += base/guiIPad.cpp
-    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), Android)
     CXXFILES += base/guiAndroid.cpp
-    DATA_MODE=MEMORY
 else ifeq ($(PLATFORM), AndroidTablet)
     CXXFILES += base/guiAndroidTablet.cpp
-    DATA_MODE=MEMORY
 else
     $(error you must specify a corect platform : make PLATFORM=$(SUPPORTED_PLATFORM))
 endif
@@ -105,14 +100,14 @@ X11FLAGS+= -lX11 -DEWOL_X11_MODE__XF86V -lXxf86vm
 #X11FLAGS+= -lX11 -DEWOL_X11_MODE__XRENDER -lXrandr
 
 
-#ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
-#    FREETYPE_CFLAGS=  `pkg-config --cflags freetype2` -DEWOL_USE_FREE_TYPE
-#    FREETYPE_LDFLAGS= `pkg-config --libs freetype2` -DEWOL_USE_FREE_TYPE
-#else
+ifeq ($(shell if `pkg-config --exists freetype2` ; then echo "yes"; else echo "no"; fi), yes)
+    FREETYPE_CFLAGS=  `pkg-config --cflags freetype2` -DEWOL_USE_FREE_TYPE
+    FREETYPE_LDFLAGS= `pkg-config --libs freetype2` -DEWOL_USE_FREE_TYPE
+else
     FREETYPE_CFLAGS=
     FREETYPE_LDFLAGS=
     $(Info  libFreeType-dev is not installed)
-#endif
+endif
 
 
 ###############################################################################
@@ -145,10 +140,6 @@ CXXFLAGS+= -D_REENTRANT
 CXXFLAGS+= $(DEFINE)
 # remove warning from the convertion char*
 CXXFLAGS+= -Wno-write-strings
-#set data in memory
-ifeq ($(DATA_MODE), MEMORY)
-CXXFLAGS+= -DDATA_INTERNAL_BINARY
-endif
 
 CFLAGS=    $(CXXFLAGS) -std=c99
 
@@ -189,12 +180,6 @@ MAKE_DEPENDENCE=Makefile
 ###############################################################################
 ### Files Listes                                                            ###
 ###############################################################################
-
-#data File of the program :
-ifeq ($(DATA_MODE), MEMORY)
-CXXFILES +=		GeneratedData.cpp
-endif
-
 
 # tiny XML (extern OPEN Sources) :
 CXXFILES +=		tinyXML/tinyxml.cpp \
@@ -295,20 +280,6 @@ build: .encadrer .versionFile $(OUTPUT_NAME)
 	@echo $(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
 	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
-
-
-# Tool used to create a binary version of every element png or other needed by the application
-fileToCpp: tools/fileToCpp.cpp
-	@echo $(F_ROUGE)"          (bin) $@"$(F_NORMALE)
-	@$(CXX) $< -o $@
-	@strip -s $@
-
-# Generate basic user Data
-$(FILE_DIRECTORY)/GeneratedData.cpp: $(DATA_FILE) $(MAKE_DEPENDENCE) fileToCpp
-	@echo $(F_BLUE)"          (.cpp)  "$(DATA_FOLDER)" ==> $@"$(F_NORMALE)
-	@#echo ./pngToCpp $@ $(DATA_FILE)
-	./fileToCpp $@ $(DATA_FILE)
-
 
 .versionFile:
 	@rm -f $(OBJECT_DIRECTORY)/ewol/ewol.o

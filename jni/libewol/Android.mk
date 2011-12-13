@@ -2,12 +2,13 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_BUILD_PATH := $(LOCAL_PATH)/Object_android
-
-LOCAL_MODULE := ewolabstraction
-LOCAL_STATIC_LIBRARIES := libzip libpng ewoltestExemple
+LOCAL_MODULE := ewol
+LOCAL_STATIC_LIBRARIES := libzip libpng
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Sources $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/
+
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../Sources
+LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -Wno-write-strings \
@@ -16,10 +17,6 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DDATA_IN_APK \
-
-#                -DDATA_INTERNAL_BINARY
-
-#    ../../Sources/GeneratedData.cpp \
 
 LOCAL_SRC_FILES := \
     ../../Sources/base/guiAndroid.cpp \
@@ -68,8 +65,7 @@ LOCAL_SRC_FILES := \
 #for freetype : https://github.com/cdave1/freetype2-android
 
 # Ewol Test Software :
-CXXFILES +=		Main.cpp
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
-include $(BUILD_SHARED_LIBRARY)
-#include $(BUILD_STATIC_LIBRARY)
+#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
