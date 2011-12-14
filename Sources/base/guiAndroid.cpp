@@ -76,150 +76,138 @@ int32_t m_previous_y = -1;
 int64_t m_previousTime = 0;
 bool    m_previousDouble = false;
 
-extern "C"
+
+/* Call to initialize the graphics state */
+void EWOL_NativeInit(void)
 {
-	
-	/* Call to initialize the graphics state */
-	void Java_com_example_ewolAbstraction_EwolRenderer_nativeInit( JNIEnv*  env )
-	{
-		EWOL_INFO("Init : Start All Application");
-		gAppAlive    = 1;
-		sDemoStopped = 0;
-		sTimeOffsetInit = 0;
-		ewol::TextureOGLContext(true);
+	EWOL_INFO("Init : Start All Application");
+	gAppAlive    = 1;
+	sDemoStopped = 0;
+	sTimeOffsetInit = 0;
+	ewol::TextureOGLContext(true);
+}
+
+
+void EWOL_NativeResize(int w, int h )
+{
+	m_width = w;
+	m_height = h;
+	EWOL_INFO("Resize w=" << w << " h=" << h);
+	ewol::TextureOGLContext(false);
+	ewol::TextureOGLContext(true);
+	if (NULL != m_uniqueWindows) {
+		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+		m_uniqueWindows->SetOrigin(0.0, 0.0);
 	}
-	
-	
-	void Java_com_example_ewolAbstraction_EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
-	{
-		m_width = w;
-		m_height = h;
-		EWOL_INFO("Resize w=" << w << " h=" << h);
-		ewol::TextureOGLContext(false);
-		ewol::TextureOGLContext(true);
-		if (NULL != m_uniqueWindows) {
-			m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-			m_uniqueWindows->SetOrigin(0.0, 0.0);
-		}
-	}
-	
-	/* Call to finalize the graphics state */
-	void Java_com_example_ewolAbstraction_EwolRenderer_nativeDone( JNIEnv*  env )
-	{
-		EWOL_INFO("Renderer : Close All Application");
-		ewol::TextureOGLContext(false);
-	}
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
-	{
-		//EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
-		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-			if (true == inputIsPressed[pointerID]) {
-				if(NULL != m_uniqueWindows) {
-					//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
-				}
+}
+
+/* Call to finalize the graphics state */
+void EWOL_NativeDone(void)
+{
+	EWOL_INFO("Renderer : Close All Application");
+	ewol::TextureOGLContext(false);
+}
+
+void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
+{
+	//EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
+	if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+		if (true == inputIsPressed[pointerID]) {
+			if(NULL != m_uniqueWindows) {
+				//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
 			}
 		}
 	}
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
-	{
-		if (isUp) {
-			//EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
-			if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-				// Send Down message
-				if (NULL != m_uniqueWindows) {
-					//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonPress\"        (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
-				}
-				// Check double or triple click event ...
-				m_previousDown_x = x;
-				m_previousDown_y = y;
-				if (m_previousBouttonId != pointerID+1) {
-					m_previousBouttonId = pointerID+1;
+}
+
+void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
+{
+	if (isUp) {
+		//EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
+		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+			// Send Down message
+			if (NULL != m_uniqueWindows) {
+				//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonPress\"        (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
+			}
+			// Check double or triple click event ...
+			m_previousDown_x = x;
+			m_previousDown_y = y;
+			if (m_previousBouttonId != pointerID+1) {
+				m_previousBouttonId = pointerID+1;
+				m_previous_x = -1;
+				m_previous_y = -1;
+				m_previousTime = 0;
+				m_previousDouble = false;
+			} else {
+				if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED
+				    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED )
+				{
+					// nothink to do ... wait up ...
+				} else {
 					m_previous_x = -1;
 					m_previous_y = -1;
 					m_previousTime = 0;
 					m_previousDouble = false;
-				} else {
-					if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED
-					    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED )
+				}
+			}
+		}
+	} else {
+		//EWOL_INFO("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
+		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
+			// Send Down message
+			if (NULL != m_uniqueWindows) {
+				//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonRelease\"      (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
+			}
+			if (m_previousBouttonId != pointerID+1) {
+				m_previousDown_x = -1;
+				m_previousDown_y = -1;
+				m_previousBouttonId = 0;
+				m_previous_x = -1;
+				m_previous_y = -1;
+				m_previousTime = 0;
+				m_previousDouble = false;
+			} else {
+				int64_t currentTime = times(NULL); // return the tic in 10ms
+				//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
+				if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
+					//check if the same area click : 
+					if(    abs(m_previousDown_x - x) < OFFSET_MOVE_CLICKED
+					    && abs(m_previousDown_y - y) < OFFSET_MOVE_CLICKED )
 					{
-						// nothink to do ... wait up ...
+						// might generate an sigle event :
+						//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedSingle\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+						m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
+						m_previous_x = m_previousDown_x;
+						m_previous_y = m_previousDown_y;
+						m_previousTime = currentTime;
 					} else {
+						// reset values ...
+						m_previousDown_x = -1;
+						m_previousDown_y = -1;
+						m_previousBouttonId = 0;
 						m_previous_x = -1;
 						m_previous_y = -1;
 						m_previousTime = 0;
-						m_previousDouble = false;
 					}
-				}
-			}
-		} else {
-			//EWOL_INFO("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
-			if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-				// Send Down message
-				if (NULL != m_uniqueWindows) {
-					//EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonRelease\"      (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-					m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
-				}
-				if (m_previousBouttonId != pointerID+1) {
-					m_previousDown_x = -1;
-					m_previousDown_y = -1;
-					m_previousBouttonId = 0;
-					m_previous_x = -1;
-					m_previous_y = -1;
-					m_previousTime = 0;
 					m_previousDouble = false;
 				} else {
-					int64_t currentTime = times(NULL); // return the tic in 10ms
-					//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
-					if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
-						//check if the same area click : 
-						if(    abs(m_previousDown_x - x) < OFFSET_MOVE_CLICKED
-						    && abs(m_previousDown_y - y) < OFFSET_MOVE_CLICKED )
-						{
-							// might generate an sigle event :
-							//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedSingle\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
-							m_previous_x = m_previousDown_x;
-							m_previous_y = m_previousDown_y;
+					// TODO : the double ckick does not work, I need to check this later ... if needed
+					//check if the same area click : 
+					if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED_DOUBLE
+					    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED_DOUBLE )
+					{
+						// might generate an sigle event :
+						if (false == m_previousDouble) {
+							//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedDouble\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
 							m_previousTime = currentTime;
+							m_previousDouble = true;
 						} else {
-							// reset values ...
-							m_previousDown_x = -1;
-							m_previousDown_y = -1;
-							m_previousBouttonId = 0;
-							m_previous_x = -1;
-							m_previous_y = -1;
-							m_previousTime = 0;
-						}
-						m_previousDouble = false;
-					} else {
-						// TODO : the double ckick does not work, I need to check this later ... if needed
-						//check if the same area click : 
-						if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED_DOUBLE
-						    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED_DOUBLE )
-						{
-							// might generate an sigle event :
-							if (false == m_previousDouble) {
-								//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedDouble\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-								m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
-								m_previousTime = currentTime;
-								m_previousDouble = true;
-							} else {
-								//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedTriple\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-								m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
-								// reset values ...
-								m_previousDown_x = -1;
-								m_previousDown_y = -1;
-								m_previousBouttonId = 0;
-								m_previous_x = -1;
-								m_previous_y = -1;
-								m_previousTime = 0;
-								m_previousDouble = false;
-							}
-						} else {
+							//EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedTriple\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
 							// reset values ...
 							m_previousDown_x = -1;
 							m_previousDown_y = -1;
@@ -229,92 +217,99 @@ extern "C"
 							m_previousTime = 0;
 							m_previousDouble = false;
 						}
+					} else {
+						// reset values ...
+						m_previousDown_x = -1;
+						m_previousDown_y = -1;
+						m_previousBouttonId = 0;
+						m_previous_x = -1;
+						m_previous_y = -1;
+						m_previousTime = 0;
+						m_previousDouble = false;
 					}
 				}
 			}
 		}
 	}
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint eventID)
-	{
-		EWOL_WARNING("Event : Unknow ID=" << eventID);
-	}
-	
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
-	{
-		const char* str = env->GetStringUTFChars(myString,0);
-		switch(mode)
-		{
-			case 0:
-				EWOL_WARNING("Directory APK : path=" << str);
-				etk::SetBaseFolderData(str);
-				break;
-			case 1:
-				EWOL_WARNING("Directory mode=FILE path=" << str);
-				etk::SetBaseFolderDataUser(str);
-				break;
-			case 2:
-				EWOL_WARNING("Directory mode=CACHE path=" << str);
-				etk::SetBaseFolderCache(str);
-				break;
-			case 3:
-				EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
-				break;
-			default:
-				EWOL_WARNING("Directory mode=???? path=" << str);
-				break;
-		}
-		//env->ReleaseStringUTFChars(str,myString,0);
-	}
-	
-	
-	static bool isAlreadyInit = false;
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeApplicationInit( JNIEnv* env)
-	{
-		EWOL_WARNING("Event : Init Application");
-		if (false == isAlreadyInit) {
-			ewol::Init(0, NULL);
-			APP_Init(0, NULL);
-			isAlreadyInit = true;
-		}
-	}
-	
-	void Java_com_example_ewolAbstraction_EwolGLSurfaceView_nativeApplicationUnInit( JNIEnv* env)
-	{
-		EWOL_WARNING("Event : UnInit application");
-		// unset all windows
-		ewol::DisplayWindows(NULL);
-		// call application to uninit
-		APP_UnInit();
-		// uninit Ewol
-		ewol::UnInit();
-	}
-	
-	/* Call to render the next GL frame */
-	void Java_com_example_ewolAbstraction_EwolRenderer_nativeRender( JNIEnv*  env )
-	{
-		long   curTime;
-	
-		/* NOTE: if sDemoStopped is TRUE, then we re-render the same frame
-		 *       on each iteration.
-		 */
-		if (sDemoStopped) {
-			curTime = sTimeStopped + sTimeOffset;
-		} else {
-			curTime =times(NULL) + sTimeOffset;
-			if (sTimeOffsetInit == 0) {
-				sTimeOffsetInit = 1;
-				sTimeOffset     = -curTime;
-				curTime         = 0;
-			}
-		}
-		
-		Draw();
-	}
-
 }
+
+void EWOL_NativeEventUnknow(int eventID)
+{
+	EWOL_WARNING("Event : Unknow ID=" << eventID);
+}
+
+
+void EWOL_NativeParamSetArchiveDir(int mode, const char* str)
+{
+	switch(mode)
+	{
+		case 0:
+			EWOL_WARNING("Directory APK : path=" << str);
+			etk::SetBaseFolderData(str);
+			break;
+		case 1:
+			EWOL_WARNING("Directory mode=FILE path=" << str);
+			etk::SetBaseFolderDataUser(str);
+			break;
+		case 2:
+			EWOL_WARNING("Directory mode=CACHE path=" << str);
+			etk::SetBaseFolderCache(str);
+			break;
+		case 3:
+			EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
+			break;
+		default:
+			EWOL_WARNING("Directory mode=???? path=" << str);
+			break;
+	}
+}
+
+
+static bool isAlreadyInit = false;
+
+void EWOL_NativeApplicationInit(void)
+{
+	EWOL_WARNING("Event : Init Application");
+	if (false == isAlreadyInit) {
+		ewol::Init(0, NULL);
+		APP_Init(0, NULL);
+		isAlreadyInit = true;
+	}
+}
+
+void EWOL_NativeApplicationUnInit(void)
+{
+	EWOL_WARNING("Event : UnInit application");
+	// unset all windows
+	ewol::DisplayWindows(NULL);
+	// call application to uninit
+	APP_UnInit();
+	// uninit Ewol
+	ewol::UnInit();
+}
+
+/* Call to render the next GL frame */
+void EWOL_NativeRender(void)
+{
+	long   curTime;
+
+	/* NOTE: if sDemoStopped is TRUE, then we re-render the same frame
+	 *       on each iteration.
+	 */
+	if (sDemoStopped) {
+		curTime = sTimeStopped + sTimeOffset;
+	} else {
+		curTime =times(NULL) + sTimeOffset;
+		if (sTimeOffsetInit == 0) {
+			sTimeOffsetInit = 1;
+			sTimeOffset     = -curTime;
+			curTime         = 0;
+		}
+	}
+	
+	Draw();
+}
+
 
 
 

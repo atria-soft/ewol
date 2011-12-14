@@ -1,7 +1,7 @@
 
 
 
-package com.__PROJECT_VENDOR__.ewolAbstraction;
+package com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -37,7 +37,7 @@ public class __PROJECT_NAME__ extends Activity {
 	private GLSurfaceView mGLView;
 
 	static {
-		System.loadLibrary("ewolabstraction");
+		System.loadLibrary("__PROJECT_PACKAGE__");
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ class EwolGLSurfaceView extends GLSurfaceView {
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = context.getPackageManager();
 		try {
-			appInfo = packMgmr.getApplicationInfo("com.__PROJECT_VENDOR__.ewolAbstraction", 0);
+			appInfo = packMgmr.getApplicationInfo("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Unable to locate assets, aborting...");
