@@ -33,6 +33,7 @@ void EWOL_NativeResize(int w, int h );
 void EWOL_NativeDone(void);
 void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
 void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
+void EWOL_NativeEventUnknow(int ID);
 void EWOL_NativeParamSetArchiveDir(int mode, const char* str);
 void EWOL_NativeApplicationInit(void);
 void EWOL_NativeApplicationUnInit(void);
@@ -66,6 +67,12 @@ extern "C"
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
 		EWOL_NativeEventInputState(pointerID, isUp, x, y);
+	}
+	
+	
+	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint ID)
+	{
+		EWOL_NativeEventUnknow(ID);
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
