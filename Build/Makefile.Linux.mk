@@ -64,7 +64,7 @@ LDFLAGS=  $(X11FLAGS) $(FREETYPE_LDFLAGS)
 LDFLAGS+= -Wl,--export-dynamic
 
 # TODO : add the prefix ...
-CXXFILES =  $(addprefix $(EWOL_FOLDER)/Sources/, $(EWOL_CXXFILES))  $(PROJECT_SOURCES)
+CXXFILES = $(EWOL_CXXFILES) $(PROJECT_SOURCES)
 
 
 ###############################################################################
@@ -103,8 +103,11 @@ DATA_FILE=$(shell find $(DATA_FOLDER)/*)
 ### Liste of folder where .h can be                                         ###
 ###############################################################################
 LISTE_MODULES = $(sort $(dir $(CXXFILES)))
+
+$(info liste des modules : $(LISTE_MODULES))
+
 #$(info listeModule=$(LISTE_MODULES))
-INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) 
+INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) -I../ewol/Sources/
 # overwrite if needed the directory folder : 
 INCLUDE_DIRECTORY = -I$(FILE_DIRECTORY)/
 
@@ -124,22 +127,18 @@ all: build
 
 build: .encadrer .versionFile $(OUTPUT_NAME)
 
-.encadrer:
-	@echo $(CADRE_HAUT_BAS)
-	@echo $(CADRE_COTERS)
-	@echo '           DEBUT DE COMPILATION DU PROGRAMME :'$(CADRE_COTERS)
-	@echo '             Repertoire Sources : $(FILE_DIRECTORY)/'$(CADRE_COTERS)
-	@echo '             Repertoire object  : $(OBJECT_DIRECTORY)/'$(CADRE_COTERS)
-	@echo '             Binaire de sortie  : $(F_VIOLET)$(OUTPUT_NAME) $(F_NORMALE)'$(CADRE_COTERS)
-	@echo $(CADRE_COTERS)
-	@echo $(CADRE_HAUT_BAS)
-	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
-
 .versionFile:
-	@rm -f $(OBJECT_DIRECTORY)/ewol/ewol.o
+	@#rm -f $(OBJECT_DIRECTORY)/ewol/ewol.o
+
+
+$(info ploploplooop $(OBJ))
 
 # build C++
 $(OBJECT_DIRECTORY)/%.o: $(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
+	@echo $(F_VERT)"          (.o)  $<"$(F_NORMALE)
+	@$(CXX)  $< -c -o $@  $(INCLUDE_DIRECTORY) $(CXXFLAGS) -MMD
+
+$(OBJECT_DIRECTORY)/%.o: ../ewol/$(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
 	@echo $(F_VERT)"          (.o)  $<"$(F_NORMALE)
 	@$(CXX)  $< -c -o $@  $(INCLUDE_DIRECTORY) $(CXXFLAGS) -MMD
 
@@ -150,26 +149,16 @@ $(OUTPUT_NAME_RELEASE): $(OBJ) $(MAKE_DEPENDENCE)
 	@cp $@ $(PROJECT_NAME)
 
 # build binary Debug Mode
-ifeq ($(PLATFORM), Android)
-$(OUTPUT_NAME_DEBUG): $(MAKE_DEPENDENCE)
-	cd $(PROJECT_NDK) ; NDK_PROJECT_PATH=$(shell pwd) ./ndk-build
-	# V=1
-	PATH=$(PROJECT_SDK)/tools/:$(PROJECT_SDK)/platform-tools/:$(PATH) ant -Dsdk.dir=$(PROJECT_SDK) debug
-else
 $(OUTPUT_NAME_DEBUG): $(OBJ) $(MAKE_DEPENDENCE)
 	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
 	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
 	@cp $@ $(PROJECT_NAME)
-endif
 
 
 clean:
 	@echo $(CADRE_HAUT_BAS)
 	@echo '           CLEANING : $(F_VIOLET)$(OUTPUT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
-ifeq ($(PLATFORM), Android)
-	rm -rf bin libs gen obj
-else 
 	@echo Remove Folder : $(OBJECT_DIR)
 	@rm -rf $(OBJECT_DIR) 
 	@echo Remove File : $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
@@ -183,15 +172,12 @@ else
 	@rm -f doxygen.log
 	@echo Remove temporary files *.bck
 	@rm -f `find . -name "*.bck"`
-endif
+
 
 count:
 	wc -l Makefile `find $(FILE_DIRECTORY)/ -name "*.cpp"` `find $(FILE_DIRECTORY)/ -name "*.h"` 
 
-ifeq ($(PLATFORM), Android)
-install:
-	sudo $(PROJECT_SDK)/platform-tools/adb  install -r ./bin/EwolActivity-debug.apk
-else
+
 install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
 	@echo $(CADRE_HAUT_BAS)
 	@echo '           INSTALL : $(F_VIOLET)$(OUTPUT_NAME_RELEASE)=>$(PROJECT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
@@ -208,7 +194,7 @@ install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
 	@mkdir -p /usr/share/edn/images/
 	@cp -vf data/imagesSources/icone.png /usr/share/edn/images/
 	@cp -vf data/imagesSources/delete-24px.png /usr/share/edn/images/
-endif
+
 
 # http://alp.developpez.com/tutoriels/debian/creer-paquet/
 package: .encadrer
