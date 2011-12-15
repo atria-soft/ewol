@@ -101,9 +101,21 @@ void ewol::Button::OnRegenerateDisplay(void)
 {
 	// clean the object list ...
 	ClearOObjectList();
+/*
+	int32_t borderSize = 2;
+	int32_t paddingSize = 3;
+	int32_t tmpSizeX = 0;
+	int32_t tmpSizeY = 0;
+	int32_t tmpOriginX = 0;
+	int32_t tmpOriginX = 0;
 	
-	
-	
+	if (true==m_userFillX) {
+		
+	}
+	if (true==m_userFillY) {
+		
+	}
+*/
 	/*
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 	tmpOObjects->SetColor(0.0, 0.0, 0.0, 1.0);
@@ -113,6 +125,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 	AddOObject(tmpOObjects, "BouttonDecoration");
 	
 	*/
+#if 1
 	int32_t borderWidth = 2;
 	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 	
@@ -155,7 +168,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventButtonEnter);
 	AddEventArea(origin, size, FLAG_EVENT_INPUT_LEAVE, ewolEventButtonLeave);
-
+#endif
 }
 
 /*

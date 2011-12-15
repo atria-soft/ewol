@@ -1,31 +1,10 @@
-##################################################################################################################
-#                                                                                                                #
-#   Fichier     :   Makefile                                                                                     #
-#                                                                                                                #
-#   Type        :   Makefile d'un programme complet                                                              #
-#                                                                                                                #
-#   Auteur      :   Heero Yui                                                                                    #
-#                                                                                                                #
-#   Evolutions  :   Date          Auteur        Raison                                                           #
-#                2010-01-29      Heero Yui      Mise en place d'un makefile ultra simple                         #
-#                2011-07-14      Heero Yui      Rework the current dorder includion (simplification)             #
-#                                                                                                                #
-#   Notes       :   This makefile might be edited with an editor compatible with escape char and carrer return   #
-#                   char                                                                                         #
-#                                                                                                                #
-# Concu Pour le projet ewol                                                                                      #
-#                                                                                                                #
-##################################################################################################################
-VERSION_TAG=$(shell git describe --tags)
-#$(info $(VERSION_TAG))
-
-VERSION_TAG_SHORT=$(shell git describe --tags --abbrev=0)
-#$(info $(VERSION_TAG_SHORT))
-
-VERSION_BUILD_TIME=$(shell date)
-#$(info $(VERSION_BUILD_TIME))
 
 
+
+
+include $(EWOL_FOLDER)/Build/Makefile.common.mk
+
+include $(EWOL_FOLDER)/Build/ewol.mk
 
 ###############################################################################
 ### Compilateur base system                                                 ###
@@ -34,7 +13,6 @@ CXX=g++
 CC=gcc
 AR=ar
 
-DEBUG:=1
 
 
 X11FLAGS= -lGL -lGLU
@@ -52,15 +30,6 @@ else
     FREETYPE_CFLAGS=
     FREETYPE_LDFLAGS=
     $(Info  libFreeType-dev is not installed)
-endif
-
-
-###############################################################################
-### Android Area                                                            ###
-###############################################################################
-ifeq ($(PLATFORM), Android)
-    PROJECT_NDK=$(realpath ../android/ndk-r7/)
-    PROJECT_SDK=$(realpath ../android/sdk-r15/)
 endif
 
 
@@ -94,17 +63,16 @@ LDFLAGS=  $(X11FLAGS) $(FREETYPE_LDFLAGS)
 # Dynamic connection of the CALLBACK of the GUI
 LDFLAGS+= -Wl,--export-dynamic
 
-###############################################################################
-### Project Name                                                            ###
-###############################################################################
-PROG_NAME=ewol
+# TODO : add the prefix ...
+CXXFILES =  $(addprefix $(EWOL_FOLDER)/Sources/, $(EWOL_CXXFILES))  $(PROJECT_SOURCES)
+
 
 ###############################################################################
 ### Basic Project description Files                                         ###
 ###############################################################################
 FILE_DIRECTORY=Sources
-OUTPUT_NAME_RELEASE=$(PROG_NAME)_release
-OUTPUT_NAME_DEBUG=$(PROG_NAME)_debug
+OUTPUT_NAME_RELEASE=$(PROJECT_NAME)_release
+OUTPUT_NAME_DEBUG=$(PROJECT_NAME)_debug
 OBJECT_DIR=Object_$(PLATFORM)
 
 ifeq ("$(DEBUG)", "0")
@@ -179,7 +147,7 @@ $(OBJECT_DIRECTORY)/%.o: $(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
 $(OUTPUT_NAME_RELEASE): $(OBJ) $(MAKE_DEPENDENCE)
 	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
 	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
-	@cp $@ $(PROG_NAME)
+	@cp $@ $(PROJECT_NAME)
 
 # build binary Debug Mode
 ifeq ($(PLATFORM), Android)
@@ -191,7 +159,7 @@ else
 $(OUTPUT_NAME_DEBUG): $(OBJ) $(MAKE_DEPENDENCE)
 	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
 	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
-	@cp $@ $(PROG_NAME)
+	@cp $@ $(PROJECT_NAME)
 endif
 
 
@@ -204,8 +172,8 @@ ifeq ($(PLATFORM), Android)
 else 
 	@echo Remove Folder : $(OBJECT_DIR)
 	@rm -rf $(OBJECT_DIR) 
-	@echo Remove File : $(PROG_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
-	@rm -f $(PROG_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
+	@echo Remove File : $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
+	@rm -f $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
 	@echo Remove File : pngToCpp
 	@rm -f pngToCpp
 	@echo Remove File : $(FILE_DIRECTORY)/GuiTools/myImage.*
@@ -226,13 +194,13 @@ install:
 else
 install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
 	@echo $(CADRE_HAUT_BAS)
-	@echo '           INSTALL : $(F_VIOLET)$(OUTPUT_NAME_RELEASE)=>$(PROG_NAME)$(F_NORMALE)'$(CADRE_COTERS)
+	@echo '           INSTALL : $(F_VIOLET)$(OUTPUT_NAME_RELEASE)=>$(PROJECT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
-	@echo $(F_ROUGE)"          (stripped) $(OUTPUT_NAME_RELEASE) => $(PROG_NAME) "$(F_NORMALE)
-	@cp $(OUTPUT_NAME_RELEASE) $(PROG_NAME)
-	@strip -s $(PROG_NAME)
-	@echo $(F_VERT)"          (copy) $(PROG_NAME) /usr/bin/ "$(F_NORMALE)
-	@cp -vf $(PROG_NAME) /usr/bin/
+	@echo $(F_ROUGE)"          (stripped) $(OUTPUT_NAME_RELEASE) => $(PROJECT_NAME) "$(F_NORMALE)
+	@cp $(OUTPUT_NAME_RELEASE) $(PROJECT_NAME)
+	@strip -s $(PROJECT_NAME)
+	@echo $(F_VERT)"          (copy) $(PROJECT_NAME) /usr/bin/ "$(F_NORMALE)
+	@cp -vf $(PROJECT_NAME) /usr/bin/
 	@echo $(F_VERT)"          (data) data/* ==> /usr/share/edn/ "$(F_NORMALE)
 	@mkdir -p /usr/share/edn/
 	@rm -rf /usr/share/edn/*
@@ -245,33 +213,33 @@ endif
 # http://alp.developpez.com/tutoriels/debian/creer-paquet/
 package: .encadrer
 	@echo 'Create Folders ...'
-	@mkdir -p package/$(PROG_NAME)/DEBIAN/
-	@mkdir -p package/$(PROG_NAME)/usr/bin/
-	@mkdir -p package/$(PROG_NAME)/usr/share/doc/
-	@mkdir -p package/$(PROG_NAME)/usr/share/edn/
+	@mkdir -p package/$(PROJECT_NAME)/DEBIAN/
+	@mkdir -p package/$(PROJECT_NAME)/usr/bin/
+	@mkdir -p package/$(PROJECT_NAME)/usr/share/doc/
+	@mkdir -p package/$(PROJECT_NAME)/usr/share/edn/
 	# Create the control file
-	@echo "Package: "$(PROG_NAME) > package/$(PROG_NAME)/DEBIAN/control
-	@echo "Version: "$(VERSION_TAG_SHORT) >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "Section: Development,Editors" >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "Priority: optional" >>package/$(PROG_NAME)/DEBIAN/control
-	@echo "Architecture: all" >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "Depends: bash" >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "Maintainer: Mr DUPIN Edouard <yui.heero@gmail.com>" >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "Description: Text editor for sources code with ctags management" >> package/$(PROG_NAME)/DEBIAN/control
-	@echo "" >> package/$(PROG_NAME)/DEBIAN/control
+	@echo "Package: "$(PROJECT_NAME) > package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Version: "$(VERSION_TAG_SHORT) >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Section: Development,Editors" >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Priority: optional" >>package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Architecture: all" >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Depends: bash" >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Maintainer: Mr DUPIN Edouard <yui.heero@gmail.com>" >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "Description: Text editor for sources code with ctags management" >> package/$(PROJECT_NAME)/DEBIAN/control
+	@echo "" >> package/$(PROJECT_NAME)/DEBIAN/control
 	# Create the PostRm
-	@echo "#!/bin/bash" > package/$(PROG_NAME)/DEBIAN/postrm
-	@echo "rm ~/."$(PROG_NAME) >> package/$(PROG_NAME)/DEBIAN/postrm
-	@echo "" >> package/$(PROG_NAME)/DEBIAN/postrm
+	@echo "#!/bin/bash" > package/$(PROJECT_NAME)/DEBIAN/postrm
+	@echo "rm ~/."$(PROJECT_NAME) >> package/$(PROJECT_NAME)/DEBIAN/postrm
+	@echo "" >> package/$(PROJECT_NAME)/DEBIAN/postrm
 	# Enable Execution in script
-	@chmod 755 package/$(PROG_NAME)/DEBIAN/post*
-	@#chmod 755 package/$(PROG_NAME)/DEBIAN/pre*
+	@chmod 755 package/$(PROJECT_NAME)/DEBIAN/post*
+	@#chmod 755 package/$(PROJECT_NAME)/DEBIAN/pre*
 	# copy licence and information : 
-	@cp README package/$(PROG_NAME)/usr/share/doc/README
-	@cp licence.txt package/$(PROG_NAME)/usr/share/doc/copyright
-	@echo "First generation in progress" >> package/$(PROG_NAME)/usr/share/doc/changelog
-	@cp -vf $(PROG_NAME) package/$(PROG_NAME)/usr/bin/
-	@cp -vf data/*.xml package/$(PROG_NAME)/usr/share/edn/
-	@cd package; dpkg-deb --build $(PROG_NAME)
+	@cp README package/$(PROJECT_NAME)/usr/share/doc/README
+	@cp licence.txt package/$(PROJECT_NAME)/usr/share/doc/copyright
+	@echo "First generation in progress" >> package/$(PROJECT_NAME)/usr/share/doc/changelog
+	@cp -vf $(PROJECT_NAME) package/$(PROJECT_NAME)/usr/bin/
+	@cp -vf data/*.xml package/$(PROJECT_NAME)/usr/share/edn/
+	@cd package; dpkg-deb --build $(PROJECT_NAME)
 
 
