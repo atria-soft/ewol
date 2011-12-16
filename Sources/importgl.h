@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-#if defined(__PLATFORM__X11)
+#if defined(__PLATFORM__Linux)
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 #elif defined(__PLATFORM__DoubleBuffer)

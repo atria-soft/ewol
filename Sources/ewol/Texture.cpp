@@ -341,7 +341,7 @@ void ewol::TextureOGLContext(bool enable)
 				//--- mode nearest
 				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 				//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				//#ifdef __PLATFORM__X11
+				//#ifdef __PLATFORM__Linux
 				//--- Mode linear
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -413,7 +413,7 @@ int32_t ewol::LoadTexture(etk::File fileName)
 					//--- mode nearest
 					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					//#ifdef __PLATFORM__X11
+					//#ifdef __PLATFORM__Linux
 					//--- Mode linear
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -440,7 +440,7 @@ int32_t ewol::LoadTexture(etk::File fileName)
 
 void ewol::UnLoadTexture(uint32_t textureID)
 {
-	if (textureID>=0 &&  textureID<listLoadedTexture.Size()) {
+	if (textureID>=0 && (int32_t)textureID<listLoadedTexture.Size()) {
 		listLoadedTexture[textureID]->m_nbTimeLoaded--;
 		if (0 == listLoadedTexture[textureID]->m_nbTimeLoaded) {
 			EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << listLoadedTexture[textureID]->m_filename);
@@ -458,7 +458,7 @@ void ewol::UnLoadTexture(uint32_t textureID)
 
 uint32_t ewol::GetTextureGLID(uint32_t textureID)
 {
-	if (textureID>=0 &&  textureID<listLoadedTexture.Size()) {
+	if (textureID>=0 && (int32_t)textureID<listLoadedTexture.Size()) {
 		return listLoadedTexture[textureID]->m_openGlTextureID;
 	}
 	return -1;

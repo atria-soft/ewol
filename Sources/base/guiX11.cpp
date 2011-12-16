@@ -486,12 +486,12 @@ namespace guiAbstraction {
 							switch (event.type)
 							{
 								case ConfigureNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
 									m_uniqueWindows->CalculateSize((etkFloat_t)event.xconfigure.width, (etkFloat_t)event.xconfigure.height);
 									m_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
 									break;
 								case Expose:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"Expose\"");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"Expose\"");
 									m_uniqueWindows->SysOnExpose();
 									break;
 								case ButtonPress:
@@ -499,7 +499,7 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+										EWOL_VERBOSE("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// Send Down message
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										// Check double or triple click event ...
@@ -530,7 +530,7 @@ namespace guiAbstraction {
 										m_moveMode = false;
 										m_resizeMode = false;
 										int32_t btId = event.xbutton.button;
-										EWOL_DEBUG("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
+										EWOL_VERBOSE("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
 										// send Up event ...
 										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
 										
@@ -629,13 +629,13 @@ namespace guiAbstraction {
 										bool findOne = false;
 										for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 											if (true == inputIsPressed[iii]) {
-												EWOL_DEBUG("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+												EWOL_VERBOSE("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
 												m_uniqueWindows->GenEventInput(iii+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
 												findOne = true;
 											}
 										}
 										if (false == findOne) {
-											EWOL_DEBUG("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+											EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
 											m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
 										}
 									}
@@ -649,13 +649,13 @@ namespace guiAbstraction {
 								case FocusIn:
 									m_resizeMode = false;
 									m_moveMode = false;
-									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusIn\"");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusIn\"");
 									m_uniqueWindows->SetFocus();
 									break;
 								case FocusOut:
 									m_resizeMode = false;
 									m_moveMode = false;
-									EWOL_DEBUG("X11 event : " << event.type << " = \"FocusOut\"");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusOut\"");
 									m_uniqueWindows->RmFocus();
 									break;
 								case KeyPress:
@@ -685,11 +685,11 @@ namespace guiAbstraction {
 								//case DestroyNotify:
 								//	break;
 								case MapNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"MapNotify\"");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"MapNotify\"");
 									m_uniqueWindows->SysOnShow();
 									break;
 								case UnmapNotify:
-									EWOL_DEBUG("X11 event : " << event.type << " = \"UnmapNotify\"");
+									EWOL_VERBOSE("X11 event : " << event.type << " = \"UnmapNotify\"");
 									m_uniqueWindows->SysOnHide();
 									break;
 								default:

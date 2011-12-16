@@ -93,14 +93,14 @@ void ewol::GetAbsPos(int32_t & x, int32_t & y)
 
 void ewol::StartResizeSystem(void)
 {
-#ifdef __PLATFORM__X11
+#ifdef __PLATFORM__Linux
 	guiAbstraction::StartResizeSystem();
 #endif
 }
 
 void ewol::StartMoveSystem(void)
 {
-#ifdef __PLATFORM__X11
+#ifdef __PLATFORM__Linux
 	guiAbstraction::StartMoveSystem();
 #endif
 }

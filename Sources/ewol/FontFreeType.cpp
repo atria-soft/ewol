@@ -37,7 +37,7 @@
 #endif
 */
 #include <importgl.h>
-#if defined(__PLATFORM__X11)
+#if defined(__PLATFORM__Linux)
 #	include <ft2build.h>
 #else
 #	include <freetype/ft2build.h>

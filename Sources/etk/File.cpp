@@ -167,7 +167,7 @@ bool etk::File::operator!= (const etk::File &etkF) const
 }
 
 
-etk::String baseFolderData = "";
+etk::String baseFolderData = "assets/";
 #ifdef DATA_IN_APK
 static etk::String s_fileAPK = "";
 
@@ -260,14 +260,14 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 		}
 	}
 	bool needUnpack = false;
-	#if ETK_DEBUG_LEVEL > 3
+	#if ETK_DEBUG_LEVEL > 2
 	char *mode = NULL;
 	#endif
 	switch (m_type)
 	{
 		case etk::FILE_TYPE_DATA:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_DATA";
 				#endif
 				#ifdef DATA_INTERNAL_BINARY
@@ -304,7 +304,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			break;
 		case etk::FILE_TYPE_USER_DATA:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_USER_DATA";
 				#endif
 				etk::String tmpFilename = destFilename;
@@ -315,7 +315,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			break;
 		case etk::FILE_TYPE_CACHE:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_CACHE";
 				#endif
 				etk::String tmpFilename = destFilename;
@@ -326,7 +326,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			break;
 		default:
 			// nothing to do ...
-			#if ETK_DEBUG_LEVEL > 3
+			#if ETK_DEBUG_LEVEL > 2
 			mode = "FILE_TYPE_DIRECT";
 			#endif
 			needUnpack = true;
@@ -381,7 +381,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			m_shortFilename = destFilename;
 		}
 	}
-	TK_VERBOSE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" mode=" << mode);
+	TK_DEBUG("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" mode=" << mode);
 }
 
 int32_t etk::File::GetLineNumber(void)
@@ -616,9 +616,9 @@ bool etk::File::fClose(void)
 
 char * etk::File::fGets(char * elementLine, int32_t maxData)
 {
-	char * element = elementLine;
 	memset(elementLine, 0, maxData);
 	#ifdef DATA_INTERNAL_BINARY
+	char * element = elementLine;
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
 			//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
@@ -649,6 +649,7 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 		return NULL;
 	}
 	#elif defined(DATA_IN_APK)
+	char * element = elementLine;
 	if (etk::FILE_TYPE_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 		if (NULL == m_zipData) {
 			element[0] = '\0';

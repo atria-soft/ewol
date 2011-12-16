@@ -4,7 +4,7 @@
 
 include $(EWOL_FOLDER)/Build/Makefile.common.mk
 
-include $(EWOL_FOLDER)/Build/ewol.mk
+#include $(EWOL_FOLDER)/Build/ewol.mk
 
 ###############################################################################
 ### Compilateur base system                                                 ###
@@ -33,12 +33,25 @@ else
 endif
 
 
+
+OBJECT_DIR=Object_$(PLATFORM)
+
+ifeq ("$(DEBUG)", "0")
+    OBJECT_DIRECTORY=$(OBJECT_DIR)/release
+    OUTPUT_NAME = $(OUTPUT_NAME_RELEASE)
+else
+    OBJECT_DIRECTORY=$(OBJECT_DIR)/debug
+    OUTPUT_NAME = $(OUTPUT_NAME_DEBUG)
+endif
+
+
+
 ###############################################################################
 ### Basic C flags                                                           ###
 ###############################################################################
 
 # basic X11 librairy ==> show if we can une under lib ...
-CXXFLAGS=  $(X11FLAGS) $(FREETYPE_CFLAGS) -D__PLATFORM__$(PLATFORM)
+CXXFLAGS=  $(X11FLAGS) $(FREETYPE_CFLAGS) -D__PLATFORM__$(PLATFORM) $(PROJECT_CXXFLAGS)
 
 ifeq ("$(DEBUG)", "0")
 	CXXFLAGS+= -O2
@@ -55,145 +68,95 @@ CXXFLAGS+= $(DEFINE)
 # remove warning from the convertion char*
 CXXFLAGS+= -Wno-write-strings
 
+CXXFLAGS+= -DPROJECT_NAME="$(PROJECT_NAME)"
+
 CFLAGS=    $(CXXFLAGS) -std=c99
 
 # basic extern librairy
-LDFLAGS=  $(X11FLAGS) $(FREETYPE_LDFLAGS)
+LDFLAGS=  $(X11FLAGS) $(FREETYPE_LDFLAGS) $(PROJECT_LDFLAGS)
 
 # Dynamic connection of the CALLBACK of the GUI
 LDFLAGS+= -Wl,--export-dynamic
 
 # TODO : add the prefix ...
-CXXFILES = $(EWOL_CXXFILES) $(PROJECT_SOURCES)
-
-
-###############################################################################
-### Basic Project description Files                                         ###
-###############################################################################
-FILE_DIRECTORY=Sources
-OUTPUT_NAME_RELEASE=$(PROJECT_NAME)_release
-OUTPUT_NAME_DEBUG=$(PROJECT_NAME)_debug
-OBJECT_DIR=Object_$(PLATFORM)
-
-ifeq ("$(DEBUG)", "0")
-    OBJECT_DIRECTORY=$(OBJECT_DIR)/release
-    OUTPUT_NAME = $(OUTPUT_NAME_RELEASE)
-else
-    OBJECT_DIRECTORY=$(OBJECT_DIR)/debug
-    OUTPUT_NAME = $(OUTPUT_NAME_DEBUG)
-endif
-
-
-
-###############################################################################
-### Generique dependency                                                    ###
-###############################################################################
-MAKE_DEPENDENCE=Makefile
-
-###############################################################################
-### Files Listes                                                            ###
-###############################################################################
-
-
-# get all data file in the specific folder
-DATA_FOLDER=dataTest
-DATA_FILE=$(shell find $(DATA_FOLDER)/*)
-
-###############################################################################
-### Liste of folder where .h can be                                         ###
-###############################################################################
+CXXFILES = $(PROJECT_SOURCES)
+# create the list of module : 
 LISTE_MODULES = $(sort $(dir $(CXXFILES)))
-
-$(info liste des modules : $(LISTE_MODULES))
-
-#$(info listeModule=$(LISTE_MODULES))
-INCLUDE_DIRECTORY = $(addprefix -I$(FILE_DIRECTORY)/, $(LISTE_MODULES)) -I../ewol/Sources/
-# overwrite if needed the directory folder : 
-INCLUDE_DIRECTORY = -I$(FILE_DIRECTORY)/
 
 ###############################################################################
 ### Build Object Files List                                                 ###
 ###############################################################################
-OBJ =	$(addprefix $(OBJECT_DIRECTORY)/, $(CXXFILES:.cpp=.o))
-
+OBJ = $(addprefix $(OBJECT_DIRECTORY)/, $(CXXFILES:.cpp=.o))
 
 
 ###############################################################################
 ### Main Part of Makefile                                                   ###
 ###############################################################################
-all: build
+all: $(PROJECT_NAME)
 
 -include $(OBJ:.o=.d)
 
-build: .encadrer .versionFile $(OUTPUT_NAME)
+.ewol:
+	@cd $(EWOL_FOLDER) ; make -s PLATFORM=$(PLATFORM) DEBUG=$(DEBUG)
+	
+.ewol-clean:
+	@cd $(EWOL_FOLDER) ; make -s PLATFORM=$(PLATFORM) clean
 
-.versionFile:
-	@#rm -f $(OBJECT_DIRECTORY)/ewol/ewol.o
+.encadrer:
+	@echo $(CADRE_HAUT_BAS)
+	@echo $(CADRE_COTERS)
+	@echo '           DEBUT DE COMPILATION DU PROGRAMME :'$(CADRE_COTERS)
+	@echo '             Repertoire Sources : $(PROJECT_FILE_DIRECTORY)/'$(CADRE_COTERS)
+	@echo '             Repertoire object  : $(OBJECT_DIRECTORY)/'$(CADRE_COTERS)
+	@echo '             Binaire de sortie  : $(F_VIOLET)$(PROJECT_NAME) $(F_NORMALE)'$(CADRE_COTERS)
+	@echo $(CADRE_COTERS)
+	@echo $(CADRE_HAUT_BAS)
+	@mkdir -p $(addprefix $(OBJECT_DIRECTORY)/, $(LISTE_MODULES))
 
-
-$(info ploploplooop $(OBJ))
+$(info PROJECT_FILE_DIRECTORY=$(PROJECT_FILE_DIRECTORY) ; OBJECT_DIRECTORY=$(OBJECT_DIRECTORY))
 
 # build C++
-$(OBJECT_DIRECTORY)/%.o: $(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
-	@echo $(F_VERT)"          (.o)  $<"$(F_NORMALE)
-	@$(CXX)  $< -c -o $@  $(INCLUDE_DIRECTORY) $(CXXFLAGS) -MMD
-
-$(OBJECT_DIRECTORY)/%.o: ../ewol/$(FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
+$(OBJECT_DIRECTORY)/%.o: $(PROJECT_FILE_DIRECTORY)/%.cpp $(MAKE_DEPENDENCE)
 	@echo $(F_VERT)"          (.o)  $<"$(F_NORMALE)
 	@$(CXX)  $< -c -o $@  $(INCLUDE_DIRECTORY) $(CXXFLAGS) -MMD
 
 # build binary Release Mode
-$(OUTPUT_NAME_RELEASE): $(OBJ) $(MAKE_DEPENDENCE)
-	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
-	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
-	@cp $@ $(PROJECT_NAME)
-
-# build binary Debug Mode
-$(OUTPUT_NAME_DEBUG): $(OBJ) $(MAKE_DEPENDENCE)
-	@echo $(F_ROUGE)"          (bin) $@ "$(F_NORMALE)
-	@$(CXX) $(OBJ) $(LDFLAGS) -o $@
-	@cp $@ $(PROJECT_NAME)
+$(PROJECT_NAME): .ewol .encadrer $(PROJECT_LIB_DEPENDENCY) $(OBJ) $(MAKE_DEPENDENCE)
+	@echo $(F_ROUGE)"          (bin) $(PROJECT_NAME) "$(F_NORMALE)
+	@$(CXX) $(OBJ) $(EWOL_FOLDER)/libewol.a $(LDFLAGS) -o $@
 
 
-clean:
+
+clean: .ewol-clean 
 	@echo $(CADRE_HAUT_BAS)
 	@echo '           CLEANING : $(F_VIOLET)$(OUTPUT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
-	@echo Remove Folder : $(OBJECT_DIR)
+	@echo $(F_VERT)"          (rm)  $(OBJECT_DIR)"$(F_NORMALE)
 	@rm -rf $(OBJECT_DIR) 
-	@echo Remove File : $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
+	@echo $(F_VERT)"          (rm)  $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)"$(F_NORMALE)
 	@rm -f $(PROJECT_NAME) $(OUTPUT_NAME_DEBUG) $(OUTPUT_NAME_RELEASE)
-	@echo Remove File : pngToCpp
-	@rm -f pngToCpp
-	@echo Remove File : $(FILE_DIRECTORY)/GuiTools/myImage.*
-	@rm -f $(FILE_DIRECTORY)/GuiTools/myImage.*
-	@echo Remove doxygen  files : doxygen/*
+	@echo $(F_VERT)"          (rm)  doxygen/*"$(F_NORMALE)
 	@rm -rf doxygen
 	@rm -f doxygen.log
-	@echo Remove temporary files *.bck
+	@echo $(F_VERT)"          (rm)  *.bck"$(F_NORMALE)
 	@rm -f `find . -name "*.bck"`
 
 
 count:
-	wc -l Makefile `find $(FILE_DIRECTORY)/ -name "*.cpp"` `find $(FILE_DIRECTORY)/ -name "*.h"` 
+	wc -l Makefile `find $(FILE_DIRECTORY)/ -name "*.cpp"` `find $(PROJECT_FILE_DIRECTORY)/ -name "*.h"` 
 
 
-install: .encadrer .versionFile $(OUTPUT_NAME_RELEASE)
-	@echo $(CADRE_HAUT_BAS)
-	@echo '           INSTALL : $(F_VIOLET)$(OUTPUT_NAME_RELEASE)=>$(PROJECT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
-	@echo $(CADRE_HAUT_BAS)
-	@echo $(F_ROUGE)"          (stripped) $(OUTPUT_NAME_RELEASE) => $(PROJECT_NAME) "$(F_NORMALE)
+install: .encadrer .versionFile $(PROJECT_NAME)
+	@echo '	INSTALL : $(OUTPUT_NAME_RELEASE)=>$(PROJECT_NAME)'
+	@echo "	(stripped) $(OUTPUT_NAME_RELEASE) => $(PROJECT_NAME) "
 	@cp $(OUTPUT_NAME_RELEASE) $(PROJECT_NAME)
 	@strip -s $(PROJECT_NAME)
-	@echo $(F_VERT)"          (copy) $(PROJECT_NAME) /usr/bin/ "$(F_NORMALE)
+	@echo "	(copy) $(PROJECT_NAME) /usr/bin/ "
 	@cp -vf $(PROJECT_NAME) /usr/bin/
-	@echo $(F_VERT)"          (data) data/* ==> /usr/share/edn/ "$(F_NORMALE)
-	@mkdir -p /usr/share/edn/
-	@rm -rf /usr/share/edn/*
-	@cp -vf data/*.xml /usr/share/edn/
-	@mkdir -p /usr/share/edn/images/
-	@cp -vf data/imagesSources/icone.png /usr/share/edn/images/
-	@cp -vf data/imagesSources/delete-24px.png /usr/share/edn/images/
+	@echo "	(data) data/* ==> /usr/share/$(PROJECT_NAME)/ "
+	@mkdir -p /usr/share/$(PROJECT_NAME)/
+	@rm -rf /usr/share/$(PROJECT_NAME)/*
+	@cp -vf assets/* /usr/share/$(PROJECT_NAME)/
 
 
 # http://alp.developpez.com/tutoriels/debian/creer-paquet/
