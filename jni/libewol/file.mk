@@ -1,17 +1,6 @@
 
 
 FILE_LIST = \
-			tinyXML/tinyxml.cpp \
-			tinyXML/tinyxmlparser.cpp \
-			tinyXML/tinyxmlerror.cpp \
-			tinyXML/tinystr.cpp \
-			etk/Debug.cpp \
-			etk/DebugInternal.cpp \
-			etk/Memory.cpp \
-			etk/String.cpp \
-			etk/Stream.cpp \
-			etk/File.cpp \
-			etk/RegExp.cpp \
 			ewol/ewol.cpp \
 			ewol/Debug.cpp \
 			ewol/OObject.cpp \

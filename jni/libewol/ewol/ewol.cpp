@@ -28,7 +28,7 @@
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
 
-#include <base/gui.h>
+#include <ewol/base/gui.h>
 
 #undef __class__
 #define __class__	"ewol"

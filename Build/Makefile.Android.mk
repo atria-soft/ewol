@@ -24,14 +24,14 @@ all:
 	@mkdir -p $(JAVA_FOLDER)/
 	
 	@echo $(F_ROUGE)"          (sh) copy the java File : "$(F_NORMALE)
-	@cp $(EWOL_FOLDER)/SourcesJava/PROJECT_NAME.java $(JAVA_FOLDER)/$(PROJECT_NAME).java
+	@cp $(EWOL_FOLDER)/Java/PROJECT_NAME.java $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	@echo $(F_ROUGE)"          (sh) Replace __PROJECT_VENDOR__, __PROJECT_NAME__ and __PROJECT_PACKAGE__ with the correct intance "$(F_NORMALE)
 	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	@sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	
 	@echo $(F_ROUGE)"          (sh) copy the cpp for jni File : $(EWOL_FOLDER)/SourcesJava/ewolAndroidAbstraction.cpp"$(F_NORMALE)
-	@cp $(EWOL_FOLDER)/SourcesJava/ewolAndroidAbstraction.cpp jni/
+	@cp $(EWOL_FOLDER)/Java/ewolAndroidAbstraction.cpp jni/
 	@echo $(F_ROUGE)"          (sh) Replace __PROJECT_VENDOR__, __PROJECT_NAME__ and __PROJECT_PACKAGE__ with the correct intance "$(F_NORMALE)
 	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" jni/ewolAndroidAbstraction.cpp
 	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" jni/ewolAndroidAbstraction.cpp
