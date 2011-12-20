@@ -38,7 +38,7 @@ endif
 # Directories
 TOP_DIR := .
 #BUILD_SYSTEM := $(TOP_DIR)/Build/coreLinux
-BUILD_SYSTEM := /home/edupin/progperso/ewol/Build/coreLinux/
+BUILD_SYSTEM := $(PROJECT_NDK)/Build/coreLinux/
 
 # This is the default target.  It must be the first declared target.
 all:
@@ -62,13 +62,9 @@ TARGET_GLOBAL_LDFLAGS += -Wl,-rpath,\$$ORIGIN
 ###############################################################################
 # Version
 ###############################################################################
-#VERSION_FILE := $(TOP_DIR)/App/Res/Version.h
-#VERSION_MAJOR := $(shell grep "VERSINFO_PRODUCT_VERSION_MAJOR" $(VERSION_FILE) | sed -e "s/.*\([0-9]\+\).*/\\1/")
-#VERSION_MINOR := $(shell grep "VERSINFO_PRODUCT_VERSION_MINOR" $(VERSION_FILE) | sed -e "s/.*\([0-9]\+\).*/\\1/")
-#VERSION_REVISION := $(shell grep "VERSINFO_PRODUCT_VERSION_REVISION" $(VERSION_FILE) | sed -e "s/.*\([0-9]\+\).*/\\1/")
-VERSION_MAJOR := 1
-VERSION_MINOR := 2
-VERSION_REVISION := 3
+VERSION_MAJOR := 111
+VERSION_MINOR := 2222
+VERSION_REVISION := 3453
 VERSION := $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_REVISION)
 
 ###############################################################################
@@ -96,37 +92,6 @@ GCC_FLAGS_WARNINGS :=
 GXX_FLAGS_WARNINGS :=
 
 COMMON_FLAGS_WARNINGS += -Wall
-COMMON_FLAGS_WARNINGS += -Wno-unused -Wunused-value -Wunused-variable -Wunused-label
-COMMON_FLAGS_WARNINGS += -Wextra
-COMMON_FLAGS_WARNINGS += -Wshadow
-COMMON_FLAGS_WARNINGS += -Wswitch-default
-COMMON_FLAGS_WARNINGS += -Wwrite-strings
-COMMON_FLAGS_WARNINGS += -Wundef
-COMMON_FLAGS_WARNINGS += -Wpointer-arith
-
-# C specific
-GCC_FLAGS_WARNINGS += -Wmissing-declarations
-GCC_FLAGS_WARNINGS += -Wmissing-prototypes
-
-# Extra warnings
-ifeq ("$(W)","1")
-
-COMMON_FLAGS_WARNINGS += -Wconversion
-COMMON_FLAGS_WARNINGS += -Wswitch-enum
-COMMON_FLAGS_WARNINGS += -Wcast-qual
-
-# gcc >= 4.4.0
-ifneq (0,$(shell expr $(GCC_VERSION) \>= 4.4.0))
-COMMON_FLAGS_WARNINGS += -Wframe-larger-than=1024
-endif
-
-# c++ specific
-GXX_FLAGS_WARNINGS += -Wctor-dtor-privacy
-GXX_FLAGS_WARNINGS += -Wnon-virtual-dtor
-GXX_FLAGS_WARNINGS += -Wreorder
-GXX_FLAGS_WARNINGS += -Woverloaded-virtual
-
-endif
 
 # Add common flags to specific flags
 GCC_FLAGS_WARNINGS += $(COMMON_FLAGS_WARNINGS)
@@ -139,6 +104,8 @@ GXX_FLAGS_WARNINGS += $(COMMON_FLAGS_WARNINGS)
 makefiles += $(shell find $(TOP_DIR) -name Linux.mk)
 include $(makefiles)
 
+TARGET_GLOBAL_CPPFLAGS := $(addprefix -I, $(LIB_EXTERN_C_INCLUDE))
+TARGET_GLOBAL_LDFLAGS := $(TARGET_GLOBAL_LDFLAGS) $(LIB_EXTERN_LDLIBS)
 ###############################################################################
 # Main rules.
 ###############################################################################

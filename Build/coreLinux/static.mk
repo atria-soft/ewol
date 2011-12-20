@@ -11,6 +11,9 @@ LOCAL_BUILDING_STATIC_LIBRARY := 1
 
 include $(RULES)
 
-$(LOCAL_BUILT_MODULE): $(all_objects)
+#$(info plopppppp=$(LOCAL_BUILT_MODULE)= $(all_libraries))
+$(LOCAL_BUILT_MODULE): $(all_libraries) $(all_objects) 
 	$(transform-o-to-static-lib)
 
+LIB_EXTERN_C_INCLUDE := $(LIB_EXTERN_C_INCLUDE) $(LOCAL_EXPORT_C_INCLUDES)
+LIB_EXTERN_LDLIBS := $(LIB_EXTERN_LDLIBS) $(LOCAL_EXPORT_LDLIBS)

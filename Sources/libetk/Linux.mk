@@ -5,10 +5,10 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := etk
 LOCAL_STATIC_LIBRARIES :=
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/ $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/
+LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/../../Sources
-LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_EXPORT_LDLIBS :=
 
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
@@ -25,10 +25,7 @@ LOCAL_SRC_FILES := $(FILE_LIST)
 #for freetype : https://github.com/cdave1/freetype2-android
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_LDLIBS := 
 
 
 include $(BUILD_STATIC_LIBRARY)
-
-
-$(info ====> Sub-Module ETK ...)

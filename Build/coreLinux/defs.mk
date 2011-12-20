@@ -113,13 +113,13 @@ define transform-o-to-executable
 @mkdir -p $(dir $@)
 @echo "Executable: $(PRIVATE_MODULE) ($@)"
 $(Q)$(GXX) \
-	$(TARGET_GLOBAL_LDFLAGS) \
 	-Wl,-Map -Wl,$(basename $@).map \
-	$(PRIVATE_LDFLAGS) \
 	$(PRIVATE_ALL_OBJECTS) \
 	-Wl,--no-whole-archive \
 	$(PRIVATE_ALL_STATIC_LIBRARIES) \
 	$(PRIVATE_ALL_SHARED_LIBRARIES) \
+	$(TARGET_GLOBAL_LDFLAGS) \
+	$(PRIVATE_LDFLAGS) \
 	-o $@ \
 	$(PRIVATE_LDLIBS)
 endef
@@ -172,39 +172,5 @@ endef
 ###############################################################################
 ## Commands for importing module files.
 ###############################################################################
-define import-module
-$(info subModule loading : submodule : $(PROJECT_MODULE)$1)
-tmpname := $(shell find $(PROJECT_MODULE)$1 -name Linux.mk)
-$(info list Makefile : $(tmpname))
-endef
-
-#makefiles += $(shell find $(PROJECT_MODULE)$1 -name Linux.mk)
-
-
-#import-module = \
-#    $(eval __import_tag := $(strip $1))\
-#    $(if $(call seq,$(words $(__import_tag)),1),,\
-#      $(call __ndk_info,$(call local-makefile): Cannot import module with spaces in tag: '$(__import_tag)')\
-#    )\
-#    $(if $(call set_is_member,$(__ndk_import_list),$(__import_tag)),\
-#      $(call ndk_log,Skipping duplicate import for module with tag '$(__import_tag)')\
-#    ,\
-#      $(call ndk_log,Looking for imported module with tag '$(__import_tag)')\
-#      $(eval __imported_path := $(call import-find-module,$(__import_tag)))\
-#      $(if $(__imported_path),\
-#        $(call ndk_log,    Found in $(__imported_path))\
-#        $(eval __ndk_import_depth := $(__ndk_import_depth)x) \
-#        $(eval __ndk_import_list := $(call set_insert,$(__ndk_import_list),$(__import_tag)))\
-#        $(eval include $(__imported_path)/Android.mk)\
-#        $(eval __ndk_import_depth := $(__ndk_import_depth:%x=%))\
-#      ,\
-#        $(call __ndk_info,$(call local-makefile): Cannot find module with tag '$(__import_tag)' in import path)\
-#        $(call __ndk_info,Are you sure your NDK_MODULE_PATH variable is properly defined ?)\
-#        $(call __ndk_info,The following directories were searched:)\
-#        $(for __import_dir,$(__ndk_import_dirs),\
-#          $(call __ndk_info,    $(__import_dir))\
-#        )\
-#        $(call __ndk_error,Aborting.)\
-#      )\
-#   )
-
+import-module = \
+	$(eval include $(shell find $(PROJECT_MODULE)$1 -name Linux.mk))

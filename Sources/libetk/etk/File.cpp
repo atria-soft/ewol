@@ -296,9 +296,9 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 						TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
 					}
 				#else
-					etk::String tmpFilename = destFilename;
-					destFilename = baseFolderData;
-					destFilename += tmpFilename;
+					//etk::String tmpFilename = destFilename;
+					//destFilename = baseFolderData;
+					//destFilename += tmpFilename;
 				#endif
 			}
 			break;
@@ -486,7 +486,7 @@ int32_t etk::File::Size(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::String myCompleateName = GetCompleateName();
+	etk::String myCompleateName = baseFolderData + GetCompleateName();
 	myFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == myFile) {
 		//EWOL_ERROR("Can not find the file name=\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
@@ -519,7 +519,7 @@ bool etk::File::Exist(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::String myCompleateName = GetCompleateName();
+	etk::String myCompleateName = baseFolderData + GetCompleateName();
 	myFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == myFile) {
 		return false;
@@ -550,7 +550,8 @@ bool etk::File::fOpenRead(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	m_PointerFile=fopen(GetCompleateName().c_str(),"rb");
+	etk::String myCompleateName = baseFolderData + GetCompleateName();
+	m_PointerFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;
@@ -574,7 +575,8 @@ bool etk::File::fOpenWrite(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	m_PointerFile=fopen(GetCompleateName().c_str(),"wb");
+	etk::String myCompleateName = baseFolderData + GetCompleateName();
+	m_PointerFile=fopen(myCompleateName.c_str(),"wb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;

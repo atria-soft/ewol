@@ -119,28 +119,28 @@ endif
 
 # cpp files
 ifneq ("$(strip $(cpp_objects))","")
-$(cpp_objects): $(intermediates)/%.o: $(TOP_DIR)/$(LOCAL_PATH)/%.cpp
+$(cpp_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.cpp
 	$(transform-cpp-to-o)
 -include $(cpp_objects:%.o=%.d)
 endif
 
 # cxx files
 ifneq ("$(strip $(cxx_objects))","")
-$(cxx_objects): $(intermediates)/%.o: $(TOP_DIR)/$(LOCAL_PATH)/%.cxx
+$(cxx_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.cxx
 	$(transform-cpp-to-o)
 -include $(cxx_objects:%.o=%.d)
 endif
 
 # c files
 ifneq ("$(strip $(c_objects))","")
-$(c_objects): $(intermediates)/%.o: $(TOP_DIR)/$(LOCAL_PATH)/%.c
+$(c_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.c
 	$(transform-c-to-o)
 -include $(c_objects:%.o=%.d)
 endif
 
 # rc files
 ifneq ("$(strip $(rc_objects))","")
-$(rc_objects): $(addprefix $(TOP_DIR)/$(LOCAL_PATH)/,$(LOCAL_RC_DEPS))
+$(rc_objects): $(addprefix $(LOCAL_PATH)/,$(LOCAL_RC_DEPS))
 $(rc_objects): $(intermediates)/%.rc.o: $(TOP_DIR)/$(LOCAL_PATH)/%.rc
 	$(transform-rc-to-o)
 endif
