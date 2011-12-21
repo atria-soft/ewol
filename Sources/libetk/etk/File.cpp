@@ -32,7 +32,7 @@
 #	include <GeneratedData.h>
 #elif defined(DATA_IN_APK)
 #	include <stdio.h>
-#	include <zip.h>
+#	include <zip/zip.h>
 #endif
 
 

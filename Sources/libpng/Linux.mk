@@ -16,26 +16,17 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_CFLAGS := 
+LOCAL_CFLAGS := -DPNG_NO_LIMITS_H
 
 LOCAL_MODULE    := libpng
-LOCAL_SRC_FILES :=\
-	png.c \
-	pngerror.c \
-	pngget.c \
-	pngmem.c \
-	pngpread.c \
-	pngread.c \
-	pngrio.c \
-	pngrtran.c \
-	pngrutil.c \
-	pngset.c \
-	pngtrans.c \
-	pngwio.c \
-	pngwrite.c \
-	pngwtran.c \
-	pngwutil.c 
-	
+
+LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
+
+# load the common sources file of the platform
+include $(LOCAL_PATH)/file.mk
+
+LOCAL_SRC_FILES := $(FILE_LIST)
+
 LOCAL_LDLIBS := -lz
 
 #include $(BUILD_SHARED_LIBRARY)
