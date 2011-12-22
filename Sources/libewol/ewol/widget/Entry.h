@@ -33,8 +33,23 @@ namespace ewol {
 	class Entry :public ewol::Widget
 	{
 		public:
-			Entry(void) { };
-			virtual ~Entry(void) { };
+			Entry(void);
+			Entry(etk::String newData);
+			virtual ~Entry(void);
+			void Init(void);
+			virtual bool   CalculateMinSize(void);
+			void           SetValue(etk::String newData);
+			etk::String    GetValue(void);
+		private:
+			etk::String    m_data;
+			color_ts       m_textColorFg;  //!< Text color
+			color_ts       m_textColorBg;  //!< Background color
+		public:
+			virtual void   OnRegenerateDisplay(void);
+		public:
+			//virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]);
 	};
 };
 

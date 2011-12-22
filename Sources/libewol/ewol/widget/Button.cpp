@@ -128,9 +128,11 @@ void ewol::Button::OnRegenerateDisplay(void)
 	tmpSizeY -= 2*paddingSize;
 
 	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+	/*
 	int32_t fontId = GetDefaultFontId();
 	int32_t fontHeight = ewol::GetHeight(fontId);
 	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
+	*/
 	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str());
 
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
