@@ -21,7 +21,7 @@
  *
  *******************************************************************************
  */
-
+#ifdef EWOL_USE_FREE_TYPE
 
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
@@ -36,7 +36,7 @@
 #	include <X11/extensions/Xrender.h>
 #endif
 */
-#include <importgl.h>
+#include <ewol/importgl.h>
 #if defined(__PLATFORM__Linux)
 #	include <ft2build.h>
 #else
@@ -188,7 +188,37 @@ class FTFontInternal
 		{
 			m_fontName = fontName;
 			m_fileName = fontFileName;
-			int32_t error = FT_New_Face( library, m_fileName.GetCompleateName().c_str(), 0, &m_fftFace );
+			m_FileBuffer = NULL;
+			m_FileSize = 0;
+			#if 0
+				int32_t error = FT_New_Face( library, m_fileName.GetCompleateName().c_str(), 0, &m_fftFace );
+			#else
+				if (false == m_fileName.Exist()) {
+					EWOL_ERROR("File Does not exist : " << m_fileName);
+					return;
+				}
+				m_FileSize = m_fileName.Size();
+				if (0==m_FileSize) {
+					EWOL_ERROR("This file is empty : " << m_fileName);
+					return;
+				}
+				if (false == m_fileName.fOpenRead()) {
+					EWOL_ERROR("Can not open the file : " << m_fileName);
+					return;
+				}
+				// allocate data
+				m_FileBuffer = new FT_Byte[m_FileSize];
+				if (NULL == m_FileBuffer) {
+					EWOL_ERROR("Error Memory allocation size=" << m_FileSize);
+					return;
+				}
+				// load data from the file :
+				m_fileName.fRead(m_FileBuffer, 1, m_FileSize);
+				// close the file:
+				m_fileName.fClose();
+				// load Face ...
+				int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
+			#endif
 			if( FT_Err_Unknown_File_Format == error) {
 				EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
 			} else if (0 != error) {
@@ -201,7 +231,11 @@ class FTFontInternal
 		}
 		~FTFontInternal(void)
 		{
-			
+			// clean the tmp memory
+			if (NULL != m_FileBuffer) {
+				delete[] m_FileBuffer;
+				m_FileBuffer = NULL;
+			}
 		}
 	public:
 		etk::String GetFontName(void) {return m_fontName;};
@@ -322,6 +356,8 @@ class FTFontInternal
 	private:
 		etk::String  m_fontName;
 		etk::File    m_fileName;
+		FT_Byte *    m_FileBuffer;
+		int32_t      m_FileSize;
 		FT_Face      m_fftFace;
 };
 
@@ -662,3 +698,7 @@ int32_t ewol::GetHeight(int32_t fontID)
 	}
 	return m_listLoadedFont[fontID]->GetHeight();
 }
+
+
+#endif
+

@@ -22,6 +22,7 @@
  *******************************************************************************
  */
 
+#ifndef EWOL_USE_FREE_TYPE
 
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
@@ -540,4 +541,4 @@ int32_t ewol::GetHeight(int32_t fontID)
 
 
 
-
+#endif

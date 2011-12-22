@@ -105,6 +105,7 @@ etk::String etk::File::GetCompleateName(void) const
 	return out;
 }
 
+
 const etk::File& etk::File::operator= (const etk::File &etkF )
 {
 	if( this != &etkF ) // avoid copy to itself

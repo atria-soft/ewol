@@ -8,7 +8,7 @@ LOCAL_STATIC_LIBRARIES := etk tinyxml libzip libpng
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH) -I$(LOCAL_PATH)/../libzip/ -I$(LOCAL_PATH)/../libpng/ -I$(LOCAL_PATH)/../libtinyxml/ -I$(LOCAL_PATH)/../libetk/
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm
+LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm `pkg-config --libs freetype2`
 
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
@@ -16,7 +16,9 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
-                -DEWOL_X11_MODE__XF86V
+                -DEWOL_X11_MODE__XF86V \
+                -DEWOL_USE_FREE_TYPE \
+                `pkg-config --cflags freetype2`
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

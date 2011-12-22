@@ -9,10 +9,12 @@ FILE_LIST = \
 			ewol/OObject/2DTextured.cpp \
 			ewol/Texture.cpp \
 			ewol/FontBitmap.cpp \
+			ewol/FontFreeType.cpp \
 			ewol/Widget.cpp \
 			ewol/WidgetManager.cpp \
 			ewol/Windows.cpp \
 			ewol/widget/Button.cpp \
+			ewol/widget/Label.cpp \
 			ewol/widget/CheckBox.cpp \
 			ewol/widget/Entry.cpp \
 			ewol/widget/List.cpp \
