@@ -40,16 +40,30 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           SetValue(etk::String newData);
 			etk::String    GetValue(void);
+			void           SetWidth(int32_t width)
+			{
+				m_userSize = width;
+			}
 		private:
 			etk::String    m_data;
 			color_ts       m_textColorFg;  //!< Text color
 			color_ts       m_textColorBg;  //!< Background color
+			int32_t        m_userSize;
+			int32_t        m_displayStartPosition;
+			int32_t        m_displayCursorPos;
+			int32_t        m_borderSize;
+			int32_t        m_paddingSize;
+			void           UpdateTextPosition(void);
+			bool           m_displayCursor;
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
 			//virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 			virtual bool OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]);
+		protected:
+			virtual void OnGetFocus(void);
+			virtual void OnLostFocus(void);
 	};
 };
 

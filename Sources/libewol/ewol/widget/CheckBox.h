@@ -39,10 +39,6 @@ namespace ewol {
 			virtual ~CheckBox(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::String newLabel);
-			// TODO : 
-			//void           SetSize(int32_t size);
-			//void           SetFont(etk::String fontName);
-			//void           ResetDefaultParameters(void);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:

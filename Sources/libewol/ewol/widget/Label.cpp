@@ -42,7 +42,7 @@ void ewol::Label::Init(void)
 	m_textColorFg.green = 0.0;
 	m_textColorFg.blue  = 0.0;
 	m_textColorFg.alpha = 1.0;
-	SetCanHaveFocus(true);
+	SetCanHaveFocus(false);
 }
 
 ewol::Label::Label(void)

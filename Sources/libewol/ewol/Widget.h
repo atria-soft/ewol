@@ -157,7 +157,7 @@ namespace ewol {
 			coord          GetOrigin(void) { return m_origin; };
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; }; //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
+			virtual void   SetMinSize(etkFloat_t x=-1, etkFloat_t y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
 			coord          GetMinSize(void) { return m_minSize; };
 			coord          GetSize(void) { return m_size; };
 			void           SetCurrentSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_size.x = x; m_size.y = y; };

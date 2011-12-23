@@ -111,6 +111,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 				m_userExpendY = true;
 			}
 			coord tmpSize = m_subWidget[iii]->GetMinSize();
+			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
 			m_minSize.y += tmpSize.y;
 			if (tmpSize.x>m_minSize.x) {
 				m_minSize.x = tmpSize.x;

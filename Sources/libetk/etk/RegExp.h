@@ -60,7 +60,7 @@ multiplicity :
 */
 
 
-// internal define to permit to have all neeed system
+// internal define to permit to have all needed system
 #define REGEXP_OPCODE_PTHESE_IN			(-300)	/* ( */
 #define REGEXP_OPCODE_PTHESE_OUT		( 300)	/* ) */
 #define REGEXP_OPCODE_BRACKET_IN		(-301)	/* [ */
