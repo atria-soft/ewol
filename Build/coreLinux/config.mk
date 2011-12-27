@@ -47,13 +47,13 @@ endif
 ifeq ("$(DEBUG)","0")
   TARGET_GLOBAL_CFLAGS += -O2 -g0 -DNDEBUG -DUNICODE -D_UNICODE
   TARGET_GLOBAL_LDFLAGS += -Wl,--strip-all
-  TARGET_OUT_INTERMEDIATES := $(TOP_DIR)/build_gcc$(DIR_SUFFIX)/release
-  TARGET_OUT := $(TOP_DIR)/out_gcc$(DIR_SUFFIX)/release
+  TARGET_OUT_INTERMEDIATES := $(TOP_DIR)/linux/obj$(DIR_SUFFIX)/release
+  TARGET_OUT := $(TOP_DIR)/linux/bin$(DIR_SUFFIX)/release
 else
   TARGET_GLOBAL_CFLAGS += -O0 -g2 -DDEBUG -D_DEBUG -DUNICODE -D_UNICODE
   TARGET_GLOBAL_LDFLAGS +=
-  TARGET_OUT_INTERMEDIATES := $(TOP_DIR)/build_gcc$(DIR_SUFFIX)/debug
-  TARGET_OUT := $(TOP_DIR)/out_gcc$(DIR_SUFFIX)/debug
+  TARGET_OUT_INTERMEDIATES := $(TOP_DIR)/linux/obj$(DIR_SUFFIX)/debug
+  TARGET_OUT := $(TOP_DIR)/linux/bin$(DIR_SUFFIX)/debug
 endif
 
 ###############################################################################
