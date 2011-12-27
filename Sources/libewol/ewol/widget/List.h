@@ -3,7 +3,7 @@
  * @file ewol/widget/List.h
  * @brief ewol list widget system (header)
  * @author Edouard DUPIN
- * @date 07/11/2011
+ * @date 27/12/2011
  * @par Project
  * ewol
  *
@@ -30,11 +30,61 @@
 #include <ewol/Widget.h>
 
 namespace ewol {
+	typedef enum {
+		EVENT_LIST_CKICKED,
+		EVENT_LIST_LEFT_CKICKED,
+	} listEvent_te;
+	
+	
 	class List :public ewol::Widget
 	{
 		public:
-			List(void) { };
-			virtual ~List(void) { };
+			List(void);
+			void Init(void);
+			virtual ~List(void);
+			virtual bool   CalculateMinSize(void);
+			void           SetLabel(etk::String newLabel);
+		private:
+			int32_t        m_paddingSize;
+			int32_t        m_displayStartRaw;           //!< Current starting diaplayed raw
+			int32_t        m_diaplayCurrentNbLine;      //!< Number of line in the display
+		public:
+			virtual void   OnRegenerateDisplay(void);
+		
+		protected:
+			// function call to display the list :
+			virtual int32_t GetNuberOfColomn(void) {
+				return 0;
+			};
+			virtual bool GetTitle(int32_t colomn, etk::String &myTitle, color_ts &fg, color_ts &bg) {
+				myTitle = "";
+				return false;
+			};
+			virtual int32_t GetNuberOfRaw(void) {
+				return 0;
+			};
+			virtual bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
+				myTextToWrite = "";
+				fg.red = 0.0;
+				fg.green = 0.0;
+				fg.blue = 0.0;
+				fg.alpha = 1.0;
+				if (raw % 2) {
+					bg.red = 1.0;
+					bg.green = 1.0;
+					bg.blue = 1.0;
+					bg.alpha = 1.0;
+				} else {
+					bg.red = 0.5;
+					bg.green = 0.5;
+					bg.blue = 0.5;
+					bg.alpha = 1.0;
+				}
+				return false;
+			};
+			virtual bool OnItemEvent(listEvent_te event, int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
+				return false;
+			}
 	};
 };
 
