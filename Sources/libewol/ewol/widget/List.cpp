@@ -70,16 +70,47 @@ void ewol::List::OnRegenerateDisplay(void)
 	
 	int32_t tmpOriginX = 0;
 	int32_t tmpOriginY = 0;
-	
+	int32_t tmpOriginYBG = 0;
+	/*
 	if (true==m_userFillX) {
-		tmpOriginX = (m_size.x - m_minSize.x) / 2;
+		tmpOriginX = 0;
 	}
 	if (true==m_userFillY) {
-		tmpOriginY = (m_size.y - m_minSize.y) / 2;
-	}
+		tmpOriginY = 0;
+	}*/
 	tmpOriginX += m_paddingSize;
 	tmpOriginY += m_paddingSize;
 
+	int32_t fontId = GetDefaultFontId();
+	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minHeight = ewol::GetHeight(fontId);
+
+
+	//uint32_t nbColomn = GetNuberOfColomn();
+	uint32_t nbRaw    = GetNuberOfRaw();
+	etk::VectorType<int32_t> listSizeColomn;
+	
+	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+	AddOObject(BGOObjects, "ListDeco");
+	color_ts basicBG = GetBasicBG();
+	BGOObjects->SetColor(basicBG);
+	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+	
+	
+	for(uint32_t iii=0; iii<nbRaw; iii++) {
+		etk::String myTextToWrite;
+		color_ts fg;
+		color_ts bg;
+		GetElement(0, iii, myTextToWrite, fg, bg);
+		BGOObjects->SetColor(bg);
+		BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSize);
+		tmpOriginYBG += minHeight+2*m_paddingSize;
+		
+		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
+		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str());
+		AddOObject(tmpText, "");
+		tmpOriginY += minHeight + 2* m_paddingSize;
+	}
 	//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 	//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
 
@@ -88,3 +119,14 @@ void ewol::List::OnRegenerateDisplay(void)
 }
 
 
+bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+{
+	int32_t fontId = GetDefaultFontId();
+	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minHeight = ewol::GetHeight(fontId);
+
+	int32_t rawID = y / (minHeight + 2*m_paddingSize);
+	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
+	return OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
+	return false;
+}

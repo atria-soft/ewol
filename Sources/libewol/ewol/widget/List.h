@@ -30,12 +30,6 @@
 #include <ewol/Widget.h>
 
 namespace ewol {
-	typedef enum {
-		EVENT_LIST_CKICKED,
-		EVENT_LIST_LEFT_CKICKED,
-	} listEvent_te;
-	
-	
 	class List :public ewol::Widget
 	{
 		public:
@@ -50,17 +44,25 @@ namespace ewol {
 			int32_t        m_diaplayCurrentNbLine;      //!< Number of line in the display
 		public:
 			virtual void   OnRegenerateDisplay(void);
-		
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 		protected:
 			// function call to display the list :
-			virtual int32_t GetNuberOfColomn(void) {
+			virtual color_ts GetBasicBG(void) {
+				color_ts bg;
+				bg.red = 1.0;
+				bg.green = 1.0;
+				bg.blue = 1.0;
+				bg.alpha = 1.0;
+				return bg;
+			}
+			virtual uint32_t GetNuberOfColomn(void) {
 				return 0;
 			};
 			virtual bool GetTitle(int32_t colomn, etk::String &myTitle, color_ts &fg, color_ts &bg) {
 				myTitle = "";
 				return false;
 			};
-			virtual int32_t GetNuberOfRaw(void) {
+			virtual uint32_t GetNuberOfRaw(void) {
 				return 0;
 			};
 			virtual bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
@@ -82,7 +84,7 @@ namespace ewol {
 				}
 				return false;
 			};
-			virtual bool OnItemEvent(listEvent_te event, int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
+			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
 				return false;
 			}
 	};
