@@ -70,8 +70,11 @@ namespace ewol {
 			}
 		private:
 			ewol::Widget *  m_subWidget;
+			ewol::Widget *  m_popUpWidget;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
+			void PopUpWidgetPush(ewol::Widget * widget);
+			void PopUpWidgetPop(void);
 		protected:
 			virtual bool   OnDraw(void);
 		public:

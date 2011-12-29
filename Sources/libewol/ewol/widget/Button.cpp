@@ -40,6 +40,10 @@ const char * const ewolEventButtonLeave      = "ewol Button Leave";
 
 void ewol::Button::Init(void)
 {
+	AddEventId(ewolEventButtonPressed);
+	AddEventId(ewolEventButtonEnter);
+	AddEventId(ewolEventButtonLeave);
+	
 	m_textColorFg.red   = 0.0;
 	m_textColorFg.green = 0.0;
 	m_textColorFg.blue  = 0.0;
@@ -168,16 +172,19 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 
 bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
 {
-	bool eventIsOK = false;
+	//bool eventIsOK = false;
 	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
 	if(ewolEventButtonPressed == generateEventId) {
 		EWOL_INFO("BT pressed ... " << m_label);
-		eventIsOK = true;
+		//eventIsOK = true;
 		ewol::widgetManager::FocusKeep(this);
 	} else if(ewolEventButtonEnter == generateEventId) {
 		OnRegenerateDisplay();
 	}
-	return eventIsOK;
+	//return eventIsOK;
+	// in every case this not stop the propagation of the event
+	return false;
+	// if overwrited... you can ...
 }
 
 

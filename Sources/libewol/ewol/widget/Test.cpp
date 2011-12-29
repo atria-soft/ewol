@@ -38,6 +38,7 @@ const char * ewolEventTestPressed    = "ewol Test Pressed";
 
 ewol::Test::Test(void)
 {
+	AddEventId(ewolEventTestPressed);
 	m_elementID = 0;
 }
 

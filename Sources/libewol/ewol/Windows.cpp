@@ -46,8 +46,12 @@ const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
 
 ewol::Windows::Windows(void)
 {
+	AddEventId(ewolEventWindowsClose);
+	AddEventId(ewolEventWindowsMinimize);
+	AddEventId(ewolEventWindowsExpend);
 	SetCanHaveFocus(true);
 	m_subWidget = NULL;
+	m_popUpWidget = NULL;
 	// enable specific drawing system ...
 	SpecificDrawEnable();
 	
@@ -89,6 +93,10 @@ ewol::Windows::~Windows(void)
 		delete(m_subWidget);
 		m_subWidget=NULL;
 	}
+	if (NULL != m_popUpWidget) {
+		delete(m_popUpWidget);
+		m_popUpWidget=NULL;
+	}
 }
 
 bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
@@ -100,6 +108,10 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
 		m_subWidget->CalculateSize(m_size.x, m_size.y);
+	}
+	if (NULL != m_popUpWidget) {
+		m_popUpWidget->CalculateMinSize();
+		m_popUpWidget->CalculateSize(m_size.x, m_size.y);
 	}
 	// regenerate all the display ...
 	OnRegenerateDisplay();
@@ -125,7 +137,11 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 			}
 		}
 	}
-	if (NULL != m_subWidget) {
+	// event go directly on the pop-up
+	if (NULL != m_popUpWidget) {
+		m_popUpWidget->GenEventInput(IdInput, typeEvent, x, y);
+	// otherwise in the normal windows
+	} else if (NULL != m_subWidget) {
 		m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
 	}
 	return true;
@@ -174,13 +190,23 @@ void ewol::Windows::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
+	if (NULL != m_popUpWidget) {
+		m_popUpWidget->OnRegenerateDisplay();
+	}
 }
 
 
 bool ewol::Windows::OnDraw(void)
 {
+	// first display the windows on the display
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw();
+		//EWOL_DEBUG("Draw Windows");
+	}
+	// second display the pop-up
+	if (NULL != m_popUpWidget) {
+		m_popUpWidget->GenDraw();
+		//EWOL_DEBUG("Draw Pop-up");
 	}
 	return true;
 }
@@ -218,3 +244,25 @@ void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 	CalculateSize(m_size.x, m_size.y);
 }
 
+
+void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
+{
+	if (NULL != m_popUpWidget) {
+		EWOL_INFO("Remove current pop-up Widget...");
+		delete(m_popUpWidget);
+		m_popUpWidget = NULL;
+	}
+	m_popUpWidget = widget;
+	// Regenerate the size calculation :
+	CalculateSize(m_size.x, m_size.y);
+}
+
+
+void ewol::Windows::PopUpWidgetPop(void)
+{
+	if (NULL != m_popUpWidget) {
+		EWOL_INFO("Remove current pop-up Widget...");
+		delete(m_popUpWidget);
+		m_popUpWidget = NULL;
+	}
+}

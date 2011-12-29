@@ -55,6 +55,10 @@ ewol::Widget::~Widget(void)
 	ewol::widgetManager::Rm(this);
 }
 
+int32_t ewol::Widget::GetWidgetId(void)
+{
+	return ewol::widgetManager::Get(this);
+}
 
 
 bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
@@ -92,14 +96,9 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 					if (true == ended) {
 						break;
 					}
-					// todo : call other link widget :
-					if (-1 != m_inputEvent[iii].widgetCall) {
-						ewol::Widget * tmpWidget = NULL;
-						//tmpWidget = ewol::GetWidgetWithID(newEvent.widgetCall);
-						ended = tmpWidget->OnEventAreaExternal(ewol::widgetManager::GetId(this), m_inputEvent[iii].generateEventId, x, y);
-						if (true == ended) {
-							break;
-						}
+					if (true == GenEventInputExternal(m_inputEvent[iii].generateEventId, x, y)) {
+						ended = true;
+						break;
 					}
 				}
 			}
@@ -111,6 +110,28 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 	return ended;
 }
 
+bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y)
+{
+	bool ended = false;
+	// For all external Event Requested : 
+	for( int32_t jjj=0; jjj<m_externEvent.Size(); jjj++) {
+		// Check if it is the same ID : 
+		if (m_externEvent[jjj].generateEventId == generateEventId) {
+			// get the widget Pointer:
+			
+			ewol::Widget * tmpWidget = ewol::widgetManager::Get(m_externEvent[jjj].widgetCall);
+			if (NULL == tmpWidget) {
+				EWOL_ERROR("Try to call an NULL Widget, it might be removed ... id=" << m_externEvent[jjj].widgetCall);
+			} else {
+				ended = tmpWidget->OnEventAreaExternal(GetWidgetId(), generateEventId, m_externEvent[jjj].generateEventIdExtern, x, y);
+			}
+			if (true == ended) {
+				break;
+			}
+		}
+	}
+	return ended;
+}
 
 bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE])
 {
@@ -148,7 +169,6 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 	*/
 	event_ts newEvent;
 	newEvent.generateEventId = generateEventId;
-	newEvent.widgetCall = -1; // by default no widget is called
 	newEvent.mode = EWOL_EVENT_AREA;
 	newEvent.area.origin.x = origin.x + m_origin.x;
 	newEvent.area.origin.y = origin.y + m_origin.y;
@@ -162,25 +182,44 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 
 bool ewol::Widget::AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId)
 {
+	EWOL_TODO("code not writed now...");
 	return true;
 }
 
 
 bool ewol::Widget::AddEventShortCut(char * descriptiveString, const char * generateEventId)
 {
+	EWOL_TODO("code not writed now...");
 	return true;
 }
 
 
-bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId)
+bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId)
 {
-	return true;
+	if(NULL == eventName || 0 > widgetId) {
+		EWOL_ERROR("Try to add extern event with wrong input ..");
+		return false;
+	}
+	
+	eventExtern_ts tmpEvent;
+	// search the ID ...
+	for(int32_t iii=0; iii < m_ListEventAvaillable.Size(); iii++) {
+		if (strcmp(m_ListEventAvaillable[iii], eventName) == 0) {
+			tmpEvent.generateEventId = m_ListEventAvaillable[iii];
+			tmpEvent.widgetCall = widgetId;
+			tmpEvent.generateEventIdExtern = eventExternId;
+			m_externEvent.PushBack(tmpEvent);
+			return true;
+		}
+	}
+	EWOL_ERROR("Try to add extern event with Unknow EventID : \"" << eventName << "\"" );
+	return false;
 }
 
 
 
 
-void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
+void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system : name=\"" << name << "\"");
@@ -191,7 +230,11 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name)
 	newObject->UpdateSize(m_size.x, m_size.y);
 	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," << m_origin.y << ")");
 	newObject->UpdateOrigin(m_origin.x, m_origin.y);
-	m_listOObject.PushBack(newObject);
+	if (pos < 0 || pos >= m_listOObject.Size() ) {
+		m_listOObject.PushBack(newObject);
+	} else {
+		m_listOObject.Insert(pos, newObject);
+	}
 }
 
 

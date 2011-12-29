@@ -25,7 +25,8 @@
 #ifndef __ETK_VECTOR_H__
 #define __ETK_VECTOR_H__
 
-#include <etk/Type.h>
+#include <etk/Types.h>
+#include <etk/DebugInternal.h>
 #include <etk/Memory.h>
 
 #undef __class__
@@ -65,160 +66,12 @@
  *         ----------                                                               
  *
  */
-namespace rtk
+namespace etk
 {
 
 template<class T, int32_t INC=0> class Vector
 {
 	public:
-		class Iterator
-		{
-			// Private data : 
-			private:
-				int32_t			  m_current;		// curent Id on the vector
-				etk::Vector<T>	* m_Vector;		// Pointer on the curent element of the vector
-			public:
-				/**
-				 * @brief Basic itarator constructor with no link with an Vector
-				 */
-				Iterator():
-					m_current(-1),
-					m_Vector(NULL)
-				{
-					// nothing to do ...
-				}
-				/**
-				 * @brief Recopy constructor on a specific Vector.
-				 * @param[in] otherIterator		The Iterator that might be copy
-				 */
-				Iterator(const Iterator & otherIterator):
-					m_current(otherIterator.m_current),
-					m_Vector(otherIterator.m_Vector)
-				{
-					// nothing to do ...
-				}
-				/**
-				 * @brief Asignation operator.
-				 * @param[in] otherIterator		The Iterator that might be copy
-				 * @return reference on the curent Iterator
-				 */
-				Iterator& operator=(const Iterator & otherIterator)
-				{
-					m_current = otherIterator.m_current;
-					m_Vector = otherIterator.m_Vector;
-					return *this;
-				}
-				/**
-				 * @brief Basic destructor
-				 */
-				~Iterator()
-				{
-					m_current = -1;
-					m_Vector = NULL;
-				}
-				/**
-				 * @brief basic boolean cast
-				 * @return true if the element is present in the Vector size
-				 */
-				operator bool ()
-				{
-					if(		0 <= m_current
-						&&	m_current < m_etkVector->Size() )
-					{
-						return true;
-					} else {
-						return false;
-					}
-				}
-				/**
-				 * @brief Incremental operator
-				 * @return Reference on the current iterator incremented
-				 */
-				Iterator& operator++ ()
-				{
-					if(		NULL != m_etkVector
-						&&	m_current < m_etkVector->Size() )
-					{
-						m_current++;
-					}
-					return *this;
-				}
-				/**
-				 * @brief Decremental operator
-				 * @return Reference on the current iterator decremented
-				 */
-				Iterator& operator-- ()
-				{
-					if (m_current >= 0) {
-						m_current--;
-					}
-					return *this;
-				}
-				/**
-				 * @brief Incremental operator
-				 * @return Reference on a new iterator and increment the other one
-				 */
-				Iterator operator++ (int32_t)
-				{
-					Iterator it(*this);
-					++(*this);
-					return it;
-				}
-				/**
-				 * @brief Decremental operator
-				 * @return Reference on a new iterator and decrement the other one
-				 *
-				 */
-				Iterator operator-- (int32_t)
-				{
-					Iterator it(*this);
-					--(*this);
-					return it;
-				}
-				/**
-				 * @brief 
-				 *
-				 * @param[in,out] ---
-				 *
-				 * @return ---
-				 *
-				 */
-				T * operator-> () const
-				{
-					TK_CHECK_INOUT(m_current >= 0 && m_current < m_etkVector->Size());
-					return &m_etkVector->Get(m_current);
-				}
-				/**
-				 * @brief 
-				 *
-				 * @param[in,out] ---
-				 *
-				 * @return ---
-				 *
-				 */
-				T & operator* () const
-				{
-					TK_CHECK_INOUT(m_current >= 0 && m_current < m_etkVector->Size());
-					return m_etkVector->Get(m_current);
-				}
-			private:
-				/**
-				 * @brief 
-				 *
-				 * @param[in,out] ---
-				 *
-				 * @return ---
-				 *
-				 */
-				Iterator(etk::Vector<T> * myVector, int pos):
-					m_current(pos),
-					m_Vector(myVector)
-				{
-					// nothing to do ...
-				}
-				friend class etk::Vector<T>;
-		};
-
 	/**
 	 * @brief 
 	 *
@@ -249,7 +102,7 @@ template<class T, int32_t INC=0> class Vector
 		m_data(NULL)
 	{
 		int32_t i;
-		ETK_MALLOC_CAST(m_data, m_size, T, reinterpret_cast<T*>);
+		ETK_MALLOC_CAST(m_data, m_size, T, T*);//reinterpret_cast<T*>);
 		for(i=0; i<m_count; i++) {
 			new (&m_data[i]) T(myVector[i]);
 		}
@@ -282,7 +135,7 @@ template<class T, int32_t INC=0> class Vector
 		this->~etkVector(); 
 		m_size = etkVector.m_size;
 		m_count = etkVector.m_count;
-		TK_MALLOC_CAST(m_data, m_size, T, reinterpret_cast<T*>);
+		ETK_MALLOC_CAST(m_data, m_size, T, T*);//reinterpret_cast<T*>);
 		for(i=0; i<m_count; i++) {
 			new (&m_data[i]) T(etkVector[i]);
 		}
@@ -355,7 +208,7 @@ template<class T, int32_t INC=0> class Vector
 		if(		0 > res
 			||	res >= Size())
 		{
-			return -1
+			return -1;
 		} else {
 			return res;
 		}
@@ -374,45 +227,6 @@ template<class T, int32_t INC=0> class Vector
 		int32_t idx = Size();
 		Resize(idx+1);
 		Get(idx) = item;
-	}
-
-	/**
-	 * @brief 
-	 *
-	 * @param[in,out] ---
-	 *
-	 * @return ---
-	 *
-	 */
-	Iterator Get(int pos)
-	{
-		return Iterator(this, pos);
-	}
-	
-	/**
-	 * @brief 
-	 *
-	 * @param[in,out] ---
-	 *
-	 * @return ---
-	 *
-	 */
-	Iterator Begin()
-	{
-		return Get(0);
-	}
-	
-	/**
-	 * @brief 
-	 *
-	 * @param[in,out] ---
-	 *
-	 * @return ---
-	 *
-	 */
-	Iterator End()
-	{
-		return Get( Size()-1 );
 	}
 
 	/**
@@ -458,7 +272,7 @@ template<class T, int32_t INC=0> class Vector
 			// generate new size
 			while(count > m_size) {
 				if (INC) {
-					m_size = (m_size + INC)
+					m_size = (m_size + INC);
 				} else if (m_size==0) {
 					m_size = 1;
 				} else {
@@ -467,7 +281,7 @@ template<class T, int32_t INC=0> class Vector
 			}
 			// Allocate the curent element
 			T * data = NULL;
-			ETK_MALLOC_CAST(data, m_size, T, reinterpret_cast<T*>);
+			ETK_MALLOC_CAST(data, m_size, T, T*);//reinterpret_cast<T*>);
 			for(int i=0; i<m_count; i++) {
 				new (&data[i]) T(m_data[i]);
 			}

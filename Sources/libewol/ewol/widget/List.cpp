@@ -91,7 +91,6 @@ void ewol::List::OnRegenerateDisplay(void)
 	etk::VectorType<int32_t> listSizeColomn;
 	
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-	AddOObject(BGOObjects, "ListDeco");
 	color_ts basicBG = GetBasicBG();
 	BGOObjects->SetColor(basicBG);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
@@ -108,9 +107,10 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
 		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str());
-		AddOObject(tmpText, "");
+		AddOObject(tmpText);
 		tmpOriginY += minHeight + 2* m_paddingSize;
 	}
+	AddOObject(BGOObjects, "ListDeco", 0);
 	//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 	//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
 

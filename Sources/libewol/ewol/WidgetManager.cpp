@@ -27,9 +27,15 @@
 #undef __class__
 #define __class__	"ewol::WidgetManager"
 
+extern "C" {
+	typedef struct {
+		int32_t       widgetId;
+		ewol::Widget* widgetPointer;
+	} widgetList_ts;
+};
 
 // internal element of the widget manager : 
-static etk::VectorType<ewol::Widget*>   m_widgetList;   // all widget allocated ==> all time increment ... never removed ...
+static etk::VectorType<widgetList_ts>   m_widgetList;   // all widget allocated ==> all time increment ... never removed ...
 // For the focus Management
 static ewol::Widget * m_focusWidgetDefault = NULL;
 static ewol::Widget * m_focusWidgetCurrent = NULL;
@@ -47,10 +53,11 @@ void ewol::widgetManager::UnInit(void)
 	
 	EWOL_INFO(" Remove missing user widget");
 	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii]!=NULL) {
+		if (m_widgetList[iii].widgetPointer!=NULL) {
 			EWOL_WARNING("Un-Removed widget ... id=" << iii);
-			delete(m_widgetList[iii]);
-			m_widgetList[iii]=NULL;
+			FocusRemoveIfRemove(m_widgetList[iii].widgetPointer);
+			delete(m_widgetList[iii].widgetPointer);
+			m_widgetList[iii].widgetPointer=NULL;
 		}
 	}
 	m_widgetList.Clear();
@@ -58,10 +65,14 @@ void ewol::widgetManager::UnInit(void)
 
 void ewol::widgetManager::Add(ewol::Widget * newWidget)
 {
+	static int32_t UniqueWidgetId = 0;
 	// Check existance
-	int32_t tmpID = ewol::widgetManager::GetId(newWidget);
-	if (-1 == tmpID) {
-		m_widgetList.PushBack(newWidget);
+	int32_t tmpID = ewol::widgetManager::Get(newWidget);
+	if (0 > tmpID) {
+		widgetList_ts tmpElement;
+		tmpElement.widgetId = UniqueWidgetId++;
+		tmpElement.widgetPointer = newWidget;
+		m_widgetList.PushBack(tmpElement);
 	} else {
 		EWOL_WARNING("Widget Already added to the widget manager, id=" << tmpID);
 	}
@@ -69,38 +80,29 @@ void ewol::widgetManager::Add(ewol::Widget * newWidget)
 
 void ewol::widgetManager::Rm(ewol::Widget * newWidget)
 {
-	// check existance
-	int32_t tmpID = ewol::widgetManager::GetId(newWidget);
-	if (-1 != tmpID) {
-		ewol::widgetManager::Rm(tmpID);
-	} else {
-		EWOL_ERROR("Widget already removed ...");
+	if (NULL == newWidget) {
+		EWOL_ERROR("Try to remove (NULL) Widget");
+		return;
 	}
-}
-
-void ewol::widgetManager::Rm(int32_t widgetId)
-{
-	if (0 <= widgetId && widgetId < m_widgetList.Size()) {
-		if (m_widgetList[widgetId]!=NULL) {
-			if (m_focusWidgetCurrent==m_widgetList[widgetId]) {
-				ewol::widgetManager::FocusRelease();
-			}
-			if (m_focusWidgetDefault==m_widgetList[widgetId]) {
-				ewol::widgetManager::FocusSetDefault(NULL);
-			}
-			m_widgetList[widgetId]=NULL;
+	for (int32_t iii=0; iii<m_widgetList.Size(); iii++) {
+		if (m_widgetList[iii].widgetPointer == newWidget) {
+			FocusRemoveIfRemove(newWidget);
+			// Remove Element
+			m_widgetList.Erase(iii);
+			return;
 		}
 	}
+	EWOL_ERROR("Widget already removed ...");
 }
 
-int32_t ewol::widgetManager::GetId(ewol::Widget * newWidget)
+int32_t ewol::widgetManager::Get(ewol::Widget * newWidget)
 {
 	if (NULL == newWidget) {
 		return -1;
 	}
 	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii] == newWidget) {
-			return iii;
+		if (m_widgetList[iii].widgetPointer == newWidget) {
+			return m_widgetList[iii].widgetId;
 		}
 	}
 	return -1;
@@ -108,8 +110,13 @@ int32_t ewol::widgetManager::GetId(ewol::Widget * newWidget)
 
 ewol::Widget * ewol::widgetManager::Get(int32_t widgetId)
 {
-	if (0 <= widgetId && widgetId < m_widgetList.Size()) {
-		return m_widgetList[widgetId];
+	if (0 > widgetId) {
+		return NULL;
+	}
+	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
+		if (m_widgetList[iii].widgetId == widgetId) {
+			return m_widgetList[iii].widgetPointer;
+		}
 	}
 	return NULL;
 }
@@ -125,7 +132,7 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 		return;
 	}
 	if (false == newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::GetId(newWidget));
+		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::Get(newWidget));
 		return;
 	}
 	if (newWidget == m_focusWidgetCurrent) {
@@ -133,12 +140,12 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 		m_focusWidgetCurrent->RmFocus();
 	}
 	m_focusWidgetCurrent = newWidget;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 		m_focusWidgetCurrent->SetFocus();
 	}
 }
@@ -147,17 +154,17 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 void ewol::widgetManager::FocusSetDefault(ewol::Widget * newWidget)
 {
 	if (NULL != newWidget && false == newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::GetId(newWidget));
+		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::Get(newWidget));
 		return;
 	}
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+			EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 			m_focusWidgetCurrent->RmFocus();
 		}
 		m_focusWidgetCurrent = newWidget;
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+			EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 			m_focusWidgetCurrent->SetFocus();
 		}
 	}
@@ -172,12 +179,12 @@ void ewol::widgetManager::FocusRelease(void)
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 		m_focusWidgetCurrent->RmFocus();
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::GetId(m_focusWidgetCurrent));
+		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
 		m_focusWidgetCurrent->SetFocus();
 	}
 }
@@ -187,3 +194,17 @@ ewol::Widget * ewol::widgetManager::FocusGet(void)
 {
 	return m_focusWidgetCurrent;
 }
+
+void ewol::widgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
+{
+	if (m_focusWidgetCurrent == newWidget) {
+		EWOL_WARNING("Release Focus when remove widget");
+		FocusRelease();
+	}
+	if (m_focusWidgetDefault == newWidget) {
+		EWOL_WARNING("Release default Focus when remove widget");
+		FocusSetDefault(NULL);
+	}
+}
+
+

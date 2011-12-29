@@ -18,9 +18,12 @@ FILE_LIST = \
 			ewol/widget/CheckBox.cpp \
 			ewol/widget/Entry.cpp \
 			ewol/widget/List.cpp \
+			ewol/widget/PopUp.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
+			ewol/widget/Spacer.cpp \
 			ewol/widget/Test.cpp \
+			ewol/widgetMeta/FileChooser.cpp \
 			ewol/themeManager.cpp \
 			ewol/theme/Theme.cpp \
 			ewol/theme/EolElement.cpp \

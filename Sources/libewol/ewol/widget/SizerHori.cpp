@@ -33,6 +33,8 @@ ewol::SizerHori::SizerHori(void)
 {
 	GenericDrawDisable();
 	SpecificDrawEnable();
+	// set contamination enable
+	LockExpendContamination();
 }
 
 ewol::SizerHori::~SizerHori(void)
@@ -130,11 +132,31 @@ void ewol::SizerHori::SetExpendX(bool newExpend)
 	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
 }
 
+bool ewol::SizerHori::CanExpentX(void)
+{
+	if (true == m_lockExpendContamination) {
+		return false;
+	}
+	return m_userExpendX;
+}
+
 void ewol::SizerHori::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
+bool ewol::SizerHori::CanExpentY(void)
+{
+	if (true == m_lockExpendContamination) {
+		return false;
+	}
+	return m_userExpendY;
+}
+
+void ewol::SizerHori::LockExpendContamination(bool lockExpend)
+{
+	m_lockExpendContamination = lockExpend;
+}
 
 //etk::VectorType<ewol::Widget*> m_SubWidget;
 

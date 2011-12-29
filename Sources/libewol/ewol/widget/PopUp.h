@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/SizerHori.h
- * @brief ewol hirisantal sizer widget system (header)
+ * @file ewol/widget/PopUp.h
+ * @brief ewol pop-up widget system (header)
  * @author Edouard DUPIN
- * @date 07/11/2011
+ * @date 29/12/2011
  * @par Project
  * ewol
  *
@@ -22,36 +22,32 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_SIZER_HORI_H__
-#define __EWOL_SIZER_HORI_H__
+#ifndef __EWOL_POP_UP_H__
+#define __EWOL_POP_UP_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
 namespace ewol {
-	class SizerHori :public ewol::Widget
+	class PopUp : public ewol::Widget
 	{
 		public:
-			SizerHori(void);
-			virtual ~SizerHori(void);
+			PopUp(void);
+			virtual ~PopUp(void);
 		public:
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
-			virtual bool   CanExpentX(void);
 			virtual void   SetExpendY(bool newExpend=false);
-			virtual bool   CanExpentY(void);
-			void           LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                           m_lockExpendContamination;
-			etk::VectorType<ewol::Widget*> m_subWidget;
+			color_ts      m_colorBackGroung;
+			color_ts      m_colorEmptyArea;
+			ewol::Widget* m_subWidget;
 		public:
-			void           SubWidgetRemoveAll(void);
-			void           SubWidgetAdd(ewol::Widget* newWidget);
-			void           SubWidgetRemove(ewol::Widget* newWidget);
-			void           SubWidgetUnLink(ewol::Widget* newWidget);
+			void           SubWidgetSet(ewol::Widget* newWidget);
+			void           SubWidgetRemove(void);
 		protected:
 			virtual bool   OnDraw(void);
 		public:

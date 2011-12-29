@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/Test.h
- * @brief ewol test widget system (header)
+ * @file ewol/widget/Spacer.h
+ * @brief ewol Spacer widget system (header)
  * @author Edouard DUPIN
- * @date 07/11/2011
+ * @date 29/12/2011
  * @par Project
  * ewol
  *
@@ -22,26 +22,20 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEST_H__
-#define __EWOL_TEST_H__
+#ifndef __EWOL_SPACER_H__
+#define __EWOL_SPACER_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
 namespace ewol {
-	class Test :public ewol::Widget
+	class Spacer :public ewol::Widget
 	{
 		public:
-			Test(void);
-			virtual ~Test(void);
+			Spacer(void);
+			virtual ~Spacer(void);
 			virtual bool   CalculateMinSize(void);
-		public:
-			virtual void   OnRegenerateDisplay(void);
-		public:
-			virtual bool   OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
-		private:
-			int32_t m_elementID;
 	};
 };
 

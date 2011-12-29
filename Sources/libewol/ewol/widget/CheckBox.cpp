@@ -37,6 +37,7 @@ const char * ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 
 void ewol::CheckBox::Init(void)
 {
+	AddEventId(ewolEventCheckBoxClicked);
 	m_textColorFg.red   = 0.0;
 	m_textColorFg.green = 0.0;
 	m_textColorFg.blue  = 0.0;

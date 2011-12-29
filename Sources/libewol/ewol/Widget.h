@@ -25,6 +25,11 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
+
+namespace ewol {
+	class Widget;
+};
+
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
@@ -107,7 +112,6 @@ namespace ewol {
 	extern "C" {
 		typedef struct {
 			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			int32_t widgetCall; //!< unique ID of the widget
 			int32_t mode; //!< EWOL_EVENT_UNION or EWOL_EVENT_SHORTCUT
 			union {
 				struct {
@@ -124,15 +128,18 @@ namespace ewol {
 				} area;
 			};
 		} event_ts;
+		typedef struct {
+			const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
+			int32_t      widgetCall;            //!< unique ID of the widget
+			const char * generateEventIdExtern; //!< External generated event ID (to be unique it was pointer on the string name)
+		} eventExtern_ts;
 	};
-	
-	class Widget;
 	
 	class Widget {
 		public:
 			Widget(void);
 			virtual ~Widget(void);
-		
+			int32_t GetWidgetId(void);
 		private:
 			ewol::Widget *  m_parrent;   //!< parrent of the current widget (if NULL ==> this is the main node(root))
 		public:
@@ -163,9 +170,9 @@ namespace ewol {
 			void           SetCurrentSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_size.x = x; m_size.y = y; };
 			coord          GetCurrentSize(void) { return m_size; };
 			virtual void   SetExpendX(bool newExpend=false) { m_userExpendX = newExpend; };
-			bool           CanExpentX(void) { return m_userExpendX; };
+			virtual bool   CanExpentX(void) { return m_userExpendX; };
 			virtual void   SetExpendY(bool newExpend=false) { m_userExpendY = newExpend; };
-			bool           CanExpentY(void) { return m_userExpendY; };
+			virtual bool   CanExpentY(void) { return m_userExpendY; };
 			virtual void   SetFillX(bool newFill=false) { m_userFillX = newFill; };
 			bool           CanFillX(void) { return m_userFillX; };
 			virtual void   SetFillY(bool newFill=false) { m_userFillY = newFill; };
@@ -214,24 +221,32 @@ namespace ewol {
 		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			etk::VectorType<event_ts> m_inputEvent;     //!< generic area and short-cut event
+			etk::VectorType<event_ts>       m_inputEvent;          //!< generic area and short-cut event
+			etk::VectorType<eventExtern_ts> m_externEvent;         //!< Generic list of event generation for output link
+			etk::VectorType<const char*>    m_ListEventAvaillable; //!< List of all event availlable for this widget
 		public:
 			// external acces to set an input event on this widget.
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y); // call when input event arrive and call OnEventInput, if no event detected
+			bool GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 			bool GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE]);
 		protected:
+			void AddEventId(const char * generateEventId) {
+				if (NULL != generateEventId) {
+					m_ListEventAvaillable.PushBack(generateEventId);
+				}
+			}
 			void EventAreaRemoveAll(void) { m_inputEvent.Clear(); };
 			bool AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId);
 			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId);
 			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);
 		public:
 			// to link an extern widget at the internal event of this one it will access by here :
-			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId);
+			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId = NULL);
 		protected:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y) { return false; };
 			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
 			// when an event arrive from an other widget, it will arrive here:
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y) { return false; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present
@@ -251,7 +266,7 @@ namespace ewol {
 			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
 			bool GenericDraw(void);
 		protected:
-			void AddOObject(ewol::OObject* newObject, etk::String name = "");
+			void AddOObject(ewol::OObject* newObject, etk::String name = "", int32_t pos=-1);
 			ewol::OObject* GetOObject(etk::String name);
 			void RmOObjectElem(etk::String name);
 			void ClearOObjectList(void);

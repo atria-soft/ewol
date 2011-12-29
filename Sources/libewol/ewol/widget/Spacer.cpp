@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/Test.h
- * @brief ewol test widget system (header)
+ * @file ewol/widget/Spacer.cpp
+ * @brief ewol Spacer widget system (Sources)
  * @author Edouard DUPIN
- * @date 07/11/2011
+ * @date 29/12/2011
  * @par Project
  * ewol
  *
@@ -22,27 +22,33 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEST_H__
-#define __EWOL_TEST_H__
+#include <ewol/widget/Spacer.h>
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/OObject.h>
+#include <ewol/WidgetManager.h>
 
-namespace ewol {
-	class Test :public ewol::Widget
-	{
-		public:
-			Test(void);
-			virtual ~Test(void);
-			virtual bool   CalculateMinSize(void);
-		public:
-			virtual void   OnRegenerateDisplay(void);
-		public:
-			virtual bool   OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
-		private:
-			int32_t m_elementID;
-	};
-};
 
-#endif
+#undef __class__
+#define __class__	"ewol::Spacer"
+
+
+ewol::Spacer::Spacer(void)
+{
+	GenericDrawDisable();
+	SetCanHaveFocus(false);
+}
+
+ewol::Spacer::~Spacer(void)
+{
+	
+}
+
+bool ewol::Spacer::CalculateMinSize(void)
+{
+	m_minSize.x = 20;
+	m_minSize.y = 20;
+	return true;
+}
+
+
+

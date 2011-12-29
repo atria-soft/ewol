@@ -39,6 +39,8 @@ const char * const ewolEventEntryEnter      = "ewol Entry Enter";
 
 void ewol::Entry::Init(void)
 {
+	AddEventId(ewolEventEntryClick);
+	AddEventId(ewolEventEntryEnter);
 	m_displayStartPosition = 0;
 	m_displayCursorPos = 0;
 	m_userSize = 50;
@@ -67,9 +69,12 @@ ewol::Entry::Entry(void)
 ewol::Entry::Entry(etk::String newData)
 {
 	Init();
+	SetValue(newData);
+	/*
 	m_data = newData;
 	m_displayCursorPos = m_data.Size();
 	UpdateTextPosition();
+	*/
 }
 
 
@@ -92,6 +97,7 @@ bool ewol::Entry::CalculateMinSize(void)
 void ewol::Entry::SetValue(etk::String newData)
 {
 	m_data = newData;
+	UpdateTextPosition();
 }
 
 etk::String ewol::Entry::GetValue(void)
@@ -180,14 +186,15 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SI
 {
 	if(    UTF8_data != NULL
 	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
-		EWOL_DEBUG("Entry input data ... : \"" << UTF8_data << "\" size=" << strlen(UTF8_data) << "  lkjlkj=" << (int32_t)UTF8_data[0] );
+		//EWOL_DEBUG("Entry input data ... : \"" << UTF8_data << "\" size=" << strlen(UTF8_data) << "  data=" << (int32_t)UTF8_data[0] );
 		//return OnEventArea(ewolEventButtonPressed, -1, -1);
 	if (0x7F == UTF8_data[0]) {
 			if (m_data.Size() > 0) {
 				// SUPPR
 			}
 		} else if (0x08 == UTF8_data[0]) {
-			EWOL_DEBUG("Entrsgfqsfgqsdfgkljshdlfkjghsdlkfjghsldkjfhglkdjf");
+			EWOL_DEBUG("The entry is an UTF8 string ...");
+			EWOL_TODO("later...");
 			if (m_data.Size() > 0) {
 				// DEL : 
 				m_data.Remove(m_data.Size()-1, 1);
