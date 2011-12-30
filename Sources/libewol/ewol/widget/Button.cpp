@@ -137,7 +137,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 	int32_t fontHeight = ewol::GetHeight(fontId);
 	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 	*/
-	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str());
+	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str(), m_size.x - borderSize - 2*paddingSize);
 
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 	tmpOObjects->SetColor(m_textColorBg);

@@ -295,6 +295,8 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 					}
 					if (-1 == m_idZipFile) {
 						TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
+					} else {
+						TK_INFO("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
 					}
 				#else
 					//etk::String tmpFilename = destFilename;

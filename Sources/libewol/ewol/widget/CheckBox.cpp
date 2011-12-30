@@ -116,7 +116,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 	//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
 	//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
-	tmpText->Text(boxSize+5, posy, m_label.c_str());
+	tmpText->Text(boxSize+5, posy, m_label.c_str(), m_size.x - (boxSize+5));
 	
 	
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;

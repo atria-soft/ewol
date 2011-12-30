@@ -101,7 +101,7 @@ void ewol::Label::OnRegenerateDisplay(void)
 	tmpOriginY += paddingSize;
 
 	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str());
+	tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str(), m_size.x - 2*paddingSize);
 
 	AddOObject(tmpText, "LabelText");
 

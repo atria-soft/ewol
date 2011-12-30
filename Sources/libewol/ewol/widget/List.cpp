@@ -95,8 +95,10 @@ void ewol::List::OnRegenerateDisplay(void)
 	BGOObjects->SetColor(basicBG);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	
+	uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSize);
 	
-	for(uint32_t iii=0; iii<nbRaw; iii++) {
+	// We display only compleate lines ...
+	for(uint32_t iii=0; iii<nbRaw && iii<displayableRaw; iii++) {
 		etk::String myTextToWrite;
 		color_ts fg;
 		color_ts bg;
@@ -106,7 +108,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		tmpOriginYBG += minHeight+2*m_paddingSize;
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
-		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str());
+		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSize));
 		AddOObject(tmpText);
 		tmpOriginY += minHeight + 2* m_paddingSize;
 	}

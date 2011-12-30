@@ -135,7 +135,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 	tmpSizeY -= 2*m_paddingSize;
 
 	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_data.c_str() + m_displayStartPosition);
+	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_data.c_str() + m_displayStartPosition, m_size.x - (m_borderSize + 2*m_paddingSize));
 
 	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 	tmpOObjects->SetColor(m_textColorBg);

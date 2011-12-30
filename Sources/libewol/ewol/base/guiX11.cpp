@@ -50,6 +50,11 @@
 #include <sys/times.h>
 
 
+static int64_t GetCurrentTime(void)
+{
+	return times(NULL);
+}
+
 #undef __class__
 #define __class__	"guiAbstraction"
 
@@ -543,7 +548,7 @@ namespace guiAbstraction {
 											m_previousTime = 0;
 											m_previousDouble = false;
 										} else {
-											int64_t currentTime = times(NULL); // return the tic in 10ms
+											int64_t currentTime = GetCurrentTime(); // return the tic in 10ms
 											//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
 											if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
 												//check if the same area click : 

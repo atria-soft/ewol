@@ -70,7 +70,7 @@ void TOOLS_DisplayTime(void);
 #define ETK_DBG_COMMON(libName, color, info, data)	do { \
 														etk::cout << color; \
 														/*TOOLS_DisplayTime();*/ \
-														/*TOOLS_DisplayFuncName(__LINE__, __class__, __func__, libName);*/ \
+														TOOLS_DisplayFuncName(__LINE__, __class__, __func__, libName); \
 														etk::cout << "[" << info << "] " << data; \
 														etk::cout << ETK_BASH_COLOR_NORMAL <<etk::endl; \
 													}while(0)

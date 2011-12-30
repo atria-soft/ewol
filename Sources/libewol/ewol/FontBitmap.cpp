@@ -296,7 +296,7 @@ void ewol::UnloadFont(int32_t id)
 
 
 
-
+/*
 void ewol::DrawText(int32_t                        fontID,
                     coord2D_ts &                   drawPosition,
                     const uniChar_t *              unicodeString,
@@ -304,6 +304,8 @@ void ewol::DrawText(int32_t                        fontID,
                     etk::VectorType<coord2D_ts> &  coord,
                     etk::VectorType<texCoord_ts> & coordTex)
 {
+	EWOL_TODO("previous code does not work at all");
+
 	if(fontID>=s_listLoadedFonts.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return;
@@ -348,14 +350,15 @@ void ewol::DrawText(int32_t                        fontID,
 	}
 	drawPosition.x = posDrawX;
 }
+*/
 
-
-void ewol::DrawText(int32_t                        fontID,
-                    coord2D_ts &                   drawPosition,
-                    const char *                   utf8String,
-                    uint32_t &                     fontTextureId,
-                    etk::VectorType<coord2D_ts> &  coord,
-                    etk::VectorType<texCoord_ts> & coordTex)
+void ewol::DrawText(int32_t                        fontID,        // Id of the desire font
+                    coord2D_ts &                   drawPosition,  // position to start the writing (can be < 0) ==> no check
+                    coord2D_ts &                   clipSize,      // clipping size
+                    const char *                   utf8String,    // my UTF8 string
+                    uint32_t &                     fontTextureId, // return the fontID needed to display this string
+                    etk::VectorType<coord2D_ts> &  coord,         // return the coordonates
+                    etk::VectorType<texCoord_ts> & coordTex)      // return the texture coordonates
 {
 	// TODO : This code des not work, why ????
 	/*
@@ -403,83 +406,62 @@ void ewol::DrawText(int32_t                        fontID,
 			charIndex = 0;
 		}
 		etkFloat_t sizeWidth = listOfElement[charIndex].width;
+		// check the clipping
+		if (clipSize.x>0 && posDrawX+sizeWidth > clipSize.x) {
+			// TODO : Create a better clipping methode ...
+			break;
+		}
 		// 0x01 == 0x20 == ' ';
 		if (tmpChar != 0x01) {
-			#if !defined(__PLATFORM__Android)
-				// set texture coordonates :
-				coordTex.PushBack(listOfElement[charIndex].posStart);
-				texCoord_ts tmpTex;
-				tmpTex.u = listOfElement[charIndex].posStop.u;
-				tmpTex.v = listOfElement[charIndex].posStart.v;
-				coordTex.PushBack(tmpTex);
-				coordTex.PushBack(listOfElement[charIndex].posStop);
-				tmpTex.u = listOfElement[charIndex].posStart.u;
-				tmpTex.v = listOfElement[charIndex].posStop.v;
-				coordTex.PushBack(tmpTex);
-				// set display positions :
-				/*int32_t xxxx = posDrawX;
-				int32_t yyyy = drawPosition.y;*/
-				coord2D_ts tmpCoord;
-				tmpCoord.x = posDrawX;
-				tmpCoord.y = drawPosition.y;
-				coord.PushBack(tmpCoord);
-				tmpCoord.x = posDrawX + sizeWidth;
-				coord.PushBack(tmpCoord);
-				tmpCoord.y = drawPosition.y + size;
-				coord.PushBack(tmpCoord);
-				tmpCoord.x = posDrawX;
-				coord.PushBack(tmpCoord);
-			#else
-				// NOTE : Android does not support the Quads elements ...
-				/* Step 1 : 
-				 *   ********     
-				 *     ******     
-				 *       ****     
-				 *         **     
-				 *                
-				 */
-				// set texture coordonates :
-				coordTex.PushBack(listOfElement[charIndex].posStart);
-				texCoord_ts tmpTex;
-				tmpTex.u = listOfElement[charIndex].posStop.u;
-				tmpTex.v = listOfElement[charIndex].posStart.v;
-				coordTex.PushBack(tmpTex);
-				coordTex.PushBack(listOfElement[charIndex].posStop);
-				// set display positions :
-				coord2D_ts tmpCoord;
-				tmpCoord.x = posDrawX;
-				tmpCoord.y = drawPosition.y;
-				coord.PushBack(tmpCoord);
-				tmpCoord.x = posDrawX + sizeWidth;
-				coord.PushBack(tmpCoord);
-				tmpCoord.y = drawPosition.y + size;
-				coord.PushBack(tmpCoord);
-				
-				/* Step 2 : 
-				 *              
-				 *   **         
-				 *   ****       
-				 *   ******     
-				 *   ********   
-				 */
-				
-				// set texture coordonates :
-				coordTex.PushBack(listOfElement[charIndex].posStart);
-				coordTex.PushBack(listOfElement[charIndex].posStop);
-				tmpTex.u = listOfElement[charIndex].posStart.u;
-				tmpTex.v = listOfElement[charIndex].posStop.v;
-				coordTex.PushBack(tmpTex);
-				
-				// set display positions :
-				tmpCoord.x = posDrawX;
-				tmpCoord.y = drawPosition.y;
-				coord.PushBack(tmpCoord);
-				tmpCoord.x = posDrawX + sizeWidth;
-				tmpCoord.y = drawPosition.y + size;
-				coord.PushBack(tmpCoord);
-				tmpCoord.x = posDrawX;
-				coord.PushBack(tmpCoord);
-			#endif
+			// NOTE : Android does not support the Quads elements ...
+			/* Step 1 : 
+			 *   ********     
+			 *     ******     
+			 *       ****     
+			 *         **     
+			 *                
+			 */
+			// set texture coordonates :
+			coordTex.PushBack(listOfElement[charIndex].posStart);
+			texCoord_ts tmpTex;
+			tmpTex.u = listOfElement[charIndex].posStop.u;
+			tmpTex.v = listOfElement[charIndex].posStart.v;
+			coordTex.PushBack(tmpTex);
+			coordTex.PushBack(listOfElement[charIndex].posStop);
+			// set display positions :
+			coord2D_ts tmpCoord;
+			tmpCoord.x = posDrawX;
+			tmpCoord.y = drawPosition.y;
+			coord.PushBack(tmpCoord);
+			tmpCoord.x = posDrawX + sizeWidth;
+			coord.PushBack(tmpCoord);
+			tmpCoord.y = drawPosition.y + size;
+			coord.PushBack(tmpCoord);
+			
+			/* Step 2 : 
+			 *              
+			 *   **         
+			 *   ****       
+			 *   ******     
+			 *   ********   
+			 */
+			
+			// set texture coordonates :
+			coordTex.PushBack(listOfElement[charIndex].posStart);
+			coordTex.PushBack(listOfElement[charIndex].posStop);
+			tmpTex.u = listOfElement[charIndex].posStart.u;
+			tmpTex.v = listOfElement[charIndex].posStop.v;
+			coordTex.PushBack(tmpTex);
+			
+			// set display positions :
+			tmpCoord.x = posDrawX;
+			tmpCoord.y = drawPosition.y;
+			coord.PushBack(tmpCoord);
+			tmpCoord.x = posDrawX + sizeWidth;
+			tmpCoord.y = drawPosition.y + size;
+			coord.PushBack(tmpCoord);
+			tmpCoord.x = posDrawX;
+			coord.PushBack(tmpCoord);
 		}
 		posDrawX += sizeWidth;
 	}

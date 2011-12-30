@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ewol
 LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng 
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH) $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/ $(LOCAL_PATH)/../libtinyxml/ $(LOCAL_PATH)/../libetk/
+LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz

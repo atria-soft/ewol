@@ -82,7 +82,7 @@ ewol::Windows::Windows(void)
 		AddOObject(myOObject, "leftBoutton");
 		
 		ewol::OObject2DText * myOObjectText = new ewol::OObject2DText();
-		myOObjectText->Text(62, 2, "My Title ...");
+		myOObjectText->Text(62, 2, "My Title ...", m_size.x-2);
 		AddOObject(myOObjectText, "Title");
 	}
 }

@@ -3,15 +3,18 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := etk
-LOCAL_STATIC_LIBRARIES := 
+LOCAL_STATIC_LIBRARIES := libzip
 
-LOCAL_C_INCLUDES := 
+LOCAL_C_INCLUDES :=   $(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
+
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -Wno-write-strings \
+                -DDATA_IN_APK \
                 -DETK_DEBUG_LEVEL=3
+
 
 
 # load the common sources file of the platform

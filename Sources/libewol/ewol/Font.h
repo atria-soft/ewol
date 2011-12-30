@@ -89,18 +89,19 @@ namespace ewol
 	
 	void        DrawText(int32_t                        fontID,
 	                     coord2D_ts &                   drawPosition,
+	                     coord2D_ts &                   clipSize,
 	                     const char *                   utf8String,
 	                     uint32_t &                     fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
-	
+	/*
 	void        DrawText(int32_t                        fontID,
 	                     coord2D_ts &                   drawPosition,
 	                     const uniChar_t *              unicodeString,
 	                     uint32_t &                     fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
-	
+	*/
 	int32_t LoadFont(etk::File fontFileName);
 	void    DrawText(etkFloat_t x, etkFloat_t y, const char * myString);
 };

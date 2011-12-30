@@ -18,7 +18,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := libzip
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
+LOCAL_C_INCLUDES := $(LOCAL_PATH)
+
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

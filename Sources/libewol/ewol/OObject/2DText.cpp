@@ -69,19 +69,14 @@ void ewol::OObject2DText::Draw(void)
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
 	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
 	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
-	#if !defined(__PLATFORM__Android)
-		glDrawArrays( GL_QUADS, 0, m_coord.Size());
-	#else
-		// NOTE : Android does not support the Quads elements ...
-		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
-	#endif
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );				// Disable Texture Coord Arrays
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8String)
+void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
 {
 	m_FontTextureId = 0;
 	m_coord.Clear();
@@ -92,7 +87,10 @@ void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8Strin
 	coord2D_ts drawPosition;
 	drawPosition.x = x;
 	drawPosition.y = y;
-	ewol::DrawText(m_FontId, drawPosition, utf8String, m_FontTextureId, m_coord, m_coordTex);
+	coord2D_ts clipSize;
+	clipSize.x = clippingPositionX;
+	clipSize.y = -1;
+	ewol::DrawText(m_FontId, drawPosition, clipSize, utf8String, m_FontTextureId, m_coord, m_coordTex);
 }
 
 void ewol::OObject2DText::UpdateOrigin(etkFloat_t x, etkFloat_t y)

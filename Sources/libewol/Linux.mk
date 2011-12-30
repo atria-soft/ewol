@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := ewol
 LOCAL_STATIC_LIBRARIES := etk tinyxml libzip libpng 
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH) -I$(LOCAL_PATH)/../libzip/ -I$(LOCAL_PATH)/../libpng/ -I$(LOCAL_PATH)/../libtinyxml/ -I$(LOCAL_PATH)/../libetk/
+LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm `pkg-config --libs freetype2`
