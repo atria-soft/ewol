@@ -41,7 +41,7 @@ namespace ewol {
 		private:
 			int32_t        m_paddingSize;
 			int32_t        m_displayStartRaw;           //!< Current starting diaplayed raw
-			int32_t        m_diaplayCurrentNbLine;      //!< Number of line in the display
+			int32_t        m_displayCurrentNbLine;      //!< Number of line in the display
 		public:
 			virtual void   OnRegenerateDisplay(void);
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);

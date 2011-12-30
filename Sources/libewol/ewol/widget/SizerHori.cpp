@@ -78,7 +78,7 @@ bool ewol::SizerHori::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 		if (NULL != m_subWidget[iii]) {
 			coord tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
-			EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
+			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (true == m_subWidget[iii]->CanExpentX()) {

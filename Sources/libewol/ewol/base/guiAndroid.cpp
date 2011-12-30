@@ -66,6 +66,8 @@ static int64_t GetCurrentTime(void)
 void Draw(void);
 #define OFFSET_MOVE_CLICKED             (20)
 #define OFFSET_MOVE_CLICKED_DOUBLE      (40)
+#undef SEPARATED_CLICK_TIME
+#define SEPARATED_CLICK_TIME          (300)
 
 bool    inputIsPressed[NB_MAX_INPUT];// = {false, false, false};
 int32_t m_previousBouttonId = -1;

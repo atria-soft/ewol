@@ -42,30 +42,64 @@ extern "C" {
 #undef __class__
 #define __class__	"ewol::FileChooser(FolderList)"
 
+
+void SortList(etk::VectorType<etk::String *> &m_listDirectory)
+{
+	etk::VectorType<etk::String *> tmpList = m_listDirectory;
+	m_listDirectory.Clear();
+	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
+		m_listDirectory.PushBack(tmpList[iii]);
+	}
+}
+
+
+
+const char * const ewolEventFileChooserSelectFolder   = "ewol event file chooser Select Folder";
+
 class FileChooserFolderList : public ewol::List
 {
 	private:
 		//etk::Vector<etk::String> m_listDirectory;
-		etk::VectorType<etk::String * > m_listDirectory;
+		etk::VectorType<etk::String *> m_listDirectory;
+		int32_t                        m_selectedLine;
 	public:
 		FileChooserFolderList(void)
 		{
-			DIR *dir;
-			struct dirent *ent;
-			dir = opendir ("/");
-			if (dir != NULL) {
-				/* print all the files and directories within directory */
-				while ((ent = readdir (dir)) != NULL) {
-					etk::String * tmpString = new etk::String(ent->d_name);
-					m_listDirectory.PushBack(tmpString);
-					EWOL_INFO("file : " << *tmpString);
-				}
-				closedir (dir);
-			} else {
-				EWOL_ERROR("could not open directory");
-			}
+			AddEventId(ewolEventFileChooserSelectFolder);
+			m_selectedLine = -1;
 		};
-		~FileChooserFolderList(void) { };
+		~FileChooserFolderList(void)
+		{
+			ClearElements();
+		};
+		
+		void AddElement(etk::String &element)
+		{
+			etk::String* tmpEmement = new etk::String(element);
+			m_listDirectory.PushBack(tmpEmement);
+			OnRegenerateDisplay();
+		}
+		void ClearElements(void) {
+			for (int32_t iii=0; iii<m_listDirectory.Size(); iii++) {
+				if (NULL != m_listDirectory[iii]) {
+					delete(m_listDirectory[iii]);
+					m_listDirectory[iii] = NULL;
+				}
+			}
+			m_listDirectory.Clear();
+			OnRegenerateDisplay();
+		}
+		
+		etk::String GetSelectedLine(void)
+		{
+			etk::String tmpVal = "";
+			if (m_selectedLine >= 0) {
+				tmpVal = *(m_listDirectory[m_selectedLine]);
+			}
+			return tmpVal;
+		}
+		
+		
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
 			bg.red = 1.0;
@@ -106,12 +140,37 @@ class FileChooserFolderList : public ewol::List
 				bg.blue = 0.5;
 				bg.alpha = 1.0;
 			}
+			if (m_selectedLine == raw) {
+				bg.red = 0.6;
+				bg.green = 0.6;
+				bg.blue = 1.0;
+				bg.alpha = 1.0;
+			}
 			return true;
 		};
 		
 		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
 			if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 				EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
+				if (1 == IdInput) {
+					if (raw > m_listDirectory.Size() ) {
+						m_selectedLine = -1;
+					} else {
+						m_selectedLine = raw;
+					}
+					// need to regenerate the display of the list : 
+					OnRegenerateDisplay();
+					return true;
+				}
+			}
+			if (typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE) {
+				EWOL_INFO("Event Double on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
+				if (1 == IdInput) {
+					if (m_selectedLine >=0 ) {
+						// generate event extern : 
+						return GenEventInputExternal(ewolEventFileChooserSelectFolder, x, y);
+					}
+				}
 			}
 			return false;
 		}
@@ -123,9 +182,16 @@ class FileChooserFolderList : public ewol::List
 
 class FileChooserFileList : public ewol::List
 {
+	private:
+		etk::VectorType<etk::String *> m_listFile;
 	public:
-		FileChooserFileList(void) { };
-		~FileChooserFileList(void) { };
+		FileChooserFileList(void)
+		{
+		};
+		~FileChooserFileList(void)
+		{
+			ClearElements();
+		};
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
 			bg.red = 1.0;
@@ -134,6 +200,23 @@ class FileChooserFileList : public ewol::List
 			bg.alpha = 1.0;
 			return bg;
 		}
+		void AddElement(etk::String &element)
+		{
+			etk::String* tmpEmement = new etk::String(element);
+			m_listFile.PushBack(tmpEmement);
+			OnRegenerateDisplay();
+		}
+		void ClearElements(void) {
+			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
+				if (NULL != m_listFile[iii]) {
+					delete(m_listFile[iii]);
+					m_listFile[iii] = NULL;
+				}
+			}
+			m_listFile.Clear();
+			OnRegenerateDisplay();
+		}
+		
 		
 		uint32_t GetNuberOfColomn(void) {
 			return 1;
@@ -143,36 +226,27 @@ class FileChooserFileList : public ewol::List
 			return true;
 		};
 		uint32_t GetNuberOfRaw(void) {
-			return 3;
+			return m_listFile.Size();
 		};
 		bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
-			switch (raw) {
-				case 0:
-					myTextToWrite = "File 1.cpp";
-					break;
-				case 1:
-					myTextToWrite = "File 2.h";
-					break;
-				case 2:
-					myTextToWrite = "Makefile";
-					break;
-				default:
-					myTextToWrite = "ERROR";
-					break;
+			if (raw >= 0 && raw < m_listFile.Size()) {
+				myTextToWrite = *(m_listFile[raw]);
+			} else {
+				myTextToWrite = "ERROR";
 			}
 			fg.red = 0.0;
 			fg.green = 0.0;
 			fg.blue = 0.0;
 			fg.alpha = 1.0;
 			if (raw % 2) {
-				bg.red = 1.0;
+				bg.red = 0.9;
 				bg.green = 1.0;
 				bg.blue = 1.0;
 				bg.alpha = 1.0;
 			} else {
-				bg.red = 0.5;
-				bg.green = 0.5;
-				bg.blue = 0.5;
+				bg.red = 0.7;
+				bg.green = 0.7;
+				bg.blue = 0.7;
 				bg.alpha = 1.0;
 			}
 			return true;
@@ -194,14 +268,12 @@ class FileChooserFileList : public ewol::List
 
 const char * const ewolEventFileChooserCancel   = "ewol event file chooser cancel";
 const char * const ewolEventFileChooserValidate = "ewol event file chooser validate";
-const char * const ewolEventFileChooserFolderUp = "ewol event file chooser folderUP";
 
 
 ewol::FileChooser::FileChooser(void)
 {
 	AddEventId(ewolEventFileChooserCancel);
 	AddEventId(ewolEventFileChooserValidate);
-	AddEventId(ewolEventFileChooserFolderUp);
 	
 	m_widgetTitleId = -1;
 	m_widgetValidateId = -1;
@@ -220,6 +292,8 @@ ewol::FileChooser::FileChooser(void)
 	FileChooserFolderList * myListFolder = NULL;
 	ewol::Label * myLabel = NULL;
 	
+	m_folder = "/";
+	
 	SetDisplayRatio(0.80);
 	
 	mySizerVert = new ewol::SizerVert();
@@ -231,27 +305,21 @@ ewol::FileChooser::FileChooser(void)
 			m_widgetTitleId = myLabel->GetWidgetId();
 			mySizerVert->SubWidgetAdd(myLabel);
 		
+		myEntry = new ewol::Entry("~/");
+			m_widgetCurrentFolderId = myEntry->GetWidgetId();
+			myEntry->SetExpendX(true);
+			myEntry->SetFillX(true);
+			myEntry->SetWidth(200);
+			mySizerVert->SubWidgetAdd(myEntry);
+		
 		mySizerHori = new ewol::SizerHori();
-			//mySizerHori->LockExpendContamination(true);
-			mySizerVert->SubWidgetAdd(mySizerHori);
-			myButton = new ewol::Button("<-");
-				myButton->ExternLinkOnEvent("ewol Button Pressed", GetWidgetId(), ewolEventFileChooserFolderUp );
-				mySizerHori->SubWidgetAdd(myButton);
-			myEntry = new ewol::Entry("~/");
-				m_widgetCurrentFolderId = myEntry->GetWidgetId();
-				myEntry->SetExpendX(true);
-				myEntry->SetFillX(true);
-				myEntry->SetWidth(200);
-				mySizerHori->SubWidgetAdd(myEntry);
-			
-		mySizerHori = new ewol::SizerHori();
-			//mySizerHori->LockExpendContamination(true);
 			mySizerVert->SubWidgetAdd(mySizerHori);
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			myListFolder = new FileChooserFolderList();
 				m_widgetListFolderId = myListFolder->GetWidgetId();
+				myListFolder->ExternLinkOnEvent("ewol event file chooser Select Folder", GetWidgetId(), ewolEventFileChooserSelectFolder);
 				myListFolder->SetExpendY(true);
 				myListFolder->SetFillY(true);
 				mySizerHori->SubWidgetAdd(myListFolder);
@@ -270,7 +338,6 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(mySpacer);
 			
 		mySizerHori = new ewol::SizerHori();
-			//mySizerHori->LockExpendContamination(true);
 			mySizerVert->SubWidgetAdd(mySizerHori);
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetExpendX(true);
@@ -283,6 +350,9 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetCancelId = myButton->GetWidgetId();
 				myButton->ExternLinkOnEvent("ewol Button Pressed", GetWidgetId(), ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(myButton);
+	
+	// set the default Folder properties:
+	UpdateCurrentFolder();
 }
 
 
@@ -322,16 +392,57 @@ void ewol::FileChooser::SetCancelLabel(etk::String label)
 void ewol::FileChooser::SetFolder(etk::String folder)
 {
 	m_folder = folder;
+	UpdateCurrentFolder();
 }
 
 
 
 bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_INFO("Receive Event from the BT ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << eventExternId << "\"" );
+	EWOL_INFO("Receive Event from the LIST ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << eventExternId << "\"" );
 	if (ewolEventFileChooserCancel == eventExternId) {
 		//==> Auto remove ...
 		
+	} else if (ewolEventFileChooserSelectFolder == eventExternId) {
+		//==> this is an internal event ...
+		FileChooserFolderList * myListFolder = (FileChooserFolderList *)ewol::widgetManager::Get(m_widgetListFolderId);
+		etk::String tmpString = myListFolder->GetSelectedLine();
+		m_folder = m_folder + "/" + tmpString;
+		UpdateCurrentFolder();
+		return true;
 	}
 	return GenEventInputExternal(eventExternId, x, y);
 };
+
+
+
+void ewol::FileChooser::UpdateCurrentFolder(void)
+{
+	FileChooserFileList * myListFile     = (FileChooserFileList *)ewol::widgetManager::Get(m_widgetListFileId);
+	FileChooserFolderList * myListFolder = (FileChooserFolderList *)ewol::widgetManager::Get(m_widgetListFolderId);
+	ewol::Entry * myEntry                = (ewol::Entry *)ewol::widgetManager::Get(m_widgetCurrentFolderId);
+	
+	myListFile->ClearElements();
+	myListFolder->ClearElements();
+	
+	myEntry->SetValue(m_folder);
+	
+	DIR *dir;
+	struct dirent *ent;
+	dir = opendir(m_folder.c_str());
+	if (dir != NULL) {
+		/* print all the files and directories within directory */
+		while ((ent = readdir(dir)) != NULL) {
+			etk::String tmpString(ent->d_name);
+			if (DT_REG == ent->d_type) {
+				myListFile->AddElement(tmpString);
+			} else if (DT_DIR == ent->d_type) {
+				myListFolder->AddElement(tmpString);
+			}
+		}
+		closedir(dir);
+	} else {
+		EWOL_ERROR("could not open directory : \"" << m_folder << "\"");
+	}
+}
+

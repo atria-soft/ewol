@@ -98,6 +98,7 @@ void ewol::Entry::SetValue(etk::String newData)
 {
 	m_data = newData;
 	UpdateTextPosition();
+	OnRegenerateDisplay();
 }
 
 etk::String ewol::Entry::GetValue(void)

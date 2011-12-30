@@ -40,6 +40,7 @@ namespace ewol {
 			void SetValidateLabel(etk::String label);
 			void SetCancelLabel(etk::String label);
 			void SetFolder(etk::String folder);
+			void UpdateCurrentFolder(void);
 		private:
 			int32_t m_widgetTitleId;
 			int32_t m_widgetValidateId;

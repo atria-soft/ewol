@@ -66,7 +66,7 @@ void ewol::List::OnRegenerateDisplay(void)
 {
 	// clean the object list ...
 	ClearOObjectList();
-	EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
+	//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
 	
 	int32_t tmpOriginX = 0;
 	int32_t tmpOriginY = 0;
@@ -127,8 +127,7 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
 
-	int32_t rawID = y / (minHeight + 2*m_paddingSize);
+	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSize);
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
 	return OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
-	return false;
 }
