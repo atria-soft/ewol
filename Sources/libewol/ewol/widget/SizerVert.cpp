@@ -34,6 +34,8 @@ ewol::SizerVert::SizerVert(void)
 {
 	GenericDrawDisable();
 	SpecificDrawEnable();
+	// set contamination enable
+	LockExpendContamination();
 }
 
 ewol::SizerVert::~SizerVert(void)
@@ -133,11 +135,31 @@ void ewol::SizerVert::SetExpendX(bool newExpend)
 	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
 }
 
+bool ewol::SizerVert::CanExpentX(void)
+{
+	if (true == m_lockExpendContamination) {
+		return false;
+	}
+	return m_userExpendX;
+}
+
 void ewol::SizerVert::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
+bool ewol::SizerVert::CanExpentY(void)
+{
+	if (true == m_lockExpendContamination) {
+		return false;
+	}
+	return m_userExpendY;
+}
+
+void ewol::SizerVert::LockExpendContamination(bool lockExpend)
+{
+	m_lockExpendContamination = lockExpend;
+}
 
 //etk::VectorType<ewol::Widget*> m_SubWidget;
 

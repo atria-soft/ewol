@@ -160,23 +160,24 @@ namespace ewol {
 			bool           m_userFillX;
 			bool           m_userFillY;
 		public:
-			void           SetOrigin(etkFloat_t x, etkFloat_t y) { m_origin.x=x; m_origin.y=y; };
-			coord          GetOrigin(void) { return m_origin; };
+			void           SetOrigin(etkFloat_t x, etkFloat_t y)            { m_origin.x=x; m_origin.y=y; };
+			coord          GetOrigin(void)                                  { return m_origin; };
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
-			virtual bool   CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; }; //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSize(etkFloat_t x=-1, etkFloat_t y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
-			coord          GetMinSize(void) { return m_minSize; };
-			coord          GetSize(void) { return m_size; };
+			 //update the min Size ... and the expend parameters for the sizer
+			virtual bool   CalculateMinSize(void)                           {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; return true; };
+			virtual void   SetMinSize(etkFloat_t x=-1, etkFloat_t y=-1)     { m_userMinSize.x = x; m_userMinSize.y = y; };
+			coord          GetMinSize(void)                                 { return m_minSize; };
+			coord          GetSize(void)                                    { return m_size; };
 			void           SetCurrentSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_size.x = x; m_size.y = y; };
-			coord          GetCurrentSize(void) { return m_size; };
-			virtual void   SetExpendX(bool newExpend=false) { m_userExpendX = newExpend; };
-			virtual bool   CanExpentX(void) { return m_userExpendX; };
-			virtual void   SetExpendY(bool newExpend=false) { m_userExpendY = newExpend; };
-			virtual bool   CanExpentY(void) { return m_userExpendY; };
-			virtual void   SetFillX(bool newFill=false) { m_userFillX = newFill; };
-			bool           CanFillX(void) { return m_userFillX; };
-			virtual void   SetFillY(bool newFill=false) { m_userFillY = newFill; };
-			bool           CanFillY(void) { return m_userFillY; };
+			coord          GetCurrentSize(void)                             { return m_size; };
+			virtual void   SetExpendX(bool newExpend=false)                 { m_userExpendX = newExpend; };
+			virtual bool   CanExpentX(void)                                 { return m_userExpendX; };
+			virtual void   SetExpendY(bool newExpend=false)                 { m_userExpendY = newExpend; };
+			virtual bool   CanExpentY(void)                                 { return m_userExpendY; };
+			virtual void   SetFillX(bool newFill=false)                     { m_userFillX = newFill; };
+			bool           CanFillX(void)                                   { return m_userFillX; };
+			virtual void   SetFillY(bool newFill=false)                     { m_userFillY = newFill; };
+			bool           CanFillY(void)                                   { return m_userFillY; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area

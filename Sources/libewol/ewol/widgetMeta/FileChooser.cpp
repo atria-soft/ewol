@@ -220,7 +220,10 @@ ewol::FileChooser::FileChooser(void)
 	FileChooserFolderList * myListFolder = NULL;
 	ewol::Label * myLabel = NULL;
 	
+	SetDisplayRatio(0.80);
+	
 	mySizerVert = new ewol::SizerVert();
+		mySizerVert->LockExpendContamination(true);
 		// set it in the pop-up-system : 
 		SubWidgetSet(mySizerVert);
 		
@@ -229,7 +232,7 @@ ewol::FileChooser::FileChooser(void)
 			mySizerVert->SubWidgetAdd(myLabel);
 		
 		mySizerHori = new ewol::SizerHori();
-			mySizerHori->LockExpendContamination(true);
+			//mySizerHori->LockExpendContamination(true);
 			mySizerVert->SubWidgetAdd(mySizerHori);
 			myButton = new ewol::Button("<-");
 				myButton->ExternLinkOnEvent("ewol Button Pressed", GetWidgetId(), ewolEventFileChooserFolderUp );
@@ -242,24 +245,32 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(myEntry);
 			
 		mySizerHori = new ewol::SizerHori();
-			mySizerHori->LockExpendContamination(true);
+			//mySizerHori->LockExpendContamination(true);
 			mySizerVert->SubWidgetAdd(mySizerHori);
+			mySpacer = new ewol::Spacer();
+				mySpacer->SetSize(2);
+				mySizerHori->SubWidgetAdd(mySpacer);
 			myListFolder = new FileChooserFolderList();
 				m_widgetListFolderId = myListFolder->GetWidgetId();
-				//myList->SetExpendX(true);
 				myListFolder->SetExpendY(true);
 				myListFolder->SetFillY(true);
 				mySizerHori->SubWidgetAdd(myListFolder);
+			mySpacer = new ewol::Spacer();
+				mySpacer->SetSize(2);
+				mySizerHori->SubWidgetAdd(mySpacer);
 			myListFile = new FileChooserFileList();
 				m_widgetListFileId = myListFile->GetWidgetId();
-				myListFile->SetExpendY(true);
+				myListFile->SetExpendX(true);
 				myListFile->SetFillX(true);
 				myListFile->SetExpendY(true);
 				myListFile->SetFillY(true);
 				mySizerHori->SubWidgetAdd(myListFile);
+			mySpacer = new ewol::Spacer();
+				mySpacer->SetSize(2);
+				mySizerHori->SubWidgetAdd(mySpacer);
 			
 		mySizerHori = new ewol::SizerHori();
-			mySizerHori->LockExpendContamination(true);
+			//mySizerHori->LockExpendContamination(true);
 			mySizerVert->SubWidgetAdd(mySizerHori);
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetExpendX(true);

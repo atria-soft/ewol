@@ -66,7 +66,7 @@ void ewol::List::OnRegenerateDisplay(void)
 {
 	// clean the object list ...
 	ClearOObjectList();
-	
+	EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
 	
 	int32_t tmpOriginX = 0;
 	int32_t tmpOriginY = 0;

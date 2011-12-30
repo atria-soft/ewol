@@ -41,10 +41,12 @@ namespace ewol {
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
+			void           SetDisplayRatio(etkFloat_t ratio);
 		private:
 			color_ts      m_colorBackGroung;
 			color_ts      m_colorEmptyArea;
 			ewol::Widget* m_subWidget;
+			etkFloat_t    m_displayRatio;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);

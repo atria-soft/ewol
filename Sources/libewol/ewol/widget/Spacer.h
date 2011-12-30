@@ -36,6 +36,9 @@ namespace ewol {
 			Spacer(void);
 			virtual ~Spacer(void);
 			virtual bool   CalculateMinSize(void);
+			void SetSize(etkFloat_t size);
+		private:
+			etkFloat_t m_size;
 	};
 };
 

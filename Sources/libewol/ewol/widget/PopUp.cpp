@@ -70,6 +70,14 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		if (true == m_subWidget->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
+		if (m_displayRatio>0.1 && m_displayRatio<=100) {
+			subWidgetSize.x = etk_max(m_size.x*m_displayRatio, subWidgetSize.x);
+			subWidgetSize.y = etk_max(m_size.y*m_displayRatio, subWidgetSize.y);
+		}
+		// force to be an integer ...
+		subWidgetSize.x = (int32_t)subWidgetSize.x;
+		subWidgetSize.y = (int32_t)subWidgetSize.y;
+		// set config to the Sub-widget
 		subWidgetOrigin.x = (int32_t)(m_size.x - m_origin.x - subWidgetSize.x)/2 + m_origin.x;
 		subWidgetOrigin.y = (int32_t)(m_size.y - m_origin.y - subWidgetSize.y)/2 + m_origin.y;
 		
@@ -179,3 +187,7 @@ bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etk
 }
 
 
+void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
+{
+	m_displayRatio = ratio;
+}

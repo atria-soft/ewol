@@ -40,8 +40,12 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
+			virtual bool   CanExpentX(void);
 			virtual void   SetExpendY(bool newExpend=false);
+			virtual bool   CanExpentY(void);
+			void           LockExpendContamination(bool lockExpend=false);
 		private:
+			bool                           m_lockExpendContamination;
 			etk::VectorType<ewol::Widget*> m_subWidget;
 		public:
 			void           SubWidgetRemoveAll(void);

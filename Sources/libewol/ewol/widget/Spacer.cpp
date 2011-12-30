@@ -34,6 +34,7 @@
 
 ewol::Spacer::Spacer(void)
 {
+	m_size = 10;
 	GenericDrawDisable();
 	SetCanHaveFocus(false);
 }
@@ -45,10 +46,14 @@ ewol::Spacer::~Spacer(void)
 
 bool ewol::Spacer::CalculateMinSize(void)
 {
-	m_minSize.x = 20;
-	m_minSize.y = 20;
+	m_minSize.x = m_size;
+	m_minSize.y = m_size;
 	return true;
 }
 
 
+void ewol::Spacer::SetSize(etkFloat_t size)
+{
+	m_size = size;
+}
 

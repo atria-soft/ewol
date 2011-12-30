@@ -56,16 +56,20 @@ void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* fun
 	etk::cout << tmpName;
 }
 
-
 void TOOLS_DisplayTime(void)
 {
+	char tmpdata[50];
+#ifdef __PLATFORM__Android
+	struct timeval  now;
+	gettimeofday(&now, NULL);
+	sprintf(tmpdata, " %2dh %2dmin %2ds | ", (int32_t)(now.tv_sec/3600), (int32_t)(now.tv_sec/60)%60, (int32_t)(now.tv_sec%60));
+#else
 	time_t rawtime;
 	struct tm * timeinfo;
-	char tmpdata[50];
-	
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 	sprintf(tmpdata, " %2dh %2dmin %2ds | ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+#endif
 	etk::cout << tmpdata ;
 }
 
