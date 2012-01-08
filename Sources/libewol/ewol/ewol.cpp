@@ -24,38 +24,12 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/Font.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/themeManager.h>
 
 #include <ewol/base/gui.h>
 
 #undef __class__
 #define __class__	"ewol"
-
-void ewol::Init(int argc, char *argv[])
-{
-	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
-	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
-	guiAbstraction::Init(argc, argv);
-	ewol::theme::Init();
-	ewol::widgetManager::Init();
-	ewol::InitFont();
-}
-
-void ewol::Run(void)
-{
-	guiAbstraction::Run();
-}
-
-void ewol::UnInit(void)
-{
-	guiAbstraction::UnInit();
-	ewol::UnInitFont();
-	ewol::widgetManager::UnInit();
-	ewol::theme::UnInit();
-}
-
 
 void ewol::DisplayWindows(ewol::Windows * windows)
 {
@@ -115,4 +89,5 @@ void ewol::ForceRedrawAll(void)
 {
 	guiAbstraction::ForceRedrawAll();
 }
+
 

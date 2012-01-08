@@ -39,6 +39,7 @@ namespace ewol {
 			virtual ~Button(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::String newLabel);
+			etk::String    GetLabel(void) {return m_label;};
 			// TODO : 
 			//void           SetSize(int32_t size);
 			//void           SetFont(etk::String fontName);

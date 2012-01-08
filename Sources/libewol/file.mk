@@ -1,7 +1,7 @@
 
 
-FILE_LIST = \
-			ewol/ewol.cpp \
+FILE_LIST = ewol/ewol.cpp \
+			ewol/ewolInterne.cpp \
 			ewol/Debug.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \
@@ -24,6 +24,7 @@ FILE_LIST = \
 			ewol/widget/Spacer.cpp \
 			ewol/widget/Test.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
+			ewol/widgetMeta/Keyboard.cpp \
 			ewol/themeManager.cpp \
 			ewol/theme/Theme.cpp \
 			ewol/theme/EolElement.cpp \

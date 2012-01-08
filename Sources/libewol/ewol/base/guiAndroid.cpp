@@ -274,6 +274,7 @@ void EWOL_NativeApplicationInit(void)
 {
 	EWOL_WARNING("Event : Init Application");
 	if (false == isAlreadyInit) {
+		guiAbstraction::Init(0, NULL);
 		ewol::Init(0, NULL);
 		APP_Init(0, NULL);
 		isAlreadyInit = true;
@@ -287,6 +288,8 @@ void EWOL_NativeApplicationUnInit(void)
 	ewol::DisplayWindows(NULL);
 	// call application to uninit
 	APP_UnInit();
+	// basic abstraction un-init
+	guiAbstraction::UnInit();
 	// uninit Ewol
 	ewol::UnInit();
 }
@@ -552,6 +555,22 @@ void guiAbstraction::ForceRedrawAll(void)
 {
 	if (NULL != m_uniqueWindows) {
 		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
+	}
+}
+
+
+void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
+{
+	// Get the current Focused Widget :
+	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+	if (NULL != tmpWidget) {
+		if(true == isDown) {
+			EWOL_DEBUG("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
+		} else {
+			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
+		}
 	}
 }
 

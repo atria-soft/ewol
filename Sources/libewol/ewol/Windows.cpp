@@ -42,6 +42,7 @@
 const char * ewolEventWindowsClose    = "ewol Windows close";
 const char * ewolEventWindowsMinimize = "ewol Windows minimize";
 const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
+const char * ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
 ewol::Windows::Windows(void)
@@ -52,6 +53,8 @@ ewol::Windows::Windows(void)
 	SetCanHaveFocus(true);
 	m_subWidget = NULL;
 	m_popUpWidget = NULL;
+	m_keyBoardwidget = NULL;
+	m_keyboardShow = false;
 	// enable specific drawing system ...
 	SpecificDrawEnable();
 	
@@ -85,6 +88,7 @@ ewol::Windows::Windows(void)
 		myOObjectText->Text(62, 2, "My Title ...", m_size.x-2);
 		AddOObject(myOObjectText, "Title");
 	}
+	KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
 ewol::Windows::~Windows(void)
@@ -97,21 +101,33 @@ ewol::Windows::~Windows(void)
 		delete(m_popUpWidget);
 		m_popUpWidget=NULL;
 	}
+	if (NULL != m_keyBoardwidget) {
+		delete(m_keyBoardwidget);
+		m_keyBoardwidget=NULL;
+	}
 }
 
 bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
+	int32_t keyboardHigh = 0;
+	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+		m_keyBoardwidget->CalculateMinSize();
+		coord tmpSize = m_keyBoardwidget->GetMinSize();
+		keyboardHigh = (int32_t)tmpSize.y;
+		m_keyBoardwidget->SetOrigin(0, m_size.y - keyboardHigh);
+		m_keyBoardwidget->CalculateSize(m_size.x, keyboardHigh);
+	}
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
-		m_subWidget->CalculateSize(m_size.x, m_size.y);
+		m_subWidget->CalculateSize(m_size.x, m_size.y - keyboardHigh);
 	}
 	if (NULL != m_popUpWidget) {
 		m_popUpWidget->CalculateMinSize();
-		m_popUpWidget->CalculateSize(m_size.x, m_size.y);
+		m_popUpWidget->CalculateSize(m_size.x, m_size.y - keyboardHigh);
 	}
 	// regenerate all the display ...
 	OnRegenerateDisplay();
@@ -135,6 +151,13 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 			if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
 				ewol::StartResizeSystem();
 			}
+		}
+	}
+	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+		coord tmpSize = m_keyBoardwidget->GetMinSize();
+		if (y > m_size.y - tmpSize.y) {
+			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, x, y);
+			return true;
 		}
 	}
 	// event go directly on the pop-up
@@ -193,6 +216,9 @@ void ewol::Windows::OnRegenerateDisplay(void)
 	if (NULL != m_popUpWidget) {
 		m_popUpWidget->OnRegenerateDisplay();
 	}
+	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+		m_keyBoardwidget->OnRegenerateDisplay();
+	}
 }
 
 
@@ -208,8 +234,13 @@ bool ewol::Windows::OnDraw(void)
 		m_popUpWidget->GenDraw();
 		//EWOL_DEBUG("Draw Pop-up");
 	}
+	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+		m_keyBoardwidget->GenDraw();
+		//EWOL_DEBUG("Draw Pop-up");
+	}
 	return true;
 }
+
 
 bool ewol::Windows::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
 {
@@ -265,4 +296,36 @@ void ewol::Windows::PopUpWidgetPop(void)
 		delete(m_popUpWidget);
 		m_popUpWidget = NULL;
 	}
+}
+
+
+bool ewol::Windows::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
+{
+	EWOL_DEBUG("kjhlkjhlkjhlkjhlkhlkjhlkjhlkjhlkjhlkjhlkjh");
+	if(ewolEventWindowsHideKeyboard == generateEventId) {
+		EWOL_INFO("Request Hide keyboard");
+		KeyboardHide();
+	}
+	return true;
+}
+
+void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
+{
+	m_keyboardShow = true;
+	if (NULL == m_keyBoardwidget) {
+		// Create the keyboard ...
+		m_keyBoardwidget = new ewol::Keyboard(GetWidgetId());
+		m_keyBoardwidget->ExternLinkOnEvent("ewol event Keyboard request hide", GetWidgetId(), ewolEventWindowsHideKeyboard );
+	}
+	CalculateSize(m_size.x, m_size.y);
+	OnRegenerateDisplay();
+}
+
+
+void ewol::Windows::KeyboardHide(void)
+{
+	m_keyboardShow = false;
+	EWOL_INFO("Request Hide keyboard");
+	CalculateSize(m_size.x, m_size.y);
+	OnRegenerateDisplay();
 }

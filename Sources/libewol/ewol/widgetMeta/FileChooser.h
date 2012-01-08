@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
  * @file ewol/widgetMeta/FileChooser.h
- * @brief ewol File chooser complex widget system (header)
+ * @brief ewol File chooser meta widget system (header)
  * @author Edouard DUPIN
  * @date 29/12/2011
  * @par Project

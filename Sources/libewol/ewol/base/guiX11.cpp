@@ -672,18 +672,11 @@ namespace guiAbstraction {
 										XComposeStatus status;
 										int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
 										buf[count] = '\0';
-										// Get the current Focused Widget :
-										ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-										if (NULL != tmpWidget) {
-											if(event.type == KeyPress) {
-												// TODO : set the char here...
-												EWOL_DEBUG("X11 PRESSED : \"" << buf << "\" size=" << count);
-												tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, buf);
-											} else {
-												// TODO : set the char here...
-												EWOL_DEBUG("X11 Release : \"" << buf << "\" size=" << count);
-												tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, buf);
-											}
+										etk::String tmpData = buf;
+										if(event.type == KeyPress) {
+											SendKeyboardEvent(true, tmpData);
+										} else {
+											SendKeyboardEvent(true, tmpData);
 										}
 										break;
 									}
@@ -911,6 +904,22 @@ void guiAbstraction::ForceRedrawAll(void)
 	}
 }
 
+
+void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
+{
+	// Get the current Focused Widget :
+	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+	if (NULL != tmpWidget) {
+		if(true == isDown) {
+			EWOL_DEBUG("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
+		} else {
+			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
+		}
+	}
+}
+
 #include <ewol/ewol.h>
 
 
@@ -919,16 +928,19 @@ void guiAbstraction::ForceRedrawAll(void)
 
 int main(int argc, char *argv[])
 {
+	guiAbstraction::Init(argc, argv);
 	// init Ewol
 	ewol::Init(argc, argv);
 	// Init Application ...
 	APP_Init(argc, argv);
 	// Start Ewol diwplay while
-	ewol::Run();
+	guiAbstraction::Run();
 	// unset all windows
 	ewol::DisplayWindows(NULL);
 	// call application to uninit
 	APP_UnInit();
+	// basic abstraction un-init
+	guiAbstraction::UnInit();
 	// uninit Ewol
 	ewol::UnInit();
 	

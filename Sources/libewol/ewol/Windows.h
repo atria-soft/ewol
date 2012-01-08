@@ -30,8 +30,10 @@
 #include <etk/VectorType.h>
 #include <etk/Singleton.h>
 #include <ewol/Widget.h>
+#include <ewol/widgetMeta/Keyboard.h>
 
 namespace ewol {
+
 	class Windows :public ewol::Widget
 	{
 		public:
@@ -56,6 +58,7 @@ namespace ewol {
 		// Widget overwrite function
 		public:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
 		private:
 			bool m_hasDecoration;
 		public:
@@ -69,8 +72,10 @@ namespace ewol {
 				m_hasDecoration = true;
 			}
 		private:
-			ewol::Widget *  m_subWidget;
-			ewol::Widget *  m_popUpWidget;
+			ewol::Widget*    m_subWidget;
+			ewol::Widget*    m_popUpWidget;
+			ewol::Keyboard*  m_keyBoardwidget;
+			bool             m_keyboardShow;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
@@ -79,6 +84,9 @@ namespace ewol {
 			virtual bool   OnDraw(void);
 		public:
 			virtual void OnRegenerateDisplay(void);
+		public:
+			void KeyboardShow(ewol::keyboardMode_te mode);
+			void KeyboardHide(void);
 	};
 };
 

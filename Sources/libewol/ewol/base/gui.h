@@ -27,7 +27,9 @@
 #define __GUI_ABSTRACTION_H__
 
 #include <etk/Types.h>
+#include <etk/String.h>
 #include <ewol/Windows.h>
+#include <ewol/ewolInterne.h>
 
 namespace guiAbstraction
 {
@@ -43,6 +45,7 @@ namespace guiAbstraction
 	void StartMoveSystem(void);
 	bool IsPressedInput(int32_t inputID);
 	void ForceRedrawAll(void);
+	void SendKeyboardEvent(bool isDown, etk::String &keyInput);
 };
 
 //!< must be define in CPP by the application ...

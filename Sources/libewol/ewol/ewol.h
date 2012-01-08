@@ -31,11 +31,10 @@
 #include <ewol/Widget.h>
 #include <ewol/Windows.h>
 
+
+
 namespace ewol {
-	void Init(int32_t argc, char *argv[]);
-	void Run(void);
 	void Stop(void);
-	void UnInit(void);
 	void DisplayWindows(ewol::Windows * windows);
 	void ChangeSize(int32_t w, int32_t h);
 	void ChangePos(int32_t x, int32_t y);

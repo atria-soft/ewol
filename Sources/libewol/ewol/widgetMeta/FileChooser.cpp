@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
  * @file ewol/widgetMeta/FileChooser.cpp
- * @brief ewol File chooser complex widget system (Sources)
+ * @brief ewol File chooser meta widget system (Sources)
  * @author Edouard DUPIN
  * @date 29/12/2011
  * @par Project
