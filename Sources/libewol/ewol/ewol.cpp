@@ -65,24 +65,19 @@ void ewol::GetAbsPos(int32_t & x, int32_t & y)
 }
 
 
-void ewol::StartResizeSystem(void)
-{
-#ifdef __PLATFORM__Linux
-	guiAbstraction::StartResizeSystem();
-#endif
-}
-
-void ewol::StartMoveSystem(void)
-{
-#ifdef __PLATFORM__Linux
-	guiAbstraction::StartMoveSystem();
-#endif
-}
-
-
 bool ewol::IsPressedInput(int32_t inputID)
 {
 	return guiAbstraction::IsPressedInput(inputID);
+}
+
+void ewol::KeyboardShow(ewol::keyboardMode_te mode)
+{
+	guiAbstraction::KeyboardShow(mode);
+}
+
+void ewol::KeyboardHide(void)
+{
+	guiAbstraction::KeyboardHide();
 }
 
 void ewol::ForceRedrawAll(void)

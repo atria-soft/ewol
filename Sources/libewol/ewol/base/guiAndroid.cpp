@@ -523,24 +523,6 @@ void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
 	}
 }
 
-void guiAbstraction::StartResizeSystem(void)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->StartResizeSystem();
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::StartMoveSystem(void)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->StartMoveSystem();
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
 bool guiAbstraction::IsPressedInput(int32_t inputID)
 {
 	//if (true == guiAbstractionIsInit) {
@@ -549,6 +531,20 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	//	EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
 	//}
+}
+
+void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
+{
+	if (NULL != m_uniqueWindows) {
+		m_uniqueWindows->KeyboardShow(mode);
+	}
+}
+
+void guiAbstraction::KeyboardHide(void)
+{
+	if (NULL != m_uniqueWindows) {
+		m_uniqueWindows->KeyboardHide();
+	}
 }
 
 void guiAbstraction::ForceRedrawAll(void)

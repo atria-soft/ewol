@@ -22,8 +22,8 @@
  *******************************************************************************
  */
  
-#ifndef __TOOLS_MEMORY_H__
-#define __TOOLS_MEMORY_H__
+#ifndef __ETK_TOOLS_MEMORY_H__
+#define __ETK_TOOLS_MEMORY_H__
 
 #ifndef ETK_MEMORY_CHECKER
 #define ETK_MEMORY_CHECKER 0

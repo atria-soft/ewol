@@ -26,6 +26,7 @@
 #include <ewol/widget/Entry.h>
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/ewol.h>
 
 
 const char * const ewolEventEntryClick      = "ewol Entry click";
@@ -176,6 +177,7 @@ bool ewol::Entry::OnEventArea(const char * generateEventId, etkFloat_t x, etkFlo
 		EWOL_INFO("Entry Clicked ... " << m_data);
 		eventIsOK = true;
 		ewol::widgetManager::FocusKeep(this);
+		ewol::KeyboardShow(KEYBOARD_MODE_CODE);
 	} else if(ewolEventEntryEnter == generateEventId) {
 		//OnRegenerateDisplay();
 	}

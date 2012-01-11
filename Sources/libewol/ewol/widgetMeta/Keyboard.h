@@ -38,14 +38,17 @@ namespace ewol {
 	class Keyboard : public ewol::Widget
 	{
 		public:
-			Keyboard(int32_t windowsID);
+			Keyboard(void);
 			~Keyboard(void);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
 			void SetMode(keyboardMode_te mode);
+			bool IsHide(void) { return m_isHide; };
+			void Hide(void) { m_isHide=true; };
+			void Show(void) { m_isHide=false; };
 		private:
+			bool            m_isHide;
 			keyboardMode_te m_mode;
-			ewol::Widget* m_subWidget;
-			int32_t       m_windowsID;
+			ewol::Widget*   m_subWidget;
 		public:
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer

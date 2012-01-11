@@ -75,7 +75,6 @@ namespace ewol {
 			ewol::Widget*    m_subWidget;
 			ewol::Widget*    m_popUpWidget;
 			ewol::Keyboard*  m_keyBoardwidget;
-			bool             m_keyboardShow;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);

@@ -33,6 +33,7 @@
 #include <ewol/WidgetManager.h>
 //#include <etk/Vector.h>
 #include <etk/VectorType.h>
+#include <ewol/ewol.h>
 
 #include <ewol/base/gui.h>
 
@@ -49,14 +50,14 @@ const char * const ewolEventKeyboardHide   = "ewol event Keyboard request hide";
 const char * const ewolEventKeyEvent = "ewol event internal key event";
 
 
-ewol::Keyboard::Keyboard(int32_t windowsID)
+ewol::Keyboard::Keyboard(void)
 {
 	// set event that can propagate outside ....
 	AddEventId(ewolEventKeyboardHide);
 	SpecificDrawEnable();
 	
 	m_mode = KEYBOARD_MODE_TEXT;
-	m_windowsID = windowsID;
+	m_isHide = true;
 	SetMode(m_mode);
 }
 
@@ -83,7 +84,6 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
 	ewol::Button * myButton = NULL;
-	ewol::Spacer * mySpacer = NULL;
 	
 	mySizerVert = new ewol::SizerVert();
 		m_subWidget = mySizerVert;
@@ -190,12 +190,8 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 		guiAbstraction::SendKeyboardEvent(false, data);
 		return true;
 	} else if (ewolEventKeyboardHide == eventExternId) {
-		EWOL_INFO("plop1 : " << m_windowsID);
-		ewol::Widget * tmpWidget = ewol::widgetManager::Get(m_windowsID);
-		if (NULL != tmpWidget) {
-			EWOL_INFO(" find .. ");
-			((ewol::Windows*)tmpWidget)->KeyboardHide();
-		}
+		Hide();
+		ewol::ForceRedrawAll();
 	}
 	//return GenEventInputExternal(eventExternId, x, y);
 	return true;
@@ -227,7 +223,6 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 	
 	if (NULL != m_subWidget) {
 		coord         subWidgetSize;
-		coord         subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;

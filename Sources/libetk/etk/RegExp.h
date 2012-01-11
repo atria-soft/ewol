@@ -1554,7 +1554,7 @@ template<class CLASS_TYPE> class RegExpNodePThese : public RegExpNode<CLASS_TYPE
 #define __class__	"etk::RegExp"
 
 // Regular expression manager
-template<class CLASS_TYPE> class etkRegExp {
+template<class CLASS_TYPE> class RegExp {
 	// public API : 
 	public:
 		// create the regular expression
@@ -1564,7 +1564,7 @@ template<class CLASS_TYPE> class etkRegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		etkRegExp(const char *exp)
+		RegExp(const char *exp)
 		{
 			m_isOk = false;
 			m_areaFind.start=0;
@@ -1579,7 +1579,7 @@ template<class CLASS_TYPE> class etkRegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		etkRegExp(etk::String &exp)
+		RegExp(etk::String &exp)
 		{
 			m_isOk = false;
 			m_areaFind.start=0;
@@ -1594,7 +1594,7 @@ template<class CLASS_TYPE> class etkRegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		etkRegExp(void)
+		RegExp(void)
 		{
 			m_isOk = false;
 			m_areaFind.start=0;
@@ -1608,7 +1608,7 @@ template<class CLASS_TYPE> class etkRegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		~etkRegExp(void)
+		~RegExp(void)
 		{
 			// TODO : remove all under nodes...
 			m_isOk = false;

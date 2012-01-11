@@ -43,6 +43,14 @@ namespace etk {
 				}
 				return (static_cast<T*> (_singleton));
 			}
+			static T *getInstance()
+			{
+				if (NULL == _singleton)
+				{
+					_singleton = new T;
+				}
+				return (static_cast<T*> (_singleton));
+			}
 			static void Kill()
 			{
 				if (NULL != _singleton)

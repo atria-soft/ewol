@@ -39,9 +39,9 @@ namespace ewol {
 	void ChangeSize(int32_t w, int32_t h);
 	void ChangePos(int32_t x, int32_t y);
 	void GetAbsPos(int32_t & x, int32_t & y);
-	void StartResizeSystem(void);
-	void StartMoveSystem(void);
 	bool IsPressedInput(int32_t inputID);
+	void KeyboardShow(ewol::keyboardMode_te mode);
+	void KeyboardHide(void);
 	void ForceRedrawAll(void);
 };
 

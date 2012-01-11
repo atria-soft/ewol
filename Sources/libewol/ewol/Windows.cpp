@@ -54,41 +54,10 @@ ewol::Windows::Windows(void)
 	m_subWidget = NULL;
 	m_popUpWidget = NULL;
 	m_keyBoardwidget = NULL;
-	m_keyboardShow = false;
 	// enable specific drawing system ...
 	SpecificDrawEnable();
-	
 	SetDecorationDisable();
-	if (true == m_hasDecoration) {
-		ewol::OObject2DColored * myOObject = new ewol::OObject2DColored();
-		// Close
-		myOObject->SetColor(1.0, 0.0, 0.0, 1.0);
-		myOObject->Rectangle( 0, 0, 20, 20);
-		// Reduce
-		myOObject->SetColor(0.0, 1.0, 0.0, 1.0);
-		myOObject->Rectangle(20, 0, 20, 20);
-		// Expend - Un-expend
-		myOObject->SetColor(0.0, 0.0, 1.0, 1.0);
-		myOObject->Rectangle(40, 0, 20, 20);
-		coord origin;
-		coord size;
-		origin.x = 0.0;
-		origin.y = 0.0;
-		size.x = 20;
-		size.y = 20;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsClose);
-		origin.x = 20.0;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsMinimize);
-		origin.x = 40.0;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventWindowsExpend);
-		
-		AddOObject(myOObject, "leftBoutton");
-		
-		ewol::OObject2DText * myOObjectText = new ewol::OObject2DText();
-		myOObjectText->Text(62, 2, "My Title ...", m_size.x-2);
-		AddOObject(myOObjectText, "Title");
-	}
-	KeyboardShow(KEYBOARD_MODE_CODE);
+	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
 ewol::Windows::~Windows(void)
@@ -112,7 +81,7 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	int32_t keyboardHigh = 0;
-	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		m_keyBoardwidget->CalculateMinSize();
 		coord tmpSize = m_keyBoardwidget->GetMinSize();
 		keyboardHigh = (int32_t)tmpSize.y;
@@ -137,23 +106,7 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	if (true == m_hasDecoration) {
-		if(    x >= 60
-		    && y <=20)
-		{
-			if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
-				ewol::StartMoveSystem();
-			}
-		}
-		if(    x >= m_size.x - 20
-		    && y >= m_size.y - 20)
-		{
-			if(EVENT_INPUT_TYPE_MOVE == typeEvent && true == ewol::IsPressedInput(1) ) {
-				ewol::StartResizeSystem();
-			}
-		}
-	}
-	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		coord tmpSize = m_keyBoardwidget->GetMinSize();
 		if (y > m_size.y - tmpSize.y) {
 			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, x, y);
@@ -216,7 +169,7 @@ void ewol::Windows::OnRegenerateDisplay(void)
 	if (NULL != m_popUpWidget) {
 		m_popUpWidget->OnRegenerateDisplay();
 	}
-	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		m_keyBoardwidget->OnRegenerateDisplay();
 	}
 }
@@ -234,7 +187,7 @@ bool ewol::Windows::OnDraw(void)
 		m_popUpWidget->GenDraw();
 		//EWOL_DEBUG("Draw Pop-up");
 	}
-	if (NULL != m_keyBoardwidget && true == m_keyboardShow ) {
+	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		m_keyBoardwidget->GenDraw();
 		//EWOL_DEBUG("Draw Pop-up");
 	}
@@ -311,11 +264,18 @@ bool ewol::Windows::OnEventAreaExternal(int32_t widgetID, const char * generateE
 
 void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 {
-	m_keyboardShow = true;
 	if (NULL == m_keyBoardwidget) {
 		// Create the keyboard ...
-		m_keyBoardwidget = new ewol::Keyboard(GetWidgetId());
-		m_keyBoardwidget->ExternLinkOnEvent("ewol event Keyboard request hide", GetWidgetId(), ewolEventWindowsHideKeyboard );
+		m_keyBoardwidget = new ewol::Keyboard();
+		if (NULL == m_keyBoardwidget) {
+			EWOL_ERROR("Fail to initialize memory");
+		} else {
+			m_keyBoardwidget->ExternLinkOnEvent("ewol event Keyboard request hide", GetWidgetId(), ewolEventWindowsHideKeyboard );
+			m_keyBoardwidget->SetParrent(this);
+		}
+	}
+	if (NULL != m_keyBoardwidget) {
+		m_keyBoardwidget->Show();
 	}
 	CalculateSize(m_size.x, m_size.y);
 	OnRegenerateDisplay();
@@ -324,8 +284,10 @@ void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 
 void ewol::Windows::KeyboardHide(void)
 {
-	m_keyboardShow = false;
 	EWOL_INFO("Request Hide keyboard");
+	if (NULL != m_keyBoardwidget) {
+		m_keyBoardwidget->Hide();
+	}
 	CalculateSize(m_size.x, m_size.y);
 	OnRegenerateDisplay();
 }
