@@ -83,6 +83,23 @@ void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8Strin
 	m_coordTex.Clear();
 	if (m_FontId == -1) {
 		EWOL_ERROR("Font Id is not corectly defined");
+		return;
+	}
+	coord2D_ts drawPosition;
+	drawPosition.x = x;
+	drawPosition.y = y;
+	coord2D_ts clipSize;
+	clipSize.x = clippingPositionX;
+	clipSize.y = -1;
+	ewol::DrawText(m_FontId, drawPosition, clipSize, utf8String, m_FontTextureId, m_coord, m_coordTex);
+}
+
+void ewol::OObject2DText::TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
+{
+	m_FontTextureId = 0;
+	if (m_FontId == -1) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return;
 	}
 	coord2D_ts drawPosition;
 	drawPosition.x = x;

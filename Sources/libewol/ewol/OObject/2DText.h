@@ -38,6 +38,7 @@ namespace ewol {
 			virtual void Draw(void);
 			// set a specific text
 			void Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
+			void TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...
