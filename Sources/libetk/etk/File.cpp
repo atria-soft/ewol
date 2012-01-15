@@ -254,8 +254,22 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 		}
 	} else {
 		if (type == etk::FILE_TYPE_DIRECT) {
-			TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in FILE_TYPE_DATA mode ...");
-			m_type = etk::FILE_TYPE_DATA;
+			//TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in FILE_TYPE_DATA mode ...");
+			//m_type = etk::FILE_TYPE_DATA;
+			m_type = etk::FILE_TYPE_DIRECT;
+			// add current path : 
+			// Get the command came from the running of the program : 
+			char cCurrentPath[FILENAME_MAX];
+			if (!getcwd(cCurrentPath, FILENAME_MAX)) {
+				return;
+			}
+			cCurrentPath[FILENAME_MAX - 1] = '\0';
+			etk::String tmpFilename = destFilename;
+			destFilename = cCurrentPath;
+			destFilename += '/';
+			destFilename += tmpFilename;
+			
+			
 		} else {
 			m_type = type;
 		}

@@ -496,7 +496,7 @@ int32_t ewol::LoadFont(etk::String fontName, int32_t size)
 {
 	// check if folder file
 	etk::String tmpFileName = s_currentFolderName + "/" + fontName + ".ttf";
-	etk::File fileName(tmpFileName);
+	etk::File fileName(tmpFileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("Font does not exist: \"" << fileName.GetCompleateName() << "\"");
 		return -1;
