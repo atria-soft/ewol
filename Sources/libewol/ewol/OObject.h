@@ -81,4 +81,5 @@ namespace ewol {
 #include <ewol/OObject/2DTextured.h>
 #include <ewol/OObject/2DColored.h>
 #include <ewol/OObject/2DText.h>
+#include <ewol/OObject/2DTextColored.h>
 
