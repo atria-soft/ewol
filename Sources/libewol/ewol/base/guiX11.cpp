@@ -641,16 +641,95 @@ namespace guiAbstraction {
 								case KeyRelease:
 									//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 									{
-										char buf[11];
-										KeySym keysym;
-										XComposeStatus status;
-										int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
-										buf[count] = '\0';
-										etk::String tmpData = buf;
-										if(event.type == KeyPress) {
-											SendKeyboardEvent(true, tmpData);
-										} else {
-											SendKeyboardEvent(true, tmpData);
+										EWOL_DEBUG("eventKey : " << event.xkey.keycode);
+										bool find = true;
+										ewol::eventKbMoveType_te keyInput;
+										switch (event.xkey.keycode) {
+											case 80: // keypad
+											case 111:	keyInput = ewol::EVENT_KB_MOVE_TYPE_UP;				break;
+											case 83: // keypad
+											case 113:	keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT;			break;
+											case 85: // keypad
+											case 114:	keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT;			break;
+											case 88: // keypad
+											case 116:	keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN;			break;
+											case 81: // keypad
+											case 112:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;		break;
+											case 89: // keypad
+											case 117:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;		break;
+											case 79: // keypad
+											case 110:	keyInput = ewol::EVENT_KB_MOVE_TYPE_START;			break;
+											case 87: // keypad
+											case 115:	keyInput = ewol::EVENT_KB_MOVE_TYPE_END;			break;
+											case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
+											case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
+											case 90: // keypad
+											case 118:	keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;			break;
+											case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break;
+											case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
+											case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;
+											case 69:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F3;				break;
+											case 70:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F4;				break;
+											case 71:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F5;				break;
+											case 72:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F6;				break;
+											case 73:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F7;				break;
+											case 74:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F8;				break;
+											case 75:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F9;				break;
+											case 76:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F10;			break;
+											case 95:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F11;			break;
+											case 96:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F12;			break;
+											case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		break;
+											case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		break;
+											case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	break;
+											case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		break;
+											case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		break;
+											case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		break;
+											case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		break;
+											case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			break;
+											case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			break;
+											case 135:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;	break;
+											case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		break;
+											case 91: // Suppr on keypad
+												find = false;
+												{
+													char buf[2];
+													buf[0] = 0x7F;
+													buf[1] = 0x00;
+													etk::String tmpData = buf;
+													if(event.type == KeyPress) {
+														SendKeyboardEvent(true, tmpData);
+													} else {
+														SendKeyboardEvent(false, tmpData);
+													}
+												}
+											default:
+												find = false;
+												{
+													char buf[11];
+													KeySym keysym;
+													XComposeStatus status;
+													int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
+													buf[count] = '\0';
+													if (count>0) {
+														etk::String tmpData = buf;
+														if(event.type == KeyPress) {
+															SendKeyboardEvent(true, tmpData);
+														} else {
+															SendKeyboardEvent(false, tmpData);
+														}
+													} else {
+														EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
+													}
+												}
+												break;
+										}
+										if (true == find) {
+											EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+											if(event.type == KeyPress) {
+												SendKeyboardEventMove(true, keyInput);
+											} else {
+												SendKeyboardEventMove(false, keyInput);
+											}
 										}
 										break;
 									}
@@ -670,7 +749,7 @@ namespace guiAbstraction {
 						}
 					}
 					Draw();
-					usleep( 100000 );
+					//usleep( 100000 );
 				}
 			};
 			
@@ -871,7 +950,6 @@ void guiAbstraction::ForceRedrawAll(void)
 	}
 }
 
-
 void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
 {
 	// Get the current Focused Widget :
@@ -883,6 +961,20 @@ void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
 		} else {
 			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
 			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
+		}
+	}
+}
+
+
+void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput)
+{
+	// Get the current Focused Widget :
+	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+	if (NULL != tmpWidget) {
+		if(true == isDown) {
+			tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, keyInput);
+		} else {
+			tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, keyInput);
 		}
 	}
 }

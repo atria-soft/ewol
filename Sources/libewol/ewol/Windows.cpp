@@ -254,7 +254,6 @@ void ewol::Windows::PopUpWidgetPop(void)
 
 bool ewol::Windows::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("kjhlkjhlkjhlkjhlkhlkjhlkjhlkjhlkjhlkjhlkjh");
 	if(ewolEventWindowsHideKeyboard == generateEventId) {
 		EWOL_INFO("Request Hide keyboard");
 		KeyboardHide();

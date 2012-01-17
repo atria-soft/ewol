@@ -25,6 +25,51 @@
 #include <ewol/Widget.h>
 #include <ewol/WidgetManager.h>
 
+
+char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
+{
+	char * returnValue = "?";
+	switch(type) {
+		case ewol::EVENT_KB_MOVE_TYPE_LEFT:				returnValue = "LEFT";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_RIGHT:			returnValue = "RIGHT";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_UP:				returnValue = "UP";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_DOWN:				returnValue = "DOWN";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_PAGE_UP:			returnValue = "PAGE_UP";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN:		returnValue = "PAGE_DOWN";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_START:			returnValue = "START";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_END:				returnValue = "END";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_CENTER:			returnValue = "CENTER";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL:		returnValue = "ARRET_DEFIL";	break;
+		case ewol::EVENT_KB_MOVE_TYPE_WAIT:				returnValue = "WAIT";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_INSERT:			returnValue = "INSERT";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_F1:				returnValue = "F1";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F2:				returnValue = "F2";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F3:				returnValue = "F3";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F4:				returnValue = "F4";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F5:				returnValue = "F5";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F6:				returnValue = "F6";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F7:				returnValue = "F7";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F8:				returnValue = "F8";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F9:				returnValue = "F9";				break;
+		case ewol::EVENT_KB_MOVE_TYPE_F10:				returnValue = "F10";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_F11:				returnValue = "F11";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_F12:				returnValue = "F12";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_CAPLOCK:			returnValue = "CAPLOCK";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT:		returnValue = "SHIFT_LEFT";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT:		returnValue = "SHIFT_RIGHT";	break;
+		case ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT:		returnValue = "CTRL_LEFT";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT:		returnValue = "CTRL_RIGHT";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_META_LEFT:		returnValue = "META_LEFT";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_META_RIGHT:		returnValue = "META_RIGHT";		break;
+		case ewol::EVENT_KB_MOVE_TYPE_ALT:				returnValue = "ALT";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_ALT_GR:			returnValue = "ALT_GR";			break;
+		case ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU:		returnValue = "CONTEXT_MENU";	break;
+		case ewol::EVENT_KB_MOVE_TYPE_VER_NUM:			returnValue = "VER_NUM";		break;
+	}
+	return returnValue;
+}
+
+
 #undef __class__
 #define __class__	"ewol::Widget"
 
@@ -73,33 +118,31 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 {
 	bool ended = false;
 	//EWOL_WARNING("Input event : " << IdInput << " pos(" << x << "," << y << ")");
-	for(int32_t iii=m_inputEvent.Size()-1; iii>=0; iii--) {
-		if (EWOL_EVENT_AREA == m_inputEvent[iii].mode) {
-			if(    m_inputEvent[iii].area.origin.x <= x
-			    && m_inputEvent[iii].area.origin.y <= y
-			    && m_inputEvent[iii].area.origin.x + m_inputEvent[iii].area.size.x > x
-			    && m_inputEvent[iii].area.origin.y + m_inputEvent[iii].area.size.y > y )
+	for(int32_t iii=m_inputAreaEvent.Size()-1; iii>=0; iii--) {
+		if(    m_inputAreaEvent[iii].origin.x <= x
+		    && m_inputAreaEvent[iii].origin.y <= y
+		    && m_inputAreaEvent[iii].origin.x + m_inputAreaEvent[iii].size.x > x
+		    && m_inputAreaEvent[iii].origin.y + m_inputAreaEvent[iii].size.y > y )
+		{
+			if(    (m_inputAreaEvent[iii].flags & (1<<(IdInput-1)) )
+			    && (    (    (FLAG_EVENT_INPUT_MOTION          & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_MOVE   == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_ENTER           & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_ENTER  == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_LEAVE           & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_LEAVE  == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_DOWN            & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_DOWN   == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_UP              & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_UP     == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_CLICKED         & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_SINGLE == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_CLICKED_DOUBLE  & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_DOUBLE == typeEvent)
+			         || (    (FLAG_EVENT_INPUT_CLICKED_TRIPLE  & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_TRIPLE == typeEvent)
+			       )
+			  )
 			{
-				if(    (m_inputEvent[iii].area.flags & (1<<(IdInput-1)) )
-				    && (    (    (FLAG_EVENT_INPUT_MOTION          & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_MOVE   == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_ENTER           & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_ENTER  == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_LEAVE           & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_LEAVE  == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_DOWN            & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_DOWN   == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_UP              & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_UP     == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_CLICKED         & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_SINGLE == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_CLICKED_DOUBLE  & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_DOUBLE == typeEvent)
-				         || (    (FLAG_EVENT_INPUT_CLICKED_TRIPLE  & m_inputEvent[iii].area.flags) && EVENT_INPUT_TYPE_TRIPLE == typeEvent)
-				       )
-				  )
-				{
-					ended = OnEventArea(m_inputEvent[iii].generateEventId, x, y);
-					if (true == ended) {
-						break;
-					}
-					if (true == GenEventInputExternal(m_inputEvent[iii].generateEventId, x, y)) {
-						ended = true;
-						break;
-					}
+				ended = OnEventArea(m_inputAreaEvent[iii].generateEventId, x, y);
+				if (true == ended) {
+					break;
+				}
+				if (true == GenEventInputExternal(m_inputAreaEvent[iii].generateEventId, x, y)) {
+					ended = true;
+					break;
 				}
 			}
 		}
@@ -133,9 +176,35 @@ bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_
 	return ended;
 }
 
-bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE])
+bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue)
 {
-	return true;
+	bool ended = false;
+	//EWOL_WARNING("Input event : " << IdInput << " pos(" << x << "," << y << ")");
+	for(int32_t iii=m_inputShortCutEvent.Size()-1; iii>=0; iii--) {
+		if(    m_inputShortCutEvent[iii].shift == shift
+		    && m_inputShortCutEvent[iii].control == control
+		    && m_inputShortCutEvent[iii].alt == alt
+		    && m_inputShortCutEvent[iii].meta == meta
+		    && m_inputShortCutEvent[iii].UnicodeValue == unicodeValue)
+		{
+			/*
+			ended = OnEventArea(m_inputShortCutEvent[iii].generateEventId, -1, -1);
+			if (true == ended) {
+				break;
+			}
+			*/
+			if (true == GenEventInputExternal(m_inputShortCutEvent[iii].generateEventId, -1, -1)) {
+				ended = true;
+				break;
+			}
+		}
+	}
+	/*
+	if (false == ended) {
+		return OnEventInput(IdInput, typeEvent, -1, -1);
+	}
+	*/
+	return ended;
 }
 
 
@@ -167,30 +236,66 @@ bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const 
 		return false;
 	}
 	*/
-	event_ts newEvent;
+	eventArea_ts newEvent;
 	newEvent.generateEventId = generateEventId;
-	newEvent.mode = EWOL_EVENT_AREA;
-	newEvent.area.origin.x = origin.x + m_origin.x;
-	newEvent.area.origin.y = origin.y + m_origin.y;
-	newEvent.area.size = size;
-	newEvent.area.flags = flags;
-	m_inputEvent.PushBack(newEvent);
+	newEvent.origin.x = origin.x + m_origin.x;
+	newEvent.origin.y = origin.y + m_origin.y;
+	newEvent.size = size;
+	newEvent.flags = flags;
+	m_inputAreaEvent.PushBack(newEvent);
 	//EWOL_DEBUG("Add an area event...");
 	return true;
 }
 
 
-bool ewol::Widget::AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId)
+bool ewol::Widget::AddEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue, const char * generateEventId)
 {
-	EWOL_TODO("code not writed now...");
+	eventShortCut_ts newEvent;
+	newEvent.generateEventId = generateEventId;
+	newEvent.shift = shift;
+	newEvent.control = control;
+	newEvent.alt = alt;
+	newEvent.meta = meta;
+	newEvent.UnicodeValue = unicodeValue;
+	m_inputShortCutEvent.PushBack(newEvent);
 	return true;
 }
 
 
 bool ewol::Widget::AddEventShortCut(char * descriptiveString, const char * generateEventId)
 {
-	EWOL_TODO("code not writed now...");
-	return true;
+	if(		NULL==descriptiveString
+		||	0==strlen(descriptiveString))
+	{
+		return false;
+	}
+	bool shift = false;
+	bool control = false;
+	bool alt = false;
+	bool meta = false;
+	uint32_t UnicodeValue = 0;
+	
+	// parsing of the string :
+	//"ctrl+shift+alt+meta+s"
+	char * tmp = strstr(descriptiveString, "ctrl");
+	if(NULL != tmp) {
+		control = true;
+	}
+	tmp = strstr(descriptiveString, "shift");
+	if(NULL != tmp) {
+		shift = true;
+	}
+	tmp = strstr(descriptiveString, "alt");
+	if(NULL != tmp) {
+		alt = true;
+	}
+	tmp = strstr(descriptiveString, "meta");
+	if(NULL != tmp) {
+		meta = true;
+	}
+	UnicodeValue = descriptiveString[strlen(descriptiveString) -1];
+	// add with generic Adding function ...
+	return AddEventShortCut(shift, control, alt, meta, UnicodeValue, generateEventId);
 }
 
 

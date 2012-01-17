@@ -46,6 +46,7 @@ namespace guiAbstraction
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
 	void SendKeyboardEvent(bool isDown, etk::String &keyInput);
+	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
 };
 
 //!< must be define in CPP by the application ...

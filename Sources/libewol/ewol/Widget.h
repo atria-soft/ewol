@@ -67,7 +67,36 @@ namespace ewol {
 		EVENT_KB_MOVE_TYPE_PAGE_DOWN,
 		EVENT_KB_MOVE_TYPE_START,
 		EVENT_KB_MOVE_TYPE_END,
+		EVENT_KB_MOVE_TYPE_CENTER,
+		EVENT_KB_MOVE_TYPE_ARRET_DEFIL,
+		EVENT_KB_MOVE_TYPE_WAIT,
+		EVENT_KB_MOVE_TYPE_INSERT,
+		EVENT_KB_MOVE_TYPE_F1,
+		EVENT_KB_MOVE_TYPE_F2,
+		EVENT_KB_MOVE_TYPE_F3,
+		EVENT_KB_MOVE_TYPE_F4,
+		EVENT_KB_MOVE_TYPE_F5,
+		EVENT_KB_MOVE_TYPE_F6,
+		EVENT_KB_MOVE_TYPE_F7,
+		EVENT_KB_MOVE_TYPE_F8,
+		EVENT_KB_MOVE_TYPE_F9,
+		EVENT_KB_MOVE_TYPE_F10,
+		EVENT_KB_MOVE_TYPE_F11,
+		EVENT_KB_MOVE_TYPE_F12,
+		EVENT_KB_MOVE_TYPE_CAPLOCK,
+		EVENT_KB_MOVE_TYPE_SHIFT_LEFT,
+		EVENT_KB_MOVE_TYPE_SHIFT_RIGHT,
+		EVENT_KB_MOVE_TYPE_CTRL_LEFT,
+		EVENT_KB_MOVE_TYPE_CTRL_RIGHT,
+		EVENT_KB_MOVE_TYPE_META_LEFT,
+		EVENT_KB_MOVE_TYPE_META_RIGHT,
+		EVENT_KB_MOVE_TYPE_ALT,
+		EVENT_KB_MOVE_TYPE_ALT_GR,
+		EVENT_KB_MOVE_TYPE_CONTEXT_MENU,
+		EVENT_KB_MOVE_TYPE_VER_NUM,
 	} eventKbMoveType_te;
+	
+	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
 	enum {
 		FLAG_EVENT_INPUT_1               = 1 << 0,
@@ -112,22 +141,18 @@ namespace ewol {
 	extern "C" {
 		typedef struct {
 			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			int32_t mode; //!< EWOL_EVENT_UNION or EWOL_EVENT_SHORTCUT
-			union {
-				struct {
-					bool shift;
-					bool control;
-					bool alt;
-					bool pomme;
-					char UTF8_data[UTF8_MAX_SIZE];
-				} shortCut;
-				struct {
-					coord origin; // widget specific
-					coord size;   // widget specific
-					uint64_t flags; // widget specific
-				} area;
-			};
-		} event_ts;
+			coord origin;   // widget specific
+			coord size;     // widget specific
+			uint64_t flags; // widget specific
+		} eventArea_ts;
+		typedef struct {
+			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
+			bool shift;
+			bool control;
+			bool alt;
+			bool meta;
+			uint32_t UnicodeValue;
+		} eventShortCut_ts;
 		typedef struct {
 			const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
 			int32_t      widgetCall;            //!< unique ID of the widget
@@ -222,23 +247,24 @@ namespace ewol {
 		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			etk::VectorType<event_ts>       m_inputEvent;          //!< generic area and short-cut event
-			etk::VectorType<eventExtern_ts> m_externEvent;         //!< Generic list of event generation for output link
-			etk::VectorType<const char*>    m_ListEventAvaillable; //!< List of all event availlable for this widget
+			etk::VectorType<eventArea_ts>     m_inputAreaEvent;      //!< generic area event
+			etk::VectorType<eventShortCut_ts> m_inputShortCutEvent;  //!< generic short-cut event
+			etk::VectorType<eventExtern_ts>   m_externEvent;         //!< Generic list of event generation for output link
+			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget
 		public:
 			// external acces to set an input event on this widget.
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y);
-			bool GenEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE]);
+			bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
 		protected:
 			void AddEventId(const char * generateEventId) {
 				if (NULL != generateEventId) {
 					m_ListEventAvaillable.PushBack(generateEventId);
 				}
 			}
-			void EventAreaRemoveAll(void) { m_inputEvent.Clear(); };
+			void EventAreaRemoveAll(void) { m_inputAreaEvent.Clear();m_inputShortCutEvent.Clear(); };
 			bool AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId);
-			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, char UTF8_data[UTF8_MAX_SIZE], const char * generateEventId);
+			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, uint32_t unicodeValue, const char * generateEventId);
 			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);
 		public:
 			// to link an extern widget at the internal event of this one it will access by here :
