@@ -254,7 +254,9 @@ class FTFontInternal
 			// a small shortcut
 			FT_GlyphSlot slot = m_fftFace->glyph;
 			
-			EWOL_DEBUG("Max size for ths glyph size=" << size << " is (" << m_fftFace->max_advance_width << "," << m_fftFace->max_advance_height << ")");
+			EWOL_DEBUG("Max size for ths glyph size=" << size << 
+			           " is (" << m_fftFace->max_advance_width << "," << m_fftFace->max_advance_height << ")" <<
+			           "?=(" << (m_fftFace->max_advance_width>>6) << "," << (m_fftFace->max_advance_height>>6) << ")");
 			
 			// retrieve glyph index from character code 
 			int32_t glyph_index = FT_Get_Char_Index(m_fftFace, 'A' );
@@ -272,8 +274,8 @@ class FTFontInternal
 			
 			int32_t nbElement = listElement.Size();
 			int32_t coter = simpleSQRT(nbElement);
-			int32_t glyphMaxWidth = slot->metrics.horiAdvance>>6;
-			int32_t glyphMaxHeight = slot->metrics.vertAdvance>>6;
+			int32_t glyphMaxWidth = /*(m_fftFace->max_advance_width>>6); */slot->metrics.horiAdvance>>6;
+			int32_t glyphMaxHeight = /*(m_fftFace->max_advance_height>>6); */slot->metrics.vertAdvance>>6;
 			int32_t textureWidth = nextP2(coter*glyphMaxWidth);
 			int32_t nbRaws = textureWidth / glyphMaxWidth;
 			int32_t nbLine = (nbElement / nbRaws) + 1;
@@ -281,12 +283,11 @@ class FTFontInternal
 			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 			
 			// Allocate Memory For The Texture Data.
-			GLubyte* expanded_data = new GLubyte[ 2 * textureWidth * textureHeight];
+			GLubyte* expanded_data = new GLubyte[textureWidth * textureHeight];
 			// clean the data : 
 			for(int j=0; j <textureHeight;j++) {
 				for(int i=0; i < textureWidth; i++){
-					expanded_data[2*(i+j*textureWidth)+0] = 0;
-					expanded_data[2*(i+j*textureWidth)+1] = 0;
+					expanded_data[(i+j*textureWidth)] = 0;
 				}
 			}
 			
@@ -319,34 +320,32 @@ class FTFontInternal
 				}
 				int32_t tmpWidth=slot->bitmap.width;
 				int32_t tmpHeight=slot->bitmap.rows;
-				/*
+				
 				EWOL_DEBUG("elem=" << listElement[iii].unicodeCharVal
 				           <<" size=(" << tmpWidth << "," << tmpHeight << ")"
 				           << " for bitmap (left=" << slot->bitmap_left << ",top=" << slot->bitmap_top << ")");
 				EWOL_DEBUG(" BEARING=(" << (slot->metrics.horiBearingX>>6) << "," << (slot->metrics.vertBearingY>>6) << ")" );
-				*/
+				
 				for(int32_t j=0; j < tmpHeight;j++) {
 					for(int32_t i=0; i < tmpWidth; i++){
-						int32_t position = 2*(   (tmpRowId *glyphMaxWidth  + i /*+ (slot->metrics.horiBearingX>>6)*/ )
-						                       + (tmpLineId*glyphMaxHeight + j + (size-(slot->metrics.horiBearingY>>6)) ) * textureWidth);
+						int32_t position =   (   (tmpRowId *glyphMaxWidth  + i /*+ (slot->metrics.horiBearingX>>6)*/ )
+						                   + (tmpLineId*glyphMaxHeight + j + (size-(slot->metrics.horiBearingY>>6)) ) * textureWidth);
 						//EWOL_DEBUG(" BEARING=(" << i << "," << j << ") pos=" << position);
-						expanded_data[position+0] = slot->bitmap.buffer[i + tmpWidth*j];
-						expanded_data[position+1] = slot->bitmap.buffer[i + tmpWidth*j];
+						expanded_data[position] = slot->bitmap.buffer[i + tmpWidth*j];
 					}
 				}
 				listElement[iii].width = glyphMaxWidth;
 				listElement[iii].posStart.u = (etkFloat_t)(tmpRowId *glyphMaxWidth) / (etkFloat_t)textureWidth;
 				listElement[iii].posStart.v = (etkFloat_t)(tmpLineId*glyphMaxHeight) / (etkFloat_t)textureHeight;
 				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (etkFloat_t)textureWidth;
-				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight + 1) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight+1) / (etkFloat_t)textureHeight;
 			}
 			// Now We Just Setup Some Texture Parameters.
 			glBindTexture( GL_TEXTURE_2D, textureId);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 			
-			// Here We Actually Create The Texture Itself, Notice That We Are Using GL_LUMINANCE_ALPHA To Indicate That we Are Using 2 Channel Data.
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, textureWidth, textureHeight, 0, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, expanded_data );
+			glTexImage2D( GL_TEXTURE_2D, 0, GL_ALPHA8, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data );
 			
 			// With The Texture Created, We Don't Need The Expanded Data Anymore.
 			delete [] expanded_data;
@@ -443,7 +442,6 @@ class FTFont{
 		int32_t                                   m_lineHeight;  // nb pixel height
 		int32_t                                   m_interline;   // nb pixel between 2 lines
 		etk::VectorType<freeTypeFontElement_ts>   m_elements;    // 
-		
 };
 
 static etk::VectorType<FTFont*> m_listLoadedFont;
@@ -516,61 +514,6 @@ void ewol::UnloadFont(int32_t id)
 	EWOL_TODO("I do not think it was a good idea... will be done later");
 }
 
-
-
-
-/*
-void ewol::DrawText(int32_t                        fontID,
-                    coord2D_ts &                   drawPosition,
-                    const uniChar_t *              unicodeString,
-                    uint32_t &                     fontTextureId,
-                    etk::VectorType<coord2D_ts> &  coord,
-                    etk::VectorType<texCoord_ts> & coordTex)
-{
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
-		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
-		return;
-	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
-	
-	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t size = m_listLoadedFont[fontID]->GetHeight();
-	
-	etkFloat_t posDrawX = drawPosition.x;
-	while(*unicodeString != 0) {
-		int32_t tmpChar = *unicodeString++;
-		if (tmpChar >= 0x80) {
-			tmpChar = 0;
-		}
-		etkFloat_t sizeWidth = listOfElement[tmpChar].width;
-		if (tmpChar != 0x20) {
-			// set texture coordonates :
-			coordTex.PushBack(listOfElement[tmpChar].posStart);
-			texCoord_ts tmpTex;
-			tmpTex.u = listOfElement[tmpChar].posStop.u;
-			tmpTex.v = listOfElement[tmpChar].posStart.v;
-			coordTex.PushBack(tmpTex);
-			coordTex.PushBack(listOfElement[tmpChar].posStop);
-			tmpTex.u = listOfElement[tmpChar].posStart.u;
-			tmpTex.v = listOfElement[tmpChar].posStop.v;
-			coordTex.PushBack(tmpTex);
-			// set display positions :
-			coord2D_ts tmpCoord;
-			tmpCoord.x = posDrawX;
-			tmpCoord.y = drawPosition.y;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX + sizeWidth;
-			coord.PushBack(tmpCoord);
-			tmpCoord.y = drawPosition.y + size;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX;
-			coord.PushBack(tmpCoord);
-		}
-		posDrawX += sizeWidth;
-	}
-	drawPosition.x = posDrawX;
-}
-*/
 
 void ewol::DrawText(int32_t                        fontID,
                     coord2D_ts &                   drawPosition,
