@@ -665,7 +665,7 @@ namespace guiAbstraction {
 											case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
 											//case 90: // keypad
 											case 118:	keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;			break;
-											case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break;
+											//case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break; // Keypad
 											case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
 											case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;
 											case 69:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F3;				break;
@@ -710,6 +710,11 @@ namespace guiAbstraction {
 													XComposeStatus status;
 													int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
 													buf[count] = '\0';
+													EWOL_WARNING("Unknow event Key : " << event.xkey.keycode << " char=" << (int32_t)buf[0]);
+													if (buf[0] == '\r') {
+														buf[0] = '\n';
+														buf[1] = '\0';
+													}
 													if (count>0) {
 														etk::String tmpData = buf;
 														if(event.type == KeyPress) {
