@@ -60,7 +60,6 @@ extern "C"
 		coord2D_ts  bearing;
 		coord2D_ts  size;
 		int32_t     advance;
-		etkFloat_t  ratio;
 	}freeTypeFontElement_ts;
 };
 
