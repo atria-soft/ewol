@@ -645,25 +645,25 @@ namespace guiAbstraction {
 										bool find = true;
 										ewol::eventKbMoveType_te keyInput;
 										switch (event.xkey.keycode) {
-											case 80: // keypad
+											//case 80: // keypad
 											case 111:	keyInput = ewol::EVENT_KB_MOVE_TYPE_UP;				break;
-											case 83: // keypad
+											//case 83: // keypad
 											case 113:	keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT;			break;
-											case 85: // keypad
+											//case 85: // keypad
 											case 114:	keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT;			break;
-											case 88: // keypad
+											//case 88: // keypad
 											case 116:	keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN;			break;
-											case 81: // keypad
+											//case 81: // keypad
 											case 112:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;		break;
-											case 89: // keypad
+											//case 89: // keypad
 											case 117:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;		break;
-											case 79: // keypad
+											//case 79: // keypad
 											case 110:	keyInput = ewol::EVENT_KB_MOVE_TYPE_START;			break;
-											case 87: // keypad
+											//case 87: // keypad
 											case 115:	keyInput = ewol::EVENT_KB_MOVE_TYPE_END;			break;
 											case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
 											case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
-											case 90: // keypad
+											//case 90: // keypad
 											case 118:	keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;			break;
 											case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break;
 											case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;

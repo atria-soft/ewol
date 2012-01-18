@@ -361,7 +361,7 @@ class FTFontInternal
 				listElement[iii].posStart.u = (etkFloat_t)(tmpRowStartPos) / (etkFloat_t)textureWidth;
 				listElement[iii].posStart.v = (etkFloat_t)(tmpLineStartPos) / (etkFloat_t)textureHeight;
 				listElement[iii].posStop.u  = (etkFloat_t)(tmpRowStartPos + tmpWidth) / (etkFloat_t)textureWidth;
-				listElement[iii].posStop.v  = (etkFloat_t)(tmpLineStartPos + tmpHeight+1) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.v  = (etkFloat_t)(tmpLineStartPos + tmpHeight) / (etkFloat_t)textureHeight;
 				
 				// update the maximum of the line hight : 
 				if (CurrentLineHigh<tmpHeight) {
@@ -548,7 +548,7 @@ void ewol::UnloadFont(int32_t id)
 }
 
 
-int32_t ewol::DrawText(int32_t                        fontID,
+int32_t ewol::DrawText(int32_t                     fontID,
                     coord2D_ts &                   drawPosition,
                     coord2D_ts &                   clipSize,
                     const char *                   utf8String,
@@ -681,6 +681,19 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	drawPosition.x = posDrawX;
 	return sizeOut;
 }
+/*
+int32_t ewol::DrawText(int32_t                     fontID,
+                    coord2D_ts &                   drawPosition,
+                    coord2D_ts &                   clipSize,
+                    const char *                   utf8String,
+                    uint32_t &                     fontTextureId,
+                    etk::VectorType<coord2D_ts> &  coord,
+                    etk::VectorType<texCoord_ts> & coordTex)
+{
+	uniChar_t
+}
+*/
+
 
 int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
 {
