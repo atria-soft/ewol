@@ -52,12 +52,15 @@
 
 extern "C"
 {
+	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 	typedef struct {
 		uniChar_t   unicodeCharVal;
-		int32_t     width;
 		texCoord_ts posStart;
 		texCoord_ts posStop;
-		etkFloat_t ratio;
+		coord2D_ts  bearing;
+		coord2D_ts  size;
+		int32_t     advance;
+		etkFloat_t  ratio;
 	}freeTypeFontElement_ts;
 };
 
@@ -278,24 +281,33 @@ class FTFontInternal
 			int32_t glyphMaxHeight = /*(m_fftFace->max_advance_height>>6); */slot->metrics.vertAdvance>>6;
 			int32_t textureWidth = nextP2(coter*glyphMaxWidth);
 			int32_t nbRaws = textureWidth / glyphMaxWidth;
+			if (nbRaws <= 0) {
+				EWOL_ERROR("devide by 0");
+				nbRaws = 1;
+			}
 			int32_t nbLine = (nbElement / nbRaws) + 1;
 			int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
 			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 			
 			// Allocate Memory For The Texture Data.
 			GLubyte* expanded_data = new GLubyte[textureWidth * textureHeight];
+			if (NULL == expanded_data) {
+				EWOL_ERROR("Allocation tmp data ERROR");
+				return false;
+			}
 			// clean the data : 
 			for(int j=0; j <textureHeight;j++) {
 				for(int i=0; i < textureWidth; i++){
 					expanded_data[(i+j*textureWidth)] = 0;
 				}
 			}
-			
-			int32_t tmpRowId = 0;
-			int32_t tmpLineId = 0;
+			int32_t tmpRowStartPos = 0;
+			int32_t tmpLineStartPos = 0;
+			int32_t CurrentLineHigh = 0;
 			// Generate for All Elements :
 			for (int32_t iii=0; iii<listElement.Size(); iii++) {
 				// increment the position of the texture
+				/*
 				if (iii!=0) {
 					tmpRowId++;
 					if (tmpRowId>=nbRaws) {
@@ -303,6 +315,7 @@ class FTFontInternal
 						tmpLineId++;
 					}
 				}
+				*/
 				// retrieve glyph index from character code 
 				glyph_index = FT_Get_Char_Index(m_fftFace, listElement[iii].unicodeCharVal );
 				// load glyph image into the slot (erase previous one)
@@ -320,6 +333,14 @@ class FTFontInternal
 				}
 				int32_t tmpWidth=slot->bitmap.width;
 				int32_t tmpHeight=slot->bitmap.rows;
+				// check if we have enought place on the bitmap to add the current element : 
+				if (tmpRowStartPos+tmpWidth >= textureWidth) {
+					tmpRowStartPos = 0;
+					tmpLineStartPos += CurrentLineHigh;
+					CurrentLineHigh = 0;
+					EWOL_ASSERT(tmpLineStartPos+tmpHeight < textureHeight, "Texture dimention estimatiuon error for the current Font");
+				}
+				
 				
 				EWOL_DEBUG("elem=" << listElement[iii].unicodeCharVal
 				           <<" size=(" << tmpWidth << "," << tmpHeight << ")"
@@ -328,17 +349,30 @@ class FTFontInternal
 				
 				for(int32_t j=0; j < tmpHeight;j++) {
 					for(int32_t i=0; i < tmpWidth; i++){
-						int32_t position =   (   (tmpRowId *glyphMaxWidth  + i /*+ (slot->metrics.horiBearingX>>6)*/ )
-						                   + (tmpLineId*glyphMaxHeight + j + (size-(slot->metrics.horiBearingY>>6)) ) * textureWidth);
-						//EWOL_DEBUG(" BEARING=(" << i << "," << j << ") pos=" << position);
+						int32_t position =   (tmpRowStartPos  + i )
+						                   + (tmpLineStartPos + j ) * textureWidth;
 						expanded_data[position] = slot->bitmap.buffer[i + tmpWidth*j];
 					}
 				}
-				listElement[iii].width = glyphMaxWidth;
-				listElement[iii].posStart.u = (etkFloat_t)(tmpRowId *glyphMaxWidth) / (etkFloat_t)textureWidth;
-				listElement[iii].posStart.v = (etkFloat_t)(tmpLineId*glyphMaxHeight) / (etkFloat_t)textureHeight;
-				listElement[iii].posStop.u = (etkFloat_t)(tmpRowId *glyphMaxWidth + glyphMaxWidth) / (etkFloat_t)textureWidth;
-				listElement[iii].posStop.v = (etkFloat_t)(tmpLineId*glyphMaxHeight + glyphMaxHeight+1) / (etkFloat_t)textureHeight;
+				listElement[iii].bearing.x  = slot->metrics.horiBearingX>>6;
+				listElement[iii].bearing.y  = slot->metrics.horiBearingY>>6;
+				listElement[iii].size.x     = tmpWidth;
+				listElement[iii].size.y     = tmpHeight;
+				listElement[iii].advance    = slot->metrics.horiAdvance>>6;
+				listElement[iii].posStart.u = (etkFloat_t)(tmpRowStartPos) / (etkFloat_t)textureWidth;
+				listElement[iii].posStart.v = (etkFloat_t)(tmpLineStartPos) / (etkFloat_t)textureHeight;
+				listElement[iii].posStop.u  = (etkFloat_t)(tmpRowStartPos + tmpWidth) / (etkFloat_t)textureWidth;
+				listElement[iii].posStop.v  = (etkFloat_t)(tmpLineStartPos + tmpHeight+1) / (etkFloat_t)textureHeight;
+				
+				// update the maximum of the line hight : 
+				if (CurrentLineHigh<tmpHeight) {
+					CurrentLineHigh = tmpHeight;
+				}
+				// update the Bitmap position drawing : 
+				tmpRowStartPos += tmpWidth;
+				
+				
+				
 			}
 			// Now We Just Setup Some Texture Parameters.
 			glBindTexture( GL_TEXTURE_2D, textureId);
@@ -493,7 +527,7 @@ int32_t ewol::GetDefaultFontId(void)
 int32_t ewol::LoadFont(etk::String fontName, int32_t size)
 {
 	// check if folder file
-	etk::String tmpFileName = s_currentFolderName + "/" + fontName + ".ttf";
+	etk::String tmpFileName = s_currentFolderName + "/" + fontName;
 	etk::File fileName(tmpFileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("Font does not exist: \"" << fileName.GetCompleateName() << "\"");
@@ -515,7 +549,7 @@ void ewol::UnloadFont(int32_t id)
 }
 
 
-void ewol::DrawText(int32_t                        fontID,
+int32_t ewol::DrawText(int32_t                        fontID,
                     coord2D_ts &                   drawPosition,
                     coord2D_ts &                   clipSize,
                     const char *                   utf8String,
@@ -539,13 +573,14 @@ void ewol::DrawText(int32_t                        fontID,
 	*/
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
-		return;
+		return 0;
 	}
 	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	char * tmpVal = (char*)utf8String;
 	
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t size = m_listLoadedFont[fontID]->GetHeight();
+	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 	
 	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != 0) {
@@ -567,7 +602,7 @@ void ewol::DrawText(int32_t                        fontID,
 			// TODO : Update if possible the mapping
 			charIndex = 0;
 		}
-		etkFloat_t sizeWidth = listOfElement[charIndex].width;
+		etkFloat_t sizeWidth = listOfElement[charIndex].advance;
 		// check the clipping
 		if (clipSize.x>0 && posDrawX+sizeWidth > clipSize.x) {
 			// TODO : Create a better clipping methode ...
@@ -575,7 +610,39 @@ void ewol::DrawText(int32_t                        fontID,
 		}
 		// 0x01 == 0x20 == ' ';
 		if (tmpChar != 0x01) {
-
+			/* Bitmap position
+			 *   0------1
+			 *   |      |
+			 *   |      |
+			 *   3------2
+			 */
+			coord2D_ts bitmapDrawPos[4];
+			bitmapDrawPos[0].x = posDrawX + listOfElement[charIndex].bearing.x;
+			bitmapDrawPos[1].x = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+			bitmapDrawPos[2].x = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+			bitmapDrawPos[3].x = posDrawX + listOfElement[charIndex].bearing.x;
+			
+			bitmapDrawPos[0].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y;
+			bitmapDrawPos[1].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y;
+			bitmapDrawPos[2].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			bitmapDrawPos[3].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			/* texture Position : 
+			 *   0------1
+			 *   |      |
+			 *   |      |
+			 *   3------2
+			 */
+			texCoord_ts texturePos[4];
+			texturePos[0].u = listOfElement[charIndex].posStart.u;
+			texturePos[1].u = listOfElement[charIndex].posStop.u;
+			texturePos[2].u = listOfElement[charIndex].posStop.u;
+			texturePos[3].u = listOfElement[charIndex].posStart.u;
+			
+			texturePos[0].v = listOfElement[charIndex].posStart.v;
+			texturePos[1].v = listOfElement[charIndex].posStart.v;
+			texturePos[2].v = listOfElement[charIndex].posStop.v;
+			texturePos[3].v = listOfElement[charIndex].posStop.v;
+			
 			// NOTE : Android does not support the Quads elements ...
 			/* Step 1 : 
 			 *   ********     
@@ -585,21 +652,13 @@ void ewol::DrawText(int32_t                        fontID,
 			 *                
 			 */
 			// set texture coordonates :
-			coordTex.PushBack(listOfElement[charIndex].posStart);
-			texCoord_ts tmpTex;
-			tmpTex.u = listOfElement[charIndex].posStop.u;
-			tmpTex.v = listOfElement[charIndex].posStart.v;
-			coordTex.PushBack(tmpTex);
-			coordTex.PushBack(listOfElement[charIndex].posStop);
+			coordTex.PushBack(texturePos[0]);
+			coordTex.PushBack(texturePos[1]);
+			coordTex.PushBack(texturePos[2]);
 			// set display positions :
-			coord2D_ts tmpCoord;
-			tmpCoord.x = posDrawX;
-			tmpCoord.y = drawPosition.y;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX + sizeWidth;
-			coord.PushBack(tmpCoord);
-			tmpCoord.y = drawPosition.y + size;
-			coord.PushBack(tmpCoord);
+			coord.PushBack(bitmapDrawPos[0]);
+			coord.PushBack(bitmapDrawPos[1]);
+			coord.PushBack(bitmapDrawPos[2]);
 			
 			/* Step 2 : 
 			 *              
@@ -608,28 +667,20 @@ void ewol::DrawText(int32_t                        fontID,
 			 *   ******     
 			 *   ********   
 			 */
-			
 			// set texture coordonates :
-			coordTex.PushBack(listOfElement[charIndex].posStart);
-			coordTex.PushBack(listOfElement[charIndex].posStop);
-			tmpTex.u = listOfElement[charIndex].posStart.u;
-			tmpTex.v = listOfElement[charIndex].posStop.v;
-			coordTex.PushBack(tmpTex);
-			
+			coordTex.PushBack(texturePos[0]);
+			coordTex.PushBack(texturePos[2]);
+			coordTex.PushBack(texturePos[3]);
 			// set display positions :
-			tmpCoord.x = posDrawX;
-			tmpCoord.y = drawPosition.y;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX + sizeWidth;
-			tmpCoord.y = drawPosition.y + size;
-			coord.PushBack(tmpCoord);
-			tmpCoord.x = posDrawX;
-			coord.PushBack(tmpCoord);
+			coord.PushBack(bitmapDrawPos[0]);
+			coord.PushBack(bitmapDrawPos[2]);
+			coord.PushBack(bitmapDrawPos[3]);
 		}
 		posDrawX += sizeWidth;
 	}
+	int32_t sizeOut = posDrawX - drawPosition.x;
 	drawPosition.x = posDrawX;
-	
+	return sizeOut;
 }
 
 int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
@@ -661,7 +712,7 @@ int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
 			// TODO : Update if possible the mapping
 			charIndex = 0;
 		}
-		posDrawX += listOfElement[charIndex].width;
+		posDrawX += listOfElement[charIndex].advance;
 	}
 	return posDrawX;
 }

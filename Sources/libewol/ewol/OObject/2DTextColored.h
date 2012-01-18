@@ -39,8 +39,8 @@ namespace ewol {
 			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
 			void SetColor(color_ts color);
 			// set a specific text
-			void Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
-			void TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
+			int32_t Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
+			int32_t TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_color;         //!< tmp text color ...

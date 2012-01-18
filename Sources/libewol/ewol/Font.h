@@ -87,7 +87,7 @@ namespace ewol
 	int32_t     GetHeight(int32_t fontID);
 	
 	
-	void        DrawText(int32_t                        fontID,
+	int32_t     DrawText(int32_t                        fontID,
 	                     coord2D_ts &                   drawPosition,
 	                     coord2D_ts &                   clipSize,
 	                     const char *                   utf8String,
