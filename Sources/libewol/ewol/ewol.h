@@ -43,6 +43,15 @@ namespace ewol {
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
+	
+	bool IsSetCapsLock(void);
+	bool IsSetShift(void);
+	bool IsSetCtrl(void);
+	bool IsSetMeta(void);
+	bool IsSetAlt(void);
+	bool IsSetAltGr(void);
+	bool IsSetVerNum(void);
+	bool IsSetInsert(void);
 };
 
 

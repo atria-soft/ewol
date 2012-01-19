@@ -94,6 +94,15 @@ static int VisualData[] = {
 #endif
 
 
+extern bool guiKeyBoardMode_CapLock;
+extern bool guiKeyBoardMode_Shift;
+extern bool guiKeyBoardMode_Ctrl;
+extern bool guiKeyBoardMode_Meta;
+extern bool guiKeyBoardMode_Alt;
+extern bool guiKeyBoardMode_AltGr;
+extern bool guiKeyBoardMode_VerNum;
+extern bool guiKeyBoardMode_Insert;
+
 namespace guiAbstraction {
 	extern "C" {
 		typedef struct Hints
@@ -641,7 +650,52 @@ namespace guiAbstraction {
 								case KeyRelease:
 									//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 									{
-										EWOL_DEBUG("eventKey : " << event.xkey.keycode);
+										EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+										if (event.xkey.state & (1<<0) ) {
+											//EWOL_DEBUG("    Special Key : SHIFT");
+											guiKeyBoardMode_Shift = true;
+										} else {
+											guiKeyBoardMode_Shift = false;
+										}
+										if (event.xkey.state & (1<<1) ) {
+											//EWOL_DEBUG("    Special Key : CAPS_LOCK");
+											guiKeyBoardMode_CapLock = true;
+										} else {
+											guiKeyBoardMode_CapLock = false;
+										}
+										if (event.xkey.state & (1<<2) ) {
+											//EWOL_DEBUG("    Special Key : Ctrl");
+											guiKeyBoardMode_Ctrl = true;
+										} else {
+											guiKeyBoardMode_Ctrl = false;
+										}
+										if (event.xkey.state & (1<<3) ) {
+											//EWOL_DEBUG("    Special Key : Alt");
+											guiKeyBoardMode_Alt = true;
+										} else {
+											guiKeyBoardMode_Alt = false;
+										}
+										if (event.xkey.state & (1<<4) ) {
+											//EWOL_DEBUG("    Special Key : VER_num");
+											guiKeyBoardMode_VerNum = true;
+										} else {
+											guiKeyBoardMode_VerNum = false;
+										}
+										if (event.xkey.state & (1<<5) ) {
+											EWOL_DEBUG("    Special Key : MOD");
+										}
+										if (event.xkey.state & (1<<6) ) {
+											//EWOL_DEBUG("    Special Key : META");
+											guiKeyBoardMode_Meta = true;
+										} else {
+											guiKeyBoardMode_Meta = false;
+										}
+										if (event.xkey.state & (1<<7) ) {
+											//EWOL_DEBUG("    Special Key : ALT_GR");
+											guiKeyBoardMode_AltGr = true;
+										} else {
+											guiKeyBoardMode_AltGr = false;
+										}
 										bool find = true;
 										ewol::eventKbMoveType_te keyInput;
 										switch (event.xkey.keycode) {
@@ -664,7 +718,16 @@ namespace guiAbstraction {
 											case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
 											case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
 											//case 90: // keypad
-											case 118:	keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;			break;
+											case 118:
+												keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+												if(event.type == KeyRelease) {
+													if (true == guiKeyBoardMode_Insert) {
+														guiKeyBoardMode_Insert = false;
+													} else {
+														guiKeyBoardMode_Insert = true;
+													}
+												}
+												break;
 											//case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break; // Keypad
 											case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
 											case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;

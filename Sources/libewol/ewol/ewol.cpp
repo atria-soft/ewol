@@ -86,3 +86,53 @@ void ewol::ForceRedrawAll(void)
 }
 
 
+bool guiKeyBoardMode_CapLock = false;
+bool ewol::IsSetCapsLock(void)
+{
+	return guiKeyBoardMode_CapLock;
+}
+
+bool guiKeyBoardMode_Shift = false;
+bool ewol::IsSetShift(void)
+{
+	return guiKeyBoardMode_Shift;
+}
+
+bool guiKeyBoardMode_Ctrl = false;
+bool ewol::IsSetCtrl(void)
+{
+	return guiKeyBoardMode_Ctrl;
+}
+
+bool guiKeyBoardMode_Meta = false;
+bool ewol::IsSetMeta(void)
+{
+	return guiKeyBoardMode_Meta;
+}
+
+bool guiKeyBoardMode_Alt = false;
+bool ewol::IsSetAlt(void)
+{
+	return guiKeyBoardMode_Alt;
+}
+
+bool guiKeyBoardMode_AltGr = false;
+bool ewol::IsSetAltGr(void)
+{
+	return guiKeyBoardMode_AltGr;
+}
+
+bool guiKeyBoardMode_VerNum = false;
+bool ewol::IsSetVerNum(void)
+{
+	return guiKeyBoardMode_VerNum;
+}
+
+bool guiKeyBoardMode_Insert = false;
+bool ewol::IsSetInsert(void)
+{
+	return guiKeyBoardMode_Insert;
+}
+
+
+
