@@ -681,18 +681,172 @@ int32_t ewol::DrawText(int32_t                     fontID,
 	drawPosition.x = posDrawX;
 	return sizeOut;
 }
-/*
-int32_t ewol::DrawText(int32_t                     fontID,
-                    coord2D_ts &                   drawPosition,
-                    coord2D_ts &                   clipSize,
-                    const char *                   utf8String,
-                    uint32_t &                     fontTextureId,
-                    etk::VectorType<coord2D_ts> &  coord,
-                    etk::VectorType<texCoord_ts> & coordTex)
+
+int32_t ewol::DrawText(int32_t                        fontID,
+                       coord2D_ts                     textPos,
+                       coord2D_ts &                   drawOrigin,
+                       coord2D_ts &                   drawSize,
+                       const uniChar_t *              unicodeString,
+                       uint32_t &                     fontTextureId,
+                       etk::VectorType<coord2D_ts> &  coord,
+                       etk::VectorType<texCoord_ts> & coordTex)
 {
-	uniChar_t
+	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return 0;
+	}
+	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	uniChar_t * tmpVal = (uniChar_t *)unicodeString;
+	
+	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
+	int32_t size = m_listLoadedFont[fontID]->GetHeight();
+	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
+
+	etkFloat_t posDrawX = textPos.x;
+	
+	while(*tmpVal != 0) {
+		int32_t tmpChar = *tmpVal++;
+		int32_t charIndex;
+		if (tmpChar >= 0x80) {
+			charIndex = 0;
+		} else if (tmpChar < 0x20) {
+			charIndex = 0;
+		} else if (tmpChar < 0x80) {
+			charIndex = tmpChar - 0x1F;
+		} else {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+				if (listOfElement[iii].unicodeCharVal == tmpChar) {
+					charIndex = iii;
+					break;
+				}
+			}
+			// TODO : Update if possible the mapping
+			charIndex = 0;
+		}
+		// 0x01 == 0x20 == ' ';
+		if (tmpChar != 0x01) {
+			/* Bitmap position
+			 *      xA     xB
+			 *   yC *------*
+			 *      |      |
+			 *      |      |
+			 *   yD *------*
+			 */
+			etkFloat_t dxA = posDrawX + listOfElement[charIndex].bearing.x;
+			etkFloat_t dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+			etkFloat_t dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
+			etkFloat_t dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			
+			etkFloat_t tuA = listOfElement[charIndex].posStart.u;
+			etkFloat_t tuB = listOfElement[charIndex].posStop.u;
+			etkFloat_t tvC = listOfElement[charIndex].posStart.v;
+			etkFloat_t tvD = listOfElement[charIndex].posStop.v;
+			
+			
+			// Clipping and drawing area
+			coord2D_ts drawStart = drawOrigin;
+			coord2D_ts drawStop;
+			drawStop.x = drawOrigin.x + drawSize.x;
+			drawStop.y = drawOrigin.y + drawSize.y;
+			// TODO : clipping in Y too ...
+			if(    dxB < drawStart.x
+			    || dxA > drawStop.x)
+			{
+				// Nothing to diplay ...
+			} else {
+				// generata positions...
+				etkFloat_t TexSizeX = tuB - tuA;
+				if (dxA < drawStart.x) {
+					// clip display
+					etkFloat_t drawSize = drawStart.x - dxA;
+					// Update element start display
+					dxA = drawStart.x;
+					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+					// update texture start X Pos
+					tuA += addElement;
+				}
+				if (dxB < drawStop.x) {
+					// clip display
+					etkFloat_t drawSize = dxB - drawStop.x;
+					// Update element start display
+					dxB = drawStop.x;
+					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+					// update texture start X Pos
+					tuB -= addElement;
+				}
+				/* Bitmap position
+				 *   0------1
+				 *   |      |
+				 *   |      |
+				 *   3------2
+				 */
+				coord2D_ts bitmapDrawPos[4];
+				bitmapDrawPos[0].x = dxA;
+				bitmapDrawPos[1].x = dxB;
+				bitmapDrawPos[2].x = dxB;
+				bitmapDrawPos[3].x = dxA;
+				
+				bitmapDrawPos[0].y = dyC;
+				bitmapDrawPos[1].y = dyC;
+				bitmapDrawPos[2].y = dyD;
+				bitmapDrawPos[3].y = dyD;
+				/* texture Position : 
+				 *   0------1
+				 *   |      |
+				 *   |      |
+				 *   3------2
+				 */
+				texCoord_ts texturePos[4];
+				texturePos[0].u = tuA;
+				texturePos[1].u = tuB;
+				texturePos[2].u = tuB;
+				texturePos[3].u = tuA;
+				
+				texturePos[0].v = tvC;
+				texturePos[1].v = tvC;
+				texturePos[2].v = tvD;
+				texturePos[3].v = tvD;
+				
+				// NOTE : Android does not support the Quads elements ...
+				/* Step 1 : 
+				 *   ********     
+				 *     ******     
+				 *       ****     
+				 *         **     
+				 *                
+				 */
+				// set texture coordonates :
+				coordTex.PushBack(texturePos[0]);
+				coordTex.PushBack(texturePos[1]);
+				coordTex.PushBack(texturePos[2]);
+				// set display positions :
+				coord.PushBack(bitmapDrawPos[0]);
+				coord.PushBack(bitmapDrawPos[1]);
+				coord.PushBack(bitmapDrawPos[2]);
+				
+				/* Step 2 : 
+				 *              
+				 *   **         
+				 *   ****       
+				 *   ******     
+				 *   ********   
+				 */
+				// set texture coordonates :
+				coordTex.PushBack(texturePos[0]);
+				coordTex.PushBack(texturePos[2]);
+				coordTex.PushBack(texturePos[3]);
+				// set display positions :
+				coord.PushBack(bitmapDrawPos[0]);
+				coord.PushBack(bitmapDrawPos[2]);
+				coord.PushBack(bitmapDrawPos[3]);
+			}
+		}
+		posDrawX += listOfElement[charIndex].advance;
+	}
+	int32_t sizeOut = posDrawX - textPos.x;
+	textPos.x = posDrawX;
+	return sizeOut;
 }
-*/
 
 
 int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
