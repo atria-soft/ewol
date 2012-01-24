@@ -41,7 +41,7 @@ namespace ewol {
 			// set a specific text
 			int32_t Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
 			int32_t TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
-			int32_t TextAdd(coord2D_ts textPos, coord2D_ts drawOrigin, coord2D_ts drawSize, const uniChar_t* unicodeString);
+			int32_t TextAdd(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t* unicodeString);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_color;         //!< tmp text color ...

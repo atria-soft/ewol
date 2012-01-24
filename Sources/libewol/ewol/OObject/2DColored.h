@@ -51,6 +51,7 @@ namespace ewol {
 			void SetPoint(etkFloat_t x, etkFloat_t y);
 			void Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness);
 			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h);
+			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, clipping_ts& drawClipping);
 			//void RectangleAngle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t angle);
 			void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness);
 			//void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness, etkFloat_t angle);

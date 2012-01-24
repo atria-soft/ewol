@@ -675,8 +675,7 @@ int32_t ewol::DrawText(int32_t                     fontID,
 
 int32_t ewol::DrawText(int32_t                        fontID,
                        coord2D_ts                     textPos,
-                       coord2D_ts &                   drawOrigin,
-                       coord2D_ts &                   drawSize,
+                       clipping_ts &                  drawClipping,
                        const uniChar_t *              unicodeString,
                        uint32_t &                     fontTextureId,
                        etk::VectorType<coord2D_ts> &  coord,
@@ -735,32 +734,28 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			
 			
 			// Clipping and drawing area
-			coord2D_ts drawStart = drawOrigin;
-			coord2D_ts drawStop;
-			drawStop.x = drawOrigin.x + drawSize.x;
-			drawStop.y = drawOrigin.y + drawSize.y;
 			// TODO : clipping in Y too ...
-			if(    dxB < drawStart.x
-			    || dxA > drawStop.x)
+			if(    dxB < drawClipping.x
+			    || dxA > drawClipping.x + drawClipping.w)
 			{
 				// Nothing to diplay ...
 			} else {
 				// generata positions...
 				etkFloat_t TexSizeX = tuB - tuA;
-				if (dxA < drawStart.x) {
+				if (dxA < drawClipping.x) {
 					// clip display
-					etkFloat_t drawSize = drawStart.x - dxA;
+					etkFloat_t drawSize = drawClipping.x - dxA;
 					// Update element start display
-					dxA = drawStart.x;
+					dxA = drawClipping.x;
 					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 					// update texture start X Pos
 					tuA += addElement;
 				}
-				if (dxB > drawStop.x) {
+				if (dxB > drawClipping.x + drawClipping.w) {
 					// clip display
-					etkFloat_t drawSize = dxB - drawStop.x;
+					etkFloat_t drawSize = dxB - (drawClipping.x + drawClipping.w);
 					// Update element start display
-					dxB = drawStop.x;
+					dxB = drawClipping.x + drawClipping.w;
 					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 					// update texture start X Pos
 					tuB -= addElement;

@@ -450,6 +450,47 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 	SetPoint(x    , y + h);
 }
 
+
+void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, clipping_ts& drawClipping)
+{
+	ResetCount();
+	
+	/* Bitmap position
+	 *      xA     xB
+	 *   yC *------*
+	 *      |      |
+	 *      |      |
+	 *   yD *------*
+	 */
+	etkFloat_t dxA = x;
+	etkFloat_t dxB = y;
+	etkFloat_t dyC = x + w;
+	etkFloat_t dyD = y + h;
+	
+	
+	if (dxA < drawClipping.x) {
+		dxA = drawClipping.x;
+	}
+	if (dxB > drawClipping.x + drawClipping.w) {
+		dxB = drawClipping.x + drawClipping.w;
+	}
+	if (dyC < drawClipping.y) {
+		dyC = drawClipping.y;
+	}
+	if (dyD > drawClipping.y + drawClipping.h) {
+		dyD = drawClipping.y + drawClipping.h;
+	}
+	
+
+	SetPoint(dxA, dyD);
+	SetPoint(dxA, dxB);
+	SetPoint(dyC, dxB);
+
+	SetPoint(dyC, dxB);
+	SetPoint(dyC, dyD);
+	SetPoint(dxA, dyD);
+}
+
 void ewol::OObject2DColored::RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness)
 {
 	// TODO : This did not manage the thickness of the line ...

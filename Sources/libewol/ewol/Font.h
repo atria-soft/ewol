@@ -96,8 +96,7 @@ namespace ewol
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     coord2D_ts                     textPos,
-	                     coord2D_ts&                    drawOrigin,
-	                     coord2D_ts&                    drawSize,
+	                     clipping_ts &                  drawClipping,
 	                     const uniChar_t *              unicodeString,
 	                     uint32_t &                     fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,

@@ -100,6 +100,14 @@ extern "C"
 		etkFloat_t u;
 		etkFloat_t v;
 	}texCoord_ts;
+	
+	typedef struct {
+		etkFloat_t x;
+		etkFloat_t y;
+		etkFloat_t w;
+		etkFloat_t h;
+	}clipping_ts;
+	
 	typedef struct {
 		etkFloat_t red;
 		etkFloat_t green;
