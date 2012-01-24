@@ -23,9 +23,9 @@
  */
 
 
-#include <tools_debug.h>
-#include <tools_globals.h>
-#include <charsetTable.h>
+#include <etk/Types.h>
+#include <etk/Debug.h>
+#include <etk/unicodeTable.h>
 
 extern "C" {
 

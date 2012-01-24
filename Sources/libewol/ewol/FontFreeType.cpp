@@ -27,15 +27,6 @@
 #include <ewol/Texture.h>
 #include <etk/VectorType.h>
 
-/*
-#include <GL/glx.h>
-#include <GL/glut.h>
-#if defined(EWOL_X11_MODE__XF86V)
-#	include <X11/extensions/xf86vmode.h>
-#elif defined(EWOL_X11_MODE__XRENDER)
-#	include <X11/extensions/Xrender.h>
-#endif
-*/
 #include <ewol/importgl.h>
 #if defined(__PLATFORM__Linux)
 #	include <ft2build.h>
@@ -765,7 +756,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 					// update texture start X Pos
 					tuA += addElement;
 				}
-				if (dxB < drawStop.x) {
+				if (dxB > drawStop.x) {
 					// clip display
 					etkFloat_t drawSize = dxB - drawStop.x;
 					// Update element start display
@@ -846,6 +837,40 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	int32_t sizeOut = posDrawX - textPos.x;
 	textPos.x = posDrawX;
 	return sizeOut;
+}
+
+int32_t ewol::GetWidth(int32_t fontID, const uniChar_t * unicodeString)
+{
+	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
+		return 0;
+	}
+	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	uniChar_t * tmpVal = (uniChar_t*)unicodeString;
+	
+	etkFloat_t posDrawX = 0.0;
+	while(*tmpVal != 0) {
+		int32_t tmpChar = *tmpVal++;
+		int32_t charIndex;
+		if (tmpChar >= 0x80) {
+			charIndex = 0;
+		} else if (tmpChar < 0x20) {
+			charIndex = 0;
+		} else if (tmpChar < 0x80) {
+			charIndex = tmpChar - 0x1F;
+		} else {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+				if (listOfElement[iii].unicodeCharVal == tmpChar) {
+					charIndex = iii;
+					break;
+				}
+			}
+			// TODO : Update if possible the mapping
+			charIndex = 0;
+		}
+		posDrawX += listOfElement[charIndex].advance;
+	}
+	return posDrawX;
 }
 
 

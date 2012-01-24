@@ -24,16 +24,15 @@
 
 // cf : http://unicode.org/fr/charts/symbols.html#CombiningDiacriticalMarks
 
-#include <tools_debug.h>
-#include <tools_globals.h>
-#include <charsetTable.h>
-#include <charset.h>
+#include <etk/Types.h>
+#include <etk/Debug.h>
+#include <etk/unicodeTable.h>
+#include <etk/unicode.h>
 
-//    /usr/include/gtk-3.0/gdk/gdkkeysyms.h
 
 
 // transform ISO <==> Unicode
-void etk::unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, uniChar_t & output_Unicode)
+void unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, uniChar_t & output_Unicode)
 {
 	switch(inputCharset)
 	{
@@ -59,16 +58,16 @@ void etk::unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, 
 			#endif
 			break;
 		default :
-			EDN_WARNING("Unknow charset ... " <<  inputCharset);
+			TK_WARNING("Unknow charset ... " << inputCharset);
 			output_Unicode = '?';
 			break;
 	}
 }
 
 
-void etk::unicode::convertUnicodeToIso(charset_te inputCharset, uniChar_t input_Unicode, char & output_ISO)
+void unicode::convertUnicodeToIso(charset_te inputCharset, uniChar_t input_Unicode, char & output_ISO)
 {
-	const int32_t *tmpTable = NULL;
+	const uniChar_t *tmpTable = NULL;
 	switch(inputCharset)
 	{
 		case EDN_CHARSET_ISO_8859_1:		tmpTable = TableIso8859_1;		break;
@@ -86,7 +85,7 @@ void etk::unicode::convertUnicodeToIso(charset_te inputCharset, uniChar_t input_
 		case EDN_CHARSET_ISO_8859_14:		tmpTable = TableIso8859_14;		break;
 		case EDN_CHARSET_ISO_8859_15:		tmpTable = TableIso8859_15;		break;
 		default :
-			EDN_WARNING("Unknow charset ... " <<  inputCharset);
+			TK_WARNING("Unknow charset ... " <<  inputCharset);
 			output_ISO = '?';
 			return;
 	}
@@ -100,16 +99,16 @@ void etk::unicode::convertUnicodeToIso(charset_te inputCharset, uniChar_t input_
 }
 
 
-int32_t etk::unicode::convertIsoToUnicode(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<uniChar_t>& output_Unicode)
+int32_t unicode::convertIsoToUnicode(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
 
-int32_t etk::unicode::convertUnicodeToIso(charset_te inputCharset, etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>&    output_ISO)
+int32_t unicode::convertUnicodeToIso(charset_te inputCharset, etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>&    output_ISO)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
@@ -141,7 +140,7 @@ static uint32_t unicodeToUtf8(uniChar_t value)
 		output+= (value & 0x00000FC0)<<2;
 		output+=  value & 0x0000003F;
 	} else {
-		EDN_ERROR("NON UTF8 caracter input...");
+		TK_ERROR("NON UTF8 caracter input...");
 		return 0;
 	}
 	//printf("utf8convertion : %d=%08x ==> %08x\n",value, value, output);
@@ -150,7 +149,7 @@ static uint32_t unicodeToUtf8(uniChar_t value)
 
 
 // Transform UTF-8 <==> Unicode
-void etk::unicode::convertUnicodeToUtf8(uniChar_t input_Unicode, char * output_UTF8)
+void unicode::convertUnicodeToUtf8(uniChar_t input_Unicode, char * output_UTF8)
 {
 	uint32_t value = unicodeToUtf8(input_Unicode);
 	if (0xFF >= value) {
@@ -176,7 +175,7 @@ void etk::unicode::convertUnicodeToUtf8(uniChar_t input_Unicode, char * output_U
 
 
 
-void etk::unicode::convertUtf8ToUnicode(char * input_UTF8, uniChar_t &output_Unicode)
+void unicode::convertUtf8ToUnicode(char * input_UTF8, uniChar_t &output_Unicode)
 {
 	int32_t len = strlen(input_UTF8);
 	output_Unicode = 0;
@@ -203,24 +202,24 @@ void etk::unicode::convertUtf8ToUnicode(char * input_UTF8, uniChar_t &output_Uni
 }
 
 
-int32_t etk::unicode::convertUnicodeToUtf8(etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>& output_UTF8)
+int32_t unicode::convertUnicodeToUtf8(etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>& output_UTF8)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
 
-int32_t etk::unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
+int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
 
 // Transform ISO <==> UTF-8
-void etk::unicode::convertIsoToUtf8(charset_te inputCharset,  char input_ISO, char * output_UTF8)
+void unicode::convertIsoToUtf8(charset_te inputCharset,  char input_ISO, char * output_UTF8)
 {
-	int32_t tmpUnicode;
+	uniChar_t tmpUnicode;
 	// concert Iso in UniCode
 	convertIsoToUnicode(inputCharset, input_ISO, tmpUnicode );
 	// convert UniCode in Utf-8
@@ -228,9 +227,9 @@ void etk::unicode::convertIsoToUtf8(charset_te inputCharset,  char input_ISO, ch
 }
 
 
-void etk::unicode::convertUtf8ToIso(charset_te inputCharset,  char * input_UTF8, char & output_ISO)
+void unicode::convertUtf8ToIso(charset_te inputCharset,  char * input_UTF8, char & output_ISO)
 {
-	int32_t tmpUnicode;
+	uniChar_t tmpUnicode;
 	// convert Utf-8 in UniCode
 	convertUtf8ToUnicode(input_UTF8, tmpUnicode);
 	// concert UniCode in Iso
@@ -238,16 +237,16 @@ void etk::unicode::convertUtf8ToIso(charset_te inputCharset,  char * input_UTF8,
 }
 
 
-int32_t etk::unicode::convertIsoToUtf8(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<char>& output_UTF8)
+int32_t unicode::convertIsoToUtf8(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<char>& output_UTF8)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
 
-int32_t etk::unicode::convertUtf8ToIso(charset_te inputCharset, etk::VectorType<char>& input_UTF8, etk::VectorType<char>& output_ISO)
+int32_t unicode::convertUtf8ToIso(charset_te inputCharset, etk::VectorType<char>& input_UTF8, etk::VectorType<char>& output_ISO)
 {
-	EDN_WARNING("TODO : not coded...");
+	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
@@ -261,9 +260,9 @@ int32_t etk::unicode::convertUtf8ToIso(charset_te inputCharset, etk::VectorType<
  * @return ---
  *
  */
-void Utf8_SizeElement(const char * data, int32_t lenMax , uint8_t &size, bool &baseValid)
+void unicode::Utf8_SizeElement(const char * data, int32_t lenMax , uint8_t &size, bool &baseValid)
 {
-	EDN_ASSERT(0 <= lenMax, "size can not be < 0 ...");
+	TK_ASSERT(0 <= lenMax, "size can not be < 0 ...");
 	if (0 > lenMax) {
 		size = 0;
 		baseValid = false;
@@ -418,7 +417,7 @@ static uint32_t Utf8_GetValue(UTF8Element_ts &Element)
 */
 
 
-int32_t strUtf8Len(const char *input_UTF8)
+int32_t unicode::strUtf8Len(const char *input_UTF8)
 {
 	int32_t count = 0;
 	int32_t size = strlen(input_UTF8);
