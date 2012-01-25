@@ -28,9 +28,9 @@
 
 #include <cstdio>
 #include <typeinfo>
+#include <string.h>
 
 #if defined(__PLATFORM__Android)
-#	include <string.h>
 #	include <android/log.h>
 #	define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "====> EWOL", __VA_ARGS__))
 #	define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "====> EWOL", __VA_ARGS__))
@@ -38,7 +38,7 @@
 #endif
 
 #define MAX_LOG_SIZE		(16000)
-#define MAX_LOG_SIZE_TMP	(16000)
+#define MAX_LOG_SIZE_TMP	(512)
 
 namespace etk{
 	class CEndl{};
@@ -68,6 +68,11 @@ namespace etk{
 		}
 		CCout& operator << (long t) {
 			snprintf(tmp, MAX_LOG_SIZE_TMP, "%ld", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		CCout& operator << (long long t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%lld", t);
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}

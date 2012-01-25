@@ -62,13 +62,13 @@ void TOOLS_DisplayTime(void)
 #ifdef __PLATFORM__Android
 	struct timeval  now;
 	gettimeofday(&now, NULL);
-	sprintf(tmpdata, " %2dh %2dmin %2ds | ", (int32_t)(now.tv_sec/3600), (int32_t)(now.tv_sec/60)%60, (int32_t)(now.tv_sec%60));
+	sprintf(tmpdata, " %2dh %2dmin %2ds | ", (int32_t)(now.tv_sec/3600)%24, (int32_t)(now.tv_sec/60)%60, (int32_t)(now.tv_sec%60));
 #else
 	time_t rawtime;
 	struct tm * timeinfo;
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
-	sprintf(tmpdata, " %2dh %2dmin %2ds | ", timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+	sprintf(tmpdata, " %2dh %2dmin %2ds | ", (timeinfo->tm_hour)%24, timeinfo->tm_min, timeinfo->tm_sec);
 #endif
 	etk::cout << tmpdata ;
 }

@@ -334,10 +334,10 @@ class FTFontInternal
 				}
 				
 				
-				EWOL_DEBUG("elem=" << listElement[iii].unicodeCharVal
-				           <<" size=(" << tmpWidth << "," << tmpHeight << ")"
-				           << " for bitmap (left=" << slot->bitmap_left << ",top=" << slot->bitmap_top << ")");
-				EWOL_DEBUG(" BEARING=(" << (slot->metrics.horiBearingX>>6) << "," << (slot->metrics.vertBearingY>>6) << ")" );
+				EWOL_VERBOSE("elem=" << listElement[iii].unicodeCharVal
+				              <<" size=(" << tmpWidth << "," << tmpHeight << ")"
+				              << " for bitmap (left=" << slot->bitmap_left << ",top=" << slot->bitmap_top << ")");
+				EWOL_VERBOSE(" BEARING=(" << (slot->metrics.horiBearingX>>6) << "," << (slot->metrics.vertBearingY>>6) << ")" );
 				
 				for(int32_t j=0; j < tmpHeight;j++) {
 					for(int32_t i=0; i < tmpWidth; i++){
@@ -363,11 +363,15 @@ class FTFontInternal
 				// update the Bitmap position drawing : 
 				tmpRowStartPos += tmpWidth;
 			}
+			EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
 			// use the texture manager to have the texture availlable every restart of the screen
 			//textureId = LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA8, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
 			textureId = ewol::LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
+			
+			EWOL_DEBUG("end load texture font");
 			// With The Texture Created, We Don't Need The Expanded Data Anymore.
 			delete [] expanded_data;
+			EWOL_DEBUG("end load remode tmp data");
 		
 			return false;
 		}
@@ -414,6 +418,7 @@ class FTFont{
 			}
 			m_size = size;
 			m_listLoadedTTFont[m_trueTypeFontId]->GenerateBitmapFont(m_size, m_lineHeight, m_textureId, m_elements);
+			EWOL_DEBUG("plop");
 		}
 		~FTFont(void)
 		{
@@ -500,6 +505,7 @@ void ewol::SetDefaultFont(etk::String fontName, int32_t size)
 	// save the default font parameters ...
 	s_currentDefaultFontName = fontName;
 	s_currentDefaultFontId = tmpId;
+	EWOL_DEBUG("MEGAPLOP 2");
 }
 
 int32_t ewol::GetDefaultFontId(void)

@@ -54,7 +54,7 @@ static etkFloat_t m_width = 320;
 static etkFloat_t m_height = 480;
 
 ewol::Windows* m_uniqueWindows = NULL;
-static int64_t GetCurrentTime(void)
+int64_t GetCurrentTime(void)
 {
     struct timeval  now;
     gettimeofday(&now, NULL);
@@ -283,13 +283,16 @@ static bool isAlreadyInit = false;
 
 void EWOL_NativeApplicationInit(void)
 {
-	EWOL_WARNING("Event : Init Application");
+	int64_t time = GetCurrentTime();
+	EWOL_WARNING("Event : Init Application (start)" << time);
 	if (false == isAlreadyInit) {
 		guiAbstraction::Init(0, NULL);
 		ewol::Init(0, NULL);
 		APP_Init(0, NULL);
 		isAlreadyInit = true;
 	}
+	time = GetCurrentTime();
+	EWOL_WARNING("Event : Init Application (end)" << time);
 }
 
 void EWOL_NativeApplicationUnInit(void)

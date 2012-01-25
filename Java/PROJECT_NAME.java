@@ -11,6 +11,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.KeyEvent;
 // For No Title : 
 import android.view.Window;
 
@@ -151,6 +152,11 @@ class EwolGLSurfaceView extends GLSurfaceView {
 		} else {
 			nativeEventUnknow(tmpActionType);
 		}
+		return true;
+	}
+	
+	public boolean onKeyDown (int keyCode, KeyEvent event){
+		nativeEventUnknow(156);
 		return true;
 	}
 	
