@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng 
+LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng libfreetype
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
@@ -16,6 +16,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DEWOL_USE_FREE_TYPE \
                 -DDATA_IN_APK \
 
 # load the common sources file of the platform

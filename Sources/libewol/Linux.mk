@@ -3,12 +3,12 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := etk tinyxml libzip libpng 
+LOCAL_STATIC_LIBRARIES := etk libfreetype tinyxml libzip libpng 
 
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm `pkg-config --libs freetype2`
+LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm
 
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \

@@ -462,8 +462,8 @@ template<class CLASS_TYPE> class RegExpNodeDigit : public RegExpNode<CLASS_TYPE>
 			for (j=0; j<RegExpNode<CLASS_TYPE>::m_multipleMax && tmpFind ==true && j < lenMax; j++) {
 				char tmpVal = data[currentPos+j];
 				//TK_DEBUG("compare : " << tmpVal);
-				if(		'0' <= tmpVal
-					&&	'9' >= tmpVal)
+				if(    '0' <= tmpVal
+				    && '9' >= tmpVal)
 				{
 					//TK_DEBUG("find ++");
 					findLen += 1;
@@ -2011,15 +2011,15 @@ template<class CLASS_TYPE> class RegExp {
 							case REGEXP_OPCODE_BRACKET_IN:		find = (char*)"[";			break;
 							case REGEXP_OPCODE_BRACE_IN:		find = (char*)"{";			break;
 							case REGEXP_OPCODE_PTHESE_OUT:		find = (char*)")";			break;
-							case REGEXP_OPCODE_BRACKET_OUT:	find = (char*)"]";			break;
+							case REGEXP_OPCODE_BRACKET_OUT:		find = (char*)"]";			break;
 							case REGEXP_OPCODE_BRACE_OUT:		find = (char*)"}";			break;
 							case REGEXP_OPCODE_STAR:			find = (char*)"*";			break;
-							case REGEXP_OPCODE_DOT:			find = (char*)".";			break;
+							case REGEXP_OPCODE_DOT:				find = (char*)".";			break;
 							case REGEXP_OPCODE_QUESTION:		find = (char*)"?";			break;
 							case REGEXP_OPCODE_PLUS:			find = (char*)"+";			break;
 							case REGEXP_OPCODE_PIPE:			find = (char*)"|";			break;
 							case REGEXP_OPCODE_START_OF_LINE:	find = (char*)"^";			break;
-							case REGEXP_OPCODE_END_OF_LINE:	find = (char*)"$";			break;
+							case REGEXP_OPCODE_END_OF_LINE:		find = (char*)"$";			break;
 							case REGEXP_OPCODE_DIGIT:			find = (char*)"\\d";		break;
 							case REGEXP_OPCODE_DIGIT_NOT:		find = (char*)"\\D";		break;
 							case REGEXP_OPCODE_LETTER:			find = (char*)"\\l";		break;
@@ -2028,10 +2028,11 @@ template<class CLASS_TYPE> class RegExp {
 							case REGEXP_OPCODE_SPACE_NOT:		find = (char*)"\\S";		break;
 							case REGEXP_OPCODE_WORD:			find = (char*)"\\w";		break;
 							case REGEXP_OPCODE_WORD_NOT:		find = (char*)"\\W";		break;
-							case REGEXP_OPCODE_NO_CHAR:		find = (char*)"\\@";		break;
-							default:					break;
+							case REGEXP_OPCODE_NO_CHAR:			find = (char*)"\\@";		break;
+							default:														break;
 						}
 						if (NULL != find) {
+							(void)input;
 							TK_ERROR("can not have : '" << find << "' inside " << input << " element");
 							return false;
 						}

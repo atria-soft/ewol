@@ -37,6 +37,9 @@
 #	define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "====> EWOL", __VA_ARGS__))
 #endif
 
+#define MAX_LOG_SIZE		(16000)
+#define MAX_LOG_SIZE_TMP	(16000)
+
 namespace etk{
 	class CEndl{};
 	class CHex{};
@@ -44,112 +47,66 @@ namespace etk{
 		private:
 			bool hex;
 		public:
-#if defined(__PLATFORM__Android)
 	private:
-		char m_tmpChar[2048];
+		char m_tmpChar[MAX_LOG_SIZE+1];
+		char tmp[MAX_LOG_SIZE_TMP];
 	public:
 		CCout(){
 			hex=false;
-			memset(m_tmpChar, 0, 2048*sizeof(char));
+			memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
 		};
 		~CCout() { };
 		CCout& operator << (int t) {
-			char tmp[256];
-			sprintf(tmp,"%d", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%d", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (unsigned int t) {
-			char tmp[256];
-			sprintf(tmp, "%d", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%d", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (long t) {
-			char tmp[256];
-			sprintf(tmp, "%ld", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%ld", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (double t) {
-			char tmp[256];
-			sprintf(tmp, "%f", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%f", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (float t) {
-			char tmp[256];
-			sprintf(tmp, "%f", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%f", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (char * t) {
-			char tmp[256];
-			sprintf(tmp, "%s", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%s", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (const char * t) {
-			char tmp[256];
-			sprintf(tmp, "%s", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%s", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (char t) {
-			char tmp[256];
-			sprintf(tmp, "%c", t);
-			strcat(m_tmpChar, tmp);
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%c", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
 		CCout& operator << (etk::CEndl t) {
-			strcat(m_tmpChar, "\n");
+			strncat(m_tmpChar, "\n", MAX_LOG_SIZE);
+			m_tmpChar[MAX_LOG_SIZE] = '\0';
+#if defined(__PLATFORM__Android)
 			LOGI("%s", m_tmpChar);
-			memset(m_tmpChar, 0, 2048*sizeof(char));
-			return *this;
-		}
 #else
-		CCout(){
-			hex=false;
-		};
-		
-		~CCout() { };
-		CCout& operator << (int t) {
-			printf("%d", t);
-			return *this;
-		}
-		CCout& operator << (unsigned int t) {
-			printf("%d", t);
-			return *this;
-		}
-		CCout& operator << (long t) {
-			printf("%ld", t);
-			return *this;
-		}
-		CCout& operator << (double t) {
-			printf("%f", t);
-			return *this;
-		}
-		CCout& operator << (float t) {
-			printf("%f", t);
-			return *this;
-		}
-		CCout& operator << (char * t) {
-			printf("%s", t);
-			return *this;
-		}
-		CCout& operator << (const char * t) {
-			printf("%s", t);
-			return *this;
-		}
-		CCout& operator << (char t) {
-			printf("%c", t);
-			return *this;
-		}
-		CCout& operator << (etk::CEndl t) {
-			printf("\n");
-			return *this;
-		}
+			printf("%s", m_tmpChar);
 #endif
+			memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
+			return *this;
+		}
 	};
 	extern etk::CCout cout;
 	extern etk::CEndl endl;

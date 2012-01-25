@@ -94,10 +94,7 @@ namespace etk
 		private :
 			etk::FileType_te m_type;
 			FILE *           m_PointerFile;
-			#ifdef DATA_INTERNAL_BINARY
-			int32_t          m_idInternal;
-			int32_t          m_readingOffset;
-			#elif defined(DATA_IN_APK)
+			#if defined(DATA_IN_APK)
 			bool             LoadDataZip(void);
 			int32_t          m_idZipFile;
 			char *           m_zipData;

@@ -28,9 +28,7 @@
 #include <etk/File.h>
 #include <unistd.h>
 
-#ifdef DATA_INTERNAL_BINARY
-#	include <GeneratedData.h>
-#elif defined(DATA_IN_APK)
+#if defined(DATA_IN_APK)
 #	include <stdio.h>
 #	include <zip/zip.h>
 #endif
@@ -118,10 +116,7 @@ const etk::File& etk::File::operator= (const etk::File &etkF )
 			TK_ERROR("Missing close the file : \"" << GetCompleateName() << "\"");
 			fClose();
 		}
-		#ifdef DATA_INTERNAL_BINARY
-			m_idInternal = etkF.m_idInternal;
-			m_readingOffset = 0;
-		#elif defined(DATA_IN_APK)
+		#if defined(DATA_IN_APK)
 			m_idZipFile = etkF.m_idZipFile;
 			m_zipData = NULL;
 			m_zipDataSize = 0;
@@ -199,11 +194,7 @@ etk::String baseFolderCache = "~/.tmp/cache/";
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
-	#ifdef DATA_INTERNAL_BINARY
-		for(int32_t iii=0; iii<internalDataFilesSize; iii++) {
-			TK_DEBUG("Internal date : \"" << internalDataFiles[iii].filename << "\" size=" << internalDataFiles[iii].fileLenght);
-		}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 		baseFolderData = "assets/";
 		s_fileAPK = folder;
 		loadAPK(s_fileAPK.c_str());
@@ -226,9 +217,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 	char buf[MAX_FILE_NAME];
 	memset(buf, 0, MAX_FILE_NAME);
 	char * ok;
-	#ifdef DATA_INTERNAL_BINARY
-	m_idInternal = -1;
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	m_idZipFile = -1;
 	m_zipData = NULL;
 	m_zipDataSize = 0;
@@ -285,17 +274,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_DATA";
 				#endif
-				#ifdef DATA_INTERNAL_BINARY
-					for(int32_t iii=0; iii<internalDataFilesSize; iii++) {
-						if (destFilename == internalDataFiles[iii].filename) {
-							m_idInternal = iii;
-							break;
-						}
-					}
-					if (-1 == m_idInternal) {
-						TK_ERROR("File Does not existed ... in memory : \"" << destFilename << "\"");
-					}
-				#elif defined(DATA_IN_APK)
+				#if defined(DATA_IN_APK)
 					etk::String tmpFilename = baseFolderData + destFilename;
 					for (int iii=0; iii<s_APKnbFiles; iii++) {
 						const char* name = zip_get_name(s_APKArchive, iii, 0);
@@ -487,14 +466,7 @@ bool etk::File::LoadDataZip(void)
 
 int32_t etk::File::Size(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			return internalDataFiles[m_idInternal].fileLenght;
-		}
-		return 0;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (true == LoadDataZip()) {
 			return m_zipDataSize;
@@ -520,14 +492,7 @@ int32_t etk::File::Size(void)
 
 bool etk::File::Exist(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			return true;
-		}
-		return false;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idZipFile >= -1  && m_idZipFile < s_APKnbFiles) {
 			return true;
@@ -549,16 +514,7 @@ bool etk::File::Exist(void)
 
 bool etk::File::fOpenRead(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		m_readingOffset = 0;
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			TK_DEBUG("Open file : " << GetCompleateName() << " with size=" << internalDataFiles[m_idInternal].fileLenght << " Octets");
-			return true;
-		}
-		return false;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		return LoadDataZip();
 	}
@@ -578,12 +534,7 @@ bool etk::File::fOpenRead(void)
 
 bool etk::File::fOpenWrite(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		m_readingOffset = 0;
-		return false;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		return false;
 	}
@@ -603,15 +554,7 @@ bool etk::File::fOpenWrite(void)
 
 bool etk::File::fClose(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		m_readingOffset = 0;
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			return true;
-		}
-		return false;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			TK_CRITICAL("File Already closed : \"" << GetCompleateName() << "\"");
@@ -636,38 +579,7 @@ bool etk::File::fClose(void)
 char * etk::File::fGets(char * elementLine, int32_t maxData)
 {
 	memset(elementLine, 0, maxData);
-	#ifdef DATA_INTERNAL_BINARY
-	char * element = elementLine;
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
-			if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
-				element[0] = '\0';
-				return NULL;
-			}
-			while (internalDataFiles[m_idInternal].data[m_readingOffset] != '\0') {
-				if(    internalDataFiles[m_idInternal].data[m_readingOffset] == '\n'
-				    || internalDataFiles[m_idInternal].data[m_readingOffset] == '\r')
-				{
-					*element = internalDataFiles[m_idInternal].data[m_readingOffset];
-					element++;
-					m_readingOffset++;
-					*element = '\0';
-					return elementLine;
-				}
-				*element = internalDataFiles[m_idInternal].data[m_readingOffset];
-				element++;
-				m_readingOffset++;
-				if (m_readingOffset>internalDataFiles[m_idInternal].fileLenght) {
-					*element = '\0';
-					return elementLine;
-				}
-			}
-		}
-		elementLine[0] = '\0';
-		return NULL;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	char * element = elementLine;
 	if (etk::FILE_TYPE_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 		if (NULL == m_zipData) {
@@ -704,21 +616,7 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 
 int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			int32_t dataToRead = blockSize * nbBlock;
-			if (dataToRead + m_readingOffset > internalDataFiles[m_idInternal].fileLenght) {
-				nbBlock = ((internalDataFiles[m_idInternal].fileLenght - m_readingOffset) / blockSize);
-				dataToRead = blockSize * nbBlock;
-			}
-			memcpy(data, &internalDataFiles[m_idInternal].data[m_readingOffset], dataToRead);
-			m_readingOffset +=dataToRead;
-			return nbBlock;
-		}
-		return 0;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			((char*)data)[0] = '\0';
@@ -739,12 +637,7 @@ int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 
 int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		TK_CRITICAL("Can not write on data inside memory : \"" << GetCompleateName() << "\"");
-		return 0;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		TK_CRITICAL("Can not write on data inside APK : \"" << GetCompleateName() << "\"");
 		return 0;
@@ -756,33 +649,7 @@ int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 
 bool etk::File::fSeek(long int offset, int origin)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			int32_t positionEnd = 0;
-			switch(origin) {
-				case SEEK_END:
-					positionEnd = internalDataFiles[m_idInternal].fileLenght;
-					break;
-				case SEEK_CUR:
-					positionEnd = m_readingOffset;
-					break;
-				default:
-					positionEnd = 0;
-					break;
-			}
-			positionEnd += offset;
-			if (positionEnd < 0) {
-				positionEnd = 0;
-			} else if (positionEnd > internalDataFiles[m_idInternal].fileLenght) {
-				positionEnd = internalDataFiles[m_idInternal].fileLenght;
-			}
-			m_readingOffset = positionEnd;
-			return true;
-		}
-		return false;
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			return false;
@@ -820,13 +687,7 @@ bool etk::File::fSeek(long int offset, int origin)
 
 char * etk::File::GetDirectPointer(void)
 {
-	#ifdef DATA_INTERNAL_BINARY
-	if (etk::FILE_TYPE_DATA == m_type) {
-		if (m_idInternal >= -1  && m_idInternal < internalDataFilesSize) {
-			return (char*)internalDataFiles[m_idInternal].data;
-		}
-	}
-	#elif defined(DATA_IN_APK)
+	#if defined(DATA_IN_APK)
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			return NULL;

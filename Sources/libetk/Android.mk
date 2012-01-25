@@ -5,10 +5,12 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := etk
 LOCAL_STATIC_LIBRARIES := libzip
 
+# load the common sources file of the platform
+include $(LOCAL_PATH)/file.mk
+
 LOCAL_C_INCLUDES :=   $(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-
 
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -Wno-write-strings \
@@ -17,12 +19,10 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
 
 
 
-# load the common sources file of the platform
-include $(LOCAL_PATH)/file.mk
+
 
 LOCAL_SRC_FILES := $(FILE_LIST)
 
-#for freetype : https://github.com/cdave1/freetype2-android
 
 # Ewol Test Software :
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz

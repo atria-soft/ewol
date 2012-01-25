@@ -78,6 +78,7 @@ int32_t m_previous_y = -1;
 int64_t m_previousTime = 0;
 bool    m_previousDouble = false;
 
+bool firstInitDone = false;
 
 /* Call to initialize the graphics state */
 void EWOL_NativeInit(void)
@@ -87,6 +88,7 @@ void EWOL_NativeInit(void)
 	sDemoStopped = 0;
 	sTimeOffsetInit = 0;
 	ewol::TextureOGLContext(true);
+	firstInitDone = true;
 }
 
 
@@ -247,22 +249,31 @@ void EWOL_NativeParamSetArchiveDir(int mode, const char* str)
 	switch(mode)
 	{
 		case 0:
-			EWOL_WARNING("Directory APK : path=" << str);
-			etk::SetBaseFolderData(str);
+			EWOL_DEBUG("Directory APK : path=" << str);
+			//if (firstInitDone == false)
+			{
+				etk::SetBaseFolderData(str);
+			}
 			break;
 		case 1:
-			EWOL_WARNING("Directory mode=FILE path=" << str);
-			etk::SetBaseFolderDataUser(str);
+			EWOL_DEBUG("Directory mode=FILE path=" << str);
+			//if (firstInitDone == false)
+			{
+				etk::SetBaseFolderDataUser(str);
+			}
 			break;
 		case 2:
-			EWOL_WARNING("Directory mode=CACHE path=" << str);
-			etk::SetBaseFolderCache(str);
+			EWOL_DEBUG("Directory mode=CACHE path=" << str);
+			//if (firstInitDone == false)
+			{
+				etk::SetBaseFolderCache(str);
+			}
 			break;
 		case 3:
-			EWOL_WARNING("Directory mode=EXTERNAL_CACHE path=" << str);
+			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << str);
 			break;
 		default:
-			EWOL_WARNING("Directory mode=???? path=" << str);
+			EWOL_DEBUG("Directory mode=???? path=" << str);
 			break;
 	}
 }

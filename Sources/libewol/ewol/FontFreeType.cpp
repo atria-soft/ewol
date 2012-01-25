@@ -28,12 +28,9 @@
 #include <etk/VectorType.h>
 
 #include <ewol/importgl.h>
-#if defined(__PLATFORM__Linux)
-#	include <ft2build.h>
-#else
-#	include <freetype/ft2build.h>
-#endif
-
+extern "C" {
+	#include <freetype/ft2build.h>
+}
 #include FT_FREETYPE_H
 
 #undef __class__
@@ -165,11 +162,13 @@ class FTFontInternal
 			} else {
 				EWOL_DEBUG("    flags                = FT_FACE_FLAG_CID_KEYED (disable)");
 			}
+			/*
 			if ((FT_FACE_FLAG_TRICKY & m_fftFace->face_flags) != 0) {
 				EWOL_INFO("    flags                = FT_FACE_FLAG_TRICKY (enable)");
 			} else {
 				EWOL_DEBUG("    flags                = FT_FACE_FLAG_TRICKY (disable)");
 			}
+			*/
 			EWOL_INFO("    unit per EM          = " << m_fftFace->units_per_EM);
 			EWOL_INFO("    num of fixed sizes   = " << m_fftFace->num_fixed_sizes);
 			//EWOL_INFO("    Availlable sizes     = " << (int)m_fftFace->available_sizes);
@@ -183,35 +182,31 @@ class FTFontInternal
 			m_fileName = fontFileName;
 			m_FileBuffer = NULL;
 			m_FileSize = 0;
-			#if 0
-				int32_t error = FT_New_Face( library, m_fileName.GetCompleateName().c_str(), 0, &m_fftFace );
-			#else
-				if (false == m_fileName.Exist()) {
-					EWOL_ERROR("File Does not exist : " << m_fileName);
-					return;
-				}
-				m_FileSize = m_fileName.Size();
-				if (0==m_FileSize) {
-					EWOL_ERROR("This file is empty : " << m_fileName);
-					return;
-				}
-				if (false == m_fileName.fOpenRead()) {
-					EWOL_ERROR("Can not open the file : " << m_fileName);
-					return;
-				}
-				// allocate data
-				m_FileBuffer = new FT_Byte[m_FileSize];
-				if (NULL == m_FileBuffer) {
-					EWOL_ERROR("Error Memory allocation size=" << m_FileSize);
-					return;
-				}
-				// load data from the file :
-				m_fileName.fRead(m_FileBuffer, 1, m_FileSize);
-				// close the file:
-				m_fileName.fClose();
-				// load Face ...
-				int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
-			#endif
+			if (false == m_fileName.Exist()) {
+				EWOL_ERROR("File Does not exist : " << m_fileName);
+				return;
+			}
+			m_FileSize = m_fileName.Size();
+			if (0==m_FileSize) {
+				EWOL_ERROR("This file is empty : " << m_fileName);
+				return;
+			}
+			if (false == m_fileName.fOpenRead()) {
+				EWOL_ERROR("Can not open the file : " << m_fileName);
+				return;
+			}
+			// allocate data
+			m_FileBuffer = new FT_Byte[m_FileSize];
+			if (NULL == m_FileBuffer) {
+				EWOL_ERROR("Error Memory allocation size=" << m_FileSize);
+				return;
+			}
+			// load data from the file :
+			m_fileName.fRead(m_FileBuffer, 1, m_FileSize);
+			// close the file:
+			m_fileName.fClose();
+			// load Face ...
+			int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
 			if( FT_Err_Unknown_File_Format == error) {
 				EWOL_ERROR("... the font file could be opened and read, but it appears ... that its font format is unsupported");
 			} else if (0 != error) {
@@ -232,7 +227,7 @@ class FTFontInternal
 		}
 	public:
 		etk::String GetFontName(void) {return m_fontName;};
-		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
+		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t & textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
 		{
 			// 300dpi (hight quality) 96 dpi (normal quality)
 			int32_t fontQuality = 96;
@@ -277,10 +272,17 @@ class FTFontInternal
 			}
 			int32_t nbLine = (nbElement / nbRaws) + 1;
 			int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
+			/*if (textureWidth < textureHeight) {
+				textureWidth = textureHeight;
+			}
+			if (textureWidth > textureHeight) {
+				textureHeight = textureWidth;
+			}*/
 			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 			
 			// Allocate Memory For The Texture Data.
-			GLubyte* expanded_data = new GLubyte[textureWidth * textureHeight];
+			int32_t byfferDataSize = textureWidth * textureHeight;
+			GLubyte* expanded_data = new GLubyte[byfferDataSize];
 			if (NULL == expanded_data) {
 				EWOL_ERROR("Allocation tmp data ERROR");
 				return false;
@@ -360,17 +362,10 @@ class FTFontInternal
 				}
 				// update the Bitmap position drawing : 
 				tmpRowStartPos += tmpWidth;
-				
-				
-				
 			}
-			// Now We Just Setup Some Texture Parameters.
-			glBindTexture( GL_TEXTURE_2D, textureId);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-			
-			glTexImage2D( GL_TEXTURE_2D, 0, GL_ALPHA8, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data );
-			
+			// use the texture manager to have the texture availlable every restart of the screen
+			//textureId = LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA8, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
+			textureId = ewol::LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
 			// With The Texture Created, We Don't Need The Expanded Data Anymore.
 			delete [] expanded_data;
 		
@@ -412,14 +407,12 @@ class FTFont{
 			freeTypeFontElement_ts tmpchar1;
 			tmpchar1.unicodeCharVal = 0;
 			m_elements.PushBack(tmpchar1);
-			for (int32_t iii=0x20; iii<127; iii++) {
+			for (int32_t iii=0x20; iii<0x7F; iii++) {
 				freeTypeFontElement_ts tmpchar;
 				tmpchar.unicodeCharVal = iii;
 				m_elements.PushBack(tmpchar);
 			}
 			m_size = size;
-			//generate font
-			glGenTextures(1, &m_textureId);
 			m_listLoadedTTFont[m_trueTypeFontId]->GenerateBitmapFont(m_size, m_lineHeight, m_textureId, m_elements);
 		}
 		~FTFont(void)
@@ -446,7 +439,7 @@ class FTFont{
 		
 		uint32_t GetOglId(void)
 		{
-			return m_textureId;
+			return ewol::GetTextureGLID(m_textureId);
 		};
 		
 		int32_t GetSize(void)
@@ -461,7 +454,7 @@ class FTFont{
 		
 	private:
 		int32_t                                   m_trueTypeFontId;
-		uint32_t                                  m_textureId;   // internal texture ID
+		int32_t                                   m_textureId;   // internal texture ID
 		int32_t                                   m_size;        // nb pixel height
 		int32_t                                   m_lineHeight;  // nb pixel height
 		int32_t                                   m_interline;   // nb pixel between 2 lines
@@ -547,20 +540,6 @@ int32_t ewol::DrawText(int32_t                     fontID,
                     etk::VectorType<coord2D_ts> &  coord,
                     etk::VectorType<texCoord_ts> & coordTex)
 {
-	// TODO : This code des not work, why ????
-	/*
-	int32_t tmpstringLen = strlen(utf8String);
-	int32_t * tmpUnicodeString = new int32_t(tmpstringLen+1);
-	// TODO : generate a better convertor...
-	for (int32_t iii=0; iii<tmpstringLen; iii++) {
-		tmpUnicodeString[iii] = utf8String[iii];
-	}
-	tmpUnicodeString[tmpstringLen] = 0;
-	// unicode display ...
-	//DrawText(fontID, drawPosition, tmpUnicodeString, fontTextureId, coord, coordTex);
-	// clean temporary data ..
-	delete [] tmpUnicodeString;
-	*/
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
@@ -569,12 +548,11 @@ int32_t ewol::DrawText(int32_t                     fontID,
 	char * tmpVal = (char*)utf8String;
 	
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t size = m_listLoadedFont[fontID]->GetHeight();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 	
 	etkFloat_t posDrawX = drawPosition.x;
 	while(*tmpVal != 0) {
-		int32_t tmpChar = *tmpVal++;
+		uint32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
 		if (tmpChar >= 0x80) {
 			charIndex = 0;
@@ -689,13 +667,12 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	uniChar_t * tmpVal = (uniChar_t *)unicodeString;
 	
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t size = m_listLoadedFont[fontID]->GetHeight();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 
 	etkFloat_t posDrawX = textPos.x;
 	
 	while(*tmpVal != 0) {
-		int32_t tmpChar = *tmpVal++;
+		uint32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
 		if (tmpChar >= 0x80) {
 			charIndex = 0;
@@ -845,7 +822,7 @@ int32_t ewol::GetWidth(int32_t fontID, const uniChar_t * unicodeString)
 	
 	etkFloat_t posDrawX = 0.0;
 	while(*tmpVal != 0) {
-		int32_t tmpChar = *tmpVal++;
+		uint32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
 		if (tmpChar >= 0x80) {
 			charIndex = 0;
@@ -880,7 +857,7 @@ int32_t ewol::GetWidth(int32_t fontID, const char * utf8String)
 	
 	etkFloat_t posDrawX = 0.0;
 	while(*tmpVal != 0) {
-		int32_t tmpChar = *tmpVal++;
+		uint32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
 		if (tmpChar >= 0x80) {
 			charIndex = 0;
