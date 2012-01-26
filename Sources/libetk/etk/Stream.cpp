@@ -28,4 +28,5 @@
 etk::CCout etk::cout;
 etk::CEndl etk::endl;
 etk::CHex etk::hex;
+etk::CStart etk::cstart;
 

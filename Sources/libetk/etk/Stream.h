@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <typeinfo>
 #include <string.h>
+#include <pthread.h>
 
 #if defined(__PLATFORM__Android)
 #	include <android/log.h>
@@ -43,19 +44,25 @@
 namespace etk{
 	class CEndl{};
 	class CHex{};
+	class CStart{};
 	class CCout{
 		private:
 			bool hex;
 		public:
 	private:
-		char m_tmpChar[MAX_LOG_SIZE+1];
-		char tmp[MAX_LOG_SIZE_TMP];
+		char             m_tmpChar[MAX_LOG_SIZE+1];
+		char             tmp[MAX_LOG_SIZE_TMP];
+		pthread_mutex_t  m_mutex;
 	public:
 		CCout(){
 			hex=false;
 			memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
+			pthread_mutex_init(&m_mutex, NULL);
 		};
-		~CCout() { };
+		~CCout() {
+			pthread_mutex_destroy(&m_mutex);
+		};
+		
 		CCout& operator << (int t) {
 			snprintf(tmp, MAX_LOG_SIZE_TMP, "%d", t);
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
@@ -101,6 +108,10 @@ namespace etk{
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
+		CCout& operator << (CStart ccc) {
+			pthread_mutex_lock(&m_mutex);
+			return *this;
+		}
 		CCout& operator << (etk::CEndl t) {
 			strncat(m_tmpChar, "\n", MAX_LOG_SIZE);
 			m_tmpChar[MAX_LOG_SIZE] = '\0';
@@ -110,12 +121,14 @@ namespace etk{
 			printf("%s", m_tmpChar);
 #endif
 			memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
+			pthread_mutex_unlock(&m_mutex);
 			return *this;
 		}
 	};
 	extern etk::CCout cout;
 	extern etk::CEndl endl;
 	extern etk::CHex hex;
+	extern etk::CStart cstart;
 }
 #endif
 

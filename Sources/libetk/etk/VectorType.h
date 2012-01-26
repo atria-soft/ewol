@@ -255,10 +255,10 @@ template<typename MY_TYPE=int32_t> class VectorType
 			if (NULL!=m_data) {
 				ETK_FREE(m_data);
 				m_data = NULL;
-				m_allocated = 0;
-				m_size = 0;
-				m_increment = 0;
 			}
+			m_allocated = 0;
+			m_size = 0;
+			m_increment = 0;
 		}
 
 		/**
