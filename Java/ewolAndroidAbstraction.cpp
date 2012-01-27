@@ -33,150 +33,11 @@
 
 // declaration of the ewol android abstraction ...
 void EWOL_NativeInit(void);
-void EWOL_NativeResize(int w, int h );
 void EWOL_NativeDone(void);
-void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
-void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
-void EWOL_NativeEventUnknow(int ID);
-void EWOL_NativeParamSetArchiveDir(int mode, const char* str);
 void EWOL_NativeApplicationInit(void);
 void EWOL_NativeApplicationUnInit(void);
 void EWOL_NativeRender(void);
 
-static ewol::threadMsg::threadMsg_ts    androidJniMsg;
-static pthread_t                        androidJniThread;
-static pthread_attr_t                   androidJniThreadAttr;
-
-enum {
-	JNI_NONE,
-	JNI_INIT,
-	JNI_UN_INIT,
-	JNI_DONE,
-	JNI_RESIZE,
-	JNI_INPUT_MOTION,
-	JNI_INPUT_STATE,
-	JNI_DATA_ARCHIVE_DIR,
-	JNI_APP_INIT,
-	JNI_APP_UN_INIT,
-	JNI_APP_RENDERER,
-	
-};
-
-
-#include <unistd.h>
-
-typedef struct {
-	int w;
-	int h;
-} eventResize_ts;
-
-typedef struct {
-	int pointerID;
-	float x;
-	float y;
-} eventInputMotion_ts;
-
-typedef struct {
-	int pointerID;
-	bool state;
-	float x;
-	float y;
-} eventInputState_ts;
-
-
-
-static void* BaseAppEntry(void* param)
-{
-	bool requestEndProcessing = false;
-	EDN_DEBUG("start Ewol Basic thread ...");
-	while(false == requestEndProcessing) {
-		ewol::threadMsg::threadMsgContent_ts data;
-		ewol::threadMsg::WaitMessage(androidJniMsg, data);
-		switch (data.type) {
-			case JNI_NONE:
-				EDN_DEBUG("Receive MSG : JNI_NONE");
-				break;
-			case JNI_INIT:
-				EDN_DEBUG("Receive MSG : JNI_INIT");
-				EWOL_NativeApplicationInit();
-				break;
-			case JNI_UN_INIT:
-				EDN_DEBUG("Receive MSG : JNI_UN_INIT");
-				EWOL_NativeApplicationUnInit();
-				requestEndProcessing = true;
-				break;
-			case JNI_DONE:
-				EDN_DEBUG("Receive MSG : JNI_DONE");
-				break;
-			case JNI_RESIZE:
-				EDN_DEBUG("Receive MSG : JNI_RESIZE");
-				{
-					eventResize_ts * tmpData = (eventResize_ts*)data.data;
-					EWOL_NativeResize(tmpData->w, tmpData->h);
-					EWOL_NativeInit();
-				}
-				break;
-			case JNI_INPUT_MOTION:
-				EDN_DEBUG("Receive MSG : JNI_INPUT_MOTION");
-				{
-					eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-					EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
-				}
-				break;
-			case JNI_INPUT_STATE:
-				EDN_DEBUG("Receive MSG : JNI_INPUT_STATE");
-				{
-					eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-					EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
-				}
-				break;
-			case JNI_DATA_ARCHIVE_DIR:
-				EDN_DEBUG("Receive MSG : JNI_DATA_ARCHIVE_DIR");
-				break;
-			case JNI_APP_INIT:
-				EDN_DEBUG("Receive MSG : JNI_APP_INIT");
-				break;
-			case JNI_APP_UN_INIT:
-				EDN_DEBUG("Receive MSG : JNI_APP_UN_INIT");
-				break;
-			case JNI_APP_RENDERER:
-				EDN_DEBUG("Receive MSG : JNI_APP_RENDERER");
-				break;
-			default:
-				EDN_DEBUG("Receive MSG : UNKNOW");
-				break;
-		}
-	}
-	EDN_DEBUG("End Ewol Basic thread ...");
-	pthread_exit(NULL);
-}
-
-bool isGlobalSystemInit = false;
-
-void BaseInit(void)
-{
-	if (false == isGlobalSystemInit) {
-		// create interface mutex :
-		ewol::threadMsg::Init(androidJniMsg);
-		// init the thread :
-		pthread_create(&androidJniThread, NULL, BaseAppEntry, NULL);
-		isGlobalSystemInit = true;
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
-	}
-}
-
-void BaseUnInit(void)
-{
-	if (true == isGlobalSystemInit) {
-		isGlobalSystemInit = false;
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_UN_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
-		
-		EDN_DEBUG("Wait end of the thread ...");
-		// Wait end of the thread
-		pthread_join(androidJniThread, NULL);
-		ewol::threadMsg::UnInit(androidJniMsg);
-	}
-}
 
 extern "C"
 {
@@ -186,7 +47,7 @@ extern "C"
 	{
 		// direct setting of the date in the string system ...
 		const char* str = env->GetStringUTFChars(myString,0);
-		EWOL_NativeParamSetArchiveDir(mode, str);
+		EWOL_ThreadSetArchiveDir(mode, str);
 		//env->ReleaseStringUTFChars(str,myString,0);
 	}
 	
@@ -254,12 +115,6 @@ extern "C"
 		tmpData.x = x;
 		tmpData.y = y;
 		ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
-	}
-	
-	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventUnknow( JNIEnv* env, jobject  thiz, jint ID)
-	{
-		//EWOL_NativeEventUnknow(ID);
 	}
 	
 	

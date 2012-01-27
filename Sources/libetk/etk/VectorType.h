@@ -463,7 +463,7 @@ template<typename MY_TYPE=int32_t> class VectorType
 		 */
 		void Erase(int32_t pos)
 		{
-			if (pos>m_size) {
+			if (pos<0 || (uint32_t)pos>m_size) {
 				TK_ERROR(" can not Erase Element at this position : " << pos << " > " << m_size);
 				return;
 			}

@@ -193,14 +193,12 @@ class EwolGLSurfaceView extends GLSurfaceView {
 				nativeEventInputState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				InputDown3 = false;
 			}
-		} else {
-			nativeEventUnknow(tmpActionType);
 		}
 		return true;
 	}
 	
 	public boolean onKeyDown (int keyCode, KeyEvent event){
-		nativeEventUnknow(156);
+		// TODO ...
 		return true;
 	}
 	

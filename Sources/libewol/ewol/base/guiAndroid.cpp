@@ -238,95 +238,10 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 	}
 }
 
-void EWOL_NativeEventUnknow(int eventID)
-{
-	EWOL_WARNING("Event : Unknow ID=" << eventID);
-}
-
-
-void EWOL_NativeParamSetArchiveDir(int mode, const char* str)
-{
-	switch(mode)
-	{
-		case 0:
-			EWOL_DEBUG("Directory APK : path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderData(str);
-			}
-			break;
-		case 1:
-			EWOL_DEBUG("Directory mode=FILE path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderDataUser(str);
-			}
-			break;
-		case 2:
-			EWOL_DEBUG("Directory mode=CACHE path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderCache(str);
-			}
-			break;
-		case 3:
-			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << str);
-			break;
-		default:
-			EWOL_DEBUG("Directory mode=???? path=" << str);
-			break;
-	}
-}
-
-
-static bool isAlreadyInit = false;
-
-void EWOL_NativeApplicationInit(void)
-{
-	int64_t time = GetCurrentTime();
-	EWOL_WARNING("Event : Init Application (start)" << time);
-	if (false == isAlreadyInit) {
-		guiAbstraction::Init(0, NULL);
-		ewol::Init(0, NULL);
-		APP_Init(0, NULL);
-		isAlreadyInit = true;
-	}
-	time = GetCurrentTime();
-	EWOL_WARNING("Event : Init Application (end)" << time);
-}
-
-void EWOL_NativeApplicationUnInit(void)
-{
-	EWOL_WARNING("Event : UnInit application");
-	// unset all windows
-	ewol::DisplayWindows(NULL);
-	// call application to uninit
-	APP_UnInit();
-	// basic abstraction un-init
-	guiAbstraction::UnInit();
-	// uninit Ewol
-	ewol::UnInit();
-}
 
 /* Call to render the next GL frame */
 void EWOL_NativeRender(void)
 {
-	long   curTime;
-
-	/* NOTE: if sDemoStopped is TRUE, then we re-render the same frame
-	 *       on each iteration.
-	 */
-	if (sDemoStopped) {
-		curTime = sTimeStopped + sTimeOffset;
-	} else {
-		curTime =GetCurrentTime() + sTimeOffset;
-		if (sTimeOffsetInit == 0) {
-			sTimeOffsetInit = 1;
-			sTimeOffset     = -curTime;
-			curTime         = 0;
-		}
-	}
-	
 	Draw();
 }
 
