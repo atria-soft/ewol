@@ -20,6 +20,7 @@ import android.view.WindowManager;
 
 import java.io.File;
 import android.content.Context;
+import android.content.res.Configuration;
 
 // For the getting apk name : 
 import android.content.pm.ActivityInfo;
@@ -34,6 +35,14 @@ import android.content.res.AssetManager;
  *
  */
 public class __PROJECT_NAME__ extends Activity {
+	private static native void ActivityOnCreate();
+	private static native void ActivityOnStart();
+	private static native void ActivityOnReStart();
+	private static native void ActivityOnResume();
+	private static native void ActivityOnPause();
+	private static native void ActivityOnStop();
+	private static native void ActivityOnDestroy();
+	private static native void ActivityParamSetArchiveDir(int mode, String myString);
 
 	private GLSurfaceView mGLView;
 
@@ -43,6 +52,30 @@ public class __PROJECT_NAME__ extends Activity {
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Load the application directory
+		ActivityParamSetArchiveDir(1, getFilesDir().toString());
+		ActivityParamSetArchiveDir(2, getCacheDir().toString());
+		// to enable extarnal storage: add in the manifest the restriction needed ...
+		//ActivityParamSetArchiveDir(3, getExternalCacheDir().toString());
+		
+		// return apk file path (or null on error)
+		String apkFilePath = null;
+		ApplicationInfo appInfo = null;
+		PackageManager packMgmr = getPackageManager();
+		try {
+			appInfo = packMgmr.getApplicationInfo("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Unable to locate assets, aborting...");
+		}
+		apkFilePath = appInfo.sourceDir;
+		ActivityParamSetArchiveDir(0, apkFilePath);
+		
+		
+		// call C init ...
+		ActivityOnCreate();
+		
 		// Remove the title of the current display : 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// set full screen Mode : 
@@ -54,14 +87,44 @@ public class __PROJECT_NAME__ extends Activity {
 		setContentView(mGLView);
 	}
 
-	@Override protected void onPause() {
-		super.onPause();
-		mGLView.onPause();
+	@Override protected void onStart() {
+		super.onStart();
+		// call C
+		ActivityOnStart();
 	}
-
+	
+	@Override protected void onRestart() {
+		super.onRestart();
+		// call C
+		ActivityOnReStart();
+	}
+	
 	@Override protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
+		// call C
+		ActivityOnResume();
+	}
+	
+	@Override protected void onPause() {
+		super.onPause();
+		mGLView.onPause();
+		// call C
+		ActivityOnPause();
+	}
+	
+	@Override protected void onStop() {
+		super.onStop();
+		// call C
+		ActivityOnStop();
+	}
+	@Override protected void onDestroy() {
+		super.onDestroy();
+		// call C
+		ActivityOnDestroy();
+	}
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 }
 
@@ -76,29 +139,10 @@ class EwolGLSurfaceView extends GLSurfaceView {
 	private static native void nativeEventInputMotion(int pointerID, float x, float y);
 	private static native void nativeEventInputState(int pointerID, boolean isDown, float x, float y);
 	private static native void nativeEventUnknow(int eventID);
-	private static native void nativeParamSetArchiveDir(int mode, String myString);
 	
 	public EwolGLSurfaceView(Context context) {
 		// super must be first statement in constructor
 		super(context);
-		// Load the application directory
-		nativeParamSetArchiveDir(1, context.getFilesDir().toString());
-		nativeParamSetArchiveDir(2, context.getCacheDir().toString());
-		// to enable extarnal storage: add in the manifest the restriction needed ...
-		//nativeParamSetArchiveDir(3, context.getExternalCacheDir().toString());
-		
-		// return apk file path (or null on error)
-		String apkFilePath = null;
-		ApplicationInfo appInfo = null;
-		PackageManager packMgmr = context.getPackageManager();
-		try {
-			appInfo = packMgmr.getApplicationInfo("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Unable to locate assets, aborting...");
-		}
-		apkFilePath = appInfo.sourceDir;
-		nativeParamSetArchiveDir(0, apkFilePath);
 		
 		// je n'ai pas compris ...
 		mRenderer = new EwolRenderer();
@@ -121,32 +165,32 @@ class EwolGLSurfaceView extends GLSurfaceView {
 			}
 		} else if(    tmpActionType == MotionEvent.ACTION_POINTER_1_DOWN 
 		           || tmpActionType == MotionEvent.ACTION_DOWN) {
-			nativeEventInputState(0, true, (float)event.getX(0), (float)event.getY(0));
+			nativeEventInputState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
 			InputDown1 = true;
 		} else if(tmpActionType == MotionEvent.ACTION_POINTER_1_UP) {
-			nativeEventInputState(0, false, (float)event.getX(0), (float)event.getY(0));
+			nativeEventInputState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 			InputDown1 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_DOWN) {
-			nativeEventInputState(1, true, (float)event.getX(1), (float)event.getY(1));
+			nativeEventInputState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
 			InputDown2 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_UP) {
-			nativeEventInputState(1, false, (float)event.getX(1), (float)event.getY(1));
+			nativeEventInputState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
 			InputDown2 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_DOWN) {
-			nativeEventInputState(2, true, (float)event.getX(2), (float)event.getY(2));
+			nativeEventInputState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
 			InputDown3 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_UP) {
-			nativeEventInputState(2, false, (float)event.getX(2), (float)event.getY(2));
+			nativeEventInputState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
 			InputDown3 = false;
 		} else if(tmpActionType == MotionEvent.ACTION_UP){
 			if (InputDown1) {
-				nativeEventInputState(0, false, (float)event.getX(0), (float)event.getY(0));
+				nativeEventInputState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				InputDown1 = false;
 			} else if (InputDown2) {
-				nativeEventInputState(1, false, (float)event.getX(1), (float)event.getY(1));
+				nativeEventInputState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				InputDown2 = false;
 			} else {
-				nativeEventInputState(2, false, (float)event.getX(2), (float)event.getY(2));
+				nativeEventInputState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				InputDown3 = false;
 			}
 		} else {
@@ -173,7 +217,6 @@ class EwolRenderer implements GLSurfaceView.Renderer {
 	private static native void nativeInit();
 	private static native void nativeResize(int w, int h);
 	private static native void nativeRender();
-	private static native void nativeDone();
 	
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		nativeInit();

@@ -435,7 +435,7 @@ int32_t ewol::LoadTexture(int32_t target,
 	memcpy(tmpTex->m_data, data, sizeof(char) * tmpTex->m_nbBytes);
 	
 	if (true == OGLContextLoaded) {
-		uint32_t textureid = -1;
+		uint32_t textureid = 0;
 		glGenTextures(1, &textureid);
 		glBindTexture(tmpTex->m_target, textureid);
 		//glTexParameteri(tmpTex->m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);

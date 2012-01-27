@@ -60,10 +60,7 @@ namespace ewol {
 		void Init(threadMsg_ts& messageData);
 		void UnInit(threadMsg_ts& messageData);
 		bool WaitMessage(threadMsg_ts& messageData, threadMsgContent_ts &data);
-		bool SendMessage(threadMsg_ts& messageData, uint32_t type, char * data = NULL, uint32_t size = 0, msgPriority_te prio = MSG_PRIO_NONE);
-		
-		
-		void tmppp5656(const char * plop);
+		bool SendMessage(threadMsg_ts& messageData, uint32_t type, msgPriority_te prio = MSG_PRIO_NONE, void * data = NULL, uint32_t size = 0);
 	};
 };
 

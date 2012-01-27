@@ -70,7 +70,15 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 		return false;
 	}
 	pthread_mutex_lock(&messageData.mutex);
-	pthread_cond_wait(&messageData.condition, &messageData.mutex);
+	bool findAnOtherMessageInStack = false;
+	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
+		if (0 < messageData.nbMessages[iii]) {
+			findAnOtherMessageInStack = true;
+		}
+	}
+	if (false == findAnOtherMessageInStack) {
+		pthread_cond_wait(&messageData.condition, &messageData.mutex);
+	}
 	// find the message : 
 	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
 		if (0 < messageData.nbMessages[iii]) {
@@ -96,7 +104,7 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 	return true;
 }
 
-bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, uint32_t type, char * data, uint32_t size, ewol::threadMsg::msgPriority_te prio)
+bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, uint32_t type, ewol::threadMsg::msgPriority_te prio, void * data, uint32_t size)
 {
 	if (false == messageData.isInit) {
 		return false;
@@ -107,8 +115,9 @@ bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, ui
 	}
 	if (size > MAX_MSG_DATA_SIZE) {
 		EWOL_ERROR("Send message with an biger size than predictible " << size << " > " << MAX_MSG_DATA_SIZE);
+		return false;
 	}
-	EWOL_DEBUG("Try to send Message");
+	pthread_mutex_lock(&messageData.mutex);
 	int32_t lastNbMessage = messageData.nbMessages[prio];
 	for (int32_t jjj=0; NUMBER_OF_ELEMENT_IN_THE_FIFO>jjj; jjj++) {
 		if (messageData.listOfMessages[prio][jjj].isActive == false) {
@@ -119,21 +128,27 @@ bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, ui
 			if (data!=NULL) {
 				memcpy(messageData.listOfMessages[prio][jjj].data, data, size);
 			}
+			//EWOL_DEBUG("Find Slot : (" << prio << "," << jjj << ")");
 			messageData.nbMessages[prio]++;
+			break;
 		}
 	}
-	pthread_cond_broadcast(&messageData.condition);
+	/*
+	EWOL_DEBUG("send message (" << messageData.nbMessages[MSG_PRIO_REAL_TIME] << ","
+	                            << messageData.nbMessages[MSG_PRIO_HIGH] << ","
+	                            << messageData.nbMessages[MSG_PRIO_MEDIUM] << ","
+	                            << messageData.nbMessages[MSG_PRIO_LOW] << ","
+	                            << messageData.nbMessages[MSG_PRIO_NONE] << ")");
+	*/
+	bool returnValue = false;
 	if (lastNbMessage != messageData.nbMessages[prio]) {
-		return true;
+		returnValue = true;
 	} else {
 		EWOL_ERROR("Send message Add error");
-		return false;
+		returnValue = false;
 	}
-}
-
-
-void ewol::threadMsg::tmppp5656(const char * plop)
-{
-	EWOL_CRITICAL(plop);
+	pthread_cond_broadcast(&messageData.condition);
+	pthread_mutex_unlock(&messageData.mutex);
+	return returnValue;
 }
 

@@ -505,7 +505,6 @@ void ewol::SetDefaultFont(etk::String fontName, int32_t size)
 	// save the default font parameters ...
 	s_currentDefaultFontName = fontName;
 	s_currentDefaultFontId = tmpId;
-	EWOL_DEBUG("MEGAPLOP 2");
 }
 
 int32_t ewol::GetDefaultFontId(void)

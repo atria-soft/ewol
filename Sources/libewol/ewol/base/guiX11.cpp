@@ -50,7 +50,7 @@
 #include <sys/times.h>
 
 
-static int64_t GetCurrentTime(void)
+int64_t GetCurrentTime(void)
 {
 	return times(NULL);
 }
