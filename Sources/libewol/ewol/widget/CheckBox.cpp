@@ -29,7 +29,7 @@
 #include <ewol/WidgetManager.h>
 
 
-const char * ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
+extern const char * ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 
 #undef __class__
 #define __class__	"ewol::CheckBox"

@@ -29,6 +29,8 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+extern const char * const ewolEventLabelPressed;
+
 namespace ewol {
 	class Label :public ewol::Widget
 	{

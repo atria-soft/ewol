@@ -29,6 +29,9 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+extern const char * const ewolEventEntryClick;
+extern const char * const ewolEventEntryEnter;
+
 namespace ewol {
 	class Entry :public ewol::Widget
 	{

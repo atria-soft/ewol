@@ -32,7 +32,6 @@
 #include <ewol/Windows.h>
 
 
-
 namespace ewol {
 	void Stop(void);
 	void DisplayWindows(ewol::Windows * windows);

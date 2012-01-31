@@ -12,7 +12,7 @@
  *
  * This software is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY.
- *
+ *O
  * Licence summary : 
  *    You can modify and redistribute the sources code and binaries.
  *    You can send me the bug-fix
@@ -35,8 +35,8 @@ void EWOL_SystemStop(void);
 
 void EWOL_ThreadSetArchiveDir(int mode, const char* str);
 void EWOL_ThreadResize(int w, int h );
-void EWOL_ThreadEventInputMotion(int pointerID, float x, float y );
-void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y );
+void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
+void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
 
 
 

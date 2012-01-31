@@ -29,6 +29,8 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+extern const char * const ewolEventKeyboardHide;
+
 namespace ewol {
 	typedef enum {
 		KEYBOARD_MODE_TEXT,

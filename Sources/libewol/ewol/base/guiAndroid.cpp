@@ -41,14 +41,8 @@
 
 #undef __class__
 #define __class__ "AndroidJNI"
-
-
-int   gAppAlive   = 1;
-
-static int  sDemoStopped  = 0;
-static long sTimeOffset   = 0;
-static int  sTimeOffsetInit = 0;
-static long sTimeStopped  = 0;
+int EWOL_appArgC = 0;
+char *EWOL_appArgV[] = NULL;
 
 static etkFloat_t m_width = 320;
 static etkFloat_t m_height = 480;
@@ -84,10 +78,6 @@ bool firstInitDone = false;
 void EWOL_NativeInit(void)
 {
 	EWOL_INFO("Init : Start All Application");
-	gAppAlive    = 1;
-	sDemoStopped = 0;
-	sTimeOffsetInit = 0;
-	ewol::TextureOGLContext(true);
 	firstInitDone = true;
 }
 
@@ -97,8 +87,6 @@ void EWOL_NativeResize(int w, int h )
 	m_width = w;
 	m_height = h;
 	EWOL_INFO("Resize w=" << w << " h=" << h);
-	ewol::TextureOGLContext(false);
-	ewol::TextureOGLContext(true);
 	if (NULL != m_uniqueWindows) {
 		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 		m_uniqueWindows->SetOrigin(0.0, 0.0);
@@ -109,7 +97,6 @@ void EWOL_NativeResize(int w, int h )
 void EWOL_NativeDone(void)
 {
 	EWOL_INFO("Renderer : Close All Application");
-	ewol::TextureOGLContext(false);
 }
 
 void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
@@ -265,6 +252,7 @@ static etkFloat_t gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0
 
 void Draw(void)
 {
+	ewol::UpdateTextureContext();
 	//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
 	if(NULL == m_uniqueWindows) {
 		// set the size of the open GL system
@@ -371,95 +359,9 @@ void Draw(void)
 #undef __class__
 #define __class__ "guiAbstraction"
 
-static bool guiAbstractionIsInit = false;
-//static guiAbstraction::X11systemInterface * myX11Access = NULL;
-
-
-void guiAbstraction::Init(int32_t argc, char *argv[])
-{
-	if (false == guiAbstractionIsInit) {
-		// set the gui is init :
-		guiAbstractionIsInit = true;
-		EWOL_INFO("INIT for X11 environement");
-		//myX11Access = new guiAbstraction::X11systemInterface();
-	} else {
-		EWOL_CRITICAL("Can not INIT X11 ==> already init before");
-	}
-}
-
-
-void guiAbstraction::Run(void)
-{
-	EWOL_INFO("Noting to run in android mode ...");
-}
-
-void guiAbstraction::Stop(void)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->Stop();
-	} else {
-		EWOL_CRITICAL("Can not Stop X11 ==> not init ... ");
-	}
-}
-
 void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
 {
-	if (true == guiAbstractionIsInit) {
-		Setwindow(newOne);
-	} else {
-		EWOL_CRITICAL("Can not set Windows X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::UnInit(void)
-{
-	if (true == guiAbstractionIsInit) {
-		EWOL_INFO("UN-INIT for X11 environement");
-		//if (NULL != myX11Access) {
-		//	delete(myX11Access);
-		//}
-		guiAbstractionIsInit = false;
-	} else {
-		EWOL_CRITICAL("Can not Un-Init X11 ==> not init ... ");
-	}
-}
-
-
-void guiAbstraction::ChangeSize(int32_t w, int32_t h)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->ChangeSize(w, h);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::ChangePos(int32_t x, int32_t y)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->ChangePos(x, y);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
-{
-	if (true == guiAbstractionIsInit) {
-		//myX11Access->GetAbsPos(x, y);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-bool guiAbstraction::IsPressedInput(int32_t inputID)
-{
-	//if (true == guiAbstractionIsInit) {
-	//	return myX11Access->IsPressedInput(inputID);
-	//} else {
-	//	EWOL_CRITICAL("X11 ==> not init ... ");
-		return false;
-	//}
+	Setwindow(newOne);
 }
 
 void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
@@ -499,13 +401,6 @@ void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
 	}
 }
 
-// never had main in android ...
-/*
-int main(int argc, char *argv[])
-{
-	return -1;
-}
-*/
 
 void glOrtho(GLfloat left,
              GLfloat right,

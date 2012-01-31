@@ -27,12 +27,13 @@
 #include <ewol/Debug.h>
 #include <ewol/threadMsg.h>
 #include <ewol/base/MainThread.h>
+#include <ewol/base/gui.h>
 
 
 
 static ewol::threadMsg::threadMsg_ts    androidJniMsg;
 static pthread_t                        androidJniThread;
-static pthread_attr_t                   androidJniThreadAttr;
+//static pthread_attr_t                   androidJniThreadAttr;
 
 enum {
 	JNI_NONE,
@@ -70,83 +71,84 @@ typedef struct {
 } eventInputState_ts;
 
 
+extern int EWOL_appArgC;
+extern char *EWOL_appArgV[];
 
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
-	EDN_DEBUG("start Ewol Basic thread ...");
-	guiAbstraction::Init(0, NULL);
-	ewol::Init(0, NULL);
-	APP_Init(0, NULL);
+	EWOL_DEBUG("BThread Init (START)");
+	
+	ewol::Init(EWOL_appArgC, EWOL_appArgV);
+	APP_Init(EWOL_appArgC, EWOL_appArgV);
+	EWOL_DEBUG("BThread Init (END)");
 	while(false == requestEndProcessing) {
 		ewol::threadMsg::threadMsgContent_ts data;
 		ewol::threadMsg::WaitMessage(androidJniMsg, data);
 		switch (data.type) {
 			case JNI_NONE:
-				EDN_DEBUG("Receive MSG : JNI_NONE");
+				EWOL_DEBUG("Receive MSG : JNI_NONE");
 				break;
 			case JNI_INIT:
-				EDN_DEBUG("Receive MSG : JNI_INIT");
-				EWOL_NativeApplicationInit();
+				EWOL_DEBUG("Receive MSG : JNI_INIT");
+				//Android : EWOL_NativeApplicationInit();
 				break;
 			case JNI_UN_INIT:
-				EDN_DEBUG("Receive MSG : JNI_UN_INIT");
-				EWOL_NativeApplicationUnInit();
+				EWOL_DEBUG("Receive MSG : JNI_UN_INIT");
+				//Android : EWOL_NativeApplicationUnInit();
 				requestEndProcessing = true;
 				break;
 			case JNI_DONE:
-				EDN_DEBUG("Receive MSG : JNI_DONE");
+				EWOL_DEBUG("Receive MSG : JNI_DONE");
 				break;
 			case JNI_RESIZE:
-				EDN_DEBUG("Receive MSG : JNI_RESIZE");
+				EWOL_DEBUG("Receive MSG : JNI_RESIZE");
 				{
 					eventResize_ts * tmpData = (eventResize_ts*)data.data;
-					EWOL_NativeResize(tmpData->w, tmpData->h);
-					EWOL_NativeInit();
+					//Android : EWOL_NativeResize(tmpData->w, tmpData->h);
+					//Android : EWOL_NativeInit();
 				}
 				break;
 			case JNI_INPUT_MOTION:
-				EDN_DEBUG("Receive MSG : JNI_INPUT_MOTION");
+				EWOL_DEBUG("Receive MSG : JNI_INPUT_MOTION");
 				{
 					eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-					EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
+					//Android : EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
 				}
 				break;
 			case JNI_INPUT_STATE:
-				EDN_DEBUG("Receive MSG : JNI_INPUT_STATE");
+				EWOL_DEBUG("Receive MSG : JNI_INPUT_STATE");
 				{
 					eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-					EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
+					//Android : EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
 				}
 				break;
 			case JNI_DATA_ARCHIVE_DIR:
-				EDN_DEBUG("Receive MSG : JNI_DATA_ARCHIVE_DIR");
+				EWOL_DEBUG("Receive MSG : JNI_DATA_ARCHIVE_DIR");
 				break;
 			case JNI_APP_INIT:
-				EDN_DEBUG("Receive MSG : JNI_APP_INIT");
+				EWOL_DEBUG("Receive MSG : JNI_APP_INIT");
 				break;
 			case JNI_APP_UN_INIT:
-				EDN_DEBUG("Receive MSG : JNI_APP_UN_INIT");
+				EWOL_DEBUG("Receive MSG : JNI_APP_UN_INIT");
 				break;
 			case JNI_APP_RENDERER:
-				EDN_DEBUG("Receive MSG : JNI_APP_RENDERER");
+				EWOL_DEBUG("Receive MSG : JNI_APP_RENDERER");
 				break;
 			default:
-				EDN_DEBUG("Receive MSG : UNKNOW");
+				EWOL_DEBUG("Receive MSG : UNKNOW");
 				break;
 		}
 	}
-	EDN_DEBUG("End Ewol Basic thread ...");
+	EWOL_DEBUG("BThread Un-Init (START)");
 	
 	// unset all windows
 	ewol::DisplayWindows(NULL);
 	// call application to uninit
 	APP_UnInit();
-	// basic abstraction un-init
-	guiAbstraction::UnInit();
 	// uninit Ewol
 	ewol::UnInit();
-	
+	EWOL_DEBUG("BThread Un-Init (END)");
 	pthread_exit(NULL);
 }
 
@@ -206,7 +208,7 @@ void EWOL_SystemStop(void)
 		isGlobalSystemInit = false;
 		ewol::threadMsg::SendMessage(androidJniMsg, JNI_UN_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
 		
-		EDN_DEBUG("Wait end of the thread ...");
+		EWOL_DEBUG("Wait end of the thread ...");
 		// Wait end of the thread
 		pthread_join(androidJniThread, NULL);
 		ewol::threadMsg::UnInit(androidJniMsg);
@@ -217,18 +219,29 @@ void EWOL_SystemStop(void)
 
 void EWOL_ThreadResize(int w, int h )
 {
-	
+	eventResize_ts tmpData;
+	tmpData.w = w;
+	tmpData.h = h;
+	ewol::threadMsg::SendMessage(androidJniMsg, JNI_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
 }
-
 
 void EWOL_ThreadEventInputMotion(int pointerID, float x, float y )
 {
-	
+	eventInputMotion_ts tmpData;
+	tmpData.pointerID = pointerID;
+	tmpData.x = x;
+	tmpData.y = y;
+	ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
 }
 
 
 void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
 {
-	
+	eventInputState_ts tmpData;
+	tmpData.pointerID = pointerID;
+	tmpData.state = isUp;
+	tmpData.x = x;
+	tmpData.y = y;
+	ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
 }
 

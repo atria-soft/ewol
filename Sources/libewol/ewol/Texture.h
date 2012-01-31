@@ -44,6 +44,7 @@ namespace ewol
 	void     UnLoadTexture(uint32_t textureID);
 	int32_t  GetTextureSize(uint32_t textureID);
 	uint32_t GetTextureGLID(uint32_t textureID);
+	void     UpdateTextureContext(void);
 	void     TextureOGLContext(bool enable);
 };
 

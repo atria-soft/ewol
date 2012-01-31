@@ -29,6 +29,8 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+extern const char * ewolEventCheckBoxClicked;
+
 namespace ewol {
 	class CheckBox :public ewol::Widget
 	{

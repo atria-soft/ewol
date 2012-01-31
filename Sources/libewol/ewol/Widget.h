@@ -272,8 +272,9 @@ namespace ewol {
 		protected:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y) { return false; };
 			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
+		public:
 			// when an event arrive from an other widget, it will arrive here:
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y) { return false; };
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y) { return false; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present

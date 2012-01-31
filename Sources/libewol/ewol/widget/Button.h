@@ -29,6 +29,10 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+extern const char * const ewolEventButtonPressed;
+extern const char * const ewolEventButtonEnter;
+extern const char * const ewolEventButtonLeave;
+
 namespace ewol {
 	class Button :public ewol::Widget
 	{

@@ -46,8 +46,8 @@ extern "C" {
 #define __class__	"ewol::Keyboard"
 
 
-const char * const ewolEventKeyboardHide   = "ewol event Keyboard request hide";
-const char * const ewolEventKeyEvent = "ewol event internal key event";
+extern const char * const ewolEventKeyboardHide   = "ewol event Keyboard request hide";
+extern const char * const ewolEventKeyEvent = "ewol event internal key event";
 
 
 ewol::Keyboard::Keyboard(void)

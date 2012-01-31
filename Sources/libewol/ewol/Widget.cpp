@@ -24,6 +24,7 @@
 
 #include <ewol/Widget.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/WidgetMessageMultiCast.h>
 
 
 char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
@@ -97,6 +98,7 @@ ewol::Widget::Widget(void)
 
 ewol::Widget::~Widget(void)
 {
+	ewol::widgetMessageMultiCast::Rm(GetWidgetId());
 	ewol::widgetManager::Rm(this);
 }
 
@@ -166,7 +168,7 @@ bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_
 			if (NULL == tmpWidget) {
 				EWOL_ERROR("Try to call an NULL Widget, it might be removed ... id=" << m_externEvent[jjj].widgetCall);
 			} else {
-				ended = tmpWidget->OnEventAreaExternal(GetWidgetId(), generateEventId, m_externEvent[jjj].generateEventIdExtern, x, y);
+				ended = tmpWidget->OnEventAreaExternal(GetWidgetId(), m_externEvent[jjj].generateEventIdExtern, NULL, x, y);
 			}
 			if (true == ended) {
 				break;

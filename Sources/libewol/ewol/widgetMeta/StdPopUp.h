@@ -29,6 +29,13 @@
 #include <ewol/Debug.h>
 #include <ewol/widget/PopUp.h>
 
+extern const char * const ewolEventFileStdPopUpCancel;
+extern const char * const ewolEventFileStdPopUpValidate;
+extern const char * const ewolEventFileStdPopUpButton1;
+extern const char * const ewolEventFileStdPopUpButton2;
+extern const char * const ewolEventFileStdPopUpButton3;
+extern const char * const ewolEventFileStdPopUpButton4;
+
 namespace ewol {
 	class StdPopUp : public ewol::PopUp
 	{

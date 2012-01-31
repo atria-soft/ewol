@@ -29,8 +29,8 @@
 #include <ewol/ewol.h>
 
 
-const char * const ewolEventEntryClick      = "ewol Entry click";
-const char * const ewolEventEntryEnter      = "ewol Entry Enter";
+extern const char * const ewolEventEntryClick      = "ewol Entry click";
+extern const char * const ewolEventEntryEnter      = "ewol Entry Enter";
 
 
 

@@ -3,6 +3,7 @@
 FILE_LIST = ewol/ewol.cpp \
 			ewol/ewolInterne.cpp \
 			ewol/threadMsg.cpp \
+			ewol/base/MainThread.cpp \
 			ewol/Debug.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \
@@ -14,6 +15,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/FontFreeType.cpp \
 			ewol/Widget.cpp \
 			ewol/WidgetManager.cpp \
+			ewol/WidgetMessageMultiCast.cpp \
 			ewol/Windows.cpp \
 			ewol/widget/Button.cpp \
 			ewol/widget/Label.cpp \

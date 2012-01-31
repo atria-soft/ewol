@@ -32,11 +32,13 @@
 #include <ewol/threadMsg.h>
 
 // declaration of the ewol android abstraction ...
-void EWOL_NativeInit(void);
-void EWOL_NativeDone(void);
-void EWOL_NativeApplicationInit(void);
-void EWOL_NativeApplicationUnInit(void);
-void EWOL_NativeRender(void);
+
+void EWOL_SystemStart(void);
+void EWOL_SystemStop(void);
+void EWOL_ThreadSetArchiveDir(int mode, const char* str);
+void EWOL_ThreadResize(int w, int h );
+void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
+void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
 
 
 extern "C"
@@ -54,7 +56,7 @@ extern "C"
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnCreate( JNIEnv*  env )
 	{
 		EDN_DEBUG("Activity On Create");
-		BaseInit();
+		EWOL_SystemStart();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStart( JNIEnv*  env )
 	{
@@ -79,7 +81,7 @@ extern "C"
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnDestroy( JNIEnv*  env )
 	{
 		EDN_DEBUG("Activity On Destroy");
-		BaseUnInit();
+		EWOL_SystemStop();
 	}
 	
 	
@@ -92,41 +94,29 @@ extern "C"
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
 	{
-		eventResize_ts tmpData;
-		tmpData.w = w;
-		tmpData.h = h;
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
+		EWOL_ThreadResize(w, h);
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		eventInputMotion_ts tmpData;
-		tmpData.pointerID = pointerID;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+		EWOL_ThreadEventInputMotion(pointerID, x, y);
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		eventInputState_ts tmpData;
-		tmpData.pointerID = pointerID;
-		tmpData.state = isUp;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+		EWOL_ThreadEventInputState(pointerID, isUp, x, y);
 	}
 	
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeApplicationInit( JNIEnv* env)
 	{
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_INIT);
+		//ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_INIT);
 		//EWOL_NativeApplicationInit();
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeApplicationUnInit( JNIEnv* env)
 	{
-		ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_UN_INIT);
+		//ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_UN_INIT);
 		//EWOL_NativeApplicationUnInit();
 	}
 	

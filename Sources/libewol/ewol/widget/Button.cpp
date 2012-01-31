@@ -28,9 +28,9 @@
 #include <ewol/WidgetManager.h>
 
 
-const char * const ewolEventButtonPressed    = "ewol Button Pressed";
-const char * const ewolEventButtonEnter      = "ewol Button Enter";
-const char * const ewolEventButtonLeave      = "ewol Button Leave";
+extern const char * const ewolEventButtonPressed    = "ewol Button Pressed";
+extern const char * const ewolEventButtonEnter      = "ewol Button Enter";
+extern const char * const ewolEventButtonLeave      = "ewol Button Leave";
 
 
 

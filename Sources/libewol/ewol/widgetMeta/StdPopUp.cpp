@@ -36,12 +36,12 @@
 #define __class__	"ewol::StdPopUp"
 
 
-const char * const ewolEventFileStdPopUpCancel   = "ewol event std_pop_up cancel";
-const char * const ewolEventFileStdPopUpValidate = "ewol event std_pop_up validate";
-const char * const ewolEventFileStdPopUpButton1 = "ewol event std_pop_up BT1";
-const char * const ewolEventFileStdPopUpButton2 = "ewol event std_pop_up BT2";
-const char * const ewolEventFileStdPopUpButton3 = "ewol event std_pop_up BT3";
-const char * const ewolEventFileStdPopUpButton4 = "ewol event std_pop_up BT4";
+extern const char * const ewolEventFileStdPopUpCancel   = "ewol event std_pop_up cancel";
+extern const char * const ewolEventFileStdPopUpValidate = "ewol event std_pop_up validate";
+extern const char * const ewolEventFileStdPopUpButton1 = "ewol event std_pop_up BT1";
+extern const char * const ewolEventFileStdPopUpButton2 = "ewol event std_pop_up BT2";
+extern const char * const ewolEventFileStdPopUpButton3 = "ewol event std_pop_up BT3";
+extern const char * const ewolEventFileStdPopUpButton4 = "ewol event std_pop_up BT4";
 
 
 ewol::FileChooser::FileChooser(void)

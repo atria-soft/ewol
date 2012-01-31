@@ -29,13 +29,16 @@
 #include <ewol/Debug.h>
 #include <ewol/widget/PopUp.h>
 
+extern const char * const ewolEventFileChooserCancel;
+extern const char * const ewolEventFileChooserValidate;
+
 namespace ewol {
 	class FileChooser : public ewol::PopUp
 	{
 		public:
 			FileChooser(void);
 			~FileChooser(void);
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y);
 			void SetTitle(etk::String label);
 			void SetValidateLabel(etk::String label);
 			void SetCancelLabel(etk::String label);
