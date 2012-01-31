@@ -42,7 +42,7 @@
 #undef __class__
 #define __class__ "AndroidJNI"
 int EWOL_appArgC = 0;
-char *EWOL_appArgV[] = NULL;
+char **EWOL_appArgV = NULL;
 
 static etkFloat_t m_width = 320;
 static etkFloat_t m_height = 480;
@@ -72,14 +72,6 @@ int32_t m_previous_y = -1;
 int64_t m_previousTime = 0;
 bool    m_previousDouble = false;
 
-bool firstInitDone = false;
-
-/* Call to initialize the graphics state */
-void EWOL_NativeInit(void)
-{
-	EWOL_INFO("Init : Start All Application");
-	firstInitDone = true;
-}
 
 
 void EWOL_NativeResize(int w, int h )
@@ -91,12 +83,6 @@ void EWOL_NativeResize(int w, int h )
 		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 		m_uniqueWindows->SetOrigin(0.0, 0.0);
 	}
-}
-
-/* Call to finalize the graphics state */
-void EWOL_NativeDone(void)
-{
-	EWOL_INFO("Renderer : Close All Application");
 }
 
 void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
@@ -359,6 +345,14 @@ void Draw(void)
 #undef __class__
 #define __class__ "guiAbstraction"
 
+void guiAbstraction::Run(void)
+{
+}
+
+void guiAbstraction::Stop(void)
+{
+}
+
 void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
 {
 	Setwindow(newOne);
@@ -383,6 +377,28 @@ void guiAbstraction::ForceRedrawAll(void)
 	if (NULL != m_uniqueWindows) {
 		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
 	}
+}
+
+void guiAbstraction::ChangeSize(int32_t w, int32_t h)
+{
+}
+
+void guiAbstraction::ChangePos(int32_t x, int32_t y)
+{
+}
+
+void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
+{
+}
+
+bool guiAbstraction::IsPressedInput(int32_t inputID)
+{
+	//if (true == guiAbstractionIsInit) {
+	//	return myX11Access->IsPressedInput(inputID);
+	//} else {
+	//	EWOL_CRITICAL("X11 ==> not init ... ");
+		return false;
+	//}
 }
 
 

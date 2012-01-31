@@ -74,6 +74,10 @@ typedef struct {
 extern int EWOL_appArgC;
 extern char *EWOL_appArgV[];
 
+void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
+void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
+void EWOL_NativeResize(int w, int h );
+
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
@@ -95,7 +99,6 @@ static void* BaseAppEntry(void* param)
 				break;
 			case JNI_UN_INIT:
 				EWOL_DEBUG("Receive MSG : JNI_UN_INIT");
-				//Android : EWOL_NativeApplicationUnInit();
 				requestEndProcessing = true;
 				break;
 			case JNI_DONE:
@@ -105,22 +108,21 @@ static void* BaseAppEntry(void* param)
 				EWOL_DEBUG("Receive MSG : JNI_RESIZE");
 				{
 					eventResize_ts * tmpData = (eventResize_ts*)data.data;
-					//Android : EWOL_NativeResize(tmpData->w, tmpData->h);
-					//Android : EWOL_NativeInit();
+					EWOL_NativeResize(tmpData->w, tmpData->h);
 				}
 				break;
 			case JNI_INPUT_MOTION:
 				EWOL_DEBUG("Receive MSG : JNI_INPUT_MOTION");
 				{
 					eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-					//Android : EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
+					EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
 				}
 				break;
 			case JNI_INPUT_STATE:
 				EWOL_DEBUG("Receive MSG : JNI_INPUT_STATE");
 				{
 					eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-					//Android : EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
+					EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
 				}
 				break;
 			case JNI_DATA_ARCHIVE_DIR:

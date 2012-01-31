@@ -434,6 +434,7 @@ bool etk::File::LoadDataZip(void)
 		zip_stat_init(&zipFileProperty);
 		zip_stat_index(s_APKArchive, m_idZipFile, 0, &zipFileProperty);
 		TK_DEBUG("LOAD data from the files : \"" << GetCompleateName() << "\"");
+		/*
 		TK_DEBUG("         name=" << zipFileProperty.name);
 		TK_DEBUG("         index=" << zipFileProperty.index);
 		TK_DEBUG("         crc=" << zipFileProperty.crc);
@@ -442,6 +443,7 @@ bool etk::File::LoadDataZip(void)
 		TK_DEBUG("         comp_size=" << zipFileProperty.comp_size);
 		TK_DEBUG("         comp_method=" << zipFileProperty.comp_method);
 		TK_DEBUG("         encryption_method=" << zipFileProperty.encryption_method);
+		*/
 		m_zipDataSize = zipFileProperty.size;
 		m_zipData = new char[m_zipDataSize +10];
 		if (NULL == m_zipData) {
