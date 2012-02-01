@@ -27,6 +27,7 @@
 #include <ewol/Texture.h>
 #include <ewol/importgl.h>
 #include <ewol/ewol.h>
+#include <pthread.h>
 
 extern "C"
 {
@@ -334,6 +335,24 @@ class LoadedTexture
 
 
 etk::VectorType<LoadedTexture*> listLoadedTexture;
+#undef __class__
+#define __class__	"ewol::texture"
+
+static pthread_mutex_t localMutex;
+
+
+void ewol::texture::Init(void)
+{
+	// create interface mutex :
+	int ret = pthread_mutex_init(&localMutex, NULL);
+	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
+}
+
+void ewol::texture::UnInit(void)
+{
+	int ret = pthread_mutex_destroy(&localMutex);
+	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
+}
 
 
 #undef __class__
@@ -343,6 +362,7 @@ etk::VectorType<LoadedTexture*> listLoadedTexture;
 void ewol::UpdateTextureContext(void)
 {
 	bool needRedraw = false;
+	pthread_mutex_lock(&localMutex);
 	for (int32_t iii=0; iii < listLoadedTexture.Size(); iii++) {
 		if(    NULL != listLoadedTexture[iii]
 		    && NULL != listLoadedTexture[iii]->m_data)
@@ -393,6 +413,7 @@ void ewol::UpdateTextureContext(void)
 			}
 		}
 	}
+	pthread_mutex_unlock(&localMutex);
 	if (true == needRedraw) {
 		ewol::ForceRedrawAll();
 	}
@@ -439,8 +460,10 @@ int32_t ewol::LoadTexture(int32_t target,
 	}
 	memcpy(tmpTex->m_data, data, sizeof(char) * tmpTex->m_nbBytes);
 	
+	pthread_mutex_lock(&localMutex);
 	listLoadedTexture.PushBack(tmpTex);
 	outTextureID = listLoadedTexture.Size()-1;
+	pthread_mutex_unlock(&localMutex);
 	return outTextureID;
 }
 

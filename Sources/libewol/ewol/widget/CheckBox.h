@@ -29,7 +29,7 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
-extern const char * ewolEventCheckBoxClicked;
+extern const char* const ewolEventCheckBoxClicked;
 
 namespace ewol {
 	class CheckBox :public ewol::Widget

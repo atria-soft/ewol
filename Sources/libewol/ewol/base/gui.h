@@ -29,14 +29,13 @@
 #include <etk/Types.h>
 #include <etk/String.h>
 #include <ewol/Windows.h>
-#include <ewol/ewolInterne.h>
+
+void EWOL_NativeResize(int w, int h );
+void EWOL_GenericDraw(void);
 
 namespace guiAbstraction
 {
-	void Init(int32_t argc, char *argv[]);
-	void Run(void);
 	void Stop(void);
-	void UnInit(void);
 	void SetDisplayOnWindows(ewol::Windows * newOne);
 	void ChangeSize(int32_t w, int32_t h);
 	void ChangePos(int32_t x, int32_t y);
@@ -56,6 +55,5 @@ void APP_Init(int argc, char *argv[]);
 void APP_UnInit(void);
 
 #define NB_MAX_INPUT                  (20)
-#define SEPARATED_CLICK_TIME          (30)
 
 #endif

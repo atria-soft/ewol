@@ -43,11 +43,14 @@
 #define __class__ "AndroidJNI"
 int EWOL_appArgC = 0;
 char **EWOL_appArgV = NULL;
+int32_t separateClickTime = 20;
+int32_t offsetMoveClicked = 40;
+int32_t offsetMoveClickedDouble = 300;
 
-static etkFloat_t m_width = 320;
-static etkFloat_t m_height = 480;
+extern etkFloat_t     gui_width;
+extern etkFloat_t     gui_height;
+extern ewol::Windows* gui_uniqueWindows;
 
-ewol::Windows* m_uniqueWindows = NULL;
 int64_t GetCurrentTime(void)
 {
     struct timeval  now;
@@ -63,7 +66,7 @@ void Draw(void);
 #undef SEPARATED_CLICK_TIME
 #define SEPARATED_CLICK_TIME          (300)
 
-bool    inputIsPressed[NB_MAX_INPUT];// = {false, false, false};
+//bool    inputIsPressed[NB_MAX_INPUT];// = {false, false, false};
 int32_t m_previousBouttonId = -1;
 int32_t m_previousDown_x = -1;
 int32_t m_previousDown_y = -1;
@@ -74,175 +77,18 @@ bool    m_previousDouble = false;
 
 
 
-void EWOL_NativeResize(int w, int h )
-{
-	m_width = w;
-	m_height = h;
-	EWOL_INFO("Resize w=" << w << " h=" << h);
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-		m_uniqueWindows->SetOrigin(0.0, 0.0);
-	}
-}
-
-void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
-{
-	//EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
-	if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-		if (true == inputIsPressed[pointerID]) {
-			if(NULL != m_uniqueWindows) {
-				//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
-			}
-		}
-	}
-}
-
-void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
-{
-	//EWOL_INFO("Event : Input ID=" << pointerID << " [" << isUp << "] x=" << x << " y=" << y);
-	if (isUp) {
-		//EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
-		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-			// Send Down message
-			if (NULL != m_uniqueWindows) {
-				EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonPress\"        (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
-			}
-			// Check double or triple click event ...
-			m_previousDown_x = x;
-			m_previousDown_y = y;
-			if (m_previousBouttonId != pointerID+1) {
-				m_previousBouttonId = pointerID+1;
-				m_previous_x = -1;
-				m_previous_y = -1;
-				m_previousTime = 0;
-				m_previousDouble = false;
-			} else {
-				if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED
-				    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED )
-				{
-					// nothink to do ... wait up ...
-				} else {
-					m_previous_x = -1;
-					m_previous_y = -1;
-					m_previousTime = 0;
-					m_previousDouble = false;
-				}
-			}
-		}
-	} else {
-		//EWOL_INFO("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
-		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
-			// Send Down message
-			if (NULL != m_uniqueWindows) {
-				EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonRelease\"      (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-				m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
-			}
-			if (m_previousBouttonId != pointerID+1) {
-				m_previousDown_x = -1;
-				m_previousDown_y = -1;
-				m_previousBouttonId = 0;
-				m_previous_x = -1;
-				m_previous_y = -1;
-				m_previousTime = 0;
-				m_previousDouble = false;
-			} else {
-				int64_t currentTime = GetCurrentTime(); // return the tic in 10ms
-				//EWOL_DEBUG("time is : " << (int)currentTime << "    "<< (int)(currentTime/100) <<"s " << (int)((currentTime%100)*10) << "ms");
-				if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
-					//check if the same area click : 
-					if(    abs(m_previousDown_x - x) < OFFSET_MOVE_CLICKED
-					    && abs(m_previousDown_y - y) < OFFSET_MOVE_CLICKED )
-					{
-						// might generate an sigle event :
-						EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedSingle\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-						m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
-						m_previous_x = m_previousDown_x;
-						m_previous_y = m_previousDown_y;
-						m_previousTime = currentTime;
-					} else {
-						// reset values ...
-						m_previousDown_x = -1;
-						m_previousDown_y = -1;
-						m_previousBouttonId = 0;
-						m_previous_x = -1;
-						m_previous_y = -1;
-						m_previousTime = 0;
-					}
-					m_previousDouble = false;
-				} else {
-					// TODO : the double ckick does not work, I need to check this later ... if needed
-					//check if the same area click : 
-					if(    abs(m_previous_x - x) < OFFSET_MOVE_CLICKED_DOUBLE
-					    && abs(m_previous_y - y) < OFFSET_MOVE_CLICKED_DOUBLE )
-					{
-						// might generate an sigle event :
-						if (false == m_previousDouble) {
-							EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedDouble\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
-							m_previousTime = currentTime;
-							m_previousDouble = true;
-						} else {
-							EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedTriple\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-							m_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
-							// reset values ...
-							m_previousDown_x = -1;
-							m_previousDown_y = -1;
-							m_previousBouttonId = 0;
-							m_previous_x = -1;
-							m_previous_y = -1;
-							m_previousTime = 0;
-							m_previousDouble = false;
-						}
-					} else {
-						// reset values ...
-						m_previousDown_x = -1;
-						m_previousDown_y = -1;
-						m_previousBouttonId = 0;
-						m_previous_x = -1;
-						m_previous_y = -1;
-						m_previousTime = 0;
-						m_previousDouble = false;
-					}
-				}
-			}
-		}
-	}
-}
-
-
-/* Call to render the next GL frame */
-void EWOL_NativeRender(void)
-{
-	Draw();
-}
-
-
-
-
-
-static void Setwindow(ewol::Windows* newWindows)
-{
-	m_uniqueWindows = newWindows;
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-	}
-}
-
-
 
 static etkFloat_t gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
 static etkFloat_t gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
                                            200.0f, 200.0f, 300.0f, 200.0f, 200.0f, 300.0f };
 
-void Draw(void)
+void EWOL_NativeRender(void)
 {
 	ewol::UpdateTextureContext();
-	//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
-	if(NULL == m_uniqueWindows) {
+	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
+	if(NULL == gui_uniqueWindows) {
 		// set the size of the open GL system
-		glViewport(0,0,m_width,m_height);
+		glViewport(0,0,gui_width,gui_height);
 		
 		// Clear the screen with transparency ...
 		glClearColor(0.0,0.0,0.0, 1.0);
@@ -251,12 +97,12 @@ void Draw(void)
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		//glOrtho(0., width, 0., -height, 1., 20.);
-		glOrtho(-m_width/2, m_width/2, m_height/2, -m_height/2, -1, 1);
+		glOrtho(-gui_width/2, gui_width/2, gui_height/2, -gui_height/2, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
 		//glTranslatef(0, -height/2, -5);
-		glTranslatef(-m_width/2, -m_height/2, -1.0);
+		glTranslatef(-gui_width/2, -gui_height/2, -1.0);
 		
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -334,7 +180,7 @@ void Draw(void)
 	
 		glDisable(GL_BLEND);
 	} else {
-		m_uniqueWindows->SysDraw();
+		EWOL_GenericDraw();
 	}
 	glFlush();
 }
@@ -345,46 +191,20 @@ void Draw(void)
 #undef __class__
 #define __class__ "guiAbstraction"
 
-void guiAbstraction::Run(void)
-{
-}
-
 void guiAbstraction::Stop(void)
 {
+	// TODo : send a message to the android system to stop ...
 }
 
-void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
-{
-	Setwindow(newOne);
-}
-
-void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
-{
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->KeyboardShow(mode);
-	}
-}
-
-void guiAbstraction::KeyboardHide(void)
-{
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->KeyboardHide();
-	}
-}
-
-void guiAbstraction::ForceRedrawAll(void)
-{
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-	}
-}
 
 void guiAbstraction::ChangeSize(int32_t w, int32_t h)
 {
+	// nothing to do with Android
 }
 
 void guiAbstraction::ChangePos(int32_t x, int32_t y)
 {
+	// nothing to do with Android
 }
 
 void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
@@ -401,21 +221,6 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	//}
 }
 
-
-void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
-{
-	// Get the current Focused Widget :
-	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-	if (NULL != tmpWidget) {
-		if(true == isDown) {
-			EWOL_DEBUG("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
-		} else {
-			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
-		}
-	}
-}
 
 
 void glOrtho(GLfloat left,

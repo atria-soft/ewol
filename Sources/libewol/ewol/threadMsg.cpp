@@ -152,3 +152,16 @@ bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, ui
 	return returnValue;
 }
 
+int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
+{
+	if (false == messageData.isInit) {
+		return false;
+	}
+	pthread_mutex_lock(&messageData.mutex);
+	int32_t nbMessage = 0;
+	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
+		nbMessage += messageData.nbMessages[iii];
+	}
+	pthread_mutex_unlock(&messageData.mutex);
+	return nbMessage;
+}

@@ -34,6 +34,9 @@ extern "C" {
 	} widgetList_ts;
 };
 
+static pthread_mutex_t localMutex;
+
+
 // internal element of the widget manager : 
 static etk::VectorType<widgetList_ts>   m_widgetList;   // all widget allocated ==> all time increment ... never removed ...
 // For the focus Management
@@ -42,11 +45,15 @@ static ewol::Widget * m_focusWidgetCurrent = NULL;
 
 void ewol::widgetManager::Init(void)
 {
-	EWOL_INFO("user widget manager");
+	EWOL_DEBUG("Init Widget manager");
+	// create interface mutex :
+	int ret = pthread_mutex_init(&localMutex, NULL);
+	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
 }
 
 void ewol::widgetManager::UnInit(void)
 {
+	EWOL_DEBUG("Un-Init Widget manager");
 	EWOL_INFO("Realease all FOCUS");
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
@@ -61,6 +68,8 @@ void ewol::widgetManager::UnInit(void)
 		}
 	}
 	m_widgetList.Clear();
+	int ret = pthread_mutex_destroy(&localMutex);
+	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 }
 
 void ewol::widgetManager::Add(ewol::Widget * newWidget)
@@ -208,3 +217,25 @@ void ewol::widgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
 }
 
 
+
+void ewol::widgetManager::GetDoubleBufferFlipFlop(void)
+{
+	pthread_mutex_lock(&localMutex);
+	// flip/Flop all the widget registered :
+	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
+		if (NULL != m_widgetList[iii].widgetPointer) {
+			m_widgetList[iii].widgetPointer->DoubleBufferFlipFlop();
+		}
+	}
+	pthread_mutex_unlock(&localMutex);
+}
+
+void ewol::widgetManager::GetDoubleBufferStartDraw(void)
+{
+	pthread_mutex_lock(&localMutex);
+}
+
+void ewol::widgetManager::GetDoubleBufferStopDraw(void)
+{
+	pthread_mutex_unlock(&localMutex);
+}

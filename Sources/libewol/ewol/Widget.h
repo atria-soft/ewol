@@ -25,6 +25,7 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
+#define NB_BOUBLE_BUFFER        (2)
 
 namespace ewol {
 	class Widget;
@@ -291,8 +292,13 @@ namespace ewol {
 		private:
 			bool m_genericDraw;
 			bool m_specificDraw;
-			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
+			int32_t m_currentDrawId;
+			int32_t m_currentCreateId;
+			bool    m_needFlipFlop;
+			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
 			bool GenericDraw(void);
+		public:
+			void DoubleBufferFlipFlop(void);
 		protected:
 			void AddOObject(ewol::OObject* newObject, etk::String name = "", int32_t pos=-1);
 			ewol::OObject* GetOObject(etk::String name);

@@ -60,6 +60,7 @@ namespace ewol {
 		void Init(threadMsg_ts& messageData);
 		void UnInit(threadMsg_ts& messageData);
 		bool WaitMessage(threadMsg_ts& messageData, threadMsgContent_ts &data);
+		int32_t WaitingMessage(threadMsg_ts& messageData);
 		bool SendMessage(threadMsg_ts& messageData, uint32_t type, msgPriority_te prio = MSG_PRIO_NONE, void * data = NULL, uint32_t size = 0);
 	};
 };

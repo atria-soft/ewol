@@ -76,6 +76,9 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 
 ewol::Widget::Widget(void)
 {
+	m_currentDrawId = 0;
+	m_currentCreateId = 1;
+	m_needFlipFlop = false;
 	m_origin.x = 0.0;
 	m_origin.y = 0.0;
 	m_size.x = 10.0;
@@ -337,19 +340,20 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name, int32_
 	newObject->UpdateSize(m_size.x, m_size.y);
 	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," << m_origin.y << ")");
 	newObject->UpdateOrigin(m_origin.x, m_origin.y);
-	if (pos < 0 || pos >= m_listOObject.Size() ) {
-		m_listOObject.PushBack(newObject);
+	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
+		m_listOObject[m_currentCreateId].PushBack(newObject);
 	} else {
-		m_listOObject.Insert(pos, newObject);
+		m_listOObject[m_currentCreateId].Insert(pos, newObject);
 	}
+	m_needFlipFlop = true;
 }
 
 
 ewol::OObject* ewol::Widget::GetOObject(etk::String name)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
-		if (m_listOObject[iii]->GetName() == name) {
-			return m_listOObject[iii];
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
+		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {
+			return m_listOObject[m_currentCreateId][iii];
 		}
 	}
 	return NULL;
@@ -357,11 +361,11 @@ ewol::OObject* ewol::Widget::GetOObject(etk::String name)
 
 void ewol::Widget::RmOObjectElem(etk::String name)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
-		if (m_listOObject[iii]->GetName() == name) {
-			delete(m_listOObject[iii]);
-			m_listOObject[iii] = NULL;
-			m_listOObject.Erase(iii);
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
+		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {
+			delete(m_listOObject[m_currentCreateId][iii]);
+			m_listOObject[m_currentCreateId][iii] = NULL;
+			m_listOObject[m_currentCreateId].Erase(iii);
 			return;
 		}
 	}
@@ -369,24 +373,38 @@ void ewol::Widget::RmOObjectElem(etk::String name)
 
 void ewol::Widget::ClearOObjectList(void)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
-		delete(m_listOObject[iii]);
-		m_listOObject[iii] = NULL;
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
+		delete(m_listOObject[m_currentCreateId][iii]);
+		m_listOObject[m_currentCreateId][iii] = NULL;
 	}
-	m_listOObject.Clear();
+	m_listOObject[m_currentCreateId].Clear();
 }
 
 bool ewol::Widget::GenericDraw(void)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
-		if (NULL != m_listOObject[iii]) {
-			m_listOObject[iii]->Draw();
+	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_listOObject[m_currentDrawId][iii]) {
+			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
 	}
 	return true;
 }
 
 
-//} // ???
+void ewol::Widget::DoubleBufferFlipFlop(void)
+{
+	if (true == m_needFlipFlop) {
+		m_currentDrawId++;
+		if (NB_BOUBLE_BUFFER<=m_currentDrawId) {
+			m_currentDrawId = 0;
+		}
+		m_currentCreateId++;
+		if (NB_BOUBLE_BUFFER<=m_currentCreateId) {
+			m_currentCreateId = 0;
+		}
+		m_needFlipFlop = false;
+	}
+}
+
 
 

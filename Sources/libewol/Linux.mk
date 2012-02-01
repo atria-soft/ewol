@@ -16,7 +16,6 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
-                -DEWOL_X11_MODE__XF86V \
                 -DEWOL_USE_FREE_TYPE \
                 `pkg-config --cflags freetype2`
 

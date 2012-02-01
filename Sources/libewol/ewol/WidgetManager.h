@@ -45,6 +45,13 @@ namespace ewol {
 			void           FocusRelease(   void); // Release focus from the current widget to the default
 			ewol::Widget * FocusGet(       void);
 			void           FocusRemoveIfRemove(ewol::Widget * newWidget);
+			
+			
+			int32_t GetDoubleBufferCreate(void);
+			int32_t GetDoubleBufferDraw(void);
+			void    GetDoubleBufferFlipFlop(void);
+			void    GetDoubleBufferStartDraw(void);
+			void    GetDoubleBufferStopDraw(void);
 	};
 };
 

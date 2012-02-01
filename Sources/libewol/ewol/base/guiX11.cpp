@@ -40,14 +40,7 @@
 #include <GL/glut.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
-#if defined(EWOL_X11_MODE__XF86V)
-#	include <X11/extensions/xf86vmode.h>
-#elif defined(EWOL_X11_MODE__XRENDER)
-#	include <X11/extensions/Xrender.h>
-#else
-#	error you might define an EWOL_X11_MODE in EWOL_X11_XF86V / EWOL_X11_XRENDER
-#endif
-
+#include <X11/extensions/xf86vmode.h>
 #include <sys/times.h>
 
 
@@ -59,7 +52,6 @@ int64_t GetCurrentTime(void)
 #undef __class__
 #define __class__	"guiAbstraction"
 
-#if defined(EWOL_X11_MODE__XF86V)
 // attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListSgl[] = {
 	GLX_RGBA,
@@ -80,20 +72,6 @@ static int attrListDbl[] = {
 	GLX_DEPTH_SIZE, 16,
 	None
 };
-#elif defined(EWOL_X11_MODE__XRENDER)
-static int VisualData[] = {
-	GLX_RENDER_TYPE, GLX_RGBA_BIT,
-	GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-	GLX_DOUBLEBUFFER, True,
-	GLX_RED_SIZE, 1,
-	GLX_GREEN_SIZE, 1,
-	GLX_BLUE_SIZE, 1,
-	GLX_ALPHA_SIZE, 1,
-	GLX_DEPTH_SIZE, 1,
-	None
-};
-#endif
-
 
 extern bool guiKeyBoardMode_CapLock;
 extern bool guiKeyBoardMode_Shift;
@@ -128,12 +106,6 @@ bool    m_previousDouble;
 Atom           m_delAtom;
 Display *      m_display;
 Window         WindowHandle;
-#if defined(EWOL_X11_MODE__XRENDER)
-GLXFBConfig    m_fbConfig;
-Window         m_GLXWindowHandle;
-#endif
-int32_t        m_width;
-int32_t        m_height;
 int32_t        m_originX;
 int32_t        m_originY;
 int32_t        m_cursorEventX;
@@ -141,19 +113,21 @@ int32_t        m_cursorEventY;
 XVisualInfo *  m_visual;
 bool           m_doubleBuffered;
 bool           m_run;
-ewol::Windows* m_uniqueWindows;
+extern ewol::Windows* gui_uniqueWindows;
+extern etkFloat_t     gui_width;
+extern etkFloat_t     gui_height;
+
+int32_t separateClickTime = 30;
+int32_t offsetMoveClicked = 10;
+int32_t offsetMoveClickedDouble = 20;
+
 
 bool inputIsPressed[20];
 
 
-static void X11_Stop(void);
 static void X11_ChangeSize(int32_t w, int32_t h);
 static void X11_ChangePos(int32_t x, int32_t y);
 static void X11_GetAbsPos(int32_t & x, int32_t & y);
-static void X11_KeyboardShow(ewol::keyboardMode_te mode);
-static void X11_KeyboardHide(void);
-static void X11_ForceRedrawAll(void);
-static bool X11_IsPressedInput(int32_t inputID);
 
 bool CreateX11Context(void)
 {
@@ -164,11 +138,7 @@ bool CreateX11Context(void)
 	XSetWindowAttributes attr;
 	static char *title = (char*)"APPLICATION Title ... (todo)";
 	
-	#if defined(EWOL_X11_MODE__XF86V)
-		EWOL_INFO("X11 Mode XF86 Video");
-	#elif defined(EWOL_X11_MODE__XRENDER)
-		EWOL_INFO("X11 Mode XRendrer Video");
-	#endif
+	EWOL_INFO("X11 Mode XF86 Video");
 	
 	// Connect to the X server
 	m_display = XOpenDisplay(NULL);
@@ -179,43 +149,21 @@ bool CreateX11Context(void)
 		EWOL_INFO("Display opened.");
 	}
 	int Xscreen = DefaultScreen(m_display);
-	#if defined(EWOL_X11_MODE__XF86V)
-		{
-			int32_t vmMajor, vmMinor;
-			XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
-			EWOL_INFO("XF86 VideoMode extension version " << vmMajor << "." << vmMinor);
-		}
-		// get an appropriate visual
-		m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
-		if (NULL == m_visual) {
-			m_visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
-			m_doubleBuffered = false;
-			EWOL_INFO("XF86 singlebuffered rendering will be used, no doublebuffering available");
-		} else {
-			m_doubleBuffered = true;
-			EWOL_INFO("XF86 doublebuffered rendering available");
-		}
-	#elif defined(EWOL_X11_MODE__XRENDER)
-		int numfbconfigs;
+	{
+		int32_t vmMajor, vmMinor;
+		XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
+		EWOL_INFO("XF86 VideoMode extension version " << vmMajor << "." << vmMinor);
+	}
+	// get an appropriate visual
+	m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
+	if (NULL == m_visual) {
+		m_visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
+		m_doubleBuffered = false;
+		EWOL_INFO("XF86 singlebuffered rendering will be used, no doublebuffering available");
+	} else {
 		m_doubleBuffered = true;
-		GLXFBConfig *fbconfigs = glXChooseFBConfig(m_display, Xscreen, VisualData, &numfbconfigs);
-		EWOL_DEBUG("get glx format config =" << numfbconfigs);
-		for(int i = 0; i<numfbconfigs; i++) {
-			m_visual = glXGetVisualFromFBConfig(m_display, fbconfigs[i]);
-			if(!m_visual) {
-				continue;
-			}
-			XRenderPictFormat * pictFormat = XRenderFindVisualFormat(m_display, m_visual->visual);
-			if(!pictFormat) {
-				continue;
-			}
-			if(pictFormat->direct.alphaMask > 0) {
-				m_fbConfig = fbconfigs[i];
-				EWOL_DEBUG("SELECT fbconfig id=" << i);
-				break;
-			}
-		}
-	#endif
+		EWOL_INFO("XF86 doublebuffered rendering available");
+	}
 	{
 		int32_t glxMajor, glxMinor;
 		glXQueryVersion(m_display, &glxMajor, &glxMinor);
@@ -246,15 +194,16 @@ bool CreateX11Context(void)
 	// select internal attribute
 	attr_mask = CWBackPixmap | CWColormap | CWBorderPixel | CWEventMask;
 	// Create the window
-	m_width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
-	m_height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
-	x=m_width/2;
-	y=m_height/4;
+	int32_t tmp_width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
+	int32_t tmp_height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
+	EWOL_NativeResize(tmp_width, tmp_height);
+	x=tmp_width/2;
+	y=tmp_height/4;
 	
 	// Real create of the window
 	WindowHandle = XCreateWindow(m_display,
 	                             Xroot,
-	                             x, y, m_width, m_height,
+	                             x, y, tmp_width, tmp_height,
 	                             1,
 	                             m_visual->depth,
 	                             InputOutput,
@@ -274,8 +223,8 @@ bool CreateX11Context(void)
 	
 	hints.x = x;
 	hints.y = y;
-	hints.width = m_width;
-	hints.height = m_height;
+	hints.width = tmp_width;
+	hints.height = tmp_height;
 	hints.flags = USPosition|USSize;
 	
 	StartupState = XAllocWMHints();
@@ -336,49 +285,27 @@ void AddDecoration(void)
 
 bool CreateOGlContext(void)
 {
-	#if defined(EWOL_X11_MODE__XRENDER)
-		/* See if we can do OpenGL on this visual */
-		int dummy;
-		if (!glXQueryExtension(m_display, &dummy, &dummy)) {
-			EWOL_CRITICAL("OpenGL not supported by X server");
-			exit(-1);
-		}
-		
-		/* Create the OpenGL rendering context */
-		GLXContext RenderContext = glXCreateNewContext(m_display, m_fbConfig, GLX_RGBA_TYPE, 0, GL_TRUE);
-		if (!RenderContext) {
-			EWOL_CRITICAL("Failed to create a GL context");
-			exit(-1);
-		}
-		m_GLXWindowHandle = glXCreateWindow(m_display, m_fbConfig, WindowHandle, NULL);
-		/* Make it current */
-		if (!glXMakeContextCurrent(m_display, m_GLXWindowHandle, m_GLXWindowHandle, RenderContext)) {
-			EWOL_CRITICAL("glXMakeCurrent failed for window");
-			exit(-1);
-		}
-	#elif defined(EWOL_X11_MODE__XF86V)
-		/* create a GLX context */
-		GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
-		/* connect the glx-context to the window */
-		glXMakeCurrent(m_display, WindowHandle, RenderContext);
-		if (glXIsDirect(m_display, RenderContext)) {
-			EWOL_INFO("XF86 DRI enabled\n");
-		} else {
-			EWOL_INFO("XF86 DRI NOT available\n");
-		}
-	#endif
+	/* create a GLX context */
+	GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
+	/* connect the glx-context to the window */
+	glXMakeCurrent(m_display, WindowHandle, RenderContext);
+	if (glXIsDirect(m_display, RenderContext)) {
+		EWOL_INFO("XF86 DRI enabled\n");
+	} else {
+		EWOL_INFO("XF86 DRI NOT available\n");
+	}
 	return true;
 }
 
-void Draw(void)
+void EWOL_NativeRender(void)
 {
 	ewol::UpdateTextureContext();
-	//EWOL_DEBUG("redraw (" << m_width << "," << m_height << ")");
-	if(NULL == m_uniqueWindows) {
+	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
+	if(NULL == gui_uniqueWindows) {
 		//EWOL_DEBUG("Has No Windows set...");
 		
 		// set the size of the open GL system
-		glViewport(0,0,m_width,m_height);
+		glViewport(0,0,gui_width,gui_height);
 		
 		// Clear the screen with transparency ...
 		glClearColor(0.750, 0.750, 0.750, 0.5);
@@ -386,30 +313,26 @@ void Draw(void)
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0., (etkFloat_t)m_width, 0., (etkFloat_t)m_height, 1., 20.);
+		glOrtho(0., (etkFloat_t)gui_width, 0., (etkFloat_t)gui_height, 1., 20.);
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(0, 0, -5);
 		
 		glBegin(GL_QUADS);
-			glColor3f(1., 0., 0.); glVertex3f( .25*(etkFloat_t)m_width, .25*(etkFloat_t)m_height, 0.);
-			glColor3f(0., 1., 0.); glVertex3f( .75*(etkFloat_t)m_width, .25*(etkFloat_t)m_height, 0.);
-			glColor3f(0., 0., 1.); glVertex3f( .75*(etkFloat_t)m_width, .75*(etkFloat_t)m_height, 0.);
-			glColor3f(1., 1., 0.); glVertex3f( .25*(etkFloat_t)m_width, .75*(etkFloat_t)m_height, 0.);
+			glColor3f(1., 0., 0.); glVertex3f( .25*(etkFloat_t)gui_width, .25*(etkFloat_t)gui_height, 0.);
+			glColor3f(0., 1., 0.); glVertex3f( .75*(etkFloat_t)gui_width, .25*(etkFloat_t)gui_height, 0.);
+			glColor3f(0., 0., 1.); glVertex3f( .75*(etkFloat_t)gui_width, .75*(etkFloat_t)gui_height, 0.);
+			glColor3f(1., 1., 0.); glVertex3f( .25*(etkFloat_t)gui_width, .75*(etkFloat_t)gui_height, 0.);
 		glEnd();
 	} else {
-		m_uniqueWindows->SysDraw();
+		EWOL_GenericDraw();
 	}
 	// swap the buffers if we have doublebuffered
-	#if defined(EWOL_X11_MODE__XRENDER)
-		glXSwapBuffers(m_display, m_GLXWindowHandle);
-	#elif defined(EWOL_X11_MODE__XF86V)
-		glFlush();
-		if (m_doubleBuffered) {
-			glXSwapBuffers(m_display, WindowHandle);
-		}
-	#endif
+	glFlush();
+	if (m_doubleBuffered) {
+		glXSwapBuffers(m_display, WindowHandle);
+	}
 }
 
 void X11_Init(void)
@@ -435,14 +358,6 @@ void X11_Init(void)
 }
 
 
-void X11_Setwindow(ewol::Windows* newWindows)
-{
-	m_uniqueWindows = newWindows;
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-	}
-}
-
 void X11_Run(void)
 {
 	// main cycle
@@ -458,16 +373,15 @@ void X11_Run(void)
 					{
 						Atom atom = XInternAtom(m_display, "WM_DELETE_WINDOW", false);
 						if((int64_t)atom == (int64_t)event.xclient.data.l[0]) {
-							if (NULL != m_uniqueWindows) {
-								m_uniqueWindows->SysOnKill();
+							if (NULL != gui_uniqueWindows) {
+								gui_uniqueWindows->SysOnKill();
 							}
-							X11_Stop();
+							m_run = false;
 						}
 					}
 					break;
 				case ConfigureNotify:
-					m_width  = event.xconfigure.width;
-					m_height = event.xconfigure.height;
+					EWOL_NativeResize(event.xconfigure.width, event.xconfigure.height);
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
 					break;
@@ -496,130 +410,29 @@ void X11_Run(void)
 					break;
 			}
 			// parse event
-			if(NULL == m_uniqueWindows) {
+			if(NULL == gui_uniqueWindows) {
 				EWOL_DEBUG("Has No Windows set...");
 			} else {
 				switch (event.type)
 				{
 					case ConfigureNotify:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
-						m_uniqueWindows->CalculateSize((etkFloat_t)event.xconfigure.width, (etkFloat_t)event.xconfigure.height);
-						m_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
+						//EWOL_VERBOSE("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
+						//gui_uniqueWindows->CalculateSize((etkFloat_t)event.xconfigure.width, (etkFloat_t)event.xconfigure.height);
+						//gui_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
 						break;
 					case Expose:
 						EWOL_VERBOSE("X11 event : " << event.type << " = \"Expose\"");
-						m_uniqueWindows->SysOnExpose();
+						gui_uniqueWindows->SysOnExpose();
 						break;
 					case ButtonPress:
-						{
-							int32_t btId = event.xbutton.button;
-							EWOL_VERBOSE("X11 bt=" << btId << " event : " << event.type << "=\"ButtonPress\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
-							// Send Down message
-							m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
-							// Check double or triple click event ...
-							m_previousDown_x = event.xbutton.x;
-							m_previousDown_y = event.xbutton.y;
-							if (m_previousBouttonId != btId) {
-								m_previousBouttonId = btId;
-								m_previous_x = -1;
-								m_previous_y = -1;
-								m_previousTime = 0;
-								m_previousDouble = false;
-							} else {
-								if(    abs(m_previous_x - event.xbutton.x) < 5
-								    && abs(m_previous_y - event.xbutton.y) < 5 )
-								{
-									// nothink to do ... wait up ...
-								} else {
-									m_previous_x = -1;
-									m_previous_y = -1;
-									m_previousTime = 0;
-									m_previousDouble = false;
-								}
-							}
-						}
+						EWOL_ThreadEventInputState(event.xbutton.button-1, true, (float)event.xbutton.x, (float)event.xbutton.y);
 						break;
 					case ButtonRelease:
-						{
-							int32_t btId = event.xbutton.button;
-							EWOL_VERBOSE("X11 bt=" << btId << " event : " << event.type << "=\"ButtonRelease\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
-							// send Up event ...
-							m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
-							
-							if (m_previousBouttonId != btId) {
-								m_previousDown_x = -1;
-								m_previousDown_y = -1;
-								m_previousBouttonId = 0;
-								m_previous_x = -1;
-								m_previous_y = -1;
-								m_previousTime = 0;
-								m_previousDouble = false;
-							} else {
-								int64_t currentTime = GetCurrentTime(); // return the tic in 10ms
-								//EWOL_DEBUG("time is : " << currentTime << "    "<< currentTime/100 <<"s " << (currentTime%100)*10 << "ms");
-								if (currentTime - m_previousTime >= SEPARATED_CLICK_TIME) {
-									//check if the same area click : 
-									if(    abs(m_previousDown_x - event.xbutton.x) < 5
-									    && abs(m_previousDown_y - event.xbutton.y) < 5 )
-									{
-										// might generate an sigle event :
-										//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedSingle\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
-										m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
-										m_previous_x = m_previousDown_x;
-										m_previous_y = m_previousDown_y;
-										m_previousTime = currentTime;
-									} else {
-										// reset values ...
-										m_previousDown_x = -1;
-										m_previousDown_y = -1;
-										m_previousBouttonId = 0;
-										m_previous_x = -1;
-										m_previous_y = -1;
-										m_previousTime = 0;
-									}
-									m_previousDouble = false;
-								} else {
-									//check if the same area click : 
-									if(    abs(m_previous_x - event.xbutton.x) < 5
-									    && abs(m_previous_y - event.xbutton.y) < 5 )
-									{
-										// might generate an sigle event :
-										if (false == m_previousDouble) {
-											//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedDouble\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
-											m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
-											m_previousTime = currentTime;
-											m_previousDouble = true;
-										} else {
-											//EWOL_DEBUG("X11 event : " << event.type << " = \"ButtonClickedTriple\" (" << (etkFloat_t)event.xbutton.x << "," << (etkFloat_t)event.xbutton.y << ")");
-											m_uniqueWindows->GenEventInput(btId, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)event.xbutton.x, (etkFloat_t)event.xbutton.y);
-											// reset values ...
-											m_previousDown_x = -1;
-											m_previousDown_y = -1;
-											m_previousBouttonId = 0;
-											m_previous_x = -1;
-											m_previous_y = -1;
-											m_previousTime = 0;
-											m_previousDouble = false;
-										}
-									} else {
-										// reset values ...
-										m_previousDown_x = -1;
-										m_previousDown_y = -1;
-										m_previousBouttonId = 0;
-										m_previous_x = -1;
-										m_previous_y = -1;
-										m_previousTime = 0;
-										m_previousDouble = false;
-									}
-								}
-								
-								//int64_t currentTime = 
-							}
-						}
+						EWOL_ThreadEventInputState(event.xbutton.button-1, false, (float)event.xbutton.x, (float)event.xbutton.y);
 						break;
 					case EnterNotify:
 						//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
-						m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
+						//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
 						break;
 					case MotionNotify:
 						{
@@ -628,27 +441,29 @@ void X11_Run(void)
 							for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 								if (true == inputIsPressed[iii]) {
 									EWOL_VERBOSE("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-									m_uniqueWindows->GenEventInput(iii+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+									//gui_uniqueWindows->GenEventInput(iii+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+									EWOL_ThreadEventInputMotion(iii+1, (float)event.xmotion.x, (float)event.xmotion.y);
 									findOne = true;
 								}
 							}
 							if (false == findOne) {
 								EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-								m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+								//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
+								EWOL_ThreadEventInputMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
 							}
 						}
 						break;
 					case LeaveNotify:
 						//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
-						m_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
+						//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
 						break;
 					case FocusIn:
 						EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusIn\"");
-						m_uniqueWindows->SetFocus();
+						//gui_uniqueWindows->SetFocus();
 						break;
 					case FocusOut:
 						EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusOut\"");
-						m_uniqueWindows->RmFocus();
+						//gui_uniqueWindows->RmFocus();
 						break;
 					case KeyPress:
 					case KeyRelease:
@@ -764,9 +579,9 @@ void X11_Run(void)
 										buf[1] = 0x00;
 										etk::String tmpData = buf;
 										if(event.type == KeyPress) {
-											guiAbstraction::SendKeyboardEvent(true, tmpData);
+											EWOL_ThreadKeyboardEvent(true, tmpData);
 										} else {
-											guiAbstraction::SendKeyboardEvent(false, tmpData);
+											EWOL_ThreadKeyboardEvent(false, tmpData);
 										}
 									}
 								default:
@@ -785,9 +600,9 @@ void X11_Run(void)
 										if (count>0) {
 											etk::String tmpData = buf;
 											if(event.type == KeyPress) {
-												guiAbstraction::SendKeyboardEvent(true, tmpData);
+												EWOL_ThreadKeyboardEvent(true, tmpData);
 											} else {
-												guiAbstraction::SendKeyboardEvent(false, tmpData);
+												EWOL_ThreadKeyboardEvent(false, tmpData);
 											}
 										} else {
 											EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
@@ -798,9 +613,9 @@ void X11_Run(void)
 							if (true == find) {
 								EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
 								if(event.type == KeyPress) {
-									guiAbstraction::SendKeyboardEventMove(true, keyInput);
+									EWOL_ThreadKeyboardEventMove(true, keyInput);
 								} else {
-									guiAbstraction::SendKeyboardEventMove(false, keyInput);
+									EWOL_ThreadKeyboardEventMove(false, keyInput);
 								}
 							}
 							break;
@@ -809,25 +624,20 @@ void X11_Run(void)
 					//	break;
 					case MapNotify:
 						EWOL_VERBOSE("X11 event : " << event.type << " = \"MapNotify\"");
-						m_uniqueWindows->SysOnShow();
+						gui_uniqueWindows->SysOnShow();
 						break;
 					case UnmapNotify:
 						EWOL_VERBOSE("X11 event : " << event.type << " = \"UnmapNotify\"");
-						m_uniqueWindows->SysOnHide();
+						gui_uniqueWindows->SysOnHide();
 						break;
 					default:
 						EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
 				}
 			}
 		}
-		Draw();
+		EWOL_NativeRender();
 		//usleep( 100000 );
 	}
-};
-
-void X11_Stop(void)
-{
-	m_run = false;
 };
 
 void X11_ChangeSize(int32_t w, int32_t h)
@@ -848,27 +658,38 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
 };
 
-void X11_KeyboardShow(ewol::keyboardMode_te mode)
+
+
+
+
+#undef __class__
+#define __class__ "guiAbstraction"
+
+
+void guiAbstraction::Stop(void)
 {
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->KeyboardShow(mode);
-	}
-}
-void X11_KeyboardHide(void)
-{
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->KeyboardHide();
-	}
-	X11_ForceRedrawAll();
+	m_run = false;
 }
 
-void X11_ForceRedrawAll(void)
+
+
+
+void guiAbstraction::ChangeSize(int32_t w, int32_t h)
 {
-	if (NULL != m_uniqueWindows) {
-		m_uniqueWindows->CalculateSize((etkFloat_t)m_width, (etkFloat_t)m_height);
-	}
-};
-bool X11_IsPressedInput(int32_t inputID)
+	X11_ChangeSize(w, h);
+}
+
+void guiAbstraction::ChangePos(int32_t x, int32_t y)
+{
+	X11_ChangePos(x, y);
+}
+
+void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
+{
+	X11_GetAbsPos(x, y);
+}
+
+bool guiAbstraction::IsPressedInput(int32_t inputID)
 {
 	if(    NB_MAX_INPUT > inputID
 	    && 0 <= inputID)
@@ -877,148 +698,6 @@ bool X11_IsPressedInput(int32_t inputID)
 	} else {
 		EWOL_WARNING("Wrong input ID : " << inputID);
 		return false;
-	}
-}
-
-
-
-
-#undef __class__
-#define __class__ "guiAbstraction"
-
-static bool guiAbstractionIsInit = false;
-
-void guiAbstraction::Init(int32_t argc, char *argv[])
-{
-	if (false == guiAbstractionIsInit) {
-		// set the gui is init :
-		guiAbstractionIsInit = true;
-		EWOL_INFO("INIT for X11 environement");
-		X11_Init();
-	} else {
-		EWOL_CRITICAL("Can not INIT X11 ==> already init before");
-	}
-}
-
-void guiAbstraction::Stop(void)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_Stop();
-	} else {
-		EWOL_CRITICAL("Can not Stop X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newOne)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_Setwindow(newOne);
-	} else {
-		EWOL_CRITICAL("Can not set Windows X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::UnInit(void)
-{
-	if (true == guiAbstractionIsInit) {
-		EWOL_INFO("UN-INIT for X11 environement");
-		guiAbstractionIsInit = false;
-	} else {
-		EWOL_CRITICAL("Can not Un-Init X11 ==> not init ... ");
-	}
-}
-
-
-void guiAbstraction::ChangeSize(int32_t w, int32_t h)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_ChangeSize(w, h);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::ChangePos(int32_t x, int32_t y)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_ChangePos(x, y);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_GetAbsPos(x, y);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-bool guiAbstraction::IsPressedInput(int32_t inputID)
-{
-	if (true == guiAbstractionIsInit) {
-		return X11_IsPressedInput(inputID);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-		return false;
-	}
-}
-
-void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_KeyboardShow(mode);
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::KeyboardHide(void)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_KeyboardHide();
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::ForceRedrawAll(void)
-{
-	if (true == guiAbstractionIsInit) {
-		X11_ForceRedrawAll();
-	} else {
-		EWOL_CRITICAL("X11 ==> not init ... ");
-	}
-}
-
-void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
-{
-	// Get the current Focused Widget :
-	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-	if (NULL != tmpWidget) {
-		if(true == isDown) {
-			EWOL_DEBUG("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
-		} else {
-			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
-		}
-	}
-}
-
-
-void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput)
-{
-	// Get the current Focused Widget :
-	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-	if (NULL != tmpWidget) {
-		if(true == isDown) {
-			tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, keyInput);
-		} else {
-			tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, keyInput);
-		}
 	}
 }
 
@@ -1034,19 +713,15 @@ int main(int argc, char *argv[])
 	//EWOL_appArgC = argc;
 	//EWOL_appArgV = argv;
 	// start X11 thread ...
-	guiAbstraction::Init(argc, argv);
-	
+	X11_Init();
 	//start the basic thread : 
 	EWOL_SystemStart();
 	// Run ...
 	X11_Run();
 	// close X11 :
-	X11_Stop();
+	guiAbstraction::Stop();
 	// uninit ALL :
 	EWOL_SystemStop();
-	
-	// basic abstraction un-init
-	guiAbstraction::UnInit();
 	
 	return 0;
 }

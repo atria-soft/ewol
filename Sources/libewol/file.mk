@@ -1,9 +1,9 @@
 
 
 FILE_LIST = ewol/ewol.cpp \
-			ewol/ewolInterne.cpp \
 			ewol/threadMsg.cpp \
 			ewol/base/MainThread.cpp \
+			ewol/base/gui.cpp \
 			ewol/Debug.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \

@@ -28,6 +28,9 @@
 #include <ewol/threadMsg.h>
 #include <ewol/base/MainThread.h>
 #include <ewol/base/gui.h>
+#include <ewol/Texture.h>
+#include <ewol/WidgetManager.h>
+#include <ewol/themeManager.h>
 
 
 
@@ -47,6 +50,9 @@ enum {
 	JNI_APP_INIT,
 	JNI_APP_UN_INIT,
 	JNI_APP_RENDERER,
+	
+	THREAD_KEYBORAD_KEY,
+	THREAD_KEYBORAD_MOVE,
 };
 
 
@@ -70,6 +76,15 @@ typedef struct {
 	float y;
 } eventInputState_ts;
 
+typedef struct {
+	bool      isDown;
+	uniChar_t myChar;
+} eventKeyboardKey_ts;
+
+typedef struct {
+	bool                     isDown;
+	ewol::eventKbMoveType_te move;
+} eventKeyboardMove_ts;
 
 extern int EWOL_appArgC;
 extern char *EWOL_appArgV[];
@@ -78,12 +93,19 @@ void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
 void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
 void EWOL_NativeResize(int w, int h );
 
+
+
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
 	EWOL_DEBUG("BThread Init (START)");
 	
-	ewol::Init(EWOL_appArgC, EWOL_appArgV);
+	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
+	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
+	ewol::texture::Init();
+	ewol::theme::Init();
+	ewol::widgetManager::Init();
+	ewol::InitFont();
 	APP_Init(EWOL_appArgC, EWOL_appArgV);
 	EWOL_DEBUG("BThread Init (END)");
 	while(false == requestEndProcessing) {
@@ -112,14 +134,14 @@ static void* BaseAppEntry(void* param)
 				}
 				break;
 			case JNI_INPUT_MOTION:
-				EWOL_DEBUG("Receive MSG : JNI_INPUT_MOTION");
+				//EWOL_DEBUG("Receive MSG : JNI_INPUT_MOTION");
 				{
 					eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
 					EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
 				}
 				break;
 			case JNI_INPUT_STATE:
-				EWOL_DEBUG("Receive MSG : JNI_INPUT_STATE");
+				//EWOL_DEBUG("Receive MSG : JNI_INPUT_STATE");
 				{
 					eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
 					EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
@@ -137,9 +159,29 @@ static void* BaseAppEntry(void* param)
 			case JNI_APP_RENDERER:
 				EWOL_DEBUG("Receive MSG : JNI_APP_RENDERER");
 				break;
+			case THREAD_KEYBORAD_KEY:
+				EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
+				{
+					eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
+					etk::String keyInput = "a";
+					keyInput.c_str()[0] = tmpData->myChar;
+					guiAbstraction::SendKeyboardEvent(tmpData->isDown, keyInput);
+				}
+				break;
+			case THREAD_KEYBORAD_MOVE:
+				EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
+				{
+					eventKeyboardMove_ts * tmpData = (eventKeyboardMove_ts*)data.data;
+					guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
+				}
+				break;
 			default:
 				EWOL_DEBUG("Receive MSG : UNKNOW");
 				break;
+		}
+		// TODO : when no message in the pipe : generate the display, and after, request the flip flop
+		if (0 == ewol::threadMsg::WaitingMessage(androidJniMsg)) {
+			ewol::widgetManager::GetDoubleBufferFlipFlop();
 		}
 	}
 	EWOL_DEBUG("BThread Un-Init (START)");
@@ -148,8 +190,11 @@ static void* BaseAppEntry(void* param)
 	ewol::DisplayWindows(NULL);
 	// call application to uninit
 	APP_UnInit();
-	// uninit Ewol
-	ewol::UnInit();
+	
+	ewol::texture::UnInit();
+	ewol::UnInitFont();
+	ewol::widgetManager::UnInit();
+	ewol::theme::UnInit();
 	EWOL_DEBUG("BThread Un-Init (END)");
 	pthread_exit(NULL);
 }
@@ -161,24 +206,15 @@ void EWOL_ThreadSetArchiveDir(int mode, const char* str)
 	{
 		case 0:
 			EWOL_DEBUG("Directory APK : path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderData(str);
-			}
+			etk::SetBaseFolderData(str);
 			break;
 		case 1:
 			EWOL_DEBUG("Directory mode=FILE path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderDataUser(str);
-			}
+			etk::SetBaseFolderDataUser(str);
 			break;
 		case 2:
 			EWOL_DEBUG("Directory mode=CACHE path=" << str);
-			//if (firstInitDone == false)
-			{
-				etk::SetBaseFolderCache(str);
-			}
+			etk::SetBaseFolderCache(str);
 			break;
 		case 3:
 			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << str);
@@ -246,4 +282,21 @@ void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
 	tmpData.y = y;
 	ewol::threadMsg::SendMessage(androidJniMsg, JNI_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
 }
+
+void EWOL_ThreadKeyboardEvent(bool isDown, etk::String &keyInput)
+{
+	eventKeyboardKey_ts tmpData;
+	tmpData.isDown = isDown;
+	tmpData.myChar = keyInput.c_str()[0];
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventKeyboardKey_ts) );
+}
+
+void EWOL_ThreadKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput)
+{
+	eventKeyboardMove_ts tmpData;
+	tmpData.isDown = isDown;
+	tmpData.move = keyInput;
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventKeyboardMove_ts) );
+}
+
 
