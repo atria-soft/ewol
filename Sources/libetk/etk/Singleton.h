@@ -31,11 +31,11 @@ namespace etk {
 	{
 		protected:
 			// Constructeur/destructeur
-			Singleton() { }
-			~Singleton() { /*std::cout << "destroying singleton." << std::endl;*/ }
+			Singleton(void) { }
+			~Singleton(void) { /*std::cout << "destroying singleton." << std::endl;*/ }
 		public:
 			// Interface publique
-			static T *Get()
+			static T *Get(void)
 			{
 				if (NULL == _singleton)
 				{
@@ -43,7 +43,7 @@ namespace etk {
 				}
 				return (static_cast<T*> (_singleton));
 			}
-			static T *getInstance()
+			static T *getInstance(void)
 			{
 				if (NULL == _singleton)
 				{
@@ -51,7 +51,7 @@ namespace etk {
 				}
 				return (static_cast<T*> (_singleton));
 			}
-			static void Kill()
+			static void Kill(void)
 			{
 				if (NULL != _singleton)
 				{

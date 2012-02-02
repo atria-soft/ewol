@@ -96,9 +96,9 @@ static void* BaseAppEntry(void* param)
 	
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
+	ewol::widgetManager::Init();
 	ewol::texture::Init();
 	ewol::theme::Init();
-	ewol::widgetManager::Init();
 	ewol::InitFont();
 	APP_Init();
 	int32_t countNbEvent = 0;
