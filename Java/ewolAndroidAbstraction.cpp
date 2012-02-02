@@ -104,12 +104,12 @@ extern "C"
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventInputMotion(pointerID, x, y);
+		EWOL_ThreadEventInputMotion(pointerID+1, x, y);
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventInputState(pointerID, isUp, x, y);
+		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
 	}
 	
 	
