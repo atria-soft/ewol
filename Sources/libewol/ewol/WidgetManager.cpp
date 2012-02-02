@@ -217,6 +217,7 @@ void ewol::widgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
 }
 
 
+static bool needRedraw = true;
 
 void ewol::widgetManager::GetDoubleBufferFlipFlop(void)
 {
@@ -227,12 +228,22 @@ void ewol::widgetManager::GetDoubleBufferFlipFlop(void)
 			m_widgetList[iii].widgetPointer->DoubleBufferFlipFlop();
 		}
 	}
+	needRedraw = true;
 	pthread_mutex_unlock(&localMutex);
 }
 
 void ewol::widgetManager::GetDoubleBufferStartDraw(void)
 {
 	pthread_mutex_lock(&localMutex);
+}
+
+bool ewol::widgetManager::GetDoubleBufferNeedDraw(void)
+{
+	if (true == needRedraw) {
+		needRedraw = false;
+		return true;
+	}
+	return false;
 }
 
 void ewol::widgetManager::GetDoubleBufferStopDraw(void)

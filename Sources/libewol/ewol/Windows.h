@@ -45,7 +45,6 @@ namespace ewol {
 			void SysOnShow(void) {};
 			void SysOnHide(void) {};
 			void SysOnKill(void) {};
-			void SysOnExpose(void) {};
 		public:
 			virtual void OnShow(void) { };
 			virtual void OnHide(void) { };

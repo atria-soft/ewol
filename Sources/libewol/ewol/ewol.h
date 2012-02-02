@@ -42,6 +42,8 @@ namespace ewol {
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
+	int32_t     CmdLineNb(void);
+	etk::String CmdLineGet(int32_t id);
 	
 	bool IsSetCapsLock(void);
 	bool IsSetShift(void);

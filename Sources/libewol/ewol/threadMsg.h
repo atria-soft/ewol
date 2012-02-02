@@ -55,6 +55,7 @@ namespace ewol {
 			pthread_cond_t      condition;
 			threadMsgContent_ts listOfMessages[MSG_PRIO_NUMBER][NUMBER_OF_ELEMENT_IN_THE_FIFO];
 			int32_t             nbMessages[MSG_PRIO_NUMBER];
+			bool                displayHasDone;
 		} threadMsg_ts;
 		
 		void Init(threadMsg_ts& messageData);

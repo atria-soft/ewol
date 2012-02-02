@@ -50,6 +50,7 @@ namespace ewol {
 			int32_t GetDoubleBufferCreate(void);
 			int32_t GetDoubleBufferDraw(void);
 			void    GetDoubleBufferFlipFlop(void);
+			bool    GetDoubleBufferNeedDraw(void);
 			void    GetDoubleBufferStartDraw(void);
 			void    GetDoubleBufferStopDraw(void);
 	};

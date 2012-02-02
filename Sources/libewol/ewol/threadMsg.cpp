@@ -165,3 +165,5 @@ int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
 	pthread_mutex_unlock(&messageData.mutex);
 	return nbMessage;
 }
+
+

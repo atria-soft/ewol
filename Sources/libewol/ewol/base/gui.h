@@ -51,7 +51,7 @@ namespace guiAbstraction
 int64_t GetCurrentTime(void);
 
 //!< must be define in CPP by the application ...
-void APP_Init(int argc, char *argv[]);
+void APP_Init(void);
 void APP_UnInit(void);
 
 #define NB_MAX_INPUT                  (20)

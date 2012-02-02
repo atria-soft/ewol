@@ -130,27 +130,27 @@ void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
 	if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 		if(NULL != gui_uniqueWindows) {
 			//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-			gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
+			gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
 		}
 	}
 }
 
 void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 {
-	//EWOL_INFO("Event : Input ID=" << pointerID << " [" << isUp << "] x=" << x << " y=" << y);
+	//EWOL_INFO("GUI : Input ID=" << pointerID << " [" << isUp << "] x=" << x << " y=" << y);
 	if (isUp) {
-		//EWOL_INFO("Event : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
+		//EWOL_DEBUG("GUI : Input ID=" << pointerID << " [DOWN] x=" << x << " y=" << y);
 		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 			// Send Down message
 			if (NULL != gui_uniqueWindows) {
-				EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonPress\"        (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-				gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
+				EWOL_DEBUG("GUI : Input ID=" << pointerID << " [DOWN]   (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
 			}
 			// Check double or triple click event ...
 			m_previousDown_x = x;
 			m_previousDown_y = y;
-			if (m_previousBouttonId != pointerID+1) {
-				m_previousBouttonId = pointerID+1;
+			if (m_previousBouttonId != pointerID) {
+				m_previousBouttonId = pointerID;
 				m_previous_x = -1;
 				m_previous_y = -1;
 				m_previousTime = 0;
@@ -169,14 +169,14 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 			}
 		}
 	} else {
-		//EWOL_INFO("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
+		//EWOL_DEBUG("Event : Input ID=" << pointerID << " [UP]   x=" << x << " y=" << y);
 		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 			// Send Down message
 			if (NULL != gui_uniqueWindows) {
-				EWOL_DEBUG("ANDROID bt=" << pointerID+1 << " event : **=\"ButtonRelease\"      (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-				gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
+				EWOL_DEBUG("GUI : Input ID=" << pointerID << " [UP]     (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
 			}
-			if (m_previousBouttonId != pointerID+1) {
+			if (m_previousBouttonId != pointerID) {
 				m_previousDown_x = -1;
 				m_previousDown_y = -1;
 				m_previousBouttonId = 0;
@@ -185,16 +185,16 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 				m_previousTime = 0;
 				m_previousDouble = false;
 			} else {
-				int64_t currentTime = GetCurrentTime(); // return the tic in 10ms
-				//EWOL_DEBUG("time is : " << (int)currentTime << "    "<< (int)(currentTime/100) <<"s " << (int)((currentTime%100)*10) << "ms");
+				int64_t currentTime = GetCurrentTime(); // return the tic in 1ms
+				EWOL_DEBUG("time is : " << (int)currentTime << "    "<< (int)(currentTime/1000) <<"s " << (int)((currentTime%100)*10) << "ms    delta : " << (currentTime - m_previousTime) << "<" << separateClickTime );
 				if (currentTime - m_previousTime >= separateClickTime) {
 					//check if the same area click : 
 					if(    abs(m_previousDown_x - x) < offsetMoveClicked
 					    && abs(m_previousDown_y - y) < offsetMoveClicked )
 					{
 						// might generate an sigle event :
-						EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedSingle\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-						gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
+						EWOL_DEBUG("GUI : Input ID=" << pointerID << " [SINGLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+						gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
 						m_previous_x = m_previousDown_x;
 						m_previous_y = m_previousDown_y;
 						m_previousTime = currentTime;
@@ -216,13 +216,13 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 					{
 						// might generate an sigle event :
 						if (false == m_previousDouble) {
-							EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedDouble\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-							gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
+							EWOL_DEBUG("GUI : Input ID=" << pointerID << " [DOUBLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
 							m_previousTime = currentTime;
 							m_previousDouble = true;
 						} else {
-							EWOL_DEBUG("ANDROID event : ** = \"ButtonClickedTriple\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
-							gui_uniqueWindows->GenEventInput(pointerID+1, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
+							EWOL_DEBUG("GUI : Input ID=" << pointerID << " [TRIPLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
 							// reset values ...
 							m_previousDown_x = -1;
 							m_previousDown_y = -1;
@@ -248,10 +248,37 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 	}
 }
 
+static int64_t startTime = -1;
+static int64_t nbCallTime = 0;
+static int64_t nbDisplayTime = 0;
+#define DISPLAY_PERIODE_MS       (1000)
+
 
 void EWOL_GenericDraw(void)
 {
+	bool display = false;
+	nbCallTime++;
+	if (startTime<0) {
+		startTime = GetCurrentTime();
+	}
+	int64_t currentTime = GetCurrentTime();
+	//EWOL_DEBUG("current : " << currentTime << "time    diff : " << (currentTime - startTime));
+	if ( (currentTime - startTime) > DISPLAY_PERIODE_MS) {
+		display = true;
+	}
 	ewol::widgetManager::GetDoubleBufferStartDraw();
-	gui_uniqueWindows->SysDraw();
+	if (true == ewol::widgetManager::GetDoubleBufferNeedDraw()) {
+		nbDisplayTime++;
+		gui_uniqueWindows->SysDraw();
+	}
 	ewol::widgetManager::GetDoubleBufferStopDraw();
+	// send Message that we just finished a display ...
+	EWOL_ThreadEventHasJustDisplay();
+	
+	if (true == display) {
+		EWOL_DEBUG("display property : " << (int32_t)((double)nbDisplayTime/(double)DISPLAY_PERIODE_MS*(double)1000) << "/" << (int32_t)((double)nbCallTime/(double)DISPLAY_PERIODE_MS*(double)1000) << "fps");
+		nbCallTime = 0;
+		nbDisplayTime = 0;
+		startTime = -1;
+	}
 }

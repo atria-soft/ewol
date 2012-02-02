@@ -46,7 +46,15 @@
 
 int64_t GetCurrentTime(void)
 {
-	return times(NULL);
+	struct timespec now;
+	int ret = clock_gettime(CLOCK_REALTIME, &now);
+	if (ret != 0) {
+		// Error to get the time ...
+		now.tv_sec = time(NULL);
+		now.tv_nsec = 0;
+	}
+	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
+	return (int64_t)((int64_t)now.tv_sec*(int64_t)1000 + (int64_t)now.tv_nsec/(int64_t)1000000);
 }
 
 #undef __class__
@@ -117,7 +125,7 @@ extern ewol::Windows* gui_uniqueWindows;
 extern etkFloat_t     gui_width;
 extern etkFloat_t     gui_height;
 
-int32_t separateClickTime = 30;
+int32_t separateClickTime = 300;
 int32_t offsetMoveClicked = 10;
 int32_t offsetMoveClickedDouble = 20;
 
@@ -381,9 +389,9 @@ void X11_Run(void)
 					}
 					break;
 				case ConfigureNotify:
-					EWOL_NativeResize(event.xconfigure.width, event.xconfigure.height);
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
+					EWOL_ThreadResize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
 					m_cursorEventX = event.xbutton.x;
@@ -391,6 +399,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
+					EWOL_ThreadEventInputState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case ButtonRelease:
 					m_cursorEventX = event.xbutton.x;
@@ -398,245 +407,214 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = false;
 					}
+					EWOL_ThreadEventInputState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case EnterNotify:
+					m_cursorEventX = event.xcrossing.x;
+					m_cursorEventY = event.xcrossing.y;
+					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
+					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
+					break;
 				case LeaveNotify:
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = event.xcrossing.y;
+					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
 					break;
 				case MotionNotify:
 					m_cursorEventX = event.xmotion.x;
 					m_cursorEventY = event.xmotion.y;
-					break;
-			}
-			// parse event
-			if(NULL == gui_uniqueWindows) {
-				EWOL_DEBUG("Has No Windows set...");
-			} else {
-				switch (event.type)
-				{
-					case ConfigureNotify:
-						//EWOL_VERBOSE("X11 event : " << event.type << " = \"ConfigureNotify\" Origin(" << event.xconfigure.x << "," << event.xconfigure.y << ") Size(" << event.xconfigure.width << "," << event.xconfigure.height << ")");
-						//gui_uniqueWindows->CalculateSize((etkFloat_t)event.xconfigure.width, (etkFloat_t)event.xconfigure.height);
-						//gui_uniqueWindows->SetOrigin(event.xconfigure.x, event.xconfigure.y);
-						break;
-					case Expose:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"Expose\"");
-						gui_uniqueWindows->SysOnExpose();
-						break;
-					case ButtonPress:
-						EWOL_ThreadEventInputState(event.xbutton.button-1, true, (float)event.xbutton.x, (float)event.xbutton.y);
-						break;
-					case ButtonRelease:
-						EWOL_ThreadEventInputState(event.xbutton.button-1, false, (float)event.xbutton.x, (float)event.xbutton.y);
-						break;
-					case EnterNotify:
-						//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
-						//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
-						break;
-					case MotionNotify:
-						{
-							// For compatibility of the Android system : 
-							bool findOne = false;
-							for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
-								if (true == inputIsPressed[iii]) {
-									EWOL_VERBOSE("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-									//gui_uniqueWindows->GenEventInput(iii+1, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
-									EWOL_ThreadEventInputMotion(iii+1, (float)event.xmotion.x, (float)event.xmotion.y);
-									findOne = true;
-								}
-							}
-							if (false == findOne) {
-								EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-								//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)event.xmotion.x, (etkFloat_t)event.xmotion.y);
-								EWOL_ThreadEventInputMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+					{
+						// For compatibility of the Android system : 
+						bool findOne = false;
+						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
+							if (true == inputIsPressed[iii]) {
+								EWOL_VERBOSE("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+								EWOL_ThreadEventInputMotion(iii+1, (float)event.xmotion.x, (float)event.xmotion.y);
+								findOne = true;
 							}
 						}
-						break;
-					case LeaveNotify:
-						//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
-						//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_LEAVE, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
-						break;
-					case FocusIn:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusIn\"");
-						//gui_uniqueWindows->SetFocus();
-						break;
-					case FocusOut:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusOut\"");
-						//gui_uniqueWindows->RmFocus();
-						break;
-					case KeyPress:
-					case KeyRelease:
-						//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
-						{
-							EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
-							if (event.xkey.state & (1<<0) ) {
-								//EWOL_DEBUG("    Special Key : SHIFT");
-								guiKeyBoardMode_Shift = true;
-							} else {
-								guiKeyBoardMode_Shift = false;
-							}
-							if (event.xkey.state & (1<<1) ) {
-								//EWOL_DEBUG("    Special Key : CAPS_LOCK");
-								guiKeyBoardMode_CapLock = true;
-							} else {
-								guiKeyBoardMode_CapLock = false;
-							}
-							if (event.xkey.state & (1<<2) ) {
-								//EWOL_DEBUG("    Special Key : Ctrl");
-								guiKeyBoardMode_Ctrl = true;
-							} else {
-								guiKeyBoardMode_Ctrl = false;
-							}
-							if (event.xkey.state & (1<<3) ) {
-								//EWOL_DEBUG("    Special Key : Alt");
-								guiKeyBoardMode_Alt = true;
-							} else {
-								guiKeyBoardMode_Alt = false;
-							}
-							if (event.xkey.state & (1<<4) ) {
-								//EWOL_DEBUG("    Special Key : VER_num");
-								guiKeyBoardMode_VerNum = true;
-							} else {
-								guiKeyBoardMode_VerNum = false;
-							}
-							if (event.xkey.state & (1<<5) ) {
-								EWOL_DEBUG("    Special Key : MOD");
-							}
-							if (event.xkey.state & (1<<6) ) {
-								//EWOL_DEBUG("    Special Key : META");
-								guiKeyBoardMode_Meta = true;
-							} else {
-								guiKeyBoardMode_Meta = false;
-							}
-							if (event.xkey.state & (1<<7) ) {
-								//EWOL_DEBUG("    Special Key : ALT_GR");
-								guiKeyBoardMode_AltGr = true;
-							} else {
-								guiKeyBoardMode_AltGr = false;
-							}
-							bool find = true;
-							ewol::eventKbMoveType_te keyInput;
-							switch (event.xkey.keycode) {
-								//case 80: // keypad
-								case 111:	keyInput = ewol::EVENT_KB_MOVE_TYPE_UP;				break;
-								//case 83: // keypad
-								case 113:	keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT;			break;
-								//case 85: // keypad
-								case 114:	keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT;			break;
-								//case 88: // keypad
-								case 116:	keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN;			break;
-								//case 81: // keypad
-								case 112:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;		break;
-								//case 89: // keypad
-								case 117:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;		break;
-								//case 79: // keypad
-								case 110:	keyInput = ewol::EVENT_KB_MOVE_TYPE_START;			break;
-								//case 87: // keypad
-								case 115:	keyInput = ewol::EVENT_KB_MOVE_TYPE_END;			break;
-								case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
-								case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
-								//case 90: // keypad
-								case 118:
-									keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
-									if(event.type == KeyRelease) {
-										if (true == guiKeyBoardMode_Insert) {
-											guiKeyBoardMode_Insert = false;
-										} else {
-											guiKeyBoardMode_Insert = true;
-										}
+						if (false == findOne) {
+							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+							EWOL_ThreadEventInputMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+						}
+					}
+					break;
+				case FocusIn:
+					EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusIn\"");
+					break;
+				case FocusOut:
+					EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusOut\"");
+					break;
+				case KeyPress:
+				case KeyRelease:
+					//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+					{
+						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+						if (event.xkey.state & (1<<0) ) {
+							//EWOL_DEBUG("    Special Key : SHIFT");
+							guiKeyBoardMode_Shift = true;
+						} else {
+							guiKeyBoardMode_Shift = false;
+						}
+						if (event.xkey.state & (1<<1) ) {
+							//EWOL_DEBUG("    Special Key : CAPS_LOCK");
+							guiKeyBoardMode_CapLock = true;
+						} else {
+							guiKeyBoardMode_CapLock = false;
+						}
+						if (event.xkey.state & (1<<2) ) {
+							//EWOL_DEBUG("    Special Key : Ctrl");
+							guiKeyBoardMode_Ctrl = true;
+						} else {
+							guiKeyBoardMode_Ctrl = false;
+						}
+						if (event.xkey.state & (1<<3) ) {
+							//EWOL_DEBUG("    Special Key : Alt");
+							guiKeyBoardMode_Alt = true;
+						} else {
+							guiKeyBoardMode_Alt = false;
+						}
+						if (event.xkey.state & (1<<4) ) {
+							//EWOL_DEBUG("    Special Key : VER_num");
+							guiKeyBoardMode_VerNum = true;
+						} else {
+							guiKeyBoardMode_VerNum = false;
+						}
+						if (event.xkey.state & (1<<5) ) {
+							EWOL_DEBUG("    Special Key : MOD");
+						}
+						if (event.xkey.state & (1<<6) ) {
+							//EWOL_DEBUG("    Special Key : META");
+							guiKeyBoardMode_Meta = true;
+						} else {
+							guiKeyBoardMode_Meta = false;
+						}
+						if (event.xkey.state & (1<<7) ) {
+							//EWOL_DEBUG("    Special Key : ALT_GR");
+							guiKeyBoardMode_AltGr = true;
+						} else {
+							guiKeyBoardMode_AltGr = false;
+						}
+						bool find = true;
+						ewol::eventKbMoveType_te keyInput;
+						switch (event.xkey.keycode) {
+							//case 80: // keypad
+							case 111:	keyInput = ewol::EVENT_KB_MOVE_TYPE_UP;				break;
+							//case 83: // keypad
+							case 113:	keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT;			break;
+							//case 85: // keypad
+							case 114:	keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT;			break;
+							//case 88: // keypad
+							case 116:	keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN;			break;
+							//case 81: // keypad
+							case 112:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;		break;
+							//case 89: // keypad
+							case 117:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;		break;
+							//case 79: // keypad
+							case 110:	keyInput = ewol::EVENT_KB_MOVE_TYPE_START;			break;
+							//case 87: // keypad
+							case 115:	keyInput = ewol::EVENT_KB_MOVE_TYPE_END;			break;
+							case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
+							case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
+							//case 90: // keypad
+							case 118:
+								keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+								if(event.type == KeyRelease) {
+									if (true == guiKeyBoardMode_Insert) {
+										guiKeyBoardMode_Insert = false;
+									} else {
+										guiKeyBoardMode_Insert = true;
 									}
-									break;
-								//case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break; // Keypad
-								case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
-								case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;
-								case 69:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F3;				break;
-								case 70:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F4;				break;
-								case 71:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F5;				break;
-								case 72:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F6;				break;
-								case 73:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F7;				break;
-								case 74:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F8;				break;
-								case 75:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F9;				break;
-								case 76:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F10;			break;
-								case 95:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F11;			break;
-								case 96:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F12;			break;
-								case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		break;
-								case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		break;
-								case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	break;
-								case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		break;
-								case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		break;
-								case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		break;
-								case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		break;
-								case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			break;
-								case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			break;
-								case 135:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;	break;
-								case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		break;
-								case 91: // Suppr on keypad
-									find = false;
-									{
-										char buf[2];
-										buf[0] = 0x7F;
-										buf[1] = 0x00;
+								}
+								break;
+							//case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break; // Keypad
+							case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
+							case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;
+							case 69:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F3;				break;
+							case 70:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F4;				break;
+							case 71:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F5;				break;
+							case 72:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F6;				break;
+							case 73:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F7;				break;
+							case 74:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F8;				break;
+							case 75:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F9;				break;
+							case 76:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F10;			break;
+							case 95:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F11;			break;
+							case 96:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F12;			break;
+							case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		break;
+							case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		break;
+							case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	break;
+							case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		break;
+							case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		break;
+							case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		break;
+							case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		break;
+							case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			break;
+							case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			break;
+							case 135:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;	break;
+							case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		break;
+							case 91: // Suppr on keypad
+								find = false;
+								{
+									char buf[2];
+									buf[0] = 0x7F;
+									buf[1] = 0x00;
+									etk::String tmpData = buf;
+									if(event.type == KeyPress) {
+										EWOL_ThreadKeyboardEvent(true, tmpData);
+									} else {
+										EWOL_ThreadKeyboardEvent(false, tmpData);
+									}
+								}
+							default:
+								find = false;
+								{
+									char buf[11];
+									KeySym keysym;
+									XComposeStatus status;
+									int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
+									buf[count] = '\0';
+									EWOL_WARNING("Unknow event Key : " << event.xkey.keycode << " char=" << (int32_t)buf[0]);
+									if (buf[0] == '\r') {
+										buf[0] = '\n';
+										buf[1] = '\0';
+									}
+									if (count>0) {
 										etk::String tmpData = buf;
 										if(event.type == KeyPress) {
 											EWOL_ThreadKeyboardEvent(true, tmpData);
 										} else {
 											EWOL_ThreadKeyboardEvent(false, tmpData);
 										}
+									} else {
+										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 									}
-								default:
-									find = false;
-									{
-										char buf[11];
-										KeySym keysym;
-										XComposeStatus status;
-										int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
-										buf[count] = '\0';
-										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode << " char=" << (int32_t)buf[0]);
-										if (buf[0] == '\r') {
-											buf[0] = '\n';
-											buf[1] = '\0';
-										}
-										if (count>0) {
-											etk::String tmpData = buf;
-											if(event.type == KeyPress) {
-												EWOL_ThreadKeyboardEvent(true, tmpData);
-											} else {
-												EWOL_ThreadKeyboardEvent(false, tmpData);
-											}
-										} else {
-											EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
-										}
-									}
-									break;
-							}
-							if (true == find) {
-								EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-								if(event.type == KeyPress) {
-									EWOL_ThreadKeyboardEventMove(true, keyInput);
-								} else {
-									EWOL_ThreadKeyboardEventMove(false, keyInput);
 								}
-							}
-							break;
+								break;
 						}
-					//case DestroyNotify:
-					//	break;
-					case MapNotify:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"MapNotify\"");
-						gui_uniqueWindows->SysOnShow();
+						if (true == find) {
+							EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+							if(event.type == KeyPress) {
+								EWOL_ThreadKeyboardEventMove(true, keyInput);
+							} else {
+								EWOL_ThreadKeyboardEventMove(false, keyInput);
+							}
+						}
 						break;
-					case UnmapNotify:
-						EWOL_VERBOSE("X11 event : " << event.type << " = \"UnmapNotify\"");
-						gui_uniqueWindows->SysOnHide();
-						break;
-					default:
-						EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
-				}
+					}
+				//case DestroyNotify:
+				//	break;
+				case MapNotify:
+					EWOL_VERBOSE("X11 event : " << event.type << " = \"MapNotify\"");
+					EWOL_ThreadEventShow();
+					break;
+				case UnmapNotify:
+					EWOL_VERBOSE("X11 event : " << event.type << " = \"UnmapNotify\"");
+					EWOL_ThreadEventHide();
+					break;
+				default:
+					EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
 			}
 		}
 		EWOL_NativeRender();
-		//usleep( 100000 );
 	}
 };
 
@@ -703,15 +681,34 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 
 #include <ewol/ewol.h>
 
+static etk::VectorType<etk::String*> listArgs;
 
+int32_t ewol::CmdLineNb(void)
+{
+	return listArgs.Size();
+}
 
-int EWOL_appArgC = 0;
-char **EWOL_appArgV = NULL;
+etk::String ewol::CmdLineGet(int32_t id)
+{
+	if (id<0 && id>=listArgs.Size()) {
+		return "";
+	}
+	if (NULL == listArgs[id]) {
+		return "";
+	}
+	return *listArgs[id];
+}
+
 
 int main(int argc, char *argv[])
 {
-	//EWOL_appArgC = argc;
-	//EWOL_appArgV = argv;
+	for( int32_t i=1 ; i<argc; i++) {
+		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
+		etk::String* tmpString = new etk::String(argv[i]);
+		if (NULL != tmpString) {
+			listArgs.PushBack(tmpString);
+		}
+	}
 	// start X11 thread ...
 	X11_Init();
 	//start the basic thread : 
@@ -722,7 +719,13 @@ int main(int argc, char *argv[])
 	guiAbstraction::Stop();
 	// uninit ALL :
 	EWOL_SystemStop();
-	
+	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
+		if (NULL != listArgs[iii]) {
+			delete listArgs[iii];
+			listArgs[iii] = NULL;
+		}
+	}
+	listArgs.Clear();
 	return 0;
 }
 

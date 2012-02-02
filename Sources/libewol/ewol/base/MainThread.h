@@ -41,6 +41,9 @@ void EWOL_ThreadKeyboardEvent(bool isDown, etk::String &keyInput);
 void EWOL_ThreadKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
 
 
+void EWOL_ThreadEventHide(void);
+void EWOL_ThreadEventShow(void);
+void EWOL_ThreadEventHasJustDisplay(void);
 
 #endif
 

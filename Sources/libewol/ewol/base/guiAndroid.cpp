@@ -41,9 +41,7 @@
 
 #undef __class__
 #define __class__ "AndroidJNI"
-int EWOL_appArgC = 0;
-char **EWOL_appArgV = NULL;
-int32_t separateClickTime = 20;
+int32_t separateClickTime = 200;
 int32_t offsetMoveClicked = 40;
 int32_t offsetMoveClickedDouble = 300;
 
@@ -253,4 +251,15 @@ void glOrtho(GLfloat left,
 	glLoadMatrixf(myMatrix);
 
 
+}
+
+#include <ewol/ewol.h>
+int32_t ewol::CmdLineNb(void)
+{
+	return 0;
+}
+
+etk::String ewol::CmdLineGet(int32_t id)
+{
+	return "";
 }
