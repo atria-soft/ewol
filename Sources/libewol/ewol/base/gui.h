@@ -31,7 +31,8 @@
 #include <ewol/Windows.h>
 
 void EWOL_NativeResize(int w, int h );
-void EWOL_GenericDraw(void);
+void EWOL_GenericDraw(bool everyTime);
+void EWOL_NativeGLDestroy(void);
 
 namespace guiAbstraction
 {

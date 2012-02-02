@@ -254,7 +254,7 @@ static int64_t nbDisplayTime = 0;
 #define DISPLAY_PERIODE_MS       (1000)
 
 
-void EWOL_GenericDraw(void)
+void EWOL_GenericDraw(bool everyTime)
 {
 	bool display = false;
 	nbCallTime++;
@@ -267,7 +267,9 @@ void EWOL_GenericDraw(void)
 		display = true;
 	}
 	ewol::widgetManager::GetDoubleBufferStartDraw();
-	if (true == ewol::widgetManager::GetDoubleBufferNeedDraw()) {
+	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
+	    || true == everyTime)
+	{
 		nbDisplayTime++;
 		gui_uniqueWindows->SysDraw();
 	}
@@ -282,3 +284,9 @@ void EWOL_GenericDraw(void)
 		startTime = -1;
 	}
 }
+
+void EWOL_NativeGLDestroy(void)
+{
+	ewol::UpdateTextureContextIsDestroy();
+}
+

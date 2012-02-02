@@ -358,6 +358,18 @@ void ewol::texture::UnInit(void)
 #undef __class__
 #define __class__	"ewol"
 
+void ewol::UpdateTextureContextIsDestroy(void)
+{
+	pthread_mutex_lock(&localMutex);
+	for (int32_t iii=0; iii < listLoadedTexture.Size(); iii++) {
+		if(    NULL != listLoadedTexture[iii]
+		    && NULL != listLoadedTexture[iii]->m_data)
+		{
+			listLoadedTexture[iii]->m_loaded = false;
+		}
+	}
+	pthread_mutex_unlock(&localMutex);
+}
 
 void ewol::UpdateTextureContext(void)
 {

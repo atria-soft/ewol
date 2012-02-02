@@ -39,6 +39,7 @@ static pthread_t                        androidJniThread;
 //static pthread_attr_t                   androidJniThreadAttr;
 
 enum {
+	THREAD_INIT,
 	THREAD_UN_INIT,
 	THREAD_RESIZE,
 	THREAD_HIDE,
@@ -110,6 +111,9 @@ static void* BaseAppEntry(void* param)
 			countNbEvent++;
 			//EWOL_DEBUG("EVENT");
 			switch (data.type) {
+				case THREAD_INIT:
+					EWOL_DEBUG("Receive MSG : THREAD_INIT");
+					break;
 				case THREAD_UN_INIT:
 					EWOL_DEBUG("Receive MSG : THREAD_UN_INIT");
 					requestEndProcessing = true;
@@ -226,6 +230,7 @@ void EWOL_SystemStart(void)
 		// init the thread :
 		pthread_create(&androidJniThread, NULL, BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
 	}
 }
 

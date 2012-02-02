@@ -41,7 +41,7 @@
 
 #undef __class__
 #define __class__ "AndroidJNI"
-int32_t separateClickTime = 200;
+int32_t separateClickTime = 800;
 int32_t offsetMoveClicked = 40;
 int32_t offsetMoveClickedDouble = 300;
 
@@ -178,7 +178,7 @@ void EWOL_NativeRender(void)
 	
 		glDisable(GL_BLEND);
 	} else {
-		EWOL_GenericDraw();
+		EWOL_GenericDraw(true);
 	}
 	glFlush();
 }

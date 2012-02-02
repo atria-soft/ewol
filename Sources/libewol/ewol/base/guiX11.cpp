@@ -334,9 +334,8 @@ void EWOL_NativeRender(void)
 			glColor3f(1., 1., 0.); glVertex3f( .25*(etkFloat_t)gui_width, .75*(etkFloat_t)gui_height, 0.);
 		glEnd();
 	} else {
-		EWOL_GenericDraw();
+		EWOL_GenericDraw(false);
 	}
-	// swap the buffers if we have doublebuffered
 	glFlush();
 	if (m_doubleBuffered) {
 		glXSwapBuffers(m_display, WindowHandle);

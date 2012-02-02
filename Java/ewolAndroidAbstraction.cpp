@@ -40,6 +40,7 @@ void EWOL_ThreadResize(int w, int h );
 void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
 void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
 void EWOL_NativeRender(void);
+void EWOL_NativeGLDestroy(void);
 
 
 extern "C"
@@ -74,6 +75,9 @@ extern "C"
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnPause( JNIEnv*  env )
 	{
 		EDN_DEBUG("Activity On Pause");
+		// All the openGl has been destroyed ...
+		// TODO : Mark all the texture to be reloaded ...
+		EWOL_NativeGLDestroy();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStop( JNIEnv*  env )
 	{
