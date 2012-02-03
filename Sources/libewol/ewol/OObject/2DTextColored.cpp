@@ -40,9 +40,23 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::String FontName, int32_t s
 		EWOL_TODO("pas encore fait...");
 		//m_FontId = GetFontIdWithName(FontName);
 		m_FontId = -1;
-		return;
 	}
 }
+
+ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)
+{
+	m_color.red = 0.0;
+	m_color.green = 0.0;
+	m_color.blue = 0.0;
+	m_color.alpha = 1.0;
+	if (fontID < 0) {
+		m_FontId = GetDefaultFontId();
+	} else {
+		m_FontId = fontID;
+	}
+}
+
+
 // open with default font ...
 ewol::OObject2DTextColored::OObject2DTextColored(void)
 {

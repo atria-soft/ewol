@@ -467,7 +467,7 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 	etkFloat_t dyC = x + w;
 	etkFloat_t dyD = y + h;
 	
-	
+	//EWOL_INFO("Rectangle size : (" << x << "," << y << ") in clipping (" << drawClipping.x << "," << drawClipping.y << ") ==> (" << drawClipping.w << "," << drawClipping.h << ")");
 	if (dxA < drawClipping.x) {
 		dxA = drawClipping.x;
 	}
@@ -480,7 +480,6 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 	if (dyD > drawClipping.y + drawClipping.h) {
 		dyD = drawClipping.y + drawClipping.h;
 	}
-	
 
 	SetPoint(dxA, dyD);
 	SetPoint(dxA, dxB);

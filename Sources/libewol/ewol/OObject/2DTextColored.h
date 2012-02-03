@@ -32,6 +32,7 @@ namespace ewol {
 	{
 		public:
 			OObject2DTextColored(etk::String FontName, int32_t size);
+			OObject2DTextColored(int32_t fontID);
 			OObject2DTextColored(void);
 			virtual ~OObject2DTextColored(void);
 		public:
@@ -50,6 +51,7 @@ namespace ewol {
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
 			etk::VectorType<color_ts>     m_coordColor;    //!< internal color of the different point
 		public:
+			int32_t GetFontID(void) { return m_FontId; };
 			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};
 };
