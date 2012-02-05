@@ -93,7 +93,7 @@ void EWOL_NativeResize(int w, int h );
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
-	EWOL_DEBUG("BThread Init (START)");
+	EWOL_DEBUG("==> Init BThread (START)");
 	
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
@@ -103,7 +103,7 @@ static void* BaseAppEntry(void* param)
 	ewol::InitFont();
 	APP_Init();
 	int32_t countNbEvent = 0;
-	EWOL_DEBUG("BThread Init (END)");
+	EWOL_DEBUG("==> Init BThread (END)");
 	while(false == requestEndProcessing) {
 		ewol::threadMsg::threadMsgContent_ts data;
 		ewol::threadMsg::WaitMessage(androidJniMsg, data);
@@ -178,7 +178,7 @@ static void* BaseAppEntry(void* param)
 			}
 		}
 	}
-	EWOL_DEBUG("BThread Un-Init (START)");
+	EWOL_DEBUG("==> Un-Init BThread (START)");
 	
 	// unset all windows
 	ewol::DisplayWindows(NULL);
@@ -189,7 +189,7 @@ static void* BaseAppEntry(void* param)
 	ewol::UnInitFont();
 	ewol::widgetManager::UnInit();
 	ewol::theme::UnInit();
-	EWOL_DEBUG("BThread Un-Init (END)");
+	EWOL_DEBUG("==> Un-Init BThread (END)");
 	pthread_exit(NULL);
 }
 

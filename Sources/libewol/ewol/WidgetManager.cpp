@@ -45,15 +45,19 @@ static ewol::Widget * m_focusWidgetCurrent = NULL;
 
 void ewol::widgetManager::Init(void)
 {
-	EWOL_DEBUG("Init Widget manager");
+	EWOL_DEBUG("==> Init Widget-Manager");
 	// create interface mutex :
 	int ret = pthread_mutex_init(&localMutex, NULL);
 	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
+	// prevent android error ==> can create memory leak but I prefer
+	m_widgetList.Clear();
+	m_focusWidgetDefault = NULL;
+	m_focusWidgetCurrent = NULL;
 }
 
 void ewol::widgetManager::UnInit(void)
 {
-	EWOL_DEBUG("Un-Init Widget manager");
+	EWOL_DEBUG("==> Un-Init Widget-Manager");
 	EWOL_INFO("Realease all FOCUS");
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();

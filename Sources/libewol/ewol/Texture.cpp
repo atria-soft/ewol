@@ -343,6 +343,7 @@ static pthread_mutex_t localMutex;
 
 void ewol::texture::Init(void)
 {
+	EWOL_DEBUG("==> Init Texture-Manager");
 	// create interface mutex :
 	int ret = pthread_mutex_init(&localMutex, NULL);
 	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
@@ -350,6 +351,14 @@ void ewol::texture::Init(void)
 
 void ewol::texture::UnInit(void)
 {
+	EWOL_DEBUG("==> Un-Init Texture-Manager");
+	for (int32_t iii=0; iii<listLoadedTexture.Size(); iii++) {
+		if (listLoadedTexture[iii] != NULL) {
+			delete(listLoadedTexture[iii]);
+		}
+		listLoadedTexture[iii] = NULL;
+	}
+	listLoadedTexture.Clear();
 	int ret = pthread_mutex_destroy(&localMutex);
 	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 }
@@ -366,6 +375,10 @@ void ewol::UpdateTextureContextIsDestroy(void)
 		    && NULL != listLoadedTexture[iii]->m_data)
 		{
 			listLoadedTexture[iii]->m_loaded = false;
+			EWOL_INFO("TEXTURE: Disable [" << iii << "]=(" << listLoadedTexture[iii]->m_width << "px," << 
+			          listLoadedTexture[iii]->m_height << "px) in file:" << 
+			          listLoadedTexture[iii]->m_filename << " OGl_Id=" <<listLoadedTexture[iii]->m_openGlTextureID);
+			//glDeleteTextures(1, &listLoadedTexture[iii]->m_openGlTextureID);
 		}
 	}
 	pthread_mutex_unlock(&localMutex);
@@ -394,8 +407,8 @@ void ewol::UpdateTextureContext(void)
 				glTexParameteri(listLoadedTexture[iii]->m_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 				glTexParameteri(listLoadedTexture[iii]->m_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 				EWOL_INFO("TEXTURE: Add [" << iii << "]=(" << listLoadedTexture[iii]->m_width << "px," << 
-				             listLoadedTexture[iii]->m_height << "px) in file:" << 
-				             listLoadedTexture[iii]->m_filename << " OGl_Id=" <<textureid);
+				          listLoadedTexture[iii]->m_height << "px) in file:" << 
+				          listLoadedTexture[iii]->m_filename << " OGl_Id=" <<textureid);
 				glTexImage2D(listLoadedTexture[iii]->m_target,
 				             listLoadedTexture[iii]->m_level,
 				             listLoadedTexture[iii]->m_internalFormat,

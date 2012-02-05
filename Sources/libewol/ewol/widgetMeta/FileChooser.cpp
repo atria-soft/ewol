@@ -337,10 +337,13 @@ ewol::FileChooser::FileChooser(void)
 	FileChooserFileList * myListFile = NULL;
 	FileChooserFolderList * myListFolder = NULL;
 	ewol::Label * myLabel = NULL;
-	
-	m_folder = "/";
-	
-	SetDisplayRatio(0.80);
+	#ifdef __PLATFORM__Android
+		m_folder = "/mnt/sdcard/";
+		SetDisplayRatio(0.90);
+	#else
+		m_folder = "/home/";
+		SetDisplayRatio(0.80);
+	#endif
 	
 	mySizerVert = new ewol::SizerVert();
 		mySizerVert->LockExpendContamination(true);

@@ -34,7 +34,12 @@
 
 void ewol::List::Init(void)
 {
-	m_paddingSize = 2;
+	m_paddingSizeX = 2;
+	#ifdef __PLATFORM__Android
+		m_paddingSizeY = 10;
+	#else
+		m_paddingSizeY = 2;
+	#endif
 	SetCanHaveFocus(true);
 }
 
@@ -78,8 +83,8 @@ void ewol::List::OnRegenerateDisplay(void)
 	if (true==m_userFillY) {
 		tmpOriginY = 0;
 	}*/
-	tmpOriginX += m_paddingSize;
-	tmpOriginY += m_paddingSize;
+	tmpOriginX += m_paddingSizeX;
+	tmpOriginY += m_paddingSizeY;
 
 	int32_t fontId = GetDefaultFontId();
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
@@ -95,7 +100,7 @@ void ewol::List::OnRegenerateDisplay(void)
 	BGOObjects->SetColor(basicBG);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	
-	uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSize);
+	uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
 	
 	// We display only compleate lines ...
 	for(uint32_t iii=0; iii<nbRaw && iii<displayableRaw; iii++) {
@@ -104,13 +109,13 @@ void ewol::List::OnRegenerateDisplay(void)
 		color_ts bg;
 		GetElement(0, iii, myTextToWrite, fg, bg);
 		BGOObjects->SetColor(bg);
-		BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSize);
-		tmpOriginYBG += minHeight+2*m_paddingSize;
+		BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSizeY);
+		tmpOriginYBG += minHeight+2*m_paddingSizeY;
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
-		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSize));
+		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSizeX));
 		AddOObject(tmpText);
-		tmpOriginY += minHeight + 2* m_paddingSize;
+		tmpOriginY += minHeight + 2* m_paddingSizeY;
 	}
 	AddOObject(BGOObjects, "ListDeco", 0);
 	//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
@@ -127,7 +132,7 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
 
-	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSize);
+	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSizeY);
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
 	return OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
 }

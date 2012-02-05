@@ -80,13 +80,6 @@ static int32_t simpleSQRT(int32_t value)
 	return val;
 }
 
-void ewol::InitFont(void)
-{
-	int32_t error = FT_Init_FreeType( &library );
-	if(0 != error) {
-		EWOL_CRITICAL(" when loading FreeType Librairy ...");
-	}
-}
 
 // keep only one instance of every font in freetype
 class FTFontInternal
@@ -481,10 +474,41 @@ void ewol::SetFontFolder(etk::String folderName)
 	EWOL_INFO("New default font folder name=\"" << s_currentFolderName << "\"");
 }
 
+void ewol::InitFont(void)
+{
+	EWOL_DEBUG("==> Init Font-Manager");
+	int32_t error = FT_Init_FreeType( &library );
+	if(0 != error) {
+		EWOL_CRITICAL(" when loading FreeType Librairy ...");
+	}
+	// prevent android error ==> can create memory leak but I prefer
+	s_currentFolderName = "";
+	s_currentDefaultFontName = "";
+	m_listLoadedTTFont.Clear();
+	s_currentDefaultFontId = -1;
+}
 
 void ewol::UnInitFont(void)
 {
-	EWOL_TODO("later");
+	EWOL_DEBUG("==> Un-Init Font-Manager");
+	/*int32_t error = FT_Done_FreeType( library );
+	library = NULL;
+	if(0 != error) {
+		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
+	}
+	*/
+	/*
+	s_currentFolderName = "";
+	s_currentDefaultFontName = "";
+	s_currentDefaultFontId = -1;
+	for(int32_t iii=0; iii<m_listLoadedTTFont.Size(); iii++) {
+		if (NULL != m_listLoadedTTFont[iii]) {
+			delete(m_listLoadedTTFont[iii]);
+		}
+		m_listLoadedTTFont[iii] = NULL;
+	}
+	m_listLoadedTTFont.Clear();
+	*/
 }
 
 void ewol::SetDefaultFont(etk::String fontName, int32_t size)

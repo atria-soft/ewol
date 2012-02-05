@@ -39,7 +39,8 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::String newLabel);
 		private:
-			int32_t        m_paddingSize;
+			int32_t        m_paddingSizeX;
+			int32_t        m_paddingSizeY;
 			int32_t        m_displayStartRaw;           //!< Current starting diaplayed raw
 			int32_t        m_displayCurrentNbLine;      //!< Number of line in the display
 		public:

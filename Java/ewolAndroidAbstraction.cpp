@@ -57,35 +57,49 @@ extern "C"
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnCreate( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Create");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Create                   **");
+		EDN_DEBUG("*******************************************");
 		EWOL_SystemStart();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStart( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Start");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Start                    **");
+		EDN_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnReStart( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Re-Start");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Re-Start                 **");
+		EDN_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnResume( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Resume");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Resume                   **");
+		EDN_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnPause( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Pause");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Pause                    **");
+		EDN_DEBUG("*******************************************");
 		// All the openGl has been destroyed ...
 		// TODO : Mark all the texture to be reloaded ...
 		EWOL_NativeGLDestroy();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStop( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Stop");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Stop                     **");
+		EDN_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnDestroy( JNIEnv*  env )
 	{
-		EDN_DEBUG("Activity On Destroy");
+		EDN_DEBUG("*******************************************");
+		EDN_DEBUG("**  Activity On Destroy                  **");
+		EDN_DEBUG("*******************************************");
 		EWOL_SystemStop();
 	}
 	

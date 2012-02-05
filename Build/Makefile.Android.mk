@@ -18,6 +18,8 @@ all:
 	@echo $(CADRE_COTERS)
 	@echo $(CADRE_HAUT_BAS)
 	
+	@rm -rf bin
+	
 	@echo $(F_ROUGE)"          (sh) Clear previous sources "$(F_NORMALE)
 	@rm -rf src jni/ewolAndroidAbstraction.cpp
 	@echo $(F_ROUGE)"          (sh) Create folder : $(JAVA_FOLDER)/ "$(F_NORMALE)
@@ -50,7 +52,7 @@ install: all
 	@echo $(CADRE_HAUT_BAS)
 	@# $(PROJECT_SDK)/platform-tools/adb kill-server
 	@# install application
-	sudo $(PROJECT_SDK)/platform-tools/adb  install -r ./bin/$(PROJECT_NAME)-debug.apk
+	$(PROJECT_SDK)/platform-tools/adb  install -r ./bin/$(PROJECT_NAME)-debug.apk
 
 clean:
 	@echo $(CADRE_HAUT_BAS)
