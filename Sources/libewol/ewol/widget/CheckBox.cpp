@@ -92,7 +92,7 @@ void ewol::CheckBox::SetValue(bool val)
 		return;
 	}
 	m_value = val;
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }
 
 bool ewol::CheckBox::GetValue(void)
@@ -103,45 +103,46 @@ bool ewol::CheckBox::GetValue(void)
 
 void ewol::CheckBox::OnRegenerateDisplay(void)
 {
-	// clean the object list ...
-	ClearOObjectList();
+	if (true == NeedRedraw()) {
+		// clean the object list ...
+		ClearOObjectList();
+		
+		int32_t borderWidth = 2;
+		
+		
+		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+		int32_t fontId = GetDefaultFontId();
+		int32_t fontHeight = ewol::GetHeight(fontId);
+		etkFloat_t boxSize = etk_max(20, fontHeight);
+		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
+		int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
+		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
+		tmpText->Text(boxSize+5, posy, m_label.c_str(), m_size.x - (boxSize+5));
+		
+		
+		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		tmpOObjects->SetColor(m_textColorBg);
+		tmpOObjects->Rectangle( 2.5, 2.5, boxSize, boxSize);
+		tmpOObjects->SetColor(m_textColorFg);
+		tmpOObjects->RectangleBorder( 2.5, 2.5, boxSize, boxSize, borderWidth);
+		if (m_value) {
+			tmpOObjects->Line( 2.5, 2.5, boxSize+2.5, boxSize+2.5, borderWidth);
+			tmpOObjects->Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
+		}
+		
+		AddOObject(tmpOObjects, "Decoration");
+		AddOObject(tmpText, "Text");
 	
-	int32_t borderWidth = 2;
-	
-	
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	int32_t fontId = GetDefaultFontId();
-	int32_t fontHeight = ewol::GetHeight(fontId);
-	etkFloat_t boxSize = etk_max(20, fontHeight);
-	//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-	int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
-	//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
-	tmpText->Text(boxSize+5, posy, m_label.c_str(), m_size.x - (boxSize+5));
-	
-	
-	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-	tmpOObjects->SetColor(m_textColorBg);
-	tmpOObjects->Rectangle( 2.5, 2.5, boxSize, boxSize);
-	tmpOObjects->SetColor(m_textColorFg);
-	tmpOObjects->RectangleBorder( 2.5, 2.5, boxSize, boxSize, borderWidth);
-	if (m_value) {
-		tmpOObjects->Line( 2.5, 2.5, boxSize+2.5, boxSize+2.5, borderWidth);
-		tmpOObjects->Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
+		// Regenerate the event Area:
+		EventAreaRemoveAll();
+		coord origin;
+		coord size;
+		origin.x = 3.0;
+		origin.y = 3.0;
+		size.x = m_size.x-6;
+		size.y = m_size.y-6;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventCheckBoxClicked);
 	}
-	
-	AddOObject(tmpOObjects, "Decoration");
-	AddOObject(tmpText, "Text");
-
-	// Regenerate the event Area:
-	EventAreaRemoveAll();
-	coord origin;
-	coord size;
-	origin.x = 3.0;
-	origin.y = 3.0;
-	size.x = m_size.x-6;
-	size.y = m_size.y-6;
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventCheckBoxClicked);
-
 }
 
 /*
@@ -164,7 +165,7 @@ bool ewol::CheckBox::OnEventArea(const char * generateEventId, etkFloat_t x, etk
 		} else {
 			m_value = true;
 		}
-		OnRegenerateDisplay();
+		MarkToReedraw();
 		eventIsOK = true;
 	}
 	return eventIsOK;

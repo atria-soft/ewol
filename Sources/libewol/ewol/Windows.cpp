@@ -99,7 +99,7 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 		m_popUpWidget->CalculateSize(m_size.x, m_size.y - keyboardHigh);
 	}
 	// regenerate all the display ...
-	OnRegenerateDisplay();
+	MarkToReedraw();
 	return true;
 }
 
@@ -163,6 +163,9 @@ void ewol::Windows::SysDraw(void)
 
 void ewol::Windows::OnRegenerateDisplay(void)
 {
+	if (true == NeedRedraw()) {
+		// no decoration ...
+	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
@@ -277,7 +280,7 @@ void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 		m_keyBoardwidget->Show();
 	}
 	CalculateSize(m_size.x, m_size.y);
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }
 
 
@@ -288,5 +291,5 @@ void ewol::Windows::KeyboardHide(void)
 		m_keyBoardwidget->Hide();
 	}
 	CalculateSize(m_size.x, m_size.y);
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }

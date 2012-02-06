@@ -99,7 +99,7 @@ void ewol::Entry::SetValue(etk::String newData)
 {
 	m_data = newData;
 	UpdateTextPosition();
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }
 
 etk::String ewol::Entry::GetValue(void)
@@ -110,62 +110,64 @@ etk::String ewol::Entry::GetValue(void)
 
 void ewol::Entry::OnRegenerateDisplay(void)
 {
-	// clean the object list ...
-	ClearOObjectList();
-
-	// TODO later : Add this in the basic element of the widget ...
-	
-	int32_t tmpSizeX = m_minSize.x;
-	int32_t tmpSizeY = m_minSize.y;
-	int32_t tmpOriginX = 0;
-	int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
-	// no change for the text orogin : 
-	int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
-	int32_t tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
-	
-	if (true==m_userFillX) {
-		tmpSizeX = m_size.x;
+	if (true == NeedRedraw()) {
+		// clean the object list ...
+		ClearOObjectList();
+		
+		// TODO later : Add this in the basic element of the widget ...
+		
+		int32_t tmpSizeX = m_minSize.x;
+		int32_t tmpSizeY = m_minSize.y;
+		int32_t tmpOriginX = 0;
+		int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
+		// no change for the text orogin : 
+		int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
+		int32_t tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
+		
+		if (true==m_userFillX) {
+			tmpSizeX = m_size.x;
+		}
+		if (true==m_userFillY) {
+			//tmpSizeY = m_size.y;
+			tmpOriginY = 0;
+			tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
+		}
+		tmpOriginX += m_paddingSize;
+		tmpOriginY += m_paddingSize;
+		tmpSizeX -= 2*m_paddingSize;
+		tmpSizeY -= 2*m_paddingSize;
+		
+		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+		tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_data.c_str() + m_displayStartPosition, m_size.x - (m_borderSize + 2*m_paddingSize));
+		
+		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		tmpOObjects->SetColor(m_textColorBg);
+		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		tmpOObjects->SetColor(m_textColorFg);
+		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
+		if (true == m_displayCursor) {
+			int32_t fontId = GetDefaultFontId();
+			int32_t fontHeight = ewol::GetHeight(fontId);
+			int32_t fontWidth = ewol::GetWidth(fontId, m_data.c_str() + m_displayStartPosition);
+			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
+			tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
+		}
+		
+		AddOObject(tmpOObjects, "BouttonDecoration");
+		
+		AddOObject(tmpText, "BouttonText");
+		
+		// Regenerate the event Area:
+		EventAreaRemoveAll();
+		coord origin;
+		coord size;
+		origin.x = tmpOriginX;
+		origin.y = tmpOriginY;
+		size.x = tmpSizeX;
+		size.y = tmpSizeY;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventEntryClick);
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventEntryEnter);
 	}
-	if (true==m_userFillY) {
-		//tmpSizeY = m_size.y;
-		tmpOriginY = 0;
-		tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
-	}
-	tmpOriginX += m_paddingSize;
-	tmpOriginY += m_paddingSize;
-	tmpSizeX -= 2*m_paddingSize;
-	tmpSizeY -= 2*m_paddingSize;
-
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_data.c_str() + m_displayStartPosition, m_size.x - (m_borderSize + 2*m_paddingSize));
-
-	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-	tmpOObjects->SetColor(m_textColorBg);
-	tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-	tmpOObjects->SetColor(m_textColorFg);
-	tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
-	if (true == m_displayCursor) {
-		int32_t fontId = GetDefaultFontId();
-		int32_t fontHeight = ewol::GetHeight(fontId);
-		int32_t fontWidth = ewol::GetWidth(fontId, m_data.c_str() + m_displayStartPosition);
-		int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
-		tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
-	}
-
-	AddOObject(tmpOObjects, "BouttonDecoration");
-
-	AddOObject(tmpText, "BouttonText");
-
-	// Regenerate the event Area:
-	EventAreaRemoveAll();
-	coord origin;
-	coord size;
-	origin.x = tmpOriginX;
-	origin.y = tmpOriginY;
-	size.x = tmpSizeX;
-	size.y = tmpSizeY;
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventEntryClick);
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventEntryEnter);
 }
 
 
@@ -179,7 +181,7 @@ bool ewol::Entry::OnEventArea(const char * generateEventId, etkFloat_t x, etkFlo
 		ewol::widgetManager::FocusKeep(this);
 		ewol::KeyboardShow(KEYBOARD_MODE_CODE);
 	} else if(ewolEventEntryEnter == generateEventId) {
-		//OnRegenerateDisplay();
+		//MarkToReedraw();
 	}
 	return eventIsOK;
 }
@@ -206,7 +208,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SI
 			m_data += UTF8_data;
 		}
 		UpdateTextPosition();
-		OnRegenerateDisplay();
+		MarkToReedraw();
 		return true;
 	}
 	return false;
@@ -238,11 +240,11 @@ void ewol::Entry::UpdateTextPosition(void)
 void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }
 
 void ewol::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
-	OnRegenerateDisplay();
+	MarkToReedraw();
 }

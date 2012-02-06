@@ -47,6 +47,13 @@ void EWOL_NativeResize(int w, int h )
 	}
 }
 
+void EWOL_NativeRegenerateDisplay(void)
+{
+	//EWOL_INFO("Resize w=" << w << " h=" << h);
+	if (NULL != gui_uniqueWindows) {
+		gui_uniqueWindows->OnRegenerateDisplay();
+	}
+}
 
 void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newWindows)
 {

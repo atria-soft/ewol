@@ -83,37 +83,39 @@ void ewol::Label::SetLabel(etk::String newLabel)
 
 void ewol::Label::OnRegenerateDisplay(void)
 {
-	// clean the object list ...
-	ClearOObjectList();
-	
-	int32_t paddingSize = 3;
-	
-	int32_t tmpOriginX = 0;
-	int32_t tmpOriginY = 0;
-	
-	if (true==m_userFillX) {
-		tmpOriginX = (m_size.x - m_minSize.x) / 2;
+	if (true == NeedRedraw()) {
+		// clean the object list ...
+		ClearOObjectList();
+		
+		int32_t paddingSize = 3;
+		
+		int32_t tmpOriginX = 0;
+		int32_t tmpOriginY = 0;
+		
+		if (true==m_userFillX) {
+			tmpOriginX = (m_size.x - m_minSize.x) / 2;
+		}
+		if (true==m_userFillY) {
+			tmpOriginY = (m_size.y - m_minSize.y) / 2;
+		}
+		tmpOriginX += paddingSize;
+		tmpOriginY += paddingSize;
+		
+		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+		tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str(), m_size.x - 2*paddingSize);
+		
+		AddOObject(tmpText, "LabelText");
+		
+		// Regenerate the event Area:
+		EventAreaRemoveAll();
+		coord origin;
+		coord size;
+		origin.x = tmpOriginX;
+		origin.y = tmpOriginY;
+		size.x = m_minSize.x;
+		size.y = m_minSize.y;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventLabelPressed);
 	}
-	if (true==m_userFillY) {
-		tmpOriginY = (m_size.y - m_minSize.y) / 2;
-	}
-	tmpOriginX += paddingSize;
-	tmpOriginY += paddingSize;
-
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str(), m_size.x - 2*paddingSize);
-
-	AddOObject(tmpText, "LabelText");
-
-	// Regenerate the event Area:
-	EventAreaRemoveAll();
-	coord origin;
-	coord size;
-	origin.x = tmpOriginX;
-	origin.y = tmpOriginY;
-	size.x = m_minSize.x;
-	size.y = m_minSize.y;
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventLabelPressed);
 }
 
 bool ewol::Label::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)

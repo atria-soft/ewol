@@ -69,60 +69,61 @@ bool ewol::List::CalculateMinSize(void)
 
 void ewol::List::OnRegenerateDisplay(void)
 {
-	// clean the object list ...
-	ClearOObjectList();
-	//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
-	
-	int32_t tmpOriginX = 0;
-	int32_t tmpOriginY = 0;
-	int32_t tmpOriginYBG = 0;
-	/*
-	if (true==m_userFillX) {
-		tmpOriginX = 0;
-	}
-	if (true==m_userFillY) {
-		tmpOriginY = 0;
-	}*/
-	tmpOriginX += m_paddingSizeX;
-	tmpOriginY += m_paddingSizeY;
-
-	int32_t fontId = GetDefaultFontId();
-	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
-	int32_t minHeight = ewol::GetHeight(fontId);
-
-
-	//uint32_t nbColomn = GetNuberOfColomn();
-	uint32_t nbRaw    = GetNuberOfRaw();
-	etk::VectorType<int32_t> listSizeColomn;
-	
-	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-	color_ts basicBG = GetBasicBG();
-	BGOObjects->SetColor(basicBG);
-	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
-	
-	uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
-	
-	// We display only compleate lines ...
-	for(uint32_t iii=0; iii<nbRaw && iii<displayableRaw; iii++) {
-		etk::String myTextToWrite;
-		color_ts fg;
-		color_ts bg;
-		GetElement(0, iii, myTextToWrite, fg, bg);
-		BGOObjects->SetColor(bg);
-		BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSizeY);
-		tmpOriginYBG += minHeight+2*m_paddingSizeY;
+	if (true == NeedRedraw()) {
+		// clean the object list ...
+		ClearOObjectList();
+		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
 		
-		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
-		tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSizeX));
-		AddOObject(tmpText);
-		tmpOriginY += minHeight + 2* m_paddingSizeY;
+		int32_t tmpOriginX = 0;
+		int32_t tmpOriginY = 0;
+		int32_t tmpOriginYBG = 0;
+		/*
+		if (true==m_userFillX) {
+			tmpOriginX = 0;
+		}
+		if (true==m_userFillY) {
+			tmpOriginY = 0;
+		}*/
+		tmpOriginX += m_paddingSizeX;
+		tmpOriginY += m_paddingSizeY;
+	
+		int32_t fontId = GetDefaultFontId();
+		//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+		int32_t minHeight = ewol::GetHeight(fontId);
+	
+	
+		//uint32_t nbColomn = GetNuberOfColomn();
+		uint32_t nbRaw    = GetNuberOfRaw();
+		etk::VectorType<int32_t> listSizeColomn;
+		
+		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+		color_ts basicBG = GetBasicBG();
+		BGOObjects->SetColor(basicBG);
+		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+		
+		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
+		
+		// We display only compleate lines ...
+		for(uint32_t iii=0; iii<nbRaw && iii<displayableRaw; iii++) {
+			etk::String myTextToWrite;
+			color_ts fg;
+			color_ts bg;
+			GetElement(0, iii, myTextToWrite, fg, bg);
+			BGOObjects->SetColor(bg);
+			BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSizeY);
+			tmpOriginYBG += minHeight+2*m_paddingSizeY;
+			
+			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
+			tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSizeX));
+			AddOObject(tmpText);
+			tmpOriginY += minHeight + 2* m_paddingSizeY;
+		}
+		AddOObject(BGOObjects, "ListDeco", 0);
+		//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+		//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
+	
+		//AddOObject(tmpText, "ListText");
 	}
-	AddOObject(BGOObjects, "ListDeco", 0);
-	//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
-
-	//AddOObject(tmpText, "ListText");
-
 }
 
 

@@ -309,6 +309,11 @@ namespace ewol {
 			void SpecificDrawDisable(void) { m_specificDraw = false; };
 			void SpecificDrawEnable(void) { m_specificDraw = true; };
 			virtual bool OnDraw(void) { /*EWOL_ERROR("plop");*/ return true; };
+		private:
+			bool m_needRegenerateDisplay;
+		protected:
+			void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
+			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
 			virtual void OnRegenerateDisplay(void) { };
 			bool GenDraw(void)

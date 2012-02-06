@@ -103,63 +103,65 @@ bool ewol::Button::GetValue(void)
 
 void ewol::Button::OnRegenerateDisplay(void)
 {
-	// clean the object list ...
-	ClearOObjectList();
-
-	// TODO later : Add this in the basic element of the widget ...
-	int32_t borderSize = 2;
-	int32_t paddingSize = 3;
-	
-	int32_t tmpSizeX = m_minSize.x;
-	int32_t tmpSizeY = m_minSize.y;
-	int32_t tmpOriginX = (m_size.x - tmpSizeX) / 2;
-	int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
-	// no change for the text orogin : 
-	int32_t tmpTextOriginX = (m_size.x - tmpSizeX) / 2 + borderSize + 2*paddingSize;
-	int32_t tmpTextOriginY = (m_size.y - tmpSizeY) / 2 + borderSize + 2*paddingSize;
-	
-	if (true==m_userFillX) {
-		tmpSizeX = m_size.x;
-		tmpOriginX = 0;
+	if (true == NeedRedraw()) {
+		// clean the object list ...
+		ClearOObjectList();
+		
+		// TODO later : Add this in the basic element of the widget ...
+		int32_t borderSize = 2;
+		int32_t paddingSize = 3;
+		
+		int32_t tmpSizeX = m_minSize.x;
+		int32_t tmpSizeY = m_minSize.y;
+		int32_t tmpOriginX = (m_size.x - tmpSizeX) / 2;
+		int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
+		// no change for the text orogin : 
+		int32_t tmpTextOriginX = (m_size.x - tmpSizeX) / 2 + borderSize + 2*paddingSize;
+		int32_t tmpTextOriginY = (m_size.y - tmpSizeY) / 2 + borderSize + 2*paddingSize;
+		
+		if (true==m_userFillX) {
+			tmpSizeX = m_size.x;
+			tmpOriginX = 0;
+		}
+		if (true==m_userFillY) {
+			tmpSizeY = m_size.y;
+			tmpOriginY = 0;
+		}
+		tmpOriginX += paddingSize;
+		tmpOriginY += paddingSize;
+		tmpSizeX -= 2*paddingSize;
+		tmpSizeY -= 2*paddingSize;
+		
+		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
+		/*
+		int32_t fontId = GetDefaultFontId();
+		int32_t fontHeight = ewol::GetHeight(fontId);
+		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
+		*/
+		tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str(), m_size.x - borderSize - 2*paddingSize);
+		
+		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		tmpOObjects->SetColor(m_textColorBg);
+		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		tmpOObjects->SetColor(m_textColorFg);
+		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, borderSize);
+		
+		AddOObject(tmpOObjects, "BouttonDecoration");
+		
+		AddOObject(tmpText, "BouttonText");
+		
+		// Regenerate the event Area:
+		EventAreaRemoveAll();
+		coord origin;
+		coord size;
+		origin.x = tmpOriginX;
+		origin.y = tmpOriginY;
+		size.x = tmpSizeX;
+		size.y = tmpSizeY;
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventButtonEnter);
+		AddEventArea(origin, size, FLAG_EVENT_INPUT_LEAVE, ewolEventButtonLeave);
 	}
-	if (true==m_userFillY) {
-		tmpSizeY = m_size.y;
-		tmpOriginY = 0;
-	}
-	tmpOriginX += paddingSize;
-	tmpOriginY += paddingSize;
-	tmpSizeX -= 2*paddingSize;
-	tmpSizeY -= 2*paddingSize;
-
-	ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-	/*
-	int32_t fontId = GetDefaultFontId();
-	int32_t fontHeight = ewol::GetHeight(fontId);
-	int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-	*/
-	tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str(), m_size.x - borderSize - 2*paddingSize);
-
-	ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-	tmpOObjects->SetColor(m_textColorBg);
-	tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-	tmpOObjects->SetColor(m_textColorFg);
-	tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, borderSize);
-
-	AddOObject(tmpOObjects, "BouttonDecoration");
-
-	AddOObject(tmpText, "BouttonText");
-
-	// Regenerate the event Area:
-	EventAreaRemoveAll();
-	coord origin;
-	coord size;
-	origin.x = tmpOriginX;
-	origin.y = tmpOriginY;
-	size.x = tmpSizeX;
-	size.y = tmpSizeY;
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventButtonEnter);
-	AddEventArea(origin, size, FLAG_EVENT_INPUT_LEAVE, ewolEventButtonLeave);
 }
 
 /*
@@ -179,7 +181,7 @@ bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFl
 		//eventIsOK = true;
 		ewol::widgetManager::FocusKeep(this);
 	} else if(ewolEventButtonEnter == generateEventId) {
-		OnRegenerateDisplay();
+		MarkToReedraw();
 	}
 	//return eventIsOK;
 	// in every case this not stop the propagation of the event

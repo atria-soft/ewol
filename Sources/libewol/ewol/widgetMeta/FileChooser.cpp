@@ -77,7 +77,7 @@ class FileChooserFolderList : public ewol::List
 		{
 			etk::String* tmpEmement = new etk::String(element);
 			m_listDirectory.PushBack(tmpEmement);
-			OnRegenerateDisplay();
+			MarkToReedraw();
 		}
 		void ClearElements(void) {
 			for (int32_t iii=0; iii<m_listDirectory.Size(); iii++) {
@@ -87,7 +87,7 @@ class FileChooserFolderList : public ewol::List
 				}
 			}
 			m_listDirectory.Clear();
-			OnRegenerateDisplay();
+			MarkToReedraw();
 		}
 		
 		etk::String GetSelectedLine(void)
@@ -159,7 +159,7 @@ class FileChooserFolderList : public ewol::List
 						m_selectedLine = raw;
 					}
 					// need to regenerate the display of the list : 
-					OnRegenerateDisplay();
+					MarkToReedraw();
 					return true;
 				}
 			}
@@ -211,7 +211,7 @@ class FileChooserFileList : public ewol::List
 		{
 			etk::String* tmpEmement = new etk::String(element);
 			m_listFile.PushBack(tmpEmement);
-			OnRegenerateDisplay();
+			MarkToReedraw();
 		}
 		void ClearElements(void) {
 			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
@@ -221,7 +221,7 @@ class FileChooserFileList : public ewol::List
 				}
 			}
 			m_listFile.Clear();
-			OnRegenerateDisplay();
+			MarkToReedraw();
 		}
 		
 		etk::String GetSelectedLine(void)
@@ -284,7 +284,7 @@ class FileChooserFileList : public ewol::List
 						m_selectedLine = raw;
 					}
 					// need to regenerate the display of the list : 
-					OnRegenerateDisplay();
+					MarkToReedraw();
 					if (m_selectedLine >=0 ) {
 						// generate event extern : 
 						return GenEventInputExternal(ewolEventFileChooserSelectFile, x, y);

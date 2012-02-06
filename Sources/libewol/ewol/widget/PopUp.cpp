@@ -84,6 +84,7 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
+	MarkToReedraw();
 	return true;
 }
 
@@ -149,11 +150,13 @@ bool ewol::PopUp::OnDraw(void)
 
 void ewol::PopUp::OnRegenerateDisplay(void)
 {
+	if (true == NeedRedraw()) {
+	}
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
 	AddOObject(BGOObjects, "ListDeco");
-
+	
 	BGOObjects->SetColor(m_colorEmptyArea);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...

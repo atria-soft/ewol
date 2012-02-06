@@ -90,6 +90,7 @@ bool ewol::SizerHori::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 			}
 		}
 	}
+	MarkToReedraw();
 	return true;
 }
 

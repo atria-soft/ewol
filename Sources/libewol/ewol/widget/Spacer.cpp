@@ -55,5 +55,6 @@ bool ewol::Spacer::CalculateMinSize(void)
 void ewol::Spacer::SetSize(etkFloat_t size)
 {
 	m_size = size;
+	MarkToReedraw();
 }
 

@@ -237,6 +237,7 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 		m_subWidget->SetOrigin(m_origin.x, m_origin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
+	MarkToReedraw();
 	return true;
 }
 
@@ -270,19 +271,19 @@ bool ewol::Keyboard::OnDraw(void)
 
 void ewol::Keyboard::OnRegenerateDisplay(void)
 {
-	color_ts mycolor;
-	mycolor.red   = 1.0;
-	mycolor.green = 1.0;
-	mycolor.blue  = 1.0;
-	mycolor.alpha = 0.50;
-	
-	// generate a white background and take gray on other surfaces
-	ClearOObjectList();
-	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-
-	BGOObjects->SetColor(mycolor);
-	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
-	AddOObject(BGOObjects, "ListDeco");
+	if (true == NeedRedraw()) {
+		color_ts mycolor;
+		mycolor.red   = 1.0;
+		mycolor.green = 1.0;
+		mycolor.blue  = 1.0;
+		mycolor.alpha = 0.50;
+		// generate a white background and take gray on other surfaces
+		ClearOObjectList();
+		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+		BGOObjects->SetColor(mycolor);
+		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+		AddOObject(BGOObjects, "ListDeco");
+	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}

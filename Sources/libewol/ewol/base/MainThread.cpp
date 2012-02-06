@@ -87,6 +87,7 @@ typedef struct {
 void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
 void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
 void EWOL_NativeResize(int w, int h );
+void EWOL_NativeRegenerateDisplay(void);
 
 
 
@@ -172,6 +173,7 @@ static void* BaseAppEntry(void* param)
 		}
 		if (0 == ewol::threadMsg::WaitingMessage(androidJniMsg)) {
 			if (countNbEvent > 0) {
+				EWOL_NativeRegenerateDisplay();
 				// TODO : Generate the display here ... Instead of every time we call the sub-Widget ...
 				ewol::widgetManager::GetDoubleBufferFlipFlop();
 				countNbEvent = 0;

@@ -92,6 +92,7 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 			}
 		}
 	}
+	MarkToReedraw();
 	return true;
 }
 
