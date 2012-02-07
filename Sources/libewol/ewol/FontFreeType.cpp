@@ -437,7 +437,7 @@ class FTFont{
 		
 		uint32_t GetOglId(void)
 		{
-			return ewol::GetTextureGLID(m_textureId);
+			return m_textureId;
 		};
 		
 		int32_t GetSize(void)
@@ -497,10 +497,19 @@ void ewol::UnInitFont(void)
 		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
 	}
 	*/
-	/*
 	s_currentFolderName = "";
 	s_currentDefaultFontName = "";
 	s_currentDefaultFontId = -1;
+	
+	// unload global font
+	for(int32_t iii=0; iii<m_listLoadedFont.Size(); iii++) {
+		if (NULL != m_listLoadedFont[iii]) {
+			delete(m_listLoadedFont[iii]);
+		}
+		m_listLoadedFont[iii] = NULL;
+	}
+	m_listLoadedFont.Clear();
+	// unload TFT font ...
 	for(int32_t iii=0; iii<m_listLoadedTTFont.Size(); iii++) {
 		if (NULL != m_listLoadedTTFont[iii]) {
 			delete(m_listLoadedTTFont[iii]);
@@ -508,7 +517,6 @@ void ewol::UnInitFont(void)
 		m_listLoadedTTFont[iii] = NULL;
 	}
 	m_listLoadedTTFont.Clear();
-	*/
 }
 
 void ewol::SetDefaultFont(etk::String fontName, int32_t size)
@@ -565,7 +573,7 @@ int32_t ewol::DrawText(int32_t                     fontID,
                     coord2D_ts &                   drawPosition,
                     coord2D_ts &                   clipSize,
                     const char *                   utf8String,
-                    uint32_t &                     fontTextureId,
+                    int32_t &                      fontTextureId,
                     etk::VectorType<coord2D_ts> &  coord,
                     etk::VectorType<texCoord_ts> & coordTex)
 {
@@ -684,7 +692,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
                        coord2D_ts                     textPos,
                        clipping_ts &                  drawClipping,
                        const uniChar_t *              unicodeString,
-                       uint32_t &                     fontTextureId,
+                       int32_t &                      fontTextureId,
                        etk::VectorType<coord2D_ts> &  coord,
                        etk::VectorType<texCoord_ts> & coordTex)
 {

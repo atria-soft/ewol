@@ -30,19 +30,29 @@
 #include <ewol/Widget.h>
 
 namespace ewol {
+	typedef enum {
+		SCROLL_DISABLE,
+		SCROLL_INIT,
+		SCROLL_ENABLE_HORIZONTAL,
+		SCROLL_ENABLE_VERTICAL,
+	}highSpeedMode_te;
+	
 	class WidgetScrooled :public ewol::Widget
 	{
 		protected:
-			int32_t m_originScrooledX;
-			int32_t m_originScrooledY;
+			coord    m_originScrooled;
+			coord    m_maxSize;
 		private:
-			uint32_t m_pixelScrolling;
+			etkFloat_t        m_pixelScrolling;
+			coord             m_highSpeedStartPos;
+			highSpeedMode_te  m_highSpeedMode;
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
+			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 		protected:
-			void SetScrollingSize(uint32_t nbPixel) { m_pixelScrolling = nbPixel; };
+			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
 	};
 };
 

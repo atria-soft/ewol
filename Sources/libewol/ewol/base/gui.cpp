@@ -136,7 +136,7 @@ void EWOL_NativeEventInputMotion(int pointerID, float x, float y )
 	//EWOL_INFO("Event : Input Motion ID=" << pointerID << " x=" << x << " y=" << y);
 	if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 		if(NULL != gui_uniqueWindows) {
-			//EWOL_DEBUG("ANDROID event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+			//EWOL_DEBUG("Event: bt=" << pointerID+1 << " ** = \"MotionNotify\" (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 			gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_MOVE, (etkFloat_t)x, (etkFloat_t)y);
 		}
 	}

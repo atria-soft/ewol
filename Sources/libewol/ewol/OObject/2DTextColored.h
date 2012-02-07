@@ -46,7 +46,7 @@ namespace ewol {
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_color;         //!< tmp text color ...
-			uint32_t                      m_FontTextureId; //!< font internal Texture ID
+			int32_t                       m_FontTextureId; //!< font internal Texture ID
 			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
 			etk::VectorType<color_ts>     m_coordColor;    //!< internal color of the different point

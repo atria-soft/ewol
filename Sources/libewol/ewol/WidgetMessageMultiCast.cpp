@@ -58,6 +58,7 @@ void ewol::widgetMessageMultiCast::Add(int32_t widgetId, const char* const messa
 	tmpMessage.widgetId = widgetId;
 	tmpMessage.message = message;
 	m_messageList.PushBack(tmpMessage);
+	EWOL_DEBUG("SendMulticast ADD listener :" << widgetId << " on \"" << message << "\"" );
 }
 
 // TODO : Do this better ...
@@ -65,7 +66,8 @@ void ewol::widgetMessageMultiCast::Rm(int32_t widgetId)
 {
 	// send the message at all registered widget ...
 	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
-		if(m_messageList[iii].widgetId != widgetId) {
+		if(m_messageList[iii].widgetId == widgetId) {
+			EWOL_DEBUG("SendMulticast RM listener :" << widgetId);
 			m_messageList[iii].message = NULL;
 			m_messageList[iii].widgetId = -1;
 		}
@@ -81,7 +83,11 @@ void ewol::widgetMessageMultiCast::Send(int32_t widgetId, const char* const mess
 
 void ewol::widgetMessageMultiCast::Send(int32_t widgetId, const char* const message, const char * data)
 {
-	EWOL_DEBUG("SendMulticast message \"" << message << "\" to :");
+	if (data!=NULL) {
+		EWOL_DEBUG("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
+	} else {
+		EWOL_DEBUG("SendMulticast message \"" << message << "\" data=NULL to :");
+	}
 	// send the message at all registered widget ...
 	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
 		if(    m_messageList[iii].message == message

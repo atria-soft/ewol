@@ -58,15 +58,33 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 	} else {
 		TiXmlDocument XmlDocument;
 		// open the curent File
-		#ifdef DATA_INTERNAL_BINARY
-			if (etk::FILE_TYPE_DATA == newFile.GetTypeAccess()) {
-				XmlDocument.Parse(newFile.GetDirectPointer());
-			} else {
-				XmlDocument.LoadFile(newFile.GetCompleateName().c_str());
-			}
-		#else
-			XmlDocument.LoadFile(newFile.GetCompleateName().c_str());
-		#endif
+		if (false == newFile.Exist()) {
+			EWOL_ERROR("File Does not exist : " << newFile);
+			return;
+		}
+		int32_t fileSize = newFile.Size();
+		if (0==fileSize) {
+			EWOL_ERROR("This file is empty : " << newFile);
+			return;
+		}
+		if (false == newFile.fOpenRead()) {
+			EWOL_ERROR("Can not open the file : " << newFile);
+			return;
+		}
+		// allocate data
+		char * fileBuffer = new char[fileSize+5];
+		if (NULL == fileBuffer) {
+			EWOL_ERROR("Error Memory allocation size=" << fileSize);
+			return;
+		}
+		memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
+		// load data from the file :
+		newFile.fRead(fileBuffer, 1, fileSize);
+		// close the file:
+		newFile.fClose();
+		// load the XML from the memory
+		XmlDocument.Parse((const char*)fileBuffer, 0, TIXML_ENCODING_UTF8);
+		
 		TiXmlElement* root = XmlDocument.FirstChildElement( "eol" );
 		if (NULL == root ) {
 			EWOL_ERROR("(l ?) main node not find: \"eol\" in \"" << newFile << "\"");
@@ -170,6 +188,9 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 					EWOL_ERROR("(l " << pNode->Row() << ") node not suported : \"" << nodeValue <<"\" must be [group,color,element]");
 				}
 			}
+		}
+		if (NULL != fileBuffer) {
+			delete[] fileBuffer;
 		}
 	}
 }

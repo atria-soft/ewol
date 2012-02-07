@@ -91,14 +91,14 @@ namespace ewol
 	                     coord2D_ts &                   drawPosition,
 	                     coord2D_ts &                   clipSize,
 	                     const char *                   utf8String,
-	                     uint32_t &                     fontTextureId,
+	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     coord2D_ts                     textPos,
 	                     clipping_ts &                  drawClipping,
 	                     const uniChar_t *              unicodeString,
-	                     uint32_t &                     fontTextureId,
+	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	/*

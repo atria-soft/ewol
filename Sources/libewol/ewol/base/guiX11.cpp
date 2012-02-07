@@ -103,24 +103,24 @@ extern "C" {
 }
 
 // for double and triple click selection, we need to save the previous click up and down position , and the previous time ...
-int32_t m_previousBouttonId;
-int32_t m_previousDown_x;
-int32_t m_previousDown_y;
-int32_t m_previous_x;
-int32_t m_previous_y;
-int64_t m_previousTime;
-bool    m_previousDouble;
+int32_t m_previousBouttonId = -1;
+int32_t m_previousDown_x = 0;
+int32_t m_previousDown_y = 0;
+int32_t m_previous_x = 0;
+int32_t m_previous_y = 0;
+int64_t m_previousTime = 0;
+bool    m_previousDouble = 0;
 
 Atom           m_delAtom;
-Display *      m_display;
+Display *      m_display = NULL;;
 Window         WindowHandle;
-int32_t        m_originX;
-int32_t        m_originY;
-int32_t        m_cursorEventX;
-int32_t        m_cursorEventY;
-XVisualInfo *  m_visual;
-bool           m_doubleBuffered;
-bool           m_run;
+int32_t        m_originX = 0;
+int32_t        m_originY = 0;
+int32_t        m_cursorEventX = 0;
+int32_t        m_cursorEventY = 0;
+XVisualInfo *  m_visual = NULL;
+bool           m_doubleBuffered = 0;
+bool           m_run = 0;
 extern ewol::Windows* gui_uniqueWindows;
 extern etkFloat_t     gui_width;
 extern etkFloat_t     gui_height;
@@ -369,9 +369,11 @@ void X11_Run(void)
 {
 	// main cycle
 	while(true == m_run) {
+		//EWOL_ERROR("plop1");
 		XEvent event;
 		// main X boucle :
 		while (XPending(m_display)) {
+			//EWOL_ERROR("plop 22222");
 			XNextEvent(m_display, &event);
 			
 			switch (event.type)
@@ -427,8 +429,8 @@ void X11_Run(void)
 						bool findOne = false;
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
-								EWOL_VERBOSE("X11 event: bt=" << iii+1 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-								EWOL_ThreadEventInputMotion(iii+1, (float)event.xmotion.x, (float)event.xmotion.y);
+								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+								EWOL_ThreadEventInputMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
 								findOne = true;
 							}
 						}
@@ -712,6 +714,7 @@ int main(int argc, char *argv[])
 	X11_Init();
 	//start the basic thread : 
 	EWOL_SystemStart();
+	usleep(500);
 	// Run ...
 	X11_Run();
 	// close X11 :

@@ -228,11 +228,15 @@ void EWOL_SystemStart(void)
 {
 	if (false == isGlobalSystemInit) {
 		// create interface mutex :
+		EWOL_DEBUG("Init thread message system");
 		ewol::threadMsg::Init(androidJniMsg);
 		// init the thread :
+		EWOL_DEBUG("Create the thread");
 		pthread_create(&androidJniThread, NULL, BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
+		EWOL_DEBUG("Send Init message to the thread");
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
+		EWOL_DEBUG("end basic init");
 	}
 }
 

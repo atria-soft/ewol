@@ -51,7 +51,7 @@ void ewol::OObject2DTextured::Draw(void)
 	
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
+	glBindTexture(GL_TEXTURE_2D, ewol::GetTextureGLID(m_textureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
 	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );

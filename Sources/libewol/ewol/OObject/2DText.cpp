@@ -24,6 +24,7 @@
 
 #include <ewol/OObject/2DText.h>
 #include <ewol/importgl.h>
+#include <ewol/Texture.h>
 
 #undef __class__
 #define __class__	"ewol::OObject2DText"
@@ -64,7 +65,7 @@ void ewol::OObject2DText::Draw(void)
 	}
 	glColor4f(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, m_FontTextureId);
+	glBindTexture(GL_TEXTURE_2D, ewol::GetTextureGLID(m_FontTextureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
 	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
