@@ -143,30 +143,21 @@ void ewol::Test::OnRegenerateDisplay(void)
 		ewol::theme::Generate(0, 0, *tmpOObjects, 50, 50, m_size.x*0.75, m_size.y*0.75);
 		AddOObject(tmpOObjects, "themeObject");
 		*/
-		
-		// Regenerate the event Area:
-		EventAreaRemoveAll();
-		coord origin;
-		coord size;
-		origin.x = 3.0;
-		origin.y = 3.0;
-		size.x = m_size.x-6;
-		size.y = m_size.y-6;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventTestPressed);
 	}
 }
 
-bool ewol::Test::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
+bool ewol::Test::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventTestPressed == generateEventId) {
-		m_elementID++;
-		if (m_elementID > 7 ) {
-			m_elementID = 0;
+	EWOL_DEBUG("Event on Test ...");
+	if (1 == IdInput) {
+		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+			m_elementID++;
+			if (m_elementID > 7 ) {
+				m_elementID = 0;
+			}
+			MarkToReedraw();
+			return true;
 		}
-		MarkToReedraw();
-		eventIsOK = true;
 	}
-	return eventIsOK;
+	return false;
 }

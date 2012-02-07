@@ -122,41 +122,7 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 
 bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	bool ended = false;
-	//EWOL_WARNING("Input event : " << IdInput << " pos(" << x << "," << y << ")");
-	for(int32_t iii=m_inputAreaEvent.Size()-1; iii>=0; iii--) {
-		if(    m_inputAreaEvent[iii].origin.x <= x
-		    && m_inputAreaEvent[iii].origin.y <= y
-		    && m_inputAreaEvent[iii].origin.x + m_inputAreaEvent[iii].size.x > x
-		    && m_inputAreaEvent[iii].origin.y + m_inputAreaEvent[iii].size.y > y )
-		{
-			if(    (m_inputAreaEvent[iii].flags & (1<<(IdInput-1)) )
-			    && (    (    (FLAG_EVENT_INPUT_MOTION          & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_MOVE   == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_ENTER           & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_ENTER  == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_LEAVE           & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_LEAVE  == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_DOWN            & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_DOWN   == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_UP              & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_UP     == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_CLICKED         & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_SINGLE == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_CLICKED_DOUBLE  & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_DOUBLE == typeEvent)
-			         || (    (FLAG_EVENT_INPUT_CLICKED_TRIPLE  & m_inputAreaEvent[iii].flags) && EVENT_INPUT_TYPE_TRIPLE == typeEvent)
-			       )
-			  )
-			{
-				ended = OnEventArea(m_inputAreaEvent[iii].generateEventId, x, y);
-				if (true == ended) {
-					break;
-				}
-				if (true == GenEventInputExternal(m_inputAreaEvent[iii].generateEventId, x, y)) {
-					ended = true;
-					break;
-				}
-			}
-		}
-	}
-	if (false == ended) {
-		return OnEventInput(IdInput, typeEvent, x, y);
-	}
-	return ended;
+	return OnEventInput(IdInput, typeEvent, x, y);
 }
 
 bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y)
@@ -193,12 +159,6 @@ bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool met
 		    && m_inputShortCutEvent[iii].meta == meta
 		    && m_inputShortCutEvent[iii].UnicodeValue == unicodeValue)
 		{
-			/*
-			ended = OnEventArea(m_inputShortCutEvent[iii].generateEventId, -1, -1);
-			if (true == ended) {
-				break;
-			}
-			*/
 			if (true == GenEventInputExternal(m_inputShortCutEvent[iii].generateEventId, -1, -1)) {
 				ended = true;
 				break;
@@ -211,46 +171,6 @@ bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool met
 	}
 	*/
 	return ended;
-}
-
-
-bool ewol::Widget::AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId)
-{
-	/*
-	if(    origin.x < 0.0
-	    || origin.y < 0.0)
-	{
-		EWOL_WARNING("origin under 0.0 ... out of range");
-		return false;
-	}
-	if(    size.x < 0.0
-	    || size.y < 0.0)
-	{
-		EWOL_WARNING("size under 0.0 ... out of range");
-		return false;
-	}
-	if(    origin.x > m_size.x
-	    || origin.y > m_size.y)
-	{
-		EWOL_WARNING("origin out of range");
-		return false;
-	}
-	if(    origin.x + size.x > m_size.x
-	    || origin.y + size.y > m_size.y)
-	{
-		EWOL_WARNING("end area out of size");
-		return false;
-	}
-	*/
-	eventArea_ts newEvent;
-	newEvent.generateEventId = generateEventId;
-	newEvent.origin.x = origin.x + m_origin.x;
-	newEvent.origin.y = origin.y + m_origin.y;
-	newEvent.size = size;
-	newEvent.flags = flags;
-	m_inputAreaEvent.PushBack(newEvent);
-	//EWOL_DEBUG("Add an area event...");
-	return true;
 }
 
 

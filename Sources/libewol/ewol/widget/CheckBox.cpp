@@ -132,44 +132,28 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		
 		AddOObject(tmpOObjects, "Decoration");
 		AddOObject(tmpText, "Text");
-	
-		// Regenerate the event Area:
-		EventAreaRemoveAll();
-		coord origin;
-		coord size;
-		origin.x = 3.0;
-		origin.y = 3.0;
-		size.x = m_size.x-6;
-		size.y = m_size.y-6;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventCheckBoxClicked);
 	}
 }
 
-/*
+
 bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("Event on BT ...");
-	return true;
-}
-*/
-
-bool ewol::CheckBox::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
-{
-	bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventCheckBoxClicked == generateEventId) {
-		ewol::widgetManager::FocusKeep(this);
-		EWOL_INFO("CB pressed ... " << m_label);
-		if(true == m_value) {
-			m_value = false;
-		} else {
-			m_value = true;
+	EWOL_DEBUG("Event on checkbox ...");
+	if (1 == IdInput) {
+		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+			if(true == m_value) {
+				m_value = false;
+			} else {
+				m_value = true;
+			}
+			GenEventInputExternal(ewolEventCheckBoxClicked, x, y);
+			ewol::widgetManager::FocusKeep(this);
+			return true;
 		}
-		MarkToReedraw();
-		eventIsOK = true;
 	}
-	return eventIsOK;
+	return false;
 }
+
 
 bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
 {
@@ -179,7 +163,12 @@ bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX
 	    && (    UTF8_data[0] == '\r'
 	         || UTF8_data[0] == ' ')
 	       ) {
-		return OnEventArea(ewolEventCheckBoxClicked, -1, -1);
+		if(true == m_value) {
+			m_value = false;
+		} else {
+			m_value = true;
+		}
+		return GenEventInputExternal(ewolEventCheckBoxClicked, -1,-1);
 	}
 	return false;
 }

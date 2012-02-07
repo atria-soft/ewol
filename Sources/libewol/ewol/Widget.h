@@ -98,7 +98,7 @@ namespace ewol {
 	} eventKbMoveType_te;
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
-	
+	/*
 	enum {
 		FLAG_EVENT_INPUT_1               = 1 << 0,
 		FLAG_EVENT_INPUT_2               = 1 << 1,
@@ -134,7 +134,7 @@ namespace ewol {
 	#define FLAG_EVENT_INPUT_BT_RIGHT       (FLAG_EVENT_INPUT_3)
 	#define FLAG_EVENT_INPUT_BT_SCROOL_UP   (FLAG_EVENT_INPUT_4)
 	#define FLAG_EVENT_INPUT_BT_SCROOL_DOWN (FLAG_EVENT_INPUT_5)
-	
+	*/
 	
 	#define UTF8_MAX_SIZE          (8)
 	#define EWOL_EVENT_AREA        (0)
@@ -248,7 +248,6 @@ namespace ewol {
 		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			etk::VectorType<eventArea_ts>     m_inputAreaEvent;      //!< generic area event
 			etk::VectorType<eventShortCut_ts> m_inputShortCutEvent;  //!< generic short-cut event
 			etk::VectorType<eventExtern_ts>   m_externEvent;         //!< Generic list of event generation for output link
 			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget
@@ -263,8 +262,7 @@ namespace ewol {
 					m_ListEventAvaillable.PushBack(generateEventId);
 				}
 			}
-			void EventAreaRemoveAll(void) { m_inputAreaEvent.Clear();m_inputShortCutEvent.Clear(); };
-			bool AddEventArea(coord origin, coord size, uint64_t flags, const char * generateEventId);
+			//void EventAreaRemoveAll(void) { m_inputAreaEvent.Clear();m_inputShortCutEvent.Clear(); };
 			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, uint32_t unicodeValue, const char * generateEventId);
 			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);
 		public:
@@ -272,9 +270,9 @@ namespace ewol {
 			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId = NULL);
 		protected:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y) { return false; };
-			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y) { return false; };
 		public:
 			// when an event arrive from an other widget, it will arrive here:
+			// TODO : change name ...
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y) { return false; };
 		
 		// ----------------------------------------------------------------------------------------------------------------

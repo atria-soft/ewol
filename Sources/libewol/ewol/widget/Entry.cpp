@@ -152,38 +152,25 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
 			tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
 		}
-		
 		AddOObject(tmpOObjects, "BouttonDecoration");
-		
 		AddOObject(tmpText, "BouttonText");
-		
-		// Regenerate the event Area:
-		EventAreaRemoveAll();
-		coord origin;
-		coord size;
-		origin.x = tmpOriginX;
-		origin.y = tmpOriginY;
-		size.x = tmpSizeX;
-		size.y = tmpSizeY;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventEntryClick);
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventEntryEnter);
 	}
 }
 
 
-bool ewol::Entry::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
+bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventEntryClick == generateEventId) {
-		EWOL_INFO("Entry Clicked ... " << m_data);
-		eventIsOK = true;
-		ewol::widgetManager::FocusKeep(this);
-		ewol::KeyboardShow(KEYBOARD_MODE_CODE);
-	} else if(ewolEventEntryEnter == generateEventId) {
-		//MarkToReedraw();
+	EWOL_DEBUG("Event on Entry ...");
+	if (1 == IdInput) {
+		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+			// nothing to do ...
+			GenEventInputExternal(ewolEventEntryClick, x, y);
+			ewol::widgetManager::FocusKeep(this);
+			ewol::KeyboardShow(KEYBOARD_MODE_CODE);
+			return true;
+		}
 	}
-	return eventIsOK;
+	return false;
 }
 
 
@@ -192,7 +179,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SI
 	if(    UTF8_data != NULL
 	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
 		//EWOL_DEBUG("Entry input data ... : \"" << UTF8_data << "\" size=" << strlen(UTF8_data) << "  data=" << (int32_t)UTF8_data[0] );
-		//return OnEventArea(ewolEventButtonPressed, -1, -1);
+		return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
 	if (0x7F == UTF8_data[0]) {
 			if (m_data.Size() > 0) {
 				// SUPPR

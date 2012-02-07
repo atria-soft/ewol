@@ -149,44 +149,21 @@ void ewol::Button::OnRegenerateDisplay(void)
 		AddOObject(tmpOObjects, "BouttonDecoration");
 		
 		AddOObject(tmpText, "BouttonText");
-		
-		// Regenerate the event Area:
-		EventAreaRemoveAll();
-		coord origin;
-		coord size;
-		origin.x = tmpOriginX;
-		origin.y = tmpOriginY;
-		size.x = tmpSizeX;
-		size.y = tmpSizeY;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventButtonPressed);
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_ENTER, ewolEventButtonEnter);
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_LEAVE, ewolEventButtonLeave);
 	}
 }
 
-/*
+
 bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	EWOL_DEBUG("Event on BT ...");
-	return true;
-}
-*/
-
-bool ewol::Button::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
-{
-	//bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventButtonPressed == generateEventId) {
-		EWOL_INFO("BT pressed ... " << m_label);
-		//eventIsOK = true;
-		ewol::widgetManager::FocusKeep(this);
-	} else if(ewolEventButtonEnter == generateEventId) {
-		MarkToReedraw();
+	if (1 == IdInput) {
+		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+			// nothing to do ...
+			GenEventInputExternal(ewolEventButtonPressed, x, y);
+			return true;
+		}
 	}
-	//return eventIsOK;
-	// in every case this not stop the propagation of the event
 	return false;
-	// if overwrited... you can ...
 }
 
 
@@ -196,9 +173,8 @@ bool ewol::Button::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_S
 	if(    UTF8_data != NULL
 	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN
 	    && UTF8_data[0] == '\r') {
-		return OnEventArea(ewolEventButtonPressed, -1, -1);
+		GenEventInputExternal(ewolEventButtonEnter, -1, -1);
 	}
 	return false;
 }
-
 
