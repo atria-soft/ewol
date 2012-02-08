@@ -81,6 +81,7 @@ bool ewol::Button::CalculateMinSize(void)
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = 16+minWidth;
 	m_minSize.y = 16+minHeight;
+	MarkToReedraw();
 	return true;
 }
 
@@ -155,7 +156,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 
 bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("Event on BT ...");
+	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...

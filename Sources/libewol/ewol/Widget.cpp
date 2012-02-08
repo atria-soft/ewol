@@ -116,6 +116,7 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
+	MarkToReedraw();
 	return true;
 }
 

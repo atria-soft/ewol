@@ -160,7 +160,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 
 bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("Event on Entry ...");
+	//EWOL_DEBUG("Event on Entry ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...

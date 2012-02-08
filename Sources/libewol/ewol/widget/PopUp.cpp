@@ -91,6 +91,7 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 
 bool ewol::PopUp::CalculateMinSize(void)
 {
+	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpendX=false;
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
@@ -102,6 +103,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 		m_minSize.y = tmpSize.y;
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
+	MarkToReedraw();
 	return true;
 }
 

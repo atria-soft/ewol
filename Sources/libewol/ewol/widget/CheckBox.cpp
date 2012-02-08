@@ -77,6 +77,7 @@ bool ewol::CheckBox::CalculateMinSize(void)
 	etkFloat_t boxSize = etk_max(20, minHeight) + 5;
 	m_minSize.x = boxSize+minWidth;
 	m_minSize.y = etk_max(boxSize, minHeight)+3;
+	MarkToReedraw();
 	return true;
 }
 
@@ -138,7 +139,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 
 bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("Event on checkbox ...");
+	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			if(true == m_value) {

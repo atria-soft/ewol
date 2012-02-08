@@ -389,6 +389,36 @@ void X11_Run(void)
 						}
 					}
 					break;
+				case Expose:
+					EWOL_DEBUG("X11 event Expose");
+					break;
+				case GraphicsExpose:
+					EWOL_DEBUG("X11 event GraphicsExpose");
+					break;
+				case NoExpose:
+					EWOL_DEBUG("X11 event NoExpose");
+					break;
+				case CreateNotify:
+					EWOL_DEBUG("X11 event CreateNotify");
+					break;
+				case DestroyNotify:
+					EWOL_DEBUG("X11 event DestroyNotify");
+					break;
+				case GravityNotify:
+					EWOL_DEBUG("X11 event GravityNotify");
+					break;
+				case VisibilityNotify:
+					EWOL_DEBUG("X11 event VisibilityNotify");
+					break;
+				case CirculateNotify:
+					EWOL_DEBUG("X11 event CirculateNotify");
+					break;
+				case ReparentNotify:
+					EWOL_DEBUG("X11 event ReparentNotify");
+					break;
+				case PropertyNotify:
+					EWOL_DEBUG("X11 event PropertyNotify");
+					break;
 				case ConfigureNotify:
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
