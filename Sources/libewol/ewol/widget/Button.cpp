@@ -161,6 +161,7 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...
 			GenEventInputExternal(ewolEventButtonPressed, x, y);
+			MarkToReedraw();
 			return true;
 		}
 	}

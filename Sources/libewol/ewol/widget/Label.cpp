@@ -106,24 +106,13 @@ void ewol::Label::OnRegenerateDisplay(void)
 		tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str(), m_size.x - 2*paddingSize);
 		
 		AddOObject(tmpText, "LabelText");
-		/*
-		// Regenerate the event Area:
-		EventAreaRemoveAll();
-		coord origin;
-		coord size;
-		origin.x = tmpOriginX;
-		origin.y = tmpOriginY;
-		size.x = m_minSize.x;
-		size.y = m_minSize.y;
-		AddEventArea(origin, size, FLAG_EVENT_INPUT_1 | FLAG_EVENT_INPUT_CLICKED_ALL, ewolEventLabelPressed);
-		*/
 	}
 }
 
 
 bool ewol::Label::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_DEBUG("Event on Label ...");
+	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...
@@ -134,17 +123,4 @@ bool ewol::Label::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etk
 	return false;
 }
 
-
-/*
-bool ewol::Label::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
-{
-	bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventLabelPressed == generateEventId) {
-		EWOL_INFO("LBL pressed ... " << m_label);
-		//ewol::widgetManager::FocusKeep(this);
-	}
-	return eventIsOK;
-}
-*/
 

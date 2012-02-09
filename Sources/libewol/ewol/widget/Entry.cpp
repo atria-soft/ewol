@@ -65,17 +65,15 @@ ewol::Entry::Entry(void)
 	Init();
 	m_data = "";
 	UpdateTextPosition();
+	MarkToReedraw();
 }
 
 ewol::Entry::Entry(etk::String newData)
 {
 	Init();
 	SetValue(newData);
-	/*
-	m_data = newData;
-	m_displayCursorPos = m_data.Size();
 	UpdateTextPosition();
-	*/
+	MarkToReedraw();
 }
 
 
@@ -91,6 +89,7 @@ bool ewol::Entry::CalculateMinSize(void)
 	m_minSize.x = m_userSize;
 	m_minSize.y = minHeight + 2*(m_borderSize + 2*m_paddingSize);
 	UpdateTextPosition();
+	MarkToReedraw();
 	return true;
 }
 
@@ -166,7 +165,7 @@ bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etk
 			// nothing to do ...
 			GenEventInputExternal(ewolEventEntryClick, x, y);
 			ewol::widgetManager::FocusKeep(this);
-			ewol::KeyboardShow(KEYBOARD_MODE_CODE);
+			MarkToReedraw();
 			return true;
 		}
 	}
@@ -227,11 +226,13 @@ void ewol::Entry::UpdateTextPosition(void)
 void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
+	ewol::KeyboardShow(ewol::KEYBOARD_MODE_CODE);
 	MarkToReedraw();
 }
 
 void ewol::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
+	ewol::KeyboardHide();
 	MarkToReedraw();
 }

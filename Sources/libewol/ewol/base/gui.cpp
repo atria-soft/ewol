@@ -77,10 +77,10 @@ void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
 	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 	if (NULL != tmpWidget) {
 		if(true == isDown) {
-			EWOL_DEBUG("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
+			EWOL_VERBOSE("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
 			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
 		} else {
-			EWOL_DEBUG("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
+			EWOL_VERBOSE("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
 			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
 		}
 	}
@@ -150,7 +150,7 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 			// Send Down message
 			if (NULL != gui_uniqueWindows) {
-				EWOL_DEBUG("GUI : Input ID=" << pointerID << " [DOWN]   (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				EWOL_VERBOSE("GUI : Input ID=" << pointerID << " [DOWN]   (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 				gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_DOWN, (etkFloat_t)x, (etkFloat_t)y);
 			}
 			// Check double or triple click event ...
@@ -180,7 +180,7 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 		if(0<=pointerID && pointerID < NB_MAX_INPUT ) {
 			// Send Down message
 			if (NULL != gui_uniqueWindows) {
-				EWOL_DEBUG("GUI : Input ID=" << pointerID << " [UP]     (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+				EWOL_VERBOSE("GUI : Input ID=" << pointerID << " [UP]     (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 				gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_UP, (etkFloat_t)x, (etkFloat_t)y);
 			}
 			if (m_previousBouttonId != pointerID) {
@@ -193,14 +193,14 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 				m_previousDouble = false;
 			} else {
 				int64_t currentTime = GetCurrentTime(); // return the tic in 1ms
-				EWOL_DEBUG("time is : " << (int)currentTime << "    "<< (int)(currentTime/1000) <<"s " << (int)((currentTime%100)*10) << "ms    delta : " << (currentTime - m_previousTime) << "<" << separateClickTime );
+				EWOL_VERBOSE("time is : " << (int)currentTime << "    "<< (int)(currentTime/1000) <<"s " << (int)((currentTime%100)*10) << "ms    delta : " << (currentTime - m_previousTime) << "<" << separateClickTime );
 				if (currentTime - m_previousTime >= separateClickTime) {
 					//check if the same area click : 
 					if(    abs(m_previousDown_x - x) < offsetMoveClicked
 					    && abs(m_previousDown_y - y) < offsetMoveClicked )
 					{
 						// might generate an sigle event :
-						EWOL_DEBUG("GUI : Input ID=" << pointerID << " [SINGLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+						EWOL_VERBOSE("GUI : Input ID=" << pointerID << " [SINGLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 						gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_SINGLE, (etkFloat_t)x, (etkFloat_t)y);
 						m_previous_x = m_previousDown_x;
 						m_previous_y = m_previousDown_y;
@@ -223,12 +223,12 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y )
 					{
 						// might generate an sigle event :
 						if (false == m_previousDouble) {
-							EWOL_DEBUG("GUI : Input ID=" << pointerID << " [DOUBLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							EWOL_VERBOSE("GUI : Input ID=" << pointerID << " [DOUBLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 							gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_DOUBLE, (etkFloat_t)x, (etkFloat_t)y);
 							m_previousTime = currentTime;
 							m_previousDouble = true;
 						} else {
-							EWOL_DEBUG("GUI : Input ID=" << pointerID << " [TRIPLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
+							EWOL_VERBOSE("GUI : Input ID=" << pointerID << " [TRIPLE] (" << (etkFloat_t)x << "," << (etkFloat_t)y << ")");
 							gui_uniqueWindows->GenEventInput(pointerID, ewol::EVENT_INPUT_TYPE_TRIPLE, (etkFloat_t)x, (etkFloat_t)y);
 							// reset values ...
 							m_previousDown_x = -1;

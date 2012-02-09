@@ -135,5 +135,9 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 
 	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSizeY);
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
-	return OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
+	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
+	if (true == isUsed) {
+		ewol::widgetManager::FocusKeep(this);
+	}
+	return isUsed;
 }

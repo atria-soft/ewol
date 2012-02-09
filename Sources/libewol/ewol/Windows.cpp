@@ -39,17 +39,11 @@
 
 
 //list of local events : 
-const char * ewolEventWindowsClose    = "ewol Windows close";
-const char * ewolEventWindowsMinimize = "ewol Windows minimize";
-const char * ewolEventWindowsExpend   = "ewol Windows expend/unExpend";
-const char * ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
+extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
 ewol::Windows::Windows(void)
 {
-	AddEventId(ewolEventWindowsClose);
-	AddEventId(ewolEventWindowsMinimize);
-	AddEventId(ewolEventWindowsExpend);
 	SetCanHaveFocus(true);
 	m_subWidget = NULL;
 	m_popUpWidget = NULL;
@@ -198,26 +192,6 @@ bool ewol::Windows::OnDraw(void)
 }
 
 
-bool ewol::Windows::OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y)
-{
-	bool eventIsOK = false;
-	//EWOL_DEBUG("Receive event : \"" << generateEventId << "\"");
-	if(ewolEventWindowsClose == generateEventId) {
-		EWOL_INFO("Request close of the windows");
-		ewol::Stop();
-		eventIsOK = true;
-	} else if(ewolEventWindowsMinimize == generateEventId) {
-		EWOL_INFO("Request Minimize of the windows");
-		eventIsOK = true;
-	} else if(ewolEventWindowsExpend == generateEventId) {
-		EWOL_INFO("Request Expend of the windows");
-		eventIsOK = true;
-	}
-	
-	return eventIsOK;
-}
-
-
 
 void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 {
@@ -260,12 +234,14 @@ bool ewol::Windows::OnEventAreaExternal(int32_t widgetID, const char * generateE
 	if(ewolEventWindowsHideKeyboard == generateEventId) {
 		EWOL_INFO("Request Hide keyboard");
 		KeyboardHide();
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 {
+#if defined(__PLATFORM__Android)
 	if (NULL == m_keyBoardwidget) {
 		// Create the keyboard ...
 		m_keyBoardwidget = new ewol::Keyboard();
@@ -281,6 +257,7 @@ void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 	}
 	CalculateSize(m_size.x, m_size.y);
 	MarkToReedraw();
+#endif
 }
 
 

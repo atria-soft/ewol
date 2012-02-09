@@ -43,6 +43,7 @@ namespace ewol {
 			void SetValidateLabel(etk::String label);
 			void SetCancelLabel(etk::String label);
 			void SetFolder(etk::String folder);
+			void SetFileName(etk::String filename);
 			etk::String GetCompleateFileName(void);
 			void UpdateCurrentFolder(void);
 		private:
@@ -50,8 +51,10 @@ namespace ewol {
 			int32_t m_widgetValidateId;
 			int32_t m_widgetCancelId;
 			int32_t m_widgetCurrentFolderId;
+			int32_t m_widgetCurrentFileNameId;
 			int32_t m_widgetListFolderId;
 			int32_t m_widgetListFileId;
+			int32_t m_widgetCheckBoxId;
 			bool    m_hasSelectedFile;
 			etk::String m_folder;
 			etk::String m_file;

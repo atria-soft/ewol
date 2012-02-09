@@ -51,11 +51,8 @@ namespace ewol {
 			virtual bool OnKill(void) { return true; };
 			virtual void OnReduce(void) { };
 			virtual void On(void) { };
-		// from Widget management : 
-			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
-			virtual bool OnEventArea(const char * generateEventId, etkFloat_t x, etkFloat_t y);
-		// Widget overwrite function
 		public:
+			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
 		private:

@@ -159,20 +159,26 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 		mySizerHori = new ewol::SizerHori();
 			mySizerVert->SubWidgetAdd(mySizerHori);
 			ADD_BUTTON(mySizerHori,myButton,"Hide",ewolEventKeyboardHide);
+			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Ctrl",ewolEventKeyEvent);
+			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Pomme",ewolEventKeyEvent);
+			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Alt",ewolEventKeyEvent);
-			ADD_BUTTON(mySizerHori,myButton,"                               ",ewolEventKeyEvent);
+			myButton->SetExpendX(false);
+			ADD_BUTTON(mySizerHori,myButton," ",ewolEventKeyEvent);
 			ADD_BUTTON(mySizerHori,myButton,"AltGr",ewolEventKeyEvent);
+			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Ctrl",ewolEventKeyEvent);
+			myButton->SetExpendX(false);
 	
 }
 
 
-bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
+bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
 {
-	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << eventExternId << "\"" );
-	if (ewolEventKeyEvent == eventExternId) {
+	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << data << "\"" );
+	if (ewolEventKeyEvent == generateEventId) {
 		ewol::Button * bt     = (ewol::Button *)ewol::widgetManager::Get(widgetID);
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
 		etk::String data = bt->GetLabel();
@@ -189,7 +195,7 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 		guiAbstraction::SendKeyboardEvent(true, data);
 		guiAbstraction::SendKeyboardEvent(false, data);
 		return true;
-	} else if (ewolEventKeyboardHide == eventExternId) {
+	} else if (ewolEventKeyboardHide == generateEventId) {
 		Hide();
 		ewol::ForceRedrawAll();
 	}
