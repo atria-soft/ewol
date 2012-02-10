@@ -70,6 +70,7 @@ bool ewol::List::CalculateMinSize(void)
 void ewol::List::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		
 		// clean the object list ...
 		ClearOObjectList();
 		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
@@ -94,6 +95,11 @@ void ewol::List::OnRegenerateDisplay(void)
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
 		uint32_t nbRaw    = GetNuberOfRaw();
+		// For the scrooling windows
+		m_maxSize.x = m_size.x;
+		m_maxSize.y = minHeight * nbRaw;
+		
+		
 		etk::VectorType<int32_t> listSizeColomn;
 		
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
@@ -103,8 +109,13 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
 		
+		int32_t startRaw = m_originScrooled.y / minHeight - 1;
+		if (startRaw<0) {
+			startRaw = 0;
+		}
 		// We display only compleate lines ...
-		for(uint32_t iii=0; iii<nbRaw && iii<displayableRaw; iii++) {
+		EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws");
+		for(uint32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::String myTextToWrite;
 			color_ts fg;
 			color_ts bg;
@@ -123,17 +134,29 @@ void ewol::List::OnRegenerateDisplay(void)
 		//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
 	
 		//AddOObject(tmpText, "ListText");
+		
+		// call the herited class...
+		WidgetScrooled::OnRegenerateDisplay();
 	}
 }
 
 
 bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
+	if (true == WidgetScrooled::OnEventInput(IdInput, typeEvent, x, y)) {
+		ewol::widgetManager::FocusKeep(this);
+		// nothing to do ... done on upper widet ...
+		return true;
+	}
 	int32_t fontId = GetDefaultFontId();
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
-
-	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSizeY);
+	
+	int32_t startRaw = m_originScrooled.y / minHeight - 1;
+	if (startRaw<0) {
+		startRaw = 0;
+	}
+	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSizeY) + startRaw;
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
 	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
 	if (true == isUsed) {

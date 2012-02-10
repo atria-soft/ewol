@@ -55,7 +55,6 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 
 bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	
 	if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 		EWOL_INFO("mouse-event GDK_SCROLL_UP");
 		m_originScrooled.y -= m_pixelScrolling;

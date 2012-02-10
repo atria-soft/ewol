@@ -27,10 +27,10 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/WidgetScrolled.h>
 
 namespace ewol {
-	class List :public ewol::Widget
+	class List :public ewol::WidgetScrooled
 	{
 		public:
 			List(void);

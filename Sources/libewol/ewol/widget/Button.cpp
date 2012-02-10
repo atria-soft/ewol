@@ -158,7 +158,9 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
-		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
+		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
+		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			// nothing to do ...
 			GenEventInputExternal(ewolEventButtonPressed, x, y);
 			MarkToReedraw();
