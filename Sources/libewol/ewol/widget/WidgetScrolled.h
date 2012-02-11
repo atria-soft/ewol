@@ -33,8 +33,12 @@ namespace ewol {
 	typedef enum {
 		SCROLL_DISABLE,
 		SCROLL_INIT,
+	#ifdef __MODE__Touch
+		SCROLL_ENABLE,
+	#else
 		SCROLL_ENABLE_HORIZONTAL,
 		SCROLL_ENABLE_VERTICAL,
+	#endif
 	}highSpeedMode_te;
 	
 	class WidgetScrooled :public ewol::Widget

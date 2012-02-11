@@ -11,6 +11,7 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
 LOCAL_CFLAGS := -D__PLATFORM__Android \
+                -D__MODE__Touch \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
