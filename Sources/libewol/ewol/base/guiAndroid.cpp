@@ -179,6 +179,7 @@ void EWOL_NativeRender(void)
 		glDisable(GL_BLEND);
 	} else {
 		EWOL_GenericDraw(true);
+		//EWOL_GenericDraw(false);
 	}
 	glFlush();
 }

@@ -160,7 +160,20 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
 	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
 	if (true == isUsed) {
-		ewol::widgetManager::FocusKeep(this);
+		// TODO : this generate bugs ... I did not understand why ..
+		//ewol::widgetManager::FocusKeep(this);
 	}
 	return isUsed;
+}
+
+
+
+void ewol::List::OnGetFocus(void)
+{
+	EWOL_DEBUG("Ewol::List Get Focus");
+}
+
+void ewol::List::OnLostFocus(void)
+{
+	EWOL_DEBUG("Ewol::List Lost Focus");
 }

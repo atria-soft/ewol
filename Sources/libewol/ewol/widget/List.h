@@ -88,6 +88,9 @@ namespace ewol {
 			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
 				return false;
 			}
+		protected:
+			virtual void OnGetFocus(void);
+			virtual void OnLostFocus(void);
 	};
 };
 
