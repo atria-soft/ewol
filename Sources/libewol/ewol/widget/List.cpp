@@ -109,7 +109,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
 		
-		int32_t startRaw = m_originScrooled.y / minHeight - 1;
+		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY) - 1;
 		if (startRaw<0) {
 			startRaw = 0;
 		}
@@ -152,7 +152,7 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
 	
-	int32_t startRaw = m_originScrooled.y / minHeight - 1;
+	int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY) - 1;
 	if (startRaw<0) {
 		startRaw = 0;
 	}
