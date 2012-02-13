@@ -23,6 +23,7 @@
  */
 
 
+#include <etk/unicode.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
@@ -173,24 +174,19 @@ bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etk
 }
 
 
-bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 {
-	if(    UTF8_data != NULL
-	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
-		//EWOL_DEBUG("Entry input data ... : \"" << UTF8_data << "\" size=" << strlen(UTF8_data) << "  data=" << (int32_t)UTF8_data[0] );
-		return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
-	if (0x7F == UTF8_data[0]) {
-			if (m_data.Size() > 0) {
-				// SUPPR
-			}
-		} else if (0x08 == UTF8_data[0]) {
-			EWOL_DEBUG("The entry is an UTF8 string ...");
-			EWOL_TODO("later...");
-			if (m_data.Size() > 0) {
-				// DEL : 
-				m_data.Remove(m_data.Size()-1, 1);
-			}
-		} else if(UTF8_data[0] >= 20) {
+	if( typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
+		//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
+		//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
+	if (0x7F == unicodeData) {
+			// SUPPR
+		} else if (0x08 == unicodeData) {
+			// DEL : 
+			m_data.Remove(m_data.Size()-1, 1);
+		} else if(unicodeData >= 20) {
+			char UTF8_data[50];
+			unicode::convertUnicodeToUtf8(unicodeData, UTF8_data);
 			m_data += UTF8_data;
 		}
 		UpdateTextPosition();

@@ -71,17 +71,17 @@ void guiAbstraction::ForceRedrawAll(void)
 }
 
 
-void guiAbstraction::SendKeyboardEvent(bool isDown, etk::String &keyInput)
+void guiAbstraction::SendKeyboardEvent(bool isDown, uniChar_t keyInput)
 {
 	// Get the current Focused Widget :
 	ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 	if (NULL != tmpWidget) {
 		if(true == isDown) {
-			EWOL_VERBOSE("X11 PRESSED : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput.c_str());
+			EWOL_VERBOSE("GUI PRESSED : \"" << keyInput << "\"");
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, keyInput);
 		} else {
-			EWOL_VERBOSE("X11 Release : \"" << keyInput << "\" size=" << keyInput.Size());
-			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput.c_str());
+			EWOL_VERBOSE("GUI Release : \"" << keyInput << "\"");
+			tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, keyInput);
 		}
 	}
 }

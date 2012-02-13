@@ -279,7 +279,7 @@ namespace ewol {
 		// -- Keboard event (when one is present or when a graphical is present
 		// ----------------------------------------------------------------------------------------------------------------
 		public:
-			virtual bool OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]) { return false; };
+			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData) { return false; };
 			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent) { return false; };
 		
 		

@@ -33,6 +33,7 @@
 #include <ewol/WidgetManager.h>
 //#include <etk/Vector.h>
 #include <etk/VectorType.h>
+#include <etk/unicode.h>
 #include <ewol/ewol.h>
 
 #include <ewol/base/gui.h>
@@ -192,8 +193,10 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 		if (data == "TAB") {
 			data = "\t";
 		}
-		guiAbstraction::SendKeyboardEvent(true, data);
-		guiAbstraction::SendKeyboardEvent(false, data);
+		uniChar_t unicodeValue;
+		unicode::convertUtf8ToUnicode(data.c_str(), unicodeValue);
+		guiAbstraction::SendKeyboardEvent(true, unicodeValue);
+		guiAbstraction::SendKeyboardEvent(false, unicodeValue);
 		return true;
 	} else if (ewolEventKeyboardHide == generateEventId) {
 		Hide();

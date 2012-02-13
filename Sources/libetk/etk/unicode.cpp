@@ -211,7 +211,53 @@ int32_t unicode::convertUnicodeToUtf8(etk::VectorType<uniChar_t>& input_Unicode,
 
 int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	TK_WARNING("TODO : not coded...");
+	bool baseValid;
+	char tmpData[20];
+	int32_t pos = 0;
+	while (pos < input_UTF8.Size()) {
+		int32_t lenMax = input_UTF8.Size() - pos;
+		//4 case
+		if(    1<=lenMax
+		    && 0x00 == (input_UTF8[pos+0] & 0x80) )
+		{
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = '\0';
+			pos += 1;
+		} else if(		2<=lenMax
+					&&	0xC0 == (input_UTF8[pos+0] & 0xE0)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0) ) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = '\0';
+			pos += 1;
+		} else if(		3<=lenMax
+					&&	0xE0 == (input_UTF8[pos+0] & 0xF0)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+2] & 0xC0)) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = input_UTF8[pos+2];
+			tmpData[3] = '\0';
+			pos += 1;
+		} else if(		4<=lenMax
+					&&	0xF0 == (input_UTF8[pos+0] & 0xF8)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+2] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+3] & 0xC0)) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = input_UTF8[pos+2];
+			tmpData[3] = input_UTF8[pos+3];
+			tmpData[4] = '\0';
+			pos += 1;
+		} else {
+			tmpData[0] = '\0';
+			pos += 1;
+		}
+		uniChar_t tmpUnicode;
+		convertUtf8ToUnicode(tmpData, tmpUnicode);
+		output_Unicode.PushBack(tmpUnicode);
+	}
 	return 0;
 }
 

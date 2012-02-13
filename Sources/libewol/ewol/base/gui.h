@@ -45,7 +45,7 @@ namespace guiAbstraction
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
-	void SendKeyboardEvent(bool isDown, etk::String &keyInput);
+	void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
 	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
 };
 

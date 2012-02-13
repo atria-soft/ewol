@@ -25,6 +25,7 @@
 
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
+#include <etk/unicode.h>
 #include <etk/VectorType.h>
 
 #include <ewol/importgl.h>
@@ -207,7 +208,7 @@ class FTFontInternal
 			} else {
 				// all OK
 				EWOL_INFO("load font : \"" << m_fileName << "\" ");
-				Display();
+				//Display();
 			}
 		}
 		~FTFontInternal(void)
@@ -234,11 +235,11 @@ class FTFontInternal
 
 			// a small shortcut
 			FT_GlyphSlot slot = m_fftFace->glyph;
-			
+			/*
 			EWOL_DEBUG("Max size for ths glyph size=" << size << 
 			           " is (" << m_fftFace->max_advance_width << "," << m_fftFace->max_advance_height << ")" <<
 			           "?=(" << (m_fftFace->max_advance_width>>6) << "," << (m_fftFace->max_advance_height>>6) << ")");
-			
+			*/
 			// retrieve glyph index from character code 
 			int32_t glyph_index = FT_Get_Char_Index(m_fftFace, 'A' );
 			// load glyph image into the slot (erase previous one)
@@ -265,12 +266,6 @@ class FTFontInternal
 			}
 			int32_t nbLine = (nbElement / nbRaws) + 1;
 			int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
-			/*if (textureWidth < textureHeight) {
-				textureWidth = textureHeight;
-			}
-			if (textureWidth > textureHeight) {
-				textureHeight = textureWidth;
-			}*/
 			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 			
 			// Allocate Memory For The Texture Data.
@@ -303,6 +298,11 @@ class FTFontInternal
 				*/
 				// retrieve glyph index from character code 
 				glyph_index = FT_Get_Char_Index(m_fftFace, listElement[iii].unicodeCharVal );
+				/*
+				if (glyph_index < 1) {
+					EWOL_WARNING("Can not load Glyph : " << listElement[iii].unicodeCharVal);
+				}
+				*/
 				// load glyph image into the slot (erase previous one)
 				error = FT_Load_Glyph(m_fftFace, // handle to face object
 				                      glyph_index, // glyph index
@@ -326,12 +326,12 @@ class FTFontInternal
 					EWOL_ASSERT(tmpLineStartPos+tmpHeight < textureHeight, "Texture dimention estimatiuon error for the current Font");
 				}
 				
-				
+				/*
 				EWOL_VERBOSE("elem=" << listElement[iii].unicodeCharVal
 				              <<" size=(" << tmpWidth << "," << tmpHeight << ")"
 				              << " for bitmap (left=" << slot->bitmap_left << ",top=" << slot->bitmap_top << ")");
 				EWOL_VERBOSE(" BEARING=(" << (slot->metrics.horiBearingX>>6) << "," << (slot->metrics.vertBearingY>>6) << ")" );
-				
+				*/
 				for(int32_t j=0; j < tmpHeight;j++) {
 					for(int32_t i=0; i < tmpWidth; i++){
 						int32_t position =   (tmpRowStartPos  + i )
@@ -404,10 +404,14 @@ class FTFont{
 			freeTypeFontElement_ts tmpchar1;
 			tmpchar1.unicodeCharVal = 0;
 			m_elements.PushBack(tmpchar1);
-			for (int32_t iii=0x20; iii<0x7F; iii++) {
+			// TODO : dynamic generation of this : expected minimum of 0x20 => 0x7F ....
+			for (int32_t iii=0x20; iii<0xFF; iii++) {
 				freeTypeFontElement_ts tmpchar;
 				tmpchar.unicodeCharVal = iii;
 				m_elements.PushBack(tmpchar);
+				if (0x7F == iii) {
+					iii = 0x9F;
+				}
 			}
 			m_size = size;
 			m_listLoadedTTFont[m_trueTypeFontId]->GenerateBitmapFont(m_size, m_lineHeight, m_textureId, m_elements);
@@ -569,6 +573,7 @@ void ewol::UnloadFont(int32_t id)
 }
 
 
+// TODO : Change this code ....
 int32_t ewol::DrawText(int32_t                     fontID,
                     coord2D_ts &                   drawPosition,
                     coord2D_ts &                   clipSize,
@@ -577,115 +582,23 @@ int32_t ewol::DrawText(int32_t                     fontID,
                     etk::VectorType<coord2D_ts> &  coord,
                     etk::VectorType<texCoord_ts> & coordTex)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
-		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
-		return 0;
+	// TODO : Remove this part of code ...  ==> how???
+	int32_t nbElement = strlen(utf8String);
+	etk::VectorType<char> tmpStruct;
+	for (int32_t iii=0; iii<nbElement; iii++) {
+		tmpStruct.PushBack(utf8String[iii]);
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
-	char * tmpVal = (char*)utf8String;
 	
-	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
-	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
+	clipping_ts tmpClip;
+	tmpClip.x = 0;
+	tmpClip.y = 0;
+	tmpClip.w = clipSize.x;
+	tmpClip.h = clipSize.y;
 	
-	etkFloat_t posDrawX = drawPosition.x;
-	while(*tmpVal != 0) {
-		uint32_t tmpChar = *tmpVal++;
-		int32_t charIndex;
-		if (tmpChar >= 0x80) {
-			charIndex = 0;
-		} else if (tmpChar < 0x20) {
-			charIndex = 0;
-		} else if (tmpChar < 0x80) {
-			charIndex = tmpChar - 0x1F;
-		} else {
-			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
-				if (listOfElement[iii].unicodeCharVal == tmpChar) {
-					charIndex = iii;
-					break;
-				}
-			}
-			// TODO : Update if possible the mapping
-			charIndex = 0;
-		}
-		etkFloat_t sizeWidth = listOfElement[charIndex].advance;
-		// check the clipping
-		if (clipSize.x>0 && posDrawX+sizeWidth > clipSize.x) {
-			// TODO : Create a better clipping methode ...
-			break;
-		}
-		// 0x01 == 0x20 == ' ';
-		if (tmpChar != 0x01) {
-			/* Bitmap position
-			 *   0------1
-			 *   |      |
-			 *   |      |
-			 *   3------2
-			 */
-			coord2D_ts bitmapDrawPos[4];
-			bitmapDrawPos[0].x = posDrawX + listOfElement[charIndex].bearing.x;
-			bitmapDrawPos[1].x = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			bitmapDrawPos[2].x = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			bitmapDrawPos[3].x = posDrawX + listOfElement[charIndex].bearing.x;
-			
-			bitmapDrawPos[0].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y;
-			bitmapDrawPos[1].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y;
-			bitmapDrawPos[2].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
-			bitmapDrawPos[3].y = drawPosition.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
-			/* texture Position : 
-			 *   0------1
-			 *   |      |
-			 *   |      |
-			 *   3------2
-			 */
-			texCoord_ts texturePos[4];
-			texturePos[0].u = listOfElement[charIndex].posStart.u;
-			texturePos[1].u = listOfElement[charIndex].posStop.u;
-			texturePos[2].u = listOfElement[charIndex].posStop.u;
-			texturePos[3].u = listOfElement[charIndex].posStart.u;
-			
-			texturePos[0].v = listOfElement[charIndex].posStart.v;
-			texturePos[1].v = listOfElement[charIndex].posStart.v;
-			texturePos[2].v = listOfElement[charIndex].posStop.v;
-			texturePos[3].v = listOfElement[charIndex].posStop.v;
-			
-			// NOTE : Android does not support the Quads elements ...
-			/* Step 1 : 
-			 *   ********     
-			 *     ******     
-			 *       ****     
-			 *         **     
-			 *                
-			 */
-			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[1]);
-			coordTex.PushBack(texturePos[2]);
-			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[1]);
-			coord.PushBack(bitmapDrawPos[2]);
-			
-			/* Step 2 : 
-			 *              
-			 *   **         
-			 *   ****       
-			 *   ******     
-			 *   ********   
-			 */
-			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[2]);
-			coordTex.PushBack(texturePos[3]);
-			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[2]);
-			coord.PushBack(bitmapDrawPos[3]);
-		}
-		posDrawX += sizeWidth;
-	}
-	int32_t sizeOut = posDrawX - drawPosition.x;
-	drawPosition.x = posDrawX;
-	return sizeOut;
+	etk::VectorType<uniChar_t> outputData;
+	unicode::convertUtf8ToUnicode(tmpStruct, outputData);
+	outputData.PushBack(0);
+	return DrawText(fontID, drawPosition, tmpClip, &outputData[0], fontTextureId, coord, coordTex);
 }
 
 int32_t ewol::DrawText(int32_t                        fontID,
@@ -711,21 +624,18 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	while(*tmpVal != 0) {
 		uint32_t tmpChar = *tmpVal++;
 		int32_t charIndex;
-		if (tmpChar >= 0x80) {
-			charIndex = 0;
-		} else if (tmpChar < 0x20) {
+		if (tmpChar < 0x20) {
 			charIndex = 0;
 		} else if (tmpChar < 0x80) {
 			charIndex = tmpChar - 0x1F;
 		} else {
+			charIndex = 0;
 			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
 				if (listOfElement[iii].unicodeCharVal == tmpChar) {
 					charIndex = iii;
 					break;
 				}
 			}
-			// TODO : Update if possible the mapping
-			charIndex = 0;
 		}
 		// 0x01 == 0x20 == ' ';
 		if (tmpChar != 0x01) {

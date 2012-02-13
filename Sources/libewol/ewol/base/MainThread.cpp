@@ -144,9 +144,7 @@ static void* BaseAppEntry(void* param)
 					EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 					{
 						eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
-						etk::String keyInput = "a";
-						keyInput.c_str()[0] = tmpData->myChar;
-						guiAbstraction::SendKeyboardEvent(tmpData->isDown, keyInput);
+						guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
 					}
 					break;
 				case THREAD_KEYBORAD_MOVE:
@@ -283,11 +281,11 @@ void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
 	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
 }
 
-void EWOL_ThreadKeyboardEvent(bool isDown, etk::String &keyInput)
+void EWOL_ThreadKeyboardEvent(bool isDown, uniChar_t keyInput)
 {
 	eventKeyboardKey_ts tmpData;
 	tmpData.isDown = isDown;
-	tmpData.myChar = keyInput.c_str()[0];
+	tmpData.myChar = keyInput;
 	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventKeyboardKey_ts) );
 }
 

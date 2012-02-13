@@ -25,6 +25,7 @@
 
 #include <ewol/Debug.h>
 #include <etk/String.h>
+#include <etk/unicode.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
 
@@ -585,14 +586,10 @@ void X11_Run(void)
 							case 91: // Suppr on keypad
 								find = false;
 								{
-									char buf[2];
-									buf[0] = 0x7F;
-									buf[1] = 0x00;
-									etk::String tmpData = buf;
 									if(event.type == KeyPress) {
-										EWOL_ThreadKeyboardEvent(true, tmpData);
+										EWOL_ThreadKeyboardEvent(true, 0x0000007F);
 									} else {
-										EWOL_ThreadKeyboardEvent(false, tmpData);
+										EWOL_ThreadKeyboardEvent(false, 0x0000007F);
 									}
 								}
 							default:
@@ -603,17 +600,21 @@ void X11_Run(void)
 									XComposeStatus status;
 									int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
 									buf[count] = '\0';
-									EWOL_WARNING("Unknow event Key : " << event.xkey.keycode << " char=" << (int32_t)buf[0]);
+									// Replace \r error ...
 									if (buf[0] == '\r') {
 										buf[0] = '\n';
 										buf[1] = '\0';
 									}
 									if (count>0) {
-										etk::String tmpData = buf;
+										// transform iun unicode
+										uniChar_t unicodeValue;
+										//unicode::convertUtf8ToUnicode(buf, unicodeValue);
+										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], unicodeValue);
+										EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 										if(event.type == KeyPress) {
-											EWOL_ThreadKeyboardEvent(true, tmpData);
+											EWOL_ThreadKeyboardEvent(true, unicodeValue);
 										} else {
-											EWOL_ThreadKeyboardEvent(false, tmpData);
+											EWOL_ThreadKeyboardEvent(false, unicodeValue);
 										}
 									} else {
 										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
