@@ -610,7 +610,7 @@ void X11_Run(void)
 										uniChar_t unicodeValue;
 										//unicode::convertUtf8ToUnicode(buf, unicodeValue);
 										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], unicodeValue);
-										EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
+										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 										if(event.type == KeyPress) {
 											EWOL_ThreadKeyboardEvent(true, unicodeValue);
 										} else {
