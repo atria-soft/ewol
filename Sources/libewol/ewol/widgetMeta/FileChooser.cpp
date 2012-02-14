@@ -316,6 +316,8 @@ class FileChooserFileList : public ewol::List
 extern const char * const ewolEventFileChooserCancel   = "ewol-event-file-chooser-cancel";
 extern const char * const ewolEventFileChooserValidate = "ewol-event-file-chooser-validate";
 extern const char * const ewolEventFileChooserHidenFileChange = "ewol-event-file-chooser-Show/Hide-hiden-Files";
+extern const char * const ewolEventFileChooserEntryFolder = "ewol-event-file-chooser-modify-entry-folder";
+extern const char * const ewolEventFileChooserEntryFile = "ewol-event-file-chooser-modify-entry-file";
 
 
 ewol::FileChooser::FileChooser(void)
@@ -367,6 +369,7 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(myLabel);
 			myEntry = new ewol::Entry(m_folder);
 				m_widgetCurrentFolderId = myEntry->GetWidgetId();
+				myEntry->ExternLinkOnEvent(ewolEventEntryModify, GetWidgetId(), ewolEventFileChooserEntryFolder);
 				myEntry->SetExpendX(true);
 				myEntry->SetFillX(true);
 				myEntry->SetWidth(200);
@@ -379,6 +382,7 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(myLabel);
 			myEntry = new ewol::Entry(m_file);
 				m_widgetCurrentFileNameId = myEntry->GetWidgetId();
+				myEntry->ExternLinkOnEvent(ewolEventEntryModify, GetWidgetId(), ewolEventFileChooserEntryFile);
 				myEntry->SetExpendX(true);
 				myEntry->SetFillX(true);
 				myEntry->SetWidth(200);
@@ -489,9 +493,19 @@ void ewol::FileChooser::SetFileName(etk::String filename)
 bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
 {
 	EWOL_INFO("Receive Event from the LIST ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> data=\"" << data << "\"" );
-	if (ewolEventFileChooserCancel == generateEventId) {
+	if (ewolEventFileChooserEntryFolder == generateEventId) {
+		//==> change the folder name
+		// TODO : Change the folder, if it exit ...
+	} else if (ewolEventFileChooserEntryFile == generateEventId) {
+		//==> change the file name
+		ewol::Entry * tmpWidget = (ewol::Entry*)ewol::widgetManager::Get(m_widgetCurrentFileNameId);
+		if (NULL != tmpWidget) {
+			m_file = tmpWidget->GetValue();
+		}
+		// TODO : Remove file selection
+	} else if (ewolEventFileChooserCancel == generateEventId) {
 		//==> Auto remove ...
-		
+		// TODO : ...
 	} else if (ewolEventFileChooserHidenFileChange == generateEventId) {
 		// regenerate the display ...
 		UpdateCurrentFolder();

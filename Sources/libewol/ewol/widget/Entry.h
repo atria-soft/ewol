@@ -31,6 +31,7 @@
 
 extern const char * const ewolEventEntryClick;
 extern const char * const ewolEventEntryEnter;
+extern const char * const ewolEventEntryModify;
 
 namespace ewol {
 	class Entry :public ewol::Widget

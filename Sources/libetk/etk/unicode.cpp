@@ -202,20 +202,84 @@ void unicode::convertUtf8ToUnicode(char * input_UTF8, uniChar_t &output_Unicode)
 }
 
 
-int32_t unicode::convertUnicodeToUtf8(etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>& output_UTF8)
+int32_t unicode::convertUnicodeToUtf8(const etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>& output_UTF8)
 {
-	TK_WARNING("TODO : not coded...");
-	return 0;
+	char output[10];
+	
+	for (int32_t iii=0; iii<input_Unicode.Size(); iii++) {
+		unicode::convertUnicodeToUtf8(input_Unicode[iii], output);
+		char * tmp = output ;
+		while (*tmp != '\0') {
+			output_UTF8.PushBack(*tmp);
+			tmp++;
+		}
+	}
+	output_UTF8.PushBack('\0');
+	return output_UTF8.Size()-1;
 }
 
 
 int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	bool baseValid;
 	char tmpData[20];
 	int32_t pos = 0;
 	while (pos < input_UTF8.Size()) {
 		int32_t lenMax = input_UTF8.Size() - pos;
+		//4 case
+		if(    1<=lenMax
+		    && 0x00 == (input_UTF8[pos+0] & 0x80) )
+		{
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = '\0';
+			pos += 1;
+		} else if(		2<=lenMax
+					&&	0xC0 == (input_UTF8[pos+0] & 0xE0)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0) ) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = '\0';
+			pos += 1;
+		} else if(		3<=lenMax
+					&&	0xE0 == (input_UTF8[pos+0] & 0xF0)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+2] & 0xC0)) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = input_UTF8[pos+2];
+			tmpData[3] = '\0';
+			pos += 1;
+		} else if(		4<=lenMax
+					&&	0xF0 == (input_UTF8[pos+0] & 0xF8)
+					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+2] & 0xC0)
+					&&	0x80 == (input_UTF8[pos+3] & 0xC0)) {
+			tmpData[0] = input_UTF8[pos+0];
+			tmpData[1] = input_UTF8[pos+1];
+			tmpData[2] = input_UTF8[pos+2];
+			tmpData[3] = input_UTF8[pos+3];
+			tmpData[4] = '\0';
+			pos += 1;
+		} else {
+			tmpData[0] = '\0';
+			pos += 1;
+		}
+		uniChar_t tmpUnicode;
+		convertUtf8ToUnicode(tmpData, tmpUnicode);
+		output_Unicode.PushBack(tmpUnicode);
+	}
+	return 0;
+}
+
+int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
+{
+	char tmpData[20];
+	int32_t pos = 0;
+	if (NULL == input_UTF8) {
+		return 0;
+	}
+	int32_t len = strlen(input_UTF8);
+	while (pos < len) {
+		int32_t lenMax = len - pos;
 		//4 case
 		if(    1<=lenMax
 		    && 0x00 == (input_UTF8[pos+0] & 0x80) )

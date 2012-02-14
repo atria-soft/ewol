@@ -114,7 +114,7 @@ void ewol::List::OnRegenerateDisplay(void)
 			startRaw = 0;
 		}
 		// We display only compleate lines ...
-		EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws");
+		EWOL_VERBOSE("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws");
 		for(uint32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::String myTextToWrite;
 			color_ts fg;

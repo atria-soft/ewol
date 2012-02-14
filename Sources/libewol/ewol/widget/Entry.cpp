@@ -30,8 +30,9 @@
 #include <ewol/ewol.h>
 
 
-extern const char * const ewolEventEntryClick      = "ewol Entry click";
-extern const char * const ewolEventEntryEnter      = "ewol Entry Enter";
+extern const char * const ewolEventEntryClick      = "ewol-Entry-click";
+extern const char * const ewolEventEntryEnter      = "ewol-Entry-Enter";
+extern const char * const ewolEventEntryModify     = "ewol-Entry-Modify";
 
 
 
@@ -43,6 +44,7 @@ void ewol::Entry::Init(void)
 {
 	AddEventId(ewolEventEntryClick);
 	AddEventId(ewolEventEntryEnter);
+	AddEventId(ewolEventEntryModify);
 	m_displayStartPosition = 0;
 	m_displayCursorPos = 0;
 	m_userSize = 50;
@@ -189,6 +191,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			unicode::convertUnicodeToUtf8(unicodeData, UTF8_data);
 			m_data += UTF8_data;
 		}
+		GenEventInputExternal(ewolEventEntryModify, -1, -1);
 		UpdateTextPosition();
 		MarkToReedraw();
 		return true;

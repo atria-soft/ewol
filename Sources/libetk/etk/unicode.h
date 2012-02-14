@@ -54,8 +54,9 @@ namespace unicode {
 	// Transform UTF-8 <==> Unicode
 	void    convertUnicodeToUtf8(                        uniChar_t                   input_Unicode, char *                      output_UTF8);
 	void    convertUtf8ToUnicode(                        char *                      input_UTF8,    uniChar_t&                  output_Unicode);
-	int32_t convertUnicodeToUtf8(                        etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>&      output_UTF8);
+	int32_t convertUnicodeToUtf8(                        const etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>&      output_UTF8);
 	int32_t convertUtf8ToUnicode(                        etk::VectorType<char>&      input_UTF8,    etk::VectorType<uniChar_t>& output_Unicode);
+	int32_t convertUtf8ToUnicode(                        char *                      input_UTF8,    etk::VectorType<uniChar_t>& output_Unicode);
 	// Transform ISO <==> UTF-8
 	void    convertIsoToUtf8(  charset_te inputCharset,  char                      input_ISO,     char *                    output_UTF8);
 	void    convertUtf8ToIso(  charset_te inputCharset,  char *                    input_UTF8,    char &                    output_ISO);
