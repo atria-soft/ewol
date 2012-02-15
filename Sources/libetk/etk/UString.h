@@ -67,6 +67,10 @@ namespace etk
 			bool  operator!= (const uniChar_t * inputData) const;
 			bool  operator!= (const char * inputData) const;
 			/*****************************************************
+			 *    > operator
+			 *****************************************************/
+			bool  operator> (const etk::UString& etkS) const;
+			/*****************************************************
 			 *    += operator
 			 *****************************************************/
 			const etk::UString& operator+= (const etk::UString &etkS);

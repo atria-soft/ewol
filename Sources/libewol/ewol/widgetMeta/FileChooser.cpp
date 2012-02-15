@@ -49,7 +49,15 @@ void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
 	m_listDirectory.Clear();
 	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
-		m_listDirectory.PushBack(tmpList[iii]);
+		
+		int32_t findPos = 0;
+		for(int32_t jjj=0; jjj<m_listDirectory.Size(); jjj++) {
+			if (*tmpList[iii] > *m_listDirectory[jjj]) {
+				findPos = jjj;
+			}
+		}
+		//EWOL_DEBUG("position="<<findPos);
+		m_listDirectory.Insert(findPos, tmpList[iii]);
 	}
 }
 
@@ -80,6 +88,7 @@ class FileChooserFolderList : public ewol::List
 			m_listDirectory.PushBack(tmpEmement);
 			MarkToReedraw();
 		}
+		
 		void ClearElements(void) {
 			for (int32_t iii=0; iii<m_listDirectory.Size(); iii++) {
 				if (NULL != m_listDirectory[iii]) {
@@ -212,6 +221,22 @@ class FileChooserFileList : public ewol::List
 		{
 			etk::UString* tmpEmement = new etk::UString(element);
 			m_listFile.PushBack(tmpEmement);
+		}
+		void endGenerating(void)
+		{
+			/*
+			EWOL_DEBUG("list before");
+			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
+				EWOL_DEBUG("      " << *m_listFile[iii] );
+			}
+			*/
+			SortList(m_listFile);
+			/*
+			EWOL_DEBUG("list after");
+			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
+				EWOL_DEBUG("      " << *m_listFile[iii] );
+			}
+			*/
 			MarkToReedraw();
 		}
 		void ClearElements(void) {
@@ -313,11 +338,11 @@ class FileChooserFileList : public ewol::List
 #define __class__	"ewol::FileChooser"
 
 
-extern const char * const ewolEventFileChooserCancel   = "ewol-event-file-chooser-cancel";
-extern const char * const ewolEventFileChooserValidate = "ewol-event-file-chooser-validate";
+extern const char * const ewolEventFileChooserCancel          = "ewol-event-file-chooser-cancel";
+extern const char * const ewolEventFileChooserValidate        = "ewol-event-file-chooser-validate";
 extern const char * const ewolEventFileChooserHidenFileChange = "ewol-event-file-chooser-Show/Hide-hiden-Files";
-extern const char * const ewolEventFileChooserEntryFolder = "ewol-event-file-chooser-modify-entry-folder";
-extern const char * const ewolEventFileChooserEntryFile = "ewol-event-file-chooser-modify-entry-file";
+extern const char * const ewolEventFileChooserEntryFolder     = "ewol-event-file-chooser-modify-entry-folder";
+extern const char * const ewolEventFileChooserEntryFile       = "ewol-event-file-chooser-modify-entry-file";
 
 
 ewol::FileChooser::FileChooser(void)
@@ -576,14 +601,12 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 		while ((ent = readdir(dir)) != NULL) {
 			etk::UString tmpString(ent->d_name);
 			if (DT_REG == ent->d_type) {
-				if (false == tmpString.StartWith(".") || true==ShowHidenFile)
-				{
+				if (false == tmpString.StartWith(".") || true==ShowHidenFile) {
 					myListFile->AddElement(tmpString);
 				}
 			} else if (DT_DIR == ent->d_type) {
 				if (tmpString != "." && tmpString != "..") {
-					if (false == tmpString.StartWith(".") || true==ShowHidenFile)
-					{
+					if (false == tmpString.StartWith(".") || true==ShowHidenFile) {
 						myListFolder->AddElement(tmpString);
 					}
 				}
@@ -593,6 +616,7 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	} else {
 		EWOL_ERROR("could not open directory : \"" << m_folder << "\"");
 	}
+	myListFile->endGenerating();
 	MarkToReedraw();
 }
 

@@ -314,6 +314,24 @@ const etk::UString& etk::UString::operator= (etk::VectorType<uniChar_t> inputDat
 	return *this;
 }
 
+
+
+bool etk::UString::operator> (const etk::UString& etkS) const
+{
+	if( this != &etkS ) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
+			if (m_data[iii] > etkS.m_data[iii] ) {
+				return true;
+			}
+		}
+		if (m_data.Size() > etkS.m_data.Size()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
 /**
  * @brief 
  *
@@ -803,7 +821,7 @@ bool etk::UString::StartWith(const etk::UString& data)
 			return false;
 		}
 	}
-	return false;
+	return true;
 }
 
 
