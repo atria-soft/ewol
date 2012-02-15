@@ -128,7 +128,7 @@ ewol::StdPopUp::~StdPopUp(void)
 }
 
 
-void ewol::StdPopUp::SetTitle(etk::String label)
+void ewol::StdPopUp::SetTitle(etk::UString label)
 {
 	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::Get(m_widgetTitleId);
 	if (NULL == tmpWidget) {
@@ -137,7 +137,7 @@ void ewol::StdPopUp::SetTitle(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetValidateLabel(etk::String label)
+void ewol::StdPopUp::SetValidateLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetValidateId);
 	if (NULL == tmpWidget) {
@@ -146,7 +146,7 @@ void ewol::StdPopUp::SetValidateLabel(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetCancelLabel(etk::String label)
+void ewol::StdPopUp::SetCancelLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetCancelId);
 	if (NULL == tmpWidget) {
@@ -155,7 +155,7 @@ void ewol::StdPopUp::SetCancelLabel(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetFolder(etk::String folder)
+void ewol::StdPopUp::SetFolder(etk::UString folder)
 {
 	m_folder = folder;
 }

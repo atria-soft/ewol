@@ -23,7 +23,7 @@
  */
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/Widget.h>
 #include <ewol/Windows.h>
 #include <ewol/OObject.h>

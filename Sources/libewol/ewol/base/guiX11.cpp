@@ -24,7 +24,7 @@
 
 
 #include <ewol/Debug.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
@@ -713,14 +713,14 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 
 #include <ewol/ewol.h>
 
-static etk::VectorType<etk::String*> listArgs;
+static etk::VectorType<etk::UString*> listArgs;
 
 int32_t ewol::CmdLineNb(void)
 {
 	return listArgs.Size();
 }
 
-etk::String ewol::CmdLineGet(int32_t id)
+etk::UString ewol::CmdLineGet(int32_t id)
 {
 	if (id<0 && id>=listArgs.Size()) {
 		return "";
@@ -736,7 +736,7 @@ int main(int argc, char *argv[])
 {
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
-		etk::String* tmpString = new etk::String(argv[i]);
+		etk::UString* tmpString = new etk::UString(argv[i]);
 		if (NULL != tmpString) {
 			listArgs.PushBack(tmpString);
 		}

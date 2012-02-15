@@ -27,7 +27,7 @@
 #define __EWOL_H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/Widget.h>
 #include <ewol/Windows.h>
 
@@ -42,8 +42,8 @@ namespace ewol {
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
-	int32_t     CmdLineNb(void);
-	etk::String CmdLineGet(int32_t id);
+	int32_t      CmdLineNb(void);
+	etk::UString CmdLineGet(int32_t id);
 	
 	bool IsSetCapsLock(void);
 	bool IsSetShift(void);

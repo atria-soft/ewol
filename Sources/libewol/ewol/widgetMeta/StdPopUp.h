@@ -43,10 +43,10 @@ namespace ewol {
 			StdPopUp(void);
 			~StdPopUp(void);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
-			void SetTitle(etk::String label);
-			void SetValidateLabel(etk::String label);
-			void SetCancelLabel(etk::String label);
-			void SetFolder(etk::String folder);
+			void SetTitle(etk::UString label);
+			void SetValidateLabel(etk::UString label);
+			void SetCancelLabel(etk::UString label);
+			void SetFolder(etk::UString folder);
 		private:
 			int32_t m_widgetTitleId;
 			int32_t m_widgetValidateId;
@@ -54,7 +54,7 @@ namespace ewol {
 			int32_t m_widgetCurrentFolderId;
 			int32_t m_widgetListFolderId;
 			int32_t m_widgetListFileId;
-			etk::String m_folder;
+			etk::UString m_folder;
 	};
 };
 

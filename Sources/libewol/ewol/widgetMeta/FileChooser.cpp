@@ -44,9 +44,9 @@ extern "C" {
 #define __class__	"ewol::FileChooser(FolderList)"
 
 
-void SortList(etk::VectorType<etk::String *> &m_listDirectory)
+void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 {
-	etk::VectorType<etk::String *> tmpList = m_listDirectory;
+	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
 	m_listDirectory.Clear();
 	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		m_listDirectory.PushBack(tmpList[iii]);
@@ -60,8 +60,8 @@ const char * const ewolEventFileChooserSelectFolder   = "ewol-event-file-chooser
 class FileChooserFolderList : public ewol::List
 {
 	private:
-		//etk::Vector<etk::String> m_listDirectory;
-		etk::VectorType<etk::String *> m_listDirectory;
+		//etk::Vector<etk::UString> m_listDirectory;
+		etk::VectorType<etk::UString *> m_listDirectory;
 		int32_t                        m_selectedLine;
 	public:
 		FileChooserFolderList(void)
@@ -74,9 +74,9 @@ class FileChooserFolderList : public ewol::List
 			ClearElements();
 		};
 		
-		void AddElement(etk::String element)
+		void AddElement(etk::UString element)
 		{
-			etk::String* tmpEmement = new etk::String(element);
+			etk::UString* tmpEmement = new etk::UString(element);
 			m_listDirectory.PushBack(tmpEmement);
 			MarkToReedraw();
 		}
@@ -91,9 +91,9 @@ class FileChooserFolderList : public ewol::List
 			MarkToReedraw();
 		}
 		
-		etk::String GetSelectedLine(void)
+		etk::UString GetSelectedLine(void)
 		{
-			etk::String tmpVal = "";
+			etk::UString tmpVal = "";
 			if (m_selectedLine >= 0) {
 				tmpVal = *(m_listDirectory[m_selectedLine]);
 			}
@@ -113,14 +113,14 @@ class FileChooserFolderList : public ewol::List
 		uint32_t GetNuberOfColomn(void) {
 			return 1;
 		};
-		bool GetTitle(int32_t colomn, etk::String &myTitle, color_ts &fg, color_ts &bg) {
+		bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
 			myTitle = "title";
 			return true;
 		};
 		uint32_t GetNuberOfRaw(void) {
 			return m_listDirectory.Size();
 		};
-		bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
+		bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
 			if (raw >= 0 && raw < m_listDirectory.Size()) {
 				myTextToWrite = *(m_listDirectory[raw]);
 			} else {
@@ -187,7 +187,7 @@ const char * const ewolEventFileChooserValidateFile   = "ewol-event-file-chooser
 class FileChooserFileList : public ewol::List
 {
 	private:
-		etk::VectorType<etk::String *> m_listFile;
+		etk::VectorType<etk::UString *> m_listFile;
 		int32_t                        m_selectedLine;
 	public:
 		FileChooserFileList(void)
@@ -208,9 +208,9 @@ class FileChooserFileList : public ewol::List
 			bg.alpha = 1.0;
 			return bg;
 		}
-		void AddElement(etk::String element)
+		void AddElement(etk::UString element)
 		{
-			etk::String* tmpEmement = new etk::String(element);
+			etk::UString* tmpEmement = new etk::UString(element);
 			m_listFile.PushBack(tmpEmement);
 			MarkToReedraw();
 		}
@@ -225,9 +225,9 @@ class FileChooserFileList : public ewol::List
 			MarkToReedraw();
 		}
 		
-		etk::String GetSelectedLine(void)
+		etk::UString GetSelectedLine(void)
 		{
-			etk::String tmpVal = "";
+			etk::UString tmpVal = "";
 			if (m_selectedLine >= 0) {
 				tmpVal = *(m_listFile[m_selectedLine]);
 			}
@@ -238,14 +238,14 @@ class FileChooserFileList : public ewol::List
 		uint32_t GetNuberOfColomn(void) {
 			return 1;
 		};
-		bool GetTitle(int32_t colomn, etk::String &myTitle, color_ts &fg, color_ts &bg) {
+		bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
 			myTitle = "title";
 			return true;
 		};
 		uint32_t GetNuberOfRaw(void) {
 			return m_listFile.Size();
 		};
-		bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
+		bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
 			if (raw >= 0 && raw < m_listFile.Size()) {
 				myTextToWrite = *(m_listFile[raw]);
 			} else {
@@ -445,7 +445,7 @@ ewol::FileChooser::~FileChooser(void)
 }
 
 
-void ewol::FileChooser::SetTitle(etk::String label)
+void ewol::FileChooser::SetTitle(etk::UString label)
 {
 	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::Get(m_widgetTitleId);
 	if (NULL == tmpWidget) {
@@ -454,7 +454,7 @@ void ewol::FileChooser::SetTitle(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::FileChooser::SetValidateLabel(etk::String label)
+void ewol::FileChooser::SetValidateLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetValidateId);
 	if (NULL == tmpWidget) {
@@ -463,7 +463,7 @@ void ewol::FileChooser::SetValidateLabel(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::FileChooser::SetCancelLabel(etk::String label)
+void ewol::FileChooser::SetCancelLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetCancelId);
 	if (NULL == tmpWidget) {
@@ -472,13 +472,13 @@ void ewol::FileChooser::SetCancelLabel(etk::String label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::FileChooser::SetFolder(etk::String folder)
+void ewol::FileChooser::SetFolder(etk::UString folder)
 {
 	m_folder = folder;
 	UpdateCurrentFolder();
 }
 
-void ewol::FileChooser::SetFileName(etk::String filename)
+void ewol::FileChooser::SetFileName(etk::UString filename)
 {
 	m_file = filename;
 	ewol::Entry * tmpWidget = (ewol::Entry*)ewol::widgetManager::Get(m_widgetCurrentFileNameId);
@@ -513,12 +513,12 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 	} else if (ewolEventFileChooserSelectFolder == generateEventId) {
 		//==> this is an internal event ...
 		FileChooserFolderList * myListFolder = (FileChooserFolderList *)ewol::widgetManager::Get(m_widgetListFolderId);
-		etk::String tmpString = myListFolder->GetSelectedLine();
+		etk::UString tmpString = myListFolder->GetSelectedLine();
 		m_folder = m_folder + tmpString;
 		char buf[MAX_FILE_NAME];
 		memset(buf, 0, MAX_FILE_NAME);
 		char * ok;
-		ok = realpath(m_folder.c_str(), buf);
+		ok = realpath(m_folder.Utf8Data(), buf);
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
 			m_folder = "/";
@@ -535,7 +535,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 	} else if (ewolEventFileChooserSelectFile == generateEventId) {
 		m_hasSelectedFile = true;
 		FileChooserFileList * myListFile     = (FileChooserFileList *)ewol::widgetManager::Get(m_widgetListFileId);
-		etk::String file = myListFile->GetSelectedLine();
+		etk::UString file = myListFile->GetSelectedLine();
 		SetFileName(file);
 	} else if (ewolEventFileChooserValidateFile == generateEventId) {
 		// select the File ==> generate a validate
@@ -566,23 +566,23 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	
 	
 	myEntry->SetValue(m_folder);
-	myListFolder->AddElement(etk::String("."));
-	myListFolder->AddElement(etk::String(".."));
+	myListFolder->AddElement(etk::UString("."));
+	myListFolder->AddElement(etk::UString(".."));
 	DIR *dir;
 	struct dirent *ent;
-	dir = opendir(m_folder.c_str());
+	dir = opendir(m_folder.Utf8Data());
 	if (dir != NULL) {
 		/* print all the files and directories within directory */
 		while ((ent = readdir(dir)) != NULL) {
-			etk::String tmpString(ent->d_name);
+			etk::UString tmpString(ent->d_name);
 			if (DT_REG == ent->d_type) {
-				if (tmpString.c_str()[0] != '.' || true==ShowHidenFile)
+				if (false == tmpString.StartWith(".") || true==ShowHidenFile)
 				{
 					myListFile->AddElement(tmpString);
 				}
 			} else if (DT_DIR == ent->d_type) {
 				if (tmpString != "." && tmpString != "..") {
-					if (tmpString.c_str()[0] != '.' || true==ShowHidenFile)
+					if (false == tmpString.StartWith(".") || true==ShowHidenFile)
 					{
 						myListFolder->AddElement(tmpString);
 					}
@@ -597,10 +597,10 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 }
 
 
-etk::String ewol::FileChooser::GetCompleateFileName(void)
+etk::UString ewol::FileChooser::GetCompleateFileName(void)
 {
 	
-	etk::String tmpString = m_folder;
+	etk::UString tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;
 	return tmpString;

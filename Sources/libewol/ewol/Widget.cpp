@@ -251,7 +251,7 @@ bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId, c
 
 
 
-void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name, int32_t pos)
+void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::UString name, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system : name=\"" << name << "\"");
@@ -271,7 +271,7 @@ void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::String name, int32_
 }
 
 
-ewol::OObject* ewol::Widget::GetOObject(etk::String name)
+ewol::OObject* ewol::Widget::GetOObject(etk::UString name)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
 		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {
@@ -281,7 +281,7 @@ ewol::OObject* ewol::Widget::GetOObject(etk::String name)
 	return NULL;
 }
 
-void ewol::Widget::RmOObjectElem(etk::String name)
+void ewol::Widget::RmOObjectElem(etk::UString name)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
 		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {

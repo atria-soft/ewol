@@ -37,7 +37,7 @@ namespace ewol {
 			void Init(void);
 			virtual ~List(void);
 			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::String newLabel);
+			void           SetLabel(etk::UString newLabel);
 		private:
 			int32_t        m_paddingSizeX;
 			int32_t        m_paddingSizeY;
@@ -59,14 +59,14 @@ namespace ewol {
 			virtual uint32_t GetNuberOfColomn(void) {
 				return 0;
 			};
-			virtual bool GetTitle(int32_t colomn, etk::String &myTitle, color_ts &fg, color_ts &bg) {
+			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
 				myTitle = "";
 				return false;
 			};
 			virtual uint32_t GetNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool GetElement(int32_t colomn, int32_t raw, etk::String &myTextToWrite, color_ts &fg, color_ts &bg) {
+			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
 				myTextToWrite = "";
 				fg.red = 0.0;
 				fg.green = 0.0;

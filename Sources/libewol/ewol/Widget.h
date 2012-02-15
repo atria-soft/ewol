@@ -298,9 +298,9 @@ namespace ewol {
 		public:
 			void DoubleBufferFlipFlop(void);
 		protected:
-			void AddOObject(ewol::OObject* newObject, etk::String name = "", int32_t pos=-1);
-			ewol::OObject* GetOObject(etk::String name);
-			void RmOObjectElem(etk::String name);
+			void AddOObject(ewol::OObject* newObject, etk::UString name = "", int32_t pos=-1);
+			ewol::OObject* GetOObject(etk::UString name);
+			void RmOObjectElem(etk::UString name);
 			void ClearOObjectList(void);
 			void GenericDrawDisable(void) { m_genericDraw = false; };
 			void GenericDrawEnable(void) { m_genericDraw = true; };

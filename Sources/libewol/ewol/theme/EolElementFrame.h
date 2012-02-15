@@ -28,7 +28,7 @@
 #define __EWOL_THEME_EOL_ELEMENT_FRAME_H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/File.h>
 #include <ewol/OObject.h>
 #include <ewol/theme/EolColor.h>
@@ -51,12 +51,12 @@ namespace ewol {
 				void Generate(const ewol::theme::Theme * myTheme, const ewol::theme::EolElement * myElement, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 				
 				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void);
-				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName);
+				etk::UString GetName(void);
+				void SetName(etk::UString & newName);
+				bool HasName(etk::UString & newName);
 			private:
 				void RemoveAll(void);
-				etk::String m_name;
+				etk::UString m_name;
 				etk::VectorType<ewol::theme::EolBase*> m_description; // all element to draw the image ...
 			public:
 				// acces to manage and create object ==> drawing system 

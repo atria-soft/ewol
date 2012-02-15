@@ -28,7 +28,7 @@
 #define __EWOL_THEME_EOL_BASE__H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/OObject.h>
 #include <tinyXML/tinyxml.h>
 

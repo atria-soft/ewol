@@ -28,7 +28,7 @@
 #define __EWOL_THEME_EOL_ELEMENT_H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/File.h>
 #include <ewol/OObject.h>
 #include <ewol/theme/EolColor.h>
@@ -42,25 +42,25 @@ namespace ewol {
 				EolElement(void);
 				virtual ~EolElement(void);
 				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void) const;
-				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName) const;
+				etk::UString GetName(void) const;
+				void SetName(etk::UString & newName);
+				bool HasName(etk::UString & newName) const;
 				
 				void Generate(const ewol::theme::Theme * myTheme, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GenerateGroup(const ewol::theme::Theme * myTheme, etk::String groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GetColor(etk::String colorName, color_ts & selectedColor) const;
+				bool GenerateGroup(const ewol::theme::Theme * myTheme, etk::UString groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GetColor(etk::UString colorName, color_ts & selectedColor) const;
 				
 				int32_t GetNbFrame(void) const;
-				int32_t GetFrameId(etk::String & frameName) const;
+				int32_t GetFrameId(etk::UString & frameName) const;
 			private:
 				void RemoveAll(void);
-				etk::String m_name;
+				etk::UString m_name;
 				/*
 				void Load(etk::File & newFile) { };
 				void Generate(int32_t id, int32_t frameId, OObject2DTextured & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY) {};
 				int32_t GetNbFrame(int32_t id) {return 0;};
-				int32_t GetFrameId(int32_t id, etk::String & frameName) {return 0;};
-				int32_t GetObjectId(etk::String name) { return -1; };
+				int32_t GetFrameId(int32_t id, etk::UString & frameName) {return 0;};
+				int32_t GetObjectId(etk::UString name) { return -1; };
 				*/
 			private:
 				etk::VectorType<ewol::theme::EolColor*>         m_listColor;

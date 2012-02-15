@@ -47,7 +47,7 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::File &obj)
 	return os;
 }
 
-etk::File::File(etk::String &filename, etk::FileType_te type, int32_t LineNumber)
+etk::File::File(etk::UString &filename, etk::FileType_te type, int32_t LineNumber)
 {
 	m_lineNumberOpen = LineNumber;
 	m_PointerFile = NULL;
@@ -57,17 +57,17 @@ etk::File::File(etk::String &filename, etk::FileType_te type, int32_t LineNumber
 
 etk::File::File(const char  *filename, etk::FileType_te type, int32_t LineNumber)
 {
-	etk::String tmpString = filename;
+	etk::UString tmpString = filename;
 	m_lineNumberOpen = LineNumber;
 	m_PointerFile = NULL;
 	SetCompleateName(tmpString, type);
 }
 
 
-etk::File::File(etk::String &filename, etk::String &folder, etk::FileType_te type, int32_t lineNumber)
+etk::File::File(etk::UString &filename, etk::UString &folder, etk::FileType_te type, int32_t lineNumber)
 {
-	etk::String tmpString = folder;
-	tmpString += '/';
+	etk::UString tmpString = folder;
+	tmpString += "/";
 	tmpString += filename;
 	m_PointerFile = NULL;
 	SetCompleateName(tmpString, type);
@@ -84,21 +84,21 @@ etk::File::~File(void)
 }
 
 
-etk::String etk::File::GetFolder(void) const
+etk::UString etk::File::GetFolder(void) const
 {
 	return m_folder;
 }
 
-etk::String etk::File::GetShortFilename(void) const
+etk::UString etk::File::GetShortFilename(void) const
 {
 	return m_shortFilename;
 }
 
-etk::String etk::File::GetCompleateName(void) const
+etk::UString etk::File::GetCompleateName(void) const
 {
-	etk::String out;
+	etk::UString out;
 	out  = m_folder;
-	out += '/';
+	out += "/";
 	out += m_shortFilename;
 	return out;
 }
@@ -163,18 +163,18 @@ bool etk::File::operator!= (const etk::File &etkF) const
 }
 
 
-etk::String baseFolderData = "assets/";
+etk::UString baseFolderData = "assets/";
 #ifdef DATA_IN_APK
-static etk::String s_fileAPK = "";
+static etk::UString s_fileAPK = "";
 
 static struct zip * s_APKArchive = NULL;
 static int32_t      s_APKnbFiles = 0;
 
 
-static void loadAPK (const char* apkPath)
+static void loadAPK (const etk::UString& apkPath)
 {
 	TK_DEBUG("Loading APK \"" << apkPath << "\"");
-	s_APKArchive = zip_open(apkPath, 0, NULL);
+	s_APKArchive = zip_open(apkPath.Utf8Data(), 0, NULL);
 	TK_ASSERT(s_APKArchive != NULL, "Error loading APK ...  \"" << apkPath << "\"");
 	//Just for debug, print APK contents
 	s_APKnbFiles = zip_get_num_files(s_APKArchive);
@@ -189,15 +189,15 @@ static void loadAPK (const char* apkPath)
 	}
 }
 #endif
-etk::String baseFolderDataUser = "~/.tmp/userData/";
-etk::String baseFolderCache = "~/.tmp/cache/";
+etk::UString baseFolderDataUser = "~/.tmp/userData/";
+etk::UString baseFolderCache = "~/.tmp/cache/";
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
 	#if defined(DATA_IN_APK)
 		baseFolderData = "assets/";
 		s_fileAPK = folder;
-		loadAPK(s_fileAPK.c_str());
+		loadAPK(s_fileAPK);
 	#else
 		baseFolderData = folder;
 	#endif
@@ -212,7 +212,7 @@ void etk::SetBaseFolderCache(const char * folder)
 }
 
 
-void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type)
+void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te type)
 {
 	char buf[MAX_FILE_NAME];
 	memset(buf, 0, MAX_FILE_NAME);
@@ -228,18 +228,18 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 	m_folder = "";
 	m_shortFilename = "";
 	m_lineNumberOpen = 0;
-	TK_VERBOSE("1 :Set Name : " << newFilename );
-	etk::String destFilename;
+	TK_DEBUG("1 :Set Name : " << newFilename );
+	etk::UString destFilename;
 	if (newFilename.Size() == 0) {
 		destFilename = "no-name";
 	} else {
 		destFilename = newFilename;
 	}
-	TK_VERBOSE("2 : Get file Name : " << destFilename );
-	if ('/' == *destFilename.c_str()) {
+	TK_DEBUG("2 : Get file Name : " << destFilename );
+	if (false == destFilename.StartWith('/')) {
 		m_type = etk::FILE_TYPE_DIRECT;
 		if (type != etk::FILE_TYPE_DIRECT) {
-			TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
+			TK_DEBUG("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
 		}
 	} else {
 		if (type == etk::FILE_TYPE_DIRECT) {
@@ -253,9 +253,9 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				return;
 			}
 			cCurrentPath[FILENAME_MAX - 1] = '\0';
-			etk::String tmpFilename = destFilename;
+			etk::UString tmpFilename = destFilename;
 			destFilename = cCurrentPath;
-			destFilename += '/';
+			destFilename += "/";
 			destFilename += tmpFilename;
 			
 			
@@ -275,7 +275,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				mode = "FILE_TYPE_DATA";
 				#endif
 				#if defined(DATA_IN_APK)
-					etk::String tmpFilename = baseFolderData + destFilename;
+					etk::UString tmpFilename = baseFolderData + destFilename;
 					for (int iii=0; iii<s_APKnbFiles; iii++) {
 						const char* name = zip_get_name(s_APKArchive, iii, 0);
 						if (name == NULL) {
@@ -292,7 +292,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 						TK_INFO("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
 					}
 				#else
-					//etk::String tmpFilename = destFilename;
+					//etk::UString tmpFilename = destFilename;
 					//destFilename = baseFolderData;
 					//destFilename += tmpFilename;
 				#endif
@@ -303,7 +303,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_USER_DATA";
 				#endif
-				etk::String tmpFilename = destFilename;
+				etk::UString tmpFilename = destFilename;
 				destFilename = baseFolderDataUser;
 				destFilename += tmpFilename;
 			}
@@ -314,7 +314,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				#if ETK_DEBUG_LEVEL > 2
 				mode = "FILE_TYPE_CACHE";
 				#endif
-				etk::String tmpFilename = destFilename;
+				etk::UString tmpFilename = destFilename;
 				destFilename = baseFolderCache;
 				destFilename += tmpFilename;
 			}
@@ -328,20 +328,20 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			needUnpack = true;
 			break;
 	}
-	TK_VERBOSE("3 : Get file Name : " << destFilename );
+	TK_DEBUG("3 : Get file Name : " << destFilename );
 	if (true == needUnpack) {
 		// Get the real Path of the current File
-		ok = realpath(destFilename.c_str(), buf);
+		ok = realpath(destFilename.Utf8Data(), buf);
 		if (!ok) {
 			int32_t lastPos = destFilename.FindBack('/');
 			if (-1 != lastPos) {
 				// Get the FileName
-				etk::String tmpFilename = destFilename.Extract(lastPos+1);
+				etk::UString tmpFilename = destFilename.Extract(lastPos+1);
 				destFilename.Remove(lastPos, destFilename.Size() - lastPos);
-				TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
-				ok = realpath(destFilename.c_str(), buf);
+				TK_DEBUG("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
+				ok = realpath(destFilename.Utf8Data(), buf);
 				if (!ok) {
-					TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
+					TK_DEBUG("Can not find real Path name of \"" << destFilename << "\"");
 					m_shortFilename = tmpFilename;
 					m_folder        = destFilename;
 				} else {
@@ -350,7 +350,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 					m_folder        = destFilename;
 				}
 			} else {
-				TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
+				TK_DEBUG("file : \"" << destFilename << "\" ==> No data???");
 				// Basic ERROR ...
 				m_shortFilename = destFilename;
 			}
@@ -362,7 +362,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 				m_folder        = destFilename.Extract(0, lastPos);
 			} else {
 				// Basic ERROR ...
-				TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
+				TK_DEBUG("file : \"" << destFilename << "\" ==> No data???");
 				m_shortFilename = destFilename;
 			}
 		}
@@ -373,7 +373,7 @@ void etk::File::SetCompleateName(etk::String &newFilename, etk::FileType_te type
 			m_folder        = destFilename.Extract(0, lastPos);
 		} else {
 			// Basic ERROR ...
-			TK_WARNING("file : \"" << destFilename << "\" ==> No data???");
+			TK_DEBUG("file : \"" << destFilename << "\" ==> No data???");
 			m_shortFilename = destFilename;
 		}
 	}
@@ -404,9 +404,9 @@ bool etk::File::HasExtention(void)
 }
 
 
-etk::String etk::File::GetExtention(void)
+etk::UString etk::File::GetExtention(void)
 {
-	etk::String tmpExt = "";
+	etk::UString tmpExt = "";
 	int32_t lastPos = m_shortFilename.FindBack('.');
 	if(    -1 != lastPos                       // not find the .
 	    && 0  != lastPos                       // Find a . at the fist position .jdlskjdfklj ==> hiden file
@@ -477,8 +477,8 @@ int32_t etk::File::Size(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::String myCompleateName = baseFolderData + GetCompleateName();
-	myFile=fopen(myCompleateName.c_str(),"rb");
+	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	myFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == myFile) {
 		//EWOL_ERROR("Can not find the file name=\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
 		return -1;
@@ -503,8 +503,8 @@ bool etk::File::Exist(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::String myCompleateName = baseFolderData + GetCompleateName();
-	myFile=fopen(myCompleateName.c_str(),"rb");
+	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	myFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == myFile) {
 		return false;
 	}
@@ -525,8 +525,8 @@ bool etk::File::fOpenRead(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	etk::String myCompleateName = baseFolderData + GetCompleateName();
-	m_PointerFile=fopen(myCompleateName.c_str(),"rb");
+	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	m_PointerFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;
@@ -545,8 +545,8 @@ bool etk::File::fOpenWrite(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	etk::String myCompleateName = baseFolderData + GetCompleateName();
-	m_PointerFile=fopen(myCompleateName.c_str(),"wb");
+	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	m_PointerFile=fopen(myCompleateName.Utf8Data(),"wb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;

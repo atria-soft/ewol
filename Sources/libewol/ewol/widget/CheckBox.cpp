@@ -57,7 +57,7 @@ ewol::CheckBox::CheckBox(void)
 	Init();
 }
 
-ewol::CheckBox::CheckBox(etk::String newLabel)
+ewol::CheckBox::CheckBox(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
@@ -72,7 +72,7 @@ ewol::CheckBox::~CheckBox(void)
 bool ewol::CheckBox::CalculateMinSize(void)
 {
 	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
 	etkFloat_t boxSize = etk_max(20, minHeight) + 5;
 	m_minSize.x = boxSize+minWidth;
@@ -82,7 +82,7 @@ bool ewol::CheckBox::CalculateMinSize(void)
 }
 
 
-void ewol::CheckBox::SetLabel(etk::String newLabel)
+void ewol::CheckBox::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 }
@@ -118,7 +118,18 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
-		tmpText->Text(boxSize+5, posy, m_label.c_str(), m_size.x - (boxSize+5));
+		
+		
+		coord2D_ts textPos;
+		textPos.x = boxSize+5;
+		textPos.y = posy;
+		clipping_ts drawClipping;
+		drawClipping.x = 0;
+		drawClipping.y = 0;
+		drawClipping.w = m_size.x - (boxSize+5);
+		drawClipping.h = m_size.y;
+		tmpText->Text(textPos, drawClipping, m_label);
+		
 		
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;

@@ -28,7 +28,7 @@
 #include <etk/Types.h>
 #include <etk/DebugInternal.h>
 #include <etk/Memory.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/VectorType.h>
 
 namespace etk {
@@ -1579,7 +1579,7 @@ template<class CLASS_TYPE> class RegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		RegExp(etk::String &exp)
+		RegExp(etk::UString &exp)
 		{
 			m_isOk = false;
 			m_areaFind.start=0;
@@ -1622,7 +1622,7 @@ template<class CLASS_TYPE> class RegExp {
 		void SetRegExp(const char *exp)
 		{
 			TK_CHECK_INOUT(exp);
-			etk::String expressionRequested = exp;
+			etk::UString expressionRequested = exp;
 			SetRegExp(expressionRequested);
 		};
 		
@@ -1631,7 +1631,7 @@ template<class CLASS_TYPE> class RegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		void SetRegExp(etk::String &expressionRequested)
+		void SetRegExp(etk::UString &expressionRequested)
 		{
 			m_expressionRequested = expressionRequested;		// TODO : Must be deprecated ...
 			etk::VectorType<int16_t> tmpExp;
@@ -1643,7 +1643,8 @@ template<class CLASS_TYPE> class RegExp {
 			m_notBeginWithChar = false;
 			m_notEndWithChar = false;
 			
-			char * exp = expressionRequested.c_str();
+			// TODO : Check this ... ==> could create some errors ...
+			char * exp = expressionRequested.Utf8Data();
 			int32_t regExpLen = strlen(exp);
 			// change in the regular Opcode ==> replace \x with the corect element ... x if needed
 			int32_t iii;
@@ -1763,7 +1764,7 @@ template<class CLASS_TYPE> class RegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		etk::String	GetRegExp(void)
+		etk::UString	GetRegExp(void)
 		{
 			return m_expressionRequested;
 		};
@@ -1963,7 +1964,7 @@ template<class CLASS_TYPE> class RegExp {
 		};
 	// internal parameters
 	private:
-		etk::String                     m_expressionRequested;      // TODO : Remove ...
+		etk::UString                     m_expressionRequested;      // TODO : Remove ...
 		elementPos_ts                   m_areaFind;                 //!< position around selection
 		RegExpNodePThese<CLASS_TYPE>    m_exprRootNode;             //!< The tree where data is set
 		bool                            m_isOk;                     //!< Known if we can process with this regExp

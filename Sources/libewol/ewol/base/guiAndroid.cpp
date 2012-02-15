@@ -31,7 +31,7 @@
 #include <stdint.h>
 
 #include <ewol/Debug.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
 #include <ewol/ewol.h>
@@ -260,7 +260,7 @@ int32_t ewol::CmdLineNb(void)
 	return 0;
 }
 
-etk::String ewol::CmdLineGet(int32_t id)
+etk::UString ewol::CmdLineGet(int32_t id)
 {
 	return "";
 }

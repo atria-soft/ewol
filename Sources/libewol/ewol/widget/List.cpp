@@ -56,7 +56,7 @@ ewol::List::~List(void)
 bool ewol::List::CalculateMinSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
@@ -89,7 +89,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		tmpOriginY += m_paddingSizeY;
 	
 		int32_t fontId = GetDefaultFontId();
-		//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+		//int32_t minWidth = ewol::GetWidth(fontId, m_label);
 		int32_t minHeight = ewol::GetHeight(fontId);
 	
 	
@@ -97,7 +97,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		uint32_t nbRaw    = GetNuberOfRaw();
 		// For the scrooling windows
 		m_maxSize.x = m_size.x;
-		m_maxSize.y = minHeight * nbRaw;
+		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
 		
 		
 		etk::VectorType<int32_t> listSizeColomn;
@@ -115,8 +115,15 @@ void ewol::List::OnRegenerateDisplay(void)
 		}
 		// We display only compleate lines ...
 		EWOL_VERBOSE("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws");
+		
+		clipping_ts drawClipping;
+		drawClipping.x = 0;
+		drawClipping.y = 0;
+		drawClipping.w = m_size.x - (2*m_paddingSizeX);
+		drawClipping.h = m_size.y;
+			
 		for(uint32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
-			etk::String myTextToWrite;
+			etk::UString myTextToWrite;
 			color_ts fg;
 			color_ts bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
@@ -125,7 +132,12 @@ void ewol::List::OnRegenerateDisplay(void)
 			tmpOriginYBG += minHeight+2*m_paddingSizeY;
 			
 			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
-			tmpText->Text(tmpOriginX, tmpOriginY, myTextToWrite.c_str(), m_size.x - (2*m_paddingSizeX));
+			
+			coord2D_ts textPos;
+			textPos.x = tmpOriginX;
+			textPos.y = tmpOriginY;
+			tmpText->Text(textPos, drawClipping, myTextToWrite);
+			
 			AddOObject(tmpText);
 			tmpOriginY += minHeight + 2* m_paddingSizeY;
 		}

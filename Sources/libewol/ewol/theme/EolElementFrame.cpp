@@ -62,7 +62,7 @@ void ewol::theme::EolElementFrame::Parse(TiXmlNode * root)
 		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
 			continue;
 		}
-		etk::String nodeValue = pNode->Value();
+		etk::UString nodeValue = pNode->Value();
 		ewol::theme::EolBase * myBaseTmp = NULL;
 		if (nodeValue == "line") {
 			//EWOL_INFO("Find baseElement Line");
@@ -102,19 +102,19 @@ void ewol::theme::EolElementFrame::Parse(TiXmlNode * root)
 }
 
 
-etk::String ewol::theme::EolElementFrame::GetName(void)
+etk::UString ewol::theme::EolElementFrame::GetName(void)
 {
 	return m_name;
 }
 
 
-void ewol::theme::EolElementFrame::SetName(etk::String & newName)
+void ewol::theme::EolElementFrame::SetName(etk::UString & newName)
 {
 	m_name = newName;
 }
 
 
-bool ewol::theme::EolElementFrame::HasName(etk::String & newName)
+bool ewol::theme::EolElementFrame::HasName(etk::UString & newName)
 {
 	return m_name == newName;
 }

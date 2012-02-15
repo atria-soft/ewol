@@ -28,7 +28,7 @@
 
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/File.h>
 #include <ewol/OObject.h>
 #include <tinyXML/tinyxml.h>
@@ -42,15 +42,15 @@ namespace ewol {
 				virtual ~EolColor(void);
 				
 				void Parse(TiXmlNode * pNode);
-				etk::String GetName(void) const;
-				void SetName(etk::String & newName);
-				bool HasName(etk::String & newName) const;
+				etk::UString GetName(void) const;
+				void SetName(etk::UString & newName);
+				bool HasName(etk::UString & newName) const;
 				color_ts Get(void) const;
 				void Set(color_ts newColor);
 				void Set(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1);
 			private:
-				color_ts    m_color;
-				etk::String m_name;
+				color_ts     m_color;
+				etk::UString m_name;
 		};
 	};
 };

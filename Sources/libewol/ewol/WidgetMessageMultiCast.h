@@ -30,6 +30,7 @@
 #include <ewol/OObject.h>
 #include <etk/VectorType.h>
 #include <ewol/Widget.h>
+#include <etk/UString.h>
 
 namespace ewol {
 	namespace widgetMessageMultiCast {
@@ -38,7 +39,9 @@ namespace ewol {
 			void Add( int32_t widgetId, const char* const message);
 			void Rm(  int32_t widgetId);
 			void Send(int32_t widgetId, const char* const message, int32_t data);
+			// TODO : Mus be deprecated ....
 			void Send(int32_t widgetId, const char* const message, const char * data = NULL);
+			void Send(int32_t widgetId, const char* const message, etk::UString& data);
 	};
 };
 

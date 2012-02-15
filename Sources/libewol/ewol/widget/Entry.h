@@ -38,18 +38,18 @@ namespace ewol {
 	{
 		public:
 			Entry(void);
-			Entry(etk::String newData);
+			Entry(etk::UString newData);
 			virtual ~Entry(void);
 			void Init(void);
 			virtual bool   CalculateMinSize(void);
-			void           SetValue(etk::String newData);
-			etk::String    GetValue(void);
+			void           SetValue(etk::UString newData);
+			etk::UString   GetValue(void);
 			void           SetWidth(int32_t width)
 			{
 				m_userSize = width;
 			}
 		private:
-			etk::String    m_data;
+			etk::UString   m_data;
 			color_ts       m_textColorFg;  //!< Text color
 			color_ts       m_textColorBg;  //!< Background color
 			int32_t        m_userSize;

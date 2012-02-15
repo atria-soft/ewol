@@ -28,7 +28,7 @@
 #define __EWOL_THEME_MANAGER_H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/File.h>
 #include <ewol/OObject.h>
 
@@ -38,11 +38,11 @@ namespace ewol {
 		void UnInit(void);
 		void LoadDefault(etk::File filename); // default system theme ==> when an element in not find in the user theme, it is search in this one ... not needed
 		void Load(etk::File filename); // add a user theme at the list ==> this remove previous declaration by the user...
-		int32_t GetObjectId(etk::String name);
+		int32_t GetObjectId(etk::UString name);
 		// ???? GetObjectType(int32_t id);
 		void Generate(int32_t id, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
 		int32_t GetNbFrame(int32_t id);
-		int32_t GetFrameId(int32_t id, etk::String & frameName);
+		int32_t GetFrameId(int32_t id, etk::UString & frameName);
 		
 	};
 };

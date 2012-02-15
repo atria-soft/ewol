@@ -23,7 +23,7 @@
  */
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/OObject.h>
 #include <ewol/importgl.h>
 
@@ -43,7 +43,7 @@ ewol::OObject::~OObject(void)
 	
 }
 
-void ewol::OObject::SetName(etk::String & name)
+void ewol::OObject::SetName(etk::UString & name)
 {
 	m_name = name;
 }
@@ -55,7 +55,7 @@ void ewol::OObject::SetName(const char * name)
 	}
 }
 
-etk::String ewol::OObject::GetName(void)
+etk::UString ewol::OObject::GetName(void)
 {
 	return m_name;
 }

@@ -6,7 +6,6 @@ FILE_LIST = \
 			etk/Memory.cpp \
 			etk/unicode.cpp \
 			etk/unicodeTable.cpp \
-			etk/String.cpp \
 			etk/UString.cpp \
 			etk/Stream.cpp \
 			etk/File.cpp \

@@ -39,12 +39,12 @@ namespace ewol {
 			FileChooser(void);
 			~FileChooser(void);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y);
-			void SetTitle(etk::String label);
-			void SetValidateLabel(etk::String label);
-			void SetCancelLabel(etk::String label);
-			void SetFolder(etk::String folder);
-			void SetFileName(etk::String filename);
-			etk::String GetCompleateFileName(void);
+			void SetTitle(etk::UString label);
+			void SetValidateLabel(etk::UString label);
+			void SetCancelLabel(etk::UString label);
+			void SetFolder(etk::UString folder);
+			void SetFileName(etk::UString filename);
+			etk::UString GetCompleateFileName(void);
 			void UpdateCurrentFolder(void);
 		private:
 			int32_t m_widgetTitleId;
@@ -56,8 +56,8 @@ namespace ewol {
 			int32_t m_widgetListFileId;
 			int32_t m_widgetCheckBoxId;
 			bool    m_hasSelectedFile;
-			etk::String m_folder;
-			etk::String m_file;
+			etk::UString m_folder;
+			etk::UString m_file;
 	};
 };
 

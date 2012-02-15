@@ -35,82 +35,38 @@ namespace ewol
 	// TODO : Create a subNameSpace:
 	/*
 	namespace font {
-		// set default folder name of the font : 
-		void        SetFolder(etk::String folderName);
-		void        SetDefault(etk::String fontName, int32_t size);
-		// unload all font loaded
-		void        Init(void);
-		void        UnInit(void);
-		// load the fonts...
-		int32_t     Load(etk::String fontName, int32_t size); // return ID of font
-		int32_t     GetDefaultId(void);
-		void        Unload(int32_t id);
-		
-		// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
-		int32_t     GetWidth(int32_t fontID, const uniChar_t * unicodeString);
-		int32_t     GetWidth(int32_t fontID, const char *      utf8String);
-		int32_t     GetHeight(int32_t fontID);
-		
-		
-		void        DrawText(int32_t                        fontID,
-		                     coord2D_ts &                   drawPosition,
-		                     const char *                   utf8String,
-		                     uint32_t &                     fontTextureId,
-		                     etk::VectorType<coord2D_ts> &  coord,
-		                     etk::VectorType<texCoord_ts> & coordTex);
-		
-		void        DrawText(int32_t                        fontID,
-		                     coord2D_ts &                   drawPosition,
-		                     const uniChar_t *              unicodeString,
-		                     uint32_t &                     fontTextureId,
-		                     etk::VectorType<coord2D_ts> &  coord,
-		                     etk::VectorType<texCoord_ts> & coordTex);
-		
-		int32_t Load(etk::File fontFileName);
-		void    DrawText(etkFloat_t x, etkFloat_t y, const char * myString);
+		...
 	};
 	*/
 	// set default folder name of the font : 
-	void        SetFontFolder(etk::String folderName);
-	void        SetDefaultFont(etk::String fontName, int32_t size);
+	void        SetFontFolder(etk::UString folderName);
+	void        SetDefaultFont(etk::UString fontName, int32_t size);
 	// unload all font loaded
 	void        InitFont(void);
 	void        UnInitFont(void);
 	// load the fonts...
-	int32_t     LoadFont(etk::String fontName, int32_t size); // return ID of font
+	int32_t     LoadFont(etk::UString fontName, int32_t size); // return ID of font
 	int32_t     GetDefaultFontId(void);
 	void        UnloadFont(int32_t id);
 	
 	// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
-	int32_t     GetWidth(int32_t fontID, const uniChar_t * unicodeString);
-	int32_t     GetWidth(int32_t fontID, const char *      utf8String);
+	int32_t     GetWidth(int32_t fontID, const etk::UString& unicodeString);
 	int32_t     GetHeight(int32_t fontID);
-	
-	
 	int32_t     DrawText(int32_t                        fontID,
-	                     coord2D_ts &                   drawPosition,
-	                     coord2D_ts &                   clipSize,
-	                     const char *                   utf8String,
+	                     coord2D_ts                     textPos,
+	                     clipping_ts &                  drawClipping,
+	                     const etk::UString &           unicodeString,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     coord2D_ts                     textPos,
 	                     clipping_ts &                  drawClipping,
-	                     const uniChar_t *              unicodeString,
+	                     const uniChar_t                unicodeChar,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
-	/*
-	void        DrawText(int32_t                        fontID,
-	                     coord2D_ts &                   drawPosition,
-	                     const uniChar_t *              unicodeString,
-	                     uint32_t &                     fontTextureId,
-	                     etk::VectorType<coord2D_ts> &  coord,
-	                     etk::VectorType<texCoord_ts> & coordTex);
-	*/
-	int32_t LoadFont(etk::File fontFileName);
-	void    DrawText(etkFloat_t x, etkFloat_t y, const char * myString);
+	int32_t     LoadFont(etk::File fontFileName);
 };
 
 #endif

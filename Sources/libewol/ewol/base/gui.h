@@ -27,7 +27,7 @@
 #define __GUI_ABSTRACTION_H__
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/Windows.h>
 
 void EWOL_NativeResize(int w, int h );

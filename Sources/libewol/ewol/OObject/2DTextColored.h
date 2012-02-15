@@ -31,7 +31,7 @@ namespace ewol {
 	class OObject2DTextColored :public ewol::OObject
 	{
 		public:
-			OObject2DTextColored(etk::String FontName, int32_t size);
+			OObject2DTextColored(etk::UString FontName, int32_t size);
 			OObject2DTextColored(int32_t fontID);
 			OObject2DTextColored(void);
 			virtual ~OObject2DTextColored(void);
@@ -40,9 +40,9 @@ namespace ewol {
 			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
 			void SetColor(color_ts color);
 			// set a specific text
-			int32_t Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
-			int32_t TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
-			int32_t TextAdd(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t* unicodeString);
+			void    Clear(void);
+			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString);
+			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_color;         //!< tmp text color ...

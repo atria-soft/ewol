@@ -34,7 +34,7 @@ namespace ewol {
 }
 
 #include <etk/Types.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <etk/File.h>
 #include <etk/VectorType.h>
 #include <ewol/OObject.h>
@@ -51,11 +51,11 @@ namespace ewol {
 				virtual ~Theme(void);
 				void Load(etk::File & newFile, bool defaultTheme=false);
 				void Generate(int32_t id, int32_t frameId, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GenerateGroup(etk::String groupName,  ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
-				bool GetColor(etk::String colorName, color_ts & selectedColor);
+				bool GenerateGroup(etk::UString groupName,  ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY);
+				bool GetColor(etk::UString colorName, color_ts & selectedColor);
 				int32_t GetNbFrame(int32_t id);
-				int32_t GetFrameId(int32_t id, etk::String & frameName);
-				int32_t GetObjectId(etk::String name);
+				int32_t GetFrameId(int32_t id, etk::UString & frameName);
+				int32_t GetObjectId(etk::UString name);
 			private:
 				etk::VectorType<ewol::theme::EolColor*>        m_listColor;
 				etk::VectorType<ewol::theme::EolElementFrame*> m_listGroup;

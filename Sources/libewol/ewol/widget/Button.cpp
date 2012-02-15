@@ -62,7 +62,7 @@ ewol::Button::Button(void)
 	Init();
 }
 
-ewol::Button::Button(etk::String newLabel)
+ewol::Button::Button(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
@@ -77,7 +77,7 @@ ewol::Button::~Button(void)
 bool ewol::Button::CalculateMinSize(void)
 {
 	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = 16+minWidth;
 	m_minSize.y = 16+minHeight;
@@ -86,7 +86,7 @@ bool ewol::Button::CalculateMinSize(void)
 }
 
 
-void ewol::Button::SetLabel(etk::String newLabel)
+void ewol::Button::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 }
@@ -139,7 +139,15 @@ void ewol::Button::OnRegenerateDisplay(void)
 		int32_t fontHeight = ewol::GetHeight(fontId);
 		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		*/
-		tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_label.c_str(), m_size.x - borderSize - 2*paddingSize);
+		coord2D_ts textPos;
+		textPos.x = tmpTextOriginX;
+		textPos.y = tmpTextOriginY;
+		clipping_ts drawClipping;
+		drawClipping.x = paddingSize;
+		drawClipping.y = paddingSize;
+		drawClipping.w = m_size.x - borderSize - 2*paddingSize;
+		drawClipping.h = m_size.y - borderSize - 2*paddingSize;
+		tmpText->Text(textPos, drawClipping, m_label);
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		tmpOObjects->SetColor(m_textColorBg);

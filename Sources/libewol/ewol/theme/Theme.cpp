@@ -94,10 +94,10 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 				if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
 					continue;
 				}
-				etk::String nodeValue = pNode->Value();
+				etk::UString nodeValue = pNode->Value();
 				if (nodeValue == "element") {
 					//EWOL_INFO("Find ELEMENT ... ");
-					etk::String elementNameTmp = pNode->ToElement()->Attribute("name");
+					etk::UString elementNameTmp = pNode->ToElement()->Attribute("name");
 					if (elementNameTmp == "") {
 						EWOL_ERROR("(l " << pNode->Row() << ") Element with NO name ... (not parsed)");
 						// not added it
@@ -127,7 +127,7 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 					}
 				} else if (nodeValue == "group") {
 					//EWOL_INFO("Find group ... ");
-					etk::String groupNameTmp = pNode->ToElement()->Attribute("name");
+					etk::UString groupNameTmp = pNode->ToElement()->Attribute("name");
 					if (groupNameTmp == "") {
 						EWOL_ERROR("(l " << pNode->Row() << ") Group with NO name ... (not parsed)");
 						// not added it
@@ -156,7 +156,7 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 						}
 					}
 				} else if (nodeValue == "color") {
-					etk::String colorNameTmp = pNode->ToElement()->Attribute("name");
+					etk::UString colorNameTmp = pNode->ToElement()->Attribute("name");
 					if (colorNameTmp == "") {
 						EWOL_ERROR("(l " << pNode->Row() << ") Color with NO name ... (not parsed)");
 						// not added it
@@ -196,7 +196,7 @@ void ewol::theme::Theme::Load(etk::File & newFile, bool defaultTheme)
 }
 
 
-bool ewol::theme::Theme::GetColor(etk::String colorName, color_ts & selectedColor)
+bool ewol::theme::Theme::GetColor(etk::UString colorName, color_ts & selectedColor)
 {
 	for (int32_t iii=0; iii < m_listColor.Size(); iii++) {
 		if(NULL!=m_listColor[iii]) {
@@ -223,7 +223,7 @@ void ewol::theme::Theme::Generate(int32_t id, int32_t frameId, ewol::OObject2DCo
 	}
 }
 
-bool ewol::theme::Theme::GenerateGroup(etk::String groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
+bool ewol::theme::Theme::GenerateGroup(etk::UString groupName, ewol::OObject2DColored & newObject, etkFloat_t posX, etkFloat_t posY, etkFloat_t sizeX, etkFloat_t sizeY)
 {
 	if (groupName == "") {
 		EWOL_ERROR("Did not find the group name=" << groupName);
@@ -253,7 +253,7 @@ int32_t ewol::theme::Theme::GetNbFrame(int32_t id)
 	return 0;
 }
 
-int32_t ewol::theme::Theme::GetFrameId(int32_t id, etk::String & frameName)
+int32_t ewol::theme::Theme::GetFrameId(int32_t id, etk::UString & frameName)
 {
 	if (0 > id || id > m_listElement.Size()) {
 		EWOL_ERROR("Did not find the Element named=" << frameName);
@@ -266,7 +266,7 @@ int32_t ewol::theme::Theme::GetFrameId(int32_t id, etk::String & frameName)
 }
 
 
-int32_t ewol::theme::Theme::GetObjectId(etk::String name)
+int32_t ewol::theme::Theme::GetObjectId(etk::UString name)
 {
 	if (name == "") {
 		return -1;

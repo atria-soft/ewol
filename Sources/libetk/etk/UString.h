@@ -70,6 +70,9 @@ namespace etk
 			 *    += operator
 			 *****************************************************/
 			const etk::UString& operator+= (const etk::UString &etkS);
+			const etk::UString& operator+= (const char data);
+			const etk::UString& operator+= (const int data);
+			const etk::UString& operator+= (const unsigned int data);
 			const etk::UString& operator+= (const char * inputData);
 			const etk::UString& operator+= (const uniChar_t * inputData);
 			/*****************************************************
@@ -79,28 +82,70 @@ namespace etk
 			etk::UString operator+ (const char * inputData);
 			etk::UString operator+ (const uniChar_t * inputData);
 			/*****************************************************
-			 *    * operator
+			 *    << operator
+			 *****************************************************/
+			/*
+			const etk::UString& operator <<= (const char input);
+			const etk::UString& operator <<= (const int input);
+			const etk::UString& operator <<= (const unsigned int input);
+			*/
+			/*****************************************************
+			 *    >> operator
+			 *****************************************************/
+			
+			/*****************************************************
+			 *    Cout << operator
 			 *****************************************************/
 			friend etk::CCout& operator <<( etk::CCout &os,const etk::UString &obj);
-	
+			/*****************************************************
+			 *    [] operator
+			 *****************************************************/
+			const uniChar_t& operator[] (int32_t pos) const {
+				return m_data[pos];
+			}
+			uniChar_t& operator[] (int32_t pos) {
+				return m_data[pos];
+			}
+			
+			/*****************************************************
+			 *    toolbox
+			 *****************************************************/
+			// Start With ...
+			bool          StartWith(const char*         data);
+			bool          StartWith(const uniChar_t*    data);
+			bool          StartWith(const etk::UString& data);
+			// End With ...
+			bool          EndWith(const char*         data);
+			bool          EndWith(const uniChar_t*    data);
+			bool          EndWith(const etk::UString& data);
+			// Find element
+			int32_t       FindForward(const char      data, int32_t startPos=0);
+			int32_t       FindForward(const uniChar_t data, int32_t startPos=0);
+			int32_t       FindBack(const char      data, int32_t startPos=0x7FFFFFFF);
+			int32_t       FindBack(const uniChar_t data, int32_t startPos=0x7FFFFFFF);
+			
 			bool          IsEmpty(void) const;
 			int32_t       Size(void) const;
-	
+			
+			/*****************************************************
+			 *    Generic modification function
+			 *****************************************************/
 			void          Add(int32_t currentID, const char* inputData);
 			void          Add(int32_t currentID, const uniChar_t* inputData);
 			void          Remove(int32_t currentID, int32_t len);
 			void          Clear(void);
-	
+			
 			etk::VectorType<uniChar_t> GetVector(void);
 			uniChar_t *                pointer(void) { return &m_data[0]; };
-	
+			// generate temporary allocation (auto unallocated...)
+			char *                     Utf8Data(void);
+			
 			// Sting operation :
-			int32_t       FindForward(const uniChar_t element, int32_t startPos=0);
-			int32_t       FindBack(const uniChar_t element, int32_t startPos=0x7FFFFFFF);
 			etk::UString  Extract(int32_t posStart=0, int32_t posEnd=0x7FFFFFFF);
 	
 		private :
-			etk::VectorType<uniChar_t> m_data;
+			etk::VectorType<uniChar_t> m_data;     //!< internal data is stored in the Unicode properties ...
+			etk::VectorType<char>      m_dataUtf8; //!< Tmp data for the Utf8Data() function
 	};
 
 	etk::CCout& operator <<(etk::CCout &os, const etk::UString &obj);

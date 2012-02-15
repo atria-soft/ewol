@@ -52,7 +52,7 @@ ewol::Label::Label(void)
 	Init();
 }
 
-ewol::Label::Label(etk::String newLabel)
+ewol::Label::Label(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
@@ -67,7 +67,7 @@ ewol::Label::~Label(void)
 bool ewol::Label::CalculateMinSize(void)
 {
 	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
@@ -76,7 +76,7 @@ bool ewol::Label::CalculateMinSize(void)
 }
 
 
-void ewol::Label::SetLabel(etk::String newLabel)
+void ewol::Label::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 }
@@ -103,7 +103,16 @@ void ewol::Label::OnRegenerateDisplay(void)
 		tmpOriginY += paddingSize;
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		tmpText->Text(tmpOriginX, tmpOriginY, m_label.c_str(), m_size.x - 2*paddingSize);
+		
+		coord2D_ts textPos;
+		textPos.x = tmpOriginX;
+		textPos.y = tmpOriginY;
+		clipping_ts drawClipping;
+		drawClipping.x = paddingSize;
+		drawClipping.y = paddingSize;
+		drawClipping.w = m_size.x - 2*paddingSize;
+		drawClipping.h = m_size.y - 2*paddingSize;
+		tmpText->Text(textPos, drawClipping, m_label);
 		
 		AddOObject(tmpText, "LabelText");
 	}

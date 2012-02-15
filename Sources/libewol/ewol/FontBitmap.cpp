@@ -50,7 +50,7 @@ namespace ewol
 	class EbtFont
 	{
 		public:
-			EbtFont(etk::File newFile, etk::String fontName, int32_t size)
+			EbtFont(etk::File newFile, etk::UString fontName, int32_t size)
 			{
 				m_loadedOK = false;
 				m_filename = newFile;
@@ -116,7 +116,7 @@ namespace ewol
 				// close the file at end of reading...
 				m_filename.fClose();
 				// Load Bitmap : 
-				etk::String bitmapRealFile = m_filename.GetFolder() + "/" + m_bitmapName;
+				etk::UString bitmapRealFile = m_filename.GetFolder() + "/" + m_bitmapName;
 				EWOL_INFO("load text font image : \"" << bitmapRealFile << "\"");
 				etk::File tmpFile(bitmapRealFile, m_filename.GetTypeAccess());
 				m_textureId = ewol::LoadTexture(tmpFile);
@@ -167,7 +167,7 @@ namespace ewol
 			{
 				return m_filename;
 			};
-			etk::String GetName(void)
+			etk::UString GetName(void)
 			{
 				return m_fontName;
 			};
@@ -175,7 +175,7 @@ namespace ewol
 			{
 				return m_textureLoaded;
 			};
-			bool Check(etk::String fontName, int32_t size)
+			bool Check(etk::UString fontName, int32_t size)
 			{
 				if (m_loadedOK == -1) {
 					return false;
@@ -191,11 +191,11 @@ namespace ewol
 		private:
 			etk::File      m_filename;
 			bool           m_loadedOK;
-			etk::String    m_fontName;
+			etk::UString    m_fontName;
 			int32_t        m_size;
 			uint32_t       m_textureId;
 			bool           m_textureLoaded;
-			etk::String    m_bitmapName;
+			etk::UString    m_bitmapName;
 			etk::VectorType<UTF8Element_ts>   m_elements;    // 
 		public:
 			etk::VectorType<UTF8Element_ts> & GetRefOnElement(void)
@@ -219,11 +219,11 @@ namespace ewol
 
 static etk::VectorType<ewol::EbtFont*> s_listLoadedFonts;
 
-static etk::String s_currentFolderName = "";
-static etk::String s_currentDefaultFontName = "";
+static etk::UString s_currentFolderName = "";
+static etk::UString s_currentDefaultFontName = "";
 static int32_t s_currentDefaultFontId = -1;
 
-void ewol::SetFontFolder(etk::String folderName)
+void ewol::SetFontFolder(etk::UString folderName)
 {
 	if (s_currentFolderName != "") {
 		EWOL_WARNING("Change the FontFolder, old=\"" << s_currentFolderName << "\"");
@@ -243,7 +243,7 @@ void ewol::UnInitFont(void)
 	EWOL_TODO("later");
 }
 
-void ewol::SetDefaultFont(etk::String fontName, int32_t size)
+void ewol::SetDefaultFont(etk::UString fontName, int32_t size)
 {
 	if (s_currentDefaultFontName != "") {
 		EWOL_WARNING("Change the default Ewol Font, old=\"" << s_currentDefaultFontName << "\"");
@@ -268,10 +268,10 @@ int32_t ewol::GetDefaultFontId(void)
 	return s_currentDefaultFontId;
 }
 
-int32_t ewol::LoadFont(etk::String fontName, int32_t size)
+int32_t ewol::LoadFont(etk::UString fontName, int32_t size)
 {
 	// check if folder file
-	etk::String tmpFileName = s_currentFolderName + "/" + fontName + ".ebt";
+	etk::UString tmpFileName = s_currentFolderName + "/" + fontName + ".ebt";
 	etk::File fileName(tmpFileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("Font does not exist: \"" << fileName.GetCompleateName() << "\"");

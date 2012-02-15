@@ -31,9 +31,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Label.h>
 #include <ewol/WidgetManager.h>
-//#include <etk/Vector.h>
 #include <etk/VectorType.h>
-#include <etk/unicode.h>
 #include <ewol/ewol.h>
 
 #include <ewol/base/gui.h>
@@ -182,7 +180,7 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 	if (ewolEventKeyEvent == generateEventId) {
 		ewol::Button * bt     = (ewol::Button *)ewol::widgetManager::Get(widgetID);
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
-		etk::String data = bt->GetLabel();
+		etk::UString data = bt->GetLabel();
 		if (data == "DEL") {
 			char tmppp[2] = {0x08, 0x00};
 			data = tmppp;
@@ -193,10 +191,8 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 		if (data == "TAB") {
 			data = "\t";
 		}
-		uniChar_t unicodeValue;
-		unicode::convertUtf8ToUnicode(data.c_str(), unicodeValue);
-		guiAbstraction::SendKeyboardEvent(true, unicodeValue);
-		guiAbstraction::SendKeyboardEvent(false, unicodeValue);
+		guiAbstraction::SendKeyboardEvent(true, data[0]);
+		guiAbstraction::SendKeyboardEvent(false, data[0]);
 		return true;
 	} else if (ewolEventKeyboardHide == generateEventId) {
 		Hide();

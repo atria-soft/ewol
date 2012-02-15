@@ -26,19 +26,21 @@
 #define __EWOL_O_OBJECT_2D_TEXT_H__
 
 #include <ewol/OObject.h>
+#include <etk/UString.h>
 
 namespace ewol {
 	class OObject2DText :public ewol::OObject
 	{
 		public:
-			OObject2DText(etk::String FontName, int32_t size, color_ts textColorFg);
+			OObject2DText(etk::UString FontName, int32_t size, color_ts textColorFg);
 			OObject2DText(void);
 			virtual ~OObject2DText(void);
 		public:
 			virtual void Draw(void);
 			// set a specific text
-			void Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
-			void TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX);
+			void    Clear(void);
+			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString);
+			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...

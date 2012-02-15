@@ -78,13 +78,13 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 		sscanf(tmp, "%lf", &xxx);
 		m_ratio=xxx;
 	}
-	etk::String tmpString = root->ToElement()->Attribute("ClipX");
+	etk::UString tmpString = root->ToElement()->Attribute("ClipX");
 	if (tmpString == "true") {
 		m_clipX = true;
 	} else {
 		m_clipX = false;
 	}
-	etk::String tmpString2 = root->ToElement()->Attribute("ClipY");
+	etk::UString tmpString2 = root->ToElement()->Attribute("ClipY");
 	if (tmpString2 == "true") {
 		m_clipY = true;
 	} else {
@@ -119,10 +119,10 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
 			continue;
 		}
-		etk::String nodeValue = pNode->Value();
+		etk::UString nodeValue = pNode->Value();
 		if (nodeValue == "group") {
 			//EWOL_INFO("Find group ... ");
-			etk::String groupNameTmp = pNode->ToElement()->Attribute("name");
+			etk::UString groupNameTmp = pNode->ToElement()->Attribute("name");
 			if (groupNameTmp == "") {
 				EWOL_ERROR("(l " << pNode->Row() << ") Group with NO name ... (not parsed)");
 				// not added it
@@ -152,7 +152,7 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 			}
 		} else if (nodeValue == "frame") {
 			//EWOL_INFO("Find frame ... ");
-			etk::String groupNameTmp = pNode->ToElement()->Attribute("name");
+			etk::UString groupNameTmp = pNode->ToElement()->Attribute("name");
 			if (groupNameTmp == "") {
 				EWOL_ERROR("(l " << pNode->Row() << ") Group with NO name ... (not parsed)");
 				// not added it
@@ -181,7 +181,7 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 				}
 			}
 		} else if (nodeValue == "color") {
-			etk::String colorNameTmp = pNode->ToElement()->Attribute("name");
+			etk::UString colorNameTmp = pNode->ToElement()->Attribute("name");
 			if (colorNameTmp == "") {
 				EWOL_ERROR("(l " << pNode->Row() << ") Color with NO name ... (not parsed)");
 				// not added it
@@ -218,7 +218,7 @@ void ewol::theme::EolElement::Parse(TiXmlNode * root)
 
 
 
-bool ewol::theme::EolElement::GetColor(etk::String colorName, color_ts & selectedColor) const
+bool ewol::theme::EolElement::GetColor(etk::UString colorName, color_ts & selectedColor) const
 {
 	for (int32_t iii=0; iii < m_listColor.Size(); iii++) {
 		if(NULL!=m_listColor[iii]) {
@@ -241,7 +241,7 @@ int32_t ewol::theme::EolElement::GetNbFrame(void) const
 }
 
 
-int32_t ewol::theme::EolElement::GetFrameId(etk::String & frameName) const
+int32_t ewol::theme::EolElement::GetFrameId(etk::UString & frameName) const
 {
 	for (int32_t iii=0; iii < m_listElement.Size(); iii++) {
 		if(NULL!=m_listElement[iii]) {
@@ -254,19 +254,19 @@ int32_t ewol::theme::EolElement::GetFrameId(etk::String & frameName) const
 }
 
 
-etk::String ewol::theme::EolElement::GetName(void) const
+etk::UString ewol::theme::EolElement::GetName(void) const
 {
 	return m_name;
 }
 
 
-void ewol::theme::EolElement::SetName(etk::String & newName)
+void ewol::theme::EolElement::SetName(etk::UString & newName)
 {
 	m_name = newName;
 }
 
 
-bool ewol::theme::EolElement::HasName(etk::String & newName) const
+bool ewol::theme::EolElement::HasName(etk::UString & newName) const
 {
 	return m_name == newName;
 }

@@ -71,7 +71,7 @@ ewol::Entry::Entry(void)
 	MarkToReedraw();
 }
 
-ewol::Entry::Entry(etk::String newData)
+ewol::Entry::Entry(etk::UString newData)
 {
 	Init();
 	SetValue(newData);
@@ -97,14 +97,14 @@ bool ewol::Entry::CalculateMinSize(void)
 }
 
 
-void ewol::Entry::SetValue(etk::String newData)
+void ewol::Entry::SetValue(etk::UString newData)
 {
 	m_data = newData;
 	UpdateTextPosition();
 	MarkToReedraw();
 }
 
-etk::String ewol::Entry::GetValue(void)
+etk::UString ewol::Entry::GetValue(void)
 {
 	return m_data;
 }
@@ -140,7 +140,18 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*m_paddingSize;
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		tmpText->Text(tmpTextOriginX, tmpTextOriginY, m_data.c_str() + m_displayStartPosition, m_size.x - (m_borderSize + 2*m_paddingSize));
+		
+		etk::UString tmpDisplay = m_data.Extract(m_displayStartPosition);
+		
+		coord2D_ts textPos;
+		textPos.x = tmpTextOriginX;
+		textPos.y = tmpTextOriginY;
+		clipping_ts drawClipping;
+		drawClipping.x = 0;
+		drawClipping.y = 0;
+		drawClipping.w = m_size.x - (m_borderSize + 2*m_paddingSize);
+		drawClipping.h = m_size.y;
+		tmpText->Text(textPos, drawClipping, tmpDisplay);
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		tmpOObjects->SetColor(m_textColorBg);
@@ -150,7 +161,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		if (true == m_displayCursor) {
 			int32_t fontId = GetDefaultFontId();
 			int32_t fontHeight = ewol::GetHeight(fontId);
-			int32_t fontWidth = ewol::GetWidth(fontId, m_data.c_str() + m_displayStartPosition);
+			int32_t fontWidth = ewol::GetWidth(fontId, tmpDisplay);
 			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
 			tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
 		}
@@ -211,7 +222,7 @@ void ewol::Entry::UpdateTextPosition(void)
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
 	while (iii > 0) {
-		if (ewol::GetWidth(fontId, m_data.c_str()+(iii-1)) > tmpUserSize) {
+		if (ewol::GetWidth(fontId, m_data[iii]) > tmpUserSize) {
 			break;
 		}
 		iii--;

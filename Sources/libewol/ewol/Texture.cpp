@@ -311,7 +311,7 @@ class Bitmap
 class LoadedTexture
 {
 	public:
-		etk::String m_filename;
+		etk::UString m_filename;
 		int32_t     m_nbTimeLoaded;
 		// openGl configuration : 
 		uint32_t    m_openGlTextureID;
@@ -454,7 +454,7 @@ int32_t ewol::LoadTexture(int32_t target,
                           int32_t type,
                           const void* data,
                           int32_t nbBytes,
-                          etk::String filename)
+                          etk::UString filename)
 {
 
 	LoadedTexture *tmpTex = new LoadedTexture();
@@ -506,7 +506,7 @@ int32_t ewol::LoadTexture(etk::File fileName)
 			}
 		}
 	}
-	etk::String fileExtention = fileName.GetExtention();
+	etk::UString fileExtention = fileName.GetExtention();
 	if (fileExtention ==  "bmp") {
 		if (false == fileName.Exist()) {
 			EWOL_ERROR("File does not Exist ... " << fileName);

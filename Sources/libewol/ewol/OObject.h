@@ -47,16 +47,16 @@ namespace ewol {
 			virtual ~OObject(void);
 		public:
 			virtual void Draw(void) = 0;
-			void SetName(etk::String & name);
+			void SetName(etk::UString & name);
 			void SetName(const char * name);
-			etk::String GetName(void);
+			etk::UString GetName(void);
 		public:
 			// use to crop element outside the display
 			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY) { };
 			// Move to the correct position display
 			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y) { };
 		private:
-			etk::String m_name;
+			etk::UString m_name;
 	};
 	
 	/*

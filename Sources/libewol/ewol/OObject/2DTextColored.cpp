@@ -29,7 +29,7 @@
 #undef __class__
 #define __class__	"ewol::OObject2DTextColored"
 
-ewol::OObject2DTextColored::OObject2DTextColored(etk::String FontName, int32_t size)
+ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t size)
 {
 	m_color.red = 0.0;
 	m_color.green = 0.0;
@@ -96,37 +96,14 @@ void ewol::OObject2DTextColored::Draw(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-int32_t ewol::OObject2DTextColored::Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
+void ewol::OObject2DTextColored::Clear(void)
 {
 	m_coord.Clear();
 	m_coordTex.Clear();
 	m_coordColor.Clear();
-	// normal adding text : 
-	return TextAdd(x, y, utf8String, clippingPositionX);
 }
 
-int32_t ewol::OObject2DTextColored::TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
-{
-	m_FontTextureId = 0;
-	if (m_FontId == -1) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return 0;
-	}
-	coord2D_ts drawPosition;
-	drawPosition.x = x;
-	drawPosition.y = y;
-	coord2D_ts clipSize;
-	clipSize.x = clippingPositionX;
-	clipSize.y = -1;
-	int32_t nbElementInTheArray = m_coord.Size();
-	int32_t size = ewol::DrawText(m_FontId, drawPosition, clipSize, utf8String, m_FontTextureId, m_coord, m_coordTex);
-	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
-		m_coordColor.PushBack(m_color);
-	}
-	return size;
-}
-
-int32_t ewol::OObject2DTextColored::TextAdd(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t* unicodeString)
+int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
@@ -135,6 +112,21 @@ int32_t ewol::OObject2DTextColored::TextAdd(coord2D_ts textPos, clipping_ts draw
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
 	int32_t size = ewol::DrawText(m_FontId, textPos, drawClipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
+	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
+		m_coordColor.PushBack(m_color);
+	}
+	return size;
+}
+
+int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t unicodeChar)
+{
+	m_FontTextureId = 0;
+	if (m_FontId == -1) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return 0;
+	}
+	int32_t nbElementInTheArray = m_coord.Size();
+	int32_t size = ewol::DrawText(m_FontId, textPos, drawClipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
 	}

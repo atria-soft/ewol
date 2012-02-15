@@ -68,7 +68,7 @@ void ewol::theme::Load(etk::File filename)
 }
 
 
-int32_t ewol::theme::GetObjectId(etk::String name)
+int32_t ewol::theme::GetObjectId(etk::UString name)
 {
 	if (NULL == localTheme) {
 		return 0;
@@ -103,7 +103,7 @@ int32_t ewol::theme::GetNbFrame(int32_t id)
 }
 
 
-int32_t ewol::theme::GetFrameId(int32_t id, etk::String & frameName)
+int32_t ewol::theme::GetFrameId(int32_t id, etk::UString & frameName)
 {
 	if (NULL == localTheme) {
 		return 0;

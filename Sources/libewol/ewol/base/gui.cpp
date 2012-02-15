@@ -25,7 +25,7 @@
 
 
 #include <ewol/Debug.h>
-#include <etk/String.h>
+#include <etk/UString.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
 

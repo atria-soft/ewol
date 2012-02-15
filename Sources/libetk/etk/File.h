@@ -25,7 +25,7 @@
 #ifndef __ETK_FILE_H__
 #define __ETK_FILE_H__
 
-#include <etk/String.h>
+#include <etk/UString.h>
 
 #define MAX_FILE_NAME      (10240)
 
@@ -59,21 +59,21 @@ namespace etk
 	class File
 	{
 		public:
-			            File(void) { m_lineNumberOpen=0; m_type = etk::FILE_TYPE_DIRECT; m_PointerFile = NULL;}
-			            File(etk::String &filename, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t LineNumber = 0);
-			            File(const char  *filename, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t LineNumber = 0);
-			            File(etk::String &filename, etk::String &folder, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t lineNumber = 0);
-			            ~File(void);
-			etk::String GetFolder(void) const;
-			etk::String GetShortFilename(void) const;
-			etk::String GetCompleateName(void) const;
-			bool        HasExtention(void);
-			etk::String GetExtention(void);
-			int32_t     Size(void);
-			bool        Exist(void);
-			int32_t     GetLineNumber(void);
-			void        SetLineNumber(int32_t newline);
-			void        SetCompleateName(etk::String &newFilename, etk::FileType_te type);
+			             File(void) { m_lineNumberOpen=0; m_type = etk::FILE_TYPE_DIRECT; m_PointerFile = NULL;}
+			             File(etk::UString &filename, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t LineNumber = 0);
+			             File(const char  *filename, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t LineNumber = 0);
+			             File(etk::UString &filename, etk::UString &folder, etk::FileType_te type = etk::FILE_TYPE_DIRECT, int32_t lineNumber = 0);
+			             ~File(void);
+			etk::UString GetFolder(void) const;
+			etk::UString GetShortFilename(void) const;
+			etk::UString GetCompleateName(void) const;
+			bool         HasExtention(void);
+			etk::UString GetExtention(void);
+			int32_t      Size(void);
+			bool         Exist(void);
+			int32_t      GetLineNumber(void);
+			void         SetLineNumber(int32_t newline);
+			void         SetCompleateName(etk::UString &newFilename, etk::FileType_te type);
 			
 			const etk::File& operator=  (const etk::File &etkF );
 			bool             operator== (const etk::File &etkF ) const;
@@ -101,8 +101,8 @@ namespace etk
 			int32_t          m_zipDataSize;
 			int32_t          m_zipReadingOffset;
 			#endif
-			etk::String      m_folder;
-			etk::String      m_shortFilename;
+			etk::UString     m_folder;
+			etk::UString     m_shortFilename;
 			int32_t          m_lineNumberOpen;
 	};
 	

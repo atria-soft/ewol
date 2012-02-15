@@ -88,19 +88,19 @@ void ewol::theme::EolColor::Parse(TiXmlNode * pNode)
 }
 
 
-etk::String ewol::theme::EolColor::GetName(void) const
+etk::UString ewol::theme::EolColor::GetName(void) const
 {
 	return m_name;
 }
 
 
-void ewol::theme::EolColor::SetName(etk::String & newName)
+void ewol::theme::EolColor::SetName(etk::UString & newName)
 {
 	m_name = newName;
 }
 
 
-bool ewol::theme::EolColor::HasName(etk::String & newName) const
+bool ewol::theme::EolColor::HasName(etk::UString & newName) const
 {
 	return m_name == newName;
 }

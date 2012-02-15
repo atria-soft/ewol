@@ -36,15 +36,15 @@ namespace ewol {
 	{
 		public:
 			CheckBox(void);
-			CheckBox(etk::String newLabel);
+			CheckBox(etk::UString newLabel);
 			void Init(void);
 			virtual ~CheckBox(void);
 			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::String newLabel);
+			void           SetLabel(etk::UString newLabel);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:
-			etk::String    m_label;
+			etk::UString   m_label;
 			bool           m_value;
 			color_ts       m_textColorFg;  //!< Text color
 			color_ts       m_textColorBg;  //!< Background color

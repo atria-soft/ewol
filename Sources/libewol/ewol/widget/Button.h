@@ -38,20 +38,20 @@ namespace ewol {
 	{
 		public:
 			Button(void);
-			Button(etk::String newLabel);
+			Button(etk::UString newLabel);
 			void Init(void);
 			virtual ~Button(void);
 			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::String newLabel);
-			etk::String    GetLabel(void) {return m_label;};
+			void           SetLabel(etk::UString newLabel);
+			etk::UString    GetLabel(void) {return m_label;};
 			// TODO : 
 			//void           SetSize(int32_t size);
-			//void           SetFont(etk::String fontName);
+			//void           SetFont(etk::UString fontName);
 			//void           ResetDefaultParameters(void);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:
-			etk::String    m_label;
+			etk::UString   m_label;
 			color_ts       m_textColorFg;  //!< Text color
 			color_ts       m_textColorBg;  //!< Background color
 		public:

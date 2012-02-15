@@ -36,13 +36,13 @@ namespace ewol {
 	{
 		public:
 			Label(void);
-			Label(etk::String newLabel);
+			Label(etk::UString newLabel);
 			void Init(void);
 			virtual ~Label(void);
 			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::String newLabel);
+			void           SetLabel(etk::UString newLabel);
 		private:
-			etk::String    m_label;
+			etk::UString   m_label;
 			color_ts       m_textColorFg;  //!< Text color
 		public:
 			virtual void   OnRegenerateDisplay(void);

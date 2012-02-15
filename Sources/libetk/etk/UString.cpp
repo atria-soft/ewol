@@ -65,6 +65,7 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
 etk::UString::~UString(void)
 {
 	m_data.Clear();
+	m_dataUtf8.Clear();
 }
 
 
@@ -469,6 +470,26 @@ const etk::UString& etk::UString::operator+= (const char * inputData)
 	return *this;
 }
 
+const etk::UString& etk::UString::operator+= (const char data)
+{
+	etk::UString tmpString(data);
+	*this += tmpString;
+	return *this;
+}
+
+const etk::UString& etk::UString::operator+= (const int data)
+{
+	etk::UString tmpString(data);
+	*this += tmpString;
+	return *this;
+}
+
+const etk::UString& etk::UString::operator+= (const unsigned int data)
+{
+	etk::UString tmpString(data);
+	*this += tmpString;
+	return *this;
+}
 
 /**
  * @brief 
@@ -649,6 +670,10 @@ void etk::UString::Clear(void)
  * @return the position of the first occurence or -1 if not find...
  *
  */
+int32_t etk::UString::FindForward(const char element, int32_t startPos)
+{
+	return FindForward((uniChar_t)element, startPos);
+}
 int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos)
 {
 	if (startPos < 0) {
@@ -674,6 +699,10 @@ int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos)
  * @return the position of the first occurence begining by the end or -1 if not find...
  *
  */
+int32_t etk::UString::FindBack(const char element, int32_t startPos)
+{
+	return FindBack((uniChar_t)element, startPos);
+}
 int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos)
 {
 	if (startPos < 0) {
@@ -732,4 +761,108 @@ etk::VectorType<uniChar_t> etk::UString::GetVector(void)
 	out.PopBack();
 	return out;
 }
+
+
+// Start With ...
+bool etk::UString::StartWith(const char* data)
+{
+	etk::UString tmpString(data);
+	return StartWith(tmpString);
+}
+
+bool etk::UString::StartWith(const uniChar_t* data)
+{
+	if (NULL == data) {
+		return false;
+	}
+	int32_t len = strlen(data);
+	if (len == 0) {
+		return false;
+	}
+	if (len > Size()) {
+		return false;
+	}
+	for (int32_t iii=0; iii<len; iii++) {
+		if (data[iii] != m_data[iii]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool etk::UString::StartWith(const etk::UString& data)
+{
+	if (data.Size() == 0) {
+		return false;
+	}
+	if (data.Size() > Size()) {
+		return false;
+	}
+	for (int32_t iii=0; iii<data.Size(); iii++) {
+		if (data[iii] != m_data[iii]) {
+			return false;
+		}
+	}
+	return false;
+}
+
+
+
+bool etk::UString::EndWith(const char* data)
+{
+	etk::UString tmpString(data);
+	return EndWith(tmpString);
+}
+
+bool etk::UString::EndWith(const uniChar_t* data)
+{
+	if (NULL == data) {
+		return false;
+	}
+	int32_t len = strlen(data);
+	if (len == 0) {
+		return false;
+	}
+	if (len > Size()) {
+		return false;
+	}
+	for( int32_t iii=Size()-1, jjj=len-1;
+	     iii>=0 && jjj>=0;
+	     iii--, jjj--) {
+		if (data[jjj] != m_data[iii]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+bool etk::UString::EndWith(const etk::UString& data)
+{
+	if (data.Size() == 0) {
+		return false;
+	}
+	if (data.Size() > Size()) {
+		return false;
+	}
+	for( int32_t iii=Size()-1, jjj=data.Size()-1;
+	     iii>=0 && jjj>=0;
+	     iii--, jjj--) {
+		if (data[jjj] != m_data[iii]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+char * etk::UString::Utf8Data(void)
+{
+	// UTF8 generation :
+	m_dataUtf8.Clear();
+	unicode::convertUnicodeToUtf8(m_data, m_dataUtf8);
+	m_dataUtf8.PushBack('\0');
+	
+	return &m_dataUtf8[0];
+}
+
 

@@ -29,7 +29,7 @@
 #undef __class__
 #define __class__	"ewol::OObject2DText"
 
-ewol::OObject2DText::OObject2DText(etk::String FontName, int32_t size, color_ts textColorFg)
+ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, color_ts textColorFg)
 {
 	m_textColorFg = textColorFg;
 	if (FontName == "") {
@@ -77,40 +77,31 @@ void ewol::OObject2DText::Draw(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ewol::OObject2DText::Text(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
+void ewol::OObject2DText::Clear(void)
 {
-	m_FontTextureId = 0;
 	m_coord.Clear();
 	m_coordTex.Clear();
-	if (m_FontId == -1) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return;
-	}
-	coord2D_ts drawPosition;
-	drawPosition.x = x;
-	drawPosition.y = y;
-	coord2D_ts clipSize;
-	clipSize.x = clippingPositionX;
-	clipSize.y = -1;
-	ewol::DrawText(m_FontId, drawPosition, clipSize, utf8String, m_FontTextureId, m_coord, m_coordTex);
 }
 
-void ewol::OObject2DText::TextAdd(etkFloat_t x, etkFloat_t y, const char* utf8String, int32_t clippingPositionX)
+int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
 		EWOL_ERROR("Font Id is not corectly defined");
-		return;
+		return 0;
 	}
-	coord2D_ts drawPosition;
-	drawPosition.x = x;
-	drawPosition.y = y;
-	coord2D_ts clipSize;
-	clipSize.x = clippingPositionX;
-	clipSize.y = -1;
-	ewol::DrawText(m_FontId, drawPosition, clipSize, utf8String, m_FontTextureId, m_coord, m_coordTex);
+	return ewol::DrawText(m_FontId, textPos, drawClipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
 }
 
+int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t unicodeChar)
+{
+	m_FontTextureId = 0;
+	if (m_FontId == -1) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return 0;
+	}
+	return ewol::DrawText(m_FontId, textPos, drawClipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
+}
 void ewol::OObject2DText::UpdateOrigin(etkFloat_t x, etkFloat_t y)
 {
 	for (int32_t iii=0; iii<m_coord.Size(); iii++) {

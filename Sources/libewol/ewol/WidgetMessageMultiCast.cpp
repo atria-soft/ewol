@@ -103,4 +103,8 @@ void ewol::widgetMessageMultiCast::Send(int32_t widgetId, const char* const mess
 	}
 }
 
+void ewol::widgetMessageMultiCast::Send(int32_t widgetId, const char* const message, etk::UString& data)
+{
+	Send(widgetId, message, data.Utf8Data());
+}
 
