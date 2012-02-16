@@ -170,6 +170,18 @@ void etk::UString::Set(const uniChar_t * inputData, int32_t len)
  * @return 
  *
  */
+etk::UString::UString(char inputData)
+{
+	char tmpVal[2];
+	// generate the UString : 
+	sprintf(tmpVal, "%c", inputData);
+	// set the internal data : 
+	m_data.Clear();
+	m_data.PushBack('\0');
+	Set(tmpVal);
+}
+
+
 etk::UString::UString(int inputData)
 {
 	char tmpVal[256];
@@ -222,57 +234,6 @@ const etk::UString& etk::UString::operator= (const etk::UString &etkS )
 	//TK_INFO("OPERATOR de recopie");
 	if( this != &etkS ) {
 		m_data = etkS.m_data;
-	}
-	return *this;
-}
-
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-const etk::UString& etk::UString::operator= (const char * inputData)
-{
-	m_data.Clear();
-	m_data.PushBack('\0');
-	if (NULL == inputData) {
-		return *this;
-	}
-	// calculate the size : 
-	uint32_t len = strlen(inputData);
-	// check the new size ...
-	if (len > 0 ) {
-		// copy all data : 
-		Set(inputData, len);
-	}
-	return *this;
-}
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-const etk::UString& etk::UString::operator= (const uniChar_t * inputData)
-{
-	m_data.Clear();
-	m_data.PushBack('\0');
-	if (NULL == inputData) {
-		return *this;
-	}
-	// calculate the size : 
-	int32_t len = strlen(inputData);
-	// check the new size ...
-	if (len > 0 ) {
-		// copy all data : 
-		Set(inputData, len);
 	}
 	return *this;
 }
@@ -442,43 +403,6 @@ bool etk::UString::operator== (const etk::UString& etkS) const
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-bool etk::UString::operator== (const char * inputData) const
-{
-	etk::UString tmpString(inputData);
-	return *this == tmpString;
-}
-
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-bool etk::UString::operator== (const uniChar_t * inputData) const
-{
-	// calculate the size : 
-	int32_t len = strlen(inputData);
-	if (len+1 != m_data.Size()) {
-		return false;
-	}
-	for (int32_t iii= 0; iii<m_data.Size(); iii++) {
-		if (inputData[iii]!= m_data[iii]){
-			return false;
-		}
-	}
-	return true;
-}
 
 /**
  * @brief 
@@ -491,20 +415,6 @@ bool etk::UString::operator== (const uniChar_t * inputData) const
 bool etk::UString::operator!= (const etk::UString& etkS) const
 {
 	return !(*this == etkS);
-}
-
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-bool etk::UString::operator!= (const char * inputData) const
-{
-	return !(*this == inputData);
 }
 
 
@@ -541,65 +451,6 @@ const etk::UString& etk::UString::operator+= (const etk::UString &etkS)
  * @return 
  *
  */
-const etk::UString& etk::UString::operator+= (const uniChar_t * inputData)
-{
-	//TK_INFO("        UString(arg) : \"" << inputData << "\"");
-	//TK_INFO("        UString(direct) : \"" << m_data << "\"");
-	int32_t len = strlen(inputData);
-	
-	if (len != 0) {
-		// remove the last '\0'
-		m_data.PopBack();
-		// copy the data ...
-		m_data.PushBack(inputData, len+1 );
-	}
-	return *this;
-}
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-const etk::UString& etk::UString::operator+= (const char * inputData)
-{
-	etk::UString tmpString(inputData);
-	*this += tmpString;
-	return *this;
-}
-
-const etk::UString& etk::UString::operator+= (const char data)
-{
-	etk::UString tmpString(data);
-	*this += tmpString;
-	return *this;
-}
-
-const etk::UString& etk::UString::operator+= (const int data)
-{
-	etk::UString tmpString(data);
-	*this += tmpString;
-	return *this;
-}
-
-const etk::UString& etk::UString::operator+= (const unsigned int data)
-{
-	etk::UString tmpString(data);
-	*this += tmpString;
-	return *this;
-}
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString etk::UString::operator+ (const etk::UString &etkS)
 {
 	etk::UString temp;
@@ -610,41 +461,6 @@ etk::UString etk::UString::operator+ (const etk::UString &etkS)
 	return temp;
 }
 
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-etk::UString etk::UString::operator+ (const char * inputData)
-{
-	etk::UString temp;
-	//TK_INFO("        UString(arg) : \"" << inputData << "\"");
-	//TK_INFO("        UString(direct) : \"" << m_data << "\"");
-	temp += *this;
-	temp += inputData;
-	return temp;
-}
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
-etk::UString etk::UString::operator+ (const uniChar_t * inputData)
-{
-	etk::UString temp;
-	//TK_INFO("        UString(arg) : \"" << inputData << "\"");
-	//TK_INFO("        UString(direct) : \"" << m_data << "\"");
-	temp += *this;
-	temp += inputData;
-	return temp;
-}
 
 
 
@@ -865,31 +681,6 @@ etk::VectorType<uniChar_t> etk::UString::GetVector(void)
 
 
 // Start With ...
-bool etk::UString::StartWith(const char* data)
-{
-	etk::UString tmpString(data);
-	return StartWith(tmpString);
-}
-
-bool etk::UString::StartWith(const uniChar_t* data)
-{
-	if (NULL == data) {
-		return false;
-	}
-	int32_t len = strlen(data);
-	if (len == 0) {
-		return false;
-	}
-	if (len > Size()) {
-		return false;
-	}
-	for (int32_t iii=0; iii<len; iii++) {
-		if (data[iii] != m_data[iii]) {
-			return false;
-		}
-	}
-	return true;
-}
 
 bool etk::UString::StartWith(const etk::UString& data)
 {
@@ -907,35 +698,6 @@ bool etk::UString::StartWith(const etk::UString& data)
 	return true;
 }
 
-
-
-bool etk::UString::EndWith(const char* data)
-{
-	etk::UString tmpString(data);
-	return EndWith(tmpString);
-}
-
-bool etk::UString::EndWith(const uniChar_t* data)
-{
-	if (NULL == data) {
-		return false;
-	}
-	int32_t len = strlen(data);
-	if (len == 0) {
-		return false;
-	}
-	if (len > Size()) {
-		return false;
-	}
-	for( int32_t iii=Size()-1, jjj=len-1;
-	     iii>=0 && jjj>=0;
-	     iii--, jjj--) {
-		if (data[jjj] != m_data[iii]) {
-			return false;
-		}
-	}
-	return true;
-}
 
 bool etk::UString::EndWith(const etk::UString& data)
 {

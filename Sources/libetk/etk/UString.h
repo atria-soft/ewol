@@ -40,6 +40,7 @@ namespace etk
 			void Set(const uniChar_t* inputData, int32_t len=-1);
 			void Set(const char*      inputData, int32_t len=-1);
 			// basic convertion integer en string
+			UString(char inputData);
 			UString(int inputData);
 			UString(unsigned int inputData);
 			UString(const etk::UString &etkS);
@@ -50,22 +51,16 @@ namespace etk
 			 *    = assigment
 			 *****************************************************/
 			const etk::UString& operator= (const etk::UString &etkS );
-			const etk::UString& operator= (const char * inputData);
-			const etk::UString& operator= (const uniChar_t * inputData);
 			const etk::UString& operator= (etk::VectorType<char> inputData);
 			const etk::UString& operator= (etk::VectorType<uniChar_t> inputData);
 			/*****************************************************
 			 *    == operator
 			 *****************************************************/
 			bool  operator== (const etk::UString& etkS) const;
-			bool  operator== (const uniChar_t * inputData) const;
-			bool  operator== (const char * inputData) const;
 			/*****************************************************
 			 *    != operator
 			 *****************************************************/
 			bool  operator!= (const etk::UString& etkS) const;
-			bool  operator!= (const uniChar_t * inputData) const;
-			bool  operator!= (const char * inputData) const;
 			/*****************************************************
 			 *    > < >= <= operator
 			 *****************************************************/
@@ -77,17 +72,10 @@ namespace etk
 			 *    += operator
 			 *****************************************************/
 			const etk::UString& operator+= (const etk::UString &etkS);
-			const etk::UString& operator+= (const char data);
-			const etk::UString& operator+= (const int data);
-			const etk::UString& operator+= (const unsigned int data);
-			const etk::UString& operator+= (const char * inputData);
-			const etk::UString& operator+= (const uniChar_t * inputData);
 			/*****************************************************
 			 *    + operator
 			 *****************************************************/
 			etk::UString operator+ (const etk::UString &etkS);
-			etk::UString operator+ (const char * inputData);
-			etk::UString operator+ (const uniChar_t * inputData);
 			/*****************************************************
 			 *    << operator
 			 *****************************************************/
@@ -118,12 +106,8 @@ namespace etk
 			 *    toolbox
 			 *****************************************************/
 			// Start With ...
-			bool          StartWith(const char*         data);
-			bool          StartWith(const uniChar_t*    data);
 			bool          StartWith(const etk::UString& data);
 			// End With ...
-			bool          EndWith(const char*         data);
-			bool          EndWith(const uniChar_t*    data);
 			bool          EndWith(const etk::UString& data);
 			// Find element
 			int32_t       FindForward(const char      data, int32_t startPos=0);

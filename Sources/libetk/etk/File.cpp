@@ -171,7 +171,7 @@ static struct zip * s_APKArchive = NULL;
 static int32_t      s_APKnbFiles = 0;
 
 
-static void loadAPK (const etk::UString& apkPath)
+static void loadAPK(etk::UString& apkPath)
 {
 	TK_DEBUG("Loading APK \"" << apkPath << "\"");
 	s_APKArchive = zip_open(apkPath.Utf8Data(), 0, NULL);
@@ -235,8 +235,8 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	} else {
 		destFilename = newFilename;
 	}
-	TK_DEBUG("2 : Get file Name : " << destFilename );
-	if (false == destFilename.StartWith('/')) {
+	TK_DEBUG("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
+	if (true == destFilename.StartWith('/')) {
 		m_type = etk::FILE_TYPE_DIRECT;
 		if (type != etk::FILE_TYPE_DIRECT) {
 			TK_DEBUG("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
@@ -257,8 +257,6 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			destFilename = cCurrentPath;
 			destFilename += "/";
 			destFilename += tmpFilename;
-			
-			
 		} else {
 			m_type = type;
 		}

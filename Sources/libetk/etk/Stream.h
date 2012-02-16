@@ -116,6 +116,14 @@ namespace etk{
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
+		CCout& operator << (bool t) {
+			if (t) {
+				strncat(m_tmpChar, "true", MAX_LOG_SIZE);
+			} else {
+				strncat(m_tmpChar, "false", MAX_LOG_SIZE);
+			}
+			return *this;
+		}
 		CCout& operator << (CStart ccc) {
 			pthread_mutex_lock(&m_mutex);
 			return *this;

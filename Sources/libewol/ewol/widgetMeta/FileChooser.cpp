@@ -532,10 +532,13 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		//==> this is an internal event ...
 		FileChooserFolderList * myListFolder = (FileChooserFolderList *)ewol::widgetManager::Get(m_widgetListFolderId);
 		etk::UString tmpString = myListFolder->GetSelectedLine();
+		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
 		m_folder = m_folder + tmpString;
 		char buf[MAX_FILE_NAME];
 		memset(buf, 0, MAX_FILE_NAME);
 		char * ok;
+		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
+		
 		ok = realpath(m_folder.Utf8Data(), buf);
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
@@ -585,7 +588,9 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	
 	myEntry->SetValue(m_folder);
 	myListFolder->AddElement(etk::UString("."));
-	myListFolder->AddElement(etk::UString(".."));
+	if (m_folder != "/" ) {
+		myListFolder->AddElement(etk::UString(".."));
+	}
 	DIR *dir;
 	struct dirent *ent;
 	dir = opendir(m_folder.Utf8Data());
@@ -598,6 +603,7 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 					myListFile->AddElement(tmpString);
 				}
 			} else if (DT_DIR == ent->d_type) {
+				//EWOL_DEBUG("    find Folder : \"" << tmpString << "\"(" << tmpString.Size() << ") ?= \"" << ent->d_name << "\"(" << strlen(ent->d_name) );
 				if (tmpString != "." && tmpString != "..") {
 					if (false == tmpString.StartWith(".") || true==ShowHidenFile) {
 						myListFolder->AddElement(tmpString);

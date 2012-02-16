@@ -238,7 +238,7 @@ int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::Ve
 			tmpData[0] = input_UTF8[pos+0];
 			tmpData[1] = input_UTF8[pos+1];
 			tmpData[2] = '\0';
-			pos += 1;
+			pos += 2;
 		} else if(		3<=lenMax
 					&&	0xE0 == (input_UTF8[pos+0] & 0xF0)
 					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
@@ -247,7 +247,7 @@ int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::Ve
 			tmpData[1] = input_UTF8[pos+1];
 			tmpData[2] = input_UTF8[pos+2];
 			tmpData[3] = '\0';
-			pos += 1;
+			pos += 3;
 		} else if(		4<=lenMax
 					&&	0xF0 == (input_UTF8[pos+0] & 0xF8)
 					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
@@ -258,7 +258,7 @@ int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::Ve
 			tmpData[2] = input_UTF8[pos+2];
 			tmpData[3] = input_UTF8[pos+3];
 			tmpData[4] = '\0';
-			pos += 1;
+			pos += 4;
 		} else {
 			tmpData[0] = '\0';
 			pos += 1;
@@ -293,7 +293,7 @@ int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, etk::VectorType<uniChar
 			tmpData[0] = input_UTF8[pos+0];
 			tmpData[1] = input_UTF8[pos+1];
 			tmpData[2] = '\0';
-			pos += 1;
+			pos += 2;
 		} else if(		3<=lenMax
 					&&	0xE0 == (input_UTF8[pos+0] & 0xF0)
 					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
@@ -302,7 +302,7 @@ int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, etk::VectorType<uniChar
 			tmpData[1] = input_UTF8[pos+1];
 			tmpData[2] = input_UTF8[pos+2];
 			tmpData[3] = '\0';
-			pos += 1;
+			pos += 3;
 		} else if(		4<=lenMax
 					&&	0xF0 == (input_UTF8[pos+0] & 0xF8)
 					&&	0x80 == (input_UTF8[pos+1] & 0xC0)
@@ -313,7 +313,7 @@ int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, etk::VectorType<uniChar
 			tmpData[2] = input_UTF8[pos+2];
 			tmpData[3] = input_UTF8[pos+3];
 			tmpData[4] = '\0';
-			pos += 1;
+			pos += 4;
 		} else {
 			tmpData[0] = '\0';
 			pos += 1;
