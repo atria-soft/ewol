@@ -23,6 +23,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/CheckBox.cpp \
 			ewol/widget/Entry.cpp \
 			ewol/widget/List.cpp \
+			ewol/widget/Menu.cpp \
 			ewol/widget/ContextMenu.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/SizerHori.cpp \

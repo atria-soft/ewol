@@ -48,10 +48,10 @@ namespace ewol {
 			bool                           m_lockExpendContamination;
 			etk::VectorType<ewol::Widget*> m_subWidget;
 		public:
-			void           SubWidgetRemoveAll(void);
-			void           SubWidgetAdd(ewol::Widget* newWidget);
-			void           SubWidgetRemove(ewol::Widget* newWidget);
-			void           SubWidgetUnLink(ewol::Widget* newWidget);
+			virtual void   SubWidgetRemoveAll(void);
+			virtual void   SubWidgetAdd(ewol::Widget* newWidget);
+			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
+			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		protected:
 			virtual bool   OnDraw(void);
 		public:
