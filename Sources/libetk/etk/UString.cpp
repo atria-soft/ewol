@@ -315,16 +315,99 @@ const etk::UString& etk::UString::operator= (etk::VectorType<uniChar_t> inputDat
 }
 
 
+uniChar_t changeOrder(uniChar_t elemA)
+{
+	if (elemA >= 'A' && elemA <= 'Z') {
+		return (elemA - (uniChar_t)'A')*2 + 'A';
+	}
+	if (elemA >= 'a' && elemA <= 'z') {
+		return (elemA - (uniChar_t)'a')*2 + 'A' + 1;
+	}
+	if (elemA >= ':' && elemA <= '@') {
+		return elemA + 52;
+	}
+	if (elemA >= '[' && elemA <= '`') {
+		return elemA +26;
+	}
+	return elemA;
+}
+
 
 bool etk::UString::operator> (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
 		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
-			if (m_data[iii] > etkS.m_data[iii] ) {
-				return true;
+			//TK_DEBUG("    compare : '" << (char)m_data[iii] << "'>'" << (char)etkS.m_data[iii] << "' ==> " << changeOrder(m_data[iii]) << ">" << changeOrder(etkS.m_data[iii]) << "");
+			uniChar_t elemA = changeOrder(m_data[iii]);
+			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
+			if (elemA != elemB) {
+				if (elemA > elemB) {
+					return true;
+				}
+				return false;
 			}
 		}
 		if (m_data.Size() > etkS.m_data.Size()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool etk::UString::operator>= (const etk::UString& etkS) const
+{
+	if( this != &etkS ) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
+			uniChar_t elemA = changeOrder(m_data[iii]);
+			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
+			if (elemA != elemB) {
+				if (elemA > elemB) {
+					return true;
+				}
+				return false;
+			}
+		}
+		if (m_data.Size() >= etkS.m_data.Size()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool etk::UString::operator< (const etk::UString& etkS) const
+{
+	if( this != &etkS ) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
+			uniChar_t elemA = changeOrder(m_data[iii]);
+			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
+			if (elemA != elemB) {
+				if (elemA < elemB) {
+					return true;
+				}
+				return false;
+			}
+		}
+		if (m_data.Size() < etkS.m_data.Size()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool etk::UString::operator<= (const etk::UString& etkS) const
+{
+	if( this != &etkS ) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
+			uniChar_t elemA = changeOrder(m_data[iii]);
+			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
+			if (elemA != elemB) {
+				if (elemA < elemB) {
+					return true;
+				}
+				return false;
+			}
+		}
+		if (m_data.Size() <= etkS.m_data.Size()) {
 			return true;
 		}
 	}

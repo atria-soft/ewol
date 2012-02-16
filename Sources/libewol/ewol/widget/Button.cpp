@@ -152,9 +152,10 @@ void ewol::Button::OnRegenerateDisplay(void)
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		tmpOObjects->SetColor(m_textColorBg);
 		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		/*
 		tmpOObjects->SetColor(m_textColorFg);
 		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, borderSize);
-		
+		*/
 		AddOObject(tmpOObjects, "BouttonDecoration");
 		
 		AddOObject(tmpText, "BouttonText");

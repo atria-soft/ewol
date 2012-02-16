@@ -30,6 +30,7 @@
 #include <typeinfo>
 #include <string.h>
 #include <pthread.h>
+#include <etk/Types.h>
 
 #if defined(__PLATFORM__Android)
 #	include <android/log.h>
@@ -73,6 +74,13 @@ namespace etk{
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;
 		}
+		/*
+		CCout& operator << (uniChar_t t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "%c", t);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		*/
 		CCout& operator << (long t) {
 			snprintf(tmp, MAX_LOG_SIZE_TMP, "%ld", t);
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);

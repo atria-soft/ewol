@@ -52,8 +52,9 @@ void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 		
 		int32_t findPos = 0;
 		for(int32_t jjj=0; jjj<m_listDirectory.Size(); jjj++) {
+			//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
 			if (*tmpList[iii] > *m_listDirectory[jjj]) {
-				findPos = jjj;
+				findPos = jjj+1;
 			}
 		}
 		//EWOL_DEBUG("position="<<findPos);
@@ -86,6 +87,10 @@ class FileChooserFolderList : public ewol::List
 		{
 			etk::UString* tmpEmement = new etk::UString(element);
 			m_listDirectory.PushBack(tmpEmement);
+		}
+		void EndGenerating(void)
+		{
+			SortList(m_listDirectory);
 			MarkToReedraw();
 		}
 		
@@ -222,21 +227,9 @@ class FileChooserFileList : public ewol::List
 			etk::UString* tmpEmement = new etk::UString(element);
 			m_listFile.PushBack(tmpEmement);
 		}
-		void endGenerating(void)
+		void EndGenerating(void)
 		{
-			/*
-			EWOL_DEBUG("list before");
-			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
-				EWOL_DEBUG("      " << *m_listFile[iii] );
-			}
-			*/
 			SortList(m_listFile);
-			/*
-			EWOL_DEBUG("list after");
-			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
-				EWOL_DEBUG("      " << *m_listFile[iii] );
-			}
-			*/
 			MarkToReedraw();
 		}
 		void ClearElements(void) {
@@ -616,7 +609,8 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	} else {
 		EWOL_ERROR("could not open directory : \"" << m_folder << "\"");
 	}
-	myListFile->endGenerating();
+	myListFile->EndGenerating();
+	myListFolder->EndGenerating();
 	MarkToReedraw();
 }
 
