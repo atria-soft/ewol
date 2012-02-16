@@ -70,7 +70,7 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		if (true == m_subWidget->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
-		if (m_displayRatio>0.1 && m_displayRatio<=100) {
+		if (m_displayRatio>0.1 && m_displayRatio<=1) {
 			subWidgetSize.x = etk_max(m_size.x*m_displayRatio, subWidgetSize.x);
 			subWidgetSize.y = etk_max(m_size.y*m_displayRatio, subWidgetSize.y);
 		}

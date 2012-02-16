@@ -44,13 +44,10 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
 			etk::UString    GetLabel(void) {return m_label;};
-			// TODO : 
-			//void           SetSize(int32_t size);
-			//void           SetFont(etk::UString fontName);
-			//void           ResetDefaultParameters(void);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:
+			coord2D_ts     m_padding;
 			etk::UString   m_label;
 			color_ts       m_textColorFg;  //!< Text color
 			color_ts       m_textColorBg;  //!< Background color

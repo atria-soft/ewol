@@ -17,7 +17,9 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE \
-                `pkg-config --cflags freetype2`
+                -std=c++0x
+                
+#                `pkg-config --cflags freetype2`
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

@@ -44,6 +44,13 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
 	
+	m_padding.x = 4;
+	#ifdef __PLATFORM__Android
+		m_padding.y = 12;
+	#else
+		m_padding.y = 4;
+	#endif
+	
 	m_textColorFg.red   = 0.0;
 	m_textColorFg.green = 0.0;
 	m_textColorFg.blue  = 0.0;
@@ -79,8 +86,8 @@ bool ewol::Button::CalculateMinSize(void)
 	int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
-	m_minSize.x = 16+minWidth;
-	m_minSize.y = 16+minHeight;
+	m_minSize.x = m_padding.x*2 + minWidth;
+	m_minSize.y = m_padding.y*2 + minHeight;
 	MarkToReedraw();
 	return true;
 }
@@ -108,17 +115,13 @@ void ewol::Button::OnRegenerateDisplay(void)
 		// clean the object list ...
 		ClearOObjectList();
 		
-		// TODO later : Add this in the basic element of the widget ...
-		int32_t borderSize = 2;
-		int32_t paddingSize = 3;
-		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
-		int32_t tmpOriginX = (m_size.x - tmpSizeX) / 2;
-		int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
+		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
+		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = (m_size.x - tmpSizeX) / 2 + borderSize + 2*paddingSize;
-		int32_t tmpTextOriginY = (m_size.y - tmpSizeY) / 2 + borderSize + 2*paddingSize;
+		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + m_padding.x;
+		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + m_padding.y;
 		
 		if (true==m_userFillX) {
 			tmpSizeX = m_size.x;
@@ -128,10 +131,10 @@ void ewol::Button::OnRegenerateDisplay(void)
 			tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 		}
-		tmpOriginX += paddingSize;
-		tmpOriginY += paddingSize;
-		tmpSizeX -= 2*paddingSize;
-		tmpSizeY -= 2*paddingSize;
+		tmpOriginX += m_padding.x;
+		tmpOriginY += m_padding.y;
+		tmpSizeX -= 2*m_padding.x;
+		tmpSizeY -= 2*m_padding.y;
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		/*
@@ -143,19 +146,19 @@ void ewol::Button::OnRegenerateDisplay(void)
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
 		clipping_ts drawClipping;
-		drawClipping.x = paddingSize;
-		drawClipping.y = paddingSize;
-		drawClipping.w = m_size.x - borderSize - 2*paddingSize;
-		drawClipping.h = m_size.y - borderSize - 2*paddingSize;
+		drawClipping.x = m_padding.x;
+		drawClipping.y = m_padding.y;
+		drawClipping.w = m_size.x - 2*m_padding.x;
+		drawClipping.h = m_size.y - 2*m_padding.y;
 		tmpText->Text(textPos, drawClipping, m_label);
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		tmpOObjects->SetColor(m_textColorBg);
+		tmpOriginX -= m_padding.x/2;
+		tmpOriginY -= m_padding.y/2;
+		tmpSizeX += m_padding.x/1;
+		tmpSizeY += m_padding.y/1;
 		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		/*
-		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, borderSize);
-		*/
 		AddOObject(tmpOObjects, "BouttonDecoration");
 		
 		AddOObject(tmpText, "BouttonText");

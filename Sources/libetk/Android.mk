@@ -15,7 +15,8 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -Wno-write-strings \
                 -DDATA_IN_APK \
-                -DETK_DEBUG_LEVEL=3
+                -DETK_DEBUG_LEVEL=3 \
+                -std=c++0x
 
 
 

@@ -19,6 +19,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE \
                 -DDATA_IN_APK \
+                -std=c++0x
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

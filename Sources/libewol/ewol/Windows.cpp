@@ -144,8 +144,16 @@ void ewol::Windows::SysDraw(void)
 	glTranslatef(0, -m_size.y, -5);
 #endif
 	//http://www.khronos.org/opengles/documentation/opengles1_0/html/glBlendFunc.html
+	
+	glEnable(GL_POLYGON_SMOOTH);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
+	
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glShadeModel(GL_POLYGON_SMOOTH);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
 	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 

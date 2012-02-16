@@ -28,6 +28,7 @@
 #include <etk/UString.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
+#include <ewol/ewol.h>
 
 #include <ewol/Texture.h>
 #include <ewol/base/MainThread.h>
@@ -35,6 +36,14 @@
 ewol::Windows* gui_uniqueWindows = NULL;
 etkFloat_t     gui_width = 320;
 etkFloat_t     gui_height = 480;
+
+void ewol::RmPopUp(void)
+{
+	if (NULL != gui_uniqueWindows) {
+		gui_uniqueWindows->PopUpWidgetPop();
+	}
+}
+
 
 void EWOL_NativeResize(int w, int h )
 {

@@ -44,6 +44,8 @@ extern "C" {
 #define __class__	"ewol::FileChooser(FolderList)"
 
 
+#include <ewol/ewol.h>
+
 void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 {
 	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
@@ -514,6 +516,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 	if (ewolEventFileChooserEntryFolder == generateEventId) {
 		//==> change the folder name
 		// TODO : Change the folder, if it exit ...
+		return true;
 	} else if (ewolEventFileChooserEntryFile == generateEventId) {
 		//==> change the file name
 		ewol::Entry * tmpWidget = (ewol::Entry*)ewol::widgetManager::Get(m_widgetCurrentFileNameId);
@@ -521,9 +524,12 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 			m_file = tmpWidget->GetValue();
 		}
 		// TODO : Remove file selection
+		return true;
 	} else if (ewolEventFileChooserCancel == generateEventId) {
 		//==> Auto remove ...
-		// TODO : ...
+		bool tmppp = GenEventInputExternal(generateEventId, x, y);
+		ewol::RmPopUp();
+		return tmppp;
 	} else if (ewolEventFileChooserHidenFileChange == generateEventId) {
 		// regenerate the display ...
 		UpdateCurrentFolder();
@@ -558,13 +564,16 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		FileChooserFileList * myListFile     = (FileChooserFileList *)ewol::widgetManager::Get(m_widgetListFileId);
 		etk::UString file = myListFile->GetSelectedLine();
 		SetFileName(file);
+		GenEventInputExternal(generateEventId, x, y);
 	} else if (ewolEventFileChooserValidateFile == generateEventId) {
 		// select the File ==> generate a validate
-		return GenEventInputExternal(ewolEventFileChooserValidate, x, y);;
+		bool tmppp = GenEventInputExternal(ewolEventFileChooserValidate, x, y);
+		ewol::RmPopUp();
+		return tmppp;
 	} else if (ewolEventFileChooserValidate == generateEventId && false == m_hasSelectedFile) {
 		return false;
 	}
-	return GenEventInputExternal(generateEventId, x, y);
+	return false;
 };
 
 
