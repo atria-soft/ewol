@@ -8,7 +8,7 @@ LOCAL_STATIC_LIBRARIES := etk libfreetype tinyxml libzip libpng
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm
+LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11
 
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
@@ -29,7 +29,7 @@ LOCAL_SRC_FILES := \
 #for freetype : https://github.com/cdave1/freetype2-android
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGL -lGLU -lz -lX11 -lXxf86vm
+LOCAL_LDLIBS := -lGL -lGLU -lz -lX11
 
 
 include $(BUILD_STATIC_LIBRARY)

@@ -36,12 +36,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glut.h>
 #include <GL/glx.h>
 #include <X11/Xatom.h>
-#include <X11/extensions/xf86vmode.h>
 #include <sys/times.h>
 
 
@@ -158,20 +154,15 @@ bool CreateX11Context(void)
 		EWOL_INFO("Display opened.");
 	}
 	int Xscreen = DefaultScreen(m_display);
-	{
-		int32_t vmMajor, vmMinor;
-		XF86VidModeQueryVersion(m_display, &vmMajor, &vmMinor);
-		EWOL_INFO("XF86 VideoMode extension version " << vmMajor << "." << vmMinor);
-	}
 	// get an appropriate visual
 	m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
 	if (NULL == m_visual) {
 		m_visual = glXChooseVisual(m_display, Xscreen, attrListSgl);
 		m_doubleBuffered = false;
-		EWOL_INFO("XF86 singlebuffered rendering will be used, no doublebuffering available");
+		EWOL_INFO("GL-X singlebuffered rendering will be used, no doublebuffering available");
 	} else {
 		m_doubleBuffered = true;
-		EWOL_INFO("XF86 doublebuffered rendering available");
+		EWOL_INFO("GL-X doublebuffered rendering available");
 	}
 	{
 		int32_t glxMajor, glxMinor;
