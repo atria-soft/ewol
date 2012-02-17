@@ -1,5 +1,7 @@
 Welcome in the developement file TODO list ...
 
+Retirer les singleton ==> incompatible avec le sytem courant de multithreading ...
+
 Basic feature : 
 	- Clipboard management
 	- Shortcut

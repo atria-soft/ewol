@@ -63,6 +63,8 @@ void ewol::widgetManager::UnInit(void)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	
+	ewol::widgetManager::RemoveAllMarkWidget();
+	
 	EWOL_INFO(" Remove missing user widget");
 	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
 		if (m_widgetList[iii].widgetPointer!=NULL) {
@@ -322,7 +324,7 @@ void ewol::widgetManager::RemoveAllMarkWidget(void)
 	pthread_mutex_unlock(&localMutex);
 	
 	if (m_widgetDeletedList.Size() != 0 ) {
-		EWOL_CRITICAL("Memory leak ==> not all the widget are auto-removed");
+		EWOL_CRITICAL("Memory leak ==> not all the widget are auto-removed nb = " << m_widgetDeletedList.Size());
 		// in every case clean the list ...
 		m_widgetDeletedList.Clear();
 	}
