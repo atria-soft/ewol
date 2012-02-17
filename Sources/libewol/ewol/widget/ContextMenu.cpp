@@ -24,8 +24,9 @@
 
 
 
-#include <ewol/widget/ContextMenu.h>
 #include <ewol/ewol.h>
+#include <ewol/WidgetManager.h>
+#include <ewol/widget/ContextMenu.h>
 
 #undef __class__
 #define __class__	"ewol::ContextMenu"
@@ -51,7 +52,8 @@ ewol::ContextMenu::ContextMenu(void)
 	m_colorBorder.blue  = 0.0;
 	m_colorBorder.alpha = 0.50;
 	
-	m_arrowPos = {0,0};
+	m_arrowPos.x = 0;
+	m_arrowPos.y = 0;
 	m_arrawBorder = ewol::CONTEXT_MENU_MARK_TOP;
 }
 
@@ -99,7 +101,32 @@ bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availla
 				subWidgetOrigin.y = (int32_t)(m_size.y - m_origin.y - subWidgetSize.y)/2 + m_origin.y;
 				break;
 		}
+		// set the widget position at the border of the screen
+		subWidgetOrigin.x -= m_padding.x*2;
+		subWidgetOrigin.x  = etk_max(0, subWidgetOrigin.x);
+		subWidgetOrigin.x += m_padding.x*2;
+		subWidgetOrigin.x  = (int32_t)subWidgetOrigin.x;
 		
+		subWidgetOrigin.y -= m_padding.y*2;
+		subWidgetOrigin.y  = etk_max(0, subWidgetOrigin.y);
+		subWidgetOrigin.y += m_padding.y*2;
+		subWidgetOrigin.y  = (int32_t)subWidgetOrigin.y;
+		switch (m_arrawBorder)
+		{
+			default:
+			case ewol::CONTEXT_MENU_MARK_TOP:
+			case ewol::CONTEXT_MENU_MARK_BOTTOM:
+				if (m_arrowPos.x <= m_offset ) {
+					subWidgetOrigin.x = m_arrowPos.x+m_padding.x;
+				}
+				break;
+			case ewol::CONTEXT_MENU_MARK_RIGHT:
+			case ewol::CONTEXT_MENU_MARK_LEFT:
+				if (m_arrowPos.y <= m_offset ) {
+					subWidgetOrigin.y = m_arrowPos.y+m_padding.y;
+				}
+				break;
+		}
 		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
@@ -155,7 +182,7 @@ void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 void ewol::ContextMenu::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
-		delete(m_subWidget);
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
 		m_subWidget = NULL;
 	}
 }
@@ -184,10 +211,27 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
-		BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
-		int32_t laking = m_offset - m_padding.y;
-		BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
-		BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y+laking);
+		switch (m_arrawBorder)
+		{
+			case ewol::CONTEXT_MENU_MARK_TOP:
+				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
+				if (m_arrowPos.x <= tmpOrigin.x ) {
+					int32_t laking = m_offset - m_padding.y;
+					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
+					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y+laking);
+				} else {
+					int32_t laking = m_offset - m_padding.y;
+					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
+					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y+laking);
+				}
+				break;
+			default:
+			case ewol::CONTEXT_MENU_MARK_BOTTOM:
+			case ewol::CONTEXT_MENU_MARK_RIGHT:
+			case ewol::CONTEXT_MENU_MARK_LEFT:
+				EWOL_TODO("later");
+				break;
+		}
 		
 		BGOObjects->Rectangle(tmpOrigin.x-m_padding.x, tmpOrigin.y - m_padding.y, tmpSize.x + m_padding.x*2, tmpSize.y + m_padding.y*2);
 		// set the area in white ...
@@ -220,7 +264,7 @@ bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEven
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_UP
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
-					ewol::RmPopUp();
+					ewol::RmPopUp(GetWidgetId());
 				}
 			}
 		}

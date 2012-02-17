@@ -44,11 +44,14 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
 	
-	m_padding.x = 4;
+	m_alignement = ewol::TEXT_ALIGN_CENTER;
+	
 	#ifdef __PLATFORM__Android
 		m_padding.y = 12;
+		m_padding.x = 12;
 	#else
 		m_padding.y = 4;
+		m_padding.x = 4;
 	#endif
 	
 	m_textColorFg.red   = 0.0;
@@ -81,6 +84,11 @@ ewol::Button::~Button(void)
 	
 }
 
+void ewol::Button::SetPadding(coord2D_ts newPadding)
+{
+	m_padding = newPadding;
+}
+
 bool ewol::Button::CalculateMinSize(void)
 {
 	int32_t fontId = GetDefaultFontId();
@@ -102,6 +110,13 @@ void ewol::Button::SetValue(bool val)
 {
 	
 }
+
+void ewol::Button::SetAlignement(textAlignement_te typeAlign)
+{
+	m_alignement = typeAlign;
+	MarkToReedraw();
+}
+
 
 bool ewol::Button::GetValue(void)
 {
@@ -126,6 +141,9 @@ void ewol::Button::OnRegenerateDisplay(void)
 		if (true==m_userFillX) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
+			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
+				tmpTextOriginX = m_padding.x;
+			}
 		}
 		if (true==m_userFillY) {
 			tmpSizeY = m_size.y;
@@ -183,7 +201,7 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 }
 
 
-bool ewol::Button::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    UTF8_data != NULL

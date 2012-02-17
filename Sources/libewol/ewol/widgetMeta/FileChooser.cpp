@@ -528,7 +528,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 	} else if (ewolEventFileChooserCancel == generateEventId) {
 		//==> Auto remove ...
 		bool tmppp = GenEventInputExternal(generateEventId, x, y);
-		ewol::RmPopUp();
+		ewol::RmPopUp(GetWidgetId());
 		return tmppp;
 	} else if (ewolEventFileChooserHidenFileChange == generateEventId) {
 		// regenerate the display ...
@@ -568,7 +568,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 	} else if (ewolEventFileChooserValidateFile == generateEventId) {
 		// select the File ==> generate a validate
 		bool tmppp = GenEventInputExternal(ewolEventFileChooserValidate, x, y);
-		ewol::RmPopUp();
+		ewol::RmPopUp(GetWidgetId());
 		return tmppp;
 	} else if (ewolEventFileChooserValidate == generateEventId && false == m_hasSelectedFile) {
 		return false;

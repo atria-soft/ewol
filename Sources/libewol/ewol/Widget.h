@@ -133,6 +133,8 @@ namespace ewol {
 			ewol::Widget *  m_parrent;   //!< parrent of the current widget (if NULL ==> this is the main node(root))
 		public:
 			void SetParrent(ewol::Widget * newParrent) { m_parrent = newParrent; };
+			void UnlinkParrent(void) { if (NULL != m_parrent) { m_parrent->removedChild(this); m_parrent=NULL; } };
+			virtual void removedChild(ewol::Widget * removedChild) {  };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:

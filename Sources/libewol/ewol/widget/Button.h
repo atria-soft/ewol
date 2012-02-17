@@ -34,6 +34,10 @@ extern const char * const ewolEventButtonEnter;
 extern const char * const ewolEventButtonLeave;
 
 namespace ewol {
+	typedef enum {
+		TEXT_ALIGN_LEFT,
+		TEXT_ALIGN_CENTER,
+	} textAlignement_te;
 	class Button :public ewol::Widget
 	{
 		public:
@@ -43,19 +47,22 @@ namespace ewol {
 			virtual ~Button(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
-			etk::UString    GetLabel(void) {return m_label;};
+			etk::UString   GetLabel(void) {return m_label;};
 			void           SetValue(bool val);
 			bool           GetValue(void);
+			void           SetAlignement(textAlignement_te typeAlign);
+			void           SetPadding(coord2D_ts newPadding);
 		private:
-			coord2D_ts     m_padding;
-			etk::UString   m_label;
-			color_ts       m_textColorFg;  //!< Text color
-			color_ts       m_textColorBg;  //!< Background color
+			textAlignement_te  m_alignement;
+			coord2D_ts         m_padding;
+			etk::UString       m_label;
+			color_ts           m_textColorFg;  //!< Text color
+			color_ts           m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
-			virtual bool OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]);
+			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE]);
 	};
 };
 

@@ -37,13 +37,19 @@ ewol::Windows* gui_uniqueWindows = NULL;
 etkFloat_t     gui_width = 320;
 etkFloat_t     gui_height = 480;
 
-void ewol::RmPopUp(void)
+void ewol::RmPopUp(int32_t widgetID)
 {
 	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->PopUpWidgetPop();
+		gui_uniqueWindows->PopUpWidgetPop(widgetID);
 	}
 }
 
+void ewol::PopUpWidgetPush(ewol::Widget * tmpWidget)
+{
+	if (NULL != gui_uniqueWindows && NULL != tmpWidget) {
+		gui_uniqueWindows->PopUpWidgetPush(tmpWidget);
+	}
+}
 
 void EWOL_NativeResize(int w, int h )
 {

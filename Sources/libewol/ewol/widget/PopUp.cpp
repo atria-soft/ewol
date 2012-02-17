@@ -25,6 +25,7 @@
 
 
 #include <ewol/widget/PopUp.h>
+#include <ewol/WidgetManager.h>
 
 #undef __class__
 #define __class__	"ewol::PopUp"
@@ -136,7 +137,7 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 void ewol::PopUp::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
-		delete(m_subWidget);
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
 		m_subWidget = NULL;
 	}
 }

@@ -42,7 +42,8 @@ namespace ewol {
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
-	void RmPopUp(void);
+	void PopUpWidgetPush(ewol::Widget * tmpWidget);
+	void RmPopUp(int32_t widgetID);
 	int32_t      CmdLineNb(void);
 	etk::UString CmdLineGet(int32_t id);
 	

@@ -654,71 +654,95 @@ int32_t ewol::DrawText(int32_t                        fontID,
 					// update texture start X Pos
 					tuB -= addElement;
 				}
-				/* Bitmap position
-				 *   0------1
-				 *   |      |
-				 *   |      |
-				 *   3------2
-				 */
-				coord2D_ts bitmapDrawPos[4];
-				bitmapDrawPos[0].x = dxA;
-				bitmapDrawPos[1].x = dxB;
-				bitmapDrawPos[2].x = dxB;
-				bitmapDrawPos[3].x = dxA;
-				
-				bitmapDrawPos[0].y = dyC;
-				bitmapDrawPos[1].y = dyC;
-				bitmapDrawPos[2].y = dyD;
-				bitmapDrawPos[3].y = dyD;
-				/* texture Position : 
-				 *   0------1
-				 *   |      |
-				 *   |      |
-				 *   3------2
-				 */
-				texCoord_ts texturePos[4];
-				texturePos[0].u = tuA;
-				texturePos[1].u = tuB;
-				texturePos[2].u = tuB;
-				texturePos[3].u = tuA;
-				
-				texturePos[0].v = tvC;
-				texturePos[1].v = tvC;
-				texturePos[2].v = tvD;
-				texturePos[3].v = tvD;
-				
-				// NOTE : Android does not support the Quads elements ...
-				/* Step 1 : 
-				 *   ********     
-				 *     ******     
-				 *       ****     
-				 *         **     
-				 *                
-				 */
-				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[1]);
-				coordTex.PushBack(texturePos[2]);
-				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[1]);
-				coord.PushBack(bitmapDrawPos[2]);
-				
-				/* Step 2 : 
-				 *              
-				 *   **         
-				 *   ****       
-				 *   ******     
-				 *   ********   
-				 */
-				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[2]);
-				coordTex.PushBack(texturePos[3]);
-				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[2]);
-				coord.PushBack(bitmapDrawPos[3]);
+				etkFloat_t TexSizeY = tvD - tvC;
+				if (dyC < drawClipping.y) {
+					// clip display
+					etkFloat_t drawSize = drawClipping.y - dyC;
+					// Update element start display
+					dyC = drawClipping.y;
+					etkFloat_t addElement = TexSizeY * drawSize / listOfElement[charIndex].size.y;
+					// update texture start X Pos
+					tvC += addElement;
+				}
+				if (dyD > drawClipping.y + drawClipping.h) {
+					// clip display
+					etkFloat_t drawSize = dyD - (drawClipping.y + drawClipping.h);
+					// Update element start display
+					dyD = drawClipping.y + drawClipping.h;
+					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.y;
+					// update texture start X Pos
+					tvD -= addElement;
+				}
+				if(    dxB <= dxA
+				    || dyD <= dyC) {
+					// nothing to do ...
+				} else {
+					/* Bitmap position
+					 *   0------1
+					 *   |      |
+					 *   |      |
+					 *   3------2
+					 */
+					coord2D_ts bitmapDrawPos[4];
+					bitmapDrawPos[0].x = dxA;
+					bitmapDrawPos[1].x = dxB;
+					bitmapDrawPos[2].x = dxB;
+					bitmapDrawPos[3].x = dxA;
+					
+					bitmapDrawPos[0].y = dyC;
+					bitmapDrawPos[1].y = dyC;
+					bitmapDrawPos[2].y = dyD;
+					bitmapDrawPos[3].y = dyD;
+					/* texture Position : 
+					 *   0------1
+					 *   |      |
+					 *   |      |
+					 *   3------2
+					 */
+					texCoord_ts texturePos[4];
+					texturePos[0].u = tuA;
+					texturePos[1].u = tuB;
+					texturePos[2].u = tuB;
+					texturePos[3].u = tuA;
+					
+					texturePos[0].v = tvC;
+					texturePos[1].v = tvC;
+					texturePos[2].v = tvD;
+					texturePos[3].v = tvD;
+					
+					// NOTE : Android does not support the Quads elements ...
+					/* Step 1 : 
+					 *   ********     
+					 *     ******     
+					 *       ****     
+					 *         **     
+					 *                
+					 */
+					// set texture coordonates :
+					coordTex.PushBack(texturePos[0]);
+					coordTex.PushBack(texturePos[1]);
+					coordTex.PushBack(texturePos[2]);
+					// set display positions :
+					coord.PushBack(bitmapDrawPos[0]);
+					coord.PushBack(bitmapDrawPos[1]);
+					coord.PushBack(bitmapDrawPos[2]);
+					
+					/* Step 2 : 
+					 *              
+					 *   **         
+					 *   ****       
+					 *   ******     
+					 *   ********   
+					 */
+					// set texture coordonates :
+					coordTex.PushBack(texturePos[0]);
+					coordTex.PushBack(texturePos[2]);
+					coordTex.PushBack(texturePos[3]);
+					// set display positions :
+					coord.PushBack(bitmapDrawPos[0]);
+					coord.PushBack(bitmapDrawPos[2]);
+					coord.PushBack(bitmapDrawPos[3]);
+				}
 			}
 		}
 		posDrawX += listOfElement[charIndex].advance;

@@ -109,7 +109,7 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 		}
 	#else
 		if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			EWOL_INFO("mouse-event GDK_SCROLL_UP");
+			//EWOL_INFO("mouse-event GDK_SCROLL_UP");
 			m_originScrooled.y -= m_pixelScrolling;
 			if (m_originScrooled.y < 0) {
 				m_originScrooled.y = 0;
@@ -117,7 +117,7 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 			MarkToReedraw();
 			return true;
 		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			EWOL_INFO("mouse-event GDK_SCROLL_DOWN");
+			//EWOL_INFO("mouse-event GDK_SCROLL_DOWN");
 			m_originScrooled.y += m_pixelScrolling;
 			if (m_maxSize.y < m_originScrooled.y) {
 				m_originScrooled.y = m_maxSize.y;

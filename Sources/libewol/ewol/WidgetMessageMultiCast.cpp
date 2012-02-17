@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewol/WidgetMessageMulticast.cpp
+ * @file ewol/WidgetMessageMultiCast.cpp
  * @brief basic ewol Widget Message Multi-cast (Sources)
  * @author Edouard DUPIN
  * @date 31/01/2012

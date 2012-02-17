@@ -72,6 +72,7 @@ ewol::Keyboard::~Keyboard(void)
                                                          (widget)->SetExpendX(true); \
                                                          (widget)->SetFillX(true); \
                                                          (widget)->SetCanHaveFocus(false); \
+                                                         (widget)->SetPadding(newPadding); \
                                                          (upperWidget)->SubWidgetAdd((widget)); \
                                                      } while (0)
 
@@ -83,6 +84,10 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
 	ewol::Button * myButton = NULL;
+	
+	coord2D_ts newPadding;
+	newPadding.y = 20;
+	newPadding.x = 12;
 	
 	mySizerVert = new ewol::SizerVert();
 		m_subWidget = mySizerVert;

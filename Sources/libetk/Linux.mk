@@ -15,8 +15,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
-                -std=c++0x
+                -DVERSION_BUILD_TIME="\"pasd_heure\""
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

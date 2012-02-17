@@ -77,7 +77,6 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = 0;
-		int32_t tmpOriginYBG = 0;
 		/*
 		if (true==m_userFillX) {
 			tmpOriginX = 0;
@@ -107,45 +106,47 @@ void ewol::List::OnRegenerateDisplay(void)
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		
-		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY);
+		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
 		
-		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY) - 1;
+		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
+		
+		if (startRaw >= nbRaw-1 ) {
+			startRaw = nbRaw - 1;
+		}
 		if (startRaw<0) {
 			startRaw = 0;
 		}
+		// Calculate the real position ...
+		tmpOriginY = -m_originScrooled.y + startRaw*(minHeight + 2*m_paddingSizeY);
+		
 		// We display only compleate lines ...
-		EWOL_VERBOSE("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws");
+		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << " ==> " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
 		
 		clipping_ts drawClipping;
 		drawClipping.x = 0;
 		drawClipping.y = 0;
 		drawClipping.w = m_size.x - (2*m_paddingSizeX);
 		drawClipping.h = m_size.y;
-			
+		
 		for(uint32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite;
 			color_ts fg;
 			color_ts bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
 			BGOObjects->SetColor(bg);
-			BGOObjects->Rectangle(0, tmpOriginYBG, m_size.x, minHeight+2*m_paddingSizeY);
-			tmpOriginYBG += minHeight+2*m_paddingSizeY;
+			BGOObjects->Rectangle(0, tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);
 			
 			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
 			
 			coord2D_ts textPos;
 			textPos.x = tmpOriginX;
-			textPos.y = tmpOriginY;
+			textPos.y = tmpOriginY + m_paddingSizeY;
 			tmpText->Text(textPos, drawClipping, myTextToWrite);
 			
 			AddOObject(tmpText);
 			tmpOriginY += minHeight + 2* m_paddingSizeY;
 		}
 		AddOObject(BGOObjects, "ListDeco", 0);
-		//ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		//tmpText->Text(tmpOriginX, tmpOriginY, "jhgjhg");
-	
-		//AddOObject(tmpText, "ListText");
 		
 		// call the herited class...
 		WidgetScrooled::OnRegenerateDisplay();

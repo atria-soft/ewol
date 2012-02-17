@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewol/WidgetMessageMulticast.h
+ * @file ewol/WidgetMessageMultiCast.h
  * @brief basic ewol Widget Message Multi-cast (Header)
  * @author Edouard DUPIN
  * @date 31/01/2012

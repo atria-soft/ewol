@@ -68,13 +68,13 @@ namespace ewol {
 				m_hasDecoration = true;
 			}
 		private:
-			ewol::Widget*    m_subWidget;
-			ewol::Widget*    m_popUpWidget;
-			ewol::Keyboard*  m_keyBoardwidget;
+			ewol::Widget*                   m_subWidget;
+			etk::VectorType<ewol::Widget*>  m_popUpWidgetList;
+			ewol::Keyboard*                 m_keyBoardwidget;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
-			void PopUpWidgetPop(void);
+			void PopUpWidgetPop(int32_t popUpId);
 		protected:
 			virtual bool   OnDraw(void);
 		public:

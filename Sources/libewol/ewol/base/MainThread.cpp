@@ -36,7 +36,7 @@
 
 static ewol::threadMsg::threadMsg_ts    androidJniMsg;
 static pthread_t                        androidJniThread;
-//static pthread_attr_t                   androidJniThreadAttr;
+static pthread_attr_t                   androidJniThreadAttr;
 
 enum {
 	THREAD_INIT,
@@ -98,6 +98,22 @@ static void* BaseAppEntry(void* param)
 	
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
+	
+
+	/*
+		struct sched_param pr;
+		int ret = 9;
+		int policy;
+		pthread_getschedparam(pthread_self(), &policy, &pr);
+		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result here
+		policy = SCHED_RR;
+		pr.sched_priority = 19;
+		pthread_setschedparam(pthread_self(), policy, &pr);
+		sleep(1);
+		pthread_getschedparam(pthread_self(), &policy, &pr);
+		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result Set
+	*/
+
 	ewol::widgetManager::Init();
 	ewol::texture::Init();
 	ewol::theme::Init();
@@ -230,7 +246,18 @@ void EWOL_SystemStart(void)
 		ewol::threadMsg::Init(androidJniMsg);
 		// init the thread :
 		EWOL_DEBUG("Create the thread");
-		pthread_create(&androidJniThread, NULL, BaseAppEntry, NULL);
+		pthread_attr_init(&androidJniThreadAttr);
+		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE)
+		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
+		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
+		// try to set prio : 
+		struct sched_param pr;
+		pr.sched_priority = 10;
+		pthread_attr_setschedpolicy(&androidJniThreadAttr, SCHED_RR);
+		pthread_attr_setschedparam(&androidJniThreadAttr, &pr);
+		
+		pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
+		//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);

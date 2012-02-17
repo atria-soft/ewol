@@ -24,6 +24,7 @@
 
 
 #include <ewol/widget/SizerVert.h>
+#include <ewol/WidgetManager.h>
 
 
 #undef __class__
@@ -167,7 +168,7 @@ void ewol::SizerVert::LockExpendContamination(bool lockExpend)
 void ewol::SizerVert::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		delete(m_subWidget[iii]);
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[iii]);
 		m_subWidget[iii] = NULL;
 	}
 	m_subWidget.Clear();
@@ -191,7 +192,7 @@ void ewol::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (newWidget == m_subWidget[iii]) {
-			delete(m_subWidget[iii]);
+			ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[iii]);
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 			return;

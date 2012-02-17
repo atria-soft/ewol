@@ -37,6 +37,7 @@ namespace ewol {
 		public : 
 			int32_t        m_localId;
 			int32_t        m_parentId;
+			int32_t        m_widgetId;
 			etk::UString   m_label;
 			etk::UString   m_image;
 			const char *   m_generateEvent;
@@ -55,11 +56,14 @@ namespace ewol {
 		private:
 			etk::VectorType<MenuElement*>  m_listElement;
 			int32_t                        m_staticId;
+			int32_t                        m_popUpId;
 		public:
 			void           Clear(void);
 			int32_t        AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
 			int32_t        Add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
 			void           AddSpacer(void);
+			
+			virtual bool   OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y);
 	};
 };
 
