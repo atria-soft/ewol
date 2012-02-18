@@ -83,6 +83,19 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
 		if (0 < messageData.nbMessages[iii]) {
 			// find a message : 
+			if (false == messageData.listOfMessages[iii][0].isActive) {
+				EWOL_ERROR( "an error occured ==> bad case ...");
+				data.isActive = false;
+				data.type = 0;
+				data.data[0] = '\0';
+			} else {
+				data = messageData.listOfMessages[iii][0];
+				messageData.listOfMessages[iii][0].isActive = false;
+			}
+			memmove(&messageData.listOfMessages[iii][0], &messageData.listOfMessages[iii][1], (NUMBER_OF_ELEMENT_IN_THE_FIFO-1)*sizeof(ewol::threadMsg::threadMsgContent_ts) );
+			
+			messageData.listOfMessages[iii][NUMBER_OF_ELEMENT_IN_THE_FIFO-1].isActive = false;
+			/*
 			for (int32_t jjj=0; NUMBER_OF_ELEMENT_IN_THE_FIFO>jjj; jjj++) {
 				if (true == messageData.listOfMessages[iii][jjj].isActive) {
 					// copy the data : 
@@ -91,6 +104,7 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 					messageData.listOfMessages[iii][jjj].isActive = false;
 				}
 			}
+			*/
 			// decrement the number of message : 
 			messageData.nbMessages[iii]--;
 			if (0>messageData.nbMessages[iii]) {
@@ -166,4 +180,7 @@ int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
 	return nbMessage;
 }
 
-
+void ewol::threadMsg::SendDisplayDone(threadMsg_ts& messageData)
+{
+	
+}

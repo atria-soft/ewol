@@ -53,6 +53,7 @@ namespace ewol {
 			bool                isInit;
 			pthread_mutex_t     mutex;
 			pthread_cond_t      condition;
+			//etk::VectorType<threadMsgContent_ts>     
 			threadMsgContent_ts listOfMessages[MSG_PRIO_NUMBER][NUMBER_OF_ELEMENT_IN_THE_FIFO];
 			int32_t             nbMessages[MSG_PRIO_NUMBER];
 			bool                displayHasDone;
@@ -63,6 +64,7 @@ namespace ewol {
 		bool WaitMessage(threadMsg_ts& messageData, threadMsgContent_ts &data);
 		int32_t WaitingMessage(threadMsg_ts& messageData);
 		bool SendMessage(threadMsg_ts& messageData, uint32_t type, msgPriority_te prio = MSG_PRIO_NONE, void * data = NULL, uint32_t size = 0);
+		void SendDisplayDone(threadMsg_ts& messageData);
 	};
 };
 

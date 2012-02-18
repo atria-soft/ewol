@@ -336,6 +336,7 @@ void EWOL_ThreadEventShow(void)
 
 void EWOL_ThreadEventHasJustDisplay(void)
 {
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_JUST_DISPLAY, ewol::threadMsg::MSG_PRIO_REAL_TIME);
+	ewol::threadMsg::SendDisplayDone(androidJniMsg);
+	//ewol::threadMsg::SendMessage(androidJniMsg, THREAD_JUST_DISPLAY, ewol::threadMsg::MSG_PRIO_REAL_TIME);
 }
 

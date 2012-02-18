@@ -49,7 +49,6 @@ namespace guiAbstraction
 	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
 };
 
-int64_t GetCurrentTime(void);
 
 //!< must be define in CPP by the application ...
 void APP_Init(void);

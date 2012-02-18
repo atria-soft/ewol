@@ -57,6 +57,7 @@ namespace ewol {
 	bool IsSetInsert(void);
 };
 
+int64_t GetCurrentTime(void);
 
 
 #endif
