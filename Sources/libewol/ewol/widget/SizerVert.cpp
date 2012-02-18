@@ -33,8 +33,6 @@
 
 ewol::SizerVert::SizerVert(void)
 {
-	GenericDrawDisable();
-	SpecificDrawEnable();
 	// set contamination enable
 	LockExpendContamination();
 }

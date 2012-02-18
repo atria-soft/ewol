@@ -146,7 +146,7 @@ void ewol::List::OnRegenerateDisplay(void)
 			AddOObject(tmpText);
 			tmpOriginY += minHeight + 2* m_paddingSizeY;
 		}
-		AddOObject(BGOObjects, "ListDeco", 0);
+		AddOObject(BGOObjects, 0);
 		
 		// call the herited class...
 		WidgetScrooled::OnRegenerateDisplay();

@@ -28,6 +28,7 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventKeyboardHide;
 
@@ -37,7 +38,7 @@ namespace ewol {
 		KEYBOARD_MODE_CODE,
 	} keyboardMode_te;
 	
-	class Keyboard : public ewol::Widget
+	class Keyboard : public ewol::Drawable
 	{
 		public:
 			Keyboard(void);

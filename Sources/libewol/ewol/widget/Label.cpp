@@ -114,7 +114,7 @@ void ewol::Label::OnRegenerateDisplay(void)
 		drawClipping.h = m_size.y - 2*paddingSize;
 		tmpText->Text(textPos, drawClipping, m_label);
 		
-		AddOObject(tmpText, "LabelText");
+		AddOObject(tmpText);
 	}
 }
 

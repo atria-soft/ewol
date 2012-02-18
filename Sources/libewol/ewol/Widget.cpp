@@ -93,8 +93,6 @@ ewol::Widget::Widget(void)
 	SetExpendY();
 	SetFillX();
 	SetFillY();
-	m_genericDraw = true;
-	m_specificDraw = false;
 	ewol::widgetManager::Add(this);
 	m_canFocus = false;
 	m_hasFocus = false;
@@ -246,70 +244,6 @@ bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId, c
 	}
 	EWOL_ERROR("Try to add extern event with Unknow EventID : \"" << eventName << "\"" );
 	return false;
-}
-
-
-
-
-void ewol::Widget::AddOObject(ewol::OObject* newObject, etk::UString name, int32_t pos)
-{
-	if (NULL == newObject) {
-		EWOL_ERROR("Try to add an empty object in the Widget generic display system : name=\"" << name << "\"");
-		return;
-	}
-	newObject->SetName(name);
-	//EWOL_INFO("UPDATE AT size : (" << m_size.x << "," << m_size.y << ")");
-	newObject->UpdateSize(m_size.x, m_size.y);
-	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," << m_origin.y << ")");
-	newObject->UpdateOrigin(m_origin.x, m_origin.y);
-	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
-		m_listOObject[m_currentCreateId].PushBack(newObject);
-	} else {
-		m_listOObject[m_currentCreateId].Insert(pos, newObject);
-	}
-	m_needFlipFlop = true;
-}
-
-
-ewol::OObject* ewol::Widget::GetOObject(etk::UString name)
-{
-	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
-		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {
-			return m_listOObject[m_currentCreateId][iii];
-		}
-	}
-	return NULL;
-}
-
-void ewol::Widget::RmOObjectElem(etk::UString name)
-{
-	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
-		if (m_listOObject[m_currentCreateId][iii]->GetName() == name) {
-			delete(m_listOObject[m_currentCreateId][iii]);
-			m_listOObject[m_currentCreateId][iii] = NULL;
-			m_listOObject[m_currentCreateId].Erase(iii);
-			return;
-		}
-	}
-}
-
-void ewol::Widget::ClearOObjectList(void)
-{
-	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
-		delete(m_listOObject[m_currentCreateId][iii]);
-		m_listOObject[m_currentCreateId][iii] = NULL;
-	}
-	m_listOObject[m_currentCreateId].Clear();
-}
-
-bool ewol::Widget::GenericDraw(void)
-{
-	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_listOObject[m_currentDrawId][iii]) {
-			m_listOObject[m_currentDrawId][iii]->Draw();
-		}
-	}
-	return true;
 }
 
 

@@ -53,7 +53,6 @@ ewol::Keyboard::Keyboard(void)
 {
 	// set event that can propagate outside ....
 	AddEventId(ewolEventKeyboardHide);
-	SpecificDrawEnable();
 	
 	m_mode = KEYBOARD_MODE_TEXT;
 	m_isHide = true;
@@ -183,7 +182,7 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 {
 	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << data << "\"" );
 	if (ewolEventKeyEvent == generateEventId) {
-		ewol::Button * bt     = (ewol::Button *)ewol::widgetManager::Get(widgetID);
+		ewol::Button * bt     = reinterpret_cast<ewol::Button *>(ewol::widgetManager::Get(widgetID));
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
 		etk::UString data = bt->GetLabel();
 		if (data == "DEL") {
@@ -292,7 +291,7 @@ void ewol::Keyboard::OnRegenerateDisplay(void)
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
 		BGOObjects->SetColor(mycolor);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
-		AddOObject(BGOObjects, "ListDeco");
+		AddOObject(BGOObjects);
 	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();

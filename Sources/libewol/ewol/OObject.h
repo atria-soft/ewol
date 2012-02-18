@@ -47,32 +47,12 @@ namespace ewol {
 			virtual ~OObject(void);
 		public:
 			virtual void Draw(void) = 0;
-			void SetName(etk::UString & name);
-			void SetName(const char * name);
-			etk::UString GetName(void);
 		public:
 			// use to crop element outside the display
 			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY) { };
 			// Move to the correct position display
 			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y) { };
-		private:
-			etk::UString m_name;
 	};
-	
-	/*
-	class OObjectFile :public ewol::OObject
-	{
-		public:
-			OObjectFile(etk::File fileName) {};
-			virtual ~OObject2DColored(void) {};
-		public:
-			void Draw(void);
-			bool Save(etk::File fileName) { return false; };
-		protected:
-			etk::VectorType<OObject*>   m_listsubObject;   //!< an object file contain more than one object...
-			bool                        m_isBinaryFile;    //!< to know th mode of saving the file
-	};
-	*/
 };
 
 #endif

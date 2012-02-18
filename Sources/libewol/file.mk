@@ -18,6 +18,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/WidgetMessageMultiCast.cpp \
 			ewol/Windows.cpp \
 			ewol/widget/WidgetScrolled.cpp \
+			ewol/widget/Drawable.cpp \
 			ewol/widget/Button.cpp \
 			ewol/widget/Label.cpp \
 			ewol/widget/CheckBox.cpp \
@@ -29,7 +30,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Spacer.cpp \
-			ewol/widget/Test.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/Keyboard.cpp \
 			ewol/themeManager.cpp \

@@ -27,12 +27,12 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 extern const char* const ewolEventCheckBoxClicked;
 
 namespace ewol {
-	class CheckBox :public ewol::Widget
+	class CheckBox :public ewol::Drawable
 	{
 		public:
 			CheckBox(void);

@@ -142,8 +142,8 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 			tmpOObjects->Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
 		}
 		
-		AddOObject(tmpOObjects, "Decoration");
-		AddOObject(tmpText, "Text");
+		AddOObject(tmpOObjects);
+		AddOObject(tmpText);
 	}
 }
 

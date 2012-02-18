@@ -27,12 +27,12 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventLabelPressed;
 
 namespace ewol {
-	class Label :public ewol::Widget
+	class Label :public ewol::Drawable
 	{
 		public:
 			Label(void);

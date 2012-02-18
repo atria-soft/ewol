@@ -27,10 +27,10 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 namespace ewol {
-	class Spacer :public ewol::Widget
+	class Spacer :public ewol::Drawable
 	{
 		public:
 			Spacer(void);

@@ -38,6 +38,7 @@ namespace ewol {
 
 namespace ewol {
 	extern "C" {
+		// TODO : Remove this bu coord2D_ts
 		typedef struct {
 			etkFloat_t x;
 			etkFloat_t y;
@@ -102,13 +103,8 @@ namespace ewol {
 	#define UTF8_MAX_SIZE          (8)
 	#define EWOL_EVENT_AREA        (0)
 	#define EWOL_EVENT_SHORTCUT    (1)
+	// TODO : Remove this and set it at the Windows only ...
 	extern "C" {
-		typedef struct {
-			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			coord origin;   // widget specific
-			coord size;     // widget specific
-			uint64_t flags; // widget specific
-		} eventArea_ts;
 		typedef struct {
 			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
 			bool shift;
@@ -252,45 +248,25 @@ namespace ewol {
 		// -- Drawing : Special case ==> have internal system drawing management to prevent reconstriction of a widget
 		// --           this will automaticly regenerate the same view in openGL
 		// ----------------------------------------------------------------------------------------------------------------
-		private:
-			bool m_genericDraw;
-			bool m_specificDraw;
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
-			bool GenericDraw(void);
 		protected:
-			int32_t m_currentDrawId;
-			int32_t m_currentCreateId;
-			bool    m_needFlipFlop;
-		public:
-			void DoubleBufferFlipFlop(void);
-		protected:
-			void AddOObject(ewol::OObject* newObject, etk::UString name = "", int32_t pos=-1);
-			ewol::OObject* GetOObject(etk::UString name);
-			void RmOObjectElem(etk::UString name);
-			void ClearOObjectList(void);
-			void GenericDrawDisable(void) { m_genericDraw = false; };
-			void GenericDrawEnable(void) { m_genericDraw = true; };
-			void SpecificDrawDisable(void) { m_specificDraw = false; };
-			void SpecificDrawEnable(void) { m_specificDraw = true; };
-			virtual bool OnDraw(void) { /*EWOL_ERROR("plop");*/ return true; };
-		private:
-			bool m_needRegenerateDisplay;
+			int32_t      m_currentDrawId;
+			int32_t      m_currentCreateId;
+			bool         m_needFlipFlop;
+			bool         m_needRegenerateDisplay;
+			virtual bool OnDraw(void) { return true; };
 		protected:
 			void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
 			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
-			virtual void OnRegenerateDisplay(void) { };
+			void DoubleBufferFlipFlop(void);
+			virtual void OnRegenerateDisplay(void) { /* nothing to do */ };
 			bool GenDraw(void)
 			{
-				if (true == m_genericDraw) {
-					//EWOL_DEBUG("Draw generic...");
-					GenericDraw();
-				}
-				if (true == m_specificDraw) {
-					//EWOL_DEBUG("Draw Custum...");
-					OnDraw();
-				}
-				return true;
+				// TODO : Set here the open gl moving ...
+				//EWOL_DEBUG("Draw Custum...");
+				bool valRet = OnDraw();
+				
+				return valRet;
 			};
 
 	}; // end of the class Widget declaration

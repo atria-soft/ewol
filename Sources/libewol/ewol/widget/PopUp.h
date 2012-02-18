@@ -28,9 +28,10 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 namespace ewol {
-	class PopUp : public ewol::Widget
+	class PopUp : public ewol::Drawable
 	{
 		public:
 			PopUp(void);

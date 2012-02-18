@@ -48,8 +48,6 @@ ewol::Windows::Windows(void)
 	SetCanHaveFocus(true);
 	m_subWidget = NULL;
 	m_keyBoardwidget = NULL;
-	// enable specific drawing system ...
-	SpecificDrawEnable();
 	SetDecorationDisable();
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }

@@ -177,9 +177,9 @@ void ewol::Button::OnRegenerateDisplay(void)
 		tmpSizeX += m_padding.x/1;
 		tmpSizeY += m_padding.y/1;
 		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		AddOObject(tmpOObjects, "BouttonDecoration");
+		AddOObject(tmpOObjects);
 		
-		AddOObject(tmpText, "BouttonText");
+		AddOObject(tmpText);
 	}
 }
 

@@ -34,7 +34,7 @@
 
 ewol::OObject::OObject(void)
 {
-	m_name="";
+	// nothing to do ...
 }
 
 
@@ -42,22 +42,4 @@ ewol::OObject::~OObject(void)
 {
 	
 }
-
-void ewol::OObject::SetName(etk::UString & name)
-{
-	m_name = name;
-}
-
-void ewol::OObject::SetName(const char * name)
-{
-	if (NULL != name) {
-		m_name = name;
-	}
-}
-
-etk::UString ewol::OObject::GetName(void)
-{
-	return m_name;
-}
-
 

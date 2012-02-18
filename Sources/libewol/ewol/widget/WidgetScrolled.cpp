@@ -50,17 +50,19 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 			ewol::OObject2DColored* myOObjectsColored = new ewol::OObject2DColored();
 			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.4);
 			myOObjectsColored->Disc(m_highSpeedStartPos.x, m_highSpeedStartPos.y, 10);
-			AddOObject(myOObjectsColored, "scolling object");
+			AddOObject(myOObjectsColored);
 		}
 	*/
 	#else
+	/*
 		if(    ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode
 		    || ewol::SCROLL_ENABLE_VERTICAL  ==m_highSpeedMode) {
 			ewol::OObject2DColored* myOObjectsColored = new ewol::OObject2DColored();
 			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.4);
 			myOObjectsColored->Disc(m_highSpeedStartPos.x, m_highSpeedStartPos.y, 10);
-			AddOObject(myOObjectsColored, "scolling object");
+			AddOObject(myOObjectsColored);
 		}
+	*/
 	#endif
 }
 

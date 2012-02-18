@@ -33,8 +33,6 @@
 
 ewol::ContextMenu::ContextMenu(void)
 {
-	//GenericDrawDisable();
-	SpecificDrawEnable();
 	m_userExpendX = true;
 	m_userExpendY = true;
 	
@@ -189,6 +187,7 @@ void ewol::ContextMenu::SubWidgetRemove(void)
 
 bool ewol::ContextMenu::OnDraw(void)
 {
+	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw();
 	}
@@ -203,7 +202,7 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-	AddOObject(BGOObjects, "ListDeco");
+	AddOObject(BGOObjects);
 	
 	if (NULL != m_subWidget) {
 		coord tmpSize = m_subWidget->GetSize();

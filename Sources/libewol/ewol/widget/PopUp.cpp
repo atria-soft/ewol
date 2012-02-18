@@ -32,8 +32,6 @@
 
 ewol::PopUp::PopUp(void)
 {
-	//GenericDrawDisable();
-	SpecificDrawEnable();
 	m_userExpendX = true;
 	m_userExpendY = true;
 
@@ -158,7 +156,7 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-	AddOObject(BGOObjects, "ListDeco");
+	AddOObject(BGOObjects);
 	
 	BGOObjects->SetColor(m_colorEmptyArea);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);

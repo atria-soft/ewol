@@ -35,7 +35,6 @@
 ewol::Spacer::Spacer(void)
 {
 	m_size = 10;
-	GenericDrawDisable();
 	SetCanHaveFocus(false);
 }
 

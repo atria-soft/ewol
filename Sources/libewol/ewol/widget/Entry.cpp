@@ -165,8 +165,8 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
 			tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
 		}
-		AddOObject(tmpOObjects, "BouttonDecoration");
-		AddOObject(tmpText, "BouttonText");
+		AddOObject(tmpOObjects);
+		AddOObject(tmpText);
 	}
 }
 

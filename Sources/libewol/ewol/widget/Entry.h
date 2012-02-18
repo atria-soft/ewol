@@ -27,14 +27,14 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventEntryClick;
 extern const char * const ewolEventEntryEnter;
 extern const char * const ewolEventEntryModify;
 
 namespace ewol {
-	class Entry :public ewol::Widget
+	class Entry :public ewol::Drawable
 	{
 		public:
 			Entry(void);

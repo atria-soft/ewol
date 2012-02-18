@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventButtonPressed;
 extern const char * const ewolEventButtonEnter;
@@ -38,7 +38,7 @@ namespace ewol {
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER,
 	} textAlignement_te;
-	class Button :public ewol::Widget
+	class Button :public ewol::Drawable
 	{
 		public:
 			Button(void);

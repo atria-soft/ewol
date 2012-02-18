@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/Test.h
- * @brief ewol test widget system (header)
+ * @file ewol/widget/Drawable.h
+ * @brief basic ewol drawable widget (header)
  * @author Edouard DUPIN
- * @date 07/11/2011
+ * @date 18/02/2012
  * @par Project
  * ewol
  *
@@ -22,27 +22,29 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEST_H__
-#define __EWOL_TEST_H__
+#ifndef __EWOL_WIDGET_DRAWABLE_H__
+#define __EWOL_WIDGET_DRAWABLE_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
+
 namespace ewol {
-	class Test :public ewol::Widget
-	{
+	
+	class Drawable : virtual public ewol::Widget {
 		public:
-			Test(void);
-			virtual ~Test(void);
-			virtual bool   CalculateMinSize(void);
-		public:
-			virtual void   OnRegenerateDisplay(void);
-		public:
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			Drawable(void);
+			virtual ~Drawable(void);
+			
 		private:
-			int32_t m_elementID;
+			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+		public:
+			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    ClearOObjectList(void);
+		protected:
+			virtual bool OnDraw(void);
 	};
 };
 
+
 #endif
+

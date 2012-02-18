@@ -32,8 +32,6 @@
 
 ewol::SizerHori::SizerHori(void)
 {
-	GenericDrawDisable();
-	SpecificDrawEnable();
 	// set contamination enable
 	LockExpendContamination();
 }

@@ -28,6 +28,7 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
+#include <ewol/widget/Drawable.h>
 
 namespace ewol {
 	typedef enum {
@@ -37,7 +38,7 @@ namespace ewol {
 		CONTEXT_MENU_MARK_LEFT,
 		CONTEXT_MENU_MARK_NONE
 	}markPosition_te;
-	class ContextMenu : public ewol::Widget
+	class ContextMenu : public ewol::Drawable
 	{
 		public:
 			ContextMenu(void);
