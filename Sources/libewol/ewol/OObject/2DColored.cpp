@@ -69,6 +69,11 @@ void ewol::OObject2DColored::Draw(void)
 
 }
 
+void ewol::OObject2DColored::Clear(void)
+{
+	m_coord.Clear();
+	m_coordColor.Clear();
+}
 
 void ewol::OObject2DColored::UpdateOrigin(etkFloat_t x, etkFloat_t y)
 {

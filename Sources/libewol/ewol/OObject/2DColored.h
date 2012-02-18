@@ -45,6 +45,7 @@ namespace ewol {
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
+			void Clear(void);
 			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
 			void SetColor(color_ts color);
 			void SetPoint(coord2D_ts point);

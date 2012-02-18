@@ -42,6 +42,11 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t 
 		//m_FontId = GetFontIdWithName(FontName);
 		m_FontId = -1;
 	}
+	/*
+	m_coord.SetIncrement(50000);
+	m_coordTex.SetIncrement(50000);
+	m_coordColor.SetIncrement(50000);
+	*/
 }
 
 ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)

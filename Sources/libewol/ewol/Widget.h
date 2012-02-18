@@ -255,11 +255,12 @@ namespace ewol {
 		private:
 			bool m_genericDraw;
 			bool m_specificDraw;
+			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			bool GenericDraw(void);
+		protected:
 			int32_t m_currentDrawId;
 			int32_t m_currentCreateId;
 			bool    m_needFlipFlop;
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
-			bool GenericDraw(void);
 		public:
 			void DoubleBufferFlipFlop(void);
 		protected:

@@ -630,7 +630,7 @@ template<typename MY_TYPE=int32_t> class VectorType
 					}
 					int32_t numberOfStep = m_allocated / devide;
 					if (newSize< ((numberOfStep-2)*devide + devide/2) ) {
-						//Allow Reallocation of a new size shoerter
+						//Allow Reallocation of a new size shorter
 						requestSize = ((newSize / devide)+1) * devide;
 					}
 				}

@@ -51,6 +51,7 @@ namespace ewol {
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
 			etk::VectorType<color_ts>     m_coordColor;    //!< internal color of the different point
 		public:
+			void    SetFontID(int32_t fontID) { m_FontId = fontID; };
 			int32_t GetFontID(void) { return m_FontId; };
 			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};

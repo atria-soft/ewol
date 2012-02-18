@@ -250,13 +250,16 @@ void EWOL_SystemStart(void)
 		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE)
 		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
 		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
+		/* // note android does not permit to change the thread priority ...
 		// try to set prio : 
 		struct sched_param pr;
 		pr.sched_priority = 10;
 		pthread_attr_setschedpolicy(&androidJniThreadAttr, SCHED_RR);
 		pthread_attr_setschedparam(&androidJniThreadAttr, &pr);
-		
+		*/
+		pthread_setname_np(androidJniThread, "ewol_basic_thread");
 		pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
+		
 		//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");
