@@ -53,7 +53,8 @@ void ewol::OObject2DColored::Draw(void)
 	// Enable Pointers
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_COLOR_ARRAY );
-
+	
+	//glPushMatrix();
 	
 	// Set the vertex pointer to our vertex data
 	glVertexPointer(2, oglTypeFloat_t, 0, &m_coord[0] );

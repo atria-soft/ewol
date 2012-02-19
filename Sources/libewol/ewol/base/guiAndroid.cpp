@@ -95,7 +95,7 @@ void EWOL_NativeRender(void)
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		//glOrtho(0., width, 0., -height, 1., 20.);
-		glOrtho(-gui_width/2, gui_width/2, gui_height/2, -gui_height/2, -1, 1);
+		glOrthoEwol(-gui_width/2, gui_width/2, gui_height/2, -gui_height/2, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
@@ -218,40 +218,6 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 	//	EWOL_CRITICAL("X11 ==> not init ... ");
 		return false;
 	//}
-}
-
-
-
-void glOrtho(GLfloat left,
-             GLfloat right,
-             GLfloat bottom,
-             GLfloat top,
-             GLfloat nearVal,
-             GLfloat farVal)
-{
-	GLfloat myMatrix[4*4];
-	int iii;
-	for(iii=0; iii<4*4 ; iii++) {
-		myMatrix[iii] = 0;
-	}
-	myMatrix[0] = 2.0 / (right - left);
-	myMatrix[5] = 2.0 / (top - bottom);
-	myMatrix[10] = -2.0 / (farVal - nearVal);
-#if 1
-	myMatrix[3]  = -1*(right + left) / (right - left);
-	myMatrix[7]  = -1*(top + bottom) / (top - bottom);
-	myMatrix[11] = -1*(farVal + nearVal) / (farVal - nearVal);
-#else
-	// test if matrix is not corectly instanciate ...
-	myMatrix[12]  = -1*(right + left) / (right - left);
-	myMatrix[13]  = -1*(top + bottom) / (top - bottom);
-	myMatrix[14] = -1*(farVal + nearVal) / (farVal - nearVal);
-#endif
-	myMatrix[15] = 1;
-
-	glLoadMatrixf(myMatrix);
-
-
 }
 
 #include <ewol/ewol.h>

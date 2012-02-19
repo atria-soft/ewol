@@ -139,14 +139,35 @@ void ewol::Windows::SysDraw(void)
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+//#if defined(__PLATFORM__Android)
 	glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	
 	glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+/*
+#else
+	glOrtho(0., m_size.x, 0., -m_size.y, 1., 20.);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0, -m_size.y, -5);
+#endif
+*/
+	//http://www.khronos.org/opengles/documentation/opengles1_0/html/glBlendFunc.html
+	
+	//glEnable(GL_POLYGON_SMOOTH);
+	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
 	
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glShadeModel(GL_POLYGON_SMOOTH);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
+	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
+
 	GenDraw();
 
 	glDisable(GL_BLEND);
