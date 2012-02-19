@@ -25,7 +25,7 @@
 #include <ewol/Widget.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/WidgetMessageMultiCast.h>
-
+#include <ewol/importgl.h>
 
 char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 {
@@ -109,6 +109,20 @@ int32_t ewol::Widget::GetWidgetId(void)
 	return ewol::widgetManager::Get(this);
 }
 
+coord2D_ts ewol::Widget::GetRealOrigin(void)
+{
+	coord2D_ts parentCoord;
+	if( NULL != m_parrent) {
+		parentCoord    = m_parrent->GetRealOrigin();
+		parentCoord.x += m_origin.x;
+		parentCoord.y += m_origin.y;
+	} else {
+		parentCoord.x = m_origin.x;
+		parentCoord.y = m_origin.y;
+	}
+	return parentCoord;
+}
+
 
 bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
@@ -121,7 +135,7 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 
 bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	return OnEventInput(IdInput, typeEvent, x, y);
+	return OnEventInput(IdInput, typeEvent, x-m_origin.x, y-m_origin.y);
 }
 
 bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y)
@@ -149,78 +163,7 @@ bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_
 
 bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue)
 {
-	bool ended = false;
-	//EWOL_WARNING("Input event : " << IdInput << " pos(" << x << "," << y << ")");
-	for(int32_t iii=m_inputShortCutEvent.Size()-1; iii>=0; iii--) {
-		if(    m_inputShortCutEvent[iii].shift == shift
-		    && m_inputShortCutEvent[iii].control == control
-		    && m_inputShortCutEvent[iii].alt == alt
-		    && m_inputShortCutEvent[iii].meta == meta
-		    && m_inputShortCutEvent[iii].UnicodeValue == unicodeValue)
-		{
-			if (true == GenEventInputExternal(m_inputShortCutEvent[iii].generateEventId, -1, -1)) {
-				ended = true;
-				break;
-			}
-		}
-	}
-	/*
-	if (false == ended) {
-		return OnEventInput(IdInput, typeEvent, -1, -1);
-	}
-	*/
-	return ended;
-}
-
-
-bool ewol::Widget::AddEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue, const char * generateEventId)
-{
-	eventShortCut_ts newEvent;
-	newEvent.generateEventId = generateEventId;
-	newEvent.shift = shift;
-	newEvent.control = control;
-	newEvent.alt = alt;
-	newEvent.meta = meta;
-	newEvent.UnicodeValue = unicodeValue;
-	m_inputShortCutEvent.PushBack(newEvent);
-	return true;
-}
-
-
-bool ewol::Widget::AddEventShortCut(char * descriptiveString, const char * generateEventId)
-{
-	if(		NULL==descriptiveString
-		||	0==strlen(descriptiveString))
-	{
-		return false;
-	}
-	bool shift = false;
-	bool control = false;
-	bool alt = false;
-	bool meta = false;
-	uint32_t UnicodeValue = 0;
-	
-	// parsing of the string :
-	//"ctrl+shift+alt+meta+s"
-	char * tmp = strstr(descriptiveString, "ctrl");
-	if(NULL != tmp) {
-		control = true;
-	}
-	tmp = strstr(descriptiveString, "shift");
-	if(NULL != tmp) {
-		shift = true;
-	}
-	tmp = strstr(descriptiveString, "alt");
-	if(NULL != tmp) {
-		alt = true;
-	}
-	tmp = strstr(descriptiveString, "meta");
-	if(NULL != tmp) {
-		meta = true;
-	}
-	UnicodeValue = descriptiveString[strlen(descriptiveString) -1];
-	// add with generic Adding function ...
-	return AddEventShortCut(shift, control, alt, meta, UnicodeValue, generateEventId);
+	return false;
 }
 
 
@@ -264,3 +207,42 @@ void ewol::Widget::DoubleBufferFlipFlop(void)
 
 
 
+
+bool ewol::Widget::SetFocus(void)
+{
+	if (true == m_canFocus) {
+		m_hasFocus = true;
+		OnGetFocus();
+		return true;
+	}
+	return false;
+}
+
+bool ewol::Widget::RmFocus(void)
+{
+	if (true == m_canFocus) {
+		m_hasFocus = false;
+		OnLostFocus();
+		return true;
+	}
+	return false;
+}
+
+void ewol::Widget::SetCanHaveFocus(bool canFocusState)
+{
+	m_canFocus = canFocusState;
+	if (true == m_hasFocus) {
+		(void)RmFocus();
+	}
+}
+
+
+
+bool ewol::Widget::GenDraw(void)
+{
+	glTranslatef(m_origin.x,m_origin.y, 0);
+	//EWOL_DEBUG("Draw Custum...");
+	bool valRet = OnDraw();
+	glTranslatef(-m_origin.x,-m_origin.y, 0);
+	return valRet;
+}

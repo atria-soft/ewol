@@ -9,6 +9,7 @@ extern "C" {
 #if defined(__PLATFORM__Linux)
 	#include <GL/gl.h>
 	#include <GL/glu.h>
+	void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);
 #elif defined(__PLATFORM__DoubleBuffer)
 	
 #elif defined(__PLATFORM__Android)

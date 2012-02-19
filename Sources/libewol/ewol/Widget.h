@@ -100,19 +100,10 @@ namespace ewol {
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
-	#define UTF8_MAX_SIZE          (8)
 	#define EWOL_EVENT_AREA        (0)
 	#define EWOL_EVENT_SHORTCUT    (1)
 	// TODO : Remove this and set it at the Windows only ...
 	extern "C" {
-		typedef struct {
-			const char * generateEventId; // event generate ID (to be unique it was pointer on the string name)
-			bool shift;
-			bool control;
-			bool alt;
-			bool meta;
-			uint32_t UnicodeValue;
-		} eventShortCut_ts;
 		typedef struct {
 			const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
 			int32_t      widgetCall;            //!< unique ID of the widget
@@ -131,6 +122,7 @@ namespace ewol {
 			void SetParrent(ewol::Widget * newParrent) { m_parrent = newParrent; };
 			void UnlinkParrent(void) { if (NULL != m_parrent) { m_parrent->removedChild(this); m_parrent=NULL; } };
 			virtual void removedChild(ewol::Widget * removedChild) {  };
+			coord2D_ts GetRealOrigin(void); // this fnction call all the parrent to get his real position ...
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
@@ -173,33 +165,11 @@ namespace ewol {
 			bool    m_hasFocus;        //!< set the focus on this widget
 			bool    m_canFocus;        //!< the focus can be done on this widget
 		public:
-			bool    SetFocus(void)
-			{
-				if (true == m_canFocus) {
-					m_hasFocus = true;
-					OnGetFocus();
-					return true;
-				}
-				return false;
-			}
-			bool    RmFocus(void)
-			{
-				if (true == m_canFocus) {
-					m_hasFocus = false;
-					OnLostFocus();
-					return true;
-				}
-				return false;
-			}
 			bool    GetFocus(void) { return m_hasFocus;};
 			bool    CanHaveFocus(void) { return m_canFocus;};
-			void    SetCanHaveFocus(bool canFocusState)
-			{
-				m_canFocus = canFocusState;
-				if (true == m_hasFocus) {
-					(void)RmFocus();
-				}
-			}
+			bool    SetFocus(void);
+			bool    RmFocus(void);
+			void    SetCanHaveFocus(bool canFocusState);
 		protected:
 			virtual void OnGetFocus(void) {};
 			virtual void OnLostFocus(void) {};
@@ -209,23 +179,19 @@ namespace ewol {
 		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			etk::VectorType<eventShortCut_ts> m_inputShortCutEvent;  //!< generic short-cut event
 			etk::VectorType<eventExtern_ts>   m_externEvent;         //!< Generic list of event generation for output link
 			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget
 		public:
 			// external acces to set an input event on this widget.
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y);
-			bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
+			virtual bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
 		protected:
 			void AddEventId(const char * generateEventId) {
 				if (NULL != generateEventId) {
 					m_ListEventAvaillable.PushBack(generateEventId);
 				}
 			}
-			//void EventAreaRemoveAll(void) { m_inputAreaEvent.Clear();m_inputShortCutEvent.Clear(); };
-			bool AddEventShortCut(bool shift, bool control, bool alt, bool pomme, uint32_t unicodeValue, const char * generateEventId);
-			bool AddEventShortCut(char * descriptiveString, const char * generateEventId);
 		public:
 			// to link an extern widget at the internal event of this one it will access by here :
 			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId = NULL);
@@ -243,16 +209,14 @@ namespace ewol {
 			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData) { return false; };
 			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent) { return false; };
 		
-		
 		// ----------------------------------------------------------------------------------------------------------------
-		// -- Drawing : Special case ==> have internal system drawing management to prevent reconstriction of a widget
-		// --           this will automaticly regenerate the same view in openGL
+		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			int32_t      m_currentDrawId;
-			int32_t      m_currentCreateId;
-			bool         m_needFlipFlop;
-			bool         m_needRegenerateDisplay;
+			int8_t       m_currentDrawId;         //!< Id of the element that might be displayed by the Gui thread
+			int8_t       m_currentCreateId;       //!< Id of the element might be modify
+			bool         m_needFlipFlop;          //!< A flip flop need to be done
+			bool         m_needRegenerateDisplay; //!< the display might be done the next regeneration
 			virtual bool OnDraw(void) { return true; };
 		protected:
 			void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
@@ -260,14 +224,7 @@ namespace ewol {
 		public:
 			void DoubleBufferFlipFlop(void);
 			virtual void OnRegenerateDisplay(void) { /* nothing to do */ };
-			bool GenDraw(void)
-			{
-				// TODO : Set here the open gl moving ...
-				//EWOL_DEBUG("Draw Custum...");
-				bool valRet = OnDraw();
-				
-				return valRet;
-			};
+			bool GenDraw(void);
 
 	}; // end of the class Widget declaration
 };// end of nameSpace

@@ -312,3 +312,38 @@ void EWOL_NativeGLDestroy(void)
 	ewol::UpdateTextureContextIsDestroy();
 }
 
+
+#include <ewol/importgl.h>
+
+
+void glOrthoEwol(GLfloat left,
+             GLfloat right,
+             GLfloat bottom,
+             GLfloat top,
+             GLfloat nearVal,
+             GLfloat farVal)
+{
+	GLfloat myMatrix[4*4];
+	int iii;
+	for(iii=0; iii<4*4 ; iii++) {
+		myMatrix[iii] = 0;
+	}
+	myMatrix[0] = 2.0 / (right - left);
+	myMatrix[5] = 2.0 / (top - bottom);
+	myMatrix[10] = -2.0 / (farVal - nearVal);
+#if 1
+	myMatrix[3]  = -1*(right + left) / (right - left);
+	myMatrix[7]  = -1*(top + bottom) / (top - bottom);
+	myMatrix[11] = -1*(farVal + nearVal) / (farVal - nearVal);
+#else
+	// test if matrix is not corectly instanciate ...
+	myMatrix[12]  = -1*(right + left) / (right - left);
+	myMatrix[13]  = -1*(top + bottom) / (top - bottom);
+	myMatrix[14] = -1*(farVal + nearVal) / (farVal - nearVal);
+#endif
+	myMatrix[15] = 1;
+
+	glLoadMatrixf(myMatrix);
+
+
+}

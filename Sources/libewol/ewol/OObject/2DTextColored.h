@@ -53,7 +53,6 @@ namespace ewol {
 		public:
 			void    SetFontID(int32_t fontID) { m_FontId = fontID; };
 			int32_t GetFontID(void) { return m_FontId; };
-			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};
 };
 

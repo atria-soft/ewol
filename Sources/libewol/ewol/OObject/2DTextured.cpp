@@ -109,12 +109,3 @@ void ewol::OObject2DTextured::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 }
-
-void ewol::OObject2DTextured::UpdateOrigin(etkFloat_t x, etkFloat_t y)
-{
-	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
-		m_coord[iii].x += x;
-		m_coord[iii].y += y;
-	}
-}
-

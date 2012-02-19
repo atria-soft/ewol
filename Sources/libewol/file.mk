@@ -18,6 +18,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/WidgetMessageMultiCast.cpp \
 			ewol/Windows.cpp \
 			ewol/widget/WidgetScrolled.cpp \
+			ewol/widget/WidgetShortCut.cpp \
 			ewol/widget/Drawable.cpp \
 			ewol/widget/Button.cpp \
 			ewol/widget/Label.cpp \

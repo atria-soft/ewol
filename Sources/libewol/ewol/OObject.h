@@ -50,8 +50,6 @@ namespace ewol {
 		public:
 			// use to crop element outside the display
 			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY) { };
-			// Move to the correct position display
-			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y) { };
 	};
 };
 

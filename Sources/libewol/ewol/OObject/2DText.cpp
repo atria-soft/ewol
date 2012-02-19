@@ -102,13 +102,6 @@ int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, 
 	}
 	return ewol::DrawText(m_FontId, textPos, drawClipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
 }
-void ewol::OObject2DText::UpdateOrigin(etkFloat_t x, etkFloat_t y)
-{
-	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
-		m_coord[iii].x += x;
-		m_coord[iii].y += y;
-	}
-}
 
 
 

@@ -168,13 +168,12 @@ bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 }
 
 
-bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    UTF8_data != NULL
-	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN
-	    && (    UTF8_data[0] == '\r'
-	         || UTF8_data[0] == ' ')
+	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	    && (    unicodeData == '\r'
+	         || unicodeData == ' ')
 	       ) {
 		if(true == m_value) {
 			m_value = false;

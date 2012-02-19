@@ -47,8 +47,6 @@ namespace ewol {
 			int32_t                       m_FontTextureId; //!< font internal Texture ID
 			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
-		public:
-			virtual void UpdateOrigin(etkFloat_t x, etkFloat_t y);
 	};
 };
 

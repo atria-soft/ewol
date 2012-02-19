@@ -71,8 +71,6 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 	#ifdef __MODE__Touch
 		if (1 == IdInput) {
 			EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
-			x -= m_origin.x;
-			y -= m_origin.y;
 			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_INIT;
 				m_highSpeedStartPos.x = x;
@@ -133,8 +131,6 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 			MarkToReedraw();
 			return true;
 		}else if (2 == IdInput) {
-			x -= m_origin.x;
-			y -= m_origin.y;
 			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_INIT;
 				m_highSpeedStartPos.x = x;

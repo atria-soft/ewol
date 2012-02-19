@@ -165,11 +165,7 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkF
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
 	
-	int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY) - 1;
-	if (startRaw<0) {
-		startRaw = 0;
-	}
-	int32_t rawID = (y - m_origin.y) / (minHeight + 2*m_paddingSizeY) + startRaw;
+	int32_t rawID = (y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
 	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, x, y);
 	if (true == isUsed) {

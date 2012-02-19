@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file ewol/widget/Drawable.h
- * @brief basic ewol drawable widget (header)
+ * @file ewol/widget/Drawable.cpp
+ * @brief basic ewol drawable widget (Sources)
  * @author Edouard DUPIN
  * @date 18/02/2012
  * @par Project
@@ -52,7 +52,7 @@ void ewol::Drawable::AddOObject(ewol::OObject* newObject, int32_t pos)
 	//EWOL_INFO("UPDATE AT size : (" << m_size.x << "," << m_size.y << ")");
 	newObject->UpdateSize(m_size.x, m_size.y);
 	//EWOL_INFO("UPDATE AT origin : (" << m_origin.x << "," << m_origin.y << ")");
-	newObject->UpdateOrigin(m_origin.x, m_origin.y);
+	//newObject->UpdateOrigin(m_origin.x, m_origin.y);
 	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
 		m_listOObject[m_currentCreateId].PushBack(newObject);
 	} else {

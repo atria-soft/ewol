@@ -201,12 +201,11 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 }
 
 
-bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, char UTF8_data[UTF8_MAX_SIZE])
+bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    UTF8_data != NULL
-	    && typeEvent == ewol::EVENT_KB_TYPE_DOWN
-	    && UTF8_data[0] == '\r') {
+	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	    && unicodeData == '\r') {
 		GenEventInputExternal(ewolEventButtonEnter, -1, -1);
 	}
 	return false;

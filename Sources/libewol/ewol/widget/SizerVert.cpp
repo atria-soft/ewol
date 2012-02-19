@@ -73,8 +73,8 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 		}
 	}
 	coord tmpOrigin;
-	tmpOrigin.x = m_origin.x;
-	tmpOrigin.y = m_origin.y;
+	tmpOrigin.x = 0;
+	tmpOrigin.y = 0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			coord tmpSize = m_subWidget[iii]->GetMinSize();

@@ -182,7 +182,7 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 {
 	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << data << "\"" );
 	if (ewolEventKeyEvent == generateEventId) {
-		ewol::Button * bt     = reinterpret_cast<ewol::Button *>(ewol::widgetManager::Get(widgetID));
+		ewol::Button * bt     = dynamic_cast<ewol::Button *>(ewol::widgetManager::Get(widgetID));
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
 		etk::UString data = bt->GetLabel();
 		if (data == "DEL") {

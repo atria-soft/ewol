@@ -139,15 +139,6 @@ int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawCli
 }
 
 
-void ewol::OObject2DTextColored::UpdateOrigin(etkFloat_t x, etkFloat_t y)
-{
-	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
-		m_coord[iii].x += x;
-		m_coord[iii].y += y;
-	}
-}
-
-
 void ewol::OObject2DTextColored::SetColor(color_ts color)
 {
 	m_color = color;

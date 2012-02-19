@@ -75,13 +75,6 @@ void ewol::OObject2DColored::Clear(void)
 	m_coordColor.Clear();
 }
 
-void ewol::OObject2DColored::UpdateOrigin(etkFloat_t x, etkFloat_t y)
-{
-	for (int32_t iii=0; iii<m_coord.Size(); iii++) {
-		m_coord[iii].x += x;
-		m_coord[iii].y += y;
-	}
-}
 
 void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output )
 {
