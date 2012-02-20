@@ -28,7 +28,6 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/VectorType.h>
-#include <etk/Singleton.h>
 #include <ewol/Widget.h>
 #include <ewol/widgetMeta/Keyboard.h>
 

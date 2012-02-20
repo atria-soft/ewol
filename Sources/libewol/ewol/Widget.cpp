@@ -236,12 +236,11 @@ void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 	}
 }
 
-#define TEST_CLIPPING_SIZE       (10)
+//#define TEST_CLIPPING_SIZE       (10)
 //#define TEST_CLIPPING_SIZE       (3)
-//#define TEST_CLIPPING_SIZE       (0)
+#define TEST_CLIPPING_SIZE       (0)
 
-#if 1
-//def __PLATFORM__Android
+#ifdef __PLATFORM__Android
 #	define   clipping_type       GLfloat
 #	define   clipping_function   glClipPlanef
 #else
@@ -255,7 +254,7 @@ bool ewol::Widget::GenDraw(void)
 	glTranslatef(m_origin.x,m_origin.y, 0);
 	//GLfloat
 	clipping_type eqn1[4] = { 0.0,  1.0, 0.0, -TEST_CLIPPING_SIZE}; // less the Y pos ...
-	clipping_type eqn2[4] = { 0.0, -1.0, 0.0, m_size.y-TEST_CLIPPING_SIZE-50}; // upper the y pos ...
+	clipping_type eqn2[4] = { 0.0, -1.0, 0.0, m_size.y-TEST_CLIPPING_SIZE}; // upper the y pos ...
 	clipping_type eqn3[4] = { 1.0,  0.0, 0.0, -TEST_CLIPPING_SIZE}; // less the x pos ...
 	clipping_type eqn4[4] = {-1.0,  0.0, 0.0, m_size.x-TEST_CLIPPING_SIZE}; // upper the x pos ...
 	//EWOL_DEBUG("widget size (" << m_size.x << "," << m_size.y << ")" );
