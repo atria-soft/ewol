@@ -247,8 +247,8 @@ void EWOL_SystemStart(void)
 		// init the thread :
 		EWOL_DEBUG("Create the thread");
 		pthread_attr_init(&androidJniThreadAttr);
-		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE)
-		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
+		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
+		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
 		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
 		/* // note android does not permit to change the thread priority ...
 		// try to set prio : 

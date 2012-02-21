@@ -155,8 +155,8 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 					newPosition.y = y;
 					ewol::Widget * eventFromWidget = ewol::widgetManager::Get(widgetID);
 					if (NULL != eventFromWidget) {
-						coord tmpOri  = eventFromWidget->GetOrigin();
-						coord tmpSize = eventFromWidget->GetSize();
+						coord2D_ts tmpOri  = eventFromWidget->GetOrigin();
+						coord2D_ts tmpSize = eventFromWidget->GetSize();
 						// calculate the correct position
 						newPosition.x = tmpOri.x + tmpSize.x/2;
 						newPosition.y = tmpOri.y + tmpSize.y;

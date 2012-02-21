@@ -44,11 +44,11 @@ namespace ewol {
 	class WidgetScrooled : virtual public ewol::Widget
 	{
 		protected:
-			coord    m_originScrooled;
-			coord    m_maxSize;
+			coord2D_ts        m_originScrooled;
+			coord2D_ts        m_maxSize;
 		private:
 			etkFloat_t        m_pixelScrolling;
-			coord             m_highSpeedStartPos;
+			coord2D_ts        m_highSpeedStartPos;
 			highSpeedMode_te  m_highSpeedMode;
 		public:
 			WidgetScrooled(void);

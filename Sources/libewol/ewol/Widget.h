@@ -37,13 +37,6 @@ namespace ewol {
 #include <etk/VectorType.h>
 
 namespace ewol {
-	extern "C" {
-		// TODO : Remove this bu coord2D_ts
-		typedef struct {
-			etkFloat_t x;
-			etkFloat_t y;
-		} coord;
-	}
 	typedef enum {
 		EVENT_INPUT_TYPE_DOWN,
 		EVENT_INPUT_TYPE_MOVE,
@@ -100,9 +93,6 @@ namespace ewol {
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
-	#define EWOL_EVENT_AREA        (0)
-	#define EWOL_EVENT_SHORTCUT    (1)
-	// TODO : Remove this and set it at the Windows only ...
 	extern "C" {
 		typedef struct {
 			const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
@@ -129,26 +119,26 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			// internal element calculated by the system
-			coord          m_origin;        //!< internal ... I do not really known how i can use it ...
-			coord          m_size;          //!< internal : current size of the widget
-			coord          m_minSize;       //!< user define the minimum size of the widget
+			coord2D_ts     m_origin;        //!< internal ... I do not really known how i can use it ...
+			coord2D_ts     m_size;          //!< internal : current size of the widget
+			coord2D_ts     m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
-			coord          m_userMinSize;   //!< user define the minimum size of the widget
+			coord2D_ts     m_userMinSize;   //!< user define the minimum size of the widget
 			bool           m_userExpendX;
 			bool           m_userExpendY;
 			bool           m_userFillX;
 			bool           m_userFillY;
 		public:
 			void           SetOrigin(etkFloat_t x, etkFloat_t y)            { m_origin.x=x; m_origin.y=y;};
-			coord          GetOrigin(void)                                  { return m_origin; };
+			coord2D_ts     GetOrigin(void)                                  { return m_origin; };
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			//update the min Size ... and the expend parameters for the sizer
 			virtual bool   CalculateMinSize(void)                           {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; MarkToReedraw(); return true; };
 			virtual void   SetMinSize(etkFloat_t x=-1, etkFloat_t y=-1)     { m_userMinSize.x = x; m_userMinSize.y = y; };
-			coord          GetMinSize(void)                                 { return m_minSize; };
-			coord          GetSize(void)                                    { return m_size; };
+			coord2D_ts     GetMinSize(void)                                 { return m_minSize; };
+			coord2D_ts     GetSize(void)                                    { return m_size; };
 			void           SetCurrentSise(etkFloat_t x=-1, etkFloat_t y=-1) { m_size.x = x; m_size.y = y; MarkToReedraw();};
-			coord          GetCurrentSize(void)                             { return m_size; };
+			coord2D_ts     GetCurrentSize(void)                             { return m_size; };
 			virtual void   SetExpendX(bool newExpend=false)                 { m_userExpendX = newExpend; };
 			virtual bool   CanExpentX(void)                                 { return m_userExpendX; };
 			virtual void   SetExpendY(bool newExpend=false)                 { m_userExpendY = newExpend; };

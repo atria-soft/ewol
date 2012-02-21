@@ -53,7 +53,7 @@ bool ewol::SizerHori::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			coord tmpSize = m_subWidget[iii]->GetMinSize();
+			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
 			unexpendableSize += tmpSize.x;
 			if (false == m_subWidget[iii]->CanExpentX()) {
 				nbWidgetFixedSize++;
@@ -70,12 +70,12 @@ bool ewol::SizerHori::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	coord tmpOrigin;
+	coord2D_ts tmpOrigin;
 	tmpOrigin.x = 0;
 	tmpOrigin.y = 0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			coord tmpSize = m_subWidget[iii]->GetMinSize();
+			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
@@ -110,7 +110,7 @@ bool ewol::SizerHori::CalculateMinSize(void)
 			if (true == m_subWidget[iii]->CanExpentY()) {
 				m_userExpendY = true;
 			}
-			coord tmpSize = m_subWidget[iii]->GetMinSize();
+			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
 			m_minSize.x += tmpSize.x;
 			if (tmpSize.y>m_minSize.y) {
 				m_minSize.y = tmpSize.y;
@@ -239,8 +239,8 @@ bool ewol::SizerHori::OnEventInput(int32_t IdInput, eventInputType_te typeEvent,
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			coord tmpSize = m_subWidget[iii]->GetSize();
-			coord tmpOrigin = m_subWidget[iii]->GetOrigin();
+			coord2D_ts tmpSize = m_subWidget[iii]->GetSize();
+			coord2D_ts tmpOrigin = m_subWidget[iii]->GetOrigin();
 			if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
 			    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
 			{

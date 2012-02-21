@@ -62,7 +62,10 @@ ewol::Keyboard::Keyboard(void)
 
 ewol::Keyboard::~Keyboard(void)
 {
-	
+	if (NULL != m_subWidget) {
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
+		m_subWidget = NULL;
+	}
 }
 
 #define ADD_BUTTON(upperWidget,widget,text,event)    do { \
@@ -231,7 +234,7 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget) {
-		coord         subWidgetSize;
+		coord2D_ts subWidgetSize;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -243,7 +246,7 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 		subWidgetSize.x = (int32_t)subWidgetSize.x;
 		subWidgetSize.y = (int32_t)subWidgetSize.y;
 		
-		m_subWidget->SetOrigin(m_origin.x, m_origin.y);
+		m_subWidget->SetOrigin(0, 0);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
@@ -259,7 +262,7 @@ bool ewol::Keyboard::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
-		coord tmpSize = m_subWidget->GetMinSize();
+		coord2D_ts tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}

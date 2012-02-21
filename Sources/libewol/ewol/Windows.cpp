@@ -80,7 +80,7 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 	int32_t keyboardHigh = 0;
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		m_keyBoardwidget->CalculateMinSize();
-		coord tmpSize = m_keyBoardwidget->GetMinSize();
+		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
 		keyboardHigh = (int32_t)tmpSize.y;
 		m_keyBoardwidget->SetOrigin(0, m_size.y - keyboardHigh);
 		m_keyBoardwidget->CalculateSize(m_size.x, keyboardHigh);
@@ -106,7 +106,7 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		coord tmpSize = m_keyBoardwidget->GetMinSize();
+		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
 		if (y > m_size.y - tmpSize.y) {
 			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, x, y);
 			return true;

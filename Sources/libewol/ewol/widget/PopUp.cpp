@@ -60,8 +60,8 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget) {
-		coord         subWidgetSize;
-		coord         subWidgetOrigin;
+		coord2D_ts subWidgetSize;
+		coord2D_ts subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -97,7 +97,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
-		coord tmpSize = m_subWidget->GetMinSize();
+		coord2D_ts tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -164,8 +164,8 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...
 	if (NULL != m_subWidget) {
-		coord tmpSize = m_subWidget->GetSize();
-		coord tmpOrigin = m_subWidget->GetOrigin();
+		coord2D_ts tmpSize = m_subWidget->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}
@@ -178,8 +178,8 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	if (NULL != m_subWidget) {
-		coord tmpSize = m_subWidget->GetSize();
-		coord tmpOrigin = m_subWidget->GetOrigin();
+		coord2D_ts tmpSize = m_subWidget->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
 		    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
 		{

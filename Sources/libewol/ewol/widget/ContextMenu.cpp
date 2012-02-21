@@ -69,8 +69,8 @@ bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availla
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget) {
-		coord         subWidgetSize;
-		coord         subWidgetOrigin;
+		coord2D_ts subWidgetSize;
+		coord2D_ts subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -142,7 +142,7 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
-		coord tmpSize = m_subWidget->GetMinSize();
+		coord2D_ts tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -205,8 +205,8 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	AddOObject(BGOObjects);
 	
 	if (NULL != m_subWidget) {
-		coord tmpSize = m_subWidget->GetSize();
-		coord tmpOrigin = m_subWidget->GetOrigin();
+		coord2D_ts tmpSize = m_subWidget->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
@@ -246,8 +246,8 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
 	if (NULL != m_subWidget) {
-		coord tmpSize = m_subWidget->GetSize();
-		coord tmpOrigin = m_subWidget->GetOrigin();
+		coord2D_ts tmpSize = m_subWidget->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
 		    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
 		{
