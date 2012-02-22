@@ -52,11 +52,11 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 	etkFloat_t unexpendableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			unexpendableSize += tmpSize.y;
-			if (false == m_subWidget[iii]->CanExpentY()) {
+			if (false == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
 				nbWidgetFixedSize++;
 			} else {
 				nbWidgetNotFixedSize++;
@@ -75,18 +75,18 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 	coord2D_ts tmpOrigin;
 	tmpOrigin.x = 0;
 	tmpOrigin.y = 0;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
-			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
+			m_subWidget[m_currentCreateId][iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
 			// Now Update his Size  his size in X and the curent sizer size in Y:
-			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_subWidget[iii]->CalculateSize(m_size.x, tmpSize.y+sizeToAddAtEveryOne);
+			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
+				m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, tmpSize.y+sizeToAddAtEveryOne);
 				tmpOrigin.y += tmpSize.y+sizeToAddAtEveryOne;
 			} else {
-				m_subWidget[iii]->CalculateSize(m_size.x, tmpSize.y);
+				m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, tmpSize.y);
 				tmpOrigin.y += tmpSize.y;
 			}
 		}
@@ -103,16 +103,16 @@ bool ewol::SizerVert::CalculateMinSize(void)
 	m_userExpendY=false;
 	m_minSize.x = 0.0;
 	m_minSize.y = 0.0;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->CalculateMinSize();
-			if (true == m_subWidget[iii]->CanExpentX()) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->CalculateMinSize();
+			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentX()) {
 				m_userExpendX = true;
 			}
-			if (true == m_subWidget[iii]->CanExpentY()) {
+			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
 				m_userExpendY = true;
 			}
-			coord2D_ts tmpSize = m_subWidget[iii]->GetMinSize();
+			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
 			m_minSize.y += tmpSize.y;
 			if (tmpSize.x>m_minSize.x) {
@@ -165,11 +165,11 @@ void ewol::SizerVert::LockExpendContamination(bool lockExpend)
 
 void ewol::SizerVert::SubWidgetRemoveAll(void)
 {
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[iii]);
-		m_subWidget[iii] = NULL;
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId][iii]);
+		m_subWidget[m_currentCreateId][iii] = NULL;
 	}
-	m_subWidget.Clear();
+	m_subWidget[m_currentCreateId].Clear();
 }
 
 
@@ -178,7 +178,7 @@ void ewol::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	m_subWidget.PushBack(newWidget);
+	m_subWidget[m_currentCreateId].PushBack(newWidget);
 	newWidget->SetParrent(this);
 }
 
@@ -188,11 +188,11 @@ void ewol::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (newWidget == m_subWidget[iii]) {
-			ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[iii]);
-			m_subWidget[iii] = NULL;
-			m_subWidget.Erase(iii);
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
+			ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId][iii]);
+			m_subWidget[m_currentCreateId][iii] = NULL;
+			m_subWidget[m_currentCreateId].Erase(iii);
 			return;
 		}
 	}
@@ -203,10 +203,10 @@ void ewol::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (newWidget == m_subWidget[iii]) {
-			m_subWidget[iii] = NULL;
-			m_subWidget.Erase(iii);
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii] = NULL;
+			m_subWidget[m_currentCreateId].Erase(iii);
 			return;
 		}
 	}
@@ -215,9 +215,9 @@ void ewol::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 
 bool ewol::SizerVert::OnDraw(void)
 {
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw();
+	for (int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentDrawId][iii]) {
+			m_subWidget[m_currentDrawId][iii]->GenDraw();
 		}
 	}
 	return true;
@@ -227,9 +227,9 @@ bool ewol::SizerVert::OnDraw(void)
 
 void ewol::SizerVert::OnRegenerateDisplay(void)
 {
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->OnRegenerateDisplay();
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
 	}
 }
@@ -237,17 +237,23 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
 
 bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			coord2D_ts tmpSize = m_subWidget[iii]->GetSize();
-			coord2D_ts tmpOrigin = m_subWidget[iii]->GetOrigin();
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
+			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
 			if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
 			    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
 			{
-				return m_subWidget[iii]->GenEventInput(IdInput, typeEvent, x, y);
+				return m_subWidget[m_currentCreateId][iii]->GenEventInput(IdInput, typeEvent, x, y);
 			}
 		}
 	}
 	return true;
+}
+
+void ewol::SizerVert::OnFlipFlopEvent(void)
+{
+	// keep in the current element all the modification done ...
+	m_subWidget[m_currentCreateId]  = m_subWidget[m_currentDrawId];
 }
 

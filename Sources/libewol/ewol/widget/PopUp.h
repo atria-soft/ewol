@@ -46,7 +46,7 @@ namespace ewol {
 		private:
 			color_ts      m_colorBackGroung;
 			color_ts      m_colorEmptyArea;
-			ewol::Widget* m_subWidget;
+			ewol::Widget* m_subWidget[NB_BOUBLE_BUFFER];
 			etkFloat_t    m_displayRatio;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
@@ -57,6 +57,7 @@ namespace ewol {
 			virtual void   OnRegenerateDisplay(void);
 		public:
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual void   OnFlipFlopEvent(void);
 	};
 };
 

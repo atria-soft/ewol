@@ -79,7 +79,7 @@ ewol::Widget::Widget(void)
 	m_needRegenerateDisplay = true;
 	m_currentDrawId = 0;
 	m_currentCreateId = 1;
-	m_needFlipFlop = false;
+	m_needFlipFlop = true;
 	m_origin.x = 0.0;
 	m_origin.y = 0.0;
 	m_size.x = 10.0;
@@ -202,6 +202,7 @@ void ewol::Widget::DoubleBufferFlipFlop(void)
 			m_currentCreateId = 0;
 		}
 		m_needFlipFlop = false;
+		OnFlipFlopEvent();
 	}
 }
 

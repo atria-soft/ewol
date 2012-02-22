@@ -46,7 +46,9 @@ extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKey
 ewol::Windows::Windows(void)
 {
 	SetCanHaveFocus(true);
-	m_subWidget = NULL;
+	for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		m_subWidget[iii] = NULL;
+	}
 	m_keyBoardwidget = NULL;
 	SetDecorationDisable();
 	//KeyboardShow(KEYBOARD_MODE_CODE);
@@ -54,18 +56,18 @@ ewol::Windows::Windows(void)
 
 ewol::Windows::~Windows(void)
 {
-	if (NULL != m_subWidget) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
-		m_subWidget=NULL;
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId]);
+		m_subWidget[m_currentCreateId]=NULL;
 	}
 	
-	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
-		if (NULL != m_popUpWidgetList[iii]) {
-			ewol::widgetManager::MarkWidgetToBeRemoved(m_popUpWidgetList[iii]);
-			m_popUpWidgetList[iii]=NULL;
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
+			ewol::widgetManager::MarkWidgetToBeRemoved(m_popUpWidgetList[m_currentCreateId][iii]);
+			m_popUpWidgetList[m_currentCreateId][iii]=NULL;
 		}
 	}
-	m_popUpWidgetList.Clear();
+	m_popUpWidgetList[m_currentCreateId].Clear();
 	
 	if (NULL != m_keyBoardwidget) {
 		ewol::widgetManager::MarkWidgetToBeRemoved(m_keyBoardwidget);
@@ -75,6 +77,7 @@ ewol::Windows::~Windows(void)
 
 bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
+	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	int32_t keyboardHigh = 0;
@@ -85,20 +88,18 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 		m_keyBoardwidget->SetOrigin(0, m_size.y - keyboardHigh);
 		m_keyBoardwidget->CalculateSize(m_size.x, keyboardHigh);
 	}
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->CalculateMinSize();
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
-		m_subWidget->CalculateSize(m_size.x, m_size.y - keyboardHigh);
+		m_subWidget[m_currentCreateId]->CalculateSize(m_size.x, m_size.y - keyboardHigh);
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
-		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->CalculateMinSize();
-			m_popUpWidgetList[iii]->CalculateSize(m_size.x, m_size.y - keyboardHigh);
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
+			m_popUpWidgetList[m_currentCreateId][iii]->CalculateMinSize();
+			m_popUpWidgetList[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y - keyboardHigh);
 		}
 	}
-	// regenerate all the display ...
-	MarkToReedraw();
 	return true;
 }
 
@@ -113,15 +114,15 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 		}
 	}
 	// event go directly on the pop-up
-	if (0 < m_popUpWidgetList.Size()) {
-		if (NULL == m_popUpWidgetList[m_popUpWidgetList.Size()-1]) {
-			m_popUpWidgetList.PopBack();
+	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
+		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
+			m_popUpWidgetList[m_currentCreateId].PopBack();
 		} else {
-			m_popUpWidgetList[m_popUpWidgetList.Size()-1]->GenEventInput(IdInput, typeEvent, x, y);
+			m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GenEventInput(IdInput, typeEvent, x, y);
 		}
 	// otherwise in the normal windows
-	} else if (NULL != m_subWidget) {
-		m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
+	} else if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, x, y);
 	}
 	return true;
 }
@@ -176,15 +177,12 @@ void ewol::Windows::SysDraw(void)
 
 void ewol::Windows::OnRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
-		// no decoration ...
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
-	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
-	}
-	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
-		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->OnRegenerateDisplay();
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
+			m_popUpWidgetList[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
 	}
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
@@ -195,21 +193,22 @@ void ewol::Windows::OnRegenerateDisplay(void)
 
 bool ewol::Windows::OnDraw(void)
 {
+	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
-	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw();
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->GenDraw();
 		//EWOL_DEBUG("Draw Windows");
 	}
 	// second display the pop-up
-	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
-		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->GenDraw();
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_popUpWidgetList[m_currentDrawId][iii]) {
+			m_popUpWidgetList[m_currentDrawId][iii]->GenDraw();
 			//EWOL_DEBUG("Draw Pop-up");
 		}
 	}
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		m_keyBoardwidget->GenDraw();
-		//EWOL_DEBUG("Draw Pop-up");
+		//EWOL_DEBUG("Draw kewboard");
 	}
 	return true;
 }
@@ -218,33 +217,37 @@ bool ewol::Windows::OnDraw(void)
 
 void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 {
-	if (NULL != m_subWidget) {
+	if (NULL != m_subWidget[m_currentCreateId]) {
 		EWOL_INFO("Remove current main windows Widget...");
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
-		m_subWidget = NULL;
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId]);
+		m_subWidget[m_currentCreateId] = NULL;
 	}
-	m_subWidget = widget;
+	m_subWidget[m_currentCreateId] = widget;
 	// Regenerate the size calculation :
 	CalculateSize(m_size.x, m_size.y);
+	m_needFlipFlop = true;
 }
 
 
 void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 {
-	m_popUpWidgetList.PushBack(widget);
+	m_popUpWidgetList[m_currentCreateId].PushBack(widget);
 	// Regenerate the size calculation :
 	CalculateSize(m_size.x, m_size.y);
+	m_needFlipFlop = true;
 }
 
 void ewol::Windows::PopUpWidgetPop(int32_t popUpId)
 {
 	if(popUpId >= 0) {
-		for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
-			if (NULL != m_popUpWidgetList[iii]) {
-				if (m_popUpWidgetList[iii]->GetWidgetId() == popUpId) {
-					ewol::widgetManager::MarkWidgetToBeRemoved(m_popUpWidgetList[iii]);
-					m_popUpWidgetList[iii] = NULL;
-					m_popUpWidgetList.Erase(iii);
+		for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+			if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
+				if (m_popUpWidgetList[m_currentCreateId][iii]->GetWidgetId() == popUpId) {
+					ewol::widgetManager::MarkWidgetToBeRemoved(m_popUpWidgetList[m_currentCreateId][iii]);
+					m_popUpWidgetList[m_currentCreateId][iii] = NULL;
+					m_popUpWidgetList[m_currentCreateId].Erase(iii);
+					m_needFlipFlop = true;
+					CalculateSize(m_size.x, m_size.y);
 					return;
 				}
 			}
@@ -279,7 +282,6 @@ void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 		m_keyBoardwidget->Show();
 	}
 	CalculateSize(m_size.x, m_size.y);
-	MarkToReedraw();
 #endif
 }
 
@@ -291,5 +293,14 @@ void ewol::Windows::KeyboardHide(void)
 		m_keyBoardwidget->Hide();
 	}
 	CalculateSize(m_size.x, m_size.y);
-	MarkToReedraw();
+}
+
+
+
+void ewol::Windows::OnFlipFlopEvent(void)
+{
+	//EWOL_CRITICAL("FlipFlop on windows draw("<<m_currentDrawId<<") create("<<m_currentCreateId<<")");
+	// keep in the current element all the modification done ...
+	m_subWidget[m_currentCreateId]       = m_subWidget[m_currentDrawId];
+	m_popUpWidgetList[m_currentCreateId] = m_popUpWidgetList[m_currentDrawId];
 }

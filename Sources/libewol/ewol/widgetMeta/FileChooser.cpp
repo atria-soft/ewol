@@ -118,10 +118,10 @@ class FileChooserFolderList : public ewol::List
 		
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
-			bg.red = 1.0;
+			bg.red = 0.0;
 			bg.green = 0.0;
 			bg.blue = 0.0;
-			bg.alpha = 1.0;
+			bg.alpha = 0.2;
 			return bg;
 		}
 		
@@ -217,10 +217,10 @@ class FileChooserFileList : public ewol::List
 		};
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
-			bg.red = 1.0;
+			bg.red = 0.0;
 			bg.green = 0.0;
 			bg.blue = 0.0;
-			bg.alpha = 1.0;
+			bg.alpha = 0.2;
 			return bg;
 		}
 		void AddElement(etk::UString element)

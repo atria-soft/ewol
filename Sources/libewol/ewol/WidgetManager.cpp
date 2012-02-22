@@ -73,7 +73,7 @@ void ewol::widgetManager::UnInit(void)
 		}
 	}
 	// local acces ==> this control the mutex Lock
-	RemoveAllMarkWidget();
+	ewol::widgetManager::RemoveAllMarkWidget();
 	
 	IsInit = false;
 	
@@ -251,6 +251,8 @@ void ewol::widgetManager::GetDoubleBufferFlipFlop(void)
 		}
 	}
 	needRedraw = true;
+	// Remove the deprecated flipFlop elements ...
+	
 	pthread_mutex_unlock(&localMutex);
 }
 
@@ -319,29 +321,25 @@ void ewol::widgetManager::MarkWidgetToBeRemoved(ewol::Widget * expectedWidget)
 
 void ewol::widgetManager::RemoveAllMarkWidget(void)
 {
-	if (IsInit) {
-		pthread_mutex_lock(&localMutex);
-		etk::VectorType<widgetList_ts>   m_widgetDeletedList_tmp = m_widgetDeletedList;
-		/*
-		if (m_widgetDeletedList.Size() > 0 ) {
-			EWOL_DEBUG("NB element to remove : " << m_widgetDeletedList.Size());
-		}
-		*/
-		// flip/Flop all the widget registered :
-		for(int32_t iii=0; iii<m_widgetDeletedList_tmp.Size(); iii++) {
-			if (NULL != m_widgetDeletedList_tmp[iii].widgetPointer) {
-				delete(m_widgetDeletedList_tmp[iii].widgetPointer);
-				m_widgetDeletedList_tmp[iii].widgetPointer = NULL;
-			}
-		}
-		/*
-		if (m_widgetDeletedList.Size() > 0 ) {
-			EWOL_CRITICAL("Memory leak ==> not all the widget are auto-removed nb = " << m_widgetDeletedList.Size());
-			// in every case clean the list ...
-			m_widgetDeletedList.Clear();
-		}
-		*/
-		pthread_mutex_unlock(&localMutex);
+	etk::VectorType<widgetList_ts>   m_widgetDeletedList_tmp = m_widgetDeletedList;
+	/*
+	if (m_widgetDeletedList.Size() > 0 ) {
+		EWOL_DEBUG("NB element to remove : " << m_widgetDeletedList.Size());
 	}
+	*/
+	// flip/Flop all the widget registered :
+	for(int32_t iii=0; iii<m_widgetDeletedList_tmp.Size(); iii++) {
+		if (NULL != m_widgetDeletedList_tmp[iii].widgetPointer) {
+			delete(m_widgetDeletedList_tmp[iii].widgetPointer);
+			m_widgetDeletedList_tmp[iii].widgetPointer = NULL;
+		}
+	}
+	/*
+	if (m_widgetDeletedList.Size() > 0 ) {
+		EWOL_CRITICAL("Memory leak ==> not all the widget are auto-removed nb = " << m_widgetDeletedList.Size());
+		// in every case clean the list ...
+		m_widgetDeletedList.Clear();
+	}
+	*/
 }
 

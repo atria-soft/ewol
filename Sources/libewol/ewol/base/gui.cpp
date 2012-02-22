@@ -294,6 +294,7 @@ void EWOL_GenericDraw(bool everyTime)
 	{
 		nbDisplayTime++;
 		gui_uniqueWindows->SysDraw();
+		//EWOL_WARNING("DRAW...");
 	}
 	ewol::widgetManager::GetDoubleBufferStopDraw();
 	// send Message that we just finished a display ...

@@ -213,6 +213,7 @@ namespace ewol {
 			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
 			void DoubleBufferFlipFlop(void);
+			virtual void OnFlipFlopEvent(void) { /* nothing to do */  };
 			virtual void OnRegenerateDisplay(void) { /* nothing to do */ };
 			bool GenDraw(void);
 

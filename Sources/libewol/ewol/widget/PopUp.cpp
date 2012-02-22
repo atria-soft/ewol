@@ -59,14 +59,14 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	
-	if (NULL != m_subWidget) {
+	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts subWidgetSize;
 		coord2D_ts subWidgetOrigin;
-		subWidgetSize = m_subWidget->GetMinSize();
-		if (true == m_subWidget->CanExpentX()) {
+		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
+		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
 		}
-		if (true == m_subWidget->CanExpentY()) {
+		if (true == m_subWidget[m_currentCreateId]->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
 		if (m_displayRatio>0.1 && m_displayRatio<=1) {
@@ -80,8 +80,8 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		subWidgetOrigin.x = (int32_t)(m_size.x - m_origin.x - subWidgetSize.x)/2 + m_origin.x;
 		subWidgetOrigin.y = (int32_t)(m_size.y - m_origin.y - subWidgetSize.y)/2 + m_origin.y;
 		
-		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
-		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
+		m_subWidget[m_currentCreateId]->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
+		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
 	return true;
@@ -95,9 +95,9 @@ bool ewol::PopUp::CalculateMinSize(void)
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
-		coord2D_ts tmpSize = m_subWidget->GetMinSize();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->CalculateMinSize();
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -127,16 +127,16 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	m_subWidget = newWidget;
+	m_subWidget[m_currentCreateId] = newWidget;
 	newWidget->SetParrent(this);
 }
 
 
 void ewol::PopUp::SubWidgetRemove(void)
 {
-	if (NULL != m_subWidget) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
-		m_subWidget = NULL;
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId]);
+		m_subWidget[m_currentCreateId] = NULL;
 	}
 }
 
@@ -144,8 +144,8 @@ bool ewol::PopUp::OnDraw(void)
 {
 	// draw upper classes
 	ewol::Drawable::OnDraw();
-	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw();
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->GenDraw();
 	}
 	return true;
 }
@@ -163,27 +163,27 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	BGOObjects->SetColor(m_colorEmptyArea);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...
-	if (NULL != m_subWidget) {
-		coord2D_ts tmpSize = m_subWidget->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}
-	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
 }
 
 
 bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
 {
-	if (NULL != m_subWidget) {
-		coord2D_ts tmpSize = m_subWidget->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
 		    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
 		{
-			return m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
+			return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, x, y);
 		} else {
 			//EWOL_INFO("Event ouside the Pop-up");
 		}
@@ -197,3 +197,11 @@ void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
 {
 	m_displayRatio = ratio;
 }
+
+
+void ewol::PopUp::OnFlipFlopEvent(void)
+{
+	// keep in the current element all the modification done ...
+	m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+}
+

@@ -46,7 +46,7 @@ namespace ewol {
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
-			etk::VectorType<ewol::Widget*> m_subWidget;
+			etk::VectorType<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
 		public:
 			virtual void   SubWidgetRemoveAll(void);
 			virtual void   SubWidgetAdd(ewol::Widget* newWidget);
@@ -57,6 +57,7 @@ namespace ewol {
 		public:
 			virtual void   OnRegenerateDisplay(void);
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual void   OnFlipFlopEvent(void);
 	};
 };
 

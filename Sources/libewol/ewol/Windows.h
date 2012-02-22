@@ -67,8 +67,8 @@ namespace ewol {
 				m_hasDecoration = true;
 			}
 		private:
-			ewol::Widget*                   m_subWidget;
-			etk::VectorType<ewol::Widget*>  m_popUpWidgetList;
+			ewol::Widget*                   m_subWidget[NB_BOUBLE_BUFFER];
+			etk::VectorType<ewol::Widget*>  m_popUpWidgetList[NB_BOUBLE_BUFFER];
 			ewol::Keyboard*                 m_keyBoardwidget;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
@@ -81,6 +81,7 @@ namespace ewol {
 		public:
 			void KeyboardShow(ewol::keyboardMode_te mode);
 			void KeyboardHide(void);
+			virtual void OnFlipFlopEvent(void);
 	};
 };
 
