@@ -55,6 +55,10 @@ namespace ewol {
 	bool IsSetAltGr(void);
 	bool IsSetVerNum(void);
 	bool IsSetInsert(void);
+	namespace shortCut {
+		void Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString& data);
+		void Add(char * descriptiveString, const char * generateEventId, etk::UString& data);
+	};
 };
 
 int64_t GetCurrentTime(void);

@@ -31,6 +31,7 @@
 #include <ewol/Texture.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
+#include <ewol/ShortCutManager.h>
 
 
 
@@ -89,8 +90,6 @@ void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
 void EWOL_NativeResize(int w, int h );
 void EWOL_NativeRegenerateDisplay(void);
 
-
-
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
@@ -118,6 +117,7 @@ static void* BaseAppEntry(void* param)
 	ewol::texture::Init();
 	ewol::theme::Init();
 	ewol::InitFont();
+	ewol::shortCut::Init();
 	APP_Init();
 	int32_t countNbEvent = 0;
 	EWOL_DEBUG("==> Init BThread (END)");
@@ -161,6 +161,7 @@ static void* BaseAppEntry(void* param)
 					{
 						eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
 						guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
+						//if (false==ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue)) { ... }
 					}
 					break;
 				case THREAD_KEYBORAD_MOVE:
@@ -201,6 +202,7 @@ static void* BaseAppEntry(void* param)
 	// call application to uninit
 	APP_UnInit();
 	
+	ewol::shortCut::UnInit();
 	ewol::texture::UnInit();
 	ewol::UnInitFont();
 	ewol::widgetManager::UnInit();
