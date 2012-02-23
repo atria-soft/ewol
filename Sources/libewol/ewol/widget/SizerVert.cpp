@@ -73,8 +73,8 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 		}
 	}
 	coord2D_ts tmpOrigin;
-	tmpOrigin.x = 0;
-	tmpOrigin.y = 0;
+	tmpOrigin.x = m_origin.x;
+	tmpOrigin.y = m_origin.y;
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
@@ -235,16 +235,16 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
 			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
-			if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
-			    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
+			if(    (tmpOrigin.x <= pos.abs.x && tmpOrigin.x + tmpSize.x >= pos.abs.x)
+			    && (tmpOrigin.y <= pos.abs.y && tmpOrigin.y + tmpSize.y >= pos.abs.y) )
 			{
-				return m_subWidget[m_currentCreateId][iii]->GenEventInput(IdInput, typeEvent, x, y);
+				return m_subWidget[m_currentCreateId][iii]->GenEventInput(IdInput, typeEvent, pos.abs);
 			}
 		}
 	}

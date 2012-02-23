@@ -148,7 +148,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {
@@ -158,7 +158,7 @@ bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 			} else {
 				m_value = true;
 			}
-			GenEventInputExternal(ewolEventCheckBoxClicked, x, y);
+			GenEventInputExternal(ewolEventCheckBoxClicked, pos.abs.x, pos.abs.y);
 			ewol::widgetManager::FocusKeep(this);
 			MarkToReedraw();
 			return true;

@@ -171,13 +171,13 @@ void ewol::Entry::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	//EWOL_DEBUG("Event on Entry ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...
-			GenEventInputExternal(ewolEventEntryClick, x, y);
+			GenEventInputExternal(ewolEventEntryClick, pos.abs.x, pos.abs.y);
 			ewol::widgetManager::FocusKeep(this);
 			MarkToReedraw();
 			return true;

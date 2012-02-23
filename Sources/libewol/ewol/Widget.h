@@ -93,13 +93,19 @@ namespace ewol {
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
-	extern "C" {
-		typedef struct {
-			const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
-			int32_t      widgetCall;            //!< unique ID of the widget
-			const char * generateEventIdExtern; //!< External generated event ID (to be unique it was pointer on the string name)
-		} eventExtern_ts;
-	};
+	
+	typedef struct {
+		const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
+		int32_t      widgetCall;            //!< unique ID of the widget
+		const char * generateEventIdExtern; //!< External generated event ID (to be unique it was pointer on the string name)
+	} eventExtern_ts;
+	
+	typedef struct {
+		coord2D_ts   abs;
+		coord2D_ts   local;
+	} eventPosition_ts;
+	
+	
 	
 	class Widget {
 		public:
@@ -173,7 +179,7 @@ namespace ewol {
 			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget
 		public:
 			// external acces to set an input event on this widget.
-			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y); // call when input event arrive and call OnEventInput, if no event detected
+			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos); // call when input event arrive and call OnEventInput, if no event detected
 			bool GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 			virtual bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
 		protected:
@@ -186,7 +192,7 @@ namespace ewol {
 			// to link an extern widget at the internal event of this one it will access by here :
 			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId = NULL);
 		protected:
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t X, etkFloat_t Y) { return false; };
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos) { return false; };
 		public:
 			// when an event arrive from an other widget, it will arrive here:
 			// TODO : change name ...

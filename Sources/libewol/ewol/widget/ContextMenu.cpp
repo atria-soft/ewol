@@ -243,15 +243,15 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	if (NULL != m_subWidget) {
 		coord2D_ts tmpSize = m_subWidget->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
-		if(    (tmpOrigin.x <= x && tmpOrigin.x + tmpSize.x >= x)
-		    && (tmpOrigin.y <= y && tmpOrigin.y + tmpSize.y >= y) )
+		if(    (tmpOrigin.x <= pos.local.x && tmpOrigin.x + tmpSize.x >= pos.local.x)
+		    && (tmpOrigin.y <= pos.local.y && tmpOrigin.y + tmpSize.y >= pos.local.y) )
 		{
-			return m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
+			return m_subWidget->GenEventInput(IdInput, typeEvent, pos.abs);
 		} else {
 			//EWOL_INFO("Event ouside the context menu");
 			if (IdInput > 0) {

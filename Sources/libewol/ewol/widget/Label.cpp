@@ -119,13 +119,13 @@ void ewol::Label::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::Label::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Label::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...
-			GenEventInputExternal(ewolEventLabelPressed, x, y);
+			GenEventInputExternal(ewolEventLabelPressed, pos.abs.x, pos.abs.y);
 			return true;
 		}
 	}

@@ -184,7 +184,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
@@ -192,7 +192,7 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, et
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			// nothing to do ...
-			GenEventInputExternal(ewolEventButtonPressed, x, y);
+			GenEventInputExternal(ewolEventButtonPressed, pos.abs.x, pos.abs.y);
 			MarkToReedraw();
 			return true;
 		}

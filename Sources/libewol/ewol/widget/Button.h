@@ -61,7 +61,7 @@ namespace ewol {
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
 	};
 };

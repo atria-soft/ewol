@@ -133,9 +133,14 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 }
 
 
-bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
 {
-	return OnEventInput(IdInput, typeEvent, x-m_origin.x, y-m_origin.y);
+	eventPosition_ts eventPos;
+	eventPos.abs   = pos;
+	eventPos.local.x = pos.x - m_origin.x;
+	eventPos.local.y = pos.y - m_origin.y;
+	//EWOL_DEBUG(" event on abs=(" << eventPos.abs.x << "," << eventPos.abs.y << ") local=(" << eventPos.local.x << "," << eventPos.local.y << ")");
+	return OnEventInput(IdInput, typeEvent, eventPos);
 }
 
 bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y)
@@ -241,44 +246,26 @@ void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 //#define TEST_CLIPPING_SIZE       (3)
 #define TEST_CLIPPING_SIZE       (0)
 
-#ifdef __PLATFORM__Android
-#	define   clipping_type       GLfloat
-#	define   clipping_function   glClipPlanef
-#else
-#	define   clipping_type       GLdouble
-#	define   clipping_function   glClipPlane
-#endif
 bool ewol::Widget::GenDraw(void)
 {
 	glPushMatrix();
-#if 1
-	glTranslatef(m_origin.x,m_origin.y, 0);
-	//GLfloat
-	clipping_type eqn1[4] = { 0.0,  1.0, 0.0, -TEST_CLIPPING_SIZE}; // less the Y pos ...
-	clipping_type eqn2[4] = { 0.0, -1.0, 0.0, m_size.y-TEST_CLIPPING_SIZE}; // upper the y pos ...
-	clipping_type eqn3[4] = { 1.0,  0.0, 0.0, -TEST_CLIPPING_SIZE}; // less the x pos ...
-	clipping_type eqn4[4] = {-1.0,  0.0, 0.0, m_size.x-TEST_CLIPPING_SIZE}; // upper the x pos ...
-	//EWOL_DEBUG("widget size (" << m_size.x << "," << m_size.y << ")" );
-	glEnable(GL_CLIP_PLANE0);
-	glEnable(GL_CLIP_PLANE1);
-	glEnable(GL_CLIP_PLANE2);
-	glEnable(GL_CLIP_PLANE3);
-	clipping_function(GL_CLIP_PLANE0, eqn1);
-	clipping_function(GL_CLIP_PLANE1, eqn2);
-	clipping_function(GL_CLIP_PLANE2, eqn3);
-	clipping_function(GL_CLIP_PLANE3, eqn4);
-#else
-	glTranslatef(m_origin.x,m_origin.y, 0);
-	glEnable(GL_SCISSOR_TEST);
-	glScissor(TEST_CLIPPING_SIZE, TEST_CLIPPING_SIZE, m_size.x-TEST_CLIPPING_SIZE, m_size.y-TEST_CLIPPING_SIZE);
-#endif
+	etkFloat_t testSizeX = m_size.x-TEST_CLIPPING_SIZE*2;
+	etkFloat_t testSizeY = m_size.y-TEST_CLIPPING_SIZE*2;
+	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+	glViewport(                  m_origin.x + TEST_CLIPPING_SIZE,
+	            600 - m_size.y - m_origin.y + TEST_CLIPPING_SIZE,
+	            testSizeX,
+	            testSizeY);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrthoEwol(-testSizeX/2, testSizeX/2, testSizeY/2, -testSizeY/2, -1, 1);
+	//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(-testSizeX/2, -testSizeY/2, -1.0);
+
 	bool valRet = OnDraw();
-	/*
-	glDisable(GL_CLIP_PLANE3);
-	glDisable(GL_CLIP_PLANE2);
-	glDisable(GL_CLIP_PLANE1);
-	glDisable(GL_CLIP_PLANE0);
-	*/
 	glPopMatrix();
 	return valRet;
 }

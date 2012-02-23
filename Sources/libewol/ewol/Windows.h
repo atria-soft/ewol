@@ -52,7 +52,7 @@ namespace ewol {
 			virtual void On(void) { };
 		public:
 			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
 		private:
 			bool m_hasDecoration;

@@ -54,7 +54,7 @@ namespace ewol {
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, eventPosition_ts pos);
 		protected:
 			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
 	};

@@ -301,10 +301,10 @@ void ewol::Keyboard::OnRegenerateDisplay(void)
 	}
 }
 
-bool ewol::Keyboard::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Keyboard::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	if (NULL != m_subWidget) {
-		return m_subWidget->GenEventInput(IdInput, typeEvent, x, y);
+		return m_subWidget->GenEventInput(IdInput, typeEvent, pos.abs);
 	}
 	return false;
 }

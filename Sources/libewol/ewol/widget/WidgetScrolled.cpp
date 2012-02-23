@@ -66,15 +66,15 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 	#endif
 }
 
-bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	#ifdef __MODE__Touch
 		if (1 == IdInput) {
 			EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
 			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_INIT;
-				m_highSpeedStartPos.x = x;
-				m_highSpeedStartPos.y = y;
+				m_highSpeedStartPos.x = pos.local.x;
+				m_highSpeedStartPos.y = pos.local.y;
 				EWOL_VERBOSE("SCROOL ==> INIT");
 				return true;
 			} else if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
@@ -84,8 +84,8 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 				return true;
 			} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(x - m_highSpeedStartPos.x) > 10 
-				    || abs(y - m_highSpeedStartPos.y) > 10 ) {
+				if(    abs(pos.local.x - m_highSpeedStartPos.x) > 10 
+				    || abs(pos.local.y - m_highSpeedStartPos.y) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
 					m_highSpeedMode = ewol::SCROLL_ENABLE;
@@ -95,14 +95,14 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 				return true;
 			} if (ewol::SCROLL_ENABLE==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 				//m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
-				m_originScrooled.x -= x - m_highSpeedStartPos.x;
-				m_originScrooled.y -= y - m_highSpeedStartPos.y;
+				m_originScrooled.x -= pos.local.x - m_highSpeedStartPos.x;
+				m_originScrooled.y -= pos.local.y - m_highSpeedStartPos.y;
 				m_originScrooled.x = etk_max(m_originScrooled.x, 0);
 				m_originScrooled.y = etk_max(m_originScrooled.y, 0);
 				m_originScrooled.x = etk_min(m_originScrooled.x, m_maxSize.x);
 				m_originScrooled.y = etk_min(m_originScrooled.y, m_maxSize.y);
-				m_highSpeedStartPos.x = x;
-				m_highSpeedStartPos.y = y;
+				m_highSpeedStartPos.x = pos.local.x;
+				m_highSpeedStartPos.y = pos.local.y;
 				EWOL_VERBOSE("SCROOL ==> MOVE (" << m_originScrooled.x << "," << m_originScrooled.y << ")");
 				MarkToReedraw();
 				return true;
@@ -133,8 +133,8 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 		}else if (2 == IdInput) {
 			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_INIT;
-				m_highSpeedStartPos.x = x;
-				m_highSpeedStartPos.y = y;
+				m_highSpeedStartPos.x = pos.local.x;
+				m_highSpeedStartPos.y = pos.local.y;
 				return true;
 			} else if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_DISABLE;
@@ -142,16 +142,16 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 				return true;
 			} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(x - m_highSpeedStartPos.x) > 10 
-				    || abs(y - m_highSpeedStartPos.y) > 10 ) {
+				if(    abs(pos.local.x - m_highSpeedStartPos.x) > 10 
+				    || abs(pos.local.y - m_highSpeedStartPos.y) > 10 ) {
 					// the scrooling can start : 
 					// select the direction :
-					if (x == m_highSpeedStartPos.x) {
+					if (pos.local.x == m_highSpeedStartPos.x) {
 						m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
-					} else if (y == m_highSpeedStartPos.y) {
+					} else if (pos.local.y == m_highSpeedStartPos.y) {
 						m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
 					} else {
-						etkFloat_t coef = (y - m_highSpeedStartPos.y) / (x - m_highSpeedStartPos.x);
+						etkFloat_t coef = (pos.local.y - m_highSpeedStartPos.y) / (pos.local.x - m_highSpeedStartPos.x);
 						if (abs(coef) <= 1 ) {
 							m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
 						} else {
@@ -167,11 +167,11 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 				}
 				return true;
 			} if (ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
+				m_originScrooled.x = (int32_t)(m_maxSize.x * pos.local.x / m_size.x);
 				MarkToReedraw();
 				return true;
 			} if (ewol::SCROLL_ENABLE_VERTICAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				m_originScrooled.y = (int32_t)(m_maxSize.y * y / m_size.y);
+				m_originScrooled.y = (int32_t)(m_maxSize.y * pos.local.y / m_size.y);
 				MarkToReedraw();
 				return true;
 			}

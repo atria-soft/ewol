@@ -104,12 +104,12 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 }
 
 
-bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y)
+bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
-		if (y > m_size.y - tmpSize.y) {
-			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, x, y);
+		if (pos.local.y > m_size.y - tmpSize.y) {
+			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, pos.abs);
 			return true;
 		}
 	}
@@ -118,11 +118,11 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
 			m_popUpWidgetList[m_currentCreateId].PopBack();
 		} else {
-			m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GenEventInput(IdInput, typeEvent, x, y);
+			m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GenEventInput(IdInput, typeEvent, pos.abs);
 		}
 	// otherwise in the normal windows
 	} else if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, x, y);
+		m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
 	}
 	return true;
 }
@@ -133,20 +133,15 @@ void ewol::Windows::SysDraw(void)
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
-	
-	// Clear the screen with transparency ...
-	glClearColor(0.750, 0.750, 0.750, 0.5);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+/*
 	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-//#if defined(__PLATFORM__Android)
 	glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	
 	glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
-/*
+	
 #else
 	glOrtho(0., m_size.x, 0., -m_size.y, 1., 20.);
 	
@@ -155,19 +150,8 @@ void ewol::Windows::SysDraw(void)
 	glTranslatef(0, -m_size.y, -5);
 #endif
 */
-	//http://www.khronos.org/opengles/documentation/opengles1_0/html/glBlendFunc.html
-	
-	//glEnable(GL_POLYGON_SMOOTH);
-	//glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
-	
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	//glShadeModel(GL_POLYGON_SMOOTH);
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
-	//glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
 
 	GenDraw();
 
@@ -193,6 +177,11 @@ void ewol::Windows::OnRegenerateDisplay(void)
 
 bool ewol::Windows::OnDraw(void)
 {
+
+	// Clear the screen with transparency ...
+	glClearColor(0.750, 0.750, 0.750, 0.5);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
 	if (NULL != m_subWidget[m_currentDrawId]) {

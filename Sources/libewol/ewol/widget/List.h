@@ -46,7 +46,7 @@ namespace ewol {
 			int32_t        m_displayCurrentNbLine;      //!< Number of line in the display
 		public:
 			virtual void   OnRegenerateDisplay(void);
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 		protected:
 			// function call to display the list :
 			virtual color_ts GetBasicBG(void) {

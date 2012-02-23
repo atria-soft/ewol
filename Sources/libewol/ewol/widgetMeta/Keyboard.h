@@ -62,7 +62,7 @@ namespace ewol {
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, etkFloat_t x, etkFloat_t y);
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 	};
 };
 
