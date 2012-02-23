@@ -66,6 +66,18 @@ namespace ewol
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<coord2D_ts> &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
+	int32_t     DrawText(int32_t                        fontID,
+	                     coord2D_ts                     textPos,
+	                     const etk::UString &           unicodeString,
+	                     int32_t &                      fontTextureId,
+	                     etk::VectorType<coord2D_ts> &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
+	int32_t     DrawText(int32_t                        fontID,
+	                     coord2D_ts                     textPos,
+	                     const uniChar_t                unicodeChar,
+	                     int32_t &                      fontTextureId,
+	                     etk::VectorType<coord2D_ts> &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     LoadFont(etk::File fontFileName);
 };
 

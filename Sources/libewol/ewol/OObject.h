@@ -48,8 +48,9 @@ namespace ewol {
 		public:
 			OObject(void);
 			virtual ~OObject(void);
-			void SetClipping(clipping_ts clip) {m_clipping = clip; m_hasClipping = true;};
-			void RmClipping(void) {m_hasClipping = false;};
+			void clippingSet(clipping_ts clip) {m_clipping = clip; m_hasClipping = true;};
+			void clippingDisable(void) {m_hasClipping = false;};
+			void clippingEnable(void) {m_hasClipping = true;};
 			virtual void Draw(void) = 0;
 	};
 };

@@ -108,7 +108,7 @@ void ewol::OObject2DTextColored::Clear(void)
 	m_coordColor.Clear();
 }
 
-int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString)
+int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, const etk::UString& unicodeString)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
@@ -116,14 +116,19 @@ int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawCli
 		return 0;
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
-	int32_t size = ewol::DrawText(m_FontId, textPos, drawClipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
+	int32_t size = 0;
+	if (true==m_hasClipping) {
+		size = ewol::DrawText(m_FontId, textPos, m_clipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
+	} else {
+		size = ewol::DrawText(m_FontId, textPos, unicodeString, m_FontTextureId, m_coord, m_coordTex);
+	}
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
 	}
 	return size;
 }
 
-int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t unicodeChar)
+int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, const uniChar_t unicodeChar)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
@@ -131,7 +136,12 @@ int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, clipping_ts drawCli
 		return 0;
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
-	int32_t size = ewol::DrawText(m_FontId, textPos, drawClipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
+	int32_t size = 0;
+	if (true==m_hasClipping) {
+		size = ewol::DrawText(m_FontId, textPos, m_clipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
+	} else {
+		size = ewol::DrawText(m_FontId, textPos, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
+	}
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
 	}

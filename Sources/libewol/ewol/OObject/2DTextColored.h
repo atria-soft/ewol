@@ -41,8 +41,8 @@ namespace ewol {
 			void SetColor(color_ts color);
 			// set a specific text
 			void    Clear(void);
-			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString);
-			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
+			int32_t Text(coord2D_ts textPos, const etk::UString& unicodeString);
+			int32_t Text(coord2D_ts textPos, const uniChar_t     unicodeChar);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_color;         //!< tmp text color ...

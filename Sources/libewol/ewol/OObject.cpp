@@ -34,6 +34,7 @@
 
 ewol::OObject::OObject(void)
 {
+	m_hasClipping = false;
 	// nothing to do ...
 }
 
