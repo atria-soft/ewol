@@ -246,7 +246,7 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 		subWidgetSize.x = (int32_t)subWidgetSize.x;
 		subWidgetSize.y = (int32_t)subWidgetSize.y;
 		
-		m_subWidget->SetOrigin(0, 0);
+		m_subWidget->SetOrigin(m_origin.x, m_origin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();

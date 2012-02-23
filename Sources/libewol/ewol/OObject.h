@@ -42,14 +42,15 @@ namespace ewol {
 	
 	class OObject
 	{
+		protected:
+			bool        m_hasClipping;
+			clipping_ts m_clipping;
 		public:
 			OObject(void);
 			virtual ~OObject(void);
-		public:
+			void SetClipping(clipping_ts clip) {m_clipping = clip; m_hasClipping = true;};
+			void RmClipping(void) {m_hasClipping = false;};
 			virtual void Draw(void) = 0;
-		public:
-			// use to crop element outside the display
-			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY) { };
 	};
 };
 

@@ -49,10 +49,6 @@ void ewol::Drawable::AddOObject(ewol::OObject* newObject, int32_t pos)
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	// TODO : Chow why I use this ...
-	//EWOL_INFO("UPDATE AT size : (" << m_size.x << "," << m_size.y << ")");
-	newObject->UpdateSize(m_size.x, m_size.y);
-	
 	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
 		m_listOObject[m_currentCreateId].PushBack(newObject);
 	} else {

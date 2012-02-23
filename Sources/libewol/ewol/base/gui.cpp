@@ -37,6 +37,17 @@ ewol::Windows* gui_uniqueWindows = NULL;
 etkFloat_t     gui_width = 320;
 etkFloat_t     gui_height = 480;
 
+
+int32_t ewol::GetCurrentWidth(void)
+{
+	return gui_width;
+}
+
+int32_t ewol::GetCurrentHeight(void)
+{
+	return gui_height;
+}
+
 void ewol::RmPopUp(int32_t widgetID)
 {
 	if (NULL != gui_uniqueWindows) {

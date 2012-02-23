@@ -79,6 +79,7 @@ bool ewol::Label::CalculateMinSize(void)
 void ewol::Label::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
+	MarkToReedraw();
 }
 
 

@@ -25,6 +25,7 @@
 #include <ewol/Widget.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/WidgetMessageMultiCast.h>
+#include <ewol/ewol.h>
 #include <ewol/importgl.h>
 
 char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
@@ -252,8 +253,8 @@ bool ewol::Widget::GenDraw(void)
 	etkFloat_t testSizeX = m_size.x-TEST_CLIPPING_SIZE*2;
 	etkFloat_t testSizeY = m_size.y-TEST_CLIPPING_SIZE*2;
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-	glViewport(                  m_origin.x + TEST_CLIPPING_SIZE,
-	            600 - m_size.y - m_origin.y + TEST_CLIPPING_SIZE,
+	glViewport(                                       m_origin.x + TEST_CLIPPING_SIZE,
+	            ewol::GetCurrentHeight() - m_size.y - m_origin.y + TEST_CLIPPING_SIZE,
 	            testSizeX,
 	            testSizeY);
 	glMatrixMode(GL_PROJECTION);

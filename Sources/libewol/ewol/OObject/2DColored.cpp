@@ -283,49 +283,6 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 }
 
 
-void ewol::OObject2DColored::UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY)
-{
-	// copy the data
-	etk::VectorType<coord2D_ts>   coord = m_coord;
-	etk::VectorType<color_ts>     color = m_coordColor;
-	// Clear the generated display ...
-	m_coord.Clear();
-	m_coordColor.Clear();
-	// Check if the triangle is in the area...
-	int32_t nbTriangle = coord.Size()/3;
-	for (int32_t iii=0; iii<nbTriangle; iii++) {
-		if(    coord[iii*3+0].x >= 0.0 && coord[iii*3+0].x < sizeX
-		    && coord[iii*3+0].y >= 0.0 && coord[iii*3+0].y < sizeY
-		    && coord[iii*3+1].x >= 0.0 && coord[iii*3+1].x < sizeX
-		    && coord[iii*3+1].y >= 0.0 && coord[iii*3+1].y < sizeY
-		    && coord[iii*3+2].x >= 0.0 && coord[iii*3+2].x < sizeX
-		    && coord[iii*3+2].y >= 0.0 && coord[iii*3+2].y < sizeY)
-		{
-			// point 1-2-3 inside
-			m_coord.PushBack(coord[iii*3+0]);
-			m_coordColor.PushBack(color[iii*3+0]);
-			m_coord.PushBack(coord[iii*3+1]);
-			m_coordColor.PushBack(color[iii*3+1]);
-			m_coord.PushBack(coord[iii*3+2]);
-			m_coordColor.PushBack(color[iii*3+2]);
-		} else {
-			etk::VectorType<coord2D_ts>   tmpCoord;
-			etk::VectorType<coord2D_ts>   tmpCoordOut;
-			tmpCoord.PushBack(coord[iii*3+0]);
-			tmpCoord.PushBack(coord[iii*3+1]);
-			tmpCoord.PushBack(coord[iii*3+2]);
-			
-			SutherlandHodgman(tmpCoord, tmpCoordOut, 0, 0, sizeX, sizeY);
-			tmpCoord.Clear();
-			generatePolyGone(tmpCoordOut, tmpCoord);
-			for (int32_t jjj=0; jjj<tmpCoord.Size(); jjj++) {
-				m_coord.PushBack(tmpCoord[jjj]);
-				m_coordColor.PushBack(color[iii*3+0]);
-			}
-		}
-	}
-}
-
 void ewol::OObject2DColored::GenerateTriangle(void)
 {
 	m_triElement = 0;
@@ -435,27 +392,7 @@ void ewol::OObject2DColored::Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, e
 	SetPoint(sx - offsetx, sy - offsety);
 }
 
-
 void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h)
-{
-	ResetCount();
-
-	if(    0 >= h
-	    || 0 >= w) {
-		return;
-	}
-	
-	SetPoint(x    , y + h);
-	SetPoint(x    , y);
-	SetPoint(x + w, y);
-
-	SetPoint(x + w, y);
-	SetPoint(x + w, y + h);
-	SetPoint(x    , y + h);
-}
-
-
-void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, clipping_ts& drawClipping)
 {
 	ResetCount();
 	
@@ -471,24 +408,24 @@ void ewol::OObject2DColored::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w,
 	etkFloat_t dyC = y;
 	etkFloat_t dyD = y + h;
 	
-	//EWOL_INFO("Rectangle size : (" << x << "," << y << ") in clipping (" << drawClipping.x << "," << drawClipping.y << ") ==> (" << drawClipping.w << "," << drawClipping.h << ")");
-	if (dxA < drawClipping.x) {
-		dxA = drawClipping.x;
-	}
-	if (dxB > drawClipping.x + drawClipping.w) {
-		dxB = drawClipping.x + drawClipping.w;
-	}
-	if (dyC < drawClipping.y) {
-		dyC = drawClipping.y;
-	}
-	if (dyD > drawClipping.y + drawClipping.h) {
-		dyD = drawClipping.y + drawClipping.h;
+	if (true == m_hasClipping) {
+		if (dxA < m_clipping.x) {
+			dxA = m_clipping.x;
+		}
+		if (dxB > m_clipping.x + m_clipping.w) {
+			dxB = m_clipping.x + m_clipping.w;
+		}
+		if (dyC < m_clipping.y) {
+			dyC = m_clipping.y;
+		}
+		if (dyD > m_clipping.y + m_clipping.h) {
+			dyD = m_clipping.y + m_clipping.h;
+		}
 	}
 	if(    dyC >= dyD
 	    || dxA >= dxB) {
 		return;
 	}
-	
 	SetPoint(dxA, dyD);
 	SetPoint(dxA, dyC);
 	SetPoint(dxB, dyC);

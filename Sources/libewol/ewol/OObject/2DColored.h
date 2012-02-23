@@ -52,15 +52,11 @@ namespace ewol {
 			void SetPoint(etkFloat_t x, etkFloat_t y);
 			void Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness);
 			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h);
-			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, clipping_ts& drawClipping);
 			void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness);
 			void Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness);
 			void CirclePart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness, etkFloat_t angleStart, etkFloat_t angleStop);
 			void Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius);
 			void DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t angleStart, etkFloat_t angleStop);
-		public:
-			// Ewol internal ... : done to update at the origin of the widget ...
-			virtual void UpdateSize(etkFloat_t sizeX, etkFloat_t sizeY);
 	};
 };
 
