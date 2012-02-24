@@ -42,7 +42,7 @@ class EventShortCut {
 static etk::VectorType<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
 
 
-void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString& data)
+void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data)
 {
 	EventShortCut * newEvent = new EventShortCut();
 	if (NULL == newEvent) {
@@ -61,7 +61,7 @@ void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_
 }
 
 
-void ewol::shortCut::Add(char * descriptiveString, const char * generateEventId, etk::UString& data)
+void ewol::shortCut::Add(const char * descriptiveString, const char * generateEventId, etk::UString data)
 {
 	if(		NULL==descriptiveString
 		||	0==strlen(descriptiveString))
@@ -76,7 +76,7 @@ void ewol::shortCut::Add(char * descriptiveString, const char * generateEventId,
 	
 	// parsing of the string :
 	//"ctrl+shift+alt+meta+s"
-	char * tmp = strstr(descriptiveString, "ctrl");
+	const char * tmp = strstr(descriptiveString, "ctrl");
 	if(NULL != tmp) {
 		control = true;
 	}
@@ -123,8 +123,11 @@ void ewol::shortCut::UnInit(void)
 
 
 
-bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue)
+bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, bool isDown)
 {
+	if (unicodeValue >= 'A' && unicodeValue <='Z') {
+		unicodeValue += 'a' - 'A';
+	}
 	//EWOL_INFO("Try to find generic shortcut ...");
 	for(int32_t iii=l_inputShortCutEvent.Size()-1; iii>=0; iii--) {
 		if(    l_inputShortCutEvent[iii]->shift == shift
@@ -133,7 +136,9 @@ bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniC
 		    && l_inputShortCutEvent[iii]->meta == meta
 		    && l_inputShortCutEvent[iii]->UnicodeValue == unicodeValue)
 		{
-			ewol::widgetMessageMultiCast::Send(-1, l_inputShortCutEvent[iii]->generateEventId, l_inputShortCutEvent[iii]->eventData);
+			if (isDown) {
+				ewol::widgetMessageMultiCast::Send(-1, l_inputShortCutEvent[iii]->generateEventId, l_inputShortCutEvent[iii]->eventData);
+			} // no else
 			return true;
 		}
 	}

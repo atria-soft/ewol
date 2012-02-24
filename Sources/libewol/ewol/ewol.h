@@ -56,8 +56,8 @@ namespace ewol {
 	bool IsSetVerNum(void);
 	bool IsSetInsert(void);
 	namespace shortCut {
-		void Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString& data);
-		void Add(char * descriptiveString, const char * generateEventId, etk::UString& data);
+		void Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data);
+		void Add(const char * descriptiveString, const char * generateEventId, etk::UString data);
 	};
 	
 	int32_t GetCurrentWidth(void);

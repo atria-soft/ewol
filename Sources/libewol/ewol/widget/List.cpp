@@ -93,7 +93,7 @@ void ewol::List::OnRegenerateDisplay(void)
 	
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
-		uint32_t nbRaw    = GetNuberOfRaw();
+		int32_t nbRaw    = GetNuberOfRaw();
 		// For the scrooling windows
 		m_maxSize.x = m_size.x;
 		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
@@ -128,7 +128,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		drawClipping.w = m_size.x - (2*m_paddingSizeX);
 		drawClipping.h = m_size.y;
 		
-		for(uint32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
+		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite;
 			color_ts fg;
 			color_ts bg;

@@ -78,14 +78,7 @@ static int attrListDbl[] = {
 	None
 };
 
-extern bool guiKeyBoardMode_CapLock;
-extern bool guiKeyBoardMode_Shift;
-extern bool guiKeyBoardMode_Ctrl;
-extern bool guiKeyBoardMode_Meta;
-extern bool guiKeyBoardMode_Alt;
-extern bool guiKeyBoardMode_AltGr;
-extern bool guiKeyBoardMode_VerNum;
-extern bool guiKeyBoardMode_Insert;
+static eventSpecialKey_ts guiKeyBoardMode;
 
 
 extern "C" {
@@ -475,48 +468,48 @@ void X11_Run(void)
 						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
 						if (event.xkey.state & (1<<0) ) {
 							//EWOL_DEBUG("    Special Key : SHIFT");
-							guiKeyBoardMode_Shift = true;
+							guiKeyBoardMode.shift = true;
 						} else {
-							guiKeyBoardMode_Shift = false;
+							guiKeyBoardMode.shift = false;
 						}
 						if (event.xkey.state & (1<<1) ) {
 							//EWOL_DEBUG("    Special Key : CAPS_LOCK");
-							guiKeyBoardMode_CapLock = true;
+							guiKeyBoardMode.capLock = true;
 						} else {
-							guiKeyBoardMode_CapLock = false;
+							guiKeyBoardMode.capLock = false;
 						}
 						if (event.xkey.state & (1<<2) ) {
 							//EWOL_DEBUG("    Special Key : Ctrl");
-							guiKeyBoardMode_Ctrl = true;
+							guiKeyBoardMode.ctrl = true;
 						} else {
-							guiKeyBoardMode_Ctrl = false;
+							guiKeyBoardMode.ctrl = false;
 						}
 						if (event.xkey.state & (1<<3) ) {
 							//EWOL_DEBUG("    Special Key : Alt");
-							guiKeyBoardMode_Alt = true;
+							guiKeyBoardMode.alt = true;
 						} else {
-							guiKeyBoardMode_Alt = false;
+							guiKeyBoardMode.alt = false;
 						}
 						if (event.xkey.state & (1<<4) ) {
 							//EWOL_DEBUG("    Special Key : VER_num");
-							guiKeyBoardMode_VerNum = true;
+							guiKeyBoardMode.verNum = true;
 						} else {
-							guiKeyBoardMode_VerNum = false;
+							guiKeyBoardMode.verNum = false;
 						}
 						if (event.xkey.state & (1<<5) ) {
 							EWOL_DEBUG("    Special Key : MOD");
 						}
 						if (event.xkey.state & (1<<6) ) {
 							//EWOL_DEBUG("    Special Key : META");
-							guiKeyBoardMode_Meta = true;
+							guiKeyBoardMode.meta = true;
 						} else {
-							guiKeyBoardMode_Meta = false;
+							guiKeyBoardMode.meta = false;
 						}
 						if (event.xkey.state & (1<<7) ) {
 							//EWOL_DEBUG("    Special Key : ALT_GR");
-							guiKeyBoardMode_AltGr = true;
+							guiKeyBoardMode.altGr = true;
 						} else {
-							guiKeyBoardMode_AltGr = false;
+							guiKeyBoardMode.altGr = false;
 						}
 						bool find = true;
 						ewol::eventKbMoveType_te keyInput;
@@ -543,10 +536,10 @@ void X11_Run(void)
 							case 118:
 								keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
 								if(event.type == KeyRelease) {
-									if (true == guiKeyBoardMode_Insert) {
-										guiKeyBoardMode_Insert = false;
+									if (true == guiKeyBoardMode.insert) {
+										guiKeyBoardMode.insert = false;
 									} else {
-										guiKeyBoardMode_Insert = true;
+										guiKeyBoardMode.insert = true;
 									}
 								}
 								break;
@@ -577,19 +570,31 @@ void X11_Run(void)
 							case 91: // Suppr on keypad
 								find = false;
 								{
+									eventKeyboardKey_ts specialEvent;
+									specialEvent.special = guiKeyBoardMode;
+									specialEvent.myChar = 0x0000007F;
 									if(event.type == KeyPress) {
-										EWOL_ThreadKeyboardEvent(true, 0x0000007F);
+										specialEvent.isDown = true;
 									} else {
-										EWOL_ThreadKeyboardEvent(false, 0x0000007F);
+										specialEvent.isDown = false;
 									}
+									EWOL_ThreadKeyboardEvent(specialEvent);
 								}
 							default:
 								find = false;
 								{
 									char buf[11];
+									EWOL_DEBUG("Keycode: " << event.xkey.keycode);
+									// change keystate for simple reson of the ctrl error...
+									int32_t keyStateSave = event.xkey.state;
+									if (event.xkey.state & (1<<2) ) {
+										event.xkey.state = event.xkey.state & 0xFFFFFFFB;
+									}
 									KeySym keysym;
 									XComposeStatus status;
 									int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
+									// retreave real keystate
+									event.xkey.state = keyStateSave;
 									buf[count] = '\0';
 									// Replace \r error ...
 									if (buf[0] == '\r') {
@@ -598,15 +603,16 @@ void X11_Run(void)
 									}
 									if (count>0) {
 										// transform iun unicode
-										uniChar_t unicodeValue;
-										//unicode::convertUtf8ToUnicode(buf, unicodeValue);
-										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], unicodeValue);
+										eventKeyboardKey_ts specialEvent;
+										specialEvent.special = guiKeyBoardMode;
+										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], specialEvent.myChar);
 										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 										if(event.type == KeyPress) {
-											EWOL_ThreadKeyboardEvent(true, unicodeValue);
+											specialEvent.isDown = true;
 										} else {
-											EWOL_ThreadKeyboardEvent(false, unicodeValue);
+											specialEvent.isDown = false;
 										}
+										EWOL_ThreadKeyboardEvent(specialEvent);
 									} else {
 										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 									}
@@ -615,11 +621,15 @@ void X11_Run(void)
 						}
 						if (true == find) {
 							EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+							eventKeyboardMove_ts specialEvent;
+							specialEvent.special = guiKeyBoardMode;
 							if(event.type == KeyPress) {
-								EWOL_ThreadKeyboardEventMove(true, keyInput);
+								specialEvent.isDown = true;
 							} else {
-								EWOL_ThreadKeyboardEventMove(false, keyInput);
+								specialEvent.isDown = false;
 							}
+							specialEvent.move = keyInput;
+							EWOL_ThreadKeyboardEventMove(specialEvent);
 						}
 						break;
 					}

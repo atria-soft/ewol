@@ -75,16 +75,6 @@ typedef struct {
 	float y;
 } eventInputState_ts;
 
-typedef struct {
-	bool      isDown;
-	uniChar_t myChar;
-} eventKeyboardKey_ts;
-
-typedef struct {
-	bool                     isDown;
-	ewol::eventKbMoveType_te move;
-} eventKeyboardMove_ts;
-
 void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
 void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
 void EWOL_NativeResize(int w, int h );
@@ -157,15 +147,16 @@ static void* BaseAppEntry(void* param)
 					}
 					break;
 				case THREAD_KEYBORAD_KEY:
-					EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
+					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 					{
 						eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
-						guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
-						//if (false==ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue)) { ... }
+						if (false==ewol::shortCut::Process(tmpData->special.shift, tmpData->special.ctrl, tmpData->special.alt, tmpData->special.meta, tmpData->myChar, tmpData->isDown)) {
+							guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
+						}
 					}
 					break;
 				case THREAD_KEYBORAD_MOVE:
-					EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
+					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
 					{
 						eventKeyboardMove_ts * tmpData = (eventKeyboardMove_ts*)data.data;
 						guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
@@ -313,20 +304,14 @@ void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
 	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
 }
 
-void EWOL_ThreadKeyboardEvent(bool isDown, uniChar_t keyInput)
+void EWOL_ThreadKeyboardEvent(eventKeyboardKey_ts& keyInput)
 {
-	eventKeyboardKey_ts tmpData;
-	tmpData.isDown = isDown;
-	tmpData.myChar = keyInput;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventKeyboardKey_ts) );
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eventKeyboardKey_ts) );
 }
 
-void EWOL_ThreadKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput)
+void EWOL_ThreadKeyboardEventMove(eventKeyboardMove_ts& keyInput)
 {
-	eventKeyboardMove_ts tmpData;
-	tmpData.isDown = isDown;
-	tmpData.move = keyInput;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventKeyboardMove_ts) );
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eventKeyboardMove_ts) );
 }
 
 void EWOL_ThreadEventHide(void)
