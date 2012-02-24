@@ -5,6 +5,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/base/MainThread.cpp \
 			ewol/base/gui.cpp \
 			ewol/Debug.cpp \
+			ewol/EObject.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \
 			ewol/OObject/2DTextColored.cpp \

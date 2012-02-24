@@ -107,6 +107,8 @@ namespace ewol {
 	
 	
 	
+	
+	
 	class Widget {
 		public:
 			Widget(void);
@@ -170,10 +172,6 @@ namespace ewol {
 			virtual void OnGetFocus(void) {};
 			virtual void OnLostFocus(void) {};
 		
-		// ----------------------------------------------------------------------------------------------------------------
-		// -- Input Event on the widget : The input is the muse for a computer, or the finger for the tablettes
-		// -- Shortcut: (only for computer) ==> must be manage otherwise for tablette pc
-		// ----------------------------------------------------------------------------------------------------------------
 		private:
 			etk::VectorType<eventExtern_ts>   m_externEvent;         //!< Generic list of event generation for output link
 			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget

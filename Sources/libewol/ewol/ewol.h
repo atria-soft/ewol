@@ -35,18 +35,23 @@
 namespace ewol {
 	void Stop(void);
 	void DisplayWindows(ewol::Windows * windows);
+	// only on computer
 	void ChangeSize(int32_t w, int32_t h);
 	void ChangePos(int32_t x, int32_t y);
+	// TODO : Deprecated used FOR???
 	void GetAbsPos(int32_t & x, int32_t & y);
+	
+	// TODO : Deprecated remove it ...
 	bool IsPressedInput(int32_t inputID);
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
 	void PopUpWidgetPush(ewol::Widget * tmpWidget);
 	void RmPopUp(int32_t widgetID);
+	
 	int32_t      CmdLineNb(void);
 	etk::UString CmdLineGet(int32_t id);
-	
+	// TODO : This might be deprecated ... 
 	bool IsSetCapsLock(void);
 	bool IsSetShift(void);
 	bool IsSetCtrl(void);
@@ -55,15 +60,16 @@ namespace ewol {
 	bool IsSetAltGr(void);
 	bool IsSetVerNum(void);
 	bool IsSetInsert(void);
+	// basic shortcut setting (set default value, the configutration file will overloaded it automaticly
 	namespace shortCut {
 		void Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data);
 		void Add(const char * descriptiveString, const char * generateEventId, etk::UString data);
 	};
-	
+	// TODO : This is dangerous and might be deprecated ... Soon
 	int32_t GetCurrentWidth(void);
 	int32_t GetCurrentHeight(void);
 };
-
+// get current time in ms...
 int64_t GetCurrentTime(void);
 
 
