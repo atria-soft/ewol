@@ -54,6 +54,7 @@ ewol::PopUp::~PopUp(void)
 
 bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
+	/*
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
@@ -84,12 +85,14 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
+	*/
 	return true;
 }
 
 
 bool ewol::PopUp::CalculateMinSize(void)
 {
+	/*
 	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpendX=false;
 	m_userExpendY=false;
@@ -103,6 +106,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
 	MarkToReedraw();
+	*/
 	return true;
 }
 
@@ -124,35 +128,42 @@ void ewol::PopUp::SetExpendY(bool newExpend)
 
 void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 {
+	/*
 	if (NULL == newWidget) {
 		return;
 	}
 	m_subWidget[m_currentCreateId] = newWidget;
 	newWidget->SetParrent(this);
+	*/
 }
 
 
 void ewol::PopUp::SubWidgetRemove(void)
 {
+	/*
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId]);
 		m_subWidget[m_currentCreateId] = NULL;
 	}
+	*/
 }
 
 bool ewol::PopUp::OnDraw(void)
 {
+	/*
 	// draw upper classes
 	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->GenDraw();
 	}
+	*/
 	return true;
 }
 
 
 void ewol::PopUp::OnRegenerateDisplay(void)
 {
+	/*
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
@@ -172,11 +183,13 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
+	*/
 }
 
 
 bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+	/*
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
@@ -189,19 +202,29 @@ bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eve
 		}
 		
 	}
+	*/
 	return true;
 }
 
 
 void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
 {
+	/*
 	m_displayRatio = ratio;
+	*/
 }
-
 
 void ewol::PopUp::OnFlipFlopEvent(void)
 {
-	// keep in the current element all the modification done ...
-	m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+	bool needFlipFlop = m_needFlipFlop;
+	// call herited classes
+	ewol::Widget::OnFlipFlopEvent();
+	// internal saving
+	if (true == needFlipFlop) {
+		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+	}
+	// in every case, we propagate the flip-flop EVENT
+	if(NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
+	}
 }
-

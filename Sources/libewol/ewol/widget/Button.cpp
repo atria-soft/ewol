@@ -192,7 +192,7 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, ev
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			// nothing to do ...
-			GenEventInputExternal(ewolEventButtonPressed, pos.abs.x, pos.abs.y);
+			GenerateEventId(ewolEventButtonPressed);
 			MarkToReedraw();
 			return true;
 		}
@@ -206,7 +206,7 @@ bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeDa
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
 	    && unicodeData == '\r') {
-		GenEventInputExternal(ewolEventButtonEnter, -1, -1);
+		GenerateEventId(ewolEventButtonEnter);
 	}
 	return false;
 }

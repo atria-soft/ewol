@@ -158,7 +158,7 @@ bool ewol::CheckBox::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 			} else {
 				m_value = true;
 			}
-			GenEventInputExternal(ewolEventCheckBoxClicked, pos.abs.x, pos.abs.y);
+			GenerateEventId(ewolEventCheckBoxClicked);
 			ewol::widgetManager::FocusKeep(this);
 			MarkToReedraw();
 			return true;
@@ -181,7 +181,8 @@ bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			m_value = true;
 		}
 		MarkToReedraw();
-		return GenEventInputExternal(ewolEventCheckBoxClicked, -1,-1);
+		GenerateEventId(ewolEventCheckBoxClicked);
+		return true;
 	}
 	return false;
 }

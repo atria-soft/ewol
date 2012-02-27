@@ -6,6 +6,8 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/base/gui.cpp \
 			ewol/Debug.cpp \
 			ewol/EObject.cpp \
+			ewol/EObjectManager.cpp \
+			ewol/EObjectMessageMulticast.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \
 			ewol/OObject/2DTextColored.cpp \
@@ -16,7 +18,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/FontFreeType.cpp \
 			ewol/Widget.cpp \
 			ewol/WidgetManager.cpp \
-			ewol/WidgetMessageMultiCast.cpp \
 			ewol/Windows.cpp \
 			ewol/ShortCutManager.cpp \
 			ewol/widget/WidgetScrolled.cpp \

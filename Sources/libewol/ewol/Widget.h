@@ -25,6 +25,8 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
+#include <ewol/EObject.h>
+
 #define NB_BOUBLE_BUFFER        (2)
 
 namespace ewol {
@@ -46,6 +48,7 @@ namespace ewol {
 		EVENT_INPUT_TYPE_UP,
 		EVENT_INPUT_TYPE_ENTER,
 		EVENT_INPUT_TYPE_LEAVE,
+		EVENT_INPUT_TYPE_ABORT, // SPecial event generate when an upper classes get an event ... (TBD)
 	} eventInputType_te;
 	
 	typedef enum {
@@ -93,13 +96,6 @@ namespace ewol {
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
-	
-	typedef struct {
-		const char * generateEventId;       //!< event generate ID (to be unique it was pointer on the string name)
-		int32_t      widgetCall;            //!< unique ID of the widget
-		const char * generateEventIdExtern; //!< External generated event ID (to be unique it was pointer on the string name)
-	} eventExtern_ts;
-	
 	typedef struct {
 		coord2D_ts   abs;
 		coord2D_ts   local;
@@ -109,19 +105,12 @@ namespace ewol {
 	
 	
 	
-	class Widget {
+	class Widget : public EObject {
 		public:
 			Widget(void);
+			// TODO : Set this in private if possible ...
 			virtual ~Widget(void);
-			int32_t GetWidgetId(void);
-		private:
-			ewol::Widget *  m_parrent;   //!< parrent of the current widget (if NULL ==> this is the main node(root))
-		public:
-			void SetParrent(ewol::Widget * newParrent) { m_parrent = newParrent; };
-			void UnlinkParrent(void) { if (NULL != m_parrent) { m_parrent->removedChild(this); m_parrent=NULL; } };
-			virtual void removedChild(ewol::Widget * removedChild) {  };
-			coord2D_ts GetRealOrigin(void); // this fnction call all the parrent to get his real position ...
-		
+			void    MarkToRemove(void);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
@@ -172,30 +161,12 @@ namespace ewol {
 			virtual void OnGetFocus(void) {};
 			virtual void OnLostFocus(void) {};
 		
-		private:
-			etk::VectorType<eventExtern_ts>   m_externEvent;         //!< Generic list of event generation for output link
-			etk::VectorType<const char*>      m_ListEventAvaillable; //!< List of all event availlable for this widget
 		public:
 			// external acces to set an input event on this widget.
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos); // call when input event arrive and call OnEventInput, if no event detected
-			bool GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y);
 			virtual bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
 		protected:
-			void AddEventId(const char * generateEventId) {
-				if (NULL != generateEventId) {
-					m_ListEventAvaillable.PushBack(generateEventId);
-				}
-			}
-		public:
-			// to link an extern widget at the internal event of this one it will access by here :
-			bool ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId = NULL);
-		protected:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos) { return false; };
-		public:
-			// when an event arrive from an other widget, it will arrive here:
-			// TODO : change name ...
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y) { return false; };
-		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present
 		// ----------------------------------------------------------------------------------------------------------------
@@ -211,15 +182,16 @@ namespace ewol {
 			int8_t       m_currentCreateId;       //!< Id of the element might be modify
 			bool         m_needFlipFlop;          //!< A flip flop need to be done
 			bool         m_needRegenerateDisplay; //!< the display might be done the next regeneration
-			virtual bool OnDraw(void) { return true; };
-		protected:
-			void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
-			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
+			        void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
+			        bool NeedRedraw(void)    { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
-			void DoubleBufferFlipFlop(void);
-			virtual void OnFlipFlopEvent(void) { /* nothing to do */  };
+			virtual void OnFlipFlopEvent(void);
+		public:
+			        bool GenDraw(void);
+		protected:
+			virtual bool OnDraw(void) { return true; };
+		public:
 			virtual void OnRegenerateDisplay(void) { /* nothing to do */ };
-			bool GenDraw(void);
 
 	}; // end of the class Widget declaration
 };// end of nameSpace

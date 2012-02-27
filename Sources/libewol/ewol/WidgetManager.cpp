@@ -27,19 +27,9 @@
 #undef __class__
 #define __class__	"ewol::WidgetManager"
 
-extern "C" {
-	typedef struct {
-		int32_t       widgetId;
-		ewol::Widget* widgetPointer;
-	} widgetList_ts;
-};
-
 static pthread_mutex_t localMutex;
 static bool IsInit = false;
 
-// internal element of the widget manager : 
-static etk::VectorType<widgetList_ts>   m_widgetList;          // all widget allocated ==> all time increment ... never removed ...
-static etk::VectorType<widgetList_ts>   m_widgetDeletedList;   // all widget allocated
 // For the focus Management
 static ewol::Widget * m_focusWidgetDefault = NULL;
 static ewol::Widget * m_focusWidgetCurrent = NULL;
@@ -51,7 +41,6 @@ void ewol::widgetManager::Init(void)
 	int ret = pthread_mutex_init(&localMutex, NULL);
 	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
 	// prevent android error ==> can create memory leak but I prefer
-	m_widgetList.Clear();
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
 	IsInit = true;
@@ -64,91 +53,15 @@ void ewol::widgetManager::UnInit(void)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	
-	ewol::widgetManager::RemoveAllMarkWidget();
-	
-	EWOL_INFO(" Remove missing user widget");
-	while(0<m_widgetList.Size()) {
-		if (m_widgetList[0].widgetPointer!=NULL) {
-			MarkWidgetToBeRemoved(m_widgetList[0].widgetPointer);
-		}
-	}
-	// local acces ==> this control the mutex Lock
-	ewol::widgetManager::RemoveAllMarkWidget();
-	
 	IsInit = false;
 	
 	int ret = pthread_mutex_destroy(&localMutex);
 	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 }
 
-void ewol::widgetManager::Add(ewol::Widget * newWidget)
-{
-	static int32_t UniqueWidgetId = 0;
-	// Check existance
-	int32_t tmpID = ewol::widgetManager::Get(newWidget);
-	if (0 > tmpID) {
-		widgetList_ts tmpElement;
-		tmpElement.widgetId = UniqueWidgetId++;
-		tmpElement.widgetPointer = newWidget;
-		m_widgetList.PushBack(tmpElement);
-	} else {
-		EWOL_WARNING("Widget Already added to the widget manager, id=" << tmpID);
-	}
-}
-
 void ewol::widgetManager::Rm(ewol::Widget * newWidget)
 {
-	if (NULL == newWidget) {
-		EWOL_ERROR("Try to remove (NULL) Widget");
-		return;
-	}
-	for (int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii].widgetPointer == newWidget) {
-			FocusRemoveIfRemove(newWidget);
-			// Remove Element
-			m_widgetList.Erase(iii);
-			EWOL_CRITICAL("Widget direct remove is really DANGEROUS due to the multithreading ...");
-			return;
-		}
-	}
-	for (int32_t iii=0; iii<m_widgetDeletedList.Size(); iii++) {
-		if (m_widgetDeletedList[iii].widgetPointer == newWidget) {
-			// Remove focus here is an impossible case ...
-			FocusRemoveIfRemove(newWidget);
-			// Remove Element
-			m_widgetDeletedList.Erase(iii);
-			//Normal remove of the widget ...
-			//EWOL_DEBUG("Remove element " << iii);
-			return;
-		}
-	}
-	EWOL_ERROR("Widget already removed ...");
-}
-
-int32_t ewol::widgetManager::Get(ewol::Widget * newWidget)
-{
-	if (NULL == newWidget) {
-		return -1;
-	}
-	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii].widgetPointer == newWidget) {
-			return m_widgetList[iii].widgetId;
-		}
-	}
-	return -1;
-}
-
-ewol::Widget * ewol::widgetManager::Get(int32_t widgetId)
-{
-	if (0 > widgetId) {
-		return NULL;
-	}
-	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii].widgetId == widgetId) {
-			return m_widgetList[iii].widgetPointer;
-		}
-	}
-	return NULL;
+	FocusRemoveIfRemove(newWidget);
 }
 
 /* *************************************************************************
@@ -170,12 +83,12 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+		EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->RmFocus();
 	}
 	m_focusWidgetCurrent = newWidget;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+		EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->SetFocus();
 	}
 }
@@ -184,17 +97,17 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 void ewol::widgetManager::FocusSetDefault(ewol::Widget * newWidget)
 {
 	if (NULL != newWidget && false == newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::Get(newWidget));
+		EWOL_VERBOSE("Widget can not have Focus, id=" << newWidget->GetId() );
 		return;
 	}
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+			EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 			m_focusWidgetCurrent->RmFocus();
 		}
 		m_focusWidgetCurrent = newWidget;
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+			EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 			m_focusWidgetCurrent->SetFocus();
 		}
 	}
@@ -209,12 +122,12 @@ void ewol::widgetManager::FocusRelease(void)
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+		EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->RmFocus();
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << ewol::widgetManager::Get(m_focusWidgetCurrent));
+		EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->SetFocus();
 	}
 }
@@ -240,27 +153,16 @@ void ewol::widgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
 
 static bool needRedraw = true;
 
-void ewol::widgetManager::GetDoubleBufferFlipFlop(void)
-{
-	ewol::widgetManager::RemoveAllMarkWidget();
-	pthread_mutex_lock(&localMutex);
-	// flip/Flop all the widget registered :
-	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (NULL != m_widgetList[iii].widgetPointer) {
-			m_widgetList[iii].widgetPointer->DoubleBufferFlipFlop();
-		}
-	}
-	needRedraw = true;
-	// Remove the deprecated flipFlop elements ...
-	
-	pthread_mutex_unlock(&localMutex);
-}
-
-void ewol::widgetManager::GetDoubleBufferStartDraw(void)
+void ewol::widgetManager::DoubleBufferLock(void)
 {
 	if (IsInit) {
 		pthread_mutex_lock(&localMutex);
 	}
+}
+
+void ewol::widgetManager::SetDoubleBufferNeedDraw(void)
+{
+	needRedraw = true;
 }
 
 bool ewol::widgetManager::GetDoubleBufferNeedDraw(void)
@@ -272,74 +174,11 @@ bool ewol::widgetManager::GetDoubleBufferNeedDraw(void)
 	return false;
 }
 
-void ewol::widgetManager::GetDoubleBufferStopDraw(void)
+void ewol::widgetManager::DoubleBufferUnLock(void)
 {
 	if (IsInit) {
 		pthread_mutex_unlock(&localMutex);
 	}
 }
 
-
-
-
-
-
-void ewol::widgetManager::MarkWidgetToBeRemoved(int32_t widgetId)
-{
-	MarkWidgetToBeRemoved(ewol::widgetManager::Get(widgetId));
-}
-
-void ewol::widgetManager::MarkWidgetToBeRemoved(ewol::Widget * expectedWidget)
-{
-	if (expectedWidget == NULL) {
-		EWOL_WARNING("try to remove a NULL Pointer on the widget");
-		return;
-	}
-	int32_t findId = -1;
-	// check if the widget is not destroy :
-	for(int32_t iii=0; iii<m_widgetList.Size(); iii++) {
-		if (m_widgetList[iii].widgetPointer == expectedWidget) {
-			findId = iii;
-			break;
-		}
-	}
-	if (-1 == findId) {
-		EWOL_CRITICAL("Try to connect a wiget that is already removed or not registerd (imposible case)");
-		return;
-	}
-	// Remove the focus ..
-	FocusRemoveIfRemove(expectedWidget);
-	// move the widget from the basic list and set it in the remove list
-	widgetList_ts tmpWidgetProperty = m_widgetList[findId];
-	m_widgetList.Erase(findId);
-	// Unlink from the parrent ...
-	// TODO : Set it again ....
-	//tmpWidgetProperty.widgetPointer->UnlinkParrent();
-	// add ...
-	m_widgetDeletedList.PushBack(tmpWidgetProperty);
-}
-
-void ewol::widgetManager::RemoveAllMarkWidget(void)
-{
-	etk::VectorType<widgetList_ts>   m_widgetDeletedList_tmp = m_widgetDeletedList;
-	/*
-	if (m_widgetDeletedList.Size() > 0 ) {
-		EWOL_DEBUG("NB element to remove : " << m_widgetDeletedList.Size());
-	}
-	*/
-	// flip/Flop all the widget registered :
-	for(int32_t iii=0; iii<m_widgetDeletedList_tmp.Size(); iii++) {
-		if (NULL != m_widgetDeletedList_tmp[iii].widgetPointer) {
-			delete(m_widgetDeletedList_tmp[iii].widgetPointer);
-			m_widgetDeletedList_tmp[iii].widgetPointer = NULL;
-		}
-	}
-	/*
-	if (m_widgetDeletedList.Size() > 0 ) {
-		EWOL_CRITICAL("Memory leak ==> not all the widget are auto-removed nb = " << m_widgetDeletedList.Size());
-		// in every case clean the list ...
-		m_widgetDeletedList.Clear();
-	}
-	*/
-}
 

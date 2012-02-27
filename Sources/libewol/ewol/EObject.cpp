@@ -23,6 +23,7 @@
  */
 
 #include <ewol/EObject.h>
+#include <ewol/EObjectManager.h>
 #include <ewol/Debug.h>
 
 /**
@@ -34,6 +35,7 @@ ewol::EObject::EObject(void)
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = ss_globalUniqueId++;
 	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
+	ewol::EObjectManager::Add(this);
 }
 
 /**
@@ -41,6 +43,7 @@ ewol::EObject::EObject(void)
  */
 ewol::EObject::~EObject(void)
 {
+	ewol::EObjectManager::Rm(this);
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {

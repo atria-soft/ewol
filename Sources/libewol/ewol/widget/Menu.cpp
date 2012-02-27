@@ -25,7 +25,7 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/WidgetMessageMultiCast.h>
+#include <ewol/EObjectMessageMulticast.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>
@@ -37,8 +37,8 @@
 
 ewol::Menu::Menu(void)
 {
-	m_staticId = 0;
-	m_popUpId = -1;
+	m_staticPointer = NULL;
+	m_widgetPopUp = NULL;
 }
 
 ewol::Menu::~Menu(void)
@@ -68,6 +68,7 @@ void ewol::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
 
 void ewol::Menu::Clear(void)
 {
+	/*
 	for( int32_t iii=0; iii < m_listElement.Size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
@@ -75,6 +76,7 @@ void ewol::Menu::Clear(void)
 		}
 	}
 	m_listElement.Clear();
+	*/
 }
 
 int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
@@ -84,6 +86,7 @@ int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char 
 
 int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
 {
+/*
 	ewol::MenuElement * tmpObject = new ewol::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
@@ -109,6 +112,8 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 		tmpObject->m_widgetId = myButton->GetWidgetId();
 	}
 	return tmpObject->m_localId;
+*/
+	return 0;
 }
 
 void ewol::Menu::AddSpacer(void)
@@ -119,17 +124,21 @@ void ewol::Menu::AddSpacer(void)
 
 bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
 {
+	/*
 	if (true == ewol::SizerHori::OnEventAreaExternal(widgetID, generateEventId, data, x, y)) {
 		return true;
 	}
+	*/
+	/*
 	if (NULL==data && generateEventId==ewolEventButtonPressed) {
 		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
 			if (widgetID == m_listElement[iii]->m_widgetId) {
 				// 2 posible case
 				if (m_listElement[iii]->m_generateEvent != NULL) {
-					ewol::widgetMessageMultiCast::Send(GetWidgetId(), m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
-					ewol::RmPopUp(m_popUpId);
-					m_popUpId = -1;
+					// TODO : Later ...
+					//ewol::widgetMessageMultiCast::Send(GetWidgetId(), m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
+					m_widgetPopUp->MarkToRemove();
+					m_widgetPopUp = NULL;
 					return true;
 				} else {
 					bool findChild = false;
@@ -178,20 +187,21 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 								if (NULL == myButton) {
 									EWOL_ERROR("Allocation Error");
 								}
-								m_listElement[jjj]->m_widgetId = myButton->GetWidgetId();
-								myButton->ExternLinkOnEvent(ewolEventButtonPressed, GetWidgetId(), ewolEventButtonPressed);
+								m_listElement[jjj]->m_widgetPointer = myButton;
+								myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed, "");
 								myButton->SetExpendX(true);
 								myButton->SetFillX(true);
 								myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
 								mySizerVert->SubWidgetAdd(myButton);
 							}
 						}
-					m_popUpId = tmpWidget->GetWidgetId();
-					ewol::PopUpWidgetPush(tmpWidget);
+					m_staticPointer = tmpWidget;
+					ewol::PopUpWidgetPush(m_staticPointer);
 				}
 				return true;
 			}
 		}
 	}
+	*/
 	return false;
 }

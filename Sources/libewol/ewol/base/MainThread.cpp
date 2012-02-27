@@ -180,8 +180,6 @@ static void* BaseAppEntry(void* param)
 		if (0 == ewol::threadMsg::WaitingMessage(androidJniMsg)) {
 			if (countNbEvent > 0) {
 				EWOL_NativeRegenerateDisplay();
-				// TODO : Generate the display here ... Instead of every time we call the sub-Widget ...
-				ewol::widgetManager::GetDoubleBufferFlipFlop();
 				countNbEvent = 0;
 			}
 		}

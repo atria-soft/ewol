@@ -23,8 +23,9 @@
  */
 
 #include <ewol/Widget.h>
+#include <ewol/EObjectManager.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/WidgetMessageMultiCast.h>
+#include <ewol/EObjectMessageMulticast.h>
 #include <ewol/ewol.h>
 #include <ewol/importgl.h>
 
@@ -94,34 +95,22 @@ ewol::Widget::Widget(void)
 	SetExpendY();
 	SetFillX();
 	SetFillY();
-	ewol::widgetManager::Add(this);
 	m_canFocus = false;
 	m_hasFocus = false;
 }
 
 ewol::Widget::~Widget(void)
 {
-	ewol::widgetMessageMultiCast::Rm(GetWidgetId());
+	//ewol::widgetMessageMultiCast::Rm(GetWidgetId());
+}
+
+
+void ewol::Widget::MarkToRemove(void)
+{
+	// Remove his own focus...
 	ewol::widgetManager::Rm(this);
-}
-
-int32_t ewol::Widget::GetWidgetId(void)
-{
-	return ewol::widgetManager::Get(this);
-}
-
-coord2D_ts ewol::Widget::GetRealOrigin(void)
-{
-	coord2D_ts parentCoord;
-	if( NULL != m_parrent) {
-		parentCoord    = m_parrent->GetRealOrigin();
-		parentCoord.x += m_origin.x;
-		parentCoord.y += m_origin.y;
-	} else {
-		parentCoord.x = m_origin.x;
-		parentCoord.y = m_origin.y;
-	}
-	return parentCoord;
+	// merk to remova at the next cycle
+	ewol::EObjectManager::MarkToRemoved(this);
 }
 
 
@@ -144,59 +133,13 @@ bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, c
 	return OnEventInput(IdInput, typeEvent, eventPos);
 }
 
-bool ewol::Widget::GenEventInputExternal(const char * generateEventId, etkFloat_t x, etkFloat_t y)
-{
-	bool ended = false;
-	// For all external Event Requested : 
-	for( int32_t jjj=0; jjj<m_externEvent.Size(); jjj++) {
-		// Check if it is the same ID : 
-		if (m_externEvent[jjj].generateEventId == generateEventId) {
-			// get the widget Pointer:
-			
-			ewol::Widget * tmpWidget = ewol::widgetManager::Get(m_externEvent[jjj].widgetCall);
-			if (NULL == tmpWidget) {
-				EWOL_ERROR("Try to call an NULL Widget, it might be removed ... id=" << m_externEvent[jjj].widgetCall);
-			} else {
-				ended = tmpWidget->OnEventAreaExternal(GetWidgetId(), m_externEvent[jjj].generateEventIdExtern, NULL, x, y);
-			}
-			if (true == ended) {
-				break;
-			}
-		}
-	}
-	return ended;
-}
-
 bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue)
 {
 	return false;
 }
 
 
-bool ewol::Widget::ExternLinkOnEvent(const char * eventName, int32_t widgetId, const char * eventExternId)
-{
-	if(NULL == eventName || 0 > widgetId) {
-		EWOL_ERROR("Try to add extern event with wrong input ..");
-		return false;
-	}
-	
-	eventExtern_ts tmpEvent;
-	// search the ID ...
-	for(int32_t iii=0; iii < m_ListEventAvaillable.Size(); iii++) {
-		if (strcmp(m_ListEventAvaillable[iii], eventName) == 0) {
-			tmpEvent.generateEventId = m_ListEventAvaillable[iii];
-			tmpEvent.widgetCall = widgetId;
-			tmpEvent.generateEventIdExtern = eventExternId;
-			m_externEvent.PushBack(tmpEvent);
-			return true;
-		}
-	}
-	EWOL_ERROR("Try to add extern event with Unknow EventID : \"" << eventName << "\"" );
-	return false;
-}
-
-
-void ewol::Widget::DoubleBufferFlipFlop(void)
+void ewol::Widget::OnFlipFlopEvent(void)
 {
 	if (true == m_needFlipFlop) {
 		m_currentDrawId++;
@@ -208,7 +151,6 @@ void ewol::Widget::DoubleBufferFlipFlop(void)
 			m_currentCreateId = 0;
 		}
 		m_needFlipFlop = false;
-		OnFlipFlopEvent();
 	}
 }
 

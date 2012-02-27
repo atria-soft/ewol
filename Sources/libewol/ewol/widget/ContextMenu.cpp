@@ -57,12 +57,15 @@ ewol::ContextMenu::ContextMenu(void)
 
 ewol::ContextMenu::~ContextMenu(void)
 {
+	/*
 	SubWidgetRemove();
+	*/
 }
 
 
 bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
+	/*
 	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
@@ -129,12 +132,14 @@ bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availla
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
+	*/
 	return true;
 }
 
 
 bool ewol::ContextMenu::CalculateMinSize(void)
 {
+	/*
 	EWOL_DEBUG("CalculateMinSize");
 	m_userExpendX=false;
 	m_userExpendY=false;
@@ -148,6 +153,7 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	}
 	EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
 	MarkToReedraw();
+	*/
 	return true;
 }
 
@@ -169,34 +175,41 @@ void ewol::ContextMenu::SetExpendY(bool newExpend)
 
 void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 {
+	/*
 	if (NULL == newWidget) {
 		return;
 	}
 	m_subWidget = newWidget;
 	newWidget->SetParrent(this);
+	*/
 }
 
 
 void ewol::ContextMenu::SubWidgetRemove(void)
 {
+	/*
 	if (NULL != m_subWidget) {
 		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
 		m_subWidget = NULL;
 	}
+	*/
 }
 
 bool ewol::ContextMenu::OnDraw(void)
 {
+	/*
 	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw();
 	}
+	*/
 	return true;
 }
 
 
 void ewol::ContextMenu::OnRegenerateDisplay(void)
 {
+	/*
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
@@ -240,11 +253,13 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
+	*/
 }
 
 
 bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+	/*
 	if (NULL != m_subWidget) {
 		coord2D_ts tmpSize = m_subWidget->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
@@ -269,14 +284,17 @@ bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEven
 		}
 		
 	}
+	*/
 	return true;
 }
 
 
 void ewol::ContextMenu::SetPositionMark(markPosition_te position, coord2D_ts arrowPos)
 {
+	/*
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;
 	m_arrowPos = arrowPos;
 	MarkToReedraw();
+	*/
 }

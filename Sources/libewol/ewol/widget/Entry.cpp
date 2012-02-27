@@ -177,7 +177,7 @@ bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eve
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			// nothing to do ...
-			GenEventInputExternal(ewolEventEntryClick, pos.abs.x, pos.abs.y);
+			GenerateEventId(ewolEventEntryClick);
 			ewol::widgetManager::FocusKeep(this);
 			MarkToReedraw();
 			return true;
@@ -202,7 +202,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			unicode::convertUnicodeToUtf8(unicodeData, UTF8_data);
 			m_data += UTF8_data;
 		}
-		GenEventInputExternal(ewolEventEntryModify, -1, -1);
+		GenerateEventId(ewolEventEntryModify);
 		UpdateTextPosition();
 		MarkToReedraw();
 		return true;

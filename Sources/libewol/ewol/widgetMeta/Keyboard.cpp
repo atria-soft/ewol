@@ -51,21 +51,25 @@ extern const char * const ewolEventKeyEvent = "ewol event internal key event";
 
 ewol::Keyboard::Keyboard(void)
 {
+	/*
 	// set event that can propagate outside ....
 	AddEventId(ewolEventKeyboardHide);
 	
 	m_mode = KEYBOARD_MODE_TEXT;
 	m_isHide = true;
 	SetMode(m_mode);
+	*/
 }
 
 
 ewol::Keyboard::~Keyboard(void)
 {
+	/*
 	if (NULL != m_subWidget) {
 		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
 		m_subWidget = NULL;
 	}
+	*/
 }
 
 #define ADD_BUTTON(upperWidget,widget,text,event)    do { \
@@ -82,6 +86,7 @@ ewol::Keyboard::~Keyboard(void)
 
 void ewol::Keyboard::SetMode(keyboardMode_te mode)
 {
+	/*
 	
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
@@ -177,12 +182,13 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Ctrl",ewolEventKeyEvent);
 			myButton->SetExpendX(false);
-	
+	*/
 }
 
 
 bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
 {
+	/*
 	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << data << "\"" );
 	if (ewolEventKeyEvent == generateEventId) {
 		ewol::Button * bt     = dynamic_cast<ewol::Button *>(ewol::widgetManager::Get(widgetID));
@@ -207,6 +213,7 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 	}
 	//return GenEventInputExternal(eventExternId, x, y);
 	return true;
+	*/
 };
 
 
@@ -228,6 +235,7 @@ void ewol::Keyboard::SetExpendY(bool newExpend)
 
 bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
+	/*
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
@@ -250,12 +258,14 @@ bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
+	*/
 	return true;
 }
 
 
 bool ewol::Keyboard::CalculateMinSize(void)
 {
+	/*
 	m_userExpendX=false;
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
@@ -267,6 +277,7 @@ bool ewol::Keyboard::CalculateMinSize(void)
 		m_minSize.y = tmpSize.y;
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
+	*/
 	return true;
 }
 
@@ -274,15 +285,18 @@ bool ewol::Keyboard::CalculateMinSize(void)
 
 bool ewol::Keyboard::OnDraw(void)
 {
+	/*
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw();
 	}
+	*/
 	return true;
 }
 
 
 void ewol::Keyboard::OnRegenerateDisplay(void)
 {
+	/*
 	if (true == NeedRedraw()) {
 		color_ts mycolor;
 		mycolor.red   = 1.0;
@@ -299,13 +313,16 @@ void ewol::Keyboard::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
+	*/
 }
 
 bool ewol::Keyboard::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+	/*
 	if (NULL != m_subWidget) {
 		return m_subWidget->GenEventInput(IdInput, typeEvent, pos.abs);
 	}
+	*/
 	return false;
 }
 

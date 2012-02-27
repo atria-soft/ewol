@@ -35,10 +35,8 @@ namespace ewol {
 	namespace widgetManager {
 		void           Init(  void);
 		void           UnInit(void);
-		void           Add(   ewol::Widget * newWidget);
+		// need to call when remove a widget to clear all dependency of the focus system
 		void           Rm(    ewol::Widget * newWidget);
-		int32_t        Get(   ewol::Widget * newWidget);
-		ewol::Widget * Get(   int32_t widgetId);
 		
 		void           FocusKeep(      ewol::Widget * newWidget); // set the focus at the specific widget
 		void           FocusSetDefault(ewol::Widget * newWidget); // select the default focus getter
@@ -46,18 +44,13 @@ namespace ewol {
 		ewol::Widget * FocusGet(       void);
 		void           FocusRemoveIfRemove(ewol::Widget * newWidget);
 		
-		
+		// TODO : Remove this from here ...
 		int32_t GetDoubleBufferCreate(void);
 		int32_t GetDoubleBufferDraw(void);
-		void    GetDoubleBufferFlipFlop(void);
 		bool    GetDoubleBufferNeedDraw(void);
-		void    GetDoubleBufferStartDraw(void);
-		void    GetDoubleBufferStopDraw(void);
-		
-		// For the multithreaded context the widget mus not de removed by the user ==> he might mark if to be remove later with a mutex protection...
-		void    MarkWidgetToBeRemoved(int32_t widgetId);
-		void    MarkWidgetToBeRemoved(ewol::Widget * expectedWidget);
-		void    RemoveAllMarkWidget(void);
+		void    SetDoubleBufferNeedDraw(void);
+		void    DoubleBufferLock(void);
+		void    DoubleBufferUnLock(void);
 	};
 };
 

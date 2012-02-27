@@ -48,12 +48,6 @@ int32_t ewol::GetCurrentHeight(void)
 	return gui_height;
 }
 
-void ewol::RmPopUp(int32_t widgetID)
-{
-	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->PopUpWidgetPop(widgetID);
-	}
-}
 
 void ewol::PopUpWidgetPush(ewol::Widget * tmpWidget)
 {
@@ -78,6 +72,9 @@ void EWOL_NativeRegenerateDisplay(void)
 	//EWOL_INFO("Resize w=" << w << " h=" << h);
 	if (NULL != gui_uniqueWindows) {
 		gui_uniqueWindows->OnRegenerateDisplay();
+		ewol::widgetManager::DoubleBufferLock();
+		gui_uniqueWindows->OnFlipFlopEvent();
+		ewol::widgetManager::DoubleBufferUnLock();
 	}
 }
 
@@ -323,7 +320,7 @@ void EWOL_GenericDraw(bool everyTime)
 	if ( (currentTime - startTime) > DISPLAY_PERIODE_MS) {
 		display = true;
 	}
-	ewol::widgetManager::GetDoubleBufferStartDraw();
+	ewol::widgetManager::DoubleBufferLock();
 	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
 	    || true == everyTime)
 	{
@@ -331,7 +328,7 @@ void EWOL_GenericDraw(bool everyTime)
 		gui_uniqueWindows->SysDraw();
 		//EWOL_WARNING("DRAW...");
 	}
-	ewol::widgetManager::GetDoubleBufferStopDraw();
+	ewol::widgetManager::DoubleBufferUnLock();
 	// send Message that we just finished a display ...
 	EWOL_ThreadEventHasJustDisplay();
 	

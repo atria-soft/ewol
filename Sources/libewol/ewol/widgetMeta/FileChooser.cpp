@@ -184,7 +184,8 @@ class FileChooserFolderList : public ewol::List
 				if (1 == IdInput) {
 					if (m_selectedLine >=0 ) {
 						// generate event extern : 
-						return GenEventInputExternal(ewolEventFileChooserSelectFolder, x, y);
+						GenerateEventId(ewolEventFileChooserSelectFolder);
+						return true;
 					}
 				}
 			}
@@ -307,7 +308,8 @@ class FileChooserFileList : public ewol::List
 					MarkToReedraw();
 					if (m_selectedLine >=0 ) {
 						// generate event extern : 
-						return GenEventInputExternal(ewolEventFileChooserSelectFile, x, y);
+						GenerateEventId(ewolEventFileChooserSelectFile);
+						return true;
 					}
 					return true;
 				}
@@ -317,7 +319,8 @@ class FileChooserFileList : public ewol::List
 				if (1 == IdInput) {
 					if (m_selectedLine >=0 ) {
 						// generate event extern : 
-						return GenEventInputExternal(ewolEventFileChooserValidateFile, x, y);
+						GenerateEventId(ewolEventFileChooserValidateFile);
+						return true;
 					}
 				}
 			}
@@ -341,6 +344,7 @@ extern const char * const ewolEventFileChooserEntryFile       = "ewol-event-file
 
 ewol::FileChooser::FileChooser(void)
 {
+	/*
 	AddEventId(ewolEventFileChooserCancel);
 	AddEventId(ewolEventFileChooserValidate);
 	
@@ -455,6 +459,7 @@ ewol::FileChooser::FileChooser(void)
 	
 	// set the default Folder properties:
 	UpdateCurrentFolder();
+	*/
 }
 
 
@@ -466,51 +471,62 @@ ewol::FileChooser::~FileChooser(void)
 
 void ewol::FileChooser::SetTitle(etk::UString label)
 {
+	/*
 	ewol::Label * tmpWidget = dynamic_cast<ewol::Label*>(ewol::widgetManager::Get(m_widgetTitleId));
 	if (NULL == tmpWidget) {
 		return;
 	}
 	tmpWidget->SetLabel(label);
+	*/
 }
 
 void ewol::FileChooser::SetValidateLabel(etk::UString label)
 {
+	/*
 	ewol::Button * tmpWidget = dynamic_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetValidateId));
 	if (NULL == tmpWidget) {
 		return;
 	}
 	tmpWidget->SetLabel(label);
+	*/
 }
 
 void ewol::FileChooser::SetCancelLabel(etk::UString label)
 {
+	/*
 	ewol::Button * tmpWidget = dynamic_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetCancelId));
 	if (NULL == tmpWidget) {
 		return;
 	}
 	tmpWidget->SetLabel(label);
+	*/
 }
 
 void ewol::FileChooser::SetFolder(etk::UString folder)
 {
+	/*
 	m_folder = folder;
 	UpdateCurrentFolder();
+	*/
 }
 
 void ewol::FileChooser::SetFileName(etk::UString filename)
 {
+	/*
 	m_file = filename;
 	ewol::Entry * tmpWidget = dynamic_cast<ewol::Entry*>(ewol::widgetManager::Get(m_widgetCurrentFileNameId));
 	if (NULL == tmpWidget) {
 		return;
 	}
 	tmpWidget->SetValue(filename);
+	*/
 }
 
 
 
 bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
 {
+	/*
 	EWOL_INFO("Receive Event from the LIST ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> data=\"" << data << "\"" );
 	if (ewolEventFileChooserEntryFolder == generateEventId) {
 		//==> change the folder name
@@ -571,6 +587,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		ewol::RmPopUp(GetWidgetId());
 		return tmppp;
 	}
+	*/
 	return false;
 };
 
@@ -578,6 +595,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 
 void ewol::FileChooser::UpdateCurrentFolder(void)
 {
+	/*
 	FileChooserFileList * myListFile     = dynamic_cast<FileChooserFileList *>(ewol::widgetManager::Get(m_widgetListFileId));
 	FileChooserFolderList * myListFolder = dynamic_cast<FileChooserFolderList *>(ewol::widgetManager::Get(m_widgetListFolderId));
 	ewol::Entry * myEntry                = dynamic_cast<ewol::Entry *>(ewol::widgetManager::Get(m_widgetCurrentFolderId));
@@ -625,16 +643,19 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	myListFile->EndGenerating();
 	myListFolder->EndGenerating();
 	MarkToReedraw();
+	*/
 }
 
 
 etk::UString ewol::FileChooser::GetCompleateFileName(void)
 {
+	/*
 	
 	etk::UString tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;
 	return tmpString;
+	*/
 }
 
 

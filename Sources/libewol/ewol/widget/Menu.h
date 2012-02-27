@@ -37,7 +37,7 @@ namespace ewol {
 		public : 
 			int32_t        m_localId;
 			int32_t        m_parentId;
-			int32_t        m_widgetId;
+			ewol::EObject* m_widgetPointer;
 			etk::UString   m_label;
 			etk::UString   m_image;
 			const char *   m_generateEvent;
@@ -55,8 +55,8 @@ namespace ewol {
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		private:
 			etk::VectorType<MenuElement*>  m_listElement;
-			int32_t                        m_staticId;
-			int32_t                        m_popUpId;
+			ewol::EObject*                 m_staticPointer;
+			ewol::EObject*                 m_widgetPopUp;
 		public:
 			void           Clear(void);
 			int32_t        AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");

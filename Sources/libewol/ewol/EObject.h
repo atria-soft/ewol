@@ -65,7 +65,6 @@ namespace ewol {
 			 */
 			~EObject(void);
 			
-		protected:
 			/**
 			 * @brief Get the UniqueId of the EObject
 			 * @param ---
@@ -73,6 +72,7 @@ namespace ewol {
 			 */
 			int32_t GetId(void);
 			
+		protected:
 			/**
 			 * @brief Add a specific event Id in the list to prevent wrong link on a EObject
 			 * @param[in] generateEventId event Id to add

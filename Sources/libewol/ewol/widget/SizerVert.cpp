@@ -166,7 +166,7 @@ void ewol::SizerVert::LockExpendContamination(bool lockExpend)
 void ewol::SizerVert::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId][iii]);
+		m_subWidget[m_currentCreateId][iii]->MarkToRemove();
 		m_subWidget[m_currentCreateId][iii] = NULL;
 	}
 	m_subWidget[m_currentCreateId].Clear();
@@ -179,7 +179,6 @@ void ewol::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
 		return;
 	}
 	m_subWidget[m_currentCreateId].PushBack(newWidget);
-	newWidget->SetParrent(this);
 }
 
 
@@ -190,7 +189,7 @@ void ewol::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
-			ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId][iii]);
+			m_subWidget[m_currentCreateId][iii]->MarkToRemove();
 			m_subWidget[m_currentCreateId][iii] = NULL;
 			m_subWidget[m_currentCreateId].Erase(iii);
 			return;
@@ -253,7 +252,18 @@ bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent,
 
 void ewol::SizerVert::OnFlipFlopEvent(void)
 {
-	// keep in the current element all the modification done ...
-	m_subWidget[m_currentCreateId]  = m_subWidget[m_currentDrawId];
+	bool needFlipFlop = m_needFlipFlop;
+	// call herited classes
+	ewol::Widget::OnFlipFlopEvent();
+	// internal saving
+	if (true == needFlipFlop) {
+		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+	}
+	// in every case, we propagate the flip-flop EVENT
+	for(int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
+		if(NULL != m_subWidget[m_currentDrawId][iii]) {
+			m_subWidget[m_currentDrawId][iii]->OnFlipFlopEvent();
+		}
+	}
 }
 

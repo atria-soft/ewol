@@ -28,13 +28,15 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/PopUp.h>
+#include <ewol/widget/Label.h>
+#include <ewol/widget/Button.h>
 
-extern const char * const ewolEventFileStdPopUpCancel;
-extern const char * const ewolEventFileStdPopUpValidate;
 extern const char * const ewolEventFileStdPopUpButton1;
 extern const char * const ewolEventFileStdPopUpButton2;
 extern const char * const ewolEventFileStdPopUpButton3;
 extern const char * const ewolEventFileStdPopUpButton4;
+extern const char * const ewolEventFileStdPopUpButton5;
+extern const char * const ewolEventFileStdPopUpButton6;
 
 namespace ewol {
 	class StdPopUp : public ewol::PopUp
@@ -43,18 +45,13 @@ namespace ewol {
 			StdPopUp(void);
 			~StdPopUp(void);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
-			void SetTitle(etk::UString label);
-			void SetValidateLabel(etk::UString label);
-			void SetCancelLabel(etk::UString label);
-			void SetFolder(etk::UString folder);
+			void SetTitle(etk::UString text);
+			void SetComment(etk::UString text);
+			void SetButtonLabel(int32_t btId, etk::UString text); // note : if no label no bt...
 		private:
-			int32_t m_widgetTitleId;
-			int32_t m_widgetValidateId;
-			int32_t m_widgetCancelId;
-			int32_t m_widgetCurrentFolderId;
-			int32_t m_widgetListFolderId;
-			int32_t m_widgetListFileId;
-			etk::UString m_folder;
+			ewol::widget::Label*  m_title;
+			ewol::widget::Label*  m_comment;
+			ewol::widget::Button* m_button[6];
 	};
 };
 

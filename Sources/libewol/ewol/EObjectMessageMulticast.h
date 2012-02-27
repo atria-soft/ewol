@@ -22,26 +22,24 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_WIDGET_MESSAGE_MULTIICAST_H__
-#define __EWOL_WIDGET_MESSAGE_MULTIICAST_H__
+#ifndef __EWOL_E_OBJECT_MESSAGE_MULTIICAST_H__
+#define __EWOL_E_OBJECT_MESSAGE_MULTIICAST_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
 #include <etk/VectorType.h>
-#include <ewol/Widget.h>
+#include <ewol/EObject.h>
 #include <etk/UString.h>
 
 namespace ewol {
-	namespace widgetMessageMultiCast {
+	namespace EObjectMessageMultiCast {
 			void Init(  void);
 			void UnInit(void);
-			void Add( int32_t widgetId, const char* const message);
-			void Rm(  int32_t widgetId);
-			void Send(int32_t widgetId, const char* const message, int32_t data);
-			// TODO : Mus be deprecated ....
-			void Send(int32_t widgetId, const char* const message, const char * data = NULL);
-			void Send(int32_t widgetId, const char* const message, etk::UString& data);
+			void Add( ewol::EObject* object, const char* const message);
+			void Rm(  ewol::EObject* object);
+			void Send(ewol::EObject* object, const char* const message, int32_t data);
+			void Send(ewol::EObject* object, const char* const message, etk::UString& data);
 	};
 };
 
