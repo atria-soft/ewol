@@ -30,7 +30,7 @@
 
 namespace ewol {
 	
-	class Drawable : virtual public ewol::Widget {
+	class Drawable : public ewol::Widget {
 		public:
 			Drawable(void);
 			virtual ~Drawable(void);

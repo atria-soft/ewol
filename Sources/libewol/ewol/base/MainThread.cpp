@@ -102,7 +102,8 @@ static void* BaseAppEntry(void* param)
 		pthread_getschedparam(pthread_self(), &policy, &pr);
 		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result Set
 	*/
-
+	
+	ewol::EObjectMessageMultiCast::Init();
 	ewol::widgetManager::Init();
 	ewol::texture::Init();
 	ewol::theme::Init();
@@ -195,6 +196,7 @@ static void* BaseAppEntry(void* param)
 	ewol::texture::UnInit();
 	ewol::UnInitFont();
 	ewol::widgetManager::UnInit();
+	ewol::EObjectMessageMultiCast::UnInit();
 	ewol::theme::UnInit();
 	EWOL_DEBUG("==> Un-Init BThread (END)");
 	pthread_exit(NULL);

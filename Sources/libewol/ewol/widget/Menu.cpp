@@ -25,7 +25,7 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/EObjectMessageMulticast.h>
+#include <ewol/EObject.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>
@@ -37,8 +37,8 @@
 
 ewol::Menu::Menu(void)
 {
-	m_staticPointer = NULL;
-	m_widgetPopUp = NULL;
+	m_staticId = 0;
+	m_widgetContextMenu = NULL;
 }
 
 ewol::Menu::~Menu(void)
@@ -68,7 +68,6 @@ void ewol::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
 
 void ewol::Menu::Clear(void)
 {
-	/*
 	for( int32_t iii=0; iii < m_listElement.Size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
@@ -76,7 +75,6 @@ void ewol::Menu::Clear(void)
 		}
 	}
 	m_listElement.Clear();
-	*/
 }
 
 int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
@@ -86,7 +84,6 @@ int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char 
 
 int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
 {
-/*
 	ewol::MenuElement * tmpObject = new ewol::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
@@ -94,7 +91,7 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 	}
 	tmpObject->m_localId = m_staticId++;
 	tmpObject->m_parentId = parent;
-	tmpObject->m_widgetId = -1;
+	tmpObject->m_widgetPointer = NULL;
 	tmpObject->m_label = label;
 	tmpObject->m_image = image;
 	tmpObject->m_generateEvent = generateEvent;
@@ -108,12 +105,10 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 			return tmpObject->m_localId;;
 		}
 		ewol::SizerHori::SubWidgetAdd(myButton);
-		myButton->ExternLinkOnEvent(ewolEventButtonPressed, GetWidgetId(), ewolEventButtonPressed);
-		tmpObject->m_widgetId = myButton->GetWidgetId();
+		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
+		tmpObject->m_widgetPointer = myButton;
 	}
 	return tmpObject->m_localId;
-*/
-	return 0;
 }
 
 void ewol::Menu::AddSpacer(void)
@@ -122,25 +117,37 @@ void ewol::Menu::AddSpacer(void)
 }
 
 
-bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
+/**
+ * @brief Receive a message from an other EObject with a specific eventId and data
+ * @param[in] CallerObject Pointer on the EObject that information came from
+ * @param[in] eventId Message registered by this class
+ * @param[in] data Data registered by this class
+ * @return ---
+ */
+void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	/*
-	if (true == ewol::SizerHori::OnEventAreaExternal(widgetID, generateEventId, data, x, y)) {
+	if (true == ewol::SizerHori::OnReceiveMessage(CallerObject, eventId, data)) {
 		return true;
 	}
 	*/
-	/*
-	if (NULL==data && generateEventId==ewolEventButtonPressed) {
+	if (eventId == ewolEventButtonPressed) {
 		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
-			if (widgetID == m_listElement[iii]->m_widgetId) {
-				// 2 posible case
+			if (CallerObject == m_listElement[iii]->m_widgetPointer) {
+				// 2 posible case (have a message or have a child ...
 				if (m_listElement[iii]->m_generateEvent != NULL) {
-					// TODO : Later ...
-					//ewol::widgetMessageMultiCast::Send(GetWidgetId(), m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
-					m_widgetPopUp->MarkToRemove();
-					m_widgetPopUp = NULL;
-					return true;
-				} else {
+					EWOL_DEBUG("Menu ==> Generate Event");
+					// Send a multicast event ...
+					SendMultiCast(m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
+					/*
+					if (NULL != m_widgetContextMenu) {
+						m_widgetContextMenu->MarkToRemove();
+					}
+					*/
+					m_widgetContextMenu = NULL;
+					return;
+				} else{
+					EWOL_DEBUG("Menu ==> Load Sub Menu");
 					bool findChild = false;
 					for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
 						if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
@@ -150,19 +157,17 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 					}
 					if (false == findChild) {
 						EWOL_WARNING("Event on menu element with no child an no event... label=" << m_listElement[iii]->m_label);
-						return false;
+						return;
 					}
 					// create a context menu : 
-					ewol::ContextMenu * tmpWidget = new ewol::ContextMenu();
-					if (NULL == tmpWidget) {
+					m_widgetContextMenu = new ewol::ContextMenu();
+					if (NULL == m_widgetContextMenu) {
 						EWOL_ERROR("Allocation Error");
-						return false;
+						return;
 					}
 					// Get the button widget : 
 					coord2D_ts newPosition;
-					newPosition.x = x;
-					newPosition.y = y;
-					ewol::Widget * eventFromWidget = ewol::widgetManager::Get(widgetID);
+					ewol::Widget * eventFromWidget = static_cast<ewol::Widget*>(CallerObject);
 					if (NULL != eventFromWidget) {
 						coord2D_ts tmpOri  = eventFromWidget->GetOrigin();
 						coord2D_ts tmpSize = eventFromWidget->GetSize();
@@ -171,7 +176,7 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 						newPosition.y = tmpOri.y + tmpSize.y;
 					}
 					
-					tmpWidget->SetPositionMark(ewol::CONTEXT_MENU_MARK_TOP, newPosition );
+					m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_TOP, newPosition );
 					
 					ewol::SizerVert * mySizerVert = NULL;
 					ewol::Button * myButton = NULL;
@@ -179,7 +184,7 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 					mySizerVert = new ewol::SizerVert();
 						mySizerVert->LockExpendContamination(true);
 						// set it in the pop-up-system : 
-						tmpWidget->SubWidgetSet(mySizerVert);
+						m_widgetContextMenu->SubWidgetSet(mySizerVert);
 						
 						for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
 							if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
@@ -195,13 +200,10 @@ bool ewol::Menu::OnEventAreaExternal(int32_t widgetID, const char * generateEven
 								mySizerVert->SubWidgetAdd(myButton);
 							}
 						}
-					m_staticPointer = tmpWidget;
-					ewol::PopUpWidgetPush(m_staticPointer);
+					ewol::PopUpWidgetPush(m_widgetContextMenu);
 				}
-				return true;
+				return;
 			}
 		}
 	}
-	*/
-	return false;
 }

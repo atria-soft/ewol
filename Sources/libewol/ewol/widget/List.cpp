@@ -50,7 +50,14 @@ ewol::List::List(void)
 
 ewol::List::~List(void)
 {
-	
+	//clean all the object
+	for (int32_t jjj=0; jjj<NB_BOUBLE_BUFFER; jjj++) {
+		for (int32_t iii=0; iii<m_listOObject[jjj].Size(); iii++) {
+			delete(m_listOObject[jjj][iii]);
+			m_listOObject[jjj][iii] = NULL;
+		}
+		m_listOObject[jjj].Clear();
+	}
 }
 
 bool ewol::List::CalculateMinSize(void)
@@ -65,6 +72,43 @@ bool ewol::List::CalculateMinSize(void)
 	m_minSize.y = 150;
 	return true;
 }
+
+
+void ewol::List::AddOObject(ewol::OObject* newObject, int32_t pos)
+{
+	if (NULL == newObject) {
+		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
+		return;
+	}
+	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
+		m_listOObject[m_currentCreateId].PushBack(newObject);
+	} else {
+		m_listOObject[m_currentCreateId].Insert(pos, newObject);
+	}
+	m_needFlipFlop = true;
+}
+
+
+void ewol::List::ClearOObjectList(void)
+{
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
+		delete(m_listOObject[m_currentCreateId][iii]);
+		m_listOObject[m_currentCreateId][iii] = NULL;
+	}
+	m_listOObject[m_currentCreateId].Clear();
+}
+
+bool ewol::List::OnDraw(void)
+{
+	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_listOObject[m_currentDrawId][iii]) {
+			m_listOObject[m_currentDrawId][iii]->Draw();
+		}
+	}
+	return true;
+}
+
+
 
 
 void ewol::List::OnRegenerateDisplay(void)

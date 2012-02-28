@@ -74,6 +74,7 @@ void EWOL_NativeRegenerateDisplay(void)
 		gui_uniqueWindows->OnRegenerateDisplay();
 		ewol::widgetManager::DoubleBufferLock();
 		gui_uniqueWindows->OnFlipFlopEvent();
+		ewol::widgetManager::SetDoubleBufferNeedDraw();
 		ewol::widgetManager::DoubleBufferUnLock();
 	}
 }

@@ -31,7 +31,7 @@
 #include <ewol/widget/Drawable.h>
 
 namespace ewol {
-	class List :public ewol::WidgetScrooled, ewol::Drawable
+	class List :public ewol::WidgetScrooled
 	{
 		public:
 			List(void);
@@ -39,6 +39,15 @@ namespace ewol {
 			virtual ~List(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
+		// Drawing capabilities ....
+		private:
+			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+		public:
+			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    ClearOObjectList(void);
+		protected:
+			virtual bool OnDraw(void);
+		// list properties ...
 		private:
 			int32_t        m_paddingSizeX;
 			int32_t        m_paddingSizeY;

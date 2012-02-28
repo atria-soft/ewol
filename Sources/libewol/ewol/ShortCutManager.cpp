@@ -24,7 +24,7 @@
 
 
 #include <ewol/ShortCutManager.h>
-#include <ewol/EObjectMessageMulticast.h>
+#include <ewol/EObject.h>
 #include <ewol/ewol.h>
 
 
@@ -137,7 +137,7 @@ bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniC
 		    && l_inputShortCutEvent[iii]->UnicodeValue == unicodeValue)
 		{
 			if (isDown) {
-				ewol::EObjectMessageMultiCast::Send(NULL, l_inputShortCutEvent[iii]->generateEventId, l_inputShortCutEvent[iii]->eventData);
+				ewol::EObjectMessageMultiCast::AnonymousSend(l_inputShortCutEvent[iii]->generateEventId, l_inputShortCutEvent[iii]->eventData);
 			} // no else
 			return true;
 		}

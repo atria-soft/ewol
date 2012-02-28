@@ -56,7 +56,7 @@ namespace ewol {
 			coord2D_ts      m_arrowPos;
 			etkFloat_t      m_offset;
 			markPosition_te m_arrawBorder;
-			ewol::Widget* m_subWidget;
+			ewol::Widget*   m_subWidget[NB_BOUBLE_BUFFER];
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
@@ -67,6 +67,7 @@ namespace ewol {
 			virtual void   OnRegenerateDisplay(void);
 		public:
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
+			virtual void   OnFlipFlopEvent(void);
 	};
 };
 

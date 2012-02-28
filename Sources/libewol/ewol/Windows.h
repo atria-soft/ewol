@@ -69,6 +69,7 @@ namespace ewol {
 		private:
 			ewol::Widget*                   m_subWidget[NB_BOUBLE_BUFFER];
 			etk::VectorType<ewol::Widget*>  m_popUpWidgetList[NB_BOUBLE_BUFFER];
+			// TODO : Add flip flop ...
 			ewol::Keyboard*                 m_keyBoardwidget;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
@@ -81,6 +82,13 @@ namespace ewol {
 			void KeyboardShow(ewol::keyboardMode_te mode);
 			void KeyboardHide(void);
 			virtual void OnFlipFlopEvent(void);
+			/**
+			 * @brief Inform object that an other object is removed ...
+			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @note : Sub classes must call this class
+			 * @return ---
+			 */
+			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};
 };
 

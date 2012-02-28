@@ -7,7 +7,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/Debug.cpp \
 			ewol/EObject.cpp \
 			ewol/EObjectManager.cpp \
-			ewol/EObjectMessageMulticast.cpp \
 			ewol/OObject.cpp \
 			ewol/OObject/2DText.cpp \
 			ewol/OObject/2DTextColored.cpp \

@@ -41,7 +41,7 @@ namespace ewol {
 	#endif
 	}highSpeedMode_te;
 	
-	class WidgetScrooled : virtual public ewol::Widget
+	class WidgetScrooled : public ewol::Widget
 	{
 		protected:
 			coord2D_ts        m_originScrooled;

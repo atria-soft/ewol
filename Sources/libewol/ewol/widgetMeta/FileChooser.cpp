@@ -472,7 +472,7 @@ ewol::FileChooser::~FileChooser(void)
 void ewol::FileChooser::SetTitle(etk::UString label)
 {
 	/*
-	ewol::Label * tmpWidget = dynamic_cast<ewol::Label*>(ewol::widgetManager::Get(m_widgetTitleId));
+	ewol::Label * tmpWidget = static_cast<ewol::Label*>(ewol::widgetManager::Get(m_widgetTitleId));
 	if (NULL == tmpWidget) {
 		return;
 	}
@@ -483,7 +483,7 @@ void ewol::FileChooser::SetTitle(etk::UString label)
 void ewol::FileChooser::SetValidateLabel(etk::UString label)
 {
 	/*
-	ewol::Button * tmpWidget = dynamic_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetValidateId));
+	ewol::Button * tmpWidget = static_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetValidateId));
 	if (NULL == tmpWidget) {
 		return;
 	}
@@ -494,7 +494,7 @@ void ewol::FileChooser::SetValidateLabel(etk::UString label)
 void ewol::FileChooser::SetCancelLabel(etk::UString label)
 {
 	/*
-	ewol::Button * tmpWidget = dynamic_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetCancelId));
+	ewol::Button * tmpWidget = static_cast<ewol::Button*>(ewol::widgetManager::Get(m_widgetCancelId));
 	if (NULL == tmpWidget) {
 		return;
 	}
@@ -514,7 +514,7 @@ void ewol::FileChooser::SetFileName(etk::UString filename)
 {
 	/*
 	m_file = filename;
-	ewol::Entry * tmpWidget = dynamic_cast<ewol::Entry*>(ewol::widgetManager::Get(m_widgetCurrentFileNameId));
+	ewol::Entry * tmpWidget = static_cast<ewol::Entry*>(ewol::widgetManager::Get(m_widgetCurrentFileNameId));
 	if (NULL == tmpWidget) {
 		return;
 	}
@@ -534,7 +534,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		return true;
 	} else if (ewolEventFileChooserEntryFile == generateEventId) {
 		//==> change the file name
-		ewol::Entry * tmpWidget = dynamic_cast<ewol::Entry*>(ewol::widgetManager::Get(m_widgetCurrentFileNameId));
+		ewol::Entry * tmpWidget = static_cast<ewol::Entry*>(ewol::widgetManager::Get(m_widgetCurrentFileNameId));
 		if (NULL != tmpWidget) {
 			m_file = tmpWidget->GetValue();
 		}
@@ -551,7 +551,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		return true;
 	} else if (ewolEventFileChooserSelectFolder == generateEventId) {
 		//==> this is an internal event ...
-		FileChooserFolderList * myListFolder = dynamic_cast<FileChooserFolderList *>(ewol::widgetManager::Get(m_widgetListFolderId));
+		FileChooserFolderList * myListFolder = static_cast<FileChooserFolderList *>(ewol::widgetManager::Get(m_widgetListFolderId));
 		etk::UString tmpString = myListFolder->GetSelectedLine();
 		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
 		m_folder = m_folder + tmpString;
@@ -576,7 +576,7 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 		return true;
 	} else if (ewolEventFileChooserSelectFile == generateEventId) {
 		m_hasSelectedFile = true;
-		FileChooserFileList * myListFile     = dynamic_cast<FileChooserFileList *>(ewol::widgetManager::Get(m_widgetListFileId));
+		FileChooserFileList * myListFile     = static_cast<FileChooserFileList *>(ewol::widgetManager::Get(m_widgetListFileId));
 		etk::UString file = myListFile->GetSelectedLine();
 		SetFileName(file);
 		GenEventInputExternal(generateEventId, x, y);
@@ -596,10 +596,10 @@ bool ewol::FileChooser::OnEventAreaExternal(int32_t widgetID, const char * gener
 void ewol::FileChooser::UpdateCurrentFolder(void)
 {
 	/*
-	FileChooserFileList * myListFile     = dynamic_cast<FileChooserFileList *>(ewol::widgetManager::Get(m_widgetListFileId));
-	FileChooserFolderList * myListFolder = dynamic_cast<FileChooserFolderList *>(ewol::widgetManager::Get(m_widgetListFolderId));
-	ewol::Entry * myEntry                = dynamic_cast<ewol::Entry *>(ewol::widgetManager::Get(m_widgetCurrentFolderId));
-	ewol::CheckBox * myhidenFiles        = dynamic_cast<ewol::CheckBox *>(ewol::widgetManager::Get(m_widgetCheckBoxId));
+	FileChooserFileList * myListFile     = static_cast<FileChooserFileList *>(ewol::widgetManager::Get(m_widgetListFileId));
+	FileChooserFolderList * myListFolder = static_cast<FileChooserFolderList *>(ewol::widgetManager::Get(m_widgetListFolderId));
+	ewol::Entry * myEntry                = static_cast<ewol::Entry *>(ewol::widgetManager::Get(m_widgetCurrentFolderId));
+	ewol::CheckBox * myhidenFiles        = static_cast<ewol::CheckBox *>(ewol::widgetManager::Get(m_widgetCheckBoxId));
 	
 	myListFile->ClearElements();
 	myListFolder->ClearElements();

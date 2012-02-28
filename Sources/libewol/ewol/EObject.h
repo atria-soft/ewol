@@ -30,6 +30,12 @@
 #include <etk/VectorType.h>
 
 namespace ewol {
+	namespace EObjectMessageMultiCast {
+		void Init(  void);
+		void UnInit(void);
+		void AnonymousSend(const char* const messageId, etk::UString& data);
+	};
+	
 	
 	class EObject;
 	/**
@@ -86,6 +92,29 @@ namespace ewol {
 			 * @return ---
 			 */
 			void GenerateEventId(const char * generateEventId);
+			
+			/**
+			 * @brief Generate Multicast event on all EObject requested the event
+			 * @param[in] messageId Event Id that is generated
+			 * @param[in] data Interger which is transform in etk::UString
+			 * @return ---
+			 */
+			void SendMultiCast(const char* const messageId, int32_t data);
+			
+			/**
+			 * @brief Generate Multicast event on all EObject requested the event
+			 * @param[in] messageId Event Id that is generated
+			 * @param[in] data String that is send at all the destinations
+			 * @return ---
+			 */
+			void SendMultiCast(const char* const messageId, etk::UString& data);
+			
+			/**
+			 * @brief Register of the arrival of a Multicast message
+			 * @param[in] messageId Event Id waiting for...
+			 * @return ---
+			 */
+			void RegisterMultiCast(const char* const messageId);
 		public:
 			/**
 			 * @brief Register an EObject over an other to get event on the second...

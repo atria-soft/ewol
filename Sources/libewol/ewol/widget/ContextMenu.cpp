@@ -29,7 +29,7 @@
 #include <ewol/widget/ContextMenu.h>
 
 #undef __class__
-#define __class__	"ewol::ContextMenu"
+#define __class__	"ContextMenu"
 
 ewol::ContextMenu::ContextMenu(void)
 {
@@ -57,28 +57,25 @@ ewol::ContextMenu::ContextMenu(void)
 
 ewol::ContextMenu::~ContextMenu(void)
 {
-	/*
 	SubWidgetRemove();
-	*/
 }
 
 
 bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
-	/*
 	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	
-	if (NULL != m_subWidget) {
+	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts subWidgetSize;
 		coord2D_ts subWidgetOrigin;
-		subWidgetSize = m_subWidget->GetMinSize();
-		if (true == m_subWidget->CanExpentX()) {
+		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
+		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
 		}
-		if (true == m_subWidget->CanExpentY()) {
+		if (true == m_subWidget[m_currentCreateId]->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
 		int32_t minWidth = 100;
@@ -128,32 +125,29 @@ bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availla
 				}
 				break;
 		}
-		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
-		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
+		m_subWidget[m_currentCreateId]->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
+		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
-	*/
 	return true;
 }
 
 
 bool ewol::ContextMenu::CalculateMinSize(void)
 {
-	/*
 	EWOL_DEBUG("CalculateMinSize");
 	m_userExpendX=false;
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
-		coord2D_ts tmpSize = m_subWidget->GetMinSize();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->CalculateMinSize();
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
 	EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
 	MarkToReedraw();
-	*/
 	return true;
 }
 
@@ -175,41 +169,34 @@ void ewol::ContextMenu::SetExpendY(bool newExpend)
 
 void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 {
-	/*
 	if (NULL == newWidget) {
 		return;
 	}
-	m_subWidget = newWidget;
-	newWidget->SetParrent(this);
-	*/
+	m_subWidget[m_currentCreateId] = newWidget;
 }
 
 
 void ewol::ContextMenu::SubWidgetRemove(void)
 {
-	/*
-	if (NULL != m_subWidget) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget);
-		m_subWidget = NULL;
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->MarkToRemove();
+		m_subWidget[m_currentCreateId] = NULL;
 	}
-	*/
 }
 
 bool ewol::ContextMenu::OnDraw(void)
 {
-	/*
+	EWOL_DEBUG("On Draw " << m_currentDrawId);
 	ewol::Drawable::OnDraw();
-	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw();
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->GenDraw();
 	}
-	*/
 	return true;
 }
 
 
 void ewol::ContextMenu::OnRegenerateDisplay(void)
 {
-	/*
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
@@ -217,9 +204,9 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
 	AddOObject(BGOObjects);
 	
-	if (NULL != m_subWidget) {
-		coord2D_ts tmpSize = m_subWidget->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
@@ -250,23 +237,21 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}
-	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
-	*/
 }
 
 
 bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
-	/*
-	if (NULL != m_subWidget) {
-		coord2D_ts tmpSize = m_subWidget->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget->GetOrigin();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		if(    (tmpOrigin.x <= pos.local.x && tmpOrigin.x + tmpSize.x >= pos.local.x)
 		    && (tmpOrigin.y <= pos.local.y && tmpOrigin.y + tmpSize.y >= pos.local.y) )
 		{
-			return m_subWidget->GenEventInput(IdInput, typeEvent, pos.abs);
+			return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
 		} else {
 			//EWOL_INFO("Event ouside the context menu");
 			if (IdInput > 0) {
@@ -278,23 +263,36 @@ bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEven
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_UP
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
 				    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
-					ewol::RmPopUp(GetWidgetId());
+					// Auto-remove ...
+					MarkToRemove();
 				}
 			}
 		}
-		
 	}
-	*/
 	return true;
 }
 
 
 void ewol::ContextMenu::SetPositionMark(markPosition_te position, coord2D_ts arrowPos)
 {
-	/*
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;
 	m_arrowPos = arrowPos;
 	MarkToReedraw();
-	*/
+}
+
+void ewol::ContextMenu::OnFlipFlopEvent(void)
+{
+	EWOL_DEBUG("Flip-Flop");
+	bool needFlipFlop = m_needFlipFlop;
+	// call herited classes
+	ewol::Drawable::OnFlipFlopEvent();
+	// internal saving
+	if (true == needFlipFlop) {
+		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+	}
+	// in every case, we propagate the flip-flop EVENT
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
+	}
 }

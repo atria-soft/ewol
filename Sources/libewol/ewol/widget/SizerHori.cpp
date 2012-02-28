@@ -28,7 +28,7 @@
 #include <ewol/WidgetManager.h>
 
 #undef __class__
-#define __class__	"ewol::SizerHori"
+#define __class__	"SizerHori"
 
 ewol::SizerHori::SizerHori(void)
 {

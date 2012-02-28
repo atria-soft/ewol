@@ -26,6 +26,99 @@
 #include <ewol/EObjectManager.h>
 #include <ewol/Debug.h>
 
+
+#undef __class__
+#define __class__	"ewol::EObjectMessageMultiCast"
+
+extern "C" {
+	typedef struct {
+		const char*    message;
+		ewol::EObject* object;
+	} messageList_ts;
+};
+
+
+// internal element of the widget manager : 
+static etk::VectorType<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
+
+
+void ewol::EObjectMessageMultiCast::Init(void)
+{
+	EWOL_INFO("EObject message Multi-Cast");
+	m_messageList.Clear();
+}
+
+
+void ewol::EObjectMessageMultiCast::UnInit(void)
+{
+	EWOL_INFO("EObject message Multi-Cast");
+	m_messageList.Clear();
+}
+
+
+static void MultiCastAdd(ewol::EObject* object, const char* const message)
+{
+	if (NULL == object) {
+		EWOL_ERROR("Add with NULL object");
+		return;
+	}
+	if (NULL == message) {
+		EWOL_ERROR("Add with NULL Message");
+		return;
+	}
+	messageList_ts tmpMessage;
+	tmpMessage.object = object;
+	tmpMessage.message = message;
+	m_messageList.PushBack(tmpMessage);
+	EWOL_DEBUG("SendMulticast ADD listener :" << object->GetId() << " on \"" << message << "\"" );
+}
+
+
+static void MultiCastRm(ewol::EObject* object)
+{
+	if (NULL == object) {
+		EWOL_ERROR("Rm with NULL object");
+		return;
+	}
+	// send the message at all registered widget ...
+	for (int32_t iii=m_messageList.Size(); iii>=0; iii--) {
+		if(m_messageList[iii].object == object) {
+			EWOL_DEBUG("SendMulticast RM listener :" << object->GetId());
+			m_messageList[iii].message = NULL;
+			m_messageList[iii].object = NULL;
+			m_messageList.Erase(iii);
+		}
+	}
+}
+
+static void MultiCastSend(ewol::EObject* object, const char* const message, etk::UString& data)
+{
+	EWOL_DEBUG("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
+	
+	// send the message at all registered widget ...
+	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
+		if(    m_messageList[iii].message == message
+		    && m_messageList[iii].object != object)
+		{
+			if (NULL != m_messageList[iii].object) {
+				EWOL_DEBUG("        id = " << m_messageList[iii].object->GetId());
+				// generate event ...
+				m_messageList[iii].object->OnReceiveMessage(object, m_messageList[iii].message, data);
+			}
+		}
+	}
+}
+
+void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const messageId, etk::UString& data)
+{
+	MultiCastSend(NULL, messageId, data);
+}
+
+#undef __class__
+#define __class__	"ewol::EObject"
+
+
+
 /**
  * @brief Constructor
  */
@@ -44,6 +137,7 @@ ewol::EObject::EObject(void)
 ewol::EObject::~EObject(void)
 {
 	ewol::EObjectManager::Rm(this);
+	MultiCastRm(this);
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
@@ -101,6 +195,38 @@ void ewol::EObject::GenerateEventId(const char * generateEventId)
 	}
 }
 
+/**
+ * @brief Generate Multicast event on all EObject requested the event
+ * @param[in] messageId Event Id that is generated
+ * @param[in] data Interger which is transform in etk::UString
+ * @return ---
+ */
+void ewol::EObject::SendMultiCast(const char* const messageId, int32_t data)
+{
+	etk::UString tmpData(data);
+	MultiCastSend(this, messageId, tmpData);
+}
+
+/**
+ * @brief Generate Multicast event on all EObject requested the event
+ * @param[in] messageId Event Id that is generated
+ * @param[in] data String that is send at all the destinations
+ * @return ---
+ */
+void ewol::EObject::SendMultiCast(const char* const messageId, etk::UString& data)
+{
+	MultiCastSend(this, messageId, data);
+}
+
+/**
+ * @brief Register of the arrival of a Multicast message
+ * @param[in] messageId Event Id waiting for...
+ * @return ---
+ */
+void ewol::EObject::RegisterMultiCast(const char* const messageId)
+{
+	MultiCastAdd(this, messageId);
+}
 
 /**
  * @brief Register an EObject over an other to get event on the second...

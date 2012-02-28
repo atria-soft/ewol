@@ -289,3 +289,34 @@ void ewol::Windows::OnFlipFlopEvent(void)
 		}
 	}
 }
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
+{
+	// First step call parrent : 
+	ewol::Widget::OnObjectRemove(removeObject);
+	// second strep find if in alll the elements ...
+	
+	if (m_subWidget[m_currentCreateId] == removeObject) {
+		EWOL_DEBUG("Remove main element of the windows ==> destroyed object");
+		m_subWidget[m_currentCreateId] = NULL;
+	}
+	for(int32_t iii=m_popUpWidgetList[m_currentCreateId].Size(); iii>=0; iii--) {
+		if(m_popUpWidgetList[m_currentCreateId][iii] == removeObject) {
+			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows ==> destroyed object");
+			m_popUpWidgetList[m_currentCreateId][iii] = NULL;
+			m_popUpWidgetList[m_currentCreateId].Erase(iii);
+		}
+	}
+	if (m_keyBoardwidget == removeObject) {
+		EWOL_DEBUG("Remove Keyboard element of the windows ==> destroyed object");
+		m_keyBoardwidget = NULL;
+	}
+}
+
+

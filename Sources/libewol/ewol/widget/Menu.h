@@ -30,6 +30,7 @@
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 #include <ewol/widget/SizerHori.h>
+#include <ewol/widget/ContextMenu.h>
 
 namespace ewol {
 	
@@ -55,15 +56,22 @@ namespace ewol {
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		private:
 			etk::VectorType<MenuElement*>  m_listElement;
-			ewol::EObject*                 m_staticPointer;
-			ewol::EObject*                 m_widgetPopUp;
+			int32_t                        m_staticId;      // unique ID for every element of the menu ...
+			ewol::ContextMenu*             m_widgetContextMenu;
 		public:
 			void           Clear(void);
 			int32_t        AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
 			int32_t        Add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
 			void           AddSpacer(void);
 			
-			virtual bool   OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y);
+			/**
+			 * @brief Receive a message from an other EObject with a specific eventId and data
+			 * @param[in] CallerObject Pointer on the EObject that information came from
+			 * @param[in] eventId Message registered by this class
+			 * @param[in] data Data registered by this class
+			 * @return ---
+			 */
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 	};
 };
 
