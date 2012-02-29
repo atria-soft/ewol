@@ -25,7 +25,7 @@
 #include <ewol/EObjectManager.h>
 
 #undef __class__
-#define __class__	"ewol::EObjectManager"
+#define __class__	"EObjectManager"
 
 static bool IsInit = false;
 
@@ -47,9 +47,10 @@ void ewol::EObjectManager::Init(void)
 void ewol::EObjectManager::UnInit(void)
 {
 	EWOL_DEBUG("==> Un-Init EObject-Manager");
-	
-	ewol::EObjectManager::RemoveAllMark();
-	
+	// Some call to permit to remove all the needed stack of EObject
+	for(int32_t iii=0; iii<128 ; iii++) {
+		ewol::EObjectManager::RemoveAllMark();
+	}
 	EWOL_INFO(" Remove missing user widget");
 	while(0<m_eObjectList.Size()) {
 		if (m_eObjectList[0]!=NULL) {

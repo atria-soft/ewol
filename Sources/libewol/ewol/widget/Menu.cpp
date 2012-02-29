@@ -33,7 +33,7 @@
 #include <ewol/widget/SizerVert.h>
 
 #undef __class__
-#define __class__	"ewol::Menu"
+#define __class__	"Menu"
 
 ewol::Menu::Menu(void)
 {
@@ -139,11 +139,10 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 					EWOL_DEBUG("Menu ==> Generate Event");
 					// Send a multicast event ...
 					SendMultiCast(m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
-					/*
 					if (NULL != m_widgetContextMenu) {
+						EWOL_DEBUG("Mark the menu to remove ...");
 						m_widgetContextMenu->MarkToRemove();
 					}
-					*/
 					m_widgetContextMenu = NULL;
 					return;
 				} else{

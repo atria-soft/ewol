@@ -28,7 +28,7 @@
 #include <ewol/WidgetManager.h>
 
 #undef __class__
-#define __class__	"ewol::PopUp"
+#define __class__	"PopUp"
 
 ewol::PopUp::PopUp(void)
 {
@@ -54,7 +54,6 @@ ewol::PopUp::~PopUp(void)
 
 bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
-	/*
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
@@ -85,14 +84,12 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
-	*/
 	return true;
 }
 
 
 bool ewol::PopUp::CalculateMinSize(void)
 {
-	/*
 	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpendX=false;
 	m_userExpendY=false;
@@ -106,7 +103,6 @@ bool ewol::PopUp::CalculateMinSize(void)
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
 	MarkToReedraw();
-	*/
 	return true;
 }
 
@@ -128,42 +124,39 @@ void ewol::PopUp::SetExpendY(bool newExpend)
 
 void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 {
-	/*
 	if (NULL == newWidget) {
 		return;
 	}
+	SubWidgetRemove();
 	m_subWidget[m_currentCreateId] = newWidget;
-	newWidget->SetParrent(this);
-	*/
+	m_needFlipFlop = true;
+	MarkToReedraw();
 }
 
 
 void ewol::PopUp::SubWidgetRemove(void)
 {
-	/*
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		ewol::widgetManager::MarkWidgetToBeRemoved(m_subWidget[m_currentCreateId]);
+		m_subWidget[m_currentCreateId]->MarkToRemove();;
 		m_subWidget[m_currentCreateId] = NULL;
 	}
-	*/
+	m_needFlipFlop = true;
+	MarkToReedraw();
 }
 
 bool ewol::PopUp::OnDraw(void)
 {
-	/*
 	// draw upper classes
 	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->GenDraw();
 	}
-	*/
 	return true;
 }
 
 
 void ewol::PopUp::OnRegenerateDisplay(void)
 {
-	/*
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
@@ -183,13 +176,11 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
-	*/
 }
 
 
 bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
-	/*
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
@@ -200,18 +191,14 @@ bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eve
 		} else {
 			//EWOL_INFO("Event ouside the Pop-up");
 		}
-		
 	}
-	*/
 	return true;
 }
 
 
 void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
 {
-	/*
 	m_displayRatio = ratio;
-	*/
 }
 
 void ewol::PopUp::OnFlipFlopEvent(void)
@@ -228,3 +215,22 @@ void ewol::PopUp::OnFlipFlopEvent(void)
 		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
 	}
 }
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::PopUp::OnObjectRemove(ewol::EObject * removeObject)
+{
+	// First step call parrent : 
+	ewol::Drawable::OnObjectRemove(removeObject);
+	// second step find if in all the elements ...
+	if(m_subWidget[m_currentCreateId] == removeObject) {
+		EWOL_DEBUG("Remove pop-up sub Element ==> destroyed object");
+		m_subWidget[m_currentCreateId] = NULL;
+		m_needFlipFlop = true;
+	}
+}
+

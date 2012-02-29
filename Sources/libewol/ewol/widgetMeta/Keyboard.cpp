@@ -74,7 +74,7 @@ ewol::Keyboard::~Keyboard(void)
 
 #define ADD_BUTTON(upperWidget,widget,text,event)    do { \
                                                          (widget) = new ewol::Button((text)); \
-                                                         (widget)->ExternLinkOnEvent("ewol Button Pressed", GetWidgetId(), (event) ); \
+                                                         (widget)->RegisterOnEvent(this, ewolEventButtonPressed, (event) ); \
                                                          (widget)->SetExpendX(true); \
                                                          (widget)->SetFillX(true); \
                                                          (widget)->SetCanHaveFocus(false); \
@@ -86,8 +86,6 @@ ewol::Keyboard::~Keyboard(void)
 
 void ewol::Keyboard::SetMode(keyboardMode_te mode)
 {
-	/*
-	
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
 	ewol::Button * myButton = NULL;
@@ -97,7 +95,7 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 	newPadding.x = 12;
 	
 	mySizerVert = new ewol::SizerVert();
-		m_subWidget = mySizerVert;
+		m_subWidget[m_currentCreateId] = mySizerVert;
 		
 		mySizerHori = new ewol::SizerHori();
 			mySizerVert->SubWidgetAdd(mySizerHori);
@@ -182,16 +180,24 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 			myButton->SetExpendX(false);
 			ADD_BUTTON(mySizerHori,myButton,"Ctrl",ewolEventKeyEvent);
 			myButton->SetExpendX(false);
-	*/
 }
 
 
-bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y)
+/**
+ * @brief Receive a message from an other EObject with a specific eventId and data
+ * @param[in] CallerObject Pointer on the EObject that information came from
+ * @param[in] eventId Message registered by this class
+ * @param[in] data Data registered by this class
+ * @return ---
+ */
+void ewol::Keyboard::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
-	/*
-	EWOL_INFO("Receive Event from the Keyboard ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << data << "\"" );
-	if (ewolEventKeyEvent == generateEventId) {
-		ewol::Button * bt     = static_cast<ewol::Button *>(ewol::widgetManager::Get(widgetID));
+	EWOL_INFO("Receive Event from the Keyboard ... : widget*=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
+	if (ewolEventKeyEvent == eventId) {
+		if (NULL == CallerObject) {
+			return;
+		}
+		ewol::Button * bt     = static_cast<ewol::Button *>(CallerObject);
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
 		etk::UString data = bt->GetLabel();
 		if (data == "DEL") {
@@ -206,14 +212,13 @@ bool ewol::Keyboard::OnEventAreaExternal(int32_t widgetID, const char * generate
 		}
 		guiAbstraction::SendKeyboardEvent(true, data[0]);
 		guiAbstraction::SendKeyboardEvent(false, data[0]);
-		return true;
-	} else if (ewolEventKeyboardHide == generateEventId) {
+		return;
+	} else if (ewolEventKeyboardHide == eventId) {
 		Hide();
 		ewol::ForceRedrawAll();
 	}
 	//return GenEventInputExternal(eventExternId, x, y);
-	return true;
-	*/
+	return;
 };
 
 
@@ -235,49 +240,45 @@ void ewol::Keyboard::SetExpendY(bool newExpend)
 
 bool ewol::Keyboard::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
-	/*
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	
-	if (NULL != m_subWidget) {
+	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts subWidgetSize;
-		subWidgetSize = m_subWidget->GetMinSize();
-		if (true == m_subWidget->CanExpentX()) {
+		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
+		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
 		}
-		if (true == m_subWidget->CanExpentY()) {
+		if (true == m_subWidget[m_currentCreateId]->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
 		// force to be an integer ...
 		subWidgetSize.x = (int32_t)subWidgetSize.x;
 		subWidgetSize.y = (int32_t)subWidgetSize.y;
 		
-		m_subWidget->SetOrigin(m_origin.x, m_origin.y);
-		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
+		m_subWidget[m_currentCreateId]->SetOrigin(m_origin.x, m_origin.y);
+		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
-	*/
 	return true;
 }
 
 
 bool ewol::Keyboard::CalculateMinSize(void)
 {
-	/*
 	m_userExpendX=false;
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
-		coord2D_ts tmpSize = m_subWidget->GetMinSize();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->CalculateMinSize();
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
-	*/
 	return true;
 }
 
@@ -285,18 +286,15 @@ bool ewol::Keyboard::CalculateMinSize(void)
 
 bool ewol::Keyboard::OnDraw(void)
 {
-	/*
-	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw();
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->GenDraw();
 	}
-	*/
 	return true;
 }
 
 
 void ewol::Keyboard::OnRegenerateDisplay(void)
 {
-	/*
 	if (true == NeedRedraw()) {
 		color_ts mycolor;
 		mycolor.red   = 1.0;
@@ -310,20 +308,49 @@ void ewol::Keyboard::OnRegenerateDisplay(void)
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		AddOObject(BGOObjects);
 	}
-	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
-	*/
 }
 
 bool ewol::Keyboard::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
-	/*
-	if (NULL != m_subWidget) {
-		return m_subWidget->GenEventInput(IdInput, typeEvent, pos.abs);
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
 	}
-	*/
 	return false;
 }
 
 
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::Keyboard::OnObjectRemove(ewol::EObject * removeObject)
+{
+	ewol::Drawable::OnObjectRemove(removeObject);
+	if (removeObject == m_subWidget[m_currentCreateId]) {
+		m_subWidget[m_currentCreateId] = NULL;
+		m_needFlipFlop = true;
+	}
+}
+
+
+
+void ewol::Keyboard::OnFlipFlopEvent(void)
+{
+	bool needFlipFlop = m_needFlipFlop;
+	// call herited classes
+	ewol::Drawable::OnFlipFlopEvent();
+	// internal saving
+	if (true == needFlipFlop) {
+		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
+	}
+	// in every case, we propagate the flip-flop EVENT
+	if (NULL != m_subWidget[m_currentDrawId]) {
+		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
+	}
+}

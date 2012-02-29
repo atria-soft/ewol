@@ -186,7 +186,7 @@ void ewol::ContextMenu::SubWidgetRemove(void)
 
 bool ewol::ContextMenu::OnDraw(void)
 {
-	EWOL_DEBUG("On Draw " << m_currentDrawId);
+	//EWOL_DEBUG("On Draw " << m_currentDrawId);
 	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->GenDraw();
@@ -283,7 +283,7 @@ void ewol::ContextMenu::SetPositionMark(markPosition_te position, coord2D_ts arr
 
 void ewol::ContextMenu::OnFlipFlopEvent(void)
 {
-	EWOL_DEBUG("Flip-Flop");
+	//EWOL_DEBUG("Flip-Flop");
 	bool needFlipFlop = m_needFlipFlop;
 	// call herited classes
 	ewol::Drawable::OnFlipFlopEvent();

@@ -29,7 +29,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::Spacer"
+#define __class__	"Spacer"
 
 
 ewol::Spacer::Spacer(void)

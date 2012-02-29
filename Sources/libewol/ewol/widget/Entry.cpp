@@ -37,7 +37,7 @@ extern const char * const ewolEventEntryModify     = "ewol-Entry-Modify";
 
 
 #undef __class__
-#define __class__	"ewol::Entry"
+#define __class__	"Entry"
 
 
 void ewol::Entry::Init(void)

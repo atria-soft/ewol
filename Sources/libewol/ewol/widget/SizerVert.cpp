@@ -28,7 +28,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::SizerVert"
+#define __class__	"SizerVert"
 
 
 ewol::SizerVert::SizerVert(void)
@@ -266,4 +266,26 @@ void ewol::SizerVert::OnFlipFlopEvent(void)
 		}
 	}
 }
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::SizerVert::OnObjectRemove(ewol::EObject * removeObject)
+{
+	// First step call parrent : 
+	ewol::Widget::OnObjectRemove(removeObject);
+	// second step find if in all the elements ...
+	for(int32_t iii=m_subWidget[m_currentCreateId].Size()-1; iii>=0; iii--) {
+		if(m_subWidget[m_currentCreateId][iii] == removeObject) {
+			EWOL_DEBUG("Remove sizer sub Element [" << iii << "] ==> destroyed object");
+			m_subWidget[m_currentCreateId][iii] = NULL;
+			m_subWidget[m_currentCreateId].Erase(iii);
+			m_needFlipFlop = true;
+		}
+	}
+}
+
 

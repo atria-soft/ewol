@@ -69,7 +69,7 @@ namespace ewol {
 			/**
 			 * @brief Destructor
 			 */
-			~EObject(void);
+			virtual ~EObject(void);
 			
 			/**
 			 * @brief Get the UniqueId of the EObject
@@ -96,18 +96,11 @@ namespace ewol {
 			/**
 			 * @brief Generate Multicast event on all EObject requested the event
 			 * @param[in] messageId Event Id that is generated
-			 * @param[in] data Interger which is transform in etk::UString
-			 * @return ---
-			 */
-			void SendMultiCast(const char* const messageId, int32_t data);
-			
-			/**
-			 * @brief Generate Multicast event on all EObject requested the event
-			 * @param[in] messageId Event Id that is generated
 			 * @param[in] data String that is send at all the destinations
 			 * @return ---
 			 */
-			void SendMultiCast(const char* const messageId, etk::UString& data);
+			//void SendMultiCast(const char* const messageId, etk::UString& data);
+			void SendMultiCast(const char* const messageId, etk::UString data = "");
 			
 			/**
 			 * @brief Register of the arrival of a Multicast message

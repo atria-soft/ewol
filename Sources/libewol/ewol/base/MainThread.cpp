@@ -29,6 +29,8 @@
 #include <ewol/base/MainThread.h>
 #include <ewol/base/gui.h>
 #include <ewol/Texture.h>
+#include <ewol/EObject.h>
+#include <ewol/EObjectManager.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
 #include <ewol/ShortCutManager.h>
@@ -103,6 +105,7 @@ static void* BaseAppEntry(void* param)
 		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result Set
 	*/
 	
+	ewol::EObjectManager::Init();
 	ewol::EObjectMessageMultiCast::Init();
 	ewol::widgetManager::Init();
 	ewol::texture::Init();
@@ -197,6 +200,7 @@ static void* BaseAppEntry(void* param)
 	ewol::UnInitFont();
 	ewol::widgetManager::UnInit();
 	ewol::EObjectMessageMultiCast::UnInit();
+	ewol::EObjectManager::UnInit();
 	ewol::theme::UnInit();
 	EWOL_DEBUG("==> Un-Init BThread (END)");
 	pthread_exit(NULL);

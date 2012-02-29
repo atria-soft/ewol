@@ -26,6 +26,8 @@
 
 #include <ewol/Debug.h>
 #include <etk/UString.h>
+#include <ewol/EObject.h>
+#include <ewol/EObjectManager.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
 #include <ewol/ewol.h>
@@ -71,11 +73,18 @@ void EWOL_NativeRegenerateDisplay(void)
 {
 	//EWOL_INFO("Resize w=" << w << " h=" << h);
 	if (NULL != gui_uniqueWindows) {
+		// Redraw all needed elements
 		gui_uniqueWindows->OnRegenerateDisplay();
+		// Keep Inter-thread-lock-mutex
 		ewol::widgetManager::DoubleBufferLock();
+		// flip-flop all needed double-buffer in all widget
 		gui_uniqueWindows->OnFlipFlopEvent();
+		// Inform the main thread of openGl draw that somthing to display
 		ewol::widgetManager::SetDoubleBufferNeedDraw();
+		// Release Inter-thread-lock-mutex
 		ewol::widgetManager::DoubleBufferUnLock();
+		// Remove deprecated widget (which have no more reference in the system)
+		ewol::EObjectManager::RemoveAllMark();
 	}
 }
 

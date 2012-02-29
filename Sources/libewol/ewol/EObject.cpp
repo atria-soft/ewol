@@ -28,7 +28,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::EObjectMessageMultiCast"
+#define __class__	"EObjectMessageMultiCast"
 
 extern "C" {
 	typedef struct {
@@ -81,7 +81,7 @@ static void MultiCastRm(ewol::EObject* object)
 		return;
 	}
 	// send the message at all registered widget ...
-	for (int32_t iii=m_messageList.Size(); iii>=0; iii--) {
+	for (int32_t iii=m_messageList.Size()-1; iii>=0; iii--) {
 		if(m_messageList[iii].object == object) {
 			EWOL_DEBUG("SendMulticast RM listener :" << object->GetId());
 			m_messageList[iii].message = NULL;
@@ -198,22 +198,10 @@ void ewol::EObject::GenerateEventId(const char * generateEventId)
 /**
  * @brief Generate Multicast event on all EObject requested the event
  * @param[in] messageId Event Id that is generated
- * @param[in] data Interger which is transform in etk::UString
- * @return ---
- */
-void ewol::EObject::SendMultiCast(const char* const messageId, int32_t data)
-{
-	etk::UString tmpData(data);
-	MultiCastSend(this, messageId, tmpData);
-}
-
-/**
- * @brief Generate Multicast event on all EObject requested the event
- * @param[in] messageId Event Id that is generated
  * @param[in] data String that is send at all the destinations
  * @return ---
  */
-void ewol::EObject::SendMultiCast(const char* const messageId, etk::UString& data)
+void ewol::EObject::SendMultiCast(const char* const messageId, etk::UString data)
 {
 	MultiCastSend(this, messageId, data);
 }
@@ -270,14 +258,11 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
  */
 void ewol::EObject::OnObjectRemove(ewol::EObject * removeObject)
 {
-	int32_t iii = m_externEvent.Size()-1;
-	while(iii>=0) {
+	for(int32_t iii=m_externEvent.Size()-1; iii>=0; iii--) {
 		if (NULL==m_externEvent[iii]) {
 			m_externEvent.Erase(iii);
 		} else if (m_externEvent[iii]->destEObject == removeObject) {
 			m_externEvent.Erase(iii);
-		} else {
-			iii--;
 		}
 	}
 }

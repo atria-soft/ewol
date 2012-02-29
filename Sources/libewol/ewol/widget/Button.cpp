@@ -35,7 +35,7 @@ extern const char * const ewolEventButtonLeave      = "ewol Button Leave";
 
 
 #undef __class__
-#define __class__	"ewol::Button"
+#define __class__	"Button"
 
 
 void ewol::Button::Init(void)

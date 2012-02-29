@@ -36,7 +36,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::Windows"
+#define __class__	"Windows"
 
 
 //list of local events : 
@@ -226,17 +226,6 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	m_needFlipFlop = true;
 }
 
-
-bool ewol::Windows::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
-{
-	if(ewolEventWindowsHideKeyboard == generateEventId) {
-		EWOL_INFO("Request Hide keyboard");
-		KeyboardHide();
-		return true;
-	}
-	return false;
-}
-
 void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 {
 #if defined(__PLATFORM__Android)
@@ -300,22 +289,25 @@ void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);
-	// second strep find if in alll the elements ...
+	// second step find if in all the elements ...
 	
 	if (m_subWidget[m_currentCreateId] == removeObject) {
 		EWOL_DEBUG("Remove main element of the windows ==> destroyed object");
 		m_subWidget[m_currentCreateId] = NULL;
+		m_needFlipFlop = true;
 	}
-	for(int32_t iii=m_popUpWidgetList[m_currentCreateId].Size(); iii>=0; iii--) {
+	for(int32_t iii=m_popUpWidgetList[m_currentCreateId].Size()-1; iii>=0; iii--) {
 		if(m_popUpWidgetList[m_currentCreateId][iii] == removeObject) {
 			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows ==> destroyed object");
 			m_popUpWidgetList[m_currentCreateId][iii] = NULL;
 			m_popUpWidgetList[m_currentCreateId].Erase(iii);
+			m_needFlipFlop = true;
 		}
 	}
 	if (m_keyBoardwidget == removeObject) {
 		EWOL_DEBUG("Remove Keyboard element of the windows ==> destroyed object");
 		m_keyBoardwidget = NULL;
+		m_needFlipFlop = true;
 	}
 }
 

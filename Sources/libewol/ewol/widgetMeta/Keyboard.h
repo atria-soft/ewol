@@ -43,7 +43,22 @@ namespace ewol {
 		public:
 			Keyboard(void);
 			~Keyboard(void);
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
+			virtual void OnFlipFlopEvent(void);
+			/**
+			 * @brief Receive a message from an other EObject with a specific eventId and data
+			 * @param[in] CallerObject Pointer on the EObject that information came from
+			 * @param[in] eventId Message registered by this class
+			 * @param[in] data Data registered by this class
+			 * @return ---
+			 */
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			/**
+			 * @brief Inform object that an other object is removed ...
+			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @note : Sub classes must call this class
+			 * @return ---
+			 */
+			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			void SetMode(keyboardMode_te mode);
 			bool IsHide(void) { return m_isHide; };
 			void Hide(void) { m_isHide=true; };
@@ -51,7 +66,7 @@ namespace ewol {
 		private:
 			bool            m_isHide;
 			keyboardMode_te m_mode;
-			ewol::Widget*   m_subWidget;
+			ewol::Widget*   m_subWidget[NB_BOUBLE_BUFFER];
 		public:
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer

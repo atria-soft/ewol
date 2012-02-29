@@ -28,6 +28,10 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/PopUp.h>
+#include <ewol/widget/Button.h>
+#include <ewol/widget/Entry.h>
+#include <ewol/widget/Label.h>
+#include <ewol/widget/CheckBox.h>
 
 extern const char * const ewolEventFileChooserCancel;
 extern const char * const ewolEventFileChooserValidate;
@@ -38,7 +42,21 @@ namespace ewol {
 		public:
 			FileChooser(void);
 			~FileChooser(void);
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * data, etkFloat_t x, etkFloat_t y);
+			/**
+			 * @brief Receive a message from an other EObject with a specific eventId and data
+			 * @param[in] CallerObject Pointer on the EObject that information came from
+			 * @param[in] eventId Message registered by this class
+			 * @param[in] data Data registered by this class
+			 * @return ---
+			 */
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			/**
+			 * @brief Inform object that an other object is removed ...
+			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @note : Sub classes must call this class
+			 * @return ---
+			 */
+			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			void SetTitle(etk::UString label);
 			void SetValidateLabel(etk::UString label);
 			void SetCancelLabel(etk::UString label);
@@ -47,17 +65,17 @@ namespace ewol {
 			etk::UString GetCompleateFileName(void);
 			void UpdateCurrentFolder(void);
 		private:
-			int32_t m_widgetTitleId;
-			int32_t m_widgetValidateId;
-			int32_t m_widgetCancelId;
-			int32_t m_widgetCurrentFolderId;
-			int32_t m_widgetCurrentFileNameId;
-			int32_t m_widgetListFolderId;
-			int32_t m_widgetListFileId;
-			int32_t m_widgetCheckBoxId;
-			bool    m_hasSelectedFile;
-			etk::UString m_folder;
-			etk::UString m_file;
+			ewol::Label*     m_widgetTitle;
+			ewol::Button*    m_widgetValidate;
+			ewol::Button*    m_widgetCancel;
+			ewol::Entry*     m_widgetCurrentFolder;
+			ewol::Entry*     m_widgetCurrentFileName;
+			ewol::Widget*    m_widgetListFolder;
+			ewol::Widget*    m_widgetListFile;
+			ewol::CheckBox*  m_widgetCheckBox;
+			bool             m_hasSelectedFile;
+			etk::UString     m_folder;
+			etk::UString     m_file;
 	};
 };
 

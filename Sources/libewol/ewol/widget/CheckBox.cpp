@@ -32,7 +32,7 @@
 extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 
 #undef __class__
-#define __class__	"ewol::CheckBox"
+#define __class__	"CheckBox"
 
 
 void ewol::CheckBox::Init(void)

@@ -73,7 +73,7 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 
 
 #undef __class__
-#define __class__	"ewol::Widget"
+#define __class__	"Widget"
 
 ewol::Widget::Widget(void)
 {

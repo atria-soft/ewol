@@ -59,6 +59,13 @@ namespace ewol {
 		public:
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 			virtual void   OnFlipFlopEvent(void);
+			/**
+			 * @brief Inform object that an other object is removed ...
+			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @note : Sub classes must call this class
+			 * @return ---
+			 */
+			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};
 };
 

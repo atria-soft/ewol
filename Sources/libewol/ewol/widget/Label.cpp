@@ -33,7 +33,7 @@ extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
 
 
 #undef __class__
-#define __class__	"ewol::Label"
+#define __class__	"Label"
 
 
 void ewol::Label::Init(void)

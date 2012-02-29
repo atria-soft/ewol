@@ -25,7 +25,7 @@
 #include <ewol/WidgetManager.h>
 
 #undef __class__
-#define __class__	"ewol::WidgetManager"
+#define __class__	"WidgetManager"
 
 static pthread_mutex_t localMutex;
 static bool IsInit = false;

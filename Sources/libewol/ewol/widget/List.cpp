@@ -29,7 +29,7 @@
 #include <ewol/WidgetManager.h>
 
 #undef __class__
-#define __class__	"ewol::List"
+#define __class__	"List"
 
 
 void ewol::List::Init(void)
