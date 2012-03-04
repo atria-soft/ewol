@@ -22,6 +22,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/WidgetScrolled.cpp \
 			ewol/widget/Drawable.cpp \
 			ewol/widget/Button.cpp \
+			ewol/widget/ButtonColor.cpp \
 			ewol/widget/Label.cpp \
 			ewol/widget/CheckBox.cpp \
 			ewol/widget/Entry.cpp \
