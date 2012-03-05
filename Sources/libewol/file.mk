@@ -29,6 +29,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/List.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/ContextMenu.cpp \
+			ewol/widget/ColorBar.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
