@@ -31,7 +31,9 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/Label.h>
-#include <ewol/widget/CheckBox.h>
+#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/ColorBar.h>
+#include <ewol/widget/Slider.h>
 
 extern const char * const ewolEventColorChooserChange;
 
@@ -60,10 +62,12 @@ namespace ewol {
 			void     SetColor(color_ts newColor);
 			color_ts GetColor(void);
 		private:;
-			ewol::Entry*        m_widgetColor;
 			ewol::ColorBar*     m_widgetColorBar;
-			//ewol::Slider*       m_widgetAlpha;
-			//ewol::PreciseColor* m_widgetColorPrecise;
+			ewol::Slider*       m_widgetRed;
+			ewol::Slider*       m_widgetGreen;
+			ewol::Slider*       m_widgetBlue;
+			ewol::Slider*       m_widgetAlpha;
+			color_ts            m_currentColor;
 	};
 };
 

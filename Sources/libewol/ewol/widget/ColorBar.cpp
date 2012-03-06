@@ -67,15 +67,17 @@ bool ewol::ColorBar::CalculateMinSize(void)
 	MarkToReedraw();
 	return true;
 }
-
-static color_ts s_listColor[7][3] = {
-	{ { 1.0, 1.0, 1.0, 1.0 }, {1.0, 0.0, 0.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {1.0, 1.0, 0.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {0.0, 1.0, 0.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {0.0, 1.0, 1.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {0.0, 0.0, 1.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {1.0, 0.0, 1.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } },
-	{ { 1.0, 1.0, 1.0, 1.0 }, {1.0, 0.0, 0.0, 1.0 }, {0.0, 0.0, 0.0, 1.0 } }
+static color_ts s_listColorWhite = {1.0, 1.0, 1.0, 1.0 };
+static color_ts s_listColorBlack = {0.0, 0.0, 0.0, 1.0 };
+#define NB_BAND_COLOR		(6)
+static color_ts s_listColor[NB_BAND_COLOR+1] = {
+	{1.0, 0.0, 0.0, 1.0 },
+	{1.0, 1.0, 0.0, 1.0 },
+	{0.0, 1.0, 0.0, 1.0 },
+	{0.0, 1.0, 1.0, 1.0 },
+	{0.0, 0.0, 1.0, 1.0 },
+	{1.0, 0.0, 1.0, 1.0 },
+	{1.0, 0.0, 0.0, 1.0 }
 };
 
 color_ts ewol::ColorBar::GetCurrentColor(void)
@@ -119,7 +121,7 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 		tmpSizeX += m_padding.x;
 		tmpSizeY += m_padding.y;
 		
-		for(int32_t iii=0; iii<6 ; iii++) {
+		for(int32_t iii=0; iii<NB_BAND_COLOR ; iii++) {
 			
 			/* Step 1 : 
 			 *              
@@ -128,12 +130,12 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			tmpOObjects->SetColor(s_listColor[iii][0]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1][1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii][1]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColorWhite);
+			tmpOObjects->SetPoint(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
+			tmpOObjects->SetColor(s_listColor[iii+1]);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColor[iii]);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
 			
 			/* Step 2 : 
 			 *   ********     
@@ -142,13 +144,12 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			tmpOObjects->SetColor(s_listColor[iii][0]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1][0]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1][1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
-			
+			tmpOObjects->SetColor(s_listColorWhite);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
+			tmpOObjects->SetColor(s_listColorWhite);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
+			tmpOObjects->SetColor(s_listColor[iii+1]);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
 			/* Step 3 : 
 			 *              
 			 *   **         
@@ -156,13 +157,12 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			tmpOObjects->SetColor(s_listColor[iii][1]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii+1][2]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY+tmpSizeY);
-			tmpOObjects->SetColor(s_listColor[iii][2]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY+tmpSizeY);
-			
+			tmpOObjects->SetColor(s_listColor[iii]);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColorBlack);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
+			tmpOObjects->SetColor(s_listColorBlack);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
 			/* Step 4 : 
 			 *   ********     
 			 *     ******     
@@ -170,19 +170,38 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			tmpOObjects->SetColor(s_listColor[iii][1]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii+1][1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii+1][2]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/6), tmpOriginY+tmpSizeY);
+			tmpOObjects->SetColor(s_listColor[iii]);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColor[iii+1]);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColorBlack);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
+			/*
+			tmpOObjects->SetColor(s_listColorWhite);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
+			tmpOObjects->SetColor(s_listColor[iii+1]);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColor[iii]);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
 			
-			//tmpOObjects->Rectangle( tmpOriginX + iii*(tmpSizeX/7), tmpOriginY, tmpSizeX/7, tmpSizeY);
+			tmpOObjects->SetColor(s_listColor[iii]);
+			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColor[iii+1]);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			tmpOObjects->SetColor(s_listColorBlack);
+			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
+			*/
 		}
 		color_ts tmpColor;
-		tmpColor.red   = 0.5;
-		tmpColor.green = 0.5;
-		tmpColor.blue  = 0.5;
+		if (m_currentUserPos.y > 0.5) {
+			tmpColor.red   = 1.0;
+			tmpColor.green = 1.0;
+			tmpColor.blue  = 1.0;
+		} else {
+			tmpColor.red   = 0.0;
+			tmpColor.green = 0.0;
+			tmpColor.blue  = 0.0;
+		}
 		tmpColor.alpha = 1.0;
 		tmpOObjects->SetColor(tmpColor);
 		tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
@@ -198,16 +217,66 @@ bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 	if (1 == IdInput) {
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent
+		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
 			// nothing to do ...
-			//GenerateEventId(ewolEventButtonPressed);
 			m_currentUserPos.x=pos.local.x/m_size.x;
 			m_currentUserPos.y=pos.local.y/m_size.y;
 			MarkToReedraw();
 			//==> try to estimate color
-			int32_t bandID = (int32_t)(pos.local.x/6);
-			etkFloat_t relativePos = pos.local.x - (pos.local.x/6) * bandID;
-			
+			EWOL_VERBOSE("event on (" << pos.local.x << "," << pos.local.y << ")");
+			int32_t bandID = (int32_t)(pos.local.x/(m_size.x/6));
+			etkFloat_t relativePos = pos.local.x - (m_size.x/6) * bandID;
+			etkFloat_t poroportionnalPos = relativePos/(m_size.x/6);
+			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << relativePos);
+			color_ts estimateColor;
+			estimateColor.alpha = 1.0;
+			if (s_listColor[bandID].red == s_listColor[bandID+1].red) {
+				estimateColor.red = s_listColor[bandID].red;
+			} else if (s_listColor[bandID].red < s_listColor[bandID+1].red) {
+				estimateColor.red = s_listColor[bandID].red + (s_listColor[bandID+1].red-s_listColor[bandID].red)*poroportionnalPos;
+			} else {
+				estimateColor.red = s_listColor[bandID+1].red + (s_listColor[bandID].red-s_listColor[bandID+1].red)*(1-poroportionnalPos);
+			}
+			if (s_listColor[bandID].green == s_listColor[bandID+1].green) {
+				estimateColor.green = s_listColor[bandID].green;
+			} else if (s_listColor[bandID].green < s_listColor[bandID+1].green) {
+				estimateColor.green = s_listColor[bandID].green + (s_listColor[bandID+1].green-s_listColor[bandID].green)*poroportionnalPos;
+			} else {
+				estimateColor.green = s_listColor[bandID+1].green + (s_listColor[bandID].green-s_listColor[bandID+1].green)*(1-poroportionnalPos);
+			}
+			if (s_listColor[bandID].blue == s_listColor[bandID+1].blue) {
+				estimateColor.blue = s_listColor[bandID].blue;
+			} else if (s_listColor[bandID].blue < s_listColor[bandID+1].blue) {
+				estimateColor.blue = s_listColor[bandID].blue + (s_listColor[bandID+1].blue-s_listColor[bandID].blue)*poroportionnalPos;
+			} else {
+				estimateColor.blue = s_listColor[bandID+1].blue + (s_listColor[bandID].blue-s_listColor[bandID+1].blue)*(1-poroportionnalPos);
+			}
+			// step 2 generate the white and black ...
+			if (pos.local.y == (m_size.y/2)) {
+				// nothing to do ... just get the current color ...
+			} else if (pos.local.y < (m_size.y/2)) {
+				etkFloat_t poroportionnalWhite = 1.0-pos.local.y/(m_size.y/2);
+				estimateColor.red   = estimateColor.red   + (1.0 - estimateColor.red  )*poroportionnalWhite;
+				estimateColor.green = estimateColor.green + (1.0 - estimateColor.green)*poroportionnalWhite;
+				estimateColor.blue  = estimateColor.blue  + (1.0 - estimateColor.blue )*poroportionnalWhite;
+			} else {
+				etkFloat_t poroportionnalBlack = (pos.local.y-(m_size.y/2))/(m_size.y/2);
+				estimateColor.red   = estimateColor.red   - (estimateColor.red  )*poroportionnalBlack;
+				estimateColor.green = estimateColor.green - (estimateColor.green)*poroportionnalBlack;
+				estimateColor.blue  = estimateColor.blue  - (estimateColor.blue )*poroportionnalBlack;
+			}
+			/*
+			char colorText[256];
+			sprintf(colorText, "#%02X%02X%02X%02X",
+			        (uint8_t)(estimateColor.red   * 0xFF),
+			        (uint8_t)(estimateColor.green * 0xFF),
+			        (uint8_t)(estimateColor.blue  * 0xFF),
+			        (uint8_t)(estimateColor.alpha * 0xFF));
+			EWOL_DEBUG("new color : " << colorText);
+			*/
+			m_currentColor = estimateColor;
+			GenerateEventId(ewolEventColorBarChange);
 			
 			return true;
 		}

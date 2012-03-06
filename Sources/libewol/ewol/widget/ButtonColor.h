@@ -29,6 +29,7 @@
 #include <ewol/Debug.h>
 #include <ewol/widget/Drawable.h>
 #include <ewol/widget/Button.h>
+#include <ewol/widget/ContextMenu.h>
 
 extern const char * const ewolEventButtonColorChange;
 
@@ -48,18 +49,27 @@ namespace ewol {
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(coord2D_ts newPadding);
 		private:
-			textAlignement_te  m_alignement;
-			coord2D_ts         m_padding;
-			etk::UString       m_label;
-			color_ts           m_textColorFg;    //!< Text color
-			color_ts           m_textColorBg;    //!< Background color
-			color_ts           m_selectedColor;  //!< user current selected Color
+			textAlignement_te    m_alignement;
+			coord2D_ts           m_padding;
+			etk::UString         m_label;
+			color_ts             m_textColorFg;    //!< Text color
+			color_ts             m_textColorBg;    //!< Background color
+			color_ts             m_selectedColor;  //!< user current selected Color
+			ewol::ContextMenu*   m_widgetContextMenu;
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 			color_ts GetCurrentColor(void) { return m_selectedColor; };
 			void     SetCurrentColor(color_ts color);
+			/**
+			 * @brief Receive a message from an other EObject with a specific eventId and data
+			 * @param[in] CallerObject Pointer on the EObject that information came from
+			 * @param[in] eventId Message registered by this class
+			 * @param[in] data Data registered by this class
+			 * @return ---
+			 */
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 	};
 };
 

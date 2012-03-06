@@ -33,8 +33,10 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
+			ewol/widget/Slider.cpp \
 			ewol/widget/Spacer.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
+			ewol/widgetMeta/ColorChooser.cpp \
 			ewol/widgetMeta/Keyboard.cpp \
 			ewol/themeManager.cpp \
 			ewol/theme/Theme.cpp \

@@ -26,6 +26,8 @@
 
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/widgetMeta/ColorChooser.h>
+#include <ewol/ewol.h>
 
 
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
@@ -50,15 +52,12 @@ void ewol::ButtonColor::Init(void)
 		m_padding.x = 4;
 	#endif
 	
-	m_textColorFg.red   = 0.0;
-	m_textColorFg.green = 0.0;
-	m_textColorFg.blue  = 0.0;
-	m_textColorFg.alpha = 1.0;
 	
 	m_textColorBg.red   = 0.0;
 	m_textColorBg.green = 0.0;
 	m_textColorBg.blue  = 0.0;
 	m_textColorBg.alpha = 0.25;
+	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
 }
 
@@ -151,6 +150,17 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_padding.x;
 		tmpSizeY -= 2*m_padding.y;
 		
+		if ((m_textColorBg.red>0.5) || (m_textColorBg.green>0.5) || (m_textColorBg.blue > 0.8) ) {
+			m_textColorFg.red   = 0.0;
+			m_textColorFg.green = 0.0;
+			m_textColorFg.blue  = 0.0;
+			m_textColorFg.alpha = 1.0;
+		} else {
+			m_textColorFg.red   = 1.0;
+			m_textColorFg.green = 1.0;
+			m_textColorFg.blue  = 1.0;
+			m_textColorFg.alpha = 1.0;
+		}
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		/*
 		int32_t fontId = GetDefaultFontId();
@@ -189,8 +199,29 @@ bool ewol::ButtonColor::OnEventInput(int32_t IdInput, eventInputType_te typeEven
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			// nothing to do ...
-			GenerateEventId(ewolEventButtonPressed);
+			//GenerateEventId(ewolEventButtonPressed);
+			// Display the pop-up menu ... 
+			
+			// create a context menu : 
+			m_widgetContextMenu = new ewol::ContextMenu();
+			if (NULL == m_widgetContextMenu) {
+				EWOL_ERROR("Allocation Error");
+				return true;
+			}
+			// Get the button widget : 
+			coord2D_ts newPosition;
+			newPosition.x = m_origin.x + m_size.x/2;
+			newPosition.y = m_origin.y;
+			
+			m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_BOTTOM, newPosition );
+			
+			ewol::ColorChooser * myColorChooser = new ewol::ColorChooser();
+			// set it in the pop-up-system : 
+			m_widgetContextMenu->SubWidgetSet(myColorChooser);
+			myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
+			ewol::PopUpWidgetPush(m_widgetContextMenu);
 			MarkToReedraw();
+			
 			return true;
 		}
 	}
@@ -210,4 +241,33 @@ void ewol::ButtonColor::SetCurrentColor(color_ts color)
 	        (uint8_t)(color.alpha * 0xFF));
 	//set the new label ...
 	SetLabel(colorText);
+}
+
+/**
+ * @brief Receive a message from an other EObject with a specific eventId and data
+ * @param[in] CallerObject Pointer on the EObject that information came from
+ * @param[in] eventId Message registered by this class
+ * @param[in] data Data registered by this class
+ * @return ---
+ */
+void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+{
+	if (eventId == ewolEventColorChooserChange) {
+		//==> this is an internal event ...
+		ewol::ColorChooser * myColorChooser = static_cast<ewol::ColorChooser *>(CallerObject);
+		
+		color_ts tmpColor = myColorChooser->GetColor();
+		
+		m_selectedColor = tmpColor;
+		m_textColorBg = m_selectedColor;
+		char colorText[256];
+		sprintf(colorText, "#%02X%02X%02X%02X",
+		        (uint8_t)(tmpColor.red   * 0xFF),
+		        (uint8_t)(tmpColor.green * 0xFF),
+		        (uint8_t)(tmpColor.blue  * 0xFF),
+		        (uint8_t)(tmpColor.alpha * 0xFF));
+		//set the new label ...
+		SetLabel(colorText);
+		
+	}
 }
