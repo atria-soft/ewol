@@ -179,8 +179,35 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 }
 
 
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::PopUp::GetWidgetAtPos(coord2D_ts pos)
+{
+	// calculate relative position
+	coord2D_ts relativePos = RelativePosition(pos);
+	// for the element in the pop-up ...
+	if (NULL != m_subWidget[m_currentCreateId]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
+		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
+		{
+			return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
+		} else {
+			//EWOL_INFO("Event ouside the Pop-up");
+		}
+	}
+	// otherwise the event go to this widget ...
+	return this;
+}
+
 bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+/*
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
@@ -192,6 +219,7 @@ bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eve
 			//EWOL_INFO("Event ouside the Pop-up");
 		}
 	}
+*/
 	return true;
 }
 

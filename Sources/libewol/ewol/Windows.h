@@ -52,6 +52,13 @@ namespace ewol {
 			virtual void On(void) { };
 		public:
 			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
+			/**
+			 * @brief Get the widget at the specific windows absolute position
+			 * @param[in] pos gAbsolute position of the requested widget knowledge
+			 * @return NULL No widget found
+			 * @return pointer on the widget found
+			 */
+			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 		private:
 			bool m_hasDecoration;

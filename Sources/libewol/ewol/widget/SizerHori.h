@@ -56,6 +56,13 @@ namespace ewol {
 			virtual bool   OnDraw(void);
 		public:
 			virtual void   OnRegenerateDisplay(void);
+			/**
+			 * @brief Get the widget at the specific windows absolute position
+			 * @param[in] pos gAbsolute position of the requested widget knowledge
+			 * @return NULL No widget found
+			 * @return pointer on the widget found
+			 */
+			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
 			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 			virtual void   OnFlipFlopEvent(void);
 			/**

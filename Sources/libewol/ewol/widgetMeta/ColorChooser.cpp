@@ -71,18 +71,30 @@ ewol::ColorChooser::ColorChooser(void)
 			*/
 			SubWidgetAdd(m_widgetColorBar);
 		
+		color_ts sliderColor;
+		sliderColor.red = 0.0;
+		sliderColor.green = 0.0;
+		sliderColor.blue = 0.0;
+		sliderColor.alpha = 1.0;
+		
 		m_widgetRed = new ewol::Slider();
 			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetRed->SetExpendX(true);
 			m_widgetRed->SetFillX(true);
 			m_widgetRed->SetMin(0);
 			m_widgetRed->SetMax(255);
+			sliderColor.red = 1.0;
+			m_widgetRed->SetColor(sliderColor);
+			sliderColor.red = 0.0;
 			SubWidgetAdd(m_widgetRed);
 		m_widgetGreen = new ewol::Slider();
 			m_widgetGreen->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetGreen->SetExpendX(true);
 			m_widgetGreen->SetFillX(true);
 			m_widgetGreen->SetMin(0);
+			sliderColor.green = 1.0;
+			m_widgetGreen->SetColor(sliderColor);
+			sliderColor.green = 0.0;
 			m_widgetGreen->SetMax(255);
 			SubWidgetAdd(m_widgetGreen);
 		m_widgetBlue = new ewol::Slider();
@@ -90,6 +102,9 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetBlue->SetExpendX(true);
 			m_widgetBlue->SetFillX(true);
 			m_widgetBlue->SetMin(0);
+			sliderColor.blue = 1.0;
+			m_widgetBlue->SetColor(sliderColor);
+			sliderColor.blue = 0.0;
 			m_widgetBlue->SetMax(255);
 			SubWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = new ewol::Slider();

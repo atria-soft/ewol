@@ -215,6 +215,8 @@ bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
+		pos.local.x = etk_max(etk_min(pos.local.x, m_size.x),0);
+		pos.local.y = etk_max(etk_min(pos.local.y, m_size.y),0);
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent

@@ -122,6 +122,17 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 }
 
 
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::Widget::GetWidgetAtPos(coord2D_ts pos)
+{
+	return this;
+}
+
 bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
 {
 	eventPosition_ts eventPos;

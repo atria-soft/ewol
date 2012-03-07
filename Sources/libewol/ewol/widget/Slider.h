@@ -42,6 +42,7 @@ namespace ewol {
 			int32_t        GetValue(void);
 			void           SetMin(int32_t val);
 			void           SetMax(int32_t val);
+			void           SetColor(color_ts newColor) { m_textColorFg = newColor; };
 		private:
 			int32_t            m_value;
 			int32_t            m_min;

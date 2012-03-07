@@ -128,6 +128,7 @@ namespace ewol {
 		public:
 			void           SetOrigin(etkFloat_t x, etkFloat_t y)            { m_origin.x=x; m_origin.y=y;};
 			coord2D_ts     GetOrigin(void)                                  { return m_origin; };
+			coord2D_ts     RelativePosition(coord2D_ts pos)                 { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			//update the min Size ... and the expend parameters for the sizer
 			virtual bool   CalculateMinSize(void)                           {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; MarkToReedraw(); return true; };
@@ -162,10 +163,26 @@ namespace ewol {
 			virtual void OnLostFocus(void) {};
 		
 		public:
+			/**
+			 * @brief Get the widget at the specific windows absolute position
+			 * @param[in] pos gAbsolute position of the requested widget knowledge
+			 * @return NULL No widget found
+			 * @return pointer on the widget found
+			 */
+			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
 			// external acces to set an input event on this widget.
+			// TODO : deprecated ...
 			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos); // call when input event arrive and call OnEventInput, if no event detected
 			virtual bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
-		protected:
+			// TODO : Remasterised ...
+			/**
+			 * @brief Manage input event of this Widget
+			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+			 * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+			 * @param[in] pos Relative and absolute position
+			 * @return true the event is used
+			 * @return false the event is not used
+			 */
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos) { return false; };
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Keboard event (when one is present or when a graphical is present

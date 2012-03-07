@@ -23,6 +23,7 @@
  */
 
 #include <ewol/EObjectManager.h>
+#include <ewol/base/eventInputManagement.h>
 
 #undef __class__
 #define __class__	"EObjectManager"
@@ -108,6 +109,8 @@ void informOneObjectIsRemoved(ewol::EObject* object)
 			m_eObjectList[iii]->OnObjectRemove(object);
 		}
 	}
+	// call input event manager to remove linked widget ...
+	ewol::eventInput::OnObjectRemove(object);
 }
 
 

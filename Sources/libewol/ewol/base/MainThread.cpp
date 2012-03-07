@@ -23,6 +23,7 @@
  */
 
 
+#include <etk/Types.h>
 #include <ewol/ewol.h>
 #include <ewol/Debug.h>
 #include <ewol/threadMsg.h>
@@ -34,6 +35,7 @@
 #include <ewol/WidgetManager.h>
 #include <ewol/themeManager.h>
 #include <ewol/ShortCutManager.h>
+#include <ewol/base/eventInputManagement.h>
 
 
 
@@ -77,8 +79,6 @@ typedef struct {
 	float y;
 } eventInputState_ts;
 
-void EWOL_NativeEventInputMotion(int pointerID, float x, float y );
-void EWOL_NativeEventInputState(int pointerID, bool isUp, float x, float y );
 void EWOL_NativeResize(int w, int h );
 void EWOL_NativeRegenerateDisplay(void);
 
@@ -107,6 +107,7 @@ static void* BaseAppEntry(void* param)
 	
 	ewol::EObjectManager::Init();
 	ewol::EObjectMessageMultiCast::Init();
+	ewol::eventInput::Init();
 	ewol::widgetManager::Init();
 	ewol::texture::Init();
 	ewol::theme::Init();
@@ -140,14 +141,24 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
 					{
 						eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-						EWOL_NativeEventInputMotion(tmpData->pointerID, tmpData->x, tmpData->y);
+						coord2D_ts pos;
+						pos.x = tmpData->x;
+						pos.y = tmpData->y;
+						ewol::eventInput::Motion(tmpData->pointerID, pos);
 					}
 					break;
 				case THREAD_INPUT_STATE:
 					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 					{
 						eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-						EWOL_NativeEventInputState(tmpData->pointerID, tmpData->state, tmpData->x, tmpData->y);
+						bool isdown = true;
+						if (true==tmpData->state) {
+							isdown = false;
+						}
+						coord2D_ts pos;
+						pos.x = tmpData->x;
+						pos.y = tmpData->y;
+						ewol::eventInput::State(tmpData->pointerID, tmpData->state, pos);
 					}
 					break;
 				case THREAD_KEYBORAD_KEY:
@@ -202,6 +213,7 @@ static void* BaseAppEntry(void* param)
 	ewol::EObjectMessageMultiCast::UnInit();
 	ewol::EObjectManager::UnInit();
 	ewol::theme::UnInit();
+	ewol::eventInput::UnInit();
 	EWOL_DEBUG("==> Un-Init BThread (END)");
 	pthread_exit(NULL);
 }

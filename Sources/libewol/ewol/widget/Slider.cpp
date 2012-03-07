@@ -35,6 +35,7 @@ extern const char * const ewolEventSliderChange    = "ewol-event-slider-change";
 #undef __class__
 #define __class__	"Slider"
 
+const int32_t dotRadius = 6;
 
 ewol::Slider::Slider(void)
 {
@@ -66,7 +67,7 @@ ewol::Slider::~Slider(void)
 bool ewol::Slider::CalculateMinSize(void)
 {
 	m_minSize.x = 40;
-	m_minSize.y = 15;
+	m_minSize.y = dotRadius*2;
 	MarkToReedraw();
 	return true;
 }
@@ -111,9 +112,9 @@ void ewol::Slider::OnRegenerateDisplay(void)
 		
 		tmpOObjects->SetColor(m_textColorFg);
 		// draw a line :
-		tmpOObjects->Line(4, m_size.y/2, m_size.x-4, m_size.y/2, 1);
+		tmpOObjects->Line(dotRadius, m_size.y/2, m_size.x-dotRadius, m_size.y/2, 1);
 		
-		tmpOObjects->Disc(4+((etkFloat_t)(m_value-m_min)/(etkFloat_t)(m_max-m_min))*(etkFloat_t)(m_size.x-8), m_size.y/2, 4);
+		tmpOObjects->Disc(4+((etkFloat_t)(m_value-m_min)/(etkFloat_t)(m_max-m_min))*(etkFloat_t)(m_size.x-2*dotRadius), m_size.y/2, dotRadius);
 		
 		AddOObject(tmpOObjects);
 	}
@@ -130,9 +131,9 @@ bool ewol::Slider::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, ev
 		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
 			// get the new position :
 			EWOL_DEBUG("Event on Slider (" << pos.local.x << "," << pos.local.y << ")");
-			m_value = m_min + (etkFloat_t)(pos.local.x - 4) / (etkFloat_t)(m_size.x-8) * (etkFloat_t)(m_max-m_min);
+			m_value = m_min + (etkFloat_t)(pos.local.x - dotRadius) / (etkFloat_t)(m_size.x-2*dotRadius) * (etkFloat_t)(m_max-m_min);
 			m_value = etk_max(etk_min(m_value, m_max), m_min);
-			EWOL_DEBUG(" new value : " << m_value << "¤ [" << m_min << ".." << m_max << "]");
+			EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
 			GenerateEventId(ewolEventSliderChange);
 			MarkToReedraw();
 			return true;

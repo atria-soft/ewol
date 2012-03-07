@@ -258,33 +258,55 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(coord2D_ts pos)
 {
+	// calculate relative position
+	coord2D_ts relativePos = RelativePosition(pos);
+	// Check for sub Element
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
-		if(    (tmpOrigin.x <= pos.local.x && tmpOrigin.x + tmpSize.x >= pos.local.x)
-		    && (tmpOrigin.y <= pos.local.y && tmpOrigin.y + tmpSize.y >= pos.local.y) )
+		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
+		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{
-			return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
-		} else {
-			//EWOL_INFO("Event ouside the context menu");
-			if (IdInput > 0) {
-				if(    typeEvent == ewol::EVENT_INPUT_TYPE_DOWN
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_MOVE
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_TRIPLE
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_UP
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
-				    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
-					// Auto-remove ...
-					MarkToRemove();
-				}
-			}
+			return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
 		}
 	}
-	return true;
+	return this;
+}
+
+/**
+ * @brief Manage input event of this Widget
+ * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+ * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+ * @param[in] pos Relative and absolute position
+ * @return true the event is used
+ * @return false the event is not used
+ */
+bool ewol::ContextMenu::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+{
+	//EWOL_INFO("Event ouside the context menu");
+	if (IdInput > 0) {
+		if(    typeEvent == ewol::EVENT_INPUT_TYPE_DOWN
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_MOVE
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_TRIPLE
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_UP
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
+			// Auto-remove ...
+			MarkToRemove();
+			return true;
+		}
+	}
+	return false;
 }
 
 

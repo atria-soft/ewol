@@ -4,6 +4,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/threadMsg.cpp \
 			ewol/base/MainThread.cpp \
 			ewol/base/gui.cpp \
+			ewol/base/eventInputManagement.cpp \
 			ewol/Debug.cpp \
 			ewol/EObject.cpp \
 			ewol/EObjectManager.cpp \

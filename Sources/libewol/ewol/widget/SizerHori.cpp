@@ -234,8 +234,34 @@ void ewol::SizerHori::OnRegenerateDisplay(void)
 }
 
 
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::SizerHori::GetWidgetAtPos(coord2D_ts pos)
+{
+	// for all element in the sizer ...
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
+			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
+			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
+			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
+			{
+				return m_subWidget[m_currentCreateId][iii]->GetWidgetAtPos(pos);
+			}
+		}
+	}
+	// otherwise the event go to this widget ...
+	return this;
+}
+
+
 bool ewol::SizerHori::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+/*
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
@@ -247,6 +273,7 @@ bool ewol::SizerHori::OnEventInput(int32_t IdInput, eventInputType_te typeEvent,
 			}
 		}
 	}
+*/
 	return true;
 }
 

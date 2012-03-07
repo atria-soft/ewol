@@ -103,9 +103,41 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 	return true;
 }
 
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::Windows::GetWidgetAtPos(coord2D_ts pos)
+{
+	// calculate relative position
+	coord2D_ts relativePos = RelativePosition(pos);
+	
+	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
+		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
+		if (relativePos.y > m_size.y - tmpSize.y) {
+			return m_keyBoardwidget->GetWidgetAtPos(pos);
+		}
+	}
+	// event go directly on the pop-up
+	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
+		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
+			m_popUpWidgetList[m_currentCreateId].PopBack();
+		} else {
+			return m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GetWidgetAtPos(pos);
+		}
+	// otherwise in the normal windows
+	} else if (NULL != m_subWidget[m_currentCreateId]) {
+		return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
+	}
+	// otherwise the event go to this widget ...
+	return this;
+}
 
 bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
 {
+/*
 	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
 		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
 		if (pos.local.y > m_size.y - tmpSize.y) {
@@ -124,6 +156,7 @@ bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, e
 	} else if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
 	}
+*/
 	return true;
 }
 
