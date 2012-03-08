@@ -64,8 +64,11 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
-			
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
+			/**
+			 * @brief Event generated to inform a flip-flop has occured on the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void   OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...

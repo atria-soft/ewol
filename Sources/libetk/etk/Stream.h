@@ -124,6 +124,31 @@ namespace etk{
 			}
 			return *this;
 		}
+		CCout& operator << (coord2D_ts t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", t.x, t.y);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		CCout& operator << (coord3D_ts t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", t.x, t.y, t.z);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		CCout& operator << (texCoord_ts t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "{%f,%f}", t.u, t.v);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		CCout& operator << (color_ts t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "(r=%f,g=%f,b=%f,a=%f)", t.red, t.green, t.blue, t.alpha);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
+		CCout& operator << (clipping_ts t) {
+			snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%f,%f) size=(%f,%f)", t.x, t.y, t.w, t.h);
+			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+			return *this;
+		}
 		CCout& operator << (CStart ccc) {
 			pthread_mutex_lock(&m_mutex);
 			return *this;

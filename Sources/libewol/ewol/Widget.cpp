@@ -133,22 +133,17 @@ ewol::Widget * ewol::Widget::GetWidgetAtPos(coord2D_ts pos)
 	return this;
 }
 
-bool ewol::Widget::GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
-{
-	eventPosition_ts eventPos;
-	eventPos.abs   = pos;
-	eventPos.local.x = pos.x - m_origin.x;
-	eventPos.local.y = pos.y - m_origin.y;
-	//EWOL_DEBUG(" event on abs=(" << eventPos.abs.x << "," << eventPos.abs.y << ") local=(" << eventPos.local.x << "," << eventPos.local.y << ")");
-	return OnEventInput(IdInput, typeEvent, eventPos);
-}
 
 bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue)
 {
 	return false;
 }
 
-
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::Widget::OnFlipFlopEvent(void)
 {
 	if (true == m_needFlipFlop) {

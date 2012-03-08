@@ -258,24 +258,12 @@ ewol::Widget * ewol::SizerVert::GetWidgetAtPos(coord2D_ts pos)
 	return this;
 }
 
-bool ewol::SizerVert::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
-{
-/*
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
-		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
-			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
-			if(    (tmpOrigin.x <= pos.abs.x && tmpOrigin.x + tmpSize.x >= pos.abs.x)
-			    && (tmpOrigin.y <= pos.abs.y && tmpOrigin.y + tmpSize.y >= pos.abs.y) )
-			{
-				return m_subWidget[m_currentCreateId][iii]->GenEventInput(IdInput, typeEvent, pos.abs);
-			}
-		}
-	}
-*/
-	return true;
-}
 
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::SizerVert::OnFlipFlopEvent(void)
 {
 	bool needFlipFlop = m_needFlipFlop;
@@ -292,6 +280,7 @@ void ewol::SizerVert::OnFlipFlopEvent(void)
 		}
 	}
 }
+
 
 /**
  * @brief Inform object that an other object is removed ...

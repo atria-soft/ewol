@@ -43,6 +43,11 @@ namespace ewol {
 		public:
 			Keyboard(void);
 			~Keyboard(void);
+			/**
+			 * @brief Event generated to inform a flip-flop has occured on the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnFlipFlopEvent(void);
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
@@ -59,6 +64,13 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			/**
+			 * @brief Get the widget at the specific windows absolute position
+			 * @param[in] pos gAbsolute position of the requested widget knowledge
+			 * @return NULL No widget found
+			 * @return pointer on the widget found
+			 */
+			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
 			void SetMode(keyboardMode_te mode);
 			bool IsHide(void) { return m_isHide; };
 			void Hide(void) { m_isHide=true; };
@@ -77,7 +89,6 @@ namespace ewol {
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 	};
 };
 

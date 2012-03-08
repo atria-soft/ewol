@@ -151,10 +151,6 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 					{
 						eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-						bool isdown = true;
-						if (true==tmpData->state) {
-							isdown = false;
-						}
 						coord2D_ts pos;
 						pos.x = tmpData->x;
 						pos.y = tmpData->y;

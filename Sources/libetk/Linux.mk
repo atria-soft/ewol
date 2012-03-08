@@ -10,12 +10,22 @@ LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS :=
 
+ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\""
+else
+LOCAL_CFLAGS := -D__PLATFORM__Linux \
+                -Wno-write-strings \
+                -DETK_DEBUG_LEVEL=1 \
+                -DEWOL_DEBUG_LEVEL=1 \
+                -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
+                -DVERSION_BUILD_TIME="\"pasd_heure\""
+endif
+
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

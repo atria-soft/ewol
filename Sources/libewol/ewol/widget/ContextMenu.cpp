@@ -318,6 +318,12 @@ void ewol::ContextMenu::SetPositionMark(markPosition_te position, coord2D_ts arr
 	MarkToReedraw();
 }
 
+
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::ContextMenu::OnFlipFlopEvent(void)
 {
 	//EWOL_DEBUG("Flip-Flop");

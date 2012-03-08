@@ -25,9 +25,7 @@
 #ifndef __ETK_TYPES_H__
 #define __ETK_TYPES_H__
 
-// includes system, malloc, EXIT_SUCCESS
 #include <stdlib.h>
-// includes fopen, fwrite, fseek, ftell
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -72,30 +70,17 @@ extern "C"
 		#define oglTypeFloat_t   GL_FLOAT
 	#endif
 	
-	struct etkPointAndPositionDouble{
-		etkFloat_t x;
-		etkFloat_t y;
-	};
-	
-	struct etkPointAndPositionInt{
-		int32_t x;
-		int32_t y;
-	};
-	
-	typedef etkPointAndPositionDouble     point_ts;
-	typedef etkPointAndPositionDouble     position_ts;
-	typedef etkPointAndPositionDouble     size_ts;
-	typedef etkPointAndPositionInt        intSize_ts;
-	
 	typedef struct {
 		etkFloat_t x;
 		etkFloat_t y;
 		etkFloat_t z;
 	}coord3D_ts;
+	
 	typedef struct {
 		etkFloat_t x;
 		etkFloat_t y;
 	}coord2D_ts;
+	
 	typedef struct {
 		etkFloat_t u;
 		etkFloat_t v;

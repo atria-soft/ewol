@@ -205,30 +205,18 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(coord2D_ts pos)
 	return this;
 }
 
-bool ewol::PopUp::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
-{
-/*
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
-		if(    (tmpOrigin.x <= pos.local.x && tmpOrigin.x + tmpSize.x >= pos.local.x)
-		    && (tmpOrigin.y <= pos.local.y && tmpOrigin.y + tmpSize.y >= pos.local.y) )
-		{
-			return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
-		} else {
-			//EWOL_INFO("Event ouside the Pop-up");
-		}
-	}
-*/
-	return true;
-}
-
 
 void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
 {
 	m_displayRatio = ratio;
 }
 
+
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::PopUp::OnFlipFlopEvent(void)
 {
 	bool needFlipFlop = m_needFlipFlop;

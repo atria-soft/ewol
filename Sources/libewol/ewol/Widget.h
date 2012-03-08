@@ -170,11 +170,7 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
-			// external acces to set an input event on this widget.
-			// TODO : deprecated ...
-			bool GenEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos); // call when input event arrive and call OnEventInput, if no event detected
 			virtual bool GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue);
-			// TODO : Remasterised ...
 			/**
 			 * @brief Manage input event of this Widget
 			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
@@ -202,6 +198,11 @@ namespace ewol {
 			        void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
 			        bool NeedRedraw(void)    { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
+			/**
+			 * @brief Event generated to inform a flip-flop has occured on the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnFlipFlopEvent(void);
 		public:
 			        bool GenDraw(void);

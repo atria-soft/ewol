@@ -313,15 +313,20 @@ void ewol::Keyboard::OnRegenerateDisplay(void)
 	}
 }
 
-bool ewol::Keyboard::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+
+/**
+ * @brief Get the widget at the specific windows absolute position
+ * @param[in] pos gAbsolute position of the requested widget knowledge
+ * @return NULL No widget found
+ * @return pointer on the widget found
+ */
+ewol::Widget * ewol::Keyboard::GetWidgetAtPos(coord2D_ts pos)
 {
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		return m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
+		return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
 	}
-	return false;
+	return this;
 }
-
-
 
 /**
  * @brief Inform object that an other object is removed ...
@@ -339,7 +344,11 @@ void ewol::Keyboard::OnObjectRemove(ewol::EObject * removeObject)
 }
 
 
-
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::Keyboard::OnFlipFlopEvent(void)
 {
 	bool needFlipFlop = m_needFlipFlop;

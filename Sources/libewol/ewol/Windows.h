@@ -87,6 +87,11 @@ namespace ewol {
 		public:
 			void KeyboardShow(ewol::keyboardMode_te mode);
 			void KeyboardHide(void);
+			/**
+			 * @brief Event generated to inform a flip-flop has occured on the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...

@@ -290,7 +290,11 @@ void ewol::Windows::KeyboardHide(void)
 }
 
 
-
+/**
+ * @brief Event generated to inform a flip-flop has occured on the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::Windows::OnFlipFlopEvent(void)
 {
 	bool needFlipFlop = m_needFlipFlop;
