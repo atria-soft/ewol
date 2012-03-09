@@ -190,8 +190,15 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 	}
 }
 
-
-bool ewol::ButtonColor::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+/**
+ * @brief Event on an input of this Widget
+ * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+ * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+ * @param[in] pos Absolute position of the event
+ * @return true the event is used
+ * @return false the event is not used
+ */
+bool ewol::ButtonColor::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

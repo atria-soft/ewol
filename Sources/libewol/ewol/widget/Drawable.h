@@ -41,7 +41,7 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			virtual bool OnDraw(void);
+			virtual void OnDraw(void);
 	};
 };
 

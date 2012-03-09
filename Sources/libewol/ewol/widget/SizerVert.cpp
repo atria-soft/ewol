@@ -212,14 +212,13 @@ void ewol::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-bool ewol::SizerVert::OnDraw(void)
+void ewol::SizerVert::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
 			m_subWidget[m_currentDrawId][iii]->GenDraw();
 		}
 	}
-	return true;
 }
 
 

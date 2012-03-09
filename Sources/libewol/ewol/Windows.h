@@ -59,7 +59,6 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
-			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
 		private:
 			bool m_hasDecoration;
 		public:
@@ -81,7 +80,7 @@ namespace ewol {
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
 		protected:
-			virtual bool   OnDraw(void);
+			virtual void OnDraw(void);
 		public:
 			virtual void OnRegenerateDisplay(void);
 		public:

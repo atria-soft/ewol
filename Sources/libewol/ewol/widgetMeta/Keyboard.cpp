@@ -284,12 +284,11 @@ bool ewol::Keyboard::CalculateMinSize(void)
 
 
 
-bool ewol::Keyboard::OnDraw(void)
+void ewol::Keyboard::OnDraw(void)
 {
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->GenDraw();
 	}
-	return true;
 }
 
 

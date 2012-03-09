@@ -67,14 +67,13 @@ void ewol::Drawable::ClearOObjectList(void)
 	m_listOObject[m_currentCreateId].Clear();
 }
 
-bool ewol::Drawable::OnDraw(void)
+void ewol::Drawable::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
 			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
 	}
-	return true;
 }
 
 

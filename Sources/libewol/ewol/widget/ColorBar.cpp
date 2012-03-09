@@ -210,27 +210,35 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 	}
 }
 
-
-bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+/**
+ * @brief Event on an input of this Widget
+ * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+ * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+ * @param[in] pos Absolute position of the event
+ * @return true the event is used
+ * @return false the event is not used
+ */
+bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
 {
+	coord2D_ts relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
-		pos.local.x = etk_max(etk_min(pos.local.x, m_size.x),0);
-		pos.local.y = etk_max(etk_min(pos.local.y, m_size.y),0);
+		relativePos.x = etk_max(etk_min(relativePos.x, m_size.x),0);
+		relativePos.y = etk_max(etk_min(relativePos.y, m_size.y),0);
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
 			// nothing to do ...
-			m_currentUserPos.x=pos.local.x/m_size.x;
-			m_currentUserPos.y=pos.local.y/m_size.y;
+			m_currentUserPos.x=relativePos.x/m_size.x;
+			m_currentUserPos.y=relativePos.y/m_size.y;
 			MarkToReedraw();
 			//==> try to estimate color
-			EWOL_VERBOSE("event on (" << pos.local.x << "," << pos.local.y << ")");
-			int32_t bandID = (int32_t)(pos.local.x/(m_size.x/6));
-			etkFloat_t relativePos = pos.local.x - (m_size.x/6) * bandID;
-			etkFloat_t poroportionnalPos = relativePos/(m_size.x/6);
-			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << relativePos);
+			EWOL_VERBOSE("event on (" << relativePos.x << "," << relativePos.y << ")");
+			int32_t bandID = (int32_t)(relativePos.x/(m_size.x/6));
+			etkFloat_t localPos = relativePos.x - (m_size.x/6) * bandID;
+			etkFloat_t poroportionnalPos = localPos/(m_size.x/6);
+			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
 			color_ts estimateColor;
 			estimateColor.alpha = 1.0;
 			if (s_listColor[bandID].red == s_listColor[bandID+1].red) {
@@ -255,15 +263,15 @@ bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 				estimateColor.blue = s_listColor[bandID+1].blue + (s_listColor[bandID].blue-s_listColor[bandID+1].blue)*(1-poroportionnalPos);
 			}
 			// step 2 generate the white and black ...
-			if (pos.local.y == (m_size.y/2)) {
+			if (relativePos.y == (m_size.y/2)) {
 				// nothing to do ... just get the current color ...
-			} else if (pos.local.y < (m_size.y/2)) {
-				etkFloat_t poroportionnalWhite = 1.0-pos.local.y/(m_size.y/2);
+			} else if (relativePos.y < (m_size.y/2)) {
+				etkFloat_t poroportionnalWhite = 1.0-relativePos.y/(m_size.y/2);
 				estimateColor.red   = estimateColor.red   + (1.0 - estimateColor.red  )*poroportionnalWhite;
 				estimateColor.green = estimateColor.green + (1.0 - estimateColor.green)*poroportionnalWhite;
 				estimateColor.blue  = estimateColor.blue  + (1.0 - estimateColor.blue )*poroportionnalWhite;
 			} else {
-				etkFloat_t poroportionnalBlack = (pos.local.y-(m_size.y/2))/(m_size.y/2);
+				etkFloat_t poroportionnalBlack = (relativePos.y-(m_size.y/2))/(m_size.y/2);
 				estimateColor.red   = estimateColor.red   - (estimateColor.red  )*poroportionnalBlack;
 				estimateColor.green = estimateColor.green - (estimateColor.green)*poroportionnalBlack;
 				estimateColor.blue  = estimateColor.blue  - (estimateColor.blue )*poroportionnalBlack;

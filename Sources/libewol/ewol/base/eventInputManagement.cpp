@@ -100,10 +100,7 @@ extern ewol::Windows* gui_uniqueWindows;
 static bool localEventInput(ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
 {
 	if (NULL != destWidget) {
-		ewol::eventPosition_ts tmpEventPosition;
-		tmpEventPosition.abs = pos;
-		tmpEventPosition.local = destWidget->RelativePosition(pos);
-		return destWidget->OnEventInput(IdInput, typeEvent, tmpEventPosition);
+		return destWidget->OnEventInput(IdInput, typeEvent, pos);
 	}
 	return false;
 }

@@ -98,14 +98,13 @@ void ewol::List::ClearOObjectList(void)
 	m_listOObject[m_currentCreateId].Clear();
 }
 
-bool ewol::List::OnDraw(void)
+void ewol::List::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
 			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
 	}
-	return true;
 }
 
 
@@ -197,9 +196,17 @@ void ewol::List::OnRegenerateDisplay(void)
 	}
 }
 
-
-bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
+/**
+ * @brief Event on an input of this Widget
+ * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+ * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+ * @param[in] pos Absolute position of the event
+ * @return true the event is used
+ * @return false the event is not used
+ */
+bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
 {
+	coord2D_ts relativePos = RelativePosition(pos);
 	if (true == WidgetScrooled::OnEventInput(IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...
@@ -209,9 +216,9 @@ bool ewol::List::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, even
 	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 	int32_t minHeight = ewol::GetHeight(fontId);
 	
-	int32_t rawID = (pos.local.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
+	int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
 	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
-	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.local.x, pos.local.y);
+	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x, pos.y);
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::widgetManager::FocusKeep(this);

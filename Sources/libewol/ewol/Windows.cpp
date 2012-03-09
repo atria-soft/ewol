@@ -135,30 +135,6 @@ ewol::Widget * ewol::Windows::GetWidgetAtPos(coord2D_ts pos)
 	return this;
 }
 
-bool ewol::Windows::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos)
-{
-/*
-	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
-		if (pos.local.y > m_size.y - tmpSize.y) {
-			m_keyBoardwidget->GenEventInput(IdInput, typeEvent, pos.abs);
-			return true;
-		}
-	}
-	// event go directly on the pop-up
-	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
-		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
-			m_popUpWidgetList[m_currentCreateId].PopBack();
-		} else {
-			m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GenEventInput(IdInput, typeEvent, pos.abs);
-		}
-	// otherwise in the normal windows
-	} else if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->GenEventInput(IdInput, typeEvent, pos.abs);
-	}
-*/
-	return true;
-}
 
 void ewol::Windows::SysDraw(void)
 {
@@ -208,7 +184,7 @@ void ewol::Windows::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::Windows::OnDraw(void)
+void ewol::Windows::OnDraw(void)
 {
 
 	// Clear the screen with transparency ...
@@ -232,7 +208,6 @@ bool ewol::Windows::OnDraw(void)
 		m_keyBoardwidget->GenDraw();
 		//EWOL_DEBUG("Draw kewboard");
 	}
-	return true;
 }
 
 

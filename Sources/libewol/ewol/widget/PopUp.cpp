@@ -144,14 +144,13 @@ void ewol::PopUp::SubWidgetRemove(void)
 	MarkToReedraw();
 }
 
-bool ewol::PopUp::OnDraw(void)
+void ewol::PopUp::OnDraw(void)
 {
 	// draw upper classes
 	ewol::Drawable::OnDraw();
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->GenDraw();
 	}
-	return true;
 }
 
 

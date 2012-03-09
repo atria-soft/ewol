@@ -83,7 +83,7 @@ namespace ewol {
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
 		protected:
-			virtual bool   OnDraw(void);
+			virtual void   OnDraw(void);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);

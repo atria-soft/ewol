@@ -62,7 +62,7 @@ namespace ewol {
 			void           SubWidgetRemove(void);
 			void           SetPositionMark(markPosition_te position, coord2D_ts arrowPos);
 		protected:
-			virtual bool   OnDraw(void);
+			virtual void   OnDraw(void);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
@@ -73,7 +73,15 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
-			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, eventPosition_ts pos);
+			/**
+			 * @brief Event on an input of this Widget
+			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
+			 * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
+			 * @param[in] pos Absolute position of the event
+			 * @return true the event is used
+			 * @return false the event is not used
+			 */
+			virtual bool   OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
 			/**
 			 * @brief Event generated to inform a flip-flop has occured on the current widget
 			 * @param ---

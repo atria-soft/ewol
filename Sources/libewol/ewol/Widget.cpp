@@ -75,6 +75,11 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 #undef __class__
 #define __class__	"Widget"
 
+/**
+ * @brief Constructor of the widget classes
+ * @param ---
+ * @return (no execption generated (not managed in embended platform))
+ */
 ewol::Widget::Widget(void)
 {
 	m_needRegenerateDisplay = true;
@@ -98,12 +103,14 @@ ewol::Widget::Widget(void)
 	m_hasFocus = false;
 }
 
-ewol::Widget::~Widget(void)
-{
-	//ewol::widgetMessageMultiCast::Rm(GetWidgetId());
-}
 
-
+/**
+ * @brief This will be equivalent at the destructor @ref ~Widget
+ * @note this fuction "mark" the widget as removed an inform the widget manager that the widget has been removed by the user.
+ * @note All the EObject are inform that an other EObject is removed ... @ref ewol::EObject
+ * @param ---
+ * @return ---
+ */
 void ewol::Widget::MarkToRemove(void)
 {
 	// Remove his own focus...
@@ -113,6 +120,13 @@ void ewol::Widget::MarkToRemove(void)
 }
 
 
+/**
+ * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
+ *        By default this save the widget availlable size in the widget size
+ * @param[in] availlableX Availlable horisantal pixel size
+ * @param[in] availlableY Availlable vertical pixel size
+ * @return ---
+ */
 bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	m_size.x = availlableX;
@@ -121,23 +135,6 @@ bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 	return true;
 }
 
-
-/**
- * @brief Get the widget at the specific windows absolute position
- * @param[in] pos gAbsolute position of the requested widget knowledge
- * @return NULL No widget found
- * @return pointer on the widget found
- */
-ewol::Widget * ewol::Widget::GetWidgetAtPos(coord2D_ts pos)
-{
-	return this;
-}
-
-
-bool ewol::Widget::GenEventShortCut(bool shift, bool control, bool alt, bool meta, uint32_t unicodeValue)
-{
-	return false;
-}
 
 /**
  * @brief Event generated to inform a flip-flop has occured on the current widget
@@ -160,8 +157,11 @@ void ewol::Widget::OnFlipFlopEvent(void)
 }
 
 
-
-
+/**
+ * @brief Set focus on this widget
+ * @param ---
+ * @return return true if the widget keep the focus
+ */
 bool ewol::Widget::SetFocus(void)
 {
 	if (true == m_canFocus) {
@@ -172,6 +172,12 @@ bool ewol::Widget::SetFocus(void)
 	return false;
 }
 
+
+/**
+ * @brief Remove the focus on this widget
+ * @param ---
+ * @return return true if the widget have release his focus (if he has it)
+ */
 bool ewol::Widget::RmFocus(void)
 {
 	if (true == m_canFocus) {
@@ -182,6 +188,12 @@ bool ewol::Widget::RmFocus(void)
 	return false;
 }
 
+
+/**
+ * @brief Set the capability to have the focus
+ * @param[in] canFocusState new focus capability
+ * @return ---
+ */
 void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 {
 	m_canFocus = canFocusState;
@@ -190,30 +202,31 @@ void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 	}
 }
 
-//#define TEST_CLIPPING_SIZE       (10)
-//#define TEST_CLIPPING_SIZE       (3)
-#define TEST_CLIPPING_SIZE       (0)
 
-bool ewol::Widget::GenDraw(void)
+/**
+ * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+ * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::GenDraw(void)
 {
 	glPushMatrix();
-	etkFloat_t testSizeX = m_size.x-TEST_CLIPPING_SIZE*2;
-	etkFloat_t testSizeY = m_size.y-TEST_CLIPPING_SIZE*2;
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-	glViewport(                                       m_origin.x + TEST_CLIPPING_SIZE,
-	            ewol::GetCurrentHeight() - m_size.y - m_origin.y + TEST_CLIPPING_SIZE,
-	            testSizeX,
-	            testSizeY);
+	glViewport(                                       m_origin.x,
+	            ewol::GetCurrentHeight() - m_size.y - m_origin.y,
+	            m_size.x,
+	            m_size.y);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrthoEwol(-testSizeX/2, testSizeX/2, testSizeY/2, -testSizeY/2, -1, 1);
+	glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
 	//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glTranslatef(-testSizeX/2, -testSizeY/2, -1.0);
-
-	bool valRet = OnDraw();
+	glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+	// Call the widget drawing methode
+	OnDraw();
 	glPopMatrix();
-	return valRet;
+	return;
 }
