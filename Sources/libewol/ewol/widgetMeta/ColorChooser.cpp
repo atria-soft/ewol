@@ -163,13 +163,18 @@ color_ts ewol::ColorChooser::GetColor(void)
  */
 void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
+	if (NULL == CallerObject) {
+		return;
+	}
 	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventColorBarHasChange == eventId) {
 		//==> colorBar has change ...
-		
+		etkFloat_t tmpAlpha = m_currentColor.alpha;
+		// the colorbar has no notion of the alpha ==> keep it ...
 		if (NULL != m_widgetColorBar) {
 			m_currentColor = m_widgetColorBar->GetCurrentColor();
 		}
+		m_currentColor.alpha = tmpAlpha;
 		if (NULL != m_widgetRed) {
 			m_widgetRed->SetValue(m_currentColor.red * 255.);
 		}
@@ -183,12 +188,25 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 			m_widgetAlpha->SetValue(m_currentColor.alpha * 255.);
 		}
 		GenerateEventId(ewolEventColorChooserChange);
-		return;
 	} else if (eventColorSpecificHasChange == eventId) {
-		//==> Entry has change ...
-		return;
+		// Slider has changes his color ==> get the one change ...
+		if (CallerObject == m_widgetRed) {
+			m_currentColor.red   = m_widgetRed->GetValue() / 255.;
+		}
+		if (CallerObject == m_widgetGreen) {
+			m_currentColor.green = m_widgetGreen->GetValue() / 255.;
+		}
+		if (CallerObject == m_widgetBlue) {
+			m_currentColor.blue  = m_widgetBlue->GetValue() / 255.;
+		}
+		if (CallerObject == m_widgetAlpha) {
+			m_currentColor.alpha = m_widgetAlpha->GetValue() / 255.;
+		}
+		if (NULL != m_widgetColorBar) {
+			 m_widgetColorBar->SetCurrentColor(m_currentColor);
+		}
+		GenerateEventId(ewolEventColorChooserChange);
 	}
-	return;
 };
 
 

@@ -88,6 +88,8 @@ void ewol::ColorBar::SetCurrentColor(color_ts newOne)
 {
 	m_currentColor = newOne;
 	m_currentColor.alpha = 1.0;
+	// estimate the cursor position :
+	// TODO : Later when really needed ...
 }
 
 void ewol::ColorBar::OnRegenerateDisplay(void)

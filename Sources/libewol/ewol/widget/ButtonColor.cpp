@@ -223,6 +223,7 @@ bool ewol::ButtonColor::OnEventInput(int32_t IdInput, eventInputType_te typeEven
 			m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_BOTTOM, newPosition );
 			
 			ewol::ColorChooser * myColorChooser = new ewol::ColorChooser();
+			myColorChooser->SetColor(m_textColorBg);
 			// set it in the pop-up-system : 
 			m_widgetContextMenu->SubWidgetSet(myColorChooser);
 			myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
