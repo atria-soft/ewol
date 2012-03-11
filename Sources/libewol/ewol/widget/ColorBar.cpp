@@ -287,9 +287,13 @@ bool ewol::ColorBar::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 			        (uint8_t)(estimateColor.alpha * 0xFF));
 			EWOL_DEBUG("new color : " << colorText);
 			*/
-			m_currentColor = estimateColor;
-			GenerateEventId(ewolEventColorBarChange);
-			
+			if(    m_currentColor.red   != estimateColor.red
+			    || m_currentColor.green != estimateColor.green
+			    || m_currentColor.blue  != estimateColor.blue
+			    || m_currentColor.alpha != estimateColor.alpha) {
+				m_currentColor = estimateColor;
+				GenerateEventId(ewolEventColorBarChange);
+			}
 			return true;
 		}
 	}

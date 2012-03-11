@@ -276,6 +276,6 @@ void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		        (uint8_t)(tmpColor.alpha * 0xFF));
 		//set the new label ...
 		SetLabel(colorText);
-		
+		GenerateEventId(ewolEventButtonColorChange);
 	}
 }
