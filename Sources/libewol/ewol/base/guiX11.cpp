@@ -465,7 +465,7 @@ void X11_Run(void)
 				case KeyRelease:
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					{
-						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+						//EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
 						if (event.xkey.state & (1<<0) ) {
 							//EWOL_DEBUG("    Special Key : SHIFT");
 							guiKeyBoardMode.shift = true;
@@ -556,17 +556,17 @@ void X11_Run(void)
 							case 76:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F10;			break;
 							case 95:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F11;			break;
 							case 96:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F12;			break;
-							case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		break;
-							case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		break;
-							case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	break;
-							case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		break;
-							case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		break;
-							case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		break;
-							case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		break;
-							case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			break;
-							case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			break;
+							case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
+							case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+							case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+							case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+							case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+							case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+							case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+							case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
+							case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
 							case 135:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;	break;
-							case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		break;
+							case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		guiKeyBoardMode.verNum  = (event.type == KeyPress) ? true : false; break;
 							case 91: // Suppr on keypad
 								find = false;
 								{
@@ -584,7 +584,7 @@ void X11_Run(void)
 								find = false;
 								{
 									char buf[11];
-									EWOL_DEBUG("Keycode: " << event.xkey.keycode);
+									//EWOL_DEBUG("Keycode: " << event.xkey.keycode);
 									// change keystate for simple reson of the ctrl error...
 									int32_t keyStateSave = event.xkey.state;
 									if (event.xkey.state & (1<<2) ) {
@@ -620,7 +620,7 @@ void X11_Run(void)
 								break;
 						}
 						if (true == find) {
-							EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
 							eventKeyboardMove_ts specialEvent;
 							specialEvent.special = guiKeyBoardMode;
 							if(event.type == KeyPress) {

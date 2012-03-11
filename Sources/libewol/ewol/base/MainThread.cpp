@@ -82,6 +82,8 @@ typedef struct {
 void EWOL_NativeResize(int w, int h );
 void EWOL_NativeRegenerateDisplay(void);
 
+extern eventSpecialKey_ts specialCurrentKey;
+
 static void* BaseAppEntry(void* param)
 {
 	bool requestEndProcessing = false;
@@ -161,6 +163,7 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 					{
 						eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
+						specialCurrentKey = tmpData->special;
 						if (false==ewol::shortCut::Process(tmpData->special.shift, tmpData->special.ctrl, tmpData->special.alt, tmpData->special.meta, tmpData->myChar, tmpData->isDown)) {
 							guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
 						}
@@ -170,6 +173,7 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
 					{
 						eventKeyboardMove_ts * tmpData = (eventKeyboardMove_ts*)data.data;
+						specialCurrentKey = tmpData->special;
 						guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
 					}
 					break;

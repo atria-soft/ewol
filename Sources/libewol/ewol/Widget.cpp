@@ -202,6 +202,15 @@ void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 	}
 }
 
+/**
+ * @brief Keep the focus on this widget ==> this remove the previous focus on all other widget
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::KeepFocus(void)
+{
+	ewol::widgetManager::FocusKeep(this);
+}
 
 /**
  * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])

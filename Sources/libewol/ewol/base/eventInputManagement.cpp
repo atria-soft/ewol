@@ -144,8 +144,19 @@ extern int32_t offsetMoveClickedDouble;
 void ewol::eventInput::Motion(int pointerID, coord2D_ts pos)
 {
 	if(    pointerID > MAX_MANAGE_INPUT
-	    || pointerID <= 0) {
+	    || pointerID < 0) {
 		// not manage input
+		return;
+	}
+	// special PC State : 
+	if(pointerID == 0) {
+		ewol::Widget* destWidget = NULL;
+		if(NULL != gui_uniqueWindows) {
+			destWidget = gui_uniqueWindows->GetWidgetAtPos(pos);
+		}
+		if (NULL != destWidget) {
+			destWidget->OnEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, pos);
+		}
 		return;
 	}
 	if (true == eventInputSaved[pointerID].isUsed) {

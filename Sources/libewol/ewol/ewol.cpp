@@ -25,6 +25,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/base/MainThread.h>
 
 #include <ewol/base/gui.h>
 
@@ -86,52 +87,45 @@ void ewol::ForceRedrawAll(void)
 }
 
 
-bool guiKeyBoardMode_CapLock = false;
+eventSpecialKey_ts specialCurrentKey;
 bool ewol::IsSetCapsLock(void)
 {
-	return guiKeyBoardMode_CapLock;
+	return specialCurrentKey.capLock;
 }
 
-bool guiKeyBoardMode_Shift = false;
 bool ewol::IsSetShift(void)
 {
-	return guiKeyBoardMode_Shift;
+	return specialCurrentKey.shift;
 }
 
-bool guiKeyBoardMode_Ctrl = false;
 bool ewol::IsSetCtrl(void)
 {
-	return guiKeyBoardMode_Ctrl;
+	return specialCurrentKey.ctrl;
 }
 
-bool guiKeyBoardMode_Meta = false;
 bool ewol::IsSetMeta(void)
 {
-	return guiKeyBoardMode_Meta;
+	return specialCurrentKey.meta;
 }
 
-bool guiKeyBoardMode_Alt = false;
 bool ewol::IsSetAlt(void)
 {
-	return guiKeyBoardMode_Alt;
+	return specialCurrentKey.alt;
 }
 
-bool guiKeyBoardMode_AltGr = false;
 bool ewol::IsSetAltGr(void)
 {
-	return guiKeyBoardMode_AltGr;
+	return specialCurrentKey.altGr;
 }
 
-bool guiKeyBoardMode_VerNum = false;
 bool ewol::IsSetVerNum(void)
 {
-	return guiKeyBoardMode_VerNum;
+	return specialCurrentKey.verNum;
 }
 
-bool guiKeyBoardMode_Insert = false;
 bool ewol::IsSetInsert(void)
 {
-	return guiKeyBoardMode_Insert;
+	return specialCurrentKey.insert;
 }
 
 

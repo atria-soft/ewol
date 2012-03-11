@@ -285,6 +285,12 @@ namespace ewol {
 			void SetCanHaveFocus(bool canFocusState);
 		protected:
 			/**
+			 * @brief Keep the focus on this widget ==> this remove the previous focus on all other widget
+			 * @param ---
+			 * @return ---
+			 */
+			void KeepFocus(void);
+			/**
 			 * @brief Event of the focus has been grep by the current widget
 			 * @param ---
 			 * @return ---
