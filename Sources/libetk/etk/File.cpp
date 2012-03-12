@@ -475,7 +475,23 @@ int32_t etk::File::Size(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	etk::UString myCompleateName;
+	switch (m_type)
+	{
+		case etk::FILE_TYPE_DATA:
+			myCompleateName = baseFolderData;
+			break;
+		case etk::FILE_TYPE_USER_DATA:
+			myCompleateName = baseFolderDataUser;
+			break;
+		case etk::FILE_TYPE_CACHE:
+			myCompleateName = baseFolderCache;
+			break;
+		default:
+			myCompleateName = "";
+			break;
+	}
+	myCompleateName += GetCompleateName();
 	myFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == myFile) {
 		//EWOL_ERROR("Can not find the file name=\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
@@ -501,9 +517,26 @@ bool etk::File::Exist(void)
 	}
 	#endif
 	FILE *myFile=NULL;
-	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	etk::UString myCompleateName;
+	switch (m_type)
+	{
+		case etk::FILE_TYPE_DATA:
+			myCompleateName = baseFolderData;
+			break;
+		case etk::FILE_TYPE_USER_DATA:
+			myCompleateName = baseFolderDataUser;
+			break;
+		case etk::FILE_TYPE_CACHE:
+			myCompleateName = baseFolderCache;
+			break;
+		default:
+			myCompleateName = "";
+			break;
+	}
+	myCompleateName += GetCompleateName();
 	myFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == myFile) {
+		TK_DEBUG("try to open : " << myCompleateName.Utf8Data());
 		return false;
 	}
 	fclose(myFile);
@@ -523,7 +556,23 @@ bool etk::File::fOpenRead(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	etk::UString myCompleateName;
+	switch (m_type)
+	{
+		case etk::FILE_TYPE_DATA:
+			myCompleateName = baseFolderData;
+			break;
+		case etk::FILE_TYPE_USER_DATA:
+			myCompleateName = baseFolderDataUser;
+			break;
+		case etk::FILE_TYPE_CACHE:
+			myCompleateName = baseFolderCache;
+			break;
+		default:
+			myCompleateName = "";
+			break;
+	}
+	myCompleateName += GetCompleateName();
 	m_PointerFile=fopen(myCompleateName.Utf8Data(),"rb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
@@ -543,7 +592,23 @@ bool etk::File::fOpenWrite(void)
 		TK_CRITICAL("File Already open : \"" << GetCompleateName() << "\"");
 		return true;
 	}
-	etk::UString myCompleateName = baseFolderData + GetCompleateName();
+	etk::UString myCompleateName;
+	switch (m_type)
+	{
+		case etk::FILE_TYPE_DATA:
+			myCompleateName = baseFolderData;
+			break;
+		case etk::FILE_TYPE_USER_DATA:
+			myCompleateName = baseFolderDataUser;
+			break;
+		case etk::FILE_TYPE_CACHE:
+			myCompleateName = baseFolderCache;
+			break;
+		default:
+			myCompleateName = "";
+			break;
+	}
+	myCompleateName += GetCompleateName();
 	m_PointerFile=fopen(myCompleateName.Utf8Data(),"wb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
