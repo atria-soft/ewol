@@ -70,5 +70,13 @@ extern const char * ewolLibName;
 #	define EWOL_CHECK_INOUT(cond)   do { } while (0)
 #endif
 
+
+// Main define for the check casting of the class in EWOL
+#if EWOL_DEBUG_LEVEL > 2
+#	define EWOL_CAST(eObjectType,eObjectClass,curentPointer)   (NULL==curentPointer) ? NULL : (curentPointer->CheckObjectType(eObjectType)) ? static_cast<eObjectClass*>(curentPointer) : NULL
+#else
+#	define EWOL_CAST(eObjectType,eObjectClass,curentPointer)   static_cast<eObjectClass*>(curentPointer)
+#endif
+
 #endif
 

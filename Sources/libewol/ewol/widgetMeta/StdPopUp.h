@@ -44,6 +44,21 @@ namespace ewol {
 		public:
 			StdPopUp(void);
 			~StdPopUp(void);
+			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
 			void SetTitle(etk::UString text);
 			void SetComment(etk::UString text);
@@ -53,6 +68,11 @@ namespace ewol {
 			ewol::widget::Label*  m_comment;
 			ewol::widget::Button* m_button[6];
 	};
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_STD_POP_UP;
+	
 };
+
+#define EWOL_CAST_WIDGET_STD_POP_UP(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_STD_POP_UP,ewol::StdPopUp,curentPointer)
 
 #endif

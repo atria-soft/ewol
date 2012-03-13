@@ -43,6 +43,21 @@ namespace ewol {
 		public:
 			ContextMenu(void);
 			virtual ~ContextMenu(void);
+			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
 		public:
 			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
@@ -89,6 +104,11 @@ namespace ewol {
 			 */
 			virtual void   OnFlipFlopEvent(void);
 	};
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_CONTEXT_MENU;
+	
 };
+
+#define EWOL_CAST_WIDGET_CONTEXT_MENU(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU,ewol::ContextMenu,curentPointer)
 
 #endif

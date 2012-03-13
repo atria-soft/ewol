@@ -63,6 +63,8 @@ void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 
 
 const char * const ewolEventFileChooserSelectFolder   = "ewol-event-file-chooser-Select-Folder";
+//!< EObject name :
+extern const char * const TYPE_EOBJECT_WIDGET_FOLDER_LIST = "FileChooserFolderList";
 
 class FileChooserFolderList : public ewol::List
 {
@@ -188,13 +190,50 @@ class FileChooserFolderList : public ewol::List
 			return false;
 		}
 	
+	public:
+		/**
+		 * @brief Check if the object has the specific type.
+		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+		 * @param[in] objectType type of the object we want to check
+		 * @return true if the object is compatible, otherwise false
+		 */
+		bool CheckObjectType(const char * const objectType)
+		{
+			if (NULL == objectType) {
+				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FOLDER_LIST << "\" != NULL(pointer) ");
+				return false;
+			}
+			if (objectType == TYPE_EOBJECT_WIDGET_FOLDER_LIST) {
+				return true;
+			} else {
+				if(true == ewol::List::CheckObjectType(objectType)) {
+					return true;
+				}
+				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FOLDER_LIST << "\" != \"" << objectType << "\"");
+				return false;
+			}
+		}
+		
+		/**
+		 * @brief Get the current Object type of the EObject
+		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+		 * @param[in] objectType type description
+		 * @return true if the object is compatible, otherwise false
+		 */
+		const char * const GetObjectType(void)
+		{
+			return TYPE_EOBJECT_WIDGET_FOLDER_LIST;
+		}
 };
+#define EWOL_CAST_WIDGET_FOLDER_LIST(curentPointer) EWOL_CAST(TYPE_EOBJECT_WIDGET_FOLDER_LIST,FileChooserFolderList,curentPointer)
 
 #undef __class__
 #define __class__	"FileChooser(FileList)"
 
 const char * const ewolEventFileChooserSelectFile   = "ewol-event-file-chooser-Select-File";
 const char * const ewolEventFileChooserValidateFile   = "ewol-event-file-chooser-Validate-File";
+//!< EObject name :
+extern const char * const TYPE_EOBJECT_WIDGET_FILE_LIST = "FileChooserFileList";
 
 class FileChooserFileList : public ewol::List
 {
@@ -324,7 +363,43 @@ class FileChooserFileList : public ewol::List
 			return false;
 		}
 	
+	
+	public:
+		/**
+		 * @brief Check if the object has the specific type.
+		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+		 * @param[in] objectType type of the object we want to check
+		 * @return true if the object is compatible, otherwise false
+		 */
+		bool CheckObjectType(const char * const objectType)
+		{
+			if (NULL == objectType) {
+				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FILE_LIST << "\" != NULL(pointer) ");
+				return false;
+			}
+			if (objectType == TYPE_EOBJECT_WIDGET_FILE_LIST) {
+				return true;
+			} else {
+				if(true == ewol::List::CheckObjectType(objectType)) {
+					return true;
+				}
+				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FILE_LIST << "\" != \"" << objectType << "\"");
+				return false;
+			}
+		}
+		
+		/**
+		 * @brief Get the current Object type of the EObject
+		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+		 * @param[in] objectType type description
+		 * @return true if the object is compatible, otherwise false
+		 */
+		const char * const GetObjectType(void)
+		{
+			return TYPE_EOBJECT_WIDGET_FILE_LIST;
+		}
 };
+#define EWOL_CAST_WIDGET_FILE_LIST(curentPointer) EWOL_CAST(TYPE_EOBJECT_WIDGET_FILE_LIST,FileChooserFileList,curentPointer)
 
 
 #undef __class__
@@ -437,11 +512,11 @@ ewol::FileChooser::FileChooser(void)
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetExpendX(true);
 				mySizerHori->SubWidgetAdd(mySpacer);
-			m_widgetValidate = new ewol::Button("Open");
-				m_widgetCheckBox->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
+			m_widgetValidate = new ewol::Button("Validate");
+				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			m_widgetCancel = new ewol::Button("Cancel");
-				m_widgetCheckBox->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
+				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 	
 	// set the default Folder properties:
@@ -453,6 +528,45 @@ ewol::FileChooser::~FileChooser(void)
 {
 	
 }
+
+
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER = "FileChooser";
+
+/**
+ * @brief Check if the object has the specific type.
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type of the object we want to check
+ * @return true if the object is compatible, otherwise false
+ */
+bool ewol::FileChooser::CheckObjectType(const char * const objectType)
+{
+	if (NULL == objectType) {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER << "\" != NULL(pointer) ");
+		return false;
+	}
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER) {
+		return true;
+	} else {
+		if(true == ewol::PopUp::CheckObjectType(objectType)) {
+			return true;
+		}
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER << "\" != \"" << objectType << "\"");
+		return false;
+	}
+}
+
+/**
+ * @brief Get the current Object type of the EObject
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type description
+ * @return true if the object is compatible, otherwise false
+ */
+const char * const ewol::FileChooser::GetObjectType(void)
+{
+	return ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER;
+}
+
 
 
 void ewol::FileChooser::SetTitle(etk::UString label)
@@ -527,7 +641,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		return;
 	} else if (ewolEventFileChooserSelectFolder == eventId) {
 		//==> this is an internal event ...
-		FileChooserFolderList * myListFolder = static_cast<FileChooserFolderList *>(m_widgetListFolder);
+		FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
 		etk::UString tmpString = myListFolder->GetSelectedLine();
 		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
 		m_folder = m_folder + tmpString;
@@ -552,7 +666,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		return;
 	} else if (ewolEventFileChooserSelectFile == eventId) {
 		m_hasSelectedFile = true;
-		FileChooserFileList * myListFile = static_cast<FileChooserFileList *>(m_widgetListFile);
+		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
 		etk::UString file = myListFile->GetSelectedLine();
 		SetFileName(file);
 		GenerateEventId(eventId);
@@ -576,8 +690,8 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	if (NULL == m_widgetListFolder) {
 		return;
 	}
-	FileChooserFileList * myListFile     = static_cast<FileChooserFileList *>(m_widgetListFile);
-	FileChooserFolderList * myListFolder = static_cast<FileChooserFolderList *>(m_widgetListFolder);
+	FileChooserFileList * myListFile     = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
+	FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
 	
 	myListFile->ClearElements();
 	myListFolder->ClearElements();

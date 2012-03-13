@@ -37,7 +37,6 @@ extern "C" {
 	} messageList_ts;
 };
 
-
 // internal element of the widget manager : 
 static etk::VectorType<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
 
@@ -161,6 +160,39 @@ int32_t ewol::EObject::GetId(void)
 	return m_uniqueId;
 };
 
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT = "EObject";
+
+/**
+ * @brief Check if the object has the specific type.
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type of the object we want to check
+ * @return true if the object is compatible, otherwise false
+ */
+bool ewol::EObject::CheckObjectType(const char * const objectType)
+{
+	if (NULL == objectType) {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT << "\" != NULL(pointer) ");
+		return false;
+	}
+	if (objectType == ewol::TYPE_EOBJECT) {
+		return true;
+	} else {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT << "\" != \"" << objectType << "\"");
+		return false;
+	}
+}
+
+/**
+ * @brief Get the current Object type of the EObject
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type description
+ * @return true if the object is compatible, otherwise false
+ */
+const char * const ewol::EObject::GetObjectType(void)
+{
+	return ewol::TYPE_EOBJECT;
+}
 
 /**
  * @brief Add a specific event Id in the list to prevent wrong link on a EObject
@@ -234,8 +266,26 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 		EWOL_ERROR("Input ERROR NULL pointer Event Id...");
 		return;
 	}
-	if (NULL == eventIdgenerated) {
-		EWOL_ERROR("Input ERROR NULL pointer destination Event Id...");
+	// check if event existed :
+	bool findIt = false;
+	for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
+		if (m_availlableEventId[iii] == eventId) {
+			findIt = true;
+			break;
+		}
+	}
+	if (false == findIt) {
+		EWOL_DEBUG("Try to register with a NON direct string name");
+		for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
+			if (0 == strncmp(m_availlableEventId[iii], eventId, 1024)) {
+				findIt = true;
+				eventIdgenerated = m_availlableEventId[iii];
+				break;
+			}
+		}
+	}
+	if (false == findIt) {
+		EWOL_ERROR("Can not register event on this WidgetType=" << GetObjectType() << " event=\"" << eventId << "\" ==> unknow event");
 		return;
 	}
 	ewol::EventExtGen * tmpEvent = new ewol::EventExtGen();
@@ -245,7 +295,11 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	}
 	tmpEvent->localEventId = eventId;
 	tmpEvent->destEObject = destinationObject;
-	tmpEvent->destEventId = eventIdgenerated;
+	if (NULL != eventIdgenerated) {
+		tmpEvent->destEventId = eventIdgenerated;
+	} else {
+		tmpEvent->destEventId = eventId;
+	}
 	tmpEvent->destData = data;
 	m_externEvent.PushBack(tmpEvent);
 }

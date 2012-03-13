@@ -44,6 +44,21 @@ namespace ewol {
 			Keyboard(void);
 			~Keyboard(void);
 			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
+			/**
 			 * @brief Event generated to inform a flip-flop has occured on the current widget
 			 * @param ---
 			 * @return ---
@@ -90,6 +105,11 @@ namespace ewol {
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
 	};
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_KEYBORAD;
+	
 };
+
+#define EWOL_CAST_WIDGET_KEYBOARD(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_KEYBORAD,ewol::Keyboard,curentPointer)
 
 #endif

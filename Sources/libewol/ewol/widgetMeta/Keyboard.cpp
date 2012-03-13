@@ -183,6 +183,45 @@ void ewol::Keyboard::SetMode(keyboardMode_te mode)
 }
 
 
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_KEYBORAD = "Keyboard";
+
+/**
+ * @brief Check if the object has the specific type.
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type of the object we want to check
+ * @return true if the object is compatible, otherwise false
+ */
+bool ewol::Keyboard::CheckObjectType(const char * const objectType)
+{
+	if (NULL == objectType) {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_KEYBORAD << "\" != NULL(pointer) ");
+		return false;
+	}
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_KEYBORAD) {
+		return true;
+	} else {
+		if(true == ewol::Drawable::CheckObjectType(objectType)) {
+			return true;
+		}
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_KEYBORAD << "\" != \"" << objectType << "\"");
+		return false;
+	}
+}
+
+/**
+ * @brief Get the current Object type of the EObject
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type description
+ * @return true if the object is compatible, otherwise false
+ */
+const char * const ewol::Keyboard::GetObjectType(void)
+{
+	return ewol::TYPE_EOBJECT_WIDGET_KEYBORAD;
+}
+
+
+
 /**
  * @brief Receive a message from an other EObject with a specific eventId and data
  * @param[in] CallerObject Pointer on the EObject that information came from
@@ -197,7 +236,7 @@ void ewol::Keyboard::OnReceiveMessage(ewol::EObject * CallerObject, const char *
 		if (NULL == CallerObject) {
 			return;
 		}
-		ewol::Button * bt     = static_cast<ewol::Button *>(CallerObject);
+		ewol::Button * bt = EWOL_CAST_WIDGET_BUTTON(CallerObject);
 		EWOL_DEBUG("kbevent : \"" << bt->GetLabel() << "\"");
 		etk::UString data = bt->GetLabel();
 		if (data == "DEL") {

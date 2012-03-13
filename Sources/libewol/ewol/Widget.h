@@ -118,6 +118,21 @@ namespace ewol {
 			// TODO : Set this in private if possible ...
 			virtual ~Widget(void) { };
 			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
+			/**
 			 * @brief This will be equivalent at the destructor @ref ~Widget
 			 * @note this fuction "mark" the widget as removed an inform the widget manager that the widget has been removed by the user.
 			 * @note All the EObject are inform that an other EObject is removed ... @ref ewol::EObject
@@ -398,6 +413,11 @@ namespace ewol {
 			virtual void OnRegenerateDisplay(void) { };
 
 	}; // end of the class Widget declaration
+	
+	extern const char * const TYPE_EOBJECT_WIDGET;
+	
 };// end of namespace
+
+#define EWOL_CAST_WIDGET(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET,ewol::Widget,curentPointer)
 
 #endif

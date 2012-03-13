@@ -61,6 +61,45 @@ ewol::ContextMenu::~ContextMenu(void)
 }
 
 
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU = "ContextMenu";
+
+/**
+ * @brief Check if the object has the specific type.
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type of the object we want to check
+ * @return true if the object is compatible, otherwise false
+ */
+bool ewol::ContextMenu::CheckObjectType(const char * const objectType)
+{
+	if (NULL == objectType) {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU << "\" != NULL(pointer) ");
+		return false;
+	}
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU) {
+		return true;
+	} else {
+		if(true == ewol::EObject::CheckObjectType(objectType)) {
+			return true;
+		}
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU << "\" != \"" << objectType << "\"");
+		return false;
+	}
+}
+
+/**
+ * @brief Get the current Object type of the EObject
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type description
+ * @return true if the object is compatible, otherwise false
+ */
+const char * const ewol::ContextMenu::GetObjectType(void)
+{
+	return ewol::TYPE_EOBJECT_WIDGET_CONTEXT_MENU;
+}
+
+
+
 bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");

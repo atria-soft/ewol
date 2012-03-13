@@ -43,6 +43,21 @@ namespace ewol {
 		public:
 			Button(void);
 			Button(etk::UString newLabel);
+			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
 			void Init(void);
 			virtual ~Button(void);
 			virtual bool   CalculateMinSize(void);
@@ -72,6 +87,10 @@ namespace ewol {
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
 	};
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_BUTTON;
+	
 };
+#define EWOL_CAST_WIDGET_BUTTON(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_BUTTON,ewol::Button,curentPointer)
 
 #endif

@@ -36,7 +36,6 @@ namespace ewol {
 		void AnonymousSend(const char* const messageId, etk::UString& data);
 	};
 	
-	
 	class EObject;
 	/**
 	 * local class for event generation
@@ -78,6 +77,21 @@ namespace ewol {
 			 */
 			int32_t GetId(void);
 			
+			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
 		protected:
 			/**
 			 * @brief Add a specific event Id in the list to prevent wrong link on a EObject
@@ -135,12 +149,12 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
-		
 	};
+	
+	extern const char * const TYPE_EOBJECT;
 };
 
-
-
+#define EWOL_CAST_EOBJECT(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT,ewol::EObject,curentPointer)
 
 #endif
 

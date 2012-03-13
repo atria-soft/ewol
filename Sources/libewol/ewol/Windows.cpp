@@ -75,6 +75,44 @@ ewol::Windows::~Windows(void)
 	}
 }
 
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_WINDOWS = "Windows";
+
+/**
+ * @brief Check if the object has the specific type.
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type of the object we want to check
+ * @return true if the object is compatible, otherwise false
+ */
+bool ewol::Windows::CheckObjectType(const char * const objectType)
+{
+	if (NULL == objectType) {
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_WINDOWS << "\" != NULL(pointer) ");
+		return false;
+	}
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_WINDOWS) {
+		return true;
+	} else {
+		if(true == ewol::Widget::CheckObjectType(objectType)) {
+			return true;
+		}
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_WINDOWS << "\" != \"" << objectType << "\"");
+		return false;
+	}
+}
+
+/**
+ * @brief Get the current Object type of the EObject
+ * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+ * @param[in] objectType type description
+ * @return true if the object is compatible, otherwise false
+ */
+const char * const ewol::Windows::GetObjectType(void)
+{
+	return ewol::TYPE_EOBJECT_WIDGET_WINDOWS;
+}
+
+
 bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);

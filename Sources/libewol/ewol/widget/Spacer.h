@@ -35,11 +35,31 @@ namespace ewol {
 		public:
 			Spacer(void);
 			virtual ~Spacer(void);
+			/**
+			 * @brief Check if the object has the specific type.
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type of the object we want to check
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual bool CheckObjectType(const char * const objectType);
+			
+			/**
+			 * @brief Get the current Object type of the EObject
+			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
+			 * @param[in] objectType type description
+			 * @return true if the object is compatible, otherwise false
+			 */
+			virtual const char * const GetObjectType(void);
 			virtual bool   CalculateMinSize(void);
 			void SetSize(etkFloat_t size);
 		private:
 			etkFloat_t m_size;
 	};
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_SPACER;
+	
 };
+
+#define EWOL_CAST_WIDGET_SPACER(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_SPACER,ewol::Spacer,curentPointer)
 
 #endif
