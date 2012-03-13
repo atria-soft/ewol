@@ -13,6 +13,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/OObject/2DTextColored.cpp \
 			ewol/OObject/2DColored.cpp \
 			ewol/OObject/2DTextured.cpp \
+			ewol/OObject/e2d.cpp \
 			ewol/Texture.cpp \
 			ewol/FontBitmap.cpp \
 			ewol/FontFreeType.cpp \
@@ -36,6 +37,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \
 			ewol/widget/Spacer.cpp \
+			ewol/widget/widgetE2D.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
 			ewol/widgetMeta/Keyboard.cpp \
