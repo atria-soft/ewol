@@ -58,7 +58,6 @@ namespace ewol {
 			int32_t                        m_uniqueId;          //!< Object UniqueID ==> TODO : Check if it use is needed
 			etk::VectorType<EventExtGen*>  m_externEvent;       //!< Generic list of event generation for output link
 			etk::VectorType<const char*>   m_availlableEventId; //!< List of all event availlable for this widget
-			
 		public:
 			/**
 			 * @brief Constructor

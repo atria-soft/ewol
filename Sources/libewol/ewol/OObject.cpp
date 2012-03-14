@@ -35,7 +35,8 @@
 ewol::OObject::OObject(void)
 {
 	m_hasClipping = false;
-	// nothing to do ...
+	m_scaling.x = 1.0;
+	m_scaling.y = 1.0;
 }
 
 

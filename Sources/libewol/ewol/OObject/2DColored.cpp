@@ -50,11 +50,12 @@ void ewol::OObject2DColored::Draw(void)
 	if (m_coord.Size()<=0) {
 		return;
 	}
+	glPushMatrix();
 	// Enable Pointers
 	glEnableClientState( GL_VERTEX_ARRAY );
 	glEnableClientState( GL_COLOR_ARRAY );
 	
-	//glPushMatrix();
+	glScalef(m_scaling.x, m_scaling.y, 1.0);
 	
 	// Set the vertex pointer to our vertex data
 	glVertexPointer(2, oglTypeFloat_t, 0, &m_coord[0] );
@@ -67,6 +68,7 @@ void ewol::OObject2DColored::Draw(void)
 	// Disable Pointers
 	glDisableClientState( GL_COLOR_ARRAY );
 	glDisableClientState( GL_VERTEX_ARRAY );
+	glPopMatrix();
 
 }
 
