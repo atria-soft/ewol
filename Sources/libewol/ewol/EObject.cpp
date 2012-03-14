@@ -100,7 +100,7 @@ static void MultiCastSend(ewol::EObject* object, const char* const message, etk:
 		    && m_messageList[iii].object != object)
 		{
 			if (NULL != m_messageList[iii].object) {
-				EWOL_DEBUG("        id = " << m_messageList[iii].object->GetId());
+				EWOL_DEBUG("        id = " << m_messageList[iii].object->GetId() << " type=" << m_messageList[iii].object->GetObjectType());
 				// generate event ...
 				m_messageList[iii].object->OnReceiveMessage(object, m_messageList[iii].message, data);
 			}

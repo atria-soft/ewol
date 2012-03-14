@@ -129,10 +129,11 @@ void ewol::EObjectManager::MarkToRemoved(ewol::EObject* object)
 		}
 	}
 	if (-1 == findId) {
-		EWOL_CRITICAL("Try to mark remove an object already removed (or not registerd [imposible case])");
+		EWOL_CRITICAL("Try to mark remove an object already removed (or not registerd [imposible case]) ==> requested for EObject : [" << object->GetId() << "] type=" << object->GetObjectType());
 		return;
 	}
 	m_eObjectList.Erase(findId);
+	EWOL_DEBUG("MarkToRemoved EObject : [" << object->GetId() << "] type=" << object->GetObjectType());
 	m_eObjectDeletedList.PushBack(object);
 	// Informe all EObject to remove reference of this one ...
 	informOneObjectIsRemoved(object);

@@ -144,7 +144,7 @@ void ewol::oobject::e2d::LoadFile(etk::File file)
 							sscanf(yyy, "%lf", &posY);
 							pos.x = posX;
 							pos.y = posY;
-							EWOL_DEBUG("load dot : " << xxx << "," << yyy << " ==>" << pos);
+							EWOL_VERBOSE("load dot : " << xxx << "," << yyy << " ==>" << pos);
 							m_dotList.PushBack(pos);
 						}
 					} else if (!strcmp(pGuiNode->Value(), "link")) {
@@ -180,8 +180,8 @@ void ewol::oobject::e2d::LoadFile(etk::File file)
 									localLink.color[kkk].alpha = (float)a/255.0;
 								}
 							}
-							EWOL_DEBUG("load link : [" << localLink.dot[0] << "," << localLink.dot[1] << "," << localLink.dot[2] << "] ");
-							EWOL_DEBUG("       col: [" << localLink.color[0] << "," << localLink.color[1] << "," << localLink.color[2] << "] ");
+							EWOL_VERBOSE("load link : [" << localLink.dot[0] << "," << localLink.dot[1] << "," << localLink.dot[2] << "] ");
+							EWOL_VERBOSE("       col: [" << localLink.color[0] << "," << localLink.color[1] << "," << localLink.color[2] << "] ");
 							m_linkList.PushBack(localLink);
 						}
 					} else {
