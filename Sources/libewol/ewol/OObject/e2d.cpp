@@ -24,7 +24,7 @@
 
 #include <ewol/OObject/e2d.h>
 #include <ewol/importgl.h>
-#include "tinyXML/tinyxml.h"
+#include <tinyXML/tinyxml.h>
 
 
 #undef __class__

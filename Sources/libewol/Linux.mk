@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := etk libfreetype tinyxml libzip libpng 
+LOCAL_STATIC_LIBRARIES := etk libfreetype tinyxml libzip libpng agg parsersvg
 
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 

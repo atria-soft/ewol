@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng libfreetype agg
+LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng libfreetype
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
