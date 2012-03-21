@@ -36,9 +36,10 @@ namespace svg
 			coord2D_ts m_size;            //!< size of the rectangle
 			coord2D_ts m_roundedCorner;   //!< property of the rounded corner
 		public:
-			Rectangle(void);
+			Rectangle(paintState_ts parentPaintState);
 			~Rectangle(void);
 			virtual bool Parse(TiXmlNode * node);
+			virtual void Display(int32_t spacing);
 	};
 };
 

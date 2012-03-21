@@ -25,9 +25,14 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Rectangle.h>
 
-svg::Rectangle::Rectangle(void)
+svg::Rectangle::Rectangle(paintState_ts parentPaintState) : svg::Base(parentPaintState)
 {
-	
+	m_position.x = 0.0;
+	m_position.y = 0.0;
+	m_size.x = 0.0;
+	m_size.y = 0.0;
+	m_roundedCorner.x = 0.0;
+	m_roundedCorner.y = 0.0;
 }
 
 svg::Rectangle::~Rectangle(void)
@@ -37,5 +42,23 @@ svg::Rectangle::~Rectangle(void)
 
 bool svg::Rectangle::Parse(TiXmlNode * node)
 {
-	return false;
+	m_position.x = 0.0;
+	m_position.y = 0.0;
+	m_size.x = 0.0;
+	m_size.y = 0.0;
+	m_roundedCorner.x = 0.0;
+	m_roundedCorner.y = 0.0;
+	
+	ParseTransform(node);
+	ParsePaintAttr(node);
+	
+	ParsePosition(node, m_position, m_size);
+	
+	return true;
 }
+
+void svg::Rectangle::Display(int32_t spacing)
+{
+	SVG_DEBUG(SpacingDist(spacing) << "Rectangle");
+}
+

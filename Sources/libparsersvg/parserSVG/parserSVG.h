@@ -31,17 +31,21 @@
 
 namespace svg
 {
-	class Parser
+	class Parser : public svg::Base
 	{
 		private:
 			etk::File                    m_fileName;
 			bool                         m_loadOK;
 			etk::UString                 m_version;
 			etk::VectorType<svg::Base *> m_subElementList;
+	
 		public:
 			Parser(etk::File fileName);
 			~Parser(void);
 			bool IsLoadOk(void) { return m_loadOK; };
+			void DisplayDebug(void);
+			void GenerateTestFile(void);
+			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx);
 	};
 };
 

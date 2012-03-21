@@ -40,9 +40,11 @@ namespace svg
 			etk::VectorType<coord2D_ts> m_listPoint;    //!< list of all point of the polygone
 			PolygonMode_te              m_diplayMode;   //!< polygone specific display mode
 		public:
-			Polygon(void);
+			Polygon(paintState_ts parentPaintState);
 			~Polygon(void);
 			virtual bool Parse(TiXmlNode * node);
+			virtual void Display(int32_t spacing);
+			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx);
 	};
 };
 

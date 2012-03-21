@@ -35,9 +35,10 @@ namespace svg
 		private:
 			etk::VectorType<coord2D_ts> m_listPoint;    //!< list of all point of the polyline
 		public:
-			Polyline(void);
+			Polyline(paintState_ts parentPaintState);
 			~Polyline(void);
 			virtual bool Parse(TiXmlNode * node);
+			virtual void Display(int32_t spacing);
 	};
 };
 

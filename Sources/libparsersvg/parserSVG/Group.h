@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file parserSVG/Text.h
- * @brief Basic Text parsing (Header)
+ * @file parserSVG/Group.h
+ * @brief basic group parsing (Header)
  * @author Edouard DUPIN
- * @date 20/03/2012
+ * @date 21/03/2012
  * @par Project
  * parserSVG
  *
@@ -22,22 +22,24 @@
  *******************************************************************************
  */
 
-#ifndef __SVG_TEXT_H__
-#define __SVG_TEXT_H__
+#ifndef __SVG_GROUP_H__
+#define __SVG_GROUP_H__
 
 #include <parserSVG/Base.h>
+#include <etk/VectorType.h>
 
 namespace svg
 {
-	class Text : public svg::Base
+	class Group : public svg::Base
 	{
 		private:
-			
+			etk::VectorType<svg::Base *> m_subElementList;  //!< group sub elements ...
 		public:
-			Text(paintState_ts parentPaintState);
-			~Text(void);
+			Group(paintState_ts parentPaintState);
+			~Group(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);
+			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx);
 	};
 };
 

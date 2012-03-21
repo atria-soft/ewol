@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Path.h>
 
-svg::Path::Path(void)
+svg::Path::Path(paintState_ts parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -37,5 +37,14 @@ svg::Path::~Path(void)
 
 bool svg::Path::Parse(TiXmlNode * node)
 {
+	ParseTransform(node);
+	ParsePaintAttr(node);
 	return false;
 }
+
+void svg::Path::Display(int32_t spacing)
+{
+	SVG_DEBUG(SpacingDist(spacing) << "Path");
+}
+
+

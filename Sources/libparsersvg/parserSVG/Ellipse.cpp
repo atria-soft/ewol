@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Ellipse.h>
 
-svg::Ellipse::Ellipse(void)
+svg::Ellipse::Ellipse(paintState_ts parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -37,5 +37,42 @@ svg::Ellipse::~Ellipse(void)
 
 bool svg::Ellipse::Parse(TiXmlNode * node)
 {
-	return false;
+	ParseTransform(node);
+	ParsePaintAttr(node);
+	m_c.x = 0.0;
+	m_c.y = 0.0;
+	m_r.x = 0.0;
+	m_r.y = 0.0;
+	
+	const char * content = node->ToElement()->Attribute("cx");
+	if (NULL != content) {
+		m_c.x = ParseLength(content);
+	}
+	content = node->ToElement()->Attribute("cy");
+	if (NULL != content) {
+		m_c.y = ParseLength(content);
+	}
+	content = node->ToElement()->Attribute("rx");
+	if (NULL != content) {
+		m_r.x = ParseLength(content);
+	} else {
+		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"rx\" is not present");
+		return false;
+	}
+	content = node->ToElement()->Attribute("ry");
+	if (NULL != content) {
+		m_r.y = ParseLength(content);
+	} else {
+		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"ry\" is not present");
+		return false;
+	}
+	
+	return true;
 }
+
+void svg::Ellipse::Display(int32_t spacing)
+{
+	SVG_DEBUG(SpacingDist(spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+}
+
+

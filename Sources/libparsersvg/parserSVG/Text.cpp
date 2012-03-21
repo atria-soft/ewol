@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Text.h>
 
-svg::Text::Text(void)
+svg::Text::Text(paintState_ts parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -39,3 +39,10 @@ bool svg::Text::Parse(TiXmlNode * node)
 {
 	return false;
 }
+
+void svg::Text::Display(int32_t spacing)
+{
+	SVG_DEBUG(SpacingDist(spacing) << "Text");
+}
+
+

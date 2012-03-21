@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Circle.h>
 
-svg::Circle::Circle(void)
+svg::Circle::Circle(paintState_ts parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -37,6 +37,40 @@ svg::Circle::~Circle(void)
 
 bool svg::Circle::Parse(TiXmlNode * node)
 {
-	return false;
+	m_radius = 0.0;
+	m_position.x = 0.0;
+	m_position.y = 0.0;
+	ParseTransform(node);
+	ParsePaintAttr(node);
+	
+	const char * content = node->ToElement()->Attribute("cx");
+	if (NULL != content) {
+		m_position.x = ParseLength(content);
+	}
+	content = node->ToElement()->Attribute("cy");
+	if (NULL != content) {
+		m_position.y = ParseLength(content);
+	}
+	content = node->ToElement()->Attribute("r");
+	if (NULL != content) {
+		m_radius = ParseLength(content);
+	} else {
+		SVG_ERROR("(l "<<node->Row()<<") Circle \"r\" is not present");
+		return false;
+	}
+
+	if (0 > m_radius) {
+		m_radius = 0;
+		SVG_ERROR("(l "<<node->Row()<<") Circle \"r\" is negative");
+		return false;
+	}
+	return true;
 }
+
+void svg::Circle::Display(int32_t spacing)
+{
+	SVG_DEBUG(SpacingDist(spacing) << "Circle " << m_position << " radius=" << m_radius);
+}
+
+
 
