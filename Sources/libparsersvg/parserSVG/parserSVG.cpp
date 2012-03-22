@@ -219,6 +219,28 @@ bool write_ppm(const unsigned char* buf,
 typedef agg::rgba8             color_type;
 
 
+//////////////////////////////////////////////////////////////////////////////////
+// Start of AGG abstraction for SVG render ...
+
+typedef agg::renderer_base<agg::pixfmt_rgba32>           rendererBase_t;
+typedef agg::renderer_scanline_aa_solid<renderer_base>   rendererSolid_t;
+class Renderer {
+	private:
+		char *                        m_buffer;
+	public:
+		Renderer(uint32_t width, uint32_t height);
+		~Renderer(void);
+		uint32_t                      m_sizeX;
+		uint32_t                      m_sizeY;
+		rendererSolid_t *             m_renderArea;
+		agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
+		agg::scanline_p8              m_scanLine;    //!< 
+		agg::trans_affine             m_basicMatrix; //!< specific render of the curent element
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+
+
 agg::rasterizer_scanline_aa<> g_rasterizer;
 agg::scanline_p8              g_scanline;
 agg::path_storage             g_path;
@@ -248,9 +270,9 @@ double            g_skew_x = 0;
 double            g_skew_y = 0;
 int               g_nclick = 0;
 
-typedef agg::renderer_base<agg::pixfmt_rgba32> renderer_base;
-typedef agg::renderer_scanline_aa_solid<renderer_base> renderer_solid;
 
+typedef agg::renderer_base<agg::pixfmt_rgba32>           renderer_base;
+typedef agg::renderer_scanline_aa_solid<renderer_base>   renderer_solid;
 
 static char g_lion[] = 
 "f2cc99\n"
@@ -530,7 +552,6 @@ void svg::Parser::GenerateTestFile(void)
 	mtx2 *= agg::trans_affine_translation(width*0.7, height/2);
 	
 	agg::conv_transform<agg::path_storage, agg::trans_affine> trans2(g_path2, mtx2);
-	//g_rasterizer.add_path(trans2);
 	agg::render_all_paths(g_rasterizer, g_scanline, r, trans2, &g_colorsList2[0], &g_pathLdxList2[0], g_pathLdxList2.Size());
 
 	// Creating a rounded rectangle
