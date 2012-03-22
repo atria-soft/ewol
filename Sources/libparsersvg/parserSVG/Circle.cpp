@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Circle.h>
 
-svg::Circle::Circle(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Circle::Circle(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }

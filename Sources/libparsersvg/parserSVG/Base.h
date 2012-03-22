@@ -44,33 +44,68 @@
 namespace svg
 {
 	#define MATRIX_SIZE       (6)
-	typedef struct {
-		color_ts   fill;
-		color_ts   stroke;
-		etkFloat_t strokeWidth;
-		coord2D_ts viewPort;
-		etkFloat_t matrix[MATRIX_SIZE];
-	} paintState_ts;
+	class PaintState {
+		public :
+			PaintState(void) {};
+			~PaintState(void) {};
+			color8_ts  fill;
+			color8_ts  stroke;
+			etkFloat_t strokeWidth;
+			coord2D_ts viewPort;
+			etkFloat_t matrix[MATRIX_SIZE];
+		bool  operator!= (const svg::PaintState& paintExt) const
+		{
+			if(    fill.red   != paintExt.fill.red
+			    || fill.green != paintExt.fill.green
+			    || fill.blue  != paintExt.fill.blue
+			    || fill.alpha != paintExt.fill.alpha) {
+				return true;
+			}
+			if(    stroke.red   != paintExt.stroke.red
+			    || stroke.green != paintExt.stroke.green
+			    || stroke.blue  != paintExt.stroke.blue
+			    || stroke.alpha != paintExt.stroke.alpha) {
+				return true;
+			}
+			if (strokeWidth != paintExt.strokeWidth) {
+				return true;
+			}
+			if(    viewPort.x != paintExt.viewPort.x
+			    || viewPort.y != paintExt.viewPort.y) {
+				return true;
+			}
+			if(    matrix[0] != paintExt.matrix[0]
+			    || matrix[1] != paintExt.matrix[1]
+			    || matrix[2] != paintExt.matrix[2]
+			    || matrix[3] != paintExt.matrix[3]
+			    || matrix[4] != paintExt.matrix[4]
+			    || matrix[5] != paintExt.matrix[5]) {
+				return true;
+			}
+			return false;
+		}
+	};
 	
 	class Base
 	{
 		protected:
-			paintState_ts m_paint;
+			PaintState m_paint;
 			const char * SpacingDist(int32_t spacing);
 		public:
 			Base(void) {};
-			Base(paintState_ts parentPaintState);
+			Base(PaintState parentPaintState);
 			~Base(void) { };
 			virtual bool Parse(TiXmlNode * node);
 			//specific drawing for AAG librairy ...
-			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx) { };
+			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp) { };
+			virtual void AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp);
 			
 			virtual void Display(int32_t spacing) { };
 			void ParseTransform(TiXmlNode *node);
 			void ParsePosition(const TiXmlNode *node, coord2D_ts &pos, coord2D_ts &size);
 			etkFloat_t ParseLength(const char *dataInput);
 			void ParsePaintAttr(const TiXmlNode *node);
-			color_ts ParseColor(const char *inputData);
+			color8_ts ParseColor(const char *inputData);
 	};
 };
 

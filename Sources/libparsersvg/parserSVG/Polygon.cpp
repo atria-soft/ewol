@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Polygon.h>
 
-svg::Polygon::Polygon(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Polygon::Polygon(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -65,11 +65,13 @@ void svg::Polygon::Display(int32_t spacing)
 }
 
 
-void svg::Polygon::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx)
+void svg::Polygon::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
 {
 	if (m_listPoint.Size()<2) {
 		// nothing to draw ...
+		return;
 	}
+	AggCheckChange(path, colors, pathIdx, curentPaintProp);
 	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
 	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
 		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);

@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Polyline.h>
 
-svg::Polyline::Polyline(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Polyline::Polyline(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }

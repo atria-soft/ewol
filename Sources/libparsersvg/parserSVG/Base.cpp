@@ -27,7 +27,7 @@
 #include <parserSVG/Base.h>
 #include <math.h>
 
-svg::Base::Base(paintState_ts parentPaintState)
+svg::Base::Base(PaintState parentPaintState)
 {
 	// copy the parent painting properties ...
 	m_paint = parentPaintState;
@@ -231,54 +231,278 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 		}
 	}
 }
+typedef struct {
+	const char * colorName;
+	uint32_t color;
+} colorList_ts;
+
+const colorList_ts listOfColor[] = {
+	{ "none",				0x00000000},
+	{ "AliceBlue",			0xF0F8FFFF},
+	{ "AntiqueWhite",		0xFAEBD7FF},
+	{ "Aqua",				0x00FFFFFF},
+	{ "Aquamarine",			0x7FFFD4FF},
+	{ "Azure",				0xF0FFFFFF},
+	{ "Beige",				0xF5F5DCFF},
+	{ "Bisque",				0xFFE4C4FF},
+	{ "Black",				0x000000FF},
+	{ "BlanchedAlmond",		0xFFEBCDFF},
+	{ "Blue",				0x0000FFFF},
+	{ "BlueViolet",			0x8A2BE2FF},
+	{ "Brown",				0xA52A2AFF},
+	{ "BurlyWood",			0xDEB887FF},
+	{ "CadetBlue",			0x5F9EA0FF},
+	{ "Chartreuse",			0x7FFF00FF},
+	{ "Chocolate",			0xD2691EFF},
+	{ "Coral",				0xFF7F50FF},
+	{ "CornflowerBlue",		0x6495EDFF},
+	{ "Cornsilk",			0xFFF8DCFF},
+	{ "Crimson",			0xDC143CFF},
+	{ "Cyan",				0x00FFFFFF},
+	{ "DarkBlue",			0x00008BFF},
+	{ "DarkCyan",			0x008B8BFF},
+	{ "DarkGoldenRod",		0xB8860BFF},
+	{ "DarkGray",			0xA9A9A9FF},
+	{ "DarkGrey",			0xA9A9A9FF},
+	{ "DarkGreen",			0x006400FF},
+	{ "DarkKhaki",			0xBDB76BFF},
+	{ "DarkMagenta",		0x8B008BFF},
+	{ "DarkOliveGreen",		0x556B2FFF},
+	{ "Darkorange",			0xFF8C00FF},
+	{ "DarkOrchid",			0x9932CCFF},
+	{ "DarkRed",			0x8B0000FF},
+	{ "DarkSalmon",			0xE9967AFF},
+	{ "DarkSeaGreen",		0x8FBC8FFF},
+	{ "DarkSlateBlue",		0x483D8BFF},
+	{ "DarkSlateGray",		0x2F4F4FFF},
+	{ "DarkSlateGrey",		0x2F4F4FFF},
+	{ "DarkTurquoise",		0x00CED1FF},
+	{ "DarkViolet",			0x9400D3FF},
+	{ "DeepPink",			0xFF1493FF},
+	{ "DeepSkyBlue",		0x00BFFFFF},
+	{ "DimGray",			0x696969FF},
+	{ "DimGrey",			0x696969FF},
+	{ "DodgerBlue",			0x1E90FFFF},
+	{ "FireBrick",			0xB22222FF},
+	{ "FloralWhite",		0xFFFAF0FF},
+	{ "ForestGreen",		0x228B22FF},
+	{ "Fuchsia",			0xFF00FFFF},
+	{ "Gainsboro",			0xDCDCDCFF},
+	{ "GhostWhite",			0xF8F8FFFF},
+	{ "Gold",				0xFFD700FF},
+	{ "GoldenRod",			0xDAA520FF},
+	{ "Gray",				0x808080FF},
+	{ "Grey",				0x808080FF},
+	{ "Green",				0x008000FF},
+	{ "GreenYellow",		0xADFF2FFF},
+	{ "HoneyDew",			0xF0FFF0FF},
+	{ "HotPink",			0xFF69B4FF},
+	{ "IndianRed ",			0xCD5C5CFF},
+	{ "Indigo ",			0x4B0082FF},
+	{ "Ivory",				0xFFFFF0FF},
+	{ "Khaki",				0xF0E68CFF},
+	{ "Lavender",			0xE6E6FAFF},
+	{ "LavenderBlush",		0xFFF0F5FF},
+	{ "LawnGreen",			0x7CFC00FF},
+	{ "LemonChiffon",			0xFFFACDFF},
+	{ "LightBlue",				0xADD8E6FF},
+	{ "LightCoral",				0xF08080FF},
+	{ "LightCyan",				0xE0FFFFFF},
+	{ "LightGoldenRodYellow",	0xFAFAD2FF},
+	{ "LightGray",				0xD3D3D3FF},
+	{ "LightGrey",				0xD3D3D3FF},
+	{ "LightGreen",				0x90EE90FF},
+	{ "LightPink",				0xFFB6C1FF},
+	{ "LightSalmon",			0xFFA07AFF},
+	{ "LightSeaGreen",			0x20B2AAFF},
+	{ "LightSkyBlue",			0x87CEFAFF},
+	{ "LightSlateGray",			0x778899FF},
+	{ "LightSlateGrey",			0x778899FF},
+	{ "LightSteelBlue",			0xB0C4DEFF},
+	{ "LightYellow",			0xFFFFE0FF},
+	{ "Lime",				0x00FF00FF},
+	{ "LimeGreen",			0x32CD32FF},
+	{ "Linen",				0xFAF0E6FF},
+	{ "Magenta",			0xFF00FFFF},
+	{ "Maroon",				0x800000FF},
+	{ "MediumAquaMarine",	0x66CDAAFF},
+	{ "MediumBlue",			0x0000CDFF},
+	{ "MediumOrchid",		0xBA55D3FF},
+	{ "MediumPurple",		0x9370D8FF},
+	{ "MediumSeaGreen",		0x3CB371FF},
+	{ "MediumSlateBlue",	0x7B68EEFF},
+	{ "MediumSpringGreen",	0x00FA9AFF},
+	{ "MediumTurquoise",	0x48D1CCFF},
+	{ "MediumVioletRed",	0xC71585FF},
+	{ "MidnightBlue",		0x191970FF},
+	{ "MintCream",			0xF5FFFAFF},
+	{ "MistyRose",			0xFFE4E1FF},
+	{ "Moccasin",			0xFFE4B5FF},
+	{ "NavajoWhite",		0xFFDEADFF},
+	{ "Navy",				0x000080FF},
+	{ "OldLace",			0xFDF5E6FF},
+	{ "Olive",				0x808000FF},
+	{ "OliveDrab",			0x6B8E23FF},
+	{ "Orange",				0xFFA500FF},
+	{ "OrangeRed",			0xFF4500FF},
+	{ "Orchid",				0xDA70D6FF},
+	{ "PaleGoldenRod",		0xEEE8AAFF},
+	{ "PaleGreen",			0x98FB98FF},
+	{ "PaleTurquoise",		0xAFEEEEFF},
+	{ "PaleVioletRed",		0xD87093FF},
+	{ "PapayaWhip",			0xFFEFD5FF},
+	{ "PeachPuff",			0xFFDAB9FF},
+	{ "Peru",				0xCD853FFF},
+	{ "Pink",				0xFFC0CBFF},
+	{ "Plum",				0xDDA0DDFF},
+	{ "PowderBlue",			0xB0E0E6FF},
+	{ "Purple",				0x800080FF},
+	{ "Red",				0xFF0000FF},
+	{ "RosyBrown",			0xBC8F8FFF},
+	{ "RoyalBlue",			0x4169E1FF},
+	{ "SaddleBrown",		0x8B4513FF},
+	{ "Salmon",				0xFA8072FF},
+	{ "SandyBrown",			0xF4A460FF},
+	{ "SeaGreen",			0x2E8B57FF},
+	{ "SeaShell",			0xFFF5EEFF},
+	{ "Sienna",				0xA0522DFF},
+	{ "Silver",				0xC0C0C0FF},
+	{ "SkyBlue",			0x87CEEBFF},
+	{ "SlateBlue",			0x6A5ACDFF},
+	{ "SlateGray",			0x708090FF},
+	{ "SlateGrey",			0x708090FF},
+	{ "Snow",				0xFFFAFAFF},
+	{ "SpringGreen",		0x00FF7FFF},
+	{ "SteelBlue",			0x4682B4FF},
+	{ "Tan",				0xD2B48CFF},
+	{ "Teal",				0x008080FF},
+	{ "Thistle",			0xD8BFD8FF},
+	{ "Tomato",				0xFF6347FF},
+	{ "Turquoise",			0x40E0D0FF},
+	{ "Violet",				0xEE82EEFF},
+	{ "Wheat",				0xF5DEB3FF},
+	{ "White",				0xFFFFFFFF},
+	{ "WhiteSmoke",			0xF5F5F5FF},
+	{ "Yellow",				0xFFFF00FF},
+	{ "YellowGreen",		0x9ACD32FF}
+};
+const int32_t listOfColorSize = sizeof(listOfColor) / sizeof(colorList_ts);
+
+bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen)
+{
+	int32_t iii=0;
+	while ('\0' != *input1 && '\0' != *input2 && iii < maxLen) {
+		char in1 = *input1;
+		char in2 = *input2;
+		if (in1 != in2) {
+			if (in1 <= 'Z' && in1 >= 'A') {
+				in1 = in1 - 'A' + 'a';
+			}
+			if (in2 <= 'Z' && in2 >= 'A') {
+				in2 = in2 - 'A' + 'a';
+			}
+			if (in1 != in2) {
+				return false;
+			}
+		}
+		iii++;
+		input1++;
+		input2++;
+	}
+	return true;
+}
+
 
 /**
  * @brief Parse a color specification from the svg file
  * @param[in] inputData Data C String with the xml definition
  * @return the parsed color
  */
-color_ts svg::Base::ParseColor(const char *inputData)
+color8_ts svg::Base::ParseColor(const char *inputData)
 {
-	color_ts localColor;
-	localColor.red  =1.0;
-	localColor.green=1.0;
-	localColor.blue =1.0;
-	localColor.alpha=1.0;
+	color8_ts localColor;
+	localColor.red  =0xFF;
+	localColor.green=0xFF;
+	localColor.blue =0xFF;
+	localColor.alpha=0xFF;
 	
-	uint32_t red, green, blue;
+	uint32_t red, green, blue, alpha;
+	float fred, fgreen, fblue, falpha;
 	size_t len = strlen(inputData);
 
-	if(    len == 4
+	if(    len >=1
 	    && inputData[0] == '#') {
-		if (sscanf(inputData + 1, "%1x%1x%1x", &red, &green, &blue) == 3) {
-			localColor.red  = (etkFloat_t)(red | red << 4) / 256.0;
-			localColor.green= (etkFloat_t)(green | green << 4) / 256.0;
-			localColor.blue = (etkFloat_t)(blue | blue << 4) / 256.0;
+		if(len == 4) {
+			if (sscanf(inputData + 1, "%1x%1x%1x", &red, &green, &blue) == 3) {
+				localColor.red  = (red | red << 4);
+				localColor.green= (green | green << 4);
+				localColor.blue = (blue | blue << 4);
+			} else {
+				SVG_ERROR(" pb in parsing the color : \"" << inputData << "\"");
+			}
+		} else if (len==5) {
+			if (sscanf(inputData + 1, "%1x%1x%1x%1x", &red, &green, &blue, &alpha) == 4) {
+				localColor.red   = (red | red << 4);
+				localColor.green = (green | green << 4);
+				localColor.blue  = (blue | blue << 4);
+				localColor.alpha = (alpha | alpha << 4);
+			} else {
+				SVG_ERROR(" pb in parsing the color : \"" << inputData << "\"");
+			}
+		} else if (len == 7) {
+			if (sscanf(inputData + 1, "%2x%2x%2x", &red, &green, &blue) == 3) {
+				localColor.red  = red;
+				localColor.green= green;
+				localColor.blue = blue;
+			} else {
+				SVG_ERROR(" pb in parsing the color : \"" << inputData << "\"");
+			}
+		} else if (len == 9) {
+			if (sscanf(inputData + 1, "%2x%2x%2x%2x", &red, &green, &blue, &alpha) == 4) {
+				localColor.red  = red;
+				localColor.green= green;
+				localColor.blue = blue;
+				localColor.alpha = alpha;
+			} else {
+				SVG_ERROR(" pb in parsing the color : \"" << inputData << "\"");
+			}
+		} else {
+			SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> unknown methode ...");
 		}
-	} else if(    len == 7
-	           && inputData[0] == '#') {
-		if (sscanf(inputData + 1, "%2x%2x%2x", &red, &green, &blue) == 3) {
-			localColor.red  = (etkFloat_t)(red) / 256.0;
-			localColor.green= (etkFloat_t)(green) / 256.0;
-			localColor.blue = (etkFloat_t)(blue) / 256.0;
-		}
-	} else if(    10 <= len
+	} else if(    4 <= len
 	           && inputData[0] == 'r'
 	           && inputData[1] == 'g'
 	           && inputData[2] == 'b'
-	           && inputData[3] == '('
-	           && inputData[len - 1] == ')') {
-		if (sscanf(inputData + 4, "%u,%u,%u", &red, &green, &blue) == 3) {
-			localColor.red  = (etkFloat_t)(red) / 256.0;
-			localColor.green= (etkFloat_t)(green) / 256.0;
-			localColor.blue = (etkFloat_t)(blue) / 256.0;
-		} else if (sscanf(inputData + 4, "%f%%,%f%%,%f%%", &localColor.red, &localColor.green, &localColor.blue) == 3) {
-			// nothing to do ...
+	           && inputData[3] == '(' ) {
+		if (sscanf(inputData + 4, "%u,%u,%u,%u", &red, &green, &blue, &alpha) == 4) {
+			localColor.red  = etk_min(0xFF, red);
+			localColor.green= etk_min(0xFF, green);
+			localColor.blue = etk_min(0xFF, blue);
+			localColor.alpha = etk_min(0xFF, alpha);
+		} else if (sscanf(inputData + 4, "%u,%u,%u", &red, &green, &blue) == 3) {
+			localColor.red  = etk_min(0xFF, red);
+			localColor.green= etk_min(0xFF, green);
+			localColor.blue = etk_min(0xFF, blue);
+		} else if (sscanf(inputData + 4, "%f%%,%f%%,%f%%,%f%%", &fred, &fgreen, &fblue, &falpha) == 4) {
+			fred  = etk_max(0.0, etk_min(1.0, fred));
+			fgreen= etk_max(0.0, etk_min(1.0, fgreen));
+			fblue = etk_max(0.0, etk_min(1.0, fblue));
+			falpha = etk_max(0.0, etk_min(1.0, falpha));
+			localColor.red  = (uint8_t)(fred * 255.);
+			localColor.green= (uint8_t)(fgreen * 255.);
+			localColor.blue = (uint8_t)(fblue * 255.);
+			localColor.alpha = (uint8_t)(falpha * 255.);
+		} else if (sscanf(inputData + 4, "%f%%,%f%%,%f%%", &fred, &fgreen, &fblue) == 3) {
+			fred  = etk_max(0.0, etk_min(1.0, fred));
+			fgreen= etk_max(0.0, etk_min(1.0, fgreen));
+			fblue = etk_max(0.0, etk_min(1.0, fblue));
+			localColor.red  = (uint8_t)(fred * 255.);
+			localColor.green= (uint8_t)(fgreen * 255.);
+			localColor.blue = (uint8_t)(fblue * 255.);
+		} else {
+			SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> unknown methode ...");
 		}
-	} else if(    len == 4
-	           && strcmp(inputData, "none") == 0) {
-		localColor.alpha=0.0;
-	} else if(    5 < len
+	} else if(    4 < len
 	           && inputData[0] == 'u'
 	           && inputData[1] == 'r'
 	           && inputData[2] == 'l'
@@ -286,9 +510,28 @@ color_ts svg::Base::ParseColor(const char *inputData)
 		if (inputData[4] == '#') {
 			// TODO : parse gradient ...
 		}
+		SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> url(XXX) is not supported now ...");
 	} else {
-		// TODO : Might be a named color ... need to find it ...
+		bool findIt = false;
+		// direct named color ...
+		for (int32_t iii=0; iii<listOfColorSize; iii++) {
+			if (strnCmpNoCase(listOfColor[iii].colorName, inputData, strlen(listOfColor[iii].colorName)) == true) {
+				findIt = true;
+				localColor.red  = (uint8_t)((0xFF000000 & listOfColor[iii].color) >> 24) ;
+				localColor.green= (uint8_t)((0x00FF0000 & listOfColor[iii].color) >> 16) ;
+				localColor.blue = (uint8_t)((0x0000FF00 & listOfColor[iii].color) >> 8) ;
+				localColor.alpha = (uint8_t)(0x000000FF & listOfColor[iii].color) ;
+				// stop searching
+				break;
+			}
+		}
+		// or color in reference ...
+		if (findIt == false) {
+			// TODO : Might be a named color ... need to find it ...
+			SVG_ERROR(" pb in parsing the color : \"" << inputData << "\" ==> refs color not supported now ...");
+		}
 	}
+	SVG_VERBOSE("Parse color : \"" << inputData << "\" ==> " << localColor);
 	return localColor;
 }
 
@@ -311,4 +554,18 @@ const char * svg::Base::SpacingDist(int32_t spacing)
 		spacing = 20;
 	}
 	return tmpValue + 20*4 - spacing*4;
+}
+
+
+
+void svg::Base::AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
+{
+	if (curentPaintProp != m_paint) {
+		SVG_INFO("add path color = " << m_paint.fill);
+		// New color. Every new color creates new path in the path object.
+		colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+		uint32_t tmpPathNew = path.start_new_path();
+		pathIdx.PushBack(tmpPathNew);
+		curentPaintProp = m_paint;
+	}
 }

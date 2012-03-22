@@ -35,7 +35,7 @@ namespace svg
 			coord2D_ts m_startPos;       //!< Start line position
 			coord2D_ts m_stopPos;        //!< Stop line position
 		public:
-			Line(paintState_ts parentPaintState);
+			Line(PaintState parentPaintState);
 			~Line(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);

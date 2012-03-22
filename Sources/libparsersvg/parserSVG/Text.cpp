@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Text.h>
 
-svg::Text::Text(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Text::Text(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }

@@ -35,7 +35,7 @@ namespace svg
 			coord2D_ts m_c;        //!< C property of the ellipse
 			coord2D_ts m_r;        //!< R property of the ellipse
 		public:
-			Ellipse(paintState_ts parentPaintState);
+			Ellipse(PaintState parentPaintState);
 			~Ellipse(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);

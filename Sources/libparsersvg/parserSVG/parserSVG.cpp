@@ -52,19 +52,19 @@ svg::Parser::Parser(etk::File fileName)
 	m_fileName = fileName;
 	m_version = "0.0";
 	m_loadOK = false;
-	m_paint.fill.red = 1.0;
-	m_paint.fill.green = 1.0;
-	m_paint.fill.blue = 1.0;
-	m_paint.fill.alpha = 1.0;
+	m_paint.fill.red = 0xFF;
+	m_paint.fill.green = 0;
+	m_paint.fill.blue = 0;
+	m_paint.fill.alpha = 0xFF;
 	
-	m_paint.stroke.red = 1.0;
-	m_paint.stroke.green = 1.0;
-	m_paint.stroke.blue = 1.0;
-	m_paint.stroke.alpha = 0.0;
+	m_paint.stroke.red = 0xFF;
+	m_paint.stroke.green = 0xFF;
+	m_paint.stroke.blue = 0xFF;
+	m_paint.stroke.alpha = 0;
 	
-	m_paint.strokeWidth = 1.0;
-	m_paint.viewPort.x = 1.0;
-	m_paint.viewPort.y = 1.0;
+	m_paint.strokeWidth = 0xFF;
+	m_paint.viewPort.x = 0xFF;
+	m_paint.viewPort.y = 0xFF;
 	m_paint.matrix[0] = 1.0;
 	m_paint.matrix[1] = 0.0;
 	m_paint.matrix[2] = 0.0;
@@ -230,6 +230,10 @@ etk::VectorType<agg::rgba8>   g_colorsList2;
 etk::VectorType<uint32_t>     g_pathLdxList2;
 double            g_base_dx2 = 0;
 double            g_base_dy2 = 0;
+double            g_x12 = 0;
+double            g_y12 = 0;
+double            g_x22 = 0;
+double            g_y22 = 0;
 
 uint32_t          g_npaths = 0;
 double            g_x1 = 0;
@@ -407,11 +411,12 @@ uint32_t parse_lion(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors
 	const char* ptr = g_lion;
 	while(*ptr) {
 		if(*ptr != 'M' && isalnum(*ptr)) {
-			unsigned c = 0;
+			uint32_t c = 0;
 			sscanf(ptr, "%x", &c);
 			
 			// New color. Every new color creates new path in the path object.
 			path.close_polygon();
+			SVG_ERROR("printed color 1 = " << c);
 			colors.PushBack(agg::rgb8_packed(c));
 			uint32_t tmpPathNew = path.start_new_path();
 			pathIdx.PushBack(tmpPathNew);
@@ -453,43 +458,49 @@ uint32_t parse_lion(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors
 }
 
 
-void svg::Parser::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx)
+void svg::Parser::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
 {
-	uint32_t tmpColor = 0;
-	tmpColor  = ((int32_t)(m_paint.fill.red*256.))<<24;
-	tmpColor += ((int32_t)(m_paint.fill.green*256.))<<24;
-	tmpColor += ((int32_t)(m_paint.fill.blue*256.))<<24;
-	tmpColor += ((int32_t)(m_paint.fill.alpha*256.))<<24;
-	// New color. Every new color creates new path in the path object.
-	colors.PushBack(agg::rgb8_packed(tmpColor));
+	SVG_ERROR("printed color X = " << m_paint.fill);
+	colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
 	uint32_t tmpPathNew = path.start_new_path();
 	pathIdx.PushBack(tmpPathNew);
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(path, colors, pathIdx);
+			m_subElementList[iii]->AggDraw(path, colors, pathIdx, curentPaintProp);
 		}
 	}
+	// this permit to have not the display of the layer substraction ...
+	path.arrange_orientations_all_paths(agg::path_flags_cw);
 	
 }
 
+#include <agg-2.4/agg_rounded_rect.h>
+#include <agg-2.4/agg_conv_stroke.h>
 
 void svg::Parser::GenerateTestFile(void)
 {
-	
+	g_path.remove_all();
+	g_colorsList.Clear();
+	g_pathLdxList.Clear();
 	uint32_t g_npaths = parse_lion(g_path, g_colorsList, g_pathLdxList);
 	agg::pod_array_adaptor<unsigned> path_idx(&g_pathLdxList[0], g_npaths);
 	agg::bounding_rect(g_path, path_idx, 0, g_npaths, &g_x1, &g_y1, &g_x2, &g_y2);
 	g_base_dx = (g_x2 - g_x1) / 2.0;
 	g_base_dy = (g_y2 - g_y1) / 2.0;
 	
-	AggDraw(g_path2, g_colorsList2, g_pathLdxList2);
+	g_path2.remove_all();
+	g_colorsList2.Clear();
+	g_pathLdxList2.Clear();
+	PaintState curentPaintProp;
+	AggDraw(g_path2, g_colorsList2, g_pathLdxList2, curentPaintProp);
 	agg::pod_array_adaptor<unsigned> path_idx2(&g_pathLdxList2[0], g_pathLdxList2.Size() );
-	agg::bounding_rect(g_path2, path_idx2, 0, g_pathLdxList2.Size(), &g_x1, &g_y1, &g_x2, &g_y2);
-	g_base_dx2 = (g_x2 - g_x1) / 2.0;
-	g_base_dy2 = (g_y2 - g_y1) / 2.0;
+	agg::bounding_rect(g_path2, path_idx2, 0, g_pathLdxList2.Size(), &g_x12, &g_y12, &g_x22, &g_y22);
+	g_base_dx2 = (g_x22 - g_x12) / 2.0;
+	g_base_dy2 = (g_y22 - g_y12) / 2.0;
 	
-	int width = 800;
-	int height = 600;
+	float coefmult = 2;
+	int width = 800*coefmult;
+	int height = 600*coefmult;
 	
 	unsigned char* buffer = new unsigned char[width * height * 4];
 	memset(buffer, 255, width * height * 4);
@@ -501,7 +512,7 @@ void svg::Parser::GenerateTestFile(void)
 	
 	agg::trans_affine  mtx;
 	mtx *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	mtx *= agg::trans_affine_scaling(g_scale, g_scale);
+	mtx *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
 	mtx *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
 	mtx *= agg::trans_affine_translation(width*0.3, height/2);
@@ -509,19 +520,30 @@ void svg::Parser::GenerateTestFile(void)
 	// This code renders the lion:
 	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(g_path, mtx);
 	agg::render_all_paths(g_rasterizer, g_scanline, r, trans, &g_colorsList[0], &g_pathLdxList[0], g_npaths);
-	// This code renders a second lion:
+	// This code renders a second svg syctem ...:
 	
 	agg::trans_affine  mtx2;
 	mtx2 *= agg::trans_affine_translation(-g_base_dx2, -g_base_dy2);
-	mtx2 *= agg::trans_affine_scaling(g_scale, g_scale);
+	mtx2 *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
 	mtx2 *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
 	mtx2 *= agg::trans_affine_translation(width*0.7, height/2);
 	
 	agg::conv_transform<agg::path_storage, agg::trans_affine> trans2(g_path2, mtx2);
+	//g_rasterizer.add_path(trans2);
 	agg::render_all_paths(g_rasterizer, g_scanline, r, trans2, &g_colorsList2[0], &g_pathLdxList2[0], g_pathLdxList2.Size());
 
-	write_ppm(buffer, width, height, "agg_test.ppm");
+	// Creating a rounded rectangle
+	agg::rounded_rect rect_r(50, 50, 100, 120, 18);
+	rect_r.normalize_radius();
+	// Drawing as an outline
+	agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);
+	rect_p.width(1.0);
+	g_rasterizer.add_path(rect_p);
+	agg::render_scanlines(g_rasterizer, g_scanline, r);
+
+	etk::UString tmpFileOut = etk::UString("zzz_out_") + m_fileName.GetShortFilename() + ".ppm";
+	write_ppm(buffer, width, height, tmpFileOut.Utf8Data());
 	
 	delete [] buffer;
 }

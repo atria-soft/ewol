@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Path.h>
 
-svg::Path::Path(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Path::Path(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }

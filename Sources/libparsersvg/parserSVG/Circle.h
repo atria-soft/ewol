@@ -35,7 +35,7 @@ namespace svg
 			coord2D_ts m_position;        //!< Position of the Circle
 			etkFloat_t m_radius;          //!< Radius of the Circle
 		public:
-			Circle(paintState_ts parentPaintState);
+			Circle(PaintState parentPaintState);
 			~Circle(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);

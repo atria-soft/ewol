@@ -35,11 +35,11 @@ namespace svg
 		private:
 			etk::VectorType<svg::Base *> m_subElementList;  //!< group sub elements ...
 		public:
-			Group(paintState_ts parentPaintState);
+			Group(PaintState parentPaintState);
 			~Group(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);
-			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx);
+			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp);
 	};
 };
 

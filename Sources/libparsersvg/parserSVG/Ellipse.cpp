@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Ellipse.h>
 
-svg::Ellipse::Ellipse(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Ellipse::Ellipse(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }

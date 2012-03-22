@@ -36,7 +36,7 @@
 #include <parserSVG/Text.h>
 #include <parserSVG/Group.h>
 
-svg::Group::Group(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Group::Group(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	
 }
@@ -104,7 +104,7 @@ bool svg::Group::Parse(TiXmlNode * node)
 
 void svg::Group::Display(int32_t spacing)
 {
-	SVG_DEBUG(SpacingDist(spacing) << "Group (START)");
+	SVG_DEBUG(SpacingDist(spacing) << "Group (START) fill=" << m_paint.fill << " stroke=" << m_paint.stroke);
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
 			m_subElementList[iii]->Display(spacing+1);
@@ -113,20 +113,12 @@ void svg::Group::Display(int32_t spacing)
 	SVG_DEBUG(SpacingDist(spacing) << "Group (STOP)");
 }
 
-void svg::Group::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx)
+void svg::Group::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
 {
-	uint32_t tmpColor = 0;
-	tmpColor  = ((int32_t)(m_paint.fill.red*256.))<<24;
-	tmpColor += ((int32_t)(m_paint.fill.green*256.))<<16;
-	tmpColor += ((int32_t)(m_paint.fill.blue*256.))<<8;
-	tmpColor += ((int32_t)(m_paint.fill.alpha*256.));
-	// New color. Every new color creates new path in the path object.
-	colors.PushBack(agg::rgb8_packed(tmpColor));
-	uint32_t tmpPathNew = path.start_new_path();
-	pathIdx.PushBack(tmpPathNew);
+	AggCheckChange(path, colors, pathIdx, curentPaintProp);
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(path, colors, pathIdx);
+			m_subElementList[iii]->AggDraw(path, colors, pathIdx, curentPaintProp);
 		}
 	}
 	

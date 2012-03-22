@@ -34,7 +34,7 @@ namespace svg
 		private:
 			
 		public:
-			Path(paintState_ts parentPaintState);
+			Path(PaintState parentPaintState);
 			~Path(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);

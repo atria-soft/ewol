@@ -25,7 +25,7 @@
 #include <parserSVG/Debug.h>
 #include <parserSVG/Line.h>
 
-svg::Line::Line(paintState_ts parentPaintState) : svg::Base(parentPaintState)
+svg::Line::Line(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
 	m_startPos.x = 0.0;
 	m_startPos.y = 0.0;
