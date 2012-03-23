@@ -39,7 +39,7 @@ namespace svg
 			~Group(void);
 			virtual bool Parse(TiXmlNode * node);
 			virtual void Display(int32_t spacing);
-			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp);
+			virtual void AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp);
 	};
 };
 

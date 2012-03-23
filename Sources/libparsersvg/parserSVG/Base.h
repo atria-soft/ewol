@@ -29,6 +29,7 @@
 #include <etk/VectorType.h>
 
 #include <tinyXML/tinyxml.h>
+#include <parserSVG/Renderer.h>
 
 #include <agg-2.4/agg_basics.h>
 #include <agg-2.4/agg_rendering_buffer.h>
@@ -43,49 +44,6 @@
 
 namespace svg
 {
-	#define MATRIX_SIZE       (6)
-	class PaintState {
-		public :
-			PaintState(void) {};
-			~PaintState(void) {};
-			color8_ts  fill;
-			color8_ts  stroke;
-			etkFloat_t strokeWidth;
-			coord2D_ts viewPort;
-			etkFloat_t matrix[MATRIX_SIZE];
-		bool  operator!= (const svg::PaintState& paintExt) const
-		{
-			if(    fill.red   != paintExt.fill.red
-			    || fill.green != paintExt.fill.green
-			    || fill.blue  != paintExt.fill.blue
-			    || fill.alpha != paintExt.fill.alpha) {
-				return true;
-			}
-			if(    stroke.red   != paintExt.stroke.red
-			    || stroke.green != paintExt.stroke.green
-			    || stroke.blue  != paintExt.stroke.blue
-			    || stroke.alpha != paintExt.stroke.alpha) {
-				return true;
-			}
-			if (strokeWidth != paintExt.strokeWidth) {
-				return true;
-			}
-			if(    viewPort.x != paintExt.viewPort.x
-			    || viewPort.y != paintExt.viewPort.y) {
-				return true;
-			}
-			if(    matrix[0] != paintExt.matrix[0]
-			    || matrix[1] != paintExt.matrix[1]
-			    || matrix[2] != paintExt.matrix[2]
-			    || matrix[3] != paintExt.matrix[3]
-			    || matrix[4] != paintExt.matrix[4]
-			    || matrix[5] != paintExt.matrix[5]) {
-				return true;
-			}
-			return false;
-		}
-	};
-	
 	class Base
 	{
 		protected:
@@ -97,8 +55,7 @@ namespace svg
 			~Base(void) { };
 			virtual bool Parse(TiXmlNode * node);
 			//specific drawing for AAG librairy ...
-			virtual void AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp) { };
-			virtual void AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp);
+			virtual void AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp) { };
 			
 			virtual void Display(int32_t spacing) { };
 			void ParseTransform(TiXmlNode *node);

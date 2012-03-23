@@ -155,10 +155,13 @@ etkFloat_t svg::Base::ParseLength(const char *dataInput)
 {
 	int32_t numLength = strspn(dataInput, "0123456789+-.");
 	const char *unit = dataInput + numLength;
+	//SVG_INFO("          ==> \"" << dataInput << "\"");
 	etkFloat_t n = atof(dataInput);
+	//SVG_INFO("          ==> ?? = " << n );
 	etkFloat_t font_size = 20.0;
-
-	if (unit[0] == '\0') {
+	
+	// note : ";" is for the parsing of the style elements ...
+	if (unit[0] == '\0' || unit[0] == ';' ) {
 		return n;
 	} else if (unit[0] == '%') {                   // xxx %
 		return n / 100.0 * m_paint.viewPort.x;
@@ -223,11 +226,22 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 		}
 		if ((sss = strstr(content, "stroke-width:"))) {
 			sss += 13;
+			SVG_VERBOSE(" find a stroke width ... : " << sss);
 			while(    sss[0] ==' '
 			       && sss[0]!='\0' ) {
 				sss++;
 			}
 			m_paint.strokeWidth = ParseLength(sss);
+			SVG_VERBOSE("        ==> " << m_paint.strokeWidth);
+		}
+		if ((sss = strstr(content, "opacity:"))) {
+			sss += 8;
+			while(    sss[0] ==' '
+			       && sss[0]!='\0' ) {
+				sss++;
+			}
+			etkFloat_t opacity = ParseLength(sss);
+			m_paint.opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		}
 	}
 }
@@ -557,7 +571,7 @@ const char * svg::Base::SpacingDist(int32_t spacing)
 }
 
 
-
+/*
 void svg::Base::AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
 {
 	if (curentPaintProp != m_paint) {
@@ -569,3 +583,4 @@ void svg::Base::AggCheckChange(agg::path_storage& path, etk::VectorType<agg::rgb
 		curentPaintProp = m_paint;
 	}
 }
+*/

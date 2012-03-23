@@ -65,18 +65,47 @@ void svg::Polygon::Display(int32_t spacing)
 }
 
 
-void svg::Polygon::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
+#include <agg-2.4/agg_basics.h>
+#include <agg-2.4/agg_rendering_buffer.h>
+#include <agg-2.4/agg_rasterizer_scanline_aa.h>
+#include <agg-2.4/agg_scanline_p.h>
+#include <agg-2.4/agg_renderer_scanline.h>
+#include <agg-2.4/agg_path_storage.h>
+#include <agg-2.4/agg_conv_transform.h>
+#include <agg-2.4/agg_bounding_rect.h>
+#include <agg-2.4/agg_color_rgba.h>
+#include <agg-2.4/agg_pixfmt_rgba.h>
+
+void svg::Polygon::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
 {
-	if (m_listPoint.Size()<2) {
-		// nothing to draw ...
-		return;
-	}
-	AggCheckChange(path, colors, pathIdx, curentPaintProp);
+	curentPaintProp = m_paint;
+	agg::path_storage             path;
+	etk::VectorType<agg::rgba8>   colorsList;
+	etk::VectorType<uint32_t>     pathListId;
+	
+	// New color. Every new color creates new path in the path object.
+	colorsList.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+	uint32_t tmpPathNew = path.start_new_path();
+	pathListId.PushBack(tmpPathNew);
+	
 	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
 	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
 		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
 	}
 	path.close_polygon();
+	
+	
+	agg::trans_affine  mtx;
+	//mtx *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
+	//mtx *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
+	//mtx *= agg::trans_affine_rotation(g_angle);// + agg::pi);
+	//mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
+	//mtx *= agg::trans_affine_translation(width*0.3, height/2);
+	mtx *= agg::trans_affine_translation(myRenderer.m_size.x*0.5, myRenderer.m_size.x/2);
+	
+	// This code renders the lion:
+	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
+	
+	agg::render_all_paths( myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea, trans, &colorsList[0], &pathListId[0], pathListId.Size());
 }
-
 

@@ -219,28 +219,6 @@ bool write_ppm(const unsigned char* buf,
 typedef agg::rgba8             color_type;
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// Start of AGG abstraction for SVG render ...
-
-typedef agg::renderer_base<agg::pixfmt_rgba32>           rendererBase_t;
-typedef agg::renderer_scanline_aa_solid<renderer_base>   rendererSolid_t;
-class Renderer {
-	private:
-		char *                        m_buffer;
-	public:
-		Renderer(uint32_t width, uint32_t height);
-		~Renderer(void);
-		uint32_t                      m_sizeX;
-		uint32_t                      m_sizeY;
-		rendererSolid_t *             m_renderArea;
-		agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
-		agg::scanline_p8              m_scanLine;    //!< 
-		agg::trans_affine             m_basicMatrix; //!< specific render of the curent element
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-
-
 agg::rasterizer_scanline_aa<> g_rasterizer;
 agg::scanline_p8              g_scanline;
 agg::path_storage             g_path;
@@ -479,94 +457,30 @@ uint32_t parse_lion(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors
 	return pathIdx.Size();
 }
 
-
-void svg::Parser::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
+void svg::Parser::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
 {
-	SVG_ERROR("printed color X = " << m_paint.fill);
-	colors.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
-	uint32_t tmpPathNew = path.start_new_path();
-	pathIdx.PushBack(tmpPathNew);
+	curentPaintProp = m_paint;
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(path, colors, pathIdx, curentPaintProp);
+			m_subElementList[iii]->AggDraw(myRenderer, curentPaintProp);
 		}
 	}
-	// this permit to have not the display of the layer substraction ...
-	path.arrange_orientations_all_paths(agg::path_flags_cw);
-	
 }
 
-#include <agg-2.4/agg_rounded_rect.h>
-#include <agg-2.4/agg_conv_stroke.h>
 
 void svg::Parser::GenerateTestFile(void)
 {
-	g_path.remove_all();
-	g_colorsList.Clear();
-	g_pathLdxList.Clear();
-	uint32_t g_npaths = parse_lion(g_path, g_colorsList, g_pathLdxList);
-	agg::pod_array_adaptor<unsigned> path_idx(&g_pathLdxList[0], g_npaths);
-	agg::bounding_rect(g_path, path_idx, 0, g_npaths, &g_x1, &g_y1, &g_x2, &g_y2);
-	g_base_dx = (g_x2 - g_x1) / 2.0;
-	g_base_dy = (g_y2 - g_y1) / 2.0;
-	
-	g_path2.remove_all();
-	g_colorsList2.Clear();
-	g_pathLdxList2.Clear();
-	PaintState curentPaintProp;
-	AggDraw(g_path2, g_colorsList2, g_pathLdxList2, curentPaintProp);
-	agg::pod_array_adaptor<unsigned> path_idx2(&g_pathLdxList2[0], g_pathLdxList2.Size() );
-	agg::bounding_rect(g_path2, path_idx2, 0, g_pathLdxList2.Size(), &g_x12, &g_y12, &g_x22, &g_y22);
-	g_base_dx2 = (g_x22 - g_x12) / 2.0;
-	g_base_dy2 = (g_y22 - g_y12) / 2.0;
-	
 	float coefmult = 2;
 	int width = 800*coefmult;
 	int height = 600*coefmult;
 	
-	unsigned char* buffer = new unsigned char[width * height * 4];
-	memset(buffer, 255, width * height * 4);
-
-	agg::rendering_buffer rbuf(buffer, width, height, width * 4);
-	agg::pixfmt_rgba32 pixf(rbuf);
-	renderer_base rb(pixf);
-	renderer_solid r(rb);
+	svg::Renderer * myRenderer = new svg::Renderer(width,height);
+	AggDraw(*myRenderer, m_paint);
+	etk::UString tmpFileOut = "yyy_out_";
+	tmpFileOut += m_fileName.GetShortFilename();
+	tmpFileOut += ".ppm";
+	myRenderer->WritePpm(tmpFileOut);
 	
-	agg::trans_affine  mtx;
-	mtx *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	mtx *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
-	mtx *= agg::trans_affine_rotation(g_angle);// + agg::pi);
-	mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	mtx *= agg::trans_affine_translation(width*0.3, height/2);
-	
-	// This code renders the lion:
-	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(g_path, mtx);
-	agg::render_all_paths(g_rasterizer, g_scanline, r, trans, &g_colorsList[0], &g_pathLdxList[0], g_npaths);
-	// This code renders a second svg syctem ...:
-	
-	agg::trans_affine  mtx2;
-	mtx2 *= agg::trans_affine_translation(-g_base_dx2, -g_base_dy2);
-	mtx2 *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
-	mtx2 *= agg::trans_affine_rotation(g_angle);// + agg::pi);
-	mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	mtx2 *= agg::trans_affine_translation(width*0.7, height/2);
-	
-	agg::conv_transform<agg::path_storage, agg::trans_affine> trans2(g_path2, mtx2);
-	agg::render_all_paths(g_rasterizer, g_scanline, r, trans2, &g_colorsList2[0], &g_pathLdxList2[0], g_pathLdxList2.Size());
-
-	// Creating a rounded rectangle
-	agg::rounded_rect rect_r(50, 50, 100, 120, 18);
-	rect_r.normalize_radius();
-	// Drawing as an outline
-	agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);
-	rect_p.width(1.0);
-	g_rasterizer.add_path(rect_p);
-	agg::render_scanlines(g_rasterizer, g_scanline, r);
-
-	etk::UString tmpFileOut = etk::UString("zzz_out_") + m_fileName.GetShortFilename() + ".ppm";
-	write_ppm(buffer, width, height, tmpFileOut.Utf8Data());
-	
-	delete [] buffer;
 }
 
 

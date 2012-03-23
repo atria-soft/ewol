@@ -113,14 +113,13 @@ void svg::Group::Display(int32_t spacing)
 	SVG_DEBUG(SpacingDist(spacing) << "Group (STOP)");
 }
 
-void svg::Group::AggDraw(agg::path_storage& path, etk::VectorType<agg::rgba8> &colors, etk::VectorType<uint32_t> &pathIdx, PaintState &curentPaintProp)
+void svg::Group::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
 {
-	AggCheckChange(path, colors, pathIdx, curentPaintProp);
+	curentPaintProp = m_paint;
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(path, colors, pathIdx, curentPaintProp);
+			m_subElementList[iii]->AggDraw(myRenderer, curentPaintProp);
 		}
 	}
-	
 }
 

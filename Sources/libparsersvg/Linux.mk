@@ -15,11 +15,12 @@ LOCAL_EXPORT_LDLIBS :=
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -DSVG_DEBUG_LEVEL=3
-                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\""
+                -DSVG_DEBUG_LEVEL=3 \
+                -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\"" \
+                -Wall
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -DSVG_DEBUG_LEVEL=1
+                -DSVG_DEBUG_LEVEL=1 \
                 -DPARSER_SVG_VERSION_TAG_NAME="\"???-release\""
 endif
 

@@ -16,7 +16,8 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\""
+                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -Wall
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
