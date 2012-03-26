@@ -24,6 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Ellipse.h>
+#include <agg-2.4/agg_conv_stroke.h>
+#include <agg-2.4/agg_ellipse.h>
 
 svg::Ellipse::Ellipse(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
@@ -35,10 +37,14 @@ svg::Ellipse::~Ellipse(void)
 	
 }
 
-bool svg::Ellipse::Parse(TiXmlNode * node)
+bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
+	
 	m_c.x = 0.0;
 	m_c.y = 0.0;
 	m_r.x = 0.0;
@@ -73,6 +79,38 @@ bool svg::Ellipse::Parse(TiXmlNode * node)
 void svg::Ellipse::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Ellipse c=" << m_c << " r=" << m_r);
+}
+
+
+void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+{
+	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
+	// Creating an ellipse
+	agg::ellipse myEllipse(m_c.x, m_c.y, m_r.x, m_r.y, 0);
+	
+	// Calculate transformation matrix ...
+	agg::trans_affine  mtx = m_transformMatrix;
+	mtx *= basicTrans;
+	
+	// set the filling mode : 
+	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+	
+	agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
+	myRenderer.m_rasterizer.add_path(trans);
+	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+
+	if (m_paint.strokeWidth > 0) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+		// Drawing as an outline
+		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);
+		myEllipseStroke.width(m_paint.strokeWidth);
+		agg::conv_transform<agg::conv_stroke<agg::ellipse>, agg::trans_affine> transStroke(myEllipseStroke, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
+
 }
 
 

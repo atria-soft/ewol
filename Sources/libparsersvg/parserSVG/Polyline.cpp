@@ -24,6 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Polyline.h>
+#include <agg-2.4/agg_conv_stroke.h>
+#include <agg-2.4/agg_path_storage.h>
 
 svg::Polyline::Polyline(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
@@ -35,10 +37,15 @@ svg::Polyline::~Polyline(void)
 	
 }
 
-bool svg::Polyline::Parse(TiXmlNode * node)
+bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
+	// line must have a minimum size...
+	m_paint.strokeWidth = 1;
 	ParseTransform(node);
 	ParsePaintAttr(node);
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
 	
 	const char *sss = node->ToElement()->Attribute("points");
 	if (NULL == sss) {
@@ -62,6 +69,33 @@ bool svg::Polyline::Parse(TiXmlNode * node)
 void svg::Polyline::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Polyline nbPoint=" << m_listPoint.Size());
+}
+
+
+void svg::Polyline::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+{
+	agg::path_storage path;
+	path.start_new_path();
+	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
+	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
+		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
+	}
+	//path.close_polygon();
+	
+	agg::trans_affine mtx = m_transformMatrix;
+	mtx *= basicTrans;
+	
+	if (m_paint.strokeWidth > 0) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+		// Drawing as an outline
+		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
+		myPolygonStroke.width(m_paint.strokeWidth);
+		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 }
 
 

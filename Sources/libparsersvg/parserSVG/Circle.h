@@ -37,8 +37,9 @@ namespace svg
 		public:
 			Circle(PaintState parentPaintState);
 			~Circle(void);
-			virtual bool Parse(TiXmlNode * node);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
 			virtual void Display(int32_t spacing);
+			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
 };
 

@@ -46,8 +46,9 @@ void svg::Base::ParseTransform(TiXmlNode *node)
 	if (NULL == inputString) {
 		return;
 	}
+	SVG_VERBOSE("find transform : \"" << inputString << "\"");
 	char tmpData[2048];
-	for (int32_t iii=0; inputString[iii]=='\0' && iii<2047; iii++) {
+	for (int32_t iii=0; inputString[iii]!='\0' && iii<2047; iii++) {
 		if (inputString[iii] == ',') {
 			tmpData[iii] = ' ';
 		} else {
@@ -56,58 +57,46 @@ void svg::Base::ParseTransform(TiXmlNode *node)
 		// end of the string ...
 		tmpData[iii+1] = '\0';
 	}
-	etkFloat_t base[6];
-	etkFloat_t zzz[6];
-	etkFloat_t angle, xxx, yyy;
+	SVG_VERBOSE("find transform : \"" << tmpData << "\"");
+	double matrix[6];
+	float angle, xxx, yyy;
 	int32_t n;
 	char * pointerOnData = tmpData;
 	while (*pointerOnData) {
-		base[0] = 1.0;
-		base[1] = 0.0;
-		base[2] = 0.0;
-		base[3] = 1.0;
-		base[4] = 0.0;
-		base[5] = 0.0;
-		if (sscanf(pointerOnData, "matrix (%f %f %f %f %f %f) %n", &base[0], &base[1], &base[2], &base[3], &base[4], &base[5], &n) == 6) {
-			// nothing to do ...
-		} else if (sscanf(pointerOnData, "translate (%f %f) %n", &base[4], &base[5], &n) == 2) {
-			// nothing to do ...
-		} else if (sscanf(pointerOnData, "translate (%f) %n", &base[4], &n) == 1) {
-			// nothing to do ...
-		} else if (sscanf(pointerOnData, "scale (%f %f) %n", &base[0], &base[3], &n) == 2) {
-			// nothing to do ...
-		} else if (sscanf(pointerOnData, "scale (%f) %n", &base[0], &n) == 1) {
-			base[3] = base[0];
+		if (sscanf(pointerOnData, "matrix (%lf %lf %lf %lf %lf %lf) %n", &matrix[0], &matrix[1], &matrix[2], &matrix[3], &matrix[4], &matrix[5], &n) == 6) {
+			m_transformMatrix.load_from(matrix);
+		} else if (sscanf(pointerOnData, "translate (%f %f) %n", &xxx, &yyy, &n) == 2) {
+			m_transformMatrix *= agg::trans_affine_translation(xxx, yyy);
+			SVG_VERBOSE("Translate : " << xxx << ", " << yyy);
+		} else if (sscanf(pointerOnData, "translate (%f) %n", &xxx, &n) == 1) {
+			m_transformMatrix *= agg::trans_affine_translation(xxx, 0);
+			SVG_VERBOSE("Translate : " << xxx << ", " << 0);
+		} else if (sscanf(pointerOnData, "scale (%f %f) %n", &xxx, &yyy, &n) == 2) {
+			m_transformMatrix *= agg::trans_affine_scaling(xxx, yyy);
+			SVG_VERBOSE("Scale : " << xxx << ", " << yyy);
+		} else if (sscanf(pointerOnData, "scale (%f) %n", &xxx, &n) == 1) {
+			m_transformMatrix *= agg::trans_affine_scaling(xxx, xxx);
+			SVG_VERBOSE("Scale : " << xxx << ", " << xxx);
 		} else if (sscanf(pointerOnData, "rotate (%f %f %f) %n", &angle, &xxx, &yyy, &n) == 3) {
 			angle = angle / 180 * M_PI;
-			base[0] = cos(angle);
-			base[1] = sin(angle);
-			base[2] = -sin(angle);
-			base[3] = cos(angle);
-			base[4] = -xxx * cos(angle) + yyy * sin(angle) + xxx;
-			base[5] = -xxx * sin(angle) - yyy * cos(angle) + yyy;
+			m_transformMatrix *= agg::trans_affine_translation(-xxx, -yyy);
+			m_transformMatrix *= agg::trans_affine_rotation(angle);
+			m_transformMatrix *= agg::trans_affine_translation(xxx, yyy);
 		} else if (sscanf(pointerOnData, "rotate (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			base[0] = cos(angle);
-			base[1] = sin(angle);
-			base[2] = -sin(angle);
-			base[3] = cos(angle);
+			SVG_VERBOSE("rotate : " << angle << "rad, " << (angle/M_PI*180) << "°");
+			m_transformMatrix *= agg::trans_affine_rotation(angle);
 		} else if (sscanf(pointerOnData, "skewX (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			base[2] = tan(angle);
+			SVG_VERBOSE("skewX : " << angle << "rad, " << (angle/M_PI*180) << "\Uffffffff");
+			m_transformMatrix *= agg::trans_affine_skewing(angle, 0.0);
 		} else if (sscanf(pointerOnData, "skewY (%f) %n", &angle, &n) == 1) {
 			angle = angle / 180 * M_PI;
-			base[1] = tan(angle);
+			SVG_VERBOSE("skewY : " << angle << "rad, " << (angle/M_PI*180) << "\Uffffffff");
+			m_transformMatrix *= agg::trans_affine_skewing(0.0, angle);
 		} else {
 			break;
 		}
-		zzz[0] = m_paint.matrix[0]*base[0] + m_paint.matrix[2]*base[1];
-		zzz[1] = m_paint.matrix[1]*base[0] + m_paint.matrix[3]*base[1];
-		zzz[2] = m_paint.matrix[0]*base[2] + m_paint.matrix[2]*base[3];
-		zzz[3] = m_paint.matrix[1]*base[2] + m_paint.matrix[3]*base[3];
-		zzz[4] = m_paint.matrix[0]*base[4] + m_paint.matrix[2]*base[5] + m_paint.matrix[4];
-		zzz[5] = m_paint.matrix[1]*base[4] + m_paint.matrix[3]*base[5] + m_paint.matrix[5];
-		memcpy(m_paint.matrix, zzz, sizeof(etkFloat_t) * 6 );
 		pointerOnData += n;
 	}
 }
@@ -185,6 +174,40 @@ etkFloat_t svg::Base::ParseLength(const char *dataInput)
 	return 0;
 }
 
+// return the next char position ... (after ';' or NULL)
+const char * extractPartOfStyle(const char * input, char * outputType, char * outputData, int32_t maxLen)
+{
+	if (*input == '\0') {
+		return NULL;
+	}
+	int32_t jjj = 0;
+	const char * outputPointer = NULL;
+	outputType[maxLen-1] = '\0';
+	outputType[0] = '\0';
+	outputData[maxLen-1] = '\0';
+	outputData[0] = '\0';
+	char * output = outputType;
+	for( int32_t iii=0; iii<maxLen-1 && input[iii]!='\0'; iii++) {
+		outputPointer = &input[iii];
+		if (input[iii] != ';') {
+			if (input[iii] == ' ') {
+				// nothing to do ... we do not copy espaces ...
+			} else if (input[iii] == ':') {
+				// change the output ...
+				output = outputData;
+				jjj = 0;
+			} else {
+				output[jjj] = input[iii];
+				output[jjj+1] = '\0';
+				jjj++;
+			}
+		} else {
+			break;
+		}
+	}
+	outputPointer++;
+	return outputPointer;
+}
 
 /**
  * @brief Parse a Painting attribute of a specific node
@@ -207,41 +230,43 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	}
 	content = node->ToElement()->Attribute("style");
 	if (NULL != content) {
-		const char *sss;
-		if ((sss = strstr(content, "fill:"))) {
-			sss += 5;
-			while(    sss[0] ==' '
-			       && sss[0]!='\0' ) {
-				sss++;
+		char outputType[1024] = "";
+		char outputValue[1024] = "";
+		
+		for( const char *sss=extractPartOfStyle(content, outputType, outputValue, 1024);
+		     NULL != sss;
+		     sss=extractPartOfStyle(sss, outputType, outputValue, 1024) ) {
+			//SVG_INFO(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
+			if (0 == strcmp(outputType, "fill") ) {
+				m_paint.fill = ParseColor(outputValue);
+			} else if (0 == strcmp(outputType, "stroke") ) {
+				m_paint.stroke = ParseColor(outputValue);
+			} else if (0 == strcmp(outputType, "stroke-width") ) {
+				m_paint.strokeWidth = ParseLength(outputValue);
+			} else if (0 == strcmp(outputType, "opacity") ) {
+				etkFloat_t opacity = ParseLength(outputValue);
+				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				m_paint.fill.alpha = opacity*0xFF;
+				m_paint.stroke.alpha = opacity*0xFF;
+			} else if (0 == strcmp(outputType, "fill-opacity") ) {
+				etkFloat_t opacity = ParseLength(outputValue);
+				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				m_paint.fill.alpha = opacity*0xFF;
+			} else if (0 == strcmp(outputType, "stroke-opacity") ) {
+				etkFloat_t opacity = ParseLength(outputValue);
+				opacity  = etk_max(0.0, etk_min(1.0, opacity));
+				m_paint.stroke.alpha = opacity*0xFF;
+			} else if (0 == strcmp(outputType, "fill-rule") ) {
+				if (0 == strcmp(outputValue, "nonzero") ) {
+					m_paint.flagEvenOdd = false;
+				} else if (0 == strcmp(outputValue, "evenodd") ) {
+					m_paint.flagEvenOdd = true;
+				} else {
+					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [nonzero,evenodd]");
+				}
+			} else {
+				SVG_ERROR("not know painting element in style balise : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			}
-			m_paint.fill = ParseColor(sss);
-		}
-		if ((sss = strstr(content, "stroke:"))) {
-			sss += 7;
-			while(    sss[0] ==' '
-			       && sss[0]!='\0' ) {
-				sss++;
-			}
-			m_paint.stroke = ParseColor(sss);
-		}
-		if ((sss = strstr(content, "stroke-width:"))) {
-			sss += 13;
-			SVG_VERBOSE(" find a stroke width ... : " << sss);
-			while(    sss[0] ==' '
-			       && sss[0]!='\0' ) {
-				sss++;
-			}
-			m_paint.strokeWidth = ParseLength(sss);
-			SVG_VERBOSE("        ==> " << m_paint.strokeWidth);
-		}
-		if ((sss = strstr(content, "opacity:"))) {
-			sss += 8;
-			while(    sss[0] ==' '
-			       && sss[0]!='\0' ) {
-				sss++;
-			}
-			etkFloat_t opacity = ParseLength(sss);
-			m_paint.opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		}
 	}
 }
@@ -555,8 +580,9 @@ color8_ts svg::Base::ParseColor(const char *inputData)
  * @param[in] node standart XML node
  * @return true if no problem arrived
  */
-bool svg::Base::Parse(TiXmlNode * node)
+bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
+	SVG_ERROR("NOT IMPLEMENTED");
 	return false;
 }
 

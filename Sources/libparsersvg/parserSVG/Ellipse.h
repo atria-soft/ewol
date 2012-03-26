@@ -32,13 +32,14 @@ namespace svg
 	class Ellipse : public svg::Base
 	{
 		private:
-			coord2D_ts m_c;        //!< C property of the ellipse
-			coord2D_ts m_r;        //!< R property of the ellipse
+			coord2D_ts m_c;        //!< Center property of the ellipse
+			coord2D_ts m_r;        //!< Radius property of the ellipse
 		public:
 			Ellipse(PaintState parentPaintState);
 			~Ellipse(void);
-			virtual bool Parse(TiXmlNode * node);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
 			virtual void Display(int32_t spacing);
+			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
 };
 

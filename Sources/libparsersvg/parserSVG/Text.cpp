@@ -35,8 +35,9 @@ svg::Text::~Text(void)
 	
 }
 
-bool svg::Text::Parse(TiXmlNode * node)
+bool svg::Text::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
+	SVG_ERROR("NOT IMPLEMENTED");
 	return false;
 }
 

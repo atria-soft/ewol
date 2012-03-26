@@ -47,15 +47,16 @@ namespace svg
 	class Base
 	{
 		protected:
-			PaintState m_paint;
+			PaintState         m_paint;
+			agg::trans_affine  m_transformMatrix; //!< specific render of the curent element
 			const char * SpacingDist(int32_t spacing);
 		public:
 			Base(void) {};
 			Base(PaintState parentPaintState);
 			~Base(void) { };
-			virtual bool Parse(TiXmlNode * node);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
 			//specific drawing for AAG librairy ...
-			virtual void AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp) { };
+			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans) { };
 			
 			virtual void Display(int32_t spacing) { };
 			void ParseTransform(TiXmlNode *node);

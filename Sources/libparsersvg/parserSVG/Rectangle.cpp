@@ -42,7 +42,7 @@ svg::Rectangle::~Rectangle(void)
 	
 }
 
-bool svg::Rectangle::Parse(TiXmlNode * node)
+bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
 	m_position.x = 0.0;
 	m_position.y = 0.0;
@@ -53,6 +53,9 @@ bool svg::Rectangle::Parse(TiXmlNode * node)
 	
 	ParseTransform(node);
 	ParsePaintAttr(node);
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
 	
 	ParsePosition(node, m_position, m_size);
 	
@@ -72,8 +75,7 @@ void svg::Rectangle::Display(int32_t spacing)
 	SVG_DEBUG(SpacingDist(spacing) << "Rectangle : pos=" << m_position << " size=" << m_size << " corner=" << m_roundedCorner);
 }
 
-
-void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
+void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
 	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
 	// Creating a rounded rectangle
@@ -81,32 +83,27 @@ void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentP
 	rect_r.radius(m_roundedCorner.x, m_roundedCorner.y);
 	rect_r.normalize_radius();
 	
-	myRenderer.m_rasterizer.add_path(rect_r);
+	agg::trans_affine  mtx = m_transformMatrix;
+	// herited modifications ...
+	mtx *= basicTrans;
+	
+	agg::conv_transform<agg::rounded_rect, agg::trans_affine> trans(rect_r, mtx);
+	// set the filling mode : 
+	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+	myRenderer.m_rasterizer.add_path(trans);
 	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
 
 	if (m_paint.strokeWidth > 0) {
 		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
 		// Drawing as an outline
 		agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
 		rect_p.width(m_paint.strokeWidth);
-		myRenderer.m_rasterizer.add_path(rect_p);
+		agg::conv_transform<agg::conv_stroke<agg::rounded_rect>, agg::trans_affine> transStroke(rect_p, mtx);
+		myRenderer.m_rasterizer.add_path(transStroke);
 		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
 	}
-	
-	/*
-	agg::trans_affine  mtx;
-	//mtx *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	//mtx *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
-	//mtx *= agg::trans_affine_rotation(g_angle);// + agg::pi);
-	//mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	//mtx *= agg::trans_affine_translation(width*0.3, height/2);
-	mtx *= agg::trans_affine_translation(myRenderer.m_size.x*0.5, myRenderer.m_size.x/2);
-	
-	// This code renders the lion:
-	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
-	
-	agg::render_all_paths( myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea, trans, &colorsList[0], &pathListId[0], pathListId.Size());
-	*/
 
 }
 

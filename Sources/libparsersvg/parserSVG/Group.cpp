@@ -46,7 +46,7 @@ svg::Group::~Group(void)
 	
 }
 
-bool svg::Group::Parse(TiXmlNode * node)
+bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
 	// parse ...
 	coord2D_ts pos;
@@ -54,6 +54,12 @@ bool svg::Group::Parse(TiXmlNode * node)
 	ParseTransform(node);
 	ParsePosition(node, pos, size);
 	ParsePaintAttr(node);
+	SVG_VERBOSE("parsed G1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
+	
+	SVG_VERBOSE("parsed G2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
 	// parse all sub node :
 	for(TiXmlNode * child = node->FirstChild(); NULL != child; child = child->NextSibling() ) {
@@ -88,7 +94,7 @@ bool svg::Group::Parse(TiXmlNode * node)
 			if (NULL == elementParser) {
 				SVG_ERROR("(l "<<child->Row()<<") error on node: \""<<localValue<<"\" allocation error or not supported ...");
 			} else {
-				if (false == elementParser->Parse(child)) {
+				if (false == elementParser->Parse(child, m_transformMatrix)) {
 					SVG_ERROR("(l "<<child->Row()<<") error on node: \""<<localValue<<"\" Sub Parsing ERROR");
 					delete(elementParser);
 					elementParser = NULL;
@@ -113,12 +119,11 @@ void svg::Group::Display(int32_t spacing)
 	SVG_DEBUG(SpacingDist(spacing) << "Group (STOP)");
 }
 
-void svg::Group::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
+void svg::Group::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	curentPaintProp = m_paint;
 	for (int32_t iii=0; iii<m_subElementList.Size(); iii++) {
 		if (NULL != m_subElementList[iii]) {
-			m_subElementList[iii]->AggDraw(myRenderer, curentPaintProp);
+			m_subElementList[iii]->AggDraw(myRenderer, basicTrans);
 		}
 	}
 }

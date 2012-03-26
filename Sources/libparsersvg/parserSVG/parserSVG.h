@@ -45,7 +45,7 @@ namespace svg
 			bool IsLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
-			virtual void AggDraw(svg::Renderer& myRenderer, PaintState &curentPaintProp);
+			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};
 };
 

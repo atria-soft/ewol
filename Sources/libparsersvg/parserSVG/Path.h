@@ -29,14 +29,68 @@
 
 namespace svg
 {
+	typedef enum {
+		PATH_ENUM_STOP,
+		PATH_ENUM_GOTO,
+		PATH_ENUM_LINETO,
+		PATH_ENUM_CURVETO,
+		PATH_ENUM_SMOTH_CURVETO,
+		PATH_ENUM_BEZIER_CURVETO,
+		PATH_ENUM_BEZIER_SMOTH_CURVETO,
+		PATH_ENUM_ELLIPTIC,
+	} pathEnum_te;
+	
+	typedef struct {
+		pathEnum_te cmd;
+		union {
+			struct{
+				etkFloat_t x;
+				etkFloat_t y;
+			} position_s;
+			struct{
+				etkFloat_t x1;
+				etkFloat_t y1;
+				etkFloat_t x2;
+				etkFloat_t y2;
+				etkFloat_t x3;
+				etkFloat_t y3;
+			}curveto_s;
+			struct{
+				etkFloat_t x1;
+				etkFloat_t y1;
+				etkFloat_t x2;
+				etkFloat_t y2;
+			}shorthandSmoothCurveto_s;
+			struct{
+				etkFloat_t x1;
+				etkFloat_t y1;
+				etkFloat_t x2;
+				etkFloat_t y2;
+			}quadraticBezierCurveto_s;
+			struct{
+				etkFloat_t x;
+				etkFloat_t y;
+			} shorthandSmoothQuadraticBezierCurveto_s;
+			struct{
+				etkFloat_t rx;
+				etkFloat_t ry;
+				etkFloat_t rotation;
+				etkFloat_t large_arc;
+				etkFloat_t sweep;
+				etkFloat_t x;
+				etkFloat_t y;
+			}ellipticArc_s;
+		};
+	}pathBasic_ts;
+	
 	class Path : public svg::Base
 	{
 		private:
-			
+			etk::VectorType<pathBasic_ts> m_listElement;
 		public:
 			Path(PaintState parentPaintState);
 			~Path(void);
-			virtual bool Parse(TiXmlNode * node);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
 			virtual void Display(int32_t spacing);
 	};
 };

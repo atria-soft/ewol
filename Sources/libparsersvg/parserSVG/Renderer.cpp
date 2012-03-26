@@ -74,7 +74,7 @@ svg::Renderer::Renderer(uint32_t width, uint32_t height)
 	//m_basicMatrix *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
 	//m_basicMatrix *= agg::trans_affine_rotation(g_angle);// + agg::pi);
 	//m_basicMatrix *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
+	//m_basicMatrix *= agg::trans_affine_translation(m_size.x*0.7, m_size.y/2);
 }
 
 svg::Renderer::~Renderer(void)

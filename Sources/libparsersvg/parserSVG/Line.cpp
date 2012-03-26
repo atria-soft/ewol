@@ -24,6 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Line.h>
+#include <agg-2.4/agg_conv_stroke.h>
+#include <agg-2.4/agg_path_storage.h>
 
 svg::Line::Line(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
@@ -38,10 +40,15 @@ svg::Line::~Line(void)
 	
 }
 
-bool svg::Line::Parse(TiXmlNode * node)
+bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
+	// line must have a minimum size...
+	m_paint.strokeWidth = 1;
 	ParseTransform(node);
 	ParsePaintAttr(node);
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
 	
 	const char * content = node->ToElement()->Attribute("x1");
 	if (NULL != content) {
@@ -59,11 +66,37 @@ bool svg::Line::Parse(TiXmlNode * node)
 	if (NULL != content) {
 		m_stopPos.y = ParseLength(content);
 	}
+	return true;
 }
 
 void svg::Line::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Line " << m_startPos << " to " << m_stopPos);
+}
+
+
+void svg::Line::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
+{
+	agg::path_storage path;
+	path.start_new_path();
+	path.move_to(m_startPos.x, m_startPos.y);
+	path.line_to(m_stopPos.x, m_stopPos.y);
+	//path.close_polygon();
+	
+	agg::trans_affine mtx = m_transformMatrix;
+	mtx *= basicTrans;
+	
+	if (m_paint.strokeWidth > 0) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+		// Drawing as an outline
+		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
+		myPolygonStroke.width(m_paint.strokeWidth);
+		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 }
 
 

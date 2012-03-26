@@ -42,46 +42,12 @@ namespace svg
 {
 	#define MATRIX_SIZE       (6)
 	class PaintState {
-		public :
-			PaintState(void) {};
-			~PaintState(void) {};
-			color8_ts  fill;
-			color8_ts  stroke;
-			etkFloat_t strokeWidth;
+		public:
+			color8_ts         fill;
+			color8_ts         stroke;
+			etkFloat_t        strokeWidth;
+			bool              flagEvenOdd;
 			coord2D_ts viewPort;
-			etkFloat_t matrix[MATRIX_SIZE];
-			etkFloat_t opacity;   //!< opacity on the result drawing ...
-		bool  operator!= (const svg::PaintState& paintExt) const
-		{
-			if(    fill.red   != paintExt.fill.red
-			    || fill.green != paintExt.fill.green
-			    || fill.blue  != paintExt.fill.blue
-			    || fill.alpha != paintExt.fill.alpha) {
-				return true;
-			}
-			if(    stroke.red   != paintExt.stroke.red
-			    || stroke.green != paintExt.stroke.green
-			    || stroke.blue  != paintExt.stroke.blue
-			    || stroke.alpha != paintExt.stroke.alpha) {
-				return true;
-			}
-			if (strokeWidth != paintExt.strokeWidth) {
-				return true;
-			}
-			if(    viewPort.x != paintExt.viewPort.x
-			    || viewPort.y != paintExt.viewPort.y) {
-				return true;
-			}
-			if(    matrix[0] != paintExt.matrix[0]
-			    || matrix[1] != paintExt.matrix[1]
-			    || matrix[2] != paintExt.matrix[2]
-			    || matrix[3] != paintExt.matrix[3]
-			    || matrix[4] != paintExt.matrix[4]
-			    || matrix[5] != paintExt.matrix[5]) {
-				return true;
-			}
-			return false;
-		}
 	};
 	
 	// basic definition type for the renderer
@@ -102,7 +68,6 @@ namespace svg
 			rendererSolid_t *             m_renderArea;
 			agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
 			agg::scanline_p8              m_scanLine;    //!< 
-			agg::trans_affine             m_basicMatrix; //!< specific render of the curent element
 	};
 };
 

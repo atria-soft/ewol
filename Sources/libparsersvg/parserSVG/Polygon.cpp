@@ -24,6 +24,8 @@
 
 #include <parserSVG/Debug.h>
 #include <parserSVG/Polygon.h>
+#include <agg-2.4/agg_conv_stroke.h>
+#include <agg-2.4/agg_path_storage.h>
 
 svg::Polygon::Polygon(PaintState parentPaintState) : svg::Base(parentPaintState)
 {
@@ -35,10 +37,17 @@ svg::Polygon::~Polygon(void)
 	
 }
 
-bool svg::Polygon::Parse(TiXmlNode * node)
+bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);
+	
+	SVG_VERBOSE("parsed P1.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
+	
+	// add the property of the parrent modifications ...
+	m_transformMatrix *= parentTrans;
+	
+	SVG_VERBOSE("parsed P2.   trans : (" << m_transformMatrix.sx << "," << m_transformMatrix.shy << "," << m_transformMatrix.shx << "," << m_transformMatrix.sy << "," << m_transformMatrix.tx << "," << m_transformMatrix.ty << ")");
 	
 	const char *sss = node->ToElement()->Attribute("points");
 	if (NULL == sss) {
@@ -64,29 +73,12 @@ void svg::Polygon::Display(int32_t spacing)
 	SVG_DEBUG(SpacingDist(spacing) << "Polygon nbPoint=" << m_listPoint.Size());
 }
 
-
-#include <agg-2.4/agg_basics.h>
-#include <agg-2.4/agg_rendering_buffer.h>
-#include <agg-2.4/agg_rasterizer_scanline_aa.h>
-#include <agg-2.4/agg_scanline_p.h>
-#include <agg-2.4/agg_renderer_scanline.h>
-#include <agg-2.4/agg_path_storage.h>
-#include <agg-2.4/agg_conv_transform.h>
-#include <agg-2.4/agg_bounding_rect.h>
-#include <agg-2.4/agg_color_rgba.h>
-#include <agg-2.4/agg_pixfmt_rgba.h>
-
-void svg::Polygon::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPaintProp)
+void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans)
 {
-	curentPaintProp = m_paint;
-	agg::path_storage             path;
-	etk::VectorType<agg::rgba8>   colorsList;
-	etk::VectorType<uint32_t>     pathListId;
+	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
 	
-	// New color. Every new color creates new path in the path object.
-	colorsList.PushBack(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
-	uint32_t tmpPathNew = path.start_new_path();
-	pathListId.PushBack(tmpPathNew);
+	agg::path_storage path;
+	path.start_new_path();
 	
 	path.move_to(m_listPoint[0].x, m_listPoint[0].y);
 	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
@@ -95,17 +87,26 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, svg::PaintState &curentPai
 	path.close_polygon();
 	
 	
-	agg::trans_affine  mtx;
-	//mtx *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
-	//mtx *= agg::trans_affine_scaling(g_scale*coefmult, g_scale*coefmult);
-	//mtx *= agg::trans_affine_rotation(g_angle);// + agg::pi);
-	//mtx *= agg::trans_affine_skewing(g_skew_x/1000.0, g_skew_y/1000.0);
-	//mtx *= agg::trans_affine_translation(width*0.3, height/2);
-	mtx *= agg::trans_affine_translation(myRenderer.m_size.x*0.5, myRenderer.m_size.x/2);
+	agg::trans_affine mtx = m_transformMatrix;
+	mtx *= basicTrans;
 	
-	// This code renders the lion:
 	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
+	// set the filling mode : 
+	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+	myRenderer.m_rasterizer.add_path(trans);
+	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
 	
-	agg::render_all_paths( myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea, trans, &colorsList[0], &pathListId[0], pathListId.Size());
+	
+	if (m_paint.strokeWidth > 0) {
+		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
+		// Drawing as an outline
+		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);
+		myPolygonStroke.width(m_paint.strokeWidth);
+		agg::conv_transform<agg::conv_stroke<agg::path_storage>, agg::trans_affine> transStroke(myPolygonStroke, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule(agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(transStroke);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 }
 
