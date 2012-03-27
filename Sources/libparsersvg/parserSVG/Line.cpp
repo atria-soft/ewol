@@ -40,7 +40,7 @@ svg::Line::~Line(void)
 	
 }
 
-bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
@@ -66,6 +66,8 @@ bool svg::Line::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 	if (NULL != content) {
 		m_stopPos.y = ParseLength(content);
 	}
+	sizeMax.x = etk_max(m_startPos.x, m_stopPos.x);
+	sizeMax.y = etk_max(m_startPos.y, m_stopPos.y);
 	return true;
 }
 
@@ -81,8 +83,31 @@ void svg::Line::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans
 	path.start_new_path();
 	path.move_to(m_startPos.x, m_startPos.y);
 	path.line_to(m_stopPos.x, m_stopPos.y);
-	//path.close_polygon();
-	
+	/*
+	// configure the end of the line : 
+	switch (m_paint.lineCap) {
+		case svg::LINECAP_SQUARE:
+			path.line_cap(agg::square_cap);
+			break;
+		case svg::LINECAP_ROUND:
+			path.line_cap(agg::round_cap);
+			break;
+		default: // svg::LINECAP_BUTT
+			path.line_cap(agg::butt_cap);
+			break;
+	}
+	switch (m_paint.lineJoin) {
+		case svg::LINEJOIN_BEVEL:
+			path.line_join(agg::bevel_join);
+			break;
+		case svg::LINEJOIN_ROUND:
+			path.line_join(agg::round_join);
+			break;
+		default: // svg::LINEJOIN_MITER
+			path.line_join(agg::miter_join);
+			break;
+	}
+	*/
 	agg::trans_affine mtx = m_transformMatrix;
 	mtx *= basicTrans;
 	

@@ -42,7 +42,7 @@ namespace svg
 		public:
 			Polygon(PaintState parentPaintState);
 			~Polygon(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

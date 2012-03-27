@@ -37,7 +37,7 @@ svg::Polyline::~Polyline(void)
 	
 }
 
-bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	// line must have a minimum size...
 	m_paint.strokeWidth = 1;
@@ -52,12 +52,16 @@ bool svg::Polyline::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 		SVG_ERROR("(l "<<node->Row()<<") polyline: missing points attribute");
 		return false;
 	}
+	sizeMax.x = 0;
+	sizeMax.y = 0;
 	SVG_VERBOSE("Parse polyline : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
 		coord2D_ts pos;
 		int32_t n;
 		if (sscanf(sss, "%f,%f %n", &pos.x, &pos.y, &n) == 2) {
 			m_listPoint.PushBack(pos);
+			sizeMax.x = etk_max(sizeMax.x, pos.x);
+			sizeMax.y = etk_max(sizeMax.y, pos.y);
 			sss += n;
 		} else {
 			break;
@@ -80,7 +84,31 @@ void svg::Polyline::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicT
 	for( int32_t iii=1; iii< m_listPoint.Size(); iii++) {
 		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
 	}
-	//path.close_polygon();
+	/*
+	// configure the end of the line : 
+	switch (m_paint.lineCap) {
+		case svg::LINECAP_SQUARE:
+			path.line_cap(agg::square_cap);
+			break;
+		case svg::LINECAP_ROUND:
+			path.line_cap(agg::round_cap);
+			break;
+		default: // svg::LINECAP_BUTT
+			path.line_cap(agg::butt_cap);
+			break;
+	}
+	switch (m_paint.lineJoin) {
+		case svg::LINEJOIN_BEVEL:
+			path.line_join(agg::bevel_join);
+			break;
+		case svg::LINEJOIN_ROUND:
+			path.line_join(agg::round_join);
+			break;
+		default: // svg::LINEJOIN_MITER
+			path.line_join(agg::miter_join);
+			break;
+	}
+	*/
 	
 	agg::trans_affine mtx = m_transformMatrix;
 	mtx *= basicTrans;

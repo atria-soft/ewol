@@ -38,7 +38,7 @@ svg::Circle::~Circle(void)
 	
 }
 
-bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	m_radius = 0.0;
 	m_position.x = 0.0;
@@ -70,6 +70,8 @@ bool svg::Circle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 		SVG_ERROR("(l "<<node->Row()<<") Circle \"r\" is negative");
 		return false;
 	}
+	sizeMax.x = m_position.x + m_radius;
+	sizeMax.y = m_position.y + m_radius;
 	return true;
 }
 
@@ -92,11 +94,13 @@ void svg::Circle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTra
 	// set the filling mode : 
 	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 	
-	agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myCircle, mtx);
-	myRenderer.m_rasterizer.add_path(trans);
-	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	if (m_paint.fill.alpha != 0x00) {
+		agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myCircle, mtx);
+		myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 
-	if (m_paint.strokeWidth > 0) {
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
 		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
 		// Drawing as an outline
 		agg::conv_stroke<agg::ellipse> myCircleStroke(myCircle);

@@ -40,13 +40,25 @@
 
 namespace svg
 {
-	#define MATRIX_SIZE       (6)
+	typedef enum {
+		LINECAP_BUTT,
+		LINECAP_ROUND,
+		LINECAP_SQUARE,
+	} lineCap_te;
+	typedef enum {
+		LINEJOIN_MITER,
+		LINEJOIN_ROUND,
+		LINEJOIN_BEVEL,
+	} lineJoin_te;
+	
 	class PaintState {
 		public:
 			color8_ts         fill;
 			color8_ts         stroke;
 			etkFloat_t        strokeWidth;
 			bool              flagEvenOdd;
+			lineCap_te        lineCap;
+			lineJoin_te       lineJoin;
 			coord2D_ts viewPort;
 	};
 	

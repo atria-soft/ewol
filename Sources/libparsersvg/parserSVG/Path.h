@@ -26,13 +26,16 @@
 #define __SVG_PATH_H__
 
 #include <parserSVG/Base.h>
+#include <agg-2.4/agg_path_storage.h>
 
 namespace svg
 {
 	typedef enum {
 		PATH_ENUM_STOP,
-		PATH_ENUM_GOTO,
+		PATH_ENUM_MOVETO,
 		PATH_ENUM_LINETO,
+		PATH_ENUM_LINETO_H,
+		PATH_ENUM_LINETO_V,
 		PATH_ENUM_CURVETO,
 		PATH_ENUM_SMOTH_CURVETO,
 		PATH_ENUM_BEZIER_CURVETO,
@@ -42,45 +45,8 @@ namespace svg
 	
 	typedef struct {
 		pathEnum_te cmd;
-		union {
-			struct{
-				etkFloat_t x;
-				etkFloat_t y;
-			} position_s;
-			struct{
-				etkFloat_t x1;
-				etkFloat_t y1;
-				etkFloat_t x2;
-				etkFloat_t y2;
-				etkFloat_t x3;
-				etkFloat_t y3;
-			}curveto_s;
-			struct{
-				etkFloat_t x1;
-				etkFloat_t y1;
-				etkFloat_t x2;
-				etkFloat_t y2;
-			}shorthandSmoothCurveto_s;
-			struct{
-				etkFloat_t x1;
-				etkFloat_t y1;
-				etkFloat_t x2;
-				etkFloat_t y2;
-			}quadraticBezierCurveto_s;
-			struct{
-				etkFloat_t x;
-				etkFloat_t y;
-			} shorthandSmoothQuadraticBezierCurveto_s;
-			struct{
-				etkFloat_t rx;
-				etkFloat_t ry;
-				etkFloat_t rotation;
-				etkFloat_t large_arc;
-				etkFloat_t sweep;
-				etkFloat_t x;
-				etkFloat_t y;
-			}ellipticArc_s;
-		};
+		bool        relative;
+		etkFloat_t  element[7];
 	}pathBasic_ts;
 	
 	class Path : public svg::Base
@@ -90,8 +56,19 @@ namespace svg
 		public:
 			Path(PaintState parentPaintState);
 			~Path(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
 			virtual void Display(int32_t spacing);
+			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+		private:
+			void AbstractMoveTo(agg::path_storage& path, bool rel, double x, double y);
+			void AbstractLineTo(agg::path_storage& path, bool rel, double x, double y);
+			void AbstractHLineTo(agg::path_storage& path, bool rel, double x);
+			void AbstractVLineTo(agg::path_storage& path, bool rel, double y);
+			void AbstractCurve3(agg::path_storage& path, bool rel, double x1, double y1, double x, double y);
+			void AbstractCurve3(agg::path_storage& path, bool rel, double x, double y);
+			void AbstractCurve4(agg::path_storage& path, bool rel, double x1, double y1, double x2, double y2, double x,  double y);
+			void AbstractCurve4(agg::path_storage& path, bool rel, double x2, double y2, double x, double y);
+			void AbstractCloseSubpath(agg::path_storage& path);
 	};
 };
 

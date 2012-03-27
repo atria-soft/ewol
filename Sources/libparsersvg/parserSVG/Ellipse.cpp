@@ -37,7 +37,7 @@ svg::Ellipse::~Ellipse(void)
 	
 }
 
-bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);
@@ -72,6 +72,8 @@ bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 		SVG_ERROR("(l "<<node->Row()<<") Ellipse \"ry\" is not present");
 		return false;
 	}
+	sizeMax.x = m_c.x + m_r.x;
+	sizeMax.y = m_c.y + m_r.y;
 	
 	return true;
 }
@@ -95,11 +97,13 @@ void svg::Ellipse::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 	// set the filling mode : 
 	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
 	
-	agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
-	myRenderer.m_rasterizer.add_path(trans);
-	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	if (m_paint.fill.alpha != 0x00) {
+		agg::conv_transform<agg::ellipse, agg::trans_affine> trans(myEllipse, mtx);
+		myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 
-	if (m_paint.strokeWidth > 0) {
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
 		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
 		// Drawing as an outline
 		agg::conv_stroke<agg::ellipse> myEllipseStroke(myEllipse);

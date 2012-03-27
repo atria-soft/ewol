@@ -38,7 +38,7 @@ namespace svg
 		public:
 			Rectangle(PaintState parentPaintState);
 			~Rectangle(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

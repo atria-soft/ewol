@@ -113,8 +113,8 @@ void svg::Base::ParsePosition(const TiXmlNode *node, coord2D_ts &pos, coord2D_ts
 {
 	pos.x = 0;
 	pos.y = 0;
-	size.x = m_paint.viewPort.x;
-	size.y = m_paint.viewPort.y;
+	size.x = 0;
+	size.y = 0;
 
 	const char * content = node->ToElement()->Attribute("x");
 	if (NULL != content) {
@@ -243,6 +243,7 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 				m_paint.stroke = ParseColor(outputValue);
 			} else if (0 == strcmp(outputType, "stroke-width") ) {
 				m_paint.strokeWidth = ParseLength(outputValue);
+				//SVG_ERROR(" input : \"" << outputValue << "\" ==> " <<m_paint.strokeWidth);
 			} else if (0 == strcmp(outputType, "opacity") ) {
 				etkFloat_t opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
@@ -263,6 +264,28 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 					m_paint.flagEvenOdd = true;
 				} else {
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [nonzero,evenodd]");
+				}
+			} else if (0 == strcmp(outputType, "stroke-linecap") ) {
+				if (0 == strcmp(outputValue, "butt") ) {
+					m_paint.lineCap = svg::LINECAP_BUTT;
+				} else if (0 == strcmp(outputValue, "round") ) {
+					m_paint.lineCap = svg::LINECAP_ROUND;
+				} else if (0 == strcmp(outputValue, "square") ) {
+					m_paint.lineCap = svg::LINECAP_SQUARE;
+				} else {
+					m_paint.lineCap = svg::LINECAP_BUTT;
+					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [butt,round,square]");
+				}
+			} else if (0 == strcmp(outputType, "stroke-linejoin") ) {
+				if (0 == strcmp(outputValue, "miter") ) {
+					m_paint.lineJoin = svg::LINEJOIN_MITER;
+				} else if (0 == strcmp(outputValue, "round") ) {
+					m_paint.lineJoin = svg::LINEJOIN_ROUND;
+				} else if (0 == strcmp(outputValue, "bevel") ) {
+					m_paint.lineJoin = svg::LINEJOIN_BEVEL;
+				} else {
+					m_paint.lineJoin = svg::LINEJOIN_MITER;
+					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
 			} else {
 				SVG_ERROR("not know painting element in style balise : \"" << outputType << "\" with value : \"" << outputValue << "\"");
@@ -580,9 +603,11 @@ color8_ts svg::Base::ParseColor(const char *inputData)
  * @param[in] node standart XML node
  * @return true if no problem arrived
  */
-bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Base::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	SVG_ERROR("NOT IMPLEMENTED");
+	sizeMax.x = 0;
+	sizeMax.y = 0;
 	return false;
 }
 

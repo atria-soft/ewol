@@ -37,7 +37,7 @@ svg::Polygon::~Polygon(void)
 	
 }
 
-bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);
@@ -54,6 +54,8 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 		SVG_ERROR("(l "<<node->Row()<<") polygon: missing points attribute");
 		return false;
 	}
+	sizeMax.x = 0;
+	sizeMax.y = 0;
 	SVG_VERBOSE("Parse polygon : \"" << sss << "\"");
 	while ('\0' != sss[0]) {
 		coord2D_ts pos;
@@ -61,6 +63,8 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 		if (sscanf(sss, "%f,%f %n", &pos.x, &pos.y, &n) == 2) {
 			m_listPoint.PushBack(pos);
 			sss += n;
+			sizeMax.x = etk_max(sizeMax.x, pos.x);
+			sizeMax.y = etk_max(sizeMax.y, pos.y);
 		} else {
 			break;
 		}
@@ -85,19 +89,44 @@ void svg::Polygon::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTr
 		path.line_to(m_listPoint[iii].x, m_listPoint[iii].y);
 	}
 	path.close_polygon();
-	
+	/*
+	// configure the end of the line : 
+	switch (m_paint.lineCap) {
+		case svg::LINECAP_SQUARE:
+			path.line_cap(agg::square_cap);
+			break;
+		case svg::LINECAP_ROUND:
+			path.line_cap(agg::round_cap);
+			break;
+		default: // svg::LINECAP_BUTT
+			path.line_cap(agg::butt_cap);
+			break;
+	}
+	switch (m_paint.lineJoin) {
+		case svg::LINEJOIN_BEVEL:
+			path.line_join(agg::bevel_join);
+			break;
+		case svg::LINEJOIN_ROUND:
+			path.line_join(agg::round_join);
+			break;
+		default: // svg::LINEJOIN_MITER
+			path.line_join(agg::miter_join);
+			break;
+	}
+	*/
 	
 	agg::trans_affine mtx = m_transformMatrix;
 	mtx *= basicTrans;
 	
-	agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
-	// set the filling mode : 
-	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-	myRenderer.m_rasterizer.add_path(trans);
-	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	if (m_paint.fill.alpha != 0x00) {
+		agg::conv_transform<agg::path_storage, agg::trans_affine> trans(path, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 	
-	
-	if (m_paint.strokeWidth > 0) {
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
 		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
 		// Drawing as an outline
 		agg::conv_stroke<agg::path_storage> myPolygonStroke(path);

@@ -42,7 +42,7 @@ svg::Rectangle::~Rectangle(void)
 	
 }
 
-bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
+bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
 {
 	m_position.x = 0.0;
 	m_position.y = 0.0;
@@ -67,6 +67,8 @@ bool svg::Rectangle::Parse(TiXmlNode * node, agg::trans_affine& parentTrans)
 	if (NULL != content) {
 		m_roundedCorner.y = ParseLength(content);
 	}
+	sizeMax.x = m_position.x + m_size.x + m_paint.strokeWidth;
+	sizeMax.y = m_position.y + m_size.y + m_paint.strokeWidth;
 	return true;
 }
 
@@ -79,7 +81,7 @@ void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basic
 {
 	myRenderer.m_renderArea->color(agg::rgba8(m_paint.fill.red, m_paint.fill.green, m_paint.fill.blue, m_paint.fill.alpha));
 	// Creating a rounded rectangle
-	agg::rounded_rect rect_r(m_position.x, m_position.y, m_size.x, m_size.y, m_roundedCorner.x);
+	agg::rounded_rect rect_r(m_position.x, m_position.y, m_position.x+m_size.x, m_position.y+m_size.y, m_roundedCorner.x);
 	rect_r.radius(m_roundedCorner.x, m_roundedCorner.y);
 	rect_r.normalize_radius();
 	
@@ -87,13 +89,15 @@ void svg::Rectangle::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basic
 	// herited modifications ...
 	mtx *= basicTrans;
 	
-	agg::conv_transform<agg::rounded_rect, agg::trans_affine> trans(rect_r, mtx);
-	// set the filling mode : 
-	myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
-	myRenderer.m_rasterizer.add_path(trans);
-	agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	if (m_paint.fill.alpha != 0x00) {
+		agg::conv_transform<agg::rounded_rect, agg::trans_affine> trans(rect_r, mtx);
+		// set the filling mode : 
+		myRenderer.m_rasterizer.filling_rule((m_paint.flagEvenOdd)?agg::fill_even_odd:agg::fill_non_zero);
+		myRenderer.m_rasterizer.add_path(trans);
+		agg::render_scanlines(myRenderer.m_rasterizer, myRenderer.m_scanLine, *myRenderer.m_renderArea);
+	}
 
-	if (m_paint.strokeWidth > 0) {
+	if (m_paint.strokeWidth > 0 && m_paint.stroke.alpha!=0x00 ) {
 		myRenderer.m_renderArea->color(agg::rgba8(m_paint.stroke.red, m_paint.stroke.green, m_paint.stroke.blue, m_paint.stroke.alpha));
 		// Drawing as an outline
 		agg::conv_stroke<agg::rounded_rect> rect_p(rect_r);

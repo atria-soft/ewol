@@ -37,7 +37,9 @@ namespace svg
 			etk::File                    m_fileName;
 			bool                         m_loadOK;
 			etk::UString                 m_version;
+			etk::UString                 m_title;
 			etk::VectorType<svg::Base *> m_subElementList;
+			coord2D_ts                   m_size;
 	
 		public:
 			Parser(etk::File fileName);
