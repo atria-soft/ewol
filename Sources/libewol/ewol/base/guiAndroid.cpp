@@ -82,7 +82,7 @@ static etkFloat_t gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0
 
 void EWOL_NativeRender(void)
 {
-	ewol::UpdateTextureContext();
+	ewol::texture::UpdateContext();
 	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
 	if(NULL == gui_uniqueWindows) {
 		// set the size of the open GL system

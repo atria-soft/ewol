@@ -69,6 +69,7 @@ namespace svg
 	class Renderer {
 		private:
 			uint8_t *                     m_buffer;
+			uint32_t                      m_allocatedSize;
 		public:
 			Renderer(uint32_t width, uint32_t height);
 			~Renderer(void);
@@ -80,6 +81,8 @@ namespace svg
 			rendererSolid_t *             m_renderArea;
 			agg::rasterizer_scanline_aa<> m_rasterizer;  //!< AGG renderer system
 			agg::scanline_p8              m_scanLine;    //!< 
+			uint8_t* GetDataPointer(void) { return m_buffer; };
+			uint32_t GetDataSize(void)    { return m_allocatedSize; };
 	};
 };
 

@@ -141,9 +141,13 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 		myButton = new ewol::Button(label);
 		if (NULL == myButton) {
 			EWOL_ERROR("Allocation button error");
-			return tmpObject->m_localId;;
+			return tmpObject->m_localId;
 		}
+		// set the image if one is present ...
+		myButton->SetImage(tmpObject->m_image);
+		// add it in the widget list
 		ewol::SizerHori::SubWidgetAdd(myButton);
+		// keep the specific event ...
 		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 		tmpObject->m_widgetPointer = myButton;
 	}
@@ -229,13 +233,17 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 								myButton = new ewol::Button(m_listElement[jjj]->m_label);
 								if (NULL == myButton) {
 									EWOL_ERROR("Allocation Error");
+								} else {
+									// set the image if one is present ...
+									myButton->SetImage(m_listElement[jjj]->m_image);
+									myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed, "");
+									myButton->SetExpendX(true);
+									myButton->SetFillX(true);
+									myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
+									// add it in the widget list
+									mySizerVert->SubWidgetAdd(myButton);
+									m_listElement[jjj]->m_widgetPointer = myButton;
 								}
-								m_listElement[jjj]->m_widgetPointer = myButton;
-								myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed, "");
-								myButton->SetExpendX(true);
-								myButton->SetFillX(true);
-								myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
-								mySizerVert->SubWidgetAdd(myButton);
 							}
 						}
 					ewol::PopUpWidgetPush(m_widgetContextMenu);

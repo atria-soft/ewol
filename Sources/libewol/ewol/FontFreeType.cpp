@@ -359,7 +359,7 @@ class FTFontInternal
 			EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
 			// use the texture manager to have the texture availlable every restart of the screen
 			//textureId = LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA8, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
-			textureId = ewol::LoadTexture(GL_TEXTURE_2D, 0, GL_ALPHA, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
+			textureId = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_ALPHA, textureWidth, textureHeight, 0, GL_ALPHA, GL_UNSIGNED_BYTE, expanded_data, byfferDataSize * sizeof(GLubyte), "---FreeFont---" );
 			
 			EWOL_DEBUG("end load texture font");
 			// With The Texture Created, We Don't Need The Expanded Data Anymore.

@@ -47,11 +47,11 @@
 #include <agg-2.4/agg_color_rgba.h>
 #include <agg-2.4/agg_pixfmt_rgba.h>
 
-svg::Parser::Parser(etk::File fileName)
+svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 {
 	m_fileName = fileName;
 	m_version = "0.0";
-	m_loadOK = false;
+	m_loadOK = true;
 	m_paint.fill.red = 0xFF;
 	m_paint.fill.green = 0;
 	m_paint.fill.blue = 0;
@@ -78,21 +78,25 @@ svg::Parser::Parser(etk::File fileName)
 	TiXmlDocument XmlDocument;
 	if (false == m_fileName.Exist()) {
 		SVG_ERROR("File Does not exist : " << m_fileName);
+		m_loadOK = false;
 		return;
 	}
 	int32_t fileSize = m_fileName.Size();
 	if (0==fileSize) {
 		SVG_ERROR("This file is empty : " << m_fileName);
+		m_loadOK = false;
 		return;
 	}
 	if (false == m_fileName.fOpenRead()) {
 		SVG_ERROR("Can not open the file : " << m_fileName);
+		m_loadOK = false;
 		return;
 	}
 	// allocate data
 	char * fileBuffer = new char[fileSize+5];
 	if (NULL == fileBuffer) {
 		SVG_ERROR("Error Memory allocation size=" << fileSize);
+		m_loadOK = false;
 		return;
 	}
 	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
@@ -106,6 +110,7 @@ svg::Parser::Parser(etk::File fileName)
 	TiXmlElement* root = XmlDocument.FirstChildElement( "svg" );
 	if (NULL == root ) {
 		SVG_ERROR("(l ?) main node not find: \"svg\" in \"" << m_fileName << "\"");
+		m_loadOK = false;
 	} else {
 		// get the svg version :
 		const char *version = root->ToElement()->Attribute("version");
@@ -197,7 +202,10 @@ svg::Parser::Parser(etk::File fileName)
 
 svg::Parser::~Parser(void)
 {
-	
+	if(NULL != m_renderedElement) {
+		delete(m_renderedElement);
+		m_renderedElement = NULL;
+	}
 }
 
 
@@ -225,7 +233,6 @@ void svg::Parser::AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTra
 
 void svg::Parser::GenerateTestFile(void)
 {
-	float coefmult = 2;
 	int32_t SizeX = m_size.x;
 	if (SizeX == 0) {
 		SizeX = 50;
@@ -234,7 +241,11 @@ void svg::Parser::GenerateTestFile(void)
 	if (SizeY == 0) {
 		SizeY = 50;
 	}
-	svg::Renderer * myRenderer = new svg::Renderer(SizeX, SizeY);
+	if(NULL != m_renderedElement) {
+		delete(m_renderedElement);
+		m_renderedElement = NULL;
+	}
+	m_renderedElement = new svg::Renderer(SizeX, SizeY);
 	// create the first element matrix modification ...
 	agg::trans_affine basicTrans;
 	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
@@ -245,12 +256,61 @@ void svg::Parser::GenerateTestFile(void)
 	//basicTrans *= agg::trans_affine_translation(width/3, height/3);
 	
 	
-	AggDraw(*myRenderer, basicTrans);
+	AggDraw(*m_renderedElement, basicTrans);
 	etk::UString tmpFileOut = "yyy_out_";
 	tmpFileOut += m_fileName.GetShortFilename();
 	tmpFileOut += ".ppm";
-	myRenderer->WritePpm(tmpFileOut);
+	m_renderedElement->WritePpm(tmpFileOut);
 	
+}
+
+
+
+void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
+{
+	int32_t SizeX = sizeX;
+	if (SizeX == 0) {
+		SizeX = 50;
+	}
+	int32_t SizeY = sizeY;
+	if (SizeY == 0) {
+		SizeY = 50;
+	}
+	if(NULL != m_renderedElement) {
+		delete(m_renderedElement);
+		m_renderedElement = NULL;
+	}
+	
+	m_renderedElement = new svg::Renderer(SizeX, SizeY);
+	// create the first element matrix modification ...
+	agg::trans_affine basicTrans;
+	//basicTrans *= agg::trans_affine_translation(-g_base_dx, -g_base_dy);
+	basicTrans *= agg::trans_affine_scaling(SizeX/m_size.x, SizeY/m_size.y);
+	//basicTrans *= agg::trans_affine_rotation(g_angle);// + agg::pi);
+	//basicTrans *= agg::trans_affine_skewing(2.0, 5.0);
+	//basicTrans *= agg::trans_affine_translation(width*0.3, height/2);
+	//basicTrans *= agg::trans_affine_translation(width/3, height/3);
+	
+	AggDraw(*m_renderedElement, basicTrans);
+	
+	etk::UString tmpFileOut = "zzz_out_test.ppm";
+	m_renderedElement->WritePpm(tmpFileOut);
+}
+
+uint8_t* svg::Parser::GetPointerOnData(void)
+{
+	if(NULL == m_renderedElement) {
+		return NULL;
+	}
+	return m_renderedElement->GetDataPointer();
+}
+
+uint32_t svg::Parser::GetSizeOnData(void)
+{
+	if(NULL == m_renderedElement) {
+		return 0;
+	}
+	return m_renderedElement->GetDataSize();
 }
 
 

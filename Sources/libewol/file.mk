@@ -15,6 +15,9 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/OObject/2DTextured.cpp \
 			ewol/OObject/e2d.cpp \
 			ewol/Texture.cpp \
+			ewol/Texture/TextureBMP.cpp \
+			ewol/Texture/TexturePNG.cpp \
+			ewol/Texture/TextureSVG.cpp \
 			ewol/FontBitmap.cpp \
 			ewol/FontFreeType.cpp \
 			ewol/Widget.cpp \

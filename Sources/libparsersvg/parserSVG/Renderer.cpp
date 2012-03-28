@@ -30,10 +30,12 @@
 
 svg::Renderer::Renderer(uint32_t width, uint32_t height)
 {
+	m_allocatedSize = 0;
 	m_size.x = width;
 	m_size.y = height;
 	
 	int32_t dataSize = ((int32_t)width * (int32_t)height * DATA_ALLOCATION_ELEMENT);
+	m_allocatedSize = dataSize;
 	
 	// allocate Data
 	SVG_DEBUG("Allocate buffer : " << dataSize);
@@ -41,10 +43,11 @@ svg::Renderer::Renderer(uint32_t width, uint32_t height)
 	ETK_MALLOC(m_buffer, dataSize, uint8_t);
 	if (NULL == m_buffer) {
 		SVG_ERROR("Allocation of the output buffer for SVG drawing error");
+		m_allocatedSize = 0;
 		return;
 	}
 	
-	memset(m_buffer, 0xFF, dataSize * sizeof(uint8_t) );
+	memset(m_buffer, 0x00, dataSize * sizeof(uint8_t) );
 
 	m_renderingBuffer = new agg::rendering_buffer(m_buffer, m_size.x, m_size.y, m_size.x * DATA_ALLOCATION_ELEMENT);
 	if (NULL == m_renderingBuffer) {

@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/Texture.h
- * @brief ewol Texture loading system (header)
+ * @file ewol/Texture/TextureSVG.h
+ * @brief ewol Texture SVG abstraction (header)
  * @author Edouard DUPIN
- * @date 28/10/2011
+ * @date 28/03/2012
  * @par Project
  * ewol
  *
@@ -22,26 +22,36 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEXTURE_H__
-#define __EWOL_TEXTURE_H__
+#ifndef __EWOL_TEXTURE_SVG_H__
+#define __EWOL_TEXTURE_SVG_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/File.h>
+#include <parserSVG/parserSVG.h>
 
 namespace ewol
 {
 	namespace texture {
-		void     Init(void);
-		void     UnInit(void);
-		int32_t  Load(etk::File fileName, int32_t requestedWidth=-1);
-		int32_t  Load(int32_t target, int32_t level, int32_t internalFormat, int32_t width, int32_t height, int32_t border, int32_t format, int32_t type, const void* data, int32_t nbBytes, etk::UString filename);
-		void     UnLoad(uint32_t textureID);
-		int32_t  GetSize(uint32_t textureID);
-		uint32_t GetGLID(uint32_t textureID);
-		void     UpdateContext(void);
-		void     UpdateContextIsDestroy(void);
-		void     OGLContext(bool enable);
+		class TextureSVG
+		{
+			private:
+				svg::Parser         m_elementParsed;
+				int32_t             m_width;
+				int32_t             m_height;
+				int32_t             m_size;
+				uint8_t *           m_data;
+				bool                m_loadOK;
+			public:
+				TextureSVG(etk::File & fileName, int32_t width, int32_t height);
+				~TextureSVG(void);
+				bool LoadOK(void);
+				int32_t Width(void);
+				int32_t Height(void);
+				uint8_t * Data(void);
+				uint32_t DataSize(void);
+				void Display(void);
+		};
 	};
 };
 

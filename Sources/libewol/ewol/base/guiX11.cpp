@@ -292,7 +292,7 @@ bool CreateOGlContext(void)
 
 void EWOL_NativeRender(void)
 {
-	ewol::UpdateTextureContext();
+	ewol::texture::UpdateContext();
 	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
 	if(NULL == gui_uniqueWindows) {
 		//EWOL_DEBUG("Has No Windows set...");

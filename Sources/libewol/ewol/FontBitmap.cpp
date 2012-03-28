@@ -119,7 +119,7 @@ namespace ewol
 				etk::UString bitmapRealFile = m_filename.GetFolder() + "/" + m_bitmapName;
 				EWOL_INFO("load text font image : \"" << bitmapRealFile << "\"");
 				etk::File tmpFile(bitmapRealFile, m_filename.GetTypeAccess());
-				m_textureId = ewol::LoadTexture(tmpFile);
+				m_textureId = ewol::texture::Load(tmpFile);
 				m_textureLoaded = true;
 				m_loadedOK = true;
 			};
@@ -127,7 +127,7 @@ namespace ewol
 			~EbtFont(void)
 			{
 				if (true == m_textureLoaded) {
-					ewol::UnLoadTexture(m_textureId);
+					ewol::Texture::UnLoad(m_textureId);
 				}
 			};
 			bool loadedOK(void)
@@ -204,7 +204,7 @@ namespace ewol
 			};
 			uint32_t GetOglId(void)
 			{
-				return GetTextureGLID(m_textureId);
+				return ewol::Texture::GetGLID(m_textureId);
 			};
 			int32_t GetHeight(void)
 			{

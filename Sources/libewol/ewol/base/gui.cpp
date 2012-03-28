@@ -177,6 +177,7 @@ void EWOL_GenericDraw(bool everyTime)
 	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
 	    || true == everyTime)
 	{
+		ewol::texture::UpdateContext();
 		nbDisplayTime++;
 		gui_uniqueWindows->SysDraw();
 		//EWOL_WARNING("DRAW...");
@@ -195,7 +196,7 @@ void EWOL_GenericDraw(bool everyTime)
 
 void EWOL_NativeGLDestroy(void)
 {
-	ewol::UpdateTextureContextIsDestroy();
+	ewol::texture::UpdateContextIsDestroy();
 }
 
 

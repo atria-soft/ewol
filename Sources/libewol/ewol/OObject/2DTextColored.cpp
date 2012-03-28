@@ -86,7 +86,7 @@ void ewol::OObject2DTextColored::Draw(void)
 		return;
 	}
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, ewol::GetTextureGLID(m_FontTextureId));
+	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_FontTextureId));
 	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays

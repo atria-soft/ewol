@@ -34,12 +34,18 @@
 ewol::OObject2DTextured::OObject2DTextured(etk::File textureName)
 {
 	EWOL_DEBUG("Create OObject textured : \"" << textureName << "\"");
-	m_textureId = ewol::LoadTexture(textureName);
+	m_textureId = ewol::texture::Load(textureName);
 }
+ewol::OObject2DTextured::OObject2DTextured(etk::File textureName, etkFloat_t sizeX, etkFloat_t sizeY)
+{
+	EWOL_DEBUG("Create OObject textured : \"" << textureName << "\"");
+	m_textureId = ewol::texture::Load(textureName, sizeX);
+}
+
 
 ewol::OObject2DTextured::~OObject2DTextured(void)
 {
-	ewol::UnLoadTexture(m_textureId);
+	ewol::texture::UnLoad(m_textureId);
 }
 
 void ewol::OObject2DTextured::Draw(void)
@@ -48,10 +54,14 @@ void ewol::OObject2DTextured::Draw(void)
 		EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	
+	if (m_textureId == -1) {
+		EWOL_WARNING("Texture does not exist ...");
+		return;
+	}
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, ewol::GetTextureGLID(m_textureId));
+	//EWOL_WARNING("Draw with texture : " << m_textureId << " ==> ogl=" << ewol::texture::GetGLID(m_textureId));
+	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
 	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );

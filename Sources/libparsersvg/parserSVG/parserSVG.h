@@ -40,6 +40,7 @@ namespace svg
 			etk::UString                 m_title;
 			etk::VectorType<svg::Base *> m_subElementList;
 			coord2D_ts                   m_size;
+			svg::Renderer*               m_renderedElement;
 	
 		public:
 			Parser(etk::File fileName);
@@ -47,7 +48,11 @@ namespace svg
 			bool IsLoadOk(void) { return m_loadOK; };
 			void DisplayDebug(void);
 			void GenerateTestFile(void);
+			void GenerateAnImage(int32_t sizeX, int32_t sizeY);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
+			uint8_t* GetPointerOnData(void);
+			uint32_t GetSizeOnData(void);
+			coord2D_ts GetDefinedSize(void) { return m_size;};
 	};
 };
 

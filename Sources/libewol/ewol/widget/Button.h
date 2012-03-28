@@ -63,11 +63,14 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
 			etk::UString   GetLabel(void) {return m_label;};
+			void           SetImage(etk::UString imageName);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(coord2D_ts newPadding);
 		private:
+			bool               m_hasAnImage;
+			etk::File          m_imageSelected;
 			textAlignement_te  m_alignement;
 			coord2D_ts         m_padding;
 			etk::UString       m_label;

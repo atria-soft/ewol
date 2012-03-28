@@ -43,7 +43,7 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
-	
+	m_hasAnImage = false;
 	m_alignement = ewol::TEXT_ALIGN_CENTER;
 	
 	#ifdef __PLATFORM__Android
@@ -84,6 +84,15 @@ ewol::Button::~Button(void)
 	
 }
 
+void ewol::Button::SetImage(etk::UString imageName)
+{
+	if (imageName == "") {
+		m_hasAnImage = false;
+	} else {
+		m_imageSelected.SetCompleateName(imageName, etk::FILE_TYPE_DATA);
+		m_hasAnImage = true;
+	}
+}
 
 //!< EObject name :
 extern const char * const ewol::TYPE_EOBJECT_WIDGET_BUTTON = "Button";
@@ -135,6 +144,13 @@ bool ewol::Button::CalculateMinSize(void)
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = m_padding.x*2 + minWidth;
 	m_minSize.y = m_padding.y*2 + minHeight;
+	// Add the image element ...
+	if (true == m_hasAnImage) {
+		//m_minSize.x += -m_padding.x + m_padding.y*2 + minHeight;
+		//m_minSize.y += m_padding.y*2;
+		m_minSize.x += m_padding.x + minHeight;
+	}
+	
 	MarkToReedraw();
 	return true;
 }
@@ -202,6 +218,16 @@ void ewol::Button::OnRegenerateDisplay(void)
 		coord2D_ts textPos;
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
+		
+		ewol::OObject2DTextured * tmpImage = NULL;
+		if (true == m_hasAnImage) {
+			int32_t fontId = GetDefaultFontId();
+			int32_t fontHeight = ewol::GetHeight(fontId);
+			tmpImage = new ewol::OObject2DTextured(m_imageSelected, fontHeight, fontHeight);
+			tmpImage->Rectangle(textPos.x, textPos.y, fontHeight, fontHeight);
+			// update the text position ...
+			textPos.x += m_padding.x + fontHeight;
+		}
 		clipping_ts drawClipping;
 		drawClipping.x = m_padding.x;
 		drawClipping.y = m_padding.y;
@@ -216,9 +242,16 @@ void ewol::Button::OnRegenerateDisplay(void)
 		tmpSizeX += m_padding.x/1;
 		tmpSizeY += m_padding.y/1;
 		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		AddOObject(tmpOObjects);
-		
-		AddOObject(tmpText);
+		// add all needed objects ...
+		if (NULL != tmpOObjects) {
+			AddOObject(tmpOObjects);
+		}
+		if (NULL != tmpImage) {
+			AddOObject(tmpImage);
+		}
+		if (NULL != tmpText) {
+			AddOObject(tmpText);
+		}
 	}
 }
 
