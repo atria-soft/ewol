@@ -221,6 +221,10 @@ uint8_t * ewol::texture::TextureBMP::Data(void)
 {
 	return m_dataGenerate;
 };
+uint8_t * ewol::texture::TextureBMP::RawData(void)
+{
+	return m_data;
+};
 
 uint32_t ewol::texture::TextureBMP::DataSize(void)
 {

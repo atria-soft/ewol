@@ -28,6 +28,7 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
+#include <etk/File.h>
 #include <ewol/Widget.h>
 #include <ewol/Windows.h>
 
@@ -67,6 +68,8 @@ namespace ewol {
 	// TODO : This is dangerous and might be deprecated ... Soon
 	int32_t GetCurrentWidth(void);
 	int32_t GetCurrentHeight(void);
+	
+	void SetTitle(etk::UString title);
 };
 // get current time in ms...
 int64_t GetCurrentTime(void);

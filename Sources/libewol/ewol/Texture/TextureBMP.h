@@ -83,6 +83,7 @@ namespace ewol
 				int32_t Width(void);
 				int32_t Height(void);
 				uint8_t * Data(void);
+				uint8_t * RawData(void);
 				uint32_t DataSize(void);
 				void Display(void);
 		};

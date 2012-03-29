@@ -186,6 +186,11 @@ void EWOL_NativeRender(void)
 
 
 
+void ewol::SetTitle(etk::UString title)
+{
+	// can not set the title in Android ...
+}
+
 
 #undef __class__
 #define __class__ "guiAbstraction"

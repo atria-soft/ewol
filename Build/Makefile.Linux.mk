@@ -1,39 +1,35 @@
 
-
-
 include $(EWOL_FOLDER)/Build/coreLinux/main.mk
 
 
-
-
-#include $(EWOL_FOLDER)/Build/Makefile.common.mk
-
-
-
-
-#all:
-#	@echo $(CADRE_HAUT_BAS)
-#	@echo $(CADRE_COTERS)
-#	@echo '           DEBUT DE COMPILATION DU PROGRAMME :'$(CADRE_COTERS)
-#	@echo '             Project name    : $(F_BLUE)$(PROJECT_NAME)$(F_NORMALE)'$(CADRE_COTERS)
-#	@echo '             Project Vendor  : $(F_CYAN)$(PROJECT_VENDOR)$(F_NORMALE)'$(CADRE_COTERS)
-#	@echo '             Build date      : $(F_ROUGE)$(BUILD_TIME) $(F_NORMALE)'$(CADRE_COTERS)
-#	@echo '             Tag             : $(F_VIOLET)$(PROJECT_VERSION_TAG) $(F_NORMALE)'$(CADRE_COTERS)
-#	@echo $(CADRE_COTERS)
-#	@echo $(CADRE_HAUT_BAS)
-#	
-#	@echo $(F_ROUGE)"          (ndk-build) build native code"$(F_NORMALE)
-#	cd $(PROJECT_NDK) ; NDK_PROJECT_PATH=$(PROJECT_PATH) NDK_MODULE_PATH=$(PROJECT_MODULE) ./ndk-build
-#	#cd $(PROJECT_NDK) ; NDK_PROJECT_PATH=$(PROJECT_PATH) NDK_MODULE_PATH=$(PROJECT_MODULE) NDK_LOG=~/.ndklog.txt make -f $(EWOL_FOLDER)/Build/coreLinux/build-local.mk
-
-#install: all
-#	@echo $(CADRE_HAUT_BAS)
-#	@echo '           INSTALL : $(F_VIOLET)./bin/$(PROJECT_NAME)-debug.apk$(F_NORMALE)'$(CADRE_COTERS)
-#	@echo $(CADRE_HAUT_BAS)
-#	# TODO : Later ....
-
-#clean:
-#	@echo $(CADRE_HAUT_BAS)
-#	@echo '           CLEANING : bin libs gen obj'$(CADRE_COTERS)
-#	@echo $(CADRE_HAUT_BAS)
-#	# TODO : Later ....
+# http://alp.developpez.com/tutoriels/debian/creer-paquet/
+#package: .encadrer
+#	@echo 'Create Folders ...'
+#	@mkdir -p package/$(PROJECT_NAME)/DEBIAN/
+#	@mkdir -p package/$(PROJECT_NAME)/usr/bin/
+#	@mkdir -p package/$(PROJECT_NAME)/usr/share/doc/
+#	@mkdir -p package/$(PROJECT_NAME)/usr/share/edn/
+#	# Create the control file
+#	@echo "Package: "$(PROJECT_NAME) > package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Version: "$(VERSION_TAG_SHORT) >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Section: Development,Editors" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Priority: optional" >>package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Architecture: all" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Depends: bash" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Maintainer: Mr DUPIN Edouard <yui.heero@gmail.com>" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "Description: Text editor for sources code with ctags management" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	@echo "" >> package/$(PROJECT_NAME)/DEBIAN/control
+#	# Create the PostRm
+#	@echo "#!/bin/bash" > package/$(PROJECT_NAME)/DEBIAN/postrm
+#	@echo "rm ~/."$(PROJECT_NAME) >> package/$(PROJECT_NAME)/DEBIAN/postrm
+#	@echo "" >> package/$(PROJECT_NAME)/DEBIAN/postrm
+#	# Enable Execution in script
+#	@chmod 755 package/$(PROJECT_NAME)/DEBIAN/post*
+#	@#chmod 755 package/$(PROJECT_NAME)/DEBIAN/pre*
+#	# copy licence and information : 
+#	@cp README package/$(PROJECT_NAME)/usr/share/doc/README
+#	@cp licence.txt package/$(PROJECT_NAME)/usr/share/doc/copyright
+#	@echo "First generation in progress" >> package/$(PROJECT_NAME)/usr/share/doc/changelog
+#	@cp -vf $(PROJECT_NAME) package/$(PROJECT_NAME)/usr/bin/
+#	@cp -vf data/*.xml package/$(PROJECT_NAME)/usr/share/edn/
+#	@cd package; dpkg-deb --build $(PROJECT_NAME)

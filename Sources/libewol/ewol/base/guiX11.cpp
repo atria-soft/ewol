@@ -24,12 +24,14 @@
 
 
 #include <ewol/Debug.h>
+#include <ewol/ewol.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/WidgetManager.h>
 #include <ewol/base/gui.h>
 
 #include <ewol/Texture.h>
+#include <ewol/Texture/TextureBMP.h>
 #include <ewol/base/MainThread.h>
 
 #include <unistd.h>
@@ -134,9 +136,8 @@ bool CreateX11Context(void)
 	XWMHints *StartupState;
 	XTextProperty textprop;
 	XSetWindowAttributes attr;
-	static char *title = (char*)"APPLICATION Title ... (todo)";
-	
-	EWOL_INFO("X11 Mode XF86 Video");
+	// basic title of the windows ...
+	static char *title = (char*)"Ewol";
 	
 	// Connect to the X server
 	m_display = XOpenDisplay(NULL);
@@ -245,6 +246,80 @@ bool CreateX11Context(void)
 	
 	return true;
 }
+
+void ewol::SetTitle(etk::UString title)
+{
+	XTextProperty tp;
+	tp.value = (unsigned char *)title.Utf8Data();
+	tp.encoding = XA_WM_NAME;
+	tp.format = 8;
+	tp.nitems = strlen((const char*)tp.value);
+	XSetWMName(m_display, WindowHandle, &tp);
+	XStoreName(m_display, WindowHandle, (const char*)tp.value);
+	XSetIconName(m_display, WindowHandle, (const char*)tp.value);
+	XSetWMIconName(m_display, WindowHandle, &tp);
+}
+
+/* this variable will contain the ID of the newly created pixmap.    */
+Pixmap icon_pixmap;
+
+// TODO : I don't understand why it does not work ....
+void SetIcon(etk::File bitmapFile)
+{
+	// load bitmap
+	EWOL_INFO("try to set icon : " << bitmapFile);
+	if (false == bitmapFile.Exist()) {
+		EWOL_ERROR("X11 Icon File does not Exist ... " << bitmapFile);
+	} else {
+		etk::UString fileExtention = bitmapFile.GetExtention();
+		if (fileExtention ==  "bmp") {
+			// pointer to the WM hints structure.
+			XWMHints* win_hints;
+	
+			unsigned int bitmap_width, bitmap_height;
+			int hotspot_x, hotspot_y;
+			int rc = XReadBitmapFile(m_display, WindowHandle,
+			                         "assets/iconEdn.xpm",
+			                         &bitmap_width, &bitmap_height,
+			                         &icon_pixmap,
+			                         &hotspot_x, &hotspot_y);
+			switch (rc) {
+				case BitmapOpenFailed:
+					EWOL_ERROR("XReadBitmapFile - could not open file ");
+					return;
+				case BitmapFileInvalid:
+					EWOL_ERROR("XReadBitmapFile - file doesn't contain a valid bitmap.");
+					return;
+				case BitmapNoMemory:
+					EWOL_ERROR("XReadBitmapFile - not enough memory.");
+					return;
+				case BitmapSuccess:
+					/* bitmap loaded successfully - do something with it... */
+					EWOL_INFO("XReadBitmapFile - bitmap loaded successfully.");
+					break;
+			}
+			// allocate a WM hints structure.
+			win_hints = XAllocWMHints();
+			if (!win_hints) {
+				EWOL_ERROR("XAllocWMHints - out of memory");
+				return;
+			}
+			// initialize the structure appropriately. first, specify which size hints we want to fill in. in our case - setting the icon's pixmap.
+			win_hints->flags = IconPixmapHint;
+			// next, specify the desired hints data. in our case - supply the icon's desired pixmap.
+			win_hints->icon_pixmap = icon_pixmap;
+			// pass the hints to the window manager.
+			XSetWMHints(m_display, WindowHandle, win_hints);
+			EWOL_INFO("    ==> might be done ");
+			// finally, we can free the WM hints structure.
+			XFree(win_hints);
+			
+		} else {
+			EWOL_ERROR("X11 Icon Extention not managed " << bitmapFile << " Sopported extention : .bmp ");
+		}
+	}
+}
+
 
 void RemoveDecoration(void)
 {
@@ -731,7 +806,8 @@ etk::UString ewol::CmdLineGet(int32_t id)
 	}
 	return *listArgs[id];
 }
-
+// might be declared by the application ....
+etk::File APP_Icon(void);
 
 int main(int argc, char *argv[])
 {
@@ -747,6 +823,10 @@ int main(int argc, char *argv[])
 	//start the basic thread : 
 	EWOL_SystemStart();
 	usleep(500);
+	// get the icon file : 
+	etk::File myIcon = APP_Icon();
+	SetIcon(myIcon);
+	
 	// Run ...
 	X11_Run();
 	// close X11 :
