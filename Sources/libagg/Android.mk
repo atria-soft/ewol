@@ -2,33 +2,31 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := libetk libtinyxml libzip libpng libfreetype
+# name of the librairy
+LOCAL_MODULE := agg
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
+# name of the dependency
+LOCAL_STATIC_LIBRARIES := libfreetype
+
+LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+                    $(LOCAL_PATH)/agg-2.4/ \
+                    $(LOCAL_PATH)/agg-2.4/util/
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
+ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Android \
-                -D__MODE__Touch \
-                -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=3 \
-                -DEWOL_DEBUG_LEVEL=3 \
-                -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
-                -DEWOL_USE_FREE_TYPE \
-                -DDATA_IN_APK \
-                -frtti
+                -DAGG_DEBUG_LEVEL=3 \
+                -DAGG_VERSION_TAG_NAME="\"2.4-debug\""
+else
+LOCAL_CFLAGS := -D__PLATFORM__Android \
+                -DAGG_DEBUG_LEVEL=3 \
+                -DAGG_VERSION_TAG_NAME="\"2.4-release\""
+endif
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := ewol/base/guiAndroid.cpp $(FILE_LIST)
-
-# Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_SRC_FILES := $(FILE_LIST)
 
 include $(BUILD_STATIC_LIBRARY)
-
-

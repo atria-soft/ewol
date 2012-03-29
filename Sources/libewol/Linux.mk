@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := ewol
-LOCAL_STATIC_LIBRARIES := etk libfreetype tinyxml libzip libpng agg parsersvg
+LOCAL_STATIC_LIBRARIES :=    etk libfreetype    tinyxml libzip libpng    agg    parsersvg
 
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
@@ -19,6 +19,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE \
                 -Wall
+
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
@@ -27,6 +28,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE
+
 endif
 
 # load the common sources file of the platform
@@ -35,8 +37,6 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_SRC_FILES := \
 	ewol/base/guiX11.cpp \
 	$(FILE_LIST)
-
-#for freetype : https://github.com/cdave1/freetype2-android
 
 # Ewol Test Software :
 LOCAL_LDLIBS := -lGL -lGLU -lz -lX11

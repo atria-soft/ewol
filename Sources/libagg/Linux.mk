@@ -13,13 +13,14 @@ LOCAL_C_INCLUDES := -I$(LOCAL_PATH) \
                     -I$(LOCAL_PATH)/agg-2.4/util/
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := 
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
+                -DAGG_DEBUG_LEVEL=3 \
                 -DAGG_VERSION_TAG_NAME="\"2.4-debug\""
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
+                -DAGG_DEBUG_LEVEL=3 \
                 -DAGG_VERSION_TAG_NAME="\"2.4-release\""
 endif
 
@@ -27,11 +28,5 @@ endif
 include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := $(FILE_LIST)
-
-#for freetype : https://github.com/cdave1/freetype2-android
-
-# Ewol Test Software :
-LOCAL_LDLIBS := 
-
 
 include $(BUILD_STATIC_LIBRARY)

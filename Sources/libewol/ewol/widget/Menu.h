@@ -36,6 +36,7 @@ namespace ewol {
 	
 	class MenuElement {
 		public : 
+			MenuElement(void) : m_widgetPointer(NULL) { };
 			int32_t        m_localId;
 			int32_t        m_parentId;
 			ewol::EObject* m_widgetPointer;

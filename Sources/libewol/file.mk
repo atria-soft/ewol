@@ -18,7 +18,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/Texture/TextureBMP.cpp \
 			ewol/Texture/TexturePNG.cpp \
 			ewol/Texture/TextureSVG.cpp \
-			ewol/FontBitmap.cpp \
 			ewol/FontFreeType.cpp \
 			ewol/Widget.cpp \
 			ewol/WidgetManager.cpp \

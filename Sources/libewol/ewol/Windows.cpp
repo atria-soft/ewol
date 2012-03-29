@@ -274,6 +274,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 
 void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 {
+/*
 #if defined(__PLATFORM__Android)
 	if (NULL == m_keyBoardwidget) {
 		// Create the keyboard ...
@@ -290,6 +291,7 @@ void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
 	}
 	CalculateSize(m_size.x, m_size.y);
 #endif
+*/
 }
 
 

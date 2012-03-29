@@ -11,14 +11,14 @@ LOCAL_STATIC_LIBRARIES := libetk libagg libtinyxml
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := 
 
 ifeq ($(DEBUG),1)
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
+LOCAL_CFLAGS := -D__PLATFORM__Android \
+                -DSVG_DEBUG_LEVEL=3 \
                 -DPARSER_SVG_VERSION_TAG_NAME="\"???-debug\"" \
-                -Wall -Wextra
 else
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
+LOCAL_CFLAGS := -D__PLATFORM__Android \
+                -DSVG_DEBUG_LEVEL=1 \
                 -DPARSER_SVG_VERSION_TAG_NAME="\"???-release\""
 endif
 
@@ -26,9 +26,6 @@ endif
 include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := $(FILE_LIST)
-
-# Ewol Test Software :
-LOCAL_LDLIBS := 
 
 include $(BUILD_STATIC_LIBRARY)
 

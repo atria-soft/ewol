@@ -313,7 +313,7 @@ int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
 			delete (myBitmap);
 		} else if (fileExtention ==  "svg") {
 			// get the upper paw2 ot the size requested...
-			requestedWidth = nextP2(requestedWidth);
+			//requestedWidth = nextP2(requestedWidth);
 			/*if (requestedWidth < 32) {
 				requestedWidth = 32;
 			}*/

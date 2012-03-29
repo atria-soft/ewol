@@ -44,6 +44,10 @@ ewol::PopUp::PopUp(void)
 	m_colorEmptyArea.green = 0.0;
 	m_colorEmptyArea.blue  = 0.0;
 	m_colorEmptyArea.alpha = 0.50;
+	
+	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		m_subWidget[iii] = 0;
+	}
 }
 
 ewol::PopUp::~PopUp(void)
