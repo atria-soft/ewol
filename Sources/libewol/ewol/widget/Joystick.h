@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/widgetE2D.h
- * @brief ewol file e2d widget system (header)
+ * @file ewol/widget/Joystick.h
+ * @brief ewol Joystick widget system (header)
  * @author Edouard DUPIN
- * @date 13/03/2012
+ * @date 30/03/2012
  * @par Project
  * ewol
  *
@@ -22,23 +22,35 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_WIDGET_E2D_H__
-#define __EWOL_WIDGET_E2D_H__
+#ifndef __EWOL_JOYSTICK_H__
+#define __EWOL_JOYSTICK_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/Drawable.h>
 
-extern const char * const ewolEventE2DPressed;
+extern const char * const ewolEventJoystickEnable;
+extern const char * const ewolEventJoystickDisable;
+extern const char * const ewolEventJoystickMove;
 
 namespace ewol {
-	class widgetE2D : public ewol::Drawable
+	typedef enum {
+		JOYSTICK_NORMAL_MODE,
+		JOYSTICK_ARROW_MODE,
+	} joystickMode_te;
+	class Joystick :public ewol::Drawable
 	{
-		protected:
-			etk::File m_fileName;
+		private:
+			color_ts           m_colorFg;      //!< Forground  color
+			color_ts           m_colorBg;      //!< Background color
+			coord2D_ts         m_displayPos;   //!< direction of the cursor ...
+			etkFloat_t         m_distance;     //!< dintance from the center
+			etkFloat_t         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
+			bool               m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
+			joystickMode_te    m_displayMode;  //!< Type of fonctionnal mode of the joystick
 		public:
-			widgetE2D(void);
-			virtual ~widgetE2D(void);
+			Joystick(void);
+			virtual ~Joystick(void);
 			/**
 			 * @brief Check if the object has the specific type.
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
@@ -54,7 +66,14 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void);
-			void           SetElement(etk::File filename);
+			/**
+			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
+			 *        By default this save the widget availlable size in the widget size
+			 * @param[in] availlableX Availlable horisantal pixel size
+			 * @param[in] availlableY Availlable vertical pixel size
+			 * @return ---
+			 */
+			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
 			virtual void   OnRegenerateDisplay(void);
 			/**
 			 * @brief Event on an input of this Widget
@@ -65,11 +84,13 @@ namespace ewol {
 			 * @return false the event is not used
 			 */
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
+			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_E2D;
+	extern const char * const TYPE_EOBJECT_WIDGET_JOYSTICK;
 	
 };
-#define EWOL_CAST_WIDGET_E2D(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_E2D,ewol::widgetE2D,curentPointer)
+#define EWOL_CAST_WIDGET_JOYSTICK(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_JOYSTICK,ewol::Button,curentPointer)
 
 #endif

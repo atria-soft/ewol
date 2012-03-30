@@ -184,7 +184,7 @@ namespace ewol {
 			 */
 			// TODO : Remove bool ==> deprecated ...
 			// TODO : Rename in SetSize()
-			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
+			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
 			//update the min Size ... and the expend parameters for the sizer
 			/**
 			 * @brief Calculate the minimum size of the widget that is needed to display or the user requested)

@@ -23,23 +23,23 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/WidgetManager.cpp \
 			ewol/Windows.cpp \
 			ewol/ShortCutManager.cpp \
-			ewol/widget/WidgetScrolled.cpp \
-			ewol/widget/Drawable.cpp \
 			ewol/widget/Button.cpp \
 			ewol/widget/ButtonColor.cpp \
-			ewol/widget/Label.cpp \
 			ewol/widget/CheckBox.cpp \
+			ewol/widget/ColorBar.cpp \
+			ewol/widget/ContextMenu.cpp \
+			ewol/widget/Drawable.cpp \
 			ewol/widget/Entry.cpp \
+			ewol/widget/Joystick.cpp \
+			ewol/widget/Label.cpp \
 			ewol/widget/List.cpp \
 			ewol/widget/Menu.cpp \
-			ewol/widget/ContextMenu.cpp \
-			ewol/widget/ColorBar.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \
 			ewol/widget/Spacer.cpp \
-			ewol/widget/widgetE2D.cpp \
+			ewol/widget/WidgetScrolled.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
 			ewol/widgetMeta/Keyboard.cpp \
