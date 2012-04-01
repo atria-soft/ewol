@@ -33,6 +33,16 @@ extern const char * const ewolEventButtonEnter      = "ewol Button Enter";
 extern const char * const ewolEventButtonLeave      = "ewol Button Leave";
 
 
+/**
+ * @brief Initilise the basic widget property ==> due to the android system
+ * @note all widget that have template might have this initializer ...
+ * @param ---
+ * @return ---
+ */
+void ewol::WIDGET_ButtonInit(void)
+{
+	
+}
 
 #undef __class__
 #define __class__	"Button"

@@ -43,7 +43,7 @@ static etkFloat_t   l_ratio(1.0/7.0);
  * @param ---
  * @return ---
  */
-void WIDGET_JoystickInit(void)
+void ewol::WIDGET_JoystickInit(void)
 {
 	l_displayBackground = true;
 	l_background = "";
@@ -56,7 +56,7 @@ void WIDGET_JoystickInit(void)
  * @param[in] newRatio the new ratio that might be set
  * @return ---
  */
-void WIDGET_JoystickDefaultRatio(etkFloat_t newRatio)
+void ewol::WIDGET_JoystickDefaultRatio(etkFloat_t newRatio)
 {
 	if (newRatio > 1) {
 		newRatio = 1;
@@ -70,7 +70,7 @@ void WIDGET_JoystickDefaultRatio(etkFloat_t newRatio)
  * @param[in] imageNameInData the new rbackground that might be set
  * @return ---
  */
-void WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display)
+void ewol::WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display)
 {
 	// TODO : check if it existed
 	l_background = imageNameInData;
@@ -83,7 +83,7 @@ void WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display
  * @param[in] imageNameInData the new Foreground that might be set
  * @return ---
  */
-void WIDGET_JoystickDefaultForeground(etk::UString imageNameInData)
+void ewol::WIDGET_JoystickDefaultForeground(etk::UString imageNameInData)
 {
 	// TODO : check if it existed
 	l_foreground = imageNameInData;

@@ -33,6 +33,16 @@
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
 
 
+/**
+ * @brief Initilise the basic widget property ==> due to the android system
+ * @note all widget that have template might have this initializer ...
+ * @param ---
+ * @return ---
+ */
+void ewol::WIDGET_ButtonColorInit(void)
+{
+	
+}
 
 #undef __class__
 #define __class__	"ButtonColor"

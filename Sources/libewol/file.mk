@@ -35,6 +35,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/List.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/PopUp.cpp \
+			ewol/widget/Scene.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \

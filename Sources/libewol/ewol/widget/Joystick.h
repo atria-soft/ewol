@@ -114,9 +114,36 @@ namespace ewol {
 			void Foreground(etk::UString imageNameInData);
 	};
 	
+	/**
+	 * @brief Initilise the basic widget property ==> due to the android system
+	 * @note all widget that have template might have this initializer ...
+	 * @param ---
+	 * @return ---
+	 */
+	void WIDGET_JoystickInit(void);
+	/**
+	 * @brief Set the default ratio of the widget joystick
+	 * @param[in] newRatio the new ratio that might be set
+	 * @return ---
+	 */
+	void WIDGET_JoystickDefaultRatio(etkFloat_t newRatio);
+	/**
+	 * @brief Set the default Background of the widget joystick
+	 * @param[in] imageNameInData the new rbackground that might be set
+	 * @return ---
+	 */
+	void WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display);
+	/**
+	 * @brief Set the default Foreground of the widget joystick
+	 * @param[in] imageNameInData the new Foreground that might be set
+	 * @return ---
+	 */
+	void WIDGET_JoystickDefaultForeground(etk::UString imageNameInData);
+	
 	extern const char * const TYPE_EOBJECT_WIDGET_JOYSTICK;
 	
 };
-#define EWOL_CAST_WIDGET_JOYSTICK(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_JOYSTICK,ewol::Button,curentPointer)
+#define EWOL_CAST_WIDGET_JOYSTICK(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_JOYSTICK,ewol::Joystick,curentPointer)
+
 
 #endif

@@ -95,6 +95,14 @@ namespace ewol {
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 	};
 	
+	/**
+	 * @brief Initilise the basic widget property ==> due to the android system
+	 * @note all widget that have template might have this initializer ...
+	 * @param ---
+	 * @return ---
+	 */
+	void WIDGET_ButtonColorInit(void);
+	
 	extern const char * const TYPE_EOBJECT_WIDGET_BUTTON_COLOR;
 	
 };

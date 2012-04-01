@@ -91,6 +91,14 @@ namespace ewol {
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
 	};
 	
+	/**
+	 * @brief Initilise the basic widget property ==> due to the android system
+	 * @note all widget that have template might have this initializer ...
+	 * @param ---
+	 * @return ---
+	 */
+	void WIDGET_ButtonInit(void);
+	
 	extern const char * const TYPE_EOBJECT_WIDGET_BUTTON;
 	
 };

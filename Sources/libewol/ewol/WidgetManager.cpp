@@ -23,6 +23,10 @@
  */
 
 #include <ewol/WidgetManager.h>
+#include <ewol/widget/Joystick.h>
+#include <ewol/widget/Button.h>
+#include <ewol/widget/ButtonColor.h>
+#include <ewol/widget/Scene.h>
 
 #undef __class__
 #define __class__	"WidgetManager"
@@ -43,6 +47,11 @@ void ewol::widgetManager::Init(void)
 	// prevent android error ==> can create memory leak but I prefer
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
+	// init all the widget global parameters :
+	ewol::WIDGET_JoystickInit();
+	ewol::WIDGET_ButtonInit();
+	ewol::WIDGET_ButtonColorInit();
+	ewol::WIDGET_SceneInit();
 	IsInit = true;
 }
 
