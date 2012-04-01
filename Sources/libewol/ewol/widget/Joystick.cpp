@@ -192,28 +192,43 @@ void ewol::Joystick::OnRegenerateDisplay(void)
 		// clean the object list ...
 		ClearOObjectList();
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		ewol::OObject2DColored * tmpOObjects = NULL;
+		ewol::OObject2DTextured * tmpOOtexBg = NULL;
+		ewol::OObject2DTextured * tmpOOtexFg = NULL;
 		// set background
 		if (true == m_displayBackground) {
 			if (m_background == "") {
+				tmpOObjects = new ewol::OObject2DColored;
 				tmpOObjects->SetColor(m_colorBg);
 				tmpOObjects->Disc( m_size.x/2, m_size.y/2, m_size.x/2-1);
 			} else {
-				
+				tmpOOtexBg = new ewol::OObject2DTextured(m_background, m_size.x, m_size.y);
+				tmpOOtexBg->Rectangle(0, 0, m_size.x, m_size.y);
 			}
 		}
 		// set cursor point
 		etkFloat_t sizeElement = m_size.x*m_ratio;
 		if (m_foreground == "") {
+			if (NULL == tmpOObjects) {
+				tmpOObjects = new ewol::OObject2DColored;
+			}
 			tmpOObjects->SetColor(m_colorFg);
-			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement) + sizeElement, ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement) + sizeElement, sizeElement);
-			EWOL_INFO("kjhkjh sdfs  " << m_colorFg << " plop" << m_displayPos << " ratio:" << m_ratio);
+			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement) + sizeElement,
+			                   ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement) + sizeElement, sizeElement);
 		} else {
-			EWOL_INFO("kjhkjh " << m_foreground);
+			tmpOOtexFg = new ewol::OObject2DTextured(m_foreground,sizeElement*2, sizeElement*2);
+			tmpOOtexFg->Rectangle(((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement),
+			                      ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement), sizeElement*2, sizeElement*2);
 		}
 		// add all needed objects ...
 		if (NULL != tmpOObjects) {
 			AddOObject(tmpOObjects);
+		}
+		if (NULL != tmpOOtexBg) {
+			AddOObject(tmpOOtexBg);
+		}
+		if (NULL != tmpOOtexFg) {
+			AddOObject(tmpOOtexFg);
 		}
 	}
 }
