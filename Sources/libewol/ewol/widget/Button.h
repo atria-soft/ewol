@@ -70,7 +70,7 @@ namespace ewol {
 			void           SetPadding(coord2D_ts newPadding);
 		private:
 			bool               m_hasAnImage;
-			etk::File          m_imageSelected;
+			etk::UString       m_imageSelected;
 			textAlignement_te  m_alignement;
 			coord2D_ts         m_padding;
 			etk::UString       m_label;

@@ -32,6 +32,65 @@ extern const char * const ewolEventJoystickEnable   = "ewol-joystick-enable";
 extern const char * const ewolEventJoystickDisable  = "ewol-joystick-disable";
 extern const char * const ewolEventJoystickMove     = "ewol-joystick-move";
 
+static bool         l_displayBackground(true);
+static etk::UString l_background("");
+static etk::UString l_foreground("");
+static etkFloat_t   l_ratio(1.0/7.0);
+
+/**
+ * @brief Initilise the basic widget property ==> due to the android system
+ * @note all widget that have template might have this initializer ...
+ * @param ---
+ * @return ---
+ */
+void WIDGET_JoystickInit(void)
+{
+	l_displayBackground = true;
+	l_background = "";
+	l_foreground = "";
+	l_ratio = 1.0/7.0;
+}
+
+/**
+ * @brief Set the default ratio of the widget joystick
+ * @param[in] newRatio the new ratio that might be set
+ * @return ---
+ */
+void WIDGET_JoystickDefaultRatio(etkFloat_t newRatio)
+{
+	if (newRatio > 1) {
+		newRatio = 1;
+	}
+	l_ratio = newRatio;
+	EWOL_INFO("Set default Joystick ratio at " << l_ratio);
+}
+
+/**
+ * @brief Set the default Background of the widget joystick
+ * @param[in] imageNameInData the new rbackground that might be set
+ * @return ---
+ */
+void WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display)
+{
+	// TODO : check if it existed
+	l_background = imageNameInData;
+	l_displayBackground = display;
+	EWOL_INFO("Set default Joystick background at " << l_background << " Display it=" << l_displayBackground);
+}
+
+/**
+ * @brief Set the default Foreground of the widget joystick
+ * @param[in] imageNameInData the new Foreground that might be set
+ * @return ---
+ */
+void WIDGET_JoystickDefaultForeground(etk::UString imageNameInData)
+{
+	// TODO : check if it existed
+	l_foreground = imageNameInData;
+	EWOL_INFO("Set default Joystick Foreground at " << l_foreground);
+}
+
+
 #undef __class__
 #define __class__	"Joystick"
 
@@ -59,6 +118,11 @@ ewol::Joystick::Joystick(void)
 	m_distance = 0.0;
 	m_angle = -0.1;
 	
+	// set the generic parameters:
+	m_displayBackground = l_displayBackground;
+	m_background = l_background;
+	m_foreground = l_foreground;
+	m_ratio = l_ratio;
 	SetCanHaveFocus(true);
 }
 
@@ -121,7 +185,7 @@ bool ewol::Joystick::CalculateSize(etkFloat_t availlableX, etkFloat_t availlable
 	MarkToReedraw();
 	return true;
 }
-#define INTERNAL_ELEMENT_RATIO			(7)
+
 void ewol::Joystick::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
@@ -130,19 +194,22 @@ void ewol::Joystick::OnRegenerateDisplay(void)
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		// set background
-		tmpOObjects->SetColor(m_colorBg);
-		if (true) { //(ewol::JOYSTICK_CIRCLE_MODE==m_displayMode) {
-			tmpOObjects->Disc( m_size.x/2, m_size.y/2, m_size.x/2-1);
-		} else {
-			tmpOObjects->Rectangle( 2, 2, m_size.x-4, m_size.y-4);
+		if (true == m_displayBackground) {
+			if (m_background == "") {
+				tmpOObjects->SetColor(m_colorBg);
+				tmpOObjects->Disc( m_size.x/2, m_size.y/2, m_size.x/2-1);
+			} else {
+				
+			}
 		}
 		// set cursor point
-		tmpOObjects->SetColor(m_colorFg);
-		etkFloat_t sizeElement = m_size.x/INTERNAL_ELEMENT_RATIO;
-		if (true) { //(ewol::JOYSTICK_CIRCLE_MODE==m_displayMode) {
-			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*m_size.x, ((m_displayPos.y+1.0)/2.0)*m_size.y, sizeElement);
+		etkFloat_t sizeElement = m_size.x*m_ratio;
+		if (m_foreground == "") {
+			tmpOObjects->SetColor(m_colorFg);
+			tmpOObjects->Disc( ((m_displayPos.x+1.0)/2.0)*(m_size.x-2*sizeElement) + sizeElement, ((m_displayPos.y+1.0)/2.0)*(m_size.y-2*sizeElement) + sizeElement, sizeElement);
+			EWOL_INFO("kjhkjh sdfs  " << m_colorFg << " plop" << m_displayPos << " ratio:" << m_ratio);
 		} else {
-			tmpOObjects->Rectangle( ((m_displayPos.x+1.0)/2.0)*m_size.x-sizeElement/2.0, ((m_displayPos.y+1.0)/2.0)*m_size.y-sizeElement/2.0, sizeElement, sizeElement);
+			EWOL_INFO("kjhkjh " << m_foreground);
 		}
 		// add all needed objects ...
 		if (NULL != tmpOObjects) {
@@ -172,9 +239,10 @@ bool ewol::Joystick::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 		    || ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 			// get local relative position
 			coord2D_ts relativePos = RelativePosition(pos);
+			etkFloat_t sizeElement = m_size.x*m_ratio;
 			// Calculate the position of the cursor...
-			m_displayPos.x = relativePos.x/m_size.x*2.0 - 1.0;
-			m_displayPos.y = relativePos.y/m_size.y*2.0 - 1.0;
+			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;
+			m_displayPos.y = (relativePos.y-sizeElement)/(m_size.y-sizeElement*2)*2.0 - 1.0;
 			
 			// distance :
 			m_distance = m_displayPos.y*m_displayPos.y + m_displayPos.x * m_displayPos.x;
@@ -218,5 +286,45 @@ bool ewol::Joystick::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, 
 		return false;
 	}
 	return false;
+}
+
+
+/**
+ * @brief Set the ratio of the widget joystick
+ * @param[in] newRatio the new ratio that might be set
+ * @return ---
+ */
+void ewol::Joystick::Ratio(etkFloat_t newRatio)
+{
+	if (newRatio > 1) {
+		newRatio = 1;
+	}
+	m_ratio = newRatio;
+	EWOL_INFO("Set default Joystick ratio at " << m_ratio);
+}
+
+/**
+ * @brief Set the Background of the widget joystick
+ * @param[in] imageNameInData the new rbackground that might be set
+ * @return ---
+ */
+void ewol::Joystick::Background(etk::UString imageNameInData, bool display)
+{
+	// TODO : check if it existed
+	m_background = imageNameInData;
+	m_displayBackground = display;
+	EWOL_INFO("Set default Joystick background at " << m_background << " Display it=" << m_displayBackground);
+}
+
+/**
+ * @brief Set the Foreground of the widget joystick
+ * @param[in] imageNameInData the new Foreground that might be set
+ * @return ---
+ */
+void ewol::Joystick::Foreground(etk::UString imageNameInData)
+{
+	// TODO : check if it existed
+	m_foreground = imageNameInData;
+	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);
 }
 

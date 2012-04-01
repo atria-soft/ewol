@@ -48,6 +48,12 @@ namespace ewol {
 			etkFloat_t         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 			bool               m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
 			joystickMode_te    m_displayMode;  //!< Type of fonctionnal mode of the joystick
+		private:
+			// generic property of the joystick:
+			bool               m_displayBackground;
+			etk::UString       m_background;
+			etk::UString       m_foreground;
+			etkFloat_t         m_ratio;
 		public:
 			Joystick(void);
 			virtual ~Joystick(void);
@@ -74,7 +80,7 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
@@ -86,6 +92,26 @@ namespace ewol {
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
 			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
 			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
+			/**
+			 * @brief Set the ratio of the widget joystick
+			 * @param[in] newRatio the new ratio that might be set
+			 * @return ---
+			 */
+			void Ratio(etkFloat_t newRatio);
+			
+			/**
+			 * @brief Set the Background of the widget joystick
+			 * @param[in] imageNameInData the new rbackground that might be set
+			 * @return ---
+			 */
+			void Background(etk::UString imageNameInData, bool display=true);
+			
+			/**
+			 * @brief Set the Foreground of the widget joystick
+			 * @param[in] imageNameInData the new Foreground that might be set
+			 * @return ---
+			 */
+			void Foreground(etk::UString imageNameInData);
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_JOYSTICK;

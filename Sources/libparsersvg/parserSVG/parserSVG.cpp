@@ -292,9 +292,10 @@ void svg::Parser::GenerateAnImage(int32_t sizeX, int32_t sizeY)
 	//basicTrans *= agg::trans_affine_translation(width/3, height/3);
 	
 	AggDraw(*m_renderedElement, basicTrans);
-	
+	/*
 	etk::UString tmpFileOut = "zzz_out_test.ppm";
 	m_renderedElement->WritePpm(tmpFileOut);
+	*/
 }
 
 uint8_t* svg::Parser::GetPointerOnData(void)

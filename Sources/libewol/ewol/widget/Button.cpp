@@ -89,7 +89,7 @@ void ewol::Button::SetImage(etk::UString imageName)
 	if (imageName == "") {
 		m_hasAnImage = false;
 	} else {
-		m_imageSelected.SetCompleateName(imageName, etk::FILE_TYPE_DATA);
+		m_imageSelected = imageName;
 		m_hasAnImage = true;
 	}
 }

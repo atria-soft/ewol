@@ -31,8 +31,8 @@ namespace ewol {
 	class OObject2DTextured :public ewol::OObject
 	{
 		public:
-			OObject2DTextured(etk::File textureName);
-			OObject2DTextured(etk::File textureName, etkFloat_t sizeX, etkFloat_t sizeY);
+			OObject2DTextured(etk::UString textureName);
+			OObject2DTextured(etk::UString textureName, etkFloat_t sizeX, etkFloat_t sizeY);
 			virtual ~OObject2DTextured(void);
 		public:
 			virtual void Draw(void);

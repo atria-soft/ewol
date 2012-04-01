@@ -31,21 +31,23 @@
 
 
 
-ewol::OObject2DTextured::OObject2DTextured(etk::File textureName)
+ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName)
 {
-	EWOL_DEBUG("Create OObject textured : \"" << textureName << "\"");
+	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	m_textureId = ewol::texture::Load(textureName);
 }
-ewol::OObject2DTextured::OObject2DTextured(etk::File textureName, etkFloat_t sizeX, etkFloat_t sizeY)
+ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, etkFloat_t sizeX, etkFloat_t sizeY)
 {
-	EWOL_DEBUG("Create OObject textured : \"" << textureName << "\"");
+	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	m_textureId = ewol::texture::Load(textureName, sizeX);
 }
 
 
 ewol::OObject2DTextured::~OObject2DTextured(void)
 {
-	ewol::texture::UnLoad(m_textureId);
+	if (-1 != m_textureId) {
+		ewol::texture::UnLoad(m_textureId);
+	}
 }
 
 void ewol::OObject2DTextured::Draw(void)

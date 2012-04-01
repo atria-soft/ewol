@@ -276,19 +276,20 @@ static int32_t nextP2(int32_t value)
  */
 // TODO : Load non square texture ...
 // TODO : Check the size to regenerate the texture if the size change
-int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
+int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 {
 	int32_t outTextureID = -1;
 	if (l_listLoadedTexture.Size()!=0) {
 		for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
 			if (NULL != l_listLoadedTexture[iii]) {
-				if (l_listLoadedTexture[iii]->m_filename == fileName.GetCompleateName()) {
+				if (l_listLoadedTexture[iii]->m_filename == tmpfileName) {
 					l_listLoadedTexture[iii]->m_nbTimeLoaded++;
 					return iii;
 				}
 			}
 		}
 	}
+	etk::File fileName(tmpfileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("File does not Exist ... " << fileName);
 	} else {
@@ -297,7 +298,7 @@ int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
 			// create the bitmap texture
 			ewol::texture::TextureBMP * myBitmap = new ewol::texture::TextureBMP(fileName);
 			// draw bitmap properties
-			myBitmap->Display();
+			//myBitmap->Display();
 			// check if all is OK
 			if (myBitmap->LoadOK() == true) {
 				if (myBitmap->Width() != nextP2(myBitmap->Width()) ) {
@@ -307,7 +308,7 @@ int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
 					EWOL_ERROR("Texture can not have Width=" << myBitmap->Width() << "px different of height=" << myBitmap->Height() << "px in file:" << fileName);
 					return -1;
 				}
-				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap->Width(), myBitmap->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap->Data(), myBitmap->DataSize(), fileName.GetCompleateName());
+				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap->Width(), myBitmap->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap->Data(), myBitmap->DataSize(), tmpfileName);
 			}
 			// removet the bitmap handle
 			delete (myBitmap);
@@ -320,14 +321,14 @@ int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
 			// create the bitmap texture
 			ewol::texture::TextureSVG * mySvg = new ewol::texture::TextureSVG(fileName, requestedWidth, requestedWidth);
 			// draw bitmap properties
-			mySvg->Display();
+			//mySvg->Display();
 			// check if all is OK
 			if (mySvg->LoadOK() == true) {
 				if (mySvg->Width() != mySvg->Height()) {
 					EWOL_ERROR("Texture can not have Width=" << mySvg->Width() << "px different of height=" << mySvg->Height() << "px in file:" << fileName);
 					return -1;
 				}
-				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, mySvg->Width(), mySvg->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mySvg->Data(), mySvg->DataSize(), fileName.GetCompleateName());
+				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, mySvg->Width(), mySvg->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mySvg->Data(), mySvg->DataSize(), tmpfileName);
 			}
 			// removet the bitmap handle
 			delete (mySvg);
@@ -349,7 +350,7 @@ int32_t ewol::texture::Load(etk::File fileName, int32_t requestedWidth)
  */
 void ewol::texture::UnLoad(uint32_t textureID)
 {
-	EWOL_INFO("Unload a specific tecture ID=" << textureID);
+	//EWOL_INFO("Unload a specific tecture ID=" << textureID);
 	if (textureID>=0 && (int32_t)textureID<l_listLoadedTexture.Size()) {
 		if (NULL == l_listLoadedTexture[textureID]) {
 			EWOL_ERROR("Texture : " << textureID << " does not existe anymore...");
