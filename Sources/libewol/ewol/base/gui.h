@@ -47,6 +47,14 @@ namespace guiAbstraction
 	void ForceRedrawAll(void);
 	void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
 	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
+
+	// copy and cut generic properties : 
+	typedef enum {
+		CLIPBOARD_MODE_PRIMARY,
+		CLIPBOARD_MODE_STD,
+	} clipBoardMode_te;
+	void ClipBoardGet(etk::UString& newData, clipBoardMode_te mode);
+	void ClipBoardSet(etk::UString& newData, clipBoardMode_te mode);
 };
 
 

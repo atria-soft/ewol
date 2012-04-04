@@ -43,6 +43,7 @@
 #include <sys/times.h>
 
 
+
 int64_t GetCurrentTime(void)
 {
 	struct timespec now;
@@ -123,6 +124,17 @@ int32_t offsetMoveClickedDouble = 20;
 
 
 bool inputIsPressed[20];
+
+// internal copy of the clipBoard ...
+static etk::UString l_clipBoardPrimary("");
+static etk::UString l_clipBoardStd("");
+// Atom access...
+static Atom XAtomeSelection = 0;
+static Atom XAtomeClipBoard = 0;
+static Atom XAtomeTargetString = 0;
+static Atom XAtomeTargetStringUTF8 = 0;
+static Atom XAtomeTargetTarget = 0;
+static Atom XAtomeEWOL = 0;
 
 
 static void X11_ChangeSize(int32_t w, int32_t h);
@@ -421,6 +433,17 @@ void X11_Init(void)
 	}
 	CreateX11Context();
 	CreateOGlContext();
+	// reset clipBoard
+	l_clipBoardPrimary = "";
+	l_clipBoardStd = "";
+	// reset the Atom properties ...
+	XAtomeSelection        = XInternAtom(m_display, "PRIMARY", 0);
+	XAtomeClipBoard        = XInternAtom(m_display, "CLIPBOARD", 0);
+	XAtomeTargetString     = XInternAtom(m_display, "STRING", 0);
+	XAtomeTargetStringUTF8 = XInternAtom(m_display, "UTF8_STRING", 0);
+	XAtomeTargetTarget     = XInternAtom(m_display, "TARGETS", 0);
+	XAtomeEWOL             = XInternAtom(m_display, "EWOL", 0);
+	
 	m_run = true;
 }
 
@@ -431,6 +454,7 @@ void X11_Run(void)
 	while(true == m_run) {
 		//EWOL_ERROR("plop1");
 		XEvent event;
+		XEvent respond;
 		// main X boucle :
 		while (XPending(m_display)) {
 			//EWOL_ERROR("plop 22222");
@@ -449,6 +473,114 @@ void X11_Run(void)
 						}
 					}
 					break;
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				//                               Selection AREA                                                              //
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				case SelectionClear:
+					// Selection has been done on an other program ==> clear ours ...
+					EWOL_DEBUG("X11 event SelectionClear");
+					{
+						XSelectionRequestEvent *req=&(event.xselectionrequest);
+						EWOL_DEBUG("    property: \"" << XGetAtomName(m_display, req->property) << "\"");
+						EWOL_DEBUG("    target:   \"" << XGetAtomName(m_display, req->target) << "\"");
+					}
+					break;
+				case SelectionNotify:
+					EWOL_DEBUG("X11 event SelectionNotify");
+					if (event.xselection.property == None) {
+						EWOL_DEBUG("    ==> no data ...");
+					} else {
+						unsigned char *buf = 0;
+						Atom type;
+						int format;
+						unsigned long nitems, bytes;
+						XGetWindowProperty(m_display,
+						                   WindowHandle,
+						                   event.xselection.property,
+						                   0, // offset
+						                   (~0L), // length
+						                   False, // delete
+						                   AnyPropertyType, // reg_type
+						                   &type,// *actual_type_return,
+						                   &format,// *actual_format_return
+						                   &nitems,// *nitems_return
+						                   &bytes, // *bytes_after_return
+						                   &buf// **prop_return);
+						                   );
+						EWOL_DEBUG("    ==> data  : " << buf);
+					}
+					break;
+				case SelectionRequest:
+					EWOL_DEBUG("X11 event SelectionRequest");
+					{
+						XSelectionRequestEvent *req=&(event.xselectionrequest);
+						EWOL_DEBUG("    from: " << XGetAtomName(m_display, req->property) << "  request=" << XGetAtomName(m_display, req->selection) << " in " << XGetAtomName(m_display, req->target));
+						const char * magatTextToSend = NULL;
+						
+						if (req->selection == XAtomeSelection) {
+							magatTextToSend = l_clipBoardPrimary.Utf8Data();
+						} else if (req->selection == XAtomeClipBoard) {
+							magatTextToSend = l_clipBoardStd.Utf8Data();
+						} else {
+							magatTextToSend = "";
+						}
+						
+						Atom listOfAtom[4];
+						if(strlen(magatTextToSend) == 0 ) {
+							respond.xselection.property= None;
+						} else if(XAtomeTargetTarget == req->target) {
+							// We need to generate the list of the possibles target element of atom
+							int32_t nbAtomSupported = 0;
+							listOfAtom[nbAtomSupported++] = XAtomeTargetTarget;
+							listOfAtom[nbAtomSupported++] = XAtomeTargetString;
+							listOfAtom[nbAtomSupported++] = XAtomeTargetStringUTF8;
+							listOfAtom[nbAtomSupported++] = None;
+							XChangeProperty( m_display,
+							                 req->requestor,
+							                 req->property,
+							                 XA_ATOM,
+							                 32,
+							                 PropModeReplace,
+							                 (unsigned char*)listOfAtom,
+							                 nbAtomSupported );
+							respond.xselection.property=req->property;
+							EWOL_VERBOSE("            ==> Respond ... (test)");
+						} else if(XAtomeTargetString == req->target) {
+							XChangeProperty( m_display,
+							                 req->requestor,
+							                 req->property,
+							                 req->target,
+							                 8,
+							                 PropModeReplace,
+							                 (unsigned char*)magatTextToSend,
+							                 strlen(magatTextToSend));
+							respond.xselection.property=req->property;
+							EWOL_VERBOSE("            ==> Respond ...");
+						} else if (XAtomeTargetStringUTF8 == req->target) {
+							XChangeProperty( m_display,
+							                 req->requestor,
+							                 req->property,
+							                 req->target,
+							                 8,
+							                 PropModeReplace,
+							                 (unsigned char*)magatTextToSend,
+							                 strlen(magatTextToSend));
+							respond.xselection.property=req->property;
+							EWOL_VERBOSE("            ==> Respond ...");
+						} else {
+							respond.xselection.property= None;
+						}
+						respond.xselection.type= SelectionNotify;
+						respond.xselection.display= req->display;
+						respond.xselection.requestor= req->requestor;
+						respond.xselection.selection=req->selection;
+						respond.xselection.target= req->target;
+						respond.xselection.time = req->time;
+						XSendEvent (m_display, req->requestor,0,0,&respond);
+						XFlush (m_display);
+					}
+					break;
+				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case Expose:
 					EWOL_DEBUG("X11 event Expose");
 					break;
@@ -745,6 +877,73 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 };
 
 
+
+// ClipBoard AREA : 
+
+void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
+{
+	newData = "";
+	switch (mode)
+	{
+		case CLIPBOARD_MODE_PRIMARY:
+			break;
+		case CLIPBOARD_MODE_STD:
+			
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
+
+void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
+{
+	switch (mode)
+	{
+		case CLIPBOARD_MODE_PRIMARY:
+			if (newData.Size() > 0) {
+				// copy it ...
+				l_clipBoardPrimary = newData;
+				// Request the selection :
+				XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
+			}
+			break;
+		case CLIPBOARD_MODE_STD:
+			if (newData.Size() > 0) {
+				// copy it ...
+				l_clipBoardStd = newData;
+				// Request the clipBoard :
+				XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
+			}
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
+/*
+void ewol::clipboard::Copy(etk::UString newData, int32_t bufferId)
+{
+	char * tmpPointer = newData.Utf8Data();
+	
+	Atom selection  = XA_PRIMARY;
+	//All your selection are belong to us...
+	XSetSelectionOwner(m_display, selection, WindowHandle, CurrentTime);
+	
+	EWOL_DEBUG("--------------------------------------------------------------");
+	if (BadAlloc == XStoreBuffer(m_display, tmpPointer, strlen(tmpPointer), bufferId)) {
+		EWOL_ERROR("Copy error");
+	} else {
+		EWOL_DEBUG("Copy well done : \"" << tmpPointer << "\"=" << strlen(tmpPointer));
+	}
+	if (BadAlloc == XStoreBytes(m_display, tmpPointer, strlen(tmpPointer))) {
+		EWOL_ERROR("Copy error");
+	} else {
+		EWOL_DEBUG("Copy well done");
+	}
+	EWOL_DEBUG("--------------------------------------------------------------");
+}
+*/
 
 
 

@@ -26,7 +26,7 @@
 #include <ewol/widget/Joystick.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ButtonColor.h>
-#include <ewol/widget/Scene.h>
+//#include <ewol/widget/Scene.h>
 
 #undef __class__
 #define __class__	"WidgetManager"
@@ -51,7 +51,7 @@ void ewol::widgetManager::Init(void)
 	ewol::WIDGET_JoystickInit();
 	ewol::WIDGET_ButtonInit();
 	ewol::WIDGET_ButtonColorInit();
-	ewol::WIDGET_SceneInit();
+	//ewol::WIDGET_SceneInit();
 	IsInit = true;
 }
 
