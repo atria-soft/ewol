@@ -14,6 +14,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/OObject/2DTextColored.cpp \
 			ewol/OObject/2DColored.cpp \
 			ewol/OObject/2DTextured.cpp \
+			ewol/OObject/Sprite.cpp \
 			ewol/OObject/e2d.cpp \
 			ewol/Texture.cpp \
 			ewol/Texture/TextureBMP.cpp \
@@ -36,6 +37,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/List.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/PopUp.cpp \
+			ewol/widget/Scene.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \
