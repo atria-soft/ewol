@@ -32,6 +32,7 @@
 #include <ewol/ewol.h>
 #include <ewol/importgl.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/base/eventInputManagement.h>
 
 
 
@@ -270,6 +271,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	// Regenerate the size calculation :
 	CalculateSize(m_size.x, m_size.y);
 	m_needFlipFlop = true;
+	ewol::eventInput::NewLayerSet();
 }
 
 void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)

@@ -262,4 +262,21 @@ void ewol::simpleMsg::SendMessage(ewol::simpleMsg::simpleMsg_ts& handle, uint32_
 }
 
 
+void ewol::simpleMsg::Clear(simpleMsg_ts& handle)
+{
+	if (false == handle.isInit) {
+		return;
+	}
+	pthread_mutex_lock(&handle.mutex);
+	if (handle.messageValue !=0) {
+		struct timespec timeout;
+		timeout.tv_sec = 0;
+		timeout.tv_nsec = 0;
+		pthread_cond_timedwait(&handle.condition, &handle.mutex, &timeout);
+		
+	}
+	pthread_mutex_unlock(&handle.mutex);
+}
+
+
 

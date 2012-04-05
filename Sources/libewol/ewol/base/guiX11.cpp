@@ -127,12 +127,12 @@ int32_t offsetMoveClickedDouble = 20;
 bool inputIsPressed[20];
 
 // internal copy of the clipBoard ...
-static ewol::simpleMsg::simpleMsg_ts l_clipboardMessage;
-static bool                          l_clipBoardRequestPrimary = false;
-static bool                          l_clipBoardOwnerPrimary = false;
-static etk::UString                  l_clipBoardPrimary("");
-static bool                          l_clipBoardOwnerStd = false;
-static etk::UString                  l_clipBoardStd("");
+static ewol::simpleMsg::simpleMsg_ts l_clipboardMessage; /// message to prevent the other thread that we have receive the requested data
+static bool                          l_clipBoardRequestPrimary = false;   // if false : request the copy/past buffer, if true : request current selection
+static bool                          l_clipBoardOwnerPrimary = false; // we are the owner of the current selection
+static etk::UString                  l_clipBoardPrimary(""); // local copy of the selection
+static bool                          l_clipBoardOwnerStd = false; // we are the owner of the current copy buffer
+static etk::UString                  l_clipBoardStd(""); // local copy of the clipboard
 // Atom access...
 static Atom XAtomeSelection = 0;
 static Atom XAtomeClipBoard = 0;
@@ -525,10 +525,12 @@ void X11_Run(void)
 						                   );
 						if (true == l_clipBoardRequestPrimary) {
 							l_clipBoardPrimary = (char*)buf;
+							// inform that we have receive the data
 							ewol::simpleMsg::SendMessage(l_clipboardMessage, 4);
 							EWOL_VERBOSE("    ==> data  : " << l_clipBoardPrimary);
 						} else {
 							l_clipBoardStd = (char*)buf;
+							// inform that we have receive the data
 							ewol::simpleMsg::SendMessage(l_clipboardMessage, 2);
 							EWOL_VERBOSE("    ==> data  : " << l_clipBoardStd);
 						}
@@ -914,6 +916,9 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 		case CLIPBOARD_MODE_PRIMARY:
 			if (false == l_clipBoardOwnerPrimary) {
 				l_clipBoardRequestPrimary = true;
+				// clear old request ..
+				ewol::simpleMsg::Clear(l_clipboardMessage);
+				// Generate a request on X11
 				XConvertSelection(m_display,
 				                  XAtomeSelection,// atom,
 				                  XAtomeTargetStringUTF8, // type?
@@ -932,6 +937,9 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 		case CLIPBOARD_MODE_STD:
 			if (false == l_clipBoardOwnerStd) {
 				l_clipBoardRequestPrimary = false;
+				// clear old request ..
+				ewol::simpleMsg::Clear(l_clipboardMessage);
+				// Generate a request on X11
 				XConvertSelection(m_display,
 				                  XAtomeClipBoard,// atom,
 				                  XAtomeTargetStringUTF8, // type?
@@ -985,29 +993,6 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 			break;
 	}
 }
-/*
-void ewol::clipboard::Copy(etk::UString newData, int32_t bufferId)
-{
-	char * tmpPointer = newData.Utf8Data();
-	
-	Atom selection  = XA_PRIMARY;
-	//All your selection are belong to us...
-	XSetSelectionOwner(m_display, selection, WindowHandle, CurrentTime);
-	
-	EWOL_DEBUG("--------------------------------------------------------------");
-	if (BadAlloc == XStoreBuffer(m_display, tmpPointer, strlen(tmpPointer), bufferId)) {
-		EWOL_ERROR("Copy error");
-	} else {
-		EWOL_DEBUG("Copy well done : \"" << tmpPointer << "\"=" << strlen(tmpPointer));
-	}
-	if (BadAlloc == XStoreBytes(m_display, tmpPointer, strlen(tmpPointer))) {
-		EWOL_ERROR("Copy error");
-	} else {
-		EWOL_DEBUG("Copy well done");
-	}
-	EWOL_DEBUG("--------------------------------------------------------------");
-}
-*/
 
 
 

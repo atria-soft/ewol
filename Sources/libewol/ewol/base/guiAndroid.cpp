@@ -74,6 +74,8 @@ int64_t m_previousTime = 0;
 bool    m_previousDouble = false;
 
 
+static etk::UString l_clipBoardPrimary(""); // local copy of the selection
+static etk::UString l_clipBoardStd(""); // local copy of the clipboard
 
 
 static etkFloat_t gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
@@ -191,6 +193,52 @@ void ewol::SetTitle(etk::UString title)
 	// can not set the title in Android ...
 }
 
+// ClipBoard AREA :
+void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
+{
+	EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
+	newData = "";
+	switch (mode)
+	{
+		case CLIPBOARD_MODE_PRIMARY:
+			// get our own buffer ... (no current selectin on Android ...
+			newData = l_clipBoardPrimary;
+			break;
+		case CLIPBOARD_MODE_STD:
+			EWOL_TODO("implement on Android");
+			// get our own buffer ...
+			newData = l_clipBoardStd;
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
+
+void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
+{
+	EWOL_VERBOSE("Request set of a clipboard : " << mode << " size=" << newData.Size() );
+	switch (mode)
+	{
+		case CLIPBOARD_MODE_PRIMARY:
+			if (newData.Size() > 0) {
+				// copy it ...
+				l_clipBoardPrimary = newData;
+			}
+			break;
+		case CLIPBOARD_MODE_STD:
+			if (newData.Size() > 0) {
+				// copy it ...
+				l_clipBoardStd = newData;
+				// Request the clipBoard :
+				EWOL_TODO("implement on Android copy the copy data");
+			}
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
 
 #undef __class__
 #define __class__ "guiAbstraction"

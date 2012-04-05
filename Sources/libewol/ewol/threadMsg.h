@@ -79,6 +79,7 @@ namespace ewol {
 		void     UnInit(        simpleMsg_ts& handle);
 		uint32_t WaitingMessage(simpleMsg_ts& handle, int32_t timeOut=0);
 		void     SendMessage(   simpleMsg_ts& handle, uint32_t message);
+		void     Clear(         simpleMsg_ts& handle);
 	};
 };
 

@@ -33,7 +33,7 @@ namespace ewol {
 	namespace clipBoard
 	{
 		enum {
-			CLIPBOARD_STD,
+			CLIPBOARD_0,
 			CLIPBOARD_1,
 			CLIPBOARD_2,
 			CLIPBOARD_3,
@@ -43,8 +43,9 @@ namespace ewol {
 			CLIPBOARD_7,
 			CLIPBOARD_8,
 			CLIPBOARD_9,
-			CLIPBOARD_SELECTION,
 			TOTAL_OF_CLICKBOARD,
+			CLIPBOARD_STD,
+			CLIPBOARD_SELECTION,
 		};
 		void	Init(void);
 		void	UnInit(void);

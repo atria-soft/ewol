@@ -45,6 +45,11 @@ ewol::PopUp::PopUp(void)
 	m_colorEmptyArea.blue  = 0.0;
 	m_colorEmptyArea.alpha = 0.50;
 	
+	m_colorBorder.red   = 0.0;
+	m_colorBorder.green = 0.0;
+	m_colorBorder.blue  = 0.0;
+	m_colorBorder.alpha = 0.50;
+	
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_subWidget[iii] = 0;
 	}
@@ -196,7 +201,7 @@ void ewol::PopUp::OnDraw(void)
 	}
 }
 
-
+#define BORDER_SIZE_TMP         (4)
 void ewol::PopUp::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
@@ -212,6 +217,8 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
 		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		BGOObjects->SetColor(m_colorBorder);
+		BGOObjects->Rectangle(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP, tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP);
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}

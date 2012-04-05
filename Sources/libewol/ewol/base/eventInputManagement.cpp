@@ -35,21 +35,6 @@ typedef struct {
 #define MAX_MANAGE_INPUT    (10)
 InputPoperty_ts eventInputSaved[MAX_MANAGE_INPUT];
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- * @return ---
- */
-void ewol::eventInput::OnObjectRemove(ewol::EObject * removeObject)
-{
-	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		if (eventInputSaved[iii].curentWidgetEvent == removeObject) {
-			eventInputSaved[iii].curentWidgetEvent = NULL;
-		}
-	}
-}
-
 static void CleanInputElement(int32_t idInput)
 {
 	eventInputSaved[idInput].isUsed = false;
@@ -66,6 +51,36 @@ static void CleanInputElement(int32_t idInput)
 	eventInputSaved[idInput].isInside = true;
 	eventInputSaved[idInput].nbClickEvent = 0;
 }
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::eventInput::OnObjectRemove(ewol::EObject * removeObject)
+{
+	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
+		if (eventInputSaved[iii].curentWidgetEvent == removeObject) {
+			// remove the property of this input ...
+			CleanInputElement(iii);
+		}
+	}
+}
+
+/**
+ * @brief a new layer on the windows is set ==> might remove all the property of the current element ...
+ * @param ---
+ * @return ---
+ */
+void ewol::eventInput::NewLayerSet(void)
+{
+	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
+		// remove the property of this input ...
+		CleanInputElement(iii);
+	}
+}
+
 
 void ewol::eventInput::Init(void)
 {

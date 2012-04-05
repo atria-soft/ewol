@@ -21,6 +21,12 @@ namespace ewol
 		 * @return ---
 		 */
 		void OnObjectRemove(ewol::EObject * removeObject);
+		/**
+		 * @brief a new layer on the windows is set ==> might remove all the property of the current element ...
+		 * @param ---
+		 * @return ---
+		 */
+		void NewLayerSet(void);
 	}
 }
 #endif

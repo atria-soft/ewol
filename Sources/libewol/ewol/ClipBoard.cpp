@@ -60,14 +60,18 @@ void ewol::clipBoard::UnInit(void)
 void ewol::clipBoard::Set(uint8_t clipboardID, etk::UString &data)
 {
 	// check if ID is correct
-	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
-		EWOL_WARNING("request ClickBoard id error");
-	} else if(0 == data.Size()) {
+	if(0 == data.Size()) {
 		EWOL_INFO("request a copy of nothing");
+		return;
 	} else if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
 		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_STD);
+		return;
 	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
 		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
+		return;
+	}else if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+		EWOL_WARNING("request ClickBoard id error");
+		return;
 	}
 	// Copy datas ...
 	mesCopy[clipboardID] = data;
@@ -75,13 +79,14 @@ void ewol::clipBoard::Set(uint8_t clipboardID, etk::UString &data)
 
 void ewol::clipBoard::Get(uint8_t clipboardID, etk::UString &data)
 {
-	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
-		EWOL_WARNING("request ClickBoard id error");
-	} else if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
+	if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
 		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_STD);
 		return;
 	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
 		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
+		return;
+	} else if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+		EWOL_WARNING("request ClickBoard id error");
 		return;
 	}
 	// Copy datas ...

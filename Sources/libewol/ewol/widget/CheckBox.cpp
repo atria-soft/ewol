@@ -165,7 +165,8 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		clipping_ts drawClipping;
 		drawClipping.x = 0;
 		drawClipping.y = 0;
-		drawClipping.w = m_size.x - (boxSize+5);
+		// note : pb on the clipping properties ...
+		drawClipping.w = m_size.x;// - (boxSize+5);
 		drawClipping.h = m_size.y;
 		tmpText->Text(textPos, drawClipping, m_label);
 		

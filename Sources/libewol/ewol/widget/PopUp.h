@@ -60,6 +60,7 @@ namespace ewol {
 			void           SetDisplayRatio(etkFloat_t ratio);
 		private:
 			color_ts      m_colorBackGroung;
+			color_ts      m_colorBorder;
 			color_ts      m_colorEmptyArea;
 			ewol::Widget* m_subWidget[NB_BOUBLE_BUFFER];
 			etkFloat_t    m_displayRatio;
