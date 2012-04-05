@@ -33,6 +33,7 @@
 #include <ewol/Texture.h>
 #include <ewol/Texture/TextureBMP.h>
 #include <ewol/base/MainThread.h>
+#include <ewol/threadMsg.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -126,8 +127,12 @@ int32_t offsetMoveClickedDouble = 20;
 bool inputIsPressed[20];
 
 // internal copy of the clipBoard ...
-static etk::UString l_clipBoardPrimary("");
-static etk::UString l_clipBoardStd("");
+static ewol::simpleMsg::simpleMsg_ts l_clipboardMessage;
+static bool                          l_clipBoardRequestPrimary = false;
+static bool                          l_clipBoardOwnerPrimary = false;
+static etk::UString                  l_clipBoardPrimary("");
+static bool                          l_clipBoardOwnerStd = false;
+static etk::UString                  l_clipBoardStd("");
 // Atom access...
 static Atom XAtomeSelection = 0;
 static Atom XAtomeClipBoard = 0;
@@ -434,8 +439,12 @@ void X11_Init(void)
 	CreateX11Context();
 	CreateOGlContext();
 	// reset clipBoard
+	l_clipBoardRequestPrimary = false;
+	l_clipBoardOwnerPrimary = false;
+	l_clipBoardOwnerStd = false;
 	l_clipBoardPrimary = "";
 	l_clipBoardStd = "";
+	ewol::simpleMsg::Init(l_clipboardMessage);
 	// reset the Atom properties ...
 	XAtomeSelection        = XInternAtom(m_display, "PRIMARY", 0);
 	XAtomeClipBoard        = XInternAtom(m_display, "CLIPBOARD", 0);
@@ -478,17 +487,24 @@ void X11_Run(void)
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case SelectionClear:
 					// Selection has been done on an other program ==> clear ours ...
-					EWOL_DEBUG("X11 event SelectionClear");
+					EWOL_VERBOSE("X11 event SelectionClear");
 					{
 						XSelectionRequestEvent *req=&(event.xselectionrequest);
-						EWOL_DEBUG("    property: \"" << XGetAtomName(m_display, req->property) << "\"");
-						EWOL_DEBUG("    target:   \"" << XGetAtomName(m_display, req->target) << "\"");
+						EWOL_VERBOSE("    property: \"" << XGetAtomName(m_display, req->property) << "\"");
+						EWOL_VERBOSE("    target:   \"" << XGetAtomName(m_display, req->target) << "\"");
+						if (true == l_clipBoardOwnerPrimary) {
+							l_clipBoardOwnerPrimary = false;
+						} else if (true == l_clipBoardOwnerStd) {
+							l_clipBoardOwnerStd = false;
+						} else {
+							EWOL_ERROR("X11 event SelectionClear ==> but no selection requested anymore ...");
+						}
 					}
 					break;
 				case SelectionNotify:
-					EWOL_DEBUG("X11 event SelectionNotify");
+					EWOL_VERBOSE("X11 event SelectionNotify");
 					if (event.xselection.property == None) {
-						EWOL_DEBUG("    ==> no data ...");
+						EWOL_VERBOSE("    ==> no data ...");
 					} else {
 						unsigned char *buf = 0;
 						Atom type;
@@ -507,14 +523,22 @@ void X11_Run(void)
 						                   &bytes, // *bytes_after_return
 						                   &buf// **prop_return);
 						                   );
-						EWOL_DEBUG("    ==> data  : " << buf);
+						if (true == l_clipBoardRequestPrimary) {
+							l_clipBoardPrimary = (char*)buf;
+							ewol::simpleMsg::SendMessage(l_clipboardMessage, 4);
+							EWOL_VERBOSE("    ==> data  : " << l_clipBoardPrimary);
+						} else {
+							l_clipBoardStd = (char*)buf;
+							ewol::simpleMsg::SendMessage(l_clipboardMessage, 2);
+							EWOL_VERBOSE("    ==> data  : " << l_clipBoardStd);
+						}
 					}
 					break;
 				case SelectionRequest:
-					EWOL_DEBUG("X11 event SelectionRequest");
+					EWOL_VERBOSE("X11 event SelectionRequest");
 					{
 						XSelectionRequestEvent *req=&(event.xselectionrequest);
-						EWOL_DEBUG("    from: " << XGetAtomName(m_display, req->property) << "  request=" << XGetAtomName(m_display, req->selection) << " in " << XGetAtomName(m_display, req->target));
+						EWOL_VERBOSE("    from: " << XGetAtomName(m_display, req->property) << "  request=" << XGetAtomName(m_display, req->selection) << " in " << XGetAtomName(m_display, req->target));
 						const char * magatTextToSend = NULL;
 						
 						if (req->selection == XAtomeSelection) {
@@ -577,6 +601,7 @@ void X11_Run(void)
 						respond.xselection.target= req->target;
 						respond.xselection.time = req->time;
 						XSendEvent (m_display, req->requestor,0,0,&respond);
+						// Flush the message on the pipe ...
 						XFlush (m_display);
 					}
 					break;
@@ -878,17 +903,49 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 
 
 
-// ClipBoard AREA : 
+// ClipBoard AREA :
 
 void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 {
+	EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
 	newData = "";
 	switch (mode)
 	{
 		case CLIPBOARD_MODE_PRIMARY:
+			if (false == l_clipBoardOwnerPrimary) {
+				l_clipBoardRequestPrimary = true;
+				XConvertSelection(m_display,
+				                  XAtomeSelection,// atom,
+				                  XAtomeTargetStringUTF8, // type?
+				                  XAtomeEWOL, // prop,
+				                  WindowHandle,
+				                  CurrentTime);
+				// wait the event ...
+				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
+				if (waitTmp == 0) {
+					EWOL_ERROR("Timeout when waiting the current selection");
+				}
+			}
+			// get our own buffer ...
+			newData = l_clipBoardPrimary;
 			break;
 		case CLIPBOARD_MODE_STD:
-			
+			if (false == l_clipBoardOwnerStd) {
+				l_clipBoardRequestPrimary = false;
+				XConvertSelection(m_display,
+				                  XAtomeClipBoard,// atom,
+				                  XAtomeTargetStringUTF8, // type?
+				                  XAtomeEWOL, // prop,
+				                  WindowHandle,
+				                  CurrentTime);
+				// wait the event ...
+				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
+				if (waitTmp == 0) {
+					EWOL_ERROR("Timeout when waiting the current copy buffer");
+				}
+			}
+			// get our own buffer ...
+			newData = l_clipBoardStd;
 			break;
 		default:
 			EWOL_ERROR("Request an unknow ClipBoard ...");
@@ -898,6 +955,7 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 
 void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 {
+	EWOL_VERBOSE("Request set of a clipboard : " << mode << " size=" << newData.Size() );
 	switch (mode)
 	{
 		case CLIPBOARD_MODE_PRIMARY:
@@ -905,7 +963,10 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				// copy it ...
 				l_clipBoardPrimary = newData;
 				// Request the selection :
-				XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
+				if (false == l_clipBoardOwnerPrimary) {
+					XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
+					l_clipBoardOwnerPrimary = true;
+				}
 			}
 			break;
 		case CLIPBOARD_MODE_STD:
@@ -913,7 +974,10 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				// copy it ...
 				l_clipBoardStd = newData;
 				// Request the clipBoard :
-				XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
+				if (false == l_clipBoardOwnerStd) {
+					XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
+					l_clipBoardOwnerStd = true;
+				}
 			}
 			break;
 		default:

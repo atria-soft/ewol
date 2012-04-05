@@ -52,6 +52,7 @@ namespace etk
 			 *****************************************************/
 			const etk::UString& operator= (const etk::UString &etkS );
 			const etk::UString& operator= (etk::VectorType<char> inputData);
+			const etk::UString& operator= (etk::VectorType<int8_t> inputData);
 			const etk::UString& operator= (etk::VectorType<uniChar_t> inputData);
 			/*****************************************************
 			 *    == operator

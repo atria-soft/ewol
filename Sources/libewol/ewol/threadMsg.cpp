@@ -184,3 +184,82 @@ void ewol::threadMsg::SendDisplayDone(threadMsg_ts& messageData)
 {
 	
 }
+
+
+
+#include <sys/time.h>
+
+
+
+void ewol::simpleMsg::Init(ewol::simpleMsg::simpleMsg_ts& handle)
+{
+	// create interface mutex :
+	int ret = pthread_mutex_init(&handle.mutex, NULL);
+	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
+	// create contition :
+	ret = pthread_cond_init(&handle.condition, NULL);
+	EWOL_ASSERT(ret == 0, "Error creating Condition ...");
+	if (ret != 0) {
+		ret = pthread_mutex_destroy(&handle.mutex);
+		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
+	} else {
+		handle.messageValue = 0;
+	}
+	handle.isInit = true;
+}
+
+void ewol::simpleMsg::UnInit(ewol::simpleMsg::simpleMsg_ts& handle)
+{
+	if (true == handle.isInit) {
+		// Remove Mutex
+		int ret = pthread_cond_destroy(&handle.condition);
+		EWOL_ASSERT(ret == 0, "Error destroying Condition ...");
+		// Remove condition
+		ret = pthread_mutex_destroy(&handle.mutex);
+		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
+		// remove data ????
+		handle.isInit = false;
+	}
+}
+
+uint32_t ewol::simpleMsg::WaitingMessage(ewol::simpleMsg::simpleMsg_ts& handle, int32_t timeOut)
+{
+	if (false == handle.isInit) {
+		return 0;
+	}
+	pthread_mutex_lock(&handle.mutex);
+	
+	if (0 == handle.messageValue) {
+		if (timeOut == 0) {
+			pthread_cond_wait(&handle.condition, &handle.mutex);
+		} else {
+			struct timeval now;
+			struct timespec timeout;
+			gettimeofday(&now, NULL);
+			timeout.tv_sec = now.tv_sec + timeOut/1000;
+			timeout.tv_nsec = now.tv_usec * 1000 + timeOut%1000;
+			pthread_cond_timedwait(&handle.condition, &handle.mutex, &timeout);
+		}
+	}
+	// copy message
+	int32_t messageCopy = handle.messageValue;
+	// reset it ...
+	handle.messageValue = 0;
+	
+	pthread_mutex_unlock(&handle.mutex);
+	return messageCopy;
+}
+
+void ewol::simpleMsg::SendMessage(ewol::simpleMsg::simpleMsg_ts& handle, uint32_t message)
+{
+	if (false == handle.isInit) {
+		return;
+	}
+	pthread_mutex_lock(&handle.mutex);
+	handle.messageValue = message;
+	pthread_cond_broadcast(&handle.condition);
+	pthread_mutex_unlock(&handle.mutex);
+}
+
+
+

@@ -24,6 +24,7 @@
 
 #include <ewol/Debug.h>
 #include <ewol/ClipBoard.h>
+#include <ewol/base/gui.h>
 
 #undef __class__
 #define __class__	"ClipBoard"
@@ -64,39 +65,24 @@ void ewol::clipBoard::Set(uint8_t clipboardID, etk::UString &data)
 	} else if(0 == data.Size()) {
 		EWOL_INFO("request a copy of nothing");
 	} else if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
-		//GtkClipboard * clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD);
-		//gtk_clipboard_set_text(clipboard, (const gchar*)&data[0], data.Size() );
+		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_STD);
 	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		//GtkClipboard * clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY);
-		//gtk_clipboard_set_text(clipboard, (const gchar*)&data[0], data.Size() );
+		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
 	}
 	// Copy datas ...
 	mesCopy[clipboardID] = data;
 }
-
 
 void ewol::clipBoard::Get(uint8_t clipboardID, etk::UString &data)
 {
 	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
 		EWOL_WARNING("request ClickBoard id error");
 	} else if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
-		/*
-		GtkClipboard * clipboard = gtk_clipboard_get(GDK_SELECTION_CLIPBOARD );
-		gchar *text = gtk_clipboard_wait_for_text(clipboard);
-		if (text != NULL) {
-			mesCopy[COPY_STD].Clear();
-			mesCopy[COPY_STD].PushBack((int8_t*)text, strlen(text) );
-		}
-		*/
+		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_STD);
+		return;
 	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		/*
-		GtkClipboard * clipboard = gtk_clipboard_get(GDK_SELECTION_PRIMARY );
-		gchar *text = gtk_clipboard_wait_for_text(clipboard);
-		if (text != NULL) {
-			mesCopy[COPY_MIDDLE_BUTTON].Clear();
-			mesCopy[COPY_MIDDLE_BUTTON].PushBack((int8_t*)text, strlen(text) );
-		}
-		*/
+		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
+		return;
 	}
 	// Copy datas ...
 	data = mesCopy[clipboardID];

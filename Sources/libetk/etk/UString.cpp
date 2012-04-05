@@ -263,6 +263,23 @@ const etk::UString& etk::UString::operator= (etk::VectorType<char> inputData)
  * @return 
  *
  */
+const etk::UString& etk::UString::operator= (etk::VectorType<int8_t> inputData)
+{
+	etk::VectorType<uniChar_t> output_Unicode;
+	unicode::convertUtf8ToUnicode(inputData, output_Unicode);
+	*this = output_Unicode;
+	return *this;
+}
+
+
+/**
+ * @brief 
+ *
+ * @param[in,out] 
+ *
+ * @return 
+ *
+ */
 const etk::UString& etk::UString::operator= (etk::VectorType<uniChar_t> inputData)
 {
 	m_data = inputData;

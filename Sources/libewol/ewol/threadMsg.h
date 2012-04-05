@@ -66,6 +66,20 @@ namespace ewol {
 		bool SendMessage(threadMsg_ts& messageData, uint32_t type, msgPriority_te prio = MSG_PRIO_NONE, void * data = NULL, uint32_t size = 0);
 		void SendDisplayDone(threadMsg_ts& messageData);
 	};
+	
+	namespace simpleMsg {
+		typedef struct {
+			bool                isInit;
+			pthread_mutex_t     mutex;
+			pthread_cond_t      condition;
+			uint32_t            messageValue;
+		} simpleMsg_ts;
+		
+		void     Init(          simpleMsg_ts& handle);
+		void     UnInit(        simpleMsg_ts& handle);
+		uint32_t WaitingMessage(simpleMsg_ts& handle, int32_t timeOut=0);
+		void     SendMessage(   simpleMsg_ts& handle, uint32_t message);
+	};
 };
 
 #endif
