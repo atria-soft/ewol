@@ -30,6 +30,8 @@
 #include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventButtonPressed;
+extern const char * const ewolEventButtonDown;
+extern const char * const ewolEventButtonUp;
 extern const char * const ewolEventButtonEnter;
 extern const char * const ewolEventButtonLeave;
 

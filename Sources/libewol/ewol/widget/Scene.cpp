@@ -167,11 +167,15 @@ void ewol::Scene::AddElement(ewol::GameElement* newElement)
  */
 void ewol::Scene::PeriodicCall(int64_t localTime)
 {
+	
 	//EWOL_ERROR("Periodic Call ... " << localTime);
 	for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
 		if (NULL != m_listAnimatedElements[iii]) {
-			// find an empty slot ...
-			m_listAnimatedElements[iii]->Process(localTime, 100, m_listAnimatedElements);
+			// check if the element request an auto Kill ...
+			if (true == m_listAnimatedElements[iii]->Process(localTime, 20000, m_listAnimatedElements) ) {
+				delete(m_listAnimatedElements[iii]);
+				m_listAnimatedElements[iii] = NULL;
+			}
 		}
 	}
 	MarkToReedraw();

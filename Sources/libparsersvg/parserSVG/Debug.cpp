@@ -24,4 +24,4 @@
 
 #include <parserSVG/Debug.h>
 
-const char * parserSVGLibName = "parserSVG ";
+const char * parserSVGLibName = "parserSVG";

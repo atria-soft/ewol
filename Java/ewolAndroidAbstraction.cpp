@@ -27,7 +27,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <pthread.h>
-#include <tools_debug.h>
+#include <Debug.h>
 
 #include <ewol/threadMsg.h>
 
@@ -57,49 +57,49 @@ extern "C"
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnCreate( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Create                   **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Create                   **");
+		APPL_DEBUG("*******************************************");
 		EWOL_SystemStart();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStart( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Start                    **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Start                    **");
+		APPL_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnReStart( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Re-Start                 **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Re-Start                 **");
+		APPL_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnResume( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Resume                   **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Resume                   **");
+		APPL_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnPause( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Pause                    **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Pause                    **");
+		APPL_DEBUG("*******************************************");
 		// All the openGl has been destroyed ...
 		// TODO : Mark all the texture to be reloaded ...
 		EWOL_NativeGLDestroy();
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStop( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Stop                     **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Stop                     **");
+		APPL_DEBUG("*******************************************");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnDestroy( JNIEnv*  env )
 	{
-		EDN_DEBUG("*******************************************");
-		EDN_DEBUG("**  Activity On Destroy                  **");
-		EDN_DEBUG("*******************************************");
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Activity On Destroy                  **");
+		APPL_DEBUG("*******************************************");
 		EWOL_SystemStop();
 	}
 	

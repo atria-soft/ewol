@@ -28,9 +28,11 @@
 #include <ewol/WidgetManager.h>
 
 
-extern const char * const ewolEventButtonPressed    = "ewol Button Pressed";
-extern const char * const ewolEventButtonEnter      = "ewol Button Enter";
-extern const char * const ewolEventButtonLeave      = "ewol Button Leave";
+extern const char * const ewolEventButtonPressed    = "ewol-button-Pressed";
+extern const char * const ewolEventButtonDown       = "ewol-button-down";
+extern const char * const ewolEventButtonUp         = "ewol-button-up";
+extern const char * const ewolEventButtonEnter      = "ewol-button-enter";
+extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
 
 
 /**
@@ -51,6 +53,8 @@ void ewol::WIDGET_ButtonInit(void)
 void ewol::Button::Init(void)
 {
 	AddEventId(ewolEventButtonPressed);
+	AddEventId(ewolEventButtonDown);
+	AddEventId(ewolEventButtonUp);
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
 	m_hasAnImage = false;
@@ -277,11 +281,15 @@ bool ewol::Button::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, co
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
+		if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+			GenerateEventId(ewolEventButtonDown);
+		}
+		if(ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+			GenerateEventId(ewolEventButtonUp);
+		}
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
-			// nothing to do ...
-			//EWOL_DEBUG("    ==> generate event : " << ewolEventButtonPressed);
 			GenerateEventId(ewolEventButtonPressed);
 			MarkToReedraw();
 			return true;

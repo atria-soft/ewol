@@ -36,10 +36,11 @@ ewol::GameElement::GameElement(void)
 	m_visible = true;
 	m_position.x = 0.0;
 	m_position.y = 0.0;
-	m_acceleration.x = 0.0;
-	m_acceleration.y = 0.0;
+	m_speed.x = 0.0;
+	m_speed.y = 0.0;
 	m_size = 64.0;
 	m_angle = 0.0;
+	m_gravity = 0.0;
 }
 
 

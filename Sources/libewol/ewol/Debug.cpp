@@ -25,4 +25,4 @@
 
 #include <ewol/Debug.h>
 
-const char * ewolLibName = "ewol    ";
+const char * ewolLibName = "ewol     ";
