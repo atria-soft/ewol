@@ -45,6 +45,7 @@ void ewol::WIDGET_SceneInit(void)
 ewol::Scene::Scene(void)
 {
 	SetCanHaveFocus(true);
+	PeriodicCallSet(true);
 }
 
 
@@ -95,5 +96,85 @@ const char * const ewol::Scene::GetObjectType(void)
 void ewol::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		// clean elements
+		for (int32_t iii=0; iii<m_animated[m_currentCreateId].Size(); iii++) {
+			if (NULL != m_animated[m_currentCreateId][iii]) {
+				m_animated[m_currentCreateId][iii]->Clear();
+			}
+		}
+		// clean effects
+		for (int32_t iii=0; iii<m_effects[m_currentCreateId].Size(); iii++) {
+			if (NULL != m_effects[m_currentCreateId][iii]) {
+				m_effects[m_currentCreateId][iii]->Clear();
+			}
+		}
+		for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
+			if (NULL != m_listAnimatedElements[iii]) {
+				// find an empty slot ...
+				m_listAnimatedElements[iii]->Draw(m_animated[m_currentCreateId], m_effects[m_currentCreateId]);
+			}
+		}
 	}
 }
+
+/**
+ * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
+ * @param ---
+ * @return ---
+ */
+void ewol::Scene::OnDraw(void)
+{
+	//EWOL_ERROR(" On draw : " << m_currentDrawId);
+	// draw background
+	// TODO : ...
+	// draw elements
+	for (int32_t iii=0; iii<m_animated[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_animated[m_currentDrawId][iii]) {
+			m_animated[m_currentDrawId][iii]->Draw();
+		}
+	}
+	// draw effects
+	for (int32_t iii=0; iii<m_effects[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_effects[m_currentDrawId][iii]) {
+			m_effects[m_currentDrawId][iii]->Draw();
+		}
+	}
+	m_needFlipFlop = true;
+}
+
+
+void ewol::Scene::AddElement(ewol::GameElement* newElement)
+{
+	if (NULL == newElement) {
+		return;
+	}
+	for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
+		if (NULL == m_listAnimatedElements[iii]) {
+			// find an empty slot ...
+			m_listAnimatedElements[iii] = newElement;
+			return;
+		}
+	}
+	//did not find empty slot : 
+	m_listAnimatedElements.PushBack(newElement);
+}
+
+
+/**
+ * @brief Periodic call of this widget
+ * @param localTime curent system time
+ * @return ---
+ */
+void ewol::Scene::PeriodicCall(int64_t localTime)
+{
+	//EWOL_ERROR("Periodic Call ... " << localTime);
+	for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
+		if (NULL != m_listAnimatedElements[iii]) {
+			// find an empty slot ...
+			m_listAnimatedElements[iii]->Process(localTime, 100, m_listAnimatedElements);
+		}
+	}
+	MarkToReedraw();
+}
+
+

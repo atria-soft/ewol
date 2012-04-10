@@ -27,27 +27,19 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/OObject/Sprite.h>
 #include <ewol/widget/WidgetScrolled.h>
+#include <ewol/OObject/Sprite.h>
+#include <ewol/Game/GameElement.h>
 
 
 namespace ewol {
-	class GameElement
-	{
-		private:
-			bool       m_visible;
-			coord2D_ts m_position;
-		public:
-			         GameElement(void) { m_visible = true; m_position.x=0.0; m_position.y=0.0;};
-			virtual ~GameElement(void) {};
-	};
-	
 	class Scene :public ewol::WidgetScrooled
 	{
 		// TODO : Set it in private ...
 		protected:
 			etk::VectorType<ewol::OObject*> m_backgroundElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::Sprite*> m_backgrouanimatedElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
+			etk::VectorType<ewol::Sprite*> m_animated[NB_BOUBLE_BUFFER];   //!< element that must be display the first
+			etk::VectorType<ewol::Sprite*> m_effects[NB_BOUBLE_BUFFER];   //!< element that must be display the first
 			etk::VectorType<ewol::GameElement*> m_listAnimatedElements;   //!< generic element to display...
 		public:
 			Scene(void);
@@ -68,6 +60,20 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 			virtual void OnRegenerateDisplay(void);
+			
+			/**
+			 * @brief Periodic call of this widget
+			 * @param localTime curent system time
+			 * @return ---
+			 */
+			virtual void PeriodicCall(int64_t localTime);
+			/**
+			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
+			 * @param ---
+			 * @return ---
+			 */
+			virtual void OnDraw(void);
+			void AddElement(ewol::GameElement* newElement);
 	};
 	
 	/**

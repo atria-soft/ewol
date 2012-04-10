@@ -182,7 +182,28 @@ int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
 
 void ewol::threadMsg::SendDisplayDone(threadMsg_ts& messageData)
 {
+	if (false == messageData.isInit) {
+		return;
+	}
+	pthread_mutex_lock(&messageData.mutex);
+	messageData.displayHasDone = true;
+	pthread_cond_broadcast(&messageData.condition);
+	pthread_mutex_unlock(&messageData.mutex);
 	
+}
+
+
+bool ewol::threadMsg::HasDisplayDone(threadMsg_ts& messageData)
+{
+	if (false == messageData.isInit) {
+		return false;
+	}
+	bool state = false;
+	pthread_mutex_lock(&messageData.mutex);
+	state = messageData.displayHasDone;
+	messageData.displayHasDone = false;;
+	pthread_mutex_unlock(&messageData.mutex);
+	return state;
 }
 
 

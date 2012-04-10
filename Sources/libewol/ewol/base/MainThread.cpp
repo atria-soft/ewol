@@ -194,6 +194,10 @@ static void* BaseAppEntry(void* param)
 		}
 		if (0 == ewol::threadMsg::WaitingMessage(androidJniMsg)) {
 			if (countNbEvent > 0) {
+				if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
+					
+					ewol::widgetManager::PeriodicCall(0);
+				}
 				EWOL_NativeRegenerateDisplay();
 				countNbEvent = 0;
 			}

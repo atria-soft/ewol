@@ -173,6 +173,9 @@ void EWOL_GenericDraw(bool everyTime)
 	if ( (currentTime - startTime) > DISPLAY_PERIODE_MS) {
 		display = true;
 	}
+	if (ewol::widgetManager::PeriodicCallHave()) {
+		everyTime = true;
+	}
 	ewol::widgetManager::DoubleBufferLock();
 	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
 	    || true == everyTime)

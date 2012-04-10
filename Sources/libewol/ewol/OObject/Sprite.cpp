@@ -25,6 +25,7 @@
 #include <ewol/OObject/Sprite.h>
 #include <ewol/Texture.h>
 #include <ewol/importgl.h>
+#include <math.h>
 
 #undef __class__
 #define __class__	"Sprite"
@@ -53,7 +54,7 @@ ewol::Sprite::~Sprite(void)
 void ewol::Sprite::Draw(void)
 {
 	if (m_coord.Size()<=0) {
-		EWOL_WARNING("Nothink to draw...");
+		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
 	if (m_textureId == -1) {
@@ -75,56 +76,56 @@ void ewol::Sprite::Draw(void)
 	glDisable(GL_TEXTURE_2D);
 }
 
-void ewol::Sprite::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX, etkFloat_t texY, etkFloat_t texSX, etkFloat_t texSY)
+void ewol::Sprite::Clear(void)
 {
-	//EWOL_DEBUG("Add rectangle : ...");
-	coord2D_ts point;
-	texCoord_ts tex;
-
-	tex.u = texX;
-	tex.v = texY;
-	point.x = x;
-	point.y = y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-
-
-	tex.u = texSX;
-	tex.v = texY;
-	point.x = x + w;
-	point.y = y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-
-
-	tex.u = texSX;
-	tex.v = texSY;
-	point.x = x + w;
-	point.y = y + h;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-
-	tex.u = texX;
-	tex.v = texSY;
-	point.x = x;
-	point.y = y + h;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-
-	tex.u = texX;
-	tex.v = texY;
-	point.x = x;
-	point.y = y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
+	m_coord.Clear();
+	m_coordTex.Clear();
 }
 
-
-void Element(coord2D_ts pos, etkFloat_t size, etkFloat_t angle)
+void ewol::Sprite::Element(coord2D_ts pos, etkFloat_t size, etkFloat_t angle)
 {
+	angle -= M_PI/4;
+	size *= 0.7;
+	texCoord_ts texA, texB, texC, texD;
+	texA.u = 0.0;
+	texA.v = 0.0;
+	texB.u = 0.0;
+	texB.v = 1.0;
+	texC.u = 1.0;
+	texC.v = 1.0;
+	texD.u = 1.0;
+	texD.v = 0.0;
 	
+	coord2D_ts point;
+	etkFloat_t yyySin = sin(angle) * size;
+	etkFloat_t xxxCos = cos(angle) * size;
+	
+	point.x = xxxCos + pos.x;
+	point.y = yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texB);
+	
+	point.x = yyySin + pos.x;
+	point.y = -xxxCos + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texC);
+	
+	point.x = -xxxCos + pos.x;
+	point.y = -yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texD);
+	
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texD);
+	
+	point.x = -yyySin + pos.x;
+	point.y = xxxCos + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texA);
+	
+	point.x = xxxCos + pos.x;
+	point.y = yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texB);
 }
 

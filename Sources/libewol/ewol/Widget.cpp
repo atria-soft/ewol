@@ -276,3 +276,17 @@ void ewol::Widget::GenDraw(void)
 	glPopMatrix();
 	return;
 }
+
+/**
+ * @brief Request that the current widegt have a periodic call
+ * @param statusToSet true if the periodic call is needed
+ * @return ---
+ */
+void ewol::Widget::PeriodicCallSet(bool statusToSet)
+{
+	if (true == statusToSet) {
+		ewol::widgetManager::PeriodicCallAdd(this);
+	} else {
+		ewol::widgetManager::PeriodicCallRm(this);
+	}
+}

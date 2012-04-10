@@ -228,6 +228,61 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	if (NULL != content) {
 		m_paint.strokeWidth = ParseLength(content);
 	}
+	content = node->ToElement()->Attribute("opacity");
+	if (NULL != content) {
+		etkFloat_t opacity = ParseLength(content);
+		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		m_paint.fill.alpha = opacity*0xFF;
+		m_paint.stroke.alpha = opacity*0xFF;
+	}
+	content = node->ToElement()->Attribute("fill-opacity");
+	if (NULL != content) {
+		etkFloat_t opacity = ParseLength(content);
+		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		m_paint.fill.alpha = opacity*0xFF;
+	}
+	content = node->ToElement()->Attribute("stroke-opacity");
+	if (NULL != content) {
+		etkFloat_t opacity = ParseLength(content);
+		opacity  = etk_max(0.0, etk_min(1.0, opacity));
+		m_paint.stroke.alpha = opacity*0xFF;
+	}
+	content = node->ToElement()->Attribute("fill-rule");
+	if (NULL != content) {
+		if (0 == strcmp(content, "nonzero") ) {
+			m_paint.flagEvenOdd = false;
+		} else if (0 == strcmp(content, "evenodd") ) {
+			m_paint.flagEvenOdd = true;
+		} else {
+			SVG_ERROR("not know fill-rule value : \"" << content << "\", not in [nonzero,evenodd]");
+		}
+	}
+	content = node->ToElement()->Attribute("stroke-linecap");
+	if (NULL != content) {
+		if (0 == strcmp(content, "butt") ) {
+			m_paint.lineCap = svg::LINECAP_BUTT;
+		} else if (0 == strcmp(content, "round") ) {
+			m_paint.lineCap = svg::LINECAP_ROUND;
+		} else if (0 == strcmp(content, "square") ) {
+			m_paint.lineCap = svg::LINECAP_SQUARE;
+		} else {
+			m_paint.lineCap = svg::LINECAP_BUTT;
+			SVG_ERROR("not know stroke-linecap value : \"" << content << "\", not in [butt,round,square]");
+		}
+	}
+	content = node->ToElement()->Attribute("stroke-linejoin");
+	if (NULL != content) {
+		if (0 == strcmp(content, "miter") ) {
+			m_paint.lineJoin = svg::LINEJOIN_MITER;
+		} else if (0 == strcmp(content, "round") ) {
+			m_paint.lineJoin = svg::LINEJOIN_ROUND;
+		} else if (0 == strcmp(content, "bevel") ) {
+			m_paint.lineJoin = svg::LINEJOIN_BEVEL;
+		} else {
+			m_paint.lineJoin = svg::LINEJOIN_MITER;
+			SVG_ERROR("not know stroke-linejoin value : \"" << content << "\", not in [miter,round,bevel]");
+		}
+	}
 	content = node->ToElement()->Attribute("style");
 	if (NULL != content) {
 		char outputType[1024] = "";
@@ -287,6 +342,8 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 					m_paint.lineJoin = svg::LINEJOIN_MITER;
 					SVG_ERROR("not know  " << outputType << " value : \"" << outputValue << "\", not in [miter,round,bevel]");
 				}
+			} else if (0 == strcmp(outputType, "marker-start") ) {
+				// TODO : ...
 			} else {
 				SVG_ERROR("not know painting element in style balise : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			}
@@ -491,7 +548,7 @@ color8_ts svg::Base::ParseColor(const char *inputData)
 	uint32_t red, green, blue, alpha;
 	float fred, fgreen, fblue, falpha;
 	size_t len = strlen(inputData);
-
+	
 	if(    len >=1
 	    && inputData[0] == '#') {
 		if(len == 4) {

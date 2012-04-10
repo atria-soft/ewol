@@ -10,6 +10,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/EObject.cpp \
 			ewol/EObjectManager.cpp \
 			ewol/OObject.cpp \
+			ewol/Game/GameElement.cpp \
 			ewol/OObject/2DText.cpp \
 			ewol/OObject/2DTextColored.cpp \
 			ewol/OObject/2DColored.cpp \

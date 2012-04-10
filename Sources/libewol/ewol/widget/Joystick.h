@@ -112,6 +112,15 @@ namespace ewol {
 			 * @return ---
 			 */
 			void Foreground(etk::UString imageNameInData);
+			
+			/**
+			 * @brief Get the property of the joystick
+			 * @param[out] distance distance to the center
+			 * @param[out] angle angle of the joy
+			 * @return ---
+			 */
+			void GetProperty(etkFloat_t& distance, etkFloat_t& angle);
+			
 	};
 	
 	/**

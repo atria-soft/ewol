@@ -36,10 +36,10 @@ namespace ewol {
 			Sprite(etk::UString spriteName);
 			Sprite(etk::UString spriteName, etkFloat_t sizeX, etkFloat_t sizeY);
 			virtual ~Sprite(void);
-		public:
 			virtual void Draw(void);
-			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX=0.0, etkFloat_t texY=0.0, etkFloat_t texSX=1.0, etkFloat_t texSY=1.0);
+			void Clear(void);
 			void Element(coord2D_ts pos, etkFloat_t size, etkFloat_t angle);
+			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
 			int32_t                       m_textureId;   //!< texture internal ID
 			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object

@@ -343,3 +343,17 @@ void ewol::Joystick::Foreground(etk::UString imageNameInData)
 	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);
 }
 
+
+/**
+ * @brief Get the property of the joystick
+ * @param[out] distance distance to the center
+ * @param[out] angle angle of the joy
+ * @return ---
+ */
+void ewol::Joystick::GetProperty(etkFloat_t& distance, etkFloat_t& angle)
+{
+	distance = m_distance;
+	angle = m_angle+M_PI/2;
+}
+
+

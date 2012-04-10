@@ -317,7 +317,21 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnLostFocus(void) {};
-		
+		protected:
+			/**
+			 * @brief Request that the current widegt have a periodic call
+			 * @param statusToSet true if the periodic call is needed
+			 * @return ---
+			 */
+			void PeriodicCallSet(bool statusToSet);
+		public:
+			/**
+			 * @brief Periodic call of this widget
+			 * @param localTime curent system time
+			 * @return ---
+			 */
+			virtual void PeriodicCall(int64_t localTime) { };
+			
 		public:
 			/**
 			 * @brief Get the widget at the specific windows absolute position

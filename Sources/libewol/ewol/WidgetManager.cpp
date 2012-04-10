@@ -27,6 +27,7 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ButtonColor.h>
 //#include <ewol/widget/Scene.h>
+#include <etk/VectorType.h>
 
 #undef __class__
 #define __class__	"WidgetManager"
@@ -37,6 +38,8 @@ static bool IsInit = false;
 // For the focus Management
 static ewol::Widget * m_focusWidgetDefault = NULL;
 static ewol::Widget * m_focusWidgetCurrent = NULL;
+static etk::VectorType<ewol::Widget*> l_listOfPeriodicWidget;
+static bool                           l_havePeriodic = false;
 
 void ewol::widgetManager::Init(void)
 {
@@ -47,6 +50,8 @@ void ewol::widgetManager::Init(void)
 	// prevent android error ==> can create memory leak but I prefer
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
+	l_listOfPeriodicWidget.Clear();
+	l_havePeriodic = false;
 	// init all the widget global parameters :
 	ewol::WIDGET_JoystickInit();
 	ewol::WIDGET_ButtonInit();
@@ -64,12 +69,14 @@ void ewol::widgetManager::UnInit(void)
 	
 	IsInit = false;
 	
+	l_listOfPeriodicWidget.Clear();
 	int ret = pthread_mutex_destroy(&localMutex);
 	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 }
 
 void ewol::widgetManager::Rm(ewol::Widget * newWidget)
 {
+	PeriodicCallRm(newWidget);
 	FocusRemoveIfRemove(newWidget);
 }
 
@@ -157,6 +164,54 @@ void ewol::widgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
 		EWOL_WARNING("Release default Focus when remove widget");
 		FocusSetDefault(NULL);
 	}
+}
+
+
+
+void ewol::widgetManager::PeriodicCallAdd(ewol::Widget * pWidget)
+{
+	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+		if (l_listOfPeriodicWidget[iii] == pWidget) {
+			return;
+		}
+	}
+	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+		if (NULL == l_listOfPeriodicWidget[iii]) {
+			l_listOfPeriodicWidget[iii] = pWidget;
+			return;
+		}
+	}
+	l_listOfPeriodicWidget.PushBack(pWidget);
+	l_havePeriodic = true;
+}
+
+void ewol::widgetManager::PeriodicCallRm(ewol::Widget * pWidget)
+{
+	int32_t nbElement = 0;
+	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+		if (l_listOfPeriodicWidget[iii] == pWidget) {
+			l_listOfPeriodicWidget[iii] = NULL;
+		} else {
+			nbElement++;
+		}
+	}
+	if (0 == nbElement) {
+		l_havePeriodic = false;
+	}
+}
+
+void ewol::widgetManager::PeriodicCall(int64_t localTime)
+{
+	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+		if (NULL != l_listOfPeriodicWidget[iii]) {
+			l_listOfPeriodicWidget[iii]->PeriodicCall(localTime);
+		}
+	}
+}
+
+bool ewol::widgetManager::PeriodicCallHave(void)
+{
+	return l_havePeriodic;
 }
 
 
