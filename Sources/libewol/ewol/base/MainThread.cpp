@@ -120,9 +120,10 @@ static void* BaseAppEntry(void* param)
 	EWOL_DEBUG("==> Init BThread (END)");
 	while(false == requestEndProcessing) {
 		ewol::threadMsg::threadMsgContent_ts data;
+		data.type = THREAD_JUST_DISPLAY;
 		ewol::threadMsg::WaitMessage(androidJniMsg, data);
+		countNbEvent++;
 		if (data.type != THREAD_JUST_DISPLAY) {
-			countNbEvent++;
 			//EWOL_DEBUG("EVENT");
 			switch (data.type) {
 				case THREAD_INIT:

@@ -252,6 +252,7 @@ void ewol::Widget::KeepFocus(void)
 /**
  * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
  * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
+ * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
  * @param ---
  * @return ---
  */

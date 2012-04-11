@@ -26,6 +26,8 @@
 
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/importgl.h>
+#include <ewol/ewol.h>
 
 
 
@@ -35,6 +37,8 @@ ewol::WidgetScrooled::WidgetScrooled(void)
 	m_originScrooled.y = 0;
 	m_pixelScrolling = 20;
 	m_highSpeedMode = SCROLL_DISABLE;
+	m_scroollingMode = SCROLL_MODE_NORMAL;
+	m_zoom = 1.0;
 }
 
 ewol::WidgetScrooled::~WidgetScrooled(void)
@@ -115,6 +119,7 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
 {
 	coord2D_ts relativePos = RelativePosition(pos);
+	if (SCROLL_MODE_NORMAL == m_scroollingMode) {
 	#ifdef __MODE__Touch
 		if (1 == IdInput) {
 			EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
@@ -162,7 +167,6 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 		}
 	#else
 		if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			//EWOL_INFO("mouse-event GDK_SCROLL_UP");
 			m_originScrooled.y -= m_pixelScrolling;
 			if (m_originScrooled.y < 0) {
 				m_originScrooled.y = 0;
@@ -170,7 +174,6 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 			MarkToReedraw();
 			return true;
 		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			//EWOL_INFO("mouse-event GDK_SCROLL_DOWN");
 			m_originScrooled.y += m_pixelScrolling;
 			if (m_maxSize.y < m_originScrooled.y) {
 				m_originScrooled.y = m_maxSize.y;
@@ -228,6 +231,69 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 			return true;
 		}
 	#endif
+	} else if (SCROLL_MODE_CENTER == m_scroollingMode) {
+	#ifdef __MODE__Touch
+		// TODO ...
+	#else
+		etkFloat_t tmp1=ewol::GetCurrentHeight() / m_maxSize.y;
+		etkFloat_t tmp2=ewol::GetCurrentWidth() / m_maxSize.x;
+		//EWOL_INFO(" elements Zoom : " << tmp1 << " " << tmp2);
+		tmp1 = etk_min(tmp1, tmp2);
+		if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+			m_zoom -= 0.1;
+			if (tmp1 < 1.0) {
+				m_zoom = etk_max(tmp1, m_zoom);
+			} else {
+				m_zoom = etk_max(1.0, m_zoom);
+			}
+			MarkToReedraw();
+			return true;
+		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+			m_zoom += 0.1;
+			if (tmp1 > 1.0) {
+				m_zoom = etk_min(tmp1, m_zoom);
+			} else {
+				m_zoom = etk_min(1.0, m_zoom);
+			}
+			MarkToReedraw();
+			return true;
+		}
+	#endif
+	} else {
+		EWOL_ERROR("Scrolling mode unknow ... " << m_scroollingMode );
+	}
 	return false;
 }
 
+/**
+ * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+ * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
+ * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
+ * @param ---
+ * @return ---
+ */
+void ewol::WidgetScrooled::GenDraw(void)
+{
+	if (SCROLL_MODE_CENTER == m_scroollingMode) {
+		glPushMatrix();
+		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+		glViewport(                                       m_origin.x,
+		            ewol::GetCurrentHeight() - m_size.y - m_origin.y,
+		            m_size.x,
+		            m_size.y);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glScalef(m_zoom, m_zoom, 1.0);
+		glTranslatef(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
+		
+		// Call the widget drawing methode
+		OnDraw();
+		glPopMatrix();
+	} else {
+		ewol::Widget::GenDraw();
+	}
+	
+}

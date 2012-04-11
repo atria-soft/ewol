@@ -41,12 +41,18 @@ namespace ewol {
 	#endif
 	}highSpeedMode_te;
 	
+	typedef enum {
+		SCROLL_MODE_NORMAL, //!< No Zoom , can UP and down, left and right
+		SCROLL_MODE_CENTER, //!< Zoom enable, no move left and right
+	} scrollingMode_te;
 	class WidgetScrooled : public ewol::Widget
 	{
 		protected:
 			coord2D_ts        m_originScrooled;
 			coord2D_ts        m_maxSize;
+			etkFloat_t        m_zoom; //!< current zoom on the display
 		private:
+			scrollingMode_te  m_scroollingMode; //!< mode of management of the scrooling
 			etkFloat_t        m_pixelScrolling;
 			coord2D_ts        m_highSpeedStartPos;
 			highSpeedMode_te  m_highSpeedMode;
@@ -78,8 +84,17 @@ namespace ewol {
 			 * @return false the event is not used
 			 */
 			virtual bool OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos);
+			/**
+			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
+			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
+			 * @param ---
+			 * @return ---
+			 */
+			virtual void GenDraw(void);
 		protected:
 			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
+			void ScroolingMode(scrollingMode_te newMode) { m_scroollingMode = newMode; };
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SCROOLED;

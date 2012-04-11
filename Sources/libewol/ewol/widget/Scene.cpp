@@ -97,21 +97,21 @@ void ewol::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean elements
-		for (int32_t iii=0; iii<m_animated[m_currentCreateId].Size(); iii++) {
-			if (NULL != m_animated[m_currentCreateId][iii]) {
-				m_animated[m_currentCreateId][iii]->Clear();
+		for (int32_t iii=0; iii<m_sceneElement.animated[m_currentCreateId].Size(); iii++) {
+			if (NULL != m_sceneElement.animated[m_currentCreateId][iii]) {
+				m_sceneElement.animated[m_currentCreateId][iii]->Clear();
 			}
 		}
 		// clean effects
-		for (int32_t iii=0; iii<m_effects[m_currentCreateId].Size(); iii++) {
-			if (NULL != m_effects[m_currentCreateId][iii]) {
-				m_effects[m_currentCreateId][iii]->Clear();
+		for (int32_t iii=0; iii<m_sceneElement.effects[m_currentCreateId].Size(); iii++) {
+			if (NULL != m_sceneElement.effects[m_currentCreateId][iii]) {
+				m_sceneElement.effects[m_currentCreateId][iii]->Clear();
 			}
 		}
-		for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
-			if (NULL != m_listAnimatedElements[iii]) {
+		for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
+			if (NULL != m_sceneElement.listAnimatedElements[iii]) {
 				// find an empty slot ...
-				m_listAnimatedElements[iii]->Draw(m_animated[m_currentCreateId], m_effects[m_currentCreateId]);
+				m_sceneElement.listAnimatedElements[iii]->Draw(m_sceneElement.animated[m_currentCreateId], m_sceneElement.effects[m_currentCreateId]);
 			}
 		}
 	}
@@ -128,35 +128,36 @@ void ewol::Scene::OnDraw(void)
 	// draw background
 	// TODO : ...
 	// draw elements
-	for (int32_t iii=0; iii<m_animated[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_animated[m_currentDrawId][iii]) {
-			m_animated[m_currentDrawId][iii]->Draw();
+	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_sceneElement.animated[m_currentDrawId][iii]) {
+			m_sceneElement.animated[m_currentDrawId][iii]->Draw();
 		}
 	}
 	// draw effects
-	for (int32_t iii=0; iii<m_effects[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_effects[m_currentDrawId][iii]) {
-			m_effects[m_currentDrawId][iii]->Draw();
+	for (int32_t iii=0; iii<m_sceneElement.effects[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_sceneElement.effects[m_currentDrawId][iii]) {
+			m_sceneElement.effects[m_currentDrawId][iii]->Draw();
 		}
 	}
 	m_needFlipFlop = true;
 }
 
 
-void ewol::Scene::AddElement(ewol::GameElement* newElement)
+int32_t ewol::SceneElement::AddElement(ewol::GameElement* newElement)
 {
 	if (NULL == newElement) {
-		return;
+		return -1;
 	}
-	for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
-		if (NULL == m_listAnimatedElements[iii]) {
+	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
+		if (NULL == listAnimatedElements[iii]) {
 			// find an empty slot ...
-			m_listAnimatedElements[iii] = newElement;
-			return;
+			listAnimatedElements[iii] = newElement;
+			return iii;
 		}
 	}
 	//did not find empty slot : 
-	m_listAnimatedElements.PushBack(newElement);
+	listAnimatedElements.PushBack(newElement);
+	return listAnimatedElements.Size()-1;
 }
 
 
@@ -169,12 +170,12 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 {
 	
 	//EWOL_ERROR("Periodic Call ... " << localTime);
-	for (int32_t iii=0; iii<m_listAnimatedElements.Size(); iii++) {
-		if (NULL != m_listAnimatedElements[iii]) {
+	for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
+		if (NULL != m_sceneElement.listAnimatedElements[iii]) {
 			// check if the element request an auto Kill ...
-			if (true == m_listAnimatedElements[iii]->Process(localTime, 20000, m_listAnimatedElements) ) {
-				delete(m_listAnimatedElements[iii]);
-				m_listAnimatedElements[iii] = NULL;
+			if (true == m_sceneElement.listAnimatedElements[iii]->Process(localTime, 20000, m_sceneElement) ) {
+				delete(m_sceneElement.listAnimatedElements[iii]);
+				m_sceneElement.listAnimatedElements[iii] = NULL;
 			}
 		}
 	}

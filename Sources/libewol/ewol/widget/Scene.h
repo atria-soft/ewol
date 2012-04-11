@@ -33,14 +33,21 @@
 
 
 namespace ewol {
+	class SceneElement {
+		public:
+			etk::VectorType<ewol::OObject*>     backgroundElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
+			etk::VectorType<ewol::Sprite*>      animated[NB_BOUBLE_BUFFER];   //!< element that must be display the first
+			etk::VectorType<ewol::Sprite*>      effects[NB_BOUBLE_BUFFER];   //!< element that must be display the first
+			etk::VectorType<ewol::GameElement*> listAnimatedElements;   //!< generic element to display...
+			int32_t AddElement(ewol::GameElement* newElement);
+	};
+	
+	
 	class Scene :public ewol::WidgetScrooled
 	{
 		// TODO : Set it in private ...
 		protected:
-			etk::VectorType<ewol::OObject*> m_backgroundElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::Sprite*> m_animated[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::Sprite*> m_effects[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::GameElement*> m_listAnimatedElements;   //!< generic element to display...
+			SceneElement        m_sceneElement; //!< all element neede in the scene
 		public:
 			Scene(void);
 			virtual ~Scene(void);
@@ -73,7 +80,6 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnDraw(void);
-			void AddElement(ewol::GameElement* newElement);
 	};
 	
 	/**

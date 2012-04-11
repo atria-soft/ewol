@@ -293,6 +293,9 @@ int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("File does not Exist ... " << fileName);
 	} else {
+		// get the upper paw2 ot the size requested...
+		requestedWidth = nextP2(requestedWidth);
+		
 		etk::UString fileExtention = fileName.GetExtention();
 		if (fileExtention ==  "bmp") {
 			// create the bitmap texture
@@ -313,8 +316,6 @@ int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 			// removet the bitmap handle
 			delete (myBitmap);
 		} else if (fileExtention ==  "svg") {
-			// get the upper paw2 ot the size requested...
-			//requestedWidth = nextP2(requestedWidth);
 			/*if (requestedWidth < 32) {
 				requestedWidth = 32;
 			}*/
