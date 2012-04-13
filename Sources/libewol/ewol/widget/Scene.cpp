@@ -44,8 +44,11 @@ void ewol::WIDGET_SceneInit(void)
 
 ewol::Scene::Scene(void)
 {
+	m_isRunning = true;
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
+	m_lastCallTime = -1;
+	m_sceneElement.id = 1;
 }
 
 
@@ -160,7 +163,7 @@ int32_t ewol::SceneElement::AddElement(ewol::GameElement* newElement)
 	return listAnimatedElements.Size()-1;
 }
 
-
+#define CYCLIC_CALL_PERIODE_US     (10000)
 /**
  * @brief Periodic call of this widget
  * @param localTime curent system time
@@ -168,14 +171,32 @@ int32_t ewol::SceneElement::AddElement(ewol::GameElement* newElement)
  */
 void ewol::Scene::PeriodicCall(int64_t localTime)
 {
-	
-	//EWOL_ERROR("Periodic Call ... " << localTime);
-	for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
-		if (NULL != m_sceneElement.listAnimatedElements[iii]) {
-			// check if the element request an auto Kill ...
-			if (true == m_sceneElement.listAnimatedElements[iii]->Process(localTime, 20000, m_sceneElement) ) {
-				delete(m_sceneElement.listAnimatedElements[iii]);
-				m_sceneElement.listAnimatedElements[iii] = NULL;
+	// First time : 
+	if (-1 == m_lastCallTime) {
+		m_lastCallTime = localTime;
+	}
+	// check if the processing is availlable
+	if (false == m_isRunning) {
+		m_lastCallTime = localTime;
+		MarkToReedraw();
+		return;
+	}
+	// cut the processing in small slot of time to prevent error in the real-time Display (Android call us between 30 to 60 fps)
+	int32_t deltaTime = (int32_t) (localTime - m_lastCallTime);
+	//EWOL_DEBUG(" currentTime = " << localTime << " last=" << m_lastCallTime << "  delta=" << deltaTime);
+	while (deltaTime >= CYCLIC_CALL_PERIODE_US) {
+		//EWOL_DEBUG(" process = " << CYCLIC_CALL_PERIODE_US);
+		m_lastCallTime += CYCLIC_CALL_PERIODE_US;
+		deltaTime -= CYCLIC_CALL_PERIODE_US;
+		ScenePeriodicCall(m_lastCallTime, CYCLIC_CALL_PERIODE_US);
+		//EWOL_ERROR("Periodic Call ... " << localTime);
+		for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
+			if (NULL != m_sceneElement.listAnimatedElements[iii]) {
+				// check if the element request an auto Kill ...
+				if (true == m_sceneElement.listAnimatedElements[iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US, m_sceneElement) ) {
+					delete(m_sceneElement.listAnimatedElements[iii]);
+					m_sceneElement.listAnimatedElements[iii] = NULL;
+				}
 			}
 		}
 	}

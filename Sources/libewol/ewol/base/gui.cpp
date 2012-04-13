@@ -158,7 +158,8 @@ void guiAbstraction::KeyboardHide(void)
 static int64_t startTime = -1;
 static int64_t nbCallTime = 0;
 static int64_t nbDisplayTime = 0;
-#define DISPLAY_PERIODE_MS       (1000)
+// display every second ...
+#define DISPLAY_PERIODE_US       (1000000)
 
 
 void EWOL_GenericDraw(bool everyTime)
@@ -170,9 +171,10 @@ void EWOL_GenericDraw(bool everyTime)
 	}
 	int64_t currentTime = GetCurrentTime();
 	//EWOL_DEBUG("current : " << currentTime << "time    diff : " << (currentTime - startTime));
-	if ( (currentTime - startTime) > DISPLAY_PERIODE_MS) {
+	if ( (currentTime - startTime) > DISPLAY_PERIODE_US) {
 		display = true;
 	}
+	// TODO : Remove this ...
 	if (ewol::widgetManager::PeriodicCallHave()) {
 		everyTime = true;
 	}
@@ -183,14 +185,13 @@ void EWOL_GenericDraw(bool everyTime)
 		ewol::texture::UpdateContext();
 		nbDisplayTime++;
 		gui_uniqueWindows->SysDraw();
-		//EWOL_WARNING("DRAW...");
 	}
 	ewol::widgetManager::DoubleBufferUnLock();
 	// send Message that we just finished a display ...
 	EWOL_ThreadEventHasJustDisplay();
 	
 	if (true == display) {
-		EWOL_DEBUG("display property : " << (int32_t)((double)nbDisplayTime/(double)DISPLAY_PERIODE_MS*(double)1000) << "/" << (int32_t)((double)nbCallTime/(double)DISPLAY_PERIODE_MS*(double)1000) << "fps");
+		EWOL_DEBUG("display property : " << nbDisplayTime << "/" << nbCallTime << "fps");
 		nbCallTime = 0;
 		nbDisplayTime = 0;
 		startTime = -1;

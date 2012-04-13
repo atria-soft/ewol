@@ -52,6 +52,14 @@ namespace ewol {
 			virtual const char * const GetObjectType(void);
 			virtual bool   CalculateMinSize(void);
 			void SetSize(etkFloat_t size);
+			/**
+			 * @brief Get the widget at the specific windows absolute position
+			 * @note the sizer return NULL, because nothing can be done inside nothing
+			 * @param[in] pos gAbsolute position of the requested widget knowledge
+			 * @return NULL No widget found
+			 * @return pointer on the widget found
+			 */
+			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos) { return NULL; };
 		private:
 			etkFloat_t m_size;
 	};

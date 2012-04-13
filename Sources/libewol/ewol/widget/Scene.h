@@ -36,9 +36,10 @@ namespace ewol {
 	class SceneElement {
 		public:
 			etk::VectorType<ewol::OObject*>     backgroundElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::Sprite*>      animated[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::Sprite*>      effects[NB_BOUBLE_BUFFER];   //!< element that must be display the first
-			etk::VectorType<ewol::GameElement*> listAnimatedElements;   //!< generic element to display...
+			etk::VectorType<ewol::Sprite*>      animated[NB_BOUBLE_BUFFER];             //!< element that must be display the first
+			etk::VectorType<ewol::Sprite*>      effects[NB_BOUBLE_BUFFER];              //!< element that must be display the first
+			etk::VectorType<ewol::GameElement*> listAnimatedElements;                   //!< generic element to display...
+			int32_t                             id;                                     //!< Unique element ID
 			int32_t AddElement(ewol::GameElement* newElement);
 	};
 	
@@ -48,6 +49,8 @@ namespace ewol {
 		// TODO : Set it in private ...
 		protected:
 			SceneElement        m_sceneElement; //!< all element neede in the scene
+			bool                m_isRunning;
+			int64_t             m_lastCallTime;
 		public:
 			Scene(void);
 			virtual ~Scene(void);
@@ -80,6 +83,32 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnDraw(void);
+			/**
+			 * @brief Set the scene in pause for a while
+			 * @param ---
+			 * @return ---
+			 */
+			void Pause(void) { m_isRunning = false; };
+			/**
+			 * @brief Resume the scene activity
+			 * @param ---
+			 * @return ---
+			 */
+			void Resume(void) { m_isRunning = true; };
+			/**
+			 * @brief Toggle between pause and running
+			 * @param ---
+			 * @return ---
+			 */
+			void PauseToggle(void) { if(true==m_isRunning){ m_isRunning=false;}else{m_isRunning=true;} };
+		protected:
+			/**
+			 * @brief Periodic call in the sub element timed
+			 * @param localTime curent system time
+			 * @param deltaTime delta time while the previous call
+			 * @return ---
+			 */
+			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
 	};
 	
 	/**

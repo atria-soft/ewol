@@ -41,9 +41,9 @@
 
 #undef __class__
 #define __class__ "AndroidJNI"
-int32_t separateClickTime = 800;
-int32_t offsetMoveClicked = 40;
-int32_t offsetMoveClickedDouble = 300;
+int32_t separateClickTime = 800000;
+int32_t offsetMoveClicked = 40000;
+int32_t offsetMoveClickedDouble = 300000;
 
 extern etkFloat_t     gui_width;
 extern etkFloat_t     gui_height;
@@ -54,7 +54,7 @@ int64_t GetCurrentTime(void)
     struct timeval  now;
     gettimeofday(&now, NULL);
     //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
-    return (int64_t)((int64_t)now.tv_sec*(int64_t)1000 + (int64_t)now.tv_usec/(int64_t)1000);
+    return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
 
 

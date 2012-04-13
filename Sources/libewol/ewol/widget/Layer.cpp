@@ -245,7 +245,10 @@ ewol::Widget * ewol::Layer::GetWidgetAtPos(coord2D_ts pos)
 			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 			{
-				return m_subWidget[m_currentCreateId][iii]->GetWidgetAtPos(pos);
+				ewol::Widget * tmpWidget = m_subWidget[m_currentCreateId][iii]->GetWidgetAtPos(pos);
+				if (NULL != tmpWidget) {
+					return tmpWidget;
+				}
 			}
 		}
 	}

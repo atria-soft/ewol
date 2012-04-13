@@ -55,7 +55,7 @@ int64_t GetCurrentTime(void)
 		now.tv_nsec = 0;
 	}
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
-	return (int64_t)((int64_t)now.tv_sec*(int64_t)1000 + (int64_t)now.tv_nsec/(int64_t)1000000);
+	return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_nsec/(int64_t)1000);
 }
 
 #undef __class__
@@ -119,9 +119,9 @@ extern ewol::Windows* gui_uniqueWindows;
 extern etkFloat_t     gui_width;
 extern etkFloat_t     gui_height;
 
-int32_t separateClickTime = 300;
-int32_t offsetMoveClicked = 10;
-int32_t offsetMoveClickedDouble = 20;
+int32_t separateClickTime = 300000;
+int32_t offsetMoveClicked = 10000;
+int32_t offsetMoveClickedDouble = 20000;
 
 
 bool inputIsPressed[20];
