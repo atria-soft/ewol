@@ -105,8 +105,8 @@ const char * const ewol::Slider::GetObjectType(void)
 
 bool ewol::Slider::CalculateMinSize(void)
 {
-	m_minSize.x = 40;
-	m_minSize.y = dotRadius*2;
+	m_minSize.x = etk_max(m_userMinSize.x, 40);
+	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
 	MarkToReedraw();
 	return true;
 }

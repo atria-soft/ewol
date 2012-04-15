@@ -125,6 +125,7 @@ void ewol::Scene::OnRegenerateDisplay(void)
  * @param ---
  * @return ---
  */
+//TODO : Il y a un bug : seg fault ... je ne sais pas trop ou ...
 void ewol::Scene::OnDraw(void)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);

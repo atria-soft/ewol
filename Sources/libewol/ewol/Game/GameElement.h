@@ -25,17 +25,21 @@
 #ifndef __EWOL_GAME_ELEMENT_H__
 #define __EWOL_GAME_ELEMENT_H__
 
+namespace ewol {
+	class GameElement;
+};
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject/Sprite.h>
 #include <ewol/Widget.h>
+#include <ewol/Game/SceneElement.h>
 
 namespace ewol {
-	// declare the scene element before ...
-	class SceneElement;
 	
 	class GameElement
 	{
+		protected:
+			SceneElement & m_sceneElement; //!< all element neede in the scene
 		protected:
 			int32_t    m_group;
 			int32_t    m_type;
@@ -51,7 +55,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			GameElement(void);
+			GameElement(SceneElement & sceneElement);
 			/**
 			 * @brief Destructor : This does not remove the sprite requested, they will be supressed when the scene is removed ...
 			 * @param ---

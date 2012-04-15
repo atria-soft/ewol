@@ -210,7 +210,8 @@ void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 
 void ewol::Layer::OnDraw(void)
 {
-	for (int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
+	// draw is done in the invert sense of inserting ... the first element inserted is on the top and the last is on the buttom
+	for (int32_t iii=m_subWidget[m_currentDrawId].Size()-1; iii>=0; iii--) {
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
 			m_subWidget[m_currentDrawId][iii]->GenDraw();
 		}

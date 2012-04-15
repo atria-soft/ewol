@@ -31,7 +31,7 @@
  * @param ---
  * @return ---
  */
-ewol::GameElement::GameElement(void)
+ewol::GameElement::GameElement(SceneElement & sceneElement) : m_sceneElement(sceneElement)
 {
 	m_group = -1;
 	m_type = -1;

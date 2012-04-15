@@ -213,6 +213,27 @@ etk::UString::UString(unsigned int inputData)
 	Set(tmpVal);
 }
 
+etk::UString::UString(float inputData)
+{
+	char tmpVal[256];
+	// generate the UString : 
+	sprintf(tmpVal, "%f", inputData);
+	// set the internal data : 
+	m_data.Clear();
+	m_data.PushBack('\0');
+	Set(tmpVal);
+}
+
+etk::UString::UString(double inputData)
+{
+	char tmpVal[256];
+	// generate the UString : 
+	sprintf(tmpVal, "%lf", inputData);
+	// set the internal data : 
+	m_data.Clear();
+	m_data.PushBack('\0');
+	Set(tmpVal);
+}
 
 etk::UString::UString(const etk::UString &etkS)
 {

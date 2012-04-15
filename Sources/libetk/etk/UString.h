@@ -43,6 +43,8 @@ namespace etk
 			UString(char inputData);
 			UString(int inputData);
 			UString(unsigned int inputData);
+			UString(float inputData);
+			UString(double inputData);
 			UString(const etk::UString &etkS);
 			// destructor : 
 			~UString(void);
