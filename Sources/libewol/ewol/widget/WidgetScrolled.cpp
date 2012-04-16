@@ -168,16 +168,12 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 	#else
 		if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 			m_originScrooled.y -= m_pixelScrolling;
-			if (m_originScrooled.y < 0) {
-				m_originScrooled.y = 0;
-			}
+			m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 			MarkToReedraw();
 			return true;
 		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 			m_originScrooled.y += m_pixelScrolling;
-			if (m_maxSize.y < m_originScrooled.y) {
-				m_originScrooled.y = m_maxSize.y;
-			}
+			m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 			MarkToReedraw();
 			return true;
 		}else if (2 == IdInput) {
@@ -215,13 +211,16 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 					}
 					MarkToReedraw();
 				}
+				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 				return true;
 			} if (ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 				m_originScrooled.x = (int32_t)(m_maxSize.x * relativePos.x / m_size.x);
+				m_originScrooled.x = etk_avg(0, m_originScrooled.x, m_maxSize.x);
 				MarkToReedraw();
 				return true;
 			} if (ewol::SCROLL_ENABLE_VERTICAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 				m_originScrooled.y = (int32_t)(m_maxSize.y * relativePos.y / m_size.y);
+				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 				MarkToReedraw();
 				return true;
 			}
