@@ -146,23 +146,6 @@ void ewol::Scene::OnDraw(void)
 }
 
 
-int32_t ewol::SceneElement::AddElement(ewol::GameElement* newElement)
-{
-	if (NULL == newElement) {
-		return -1;
-	}
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL == listAnimatedElements[iii]) {
-			// find an empty slot ...
-			listAnimatedElements[iii] = newElement;
-			return iii;
-		}
-	}
-	//did not find empty slot : 
-	listAnimatedElements.PushBack(newElement);
-	return listAnimatedElements.Size()-1;
-}
-
 #define CYCLIC_CALL_PERIODE_US     (10000)
 /**
  * @brief Periodic call of this widget

@@ -424,7 +424,10 @@ template<typename MY_TYPE=int32_t> class VectorType
 			// Request resize of the current buffer
 			Resize(m_size+1);
 			// move curent data
-			memmove((m_data + pos + 1), (m_data + pos), (tmpSize - pos)*sizeof(MY_TYPE) );
+			int32_t sizeToMove = (tmpSize - pos)*sizeof(MY_TYPE);
+			if ( 0 < sizeToMove) {
+				memmove((m_data + pos + 1), (m_data + pos), sizeToMove );
+			}
 			// affectation of the current element
 			m_data[pos] = item;
 		}
@@ -448,7 +451,10 @@ template<typename MY_TYPE=int32_t> class VectorType
 			// Request resize of the current buffer
 			Resize(m_size+nbElement);
 			// move curent data (after the position)
-			memmove((m_data + pos + nbElement), (m_data + pos), (tmpSize - pos)*sizeof(MY_TYPE) );
+			int32_t sizeToMove = (tmpSize - pos)*sizeof(MY_TYPE);
+			if ( 0 < sizeToMove) {
+				memmove((m_data + pos + nbElement), (m_data + pos), sizeToMove );
+			}
 			// affectation of all input element
 			memcpy(&m_data[pos], item, nbElement*sizeof(MY_TYPE) );
 		}
@@ -468,8 +474,11 @@ template<typename MY_TYPE=int32_t> class VectorType
 				return;
 			}
 			int32_t tmpSize = m_size;
-			// move curent data
-			memmove((m_data + pos), (m_data + pos + 1), (tmpSize - (pos+1))*sizeof(MY_TYPE) );
+			int32_t sizeToMove = (tmpSize - (pos+1))*sizeof(MY_TYPE);
+			if ( 0 < sizeToMove) {
+				// move curent data
+				memmove((m_data + pos), (m_data + pos + 1), sizeToMove );
+			}
 			// Request resize of the current buffer
 			Resize(m_size-1);
 		}
@@ -495,7 +504,10 @@ template<typename MY_TYPE=int32_t> class VectorType
 			int32_t nbElement = m_size - pos;
 			int32_t tmpSize = m_size;
 			// move curent data
-			memmove((m_data + pos), (m_data + pos + nbElement), (tmpSize - (pos+nbElement))*sizeof(MY_TYPE) );
+			int32_t sizeToMove = (tmpSize - (pos+nbElement))*sizeof(MY_TYPE);
+			if ( 0 < sizeToMove) {
+				memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove );
+			}
 			// Request resize of the current buffer
 			Resize(m_size-nbElement);
 		}
@@ -520,7 +532,10 @@ template<typename MY_TYPE=int32_t> class VectorType
 			}
 			int32_t tmpSize = m_size;
 			// move curent data
-			memmove((m_data + pos), (m_data + pos + nbElement), (tmpSize - (pos+nbElement))*sizeof(MY_TYPE) );
+			int32_t sizeToMove = (tmpSize - (pos+nbElement))*sizeof(MY_TYPE);
+			if ( 0 < sizeToMove) {
+				memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove );
+			}
 			// Request resize of the current buffer
 			Resize(m_size-nbElement);
 		}
