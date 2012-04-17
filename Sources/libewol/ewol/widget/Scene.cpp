@@ -48,7 +48,6 @@ ewol::Scene::Scene(void)
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
 	m_lastCallTime = -1;
-	m_sceneElement.id = 1;
 }
 
 

@@ -36,12 +36,16 @@ namespace ewol {
 
 namespace ewol {
 	class SceneElement {
+		private:
+			int32_t                             m_id;                                   //!< Unique element ID
 		public:
+			SceneElement(void) { m_id = 1; };
+			~SceneElement(void) { };
 			etk::VectorType<ewol::OObject*>     backgroundElements[NB_BOUBLE_BUFFER];   //!< element that must be display the first
 			etk::VectorType<ewol::Sprite*>      animated[NB_BOUBLE_BUFFER];             //!< element that must be display the first
 			etk::VectorType<ewol::Sprite*>      effects[NB_BOUBLE_BUFFER];              //!< element that must be display the first
 			etk::VectorType<ewol::GameElement*> listAnimatedElements;                   //!< generic element to display...
-			int32_t                             id;                                     //!< Unique element ID
+			int32_t GetUniqueId(void) { int32_t iddd = m_id; m_id++; return iddd; };
 			int32_t AddElement(ewol::GameElement* newElement);
 	};
 };
