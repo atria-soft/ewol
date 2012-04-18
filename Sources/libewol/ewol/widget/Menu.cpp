@@ -87,7 +87,8 @@ const char * const ewol::Menu::GetObjectType(void)
 
 void ewol::Menu::SubWidgetRemoveAll(void)
 {
-	EWOL_ERROR("Not availlable");
+	Clear();
+	ewol::SizerHori::SubWidgetRemoveAll();
 }
 
 void ewol::Menu::SubWidgetAdd(ewol::Widget* newWidget)
@@ -253,3 +254,25 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 		}
 	}
 }
+
+/**
+ * @brief Inform object that an other object is removed ...
+ * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+ * @note : Sub classes must call this class
+ * @return ---
+ */
+void ewol::Menu::OnObjectRemove(ewol::EObject * removeObject)
+{
+	ewol::SizerHori::OnObjectRemove(removeObject);
+	if (m_widgetContextMenu == removeObject) {
+		m_widgetContextMenu = NULL;
+	}
+	for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
+		if (NULL != m_listElement[jjj]) {
+			if (m_listElement[jjj]->m_widgetPointer == removeObject) {
+				m_listElement[jjj]->m_widgetPointer = NULL;
+			}
+		}
+	}
+}
+

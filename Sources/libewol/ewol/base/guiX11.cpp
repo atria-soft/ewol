@@ -1006,6 +1006,16 @@ void guiAbstraction::Stop(void)
 }
 
 
+void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
+{
+	// nothing to do : No keyboard on computer ...
+}
+
+void guiAbstraction::KeyboardHide(void)
+{
+	// nothing to do : No keyboard on computer ...
+}
+
 
 
 void guiAbstraction::ChangeSize(int32_t w, int32_t h)

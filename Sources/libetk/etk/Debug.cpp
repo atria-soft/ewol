@@ -37,17 +37,16 @@ void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* fun
 	
 	if (NULL == className) {
 		if (NULL == libName) {
-			snprintf(tmpName, FUNCTION_NAME_SIZE, "???????? | (l=%5d) %s                                             ",ligne, funcName);
+			snprintf(tmpName, FUNCTION_NAME_SIZE-1, "???????? | (l=%5d) %s                                             ",ligne, funcName);
 		} else {
-			snprintf(tmpName, FUNCTION_NAME_SIZE, "%s | (l=%5d) %s                                             ",libName, ligne, funcName);
+			snprintf(tmpName, FUNCTION_NAME_SIZE-1, "%s | (l=%5d) %s                                             ",libName, ligne, funcName);
 		}
 	} else {
 		if (NULL == libName) {
-			snprintf(tmpName, FUNCTION_NAME_SIZE, "???????? | (l=%5d) %s::%s                                             ",ligne, className, funcName);
+			snprintf(tmpName, FUNCTION_NAME_SIZE-1, "???????? | (l=%5d) %s::%s                                             ",ligne, className, funcName);
 		} else {
-			snprintf(tmpName, FUNCTION_NAME_SIZE, "%s | (l=%5d) %s::%s                                             ", libName, ligne, className, funcName);
+			snprintf(tmpName, FUNCTION_NAME_SIZE-1, "%s | (l=%5d) %s::%s                                             ", libName, ligne, className, funcName);
 		}
-		
 	}
 	tmpName[FUNCTION_NAME_SIZE-4] = ' ';
 	tmpName[FUNCTION_NAME_SIZE-3] = '|';

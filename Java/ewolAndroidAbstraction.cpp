@@ -42,9 +42,123 @@ void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
 void EWOL_NativeRender(void);
 void EWOL_NativeGLDestroy(void);
 
+// get a resources from the java environement : 
+static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
+static jclass    javaClassActivity = 0;            // main activity class (android ...)
+static jmethodID javaClassActivityEntryPoint = 0;  // basic methode to call ...
+// generic classes
+static jclass    javaDefaultClassString = 0;       // default string class
+
+
+static JavaVM* g_JavaVM = NULL;
+
+
+void SendSystemMessage(const char * dataString)
+{
+	APPL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
+	if (NULL == g_JavaVM) {
+		APPL_DEBUG("C->java : JVM not initialised");
+		return;
+	}
+	JNIEnv *JavaVirtualMachinePointer;
+	int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer, JNI_VERSION_1_6);
+	if (status == JNI_EDETACHED) {
+		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer, NULL);
+		if (status != JNI_OK) {
+			APPL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+			return;
+		}
+		jclass javaClassActivity = JavaVirtualMachinePointer->FindClass("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__" );
+		if (javaClassActivity == 0) {
+			APPL_DEBUG("C->java : Can't find com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__ class");
+			// remove access on the virtual machine : 
+			JavaVirtualMachinePointer = NULL;
+			return;
+		}
+		jmethodID javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
+		if (javaClassActivityEntryPoint == 0) {
+			APPL_DEBUG("C->java : Can't find com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__.eventFromCPP" );
+			// remove access on the virtual machine : 
+			JavaVirtualMachinePointer = NULL;
+			return;
+		}
+		jclass javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
+		if (javaDefaultClassString == 0) {
+			APPL_DEBUG("C->java : Can't find java/lang/String" );
+			// remove access on the virtual machine : 
+			JavaVirtualMachinePointer = NULL;
+			return;
+		}
+		// create the string to the java
+		jstring jstr = JavaVirtualMachinePointer->NewStringUTF(dataString);
+		if (jstr == 0) {
+			APPL_DEBUG("C->java : Out of memory" );
+			return;
+		}
+		// create argument list
+		jobjectArray args = JavaVirtualMachinePointer->NewObjectArray(1, javaDefaultClassString, jstr);
+		if (args == 0) {
+			APPL_DEBUG("C->java : Out of memory" );
+			return;
+		}
+		//Call java ...
+		JavaVirtualMachinePointer->CallStaticVoidMethod(javaClassActivity, javaClassActivityEntryPoint, args);
+		
+		// manage execption : 
+		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+			JavaVirtualMachinePointer->ExceptionDescribe();
+		}
+	} else {
+		APPL_DEBUG("C->java : do nothing ... ");
+	}
+
+
+/*
+	if (NULL == JavaVirtualMachinePointer) {
+		APPL_DEBUG("C->java : JVM not initialised");
+		return;
+	}
+	// create the string to the java
+	jstring jstr = JavaVirtualMachinePointer->NewStringUTF(dataString);
+	if (jstr == 0) {
+		APPL_DEBUG("C->java : Out of memory" );
+		return;
+	}
+	// create argument list
+	jobjectArray args = JavaVirtualMachinePointer->NewObjectArray(1, javaDefaultClassString, jstr);
+	if (args == 0) {
+		APPL_DEBUG("C->java : Out of memory" );
+		return;
+	}
+	//Call java ...
+	JavaVirtualMachinePointer->CallStaticVoidMethod(javaClassActivity, javaClassActivityEntryPoint, args);
+	
+	// manage execption : 
+	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+		JavaVirtualMachinePointer->ExceptionDescribe();
+	}
+*/
+}
+
 
 extern "C"
 {
+	// JNI OnLoad
+	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved)
+	{
+		// get the java virtual machine handle ...
+		g_JavaVM = jvm;
+		APPL_DEBUG("JNI-> load the jvm ..." );
+		return JNI_VERSION_1_6;
+	}
+	// JNI OnUnLoad
+	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved)
+	{
+		g_JavaVM = NULL;
+		APPL_DEBUG("JNI-> Un-load the jvm ..." );
+	}
+
+	
 	/* Call to initialize the graphics state */
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
@@ -53,6 +167,49 @@ extern "C"
 		const char* str = env->GetStringUTFChars(myString,0);
 		EWOL_ThreadSetArchiveDir(mode, str);
 		//env->ReleaseStringUTFChars(str,myString,0);
+	}
+	
+	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env )
+	{
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Set JVM Pointer                      **");
+		APPL_DEBUG("*******************************************");
+		JavaVirtualMachinePointer = env;
+		// get default needed all time elements : 
+		if (NULL != JavaVirtualMachinePointer) {
+			javaClassActivity = JavaVirtualMachinePointer->FindClass("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__" );
+			if (javaClassActivity == 0) {
+				APPL_DEBUG("C->java : Can't find com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__ class");
+				// remove access on the virtual machine : 
+				JavaVirtualMachinePointer = NULL;
+				return;
+			}
+			javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
+			if (javaClassActivityEntryPoint == 0) {
+				APPL_DEBUG("C->java : Can't find com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__.__PROJECT_NAME__.eventFromCPP" );
+				// remove access on the virtual machine : 
+				JavaVirtualMachinePointer = NULL;
+				return;
+			}
+			javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
+			if (javaDefaultClassString == 0) {
+				APPL_DEBUG("C->java : Can't find java/lang/String" );
+				// remove access on the virtual machine : 
+				JavaVirtualMachinePointer = NULL;
+				return;
+			}
+		}
+	}
+	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStop( JNIEnv*  env )
+	{
+		APPL_DEBUG("*******************************************");
+		APPL_DEBUG("**  Remove JVM Pointer                   **");
+		APPL_DEBUG("*******************************************");
+		JavaVirtualMachinePointer = NULL;
+	}
+	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___TouchEvent( JNIEnv*  env )
+	{
+		APPL_DEBUG(" ==> Touch Event");
 	}
 	
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnCreate( JNIEnv*  env )
@@ -67,6 +224,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Start                    **");
 		APPL_DEBUG("*******************************************");
+		//SendSystemMessage(" testmessages ... ");
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnReStart( JNIEnv*  env )
 	{

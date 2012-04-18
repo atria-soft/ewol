@@ -35,6 +35,9 @@ import android.content.res.AssetManager;
  *
  */
 public class __PROJECT_NAME__ extends Activity {
+	private static native void TouchEvent();
+	private static native void ActivitySetJavaVortualMachineStart();
+	private static native void ActivitySetJavaVortualMachineStop();
 	private static native void ActivityOnCreate();
 	private static native void ActivityOnStart();
 	private static native void ActivityOnReStart();
@@ -50,8 +53,12 @@ public class __PROJECT_NAME__ extends Activity {
 		System.loadLibrary("__PROJECT_PACKAGE__");
 	}
 
-	@Override protected void onCreate(Bundle savedInstanceState) {
+	@Override protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
+		
+		// set the java evironement in the C sources : 
+		ActivitySetJavaVortualMachineStart();
 		
 		// Load the application directory
 		ActivityParamSetArchiveDir(1, getFilesDir().toString());
@@ -87,44 +94,67 @@ public class __PROJECT_NAME__ extends Activity {
 		setContentView(mGLView);
 	}
 
-	@Override protected void onStart() {
+	@Override protected void onStart()
+	{
 		super.onStart();
 		// call C
 		ActivityOnStart();
 	}
 	
-	@Override protected void onRestart() {
+	@Override protected void onRestart()
+	{
 		super.onRestart();
 		// call C
 		ActivityOnReStart();
 	}
 	
-	@Override protected void onResume() {
+	@Override protected void onResume()
+	{
 		super.onResume();
 		mGLView.onResume();
 		// call C
 		ActivityOnResume();
 	}
 	
-	@Override protected void onPause() {
+	@Override protected void onPause()
+	{
 		super.onPause();
 		mGLView.onPause();
 		// call C
 		ActivityOnPause();
 	}
 	
-	@Override protected void onStop() {
+	@Override protected void onStop()
+	{
 		super.onStop();
 		// call C
 		ActivityOnStop();
 	}
-	@Override protected void onDestroy() {
+	@Override protected void onDestroy()
+	{
 		super.onDestroy();
 		// call C
 		ActivityOnDestroy();
+		// Remove the java Virtual machine pointer form the C code
+		ActivitySetJavaVortualMachineStop();
 	}
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(Configuration newConfig)
+	{
 		super.onConfigurationChanged(newConfig);
+	}
+	
+	public static void eventFromCPP(String[] args)
+	{
+		if (args[0] == "Keyboard_Show") {
+			TouchEvent();
+			TouchEvent();
+			TouchEvent();
+		} else if (args[0] == "Keyboard_Hide") {
+			TouchEvent();
+			TouchEvent();
+		} else {
+			TouchEvent();
+		}
 	}
 }
 

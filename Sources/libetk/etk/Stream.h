@@ -34,9 +34,9 @@
 
 #if defined(__PLATFORM__Android)
 #	include <android/log.h>
-#	define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "====> EWOL", __VA_ARGS__))
-#	define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "====> EWOL", __VA_ARGS__))
-#	define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "====> EWOL", __VA_ARGS__))
+#	define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "EWOL", __VA_ARGS__))
+#	define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "EWOL", __VA_ARGS__))
+#	define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "EWOL", __VA_ARGS__))
 #endif
 
 #define MAX_LOG_SIZE		(16000)

@@ -88,6 +88,13 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			/**
+			 * @brief Inform object that an other object is removed ...
+			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @note : Sub classes must call this class
+			 * @return ---
+			 */
+			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_MENU;

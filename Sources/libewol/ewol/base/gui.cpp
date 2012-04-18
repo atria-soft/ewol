@@ -133,7 +133,7 @@ void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te
 }
 
 
-
+/*
 void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
 {
 	if (NULL != gui_uniqueWindows) {
@@ -148,7 +148,7 @@ void guiAbstraction::KeyboardHide(void)
 	}
 	ForceRedrawAll();
 }
-
+*/
 
 
 
