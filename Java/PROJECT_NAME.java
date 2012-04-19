@@ -17,6 +17,8 @@ import android.view.Window;
 
 // For the full screen : 
 import android.view.WindowManager;
+// for the keyboard event :
+import android.view.inputmethod.InputMethodManager;
 
 import java.io.File;
 import android.content.Context;
@@ -36,7 +38,8 @@ import android.content.res.AssetManager;
  */
 public class __PROJECT_NAME__ extends Activity {
 	private static native void TouchEvent();
-	private static native void ActivitySetJavaVortualMachineStart();
+	private static native void ActivitySetJavaVortualMachineStart(__PROJECT_NAME__ ActivityInstance);
+	//private static native void ActivitySetJavaVortualMachineStart();
 	private static native void ActivitySetJavaVortualMachineStop();
 	private static native void ActivityOnCreate();
 	private static native void ActivityOnStart();
@@ -51,14 +54,17 @@ public class __PROJECT_NAME__ extends Activity {
 
 	static {
 		System.loadLibrary("__PROJECT_PACKAGE__");
+		//ActivitySetInstance(this);
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
+		
 		// set the java evironement in the C sources : 
-		ActivitySetJavaVortualMachineStart();
+		ActivitySetJavaVortualMachineStart(this);
+		//ActivitySetJavaVortualMachineStart();
 		
 		// Load the application directory
 		ActivityParamSetArchiveDir(1, getFilesDir().toString());
@@ -87,6 +93,10 @@ public class __PROJECT_NAME__ extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		// set full screen Mode : 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		// display keyboard:
+		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		// hide keyboard : 
+		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		//Force landscape
 		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		// create bsurface system
@@ -138,23 +148,33 @@ public class __PROJECT_NAME__ extends Activity {
 		// Remove the java Virtual machine pointer form the C code
 		ActivitySetJavaVortualMachineStop();
 	}
+	
+	@Override protected void finalize() throws Throwable
+	{
+		super.finalize();
+		// cleanup your object here
+	}
+	
 	public void onConfigurationChanged(Configuration newConfig)
 	{
 		super.onConfigurationChanged(newConfig);
 	}
 	
+	public void CPP_keyboardShow()
+	{
+		TouchEvent();
+		try{
+			getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		} catch (Exception e) {
+			
+		}
+		TouchEvent();
+	}
+	
 	public static void eventFromCPP(String[] args)
 	{
-		if (args[0] == "Keyboard_Show") {
-			TouchEvent();
-			TouchEvent();
-			TouchEvent();
-		} else if (args[0] == "Keyboard_Hide") {
-			TouchEvent();
-			TouchEvent();
-		} else {
-			TouchEvent();
-		}
+		// just for the test ...
+		TouchEvent();
 	}
 }
 

@@ -247,13 +247,15 @@ void guiAbstraction::Stop(void)
 {
 	// TODo : send a message to the android system to stop ...
 }
+
 // java system to send message : 
 void SendSystemMessage(const char * dataString);
+void SendJava_KeyboardShow(void);
 
 void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
 {
 	// send a message at the java :
-	SendSystemMessage("Keyboard_Show");
+	SendJava_KeyboardShow();
 }
 
 void guiAbstraction::KeyboardHide(void)
