@@ -2,6 +2,7 @@
 
 PROJECT_PACKAGE=$(PROJECT_NAME)package
 JAVA_FOLDER=src/com/$(PROJECT_VENDOR)/$(PROJECT_NAME)
+EWOL_JAVA_FOLDER=src/org/ewol
 
 
 all:
@@ -16,19 +17,22 @@ all:
 	
 	@echo "    (sh) Clear previous sources "
 	@rm -rf src jni/ewolAndroidAbstraction.cpp
-	@echo "    (sh) Create folder : $(JAVA_FOLDER)/ "
+	@echo "    (sh) Create folder : $(JAVA_FOLDER)/ & $(EWOL_JAVA_FOLDER)"
 	@mkdir -p $(JAVA_FOLDER)/
+	@mkdir -p $(EWOL_JAVA_FOLDER)/
 	
-	@echo "    (sh) copy the java File : "
+	@echo "    (sh) copy the java Files & Replace __XXX__ element with project properties"
 	@cp $(EWOL_FOLDER)/Java/PROJECT_NAME.java $(JAVA_FOLDER)/$(PROJECT_NAME).java
-	@echo "    (sh) Replace __PROJECT_VENDOR__, __PROJECT_NAME__ and __PROJECT_PACKAGE__ with the correct intance "
 	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
 	@sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(JAVA_FOLDER)/$(PROJECT_NAME).java
+	# copy the Ewol java files : 
+	@cp $(EWOL_FOLDER)/Java/interfaceJNI.java $(EWOL_JAVA_FOLDER)/
+	@cp $(EWOL_FOLDER)/Java/interfaceOpenGL.java $(EWOL_JAVA_FOLDER)/
+	@cp $(EWOL_FOLDER)/Java/interfaceSurfaceView.java $(EWOL_JAVA_FOLDER)/
 	
 	@echo "    (sh) copy the cpp for jni File : $(EWOL_FOLDER)/SourcesJava/ewolAndroidAbstraction.cpp"
 	@cp $(EWOL_FOLDER)/Java/ewolAndroidAbstraction.cpp jni/
-	@echo "    (sh) Replace __PROJECT_VENDOR__, __PROJECT_NAME__ and __PROJECT_PACKAGE__ with the correct intance "
 	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" jni/ewolAndroidAbstraction.cpp
 	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" jni/ewolAndroidAbstraction.cpp
 	@sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" jni/ewolAndroidAbstraction.cpp

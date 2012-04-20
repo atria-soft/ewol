@@ -48,6 +48,7 @@ static jclass    javaClassActivity = 0;            // main activity class (andro
 static jobject   javaObjectActivity = 0;
 static jmethodID javaClassActivityEntryPoint = 0;  // basic methode to call ...
 static jmethodID javaClassActivityEntryPoint__CPP_keyboardShow = 0;  // basic methode to call ...
+static jmethodID javaClassActivityEntryPoint__CPP_keyboardHide = 0;  // basic methode to call ...
 // generic classes
 static jclass    javaDefaultClassString = 0;       // default string class
 
@@ -57,84 +58,7 @@ static JavaVM* g_JavaVM = NULL;
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
 
-// for exemple test :
-void displayKeyboard(bool pShow) {
-    // Attaches the current thread to the JVM.
-    jint lResult;
-    jint lFlags = 0;
-
-    JavaVM* lJavaVM = g_JavaVM;
-    JNIEnv* lJNIEnv = NULL;
-
-	int status = g_JavaVM->GetEnv((void **) &lJNIEnv, JNI_VERSION_1_6);
-	if (status == JNI_EDETACHED) {
-		JavaVMAttachArgs lJavaVMAttachArgs;
-		lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-		lJavaVMAttachArgs.name = "EwolNativeThread";
-		lJavaVMAttachArgs.group = NULL; 
-		status = g_JavaVM->AttachCurrentThread(&lJNIEnv, &lJavaVMAttachArgs);
-		if (status != JNI_OK) {
-			APPL_DEBUG("C->java : AttachCurrentThread failed : " << status);
-			return;
-		}
-		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-			JavaVirtualMachinePointer->ExceptionDescribe();
-			JavaVirtualMachinePointer->ExceptionClear();
-		}
-	}
-	/*
-	if (lResult == JNI_ERR) {
-		return;
-	}
-	*/
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
-
-    // Retrieves NativeActivity.
-    jobject lNativeActivity = javaClassActivity;
-    jclass ClassNativeActivity = lJNIEnv->GetObjectClass(lNativeActivity);
-
-    // Retrieves Context.INPUT_METHOD_SERVICE.
-    jclass ClassContext = lJNIEnv->FindClass("android/content/Context");
-    jfieldID FieldINPUT_METHOD_SERVICE = lJNIEnv->GetStaticFieldID(ClassContext, "INPUT_METHOD_SERVICE", "Ljava/lang/String;");
-    jobject INPUT_METHOD_SERVICE = lJNIEnv->GetStaticObjectField(ClassContext, FieldINPUT_METHOD_SERVICE);
-    // TODO : jniCheck(INPUT_METHOD_SERVICE);
-
-    // Runs getSystemService(Context.INPUT_METHOD_SERVICE).
-    jclass ClassInputMethodManager = lJNIEnv->FindClass("android/view/inputmethod/InputMethodManager");
-    jmethodID MethodGetSystemService = lJNIEnv->GetMethodID(ClassNativeActivity, "getSystemService", "(Ljava/lang/String;)Ljava/lang/Object;");
-    jobject lInputMethodManager = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetSystemService, INPUT_METHOD_SERVICE);
-
-    // Runs getWindow().getDecorView().
-    jmethodID MethodGetWindow = lJNIEnv->GetMethodID(ClassNativeActivity, "getWindow", "()Landroid/view/Window;");
-    jobject lWindow = lJNIEnv->CallObjectMethod(lNativeActivity, MethodGetWindow);
-    jclass ClassWindow = lJNIEnv->FindClass("android/view/Window");
-    jmethodID MethodGetDecorView = lJNIEnv->GetMethodID(ClassWindow, "getDecorView", "()Landroid/view/View;");
-    jobject lDecorView = lJNIEnv->CallObjectMethod(lWindow, MethodGetDecorView);
-
-    if (pShow) {
-        // Runs lInputMethodManager.showSoftInput(...).
-        jmethodID MethodShowSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "showSoftInput", "(Landroid/view/View;I)Z");
-        jboolean lResult = lJNIEnv->CallBooleanMethod(lInputMethodManager, MethodShowSoftInput, lDecorView, lFlags);
-    } else {
-        // Runs lWindow.getViewToken()
-        jclass ClassView = lJNIEnv->FindClass("android/view/View");
-        jmethodID MethodGetWindowToken = lJNIEnv->GetMethodID(ClassView, "getWindowToken", "()Landroid/os/IBinder;");
-        jobject lBinder = lJNIEnv->CallObjectMethod(lDecorView, MethodGetWindowToken);
-        // lInputMethodManager.hideSoftInput(...).
-        jmethodID MethodHideSoftInput = lJNIEnv->GetMethodID( ClassInputMethodManager, "hideSoftInputFromWindow", "(Landroid/os/IBinder;I)Z");
-        jboolean lRes = lJNIEnv->CallBooleanMethod( lInputMethodManager, MethodHideSoftInput, lBinder, lFlags);
-    }
-
-    // Finished with the JVM.
-    lJavaVM->DetachCurrentThread();
-
-}
-
-
-void SendJava_KeyboardShow(void)
+void SendJava_KeyboardShow(bool showIt)
 {
 	APPL_DEBUG("C->java : call java");
 	if (NULL == g_JavaVM) {
@@ -165,20 +89,18 @@ void SendJava_KeyboardShow(void)
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
 
-	APPL_DEBUG("C->java : 111");
 	if (NULL == JavaVirtualMachinePointer) {
 		APPL_DEBUG("C->java : JVM not initialised");
 		return;
 	}
 
-	APPL_DEBUG("C->java : 333");
 	//Call java ...
-	//JavaVirtualMachinePointer->CallVoidMethod(javaClassActivity, javaClassActivityEntryPoint__CPP_keyboardShow);
-	//JavaVirtualMachinePointer->CallStaticVoidMethod(javaClassActivity, javaClassActivityEntryPoint__CPP_keyboardShow);
-	JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_keyboardShow);
-	
+	if (true == showIt) {
+		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_keyboardShow);
+	} else {
+		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_keyboardHide);
+	}
 
-	APPL_DEBUG("C->java : 444");
 	// manage execption : 
 	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
 		APPL_DEBUG("C->java : EXEPTION ...");
@@ -249,6 +171,9 @@ void SendSystemMessage(const char * dataString)
 	g_JavaVM->DetachCurrentThread();
 }
 
+namespace guiAbstraction {
+void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
+};
 
 extern "C"
 {
@@ -308,13 +233,21 @@ extern "C"
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardShow = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardShow", "()V" );
-			if (javaClassActivityEntryPoint == 0) {
+			if (javaClassActivityEntryPoint__CPP_keyboardShow == 0) {
 				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
-			javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
+			javaClassActivityEntryPoint__CPP_keyboardHide = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardHide", "()V" );
+			if (javaClassActivityEntryPoint__CPP_keyboardHide == 0) {
+				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
+				// remove access on the virtual machine : 
+				JavaVirtualMachinePointer = NULL;
+				return;
+			}
+			//javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
+			javaObjectActivity = obj;
 			
 			javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
 			if (javaDefaultClassString == 0) {
@@ -332,7 +265,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		JavaVirtualMachinePointer = NULL;
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___TouchEvent( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_TouchEvent( JNIEnv*  env )
 	{
 		APPL_DEBUG(" ==> Touch Event");
 		if (env->ExceptionOccurred()) {
@@ -341,33 +274,33 @@ extern "C"
 		}
 	}
 	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnCreate( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnCreate( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Create                   **");
 		APPL_DEBUG("*******************************************");
 		EWOL_SystemStart();
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStart( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnStart( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Start                    **");
 		APPL_DEBUG("*******************************************");
 		//SendSystemMessage(" testmessages ... ");
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnReStart( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnReStart( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Re-Start                 **");
 		APPL_DEBUG("*******************************************");
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnResume( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnResume( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Resume                   **");
 		APPL_DEBUG("*******************************************");
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnPause( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnPause( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Pause                    **");
@@ -376,13 +309,13 @@ extern "C"
 		// TODO : Mark all the texture to be reloaded ...
 		EWOL_NativeGLDestroy();
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnStop( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnStop( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Stop                     **");
 		APPL_DEBUG("*******************************************");
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityOnDestroy( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_ActivityOnDestroy( JNIEnv*  env )
 	{
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Destroy                  **");
@@ -391,42 +324,86 @@ extern "C"
 	}
 	
 	
-	/* Call to initialize the graphics state */
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolRenderer_nativeInit( JNIEnv*  env )
-	{
-		
-	}
 	
-	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolRenderer_nativeResize( JNIEnv* env, jobject thiz, jint w, jint h )
-	{
-		EWOL_ThreadResize(w, h);
-	}
-	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
+	/* **********************************************************************************************
+	 * ** IO section :
+	 * ********************************************************************************************** */
+	void Java_org_ewol_interfaceJNI_IOInputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
 		EWOL_ThreadEventInputMotion(pointerID+1, x, y);
 	}
 	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeEventInputState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
+	void Java_org_ewol_interfaceJNI_IOInputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
 		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
 	}
 	
-	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeApplicationInit( JNIEnv* env)
+	void Java_org_ewol_interfaceJNI_IOInputEventUnknow( JNIEnv* env, jobject  thiz, jint pointerID)
 	{
-		//ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_INIT);
-		//EWOL_NativeApplicationInit();
+		APPL_DEBUG("Unknown IO event : " << pointerID << " ???");
 	}
 	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolGLSurfaceView_nativeApplicationUnInit( JNIEnv* env)
+	void Java_org_ewol_interfaceJNI_IOKeyboardEventMove( JNIEnv* env, jobject  thiz, jint type, jboolean isdown)
 	{
-		//ewol::threadMsg::SendMessage(androidJniMsg, JNI_APP_UN_INIT);
-		//EWOL_NativeApplicationUnInit();
+		APPL_DEBUG("IO keyboard Move event : \"" << type << "\" is down=" << isdown);
 	}
 	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE___EwolRenderer_nativeRender( JNIEnv*  env )
+	void Java_org_ewol_interfaceJNI_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
+	{
+		APPL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
+		guiAbstraction::SendKeyboardEvent(isdown, uniChar);
+	}
+	enum {
+		SYSTEM_KEY__VOLUME_UP = 1,
+		SYSTEM_KEY__VOLUME_DOWN,
+		SYSTEM_KEY__MENU,
+		SYSTEM_KEY__CAMERA,
+		SYSTEM_KEY__HOME,
+		SYSTEM_KEY__POWER,
+	};
+	void Java_org_ewol_interfaceJNI_IOKeyboardEventKeySystem( JNIEnv* env, jobject  thiz, jint keyVal, jboolean isdown)
+	{
+		switch (keyVal)
+		{
+			case SYSTEM_KEY__VOLUME_UP:
+				APPL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << keyVal);
+				break;
+			case SYSTEM_KEY__VOLUME_DOWN:
+				APPL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << keyVal);
+				break;
+			case SYSTEM_KEY__MENU:
+				APPL_DEBUG("IO keyboard Key System \"MENU\" is down=" << keyVal);
+				break;
+			case SYSTEM_KEY__CAMERA:
+				APPL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << keyVal);
+				break;
+			case SYSTEM_KEY__HOME:
+				APPL_DEBUG("IO keyboard Key System \"HOME\" is down=" << keyVal);
+				break;
+			case SYSTEM_KEY__POWER:
+				APPL_DEBUG("IO keyboard Key System \"POWER\" is down=" << keyVal);
+				break;
+			default:
+				APPL_DEBUG("IO keyboard Key System event : \"" << keyVal << "\" is down=" << isdown);
+				break;
+		}
+	}
+	
+	
+	/* **********************************************************************************************
+	 * **  Renderer section :
+	 * ********************************************************************************************** */
+	void Java_org_ewol_interfaceJNI_RenderInit( JNIEnv*  env )
+	{
+		
+	}
+	
+	void Java_org_ewol_interfaceJNI_RenderResize( JNIEnv* env, jobject thiz, jint w, jint h )
+	{
+		EWOL_ThreadResize(w, h);
+	}
+	
+	void Java_org_ewol_interfaceJNI_RenderDraw( JNIEnv*  env )
 	{
 		EWOL_NativeRender();
 	}

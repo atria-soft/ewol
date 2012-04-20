@@ -250,18 +250,18 @@ void guiAbstraction::Stop(void)
 
 // java system to send message : 
 void SendSystemMessage(const char * dataString);
-void SendJava_KeyboardShow(void);
+void SendJava_KeyboardShow(bool showIt);
 
 void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
 {
 	// send a message at the java :
-	SendJava_KeyboardShow();
+	SendJava_KeyboardShow(true);
 }
 
 void guiAbstraction::KeyboardHide(void)
 {
 	// send a message at the java :
-	SendSystemMessage("Keyboard_Hide");
+	SendJava_KeyboardShow(false);
 }
 
 void guiAbstraction::ChangeSize(int32_t w, int32_t h)
