@@ -9,6 +9,7 @@ FILE_LIST = \
 			etk/UString.cpp \
 			etk/Stream.cpp \
 			etk/File.cpp \
-			etk/RegExp.cpp
+			etk/RegExp.cpp \
+			etk/Color.cpp
 
 

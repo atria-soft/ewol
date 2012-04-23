@@ -34,21 +34,14 @@ ewol::PopUp::PopUp(void)
 {
 	m_userExpendX = true;
 	m_userExpendY = true;
-
-	m_colorBackGroung.red   = 1.0;
-	m_colorBackGroung.green = 1.0;
-	m_colorBackGroung.blue  = 1.0;
-	m_colorBackGroung.alpha = 1.0;
-
-	m_colorEmptyArea.red   = 0.0;
-	m_colorEmptyArea.green = 0.0;
-	m_colorEmptyArea.blue  = 0.0;
-	m_colorEmptyArea.alpha = 0.50;
 	
-	m_colorBorder.red   = 0.0;
-	m_colorBorder.green = 0.0;
-	m_colorBorder.blue  = 0.0;
-	m_colorBorder.alpha = 0.50;
+	m_colorBackGroung = etk::color::color_White;
+	
+	m_colorEmptyArea = etk::color::color_Black;
+	m_colorEmptyArea.alpha = 0x7F;
+	
+	m_colorBorder = etk::color::color_Black;
+	m_colorBorder.alpha = 0x7F;
 	
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_subWidget[iii] = 0;

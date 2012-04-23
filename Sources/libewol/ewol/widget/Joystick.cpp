@@ -103,15 +103,10 @@ ewol::Joystick::Joystick(void)
 	m_lock = false;
 	m_displayMode = ewol::JOYSTICK_NORMAL_MODE;
 	
-	m_colorFg.red   = 1.0;
-	m_colorFg.green = 0.0;
-	m_colorFg.blue  = 0.0;
-	m_colorFg.alpha = 1.0;
+	m_colorFg = etk::color::color_Blue;
 	
-	m_colorBg.red   = 0.0;
-	m_colorBg.green = 0.0;
-	m_colorBg.blue  = 0.0;
-	m_colorBg.alpha = 0.25;
+	m_colorBg = etk::color::color_Black;
+	m_colorBg.alpha = 0x3F;
 	
 	m_displayPos.x = 0.0;
 	m_displayPos.y = 0.0;

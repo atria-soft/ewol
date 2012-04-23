@@ -31,10 +31,7 @@
 
 ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t size)
 {
-	m_color.red = 0.0;
-	m_color.green = 0.0;
-	m_color.blue = 0.0;
-	m_color.alpha = 1.0;
+	m_color = etk::color::color_Black;
 	if (FontName == "") {
 		m_FontId = GetDefaultFontId();
 	} else {
@@ -51,10 +48,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t 
 
 ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)
 {
-	m_color.red = 0.0;
-	m_color.green = 0.0;
-	m_color.blue = 0.0;
-	m_color.alpha = 1.0;
+	m_color = etk::color::color_Black;
 	if (fontID < 0) {
 		m_FontId = GetDefaultFontId();
 	} else {
@@ -66,10 +60,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)
 // open with default font ...
 ewol::OObject2DTextColored::OObject2DTextColored(void)
 {
-	m_color.red = 0.0;
-	m_color.green = 0.0;
-	m_color.blue = 0.0;
-	m_color.alpha = 1.0;
+	m_color = etk::color::color_Black;
 	m_FontId = GetDefaultFontId();
 }
 
@@ -92,7 +83,7 @@ void ewol::OObject2DTextColored::Draw(void)
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
 	glVertexPointer(   2, oglTypeFloat_t, 0, &m_coord[0] );
 	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
-	glColorPointer(    4, oglTypeFloat_t, 0, &m_coordColor[0] );
+	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
@@ -157,10 +148,7 @@ void ewol::OObject2DTextColored::SetColor(color_ts color)
 
 void ewol::OObject2DTextColored::SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha)
 {
-	m_color.red = red;
-	m_color.green = green;
-	m_color.blue = blue;
-	m_color.alpha = alpha;
+	m_color = etk::color::Create(red, green, blue, alpha);
 }
 
 

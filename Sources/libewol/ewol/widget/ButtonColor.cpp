@@ -63,10 +63,8 @@ void ewol::ButtonColor::Init(void)
 	#endif
 	
 	
-	m_textColorBg.red   = 0.0;
-	m_textColorBg.green = 0.0;
-	m_textColorBg.blue  = 0.0;
-	m_textColorBg.alpha = 0.25;
+	m_textColorBg = etk::color::color_Black;
+	m_textColorBg.alpha = 0x3F;
 	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
 }

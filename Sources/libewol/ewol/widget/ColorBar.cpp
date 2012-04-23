@@ -48,10 +48,7 @@ ewol::ColorBar::ColorBar(void)
 	#endif
 	m_currentUserPos.x=0;
 	m_currentUserPos.y=0;
-	m_currentColor.red   = 0.0;
-	m_currentColor.green = 0.0;
-	m_currentColor.blue  = 0.0;
-	m_currentColor.alpha = 1.0;
+	m_currentColor = etk::color::color_Black;
 	SetCanHaveFocus(true);
 }
 
@@ -106,17 +103,17 @@ bool ewol::ColorBar::CalculateMinSize(void)
 	MarkToReedraw();
 	return true;
 }
-static color_ts s_listColorWhite = {1.0, 1.0, 1.0, 1.0 };
-static color_ts s_listColorBlack = {0.0, 0.0, 0.0, 1.0 };
+static color_ts s_listColorWhite = {0xFF, 0xFF, 0xFF, 0xFF};
+static color_ts s_listColorBlack = {0x00, 0x00, 0x00, 0xFF};
 #define NB_BAND_COLOR		(6)
 static color_ts s_listColor[NB_BAND_COLOR+1] = {
-	{1.0, 0.0, 0.0, 1.0 },
-	{1.0, 1.0, 0.0, 1.0 },
-	{0.0, 1.0, 0.0, 1.0 },
-	{0.0, 1.0, 1.0, 1.0 },
-	{0.0, 0.0, 1.0, 1.0 },
-	{1.0, 0.0, 1.0, 1.0 },
-	{1.0, 0.0, 0.0, 1.0 }
+	{0xFF, 0x00, 0x00, 0xFF},
+	{0xFF, 0xFF, 0x00, 0xFF},
+	{0x00, 0xFF, 0x00, 0xFF},
+	{0x00, 0xFF, 0xFF, 0xFF},
+	{0x00, 0x00, 0xFF, 0xFF},
+	{0xFF, 0x00, 0xFF, 0xFF},
+	{0xFF, 0x00, 0x00, 0xFF}
 };
 
 color_ts ewol::ColorBar::GetCurrentColor(void)

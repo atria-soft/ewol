@@ -50,17 +50,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
 			ewol/widgetMeta/Keyboard.cpp \
-			ewol/themeManager.cpp \
-			ewol/theme/Theme.cpp \
-			ewol/theme/EolElement.cpp \
-			ewol/theme/EolElementFrame.cpp \
-			ewol/theme/EolColor.cpp \
-			ewol/theme/EolBase.cpp \
-			ewol/theme/EolBaseCircle.cpp \
-			ewol/theme/EolBaseCirclePart.cpp \
-			ewol/theme/EolBaseLine.cpp \
-			ewol/theme/EolBasePolygone.cpp \
-			ewol/theme/EolBaseRect.cpp \
-			ewol/theme/EolBaseTriangle.cpp
+			ewol/theme/Theme.cpp
 
 

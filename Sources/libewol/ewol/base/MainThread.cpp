@@ -33,7 +33,6 @@
 #include <ewol/EObject.h>
 #include <ewol/EObjectManager.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/themeManager.h>
 #include <ewol/ShortCutManager.h>
 #include <ewol/base/eventInputManagement.h>
 
@@ -112,7 +111,6 @@ static void* BaseAppEntry(void* param)
 	ewol::eventInput::Init();
 	ewol::widgetManager::Init();
 	ewol::texture::Init();
-	ewol::theme::Init();
 	ewol::InitFont();
 	ewol::shortCut::Init();
 	APP_Init();
@@ -217,7 +215,6 @@ static void* BaseAppEntry(void* param)
 	ewol::widgetManager::UnInit();
 	ewol::EObjectMessageMultiCast::UnInit();
 	ewol::EObjectManager::UnInit();
-	ewol::theme::UnInit();
 	ewol::eventInput::UnInit();
 	EWOL_DEBUG("==> Un-Init BThread (END)");
 	pthread_exit(NULL);

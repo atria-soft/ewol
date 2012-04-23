@@ -140,11 +140,6 @@ namespace etk{
 			return *this;
 		}
 		CCout& operator << (color_ts t) {
-			snprintf(tmp, MAX_LOG_SIZE_TMP, "(r=%f,g=%f,b=%f,a=%f)", t.red, t.green, t.blue, t.alpha);
-			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-			return *this;
-		}
-		CCout& operator << (color8_ts t) {
 			snprintf(tmp, MAX_LOG_SIZE_TMP, "#%02X%02X%02X%02X", t.red, t.green, t.blue, t.alpha);
 			strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 			return *this;

@@ -101,21 +101,14 @@ extern "C"
 		etkFloat_t h;
 	}clipping_ts;
 	
-	typedef struct {
-		etkFloat_t red;
-		etkFloat_t green;
-		etkFloat_t blue;
-		etkFloat_t alpha;
-	}color_ts;
-	
-	typedef struct {
+	typedef struct color_ts {
 		uint8_t red;
 		uint8_t green;
 		uint8_t blue;
 		uint8_t alpha;
-	}color8_ts;
+	}color_ts;
 }
-
+#include <etk/Color.h>
 
 
 #endif

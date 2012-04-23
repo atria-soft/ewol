@@ -53,8 +53,8 @@ namespace svg
 	
 	class PaintState {
 		public:
-			color8_ts         fill;
-			color8_ts         stroke;
+			color_ts          fill;
+			color_ts          stroke;
 			etkFloat_t        strokeWidth;
 			bool              flagEvenOdd;
 			lineCap_te        lineCap;

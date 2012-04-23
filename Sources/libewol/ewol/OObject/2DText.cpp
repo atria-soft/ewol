@@ -44,10 +44,10 @@ ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, color_ts
 // open with default font ...
 ewol::OObject2DText::OObject2DText(void)
 {
-	m_textColorFg.red = 0.0;
-	m_textColorFg.green = 0.0;
-	m_textColorFg.blue = 0.0;
-	m_textColorFg.alpha = 1.0;
+	m_textColorFg.red = 0;
+	m_textColorFg.green = 0;
+	m_textColorFg.blue = 0;
+	m_textColorFg.alpha = 0xFF;
 	m_FontId = GetDefaultFontId();
 }
 
@@ -63,7 +63,7 @@ void ewol::OObject2DText::Draw(void)
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	glColor4f(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
+	glColor4ub(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_FontTextureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays

@@ -59,7 +59,8 @@ void ewol::OObject2DColored::Draw(void)
 	
 	// Set the vertex pointer to our vertex data
 	glVertexPointer(2, oglTypeFloat_t, 0, &m_coord[0] );
-	glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
+	//glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
+	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 	// Render : draw all of the triangles at once
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
@@ -315,22 +316,22 @@ void ewol::OObject2DColored::SetColor(color_ts color)
 void ewol::OObject2DColored::SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha)
 {
 	if (m_triElement < 1) {
-		m_color[0].red = red;
-		m_color[0].green = green;
-		m_color[0].blue = blue;
-		m_color[0].alpha = alpha;
+		m_color[0].red = red*255;
+		m_color[0].green = green*255;
+		m_color[0].blue = blue*255;
+		m_color[0].alpha = alpha*255;
 	}
 	if (m_triElement < 2) {
-		m_color[1].red = red;
-		m_color[1].green = green;
-		m_color[1].blue = blue;
-		m_color[1].alpha = alpha;
+		m_color[1].red = red*255;
+		m_color[1].green = green*255;
+		m_color[1].blue = blue*255;
+		m_color[1].alpha = alpha*255;
 	}
 	if (m_triElement < 3) {
-		m_color[2].red = red;
-		m_color[2].green = green;
-		m_color[2].blue = blue;
-		m_color[2].alpha = alpha;
+		m_color[2].red = red*255;
+		m_color[2].green = green*255;
+		m_color[2].blue = blue*255;
+		m_color[2].alpha = alpha*255;
 	}
 	
 }

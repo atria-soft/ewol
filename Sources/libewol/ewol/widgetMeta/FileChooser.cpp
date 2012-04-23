@@ -116,10 +116,10 @@ class FileChooserFolderList : public ewol::List
 		
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
-			bg.red = 0.0;
-			bg.green = 0.0;
-			bg.blue = 0.0;
-			bg.alpha = 0.2;
+			bg.red = 0;
+			bg.green = 0;
+			bg.blue = 0;
+			bg.alpha = 0x30;
 			return bg;
 		}
 		
@@ -139,26 +139,20 @@ class FileChooserFolderList : public ewol::List
 			} else {
 				myTextToWrite = "ERROR";
 			}
-			fg.red = 0.0;
-			fg.green = 0.0;
-			fg.blue = 0.0;
-			fg.alpha = 1.0;
+			fg = etk::color::color_Black;
 			if (raw % 2) {
-				bg.red = 1.0;
-				bg.green = 1.0;
-				bg.blue = 1.0;
-				bg.alpha = 1.0;
+				bg = etk::color::color_White;
 			} else {
-				bg.red = 0.5;
-				bg.green = 0.5;
-				bg.blue = 0.5;
-				bg.alpha = 1.0;
+				bg.red = 0x7F;
+				bg.green = 0x7F;
+				bg.blue = 0x7F;
+				bg.alpha = 0xFF;
 			}
 			if (m_selectedLine == raw) {
-				bg.red = 0.6;
-				bg.green = 0.6;
-				bg.blue = 1.0;
-				bg.alpha = 1.0;
+				bg.red = 0x8F;
+				bg.green = 0x8F;
+				bg.blue = 0xFF;
+				bg.alpha = 0xFF;
 			}
 			return true;
 		};
@@ -253,10 +247,10 @@ class FileChooserFileList : public ewol::List
 		};
 		virtual color_ts GetBasicBG(void) {
 			color_ts bg;
-			bg.red = 0.0;
-			bg.green = 0.0;
-			bg.blue = 0.0;
-			bg.alpha = 0.2;
+			bg.red = 0;
+			bg.green = 0;
+			bg.blue = 0;
+			bg.alpha = 0x30;
 			return bg;
 		}
 		void AddElement(etk::UString element)
@@ -306,26 +300,23 @@ class FileChooserFileList : public ewol::List
 			} else {
 				myTextToWrite = "ERROR";
 			}
-			fg.red = 0.0;
-			fg.green = 0.0;
-			fg.blue = 0.0;
-			fg.alpha = 1.0;
+			fg = etk::color::color_Black;
 			if (raw % 2) {
-				bg.red = 0.9;
-				bg.green = 1.0;
-				bg.blue = 1.0;
-				bg.alpha = 1.0;
+				bg.red = 0xCF;
+				bg.green = 0xFF;
+				bg.blue = 0xFF;
+				bg.alpha = 0xFF;
 			} else {
-				bg.red = 0.7;
-				bg.green = 0.7;
-				bg.blue = 0.7;
-				bg.alpha = 1.0;
+				bg.red = 0x9F;
+				bg.green = 0x9F;
+				bg.blue = 0x9F;
+				bg.alpha = 0xFF;
 			}
 			if (m_selectedLine == raw) {
-				bg.red = 0.6;
-				bg.green = 0.6;
-				bg.blue = 1.0;
-				bg.alpha = 1.0;
+				bg.red = 0x8F;
+				bg.green = 0x8F;
+				bg.blue = 0xFF;
+				bg.alpha = 0xFF;
 			}
 			return true;
 		};

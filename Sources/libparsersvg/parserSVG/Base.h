@@ -63,7 +63,7 @@ namespace svg
 			void ParsePosition(const TiXmlNode *node, coord2D_ts &pos, coord2D_ts &size);
 			etkFloat_t ParseLength(const char *dataInput);
 			void ParsePaintAttr(const TiXmlNode *node);
-			color8_ts ParseColor(const char *inputData);
+			color_ts ParseColor(const char *inputData);
 	};
 };
 
