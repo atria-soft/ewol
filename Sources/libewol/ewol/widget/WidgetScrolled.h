@@ -93,8 +93,31 @@ namespace ewol {
 			 */
 			virtual void GenDraw(void);
 		protected:
+			/**
+			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled
+			 * @param[in] nbPixel number of pixel scrolling
+			 * @return ---
+			 */
 			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
+			/**
+			 * @brief Specify the mode of scrolling for this windows
+			 * @param[in] newMode the selected mode for the scrolling...
+			 * @return ---
+			 */
 			void ScroolingMode(scrollingMode_te newMode) { m_scroollingMode = newMode; };
+			/**
+			 * @brief Set the specific mawimum size of the widget
+			 * @param[in] localSize new Maximum size
+			 * @return ---
+			 */
+			void SetMaxSize(coord2D_ts localSize) { m_maxSize = localSize; };
+			/**
+			 * @brief Request a specific position for the scrolling of the current windows.
+			 * @param[in] borderWidth Size of the border that requested the element might not to be
+			 * @param[in] currentPosition Position that is requested to view
+			 * @param[in] center True if the position might be at the center of the widget
+			 * @return ---
+			 */
 			void SetScrollingPositionDynamic(coord2D_ts borderWidth, coord2D_ts currentPosition, bool center = false);
 	};
 	
