@@ -296,3 +296,35 @@ void ewol::WidgetScrooled::GenDraw(void)
 	}
 	
 }
+
+/**
+ * @brief Request a specific position for the scrolling of the current windows.
+ * @param[in] borderWidth Size of the border that requested the element might not to be
+ * @param[in] currentPosition Position that is requested to view
+ * @param[in] center True if the position might be at the center of the widget
+ * @return ---
+ */
+void ewol::WidgetScrooled::SetScrollingPositionDynamic(coord2D_ts borderWidth, coord2D_ts currentPosition, bool center)
+{
+	if (true == center) {
+		borderWidth.x = m_size.x / 2 - borderWidth.x;
+		borderWidth.y = m_size.y / 2 - borderWidth.y;
+	}
+	// check scrooling in X
+	if( currentPosition.x < (m_originScrooled.x+borderWidth.x) ) {
+		m_originScrooled.x = currentPosition.x - borderWidth.x;
+		m_originScrooled.x = etk_max(0.0, m_originScrooled.x);
+	} else if( currentPosition.x > (m_originScrooled.x+m_size.x-2*borderWidth.x) ) {
+		m_originScrooled.x = currentPosition.x - m_size.x + 2*borderWidth.x;
+		m_originScrooled.x = etk_max(0.0, m_originScrooled.x);
+	}
+	// check scrooling in Y
+	if( currentPosition.y < (m_originScrooled.y+borderWidth.y) ) {
+		m_originScrooled.y = currentPosition.y - borderWidth.y;
+		m_originScrooled.y = etk_max(0.0, m_originScrooled.y);
+	} else if( currentPosition.y > (m_originScrooled.y+m_size.y-2*borderWidth.y) ) {
+		m_originScrooled.y = currentPosition.y - m_size.y + 2*borderWidth.y;
+		m_originScrooled.y = etk_max(0.0, m_originScrooled.y);
+	}
+}
+

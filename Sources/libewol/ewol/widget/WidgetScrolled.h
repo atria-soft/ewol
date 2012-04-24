@@ -95,6 +95,7 @@ namespace ewol {
 		protected:
 			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
 			void ScroolingMode(scrollingMode_te newMode) { m_scroollingMode = newMode; };
+			void SetScrollingPositionDynamic(coord2D_ts borderWidth, coord2D_ts currentPosition, bool center = false);
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SCROOLED;
