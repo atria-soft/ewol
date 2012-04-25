@@ -291,27 +291,32 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 		for( const char *sss=extractPartOfStyle(content, outputType, outputValue, 1024);
 		     NULL != sss;
 		     sss=extractPartOfStyle(sss, outputType, outputValue, 1024) ) {
-			//SVG_INFO(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
+			SVG_INFO(" style parse : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			if (0 == strcmp(outputType, "fill") ) {
 				m_paint.fill = ParseColor(outputValue);
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "stroke") ) {
 				m_paint.stroke = ParseColor(outputValue);
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
 			} else if (0 == strcmp(outputType, "stroke-width") ) {
 				m_paint.strokeWidth = ParseLength(outputValue);
-				//SVG_ERROR(" input : \"" << outputValue << "\" ==> " <<m_paint.strokeWidth);
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.strokeWidth);
 			} else if (0 == strcmp(outputType, "opacity") ) {
 				etkFloat_t opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.alpha = opacity*0xFF;
 				m_paint.stroke.alpha = opacity*0xFF;
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "fill-opacity") ) {
 				etkFloat_t opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.alpha = opacity*0xFF;
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "stroke-opacity") ) {
 				etkFloat_t opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.stroke.alpha = opacity*0xFF;
+				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
 			} else if (0 == strcmp(outputType, "fill-rule") ) {
 				if (0 == strcmp(outputValue, "nonzero") ) {
 					m_paint.flagEvenOdd = false;

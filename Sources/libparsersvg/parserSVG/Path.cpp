@@ -128,7 +128,13 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_
 					break;
 				}
 				pathElement.cmd = svg::PATH_ENUM_MOVETO;
-				for(int32_t iii=0; iii<listDot.Size(); iii+=2) {
+				if (listDot.Size() >= 2) {
+					pathElement.element[0] = listDot[0];
+					pathElement.element[1] = listDot[1];
+					m_listElement.PushBack(pathElement);
+				}
+				pathElement.cmd = svg::PATH_ENUM_LINETO;
+				for(int32_t iii=2; iii<listDot.Size(); iii+=2) {
 					pathElement.element[0] = listDot[iii];
 					pathElement.element[1] = listDot[iii+1];
 					m_listElement.PushBack(pathElement);
@@ -286,6 +292,54 @@ bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_
 void svg::Path::Display(int32_t spacing)
 {
 	SVG_DEBUG(SpacingDist(spacing) << "Path");
+	for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
+		switch (m_listElement[iii].cmd) {
+			case PATH_ENUM_STOP:
+				SVG_DEBUG(SpacingDist(spacing+4) << "STOP");
+				break;
+			case PATH_ENUM_MOVETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "MOVETO (" << m_listElement[iii].element[0] << "," << m_listElement[iii].element[1] << ")" );
+				break;
+			case PATH_ENUM_LINETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "LINETO (" << m_listElement[iii].element[0] << "," << m_listElement[iii].element[1] << ")" );
+				break;
+			case PATH_ENUM_LINETO_H:
+				SVG_DEBUG(SpacingDist(spacing+4) << "LINETO_H (" << m_listElement[iii].element[0] << ")" );
+				break;
+			case PATH_ENUM_LINETO_V:
+				SVG_DEBUG(SpacingDist(spacing+4) << "LINETO_V (" << m_listElement[iii].element[0] << ")" );
+				break;
+			case PATH_ENUM_CURVETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "CURVETO (" << m_listElement[iii].element[0] << 
+				                                            "," << m_listElement[iii].element[1] << 
+				                                            "," << m_listElement[iii].element[2] << 
+				                                            "," << m_listElement[iii].element[3] << 
+				                                            "," << m_listElement[iii].element[4] << 
+				                                            "," << m_listElement[iii].element[5] << ")" );
+				break;
+			case PATH_ENUM_SMOTH_CURVETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "SMOTH_CURVETO (" << m_listElement[iii].element[0] <<
+				                                                  "," << m_listElement[iii].element[1] << 
+				                                                  "," << m_listElement[iii].element[2] << 
+				                                                  "," << m_listElement[iii].element[3] <<  ")" );
+				break;
+			case PATH_ENUM_BEZIER_CURVETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "BEZIER_CURVETO (" << m_listElement[iii].element[0] << 
+				                                                   "," << m_listElement[iii].element[1] << 
+				                                                   "," << m_listElement[iii].element[2] << 
+				                                                   "," << m_listElement[iii].element[3] << ")" );
+				break;
+			case PATH_ENUM_BEZIER_SMOTH_CURVETO:
+				SVG_DEBUG(SpacingDist(spacing+4) << "BEZIER_SMOTH_CURVETO (" << m_listElement[iii].element[0] << "," << m_listElement[iii].element[1] << ")" );
+				break;
+			case PATH_ENUM_ELLIPTIC:
+				SVG_DEBUG(SpacingDist(spacing+4) << "ELLIPTIC (TODO...)" );
+				break;
+			default:
+				SVG_DEBUG(SpacingDist(spacing+4) << "????" );
+				break;
+		}
+	}
 }
 
 
