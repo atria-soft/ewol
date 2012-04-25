@@ -216,13 +216,21 @@ const char * extractPartOfStyle(const char * input, char * outputType, char * ou
  */
 void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 {
+	bool fillNone = false;
+	bool strokeNone = false;
 	const char * content = node->ToElement()->Attribute("fill");
 	if (NULL != content) {
 		m_paint.fill = ParseColor(content);
+		if (m_paint.fill.alpha == 0) {
+			fillNone = true;
+		}
 	}
 	content = node->ToElement()->Attribute("stroke");
 	if (NULL != content) {
 		m_paint.stroke = ParseColor(content);
+		if (m_paint.stroke.alpha == 0) {
+			strokeNone = true;
+		}
 	}
 	content = node->ToElement()->Attribute("stroke-width");
 	if (NULL != content) {
@@ -295,9 +303,15 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 			if (0 == strcmp(outputType, "fill") ) {
 				m_paint.fill = ParseColor(outputValue);
 				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
+				if (m_paint.fill.alpha == 0) {
+					fillNone = true;
+				}
 			} else if (0 == strcmp(outputType, "stroke") ) {
 				m_paint.stroke = ParseColor(outputValue);
 				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);
+				if (m_paint.stroke.alpha == 0) {
+					strokeNone = true;
+				}
 			} else if (0 == strcmp(outputType, "stroke-width") ) {
 				m_paint.strokeWidth = ParseLength(outputValue);
 				SVG_ERROR(" input : \"" << outputValue << "\" ==> " << m_paint.strokeWidth);
@@ -353,6 +367,13 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 				SVG_ERROR("not know painting element in style balise : \"" << outputType << "\" with value : \"" << outputValue << "\"");
 			}
 		}
+	}
+	// check if somewere none is set to the filling:
+	if (true == fillNone) {
+		m_paint.fill.alpha = 0;
+	}
+	if (true == strokeNone) {
+		m_paint.stroke.alpha = 0;
 	}
 }
 
