@@ -31,7 +31,7 @@
  * @param ---
  * @return ---
  */
-ewol::GameElement::GameElement(SceneElement & sceneElement) : m_sceneElement(sceneElement)
+ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpName) : m_sceneElement(sceneElement), m_fileNameConfig(tmpName)
 {
 	m_group = -1;
 	m_type = -1;

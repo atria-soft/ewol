@@ -35,24 +35,25 @@ namespace ewol {
 	
 	class GameElement
 	{
+		private:
+			etk::UString m_fileNameConfig;
 		protected:
 			SceneElement & m_sceneElement; //!< all element neede in the scene
-		protected:
-			int32_t    m_group;
-			int32_t    m_type;
-			bool       m_visible;
-			coord2D_ts m_position;
-			coord2D_ts m_speed;
-			etkFloat_t m_size;
-			etkFloat_t m_angle;
-			etkFloat_t m_gravity;
+			int32_t      m_group;
+			int32_t      m_type;
+			bool         m_visible;
+			coord2D_ts   m_position;
+			coord2D_ts   m_speed;
+			etkFloat_t   m_size;
+			etkFloat_t   m_angle;
+			etkFloat_t   m_gravity;
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
 			 * @param ---
 			 * @return ---
 			 */
-			GameElement(SceneElement & sceneElement);
+			GameElement(SceneElement & sceneElement, etk::UString& tmpName);
 			/**
 			 * @brief Destructor : This does not remove the sprite requested, they will be supressed when the scene is removed ...
 			 * @param ---
@@ -60,6 +61,7 @@ namespace ewol {
 			 */
 			virtual ~GameElement(void) { };
 			
+			bool        HasName(etk::UString tmpName)                  { return (tmpName == m_fileNameConfig); };
 			bool        IsVisible(void)                                { return m_visible; };
 			void        SetVisible(bool state)                         { m_visible = state; };
 			coord2D_ts  PositionGet(void)                              { return m_position; };
