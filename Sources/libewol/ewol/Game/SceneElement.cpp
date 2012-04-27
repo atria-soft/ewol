@@ -26,61 +26,90 @@
 #include <ewol/Game/GameElement.h>
 #include <ewol/Game/SceneElement.h>
 
-
-int32_t ewol::SceneElement::AddElement(ewol::GameElement* newElement)
+ewol::SceneElement::SceneElement(void)
 {
-	if (NULL == newElement) {
-		return -1;
+	m_id = 1;
+	numberOfGroup = 0;
+	for (int32_t iii=0; iii<MAX_GROUP_NUMBER; iii++) {
+		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+			groupEnemy[iii][jjj] = -1;
+		}
 	}
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL == listAnimatedElements[iii]) {
+};
+
+void ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newElement)
+{
+	elementIdentifier_ts tmpElement;
+	if (NULL == newElement) {
+		EWOL_ERROR("newElement is empty ==> not added at the system ...");
+		return;
+	}
+	if (group < 0 || group >= MAX_GROUP_NUMBER) {
+		EWOL_ERROR("group is wrong " << group << "!=[0," << MAX_GROUP_NUMBER << "]==> not added at the system ...");
+		return;
+	}
+	for (int32_t iii=0; iii<listAnimatedElements[group].Size(); iii++) {
+		if (NULL == listAnimatedElements[group][iii]) {
 			// find an empty slot ...
-			listAnimatedElements[iii] = newElement;
-			return iii;
+			listAnimatedElements[group][iii] = newElement;
+			return;
 		}
 	}
 	//did not find empty slot : 
 	listAnimatedElements.PushBack(newElement);
-	return listAnimatedElements.Size()-1;
 }
 
 
-bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &element, int32_t id)
+bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &element, elementIdentifier_ts& id)
 {
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL != listAnimatedElements[iii]) {
-			if (true == listAnimatedElements[iii]->GetElementProperty(element, id) ) {
-				return true;
-			}
-		}
+	if (id.group > numberOfGroup || id.group > MAX_GROUP_NUMBER) {
+		return false;
 	}
-	return false;
+	if (id.listId >= listAnimatedElements[id.group].Size()) {
+		return false;
+	if (NULL == listAnimatedElements[id.group][id.listId]) {
+		return false;
+	}
+	// copy the properties
+	element.id = id;
+	// get the sub properties ...
+	return listAnimatedElements[id.group][id.listId]->GetElementProperty(element, id.id);
 }
 
 
-int32_t ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupId)
+elementIdentifier_ts ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupId)
 {
-	int32_t findId = -1;
+	elementIdentifier_ts findId;
+	findId.id = -1;
+	findId.group = -1;
+	findId.listId = -1;
 	etkFloat_t lastQuadDistance = 9999999999999999.0;
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL != listAnimatedElements[iii]) {
-			int32_t newID = listAnimatedElements[iii]->GetNearestEnemy(position, groupId, lastQuadDistance);
-			if (-1 != newID) {
-				findId = newID;
+	int32_t jjj=0;
+	while (groupEnemy[jjj] != -1) {
+		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[jjj]].Size(); iii++) {
+			if (NULL != listAnimatedElements[groupEnemy[jjj]][iii]) {
+				int32_t newID = listAnimatedElements[groupEnemy[jjj]][iii]->GetNearestEnemy(position, lastQuadDistance);
+				if (-1 != newID) {
+					findId.id = newID;
+					findId.group = groupEnemy[jjj];
+					findId.listId = iii;
+				}
 			}
 		}
+		jjj++;
 	}
 	return findId;
 }
 
 
-
 bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
 {
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL != listAnimatedElements[iii]) {
-			if (true == listAnimatedElements[iii]->HaveImpact(group, type, position, size )) {
-				return true;
+	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
+			if (NULL != listAnimatedElements[jjj][iii]) {
+				if (true == listAnimatedElements[jjj][iii]->HaveImpact(group, type, position, size )) {
+					return true;
+				}
 			}
 		}
 	}
@@ -89,9 +118,55 @@ bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, coord2D_ts posi
 
 void ewol::SceneElement::Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power)
 {
-	for (int32_t iii=0; iii<listAnimatedElements.Size(); iii++) {
-		if (NULL != listAnimatedElements[iii]) {
-			listAnimatedElements[iii]->Explosion(group, type, position, pxAtenuation, power);
+	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
+			if (NULL != listAnimatedElements[jjj][iii]) {
+				listAnimatedElements[jjj][iii]->Explosion(group, type, position, pxAtenuation, power);
+			}
 		}
 	}
 }
+
+elementIdentifier_ts ewol::SceneElement::GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection)
+{
+	elementIdentifier_ts findId;
+	findId.id = -1;
+	findId.group = -1;
+	findId.listId = -1;
+	etkFloat_t lastQuadDistance = 9999999999999999.0;
+	int32_t jjj=0;
+	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
+			if (NULL != listAnimatedElements[jjj][iii]) {
+				int32_t newID = listAnimatedElements[jjj][iii]->GetNearestEnemy(position, lastQuadDistance);
+				if (-1 != newID) {
+					findId.id = newID;
+					findId.group = groupEnemy[jjj];
+					findId.listId = iii;
+				}
+			}
+		}
+	}
+	if (lastQuadDistance > maxDistanceDetection*maxDistanceDetection) {
+		findId.id = -1;
+		findId.group = -1;
+		findId.listId = -1;
+	}
+	return findId;
+}
+
+void ewol::SceneElement::SetEventInput(elementIdentifier_ts& id, coord2D_ts position)
+{
+	EWOL_TODO("but when ...");
+}
+
+void ewol::SceneElement::SetEventExternButton(elementIdentifier_ts& id, int32_t btId, int32_t state)
+{
+	EWOL_TODO("but when ...");
+}
+
+void ewol::SceneElement::SetEventExternJoystick(elementIdentifier_ts& id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state)
+{
+	EWOL_TODO("but when ...");
+}
+
