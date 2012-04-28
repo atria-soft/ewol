@@ -110,10 +110,12 @@ void ewol::Scene::OnRegenerateDisplay(void)
 				m_sceneElement.effects[m_currentCreateId][iii]->Clear();
 			}
 		}
-		for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
-			if (NULL != m_sceneElement.listAnimatedElements[iii]) {
-				// find an empty slot ...
-				m_sceneElement.listAnimatedElements[iii]->Draw(m_sceneElement.animated[m_currentCreateId], m_sceneElement.effects[m_currentCreateId]);
+		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
+				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
+					// find an empty slot ...
+					m_sceneElement.listAnimatedElements[jjj][iii]->Draw(m_sceneElement.animated[m_currentCreateId], m_sceneElement.effects[m_currentCreateId]);
+				}
 			}
 		}
 	}
@@ -173,12 +175,14 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 		deltaTime -= CYCLIC_CALL_PERIODE_US;
 		ScenePeriodicCall(m_lastCallTime, CYCLIC_CALL_PERIODE_US);
 		//EWOL_ERROR("Periodic Call ... " << localTime);
-		for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements.Size(); iii++) {
-			if (NULL != m_sceneElement.listAnimatedElements[iii]) {
-				// check if the element request an auto Kill ...
-				if (true == m_sceneElement.listAnimatedElements[iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US, m_sceneElement) ) {
-					delete(m_sceneElement.listAnimatedElements[iii]);
-					m_sceneElement.listAnimatedElements[iii] = NULL;
+		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
+			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
+				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
+					// check if the element request an auto Kill ...
+					if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US, m_sceneElement) ) {
+						delete(m_sceneElement.listAnimatedElements[jjj][iii]);
+						m_sceneElement.listAnimatedElements[jjj][iii] = NULL;
+					}
 				}
 			}
 		}

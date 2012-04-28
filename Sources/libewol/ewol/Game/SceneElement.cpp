@@ -56,7 +56,7 @@ void ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newElement
 		}
 	}
 	//did not find empty slot : 
-	listAnimatedElements.PushBack(newElement);
+	listAnimatedElements[group].PushBack(newElement);
 }
 
 
@@ -67,6 +67,7 @@ bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &eleme
 	}
 	if (id.listId >= listAnimatedElements[id.group].Size()) {
 		return false;
+	}
 	if (NULL == listAnimatedElements[id.group][id.listId]) {
 		return false;
 	}
@@ -77,7 +78,7 @@ bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &eleme
 }
 
 
-elementIdentifier_ts ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupId)
+ewol::elementIdentifier_ts ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupId)
 {
 	elementIdentifier_ts findId;
 	findId.id = -1;
@@ -85,13 +86,13 @@ elementIdentifier_ts ewol::SceneElement::GetNearestEnemy(coord2D_ts position, in
 	findId.listId = -1;
 	etkFloat_t lastQuadDistance = 9999999999999999.0;
 	int32_t jjj=0;
-	while (groupEnemy[jjj] != -1) {
-		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[jjj]].Size(); iii++) {
-			if (NULL != listAnimatedElements[groupEnemy[jjj]][iii]) {
-				int32_t newID = listAnimatedElements[groupEnemy[jjj]][iii]->GetNearestEnemy(position, lastQuadDistance);
+	while (groupEnemy[groupId][jjj] != -1) {
+		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[groupId][jjj]].Size(); iii++) {
+			if (NULL != listAnimatedElements[groupEnemy[groupId][jjj]][iii]) {
+				int32_t newID = listAnimatedElements[groupEnemy[groupId][jjj]][iii]->GetNearestEnemy(position, lastQuadDistance);
 				if (-1 != newID) {
 					findId.id = newID;
-					findId.group = groupEnemy[jjj];
+					findId.group = groupEnemy[groupId][jjj];
 					findId.listId = iii;
 				}
 			}
@@ -127,7 +128,7 @@ void ewol::SceneElement::Explosion(int32_t group, int32_t type, coord2D_ts posit
 	}
 }
 
-elementIdentifier_ts ewol::SceneElement::GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection)
+ewol::elementIdentifier_ts ewol::SceneElement::GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection)
 {
 	elementIdentifier_ts findId;
 	findId.id = -1;
@@ -141,7 +142,7 @@ elementIdentifier_ts ewol::SceneElement::GetElementAtPos(coord2D_ts position, in
 				int32_t newID = listAnimatedElements[jjj][iii]->GetNearestEnemy(position, lastQuadDistance);
 				if (-1 != newID) {
 					findId.id = newID;
-					findId.group = groupEnemy[jjj];
+					findId.group = jjj;
 					findId.listId = iii;
 				}
 			}

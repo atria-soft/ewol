@@ -82,7 +82,7 @@ namespace ewol {
 			void        GroupSet(int32_t state)                        { m_group = state; };
 			
 			virtual bool GetElementProperty(gameElementGenericProperty_ts &element, int32_t id) {return false;};
-			virtual int32_t GetNearestEnemy(coord2D_ts position, int32_t groupId, etkFloat_t& lastQuadDistance) { return -1;};
+			virtual int32_t GetNearestEnemy(coord2D_ts position, etkFloat_t& lastQuadDistance) { return -1;};
 			/**
 			 * @brief Periodicly this fuction will be call tu change property of all the dynamic obbjects
 			 * @param[in] time Current game time (start at 0)
