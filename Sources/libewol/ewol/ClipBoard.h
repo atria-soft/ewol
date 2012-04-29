@@ -43,9 +43,9 @@ namespace ewol {
 			CLIPBOARD_7,
 			CLIPBOARD_8,
 			CLIPBOARD_9,
-			TOTAL_OF_CLICKBOARD,
 			CLIPBOARD_STD,
 			CLIPBOARD_SELECTION,
+			TOTAL_OF_CLICKBOARD,
 		};
 		void	Init(void);
 		void	UnInit(void);
