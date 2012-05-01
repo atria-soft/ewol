@@ -9,6 +9,14 @@ Basic feature :
 	- Charset normaliqation
 
 
+mise en place d'une chaine audio : 
+	- background music layer (wav)
+	- effect play (wav)
+	- mix all in one signal
+	- Limiteur when adding signals...
+	- volume stage ==> effects / music backgroud
+
+
 List of feature needed for v1.0
 	# widget list : 
 		- Button Toogle

@@ -634,7 +634,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		//==> this is an internal event ...
 		FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
 		etk::UString tmpString = myListFolder->GetSelectedLine();
-		EWOL_ERROR(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
+		EWOL_VERBOSE(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
 		m_folder = m_folder + tmpString;
 		char buf[MAX_FILE_NAME];
 		memset(buf, 0, MAX_FILE_NAME);
