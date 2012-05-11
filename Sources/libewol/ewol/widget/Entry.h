@@ -86,7 +86,20 @@ namespace ewol {
 			 * @return false the event is not used
 			 */
 			virtual bool OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			/**
+			 * @brief Event on the keybord (if no shortcut has been detected before).
+			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
+			 * @param[in] unicodeValue key pressed by the user
+			 * @return true if the event has been used
+			 * @return false if the event has not been used
+			 */
 			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData);
+			/**
+			 * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
+			 * @return true if the event has been used
+			 * @return false if the event has not been used
+			 */
+			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent);
 		protected:
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);

@@ -134,7 +134,8 @@ bool ewol::Entry::CalculateMinSize(void)
 void ewol::Entry::SetValue(etk::UString newData)
 {
 	m_data = newData;
-	UpdateTextPosition();
+	m_displayCursorPos = m_data.Size();
+	EWOL_DEBUG("Set ... " << newData);
 	MarkToReedraw();
 }
 
@@ -147,6 +148,7 @@ etk::UString ewol::Entry::GetValue(void)
 void ewol::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		UpdateTextPosition();
 		// clean the object list ...
 		ClearOObjectList();
 		
@@ -175,17 +177,15 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		
-		etk::UString tmpDisplay = m_data.Extract(m_displayStartPosition);
-		
 		coord2D_ts textPos;
-		textPos.x = tmpTextOriginX;
+		textPos.x = tmpTextOriginX + m_displayStartPosition;
 		textPos.y = tmpTextOriginY;
 		clipping_ts drawClipping;
-		drawClipping.x = 0;
-		drawClipping.y = 0;
-		drawClipping.w = m_size.x - (m_borderSize + 2*m_paddingSize);
+		drawClipping.x = 2*m_paddingSize + m_borderSize;
+		drawClipping.y = 2*m_paddingSize + m_borderSize;
+		drawClipping.w = m_size.x;// - (m_borderSize + 2*m_paddingSize);
 		drawClipping.h = m_size.y;
-		tmpText->Text(textPos, drawClipping, tmpDisplay);
+		tmpText->Text(textPos, drawClipping, m_data);
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
 		tmpOObjects->SetColor(m_textColorBg);
@@ -195,9 +195,12 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		if (true == m_displayCursor) {
 			int32_t fontId = GetDefaultFontId();
 			int32_t fontHeight = ewol::GetHeight(fontId);
+			etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
 			int32_t fontWidth = ewol::GetWidth(fontId, tmpDisplay);
-			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize;
-			tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
+			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
+			if (XCursorPos >= m_borderSize + 2*m_paddingSize) {
+				tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
+			}
 		}
 		AddOObject(tmpOObjects);
 		AddOObject(tmpText);
@@ -228,23 +231,70 @@ bool ewol::Entry::OnEventInput(int32_t IdInput, eventInputType_te typeEvent, coo
 }
 
 
+/**
+ * @brief Event on the keybord (if no shortcut has been detected before).
+ * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
+ * @param[in] unicodeValue key pressed by the user
+ * @return true if the event has been used
+ * @return false if the event has not been used
+ */
 bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 {
 	if( typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
 		//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
 		//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
-	if (0x7F == unicodeData) {
-			// SUPPR
+		if (0x7F == unicodeData) {
+			// SUPPR :
+			if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
+				m_data.Remove(m_displayCursorPos, 1);
+				m_displayCursorPos;
+				m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+			}
 		} else if (0x08 == unicodeData) {
-			// DEL : 
-			m_data.Remove(m_data.Size()-1, 1);
+			// DEL :
+			if (m_data.Size() > 0 && m_displayCursorPos != 0) {
+				m_data.Remove(m_displayCursorPos-1, 1);
+				m_displayCursorPos--;
+				m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+			}
 		} else if(unicodeData >= 20) {
-			char UTF8_data[50];
-			unicode::convertUnicodeToUtf8(unicodeData, UTF8_data);
-			m_data += UTF8_data;
+			m_data.Add(m_displayCursorPos, unicodeData);
+			m_displayCursorPos++;
 		}
 		GenerateEventId(ewolEventEntryModify);
-		UpdateTextPosition();
+		MarkToReedraw();
+		return true;
+	}
+	return false;
+}
+
+
+/**
+ * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
+ * @return true if the event has been used
+ * @return false if the event has not been used
+ */
+bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent)
+{
+	if(typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
+		switch (moveTypeEvent)
+		{
+			case EVENT_KB_MOVE_TYPE_LEFT:
+				m_displayCursorPos--;
+				break;
+			case EVENT_KB_MOVE_TYPE_RIGHT:
+				m_displayCursorPos++;
+				break;
+			case EVENT_KB_MOVE_TYPE_START:
+				m_displayCursorPos = 0;
+				break;
+			case EVENT_KB_MOVE_TYPE_END:
+				m_displayCursorPos = m_data.Size();
+				break;
+			default:
+				return false;
+		}
+		m_displayCursorPos = etk_avg(0, m_displayCursorPos, m_data.Size());
 		MarkToReedraw();
 		return true;
 	}
@@ -262,15 +312,12 @@ void ewol::Entry::UpdateTextPosition(void)
 		tmpSizeX = m_size.x;
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
-	while (iii > 0) {
-		if (ewol::GetWidth(fontId, m_data[iii]) > tmpUserSize) {
-			break;
-		}
-		iii--;
+	int32_t totalWidth = ewol::GetWidth(fontId, m_data);
+	if (totalWidth < tmpUserSize) {
+		m_displayStartPosition = 0;
+	} else {
+		m_displayStartPosition = -totalWidth + tmpUserSize;
 	}
-	iii++;
-	m_displayStartPosition = iii-1;
-	m_displayCursorPos = m_data.Size();
 }
 
 
