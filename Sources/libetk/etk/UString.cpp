@@ -115,6 +115,14 @@ etk::UString::UString(const uniChar_t* inputData, int32_t len)
 	m_data.PushBack('\0');
 	Set(inputData, len);
 }
+/*
+etk::UString::UString(const uniChar_t inputData)
+{
+	m_data.Clear();
+	m_data.PushBack('\0');
+	Set(&inputData, 1);
+}
+*/
 
 void etk::UString::Set(const char * inputData, int32_t len)
 {
@@ -578,6 +586,22 @@ void etk::UString::Add(int32_t currentID, const uniChar_t* inputData)
 		return;
 	}
 	m_data.Insert(currentID, inputData, len);
+}
+
+/**
+ * @brief 
+ *
+ * @param[in,out] 
+ *
+ * @return 
+ *
+ */
+void etk::UString::Add(int32_t currentID, const uniChar_t inputData)
+{
+	uniChar_t data[2];
+	data[0] = inputData;
+	data[1] = 0;
+	Add(currentID, data);
 }
 
 

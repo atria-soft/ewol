@@ -46,6 +46,7 @@ namespace etk
 			UString(float inputData);
 			UString(double inputData);
 			UString(const etk::UString &etkS);
+			//UString(const uniChar_t inputData);
 			// destructor : 
 			~UString(void);
 			
@@ -126,6 +127,7 @@ namespace etk
 			 *****************************************************/
 			void          Add(int32_t currentID, const char* inputData);
 			void          Add(int32_t currentID, const uniChar_t* inputData);
+			void          Add(int32_t currentID, const uniChar_t  inputData);
 			void          Remove(int32_t currentID, int32_t len);
 			void          Clear(void);
 			
