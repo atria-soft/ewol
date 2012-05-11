@@ -162,8 +162,11 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 					elementParser = new svg::Polygon(m_paint);
 				} else if (localValue == "text") {
 					elementParser = new svg::Text(m_paint);
+				} else if (localValue == "metadata") {
+					// nothing to do : generaly inkscape data
+					normalNoElement = true;
 				} else {
-					SVG_ERROR("(l "<<child->Row()<<") node not suported : \""<<localValue<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text]");
+					SVG_ERROR("(l "<<child->Row()<<") node not suported : \""<<localValue<<"\" must be [title,g,a,path,rect,circle,ellipse,line,polyline,polygon,text,metadata]");
 				}
 				if (false == normalNoElement) {
 					if (NULL == elementParser) {
