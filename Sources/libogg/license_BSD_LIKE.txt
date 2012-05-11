@@ -1,0 +1,3 @@
+THE OggVorbis 'TREMOR' SOURCE CODE IS (C) COPYRIGHT 1994-2002
+BY THE Xiph.Org FOUNDATION http://www.xiph.org/
+
