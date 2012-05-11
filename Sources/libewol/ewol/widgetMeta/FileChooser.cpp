@@ -101,6 +101,8 @@ class FileChooserFolderList : public ewol::List
 				}
 			}
 			m_listDirectory.Clear();
+			m_originScrooled.x = 0;
+			m_originScrooled.y = 0;
 			MarkToReedraw();
 		}
 		
@@ -271,6 +273,8 @@ class FileChooserFileList : public ewol::List
 				}
 			}
 			m_listFile.Clear();
+			m_originScrooled.x = 0;
+			m_originScrooled.y = 0;
 			MarkToReedraw();
 		}
 		
