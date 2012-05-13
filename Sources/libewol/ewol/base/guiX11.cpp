@@ -140,6 +140,7 @@ static Atom XAtomeTargetString = 0;
 static Atom XAtomeTargetStringUTF8 = 0;
 static Atom XAtomeTargetTarget = 0;
 static Atom XAtomeEWOL = 0;
+static Atom XAtomeDeleteWindows = 0;
 
 
 static void X11_ChangeSize(int32_t w, int32_t h);
@@ -452,6 +453,7 @@ void X11_Init(void)
 	XAtomeTargetStringUTF8 = XInternAtom(m_display, "UTF8_STRING", 0);
 	XAtomeTargetTarget     = XInternAtom(m_display, "TARGETS", 0);
 	XAtomeEWOL             = XInternAtom(m_display, "EWOL", 0);
+	XAtomeDeleteWindows    = XInternAtom(m_display, "WM_DELETE_WINDOW", 0);
 	
 	m_run = true;
 }
@@ -474,8 +476,7 @@ void X11_Run(void)
 				case ClientMessage:
 					{
 						EWOL_INFO("Receive : ClientMessage");
-						Atom atom = XInternAtom(m_display, "WM_DELETE_WINDOW", false);
-						if((int64_t)atom == (int64_t)event.xclient.data.l[0]) {
+						if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
 							EWOL_INFO("    ==> Kill Requested ...");
 							if (NULL != gui_uniqueWindows) {
 								gui_uniqueWindows->SysOnKill();
@@ -701,7 +702,7 @@ void X11_Run(void)
 				case KeyRelease:
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					{
-						//EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
 						if (event.xkey.state & (1<<0) ) {
 							//EWOL_DEBUG("    Special Key : SHIFT");
 							guiKeyBoardMode.shift = true;
@@ -816,6 +817,21 @@ void X11_Run(void)
 									}
 									EWOL_ThreadKeyboardEvent(specialEvent);
 								}
+								break;
+							case 23: // special case for TAB
+								find = false;
+								{
+									eventKeyboardKey_ts specialEvent;
+									specialEvent.special = guiKeyBoardMode;
+									specialEvent.myChar = 0x00000009;
+									if(event.type == KeyPress) {
+										specialEvent.isDown = true;
+									} else {
+										specialEvent.isDown = false;
+									}
+									EWOL_ThreadKeyboardEvent(specialEvent);
+								}
+								break;
 							default:
 								find = false;
 								{
