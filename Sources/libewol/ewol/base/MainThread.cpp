@@ -24,6 +24,7 @@
 
 
 #include <etk/Types.h>
+#include <etk/File.h>
 #include <ewol/ewol.h>
 #include <ewol/Debug.h>
 #include <ewol/threadMsg.h>
@@ -91,6 +92,7 @@ static void* BaseAppEntry(void* param)
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
 	
+	etk::InitDefaultFolder("ewolApplNoName");
 
 	/*
 		struct sched_param pr;

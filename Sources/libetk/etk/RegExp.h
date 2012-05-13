@@ -2119,4 +2119,7 @@ template<class CLASS_TYPE> class RegExp {
 
 }; // end of etk namespace
 
+#undef __class__
+#define __class__	(NULL)
+
 #endif

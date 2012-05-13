@@ -14,17 +14,12 @@ ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=3 \
-                -DEWOL_DEBUG_LEVEL=3 \
-                -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -Wall
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=1 \
-                -DEWOL_DEBUG_LEVEL=1 \
-                -DEWOL_VERSION_TAG_NAME="\"UNKNOW-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\""
+                -DMODE_RELEASE
 endif
 
 

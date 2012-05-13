@@ -94,7 +94,7 @@ namespace etk
 		private :
 			etk::FileType_te m_type;
 			FILE *           m_PointerFile;
-			#if defined(DATA_IN_APK)
+			#ifdef __PLATFORM__Android
 			bool             LoadDataZip(void);
 			int32_t          m_idZipFile;
 			char *           m_zipData;
@@ -111,6 +111,8 @@ namespace etk
 	void SetBaseFolderData(const char * folder);
 	void SetBaseFolderDataUser(const char * folder);
 	void SetBaseFolderCache(const char * folder);
+	void InitDefaultFolder(const char * applName);
+	etk::UString GetUserHomeFolder(void);
 
 }
 

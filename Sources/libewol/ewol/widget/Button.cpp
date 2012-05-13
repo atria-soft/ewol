@@ -101,6 +101,7 @@ void ewol::Button::SetImage(etk::UString imageName)
 		m_imageSelected = imageName;
 		m_hasAnImage = true;
 	}
+	MarkToReedraw();
 }
 
 //!< EObject name :
@@ -168,6 +169,7 @@ bool ewol::Button::CalculateMinSize(void)
 void ewol::Button::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
+	MarkToReedraw();
 }
 
 void ewol::Button::SetValue(bool val)

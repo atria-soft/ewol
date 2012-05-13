@@ -27,6 +27,7 @@
 #include <ewol/widget/SizerVert.h>
 #include <ewol/widget/List.h>
 #include <ewol/widget/Spacer.h>
+#include <ewol/widget/Image.h>
 #include <ewol/WidgetManager.h>
 //#include <etk/Vector.h>
 #include <etk/VectorType.h>
@@ -406,6 +407,7 @@ extern const char * const ewolEventFileChooserValidate        = "ewol-event-file
 extern const char * const ewolEventFileChooserHidenFileChange = "ewol-event-file-chooser-Show/Hide-hiden-Files";
 extern const char * const ewolEventFileChooserEntryFolder     = "ewol-event-file-chooser-modify-entry-folder";
 extern const char * const ewolEventFileChooserEntryFile       = "ewol-event-file-chooser-modify-entry-file";
+extern const char * const ewolEventFileChooserHome            = "ewol-event-file-chooser-home";
 
 
 ewol::FileChooser::FileChooser(void)
@@ -430,6 +432,7 @@ ewol::FileChooser::FileChooser(void)
 	FileChooserFileList * myListFile = NULL;
 	FileChooserFolderList * myListFolder = NULL;
 	ewol::Label * myLabel = NULL;
+	ewol::Image * myImage = NULL;
 	#ifdef __PLATFORM__Android
 		m_folder = "/mnt/sdcard/";
 		SetDisplayRatio(0.90);
@@ -449,21 +452,26 @@ ewol::FileChooser::FileChooser(void)
 		
 		mySizerHori = new ewol::SizerHori();
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myLabel = new ewol::Label("Folder : ");
-				myLabel->SetFillY(true);
-				mySizerHori->SubWidgetAdd(myLabel);
+			myImage = new ewol::Image("icon/Folder.svg");
+				myImage->SetFillY(true);
+				mySizerHori->SubWidgetAdd(myImage);
+			
 			m_widgetCurrentFolder = new ewol::Entry(m_folder);
 				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFolder);
 				m_widgetCurrentFolder->SetExpendX(true);
 				m_widgetCurrentFolder->SetFillX(true);
 				m_widgetCurrentFolder->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFolder);
+			myImage = new ewol::Image("icon/Home.svg");
+				myImage->RegisterOnEvent(this, ewolEventImagePressed, ewolEventFileChooserHome);
+				myImage->SetFillY(true);
+				mySizerHori->SubWidgetAdd(myImage);
 		
 		mySizerHori = new ewol::SizerHori();
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myLabel = new ewol::Label("File Name : ");
-				myLabel->SetFillY(true);
-				mySizerHori->SubWidgetAdd(myLabel);
+			myImage = new ewol::Image("icon/File.svg");
+				myImage->SetFillY(true);
+				mySizerHori->SubWidgetAdd(myImage);
 			m_widgetCurrentFileName = new ewol::Entry(m_file);
 				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFile);
 				m_widgetCurrentFileName->SetExpendX(true);
@@ -508,9 +516,11 @@ ewol::FileChooser::FileChooser(void)
 				mySpacer->SetExpendX(true);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			m_widgetValidate = new ewol::Button("Validate");
+				m_widgetValidate->SetImage("icon/Load.svg");
 				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			m_widgetCancel = new ewol::Button("Cancel");
+				m_widgetCancel->SetImage("icon/Remove.svg");
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 	
@@ -617,23 +627,19 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 	if (ewolEventFileChooserEntryFolder == eventId) {
 		//==> change the folder name
 		// TODO : Change the folder, if it exit ...
-		return;
 	} else if (ewolEventFileChooserEntryFile == eventId) {
 		//==> change the file name
 		if (NULL != m_widgetCurrentFileName) {
 			m_file = m_widgetCurrentFileName->GetValue();
 		}
 		// TODO : Remove file selection
-		return;
 	} else if (ewolEventFileChooserCancel == eventId) {
 		//==> Auto remove ...
 		GenerateEventId(eventId);
 		MarkToRemove();
-		return;
 	} else if (ewolEventFileChooserHidenFileChange == eventId) {
 		// regenerate the display ...
 		UpdateCurrentFolder();
-		return;
 	} else if (ewolEventFileChooserSelectFolder == eventId) {
 		//==> this is an internal event ...
 		FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
@@ -658,7 +664,6 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		SetFileName("");
 		UpdateCurrentFolder();
 		m_hasSelectedFile = false;
-		return;
 	} else if (ewolEventFileChooserSelectFile == eventId) {
 		m_hasSelectedFile = true;
 		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
@@ -670,7 +675,26 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		// select the File ==> generate a validate
 		GenerateEventId(ewolEventFileChooserValidate);
 		MarkToRemove();
-		return;
+	} else if(ewolEventFileChooserHome == eventId) {
+		etk::UString tmpUserFolder = etk::GetUserHomeFolder();
+		char buf[MAX_FILE_NAME];
+		memset(buf, 0, MAX_FILE_NAME);
+		char * ok;
+		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
+		
+		ok = realpath(tmpUserFolder.Utf8Data(), buf);
+		if (!ok) {
+			EWOL_ERROR("Error to get the real path");
+			m_folder = "/";
+		} else {
+			m_folder = buf;
+		}
+		if (m_folder != "/" ) {
+			m_folder +=  "/";
+		}
+		SetFileName("");
+		UpdateCurrentFolder();
+		m_hasSelectedFile = false;
 	}
 	return;
 };
