@@ -473,8 +473,10 @@ void X11_Run(void)
 			{
 				case ClientMessage:
 					{
+						EWOL_INFO("Receive : ClientMessage");
 						Atom atom = XInternAtom(m_display, "WM_DELETE_WINDOW", false);
 						if((int64_t)atom == (int64_t)event.xclient.data.l[0]) {
+							EWOL_INFO("    ==> Kill Requested ...");
 							if (NULL != gui_uniqueWindows) {
 								gui_uniqueWindows->SysOnKill();
 							}
@@ -881,7 +883,9 @@ void X11_Run(void)
 					EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
 			}
 		}
-		EWOL_NativeRender();
+		if(true == m_run) {
+			EWOL_NativeRender();
+		}
 	}
 };
 
@@ -1071,9 +1075,25 @@ int main(int argc, char *argv[])
 {
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
-		etk::UString* tmpString = new etk::UString(argv[i]);
-		if (NULL != tmpString) {
-			listArgs.PushBack(tmpString);
+		if (0==strncmp("-l0", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_NONE);
+		} else if (0==strncmp("-l1", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_CRITICAL);
+		} else if (0==strncmp("-l2", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_ERROR);
+		} else if (0==strncmp("-l3", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_WARNING);
+		} else if (0==strncmp("-l4", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_INFO);
+		} else if (0==strncmp("-l5", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_DEBUG);
+		} else if (0==strncmp("-l6", argv[i], 256)) {
+			etk::cout.SetLevel(etk::LOG_LEVEL_VERBOSE);
+		} else {
+			etk::UString* tmpString = new etk::UString(argv[i]);
+			if (NULL != tmpString) {
+				listArgs.PushBack(tmpString);
+			}
 		}
 	}
 	// start X11 thread ...

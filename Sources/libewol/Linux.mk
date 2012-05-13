@@ -31,9 +31,9 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
 else
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=1 \
-                -DEWOL_DEBUG_LEVEL=1 \
-                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
+                -DETK_DEBUG_LEVEL=3 \
+                -DEWOL_DEBUG_LEVEL=3 \
+                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-release\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE
 

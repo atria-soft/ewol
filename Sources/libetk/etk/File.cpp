@@ -115,10 +115,15 @@ void etk::InitDefaultFolder(const char * applName)
 		baseFolderCache += baseApplName;
 		baseFolderCache += "/";
 	#endif
-	TK_INFO("baseFolderHome     : \"" << baseFolderHome << "\"");
-	TK_INFO("baseFolderData     : \"" << baseFolderData << "\"");
-	TK_INFO("baseFolderDataUser : \"" << baseFolderDataUser << "\"");
-	TK_INFO("baseFolderCache    : \"" << baseFolderCache << "\"");
+	#ifdef MODE_RELEASE
+		if (strncmp("ewolApplNoName",applName, 256) != 0) {
+			// start log
+		}
+	#endif
+	TK_ERROR("baseFolderHome     : \"" << baseFolderHome << "\"");
+	TK_ERROR("baseFolderData     : \"" << baseFolderData << "\"");
+	TK_ERROR("baseFolderDataUser : \"" << baseFolderDataUser << "\"");
+	TK_ERROR("baseFolderCache    : \"" << baseFolderCache << "\"");
 }
 
 etk::UString etk::GetUserHomeFolder(void)
