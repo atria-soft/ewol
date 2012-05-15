@@ -47,6 +47,10 @@ namespace ewol {
 	} scrollingMode_te;
 	class WidgetScrooled : public ewol::Widget
 	{
+		private:
+			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    ClearOObjectList(void);
 		protected:
 			coord2D_ts        m_originScrooled;
 			coord2D_ts        m_maxSize;
@@ -75,6 +79,7 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 			virtual void OnRegenerateDisplay(void);
+			virtual void OnDraw(void);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))

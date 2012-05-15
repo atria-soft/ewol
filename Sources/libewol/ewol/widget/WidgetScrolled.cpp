@@ -107,7 +107,39 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 		}
 	*/
 	#endif
+	ClearOObjectList();
+	ewol::OObject2DColored* myOObjectsColored = NULL;
+	if(m_size.y < m_maxSize.y || m_size.x < m_maxSize.x) {
+		myOObjectsColored = new ewol::OObject2DColored();
+		myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.6);
+	}
+	if(m_size.y < m_maxSize.y) {
+		myOObjectsColored->Line(m_size.x-15, 15, m_size.x-15, m_size.y-15, 1);
+		etkFloat_t lenScrollBar = m_size.y / m_maxSize.y * 100;
+		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.y-30));
+		etkFloat_t originScrollBar = m_originScrooled.y / m_maxSize.y;
+		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+		originScrollBar *= (m_size.y-15.0-lenScrollBar);
+		originScrollBar += 15;
+		myOObjectsColored->Line(m_size.x-15, originScrollBar, m_size.x-15, originScrollBar+lenScrollBar, 10);
+	}
+	if(m_size.x < m_maxSize.x) {
+		myOObjectsColored->Line(15, m_size.y-15, m_size.x-15, m_size.y-15, 1);
+		etkFloat_t lenScrollBar = m_size.x / m_maxSize.x * 100;
+		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x-30));
+		etkFloat_t originScrollBar = m_originScrooled.x / m_maxSize.x;
+		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+		originScrollBar *= (m_size.x-15.0-lenScrollBar);
+		originScrollBar += 15;
+		myOObjectsColored->Line(originScrollBar, m_size.y-15, originScrollBar+lenScrollBar, m_size.y-15, 10);
+	}
+	if (NULL!=myOObjectsColored) {
+		EWOL_DEBUG("scrolling : size=" << m_size << " maxSize=" << m_maxSize << " scrolling origin=" << m_originScrooled);
+		AddOObject(myOObjectsColored);
+	}
 }
+
+
 /**
  * @brief Event on an input of this Widget
  * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
@@ -264,6 +296,39 @@ bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te
 	return false;
 }
 
+void ewol::WidgetScrooled::AddOObject(ewol::OObject* newObject, int32_t pos)
+{
+	if (NULL == newObject) {
+		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
+		return;
+	}
+	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
+		m_listOObject[m_currentCreateId].PushBack(newObject);
+	} else {
+		m_listOObject[m_currentCreateId].Insert(pos, newObject);
+	}
+	m_needFlipFlop = true;
+}
+
+
+void ewol::WidgetScrooled::ClearOObjectList(void)
+{
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
+		delete(m_listOObject[m_currentCreateId][iii]);
+		m_listOObject[m_currentCreateId][iii] = NULL;
+	}
+	m_listOObject[m_currentCreateId].Clear();
+}
+
+void ewol::WidgetScrooled::OnDraw(void)
+{
+	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
+		if (NULL != m_listOObject[m_currentDrawId][iii]) {
+			m_listOObject[m_currentDrawId][iii]->Draw();
+		}
+	}
+}
+
 /**
  * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
  * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
@@ -296,6 +361,7 @@ void ewol::WidgetScrooled::GenDraw(void)
 	}
 	
 }
+
 
 /**
  * @brief Request a specific position for the scrolling of the current windows.
