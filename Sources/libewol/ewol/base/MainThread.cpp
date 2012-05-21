@@ -67,12 +67,14 @@ typedef struct {
 } eventResize_ts;
 
 typedef struct {
+	ewol::inputType_te type;
 	int pointerID;
 	float x;
 	float y;
 } eventInputMotion_ts;
 
 typedef struct {
+	ewol::inputType_te type;
 	int pointerID;
 	bool state;
 	float x;
@@ -147,7 +149,7 @@ static void* BaseAppEntry(void* param)
 						coord2D_ts pos;
 						pos.x = tmpData->x;
 						pos.y = tmpData->y;
-						ewol::eventInput::Motion(tmpData->pointerID, pos);
+						ewol::eventInput::Motion(tmpData->type, tmpData->pointerID, pos);
 					}
 					break;
 				case THREAD_INPUT_STATE:
@@ -157,7 +159,7 @@ static void* BaseAppEntry(void* param)
 						coord2D_ts pos;
 						pos.x = tmpData->x;
 						pos.y = tmpData->y;
-						ewol::eventInput::State(tmpData->pointerID, tmpData->state, pos);
+						ewol::eventInput::State(tmpData->type, tmpData->pointerID, tmpData->state, pos);
 					}
 					break;
 				case THREAD_KEYBORAD_KEY:
@@ -307,6 +309,7 @@ void EWOL_ThreadResize(int w, int h )
 void EWOL_ThreadEventInputMotion(int pointerID, float x, float y )
 {
 	eventInputMotion_ts tmpData;
+	tmpData.type = ewol::INPUT_TYPE_FINGER;
 	tmpData.pointerID = pointerID;
 	tmpData.x = x;
 	tmpData.y = y;
@@ -317,6 +320,29 @@ void EWOL_ThreadEventInputMotion(int pointerID, float x, float y )
 void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
 {
 	eventInputState_ts tmpData;
+	tmpData.type = ewol::INPUT_TYPE_FINGER;
+	tmpData.pointerID = pointerID;
+	tmpData.state = isUp;
+	tmpData.x = x;
+	tmpData.y = y;
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+}
+
+void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y )
+{
+	eventInputMotion_ts tmpData;
+	tmpData.type = ewol::INPUT_TYPE_MOUSE;
+	tmpData.pointerID = pointerID;
+	tmpData.x = x;
+	tmpData.y = y;
+	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+}
+
+
+void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y )
+{
+	eventInputState_ts tmpData;
+	tmpData.type = ewol::INPUT_TYPE_MOUSE;
 	tmpData.pointerID = pointerID;
 	tmpData.state = isUp;
 	tmpData.x = x;

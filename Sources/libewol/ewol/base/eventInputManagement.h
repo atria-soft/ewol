@@ -7,12 +7,17 @@
 
 namespace ewol
 {
+	typedef enum {
+		INPUT_TYPE_MOUSE,
+		INPUT_TYPE_FINGER,
+	} inputType_te;
 	namespace eventInput
 	{
 		void Init(void);
 		void UnInit(void);
-		void Motion(int pointerID, coord2D_ts pos );
-		void State(int pointerID, bool isDown, coord2D_ts pos);
+		// note if id<0 ==> the it was finger event ...
+		void Motion(ewol::inputType_te type, int pointerID, coord2D_ts pos );
+		void State(ewol::inputType_te type, int pointerID, bool isDown, coord2D_ts pos);
 		
 		/**
 		 * @brief Inform object that an other object is removed ...

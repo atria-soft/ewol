@@ -652,7 +652,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
-					EWOL_ThreadEventInputState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
+					EWOL_ThreadEventMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case ButtonRelease:
 					m_cursorEventX = event.xbutton.x;
@@ -660,7 +660,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = false;
 					}
-					EWOL_ThreadEventInputState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
+					EWOL_ThreadEventMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case EnterNotify:
 					m_cursorEventX = event.xcrossing.x;
@@ -682,13 +682,13 @@ void X11_Run(void)
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
 								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-								EWOL_ThreadEventInputMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
+								EWOL_ThreadEventMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
 							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
-							EWOL_ThreadEventInputMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+							EWOL_ThreadEventMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
 						}
 					}
 					break;

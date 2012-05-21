@@ -39,6 +39,8 @@ void EWOL_ThreadSetArchiveDir(int mode, const char* str);
 void EWOL_ThreadResize(int w, int h );
 void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
 void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
+void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y);
+void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y);
 void EWOL_NativeRender(void);
 void EWOL_NativeGLDestroy(void);
 
@@ -340,14 +342,12 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		APPL_DEBUG("IO Mouse event : " << pointerID << " ???");
-		EWOL_ThreadEventInputMotion(pointerID+1, x, y);
+		EWOL_ThreadEventMouseMotion(pointerID+1, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		APPL_DEBUG("IO Mouse event : " << pointerID << " ???");
-		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
+		EWOL_ThreadEventMouseState(pointerID+1, isUp, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)

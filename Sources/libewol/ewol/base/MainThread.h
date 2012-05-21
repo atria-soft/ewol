@@ -37,6 +37,8 @@ void EWOL_ThreadSetArchiveDir(int mode, const char* str);
 void EWOL_ThreadResize(int w, int h );
 void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
 void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
+void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y);
+void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y);
 
 
 
