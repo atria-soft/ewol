@@ -338,7 +338,19 @@ extern "C"
 		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
 	}
 	
-	void Java_org_ewol_interfaceJNI_IOInputEventUnknow( JNIEnv* env, jobject  thiz, jint pointerID)
+	void Java_org_ewol_interfaceJNI_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
+	{
+		APPL_DEBUG("IO Mouse event : " << pointerID << " ???");
+		EWOL_ThreadEventInputMotion(pointerID+1, x, y);
+	}
+	
+	void Java_org_ewol_interfaceJNI_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
+	{
+		APPL_DEBUG("IO Mouse event : " << pointerID << " ???");
+		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
+	}
+	
+	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
 	{
 		APPL_DEBUG("Unknown IO event : " << pointerID << " ???");
 	}

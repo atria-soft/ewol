@@ -144,6 +144,7 @@ void ewol::List::OnDraw(void)
 			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
 	}
+	WidgetScrooled::OnDraw();
 }
 
 
