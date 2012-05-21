@@ -232,6 +232,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		// call the herited class...
 		WidgetScrooled::OnRegenerateDisplay();
+		m_needFlipFlop = true;
 	}
 }
 

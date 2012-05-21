@@ -39,6 +39,7 @@ namespace ewol {
 		SCROLL_ENABLE_HORIZONTAL,
 		SCROLL_ENABLE_VERTICAL,
 	#endif
+		SCROLL_GREP_END_EVENT,
 	}highSpeedMode_te;
 	
 	typedef enum {
@@ -60,6 +61,7 @@ namespace ewol {
 			etkFloat_t        m_pixelScrolling;
 			coord2D_ts        m_highSpeedStartPos;
 			highSpeedMode_te  m_highSpeedMode;
+			int32_t           m_highSpeedButton;
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
