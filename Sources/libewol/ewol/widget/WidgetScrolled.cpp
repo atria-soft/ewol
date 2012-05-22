@@ -145,201 +145,200 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 
 /**
  * @brief Event on an input of this Widget
+ * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
  * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
  * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
  * @param[in] pos Absolute position of the event
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::WidgetScrooled::OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
 {
 	coord2D_ts relativePos = RelativePosition(pos);
 	if (SCROLL_MODE_NORMAL == m_scroollingMode) {
-	#ifdef __MODE__Touch
-		if (1 == IdInput) {
-			EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
-			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
-				m_highSpeedMode = ewol::SCROLL_INIT;
-				m_highSpeedStartPos.x = relativePos.x;
-				m_highSpeedStartPos.y = relativePos.y;
-				EWOL_VERBOSE("SCROOL ==> INIT");
-				return true;
-			} else if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-				m_highSpeedMode = ewol::SCROLL_DISABLE;
-				EWOL_VERBOSE("SCROOL ==> DISABLE");
+		if (ewol::INPUT_TYPE_MOUSE==type && ( ewol::INPUT_TYPE_UNKNOW==m_highSpeedType || ewol::INPUT_TYPE_MOUSE==m_highSpeedType )) {
+			if (1 == IdInput && ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+				// check if selected the scrolling position whth the scrolling bar ...
+				if (relativePos.x >= (m_size.x-SCROLL_BAR_SPACE)) {
+					if(m_size.y < m_maxSize.y) {
+						m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
+						m_highSpeedType = ewol::INPUT_TYPE_MOUSE;
+						m_highSpeedStartPos.x = relativePos.x;
+						m_highSpeedStartPos.y = m_originScrooled.y / m_maxSize.y * (m_size.y-SCROLL_BAR_SPACE*2);
+						m_highSpeedButton = 1;
+						// force direct scrolling in this case
+						m_originScrooled.y = (int32_t)(m_maxSize.y * (relativePos.y-SCROLL_BAR_SPACE) / (m_size.y-SCROLL_BAR_SPACE*2));
+						m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
+						MarkToReedraw();
+						return true;
+					}
+				} else if (relativePos.y >= (m_size.y-SCROLL_BAR_SPACE)) {
+					if(m_size.x < m_maxSize.x) {
+						m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
+						m_highSpeedType = ewol::INPUT_TYPE_MOUSE;
+						m_highSpeedStartPos.x = m_originScrooled.x / m_maxSize.x * (m_size.x-SCROLL_BAR_SPACE*2);
+						m_highSpeedStartPos.y = relativePos.y;
+						m_highSpeedButton = 1;
+						// force direct scrolling in this case
+						m_originScrooled.x = (int32_t)(m_maxSize.x * (relativePos.x-SCROLL_BAR_SPACE) / (m_size.x-SCROLL_BAR_SPACE*2));
+						m_originScrooled.x = etk_avg(0, m_originScrooled.x, m_maxSize.x);
+						MarkToReedraw();
+						return true;
+					}
+				}
+				return false;
+			} else if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+				m_originScrooled.y -= m_pixelScrolling;
+				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 				MarkToReedraw();
 				return true;
-			} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(relativePos.x - m_highSpeedStartPos.x) > 10 
-				    || abs(relativePos.y - m_highSpeedStartPos.y) > 10 ) {
-					// the scrooling can start : 
-					// select the direction :
-					m_highSpeedMode = ewol::SCROLL_ENABLE;
-					EWOL_VERBOSE("SCROOL ==> ENABLE");
-					MarkToReedraw();
-				}
+			} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+				m_originScrooled.y += m_pixelScrolling;
+				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
+				MarkToReedraw();
 				return true;
-			} if (ewol::SCROLL_ENABLE==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				//m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
-				m_originScrooled.x -= relativePos.x - m_highSpeedStartPos.x;
-				m_originScrooled.y -= relativePos.y - m_highSpeedStartPos.y;
-				m_originScrooled.x = etk_max(m_originScrooled.x, 0);
-				m_originScrooled.y = etk_max(m_originScrooled.y, 0);
-				m_originScrooled.x = etk_min(m_originScrooled.x, m_maxSize.x);
-				m_originScrooled.y = etk_min(m_originScrooled.y, m_maxSize.y);
-				m_highSpeedStartPos.x = relativePos.x;
-				m_highSpeedStartPos.y = relativePos.y;
-				EWOL_VERBOSE("SCROOL ==> MOVE (" << m_originScrooled.x << "," << m_originScrooled.y << ")");
+			}else if (2 == IdInput) {
+				if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+					m_highSpeedMode = ewol::SCROLL_INIT;
+					m_highSpeedType = ewol::INPUT_TYPE_MOUSE;
+					m_highSpeedStartPos.x = relativePos.x;
+					m_highSpeedStartPos.y = relativePos.y;
+					m_highSpeedButton = 2;
+					return true;
+				}
+			} else if (ewol::SCROLL_DISABLE!=m_highSpeedMode && ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
+				m_highSpeedMode = ewol::SCROLL_DISABLE;
+				m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
 				MarkToReedraw();
 				return true;
 			}
-		} else if (ewol::SCROLL_DISABLE!=m_highSpeedMode && ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
-			m_highSpeedMode = ewol::SCROLL_DISABLE;
-			EWOL_VERBOSE("SCROOL ==> DISABLE");
-			MarkToReedraw();
-			return true;
-		}
-	#else
-		if (1 == IdInput && ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
-			// check if selected the scrolling position whth the scrolling bar ...
-			if (relativePos.x >= (m_size.x-SCROLL_BAR_SPACE)) {
-				if(m_size.y < m_maxSize.y) {
-					m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
-					m_highSpeedStartPos.x = relativePos.x;
-					m_highSpeedStartPos.y = m_originScrooled.y / m_maxSize.y * (m_size.y-SCROLL_BAR_SPACE*2);
-					m_highSpeedButton = 1;
-					// force direct scrolling in this case
+			if (IdInput==m_highSpeedButton && ewol::SCROLL_DISABLE!=m_highSpeedMode) {
+				if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+					m_highSpeedMode = ewol::SCROLL_GREP_END_EVENT;
+					MarkToReedraw();
+					return true;
+				} else if (ewol::SCROLL_GREP_END_EVENT == m_highSpeedMode) {
+					if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+						m_highSpeedMode = ewol::SCROLL_DISABLE;
+						m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
+						m_highSpeedButton = -1;
+						MarkToReedraw();
+					}
+					return true;
+				} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+					// wait that the cursor move more than 10 px to enable it :
+					if(    abs(relativePos.x - m_highSpeedStartPos.x) > 10 
+					    || abs(relativePos.y - m_highSpeedStartPos.y) > 10 ) {
+						// the scrooling can start : 
+						// select the direction :
+						if (relativePos.x == m_highSpeedStartPos.x) {
+							m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
+						} else if (relativePos.y == m_highSpeedStartPos.y) {
+							m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
+						} else {
+							etkFloat_t coef = (relativePos.y - m_highSpeedStartPos.y) / (relativePos.x - m_highSpeedStartPos.x);
+							if (abs(coef) <= 1 ) {
+								m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
+							} else {
+								m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
+							}
+						}
+						if (m_highSpeedMode == ewol::SCROLL_ENABLE_HORIZONTAL) {
+							m_highSpeedStartPos.x = m_originScrooled.x / m_maxSize.x * (m_size.x-SCROLL_BAR_SPACE*2);
+						} else {
+							m_highSpeedStartPos.y = m_originScrooled.y / m_maxSize.y * (m_size.y-SCROLL_BAR_SPACE*2);
+						}
+						MarkToReedraw();
+					}
+					m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
+					return true;
+				} if (ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+					m_originScrooled.x = (int32_t)(m_maxSize.x * (relativePos.x-SCROLL_BAR_SPACE) / (m_size.x-SCROLL_BAR_SPACE*2));
+					m_originScrooled.x = etk_avg(0, m_originScrooled.x, m_maxSize.x);
+					MarkToReedraw();
+					return true;
+				} if (ewol::SCROLL_ENABLE_VERTICAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 					m_originScrooled.y = (int32_t)(m_maxSize.y * (relativePos.y-SCROLL_BAR_SPACE) / (m_size.y-SCROLL_BAR_SPACE*2));
 					m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
 					MarkToReedraw();
 					return true;
 				}
-			} else if (relativePos.y >= (m_size.y-SCROLL_BAR_SPACE)) {
-				if(m_size.x < m_maxSize.x) {
-					m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
-					m_highSpeedStartPos.x = m_originScrooled.x / m_maxSize.x * (m_size.x-SCROLL_BAR_SPACE*2);
+			}
+		} else if (ewol::INPUT_TYPE_FINGER==type && ( ewol::INPUT_TYPE_UNKNOW==m_highSpeedType || ewol::INPUT_TYPE_FINGER==m_highSpeedType )) {
+			if (1 == IdInput) {
+				EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
+				if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+					m_highSpeedMode = ewol::SCROLL_INIT;
+					m_highSpeedType = ewol::INPUT_TYPE_FINGER;
+					m_highSpeedStartPos.x = relativePos.x;
 					m_highSpeedStartPos.y = relativePos.y;
-					m_highSpeedButton = 1;
-					// force direct scrolling in this case
-					m_originScrooled.x = (int32_t)(m_maxSize.x * (relativePos.x-SCROLL_BAR_SPACE) / (m_size.x-SCROLL_BAR_SPACE*2));
-					m_originScrooled.x = etk_avg(0, m_originScrooled.x, m_maxSize.x);
+					EWOL_VERBOSE("SCROOL ==> INIT");
+					return true;
+				} else if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+					m_highSpeedMode = ewol::SCROLL_DISABLE;
+					m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
+					EWOL_VERBOSE("SCROOL ==> DISABLE");
+					MarkToReedraw();
+					return true;
+				} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+					// wait that the cursor move more than 10 px to enable it :
+					if(    abs(relativePos.x - m_highSpeedStartPos.x) > 10 
+					    || abs(relativePos.y - m_highSpeedStartPos.y) > 10 ) {
+						// the scrooling can start : 
+						// select the direction :
+						m_highSpeedMode = ewol::SCROLL_ENABLE_FINGER;
+						EWOL_VERBOSE("SCROOL ==> ENABLE");
+						MarkToReedraw();
+					}
+					return true;
+				} if (ewol::SCROLL_ENABLE_FINGER==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+					//m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
+					m_originScrooled.x -= relativePos.x - m_highSpeedStartPos.x;
+					m_originScrooled.y -= relativePos.y - m_highSpeedStartPos.y;
+					m_originScrooled.x = etk_max(m_originScrooled.x, 0);
+					m_originScrooled.y = etk_max(m_originScrooled.y, 0);
+					m_originScrooled.x = etk_min(m_originScrooled.x, m_maxSize.x);
+					m_originScrooled.y = etk_min(m_originScrooled.y, m_maxSize.y);
+					m_highSpeedStartPos.x = relativePos.x;
+					m_highSpeedStartPos.y = relativePos.y;
+					EWOL_VERBOSE("SCROOL ==> MOVE (" << m_originScrooled.x << "," << m_originScrooled.y << ")");
 					MarkToReedraw();
 					return true;
 				}
-			}
-			return false;
-		} else if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			m_originScrooled.y -= m_pixelScrolling;
-			m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
-			MarkToReedraw();
-			return true;
-		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			m_originScrooled.y += m_pixelScrolling;
-			m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
-			MarkToReedraw();
-			return true;
-		}else if (2 == IdInput) {
-			if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
-				m_highSpeedMode = ewol::SCROLL_INIT;
-				m_highSpeedStartPos.x = relativePos.x;
-				m_highSpeedStartPos.y = relativePos.y;
-				m_highSpeedButton = 2;
-				return true;
-			}
-		} else if (ewol::SCROLL_DISABLE!=m_highSpeedMode && ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
-			m_highSpeedMode = ewol::SCROLL_DISABLE;
-			MarkToReedraw();
-			return true;
-		}
-		if (IdInput==m_highSpeedButton && ewol::SCROLL_DISABLE!=m_highSpeedMode) {
-			if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-				m_highSpeedMode = ewol::SCROLL_GREP_END_EVENT;
-				MarkToReedraw();
-				return true;
-			} else if (ewol::SCROLL_GREP_END_EVENT == m_highSpeedMode) {
-				if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
-					m_highSpeedMode = ewol::SCROLL_DISABLE;
-					m_highSpeedButton = -1;
-					MarkToReedraw();
-				} else if (ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent) {
-					m_highSpeedMode = ewol::SCROLL_DISABLE;
-					m_highSpeedButton = -1;
-					MarkToReedraw();
-				} else if (ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
-					m_highSpeedMode = ewol::SCROLL_DISABLE;
-					m_highSpeedButton = -1;
-					MarkToReedraw();
-				}
-				return true;
-			} else if (ewol::SCROLL_INIT==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				// wait that the cursor move more than 10 px to enable it :
-				if(    abs(relativePos.x - m_highSpeedStartPos.x) > 10 
-				    || abs(relativePos.y - m_highSpeedStartPos.y) > 10 ) {
-					// the scrooling can start : 
-					// select the direction :
-					if (relativePos.x == m_highSpeedStartPos.x) {
-						m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
-					} else if (relativePos.y == m_highSpeedStartPos.y) {
-						m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
-					} else {
-						etkFloat_t coef = (relativePos.y - m_highSpeedStartPos.y) / (relativePos.x - m_highSpeedStartPos.x);
-						if (abs(coef) <= 1 ) {
-							m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
-						} else {
-							m_highSpeedMode = ewol::SCROLL_ENABLE_VERTICAL;
-						}
-					}
-					if (m_highSpeedMode == ewol::SCROLL_ENABLE_HORIZONTAL) {
-						m_highSpeedStartPos.x = m_originScrooled.x / m_maxSize.x * (m_size.x-SCROLL_BAR_SPACE*2);
-					} else {
-						m_highSpeedStartPos.y = m_originScrooled.y / m_maxSize.y * (m_size.y-SCROLL_BAR_SPACE*2);
-					}
-					MarkToReedraw();
-				}
-				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
-				return true;
-			} if (ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				m_originScrooled.x = (int32_t)(m_maxSize.x * (relativePos.x-SCROLL_BAR_SPACE) / (m_size.x-SCROLL_BAR_SPACE*2));
-				m_originScrooled.x = etk_avg(0, m_originScrooled.x, m_maxSize.x);
-				MarkToReedraw();
-				return true;
-			} if (ewol::SCROLL_ENABLE_VERTICAL==m_highSpeedMode && ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-				m_originScrooled.y = (int32_t)(m_maxSize.y * (relativePos.y-SCROLL_BAR_SPACE) / (m_size.y-SCROLL_BAR_SPACE*2));
-				m_originScrooled.y = etk_avg(0, m_originScrooled.y, m_maxSize.y);
+			} else if (ewol::SCROLL_DISABLE!=m_highSpeedMode && ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
+				m_highSpeedMode = ewol::SCROLL_DISABLE;
+				m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
+				EWOL_VERBOSE("SCROOL ==> DISABLE");
 				MarkToReedraw();
 				return true;
 			}
 		}
-	#endif
 	} else if (SCROLL_MODE_CENTER == m_scroollingMode) {
-	#ifdef __MODE__Touch
-		// TODO ...
-	#else
-		etkFloat_t tmp1=ewol::GetCurrentHeight() / m_maxSize.y;
-		etkFloat_t tmp2=ewol::GetCurrentWidth() / m_maxSize.x;
-		//EWOL_INFO(" elements Zoom : " << tmp1 << " " << tmp2);
-		tmp1 = etk_min(tmp1, tmp2);
-		if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			m_zoom -= 0.1;
-			if (tmp1 < 1.0) {
-				m_zoom = etk_max(tmp1, m_zoom);
-			} else {
-				m_zoom = etk_max(1.0, m_zoom);
+		if (ewol::INPUT_TYPE_MOUSE==type) {
+			etkFloat_t tmp1=ewol::GetCurrentHeight() / m_maxSize.y;
+			etkFloat_t tmp2=ewol::GetCurrentWidth() / m_maxSize.x;
+			//EWOL_INFO(" elements Zoom : " << tmp1 << " " << tmp2);
+			tmp1 = etk_min(tmp1, tmp2);
+			if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+				m_zoom -= 0.1;
+				if (tmp1 < 1.0) {
+					m_zoom = etk_max(tmp1, m_zoom);
+				} else {
+					m_zoom = etk_max(1.0, m_zoom);
+				}
+				MarkToReedraw();
+				return true;
+			} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+				m_zoom += 0.1;
+				if (tmp1 > 1.0) {
+					m_zoom = etk_min(tmp1, m_zoom);
+				} else {
+					m_zoom = etk_min(1.0, m_zoom);
+				}
+				MarkToReedraw();
+				return true;
 			}
-			MarkToReedraw();
-			return true;
-		} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			m_zoom += 0.1;
-			if (tmp1 > 1.0) {
-				m_zoom = etk_min(tmp1, m_zoom);
-			} else {
-				m_zoom = etk_min(1.0, m_zoom);
-			}
-			MarkToReedraw();
-			return true;
 		}
-	#endif
 	} else {
 		EWOL_ERROR("Scrolling mode unknow ... " << m_scroollingMode );
 	}

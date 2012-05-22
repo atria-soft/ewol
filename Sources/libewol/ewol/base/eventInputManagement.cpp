@@ -1,3 +1,27 @@
+/**
+ *******************************************************************************
+ * @file eventInputManagement.cpp
+ * @brief Input (mouse,finger) abstraction layer (Sources)
+ * @author Edouard DUPIN
+ * @date 00/04/2011
+ * @par Project
+ * ewol
+ *
+ * @par Copyright
+ * Copyright 2011 Edouard DUPIN, all right reserved
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY.
+ *
+ * Licence summary : 
+ *    You can modify and redistribute the sources code and binaries.
+ *    You can send me the bug-fix
+ *
+ * Term of the licence in in the file licence.txt.
+ *
+ *******************************************************************************
+ */
+
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
@@ -112,29 +136,32 @@ void ewol::eventInput::UnInit(void)
 
 extern ewol::Windows* gui_uniqueWindows;
 
+/**
+ * @brief generate the event on the destinated widger
+ * @param[in] type Type of the event that might be sended
+ * @param[in] destWidget Pointer on the requested widget that element might be sended
+ * @param[in] IdInput Id of the event (PC : [0..9] and touch : [1..9])
+ * @param[in] typeEvent type of the eventg generated
+ * @param[in] pos position of the event
+ * @return true if event has been greped
+ */
 static bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
 {
 	if (NULL != destWidget) {
-		if (type == ewol::INPUT_TYPE_MOUSE) {
-			return destWidget->OnEventInput(IdInput, typeEvent, pos);
-		} else if (type == ewol::INPUT_TYPE_FINGER) {
-			return destWidget->OnEventInput(-1*IdInput, typeEvent, pos);
+		if (type == ewol::INPUT_TYPE_MOUSE || type == ewol::INPUT_TYPE_FINGER) {
+			return destWidget->OnEventInput(type, IdInput, typeEvent, pos);
 		} else {
 			return false;
 		}
-		
 	}
 	return false;
 }
 
 /**
  * @brief Convert the system event id in the correct EWOL id depending of the system management mode
- *
  * This function find the next input id unused on the specifiic widget ==> on PC, the ID does not change (IHM is not the same
- *
  * @param[in] destWidget Pointer of the widget destination
  * @param[in] realInputId System Id
- *
  * @return the ewol input id
  */
 static int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId)
@@ -187,7 +214,7 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, coord2D_ts
 				destWidget = gui_uniqueWindows->GetWidgetAtPos(pos);
 			}
 			if (NULL != destWidget) {
-				destWidget->OnEventInput(0, ewol::EVENT_INPUT_TYPE_MOVE, pos);
+				destWidget->OnEventInput(type, 0, ewol::EVENT_INPUT_TYPE_MOVE, pos);
 			}
 			return;
 		}

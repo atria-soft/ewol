@@ -33,12 +33,9 @@ namespace ewol {
 	typedef enum {
 		SCROLL_DISABLE,
 		SCROLL_INIT,
-	#ifdef __MODE__Touch
-		SCROLL_ENABLE,
-	#else
-		SCROLL_ENABLE_HORIZONTAL,
-		SCROLL_ENABLE_VERTICAL,
-	#endif
+		SCROLL_ENABLE_FINGER,     // Specific for touchpad
+		SCROLL_ENABLE_HORIZONTAL, // Specific for mouse
+		SCROLL_ENABLE_VERTICAL,   // Specific for mouse
 		SCROLL_GREP_END_EVENT,
 	}highSpeedMode_te;
 	
@@ -53,15 +50,16 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			coord2D_ts        m_originScrooled;
-			coord2D_ts        m_maxSize;
-			etkFloat_t        m_zoom; //!< current zoom on the display
+			coord2D_ts         m_originScrooled;
+			coord2D_ts         m_maxSize;
+			etkFloat_t         m_zoom; //!< current zoom on the display
 		private:
-			scrollingMode_te  m_scroollingMode; //!< mode of management of the scrooling
-			etkFloat_t        m_pixelScrolling;
-			coord2D_ts        m_highSpeedStartPos;
-			highSpeedMode_te  m_highSpeedMode;
-			int32_t           m_highSpeedButton;
+			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
+			etkFloat_t         m_pixelScrolling;
+			coord2D_ts         m_highSpeedStartPos;
+			highSpeedMode_te   m_highSpeedMode;
+			int32_t            m_highSpeedButton;
+			ewol::inputType_te m_highSpeedType;
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
@@ -84,13 +82,14 @@ namespace ewol {
 			virtual void OnDraw(void);
 			/**
 			 * @brief Event on an input of this Widget
+			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
 			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
 			 * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
 			 * @param[in] pos Absolute position of the event
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos);
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget

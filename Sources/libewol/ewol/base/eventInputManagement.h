@@ -1,4 +1,26 @@
-
+/**
+ *******************************************************************************
+ * @file eventInputManagement.h
+ * @brief Input (mouse,finger) abstraction layer (header)
+ * @author Edouard DUPIN
+ * @date 00/04/2011
+ * @par Project
+ * ewol
+ *
+ * @par Copyright
+ * Copyright 2011 Edouard DUPIN, all right reserved
+ *
+ * This software is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY.
+ *
+ * Licence summary : 
+ *    You can modify and redistribute the sources code and binaries.
+ *    You can send me the bug-fix
+ *
+ * Term of the licence in in the file licence.txt.
+ *
+ *******************************************************************************
+ */
 
 
 
@@ -8,6 +30,7 @@
 namespace ewol
 {
 	typedef enum {
+		INPUT_TYPE_UNKNOW,
 		INPUT_TYPE_MOUSE,
 		INPUT_TYPE_FINGER,
 	} inputType_te;
