@@ -29,6 +29,7 @@
 #include <etk/Types.h>
 #include <etk/UString.h>
 #include <ewol/Windows.h>
+#include <ewol/ewol.h>
 
 void EWOL_NativeResize(int w, int h );
 void EWOL_GenericDraw(bool everyTime);

@@ -29,10 +29,9 @@
 #include <ewol/Debug.h>
 #include <etk/VectorType.h>
 #include <ewol/Widget.h>
-#include <ewol/widgetMeta/Keyboard.h>
 
 namespace ewol {
-
+	
 	class Windows :public ewol::Widget
 	{
 		public:
@@ -89,8 +88,6 @@ namespace ewol {
 		private:
 			ewol::Widget*                   m_subWidget[NB_BOUBLE_BUFFER];
 			etk::VectorType<ewol::Widget*>  m_popUpWidgetList[NB_BOUBLE_BUFFER];
-			// TODO : Add flip flop ...
-			ewol::Keyboard*                 m_keyBoardwidget;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
@@ -99,8 +96,6 @@ namespace ewol {
 		public:
 			virtual void OnRegenerateDisplay(void);
 		public:
-			void KeyboardShow(ewol::keyboardMode_te mode);
-			void KeyboardHide(void);
 			/**
 			 * @brief Event generated to inform a flip-flop has occured on the current widget
 			 * @param ---

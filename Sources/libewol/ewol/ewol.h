@@ -44,6 +44,11 @@ namespace ewol {
 	
 	// TODO : Deprecated remove it ...
 	bool IsPressedInput(int32_t inputID);
+	typedef enum {
+		KEYBOARD_MODE_TEXT,
+		KEYBOARD_MODE_NUMBER,
+		KEYBOARD_MODE_CODE,
+	} keyboardMode_te;
 	void KeyboardShow(ewol::keyboardMode_te mode);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);

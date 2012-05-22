@@ -50,7 +50,6 @@ ewol::Windows::Windows(void)
 	for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_subWidget[iii] = NULL;
 	}
-	m_keyBoardwidget = NULL;
 	SetDecorationDisable();
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
@@ -69,11 +68,6 @@ ewol::Windows::~Windows(void)
 		}
 	}
 	m_popUpWidgetList[m_currentCreateId].Clear();
-	
-	if (NULL != m_keyBoardwidget) {
-		m_keyBoardwidget->MarkToRemove();
-		m_keyBoardwidget=NULL;
-	}
 }
 
 //!< EObject name :
@@ -119,24 +113,16 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
 	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);
 	m_size.x = availlableX;
 	m_size.y = availlableY;
-	int32_t keyboardHigh = 0;
-	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		m_keyBoardwidget->CalculateMinSize();
-		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
-		keyboardHigh = (int32_t)tmpSize.y;
-		m_keyBoardwidget->SetOrigin(0, m_size.y - keyboardHigh);
-		m_keyBoardwidget->CalculateSize(m_size.x, keyboardHigh);
-	}
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->CalculateMinSize();
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
-		m_subWidget[m_currentCreateId]->CalculateSize(m_size.x, m_size.y - keyboardHigh);
+		m_subWidget[m_currentCreateId]->CalculateSize(m_size.x, m_size.y);
 	}
 	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
 			m_popUpWidgetList[m_currentCreateId][iii]->CalculateMinSize();
-			m_popUpWidgetList[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y - keyboardHigh);
+			m_popUpWidgetList[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
 		}
 	}
 	return true;
@@ -152,13 +138,6 @@ ewol::Widget * ewol::Windows::GetWidgetAtPos(coord2D_ts pos)
 {
 	// calculate relative position
 	coord2D_ts relativePos = RelativePosition(pos);
-	
-	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		coord2D_ts tmpSize = m_keyBoardwidget->GetMinSize();
-		if (relativePos.y > m_size.y - tmpSize.y) {
-			return m_keyBoardwidget->GetWidgetAtPos(pos);
-		}
-	}
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
 		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
@@ -217,9 +196,6 @@ void ewol::Windows::OnRegenerateDisplay(void)
 			m_popUpWidgetList[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
 	}
-	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		m_keyBoardwidget->OnRegenerateDisplay();
-	}
 }
 
 
@@ -242,10 +218,6 @@ void ewol::Windows::OnDraw(void)
 			m_popUpWidgetList[m_currentDrawId][iii]->GenDraw();
 			//EWOL_DEBUG("Draw Pop-up");
 		}
-	}
-	if (NULL != m_keyBoardwidget && false == m_keyBoardwidget->IsHide() ) {
-		m_keyBoardwidget->GenDraw();
-		//EWOL_DEBUG("Draw kewboard");
 	}
 }
 
@@ -272,38 +244,6 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	CalculateSize(m_size.x, m_size.y);
 	m_needFlipFlop = true;
 	ewol::eventInput::NewLayerSet();
-}
-
-void ewol::Windows::KeyboardShow(ewol::keyboardMode_te mode)
-{
-/*
-#if defined(__PLATFORM__Android)
-	if (NULL == m_keyBoardwidget) {
-		// Create the keyboard ...
-		m_keyBoardwidget = new ewol::Keyboard();
-		if (NULL == m_keyBoardwidget) {
-			EWOL_ERROR("Fail to initialize memory");
-		} else {
-			m_keyBoardwidget->ExternLinkOnEvent("ewol event Keyboard request hide", GetWidgetId(), ewolEventWindowsHideKeyboard );
-			m_keyBoardwidget->SetParrent(this);
-		}
-	}
-	if (NULL != m_keyBoardwidget) {
-		m_keyBoardwidget->Show();
-	}
-	CalculateSize(m_size.x, m_size.y);
-#endif
-*/
-}
-
-
-void ewol::Windows::KeyboardHide(void)
-{
-	EWOL_INFO("Request Hide keyboard");
-	if (NULL != m_keyBoardwidget) {
-		m_keyBoardwidget->Hide();
-	}
-	CalculateSize(m_size.x, m_size.y);
 }
 
 
@@ -357,11 +297,6 @@ void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
 			m_popUpWidgetList[m_currentCreateId].Erase(iii);
 			m_needFlipFlop = true;
 		}
-	}
-	if (m_keyBoardwidget == removeObject) {
-		EWOL_DEBUG("Remove Keyboard element of the windows ==> destroyed object");
-		m_keyBoardwidget = NULL;
-		m_needFlipFlop = true;
 	}
 }
 

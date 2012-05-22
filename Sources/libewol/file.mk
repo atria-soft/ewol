@@ -17,7 +17,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/OObject/2DColored.cpp \
 			ewol/OObject/2DTextured.cpp \
 			ewol/OObject/Sprite.cpp \
-			ewol/OObject/e2d.cpp \
 			ewol/Texture.cpp \
 			ewol/Texture/TextureBMP.cpp \
 			ewol/Texture/TexturePNG.cpp \
@@ -50,7 +49,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/WidgetScrolled.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
-			ewol/widgetMeta/Keyboard.cpp \
 			ewol/theme/Theme.cpp
 
 
