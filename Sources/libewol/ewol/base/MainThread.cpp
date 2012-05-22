@@ -37,6 +37,9 @@
 #include <ewol/ShortCutManager.h>
 #include <ewol/base/eventInputManagement.h>
 
+#ifdef __PLATFORM__Linux
+#	include <sched.h>
+#endif
 
 
 static ewol::threadMsg::threadMsg_ts    androidJniMsg;
@@ -262,19 +265,53 @@ void EWOL_SystemStart(void)
 		// init the thread :
 		EWOL_DEBUG("Create the thread");
 		pthread_attr_init(&androidJniThreadAttr);
-		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
-		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
+		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
+		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
 		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
-		/* // note android does not permit to change the thread priority ...
-		// try to set prio : 
-		struct sched_param pr;
-		pr.sched_priority = 10;
-		pthread_attr_setschedpolicy(&androidJniThreadAttr, SCHED_RR);
-		pthread_attr_setschedparam(&androidJniThreadAttr, &pr);
-		*/
+		// note android does not permit to change the thread priority ...
+		#ifdef __PLATFORM__Linux
+			// try to set prio : 
+			struct sched_param pr;
+			int policy;
+			pr.sched_priority = 20;
+			sched_setscheduler(getpid(), SCHED_RR, &pr);
+			
+			pthread_setschedparam(pthread_self(), SCHED_RR, &pr);
+			
+			
+			pthread_getschedparam(pthread_self(), &policy, &pr);
+			EWOL_INFO("Thread <GUI> priority : " << pr.sched_priority);
+			if (policy == SCHED_RR) {
+				EWOL_INFO("Thread <GUI> policy: SCHED_RR");
+			} else if (policy == SCHED_FIFO) {
+				EWOL_INFO("Thread <GUI> policy: SCHED_FIFO");
+			} else if (policy == SCHED_OTHER) {
+				EWOL_INFO("Thread <GUI> policy: SCHED_OTHER");
+			} else {
+				EWOL_INFO("Thread <GUI> policy: ???");
+			}
+			
+			pr.sched_priority +=5;
+			EWOL_INFO("Thread <BASIC> priority : " << pr.sched_priority << " (try to set)");
+			pthread_attr_setschedpolicy(&androidJniThreadAttr, policy);
+			pthread_attr_setschedparam(&androidJniThreadAttr, &pr);
+		#endif
 		pthread_setname_np(androidJniThread, "ewol_basic_thread");
 		pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
-		
+		#ifdef __PLATFORM__Linux
+			pthread_setschedparam(androidJniThread, SCHED_RR, &pr);
+			pthread_getschedparam(androidJniThread, &policy, &pr);
+			EWOL_INFO("Thread <BASIC> priority : " << pr.sched_priority << " (is really set)");
+			if (policy == SCHED_RR) {
+				EWOL_INFO("Thread <BASIC> policy: SCHED_RR");
+			} else if (policy == SCHED_FIFO) {
+				EWOL_INFO("Thread <BASIC> policy: SCHED_FIFO");
+			} else if (policy == SCHED_OTHER) {
+				EWOL_INFO("Thread <BASIC> policy: SCHED_OTHER");
+			} else {
+				EWOL_INFO("Thread <BASIC> policy: ???");
+			}
+		#endif
 		//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");

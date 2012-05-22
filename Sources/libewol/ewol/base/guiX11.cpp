@@ -43,7 +43,7 @@
 #include <X11/Xatom.h>
 #include <sys/times.h>
 
-
+//#define DEBUG_X11_EVENT
 
 int64_t GetCurrentTime(void)
 {
@@ -347,7 +347,9 @@ void RemoveDecoration(void)
 	hints.decorations = 0;// 0 (false) means that window decorations should go bye-bye
 	property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
 	if (0 != property) {
+		XLockDisplay(m_display);
 		XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+		XUnlockDisplay(m_display);
 		XMapWindow(m_display, WindowHandle);
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
@@ -362,7 +364,9 @@ void AddDecoration(void)
 	hints.decorations = 1;// 1 (true) means that window decorations should enable
 	property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
 	if (0 != property) {
+		XLockDisplay(m_display);
 		XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
+		XUnlockDisplay(m_display);
 		XMapWindow(m_display, WindowHandle);
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
@@ -468,14 +472,18 @@ void X11_Run(void)
 		XEvent respond;
 		// main X boucle :
 		while (XPending(m_display)) {
-			//EWOL_ERROR("plop 22222");
+			#ifdef DEBUG_X11_EVENT
+				EWOL_INFO("X11:Event");
+			#endif
 			XNextEvent(m_display, &event);
 			
 			switch (event.type)
 			{
 				case ClientMessage:
 					{
-						EWOL_INFO("Receive : ClientMessage");
+						#ifdef DEBUG_X11_EVENT
+							EWOL_INFO("Receive : ClientMessage");
+						#endif
 						if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
 							EWOL_INFO("    ==> Kill Requested ...");
 							if (NULL != gui_uniqueWindows) {
@@ -490,11 +498,21 @@ void X11_Run(void)
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case SelectionClear:
 					// Selection has been done on an other program ==> clear ours ...
-					EWOL_VERBOSE("X11 event SelectionClear");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event SelectionClear");
+					#endif
 					{
-						XSelectionRequestEvent *req=&(event.xselectionrequest);
-						EWOL_VERBOSE("    property: \"" << XGetAtomName(m_display, req->property) << "\"");
-						EWOL_VERBOSE("    target:   \"" << XGetAtomName(m_display, req->target) << "\"");
+						#ifdef DEBUG_X11_EVENT
+						{
+							XSelectionRequestEvent *req=&(event.xselectionrequest);
+							char * atomNameProperty = XGetAtomName(m_display, req->property);
+							char * atomNameTarget = XGetAtomName(m_display, req->target);
+							EWOL_INFO("X11    property: \"" << atomNameProperty << "\"");
+							EWOL_INFO("X11    target:   \"" << atomNameTarget << "\"");
+							if (NULL != atomNameProperty) { XFree(atomNameProperty); }
+							if (NULL != atomNameTarget) { XFree(atomNameTarget); }
+						}
+						#endif
 						if (true == l_clipBoardOwnerPrimary) {
 							l_clipBoardOwnerPrimary = false;
 						} else if (true == l_clipBoardOwnerStd) {
@@ -505,7 +523,9 @@ void X11_Run(void)
 					}
 					break;
 				case SelectionNotify:
-					EWOL_VERBOSE("X11 event SelectionNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event SelectionNotify");
+					#endif
 					if (event.xselection.property == None) {
 						EWOL_VERBOSE("    ==> no data ...");
 					} else {
@@ -540,10 +560,22 @@ void X11_Run(void)
 					}
 					break;
 				case SelectionRequest:
-					EWOL_VERBOSE("X11 event SelectionRequest");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event SelectionRequest");
+					#endif
 					{
 						XSelectionRequestEvent *req=&(event.xselectionrequest);
-						EWOL_VERBOSE("    from: " << XGetAtomName(m_display, req->property) << "  request=" << XGetAtomName(m_display, req->selection) << " in " << XGetAtomName(m_display, req->target));
+						#ifdef DEBUG_X11_EVENT
+						{
+							char * atomNameProperty = XGetAtomName(m_display, req->property);
+							char * atomNameSelection = XGetAtomName(m_display, req->selection);
+							char * atomNameTarget = XGetAtomName(m_display, req->target);
+							EWOL_INFO("    from: " << atomNameProperty << "  request=" << atomNameSelection << " in " << atomNameTarget);
+							if (NULL != atomNameProperty) { XFree(atomNameProperty); }
+							if (NULL != atomNameSelection) { XFree(atomNameSelection); }
+							if (NULL != atomNameTarget) { XFree(atomNameTarget); }
+						}
+						#endif
 						const char * magatTextToSend = NULL;
 						
 						if (req->selection == XAtomeSelection) {
@@ -553,7 +585,7 @@ void X11_Run(void)
 						} else {
 							magatTextToSend = "";
 						}
-						
+						XLockDisplay(m_display);
 						Atom listOfAtom[4];
 						if(strlen(magatTextToSend) == 0 ) {
 							respond.xselection.property= None;
@@ -573,7 +605,7 @@ void X11_Run(void)
 							                 (unsigned char*)listOfAtom,
 							                 nbAtomSupported );
 							respond.xselection.property=req->property;
-							EWOL_VERBOSE("            ==> Respond ... (test)");
+							EWOL_INFO("            ==> Respond ... (test)");
 						} else if(XAtomeTargetString == req->target) {
 							XChangeProperty( m_display,
 							                 req->requestor,
@@ -584,7 +616,7 @@ void X11_Run(void)
 							                 (unsigned char*)magatTextToSend,
 							                 strlen(magatTextToSend));
 							respond.xselection.property=req->property;
-							EWOL_VERBOSE("            ==> Respond ...");
+							EWOL_INFO("            ==> Respond ...");
 						} else if (XAtomeTargetStringUTF8 == req->target) {
 							XChangeProperty( m_display,
 							                 req->requestor,
@@ -595,10 +627,11 @@ void X11_Run(void)
 							                 (unsigned char*)magatTextToSend,
 							                 strlen(magatTextToSend));
 							respond.xselection.property=req->property;
-							EWOL_VERBOSE("            ==> Respond ...");
+							EWOL_INFO("            ==> Respond ...");
 						} else {
 							respond.xselection.property= None;
 						}
+						XUnlockDisplay(m_display);
 						respond.xselection.type= SelectionNotify;
 						respond.xselection.display= req->display;
 						respond.xselection.requestor= req->requestor;
@@ -612,41 +645,67 @@ void X11_Run(void)
 					break;
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case Expose:
-					EWOL_DEBUG("X11 event Expose");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event Expose");
+					#endif
 					break;
 				case GraphicsExpose:
-					EWOL_DEBUG("X11 event GraphicsExpose");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event GraphicsExpose");
+					#endif
 					break;
 				case NoExpose:
-					EWOL_DEBUG("X11 event NoExpose");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event NoExpose");
+					#endif
 					break;
 				case CreateNotify:
-					EWOL_DEBUG("X11 event CreateNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event CreateNotify");
+					#endif
 					break;
 				case DestroyNotify:
-					EWOL_DEBUG("X11 event DestroyNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event DestroyNotify");
+					#endif
 					break;
 				case GravityNotify:
-					EWOL_DEBUG("X11 event GravityNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event GravityNotify");
+					#endif
 					break;
 				case VisibilityNotify:
-					EWOL_DEBUG("X11 event VisibilityNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event VisibilityNotify");
+					#endif
 					break;
 				case CirculateNotify:
-					EWOL_DEBUG("X11 event CirculateNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event CirculateNotify");
+					#endif
 					break;
 				case ReparentNotify:
-					EWOL_DEBUG("X11 event ReparentNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event ReparentNotify");
+					#endif
 					break;
 				case PropertyNotify:
-					EWOL_DEBUG("X11 event PropertyNotify");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event PropertyNotify");
+					#endif
 					break;
 				case ConfigureNotify:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event ConfigureNotify");
+					#endif
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
 					EWOL_ThreadResize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event ButtonPress");
+					#endif
 					m_cursorEventX = event.xbutton.x;
 					m_cursorEventY = event.xbutton.y;
 					if (event.xbutton.button < NB_MAX_INPUT) {
@@ -655,6 +714,9 @@ void X11_Run(void)
 					EWOL_ThreadEventMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case ButtonRelease:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event ButtonRelease");
+					#endif
 					m_cursorEventX = event.xbutton.x;
 					m_cursorEventY = event.xbutton.y;
 					if (event.xbutton.button < NB_MAX_INPUT) {
@@ -663,17 +725,26 @@ void X11_Run(void)
 					EWOL_ThreadEventMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case EnterNotify:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event EnterNotify");
+					#endif
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = event.xcrossing.y;
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
 					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
 					break;
 				case LeaveNotify:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event LeaveNotify");
+					#endif
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = event.xcrossing.y;
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
 					break;
 				case MotionNotify:
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event MotionNotify");
+					#endif
 					m_cursorEventX = event.xmotion.x;
 					m_cursorEventY = event.xmotion.y;
 					{
@@ -693,14 +764,20 @@ void X11_Run(void)
 					}
 					break;
 				case FocusIn:
-					EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusIn\"");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event FocusIn");
+					#endif
 					break;
 				case FocusOut:
-					EWOL_VERBOSE("X11 event : " << event.type << " = \"FocusOut\"");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event : FocusOut");
+					#endif
 					break;
 				case KeyPress:
 				case KeyRelease:
-					//EWOL_DEBUG("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+					#endif
 					{
 						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
 						if (event.xkey.state & (1<<0) ) {
@@ -883,36 +960,55 @@ void X11_Run(void)
 							specialEvent.move = keyInput;
 							EWOL_ThreadKeyboardEventMove(specialEvent);
 						}
-						break;
 					}
+					break;
 				//case DestroyNotify:
 				//	break;
 				case MapNotify:
-					EWOL_VERBOSE("X11 event : " << event.type << " = \"MapNotify\"");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event : MapNotify");
+					#endif
 					EWOL_ThreadEventShow();
 					break;
 				case UnmapNotify:
-					EWOL_VERBOSE("X11 event : " << event.type << " = \"UnmapNotify\"");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event : UnmapNotify");
+					#endif
 					EWOL_ThreadEventHide();
 					break;
 				default:
-					EWOL_DEBUG("X11 event : " << event.type << " = \"???\"");
+					#ifdef DEBUG_X11_EVENT
+						EWOL_INFO("X11 event : " << event.type << " = \"???\"");
+					#endif
+					break;
 			}
 		}
 		if(true == m_run) {
+			//#ifdef DEBUG_X11_EVENT
+				EWOL_INFO("X11 Render...");
+			//#endif
+			XLockDisplay(m_display);
 			EWOL_NativeRender();
+			XUnlockDisplay(m_display);
 		}
+		//#ifdef DEBUG_X11_EVENT
+			EWOL_INFO("X11 endEvent --- ");
+		//#endif
 	}
 };
 
 void X11_ChangeSize(int32_t w, int32_t h)
 {
+	XLockDisplay(m_display);
 	XResizeWindow(m_display, WindowHandle, w, h);
+	XUnlockDisplay(m_display);
 };
 
 void X11_ChangePos(int32_t x, int32_t y)
 {
+	XLockDisplay(m_display);
 	XMoveWindow(m_display, WindowHandle, x, y);
+	XUnlockDisplay(m_display);
 };
 
 void X11_GetAbsPos(int32_t & x, int32_t & y)
@@ -920,7 +1016,9 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 	int tmp;
 	unsigned int tmp2;
 	Window fromroot, tmpwin;
+	XLockDisplay(m_display);
 	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
+	XUnlockDisplay(m_display);
 };
 
 
@@ -939,12 +1037,14 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 				// clear old request ..
 				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
+				XLockDisplay(m_display);
 				XConvertSelection(m_display,
 				                  XAtomeSelection,// atom,
 				                  XAtomeTargetStringUTF8, // type?
 				                  XAtomeEWOL, // prop,
 				                  WindowHandle,
 				                  CurrentTime);
+				XUnlockDisplay(m_display);
 				// wait the event ...
 				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
 				if (waitTmp == 0) {
@@ -960,12 +1060,14 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 				// clear old request ..
 				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
+				XLockDisplay(m_display);
 				XConvertSelection(m_display,
 				                  XAtomeClipBoard,// atom,
 				                  XAtomeTargetStringUTF8, // type?
 				                  XAtomeEWOL, // prop,
 				                  WindowHandle,
 				                  CurrentTime);
+				XUnlockDisplay(m_display);
 				// wait the event ...
 				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
 				if (waitTmp == 0) {
@@ -992,7 +1094,9 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				l_clipBoardPrimary = newData;
 				// Request the selection :
 				if (false == l_clipBoardOwnerPrimary) {
+					XLockDisplay(m_display);
 					XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
+					XUnlockDisplay(m_display);
 					l_clipBoardOwnerPrimary = true;
 				}
 			}
@@ -1003,7 +1107,9 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				l_clipBoardStd = newData;
 				// Request the clipBoard :
 				if (false == l_clipBoardOwnerStd) {
+					XLockDisplay(m_display);
 					XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
+					XUnlockDisplay(m_display);
 					l_clipBoardOwnerStd = true;
 				}
 			}
