@@ -194,9 +194,16 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 			}
 			if (IdInput==m_highSpeedButton && ewol::SCROLL_DISABLE!=m_highSpeedMode) {
 				if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-					m_highSpeedMode = ewol::SCROLL_GREP_END_EVENT;
-					MarkToReedraw();
-					return true;
+					if (ewol::SCROLL_INIT==m_highSpeedMode) {
+						// TODO : Generate back the down event ...
+						m_highSpeedMode = ewol::SCROLL_DISABLE;
+						m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
+						return false;
+					} else {
+						m_highSpeedMode = ewol::SCROLL_GREP_END_EVENT;
+						MarkToReedraw();
+						return true;
+					}
 				} else if (ewol::SCROLL_GREP_END_EVENT == m_highSpeedMode) {
 					if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 						m_highSpeedMode = ewol::SCROLL_DISABLE;
