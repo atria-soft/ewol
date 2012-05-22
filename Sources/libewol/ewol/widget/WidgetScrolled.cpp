@@ -89,26 +89,6 @@ const char * const ewol::WidgetScrooled::GetObjectType(void)
 
 void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 {
-	#ifdef __MODE__Touch
-	/*
-		if(ewol::SCROLL_ENABLE==m_highSpeedMode) {
-			ewol::OObject2DColored* myOObjectsColored = new ewol::OObject2DColored();
-			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.4);
-			myOObjectsColored->Disc(m_highSpeedStartPos.x, m_highSpeedStartPos.y, 10);
-			AddOObject(myOObjectsColored);
-		}
-	*/
-	#else
-	/*
-		if(    ewol::SCROLL_ENABLE_HORIZONTAL==m_highSpeedMode
-		    || ewol::SCROLL_ENABLE_VERTICAL  ==m_highSpeedMode) {
-			ewol::OObject2DColored* myOObjectsColored = new ewol::OObject2DColored();
-			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.4);
-			myOObjectsColored->Disc(m_highSpeedStartPos.x, m_highSpeedStartPos.y, 10);
-			AddOObject(myOObjectsColored);
-		}
-	*/
-	#endif
 	ClearOObjectList();
 	ewol::OObject2DColored* myOObjectsColored = NULL;
 	if(m_size.y < m_maxSize.y || m_size.x < m_maxSize.x) {
@@ -442,4 +422,5 @@ void ewol::WidgetScrooled::SetScrollingPositionDynamic(coord2D_ts borderWidth, c
 		m_originScrooled.y = etk_max(0.0, m_originScrooled.y);
 	}
 }
+
 

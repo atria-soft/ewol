@@ -12,7 +12,6 @@ LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Android \
-                -D__MODE__Touch \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
@@ -22,7 +21,6 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -frtti
 else
 LOCAL_CFLAGS := -D__PLATFORM__Android \
-                -D__MODE__Touch \
                 -Wno-write-strings \
                 -DETK_DEBUG_LEVEL=1 \
                 -DEWOL_DEBUG_LEVEL=1 \
