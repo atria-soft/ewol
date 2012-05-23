@@ -38,6 +38,7 @@ ewol::WidgetScrooled::WidgetScrooled(void)
 	m_pixelScrolling = 20;
 	m_highSpeedMode = SCROLL_DISABLE;
 	m_scroollingMode = SCROLL_MODE_NORMAL;
+	m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
 	m_zoom = 1.0;
 	m_highSpeedButton = -1;
 }

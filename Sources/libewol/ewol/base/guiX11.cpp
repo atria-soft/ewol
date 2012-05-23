@@ -149,6 +149,9 @@ static void X11_GetAbsPos(int32_t & x, int32_t & y);
 
 bool CreateX11Context(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: CreateX11Context");
+	#endif
 	int x,y, attr_mask;
 	XSizeHints hints;
 	XWMHints *StartupState;
@@ -156,6 +159,12 @@ bool CreateX11Context(void)
 	XSetWindowAttributes attr;
 	// basic title of the windows ...
 	static char *title = (char*)"Ewol";
+	
+	// start multiple connection on the display for multiple threading : 
+	Status retStat = XInitThreads();
+	if (0!=retStat) {
+		EWOL_ERROR("While XInitThreads() ==> can have some problem sometimes : " << retStat);
+	}
 	
 	// Connect to the X server
 	m_display = XOpenDisplay(NULL);
@@ -267,6 +276,10 @@ bool CreateX11Context(void)
 
 void ewol::SetTitle(etk::UString title)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: Set Title (START)");
+	#endif
+	XLockDisplay(m_display);
 	XTextProperty tp;
 	tp.value = (unsigned char *)title.Utf8Data();
 	tp.encoding = XA_WM_NAME;
@@ -276,6 +289,10 @@ void ewol::SetTitle(etk::UString title)
 	XStoreName(m_display, WindowHandle, (const char*)tp.value);
 	XSetIconName(m_display, WindowHandle, (const char*)tp.value);
 	XSetWMIconName(m_display, WindowHandle, &tp);
+	XUnlockDisplay(m_display);
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: Set Title (END)");
+	#endif
 }
 
 /* this variable will contain the ID of the newly created pixmap.    */
@@ -284,16 +301,19 @@ Pixmap icon_pixmap;
 // TODO : I don't understand why it does not work ....
 void SetIcon(etk::File bitmapFile)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: try to set icon : " << bitmapFile);
+	#endif
 	// load bitmap
-	EWOL_INFO("try to set icon : " << bitmapFile);
 	if (false == bitmapFile.Exist()) {
 		EWOL_ERROR("X11 Icon File does not Exist ... " << bitmapFile);
 	} else {
 		etk::UString fileExtention = bitmapFile.GetExtention();
 		if (fileExtention ==  "bmp") {
+			XLockDisplay(m_display);
 			// pointer to the WM hints structure.
 			XWMHints* win_hints;
-	
+			
 			unsigned int bitmap_width, bitmap_height;
 			int hotspot_x, hotspot_y;
 			int rc = XReadBitmapFile(m_display, WindowHandle,
@@ -304,12 +324,15 @@ void SetIcon(etk::File bitmapFile)
 			switch (rc) {
 				case BitmapOpenFailed:
 					EWOL_ERROR("XReadBitmapFile - could not open file ");
+					XUnlockDisplay(m_display);
 					return;
 				case BitmapFileInvalid:
 					EWOL_ERROR("XReadBitmapFile - file doesn't contain a valid bitmap.");
+					XUnlockDisplay(m_display);
 					return;
 				case BitmapNoMemory:
 					EWOL_ERROR("XReadBitmapFile - not enough memory.");
+					XUnlockDisplay(m_display);
 					return;
 				case BitmapSuccess:
 					/* bitmap loaded successfully - do something with it... */
@@ -320,6 +343,7 @@ void SetIcon(etk::File bitmapFile)
 			win_hints = XAllocWMHints();
 			if (!win_hints) {
 				EWOL_ERROR("XAllocWMHints - out of memory");
+				XUnlockDisplay(m_display);
 				return;
 			}
 			// initialize the structure appropriately. first, specify which size hints we want to fill in. in our case - setting the icon's pixmap.
@@ -331,7 +355,7 @@ void SetIcon(etk::File bitmapFile)
 			EWOL_INFO("    ==> might be done ");
 			// finally, we can free the WM hints structure.
 			XFree(win_hints);
-			
+			XUnlockDisplay(m_display);
 		} else {
 			EWOL_ERROR("X11 Icon Extention not managed " << bitmapFile << " Sopported extention : .bmp ");
 		}
@@ -341,40 +365,50 @@ void SetIcon(etk::File bitmapFile)
 
 void RemoveDecoration(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11:RemoveDecoration");
+	#endif
+	XLockDisplay(m_display);
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
 	hints.decorations = 0;// 0 (false) means that window decorations should go bye-bye
 	property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
 	if (0 != property) {
-		XLockDisplay(m_display);
 		XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
-		XUnlockDisplay(m_display);
 		XMapWindow(m_display, WindowHandle);
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
 	}
+	XUnlockDisplay(m_display);
 }
 
 void AddDecoration(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11:AddDecoration");
+	#endif
+	XLockDisplay(m_display);
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
 	hints.decorations = 1;// 1 (true) means that window decorations should enable
 	property = XInternAtom(m_display, "_MOTIF_WM_HINTS", true);
 	if (0 != property) {
-		XLockDisplay(m_display);
 		XChangeProperty(m_display,WindowHandle,property,property,32,PropModeReplace,(unsigned char *)&hints,5);
-		XUnlockDisplay(m_display);
 		XMapWindow(m_display, WindowHandle);
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
 	}
+	XUnlockDisplay(m_display);
 }
 
 bool CreateOGlContext(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11:CreateOGlContext");
+	#endif
+	XLockDisplay(m_display);
 	/* create a GLX context */
 	GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
 	/* connect the glx-context to the window */
@@ -384,6 +418,7 @@ bool CreateOGlContext(void)
 	} else {
 		EWOL_INFO("XF86 DRI NOT available\n");
 	}
+	XUnlockDisplay(m_display);
 	return true;
 }
 
@@ -426,6 +461,9 @@ void EWOL_NativeRender(void)
 
 void X11_Init(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11:INIT");
+	#endif
 	m_visual = NULL;
 	m_previousBouttonId = 0;
 	m_previousDown_x = -1;
@@ -984,21 +1022,24 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			//#ifdef DEBUG_X11_EVENT
+			#ifdef DEBUG_X11_EVENT
 				EWOL_INFO("X11 Render...");
-			//#endif
+			#endif
 			XLockDisplay(m_display);
 			EWOL_NativeRender();
 			XUnlockDisplay(m_display);
 		}
-		//#ifdef DEBUG_X11_EVENT
+		#ifdef DEBUG_X11_EVENT
 			EWOL_INFO("X11 endEvent --- ");
-		//#endif
+		#endif
 	}
 };
 
 void X11_ChangeSize(int32_t w, int32_t h)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: X11_ChangeSize");
+	#endif
 	XLockDisplay(m_display);
 	XResizeWindow(m_display, WindowHandle, w, h);
 	XUnlockDisplay(m_display);
@@ -1006,6 +1047,9 @@ void X11_ChangeSize(int32_t w, int32_t h)
 
 void X11_ChangePos(int32_t x, int32_t y)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: X11_ChangePos");
+	#endif
 	XLockDisplay(m_display);
 	XMoveWindow(m_display, WindowHandle, x, y);
 	XUnlockDisplay(m_display);
@@ -1013,6 +1057,9 @@ void X11_ChangePos(int32_t x, int32_t y)
 
 void X11_GetAbsPos(int32_t & x, int32_t & y)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: X11_GetAbsPos");
+	#endif
 	int tmp;
 	unsigned int tmp2;
 	Window fromroot, tmpwin;
@@ -1027,7 +1074,9 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 
 void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 {
-	EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
+	#endif
 	newData = "";
 	switch (mode)
 	{
@@ -1085,7 +1134,9 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 
 void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 {
-	EWOL_VERBOSE("Request set of a clipboard : " << mode << " size=" << newData.Size() );
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("Request set of a clipboard : " << mode << " size=" << newData.Size() );
+	#endif
 	switch (mode)
 	{
 		case CLIPBOARD_MODE_PRIMARY:
@@ -1128,6 +1179,9 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 
 void guiAbstraction::Stop(void)
 {
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: Stop");
+	#endif
 	m_run = false;
 }
 
