@@ -43,7 +43,7 @@
 #include <X11/Xatom.h>
 #include <sys/times.h>
 
-#define DEBUG_X11_EVENT
+//#define DEBUG_X11_EVENT
 
 int64_t GetCurrentTime(void)
 {
@@ -129,14 +129,14 @@ int32_t offsetMoveClickedDouble = 20000;
 #ifdef PTHREAD_GUI_LOCK_MULTITHREAD
 	static pthread_mutex_t      l_mutex;
 	#define GUI_LOCK()          do { \
-	                            	EWOL_DEBUG("GUI-Lock"); \
+	                            	/*EWOL_DEBUG("GUI-Lock");*/ \
 	                            	pthread_mutex_lock(&l_mutex); \
-	                            	EWOL_DEBUG("GUI-Lock (done)"); \
+	                            	/*EWOL_DEBUG("GUI-Lock (done)");*/ \
 	                            }while(0)
 	#define GUI_UNLOCK()        do { \
-	                            	EWOL_DEBUG("GUI-UnLock"); \
+	                            	/*EWOL_DEBUG("GUI-UnLock");*/ \
 	                            	pthread_mutex_unlock(&l_mutex); \
-	                            	EWOL_DEBUG("GUI-UnLock (done)"); \
+	                            	/*EWOL_DEBUG("GUI-UnLock (done)");*/ \
 	                            }while(0)
 #else
 	#define GUI_LOCK()          XLockDisplay(m_display)
