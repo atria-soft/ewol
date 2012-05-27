@@ -265,10 +265,11 @@ void EWOL_SystemStart(void)
 		// init the thread :
 		EWOL_DEBUG("Create the thread");
 		pthread_attr_init(&androidJniThreadAttr);
-		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
-		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
+		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
+		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
 		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
 		// note android does not permit to change the thread priority ...
+		/*
 		#ifdef __PLATFORM__Linux
 			// try to set prio : 
 			struct sched_param pr;
@@ -296,8 +297,10 @@ void EWOL_SystemStart(void)
 			pthread_attr_setschedpolicy(&androidJniThreadAttr, policy);
 			pthread_attr_setschedparam(&androidJniThreadAttr, &pr);
 		#endif
+		*/
 		pthread_setname_np(androidJniThread, "ewol_basic_thread");
 		pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
+		/*
 		#ifdef __PLATFORM__Linux
 			pthread_setschedparam(androidJniThread, SCHED_RR, &pr);
 			pthread_getschedparam(androidJniThread, &policy, &pr);
@@ -312,6 +315,7 @@ void EWOL_SystemStart(void)
 				EWOL_INFO("Thread <BASIC> policy: ???");
 			}
 		#endif
+		*/
 		//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");

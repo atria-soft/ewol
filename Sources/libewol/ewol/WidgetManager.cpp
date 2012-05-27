@@ -220,7 +220,9 @@ static bool needRedraw = true;
 void ewol::widgetManager::DoubleBufferLock(void)
 {
 	if (IsInit) {
+		EWOL_DEBUG("DoubleBuffer-Lock");
 		pthread_mutex_lock(&localMutex);
+		EWOL_DEBUG("DoubleBuffer-Lock (DONE)");
 	}
 }
 
@@ -241,7 +243,9 @@ bool ewol::widgetManager::GetDoubleBufferNeedDraw(void)
 void ewol::widgetManager::DoubleBufferUnLock(void)
 {
 	if (IsInit) {
+		EWOL_DEBUG("DoubleBuffer-UnLock");
 		pthread_mutex_unlock(&localMutex);
+		EWOL_DEBUG("DoubleBuffer-UnLock (DONE)");
 	}
 }
 
