@@ -143,6 +143,8 @@ int32_t offsetMoveClickedDouble = 20000;
 	#define GUI_UNLOCK()        XUnlockDisplay(m_display)
 #endif
 
+bool l_titleChange = false;
+etk::UString l_title = "Ewol";
 
 bool inputIsPressed[20];
 
@@ -295,7 +297,7 @@ bool CreateX11Context(void)
 	return true;
 }
 
-void ewol::SetTitle(etk::UString title)
+static void local_SetTitle(etk::UString title)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (START)");
@@ -314,6 +316,19 @@ void ewol::SetTitle(etk::UString title)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (END)");
 	#endif
+}
+
+
+// the set title is abstract, because otherwise it generate latency in the display ...
+// TODO : We might generate system like this for evry other requested
+void ewol::SetTitle(etk::UString title)
+{
+	// set new title and inform that it change
+	if (true == l_titleChange) {
+		usleep(30);
+	}
+	l_title = title;
+	l_titleChange = true;
 }
 
 /* this variable will contain the ID of the newly created pixmap.    */
@@ -535,7 +550,11 @@ void X11_Run(void)
 				EWOL_INFO("X11:Event");
 			#endif
 			XNextEvent(m_display, &event);
-			
+			// change title if needed
+			if (l_titleChange) {
+				local_SetTitle(l_title);
+				l_titleChange = false;
+			}
 			switch (event.type)
 			{
 				case ClientMessage:
