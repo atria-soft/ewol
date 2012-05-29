@@ -334,6 +334,7 @@ void svg::Path::Display(int32_t spacing)
 				break;
 			case PATH_ENUM_ELLIPTIC:
 				SVG_DEBUG(SpacingDist(spacing+4) << "ELLIPTIC (TODO...)" );
+				// show explanation at : http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
 				break;
 			default:
 				SVG_DEBUG(SpacingDist(spacing+4) << "????" );
