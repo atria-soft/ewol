@@ -125,4 +125,8 @@ namespace ewol {
 
 etkFloat_t quadDist(coord2D_ts pos1, coord2D_ts pos2);
 
+#include <lua/lua.hpp>
+
+int mylib_open(lua_State *L);
+
 #endif

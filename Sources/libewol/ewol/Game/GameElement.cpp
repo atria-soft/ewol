@@ -84,3 +84,54 @@ etkFloat_t quadDist(coord2D_ts pos1, coord2D_ts pos2)
 	
 	return tmpVal1*tmpVal1 + tmpVal2*tmpVal2;
 }
+
+
+#include <lua/lua.hpp>
+extern "C" {
+#include <lua/lauxlib.h>
+}
+const char *metaname = "mine.type_t"; // associated with userdata of type type_t*
+
+typedef struct {
+    int a ;
+    int b ;
+}type_t;
+
+
+int lib_a_f_4(type_t *t)
+{
+     return t->a * t->b ;
+}
+
+static int lua_lib_a_f_4(lua_State *L) {
+  type_t *t = (type_t *)luaL_checkudata(L, 1, metaname);  // check argument type
+  lua_pushnumber(L, (lua_Number)lib_a_f_4(t));
+  return 1;
+}
+
+static int lua_new_t(lua_State *L) { // get Lua to allocate an initialize a type_t*
+  int a = luaL_checkint(L, 1);
+  int b = luaL_checkint(L, 2);
+  type_t *t = (type_t *)lua_newuserdata(L, sizeof(*t));
+  luaL_getmetatable(L, metaname);
+  lua_setmetatable(L, -2);
+  t->a = a;
+  t->b = b;
+  return 1;
+}
+
+static const struct luaL_reg functions[] = {
+  { "lib_a_f_4", lua_lib_a_f_4 },
+  { "new_t", lua_new_t },
+  { NULL, NULL }
+};
+//http://www.swig.org/Doc1.3/Lua.html#Lua_nn13
+//http://stackoverflow.com/questions/2521244/how-to-wrap-a-c-function-whose-parameters-are-pointer-to-structs-so-that-it-can
+int mylib_open(lua_State *L) {
+  luaL_register(L, "mylib", functions);
+  luaL_newmetatable(L, metaname);
+  lua_pop(L, 1);
+  //luaL_newlib(L, functionsTable);
+  //lua_pop(L, 1);
+  return 1;
+}
