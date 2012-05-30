@@ -47,7 +47,6 @@ namespace ewol {
 			virtual bool HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
 			virtual void Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
 			
-			virtual void Add(int32_t group, coord2D_ts position, coord2D_ts speed, int32_t groupEnemy, int32_t dificulty);
 			virtual bool GetElementProperty(ewol::gameElementGenericProperty_ts &element, int32_t id);
 	};
 };

@@ -24,6 +24,7 @@
 
 #include <ewol/Debug.h>
 #include <ewol/Game/GameElement.h>
+#include <ewol/Game/GameElementLua.h>
 #include <ewol/Game/SceneElement.h>
 
 ewol::SceneElement::SceneElement(void)
@@ -59,6 +60,25 @@ void ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newElement
 	listAnimatedElements[group].PushBack(newElement);
 }
 
+void ewol::SceneElement::AddElementNamed(int32_t group, etk::UString &elementName)
+{
+	// try to find the file :
+	etk::UString tmpName = "elementGame/";
+	tmpName += elementName;
+	tmpName += ".lua";
+	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
+	if (false == fileElement.Exist()) {
+		EWOL_ERROR("Can not find Game element : " << elementName << " ==> " << tmpName);
+		return;
+	}
+	EWOL_INFO("We find Game element : " << elementName << " ==> " << tmpName);
+	ewol::GameElementLua * tmpElement = new ewol::GameElementLua(*this, tmpName, group);
+	if (NULL == tmpElement) {
+		EWOL_ERROR("Can not Allocat : " << elementName);
+		return;
+	}
+	AddElement(group, tmpElement);
+}
 
 bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &element, elementIdentifier_ts& id)
 {

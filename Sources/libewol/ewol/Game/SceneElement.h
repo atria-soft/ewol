@@ -65,6 +65,7 @@ namespace ewol {
 			etk::VectorType<ewol::GameElement*> listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
 			int32_t                GetUniqueId(void) { int32_t iddd = m_id; m_id++; return iddd; };
 			void                   AddElement(int32_t group, ewol::GameElement* newElement);
+			void                   AddElementNamed(int32_t group, etk::UString &elementName);
 			bool                   GetElementProperty(gameElementGenericProperty_ts& element, elementIdentifier_ts& id);
 			elementIdentifier_ts   GetNearestEnemy(coord2D_ts position, int32_t groupId);
 			bool                   HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
