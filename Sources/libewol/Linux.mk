@@ -26,6 +26,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DEWOL_USE_FREE_TYPE \
+                -DLUA_COMPAT_ALL \
                 -Wall
 
 else
@@ -35,6 +36,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-release\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DLUA_COMPAT_ALL \
                 -DEWOL_USE_FREE_TYPE
 
 endif

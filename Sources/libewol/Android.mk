@@ -26,6 +26,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DDATA_IN_APK \
+                -DLUA_COMPAT_ALL \
                 -frtti
 else
 LOCAL_CFLAGS := -D__PLATFORM__Android \
@@ -35,6 +36,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DVERSION_BUILD_TIME="\"pasd_heure\"" \
                 -DDATA_IN_APK \
+                -DLUA_COMPAT_ALL \
                 -frtti
 endif
 
