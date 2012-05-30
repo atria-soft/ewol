@@ -11,6 +11,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/EObjectManager.cpp \
 			ewol/OObject.cpp \
 			ewol/Game/GameElement.cpp \
+			ewol/Game/GameElementLua.cpp \
 			ewol/Game/SceneElement.cpp \
 			ewol/OObject/2DText.cpp \
 			ewol/OObject/2DTextColored.cpp \
