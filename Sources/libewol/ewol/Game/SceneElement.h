@@ -32,15 +32,9 @@
 namespace ewol {
 	class GameElement;
 	
-	// this is to simplify the time to acces at a specific element
 	typedef struct {
-		int32_t    group;      //!< the element group
-		int32_t    listId;     //!< the id in the list of element
-		int32_t    id;         //!< Unique ID
-	} elementIdentifier_ts;
-	
-	typedef struct {
-		elementIdentifier_ts    id;         //!< the element definition
+		uint32_t                id;         //!< unique id of the element
+		int32_t                 group;      //!< element group
 		int32_t                 type;       //!< element type
 		coord2D_ts              position;   //!< current position
 		coord2D_ts              speed;      //!< current speed
@@ -52,7 +46,7 @@ namespace ewol {
 	
 	class SceneElement {
 		private:
-			int32_t                             m_id;                                             //!< Unique element ID ==> to reference the element unicly
+			int16_t                             m_id;                                             //!< Unique element ID ==> to reference the element unicly
 		public:
 			SceneElement(void);
 			~SceneElement(void) { };
@@ -63,17 +57,18 @@ namespace ewol {
 			etk::VectorType<ewol::Sprite*>      animated[NB_BOUBLE_BUFFER];                       //!< element that must be display the second
 			etk::VectorType<ewol::Sprite*>      effects[NB_BOUBLE_BUFFER];                        //!< element that must be display the third
 			etk::VectorType<ewol::GameElement*> listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
-			int32_t                GetUniqueId(void) { int32_t iddd = m_id; m_id++; return iddd; };
-			void                   AddElement(int32_t group, ewol::GameElement* newElement);
-			void                   AddElementNamed(int32_t group, etk::UString &elementName);
-			bool                   GetElementProperty(gameElementGenericProperty_ts& element, elementIdentifier_ts& id);
-			elementIdentifier_ts   GetNearestEnemy(coord2D_ts position, int32_t groupId);
+			int16_t                GetUniqueId(void) { int16_t iddd = m_id; m_id++; return iddd; };
+			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
+			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
+			ewol::GameElement*     GetElement(uint32_t idElement);
+			bool                   GetElementProperty(gameElementGenericProperty_ts& element, uint32_t idElement);
+			uint32_t               GetNearestEnemy(coord2D_ts position, int32_t groupId);
 			bool                   HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
 			void                   Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
-			elementIdentifier_ts   GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection);
-			void                   SetEventInput(elementIdentifier_ts& id, coord2D_ts position);
-			void                   SetEventExternButton(elementIdentifier_ts& id, int32_t btId, int32_t state);
-			void                   SetEventExternJoystick(elementIdentifier_ts& id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state);
+			uint32_t               GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection);
+			void                   SetEventInput(uint32_t id, coord2D_ts position);
+			void                   SetEventExternButton(uint32_t id, int32_t btId, int32_t state);
+			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state);
 	};
 };
 

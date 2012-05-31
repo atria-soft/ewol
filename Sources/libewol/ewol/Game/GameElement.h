@@ -39,7 +39,8 @@ namespace ewol {
 			etk::UString m_fileNameConfig;
 		protected:
 			SceneElement & m_sceneElement; //!< all element neede in the scene
-			int32_t      m_group;
+			uint16_t     m_uniqueId;
+			uint16_t     m_group;
 			int32_t      m_type;
 			bool         m_visible;
 			coord2D_ts   m_position;
@@ -61,6 +62,8 @@ namespace ewol {
 			 */
 			virtual ~GameElement(void) { };
 			
+			uint16_t    GetUniqueId(void)                              { return m_uniqueId; };
+			
 			bool        HasName(etk::UString tmpName)                  { return (tmpName == m_fileNameConfig); };
 			bool        IsVisible(void)                                { return m_visible; };
 			void        SetVisible(bool state)                         { m_visible = state; };
@@ -81,8 +84,7 @@ namespace ewol {
 			int32_t     GroupGet(void)                                 { return m_group; };
 			void        GroupSet(int32_t state)                        { m_group = state; };
 			
-			virtual bool GetElementProperty(gameElementGenericProperty_ts &element, int32_t id) {return false;};
-			virtual int32_t GetNearestEnemy(coord2D_ts position, etkFloat_t& lastQuadDistance) { return -1;};
+			void GetElementProperty(gameElementGenericProperty_ts &element);
 			/**
 			 * @brief Periodicly this fuction will be call tu change property of all the dynamic obbjects
 			 * @param[in] time Current game time (start at 0)
@@ -117,6 +119,8 @@ namespace ewol {
 			 * @return the id of the sprite requested or -1 if it does not existed
 			 */
 			int32_t LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, coord2D_ts maxSize);
+			
+			virtual void Message(etk::UString control, etk::UString message) { } ;
 	};
 	
 };

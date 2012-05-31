@@ -33,6 +33,7 @@
  */
 ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpName) : m_fileNameConfig(tmpName), m_sceneElement(sceneElement)
 {
+	m_uniqueId = sceneElement.GetUniqueId();
 	m_group = -1;
 	m_type = -1;
 	m_visible = true;
@@ -85,3 +86,14 @@ etkFloat_t quadDist(coord2D_ts pos1, coord2D_ts pos2)
 	return tmpVal1*tmpVal1 + tmpVal2*tmpVal2;
 }
 
+
+void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &element)
+{
+	element.type = m_type;
+	element.position = m_position;
+	element.speed.x = m_speed.x;
+	element.speed.y = m_speed.y;
+	element.size.x = m_size;
+	element.size.y = m_size;
+	element.angle = m_angle;
+}
