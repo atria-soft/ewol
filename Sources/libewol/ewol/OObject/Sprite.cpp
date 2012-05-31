@@ -34,13 +34,15 @@
 
 ewol::Sprite::Sprite(etk::UString spriteName)
 {
-	EWOL_VERBOSE("Create Sprite : \"" << spriteName << "\"");
-	m_textureId = ewol::texture::Load(spriteName);
+	m_name = spriteName;
+	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
+	m_textureId = ewol::texture::Load(m_name);
 }
 ewol::Sprite::Sprite(etk::UString spriteName, etkFloat_t sizeX, etkFloat_t sizeY)
 {
-	EWOL_VERBOSE("Create Sprite : \"" << spriteName << "\"");
-	m_textureId = ewol::texture::Load(spriteName, sizeX);
+	m_name = spriteName;
+	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
+	m_textureId = ewol::texture::Load(m_name, sizeX);
 }
 
 

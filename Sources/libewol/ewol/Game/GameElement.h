@@ -42,6 +42,7 @@ namespace ewol {
 			uint16_t     m_uniqueId;
 			uint16_t     m_group;
 			int32_t      m_type;
+			int32_t      m_power;
 			bool         m_visible;
 			coord2D_ts   m_position;
 			coord2D_ts   m_speed;
@@ -79,6 +80,8 @@ namespace ewol {
 			void        AngleSet(etkFloat_t state)                     { m_angle = state; };
 			etkFloat_t  GravityGet(void)                               { return m_gravity; };
 			void        GravitySet(etkFloat_t state)                   { m_gravity = state; };
+			int32_t     PowerGet(void)                                 { return m_power; };
+			void        PowerSet(int32_t state)                        { m_power = state; };
 			
 			int32_t     GetType(void)                                  { return m_type; };
 			int32_t     GroupGet(void)                                 { return m_group; };

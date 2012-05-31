@@ -81,7 +81,7 @@ uint32_t ewol::SceneElement::AddElementNamed(int32_t group, etk::UString &elemen
 		EWOL_ERROR("Can not find Game element : " << elementName << " ==> " << tmpName);
 		return 0;
 	}
-	EWOL_INFO("We find Game element : " << elementName << " ==> " << tmpName);
+	EWOL_VERBOSE("We find Game element : " << elementName << " ==> " << tmpName);
 	ewol::GameElementLua * tmpElement = new ewol::GameElementLua(*this, tmpName, group);
 	if (NULL == tmpElement) {
 		EWOL_ERROR("Can not Allocat : " << elementName);
@@ -107,27 +107,6 @@ ewol::GameElement* ewol::SceneElement::GetElement(uint32_t idElement)
 	}
 	return NULL;
 }
-
-bool ewol::SceneElement::GetElementProperty(gameElementGenericProperty_ts &element, uint32_t idElement)
-{
-	if (0 == idElement) {
-		return false;
-	}
-	uint16_t realUniqueId = (uint16_t)((idElement >> 16 ) & 0x0000FFFF);
-	uint16_t posInList    = (uint16_t)(idElement & 0x0000FFFF);
-	for (int32_t iii=0; iii<numberOfGroup; iii++) {
-		if(    posInList < listAnimatedElements[iii].Size()
-		    && NULL != listAnimatedElements[iii][posInList]
-		    && realUniqueId == listAnimatedElements[iii][posInList]->GetUniqueId()) {
-			element.id = idElement;
-			element.group = iii;
-			listAnimatedElements[iii][posInList]->GetElementProperty(element);
-			return true;
-		}
-	}
-	return false;
-}
-
 
 
 uint32_t ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupId)

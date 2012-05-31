@@ -39,22 +39,6 @@ static etk::VectorType<ewol::Sprite*> * tmpEffects = NULL;
 static ewol::SceneElement *             tmpScene = NULL;
 
 
-const char *metaname = "mine.type_t"; // associated with userdata of type type_t*
-
-typedef struct {
-    int a ;
-    int b ;
-}type_t;
-
-
-int lib_a_f_4(type_t *t)
-{
-	return t->a * t->b ;
-}
-
-
-
-
 LUAMOD_API int lua_GetPos(lua_State *L)
 {
 	if (NULL==tmpObj) {
@@ -76,8 +60,8 @@ LUAMOD_API int lua_SetPos(lua_State *L)
 		EWOL_ERROR("NULL obj...");
 		return 0;
 	}
-	float x = luaL_checkint(L, 1);
-	float y = luaL_checkint(L, 2);
+	float x = luaL_checknumber(L, 1);
+	float y = luaL_checknumber(L, 2);
 	coord2D_ts tmpPos;
 	tmpPos.x = x;
 	tmpPos.y = y;
@@ -107,8 +91,8 @@ LUAMOD_API int lua_SetSpeed(lua_State *L)
 		EWOL_ERROR("NULL obj...");
 		return 0;
 	}
-	float x = luaL_checkint(L, 1);
-	float y = luaL_checkint(L, 2);
+	float x = luaL_checknumber(L, 1);
+	float y = luaL_checknumber(L, 2);
 	coord2D_ts tmpPos;
 	tmpPos.x = x;
 	tmpPos.y = y;
@@ -117,6 +101,57 @@ LUAMOD_API int lua_SetSpeed(lua_State *L)
 	return 0;
 }
 
+LUAMOD_API int lua_GetPower(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	int32_t value = tmpObj->PowerGet();
+	lua_pushinteger(L, value );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_SetPower(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	int32_t value = luaL_checkint(L, 1);
+	tmpObj->PowerSet(value);
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_GetAngle(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = tmpObj->AngleGet();
+	lua_pushnumber(L, value );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_SetAngle(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = luaL_checknumber(L, 1);
+	tmpObj->AngleSet(value);
+	// return number of parameters
+	return 1;
+}
 
 LUAMOD_API int lua_SpriteLoad(lua_State *L)
 {
@@ -134,8 +169,6 @@ LUAMOD_API int lua_SpriteLoad(lua_State *L)
 	int32_t spriteID = tmpObj->LoadSprite( tmpScene->animated, filename, size);
 	if (spriteID < 0) {
 		EWOL_ERROR("Error to load the sprite : " << filename);
-	} else {
-		EWOL_INFO("Load the sprite : " << filename << " ==> " << spriteID);
 	}
 	lua_pushnumber(L, (lua_Number)spriteID );
 	// return number of parameters
@@ -144,6 +177,7 @@ LUAMOD_API int lua_SpriteLoad(lua_State *L)
 
 LUAMOD_API int lua_SpriteUnLoad(lua_State *L)
 {
+	// TODO : when supported ... 
 /*
 	//LUA : SpriteUnLoad(int);
 	if (NULL==tmpScene) {
@@ -182,36 +216,110 @@ LUAMOD_API int lua_SpriteDraw(lua_State *L)
 }
 
 
-
-LUAMOD_API int lua_lib_a_f_4(lua_State *L) {
-	type_t *t = (type_t *)luaL_checkudata(L, 1, metaname);  // check argument type
-	lua_pushnumber(L, (lua_Number)lib_a_f_4(t));
+LUAMOD_API int lua_ElementAdd(lua_State *L)
+{
+	//LUA : int ElementAdd("Bullet", group)
+	
+	if (NULL==tmpScene) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushinteger(L, 0 );
+		return 1;
+	}
+	etk::UString elementName = luaL_checkstring(L, 1);
+	int32_t group = luaL_checkint(L, 2);
+	// TODO : Remove this when find an other way do do it ...
+	ewol::GameElementLua *           ttmpObj = tmpObj;
+	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
+	ewol::SceneElement *             ttmpScene = tmpScene;
+	uint32_t elementId = tmpScene->AddElementNamed(group, elementName);
+	tmpObj = ttmpObj;
+	tmpSprite = ttmpSprite;
+	tmpEffects = ttmpEffects;
+	tmpScene = ttmpScene;
+	
+	if (0==elementId) {
+		EWOL_ERROR("Error creating element : " << elementName);
+	}
+	lua_pushinteger(L, elementId );
 	// return number of parameters
 	return 1;
 }
 
-LUAMOD_API int lua_new_t(lua_State *L) { // get Lua to allocate an initialize a type_t*
-	int a = luaL_checkint(L, 1);
-	int b = luaL_checkint(L, 2);
-	type_t *t = (type_t *)lua_newuserdata(L, sizeof(*t));
-	luaL_getmetatable(L, metaname);
-	lua_setmetatable(L, -2);
-	t->a = a;
-	t->b = b;
+LUAMOD_API int lua_ElementSetPos(lua_State *L)
+{
+	//LUA : ElementSetPos(newElementId, posX, posY);
+	if (NULL==tmpScene) {
+		EWOL_ERROR("ploppp ");
+		return 0;
+	}
+	int32_t idElement = luaL_checkint(L, 1);
+	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
+	if (NULL != tmpElem) {
+		coord2D_ts tmpPos;
+		tmpPos.x = luaL_checknumber(L, 2);
+		tmpPos.y = luaL_checknumber(L, 3);
+		tmpElem->PositionSet(tmpPos);
+	} else {
+		EWOL_ERROR("Get element unique ID : " << idElement);
+	}
+	// return number of parameters
+	return 0;
+}
+
+LUAMOD_API int lua_ElementSetPower(lua_State *L)
+{
+	//LUA : ElementSetPower(newElementId, 1);
+	
+	if (NULL==tmpScene) {
+		return 0;
+	}
+	int32_t idElement = luaL_checkint(L, 1);
+	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
+	if (NULL != tmpElem) {
+		int32_t power = luaL_checkint(L, 2);
+		tmpElem->PowerSet(power);
+	}
+	// return number of parameters
+	return 0;
+}
+
+LUAMOD_API int lua_ElementSetAngle(lua_State *L)
+{
+	//LUA : ElementSetAngle(newElementId, m_angle);
+	
+	if (NULL==tmpScene) {
+		return 0;
+	}
+	int32_t idElement = luaL_checkint(L, 1);
+	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
+	if (NULL != tmpElem) {
+		float angle = luaL_checknumber(L, 2);
+		tmpElem->AngleSet(angle);
+	}
 	// return number of parameters
 	return 1;
 }
 
 static const luaL_Reg functionsTable[] = {
-	{ "lib_a_f_4",      lua_lib_a_f_4 },
-	{ "new_t",          lua_new_t },
-	{ "GetPos",         lua_GetPos },
-	{ "SetPos",         lua_SetPos },
-	{ "GetSpeed",       lua_GetSpeed },
-	{ "SetSpeed",       lua_SetSpeed },
-	{ "SpriteLoad",     lua_SpriteLoad },
-	{ "SpriteUnLoad",   lua_SpriteUnLoad },
-	{ "SpriteDraw",     lua_SpriteDraw },
+	// local element section
+	{ "GetPos",          lua_GetPos },
+	{ "SetPos",          lua_SetPos },
+	{ "GetSpeed",        lua_GetSpeed },
+	{ "SetSpeed",        lua_SetSpeed },
+	{ "GetAngle",        lua_GetAngle },
+	{ "SetAngle",        lua_GetAngle },
+	{ "GetPower",        lua_GetPower },
+	{ "SetPower",        lua_GetPower },
+	// other element section
+	{ "ElementAdd",      lua_ElementAdd },
+	{ "ElementSetPos",   lua_ElementSetPos },
+	{ "ElementSetPower", lua_ElementSetPower },
+	{ "ElementSetAngle", lua_ElementSetAngle },
+	// Sprite section
+	{ "SpriteLoad",      lua_SpriteLoad },
+	{ "SpriteUnLoad",    lua_SpriteUnLoad },
+	{ "SpriteDraw",      lua_SpriteDraw },
 	{ NULL, NULL }
 };
 
@@ -220,10 +328,7 @@ static const luaL_Reg functionsTable[] = {
 //http://stackoverflow.com/questions/2521244/how-to-wrap-a-c-function-whose-parameters-are-pointer-to-structs-so-that-it-can
 LUAMOD_API int luaopen_myLib(lua_State *L) {
 	luaL_register(L, "GameElement", functionsTable);
-	luaL_newmetatable(L, metaname);
 	lua_pop(L, 1);
-	//luaL_newlib(L, functionsTable);
-	//lua_pop(L, 1);
 	return 1;
 }
 
@@ -307,6 +412,7 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 ewol::GameElementLua::~GameElementLua(void)
 {
 	tmpObj = this;
+	tmpScene = &m_sceneElement;
 	if (NULL != m_luaState) {
 		// call the init function
 		lua_getglobal(m_luaState, "UnInit");
@@ -319,11 +425,11 @@ ewol::GameElementLua::~GameElementLua(void)
 				EWOL_ERROR("LUA: error running function 'UnInit':" << lua_tostring(m_luaState, -1));
 			}
 		}
-		EWOL_DEBUG("RemoveLua Element");
 		lua_close(m_luaState);
 		m_luaState = NULL;
 	}
 	tmpObj = NULL;
+	tmpScene = NULL;
 }
 
 

@@ -61,7 +61,6 @@ namespace ewol {
 			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
-			bool                   GetElementProperty(gameElementGenericProperty_ts& element, uint32_t idElement);
 			uint32_t               GetNearestEnemy(coord2D_ts position, int32_t groupId);
 			bool                   HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
 			void                   Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
