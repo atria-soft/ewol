@@ -38,6 +38,101 @@ static etk::VectorType<ewol::Sprite*> * tmpSprite = NULL;
 static etk::VectorType<ewol::Sprite*> * tmpEffects = NULL;
 static ewol::SceneElement *             tmpScene = NULL;
 
+template <typename T> int index(lua_State* L);
+
+template <> int index<bool>(lua_State* L)
+{
+	bool* ptr = (bool*)lua_touserdata(L, 1);
+	lua_pushboolean(L, *ptr ? 1 : 0);
+	return 1;
+}
+
+template <> int index<float>(lua_State* L)
+{
+	float* ptr = (float*)lua_touserdata(L, 1);
+	lua_pushnumber(L, *ptr);
+	return 1;
+}
+
+template <typename T> int newindex(lua_State* L);
+
+template <> int newindex<bool>(lua_State* L)
+{
+	bool* ptr = (bool*)lua_touserdata(L, 1);
+	*ptr = lua_toboolean(L, 3)!=0;
+	return 0;
+}
+
+template <> int newindex<float>(lua_State* L)
+{
+	float* ptr = (float*)lua_touserdata(L, 1);
+	if (!lua_isnumber(L, 3)) {
+		return luaL_error(L, "new value must be a number");
+	}
+	*ptr = (float)lua_tonumber(L, 3);
+	return 1;
+}
+
+template <typename T> class LuaValue
+{
+	private:
+		lua_State* L;
+		etk::UString name;
+		T* ptr;
+	public:
+	LuaValue(lua_State* _L, etk::UString _name)
+		: L(_L), name(_name), ptr(0)
+	{
+		ptr = (T*)lua_newuserdata(L, sizeof(T));
+		*ptr = T();
+		lua_createtable(L, 0, 2);
+		lua_pushcfunction(L, index<T>);
+		lua_setfield(L, -2, "__index");
+		lua_pushcfunction(L, newindex<T>);
+		lua_setfield(L, -2, "__newindex");
+		lua_setmetatable(L, -2);
+		lua_setglobal(L, name.Utf8Data());
+	}
+	virtual ~LuaValue(void)
+	{
+		lua_pushnil(L);
+		lua_setglobal(L, name.Utf8Data());
+		ptr = 0;
+		L = 0;
+	}
+	LuaValue<T>& operator=(const T& value) { *ptr = value; return *this; }
+	operator T() { return *ptr; }
+};
+
+
+/*
+template <> int lua_Set<etkFloat_t>(lua_State* L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = luaL_checknumber(L, 1);
+	tmpObj->AngleSet(value);
+	// return number of parameters
+	return 1;
+}
+
+
+template <> int lua_Get<etkFloat_t>(lua_State* L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = tmpObj->AngleGet();
+	lua_pushnumber(L, value );
+	// return number of parameters
+	return 1;
+}
+*/
 
 LUAMOD_API int lua_GetPos(lua_State *L)
 {
@@ -149,6 +244,33 @@ LUAMOD_API int lua_SetAngle(lua_State *L)
 	}
 	etkFloat_t value = luaL_checknumber(L, 1);
 	tmpObj->AngleSet(value);
+	// return number of parameters
+	return 1;
+}
+
+
+LUAMOD_API int lua_GetSize(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = tmpObj->SizeGet();
+	lua_pushnumber(L, value );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_SetSize(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	etkFloat_t value = luaL_checknumber(L, 1);
+	tmpObj->SizeSet(value);
 	// return number of parameters
 	return 1;
 }
@@ -267,6 +389,30 @@ LUAMOD_API int lua_ElementSetPos(lua_State *L)
 	return 0;
 }
 
+LUAMOD_API int lua_ElementGetPos(lua_State *L)
+{
+	//LUA : ElementSetPos(newElementId, posX, posY);
+	if (NULL==tmpScene) {
+		EWOL_ERROR("ploppp ");
+		lua_pushnumber(L, (lua_Number)0 );
+		lua_pushnumber(L, (lua_Number)0 );
+		return 2;
+	}
+	int32_t idElement = luaL_checkint(L, 1);
+	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
+	if (NULL != tmpElem) {
+		coord2D_ts tmpPos = tmpElem->PositionGet();
+		lua_pushnumber(L, (lua_Number)tmpPos.x );
+		lua_pushnumber(L, (lua_Number)tmpPos.y );
+	} else {
+		lua_pushnumber(L, (lua_Number)0.0 );
+		lua_pushnumber(L, (lua_Number)0.0 );
+		EWOL_ERROR("Get element unique ID : " << idElement);
+	}
+	// return number of parameters
+	return 2;
+}
+
 LUAMOD_API int lua_ElementSetPower(lua_State *L)
 {
 	//LUA : ElementSetPower(newElementId, 1);
@@ -301,6 +447,100 @@ LUAMOD_API int lua_ElementSetAngle(lua_State *L)
 	return 1;
 }
 
+
+LUAMOD_API int lua_GetNearestEnemy(lua_State *L)
+{
+	//LUA : int GetNearestEnemy()
+	if (NULL==tmpScene || NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushinteger(L, 0 );
+		return 1;
+	}
+	uint32_t elementId = tmpScene->GetNearestEnemy(tmpObj->PositionGet(), tmpObj->GroupGet());
+	if (0==elementId) {
+		EWOL_ERROR("Error getting enemy ...");
+	}
+	lua_pushinteger(L, elementId );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_ElmentExisted(lua_State *L)
+{
+	//LUA : ElementSetPos(newElementId, posX, posY);
+	if (NULL==tmpScene) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushboolean(L, false );
+		return 1;
+	}
+	int32_t idElement = luaL_checkint(L, 1);
+	if (0 != idElement) {
+		ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
+		if (NULL != tmpElem) {
+			lua_pushboolean(L, true );
+		} else {
+			lua_pushboolean(L, false );
+		}
+	} else {
+		lua_pushboolean(L, false );
+	}
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_HaveImpact(lua_State *L)
+{
+	//LUA : ElementSetPos(newElementId, posX, posY);
+	if (NULL==tmpScene || NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushboolean(L, false );
+		return 1;
+	}
+
+	// TODO : Remove this when find an other way do do it ...
+	ewol::GameElementLua *           ttmpObj = tmpObj;
+	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
+	ewol::SceneElement *             ttmpScene = tmpScene;
+
+	bool result = tmpScene->HaveImpact(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), tmpObj->SizeGet());
+
+	tmpObj = ttmpObj;
+	tmpSprite = ttmpSprite;
+	tmpEffects = ttmpEffects;
+	tmpScene = ttmpScene;
+
+	lua_pushboolean(L, result );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_Explosion(lua_State *L)
+{
+	//LUA : ElementSetPos(newElementId, posX, posY);
+	if (NULL==tmpScene || NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		return 0;
+	}
+
+	// TODO : Remove this when find an other way do do it ...
+	ewol::GameElementLua *           ttmpObj = tmpObj;
+	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
+	ewol::SceneElement *             ttmpScene = tmpScene;
+
+	tmpScene->Explosion(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), 0.01, tmpObj->PowerGet());
+
+	tmpObj = ttmpObj;
+	tmpSprite = ttmpSprite;
+	tmpEffects = ttmpEffects;
+	tmpScene = ttmpScene;
+
+	// return number of parameters
+	return 0;
+}
+
+
 static const luaL_Reg functionsTable[] = {
 	// local element section
 	{ "GetPos",          lua_GetPos },
@@ -308,14 +548,21 @@ static const luaL_Reg functionsTable[] = {
 	{ "GetSpeed",        lua_GetSpeed },
 	{ "SetSpeed",        lua_SetSpeed },
 	{ "GetAngle",        lua_GetAngle },
-	{ "SetAngle",        lua_GetAngle },
+	{ "SetAngle",        lua_SetAngle },
+	{ "GetSize",         lua_GetSize },
+	{ "SetSize",         lua_SetSize },
 	{ "GetPower",        lua_GetPower },
-	{ "SetPower",        lua_GetPower },
+	{ "SetPower",        lua_SetPower },
 	// other element section
 	{ "ElementAdd",      lua_ElementAdd },
+	{ "ElementExisted",  lua_ElmentExisted },
 	{ "ElementSetPos",   lua_ElementSetPos },
+	{ "ElementGetPos",   lua_ElementGetPos },
 	{ "ElementSetPower", lua_ElementSetPower },
 	{ "ElementSetAngle", lua_ElementSetAngle },
+	{ "GetNearestEnemy", lua_GetNearestEnemy },
+	{ "HaveImpact",      lua_HaveImpact },
+	{ "Explosion",       lua_Explosion },
 	// Sprite section
 	{ "SpriteLoad",      lua_SpriteLoad },
 	{ "SpriteUnLoad",    lua_SpriteUnLoad },
@@ -341,6 +588,7 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 	ewol::GameElement(sceneElement, tmpName),
 	m_luaState(NULL)
 {
+	m_group = group;
 	tmpObj = this;
 	tmpScene = &m_sceneElement;
 	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
@@ -355,7 +603,12 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 	luaL_openlibs(m_luaState);
 	// open internal specific elements ...
 	luaopen_myLib(m_luaState);
-	
+/*
+	LuaValue<bool> *myBool = new LuaValue<bool>(m_luaState, "m_testBool");
+	LuaValue<float> *myValue = new LuaValue<float>(m_luaState, "m_testFloat");
+	*myBool = false;
+	*myValue = 18;
+*/
 	int32_t fileSize = fileElement.Size();
 	if (0==fileSize) {
 		EWOL_ERROR("This file is empty : " << fileElement);
@@ -404,6 +657,9 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 			return;
 		}
 	}
+/*
+	EWOL_INFO("retreave element : " << *myValue << " and : " << *myBool);
+*/
 	tmpObj = NULL;
 	tmpScene = NULL;
 }
@@ -494,14 +750,26 @@ void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, e
 
 bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
 {
-	//HaveImpact(group, type, posX, posY, size)
+	// todo set a flag that permit lua to direct control of this ...
+	
+	// check if it was in the same group
+	if (group == m_group) {
+		return false;
+	}
+	etkFloat_t quadDistance = quadDist(m_position, position);
+	etkFloat_t radiusElement = m_size * m_size;
+	if (radiusElement < quadDistance) {
+		//distance is greten than expected
+		return false;
+	}
+	//HaveImpact(group, type, posX, posY, size, quadDistance)
 	tmpObj = this;
-	bool retVal = false;
+	bool retVal = true;
 	if (NULL != m_luaState) {
 		// call the init function
-		lua_getglobal(m_luaState, "Process");
+		lua_getglobal(m_luaState, "HaveImpact");
 		if(!lua_isfunction(m_luaState,-1)) {
-			EWOL_WARNING("LUA: Not Find 'Process' function ");
+			EWOL_VERBOSE("LUA: Not Find 'HaveImpact' function ");
 			lua_pop(m_luaState,1);
 		} else {
 			lua_pushnumber(m_luaState, group);
@@ -509,8 +777,9 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts po
 			lua_pushnumber(m_luaState, position.x);
 			lua_pushnumber(m_luaState, position.y);
 			lua_pushnumber(m_luaState, size);
-			// do the call (5 arguments, 1 result)
-			if (lua_pcall(m_luaState, 5, 1, 0) != 0) {
+			lua_pushnumber(m_luaState, quadDistance);
+			// do the call (6 arguments, 1 result)
+			if (lua_pcall(m_luaState, 6, 1, 0) != 0) {
 				EWOL_ERROR("LUA: error running function 'Process':" << lua_tostring(m_luaState, -1));
 			} else {
 				// retrieve result
@@ -534,9 +803,9 @@ void ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts pos
 	tmpObj = this;
 	if (NULL != m_luaState) {
 		// call the init function
-		lua_getglobal(m_luaState, "Process");
+		lua_getglobal(m_luaState, "Explosion");
 		if(!lua_isfunction(m_luaState,-1)) {
-			EWOL_WARNING("LUA: Not Find 'Process' function ");
+			EWOL_VERBOSE("LUA: Not Find 'Explosion' function ");
 			lua_pop(m_luaState,1);
 		} else {
 			lua_pushnumber(m_luaState, group);
@@ -545,9 +814,11 @@ void ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts pos
 			lua_pushnumber(m_luaState, position.y);
 			lua_pushnumber(m_luaState, pxAtenuation);
 			lua_pushnumber(m_luaState, power);
-			// do the call (6 arguments, 0 result)
-			if (lua_pcall(m_luaState, 6, 0, 0) != 0) {
-				EWOL_ERROR("LUA: error running function 'Process':" << lua_tostring(m_luaState, -1));
+			etkFloat_t quadDistance = quadDist(m_position, position);
+			lua_pushnumber(m_luaState, quadDistance);
+			// do the call (7 arguments, 0 result)
+			if (lua_pcall(m_luaState, 7, 0, 0) != 0) {
+				EWOL_ERROR("LUA: error running function 'Explosion':" << lua_tostring(m_luaState, -1));
 			}
 		}
 	}

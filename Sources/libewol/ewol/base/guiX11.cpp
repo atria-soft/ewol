@@ -128,6 +128,7 @@ int32_t offsetMoveClickedDouble = 20000;
 #define PTHREAD_GUI_LOCK_MULTITHREAD
 #ifdef PTHREAD_GUI_LOCK_MULTITHREAD
 	static pthread_mutex_t      l_mutex;
+	#if 1
 	#define GUI_LOCK()          do { \
 	                            	/*EWOL_DEBUG("GUI-Lock");*/ \
 	                            	pthread_mutex_lock(&l_mutex); \
@@ -138,6 +139,12 @@ int32_t offsetMoveClickedDouble = 20000;
 	                            	pthread_mutex_unlock(&l_mutex); \
 	                            	/*EWOL_DEBUG("GUI-UnLock (done)");*/ \
 	                            }while(0)
+	#else
+	#define GUI_LOCK()          do { \
+	                            }while(0)
+	#define GUI_UNLOCK()        do { \
+	                            }while(0)
+	#endif
 #else
 	#define GUI_LOCK()          XLockDisplay(m_display)
 	#define GUI_UNLOCK()        XUnlockDisplay(m_display)
@@ -1300,19 +1307,19 @@ int main(int argc, char *argv[])
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
 		if (0==strncmp("-l0", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_NONE);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
 		} else if (0==strncmp("-l1", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_CRITICAL);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
 		} else if (0==strncmp("-l2", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_ERROR);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
 		} else if (0==strncmp("-l3", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_WARNING);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
 		} else if (0==strncmp("-l4", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_INFO);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
 		} else if (0==strncmp("-l5", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_DEBUG);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
 		} else if (0==strncmp("-l6", argv[i], 256)) {
-			etk::cout.SetLevel(etk::LOG_LEVEL_VERBOSE);
+			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
 		} else {
 			etk::UString* tmpString = new etk::UString(argv[i]);
 			if (NULL != tmpString) {

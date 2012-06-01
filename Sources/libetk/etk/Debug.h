@@ -36,12 +36,17 @@ void TOOLS_DisplayTime(void);
 #undef  __class__
 #define __class__				(NULL)
 
+extern etk::logLevel_te g_requestedLevel;
+void GeneralDebugSetLevel(etk::logLevel_te ccc);
+
 #define ETK_DBG_COMMON(libName, info, data)			do { \
-														etk::cout << etk::cstart << info; \
-														TOOLS_DisplayTime(); \
-														TOOLS_DisplayFuncName(__LINE__, __class__, __func__, libName); \
-														etk::cout << data; \
-														etk::cout <<etk::endl; \
+														if (info <= g_requestedLevel) { \
+															etk::cout << etk::cstart << info; \
+															TOOLS_DisplayTime(); \
+															TOOLS_DisplayFuncName(__LINE__, __class__, __func__, libName); \
+															etk::cout << data; \
+															etk::cout <<etk::endl; \
+														} \
 													}while(0)
 #define ETK_CRITICAL(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_CRITICAL, data)
 #define ETK_ERROR(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_ERROR, data)

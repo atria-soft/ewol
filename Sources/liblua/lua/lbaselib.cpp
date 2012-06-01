@@ -18,11 +18,14 @@
 
 #include "lauxlib.h"
 #include "lualib.h"
+#include <etk/Debug.h>
 
 
 static int luaB_print (lua_State *L) {
   int n = lua_gettop(L);  /* number of arguments */
   int i;
+  #if 0
+  // oudside etk :
   lua_getglobal(L, "tostring");
   for (i=1; i<=n; i++) {
     const char *s;
@@ -39,6 +42,27 @@ static int luaB_print (lua_State *L) {
     lua_pop(L, 1);  /* pop result */
   }
   luai_writeline();
+  #else
+	lua_getglobal(L, "tostring");
+	etk::cout << etk::cstart << etk::LOG_LEVEL_INFO;
+	TOOLS_DisplayTime();
+	TOOLS_DisplayFuncName(__LINE__, __class__, __func__, "luaFile  ");
+	for (i=1; i<=n; i++) {
+		const char *s;
+		size_t l;
+		lua_pushvalue(L, -1);  /* function to be called */
+		lua_pushvalue(L, i);   /* value to print */
+		lua_call(L, 1, 1);
+		s = lua_tolstring(L, -1, &l);  /* get result */
+		if (s == NULL) {
+			return luaL_error(L, LUA_QL("tostring") " must return a string to " LUA_QL("print"));
+		}
+		if (i>1) etk::cout << "\t";
+		etk::cout << s;
+		lua_pop(L, 1);  /* pop result */
+	}
+	etk::cout <<etk::endl;
+  #endif
   return 0;
 }
 

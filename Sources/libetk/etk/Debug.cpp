@@ -72,3 +72,8 @@ void TOOLS_DisplayTime(void)
 	etk::cout << tmpdata ;
 }
 
+
+etk::logLevel_te g_requestedLevel = etk::LOG_LEVEL_ERROR;
+void GeneralDebugSetLevel(etk::logLevel_te ccc) {
+	g_requestedLevel = ccc;
+}

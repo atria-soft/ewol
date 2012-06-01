@@ -114,6 +114,10 @@ uint32_t ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupI
 	uint32_t result = 0;
 	etkFloat_t lastQuadDistance = 9999999999999999.0;
 	int32_t jjj=0;
+	if (groupId <0 || groupId >= MAX_GROUP_NUMBER) {
+		EWOL_ERROR("incorect group number : " << groupId);
+		return 0;
+	}
 	while (groupEnemy[groupId][jjj] != -1) {
 		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[groupId][jjj]].Size(); iii++) {
 			if (NULL != listAnimatedElements[groupEnemy[groupId][jjj]][iii]) {

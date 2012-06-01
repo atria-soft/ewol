@@ -83,7 +83,8 @@ namespace ewol {
 			int32_t     PowerGet(void)                                 { return m_power; };
 			void        PowerSet(int32_t state)                        { m_power = state; };
 			
-			int32_t     GetType(void)                                  { return m_type; };
+			int32_t     GetType(void)                                  { return m_type; }; // DEPRECATED ...
+			int32_t     TypeGet(void)                                  { return m_type; };
 			int32_t     GroupGet(void)                                 { return m_group; };
 			void        GroupSet(int32_t state)                        { m_group = state; };
 			

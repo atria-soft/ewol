@@ -6,7 +6,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := lua
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES := 
+LOCAL_STATIC_LIBRARIES := etk
 
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH) -I$(LOCAL_PATH)/lua/
 

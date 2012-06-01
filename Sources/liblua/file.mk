@@ -1,35 +1,35 @@
 
 
-FILE_LIST = lua/lapi.c \
-            lua/lauxlib.c \
-            lua/lbaselib.c \
-            lua/lbitlib.c \
-            lua/lcode.c \
-            lua/lcorolib.c \
-            lua/lctype.c \
-            lua/ldblib.c \
-            lua/ldebug.c \
-            lua/ldo.c \
-            lua/ldump.c \
-            lua/lfunc.c \
-            lua/lgc.c \
-            lua/linit.c \
-            lua/liolib.c \
-            lua/llex.c \
-            lua/lmathlib.c \
-            lua/lmem.c \
-            lua/loadlib.c \
-            lua/lobject.c \
-            lua/lopcodes.c \
-            lua/loslib.c \
-            lua/lparser.c \
-            lua/lstate.c \
-            lua/lstring.c \
-            lua/lstrlib.c \
-            lua/ltable.c \
-            lua/ltablib.c \
-            lua/ltm.c \
-            lua/lundump.c \
-            lua/lvm.c \
-            lua/lzio.c
+FILE_LIST = lua/lapi.cpp \
+            lua/lauxlib.cpp \
+            lua/lbaselib.cpp \
+            lua/lbitlib.cpp \
+            lua/lcode.cpp \
+            lua/lcorolib.cpp \
+            lua/lctype.cpp \
+            lua/ldblib.cpp \
+            lua/ldebug.cpp \
+            lua/ldo.cpp \
+            lua/ldump.cpp \
+            lua/lfunc.cpp \
+            lua/lgc.cpp \
+            lua/linit.cpp \
+            lua/liolib.cpp \
+            lua/llex.cpp \
+            lua/lmathlib.cpp \
+            lua/lmem.cpp \
+            lua/loadlib.cpp \
+            lua/lobject.cpp \
+            lua/lopcodes.cpp \
+            lua/loslib.cpp \
+            lua/lparser.cpp \
+            lua/lstate.cpp \
+            lua/lstring.cpp \
+            lua/lstrlib.cpp \
+            lua/ltable.cpp \
+            lua/ltablib.cpp \
+            lua/ltm.cpp \
+            lua/lundump.cpp \
+            lua/lvm.cpp \
+            lua/lzio.cpp
 
