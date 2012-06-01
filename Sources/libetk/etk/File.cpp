@@ -49,6 +49,29 @@ etk::UString baseApplName = "ewolNoName";
 	etk::UString baseFolderCache    = "~/.tmp/cache/";      // Temporary data (can be removed the next time)
 #endif
 
+
+#ifdef __PLATFORM__Android
+	static struct zip * s_APKArchive = NULL;
+	static int32_t      s_APKnbFiles = 0;
+	static void loadAPK(etk::UString& apkPath)
+	{
+		TK_DEBUG("Loading APK \"" << apkPath << "\"");
+		s_APKArchive = zip_open(apkPath.Utf8Data(), 0, NULL);
+		TK_ASSERT(s_APKArchive != NULL, "Error loading APK ...  \"" << apkPath << "\"");
+		//Just for debug, print APK contents
+		s_APKnbFiles = zip_get_num_files(s_APKArchive);
+		TK_INFO("List all files in the APK : " << s_APKnbFiles << " files");
+		for (int iii=0; iii<s_APKnbFiles; iii++) {
+			const char* name = zip_get_name(s_APKArchive, iii, 0);
+			if (name == NULL) {
+				TK_ERROR("Error reading zip file name at index " << iii << " : \"" << zip_strerror(s_APKArchive) << "\"");
+				return;
+			}
+			TK_INFO("    File " << iii << " : \"" << name << "\"");
+		}
+	}
+#endif
+
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
@@ -130,30 +153,6 @@ etk::UString etk::GetUserHomeFolder(void)
 {
 	return baseFolderHome;
 }
-
-#ifdef __PLATFORM__Android
-	static struct zip * s_APKArchive = NULL;
-	static int32_t      s_APKnbFiles = 0;
-	static void loadAPK(etk::UString& apkPath)
-	{
-		TK_DEBUG("Loading APK \"" << apkPath << "\"");
-		s_APKArchive = zip_open(apkPath.Utf8Data(), 0, NULL);
-		TK_ASSERT(s_APKArchive != NULL, "Error loading APK ...  \"" << apkPath << "\"");
-		//Just for debug, print APK contents
-		s_APKnbFiles = zip_get_num_files(s_APKArchive);
-		TK_INFO("List all files in the APK : " << s_APKnbFiles << " files");
-		for (int iii=0; iii<s_APKnbFiles; iii++) {
-			const char* name = zip_get_name(s_APKArchive, iii, 0);
-			if (name == NULL) {
-				TK_ERROR("Error reading zip file name at index " << iii << " : \"" << zip_strerror(s_APKArchive) << "\"");
-				return;
-			}
-			TK_INFO("    File " << iii << " : \"" << name << "\"");
-		}
-	}
-#endif
-
-
 
 #undef __class__
 #define __class__	"File"
