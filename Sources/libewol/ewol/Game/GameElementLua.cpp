@@ -738,7 +738,7 @@ void ewol::GameElementLua::UnInit(void)
 }
 
 
-bool ewol::GameElementLua::Process(int64_t time, int32_t deltaTime, ewol::SceneElement & sceneElement)
+bool ewol::GameElementLua::Process(int64_t time, int32_t deltaTime)
 {
 	tmpObj = this;
 	tmpScene = &m_sceneElement;

@@ -104,7 +104,7 @@ namespace ewol {
 			 * @return true if the object must be remove
 			 * @return false if the object must be keep
 			 */
-			virtual bool Process(int64_t time, int32_t deltaTime, ewol::SceneElement & sceneElement) { return false; };
+			virtual bool Process(int64_t time, int32_t deltaTime) { return false; };
 			
 			/**
 			 * @brief Requuest the draw of the current element, it will be done on the current Sprite list
