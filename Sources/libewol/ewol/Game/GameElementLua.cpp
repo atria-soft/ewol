@@ -222,6 +222,33 @@ LUAMOD_API int lua_SetPower(lua_State *L)
 	return 1;
 }
 
+
+LUAMOD_API int lua_GetGroup(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	int32_t value = tmpObj->GroupGet();
+	lua_pushinteger(L, value );
+	// return number of parameters
+	return 1;
+}
+
+LUAMOD_API int lua_SetGroup(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushnumber(L, 0 );
+		return 1;
+	}
+	int32_t value = luaL_checkint(L, 1);
+	tmpObj->GroupSet(value);
+	// return number of parameters
+	return 1;
+}
+
 LUAMOD_API int lua_GetAngle(lua_State *L)
 {
 	if (NULL==tmpObj) {
@@ -581,6 +608,8 @@ static const luaL_Reg functionsTable[] = {
 	{ "SetSize",         lua_SetSize },
 	{ "GetPower",        lua_GetPower },
 	{ "SetPower",        lua_SetPower },
+	{ "GetGroup",        lua_GetGroup },
+	{ "SetGroup",        lua_SetGroup },
 	{ "GetCanBeCibled",  lua_GetCanBeCibled },
 	{ "SetCanBeCibled",  lua_SetCanBeCibled },
 	// other element section
@@ -613,12 +642,13 @@ LUAMOD_API int luaopen_myLib(lua_State *L) {
  ** Lua abstraction (END)
  ******************************************************************************* */
 
+#undef __class__
+#define __class__	"GameElementLua"
 
-ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::UString& tmpName, int32_t group) : 
+ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::UString& tmpName) : 
 	ewol::GameElement(sceneElement, tmpName),
 	m_luaState(NULL)
 {
-	m_group = group;
 	tmpObj = this;
 	tmpScene = &m_sceneElement;
 	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
@@ -800,15 +830,7 @@ void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, e
 bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
 {
 	// todo set a flag that permit lua to direct control of this ...
-	
-	// check if it was in the same group
-	if (group == m_group) {
-		return false;
-	}
-	etkFloat_t quadDistance = quadDist(m_position, position);
-	etkFloat_t radiusElement = m_size * m_size;
-	if (radiusElement < quadDistance) {
-		//distance is greten than expected
+	if (false == ewol::GameElement::HaveImpact(group, type, position, size) ) {
 		return false;
 	}
 	//HaveImpact(group, type, posX, posY, size, quadDistance)
@@ -826,6 +848,7 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts po
 			lua_pushnumber(m_luaState, position.x);
 			lua_pushnumber(m_luaState, position.y);
 			lua_pushnumber(m_luaState, size);
+			etkFloat_t quadDistance = quadDist(m_position, position);
 			lua_pushnumber(m_luaState, quadDistance);
 			// do the call (6 arguments, 1 result)
 			if (lua_pcall(m_luaState, 6, 1, 0) != 0) {
@@ -847,9 +870,10 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts po
 }
 
 
-void ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power)
+bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power)
 {
 	tmpObj = this;
+	bool retVal = false;
 	if (NULL != m_luaState) {
 		// call the init function
 		lua_getglobal(m_luaState, "Explosion");
@@ -865,13 +889,23 @@ void ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts pos
 			lua_pushnumber(m_luaState, power);
 			etkFloat_t quadDistance = quadDist(m_position, position);
 			lua_pushnumber(m_luaState, quadDistance);
-			// do the call (7 arguments, 0 result)
-			if (lua_pcall(m_luaState, 7, 0, 0) != 0) {
+			// do the call (7 arguments, 1 result)
+			if (lua_pcall(m_luaState, 7, 1, 0) != 0) {
 				EWOL_ERROR("LUA: error running function 'Explosion':" << lua_tostring(m_luaState, -1));
+			} else {
+				// retrieve result
+				if (!lua_isboolean(m_luaState, -1)) {
+					EWOL_ERROR("LUA: function 'Process' must return a boolean");
+				} else {
+					retVal = lua_toboolean(m_luaState, -1);
+					lua_pop(m_luaState, 1);
+				}
 			}
+			
 		}
 	}
 	tmpObj = NULL;
+	return retVal;
 }
 
 void ewol::GameElementLua::Message(etk::UString control, etk::UString message)

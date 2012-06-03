@@ -148,7 +148,7 @@ void ewol::Scene::OnDraw(void)
 }
 
 
-#define CYCLIC_CALL_PERIODE_US     (10000)
+
 /**
  * @brief Periodic call of this widget
  * @param localTime curent system time

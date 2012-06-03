@@ -26,6 +26,9 @@
 #include <ewol/Game/GameElement.h>
 
 
+#undef __class__
+#define __class__	"GameElement"
+
 /**
  * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
  * @param ---
@@ -46,6 +49,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_gravity = 0.0;
 	m_fileNameConfig = tmpName;
 	m_canBeCibled = false;
+	m_life = 0;
 }
 
 
@@ -99,3 +103,20 @@ void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &elemen
 	element.size.y = m_size;
 	element.angle = m_angle;
 }
+
+
+bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
+{
+	// check if it was in the same group
+	if (group == m_group) {
+		return false;
+	}
+	etkFloat_t quadDistance = quadDist(m_position, position);
+	etkFloat_t radiusElement = m_size * m_size;
+	if (radiusElement < quadDistance) {
+		//distance is greten than expected
+		return false;
+	}
+	return true;
+}
+

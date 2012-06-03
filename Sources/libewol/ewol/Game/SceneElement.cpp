@@ -156,8 +156,8 @@ uint32_t ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newEle
 		return 0;
 	}
 	// for statistic
-	newElement->GroupSet(group);
 	newElement->Init();
+	newElement->GroupSet(group);
 	for (int32_t iii=0; iii<listAnimatedElements[group].Size(); iii++) {
 		if (NULL == listAnimatedElements[group][iii]) {
 			// find an empty slot ...
@@ -196,6 +196,7 @@ uint32_t ewol::SceneElement::AddElementNamed(int32_t group, etk::UString &elemen
 			// check his name : 
 			if (listCreatorElement[iii]->name == elementName) {
 				// create a new element : 
+				allocatedElements ++;
 				newElement = (*listCreatorElement[iii]->loadElement)(*this, elementName, listCreatorElement[iii]->userString);
 				// we find a previous element loaded ==> retreve it
 				return AddElement(group, newElement);
@@ -256,10 +257,12 @@ uint32_t ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupI
 bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
 {
 	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
-		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
-			if (NULL != listAnimatedElements[jjj][iii]) {
-				if (true == listAnimatedElements[jjj][iii]->HaveImpact(group, type, position, size )) {
-					return true;
+		if (group != jjj) {
+			for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
+				if (NULL != listAnimatedElements[jjj][iii]) {
+					if (true == listAnimatedElements[jjj][iii]->HaveImpact(group, type, position, size )) {
+						return true;
+					}
 				}
 			}
 		}
@@ -272,7 +275,9 @@ void ewol::SceneElement::Explosion(int32_t group, int32_t type, coord2D_ts posit
 	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
 			if (NULL != listAnimatedElements[jjj][iii]) {
-				listAnimatedElements[jjj][iii]->Explosion(group, type, position, pxAtenuation, power);
+				if (true == listAnimatedElements[jjj][iii]->Explosion(group, type, position, pxAtenuation, power) ) {
+					RmElement(jjj, iii);
+				}
 			}
 		}
 	}

@@ -40,7 +40,7 @@ namespace ewol {
 		private:
 			lua_State *m_luaState;  // internal Lua state
 		public:
-			GameElementLua(ewol::SceneElement & sceneElement, etk::UString& tmpName, int32_t group = 0);
+			GameElementLua(ewol::SceneElement & sceneElement, etk::UString& tmpName);
 			~GameElementLua(void);
 			
 			virtual void Init(void);
@@ -48,7 +48,7 @@ namespace ewol {
 			virtual bool Process(int64_t time, int32_t deltaTime);
 			virtual void Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, etk::VectorType<ewol::Sprite*> & listOfEffects);
 			virtual bool HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
-			virtual void Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
+			virtual bool Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
 			virtual void Message(etk::UString control, etk::UString message);
 	};
 	void RegisterLuaElementInFolder(ewol::SceneElement & sceneElement, etk::UString folder);

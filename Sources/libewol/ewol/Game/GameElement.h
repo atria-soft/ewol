@@ -31,6 +31,8 @@
 #include <ewol/Widget.h>
 #include <ewol/Game/SceneElement.h>
 
+#define CYCLIC_CALL_PERIODE_US     (10000)
+
 namespace ewol {
 	
 	class GameElement
@@ -50,6 +52,7 @@ namespace ewol {
 			etkFloat_t   m_angle;
 			etkFloat_t   m_gravity;
 			bool         m_canBeCibled;
+			etkFloat_t   m_life;
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -91,8 +94,8 @@ namespace ewol {
 			
 			int32_t     GetType(void)                                  { return m_type; }; // DEPRECATED ...
 			int32_t     TypeGet(void)                                  { return m_type; };
-			int32_t     GroupGet(void)                                 { return m_group; };
-			void        GroupSet(int32_t state)                        { m_group = state; };
+			uint16_t    GroupGet(void)                                 { return m_group; };
+			void        GroupSet(uint16_t state)                       { m_group = state; };
 			
 			void GetElementProperty(gameElementGenericProperty_ts &element);
 			/**
@@ -119,8 +122,8 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void RemoveElement(int32_t idOfElement) { };
-			virtual bool HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size) {return false;};
-			virtual void Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power) { } ;
+			virtual bool HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
+			virtual bool Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power) { return false; } ;
 			/**
 			 * @brief Requuest the draw of the current element, it will be done on the current Sprite list
 			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
