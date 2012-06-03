@@ -44,6 +44,8 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_size = 64.0;
 	m_angle = 0.0;
 	m_gravity = 0.0;
+	m_fileNameConfig = tmpName;
+	m_canBeCibled = false;
 }
 
 

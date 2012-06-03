@@ -267,13 +267,44 @@ LUAMOD_API int lua_SetSize(lua_State *L)
 	if (NULL==tmpObj) {
 		EWOL_ERROR("NULL obj...");
 		lua_pushnumber(L, 0 );
-		return 1;
+		return 0;
 	}
 	etkFloat_t value = luaL_checknumber(L, 1);
 	tmpObj->SizeSet(value);
 	// return number of parameters
+	return 0;
+}
+
+
+LUAMOD_API int lua_GetCanBeCibled(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		lua_pushboolean(L, false );
+		return 1;
+	}
+	etkFloat_t value = tmpObj->CanBeCibledGet();
+	lua_pushboolean(L, value );
+	// return number of parameters
 	return 1;
 }
+
+LUAMOD_API int lua_SetCanBeCibled(lua_State *L)
+{
+	if (NULL==tmpObj) {
+		EWOL_ERROR("NULL obj...");
+		return 0;
+	}
+	bool value = false;
+	if ( lua_isboolean( L, 1 ) ) {
+		value = lua_toboolean( L, 1 );
+	}
+	tmpObj->CanBeCibledSet(value);
+	// return number of parameters
+	return 0;
+}
+
+
 
 LUAMOD_API int lua_SpriteLoad(lua_State *L)
 {
@@ -457,9 +488,6 @@ LUAMOD_API int lua_GetNearestEnemy(lua_State *L)
 		return 1;
 	}
 	uint32_t elementId = tmpScene->GetNearestEnemy(tmpObj->PositionGet(), tmpObj->GroupGet());
-	if (0==elementId) {
-		EWOL_ERROR("Error getting enemy ...");
-	}
 	lua_pushinteger(L, elementId );
 	// return number of parameters
 	return 1;
@@ -553,6 +581,8 @@ static const luaL_Reg functionsTable[] = {
 	{ "SetSize",         lua_SetSize },
 	{ "GetPower",        lua_GetPower },
 	{ "SetPower",        lua_SetPower },
+	{ "GetCanBeCibled",  lua_GetCanBeCibled },
+	{ "SetCanBeCibled",  lua_SetCanBeCibled },
 	// other element section
 	{ "ElementAdd",      lua_ElementAdd },
 	{ "ElementExisted",  lua_ElmentExisted },
@@ -644,28 +674,49 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 		EWOL_ERROR("LUA: " << lua_tostring(m_luaState, -1));
 		return;
 	}
-	
-	// call the init function
-	lua_getglobal(m_luaState, "Init");
-	if(!lua_isfunction(m_luaState,-1)) {
-		EWOL_WARNING("LUA: Not Find Init function ");
-		lua_pop(m_luaState,1);
-	} else {
-		// do the call (0 arguments, 0 result)
-		if (lua_pcall(m_luaState, 0, 0, 0) != 0) {
-			EWOL_ERROR("LUA: error running function 'Init':" << lua_tostring(m_luaState, -1));
-			return;
-		}
-	}
 /*
 	EWOL_INFO("retreave element : " << *myValue << " and : " << *myBool);
 */
 	tmpObj = NULL;
 	tmpScene = NULL;
+	Init();
+	
 }
 
 
 ewol::GameElementLua::~GameElementLua(void)
+{
+	UnInit();
+	if (NULL != m_luaState) {
+		lua_close(m_luaState);
+		m_luaState = NULL;
+	}
+}
+
+void ewol::GameElementLua::Init(void)
+{
+	tmpObj = this;
+	tmpScene = &m_sceneElement;
+	if (NULL != m_luaState) {
+		// call the init function
+		lua_getglobal(m_luaState, "Init");
+		if(!lua_isfunction(m_luaState,-1)) {
+			EWOL_WARNING("LUA: Not Find Init function ");
+			lua_pop(m_luaState,1);
+		} else {
+			// do the call (0 arguments, 0 result)
+			if (lua_pcall(m_luaState, 0, 0, 0) != 0) {
+				EWOL_ERROR("LUA: error running function 'Init':" << lua_tostring(m_luaState, -1));
+				return;
+			}
+		}
+	}
+	tmpObj = NULL;
+	tmpScene = NULL;
+}
+
+
+void ewol::GameElementLua::UnInit(void)
 {
 	tmpObj = this;
 	tmpScene = &m_sceneElement;
@@ -681,8 +732,6 @@ ewol::GameElementLua::~GameElementLua(void)
 				EWOL_ERROR("LUA: error running function 'UnInit':" << lua_tostring(m_luaState, -1));
 			}
 		}
-		lua_close(m_luaState);
-		m_luaState = NULL;
 	}
 	tmpObj = NULL;
 	tmpScene = NULL;
@@ -845,4 +894,35 @@ void ewol::GameElementLua::Message(etk::UString control, etk::UString message)
 	tmpObj = NULL;
 }
 
+static ewol::GameElement* LoadSceneElement_lua(ewol::SceneElement & sceneElement, etk::UString& elementName, etk::UString& userString)
+{
+	// try to find the file :
+	etk::UString tmpName = userString;
+	tmpName += elementName;
+	tmpName += ".lua";
+	// added a new element :
+	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
+	if (false == fileElement.Exist()) {
+		EWOL_ERROR("Can not find Game element : " << elementName << " ==> " << tmpName);
+		return NULL;
+	}
+	EWOL_VERBOSE("We find Game element : " << elementName << " ==> " << tmpName);
+	ewol::GameElementLua * tmpElement = new ewol::GameElementLua(sceneElement, tmpName);
+	if (NULL == tmpElement) {
+		EWOL_ERROR("Can not Allocat : " << elementName);
+		return NULL;
+	}
+	return tmpElement;
+}
 
+void ewol::RegisterLuaElementInFolder(ewol::SceneElement & sceneElement, etk::UString folder)
+{
+	// TODO : parsing the folder ...
+	sceneElement.RegisterElementType("??????", &LoadSceneElement_lua, folder);
+}
+
+
+void ewol::RegisterLuaElementSpecify(ewol::SceneElement & sceneElement, etk::UString folder, etk::UString name)
+{
+	sceneElement.RegisterElementType(name, &LoadSceneElement_lua, folder);
+}

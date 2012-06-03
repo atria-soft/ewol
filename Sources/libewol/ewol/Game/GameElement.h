@@ -49,6 +49,7 @@ namespace ewol {
 			etkFloat_t   m_size;
 			etkFloat_t   m_angle;
 			etkFloat_t   m_gravity;
+			bool         m_canBeCibled;
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -62,6 +63,9 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual ~GameElement(void) { };
+			
+			virtual void Init(void) { };
+			virtual void UnInit(void) { };
 			
 			uint16_t    GetUniqueId(void)                              { return m_uniqueId; };
 			
@@ -82,6 +86,8 @@ namespace ewol {
 			void        GravitySet(etkFloat_t state)                   { m_gravity = state; };
 			int32_t     PowerGet(void)                                 { return m_power; };
 			void        PowerSet(int32_t state)                        { m_power = state; };
+			bool        CanBeCibledGet(void)                           { return m_canBeCibled; };
+			void        CanBeCibledSet(bool state)                     { m_canBeCibled = state; };
 			
 			int32_t     GetType(void)                                  { return m_type; }; // DEPRECATED ...
 			int32_t     TypeGet(void)                                  { return m_type; };

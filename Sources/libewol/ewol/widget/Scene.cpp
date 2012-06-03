@@ -180,8 +180,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
 					// check if the element request an auto Kill ...
 					if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US, m_sceneElement) ) {
-						delete(m_sceneElement.listAnimatedElements[jjj][iii]);
-						m_sceneElement.listAnimatedElements[jjj][iii] = NULL;
+						m_sceneElement.RmElement(jjj, iii);
 					}
 				}
 			}

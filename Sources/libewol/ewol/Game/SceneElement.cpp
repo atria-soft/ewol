@@ -42,7 +42,108 @@ ewol::SceneElement::SceneElement(void)
 			groupEnemy[iii][jjj] = -1;
 		}
 	}
-};
+	retreviveElement = 0;
+	allocatedElements = 0;
+}
+
+ewol::SceneElement::~SceneElement(void)
+{
+	EWOL_DEBUG("Remove sceane, allocated element : " << allocatedElements << " and retreive : " << retreviveElement);
+	// clean all element allocated :
+	for (int32_t jjj=0; jjj<listGarbage.Size(); jjj++) {
+		if (NULL != listGarbage[jjj]) {
+			delete(listGarbage[jjj]);
+			listGarbage[jjj] = NULL;
+		}
+	}
+	listGarbage.Clear();
+	for (int32_t jjj=0; jjj<listCreatorElement.Size(); jjj++) {
+		if (NULL != listCreatorElement[jjj]) {
+			delete(listCreatorElement[jjj]);
+			listCreatorElement[jjj] = NULL;
+		}
+	}
+	listCreatorElement.Clear();
+	for (int32_t iii=0; iii<MAX_GROUP_NUMBER; iii++) {
+		for (int32_t jjj=0; jjj<listAnimatedElements[iii].Size(); jjj++) {
+			if (NULL != listAnimatedElements[iii][jjj]) {
+				delete(listAnimatedElements[iii][jjj]);
+				listAnimatedElements[iii][jjj] = NULL;
+			}
+		}
+		listAnimatedElements[iii].Clear();
+	}
+	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		for (int32_t jjj=0; jjj<backgroundElements[iii].Size(); jjj++) {
+			if (NULL != backgroundElements[iii][jjj]) {
+				delete(backgroundElements[iii][jjj]);
+				backgroundElements[iii][jjj] = NULL;
+			}
+		}
+		backgroundElements[iii].Clear();
+	}
+	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		for (int32_t jjj=0; jjj<animated[iii].Size(); jjj++) {
+			if (NULL != animated[iii][jjj]) {
+				delete(animated[iii][jjj]);
+				animated[iii][jjj] = NULL;
+			}
+		}
+		animated[iii].Clear();
+	}
+	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		for (int32_t jjj=0; jjj<effects[iii].Size(); jjj++) {
+			if (NULL != effects[iii][jjj]) {
+				delete(effects[iii][jjj]);
+				effects[iii][jjj] = NULL;
+			}
+		}
+		effects[iii].Clear();
+	}
+}
+
+void ewol::SceneElement::RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString)
+{
+	// TODO : Check if the element already existed
+	ewol::listRegisteElement * tmpElement = new listRegisteElement();
+	if (NULL == tmpElement) {
+		EWOL_ERROR("Memory error in allocation registered element");
+		return;
+	}
+	tmpElement->name = name;
+	tmpElement->userString = userString;
+	tmpElement->loadElement = loadElement;
+	listCreatorElement.PushBack(tmpElement);
+}
+
+
+void ewol::SceneElement::RmElement(int32_t group, int32_t idElement)
+{
+	if (group < 0 || group >= MAX_GROUP_NUMBER) {
+		EWOL_ERROR("group is wrong " << group << "!=[0," << MAX_GROUP_NUMBER << "]==> not rm at the system ...");
+		return;
+	}
+	if (idElement < 0 || idElement >= listAnimatedElements[group].Size()) {
+		EWOL_ERROR("idElement is wrong " << idElement << "!=[0," << listAnimatedElements[group].Size() << "]==> not rm at the system ...");
+		return;
+	}
+	if (NULL == listAnimatedElements[group][idElement]) {
+		return;
+	}
+	// try to find an empty slot : 
+	for (int32_t iii=0; iii<listGarbage.Size(); iii++) {
+		if (NULL == listGarbage[iii]) {
+			// find an empty slot ...
+			listGarbage[iii] = listAnimatedElements[group][idElement];
+			listAnimatedElements[group][idElement] = NULL;
+			return;
+		}
+	}
+	listAnimatedElements[group][idElement]->UnInit();
+	listGarbage.PushBack(listAnimatedElements[group][idElement]);
+	listAnimatedElements[group][idElement] = NULL;
+	return;
+}
 
 uint32_t ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newElement)
 {
@@ -54,6 +155,9 @@ uint32_t ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newEle
 		EWOL_ERROR("group is wrong " << group << "!=[0," << MAX_GROUP_NUMBER << "]==> not added at the system ...");
 		return 0;
 	}
+	// for statistic
+	newElement->GroupSet(group);
+	newElement->Init();
 	for (int32_t iii=0; iii<listAnimatedElements[group].Size(); iii++) {
 		if (NULL == listAnimatedElements[group][iii]) {
 			// find an empty slot ...
@@ -72,22 +176,34 @@ uint32_t ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newEle
 
 uint32_t ewol::SceneElement::AddElementNamed(int32_t group, etk::UString &elementName)
 {
-	// try to find the file :
-	etk::UString tmpName = "elementGame/";
-	tmpName += elementName;
-	tmpName += ".lua";
-	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
-	if (false == fileElement.Exist()) {
-		EWOL_ERROR("Can not find Game element : " << elementName << " ==> " << tmpName);
-		return 0;
+	// try to fined it in the garbase :
+	for (int32_t iii=0; iii<listGarbage.Size(); iii++) {
+		if (NULL != listGarbage[iii]) {
+			// check his name : 
+			if (true == listGarbage[iii]->HasName(elementName)) {
+				// we find a previous element loaded ==> retreve it
+				int32_t idElementBackAdded = AddElement(group, listGarbage[iii]);
+				listGarbage[iii] = NULL;
+				retreviveElement++;
+				return idElementBackAdded;
+			}
+		}
 	}
-	EWOL_VERBOSE("We find Game element : " << elementName << " ==> " << tmpName);
-	ewol::GameElementLua * tmpElement = new ewol::GameElementLua(*this, tmpName, group);
-	if (NULL == tmpElement) {
-		EWOL_ERROR("Can not Allocat : " << elementName);
-		return 0;
+	ewol::GameElement* newElement=NULL;
+	// find in registered element
+	for (int32_t iii=0; iii<listCreatorElement.Size(); iii++) {
+		if (NULL != listCreatorElement[iii]) {
+			// check his name : 
+			if (listCreatorElement[iii]->name == elementName) {
+				// create a new element : 
+				newElement = (*listCreatorElement[iii]->loadElement)(*this, elementName, listCreatorElement[iii]->userString);
+				// we find a previous element loaded ==> retreve it
+				return AddElement(group, newElement);
+			}
+		}
 	}
-	return AddElement(group, tmpElement);
+	allocatedElements++;
+	return AddElement(group, newElement);
 }
 
 
@@ -121,11 +237,13 @@ uint32_t ewol::SceneElement::GetNearestEnemy(coord2D_ts position, int32_t groupI
 	while (groupEnemy[groupId][jjj] != -1) {
 		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[groupId][jjj]].Size(); iii++) {
 			if (NULL != listAnimatedElements[groupEnemy[groupId][jjj]][iii]) {
-				coord2D_ts tmpPos = listAnimatedElements[groupEnemy[groupId][jjj]][iii]->PositionGet();
-				etkFloat_t distance = quadDist(position, tmpPos);
-				if (distance <= lastQuadDistance) {
-					lastQuadDistance = distance;
-					result = createUniqueId(listAnimatedElements[groupEnemy[groupId][jjj]][iii]->GetUniqueId(), iii);
+				if (true == listAnimatedElements[groupEnemy[groupId][jjj]][iii]->CanBeCibledGet()) {
+					coord2D_ts tmpPos = listAnimatedElements[groupEnemy[groupId][jjj]][iii]->PositionGet();
+					etkFloat_t distance = quadDist(position, tmpPos);
+					if (distance <= lastQuadDistance) {
+						lastQuadDistance = distance;
+						result = createUniqueId(listAnimatedElements[groupEnemy[groupId][jjj]][iii]->GetUniqueId(), iii);
+					}
 				}
 			}
 		}
