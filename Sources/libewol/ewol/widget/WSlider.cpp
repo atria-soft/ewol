@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/Layer.cpp
- * @brief ewol layer widget system (Sources)
+ * @file ewol/widget/WSlider.cpp
+ * @brief ewol widget slider widget system (Sources)
  * @author Edouard DUPIN
- * @date 11/04/2012
+ * @date 05/06/2012
  * @par Project
  * ewol
  *
@@ -23,28 +23,31 @@
  */
 
 
-#include <ewol/widget/Layer.h>
+#include <ewol/widget/WSlider.h>
 #include <ewol/WidgetManager.h>
 
 
 #undef __class__
-#define __class__	"Layer"
+#define __class__	"WSlider"
 
 
-ewol::Layer::Layer(void)
+ewol::WSlider::WSlider(void)
 {
 	// set contamination enable
 	LockExpendContamination();
+	m_windowsDestination = 0;
+	m_slidingProgress = 0;
+	m_windowsSources = 0;
 }
 
-ewol::Layer::~Layer(void)
+ewol::WSlider::~WSlider(void)
 {
 	SubWidgetRemoveAll();
 }
 
 
 //!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_LAYER = __class__;
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_W_SLIDER = __class__;
 
 /**
  * @brief Check if the object has the specific type.
@@ -52,19 +55,19 @@ extern const char * const ewol::TYPE_EOBJECT_WIDGET_LAYER = __class__;
  * @param[in] objectType type of the object we want to check
  * @return true if the object is compatible, otherwise false
  */
-bool ewol::Layer::CheckObjectType(const char * const objectType)
+bool ewol::WSlider::CheckObjectType(const char * const objectType)
 {
 	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_LAYER << "\" != NULL(pointer) ");
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_W_SLIDER << "\" != NULL(pointer) ");
 		return false;
 	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_LAYER) {
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_W_SLIDER) {
 		return true;
 	} else {
 		if(true == ewol::Widget::CheckObjectType(objectType)) {
 			return true;
 		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_LAYER << "\" != \"" << objectType << "\"");
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_W_SLIDER << "\" != \"" << objectType << "\"");
 		return false;
 	}
 }
@@ -75,21 +78,34 @@ bool ewol::Layer::CheckObjectType(const char * const objectType)
  * @param[in] objectType type description
  * @return true if the object is compatible, otherwise false
  */
-const char * const ewol::Layer::GetObjectType(void)
+const char * const ewol::WSlider::GetObjectType(void)
 {
-	return ewol::TYPE_EOBJECT_WIDGET_LAYER;
+	return ewol::TYPE_EOBJECT_WIDGET_W_SLIDER;
 }
 
 
 
-bool ewol::Layer::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::WSlider::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
 	m_size.y = availlableY;
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	
+	if (m_windowsDestination == m_windowsSources) {
+		int32_t iii = m_windowsDestination;
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x, m_origin.y);
+			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+		}
+	} else {
+		int32_t iii = m_windowsSources;
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*(float)m_slidingProgress/1000.0),  m_origin.y);
+			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+		}
+		iii = m_windowsDestination;
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*((float)m_slidingProgress/1000.0) - m_size.x),  m_origin.y);
 			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
 		}
 	}
@@ -98,7 +114,7 @@ bool ewol::Layer::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 }
 
 
-bool ewol::Layer::CalculateMinSize(void)
+bool ewol::WSlider::CalculateMinSize(void)
 {
 	m_userExpendX=false;
 	m_userExpendY=false;
@@ -121,17 +137,17 @@ bool ewol::Layer::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::Layer::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::WSlider::SetMinSise(etkFloat_t x, etkFloat_t y)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::Layer::SetExpendX(bool newExpend)
+void ewol::WSlider::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Layer can not have a user expend settings X (herited from under elements)");
 }
 
-bool ewol::Layer::CanExpentX(void)
+bool ewol::WSlider::CanExpentX(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -139,12 +155,12 @@ bool ewol::Layer::CanExpentX(void)
 	return m_userExpendX;
 }
 
-void ewol::Layer::SetExpendY(bool newExpend)
+void ewol::WSlider::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
-bool ewol::Layer::CanExpentY(void)
+bool ewol::WSlider::CanExpentY(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -152,14 +168,14 @@ bool ewol::Layer::CanExpentY(void)
 	return m_userExpendY;
 }
 
-void ewol::Layer::LockExpendContamination(bool lockExpend)
+void ewol::WSlider::LockExpendContamination(bool lockExpend)
 {
 	m_lockExpendContamination = lockExpend;
 }
 
 //etk::VectorType<ewol::Widget*> m_SubWidget;
 
-void ewol::Layer::SubWidgetRemoveAll(void)
+void ewol::WSlider::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		m_subWidget[m_currentCreateId][iii]->MarkToRemove();
@@ -169,7 +185,7 @@ void ewol::Layer::SubWidgetRemoveAll(void)
 }
 
 
-void ewol::Layer::SubWidgetAdd(ewol::Widget* newWidget)
+void ewol::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -178,7 +194,7 @@ void ewol::Layer::SubWidgetAdd(ewol::Widget* newWidget)
 }
 
 
-void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
+void ewol::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -193,7 +209,7 @@ void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
+void ewol::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -207,11 +223,63 @@ void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 	}
 }
 
-
-void ewol::Layer::OnDraw(void)
+void ewol::WSlider::SubWidgetSelectSet(int32_t id)
 {
-	// draw is done in the invert sense of inserting ... the first element inserted is on the top and the last is on the buttom
-	for (int32_t iii=m_subWidget[m_currentDrawId].Size()-1; iii>=0; iii--) {
+	if (id<0 || id > m_subWidget[m_currentCreateId].Size()) {
+		EWOL_ERROR("Can not change to a widget not present");
+	}
+	m_windowsDestination = id;
+	m_slidingProgress = 0;
+	PeriodicCallSet(true);
+	MarkToReedraw();
+}
+
+/**
+ * @brief Periodic call of this widget
+ * @param localTime curent system time
+ * @return ---
+ */
+void ewol::WSlider::PeriodicCall(int64_t localTime)
+{
+	if (m_slidingProgress >= 1000) {
+		// end of periodic :
+		PeriodicCallSet(false);
+		m_windowsSources = m_windowsDestination;
+	} else {
+		m_slidingProgress += 30;
+		m_slidingProgress = etk_avg(0, m_slidingProgress, 1000);
+	}
+	CalculateSize(m_size.x, m_size.y);
+	MarkToReedraw();
+}
+
+
+void ewol::WSlider::OnDraw(void)
+{
+	if (m_windowsDestination == m_windowsSources) {
+		//EWOL_DEBUG("Draw : " << m_windowsDestination);
+		int32_t iii = m_windowsDestination;
+		if (iii<0 || iii > m_subWidget[m_currentDrawId].Size()) {
+			return;
+		}
+		if (NULL != m_subWidget[m_currentDrawId][iii]) {
+			m_subWidget[m_currentDrawId][iii]->GenDraw();
+		}
+	} else {
+		//EWOL_DEBUG("Draw : " << m_windowsSources << "=>" << m_windowsDestination << "progress=" << ((float)m_slidingProgress/1000.) );
+		// draw Sources :
+		int32_t iii = m_windowsSources;
+		if (iii<0 || iii > m_subWidget[m_currentDrawId].Size()) {
+			return;
+		}
+		if (NULL != m_subWidget[m_currentDrawId][iii]) {
+			m_subWidget[m_currentDrawId][iii]->GenDraw();
+		}
+		// Draw Destination : 
+		iii = m_windowsDestination;
+		if (iii<0 || iii > m_subWidget[m_currentDrawId].Size()) {
+			return;
+		}
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
 			m_subWidget[m_currentDrawId][iii]->GenDraw();
 		}
@@ -220,9 +288,28 @@ void ewol::Layer::OnDraw(void)
 
 
 
-void ewol::Layer::OnRegenerateDisplay(void)
+void ewol::WSlider::OnRegenerateDisplay(void)
 {
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	if (m_windowsDestination == m_windowsSources) {
+		int32_t iii = m_windowsDestination;
+		if (iii<0 || iii > m_subWidget[m_currentCreateId].Size()) {
+			return;
+		}
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
+		}
+	} else {
+		int32_t iii = m_windowsSources;
+		if (iii<0 || iii > m_subWidget[m_currentCreateId].Size()) {
+			return;
+		}
+		if (NULL != m_subWidget[m_currentCreateId][iii]) {
+			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
+		}
+		iii = m_windowsDestination;
+		if (iii<0 || iii > m_subWidget[m_currentCreateId].Size()) {
+			return;
+		}
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
@@ -236,20 +323,24 @@ void ewol::Layer::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::Layer::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::WSlider::GetWidgetAtPos(coord2D_ts pos)
 {
-	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
-		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
-			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
-			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
-			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
-			{
-				ewol::Widget * tmpWidget = m_subWidget[m_currentCreateId][iii]->GetWidgetAtPos(pos);
-				if (NULL != tmpWidget) {
-					return tmpWidget;
-				}
+	// TODO : Review this ...
+	if (m_windowsDestination<0 || m_windowsDestination > m_subWidget[m_currentCreateId].Size()) {
+		// error ...
+		return NULL;
+	}
+	int32_t iii = m_windowsDestination;
+	
+	if (NULL != m_subWidget[m_currentCreateId][iii]) {
+		coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
+		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
+		if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
+		    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
+		{
+			ewol::Widget * tmpWidget = m_subWidget[m_currentCreateId][iii]->GetWidgetAtPos(pos);
+			if (NULL != tmpWidget) {
+				return tmpWidget;
 			}
 		}
 	}
@@ -263,7 +354,7 @@ ewol::Widget * ewol::Layer::GetWidgetAtPos(coord2D_ts pos)
  * @param ---
  * @return ---
  */
-void ewol::Layer::OnFlipFlopEvent(void)
+void ewol::WSlider::OnFlipFlopEvent(void)
 {
 	bool needFlipFlop = m_needFlipFlop;
 	// call herited classes
@@ -272,11 +363,12 @@ void ewol::Layer::OnFlipFlopEvent(void)
 	if (true == needFlipFlop) {
 		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
 	}
-	// in every case, we propagate the flip-flop EVENT
-	for(int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
-		if(NULL != m_subWidget[m_currentDrawId][iii]) {
-			m_subWidget[m_currentDrawId][iii]->OnFlipFlopEvent();
-		}
+	if (m_windowsDestination<0 || m_windowsDestination > m_subWidget[m_currentDrawId].Size()) {
+		// error ...
+		return;
+	}
+	if(NULL != m_subWidget[m_currentDrawId][m_windowsDestination]) {
+		m_subWidget[m_currentDrawId][m_windowsDestination]->OnFlipFlopEvent();
 	}
 }
 
@@ -287,7 +379,7 @@ void ewol::Layer::OnFlipFlopEvent(void)
  * @note : Sub classes must call this class
  * @return ---
  */
-void ewol::Layer::OnObjectRemove(ewol::EObject * removeObject)
+void ewol::WSlider::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

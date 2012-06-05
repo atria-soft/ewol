@@ -36,11 +36,17 @@ static uint32_t createUniqueId(uint16_t uniqueID, uint16_t position)
 ewol::SceneElement::SceneElement(void)
 {
 	m_id = 1;
-	numberOfGroup = 0;
+	numberOfGroup = MAX_GROUP_NUMBER;
 	for (int32_t iii=0; iii<MAX_GROUP_NUMBER; iii++) {
-		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
-			groupEnemy[iii][jjj] = -1;
+		int32_t kkk = 0;
+		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER-1; jjj++) {
+			if (jjj == kkk) {
+				kkk++;
+			}
+			groupEnemy[iii][jjj] = kkk;
+			kkk++;
 		}
+		groupEnemy[iii][MAX_GROUP_NUMBER-1] = -1;
 	}
 	retreviveElement = 0;
 	allocatedElements = 0;

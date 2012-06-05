@@ -46,6 +46,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \
+			ewol/widget/WSlider.cpp \
 			ewol/widget/Spacer.cpp \
 			ewol/widget/WidgetScrolled.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
