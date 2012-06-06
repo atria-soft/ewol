@@ -60,11 +60,14 @@ bool svg::Polygon::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord
 	while ('\0' != sss[0]) {
 		coord2D_ts pos;
 		int32_t n;
-		if (sscanf(sss, "%f,%f %n", &pos.x, &pos.y, &n) == 2) {
+		if (sscanf(sss, "%f,%f%n", &pos.x, &pos.y, &n) == 2) {
 			m_listPoint.PushBack(pos);
 			sss += n;
 			sizeMax.x = etk_max(sizeMax.x, pos.x);
 			sizeMax.y = etk_max(sizeMax.y, pos.y);
+			if(sss[0] == ' ' || sss[0] == ',') {
+				sss++;
+			}
 		} else {
 			break;
 		}

@@ -53,7 +53,6 @@ ewol::OObject2DTextured::~OObject2DTextured(void)
 void ewol::OObject2DTextured::Draw(void)
 {
 	if (m_coord.Size()<=0) {
-		EWOL_WARNING("Nothink to draw...");
 		return;
 	}
 	if (m_textureId == -1) {
@@ -73,6 +72,12 @@ void ewol::OObject2DTextured::Draw(void)
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );				// Disable Texture Coord Arrays
 	glDisable(GL_TEXTURE_2D);
+}
+
+void ewol::OObject2DTextured::Clear(void)
+{
+	m_coord.Clear();
+	m_coordTex.Clear();
 }
 
 void ewol::OObject2DTextured::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX, etkFloat_t texY, etkFloat_t texSX, etkFloat_t texSY)

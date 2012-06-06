@@ -118,6 +118,7 @@ void ewol::Scene::OnRegenerateDisplay(void)
 				}
 			}
 		}
+		m_needFlipFlop = true;
 	}
 }
 
@@ -144,7 +145,6 @@ void ewol::Scene::OnDraw(void)
 			m_sceneElement.effects[m_currentDrawId][iii]->Draw();
 		}
 	}
-	m_needFlipFlop = true;
 }
 
 

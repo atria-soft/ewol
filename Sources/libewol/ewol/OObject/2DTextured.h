@@ -36,6 +36,7 @@ namespace ewol {
 			virtual ~OObject2DTextured(void);
 		public:
 			virtual void Draw(void);
+			void Clear(void);
 			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX=0.0, etkFloat_t texY=0.0, etkFloat_t texSX=1.0, etkFloat_t texSY=1.0);
 		protected:
 			int32_t                       m_textureId;   //!< texture internal ID

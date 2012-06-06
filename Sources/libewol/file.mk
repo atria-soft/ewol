@@ -28,6 +28,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/Windows.cpp \
 			ewol/ShortCutManager.cpp \
 			ewol/widget/Button.cpp \
+			ewol/widget/ButtonImage.cpp \
 			ewol/widget/Image.cpp \
 			ewol/widget/ButtonColor.cpp \
 			ewol/widget/CheckBox.cpp \
