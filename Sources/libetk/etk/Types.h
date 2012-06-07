@@ -68,27 +68,36 @@ typedef enum {
 #define etk_max(elemA, elemB)               ((elemA)<(elemB)) ? (elemB) : (elemA)
 #define etk_avg(minimim, elem, maximum)     ((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem)
 
+
+//#define EWOL_PECISION_FIXPOINT
+
+#include <etk/TypesCoordonate.h>
+
 extern "C"
 {
-	#ifdef EWOL_PECISION_DOUBLE
-		typedef double       etkFloat_t;
-		#define oglTypeFloat_t   GL_DOUBLE
+	#if defined(EWOL_PECISION_FIXPOINT)
+		// TODO : Remove deprecated elements :
+		typedef int32_t          etkFloat_t;
+		#define oglTypeFloat_t   GL_FIXED
 	#else
-		typedef float        etkFloat_t;
+		// TODO : Remove deprecated elements :
+		typedef float            etkFloat_t;
 		#define oglTypeFloat_t   GL_FLOAT
 	#endif
-	
+	// TODO : Remove deprecated elements :
 	typedef struct {
 		etkFloat_t x;
 		etkFloat_t y;
 		etkFloat_t z;
 	}coord3D_ts;
 	
+	// TODO : Remove deprecated elements :
 	typedef struct {
 		etkFloat_t x;
 		etkFloat_t y;
 	}coord2D_ts;
 	
+	// TODO : Remove deprecated elements :
 	typedef struct {
 		etkFloat_t u;
 		etkFloat_t v;
