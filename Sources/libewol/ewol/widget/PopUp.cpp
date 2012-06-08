@@ -101,8 +101,8 @@ bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts subWidgetSize;
-		coord2D_ts subWidgetOrigin;
+		Vector2D<float> subWidgetSize;
+		Vector2D<float> subWidgetOrigin;
 		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -138,7 +138,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->CalculateMinSize();
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -208,8 +208,8 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		BGOObjects->SetColor(m_colorBorder);
 		BGOObjects->Rectangle(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP, tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP);
 		BGOObjects->SetColor(m_colorBackGroung);
@@ -227,14 +227,14 @@ void ewol::PopUp::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::PopUp::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// calculate relative position
-	coord2D_ts relativePos = RelativePosition(pos);
+	Vector2D<float> relativePos = RelativePosition(pos);
 	// for the element in the pop-up ...
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{

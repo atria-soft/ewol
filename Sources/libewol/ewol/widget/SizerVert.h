@@ -78,7 +78,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
+			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
 			/**
 			 * @brief Event generated to inform a flip-flop has occured on the current widget
 			 * @param ---

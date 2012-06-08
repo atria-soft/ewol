@@ -43,7 +43,7 @@ namespace ewol {
 		private:
 			color_ts           m_colorFg;      //!< Forground  color
 			color_ts           m_colorBg;      //!< Background color
-			coord2D_ts         m_displayPos;   //!< direction of the cursor ...
+			Vector2D<float>          m_displayPos;   //!< direction of the cursor ...
 			etkFloat_t         m_distance;     //!< dintance from the center
 			etkFloat_t         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 			bool               m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
@@ -90,7 +90,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
 			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
 			/**

@@ -83,7 +83,7 @@ void ewol::OObject2DText::Clear(void)
 	m_coordTex.Clear();
 }
 
-int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString)
+int32_t ewol::OObject2DText::Text(Vector2D<float> textPos, clipping_ts drawClipping, const etk::UString& unicodeString)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
@@ -93,7 +93,7 @@ int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, 
 	return ewol::DrawText(m_FontId, textPos, drawClipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
 }
 
-int32_t ewol::OObject2DText::Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t unicodeChar)
+int32_t ewol::OObject2DText::Text(Vector2D<float> textPos, clipping_ts drawClipping, const uniChar_t unicodeChar)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {

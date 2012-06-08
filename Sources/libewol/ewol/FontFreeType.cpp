@@ -45,8 +45,8 @@ extern "C"
 		uniChar_t   unicodeCharVal;
 		texCoord_ts posStart;
 		texCoord_ts posStop;
-		coord2D_ts  bearing;
-		coord2D_ts  size;
+		Vector2D<float>  bearing;
+		Vector2D<float>  size;
 		int32_t     advance;
 	}freeTypeFontElement_ts;
 };
@@ -572,11 +572,11 @@ void ewol::UnloadFont(int32_t id)
 }
 
 int32_t ewol::DrawText(int32_t                        fontID,
-                       coord2D_ts                     textPos,
+                       Vector2D<float>                     textPos,
                        clipping_ts &                  drawClipping,
                        const etk::UString&            unicodeString,
                        int32_t &                      fontTextureId,
-                       etk::VectorType<coord2D_ts> &  coord,
+                       etk::VectorType<Vector2D<float>> &  coord,
                        etk::VectorType<texCoord_ts> & coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
@@ -682,7 +682,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 					 *   |      |
 					 *   3------2
 					 */
-					coord2D_ts bitmapDrawPos[4];
+					Vector2D<float> bitmapDrawPos[4];
 					bitmapDrawPos[0].x = dxA;
 					bitmapDrawPos[1].x = dxB;
 					bitmapDrawPos[2].x = dxB;
@@ -753,11 +753,11 @@ int32_t ewol::DrawText(int32_t                        fontID,
 
 // TODO : Simplify this ...
 int32_t ewol::DrawText(int32_t                        fontID,
-                       coord2D_ts                     textPos,
+                       Vector2D<float>                     textPos,
                        clipping_ts &                  drawClipping,
                        const uniChar_t                unicodeChar,
                        int32_t &                      fontTextureId,
-                       etk::VectorType<coord2D_ts> &  coord,
+                       etk::VectorType<Vector2D<float>> &  coord,
                        etk::VectorType<texCoord_ts> & coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
@@ -838,7 +838,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			 *   |      |
 			 *   3------2
 			 */
-			coord2D_ts bitmapDrawPos[4];
+			Vector2D<float> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = dxA;
 			bitmapDrawPos[1].x = dxB;
 			bitmapDrawPos[2].x = dxB;
@@ -907,10 +907,10 @@ int32_t ewol::DrawText(int32_t                        fontID,
 
 
 int32_t ewol::DrawText(int32_t                        fontID,
-                       coord2D_ts                     textPos,
+                       Vector2D<float>                     textPos,
                        const etk::UString&            unicodeString,
                        int32_t &                      fontTextureId,
-                       etk::VectorType<coord2D_ts> &  coord,
+                       etk::VectorType<Vector2D<float>> &  coord,
                        etk::VectorType<texCoord_ts> & coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
@@ -971,7 +971,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 				 *   |      |
 				 *   3------2
 				 */
-				coord2D_ts bitmapDrawPos[4];
+				Vector2D<float> bitmapDrawPos[4];
 				bitmapDrawPos[0].x = dxA;
 				bitmapDrawPos[1].x = dxB;
 				bitmapDrawPos[2].x = dxB;
@@ -1041,10 +1041,10 @@ int32_t ewol::DrawText(int32_t                        fontID,
 
 // TODO : Simplify this ...
 int32_t ewol::DrawText(int32_t                        fontID,
-                       coord2D_ts                     textPos,
+                       Vector2D<float>                     textPos,
                        const uniChar_t                unicodeChar,
                        int32_t &                      fontTextureId,
-                       etk::VectorType<coord2D_ts> &  coord,
+                       etk::VectorType<Vector2D<float>> &  coord,
                        etk::VectorType<texCoord_ts> & coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
@@ -1101,7 +1101,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			 *   |      |
 			 *   3------2
 			 */
-			coord2D_ts bitmapDrawPos[4];
+			Vector2D<float> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = dxA;
 			bitmapDrawPos[1].x = dxB;
 			bitmapDrawPos[2].x = dxB;

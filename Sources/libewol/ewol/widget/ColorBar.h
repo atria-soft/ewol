@@ -57,8 +57,8 @@ namespace ewol {
 			void     SetCurrentColor(color_ts newOne);
 		private:
 			color_ts   m_currentColor;
-			coord2D_ts m_currentUserPos;
-			coord2D_ts m_padding;
+			Vector2D<float>  m_currentUserPos;
+			Vector2D<float>  m_padding;
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
@@ -71,7 +71,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_COLOR_BAR;

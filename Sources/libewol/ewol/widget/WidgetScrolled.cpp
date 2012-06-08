@@ -133,9 +133,9 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
 {
-	coord2D_ts relativePos = RelativePosition(pos);
+	Vector2D<float> relativePos = RelativePosition(pos);
 	if (SCROLL_MODE_NORMAL == m_scroollingMode) {
 		if (ewol::INPUT_TYPE_MOUSE==type && ( ewol::INPUT_TYPE_UNKNOW==m_highSpeedType || ewol::INPUT_TYPE_MOUSE==m_highSpeedType )) {
 			if (1 == IdInput && ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
@@ -407,7 +407,7 @@ void ewol::WidgetScrooled::GenDraw(void)
  * @param[in] center True if the position might be at the center of the widget
  * @return ---
  */
-void ewol::WidgetScrooled::SetScrollingPositionDynamic(coord2D_ts borderWidth, coord2D_ts currentPosition, bool center)
+void ewol::WidgetScrooled::SetScrollingPositionDynamic(Vector2D<float> borderWidth, Vector2D<float> currentPosition, bool center)
 {
 	if (true == center) {
 		borderWidth.x = m_size.x / 2 - borderWidth.x;

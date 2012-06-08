@@ -46,7 +46,7 @@ namespace svg
 	typedef struct {
 		pathEnum_te cmd;
 		bool        relative;
-		etkFloat_t  element[7];
+		float       element[7];
 	}pathBasic_ts;
 	
 	class Path : public svg::Base
@@ -56,7 +56,7 @@ namespace svg
 		public:
 			Path(PaintState parentPaintState);
 			~Path(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 		private:

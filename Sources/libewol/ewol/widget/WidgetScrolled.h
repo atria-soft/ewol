@@ -50,13 +50,13 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			coord2D_ts         m_originScrooled;
-			coord2D_ts         m_maxSize;
+			Vector2D<float>          m_originScrooled;
+			Vector2D<float>          m_maxSize;
 			etkFloat_t         m_zoom; //!< current zoom on the display
 		private:
 			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
 			etkFloat_t         m_pixelScrolling;
-			coord2D_ts         m_highSpeedStartPos;
+			Vector2D<float>          m_highSpeedStartPos;
 			highSpeedMode_te   m_highSpeedMode;
 			int32_t            m_highSpeedButton;
 			ewol::inputType_te m_highSpeedType;
@@ -89,7 +89,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float>  pos);
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
@@ -116,7 +116,7 @@ namespace ewol {
 			 * @param[in] localSize new Maximum size
 			 * @return ---
 			 */
-			void SetMaxSize(coord2D_ts localSize) { m_maxSize = localSize; };
+			void SetMaxSize(Vector2D<float>  localSize) { m_maxSize = localSize; };
 			/**
 			 * @brief Request a specific position for the scrolling of the current windows.
 			 * @param[in] borderWidth Size of the border that requested the element might not to be
@@ -124,7 +124,7 @@ namespace ewol {
 			 * @param[in] center True if the position might be at the center of the widget
 			 * @return ---
 			 */
-			void SetScrollingPositionDynamic(coord2D_ts borderWidth, coord2D_ts currentPosition, bool center = false);
+			void SetScrollingPositionDynamic(Vector2D<float>  borderWidth, Vector2D<float>  currentPosition, bool center = false);
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SCROOLED;

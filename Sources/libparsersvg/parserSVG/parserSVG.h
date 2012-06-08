@@ -39,7 +39,7 @@ namespace svg
 			etk::UString                 m_version;
 			etk::UString                 m_title;
 			etk::VectorType<svg::Base *> m_subElementList;
-			coord2D_ts                   m_size;
+			Vector2D<float>              m_size;
 			svg::Renderer*               m_renderedElement;
 	
 		public:
@@ -52,7 +52,7 @@ namespace svg
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 			uint8_t* GetPointerOnData(void);
 			uint32_t GetSizeOnData(void);
-			coord2D_ts GetDefinedSize(void) { return m_size;};
+			Vector2D<float> GetDefinedSize(void) { return m_size;};
 	};
 };
 

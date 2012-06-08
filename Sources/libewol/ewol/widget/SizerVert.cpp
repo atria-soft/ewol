@@ -93,7 +93,7 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			unexpendableSize += tmpSize.y;
 			if (false == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
 				nbWidgetFixedSize++;
@@ -111,12 +111,12 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	coord2D_ts tmpOrigin;
+	Vector2D<float> tmpOrigin;
 	tmpOrigin.x = m_origin.x;
 	tmpOrigin.y = m_origin.y;
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[m_currentCreateId][iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
@@ -151,7 +151,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
 				m_userExpendY = true;
 			}
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
 			m_minSize.y += tmpSize.y;
 			if (tmpSize.x>m_minSize.x) {
@@ -278,13 +278,13 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::SizerVert::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::SizerVert::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
-			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
+			Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
 			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 			{

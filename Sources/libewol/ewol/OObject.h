@@ -45,14 +45,14 @@ namespace ewol {
 		protected:
 			bool        m_hasClipping;
 			clipping_ts m_clipping;
-			coord2D_ts  m_scaling;           //!< scaling ol the object
+			Vector2D<float>   m_scaling;           //!< scaling ol the object
 		public:
 			OObject(void);
 			virtual ~OObject(void);
 			void clippingSet(clipping_ts clip) {m_clipping = clip; m_hasClipping = true;};
 			void clippingDisable(void) {m_hasClipping = false;};
 			void clippingEnable(void) {m_hasClipping = true;};
-			void scalingSet(coord2D_ts scale) {m_scaling = scale;};
+			void scalingSet(Vector2D<float>  scale) {m_scaling = scale;};
 			virtual void Draw(void) = 0;
 	};
 };

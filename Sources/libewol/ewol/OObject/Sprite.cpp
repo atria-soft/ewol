@@ -84,7 +84,7 @@ void ewol::Sprite::Clear(void)
 	m_coordTex.Clear();
 }
 
-void ewol::Sprite::Element(coord2D_ts pos, etkFloat_t size, etkFloat_t angle)
+void ewol::Sprite::Element(Vector2D<float> pos, etkFloat_t size, etkFloat_t angle)
 {
 	angle -= M_PI/4;
 	size *= 0.7;
@@ -98,7 +98,7 @@ void ewol::Sprite::Element(coord2D_ts pos, etkFloat_t size, etkFloat_t angle)
 	texD.u = 1.0;
 	texD.v = 0.0;
 	
-	coord2D_ts point;
+	Vector2D<float> point;
 	etkFloat_t yyySin = sin(angle) * size;
 	etkFloat_t xxxCos = cos(angle) * size;
 	

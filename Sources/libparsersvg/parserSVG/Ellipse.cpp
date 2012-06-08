@@ -37,7 +37,7 @@ svg::Ellipse::~Ellipse(void)
 	
 }
 
-bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
+bool svg::Ellipse::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);

@@ -35,7 +35,7 @@ svg::Text::~Text(void)
 	
 }
 
-bool svg::Text::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
+bool svg::Text::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
 {
 	sizeMax.x = 0;
 	sizeMax.y = 0;

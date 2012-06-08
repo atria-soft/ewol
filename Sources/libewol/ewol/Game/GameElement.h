@@ -46,8 +46,8 @@ namespace ewol {
 			int32_t      m_type;
 			int32_t      m_power;
 			bool         m_visible;
-			coord2D_ts   m_position;
-			coord2D_ts   m_speed;
+			Vector2D<float>    m_position;
+			Vector2D<float>    m_speed;
 			etkFloat_t   m_size;
 			etkFloat_t   m_angle;
 			etkFloat_t   m_gravity;
@@ -75,11 +75,11 @@ namespace ewol {
 			bool        HasName(etk::UString tmpName)                  { return (tmpName == m_fileNameConfig); };
 			bool        IsVisible(void)                                { return m_visible; };
 			void        SetVisible(bool state)                         { m_visible = state; };
-			coord2D_ts  PositionGet(void)                              { return m_position; };
-			void        PositionSet(coord2D_ts state)                  { m_position = state; };
+			Vector2D<float>   PositionGet(void)                              { return m_position; };
+			void        PositionSet(Vector2D<float>  state)                  { m_position = state; };
 			void        PositionSet(etkFloat_t xxx, etkFloat_t yyy)    { m_position.x = xxx; m_position.y = yyy; };
-			coord2D_ts  SpeedGet(void)                                 { return m_speed; };
-			void        SpeedSet(coord2D_ts state)                     { m_speed = state; };
+			Vector2D<float>   SpeedGet(void)                                 { return m_speed; };
+			void        SpeedSet(Vector2D<float>  state)                     { m_speed = state; };
 			void        SpeedSet(etkFloat_t xxx, etkFloat_t yyy)       { m_speed.x = xxx; m_speed.y = yyy; };
 			etkFloat_t  SizeGet(void)                                  { return m_size; };
 			void        SizeSet(etkFloat_t state)                      { m_size = state; };
@@ -122,8 +122,8 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void RemoveElement(int32_t idOfElement) { };
-			virtual bool HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
-			virtual bool Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power) { return false; } ;
+			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t size);
+			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t pxAtenuation, etkFloat_t power) { return false; } ;
 			/**
 			 * @brief Requuest the draw of the current element, it will be done on the current Sprite list
 			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
@@ -131,7 +131,7 @@ namespace ewol {
 			 * @param[in] maxSize maximum size of the sprite
 			 * @return the id of the sprite requested or -1 if it does not existed
 			 */
-			int32_t LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, coord2D_ts maxSize);
+			int32_t LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, Vector2D<float>  maxSize);
 			
 			virtual void Message(etk::UString control, etk::UString message) { } ;
 	};
@@ -140,6 +140,6 @@ namespace ewol {
 
 #include <ewol/widget/Scene.h>
 
-etkFloat_t quadDist(coord2D_ts pos1, coord2D_ts pos2);
+etkFloat_t quadDist(Vector2D<float>  pos1, Vector2D<float>  pos2);
 
 #endif

@@ -37,9 +37,9 @@ namespace ewol {
 		uint32_t                id;         //!< unique id of the element
 		int32_t                 group;      //!< element group
 		int32_t                 type;       //!< element type
-		coord2D_ts              position;   //!< current position
-		coord2D_ts              speed;      //!< current speed
-		coord2D_ts              size;       //!< curent size of the element
+		Vector2D<float>               position;   //!< current position
+		Vector2D<float>               speed;      //!< current speed
+		Vector2D<float>               size;       //!< curent size of the element
 		etkFloat_t              angle;      //!< element angle
 	} gameElementGenericProperty_ts;
 	
@@ -76,11 +76,11 @@ namespace ewol {
 			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
-			uint32_t               GetNearestEnemy(coord2D_ts position, int32_t groupId);
-			bool                   HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size);
-			void                   Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power);
-			uint32_t               GetElementAtPos(coord2D_ts position, int32_t maxDistanceDetection);
-			void                   SetEventInput(uint32_t id, coord2D_ts position);
+			uint32_t               GetNearestEnemy(Vector2D<float>  position, int32_t groupId);
+			bool                   HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t size);
+			void                   Explosion(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t pxAtenuation, etkFloat_t power);
+			uint32_t               GetElementAtPos(Vector2D<float>  position, int32_t maxDistanceDetection);
+			void                   SetEventInput(uint32_t id, Vector2D<float>  position);
 			void                   SetEventExternButton(uint32_t id, int32_t btId, int32_t state);
 			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state);
 	};

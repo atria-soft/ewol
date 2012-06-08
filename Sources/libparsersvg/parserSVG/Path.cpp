@@ -78,7 +78,7 @@ const char * extractCmd(const char * input, char& cmd, etk::VectorType<float>& o
 	return outputPointer;
 }
 
-bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
+bool svg::Path::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
 {
 	ParseTransform(node);
 	ParsePaintAttr(node);

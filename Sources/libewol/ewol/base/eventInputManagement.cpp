@@ -47,9 +47,9 @@ typedef struct {
 	int32_t       destinationInputId;
 	int64_t       lastTimeEvent;
 	ewol::Widget* curentWidgetEvent;
-	coord2D_ts    origin;
-	coord2D_ts    size;
-	coord2D_ts    downStart;
+	Vector2D<float>    origin;
+	Vector2D<float>    size;
+	Vector2D<float>    downStart;
 	bool          isDown;
 	bool          isInside;
 	int32_t       nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -145,7 +145,7 @@ extern ewol::Windows* gui_uniqueWindows;
  * @param[in] pos position of the event
  * @return true if event has been greped
  */
-static bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, coord2D_ts pos)
+static bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	if (NULL != destWidget) {
 		if (type == ewol::INPUT_TYPE_MOUSE || type == ewol::INPUT_TYPE_FINGER) {
@@ -190,7 +190,7 @@ extern int32_t offsetMoveClicked;
 extern int32_t offsetMoveClickedDouble;
 
 // note if id<0 ==> the it was finger event ...
-void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, coord2D_ts pos)
+void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<float> pos)
 {
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::INPUT_TYPE_MOUSE) {
@@ -245,7 +245,7 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, coord2D_ts
 	}
 }
 
-void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown, coord2D_ts pos)
+void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float> pos)
 {
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::INPUT_TYPE_MOUSE) {

@@ -36,19 +36,19 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 		protected:
-			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object
-			etk::VectorType<color_ts>     m_coordColor;  //!< internal color of the different point
+			etk::VectorType<Coord2D<oglt> >   m_coord;       //!< internal coord of the object
+			etk::VectorType<color_ts>        m_coordColor;  //!< internal color of the different point
 			//etk::VectorType<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
-			int32_t    m_triElement;
-			color_ts   m_color[3];
-			coord2D_ts m_triangle[3];
+			int32_t       m_triElement;
+			color_ts      m_color[3];
+			Coord2D<oglt> m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
 			void Clear(void);
 			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
 			void SetColor(color_ts color);
-			void SetPoint(coord2D_ts point);
+			void SetPoint(Vector2D<float>  point);
 			void SetPoint(etkFloat_t x, etkFloat_t y);
 			void Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness);
 			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h);

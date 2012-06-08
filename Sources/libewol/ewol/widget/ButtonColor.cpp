@@ -126,7 +126,7 @@ const char * const ewol::ButtonColor::GetObjectType(void)
 
 
 
-void ewol::ButtonColor::SetPadding(coord2D_ts newPadding)
+void ewol::ButtonColor::SetPadding(Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
@@ -214,7 +214,7 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		int32_t fontHeight = ewol::GetHeight(fontId);
 		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		*/
-		coord2D_ts textPos;
+		Vector2D<float> textPos;
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
 		clipping_ts drawClipping;
@@ -246,7 +246,7 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
@@ -264,7 +264,7 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 				return true;
 			}
 			// Get the button widget : 
-			coord2D_ts newPosition;
+			Vector2D<float> newPosition;
 			newPosition.x = m_origin.x + m_size.x/2;
 			newPosition.y = m_origin.y;
 			

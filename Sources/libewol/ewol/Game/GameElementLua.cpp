@@ -142,7 +142,7 @@ LUAMOD_API int lua_GetPos(lua_State *L)
 		lua_pushnumber(L, (lua_Number)0 );
 		return 2;
 	}
-	coord2D_ts tmpPos = tmpObj->PositionGet();
+	Vector2D<float> tmpPos = tmpObj->PositionGet();
 	lua_pushnumber(L, (lua_Number)tmpPos.x );
 	lua_pushnumber(L, (lua_Number)tmpPos.y );
 	// return number of parameters
@@ -157,7 +157,7 @@ LUAMOD_API int lua_SetPos(lua_State *L)
 	}
 	float x = luaL_checknumber(L, 1);
 	float y = luaL_checknumber(L, 2);
-	coord2D_ts tmpPos;
+	Vector2D<float> tmpPos;
 	tmpPos.x = x;
 	tmpPos.y = y;
 	tmpObj->PositionSet(tmpPos);
@@ -173,7 +173,7 @@ LUAMOD_API int lua_GetSpeed(lua_State *L)
 		lua_pushnumber(L, (lua_Number)0 );
 		return 2;
 	}
-	coord2D_ts tmpPos = tmpObj->SpeedGet();
+	Vector2D<float> tmpPos = tmpObj->SpeedGet();
 	lua_pushnumber(L, (lua_Number)tmpPos.x );
 	lua_pushnumber(L, (lua_Number)tmpPos.y );
 	// return number of parameters
@@ -188,7 +188,7 @@ LUAMOD_API int lua_SetSpeed(lua_State *L)
 	}
 	float x = luaL_checknumber(L, 1);
 	float y = luaL_checknumber(L, 2);
-	coord2D_ts tmpPos;
+	Vector2D<float> tmpPos;
 	tmpPos.x = x;
 	tmpPos.y = y;
 	tmpObj->SpeedSet(tmpPos);
@@ -343,7 +343,7 @@ LUAMOD_API int lua_SpriteLoad(lua_State *L)
 	}
 	const char *filename = luaL_checkstring(L, 1);
 	int32_t maxSize = luaL_checkint(L, 2);
-	coord2D_ts size;
+	Vector2D<float> size;
 	size.x = maxSize;
 	size.y = size.x;
 	int32_t spriteID = tmpObj->LoadSprite( tmpScene->animated, filename, size);
@@ -364,7 +364,7 @@ LUAMOD_API int lua_SpriteUnLoad(lua_State *L)
 		return 1;
 	}
 	float a = luaL_checkint(L, 1);
-	coord2D_ts tmpPos = tmpObj->PositionGet();
+	Vector2D<float> tmpPos = tmpObj->PositionGet();
 	tmpPos.y = a;
 	tmpObj->PositionSet(tmpPos);
 */
@@ -380,7 +380,7 @@ LUAMOD_API int lua_SpriteDraw(lua_State *L)
 		return 0;
 	}
 	float spriteID = luaL_checknumber(L, 1);
-	coord2D_ts tmpPos;
+	Vector2D<float> tmpPos;
 	tmpPos.x = luaL_checknumber(L, 2);
 	tmpPos.y = luaL_checknumber(L, 3);
 	float angle = luaL_checknumber(L, 4);
@@ -436,7 +436,7 @@ LUAMOD_API int lua_ElementSetPos(lua_State *L)
 	int32_t idElement = luaL_checkint(L, 1);
 	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
 	if (NULL != tmpElem) {
-		coord2D_ts tmpPos;
+		Vector2D<float> tmpPos;
 		tmpPos.x = luaL_checknumber(L, 2);
 		tmpPos.y = luaL_checknumber(L, 3);
 		tmpElem->PositionSet(tmpPos);
@@ -459,7 +459,7 @@ LUAMOD_API int lua_ElementGetPos(lua_State *L)
 	int32_t idElement = luaL_checkint(L, 1);
 	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
 	if (NULL != tmpElem) {
-		coord2D_ts tmpPos = tmpElem->PositionGet();
+		Vector2D<float> tmpPos = tmpElem->PositionGet();
 		lua_pushnumber(L, (lua_Number)tmpPos.x );
 		lua_pushnumber(L, (lua_Number)tmpPos.y );
 	} else {
@@ -827,7 +827,7 @@ void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, e
 }
 
 
-bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
+bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t size)
 {
 	// todo set a flag that permit lua to direct control of this ...
 	if (false == ewol::GameElement::HaveImpact(group, type, position, size) ) {
@@ -870,7 +870,7 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, coord2D_ts po
 }
 
 
-bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, coord2D_ts position, etkFloat_t pxAtenuation, etkFloat_t power)
+bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t pxAtenuation, etkFloat_t power)
 {
 	tmpObj = this;
 	bool retVal = false;

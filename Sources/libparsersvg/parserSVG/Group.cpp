@@ -46,11 +46,11 @@ svg::Group::~Group(void)
 	
 }
 
-bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax)
+bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax)
 {
 	// parse ...
-	coord2D_ts pos;
-	coord2D_ts size;
+	Vector2D<float> pos;
+	Vector2D<float> size;
 	ParseTransform(node);
 	ParsePosition(node, pos, size);
 	ParsePaintAttr(node);
@@ -63,7 +63,7 @@ bool svg::Group::Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D
 	
 	sizeMax.x = 0;
 	sizeMax.y = 0;
-	coord2D_ts tmpPos;
+	Vector2D<float> tmpPos;
 	// parse all sub node :
 	for(TiXmlNode * child = node->FirstChild(); NULL != child; child = child->NextSibling() ) {
 		svg::Base *elementParser = NULL;

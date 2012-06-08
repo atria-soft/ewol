@@ -60,7 +60,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
  * @param[in] maxSize maximum size of the sprite
  * @return the id of the sprite requested or -1 if it does not existed
  */
-int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, coord2D_ts maxSize)
+int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, Vector2D<float> maxSize)
 {
 	for (int32_t iii=0; iii<listOfElement[0].Size(); iii++) {
 		if (listOfElement[0][iii] != NULL) {
@@ -84,7 +84,7 @@ int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfEleme
 }
 
 
-etkFloat_t quadDist(coord2D_ts pos1, coord2D_ts pos2)
+etkFloat_t quadDist(Vector2D<float> pos1, Vector2D<float> pos2)
 {
 	etkFloat_t tmpVal1 = pos1.x - pos2.x;
 	etkFloat_t tmpVal2 = pos1.y - pos2.y;
@@ -105,7 +105,7 @@ void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &elemen
 }
 
 
-bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, coord2D_ts position, etkFloat_t size)
+bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t size)
 {
 	// check if it was in the same group
 	if (group == m_group) {

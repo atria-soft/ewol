@@ -141,7 +141,7 @@ void ewol::Label::OnRegenerateDisplay(void)
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		
-		coord2D_ts textPos;
+		Vector2D<float> textPos;
 		textPos.x = tmpOriginX;
 		textPos.y = tmpOriginY;
 		clipping_ts drawClipping;
@@ -164,7 +164,7 @@ void ewol::Label::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Label::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::Label::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {

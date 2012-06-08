@@ -221,7 +221,7 @@ void ewol::List::OnRegenerateDisplay(void)
 			
 			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
 			
-			coord2D_ts textPos;
+			Vector2D<float> textPos;
 			textPos.x = tmpOriginX;
 			textPos.y = tmpOriginY + m_paddingSizeY;
 			tmpText->Text(textPos, drawClipping, myTextToWrite);
@@ -246,9 +246,9 @@ void ewol::List::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
-	coord2D_ts relativePos = RelativePosition(pos);
+	Vector2D<float> relativePos = RelativePosition(pos);
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...

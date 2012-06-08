@@ -217,7 +217,7 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
@@ -242,7 +242,7 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 		}
 	} else if (0 == IdInput) {
 		if(ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
-			coord2D_ts relPos = RelativePosition(pos);
+			Vector2D<float> relPos = RelativePosition(pos);
 			
 			// check if over : 
 			int32_t tmpSizeX = m_minSize.x;

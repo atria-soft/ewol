@@ -167,66 +167,23 @@ namespace etk{
 				return *this;
 			}
 			
-			CCout& operator << (Coord2D<float> t) {
+			CCout& operator << (Vector2D<float> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", t.x, t.y);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 				return *this;
 			}
-			CCout& operator << (Coord2D<int32_t> t) {
+			CCout& operator << (Vector2D<int32_t> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%i,%i)", t.x, t.y);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 				return *this;
 			}
-			CCout& operator << (Coord2D<oglt> t) {
-				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", (float)t.x, (float)t.y);
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-				return *this;
-			}
-			CCout& operator << (Coord3D<float> t) {
+			CCout& operator << (Vector3D<float> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", t.x, t.y, t.z);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 				return *this;
 			}
-			CCout& operator << (Coord3D<int32_t> t) {
+			CCout& operator << (Vector3D<int32_t> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%i,%i,%i)", t.x, t.y, t.z);
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-				return *this;
-			}
-			CCout& operator << (Coord3D<oglt> t) {
-				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", (float)t.x, (float)t.y, (float)t.z);
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-				return *this;
-			}
-			CCout& operator << (coord2D_ts t) {
-				#if defined(EWOL_PECISION_FIXPOINT)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", UNFIXED(t.x), UNFIXED(t.y));
-				#elif defined(EWOL_PECISION_DOUBLE)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%lf,%lf)", t.x, t.y);
-				#else
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", t.x, t.y);
-				#endif
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-				return *this;
-			}
-			CCout& operator << (coord3D_ts t) {
-				#if defined(EWOL_PECISION_FIXPOINT)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", UNFIXED(t.x), UNFIXED(t.y), UNFIXED(t.z));
-				#elif defined(EWOL_PECISION_DOUBLE)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%lf,%lf,%lf)", t.x, t.y, t.z);
-				#else
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", t.x, t.y, t.z);
-				#endif
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
-				return *this;
-			}
-			CCout& operator << (texCoord_ts t) {
-				#if defined(EWOL_PECISION_FIXPOINT)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "{%f,%f}", UNFIXED(t.u), UNFIXED(t.v));
-				#elif defined(EWOL_PECISION_DOUBLE)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "{%lf,%lf}", t.u, t.v);
-				#else
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "{%f,%f}", t.u, t.v);
-				#endif
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 				return *this;
 			}
@@ -236,13 +193,7 @@ namespace etk{
 				return *this;
 			}
 			CCout& operator << (clipping_ts t) {
-				#if defined(EWOL_PECISION_FIXPOINT)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%f,%f) size=(%f,%f)", UNFIXED(t.x), UNFIXED(t.y), UNFIXED(t.w), UNFIXED(t.h));
-				#elif defined(EWOL_PECISION_DOUBLE)
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%lf,%lf) size=(%lf,%lf)", t.x, t.y, t.w, t.h);
-				#else
-					snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%f,%f) size=(%f,%f)", t.x, t.y, t.w, t.h);
-				#endif
+				snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%f,%f) size=(%f,%f)", t.x, t.y, t.w, t.h);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
 				return *this;
 			}

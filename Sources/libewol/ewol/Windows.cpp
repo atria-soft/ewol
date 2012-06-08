@@ -134,10 +134,10 @@ bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::Windows::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::Windows::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// calculate relative position
-	coord2D_ts relativePos = RelativePosition(pos);
+	Vector2D<float> relativePos = RelativePosition(pos);
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
 		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {

@@ -80,22 +80,21 @@ void ewol::OObject2DColored::Clear(void)
 }
 
 
-void generatePolyGone(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output )
+void generatePolyGone(etk::VectorType<Coord2D<oglt> > & input, etk::VectorType<Coord2D<oglt> > & output )
 {
 	if (input.Size()<3) {
 		return;
 	}
-	coord2D_ts basePoint = input[0];
 	// TODO : Regenerate a linear poligone generation
 	for (int32_t iii=1; iii<input.Size()-1; iii++) {
-		output.PushBack(basePoint);
+		output.PushBack(input[0]);
 		output.PushBack(input[iii]);
 		output.PushBack(input[iii+1]);
 	}
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coord2D_ts> & output, etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey)
+void SutherlandHodgman(etk::VectorType<Coord2D<oglt> > & input, etk::VectorType<Coord2D<oglt> > & output, etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.Size() <0) {
@@ -103,8 +102,8 @@ void SutherlandHodgman(etk::VectorType<coord2D_ts> & input, etk::VectorType<coor
 	}
 	//int32_t sizeInit=input.Size();
 	// last element :
-	coord2D_ts destPoint;
-	coord2D_ts lastElement = input[input.Size()-1];
+	Coord2D<oglt> destPoint;
+	Coord2D<oglt> lastElement = input[input.Size()-1];
 	bool inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
@@ -336,9 +335,13 @@ void ewol::OObject2DColored::SetColor(etkFloat_t red, etkFloat_t green, etkFloat
 	
 }
 
-void ewol::OObject2DColored::SetPoint(coord2D_ts point)
+void ewol::OObject2DColored::SetPoint(Vector2D<float> point)
 {
-	m_triangle[m_triElement] = point;
+	// TODO : Clean this :
+	Coord2D<oglt> tmpElement;
+	tmpElement.x = point.x;
+	tmpElement.y = point.y;
+	m_triangle[m_triElement] = tmpElement;
 	m_triElement++;
 	if (m_triElement>=3) {
 		GenerateTriangle();

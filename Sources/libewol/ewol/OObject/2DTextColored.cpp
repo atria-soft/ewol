@@ -99,7 +99,7 @@ void ewol::OObject2DTextColored::Clear(void)
 	m_coordColor.Clear();
 }
 
-int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, const etk::UString& unicodeString)
+int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::UString& unicodeString)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {
@@ -119,7 +119,7 @@ int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, const etk::UString&
 	return size;
 }
 
-int32_t ewol::OObject2DTextColored::Text(coord2D_ts textPos, const uniChar_t unicodeChar)
+int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const uniChar_t unicodeChar)
 {
 	m_FontTextureId = 0;
 	if (m_FontId == -1) {

@@ -62,10 +62,10 @@ namespace ewol {
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
-			void           SetPadding(coord2D_ts newPadding);
+			void           SetPadding(Vector2D<float>  newPadding);
 		private:
 			textAlignement_te    m_alignement;
-			coord2D_ts           m_padding;
+			Vector2D<float>            m_padding;
 			etk::UString         m_label;
 			color_ts             m_textColorFg;    //!< Text color
 			color_ts             m_textColorBg;    //!< Background color
@@ -83,7 +83,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 			color_ts GetCurrentColor(void) { return m_selectedColor; };
 			void     SetCurrentColor(color_ts color);
 			/**

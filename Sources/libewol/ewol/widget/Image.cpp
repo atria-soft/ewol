@@ -118,7 +118,7 @@ const char * const ewol::Image::GetObjectType(void)
 }
 
 
-void ewol::Image::SetPadding(coord2D_ts newPadding)
+void ewol::Image::SetPadding(Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
@@ -191,7 +191,7 @@ void ewol::Image::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Image::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::Image::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

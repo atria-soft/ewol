@@ -32,12 +32,12 @@ namespace svg
 	class Circle : public svg::Base
 	{
 		private:
-			coord2D_ts m_position;        //!< Position of the Circle
-			etkFloat_t m_radius;          //!< Radius of the Circle
+			Vector2D<float> m_position;        //!< Position of the Circle
+			float           m_radius;          //!< Radius of the Circle
 		public:
 			Circle(PaintState parentPaintState);
 			~Circle(void);
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
 			virtual void Display(int32_t spacing);
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans);
 	};

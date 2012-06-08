@@ -209,11 +209,11 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						return;
 					}
 					// Get the button widget : 
-					coord2D_ts newPosition;
+					Vector2D<float> newPosition;
 					ewol::Widget * eventFromWidget = EWOL_CAST_WIDGET(CallerObject);
 					if (NULL != eventFromWidget) {
-						coord2D_ts tmpOri  = eventFromWidget->GetOrigin();
-						coord2D_ts tmpSize = eventFromWidget->GetSize();
+						Vector2D<float> tmpOri  = eventFromWidget->GetOrigin();
+						Vector2D<float> tmpSize = eventFromWidget->GetSize();
 						// calculate the correct position
 						newPosition.x = tmpOri.x + tmpSize.x/2;
 						newPosition.y = tmpOri.y + tmpSize.y;

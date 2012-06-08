@@ -83,7 +83,7 @@ void ewol::OObject2DTextured::Clear(void)
 void ewol::OObject2DTextured::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX, etkFloat_t texY, etkFloat_t texSX, etkFloat_t texSY)
 {
 	//EWOL_DEBUG("Add rectangle : ...");
-	coord2D_ts point;
+	Vector2D<float> point;
 	texCoord_ts tex;
 
 	tex.u = texX;

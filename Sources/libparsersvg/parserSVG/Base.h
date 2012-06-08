@@ -54,13 +54,13 @@ namespace svg
 			Base(void) {};
 			Base(PaintState parentPaintState);
 			~Base(void) { };
-			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, coord2D_ts& sizeMax);
+			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
 			//specific drawing for AAG librairy ...
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans) { };
 			
 			virtual void Display(int32_t spacing) { };
 			void ParseTransform(TiXmlNode *node);
-			void ParsePosition(const TiXmlNode *node, coord2D_ts &pos, coord2D_ts &size);
+			void ParsePosition(const TiXmlNode *node, Vector2D<float> &pos, Vector2D<float> &size);
 			etkFloat_t ParseLength(const char *dataInput);
 			void ParsePaintAttr(const TiXmlNode *node);
 			color_ts ParseColor(const char *inputData);

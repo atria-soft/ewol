@@ -55,10 +55,10 @@ namespace ewol {
 			virtual ~Image(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetFile(etk::UString newFile);
-			void           SetPadding(coord2D_ts newPadding);
+			void           SetPadding(Vector2D<float>  newPadding);
 		private:
 			etk::UString       m_imageSelected;
-			coord2D_ts         m_padding;
+			Vector2D<float>          m_padding;
 			color_ts           m_textColorBg;  //!< Background color
 			int32_t            m_imageSize;
 		public:
@@ -73,7 +73,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 	};
 	
 	/**

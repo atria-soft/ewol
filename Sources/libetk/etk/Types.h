@@ -73,50 +73,33 @@ typedef enum {
 
 #include <etk/TypesCoordonate.h>
 
-extern "C"
-{
-	#if defined(EWOL_PECISION_FIXPOINT)
-		// TODO : Remove deprecated elements :
-		typedef int32_t          etkFloat_t;
-		#define oglTypeFloat_t   GL_FIXED
-	#else
-		// TODO : Remove deprecated elements :
-		typedef float            etkFloat_t;
-		#define oglTypeFloat_t   GL_FLOAT
-	#endif
-	// TODO : Remove deprecated elements :
-	typedef struct {
-		etkFloat_t x;
-		etkFloat_t y;
-		etkFloat_t z;
-	}coord3D_ts;
-	
-	// TODO : Remove deprecated elements :
-	typedef struct {
-		etkFloat_t x;
-		etkFloat_t y;
-	}coord2D_ts;
-	
-	// TODO : Remove deprecated elements :
-	typedef struct {
-		etkFloat_t u;
-		etkFloat_t v;
-	}texCoord_ts;
-	
-	typedef struct {
-		etkFloat_t x;
-		etkFloat_t y;
-		etkFloat_t w;
-		etkFloat_t h;
-	}clipping_ts;
-	
-	typedef struct color_ts {
-		uint8_t red;
-		uint8_t green;
-		uint8_t blue;
-		uint8_t alpha;
-	}color_ts;
-}
+typedef oglt etkFloat_t;
+
+#if defined(EWOL_PECISION_FIXPOINT)
+	#define oglTypeFloat_t   GL_FIXED
+#else
+	#define oglTypeFloat_t   GL_FLOAT
+#endif
+
+typedef struct {
+	float u;
+	float v;
+}texCoord_ts;
+
+typedef struct {
+	float x;
+	float y;
+	float w;
+	float h;
+}clipping_ts;
+
+typedef struct color_ts {
+	uint8_t red;
+	uint8_t green;
+	uint8_t blue;
+	uint8_t alpha;
+}color_ts;
+
 #include <etk/Color.h>
 
 

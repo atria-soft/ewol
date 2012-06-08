@@ -55,11 +55,11 @@ namespace svg
 		public:
 			color_ts          fill;
 			color_ts          stroke;
-			etkFloat_t        strokeWidth;
+			float             strokeWidth;
 			bool              flagEvenOdd;
 			lineCap_te        lineCap;
 			lineJoin_te       lineJoin;
-			coord2D_ts viewPort;
+			Vector2D<float>   viewPort;
 	};
 	
 	// basic definition type for the renderer
@@ -74,7 +74,7 @@ namespace svg
 			Renderer(uint32_t width, uint32_t height);
 			~Renderer(void);
 			void WritePpm(etk::UString fileName);
-			coord2D_ts                    m_size;
+			Vector2D<float>               m_size;
 			agg::rendering_buffer *       m_renderingBuffer;
 			agg::pixfmt_rgba32 *          m_pixFrame;
 			rendererBase_t *              m_renderBase;

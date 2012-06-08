@@ -103,8 +103,8 @@ bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availla
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts subWidgetSize;
-		coord2D_ts subWidgetOrigin;
+		Vector2D<float> subWidgetSize;
+		Vector2D<float> subWidgetOrigin;
 		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -179,7 +179,7 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->CalculateMinSize();
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -241,8 +241,8 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	AddOObject(BGOObjects);
 	
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
@@ -297,14 +297,14 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// calculate relative position
-	coord2D_ts relativePos = RelativePosition(pos);
+	Vector2D<float> relativePos = RelativePosition(pos);
 	// Check for sub Element
 	if (NULL != m_subWidget[m_currentCreateId]) {
-		coord2D_ts tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{
@@ -323,7 +323,7 @@ ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(coord2D_ts pos)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_INFO("Event ouside the context menu");
 	if (IdInput > 0) {
@@ -344,7 +344,7 @@ bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 }
 
 
-void ewol::ContextMenu::SetPositionMark(markPosition_te position, coord2D_ts arrowPos)
+void ewol::ContextMenu::SetPositionMark(markPosition_te position, Vector2D<float> arrowPos)
 {
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;

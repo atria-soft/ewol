@@ -146,11 +146,11 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			// internal element calculated by the system
-			coord2D_ts     m_origin;        //!< internal ... I do not really known how i can use it ...
-			coord2D_ts     m_size;          //!< internal : current size of the widget
-			coord2D_ts     m_minSize;       //!< user define the minimum size of the widget
+			Vector2D<float>      m_origin;        //!< internal ... I do not really known how i can use it ...
+			Vector2D<float>      m_size;          //!< internal : current size of the widget
+			Vector2D<float>      m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
-			coord2D_ts     m_userMinSize;   //!< user define the minimum size of the widget
+			Vector2D<float>      m_userMinSize;   //!< user define the minimum size of the widget
 			bool           m_userExpendX;
 			bool           m_userExpendY;
 			bool           m_userFillX;
@@ -169,13 +169,13 @@ namespace ewol {
 			 * @param ---
 			 * @return coordonate of the origin requested
 			 */
-			coord2D_ts GetOrigin(void) { return m_origin; };
+			Vector2D<float>  GetOrigin(void) { return m_origin; };
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			coord2D_ts RelativePosition(coord2D_ts pos) { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
+			Vector2D<float>  RelativePosition(Vector2D<float>  pos) { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size
@@ -206,13 +206,13 @@ namespace ewol {
 			 * @param ---
 			 * @return re size requested
 			 */
-			coord2D_ts GetMinSize(void) { return m_minSize; };
+			Vector2D<float>  GetMinSize(void) { return m_minSize; };
 			/**
 			 * @brief Get the widget size
 			 * @param ---
 			 * @return Requested size
 			 */
-			coord2D_ts GetSize(void) { return m_size; };
+			Vector2D<float>  GetSize(void) { return m_size; };
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
@@ -340,7 +340,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos) { return this; };
+			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return this; };
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -350,7 +350,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos) { return false; };
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos) { return false; };
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
 			 * @param[in] shift The key Shift (left or/and right) is pressed (if true)

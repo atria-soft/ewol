@@ -113,7 +113,7 @@ bool ewol::Layer::CalculateMinSize(void)
 			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
 				m_userExpendY = true;
 			}
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			m_minSize.x = etk_max(tmpSize.x, m_minSize.x);
 			m_minSize.y = etk_max(tmpSize.y, m_minSize.y);
 		}
@@ -236,13 +236,13 @@ void ewol::Layer::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::Layer::GetWidgetAtPos(coord2D_ts pos)
+ewol::Widget * ewol::Layer::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			coord2D_ts tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
-			coord2D_ts tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
+			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
+			Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
 			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 			{

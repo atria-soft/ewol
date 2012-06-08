@@ -25,10 +25,13 @@
 #ifndef __ETK_TYPES_COORDONATES_H__
 #define __ETK_TYPES_COORDONATES_H__
 
+typedef float  oglt;
+
+#if 0
 class oglt
 {
 	public:
-		#if defined(EWOL_PECISION_FIXPOINT)
+		#if defined(EWOL_PECISION_FIXPOINT32)
 			int32_t val;
 		#elseif defined(EWOL_PECISION_DOUBLE)
 			double val;
@@ -42,20 +45,20 @@ class oglt
 		 oglt(void) : val(0) { };
 		 oglt(const oglt& obj) : val(obj.val) { };
 		~oglt(void) { };
-		#if defined(EWOL_PECISION_FIXPOINT)
+		#if defined(EWOL_PECISION_FIXPOINT32)
 			 oglt(const int32_t val) : val(val << 16) { };
 			 oglt(const float val) : val(val*65536.0) { };
 			 oglt(const double val) : val(val*65536.0) { };
-			operator int32_t() const {  return val>>16; }
+			//operator int32_t() const {  return val>>16; }
 			operator float() const {    return (float)((float)val/(float)65536.0); }
-			operator double() const {   return (double)((double)val/(double)65536.0); }
+			//operator double() const {   return (double)((double)val/(double)65536.0); }
 		#else
 			 oglt(const int32_t val) : val(val) { };
 			 oglt(const float val) : val(val) { };
 			 oglt(const double val) : val(val) { };
-			operator int32_t() const {  return (int32_t)val; }
+			//operator int32_t() const {  return (int32_t)val; }
 			operator float() const {    return (float)val; }
-			operator double() const {   return (double)val; }
+			//operator double() const {   return (double)val; }
 		#endif
 		/*****************************************************
 		 *    = assigment
@@ -64,23 +67,163 @@ class oglt
 			val = obj.val;
 			return *this;
 		}
+		const oglt& operator= (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = ((int32_t)(value<<16);
+			#else
+				val = value;
+			#endif
+			return *this;
+		}
+		const oglt& operator= (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = ((int32_t)(value*65636.0);
+			#else
+				val = value;
+			#endif
+			return *this;
+		}
 		/*****************************************************
 		 *    == operator
 		 *****************************************************/
 		const bool operator== (const oglt& obj) const {
 			return (obj.val == val) ? true : false;
 		}
+		const bool operator== (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) == val) ? false : true;
+			#else
+				return (value == val) ? false : true;
+			#endif
+		}
+		const bool operator== (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) == val) ? false : true;
+			#else
+				return (value == val) ? false : true;
+			#endif
+		}
 		/*****************************************************
 		 *    != operator
 		 *****************************************************/
-		bool operator!= (const oglt& obj) const {
-			return (obj.val == val) ? false : true;
+		const bool operator!= (const oglt& obj) const {
+			return (obj.val != val) ? false : true;
+		}
+		const bool operator!= (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) != val) ? false : true;
+			#else
+				return (value != val) ? false : true;
+			#endif
+		}
+		const bool operator!= (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) != val) ? false : true;
+			#else
+				return (value != val) ? false : true;
+			#endif
+		}
+		/*****************************************************
+		 *    <= operator
+		 *****************************************************/
+		const bool operator<= (const oglt& obj) const {
+			return (obj.val <= val) ? false : true;
+		}
+		const bool operator<= (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) <= val) ? false : true;
+			#else
+				return (value <= val) ? false : true;
+			#endif
+		}
+		const bool operator<= (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) <= val) ? false : true;
+			#else
+				return (value <= val) ? false : true;
+			#endif
+		}
+		/*****************************************************
+		 *    < operator
+		 *****************************************************/
+		const bool operator< (const oglt& obj) const {
+			return (obj.val < val) ? false : true;
+		}
+		const bool operator< (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) < val) ? false : true;
+			#else
+				return (value < val) ? false : true;
+			#endif
+		}
+		const bool operator< (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) < val) ? false : true;
+			#else
+				return (value < val) ? false : true;
+			#endif
+		}
+		/*****************************************************
+		 *    >= operator
+		 *****************************************************/
+		const bool operator>= (const oglt& obj) const {
+			return (obj.val >= val) ? false : true;
+		}
+		const bool operator>= (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) >= val) ? false : true;
+			#else
+				return (value >= val) ? false : true;
+			#endif
+		}
+		const bool operator>= (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) >= val) ? false : true;
+			#else
+				return (value >= val) ? false : true;
+			#endif
+		}
+		/*****************************************************
+		 *    > operator
+		 *****************************************************/
+		const bool operator> (const oglt& obj) const {
+			return (obj.val > val) ? false : true;
+		}
+		const bool operator> (const int32_t value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value<<16) > val) ? false : true;
+			#else
+				return (value > val) ? false : true;
+			#endif
+		}
+		const bool operator> (const float value) const {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				return ((int32_t)(value*65636.0) > val) ? false : true;
+			#else
+				return (value > val) ? false : true;
+			#endif
 		}
 		/*****************************************************
 		 *    += operator
 		 *****************************************************/
 		const oglt& operator+= (const oglt& obj) {
 			val += obj.val;
+			return *this;
+		}
+		const oglt& operator+= (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val += (value<<16);
+			#else
+				val += value;
+			#endif
+			return *this;
+		}
+		const oglt& operator+= (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val += (int32_t)(value*65636.0);
+			#else
+				val += value;
+			#endif
 			return *this;
 		}
 		/*****************************************************
@@ -90,11 +233,50 @@ class oglt
 			val += obj.val;
 			return *this;
 		}
+		const oglt& operator+ (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val += (value<<16);
+			#else
+				val += value;
+			#endif
+			return *this;
+		}
+		const oglt operator+ (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val += (int32_t)(value*65636.0);
+			#else
+				val += value;
+			#endif
+			return *this;
+		}
+		/*
+		oglt operator+ (const oglt& obj, const oglt& obj2) {
+			oglt tmpVal = obj;
+			tmpVal += obj2;
+			return tmpVal;
+		}
+		*/
 		/*****************************************************
 		 *    -= operator
 		 *****************************************************/
 		const oglt& operator-= (const oglt& obj) {
 			val -= obj.val;
+			return *this;
+		}
+		const oglt& operator-= (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val -= (value<<16);
+			#else
+				val -= value;
+			#endif
+			return *this;
+		}
+		const oglt& operator-= (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val -= (int32_t)(value*65636.0);
+			#else
+				val -= value;
+			#endif
 			return *this;
 		}
 		/*****************************************************
@@ -104,25 +286,73 @@ class oglt
 			val -= obj.val;
 			return *this;
 		}
+		const oglt& operator- (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val -= (value<<16);
+			#else
+				val -= value;
+			#endif
+			return *this;
+		}
+		const oglt& operator- (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val -= (int32_t)(value*65636.0);
+			#else
+				val -= value;
+			#endif
+			return *this;
+		}
 		/*****************************************************
 		 *    /= operator
 		 *****************************************************/
 		const oglt& operator/= (const oglt& obj) {
-			#if defined(EWOL_PECISION_FIXPOINT)
+			#if defined(EWOL_PECISION_FIXPOINT32)
 				val = ((int64_t)val<<16) / obj.val;
 			#else
 				val /= obj.val;
 			#endif
 			return *this;
 		}
+		const oglt& operator/= (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = val / value;
+			#else
+				val /= (float)value;
+			#endif
+			return *this;
+		}
+		const oglt& operator/= (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = ((int64_t)val<<16) / (int32_t)(value);
+			#else
+				val /= value;
+			#endif
+			return *this;
+		}
 		/*****************************************************
 		 *    / operator
 		 *****************************************************/
-		const oglt& operator/ (const oglt& obj) {
-			#if defined(EWOL_PECISION_FIXPOINT)
+		oglt operator/ (const oglt& obj) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
 				val = ((int64_t)val<<16) / obj.val;
 			#else
 				val /= obj.val;
+			#endif
+			return *this;
+		}
+		oglt operator/ (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = val / value;
+			#else
+				val /= (float)value;
+			#endif
+			return *this;
+		}
+		oglt operator/ (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = ((int64_t)val<<16) / (int32_t)(value);
+			#else
+				val /= value;
 			#endif
 			return *this;
 		}
@@ -130,7 +360,7 @@ class oglt
 		 *    *= operator
 		 *****************************************************/
 		const oglt& operator*= (const oglt& obj) {
-			#if defined(EWOL_PECISION_FIXPOINT)
+			#if defined(EWOL_PECISION_FIXPOINT32)
 				int64_t tmpVal = (int64_t)val * (int64_t)obj.val;
 				val = tmpVal >> 16;
 			#else
@@ -138,15 +368,49 @@ class oglt
 			#endif
 			return *this;
 		}
+		const oglt& operator*= (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = (int32_t)((int64_t)val * (int64_t)value);
+			#else
+				val *= (float)value;
+			#endif
+			return *this;
+		}
+		const oglt& operator*= (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				int64_t tmpVal = (int64_t)val * (int64_t)(value*65636.0);
+				val = tmpVal >> 16;
+			#else
+				val *= value;
+			#endif
+			return *this;
+		}
 		/*****************************************************
 		 *    * operator
 		 *****************************************************/
-		const oglt& operator* (const oglt& obj) {
-			#if defined(EWOL_PECISION_FIXPOINT)
+		oglt operator* (const oglt& obj) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
 				int64_t tmpVal = (int64_t)val * (int64_t)obj.val;
 				val = tmpVal >> 16;
 			#else
 				val *= obj.val;
+			#endif
+			return *this;
+		}
+		oglt operator* (const int32_t value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				val = (int32_t)((int64_t)val * (int64_t)value);
+			#else
+				val *= (float)value;
+			#endif
+			return *this;
+		}
+		oglt operator* (const float value) {
+			#if defined(EWOL_PECISION_FIXPOINT32)
+				int64_t tmpVal = (int64_t)val * (int64_t)(value*65636.0);
+				val = tmpVal >> 16;
+			#else
+				val *= value;
 			#endif
 			return *this;
 		}
@@ -179,9 +443,16 @@ class oglt
 			return result;
 		}
 };
+/*
+inline explicit operator*(const float val, const oglt& obj) {
+	float val2 = val;
+	val2 *= (float)obj.val;
+	return val2;
+}
+*/
+#endif
 
-
-template <typename T> class Coord2D
+template <typename T> class Vector2D
 {
 	public:
 		T x;
@@ -190,34 +461,19 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    Constructor
 		 *****************************************************/
-		 Coord2D(void) : x(0), y(0) { };
-		 Coord2D(double _x, double _y) : x(_x), y(_y) { };
-		 Coord2D(float _x, float _y) : x(_x), y(_y) { };
-		 Coord2D(int32_t _x, int32_t _y) : x(_x), y(_y) { };
-		 Coord2D(const Coord2D<double>& obj)   : x((T)obj.x), y((T)obj.y) { };
-		 Coord2D(const Coord2D<float>& obj)    : x((T)obj.x), y((T)obj.y) { };
-		 Coord2D(const Coord2D<int32_t>& obj)  : x((T)obj.x), y((T)obj.y) { };
-		 Coord2D(const Coord2D<oglt>& obj)     : x((T)obj.x), y((T)obj.y) { };
-		~Coord2D(void) { };
+		 Vector2D(void) : x(0), y(0) { };
+		 Vector2D(double _x, double _y) : x(_x), y(_y) { };
+		 Vector2D(float _x, float _y) : x(_x), y(_y) { };
+		 Vector2D(int32_t _x, int32_t _y) : x(_x), y(_y) { };
+		 Vector2D(const Vector2D<double>& obj)   : x((T)obj.x), y((T)obj.y) { };
+		 Vector2D(const Vector2D<float>& obj)    : x((T)obj.x), y((T)obj.y) { };
+		 Vector2D(const Vector2D<int32_t>& obj)  : x((T)obj.x), y((T)obj.y) { };
+		// Vector2D(const Vector2D<oglt>& obj)     : x((T)obj.x), y((T)obj.y) { };
+		~Vector2D(void) { };
 		/*****************************************************
 		 *    = assigment
 		 *****************************************************/
-		const Coord2D<T>& operator= (const Coord2D<double>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator= (const Coord2D<float>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator= (const Coord2D<int32_t>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator= (const Coord2D<oglt>& obj ) {
+		const Vector2D<T>& operator= (const Vector2D<T>& obj ) {
 			x = (T)obj.x;
 			y = (T)obj.y;
 			return *this;
@@ -225,25 +481,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    == operator
 		 *****************************************************/
-		bool  operator== (const Coord2D<double>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord2D<float>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord2D<int32_t>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord2D<oglt>& obj) const {
+		bool  operator== (const Vector2D<T>& obj) const {
 			if ((T)obj.x == x && (T)obj.y == y) {
 				return true;
 			}
@@ -252,25 +490,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    != operator
 		 *****************************************************/
-		bool  operator!= (const Coord2D<double>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord2D<float>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord2D<int32_t>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord2D<oglt>& obj) const {
+		bool  operator!= (const Vector2D<T>& obj) const {
 			if ((T)obj.x == x && (T)obj.y == y) {
 				return false;
 			}
@@ -279,22 +499,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    += operator
 		 *****************************************************/
-		const Coord2D<T>& operator+= (const Coord2D<double>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator+= (const Coord2D<float>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator+= (const Coord2D<int32_t>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator+= (const Coord2D<oglt>& obj) {
+		const Vector2D<T>& operator+= (const Vector2D<T>& obj) {
 			x += (T)obj.x;
 			y += (T)obj.y;
 			return *this;
@@ -302,22 +507,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    + operator
 		 *****************************************************/
-		Coord2D<T> operator+ (const Coord2D<double>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator+ (const Coord2D<float>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator+ (const Coord2D<int32_t>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator+ (const Coord2D<oglt>& obj) {
+		Vector2D<T> operator+ (const Vector2D<T>& obj) {
 			x += (T)obj.x;
 			y += (T)obj.y;
 			return *this;
@@ -325,22 +515,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    -= operator
 		 *****************************************************/
-		const Coord2D<T>& operator-= (const Coord2D<double>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator-= (const Coord2D<float>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator-= (const Coord2D<int32_t>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator-= (const Coord2D<oglt>& obj) {
+		const Vector2D<T>& operator-= (const Vector2D<T>& obj) {
 			x -= (T)obj.x;
 			y -= (T)obj.y;
 			return *this;
@@ -348,22 +523,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    - operator
 		 *****************************************************/
-		Coord2D<T> operator- (const Coord2D<double>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator- (const Coord2D<float>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator- (const Coord2D<int32_t>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator- (const Coord2D<oglt>& obj) {
+		Vector2D<T> operator- (const Vector2D<T>& obj) {
 			x -= (T)obj.x;
 			y -= (T)obj.y;
 			return *this;
@@ -371,22 +531,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    /= operator
 		 *****************************************************/
-		const Coord2D<T>& operator/= (const Coord2D<double>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator/= (const Coord2D<float>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator/= (const Coord2D<int32_t>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator/= (const Coord2D<oglt>& obj) {
+		const Vector2D<T>& operator/= (const Vector2D<T>& obj) {
 			x /= (T)obj.x;
 			y /= (T)obj.y;
 			return *this;
@@ -394,22 +539,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    / operator
 		 *****************************************************/
-		Coord2D<T> operator/ (const Coord2D<double>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator/ (const Coord2D<float>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator/ (const Coord2D<int32_t>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator/ (const Coord2D<oglt>& obj) {
+		Vector2D<T> operator/ (const Vector2D<T>& obj) {
 			x /= (T)obj.x;
 			y /= (T)obj.y;
 			return *this;
@@ -417,22 +547,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    *= operator
 		 *****************************************************/
-		const Coord2D<T>& operator*= (const Coord2D<double>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator*= (const Coord2D<float>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator*= (const Coord2D<int32_t>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		const Coord2D<T>& operator*= (const Coord2D<oglt>& obj) {
+		const Vector2D<T>& operator*= (const Vector2D<T>& obj) {
 			x *= (T)obj.x;
 			y *= (T)obj.y;
 			return *this;
@@ -440,22 +555,7 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    * operator
 		 *****************************************************/
-		Coord2D<T> operator* (const Coord2D<double>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator* (const Coord2D<float>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator* (const Coord2D<int32_t>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			return *this;
-		}
-		Coord2D<T> operator* (const Coord2D<oglt>& obj) {
+		Vector2D<T> operator* (const Vector2D<T>& obj) {
 			x *= (T)obj.x;
 			y *= (T)obj.y;
 			return *this;
@@ -463,31 +563,31 @@ template <typename T> class Coord2D
 		/*****************************************************
 		 *    ++ operator
 		 *****************************************************/
-		Coord2D<T>& operator++() // prefix
+		Vector2D<T>& operator++() // prefix
 		{
 			++x;
 			++y;
 			return *this;
 		}
-		Coord2D<T> operator++(int unused) // postfix
+		Vector2D<T> operator++(int unused) // postfix
 		{
-			Coord2D<T> result = *this;
+			Vector2D<T> result = *this;
 			++(*this);
 			return result;
 		}
 		/*****************************************************
 		 *    -- operator
 		 *****************************************************/
-		Coord2D<T>& operator--() // prefix
+		Vector2D<T>& operator--() // prefix
 		{
 			--x;
 			--y;
 			return *this;
 		}
 		
-		Coord2D<T> operator--(int unused) // postfix
+		Vector2D<T> operator--(int unused) // postfix
 		{
-			Coord2D<T> result = *this;
+			Vector2D<T> result = *this;
 			--(*this);
 			return result;
 		}
@@ -496,7 +596,7 @@ template <typename T> class Coord2D
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////:
 
-template <typename T> class Coord3D
+template <typename T> class Vector3D
 {
 	public:
 		T x;
@@ -506,37 +606,19 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    Constructor
 		 *****************************************************/
-		 Coord3D(void) : x(0), y(0), z(0) { };
-		 Coord3D(double _x, double _y, double _z)    : x(_x), y(_y), z(_z) { };
-		 Coord3D(float _x, float _y, float _z)       : x(_x), y(_y), z(_z) { };
-		 Coord3D(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) { };
-		 Coord3D(const Coord3D<double>& obj)  : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
-		 Coord3D(const Coord3D<float>& obj)   : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
-		 Coord3D(const Coord3D<int32_t>& obj) : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
-		 Coord3D(const Coord3D<oglt>& obj)    : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
-		~Coord3D(void) { };
+		 Vector3D(void) : x(0), y(0), z(0) { };
+		 Vector3D(double _x, double _y, double _z)    : x(_x), y(_y), z(_z) { };
+		 Vector3D(float _x, float _y, float _z)       : x(_x), y(_y), z(_z) { };
+		 Vector3D(int32_t _x, int32_t _y, int32_t _z) : x(_x), y(_y), z(_z) { };
+		 Vector3D(const Vector3D<double>& obj)  : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
+		 Vector3D(const Vector3D<float>& obj)   : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
+		 Vector3D(const Vector3D<int32_t>& obj) : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
+		// Vector3D(const Vector3D<oglt>& obj)    : x((T)obj.x), y((T)obj.y), z((T)obj.z) { };
+		~Vector3D(void) { };
 		/*****************************************************
 		 *    = assigment
 		 *****************************************************/
-		const Coord3D<T>& operator= (const Coord3D<double>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			z = (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator= (const Coord3D<float>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			z = (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator= (const Coord3D<int32_t>& obj ) {
-			x = (T)obj.x;
-			y = (T)obj.y;
-			z = (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator= (const Coord3D<oglt>& obj ) {
+		const Vector3D<T>& operator= (const Vector3D<T>& obj ) {
 			x = (T)obj.x;
 			y = (T)obj.y;
 			z = (T)obj.z;
@@ -545,25 +627,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    == operator
 		 *****************************************************/
-		bool  operator== (const Coord3D<double>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord3D<float>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord3D<int32_t>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return true;
-			}
-			return false;
-		}
-		bool  operator== (const Coord3D<oglt>& obj) const {
+		bool  operator== (const Vector3D<T>& obj) const {
 			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
 				return true;
 			}
@@ -572,25 +636,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    != operator
 		 *****************************************************/
-		bool  operator!= (const Coord3D<double>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord3D<float>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord3D<int32_t>& obj) const {
-			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
-				return false;
-			}
-			return true;
-		}
-		bool  operator!= (const Coord3D<oglt>& obj) const {
+		bool  operator!= (const Vector3D<T>& obj) const {
 			if ((T)obj.x == x && (T)obj.y == y && (T)obj.z == z) {
 				return false;
 			}
@@ -599,25 +645,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    += operator
 		 *****************************************************/
-		const Coord3D<T>& operator+= (const Coord3D<double>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator+= (const Coord3D<float>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator+= (const Coord3D<int32_t>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator+= (const Coord3D<oglt>& obj) {
+		const Vector3D<T>& operator+= (const Vector3D<T>& obj) {
 			x += (T)obj.x;
 			y += (T)obj.y;
 			z += (T)obj.z;
@@ -626,25 +654,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    + operator
 		 *****************************************************/
-		Coord3D<T> operator+ (const Coord3D<double>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator+ (const Coord3D<float>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator+ (const Coord3D<int32_t>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator+ (const Coord3D<oglt>& obj) {
+		Vector3D<T> operator+ (const Vector3D<T>& obj) {
 			x += (T)obj.x;
 			y += (T)obj.y;
 			z += (T)obj.z;
@@ -653,25 +663,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    -= operator
 		 *****************************************************/
-		const Coord3D<T>& operator-= (const Coord3D<double>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator-= (const Coord3D<float>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator-= (const Coord3D<int32_t>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator-= (const Coord3D<oglt>& obj) {
+		const Vector3D<T>& operator-= (const Vector3D<T>& obj) {
 			x -= (T)obj.x;
 			y -= (T)obj.y;
 			z -= (T)obj.z;
@@ -680,25 +672,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    - operator
 		 *****************************************************/
-		Coord3D<T> operator- (const Coord3D<double>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator- (const Coord3D<float>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator- (const Coord3D<int32_t>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator- (const Coord3D<oglt>& obj) {
+		Vector3D<T> operator- (const Vector3D<T>& obj) {
 			x -= (T)obj.x;
 			y -= (T)obj.y;
 			z -= (T)obj.z;
@@ -707,25 +681,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    /= operator
 		 *****************************************************/
-		const Coord3D<T>& operator/= (const Coord3D<double>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator/= (const Coord3D<float>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator/= (const Coord3D<int32_t>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator/= (const Coord3D<oglt>& obj) {
+		const Vector3D<T>& operator/= (const Vector3D<T>& obj) {
 			x /= (T)obj.x;
 			y /= (T)obj.y;
 			z /= (T)obj.z;
@@ -734,25 +690,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    / operator
 		 *****************************************************/
-		Coord3D<T> operator/ (const Coord3D<double>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator/ (const Coord3D<float>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator/ (const Coord3D<int32_t>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator/ (const Coord3D<oglt>& obj) {
+		Vector3D<T> operator/ (const Vector3D<T>& obj) {
 			x /= (T)obj.x;
 			y /= (T)obj.y;
 			z /= (T)obj.z;
@@ -761,25 +699,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    *= operator
 		 *****************************************************/
-		const Coord3D<T>& operator*= (const Coord3D<double>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator*= (const Coord3D<float>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator*= (const Coord3D<int32_t>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		const Coord3D<T>& operator*= (const Coord3D<oglt>& obj) {
+		const Vector3D<T>& operator*= (const Vector3D<T>& obj) {
 			x *= (T)obj.x;
 			y *= (T)obj.y;
 			z *= (T)obj.z;
@@ -788,25 +708,7 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    * operator
 		 *****************************************************/
-		Coord3D<T> operator* (const Coord3D<double>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator* (const Coord3D<float>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator* (const Coord3D<int32_t>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
-			return *this;
-		}
-		Coord3D<T> operator* (const Coord3D<oglt>& obj) {
+		Vector3D<T> operator* (const Vector3D<T>& obj) {
 			x *= (T)obj.x;
 			y *= (T)obj.y;
 			z *= (T)obj.z;
@@ -815,32 +717,32 @@ template <typename T> class Coord3D
 		/*****************************************************
 		 *    ++ operator
 		 *****************************************************/
-		Coord3D<T>& operator++() // prefix
+		Vector3D<T>& operator++() // prefix
 		{
 			++x;
 			++y;
 			++z;
 			return *this;
 		}
-		Coord3D<T> operator++(int unused) // postfix
+		Vector3D<T> operator++(int unused) // postfix
 		{
-			Coord3D<T> result = *this;
+			Vector3D<T> result = *this;
 			++(*this);
 			return result;
 		}
 		/*****************************************************
 		 *    -- operator
 		 *****************************************************/
-		Coord3D<T>& operator--() // prefix
+		Vector3D<T>& operator--() // prefix
 		{
 			--x;
 			--y;
 			--z;
 			return *this;
 		}
-		Coord3D<T> operator--(int unused) // postfix
+		Vector3D<T> operator--(int unused) // postfix
 		{
-			Coord3D<T> result = *this;
+			Vector3D<T> result = *this;
 			--(*this);
 			return result;
 		}

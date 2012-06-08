@@ -67,15 +67,15 @@ namespace ewol {
 		private:
 			color_ts        m_colorBackGroung;
 			color_ts        m_colorBorder;
-			coord2D_ts      m_padding;
-			coord2D_ts      m_arrowPos;
+			Vector2D<float>       m_padding;
+			Vector2D<float>       m_arrowPos;
 			etkFloat_t      m_offset;
 			markPosition_te m_arrawBorder;
 			ewol::Widget*   m_subWidget[NB_BOUBLE_BUFFER];
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
-			void           SetPositionMark(markPosition_te position, coord2D_ts arrowPos);
+			void           SetPositionMark(markPosition_te position, Vector2D<float>  arrowPos);
 		protected:
 			virtual void   OnDraw(void);
 		public:
@@ -87,7 +87,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(coord2D_ts pos);
+			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -97,7 +97,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos);
+			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 			/**
 			 * @brief Event generated to inform a flip-flop has occured on the current widget
 			 * @param ---

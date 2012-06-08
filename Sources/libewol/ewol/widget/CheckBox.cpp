@@ -152,7 +152,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
-		coord2D_ts textPos;
+		Vector2D<float> textPos;
 		textPos.x = boxSize+5;
 		textPos.y = posy;
 		clipping_ts drawClipping;
@@ -189,7 +189,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, coord2D_ts pos)
+bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {

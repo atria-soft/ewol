@@ -39,8 +39,8 @@ namespace ewol
 		void Init(void);
 		void UnInit(void);
 		// note if id<0 ==> the it was finger event ...
-		void Motion(ewol::inputType_te type, int pointerID, coord2D_ts pos );
-		void State(ewol::inputType_te type, int pointerID, bool isDown, coord2D_ts pos);
+		void Motion(ewol::inputType_te type, int pointerID, Vector2D<float>  pos );
+		void State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float>  pos);
 		
 		/**
 		 * @brief Inform object that an other object is removed ...

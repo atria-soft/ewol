@@ -39,13 +39,13 @@ namespace ewol {
 			virtual void Draw(void);
 			// set a specific text
 			void    Clear(void);
-			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const etk::UString& unicodeString);
-			int32_t Text(coord2D_ts textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
+			int32_t Text(Vector2D<float>  textPos, clipping_ts drawClipping, const etk::UString& unicodeString);
+			int32_t Text(Vector2D<float>  textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...
 			int32_t                       m_FontTextureId; //!< font internal Texture ID
-			etk::VectorType<coord2D_ts>   m_coord;         //!< internal coord of the object
+			etk::VectorType<Vector2D<float> >   m_coord;         //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
 	};
 };

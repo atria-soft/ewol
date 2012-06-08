@@ -40,7 +40,7 @@ namespace ewol {
 			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX=0.0, etkFloat_t texY=0.0, etkFloat_t texSX=1.0, etkFloat_t texSY=1.0);
 		protected:
 			int32_t                       m_textureId;   //!< texture internal ID
-			etk::VectorType<coord2D_ts>   m_coord;       //!< internal coord of the object
+			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object
 			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
 	};
 };

@@ -149,7 +149,7 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
 					{
 						eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-						coord2D_ts pos;
+						Vector2D<float> pos;
 						pos.x = tmpData->x;
 						pos.y = tmpData->y;
 						ewol::eventInput::Motion(tmpData->type, tmpData->pointerID, pos);
@@ -159,7 +159,7 @@ static void* BaseAppEntry(void* param)
 					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 					{
 						eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-						coord2D_ts pos;
+						Vector2D<float> pos;
 						pos.x = tmpData->x;
 						pos.y = tmpData->y;
 						ewol::eventInput::State(tmpData->type, tmpData->pointerID, tmpData->state, pos);
