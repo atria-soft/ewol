@@ -34,11 +34,11 @@ namespace ewol {
 			etk::UString m_name;
 		public:
 			Sprite(etk::UString spriteName);
-			Sprite(etk::UString spriteName, etkFloat_t sizeX, etkFloat_t sizeY);
+			Sprite(etk::UString spriteName, float sizeX, float sizeY);
 			virtual ~Sprite(void);
 			virtual void Draw(void);
 			void Clear(void);
-			void Element(Vector2D<float>  pos, etkFloat_t size, etkFloat_t angle);
+			void Element(Vector2D<float>  pos, float size, float angle);
 			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
 			int32_t                       m_textureId;   //!< texture internal ID

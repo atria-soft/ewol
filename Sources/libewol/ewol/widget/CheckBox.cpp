@@ -106,7 +106,7 @@ bool ewol::CheckBox::CalculateMinSize(void)
 	int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
 	int32_t minHeight = ewol::GetHeight(fontId);
-	etkFloat_t boxSize = etk_max(20, minHeight) + 5;
+	float boxSize = etk_max(20, minHeight) + 5;
 	m_minSize.x = boxSize+minWidth;
 	m_minSize.y = etk_max(boxSize, minHeight)+3;
 	MarkToReedraw();
@@ -146,7 +146,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		int32_t fontId = GetDefaultFontId();
 		int32_t fontHeight = ewol::GetHeight(fontId);
-		etkFloat_t boxSize = etk_max(20, fontHeight);
+		float boxSize = etk_max(20, fontHeight);
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;

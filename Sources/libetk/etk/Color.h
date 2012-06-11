@@ -183,7 +183,7 @@ namespace etk {
 		
 		color_ts Create( uint8_t _red, uint8_t _green, uint8_t _blue, uint8_t _alpha=255);
 		
-		color_ts Create(etkFloat_t _red, etkFloat_t _green, etkFloat_t _blue, etkFloat_t _alpha=1.0);
+		color_ts Create(float _red, float _green, float _blue, float _alpha=1.0);
 	};
 };
 

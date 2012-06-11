@@ -140,14 +140,14 @@ void svg::Base::ParsePosition(const TiXmlNode *node, Vector2D<float> &pos, Vecto
  * @param[in] dataInput Data C String with the printed lenght
  * @return standart number of pixels
  */
-etkFloat_t svg::Base::ParseLength(const char *dataInput)
+float svg::Base::ParseLength(const char *dataInput)
 {
 	int32_t numLength = strspn(dataInput, "0123456789+-.");
 	const char *unit = dataInput + numLength;
 	//SVG_INFO("          ==> \"" << dataInput << "\"");
-	etkFloat_t n = atof(dataInput);
+	float n = atof(dataInput);
 	//SVG_INFO("          ==> ?? = " << n );
-	etkFloat_t font_size = 20.0;
+	float font_size = 20.0;
 	
 	// note : ";" is for the parsing of the style elements ...
 	if (unit[0] == '\0' || unit[0] == ';' ) {
@@ -238,20 +238,20 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 	}
 	content = node->ToElement()->Attribute("opacity");
 	if (NULL != content) {
-		etkFloat_t opacity = ParseLength(content);
+		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.alpha = opacity*0xFF;
 		m_paint.stroke.alpha = opacity*0xFF;
 	}
 	content = node->ToElement()->Attribute("fill-opacity");
 	if (NULL != content) {
-		etkFloat_t opacity = ParseLength(content);
+		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.fill.alpha = opacity*0xFF;
 	}
 	content = node->ToElement()->Attribute("stroke-opacity");
 	if (NULL != content) {
-		etkFloat_t opacity = ParseLength(content);
+		float opacity = ParseLength(content);
 		opacity  = etk_max(0.0, etk_min(1.0, opacity));
 		m_paint.stroke.alpha = opacity*0xFF;
 	}
@@ -316,18 +316,18 @@ void svg::Base::ParsePaintAttr(const TiXmlNode *node)
 				m_paint.strokeWidth = ParseLength(outputValue);
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.strokeWidth);
 			} else if (0 == strcmp(outputType, "opacity") ) {
-				etkFloat_t opacity = ParseLength(outputValue);
+				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.alpha = opacity*0xFF;
 				m_paint.stroke.alpha = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "fill-opacity") ) {
-				etkFloat_t opacity = ParseLength(outputValue);
+				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.fill.alpha = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.fill);
 			} else if (0 == strcmp(outputType, "stroke-opacity") ) {
-				etkFloat_t opacity = ParseLength(outputValue);
+				float opacity = ParseLength(outputValue);
 				opacity  = etk_max(0.0, etk_min(1.0, opacity));
 				m_paint.stroke.alpha = opacity*0xFF;
 				SVG_VERBOSE(" input : \"" << outputValue << "\" ==> " << m_paint.stroke);

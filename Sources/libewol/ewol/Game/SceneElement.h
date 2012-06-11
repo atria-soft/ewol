@@ -40,7 +40,7 @@ namespace ewol {
 		Vector2D<float>               position;   //!< current position
 		Vector2D<float>               speed;      //!< current speed
 		Vector2D<float>               size;       //!< curent size of the element
-		etkFloat_t              angle;      //!< element angle
+		float              angle;      //!< element angle
 	} gameElementGenericProperty_ts;
 	
 	typedef ewol::GameElement* (creatorElement_tf)(SceneElement & sceneElement, etk::UString& tmpName, etk::UString& userString);
@@ -77,12 +77,12 @@ namespace ewol {
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
 			uint32_t               GetNearestEnemy(Vector2D<float>  position, int32_t groupId);
-			bool                   HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t size);
-			void                   Explosion(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t pxAtenuation, etkFloat_t power);
+			bool                   HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
+			void                   Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power);
 			uint32_t               GetElementAtPos(Vector2D<float>  position, int32_t maxDistanceDetection);
 			void                   SetEventInput(uint32_t id, Vector2D<float>  position);
 			void                   SetEventExternButton(uint32_t id, int32_t btId, int32_t state);
-			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state);
+			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, float angle, float distance, int32_t state);
 	};
 };
 

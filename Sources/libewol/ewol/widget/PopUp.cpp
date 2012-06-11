@@ -93,7 +93,7 @@ const char * const ewol::PopUp::GetObjectType(void)
 
 
 
-bool ewol::PopUp::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
@@ -147,7 +147,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::PopUp::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::PopUp::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
@@ -248,7 +248,7 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
 }
 
 
-void ewol::PopUp::SetDisplayRatio(etkFloat_t ratio)
+void ewol::PopUp::SetDisplayRatio(float ratio)
 {
 	m_displayRatio = ratio;
 }

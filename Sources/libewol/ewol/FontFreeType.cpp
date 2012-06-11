@@ -343,10 +343,10 @@ class FTFontInternal
 				listElement[iii].size.x     = tmpWidth;
 				listElement[iii].size.y     = tmpHeight;
 				listElement[iii].advance    = slot->metrics.horiAdvance>>6;
-				listElement[iii].posStart.u = (etkFloat_t)(tmpRowStartPos) / (etkFloat_t)textureWidth;
-				listElement[iii].posStart.v = (etkFloat_t)(tmpLineStartPos) / (etkFloat_t)textureHeight;
-				listElement[iii].posStop.u  = (etkFloat_t)(tmpRowStartPos + tmpWidth) / (etkFloat_t)textureWidth;
-				listElement[iii].posStop.v  = (etkFloat_t)(tmpLineStartPos + tmpHeight) / (etkFloat_t)textureHeight;
+				listElement[iii].posStart.u = (float)(tmpRowStartPos) / (float)textureWidth;
+				listElement[iii].posStart.v = (float)(tmpLineStartPos) / (float)textureHeight;
+				listElement[iii].posStop.u  = (float)(tmpRowStartPos + tmpWidth) / (float)textureWidth;
+				listElement[iii].posStop.v  = (float)(tmpLineStartPos + tmpHeight) / (float)textureHeight;
 				
 				// update the maximum of the line hight : 
 				if (CurrentLineHigh<tmpHeight) {
@@ -571,13 +571,13 @@ void ewol::UnloadFont(int32_t id)
 	EWOL_TODO("I do not think it was a good idea... will be done later");
 }
 
-int32_t ewol::DrawText(int32_t                        fontID,
-                       Vector2D<float>                     textPos,
-                       clipping_ts &                  drawClipping,
-                       const etk::UString&            unicodeString,
-                       int32_t &                      fontTextureId,
-                       etk::VectorType<Vector2D<float>> &  coord,
-                       etk::VectorType<texCoord_ts> & coordTex)
+int32_t ewol::DrawText(int32_t                              fontID,
+                       Vector2D<float>                      textPos,
+                       clipping_ts &                        drawClipping,
+                       const etk::UString&                  unicodeString,
+                       int32_t &                            fontTextureId,
+                       etk::VectorType<Vector2D<float> > &  coord,
+                       etk::VectorType<texCoord_ts> &       coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
@@ -588,7 +588,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 
-	etkFloat_t posDrawX = textPos.x;
+	float posDrawX = textPos.x;
 	
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
 		uniChar_t tmpChar = unicodeString[iii];
@@ -615,15 +615,15 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			 *      |      |
 			 *   yD *------*
 			 */
-			etkFloat_t dxA = posDrawX + listOfElement[charIndex].bearing.x;
-			etkFloat_t dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			etkFloat_t dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-			etkFloat_t dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			float dxA = posDrawX + listOfElement[charIndex].bearing.x;
+			float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+			float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
+			float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
 			
-			etkFloat_t tuA = listOfElement[charIndex].posStart.u;
-			etkFloat_t tuB = listOfElement[charIndex].posStop.u;
-			etkFloat_t tvC = listOfElement[charIndex].posStart.v;
-			etkFloat_t tvD = listOfElement[charIndex].posStop.v;
+			float tuA = listOfElement[charIndex].posStart.u;
+			float tuB = listOfElement[charIndex].posStop.u;
+			float tvC = listOfElement[charIndex].posStart.v;
+			float tvD = listOfElement[charIndex].posStop.v;
 			
 			
 			// Clipping and drawing area
@@ -634,41 +634,41 @@ int32_t ewol::DrawText(int32_t                        fontID,
 				// Nothing to diplay ...
 			} else {
 				// generata positions...
-				etkFloat_t TexSizeX = tuB - tuA;
+				float TexSizeX = tuB - tuA;
 				if (dxA < drawClipping.x) {
 					// clip display
-					etkFloat_t drawSize = drawClipping.x - dxA;
+					float drawSize = drawClipping.x - dxA;
 					// Update element start display
 					dxA = drawClipping.x;
-					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+					float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 					// update texture start X Pos
 					tuA += addElement;
 				}
 				if (dxB > drawClipping.x + drawClipping.w) {
 					// clip display
-					etkFloat_t drawSize = dxB - (drawClipping.x + drawClipping.w);
+					float drawSize = dxB - (drawClipping.x + drawClipping.w);
 					// Update element start display
 					dxB = drawClipping.x + drawClipping.w;
-					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+					float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 					// update texture start X Pos
 					tuB -= addElement;
 				}
-				etkFloat_t TexSizeY = tvD - tvC;
+				float TexSizeY = tvD - tvC;
 				if (dyC < drawClipping.y) {
 					// clip display
-					etkFloat_t drawSize = drawClipping.y - dyC;
+					float drawSize = drawClipping.y - dyC;
 					// Update element start display
 					dyC = drawClipping.y;
-					etkFloat_t addElement = TexSizeY * drawSize / listOfElement[charIndex].size.y;
+					float addElement = TexSizeY * drawSize / listOfElement[charIndex].size.y;
 					// update texture start X Pos
 					tvC += addElement;
 				}
 				if (dyD > drawClipping.y + drawClipping.h) {
 					// clip display
-					etkFloat_t drawSize = dyD - (drawClipping.y + drawClipping.h);
+					float drawSize = dyD - (drawClipping.y + drawClipping.h);
 					// Update element start display
 					dyD = drawClipping.y + drawClipping.h;
-					etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.y;
+					float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.y;
 					// update texture start X Pos
 					tvD -= addElement;
 				}
@@ -752,13 +752,13 @@ int32_t ewol::DrawText(int32_t                        fontID,
 }
 
 // TODO : Simplify this ...
-int32_t ewol::DrawText(int32_t                        fontID,
-                       Vector2D<float>                     textPos,
-                       clipping_ts &                  drawClipping,
-                       const uniChar_t                unicodeChar,
-                       int32_t &                      fontTextureId,
-                       etk::VectorType<Vector2D<float>> &  coord,
-                       etk::VectorType<texCoord_ts> & coordTex)
+int32_t ewol::DrawText(int32_t                              fontID,
+                       Vector2D<float>                      textPos,
+                       clipping_ts &                        drawClipping,
+                       const uniChar_t                      unicodeChar,
+                       int32_t &                            fontTextureId,
+                       etk::VectorType<Vector2D<float> > &  coord,
+                       etk::VectorType<texCoord_ts> &       coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
@@ -769,7 +769,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 
-	etkFloat_t posDrawX = textPos.x;
+	float posDrawX = textPos.x;
 	int32_t charIndex;
 	
 	if (unicodeChar < 0x20) {
@@ -794,15 +794,15 @@ int32_t ewol::DrawText(int32_t                        fontID,
 		 *      |      |
 		 *   yD *------*
 		 */
-		etkFloat_t dxA = posDrawX + listOfElement[charIndex].bearing.x;
-		etkFloat_t dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-		etkFloat_t dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-		etkFloat_t dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+		float dxA = posDrawX + listOfElement[charIndex].bearing.x;
+		float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+		float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
+		float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
 		
-		etkFloat_t tuA = listOfElement[charIndex].posStart.u;
-		etkFloat_t tuB = listOfElement[charIndex].posStop.u;
-		etkFloat_t tvC = listOfElement[charIndex].posStart.v;
-		etkFloat_t tvD = listOfElement[charIndex].posStop.v;
+		float tuA = listOfElement[charIndex].posStart.u;
+		float tuB = listOfElement[charIndex].posStop.u;
+		float tvC = listOfElement[charIndex].posStart.v;
+		float tvD = listOfElement[charIndex].posStop.v;
 		
 		
 		// Clipping and drawing area
@@ -813,22 +813,22 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			// Nothing to diplay ...
 		} else {
 			// generata positions...
-			etkFloat_t TexSizeX = tuB - tuA;
+			float TexSizeX = tuB - tuA;
 			if (dxA < drawClipping.x) {
 				// clip display
-				etkFloat_t drawSize = drawClipping.x - dxA;
+				float drawSize = drawClipping.x - dxA;
 				// Update element start display
 				dxA = drawClipping.x;
-				etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+				float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 				// update texture start X Pos
 				tuA += addElement;
 			}
 			if (dxB > drawClipping.x + drawClipping.w) {
 				// clip display
-				etkFloat_t drawSize = dxB - (drawClipping.x + drawClipping.w);
+				float drawSize = dxB - (drawClipping.x + drawClipping.w);
 				// Update element start display
 				dxB = drawClipping.x + drawClipping.w;
-				etkFloat_t addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
+				float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.x;
 				// update texture start X Pos
 				tuB -= addElement;
 			}
@@ -906,12 +906,12 @@ int32_t ewol::DrawText(int32_t                        fontID,
 }
 
 
-int32_t ewol::DrawText(int32_t                        fontID,
-                       Vector2D<float>                     textPos,
-                       const etk::UString&            unicodeString,
-                       int32_t &                      fontTextureId,
-                       etk::VectorType<Vector2D<float>> &  coord,
-                       etk::VectorType<texCoord_ts> & coordTex)
+int32_t ewol::DrawText(int32_t                              fontID,
+                       Vector2D<float>                      textPos,
+                       const etk::UString&                  unicodeString,
+                       int32_t &                            fontTextureId,
+                       etk::VectorType<Vector2D<float> > &  coord,
+                       etk::VectorType<texCoord_ts> &       coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
@@ -922,7 +922,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 
-	etkFloat_t posDrawX = textPos.x;
+	float posDrawX = textPos.x;
 	
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
 		uniChar_t tmpChar = unicodeString[iii];
@@ -949,15 +949,15 @@ int32_t ewol::DrawText(int32_t                        fontID,
 			 *      |      |
 			 *   yD *------*
 			 */
-			etkFloat_t dxA = posDrawX + listOfElement[charIndex].bearing.x;
-			etkFloat_t dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			etkFloat_t dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-			etkFloat_t dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			float dxA = posDrawX + listOfElement[charIndex].bearing.x;
+			float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+			float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
+			float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
 			
-			etkFloat_t tuA = listOfElement[charIndex].posStart.u;
-			etkFloat_t tuB = listOfElement[charIndex].posStop.u;
-			etkFloat_t tvC = listOfElement[charIndex].posStart.v;
-			etkFloat_t tvD = listOfElement[charIndex].posStop.v;
+			float tuA = listOfElement[charIndex].posStart.u;
+			float tuB = listOfElement[charIndex].posStop.u;
+			float tvC = listOfElement[charIndex].posStart.v;
+			float tvD = listOfElement[charIndex].posStop.v;
 			
 			
 			// Clipping and drawing area
@@ -1040,12 +1040,12 @@ int32_t ewol::DrawText(int32_t                        fontID,
 }
 
 // TODO : Simplify this ...
-int32_t ewol::DrawText(int32_t                        fontID,
+int32_t ewol::DrawText(int32_t                             fontID,
                        Vector2D<float>                     textPos,
-                       const uniChar_t                unicodeChar,
-                       int32_t &                      fontTextureId,
-                       etk::VectorType<Vector2D<float>> &  coord,
-                       etk::VectorType<texCoord_ts> & coordTex)
+                       const uniChar_t                     unicodeChar,
+                       int32_t &                           fontTextureId,
+                       etk::VectorType<Vector2D<float> > & coord,
+                       etk::VectorType<texCoord_ts> &      coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
@@ -1056,7 +1056,7 @@ int32_t ewol::DrawText(int32_t                        fontID,
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
 
-	etkFloat_t posDrawX = textPos.x;
+	float posDrawX = textPos.x;
 	int32_t charIndex;
 	
 	if (unicodeChar < 0x20) {
@@ -1081,15 +1081,15 @@ int32_t ewol::DrawText(int32_t                        fontID,
 		 *      |      |
 		 *   yD *------*
 		 */
-		etkFloat_t dxA = posDrawX + listOfElement[charIndex].bearing.x;
-		etkFloat_t dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-		etkFloat_t dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-		etkFloat_t dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+		float dxA = posDrawX + listOfElement[charIndex].bearing.x;
+		float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
+		float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
+		float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
 		
-		etkFloat_t tuA = listOfElement[charIndex].posStart.u;
-		etkFloat_t tuB = listOfElement[charIndex].posStop.u;
-		etkFloat_t tvC = listOfElement[charIndex].posStart.v;
-		etkFloat_t tvD = listOfElement[charIndex].posStop.v;
+		float tuA = listOfElement[charIndex].posStart.u;
+		float tuB = listOfElement[charIndex].posStop.u;
+		float tvC = listOfElement[charIndex].posStart.v;
+		float tvD = listOfElement[charIndex].posStop.v;
 		
 		if(    dxB <= dxA
 		    || dyD <= dyC) {
@@ -1177,7 +1177,7 @@ int32_t ewol::GetWidth(int32_t fontID, const etk::UString& unicodeString)
 	}
 	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	
-	etkFloat_t posDrawX = 0.0;
+	float posDrawX = 0.0;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
 		uniChar_t tmpChar = unicodeString[iii];
 		int32_t charIndex;

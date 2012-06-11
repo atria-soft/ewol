@@ -65,7 +65,7 @@ namespace ewol {
 			virtual void OnReduce(void) { };
 			virtual void On(void) { };
 		public:
-			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
+			virtual bool CalculateSize(float availlableX, float availlableY);
 			/**
 			 * @brief Get the widget at the specific windows absolute position
 			 * @param[in] pos gAbsolute position of the requested widget knowledge

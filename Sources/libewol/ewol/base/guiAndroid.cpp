@@ -45,8 +45,8 @@ int32_t separateClickTime = 800000;
 int32_t offsetMoveClicked = 40000;
 int32_t offsetMoveClickedDouble = 300000;
 
-extern etkFloat_t     gui_width;
-extern etkFloat_t     gui_height;
+extern float     gui_width;
+extern float     gui_height;
 extern ewol::Windows* gui_uniqueWindows;
 
 int64_t GetCurrentTime(void)
@@ -78,8 +78,8 @@ static etk::UString l_clipBoardPrimary(""); // local copy of the selection
 static etk::UString l_clipBoardStd(""); // local copy of the clipboard
 
 
-static etkFloat_t gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
-static etkFloat_t gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
+static float gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
+static float gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
                                            200.0f, 200.0f, 300.0f, 200.0f, 200.0f, 300.0f };
 
 void EWOL_NativeRender(void)
@@ -114,7 +114,7 @@ void EWOL_NativeRender(void)
 		//LOGI("engine_draw_frame (%d,%d)",width,height);
 		
 		glColor4f(0.0, 1.0, 1.0, 1.0);
-		glVertexPointer(2, oglTypeFloat_t, 0, gTriangleVertices5 );
+		glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices5 );
 		glDrawArrays( GL_TRIANGLES, 0, 6);
 		static int vallllll = 0;
 		static float transparency = 0.0;
@@ -173,7 +173,7 @@ void EWOL_NativeRender(void)
 				glColor4f(1.0, 0.0, 1.0, transparency);
 			}
 		}
-		glVertexPointer(2, oglTypeFloat_t, 0, gTriangleVertices );
+		glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices );
 		glDrawArrays( GL_TRIANGLES, 0, 3);
 		
 		glDisableClientState( GL_VERTEX_ARRAY );

@@ -116,8 +116,8 @@ XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
 extern ewol::Windows* gui_uniqueWindows;
-extern etkFloat_t     gui_width;
-extern etkFloat_t     gui_height;
+extern float     gui_width;
+extern float     gui_height;
 
 int32_t separateClickTime = 300000;
 int32_t offsetMoveClicked = 10000;
@@ -481,17 +481,17 @@ void EWOL_NativeRender(void)
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrtho(0., (etkFloat_t)gui_width, 0., (etkFloat_t)gui_height, 1., 20.);
+		glOrtho(0., (float)gui_width, 0., (float)gui_height, 1., 20.);
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(0, 0, -5);
 		
 		glBegin(GL_QUADS);
-			glColor3f(1., 0., 0.); glVertex3f( .25*(etkFloat_t)gui_width, .25*(etkFloat_t)gui_height, 0.);
-			glColor3f(0., 1., 0.); glVertex3f( .75*(etkFloat_t)gui_width, .25*(etkFloat_t)gui_height, 0.);
-			glColor3f(0., 0., 1.); glVertex3f( .75*(etkFloat_t)gui_width, .75*(etkFloat_t)gui_height, 0.);
-			glColor3f(1., 1., 0.); glVertex3f( .25*(etkFloat_t)gui_width, .75*(etkFloat_t)gui_height, 0.);
+			glColor3f(1., 0., 0.); glVertex3f( .25*(float)gui_width, .25*(float)gui_height, 0.);
+			glColor3f(0., 1., 0.); glVertex3f( .75*(float)gui_width, .25*(float)gui_height, 0.);
+			glColor3f(0., 0., 1.); glVertex3f( .75*(float)gui_width, .75*(float)gui_height, 0.);
+			glColor3f(1., 1., 0.); glVertex3f( .25*(float)gui_width, .75*(float)gui_height, 0.);
 		glEnd();
 	} else {
 		EWOL_GenericDraw(false);
@@ -817,8 +817,8 @@ void X11_Run(void)
 					#endif
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = event.xcrossing.y;
-					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
-					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (etkFloat_t)event.xcrossing.x, (etkFloat_t)event.xcrossing.y);
+					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
+					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (float)event.xcrossing.x, (float)event.xcrossing.y);
 					break;
 				case LeaveNotify:
 					#ifdef DEBUG_X11_EVENT
@@ -826,7 +826,7 @@ void X11_Run(void)
 					#endif
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = event.xcrossing.y;
-					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (etkFloat_t)event.xcrossing.x << "," << (etkFloat_t)event.xcrossing.y << ")");
+					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 					break;
 				case MotionNotify:
 					#ifdef DEBUG_X11_EVENT
@@ -839,13 +839,13 @@ void X11_Run(void)
 						bool findOne = false;
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
-								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
 								EWOL_ThreadEventMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
-							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (etkFloat_t)event.xmotion.x << "," << (etkFloat_t)event.xmotion.y << ")");
+							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
 							EWOL_ThreadEventMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
 						}
 					}

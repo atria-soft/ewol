@@ -184,7 +184,7 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 				m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 			}
 		}
-		etkFloat_t tmpval = tmpSizeX * 0.2;
+		float tmpval = tmpSizeX * 0.2;
 		tmpSizeX -= tmpval;
 		tmpOriginX += tmpval/2;
 		tmpval = tmpSizeY * 0.2;

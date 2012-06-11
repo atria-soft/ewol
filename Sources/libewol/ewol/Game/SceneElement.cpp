@@ -235,7 +235,7 @@ ewol::GameElement* ewol::SceneElement::GetElement(uint32_t idElement)
 uint32_t ewol::SceneElement::GetNearestEnemy(Vector2D<float> position, int32_t groupId)
 {
 	uint32_t result = 0;
-	etkFloat_t lastQuadDistance = 9999999999999999.0;
+	float lastQuadDistance = 9999999999999999.0;
 	int32_t jjj=0;
 	if (groupId <0 || groupId >= MAX_GROUP_NUMBER) {
 		EWOL_ERROR("incorect group number : " << groupId);
@@ -246,7 +246,7 @@ uint32_t ewol::SceneElement::GetNearestEnemy(Vector2D<float> position, int32_t g
 			if (NULL != listAnimatedElements[groupEnemy[groupId][jjj]][iii]) {
 				if (true == listAnimatedElements[groupEnemy[groupId][jjj]][iii]->CanBeCibledGet()) {
 					Vector2D<float> tmpPos = listAnimatedElements[groupEnemy[groupId][jjj]][iii]->PositionGet();
-					etkFloat_t distance = quadDist(position, tmpPos);
+					float distance = quadDist(position, tmpPos);
 					if (distance <= lastQuadDistance) {
 						lastQuadDistance = distance;
 						result = createUniqueId(listAnimatedElements[groupEnemy[groupId][jjj]][iii]->GetUniqueId(), iii);
@@ -260,7 +260,7 @@ uint32_t ewol::SceneElement::GetNearestEnemy(Vector2D<float> position, int32_t g
 }
 
 
-bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t size)
+bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, float size)
 {
 	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 		if (group != jjj) {
@@ -276,7 +276,7 @@ bool ewol::SceneElement::HaveImpact(int32_t group, int32_t type, Vector2D<float>
 	return false;
 }
 
-void ewol::SceneElement::Explosion(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t pxAtenuation, etkFloat_t power)
+void ewol::SceneElement::Explosion(int32_t group, int32_t type, Vector2D<float> position, float pxAtenuation, float power)
 {
 	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
@@ -293,12 +293,12 @@ void ewol::SceneElement::Explosion(int32_t group, int32_t type, Vector2D<float> 
 uint32_t ewol::SceneElement::GetElementAtPos(Vector2D<float> position, int32_t maxDistanceDetection)
 {
 	uint32_t result = 0;
-	etkFloat_t lastQuadDistance = 9999999999999999.0;
+	float lastQuadDistance = 9999999999999999.0;
 	for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 		for (int32_t iii=0; iii<listAnimatedElements[jjj].Size(); iii++) {
 			if (NULL != listAnimatedElements[jjj][iii]) {
 				Vector2D<float> tmpPos = listAnimatedElements[jjj][iii]->PositionGet();
-				etkFloat_t distance = quadDist(position, tmpPos);
+				float distance = quadDist(position, tmpPos);
 				if (distance <= lastQuadDistance) {
 					lastQuadDistance = distance;
 					result = createUniqueId(listAnimatedElements[jjj][iii]->GetUniqueId(), iii);
@@ -322,7 +322,7 @@ void ewol::SceneElement::SetEventExternButton(uint32_t id, int32_t btId, int32_t
 	EWOL_TODO("but when ...");
 }
 
-void ewol::SceneElement::SetEventExternJoystick(uint32_t id, int32_t joyId, etkFloat_t angle, etkFloat_t distance, int32_t state)
+void ewol::SceneElement::SetEventExternJoystick(uint32_t id, int32_t joyId, float angle, float distance, int32_t state)
 {
 	EWOL_TODO("but when ...");
 }

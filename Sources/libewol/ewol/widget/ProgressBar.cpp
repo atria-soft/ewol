@@ -103,14 +103,14 @@ bool ewol::ProgressBar::CalculateMinSize(void)
 }
 
 
-void ewol::ProgressBar::ValueSet(etkFloat_t val)
+void ewol::ProgressBar::ValueSet(float val)
 {
 	m_value = etk_avg(0.0, val, 1.0);
 	MarkToReedraw();
 }
 
 
-etkFloat_t ewol::ProgressBar::ValueGet(void)
+float ewol::ProgressBar::ValueGet(void)
 {
 	return m_value;
 }

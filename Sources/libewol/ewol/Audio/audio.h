@@ -59,7 +59,7 @@ namespace ewol {
 		namespace effects {
 			int32_t Add(etk::UString file);
 			void    Rm(int32_t effectId);
-			void    Play(int32_t effectId, etkFloat_t xxx, etkFloat_t yyy);
+			void    Play(int32_t effectId, float xxx, float yyy);
 			
 			// in db
 			float VolumeGet(void);

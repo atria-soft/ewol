@@ -36,8 +36,8 @@
 #include <ewol/base/MainThread.h>
 
 ewol::Windows* gui_uniqueWindows = NULL;
-etkFloat_t     gui_width = 320;
-etkFloat_t     gui_height = 480;
+float     gui_width = 320;
+float     gui_height = 480;
 
 
 int32_t ewol::GetCurrentWidth(void)
@@ -64,7 +64,7 @@ void EWOL_NativeResize(int w, int h )
 	gui_height = h;
 	//EWOL_INFO("Resize w=" << w << " h=" << h);
 	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->CalculateSize((etkFloat_t)gui_width, (etkFloat_t)gui_height);
+		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
 		gui_uniqueWindows->SetOrigin(0.0, 0.0);
 	}
 }
@@ -92,14 +92,14 @@ void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newWindows)
 {
 	gui_uniqueWindows = newWindows;
 	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->CalculateSize((etkFloat_t)gui_width, (etkFloat_t)gui_height);
+		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
 	}
 }
 
 void guiAbstraction::ForceRedrawAll(void)
 {
 	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->CalculateSize((etkFloat_t)gui_width, (etkFloat_t)gui_height);
+		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
 	}
 }
 

@@ -52,10 +52,10 @@ namespace ewol {
 		protected:
 			Vector2D<float>          m_originScrooled;
 			Vector2D<float>          m_maxSize;
-			etkFloat_t         m_zoom; //!< current zoom on the display
+			float         m_zoom; //!< current zoom on the display
 		private:
 			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
-			etkFloat_t         m_pixelScrolling;
+			float         m_pixelScrolling;
 			Vector2D<float>          m_highSpeedStartPos;
 			highSpeedMode_te   m_highSpeedMode;
 			int32_t            m_highSpeedButton;
@@ -104,7 +104,7 @@ namespace ewol {
 			 * @param[in] nbPixel number of pixel scrolling
 			 * @return ---
 			 */
-			void SetScrollingSize(etkFloat_t nbPixel) { m_pixelScrolling = nbPixel; };
+			void SetScrollingSize(float nbPixel) { m_pixelScrolling = nbPixel; };
 			/**
 			 * @brief Specify the mode of scrolling for this windows
 			 * @param[in] newMode the selected mode for the scrolling...

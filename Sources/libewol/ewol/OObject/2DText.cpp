@@ -68,8 +68,8 @@ void ewol::OObject2DText::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_FontTextureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
-	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
-	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
+	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays

@@ -68,18 +68,7 @@ typedef enum {
 #define etk_max(elemA, elemB)               ((elemA)<(elemB)) ? (elemB) : (elemA)
 #define etk_avg(minimim, elem, maximum)     ((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem)
 
-
-//#define EWOL_PECISION_FIXPOINT
-
 #include <etk/TypesCoordonate.h>
-
-typedef oglt etkFloat_t;
-
-#if defined(EWOL_PECISION_FIXPOINT)
-	#define oglTypeFloat_t   GL_FIXED
-#else
-	#define oglTypeFloat_t   GL_FLOAT
-#endif
 
 typedef struct {
 	float u;

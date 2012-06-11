@@ -119,7 +119,7 @@ namespace ewol {
 				}
 				return false;
 			};
-			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
+			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
 				return false;
 			}
 		protected:

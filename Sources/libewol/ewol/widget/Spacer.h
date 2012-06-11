@@ -51,7 +51,7 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 			virtual bool   CalculateMinSize(void);
-			void SetSize(etkFloat_t size);
+			void SetSize(float size);
 			/**
 			 * @brief Get the widget at the specific windows absolute position
 			 * @note the sizer return NULL, because nothing can be done inside nothing
@@ -61,7 +61,7 @@ namespace ewol {
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return NULL; };
 		private:
-			etkFloat_t m_size;
+			float m_size;
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SPACER;

@@ -106,28 +106,28 @@ template <typename T> class LuaValue
 
 
 /*
-template <> int lua_Set<etkFloat_t>(lua_State* L)
+template <> int lua_Set<float>(lua_State* L)
 {
 	if (NULL==tmpObj) {
 		EWOL_ERROR("NULL obj...");
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	etkFloat_t value = luaL_checknumber(L, 1);
+	float value = luaL_checknumber(L, 1);
 	tmpObj->AngleSet(value);
 	// return number of parameters
 	return 1;
 }
 
 
-template <> int lua_Get<etkFloat_t>(lua_State* L)
+template <> int lua_Get<float>(lua_State* L)
 {
 	if (NULL==tmpObj) {
 		EWOL_ERROR("NULL obj...");
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	etkFloat_t value = tmpObj->AngleGet();
+	float value = tmpObj->AngleGet();
 	lua_pushnumber(L, value );
 	// return number of parameters
 	return 1;
@@ -256,7 +256,7 @@ LUAMOD_API int lua_GetAngle(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	etkFloat_t value = tmpObj->AngleGet();
+	float value = tmpObj->AngleGet();
 	lua_pushnumber(L, value );
 	// return number of parameters
 	return 1;
@@ -269,7 +269,7 @@ LUAMOD_API int lua_SetAngle(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	etkFloat_t value = luaL_checknumber(L, 1);
+	float value = luaL_checknumber(L, 1);
 	tmpObj->AngleSet(value);
 	// return number of parameters
 	return 1;
@@ -283,7 +283,7 @@ LUAMOD_API int lua_GetSize(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	etkFloat_t value = tmpObj->SizeGet();
+	float value = tmpObj->SizeGet();
 	lua_pushnumber(L, value );
 	// return number of parameters
 	return 1;
@@ -296,7 +296,7 @@ LUAMOD_API int lua_SetSize(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 0;
 	}
-	etkFloat_t value = luaL_checknumber(L, 1);
+	float value = luaL_checknumber(L, 1);
 	tmpObj->SizeSet(value);
 	// return number of parameters
 	return 0;
@@ -310,7 +310,7 @@ LUAMOD_API int lua_GetCanBeCibled(lua_State *L)
 		lua_pushboolean(L, false );
 		return 1;
 	}
-	etkFloat_t value = tmpObj->CanBeCibledGet();
+	float value = tmpObj->CanBeCibledGet();
 	lua_pushboolean(L, value );
 	// return number of parameters
 	return 1;
@@ -827,7 +827,7 @@ void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, e
 }
 
 
-bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t size)
+bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, float size)
 {
 	// todo set a flag that permit lua to direct control of this ...
 	if (false == ewol::GameElement::HaveImpact(group, type, position, size) ) {
@@ -848,7 +848,7 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<floa
 			lua_pushnumber(m_luaState, position.x);
 			lua_pushnumber(m_luaState, position.y);
 			lua_pushnumber(m_luaState, size);
-			etkFloat_t quadDistance = quadDist(m_position, position);
+			float quadDistance = quadDist(m_position, position);
 			lua_pushnumber(m_luaState, quadDistance);
 			// do the call (6 arguments, 1 result)
 			if (lua_pcall(m_luaState, 6, 1, 0) != 0) {
@@ -870,7 +870,7 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<floa
 }
 
 
-bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t pxAtenuation, etkFloat_t power)
+bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float> position, float pxAtenuation, float power)
 {
 	tmpObj = this;
 	bool retVal = false;
@@ -887,7 +887,7 @@ bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float
 			lua_pushnumber(m_luaState, position.y);
 			lua_pushnumber(m_luaState, pxAtenuation);
 			lua_pushnumber(m_luaState, power);
-			etkFloat_t quadDistance = quadDist(m_position, position);
+			float quadDistance = quadDist(m_position, position);
 			lua_pushnumber(m_luaState, quadDistance);
 			// do the call (7 arguments, 1 result)
 			if (lua_pcall(m_luaState, 7, 1, 0) != 0) {

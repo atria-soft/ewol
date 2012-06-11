@@ -201,7 +201,7 @@ void ewol::StdPopUp::SetFolder(etk::UString folder)
 
 
 
-bool ewol::StdPopUp::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y)
+bool ewol::StdPopUp::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y)
 {
 	EWOL_INFO("Receive Event from the BT ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << eventExternId << "\"" );
 	if (ewolEventFileChooserCancel == eventExternId) {

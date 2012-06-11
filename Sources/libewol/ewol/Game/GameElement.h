@@ -48,11 +48,11 @@ namespace ewol {
 			bool         m_visible;
 			Vector2D<float>    m_position;
 			Vector2D<float>    m_speed;
-			etkFloat_t   m_size;
-			etkFloat_t   m_angle;
-			etkFloat_t   m_gravity;
+			float   m_size;
+			float   m_angle;
+			float   m_gravity;
 			bool         m_canBeCibled;
-			etkFloat_t   m_life;
+			float   m_life;
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -77,16 +77,16 @@ namespace ewol {
 			void        SetVisible(bool state)                         { m_visible = state; };
 			Vector2D<float>   PositionGet(void)                              { return m_position; };
 			void        PositionSet(Vector2D<float>  state)                  { m_position = state; };
-			void        PositionSet(etkFloat_t xxx, etkFloat_t yyy)    { m_position.x = xxx; m_position.y = yyy; };
+			void        PositionSet(float xxx, float yyy)    { m_position.x = xxx; m_position.y = yyy; };
 			Vector2D<float>   SpeedGet(void)                                 { return m_speed; };
 			void        SpeedSet(Vector2D<float>  state)                     { m_speed = state; };
-			void        SpeedSet(etkFloat_t xxx, etkFloat_t yyy)       { m_speed.x = xxx; m_speed.y = yyy; };
-			etkFloat_t  SizeGet(void)                                  { return m_size; };
-			void        SizeSet(etkFloat_t state)                      { m_size = state; };
-			etkFloat_t  AngleGet(void)                                 { return m_angle; };
-			void        AngleSet(etkFloat_t state)                     { m_angle = state; };
-			etkFloat_t  GravityGet(void)                               { return m_gravity; };
-			void        GravitySet(etkFloat_t state)                   { m_gravity = state; };
+			void        SpeedSet(float xxx, float yyy)       { m_speed.x = xxx; m_speed.y = yyy; };
+			float  SizeGet(void)                                  { return m_size; };
+			void        SizeSet(float state)                      { m_size = state; };
+			float  AngleGet(void)                                 { return m_angle; };
+			void        AngleSet(float state)                     { m_angle = state; };
+			float  GravityGet(void)                               { return m_gravity; };
+			void        GravitySet(float state)                   { m_gravity = state; };
 			int32_t     PowerGet(void)                                 { return m_power; };
 			void        PowerSet(int32_t state)                        { m_power = state; };
 			bool        CanBeCibledGet(void)                           { return m_canBeCibled; };
@@ -122,8 +122,8 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void RemoveElement(int32_t idOfElement) { };
-			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t size);
-			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, etkFloat_t pxAtenuation, etkFloat_t power) { return false; } ;
+			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
+			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power) { return false; } ;
 			/**
 			 * @brief Requuest the draw of the current element, it will be done on the current Sprite list
 			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
@@ -140,6 +140,6 @@ namespace ewol {
 
 #include <ewol/widget/Scene.h>
 
-etkFloat_t quadDist(Vector2D<float>  pos1, Vector2D<float>  pos2);
+float quadDist(Vector2D<float>  pos1, Vector2D<float>  pos2);
 
 #endif

@@ -99,9 +99,9 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 	if(m_size.y < m_maxSize.y) {
 		//myOObjectsColored->Line(m_size.x-SCROLL_BAR_SPACE, SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
 		myOObjectsColored->Line(m_size.x-(SCROLL_BAR_SPACE/2), SCROLL_BAR_SPACE, m_size.x-(SCROLL_BAR_SPACE/2), m_size.y-SCROLL_BAR_SPACE, 1);
-		etkFloat_t lenScrollBar = m_size.y*(m_size.y-SCROLL_BAR_SPACE*2) / m_maxSize.y;
+		float lenScrollBar = m_size.y*(m_size.y-SCROLL_BAR_SPACE*2) / m_maxSize.y;
 		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.y-SCROLL_BAR_SPACE*2));
-		etkFloat_t originScrollBar = m_originScrooled.y / m_maxSize.y;
+		float originScrollBar = m_originScrooled.y / m_maxSize.y;
 		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 		originScrollBar *= (m_size.y-SCROLL_BAR_SPACE*2-lenScrollBar);
 		originScrollBar += 15;
@@ -110,9 +110,9 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 	if(m_size.x < m_maxSize.x) {
 		//myOObjectsColored->Line(SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
 		myOObjectsColored->Line(SCROLL_BAR_SPACE, m_size.y-(SCROLL_BAR_SPACE/2), m_size.x-SCROLL_BAR_SPACE, m_size.y-(SCROLL_BAR_SPACE/2), 1);
-		etkFloat_t lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE*2) / m_maxSize.x;
+		float lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE*2) / m_maxSize.x;
 		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x-SCROLL_BAR_SPACE*2));
-		etkFloat_t originScrollBar = m_originScrooled.x / m_maxSize.x;
+		float originScrollBar = m_originScrooled.x / m_maxSize.x;
 		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 		originScrollBar *= (m_size.x-SCROLL_BAR_SPACE*2-lenScrollBar);
 		originScrollBar += 15;
@@ -224,7 +224,7 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 						} else if (relativePos.y == m_highSpeedStartPos.y) {
 							m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
 						} else {
-							etkFloat_t coef = (relativePos.y - m_highSpeedStartPos.y) / (relativePos.x - m_highSpeedStartPos.x);
+							float coef = (relativePos.y - m_highSpeedStartPos.y) / (relativePos.x - m_highSpeedStartPos.x);
 							if (abs(coef) <= 1 ) {
 								m_highSpeedMode = ewol::SCROLL_ENABLE_HORIZONTAL;
 							} else {
@@ -303,8 +303,8 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 		}
 	} else if (SCROLL_MODE_CENTER == m_scroollingMode) {
 		if (ewol::INPUT_TYPE_MOUSE==type) {
-			etkFloat_t tmp1=ewol::GetCurrentHeight() / m_maxSize.y;
-			etkFloat_t tmp2=ewol::GetCurrentWidth() / m_maxSize.x;
+			float tmp1=ewol::GetCurrentHeight() / m_maxSize.y;
+			float tmp2=ewol::GetCurrentWidth() / m_maxSize.x;
 			//EWOL_INFO(" elements Zoom : " << tmp1 << " " << tmp2);
 			tmp1 = etk_min(tmp1, tmp2);
 			if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {

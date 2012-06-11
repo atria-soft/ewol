@@ -84,10 +84,10 @@ int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfEleme
 }
 
 
-etkFloat_t quadDist(Vector2D<float> pos1, Vector2D<float> pos2)
+float quadDist(Vector2D<float> pos1, Vector2D<float> pos2)
 {
-	etkFloat_t tmpVal1 = pos1.x - pos2.x;
-	etkFloat_t tmpVal2 = pos1.y - pos2.y;
+	float tmpVal1 = pos1.x - pos2.x;
+	float tmpVal2 = pos1.y - pos2.y;
 	
 	return tmpVal1*tmpVal1 + tmpVal2*tmpVal2;
 }
@@ -105,14 +105,14 @@ void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &elemen
 }
 
 
-bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, etkFloat_t size)
+bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, float size)
 {
 	// check if it was in the same group
 	if (group == m_group) {
 		return false;
 	}
-	etkFloat_t quadDistance = quadDist(m_position, position);
-	etkFloat_t radiusElement = m_size * m_size;
+	float quadDistance = quadDist(m_position, position);
+	float radiusElement = m_size * m_size;
 	if (radiusElement < quadDistance) {
 		//distance is greten than expected
 		return false;

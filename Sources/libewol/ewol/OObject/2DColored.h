@@ -36,27 +36,27 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 		protected:
-			etk::VectorType<Coord2D<oglt> >   m_coord;       //!< internal coord of the object
-			etk::VectorType<color_ts>        m_coordColor;  //!< internal color of the different point
+			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object
+			etk::VectorType<color_ts>           m_coordColor;  //!< internal color of the different point
 			//etk::VectorType<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
-			int32_t       m_triElement;
-			color_ts      m_color[3];
-			Coord2D<oglt> m_triangle[3];
+			int32_t         m_triElement;
+			color_ts        m_color[3];
+			Vector2D<float> m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
 			void Clear(void);
-			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
+			void SetColor(float red, float green, float blue, float alpha = 1.0);
 			void SetColor(color_ts color);
 			void SetPoint(Vector2D<float>  point);
-			void SetPoint(etkFloat_t x, etkFloat_t y);
-			void Line(etkFloat_t sx, etkFloat_t sy, etkFloat_t ex, etkFloat_t ey, etkFloat_t thickness);
-			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h);
-			void RectangleBorder(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t thickness);
-			void Circle(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness);
-			void CirclePart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t thickness, etkFloat_t angleStart, etkFloat_t angleStop);
-			void Disc(etkFloat_t x, etkFloat_t y, etkFloat_t radius);
-			void DiscPart(etkFloat_t x, etkFloat_t y, etkFloat_t radius, etkFloat_t angleStart, etkFloat_t angleStop);
+			void SetPoint(float x, float y);
+			void Line(float sx, float sy, float ex, float ey, float thickness);
+			void Rectangle(float x, float y, float w, float h);
+			void RectangleBorder(float x, float y, float w, float h, float thickness);
+			void Circle(float x, float y, float radius, float thickness);
+			void CirclePart(float x, float y, float radius, float thickness, float angleStart, float angleStop);
+			void Disc(float x, float y, float radius);
+			void DiscPart(float x, float y, float radius, float angleStart, float angleStop);
 	};
 };
 

@@ -202,7 +202,7 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventColorBarHasChange == eventId) {
 		//==> colorBar has change ...
-		etkFloat_t tmpAlpha = m_currentColor.alpha;
+		float tmpAlpha = m_currentColor.alpha;
 		// the colorbar has no notion of the alpha ==> keep it ...
 		if (NULL != m_widgetColorBar) {
 			m_currentColor = m_widgetColorBar->GetCurrentColor();

@@ -59,9 +59,9 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 		public:
-			virtual bool   CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY); // this generate the current size ...
+			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(etkFloat_t x=-1, etkFloat_t y=-1);
+			virtual void   SetMinSise(float x=-1, float y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
 		private:
@@ -69,7 +69,7 @@ namespace ewol {
 			color_ts        m_colorBorder;
 			Vector2D<float>       m_padding;
 			Vector2D<float>       m_arrowPos;
-			etkFloat_t      m_offset;
+			float      m_offset;
 			markPosition_te m_arrawBorder;
 			ewol::Widget*   m_subWidget[NB_BOUBLE_BUFFER];
 		public:

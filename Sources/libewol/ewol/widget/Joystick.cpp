@@ -35,7 +35,7 @@ extern const char * const ewolEventJoystickMove     = "ewol-joystick-move";
 static bool         l_displayBackground(true);
 static etk::UString l_background("");
 static etk::UString l_foreground("");
-static etkFloat_t   l_ratio(1.0/7.0);
+static float   l_ratio(1.0/7.0);
 
 /**
  * @brief Initilise the basic widget property ==> due to the android system
@@ -56,7 +56,7 @@ void ewol::WIDGET_JoystickInit(void)
  * @param[in] newRatio the new ratio that might be set
  * @return ---
  */
-void ewol::WIDGET_JoystickDefaultRatio(etkFloat_t newRatio)
+void ewol::WIDGET_JoystickDefaultRatio(float newRatio)
 {
 	if (newRatio > 1) {
 		newRatio = 1;
@@ -172,9 +172,9 @@ const char * const ewol::Joystick::GetObjectType(void)
  * @param[in] availlableY Availlable vertical pixel size
  * @return ---
  */
-bool ewol::Joystick::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::Joystick::CalculateSize(float availlableX, float availlableY)
 {
-	etkFloat_t minimumSize = etk_min(availlableX, availlableY);
+	float minimumSize = etk_min(availlableX, availlableY);
 	m_size.x = minimumSize;
 	m_size.y = minimumSize;
 	MarkToReedraw();
@@ -202,7 +202,7 @@ void ewol::Joystick::OnRegenerateDisplay(void)
 			}
 		}
 		// set cursor point
-		etkFloat_t sizeElement = m_size.x*m_ratio;
+		float sizeElement = m_size.x*m_ratio;
 		if (m_foreground == "") {
 			if (NULL == tmpOObjects) {
 				tmpOObjects = new ewol::OObject2DColored;
@@ -250,7 +250,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 		    || ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 			// get local relative position
 			Vector2D<float> relativePos = RelativePosition(pos);
-			etkFloat_t sizeElement = m_size.x*m_ratio;
+			float sizeElement = m_size.x*m_ratio;
 			// Calculate the position of the cursor...
 			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;
 			m_displayPos.y = (relativePos.y-sizeElement)/(m_size.y-sizeElement*2)*2.0 - 1.0;
@@ -305,7 +305,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
  * @param[in] newRatio the new ratio that might be set
  * @return ---
  */
-void ewol::Joystick::Ratio(etkFloat_t newRatio)
+void ewol::Joystick::Ratio(float newRatio)
 {
 	if (newRatio > 1) {
 		newRatio = 1;
@@ -346,7 +346,7 @@ void ewol::Joystick::Foreground(etk::UString imageNameInData)
  * @param[out] angle angle of the joy
  * @return ---
  */
-void ewol::Joystick::GetProperty(etkFloat_t& distance, etkFloat_t& angle)
+void ewol::Joystick::GetProperty(float& distance, float& angle)
 {
 	distance = m_distance;
 	angle = m_angle+M_PI/2;

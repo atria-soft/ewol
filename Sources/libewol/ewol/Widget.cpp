@@ -164,7 +164,7 @@ void ewol::Widget::MarkToRemove(void)
  * @param[in] availlableY Availlable vertical pixel size
  * @return ---
  */
-bool ewol::Widget::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;

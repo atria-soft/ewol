@@ -36,7 +36,7 @@ ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName)
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	m_textureId = ewol::texture::Load(textureName);
 }
-ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, etkFloat_t sizeX, etkFloat_t sizeY)
+ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX, float sizeY)
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	m_textureId = ewol::texture::Load(textureName, sizeX);
@@ -65,8 +65,8 @@ void ewol::OObject2DTextured::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
-	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
-	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
+	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
@@ -80,7 +80,7 @@ void ewol::OObject2DTextured::Clear(void)
 	m_coordTex.Clear();
 }
 
-void ewol::OObject2DTextured::Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX, etkFloat_t texY, etkFloat_t texSX, etkFloat_t texSY)
+void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, float texX, float texY, float texSX, float texSY)
 {
 	//EWOL_DEBUG("Add rectangle : ...");
 	Vector2D<float> point;

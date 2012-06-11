@@ -85,7 +85,7 @@ const char * const ewol::WSlider::GetObjectType(void)
 
 
 
-bool ewol::WSlider::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -137,7 +137,7 @@ bool ewol::WSlider::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::WSlider::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::WSlider::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }

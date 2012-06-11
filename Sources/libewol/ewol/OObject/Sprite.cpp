@@ -38,7 +38,7 @@ ewol::Sprite::Sprite(etk::UString spriteName)
 	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
 	m_textureId = ewol::texture::Load(m_name);
 }
-ewol::Sprite::Sprite(etk::UString spriteName, etkFloat_t sizeX, etkFloat_t sizeY)
+ewol::Sprite::Sprite(etk::UString spriteName, float sizeX, float sizeY)
 {
 	m_name = spriteName;
 	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
@@ -69,8 +69,8 @@ void ewol::Sprite::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
-	glVertexPointer( 2, oglTypeFloat_t, 0, &m_coord[0] );
-	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
+	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
@@ -84,7 +84,7 @@ void ewol::Sprite::Clear(void)
 	m_coordTex.Clear();
 }
 
-void ewol::Sprite::Element(Vector2D<float> pos, etkFloat_t size, etkFloat_t angle)
+void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
 {
 	angle -= M_PI/4;
 	size *= 0.7;
@@ -99,8 +99,8 @@ void ewol::Sprite::Element(Vector2D<float> pos, etkFloat_t size, etkFloat_t angl
 	texD.v = 0.0;
 	
 	Vector2D<float> point;
-	etkFloat_t yyySin = sin(angle) * size;
-	etkFloat_t xxxCos = cos(angle) * size;
+	float yyySin = sin(angle) * size;
+	float xxxCos = cos(angle) * size;
 	
 	point.x = xxxCos + pos.x;
 	point.y = yyySin + pos.y;

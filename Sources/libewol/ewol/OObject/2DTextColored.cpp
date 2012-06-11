@@ -81,8 +81,8 @@ void ewol::OObject2DTextColored::Draw(void)
 	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
-	glVertexPointer(   2, oglTypeFloat_t, 0, &m_coord[0] );
-	glTexCoordPointer( 2, oglTypeFloat_t, 0, &m_coordTex[0] );
+	glVertexPointer(   2, GL_FLOAT, 0, &m_coord[0] );
+	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
@@ -146,7 +146,7 @@ void ewol::OObject2DTextColored::SetColor(color_ts color)
 }
 
 
-void ewol::OObject2DTextColored::SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha)
+void ewol::OObject2DTextColored::SetColor(float red, float green, float blue, float alpha)
 {
 	m_color = etk::color::Create(red, green, blue, alpha);
 }

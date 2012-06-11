@@ -485,7 +485,7 @@ color_ts etk::color::Create(uint8_t _red, uint8_t _green, uint8_t _blue, uint8_t
 	return tmpColor;
 }
 
-color_ts etk::color::Create(etkFloat_t _red, etkFloat_t _green, etkFloat_t _blue, etkFloat_t _alpha)
+color_ts etk::color::Create(float _red, float _green, float _blue, float _alpha)
 {
 	color_ts tmpColor;
 	_red   = etk_avg((float)0, (float)_red,   (float)1);

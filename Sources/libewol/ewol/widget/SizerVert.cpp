@@ -82,13 +82,13 @@ const char * const ewol::SizerVert::GetObjectType(void)
 
 
 
-bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::SizerVert::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	// calculate unExpendable Size :
-	etkFloat_t unexpendableSize=0.0;
+	float unexpendableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
@@ -103,7 +103,7 @@ bool ewol::SizerVert::CalculateSize(etkFloat_t availlableX, etkFloat_t availlabl
 		}
 	}
 	// 2 cases : 1 or more can Expend, or all is done ...
-	etkFloat_t sizeToAddAtEveryOne = 0;
+	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expend, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
 		sizeToAddAtEveryOne = (m_size.y - unexpendableSize) / nbWidgetNotFixedSize;
@@ -164,7 +164,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerVert::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::SizerVert::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }

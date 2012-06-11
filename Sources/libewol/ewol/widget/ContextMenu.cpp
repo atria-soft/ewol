@@ -95,7 +95,7 @@ const char * const ewol::ContextMenu::GetObjectType(void)
 
 
 
-bool ewol::ContextMenu::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 {
 	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
@@ -188,7 +188,7 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::ContextMenu::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::ContextMenu::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }

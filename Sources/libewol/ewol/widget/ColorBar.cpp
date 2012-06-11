@@ -275,8 +275,8 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			//==> try to estimate color
 			EWOL_VERBOSE("event on (" << relativePos.x << "," << relativePos.y << ")");
 			int32_t bandID = (int32_t)(relativePos.x/(m_size.x/6));
-			etkFloat_t localPos = relativePos.x - (m_size.x/6) * bandID;
-			etkFloat_t poroportionnalPos = localPos/(m_size.x/6);
+			float localPos = relativePos.x - (m_size.x/6) * bandID;
+			float poroportionnalPos = localPos/(m_size.x/6);
 			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
 			color_ts estimateColor;
 			estimateColor.alpha = 1.0;
@@ -305,12 +305,12 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			if (relativePos.y == (m_size.y/2)) {
 				// nothing to do ... just get the current color ...
 			} else if (relativePos.y < (m_size.y/2)) {
-				etkFloat_t poroportionnalWhite = 1.0-relativePos.y/(m_size.y/2);
+				float poroportionnalWhite = 1.0-relativePos.y/(m_size.y/2);
 				estimateColor.red   = estimateColor.red   + (1.0 - estimateColor.red  )*poroportionnalWhite;
 				estimateColor.green = estimateColor.green + (1.0 - estimateColor.green)*poroportionnalWhite;
 				estimateColor.blue  = estimateColor.blue  + (1.0 - estimateColor.blue )*poroportionnalWhite;
 			} else {
-				etkFloat_t poroportionnalBlack = (relativePos.y-(m_size.y/2))/(m_size.y/2);
+				float poroportionnalBlack = (relativePos.y-(m_size.y/2))/(m_size.y/2);
 				estimateColor.red   = estimateColor.red   - (estimateColor.red  )*poroportionnalBlack;
 				estimateColor.green = estimateColor.green - (estimateColor.green)*poroportionnalBlack;
 				estimateColor.blue  = estimateColor.blue  - (estimateColor.blue )*poroportionnalBlack;

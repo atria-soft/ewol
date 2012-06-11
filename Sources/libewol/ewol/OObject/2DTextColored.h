@@ -37,7 +37,7 @@ namespace ewol {
 			virtual ~OObject2DTextColored(void);
 		public:
 			virtual void Draw(void);
-			void SetColor(etkFloat_t red, etkFloat_t green, etkFloat_t blue, etkFloat_t alpha = 1.0);
+			void SetColor(float red, float green, float blue, float alpha = 1.0);
 			void SetColor(color_ts color);
 			// set a specific text
 			void    Clear(void);

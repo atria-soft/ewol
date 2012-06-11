@@ -152,10 +152,10 @@ void ewol::Slider::OnRegenerateDisplay(void)
 		color_ts borderDot = m_textColorFg;
 		borderDot.alpha /= 2;
 		tmpOObjects->SetColor(borderDot);
-		tmpOObjects->Disc(4+((etkFloat_t)(m_value-m_min)/(etkFloat_t)(m_max-m_min))*(etkFloat_t)(m_size.x-2*dotRadius), m_size.y/2, dotRadius);
+		tmpOObjects->Disc(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2, dotRadius);
 		
 		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->Disc(4+((etkFloat_t)(m_value-m_min)/(etkFloat_t)(m_max-m_min))*(etkFloat_t)(m_size.x-2*dotRadius), m_size.y/2, dotRadius/1.6);
+		tmpOObjects->Disc(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2, dotRadius/1.6);
 		
 		AddOObject(tmpOObjects);
 	}
@@ -183,7 +183,7 @@ bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventI
 			// get the new position :
 			EWOL_DEBUG("Event on Slider (" << relativePos.x << "," << relativePos.y << ")");
 			int32_t oldValue = m_value;
-			m_value = m_min + (etkFloat_t)(relativePos.x - dotRadius) / (etkFloat_t)(m_size.x-2*dotRadius) * (etkFloat_t)(m_max-m_min);
+			m_value = m_min + (float)(relativePos.x - dotRadius) / (float)(m_size.x-2*dotRadius) * (float)(m_max-m_min);
 			m_value = etk_max(etk_min(m_value, m_max), m_min);
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");

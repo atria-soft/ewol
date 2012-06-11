@@ -44,8 +44,8 @@ namespace ewol {
 			color_ts           m_colorFg;      //!< Forground  color
 			color_ts           m_colorBg;      //!< Background color
 			Vector2D<float>          m_displayPos;   //!< direction of the cursor ...
-			etkFloat_t         m_distance;     //!< dintance from the center
-			etkFloat_t         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
+			float         m_distance;     //!< dintance from the center
+			float         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 			bool               m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
 			joystickMode_te    m_displayMode;  //!< Type of fonctionnal mode of the joystick
 		private:
@@ -53,7 +53,7 @@ namespace ewol {
 			bool               m_displayBackground;
 			etk::UString       m_background;
 			etk::UString       m_foreground;
-			etkFloat_t         m_ratio;
+			float         m_ratio;
 		public:
 			Joystick(void);
 			virtual ~Joystick(void);
@@ -79,7 +79,7 @@ namespace ewol {
 			 * @param[in] availlableY Availlable vertical pixel size
 			 * @return ---
 			 */
-			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
+			virtual bool CalculateSize(float availlableX, float availlableY);
 			virtual void OnRegenerateDisplay(void);
 			/**
 			 * @brief Event on an input of this Widget
@@ -98,7 +98,7 @@ namespace ewol {
 			 * @param[in] newRatio the new ratio that might be set
 			 * @return ---
 			 */
-			void Ratio(etkFloat_t newRatio);
+			void Ratio(float newRatio);
 			
 			/**
 			 * @brief Set the Background of the widget joystick
@@ -120,7 +120,7 @@ namespace ewol {
 			 * @param[out] angle angle of the joy
 			 * @return ---
 			 */
-			void GetProperty(etkFloat_t& distance, etkFloat_t& angle);
+			void GetProperty(float& distance, float& angle);
 			
 	};
 	
@@ -136,7 +136,7 @@ namespace ewol {
 	 * @param[in] newRatio the new ratio that might be set
 	 * @return ---
 	 */
-	void WIDGET_JoystickDefaultRatio(etkFloat_t newRatio);
+	void WIDGET_JoystickDefaultRatio(float newRatio);
 	/**
 	 * @brief Set the default Background of the widget joystick
 	 * @param[in] imageNameInData the new rbackground that might be set

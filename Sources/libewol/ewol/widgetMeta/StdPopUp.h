@@ -59,7 +59,7 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void);
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, etkFloat_t x, etkFloat_t y);
+			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y);
 			void SetTitle(etk::UString text);
 			void SetComment(etk::UString text);
 			void SetButtonLabel(int32_t btId, etk::UString text); // note : if no label no bt...

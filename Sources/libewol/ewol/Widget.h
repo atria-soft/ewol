@@ -163,7 +163,7 @@ namespace ewol {
 			 * @param[in] y Position ot hte vertical origin
 			 * @return ---
 			 */
-			void SetOrigin(etkFloat_t x, etkFloat_t y) { m_origin.x=x; m_origin.y=y;};
+			void SetOrigin(float x, float y) { m_origin.x=x; m_origin.y=y;};
 			/**
 			 * @brief Get the origin (obsolute position in the windows)
 			 * @param ---
@@ -185,7 +185,7 @@ namespace ewol {
 			 */
 			// TODO : Remove bool ==> deprecated ...
 			// TODO : Rename in SetSize()
-			virtual bool CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY);
+			virtual bool CalculateSize(float availlableX, float availlableY);
 			//update the min Size ... and the expend parameters for the sizer
 			/**
 			 * @brief Calculate the minimum size of the widget that is needed to display or the user requested)
@@ -200,7 +200,7 @@ namespace ewol {
 			 * @param[in] y Set minimum vertical size (-1 : no requested)
 			 * @return ---
 			 */
-			virtual void SetMinSize(etkFloat_t x=-1, etkFloat_t y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
+			virtual void SetMinSize(float x=-1, float y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
 			/**
 			 * @brief Get the current calculated min size
 			 * @param ---

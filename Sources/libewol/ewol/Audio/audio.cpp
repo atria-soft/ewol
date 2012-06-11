@@ -187,7 +187,7 @@ void ewol::audio::effects::Rm(int32_t effectId)
 }
 
 
-void ewol::audio::effects::Play(int32_t effectId, etkFloat_t xxx, etkFloat_t yyy)
+void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 {
 	
 }

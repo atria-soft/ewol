@@ -108,7 +108,7 @@ const char * const ewol::Windows::GetObjectType(void)
 }
 
 
-bool ewol::Windows::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::Windows::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);
 	m_size.x = availlableX;

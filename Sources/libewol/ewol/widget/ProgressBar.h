@@ -52,11 +52,11 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 			virtual bool   CalculateMinSize(void);
-			void           ValueSet(etkFloat_t val);
-			etkFloat_t     ValueGet(void);
+			void           ValueSet(float val);
+			float     ValueGet(void);
 			void           SetColor(color_ts newColor) { m_textColorFg = newColor; };
 		private:
-			etkFloat_t         m_value;           //!< % used
+			float         m_value;           //!< % used
 			color_ts           m_textColorFg;     //!< forder bar color
 			color_ts           m_textColorBgOn;   //!< bar color enable
 			color_ts           m_textColorBgOff;  //!< bar color disable

@@ -61,7 +61,7 @@ namespace svg
 			virtual void Display(int32_t spacing) { };
 			void ParseTransform(TiXmlNode *node);
 			void ParsePosition(const TiXmlNode *node, Vector2D<float> &pos, Vector2D<float> &size);
-			etkFloat_t ParseLength(const char *dataInput);
+			float ParseLength(const char *dataInput);
 			void ParsePaintAttr(const TiXmlNode *node);
 			color_ts ParseColor(const char *inputData);
 	};

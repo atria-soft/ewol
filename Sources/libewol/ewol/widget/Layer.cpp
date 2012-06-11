@@ -82,7 +82,7 @@ const char * const ewol::Layer::GetObjectType(void)
 
 
 
-bool ewol::Layer::CalculateSize(etkFloat_t availlableX, etkFloat_t availlableY)
+bool ewol::Layer::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -121,7 +121,7 @@ bool ewol::Layer::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::Layer::SetMinSise(etkFloat_t x, etkFloat_t y)
+void ewol::Layer::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }

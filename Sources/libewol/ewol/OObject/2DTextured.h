@@ -32,12 +32,12 @@ namespace ewol {
 	{
 		public:
 			OObject2DTextured(etk::UString textureName);
-			OObject2DTextured(etk::UString textureName, etkFloat_t sizeX, etkFloat_t sizeY);
+			OObject2DTextured(etk::UString textureName, float sizeX, float sizeY);
 			virtual ~OObject2DTextured(void);
 		public:
 			virtual void Draw(void);
 			void Clear(void);
-			void Rectangle(etkFloat_t x, etkFloat_t y, etkFloat_t w, etkFloat_t h, etkFloat_t texX=0.0, etkFloat_t texY=0.0, etkFloat_t texSX=1.0, etkFloat_t texSY=1.0);
+			void Rectangle(float x, float y, float w, float h, float texX=0.0, float texY=0.0, float texSX=1.0, float texSY=1.0);
 		protected:
 			int32_t                       m_textureId;   //!< texture internal ID
 			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object

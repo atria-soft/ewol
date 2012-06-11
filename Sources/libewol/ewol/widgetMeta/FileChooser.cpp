@@ -160,7 +160,7 @@ class FileChooserFolderList : public ewol::List
 			return true;
 		};
 		
-		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
+		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
 			if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 				EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
 				if (1 == IdInput) {
@@ -326,7 +326,7 @@ class FileChooserFileList : public ewol::List
 			return true;
 		};
 		
-		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, etkFloat_t x, etkFloat_t y) {
+		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
 			if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 				EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
 				if (1 == IdInput) {
