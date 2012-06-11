@@ -70,32 +70,32 @@ namespace ewol {
 			virtual void Init(void) { };
 			virtual void UnInit(void) { };
 			
-			uint16_t    GetUniqueId(void)                              { return m_uniqueId; };
+			uint16_t    GetUniqueId(void)                         { return m_uniqueId; };
 			
-			bool        HasName(etk::UString tmpName)                  { return (tmpName == m_fileNameConfig); };
-			bool        IsVisible(void)                                { return m_visible; };
-			void        SetVisible(bool state)                         { m_visible = state; };
-			Vector2D<float>   PositionGet(void)                              { return m_position; };
-			void        PositionSet(Vector2D<float>  state)                  { m_position = state; };
-			void        PositionSet(float xxx, float yyy)    { m_position.x = xxx; m_position.y = yyy; };
-			Vector2D<float>   SpeedGet(void)                                 { return m_speed; };
-			void        SpeedSet(Vector2D<float>  state)                     { m_speed = state; };
-			void        SpeedSet(float xxx, float yyy)       { m_speed.x = xxx; m_speed.y = yyy; };
-			float  SizeGet(void)                                  { return m_size; };
-			void        SizeSet(float state)                      { m_size = state; };
-			float  AngleGet(void)                                 { return m_angle; };
-			void        AngleSet(float state)                     { m_angle = state; };
-			float  GravityGet(void)                               { return m_gravity; };
-			void        GravitySet(float state)                   { m_gravity = state; };
-			int32_t     PowerGet(void)                                 { return m_power; };
-			void        PowerSet(int32_t state)                        { m_power = state; };
-			bool        CanBeCibledGet(void)                           { return m_canBeCibled; };
-			void        CanBeCibledSet(bool state)                     { m_canBeCibled = state; };
+			bool             HasName(etk::UString tmpName)        { return (tmpName == m_fileNameConfig); };
+			bool             IsVisible(void)                      { return m_visible; };
+			void             SetVisible(bool state)               { m_visible = state; };
+			Vector2D<float>  PositionGet(void)                    { return m_position; };
+			void             PositionSet(Vector2D<float> state)   { m_position = state; };
+			void             PositionSet(float xxx, float yyy)    { m_position.x = xxx; m_position.y = yyy; };
+			Vector2D<float>  SpeedGet(void)                       { return m_speed; };
+			void             SpeedSet(Vector2D<float> state)      { m_speed = state; };
+			void             SpeedSet(float xxx, float yyy)       { m_speed.x = xxx; m_speed.y = yyy; };
+			float    SizeGet(void)                                { return m_size; };
+			void     SizeSet(float state)                         { m_size = state; };
+			float    AngleGet(void)                               { return m_angle; };
+			void     AngleSet(float state)                        { m_angle = state; };
+			float    GravityGet(void)                             { return m_gravity; };
+			void     GravitySet(float state)                      { m_gravity = state; };
+			int32_t  PowerGet(void)                               { return m_power; };
+			void     PowerSet(int32_t state)                      { m_power = state; };
+			bool     CanBeCibledGet(void)                         { return m_canBeCibled; };
+			void     CanBeCibledSet(bool state)                   { m_canBeCibled = state; };
 			
-			int32_t     GetType(void)                                  { return m_type; }; // DEPRECATED ...
-			int32_t     TypeGet(void)                                  { return m_type; };
-			uint16_t    GroupGet(void)                                 { return m_group; };
-			void        GroupSet(uint16_t state)                       { m_group = state; };
+			int32_t  GetType(void)                                { return m_type; }; // TODO : DEPRECATED ...
+			int32_t  TypeGet(void)                                { return m_type; };
+			uint16_t GroupGet(void)                               { return m_group; };
+			void     GroupSet(uint16_t state)                     { m_group = state; };
 			
 			void GetElementProperty(gameElementGenericProperty_ts &element);
 			/**
@@ -115,7 +115,7 @@ namespace ewol {
 			 * @param[in,out] listOfEffects Reference on the list where the display must be done for every effects
 			 * @return ---
 			 */
-			virtual void Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, etk::VectorType<ewol::Sprite*> & listOfEffects) { };
+			virtual void Draw(int32_t currentCreateId) { };
 			/**
 			 * @brief an element has been remove, just remove reference on it or ID on IT, it can be replace whith an other that have no link
 			 * @param[in] idOfElement Id of the element that has been removed
@@ -125,13 +125,20 @@ namespace ewol {
 			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
 			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power) { return false; } ;
 			/**
-			 * @brief Requuest the draw of the current element, it will be done on the current Sprite list
+			 * @brief Load or get a previous loaded sprite, it will be done on the current Sprite list
 			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
 			 * @param[in] fileName Sprite name
 			 * @param[in] maxSize maximum size of the sprite
 			 * @return the id of the sprite requested or -1 if it does not existed
 			 */
 			int32_t LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, Vector2D<float>  maxSize);
+			/**
+			 * @brief UnLoad or not(if needed) the sprite selected, it will be done on the current Sprite list
+			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
+			 * @param[in] spriteId Sprite registered id
+			 * @return ---
+			 */
+			void UnLoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], int32_t spriteId);
 			
 			virtual void Message(etk::UString control, etk::UString message) { } ;
 	};

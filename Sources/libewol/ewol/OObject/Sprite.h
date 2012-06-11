@@ -38,12 +38,13 @@ namespace ewol {
 			virtual ~Sprite(void);
 			virtual void Draw(void);
 			void Clear(void);
-			void Element(Vector2D<float>  pos, float size, float angle);
+			void Element(Vector2D<float> pos, float size, float angle);
+			void Element(Vector3D<float> pos, float size, float angle);
 			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
-			int32_t                       m_textureId;   //!< texture internal ID
-			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object
-			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
+			int32_t                           m_textureId;   //!< texture internal ID
+			etk::VectorType<Vector3D<float> > m_coord;       //!< internal coord of the object
+			etk::VectorType<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
 	};
 };
 

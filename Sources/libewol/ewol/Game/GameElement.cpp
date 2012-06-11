@@ -54,7 +54,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 
 
 /**
- * @brief Requuest the draw of the current element, it will be done on the current Sprite list
+ * @brief Load or get a previous loaded sprite, it will be done on the current Sprite list
  * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
  * @param[in] fileName Sprite name
  * @param[in] maxSize maximum size of the sprite
@@ -65,7 +65,8 @@ int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfEleme
 	for (int32_t iii=0; iii<listOfElement[0].Size(); iii++) {
 		if (listOfElement[0][iii] != NULL) {
 			if (listOfElement[0][iii]->HasName(fileName) == true) {
-				// TODO : control the size ...
+				// count the number of element registered ...
+				listOfElement[0][iii]->IncreaseLoadedTime();
 				return iii;
 			}
 		}
@@ -81,6 +82,28 @@ int32_t ewol::GameElement::LoadSprite(etk::VectorType<ewol::Sprite*> listOfEleme
 		listOfElement[iii].PushBack(tmpSprite);
 	}
 	return listOfElement[0].Size() -1;
+}
+
+/**
+ * @brief UnLoad or not(if needed) the sprite selected, it will be done on the current Sprite list
+ * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
+ * @param[in] spriteId Sprite registered id
+ * @return ---
+ */
+void ewol::GameElement::UnLoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], int32_t spriteId)
+{
+	if (spriteId >= 0 && spriteId < listOfElement[0].Size()) {
+		if (listOfElement[0][spriteId] != NULL) {
+			// count the number of element registered ...
+			if (true == listOfElement[0][spriteId]->DecreaseLoadedTime() ) {
+				// must remove the sprite ==> pb with the double buffer ...
+				// TODO : ==> for all double buffer ...
+				for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+					
+				}
+			}
+		}
+	}
 }
 
 

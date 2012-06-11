@@ -80,15 +80,6 @@ ewol::SceneElement::~SceneElement(void)
 		listAnimatedElements[iii].Clear();
 	}
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		for (int32_t jjj=0; jjj<backgroundElements[iii].Size(); jjj++) {
-			if (NULL != backgroundElements[iii][jjj]) {
-				delete(backgroundElements[iii][jjj]);
-				backgroundElements[iii][jjj] = NULL;
-			}
-		}
-		backgroundElements[iii].Clear();
-	}
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		for (int32_t jjj=0; jjj<animated[iii].Size(); jjj++) {
 			if (NULL != animated[iii][jjj]) {
 				delete(animated[iii][jjj]);
@@ -96,15 +87,6 @@ ewol::SceneElement::~SceneElement(void)
 			}
 		}
 		animated[iii].Clear();
-	}
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		for (int32_t jjj=0; jjj<effects[iii].Size(); jjj++) {
-			if (NULL != effects[iii][jjj]) {
-				delete(effects[iii][jjj]);
-				effects[iii][jjj] = NULL;
-			}
-		}
-		effects[iii].Clear();
 	}
 }
 

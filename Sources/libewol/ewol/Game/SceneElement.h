@@ -37,10 +37,10 @@ namespace ewol {
 		uint32_t                id;         //!< unique id of the element
 		int32_t                 group;      //!< element group
 		int32_t                 type;       //!< element type
-		Vector2D<float>               position;   //!< current position
-		Vector2D<float>               speed;      //!< current speed
-		Vector2D<float>               size;       //!< curent size of the element
-		float              angle;      //!< element angle
+		Vector2D<float>         position;   //!< current position
+		Vector2D<float>         speed;      //!< current speed
+		Vector2D<float>         size;       //!< curent size of the element
+		float                   angle;      //!< element angle
 	} gameElementGenericProperty_ts;
 	
 	typedef ewol::GameElement* (creatorElement_tf)(SceneElement & sceneElement, etk::UString& tmpName, etk::UString& userString);
@@ -64,9 +64,7 @@ namespace ewol {
 			int32_t                              numberOfGroup;                                    //!< curent scene number of group
 			etk::UString                         groupDescription[MAX_GROUP_NUMBER];               //!< name of all the groups
 			int32_t                              groupEnemy[MAX_GROUP_NUMBER][MAX_GROUP_NUMBER];   //!< list of the ennemy
-			etk::VectorType<ewol::OObject*>      backgroundElements[NB_BOUBLE_BUFFER];             //!< element that must be display the first
 			etk::VectorType<ewol::Sprite*>       animated[NB_BOUBLE_BUFFER];                       //!< element that must be display the second
-			etk::VectorType<ewol::Sprite*>       effects[NB_BOUBLE_BUFFER];                        //!< element that must be display the third
 			etk::VectorType<ewol::GameElement*>  listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
 			etk::VectorType<ewol::GameElement*>  listGarbage;                                      //!< garbage of the old element allocated ==> prevent multiple alloc and free
 			etk::VectorType<listRegisteElement*> listCreatorElement;                               //!< list of all creatable elements

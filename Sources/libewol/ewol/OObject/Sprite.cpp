@@ -69,7 +69,7 @@ void ewol::Sprite::Draw(void)
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
-	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+	glVertexPointer( 3, GL_FLOAT, 0, &m_coord[0] );
 	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
@@ -98,7 +98,56 @@ void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
 	texD.u = 1.0;
 	texD.v = 0.0;
 	
-	Vector2D<float> point;
+	Vector3D<float> point;
+	point.y = 0;
+	float yyySin = sin(angle) * size;
+	float xxxCos = cos(angle) * size;
+	
+	point.x = xxxCos + pos.x;
+	point.y = yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texB);
+	
+	point.x = yyySin + pos.x;
+	point.y = -xxxCos + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texC);
+	
+	point.x = -xxxCos + pos.x;
+	point.y = -yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texD);
+	
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texD);
+	
+	point.x = -yyySin + pos.x;
+	point.y = xxxCos + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texA);
+	
+	point.x = xxxCos + pos.x;
+	point.y = yyySin + pos.y;
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(texB);
+}
+
+
+void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle)
+{
+	angle -= M_PI/4;
+	size *= 0.7;
+	texCoord_ts texA, texB, texC, texD;
+	texA.u = 0.0;
+	texA.v = 0.0;
+	texB.u = 0.0;
+	texB.v = 1.0;
+	texC.u = 1.0;
+	texC.v = 1.0;
+	texD.u = 1.0;
+	texD.v = 0.0;
+	
+	Vector3D<float> point = pos;
 	float yyySin = sin(angle) * size;
 	float xxxCos = cos(angle) * size;
 	

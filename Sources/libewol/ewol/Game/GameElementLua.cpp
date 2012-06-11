@@ -35,7 +35,6 @@
 
 static ewol::GameElementLua *           tmpObj = NULL;
 static etk::VectorType<ewol::Sprite*> * tmpSprite = NULL;
-static etk::VectorType<ewol::Sprite*> * tmpEffects = NULL;
 static ewol::SceneElement *             tmpScene = NULL;
 
 template <typename T> int index(lua_State* L);
@@ -410,12 +409,10 @@ LUAMOD_API int lua_ElementAdd(lua_State *L)
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
 	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 	uint32_t elementId = tmpScene->AddElementNamed(group, elementName);
 	tmpObj = ttmpObj;
 	tmpSprite = ttmpSprite;
-	tmpEffects = ttmpEffects;
 	tmpScene = ttmpScene;
 	
 	if (0==elementId) {
@@ -555,14 +552,12 @@ LUAMOD_API int lua_HaveImpact(lua_State *L)
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
 	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 
 	bool result = tmpScene->HaveImpact(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), tmpObj->SizeGet());
 
 	tmpObj = ttmpObj;
 	tmpSprite = ttmpSprite;
-	tmpEffects = ttmpEffects;
 	tmpScene = ttmpScene;
 
 	lua_pushboolean(L, result );
@@ -581,14 +576,12 @@ LUAMOD_API int lua_Explosion(lua_State *L)
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
 	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	etk::VectorType<ewol::Sprite*> * ttmpEffects = tmpEffects;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 
 	tmpScene->Explosion(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), 0.01, tmpObj->PowerGet());
 
 	tmpObj = ttmpObj;
 	tmpSprite = ttmpSprite;
-	tmpEffects = ttmpEffects;
 	tmpScene = ttmpScene;
 
 	// return number of parameters
@@ -803,11 +796,10 @@ bool ewol::GameElementLua::Process(int64_t time, int32_t deltaTime)
 }
 
 
-void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, etk::VectorType<ewol::Sprite*> & listOfEffects)
+void ewol::GameElementLua::Draw(int32_t currentCreateId)
 {
 	tmpObj = this;
-	tmpSprite = &listOfSprite;
-	tmpEffects = &listOfEffects;
+	tmpSprite = &m_sceneElement.animated[currentCreateId];
 	if (NULL != m_luaState) {
 		// call the Draw function
 		lua_getglobal(m_luaState, "Draw");
@@ -823,7 +815,6 @@ void ewol::GameElementLua::Draw(etk::VectorType<ewol::Sprite*> & listOfSprite, e
 	}
 	tmpObj = NULL;
 	tmpSprite = NULL;
-	tmpEffects = NULL;
 }
 
 

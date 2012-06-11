@@ -104,17 +104,11 @@ void ewol::Scene::OnRegenerateDisplay(void)
 				m_sceneElement.animated[m_currentCreateId][iii]->Clear();
 			}
 		}
-		// clean effects
-		for (int32_t iii=0; iii<m_sceneElement.effects[m_currentCreateId].Size(); iii++) {
-			if (NULL != m_sceneElement.effects[m_currentCreateId][iii]) {
-				m_sceneElement.effects[m_currentCreateId][iii]->Clear();
-			}
-		}
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
 					// find an empty slot ...
-					m_sceneElement.listAnimatedElements[jjj][iii]->Draw(m_sceneElement.animated[m_currentCreateId], m_sceneElement.effects[m_currentCreateId]);
+					m_sceneElement.listAnimatedElements[jjj][iii]->Draw(m_currentCreateId);
 				}
 			}
 		}
@@ -131,18 +125,10 @@ void ewol::Scene::OnRegenerateDisplay(void)
 void ewol::Scene::OnDraw(void)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
-	// draw background
-	// TODO : ...
 	// draw elements
 	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_sceneElement.animated[m_currentDrawId][iii]) {
 			m_sceneElement.animated[m_currentDrawId][iii]->Draw();
-		}
-	}
-	// draw effects
-	for (int32_t iii=0; iii<m_sceneElement.effects[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_sceneElement.effects[m_currentDrawId][iii]) {
-			m_sceneElement.effects[m_currentDrawId][iii]->Draw();
 		}
 	}
 }
