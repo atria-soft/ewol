@@ -42,12 +42,12 @@ extern "C"
 {
 	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 	typedef struct {
-		uniChar_t   unicodeCharVal;
-		texCoord_ts posStart;
-		texCoord_ts posStop;
+		uniChar_t        unicodeCharVal;
+		texCoord_ts      posStart;
+		texCoord_ts      posStop;
 		Vector2D<float>  bearing;
 		Vector2D<float>  size;
-		int32_t     advance;
+		int32_t          advance;
 	}freeTypeFontElement_ts;
 };
 
@@ -255,8 +255,9 @@ class FTFontInternal
 			
 			int32_t nbElement = listElement.Size();
 			int32_t coter = simpleSQRT(nbElement);
-			int32_t glyphMaxWidth = /*(m_fftFace->max_advance_width>>6); */slot->metrics.horiAdvance>>6;
-			int32_t glyphMaxHeight = /*(m_fftFace->max_advance_height>>6); */slot->metrics.vertAdvance>>6;
+			// note : +1 is for the overlapping of the glyph (Part 1)
+			int32_t glyphMaxWidth = /*(m_fftFace->max_advance_width>>6); */(slot->metrics.horiAdvance>>6) +1;
+			int32_t glyphMaxHeight = /*(m_fftFace->max_advance_height>>6); */(slot->metrics.vertAdvance>>6) +1;
 			int32_t textureWidth = nextP2(coter*glyphMaxWidth);
 			int32_t nbRaws = textureWidth / glyphMaxWidth;
 			if (nbRaws <= 0) {
@@ -350,10 +351,12 @@ class FTFontInternal
 				
 				// update the maximum of the line hight : 
 				if (CurrentLineHigh<tmpHeight) {
-					CurrentLineHigh = tmpHeight;
+					// note : +1 is for the overlapping of the glyph (Part 2)
+					CurrentLineHigh = tmpHeight+1;
 				}
+				// note : +1 is for the overlapping of the glyph (Part 3)
 				// update the Bitmap position drawing : 
-				tmpRowStartPos += tmpWidth;
+				tmpRowStartPos += tmpWidth+1;
 			}
 			EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
 			// use the texture manager to have the texture availlable every restart of the screen
@@ -683,15 +686,15 @@ int32_t ewol::DrawText(int32_t                              fontID,
 					 *   3------2
 					 */
 					Vector2D<float> bitmapDrawPos[4];
-					bitmapDrawPos[0].x = dxA;
-					bitmapDrawPos[1].x = dxB;
-					bitmapDrawPos[2].x = dxB;
-					bitmapDrawPos[3].x = dxA;
+					bitmapDrawPos[0].x = (int32_t)dxA;
+					bitmapDrawPos[1].x = (int32_t)dxB;
+					bitmapDrawPos[2].x = (int32_t)dxB;
+					bitmapDrawPos[3].x = (int32_t)dxA;
 					
-					bitmapDrawPos[0].y = dyC;
-					bitmapDrawPos[1].y = dyC;
-					bitmapDrawPos[2].y = dyD;
-					bitmapDrawPos[3].y = dyD;
+					bitmapDrawPos[0].y = (int32_t)dyC;
+					bitmapDrawPos[1].y = (int32_t)dyC;
+					bitmapDrawPos[2].y = (int32_t)dyD;
+					bitmapDrawPos[3].y = (int32_t)dyD;
 					/* texture Position : 
 					 *   0------1
 					 *   |      |
@@ -839,15 +842,15 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			 *   3------2
 			 */
 			Vector2D<float> bitmapDrawPos[4];
-			bitmapDrawPos[0].x = dxA;
-			bitmapDrawPos[1].x = dxB;
-			bitmapDrawPos[2].x = dxB;
-			bitmapDrawPos[3].x = dxA;
+			bitmapDrawPos[0].x = (int32_t)dxA;
+			bitmapDrawPos[1].x = (int32_t)dxB;
+			bitmapDrawPos[2].x = (int32_t)dxB;
+			bitmapDrawPos[3].x = (int32_t)dxA;
 			
-			bitmapDrawPos[0].y = dyC;
-			bitmapDrawPos[1].y = dyC;
-			bitmapDrawPos[2].y = dyD;
-			bitmapDrawPos[3].y = dyD;
+			bitmapDrawPos[0].y = (int32_t)dyC;
+			bitmapDrawPos[1].y = (int32_t)dyC;
+			bitmapDrawPos[2].y = (int32_t)dyD;
+			bitmapDrawPos[3].y = (int32_t)dyD;
 			/* texture Position : 
 			 *   0------1
 			 *   |      |
@@ -972,15 +975,15 @@ int32_t ewol::DrawText(int32_t                              fontID,
 				 *   3------2
 				 */
 				Vector2D<float> bitmapDrawPos[4];
-				bitmapDrawPos[0].x = dxA;
-				bitmapDrawPos[1].x = dxB;
-				bitmapDrawPos[2].x = dxB;
-				bitmapDrawPos[3].x = dxA;
+				bitmapDrawPos[0].x = (int32_t)dxA;
+				bitmapDrawPos[1].x = (int32_t)dxB;
+				bitmapDrawPos[2].x = (int32_t)dxB;
+				bitmapDrawPos[3].x = (int32_t)dxA;
 				
-				bitmapDrawPos[0].y = dyC;
-				bitmapDrawPos[1].y = dyC;
-				bitmapDrawPos[2].y = dyD;
-				bitmapDrawPos[3].y = dyD;
+				bitmapDrawPos[0].y = (int32_t)dyC;
+				bitmapDrawPos[1].y = (int32_t)dyC;
+				bitmapDrawPos[2].y = (int32_t)dyD;
+				bitmapDrawPos[3].y = (int32_t)dyD;
 				/* texture Position : 
 				 *   0------1
 				 *   |      |
@@ -1102,15 +1105,15 @@ int32_t ewol::DrawText(int32_t                             fontID,
 			 *   3------2
 			 */
 			Vector2D<float> bitmapDrawPos[4];
-			bitmapDrawPos[0].x = dxA;
-			bitmapDrawPos[1].x = dxB;
-			bitmapDrawPos[2].x = dxB;
-			bitmapDrawPos[3].x = dxA;
+			bitmapDrawPos[0].x = (int32_t)dxA;
+			bitmapDrawPos[1].x = (int32_t)dxB;
+			bitmapDrawPos[2].x = (int32_t)dxB;
+			bitmapDrawPos[3].x = (int32_t)dxA;
 			
-			bitmapDrawPos[0].y = dyC;
-			bitmapDrawPos[1].y = dyC;
-			bitmapDrawPos[2].y = dyD;
-			bitmapDrawPos[3].y = dyD;
+			bitmapDrawPos[0].y = (int32_t)dyC;
+			bitmapDrawPos[1].y = (int32_t)dyC;
+			bitmapDrawPos[2].y = (int32_t)dyD;
+			bitmapDrawPos[3].y = (int32_t)dyD;
 			/* texture Position : 
 			 *   0------1
 			 *   |      |
