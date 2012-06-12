@@ -56,48 +56,6 @@ else
   TARGET_OUT := $(TOP_DIR)/linux/bin$(DIR_SUFFIX)/debug
 endif
 
-###############################################################################
-## wxWidgets configuration.
-###############################################################################
-
-# wx-config script
-WX_CONFIG := wx-config
-ifeq ("$(shell which $(WX_CONFIG))","")
-$(warning Unable to find $(WX_CONFIG))
-$(error Please make sure wxWidgets development package is installed)
-endif
-
-# Argument for debug
-ifeq ("$(DEBUG)","0")
-  WX_CONFIG_ARGS += --debug=no
-else
-  WX_CONFIG_ARGS += --debug=yes
-endif
-
-# Argument for unicode
-WX_CONFIG_ARGS += --unicode=yes
-
-# Argument for static
-ifeq ("$(STATIC)","0")
-  WX_CONFIG_ARGS += --static=no
-else
-  WX_CONFIG_ARGS += --static=yes
-endif
-
-# Get wxWidgets configuration
-WX_LIBS := $(shell $(WX_CONFIG) --libs $(WX_CONFIG_ARGS))
-WX_FLAGS := $(shell $(WX_CONFIG) --cppflags $(WX_CONFIG_ARGS))
-WX_VERSION := $(shell $(WX_CONFIG) --version $(WX_CONFIG_ARGS))
-
-# Check that the configuration exists
-ifeq ("$(WX_LIBS)","")
-$(error wxWidgets configuration not supported: $(WX_CONFIG_ARGS))
-endif
-
-# wxWidgets >= 2.8.10 required
-ifeq (0,$(shell expr $(WX_VERSION) \>= 2.8.10))
-$(error Unsupported version of wxWidgets: $(WX_VERSION))
-endif
 
 ###############################################################################
 ## Determine gcc path and version.
