@@ -49,6 +49,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_gravity = 0.0;
 	m_fileNameConfig = tmpName;
 	m_canBeCibled = false;
+	m_canHaveImpact = true;
 	m_life = 0;
 }
 
@@ -130,6 +131,9 @@ void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &elemen
 
 bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, float size)
 {
+	if (true != m_canHaveImpact) {
+		return false;
+	}
 	// check if it was in the same group
 	if (group == m_group) {
 		return false;

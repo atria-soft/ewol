@@ -30,6 +30,7 @@
 #include <ewol/OObject/Sprite.h>
 #include <ewol/Widget.h>
 #include <ewol/Game/SceneElement.h>
+#include <math.h>
 
 #define CYCLIC_CALL_PERIODE_US     (10000)
 
@@ -40,19 +41,20 @@ namespace ewol {
 		private:
 			etk::UString m_fileNameConfig;
 		protected:
-			SceneElement & m_sceneElement; //!< all element neede in the scene
-			uint16_t     m_uniqueId;
-			uint16_t     m_group;
-			int32_t      m_type;
-			int32_t      m_power;
-			bool         m_visible;
+			SceneElement &     m_sceneElement; //!< all element neede in the scene
+			uint16_t           m_uniqueId;
+			uint16_t           m_group;
+			int32_t            m_type;
+			int32_t            m_power;
+			bool               m_visible;
 			Vector2D<float>    m_position;
 			Vector2D<float>    m_speed;
-			float   m_size;
-			float   m_angle;
-			float   m_gravity;
-			bool         m_canBeCibled;
-			float   m_life;
+			float              m_size;
+			float              m_angle;
+			float              m_gravity;
+			bool               m_canBeCibled;
+			bool               m_canHaveImpact;
+			float              m_life;
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -84,13 +86,24 @@ namespace ewol {
 			float    SizeGet(void)                                { return m_size; };
 			void     SizeSet(float state)                         { m_size = state; };
 			float    AngleGet(void)                               { return m_angle; };
-			void     AngleSet(float state)                        { m_angle = state; };
+			void     AngleSet(float state)
+			{
+				m_angle = state;
+				while (m_angle > M_PI) {
+					m_angle -= 2.0*M_PI;
+				}
+				while (m_angle < -M_PI) {
+					m_angle += 2.0*M_PI;
+				}
+			};
 			float    GravityGet(void)                             { return m_gravity; };
 			void     GravitySet(float state)                      { m_gravity = state; };
 			int32_t  PowerGet(void)                               { return m_power; };
 			void     PowerSet(int32_t state)                      { m_power = state; };
 			bool     CanBeCibledGet(void)                         { return m_canBeCibled; };
 			void     CanBeCibledSet(bool state)                   { m_canBeCibled = state; };
+			bool     CanHaveImpactGet(void)                       { return m_canHaveImpact; };
+			void     CanHaveImpactSet(bool state)                 { m_canHaveImpact = state; };
 			
 			int32_t  GetType(void)                                { return m_type; }; // TODO : DEPRECATED ...
 			int32_t  TypeGet(void)                                { return m_type; };
