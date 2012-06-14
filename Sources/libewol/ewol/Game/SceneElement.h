@@ -33,16 +33,6 @@ namespace ewol {
 	class GameElement;
 	class SceneElement;
 	
-	typedef struct {
-		uint32_t                id;         //!< unique id of the element
-		int32_t                 group;      //!< element group
-		int32_t                 type;       //!< element type
-		Vector2D<float>         position;   //!< current position
-		Vector2D<float>         speed;      //!< current speed
-		Vector2D<float>         size;       //!< curent size of the element
-		float                   angle;      //!< element angle
-	} gameElementGenericProperty_ts;
-	
 	typedef ewol::GameElement* (creatorElement_tf)(SceneElement & sceneElement, etk::UString& tmpName, etk::UString& userString);
 	
 	class listRegisteElement {

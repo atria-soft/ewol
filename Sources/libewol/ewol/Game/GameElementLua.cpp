@@ -169,14 +169,12 @@ LUAMOD_API int lua_GetSpeed(lua_State *L)
 	if (NULL==tmpObj) {
 		EWOL_ERROR("NULL obj...");
 		lua_pushnumber(L, (lua_Number)0 );
-		lua_pushnumber(L, (lua_Number)0 );
-		return 2;
+		return 1;
 	}
-	Vector2D<float> tmpPos = tmpObj->SpeedGet();
-	lua_pushnumber(L, (lua_Number)tmpPos.x );
-	lua_pushnumber(L, (lua_Number)tmpPos.y );
+	float tmpPos = tmpObj->SpeedGet();
+	lua_pushnumber(L, (lua_Number)tmpPos );
 	// return number of parameters
-	return 2;
+	return 1;
 }
 
 LUAMOD_API int lua_SetSpeed(lua_State *L)
@@ -186,11 +184,7 @@ LUAMOD_API int lua_SetSpeed(lua_State *L)
 		return 0;
 	}
 	float x = luaL_checknumber(L, 1);
-	float y = luaL_checknumber(L, 2);
-	Vector2D<float> tmpPos;
-	tmpPos.x = x;
-	tmpPos.y = y;
-	tmpObj->SpeedSet(tmpPos);
+	tmpObj->SpeedSet(x);
 	// return number of parameters
 	return 0;
 }
@@ -202,8 +196,8 @@ LUAMOD_API int lua_GetPower(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	int32_t value = tmpObj->PowerGet();
-	lua_pushinteger(L, value );
+	float value = tmpObj->PowerGet();
+	lua_pushnumber(L, (lua_Number)value );
 	// return number of parameters
 	return 1;
 }
@@ -215,7 +209,7 @@ LUAMOD_API int lua_SetPower(lua_State *L)
 		lua_pushnumber(L, 0 );
 		return 1;
 	}
-	int32_t value = luaL_checkint(L, 1);
+	float value = luaL_checknumber(L, 1);
 	tmpObj->PowerSet(value);
 	// return number of parameters
 	return 1;

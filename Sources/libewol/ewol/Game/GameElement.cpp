@@ -42,11 +42,10 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_visible = true;
 	m_position.x = 0.0;
 	m_position.y = 0.0;
-	m_speed.x = 0.0;
-	m_speed.y = 0.0;
+	m_speed = 0.0;
 	m_size = 64.0;
 	m_angle = 0.0;
-	m_gravity = 0.0;
+	m_mass = 0.0;
 	m_fileNameConfig = tmpName;
 	m_canBeCibled = false;
 	m_canHaveImpact = true;
@@ -114,18 +113,6 @@ float quadDist(Vector2D<float> pos1, Vector2D<float> pos2)
 	float tmpVal2 = pos1.y - pos2.y;
 	
 	return tmpVal1*tmpVal1 + tmpVal2*tmpVal2;
-}
-
-
-void ewol::GameElement::GetElementProperty(gameElementGenericProperty_ts &element)
-{
-	element.type = m_type;
-	element.position = m_position;
-	element.speed.x = m_speed.x;
-	element.speed.y = m_speed.y;
-	element.size.x = m_size;
-	element.size.y = m_size;
-	element.angle = m_angle;
 }
 
 
