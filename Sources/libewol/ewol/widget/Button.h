@@ -70,17 +70,18 @@ namespace ewol {
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(Vector2D<float>  newPadding);
+			void           SetColorBg(color_ts newColor) { m_textColorBg = newColor; };
+			void           SetColorFg(color_ts newColor) { m_textColorFg = newColor; };
 		private:
 			bool               m_hasAnImage;
 			etk::UString       m_imageSelected;
 			textAlignement_te  m_alignement;
-			Vector2D<float>          m_padding;
+			Vector2D<float>    m_padding;
 			etk::UString       m_label;
 			color_ts           m_textColorFg;  //!< Text color
 			color_ts           m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
-		public:
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
