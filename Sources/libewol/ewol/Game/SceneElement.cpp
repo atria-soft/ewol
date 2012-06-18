@@ -40,7 +40,7 @@ ewol::SceneElement::SceneElement(void)
 	for (int32_t iii=0; iii<MAX_GROUP_NUMBER; iii++) {
 		int32_t kkk = 0;
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER-1; jjj++) {
-			if (jjj == kkk) {
+			if (iii == kkk) {
 				kkk++;
 			}
 			groupEnemy[iii][jjj] = kkk;
@@ -224,14 +224,18 @@ uint32_t ewol::SceneElement::GetNearestEnemy(Vector2D<float> position, int32_t g
 		return 0;
 	}
 	while (groupEnemy[groupId][jjj] != -1) {
-		for (int32_t iii=0; iii<listAnimatedElements[groupEnemy[groupId][jjj]].Size(); iii++) {
-			if (NULL != listAnimatedElements[groupEnemy[groupId][jjj]][iii]) {
-				if (true == listAnimatedElements[groupEnemy[groupId][jjj]][iii]->CanBeCibledGet()) {
-					Vector2D<float> tmpPos = listAnimatedElements[groupEnemy[groupId][jjj]][iii]->PositionGet();
+		int32_t gId = groupEnemy[groupId][jjj];
+		if (gId == groupId) {
+			EWOL_ERROR("groupId=" << gId << " is ennemy of groupId:" << groupId);
+		}
+		for (int32_t iii=0; iii<listAnimatedElements[gId].Size(); iii++) {
+			if (NULL != listAnimatedElements[gId][iii]) {
+				if (true == listAnimatedElements[gId][iii]->CanBeCibledGet()) {
+					Vector2D<float> tmpPos = listAnimatedElements[gId][iii]->PositionGet();
 					float distance = quadDist(position, tmpPos);
 					if (distance <= lastQuadDistance) {
 						lastQuadDistance = distance;
-						result = createUniqueId(listAnimatedElements[groupEnemy[groupId][jjj]][iii]->GetUniqueId(), iii);
+						result = createUniqueId(listAnimatedElements[gId][iii]->GetUniqueId(), iii);
 					}
 				}
 			}

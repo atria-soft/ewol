@@ -344,7 +344,7 @@ namespace agg
 
 
         //--------------------------------------------------------------------
-        scanline32_u8() :
+        scanline32_u8(void) :
             m_min_x(0),
             m_last_x(0x7FFFFFF0),
             m_covers()
@@ -422,17 +422,17 @@ namespace agg
         }
 
         //--------------------------------------------------------------------
-        void reset_spans()
+        void reset_spans(void)
         {
             m_last_x = 0x7FFFFFF0;
             m_spans.remove_all();
         }
 
         //--------------------------------------------------------------------
-        int      y()           const { return m_y; }
-        unsigned num_spans()   const { return m_spans.size(); }
-        const_iterator begin() const { return const_iterator(m_spans); }
-        iterator       begin()       { return iterator(m_spans); }
+        int      y(void)           const { return m_y; }
+        unsigned num_spans(void)   const { return m_spans.size(); }
+        const_iterator begin(void) const { return const_iterator(m_spans); }
+        iterator       begin(void)       { return iterator(m_spans); }
 
     private:
         scanline32_u8(const self_type&);
@@ -464,7 +464,7 @@ namespace agg
         typedef base_type::coord_type coord_type;
 
 
-        scanline32_u8_am() : base_type(), m_alpha_mask(0) {}
+        scanline32_u8_am(void) : scanline_u8(), m_alpha_mask(0) {}
         scanline32_u8_am(const AlphaMask& am) : base_type(), m_alpha_mask(&am) {}
 
         //--------------------------------------------------------------------

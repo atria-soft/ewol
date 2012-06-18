@@ -18,10 +18,6 @@ DESTDIR :=
 PREFIX := /usr/local
 
 # Tools
-GCC := gcc
-GXX := g++
-AR := ar
-LD := ld
 WINDRES := windres
 
 # Overridable settings
@@ -29,6 +25,20 @@ V := 0
 W := 0
 DEBUG := 0
 STATIC := 0
+CLANG := 0
+
+
+ifneq ("$(CLANG)","1")
+	GCC := gcc
+	GXX := g++
+	AR := ar
+	LD := ld
+else
+	GCC := clang
+	GXX := clang++
+	AR := ar
+	LD := ld
+endif
 
 # Quiet command if V is not 1
 ifneq ("$(V)","1")

@@ -33,6 +33,7 @@
 #include <math.h>
 
 #define CYCLIC_CALL_PERIODE_US     (10000)
+#define NB_SPECIAL_PARAM           (5)
 
 namespace ewol {
 	
@@ -55,6 +56,7 @@ namespace ewol {
 			float              m_size;          //!< Current size of the element more specific size can be done in the under class => this is for simplify calculation ==> all is consider like sphere...
 			bool               m_canBeCibled;   //!< This is for automatic finding on an ennemy
 			bool               m_canHaveImpact; //!< detection of impact is done with this ...
+			float              m_specialParam[NB_SPECIAL_PARAM]; //!< specific game user parameter
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -108,6 +110,9 @@ namespace ewol {
 			int32_t  TypeGet(void)                                { return m_type; };
 			uint16_t GroupGet(void)                               { return m_group; };
 			void     GroupSet(uint16_t state)                     { m_group = state; };
+			
+			float    SpecialParamGet(int32_t id)                  { if (id<0 || id>=NB_SPECIAL_PARAM) {return 0.0;} return m_specialParam[id]; };
+			void     SpecialParamSet(int32_t id, float state)     { if (id<0 || id>=NB_SPECIAL_PARAM) {return;} m_specialParam[id]=state; };
 			
 			/**
 			 * @brief Periodicly this fuction will be call tu change property of all the dynamic obbjects
