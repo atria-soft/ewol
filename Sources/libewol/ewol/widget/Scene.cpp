@@ -124,6 +124,7 @@ void ewol::Scene::OnRegenerateDisplay(void)
 //TODO : Il y a un bug : seg fault ... je ne sais pas trop ou ...
 void ewol::Scene::OnDraw(void)
 {
+	m_basicBackground.Draw();
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw elements
 	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].Size(); iii++) {

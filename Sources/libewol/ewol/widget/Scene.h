@@ -37,9 +37,10 @@ namespace ewol {
 	{
 		// TODO : Set it in private ...
 		protected:
-			SceneElement        m_sceneElement; //!< all element neede in the scene
-			bool                m_isRunning;
-			int64_t             m_lastCallTime;
+			SceneElement           m_sceneElement; //!< all element neede in the scene
+			bool                   m_isRunning;
+			int64_t                m_lastCallTime;
+			ewol::OObject2DColored m_basicBackground;
 		public:
 			Scene(void);
 			virtual ~Scene(void);
