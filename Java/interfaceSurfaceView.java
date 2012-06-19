@@ -35,7 +35,6 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 
-
 /**
  * @brief Class : 
  *
@@ -68,95 +67,95 @@ public class interfaceSurfaceView extends GLSurfaceView {
 		if (tmpActionType == MotionEvent.ACTION_MOVE) {
 			final int pointerCount = event.getPointerCount();
 			for (int p = 0; p < pointerCount; p++) {
-				int typeOfPointer = getToolType(p);
-				if(   typeOfPointer == TOOL_TYPE_FINGER
-				   || typeOfPointer == TOOL_TYPE_STYLUS) {
+				final int typeOfPointer = event.getToolType(p);
+				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+				   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 					interfaceJNI.IOInputEventMotion(event.getPointerId(p), (float)event.getX(p), (float)event.getY(p));
-				} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 					interfaceJNI.IOMouseEventMotion(event.getPointerId(p), (float)event.getX(p), (float)event.getY(p));
 				}
 			}
 		} else if(    tmpActionType == MotionEvent.ACTION_POINTER_1_DOWN 
 		           || tmpActionType == MotionEvent.ACTION_DOWN) {
-			int typeOfPointer = getToolType(0);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(0);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(0), true, (float)event.getX(0), (float)event.getY(0));
 			}
 			InputDown1 = true;
 		} else if(tmpActionType == MotionEvent.ACTION_POINTER_1_UP) {
-			int typeOfPointer = getToolType(0);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(0);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 			}
 			InputDown1 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_DOWN) {
-			int typeOfPointer = getToolType(1);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(1);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(1), true, (float)event.getX(1), (float)event.getY(1));
 			}
 			InputDown2 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_2_UP) {
-			int typeOfPointer = getToolType(1);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(1);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(1), false, (float)event.getX(1), (float)event.getY(1));
 			}
 			InputDown2 = false;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_DOWN) {
-			int typeOfPointer = getToolType(2);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(2);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(2), true, (float)event.getX(2), (float)event.getY(2));
 			}
 			InputDown3 = true;
 		} else if (tmpActionType == MotionEvent.ACTION_POINTER_3_UP) {
-			int typeOfPointer = getToolType(2);
-			if(   typeOfPointer == TOOL_TYPE_FINGER
-			   || typeOfPointer == TOOL_TYPE_STYLUS) {
+			final int typeOfPointer = event.getToolType(2);
+			if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+			   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 				interfaceJNI.IOInputEventState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
-			} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+			} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 				interfaceJNI.IOMouseEventState(event.getPointerId(2), false, (float)event.getX(2), (float)event.getY(2));
 				
 			}
 			InputDown3 = false;
 		} else if(tmpActionType == MotionEvent.ACTION_UP){
 			if (InputDown1) {
-				int typeOfPointer = getToolType(0);
-				if(   typeOfPointer == TOOL_TYPE_FINGER
-				   || typeOfPointer == TOOL_TYPE_STYLUS) {
+				final int typeOfPointer = event.getToolType(0);
+				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+				   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 					interfaceJNI.IOInputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
-				} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 					interfaceJNI.IOMouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				}
 				InputDown1 = false;
 			} else if (InputDown2) {
-			int typeOfPointer = getToolType(0);
-				if(   typeOfPointer == TOOL_TYPE_FINGER
-				   || typeOfPointer == TOOL_TYPE_STYLUS) {
+				final int typeOfPointer = event.getToolType(0);
+				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+				   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 					interfaceJNI.IOInputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
-				} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 					interfaceJNI.IOMouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				}
 				InputDown2 = false;
 			} else {
-				int typeOfPointer = getToolType(0);
-				if(   typeOfPointer == TOOL_TYPE_FINGER
-				   || typeOfPointer == TOOL_TYPE_STYLUS) {
+				final int typeOfPointer = event.getToolType(0);
+				if(   typeOfPointer == MotionEvent.TOOL_TYPE_FINGER
+				   || typeOfPointer == MotionEvent.TOOL_TYPE_STYLUS) {
 					interfaceJNI.IOInputEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
-				} else if(typeOfPointer == TOOL_TYPE_MOUSE) {
+				} else if(typeOfPointer == MotionEvent.TOOL_TYPE_MOUSE) {
 					interfaceJNI.IOMouseEventState(event.getPointerId(0), false, (float)event.getX(0), (float)event.getY(0));
 				}
 				InputDown3 = false;
