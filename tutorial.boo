@@ -6,11 +6,12 @@ export NDK_PROJECT_PATH=/home/edupin/progperso/android/ndk-r7/samples/hello-jni/
 
 
 # basic SDK folder :
-export PATH=$PATH:/home/edupin/progperso/android/sdk-r15/tools/:/home/edupin/progperso/android/sdk-r15/platform-tools/
+export PATH=$PATH:/home/edupin/dev/perso/android/sdk/tools/:/home/edupin/dev/perso/android/sdk/platform-tools/
 
 # configure angroide SDK :
 # run :
-android
+cd ~/dev/perso/android/sdk/tools
+sh -x android
 #   ==> add the SDK needed for android you will use like android 2.3.3 for xperia X10
 # ... wait download ...
 
@@ -19,7 +20,7 @@ android list targets
 
 # need to generate the application APK ...
 cd /home/edupin/progperso/android/ndk-r7/samples/hello-jni/
-android update project -p . -s --target 1
+sh -x ~/dev/perso/android/sdk/tools/android update project -p . -s --target 1
 
 #install ant with aptitude ...
 

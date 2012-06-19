@@ -352,7 +352,7 @@ int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 void ewol::texture::UnLoad(uint32_t textureID)
 {
 	//EWOL_INFO("Unload a specific tecture ID=" << textureID);
-	if (textureID>=0 && (int32_t)textureID<l_listLoadedTexture.Size()) {
+	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
 		if (NULL == l_listLoadedTexture[textureID]) {
 			EWOL_ERROR("Texture : " << textureID << " does not existe anymore...");
 			return;
@@ -375,7 +375,7 @@ void ewol::texture::UnLoad(uint32_t textureID)
  */
 uint32_t ewol::texture::GetGLID(uint32_t textureID)
 {
-	if (textureID>=0 && (int32_t)textureID<l_listLoadedTexture.Size()) {
+	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
 		return l_listLoadedTexture[textureID]->m_openGlTextureID;
 	}
 	return 0;

@@ -248,7 +248,6 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			// SUPPR :
 			if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
 				m_data.Remove(m_displayCursorPos, 1);
-				m_displayCursorPos;
 				m_displayCursorPos = etk_max(m_displayCursorPos, 0);
 			}
 		} else if (0x08 == unicodeData) {
@@ -305,7 +304,6 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 
 void ewol::Entry::UpdateTextPosition(void)
 {
-	int32_t iii=m_data.Size();
 	int32_t fontId = GetDefaultFontId();
 	
 	int32_t tmpSizeX = m_minSize.x;

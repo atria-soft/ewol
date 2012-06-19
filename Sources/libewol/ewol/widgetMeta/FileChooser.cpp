@@ -431,7 +431,7 @@ ewol::FileChooser::FileChooser(void)
 	ewol::Spacer * mySpacer = NULL;
 	FileChooserFileList * myListFile = NULL;
 	FileChooserFolderList * myListFolder = NULL;
-	ewol::Label * myLabel = NULL;
+	//ewol::Label * myLabel = NULL;
 	ewol::Image * myImage = NULL;
 	#ifdef __PLATFORM__Android
 		m_folder = "/mnt/sdcard/";

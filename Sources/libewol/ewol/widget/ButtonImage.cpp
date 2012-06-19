@@ -316,8 +316,7 @@ void ewol::ButtonImage::OnFlipFlopEvent(void)
 	// internal saving
 	if (true == needFlipFlop) {
 		if (m_resetNeeded[m_currentCreateId] == true) {
-			m_resetNeeded[m_currentCreateId] == false;
-			
+			m_resetNeeded[m_currentCreateId] = false;
 			if (NULL != m_OOImageBG2[m_currentCreateId]) {
 				delete(m_OOImageBG2[m_currentCreateId]);
 				m_OOImageBG2[m_currentCreateId] = NULL;
