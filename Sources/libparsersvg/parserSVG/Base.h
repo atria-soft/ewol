@@ -53,7 +53,7 @@ namespace svg
 		public:
 			Base(void) {};
 			Base(PaintState parentPaintState);
-			~Base(void) { };
+			virtual ~Base(void) { };
 			virtual bool Parse(TiXmlNode * node, agg::trans_affine& parentTrans, Vector2D<float>& sizeMax);
 			//specific drawing for AAG librairy ...
 			virtual void AggDraw(svg::Renderer& myRenderer, agg::trans_affine& basicTrans) { };
