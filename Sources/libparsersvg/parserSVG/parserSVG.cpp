@@ -201,7 +201,7 @@ svg::Parser::Parser(etk::File fileName) : m_renderedElement(NULL)
 	if (NULL != fileBuffer) {
 		delete[] fileBuffer;
 	}
-	DisplayDebug();
+	//DisplayDebug();
 }
 
 svg::Parser::~Parser(void)

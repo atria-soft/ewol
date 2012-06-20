@@ -176,20 +176,20 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 				m_OOImage[m_currentCreateId] = new ewol::OObject2DTextured(m_image, tmpSizeX, tmpSizeY);
 			}
 		}
-		
+		float tmpval = 0.0;
 		if (NULL != m_OOImageBG2[m_currentCreateId]) {
 			m_OOImageBG2[m_currentCreateId]->Clear();
 			if(    m_down == true
 			    || m_over == true ) {
 				m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 			}
+			tmpval = tmpSizeX * 0.2;
+			tmpSizeX -= tmpval;
+			tmpOriginX += tmpval/2;
+			tmpval = tmpSizeY * 0.2;
+			tmpSizeY -= tmpval;
+			tmpOriginY += tmpval/2;
 		}
-		float tmpval = tmpSizeX * 0.2;
-		tmpSizeX -= tmpval;
-		tmpOriginX += tmpval/2;
-		tmpval = tmpSizeY * 0.2;
-		tmpSizeY -= tmpval;
-		tmpOriginY += tmpval/2;
 		if (NULL != m_OOImageBg1[m_currentCreateId]) {
 			m_OOImageBg1[m_currentCreateId]->Clear();
 			m_OOImageBg1[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
