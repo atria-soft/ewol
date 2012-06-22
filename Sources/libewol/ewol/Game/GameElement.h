@@ -54,6 +54,7 @@ namespace ewol {
 			float              m_angle;         //!< Angle of the speed
 			float              m_mass;          //!< Current element Mass ==> for the physical calculation
 			float              m_size;          //!< Current size of the element more specific size can be done in the under class => this is for simplify calculation ==> all is consider like sphere...
+			float              m_sizeDisplay;   //!< Current diplay size of the element
 			bool               m_canBeCibled;   //!< This is for automatic finding on an ennemy
 			bool               m_canHaveImpact; //!< detection of impact is done with this ...
 			float              m_specialParam[NB_SPECIAL_PARAM]; //!< specific game user parameter
@@ -88,6 +89,8 @@ namespace ewol {
 			void     MassSet(float state)                         { m_mass = state; };
 			float    SizeGet(void)                                { return m_size; };
 			void     SizeSet(float state)                         { m_size = state; };
+			float    DisplaySizeGet(void)                         { return m_sizeDisplay; };
+			void     DisplaySizeSet(float state)                  { m_sizeDisplay = state; };
 			float    AngleGet(void)                               { return m_angle; };
 			void     AngleSet(float state)
 			{

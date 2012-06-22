@@ -92,7 +92,7 @@ static void MultiCastRm(ewol::EObject* object)
 
 static void MultiCastSend(ewol::EObject* object, const char* const message, etk::UString& data)
 {
-	EWOL_DEBUG("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
+	EWOL_VERBOSE("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
 	
 	// send the message at all registered widget ...
 	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
@@ -100,7 +100,7 @@ static void MultiCastSend(ewol::EObject* object, const char* const message, etk:
 		    && m_messageList[iii].object != object)
 		{
 			if (NULL != m_messageList[iii].object) {
-				EWOL_DEBUG("        id = " << m_messageList[iii].object->GetId() << " type=" << m_messageList[iii].object->GetObjectType());
+				EWOL_VERBOSE("        id = " << m_messageList[iii].object->GetId() << " type=" << m_messageList[iii].object->GetObjectType());
 				// generate event ...
 				m_messageList[iii].object->OnReceiveMessage(object, m_messageList[iii].message, data);
 			}

@@ -44,6 +44,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_position.y = 0.0;
 	m_speed = 0.0;
 	m_size = 64.0;
+	m_sizeDisplay = 64.0;
 	m_angle = 0.0;
 	m_mass = 0.0;
 	m_fileNameConfig = tmpName;
