@@ -52,6 +52,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/WidgetScrolled.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
-			ewol/theme/Theme.cpp
+			ewol/theme/Theme.cpp \
+			ewol/Audio/audio.cpp
 
 

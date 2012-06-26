@@ -26,11 +26,13 @@
 #define __EWOL_AUDIO_H__
 
 #include <etk/Types.h>
+#include <etk/UString.h>
 
 namespace ewol {
 	namespace audio {
 		void Init(void);
 		void UnInit(void);
+		void GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
 		
 		namespace music {
 			void           Fading(int32_t timeMs);
@@ -41,7 +43,6 @@ namespace ewol {
 			erreurCode_te  ListPrevious(void);
 			erreurCode_te  ListNext(void);
 			erreurCode_te  ListFirst(void);
-			erreurCode_te  ListLast(void);
 			erreurCode_te  ListLast(void);
 			erreurCode_te  ListPlay(void); // List playing
 			erreurCode_te  ListStop(void); // List stopping

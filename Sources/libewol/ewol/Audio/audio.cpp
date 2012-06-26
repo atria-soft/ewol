@@ -23,7 +23,9 @@
  */
 
 #include <etk/Types.h>
-#include <ewol/Audo/audio.h>
+#include <ewol/Audio/audio.h>
+#include <ewol/Debug.h>
+#include <math.h>
 
 static bool    musicMute = true;
 static float   musicVolume = -5000;
@@ -34,6 +36,9 @@ static float   effectsVolume = -5000;
 
 static bool isInit = false;
 
+#ifdef __PLATFORM__Linux
+#	include <ewol/Audio/audioAlsa.h>
+#endif
 
 void ewol::audio::Init(void)
 {
@@ -46,6 +51,9 @@ void ewol::audio::Init(void)
 	effectsVolume = 0;
 	musicFadingTime = 100;
 	isInit = true;
+	#ifdef __PLATFORM__Linux
+		ewol::audioAlsa::Init();
+	#endif
 }
 
 
@@ -53,12 +61,34 @@ void ewol::audio::UnInit(void)
 {
 	if (false == isInit) {
 		EWOL_ERROR("multiple un-init requested ... at the audio system ...");
+		return;
 	}
+	#ifdef __PLATFORM__Linux
+		ewol::audioAlsa::UnInit();
+	#endif
 	musicMute = true;
 	musicVolume = -5000;
 	effectsMute = true;
 	effectsVolume = -5000;
 	musicFadingTime = 0;
+}
+
+static float angle = 0;
+
+void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
+{
+	if (nbChannels != 2) {
+		EWOL_ERROR("TODO : Support the signal mono or more tha stereo ...");
+		return;
+	}
+	for (int iii = 0; iii<nbSample ; iii++) {
+		bufferInterlace[iii*2] = 32000.0 * sin(angle/180.0 * M_PI);
+		bufferInterlace[iii*2+1] = bufferInterlace[iii*2];
+		angle+=0.9;
+		if (angle>=360) {
+			angle -= 360.0;
+		}
+	}
 }
 
 
@@ -112,11 +142,6 @@ erreurCode_te ewol::audio::music::ListLast(void)
 }
 
 
-erreurCode_te ewol::audio::music::ListLast(void)
-{
-	return ERR_FAIL;
-}
-
 
 erreurCode_te ewol::audio::music::ListPlay(void)
 {
@@ -151,7 +176,7 @@ float ewol::audio::music::VolumeGet(void)
 }
 
 
-void ewol::audio::music::(float newVolume)
+void ewol::audio::music::VolumeSet(float newVolume)
 {
 	musicVolume = newVolume;
 	musicVolume = etk_avg(-100, musicVolume, 20);
@@ -201,7 +226,7 @@ float ewol::audio::effects::VolumeGet(void)
 
 void ewol::audio::effects::VolumeSet(float newVolume)
 {
-	effectsVolume = effectsVolume;
+	effectsVolume = newVolume;
 	effectsVolume = etk_avg(-100, effectsVolume, 20);
 	EWOL_INFO("Set music Volume at " << newVolume << "dB ==> " << effectsVolume << "dB");
 }
