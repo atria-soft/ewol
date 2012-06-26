@@ -313,3 +313,56 @@ void ewol::SceneElement::SetEventExternJoystick(uint32_t id, int32_t joyId, floa
 	EWOL_TODO("but when ...");
 }
 
+
+/**
+ * @brief Load or get a previous loaded sprite, it will be done on the current Sprite list
+ * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
+ * @param[in] fileName Sprite name
+ * @param[in] maxSize maximum size of the sprite
+ * @return the id of the sprite requested or -1 if it does not existed
+ */
+int32_t ewol::SceneElement::LoadSprite(etk::UString fileName, float maxSize)
+{
+	for (int32_t iii=0; iii<animated[0].Size(); iii++) {
+		if (animated[0][iii] != NULL) {
+			if (animated[0][iii]->HasName(fileName) == true) {
+				// count the number of element registered ...
+				animated[0][iii]->IncreaseLoadedTime();
+				return iii;
+			}
+		}
+	}
+	for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+		// we did not find the sprite ==> created it ...
+		ewol::Sprite* tmpSprite = new ewol::Sprite(fileName, maxSize, maxSize);
+		if (NULL == tmpSprite) {
+			EWOL_ERROR("Allocation error on the sprite : " << fileName);
+			return -1;
+		}
+		// add it : 
+		animated[iii].PushBack(tmpSprite);
+	}
+	return animated[0].Size() -1;
+}
+
+/**
+ * @brief UnLoad or not(if needed) the sprite selected, it will be done on the current Sprite list
+ * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
+ * @param[in] spriteId Sprite registered id
+ * @return ---
+ */
+void ewol::SceneElement::UnLoadSprite(int32_t spriteId)
+{
+	if (spriteId >= 0 && spriteId < animated[0].Size()) {
+		if (animated[0][spriteId] != NULL) {
+			// count the number of element registered ...
+			if (true == animated[0][spriteId]->DecreaseLoadedTime() ) {
+				// must remove the sprite ==> pb with the double buffer ...
+				// TODO : ==> for all double buffer ...
+				for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
+					
+				}
+			}
+		}
+	}
+}

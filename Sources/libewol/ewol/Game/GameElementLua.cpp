@@ -336,10 +336,7 @@ LUAMOD_API int lua_SpriteLoad(lua_State *L)
 	}
 	const char *filename = luaL_checkstring(L, 1);
 	int32_t maxSize = luaL_checkint(L, 2);
-	Vector2D<float> size;
-	size.x = maxSize;
-	size.y = size.x;
-	int32_t spriteID = tmpObj->LoadSprite( tmpScene->animated, filename, size);
+	int32_t spriteID = tmpScene->LoadSprite( filename, maxSize);
 	if (spriteID < 0) {
 		EWOL_ERROR("Error to load the sprite : " << filename);
 	}

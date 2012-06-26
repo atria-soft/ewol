@@ -71,6 +71,20 @@ namespace ewol {
 			void                   SetEventInput(uint32_t id, Vector2D<float>  position);
 			void                   SetEventExternButton(uint32_t id, int32_t btId, int32_t state);
 			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, float angle, float distance, int32_t state);
+			/**
+			 * @brief Load or get a previous loaded sprite, it will be done on the current Sprite list
+			 * @param[in] fileName Sprite name
+			 * @param[in] maxSize maximum size of the sprite
+			 * @return the id of the sprite requested or -1 if it does not existed
+			 */
+			int32_t LoadSprite(etk::UString fileName, float maxSize);
+			/**
+			 * @brief UnLoad or not(if needed) the sprite selected, it will be done on the current Sprite list
+			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
+			 * @param[in] spriteId Sprite registered id
+			 * @return ---
+			 */
+			void UnLoadSprite(int32_t spriteId);
 	};
 };
 

@@ -143,21 +143,6 @@ namespace ewol {
 			virtual void RemoveElement(int32_t idOfElement) { };
 			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
 			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power) { return false; } ;
-			/**
-			 * @brief Load or get a previous loaded sprite, it will be done on the current Sprite list
-			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
-			 * @param[in] fileName Sprite name
-			 * @param[in] maxSize maximum size of the sprite
-			 * @return the id of the sprite requested or -1 if it does not existed
-			 */
-			int32_t LoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], etk::UString fileName, Vector2D<float>  maxSize);
-			/**
-			 * @brief UnLoad or not(if needed) the sprite selected, it will be done on the current Sprite list
-			 * @param[in,out] listOfElement Reference on the list of sprite that we need to find if it exist or added a new one
-			 * @param[in] spriteId Sprite registered id
-			 * @return ---
-			 */
-			void UnLoadSprite(etk::VectorType<ewol::Sprite*> listOfElement[NB_BOUBLE_BUFFER], int32_t spriteId);
 			
 			virtual void Message(etk::UString control, etk::UString message) { } ;
 	};
