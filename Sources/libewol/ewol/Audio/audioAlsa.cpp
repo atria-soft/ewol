@@ -59,7 +59,7 @@ static void* audioThread(void* param)
 	
 	int32_t frequency = 48000;
 	int32_t nbChan = 2;
-	int32_t frameSize = 1024;
+	int32_t frameSize = 32;
 	
 	// Open PCM device name "default" to play audio on it ...
 	rc = snd_pcm_open(&handle, "default", SND_PCM_STREAM_PLAYBACK, 0);
@@ -67,7 +67,7 @@ static void* audioThread(void* param)
 		EWOL_ERROR("AUDIO : unable to open pcm device: " << (char*)snd_strerror(rc));
 		// stop the thread ...
 		pthread_exit(NULL);
-		return;
+		return NULL;
 	}
 	// Allocate a hardware parameters object.
 	snd_pcm_hw_params_alloca(&params);
@@ -93,7 +93,7 @@ static void* audioThread(void* param)
 		EWOL_ERROR("AUDIO : unable to set hw parameters: " << (char*)snd_strerror(rc));
 		// stop the thread ...
 		pthread_exit(NULL);
-		return;
+		return NULL;
 	}
 	
 	EWOL_DEBUG("AUDIO : Audio Properties : nbChan=" << nbChan << ", freg=" << frequency << "Hz, frameRate=" << frameSize);
@@ -107,10 +107,12 @@ static void* audioThread(void* param)
 	snd_pcm_hw_params_get_period_time(params, &val, &dir);
 	EWOL_DEBUG("AUDIO : periode time = " << (float)((float)val/1000.0) << "ms" );
 	
+	FILE * fileSYS = fopen("/home/edupin/export.raw", "w");
 	EWOL_DEBUG("==> Init audioAlsa Thread (END)");
 	while (g_stopRequested==false) {
 		//request data from the standard system generation ...
 		ewol::audio::GetData((int16_t*)buffer, frames, nbChan);
+		fwrite(buffer,2,frames*nbChan, fileSYS);
 		// write it to ALSA system
 		rc = snd_pcm_writei(handle, buffer, frames);
 		if (rc == -EPIPE) {
@@ -129,6 +131,7 @@ static void* audioThread(void* param)
 	free(buffer);
 	EWOL_DEBUG("==> Un-Init audioAlsa Thread (END)");
 	pthread_exit(NULL);
+	return NULL;
 }
 
 void ewol::audioAlsa::Init(void)

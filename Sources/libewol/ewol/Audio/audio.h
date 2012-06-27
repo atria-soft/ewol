@@ -57,7 +57,9 @@ namespace ewol {
 			void  MuteSet(bool newMute);
 			
 		};
+		// note effect is loaded in memory (then don't create long effect) and unload only when requested
 		namespace effects {
+			// note : support file (Mono, 16bit, 48kHz) : .raw or .wav (no encodage) or .ogg (decoded with tremor lib)
 			int32_t Add(etk::UString file);
 			void    Rm(int32_t effectId);
 			void    Play(int32_t effectId, float xxx, float yyy);
@@ -67,6 +69,7 @@ namespace ewol {
 			void  VolumeSet(float newVolume);
 			bool  MuteGet(void);
 			void  MuteSet(bool newMute);
+			void  GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
 			
 		};
 	};

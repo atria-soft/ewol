@@ -27,6 +27,8 @@
 #include <ewol/Debug.h>
 #include <math.h>
 
+static int64_t currentTimePlaying = 0;
+
 static bool    musicMute = true;
 static float   musicVolume = -5000;
 static int32_t musicFadingTime = 0;
@@ -81,14 +83,22 @@ void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t n
 		EWOL_ERROR("TODO : Support the signal mono or more tha stereo ...");
 		return;
 	}
+	memset(bufferInterlace, 0, nbSample*sizeof(int16_t)*nbChannels);
+	static int32_t maxValue = 0;
+	maxValue +=10;
+	if (maxValue > 16000) {
+		maxValue = 0;
+	}
 	for (int iii = 0; iii<nbSample ; iii++) {
-		bufferInterlace[iii*2] = 32000.0 * sin(angle/180.0 * M_PI);
+		bufferInterlace[iii*2] = (float)maxValue * sin(angle/180.0 * M_PI);
 		bufferInterlace[iii*2+1] = bufferInterlace[iii*2];
 		angle+=0.9;
 		if (angle>=360) {
 			angle -= 360.0;
 		}
 	}
+	// add effects :
+	ewol::audio::effects::GetData(bufferInterlace, nbSample, nbChannels);
 }
 
 
@@ -200,21 +210,126 @@ void ewol::audio::music::MuteSet(bool newMute)
 
 
 
+//----------------------------------------------------------------------------------------------------------
+//                               Effects ...
+//----------------------------------------------------------------------------------------------------------
+//liste d'effet
+class EffectsLoaded {
+	public :
+		EffectsLoaded(etk::UString file)
+		{
+			m_file = file;
+			m_requestedTime = 1;
+			m_nbSamples = 12000; // 0.25s
+			m_data = (int16_t*)malloc(sizeof(int16_t)*m_nbSamples);
+			if (NULL == m_data) {
+				EWOL_CRITICAL("MEM allocation error ...");
+				return;
+			}
+			float tmp_angle = 0.0;
+			//int32_t test1 = M_PI / (50.0*m_file.Size());
+			for (int iii = 0; iii<m_nbSamples ; iii++) {
+				m_data[iii] = 32000.0 * sin(tmp_angle/180.0 * M_PI);
+				tmp_angle+=0.8;
+				if (tmp_angle>=360) {
+					tmp_angle -= 360.0;
+				}
+			}
+		}
+		etk::UString m_file;
+		int32_t      m_nbSamples;
+		int32_t      m_requestedTime;
+		int16_t*     m_data;
+};
+
+class RequestPlay {
+	private:
+		bool            m_freeSlot;
+		EffectsLoaded * m_effect; // reference to the effects
+		int32_t         m_playTime; // position in sample playing in the audio effects
+	public :
+		RequestPlay(EffectsLoaded * effect) : m_freeSlot(false), m_effect(effect), m_playTime(0) { };
+		void Reset(EffectsLoaded * effect) { m_effect=effect; m_playTime=0; m_freeSlot=false; };
+		bool IsFree(void) { return m_freeSlot; };
+		void Play(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
+		{
+			if (true==m_freeSlot) {
+				return;
+			}
+			int32_t processTimeMax = etk_min(nbSample, m_effect->m_nbSamples - m_playTime);
+			processTimeMax = etk_max(0, processTimeMax);
+			int16_t * pointer = bufferInterlace;
+			int16_t * newData = &m_effect->m_data[m_playTime];
+			//EWOL_DEBUG("AUDIO : Play slot... nb sample : " << processTimeMax << " playTime=" <<m_playTime << " nbCannels=" << nbChannels);
+			for (int32_t iii=0; iii<processTimeMax; iii++) {
+				// TODO : Set volume and spacialisation ...
+				for (int32_t jjj=0; jjj<nbChannels; jjj++) {
+					int32_t tmppp = *pointer + *newData;
+					*pointer = etk_avg(-32768, tmppp, 32767);
+					//EWOL_DEBUG("AUDIO : element : " << *pointer);
+					pointer++;
+				}
+				newData++;
+			}
+			m_playTime += processTimeMax;
+			// check end of playing ...
+			if (m_effect->m_nbSamples<=m_playTime) {
+				m_freeSlot=true;
+			}
+		}
+};
+
+#include <etk/VectorType.h>
+etk::VectorType<EffectsLoaded*> ListEffects;
+etk::VectorType<RequestPlay*>   ListEffectsPlaying;
+
+
 int32_t ewol::audio::effects::Add(etk::UString file)
 {
-	return -1;
+	// TODO : search the previous loaded element ...
+	EffectsLoaded * tmpEffect = new EffectsLoaded(file);
+	if (NULL == tmpEffect) {
+		EWOL_ERROR("Error to load the effects : \"" << file << "\"");
+		return -1;
+	}
+	ListEffects.PushBack(tmpEffect);
+	return ListEffects.Size()-1;
 }
 
 
 void ewol::audio::effects::Rm(int32_t effectId)
 {
+	// find element ...
 	
+	// chenck number of requested
+	
+	// mark to be removed ... TODO : Really removed it when no other element readed it ...
 }
 
 
 void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 {
-	
+	if (effectId <0 || effectId >= ListEffects.Size()) {
+		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.Size()-1 << "] ==> can not play it ...");
+		return;
+	}
+	if (ListEffects[effectId] == NULL) {
+		EWOL_ERROR("effect ID : " << effectId << " ==> has been removed");
+		return;
+	}
+	// try to find an empty slot :
+	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
+		if (ListEffectsPlaying[iii]->IsFree()) {
+			ListEffectsPlaying[iii]->Reset(ListEffects[effectId]);
+			return;
+		}
+	}
+	RequestPlay* newPlay = new RequestPlay(ListEffects[effectId]);
+	if (NULL == newPlay) {
+		EWOL_CRITICAL("Allocation error of a playing element : " << effectId);
+		return;
+	}
+	ListEffectsPlaying.PushBack(newPlay);
 }
 
 
@@ -246,4 +361,12 @@ void ewol::audio::effects::MuteSet(bool newMute)
 
 
 
+void ewol::audio::effects::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
+{
+	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
+		if (ListEffectsPlaying[iii]!= NULL) {
+			ListEffectsPlaying[iii]->Play(bufferInterlace, nbSample, nbChannels);
+		}
+	}
+}
 
