@@ -107,12 +107,12 @@ static void* audioThread(void* param)
 	snd_pcm_hw_params_get_period_time(params, &val, &dir);
 	EWOL_DEBUG("AUDIO : periode time = " << (float)((float)val/1000.0) << "ms" );
 	
-	FILE * fileSYS = fopen("/home/edupin/export.raw", "w");
+	//FILE * fileSYS = fopen("/home/edupin/export.raw", "w");
 	EWOL_DEBUG("==> Init audioAlsa Thread (END)");
 	while (g_stopRequested==false) {
 		//request data from the standard system generation ...
 		ewol::audio::GetData((int16_t*)buffer, frames, nbChan);
-		fwrite(buffer,2,frames*nbChan, fileSYS);
+		//fwrite(buffer,2,frames*nbChan, fileSYS);
 		// write it to ALSA system
 		rc = snd_pcm_writei(handle, buffer, frames);
 		if (rc == -EPIPE) {
