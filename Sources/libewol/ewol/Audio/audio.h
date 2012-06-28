@@ -55,6 +55,7 @@ namespace ewol {
 			void  VolumeSet(float newVolume);
 			bool  MuteGet(void);
 			void  MuteSet(bool newMute);
+			void  GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
 			
 		};
 		// note effect is loaded in memory (then don't create long effect) and unload only when requested

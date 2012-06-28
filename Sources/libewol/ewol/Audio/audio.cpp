@@ -39,7 +39,7 @@ static float   effectsVolume = -5000;
 static bool isInit = false;
 
 #ifdef __PLATFORM__Linux
-#	include <ewol/Audio/audioAlsa.h>
+#	include <ewol/Audio/interfacePortAudio.h>
 #endif
 
 void ewol::audio::Init(void)
@@ -54,7 +54,7 @@ void ewol::audio::Init(void)
 	musicFadingTime = 100;
 	isInit = true;
 	#ifdef __PLATFORM__Linux
-		ewol::audioAlsa::Init();
+		ewol::portAudio::Init();
 	#endif
 }
 
@@ -66,7 +66,7 @@ void ewol::audio::UnInit(void)
 		return;
 	}
 	#ifdef __PLATFORM__Linux
-		ewol::audioAlsa::UnInit();
+		ewol::portAudio::UnInit();
 	#endif
 	musicMute = true;
 	musicVolume = -5000;
@@ -83,20 +83,10 @@ void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t n
 		EWOL_ERROR("TODO : Support the signal mono or more tha stereo ...");
 		return;
 	}
+	// reset the current buffer
 	memset(bufferInterlace, 0, nbSample*sizeof(int16_t)*nbChannels);
-	static int32_t maxValue = 0;
-	maxValue +=10;
-	if (maxValue > 16000) {
-		maxValue = 0;
-	}
-	for (int iii = 0; iii<nbSample ; iii++) {
-		bufferInterlace[iii*2] = (float)maxValue * sin(angle/180.0 * M_PI);
-		bufferInterlace[iii*2+1] = bufferInterlace[iii*2];
-		angle+=0.9;
-		if (angle>=360) {
-			angle -= 360.0;
-		}
-	}
+	// get background music :
+	ewol::audio::music::GetData(bufferInterlace, nbSample, nbChannels);
 	// add effects :
 	ewol::audio::effects::GetData(bufferInterlace, nbSample, nbChannels);
 }
@@ -207,6 +197,10 @@ void ewol::audio::music::MuteSet(bool newMute)
 }
 
 
+void ewol::audio::music::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
+{
+	
+}
 
 
 
@@ -220,7 +214,7 @@ class EffectsLoaded {
 		{
 			m_file = file;
 			m_requestedTime = 1;
-			m_nbSamples = 12000; // 0.25s
+			m_nbSamples = 6000; // 0.25s
 			m_data = (int16_t*)malloc(sizeof(int16_t)*m_nbSamples);
 			if (NULL == m_data) {
 				EWOL_CRITICAL("MEM allocation error ...");

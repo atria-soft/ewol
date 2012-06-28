@@ -11,12 +11,12 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES :=    etk libfreetype    tinyxml libzip libpng    agg    parsersvg    lua
+LOCAL_STATIC_LIBRARIES :=    etk libfreetype    tinyxml libzip libpng    agg    parsersvg    lua    portaudio
 
 LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11 -lasound
+LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
@@ -46,11 +46,11 @@ include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := \
 	ewol/base/guiX11.cpp \
-	ewol/Audio/audioAlsa.cpp \
+	ewol/Audio/interfacePortAudio.cpp \
 	$(FILE_LIST)
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGL -lGLU -lz -lX11 -lasound
+LOCAL_LDLIBS := -lGL -lGLU -lz -lX11
 
 
 include $(BUILD_STATIC_LIBRARY)

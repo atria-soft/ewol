@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/Audio/audioAlsa.h
- * @brief Alsa ewol Audio interface (header)
+ * @file ewol/Audio/intefacePortAudio.h
+ * @brief poratudio ewol Audio interface (header)
  * @author Edouard DUPIN
- * @date 26/06/2012
+ * @date 28/06/2012
  * @par Project
  * ewol
  *
@@ -22,13 +22,13 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_ALSA_AUDIO_H__
-#define __EWOL_ALSA_AUDIO_H__
+#ifndef __EWOL_PORT_AUDIO_H__
+#define __EWOL_PORT_AUDIO_H__
 
 #include <etk/Types.h>
 
 namespace ewol {
-	namespace audioAlsa {
+	namespace portAudio {
 		void Init(void);
 		void UnInit(void);
 	};
