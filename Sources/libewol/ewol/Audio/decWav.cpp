@@ -100,7 +100,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	}
 	// try to find endienness :
 	if (fileSize < sizeof(waveHeader)) {
-		EWOL_ERROR("File : \"" << fileAccess << "\" ==> has not enouth data inside might be minumum of " << sizeof(waveHeader));
+		EWOL_ERROR("File : \"" << fileAccess << "\" ==> has not enouth data inside might be minumum of " << (int32_t)(sizeof(waveHeader)));
 		return NULL;
 	}
 	// ----------------------------------------------
@@ -238,7 +238,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	int32_t outputSize = nbChan*nbSample;
 	int16_t * outputData = (int16_t*)malloc(outputSize*sizeof(int16_t));
 	if (NULL == outputData) {
-		EWOL_ERROR("Allocation ERROR try to allocate " << (outputSize*sizeof(int16_t) ) << "bytes");
+		EWOL_ERROR("Allocation ERROR try to allocate " << (int32_t)(outputSize*sizeof(int16_t) ) << "bytes");
 		return NULL;
 	}
 	int16_t * tmpOut = outputData;

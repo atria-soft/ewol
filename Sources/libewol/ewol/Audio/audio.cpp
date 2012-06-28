@@ -30,12 +30,14 @@
 
 static int64_t currentTimePlaying = 0;
 
-static bool    musicMute = true;
-static float   musicVolume = -5000;
+static bool    musicMute = false;
+static float   musicVolume = 0;
+static int32_t musicVolumeApply = 1<<16;
 static int32_t musicFadingTime = 0;
 
-static bool    effectsMute = true;
-static float   effectsVolume = -5000;
+static bool    effectsMute = false;
+static float   effectsVolume = 0;
+static int32_t effectsVolumeApply = 1<<16;
 
 static bool isInit = false;
 
@@ -48,10 +50,10 @@ void ewol::audio::Init(void)
 	if (isInit == true) {
 		EWOL_ERROR("multiple init requested ... at the audio system ...");
 	}
-	musicMute = false;
-	musicVolume = 0;
-	effectsMute = false;
-	effectsVolume = 0;
+	ewol::audio::effects::VolumeSet(20);
+	ewol::audio::effects::MuteSet(false);
+	ewol::audio::music::VolumeSet(0);
+	ewol::audio::music::MuteSet(false);
 	musicFadingTime = 100;
 	isInit = true;
 	#ifdef __PLATFORM__Linux
@@ -181,11 +183,24 @@ float ewol::audio::music::VolumeGet(void)
 }
 
 
+static void uptateMusicVolume(void)
+{
+	if (musicMute==true) {
+		musicVolumeApply = 0;
+	} else {
+		// Convert in an fixpoint value
+		// V2 = V1*10^(db/20)
+		double coef = pow(10, (musicVolume/20) );
+		musicVolumeApply = (int32_t)(coef * (double)(1<<16));
+	}
+}
+
 void ewol::audio::music::VolumeSet(float newVolume)
 {
 	musicVolume = newVolume;
-	musicVolume = etk_avg(-100, musicVolume, 20);
+	musicVolume = etk_avg(-1000, musicVolume, 40);
 	EWOL_INFO("Set music Volume at " << newVolume << "dB ==> " << musicVolume << "dB");
+	uptateMusicVolume();
 }
 
 
@@ -199,6 +214,7 @@ void ewol::audio::music::MuteSet(bool newMute)
 {
 	musicMute = newMute;
 	EWOL_INFO("Set music Mute at " << newMute);
+	uptateMusicVolume();
 }
 
 
@@ -269,7 +285,7 @@ class RequestPlay {
 			for (int32_t iii=0; iii<processTimeMax; iii++) {
 				// TODO : Set volume and spacialisation ...
 				for (int32_t jjj=0; jjj<nbChannels; jjj++) {
-					int32_t tmppp = *pointer + *newData;
+					int32_t tmppp = *pointer + ((((int32_t)*newData)*effectsVolumeApply)>>16);
 					*pointer = etk_avg(-32767, tmppp, 32766);
 					//EWOL_DEBUG("AUDIO : element : " << *pointer);
 					pointer++;
@@ -291,7 +307,15 @@ etk::VectorType<RequestPlay*>   ListEffectsPlaying;
 
 int32_t ewol::audio::effects::Add(etk::UString file)
 {
-	// TODO : search the previous loaded element ...
+	for (int32_t iii=0; iii<ListEffects.Size(); iii++) {
+		if (NULL != ListEffects[iii]) {
+			if (ListEffects[iii]->m_file == file) {
+				ListEffects[iii]->m_requestedTime++;
+				return iii;
+			}
+		}
+	}
+	// effect does not exist ... create a new one ...
 	EffectsLoaded * tmpEffect = new EffectsLoaded(file);
 	if (NULL == tmpEffect) {
 		EWOL_ERROR("Error to load the effects : \"" << file << "\"");
@@ -305,10 +329,22 @@ int32_t ewol::audio::effects::Add(etk::UString file)
 void ewol::audio::effects::Rm(int32_t effectId)
 {
 	// find element ...
-	
-	// chenck number of requested
-	
+	if (effectId <0 || effectId >= ListEffects.Size()) {
+		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.Size()-1 << "] ==> can not remove it ...");
+		return;
+	}
+	if (ListEffects[effectId] == NULL) {
+		EWOL_ERROR("effect ID : " << effectId << " ==> has already been removed");
+		return;
+	}
+	// check number of requested
+	if (ListEffects[effectId]->m_requestedTime <=0) {
+		EWOL_ERROR("effect ID : " << effectId << " ==> request more than predicted a removed of an effects");
+		return;
+	}
+	ListEffects[effectId]->m_requestedTime--;
 	// mark to be removed ... TODO : Really removed it when no other element readed it ...
+	// TODO : ...
 }
 
 
@@ -345,11 +381,24 @@ float ewol::audio::effects::VolumeGet(void)
 }
 
 
+static void uptateEffectVolume(void)
+{
+	if (effectsMute==true) {
+		effectsVolumeApply = 0;
+	} else {
+		// Convert in an fixpoint value
+		// V2 = V1*10^(db/20)
+		double coef = pow(10, (effectsVolume/20) );
+		effectsVolumeApply = (int32_t)(coef * (double)(1<<16));
+	}
+}
+
 void ewol::audio::effects::VolumeSet(float newVolume)
 {
 	effectsVolume = newVolume;
 	effectsVolume = etk_avg(-100, effectsVolume, 20);
 	EWOL_INFO("Set music Volume at " << newVolume << "dB ==> " << effectsVolume << "dB");
+	uptateEffectVolume();
 }
 
 
