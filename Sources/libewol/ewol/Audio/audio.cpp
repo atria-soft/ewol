@@ -24,6 +24,7 @@
 
 #include <etk/Types.h>
 #include <ewol/Audio/audio.h>
+#include <ewol/Audio/decWav.h>
 #include <ewol/Debug.h>
 #include <math.h>
 
@@ -89,6 +90,10 @@ void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t n
 	ewol::audio::music::GetData(bufferInterlace, nbSample, nbChannels);
 	// add effects :
 	ewol::audio::effects::GetData(bufferInterlace, nbSample, nbChannels);
+	static FILE * plop = fopen("/home/edupin/testFile48khzstereo.raw", "w");
+	if (plop!=NULL) {
+		fwrite(bufferInterlace, sizeof(int16_t), nbSample*nbChannels, plop);
+	}
 }
 
 
@@ -199,7 +204,20 @@ void ewol::audio::music::MuteSet(bool newMute)
 
 void ewol::audio::music::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
 {
-	
+	/*static int32_t maxValue = 0;
+	static float angle = 0;
+	maxValue +=10;
+	if (maxValue > 16000) {
+		maxValue = 0;
+	}
+	for (int iii = 0; iii<nbSample ; iii++) {
+		bufferInterlace[iii*2] = (float)maxValue * sin(angle/180.0 * M_PI);
+		bufferInterlace[iii*2+1] = bufferInterlace[iii*2];
+		angle+=0.9;
+		if (angle>=360) {
+			angle -= 360.0;
+		}
+	}*/
 }
 
 
@@ -214,20 +232,9 @@ class EffectsLoaded {
 		{
 			m_file = file;
 			m_requestedTime = 1;
-			m_nbSamples = 6000; // 0.25s
-			m_data = (int16_t*)malloc(sizeof(int16_t)*m_nbSamples);
-			if (NULL == m_data) {
-				EWOL_CRITICAL("MEM allocation error ...");
-				return;
-			}
-			float tmp_angle = 0.0;
-			//int32_t test1 = M_PI / (50.0*m_file.Size());
-			for (int iii = 0; iii<m_nbSamples ; iii++) {
-				m_data[iii] = 32000.0 * sin(tmp_angle/180.0 * M_PI);
-				tmp_angle+=0.8;
-				if (tmp_angle>=360) {
-					tmp_angle -= 360.0;
-				}
+			m_data = ewol::audio::wav::LoadData(file, 1, 48000, m_nbSamples);
+			if (m_data == NULL) {
+				// write an error ...
 			}
 		}
 		etk::UString m_file;
@@ -250,6 +257,10 @@ class RequestPlay {
 			if (true==m_freeSlot) {
 				return;
 			}
+			if (m_effect->m_data == NULL) {
+				m_freeSlot = true;
+				return;
+			}
 			int32_t processTimeMax = etk_min(nbSample, m_effect->m_nbSamples - m_playTime);
 			processTimeMax = etk_max(0, processTimeMax);
 			int16_t * pointer = bufferInterlace;
@@ -259,7 +270,7 @@ class RequestPlay {
 				// TODO : Set volume and spacialisation ...
 				for (int32_t jjj=0; jjj<nbChannels; jjj++) {
 					int32_t tmppp = *pointer + *newData;
-					*pointer = etk_avg(-32768, tmppp, 32767);
+					*pointer = etk_avg(-32767, tmppp, 32766);
 					//EWOL_DEBUG("AUDIO : element : " << *pointer);
 					pointer++;
 				}
@@ -311,6 +322,7 @@ void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 		EWOL_ERROR("effect ID : " << effectId << " ==> has been removed");
 		return;
 	}
+	EWOL_ERROR("effect play : " << effectId );
 	// try to find an empty slot :
 	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
 		if (ListEffectsPlaying[iii]->IsFree()) {

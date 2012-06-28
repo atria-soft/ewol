@@ -158,6 +158,12 @@ void guiAbstraction::KeyboardHide(void)
 static int64_t startTime = -1;
 static int64_t nbCallTime = 0;
 static int64_t nbDisplayTime = 0;
+static int64_t min = 99999999999999;
+static int64_t avg = 0;
+static int64_t max = 0;
+static int64_t min2 = 99999999999999;
+static int64_t avg2 = 0;
+static int64_t max2 = 0;
 // display every second ...
 #define DISPLAY_PERIODE_US       (1000000)
 
@@ -179,6 +185,7 @@ void EWOL_GenericDraw(bool everyTime)
 		everyTime = true;
 	}
 	ewol::widgetManager::DoubleBufferLock();
+	int64_t currentTime3 = GetCurrentTime();
 	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
 	    || true == everyTime)
 	{
@@ -189,9 +196,30 @@ void EWOL_GenericDraw(bool everyTime)
 	ewol::widgetManager::DoubleBufferUnLock();
 	// send Message that we just finished a display ...
 	EWOL_ThreadEventHasJustDisplay();
-	
+	int64_t currentTime2 = GetCurrentTime();
+	int64_t processTimeLocal = (currentTime2 - currentTime);
+	min = etk_min(min, processTimeLocal);
+	max = etk_max(max, processTimeLocal);
+	avg += processTimeLocal;
+	processTimeLocal = (currentTime2 - currentTime3);
+	min2 = etk_min(min2, processTimeLocal);
+	max2 = etk_max(max2, processTimeLocal);
+	avg2 += processTimeLocal;
 	if (true == display) {
 		EWOL_DEBUG("display property : " << nbDisplayTime << "/" << nbCallTime << "fps");
+		EWOL_DEBUG("timeToProcess1 : " << (float)((float)min / 1000.0) << "ms "
+		                              << (float)((float)avg/(float)nbDisplayTime / 1000.0) << "ms "
+		                              << (float)((float)max / 1000.0) << "ms ");
+		EWOL_DEBUG("timeToProcess2 : " << (float)((float)min2 / 1000.0) << "ms "
+		                              << (float)((float)avg2/(float)nbDisplayTime / 1000.0) << "ms "
+		                              << (float)((float)max2 / 1000.0) << "ms ");
+		max2 = 0;
+		max = 0;
+		min = 99999999999999;
+		min2 = 99999999999999;
+		avg=0;
+		avg2=0;
+		
 		nbCallTime = 0;
 		nbDisplayTime = 0;
 		startTime = -1;

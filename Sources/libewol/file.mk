@@ -53,6 +53,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widgetMeta/FileChooser.cpp \
 			ewol/widgetMeta/ColorChooser.cpp \
 			ewol/theme/Theme.cpp \
-			ewol/Audio/audio.cpp
+			ewol/Audio/audio.cpp \
+			ewol/Audio/decWav.cpp
 
 
