@@ -47,6 +47,9 @@ public class interfaceJNI {
 	public static native void IOKeyboardEventMove(int type, boolean isDown);
 	public static native void IOKeyboardEventKey(int uniChar, boolean isDown);
 	
+	// Audio section ...
+	public static native void IOAudioPlayback(short[] bufferData, int frames, int nbChannels);
+	
 	public static int EWOL_SYSTEM_KEY__VOLUME_UP        = 1;
 	public static int EWOL_SYSTEM_KEY__VOLUME_DOWN      = 2;
 	public static int EWOL_SYSTEM_KEY__MENU             = 3;

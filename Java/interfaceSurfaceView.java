@@ -190,7 +190,7 @@ public class interfaceSurfaceView extends GLSurfaceView {
 			case KeyEvent.KEYCODE_BACK:
 				// the back key is wrapped in the <esc> key to simplify PC validation ...
 				interfaceJNI.IOKeyboardEventKey(0x1B, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_DEL:
 				interfaceJNI.IOKeyboardEventKey(0x08, isDown);
 				return true;

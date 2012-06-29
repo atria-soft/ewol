@@ -56,6 +56,7 @@ import android.content.res.AssetManager;
 // inport the ewol package :
 import org.ewol.interfaceJNI;
 import org.ewol.interfaceSurfaceView;
+import org.ewol.interfaceAudio;
 
 import java.io.IOException;
 
@@ -70,6 +71,8 @@ public class __PROJECT_NAME__ extends Activity {
 	private static native void ActivityParamSetArchiveDir(int mode, String myString);
 
 	private interfaceSurfaceView mGLView;
+	private interfaceAudio mStreams;
+	private Thread mAudioThread;
 
 	static {
 		System.loadLibrary("__PROJECT_PACKAGE__");
@@ -120,6 +123,9 @@ public class __PROJECT_NAME__ extends Activity {
 		// create bsurface system
 		mGLView = new interfaceSurfaceView(this);
 		
+		// create element audio ...
+		mStreams = new interfaceAudio();
+		
 		setContentView(mGLView);
 	}
 
@@ -141,6 +147,10 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		super.onResume();
 		mGLView.onResume();
+		mAudioThread = new Thread(mStreams);
+		if (mAudioThread != NULL) {
+			mAudioThread.start();
+		}
 		// call C
 		interfaceJNI.ActivityOnResume();
 	}
@@ -149,6 +159,12 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		super.onPause();
 		mGLView.onPause();
+		if (mAudioThread != NULL) {
+			// request audio stop
+			mAudioThread.Stop();
+			// wait the thread ended ...
+			mAudioThread.join();
+		}
 		// call C
 		interfaceJNI.ActivityOnPause();
 	}

@@ -30,6 +30,7 @@ all:
 	@cp $(EWOL_FOLDER)/Java/interfaceJNI.java $(EWOL_JAVA_FOLDER)/
 	@cp $(EWOL_FOLDER)/Java/interfaceOpenGL.java $(EWOL_JAVA_FOLDER)/
 	@cp $(EWOL_FOLDER)/Java/interfaceSurfaceView.java $(EWOL_JAVA_FOLDER)/
+	@cp $(EWOL_FOLDER)/Java/interfaceAudio.java $(EWOL_JAVA_FOLDER)/
 	
 	@echo "    (sh) copy the cpp for jni File : $(EWOL_FOLDER)/SourcesJava/ewolAndroidAbstraction.cpp"
 	@cp $(EWOL_FOLDER)/Java/ewolAndroidAbstraction.cpp jni/
@@ -50,7 +51,7 @@ install: all
 	@echo "------------------------------------------------------------------------"
 	@# $(PROJECT_SDK)/platform-tools/adb kill-server
 	@# install application
-	$(PROJECT_SDK)/platform-tools/adb  install -r ./bin/$(PROJECT_NAME)-debug.apk
+	sudo $(PROJECT_SDK)/platform-tools/adb  install -r ./bin/$(PROJECT_NAME)-debug.apk
 
 clean:
 	@echo "------------------------------------------------------------------------"

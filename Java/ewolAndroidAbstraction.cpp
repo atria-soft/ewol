@@ -30,6 +30,7 @@
 #include <Debug.h>
 
 #include <ewol/threadMsg.h>
+#include <ewol/Audio/audio.h>
 
 // declaration of the ewol android abstraction ...
 
@@ -420,5 +421,22 @@ extern "C"
 		EWOL_NativeRender();
 	}
 
-}
+	void Java_org_ewol_interfaceJNI_IOAudioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)
+	{
+		// Get the short* pointer from the Java array
+		jboolean isCopy;
+		jshort* dst = env->GetShortArrayElements(location, &isCopy);
+		if (NULL != dst) {
+			ewol::audio::GetData(dst, frameRate, nbChannels);
+		}
+		//APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
+		// TODO : Understand why it did not work corectly ...
+		//if (isCopy == JNI_TRUE) {
+			// Release the short* pointer
+			env->ReleaseShortArrayElements(location, dst, 0);
+		//}
+	}
+
+
+};
 

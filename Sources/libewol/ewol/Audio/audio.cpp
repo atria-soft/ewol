@@ -50,7 +50,7 @@ void ewol::audio::Init(void)
 	if (isInit == true) {
 		EWOL_ERROR("multiple init requested ... at the audio system ...");
 	}
-	ewol::audio::effects::VolumeSet(20);
+	ewol::audio::effects::VolumeSet(0);
 	ewol::audio::effects::MuteSet(false);
 	ewol::audio::music::VolumeSet(0);
 	ewol::audio::music::MuteSet(false);
