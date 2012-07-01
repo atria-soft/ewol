@@ -237,7 +237,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 								} else {
 									// set the image if one is present ...
 									myButton->SetImage(m_listElement[jjj]->m_image);
-									myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed, "");
+									myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 									myButton->SetExpendX(true);
 									myButton->SetFillX(true);
 									myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);

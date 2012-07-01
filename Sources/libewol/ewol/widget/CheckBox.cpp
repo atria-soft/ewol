@@ -196,10 +196,11 @@ bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			if(true == m_value) {
 				m_value = false;
+				GenerateEventId(ewolEventCheckBoxClicked, "false");
 			} else {
 				m_value = true;
+				GenerateEventId(ewolEventCheckBoxClicked, "true");
 			}
-			GenerateEventId(ewolEventCheckBoxClicked);
 			ewol::widgetManager::FocusKeep(this);
 			MarkToReedraw();
 			return true;
@@ -218,11 +219,12 @@ bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 	       ) {
 		if(true == m_value) {
 			m_value = false;
+			GenerateEventId(ewolEventCheckBoxClicked, "false");
 		} else {
 			m_value = true;
+			GenerateEventId(ewolEventCheckBoxClicked, "true");
 		}
 		MarkToReedraw();
-		GenerateEventId(ewolEventCheckBoxClicked);
 		return true;
 	}
 	return false;

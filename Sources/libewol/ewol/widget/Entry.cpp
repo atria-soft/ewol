@@ -261,7 +261,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			m_data.Add(m_displayCursorPos, unicodeData);
 			m_displayCursorPos++;
 		}
-		GenerateEventId(ewolEventEntryModify);
+		GenerateEventId(ewolEventEntryModify, m_data);
 		MarkToReedraw();
 		return true;
 	}

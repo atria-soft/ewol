@@ -210,9 +210,10 @@ void ewol::EObject::AddEventId(const char * generateEventId)
 /**
  * @brief Generate event on all registered EObject
  * @param[in] generateEventId event Id that is curetly generated
+ * @param[in] data data associated with the event
  * @return ---
  */
-void ewol::EObject::GenerateEventId(const char * generateEventId)
+void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString data)
 {
 	// for every element registered ...
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
@@ -220,7 +221,7 @@ void ewol::EObject::GenerateEventId(const char * generateEventId)
 			// if we find the event ...
 			if (m_externEvent[iii]->localEventId == generateEventId) {
 				if (NULL != m_externEvent[iii]->destEObject) {
-					m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->destData);
+					m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, data);
 				}
 			}
 		}
@@ -253,10 +254,9 @@ void ewol::EObject::RegisterMultiCast(const char* const messageId)
  * @param[in] destinationObject pointer on the object that might be call when an event is generated
  * @param[in] eventId Event generate inside the object
  * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
- * @param[in] data data associated with the event
  * @return true if register corectly done
  */
-void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated, etk::UString data)
+void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated)
 {
 	if (NULL == destinationObject) {
 		EWOL_ERROR("Input ERROR NULL pointer EObject ...");
@@ -300,7 +300,6 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	} else {
 		tmpEvent->destEventId = eventId;
 	}
-	tmpEvent->destData = data;
 	m_externEvent.PushBack(tmpEvent);
 }
 

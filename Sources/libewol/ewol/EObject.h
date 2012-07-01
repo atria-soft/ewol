@@ -45,7 +45,6 @@ namespace ewol {
 			const char*    localEventId;       //!< local event Id generation
 			ewol::EObject* destEObject;        //!< destination widget that might be call
 			const char*    destEventId;        //!< Generated event ID on the distant widget
-			etk::UString   destData;           //!< destination data
 	};
 	
 	/**
@@ -102,9 +101,10 @@ namespace ewol {
 			/**
 			 * @brief Generate event on all registered EObject
 			 * @param[in] generateEventId event Id that is curetly generated
+			 * @param[in] data data associated with the event
 			 * @return ---
 			 */
-			void GenerateEventId(const char * generateEventId);
+			void GenerateEventId(const char * generateEventId, const etk::UString data = "");
 			
 			/**
 			 * @brief Generate Multicast event on all EObject requested the event
@@ -112,7 +112,6 @@ namespace ewol {
 			 * @param[in] data String that is send at all the destinations
 			 * @return ---
 			 */
-			//void SendMultiCast(const char* const messageId, etk::UString& data);
 			void SendMultiCast(const char* const messageId, etk::UString data = "");
 			
 			/**
@@ -127,10 +126,9 @@ namespace ewol {
 			 * @param[in] destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] eventId Event generate inside the object
 			 * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
-			 * @param[in] data data associated with the event
 			 * @return ---
 			 */
-			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL, etk::UString data = "");
+			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL);
 			
 			/**
 			 * @brief Inform object that an other object is removed ...

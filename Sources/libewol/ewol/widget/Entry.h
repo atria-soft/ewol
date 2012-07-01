@@ -31,7 +31,7 @@
 
 extern const char * const ewolEventEntryClick;
 extern const char * const ewolEventEntryEnter;
-extern const char * const ewolEventEntryModify;
+extern const char * const ewolEventEntryModify; // return in the data the new string inside it ...
 
 namespace ewol {
 	class Entry :public ewol::Drawable
@@ -86,7 +86,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos);
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)

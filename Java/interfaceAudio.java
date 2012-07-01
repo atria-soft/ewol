@@ -91,7 +91,7 @@ public class interfaceAudio implements Runnable
 		
 		m_musicTrack.play();
 	}
-	public void Stop()
+	public void AutoStop()
 	{
 		if(m_musicTrack == null) {
 			return;
