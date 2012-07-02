@@ -148,7 +148,7 @@ public class __PROJECT_NAME__ extends Activity {
 		super.onResume();
 		mGLView.onResume();
 		mAudioThread = new Thread(mStreams);
-		if (mAudioThread ~= NULL) {
+		if (mAudioThread != null) {
 			mAudioThread.start();
 		}
 		// call C
@@ -159,11 +159,13 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		super.onPause();
 		mGLView.onPause();
-		if (mAudioThread ~= NULL) {
+		if (mAudioThread != null) {
 			// request audio stop
-			mAudioThread.AutoStop();
+			mStreams.AutoStop();
 			// wait the thread ended ...
-			mAudioThread.join();
+			try {
+				mAudioThread.join();
+			} catch(InterruptedException e) { }
 		}
 		// call C
 		interfaceJNI.ActivityOnPause();

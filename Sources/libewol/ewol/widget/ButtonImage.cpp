@@ -41,7 +41,7 @@ void ewol::WIDGET_ButtonImageInit(void)
 #undef __class__
 #define __class__	"ButtonImage"
 
-ewol::ButtonImage::ButtonImage(etk::UString newLabel)
+ewol::ButtonImage::ButtonImage(etk::UString imageName)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -53,12 +53,14 @@ ewol::ButtonImage::ButtonImage(etk::UString newLabel)
 	m_over = false;
 	m_down = false;
 	m_value = false;
+	m_image = imageName;
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_OOImage[iii] = NULL;
 		m_OOImageBg1[iii] = NULL;
 		m_OOImageBG2[iii] = NULL;
 		m_resetNeeded[iii] = false;
 	}
+	m_toggleMode = false;
 }
 
 
@@ -134,12 +136,29 @@ const char * const ewol::ButtonImage::GetObjectType(void)
 
 void ewol::ButtonImage::SetValue(bool val)
 {
-	
+	if (true == m_toggleMode) {
+		m_value = val;
+		MarkToReedraw();
+	}
 }
 
 bool ewol::ButtonImage::GetValue(void)
 {
-	return false;
+	return m_value;
+}
+
+void ewol::ButtonImage::SetToggleMode(bool val)
+{
+	m_toggleMode = val;
+	if (m_toggleMode == false) {
+		m_value = false;
+	}
+	MarkToReedraw();
+}
+
+bool ewol::ButtonImage::GetToggleMode(void)
+{
+	return m_toggleMode;
 }
 
 
@@ -222,21 +241,29 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
-			GenerateEventId(ewolEventButtonDown);
 			m_down = true;
-			m_value = true;
+			if (false == m_toggleMode) {
+				m_value = true;
+			}
+			
+			GenerateEventId(ewolEventButtonDown, (m_value)?"true":"false");
 			MarkToReedraw();
 		}
 		if(ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-			GenerateEventId(ewolEventButtonUp);
 			m_down = false;
-			m_value = false;
+			if (false == m_toggleMode) {
+				m_value = false;
+			}
+			GenerateEventId(ewolEventButtonUp, (m_value)?"true":"false");
 			MarkToReedraw();
 		}
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
-			GenerateEventId(ewolEventButtonPressed);
+			if (true == m_toggleMode) {
+				m_value = (true==m_value) ? false : true;
+			}
+			GenerateEventId(ewolEventButtonPressed, (m_value)?"true":"false");
 			MarkToReedraw();
 			return true;
 		}
@@ -281,9 +308,23 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 bool ewol::ButtonImage::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
-	    && unicodeData == '\r') {
-		GenerateEventId(ewolEventButtonEnter);
+	if (unicodeData == '\r') {
+		if(typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
+			m_down = true;
+			if (false == m_toggleMode) {
+				m_value = true;
+				GenerateEventId(ewolEventButtonEnter, (m_value)?"true":"false");
+			}
+		} else if(typeEvent == ewol::EVENT_KB_TYPE_UP) {
+			m_down = false;
+			if (false == m_toggleMode) {
+				m_value = false;
+				GenerateEventId(ewolEventButtonEnter, (m_value)?"true":"false");
+			} else {
+				m_value = (true==m_value) ? false : true;
+				GenerateEventId(ewolEventButtonEnter, (m_value)?"true":"false");
+			}
+		}
 	}
 	return false;
 }

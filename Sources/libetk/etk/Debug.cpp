@@ -73,7 +73,11 @@ void TOOLS_DisplayTime(void)
 }
 
 
+#ifdef __PLATFORM__Android
 etk::logLevel_te g_requestedLevel = etk::LOG_LEVEL_VERBOSE;
+#else
+etk::logLevel_te g_requestedLevel = etk::LOG_LEVEL_ERROR;
+#endif
 void GeneralDebugSetLevel(etk::logLevel_te ccc) {
-	g_requestedLevel = etk::LOG_LEVEL_VERBOSE;
+	g_requestedLevel = ccc;
 }

@@ -50,12 +50,12 @@ public class interfaceJNI {
 	// Audio section ...
 	public static native void IOAudioPlayback(short[] bufferData, int frames, int nbChannels);
 	
-	public static int EWOL_SYSTEM_KEY__VOLUME_UP        = 1;
-	public static int EWOL_SYSTEM_KEY__VOLUME_DOWN      = 2;
-	public static int EWOL_SYSTEM_KEY__MENU             = 3;
-	public static int EWOL_SYSTEM_KEY__CAMERA           = 4;
-	public static int EWOL_SYSTEM_KEY__HOME             = 5;
-	public static int EWOL_SYSTEM_KEY__POWER            = 6;
+	public static final int EWOL_SYSTEM_KEY__VOLUME_UP        = 1;
+	public static final int EWOL_SYSTEM_KEY__VOLUME_DOWN      = 2;
+	public static final int EWOL_SYSTEM_KEY__MENU             = 3;
+	public static final int EWOL_SYSTEM_KEY__CAMERA           = 4;
+	public static final int EWOL_SYSTEM_KEY__HOME             = 5;
+	public static final int EWOL_SYSTEM_KEY__POWER            = 6;
 	public static native void IOKeyboardEventKeySystem(int keyVal, boolean isDown);
 	// renderer Event : 
 	public static native void RenderInit();

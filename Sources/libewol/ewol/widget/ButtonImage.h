@@ -57,6 +57,8 @@ namespace ewol {
 			void           SetImageSelected(etk::UString imageName);
 			void           SetValue(bool val);
 			bool           GetValue(void);
+			void           SetToggleMode(bool val);
+			bool           GetToggleMode(void);
 		private:
 			etk::UString             m_image;
 			bool                     m_resetNeeded[NB_BOUBLE_BUFFER];
@@ -68,6 +70,7 @@ namespace ewol {
 			bool                     m_over;
 			bool                     m_down;
 			bool                     m_value;
+			bool                     m_toggleMode;
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
