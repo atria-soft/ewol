@@ -35,6 +35,8 @@ void EWOL_NativeResize(int w, int h );
 void EWOL_GenericDraw(bool everyTime);
 void EWOL_NativeGLDestroy(void);
 
+void UpdateGuiSize(void);
+
 namespace guiAbstraction
 {
 	void Stop(void);

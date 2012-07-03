@@ -37,11 +37,13 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 			void Clear(void);
-			void Rectangle(float x, float y, float w, float h, float texX=0.0, float texY=0.0, float texSX=1.0, float texSY=1.0);
+			void Rectangle(float x, float y, float w, float h, float texX=0.0, float texY=0.0, float texSX=1.0, float texSY=1.0, color_ts tmpColor=0xFFFFFFFF);
+			void Rectangle(float x, float y, float w, float h, color_ts tmpColor);
 		protected:
-			int32_t                       m_textureId;   //!< texture internal ID
+			int32_t                             m_textureId;   //!< texture internal ID
 			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object
-			etk::VectorType<texCoord_ts>  m_coordTex;    //!< internal texture coordinate for every point
+			etk::VectorType<texCoord_ts>        m_coordTex;    //!< internal texture coordinate for every point
+			etk::VectorType<color_ts>           m_coordColor;  //!< internal color of the different point
 	};
 };
 

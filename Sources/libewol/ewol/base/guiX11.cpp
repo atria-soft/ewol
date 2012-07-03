@@ -470,23 +470,17 @@ void EWOL_NativeRender(void)
 	ewol::texture::UpdateContext();
 	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
 	if(NULL == gui_uniqueWindows) {
-		//EWOL_DEBUG("Has No Windows set...");
-		
 		// set the size of the open GL system
 		glViewport(0,0,gui_width,gui_height);
-		
 		// Clear the screen with transparency ...
 		glClearColor(0.750, 0.750, 0.750, 0.5);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0., (float)gui_width, 0., (float)gui_height, 1., 20.);
-		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(0, 0, -5);
-		
 		glBegin(GL_QUADS);
 			glColor3f(1., 0., 0.); glVertex3f( .25*(float)gui_width, .25*(float)gui_height, 0.);
 			glColor3f(0., 1., 0.); glVertex3f( .75*(float)gui_width, .25*(float)gui_height, 0.);

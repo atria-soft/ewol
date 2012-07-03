@@ -75,6 +75,7 @@ namespace ewol {
 	int32_t GetCurrentHeight(void);
 	
 	void SetTitle(etk::UString title);
+	void RequestUpdateSize(void);
 };
 // get current time in ms...
 int64_t GetCurrentTime(void);

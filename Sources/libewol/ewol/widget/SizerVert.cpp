@@ -269,6 +269,7 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
 			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
 	}
+	NeedFlipFlop();
 }
 
 
@@ -280,6 +281,9 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
  */
 ewol::Widget * ewol::SizerVert::GetWidgetAtPos(Vector2D<float> pos)
 {
+	if (true == IsHide()) {
+		return NULL;
+	}
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {

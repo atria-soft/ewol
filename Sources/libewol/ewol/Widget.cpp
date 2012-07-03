@@ -101,6 +101,9 @@ ewol::Widget::Widget(void)
 	SetFillY();
 	m_canFocus = false;
 	m_hasFocus = false;
+	for(int32_t iii=0 ; iii<NB_BOUBLE_BUFFER ; iii++) {
+		m_hide[iii] = false;
+	}
 }
 
 
@@ -140,6 +143,33 @@ const char * const ewol::Widget::GetObjectType(void)
 {
 	return ewol::TYPE_EOBJECT_WIDGET;
 }
+
+
+/**
+ * @brief Set the widget hidden
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::Hide(void)
+{
+	m_hide[m_currentCreateId] = true;
+	MarkToReedraw();
+	ewol::RequestUpdateSize();
+}
+
+
+/**
+ * @brief Set the widget visible
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::Show(void)
+{
+	m_hide[m_currentCreateId] = false;
+	MarkToReedraw();
+	ewol::RequestUpdateSize();
+}
+
 
 /**
  * @brief This will be equivalent at the destructor @ref ~Widget
@@ -181,6 +211,8 @@ bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 void ewol::Widget::OnFlipFlopEvent(void)
 {
 	if (true == m_needFlipFlop) {
+		bool save = m_hide[m_currentCreateId];
+		
 		m_currentDrawId++;
 		if (NB_BOUBLE_BUFFER<=m_currentDrawId) {
 			m_currentDrawId = 0;
@@ -190,6 +222,8 @@ void ewol::Widget::OnFlipFlopEvent(void)
 			m_currentCreateId = 0;
 		}
 		m_needFlipFlop = false;
+		
+		m_hide[m_currentCreateId] = save;
 	}
 }
 
@@ -258,6 +292,10 @@ void ewol::Widget::KeepFocus(void)
  */
 void ewol::Widget::GenDraw(void)
 {
+	if (true==m_hide[m_currentDrawId]){
+		// widget is hidden ...
+		return;
+	}
 	glPushMatrix();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 	glViewport(                                       m_origin.x,

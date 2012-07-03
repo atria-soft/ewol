@@ -41,7 +41,7 @@ void ewol::WIDGET_ButtonImageInit(void)
 #undef __class__
 #define __class__	"ButtonImage"
 
-ewol::ButtonImage::ButtonImage(etk::UString imageName)
+ewol::ButtonImage::ButtonImage(etk::UString imageName, color_ts col)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -54,6 +54,7 @@ ewol::ButtonImage::ButtonImage(etk::UString imageName)
 	m_down = false;
 	m_value = false;
 	m_image = imageName;
+	m_color = col;
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_OOImage[iii] = NULL;
 		m_OOImageBg1[iii] = NULL;
@@ -69,27 +70,30 @@ ewol::ButtonImage::~ButtonImage(void)
 	
 }
 
-void ewol::ButtonImage::SetImage(etk::UString imageName)
+void ewol::ButtonImage::SetImage(etk::UString imageName, color_ts col)
 {
 	m_image = imageName;
+	m_color = col;
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_resetNeeded[iii] = true;
 	}
 	MarkToReedraw();
 }
 
-void ewol::ButtonImage::SetImageBG(etk::UString imageName)
+void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
 {
 	m_imageBg1 = imageName;
+	m_colorBg1 = col;
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_resetNeeded[iii] = true;
 	}
 	MarkToReedraw();
 }
 
-void ewol::ButtonImage::SetImageSelected(etk::UString imageName)
+void ewol::ButtonImage::SetImageSelected(etk::UString imageName, color_ts col)
 {
 	m_imageBg2 = imageName;
+	m_colorBg2 = col;
 	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
 		m_resetNeeded[iii] = true;
 	}
@@ -195,33 +199,51 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 				m_OOImage[m_currentCreateId] = new ewol::OObject2DTextured(m_image, tmpSizeX, tmpSizeY);
 			}
 		}
-		float tmpval = 0.0;
-		if (NULL != m_OOImageBG2[m_currentCreateId]) {
-			m_OOImageBG2[m_currentCreateId]->Clear();
-			if(    m_down == true
-			    || m_over == true ) {
-				m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		if (false == m_toggleMode) {
+			float tmpval = 0.0;
+			if (NULL != m_OOImageBG2[m_currentCreateId]) {
+				m_OOImageBG2[m_currentCreateId]->Clear();
+				if(    m_down == true
+				    || m_over == true ) {
+					m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+				}
+				tmpval = tmpSizeX * 0.2;
+				tmpSizeX -= tmpval;
+				tmpOriginX += tmpval/2;
+				tmpval = tmpSizeY * 0.2;
+				tmpSizeY -= tmpval;
+				tmpOriginY += tmpval/2;
 			}
-			tmpval = tmpSizeX * 0.2;
-			tmpSizeX -= tmpval;
-			tmpOriginX += tmpval/2;
-			tmpval = tmpSizeY * 0.2;
-			tmpSizeY -= tmpval;
-			tmpOriginY += tmpval/2;
-		}
-		if (NULL != m_OOImageBg1[m_currentCreateId]) {
-			m_OOImageBg1[m_currentCreateId]->Clear();
-			m_OOImageBg1[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-			tmpval = tmpSizeX * 0.2;
-			tmpSizeX -= tmpval;
-			tmpOriginX += tmpval/2;
-			tmpval = tmpSizeY * 0.2;
-			tmpSizeY -= tmpval;
-			tmpOriginY += tmpval/2;
-		}
-		if (NULL != m_OOImage[m_currentCreateId]) {
-			m_OOImage[m_currentCreateId]->Clear();
-			m_OOImage[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+			if (NULL != m_OOImageBg1[m_currentCreateId]) {
+				m_OOImageBg1[m_currentCreateId]->Clear();
+				m_OOImageBg1[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+				tmpval = tmpSizeX * 0.2;
+				tmpSizeX -= tmpval;
+				tmpOriginX += tmpval/2;
+				tmpval = tmpSizeY * 0.2;
+				tmpSizeY -= tmpval;
+				tmpOriginY += tmpval/2;
+			}
+			if (NULL != m_OOImage[m_currentCreateId]) {
+				m_OOImage[m_currentCreateId]->Clear();
+				m_OOImage[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+			}
+		} else {
+			if (NULL != m_OOImage[m_currentCreateId]) {
+				m_OOImage[m_currentCreateId]->Clear();
+			}
+			if (NULL != m_OOImageBG2[m_currentCreateId]) {
+				m_OOImageBG2[m_currentCreateId]->Clear();
+			}
+			if(m_value == true) {
+				if (NULL != m_OOImage[m_currentCreateId]) {
+					m_OOImage[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_color);
+				}
+			} else {
+				if (NULL != m_OOImageBG2[m_currentCreateId]) {
+					m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_colorBg2);
+				}
+			}
 		}
 		m_needFlipFlop = true;
 	}

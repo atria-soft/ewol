@@ -58,15 +58,19 @@ void ewol::PopUpWidgetPush(ewol::Widget * tmpWidget)
 	}
 }
 
+void UpdateGuiSize(void)
+{
+	if (NULL != gui_uniqueWindows) {
+		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
+		gui_uniqueWindows->SetOrigin(0.0, 0.0);
+	}
+}
 void EWOL_NativeResize(int w, int h )
 {
 	gui_width = w;
 	gui_height = h;
 	//EWOL_INFO("Resize w=" << w << " h=" << h);
-	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
-		gui_uniqueWindows->SetOrigin(0.0, 0.0);
-	}
+	UpdateGuiSize();
 }
 
 void EWOL_NativeRegenerateDisplay(void)

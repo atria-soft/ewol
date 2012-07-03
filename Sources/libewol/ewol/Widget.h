@@ -32,7 +32,6 @@
 namespace ewol {
 	class Widget;
 };
-
 #include <etk/Types.h>
 #include <etk/VectorType.h>
 #include <ewol/Debug.h>
@@ -144,6 +143,8 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
+		private:
+			bool                 m_hide[NB_BOUBLE_BUFFER]; //!< hide a widget on the display
 		protected:
 			// internal element calculated by the system
 			Vector2D<float>      m_origin;        //!< internal ... I do not really known how i can use it ...
@@ -206,13 +207,13 @@ namespace ewol {
 			 * @param ---
 			 * @return re size requested
 			 */
-			Vector2D<float>  GetMinSize(void) { return m_minSize; };
+			Vector2D<float>  GetMinSize(void) { if (false==IsHide()) { return m_minSize; } return Vector2D<float>(0,0); };
 			/**
 			 * @brief Get the widget size
 			 * @param ---
 			 * @return Requested size
 			 */
-			Vector2D<float>  GetSize(void) { return m_size; };
+			Vector2D<float>  GetSize(void) { if (false==IsHide()) { return m_size; } return Vector2D<float>(0,0); };
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
@@ -224,7 +225,7 @@ namespace ewol {
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentX(void) { return m_userExpendX; };
+			virtual bool CanExpentX(void) {  if (false==IsHide()) { return m_userExpendX; } return false; };
 			/**
 			 * @brief Set the vertical expend capacity
 			 * @param[in] newExpend new Expend state
@@ -236,7 +237,7 @@ namespace ewol {
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentY(void) { return m_userExpendY; };
+			virtual bool CanExpentY(void) {  if (false==IsHide()) { return m_userExpendY; } return false; };
 			/**
 			 * @brief Set the horizontal filling capacity
 			 * @param[in] newFill new fill state
@@ -261,6 +262,25 @@ namespace ewol {
 			 * @return boolean repensent the capacity to vertical filling
 			 */
 			bool CanFillY(void) { return m_userFillY; };
+			/**
+			 * @brief Set the widget hidden
+			 * @param ---
+			 * @return ---
+			 */
+			void Hide(void);
+			/**
+			 * @brief Set the widget visible
+			 * @param ---
+			 * @return ---
+			 */
+			void Show(void);
+			/**
+			 * @brief Get the visibility of the widget
+			 * @param ---
+			 * @return true: if the widget is hiden, false: it is visible
+			 */
+			bool IsHide(void) { return m_hide[m_currentCreateId]; };
+			
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area
@@ -340,7 +360,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return this; };
+			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { if (false==IsHide()) { return this; } return NULL; };
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -405,6 +425,12 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnFlipFlopEvent(void);
+			/**
+			 * @brief Request a flip-flop of the double buffer
+			 * @param ---
+			 * @return ---
+			 */
+			void NeedFlipFlop(void) { m_needFlipFlop = true; };
 		public:
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
