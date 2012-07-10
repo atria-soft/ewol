@@ -290,7 +290,8 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			return true;
 		}
 	} else if (0 == IdInput) {
-		if(ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+		if(    ewol::EVENT_INPUT_TYPE_ENTER == typeEvent
+		    || ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 			Vector2D<float> relPos = RelativePosition(pos);
 			
 			// check if over : 
@@ -315,11 +316,11 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 					m_over = true;
 					MarkToReedraw();
 				}
-			} else {
-				if(m_over != false) {
-					m_over = false;
-					MarkToReedraw();
-				}
+			}
+		} else if(ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
+			if(m_over != false) {
+				m_over = false;
+				MarkToReedraw();
 			}
 		}
 	}

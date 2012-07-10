@@ -73,7 +73,7 @@ static void CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
 	eventTable[idInput].downStart.x = 0;
 	eventTable[idInput].downStart.y = 0;
 	eventTable[idInput].isDown = false;
-	eventTable[idInput].isInside = true;
+	eventTable[idInput].isInside = false;
 	eventTable[idInput].nbClickEvent = 0;
 }
 
@@ -206,21 +206,44 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 		// not manage input
 		return;
 	}
-	// specific for the mouse system ...
-	if (type == ewol::INPUT_TYPE_MOUSE) {
-		if(pointerID == 0) {
-			ewol::Widget* destWidget = NULL;
-			if(NULL != gui_uniqueWindows) {
-				destWidget = gui_uniqueWindows->GetWidgetAtPos(pos);
-			}
-			if (NULL != destWidget) {
-				destWidget->OnEventInput(type, 0, ewol::EVENT_INPUT_TYPE_MOVE, pos);
-			}
-			return;
+	// special case for the mouse event 0 that represent the hover event of the system :
+	if (type == ewol::INPUT_TYPE_MOUSE && pointerID == 0) {
+		// this event is all time on the good widget ... and manage the enter and leave ...
+		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
+		ewol::Widget* tmpWidget = gui_uniqueWindows->GetWidgetAtPos(pos);
+		if(    tmpWidget != eventTable[pointerID].curentWidgetEvent
+		    || (    true == eventTable[pointerID].isInside
+		         && (     eventTable[pointerID].origin.x > pos.x
+		              ||  eventTable[pointerID].origin.y > pos.y
+		              || (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) < pos.x
+		              || (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) < pos.y) ) ) {
+			eventTable[pointerID].isInside = false;
+			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
+			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_LEAVE, pos);
 		}
-	}
-	if (true == eventTable[pointerID].isUsed) {
-	
+		if (false == eventTable[pointerID].isInside) {
+			// Set the element inside ...
+			eventTable[pointerID].isInside = true;
+			// get destination widget :
+			if(NULL != gui_uniqueWindows) {
+				eventTable[pointerID].curentWidgetEvent = gui_uniqueWindows->GetWidgetAtPos(pos);
+			} else {
+				eventTable[pointerID].curentWidgetEvent = NULL;
+			}
+			if (NULL == eventTable[pointerID].curentWidgetEvent) {
+				eventTable[pointerID].isInside = false;
+			}
+			if (NULL != eventTable[pointerID].curentWidgetEvent) {
+				eventTable[pointerID].origin = eventTable[pointerID].curentWidgetEvent->GetOrigin();
+				eventTable[pointerID].size = eventTable[pointerID].curentWidgetEvent->GetSize();
+			}
+			eventTable[pointerID].destinationInputId = 0;
+			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
+			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_ENTER, pos);
+		}
+		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [MOVE]  " << pos);
+		localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_MOVE, pos);
+	} else if (true == eventTable[pointerID].isUsed) {
 		if (true == eventTable[pointerID].isInside) {
 			if(     eventTable[pointerID].origin.x > pos.x
 			    ||  eventTable[pointerID].origin.y > pos.y
@@ -311,7 +334,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [UP]     " << pos);
 		if(false == eventTable[pointerID].isUsed) {
 			// bad case ... ???
-			EWOL_VERBOSE("Up event without previous down ... ");
+			EWOL_DEBUG("Up event without previous down ... ");
 			// Mark it un-used :
 			eventTable[pointerID].isUsed = false;
 			// revove the widget ...
