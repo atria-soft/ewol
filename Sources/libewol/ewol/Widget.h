@@ -338,6 +338,29 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnLostFocus(void) {};
+		
+		// ----------------------------------------------------------------------------------------------------------------
+		// -- Mouse event properties Area
+		// ----------------------------------------------------------------------------------------------------------------
+		private:
+			int32_t m_limitMouseEvent; //!< this is to limit the number of mouse event that the widget can supported
+		public:
+			/**
+			 * @brief Get the number of mouse event supported
+			 * @param ---
+			 * @return return the number of event that the mouse supported [0..3]
+			 */
+			int32_t GetMouseLimit(void) { return m_limitMouseEvent; };
+			/**
+			 * @brief Get the number of mouse event supported
+			 * @param[in] numberState The number of event that the mouse supported [0..3]
+			 * @return ---
+			 */
+			void SetMouseLimit(int32_t numberState) { m_limitMouseEvent = numberState; };
+		
+		// ----------------------------------------------------------------------------------------------------------------
+		// -- Periodic call Area
+		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			/**
 			 * @brief Request that the current widegt have a periodic call

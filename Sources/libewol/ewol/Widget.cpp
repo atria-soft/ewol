@@ -82,6 +82,7 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
  */
 ewol::Widget::Widget(void)
 {
+	m_limitMouseEvent = 3;
 	m_needRegenerateDisplay = true;
 	m_currentDrawId = 0;
 	m_currentCreateId = 1;

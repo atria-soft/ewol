@@ -221,11 +221,34 @@ bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventIn
 	//EWOL_DEBUG("Event on Entry ...");
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
-			// nothing to do ...
 			GenerateEventId(ewolEventEntryClick);
-			ewol::widgetManager::FocusKeep(this);
+			KeepFocus();
 			MarkToReedraw();
+			Vector2D<float> relPos = RelativePosition(pos);
+			// try to find the new cursor position :
+			int32_t fontId = GetDefaultFontId();
+			etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
+			int32_t displayHidenSize = ewol::GetWidth(fontId, tmpDisplay);
+			//EWOL_DEBUG("hidenSize : " << displayHidenSize);
+			int32_t newCursorPosition = -1;
+			int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
+			for (int32_t iii=0; iii<m_data.Size(); iii++) {
+				tmpDisplay = m_data.Extract(0, iii);
+				int32_t tmpWidth = ewol::GetWidth(fontId, tmpDisplay) - displayHidenSize;
+				if (tmpWidth>=relPos.x-tmpTextOriginX) {
+					newCursorPosition = iii;
+					break;
+				}
+			}
+			if (newCursorPosition == -1) {
+				newCursorPosition = m_data.Size();
+			}
+			m_displayCursorPos = newCursorPosition;
 			return true;
+		} else if (ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent) {
+			// TODO : selected area ...
+		} else if (ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+			// TODO : select all the line
 		}
 	}
 	return false;
@@ -244,7 +267,11 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 	if( typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
 		//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
 		//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
-		if (0x7F == unicodeData) {
+		if(    '\n' == unicodeData
+		    || '\r' == unicodeData) {
+			GenerateEventId(ewolEventEntryEnter, m_data);
+			return true;
+		} else if (0x7F == unicodeData) {
 			// SUPPR :
 			if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
 				m_data.Remove(m_displayCursorPos, 1);

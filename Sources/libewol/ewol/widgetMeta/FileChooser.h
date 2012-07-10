@@ -88,7 +88,6 @@ namespace ewol {
 			ewol::Widget*    m_widgetListFolder;
 			ewol::Widget*    m_widgetListFile;
 			ewol::CheckBox*  m_widgetCheckBox;
-			bool             m_hasSelectedFile;
 			etk::UString     m_folder;
 			etk::UString     m_file;
 	};

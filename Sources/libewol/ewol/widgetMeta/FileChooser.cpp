@@ -77,6 +77,7 @@ class FileChooserFolderList : public ewol::List
 		{
 			AddEventId(ewolEventFileChooserSelectFolder);
 			m_selectedLine = -1;
+			SetMouseLimit(2);
 		};
 		~FileChooserFolderList(void)
 		{
@@ -118,11 +119,7 @@ class FileChooserFolderList : public ewol::List
 		
 		
 		virtual color_ts GetBasicBG(void) {
-			color_ts bg;
-			bg.red = 0;
-			bg.green = 0;
-			bg.blue = 0;
-			bg.alpha = 0x30;
+			color_ts bg(0x00000010);
 			return bg;
 		}
 		
@@ -144,18 +141,12 @@ class FileChooserFolderList : public ewol::List
 			}
 			fg = etk::color::color_Black;
 			if (raw % 2) {
-				bg = etk::color::color_White;
+				bg = 0xFFFFFF00;
 			} else {
-				bg.red = 0x7F;
-				bg.green = 0x7F;
-				bg.blue = 0x7F;
-				bg.alpha = 0xFF;
+				bg = 0xBFBFBFFF;
 			}
 			if (m_selectedLine == raw) {
-				bg.red = 0x8F;
-				bg.green = 0x8F;
-				bg.blue = 0xFF;
-				bg.alpha = 0xFF;
+				bg = 0x8F8FFFFF;
 			}
 			return true;
 		};
@@ -243,17 +234,14 @@ class FileChooserFileList : public ewol::List
 			m_selectedLine = -1;
 			AddEventId(ewolEventFileChooserSelectFile);
 			AddEventId(ewolEventFileChooserValidateFile);
+			SetMouseLimit(2);
 		};
 		~FileChooserFileList(void)
 		{
 			ClearElements();
 		};
 		virtual color_ts GetBasicBG(void) {
-			color_ts bg;
-			bg.red = 0;
-			bg.green = 0;
-			bg.blue = 0;
-			bg.alpha = 0x30;
+			color_ts bg(0x00000010);
 			return bg;
 		}
 		void AddElement(etk::UString element)
@@ -287,7 +275,22 @@ class FileChooserFileList : public ewol::List
 			}
 			return tmpVal;
 		}
-		
+		// select the specific file
+		void SelectFile( etk::UString data) {
+			// remove selected line
+			m_selectedLine = -1;
+			// search the coresponding file :
+			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
+				if (NULL!=m_listFile[iii]) {
+					if (*m_listFile[iii] == data) {
+						// we find the line :
+						m_selectedLine = iii;
+						break;
+					}
+				}
+			}
+			MarkToReedraw();
+		}
 		
 		uint32_t GetNuberOfColomn(void) {
 			return 1;
@@ -307,21 +310,12 @@ class FileChooserFileList : public ewol::List
 			}
 			fg = etk::color::color_Black;
 			if (raw % 2) {
-				bg.red = 0xCF;
-				bg.green = 0xFF;
-				bg.blue = 0xFF;
-				bg.alpha = 0xFF;
+				bg = 0xFFFFFF00;
 			} else {
-				bg.red = 0x9F;
-				bg.green = 0x9F;
-				bg.blue = 0x9F;
-				bg.alpha = 0xFF;
+				bg = 0xBFBFBFFF;
 			}
 			if (m_selectedLine == raw) {
-				bg.red = 0x8F;
-				bg.green = 0x8F;
-				bg.blue = 0xFF;
-				bg.alpha = 0xFF;
+				bg = 0x8F8FFFFF;
 			}
 			return true;
 		};
@@ -402,20 +396,20 @@ class FileChooserFileList : public ewol::List
 #define __class__	"FileChooser"
 
 
-extern const char * const ewolEventFileChooserCancel          = "ewol-event-file-chooser-cancel";
-extern const char * const ewolEventFileChooserValidate        = "ewol-event-file-chooser-validate";
-extern const char * const ewolEventFileChooserHidenFileChange = "ewol-event-file-chooser-Show/Hide-hiden-Files";
-extern const char * const ewolEventFileChooserEntryFolder     = "ewol-event-file-chooser-modify-entry-folder";
-extern const char * const ewolEventFileChooserEntryFile       = "ewol-event-file-chooser-modify-entry-file";
-extern const char * const ewolEventFileChooserHome            = "ewol-event-file-chooser-home";
+extern const char * const ewolEventFileChooserCancel           = "ewol-event-file-chooser-cancel";
+extern const char * const ewolEventFileChooserValidate         = "ewol-event-file-chooser-validate";
+extern const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
+extern const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
+extern const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
+extern const char * const ewolEventFileChooserEntryFile        = "ewol-event-file-chooser-modify-entry-file";
+extern const char * const ewolEventFileChooserEntryFileEnter   = "ewol-event-file-chooser-modify-entry-file-enter";
+extern const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
 ewol::FileChooser::FileChooser(void)
 {
 	AddEventId(ewolEventFileChooserCancel);
 	AddEventId(ewolEventFileChooserValidate);
-	
-	m_hasSelectedFile = false;
 	
 	m_widgetTitle = NULL;
 	m_widgetValidate = NULL;
@@ -458,6 +452,7 @@ ewol::FileChooser::FileChooser(void)
 			
 			m_widgetCurrentFolder = new ewol::Entry(m_folder);
 				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFolder);
+				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFolderEnter);
 				m_widgetCurrentFolder->SetExpendX(true);
 				m_widgetCurrentFolder->SetFillX(true);
 				m_widgetCurrentFolder->SetWidth(200);
@@ -474,6 +469,7 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(myImage);
 			m_widgetCurrentFileName = new ewol::Entry(m_file);
 				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFile);
+				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFileEnter);
 				m_widgetCurrentFileName->SetExpendX(true);
 				m_widgetCurrentFileName->SetFillX(true);
 				m_widgetCurrentFileName->SetWidth(200);
@@ -629,10 +625,12 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		// TODO : Change the folder, if it exit ...
 	} else if (ewolEventFileChooserEntryFile == eventId) {
 		//==> change the file name
-		if (NULL != m_widgetCurrentFileName) {
-			m_file = m_widgetCurrentFileName->GetValue();
+		m_file = data;
+		// Update the selected file in the list : 
+		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
+		if (myListFile != NULL) {
+			myListFile->SelectFile(m_file);
 		}
-		// TODO : Remove file selection
 	} else if (ewolEventFileChooserCancel == eventId) {
 		//==> Auto remove ...
 		GenerateEventId(eventId);
@@ -663,15 +661,14 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		}
 		SetFileName("");
 		UpdateCurrentFolder();
-		m_hasSelectedFile = false;
 	} else if (ewolEventFileChooserSelectFile == eventId) {
-		m_hasSelectedFile = true;
 		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
 		etk::UString file = myListFile->GetSelectedLine();
 		SetFileName(file);
 		GenerateEventId(eventId);
-	} else if(    ewolEventFileChooserValidateFile == eventId
-	           || (ewolEventFileChooserValidate == eventId && true == m_hasSelectedFile) ) {
+	} else if(     eventId == ewolEventFileChooserValidateFile 
+	           || (eventId == ewolEventFileChooserValidate       && m_file != "" )
+	           || (eventId == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the File ==> generate a validate
 		GenerateEventId(ewolEventFileChooserValidate);
 		MarkToRemove();
@@ -694,7 +691,6 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		}
 		SetFileName("");
 		UpdateCurrentFolder();
-		m_hasSelectedFile = false;
 	}
 	return;
 };
