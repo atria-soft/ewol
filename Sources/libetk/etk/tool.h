@@ -26,11 +26,13 @@
 #define __ETK_TOOL_H__
 
 #include <etk/Types.h>
+#include <etk/UString.h>
 
 namespace etk {
 	namespace tool {
 		float   frand(float a, float b);
 		int32_t irand(int32_t a, int32_t b);
+		void SortList(etk::VectorType<etk::UString *> &m_listDirectory);
 	};
 };
 

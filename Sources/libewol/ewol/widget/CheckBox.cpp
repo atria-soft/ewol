@@ -42,6 +42,7 @@ void ewol::CheckBox::Init(void)
 	m_textColorBg = etk::color::color_White;
 	m_value = false;
 	SetCanHaveFocus(true);
+	SetMouseLimit(1);
 }
 
 ewol::CheckBox::CheckBox(void)

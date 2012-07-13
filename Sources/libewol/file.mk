@@ -39,6 +39,7 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/Joystick.cpp \
 			ewol/widget/Label.cpp \
 			ewol/widget/List.cpp \
+			ewol/widget/ListFileSystem.cpp \
 			ewol/widget/Layer.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/PopUp.cpp \

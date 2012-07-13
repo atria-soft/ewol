@@ -43,353 +43,6 @@ extern "C" {
 
 #include <ewol/ewol.h>
 
-void SortList(etk::VectorType<etk::UString *> &m_listDirectory)
-{
-	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
-	m_listDirectory.Clear();
-	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
-		
-		int32_t findPos = 0;
-		for(int32_t jjj=0; jjj<m_listDirectory.Size(); jjj++) {
-			//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
-			if (*tmpList[iii] > *m_listDirectory[jjj]) {
-				findPos = jjj+1;
-			}
-		}
-		//EWOL_DEBUG("position="<<findPos);
-		m_listDirectory.Insert(findPos, tmpList[iii]);
-	}
-}
-
-
-
-const char * const ewolEventFileChooserSelectFolder   = "ewol-event-file-chooser-Select-Folder";
-//!< EObject name :
-extern const char * const TYPE_EOBJECT_WIDGET_FOLDER_LIST = "FileChooserFolderList";
-
-class FileChooserFolderList : public ewol::List
-{
-	private:
-		etk::VectorType<etk::UString *> m_listDirectory;
-		int32_t                        m_selectedLine;
-	public:
-		FileChooserFolderList(void)
-		{
-			AddEventId(ewolEventFileChooserSelectFolder);
-			m_selectedLine = -1;
-			SetMouseLimit(2);
-		};
-		~FileChooserFolderList(void)
-		{
-			ClearElements();
-		};
-		
-		void AddElement(etk::UString element)
-		{
-			etk::UString* tmpEmement = new etk::UString(element);
-			m_listDirectory.PushBack(tmpEmement);
-		}
-		void EndGenerating(void)
-		{
-			SortList(m_listDirectory);
-			MarkToReedraw();
-		}
-		
-		void ClearElements(void) {
-			for (int32_t iii=0; iii<m_listDirectory.Size(); iii++) {
-				if (NULL != m_listDirectory[iii]) {
-					delete(m_listDirectory[iii]);
-					m_listDirectory[iii] = NULL;
-				}
-			}
-			m_listDirectory.Clear();
-			m_originScrooled.x = 0;
-			m_originScrooled.y = 0;
-			MarkToReedraw();
-		}
-		
-		etk::UString GetSelectedLine(void)
-		{
-			etk::UString tmpVal = "";
-			if (m_selectedLine >= 0) {
-				tmpVal = *(m_listDirectory[m_selectedLine]);
-			}
-			return tmpVal;
-		}
-		
-		
-		virtual color_ts GetBasicBG(void) {
-			color_ts bg(0x00000010);
-			return bg;
-		}
-		
-		uint32_t GetNuberOfColomn(void) {
-			return 1;
-		};
-		bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
-			myTitle = "title";
-			return true;
-		};
-		uint32_t GetNuberOfRaw(void) {
-			return m_listDirectory.Size();
-		};
-		bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
-			if (raw >= 0 && raw < m_listDirectory.Size()) {
-				myTextToWrite = *(m_listDirectory[raw]);
-			} else {
-				myTextToWrite = "ERROR";
-			}
-			fg = etk::color::color_Black;
-			if (raw % 2) {
-				bg = 0xFFFFFF00;
-			} else {
-				bg = 0xBFBFBFFF;
-			}
-			if (m_selectedLine == raw) {
-				bg = 0x8F8FFFFF;
-			}
-			return true;
-		};
-		
-		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
-			if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
-				EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-				if (1 == IdInput) {
-					if (raw > m_listDirectory.Size() ) {
-						m_selectedLine = -1;
-					} else {
-						m_selectedLine = raw;
-					}
-					// need to regenerate the display of the list : 
-					MarkToReedraw();
-					return true;
-				}
-			}
-			if (typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE) {
-				EWOL_INFO("Event Double on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-				if (1 == IdInput) {
-					if (m_selectedLine >=0 ) {
-						// generate event extern : 
-						GenerateEventId(ewolEventFileChooserSelectFolder);
-						return true;
-					}
-				}
-			}
-			return false;
-		}
-	
-	public:
-		/**
-		 * @brief Check if the object has the specific type.
-		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-		 * @param[in] objectType type of the object we want to check
-		 * @return true if the object is compatible, otherwise false
-		 */
-		bool CheckObjectType(const char * const objectType)
-		{
-			if (NULL == objectType) {
-				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FOLDER_LIST << "\" != NULL(pointer) ");
-				return false;
-			}
-			if (objectType == TYPE_EOBJECT_WIDGET_FOLDER_LIST) {
-				return true;
-			} else {
-				if(true == ewol::List::CheckObjectType(objectType)) {
-					return true;
-				}
-				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FOLDER_LIST << "\" != \"" << objectType << "\"");
-				return false;
-			}
-		}
-		
-		/**
-		 * @brief Get the current Object type of the EObject
-		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-		 * @param[in] objectType type description
-		 * @return true if the object is compatible, otherwise false
-		 */
-		const char * const GetObjectType(void)
-		{
-			return TYPE_EOBJECT_WIDGET_FOLDER_LIST;
-		}
-};
-#define EWOL_CAST_WIDGET_FOLDER_LIST(curentPointer) EWOL_CAST(TYPE_EOBJECT_WIDGET_FOLDER_LIST,FileChooserFolderList,curentPointer)
-
-#undef __class__
-#define __class__	"FileChooser(FileList)"
-
-const char * const ewolEventFileChooserSelectFile   = "ewol-event-file-chooser-Select-File";
-const char * const ewolEventFileChooserValidateFile   = "ewol-event-file-chooser-Validate-File";
-//!< EObject name :
-extern const char * const TYPE_EOBJECT_WIDGET_FILE_LIST = "FileChooserFileList";
-
-class FileChooserFileList : public ewol::List
-{
-	private:
-		etk::VectorType<etk::UString *> m_listFile;
-		int32_t                        m_selectedLine;
-	public:
-		FileChooserFileList(void)
-		{
-			m_selectedLine = -1;
-			AddEventId(ewolEventFileChooserSelectFile);
-			AddEventId(ewolEventFileChooserValidateFile);
-			SetMouseLimit(2);
-		};
-		~FileChooserFileList(void)
-		{
-			ClearElements();
-		};
-		virtual color_ts GetBasicBG(void) {
-			color_ts bg(0x00000010);
-			return bg;
-		}
-		void AddElement(etk::UString element)
-		{
-			etk::UString* tmpEmement = new etk::UString(element);
-			m_listFile.PushBack(tmpEmement);
-		}
-		void EndGenerating(void)
-		{
-			SortList(m_listFile);
-			MarkToReedraw();
-		}
-		void ClearElements(void) {
-			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
-				if (NULL != m_listFile[iii]) {
-					delete(m_listFile[iii]);
-					m_listFile[iii] = NULL;
-				}
-			}
-			m_listFile.Clear();
-			m_originScrooled.x = 0;
-			m_originScrooled.y = 0;
-			MarkToReedraw();
-		}
-		
-		etk::UString GetSelectedLine(void)
-		{
-			etk::UString tmpVal = "";
-			if (m_selectedLine >= 0) {
-				tmpVal = *(m_listFile[m_selectedLine]);
-			}
-			return tmpVal;
-		}
-		// select the specific file
-		void SelectFile( etk::UString data) {
-			// remove selected line
-			m_selectedLine = -1;
-			// search the coresponding file :
-			for (int32_t iii=0; iii<m_listFile.Size(); iii++) {
-				if (NULL!=m_listFile[iii]) {
-					if (*m_listFile[iii] == data) {
-						// we find the line :
-						m_selectedLine = iii;
-						break;
-					}
-				}
-			}
-			MarkToReedraw();
-		}
-		
-		uint32_t GetNuberOfColomn(void) {
-			return 1;
-		};
-		bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
-			myTitle = "title";
-			return true;
-		};
-		uint32_t GetNuberOfRaw(void) {
-			return m_listFile.Size();
-		};
-		bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
-			if (raw >= 0 && raw < m_listFile.Size()) {
-				myTextToWrite = *(m_listFile[raw]);
-			} else {
-				myTextToWrite = "ERROR";
-			}
-			fg = etk::color::color_Black;
-			if (raw % 2) {
-				bg = 0xFFFFFF00;
-			} else {
-				bg = 0xBFBFBFFF;
-			}
-			if (m_selectedLine == raw) {
-				bg = 0x8F8FFFFF;
-			}
-			return true;
-		};
-		
-		bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
-			if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
-				EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-				if (1 == IdInput) {
-					if (raw > m_listFile.Size() ) {
-						m_selectedLine = -1;
-					} else {
-						m_selectedLine = raw;
-					}
-					// need to regenerate the display of the list : 
-					MarkToReedraw();
-					if (m_selectedLine >=0 ) {
-						// generate event extern : 
-						GenerateEventId(ewolEventFileChooserSelectFile);
-						return true;
-					}
-					return true;
-				}
-			}
-			if (typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE) {
-				EWOL_INFO("Event Double on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-				if (1 == IdInput) {
-					if (m_selectedLine >=0 ) {
-						// generate event extern : 
-						GenerateEventId(ewolEventFileChooserValidateFile);
-						return true;
-					}
-				}
-			}
-			return false;
-			return false;
-		}
-	
-	
-	public:
-		/**
-		 * @brief Check if the object has the specific type.
-		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-		 * @param[in] objectType type of the object we want to check
-		 * @return true if the object is compatible, otherwise false
-		 */
-		bool CheckObjectType(const char * const objectType)
-		{
-			if (NULL == objectType) {
-				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FILE_LIST << "\" != NULL(pointer) ");
-				return false;
-			}
-			if (objectType == TYPE_EOBJECT_WIDGET_FILE_LIST) {
-				return true;
-			} else {
-				if(true == ewol::List::CheckObjectType(objectType)) {
-					return true;
-				}
-				EWOL_ERROR("check error : \"" << TYPE_EOBJECT_WIDGET_FILE_LIST << "\" != \"" << objectType << "\"");
-				return false;
-			}
-		}
-		
-		/**
-		 * @brief Get the current Object type of the EObject
-		 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-		 * @param[in] objectType type description
-		 * @return true if the object is compatible, otherwise false
-		 */
-		const char * const GetObjectType(void)
-		{
-			return TYPE_EOBJECT_WIDGET_FILE_LIST;
-		}
-};
-#define EWOL_CAST_WIDGET_FILE_LIST(curentPointer) EWOL_CAST(TYPE_EOBJECT_WIDGET_FILE_LIST,FileChooserFileList,curentPointer)
 
 
 #undef __class__
@@ -403,6 +56,9 @@ extern const char * const ewolEventFileChooserEntryFolder      = "ewol-event-fil
 extern const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
 extern const char * const ewolEventFileChooserEntryFile        = "ewol-event-file-chooser-modify-entry-file";
 extern const char * const ewolEventFileChooserEntryFileEnter   = "ewol-event-file-chooser-modify-entry-file-enter";
+extern const char * const ewolEventFileChooserListFolder       = "ewol-event-file-chooser-modify-list-folder";
+extern const char * const ewolEventFileChooserListFile         = "ewol-event-file-chooser-modify-list-file";
+extern const char * const ewolEventFileChooserListFileValidate = "ewol-event-file-chooser-modify-list-file-validate";
 extern const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
@@ -423,8 +79,6 @@ ewol::FileChooser::FileChooser(void)
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
 	ewol::Spacer * mySpacer = NULL;
-	FileChooserFileList * myListFile = NULL;
-	FileChooserFolderList * myListFolder = NULL;
 	//ewol::Label * myLabel = NULL;
 	ewol::Image * myImage = NULL;
 	#ifdef __PLATFORM__Android
@@ -480,24 +134,28 @@ ewol::FileChooser::FileChooser(void)
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
-			myListFolder = new FileChooserFolderList();
-				m_widgetListFolder = myListFolder;
-				myListFolder->RegisterOnEvent(this, ewolEventFileChooserSelectFolder, ewolEventFileChooserSelectFolder);
-				myListFolder->SetExpendY(true);
-				myListFolder->SetFillY(true);
-				mySizerHori->SubWidgetAdd(myListFolder);
+			m_widgetListFolder = new ListFileSystem();
+				m_widgetListFolder->SetShowFolder(true);
+				m_widgetListFolder->SetShowFiles(false);
+				m_widgetListFolder->SetShowHiddenFiles(false);
+				m_widgetListFolder->RegisterOnEvent(this, ewolEventFSFolderValidate, ewolEventFileChooserListFolder);
+				m_widgetListFolder->SetExpendY(true);
+				m_widgetListFolder->SetFillY(true);
+				mySizerHori->SubWidgetAdd(m_widgetListFolder);
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
-			myListFile = new FileChooserFileList();
-				m_widgetListFile = myListFile;
-				myListFile->RegisterOnEvent(this, ewolEventFileChooserSelectFile, ewolEventFileChooserSelectFile);
-				myListFile->RegisterOnEvent(this, ewolEventFileChooserValidateFile, ewolEventFileChooserValidateFile);
-				myListFile->SetExpendX(true);
-				myListFile->SetFillX(true);
-				myListFile->SetExpendY(true);
-				myListFile->SetFillY(true);
-				mySizerHori->SubWidgetAdd(myListFile);
+			m_widgetListFile = new ListFileSystem();
+				m_widgetListFile->SetShowFolder(false);
+				m_widgetListFile->SetShowFiles(true);
+				m_widgetListFile->SetShowHiddenFiles(false);
+				m_widgetListFile->RegisterOnEvent(this, ewolEventFSFileSelect, ewolEventFileChooserListFile);
+				m_widgetListFile->RegisterOnEvent(this, ewolEventFSFileValidate, ewolEventFileChooserListFileValidate);
+				m_widgetListFile->SetExpendX(true);
+				m_widgetListFile->SetFillX(true);
+				m_widgetListFile->SetExpendY(true);
+				m_widgetListFile->SetFillY(true);
+				mySizerHori->SubWidgetAdd(m_widgetListFile);
 			mySpacer = new ewol::Spacer();
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
@@ -627,23 +285,33 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		//==> change the file name
 		m_file = data;
 		// Update the selected file in the list : 
-		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
-		if (myListFile != NULL) {
-			myListFile->SelectFile(m_file);
+		if (m_widgetListFile != NULL) {
+			m_widgetListFile->SetSelect(m_file);
 		}
 	} else if (ewolEventFileChooserCancel == eventId) {
 		//==> Auto remove ...
 		GenerateEventId(eventId);
 		MarkToRemove();
 	} else if (ewolEventFileChooserHidenFileChange == eventId) {
-		// regenerate the display ...
-		UpdateCurrentFolder();
-	} else if (ewolEventFileChooserSelectFolder == eventId) {
+		if (data == "true") {
+			if (NULL!=m_widgetListFolder) {
+				m_widgetListFolder->SetShowHiddenFiles(true);
+			}
+			if (NULL!=m_widgetListFile) {
+				m_widgetListFile->SetShowHiddenFiles(true);
+			}
+		} else {
+			if (NULL!=m_widgetListFolder) {
+				m_widgetListFolder->SetShowHiddenFiles(false);
+			}
+			if (NULL!=m_widgetListFile) {
+				m_widgetListFile->SetShowHiddenFiles(false);
+			}
+		}
+	} else if (ewolEventFileChooserListFolder == eventId) {
 		//==> this is an internal event ...
-		FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
-		etk::UString tmpString = myListFolder->GetSelectedLine();
-		EWOL_VERBOSE(" old PATH : \"" << m_folder << "\" + \"" << tmpString << "\"");
-		m_folder = m_folder + tmpString;
+		EWOL_VERBOSE(" old PATH : \"" << m_folder << "\" + \"" << data << "\"");
+		m_folder = m_folder + data;
 		char buf[MAX_FILE_NAME];
 		memset(buf, 0, MAX_FILE_NAME);
 		char * ok;
@@ -661,15 +329,14 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		}
 		SetFileName("");
 		UpdateCurrentFolder();
-	} else if (ewolEventFileChooserSelectFile == eventId) {
-		FileChooserFileList * myListFile = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
-		etk::UString file = myListFile->GetSelectedLine();
-		SetFileName(file);
+	} else if (ewolEventFileChooserListFile == eventId) {
+		SetFileName(data);
 		GenerateEventId(eventId);
-	} else if(     eventId == ewolEventFileChooserValidateFile 
+	} else if(     eventId == ewolEventFileChooserListFileValidate 
 	           || (eventId == ewolEventFileChooserValidate       && m_file != "" )
 	           || (eventId == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the File ==> generate a validate
+		SetFileName(data);
 		GenerateEventId(ewolEventFileChooserValidate);
 		MarkToRemove();
 	} else if(ewolEventFileChooserHome == eventId) {
@@ -699,57 +366,15 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 
 void ewol::FileChooser::UpdateCurrentFolder(void)
 {
-	if (NULL == m_widgetListFile) {
-		return;
+	if (NULL != m_widgetListFile) {
+		m_widgetListFile->SetFolder(m_folder);
 	}
-	if (NULL == m_widgetListFolder) {
-		return;
+	if (NULL != m_widgetListFolder) {
+		m_widgetListFolder->SetFolder(m_folder);
 	}
-	FileChooserFileList * myListFile     = EWOL_CAST_WIDGET_FILE_LIST(m_widgetListFile);
-	FileChooserFolderList * myListFolder = EWOL_CAST_WIDGET_FOLDER_LIST(m_widgetListFolder);
-	
-	myListFile->ClearElements();
-	myListFolder->ClearElements();
-	bool ShowHidenFile = true;
-	if (NULL != m_widgetCheckBox) {
-		ShowHidenFile = m_widgetCheckBox->GetValue();
-	} else {
-		EWOL_ERROR("Can not get the hiden property of the file choozer...");
-	}
-	
 	if (NULL != m_widgetCurrentFolder) {
 		m_widgetCurrentFolder->SetValue(m_folder);
 	}
-	myListFolder->AddElement(etk::UString("."));
-	if (m_folder != "/" ) {
-		myListFolder->AddElement(etk::UString(".."));
-	}
-	DIR *dir;
-	struct dirent *ent;
-	dir = opendir(m_folder.Utf8Data());
-	if (dir != NULL) {
-		// for each element in the drectory...
-		while ((ent = readdir(dir)) != NULL) {
-			etk::UString tmpString(ent->d_name);
-			if (DT_REG == ent->d_type) {
-				if (false == tmpString.StartWith(".") || true==ShowHidenFile) {
-					myListFile->AddElement(tmpString);
-				}
-			} else if (DT_DIR == ent->d_type) {
-				//EWOL_DEBUG("    find Folder : \"" << tmpString << "\"(" << tmpString.Size() << ") ?= \"" << ent->d_name << "\"(" << strlen(ent->d_name) );
-				if (tmpString != "." && tmpString != "..") {
-					if (false == tmpString.StartWith(".") || true==ShowHidenFile) {
-						myListFolder->AddElement(tmpString);
-					}
-				}
-			}
-		}
-		closedir(dir);
-	} else {
-		EWOL_ERROR("could not open directory : \"" << m_folder << "\"");
-	}
-	myListFile->EndGenerating();
-	myListFolder->EndGenerating();
 	MarkToReedraw();
 }
 

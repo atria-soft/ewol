@@ -32,6 +32,7 @@
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/CheckBox.h>
+#include <ewol/widget/ListFileSystem.h>
 
 extern const char * const ewolEventFileChooserCancel;
 extern const char * const ewolEventFileChooserValidate;
@@ -80,16 +81,16 @@ namespace ewol {
 			etk::UString GetCompleateFileName(void);
 			void UpdateCurrentFolder(void);
 		private:
-			ewol::Label*     m_widgetTitle;
-			ewol::Button*    m_widgetValidate;
-			ewol::Button*    m_widgetCancel;
-			ewol::Entry*     m_widgetCurrentFolder;
-			ewol::Entry*     m_widgetCurrentFileName;
-			ewol::Widget*    m_widgetListFolder;
-			ewol::Widget*    m_widgetListFile;
-			ewol::CheckBox*  m_widgetCheckBox;
-			etk::UString     m_folder;
-			etk::UString     m_file;
+			ewol::Label*          m_widgetTitle;
+			ewol::Button*         m_widgetValidate;
+			ewol::Button*         m_widgetCancel;
+			ewol::Entry*          m_widgetCurrentFolder;
+			ewol::Entry*          m_widgetCurrentFileName;
+			ewol::ListFileSystem* m_widgetListFolder;
+			ewol::ListFileSystem* m_widgetListFile;
+			ewol::CheckBox*       m_widgetCheckBox;
+			etk::UString          m_folder;
+			etk::UString          m_file;
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_FILE_CHOOSER;
