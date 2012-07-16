@@ -8,10 +8,9 @@ LOCAL_MODULE := portaudio
 # name of the dependency
 LOCAL_STATIC_LIBRARIES := 
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH) \
-                    -I$(LOCAL_PATH)/portaudio/ \
-                    -I$(LOCAL_PATH)/portaudio/common \
-                    -I$(LOCAL_PATH)/portaudio/os/unix
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/portaudio/ \
+                    $(LOCAL_PATH)/portaudio/common \
+                    $(LOCAL_PATH)/portaudio/os/unix
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lasound

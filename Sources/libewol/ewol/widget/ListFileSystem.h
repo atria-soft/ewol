@@ -92,11 +92,10 @@ namespace ewol {
 			const char * const GetObjectType(void);
 		public:
 			// extern API :
-			
 			void         SetFolder(etk::UString newFolder);
 			etk::UString GetFolder(void);
 			// select the specific file
-			void         SetSelect( etk::UString data);
+			void         SetSelect(etk::UString data);
 			etk::UString GetSelect(void);
 			// regenerate the view ....
 			void         RegenerateView(void);

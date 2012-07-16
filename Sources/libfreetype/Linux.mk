@@ -8,7 +8,7 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_MODULE := libfreetype
 LOCAL_STATIC_LIBRARIES := 
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH) $(addprefix -I$(LOCAL_PATH)/, $(sort $(dir $(FILE_LIST))))
+LOCAL_C_INCLUDES := $(LOCAL_PATH) $(addprefix $(LOCAL_PATH)/, $(sort $(dir $(FILE_LIST))))
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

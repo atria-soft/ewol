@@ -2,7 +2,7 @@
 ###############################################################################
 ### Platform specificity :                                                  ###
 ###############################################################################
-SUPPORTED_PLATFORM=Linux IMac IOs Android
+SUPPORTED_PLATFORM=Linux CygWin MacOS IOS Android
 DEFAULT_PLATFORM=Linux
 
 # default platform can be overridden
@@ -14,9 +14,11 @@ PROJECT_MODULE=$(PROJECT_PATH)/../
 
 ifeq ($(PLATFORM), Linux)
     PROJECT_NDK?=$(realpath $(PROJECT_MODULE)/ewol/)
-else ifeq ($(PLATFORM), IMac)
+else ifeq ($(PLATFORM), MacOS)
     
-else ifeq ($(PLATFORM), IOs)
+else ifeq ($(PLATFORM), IOS)
+    
+else ifeq ($(PLATFORM), CygWin)
     
 else ifeq ($(PLATFORM), Android)
     PROJECT_NDK:=$(PROJECT_MODULE)/android/ndk/

@@ -8,7 +8,7 @@ LOCAL_MODULE := parsersvg
 # name of the dependency
 LOCAL_STATIC_LIBRARIES := etk agg tinyxml
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
+LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

@@ -20,8 +20,6 @@ LOCAL_CFLAGS := -DPNG_NO_LIMITS_H
 
 LOCAL_MODULE    := libpng
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
-
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 # load the common sources file of the platform

@@ -8,9 +8,9 @@ LOCAL_MODULE := agg
 # name of the dependency
 LOCAL_STATIC_LIBRARIES := libfreetype
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH) \
-                    -I$(LOCAL_PATH)/agg-2.4/ \
-                    -I$(LOCAL_PATH)/agg-2.4/util/
+LOCAL_C_INCLUDES := $(LOCAL_PATH) \
+                    $(LOCAL_PATH)/agg-2.4/ \
+                    $(LOCAL_PATH)/agg-2.4/util/
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 

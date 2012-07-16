@@ -13,7 +13,7 @@ $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 # name of the dependency
 LOCAL_STATIC_LIBRARIES :=    etk libfreetype    tinyxml libzip libpng    agg    parsersvg    lua    portaudio
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH)
+LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11

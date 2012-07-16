@@ -6,11 +6,11 @@
 ## Build an executable.
 ###############################################################################
 
-LOCAL_MODULE_SUFFIX := $(TARGET_EXECUTABLE_SUFFIX)
-LOCAL_BUILDING_EXECUTABLE := 1
+LOCAL_MODULE_CLASS := EXECUTABLE
+LOCAL_DESTDIR := usr/bin
 
-include $(RULES)
+ifndef LOCAL_MODULE_FILENAME
+LOCAL_MODULE_FILENAME := $(LOCAL_MODULE)$(TARGET_EXE_SUFFIX)
+endif
 
-$(LOCAL_BUILT_MODULE): $(all_libraries) $(all_objects)
-	$(transform-o-to-executable)
-
+$(call module-add,$(LOCAL_MODULE))

@@ -6,14 +6,11 @@
 ## Build a static library.
 ###############################################################################
 
-LOCAL_MODULE_SUFFIX := $(TARGET_STATIC_LIB_SUFFIX)
-LOCAL_BUILDING_STATIC_LIBRARY := 1
+LOCAL_MODULE_CLASS := STATIC_LIBRARY
+LOCAL_DESTDIR := usr/lib
 
-include $(RULES)
+ifndef LOCAL_MODULE_FILENAME
+LOCAL_MODULE_FILENAME := $(LOCAL_MODULE)$(TARGET_STATIC_LIB_SUFFIX)
+endif
 
-#$(info plopppppp=$(LOCAL_BUILT_MODULE)= $(all_libraries))
-$(LOCAL_BUILT_MODULE): $(all_libraries) $(all_objects) 
-	$(transform-o-to-static-lib)
-
-LIB_EXTERN_C_INCLUDE := $(LIB_EXTERN_C_INCLUDE) $(LOCAL_EXPORT_C_INCLUDES)
-LIB_EXTERN_LDLIBS := $(LIB_EXTERN_LDLIBS) $(LOCAL_EXPORT_LDLIBS)
+$(call module-add,$(LOCAL_MODULE))

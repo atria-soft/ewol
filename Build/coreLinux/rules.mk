@@ -12,188 +12,251 @@ ifeq ("$(LOCAL_MODULE)","")
   $(error $(LOCAL_PATH): LOCAL_MODULE is not defined)
 endif
 
-# Intermediates directory
-intermediates := $(TARGET_OUT_INTERMEDIATES)/$(LOCAL_MODULE)
+# Intermediate/Build directory
+build_dir := $(TARGET_OUT_BUILD)/$(LOCAL_MODULE)
 
 # Full path to build module
-LOCAL_BUILT_MODULE := $(intermediates)/$(LOCAL_MODULE)$(LOCAL_MODULE_SUFFIX)
+LOCAL_BUILD_MODULE := $(call module-get-build-filename,$(LOCAL_MODULE))
 
-# Full path to final module
-LOCAL_FINAL_MODULE := $(TARGET_OUT)/$(LOCAL_MODULE)$(LOCAL_MODULE_SUFFIX)
+# Full path to staging module
+LOCAL_STAGING_MODULE := $(call module-get-staging-filename,$(LOCAL_MODULE))
 
 # Assemble the list of targets to create PRIVATE_ variables for.
-LOCAL_INTERMEDIATE_TARGETS += $(LOCAL_BUILT_MODULE)
+LOCAL_TARGETS += $(LOCAL_BUILD_MODULE)
 
 # Prepend some directories in include list
-LOCAL_C_INCLUDES := -I$(intermediates) -I$(TOP_DIR)/$(LOCAL_PATH) $(LOCAL_C_INCLUDES)
+LOCAL_C_INCLUDES := -I$(build_dir) -I$(LOCAL_PATH) $(LOCAL_C_INCLUDES)
 
-# Register the module
-ALL_MODULES += $(LOCAL_MODULE)
+###############################################################################
+## ARM specific checks.
+###############################################################################
+ifeq ("$(TARGET_ARCH)","ARM")
+
+# Make sure LOCAL_ARM_MODE is valid
+# If not set, use default mode
+# Convert to upper case for further use
+LOCAL_ARM_MODE := $(call upcase,$(strip $(LOCAL_ARM_MODE)))
+ifeq ("$(LOCAL_ARM_MODE)","")
+  LOCAL_ARM_MODE := $(TARGET_DEFAULT_ARM_MODE)
+endif
+ifneq ("$(LOCAL_ARM_MODE)","ARM")
+ifneq ("$(LOCAL_ARM_MODE)","THUMB")
+  $(error $(LOCAL_PATH): LOCAL_ARM_MODE is not valid : $(LOCAL_ARM_MODE))
+endif
+endif
+
+## Check that compilation flags do not include forbidden stuff.
+check-flags-arm-mode := -marm -mthumb
+check-flags = \
+	$(foreach flags,$1, \
+		$(if $(findstring $($3),$(flags)), \
+			$(error $(LOCAL_PATH): $3 contains $(flags) : $2) \
+		) \
+	)
+
+# Check that -marm or -mthumb is not forced in compilation flags
+flags-arm-mode := -marm -mthumb
+check-message := please use LOCAL_ARM_MODE
+check-flags-arm-mode = $(call check-flags,$(flags-arm-mode),$(check-message),$1)
+$(call check-flags-arm-mode,LOCAL_CFLAGS)
+$(call check-flags-arm-mode,LOCAL_CPPFLAGS)
+$(call check-flags-arm-mode,LOCAL_EXPORT_CFLAGS)
+$(call check-flags-arm-mode,LOCAL_EXPORT_CPPFLAGS)
+
+endif
 
 ###############################################################################
 ## List of sources, objects and libraries.
 ###############################################################################
 
 cpp_sources := $(filter %.cpp,$(LOCAL_SRC_FILES))
-cpp_objects := $(addprefix $(intermediates)/,$(cpp_sources:.cpp=.o))
+cpp_objects := $(addprefix $(build_dir)/,$(cpp_sources:.cpp=.o))
 
 cxx_sources := $(filter %.cxx,$(LOCAL_SRC_FILES))
-cxx_objects := $(addprefix $(intermediates)/,$(cxx_sources:.cxx=.o))
+cxx_objects := $(addprefix $(build_dir)/,$(cxx_sources:.cxx=.o))
 
 c_sources := $(filter %.c,$(LOCAL_SRC_FILES))
-c_objects := $(addprefix $(intermediates)/,$(c_sources:.c=.o))
+c_objects := $(addprefix $(build_dir)/,$(c_sources:.c=.o))
 
-# rc files are used only under Mingw32
-ifeq ("$(OS_MINGW32)","1")
-rc_sources := $(filter %.rc,$(LOCAL_SRC_FILES))
-rc_objects := $(addprefix $(intermediates)/,$(rc_sources:.rc=.rc.o))
-endif
+s_sources := $(filter %.s,$(LOCAL_SRC_FILES))
+s_objects := $(addprefix $(build_dir)/,$(s_sources:.s=.o))
+
+S_sources := $(filter %.S,$(LOCAL_SRC_FILES))
+S_objects := $(addprefix $(build_dir)/,$(S_sources:.S=.o))
 
 all_objects := \
 	$(cpp_objects) \
 	$(cxx_objects) \
 	$(c_objects) \
-	$(rc_objects) \
+	$(s_objects) \
+	$(S_objects) \
 
-# Under mingw32, use .dll.a to link against shared libraries instead of .so
-ifeq ("$(OS_MINGW32)","1")
-  shared_suffix := $(TARGET_SHARED_LIB_SUFFIX)$(TARGET_STATIC_LIB_SUFFIX)
-else
-  shared_suffix := $(TARGET_SHARED_LIB_SUFFIX)
-endif
+# Get all static libraries this module depends on
+LOCAL_STATIC_LIBRARIES := \
+	$(call module-get-depends,$(LOCAL_STATIC_LIBRARIES),STATIC_LIBRARIES)
+LOCAL_WHOLE_STATIC_LIBRARIES := \
+	$(call module-get-depends,$(LOCAL_WHOLE_STATIC_LIBRARIES),WHOLE_STATIC_LIBRARIES)
 
-built_shared_libraries := \
+# Also get shared libraries used by static libraries
+LOCAL_SHARED_LIBRARIES += \
+	$(call module-get-depends,$(LOCAL_STATIC_LIBRARIES),SHARED_LIBRARIES)
+LOCAL_SHARED_LIBRARIES += \
+	$(call module-get-depends,$(LOCAL_WHOLE_STATIC_LIBRARIES),SHARED_LIBRARIES)
+
+# Get path
+all_shared_libraries := \
 	$(foreach lib,$(LOCAL_SHARED_LIBRARIES), \
-		$(TARGET_OUT_INTERMEDIATES)/$(lib)/$(lib)$(shared_suffix))
-
-built_static_libraries := \
+		$(call module-get-staging-filename,$(lib)))
+all_static_libraries := \
 	$(foreach lib,$(LOCAL_STATIC_LIBRARIES), \
-		$(TARGET_OUT_INTERMEDIATES)/$(lib)/$(lib)$(TARGET_STATIC_LIB_SUFFIX))
+		$(call module-get-staging-filename,$(lib)))
+all_whole_static_libraries := \
+	$(foreach lib,$(LOCAL_WHOLE_STATIC_LIBRARIES), \
+		$(call module-get-staging-filename,$(lib)))
 
-# all_libraries is used for the dependencies on LOCAL_BUILT_MODULE.
+all_external_libraries := \
+	$(foreach lib,$(LOCAL_EXTERNAL_LIBRARIES), \
+		$(TARGET_OUT_BUILD)/$(lib)/$(lib).done)
+
+# all_libraries is used for the dependencies.
 all_libraries := \
-	$(built_shared_libraries) \
-	$(built_static_libraries) \
+	$(all_shared_libraries) \
+	$(all_static_libraries) \
+	$(all_whole_static_libraries) \
+	$(all_external_libraries) \
 
 ###############################################################################
-## Resource list management.
+## Import of dependencies.
 ###############################################################################
 
-LOCAL_RESLIST := $(strip $(LOCAL_RESLIST))
+# Get all modules we depend on
+all_depends := $(call module-get-all-dependencies,$(LOCAL_MODULE))
+all_depends := $(filter-out $(LOCAL_MODULE),$(all_depends))
 
-ifneq ("$(LOCAL_RESLIST)","")
+# Get list of exported stuff by our dependencies
+imported_CFLAGS        := $(call module-get-listed-export,$(all_depends),CFLAGS)
+imported_CPPFLAGS      := $(call module-get-listed-export,$(all_depends),CPPFLAGS)
+imported_C_INCLUDES    := $(call module-get-listed-export,$(all_depends),C_INCLUDES)
+imported_LDLIBS        := $(call module-get-listed-export,$(all_depends),LDLIBS)
+imported_PREREQUISITES := $(call module-get-listed-export,$(all_depends),PREREQUISITES)
 
-# This makes sure resource list is created before compilation (order prerequisite)
-$(all_objects): | $(intermediates)/ResList
+# The imported/exported compiler flags are prepended to their LOCAL_XXXX value
+# (this allows the module to override them).
+LOCAL_CFLAGS     := $(strip $(imported_CFLAGS) $(LOCAL_EXPORT_CFLAGS) $(LOCAL_CFLAGS))
+LOCAL_CPPFLAGS   := $(strip $(imported_CPPFLAGS) $(LOCAL_EXPORT_CPPFLAGS) $(LOCAL_CPPFLAGS))
 
-# Additional dependencies
-$(intermediates)/ResList.h: $(intermediates)/ResList
-$(intermediates)/ResList.c: $(intermediates)/ResList
-$(intermediates)/ResList: $(TOP_DIR)/$(LOCAL_PATH)/$(LOCAL_XRC)
+# The imported/exported include directories are appended to their LOCAL_XXX value
+# (this allows the module to override them)
+LOCAL_C_INCLUDES := $(sort $(strip $(subst -I-I,-I,$(addprefix -I,$(LOCAL_C_INCLUDES) $(LOCAL_EXPORT_C_INCLUDES) $(imported_C_INCLUDES)))))
+#$(info LOCAL_C_INCLUDES=$(LOCAL_C_INCLUDES))
+#$(info -----)
 
-reslist := $(TOP_DIR)/$(LOCAL_PATH)/$(LOCAL_RESLIST)
-reslistsrc := $(shell dirname $(reslist))
-reslistdst := $(intermediates)
-reslistmaker := $(reslistdst)/ResListMaker/ResListMaker$(TARGET_EXE_SUFFIX)
+# Similarly, you want the imported/exported flags to appear _after_ the LOCAL_LDLIBS
+# due to the way Unix linkers work (depending libraries must appear before
+# dependees on final link command).
+LOCAL_LDLIBS     := $(strip $(LOCAL_LDLIBS) $(LOCAL_EXPORT_LDLIBS) $(imported_LDLIBS))
 
-# Generate resource list
-$(intermediates)/ResList: $(reslist) $(reslistmaker)
-	$(call transform-reslist, $(reslistmaker), $(reslistsrc), $(reslistdst))
+# Get all autoconf files that we depend on, don't forget to add ourself
+all_autoconf := \
+	$(call module-get-listed-autoconf,$(all_depends)) \
+	$(call module-get-autoconf,$(LOCAL_MODULE))
 
-# Generate resource list maker
-$(reslistmaker): $(reslistsrc)/ResListMaker.c
-	$(call generate-reslistmaker, $(reslistsrc), $(dir $(reslistmaker)))
+# Force their inclusion (space after -include and before comma is important)
+LOCAL_CFLAGS += $(addprefix -include ,$(all_autoconf))
 
-endif
+# List of all prerequisites (ours + dependencies)
+all_prerequisites := \
+	$(LOCAL_PREREQUISITES) \
+	$(LOCAL_EXPORT_PREREQUISITES) \
+	$(imported_PREREQUISITES)
+
+# All autoconf files are prerequisites
+all_prerequisites += $(all_autoconf)
+
+# User makefile is also a prerequisite
+all_prerequisites += $(LOCAL_PATH)/$(USER_MAKEFILE_NAME)
+
+# Notify that we build with dependencies
+LOCAL_CFLAGS += $(foreach __mod,$(all_depends), \
+	-DBUILD_$(call get-define,$(__mod)))
 
 ###############################################################################
 ## Actual rules.
 ###############################################################################
 
-# Final copy (not for static libraries)
-$(LOCAL_FINAL_MODULE): $(LOCAL_BUILT_MODULE)
-ifeq ("$(LOCAL_BUILDING_STATIC_LIBRARY)","")
-	@echo "Copy: $@"
-	$(copy-file-to-target)
-endif
-
 # cpp files
 ifneq ("$(strip $(cpp_objects))","")
-$(cpp_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.cpp
+$(cpp_objects): $(build_dir)/%.o: $(LOCAL_PATH)/%.cpp
 	$(transform-cpp-to-o)
 -include $(cpp_objects:%.o=%.d)
 endif
 
 # cxx files
 ifneq ("$(strip $(cxx_objects))","")
-$(cxx_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.cxx
+$(cxx_objects): $(build_dir)/%.o: $(LOCAL_PATH)/%.cxx
 	$(transform-cpp-to-o)
 -include $(cxx_objects:%.o=%.d)
 endif
 
 # c files
 ifneq ("$(strip $(c_objects))","")
-$(c_objects): $(intermediates)/%.o: $(LOCAL_PATH)/%.c
+$(c_objects): $(build_dir)/%.o: $(LOCAL_PATH)/%.c
 	$(transform-c-to-o)
 -include $(c_objects:%.o=%.d)
 endif
 
-# rc files
-ifneq ("$(strip $(rc_objects))","")
-$(rc_objects): $(addprefix $(LOCAL_PATH)/,$(LOCAL_RC_DEPS))
-$(rc_objects): $(intermediates)/%.rc.o: $(TOP_DIR)/$(LOCAL_PATH)/%.rc
-	$(transform-rc-to-o)
+# s files
+# There is NO dependency files for raw asm code...
+ifneq ("$(strip $(s_objects))","")
+$(s_objects): $(build_dir)/%.o: $(LOCAL_PATH)/%.s
+	$(transform-s-to-o)
 endif
 
-# copy files verbatim to target (flat copy in output directory)
-copy_files :=
-$(foreach f,$(LOCAL_COPY_FILES), \
-  $(eval _src := $(TOP_DIR)/$(LOCAL_PATH)/$(f)) \
-  $(eval _dst := $(TARGET_OUT)/$(notdir $(f))) \
-  $(eval copy_files += $(_dst)) \
-  $(eval $(call copy-one-file,$(_src),$(_dst))) \
-)
-$(LOCAL_BUILT_MODULE): $(copy_files)
+# S files
+# There are dependency files for asm code...
+ifneq ("$(strip $(S_objects))","")
+$(S_objects): $(build_dir)/%.o: $(LOCAL_PATH)/%.S
+	$(transform-s-to-o)
+-include $(S_objects:%.o=%.d)
+endif
 
 # clean- targets
 cleantarget := clean-$(LOCAL_MODULE)
 $(cleantarget) : PRIVATE_MODULE := $(LOCAL_MODULE)
 $(cleantarget) : PRIVATE_CLEAN_FILES := \
-	$(PRIVATE_CLEAN_FILES) \
-	$(LOCAL_BUILT_MODULE) \
-	$(LOCAL_FINAL_MODULE) \
-	$(copy_files) \
-	$(intermediates)
+	$(LOCAL_BUILD_MODULE) \
+	$(LOCAL_STAGING_MODULE) \
+	$(build_dir)
 $(cleantarget)::
 	@echo "Clean: $(PRIVATE_MODULE)"
 	$(Q)rm -rf $(PRIVATE_CLEAN_FILES)
 
-# install- targets
-installtarget := install-$(LOCAL_MODULE)
-$(installtarget) : PRIVATE_MODULE := $(LOCAL_MODULE)
-$(installtarget) : PRIVATE_FINAL_MODULE := $(LOCAL_FINAL_MODULE)
-$(installtarget) : PRIVATE_COPY_FILES := $(copy_files)
-$(installtarget) ::
-	@echo "Install: $(PRIVATE_MODULE)"
-# create directories
-	$(Q)install -d $(DESTDIR)$(PREFIX)/bin
-	$(Q)install -d $(DESTDIR)$(PREFIX)/lib/$(PACKAGE)
-# install executables and shared libraries in lib/<package> directory
-ifeq ("$(LOCAL_BUILDING_STATIC_LIBRARY)","")
-	$(Q)install $(PRIVATE_FINAL_MODULE) $(DESTDIR)$(PREFIX)/lib/$(PACKAGE)
-endif
-# install files copied verbatim
-ifneq ("$(strip $(copy_files))","")
-	$(Q)install $(PRIVATE_COPY_FILES) $(DESTDIR)$(PREFIX)/lib/$(PACKAGE)
-endif
-# create a link for executables in bin
-ifeq ("$(LOCAL_BUILDING_EXECUTABLE)","1")
-	$(Q)ln -s ../lib/$(PACKAGE)/$(PRIVATE_MODULE) $(DESTDIR)$(PREFIX)/bin/$(PRIVATE_MODULE)
-endif
-
 ## Provide a short-hand for building this module.
 .PHONY: $(LOCAL_MODULE)
-$(LOCAL_MODULE): $(LOCAL_BUILT_MODULE) $(LOCAL_FINAL_MODULE)
+$(LOCAL_MODULE): $(LOCAL_BUILD_MODULE) $(LOCAL_STAGING_MODULE)
+
+# Make sure external libraries are built first
+# Do NOT force rebuild at each check (order prerequisite)
+# TODO : check why order prerequisite
+#$(all_objects): | $(external_libraries)
+
+# Make sure all prerequisites files are generated first
+ifneq ("$(all_prerequisites)","")
+$(all_objects): $(all_prerequisites)
+endif
+
+###############################################################################
+## autoconf.h file generation.
+###############################################################################
+
+autoconf_file := $(call module-get-autoconf,$(LOCAL_MODULE))
+ifneq ("$(autoconf_file)","")
+
+# autoconf.h file depends on module config
+$(autoconf_file): $(call __get_module-config,$(LOCAL_MODULE))
+	@$(call generate-autoconf-file,$<,$@)
+
+endif
 
 ###############################################################################
 ## Precompiled headers.
@@ -202,31 +265,43 @@ $(LOCAL_MODULE): $(LOCAL_BUILT_MODULE) $(LOCAL_FINAL_MODULE)
 LOCAL_PRECOMPILED_FILE := $(strip $(LOCAL_PRECOMPILED_FILE))
 ifneq ("$(LOCAL_PRECOMPILED_FILE)","")
 
-gch_file := $(intermediates)/$(LOCAL_PRECOMPILED_FILE).gch
+gch_file := $(build_dir)/$(LOCAL_PRECOMPILED_FILE).gch
 
 # All objects will depends on the precompiled file
 $(all_objects): $(gch_file)
 
+# Make sure all prerequisites files are generated first
+ifneq ("$(all_prerequisites)","")
+$(gch_file): $(all_prerequisites)
+endif
+
 # Generate the precompiled file
-$(gch_file): $(TOP_DIR)/$(LOCAL_PATH)/$(LOCAL_PRECOMPILED_FILE)
+$(gch_file): $(LOCAL_PATH)/$(LOCAL_PRECOMPILED_FILE)
 	$(transform-h-to-gch)
 -include $(gch_file:%.gch=%.d)
+
+# Make sure external libraries are built first (order prerequisite)
+# TODO : check why order prerequisite
+#$(gch_file): | $(external_libraries)
+
 endif
 
 ###############################################################################
 # Rule-specific variable definitions.
 ###############################################################################
 
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_PATH := $(LOCAL_PATH)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_MODULE := $(LOCAL_MODULE)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_CFLAGS := $(LOCAL_CFLAGS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_C_INCLUDES := $(LOCAL_C_INCLUDES)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_CPPFLAGS := $(LOCAL_CPPFLAGS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_RCFLAGS := $(LOCAL_RCFLAGS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_ARFLAGS := $(LOCAL_ARFLAGS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_LDFLAGS := $(LOCAL_LDFLAGS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_LDLIBS := $(LOCAL_LDLIBS)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_ALL_SHARED_LIBRARIES := $(built_shared_libraries)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_ALL_STATIC_LIBRARIES := $(built_static_libraries)
-$(LOCAL_INTERMEDIATE_TARGETS): PRIVATE_ALL_OBJECTS := $(all_objects)
+$(LOCAL_TARGETS): PRIVATE_PATH := $(LOCAL_PATH)
+$(LOCAL_TARGETS): PRIVATE_MODULE := $(LOCAL_MODULE)
+$(LOCAL_TARGETS): PRIVATE_CFLAGS := $(LOCAL_CFLAGS)
+$(LOCAL_TARGETS): PRIVATE_C_INCLUDES := $(LOCAL_C_INCLUDES)
+$(LOCAL_TARGETS): PRIVATE_CPPFLAGS := $(LOCAL_CPPFLAGS)
+$(LOCAL_TARGETS): PRIVATE_ARFLAGS := $(LOCAL_ARFLAGS)
+$(LOCAL_TARGETS): PRIVATE_LDFLAGS := $(LOCAL_LDFLAGS)
+$(LOCAL_TARGETS): PRIVATE_LDLIBS := $(LOCAL_LDLIBS)
+$(LOCAL_TARGETS): PRIVATE_ARM_MODE := $(LOCAL_ARM_MODE)
+$(LOCAL_TARGETS): PRIVATE_ALL_SHARED_LIBRARIES := $(all_shared_libraries)
+$(LOCAL_TARGETS): PRIVATE_ALL_STATIC_LIBRARIES := $(all_static_libraries)
+$(LOCAL_TARGETS): PRIVATE_ALL_WHOLE_STATIC_LIBRARIES := $(all_whole_static_libraries)
+$(LOCAL_TARGETS): PRIVATE_ALL_EXTERNAL_LIBRARIES := $(all_external_libraries)
+$(LOCAL_TARGETS): PRIVATE_ALL_OBJECTS := $(all_objects)
 

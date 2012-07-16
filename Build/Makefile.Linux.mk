@@ -1,4 +1,6 @@
 
+USER_PACKAGES += $(EWOL_FOLDER)/Sources/
+
 include $(EWOL_FOLDER)/Build/coreLinux/main.mk
 
 

@@ -6,87 +6,95 @@
 ## Main Makefile.
 ###############################################################################
 
+###############################################################################
+## General setup.
+###############################################################################
+
 # Make sure SHELL is correctly set
 SHELL := /bin/bash
 
 # Turns off suffix rules built into make
 .SUFFIXES:
 
-# Installation variables
-PACKAGE := fsanalyser
-DESTDIR :=
-PREFIX := /usr/local
+# Tools for target
+GCC ?= $(CROSS)gcc
+GXX ?= $(CROSS)g++
+AR ?= $(CROSS)ar
+LD ?= $(CROSS)ld
+NM ?= $(CROSS)nm
+STRIP ?= $(CROSS)strip
 
-# Tools
-WINDRES := windres
+# Tools for host
+HOST_GCC ?= gcc
+HOST_GXX ?= g++
+HOST_AR ?= ar
+HOST_LD ?= ld
+HOST_STRIP ?= strip
 
 # Overridable settings
 V := 0
 W := 0
 DEBUG := 0
-STATIC := 0
-CLANG := 0
+USE_CLANG := 0
+USE_CCACHE := 0
 
-
-ifneq ("$(CLANG)","1")
-	GCC := gcc
-	GXX := g++
-	AR := ar
-	LD := ld
-else
-	GCC := clang
-	GXX := clang++
-	AR := ar
-	LD := ld
-endif
-
-# Quiet command if V is not 1
-ifneq ("$(V)","1")
+# Quiet command if V is 0
+ifeq ("$(V)","0")
   Q := @
 endif
-
-# Directories
-TOP_DIR := .
-#BUILD_SYSTEM := $(TOP_DIR)/Build/coreLinux
-BUILD_SYSTEM := $(PROJECT_NDK)/Build/coreLinux/
 
 # This is the default target.  It must be the first declared target.
 all:
 
-# Global variables
-TARGET_PROJECT_INCLUDES :=
-TARGET_C_INCLUDES :=
-TARGET_GLOBAL_CFLAGS := -fno-exceptions -fstrict-aliasing
-TARGET_GLOBAL_CPPFLAGS :=
-TARGET_GLOBAL_RCFLAGS :=
-TARGET_GLOBAL_ARFLAGS := -rcs
-TARGET_GLOBAL_LDFLAGS := -Wl,--gc-sections -Wl,--warn-common -Wl,--warn-constructors
-ALL_MODULES :=
-
-# To be able to load automatically .so libraries located in the same
-# folder than the application, we need to add $ORIGIN to DT_RPATH
-# '\' is to escape the '$' in the shell command
-# '$$' is to escape the '$' in the makefile
-TARGET_GLOBAL_LDFLAGS += -Wl,-rpath,\$$ORIGIN
-
-###############################################################################
-# Version
-###############################################################################
-VERSION_MAJOR := 111
-VERSION_MINOR := 2222
-VERSION_REVISION := 3453
-VERSION := $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_REVISION)
+# Target global variables
+TARGET_GLOBAL_C_INCLUDES ?=
+TARGET_GLOBAL_CFLAGS ?=
+TARGET_GLOBAL_CPPFLAGS ?=
+TARGET_GLOBAL_RCFLAGS ?=
+TARGET_GLOBAL_ARFLAGS ?= rcs
+TARGET_GLOBAL_LDFLAGS ?=
+TARGET_GLOBAL_LDFLAGS_SHARED ?=
+TARGET_GLOBAL_LDLIBS ?=
+TARGET_GLOBAL_LDLIBS_SHARED ?=
+TARGET_PCH_FLAGS ?=
+TARGET_DEFAULT_ARM_MODE ?= THUMB
+TARGET_GLOBAL_CFLAGS_ARM ?=
+TARGET_GLOBAL_CFLAGS_THUMB ?=
 
 ###############################################################################
+## The folowing 2 macros can NOT be put in defs.mk as it will be included
+## only after.
 ###############################################################################
+
+# Get full path.
+# $1 : path to extend.
+fullpath = $(shell readlink -m -n $1)
+
+# Figure out where we are
+# It returns the full path without trailing '/'
+my-dir = $(call fullpath,$(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST)))))
+
+###############################################################################
+## Build system setup.
+###############################################################################
+
+# Directories (full path)
+TOP_DIR := $(shell pwd)
+BUILD_SYSTEM := $(call my-dir)
+
+# Setup configuration
+include $(BUILD_SYSTEM)/setup.mk
 
 # Setup macros definitions
 include $(BUILD_SYSTEM)/defs.mk
 
-# Setup configuration
+# Setup warnings flags
+include $(BUILD_SYSTEM)/warnings.mk
+
+# Load configuration
 include $(BUILD_SYSTEM)/config.mk
 
-# Names of makefiles that can be included by "local.mk" Makefiles
+# Names of makefiles that can be included by user Makefiles
 CLEAR_VARS := $(BUILD_SYSTEM)/clearvars.mk
 BUILD_STATIC_LIBRARY := $(BUILD_SYSTEM)/static.mk
 BUILD_SHARED_LIBRARY := $(BUILD_SYSTEM)/shared.mk
@@ -94,96 +102,119 @@ BUILD_EXECUTABLE := $(BUILD_SYSTEM)/executable.mk
 RULES := $(BUILD_SYSTEM)/rules.mk
 
 ###############################################################################
-## Flags to activate warnings.
+## Makefile scan and includes.
+###############################################################################
+ifeq ("$(DEBUG)","1")
+	BUILD_DIRECTORY_MODE := debug
+else
+	BUILD_DIRECTORY_MODE := release
+endif
+
+TARGET_OUT_BUILD ?= $(shell pwd)/out_$(TARGET_OS)/$(BUILD_DIRECTORY_MODE)/obj
+TARGET_OUT_STAGING ?= $(shell pwd)/out_$(TARGET_OS)/$(BUILD_DIRECTORY_MODE)/obj
+TARGET_OUT_FINAL ?= $(shell pwd)/out_$(TARGET_OS)/$(BUILD_DIRECTORY_MODE)/bin
+
+# Makefile with the list of all makefiles available and include them
+SCAN_TARGET := scan
+#TODO : change this in function of the platform ...
+USER_MAKEFILE_NAME := Linux.mk
+USER_MAKEFILES:=$(TARGET_OUT_BUILD)/makefiles.mk
+
+# Include makefile containing all available makefile
+# If it does not exists, it will trigger its creation
+ifeq ("$(findstring $(SCAN_TARGET),$(MAKECMDGOALS))","")
+include $(USER_MAKEFILES)
+endif
+$(info mydir="$(my-dir)")
+$(info pwd="$(shell pwd)")
+$(info TOP_DIR="$(TOP_DIR)")
+$(info USER_PACKAGES="$(USER_PACKAGES)")
+# Create a file that will contain all user makefiles available
+define create-user-makefiles-file
+	rm -f $(USER_MAKEFILES); \
+	mkdir -p $(dir $(USER_MAKEFILES)); \
+	touch $(USER_MAKEFILES); \
+	echo "Scanning $(TOP_DIR) for makefiles..."; \
+	for f in `find $(USER_PACKAGES) -name $(USER_MAKEFILE_NAME)`; do \
+		echo "$$f"; \
+		echo "include $$f" >> $(USER_MAKEFILES); \
+	done;
+endef
+
+# Rule that will trigger creation of list of makefiles when needed
+$(USER_MAKEFILES):
+	@$(create-user-makefiles-file)
+
+# Rule to force creation of list of makefiles
+.PHONY: $(SCAN_TARGET)
+$(SCAN_TARGET):
+	@$(create-user-makefiles-file)
+
+###############################################################################
+# Module dependencies generation.
 ###############################################################################
 
-COMMON_FLAGS_WARNINGS :=
-GCC_FLAGS_WARNINGS :=
-GXX_FLAGS_WARNINGS :=
+# Recompute all dependencies between modules
+$(call modules-compute-dependencies)
 
-COMMON_FLAGS_WARNINGS += -Wall
-
-# Add common flags to specific flags
-GCC_FLAGS_WARNINGS += $(COMMON_FLAGS_WARNINGS)
-GXX_FLAGS_WARNINGS += $(COMMON_FLAGS_WARNINGS)
+# Now, really build the modules, the second pass allows to deal with exported values
+$(foreach __mod,$(__modules), \
+    $(eval LOCAL_MODULE := $(__mod)) \
+    $(eval include $(BUILD_SYSTEM)/module.mk) \
+)
 
 ###############################################################################
+# Rule to merge autoconf.h files.
 ###############################################################################
 
-# Get the list of all makefiles available and include them
-makefiles += $(shell find $(TOP_DIR) -name Linux.mk)
-include $(makefiles)
+# List of all available autoconf.h files
+__autoconf-list := $(foreach __mod,$(__modules),$(call module-get-autoconf,$(__mod)))
 
-TARGET_GLOBAL_CPPFLAGS := $(addprefix -I, $(LIB_EXTERN_C_INCLUDE))
-TARGET_GLOBAL_LDFLAGS := $(TARGET_GLOBAL_LDFLAGS) $(LIB_EXTERN_LDLIBS)
+# Concatenate all in one
+AUTOCONF_MERGE_FILE := $(TARGET_OUT_BUILD)/autoconf-merge.h
+$(AUTOCONF_MERGE_FILE): $(__autoconf-list)
+	@echo "Generating autoconf-merge.h"
+	@mkdir -p $(dir $@)
+	@rm -f $@
+	@for f in $^; do cat $$f >> $@; done
+
 ###############################################################################
 # Main rules.
 ###############################################################################
 
 .PHONY: all
-all: $(foreach m,$(ALL_MODULES),$(m))
+all: $(foreach __mod,$(__modules),$(__mod)) $(AUTOCONF_MERGE_FILE)
 
 .PHONY: clean
-clean: $(foreach m,$(ALL_MODULES),clean-$(m))
+clean: $(foreach __mod,$(__modules),clean-$(__mod))
+	@rm -f $(AUTOCONF_MERGE_FILE)
+	@rm -f $(USER_MAKEFILES)
 
-.PHONY: distclean
-distclean: clean
+# Generate final tree
+.PHONY: final
+final: all
+	@echo "Generating final tree..."
+	@$(BUILD_SYSTEM)/make-final.py \
+		--strip="$(STRIP)" \
+		$(TARGET_OUT_STAGING) $(TARGET_OUT_FINAL)
+	@echo "Done generating final tree"
 
-.PHONY: test
-test:
-
-.PHONY: install
-install: $(foreach m,$(ALL_MODULES),install-$(m))
-
-###############################################################################
-# debian package generation.
-###############################################################################
-
-.PHONY: deb
-deb:
-	@chmod +x debian/rules
-	$(Q)fakeroot debian/rules binary
-
-.PHONY: deb-clean
-deb-clean:
-	@chmod +x debian/rules
-	$(Q)fakeroot debian/rules clean
-
-###############################################################################
-# source/binary pakage generation.
-###############################################################################
-
-# Generate archive with source files from git
-SRCZIP_NAME := $(PACKAGE)-src-$(VERSION)
-.PHONY: src-zip
-src-zip:
-	@rm -f $(SRCZIP_NAME).tar
-	@rm -f $(SRCZIP_NAME).tar.bz2
-	$(Q)git archive --format=tar --prefix=$(SRCZIP_NAME)/ \
-		-o $(SRCZIP_NAME).tar HEAD
-	$(Q)bzip2 $(SRCZIP_NAME).tar
-
-# Generate archive with binary files
-BINZIP_NAME := $(PACKAGE)-bin-$(VERSION)
-.PHONY: bin-zip
-bin-zip:
-	@rm -f $(BINZIP_NAME).tar
-	@rm -f $(BINZIP_NAME).tar.bz2
-	$(Q)tar -cf $(BINZIP_NAME).tar -C $(TARGET_OUT) \
-		--transform "s/\.\(\/.*\)/$(BINZIP_NAME)\\1/" .
-	$(Q)bzip2 $(BINZIP_NAME).tar
+# Dump the module database for debuging the build system
+.PHONY: dump
+dump:
+	$(call modules-dump-database)
 
 ###############################################################################
 # Display configuration.
 ###############################################################################
-
+msg = $(info $(CLR_CYAN)$1$(CLR_DEFAULT))
 $(info ----------------------------------------------------------------------)
-$(info + VERSION = $(VERSION))
-$(info + DEBUG = $(DEBUG))
-$(info + STATIC = $(STATIC))
-$(info + TARGET_OUT_INTERMEDIATES = $(TARGET_OUT_INTERMEDIATES))
-$(info + TARGET_OUT = $(TARGET_OUT))
-$(info + GCC_PATH = $(GCC_PATH))
-$(info + GCC_VERSION = $(GCC_VERSION))
+$(call msg, + HOST_OS = $(HOST_OS))
+$(call msg, + TARGET_OS = $(TARGET_OS))
+$(call msg, + TARGET_ARCH = $(TARGET_ARCH))
+$(call msg, + TARGET_OUT_BUILD = $(TARGET_OUT_BUILD))
+$(call msg, + TARGET_OUT_STAGING = $(TARGET_OUT_STAGING))
+$(call msg, + TARGET_OUT_FINAL = $(TARGET_OUT_FINAL))
+$(call msg, + GCC_PATH = $(GCC_PATH))
+$(call msg, + GCC_VERSION = $(GCC_VERSION))
 $(info ----------------------------------------------------------------------)
-

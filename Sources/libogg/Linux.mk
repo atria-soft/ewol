@@ -7,9 +7,8 @@ LOCAL_MODULE := ogg
 
 LOCAL_STATIC_LIBRARIES := etk
 
-LOCAL_C_INCLUDES := -I$(LOCAL_PATH) \
-                    -I$(LOCAL_PATH)/tremor/ \
-                    -I$(LOCAL_PATH)/ogg/
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/tremor/ \
+                    $(LOCAL_PATH)/ogg/
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
