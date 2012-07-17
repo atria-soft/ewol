@@ -1,4 +1,30 @@
 [submodule "Build"]
 	path = Build
 	url = https://github.com/HeeroYui/Build.git
-
+[submodule "Sources/libagg"]
+	path = Sources/libagg
+	url = https://github.com/HeeroYui/libagg.git
+[submodule "Sources/liblua"]
+	path = Sources/liblua
+	url = https://github.com/HeeroYui/liblua.git
+[submodule "Sources/libogg"]
+	path = Sources/libogg
+	url = https://github.com/HeeroYui/libogg.git
+[submodule "Sources/libparsersvg"]
+	path = Sources/libparsersvg
+	url = https://github.com/HeeroYui/libparsersvg.git
+[submodule "Sources/libpng"]
+	path = Sources/libpng
+	url = https://github.com/HeeroYui/libpng.git
+[submodule "Sources/libportaudio"]
+	path = Sources/libportaudio
+	url = https://github.com/HeeroYui/libportaudio.git
+[submodule "Sources/libtinyxml"]
+	path = Sources/libtinyxml
+	url = https://github.com/HeeroYui/libtinyxml.git
+[submodule "Sources/libzip"]
+	path = Sources/libzip
+	url = https://github.com/HeeroYui/libzip.git
+[submodule "Sources/libfreetype"]
+	path = Sources/libfreetype
+	url = https://github.com/HeeroYui/libfreetype.git
