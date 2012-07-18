@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/List.h
- * @brief ewol list widget system (header)
+ * @file ewol/widget/ListFile.h
+ * @brief ewol File lister widget system (header)
  * @author Edouard DUPIN
- * @date 27/12/2011
+ * @date 12/07/2012
  * @par Project
  * ewol
  *
@@ -22,20 +22,42 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_LIST_H__
-#define __EWOL_LIST_H__
+#ifndef __EWOL_WIDGET_PARAMETER_LIST_H__
+#define __EWOL_WIDGET_PARAMETER_LIST_H__
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 #include <ewol/widget/Drawable.h>
 
+extern const char * const ewolEventParameterListSelect;
+
+
 namespace ewol {
-	class List :public ewol::WidgetScrooled
+	
+	extern const char * const TYPE_EOBJECT_WIDGET_PARAMETER_LIST;
+	
+	class elementPL
 	{
+		public :
+			etk::UString    m_label;
+			int32_t         m_refId;
+			etk::UString    m_image;
+			elementPL(etk::UString& label, int32_t refId, etk::UString& image) :
+				m_label(label),
+				m_refId(refId),
+				m_image(image)
+			{ };
+			~elementPL(void) {};
+	};
+	
+	class ParameterList :public ewol::WidgetScrooled
+	{
+		private:
+			int32_t                            m_idSelected;
+			etk::VectorType<ewol::elementPL *> m_list;
 		public:
-			List(void);
-			void Init(void);
+			ParameterList(void);
 			/**
 			 * @brief Check if the object has the specific type.
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
@@ -51,7 +73,7 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void);
-			virtual ~List(void);
+			virtual ~ParameterList(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
@@ -61,7 +83,7 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			virtual void OnDraw(void);
+			void OnDraw(void);
 		// list properties ...
 		private:
 			int32_t        m_paddingSizeX;
@@ -69,7 +91,7 @@ namespace ewol {
 			int32_t        m_displayStartRaw;           //!< Current starting diaplayed raw
 			int32_t        m_displayCurrentNbLine;      //!< Number of line in the display
 		public:
-			virtual void   OnRegenerateDisplay(void);
+			void   OnRegenerateDisplay(void);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -79,46 +101,19 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 		protected:
-			// function call to display the list :
-			virtual color_ts GetBasicBG(void) {
-				color_ts bg(0xFFFFFFFF);
-				return bg;
-			}
-			virtual uint32_t GetNuberOfColomn(void) {
-				return 0;
-			};
-			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
-				myTitle = "";
-				return false;
-			};
-			virtual uint32_t GetNuberOfRaw(void) {
-				return 0;
-			};
-			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
-				myTextToWrite = "";
-				bg = 0xFFFFFFFF;
-				fg = 0x000000FF;
-				if (raw % 2) {
-					bg = 0xFFFFFFFF;
-				} else {
-					bg = 0x7F7F7FFF;
-				}
-				return false;
-			};
-			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
-				return false;
-			}
-		protected:
-			virtual void OnGetFocus(void);
-			virtual void OnLostFocus(void);
+			void OnGetFocus(void);
+			void OnLostFocus(void);
+		public:
+			void MenuAdd(etk::UString& label, int32_t refId, etk::UString& image);
+			void MenuRm(etk::UString& ref);
+			void MenuClear(void);
+			void MenuSeparator(void);
 	};
-	
-	extern const char * const TYPE_EOBJECT_WIDGET_LIST;
-	
 };
 
-#define EWOL_CAST_WIDGET_LIST(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_LIST,ewol::List,curentPointer)
+#define EWOL_CAST_WIDGET_PARAMETER_LIST(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST,ParameterList,curentPointer)
 
 #endif
+

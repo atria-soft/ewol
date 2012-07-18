@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/widget/List.cpp
- * @brief ewol list widget system (Sources)
+ * @file ewol/widget/ListFile.cpp
+ * @brief ewol File lister widget system (Sources)
  * @author Edouard DUPIN
- * @date 27/12/2011
+ * @date 12/07/2012
  * @par Project
  * ewol
  *
@@ -22,6 +22,18 @@
  *******************************************************************************
  */
 
+#include <ewol/widgetMeta/ParameterList.h>
+#include <etk/tool.h>
+
+
+#undef __class__
+#define __class__	"ParameterList"
+
+extern const char * const ewolEventParameterListSelect     = "ewol-event-parameter-list-select";
+
+//!< EObject name :
+extern const char * const ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST = "ParameterList";
+
 
 #include <ewol/widget/List.h>
 
@@ -32,8 +44,11 @@
 #define __class__	"List"
 
 
-void ewol::List::Init(void)
+ewol::ParameterList::ParameterList(void)
 {
+	AddEventId(ewolEventParameterListSelect);
+	
+	m_idSelected = -1;
 	m_paddingSizeX = 2;
 	#ifdef __PLATFORM__Android
 		m_paddingSizeY = 10;
@@ -43,12 +58,7 @@ void ewol::List::Init(void)
 	SetCanHaveFocus(true);
 }
 
-ewol::List::List(void)
-{
-	Init();
-}
-
-ewol::List::~List(void)
+ewol::ParameterList::~ParameterList(void)
 {
 	//clean all the object
 	for (int32_t jjj=0; jjj<NB_BOUBLE_BUFFER; jjj++) {
@@ -58,11 +68,8 @@ ewol::List::~List(void)
 		}
 		m_listOObject[jjj].Clear();
 	}
+	MenuClear();
 }
-
-
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_LIST = "List";
 
 /**
  * @brief Check if the object has the specific type.
@@ -70,19 +77,19 @@ extern const char * const ewol::TYPE_EOBJECT_WIDGET_LIST = "List";
  * @param[in] objectType type of the object we want to check
  * @return true if the object is compatible, otherwise false
  */
-bool ewol::List::CheckObjectType(const char * const objectType)
+bool ewol::ParameterList::CheckObjectType(const char * const objectType)
 {
 	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_LIST << "\" != NULL(pointer) ");
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST << "\" != NULL(pointer) ");
 		return false;
 	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_LIST) {
+	if (objectType == ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST) {
 		return true;
 	} else {
 		if(true == ewol::WidgetScrooled::CheckObjectType(objectType)) {
 			return true;
 		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_LIST << "\" != \"" << objectType << "\"");
+		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST << "\" != \"" << objectType << "\"");
 		return false;
 	}
 }
@@ -93,13 +100,13 @@ bool ewol::List::CheckObjectType(const char * const objectType)
  * @param[in] objectType type description
  * @return true if the object is compatible, otherwise false
  */
-const char * const ewol::List::GetObjectType(void)
+const char * const ewol::ParameterList::GetObjectType(void)
 {
-	return ewol::TYPE_EOBJECT_WIDGET_LIST;
+	return ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST;
 }
 
 
-bool ewol::List::CalculateMinSize(void)
+bool ewol::ParameterList::CalculateMinSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
@@ -107,13 +114,13 @@ bool ewol::List::CalculateMinSize(void)
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
 	*/
-	m_minSize.x = 200;
+	m_minSize.x = 150;
 	m_minSize.y = 150;
 	return true;
 }
 
 
-void ewol::List::AddOObject(ewol::OObject* newObject, int32_t pos)
+void ewol::ParameterList::AddOObject(ewol::OObject* newObject, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
@@ -128,7 +135,7 @@ void ewol::List::AddOObject(ewol::OObject* newObject, int32_t pos)
 }
 
 
-void ewol::List::ClearOObjectList(void)
+void ewol::ParameterList::ClearOObjectList(void)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
 		delete(m_listOObject[m_currentCreateId][iii]);
@@ -137,7 +144,7 @@ void ewol::List::ClearOObjectList(void)
 	m_listOObject[m_currentCreateId].Clear();
 }
 
-void ewol::List::OnDraw(void)
+void ewol::ParameterList::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
@@ -150,7 +157,7 @@ void ewol::List::OnDraw(void)
 
 
 
-void ewol::List::OnRegenerateDisplay(void)
+void ewol::ParameterList::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
@@ -176,7 +183,7 @@ void ewol::List::OnRegenerateDisplay(void)
 	
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
-		int32_t nbRaw    = GetNuberOfRaw();
+		int32_t nbRaw    = m_list.Size();
 		// For the scrooling windows
 		m_maxSize.x = m_size.x;
 		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
@@ -184,9 +191,9 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		etk::VectorType<int32_t> listSizeColomn;
 		
+		// set background color :
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-		color_ts basicBG = GetBasicBG();
-		BGOObjects->SetColor(basicBG);
+		BGOObjects->SetColor(0xFFFFFFFF);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		
 		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
@@ -202,9 +209,6 @@ void ewol::List::OnRegenerateDisplay(void)
 		// Calculate the real position ...
 		tmpOriginY = -m_originScrooled.y + startRaw*(minHeight + 2*m_paddingSizeY);
 		
-		// We display only compleate lines ...
-		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << " ==> " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
-		
 		clipping_ts drawClipping;
 		drawClipping.x = 0;
 		drawClipping.y = 0;
@@ -212,18 +216,17 @@ void ewol::List::OnRegenerateDisplay(void)
 		drawClipping.h = m_size.y;
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
-			etk::UString myTextToWrite;
-			color_ts fg;
-			color_ts bg;
-			GetElement(0, iii, myTextToWrite, fg, bg);
-			BGOObjects->SetColor(bg);
-			BGOObjects->Rectangle(0, tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);
+			etk::UString myTextToWrite = "???";
+			color_ts fg(0x000000FF);
+			if (m_list[iii] != NULL) {
+				myTextToWrite = m_list[iii]->m_label;
+			}
 			
 			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
 			
 			Vector2D<float> textPos;
-			textPos.x = tmpOriginX;
-			textPos.y = tmpOriginY + m_paddingSizeY;
+			textPos.x = (int32_t)tmpOriginX;
+			textPos.y = (int32_t)(tmpOriginY + m_paddingSizeY);
 			tmpText->Text(textPos, drawClipping, myTextToWrite);
 			
 			AddOObject(tmpText);
@@ -246,36 +249,74 @@ void ewol::List::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
-	Vector2D<float> relativePos = RelativePosition(pos);
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	int32_t fontId = GetDefaultFontId();
-	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
-	int32_t minHeight = ewol::GetHeight(fontId);
-	
-	int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
-	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
-	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x, pos.y);
-	if (true == isUsed) {
-		// TODO : this generate bugs ... I did not understand why ..
-		//ewol::widgetManager::FocusKeep(this);
+	if (IdInput == 1 && typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
+		Vector2D<float> relativePos = RelativePosition(pos);
+		int32_t fontId = GetDefaultFontId();
+		//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
+		int32_t minHeight = ewol::GetHeight(fontId);
+		
+		int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
+		// generate an event on a rawId if the element request change and Select it ...
+		if (rawID >=0 && rawID<m_list.Size()) {
+			if (m_list[rawID]!=NULL) {
+				if (m_list[rawID]->m_refId>=0) {
+					GenerateEventId(ewolEventParameterListSelect, m_list[rawID]->m_refId);
+					m_idSelected = rawID;
+					MarkToReedraw();
+					return true;
+				}
+			}
+		}
 	}
-	return isUsed;
+	return false;
 }
 
 
 
-void ewol::List::OnGetFocus(void)
+void ewol::ParameterList::OnGetFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Get Focus");
 }
 
-void ewol::List::OnLostFocus(void)
+void ewol::ParameterList::OnLostFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Lost Focus");
 }
+
+void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UString& image)
+{
+	ewol::elementPL* tmpEmement = new ewol::elementPL(label, refId, image);
+	if (NULL != tmpEmement) {
+		m_list.PushBack(tmpEmement);
+		if (m_idSelected == -1 && label != "---" && refId>0) {
+			m_idSelected = m_list.Size()-1;
+		}
+		MarkToReedraw();
+	}
+}
+
+void ewol::ParameterList::MenuClear(void)
+{
+	m_idSelected = -1;
+	for (int32_t iii=0; iii<m_list.Size(); iii++) {
+		if (NULL != m_list[iii]) {
+			delete(m_list[iii]);
+			m_list[iii] = NULL;
+		}
+	}
+}
+
+void ewol::ParameterList::MenuSeparator(void)
+{
+	etk::UString label = "---";
+	etk::UString image = "";
+	MenuAdd(label, -1, image);
+}
+

@@ -62,6 +62,7 @@ namespace ewol {
 			color_ts      m_colorBackGroung;
 			color_ts      m_colorBorder;
 			color_ts      m_colorEmptyArea;
+			ewol::Widget* m_subWidgetNext;
 			ewol::Widget* m_subWidget[NB_BOUBLE_BUFFER];
 			float    m_displayRatio;
 		public:

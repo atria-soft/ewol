@@ -22,18 +22,21 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_FILE_CHOOSER_H__
-#define __EWOL_FILE_CHOOSER_H__
+#ifndef __EWOL_WIDGET_PARAMETER_H__
+#define __EWOL_WIDGET_PARAMETER_H__
 
 #include <etk/Types.h>
+#include <etk/UString.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/CheckBox.h>
+#include <ewol/widget/WSlider.h>
+#include <ewol/widgetMeta/ParameterList.h>
 
-extern const char * const ewolEventParameterSelection;
+extern const char * const ewolEventParameterClose;
 
 namespace ewol {
 	class Parameter : public ewol::PopUp
@@ -72,21 +75,22 @@ namespace ewol {
 			 */
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			
-			void MenuAdd(etk::UString label, etk::UString ref, etk::String image);
-			void MenuRm(etk::UString ref);
+			void SetTitle(etk::UString label);
+			void MenuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget);
 			void MenuClear(void);
 			void MenuSeparator(void);
-			void MenuGroup(etk::UString title, etk::UString image);
-			void MenuGroupEnd(void);
-			void SetSubWidget(ewol::Widget* newWidget);
 		private:
+			int32_t               m_currentIdList;
 			ewol::Label*          m_widgetTitle;
+			ewol::Button*         m_widgetCancel;
+			ewol::ParameterList*  m_paramList;
+			ewol::WSlider*        m_wSlider;
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_FILE_CHOOSER;
+	extern const char * const TYPE_EOBJECT_WIDGET_PARAMETER;
 	
 };
 
-#define EWOL_CAST_WIDGET_FILE_CHOOSER(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_FILE_CHOOSER,ewol::FileChooser,curentPointer)
+#define EWOL_CAST_WIDGET_PARAMETER(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_PARAMETER,ewol::Parameter,curentPointer)
 
 #endif

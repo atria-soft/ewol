@@ -93,20 +93,26 @@ bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
 	
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
-		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x, m_origin.y);
-			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+		if (iii < m_subWidget[m_currentCreateId].Size()) {
+			if (NULL != m_subWidget[m_currentCreateId][iii]) {
+				m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x, m_origin.y);
+				m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+			}
 		}
 	} else {
 		int32_t iii = m_windowsSources;
-		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*(float)m_slidingProgress/1000.0),  m_origin.y);
-			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+		if (iii < m_subWidget[m_currentCreateId].Size()) {
+			if (NULL != m_subWidget[m_currentCreateId][iii]) {
+				m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*(float)m_slidingProgress/1000.0),  m_origin.y);
+				m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+			}
 		}
 		iii = m_windowsDestination;
-		if (NULL != m_subWidget[m_currentCreateId][iii]) {
-			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*((float)m_slidingProgress/1000.0) - m_size.x),  m_origin.y);
-			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+		if (iii < m_subWidget[m_currentCreateId].Size()) {
+			if (NULL != m_subWidget[m_currentCreateId][iii]) {
+				m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x - (m_size.x*((float)m_slidingProgress/1000.0) - m_size.x),  m_origin.y);
+				m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
+			}
 		}
 	}
 	MarkToReedraw();

@@ -30,7 +30,8 @@
 #undef __class__
 #define __class__	"PopUp"
 
-ewol::PopUp::PopUp(void)
+ewol::PopUp::PopUp(void) :
+	m_subWidgetNext(NULL)
 {
 	m_userExpendX = true;
 	m_userExpendY = true;
@@ -166,11 +167,13 @@ void ewol::PopUp::SetExpendY(bool newExpend)
 void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
+		EWOL_ERROR("Try to set a sub wiget with NULL pointer ...");
 		return;
 	}
 	SubWidgetRemove();
 	m_subWidget[m_currentCreateId] = newWidget;
 	m_needFlipFlop = true;
+	//EWOL_DEBUG("SetSubWidget on Pop-Up : " << (int64_t)m_subWidget[m_currentCreateId]);
 	MarkToReedraw();
 }
 
@@ -251,6 +254,7 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
 void ewol::PopUp::SetDisplayRatio(float ratio)
 {
 	m_displayRatio = ratio;
+	MarkToReedraw();
 }
 
 
@@ -266,6 +270,7 @@ void ewol::PopUp::OnFlipFlopEvent(void)
 	ewol::Widget::OnFlipFlopEvent();
 	// internal saving
 	if (true == needFlipFlop) {
+		//EWOL_VERBOSE("Flip-Flop on Pop-Up : " << (int64_t)m_subWidget[m_currentCreateId] << " <-- " << (int64_t)m_subWidget[m_currentDrawId]);
 		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
 	}
 	// in every case, we propagate the flip-flop EVENT
