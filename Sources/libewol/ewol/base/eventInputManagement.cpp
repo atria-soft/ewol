@@ -192,6 +192,9 @@ extern int32_t offsetMoveClickedDouble;
 // note if id<0 ==> the it was finger event ...
 void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<float> pos)
 {
+	// convert position in Open-GL coordonates ...
+	pos.y = ewol::GetCurrentHeight() - pos.y;
+	
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::INPUT_TYPE_MOUSE) {
 		eventTable = eventMouseSaved;
@@ -270,6 +273,8 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 
 void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float> pos)
 {
+	// convert position in Open-GL coordonates ...
+	pos.y = ewol::GetCurrentHeight() - pos.y;
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::INPUT_TYPE_MOUSE) {
 		eventTable = eventMouseSaved;

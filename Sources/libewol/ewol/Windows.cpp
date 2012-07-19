@@ -160,23 +160,6 @@ void ewol::Windows::SysDraw(void)
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x,m_size.y);
-/*
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
-	
-#else
-	glOrtho(0., m_size.x, 0., -m_size.y, 1., 20.);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0, -m_size.y, -5);
-#endif
-*/
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	

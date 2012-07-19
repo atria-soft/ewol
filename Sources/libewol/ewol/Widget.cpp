@@ -311,13 +311,13 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		tmppp2 = m_origin.y + m_size.y;
 		int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
 		
-		glViewport(                                          tmpOriginX,
-		            displayProp.m_windowsSize.y - m_size.y - tmpOriginY,
+		glViewport( tmpOriginX,
+		            tmpOriginY,
 		            tmpclipX,
 		            m_size.y);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrthoEwol(-tmpclipX/2, tmpclipX/2, m_size.y/2, -m_size.y/2, -1, 1);
+		glOrthoEwol(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
 		//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
 		
 		glMatrixMode(GL_MODELVIEW);
@@ -330,14 +330,13 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		displayProp.m_size.y = m_size.y;
 		OnDraw(displayProp);
 	} else {
-		int32_t tmpOriginY = m_origin.y;
-		glViewport(                                          m_origin.x,
-		            displayProp.m_windowsSize.y - m_size.y - m_origin.y,
+		glViewport( m_origin.x,
+		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
+		glOrthoEwol(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
 		
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();

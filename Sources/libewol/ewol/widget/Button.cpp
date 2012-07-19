@@ -226,9 +226,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		int32_t fontHeight = ewol::GetHeight(fontId);
 		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		*/
-		Vector2D<float> textPos;
-		textPos.x = tmpTextOriginX;
-		textPos.y = tmpTextOriginY;
+		Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
 		
 		ewol::OObject2DTextured * tmpImage = NULL;
 		if (true == m_hasAnImage) {
@@ -244,6 +242,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		drawClipping.y = m_padding.y;
 		drawClipping.w = m_size.x - 2*m_padding.x;
 		drawClipping.h = m_size.y - 2*m_padding.y;
+		EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
 		tmpText->Text(textPos, drawClipping, m_label);
 		
 		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;

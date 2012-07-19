@@ -53,27 +53,27 @@ namespace ewol
 	int32_t     GetWidth(int32_t fontID, const etk::UString& unicodeString);
 	int32_t     GetHeight(int32_t fontID);
 	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                      textPos,
+	                     Vector2D<float>                textPos,
 	                     clipping_ts &                  drawClipping,
 	                     const etk::UString &           unicodeString,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<Vector2D<float> > &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                      textPos,
+	                     Vector2D<float>                textPos,
 	                     clipping_ts &                  drawClipping,
 	                     const uniChar_t                unicodeChar,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<Vector2D<float> > &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                      textPos,
+	                     Vector2D<float>                textPos,
 	                     const etk::UString &           unicodeString,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<Vector2D<float> > &  coord,
 	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                      textPos,
+	                     Vector2D<float>                textPos,
 	                     const uniChar_t                unicodeChar,
 	                     int32_t &                      fontTextureId,
 	                     etk::VectorType<Vector2D<float> > &  coord,

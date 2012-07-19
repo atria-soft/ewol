@@ -69,22 +69,28 @@ ewol::Parameter::Parameter(void) :
 		// set it in the pop-up-system :
 		SubWidgetSet(mySizerVert);
 		
-		m_widgetTitle = new ewol::Label("File chooser ...");
-		if (NULL == m_widgetTitle) {
+		mySizerHori = new ewol::SizerHori();
+		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			m_widgetTitle->SetExpendX(true);
-			mySizerVert->SubWidgetAdd(m_widgetTitle);
-		}
-		
-		mySpacer = new ewol::Spacer();
-		if (NULL == mySpacer) {
-			EWOL_ERROR("Can not allocate widget ==> display might be in error");
-		} else {
-			mySpacer->SetExpendX(true);
-			mySpacer->SetSize(5);
-			mySpacer->SetColor(0x000000BF);
-			mySizerVert->SubWidgetAdd(mySpacer);
+			mySizerVert->SubWidgetAdd(mySizerHori);
+			
+			mySpacer = new ewol::Spacer();
+			if (NULL == mySpacer) {
+				EWOL_ERROR("Can not allocate widget ==> display might be in error");
+			} else {
+				mySpacer->SetExpendX(true);
+				mySizerHori->SubWidgetAdd(mySpacer);
+			}
+			
+			m_widgetCancel = new ewol::Button("Close");
+			if (NULL == m_widgetCancel) {
+				EWOL_ERROR("Can not allocate widget ==> display might be in error");
+			} else {
+				m_widgetCancel->SetImage("icon/Remove.svg");
+				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventParameterClose);
+				mySizerHori->SubWidgetAdd(m_widgetCancel);
+			}
 		}
 		
 		mySizerHori = new ewol::SizerHori();
@@ -114,28 +120,22 @@ ewol::Parameter::Parameter(void) :
 			}
 		}
 		
-		mySizerHori = new ewol::SizerHori();
-		if (NULL == mySizerHori) {
+		mySpacer = new ewol::Spacer();
+		if (NULL == mySpacer) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			mySizerVert->SubWidgetAdd(mySizerHori);
-			
-			mySpacer = new ewol::Spacer();
-			if (NULL == mySpacer) {
-				EWOL_ERROR("Can not allocate widget ==> display might be in error");
-			} else {
-				mySpacer->SetExpendX(true);
-				mySizerHori->SubWidgetAdd(mySpacer);
-			}
-			
-			m_widgetCancel = new ewol::Button("Close");
-			if (NULL == m_widgetCancel) {
-				EWOL_ERROR("Can not allocate widget ==> display might be in error");
-			} else {
-				m_widgetCancel->SetImage("icon/Remove.svg");
-				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventParameterClose);
-				mySizerHori->SubWidgetAdd(m_widgetCancel);
-			}
+			mySpacer->SetExpendX(true);
+			mySpacer->SetSize(5);
+			mySpacer->SetColor(0x000000BF);
+			mySizerVert->SubWidgetAdd(mySpacer);
+		}
+		
+		m_widgetTitle = new ewol::Label("File chooser ...");
+		if (NULL == m_widgetTitle) {
+			EWOL_ERROR("Can not allocate widget ==> display might be in error");
+		} else {
+			m_widgetTitle->SetExpendX(true);
+			mySizerVert->SubWidgetAdd(m_widgetTitle);
 		}
 	}
 	MarkToReedraw();

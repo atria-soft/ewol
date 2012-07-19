@@ -590,6 +590,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
+	int32_t fontHeight = m_listLoadedFont[fontID]->GetHeight();
 
 	float posDrawX = textPos.x;
 	
@@ -620,8 +621,8 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			 */
 			float dxA = posDrawX + listOfElement[charIndex].bearing.x;
 			float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-			float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			float dyC = textPos.y + listOfElement[charIndex].bearing.y + fontHeight - fontSize;
+			float dyD = dyC - listOfElement[charIndex].size.y;
 			
 			float tuA = listOfElement[charIndex].posStart.u;
 			float tuB = listOfElement[charIndex].posStop.u;
@@ -636,6 +637,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			{
 				// Nothing to diplay ...
 			} else {
+				/*
 				// generata positions...
 				float TexSizeX = tuB - tuA;
 				if (dxA < drawClipping.x) {
@@ -657,26 +659,27 @@ int32_t ewol::DrawText(int32_t                              fontID,
 					tuB -= addElement;
 				}
 				float TexSizeY = tvD - tvC;
-				if (dyC < drawClipping.y) {
+				if (dyD < drawClipping.y) {
 					// clip display
-					float drawSize = drawClipping.y - dyC;
+					float drawSize = drawClipping.y - dyD;
 					// Update element start display
-					dyC = drawClipping.y;
+					dyD = drawClipping.y;
 					float addElement = TexSizeY * drawSize / listOfElement[charIndex].size.y;
 					// update texture start X Pos
-					tvC += addElement;
+					tvD += addElement;
 				}
-				if (dyD > drawClipping.y + drawClipping.h) {
+				if (dyC > drawClipping.y + drawClipping.h) {
 					// clip display
-					float drawSize = dyD - (drawClipping.y + drawClipping.h);
+					float drawSize = dyC - (drawClipping.y + drawClipping.h);
 					// Update element start display
-					dyD = drawClipping.y + drawClipping.h;
+					dyC = drawClipping.y + drawClipping.h;
 					float addElement = TexSizeX * drawSize / listOfElement[charIndex].size.y;
 					// update texture start X Pos
-					tvD -= addElement;
+					tvC -= addElement;
 				}
+				*/
 				if(    dxB <= dxA
-				    || dyD <= dyC) {
+				    /*|| dyD >= dyC*/) {
 					// nothing to do ...
 				} else {
 					/* Bitmap position
@@ -685,7 +688,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 					 *   |      |
 					 *   3------2
 					 */
-					Vector2D<float> bitmapDrawPos[4];
+					Vector2D<int32_t> bitmapDrawPos[4];
 					bitmapDrawPos[0].x = (int32_t)dxA;
 					bitmapDrawPos[1].x = (int32_t)dxB;
 					bitmapDrawPos[2].x = (int32_t)dxB;
@@ -763,6 +766,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
                        etk::VectorType<Vector2D<float> > &  coord,
                        etk::VectorType<texCoord_ts> &       coordTex)
 {
+#if 0
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
@@ -799,8 +803,8 @@ int32_t ewol::DrawText(int32_t                              fontID,
 		 */
 		float dxA = posDrawX + listOfElement[charIndex].bearing.x;
 		float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-		float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-		float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+		float dyC = textPos.y + listOfElement[charIndex].bearing.y - fontSize;
+		float dyD = dyC + listOfElement[charIndex].size.y;
 		
 		float tuA = listOfElement[charIndex].posStart.u;
 		float tuB = listOfElement[charIndex].posStop.u;
@@ -841,7 +845,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			 *   |      |
 			 *   3------2
 			 */
-			Vector2D<float> bitmapDrawPos[4];
+			Vector2D<int32_t> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = (int32_t)dxA;
 			bitmapDrawPos[1].x = (int32_t)dxB;
 			bitmapDrawPos[2].x = (int32_t)dxB;
@@ -906,6 +910,9 @@ int32_t ewol::DrawText(int32_t                              fontID,
 	int32_t sizeOut = posDrawX - textPos.x;
 	textPos.x = posDrawX;
 	return sizeOut;
+#else
+	return 10;
+#endif
 }
 
 
@@ -924,6 +931,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
+	int32_t fontHeight = m_listLoadedFont[fontID]->GetHeight();
 
 	float posDrawX = textPos.x;
 	
@@ -954,8 +962,8 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			 */
 			float dxA = posDrawX + listOfElement[charIndex].bearing.x;
 			float dxB = posDrawX + listOfElement[charIndex].bearing.x + listOfElement[charIndex].size.x;
-			float dyC = textPos.y + fontSize - listOfElement[charIndex].bearing.y;
-			float dyD = textPos.y + fontSize - listOfElement[charIndex].bearing.y + listOfElement[charIndex].size.y;
+			float dyC = textPos.y + listOfElement[charIndex].bearing.y + fontHeight - fontSize;
+			float dyD = dyC - listOfElement[charIndex].size.y;
 			
 			float tuA = listOfElement[charIndex].posStart.u;
 			float tuB = listOfElement[charIndex].posStop.u;
@@ -965,7 +973,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			
 			// Clipping and drawing area
 			if(    dxB <= dxA
-			    || dyD <= dyC) {
+			    || dyD >= dyC) {
 				// nothing to do ...
 			} else {
 				/* Bitmap position
@@ -974,7 +982,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 				 *   |      |
 				 *   3------2
 				 */
-				Vector2D<float> bitmapDrawPos[4];
+				Vector2D<int32_t> bitmapDrawPos[4];
 				bitmapDrawPos[0].x = (int32_t)dxA;
 				bitmapDrawPos[1].x = (int32_t)dxB;
 				bitmapDrawPos[2].x = (int32_t)dxB;
@@ -1033,6 +1041,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 				coord.PushBack(bitmapDrawPos[0]);
 				coord.PushBack(bitmapDrawPos[2]);
 				coord.PushBack(bitmapDrawPos[3]);
+				
 			}
 		}
 		posDrawX += listOfElement[charIndex].advance;

@@ -378,13 +378,13 @@ void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
 	if (SCROLL_MODE_CENTER == m_scroollingMode) {
 		glPushMatrix();
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-		glViewport(                                       m_origin.x,
-		            ewol::GetCurrentHeight() - m_size.y - m_origin.y,
+		glViewport( m_origin.x,
+		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
+		glOrthoEwol(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glScalef(m_zoom, m_zoom, 1.0);

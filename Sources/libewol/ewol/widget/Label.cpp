@@ -141,9 +141,7 @@ void ewol::Label::OnRegenerateDisplay(void)
 		
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		
-		Vector2D<float> textPos;
-		textPos.x = tmpOriginX;
-		textPos.y = tmpOriginY;
+		Vector2D<float> textPos(tmpOriginX, tmpOriginY);
 		clipping_ts drawClipping;
 		drawClipping.x = paddingSize;
 		drawClipping.y = paddingSize;
