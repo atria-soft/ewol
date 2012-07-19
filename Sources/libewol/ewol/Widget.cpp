@@ -288,31 +288,65 @@ void ewol::Widget::KeepFocus(void)
  * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
  * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
  * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
- * @param ---
+ * @param[in] displayProp properties of the current display
  * @return ---
  */
-void ewol::Widget::GenDraw(void)
+void ewol::Widget::GenDraw(DrawProperty displayProp)
 {
 	if (true==m_hide[m_currentDrawId]){
 		// widget is hidden ...
 		return;
 	}
 	glPushMatrix();
-	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-	glViewport(                                       m_origin.x,
-	            ewol::GetCurrentHeight() - m_size.y - m_origin.y,
-	            m_size.x,
-	            m_size.y);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
-	//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
-	// Call the widget drawing methode
-	OnDraw();
+	if(    (displayProp.m_origin.x > m_origin.x)
+	    || (displayProp.m_origin.x + displayProp.m_size.x < m_size.x + m_origin.x) ) {
+		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+		int32_t tmpOriginX = etk_max(displayProp.m_origin.x, m_origin.x);
+		int32_t tmppp1 = displayProp.m_origin.x + displayProp.m_size.x;
+		int32_t tmppp2 = m_origin.x + m_size.x;
+		int32_t tmpclipX = etk_min(tmppp1, tmppp2) - tmpOriginX;
+		
+		int32_t tmpOriginY = etk_max(displayProp.m_origin.y, m_origin.y);
+		tmppp1 = displayProp.m_origin.y + displayProp.m_size.y;
+		tmppp2 = m_origin.y + m_size.y;
+		int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
+		
+		glViewport(                                          tmpOriginX,
+		            displayProp.m_windowsSize.y - m_size.y - tmpOriginY,
+		            tmpclipX,
+		            m_size.y);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrthoEwol(-tmpclipX/2, tmpclipX/2, m_size.y/2, -m_size.y/2, -1, 1);
+		//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glTranslatef(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
+		// Call the widget drawing methode
+		displayProp.m_origin.x = tmpOriginX;
+		displayProp.m_origin.y = tmpOriginY;
+		displayProp.m_size.x = tmpclipX;
+		displayProp.m_size.y = m_size.y;
+		OnDraw(displayProp);
+	} else {
+		int32_t tmpOriginY = m_origin.y;
+		glViewport(                                          m_origin.x,
+		            displayProp.m_windowsSize.y - m_size.y - m_origin.y,
+		            m_size.x,
+		            m_size.y);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrthoEwol(-m_size.x/2, m_size.x/2, m_size.y/2, -m_size.y/2, -1, 1);
+		
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+		// Call the widget drawing methode
+		displayProp.m_origin = m_origin;
+		displayProp.m_size = m_size;
+		OnDraw(displayProp);
+	}
 	glPopMatrix();
 	return;
 }

@@ -77,7 +77,7 @@ namespace ewol {
 			void           SubWidgetRemove(void);
 			void           SetPositionMark(markPosition_te position, Vector2D<float>  arrowPos);
 		protected:
-			virtual void   OnDraw(void);
+			virtual void   OnDraw(DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

@@ -71,7 +71,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			virtual void OnDraw(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 			/**
 			 * @brief Set the scene in pause for a while
 			 * @param ---

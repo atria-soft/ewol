@@ -50,13 +50,13 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void);
+		private:
+			Vector2D<bool> m_underExpend; // expend of the uner elements ...
 		public:
 			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
 			virtual void   SetMinSise(float x=-1, float y=-1);
-			virtual void   SetExpendX(bool newExpend=false);
 			virtual bool   CanExpentX(void);
-			virtual void   SetExpendY(bool newExpend=false);
 			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
@@ -74,7 +74,7 @@ namespace ewol {
 			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
 			        int32_t SubWidgetNumber(void) { return m_subWidget[m_currentCreateId].Size(); };
 		protected:
-			virtual void   OnDraw(void);
+			virtual void   OnDraw(DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

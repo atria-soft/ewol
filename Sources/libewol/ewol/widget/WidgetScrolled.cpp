@@ -357,7 +357,7 @@ void ewol::WidgetScrooled::ClearOObjectList(void)
 	m_listOObject[m_currentCreateId].Clear();
 }
 
-void ewol::WidgetScrooled::OnDraw(void)
+void ewol::WidgetScrooled::OnDraw(DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
@@ -373,7 +373,7 @@ void ewol::WidgetScrooled::OnDraw(void)
  * @param ---
  * @return ---
  */
-void ewol::WidgetScrooled::GenDraw(void)
+void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
 {
 	if (SCROLL_MODE_CENTER == m_scroollingMode) {
 		glPushMatrix();
@@ -391,10 +391,10 @@ void ewol::WidgetScrooled::GenDraw(void)
 		glTranslatef(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
 		
 		// Call the widget drawing methode
-		OnDraw();
+		OnDraw(displayProp);
 		glPopMatrix();
 	} else {
-		ewol::Widget::GenDraw();
+		ewol::Widget::GenDraw(displayProp);
 	}
 	
 }

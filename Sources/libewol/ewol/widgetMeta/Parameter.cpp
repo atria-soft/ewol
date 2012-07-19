@@ -73,6 +73,7 @@ ewol::Parameter::Parameter(void) :
 		if (NULL == m_widgetTitle) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
+			m_widgetTitle->SetExpendX(true);
 			mySizerVert->SubWidgetAdd(m_widgetTitle);
 		}
 		
@@ -80,8 +81,9 @@ ewol::Parameter::Parameter(void) :
 		if (NULL == mySpacer) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			//mySpacer->SetExpendX(true);
-			//mySpacer->SetSize(10);
+			mySpacer->SetExpendX(true);
+			mySpacer->SetSize(5);
+			mySpacer->SetColor(0x000000BF);
 			mySizerVert->SubWidgetAdd(mySpacer);
 		}
 		
@@ -214,8 +216,10 @@ void ewol::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char 
 		MarkToRemove();
 	} else if (eventId == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
-			
-			m_wSlider->SubWidgetSelectSet(1);
+			int32_t value = 0;
+			sscanf(data.Utf8Data(), "%d", &value);
+			EWOL_DEBUG("event on the parameter : " << eventId << " select ID=" << value << "");
+			m_wSlider->SubWidgetSelectSet(value);
 		}
 	}
 	
@@ -261,7 +265,8 @@ void ewol::Parameter::MenuAdd(etk::UString label, etk::UString image, ewol::Widg
 			if (NULL != associateWidget) {
 				m_wSlider->SubWidgetAdd(associateWidget);
 			} else {
-				ewol::Label * myLabel = new ewol::Label((etk::UString("No widget set ... ") + m_currentIdList));
+				EWOL_DEBUG("Associate an empty widget on it ...");
+				ewol::Label * myLabel = new ewol::Label((etk::UString("No widget for : ") + label));
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {

@@ -25,6 +25,7 @@
 
 #include <ewol/widget/WSlider.h>
 #include <ewol/WidgetManager.h>
+#include <ewol/ewol.h>
 
 
 #undef __class__
@@ -38,6 +39,8 @@ ewol::WSlider::WSlider(void)
 	m_windowsDestination = 0;
 	m_slidingProgress = 0;
 	m_windowsSources = 0;
+	m_underExpend.x = false;
+	m_underExpend.y = false;
 }
 
 ewol::WSlider::~WSlider(void)
@@ -122,18 +125,19 @@ bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
 
 bool ewol::WSlider::CalculateMinSize(void)
 {
-	m_userExpendX=false;
-	m_userExpendY=false;
+	EWOL_DEBUG("Calculate MinSize");
+	m_underExpend.x=false;
+	m_underExpend.y=false;
 	m_minSize.x = 0.0;
 	m_minSize.y = 0.0;
 	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->CalculateMinSize();
 			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentX()) {
-				m_userExpendX = true;
+				m_underExpend.x = true;
 			}
 			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentY()) {
-				m_userExpendY = true;
+				m_underExpend.y = true;
 			}
 			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetMinSize();
 			m_minSize.x = etk_max(tmpSize.x, m_minSize.x);
@@ -148,30 +152,26 @@ void ewol::WSlider::SetMinSise(float x, float y)
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::WSlider::SetExpendX(bool newExpend)
-{
-	EWOL_ERROR("Layer can not have a user expend settings X (herited from under elements)");
-}
-
 bool ewol::WSlider::CanExpentX(void)
 {
+	if (m_userExpendX == true) {
+		return true;
+	}
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpendX;
-}
-
-void ewol::WSlider::SetExpendY(bool newExpend)
-{
-	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
+	return m_underExpend.x;
 }
 
 bool ewol::WSlider::CanExpentY(void)
 {
+	if (m_userExpendY == true) {
+		return true;
+	}
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpendY;
+	return m_underExpend.y;
 }
 
 void ewol::WSlider::LockExpendContamination(bool lockExpend)
@@ -197,6 +197,8 @@ void ewol::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 		return;
 	}
 	m_subWidget[m_currentCreateId].PushBack(newWidget);
+	MarkToReedraw();
+	ewol::RequestUpdateSize();
 }
 
 
@@ -210,6 +212,8 @@ void ewol::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
 			m_subWidget[m_currentCreateId][iii]->MarkToRemove();
 			m_subWidget[m_currentCreateId][iii] = NULL;
 			m_subWidget[m_currentCreateId].Erase(iii);
+			MarkToReedraw();
+			ewol::RequestUpdateSize();
 			return;
 		}
 	}
@@ -224,6 +228,8 @@ void ewol::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
 		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii] = NULL;
 			m_subWidget[m_currentCreateId].Erase(iii);
+			ewol::RequestUpdateSize();
+			MarkToReedraw();
 			return;
 		}
 	}
@@ -260,7 +266,7 @@ void ewol::WSlider::PeriodicCall(int64_t localTime)
 }
 
 
-void ewol::WSlider::OnDraw(void)
+void ewol::WSlider::OnDraw(DrawProperty& displayProp)
 {
 	if (m_windowsDestination == m_windowsSources) {
 		//EWOL_DEBUG("Draw : " << m_windowsDestination);
@@ -269,7 +275,7 @@ void ewol::WSlider::OnDraw(void)
 			return;
 		}
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
-			m_subWidget[m_currentDrawId][iii]->GenDraw();
+			m_subWidget[m_currentDrawId][iii]->GenDraw(displayProp);
 		}
 	} else {
 		//EWOL_DEBUG("Draw : " << m_windowsSources << "=>" << m_windowsDestination << "progress=" << ((float)m_slidingProgress/1000.) );
@@ -279,7 +285,7 @@ void ewol::WSlider::OnDraw(void)
 			return;
 		}
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
-			m_subWidget[m_currentDrawId][iii]->GenDraw();
+			m_subWidget[m_currentDrawId][iii]->GenDraw(displayProp);
 		}
 		// Draw Destination : 
 		iii = m_windowsDestination;
@@ -287,7 +293,7 @@ void ewol::WSlider::OnDraw(void)
 			return;
 		}
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
-			m_subWidget[m_currentDrawId][iii]->GenDraw();
+			m_subWidget[m_currentDrawId][iii]->GenDraw(displayProp);
 		}
 	}
 }

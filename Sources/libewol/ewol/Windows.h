@@ -92,7 +92,7 @@ namespace ewol {
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
 		protected:
-			virtual void OnDraw(void);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void OnRegenerateDisplay(void);
 		public:

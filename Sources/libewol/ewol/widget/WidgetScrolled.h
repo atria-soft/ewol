@@ -79,7 +79,7 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -97,7 +97,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			virtual void GenDraw(void);
+			virtual void GenDraw(DrawProperty displayProp);
 		protected:
 			/**
 			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled

@@ -144,14 +144,14 @@ void ewol::ParameterList::ClearOObjectList(void)
 	m_listOObject[m_currentCreateId].Clear();
 }
 
-void ewol::ParameterList::OnDraw(void)
+void ewol::ParameterList::OnDraw(DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
 			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
 	}
-	WidgetScrooled::OnDraw();
+	WidgetScrooled::OnDraw(displayProp);
 }
 
 

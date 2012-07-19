@@ -97,7 +97,7 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnFlipFlopEvent(void);
-			virtual void OnDraw(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 	};
 	
 	/**

@@ -15,7 +15,7 @@
  *
  * Licence summary : 
  *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
+ *    You can send me the bug-fix>
  *
  * Term of the licence in in the file licence.txt.
  *
@@ -353,7 +353,7 @@ bool ewol::ButtonImage::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unic
 }
 
 
-void ewol::ButtonImage::OnDraw(void)
+void ewol::ButtonImage::OnDraw(DrawProperty& displayProp)
 {
 	if (NULL != m_OOImageBG2[m_currentDrawId]) {
 		m_OOImageBG2[m_currentDrawId]->Draw();

@@ -64,9 +64,9 @@ typedef enum {
 }erreurCode_te;
 
 
-#define etk_min(elemA, elemB)               ((elemA)<(elemB)) ? (elemA) : (elemB)
-#define etk_max(elemA, elemB)               ((elemA)<(elemB)) ? (elemB) : (elemA)
-#define etk_avg(minimim, elem, maximum)     ((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem)
+#define etk_min(elemA, elemB)               (((elemA)<(elemB)) ? (elemA) : (elemB))
+#define etk_max(elemA, elemB)               (((elemA)<(elemB)) ? (elemB) : (elemA))
+#define etk_avg(minimim, elem, maximum)     (((minimim)>(elem)) ? (minimim) : ((maximum)<(elem)) ? (maximum) : (elem))
 
 #include <etk/TypesCoordonate.h>
 

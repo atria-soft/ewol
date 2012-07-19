@@ -60,8 +60,11 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return NULL; };
+			virtual void   OnRegenerateDisplay(void);
+			void SetColor(color_ts newColor) { m_color = newColor; MarkToReedraw(); };
 		private:
-			float m_size;
+			float     m_localSize;
+			color_ts  m_color;
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SPACER;

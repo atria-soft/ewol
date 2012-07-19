@@ -252,11 +252,11 @@ void ewol::SizerHori::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-void ewol::SizerHori::OnDraw(void)
+void ewol::SizerHori::OnDraw(DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
-			m_subWidget[m_currentDrawId][iii]->GenDraw();
+			m_subWidget[m_currentDrawId][iii]->GenDraw(displayProp);
 		}
 	}
 }

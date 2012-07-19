@@ -6,7 +6,6 @@ LOCAL_MODULE := etk
 LOCAL_STATIC_LIBRARIES := libzip
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS :=
 
 ifeq ($(DEBUG),1)
 LOCAL_CFLAGS := -D__PLATFORM__Linux \
@@ -26,10 +25,6 @@ include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := $(FILE_LIST)
 
-#for freetype : https://github.com/cdave1/freetype2-android
-
-# Ewol Test Software :
-LOCAL_LDLIBS := 
 
 
 include $(BUILD_STATIC_LIBRARY)

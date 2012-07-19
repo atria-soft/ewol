@@ -96,7 +96,12 @@ namespace ewol {
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	
-	
+	class DrawProperty{
+		public :
+			Vector2D<int32_t> m_windowsSize;
+			Vector2D<int32_t> m_origin;
+			Vector2D<int32_t> m_size;
+	};
 	
 	
 	class Widget : public EObject {
@@ -459,17 +464,17 @@ namespace ewol {
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
 			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
-			 * @param ---
+			 * @param[in] displayProp properties of the current display
 			 * @return ---
 			 */
-			virtual void GenDraw(void);
+			virtual void GenDraw(DrawProperty displayProp);
 		protected:
 			/**
 			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
-			 * @param ---
+			 * @param[in] displayProp properties of the current display
 			 * @return ---
 			 */
-			virtual void OnDraw(void) { };
+			virtual void OnDraw(DrawProperty& displayProp) { };
 		public:
 			/**
 			 * @brief Event generated when a redraw is needed

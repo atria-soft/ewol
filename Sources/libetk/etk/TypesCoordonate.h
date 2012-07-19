@@ -81,9 +81,10 @@ template <typename T> class Vector2D
 		 *    + operator
 		 *****************************************************/
 		Vector2D<T> operator+ (const Vector2D<T>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			return *this;
+			Vector2D<T> tmpp(x,y);
+			tmpp.x += (T)obj.x;
+			tmpp.y += (T)obj.y;
+			return tmpp;
 		}
 		/*****************************************************
 		 *    -= operator
@@ -97,8 +98,9 @@ template <typename T> class Vector2D
 		 *    - operator
 		 *****************************************************/
 		Vector2D<T> operator- (const Vector2D<T>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
+			Vector2D<T> tmpp(x,y);
+			tmpp.x -= (T)obj.x;
+			tmpp.y -= (T)obj.y;
 			return *this;
 		}
 		/*****************************************************
@@ -113,8 +115,9 @@ template <typename T> class Vector2D
 		 *    / operator
 		 *****************************************************/
 		Vector2D<T> operator/ (const Vector2D<T>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
+			Vector2D<T> tmpp(x,y);
+			tmpp.x /= (T)obj.x;
+			tmpp.y /= (T)obj.y;
 			return *this;
 		}
 		/*****************************************************
@@ -129,8 +132,9 @@ template <typename T> class Vector2D
 		 *    * operator
 		 *****************************************************/
 		Vector2D<T> operator* (const Vector2D<T>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
+			Vector2D<T> tmpp(x,y);
+			tmpp.x *= (T)obj.x;
+			tmpp.y *= (T)obj.y;
 			return *this;
 		}
 		/*****************************************************
@@ -227,9 +231,10 @@ template <typename T> class Vector3D
 		 *    + operator
 		 *****************************************************/
 		Vector3D<T> operator+ (const Vector3D<T>& obj) {
-			x += (T)obj.x;
-			y += (T)obj.y;
-			z += (T)obj.z;
+			Vector3D<T> tmpp(x,y,y);
+			tmpp.x += (T)obj.x;
+			tmpp.y += (T)obj.y;
+			tmpp.z += (T)obj.z;
 			return *this;
 		}
 		/*****************************************************
@@ -245,9 +250,10 @@ template <typename T> class Vector3D
 		 *    - operator
 		 *****************************************************/
 		Vector3D<T> operator- (const Vector3D<T>& obj) {
-			x -= (T)obj.x;
-			y -= (T)obj.y;
-			z -= (T)obj.z;
+			Vector3D<T> tmpp(x,y,y);
+			tmpp.x -= (T)obj.x;
+			tmpp.y -= (T)obj.y;
+			tmpp.z -= (T)obj.z;
 			return *this;
 		}
 		/*****************************************************
@@ -263,9 +269,10 @@ template <typename T> class Vector3D
 		 *    / operator
 		 *****************************************************/
 		Vector3D<T> operator/ (const Vector3D<T>& obj) {
-			x /= (T)obj.x;
-			y /= (T)obj.y;
-			z /= (T)obj.z;
+			Vector3D<T> tmpp(x,y,y);
+			tmpp.x /= (T)obj.x;
+			tmpp.y /= (T)obj.y;
+			tmpp.z /= (T)obj.z;
 			return *this;
 		}
 		/*****************************************************
@@ -281,9 +288,10 @@ template <typename T> class Vector3D
 		 *    * operator
 		 *****************************************************/
 		Vector3D<T> operator* (const Vector3D<T>& obj) {
-			x *= (T)obj.x;
-			y *= (T)obj.y;
-			z *= (T)obj.z;
+			Vector3D<T> tmpp(x,y,y);
+			tmpp.x *= (T)obj.x;
+			tmpp.y *= (T)obj.y;
+			tmpp.z *= (T)obj.z;
 			return *this;
 		}
 		/*****************************************************

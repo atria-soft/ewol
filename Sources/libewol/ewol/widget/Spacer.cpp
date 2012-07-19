@@ -34,8 +34,9 @@
 
 ewol::Spacer::Spacer(void)
 {
-	m_size = 10;
+	m_localSize = 10;
 	SetCanHaveFocus(false);
+	m_color = 0x00000000;
 }
 
 ewol::Spacer::~Spacer(void)
@@ -84,15 +85,35 @@ const char * const ewol::Spacer::GetObjectType(void)
 
 bool ewol::Spacer::CalculateMinSize(void)
 {
-	m_minSize.x = m_size;
-	m_minSize.y = m_size;
+	m_minSize.x = m_localSize;
+	m_minSize.y = m_localSize;
 	return true;
 }
 
 
 void ewol::Spacer::SetSize(float size)
 {
-	m_size = size;
+	m_localSize = size;
 	MarkToReedraw();
 }
 
+#define BORDER_SIZE_TMP         (4)
+void ewol::Spacer::OnRegenerateDisplay(void)
+{
+	if (false == NeedRedraw()) {
+		return;
+	}
+	// generate a white background and take gray on other surfaces
+	ClearOObjectList();
+	if (m_color.alpha == 0) {
+		return;
+	}
+	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+	if (NULL == BGOObjects) {
+		return;
+	}
+	AddOObject(BGOObjects);
+	
+	BGOObjects->SetColor(m_color);
+	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+}

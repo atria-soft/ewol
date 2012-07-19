@@ -61,7 +61,7 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			virtual void OnDraw(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 		// list properties ...
 		private:
 			int32_t        m_paddingSizeX;

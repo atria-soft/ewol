@@ -179,8 +179,14 @@ void ewol::Windows::SysDraw(void)
 */
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	GenDraw();
+	
+	ewol::DrawProperty displayProp;
+	displayProp.m_windowsSize = m_size;
+	displayProp.m_origin.x = 0;
+	displayProp.m_origin.y = 0;
+	displayProp.m_size = m_size;
+	
+	GenDraw(displayProp);
 
 	glDisable(GL_BLEND);
 	return;
@@ -199,7 +205,7 @@ void ewol::Windows::OnRegenerateDisplay(void)
 }
 
 
-void ewol::Windows::OnDraw(void)
+void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 {
 
 	// Clear the screen with transparency ...
@@ -209,13 +215,13 @@ void ewol::Windows::OnDraw(void)
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
 	if (NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->GenDraw();
+		m_subWidget[m_currentDrawId]->GenDraw(displayProp);
 		//EWOL_DEBUG("Draw Windows");
 	}
 	// second display the pop-up
 	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentDrawId][iii]) {
-			m_popUpWidgetList[m_currentDrawId][iii]->GenDraw();
+			m_popUpWidgetList[m_currentDrawId][iii]->GenDraw(displayProp);
 			//EWOL_DEBUG("Draw Pop-up");
 		}
 	}

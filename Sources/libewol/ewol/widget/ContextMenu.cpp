@@ -221,12 +221,12 @@ void ewol::ContextMenu::SubWidgetRemove(void)
 	}
 }
 
-void ewol::ContextMenu::OnDraw(void)
+void ewol::ContextMenu::OnDraw(DrawProperty& displayProp)
 {
 	//EWOL_DEBUG("On Draw " << m_currentDrawId);
-	ewol::Drawable::OnDraw();
+	ewol::Drawable::OnDraw(displayProp);
 	if (NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->GenDraw();
+		m_subWidget[m_currentDrawId]->GenDraw(displayProp);
 	}
 }
 

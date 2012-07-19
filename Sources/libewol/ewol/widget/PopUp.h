@@ -69,7 +69,7 @@ namespace ewol {
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
 		protected:
-			virtual void   OnDraw(void);
+			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
