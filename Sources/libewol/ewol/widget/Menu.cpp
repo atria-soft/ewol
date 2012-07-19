@@ -216,7 +216,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						Vector2D<float> tmpSize = eventFromWidget->GetSize();
 						// calculate the correct position
 						newPosition.x = tmpOri.x + tmpSize.x/2;
-						newPosition.y = tmpOri.y + tmpSize.y;
+						newPosition.y = tmpOri.y;
 					}
 					
 					m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_TOP, newPosition );
@@ -229,21 +229,23 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizerVert);
 						
-						for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
-							if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
-								myButton = new ewol::Button(m_listElement[jjj]->m_label);
-								if (NULL == myButton) {
-									EWOL_ERROR("Allocation Error");
-								} else {
-									// set the image if one is present ...
-									myButton->SetImage(m_listElement[jjj]->m_image);
-									myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
-									myButton->SetExpendX(true);
-									myButton->SetFillX(true);
-									myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
-									// add it in the widget list
-									mySizerVert->SubWidgetAdd(myButton);
-									m_listElement[jjj]->m_widgetPointer = myButton;
+						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
+							if (m_listElement[iii]!=NULL) {
+								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
+									myButton = new ewol::Button(m_listElement[jjj]->m_label);
+									if (NULL == myButton) {
+										EWOL_ERROR("Allocation Error");
+									} else {
+										// set the image if one is present ...
+										myButton->SetImage(m_listElement[jjj]->m_image);
+										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
+										myButton->SetExpendX(true);
+										myButton->SetFillX(true);
+										myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
+										// add it in the widget list
+										mySizerVert->SubWidgetAdd(myButton);
+										m_listElement[jjj]->m_widgetPointer = myButton;
+									}
 								}
 							}
 						}

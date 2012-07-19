@@ -123,11 +123,11 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 		{
 			case ewol::CONTEXT_MENU_MARK_TOP:
 				subWidgetOrigin.x = (int32_t)(m_arrowPos.x - subWidgetSize.x/2);
-				subWidgetOrigin.y = (int32_t)(m_arrowPos.y + m_offset);
+				subWidgetOrigin.y = (int32_t)(m_arrowPos.y - m_offset - subWidgetSize.y);
 				break;
 			case ewol::CONTEXT_MENU_MARK_BOTTOM:
 				subWidgetOrigin.x = (int32_t)(m_arrowPos.x - subWidgetSize.x/2);
-				subWidgetOrigin.y = (int32_t)(m_arrowPos.y - m_offset - subWidgetSize.y);
+				subWidgetOrigin.y = (int32_t)(m_arrowPos.y + m_offset);
 				break;
 			case ewol::CONTEXT_MENU_MARK_RIGHT:
 			case ewol::CONTEXT_MENU_MARK_LEFT:
@@ -252,18 +252,6 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
 				if (m_arrowPos.x <= tmpOrigin.x ) {
 					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
-					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y+laking);
-				} else {
-					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
-					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y+laking);
-				}
-				break;
-			case ewol::CONTEXT_MENU_MARK_BOTTOM:
-				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
-				if (m_arrowPos.x <= tmpOrigin.x ) {
-					int32_t laking = m_offset - m_padding.y;
 					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y-laking);
 					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y-laking);
 				} else {
@@ -272,6 +260,17 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y-laking);
 				}
 				break;
+			case ewol::CONTEXT_MENU_MARK_BOTTOM:
+				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
+				if (m_arrowPos.x <= tmpOrigin.x ) {
+					int32_t laking = m_offset - m_padding.y;
+					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
+					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y+laking);
+				} else {
+					int32_t laking = m_offset - m_padding.y;
+					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
+					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y+laking);
+				}
 				break;
 			default:
 			case ewol::CONTEXT_MENU_MARK_RIGHT:
