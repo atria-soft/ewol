@@ -200,7 +200,7 @@ void ewol::List::OnRegenerateDisplay(void)
 			startRaw = 0;
 		}
 		// Calculate the real position ...
-		tmpOriginY = -m_originScrooled.y + startRaw*(minHeight + 2*m_paddingSizeY);
+		tmpOriginY = -m_originScrooled.y + (startRaw+1)*(minHeight + 2*m_paddingSizeY);
 		
 		// We display only compleate lines ...
 		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << " ==> " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
@@ -217,13 +217,13 @@ void ewol::List::OnRegenerateDisplay(void)
 			color_ts bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
 			BGOObjects->SetColor(bg);
-			BGOObjects->Rectangle(0, tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);
+			BGOObjects->Rectangle(0, m_size.y - tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);
 			
 			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
 			
 			Vector2D<float> textPos;
 			textPos.x = tmpOriginX;
-			textPos.y = tmpOriginY + m_paddingSizeY;
+			textPos.y = m_size.y - tmpOriginY + m_paddingSizeY;
 			tmpText->Text(textPos, drawClipping, myTextToWrite);
 			
 			AddOObject(tmpText);
@@ -249,6 +249,9 @@ void ewol::List::OnRegenerateDisplay(void)
 bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	Vector2D<float> relativePos = RelativePosition(pos);
+	// corection for the openGl abstraction
+	relativePos.y = m_size.y - relativePos.y;
+	
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...

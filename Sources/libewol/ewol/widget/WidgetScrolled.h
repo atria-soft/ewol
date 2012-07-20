@@ -52,11 +52,12 @@ namespace ewol {
 		protected:
 			Vector2D<float>          m_originScrooled;
 			Vector2D<float>          m_maxSize;
-			float         m_zoom; //!< current zoom on the display
+			float                    m_zoom; //!< current zoom on the display
+			float                    m_limitScrolling;
 		private:
 			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
-			float         m_pixelScrolling;
-			Vector2D<float>          m_highSpeedStartPos;
+			float              m_pixelScrolling;
+			Vector2D<float>    m_highSpeedStartPos;
 			highSpeedMode_te   m_highSpeedMode;
 			int32_t            m_highSpeedButton;
 			ewol::inputType_te m_highSpeedType;
@@ -125,6 +126,12 @@ namespace ewol {
 			 * @return ---
 			 */
 			void SetScrollingPositionDynamic(Vector2D<float>  borderWidth, Vector2D<float>  currentPosition, bool center = false);
+			/**
+			 * @brief Set the scrolling limit when arriving at he end of the widget
+			 * @param[in] poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
+			 * @return ---
+			 */
+			void SetLimitScrolling(float poucentageLimit) { m_limitScrolling = etk_avg(0.1, poucentageLimit,0.9); };
 	};
 	
 	extern const char * const TYPE_EOBJECT_WIDGET_SCROOLED;

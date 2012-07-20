@@ -40,10 +40,12 @@ namespace ewol {
 	class elementPL
 	{
 		public :
+			bool            m_group;
 			etk::UString    m_label;
 			int32_t         m_refId;
 			etk::UString    m_image;
-			elementPL(etk::UString& label, int32_t refId, etk::UString& image) :
+			elementPL(etk::UString& label, int32_t refId, etk::UString& image, bool isGroup) :
+				m_group(isGroup),
 				m_label(label),
 				m_refId(refId),
 				m_image(image)
@@ -107,7 +109,7 @@ namespace ewol {
 			void OnLostFocus(void);
 		public:
 			void MenuAdd(etk::UString& label, int32_t refId, etk::UString& image);
-			void MenuRm(etk::UString& ref);
+			void MenuAddGroup(etk::UString& label);
 			void MenuClear(void);
 			void MenuSeparator(void);
 	};

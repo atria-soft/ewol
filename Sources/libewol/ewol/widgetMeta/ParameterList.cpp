@@ -207,7 +207,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 			startRaw = 0;
 		}
 		// Calculate the real position ...
-		tmpOriginY = -m_originScrooled.y + startRaw*(minHeight + 2*m_paddingSizeY);
+		tmpOriginY = m_size.y - (-m_originScrooled.y + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
 		
 		clipping_ts drawClipping;
 		drawClipping.x = 0;
@@ -226,11 +226,14 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 			
 			Vector2D<float> textPos;
 			textPos.x = (int32_t)tmpOriginX;
+			if (m_list[iii]->m_group == false) {
+				textPos.x += minHeight;
+			}
 			textPos.y = (int32_t)(tmpOriginY + m_paddingSizeY);
 			tmpText->Text(textPos, drawClipping, myTextToWrite);
 			
 			AddOObject(tmpText);
-			tmpOriginY += minHeight + 2* m_paddingSizeY;
+			tmpOriginY -= minHeight + 2* m_paddingSizeY;
 		}
 		AddOObject(BGOObjects, 0);
 		
@@ -258,6 +261,8 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 	}
 	if (IdInput == 1 && typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 		Vector2D<float> relativePos = RelativePosition(pos);
+		// corection for the openGl abstraction
+		relativePos.y = m_size.y - relativePos.y;
 		int32_t fontId = GetDefaultFontId();
 		//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t minHeight = ewol::GetHeight(fontId);
@@ -292,7 +297,7 @@ void ewol::ParameterList::OnLostFocus(void)
 
 void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UString& image)
 {
-	ewol::elementPL* tmpEmement = new ewol::elementPL(label, refId, image);
+	ewol::elementPL* tmpEmement = new ewol::elementPL(label, refId, image, false);
 	if (NULL != tmpEmement) {
 		m_list.PushBack(tmpEmement);
 		if (m_idSelected == -1 && label != "---" && refId>0) {
@@ -301,6 +306,16 @@ void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UStri
 		MarkToReedraw();
 	}
 }
+void ewol::ParameterList::MenuAddGroup(etk::UString& label)
+{
+	etk::UString image = "";
+	ewol::elementPL* tmpEmement = new ewol::elementPL(label, -1, image, true);
+	if (NULL != tmpEmement) {
+		m_list.PushBack(tmpEmement);
+		MarkToReedraw();
+	}
+}
+
 
 void ewol::ParameterList::MenuClear(void)
 {
@@ -311,12 +326,15 @@ void ewol::ParameterList::MenuClear(void)
 			m_list[iii] = NULL;
 		}
 	}
+	m_list.Clear();
 }
 
 void ewol::ParameterList::MenuSeparator(void)
 {
-	etk::UString label = "---";
-	etk::UString image = "";
-	MenuAdd(label, -1, image);
+	if (m_list.Size()>0) {
+		etk::UString label = "";
+		etk::UString image = "";
+		MenuAdd(label, -1, image);
+	}
 }
 

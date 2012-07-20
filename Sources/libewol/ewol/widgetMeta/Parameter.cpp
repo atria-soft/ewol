@@ -270,6 +270,8 @@ void ewol::Parameter::MenuAdd(etk::UString label, etk::UString image, ewol::Widg
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
+					myLabel->SetExpendY(true);
+					myLabel->SetExpendX(true);
 					m_wSlider->SubWidgetAdd(myLabel);
 				}
 			}
@@ -278,6 +280,13 @@ void ewol::Parameter::MenuAdd(etk::UString label, etk::UString image, ewol::Widg
 			}
 		}
 		m_currentIdList++;
+	}
+}
+void ewol::Parameter::MenuAddGroup(etk::UString label)
+{
+	if (NULL != m_paramList) {
+		m_paramList->MenuSeparator();
+		m_paramList->MenuAddGroup(label);
 	}
 }
 

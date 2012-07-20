@@ -77,6 +77,7 @@ namespace ewol {
 			
 			void SetTitle(etk::UString label);
 			void MenuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget);
+			void MenuAddGroup(etk::UString label);
 			void MenuClear(void);
 			void MenuSeparator(void);
 		private:
