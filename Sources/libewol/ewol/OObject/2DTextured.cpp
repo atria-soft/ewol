@@ -95,7 +95,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	Vector2D<float> point;
 	texCoord_ts tex;
 
-	tex.u = texSX;
+	tex.u = texX;
 	tex.v = texSY;
 	point.x = x;
 	point.y = y;
@@ -104,7 +104,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	m_coordColor.PushBack(tmpColor);
 
 
-	tex.u = texX;
+	tex.u = texSX;
 	tex.v = texSY;
 	point.x = x + w;
 	point.y = y;
@@ -113,7 +113,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	m_coordColor.PushBack(tmpColor);
 
 
-	tex.u = texX;
+	tex.u = texSX;
 	tex.v = texY;
 	point.x = x + w;
 	point.y = y + h;
@@ -125,7 +125,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(tmpColor);
 
-	tex.u = texSX;
+	tex.u = texX;
 	tex.v = texY;
 	point.x = x;
 	point.y = y + h;
@@ -133,7 +133,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(tmpColor);
 
-	tex.u = texSX;
+	tex.u = texX;
 	tex.v = texSY;
 	point.x = x;
 	point.y = y;
