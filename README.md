@@ -3,39 +3,49 @@ Edn
 
 `Ewol` (Edn Widget OpenGl Layer) is a FREE software.
 
-This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY.
-
 Instructions
 ============
 
 download the software :
 
 	git clone git://github.com/HeeroYui/ewol.git
-	cd edn
+	cd ewol
+	git submodule init
+	git submodule update
 
 Compile software and install :
 
-	sudo make DEBUG=0 install
+	For this you might use a priject that create binaies or somting else ...
+	Show http://github.com/HeeroYui/edn project
 
-Run Software :
+License (DSB like)
+==================
 
-	???
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
 
-License
-=======
+  1. Redistributions of source code must retain the above copyright
+     notice, this list of conditions and the following disclaimer.
 
-	You can:
-		- Redistribute the sources code and binaries.
-		- Modify the Sources code.
-		- Use a part of the sources (less than 50%) in an other software, just write somewhere "Edn is great" visible by the user (on your product or on your website with a link to my page).
-		- Redistribute the modification only if you want.
-		- Send me the bug-fix (it could be great).
-		- Pay me a beer or some other things.
-		- Print the source code on WC paper ...
-	You can NOT:
-		- Earn money with this Software (But I can).
-		- Add malware in the Sources.
-		- Do something bad with the sources.
-		- Use it to travel in the space with a toaster.
-	
-	I reserve the right to change this licence. If it change the version of the copy you have keep its own license
+  2. Redistributions in binary form must reproduce the above copyright
+     notice, this list of conditions and the following disclaimer in
+     the documentation and/or other materials provided with the
+     distribution.
+
+  3. The name of the author may not be used to endorse or promote
+     products derived from this software without specific prior
+     written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
