@@ -47,44 +47,6 @@ ewol::Menu::~Menu(void)
 }
 
 
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_MENU = "Menu";
-
-/**
- * @brief Check if the object has the specific type.
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type of the object we want to check
- * @return true if the object is compatible, otherwise false
- */
-bool ewol::Menu::CheckObjectType(const char * const objectType)
-{
-	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_MENU << "\" != NULL(pointer) ");
-		return false;
-	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_MENU) {
-		return true;
-	} else {
-		if(true == ewol::SizerHori::CheckObjectType(objectType)) {
-			return true;
-		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_MENU << "\" != \"" << objectType << "\"");
-		return false;
-	}
-}
-
-/**
- * @brief Get the current Object type of the EObject
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type description
- * @return true if the object is compatible, otherwise false
- */
-const char * const ewol::Menu::GetObjectType(void)
-{
-	return ewol::TYPE_EOBJECT_WIDGET_MENU;
-}
-
-
 void ewol::Menu::SubWidgetRemoveAll(void)
 {
 	Clear();
@@ -210,7 +172,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 					}
 					// Get the button widget : 
 					Vector2D<float> newPosition;
-					ewol::Widget * eventFromWidget = EWOL_CAST_WIDGET(CallerObject);
+					ewol::Widget * eventFromWidget = static_cast<ewol::Widget*>(CallerObject);
 					if (NULL != eventFromWidget) {
 						Vector2D<float> tmpOri  = eventFromWidget->GetOrigin();
 						Vector2D<float> tmpSize = eventFromWidget->GetSize();

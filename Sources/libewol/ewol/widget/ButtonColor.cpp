@@ -87,44 +87,6 @@ ewol::ButtonColor::~ButtonColor(void)
 	
 }
 
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_BUTTON_COLOR = "ButtonColor";
-
-/**
- * @brief Check if the object has the specific type.
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type of the object we want to check
- * @return true if the object is compatible, otherwise false
- */
-bool ewol::ButtonColor::CheckObjectType(const char * const objectType)
-{
-	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_BUTTON_COLOR << "\" != NULL(pointer) ");
-		return false;
-	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_BUTTON_COLOR) {
-		return true;
-	} else {
-		if(true == ewol::Drawable::CheckObjectType(objectType)) {
-			return true;
-		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_BUTTON_COLOR << "\" != \"" << objectType << "\"");
-		return false;
-	}
-}
-
-/**
- * @brief Get the current Object type of the EObject
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type description
- * @return true if the object is compatible, otherwise false
- */
-const char * const ewol::ButtonColor::GetObjectType(void)
-{
-	return ewol::TYPE_EOBJECT_WIDGET_BUTTON_COLOR;
-}
-
-
 
 void ewol::ButtonColor::SetPadding(Vector2D<float> newPadding)
 {
@@ -309,22 +271,19 @@ void ewol::ButtonColor::SetCurrentColor(color_ts color)
 void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	if (eventId == ewolEventColorChooserChange) {
-		//==> this is an internal event ...
-		ewol::ColorChooser * myColorChooser = EWOL_CAST_WIDGET_COLOR_CHOOSER(CallerObject);
-		if (NULL != myColorChooser) {
-			color_ts tmpColor = myColorChooser->GetColor();
-			
-			m_selectedColor = tmpColor;
-			m_textColorBg = m_selectedColor;
-			char colorText[256];
-			sprintf(colorText, "#%02X%02X%02X%02X",
-			        (uint8_t)(tmpColor.red   * 0xFF),
-			        (uint8_t)(tmpColor.green * 0xFF),
-			        (uint8_t)(tmpColor.blue  * 0xFF),
-			        (uint8_t)(tmpColor.alpha * 0xFF));
-			//set the new label ...
-			SetLabel(colorText);
-			GenerateEventId(ewolEventButtonColorChange);
-		}
+		// TODO : Parse the input color ...
+		//color_ts tmpColor(data);
+		color_ts tmpColor;
+		m_selectedColor = tmpColor;
+		m_textColorBg = m_selectedColor;
+		char colorText[256];
+		sprintf(colorText, "#%02X%02X%02X%02X",
+		        (uint8_t)(tmpColor.red   * 0xFF),
+		        (uint8_t)(tmpColor.green * 0xFF),
+		        (uint8_t)(tmpColor.blue  * 0xFF),
+		        (uint8_t)(tmpColor.alpha * 0xFF));
+		//set the new label ...
+		SetLabel(colorText);
+		GenerateEventId(ewolEventButtonColorChange);
 	}
 }

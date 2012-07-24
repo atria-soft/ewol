@@ -122,44 +122,6 @@ ewol::ColorChooser::~ColorChooser(void)
 }
 
 
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_COLOR_CHOOSER = "ColorChooser";
-
-/**
- * @brief Check if the object has the specific type.
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type of the object we want to check
- * @return true if the object is compatible, otherwise false
- */
-bool ewol::ColorChooser::CheckObjectType(const char * const objectType)
-{
-	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_COLOR_CHOOSER << "\" != NULL(pointer) ");
-		return false;
-	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_COLOR_CHOOSER) {
-		return true;
-	} else {
-		if(true == ewol::SizerVert::CheckObjectType(objectType)) {
-			return true;
-		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_COLOR_CHOOSER << "\" != \"" << objectType << "\"");
-		return false;
-	}
-}
-
-/**
- * @brief Get the current Object type of the EObject
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type description
- * @return true if the object is compatible, otherwise false
- */
-const char * const ewol::ColorChooser::GetObjectType(void)
-{
-	return ewol::TYPE_EOBJECT_WIDGET_COLOR_CHOOSER;
-}
-
-
 void ewol::ColorChooser::SetColor(color_ts newColor)
 {
 	m_currentColor = newColor;
@@ -220,7 +182,8 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 		if (NULL != m_widgetAlpha) {
 			m_widgetAlpha->SetValue(m_currentColor.alpha);
 		}
-		GenerateEventId(ewolEventColorChooserChange);
+		// TODO : send the real color ...
+		GenerateEventId(ewolEventColorChooserChange, "0x51452563");
 	} else if (eventColorSpecificHasChange == eventId) {
 		// Slider has changes his color ==> get the one change ...
 		if (CallerObject == m_widgetRed) {
@@ -236,9 +199,10 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 			m_currentColor.alpha = m_widgetAlpha->GetValue();
 		}
 		if (NULL != m_widgetColorBar) {
-			 m_widgetColorBar->SetCurrentColor(m_currentColor);
+			m_widgetColorBar->SetCurrentColor(m_currentColor);
 		}
-		GenerateEventId(ewolEventColorChooserChange);
+		// TODO : send the real color ...
+		GenerateEventId(ewolEventColorChooserChange, "0x51452563");
 	}
 };
 

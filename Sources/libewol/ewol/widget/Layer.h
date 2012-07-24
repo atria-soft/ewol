@@ -36,20 +36,12 @@ namespace ewol {
 			Layer(void);
 			virtual ~Layer(void);
 			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual bool CheckObjectType(const char * const objectType);
-			
-			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void);
+			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
 		public:
 			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
@@ -94,10 +86,6 @@ namespace ewol {
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_LAYER;
-	
 };
-
-#define EWOL_CAST_WIDGET_LAYER(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_LAYER,ewol::Layer,curentPointer)
 
 #endif

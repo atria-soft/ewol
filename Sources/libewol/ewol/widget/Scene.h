@@ -44,20 +44,12 @@ namespace ewol {
 			Scene(void);
 			virtual ~Scene(void);
 			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual bool CheckObjectType(const char * const objectType);
-			
-			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void);
+			virtual const char * const GetObjectType(void) { return "EwolScene"; };
 			virtual void OnRegenerateDisplay(void);
 			
 			/**
@@ -108,10 +100,6 @@ namespace ewol {
 	 */
 	void WIDGET_SceneInit(void);
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_SCENE;
-	
 };
-#define EWOL_CAST_WIDGET_SCENE(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_SCENE,ewol::Scene,curentPointer)
-
 
 #endif

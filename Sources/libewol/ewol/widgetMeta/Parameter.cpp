@@ -176,45 +176,6 @@ ewol::Parameter::~Parameter(void)
 }
 
 
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT_WIDGET_PARAMETER = "Parameter";
-
-/**
- * @brief Check if the object has the specific type.
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type of the object we want to check
- * @return true if the object is compatible, otherwise false
- */
-bool ewol::Parameter::CheckObjectType(const char * const objectType)
-{
-	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_PARAMETER << "\" != NULL(pointer) ");
-		return false;
-	}
-	if (objectType == ewol::TYPE_EOBJECT_WIDGET_PARAMETER) {
-		return true;
-	} else {
-		if(true == ewol::PopUp::CheckObjectType(objectType)) {
-			return true;
-		}
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT_WIDGET_PARAMETER << "\" != \"" << objectType << "\"");
-		return false;
-	}
-}
-
-/**
- * @brief Get the current Object type of the EObject
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type description
- * @return true if the object is compatible, otherwise false
- */
-const char * const ewol::Parameter::GetObjectType(void)
-{
-	return ewol::TYPE_EOBJECT_WIDGET_PARAMETER;
-}
-
-
-
 void ewol::Parameter::SetTitle(etk::UString label)
 {
 	if (NULL == m_widgetTitle) {

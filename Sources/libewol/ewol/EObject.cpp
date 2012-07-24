@@ -160,39 +160,6 @@ int32_t ewol::EObject::GetId(void)
 	return m_uniqueId;
 };
 
-//!< EObject name :
-extern const char * const ewol::TYPE_EOBJECT = "EObject";
-
-/**
- * @brief Check if the object has the specific type.
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type of the object we want to check
- * @return true if the object is compatible, otherwise false
- */
-bool ewol::EObject::CheckObjectType(const char * const objectType)
-{
-	if (NULL == objectType) {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT << "\" != NULL(pointer) ");
-		return false;
-	}
-	if (objectType == ewol::TYPE_EOBJECT) {
-		return true;
-	} else {
-		EWOL_ERROR("check error : \"" << ewol::TYPE_EOBJECT << "\" != \"" << objectType << "\"");
-		return false;
-	}
-}
-
-/**
- * @brief Get the current Object type of the EObject
- * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
- * @param[in] objectType type description
- * @return true if the object is compatible, otherwise false
- */
-const char * const ewol::EObject::GetObjectType(void)
-{
-	return ewol::TYPE_EOBJECT;
-}
 
 /**
  * @brief Add a specific event Id in the list to prevent wrong link on a EObject

@@ -41,20 +41,12 @@ namespace ewol {
 			Entry(etk::UString newData);
 			virtual ~Entry(void);
 			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual bool CheckObjectType(const char * const objectType);
-			
-			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void);
+			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
 			void Init(void);
 			virtual bool   CalculateMinSize(void);
 			void           SetValue(etk::UString newData);
@@ -106,10 +98,6 @@ namespace ewol {
 			virtual void OnLostFocus(void);
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_ENTRY;
-	
 };
-
-#define EWOL_CAST_WIDGET_ENTRY(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_ENTRY,ewol::Entry,curentPointer)
 
 #endif

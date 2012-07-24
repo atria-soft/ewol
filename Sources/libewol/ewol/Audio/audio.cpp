@@ -358,7 +358,7 @@ void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 		EWOL_ERROR("effect ID : " << effectId << " ==> has been removed");
 		return;
 	}
-	EWOL_ERROR("effect play : " << effectId );
+	EWOL_VERBOSE("effect play : " << effectId );
 	// try to find an empty slot :
 	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
 		if (ListEffectsPlaying[iii]->IsFree()) {

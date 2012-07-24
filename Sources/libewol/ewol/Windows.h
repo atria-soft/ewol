@@ -38,20 +38,12 @@ namespace ewol {
 			Windows(void);
 			virtual ~Windows(void);
 			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual bool CheckObjectType(const char * const objectType);
-			
-			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void);
+			virtual const char * const GetObjectType(void) { return "EwolWindows"; };
 		// internal event at ewol system : 
 		public:
 			void SysDraw(void);
@@ -111,10 +103,7 @@ namespace ewol {
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_WINDOWS;
-	
 };
-#define EWOL_CAST_WIDGET_WINDOWS(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_WINDOWS,ewol::Windows,curentPointer)
 
 #endif
 

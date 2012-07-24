@@ -32,9 +32,6 @@ extern const char * const ewolEventFSFileValidate;
 extern const char * const ewolEventFSFolderSelect;
 extern const char * const ewolEventFSFolderValidate;
 
-//!< EObject name :
-extern const char * const TYPE_EOBJECT_WIDGET_FILE_LIST;
-
 namespace ewol {
 	typedef enum {
 		EFS_FOLDER,
@@ -76,20 +73,12 @@ namespace ewol {
 			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg);
 			bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
 			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			bool CheckObjectType(const char * const objectType);
-			
-			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			const char * const GetObjectType(void);
+			const char * const GetObjectType(void) { return "EwolListFileSystem"; };
 		public:
 			// extern API :
 			void         SetFolder(etk::UString newFolder);
@@ -105,8 +94,6 @@ namespace ewol {
 			void         SetShowTemporaryFiles(bool state);
 	};
 };
-
-#define EWOL_CAST_WIDGET_FILE_LIST(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_FILE_LIST,FileChooserFileList,curentPointer)
 
 #endif
 

@@ -34,13 +34,6 @@ namespace ewol {
 		public:
 			Drawable(void);
 			virtual ~Drawable(void);
-			/**
-			 * @brief Check if the object has the specific type.
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type of the object we want to check
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual bool CheckObjectType(const char * const objectType);
 			
 			/**
 			 * @brief Get the current Object type of the EObject
@@ -48,7 +41,7 @@ namespace ewol {
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void);
+			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
 			
 		private:
 			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
@@ -59,12 +52,7 @@ namespace ewol {
 			virtual void OnDraw(DrawProperty& displayProp);
 	};
 	
-	extern const char * const TYPE_EOBJECT_WIDGET_DRAWABLE;
-	
 };
-
-
-#define EWOL_CAST_WIDGET_DRAWABLE(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_DRAWABLE,ewol::Drawable,curentPointer)
 
 #endif
 
