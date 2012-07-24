@@ -129,4 +129,8 @@ bool ewol::IsSetInsert(void)
 }
 
 
+etk::UString ewol::GetVersion(void)
+{
+	return EWOL_VERSION_TAG_NAME;
+}
 

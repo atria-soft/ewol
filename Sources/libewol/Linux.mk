@@ -24,7 +24,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DEWOL_USE_FREE_TYPE \
                 -DLUA_COMPAT_ALL \
                 -Wall
@@ -35,7 +35,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-release\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DLUA_COMPAT_ALL \
                 -DEWOL_USE_FREE_TYPE
 

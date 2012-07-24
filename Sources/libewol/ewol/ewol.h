@@ -76,6 +76,8 @@ namespace ewol {
 	
 	void SetTitle(etk::UString title);
 	void RequestUpdateSize(void);
+	
+	etk::UString GetVersion(void);
 };
 // get current time in ms...
 int64_t GetCurrentTime(void);

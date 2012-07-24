@@ -109,14 +109,40 @@ ewol::Parameter::Parameter(void) :
 				m_paramList->SetExpendY(true);
 				mySizerHori->SubWidgetAdd(m_paramList);
 			}
-			
-			m_wSlider = new ewol::WSlider();
-			if (NULL == m_wSlider) {
+			mySpacer = new ewol::Spacer();
+			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_wSlider->SetExpendX(true);
-				m_wSlider->SetExpendY(true);
-				mySizerHori->SubWidgetAdd(m_wSlider);
+				mySpacer->SetExpendY(true);
+				mySpacer->SetSize(5);
+				mySpacer->SetColor(0x000000BF);
+				mySizerHori->SubWidgetAdd(mySpacer);
+			}
+			
+			ewol::SizerVert * mySizerVert2 = new ewol::SizerVert();
+			if (NULL == mySizerVert2) {
+				EWOL_ERROR("Can not allocate widget ==> display might be in error");
+			} else {
+				mySizerHori->SubWidgetAdd(mySizerVert2);
+				
+				mySpacer = new ewol::Spacer();
+				if (NULL == mySpacer) {
+					EWOL_ERROR("Can not allocate widget ==> display might be in error");
+				} else {
+					mySpacer->SetExpendX(true);
+					mySpacer->SetSize(5);
+					mySpacer->SetColor(0x000000BF);
+					mySizerVert2->SubWidgetAdd(mySpacer);
+				}
+				
+				m_wSlider = new ewol::WSlider();
+				if (NULL == m_wSlider) {
+					EWOL_ERROR("Can not allocate widget ==> display might be in error");
+				} else {
+					m_wSlider->SetExpendX(true);
+					m_wSlider->SetExpendY(true);
+					mySizerVert2->SubWidgetAdd(m_wSlider);
+				}
 			}
 		}
 		

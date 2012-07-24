@@ -24,7 +24,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DETK_DEBUG_LEVEL=3 \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DDATA_IN_APK \
                 -DLUA_COMPAT_ALL \
                 -frtti
@@ -34,7 +34,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DETK_DEBUG_LEVEL=1 \
                 -DEWOL_DEBUG_LEVEL=1 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
-                -DVERSION_BUILD_TIME="\"pasd_heure\"" \
+                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DDATA_IN_APK \
                 -DLUA_COMPAT_ALL \
                 -frtti

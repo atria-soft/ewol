@@ -96,7 +96,7 @@ static void* BaseAppEntry(void* param)
 	EWOL_DEBUG("==> Init BThread (START)");
 	
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
-	EWOL_INFO("Build Date: " VERSION_BUILD_TIME);
+	EWOL_INFO("Build Date: " BUILD_TIME);
 	
 	etk::InitDefaultFolder("ewolApplNoName");
 
