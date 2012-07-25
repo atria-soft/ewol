@@ -78,16 +78,22 @@ void ewol::audio::UnInit(void)
 	musicFadingTime = 0;
 }
 
-static float angle = 0;
+static ewol::audio::AudioCallback userLocalCallback = NULL;
 
 void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
 {
+	// TODO : set the real playing time ...
+	currentTimePlaying += 10;
 	if (nbChannels != 2) {
 		EWOL_ERROR("TODO : Support the signal mono or more tha stereo ...");
 		return;
 	}
 	// reset the current buffer
 	memset(bufferInterlace, 0, nbSample*sizeof(int16_t)*nbChannels);
+	// get user data ...
+	if (NULL != userLocalCallback) {
+		(*userLocalCallback)(bufferInterlace, nbSample, nbChannels);
+	}
 	// get background music :
 	ewol::audio::music::GetData(bufferInterlace, nbSample, nbChannels);
 	// add effects :
@@ -98,6 +104,11 @@ void ewol::audio::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t n
 	}
 }
 
+
+void ewol::audio::AddCallbackOutput(ewol::audio::AudioCallback userCallback)
+{
+	userLocalCallback = userCallback;
+}
 
 void ewol::audio::music::Fading(int32_t timeMs)
 {

@@ -22,6 +22,7 @@
  *******************************************************************************
  */
 
+#include <ewol/ewol.h>
 #include <ewol/Debug.h>
 #include <ewol/Game/GameElement.h>
 #include <ewol/Game/GameElementLua.h>

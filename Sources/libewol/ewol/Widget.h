@@ -174,7 +174,7 @@ namespace ewol {
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			Vector2D<float>  RelativePosition(Vector2D<float>  pos) { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
+			virtual Vector2D<float>  RelativePosition(Vector2D<float>  pos) { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size

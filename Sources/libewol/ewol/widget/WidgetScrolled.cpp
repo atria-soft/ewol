@@ -55,33 +55,37 @@ ewol::WidgetScrooled::~WidgetScrooled(void)
 void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 {
 	ClearOObjectList();
-	ewol::OObject2DColored* myOObjectsColored = NULL;
-	if(m_size.y < m_maxSize.y || m_size.x < m_maxSize.x) {
-		myOObjectsColored = new ewol::OObject2DColored();
-		myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.6);
-	}
-	if(m_size.y < m_maxSize.y) {
-		//myOObjectsColored->Line(m_size.x-SCROLL_BAR_SPACE, SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
-		myOObjectsColored->Line(m_size.x-(SCROLL_BAR_SPACE/2), SCROLL_BAR_SPACE, m_size.x-(SCROLL_BAR_SPACE/2), m_size.y, 1);
-		float lenScrollBar = m_size.y*(m_size.y-SCROLL_BAR_SPACE) / m_maxSize.y;
-		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.y-SCROLL_BAR_SPACE));
-		float originScrollBar = m_originScrooled.y / (m_maxSize.y-m_size.y*m_limitScrolling);
-		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-		originScrollBar *= (m_size.y-SCROLL_BAR_SPACE-lenScrollBar);
-		myOObjectsColored->Rectangle(m_size.x-SCROLL_BAR_SPACE, m_size.y - originScrollBar - lenScrollBar, SCROLL_BAR_SPACE, lenScrollBar);
-	}
-	if(m_size.x < m_maxSize.x) {
-		//myOObjectsColored->Line(SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
-		myOObjectsColored->Line(0, (SCROLL_BAR_SPACE/2), m_size.x-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2), 1);
-		float lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE) / m_maxSize.x;
-		lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x-SCROLL_BAR_SPACE));
-		float originScrollBar = m_originScrooled.x / (m_maxSize.x-m_size.x*m_limitScrolling);
-		originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-		originScrollBar *= (m_size.x-SCROLL_BAR_SPACE-lenScrollBar);
-		myOObjectsColored->Rectangle(originScrollBar, 0, lenScrollBar, SCROLL_BAR_SPACE);
-	}
-	if (NULL!=myOObjectsColored) {
-		AddOObject(myOObjectsColored);
+	if (SCROLL_MODE_GAME == m_scroollingMode) {
+		
+	} else {
+		ewol::OObject2DColored* myOObjectsColored = NULL;
+		if(m_size.y < m_maxSize.y || m_size.x < m_maxSize.x) {
+			myOObjectsColored = new ewol::OObject2DColored();
+			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.6);
+		}
+		if(m_size.y < m_maxSize.y) {
+			//myOObjectsColored->Line(m_size.x-SCROLL_BAR_SPACE, SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
+			myOObjectsColored->Line(m_size.x-(SCROLL_BAR_SPACE/2), SCROLL_BAR_SPACE, m_size.x-(SCROLL_BAR_SPACE/2), m_size.y, 1);
+			float lenScrollBar = m_size.y*(m_size.y-SCROLL_BAR_SPACE) / m_maxSize.y;
+			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.y-SCROLL_BAR_SPACE));
+			float originScrollBar = m_originScrooled.y / (m_maxSize.y-m_size.y*m_limitScrolling);
+			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+			originScrollBar *= (m_size.y-SCROLL_BAR_SPACE-lenScrollBar);
+			myOObjectsColored->Rectangle(m_size.x-SCROLL_BAR_SPACE, m_size.y - originScrollBar - lenScrollBar, SCROLL_BAR_SPACE, lenScrollBar);
+		}
+		if(m_size.x < m_maxSize.x) {
+			//myOObjectsColored->Line(SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
+			myOObjectsColored->Line(0, (SCROLL_BAR_SPACE/2), m_size.x-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2), 1);
+			float lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE) / m_maxSize.x;
+			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x-SCROLL_BAR_SPACE));
+			float originScrollBar = m_originScrooled.x / (m_maxSize.x-m_size.x*m_limitScrolling);
+			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
+			originScrollBar *= (m_size.x-SCROLL_BAR_SPACE-lenScrollBar);
+			myOObjectsColored->Rectangle(originScrollBar, 0, lenScrollBar, SCROLL_BAR_SPACE);
+		}
+		if (NULL!=myOObjectsColored) {
+			AddOObject(myOObjectsColored);
+		}
 	}
 }
 
@@ -293,6 +297,8 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 				return true;
 			}
 		}
+	} else if (SCROLL_MODE_GAME == m_scroollingMode) {
+		
 	} else {
 		EWOL_ERROR("Scrolling mode unknow ... " << m_scroollingMode );
 	}
@@ -359,6 +365,24 @@ void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
 		// Call the widget drawing methode
 		OnDraw(displayProp);
 		glPopMatrix();
+	} if (SCROLL_MODE_GAME == m_scroollingMode) {
+		glPushMatrix();
+		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+		glViewport( m_origin.x,
+		            m_origin.y,
+		            m_size.x,
+		            m_size.y);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrthoEwol(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//glScalef(m_zoom, m_zoom, 1.0);
+		glTranslatef(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
+		
+		// Call the widget drawing methode
+		OnDraw(displayProp);
+		glPopMatrix();
 	} else {
 		ewol::Widget::GenDraw(displayProp);
 	}
@@ -398,3 +422,19 @@ void ewol::WidgetScrooled::SetScrollingPositionDynamic(Vector2D<float> borderWid
 }
 
 
+
+/**
+ * @brief Specify the mode of scrolling for this windows
+ * @param[in] newMode the selected mode for the scrolling...
+ * @return ---
+ */
+void ewol::WidgetScrooled::ScroolingMode(scrollingMode_te newMode)
+{
+	m_scroollingMode = newMode;
+	if (SCROLL_MODE_GAME == m_scroollingMode) {
+		// set the scene maximum size :
+		m_maxSize.x = etk_max(ewol::GetCurrentHeight(), ewol::GetCurrentWidth());
+		m_maxSize.y = m_maxSize.x;
+		m_zoom = 1;
+	}
+}

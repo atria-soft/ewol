@@ -33,7 +33,7 @@
 
 
 namespace ewol {
-	class Scene :public ewol::WidgetScrooled
+	class Scene :public ewol::Widget
 	{
 		// TODO : Set it in private ...
 		protected:
@@ -82,6 +82,14 @@ namespace ewol {
 			 * @return ---
 			 */
 			void PauseToggle(void) { if(true==m_isRunning){ m_isRunning=false;}else{m_isRunning=true;} };
+			/**
+			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
+			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
+			 * @param ---
+			 * @return ---
+			 */
+			virtual void GenDraw(DrawProperty displayProp);
 		protected:
 			/**
 			 * @brief Periodic call in the sub element timed
@@ -90,6 +98,26 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
+		// camera properties :
+		private:
+			Vector3D<float>   m_camRotation;
+			Vector3D<float>   m_camTranslation;
+			float             m_camAngleView;
+			float             m_camdistanceViewStart;
+			float             m_camdistanceViewStop;
+			float             m_zoom;
+		public:
+			void SetCamaraTranslation();
+			void SetCamaraRotation();
+			void SetCamaraAngleView();
+			void SetCamaraDistanceViewStart();
+			void SetCamaraDistanceViewStop();
+			/**
+			 * @brief Convert the absolute position in the local Position (Relative)
+			 * @param[in] pos Absolute position that you request convertion
+			 * @return the relative position
+			 */
+			virtual Vector2D<float>  RelativePosition(Vector2D<float>  pos);
 	};
 	
 	/**

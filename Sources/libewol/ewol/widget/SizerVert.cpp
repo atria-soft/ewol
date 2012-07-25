@@ -125,7 +125,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerVert::SetMinSise(float x, float y)
+void ewol::SizerVert::SetMinSize(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }

@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
  * @file ewol/widget/SizerHori.cpp
- * @brief ewol hirisantal sizer widget system (Sources)
+ * @brief ewol horisantal sizer widget system (Sources)
  * @author Edouard DUPIN
  * @date 07/11/2011
  * @par Project
@@ -122,7 +122,7 @@ bool ewol::SizerHori::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerHori::SetMinSise(float x, float y)
+void ewol::SizerHori::SetMinSize(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }

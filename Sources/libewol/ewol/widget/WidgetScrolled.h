@@ -42,6 +42,7 @@ namespace ewol {
 	typedef enum {
 		SCROLL_MODE_NORMAL, //!< No Zoom , can UP and down, left and right
 		SCROLL_MODE_CENTER, //!< Zoom enable, no move left and right
+		SCROLL_MODE_GAME, //!< Zoom enable, no move left and right
 	} scrollingMode_te;
 	class WidgetScrooled : public ewol::Widget
 	{
@@ -103,7 +104,7 @@ namespace ewol {
 			 * @param[in] newMode the selected mode for the scrolling...
 			 * @return ---
 			 */
-			void ScroolingMode(scrollingMode_te newMode) { m_scroollingMode = newMode; };
+			void ScroolingMode(scrollingMode_te newMode);
 			/**
 			 * @brief Set the specific mawimum size of the widget
 			 * @param[in] localSize new Maximum size

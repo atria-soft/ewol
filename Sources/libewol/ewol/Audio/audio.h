@@ -32,6 +32,10 @@ namespace ewol {
 	namespace audio {
 		void Init(void);
 		void UnInit(void);
+		
+		typedef void (*AudioCallback)(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
+		void AddCallbackOutput(AudioCallback userCallback);
+		
 		void GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
 		
 		namespace music {

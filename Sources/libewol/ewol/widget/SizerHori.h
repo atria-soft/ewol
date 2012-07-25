@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
  * @file ewol/widget/SizerHori.h
- * @brief ewol hirisantal sizer widget system (header)
+ * @brief ewol horisantal sizer widget system (header)
  * @author Edouard DUPIN
  * @date 07/11/2011
  * @par Project
@@ -46,7 +46,7 @@ namespace ewol {
 		public:
 			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(float x=-1, float y=-1);
+			virtual void   SetMinSize(float x=-1, float y=-1);
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual bool   CanExpentX(void);
 			virtual void   SetExpendY(bool newExpend=false);

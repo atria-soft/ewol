@@ -233,7 +233,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		return NULL;
 	}
 	EWOL_DEBUG("    dataSize : " << myHeader.dataSize);
-	int32_t globalDataSize = myHeader.dataSize;
+	//int32_t globalDataSize = myHeader.dataSize;
 	int32_t nbSample = (myHeader.dataSize/((myHeader.waveFormat.bitsPerSample/8)*myHeader.waveFormat.channelCount));
 	int32_t outputSize = nbChan*nbSample;
 	int16_t * outputData = (int16_t*)malloc(outputSize*sizeof(int16_t));

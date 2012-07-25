@@ -271,7 +271,7 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		int32_t tmpOriginY = etk_max(displayProp.m_origin.y, m_origin.y);
 		tmppp1 = displayProp.m_origin.y + displayProp.m_size.y;
 		tmppp2 = m_origin.y + m_size.y;
-		int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
+		//int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
 		
 		glViewport( tmpOriginX,
 		            tmpOriginY,
