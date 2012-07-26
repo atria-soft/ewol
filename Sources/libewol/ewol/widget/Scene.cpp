@@ -172,13 +172,17 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 	m_zoom = 1.0/1000.0;
 	// Clear the screen with transparency ...
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	//glEnable(GL_DEPTH_TEST);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
 	glScalef(m_zoom, m_zoom, m_zoom);
 	//glTranslatef(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
 	
 	// Call the widget drawing methode
 	OnDraw(displayProp);
+	//glDisable(GL_BLEND);
+	//glDisable(GL_DEPTH_TEST);
 	glPopMatrix();
 }
 
