@@ -139,7 +139,7 @@ template<class CLASS_TYPE> class RegExpNode{
 		 * @param[in,out] 
 		 * @return
 		 */
-		virtual int32_t Generate(etk::VectorType<int16_t> &data, int32_t startPos, int32_t nbElement)
+		virtual int32_t Generate(etk::VectorType<int16_t> &data)
 		{
 			return 0;
 		};

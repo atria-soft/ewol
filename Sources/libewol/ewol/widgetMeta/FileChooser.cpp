@@ -368,13 +368,17 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		UpdateCurrentFolder();
 	} else if (ewolEventFileChooserListFile == eventId) {
 		SetFileName(data);
-		GenerateEventId(eventId);
+		etk::UString tmpFileCompleatName = m_folder;
+		tmpFileCompleatName += m_file;
+		GenerateEventId(eventId, tmpFileCompleatName);
 	} else if(     eventId == ewolEventFileChooserListFileValidate 
 	           || (eventId == ewolEventFileChooserValidate       && m_file != "" )
 	           || (eventId == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the File ==> generate a validate
 		SetFileName(data);
-		GenerateEventId(ewolEventFileChooserValidate);
+		etk::UString tmpFileCompleatName = m_folder;
+		tmpFileCompleatName += m_file;
+		GenerateEventId(ewolEventFileChooserValidate, tmpFileCompleatName);
 		MarkToRemove();
 	} else if(ewolEventFileChooserHome == eventId) {
 		etk::UString tmpUserFolder = etk::GetUserHomeFolder();
