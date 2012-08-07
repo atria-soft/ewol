@@ -1270,16 +1270,16 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 
 #include <ewol/ewol.h>
 
-static etk::VectorType<etk::UString*> listArgs;
+static std::vector<etk::UString*> listArgs;
 
 int32_t ewol::CmdLineNb(void)
 {
-	return listArgs.Size();
+	return listArgs.size();
 }
 
 etk::UString ewol::CmdLineGet(int32_t id)
 {
-	if (id<0 && id>=listArgs.Size()) {
+	if (id<0 && id>=listArgs.size()) {
 		return "";
 	}
 	if (NULL == listArgs[id]) {
@@ -1317,7 +1317,7 @@ int main(int argc, char *argv[])
 		} else {
 			etk::UString* tmpString = new etk::UString(argv[i]);
 			if (NULL != tmpString) {
-				listArgs.PushBack(tmpString);
+				listArgs.push_back(tmpString);
 			}
 		}
 	}
@@ -1336,13 +1336,13 @@ int main(int argc, char *argv[])
 	guiAbstraction::Stop();
 	// uninit ALL :
 	EWOL_SystemStop();
-	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
+	for (int32_t iii=0; iii<listArgs.size(); iii++) {
 		if (NULL != listArgs[iii]) {
 			delete listArgs[iii];
 			listArgs[iii] = NULL;
 		}
 	}
-	listArgs.Clear();
+	listArgs.clear();
 	#ifdef PTHREAD_GUI_LOCK_MULTITHREAD
 		ret = pthread_mutex_destroy(&l_mutex);
 		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");

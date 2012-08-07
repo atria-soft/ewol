@@ -58,7 +58,7 @@ ewol::OObject2DText::~OObject2DText(void)
 
 void ewol::OObject2DText::Draw(void)
 {
-	if (m_coord.Size()<=0) {
+	if (m_coord.size()<=0) {
 		// TODO : a remètre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -70,7 +70,7 @@ void ewol::OObject2DText::Draw(void)
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );				// Enable Texture Coord Arrays
 	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
 	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
 	glDisableClientState( GL_TEXTURE_COORD_ARRAY );				// Disable Texture Coord Arrays
@@ -79,8 +79,8 @@ void ewol::OObject2DText::Draw(void)
 
 void ewol::OObject2DText::Clear(void)
 {
-	m_coord.Clear();
-	m_coordTex.Clear();
+	m_coord.clear();
+	m_coordTex.clear();
 }
 
 int32_t ewol::OObject2DText::Text(Vector2D<float> textPos, clipping_ts drawClipping, const etk::UString& unicodeString)

@@ -39,7 +39,7 @@ class EventShortCut {
 		uniChar_t     UnicodeValue;
 };
 
-static etk::VectorType<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
+static std::vector<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
 
 
 void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data)
@@ -56,7 +56,7 @@ void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_
 	newEvent->meta = meta;
 	newEvent->UnicodeValue = unicodeValue;
 	newEvent->eventData = data;
-	l_inputShortCutEvent.PushBack(newEvent);
+	l_inputShortCutEvent.push_back(newEvent);
 	return;
 }
 
@@ -100,25 +100,25 @@ void ewol::shortCut::Add(const char * descriptiveString, const char * generateEv
 
 void ewol::shortCut::Init(void)
 {
-	if (l_inputShortCutEvent.Size()>0) {
+	if (l_inputShortCutEvent.size()>0) {
 		EWOL_WARNING("Old element error in the shortCut system");
-		for(int32_t iii=0; iii< l_inputShortCutEvent.Size(); iii++) {
+		for(int32_t iii=0; iii< l_inputShortCutEvent.size(); iii++) {
 			delete(l_inputShortCutEvent[iii]);
 			l_inputShortCutEvent[iii] = NULL;
 		}
 	}
-	l_inputShortCutEvent.Clear();
+	l_inputShortCutEvent.clear();
 }
 
 void ewol::shortCut::UnInit(void)
 {
-	if (l_inputShortCutEvent.Size()>0) {
-		for(int32_t iii=0; iii< l_inputShortCutEvent.Size(); iii++) {
+	if (l_inputShortCutEvent.size()>0) {
+		for(int32_t iii=0; iii< l_inputShortCutEvent.size(); iii++) {
 			delete(l_inputShortCutEvent[iii]);
 			l_inputShortCutEvent[iii] = NULL;
 		}
 	}
-	l_inputShortCutEvent.Clear();
+	l_inputShortCutEvent.clear();
 }
 
 
@@ -129,7 +129,7 @@ bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniC
 		unicodeValue += 'a' - 'A';
 	}
 	//EWOL_INFO("Try to find generic shortcut ...");
-	for(int32_t iii=l_inputShortCutEvent.Size()-1; iii>=0; iii--) {
+	for(int32_t iii=l_inputShortCutEvent.size()-1; iii>=0; iii--) {
 		if(    l_inputShortCutEvent[iii]->shift == shift
 		    && l_inputShortCutEvent[iii]->control == control
 		    && l_inputShortCutEvent[iii]->alt == alt

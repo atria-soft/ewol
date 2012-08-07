@@ -70,13 +70,13 @@ void ewol::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
 
 void ewol::Menu::Clear(void)
 {
-	for( int32_t iii=0; iii < m_listElement.Size(); iii++) {
+	for( int32_t iii=0; iii < m_listElement.size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
 			m_listElement[iii] = NULL;
 		}
 	}
-	m_listElement.Clear();
+	m_listElement.clear();
 }
 
 int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
@@ -98,7 +98,7 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 	tmpObject->m_image = image;
 	tmpObject->m_generateEvent = generateEvent;
 	tmpObject->m_message = message;
-	m_listElement.PushBack(tmpObject);
+	m_listElement.push_back(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
 		ewol::Button * myButton = NULL;
 		myButton = new ewol::Button(label);
@@ -138,7 +138,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 	}
 	*/
 	if (eventId == ewolEventButtonPressed) {
-		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
+		for(int32_t iii=0; iii<m_listElement.size(); iii++) {
 			if (CallerObject == m_listElement[iii]->m_widgetPointer) {
 				// 2 posible case (have a message or have a child ...
 				if (m_listElement[iii]->m_generateEvent != NULL) {
@@ -154,7 +154,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 				} else{
 					EWOL_DEBUG("Menu ==> Load Sub Menu");
 					bool findChild = false;
-					for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
+					for(int32_t jjj=0; jjj<m_listElement.size(); jjj++) {
 						if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
 							findChild = true;
 							break;
@@ -191,7 +191,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizerVert);
 						
-						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
+						for(int32_t jjj=m_listElement.size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
 									myButton = new ewol::Button(m_listElement[jjj]->m_label);
@@ -231,7 +231,7 @@ void ewol::Menu::OnObjectRemove(ewol::EObject * removeObject)
 	if (m_widgetContextMenu == removeObject) {
 		m_widgetContextMenu = NULL;
 	}
-	for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
+	for(int32_t jjj=0; jjj<m_listElement.size(); jjj++) {
 		if (NULL != m_listElement[jjj]) {
 			if (m_listElement[jjj]->m_widgetPointer == removeObject) {
 				m_listElement[jjj]->m_widgetPointer = NULL;

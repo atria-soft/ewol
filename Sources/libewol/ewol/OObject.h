@@ -29,7 +29,7 @@
 #include <etk/File.h>
 #include <ewol/Debug.h>
 #include <ewol/Font.h>
-#include <etk/VectorType.h>
+#include <vector>
 
 namespace ewol {
 	extern "C" {

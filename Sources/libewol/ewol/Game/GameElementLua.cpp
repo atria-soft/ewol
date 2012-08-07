@@ -33,9 +33,9 @@
 
 //For every acces : 
 
-static ewol::GameElementLua *           tmpObj = NULL;
-static etk::VectorType<ewol::Sprite*> * tmpSprite = NULL;
-static ewol::SceneElement *             tmpScene = NULL;
+static ewol::GameElementLua *       tmpObj = NULL;
+static std::vector<ewol::Sprite*> * tmpSprite = NULL;
+static ewol::SceneElement *         tmpScene = NULL;
 
 template <typename T> int index(lua_State* L);
 
@@ -398,9 +398,9 @@ LUAMOD_API int lua_ElementAdd(lua_State *L)
 	etk::UString elementName = luaL_checkstring(L, 1);
 	int32_t group = luaL_checkint(L, 2);
 	// TODO : Remove this when find an other way do do it ...
-	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	ewol::SceneElement *             ttmpScene = tmpScene;
+	ewol::GameElementLua *       ttmpObj = tmpObj;
+	std::vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	ewol::SceneElement *         ttmpScene = tmpScene;
 	uint32_t elementId = tmpScene->AddElementNamed(group, elementName);
 	tmpObj = ttmpObj;
 	tmpSprite = ttmpSprite;
@@ -541,9 +541,9 @@ LUAMOD_API int lua_HaveImpact(lua_State *L)
 	}
 
 	// TODO : Remove this when find an other way do do it ...
-	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	ewol::SceneElement *             ttmpScene = tmpScene;
+	ewol::GameElementLua *       ttmpObj = tmpObj;
+	std::vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	ewol::SceneElement *         ttmpScene = tmpScene;
 
 	bool result = tmpScene->HaveImpact(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), tmpObj->SizeGet());
 
@@ -565,9 +565,9 @@ LUAMOD_API int lua_Explosion(lua_State *L)
 	}
 
 	// TODO : Remove this when find an other way do do it ...
-	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
-	ewol::SceneElement *             ttmpScene = tmpScene;
+	ewol::GameElementLua *       ttmpObj = tmpObj;
+	std::vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	ewol::SceneElement *         ttmpScene = tmpScene;
 
 	tmpScene->Explosion(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), 0.01, tmpObj->PowerGet());
 

@@ -26,6 +26,7 @@
 #define __EWOL_MENU_H__
 
 #include <etk/Types.h>
+#include <vector>
 #include <etk/UString.h>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
@@ -64,9 +65,9 @@ namespace ewol {
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		private:
-			etk::VectorType<MenuElement*>  m_listElement;
-			int32_t                        m_staticId;      // unique ID for every element of the menu ...
-			ewol::ContextMenu*             m_widgetContextMenu;
+			std::vector<MenuElement*>  m_listElement;
+			int32_t                    m_staticId;      // unique ID for every element of the menu ...
+			ewol::ContextMenu*         m_widgetContextMenu;
 		public:
 			void           Clear(void);
 			int32_t        AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");

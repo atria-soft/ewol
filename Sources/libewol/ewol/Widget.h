@@ -33,7 +33,6 @@ namespace ewol {
 	class Widget;
 };
 #include <etk/Types.h>
-#include <etk/VectorType.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
 #include <ewol/base/eventInputManagement.h>

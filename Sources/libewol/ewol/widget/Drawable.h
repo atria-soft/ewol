@@ -26,6 +26,7 @@
 #define __EWOL_WIDGET_DRAWABLE_H__
 
 #include <ewol/Widget.h>
+#include <vector>
 
 
 namespace ewol {
@@ -44,7 +45,7 @@ namespace ewol {
 			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
 			
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			std::vector<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);

@@ -54,8 +54,8 @@ namespace ewol {
 	class ParameterList :public ewol::WidgetScrooled
 	{
 		private:
-			int32_t                            m_idSelected;
-			etk::VectorType<ewol::elementPL *> m_list;
+			int32_t                        m_idSelected;
+			std::vector<ewol::elementPL *> m_list;
 		public:
 			ParameterList(void);
 			/**
@@ -70,7 +70,7 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			std::vector<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);

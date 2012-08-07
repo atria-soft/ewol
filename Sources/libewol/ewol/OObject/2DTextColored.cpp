@@ -71,7 +71,7 @@ ewol::OObject2DTextColored::~OObject2DTextColored(void)
 
 void ewol::OObject2DTextColored::Draw(void)
 {
-	if (m_coord.Size()<=0) {
+	if (m_coord.size()<=0) {
 		// TODO : a remètre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -84,7 +84,7 @@ void ewol::OObject2DTextColored::Draw(void)
 	glVertexPointer(   2, GL_FLOAT, 0, &m_coord[0] );
 	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
 	glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
@@ -94,9 +94,9 @@ void ewol::OObject2DTextColored::Draw(void)
 
 void ewol::OObject2DTextColored::Clear(void)
 {
-	m_coord.Clear();
-	m_coordTex.Clear();
-	m_coordColor.Clear();
+	m_coord.clear();
+	m_coordTex.clear();
+	m_coordColor.clear();
 }
 
 int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::UString& unicodeString)
@@ -106,15 +106,15 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::USt
 		EWOL_ERROR("Font Id is not corectly defined");
 		return 0;
 	}
-	int32_t nbElementInTheArray = m_coord.Size();
+	int32_t nbElementInTheArray = m_coord.size();
 	int32_t size = 0;
 	if (true==m_hasClipping) {
 		size = ewol::DrawText(m_FontId, textPos, m_clipping, unicodeString, m_FontTextureId, m_coord, m_coordTex);
 	} else {
 		size = ewol::DrawText(m_FontId, textPos, unicodeString, m_FontTextureId, m_coord, m_coordTex);
 	}
-	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
-		m_coordColor.PushBack(m_color);
+	for (int32_t iii=nbElementInTheArray; iii<m_coord.size(); iii++) {
+		m_coordColor.push_back(m_color);
 	}
 	return size;
 }
@@ -126,15 +126,15 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const uniChar_
 		EWOL_ERROR("Font Id is not corectly defined");
 		return 0;
 	}
-	int32_t nbElementInTheArray = m_coord.Size();
+	int32_t nbElementInTheArray = m_coord.size();
 	int32_t size = 0;
 	if (true==m_hasClipping) {
 		size = ewol::DrawText(m_FontId, textPos, m_clipping, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
 	} else {
 		size = ewol::DrawText(m_FontId, textPos, unicodeChar, m_FontTextureId, m_coord, m_coordTex);
 	}
-	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
-		m_coordColor.PushBack(m_color);
+	for (int32_t iii=nbElementInTheArray; iii<m_coord.size(); iii++) {
+		m_coordColor.push_back(m_color);
 	}
 	return size;
 }

@@ -311,14 +311,14 @@ class RequestPlay {
 		}
 };
 
-#include <etk/VectorType.h>
-etk::VectorType<EffectsLoaded*> ListEffects;
-etk::VectorType<RequestPlay*>   ListEffectsPlaying;
+#include <vector>
+std::vector<EffectsLoaded*> ListEffects;
+std::vector<RequestPlay*>   ListEffectsPlaying;
 
 
 int32_t ewol::audio::effects::Add(etk::UString file)
 {
-	for (int32_t iii=0; iii<ListEffects.Size(); iii++) {
+	for (int32_t iii=0; iii<ListEffects.size(); iii++) {
 		if (NULL != ListEffects[iii]) {
 			if (ListEffects[iii]->m_file == file) {
 				ListEffects[iii]->m_requestedTime++;
@@ -332,16 +332,16 @@ int32_t ewol::audio::effects::Add(etk::UString file)
 		EWOL_ERROR("Error to load the effects : \"" << file << "\"");
 		return -1;
 	}
-	ListEffects.PushBack(tmpEffect);
-	return ListEffects.Size()-1;
+	ListEffects.push_back(tmpEffect);
+	return ListEffects.size()-1;
 }
 
 
 void ewol::audio::effects::Rm(int32_t effectId)
 {
 	// find element ...
-	if (effectId <0 || effectId >= ListEffects.Size()) {
-		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.Size()-1 << "] ==> can not remove it ...");
+	if (effectId <0 || effectId >= ListEffects.size()) {
+		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.size()-1 << "] ==> can not remove it ...");
 		return;
 	}
 	if (ListEffects[effectId] == NULL) {
@@ -361,8 +361,8 @@ void ewol::audio::effects::Rm(int32_t effectId)
 
 void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 {
-	if (effectId <0 || effectId >= ListEffects.Size()) {
-		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.Size()-1 << "] ==> can not play it ...");
+	if (effectId <0 || effectId >= ListEffects.size()) {
+		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.size()-1 << "] ==> can not play it ...");
 		return;
 	}
 	if (ListEffects[effectId] == NULL) {
@@ -371,7 +371,7 @@ void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 	}
 	EWOL_VERBOSE("effect play : " << effectId );
 	// try to find an empty slot :
-	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
+	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
 		if (ListEffectsPlaying[iii]->IsFree()) {
 			ListEffectsPlaying[iii]->Reset(ListEffects[effectId]);
 			return;
@@ -382,7 +382,7 @@ void ewol::audio::effects::Play(int32_t effectId, float xxx, float yyy)
 		EWOL_CRITICAL("Allocation error of a playing element : " << effectId);
 		return;
 	}
-	ListEffectsPlaying.PushBack(newPlay);
+	ListEffectsPlaying.push_back(newPlay);
 }
 
 
@@ -429,7 +429,7 @@ void ewol::audio::effects::MuteSet(bool newMute)
 
 void ewol::audio::effects::GetData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
 {
-	for (int32_t iii=0; iii<ListEffectsPlaying.Size(); iii++) {
+	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
 		if (ListEffectsPlaying[iii]!= NULL) {
 			ListEffectsPlaying[iii]->Play(bufferInterlace, nbSample, nbChannels);
 		}

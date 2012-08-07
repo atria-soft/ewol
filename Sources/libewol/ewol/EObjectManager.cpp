@@ -31,8 +31,8 @@
 static bool IsInit = false;
 
 // internal element of the widget manager : 
-static etk::VectorType<ewol::EObject*>   m_eObjectList;          // all widget allocated ==> all time increment ... never removed ...
-static etk::VectorType<ewol::EObject*>   m_eObjectDeletedList;   // all widget allocated
+static std::vector<ewol::EObject*>   m_eObjectList;          // all widget allocated ==> all time increment ... never removed ...
+static std::vector<ewol::EObject*>   m_eObjectDeletedList;   // all widget allocated
 
 
 void ewol::EObjectManager::Init(void)
@@ -40,8 +40,8 @@ void ewol::EObjectManager::Init(void)
 	EWOL_DEBUG("==> Init EObject-Manager");
 	// Can create mlemory leak ... ==> but not predictable comportement otherwise ...
 	// TODO : Check if we can do sotthing better
-	m_eObjectDeletedList.Clear();
-	m_eObjectList.Clear();
+	m_eObjectDeletedList.clear();
+	m_eObjectList.clear();
 	IsInit = true;
 }
 
@@ -53,11 +53,11 @@ void ewol::EObjectManager::UnInit(void)
 		ewol::EObjectManager::RemoveAllMark();
 	}
 	EWOL_INFO(" Remove missing user widget");
-	while(0<m_eObjectList.Size()) {
+	while(0<m_eObjectList.size()) {
 		if (m_eObjectList[0]!=NULL) {
 			MarkToRemoved(m_eObjectList[0]);
 		} else {
-			m_eObjectList.Erase(0);
+			m_eObjectList.erase(m_eObjectList.begin());
 		}
 	}
 	// local acces ==> this control the mutex Lock
@@ -70,7 +70,7 @@ void ewol::EObjectManager::Add(ewol::EObject* object)
 {
 	// TODO : Chek if not existed before ...
 	if (NULL != object) {
-		m_eObjectList.PushBack(object);
+		m_eObjectList.push_back(object);
 	} else {
 		EWOL_ERROR("try to add an inexistant EObject in manager");
 	}
@@ -82,18 +82,18 @@ void ewol::EObjectManager::Rm(ewol::EObject* object)
 		EWOL_ERROR("Try to remove (NULL) EObject");
 		return;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == object) {
 			// Remove Element
-			m_eObjectList.Erase(iii);
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
 			EWOL_CRITICAL("EObject direct remove is really DANGEROUS due to the multithreading ...");
 			return;
 		}
 	}
-	for (int32_t iii=0; iii<m_eObjectDeletedList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectDeletedList.size(); iii++) {
 		if (m_eObjectDeletedList[iii] == object) {
 			// Remove Element
-			m_eObjectDeletedList.Erase(iii);
+			m_eObjectDeletedList.erase(m_eObjectDeletedList.begin()+iii);
 			return;
 		}
 	}
@@ -104,7 +104,7 @@ void ewol::EObjectManager::Rm(ewol::EObject* object)
 
 void informOneObjectIsRemoved(ewol::EObject* object)
 {
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
 			m_eObjectList[iii]->OnObjectRemove(object);
 		}
@@ -122,7 +122,7 @@ void ewol::EObjectManager::MarkToRemoved(ewol::EObject* object)
 	}
 	int32_t findId = -1;
 	// check if the widget is not destroy :
-	for(int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for(int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == object) {
 			findId = iii;
 			break;
@@ -132,9 +132,9 @@ void ewol::EObjectManager::MarkToRemoved(ewol::EObject* object)
 		EWOL_CRITICAL("Try to mark remove an object already removed (or not registerd [imposible case]) ==> requested for EObject : [" << object->GetId() << "] type=" << object->GetObjectType());
 		return;
 	}
-	m_eObjectList.Erase(findId);
+	m_eObjectList.erase(m_eObjectList.begin()+findId);
 	EWOL_DEBUG("MarkToRemoved EObject : [" << object->GetId() << "] type=" << object->GetObjectType());
-	m_eObjectDeletedList.PushBack(object);
+	m_eObjectDeletedList.push_back(object);
 	// Informe all EObject to remove reference of this one ...
 	informOneObjectIsRemoved(object);
 }
@@ -143,9 +143,9 @@ void ewol::EObjectManager::MarkToRemoved(ewol::EObject* object)
 
 void ewol::EObjectManager::RemoveAllMark(void)
 {
-	etk::VectorType<ewol::EObject*>   m_tmpList = m_eObjectDeletedList;
+	std::vector<ewol::EObject*>   m_tmpList = m_eObjectDeletedList;
 	// direct delete of the current list ...
-	for(int32_t iii=0; iii<m_tmpList.Size(); iii++) {
+	for(int32_t iii=0; iii<m_tmpList.size(); iii++) {
 		if (NULL != m_tmpList[iii]) {
 			delete(m_tmpList[iii]);
 			m_tmpList[iii] = NULL;

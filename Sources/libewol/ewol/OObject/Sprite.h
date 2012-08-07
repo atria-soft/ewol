@@ -44,10 +44,10 @@ namespace ewol {
 			void Element(Vector3D<float> pos, float size, float angle, color_ts tmpColor);
 			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
-			int32_t                           m_textureId;   //!< texture internal ID
-			etk::VectorType<Vector3D<float> > m_coord;       //!< internal coord of the object
-			etk::VectorType<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
-			etk::VectorType<color_ts>         m_coordColor;  //!< internal color of the different point
+			int32_t                       m_textureId;   //!< texture internal ID
+			std::vector<Vector3D<float> > m_coord;       //!< internal coord of the object
+			std::vector<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
+			std::vector<color_ts>         m_coordColor;  //!< internal color of the different point
 	};
 };
 

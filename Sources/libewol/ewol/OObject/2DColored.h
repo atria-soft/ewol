@@ -36,9 +36,9 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 		protected:
-			etk::VectorType<Vector2D<float> >   m_coord;       //!< internal coord of the object
-			etk::VectorType<color_ts>           m_coordColor;  //!< internal color of the different point
-			//etk::VectorType<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
+			std::vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
+			std::vector<color_ts>           m_coordColor;  //!< internal color of the different point
+			//std::vector<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
 			int32_t         m_triElement;
 			color_ts        m_color[3];
 			Vector2D<float> m_triangle[3];

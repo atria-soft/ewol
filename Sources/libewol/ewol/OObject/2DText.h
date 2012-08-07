@@ -45,8 +45,8 @@ namespace ewol {
 			int32_t                       m_FontId;        //!< font internal ID
 			color_ts                      m_textColorFg;   //!< text color ...
 			int32_t                       m_FontTextureId; //!< font internal Texture ID
-			etk::VectorType<Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::VectorType<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+			std::vector<Vector2D<float> > m_coord;         //!< internal coord of the object
+			std::vector<texCoord_ts>      m_coordTex;      //!< internal texture coordinate for every point
 	};
 };
 

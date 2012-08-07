@@ -29,6 +29,7 @@
 #include <ewol/Debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 #include <ewol/widget/Drawable.h>
+#include <vector>
 
 namespace ewol {
 	class List :public ewol::WidgetScrooled
@@ -48,7 +49,7 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			std::vector<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);

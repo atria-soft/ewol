@@ -29,8 +29,6 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
 #include <ewol/WidgetManager.h>
-//#include <etk/Vector.h>
-#include <etk/VectorType.h>
 
 extern "C" {
 	// file browsing ...

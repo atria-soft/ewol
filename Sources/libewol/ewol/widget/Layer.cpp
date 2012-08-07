@@ -48,7 +48,7 @@ bool ewol::Layer::CalculateSize(float availlableX, float availlableY)
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
 	m_size.y = availlableY;
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->SetOrigin(m_origin.x, m_origin.y);
 			m_subWidget[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
@@ -65,7 +65,7 @@ bool ewol::Layer::CalculateMinSize(void)
 	m_userExpendY=false;
 	m_minSize.x = 0.0;
 	m_minSize.y = 0.0;
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->CalculateMinSize();
 			if (true == m_subWidget[m_currentCreateId][iii]->CanExpentX()) {
@@ -118,15 +118,14 @@ void ewol::Layer::LockExpendContamination(bool lockExpend)
 	m_lockExpendContamination = lockExpend;
 }
 
-//etk::VectorType<ewol::Widget*> m_SubWidget;
 
 void ewol::Layer::SubWidgetRemoveAll(void)
 {
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		m_subWidget[m_currentCreateId][iii]->MarkToRemove();
 		m_subWidget[m_currentCreateId][iii] = NULL;
 	}
-	m_subWidget[m_currentCreateId].Clear();
+	m_subWidget[m_currentCreateId].clear();
 }
 
 
@@ -135,7 +134,7 @@ void ewol::Layer::SubWidgetAdd(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	m_subWidget[m_currentCreateId].PushBack(newWidget);
+	m_subWidget[m_currentCreateId].push_back(newWidget);
 }
 
 
@@ -144,11 +143,11 @@ void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->MarkToRemove();
 			m_subWidget[m_currentCreateId][iii] = NULL;
-			m_subWidget[m_currentCreateId].Erase(iii);
+			m_subWidget[m_currentCreateId].erase(m_subWidget[m_currentCreateId].begin()+iii);
 			return;
 		}
 	}
@@ -159,10 +158,10 @@ void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (newWidget == m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii] = NULL;
-			m_subWidget[m_currentCreateId].Erase(iii);
+			m_subWidget[m_currentCreateId].erase(m_subWidget[m_currentCreateId].begin()+iii);
 			return;
 		}
 	}
@@ -172,7 +171,7 @@ void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 void ewol::Layer::OnDraw(DrawProperty& displayProp)
 {
 	// draw is done in the invert sense of inserting ... the first element inserted is on the top and the last is on the buttom
-	for (int32_t iii=m_subWidget[m_currentDrawId].Size()-1; iii>=0; iii--) {
+	for (int32_t iii=m_subWidget[m_currentDrawId].size()-1; iii>=0; iii--) {
 		if (NULL != m_subWidget[m_currentDrawId][iii]) {
 			m_subWidget[m_currentDrawId][iii]->GenDraw(displayProp);
 		}
@@ -183,7 +182,7 @@ void ewol::Layer::OnDraw(DrawProperty& displayProp)
 
 void ewol::Layer::OnRegenerateDisplay(void)
 {
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			m_subWidget[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
@@ -200,7 +199,7 @@ void ewol::Layer::OnRegenerateDisplay(void)
 ewol::Widget * ewol::Layer::GetWidgetAtPos(Vector2D<float> pos)
 {
 	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget[m_currentCreateId].size(); iii++) {
 		if (NULL != m_subWidget[m_currentCreateId][iii]) {
 			Vector2D<float> tmpSize = m_subWidget[m_currentCreateId][iii]->GetSize();
 			Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId][iii]->GetOrigin();
@@ -234,7 +233,7 @@ void ewol::Layer::OnFlipFlopEvent(void)
 		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
 	}
 	// in every case, we propagate the flip-flop EVENT
-	for(int32_t iii=0; iii<m_subWidget[m_currentDrawId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_subWidget[m_currentDrawId].size(); iii++) {
 		if(NULL != m_subWidget[m_currentDrawId][iii]) {
 			m_subWidget[m_currentDrawId][iii]->OnFlipFlopEvent();
 		}
@@ -253,11 +252,11 @@ void ewol::Layer::OnObjectRemove(ewol::EObject * removeObject)
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
-	for(int32_t iii=m_subWidget[m_currentCreateId].Size()-1; iii>=0; iii--) {
+	for(int32_t iii=m_subWidget[m_currentCreateId].size()-1; iii>=0; iii--) {
 		if(m_subWidget[m_currentCreateId][iii] == removeObject) {
 			EWOL_DEBUG("Remove sizer sub Element [" << iii << "] ==> destroyed object");
 			m_subWidget[m_currentCreateId][iii] = NULL;
-			m_subWidget[m_currentCreateId].Erase(iii);
+			m_subWidget[m_currentCreateId].erase(m_subWidget[m_currentCreateId].begin()+iii);
 			m_needFlipFlop = true;
 		}
 	}

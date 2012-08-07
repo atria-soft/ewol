@@ -25,7 +25,7 @@
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
 #include <etk/unicode.h>
-#include <etk/VectorType.h>
+#include <vector>
 
 #include <ewol/importgl.h>
 extern "C" {
@@ -220,7 +220,7 @@ class FTFontInternal
 		}
 	public:
 		etk::UString GetFontName(void) {return m_fontName;};
-		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t & textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
+		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t & textureId, std::vector<freeTypeFontElement_ts> & listElement)
 		{
 			// 300dpi (hight quality) 96 dpi (normal quality)
 			int32_t fontQuality = 96;
@@ -253,7 +253,7 @@ class FTFontInternal
 			EWOL_DEBUG("metrics.horiAdvance=" << (slot->metrics.horiAdvance >> 6));
 			EWOL_DEBUG("metrics.vertAdvance=" << (slot->metrics.vertAdvance >> 6));
 			
-			int32_t nbElement = listElement.Size();
+			int32_t nbElement = listElement.size();
 			int32_t coter = simpleSQRT(nbElement);
 			// note : +1 is for the overlapping of the glyph (Part 1)
 			int32_t glyphMaxWidth = /*(m_fftFace->max_advance_width>>6); */(slot->metrics.horiAdvance>>6) +1;
@@ -285,7 +285,7 @@ class FTFontInternal
 			int32_t tmpLineStartPos = 0;
 			int32_t CurrentLineHigh = 0;
 			// Generate for All Elements :
-			for (int32_t iii=0; iii<listElement.Size(); iii++) {
+			for (int32_t iii=0; iii<listElement.size(); iii++) {
 				// increment the position of the texture
 				/*
 				if (iii!=0) {
@@ -378,7 +378,7 @@ class FTFontInternal
 		FT_Face      m_fftFace;
 };
 
-static etk::VectorType<FTFontInternal*> m_listLoadedTTFont;
+static std::vector<FTFontInternal*> m_listLoadedTTFont;
 
 
 static etk::UString s_currentFolderName = "";
@@ -390,7 +390,7 @@ class FTFont{
 		FTFont(etk::File fontfileName, etk::UString fontName, int32_t size)
 		{
 			m_trueTypeFontId = -1;
-			for (int32_t iii=0; iii < m_listLoadedTTFont.Size(); iii++) {
+			for (int32_t iii=0; iii < m_listLoadedTTFont.size(); iii++) {
 				if (m_listLoadedTTFont[iii]->GetFontName() == fontName) {
 					m_trueTypeFontId = iii;
 				}
@@ -398,19 +398,19 @@ class FTFont{
 			if (-1==m_trueTypeFontId) {
 				// load a new one ...
 				FTFontInternal * tmpElement = new FTFontInternal(fontfileName, fontName);
-				m_listLoadedTTFont.PushBack(tmpElement);
-				m_trueTypeFontId = m_listLoadedTTFont.Size() -1;
+				m_listLoadedTTFont.push_back(tmpElement);
+				m_trueTypeFontId = m_listLoadedTTFont.size() -1;
 			}
 			// set the bassic charset:
-			m_elements.Clear();
+			m_elements.clear();
 			freeTypeFontElement_ts tmpchar1;
 			tmpchar1.unicodeCharVal = 0;
-			m_elements.PushBack(tmpchar1);
+			m_elements.push_back(tmpchar1);
 			// TODO : dynamic generation of this : expected minimum of 0x20 => 0x7F ....
 			for (int32_t iii=0x20; iii<0xFF; iii++) {
 				freeTypeFontElement_ts tmpchar;
 				tmpchar.unicodeCharVal = iii;
-				m_elements.PushBack(tmpchar);
+				m_elements.push_back(tmpchar);
 				if (0x7F == iii) {
 					iii = 0x9F;
 				}
@@ -436,7 +436,7 @@ class FTFont{
 			return false;
 		};
 		
-		etk::VectorType<freeTypeFontElement_ts> & GetRefOnElement(void)
+		std::vector<freeTypeFontElement_ts> & GetRefOnElement(void)
 		{
 			return m_elements;
 		};
@@ -462,10 +462,10 @@ class FTFont{
 		int32_t                                   m_size;        // nb pixel height
 		int32_t                                   m_lineHeight;  // nb pixel height
 		int32_t                                   m_interline;   // nb pixel between 2 lines
-		etk::VectorType<freeTypeFontElement_ts>   m_elements;    // 
+		std::vector<freeTypeFontElement_ts>   m_elements;    // 
 };
 
-static etk::VectorType<FTFont*> m_listLoadedFont;
+static std::vector<FTFont*> m_listLoadedFont;
 
 #undef __class__
 #define __class__	"ewol::FontFreeType"
@@ -490,7 +490,7 @@ void ewol::InitFont(void)
 	// prevent android error ==> can create memory leak but I prefer
 	s_currentFolderName = "";
 	s_currentDefaultFontName = "";
-	m_listLoadedTTFont.Clear();
+	m_listLoadedTTFont.clear();
 	s_currentDefaultFontId = -1;
 }
 
@@ -508,21 +508,21 @@ void ewol::UnInitFont(void)
 	s_currentDefaultFontId = -1;
 	
 	// unload global font
-	for(int32_t iii=0; iii<m_listLoadedFont.Size(); iii++) {
+	for(int32_t iii=0; iii<m_listLoadedFont.size(); iii++) {
 		if (NULL != m_listLoadedFont[iii]) {
 			delete(m_listLoadedFont[iii]);
 		}
 		m_listLoadedFont[iii] = NULL;
 	}
-	m_listLoadedFont.Clear();
+	m_listLoadedFont.clear();
 	// unload TFT font ...
-	for(int32_t iii=0; iii<m_listLoadedTTFont.Size(); iii++) {
+	for(int32_t iii=0; iii<m_listLoadedTTFont.size(); iii++) {
 		if (NULL != m_listLoadedTTFont[iii]) {
 			delete(m_listLoadedTTFont[iii]);
 		}
 		m_listLoadedTTFont[iii] = NULL;
 	}
-	m_listLoadedTTFont.Clear();
+	m_listLoadedTTFont.clear();
 }
 
 void ewol::SetDefaultFont(etk::UString fontName, int32_t size)
@@ -559,14 +559,14 @@ int32_t ewol::LoadFont(etk::UString fontName, int32_t size)
 		EWOL_ERROR("Font does not exist: \"" << fileName.GetCompleateName() << "\"");
 		return -1;
 	}
-	for (int32_t iii=0; iii < m_listLoadedFont.Size(); iii++) {
+	for (int32_t iii=0; iii < m_listLoadedFont.size(); iii++) {
 		if (true == m_listLoadedFont[iii]->Check(fontName, size)) {
 			return iii;
 		}
 	}
 	FTFont * tmpFont = new FTFont(fileName, fontName, size);
-	m_listLoadedFont.PushBack(tmpFont);
-	return m_listLoadedFont.Size()-1;
+	m_listLoadedFont.push_back(tmpFont);
+	return m_listLoadedFont.size()-1;
 }
 
 void ewol::UnloadFont(int32_t id)
@@ -574,19 +574,19 @@ void ewol::UnloadFont(int32_t id)
 	EWOL_TODO("I do not think it was a good idea... will be done later");
 }
 
-int32_t ewol::DrawText(int32_t                              fontID,
-                       Vector2D<float>                      textPos,
-                       clipping_ts &                        drawClipping,
-                       const etk::UString&                  unicodeString,
-                       int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+int32_t ewol::DrawText(int32_t                          fontID,
+                       Vector2D<float>                  textPos,
+                       clipping_ts &                    drawClipping,
+                       const etk::UString&              unicodeString,
+                       int32_t &                        fontTextureId,
+                       std::vector<Vector2D<float> > &  coord,
+                       std::vector<texCoord_ts> &       coordTex)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+	if(fontID>=m_listLoadedFont.size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	std::vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -603,7 +603,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			charIndex = tmpChar - 0x1F;
 		} else {
 			charIndex = 0;
-			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.size(); iii++) {
 				if (listOfElement[iii].unicodeCharVal == tmpChar) {
 					charIndex = iii;
 					break;
@@ -724,13 +724,13 @@ int32_t ewol::DrawText(int32_t                              fontID,
 					 *                
 					 */
 					// set texture coordonates :
-					coordTex.PushBack(texturePos[0]);
-					coordTex.PushBack(texturePos[1]);
-					coordTex.PushBack(texturePos[2]);
+					coordTex.push_back(texturePos[0]);
+					coordTex.push_back(texturePos[1]);
+					coordTex.push_back(texturePos[2]);
 					// set display positions :
-					coord.PushBack(bitmapDrawPos[0]);
-					coord.PushBack(bitmapDrawPos[1]);
-					coord.PushBack(bitmapDrawPos[2]);
+					coord.push_back(bitmapDrawPos[0]);
+					coord.push_back(bitmapDrawPos[1]);
+					coord.push_back(bitmapDrawPos[2]);
 					
 					/* Step 2 : 
 					 *              
@@ -740,13 +740,13 @@ int32_t ewol::DrawText(int32_t                              fontID,
 					 *   ********   
 					 */
 					// set texture coordonates :
-					coordTex.PushBack(texturePos[0]);
-					coordTex.PushBack(texturePos[2]);
-					coordTex.PushBack(texturePos[3]);
+					coordTex.push_back(texturePos[0]);
+					coordTex.push_back(texturePos[2]);
+					coordTex.push_back(texturePos[3]);
 					// set display positions :
-					coord.PushBack(bitmapDrawPos[0]);
-					coord.PushBack(bitmapDrawPos[2]);
-					coord.PushBack(bitmapDrawPos[3]);
+					coord.push_back(bitmapDrawPos[0]);
+					coord.push_back(bitmapDrawPos[2]);
+					coord.push_back(bitmapDrawPos[3]);
 				}
 			}
 		}
@@ -758,20 +758,20 @@ int32_t ewol::DrawText(int32_t                              fontID,
 }
 
 // TODO : Simplify this ...
-int32_t ewol::DrawText(int32_t                              fontID,
-                       Vector2D<float>                      textPos,
-                       clipping_ts &                        drawClipping,
-                       const uniChar_t                      unicodeChar,
-                       int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+int32_t ewol::DrawText(int32_t                          fontID,
+                       Vector2D<float>                  textPos,
+                       clipping_ts &                    drawClipping,
+                       const uniChar_t                  unicodeChar,
+                       int32_t &                        fontTextureId,
+                       std::vector<Vector2D<float> > &  coord,
+                       std::vector<texCoord_ts> &       coordTex)
 {
 #if 0
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	std::vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -916,18 +916,18 @@ int32_t ewol::DrawText(int32_t                              fontID,
 }
 
 
-int32_t ewol::DrawText(int32_t                              fontID,
-                       Vector2D<float>                      textPos,
-                       const etk::UString&                  unicodeString,
-                       int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+int32_t ewol::DrawText(int32_t                          fontID,
+                       Vector2D<float>                  textPos,
+                       const etk::UString&              unicodeString,
+                       int32_t &                        fontTextureId,
+                       std::vector<Vector2D<float> > &  coord,
+                       std::vector<texCoord_ts> &       coordTex)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+	if(fontID>=m_listLoadedFont.size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	std::vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -944,7 +944,7 @@ int32_t ewol::DrawText(int32_t                              fontID,
 			charIndex = tmpChar - 0x1F;
 		} else {
 			charIndex = 0;
-			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.size(); iii++) {
 				if (listOfElement[iii].unicodeCharVal == tmpChar) {
 					charIndex = iii;
 					break;
@@ -1018,13 +1018,13 @@ int32_t ewol::DrawText(int32_t                              fontID,
 				 *                
 				 */
 				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[1]);
-				coordTex.PushBack(texturePos[2]);
+				coordTex.push_back(texturePos[0]);
+				coordTex.push_back(texturePos[1]);
+				coordTex.push_back(texturePos[2]);
 				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[1]);
-				coord.PushBack(bitmapDrawPos[2]);
+				coord.push_back(bitmapDrawPos[0]);
+				coord.push_back(bitmapDrawPos[1]);
+				coord.push_back(bitmapDrawPos[2]);
 				
 				/* Step 2 : 
 				 *              
@@ -1034,13 +1034,13 @@ int32_t ewol::DrawText(int32_t                              fontID,
 				 *   ********   
 				 */
 				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[2]);
-				coordTex.PushBack(texturePos[3]);
+				coordTex.push_back(texturePos[0]);
+				coordTex.push_back(texturePos[2]);
+				coordTex.push_back(texturePos[3]);
 				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[2]);
-				coord.PushBack(bitmapDrawPos[3]);
+				coord.push_back(bitmapDrawPos[0]);
+				coord.push_back(bitmapDrawPos[2]);
+				coord.push_back(bitmapDrawPos[3]);
 				
 			}
 		}
@@ -1052,18 +1052,18 @@ int32_t ewol::DrawText(int32_t                              fontID,
 }
 
 // TODO : Simplify this ...
-int32_t ewol::DrawText(int32_t                             fontID,
-                       Vector2D<float>                     textPos,
-                       const uniChar_t                     unicodeChar,
-                       int32_t &                           fontTextureId,
-                       etk::VectorType<Vector2D<float> > & coord,
-                       etk::VectorType<texCoord_ts> &      coordTex)
+int32_t ewol::DrawText(int32_t                         fontID,
+                       Vector2D<float>                 textPos,
+                       const uniChar_t                 unicodeChar,
+                       int32_t &                       fontTextureId,
+                       std::vector<Vector2D<float> > & coord,
+                       std::vector<texCoord_ts> &      coordTex)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+	if(fontID>=m_listLoadedFont.size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	std::vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -1077,7 +1077,7 @@ int32_t ewol::DrawText(int32_t                             fontID,
 		charIndex = unicodeChar - 0x1F;
 	} else {
 		charIndex = 0;
-		for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+		for (int32_t iii=0x80-0x20; iii < listOfElement.size(); iii++) {
 			if (listOfElement[iii].unicodeCharVal == unicodeChar) {
 				charIndex = iii;
 				break;
@@ -1149,13 +1149,13 @@ int32_t ewol::DrawText(int32_t                             fontID,
 			 *                
 			 */
 			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[1]);
-			coordTex.PushBack(texturePos[2]);
+			coordTex.push_back(texturePos[0]);
+			coordTex.push_back(texturePos[1]);
+			coordTex.push_back(texturePos[2]);
 			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[1]);
-			coord.PushBack(bitmapDrawPos[2]);
+			coord.push_back(bitmapDrawPos[0]);
+			coord.push_back(bitmapDrawPos[1]);
+			coord.push_back(bitmapDrawPos[2]);
 			
 			/* Step 2 : 
 			 *              
@@ -1165,13 +1165,13 @@ int32_t ewol::DrawText(int32_t                             fontID,
 			 *   ********   
 			 */
 			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[2]);
-			coordTex.PushBack(texturePos[3]);
+			coordTex.push_back(texturePos[0]);
+			coordTex.push_back(texturePos[2]);
+			coordTex.push_back(texturePos[3]);
 			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[2]);
-			coord.PushBack(bitmapDrawPos[3]);
+			coord.push_back(bitmapDrawPos[0]);
+			coord.push_back(bitmapDrawPos[2]);
+			coord.push_back(bitmapDrawPos[3]);
 		}
 	}
 	posDrawX += listOfElement[charIndex].advance;
@@ -1183,11 +1183,11 @@ int32_t ewol::DrawText(int32_t                             fontID,
 
 int32_t ewol::GetWidth(int32_t fontID, const etk::UString& unicodeString)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+	if(fontID>=m_listLoadedFont.size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	std::vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	
 	float posDrawX = 0.0;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
@@ -1200,7 +1200,7 @@ int32_t ewol::GetWidth(int32_t fontID, const etk::UString& unicodeString)
 		} else if (tmpChar < 0x80) {
 			charIndex = tmpChar - 0x1F;
 		} else {
-			for (int32_t iii=0x80-0x20; iii < listOfElement.Size(); iii++) {
+			for (int32_t iii=0x80-0x20; iii < listOfElement.size(); iii++) {
 				if (listOfElement[iii].unicodeCharVal == tmpChar) {
 					charIndex = iii;
 					break;
@@ -1217,7 +1217,7 @@ int32_t ewol::GetWidth(int32_t fontID, const etk::UString& unicodeString)
 
 int32_t ewol::GetHeight(int32_t fontID)
 {
-	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
+	if(fontID>=m_listLoadedFont.size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 10;
 	}

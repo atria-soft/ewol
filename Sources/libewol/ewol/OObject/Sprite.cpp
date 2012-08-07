@@ -56,7 +56,7 @@ ewol::Sprite::~Sprite(void)
 
 void ewol::Sprite::Draw(void)
 {
-	if (m_coord.Size()<=0) {
+	if (m_coord.size()<=0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -73,7 +73,7 @@ void ewol::Sprite::Draw(void)
 	glVertexPointer(   3, GL_FLOAT,         0, &m_coord[0] );
 	glTexCoordPointer( 2, GL_FLOAT,         0, &m_coordTex[0] );
 	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
 	glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
@@ -83,9 +83,9 @@ void ewol::Sprite::Draw(void)
 
 void ewol::Sprite::Clear(void)
 {
-	m_coord.Clear();
-	m_coordTex.Clear();
-	m_coordColor.Clear();
+	m_coord.clear();
+	m_coordTex.clear();
+	m_coordColor.clear();
 }
 
 void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
@@ -134,36 +134,36 @@ void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle, color_t
 	
 	point.x = xxxCos + pos.x;
 	point.y = yyySin + pos.y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texB);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texB);
+	m_coordColor.push_back(tmpColor);
 	
 	point.x = yyySin + pos.x;
 	point.y = -xxxCos + pos.y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texC);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texC);
+	m_coordColor.push_back(tmpColor);
 	
 	point.x = -xxxCos + pos.x;
 	point.y = -yyySin + pos.y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texD);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texD);
+	m_coordColor.push_back(tmpColor);
 	
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texD);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texD);
+	m_coordColor.push_back(tmpColor);
 	
 	point.x = -yyySin + pos.x;
 	point.y = xxxCos + pos.y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texA);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texA);
+	m_coordColor.push_back(tmpColor);
 	
 	point.x = xxxCos + pos.x;
 	point.y = yyySin + pos.y;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(texB);
-	m_coordColor.PushBack(tmpColor);
+	m_coord.push_back(point);
+	m_coordTex.push_back(texB);
+	m_coordColor.push_back(tmpColor);
 }
 

@@ -61,13 +61,13 @@ ewol::Windows::~Windows(void)
 		m_subWidget[m_currentCreateId]=NULL;
 	}
 	
-	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
 			m_popUpWidgetList[m_currentCreateId][iii]->MarkToRemove();
 			m_popUpWidgetList[m_currentCreateId][iii]=NULL;
 		}
 	}
-	m_popUpWidgetList[m_currentCreateId].Clear();
+	m_popUpWidgetList[m_currentCreateId].clear();
 }
 
 
@@ -82,7 +82,7 @@ bool ewol::Windows::CalculateSize(float availlableX, float availlableY)
 		// TODO : Herited from MinSize .. and expand ???
 		m_subWidget[m_currentCreateId]->CalculateSize(m_size.x, m_size.y);
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
 			m_popUpWidgetList[m_currentCreateId][iii]->CalculateMinSize();
 			m_popUpWidgetList[m_currentCreateId][iii]->CalculateSize(m_size.x, m_size.y);
@@ -102,11 +102,11 @@ ewol::Widget * ewol::Windows::GetWidgetAtPos(Vector2D<float> pos)
 	// calculate relative position
 	Vector2D<float> relativePos = RelativePosition(pos);
 	// event go directly on the pop-up
-	if (0 < m_popUpWidgetList[m_currentCreateId].Size()) {
-		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]) {
-			m_popUpWidgetList[m_currentCreateId].PopBack();
+	if (0 < m_popUpWidgetList[m_currentCreateId].size()) {
+		if (NULL == m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].size()-1]) {
+			m_popUpWidgetList[m_currentCreateId].pop_back();
 		} else {
-			return m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].Size()-1]->GetWidgetAtPos(pos);
+			return m_popUpWidgetList[m_currentCreateId][m_popUpWidgetList[m_currentCreateId].size()-1]->GetWidgetAtPos(pos);
 		}
 	// otherwise in the normal windows
 	} else if (NULL != m_subWidget[m_currentCreateId]) {
@@ -143,7 +143,7 @@ void ewol::Windows::OnRegenerateDisplay(void)
 	if (NULL != m_subWidget[m_currentCreateId]) {
 		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentCreateId].size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentCreateId][iii]) {
 			m_popUpWidgetList[m_currentCreateId][iii]->OnRegenerateDisplay();
 		}
@@ -165,7 +165,7 @@ void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 		//EWOL_DEBUG("Draw Windows");
 	}
 	// second display the pop-up
-	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].size(); iii++) {
 		if (NULL != m_popUpWidgetList[m_currentDrawId][iii]) {
 			m_popUpWidgetList[m_currentDrawId][iii]->GenDraw(displayProp);
 			//EWOL_DEBUG("Draw Pop-up");
@@ -191,7 +191,7 @@ void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 
 void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 {
-	m_popUpWidgetList[m_currentCreateId].PushBack(widget);
+	m_popUpWidgetList[m_currentCreateId].push_back(widget);
 	// Regenerate the size calculation :
 	CalculateSize(m_size.x, m_size.y);
 	m_needFlipFlop = true;
@@ -218,7 +218,7 @@ void ewol::Windows::OnFlipFlopEvent(void)
 	if (NULL != m_subWidget[m_currentDrawId]) {
 		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].Size(); iii++) {
+	for(int32_t iii=0; iii<m_popUpWidgetList[m_currentDrawId].size(); iii++) {
 		if(NULL != m_popUpWidgetList[m_currentDrawId][iii]) {
 			m_popUpWidgetList[m_currentDrawId][iii]->OnFlipFlopEvent();
 		}
@@ -242,11 +242,11 @@ void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
 		m_subWidget[m_currentCreateId] = NULL;
 		m_needFlipFlop = true;
 	}
-	for(int32_t iii=m_popUpWidgetList[m_currentCreateId].Size()-1; iii>=0; iii--) {
+	for(int32_t iii=m_popUpWidgetList[m_currentCreateId].size()-1; iii>=0; iii--) {
 		if(m_popUpWidgetList[m_currentCreateId][iii] == removeObject) {
 			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows ==> destroyed object");
 			m_popUpWidgetList[m_currentCreateId][iii] = NULL;
-			m_popUpWidgetList[m_currentCreateId].Erase(iii);
+			m_popUpWidgetList[m_currentCreateId].erase(m_popUpWidgetList[m_currentCreateId].begin()+iii );
 			m_needFlipFlop = true;
 		}
 	}

@@ -40,14 +40,14 @@ ewol::OObject2DColored::OObject2DColored(void)
 
 ewol::OObject2DColored::~OObject2DColored(void)
 {
-	m_coord.Clear();
-	m_coordColor.Clear();
+	m_coord.clear();
+	m_coordColor.clear();
 }
 
 
 void ewol::OObject2DColored::Draw(void)
 {
-	if (m_coord.Size()<=0) {
+	if (m_coord.size()<=0) {
 		return;
 	}
 	glPushMatrix();
@@ -62,7 +62,7 @@ void ewol::OObject2DColored::Draw(void)
 	//glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
 	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 	// Render : draw all of the triangles at once
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.size());
 	//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("Draw ..." << m_coord.Size()/3 << " triangle(s)");
 
@@ -75,41 +75,41 @@ void ewol::OObject2DColored::Draw(void)
 
 void ewol::OObject2DColored::Clear(void)
 {
-	m_coord.Clear();
-	m_coordColor.Clear();
+	m_coord.clear();
+	m_coordColor.clear();
 }
 
 
-void generatePolyGone(etk::VectorType<Vector2D<float> > & input, etk::VectorType<Vector2D<float> > & output )
+void generatePolyGone(std::vector<Vector2D<float> > & input, std::vector<Vector2D<float> > & output )
 {
-	if (input.Size()<3) {
+	if (input.size()<3) {
 		return;
 	}
 	// TODO : Regenerate a linear poligone generation
-	for (int32_t iii=1; iii<input.Size()-1; iii++) {
-		output.PushBack(input[0]);
-		output.PushBack(input[iii]);
-		output.PushBack(input[iii+1]);
+	for (int32_t iii=1; iii<input.size()-1; iii++) {
+		output.push_back(input[0]);
+		output.push_back(input[iii]);
+		output.push_back(input[iii+1]);
 	}
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorType<Vector2D<float> > & output, float sx, float sy, float ex, float ey)
+void SutherlandHodgman(std::vector<Vector2D<float> > & input, std::vector<Vector2D<float> > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
-	if (input.Size() <0) {
+	if (input.size() <=0) {
 		return;
 	}
 	//int32_t sizeInit=input.Size();
 	// last element :
 	Vector2D<float> destPoint;
-	Vector2D<float> lastElement = input[input.Size()-1];
+	Vector2D<float> lastElement = input[input.size()-1];
 	bool inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
 	}
 	//EWOL_DEBUG("generate an crop : ");
-	for(int32_t iii=0; iii<input.Size(); iii++) {
+	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].x < sx) {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> OUT ");
@@ -119,7 +119,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
-				output.PushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT ==> OUT ");
 			}
@@ -127,7 +127,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> IN ");
-				output.PushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
@@ -136,8 +136,8 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
-				output.PushBack(destPoint);
-				output.PushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -148,13 +148,13 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 	
 	//EWOL_DEBUG("generate an crop on element : " << sizeInit << " ==> " << output.Size() << "intermediate (1)");
 	input = output;
-	output.Clear();
-	lastElement = input[input.Size()-1];
+	output.clear();
+	lastElement = input[input.size()-1];
 	inside = true;
 	if (lastElement.y < sy) {
 		inside = false;
 	}
-	for(int32_t iii=0; iii<input.Size(); iii++) {
+	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].y < sy) {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> OUT ");
@@ -164,7 +164,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
-				output.PushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT ==> OUT ");
 			}
@@ -172,7 +172,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> IN ");
-				output.PushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
@@ -181,8 +181,8 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
-				output.PushBack(destPoint);
-				output.PushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -192,14 +192,14 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 	}
 	
 	input = output;
-	output.Clear();
-	lastElement = input[input.Size()-1];
+	output.clear();
+	lastElement = input[input.size()-1];
 	inside = true;
 	if (lastElement.x > ex) {
 		inside = false;
 	}
 	//EWOL_DEBUG("generate an crop : ");
-	for(int32_t iii=0; iii<input.Size(); iii++) {
+	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].x > ex) {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> OUT ");
@@ -209,7 +209,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
-				output.PushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT ==> OUT ");
 			}
@@ -217,7 +217,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> IN ");
-				output.PushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
@@ -226,8 +226,8 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
-				output.PushBack(destPoint);
-				output.PushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -237,13 +237,13 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 	}
 	
 	input = output;
-	output.Clear();
-	lastElement = input[input.Size()-1];
+	output.clear();
+	lastElement = input[input.size()-1];
 	inside = true;
 	if (lastElement.y > ey) {
 		inside = false;
 	}
-	for(int32_t iii=0; iii<input.Size(); iii++) {
+	for(int32_t iii=0; iii<input.size(); iii++) {
 		if(input[iii].y > ey) {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> OUT ");
@@ -253,7 +253,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
-				output.PushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT ==> OUT ");
 			}
@@ -261,7 +261,7 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN ==> IN ");
-				output.PushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT ==> IN ");
 				//new point intersection ...
@@ -270,8 +270,8 @@ void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorTyp
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
-				output.PushBack(destPoint);
-				output.PushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -289,12 +289,12 @@ void ewol::OObject2DColored::GenerateTriangle(void)
 {
 	m_triElement = 0;
 	
-	m_coord.PushBack(m_triangle[0]);
-	m_coordColor.PushBack(m_color[0]);
-	m_coord.PushBack(m_triangle[1]);
-	m_coordColor.PushBack(m_color[1]);
-	m_coord.PushBack(m_triangle[2]);
-	m_coordColor.PushBack(m_color[2]);
+	m_coord.push_back(m_triangle[0]);
+	m_coordColor.push_back(m_color[0]);
+	m_coord.push_back(m_triangle[1]);
+	m_coordColor.push_back(m_color[1]);
+	m_coord.push_back(m_triangle[2]);
+	m_coordColor.push_back(m_color[2]);
 }
 
 
