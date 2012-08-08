@@ -11,7 +11,7 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES :=    etk libfreetype    tinyxml libzip libpng    agg    parsersvg    lua    portaudio
+LOCAL_STATIC_LIBRARIES := etk freetype tinyxml libzip libpng agg parsersvg lua portaudio
 
 LOCAL_C_INCLUDES := 
 
@@ -25,7 +25,6 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DBUILD_TIME="\"$(BUILD_TIME)\"" \
-                -DEWOL_USE_FREE_TYPE \
                 -DLUA_COMPAT_ALL \
                 -Wall
 
@@ -36,8 +35,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Linux \
                 -DEWOL_DEBUG_LEVEL=3 \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-release\"" \
                 -DBUILD_TIME="\"$(BUILD_TIME)\"" \
-                -DLUA_COMPAT_ALL \
-                -DEWOL_USE_FREE_TYPE
+                -DLUA_COMPAT_ALL
 
 endif
 

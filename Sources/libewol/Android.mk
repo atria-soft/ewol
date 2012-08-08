@@ -11,9 +11,9 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES := libetk libfreetype libtinyxml libzip libpng libagg libparsersvg liblua
+LOCAL_STATIC_LIBRARIES := etk freetype tinyxml libzip libpng agg parsersvg lua portaudio
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
@@ -46,7 +46,10 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_SRC_FILES := ewol/base/guiAndroid.cpp $(FILE_LIST)
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz --sysroot=/home/edupin/dev/perso/android/ndk/platforms/android-14/arch-arm \
+                        /home/edupin/dev/perso/copyDirectServeur/yourDevFolder/edn/obj/local/armeabi/libstdc++.a \
+                        /home/edupin/dev/perso/android/ndk/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libsupc++.a \
+                        -lstdc++
 
 include $(BUILD_STATIC_LIBRARY)
 

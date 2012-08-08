@@ -1745,7 +1745,7 @@ template<class CLASS_TYPE> class RegExp {
 				//TK_DEBUG("=> must not end with char");
 				m_notEndWithChar = true;
 				// remove element
-				tmpExp.erase(tmpExp.end());
+				tmpExp.erase(tmpExp.end()-1);
 			}
 			
 			if (tmpExp.size() != m_exprRootNode.Generate(tmpExp) ) {
