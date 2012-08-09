@@ -24,8 +24,8 @@
 
 // cf : http://unicode.org/fr/charts/symbols.html#CombiningDiacriticalMarks
 
-#include <etk/DebugInternal.h>
 #include <etk/Types.h>
+#include <etk/Debug.h>
 #include <etk/unicodeTable.h>
 #include <etk/unicode.h>
 
@@ -58,7 +58,7 @@ void unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, uniCh
 			#endif
 			break;
 		default :
-			TK_WARNING("Unknow charset ... " << (int32_t)inputCharset);
+			TK_WARNING("Unknow charset ... " << inputCharset);
 			output_Unicode = '?';
 			break;
 	}
@@ -99,69 +99,69 @@ void unicode::convertUnicodeToIso(charset_te inputCharset, uniChar_t input_Unico
 }
 
 
-int32_t unicode::convertIsoToUnicode(charset_te inputCharset, std::vector<char>& input_ISO, std::vector<uniChar_t>& output_Unicode)
+int32_t unicode::convertIsoToUnicode(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	output_Unicode.clear();
+	output_Unicode.Clear();
 	uniChar_t output;
-	for(int32_t iii=0; iii<input_ISO.size(); iii++) {
+	for(int32_t iii=0; iii<input_ISO.Size(); iii++) {
 		convertIsoToUnicode(inputCharset, (char)input_ISO[iii], output);
-		output_Unicode.push_back(output);
+		output_Unicode.PushBack(output);
 	}
-	if (output_Unicode.size() == 0) {
-		output_Unicode.push_back(0);
-	} else if (output_Unicode[output_Unicode.size()-1] != 0) {
-		output_Unicode.push_back(0);
+	if (output_Unicode.Size() == 0) {
+		output_Unicode.PushBack(0);
+	} else if (output_Unicode[output_Unicode.Size()-1] != 0) {
+		output_Unicode.PushBack(0);
 	}
-	return output_Unicode.size();
+	return output_Unicode.Size();
 }
 
-int32_t unicode::convertIsoToUnicode(charset_te inputCharset, std::vector<int8_t>& input_ISO, std::vector<uniChar_t>& output_Unicode)
+int32_t unicode::convertIsoToUnicode(charset_te inputCharset, etk::VectorType<int8_t>& input_ISO, etk::VectorType<uniChar_t>& output_Unicode)
 {
-	output_Unicode.clear();
+	output_Unicode.Clear();
 	uniChar_t output;
-	for(int32_t iii=0; iii<input_ISO.size(); iii++) {
+	for(int32_t iii=0; iii<input_ISO.Size(); iii++) {
 		convertIsoToUnicode(inputCharset, (char)input_ISO[iii], output);
-		output_Unicode.push_back(output);
+		output_Unicode.PushBack(output);
 	}
-	if (output_Unicode.size() == 0) {
-		output_Unicode.push_back(0);
-	} else if (output_Unicode[output_Unicode.size()-1] != 0) {
-		output_Unicode.push_back(0);
+	if (output_Unicode.Size() == 0) {
+		output_Unicode.PushBack(0);
+	} else if (output_Unicode[output_Unicode.Size()-1] != 0) {
+		output_Unicode.PushBack(0);
 	}
-	return output_Unicode.size();
+	return output_Unicode.Size();
 }
 
 
-int32_t unicode::convertUnicodeToIso(charset_te inputCharset, std::vector<uniChar_t>& input_Unicode, std::vector<char>&    output_ISO)
+int32_t unicode::convertUnicodeToIso(charset_te inputCharset, etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>&    output_ISO)
 {
-	output_ISO.clear();
+	output_ISO.Clear();
 	char output[10];
-	for(int32_t iii=0; iii<input_Unicode.size(); iii++) {
+	for(int32_t iii=0; iii<input_Unicode.Size(); iii++) {
 		convertUnicodeToUtf8(input_Unicode[iii], output);
 		char * tmp = output;
 		while(*tmp != '\0') {
-			output_ISO.push_back(*tmp);
+			output_ISO.PushBack(*tmp);
 			tmp++;
 		}
 	}
-	output_ISO.push_back(0);
-	return output_ISO.size();
+	output_ISO.PushBack(0);
+	return output_ISO.Size();
 }
 
-int32_t unicode::convertUnicodeToIso(charset_te inputCharset, std::vector<uniChar_t>& input_Unicode, std::vector<int8_t>&    output_ISO)
+int32_t unicode::convertUnicodeToIso(charset_te inputCharset, etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<int8_t>&    output_ISO)
 {
-	output_ISO.clear();
+	output_ISO.Clear();
 	char output[10];
-	for(int32_t iii=0; iii<input_Unicode.size(); iii++) {
+	for(int32_t iii=0; iii<input_Unicode.Size(); iii++) {
 		convertUnicodeToUtf8(input_Unicode[iii], output);
 		char * tmp = output;
 		while(*tmp != '\0') {
-			output_ISO.push_back(*tmp);
+			output_ISO.PushBack(*tmp);
 			tmp++;
 		}
 	}
-	output_ISO.push_back(0);
-	return output_ISO.size();
+	output_ISO.PushBack(0);
+	return output_ISO.Size();
 }
 
 
@@ -254,45 +254,45 @@ void unicode::convertUtf8ToUnicode(char * input_UTF8, uniChar_t &output_Unicode)
 }
 
 
-int32_t unicode::convertUnicodeToUtf8(const std::vector<uniChar_t>& input_Unicode, std::vector<char>& output_UTF8)
+int32_t unicode::convertUnicodeToUtf8(const etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<char>& output_UTF8)
 {
 	char output[10];
 	
-	for (int32_t iii=0; iii<input_Unicode.size(); iii++) {
+	for (int32_t iii=0; iii<input_Unicode.Size(); iii++) {
 		unicode::convertUnicodeToUtf8(input_Unicode[iii], output);
 		char * tmp = output ;
 		while (*tmp != '\0') {
-			output_UTF8.push_back(*tmp);
+			output_UTF8.PushBack(*tmp);
 			tmp++;
 		}
 	}
-	output_UTF8.push_back('\0');
-	return output_UTF8.size()-1;
+	output_UTF8.PushBack('\0');
+	return output_UTF8.Size()-1;
 }
 
-int32_t unicode::convertUnicodeToUtf8(const std::vector<uniChar_t>& input_Unicode, std::vector<int8_t>& output_UTF8)
+int32_t unicode::convertUnicodeToUtf8(const etk::VectorType<uniChar_t>& input_Unicode, etk::VectorType<int8_t>& output_UTF8)
 {
 	char output[10];
 	
-	for (int32_t iii=0; iii<input_Unicode.size(); iii++) {
+	for (int32_t iii=0; iii<input_Unicode.Size(); iii++) {
 		unicode::convertUnicodeToUtf8(input_Unicode[iii], output);
 		char * tmp = output ;
 		while (*tmp != '\0') {
-			output_UTF8.push_back((int8_t)*tmp);
+			output_UTF8.PushBack((int8_t)*tmp);
 			tmp++;
 		}
 	}
-	output_UTF8.push_back('\0');
-	return output_UTF8.size()-1;
+	output_UTF8.PushBack('\0');
+	return output_UTF8.Size()-1;
 }
 
 
-int32_t unicode::convertUtf8ToUnicode(std::vector<char>& input_UTF8, std::vector<uniChar_t>& output_Unicode)
+int32_t unicode::convertUtf8ToUnicode(etk::VectorType<char>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
 	char tmpData[20];
 	int32_t pos = 0;
-	while (pos < input_UTF8.size()) {
-		int32_t lenMax = input_UTF8.size() - pos;
+	while (pos < input_UTF8.Size()) {
+		int32_t lenMax = input_UTF8.Size() - pos;
 		//4 case
 		if(    1<=lenMax
 		    && 0x00 == (input_UTF8[pos+0] & 0x80) )
@@ -333,17 +333,17 @@ int32_t unicode::convertUtf8ToUnicode(std::vector<char>& input_UTF8, std::vector
 		}
 		uniChar_t tmpUnicode;
 		convertUtf8ToUnicode(tmpData, tmpUnicode);
-		output_Unicode.push_back(tmpUnicode);
+		output_Unicode.PushBack(tmpUnicode);
 	}
 	return 0;
 }
 
-int32_t unicode::convertUtf8ToUnicode(std::vector<int8_t>& input_UTF8, std::vector<uniChar_t>& output_Unicode)
+int32_t unicode::convertUtf8ToUnicode(etk::VectorType<int8_t>& input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
 	char tmpData[20];
 	int32_t pos = 0;
-	while (pos < input_UTF8.size()) {
-		int32_t lenMax = input_UTF8.size() - pos;
+	while (pos < input_UTF8.Size()) {
+		int32_t lenMax = input_UTF8.Size() - pos;
 		//4 case
 		if(    1<=lenMax
 		    && 0x00 == (input_UTF8[pos+0] & 0x80) )
@@ -384,12 +384,12 @@ int32_t unicode::convertUtf8ToUnicode(std::vector<int8_t>& input_UTF8, std::vect
 		}
 		uniChar_t tmpUnicode;
 		convertUtf8ToUnicode(tmpData, tmpUnicode);
-		output_Unicode.push_back(tmpUnicode);
+		output_Unicode.PushBack(tmpUnicode);
 	}
 	return 0;
 }
 
-int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, std::vector<uniChar_t>& output_Unicode)
+int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, etk::VectorType<uniChar_t>& output_Unicode)
 {
 	char tmpData[20];
 	int32_t pos = 0;
@@ -439,7 +439,7 @@ int32_t unicode::convertUtf8ToUnicode(char * input_UTF8, std::vector<uniChar_t>&
 		}
 		uniChar_t tmpUnicode;
 		convertUtf8ToUnicode(tmpData, tmpUnicode);
-		output_Unicode.push_back(tmpUnicode);
+		output_Unicode.PushBack(tmpUnicode);
 	}
 	return 0;
 }
@@ -466,14 +466,14 @@ void unicode::convertUtf8ToIso(charset_te inputCharset,  char * input_UTF8, char
 }
 
 
-int32_t unicode::convertIsoToUtf8(charset_te inputCharset, std::vector<char>& input_ISO, std::vector<char>& output_UTF8)
+int32_t unicode::convertIsoToUtf8(charset_te inputCharset, etk::VectorType<char>& input_ISO, etk::VectorType<char>& output_UTF8)
 {
 	TK_WARNING("TODO : not coded...");
 	return 0;
 }
 
 
-int32_t unicode::convertUtf8ToIso(charset_te inputCharset, std::vector<char>& input_UTF8, std::vector<char>& output_ISO)
+int32_t unicode::convertUtf8ToIso(charset_te inputCharset, etk::VectorType<char>& input_UTF8, etk::VectorType<char>& output_ISO)
 {
 	TK_WARNING("TODO : not coded...");
 	return 0;

@@ -38,14 +38,14 @@ extern const char * const ewolEventFSFileValidate   = "ewol-event-file-system-fi
 extern const char * const ewolEventFSFolderSelect   = "ewol-event-file-system-folder-select";
 extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-folder-validate";
 
-static void SortElementList(std::vector<ewol::elementFS *> &list)
+static void SortElementList(etk::VectorType<ewol::elementFS *> &list)
 {
-	std::vector<ewol::elementFS *> tmpList = list;
-	list.clear();
-	for(int32_t iii=0; iii<tmpList.size(); iii++) {
+	etk::VectorType<ewol::elementFS *> tmpList = list;
+	list.Clear();
+	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		if (NULL != tmpList[iii]) {
 			int32_t findPos = 0;
-			for(int32_t jjj=0; jjj<list.size(); jjj++) {
+			for(int32_t jjj=0; jjj<list.Size(); jjj++) {
 				//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
 				if (list[jjj]!=NULL) {
 					if (tmpList[iii]->m_name > list[jjj]->m_name) {
@@ -54,7 +54,7 @@ static void SortElementList(std::vector<ewol::elementFS *> &list)
 				}
 			}
 			//EWOL_DEBUG("position="<<findPos);
-			list.insert(list.begin()+findPos, tmpList[iii]);
+			list.Insert(findPos, tmpList[iii]);
 		}
 	}
 }
@@ -78,7 +78,7 @@ ewol::ListFileSystem::ListFileSystem(void)
 
 ewol::ListFileSystem::~ListFileSystem(void)
 {
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
@@ -95,13 +95,13 @@ color_ts ewol::ListFileSystem::GetBasicBG(void) {
 void ewol::ListFileSystem::RegenerateView(void)
 {
 	// clean the list of files : 
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
 		}
 	}
-	m_list.clear();
+	m_list.Clear();
 	m_originScrooled.x = 0;
 	m_originScrooled.y = 0;
 	
@@ -111,14 +111,14 @@ void ewol::ListFileSystem::RegenerateView(void)
 		// the "." permit to reload the curent folder
 		tmpEmement = new ewol::elementFS(".", ewol::EFS_FOLDER);
 		if (NULL != tmpEmement) {
-			m_list.push_back(tmpEmement);
+			m_list.PushBack(tmpEmement);
 		}
 		tmpEmement = NULL;
 		// the ".." permit to show the upper folder (but not availlable for the "/" folder
 		if (m_folder != "/") {
 			tmpEmement = new ewol::elementFS("..", ewol::EFS_FOLDER);
 			if (NULL != tmpEmement) {
-				m_list.push_back(tmpEmement);
+				m_list.PushBack(tmpEmement);
 			}
 			tmpEmement = NULL;
 		}
@@ -137,7 +137,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 					    || true ==m_showHidden) {
 						tmpEmement = new ewol::elementFS(tmpString, ewol::EFS_FILE);
 						if (NULL != tmpEmement) {
-							m_list.push_back(tmpEmement);
+							m_list.PushBack(tmpEmement);
 						}
 						tmpEmement = NULL;
 					}
@@ -153,7 +153,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 						    || true ==m_showHidden) {
 							tmpEmement = new ewol::elementFS(tmpString, ewol::EFS_FOLDER);
 							if (NULL != tmpEmement) {
-								m_list.push_back(tmpEmement);
+								m_list.PushBack(tmpEmement);
 							}
 							tmpEmement = NULL;
 						}
@@ -222,12 +222,11 @@ etk::UString ewol::ListFileSystem::GetSelect(void)
 }
 
 // select the specific file
-void ewol::ListFileSystem::SetSelect( etk::UString data)
-{
+void ewol::ListFileSystem::SetSelect( etk::UString data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL!=m_list[iii]) {
 			if (m_list[iii]->m_name == data) {
 				// we find the line :
@@ -239,25 +238,18 @@ void ewol::ListFileSystem::SetSelect( etk::UString data)
 	MarkToReedraw();
 }
 
-uint32_t ewol::ListFileSystem::GetNuberOfColomn(void)
-{
+uint32_t ewol::ListFileSystem::GetNuberOfColomn(void) {
 	return 1;
-}
-
-bool ewol::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg)
-{
+};
+bool ewol::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
 	myTitle = "title";
 	return true;
-}
-
-uint32_t ewol::ListFileSystem::GetNuberOfRaw(void)
-{
-	return m_list.size();
-}
-
-bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg)
-{
-	if (raw >= 0 && raw < m_list.size() && NULL != m_list[raw]) {
+};
+uint32_t ewol::ListFileSystem::GetNuberOfRaw(void) {
+	return m_list.Size();
+};
+bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
+	if (raw >= 0 && raw < m_list.Size() && NULL != m_list[raw]) {
 		myTextToWrite = m_list[raw]->m_name;
 	} else {
 		myTextToWrite = "ERROR";
@@ -272,14 +264,13 @@ bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString 
 		bg = 0x8F8FFFFF;
 	}
 	return true;
-}
+};
 
-bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y)
-{
+bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
 	if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 		EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
 		if (1 == IdInput) {
-			if (raw > m_list.size() ) {
+			if (raw > m_list.Size() ) {
 				m_selectedLine = -1;
 			} else {
 				m_selectedLine = raw;

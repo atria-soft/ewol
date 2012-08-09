@@ -53,7 +53,7 @@ class LoadedTexture
 		bool        m_destroy;
 };
 //! List of all Texture loaded ...
-std::vector<LoadedTexture*> l_listLoadedTexture;
+etk::VectorType<LoadedTexture*> l_listLoadedTexture;
 #undef __class__
 #define __class__	"texture"
 
@@ -82,13 +82,13 @@ void ewol::texture::UnInit(void)
 {
 	pthread_mutex_lock(&localMutex);
 	EWOL_DEBUG("==> Un-Init Texture-Manager");
-	for (int32_t iii=0; iii<l_listLoadedTexture.size(); iii++) {
+	for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
 		if (l_listLoadedTexture[iii] != NULL) {
 			delete(l_listLoadedTexture[iii]);
 		}
 		l_listLoadedTexture[iii] = NULL;
 	}
-	l_listLoadedTexture.clear();
+	l_listLoadedTexture.Clear();
 	pthread_mutex_unlock(&localMutex);
 	int ret = pthread_mutex_destroy(&localMutex);
 	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
@@ -105,7 +105,7 @@ void ewol::texture::UnInit(void)
 void ewol::texture::UpdateContextIsDestroy(void)
 {
 	pthread_mutex_lock(&localMutex);
-	for (int32_t iii=0; iii < l_listLoadedTexture.size(); iii++) {
+	for (int32_t iii=0; iii < l_listLoadedTexture.Size(); iii++) {
 		if(    NULL != l_listLoadedTexture[iii]
 		    && NULL != l_listLoadedTexture[iii]->m_data)
 		{
@@ -131,7 +131,7 @@ void ewol::texture::UpdateContext(void)
 {
 	bool needRedraw = false;
 	pthread_mutex_lock(&localMutex);
-	for (int32_t iii=0; iii < l_listLoadedTexture.size(); iii++) {
+	for (int32_t iii=0; iii < l_listLoadedTexture.Size(); iii++) {
 		if(    NULL != l_listLoadedTexture[iii]
 		    && NULL != l_listLoadedTexture[iii]->m_data)
 		{
@@ -241,8 +241,8 @@ int32_t ewol::texture::Load(int32_t target, int32_t level, int32_t internalForma
 	memcpy(tmpTex->m_data, data, sizeof(char) * tmpTex->m_nbBytes);
 	
 	pthread_mutex_lock(&localMutex);
-	l_listLoadedTexture.push_back(tmpTex);
-	outTextureID = l_listLoadedTexture.size()-1;
+	l_listLoadedTexture.PushBack(tmpTex);
+	outTextureID = l_listLoadedTexture.Size()-1;
 	pthread_mutex_unlock(&localMutex);
 	return outTextureID;
 }
@@ -279,8 +279,8 @@ static int32_t nextP2(int32_t value)
 int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 {
 	int32_t outTextureID = -1;
-	if (l_listLoadedTexture.size()!=0) {
-		for (int32_t iii=0; iii<l_listLoadedTexture.size(); iii++) {
+	if (l_listLoadedTexture.Size()!=0) {
+		for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
 			if (NULL != l_listLoadedTexture[iii]) {
 				if (l_listLoadedTexture[iii]->m_filename == tmpfileName) {
 					l_listLoadedTexture[iii]->m_nbTimeLoaded++;
@@ -352,7 +352,7 @@ int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 void ewol::texture::UnLoad(uint32_t textureID)
 {
 	//EWOL_INFO("Unload a specific tecture ID=" << textureID);
-	if ((int32_t)textureID<l_listLoadedTexture.size()) {
+	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
 		if (NULL == l_listLoadedTexture[textureID]) {
 			EWOL_ERROR("Texture : " << textureID << " does not existe anymore...");
 			return;
@@ -375,7 +375,7 @@ void ewol::texture::UnLoad(uint32_t textureID)
  */
 uint32_t ewol::texture::GetGLID(uint32_t textureID)
 {
-	if ((int32_t)textureID<l_listLoadedTexture.size()) {
+	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
 		return l_listLoadedTexture[textureID]->m_openGlTextureID;
 	}
 	return 0;
@@ -389,7 +389,7 @@ uint32_t ewol::texture::GetGLID(uint32_t textureID)
  */
 int32_t ewol::texture::GetSize(uint32_t textureID)
 {
-	for (int32_t iii=0; iii<l_listLoadedTexture.size(); iii++) {
+	for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
 		if (l_listLoadedTexture[iii]->m_openGlTextureID == textureID) {
 			return l_listLoadedTexture[iii]->m_width;
 		}

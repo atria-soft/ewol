@@ -29,6 +29,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
 #include <ewol/WidgetManager.h>
+#include <etk/VectorType.h>
 
 
 #include <ewol/ewol.h>

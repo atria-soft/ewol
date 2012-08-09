@@ -22,7 +22,6 @@
  *******************************************************************************
  */
 
-#include <etk/DebugInternal.h>
 #include <etk/UString.h>
 #include <etk/Memory.h>
 #include <etk/unicode.h>
@@ -48,9 +47,9 @@ int32_t strlen(const uniChar_t * data)
 
 etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
 {
-	std::vector<char> output_UTF8;
+	etk::VectorType<char> output_UTF8;
 	unicode::convertUnicodeToUtf8(obj.m_data, output_UTF8);
-	output_UTF8.push_back('\0');
+	output_UTF8.PushBack('\0');
 	os << &output_UTF8[0];
 	return os;
 }
@@ -65,8 +64,8 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
  */
 etk::UString::~UString(void)
 {
-	m_data.clear();
-	m_dataUtf8.clear();
+	m_data.Clear();
+	m_dataUtf8.Clear();
 }
 
 
@@ -81,8 +80,8 @@ etk::UString::~UString(void)
 etk::UString::UString(void)
 {
 	//TK_INFO("new etk::UString()");
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 }
 
 
@@ -96,8 +95,8 @@ etk::UString::UString(void)
  */
 etk::UString::UString(const char* inputData, int32_t len)
 {
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(inputData, len);
 }
 
@@ -112,8 +111,8 @@ etk::UString::UString(const char* inputData, int32_t len)
  */
 etk::UString::UString(const uniChar_t* inputData, int32_t len)
 {
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(inputData, len);
 }
 /*
@@ -136,18 +135,18 @@ void etk::UString::Set(const char * inputData, int32_t len)
 		len = strlen(inputData);
 	}
 	// convert the string
-	std::vector<char> tmpChar;
+	etk::VectorType<char> tmpChar;
 	for (int32_t iii=0; iii<len; iii++) {
-		tmpChar.push_back(inputData[iii]);
+		tmpChar.PushBack(inputData[iii]);
 	}
 	// add it ...
 	if (len != 0) {
 		// remove the last '\0'
-		m_data.pop_back();
+		m_data.PopBack();
 		// copy the data ...
 		unicode::convertUtf8ToUnicode(tmpChar, m_data);
 		// add the last '\0'
-		m_data.push_back('\0');
+		m_data.PushBack('\0');
 	}
 }
 
@@ -164,13 +163,11 @@ void etk::UString::Set(const uniChar_t * inputData, int32_t len)
 	
 	if (len != 0) {
 		// remove the last '\0'
-		m_data.pop_back();
+		m_data.PopBack();
 		// copy the data ...
-		for (int32_t iii=0; iii<len; iii++) {
-			m_data.push_back(inputData[iii]);
-		}
+		m_data.PushBack(inputData, len);
 		// add the last '\0'
-		m_data.push_back('\0');
+		m_data.PushBack('\0');
 	}
 }
 /**
@@ -187,8 +184,8 @@ etk::UString::UString(char inputData)
 	// generate the UString : 
 	sprintf(tmpVal, "%c", inputData);
 	// set the internal data : 
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(tmpVal);
 }
 
@@ -199,8 +196,8 @@ etk::UString::UString(int inputData)
 	// generate the UString : 
 	sprintf(tmpVal, "%d", inputData);
 	// set the internal data : 
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(tmpVal);
 }
 
@@ -219,8 +216,8 @@ etk::UString::UString(unsigned int inputData)
 	// generate the UString : 
 	sprintf(tmpVal, "%d", inputData);
 	// set the internal data : 
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(tmpVal);
 }
 
@@ -230,8 +227,8 @@ etk::UString::UString(float inputData)
 	// generate the UString : 
 	sprintf(tmpVal, "%f", inputData);
 	// set the internal data : 
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(tmpVal);
 }
 
@@ -241,8 +238,8 @@ etk::UString::UString(double inputData)
 	// generate the UString : 
 	sprintf(tmpVal, "%lf", inputData);
 	// set the internal data : 
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 	Set(tmpVal);
 }
 
@@ -279,9 +276,9 @@ const etk::UString& etk::UString::operator= (const etk::UString &etkS )
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (std::vector<char> inputData)
+const etk::UString& etk::UString::operator= (etk::VectorType<char> inputData)
 {
-	std::vector<uniChar_t> output_Unicode;
+	etk::VectorType<uniChar_t> output_Unicode;
 	unicode::convertUtf8ToUnicode(inputData, output_Unicode);
 	*this = output_Unicode;
 	return *this;
@@ -295,9 +292,9 @@ const etk::UString& etk::UString::operator= (std::vector<char> inputData)
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (std::vector<int8_t> inputData)
+const etk::UString& etk::UString::operator= (etk::VectorType<int8_t> inputData)
 {
-	std::vector<uniChar_t> output_Unicode;
+	etk::VectorType<uniChar_t> output_Unicode;
 	unicode::convertUtf8ToUnicode(inputData, output_Unicode);
 	*this = output_Unicode;
 	return *this;
@@ -312,12 +309,12 @@ const etk::UString& etk::UString::operator= (std::vector<int8_t> inputData)
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (std::vector<uniChar_t> inputData)
+const etk::UString& etk::UString::operator= (etk::VectorType<uniChar_t> inputData)
 {
 	m_data = inputData;
-	if (m_data.size()>0) {
-		if (m_data[m_data.size()-1] != '\0') {
-			m_data.push_back('\0');
+	if (m_data.Size()>0) {
+		if (m_data[m_data.Size()-1] != '\0') {
+			m_data.PushBack('\0');
 		}
 	}
 	//TK_DEBUG("m_dataLen="<<m_dataLen << " m_dataLenUTF8="<<m_dataLenUTF8 << " description=" << m_data);
@@ -346,7 +343,7 @@ uniChar_t changeOrder(uniChar_t elemA)
 bool etk::UString::operator> (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
-		for (int32_t iii=0; iii < m_data.size() && iii < etkS.m_data.size(); iii++) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
 			//TK_DEBUG("    compare : '" << (char)m_data[iii] << "'>'" << (char)etkS.m_data[iii] << "' ==> " << changeOrder(m_data[iii]) << ">" << changeOrder(etkS.m_data[iii]) << "");
 			uniChar_t elemA = changeOrder(m_data[iii]);
 			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
@@ -357,7 +354,7 @@ bool etk::UString::operator> (const etk::UString& etkS) const
 				return false;
 			}
 		}
-		if (m_data.size() > etkS.m_data.size()) {
+		if (m_data.Size() > etkS.m_data.Size()) {
 			return true;
 		}
 	}
@@ -367,7 +364,7 @@ bool etk::UString::operator> (const etk::UString& etkS) const
 bool etk::UString::operator>= (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
-		for (int32_t iii=0; iii < m_data.size() && iii < etkS.m_data.size(); iii++) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
 			uniChar_t elemA = changeOrder(m_data[iii]);
 			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
 			if (elemA != elemB) {
@@ -377,7 +374,7 @@ bool etk::UString::operator>= (const etk::UString& etkS) const
 				return false;
 			}
 		}
-		if (m_data.size() >= etkS.m_data.size()) {
+		if (m_data.Size() >= etkS.m_data.Size()) {
 			return true;
 		}
 	}
@@ -387,7 +384,7 @@ bool etk::UString::operator>= (const etk::UString& etkS) const
 bool etk::UString::operator< (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
-		for (int32_t iii=0; iii < m_data.size() && iii < etkS.m_data.size(); iii++) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
 			uniChar_t elemA = changeOrder(m_data[iii]);
 			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
 			if (elemA != elemB) {
@@ -397,7 +394,7 @@ bool etk::UString::operator< (const etk::UString& etkS) const
 				return false;
 			}
 		}
-		if (m_data.size() < etkS.m_data.size()) {
+		if (m_data.Size() < etkS.m_data.Size()) {
 			return true;
 		}
 	}
@@ -407,7 +404,7 @@ bool etk::UString::operator< (const etk::UString& etkS) const
 bool etk::UString::operator<= (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
-		for (int32_t iii=0; iii < m_data.size() && iii < etkS.m_data.size(); iii++) {
+		for (int32_t iii=0; iii < m_data.Size() && iii < etkS.m_data.Size(); iii++) {
 			uniChar_t elemA = changeOrder(m_data[iii]);
 			uniChar_t elemB = changeOrder(etkS.m_data[iii]);
 			if (elemA != elemB) {
@@ -417,7 +414,7 @@ bool etk::UString::operator<= (const etk::UString& etkS) const
 				return false;
 			}
 		}
-		if (m_data.size() <= etkS.m_data.size()) {
+		if (m_data.Size() <= etkS.m_data.Size()) {
 			return true;
 		}
 	}
@@ -436,11 +433,11 @@ bool etk::UString::operator<= (const etk::UString& etkS) const
 bool etk::UString::operator== (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
-		if (etkS.m_data.size() != m_data.size()) {
+		if (etkS.m_data.Size() != m_data.Size()) {
 			//TK_DEBUG(" not the same size : " << etkS.m_data.Size() << "!=" << m_data.Size());
 			return false;
 		}
-		for (int32_t iii= 0; iii<m_data.size(); iii++) {
+		for (int32_t iii= 0; iii<m_data.Size(); iii++) {
 			//TK_DEBUG("     check : " << etkS.m_data[iii] << "!=" << m_data[iii]);
 			if (etkS.m_data[iii]!= m_data[iii]){
 				return false;
@@ -479,13 +476,13 @@ const etk::UString& etk::UString::operator+= (const etk::UString &etkS)
 {
 	if (0 < etkS.Size()) {
 		// remove the last '\0'
-		m_data.pop_back();
+		m_data.PopBack();
 		// copy the data ...
-		m_data.insert(m_data.end(), etkS.m_data.begin(), etkS.m_data.end());
+		m_data += etkS.m_data;
 		// This previous include the \0 in case of the 2 UString are different...
 		if( this == &etkS ) {
 			// add the removed end UString
-			m_data.push_back('\0');
+			m_data.PushBack('\0');
 		}
 	}
 	return *this;
@@ -525,7 +522,7 @@ etk::UString etk::UString::operator+ (const etk::UString &etkS)
  */
 bool etk::UString::IsEmpty(void) const
 {
-	if(1 >= m_data.size() ) {
+	if(1 >= m_data.Size() ) {
 		return true;
 	} else {
 		return false;
@@ -543,10 +540,10 @@ bool etk::UString::IsEmpty(void) const
  */
 int32_t etk::UString::Size(void) const
 {
-	if (m_data.size() == 0) {
+	if (m_data.Size() == 0) {
 		return 0;
 	} else {
-		return m_data.size() - 1;
+		return m_data.Size() - 1;
 	}
 }
 
@@ -585,14 +582,10 @@ void etk::UString::Add(int32_t currentID, const uniChar_t* inputData)
 		currentID = 0;
 	} else if (currentID > Size() ) {
 		TK_ERROR("Curent ID(" << currentID << ") > maxSize ... (" << Size() << ")  ==> add at the end ...");
-		for (int32_t iii=0; iii<len; iii++) {
-			m_data.push_back(inputData[iii]);
-		}
+		m_data.PushBack(inputData, len);
 		return;
 	}
-	for (int32_t iii=0; iii<len; iii++) {
-		m_data.insert(m_data.begin()+currentID+iii, inputData[iii]);
-	}
+	m_data.Insert(currentID, inputData, len);
 }
 
 /**
@@ -627,7 +620,7 @@ void etk::UString::Remove(int32_t currentID, int32_t len)
 		return;
 	}
 	// TODO : check the size of the data
-	m_data.erase(m_data.begin()+currentID, m_data.begin()+currentID+len);
+	m_data.EraseLen(currentID, len);
 }
 
 
@@ -641,8 +634,8 @@ void etk::UString::Remove(int32_t currentID, int32_t len)
  */
 void etk::UString::Clear(void)
 {
-	m_data.clear();
-	m_data.push_back('\0');
+	m_data.Clear();
+	m_data.PushBack('\0');
 }
 
 
@@ -727,9 +720,8 @@ etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd)
 	} else if (posEnd >= Size() ) {
 		posEnd = Size();
 	}
-	out.m_data.clear();
-	out.m_data.insert(out.m_data.begin(), m_data.begin()+posStart, m_data.begin()+posEnd);
-	out.m_data.push_back('\0');
+	out.m_data = m_data.Extract(posStart, posEnd);
+	out.m_data.PushBack('\0');
 	return out;
 }
 
@@ -742,10 +734,10 @@ etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd)
  * @return The desired vector with data
  *
  */
-std::vector<uniChar_t> etk::UString::GetVector(void)
+etk::VectorType<uniChar_t> etk::UString::GetVector(void)
 {
-	std::vector<uniChar_t> out = m_data;
-	out.pop_back();
+	etk::VectorType<uniChar_t> out = m_data;
+	out.PopBack();
 	return out;
 }
 
@@ -791,9 +783,9 @@ bool etk::UString::EndWith(const etk::UString& data)
 char * etk::UString::Utf8Data(void)
 {
 	// UTF8 generation :
-	m_dataUtf8.clear();
+	m_dataUtf8.Clear();
 	unicode::convertUnicodeToUtf8(m_data, m_dataUtf8);
-	m_dataUtf8.push_back('\0');
+	m_dataUtf8.PushBack('\0');
 	
 	return &m_dataUtf8[0];
 }

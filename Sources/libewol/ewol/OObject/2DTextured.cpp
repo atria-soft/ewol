@@ -52,7 +52,7 @@ ewol::OObject2DTextured::~OObject2DTextured(void)
 
 void ewol::OObject2DTextured::Draw(void)
 {
-	if (m_coord.size()<=0) {
+	if (m_coord.Size()<=0) {
 		return;
 	}
 	if (m_textureId == -1) {
@@ -69,7 +69,7 @@ void ewol::OObject2DTextured::Draw(void)
 	glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
 	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.size());
+	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
 	glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
 	glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
@@ -79,9 +79,9 @@ void ewol::OObject2DTextured::Draw(void)
 
 void ewol::OObject2DTextured::Clear(void)
 {
-	m_coord.clear();
-	m_coordTex.clear();
-	m_coordColor.clear();
+	m_coord.Clear();
+	m_coordTex.Clear();
+	m_coordColor.Clear();
 }
 
 void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, color_ts tmpColor)
@@ -99,45 +99,45 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	tex.v = texSY;
 	point.x = x;
 	point.y = y;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 
 
 	tex.u = texSX;
 	tex.v = texSY;
 	point.x = x + w;
 	point.y = y;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 
 
 	tex.u = texSX;
 	tex.v = texY;
 	point.x = x + w;
 	point.y = y + h;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 
 	tex.u = texX;
 	tex.v = texY;
 	point.x = x;
 	point.y = y + h;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 
 	tex.u = texX;
 	tex.v = texSY;
 	point.x = x;
 	point.y = y;
-	m_coord.push_back(point);
-	m_coordTex.push_back(tex);
-	m_coordColor.push_back(tmpColor);
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(tmpColor);
 }

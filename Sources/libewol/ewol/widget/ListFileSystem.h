@@ -26,7 +26,6 @@
 #define __EWOL_LIST_FILE_H__
 
 #include <ewol/widget/List.h>
-#include <vector>
 
 extern const char * const ewolEventFSFileSelect;
 extern const char * const ewolEventFSFileValidate;
@@ -56,7 +55,7 @@ namespace ewol {
 	class ListFileSystem : public ewol::List
 	{
 		private:
-			std::vector<ewol::elementFS *>     m_list;
+			etk::VectorType<ewol::elementFS *> m_list;
 			etk::UString                       m_folder;
 			int32_t                            m_selectedLine;
 			bool                               m_showFile;

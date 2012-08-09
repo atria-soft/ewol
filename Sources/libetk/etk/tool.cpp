@@ -39,20 +39,20 @@ int32_t etk::tool::irand(int32_t a, int32_t b)
 }
 
 
-void etk::tool::SortList(std::vector<etk::UString *> &m_listDirectory)
+void etk::tool::SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 {
-	std::vector<etk::UString *> tmpList = m_listDirectory;
-	m_listDirectory.clear();
-	for(int32_t iii=0; iii<tmpList.size(); iii++) {
+	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
+	m_listDirectory.Clear();
+	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		
 		int32_t findPos = 0;
-		for(int32_t jjj=0; jjj<m_listDirectory.size(); jjj++) {
+		for(int32_t jjj=0; jjj<m_listDirectory.Size(); jjj++) {
 			//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
 			if (*tmpList[iii] > *m_listDirectory[jjj]) {
 				findPos = jjj+1;
 			}
 		}
 		//EWOL_DEBUG("position="<<findPos);
-		m_listDirectory.insert(m_listDirectory.begin()+findPos, tmpList[iii]);
+		m_listDirectory.Insert(findPos, tmpList[iii]);
 	}
 }

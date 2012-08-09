@@ -26,7 +26,6 @@
 #define __EWOL_W_SLIDER_H__
 
 #include <etk/Types.h>
-#include <vector>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
@@ -53,11 +52,11 @@ namespace ewol {
 			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                       m_lockExpendContamination;
-			std::vector<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
-			int32_t                    m_windowsSources;     // widget source viewed
-			int32_t                    m_windowsDestination; // widget destinated viewed
-			int32_t                    m_slidingProgress;    // ratio progression of a sliding
+			bool                           m_lockExpendContamination;
+			etk::VectorType<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
+			int32_t                        m_windowsSources;     // widget source viewed
+			int32_t                        m_windowsDestination; // widget destinated viewed
+			int32_t                        m_slidingProgress;    // ratio progression of a sliding
 		public:
 			virtual void    SubWidgetRemoveAll(void);
 			virtual void    SubWidgetAdd(ewol::Widget* newWidget);
@@ -65,7 +64,7 @@ namespace ewol {
 			virtual void    SubWidgetUnLink(ewol::Widget* newWidget);
 			        void    SubWidgetSelectSet(int32_t id);
 			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
-			        int32_t SubWidgetNumber(void) { return m_subWidget[m_currentCreateId].size(); };
+			        int32_t SubWidgetNumber(void) { return m_subWidget[m_currentCreateId].Size(); };
 		protected:
 			virtual void   OnDraw(DrawProperty& displayProp);
 		public:

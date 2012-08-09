@@ -28,7 +28,7 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
-#include <vector>
+#include <etk/VectorType.h>
 #include <ewol/Widget.h>
 
 namespace ewol {

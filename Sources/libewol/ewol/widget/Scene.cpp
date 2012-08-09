@@ -63,13 +63,13 @@ void ewol::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean elements
-		for (int32_t iii=0; iii<m_sceneElement.animated[m_currentCreateId].size(); iii++) {
+		for (int32_t iii=0; iii<m_sceneElement.animated[m_currentCreateId].Size(); iii++) {
 			if (NULL != m_sceneElement.animated[m_currentCreateId][iii]) {
 				m_sceneElement.animated[m_currentCreateId][iii]->Clear();
 			}
 		}
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
-			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].size(); iii++) {
+			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
 					// find an empty slot ...
 					m_sceneElement.listAnimatedElements[jjj][iii]->Draw(m_currentCreateId);
@@ -90,7 +90,7 @@ void ewol::Scene::OnDraw(DrawProperty& displayProp)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw elements
-	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].size(); iii++) {
+	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_sceneElement.animated[m_currentDrawId][iii]) {
 			m_sceneElement.animated[m_currentDrawId][iii]->Draw();
 		}
@@ -126,7 +126,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 		ScenePeriodicCall(m_lastCallTime, CYCLIC_CALL_PERIODE_US);
 		//EWOL_ERROR("Periodic Call ... " << localTime);
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
-			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].size(); iii++) {
+			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
 					// check if the element request an auto Kill ...
 					if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US) ) {

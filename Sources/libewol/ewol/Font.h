@@ -28,7 +28,6 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/File.h>
-#include <vector>
 
 
 namespace ewol
@@ -58,27 +57,27 @@ namespace ewol
 	                     clipping_ts &                  drawClipping,
 	                     const etk::UString &           unicodeString,
 	                     int32_t &                      fontTextureId,
-	                     std::vector<Vector2D<float> > &  coord,
-	                     std::vector<texCoord_ts> & coordTex);
+	                     etk::VectorType<Vector2D<float> > &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     Vector2D<float>                textPos,
 	                     clipping_ts &                  drawClipping,
 	                     const uniChar_t                unicodeChar,
 	                     int32_t &                      fontTextureId,
-	                     std::vector<Vector2D<float> > &  coord,
-	                     std::vector<texCoord_ts> & coordTex);
+	                     etk::VectorType<Vector2D<float> > &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     Vector2D<float>                textPos,
 	                     const etk::UString &           unicodeString,
 	                     int32_t &                      fontTextureId,
-	                     std::vector<Vector2D<float> > &  coord,
-	                     std::vector<texCoord_ts> & coordTex);
+	                     etk::VectorType<Vector2D<float> > &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     DrawText(int32_t                        fontID,
 	                     Vector2D<float>                textPos,
 	                     const uniChar_t                unicodeChar,
 	                     int32_t &                      fontTextureId,
-	                     std::vector<Vector2D<float> > &  coord,
-	                     std::vector<texCoord_ts> & coordTex);
+	                     etk::VectorType<Vector2D<float> > &  coord,
+	                     etk::VectorType<texCoord_ts> & coordTex);
 	int32_t     LoadFont(etk::File fontFileName);
 };
 

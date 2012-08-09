@@ -26,7 +26,6 @@
 #define __EWOL_SIZER_HORI_H__
 
 #include <etk/Types.h>
-#include <vector>
 #include <ewol/Debug.h>
 #include <ewol/Widget.h>
 
@@ -54,8 +53,8 @@ namespace ewol {
 			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                       m_lockExpendContamination;
-			std::vector<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
+			bool                           m_lockExpendContamination;
+			etk::VectorType<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
 		public:
 			virtual void   SubWidgetRemoveAll(void);
 			virtual void   SubWidgetAdd(ewol::Widget* newWidget);

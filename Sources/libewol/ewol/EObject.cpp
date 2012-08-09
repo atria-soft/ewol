@@ -38,20 +38,20 @@ extern "C" {
 };
 
 // internal element of the widget manager : 
-static std::vector<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
+static etk::VectorType<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
 
 
 void ewol::EObjectMessageMultiCast::Init(void)
 {
 	EWOL_INFO("EObject message Multi-Cast");
-	m_messageList.clear();
+	m_messageList.Clear();
 }
 
 
 void ewol::EObjectMessageMultiCast::UnInit(void)
 {
 	EWOL_INFO("EObject message Multi-Cast");
-	m_messageList.clear();
+	m_messageList.Clear();
 }
 
 
@@ -68,7 +68,7 @@ static void MultiCastAdd(ewol::EObject* object, const char* const message)
 	messageList_ts tmpMessage;
 	tmpMessage.object = object;
 	tmpMessage.message = message;
-	m_messageList.push_back(tmpMessage);
+	m_messageList.PushBack(tmpMessage);
 	EWOL_DEBUG("SendMulticast ADD listener :" << object->GetId() << " on \"" << message << "\"" );
 }
 
@@ -80,12 +80,12 @@ static void MultiCastRm(ewol::EObject* object)
 		return;
 	}
 	// send the message at all registered widget ...
-	for (int32_t iii=m_messageList.size()-1; iii>=0; iii--) {
+	for (int32_t iii=m_messageList.Size()-1; iii>=0; iii--) {
 		if(m_messageList[iii].object == object) {
 			EWOL_DEBUG("SendMulticast RM listener :" << object->GetId());
 			m_messageList[iii].message = NULL;
 			m_messageList[iii].object = NULL;
-			m_messageList.erase(m_messageList.begin()+iii);
+			m_messageList.Erase(iii);
 		}
 	}
 }
@@ -95,7 +95,7 @@ static void MultiCastSend(ewol::EObject* object, const char* const message, etk:
 	EWOL_VERBOSE("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
 	
 	// send the message at all registered widget ...
-	for (int32_t iii=0; iii<m_messageList.size(); iii++) {
+	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
 		if(    m_messageList[iii].message == message
 		    && m_messageList[iii].object != object)
 		{
@@ -138,14 +138,14 @@ ewol::EObject::~EObject(void)
 	ewol::EObjectManager::Rm(this);
 	MultiCastRm(this);
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
-	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
+	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
 			m_externEvent[iii] = NULL;
 		}
 	}
-	m_externEvent.clear();
-	m_availlableEventId.clear();
+	m_externEvent.Clear();
+	m_availlableEventId.Clear();
 	m_uniqueId = -1;
 }
 
@@ -169,7 +169,7 @@ int32_t ewol::EObject::GetId(void)
 void ewol::EObject::AddEventId(const char * generateEventId)
 {
 	if (NULL != generateEventId) {
-		m_availlableEventId.push_back(generateEventId);
+		m_availlableEventId.PushBack(generateEventId);
 	}
 }
 
@@ -183,7 +183,7 @@ void ewol::EObject::AddEventId(const char * generateEventId)
 void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString data)
 {
 	// for every element registered ...
-	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
+	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			// if we find the event ...
 			if (m_externEvent[iii]->localEventId == generateEventId) {
@@ -235,7 +235,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	}
 	// check if event existed :
 	bool findIt = false;
-	for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
+	for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
 		if (m_availlableEventId[iii] == eventId) {
 			findIt = true;
 			break;
@@ -243,7 +243,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	}
 	if (false == findIt) {
 		EWOL_DEBUG("Try to register with a NON direct string name");
-		for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
+		for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
 			if (0 == strncmp(m_availlableEventId[iii], eventId, 1024)) {
 				findIt = true;
 				eventIdgenerated = m_availlableEventId[iii];
@@ -267,7 +267,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	} else {
 		tmpEvent->destEventId = eventId;
 	}
-	m_externEvent.push_back(tmpEvent);
+	m_externEvent.PushBack(tmpEvent);
 }
 
 
@@ -278,11 +278,11 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
  */
 void ewol::EObject::OnObjectRemove(ewol::EObject * removeObject)
 {
-	for(int32_t iii=m_externEvent.size()-1; iii>=0; iii--) {
+	for(int32_t iii=m_externEvent.Size()-1; iii>=0; iii--) {
 		if (NULL==m_externEvent[iii]) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
+			m_externEvent.Erase(iii);
 		} else if (m_externEvent[iii]->destEObject == removeObject) {
-			m_externEvent.erase(m_externEvent.begin()+iii);
+			m_externEvent.Erase(iii);
 		}
 	}
 }

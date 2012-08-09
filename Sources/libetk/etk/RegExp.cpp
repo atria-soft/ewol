@@ -88,10 +88,10 @@ const int32_t etk::constConvertionTableSize = sizeof(etk::constConvertionTable) 
  * @return ---
  *
  */
-void etk::DisplayData(std::vector<char> &data)
+void etk::DisplayData(etk::VectorType<char> &data)
 {
 	int32_t i;
-	for (i=0; i<(int32_t)data.size() ; i++) {
+	for (i=0; i<(int32_t)data.Size() ; i++) {
 		etk::cout<< (char)(data[i]&0x00FF );
 	}
 }
@@ -106,11 +106,11 @@ void etk::DisplayData(std::vector<char> &data)
  * @return ---
  *
  */
-void etk::DisplayElem(std::vector<int16_t> &data, int32_t start, int32_t stop)
+void etk::DisplayElem(etk::VectorType<int16_t> &data, int32_t start, int32_t stop)
 {
 	int32_t i;
 	etk::cout<< ETK_BASH_COLOR_NORMAL;
-	for (i=start; i<(int32_t)data.size() && i<stop ; i++) {
+	for (i=start; i<(int32_t)data.Size() && i<stop ; i++) {
 		switch(data[i])
 		{
 			case REGEXP_OPCODE_PTHESE_IN:		etk::cout<<ETK_BASH_COLOR_RED		<< (char*)"(" << ETK_BASH_COLOR_NORMAL;		break;
@@ -142,16 +142,29 @@ void etk::DisplayElem(std::vector<int16_t> &data, int32_t start, int32_t stop)
 		}
 	}
 }
-
-static const char* tmpSpaceArray = "                                                                                                          ";
-
-const char * etk::levelSpace(int32_t level)
+char * etk::levelSpace(int32_t level)
 {
-	int32_t len = strlen(tmpSpaceArray);
-	if (level*2 > len) {
-		return tmpSpaceArray;
+	switch(level)
+	{
+		case 0:		return (char*)"";
+		case 1:		return (char*)"  ";
+		case 2:		return (char*)"    ";
+		case 3:		return (char*)"      ";
+		case 4:		return (char*)"        ";
+		case 5:		return (char*)"          ";
+		case 6:		return (char*)"            ";
+		case 7:		return (char*)"              ";
+		case 8:		return (char*)"                ";
+		case 9:		return (char*)"                  ";
+		case 10:	return (char*)"                    ";
+		case 11:	return (char*)"                      ";
+		case 12:	return (char*)"                        ";
+		case 13:	return (char*)"                          ";
+		case 14:	return (char*)"                            ";
+		case 15:	return (char*)"                              ";
+		case 16:	return (char*)"                                ";
+		default:	return (char*)"                                  ";
 	}
-	return tmpSpaceArray + len - level*2;
 }
 
 
@@ -163,7 +176,7 @@ const char * etk::levelSpace(int32_t level)
  * @return ---
  *
  */
-int32_t etk::GetLenOfPTheseElem(std::vector<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfPTheseElem(etk::VectorType<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	int32_t nbOpen = 0;
@@ -173,7 +186,7 @@ int32_t etk::GetLenOfPTheseElem(std::vector<int16_t> &data, int32_t startPos)
 		return 0;
 	}
 	// find size ...
-	while (pos < (int32_t)data.size() ) {
+	while (pos < (int32_t)data.Size() ) {
 		if(REGEXP_OPCODE_PTHESE_IN == data[pos]) {
 			// find a sub section : 
 			nbOpen++;
@@ -212,7 +225,7 @@ int32_t etk::GetLenOfPTheseElem(std::vector<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfPThese(std::vector<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfPThese(etk::VectorType<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	int32_t nbOpen = 0;
@@ -223,7 +236,7 @@ int32_t etk::GetLenOfPThese(std::vector<int16_t> &data, int32_t startPos)
 	{
 		pos++;
 		// find size ...
-		while (pos < (int32_t)data.size() ) {
+		while (pos < (int32_t)data.Size() ) {
 			if(REGEXP_OPCODE_PTHESE_IN == data[pos]) {
 				// find a sub section : 
 				nbOpen++;
@@ -265,7 +278,7 @@ int32_t etk::GetLenOfPThese(std::vector<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfBracket(std::vector<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfBracket(etk::VectorType<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	// special case of the (...) or | ==> we search '|' or ')'
@@ -274,7 +287,7 @@ int32_t etk::GetLenOfBracket(std::vector<int16_t> &data, int32_t startPos)
 	} else if( REGEXP_OPCODE_BRACKET_IN == data[pos]) {
 		pos++;
 		// find size ...
-		while (pos < (int32_t)data.size() ) {
+		while (pos < (int32_t)data.Size() ) {
 			if(REGEXP_OPCODE_BRACKET_OUT == data[pos]) {
 				// Find the end of the [...]
 				// just return the size inside
@@ -309,7 +322,7 @@ int32_t etk::GetLenOfBracket(std::vector<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfBrace(std::vector<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfBrace(etk::VectorType<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	// special case of the (...) or | ==> we search '|' or ')'
@@ -318,7 +331,7 @@ int32_t etk::GetLenOfBrace(std::vector<int16_t> &data, int32_t startPos)
 	} else if( REGEXP_OPCODE_BRACE_IN == data[pos]) {
 		pos++;
 		// find size ...
-		while (pos < (int32_t)data.size() ) {
+		while (pos < (int32_t)data.Size() ) {
 			if(REGEXP_OPCODE_BRACE_OUT == data[pos]) {
 				// Find the end of the [...]
 				// just return the size inside
@@ -353,12 +366,12 @@ int32_t etk::GetLenOfBrace(std::vector<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfNormal(std::vector<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfNormal(etk::VectorType<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 
 	// find size ...
-	while (pos < (int32_t)data.size() ) {
+	while (pos < (int32_t)data.Size() ) {
 		switch(data[pos])
 		{
 			case REGEXP_OPCODE_PTHESE_IN:
@@ -410,7 +423,7 @@ int32_t etk::GetLenOfNormal(std::vector<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-bool etk::ParseBrace(std::vector<int16_t> &data, int32_t &min, int32_t &max)
+bool etk::ParseBrace(etk::VectorType<int16_t> &data, int32_t &min, int32_t &max)
 {
 	//TK_INFO("parse {...} in "; DisplayElem(data); );
 	int32_t k=0;
@@ -418,7 +431,7 @@ bool etk::ParseBrace(std::vector<int16_t> &data, int32_t &min, int32_t &max)
 	int32_t firstElement = 0;
 	int32_t SecondElement = 0;
 	
-	while(k<data.size()) {
+	while(k<data.Size()) {
 		if (',' == (char)data[k]) {
 			k++;
 			break;
@@ -434,10 +447,10 @@ bool etk::ParseBrace(std::vector<int16_t> &data, int32_t &min, int32_t &max)
 		}
 		k++;
 	}
-	if (k==data.size()) {
+	if (k==data.Size()) {
 		SecondElement = firstElement;
 	}
-	while(k<data.size()) {
+	while(k<data.Size()) {
 		if (',' == (char)data[k]) {
 			TK_ERROR("Can not find a second , in {} at pos " << k);
 			return false;

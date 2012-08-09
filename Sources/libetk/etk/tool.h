@@ -32,7 +32,7 @@ namespace etk {
 	namespace tool {
 		float   frand(float a, float b);
 		int32_t irand(int32_t a, int32_t b);
-		void SortList(std::vector<etk::UString *> &m_listDirectory);
+		void SortList(etk::VectorType<etk::UString *> &m_listDirectory);
 	};
 };
 

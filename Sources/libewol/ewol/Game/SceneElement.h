@@ -26,7 +26,6 @@
 #define __EWOL_SCENE_ELEMENT_H__
 
 #include <etk/Types.h>
-#include <vector>
 #include <ewol/Debug.h>
 #include <ewol/OObject/Sprite.h>
 
@@ -55,10 +54,10 @@ namespace ewol {
 			int32_t                              numberOfGroup;                                    //!< curent scene number of group
 			etk::UString                         groupDescription[MAX_GROUP_NUMBER];               //!< name of all the groups
 			int32_t                              groupEnemy[MAX_GROUP_NUMBER][MAX_GROUP_NUMBER];   //!< list of the ennemy
-			std::vector<ewol::Sprite*>           animated[NB_BOUBLE_BUFFER];                       //!< element that must be display the second
-			std::vector<ewol::GameElement*>      listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
-			std::vector<ewol::GameElement*>      listGarbage;                                      //!< garbage of the old element allocated ==> prevent multiple alloc and free
-			std::vector<listRegisteElement*>     listCreatorElement;                               //!< list of all creatable elements
+			etk::VectorType<ewol::Sprite*>       animated[NB_BOUBLE_BUFFER];                       //!< element that must be display the second
+			etk::VectorType<ewol::GameElement*>  listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
+			etk::VectorType<ewol::GameElement*>  listGarbage;                                      //!< garbage of the old element allocated ==> prevent multiple alloc and free
+			etk::VectorType<listRegisteElement*> listCreatorElement;                               //!< list of all creatable elements
 			int16_t                GetUniqueId(void) { int16_t iddd = m_id; m_id++; return iddd; };
 			void                   RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString);
 			void                   RmElement(int32_t group, int32_t idElement);

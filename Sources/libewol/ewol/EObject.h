@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
-#include <vector>
+#include <etk/VectorType.h>
 
 namespace ewol {
 	namespace EObjectMessageMultiCast {
@@ -55,8 +55,8 @@ namespace ewol {
 	class EObject {
 		private:
 			int32_t                        m_uniqueId;          //!< Object UniqueID ==> TODO : Check if it use is needed
-			std::vector<EventExtGen*>  m_externEvent;       //!< Generic list of event generation for output link
-			std::vector<const char*>   m_availlableEventId; //!< List of all event availlable for this widget
+			etk::VectorType<EventExtGen*>  m_externEvent;       //!< Generic list of event generation for output link
+			etk::VectorType<const char*>   m_availlableEventId; //!< List of all event availlable for this widget
 		public:
 			/**
 			 * @brief Constructor

@@ -58,11 +58,11 @@ ewol::ParameterList::~ParameterList(void)
 {
 	//clean all the object
 	for (int32_t jjj=0; jjj<NB_BOUBLE_BUFFER; jjj++) {
-		for (int32_t iii=0; iii<m_listOObject[jjj].size(); iii++) {
+		for (int32_t iii=0; iii<m_listOObject[jjj].Size(); iii++) {
 			delete(m_listOObject[jjj][iii]);
 			m_listOObject[jjj][iii] = NULL;
 		}
-		m_listOObject[jjj].clear();
+		m_listOObject[jjj].Clear();
 	}
 	MenuClear();
 }
@@ -88,10 +88,10 @@ void ewol::ParameterList::AddOObject(ewol::OObject* newObject, int32_t pos)
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].size() ) {
-		m_listOObject[m_currentCreateId].push_back(newObject);
+	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
+		m_listOObject[m_currentCreateId].PushBack(newObject);
 	} else {
-		m_listOObject[m_currentCreateId].insert(m_listOObject[m_currentCreateId].begin()+pos, newObject);
+		m_listOObject[m_currentCreateId].Insert(pos, newObject);
 	}
 	m_needFlipFlop = true;
 }
@@ -99,16 +99,16 @@ void ewol::ParameterList::AddOObject(ewol::OObject* newObject, int32_t pos)
 
 void ewol::ParameterList::ClearOObjectList(void)
 {
-	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].size(); iii++) {
+	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
 		delete(m_listOObject[m_currentCreateId][iii]);
 		m_listOObject[m_currentCreateId][iii] = NULL;
 	}
-	m_listOObject[m_currentCreateId].clear();
+	m_listOObject[m_currentCreateId].Clear();
 }
 
 void ewol::ParameterList::OnDraw(DrawProperty& displayProp)
 {
-	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].size(); iii++) {
+	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
 		if (NULL != m_listOObject[m_currentDrawId][iii]) {
 			m_listOObject[m_currentDrawId][iii]->Draw();
 		}
@@ -145,13 +145,13 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 	
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
-		int32_t nbRaw    = m_list.size();
+		int32_t nbRaw    = m_list.Size();
 		// For the scrooling windows
 		m_maxSize.x = m_size.x;
 		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
 		
 		
-		std::vector<int32_t> listSizeColomn;
+		etk::VectorType<int32_t> listSizeColomn;
 		
 		// set background color :
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
@@ -231,7 +231,7 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 		
 		int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
-		if (rawID >=0 && rawID<m_list.size()) {
+		if (rawID >=0 && rawID<m_list.Size()) {
 			if (m_list[rawID]!=NULL) {
 				if (m_list[rawID]->m_refId>=0) {
 					GenerateEventId(ewolEventParameterListSelect, m_list[rawID]->m_refId);
@@ -261,9 +261,9 @@ void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UStri
 {
 	ewol::elementPL* tmpEmement = new ewol::elementPL(label, refId, image, false);
 	if (NULL != tmpEmement) {
-		m_list.push_back(tmpEmement);
+		m_list.PushBack(tmpEmement);
 		if (m_idSelected == -1 && label != "---" && refId>0) {
-			m_idSelected = m_list.size()-1;
+			m_idSelected = m_list.Size()-1;
 		}
 		MarkToReedraw();
 	}
@@ -273,7 +273,7 @@ void ewol::ParameterList::MenuAddGroup(etk::UString& label)
 	etk::UString image = "";
 	ewol::elementPL* tmpEmement = new ewol::elementPL(label, -1, image, true);
 	if (NULL != tmpEmement) {
-		m_list.push_back(tmpEmement);
+		m_list.PushBack(tmpEmement);
 		MarkToReedraw();
 	}
 }
@@ -282,18 +282,18 @@ void ewol::ParameterList::MenuAddGroup(etk::UString& label)
 void ewol::ParameterList::MenuClear(void)
 {
 	m_idSelected = -1;
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
 		}
 	}
-	m_list.clear();
+	m_list.Clear();
 }
 
 void ewol::ParameterList::MenuSeparator(void)
 {
-	if (m_list.size()>0) {
+	if (m_list.Size()>0) {
 		etk::UString label = "";
 		etk::UString image = "";
 		MenuAdd(label, -1, image);
