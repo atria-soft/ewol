@@ -26,8 +26,8 @@
 #ifndef __ETK_STREAM_H__
 #define __ETK_STREAM_H__
 
-#include <cstdio>
-#include <typeinfo>
+//#include <cstdio>
+//#include <typeinfo>
 #include <string.h>
 #include <pthread.h>
 #include <etk/Types.h>

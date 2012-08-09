@@ -11,7 +11,7 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_STATIC_LIBRARIES := etk freetype tinyxml libzip libpng agg parsersvg lua portaudio
+LOCAL_STATIC_LIBRARIES := etk freetype tinyxml libzip libpng agg parsersvg lua
 
 LOCAL_C_INCLUDES :=
 
@@ -26,8 +26,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DDATA_IN_APK \
-                -DLUA_COMPAT_ALL \
-                -frtti
+                -DLUA_COMPAT_ALL
 else
 LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -Wno-write-strings \
@@ -36,8 +35,7 @@ LOCAL_CFLAGS := -D__PLATFORM__Android \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
                 -DBUILD_TIME="\"$(BUILD_TIME)\"" \
                 -DDATA_IN_APK \
-                -DLUA_COMPAT_ALL \
-                -frtti
+                -DLUA_COMPAT_ALL
 endif
 
 # load the common sources file of the platform
@@ -46,10 +44,7 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_SRC_FILES := ewol/base/guiAndroid.cpp $(FILE_LIST)
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz --sysroot=/home/edupin/dev/perso/android/ndk/platforms/android-14/arch-arm \
-                        /home/edupin/dev/perso/copyDirectServeur/yourDevFolder/edn/obj/local/armeabi/libstdc++.a \
-                        /home/edupin/dev/perso/android/ndk/sources/cxx-stl/gnu-libstdc++/libs/armeabi/libsupc++.a \
-                        -lstdc++
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
 
 include $(BUILD_STATIC_LIBRARY)
 
