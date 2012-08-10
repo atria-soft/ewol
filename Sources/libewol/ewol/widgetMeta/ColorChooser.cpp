@@ -220,23 +220,18 @@ void ewol::ColorChooser::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetRed) {
 		m_widgetRed = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetGreen) {
 		m_widgetGreen = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetBlue) {
 		m_widgetBlue = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetAlpha) {
 		m_widgetAlpha = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetColorBar) {
 		m_widgetColorBar = NULL;
-		m_needFlipFlop = true;
 	}
 }
 

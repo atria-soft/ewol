@@ -134,7 +134,7 @@ namespace ewol {
 			 * @param[in,out] listOfEffects Reference on the list where the display must be done for every effects
 			 * @return ---
 			 */
-			virtual void Draw(int32_t currentCreateId) { };
+			virtual void Draw(void) { };
 			/**
 			 * @brief an element has been remove, just remove reference on it or ID on IT, it can be replace whith an other that have no link
 			 * @param[in] idOfElement Id of the element that has been removed

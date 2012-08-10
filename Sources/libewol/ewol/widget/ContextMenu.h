@@ -63,7 +63,7 @@ namespace ewol {
 			Vector2D<float>       m_arrowPos;
 			float      m_offset;
 			markPosition_te m_arrawBorder;
-			ewol::Widget*   m_subWidget[NB_BOUBLE_BUFFER];
+			ewol::Widget*   m_subWidget;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
@@ -90,12 +90,6 @@ namespace ewol {
 			 * @return false the event is not used
 			 */
 			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void   OnFlipFlopEvent(void);
 	};
 	
 };

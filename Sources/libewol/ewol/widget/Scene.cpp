@@ -63,20 +63,19 @@ void ewol::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean elements
-		for (int32_t iii=0; iii<m_sceneElement.animated[m_currentCreateId].Size(); iii++) {
-			if (NULL != m_sceneElement.animated[m_currentCreateId][iii]) {
-				m_sceneElement.animated[m_currentCreateId][iii]->Clear();
+		for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {
+			if (NULL != m_sceneElement.animated[iii]) {
+				m_sceneElement.animated[iii]->Clear();
 			}
 		}
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
 					// find an empty slot ...
-					m_sceneElement.listAnimatedElements[jjj][iii]->Draw(m_currentCreateId);
+					m_sceneElement.listAnimatedElements[jjj][iii]->Draw();
 				}
 			}
 		}
-		m_needFlipFlop = true;
 	}
 }
 
@@ -90,9 +89,9 @@ void ewol::Scene::OnDraw(DrawProperty& displayProp)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw elements
-	for (int32_t iii=0; iii<m_sceneElement.animated[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_sceneElement.animated[m_currentDrawId][iii]) {
-			m_sceneElement.animated[m_currentDrawId][iii]->Draw();
+	for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {
+		if (NULL != m_sceneElement.animated[iii]) {
+			m_sceneElement.animated[iii]->Draw();
 		}
 	}
 }

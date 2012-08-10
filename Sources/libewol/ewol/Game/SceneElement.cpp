@@ -80,15 +80,13 @@ ewol::SceneElement::~SceneElement(void)
 		}
 		listAnimatedElements[iii].Clear();
 	}
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		for (int32_t jjj=0; jjj<animated[iii].Size(); jjj++) {
-			if (NULL != animated[iii][jjj]) {
-				delete(animated[iii][jjj]);
-				animated[iii][jjj] = NULL;
-			}
+	for (int32_t jjj=0; jjj<animated.Size(); jjj++) {
+		if (NULL != animated[jjj]) {
+			delete(animated[jjj]);
+			animated[jjj] = NULL;
 		}
-		animated[iii].Clear();
 	}
+	animated.Clear();
 }
 
 void ewol::SceneElement::RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString)
@@ -324,26 +322,25 @@ void ewol::SceneElement::SetEventExternJoystick(uint32_t id, int32_t joyId, floa
  */
 int32_t ewol::SceneElement::LoadSprite(etk::UString fileName, float maxSize)
 {
-	for (int32_t iii=0; iii<animated[0].Size(); iii++) {
-		if (animated[0][iii] != NULL) {
-			if (animated[0][iii]->HasName(fileName) == true) {
+	for (int32_t iii=0; iii<animated.Size(); iii++) {
+		if (animated[iii] != NULL) {
+			if (animated[iii]->HasName(fileName) == true) {
 				// count the number of element registered ...
-				animated[0][iii]->IncreaseLoadedTime();
+				animated[iii]->IncreaseLoadedTime();
 				return iii;
 			}
 		}
 	}
-	for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		// we did not find the sprite ==> created it ...
-		ewol::Sprite* tmpSprite = new ewol::Sprite(fileName, maxSize, maxSize);
-		if (NULL == tmpSprite) {
-			EWOL_ERROR("Allocation error on the sprite : " << fileName);
-			return -1;
-		}
-		// add it : 
-		animated[iii].PushBack(tmpSprite);
+	// we did not find the sprite ==> created it ...
+	ewol::Sprite* tmpSprite = new ewol::Sprite(fileName, maxSize, maxSize);
+	if (NULL == tmpSprite) {
+		EWOL_ERROR("Allocation error on the sprite : " << fileName);
+		return -1;
 	}
-	return animated[0].Size() -1;
+	// add it : 
+	animated.PushBack(tmpSprite);
+	
+	return animated.Size() -1;
 }
 
 /**
@@ -354,15 +351,13 @@ int32_t ewol::SceneElement::LoadSprite(etk::UString fileName, float maxSize)
  */
 void ewol::SceneElement::UnLoadSprite(int32_t spriteId)
 {
-	if (spriteId >= 0 && spriteId < animated[0].Size()) {
-		if (animated[0][spriteId] != NULL) {
+	if (spriteId >= 0 && spriteId < animated.Size()) {
+		if (animated[spriteId] != NULL) {
 			// count the number of element registered ...
-			if (true == animated[0][spriteId]->DecreaseLoadedTime() ) {
+			if (true == animated[spriteId]->DecreaseLoadedTime() ) {
 				// must remove the sprite ==> pb with the double buffer ...
-				// TODO : ==> for all double buffer ...
-				for(int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-					
-				}
+				delete(animated[spriteId]);
+				animated[spriteId] = NULL;
 			}
 		}
 	}

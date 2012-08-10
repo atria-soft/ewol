@@ -55,12 +55,10 @@ ewol::ButtonImage::ButtonImage(etk::UString imageName, color_ts col)
 	m_value = false;
 	m_image = imageName;
 	m_color = col;
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		m_OOImage[iii] = NULL;
-		m_OOImageBg1[iii] = NULL;
-		m_OOImageBG2[iii] = NULL;
-		m_resetNeeded[iii] = false;
-	}
+	m_OOImage = NULL;
+	m_OOImageBg1 = NULL;
+	m_OOImageBG2 = NULL;
+	m_resetNeeded = false;
 	m_toggleMode = false;
 }
 
@@ -74,9 +72,7 @@ void ewol::ButtonImage::SetImage(etk::UString imageName, color_ts col)
 {
 	m_image = imageName;
 	m_color = col;
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		m_resetNeeded[iii] = true;
-	}
+	m_resetNeeded = true;
 	MarkToReedraw();
 }
 
@@ -84,9 +80,7 @@ void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
 {
 	m_imageBg1 = imageName;
 	m_colorBg1 = col;
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		m_resetNeeded[iii] = true;
-	}
+	m_resetNeeded = true;
 	MarkToReedraw();
 }
 
@@ -94,9 +88,7 @@ void ewol::ButtonImage::SetImageSelected(etk::UString imageName, color_ts col)
 {
 	m_imageBg2 = imageName;
 	m_colorBg2 = col;
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		m_resetNeeded[iii] = true;
-	}
+	m_resetNeeded = true;
 	MarkToReedraw();
 }
 
@@ -147,28 +139,28 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 			tmpOriginY = 0;
 		}
 		
-		if (NULL == m_OOImageBG2[m_currentCreateId]) {
+		if (NULL == m_OOImageBG2) {
 			if(m_imageBg2 != "") {
-				m_OOImageBG2[m_currentCreateId] = new ewol::OObject2DTextured(m_imageBg2, tmpSizeX, tmpSizeY);
+				m_OOImageBG2 = new ewol::OObject2DTextured(m_imageBg2, tmpSizeX, tmpSizeY);
 			}
 		}
-		if (NULL == m_OOImageBg1[m_currentCreateId]) {
+		if (NULL == m_OOImageBg1) {
 			if(m_imageBg1 != "") {
-				m_OOImageBg1[m_currentCreateId] = new ewol::OObject2DTextured(m_imageBg1, tmpSizeX, tmpSizeY);
+				m_OOImageBg1 = new ewol::OObject2DTextured(m_imageBg1, tmpSizeX, tmpSizeY);
 			}
 		}
-		if (NULL == m_OOImage[m_currentCreateId]) {
+		if (NULL == m_OOImage) {
 			if(m_image != "") {
-				m_OOImage[m_currentCreateId] = new ewol::OObject2DTextured(m_image, tmpSizeX, tmpSizeY);
+				m_OOImage = new ewol::OObject2DTextured(m_image, tmpSizeX, tmpSizeY);
 			}
 		}
 		if (false == m_toggleMode) {
 			float tmpval = 0.0;
-			if (NULL != m_OOImageBG2[m_currentCreateId]) {
-				m_OOImageBG2[m_currentCreateId]->Clear();
+			if (NULL != m_OOImageBG2) {
+				m_OOImageBG2->Clear();
 				if(    m_down == true
 				    || m_over == true ) {
-					m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+					m_OOImageBG2->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 				}
 				tmpval = tmpSizeX * 0.2;
 				tmpSizeX -= tmpval;
@@ -177,9 +169,9 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 				tmpSizeY -= tmpval;
 				tmpOriginY += tmpval/2;
 			}
-			if (NULL != m_OOImageBg1[m_currentCreateId]) {
-				m_OOImageBg1[m_currentCreateId]->Clear();
-				m_OOImageBg1[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+			if (NULL != m_OOImageBg1) {
+				m_OOImageBg1->Clear();
+				m_OOImageBg1->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 				tmpval = tmpSizeX * 0.2;
 				tmpSizeX -= tmpval;
 				tmpOriginX += tmpval/2;
@@ -187,28 +179,27 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 				tmpSizeY -= tmpval;
 				tmpOriginY += tmpval/2;
 			}
-			if (NULL != m_OOImage[m_currentCreateId]) {
-				m_OOImage[m_currentCreateId]->Clear();
-				m_OOImage[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+			if (NULL != m_OOImage) {
+				m_OOImage->Clear();
+				m_OOImage->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 			}
 		} else {
-			if (NULL != m_OOImage[m_currentCreateId]) {
-				m_OOImage[m_currentCreateId]->Clear();
+			if (NULL != m_OOImage) {
+				m_OOImage->Clear();
 			}
-			if (NULL != m_OOImageBG2[m_currentCreateId]) {
-				m_OOImageBG2[m_currentCreateId]->Clear();
+			if (NULL != m_OOImageBG2) {
+				m_OOImageBG2->Clear();
 			}
 			if(m_value == true) {
-				if (NULL != m_OOImage[m_currentCreateId]) {
-					m_OOImage[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_color);
+				if (NULL != m_OOImage) {
+					m_OOImage->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_color);
 				}
 			} else {
-				if (NULL != m_OOImageBG2[m_currentCreateId]) {
-					m_OOImageBG2[m_currentCreateId]->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_colorBg2);
+				if (NULL != m_OOImageBG2) {
+					m_OOImageBG2->Rectangle(tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_colorBg2);
 				}
 			}
 		}
-		m_needFlipFlop = true;
 	}
 }
 
@@ -318,44 +309,14 @@ bool ewol::ButtonImage::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unic
 
 void ewol::ButtonImage::OnDraw(DrawProperty& displayProp)
 {
-	if (NULL != m_OOImageBG2[m_currentDrawId]) {
-		m_OOImageBG2[m_currentDrawId]->Draw();
+	if (NULL != m_OOImageBG2) {
+		m_OOImageBG2->Draw();
 	}
-	if (NULL != m_OOImageBg1[m_currentDrawId]) {
-		m_OOImageBg1[m_currentDrawId]->Draw();
+	if (NULL != m_OOImageBg1) {
+		m_OOImageBg1->Draw();
 	}
-	if (NULL != m_OOImage[m_currentDrawId]) {
-		m_OOImage[m_currentDrawId]->Draw();
+	if (NULL != m_OOImage) {
+		m_OOImage->Draw();
 	}
 }
 
-
-/**
- * @brief Event generated to inform a flip-flop has occured on the current widget
- * @param ---
- * @return ---
- */
-void ewol::ButtonImage::OnFlipFlopEvent(void)
-{
-	bool needFlipFlop = m_needFlipFlop;
-	// call herited classes
-	ewol::Widget::OnFlipFlopEvent();
-	// internal saving
-	if (true == needFlipFlop) {
-		if (m_resetNeeded[m_currentCreateId] == true) {
-			m_resetNeeded[m_currentCreateId] = false;
-			if (NULL != m_OOImageBG2[m_currentCreateId]) {
-				delete(m_OOImageBG2[m_currentCreateId]);
-				m_OOImageBG2[m_currentCreateId] = NULL;
-			}
-			if (NULL != m_OOImageBg1[m_currentCreateId]) {
-				delete(m_OOImageBg1[m_currentCreateId]);
-				m_OOImageBg1[m_currentCreateId] = NULL;
-			}
-			if (NULL != m_OOImage[m_currentCreateId]) {
-				delete(m_OOImage[m_currentCreateId]);
-				m_OOImage[m_currentCreateId] = NULL;
-			}
-		}
-	}
-}

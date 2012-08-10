@@ -47,7 +47,7 @@ namespace ewol {
 	class WidgetScrooled : public ewol::Widget
 	{
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject[NB_BOUBLE_BUFFER];   //!< generic element to display...
+			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:

@@ -27,8 +27,6 @@
 
 #include <ewol/EObject.h>
 
-#define NB_BOUBLE_BUFFER        (1)
-
 namespace ewol {
 	class Widget;
 };
@@ -142,7 +140,7 @@ namespace ewol {
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			bool                 m_hide[NB_BOUBLE_BUFFER]; //!< hide a widget on the display
+			bool                 m_hide; //!< hide a widget on the display
 		protected:
 			// internal element calculated by the system
 			Vector2D<float>      m_origin;        //!< internal ... I do not really known how i can use it ...
@@ -277,7 +275,7 @@ namespace ewol {
 			 * @param ---
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
-			bool IsHide(void) { return m_hide[m_currentCreateId]; };
+			bool IsHide(void) { return m_hide; };
 			
 		
 		// ----------------------------------------------------------------------------------------------------------------
@@ -422,9 +420,6 @@ namespace ewol {
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			int8_t       m_currentDrawId;         //!< Id of the element that might be displayed by the Gui thread
-			int8_t       m_currentCreateId;       //!< Id of the element might be modify
-			bool         m_needFlipFlop;          //!< A flip flop need to be done
 			bool         m_needRegenerateDisplay; //!< the display might be done the next regeneration
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
@@ -439,19 +434,6 @@ namespace ewol {
 			 * @return false if we have no need to redraw
 			 */
 			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
-		public:
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void OnFlipFlopEvent(void);
-			/**
-			 * @brief Request a flip-flop of the double buffer
-			 * @param ---
-			 * @return ---
-			 */
-			void NeedFlipFlop(void) { m_needFlipFlop = true; };
 		public:
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
@@ -477,11 +459,8 @@ namespace ewol {
 			virtual void OnRegenerateDisplay(void) { };
 
 	}; // end of the class Widget declaration
-	
-	extern const char * const TYPE_EOBJECT_WIDGET;
-	
+
 };// end of namespace
 
-#define EWOL_CAST_WIDGET(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET,ewol::Widget,curentPointer)
 
 #endif

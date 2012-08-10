@@ -44,9 +44,7 @@ ewol::PopUp::PopUp(void) :
 	m_colorBorder = etk::color::color_Black;
 	m_colorBorder.alpha = 0x7F;
 	
-	for (int32_t iii=0; iii<NB_BOUBLE_BUFFER; iii++) {
-		m_subWidget[iii] = 0;
-	}
+	m_subWidget = 0;
 }
 
 ewol::PopUp::~PopUp(void)
@@ -62,14 +60,14 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	
-	if (NULL != m_subWidget[m_currentCreateId]) {
+	if (NULL != m_subWidget) {
 		Vector2D<float> subWidgetSize;
 		Vector2D<float> subWidgetOrigin;
-		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
-		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
+		subWidgetSize = m_subWidget->GetMinSize();
+		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
 		}
-		if (true == m_subWidget[m_currentCreateId]->CanExpentY()) {
+		if (true == m_subWidget->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
 		if (m_displayRatio>0.1 && m_displayRatio<=1) {
@@ -83,8 +81,8 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 		subWidgetOrigin.x = (int32_t)(m_size.x - m_origin.x - subWidgetSize.x)/2 + m_origin.x;
 		subWidgetOrigin.y = (int32_t)(m_size.y - m_origin.y - subWidgetSize.y)/2 + m_origin.y;
 		
-		m_subWidget[m_currentCreateId]->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
-		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
+		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
+		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
 	return true;
@@ -98,9 +96,9 @@ bool ewol::PopUp::CalculateMinSize(void)
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->CalculateMinSize();
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
+	if (NULL != m_subWidget) {
+		m_subWidget->CalculateMinSize();
+		Vector2D<float> tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -132,29 +130,28 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 		return;
 	}
 	SubWidgetRemove();
-	m_subWidget[m_currentCreateId] = newWidget;
-	m_needFlipFlop = true;
-	//EWOL_DEBUG("SetSubWidget on Pop-Up : " << (int64_t)m_subWidget[m_currentCreateId]);
+	m_subWidget = newWidget;
+	//EWOL_DEBUG("SetSubWidget on Pop-Up : " << (int64_t)m_subWidget);
 	MarkToReedraw();
 }
 
 
 void ewol::PopUp::SubWidgetRemove(void)
 {
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->MarkToRemove();;
-		m_subWidget[m_currentCreateId] = NULL;
+	if (NULL != m_subWidget) {
+		m_subWidget->MarkToRemove();;
+		m_subWidget = NULL;
 	}
-	m_needFlipFlop = true;
 	MarkToReedraw();
 }
+
 
 void ewol::PopUp::OnDraw(DrawProperty& displayProp)
 {
 	// draw upper classes
 	ewol::Drawable::OnDraw(displayProp);
-	if (NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->GenDraw(displayProp);
+	if (NULL != m_subWidget) {
+		m_subWidget->GenDraw(displayProp);
 	}
 }
 
@@ -171,16 +168,16 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	BGOObjects->SetColor(m_colorEmptyArea);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+	if (NULL != m_subWidget) {
+		Vector2D<float> tmpSize = m_subWidget->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		BGOObjects->SetColor(m_colorBorder);
 		BGOObjects->Rectangle(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP, tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP);
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
+	if (NULL != m_subWidget) {
+		m_subWidget->OnRegenerateDisplay();
 	}
 }
 
@@ -196,13 +193,13 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
 	// calculate relative position
 	Vector2D<float> relativePos = RelativePosition(pos);
 	// for the element in the pop-up ...
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+	if (NULL != m_subWidget) {
+		Vector2D<float> tmpSize = m_subWidget->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{
-			return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
+			return m_subWidget->GetWidgetAtPos(pos);
 		} else {
 			//EWOL_INFO("Event ouside the Pop-up");
 		}
@@ -220,27 +217,6 @@ void ewol::PopUp::SetDisplayRatio(float ratio)
 
 
 /**
- * @brief Event generated to inform a flip-flop has occured on the current widget
- * @param ---
- * @return ---
- */
-void ewol::PopUp::OnFlipFlopEvent(void)
-{
-	bool needFlipFlop = m_needFlipFlop;
-	// call herited classes
-	ewol::Widget::OnFlipFlopEvent();
-	// internal saving
-	if (true == needFlipFlop) {
-		//EWOL_VERBOSE("Flip-Flop on Pop-Up : " << (int64_t)m_subWidget[m_currentCreateId] << " <-- " << (int64_t)m_subWidget[m_currentDrawId]);
-		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
-	}
-	// in every case, we propagate the flip-flop EVENT
-	if(NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
-	}
-}
-
-/**
  * @brief Inform object that an other object is removed ...
  * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
  * @note : Sub classes must call this class
@@ -251,10 +227,9 @@ void ewol::PopUp::OnObjectRemove(ewol::EObject * removeObject)
 	// First step call parrent : 
 	ewol::Drawable::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
-	if(m_subWidget[m_currentCreateId] == removeObject) {
+	if(m_subWidget == removeObject) {
 		EWOL_DEBUG("Remove pop-up sub Element ==> destroyed object");
-		m_subWidget[m_currentCreateId] = NULL;
-		m_needFlipFlop = true;
+		m_subWidget = NULL;
 	}
 }
 

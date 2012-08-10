@@ -53,7 +53,7 @@ namespace ewol {
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
-			etk::VectorType<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
+			etk::VectorType<ewol::Widget*> m_subWidget;
 		public:
 			virtual void   SubWidgetRemoveAll(void);
 			virtual void   SubWidgetAdd(ewol::Widget* newWidget);
@@ -71,12 +71,6 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void   OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

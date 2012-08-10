@@ -53,16 +53,16 @@ namespace ewol {
 			bool           GetToggleMode(void);
 		private:
 			etk::UString             m_image;
-			bool                     m_resetNeeded[NB_BOUBLE_BUFFER];
-			ewol::OObject2DTextured* m_OOImage[NB_BOUBLE_BUFFER];
+			bool                     m_resetNeeded;
+			ewol::OObject2DTextured* m_OOImage;
 			color_ts                 m_color;
 			
 			etk::UString             m_imageBg1;
-			ewol::OObject2DTextured* m_OOImageBg1[NB_BOUBLE_BUFFER];
+			ewol::OObject2DTextured* m_OOImageBg1;
 			color_ts                 m_colorBg1;
 			
 			etk::UString             m_imageBg2;
-			ewol::OObject2DTextured* m_OOImageBG2[NB_BOUBLE_BUFFER];
+			ewol::OObject2DTextured* m_OOImageBG2;
 			color_ts                 m_colorBg2;
 			
 			bool                     m_over;
@@ -83,12 +83,6 @@ namespace ewol {
 			 */
 			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void OnFlipFlopEvent(void);
 			virtual void OnDraw(DrawProperty& displayProp);
 	};
 	

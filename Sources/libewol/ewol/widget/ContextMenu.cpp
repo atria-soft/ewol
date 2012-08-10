@@ -63,14 +63,14 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 	m_size.x = availlableX;
 	m_size.y = availlableY;
 	
-	if (NULL != m_subWidget[m_currentCreateId]) {
+	if (NULL != m_subWidget) {
 		Vector2D<float> subWidgetSize;
 		Vector2D<float> subWidgetOrigin;
-		subWidgetSize = m_subWidget[m_currentCreateId]->GetMinSize();
-		if (true == m_subWidget[m_currentCreateId]->CanExpentX()) {
+		subWidgetSize = m_subWidget->GetMinSize();
+		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
 		}
-		if (true == m_subWidget[m_currentCreateId]->CanExpentY()) {
+		if (true == m_subWidget->CanExpentY()) {
 			subWidgetSize.y = m_size.y;
 		}
 		int32_t minWidth = 100;
@@ -123,8 +123,8 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 				}
 				break;
 		}
-		m_subWidget[m_currentCreateId]->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
-		m_subWidget[m_currentCreateId]->CalculateSize(subWidgetSize.x, subWidgetSize.y);
+		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
+		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
 	MarkToReedraw();
 	return true;
@@ -138,9 +138,9 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	m_userExpendY=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->CalculateMinSize();
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetMinSize();
+	if (NULL != m_subWidget) {
+		m_subWidget->CalculateMinSize();
+		Vector2D<float> tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -170,15 +170,15 @@ void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
-	m_subWidget[m_currentCreateId] = newWidget;
+	m_subWidget = newWidget;
 }
 
 
 void ewol::ContextMenu::SubWidgetRemove(void)
 {
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->MarkToRemove();
-		m_subWidget[m_currentCreateId] = NULL;
+	if (NULL != m_subWidget) {
+		m_subWidget->MarkToRemove();
+		m_subWidget = NULL;
 	}
 }
 
@@ -186,8 +186,8 @@ void ewol::ContextMenu::OnDraw(DrawProperty& displayProp)
 {
 	//EWOL_DEBUG("On Draw " << m_currentDrawId);
 	ewol::Drawable::OnDraw(displayProp);
-	if (NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->GenDraw(displayProp);
+	if (NULL != m_subWidget) {
+		m_subWidget->GenDraw(displayProp);
 	}
 }
 
@@ -201,9 +201,9 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
 	AddOObject(BGOObjects);
 	
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+	if (NULL != m_subWidget) {
+		Vector2D<float> tmpSize = m_subWidget->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
@@ -245,8 +245,8 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
 	}
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		m_subWidget[m_currentCreateId]->OnRegenerateDisplay();
+	if (NULL != m_subWidget) {
+		m_subWidget->OnRegenerateDisplay();
 	}
 }
 
@@ -262,13 +262,13 @@ ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(Vector2D<float> pos)
 	// calculate relative position
 	Vector2D<float> relativePos = RelativePosition(pos);
 	// Check for sub Element
-	if (NULL != m_subWidget[m_currentCreateId]) {
-		Vector2D<float> tmpSize = m_subWidget[m_currentCreateId]->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget[m_currentCreateId]->GetOrigin();
+	if (NULL != m_subWidget) {
+		Vector2D<float> tmpSize = m_subWidget->GetSize();
+		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{
-			return m_subWidget[m_currentCreateId]->GetWidgetAtPos(pos);
+			return m_subWidget->GetWidgetAtPos(pos);
 		}
 	}
 	return this;
@@ -312,24 +312,3 @@ void ewol::ContextMenu::SetPositionMark(markPosition_te position, Vector2D<float
 	MarkToReedraw();
 }
 
-
-/**
- * @brief Event generated to inform a flip-flop has occured on the current widget
- * @param ---
- * @return ---
- */
-void ewol::ContextMenu::OnFlipFlopEvent(void)
-{
-	//EWOL_DEBUG("Flip-Flop");
-	bool needFlipFlop = m_needFlipFlop;
-	// call herited classes
-	ewol::Drawable::OnFlipFlopEvent();
-	// internal saving
-	if (true == needFlipFlop) {
-		m_subWidget[m_currentCreateId] = m_subWidget[m_currentDrawId];
-	}
-	// in every case, we propagate the flip-flop EVENT
-	if (NULL != m_subWidget[m_currentDrawId]) {
-		m_subWidget[m_currentDrawId]->OnFlipFlopEvent();
-	}
-}

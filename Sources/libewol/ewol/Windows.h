@@ -78,8 +78,8 @@ namespace ewol {
 				m_hasDecoration = true;
 			}
 		private:
-			ewol::Widget*                   m_subWidget[NB_BOUBLE_BUFFER];
-			etk::VectorType<ewol::Widget*>  m_popUpWidgetList[NB_BOUBLE_BUFFER];
+			ewol::Widget*                   m_subWidget;
+			etk::VectorType<ewol::Widget*>  m_popUpWidgetList;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
@@ -88,12 +88,6 @@ namespace ewol {
 		public:
 			virtual void OnRegenerateDisplay(void);
 		public:
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

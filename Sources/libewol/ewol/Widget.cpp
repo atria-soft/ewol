@@ -84,9 +84,6 @@ ewol::Widget::Widget(void)
 {
 	m_limitMouseEvent = 3;
 	m_needRegenerateDisplay = true;
-	m_currentDrawId = 0;
-	m_currentCreateId = 1;
-	m_needFlipFlop = true;
 	m_origin.x = 0.0;
 	m_origin.y = 0.0;
 	m_size.x = 10.0;
@@ -102,9 +99,7 @@ ewol::Widget::Widget(void)
 	SetFillY();
 	m_canFocus = false;
 	m_hasFocus = false;
-	for(int32_t iii=0 ; iii<NB_BOUBLE_BUFFER ; iii++) {
-		m_hide[iii] = false;
-	}
+	m_hide = false;
 }
 
 
@@ -115,7 +110,7 @@ ewol::Widget::Widget(void)
  */
 void ewol::Widget::Hide(void)
 {
-	m_hide[m_currentCreateId] = true;
+	m_hide = true;
 	MarkToReedraw();
 	ewol::RequestUpdateSize();
 }
@@ -128,7 +123,7 @@ void ewol::Widget::Hide(void)
  */
 void ewol::Widget::Show(void)
 {
-	m_hide[m_currentCreateId] = false;
+	m_hide = false;
 	MarkToReedraw();
 	ewol::RequestUpdateSize();
 }
@@ -163,31 +158,6 @@ bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 	m_size.y = availlableY;
 	MarkToReedraw();
 	return true;
-}
-
-
-/**
- * @brief Event generated to inform a flip-flop has occured on the current widget
- * @param ---
- * @return ---
- */
-void ewol::Widget::OnFlipFlopEvent(void)
-{
-	if (true == m_needFlipFlop) {
-		bool save = m_hide[m_currentCreateId];
-		
-		m_currentDrawId++;
-		if (NB_BOUBLE_BUFFER<=m_currentDrawId) {
-			m_currentDrawId = 0;
-		}
-		m_currentCreateId++;
-		if (NB_BOUBLE_BUFFER<=m_currentCreateId) {
-			m_currentCreateId = 0;
-		}
-		m_needFlipFlop = false;
-		
-		m_hide[m_currentCreateId] = save;
-	}
 }
 
 
@@ -255,7 +225,7 @@ void ewol::Widget::KeepFocus(void)
  */
 void ewol::Widget::GenDraw(DrawProperty displayProp)
 {
-	if (true==m_hide[m_currentDrawId]){
+	if (true==m_hide){
 		// widget is hidden ...
 		return;
 	}

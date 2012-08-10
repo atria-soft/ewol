@@ -787,10 +787,10 @@ bool ewol::GameElementLua::Process(int64_t time, int32_t deltaTime)
 }
 
 
-void ewol::GameElementLua::Draw(int32_t currentCreateId)
+void ewol::GameElementLua::Draw(void)
 {
 	tmpObj = this;
-	tmpSprite = &m_sceneElement.animated[currentCreateId];
+	tmpSprite = &m_sceneElement.animated;
 	if (NULL != m_luaState) {
 		// call the Draw function
 		lua_getglobal(m_luaState, "Draw");

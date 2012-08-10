@@ -165,7 +165,6 @@ ewol::Parameter::Parameter(void) :
 		}
 	}
 	MarkToReedraw();
-	//m_needFlipFlop = true;
 
 }
 
@@ -227,19 +226,15 @@ void ewol::Parameter::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetTitle) {
 		m_widgetTitle = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_paramList) {
 		m_paramList = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetCancel) {
 		m_widgetCancel = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_wSlider) {
 		m_wSlider = NULL;
-		m_needFlipFlop = true;
 	}
 }
 

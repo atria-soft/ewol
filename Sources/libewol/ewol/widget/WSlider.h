@@ -53,7 +53,7 @@ namespace ewol {
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
-			etk::VectorType<ewol::Widget*> m_subWidget[NB_BOUBLE_BUFFER];
+			etk::VectorType<ewol::Widget*> m_subWidget;
 			int32_t                        m_windowsSources;     // widget source viewed
 			int32_t                        m_windowsDestination; // widget destinated viewed
 			int32_t                        m_slidingProgress;    // ratio progression of a sliding
@@ -64,7 +64,7 @@ namespace ewol {
 			virtual void    SubWidgetUnLink(ewol::Widget* newWidget);
 			        void    SubWidgetSelectSet(int32_t id);
 			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
-			        int32_t SubWidgetNumber(void) { return m_subWidget[m_currentCreateId].Size(); };
+			        int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
 		protected:
 			virtual void   OnDraw(DrawProperty& displayProp);
 		public:
@@ -77,12 +77,6 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void   OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

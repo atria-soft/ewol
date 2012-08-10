@@ -55,7 +55,7 @@ namespace ewol {
 			color_ts      m_colorBorder;
 			color_ts      m_colorEmptyArea;
 			ewol::Widget* m_subWidgetNext;
-			ewol::Widget* m_subWidget[NB_BOUBLE_BUFFER];
+			ewol::Widget* m_subWidget;
 			float    m_displayRatio;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
@@ -72,12 +72,6 @@ namespace ewol {
 			 * @return pointer on the widget found
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
-			/**
-			 * @brief Event generated to inform a flip-flop has occured on the current widget
-			 * @param ---
-			 * @return ---
-			 */
-			virtual void   OnFlipFlopEvent(void);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

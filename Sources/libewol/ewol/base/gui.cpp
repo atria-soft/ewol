@@ -81,8 +81,6 @@ void EWOL_NativeRegenerateDisplay(void)
 		gui_uniqueWindows->OnRegenerateDisplay();
 		// Keep Inter-thread-lock-mutex
 		ewol::widgetManager::DoubleBufferLock();
-		// flip-flop all needed double-buffer in all widget
-		gui_uniqueWindows->OnFlipFlopEvent();
 		// Inform the main thread of openGl draw that somthing to display
 		ewol::widgetManager::SetDoubleBufferNeedDraw();
 		// Release Inter-thread-lock-mutex

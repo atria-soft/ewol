@@ -311,29 +311,28 @@ void ewol::WidgetScrooled::AddOObject(ewol::OObject* newObject, int32_t pos)
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (pos < 0 || pos >= m_listOObject[m_currentCreateId].Size() ) {
-		m_listOObject[m_currentCreateId].PushBack(newObject);
+	if (pos < 0 || pos >= m_listOObject.Size() ) {
+		m_listOObject.PushBack(newObject);
 	} else {
-		m_listOObject[m_currentCreateId].Insert(pos, newObject);
+		m_listOObject.Insert(pos, newObject);
 	}
-	m_needFlipFlop = true;
 }
 
 
 void ewol::WidgetScrooled::ClearOObjectList(void)
 {
-	for (int32_t iii=0; iii<m_listOObject[m_currentCreateId].Size(); iii++) {
-		delete(m_listOObject[m_currentCreateId][iii]);
-		m_listOObject[m_currentCreateId][iii] = NULL;
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		delete(m_listOObject[iii]);
+		m_listOObject[iii] = NULL;
 	}
-	m_listOObject[m_currentCreateId].Clear();
+	m_listOObject.Clear();
 }
 
 void ewol::WidgetScrooled::OnDraw(DrawProperty& displayProp)
 {
-	for (int32_t iii=0; iii<m_listOObject[m_currentDrawId].Size(); iii++) {
-		if (NULL != m_listOObject[m_currentDrawId][iii]) {
-			m_listOObject[m_currentDrawId][iii]->Draw();
+	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+		if (NULL != m_listOObject[iii]) {
+			m_listOObject[iii]->Draw();
 		}
 	}
 }

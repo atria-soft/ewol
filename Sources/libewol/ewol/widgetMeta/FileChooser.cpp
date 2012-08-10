@@ -442,35 +442,27 @@ void ewol::FileChooser::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetTitle) {
 		m_widgetTitle = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetValidate) {
 		m_widgetValidate = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetCancel) {
 		m_widgetCancel = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetCurrentFolder) {
 		m_widgetCurrentFolder = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetCurrentFileName) {
 		m_widgetCurrentFileName = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetListFolder) {
 		m_widgetListFolder = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetListFile) {
 		m_widgetListFile = NULL;
-		m_needFlipFlop = true;
 	}
 	if(removeObject == m_widgetCheckBox) {
 		m_widgetCheckBox = NULL;
-		m_needFlipFlop = true;
 	}
 }
 
