@@ -37,7 +37,7 @@
 #include <ewol/ShortCutManager.h>
 #include <ewol/base/eventInputManagement.h>
 
-#ifdef __PLATFORM__Linux
+#ifdef __TARGET_OS__Linux
 #	include <sched.h>
 #endif
 

@@ -18,26 +18,10 @@ LOCAL_C_INCLUDES :=
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11
 
-ifeq ($(DEBUG),1)
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=3 \
-                -DEWOL_DEBUG_LEVEL=3 \
-                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-debug\"" \
-                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
+LOCAL_CFLAGS := -Wno-write-strings \
+                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -DLUA_COMPAT_ALL \
                 -Wall
-
-else
-LOCAL_CFLAGS := -D__PLATFORM__Linux \
-                -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=3 \
-                -DEWOL_DEBUG_LEVEL=3 \
-                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-release\"" \
-                -DBUILD_TIME="\"$(BUILD_TIME)\"" \
-                -DLUA_COMPAT_ALL
-
-endif
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

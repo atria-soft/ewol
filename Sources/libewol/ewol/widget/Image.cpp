@@ -50,7 +50,7 @@ void ewol::Image::Init(void)
 {
 	AddEventId(ewolEventImagePressed);
 	
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		m_padding.y = 12;
 		m_padding.x = 12;
 	#else

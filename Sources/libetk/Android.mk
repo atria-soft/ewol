@@ -13,14 +13,10 @@ LOCAL_C_INCLUDES :=   $(LOCAL_PATH)
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 ifeq ($(DEBUG),1)
-LOCAL_CFLAGS := -D__PLATFORM__Android \
-                -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=3 \
+LOCAL_CFLAGS := -Wno-write-strings \
                 -Wall
 else
-LOCAL_CFLAGS := -D__PLATFORM__Android \
-                -Wno-write-strings \
-                -DETK_DEBUG_LEVEL=1 \
+LOCAL_CFLAGS := -Wno-write-strings \
                 -DMODE_RELEASE
 endif
 

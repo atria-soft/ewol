@@ -35,7 +35,7 @@
 void ewol::List::Init(void)
 {
 	m_paddingSizeX = 2;
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		m_paddingSizeY = 10;
 	#else
 		m_paddingSizeY = 2;

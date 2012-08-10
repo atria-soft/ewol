@@ -54,7 +54,7 @@ ewol::Parameter::Parameter(void) :
 	ewol::SizerVert * mySizerVert = NULL;
 	ewol::SizerHori * mySizerHori = NULL;
 	ewol::Spacer * mySpacer = NULL;
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		SetDisplayRatio(0.90);
 	#else
 		SetDisplayRatio(0.80);

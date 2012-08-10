@@ -29,7 +29,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 #	include <stdio.h>
 #	include <zip/zip.h>
 #endif
@@ -37,7 +37,7 @@
 // zip file of the apk file for Android ==> set to zip file apk access
 static etk::UString s_fileAPK = "";
 etk::UString baseApplName = "ewolNoName";
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 	etk::UString baseFolderHome     = "/sdcard/";                  // home folder
 	etk::UString baseFolderData     = "assets/";            // program Data
 	etk::UString baseFolderDataUser = "/sdcard/.tmp/userData/";   // Data specific user (local modification)
@@ -50,7 +50,7 @@ etk::UString baseApplName = "ewolNoName";
 #endif
 
 
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 	static struct zip * s_APKArchive = NULL;
 	static int32_t      s_APKnbFiles = 0;
 	static void loadAPK(etk::UString& apkPath)
@@ -75,7 +75,7 @@ etk::UString baseApplName = "ewolNoName";
 // for specific device contraint : 
 void etk::SetBaseFolderData(const char * folder)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		baseFolderData = "assets/";
 		s_fileAPK = folder;
 		loadAPK(s_fileAPK);
@@ -86,7 +86,7 @@ void etk::SetBaseFolderData(const char * folder)
 
 void etk::SetBaseFolderDataUser(const char * folder)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		baseFolderDataUser = folder;
 	#else
 		TK_ERROR("Not Availlable Outside Android");
@@ -95,7 +95,7 @@ void etk::SetBaseFolderDataUser(const char * folder)
 
 void etk::SetBaseFolderCache(const char * folder)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		baseFolderCache = folder;
 	#else
 		TK_ERROR("Not Availlable Outside Android");
@@ -113,7 +113,7 @@ void etk::InitDefaultFolder(const char * applName)
 	} else {
 		baseFolderHome = basicPath;
 	}
-	#ifndef __PLATFORM__Android
+	#ifndef __TARGET_OS__Android
 		
 		#ifdef MODE_RELEASE
 			baseFolderData  = "/usr/share/";
@@ -235,7 +235,7 @@ const etk::File& etk::File::operator= (const etk::File &etkF )
 			TK_ERROR("Missing close the file : \"" << GetCompleateName() << "\"");
 			fClose();
 		}
-		#ifdef __PLATFORM__Android
+		#ifdef __TARGET_OS__Android
 			m_idZipFile = etkF.m_idZipFile;
 			m_zipData = NULL;
 			m_zipDataSize = 0;
@@ -287,7 +287,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	char buf[MAX_FILE_NAME];
 	memset(buf, 0, MAX_FILE_NAME);
 	char * ok;
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	m_idZipFile = -1;
 	m_zipData = NULL;
 	m_zipDataSize = 0;
@@ -339,10 +339,10 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	{
 		case etk::FILE_TYPE_DATA:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if DEBUG_LEVEL > 3
 				mode = "FILE_TYPE_DATA";
 				#endif
-				#ifdef __PLATFORM__Android
+				#ifdef __TARGET_OS__Android
 					etk::UString tmpFilename = baseFolderData + destFilename;
 					for (int iii=0; iii<s_APKnbFiles; iii++) {
 						const char* name = zip_get_name(s_APKArchive, iii, 0);
@@ -368,7 +368,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			break;
 		case etk::FILE_TYPE_USER_DATA:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if DEBUG_LEVEL > 3
 				mode = "FILE_TYPE_USER_DATA";
 				#endif
 				etk::UString tmpFilename = destFilename;
@@ -379,7 +379,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			break;
 		case etk::FILE_TYPE_CACHE:
 			{
-				#if ETK_DEBUG_LEVEL > 3
+				#if DEBUG_LEVEL > 3
 				mode = "FILE_TYPE_CACHE";
 				#endif
 				etk::UString tmpFilename = destFilename;
@@ -390,7 +390,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			break;
 		default:
 			// nothing to do ...
-			#if ETK_DEBUG_LEVEL > 3
+			#if DEBUG_LEVEL > 3
 			mode = "FILE_TYPE_DIRECT";
 			#endif
 			needUnpack = true;
@@ -486,7 +486,7 @@ etk::UString etk::File::GetExtention(void)
 	return tmpExt;
 }
 
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 bool etk::File::LoadDataZip(void)
 {
 	if (NULL != m_zipData) {
@@ -536,7 +536,7 @@ bool etk::File::LoadDataZip(void)
 
 int32_t etk::File::Size(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (true == LoadDataZip()) {
 			return m_zipDataSize;
@@ -578,7 +578,7 @@ int32_t etk::File::Size(void)
 
 bool etk::File::Exist(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (m_idZipFile >= -1  && m_idZipFile < s_APKnbFiles) {
 			return true;
@@ -617,7 +617,7 @@ bool etk::File::Exist(void)
 
 bool etk::File::fOpenRead(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		return LoadDataZip();
 	}
@@ -653,7 +653,7 @@ bool etk::File::fOpenRead(void)
 
 bool etk::File::fOpenWrite(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		return false;
 	}
@@ -689,7 +689,7 @@ bool etk::File::fOpenWrite(void)
 
 bool etk::File::fClose(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			TK_CRITICAL("File Already closed : \"" << GetCompleateName() << "\"");
@@ -714,7 +714,7 @@ bool etk::File::fClose(void)
 char * etk::File::fGets(char * elementLine, int32_t maxData)
 {
 	memset(elementLine, 0, maxData);
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	char * element = elementLine;
 	if (etk::FILE_TYPE_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 		if (NULL == m_zipData) {
@@ -751,7 +751,7 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 
 int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			((char*)data)[0] = '\0';
@@ -772,7 +772,7 @@ int32_t etk::File::fRead(void * data, int32_t blockSize, int32_t nbBlock)
 
 int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		TK_CRITICAL("Can not write on data inside APK : \"" << GetCompleateName() << "\"");
 		return 0;
@@ -784,7 +784,7 @@ int32_t etk::File::fWrite(void * data, int32_t blockSize, int32_t nbBlock)
 
 bool etk::File::fSeek(long int offset, int origin)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			return false;
@@ -822,7 +822,7 @@ bool etk::File::fSeek(long int offset, int origin)
 
 char * etk::File::GetDirectPointer(void)
 {
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 	if (etk::FILE_TYPE_DATA == m_type) {
 		if (NULL == m_zipData) {
 			return NULL;

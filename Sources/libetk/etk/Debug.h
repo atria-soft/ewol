@@ -48,24 +48,55 @@ void GeneralDebugSetLevel(etk::logLevel_te ccc);
 															etk::cout <<etk::endl; \
 														} \
 													}while(0)
+
+
 #define ETK_CRITICAL(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_CRITICAL, data)
-#define ETK_ERROR(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_ERROR, data)
-#define ETK_WARNING(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_WARNING, data)
-#define ETK_INFO(libName, data)						ETK_DBG_COMMON(libName, etk::LOG_LEVEL_INFO, data)
-#define ETK_DEBUG(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_DEBUG, data)
-#define ETK_VERBOSE(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_VERBOSE, data)
+
+#if DEBUG_LEVEL > 0
+#	define ETK_WARNING(libName, data)				ETK_DBG_COMMON(libName, etk::LOG_LEVEL_WARNING, data)
+#	define ETK_ERROR(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_ERROR, data)
+#else
+#	define ETK_WARNING(libName, data)				do {}while(0)
+#	define ETK_ERROR(libName, data)					do {}while(0)
+#endif
+
+#if DEBUG_LEVEL > 1
+#	define ETK_INFO(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_INFO, data)
+#else
+#	define ETK_INFO(libName, data)					do {}while(0)
+#endif
+
+#if DEBUG_LEVEL > 2
+#	define ETK_DEBUG(libName, data)					ETK_DBG_COMMON(libName, etk::LOG_LEVEL_DEBUG, data)
+#else
+#	define ETK_DEBUG(libName, data)					do {}while(0)
+#endif
+
+#if DEBUG_LEVEL > 3
+#	define ETK_VERBOSE(libName, data)				ETK_DBG_COMMON(libName, etk::LOG_LEVEL_VERBOSE, data)
+#else
+#	define ETK_VERBOSE(libName, data)				do {}while(0)
+#endif
+
 #define ETK_ASSERT(libName, cond, data)				do { \
 														if (!(cond)) { \
 															ETK_CRITICAL(libName, data); \
 															assert(!#cond); \
 														} \
 													} while (0)
-#define ETK_CHECK_INOUT_ASSERT(libName, cond)		ETK_ASSERT(libName, (cond), "Internal input error : "#cond)
-#define ETK_CHECK_INOUT_WARNING(libName, cond)		do { \
+
+#if DEBUG_LEVEL > 1
+#   define ETK_CHECK_INOUT(libName, cond)			ETK_ASSERT(libName, (cond), "Internal input error : "#cond)
+#elif DEBUG_LEVEL > 0
+#   define ETK_CHECK_INOUT(libName, cond)			do { \
 														if (!(cond)) { \
 															ETK_CRITICAL(libName, "Internal input error : "#cond); \
 														} \
 													} while (0)
-#define ETK_CHECK_MAGIC(libName, cond)				ETK_ASSERT(libName, (cond), "MAGIC check error : "#cond)
+#else
+#   define ETK_CHECK_INOUT(libName, cond)			do { } while (0)
+#endif
+
+#define ETK_TODO(libName, data)						ETK_INFO(libName, "TODO : " << data)
 
 #endif

@@ -81,7 +81,7 @@ ewol::FileChooser::FileChooser(void)
 	ewol::Spacer * mySpacer = NULL;
 	//ewol::Label * myLabel = NULL;
 	ewol::Image * myImage = NULL;
-	#ifdef __PLATFORM__Android
+	#ifdef __TARGET_OS__Android
 		m_folder = "/mnt/sdcard/";
 		SetDisplayRatio(0.90);
 	#else

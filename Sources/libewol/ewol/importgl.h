@@ -6,21 +6,19 @@
 extern "C" {
 #endif
 
-#if defined(__PLATFORM__Linux)
+#if defined(__TARGET_OS__Linux)
 	#include <GL/gl.h>
 	#include <GL/glu.h>
-#elif defined(__PLATFORM__DoubleBuffer)
-	
-#elif defined(__PLATFORM__Android)
+#elif defined(__TARGET_OS__Android)
 	#include <GLES/gl.h>
-#elif defined(__PLATFORM__AndroidTablet)
-	#include <GLES/gl.h>
-#elif defined(__PLATFORM__IPhone)
+#elif defined(__TARGET_OS__Windows)
 	
-#elif defined(__PLATFORM__IPad)
+#elif defined(__TARGET_OS__MacOs)
+	
+#elif defined(__TARGET_OS__IOs)
 	
 #else
-	#error you need to specify a platform ...
+	#error you need to specify a __TAGET_OS__ ...
 #endif
 
 void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);

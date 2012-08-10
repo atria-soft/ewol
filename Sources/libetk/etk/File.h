@@ -94,7 +94,7 @@ namespace etk
 		private :
 			etk::FileType_te m_type;
 			FILE *           m_PointerFile;
-			#ifdef __PLATFORM__Android
+			#ifdef __TARGET_OS__Android
 			bool             LoadDataZip(void);
 			int32_t          m_idZipFile;
 			char *           m_zipData;

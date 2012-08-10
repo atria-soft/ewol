@@ -41,7 +41,7 @@ static int32_t effectsVolumeApply = 1<<16;
 
 static bool isInit = false;
 
-#ifdef __PLATFORM__Linux
+#ifdef __TARGET_OS__Linux
 #	include <ewol/Audio/interfacePortAudio.h>
 #endif
 
@@ -56,7 +56,7 @@ void ewol::audio::Init(void)
 	ewol::audio::music::MuteSet(false);
 	musicFadingTime = 100;
 	isInit = true;
-	#ifdef __PLATFORM__Linux
+	#ifdef __TARGET_OS__Linux
 		ewol::portAudio::Init();
 	#endif
 }
@@ -68,7 +68,7 @@ void ewol::audio::UnInit(void)
 		EWOL_ERROR("multiple un-init requested ... at the audio system ...");
 		return;
 	}
-	#ifdef __PLATFORM__Linux
+	#ifdef __TARGET_OS__Linux
 		ewol::portAudio::UnInit();
 	#endif
 	musicMute = true;

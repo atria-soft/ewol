@@ -58,7 +58,7 @@ void TOOLS_DisplayFuncName(int32_t ligne, const char* className, const char* fun
 void TOOLS_DisplayTime(void)
 {
 	char tmpdata[50];
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 	struct timeval  now;
 	gettimeofday(&now, NULL);
 	sprintf(tmpdata, " %2dh %2dmin %2ds | ", (int32_t)(now.tv_sec/3600)%24, (int32_t)(now.tv_sec/60)%60, (int32_t)(now.tv_sec%60));
@@ -73,7 +73,7 @@ void TOOLS_DisplayTime(void)
 }
 
 
-#ifdef __PLATFORM__Android
+#ifdef __TARGET_OS__Android
 etk::logLevel_te g_requestedLevel = etk::LOG_LEVEL_VERBOSE;
 #else
 etk::logLevel_te g_requestedLevel = etk::LOG_LEVEL_ERROR;

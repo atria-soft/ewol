@@ -30,42 +30,14 @@
 extern const char * etkLibName;
 
 #define TK_CRITICAL(data)			ETK_CRITICAL(etkLibName, data)
-// General 
-#if ETK_DEBUG_LEVEL > 0
-#	define TK_WARNING(data)			ETK_WARNING(etkLibName, data)
-#	define TK_ERROR(data)			ETK_ERROR(etkLibName, data)
-#else
-#	define TK_WARNING(data)			do {}while(0)
-#	define TK_ERROR(data)			do {}while(0)
-#endif
-
-#if ETK_DEBUG_LEVEL > 1
-#	define TK_INFO(data)			ETK_INFO(etkLibName, data)
-#else
-#	define TK_INFO(data)			do {}while(0)
-#endif
-
-#if ETK_DEBUG_LEVEL > 2
-#	define TK_DEBUG(data)			ETK_DEBUG(etkLibName, data)
-#else
-#	define TK_DEBUG(data)			do {}while(0)
-#endif
-
-#if ETK_DEBUG_LEVEL > 3
-#	define TK_VERBOSE(data)			ETK_VERBOSE(etkLibName, data)
-#else
-#	define TK_VERBOSE(data)			do {}while(0)
-#endif
-
+#define TK_WARNING(data)			ETK_WARNING(etkLibName, data)
+#define TK_ERROR(data)				ETK_ERROR(etkLibName, data)
+#define TK_INFO(data)				ETK_INFO(etkLibName, data)
+#define TK_DEBUG(data)				ETK_DEBUG(etkLibName, data)
+#define TK_VERBOSE(data)			ETK_VERBOSE(etkLibName, data)
 #define TK_ASSERT(cond, data)		ETK_ASSERT(etkLibName, cond, data)
-
-#if ETK_DEBUG_LEVEL > 1
-#   define TK_CHECK_INOUT(cond)		ETK_CHECK_INOUT_ASSERT(etkLibName, cond)
-#elif ETK_DEBUG_LEVEL > 0
-#   define TK_CHECK_INOUT(cond)		ETK_CHECK_INOUT_WARNING(etkLibName, cond)
-#else
-#   define TK_CHECK_INOUT(cond)		do { } while (0)
-#endif
+#define TK_CHECK_INOUT(cond)		ETK_CHECK_INOUT(etkLibName, cond)
+#define TK_TODO(cond)				ETK_TODO(etkLibName, cond)
 
 #endif
 

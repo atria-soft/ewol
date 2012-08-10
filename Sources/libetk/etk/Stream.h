@@ -32,7 +32,7 @@
 #include <pthread.h>
 #include <etk/Types.h>
 
-#if defined(__PLATFORM__Android)
+#if defined(__TARGET_OS__Android)
 #	include <android/log.h>
 #	define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "EWOL", __VA_ARGS__))
 #	define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "EWOL", __VA_ARGS__))
@@ -238,7 +238,7 @@ namespace etk{
 				strncat(m_tmpChar, ETK_BASH_COLOR_NORMAL, MAX_LOG_SIZE);
 				strncat(m_tmpChar, "\n", MAX_LOG_SIZE);
 				m_tmpChar[MAX_LOG_SIZE] = '\0';
-#if defined(__PLATFORM__Android)
+#if defined(__TARGET_OS__Android)
 				LOGI("%s", m_tmpChar);
 #else
 				printf("%s", m_tmpChar);
