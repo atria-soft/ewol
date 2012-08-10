@@ -27,7 +27,7 @@
 
 #include <ewol/EObject.h>
 
-#define NB_BOUBLE_BUFFER        (2)
+#define NB_BOUBLE_BUFFER        (1)
 
 namespace ewol {
 	class Widget;

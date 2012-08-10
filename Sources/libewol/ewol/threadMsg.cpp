@@ -180,6 +180,14 @@ int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
 	return nbMessage;
 }
 
+bool ewol::threadMsg::HaveMessage(threadMsg_ts& messageData)
+{
+	if (0 < WaitingMessage(messageData)) {
+		return true;
+	}
+	return false;
+}
+
 void ewol::threadMsg::SendDisplayDone(threadMsg_ts& messageData)
 {
 	if (false == messageData.isInit) {

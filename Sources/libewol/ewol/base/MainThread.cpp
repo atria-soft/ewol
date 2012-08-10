@@ -90,29 +90,17 @@ void EWOL_NativeRegenerateDisplay(void);
 
 extern eventSpecialKey_ts specialCurrentKey;
 
-static void* BaseAppEntry(void* param)
+static bool requestEndProcessing = false;
+
+void ewolProcessInit(void)
 {
-	bool requestEndProcessing = false;
+	requestEndProcessing = false;
 	EWOL_DEBUG("==> Init BThread (START)");
 	
 	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 	EWOL_INFO("Build Date: " BUILD_TIME);
 	
 	etk::InitDefaultFolder("ewolApplNoName");
-
-	/*
-		struct sched_param pr;
-		int ret = 9;
-		int policy;
-		pthread_getschedparam(pthread_self(), &policy, &pr);
-		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result here
-		policy = SCHED_RR;
-		pr.sched_priority = 19;
-		pthread_setschedparam(pthread_self(), policy, &pr);
-		sleep(1);
-		pthread_getschedparam(pthread_self(), &policy, &pr);
-		EWOL_INFO("Child Thread Up PL" << policy << " PRI" << pr.sched_priority); //The result Set
-	*/
 	
 	ewol::EObjectManager::Init();
 	ewol::EObjectMessageMultiCast::Init();
@@ -122,13 +110,20 @@ static void* BaseAppEntry(void* param)
 	ewol::InitFont();
 	ewol::shortCut::Init();
 	APP_Init();
-	int32_t countNbEvent = 0;
 	EWOL_DEBUG("==> Init BThread (END)");
-	while(false == requestEndProcessing) {
-		ewol::threadMsg::threadMsgContent_ts data;
-		data.type = THREAD_JUST_DISPLAY;
+}
+
+
+void ewolProcessEvents(void)
+{
+	int32_t nbEvent = 0;
+	//EWOL_DEBUG(" ********  Event");
+	ewol::threadMsg::threadMsgContent_ts data;
+	data.type = THREAD_JUST_DISPLAY;
+	while (ewol::threadMsg::WaitingMessage(androidJniMsg)>0) 
+	{
+		nbEvent++;
 		ewol::threadMsg::WaitMessage(androidJniMsg, data);
-		countNbEvent++;
 		if (data.type != THREAD_JUST_DISPLAY) {
 			//EWOL_DEBUG("EVENT");
 			switch (data.type) {
@@ -202,17 +197,25 @@ static void* BaseAppEntry(void* param)
 					break;
 			}
 		}
-		if (0 == ewol::threadMsg::WaitingMessage(androidJniMsg)) {
-			if (countNbEvent > 0) {
-				if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
-					int64_t localTime = GetCurrentTime();
-					ewol::widgetManager::PeriodicCall(localTime);
-				}
-				EWOL_NativeRegenerateDisplay();
-				countNbEvent = 0;
-			}
-		}
 	}
+	// pb here when dynamic widget ...
+	if (0 < nbEvent) {
+		ewolProcessRedraw();
+	}
+}
+
+void ewolProcessRedraw(void)
+{
+	//EWOL_DEBUG(" ********  Redraw");
+	if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
+		int64_t localTime = GetCurrentTime();
+		ewol::widgetManager::PeriodicCall(localTime);
+	}
+	EWOL_NativeRegenerateDisplay();
+}
+
+void ewolProcessUnInit(void)
+{
 	EWOL_DEBUG("==> Un-Init BThread (START)");
 	
 	// unset all windows
@@ -228,6 +231,17 @@ static void* BaseAppEntry(void* param)
 	ewol::EObjectManager::UnInit();
 	ewol::eventInput::UnInit();
 	EWOL_DEBUG("==> Un-Init BThread (END)");
+}
+
+
+
+static void* BaseAppEntry(void* param)
+{
+	ewolProcessInit();
+	while(false == requestEndProcessing) {
+		ewolProcessEvents();
+	}
+	ewolProcessUnInit();
 	pthread_exit(NULL);
 }
 
@@ -263,18 +277,22 @@ bool isGlobalSystemInit = false;
 void EWOL_SystemStart(void)
 {
 	if (false == isGlobalSystemInit) {
-		// create interface mutex :
+		// create message system ...
 		EWOL_DEBUG("Init thread message system");
 		ewol::threadMsg::Init(androidJniMsg);
-		// init the thread :
-		EWOL_DEBUG("Create the thread");
-		pthread_attr_init(&androidJniThreadAttr);
-		pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
-		//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
-		//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
-		pthread_setname_np(androidJniThread, "ewol_basic_thread");
-		pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
-		//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
+		#ifdef MODE_MULTY_THREAD
+			// init the thread :
+			EWOL_DEBUG("Create the thread");
+			pthread_attr_init(&androidJniThreadAttr);
+			pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
+			//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
+			//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
+			pthread_setname_np(androidJniThread, "ewol_basic_thread");
+			pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
+			//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
+		#else
+			ewolProcessInit();
+		#endif
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
@@ -288,10 +306,13 @@ void EWOL_SystemStop(void)
 	if (true == isGlobalSystemInit) {
 		isGlobalSystemInit = false;
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_UN_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
-		
-		EWOL_DEBUG("Wait end of the thread ...");
-		// Wait end of the thread
-		pthread_join(androidJniThread, NULL);
+		#ifdef MODE_MULTY_THREAD
+			EWOL_DEBUG("Wait end of the thread ...");
+			// Wait end of the thread
+			pthread_join(androidJniThread, NULL);
+		#else
+			ewolProcessUnInit();
+		#endif
 		ewol::threadMsg::UnInit(androidJniMsg);
 	}
 }

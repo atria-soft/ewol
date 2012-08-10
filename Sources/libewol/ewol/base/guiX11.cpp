@@ -1065,6 +1065,11 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
+			#ifdef MODE_MULTY_THREAD
+				
+			#else
+				ewolProcessEvents();
+			#endif
 			#ifdef DEBUG_X11_EVENT
 				EWOL_INFO("X11 Render...");
 			#endif

@@ -29,9 +29,13 @@
 
 #include <pthread.h>
 
+//#define MODE_MULTY_THREAD
+
 void EWOL_SystemStart(void);
 void EWOL_SystemStop(void);
 
+void ewolProcessEvents(void);
+void ewolProcessRedraw(void);
 
 void EWOL_ThreadSetArchiveDir(int mode, const char* str);
 void EWOL_ThreadResize(int w, int h );
