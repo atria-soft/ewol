@@ -84,6 +84,11 @@ static float gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 10
 
 void EWOL_NativeRender(void)
 {
+	#ifdef MODE_MULTY_THREAD
+		
+	#else
+		ewolProcessEvents();
+	#endif
 	ewol::texture::UpdateContext();
 	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
 	if(NULL == gui_uniqueWindows) {
