@@ -32,6 +32,7 @@
 #include <ewol/Widget.h>
 #include <ewol/Windows.h>
 
+#if 1
 
 namespace ewol {
 	void Stop(void);
@@ -82,5 +83,46 @@ namespace ewol {
 // get current time in ms...
 int64_t GetCurrentTime(void);
 
+#else
+
+namespace ewol {
+	// stop the program :
+	void Stop(void);
+	// display a specific windows
+	void WindowsSet(ewol::Windows * windows);
+	void WindowsPopUpAdd(ewol::Widget * tmpWidget);
+	// only on computer
+	// change the windows size
+	void ChangeSize(int32_t w, int32_t h);
+	// change the windows curent position
+	void ChangePos(int32_t x, int32_t y);
+	// force the redraw of all the widget (this was a bad case ...
+	void ForceRedrawAll(void);
+	// force the calculation of all the sizes
+	void RequestUpdateSize(void);
+	// get the cmd line for computer call
+	etk::Vector<etk::UString> CmdLineGet(void);
+	// get the special key properties
+	enum {
+		EWOL_KEY_LEFT     = 1 <<  0,
+		EWOL_KEY_RIGHT    = 1 <<  1,
+		EWOL_KEY_CAP_LOCK = 1 <<  2,
+		EWOL_KEY_SHIFT    = 1 <<  3,
+		EWOL_KEY_CTRL     = 1 <<  4,
+		EWOL_KEY_META     = 1 <<  5,
+		EWOL_KEY_ALT      = 1 <<  6,
+		EWOL_KEY_ALT_GR   = 1 <<  7,
+		EWOL_KEY_VER_NUM  = 1 <<  8,
+		EWOL_KEY_INSERT   = 1 <<  9,
+	};
+	int32_t KeyboardGetStatus(void);
+	// set the vew title
+	void SetTitle(etk::UString title);
+	// get EWOL version
+	etk::UString GetVersion(void);
+	// get current time in ms...
+	int64_t GetTime(void);
+};
+#endif
 
 #endif
