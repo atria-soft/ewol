@@ -34,6 +34,7 @@
 
 #include <ewol/Texture.h>
 #include <ewol/base/MainThread.h>
+#include <ewol/importgl.h>
 
 ewol::Windows* gui_uniqueWindows = NULL;
 float     gui_width = 320;
@@ -75,26 +76,13 @@ void EWOL_NativeResize(int w, int h )
 
 void EWOL_NativeRegenerateDisplay(void)
 {
+	// Remove all widget that they are no more usefull (these who decided to destroy themself)
+	ewol::EObjectManager::RemoveAllAutoRemove();
+	
 	//EWOL_INFO("Resize w=" << w << " h=" << h);
 	if (NULL != gui_uniqueWindows) {
 		// Redraw all needed elements
 		gui_uniqueWindows->OnRegenerateDisplay();
-		// Keep Inter-thread-lock-mutex
-		ewol::widgetManager::DoubleBufferLock();
-		// Inform the main thread of openGl draw that somthing to display
-		ewol::widgetManager::SetDoubleBufferNeedDraw();
-		// Release Inter-thread-lock-mutex
-		ewol::widgetManager::DoubleBufferUnLock();
-		// Remove deprecated widget (which have no more reference in the system)
-		ewol::EObjectManager::RemoveAllMark();
-	}
-}
-
-void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newWindows)
-{
-	gui_uniqueWindows = newWindows;
-	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
 	}
 }
 
@@ -104,6 +92,13 @@ void guiAbstraction::ForceRedrawAll(void)
 		gui_uniqueWindows->CalculateSize((float)gui_width, (float)gui_height);
 	}
 }
+
+void guiAbstraction::SetDisplayOnWindows(ewol::Windows * newWindows)
+{
+	gui_uniqueWindows = newWindows;
+	ForceRedrawAll();
+}
+
 
 
 void guiAbstraction::SendKeyboardEvent(bool isDown, uniChar_t keyInput)
@@ -135,28 +130,6 @@ void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te
 }
 
 
-/*
-void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
-{
-	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->KeyboardShow(mode);
-	}
-}
-
-void guiAbstraction::KeyboardHide(void)
-{
-	if (NULL != gui_uniqueWindows) {
-		gui_uniqueWindows->KeyboardHide();
-	}
-	ForceRedrawAll();
-}
-*/
-
-
-
-
-
-
 static int64_t startTime = -1;
 static int64_t nbCallTime = 0;
 static int64_t nbDisplayTime = 0;
@@ -170,61 +143,153 @@ static int64_t max2 = 0;
 #define DISPLAY_PERIODE_US       (1000000)
 
 
+static float gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
+static float gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
+                                           200.0f, 200.0f, 300.0f, 200.0f, 200.0f, 300.0f };
+
 void EWOL_GenericDraw(bool everyTime)
 {
-	bool display = false;
-	nbCallTime++;
-	if (startTime<0) {
-		startTime = GetCurrentTime();
-	}
-	int64_t currentTime = GetCurrentTime();
-	//EWOL_DEBUG("current : " << currentTime << "time    diff : " << (currentTime - startTime));
-	if ( (currentTime - startTime) > DISPLAY_PERIODE_US) {
-		display = true;
-	}
-	// TODO : Remove this ...
-	if (ewol::widgetManager::PeriodicCallHave()) {
-		everyTime = true;
-	}
-	ewol::widgetManager::DoubleBufferLock();
-	int64_t currentTime3 = GetCurrentTime();
-	if(    true == ewol::widgetManager::GetDoubleBufferNeedDraw()
-	    || true == everyTime)
-	{
-		ewol::texture::UpdateContext();
-		nbDisplayTime++;
-		gui_uniqueWindows->SysDraw();
-	}
-	ewol::widgetManager::DoubleBufferUnLock();
-	// send Message that we just finished a display ...
-	EWOL_ThreadEventHasJustDisplay();
-	int64_t currentTime2 = GetCurrentTime();
-	int64_t processTimeLocal = (currentTime2 - currentTime);
-	min = etk_min(min, processTimeLocal);
-	max = etk_max(max, processTimeLocal);
-	avg += processTimeLocal;
-	processTimeLocal = (currentTime2 - currentTime3);
-	min2 = etk_min(min2, processTimeLocal);
-	max2 = etk_max(max2, processTimeLocal);
-	avg2 += processTimeLocal;
-	if (true == display) {
-		EWOL_DEBUG("display property : " << nbDisplayTime << "/" << nbCallTime << "fps");
-		EWOL_DEBUG("timeToProcess1 : " << (float)((float)min / 1000.0) << "ms "
-		                              << (float)((float)avg/(float)nbDisplayTime / 1000.0) << "ms "
-		                              << (float)((float)max / 1000.0) << "ms ");
-		EWOL_DEBUG("timeToProcess2 : " << (float)((float)min2 / 1000.0) << "ms "
-		                              << (float)((float)avg2/(float)nbDisplayTime / 1000.0) << "ms "
-		                              << (float)((float)max2 / 1000.0) << "ms ");
-		max2 = 0;
-		max = 0;
-		min = 99999999999999;
-		min2 = 99999999999999;
-		avg=0;
-		avg2=0;
+
+	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
+	if(NULL == gui_uniqueWindows) {
+		// set the size of the open GL system
+		glViewport(0,0,gui_width,gui_height);
 		
-		nbCallTime = 0;
-		nbDisplayTime = 0;
-		startTime = -1;
+		// Clear the screen with transparency ...
+		glClearColor(0.0,0.0,0.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		//glOrtho(0., width, 0., -height, 1., 20.);
+		glOrthoEwol(-gui_width/2, gui_width/2, gui_height/2, -gui_height/2, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		
+		//glTranslatef(0, -height/2, -5);
+		glTranslatef(-gui_width/2, -gui_height/2, -1.0);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		glEnableClientState( GL_VERTEX_ARRAY );
+		
+		//LOGI("engine_draw_frame (%d,%d)",width,height);
+		
+		glColor4f(0.0, 1.0, 1.0, 1.0);
+		glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices5 );
+		glDrawArrays( GL_TRIANGLES, 0, 6);
+		static int vallllll = 0;
+		static float transparency = 0.0;
+		if (vallllll <= 1) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(1.0, 0.0, 0.0, 1.0);
+			} else {
+				glColor4f(1.0, 0.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 2) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(1.0, 1.0, 0.0, 1.0);
+			} else {
+				glColor4f(1.0, 1.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 3) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 1.0, 0.0, 1.0);
+			} else {
+				glColor4f(0.0, 1.0, 0.0, transparency);
+			}
+		} else if (vallllll <= 4) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 1.0, 1.0, 1.0);
+			} else {
+				glColor4f(0.0, 1.0, 1.0, transparency);
+			}
+		} else if (vallllll <= 5) {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll++;
+				transparency = 0.0;
+				glColor4f(0.0, 0.0, 1.0, 1.0);
+			} else {
+				glColor4f(0.0, 0.0, 1.0, transparency);
+			}
+		} else {
+			transparency +=0.025;
+			if (transparency >= 1.0) {
+				vallllll = 0;
+				transparency = 0.0;
+				glColor4f(1.0, 0.0, 1.0, 1.0);
+			} else {
+				glColor4f(1.0, 0.0, 1.0, transparency);
+			}
+		}
+		glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices );
+		glDrawArrays( GL_TRIANGLES, 0, 3);
+		
+		glDisableClientState( GL_VERTEX_ARRAY );
+	
+		glDisable(GL_BLEND);
+	} else {
+		bool display = false;
+		nbCallTime++;
+		if (startTime<0) {
+			startTime = GetCurrentTime();
+		}
+		int64_t currentTime = GetCurrentTime();
+		//EWOL_DEBUG("current : " << currentTime << "time    diff : " << (currentTime - startTime));
+		if ( (currentTime - startTime) > DISPLAY_PERIODE_US) {
+			display = true;
+		}
+		int64_t currentTime3 = GetCurrentTime();
+		// TODO : Check if somthink has regenerate his display befor redraw ...
+		{
+			ewol::texture::UpdateContext();
+			nbDisplayTime++;
+			gui_uniqueWindows->SysDraw();
+		}
+		// send Message that we just finished a display ...
+		//EWOL_ThreadEventHasJustDisplay();
+		int64_t currentTime2 = GetCurrentTime();
+		int64_t processTimeLocal = (currentTime2 - currentTime);
+		min = etk_min(min, processTimeLocal);
+		max = etk_max(max, processTimeLocal);
+		avg += processTimeLocal;
+		processTimeLocal = (currentTime2 - currentTime3);
+		min2 = etk_min(min2, processTimeLocal);
+		max2 = etk_max(max2, processTimeLocal);
+		avg2 += processTimeLocal;
+		if (true == display) {
+			EWOL_DEBUG("display property : " << nbDisplayTime << "/" << nbCallTime << "fps");
+			EWOL_DEBUG("timeToProcess1 : " << (float)((float)min / 1000.0) << "ms "
+			                              << (float)((float)avg/(float)nbDisplayTime / 1000.0) << "ms "
+			                              << (float)((float)max / 1000.0) << "ms ");
+			EWOL_DEBUG("timeToProcess2 : " << (float)((float)min2 / 1000.0) << "ms "
+			                              << (float)((float)avg2/(float)nbDisplayTime / 1000.0) << "ms "
+			                              << (float)((float)max2 / 1000.0) << "ms ");
+			max2 = 0;
+			max = 0;
+			min = 99999999999999;
+			min2 = 99999999999999;
+			avg=0;
+			avg2=0;
+			
+			nbCallTime = 0;
+			nbDisplayTime = 0;
+			startTime = -1;
+		}
 	}
 }
 

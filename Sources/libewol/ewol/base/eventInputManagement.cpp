@@ -355,27 +355,25 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 				eventTable[pointerID].downStart = pos;
 				// save start time
 				eventTable[pointerID].lastTimeEvent = currentTime;
-				if(    eventTable[pointerID].nbClickEvent == 0
-				    && eventTable[pointerID].curentWidgetEvent != NULL
-				    && eventTable[pointerID].curentWidgetEvent->GetMouseLimit()>0 ) {
+				int32_t nbClickMax = 0;
+				if(eventTable[pointerID].curentWidgetEvent != NULL) {
+					nbClickMax = eventTable[pointerID].curentWidgetEvent->GetMouseLimit();
+					if (nbClickMax>5) {
+						nbClickMax = 5;
+					}
+				}
+				if(eventTable[pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :
 					eventTable[pointerID].nbClickEvent++;
 					EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [SINGLE] " << pos);
-					localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_SINGLE, pos);
-				} else if(    eventTable[pointerID].nbClickEvent == 1
-				           && eventTable[pointerID].curentWidgetEvent != NULL
-				           && eventTable[pointerID].curentWidgetEvent->GetMouseLimit()>1 ) {
-					// generate event DOUBLE :
-					eventTable[pointerID].nbClickEvent++;
-					EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOUBLE] " << pos);
-					localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_DOUBLE, pos);
-				} else if(    eventTable[pointerID].nbClickEvent == 2
-				           && eventTable[pointerID].curentWidgetEvent != NULL
-				           && eventTable[pointerID].curentWidgetEvent->GetMouseLimit()>2 ) {
-					// generate event TRIPLE :
-					eventTable[pointerID].nbClickEvent++;
-					EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [TRIPLE] " << pos);
-					localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_TRIPLE, pos);
+					localEventInput(type,
+					                eventTable[pointerID].curentWidgetEvent,
+					                eventTable[pointerID].destinationInputId,
+					                (ewol::eventInputType_te)(ewol::EVENT_INPUT_TYPE_SINGLE + eventTable[pointerID].nbClickEvent-1),
+					                pos);
+					if( eventTable[pointerID].nbClickEvent >= nbClickMax) {
+						eventTable[pointerID].nbClickEvent = 0;
+					}
 				} else {
 					eventTable[pointerID].nbClickEvent = 0;
 				}

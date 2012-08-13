@@ -55,13 +55,13 @@ ewol::Windows::Windows(void)
 ewol::Windows::~Windows(void)
 {
 	if (NULL != m_subWidget) {
-		m_subWidget->MarkToRemove();
+		delete(m_subWidget);
 		m_subWidget=NULL;
 	}
 	
 	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->MarkToRemove();
+			delete(m_popUpWidgetList[iii]);
 			m_popUpWidgetList[iii]=NULL;
 		}
 	}
@@ -177,7 +177,7 @@ void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 {
 	if (NULL != m_subWidget) {
 		EWOL_INFO("Remove current main windows Widget...");
-		m_subWidget->MarkToRemove();
+		delete(m_subWidget);
 		m_subWidget = NULL;
 	}
 	m_subWidget = widget;

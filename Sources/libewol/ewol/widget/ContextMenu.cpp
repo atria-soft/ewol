@@ -177,7 +177,7 @@ void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 void ewol::ContextMenu::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
-		m_subWidget->MarkToRemove();
+		delete(m_subWidget);
 		m_subWidget = NULL;
 	}
 }
@@ -296,7 +296,7 @@ bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 		    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
 		    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
 			// Auto-remove ...
-			MarkToRemove();
+			AutoDestroy();
 			return true;
 		}
 	}

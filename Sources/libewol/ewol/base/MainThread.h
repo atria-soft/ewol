@@ -27,55 +27,57 @@
 #ifndef __EWOL_MAIN_TREAD_H__
 #define __EWOL_MAIN_TREAD_H__
 
-#include <pthread.h>
+#include <ewol/ewol.h>
 
-//#define MODE_MULTY_THREAD
-
-void EWOL_SystemStart(void);
-void EWOL_SystemStop(void);
-
-void ewolProcessEvents(void);
-void ewolProcessRedraw(void);
-
-void EWOL_ThreadSetArchiveDir(int mode, const char* str);
-void EWOL_ThreadResize(int w, int h );
-void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
-void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
-void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y);
-void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y);
-
-
-
-typedef struct {
-	bool capLock;
-	bool shift;
-	bool ctrl;
-	bool meta;
-	bool alt;
-	bool altGr;
-	bool verNum;
-	bool insert;
-} eventSpecialKey_ts;
-
-typedef struct {
-	bool               isDown;
-	uniChar_t          myChar;
-	eventSpecialKey_ts special;
-} eventKeyboardKey_ts;
-
-typedef struct {
-	bool                     isDown;
-	ewol::eventKbMoveType_te move;
-	eventSpecialKey_ts       special;
-} eventKeyboardMove_ts;
-
-void EWOL_ThreadKeyboardEvent(eventKeyboardKey_ts& keyInput);
-void EWOL_ThreadKeyboardEventMove(eventKeyboardMove_ts& keyInput);
-
-
-void EWOL_ThreadEventHide(void);
-void EWOL_ThreadEventShow(void);
-void EWOL_ThreadEventHasJustDisplay(void);
+namespace guiSystem
+{
+	
+	void Init(void);
+	void UnInit(void);
+	
+	void SetArchiveDir(int mode, const char* str);
+	
+	namespace event {
+		void Resize(int w, int h );
+		
+		void SetInputMotion(int pointerID, float x, float y);
+		void SetInputState(int pointerID, bool isUp, float x, float y);
+		
+		void SetMouseMotion(int pointerID, float x, float y);
+		void SetMouseState(int pointerID, bool isUp, float x, float y);
+		
+		typedef struct {
+			bool capLock;
+			bool shift;
+			bool ctrl;
+			bool meta;
+			bool alt;
+			bool altGr;
+			bool verNum;
+			bool insert;
+		} specialKey_ts;
+		
+		typedef struct {
+			bool                      isDown;
+			uniChar_t                 myChar;
+			guiSystem::event::specialKey_ts special;
+		} keyboardKey_ts;
+		
+		typedef struct {
+			bool                      isDown;
+			ewol::eventKbMoveType_te  move;
+			guiSystem::event::specialKey_ts special;
+		} keyboardMove_ts;
+		
+		void SetKeyboard(guiSystem::event::keyboardKey_ts& keyInput);
+		void SetKeyboardMove(guiSystem::event::keyboardMove_ts& keyInput);
+		
+		void Hide(void);
+		void Show(void);
+	};
+	
+	void Draw(void);
+};
 
 #endif
 

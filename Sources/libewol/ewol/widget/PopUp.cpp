@@ -139,7 +139,7 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 void ewol::PopUp::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
-		m_subWidget->MarkToRemove();;
+		delete(m_subWidget);
 		m_subWidget = NULL;
 	}
 	MarkToReedraw();

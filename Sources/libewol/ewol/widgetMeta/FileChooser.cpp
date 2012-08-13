@@ -328,7 +328,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 	} else if (ewolEventFileChooserCancel == eventId) {
 		//==> Auto remove ...
 		GenerateEventId(eventId);
-		MarkToRemove();
+		AutoDestroy();
 	} else if (ewolEventFileChooserHidenFileChange == eventId) {
 		if (data == "true") {
 			if (NULL!=m_widgetListFolder) {
@@ -379,7 +379,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		etk::UString tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
 		GenerateEventId(ewolEventFileChooserValidate, tmpFileCompleatName);
-		MarkToRemove();
+		AutoDestroy();
 	} else if(ewolEventFileChooserHome == eventId) {
 		etk::UString tmpUserFolder = etk::GetUserHomeFolder();
 		char buf[MAX_FILE_NAME];

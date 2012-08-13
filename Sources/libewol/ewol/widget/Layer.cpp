@@ -123,7 +123,7 @@ void ewol::Layer::LockExpendContamination(bool lockExpend)
 void ewol::Layer::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		m_subWidget[iii]->MarkToRemove();
+		delete(m_subWidget[iii]);
 		m_subWidget[iii] = NULL;
 	}
 	m_subWidget.Clear();
@@ -146,7 +146,7 @@ void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (newWidget == m_subWidget[iii]) {
-			m_subWidget[iii]->MarkToRemove();
+			delete(m_subWidget[iii]);
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 			return;

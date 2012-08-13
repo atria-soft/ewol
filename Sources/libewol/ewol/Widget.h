@@ -43,6 +43,8 @@ namespace ewol {
 		EVENT_INPUT_TYPE_SINGLE,
 		EVENT_INPUT_TYPE_DOUBLE,
 		EVENT_INPUT_TYPE_TRIPLE,
+		EVENT_INPUT_TYPE_QUAD,
+		EVENT_INPUT_TYPE_QUINTE,
 		EVENT_INPUT_TYPE_UP,
 		EVENT_INPUT_TYPE_ENTER,
 		EVENT_INPUT_TYPE_LEAVE,
@@ -112,15 +114,10 @@ namespace ewol {
 			Widget(void);
 			/**
 			 * @brief Destructor of the widget classes
-			 * @note Use must never call this directly, when he will remove a widget he must call @ref MarkToRemove. This restriction is due to
-			 *       the internal system (one thread processing data, maybe one to regenerate the display(later) and one tha drawing on openGL)
-			 *       then when user want to remove a widget, it must be stored in the current pipe-line of ewol ...
 			 * @param ---
 			 * @return ---
 			 */
-			// TODO : Set this in private if possible ...
-			virtual ~Widget(void) { };
-			
+			virtual ~Widget(void);
 			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
@@ -128,14 +125,6 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void) { return "EwolWidget"; };
-			/**
-			 * @brief This will be equivalent at the destructor @ref ~Widget
-			 * @note this fuction "mark" the widget as removed an inform the widget manager that the widget has been removed by the user.
-			 * @note All the EObject are inform that an other EObject is removed ... @ref ewol::EObject
-			 * @param ---
-			 * @return ---
-			 */
-			void MarkToRemove(void);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------

@@ -214,39 +214,3 @@ bool ewol::widgetManager::PeriodicCallHave(void)
 	return l_havePeriodic;
 }
 
-
-static bool needRedraw = true;
-
-void ewol::widgetManager::DoubleBufferLock(void)
-{
-	if (IsInit) {
-		//EWOL_DEBUG("DoubleBuffer-Lock");
-		pthread_mutex_lock(&localMutex);
-		//EWOL_DEBUG("DoubleBuffer-Lock (DONE)");
-	}
-}
-
-void ewol::widgetManager::SetDoubleBufferNeedDraw(void)
-{
-	needRedraw = true;
-}
-
-bool ewol::widgetManager::GetDoubleBufferNeedDraw(void)
-{
-	if (true == needRedraw) {
-		needRedraw = false;
-		return true;
-	}
-	return false;
-}
-
-void ewol::widgetManager::DoubleBufferUnLock(void)
-{
-	if (IsInit) {
-		//EWOL_DEBUG("DoubleBuffer-UnLock");
-		pthread_mutex_unlock(&localMutex);
-		//EWOL_DEBUG("DoubleBuffer-UnLock (DONE)");
-	}
-}
-
-

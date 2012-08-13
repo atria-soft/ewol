@@ -76,6 +76,13 @@ namespace ewol {
 			int32_t GetId(void);
 			
 			/**
+			 * @brief Auto-destroy the object
+			 * @param ---
+			 * @return ---
+			 */
+			void AutoDestroy(void);
+			
+			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
 			 * @param[in] objectType type description
@@ -137,7 +144,7 @@ namespace ewol {
 			 * @param[in] data Data registered by this class
 			 * @return ---
 			 */
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data) { };
 	};
 };
 

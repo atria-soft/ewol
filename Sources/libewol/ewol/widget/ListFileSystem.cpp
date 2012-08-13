@@ -73,7 +73,7 @@ ewol::ListFileSystem::ListFileSystem(void)
 	AddEventId(ewolEventFSFileValidate);
 	AddEventId(ewolEventFSFolderSelect);
 	AddEventId(ewolEventFSFolderValidate);
-	SetMouseLimit(2);
+	SetMouseLimit(1);
 };
 
 ewol::ListFileSystem::~ListFileSystem(void)
@@ -101,6 +101,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 			m_list[iii] = NULL;
 		}
 	}
+	m_selectedLine = -1;
 	m_list.Clear();
 	m_originScrooled.x = 0;
 	m_originScrooled.y = 0;
@@ -266,10 +267,13 @@ bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString 
 	return true;
 };
 
-bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y) {
+
+bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y)
+{
 	if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
 		EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
 		if (1 == IdInput) {
+			int32_t previousRaw = m_selectedLine;
 			if (raw > m_list.Size() ) {
 				m_selectedLine = -1;
 			} else {
@@ -277,28 +281,23 @@ bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te 
 			}
 			// need to regenerate the display of the list : 
 			MarkToReedraw();
-			if (m_selectedLine >=0 ) {
-				// generate event extern : 
-				switch(m_list[m_selectedLine]->m_type)
-				{
-					case ewol::EFS_FILE :
-						GenerateEventId(ewolEventFSFileSelect, m_list[m_selectedLine]->m_name);
-						break;
-					case ewol::EFS_FOLDER :
-						GenerateEventId(ewolEventFSFolderSelect, m_list[m_selectedLine]->m_name);
-						break;
-					default:
-						EWOL_ERROR("Can not generate event on an unknow type");
-						break;
+			if (previousRaw != m_selectedLine) {
+				if (m_selectedLine >=0 ) {
+					// generate event extern : 
+					switch(m_list[m_selectedLine]->m_type)
+					{
+						case ewol::EFS_FILE :
+							GenerateEventId(ewolEventFSFileSelect, m_list[m_selectedLine]->m_name);
+							break;
+						case ewol::EFS_FOLDER :
+							GenerateEventId(ewolEventFSFolderSelect, m_list[m_selectedLine]->m_name);
+							break;
+						default:
+							EWOL_ERROR("Can not generate event on an unknow type");
+							break;
+					}
 				}
-			}
-			return true;
-		}
-	}
-	if (typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE) {
-		EWOL_INFO("Event Double on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-		if (1 == IdInput) {
-			if (m_selectedLine >=0 ) {
+			} else {
 				switch(m_list[m_selectedLine]->m_type)
 				{
 					case ewol::EFS_FILE :
@@ -311,8 +310,8 @@ bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te 
 						EWOL_ERROR("Can not generate event on an unknow type");
 						break;
 				}
-				return true;
 			}
+			return true;
 		}
 	}
 	return false;

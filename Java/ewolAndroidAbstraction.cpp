@@ -28,20 +28,12 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <Debug.h>
+#include <ewol/base/MainThread.h>
 
 #include <ewol/threadMsg.h>
 #include <ewol/Audio/audio.h>
 
 // declaration of the ewol android abstraction ...
-
-void EWOL_SystemStart(void);
-void EWOL_SystemStop(void);
-void EWOL_ThreadSetArchiveDir(int mode, const char* str);
-void EWOL_ThreadResize(int w, int h );
-void EWOL_ThreadEventInputMotion(int pointerID, float x, float y);
-void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y);
-void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y);
-void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y);
 void EWOL_NativeRender(void);
 void EWOL_NativeGLDestroy(void);
 
@@ -203,7 +195,7 @@ extern "C"
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
 		const char* str = env->GetStringUTFChars(myString, &isCopy);
-		EWOL_ThreadSetArchiveDir(mode, str);
+		guiSystem::SetArchiveDir(mode, str);
 		if (isCopy == JNI_TRUE) {
 			// from here str is reset ...
 			env->ReleaseStringUTFChars(myString, str);
@@ -282,7 +274,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Create                   **");
 		APPL_DEBUG("*******************************************");
-		EWOL_SystemStart();
+		guiSystem::Init();
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnStart( JNIEnv*  env )
 	{
@@ -323,7 +315,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Destroy                  **");
 		APPL_DEBUG("*******************************************");
-		EWOL_SystemStop();
+		guiSystem::UnInit();
 	}
 	
 	
@@ -333,22 +325,22 @@ extern "C"
 	 * ********************************************************************************************** */
 	void Java_org_ewol_interfaceJNI_IOInputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventInputMotion(pointerID+1, x, y);
+		guiSystem::event::SetInputMotion(pointerID+1, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOInputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventInputState(pointerID+1, isUp, x, y);
+		guiSystem::event::SetInputState(pointerID+1, isUp, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventMouseMotion(pointerID+1, x, y);
+		guiSystem::event::SetMouseMotion(pointerID+1, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		EWOL_ThreadEventMouseState(pointerID+1, isUp, x, y);
+		guiSystem::event::SetMouseState(pointerID+1, isUp, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
@@ -364,8 +356,12 @@ extern "C"
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
 	{
 		APPL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
-		guiAbstraction::SendKeyboardEvent(isdown, uniChar);
+		guiSystem::event::keyboardKey_ts keyInput;
+		keyInput.myChar = uniChar;
+		keyInput.isDown = isdown;
+		guiSystem::event::SetKeyboard(keyInput);
 	}
+	
 	enum {
 		SYSTEM_KEY__VOLUME_UP = 1,
 		SYSTEM_KEY__VOLUME_DOWN,
@@ -413,12 +409,12 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_RenderResize( JNIEnv* env, jobject thiz, jint w, jint h )
 	{
-		EWOL_ThreadResize(w, h);
+		guiSystem::event::Resize(w, h);
 	}
 	
 	void Java_org_ewol_interfaceJNI_RenderDraw( JNIEnv*  env )
 	{
-		EWOL_NativeRender();
+		guiSystem::Draw();
 	}
 
 	void Java_org_ewol_interfaceJNI_IOAudioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)

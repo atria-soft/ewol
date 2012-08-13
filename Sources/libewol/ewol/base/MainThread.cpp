@@ -37,14 +37,9 @@
 #include <ewol/ShortCutManager.h>
 #include <ewol/base/eventInputManagement.h>
 
-#ifdef __TARGET_OS__Linux
-#	include <sched.h>
-#endif
 
 
 static ewol::threadMsg::threadMsg_ts    androidJniMsg;
-static pthread_t                        androidJniThread;
-static pthread_attr_t                   androidJniThreadAttr;
 
 enum {
 	THREAD_INIT,
@@ -88,31 +83,9 @@ typedef struct {
 void EWOL_NativeResize(int w, int h );
 void EWOL_NativeRegenerateDisplay(void);
 
-extern eventSpecialKey_ts specialCurrentKey;
+extern guiSystem::event::specialKey_ts specialCurrentKey;
 
 static bool requestEndProcessing = false;
-
-void ewolProcessInit(void)
-{
-	requestEndProcessing = false;
-	EWOL_DEBUG("==> Init BThread (START)");
-	
-	EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
-	EWOL_INFO("Build Date: " BUILD_TIME);
-	
-	etk::InitDefaultFolder("ewolApplNoName");
-	
-	ewol::EObjectManager::Init();
-	ewol::EObjectMessageMultiCast::Init();
-	ewol::eventInput::Init();
-	ewol::widgetManager::Init();
-	ewol::texture::Init();
-	ewol::InitFont();
-	ewol::shortCut::Init();
-	APP_Init();
-	EWOL_DEBUG("==> Init BThread (END)");
-}
-
 
 void ewolProcessEvents(void)
 {
@@ -167,7 +140,7 @@ void ewolProcessEvents(void)
 				case THREAD_KEYBORAD_KEY:
 					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 					{
-						eventKeyboardKey_ts * tmpData = (eventKeyboardKey_ts*)data.data;
+						guiSystem::event::keyboardKey_ts * tmpData = (guiSystem::event::keyboardKey_ts*)data.data;
 						specialCurrentKey = tmpData->special;
 						if (false==ewol::shortCut::Process(tmpData->special.shift, tmpData->special.ctrl, tmpData->special.alt, tmpData->special.meta, tmpData->myChar, tmpData->isDown)) {
 							guiAbstraction::SendKeyboardEvent(tmpData->isDown, tmpData->myChar);
@@ -177,7 +150,7 @@ void ewolProcessEvents(void)
 				case THREAD_KEYBORAD_MOVE:
 					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
 					{
-						eventKeyboardMove_ts * tmpData = (eventKeyboardMove_ts*)data.data;
+						guiSystem::event::keyboardMove_ts * tmpData = (guiSystem::event::keyboardMove_ts*)data.data;
 						specialCurrentKey = tmpData->special;
 						guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
 					}
@@ -200,53 +173,18 @@ void ewolProcessEvents(void)
 	}
 	// pb here when dynamic widget ...
 	if (0 < nbEvent) {
-		ewolProcessRedraw();
+		//EWOL_DEBUG(" ********  Redraw");
+		if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
+			int64_t localTime = GetCurrentTime();
+			ewol::widgetManager::PeriodicCall(localTime);
+		}
+		EWOL_NativeRegenerateDisplay();
 	}
 }
 
-void ewolProcessRedraw(void)
-{
-	//EWOL_DEBUG(" ********  Redraw");
-	if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
-		int64_t localTime = GetCurrentTime();
-		ewol::widgetManager::PeriodicCall(localTime);
-	}
-	EWOL_NativeRegenerateDisplay();
-}
-
-void ewolProcessUnInit(void)
-{
-	EWOL_DEBUG("==> Un-Init BThread (START)");
-	
-	// unset all windows
-	ewol::DisplayWindows(NULL);
-	// call application to uninit
-	APP_UnInit();
-	
-	ewol::shortCut::UnInit();
-	ewol::texture::UnInit();
-	ewol::UnInitFont();
-	ewol::widgetManager::UnInit();
-	ewol::EObjectMessageMultiCast::UnInit();
-	ewol::EObjectManager::UnInit();
-	ewol::eventInput::UnInit();
-	EWOL_DEBUG("==> Un-Init BThread (END)");
-}
 
 
-
-static void* BaseAppEntry(void* param)
-{
-	ewolProcessInit();
-	while(false == requestEndProcessing) {
-		ewolProcessEvents();
-	}
-	ewolProcessUnInit();
-	pthread_exit(NULL);
-}
-
-
-void EWOL_ThreadSetArchiveDir(int mode, const char* str)
+void guiSystem::SetArchiveDir(int mode, const char* str)
 {
 	switch(mode)
 	{
@@ -272,49 +210,61 @@ void EWOL_ThreadSetArchiveDir(int mode, const char* str)
 }
 
 
+
+
+
+
+
+
 bool isGlobalSystemInit = false;
 
-void EWOL_SystemStart(void)
+void guiSystem::Init(void)
 {
+	EWOL_INFO("==> Ewol System Init (BEGIN)");
 	if (false == isGlobalSystemInit) {
 		// create message system ...
 		EWOL_DEBUG("Init thread message system");
 		ewol::threadMsg::Init(androidJniMsg);
-		#ifdef MODE_MULTY_THREAD
-			// init the thread :
-			EWOL_DEBUG("Create the thread");
-			pthread_attr_init(&androidJniThreadAttr);
-			pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_JOINABLE);
-			//pthread_attr_setdetachstate(&androidJniThreadAttr, PTHREAD_CREATE_DETACHED);
-			//pthread_attr_setscope(      &androidJniThreadAttr, PTHREAD_SCOPE_SYSTEM);
-			pthread_setname_np(androidJniThread, "ewol_basic_thread");
-			pthread_create(&androidJniThread, &androidJniThreadAttr, BaseAppEntry, NULL);
-			//pthread_create(&androidJniThread, NULL,                  BaseAppEntry, NULL);
-		#else
-			ewolProcessInit();
-		#endif
+		requestEndProcessing = false;
+		EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
+		EWOL_INFO("Build Date: " BUILD_TIME);
+		etk::InitDefaultFolder("ewolApplNoName");
+		ewol::EObjectManager::Init();
+		ewol::EObjectMessageMultiCast::Init();
+		ewol::eventInput::Init();
+		ewol::widgetManager::Init();
+		ewol::texture::Init();
+		ewol::InitFont();
+		ewol::shortCut::Init();
+		APP_Init();
 		isGlobalSystemInit = true;
 		EWOL_DEBUG("Send Init message to the thread");
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
 		EWOL_DEBUG("end basic init");
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RECALCULATE_SIZE, ewol::threadMsg::MSG_PRIO_MEDIUM);
 	}
+	EWOL_INFO("==> Ewol System Init (END)");
 }
 
-void EWOL_SystemStop(void)
+void guiSystem::UnInit(void)
 {
+	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
 	if (true == isGlobalSystemInit) {
 		isGlobalSystemInit = false;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_UN_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
-		#ifdef MODE_MULTY_THREAD
-			EWOL_DEBUG("Wait end of the thread ...");
-			// Wait end of the thread
-			pthread_join(androidJniThread, NULL);
-		#else
-			ewolProcessUnInit();
-		#endif
+		// unset all windows
+		ewol::DisplayWindows(NULL);
+		// call application to uninit
+		APP_UnInit();
+		ewol::shortCut::UnInit();
+		ewol::texture::UnInit();
+		ewol::UnInitFont();
+		ewol::widgetManager::UnInit();
+		ewol::EObjectMessageMultiCast::UnInit();
+		ewol::EObjectManager::UnInit();
+		ewol::eventInput::UnInit();
 		ewol::threadMsg::UnInit(androidJniMsg);
 	}
+	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
 
 void ewol::RequestUpdateSize(void)
@@ -326,81 +276,102 @@ void ewol::RequestUpdateSize(void)
 
 
 
-void EWOL_ThreadResize(int w, int h )
+void guiSystem::event::Resize(int w, int h )
 {
-	eventResize_ts tmpData;
-	tmpData.w = w;
-	tmpData.h = h;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
+	if (true == isGlobalSystemInit) {
+		eventResize_ts tmpData;
+		tmpData.w = w;
+		tmpData.h = h;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
+	}
 }
 
-void EWOL_ThreadEventInputMotion(int pointerID, float x, float y )
+void guiSystem::event::SetInputMotion(int pointerID, float x, float y )
 {
-	eventInputMotion_ts tmpData;
-	tmpData.type = ewol::INPUT_TYPE_FINGER;
-	tmpData.pointerID = pointerID;
-	tmpData.x = x;
-	tmpData.y = y;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
-}
-
-
-void EWOL_ThreadEventInputState(int pointerID, bool isUp, float x, float y )
-{
-	eventInputState_ts tmpData;
-	tmpData.type = ewol::INPUT_TYPE_FINGER;
-	tmpData.pointerID = pointerID;
-	tmpData.state = isUp;
-	tmpData.x = x;
-	tmpData.y = y;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
-}
-
-void EWOL_ThreadEventMouseMotion(int pointerID, float x, float y )
-{
-	eventInputMotion_ts tmpData;
-	tmpData.type = ewol::INPUT_TYPE_MOUSE;
-	tmpData.pointerID = pointerID;
-	tmpData.x = x;
-	tmpData.y = y;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+	if (true == isGlobalSystemInit) {
+		eventInputMotion_ts tmpData;
+		tmpData.type = ewol::INPUT_TYPE_FINGER;
+		tmpData.pointerID = pointerID;
+		tmpData.x = x;
+		tmpData.y = y;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+	}
 }
 
 
-void EWOL_ThreadEventMouseState(int pointerID, bool isUp, float x, float y )
+void guiSystem::event::SetInputState(int pointerID, bool isUp, float x, float y )
 {
-	eventInputState_ts tmpData;
-	tmpData.type = ewol::INPUT_TYPE_MOUSE;
-	tmpData.pointerID = pointerID;
-	tmpData.state = isUp;
-	tmpData.x = x;
-	tmpData.y = y;
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+	if (true == isGlobalSystemInit) {
+		eventInputState_ts tmpData;
+		tmpData.type = ewol::INPUT_TYPE_FINGER;
+		tmpData.pointerID = pointerID;
+		tmpData.state = isUp;
+		tmpData.x = x;
+		tmpData.y = y;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+	}
 }
 
-void EWOL_ThreadKeyboardEvent(eventKeyboardKey_ts& keyInput)
+void guiSystem::event::SetMouseMotion(int pointerID, float x, float y )
 {
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eventKeyboardKey_ts) );
+	if (true == isGlobalSystemInit) {
+		eventInputMotion_ts tmpData;
+		tmpData.type = ewol::INPUT_TYPE_MOUSE;
+		tmpData.pointerID = pointerID;
+		tmpData.x = x;
+		tmpData.y = y;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+	}
 }
 
-void EWOL_ThreadKeyboardEventMove(eventKeyboardMove_ts& keyInput)
+
+void guiSystem::event::SetMouseState(int pointerID, bool isUp, float x, float y )
 {
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eventKeyboardMove_ts) );
+	if (true == isGlobalSystemInit) {
+		eventInputState_ts tmpData;
+		tmpData.type = ewol::INPUT_TYPE_MOUSE;
+		tmpData.pointerID = pointerID;
+		tmpData.state = isUp;
+		tmpData.x = x;
+		tmpData.y = y;
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+	}
 }
 
-void EWOL_ThreadEventHide(void)
+void guiSystem::event::SetKeyboard(guiSystem::event::keyboardKey_ts& keyInput)
 {
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_HIDE, ewol::threadMsg::MSG_PRIO_LOW);
+	if (true == isGlobalSystemInit) {
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(guiSystem::event::keyboardKey_ts) );
+	}
 }
 
-void EWOL_ThreadEventShow(void)
+void guiSystem::event::SetKeyboardMove(guiSystem::event::keyboardMove_ts& keyInput)
 {
-	ewol::threadMsg::SendMessage(androidJniMsg, THREAD_SHOW, ewol::threadMsg::MSG_PRIO_LOW);
+	if (true == isGlobalSystemInit) {
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(guiSystem::event::keyboardMove_ts) );
+	}
 }
 
-void EWOL_ThreadEventHasJustDisplay(void)
+void guiSystem::event::Hide(void)
 {
-	ewol::threadMsg::SendDisplayDone(androidJniMsg);
-	//ewol::threadMsg::SendMessage(androidJniMsg, THREAD_JUST_DISPLAY, ewol::threadMsg::MSG_PRIO_REAL_TIME);
+	if (true == isGlobalSystemInit) {
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_HIDE, ewol::threadMsg::MSG_PRIO_LOW);
+	}
+}
+
+void guiSystem::event::Show(void)
+{
+	if (true == isGlobalSystemInit) {
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_SHOW, ewol::threadMsg::MSG_PRIO_LOW);
+	}
+}
+
+void guiSystem::Draw(void)
+{
+	if (true == isGlobalSystemInit) {
+		ewolProcessEvents();
+		ewol::texture::UpdateContext();
+		EWOL_NativeRender();
+	}
 }
 

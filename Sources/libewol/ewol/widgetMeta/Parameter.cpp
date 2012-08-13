@@ -199,7 +199,7 @@ void ewol::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char 
 		// inform that the parameter windows is closed
 		GenerateEventId(ewolEventParameterClose);
 		// Close this widget ...
-		MarkToRemove();
+		AutoDestroy();
 	} else if (eventId == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
 			int32_t value = 0;

@@ -43,6 +43,11 @@
 #include <X11/Xatom.h>
 #include <sys/times.h>
 
+/*
+#define GUI_LOCK()          XLockDisplay(m_display)
+#define GUI_UNLOCK()        XUnlockDisplay(m_display)
+*/
+
 //#define DEBUG_X11_EVENT
 
 int64_t GetCurrentTime(void)
@@ -82,7 +87,7 @@ static int attrListDbl[] = {
 	None
 };
 
-static eventSpecialKey_ts guiKeyBoardMode;
+static guiSystem::event::specialKey_ts guiKeyBoardMode;
 
 
 extern "C" {
@@ -123,33 +128,6 @@ int32_t separateClickTime = 300000;
 int32_t offsetMoveClicked = 10000;
 int32_t offsetMoveClickedDouble = 20000;
 
-// specific for the Multithread management :
-// Note we did not use the internal XLockDisplay(m_display); because we have real time disfunctionnement
-#define PTHREAD_GUI_LOCK_MULTITHREAD
-#ifdef PTHREAD_GUI_LOCK_MULTITHREAD
-	static pthread_mutex_t      l_mutex;
-	#if 1
-	#define GUI_LOCK()          do { \
-	                            	/*EWOL_DEBUG("GUI-Lock");*/ \
-	                            	pthread_mutex_lock(&l_mutex); \
-	                            	/*EWOL_DEBUG("GUI-Lock (done)");*/ \
-	                            }while(0)
-	#define GUI_UNLOCK()        do { \
-	                            	/*EWOL_DEBUG("GUI-UnLock");*/ \
-	                            	pthread_mutex_unlock(&l_mutex); \
-	                            	/*EWOL_DEBUG("GUI-UnLock (done)");*/ \
-	                            }while(0)
-	#else
-	#define GUI_LOCK()          do { \
-	                            }while(0)
-	#define GUI_UNLOCK()        do { \
-	                            }while(0)
-	#endif
-#else
-	#define GUI_LOCK()          XLockDisplay(m_display)
-	#define GUI_UNLOCK()        XUnlockDisplay(m_display)
-#endif
-
 bool l_titleChange = false;
 etk::UString l_title = "Ewol";
 
@@ -189,13 +167,6 @@ bool CreateX11Context(void)
 	// basic title of the windows ...
 	static char *title = (char*)"Ewol";
 	
-	#ifndef PTHREAD_GUI_LOCK_MULTITHREAD
-		// start multiple connection on the display for multiple threading : 
-		Status retStat = XInitThreads();
-		if (0!=retStat) {
-			EWOL_ERROR("While XInitThreads() ==> can have some problem sometimes : " << retStat);
-		}
-	#endif
 	// Connect to the X server
 	m_display = XOpenDisplay(NULL);
 	if(NULL == m_display) {
@@ -309,7 +280,6 @@ static void local_SetTitle(etk::UString title)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (START)");
 	#endif
-	GUI_LOCK();
 	XTextProperty tp;
 	tp.value = (unsigned char *)title.Utf8Data();
 	tp.encoding = XA_WM_NAME;
@@ -319,7 +289,6 @@ static void local_SetTitle(etk::UString title)
 	XStoreName(m_display, WindowHandle, (const char*)tp.value);
 	XSetIconName(m_display, WindowHandle, (const char*)tp.value);
 	XSetWMIconName(m_display, WindowHandle, &tp);
-	GUI_UNLOCK();
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (END)");
 	#endif
@@ -353,7 +322,6 @@ void SetIcon(etk::File bitmapFile)
 	} else {
 		etk::UString fileExtention = bitmapFile.GetExtention();
 		if (fileExtention ==  "bmp") {
-			GUI_LOCK();
 			// pointer to the WM hints structure.
 			XWMHints* win_hints;
 			
@@ -367,15 +335,12 @@ void SetIcon(etk::File bitmapFile)
 			switch (rc) {
 				case BitmapOpenFailed:
 					EWOL_ERROR("XReadBitmapFile - could not open file ");
-					GUI_UNLOCK();
 					return;
 				case BitmapFileInvalid:
 					EWOL_ERROR("XReadBitmapFile - file doesn't contain a valid bitmap.");
-					GUI_UNLOCK();
 					return;
 				case BitmapNoMemory:
 					EWOL_ERROR("XReadBitmapFile - not enough memory.");
-					GUI_UNLOCK();
 					return;
 				case BitmapSuccess:
 					/* bitmap loaded successfully - do something with it... */
@@ -386,7 +351,6 @@ void SetIcon(etk::File bitmapFile)
 			win_hints = XAllocWMHints();
 			if (!win_hints) {
 				EWOL_ERROR("XAllocWMHints - out of memory");
-				GUI_UNLOCK();
 				return;
 			}
 			// initialize the structure appropriately. first, specify which size hints we want to fill in. in our case - setting the icon's pixmap.
@@ -398,7 +362,6 @@ void SetIcon(etk::File bitmapFile)
 			EWOL_INFO("    ==> might be done ");
 			// finally, we can free the WM hints structure.
 			XFree(win_hints);
-			GUI_UNLOCK();
 		} else {
 			EWOL_ERROR("X11 Icon Extention not managed " << bitmapFile << " Sopported extention : .bmp ");
 		}
@@ -411,7 +374,6 @@ void RemoveDecoration(void)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11:RemoveDecoration");
 	#endif
-	GUI_LOCK();
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
@@ -423,7 +385,6 @@ void RemoveDecoration(void)
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
 	}
-	GUI_UNLOCK();
 }
 
 void AddDecoration(void)
@@ -431,7 +392,6 @@ void AddDecoration(void)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11:AddDecoration");
 	#endif
-	GUI_LOCK();
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
@@ -443,7 +403,6 @@ void AddDecoration(void)
 	} else {
 		EWOL_ERROR("Can not get the property for the rmoving decoration of the X11 system ....");
 	}
-	GUI_UNLOCK();
 }
 
 bool CreateOGlContext(void)
@@ -451,7 +410,6 @@ bool CreateOGlContext(void)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11:CreateOGlContext");
 	#endif
-	GUI_LOCK();
 	/* create a GLX context */
 	GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
 	/* connect the glx-context to the window */
@@ -461,35 +419,12 @@ bool CreateOGlContext(void)
 	} else {
 		EWOL_INFO("XF86 DRI NOT available\n");
 	}
-	GUI_UNLOCK();
 	return true;
 }
 
 void EWOL_NativeRender(void)
 {
-	ewol::texture::UpdateContext();
-	//EWOL_DEBUG("redraw (" << gui_width << "," << gui_height << ")");
-	if(NULL == gui_uniqueWindows) {
-		// set the size of the open GL system
-		glViewport(0,0,gui_width,gui_height);
-		// Clear the screen with transparency ...
-		glClearColor(0.750, 0.750, 0.750, 0.5);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0., (float)gui_width, 0., (float)gui_height, 1., 20.);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(0, 0, -5);
-		glBegin(GL_QUADS);
-			glColor3f(1., 0., 0.); glVertex3f( .25*(float)gui_width, .25*(float)gui_height, 0.);
-			glColor3f(0., 1., 0.); glVertex3f( .75*(float)gui_width, .25*(float)gui_height, 0.);
-			glColor3f(0., 0., 1.); glVertex3f( .75*(float)gui_width, .75*(float)gui_height, 0.);
-			glColor3f(1., 1., 0.); glVertex3f( .25*(float)gui_width, .75*(float)gui_height, 0.);
-		glEnd();
-	} else {
-		EWOL_GenericDraw(false);
-	}
+	EWOL_GenericDraw(false);
 	glFlush();
 	if (m_doubleBuffered) {
 		glXSwapBuffers(m_display, WindowHandle);
@@ -612,7 +547,6 @@ void X11_Run(void)
 						Atom type;
 						int format;
 						unsigned long nitems, bytes;
-						GUI_LOCK();
 						XGetWindowProperty(m_display,
 						                   WindowHandle,
 						                   event.xselection.property,
@@ -626,7 +560,6 @@ void X11_Run(void)
 						                   &bytes, // *bytes_after_return
 						                   &buf// **prop_return);
 						                   );
-						GUI_UNLOCK();
 						if (true == l_clipBoardRequestPrimary) {
 							l_clipBoardPrimary = (char*)buf;
 							// inform that we have receive the data
@@ -666,7 +599,6 @@ void X11_Run(void)
 						} else {
 							magatTextToSend = "";
 						}
-						GUI_LOCK();
 						Atom listOfAtom[4];
 						if(strlen(magatTextToSend) == 0 ) {
 							respond.xselection.property= None;
@@ -721,7 +653,6 @@ void X11_Run(void)
 						XSendEvent (m_display, req->requestor,0,0,&respond);
 						// Flush the message on the pipe ...
 						XFlush (m_display);
-						GUI_UNLOCK();
 					}
 					break;
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -781,7 +712,7 @@ void X11_Run(void)
 					#endif
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
-					EWOL_ThreadResize(event.xconfigure.width, event.xconfigure.height);
+					guiSystem::event::Resize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
 					#ifdef DEBUG_X11_EVENT
@@ -792,7 +723,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
-					EWOL_ThreadEventMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
+					guiSystem::event::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case ButtonRelease:
 					#ifdef DEBUG_X11_EVENT
@@ -803,7 +734,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = false;
 					}
-					EWOL_ThreadEventMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
+					guiSystem::event::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case EnterNotify:
 					#ifdef DEBUG_X11_EVENT
@@ -834,13 +765,13 @@ void X11_Run(void)
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
 								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-								EWOL_ThreadEventMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
+								guiSystem::event::SetMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
 							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-							EWOL_ThreadEventMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+							guiSystem::event::SetMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
 						}
 					}
 					break;
@@ -965,7 +896,7 @@ void X11_Run(void)
 							case 91: // Suppr on keypad
 								find = false;
 								{
-									eventKeyboardKey_ts specialEvent;
+									guiSystem::event::keyboardKey_ts specialEvent;
 									specialEvent.special = guiKeyBoardMode;
 									specialEvent.myChar = 0x0000007F;
 									if(event.type == KeyPress) {
@@ -973,13 +904,13 @@ void X11_Run(void)
 									} else {
 										specialEvent.isDown = false;
 									}
-									EWOL_ThreadKeyboardEvent(specialEvent);
+									guiSystem::event::SetKeyboard(specialEvent);
 								}
 								break;
 							case 23: // special case for TAB
 								find = false;
 								{
-									eventKeyboardKey_ts specialEvent;
+									guiSystem::event::keyboardKey_ts specialEvent;
 									specialEvent.special = guiKeyBoardMode;
 									specialEvent.myChar = 0x00000009;
 									if(event.type == KeyPress) {
@@ -987,7 +918,7 @@ void X11_Run(void)
 									} else {
 										specialEvent.isDown = false;
 									}
-									EWOL_ThreadKeyboardEvent(specialEvent);
+									guiSystem::event::SetKeyboard(specialEvent);
 								}
 								break;
 							default:
@@ -1013,7 +944,7 @@ void X11_Run(void)
 									}
 									if (count>0) {
 										// transform iun unicode
-										eventKeyboardKey_ts specialEvent;
+										guiSystem::event::keyboardKey_ts specialEvent;
 										specialEvent.special = guiKeyBoardMode;
 										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], specialEvent.myChar);
 										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
@@ -1022,7 +953,7 @@ void X11_Run(void)
 										} else {
 											specialEvent.isDown = false;
 										}
-										EWOL_ThreadKeyboardEvent(specialEvent);
+										guiSystem::event::SetKeyboard(specialEvent);
 									} else {
 										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 									}
@@ -1031,7 +962,7 @@ void X11_Run(void)
 						}
 						if (true == find) {
 							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-							eventKeyboardMove_ts specialEvent;
+							guiSystem::event::keyboardMove_ts specialEvent;
 							specialEvent.special = guiKeyBoardMode;
 							if(event.type == KeyPress) {
 								specialEvent.isDown = true;
@@ -1039,7 +970,7 @@ void X11_Run(void)
 								specialEvent.isDown = false;
 							}
 							specialEvent.move = keyInput;
-							EWOL_ThreadKeyboardEventMove(specialEvent);
+							guiSystem::event::SetKeyboardMove(specialEvent);
 						}
 					}
 					break;
@@ -1049,13 +980,13 @@ void X11_Run(void)
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event : MapNotify");
 					#endif
-					EWOL_ThreadEventShow();
+					guiSystem::event::Show();
 					break;
 				case UnmapNotify:
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event : UnmapNotify");
 					#endif
-					EWOL_ThreadEventHide();
+					guiSystem::event::Hide();
 					break;
 				default:
 					#ifdef DEBUG_X11_EVENT
@@ -1065,17 +996,7 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			#ifdef MODE_MULTY_THREAD
-				
-			#else
-				ewolProcessEvents();
-			#endif
-			#ifdef DEBUG_X11_EVENT
-				EWOL_INFO("X11 Render...");
-			#endif
-			GUI_LOCK();
-			EWOL_NativeRender();
-			GUI_UNLOCK();
+			guiSystem::Draw();
 		}
 		#ifdef DEBUG_X11_EVENT
 			EWOL_INFO("X11 endEvent --- ");
@@ -1088,9 +1009,7 @@ void X11_ChangeSize(int32_t w, int32_t h)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: X11_ChangeSize");
 	#endif
-	GUI_LOCK();
 	XResizeWindow(m_display, WindowHandle, w, h);
-	GUI_UNLOCK();
 };
 
 void X11_ChangePos(int32_t x, int32_t y)
@@ -1098,9 +1017,7 @@ void X11_ChangePos(int32_t x, int32_t y)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: X11_ChangePos");
 	#endif
-	GUI_LOCK();
 	XMoveWindow(m_display, WindowHandle, x, y);
-	GUI_UNLOCK();
 };
 
 void X11_GetAbsPos(int32_t & x, int32_t & y)
@@ -1111,9 +1028,7 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 	int tmp;
 	unsigned int tmp2;
 	Window fromroot, tmpwin;
-	GUI_LOCK();
 	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
-	GUI_UNLOCK();
 };
 
 
@@ -1134,14 +1049,12 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 				// clear old request ..
 				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
-				GUI_LOCK();
 				XConvertSelection(m_display,
 				                  XAtomeSelection,// atom,
 				                  XAtomeTargetStringUTF8, // type?
 				                  XAtomeEWOL, // prop,
 				                  WindowHandle,
 				                  CurrentTime);
-				GUI_UNLOCK();
 				// wait the event ...
 				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
 				if (waitTmp == 0) {
@@ -1157,14 +1070,12 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 				// clear old request ..
 				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
-				GUI_LOCK();
 				XConvertSelection(m_display,
 				                  XAtomeClipBoard,// atom,
 				                  XAtomeTargetStringUTF8, // type?
 				                  XAtomeEWOL, // prop,
 				                  WindowHandle,
 				                  CurrentTime);
-				GUI_UNLOCK();
 				// wait the event ...
 				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
 				if (waitTmp == 0) {
@@ -1193,9 +1104,7 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				l_clipBoardPrimary = newData;
 				// Request the selection :
 				if (false == l_clipBoardOwnerPrimary) {
-					GUI_LOCK();
 					XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
-					GUI_UNLOCK();
 					l_clipBoardOwnerPrimary = true;
 				}
 			}
@@ -1206,9 +1115,7 @@ void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
 				l_clipBoardStd = newData;
 				// Request the clipBoard :
 				if (false == l_clipBoardOwnerStd) {
-					GUI_LOCK();
 					XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
-					GUI_UNLOCK();
 					l_clipBoardOwnerStd = true;
 				}
 			}
@@ -1297,12 +1204,6 @@ etk::File APP_Icon(void);
 
 int main(int argc, char *argv[])
 {
-	#ifdef PTHREAD_GUI_LOCK_MULTITHREAD
-		// create interface mutex :
-		int ret = pthread_mutex_init(&l_mutex, NULL);
-		EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
-	#endif
-	
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
 		if (0==strncmp("-l0", argv[i], 256)) {
@@ -1329,7 +1230,7 @@ int main(int argc, char *argv[])
 	// start X11 thread ...
 	X11_Init();
 	//start the basic thread : 
-	EWOL_SystemStart();
+	guiSystem::Init();
 	usleep(500);
 	// get the icon file : 
 	etk::File myIcon = APP_Icon();
@@ -1340,7 +1241,7 @@ int main(int argc, char *argv[])
 	// close X11 :
 	guiAbstraction::Stop();
 	// uninit ALL :
-	EWOL_SystemStop();
+	guiSystem::UnInit();
 	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
 		if (NULL != listArgs[iii]) {
 			delete listArgs[iii];
@@ -1348,10 +1249,6 @@ int main(int argc, char *argv[])
 		}
 	}
 	listArgs.Clear();
-	#ifdef PTHREAD_GUI_LOCK_MULTITHREAD
-		ret = pthread_mutex_destroy(&l_mutex);
-		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
-	#endif
 	return 0;
 }
 

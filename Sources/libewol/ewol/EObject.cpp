@@ -135,9 +135,9 @@ ewol::EObject::EObject(void)
  */
 ewol::EObject::~EObject(void)
 {
+	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	ewol::EObjectManager::Rm(this);
 	MultiCastRm(this);
-	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
@@ -147,6 +147,17 @@ ewol::EObject::~EObject(void)
 	m_externEvent.Clear();
 	m_availlableEventId.Clear();
 	m_uniqueId = -1;
+}
+
+
+/**
+ * @brief Auto-destroy the object
+ * @param ---
+ * @return ---
+ */
+void ewol::EObject::AutoDestroy(void)
+{
+	ewol::EObjectManager::AutoRemove(this);
 }
 
 
@@ -285,19 +296,6 @@ void ewol::EObject::OnObjectRemove(ewol::EObject * removeObject)
 			m_externEvent.Erase(iii);
 		}
 	}
-}
-
-
-/**
- * @brief Receive a message from an other EObject with a specific eventId and data
- * @param[in] CallerObject Pointer on the EObject that information came from
- * @param[in] eventId Message registered by this class
- * @param[in] data Data registered by this class
- * @return ---
- */
-void ewol::EObject::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
-{
-	// here nothing to do ...
 }
 
 

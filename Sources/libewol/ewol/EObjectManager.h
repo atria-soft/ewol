@@ -35,8 +35,9 @@ namespace ewol {
 		void  UnInit(       void);
 		void  Add(          ewol::EObject* object);
 		void  Rm(           ewol::EObject* object);
-		void  MarkToRemoved(ewol::EObject* object);
-		void  RemoveAllMark(void);
+		
+		void  AutoRemove(   ewol::EObject* object);
+		void  RemoveAllAutoRemove(void);
 	};
 };
 

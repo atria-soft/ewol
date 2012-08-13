@@ -147,9 +147,9 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 					SendMultiCast(m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
 					if (NULL != m_widgetContextMenu) {
 						EWOL_DEBUG("Mark the menu to remove ...");
-						m_widgetContextMenu->MarkToRemove();
+						delete(m_widgetContextMenu);
+						m_widgetContextMenu = NULL;
 					}
-					m_widgetContextMenu = NULL;
 					return;
 				} else{
 					EWOL_DEBUG("Menu ==> Load Sub Menu");

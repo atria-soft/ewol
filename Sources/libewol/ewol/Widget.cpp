@@ -104,6 +104,18 @@ ewol::Widget::Widget(void)
 
 
 /**
+ * @brief Destructor of the widget classes
+ * @param ---
+ * @return (no execption generated (not managed in embended platform))
+ */
+ewol::Widget::~Widget(void)
+{
+	// Remove his own focus...
+	ewol::widgetManager::Rm(this);
+}
+
+
+/**
  * @brief Set the widget hidden
  * @param ---
  * @return ---
@@ -126,22 +138,6 @@ void ewol::Widget::Show(void)
 	m_hide = false;
 	MarkToReedraw();
 	ewol::RequestUpdateSize();
-}
-
-
-/**
- * @brief This will be equivalent at the destructor @ref ~Widget
- * @note this fuction "mark" the widget as removed an inform the widget manager that the widget has been removed by the user.
- * @note All the EObject are inform that an other EObject is removed ... @ref ewol::EObject
- * @param ---
- * @return ---
- */
-void ewol::Widget::MarkToRemove(void)
-{
-	// Remove his own focus...
-	ewol::widgetManager::Rm(this);
-	// merk to remova at the next cycle
-	ewol::EObjectManager::MarkToRemoved(this);
 }
 
 

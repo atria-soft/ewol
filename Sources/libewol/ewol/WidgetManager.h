@@ -44,20 +44,11 @@ namespace ewol {
 		ewol::Widget * FocusGet(       void);
 		void           FocusRemoveIfRemove(ewol::Widget * newWidget);
 		
-		
 		void           PeriodicCallAdd(ewol::Widget * pWidget);
 		void           PeriodicCallRm( ewol::Widget * pWidget);
 		void           PeriodicCall(int64_t localTime);
 		bool           PeriodicCallHave(void);
 		
-		
-		// TODO : Remove this from here ...
-		int32_t GetDoubleBufferCreate(void);
-		int32_t GetDoubleBufferDraw(void);
-		bool    GetDoubleBufferNeedDraw(void);
-		void    SetDoubleBufferNeedDraw(void);
-		void    DoubleBufferLock(void);
-		void    DoubleBufferUnLock(void);
 	};
 };
 
