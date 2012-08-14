@@ -515,6 +515,54 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::Color &obj)
 	return os;
 }
 
+etk::Color etk::Color::operator *(const etk::Color& _input)
+{
+	etk::Color tmp(*this);
+	tmp *= _input;
+	return tmp;
+}
+
+etk::Color etk::Color::operator +(const etk::Color& _input)
+{
+	etk::Color tmp(*this);
+	tmp += _input;
+	return tmp;
+}
+
+etk::Color etk::Color::operator -(const etk::Color& _input)
+{
+	etk::Color tmp(*this);
+	tmp -= _input;
+	return tmp;
+}
+
+etk::Color& etk::Color::operator *=(const etk::Color& _input)
+{
+	red   = (int32_t)red   * (int32_t)_input.red   / 255;
+	green = (int32_t)green * (int32_t)_input.green / 255;
+	blue  = (int32_t)blue  * (int32_t)_input.blue  / 255;
+	alpha = (int32_t)alpha * (int32_t)_input.alpha / 255;
+	return *this;
+}
+
+etk::Color& etk::Color::operator +=(const etk::Color& _input)
+{
+	red   = etk_min((int32_t)red   + (int32_t)_input.red,   255);
+	green = etk_min((int32_t)green + (int32_t)_input.green, 255);
+	blue  = etk_min((int32_t)blue  + (int32_t)_input.blue,  255);
+	alpha = etk_min((int32_t)alpha + (int32_t)_input.alpha, 255);
+	return *this;
+}
+
+etk::Color& etk::Color::operator -=(const etk::Color& _input)
+{
+	red   = etk_min((int32_t)red   - (int32_t)_input.red,   255);
+	green = etk_min((int32_t)green - (int32_t)_input.green, 255);
+	blue  = etk_min((int32_t)blue  - (int32_t)_input.blue,  255);
+	alpha = etk_min((int32_t)alpha - (int32_t)_input.alpha, 255);
+	return *this;
+}
+
 etk::Color& etk::Color::operator= (const etk::Color &_input )
 {
 	//TK_INFO("OPERATOR de recopie");

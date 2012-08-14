@@ -50,6 +50,13 @@ namespace etk {
 			Color(etk::UString data);
 			Color(const char * data);
 			// operator :
+			etk::Color  operator *(const etk::Color& _input);
+			etk::Color  operator +(const etk::Color& _input);
+			etk::Color  operator -(const etk::Color& _input);
+			etk::Color& operator *=(const etk::Color& _input);
+			etk::Color& operator +=(const etk::Color& _input);
+			etk::Color& operator -=(const etk::Color& _input);
+			
 			etk::Color& operator=(const uint32_t _input);
 			etk::Color& operator=(const etk::Color& _input);
 			bool operator==(const etk::Color& _input) const;
