@@ -69,7 +69,7 @@ bool ewol::Label::CalculateMinSize(void)
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -77,7 +77,7 @@ bool ewol::Label::CalculateMinSize(void)
 void ewol::Label::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

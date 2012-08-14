@@ -100,7 +100,7 @@ bool ewol::ButtonColor::CalculateMinSize(void)
 	int32_t minHeight = ewol::GetHeight(fontId);
 	m_minSize.x = m_padding.x*2 + minWidth;
 	m_minSize.y = m_padding.y*2 + minHeight;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -108,7 +108,7 @@ bool ewol::ButtonColor::CalculateMinSize(void)
 void ewol::ButtonColor::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::ButtonColor::SetValue(bool val)
@@ -119,7 +119,7 @@ void ewol::ButtonColor::SetValue(bool val)
 void ewol::ButtonColor::SetAlignement(textAlignement_te typeAlign)
 {
 	m_alignement = typeAlign;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -238,7 +238,7 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			m_widgetContextMenu->SubWidgetSet(myColorChooser);
 			myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
 			ewol::PopUpWidgetPush(m_widgetContextMenu);
-			MarkToReedraw();
+			MarkToRedraw();
 			
 			return true;
 		}

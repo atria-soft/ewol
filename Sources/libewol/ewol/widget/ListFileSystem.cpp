@@ -170,7 +170,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 	// reorder the files
 	SortElementList(m_list);
 	// request a redraw ...
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::ListFileSystem::SetShowHiddenFiles(bool state)
@@ -236,7 +236,7 @@ void ewol::ListFileSystem::SetSelect( etk::UString data) {
 			}
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 uint32_t ewol::ListFileSystem::GetNuberOfColomn(void) {
@@ -280,7 +280,7 @@ bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te 
 				m_selectedLine = raw;
 			}
 			// need to regenerate the display of the list : 
-			MarkToReedraw();
+			MarkToRedraw();
 			if (previousRaw != m_selectedLine) {
 				if (m_selectedLine >=0 ) {
 					// generate event extern : 

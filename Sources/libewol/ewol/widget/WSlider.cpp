@@ -79,7 +79,7 @@ bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
 			}
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -158,7 +158,7 @@ void ewol::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 		return;
 	}
 	m_subWidget.PushBack(newWidget);
-	MarkToReedraw();
+	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
@@ -173,7 +173,7 @@ void ewol::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
 			delete(m_subWidget[iii]);
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
-			MarkToReedraw();
+			MarkToRedraw();
 			ewol::RequestUpdateSize();
 			return;
 		}
@@ -190,7 +190,7 @@ void ewol::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 			ewol::RequestUpdateSize();
-			MarkToReedraw();
+			MarkToRedraw();
 			return;
 		}
 	}
@@ -204,7 +204,7 @@ void ewol::WSlider::SubWidgetSelectSet(int32_t id)
 	m_windowsDestination = id;
 	m_slidingProgress = 0;
 	PeriodicCallSet(true);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 /**
@@ -223,7 +223,7 @@ void ewol::WSlider::PeriodicCall(int64_t localTime)
 		m_slidingProgress = etk_avg(0, m_slidingProgress, 1000);
 	}
 	CalculateSize(m_size.x, m_size.y);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

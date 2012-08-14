@@ -91,7 +91,7 @@ bool ewol::SizerVert::CalculateSize(float availlableX, float availlableY)
 			}
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 

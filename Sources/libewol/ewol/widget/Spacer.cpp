@@ -56,7 +56,7 @@ bool ewol::Spacer::CalculateMinSize(void)
 void ewol::Spacer::SetSize(float size)
 {
 	m_localSize = size;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 #define BORDER_SIZE_TMP         (4)

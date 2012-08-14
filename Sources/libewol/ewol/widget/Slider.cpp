@@ -64,7 +64,7 @@ bool ewol::Slider::CalculateMinSize(void)
 {
 	m_minSize.x = etk_max(m_userMinSize.x, 40);
 	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -72,7 +72,7 @@ bool ewol::Slider::CalculateMinSize(void)
 void ewol::Slider::SetValue(int32_t val)
 {
 	m_value = etk_max(etk_min(val, m_max), m_min);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -86,7 +86,7 @@ void ewol::Slider::SetMin(int32_t val)
 {
 	m_min = val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -94,7 +94,7 @@ void ewol::Slider::SetMax(int32_t val)
 {
 	m_max = val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -148,7 +148,7 @@ bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventI
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
 				GenerateEventId(ewolEventSliderChange);
-				MarkToReedraw();
+				MarkToRedraw();
 			}
 			return true;
 		}

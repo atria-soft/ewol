@@ -179,7 +179,7 @@ namespace ewol {
 			 * @return ---
 			 */
 			// TODO : Remove bool ==> deprecated ...
-			virtual bool CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; MarkToReedraw(); return true; };
+			virtual bool CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; MarkToRedraw(); return true; };
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] x Set minimum horizontal size (-1 : no requested)
@@ -415,7 +415,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			void MarkToReedraw(void);
+			void MarkToRedraw(void);
 			/**
 			 * @brief Get the need of the redrawing of the widget and reset it to false
 			 * @param ---

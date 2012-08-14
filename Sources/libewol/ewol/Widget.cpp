@@ -123,7 +123,7 @@ ewol::Widget::~Widget(void)
 void ewol::Widget::Hide(void)
 {
 	m_hide = true;
-	MarkToReedraw();
+	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
@@ -136,7 +136,7 @@ void ewol::Widget::Hide(void)
 void ewol::Widget::Show(void)
 {
 	m_hide = false;
-	MarkToReedraw();
+	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
@@ -152,7 +152,7 @@ bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 {
 	m_size.x = availlableX;
 	m_size.y = availlableY;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -297,7 +297,7 @@ void ewol::Widget::PeriodicCallSet(bool statusToSet)
  * @param ---
  * @return ---
  */
-void ewol::Widget::MarkToReedraw(void)
+void ewol::Widget::MarkToRedraw(void)
 {
 	m_needRegenerateDisplay = true;
 	ewol::widgetManager::MarkDrawingIsNeeded();

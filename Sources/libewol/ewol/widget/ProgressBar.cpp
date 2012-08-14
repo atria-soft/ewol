@@ -58,7 +58,7 @@ bool ewol::ProgressBar::CalculateMinSize(void)
 {
 	m_minSize.x = etk_max(m_userMinSize.x, 40);
 	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -66,7 +66,7 @@ bool ewol::ProgressBar::CalculateMinSize(void)
 void ewol::ProgressBar::ValueSet(float val)
 {
 	m_value = etk_avg(0.0, val, 1.0);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

@@ -72,7 +72,7 @@ bool ewol::CheckBox::CalculateMinSize(void)
 	float boxSize = etk_max(20, minHeight) + 5;
 	m_minSize.x = boxSize+minWidth;
 	m_minSize.y = etk_max(boxSize, minHeight)+3;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -88,7 +88,7 @@ void ewol::CheckBox::SetValue(bool val)
 		return;
 	}
 	m_value = val;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 bool ewol::CheckBox::GetValue(void)
@@ -165,7 +165,7 @@ bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 				GenerateEventId(ewolEventCheckBoxClicked, "true");
 			}
 			ewol::widgetManager::FocusKeep(this);
-			MarkToReedraw();
+			MarkToRedraw();
 			return true;
 		}
 	}
@@ -187,7 +187,7 @@ bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			m_value = true;
 			GenerateEventId(ewolEventCheckBoxClicked, "true");
 		}
-		MarkToReedraw();
+		MarkToRedraw();
 		return true;
 	}
 	return false;

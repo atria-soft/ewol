@@ -101,7 +101,7 @@ void ewol::Button::SetImage(etk::UString imageName)
 		m_imageSelected = imageName;
 		m_hasAnImage = true;
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -124,7 +124,7 @@ bool ewol::Button::CalculateMinSize(void)
 		m_minSize.x += m_padding.x + minHeight;
 	}
 	
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -132,7 +132,7 @@ bool ewol::Button::CalculateMinSize(void)
 void ewol::Button::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::Button::SetValue(bool val)
@@ -143,7 +143,7 @@ void ewol::Button::SetValue(bool val)
 void ewol::Button::SetAlignement(textAlignement_te typeAlign)
 {
 	m_alignement = typeAlign;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -251,7 +251,7 @@ bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventI
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			GenerateEventId(ewolEventButtonPressed);
-			MarkToReedraw();
+			MarkToRedraw();
 			return true;
 		}
 	}

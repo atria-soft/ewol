@@ -232,7 +232,7 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 				if (m_list[rawID]->m_refId>=0) {
 					GenerateEventId(ewolEventParameterListSelect, m_list[rawID]->m_refId);
 					m_idSelected = rawID;
-					MarkToReedraw();
+					MarkToRedraw();
 					return true;
 				}
 			}
@@ -261,7 +261,7 @@ void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UStri
 		if (m_idSelected == -1 && label != "---" && refId>0) {
 			m_idSelected = m_list.Size()-1;
 		}
-		MarkToReedraw();
+		MarkToRedraw();
 	}
 }
 void ewol::ParameterList::MenuAddGroup(etk::UString& label)
@@ -270,7 +270,7 @@ void ewol::ParameterList::MenuAddGroup(etk::UString& label)
 	ewol::elementPL* tmpEmement = new ewol::elementPL(label, -1, image, true);
 	if (NULL != tmpEmement) {
 		m_list.PushBack(tmpEmement);
-		MarkToReedraw();
+		MarkToRedraw();
 	}
 }
 

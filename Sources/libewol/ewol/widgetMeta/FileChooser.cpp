@@ -416,7 +416,7 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 	if (NULL != m_widgetCurrentFolder) {
 		m_widgetCurrentFolder->SetValue(m_folder);
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

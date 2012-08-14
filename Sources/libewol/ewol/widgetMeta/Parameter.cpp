@@ -164,7 +164,7 @@ ewol::Parameter::Parameter(void) :
 			mySizerVert->SubWidgetAdd(m_widgetTitle);
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 
 }
 

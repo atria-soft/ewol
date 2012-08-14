@@ -89,7 +89,7 @@ bool ewol::Image::CalculateMinSize(void)
 {
 	m_minSize.x = m_padding.x*2 + m_imageSize;
 	m_minSize.y = m_padding.y*2 + m_imageSize;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -97,7 +97,7 @@ bool ewol::Image::CalculateMinSize(void)
 void ewol::Image::SetFile(etk::UString newFile)
 {
 	m_imageSelected = newFile;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

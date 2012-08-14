@@ -73,7 +73,7 @@ void ewol::ButtonImage::SetImage(etk::UString imageName, color_ts col)
 	m_image = imageName;
 	m_color = col;
 	m_resetNeeded = true;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
@@ -81,7 +81,7 @@ void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
 	m_imageBg1 = imageName;
 	m_colorBg1 = col;
 	m_resetNeeded = true;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::ButtonImage::SetImageSelected(etk::UString imageName, color_ts col)
@@ -89,7 +89,7 @@ void ewol::ButtonImage::SetImageSelected(etk::UString imageName, color_ts col)
 	m_imageBg2 = imageName;
 	m_colorBg2 = col;
 	m_resetNeeded = true;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -97,7 +97,7 @@ void ewol::ButtonImage::SetValue(bool val)
 {
 	if (true == m_toggleMode) {
 		m_value = val;
-		MarkToReedraw();
+		MarkToRedraw();
 	}
 }
 
@@ -112,7 +112,7 @@ void ewol::ButtonImage::SetToggleMode(bool val)
 	if (m_toggleMode == false) {
 		m_value = false;
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 bool ewol::ButtonImage::GetToggleMode(void)
@@ -223,7 +223,7 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			}
 			
 			GenerateEventId(ewolEventButtonDown, (m_value)?"true":"false");
-			MarkToReedraw();
+			MarkToRedraw();
 		}
 		if(ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 			m_down = false;
@@ -231,7 +231,7 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 				m_value = false;
 			}
 			GenerateEventId(ewolEventButtonUp, (m_value)?"true":"false");
-			MarkToReedraw();
+			MarkToRedraw();
 		}
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
@@ -240,7 +240,7 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 				m_value = (true==m_value) ? false : true;
 			}
 			GenerateEventId(ewolEventButtonPressed, (m_value)?"true":"false");
-			MarkToReedraw();
+			MarkToRedraw();
 			return true;
 		}
 	} else if (0 == IdInput) {
@@ -268,13 +268,13 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			    && relPos.y < tmpOriginY+tmpSizeY ) {
 				if (m_over != true) {
 					m_over = true;
-					MarkToReedraw();
+					MarkToRedraw();
 				}
 			}
 		} else if(ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
 			if(m_over != false) {
 				m_over = false;
-				MarkToReedraw();
+				MarkToRedraw();
 			}
 		}
 	}

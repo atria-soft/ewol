@@ -62,7 +62,7 @@ bool ewol::ColorBar::CalculateMinSize(void)
 {
 	m_minSize.x = 80;
 	m_minSize.y = 80;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 static color_ts s_listColorWhite(0xFFFFFFFF);
@@ -233,7 +233,7 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			// nothing to do ...
 			m_currentUserPos.x=relativePos.x/m_size.x;
 			m_currentUserPos.y=relativePos.y/m_size.y;
-			MarkToReedraw();
+			MarkToRedraw();
 			//==> try to estimate color
 			EWOL_VERBOSE("event on (" << relativePos.x << "," << relativePos.y << ")");
 			int32_t bandID = (int32_t)(relativePos.x/(m_size.x/6));

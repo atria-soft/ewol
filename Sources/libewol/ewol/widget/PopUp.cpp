@@ -84,7 +84,7 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -103,7 +103,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 		m_minSize.y = tmpSize.y;
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -132,7 +132,7 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 	SubWidgetRemove();
 	m_subWidget = newWidget;
 	//EWOL_DEBUG("SetSubWidget on Pop-Up : " << (int64_t)m_subWidget);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -142,7 +142,7 @@ void ewol::PopUp::SubWidgetRemove(void)
 		delete(m_subWidget);
 		m_subWidget = NULL;
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -212,7 +212,7 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
 void ewol::PopUp::SetDisplayRatio(float ratio)
 {
 	m_displayRatio = ratio;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 

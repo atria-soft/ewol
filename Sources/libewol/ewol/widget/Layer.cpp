@@ -54,7 +54,7 @@ bool ewol::Layer::CalculateSize(float availlableX, float availlableY)
 			m_subWidget[iii]->CalculateSize(m_size.x, m_size.y);
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 

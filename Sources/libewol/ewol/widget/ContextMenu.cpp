@@ -126,7 +126,7 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 		m_subWidget->SetOrigin(subWidgetOrigin.x, subWidgetOrigin.y);
 		m_subWidget->CalculateSize(subWidgetSize.x, subWidgetSize.y);
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -145,7 +145,7 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 		m_minSize.y = tmpSize.y;
 	}
 	EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -309,6 +309,6 @@ void ewol::ContextMenu::SetPositionMark(markPosition_te position, Vector2D<float
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;
 	m_arrowPos = arrowPos;
-	MarkToReedraw();
+	MarkToRedraw();
 }
 

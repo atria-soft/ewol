@@ -112,7 +112,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 	// check if the processing is availlable
 	if (false == m_isRunning) {
 		m_lastCallTime = localTime;
-		MarkToReedraw();
+		MarkToRedraw();
 		return;
 	}
 	// cut the processing in small slot of time to prevent error in the real-time Display (Android call us between 30 to 60 fps)
@@ -135,7 +135,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 			}
 		}
 	}
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 /**

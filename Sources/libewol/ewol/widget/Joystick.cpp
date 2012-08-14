@@ -140,7 +140,7 @@ bool ewol::Joystick::CalculateSize(float availlableX, float availlableY)
 	float minimumSize = etk_min(availlableX, availlableY);
 	m_size.x = minimumSize;
 	m_size.y = minimumSize;
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -234,7 +234,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 				m_displayPos.x = cos(m_angle)*m_distance;
 				m_displayPos.y = sin(m_angle)*m_distance;
 			}
-			MarkToReedraw();
+			MarkToRedraw();
 			if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 				GenerateEventId(ewolEventJoystickEnable);
 			} else {
@@ -254,7 +254,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 				m_angle = -0.1;
 				m_distance = 0;
 			}
-			MarkToReedraw();
+			MarkToRedraw();
 			GenerateEventId(ewolEventJoystickDisable);
 			return true;
 		}

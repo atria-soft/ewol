@@ -63,7 +63,7 @@ ewol::Entry::Entry(void)
 	Init();
 	m_data = "";
 	UpdateTextPosition();
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 ewol::Entry::Entry(etk::UString newData)
@@ -71,7 +71,7 @@ ewol::Entry::Entry(etk::UString newData)
 	Init();
 	SetValue(newData);
 	UpdateTextPosition();
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 
@@ -88,7 +88,7 @@ bool ewol::Entry::CalculateMinSize(void)
 	m_minSize.x = m_userSize;
 	m_minSize.y = minHeight + 2*(m_borderSize + 2*m_paddingSize);
 	UpdateTextPosition();
-	MarkToReedraw();
+	MarkToRedraw();
 	return true;
 }
 
@@ -98,7 +98,7 @@ void ewol::Entry::SetValue(etk::UString newData)
 	m_data = newData;
 	m_displayCursorPos = m_data.Size();
 	EWOL_DEBUG("Set ... " << newData);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 etk::UString ewol::Entry::GetValue(void)
@@ -185,7 +185,7 @@ bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventIn
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			GenerateEventId(ewolEventEntryClick);
 			KeepFocus();
-			MarkToReedraw();
+			MarkToRedraw();
 			Vector2D<float> relPos = RelativePosition(pos);
 			// try to find the new cursor position :
 			int32_t fontId = GetDefaultFontId();
@@ -251,7 +251,7 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 			m_displayCursorPos++;
 		}
 		GenerateEventId(ewolEventEntryModify, m_data);
-		MarkToReedraw();
+		MarkToRedraw();
 		return true;
 	}
 	return false;
@@ -284,7 +284,7 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 				return false;
 		}
 		m_displayCursorPos = etk_avg(0, m_displayCursorPos, m_data.Size());
-		MarkToReedraw();
+		MarkToRedraw();
 		return true;
 	}
 	return false;
@@ -313,12 +313,12 @@ void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
 	ewol::KeyboardShow(ewol::KEYBOARD_MODE_TEXT);
-	MarkToReedraw();
+	MarkToRedraw();
 }
 
 void ewol::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
 	ewol::KeyboardHide();
-	MarkToReedraw();
+	MarkToRedraw();
 }
