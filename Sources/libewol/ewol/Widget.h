@@ -415,7 +415,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			void MarkToReedraw(void) { m_needRegenerateDisplay = true; };
+			void MarkToReedraw(void);
 			/**
 			 * @brief Get the need of the redrawing of the widget and reset it to false
 			 * @param ---

@@ -254,8 +254,9 @@ void EWOL_GenericDraw(bool everyTime)
 			display = true;
 		}
 		int64_t currentTime3 = GetCurrentTime();
-		// TODO : Check if somthink has regenerate his display befor redraw ...
-		{
+		// check if the regenerate is needed ...
+		if(    true == ewol::widgetManager::IsDrawingNeeded()
+		    || true == everyTime) {
 			ewol::texture::UpdateContext();
 			nbDisplayTime++;
 			gui_uniqueWindows->SysDraw();

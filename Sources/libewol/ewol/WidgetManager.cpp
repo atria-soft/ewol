@@ -32,7 +32,6 @@
 #undef __class__
 #define __class__	"WidgetManager"
 
-static pthread_mutex_t localMutex;
 static bool IsInit = false;
 
 // For the focus Management
@@ -41,17 +40,17 @@ static ewol::Widget * m_focusWidgetCurrent = NULL;
 static etk::VectorType<ewol::Widget*> l_listOfPeriodicWidget;
 static bool                           l_havePeriodic = false;
 
+static bool                           l_haveRedraw = true;
+
 void ewol::widgetManager::Init(void)
 {
 	EWOL_DEBUG("==> Init Widget-Manager");
-	// create interface mutex :
-	int ret = pthread_mutex_init(&localMutex, NULL);
-	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
 	// prevent android error ==> can create memory leak but I prefer
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
 	l_listOfPeriodicWidget.Clear();
 	l_havePeriodic = false;
+	l_haveRedraw = true;
 	// init all the widget global parameters :
 	ewol::WIDGET_JoystickInit();
 	ewol::WIDGET_ButtonInit();
@@ -70,8 +69,6 @@ void ewol::widgetManager::UnInit(void)
 	IsInit = false;
 	
 	l_listOfPeriodicWidget.Clear();
-	int ret = pthread_mutex_destroy(&localMutex);
-	EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 }
 
 void ewol::widgetManager::Rm(ewol::Widget * newWidget)
@@ -214,3 +211,15 @@ bool ewol::widgetManager::PeriodicCallHave(void)
 	return l_havePeriodic;
 }
 
+
+void ewol::widgetManager::MarkDrawingIsNeeded(void)
+{
+	l_haveRedraw = true;
+}
+
+bool ewol::widgetManager::IsDrawingNeeded(void)
+{
+	bool tmp = l_haveRedraw;
+	l_haveRedraw = false;
+	return tmp;
+}

@@ -49,6 +49,8 @@ namespace ewol {
 		void           PeriodicCall(int64_t localTime);
 		bool           PeriodicCallHave(void);
 		
+		void           MarkDrawingIsNeeded(void);
+		bool           IsDrawingNeeded(void);
 	};
 };
 

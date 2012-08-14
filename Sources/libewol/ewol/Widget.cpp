@@ -291,3 +291,14 @@ void ewol::Widget::PeriodicCallSet(bool statusToSet)
 		ewol::widgetManager::PeriodicCallRm(this);
 	}
 }
+
+/**
+ * @brief The widget mark itself that it need to regenerate the nest time.
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::MarkToReedraw(void)
+{
+	m_needRegenerateDisplay = true;
+	ewol::widgetManager::MarkDrawingIsNeeded();
+};
