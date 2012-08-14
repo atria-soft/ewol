@@ -29,7 +29,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Label.h>
 #include <ewol/WidgetManager.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 
 #undef __class__

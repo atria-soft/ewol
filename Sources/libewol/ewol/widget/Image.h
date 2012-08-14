@@ -51,7 +51,7 @@ namespace ewol {
 		private:
 			etk::UString       m_imageSelected;
 			Vector2D<float>          m_padding;
-			color_ts           m_textColorBg;  //!< Background color
+			etk::Color           m_textColorBg;  //!< Background color
 			int32_t            m_imageSize;
 		public:
 			virtual void   OnRegenerateDisplay(void);

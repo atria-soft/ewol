@@ -40,9 +40,9 @@ ewol::ContextMenu::ContextMenu(void)
 	m_padding.y = 4;
 	m_offset = 20;
 
-	m_colorBackGroung = etk::color::color_White;
+	m_colorBackGroung = etk::color::white;
 
-	m_colorBorder = etk::color::color_Black;
+	m_colorBorder = etk::color::black;
 	m_colorBorder.alpha = 0x7F;
 	
 	m_arrowPos.x = 0;

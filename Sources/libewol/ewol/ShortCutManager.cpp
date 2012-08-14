@@ -39,7 +39,7 @@ class EventShortCut {
 		uniChar_t     UnicodeValue;
 };
 
-static etk::VectorType<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
+static etk::Vector<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
 
 
 void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data)

@@ -29,7 +29,7 @@
 #undef __class__
 #define __class__	"ewol::OObject2DText"
 
-ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, color_ts textColorFg)
+ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, etk::Color textColorFg)
 {
 	m_textColorFg = textColorFg;
 	if (FontName == "") {
@@ -44,10 +44,7 @@ ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, color_ts
 // open with default font ...
 ewol::OObject2DText::OObject2DText(void)
 {
-	m_textColorFg.red = 0;
-	m_textColorFg.green = 0;
-	m_textColorFg.blue = 0;
-	m_textColorFg.alpha = 0xFF;
+	m_textColorFg = 0x000000FF;
 	m_FontId = GetDefaultFontId();
 }
 

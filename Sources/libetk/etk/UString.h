@@ -26,7 +26,7 @@
 #define __ETK_USTRING_H__
 
 #include <etk/Stream.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 namespace etk
 {
@@ -54,9 +54,9 @@ namespace etk
 			 *    = assigment
 			 *****************************************************/
 			const etk::UString& operator= (const etk::UString &etkS );
-			const etk::UString& operator= (etk::VectorType<char> inputData);
-			const etk::UString& operator= (etk::VectorType<int8_t> inputData);
-			const etk::UString& operator= (etk::VectorType<uniChar_t> inputData);
+			const etk::UString& operator= (etk::Vector<char> inputData);
+			const etk::UString& operator= (etk::Vector<int8_t> inputData);
+			const etk::UString& operator= (etk::Vector<uniChar_t> inputData);
 			/*****************************************************
 			 *    == operator
 			 *****************************************************/
@@ -116,8 +116,8 @@ namespace etk
 			// Find element
 			int32_t       FindForward(const char      data, int32_t startPos=0);
 			int32_t       FindForward(const uniChar_t data, int32_t startPos=0);
-			int32_t       FindBack(const char      data, int32_t startPos=0x7FFFFFFF);
-			int32_t       FindBack(const uniChar_t data, int32_t startPos=0x7FFFFFFF);
+			int32_t       FindBack(const char         data, int32_t startPos=0x7FFFFFFF);
+			int32_t       FindBack(const uniChar_t    data, int32_t startPos=0x7FFFFFFF);
 			
 			bool          IsEmpty(void) const;
 			int32_t       Size(void) const;
@@ -131,17 +131,17 @@ namespace etk
 			void          Remove(int32_t currentID, int32_t len);
 			void          Clear(void);
 			
-			etk::VectorType<uniChar_t> GetVector(void);
-			uniChar_t *                pointer(void) { return &m_data[0]; };
+			etk::Vector<uniChar_t> GetVector(void);
+			uniChar_t *            pointer(void) { return &m_data[0]; };
 			// generate temporary allocation (auto unallocated...)
-			char *                     Utf8Data(void);
+			char *                 c_str(void);
 			
 			// Sting operation :
 			etk::UString  Extract(int32_t posStart=0, int32_t posEnd=0x7FFFFFFF);
 	
 		private :
-			etk::VectorType<uniChar_t> m_data;     //!< internal data is stored in the Unicode properties ...
-			etk::VectorType<char>      m_dataUtf8; //!< Tmp data for the Utf8Data() function
+			etk::Vector<uniChar_t> m_data;     //!< internal data is stored in the Unicode properties ...
+			etk::Vector<char>      m_dataUtf8; //!< Tmp data for the Utf8Data() function
 	};
 
 	etk::CCout& operator <<(etk::CCout &os, const etk::UString &obj);

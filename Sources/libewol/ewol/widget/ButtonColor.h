@@ -59,9 +59,9 @@ namespace ewol {
 			textAlignement_te    m_alignement;
 			Vector2D<float>            m_padding;
 			etk::UString         m_label;
-			color_ts             m_textColorFg;    //!< Text color
-			color_ts             m_textColorBg;    //!< Background color
-			color_ts             m_selectedColor;  //!< user current selected Color
+			etk::Color             m_textColorFg;    //!< Text color
+			etk::Color             m_textColorBg;    //!< Background color
+			etk::Color             m_selectedColor;  //!< user current selected Color
 			ewol::ContextMenu*   m_widgetContextMenu;
 		public:
 			virtual void   OnRegenerateDisplay(void);
@@ -76,8 +76,8 @@ namespace ewol {
 			 * @return false the event is not used
 			 */
 			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
-			color_ts GetCurrentColor(void) { return m_selectedColor; };
-			void     SetCurrentColor(color_ts color);
+			etk::Color GetCurrentColor(void) { return m_selectedColor; };
+			void     SetCurrentColor(etk::Color color);
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
 			 * @param[in] CallerObject Pointer on the EObject that information came from

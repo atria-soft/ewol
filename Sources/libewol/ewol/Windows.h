@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 #include <ewol/Widget.h>
 
 namespace ewol {
@@ -79,7 +79,7 @@ namespace ewol {
 			}
 		private:
 			ewol::Widget*                   m_subWidget;
-			etk::VectorType<ewol::Widget*>  m_popUpWidgetList;
+			etk::Vector<ewol::Widget*>  m_popUpWidgetList;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);

@@ -29,7 +29,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
 #include <ewol/WidgetManager.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 
 #include <ewol/ewol.h>
@@ -203,7 +203,7 @@ void ewol::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char 
 	} else if (eventId == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
 			int32_t value = 0;
-			sscanf(data.Utf8Data(), "%d", &value);
+			sscanf(data.c_str(), "%d", &value);
 			EWOL_DEBUG("event on the parameter : " << eventId << " select ID=" << value << "");
 			m_wSlider->SubWidgetSelectSet(value);
 		}

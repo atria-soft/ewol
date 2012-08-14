@@ -56,7 +56,7 @@ etk::UString baseApplName = "ewolNoName";
 	static void loadAPK(etk::UString& apkPath)
 	{
 		TK_DEBUG("Loading APK \"" << apkPath << "\"");
-		s_APKArchive = zip_open(apkPath.Utf8Data(), 0, NULL);
+		s_APKArchive = zip_open(apkPath.c_str(), 0, NULL);
 		TK_ASSERT(s_APKArchive != NULL, "Error loading APK ...  \"" << apkPath << "\"");
 		//Just for debug, print APK contents
 		s_APKnbFiles = zip_get_num_files(s_APKArchive);
@@ -399,7 +399,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	TK_VERBOSE("3 : Get file Name : " << destFilename );
 	if (true == needUnpack) {
 		// Get the real Path of the current File
-		ok = realpath(destFilename.Utf8Data(), buf);
+		ok = realpath(destFilename.c_str(), buf);
 		if (!ok) {
 			int32_t lastPos = destFilename.FindBack('/');
 			if (-1 != lastPos) {
@@ -407,7 +407,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 				etk::UString tmpFilename = destFilename.Extract(lastPos+1);
 				destFilename.Remove(lastPos, destFilename.Size() - lastPos);
 				TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
-				ok = realpath(destFilename.Utf8Data(), buf);
+				ok = realpath(destFilename.c_str(), buf);
 				if (!ok) {
 					TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
 					m_shortFilename = tmpFilename;
@@ -562,7 +562,7 @@ int32_t etk::File::Size(void)
 			break;
 	}
 	myCompleateName += GetCompleateName();
-	myFile=fopen(myCompleateName.Utf8Data(),"rb");
+	myFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == myFile) {
 		//EWOL_ERROR("Can not find the file name=\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
 		return -1;
@@ -604,9 +604,9 @@ bool etk::File::Exist(void)
 			break;
 	}
 	myCompleateName += GetCompleateName();
-	myFile=fopen(myCompleateName.Utf8Data(),"rb");
+	myFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == myFile) {
-		TK_DEBUG("try to open : " << myCompleateName.Utf8Data());
+		TK_DEBUG("try to open : " << myCompleateName.c_str());
 		return false;
 	}
 	fclose(myFile);
@@ -643,7 +643,7 @@ bool etk::File::fOpenRead(void)
 			break;
 	}
 	myCompleateName += GetCompleateName();
-	m_PointerFile=fopen(myCompleateName.Utf8Data(),"rb");
+	m_PointerFile=fopen(myCompleateName.c_str(),"rb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;
@@ -679,7 +679,7 @@ bool etk::File::fOpenWrite(void)
 			break;
 	}
 	myCompleateName += GetCompleateName();
-	m_PointerFile=fopen(myCompleateName.Utf8Data(),"wb");
+	m_PointerFile=fopen(myCompleateName.c_str(),"wb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
 		return false;

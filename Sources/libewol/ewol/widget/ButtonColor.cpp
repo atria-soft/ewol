@@ -63,7 +63,7 @@ void ewol::ButtonColor::Init(void)
 	#endif
 	
 	
-	m_textColorBg = etk::color::color_Black;
+	m_textColorBg = etk::color::black;
 	m_textColorBg.alpha = 0x3F;
 	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
@@ -160,15 +160,9 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*m_padding.y;
 		
 		if ((m_textColorBg.red>0.5) || (m_textColorBg.green>0.5) || (m_textColorBg.blue > 0.8) ) {
-			m_textColorFg.red   = 0.0;
-			m_textColorFg.green = 0.0;
-			m_textColorFg.blue  = 0.0;
-			m_textColorFg.alpha = 1.0;
+			m_textColorFg = etk::color::black;
 		} else {
-			m_textColorFg.red   = 1.0;
-			m_textColorFg.green = 1.0;
-			m_textColorFg.blue  = 1.0;
-			m_textColorFg.alpha = 1.0;
+			m_textColorFg = etk::color::white;
 		}
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		/*
@@ -247,16 +241,12 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 }
 
 
-void ewol::ButtonColor::SetCurrentColor(color_ts color)
+void ewol::ButtonColor::SetCurrentColor(etk::Color color)
 {
 	m_selectedColor = color;
 	m_textColorBg = m_selectedColor;
 	char colorText[256];
-	sprintf(colorText, "#%02X%02X%02X%02X",
-	        (uint8_t)(color.red   * 0xFF),
-	        (uint8_t)(color.green * 0xFF),
-	        (uint8_t)(color.blue  * 0xFF),
-	        (uint8_t)(color.alpha * 0xFF));
+	sprintf(colorText, "#%08X", color.Get());
 	//set the new label ...
 	SetLabel(colorText);
 }
@@ -272,16 +262,12 @@ void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 {
 	if (eventId == ewolEventColorChooserChange) {
 		// TODO : Parse the input color ...
-		//color_ts tmpColor(data);
-		color_ts tmpColor;
+		//etk::Color tmpColor(data);
+		etk::Color tmpColor;
 		m_selectedColor = tmpColor;
 		m_textColorBg = m_selectedColor;
 		char colorText[256];
-		sprintf(colorText, "#%02X%02X%02X%02X",
-		        (uint8_t)(tmpColor.red   * 0xFF),
-		        (uint8_t)(tmpColor.green * 0xFF),
-		        (uint8_t)(tmpColor.blue  * 0xFF),
-		        (uint8_t)(tmpColor.alpha * 0xFF));
+		sprintf(colorText, "#%08X", tmpColor.Get());
 		//set the new label ...
 		SetLabel(colorText);
 		GenerateEventId(ewolEventButtonColorChange);

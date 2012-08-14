@@ -38,7 +38,7 @@ extern "C" {
 };
 
 // internal element of the widget manager : 
-static etk::VectorType<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
+static etk::Vector<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
 
 
 void ewol::EObjectMessageMultiCast::Init(void)

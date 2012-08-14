@@ -53,10 +53,10 @@ namespace ewol {
 			 */
 			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return NULL; };
 			virtual void   OnRegenerateDisplay(void);
-			void SetColor(color_ts newColor) { m_color = newColor; MarkToRedraw(); };
+			void SetColor(etk::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		private:
 			float     m_localSize;
-			color_ts  m_color;
+			etk::Color  m_color;
 	};
 	
 };

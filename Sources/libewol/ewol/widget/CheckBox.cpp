@@ -38,8 +38,8 @@ extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 void ewol::CheckBox::Init(void)
 {
 	AddEventId(ewolEventCheckBoxClicked);
-	m_textColorFg = etk::color::color_Black;
-	m_textColorBg = etk::color::color_White;
+	m_textColorFg = etk::color::black;
+	m_textColorBg = etk::color::white;
 	m_value = false;
 	SetCanHaveFocus(true);
 	SetMouseLimit(1);

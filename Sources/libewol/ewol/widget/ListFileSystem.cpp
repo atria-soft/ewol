@@ -38,9 +38,9 @@ extern const char * const ewolEventFSFileValidate   = "ewol-event-file-system-fi
 extern const char * const ewolEventFSFolderSelect   = "ewol-event-file-system-folder-select";
 extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-folder-validate";
 
-static void SortElementList(etk::VectorType<ewol::elementFS *> &list)
+static void SortElementList(etk::Vector<ewol::elementFS *> &list)
 {
-	etk::VectorType<ewol::elementFS *> tmpList = list;
+	etk::Vector<ewol::elementFS *> tmpList = list;
 	list.Clear();
 	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		if (NULL != tmpList[iii]) {
@@ -86,8 +86,8 @@ ewol::ListFileSystem::~ListFileSystem(void)
 	}
 };
 
-color_ts ewol::ListFileSystem::GetBasicBG(void) {
-	color_ts bg(0x00000010);
+etk::Color ewol::ListFileSystem::GetBasicBG(void) {
+	etk::Color bg(0x00000010);
 	return bg;
 }
 
@@ -126,7 +126,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 	}
 	DIR *dir = NULL;
 	struct dirent *ent = NULL;
-	dir = opendir(m_folder.Utf8Data());
+	dir = opendir(m_folder.c_str());
 	if (dir != NULL) {
 		// for each element in the drectory...
 		while ((ent = readdir(dir)) != NULL) {
@@ -242,20 +242,20 @@ void ewol::ListFileSystem::SetSelect( etk::UString data) {
 uint32_t ewol::ListFileSystem::GetNuberOfColomn(void) {
 	return 1;
 };
-bool ewol::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
+bool ewol::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, etk::Color &fg, etk::Color &bg) {
 	myTitle = "title";
 	return true;
 };
 uint32_t ewol::ListFileSystem::GetNuberOfRaw(void) {
 	return m_list.Size();
 };
-bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
+bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, etk::Color &fg, etk::Color &bg) {
 	if (raw >= 0 && raw < m_list.Size() && NULL != m_list[raw]) {
 		myTextToWrite = m_list[raw]->m_name;
 	} else {
 		myTextToWrite = "ERROR";
 	}
-	fg = etk::color::color_Black;
+	fg = etk::color::black;
 	if (raw % 2) {
 		bg = 0xFFFFFF00;
 	} else {

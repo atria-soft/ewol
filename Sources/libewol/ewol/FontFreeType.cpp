@@ -25,7 +25,7 @@
 #include <ewol/Font.h>
 #include <ewol/Texture.h>
 #include <etk/unicode.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 #include <ewol/importgl.h>
 extern "C" {
@@ -220,7 +220,7 @@ class FTFontInternal
 		}
 	public:
 		etk::UString GetFontName(void) {return m_fontName;};
-		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t & textureId, etk::VectorType<freeTypeFontElement_ts> & listElement)
+		bool GenerateBitmapFont(int32_t size, int32_t &height, int32_t & textureId, etk::Vector<freeTypeFontElement_ts> & listElement)
 		{
 			// 300dpi (hight quality) 96 dpi (normal quality)
 			int32_t fontQuality = 96;
@@ -378,7 +378,7 @@ class FTFontInternal
 		FT_Face      m_fftFace;
 };
 
-static etk::VectorType<FTFontInternal*> m_listLoadedTTFont;
+static etk::Vector<FTFontInternal*> m_listLoadedTTFont;
 
 
 static etk::UString s_currentFolderName = "";
@@ -436,7 +436,7 @@ class FTFont{
 			return false;
 		};
 		
-		etk::VectorType<freeTypeFontElement_ts> & GetRefOnElement(void)
+		etk::Vector<freeTypeFontElement_ts> & GetRefOnElement(void)
 		{
 			return m_elements;
 		};
@@ -462,10 +462,10 @@ class FTFont{
 		int32_t                                   m_size;        // nb pixel height
 		int32_t                                   m_lineHeight;  // nb pixel height
 		int32_t                                   m_interline;   // nb pixel between 2 lines
-		etk::VectorType<freeTypeFontElement_ts>   m_elements;    // 
+		etk::Vector<freeTypeFontElement_ts>   m_elements;    // 
 };
 
-static etk::VectorType<FTFont*> m_listLoadedFont;
+static etk::Vector<FTFont*> m_listLoadedFont;
 
 #undef __class__
 #define __class__	"ewol::FontFreeType"
@@ -579,14 +579,14 @@ int32_t ewol::DrawText(int32_t                              fontID,
                        clipping_ts &                        drawClipping,
                        const etk::UString&                  unicodeString,
                        int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+                       etk::Vector<Vector2D<float> > &  coord,
+                       etk::Vector<texCoord_ts> &       coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	etk::Vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -763,15 +763,15 @@ int32_t ewol::DrawText(int32_t                              fontID,
                        clipping_ts &                        drawClipping,
                        const uniChar_t                      unicodeChar,
                        int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+                       etk::Vector<Vector2D<float> > &  coord,
+                       etk::Vector<texCoord_ts> &       coordTex)
 {
 #if 0
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	etk::Vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -920,14 +920,14 @@ int32_t ewol::DrawText(int32_t                              fontID,
                        Vector2D<float>                      textPos,
                        const etk::UString&                  unicodeString,
                        int32_t &                            fontTextureId,
-                       etk::VectorType<Vector2D<float> > &  coord,
-                       etk::VectorType<texCoord_ts> &       coordTex)
+                       etk::Vector<Vector2D<float> > &  coord,
+                       etk::Vector<texCoord_ts> &       coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	etk::Vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -1056,14 +1056,14 @@ int32_t ewol::DrawText(int32_t                             fontID,
                        Vector2D<float>                     textPos,
                        const uniChar_t                     unicodeChar,
                        int32_t &                           fontTextureId,
-                       etk::VectorType<Vector2D<float> > & coord,
-                       etk::VectorType<texCoord_ts> &      coordTex)
+                       etk::Vector<Vector2D<float> > & coord,
+                       etk::Vector<texCoord_ts> &      coordTex)
 {
 	if(fontID>=m_listLoadedFont.Size() || fontID < 0) {
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	etk::Vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 
 	fontTextureId = m_listLoadedFont[fontID]->GetOglId();
 	int32_t fontSize = m_listLoadedFont[fontID]->GetSize();
@@ -1187,7 +1187,7 @@ int32_t ewol::GetWidth(int32_t fontID, const etk::UString& unicodeString)
 		EWOL_WARNING("try to display text with an fontID that does not existed " << fontID);
 		return 0;
 	}
-	etk::VectorType<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
+	etk::Vector<freeTypeFontElement_ts> & listOfElement = m_listLoadedFont[fontID]->GetRefOnElement();
 	
 	float posDrawX = 0.0;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {

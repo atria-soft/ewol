@@ -41,7 +41,7 @@ void ewol::WIDGET_ButtonImageInit(void)
 #undef __class__
 #define __class__	"ButtonImage"
 
-ewol::ButtonImage::ButtonImage(etk::UString imageName, color_ts col)
+ewol::ButtonImage::ButtonImage(etk::UString imageName, etk::Color col)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -68,7 +68,7 @@ ewol::ButtonImage::~ButtonImage(void)
 	
 }
 
-void ewol::ButtonImage::SetImage(etk::UString imageName, color_ts col)
+void ewol::ButtonImage::SetImage(etk::UString imageName, etk::Color col)
 {
 	m_image = imageName;
 	m_color = col;
@@ -76,7 +76,7 @@ void ewol::ButtonImage::SetImage(etk::UString imageName, color_ts col)
 	MarkToRedraw();
 }
 
-void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
+void ewol::ButtonImage::SetImageBG(etk::UString imageName, etk::Color col)
 {
 	m_imageBg1 = imageName;
 	m_colorBg1 = col;
@@ -84,7 +84,7 @@ void ewol::ButtonImage::SetImageBG(etk::UString imageName, color_ts col)
 	MarkToRedraw();
 }
 
-void ewol::ButtonImage::SetImageSelected(etk::UString imageName, color_ts col)
+void ewol::ButtonImage::SetImageSelected(etk::UString imageName, etk::Color col)
 {
 	m_imageBg2 = imageName;
 	m_colorBg2 = col;

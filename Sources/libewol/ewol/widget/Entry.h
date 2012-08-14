@@ -57,8 +57,8 @@ namespace ewol {
 			}
 		private:
 			etk::UString   m_data;
-			color_ts       m_textColorFg;  //!< Text color
-			color_ts       m_textColorBg;  //!< Background color
+			etk::Color       m_textColorFg;  //!< Text color
+			etk::Color       m_textColorBg;  //!< Background color
 			int32_t        m_userSize;
 			int32_t        m_displayStartPosition;
 			int32_t        m_displayCursorPos;

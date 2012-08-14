@@ -90,7 +90,7 @@ void ewol::Sprite::Clear(void)
 
 void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
 {
-	color_ts tmpColor(0xFFFFFFFF);
+	etk::Color tmpColor(0xFFFFFFFF);
 	Vector3D<float> pos2;
 	pos2.x = pos.x;
 	pos2.y = pos.y;
@@ -100,11 +100,11 @@ void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
 
 void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle)
 {
-	color_ts tmpColor(0xFFFFFFFF);
+	etk::Color tmpColor(0xFFFFFFFF);
 	Element(pos, size, angle, tmpColor);
 }
 
-void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle, color_ts tmpColor)
+void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle, etk::Color tmpColor)
 {
 	Vector3D<float> pos2;
 	pos2.x = pos.x;
@@ -114,7 +114,7 @@ void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle, color_t
 }
 
 
-void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle, color_ts tmpColor)
+void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle, etk::Color tmpColor)
 {
 	angle -= M_PI/4;
 	size *= 0.7;

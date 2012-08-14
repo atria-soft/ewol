@@ -26,10 +26,11 @@
 #define __EWOL_O_OBJECT_H__
 
 #include <etk/Types.h>
+#include <etk/Color.h>
 #include <etk/File.h>
 #include <ewol/Debug.h>
 #include <ewol/Font.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 namespace ewol {
 	extern "C" {

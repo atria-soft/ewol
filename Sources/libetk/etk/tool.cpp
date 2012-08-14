@@ -39,9 +39,9 @@ int32_t etk::tool::irand(int32_t a, int32_t b)
 }
 
 
-void etk::tool::SortList(etk::VectorType<etk::UString *> &m_listDirectory)
+void etk::tool::SortList(etk::Vector<etk::UString *> &m_listDirectory)
 {
-	etk::VectorType<etk::UString *> tmpList = m_listDirectory;
+	etk::Vector<etk::UString *> tmpList = m_listDirectory;
 	m_listDirectory.Clear();
 	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		
@@ -56,3 +56,29 @@ void etk::tool::SortList(etk::VectorType<etk::UString *> &m_listDirectory)
 		m_listDirectory.Insert(findPos, tmpList[iii]);
 	}
 }
+
+
+bool etk::tool::strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen)
+{
+	int32_t iii=0;
+	while ('\0' != *input1 && '\0' != *input2 && iii < maxLen) {
+		char in1 = *input1;
+		char in2 = *input2;
+		if (in1 != in2) {
+			if (in1 <= 'Z' && in1 >= 'A') {
+				in1 = in1 - 'A' + 'a';
+			}
+			if (in2 <= 'Z' && in2 >= 'A') {
+				in2 = in2 - 'A' + 'a';
+			}
+			if (in1 != in2) {
+				return false;
+			}
+		}
+		iii++;
+		input1++;
+		input2++;
+	}
+	return true;
+}
+

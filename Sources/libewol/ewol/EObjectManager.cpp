@@ -31,8 +31,8 @@
 static bool IsInit = false;
 
 // internal element of the widget manager : 
-static etk::VectorType<ewol::EObject*>   m_eObjectList;             // all widget allocated ==> all time increment ... never removed ...
-static etk::VectorType<ewol::EObject*>   m_eObjectAutoRemoveList;   // all widget allocated
+static etk::Vector<ewol::EObject*>   m_eObjectList;             // all widget allocated ==> all time increment ... never removed ...
+static etk::Vector<ewol::EObject*>   m_eObjectAutoRemoveList;   // all widget allocated
 
 
 void ewol::EObjectManager::Init(void)

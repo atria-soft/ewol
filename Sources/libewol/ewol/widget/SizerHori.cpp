@@ -158,7 +158,7 @@ void ewol::SizerHori::LockExpendContamination(bool lockExpend)
 	m_lockExpendContamination = lockExpend;
 }
 
-//etk::VectorType<ewol::Widget*> m_subWidget[m_currentCreateId];
+//etk::Vector<ewol::Widget*> m_subWidget[m_currentCreateId];
 
 void ewol::SizerHori::SubWidgetRemoveAll(void)
 {

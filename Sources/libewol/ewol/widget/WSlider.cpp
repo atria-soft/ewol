@@ -140,7 +140,7 @@ void ewol::WSlider::LockExpendContamination(bool lockExpend)
 	m_lockExpendContamination = lockExpend;
 }
 
-//etk::VectorType<ewol::Widget*> m_SubWidget;
+//etk::Vector<ewol::Widget*> m_SubWidget;
 
 void ewol::WSlider::SubWidgetRemoveAll(void)
 {

@@ -44,7 +44,7 @@ namespace ewol {
 			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
 			
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);

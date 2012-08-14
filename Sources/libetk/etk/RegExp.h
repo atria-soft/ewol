@@ -29,7 +29,7 @@
 #include <etk/DebugInternal.h>
 #include <etk/Memory.h>
 #include <etk/UString.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 namespace etk {
 
@@ -94,15 +94,15 @@ typedef struct {
 extern const convertionTable_ts constConvertionTable[];
 extern const int32_t constConvertionTableSize;
 
-void DisplayData(etk::VectorType<char> &data);
-void DisplayElem(etk::VectorType<int16_t> &data, int32_t start=0, int32_t stop=0x7FFFFFFF);
+void DisplayData(etk::Vector<char> &data);
+void DisplayElem(etk::Vector<int16_t> &data, int32_t start=0, int32_t stop=0x7FFFFFFF);
 char * levelSpace(int32_t level);
-int32_t GetLenOfPTheseElem(etk::VectorType<int16_t> &data, int32_t startPos);
-int32_t GetLenOfPThese(etk::VectorType<int16_t> &data, int32_t startPos);
-int32_t GetLenOfBracket(etk::VectorType<int16_t> &data, int32_t startPos);
-int32_t GetLenOfBrace(etk::VectorType<int16_t> &data, int32_t startPos);
-int32_t GetLenOfNormal(etk::VectorType<int16_t> &data, int32_t startPos);
-bool ParseBrace(etk::VectorType<int16_t> &data, int32_t &min, int32_t &max);
+int32_t GetLenOfPTheseElem(etk::Vector<int16_t> &data, int32_t startPos);
+int32_t GetLenOfPThese(etk::Vector<int16_t> &data, int32_t startPos);
+int32_t GetLenOfBracket(etk::Vector<int16_t> &data, int32_t startPos);
+int32_t GetLenOfBrace(etk::Vector<int16_t> &data, int32_t startPos);
+int32_t GetLenOfNormal(etk::Vector<int16_t> &data, int32_t startPos);
+bool ParseBrace(etk::Vector<int16_t> &data, int32_t &min, int32_t &max);
 
 
 #undef __class__
@@ -139,7 +139,7 @@ template<class CLASS_TYPE> class RegExpNode{
 		 * @param[in,out] 
 		 * @return
 		 */
-		virtual int32_t Generate(etk::VectorType<int16_t> &data)
+		virtual int32_t Generate(etk::Vector<int16_t> &data)
 		{
 			return 0;
 		};
@@ -199,7 +199,7 @@ template<class CLASS_TYPE> class RegExpNode{
 		int32_t                 m_multipleMin;      //!< minimum repetition (included)
 		int32_t                 m_multipleMax;      //!< maximum repetition (included)
 		// Data Section ... (can have no data...)
-		etk::VectorType<int16_t>   m_RegExpData;       //!< data to parse and compare in some case ...
+		etk::Vector<int16_t>   m_RegExpData;       //!< data to parse and compare in some case ...
 };
 
 #undef __class__
@@ -233,7 +233,7 @@ template<class CLASS_TYPE> class RegExpNodeValue : public RegExpNode<CLASS_TYPE>
 		 * @param[in,out] 
 		 * @return
 		 */
-		int32_t Generate(etk::VectorType<int16_t> &data)
+		int32_t Generate(etk::Vector<int16_t> &data)
 		{
 			RegExpNode<CLASS_TYPE>::m_RegExpData = data;
 			//TK_DEBUG("Request Parse \"Value\" data="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData););
@@ -303,7 +303,7 @@ template<class CLASS_TYPE> class RegExpNodeValue : public RegExpNode<CLASS_TYPE>
 		};
 	protected :
 		// SubNodes :
-		etk::VectorType<char> m_data;
+		etk::Vector<char> m_data;
 };
 #undef __class__
 #define __class__	"etk::RegExpNodeBracket"
@@ -336,7 +336,7 @@ template<class CLASS_TYPE> class RegExpNodeBracket : public RegExpNode<CLASS_TYP
 		 * @param[in,out] 
 		 * @return
 		 */
-		int32_t Generate(etk::VectorType<int16_t> &data)
+		int32_t Generate(etk::Vector<int16_t> &data)
 		{
 			RegExpNode<CLASS_TYPE>::m_RegExpData = data;
 			//TK_DEBUG("Request Parse [...] data="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData););
@@ -421,7 +421,7 @@ template<class CLASS_TYPE> class RegExpNodeBracket : public RegExpNode<CLASS_TYP
 		};
 	protected :
 		// SubNodes :
-		etk::VectorType<char> m_data;
+		etk::Vector<char> m_data;
 };
 #undef __class__
 #define __class__	"etk::RegExpNodeDigit"
@@ -1211,14 +1211,14 @@ template<class CLASS_TYPE> class RegExpNodePTheseElem : public RegExpNode<CLASS_
 		 * @param[in,out] 
 		 * @return
 		 */
-		int32_t Generate(etk::VectorType<int16_t> &data)
+		int32_t Generate(etk::Vector<int16_t> &data)
 		{
 			RegExpNode<CLASS_TYPE>::m_RegExpData = data;
 			//TK_DEBUG("Request Parse (elem) data="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData););
 		
 			int32_t pos = 0;
 			int32_t elementSize = 0;
-			etk::VectorType<int16_t> tmpData;
+			etk::Vector<int16_t> tmpData;
 			while (pos < RegExpNode<CLASS_TYPE>::m_RegExpData.Size()) {
 				tmpData.Clear();
 				switch (RegExpNode<CLASS_TYPE>::m_RegExpData[pos])
@@ -1404,7 +1404,7 @@ template<class CLASS_TYPE> class RegExpNodePTheseElem : public RegExpNode<CLASS_
 		};
 	protected :
 		// SubNodes :
-		etk::VectorType<RegExpNode<CLASS_TYPE>*> m_subNode;
+		etk::Vector<RegExpNode<CLASS_TYPE>*> m_subNode;
 	private :
 		/**
 		 * @brief Set the number of repeate time on a the last node in the list ...
@@ -1461,7 +1461,7 @@ template<class CLASS_TYPE> class RegExpNodePThese : public RegExpNode<CLASS_TYPE
 		 * @param[in,out] 
 		 * @return
 		 */
-		int32_t Generate(etk::VectorType<int16_t> &data)
+		int32_t Generate(etk::Vector<int16_t> &data)
 		{
 			RegExpNode<CLASS_TYPE>::m_RegExpData = data;
 			//TK_DEBUG("Request Parse (...) data="; DisplayElem(RegExpNode<CLASS_TYPE>::m_RegExpData););
@@ -1471,7 +1471,7 @@ template<class CLASS_TYPE> class RegExpNodePThese : public RegExpNode<CLASS_TYPE
 			// generate all the "elemTypePTheseElem" of the Node
 			while (elementSize>0) {
 				// geerate output deta ...
-				etk::VectorType<int16_t> tmpData;
+				etk::Vector<int16_t> tmpData;
 				for (int32_t k=pos; k<pos+elementSize; k++) {
 					tmpData.PushBack(RegExpNode<CLASS_TYPE>::m_RegExpData[k]);
 				}
@@ -1547,7 +1547,7 @@ template<class CLASS_TYPE> class RegExpNodePThese : public RegExpNode<CLASS_TYPE
 		
 	protected :
 		// SubNodes :
-		etk::VectorType<RegExpNode<CLASS_TYPE>*> m_subNode;
+		etk::Vector<RegExpNode<CLASS_TYPE>*> m_subNode;
 		//int32_t						m_posPthese;		//!< position of the element is detected in the output element
 };
 #undef __class__
@@ -1634,7 +1634,7 @@ template<class CLASS_TYPE> class RegExp {
 		void SetRegExp(etk::UString &expressionRequested)
 		{
 			m_expressionRequested = expressionRequested;		// TODO : Must be deprecated ...
-			etk::VectorType<int16_t> tmpExp;
+			etk::Vector<int16_t> tmpExp;
 			
 			//TK_DEBUG("Parse RegExp : " << expressionRequested.c_str() );
 			m_isOk = false;
@@ -1644,7 +1644,7 @@ template<class CLASS_TYPE> class RegExp {
 			m_notEndWithChar = false;
 			
 			// TODO : Check this ... ==> could create some errors ...
-			char * exp = expressionRequested.Utf8Data();
+			char * exp = expressionRequested.c_str();
 			int32_t regExpLen = strlen(exp);
 			// change in the regular Opcode ==> replace \x with the corect element ... x if needed
 			int32_t iii;
@@ -1977,7 +1977,7 @@ template<class CLASS_TYPE> class RegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		bool CheckGoodPosition(etk::VectorType<int16_t> tmpExp, int32_t &pos)
+		bool CheckGoodPosition(etk::Vector<int16_t> tmpExp, int32_t &pos)
 		{
 			int16_t curentCode = tmpExp[pos];
 			int16_t endCode = REGEXP_OPCODE_PTHESE_OUT;
@@ -2083,7 +2083,7 @@ template<class CLASS_TYPE> class RegExp {
 		 * @param[in,out] 
 		 * @return
 		 */
-		bool CheckGoodPosition(etk::VectorType<int16_t> tmpExp)
+		bool CheckGoodPosition(etk::Vector<int16_t> tmpExp)
 		{
 			int32_t pos = 0;
 			while (pos < (int32_t)tmpExp.Size()) {

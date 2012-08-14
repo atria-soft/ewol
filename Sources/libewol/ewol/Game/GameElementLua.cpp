@@ -34,7 +34,7 @@
 //For every acces : 
 
 static ewol::GameElementLua *           tmpObj = NULL;
-static etk::VectorType<ewol::Sprite*> * tmpSprite = NULL;
+static etk::Vector<ewol::Sprite*> * tmpSprite = NULL;
 static ewol::SceneElement *             tmpScene = NULL;
 
 template <typename T> int index(lua_State* L);
@@ -90,12 +90,12 @@ template <typename T> class LuaValue
 		lua_pushcfunction(L, newindex<T>);
 		lua_setfield(L, -2, "__newindex");
 		lua_setmetatable(L, -2);
-		lua_setglobal(L, name.Utf8Data());
+		lua_setglobal(L, name.c_str());
 	}
 	virtual ~LuaValue(void)
 	{
 		lua_pushnil(L);
-		lua_setglobal(L, name.Utf8Data());
+		lua_setglobal(L, name.c_str());
 		ptr = 0;
 		L = 0;
 	}
@@ -399,7 +399,7 @@ LUAMOD_API int lua_ElementAdd(lua_State *L)
 	int32_t group = luaL_checkint(L, 2);
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::Vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 	uint32_t elementId = tmpScene->AddElementNamed(group, elementName);
 	tmpObj = ttmpObj;
@@ -542,7 +542,7 @@ LUAMOD_API int lua_HaveImpact(lua_State *L)
 
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::Vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 
 	bool result = tmpScene->HaveImpact(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), tmpObj->SizeGet());
@@ -566,7 +566,7 @@ LUAMOD_API int lua_Explosion(lua_State *L)
 
 	// TODO : Remove this when find an other way do do it ...
 	ewol::GameElementLua *           ttmpObj = tmpObj;
-	etk::VectorType<ewol::Sprite*> * ttmpSprite = tmpSprite;
+	etk::Vector<ewol::Sprite*> * ttmpSprite = tmpSprite;
 	ewol::SceneElement *             ttmpScene = tmpScene;
 
 	tmpScene->Explosion(tmpObj->GroupGet(), tmpObj->TypeGet(), tmpObj->PositionGet(), 0.01, tmpObj->PowerGet());
@@ -674,7 +674,7 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 	// close the file:
 	fileElement.fClose();
 	
-	if (luaL_loadbuffer(m_luaState, fileBuffer, fileSize, tmpName.Utf8Data())) {
+	if (luaL_loadbuffer(m_luaState, fileBuffer, fileSize, tmpName.c_str())) {
 	//if (luaL_loadfile(m_luaState, "/home/heero/dev/perso/TethysDefender/assets/elementGame/Cube.lua"  ) ) {
 		EWOL_ERROR("LUA: " << lua_tostring(m_luaState, -1));
 		return;
@@ -899,8 +899,8 @@ void ewol::GameElementLua::Message(etk::UString control, etk::UString message)
 		if(!lua_isfunction(m_luaState,-1)) {
 			lua_pop(m_luaState,1);
 		} else {
-			lua_pushstring(m_luaState, control.Utf8Data());
-			lua_pushstring(m_luaState, message.Utf8Data());
+			lua_pushstring(m_luaState, control.c_str());
+			lua_pushstring(m_luaState, message.c_str());
 			// do the call (2 arguments, 0 result)
 			if (lua_pcall(m_luaState, 2, 0, 0) != 0) {
 				EWOL_ERROR("LUA: error running function 'Message':" << lua_tostring(m_luaState, -1));

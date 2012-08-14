@@ -29,7 +29,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/WidgetManager.h>
 //#include <etk/Vector.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 extern "C" {
 	// file browsing ...
@@ -71,8 +71,8 @@ ewol::ColorChooser::ColorChooser(void)
 			*/
 			SubWidgetAdd(m_widgetColorBar);
 		
-		color_ts sliderColor;
-		sliderColor = etk::color::color_Black;
+		etk::Color sliderColor;
+		sliderColor = etk::color::black;
 		
 		m_widgetRed = new ewol::Slider();
 			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
@@ -80,18 +80,16 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetRed->SetFillX(true);
 			m_widgetRed->SetMin(0);
 			m_widgetRed->SetMax(255);
-			sliderColor.red = 0xFF;
+			sliderColor = 0xFF0000FF;
 			m_widgetRed->SetColor(sliderColor);
-			sliderColor.red = 0;
 			SubWidgetAdd(m_widgetRed);
 		m_widgetGreen = new ewol::Slider();
 			m_widgetGreen->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetGreen->SetExpendX(true);
 			m_widgetGreen->SetFillX(true);
 			m_widgetGreen->SetMin(0);
-			sliderColor.green = 0xFF;
+			sliderColor = 0x00FF00FF;
 			m_widgetGreen->SetColor(sliderColor);
-			sliderColor.green = 0;
 			m_widgetGreen->SetMax(255);
 			SubWidgetAdd(m_widgetGreen);
 		m_widgetBlue = new ewol::Slider();
@@ -99,9 +97,8 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetBlue->SetExpendX(true);
 			m_widgetBlue->SetFillX(true);
 			m_widgetBlue->SetMin(0);
-			sliderColor.blue = 0xFF;
+			sliderColor = 0x0000FFFF;
 			m_widgetBlue->SetColor(sliderColor);
-			sliderColor.blue = 0;
 			m_widgetBlue->SetMax(255);
 			SubWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = new ewol::Slider();
@@ -112,7 +109,7 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetAlpha->SetMax(255);
 			SubWidgetAdd(m_widgetAlpha);
 	
-	m_currentColor = etk::color::color_White;
+	m_currentColor = etk::color::white;
 }
 
 
@@ -122,7 +119,7 @@ ewol::ColorChooser::~ColorChooser(void)
 }
 
 
-void ewol::ColorChooser::SetColor(color_ts newColor)
+void ewol::ColorChooser::SetColor(etk::Color newColor)
 {
 	m_currentColor = newColor;
 	if (NULL != m_widgetRed) {
@@ -143,7 +140,7 @@ void ewol::ColorChooser::SetColor(color_ts newColor)
 }
 
 
-color_ts ewol::ColorChooser::GetColor(void)
+etk::Color ewol::ColorChooser::GetColor(void)
 {
 	return m_currentColor;
 }
@@ -164,7 +161,7 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventColorBarHasChange == eventId) {
 		//==> colorBar has change ...
-		float tmpAlpha = m_currentColor.alpha;
+		uint8_t tmpAlpha = m_currentColor.alpha;
 		// the colorbar has no notion of the alpha ==> keep it ...
 		if (NULL != m_widgetColorBar) {
 			m_currentColor = m_widgetColorBar->GetCurrentColor();

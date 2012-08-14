@@ -53,7 +53,7 @@ class LoadedTexture
 		bool        m_destroy;
 };
 //! List of all Texture loaded ...
-etk::VectorType<LoadedTexture*> l_listLoadedTexture;
+etk::Vector<LoadedTexture*> l_listLoadedTexture;
 #undef __class__
 #define __class__	"texture"
 

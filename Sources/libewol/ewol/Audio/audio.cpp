@@ -311,9 +311,9 @@ class RequestPlay {
 		}
 };
 
-#include <etk/VectorType.h>
-etk::VectorType<EffectsLoaded*> ListEffects;
-etk::VectorType<RequestPlay*>   ListEffectsPlaying;
+#include <etk/Vector.h>
+etk::Vector<EffectsLoaded*> ListEffects;
+etk::Vector<RequestPlay*>   ListEffectsPlaying;
 
 
 int32_t ewol::audio::effects::Add(etk::UString file)

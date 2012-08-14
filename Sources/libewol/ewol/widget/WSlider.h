@@ -53,7 +53,7 @@ namespace ewol {
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
-			etk::VectorType<ewol::Widget*> m_subWidget;
+			etk::Vector<ewol::Widget*> m_subWidget;
 			int32_t                        m_windowsSources;     // widget source viewed
 			int32_t                        m_windowsDestination; // widget destinated viewed
 			int32_t                        m_slidingProgress;    // ratio progression of a sliding

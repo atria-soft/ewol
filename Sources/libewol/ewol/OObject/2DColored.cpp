@@ -80,7 +80,7 @@ void ewol::OObject2DColored::Clear(void)
 }
 
 
-void generatePolyGone(etk::VectorType<Vector2D<float> > & input, etk::VectorType<Vector2D<float> > & output )
+void generatePolyGone(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector2D<float> > & output )
 {
 	if (input.Size()<3) {
 		return;
@@ -94,7 +94,7 @@ void generatePolyGone(etk::VectorType<Vector2D<float> > & input, etk::VectorType
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-void SutherlandHodgman(etk::VectorType<Vector2D<float> > & input, etk::VectorType<Vector2D<float> > & output, float sx, float sy, float ex, float ey)
+void SutherlandHodgman(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector2D<float> > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.Size() <0) {
@@ -298,7 +298,7 @@ void ewol::OObject2DColored::GenerateTriangle(void)
 }
 
 
-void ewol::OObject2DColored::SetColor(color_ts color)
+void ewol::OObject2DColored::SetColor(etk::Color color)
 {
 	if (m_triElement < 1) {
 		m_color[0] = color;
@@ -315,22 +315,13 @@ void ewol::OObject2DColored::SetColor(color_ts color)
 void ewol::OObject2DColored::SetColor(float red, float green, float blue, float alpha)
 {
 	if (m_triElement < 1) {
-		m_color[0].red = red*255;
-		m_color[0].green = green*255;
-		m_color[0].blue = blue*255;
-		m_color[0].alpha = alpha*255;
+		m_color[0] = etk::Color(red, green, blue, alpha);
 	}
 	if (m_triElement < 2) {
-		m_color[1].red = red*255;
-		m_color[1].green = green*255;
-		m_color[1].blue = blue*255;
-		m_color[1].alpha = alpha*255;
+		m_color[1] = etk::Color(red, green, blue, alpha);
 	}
 	if (m_triElement < 3) {
-		m_color[2].red = red*255;
-		m_color[2].green = green*255;
-		m_color[2].blue = blue*255;
-		m_color[2].alpha = alpha*255;
+		m_color[2] = etk::Color(red, green, blue, alpha);
 	}
 	
 }

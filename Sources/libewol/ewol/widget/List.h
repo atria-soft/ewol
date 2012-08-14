@@ -48,7 +48,7 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::VectorType<ewol::OObject*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
@@ -74,21 +74,21 @@ namespace ewol {
 			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 		protected:
 			// function call to display the list :
-			virtual color_ts GetBasicBG(void) {
-				color_ts bg(0xFFFFFFFF);
+			virtual etk::Color GetBasicBG(void) {
+				etk::Color bg(0xFFFFFFFF);
 				return bg;
 			}
 			virtual uint32_t GetNuberOfColomn(void) {
 				return 0;
 			};
-			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg) {
+			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, etk::Color &fg, etk::Color &bg) {
 				myTitle = "";
 				return false;
 			};
 			virtual uint32_t GetNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg) {
+			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, etk::Color &fg, etk::Color &bg) {
 				myTextToWrite = "";
 				bg = 0xFFFFFFFF;
 				fg = 0x000000FF;

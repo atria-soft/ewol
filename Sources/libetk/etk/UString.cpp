@@ -47,7 +47,7 @@ int32_t strlen(const uniChar_t * data)
 
 etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
 {
-	etk::VectorType<char> output_UTF8;
+	etk::Vector<char> output_UTF8;
 	unicode::convertUnicodeToUtf8(obj.m_data, output_UTF8);
 	output_UTF8.PushBack('\0');
 	os << &output_UTF8[0];
@@ -135,7 +135,7 @@ void etk::UString::Set(const char * inputData, int32_t len)
 		len = strlen(inputData);
 	}
 	// convert the string
-	etk::VectorType<char> tmpChar;
+	etk::Vector<char> tmpChar;
 	for (int32_t iii=0; iii<len; iii++) {
 		tmpChar.PushBack(inputData[iii]);
 	}
@@ -276,9 +276,9 @@ const etk::UString& etk::UString::operator= (const etk::UString &etkS )
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (etk::VectorType<char> inputData)
+const etk::UString& etk::UString::operator= (etk::Vector<char> inputData)
 {
-	etk::VectorType<uniChar_t> output_Unicode;
+	etk::Vector<uniChar_t> output_Unicode;
 	unicode::convertUtf8ToUnicode(inputData, output_Unicode);
 	*this = output_Unicode;
 	return *this;
@@ -292,9 +292,9 @@ const etk::UString& etk::UString::operator= (etk::VectorType<char> inputData)
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (etk::VectorType<int8_t> inputData)
+const etk::UString& etk::UString::operator= (etk::Vector<int8_t> inputData)
 {
-	etk::VectorType<uniChar_t> output_Unicode;
+	etk::Vector<uniChar_t> output_Unicode;
 	unicode::convertUtf8ToUnicode(inputData, output_Unicode);
 	*this = output_Unicode;
 	return *this;
@@ -309,7 +309,7 @@ const etk::UString& etk::UString::operator= (etk::VectorType<int8_t> inputData)
  * @return 
  *
  */
-const etk::UString& etk::UString::operator= (etk::VectorType<uniChar_t> inputData)
+const etk::UString& etk::UString::operator= (etk::Vector<uniChar_t> inputData)
 {
 	m_data = inputData;
 	if (m_data.Size()>0) {
@@ -734,9 +734,9 @@ etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd)
  * @return The desired vector with data
  *
  */
-etk::VectorType<uniChar_t> etk::UString::GetVector(void)
+etk::Vector<uniChar_t> etk::UString::GetVector(void)
 {
-	etk::VectorType<uniChar_t> out = m_data;
+	etk::Vector<uniChar_t> out = m_data;
 	out.PopBack();
 	return out;
 }
@@ -780,7 +780,7 @@ bool etk::UString::EndWith(const etk::UString& data)
 }
 
 
-char * etk::UString::Utf8Data(void)
+char * etk::UString::c_str(void)
 {
 	// UTF8 generation :
 	m_dataUtf8.Clear();

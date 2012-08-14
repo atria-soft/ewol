@@ -36,14 +36,11 @@ ewol::ProgressBar::ProgressBar(void)
 {
 	m_value = 0.0;
 	
-	m_textColorFg = etk::color::color_Black;
+	m_textColorFg = etk::color::black;
 	
-	m_textColorBgOn.red   = 0;
-	m_textColorBgOn.green = 0xFF;
-	m_textColorBgOn.blue  = 0;
-	m_textColorBgOn.alpha = 0xFF;
+	m_textColorBgOn = 0x00FF00FF;
 	
-	m_textColorBgOff = etk::color::color_Black;
+	m_textColorBgOff = etk::color::black;
 	m_textColorBgOff.alpha = 0x3F;
 	SetCanHaveFocus(true);
 }

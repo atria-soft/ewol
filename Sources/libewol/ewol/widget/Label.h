@@ -50,7 +50,7 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		private:
 			etk::UString   m_label;
-			color_ts       m_textColorFg;  //!< Text color
+			etk::Color       m_textColorFg;  //!< Text color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

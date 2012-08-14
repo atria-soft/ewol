@@ -45,10 +45,10 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void) { return "EwolColorBar"; };
 			virtual bool   CalculateMinSize(void);
-			color_ts GetCurrentColor(void);
-			void     SetCurrentColor(color_ts newOne);
+			etk::Color GetCurrentColor(void);
+			void     SetCurrentColor(etk::Color newOne);
 		private:
-			color_ts   m_currentColor;
+			etk::Color   m_currentColor;
 			Vector2D<float>  m_currentUserPos;
 			Vector2D<float>  m_padding;
 		public:

@@ -55,7 +55,7 @@ namespace ewol {
 	class ListFileSystem : public ewol::List
 	{
 		private:
-			etk::VectorType<ewol::elementFS *> m_list;
+			etk::Vector<ewol::elementFS *> m_list;
 			etk::UString                       m_folder;
 			int32_t                            m_selectedLine;
 			bool                               m_showFile;
@@ -66,11 +66,11 @@ namespace ewol {
 			ListFileSystem(void);
 			~ListFileSystem(void);
 			// display API :
-			virtual color_ts GetBasicBG(void);
+			virtual etk::Color GetBasicBG(void);
 			uint32_t GetNuberOfColomn(void);
-			bool GetTitle(int32_t colomn, etk::UString &myTitle, color_ts &fg, color_ts &bg);
+			bool GetTitle(int32_t colomn, etk::UString &myTitle, etk::Color &fg, etk::Color &bg);
 			uint32_t GetNuberOfRaw(void);
-			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, color_ts &fg, color_ts &bg);
+			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, etk::Color &fg, etk::Color &bg);
 			bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
 			/**
 			 * @brief Get the current Object type of the EObject

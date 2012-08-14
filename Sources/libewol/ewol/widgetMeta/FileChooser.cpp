@@ -30,7 +30,7 @@
 #include <ewol/widget/Image.h>
 #include <ewol/WidgetManager.h>
 //#include <etk/Vector.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 extern "C" {
 	// file browsing ...
@@ -354,7 +354,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		char * ok;
 		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
 		
-		ok = realpath(m_folder.Utf8Data(), buf);
+		ok = realpath(m_folder.c_str(), buf);
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
 			m_folder = "/";
@@ -387,7 +387,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		char * ok;
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
-		ok = realpath(tmpUserFolder.Utf8Data(), buf);
+		ok = realpath(tmpUserFolder.c_str(), buf);
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
 			m_folder = "/";

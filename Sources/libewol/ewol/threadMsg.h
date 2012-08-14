@@ -53,7 +53,7 @@ namespace ewol {
 			bool                isInit;
 			pthread_mutex_t     mutex;
 			pthread_cond_t      condition;
-			//etk::VectorType<threadMsgContent_ts>     
+			//etk::Vector<threadMsgContent_ts>     
 			threadMsgContent_ts listOfMessages[MSG_PRIO_NUMBER][NUMBER_OF_ELEMENT_IN_THE_FIFO];
 			int32_t             nbMessages[MSG_PRIO_NUMBER];
 			bool                displayHasDone;

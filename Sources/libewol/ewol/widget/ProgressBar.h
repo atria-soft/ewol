@@ -46,12 +46,12 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           ValueSet(float val);
 			float     ValueGet(void);
-			void           SetColor(color_ts newColor) { m_textColorFg = newColor; };
+			void           SetColor(etk::Color newColor) { m_textColorFg = newColor; };
 		private:
 			float         m_value;           //!< % used
-			color_ts           m_textColorFg;     //!< forder bar color
-			color_ts           m_textColorBgOn;   //!< bar color enable
-			color_ts           m_textColorBgOff;  //!< bar color disable
+			etk::Color           m_textColorFg;     //!< forder bar color
+			etk::Color           m_textColorBgOn;   //!< bar color enable
+			etk::Color           m_textColorBgOff;  //!< bar color disable
 		public:
 			virtual void   OnRegenerateDisplay(void);
 	};

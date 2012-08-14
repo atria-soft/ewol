@@ -148,7 +148,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
 		
 		
-		etk::VectorType<int32_t> listSizeColomn;
+		etk::Vector<int32_t> listSizeColomn;
 		
 		// set background color :
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
@@ -176,7 +176,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite = "???";
-			color_ts fg(0x000000FF);
+			etk::Color fg(0x000000FF);
 			if (m_list[iii] != NULL) {
 				myTextToWrite = m_list[iii]->m_label;
 			}

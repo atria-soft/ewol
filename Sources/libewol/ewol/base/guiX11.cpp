@@ -281,7 +281,7 @@ static void local_SetTitle(etk::UString title)
 		EWOL_INFO("X11: Set Title (START)");
 	#endif
 	XTextProperty tp;
-	tp.value = (unsigned char *)title.Utf8Data();
+	tp.value = (unsigned char *)title.c_str();
 	tp.encoding = XA_WM_NAME;
 	tp.format = 8;
 	tp.nitems = strlen((const char*)tp.value);
@@ -593,9 +593,9 @@ void X11_Run(void)
 						const char * magatTextToSend = NULL;
 						
 						if (req->selection == XAtomeSelection) {
-							magatTextToSend = l_clipBoardPrimary.Utf8Data();
+							magatTextToSend = l_clipBoardPrimary.c_str();
 						} else if (req->selection == XAtomeClipBoard) {
-							magatTextToSend = l_clipBoardStd.Utf8Data();
+							magatTextToSend = l_clipBoardStd.c_str();
 						} else {
 							magatTextToSend = "";
 						}
@@ -1182,7 +1182,7 @@ bool guiAbstraction::IsPressedInput(int32_t inputID)
 
 #include <ewol/ewol.h>
 
-static etk::VectorType<etk::UString*> listArgs;
+static etk::Vector<etk::UString*> listArgs;
 
 int32_t ewol::CmdLineNb(void)
 {

@@ -27,7 +27,7 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ButtonColor.h>
 //#include <ewol/widget/Scene.h>
-#include <etk/VectorType.h>
+#include <etk/Vector.h>
 
 #undef __class__
 #define __class__	"WidgetManager"
@@ -37,7 +37,7 @@ static bool IsInit = false;
 // For the focus Management
 static ewol::Widget * m_focusWidgetDefault = NULL;
 static ewol::Widget * m_focusWidgetCurrent = NULL;
-static etk::VectorType<ewol::Widget*> l_listOfPeriodicWidget;
+static etk::Vector<ewol::Widget*> l_listOfPeriodicWidget;
 static bool                           l_havePeriodic = false;
 
 static bool                           l_haveRedraw = true;

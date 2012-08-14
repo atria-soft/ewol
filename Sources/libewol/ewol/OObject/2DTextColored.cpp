@@ -31,7 +31,7 @@
 
 ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t size)
 {
-	m_color = etk::color::color_Black;
+	m_color = etk::color::black;
 	if (FontName == "") {
 		m_FontId = GetDefaultFontId();
 	} else {
@@ -48,7 +48,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString FontName, int32_t 
 
 ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)
 {
-	m_color = etk::color::color_Black;
+	m_color = etk::color::black;
 	if (fontID < 0) {
 		m_FontId = GetDefaultFontId();
 	} else {
@@ -60,7 +60,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(int32_t fontID)
 // open with default font ...
 ewol::OObject2DTextColored::OObject2DTextColored(void)
 {
-	m_color = etk::color::color_Black;
+	m_color = etk::color::black;
 	m_FontId = GetDefaultFontId();
 }
 
@@ -140,7 +140,7 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const uniChar_
 }
 
 
-void ewol::OObject2DTextColored::SetColor(color_ts color)
+void ewol::OObject2DTextColored::SetColor(etk::Color color)
 {
 	m_color = color;
 }
@@ -148,7 +148,7 @@ void ewol::OObject2DTextColored::SetColor(color_ts color)
 
 void ewol::OObject2DTextColored::SetColor(float red, float green, float blue, float alpha)
 {
-	m_color = etk::color::Create(red, green, blue, alpha);
+	m_color = etk::Color(red, green, blue, alpha);
 }
 
 

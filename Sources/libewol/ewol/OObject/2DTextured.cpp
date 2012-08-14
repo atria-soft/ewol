@@ -84,12 +84,12 @@ void ewol::OObject2DTextured::Clear(void)
 	m_coordColor.Clear();
 }
 
-void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, color_ts tmpColor)
+void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, etk::Color tmpColor)
 {
 	Rectangle(x, y, w, h, 0.0, 0.0, 1.0, 1.0, tmpColor);
 }
 
-void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, float texX, float texY, float texSX, float texSY, color_ts tmpColor)
+void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, float texX, float texY, float texSX, float texSY, etk::Color tmpColor)
 {
 	//EWOL_DEBUG("Add rectangle : ...");
 	Vector2D<float> point;

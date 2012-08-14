@@ -141,10 +141,10 @@ void ewol::List::OnRegenerateDisplay(void)
 		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
 		
 		
-		etk::VectorType<int32_t> listSizeColomn;
+		etk::Vector<int32_t> listSizeColomn;
 		
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-		color_ts basicBG = GetBasicBG();
+		etk::Color basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		
@@ -172,8 +172,8 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite;
-			color_ts fg;
-			color_ts bg;
+			etk::Color fg;
+			etk::Color bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
 			BGOObjects->SetColor(bg);
 			BGOObjects->Rectangle(0, m_size.y - tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);

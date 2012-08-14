@@ -27,6 +27,7 @@
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
 
+#include <etk/Color.h>
 
 extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 
@@ -48,7 +49,7 @@ ewol::ColorBar::ColorBar(void)
 	#endif
 	m_currentUserPos.x=0;
 	m_currentUserPos.y=0;
-	m_currentColor = etk::color::color_Black;
+	m_currentColor = etk::color::black;
 	SetCanHaveFocus(true);
 }
 
@@ -65,10 +66,10 @@ bool ewol::ColorBar::CalculateMinSize(void)
 	MarkToRedraw();
 	return true;
 }
-static color_ts s_listColorWhite(0xFFFFFFFF);
-static color_ts s_listColorBlack(0x000000FF);
+static etk::Color s_listColorWhite(0xFFFFFFFF);
+static etk::Color s_listColorBlack(0x000000FF);
 #define NB_BAND_COLOR		(6)
-static color_ts s_listColor[NB_BAND_COLOR+1] = {
+static etk::Color s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF,
 	0xFFFF00FF,
 	0x00FF00FF,
@@ -78,14 +79,14 @@ static color_ts s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF
 };
 
-color_ts ewol::ColorBar::GetCurrentColor(void)
+etk::Color ewol::ColorBar::GetCurrentColor(void)
 {
 	return m_currentColor;
 }
-void ewol::ColorBar::SetCurrentColor(color_ts newOne)
+void ewol::ColorBar::SetCurrentColor(etk::Color newOne)
 {
 	m_currentColor = newOne;
-	m_currentColor.alpha = 1.0;
+	m_currentColor.alpha = 0xFF;
 	// estimate the cursor position :
 	// TODO : Later when really needed ...
 }
@@ -192,17 +193,12 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
 			*/
 		}
-		color_ts tmpColor;
+		etk::Color tmpColor;
 		if (m_currentUserPos.y > 0.5) {
-			tmpColor.red   = 1.0;
-			tmpColor.green = 1.0;
-			tmpColor.blue  = 1.0;
+			tmpColor = etk::color::white;
 		} else {
-			tmpColor.red   = 0.0;
-			tmpColor.green = 0.0;
-			tmpColor.blue  = 0.0;
+			tmpColor = etk::color::black;
 		}
-		tmpColor.alpha = 1.0;
 		tmpOObjects->SetColor(tmpColor);
 		tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
 		
@@ -240,8 +236,7 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			float localPos = relativePos.x - (m_size.x/6) * bandID;
 			float poroportionnalPos = localPos/(m_size.x/6);
 			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
-			color_ts estimateColor;
-			estimateColor.alpha = 1.0;
+			etk::Color estimateColor = etk::color::white;
 			if (s_listColor[bandID].red == s_listColor[bandID+1].red) {
 				estimateColor.red = s_listColor[bandID].red;
 			} else if (s_listColor[bandID].red < s_listColor[bandID+1].red) {
@@ -286,10 +281,7 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			        (uint8_t)(estimateColor.alpha * 0xFF));
 			EWOL_DEBUG("new color : " << colorText);
 			*/
-			if(    m_currentColor.red   != estimateColor.red
-			    || m_currentColor.green != estimateColor.green
-			    || m_currentColor.blue  != estimateColor.blue
-			    || m_currentColor.alpha != estimateColor.alpha) {
+			if(    m_currentColor != estimateColor) {
 				m_currentColor = estimateColor;
 				GenerateEventId(ewolEventColorBarChange);
 			}

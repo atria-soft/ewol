@@ -51,9 +51,9 @@ void ewol::Entry::Init(void)
 	m_borderSize = 2;
 	m_paddingSize = 3;
 	m_displayCursor = false;
-	m_textColorFg = etk::color::color_Black;
+	m_textColorFg = etk::color::black;
 	
-	m_textColorBg = etk::color::color_White;
+	m_textColorBg = etk::color::white;
 	m_textColorBg.alpha = 0xAF;
 	SetCanHaveFocus(true);
 }

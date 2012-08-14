@@ -64,7 +64,7 @@ namespace ewol {
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		private:
-			etk::VectorType<MenuElement*>  m_listElement;
+			etk::Vector<MenuElement*>  m_listElement;
 			int32_t                        m_staticId;      // unique ID for every element of the menu ...
 			ewol::ContextMenu*             m_widgetContextMenu;
 		public:

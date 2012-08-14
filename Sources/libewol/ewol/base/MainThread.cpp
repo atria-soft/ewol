@@ -171,15 +171,6 @@ void ewolProcessEvents(void)
 			}
 		}
 	}
-	// pb here when dynamic widget ...
-	if (0 < nbEvent) {
-		//EWOL_DEBUG(" ********  Redraw");
-		if(true == ewol::threadMsg::HasDisplayDone(androidJniMsg)) {
-			int64_t localTime = GetCurrentTime();
-			ewol::widgetManager::PeriodicCall(localTime);
-		}
-		EWOL_NativeRegenerateDisplay();
-	}
 }
 
 
@@ -370,6 +361,12 @@ void guiSystem::Draw(void)
 {
 	if (true == isGlobalSystemInit) {
 		ewolProcessEvents();
+		
+		int64_t localTime = GetCurrentTime();
+		ewol::widgetManager::PeriodicCall(localTime);
+		
+		EWOL_NativeRegenerateDisplay();
+		
 		ewol::texture::UpdateContext();
 		EWOL_NativeRender();
 	}

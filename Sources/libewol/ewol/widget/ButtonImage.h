@@ -34,7 +34,7 @@ namespace ewol {
 	class ButtonImage :public ewol::Widget
 	{
 		public:
-			ButtonImage(etk::UString image, color_ts col=0xFFFFFFFF);
+			ButtonImage(etk::UString image, etk::Color col=0xFFFFFFFF);
 			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
@@ -44,9 +44,9 @@ namespace ewol {
 			virtual const char * const GetObjectType(void) { return "EwolButtonImage"; };
 			void Init(void);
 			virtual ~ButtonImage(void);
-			void           SetImage(etk::UString imageName, color_ts col=0xFFFFFFFF);
-			void           SetImageBG(etk::UString imageName, color_ts col=0xFFFFFFFF);
-			void           SetImageSelected(etk::UString imageName, color_ts col=0xFFFFFFFF);
+			void           SetImage(etk::UString imageName, etk::Color col=0xFFFFFFFF);
+			void           SetImageBG(etk::UString imageName, etk::Color col=0xFFFFFFFF);
+			void           SetImageSelected(etk::UString imageName, etk::Color col=0xFFFFFFFF);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetToggleMode(bool val);
@@ -55,15 +55,15 @@ namespace ewol {
 			etk::UString             m_image;
 			bool                     m_resetNeeded;
 			ewol::OObject2DTextured* m_OOImage;
-			color_ts                 m_color;
+			etk::Color                 m_color;
 			
 			etk::UString             m_imageBg1;
 			ewol::OObject2DTextured* m_OOImageBg1;
-			color_ts                 m_colorBg1;
+			etk::Color                 m_colorBg1;
 			
 			etk::UString             m_imageBg2;
 			ewol::OObject2DTextured* m_OOImageBG2;
-			color_ts                 m_colorBg2;
+			etk::Color                 m_colorBg2;
 			
 			bool                     m_over;
 			bool                     m_down;

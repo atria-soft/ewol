@@ -88,7 +88,7 @@ const int32_t etk::constConvertionTableSize = sizeof(etk::constConvertionTable) 
  * @return ---
  *
  */
-void etk::DisplayData(etk::VectorType<char> &data)
+void etk::DisplayData(etk::Vector<char> &data)
 {
 	int32_t i;
 	for (i=0; i<(int32_t)data.Size() ; i++) {
@@ -106,7 +106,7 @@ void etk::DisplayData(etk::VectorType<char> &data)
  * @return ---
  *
  */
-void etk::DisplayElem(etk::VectorType<int16_t> &data, int32_t start, int32_t stop)
+void etk::DisplayElem(etk::Vector<int16_t> &data, int32_t start, int32_t stop)
 {
 	int32_t i;
 	etk::cout<< ETK_BASH_COLOR_NORMAL;
@@ -176,7 +176,7 @@ char * etk::levelSpace(int32_t level)
  * @return ---
  *
  */
-int32_t etk::GetLenOfPTheseElem(etk::VectorType<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfPTheseElem(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	int32_t nbOpen = 0;
@@ -225,7 +225,7 @@ int32_t etk::GetLenOfPTheseElem(etk::VectorType<int16_t> &data, int32_t startPos
  * @return ---
  *
  */
-int32_t etk::GetLenOfPThese(etk::VectorType<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfPThese(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	int32_t nbOpen = 0;
@@ -278,7 +278,7 @@ int32_t etk::GetLenOfPThese(etk::VectorType<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfBracket(etk::VectorType<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfBracket(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	// special case of the (...) or | ==> we search '|' or ')'
@@ -322,7 +322,7 @@ int32_t etk::GetLenOfBracket(etk::VectorType<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfBrace(etk::VectorType<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfBrace(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 	// special case of the (...) or | ==> we search '|' or ')'
@@ -366,7 +366,7 @@ int32_t etk::GetLenOfBrace(etk::VectorType<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-int32_t etk::GetLenOfNormal(etk::VectorType<int16_t> &data, int32_t startPos)
+int32_t etk::GetLenOfNormal(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
 
@@ -423,7 +423,7 @@ int32_t etk::GetLenOfNormal(etk::VectorType<int16_t> &data, int32_t startPos)
  * @return ---
  *
  */
-bool etk::ParseBrace(etk::VectorType<int16_t> &data, int32_t &min, int32_t &max)
+bool etk::ParseBrace(etk::Vector<int16_t> &data, int32_t &min, int32_t &max)
 {
 	//TK_INFO("parse {...} in "; DisplayElem(data); );
 	int32_t k=0;

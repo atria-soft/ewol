@@ -32,7 +32,8 @@ namespace etk {
 	namespace tool {
 		float   frand(float a, float b);
 		int32_t irand(int32_t a, int32_t b);
-		void SortList(etk::VectorType<etk::UString *> &m_listDirectory);
+		void SortList(etk::Vector<etk::UString *> &m_listDirectory);
+		bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen);
 	};
 };
 
