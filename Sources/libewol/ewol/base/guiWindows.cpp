@@ -24,6 +24,8 @@
 
 #include <ewol/Debug.h>
 #include <ewol/ewol.h>
+
+#include <etk/TypesCoordonate.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/WidgetManager.h>
@@ -40,6 +42,9 @@ int32_t separateClickTime = 300000;
 int32_t offsetMoveClicked = 10000;
 int32_t offsetMoveClickedDouble = 20000;
 
+bool inputIsPressed[20];
+
+
 void ewol::SetTitle(etk::UString title)
 {
 	// TODO ...
@@ -48,7 +53,7 @@ void ewol::SetTitle(etk::UString title)
 
 void EWOL_NativeRender(void)
 {
-	EWOL_GenericDraw(false);
+	EWOL_GenericDraw(true);
 	glFlush();
 }
 
@@ -115,7 +120,14 @@ void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
 
 bool guiAbstraction::IsPressedInput(int32_t inputID)
 {
-	return false;
+	if(    NB_MAX_INPUT > inputID
+	    && 0 <= inputID)
+	{
+		return inputIsPressed[inputID];
+	} else {
+		EWOL_WARNING("Wrong input ID : " << inputID);
+		return false;
+	}
 }
 
 
@@ -211,6 +223,11 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	
+	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
+		inputIsPressed[iii] = false;
+	}
+	
 	// start X11 thread ...
 	// TODO : ...
 	//start the basic thread : 
@@ -241,14 +258,11 @@ int main(int argc, char *argv[])
 int plop(void)
 {
 	HINSTANCE hInstance = 0;
-	HINSTANCE hPrevInstance = 0;
 	WNDCLASS wc;
 	HWND hWnd;
 	HDC hDC;
 	HGLRC hRC;
 	MSG msg;
-	BOOL quit = FALSE;
-	float theta = 0.0f;
 	
 	// register window class
 	wc.style = CS_OWNDC;
@@ -307,9 +321,14 @@ int plop(void)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	bool mouseButtonIsDown = true;
+	int32_t mouseButtonId = 0;
+	Vector2D<int32_t> pos;
 	switch (message)
 	{
-		
+		/* **************************************************************************
+		 *                             Gui event
+		 * **************************************************************************/
 		case WM_CREATE:
 			EWOL_DEBUG("WM_CREATE");
 			return 0;
@@ -317,11 +336,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			EWOL_DEBUG("WM_CLOSE");
 			PostQuitMessage( 0 );
 			return 0;
-			
 		case WM_DESTROY:
 			EWOL_DEBUG("WM_DESTROY");
 			return 0;
+		case WM_MOVE:
+			EWOL_DEBUG("WM_MOVE");
+			return 0;
+		case WM_SIZE:
+			EWOL_DEBUG("WM_SIZE");
 			
+			return 0;
+		/* **************************************************************************
+		 *                             Keyboard management
+		 * **************************************************************************/
 		case WM_KEYDOWN:
 			EWOL_DEBUG("WM_KEYDOWN");
 			switch ( wParam ) {
@@ -330,21 +357,56 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					return 0;
 			}
 			return 0;
-		case WM_MOVE:
-			EWOL_DEBUG("WM_MOVE");
+		/* **************************************************************************
+		 *                             Mouse management
+		 * **************************************************************************/
+		case WM_LBUTTONUP:
+			mouseButtonIsDown = false;
+		case WM_LBUTTONDOWN:
+			mouseButtonId = 1;
+			pos.x = GET_X_LPARAM(lParam);
+			pos.y = GET_Y_LPARAM(lParam);
+			inputIsPressed[mouseButtonId] = mouseButtonIsDown;
+			guiSystem::event::SetMouseState(mouseButtonId, mouseButtonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
-		case WM_SIZE:
-			EWOL_DEBUG("WM_SIZE");
+		case WM_MBUTTONUP:
+			mouseButtonIsDown = false;
+		case WM_MBUTTONDOWN:
+			mouseButtonId = 2;
+			pos.x = GET_X_LPARAM(lParam);
+			pos.y = GET_Y_LPARAM(lParam);
+			inputIsPressed[mouseButtonId] = mouseButtonIsDown;
+			guiSystem::event::SetMouseState(mouseButtonId, mouseButtonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
+			
+		case WM_RBUTTONUP:
+			mouseButtonIsDown = false;
+		case WM_RBUTTONDOWN:
+			mouseButtonId = 3;
+			pos.x = GET_X_LPARAM(lParam);
+			pos.y = GET_Y_LPARAM(lParam);
+			inputIsPressed[mouseButtonId] = mouseButtonIsDown;
+			guiSystem::event::SetMouseState(mouseButtonId, mouseButtonIsDown, (float)pos.x, (float)pos.y);
+			return 0;
+			
+		// TODO : Set the other bt ...
+			
+		case WM_MOUSEHOVER:
 		case WM_MOUSEMOVE:
-			{
-				int32_t posX = GET_X_LPARAM(lParam);
-				int32_t posY = GET_Y_LPARAM(lParam);
-				EWOL_DEBUG("WM_MOUSEMOVE : (" << posX << "," << posY << ")");
+			pos.x = GET_X_LPARAM(lParam);
+			pos.y = GET_Y_LPARAM(lParam);
+			for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
+				if (true == inputIsPressed[iii]) {
+					EWOL_VERBOSE("Windows event: bt=" << iii << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
+					guiSystem::event::SetMouseMotion(iii, (float)pos.x, (float)pos.y);
+					return 0;
+				}
 			}
+			EWOL_VERBOSE("Windows event: bt=" << 0 << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
+			guiSystem::event::SetMouseMotion(0, (float)pos.x, (float)pos.y);
 			return 0;
 		default:
-			EWOL_DEBUG("event ..." << message );
+			EWOL_VERBOSE("event ..." << message );
 			return DefWindowProc( hWnd, message, wParam, lParam );
 	}
 	

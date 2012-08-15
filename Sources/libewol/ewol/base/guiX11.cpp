@@ -451,9 +451,6 @@ void X11_Init(void)
 	m_originY = 0;
 	m_cursorEventX = 0;
 	m_cursorEventY = 0;
-	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
-		inputIsPressed[iii] = false;
-	}
 	CreateX11Context();
 	CreateOGlContext();
 	// reset clipBoard
@@ -1230,6 +1227,11 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	
+	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
+		inputIsPressed[iii] = false;
+	}
+	
 	// start X11 thread ...
 	X11_Init();
 	//start the basic thread : 

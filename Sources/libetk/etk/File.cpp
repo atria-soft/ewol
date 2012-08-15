@@ -44,7 +44,7 @@ etk::UString baseApplName = "ewolNoName";
 	etk::UString baseFolderCache    = "/sdcard/.tmp/cache/";      // Temporary data (can be removed the next time)
 #else
 	etk::UString baseFolderHome     = "~";                  // home folder
-	etk::UString baseFolderData     = "assets/";            // program Data
+	etk::UString baseFolderData     = "share/";             // program Data
 	etk::UString baseFolderDataUser = "~/.tmp/userData/";   // Data specific user (local modification)
 	etk::UString baseFolderCache    = "~/.tmp/cache/";      // Temporary data (can be removed the next time)
 #endif
@@ -122,11 +122,11 @@ void etk::InitDefaultFolder(const char * applName)
 		#else
 			char cCurrentPath[FILENAME_MAX];
 			if (!getcwd(cCurrentPath, FILENAME_MAX)) {
-				baseFolderData = "./assets/";
+				baseFolderData = "./share/";
 			} else {
 				cCurrentPath[FILENAME_MAX - 1] = '\0';
 				baseFolderData  = cCurrentPath;
-				baseFolderData += "/assets/";
+				baseFolderData += "/share/";
 			}
 		#endif
 		baseFolderDataUser  = baseFolderHome;
