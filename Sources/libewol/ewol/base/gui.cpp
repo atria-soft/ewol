@@ -133,10 +133,10 @@ void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te
 static int64_t startTime = -1;
 static int64_t nbCallTime = 0;
 static int64_t nbDisplayTime = 0;
-static int64_t min = 99999999999999;
+static int64_t min = 99999999999999LL;
 static int64_t avg = 0;
 static int64_t max = 0;
-static int64_t min2 = 99999999999999;
+static int64_t min2 = 99999999999999LL;
 static int64_t avg2 = 0;
 static int64_t max2 = 0;
 // display every second ...
@@ -282,8 +282,8 @@ void EWOL_GenericDraw(bool everyTime)
 			                              << (float)((float)max2 / 1000.0) << "ms ");
 			max2 = 0;
 			max = 0;
-			min = 99999999999999;
-			min2 = 99999999999999;
+			min = 99999999999999LL;
+			min2 = 99999999999999LL;
 			avg=0;
 			avg2=0;
 			

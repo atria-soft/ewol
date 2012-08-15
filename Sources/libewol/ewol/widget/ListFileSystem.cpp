@@ -91,6 +91,13 @@ etk::Color ewol::ListFileSystem::GetBasicBG(void) {
 	return bg;
 }
 
+typedef enum {
+	DIRECTORY_TYPE_NONE,
+	DIRECTORY_TYPE_FILE,
+	DIRECTORY_TYPE_LINK,
+	DIRECTORY_TYPE_FOLDER,
+	DIRECTORY_TYPE_OTHER,
+} typeDiretoryLocal_te;
 
 void ewol::ListFileSystem::RegenerateView(void)
 {
@@ -130,8 +137,26 @@ void ewol::ListFileSystem::RegenerateView(void)
 	if (dir != NULL) {
 		// for each element in the drectory...
 		while ((ent = readdir(dir)) != NULL) {
+			typeDiretoryLocal_te localType = DIRECTORY_TYPE_NONE;
+			#ifdef __TARGET_OS__Windows
+				if (strchr(ent->d_name, '.') == NULL) {
+					localType = DIRECTORY_TYPE_FOLDER;
+				} else {
+					localType = DIRECTORY_TYPE_FILE;
+				}
+			#else
+				switch(ent->d_type)
+				{
+					case DT_DIR:
+						localType = DIRECTORY_TYPE_FOLDER;
+						break;
+					case DT_REG:
+						localType = DIRECTORY_TYPE_FILE;
+						break;
+				}
+			#endif
 			if(    true==m_showFile
-			    && DT_REG==ent->d_type) {
+			    && DIRECTORY_TYPE_FILE==localType) {
 				if (ent->d_name != NULL) {
 					etk::UString tmpString(ent->d_name);
 					if(    false==tmpString.StartWith(".")
@@ -145,7 +170,7 @@ void ewol::ListFileSystem::RegenerateView(void)
 				}
 			}
 			if(    true==m_showFolder
-			    && DT_DIR==ent->d_type) {
+			    && DIRECTORY_TYPE_FOLDER==localType) {
 				if (ent->d_name != NULL) {
 					etk::UString tmpString(ent->d_name);
 					//EWOL_DEBUG("    find Folder : \"" << tmpString << "\"(" << tmpString.Size() << ") ?= \"" << ent->d_name << "\"(" << strlen(ent->d_name) );

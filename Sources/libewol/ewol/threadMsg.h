@@ -27,7 +27,8 @@
 #ifndef __EWOL_TREAD_MSG_H__
 #define __EWOL_TREAD_MSG_H__
 
-#include <pthread.h>
+#include <etk/Mutex.h>
+#include <etk/Semaphore.h>
 
 namespace ewol {
 	namespace threadMsg {
@@ -51,8 +52,8 @@ namespace ewol {
 		
 		typedef struct {
 			bool                isInit;
-			pthread_mutex_t     mutex;
-			pthread_cond_t      condition;
+			etk::Mutex          m_mutex;
+			etk::Semaphore      m_semaphore;
 			//etk::Vector<threadMsgContent_ts>     
 			threadMsgContent_ts listOfMessages[MSG_PRIO_NUMBER][NUMBER_OF_ELEMENT_IN_THE_FIFO];
 			int32_t             nbMessages[MSG_PRIO_NUMBER];
@@ -72,8 +73,8 @@ namespace ewol {
 	namespace simpleMsg {
 		typedef struct {
 			bool                isInit;
-			pthread_mutex_t     mutex;
-			pthread_cond_t      condition;
+			etk::Mutex          m_mutex;
+			etk::Semaphore      m_semaphore;
 			uint32_t            messageValue;
 		} simpleMsg_ts;
 		

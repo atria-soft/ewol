@@ -399,7 +399,11 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	TK_VERBOSE("3 : Get file Name : " << destFilename );
 	if (true == needUnpack) {
 		// Get the real Path of the current File
-		ok = realpath(destFilename.c_str(), buf);
+		#ifdef __TARGET_OS__Windows
+			ok = 0;
+		#else
+			ok = realpath(destFilename.c_str(), buf);
+		#endif
 		if (!ok) {
 			int32_t lastPos = destFilename.FindBack('/');
 			if (-1 != lastPos) {
@@ -407,7 +411,11 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 				etk::UString tmpFilename = destFilename.Extract(lastPos+1);
 				destFilename.Remove(lastPos, destFilename.Size() - lastPos);
 				TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
-				ok = realpath(destFilename.c_str(), buf);
+				#ifdef __TARGET_OS__Windows
+					ok = 0;
+				#else
+					ok = realpath(destFilename.c_str(), buf);
+				#endif
 				if (!ok) {
 					TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
 					m_shortFilename = tmpFilename;

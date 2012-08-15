@@ -30,21 +30,10 @@
 
 void ewol::threadMsg::Init(ewol::threadMsg::threadMsg_ts& messageData)
 {
-	// create interface mutex :
-	int ret = pthread_mutex_init(&messageData.mutex, NULL);
-	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
-	// create contition :
-	ret = pthread_cond_init(&messageData.condition, NULL);
-	EWOL_ASSERT(ret == 0, "Error creating Condition ...");
-	if (ret != 0) {
-		ret = pthread_mutex_destroy(&messageData.mutex);
-		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
-	} else {
-		for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
-			messageData.nbMessages[iii] = 0;
-			for (int32_t jjj=0; NUMBER_OF_ELEMENT_IN_THE_FIFO>jjj; jjj++) {
-				messageData.listOfMessages[iii][jjj].isActive = false;
-			}
+	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
+		messageData.nbMessages[iii] = 0;
+		for (int32_t jjj=0; NUMBER_OF_ELEMENT_IN_THE_FIFO>jjj; jjj++) {
+			messageData.listOfMessages[iii][jjj].isActive = false;
 		}
 	}
 	messageData.isInit = true;
@@ -53,12 +42,6 @@ void ewol::threadMsg::Init(ewol::threadMsg::threadMsg_ts& messageData)
 void ewol::threadMsg::UnInit(ewol::threadMsg::threadMsg_ts& messageData)
 {
 	if (true == messageData.isInit) {
-		// Remove Mutex
-		int ret = pthread_cond_destroy(&messageData.condition);
-		EWOL_ASSERT(ret == 0, "Error destroying Condition ...");
-		// Remove condition
-		ret = pthread_mutex_destroy(&messageData.mutex);
-		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 		// remove data ????
 		messageData.isInit = false;
 	}
@@ -69,7 +52,7 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 	if (false == messageData.isInit) {
 		return false;
 	}
-	pthread_mutex_lock(&messageData.mutex);
+	messageData.m_mutex.Lock();
 	bool findAnOtherMessageInStack = false;
 	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
 		if (0 < messageData.nbMessages[iii]) {
@@ -77,7 +60,9 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 		}
 	}
 	if (false == findAnOtherMessageInStack) {
-		pthread_cond_wait(&messageData.condition, &messageData.mutex);
+		messageData.m_mutex.UnLock();
+		messageData.m_semaphore.Wait();
+		messageData.m_mutex.Lock();
 	}
 	// find the message : 
 	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
@@ -114,7 +99,7 @@ bool ewol::threadMsg::WaitMessage(ewol::threadMsg::threadMsg_ts& messageData, ew
 			break;
 		}
 	}
-	pthread_mutex_unlock(&messageData.mutex);
+	messageData.m_mutex.UnLock();
 	return true;
 }
 
@@ -131,7 +116,7 @@ bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, ui
 		EWOL_ERROR("Send message with an biger size than predictible " << size << " > " << MAX_MSG_DATA_SIZE);
 		return false;
 	}
-	pthread_mutex_lock(&messageData.mutex);
+	messageData.m_mutex.Lock();
 	int32_t lastNbMessage = messageData.nbMessages[prio];
 	for (int32_t jjj=0; NUMBER_OF_ELEMENT_IN_THE_FIFO>jjj; jjj++) {
 		if (messageData.listOfMessages[prio][jjj].isActive == false) {
@@ -161,8 +146,8 @@ bool ewol::threadMsg::SendMessage(ewol::threadMsg::threadMsg_ts& messageData, ui
 		EWOL_ERROR("Send message Add error");
 		returnValue = false;
 	}
-	pthread_cond_broadcast(&messageData.condition);
-	pthread_mutex_unlock(&messageData.mutex);
+	messageData.m_semaphore.Post();
+	messageData.m_mutex.UnLock();
 	return returnValue;
 }
 
@@ -171,12 +156,12 @@ int32_t ewol::threadMsg::WaitingMessage(threadMsg_ts& messageData)
 	if (false == messageData.isInit) {
 		return false;
 	}
-	pthread_mutex_lock(&messageData.mutex);
+	messageData.m_mutex.Lock();
 	int32_t nbMessage = 0;
 	for (int32_t iii=0; MSG_PRIO_NUMBER>iii; iii++) {
 		nbMessage += messageData.nbMessages[iii];
 	}
-	pthread_mutex_unlock(&messageData.mutex);
+	messageData.m_mutex.UnLock();
 	return nbMessage;
 }
 
@@ -193,10 +178,10 @@ void ewol::threadMsg::SendDisplayDone(threadMsg_ts& messageData)
 	if (false == messageData.isInit) {
 		return;
 	}
-	pthread_mutex_lock(&messageData.mutex);
+	messageData.m_mutex.Lock();
 	messageData.displayHasDone = true;
-	pthread_cond_broadcast(&messageData.condition);
-	pthread_mutex_unlock(&messageData.mutex);
+	messageData.m_semaphore.Post();
+	messageData.m_mutex.UnLock();
 	
 }
 
@@ -207,10 +192,10 @@ bool ewol::threadMsg::HasDisplayDone(threadMsg_ts& messageData)
 		return false;
 	}
 	bool state = false;
-	pthread_mutex_lock(&messageData.mutex);
+	messageData.m_mutex.Lock();
 	state = messageData.displayHasDone;
 	messageData.displayHasDone = false;;
-	pthread_mutex_unlock(&messageData.mutex);
+	messageData.m_mutex.UnLock();
 	return state;
 }
 
@@ -222,30 +207,13 @@ bool ewol::threadMsg::HasDisplayDone(threadMsg_ts& messageData)
 
 void ewol::simpleMsg::Init(ewol::simpleMsg::simpleMsg_ts& handle)
 {
-	// create interface mutex :
-	int ret = pthread_mutex_init(&handle.mutex, NULL);
-	EWOL_ASSERT(ret == 0, "Error creating Mutex ...");
-	// create contition :
-	ret = pthread_cond_init(&handle.condition, NULL);
-	EWOL_ASSERT(ret == 0, "Error creating Condition ...");
-	if (ret != 0) {
-		ret = pthread_mutex_destroy(&handle.mutex);
-		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
-	} else {
-		handle.messageValue = 0;
-	}
+	handle.messageValue = 0;
 	handle.isInit = true;
 }
 
 void ewol::simpleMsg::UnInit(ewol::simpleMsg::simpleMsg_ts& handle)
 {
 	if (true == handle.isInit) {
-		// Remove Mutex
-		int ret = pthread_cond_destroy(&handle.condition);
-		EWOL_ASSERT(ret == 0, "Error destroying Condition ...");
-		// Remove condition
-		ret = pthread_mutex_destroy(&handle.mutex);
-		EWOL_ASSERT(ret == 0, "Error destroying Mutex ...");
 		// remove data ????
 		handle.isInit = false;
 	}
@@ -256,26 +224,21 @@ uint32_t ewol::simpleMsg::WaitingMessage(ewol::simpleMsg::simpleMsg_ts& handle, 
 	if (false == handle.isInit) {
 		return 0;
 	}
-	pthread_mutex_lock(&handle.mutex);
+	handle.m_mutex.Lock();
 	
 	if (0 == handle.messageValue) {
-		if (timeOut == 0) {
-			pthread_cond_wait(&handle.condition, &handle.mutex);
-		} else {
-			struct timeval now;
-			struct timespec timeout;
-			gettimeofday(&now, NULL);
-			timeout.tv_sec = now.tv_sec + timeOut/1000;
-			timeout.tv_nsec = now.tv_usec * 1000 + timeOut%1000;
-			pthread_cond_timedwait(&handle.condition, &handle.mutex, &timeout);
+		handle.m_mutex.UnLock();
+		if (handle.m_semaphore.Wait(timeOut)==false) {
+			return false;
 		}
+		handle.m_mutex.Lock();
 	}
 	// copy message
 	int32_t messageCopy = handle.messageValue;
 	// reset it ...
 	handle.messageValue = 0;
 	
-	pthread_mutex_unlock(&handle.mutex);
+	handle.m_mutex.UnLock();
 	return messageCopy;
 }
 
@@ -284,10 +247,10 @@ void ewol::simpleMsg::SendMessage(ewol::simpleMsg::simpleMsg_ts& handle, uint32_
 	if (false == handle.isInit) {
 		return;
 	}
-	pthread_mutex_lock(&handle.mutex);
+	handle.m_mutex.Lock();
 	handle.messageValue = message;
-	pthread_cond_broadcast(&handle.condition);
-	pthread_mutex_unlock(&handle.mutex);
+	handle.m_semaphore.Post();
+	handle.m_mutex.UnLock();
 }
 
 
@@ -296,15 +259,13 @@ void ewol::simpleMsg::Clear(simpleMsg_ts& handle)
 	if (false == handle.isInit) {
 		return;
 	}
-	pthread_mutex_lock(&handle.mutex);
+	handle.m_mutex.Lock();
 	if (handle.messageValue !=0) {
-		struct timespec timeout;
-		timeout.tv_sec = 0;
-		timeout.tv_nsec = 0;
-		pthread_cond_timedwait(&handle.condition, &handle.mutex, &timeout);
-		
+		handle.m_mutex.UnLock();
+		handle.m_semaphore.Wait();
+		return;
 	}
-	pthread_mutex_unlock(&handle.mutex);
+	handle.m_mutex.UnLock();
 }
 
 

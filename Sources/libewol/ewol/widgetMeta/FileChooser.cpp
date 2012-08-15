@@ -353,8 +353,11 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		memset(buf, 0, MAX_FILE_NAME);
 		char * ok;
 		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
-		
-		ok = realpath(m_folder.c_str(), buf);
+		#ifdef __TARGET_OS__Windows
+			ok = 0;
+		#else
+			ok = realpath(m_folder.c_str(), buf);
+		#endif
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
 			m_folder = "/";
@@ -387,7 +390,11 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		char * ok;
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
-		ok = realpath(tmpUserFolder.c_str(), buf);
+		#ifdef __TARGET_OS__Windows
+			ok = 0;
+		#else
+			ok = realpath(tmpUserFolder.c_str(), buf);
+		#endif
 		if (!ok) {
 			EWOL_ERROR("Error to get the real path");
 			m_folder = "/";

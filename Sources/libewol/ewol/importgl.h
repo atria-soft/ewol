@@ -12,7 +12,7 @@ extern "C" {
 #elif defined(__TARGET_OS__Android)
 	#include <GLES/gl.h>
 #elif defined(__TARGET_OS__Windows)
-	
+	#include <GL/gl.h>
 #elif defined(__TARGET_OS__MacOs)
 	
 #elif defined(__TARGET_OS__IOs)

@@ -29,8 +29,8 @@
 //#include <cstdio>
 //#include <typeinfo>
 #include <string.h>
-#include <pthread.h>
 #include <etk/Types.h>
+#include <etk/Mutex.h>
 
 #if defined(__TARGET_OS__Android)
 #	include <android/log.h>
@@ -95,15 +95,14 @@ namespace etk{
 			bool             hex;
 			char             m_tmpChar[MAX_LOG_SIZE+1];
 			char             tmp[MAX_LOG_SIZE_TMP];
-			pthread_mutex_t  m_mutex;
+			etk::Mutex       m_mutex;
 		public:
 			CCout(){
 				hex=false;
 				memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
-				pthread_mutex_init(&m_mutex, NULL);
 			};
 			~CCout() {
-				pthread_mutex_destroy(&m_mutex);
+				
 			};
 			
 			CCout& operator << (int t) {
@@ -193,7 +192,7 @@ namespace etk{
 				return *this;
 			}
 			CCout& operator << (CStart ccc) {
-				pthread_mutex_lock(&m_mutex);
+				m_mutex.Lock();
 				return *this;
 			}
 			CCout& operator << (logLevel_te ccc) {
@@ -239,7 +238,7 @@ namespace etk{
 				printf("%s", m_tmpChar);
 #endif
 				memset(m_tmpChar, 0, (MAX_LOG_SIZE+1)*sizeof(char));
-				pthread_mutex_unlock(&m_mutex);
+				m_mutex.UnLock();
 				return *this;
 			}
 	};

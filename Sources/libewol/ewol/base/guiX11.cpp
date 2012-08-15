@@ -436,6 +436,9 @@ void X11_Init(void)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11:INIT");
 	#endif
+	if (m_doubleBuffered) {
+		glXSwapBuffers(m_display, WindowHandle);
+	}
 	m_visual = NULL;
 	m_previousBouttonId = 0;
 	m_previousDown_x = -1;
@@ -1231,7 +1234,6 @@ int main(int argc, char *argv[])
 	X11_Init();
 	//start the basic thread : 
 	guiSystem::Init();
-	usleep(500);
 	// get the icon file : 
 	etk::File myIcon = APP_Icon();
 	SetIcon(myIcon);

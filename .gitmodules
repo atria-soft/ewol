@@ -28,3 +28,6 @@
 [submodule "Sources/libfreetype"]
 	path = Sources/libfreetype
 	url = https://github.com/HeeroYui/libfreetype.git
+[submodule "Sources/libz/zlib"]
+	path = Sources/libz/zlib
+	url = https://github.com/madler/zlib.git

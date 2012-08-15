@@ -13,4 +13,10 @@ FILE_LIST = \
 			etk/Color.cpp \
 			etk/tool.cpp
 
-
+ifeq ("$(TARGET_OS)","Windows")
+	FILE_LIST += etk/Mutex.Windows.cpp
+	FILE_LIST += etk/Semaphore.Windows.cpp
+else
+	FILE_LIST += etk/Mutex.Generic.cpp
+	FILE_LIST += etk/Semaphore.Generic.cpp
+endif
