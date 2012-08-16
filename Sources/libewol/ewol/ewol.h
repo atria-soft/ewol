@@ -79,11 +79,10 @@ namespace ewol {
 	void RequestUpdateSize(void);
 	
 	etk::UString GetVersion(void);
+	
+	// get current time in ms...
+	int64_t GetTime(void);
 };
-// get current time in ms...
-#ifndef __TARGET_OS__Windows
-	int64_t GetCurrentTime(void);
-#endif
 
 #else
 

@@ -414,7 +414,7 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_RenderDraw( JNIEnv*  env )
 	{
-		guiSystem::Draw();
+		guiSystem::Draw(true);
 	}
 
 	void Java_org_ewol_interfaceJNI_IOAudioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)

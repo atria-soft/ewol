@@ -75,8 +75,8 @@ namespace guiSystem
 		void Hide(void);
 		void Show(void);
 	};
-	
-	void Draw(void);
+	// return true if a flush is needed
+	bool Draw(bool displayEveryTime);
 };
 
 #endif

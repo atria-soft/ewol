@@ -49,7 +49,7 @@ extern float     gui_width;
 extern float     gui_height;
 extern ewol::Windows* gui_uniqueWindows;
 
-int64_t GetCurrentTime(void)
+int64_t ewol::GetTime(void)
 {
     struct timeval  now;
     gettimeofday(&now, NULL);
@@ -76,14 +76,6 @@ bool    m_previousDouble = false;
 
 static etk::UString l_clipBoardPrimary(""); // local copy of the selection
 static etk::UString l_clipBoardStd(""); // local copy of the clipboard
-
-
-
-void EWOL_NativeRender(void)
-{
-	EWOL_GenericDraw(true);
-	glFlush();
-}
 
 
 

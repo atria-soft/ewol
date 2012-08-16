@@ -246,14 +246,14 @@ void EWOL_GenericDraw(bool everyTime)
 		bool display = false;
 		nbCallTime++;
 		if (startTime<0) {
-			startTime = GetCurrentTime();
+			startTime = ewol::GetTime();
 		}
-		int64_t currentTime = GetCurrentTime();
+		int64_t currentTime = ewol::GetTime();
 		//EWOL_DEBUG("current : " << currentTime << "time    diff : " << (currentTime - startTime));
 		if ( (currentTime - startTime) > DISPLAY_PERIODE_US) {
 			display = true;
 		}
-		int64_t currentTime3 = GetCurrentTime();
+		int64_t currentTime3 = ewol::GetTime();
 		// check if the regenerate is needed ...
 		if(    true == ewol::widgetManager::IsDrawingNeeded()
 		    || true == everyTime) {
@@ -263,7 +263,7 @@ void EWOL_GenericDraw(bool everyTime)
 		}
 		// send Message that we just finished a display ...
 		//EWOL_ThreadEventHasJustDisplay();
-		int64_t currentTime2 = GetCurrentTime();
+		int64_t currentTime2 = ewol::GetTime();
 		int64_t processTimeLocal = (currentTime2 - currentTime);
 		min = etk_min(min, processTimeLocal);
 		max = etk_max(max, processTimeLocal);
@@ -292,6 +292,7 @@ void EWOL_GenericDraw(bool everyTime)
 			startTime = -1;
 		}
 	}
+	glFlush();
 }
 
 void EWOL_NativeGLDestroy(void)

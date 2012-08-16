@@ -182,7 +182,8 @@ static int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* dest
 	return realInputId;
 }
 
-
+#define EVENT_DEBUG  EWOL_VERBOSE
+//#define EVENT_DEBUG  EWOL_DEBUG
 
 // defined by the platform specific file : 
 extern int32_t separateClickTime;
@@ -221,7 +222,7 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 		              || (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) < pos.x
 		              || (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) < pos.y) ) ) {
 			eventTable[pointerID].isInside = false;
-			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
+			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_LEAVE, pos);
 		}
 		if (false == eventTable[pointerID].isInside) {
@@ -241,10 +242,10 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 				eventTable[pointerID].size = eventTable[pointerID].curentWidgetEvent->GetSize();
 			}
 			eventTable[pointerID].destinationInputId = 0;
-			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
+			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_ENTER, pos);
 		}
-		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [MOVE]  " << pos);
+		EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [MOVE]  " << pos);
 		localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_MOVE, pos);
 	} else if (true == eventTable[pointerID].isUsed) {
 		if (true == eventTable[pointerID].isInside) {
@@ -253,7 +254,7 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 			    || (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) < pos.x
 			    || (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) < pos.y) {
 				eventTable[pointerID].isInside = false;
-				EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
+				EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
 				localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_LEAVE, pos);
 			}
 		} else {
@@ -262,11 +263,11 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 			    && (     eventTable[pointerID].origin.y <= pos.y
 			         && (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) >= pos.y ) ) {
 				eventTable[pointerID].isInside = true;
-				EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
+				EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
 				localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_ENTER, pos);
 			}
 		}
-		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [MOVE]  " << pos);
+		EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [MOVE]  " << pos);
 		localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_MOVE, pos);
 	}
 }
@@ -290,7 +291,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 		return;
 	}
 	// get the curent time ...
-	int64_t currentTime = GetCurrentTime();
+	int64_t currentTime = ewol::GetTime();
 	
 	if (true == isDown) {
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN] " << pos);
@@ -307,7 +308,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 			// save start time
 			eventTable[pointerID].lastTimeEvent = currentTime;
 			// generate DOWN Event
-			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN]   " << pos);
+			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN]   " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_DOWN, pos);
 		} else {
 			// Mark it used :
@@ -332,7 +333,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 				eventTable[pointerID].destinationInputId = -1;
 			}
 			// generate DOWN Event
-			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN]   " << pos);
+			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN]   " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::EVENT_INPUT_TYPE_DOWN, pos);
 		}
 	} else {
@@ -346,7 +347,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 			eventTable[pointerID].curentWidgetEvent = NULL;
 		} else {
 			// generate UP Event
-			EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [UP]     " << pos);
+			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [UP]     " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, pointerID, ewol::EVENT_INPUT_TYPE_UP, pos);
 			// generate event (single)
 			if(    abs(eventTable[pointerID].downStart.x - pos.x) < offsetMoveClicked
@@ -365,7 +366,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 				if(eventTable[pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :
 					eventTable[pointerID].nbClickEvent++;
-					EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [SINGLE] " << pos);
+					EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [" << eventTable[pointerID].nbClickEvent << "] " << pos);
 					localEventInput(type,
 					                eventTable[pointerID].curentWidgetEvent,
 					                eventTable[pointerID].destinationInputId,

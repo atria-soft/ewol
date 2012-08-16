@@ -357,18 +357,19 @@ void guiSystem::event::Show(void)
 	}
 }
 
-void guiSystem::Draw(void)
+bool guiSystem::Draw(bool displayEveryTime)
 {
 	if (true == isGlobalSystemInit) {
 		ewolProcessEvents();
 		
-		int64_t localTime = GetCurrentTime();
+		int64_t localTime = ewol::GetTime();
 		ewol::widgetManager::PeriodicCall(localTime);
 		
 		EWOL_NativeRegenerateDisplay();
 		
 		ewol::texture::UpdateContext();
-		EWOL_NativeRender();
+		EWOL_GenericDraw(true);
 	}
+	return true;
 }
 

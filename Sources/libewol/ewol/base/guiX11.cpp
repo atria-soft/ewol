@@ -50,7 +50,7 @@
 
 //#define DEBUG_X11_EVENT
 
-int64_t GetCurrentTime(void)
+int64_t ewol::GetTime(void)
 {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
@@ -420,15 +420,6 @@ bool CreateOGlContext(void)
 		EWOL_INFO("XF86 DRI NOT available\n");
 	}
 	return true;
-}
-
-void EWOL_NativeRender(void)
-{
-	EWOL_GenericDraw(false);
-	glFlush();
-	if (m_doubleBuffered) {
-		glXSwapBuffers(m_display, WindowHandle);
-	}
 }
 
 void X11_Init(void)
@@ -996,7 +987,10 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			guiSystem::Draw();
+			(void)guiSystem::Draw(false);
+			if (m_doubleBuffered) {
+				glXSwapBuffers(m_display, WindowHandle);
+			}
 		}
 		#ifdef DEBUG_X11_EVENT
 			EWOL_INFO("X11 endEvent --- ");
@@ -1231,6 +1225,14 @@ int main(int argc, char *argv[])
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
 	}
+	guiKeyBoardMode.capLock = false;
+	guiKeyBoardMode.shift = false;
+	guiKeyBoardMode.ctrl = false;
+	guiKeyBoardMode.meta = false;
+	guiKeyBoardMode.alt = false;
+	guiKeyBoardMode.altGr = false;
+	guiKeyBoardMode.verNum = false;
+	guiKeyBoardMode.insert = false;
 	
 	// start X11 thread ...
 	X11_Init();

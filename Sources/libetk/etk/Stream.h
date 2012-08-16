@@ -105,14 +105,20 @@ namespace etk{
 				
 			};
 			
+			CCout& operator << (CHex t) {
+				hex = true;
+				return *this;
+			}
 			CCout& operator << (int t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%d", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (unsigned int t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%u", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			/*
@@ -123,38 +129,55 @@ namespace etk{
 			}
 			*/
 			CCout& operator << (long t) {
-				snprintf(tmp, MAX_LOG_SIZE_TMP, "%ld", t);
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				if (true == hex) {
+					snprintf(tmp, MAX_LOG_SIZE_TMP, "0x%08X", (unsigned int)t);
+					strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+					hex = false;
+				} else {
+					snprintf(tmp, MAX_LOG_SIZE_TMP, "%ld", t);
+					strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				}
 				return *this;
 			}
 			CCout& operator << (long long t) {
-				snprintf(tmp, MAX_LOG_SIZE_TMP, "%lld", t);
-				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				if (true == hex) {
+					snprintf(tmp, MAX_LOG_SIZE_TMP, "0x%08X%08X", (unsigned int)(t>>32), (unsigned int)(t));
+					strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+					hex = false;
+				} else {
+					snprintf(tmp, MAX_LOG_SIZE_TMP, "%lld", t);
+					strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				}
 				return *this;
 			}
 			CCout& operator << (double t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%f", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (float t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%f", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (char * t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%s", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (const char * t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%s", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (char t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "%c", t);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (bool t) {
@@ -169,26 +192,31 @@ namespace etk{
 			CCout& operator << (Vector2D<float> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f)", t.x, t.y);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (Vector2D<int32_t> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%i,%i)", t.x, t.y);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (Vector3D<float> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%f,%f,%f)", t.x, t.y, t.z);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (Vector3D<int32_t> t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "(%i,%i,%i)", t.x, t.y, t.z);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (clipping_ts t) {
 				snprintf(tmp, MAX_LOG_SIZE_TMP, "origin=(%f,%f) size=(%f,%f)", t.x, t.y, t.w, t.h);
 				strncat(m_tmpChar, tmp, MAX_LOG_SIZE);
+				hex = false;
 				return *this;
 			}
 			CCout& operator << (CStart ccc) {
