@@ -35,6 +35,7 @@ namespace ewol {
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
 #include <ewol/base/eventInputManagement.h>
+#include <ewol/ClipBoard.h>
 
 namespace ewol {
 	typedef enum {
@@ -404,6 +405,13 @@ namespace ewol {
 			 * @return false if the event has not been used
 			 */
 			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent) { return false; };
+			/**
+			 * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
+			 * @note : need to have focus ...
+			 * @param[in] mode Mode of data requested
+			 * @return ---
+			 */
+			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID) { };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...

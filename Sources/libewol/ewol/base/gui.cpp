@@ -129,6 +129,16 @@ void guiAbstraction::SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te
 	}
 }
 
+void guiAbstraction::SendClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	if (NULL != gui_uniqueWindows) {
+		ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+		if (tmpWidget != NULL) {
+			tmpWidget->OnEventClipboard(clipboardID);
+		}
+	}
+}
+
 
 static int64_t startTime = -1;
 static int64_t nbCallTime = 0;

@@ -16,7 +16,7 @@ LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua
 LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \

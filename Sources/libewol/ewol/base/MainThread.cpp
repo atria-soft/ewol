@@ -55,6 +55,8 @@ enum {
 	THREAD_KEYBORAD_KEY,
 	THREAD_KEYBORAD_MOVE,
 	THREAD_JUST_DISPLAY,
+	
+	THREAD_CLIPBOARD_ARRIVE,
 };
 
 
@@ -153,6 +155,12 @@ void ewolProcessEvents(void)
 						guiSystem::event::keyboardMove_ts * tmpData = (guiSystem::event::keyboardMove_ts*)data.data;
 						specialCurrentKey = tmpData->special;
 						guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
+					}
+					break;
+				case THREAD_CLIPBOARD_ARRIVE:
+					{
+						ewol::clipBoard::clipboardListe_te * tmpdata = (ewol::clipBoard::clipboardListe_te*)data.data;
+						guiAbstraction::SendClipboard(*tmpdata);
 					}
 					break;
 				case THREAD_HIDE:
@@ -356,6 +364,15 @@ void guiSystem::event::Show(void)
 		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_SHOW, ewol::threadMsg::MSG_PRIO_LOW);
 	}
 }
+
+
+void guiSystem::event::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	if (true == isGlobalSystemInit) {
+		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_CLIPBOARD_ARRIVE, ewol::threadMsg::MSG_PRIO_LOW, &clipboardID, sizeof(uint8_t));
+	}
+}
+
 
 bool guiSystem::Draw(bool displayEveryTime)
 {

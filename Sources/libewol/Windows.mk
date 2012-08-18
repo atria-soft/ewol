@@ -29,8 +29,5 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_SRC_FILES := $(FILE_LIST) ewol/base/guiWindows.cpp
 
 
-# Ewol Test Software :
-LOCAL_LDLIBS :=
-
 
 include $(BUILD_STATIC_LIBRARY)

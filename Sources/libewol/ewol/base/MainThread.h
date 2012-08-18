@@ -74,6 +74,8 @@ namespace guiSystem
 		
 		void Hide(void);
 		void Show(void);
+		
+		void ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID);
 	};
 	// return true if a flush is needed
 	bool Draw(bool displayEveryTime);

@@ -137,9 +137,7 @@ bool inputIsPressed[20];
 static ewol::simpleMsg::simpleMsg_ts l_clipboardMessage; /// message to prevent the other thread that we have receive the requested data
 static bool                          l_clipBoardRequestPrimary = false;   // if false : request the copy/past buffer, if true : request current selection
 static bool                          l_clipBoardOwnerPrimary = false; // we are the owner of the current selection
-static etk::UString                  l_clipBoardPrimary(""); // local copy of the selection
 static bool                          l_clipBoardOwnerStd = false; // we are the owner of the current copy buffer
-static etk::UString                  l_clipBoardStd(""); // local copy of the clipboard
 // Atom access...
 static Atom XAtomeSelection = 0;
 static Atom XAtomeClipBoard = 0;
@@ -448,8 +446,6 @@ void X11_Init(void)
 	l_clipBoardRequestPrimary = false;
 	l_clipBoardOwnerPrimary = false;
 	l_clipBoardOwnerStd = false;
-	l_clipBoardPrimary = "";
-	l_clipBoardStd = "";
 	ewol::simpleMsg::Init(l_clipboardMessage);
 	// reset the Atom properties ...
 	XAtomeSelection        = XInternAtom(m_display, "PRIMARY", 0);
@@ -552,15 +548,15 @@ void X11_Run(void)
 						                   &buf// **prop_return);
 						                   );
 						if (true == l_clipBoardRequestPrimary) {
-							l_clipBoardPrimary = (char*)buf;
-							// inform that we have receive the data
-							ewol::simpleMsg::SendMessage(l_clipboardMessage, 4);
-							EWOL_VERBOSE("    ==> data  : " << l_clipBoardPrimary);
+							etk::UString tmpppp((char*)buf);
+							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_SELECTION, tmpppp);
+							// just transmit an event , we have the data in the system
+							guiSystem::event::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_SELECTION);
 						} else {
-							l_clipBoardStd = (char*)buf;
-							// inform that we have receive the data
-							ewol::simpleMsg::SendMessage(l_clipboardMessage, 2);
-							EWOL_VERBOSE("    ==> data  : " << l_clipBoardStd);
+							etk::UString tmpppp((char*)buf);
+							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_STD, tmpppp);
+							// just transmit an event , we have the data in the system
+							guiSystem::event::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_STD);
 						}
 					}
 					break;
@@ -583,13 +579,13 @@ void X11_Run(void)
 						#endif
 						const char * magatTextToSend = NULL;
 						
+						etk::UString tmpData = "";
 						if (req->selection == XAtomeSelection) {
-							magatTextToSend = l_clipBoardPrimary.c_str();
+							tmpData = ewol::clipBoard::Get(ewol::clipBoard::CLIPBOARD_SELECTION);
 						} else if (req->selection == XAtomeClipBoard) {
-							magatTextToSend = l_clipBoardStd.c_str();
-						} else {
-							magatTextToSend = "";
+							tmpData = ewol::clipBoard::Get(ewol::clipBoard::CLIPBOARD_STD);
 						}
+						magatTextToSend = tmpData.c_str();
 						Atom listOfAtom[4];
 						if(strlen(magatTextToSend) == 0 ) {
 							respond.xselection.property= None;
@@ -993,7 +989,7 @@ void X11_Run(void)
 			}
 		}
 		#ifdef DEBUG_X11_EVENT
-			EWOL_INFO("X11 endEvent --- ");
+			//EWOL_INFO("X11 endEvent --- ");
 		#endif
 	}
 };
@@ -1029,55 +1025,39 @@ void X11_GetAbsPos(int32_t & x, int32_t & y)
 
 // ClipBoard AREA :
 
-void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
+void guiAbstraction::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
-	#endif
-	newData = "";
-	switch (mode)
+	switch (clipboardID)
 	{
-		case CLIPBOARD_MODE_PRIMARY:
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
 			if (false == l_clipBoardOwnerPrimary) {
 				l_clipBoardRequestPrimary = true;
-				// clear old request ..
-				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
 				XConvertSelection(m_display,
-				                  XAtomeSelection,// atom,
-				                  XAtomeTargetStringUTF8, // type?
-				                  XAtomeEWOL, // prop,
+				                  XAtomeSelection,
+				                  XAtomeTargetStringUTF8,
+				                  XAtomeEWOL,
 				                  WindowHandle,
 				                  CurrentTime);
-				// wait the event ...
-				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
-				if (waitTmp == 0) {
-					EWOL_ERROR("Timeout when waiting the current selection");
-				}
+			} else {
+				// just transmit an event , we have the data in the system
+				guiSystem::event::ClipBoardArrive(clipboardID);
 			}
-			// get our own buffer ...
-			newData = l_clipBoardPrimary;
 			break;
-		case CLIPBOARD_MODE_STD:
+		case ewol::clipBoard::CLIPBOARD_STD:
 			if (false == l_clipBoardOwnerStd) {
 				l_clipBoardRequestPrimary = false;
-				// clear old request ..
-				ewol::simpleMsg::Clear(l_clipboardMessage);
 				// Generate a request on X11
 				XConvertSelection(m_display,
-				                  XAtomeClipBoard,// atom,
-				                  XAtomeTargetStringUTF8, // type?
-				                  XAtomeEWOL, // prop,
+				                  XAtomeClipBoard,
+				                  XAtomeTargetStringUTF8,
+				                  XAtomeEWOL,
 				                  WindowHandle,
 				                  CurrentTime);
-				// wait the event ...
-				int32_t waitTmp = ewol::simpleMsg::WaitingMessage(l_clipboardMessage, 5000);
-				if (waitTmp == 0) {
-					EWOL_ERROR("Timeout when waiting the current copy buffer");
-				}
+			} else {
+				// just transmit an event , we have the data in the system
+				guiSystem::event::ClipBoardArrive(clipboardID);
 			}
-			// get our own buffer ...
-			newData = l_clipBoardStd;
 			break;
 		default:
 			EWOL_ERROR("Request an unknow ClipBoard ...");
@@ -1085,33 +1065,22 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 	}
 }
 
-void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
+void guiAbstraction::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("Request set of a clipboard : " << mode << " size=" << newData.Size() );
-	#endif
-	switch (mode)
+	switch (clipboardID)
 	{
-		case CLIPBOARD_MODE_PRIMARY:
-			if (newData.Size() > 0) {
-				// copy it ...
-				l_clipBoardPrimary = newData;
-				// Request the selection :
-				if (false == l_clipBoardOwnerPrimary) {
-					XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
-					l_clipBoardOwnerPrimary = true;
-				}
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
+			// Request the selection :
+			if (false == l_clipBoardOwnerPrimary) {
+				XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
+				l_clipBoardOwnerPrimary = true;
 			}
 			break;
-		case CLIPBOARD_MODE_STD:
-			if (newData.Size() > 0) {
-				// copy it ...
-				l_clipBoardStd = newData;
-				// Request the clipBoard :
-				if (false == l_clipBoardOwnerStd) {
-					XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
-					l_clipBoardOwnerStd = true;
-				}
+		case ewol::clipBoard::CLIPBOARD_STD:
+			// Request the clipBoard :
+			if (false == l_clipBoardOwnerStd) {
+				XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
+				l_clipBoardOwnerStd = true;
 			}
 			break;
 		default:

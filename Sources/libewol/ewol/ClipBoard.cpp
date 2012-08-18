@@ -25,6 +25,7 @@
 #include <ewol/Debug.h>
 #include <ewol/ClipBoard.h>
 #include <ewol/base/gui.h>
+#include <ewol/base/MainThread.h>
 
 #undef __class__
 #define __class__	"ClipBoard"
@@ -36,9 +37,15 @@ note: la copy dans le :
    [1..9] : copy interne
        10 : bouton du milieux
 */
+//!< Local copy of the clipboards
 static etk::UString mesCopy[ewol::clipBoard::TOTAL_OF_CLICKBOARD];
 
 
+/**
+ * @brief Initialize the clipboard system (done by ewol)
+ * @param ---
+ * @return ---
+ */
 void ewol::clipBoard::Init(void)
 {
 	EWOL_INFO("Initialyse ClipBoards");
@@ -47,6 +54,12 @@ void ewol::clipBoard::Init(void)
 	}
 }
 
+
+/**
+ * @brief Un-Initialize the clipboard system (done by ewol)
+ * @param ---
+ * @return ---
+ */
 void ewol::clipBoard::UnInit(void)
 {
 	EWOL_INFO("Initialyse ClipBoards");
@@ -56,20 +69,69 @@ void ewol::clipBoard::UnInit(void)
 }
 
 
-
-void ewol::clipBoard::Set(uint8_t clipboardID, etk::UString &data)
+/**
+ * @brief Set the string data on a specific clipboard. The Gui system is notify that the clipboard "SELECTION" and "COPY" are change
+ * @param[in] clipboardID Select the specific ID of the clipboard
+ * @param[in] data The string that might be send to the clipboard
+ * @return ---
+ */
+void ewol::clipBoard::Set(ewol::clipBoard::clipboardListe_te clipboardID, etk::UString &data)
 {
 	// check if ID is correct
 	if(0 == data.Size()) {
 		EWOL_INFO("request a copy of nothing");
 		return;
-	} else if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
-		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_STD);
+	} else 
+	
+	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+		EWOL_WARNING("request ClickBoard id error");
 		return;
-	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		guiAbstraction::ClipBoardSet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
+	}
+	
+	ewol::clipBoard::SetSystem(clipboardID, data);
+	
+	if(    ewol::clipBoard::CLIPBOARD_STD == clipboardID
+	    || ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
+		guiAbstraction::ClipBoardSet(clipboardID);
+	}
+}
+
+
+/**
+ * @brief Call system to request the current clipboard.
+ * @note Due to some system that manage the clipboard request asynchronous (like X11) and ewol managing the system with only one thread,
+ *       we need the call the system to send us the buffer, this is really ambigous, but the widget (who has focus) receive the 
+ *       notification of the arrival of this buffer id
+ * @param[in] clipboardID the needed clipboard ID
+ * @return ---
+ */
+void ewol::clipBoard::Request(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+		EWOL_WARNING("request ClickBoard id error");
 		return;
-	}else if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+	}
+	
+	if(    ewol::clipBoard::CLIPBOARD_STD == clipboardID
+	    || ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
+		guiAbstraction::ClipBoardGet(clipboardID);
+	} else {
+		// generate an event on the main thread ...
+		guiSystem::event::ClipBoardArrive(clipboardID);
+	}
+}
+
+
+/**
+ * @brief Set the ewol internal buffer (no notification at the GUI). This fuction might be use by the 
+ *        Gui abstraction to set the buffer we receive. The end user must not use it.
+ * @param[in] clipboardID selected clipboard ID
+ * @param[in] data new buffer data
+ * @return ---
+ */
+void ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardListe_te clipboardID, etk::UString &data)
+{
+	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
 		EWOL_WARNING("request ClickBoard id error");
 		return;
 	}
@@ -77,22 +139,23 @@ void ewol::clipBoard::Set(uint8_t clipboardID, etk::UString &data)
 	mesCopy[clipboardID] = data;
 }
 
-void ewol::clipBoard::Get(uint8_t clipboardID, etk::UString &data)
+
+/**
+ * @brief Get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
+ *        the widget : @ref OnEventClipboard ==> we can nothe this function is the only one which permit it.
+ * @note if we call this fuction withoutcallin @ref ewol::clipBoard::Request, we only get the previous clipboard
+ * @param[in] clipboardID selected clipboard ID
+ * @return the requested buffer
+ */
+etk::UString ewol::clipBoard::Get(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	if (ewol::clipBoard::CLIPBOARD_STD == clipboardID) {
-		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_STD);
-		return;
-	} else if (ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		guiAbstraction::ClipBoardGet(data, guiAbstraction::CLIPBOARD_MODE_PRIMARY);
-		return;
-	} else if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
+	if(clipboardID >= ewol::clipBoard::TOTAL_OF_CLICKBOARD) {
 		EWOL_WARNING("request ClickBoard id error");
-		return;
+		return "";
 	}
 	// Copy datas ...
-	data = mesCopy[clipboardID];
+	return mesCopy[clipboardID];
 }
-
 
 
 

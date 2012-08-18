@@ -16,7 +16,7 @@ LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua portaudio
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lz -lX11
+LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lX11
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
@@ -30,9 +30,6 @@ LOCAL_SRC_FILES := \
 	ewol/base/guiX11.cpp \
 	ewol/Audio/interfacePortAudio.cpp \
 	$(FILE_LIST)
-
-# Ewol Test Software :
-LOCAL_LDLIBS := -lGL -lGLU -lz -lX11
 
 
 include $(BUILD_STATIC_LIBRARY)

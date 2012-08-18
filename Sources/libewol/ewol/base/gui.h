@@ -30,6 +30,7 @@
 #include <etk/UString.h>
 #include <ewol/Windows.h>
 #include <ewol/ewol.h>
+#include <ewol/ClipBoard.h>
 
 void EWOL_NativeRender(void);
 void EWOL_NativeResize(int w, int h );
@@ -51,14 +52,10 @@ namespace guiAbstraction
 	void ForceRedrawAll(void);
 	void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
 	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
+	void SendClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 
-	// copy and cut generic properties : 
-	typedef enum {
-		CLIPBOARD_MODE_PRIMARY,
-		CLIPBOARD_MODE_STD,
-	} clipBoardMode_te;
-	void ClipBoardGet(etk::UString& newData, clipBoardMode_te mode);
-	void ClipBoardSet(etk::UString& newData, clipBoardMode_te mode);
+	void ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID);
+	void ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID);
 };
 
 

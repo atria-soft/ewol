@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_MODULE := etk
-LOCAL_STATIC_LIBRARIES := libzip
+LOCAL_LIBRARIES := libzip
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
