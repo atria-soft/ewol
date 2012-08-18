@@ -67,7 +67,7 @@ namespace etk
 	 *              ----------------------------------------
 	 *
 	 */
-	template<typename MY_TYPE=int32_t> class Vector
+	template<class MY_TYPE=int32_t> class Vector
 	{
 		public:
 			class Iterator
@@ -210,10 +210,11 @@ namespace etk
 			};
 	
 		private:
-			MY_TYPE *   m_data;         //!< pointer on the curetn table of Data
-			int32_t     m_size;         //!< nb Element in the buffer
-			int32_t     m_allocated;    //!< Current allocated size
-			int32_t     m_increment;    //!< methode of increment
+			MY_TYPE *     m_data;         //!< pointer on the curetn table of Data
+			int32_t       m_size;         //!< nb Element in the buffer
+			int32_t       m_allocated;    //!< Current allocated size
+			int32_t       m_increment;    //!< methode of increment
+			bool          m_mode;         //!< if true the normal mode is used
 		public:
 			/**
 			 * @brief Create an empty vector
@@ -223,7 +224,8 @@ namespace etk
 				m_data(NULL),
 				m_size(0),
 				m_allocated(0),
-				m_increment(1)
+				m_increment(1),
+				m_mode(true)
 			{
 				ChangeAllocation(count);
 			}
@@ -240,10 +242,20 @@ namespace etk
 				m_data      = NULL;
 				//TK_DEBUG("USE Specific vector allocator ... Evb.m_size=" << Evb.m_size << " Evb.m_increment=" << Evb.m_increment);
 				// allocate all same data
-				ETK_MALLOC(m_data, m_allocated, MY_TYPE);
-				TK_ASSERT(NULL!=m_data, "Error in data allocation");
+				m_data = new MY_TYPE[m_allocated];
+				if (NULL==m_data) {
+					TK_CRITICAL("Vector : Error in data allocation ... might nor work corectly anymore");
+					return;
+				}
 				// Copy all data ...
-				memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+				if(true == m_mode) {
+					for(int32_t iii=0; iii<m_allocated; iii++) {
+						// copy operator ...
+						m_data[iii] = Evb.m_data[iii];
+					}
+				} else {
+					memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+				}
 			}
 	
 			/**
@@ -252,7 +264,7 @@ namespace etk
 			~Vector()
 			{
 				if (NULL!=m_data) {
-					ETK_FREE(m_data);
+					delete [] m_data;
 					m_data = NULL;
 				}
 				m_allocated = 0;
@@ -271,7 +283,7 @@ namespace etk
 				if( this != &Evb ) // avoid copy to itself
 				{
 					if (NULL!=m_data) {
-						ETK_FREE(m_data);
+						delete[] m_data;
 						m_data = NULL;
 					}
 					// Set the new value
@@ -279,15 +291,25 @@ namespace etk
 					m_size      = Evb.m_size;
 					m_increment = Evb.m_increment;
 					// allocate all same data
-					ETK_MALLOC(m_data, m_allocated, MY_TYPE);
-					TK_ASSERT(NULL!=m_data, "Error in data allocation");
-					// Copy all data ...
-					memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+					m_data = new MY_TYPE[m_allocated];
+					if (NULL==m_data) {
+						TK_CRITICAL("Vector : Error in data allocation ... might nor work corectly anymore");
+						return *this;
+					}
+					if(true == m_mode) {
+						for(int32_t iii=0; iii<m_allocated; iii++) {
+							// copy operator ...
+							m_data[iii] = Evb.m_data[iii];
+						}
+					} else {
+						// Copy all data ...
+						memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+					}
 				}
 				// Return the curent pointer
 				return *this;
 			}
-	
+			
 			/**
 			 * @brief Add at the Last position of the Vector
 			 * @param[in] item	Element to add at the end of vector
@@ -297,11 +319,22 @@ namespace etk
 				int32_t nbElememt = Evb.Size();
 				int32_t idx = m_size;
 				Resize(m_size+nbElememt);
-				memcpy(&m_data[idx], &Evb.m_data[0], nbElememt*sizeof(MY_TYPE) );
+				if (m_size<=idx) {
+					TK_CRITICAL("allocation error");
+					return *this;
+				}
+				if(true == m_mode) {
+					for(int32_t iii=0; iii<nbElememt; iii++) {
+						// copy operator ...
+						m_data[idx+iii] = Evb.m_data[iii];
+					}
+				} else {
+					memcpy(&m_data[idx], &Evb.m_data[0], nbElememt*sizeof(MY_TYPE) );
+				}
 				// Return the curent pointer
 				return *this;
 			}
-	
+			
 			/**
 			 * @brief Set increment mode of this vector (default it match corectly with the number of element inside)
 			 * @param[in] newIncrementNumber methode requested
@@ -367,7 +400,11 @@ namespace etk
 			{
 				int32_t idx = m_size;
 				Resize(m_size+1);
-				m_data[idx] = item;
+				if (idx < m_size) {
+					m_data[idx] = item;
+				} else {
+					TK_ERROR("Resize does not work corectly ... not added item");
+				}
 			}
 	
 			/**
@@ -381,7 +418,17 @@ namespace etk
 				}
 				int32_t idx = m_size;
 				Resize(m_size+nbElement);
-				memcpy(&m_data[idx], item, nbElement*sizeof(MY_TYPE) );
+				if (idx >= m_size) {
+					TK_ERROR("Resize does not work corectly ... not added item");
+					return;
+				}
+				if(true == m_mode) {
+					for (int32_t iii=0; iii<nbElement; iii++) {
+						m_data[idx+iii] = item[iii];
+					}
+				} else {
+					memcpy(&m_data[idx], item, nbElement*sizeof(MY_TYPE));
+				}
 			}
 	
 			/**
@@ -404,32 +451,6 @@ namespace etk
 				}
 			}
 	
-			/**
-			 * @brief 
-			 *
-			 * @param[in,out] ---
-			 *
-			 * @return ---
-			 *
-			 */
-			void Insert(int32_t pos, const MY_TYPE& item)
-			{
-				if (pos>m_size) {
-					TK_ERROR(" can not insert Element at this position : " << pos << " > " << m_size<< " add it at the end ... ");
-					PushBack(item);
-					return;
-				}
-				int32_t tmpSize = m_size;
-				// Request resize of the current buffer
-				Resize(m_size+1);
-				// move curent data
-				int32_t sizeToMove = (tmpSize - pos)*sizeof(MY_TYPE);
-				if ( 0 < sizeToMove) {
-					memmove((m_data + pos + 1), (m_data + pos), sizeToMove );
-				}
-				// affectation of the current element
-				m_data[pos] = item;
-			}
 	
 			/**
 			 * @brief 
@@ -446,18 +467,81 @@ namespace etk
 					PushBack(item, nbElement);
 					return;
 				}
-				int32_t tmpSize = m_size;
+				int32_t idx = m_size;
 				// Request resize of the current buffer
 				Resize(m_size+nbElement);
+				if (idx>=m_size) {
+					TK_ERROR("Resize does not work corectly ... not added item");
+					return;
+				}
 				// move curent data (after the position)
-				int32_t sizeToMove = (tmpSize - pos)*sizeof(MY_TYPE);
+				int32_t sizeToMove = (idx - pos);
 				if ( 0 < sizeToMove) {
-					memmove((m_data + pos + nbElement), (m_data + pos), sizeToMove );
+					if(true == m_mode) {
+						for (int32_t iii=1; iii<=sizeToMove; iii++) {
+							m_data[m_size-iii] = m_data[idx-iii];
+						}
+					} else {
+						memmove(&m_data[idx-sizeToMove-1], &m_data[m_size-sizeToMove-1], sizeToMove*sizeof(MY_TYPE) );
+					}
 				}
 				// affectation of all input element
-				memcpy(&m_data[pos], item, nbElement*sizeof(MY_TYPE) );
+				if(true == m_mode) {
+					for (int32_t iii=0; iii<nbElement; iii++) {
+						m_data[pos+iii] = item[iii];
+					}
+				} else {
+					memcpy(&m_data[pos], item, nbElement*sizeof(MY_TYPE) );
+				}
 			}
-	
+			
+			/**
+			 * @brief 
+			 *
+			 * @param[in,out] ---
+			 *
+			 * @return ---
+			 *
+			 */
+			void Insert(int32_t pos, const MY_TYPE& item)
+			{
+				Insert(pos, &item, 1);
+			}
+			
+			/**
+			 * @brief Remove N element
+			 *
+			 * @param[in] pos Position to remove the data
+			 * @param[in] nbElement number of element to remove
+			 *
+			 * @return ---
+			 *
+			 */
+			void EraseLen(int32_t pos, int32_t nbElement)
+			{
+				if (pos>m_size) {
+					TK_ERROR(" can not Erase Len Element at this position : " << pos << " > " << m_size);
+					return;
+				}
+				if (pos+nbElement>m_size) {
+					nbElement = m_size - pos;
+				}
+				int32_t idx = m_size;
+				// move curent data
+				int32_t sizeToMove = (idx - (pos+nbElement));
+				if ( 0 < sizeToMove) {
+					if(true == m_mode) {
+						for (int32_t iii=0; iii<sizeToMove; iii++) {
+							m_data[pos+iii] = m_data[pos+nbElement+iii];
+						}
+					} else {
+						memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove*sizeof(MY_TYPE) );
+					}
+				}
+				// Request resize of the current buffer
+				Resize(m_size-nbElement);
+			}
+			
 			/**
 			 * @brief Remove one element
 			 *
@@ -468,18 +552,7 @@ namespace etk
 			 */
 			void Erase(int32_t pos)
 			{
-				if (pos<0 || (uint32_t)pos>m_size) {
-					TK_ERROR(" can not Erase Element at this position : " << pos << " > " << m_size);
-					return;
-				}
-				int32_t tmpSize = m_size;
-				int32_t sizeToMove = (tmpSize - (pos+1))*sizeof(MY_TYPE);
-				if ( 0 < sizeToMove) {
-					// move curent data
-					memmove((m_data + pos), (m_data + pos + 1), sizeToMove );
-				}
-				// Request resize of the current buffer
-				Resize(m_size-1);
+				EraseLen(pos, 1);
 			}
 	
 			/**
@@ -503,41 +576,20 @@ namespace etk
 				int32_t nbElement = m_size - pos;
 				int32_t tmpSize = m_size;
 				// move curent data
-				int32_t sizeToMove = (tmpSize - (pos+nbElement))*sizeof(MY_TYPE);
+				int32_t sizeToMove = (tmpSize - (pos+nbElement));
 				if ( 0 < sizeToMove) {
-					memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove );
+					if(true == m_mode) {
+						for (int32_t iii=0; iii<sizeToMove; iii++) {
+							m_data[pos+iii] = m_data[pos+nbElement+iii];
+						}
+					} else {
+						memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove*sizeof(MY_TYPE) );
+					}
 				}
 				// Request resize of the current buffer
 				Resize(m_size-nbElement);
 			}
 	
-			/**
-			 * @brief Remove N element
-			 *
-			 * @param[in] pos Position to remove the data
-			 * @param[in] nbElement number of element to remove
-			 *
-			 * @return ---
-			 *
-			 */
-			void EraseLen(int32_t pos, int32_t nbElement)
-			{
-				if (pos>m_size) {
-					TK_ERROR(" can not Erase Len Element at this position : " << pos << " > " << m_size);
-					return;
-				}
-				if (pos+nbElement>m_size) {
-					nbElement = m_size - pos;
-				}
-				int32_t tmpSize = m_size;
-				// move curent data
-				int32_t sizeToMove = (tmpSize - (pos+nbElement))*sizeof(MY_TYPE);
-				if ( 0 < sizeToMove) {
-					memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove );
-				}
-				// Request resize of the current buffer
-				Resize(m_size-nbElement);
-			}
 	
 			/**
 			 * @brief extract data between two point : 
@@ -545,7 +597,7 @@ namespace etk
 			 * @param[in] posEnd End position to extract data
 			 * @return the extracted vector
 			 */
-			Vector Extract(int32_t posStart = 0, int32_t posEnd=0x7FFFFFFF)
+			Vector<MY_TYPE> Extract(int32_t posStart = 0, int32_t posEnd=0x7FFFFFFF)
 			{
 				Vector<MY_TYPE> out;
 				if (posStart < 0) {
@@ -560,21 +612,6 @@ namespace etk
 				}
 				out.PushBack(&m_data[posStart], posEnd-posStart);
 				return out;
-			}
-	
-			/**
-			 * @brief Set the minimum allocation in memory for the curent vector ==> reallocate the 
-			 *     buffer to fit exactly the mumber of element needed
-			 */
-			void Fit(void)
-			{
-				if (m_size > m_allocated) {
-					// Reallocate the curent data to the correct size ...
-					ETK_REALLOC(m_data, m_size, MY_TYPE);
-				}
-				// Check result with assert : 
-				TK_ASSERT(NULL!=m_data, "Error in data Fitting");
-				m_allocated = m_size;
 			}
 	
 			/**
@@ -666,13 +703,36 @@ namespace etk
 				// check if something is allocated : 
 				if (NULL == m_data) {
 					// no data allocated ==> request an allocation (might be the first)
-					ETK_MALLOC(m_data, requestSize, MY_TYPE);
+					m_data = new MY_TYPE[requestSize];
+					if (NULL==m_data) {
+						TK_CRITICAL("Vector : Error in data allocation request allocation:" << requestSize << "*" << (int32_t)(sizeof(MY_TYPE)) << "bytes" );
+						return;
+					}
+					// no data to copy
 				} else {
-					// move datas
-					ETK_REALLOC(m_data, requestSize, MY_TYPE);
+					// allocate a new pool of data:
+					MY_TYPE* m_dataTmp = new MY_TYPE[requestSize];
+					if (NULL==m_dataTmp) {
+						TK_CRITICAL("Vector : Error in data allocation request allocation:" << requestSize << "*" << (int32_t)(sizeof(MY_TYPE)) << "bytes" );
+						return;
+					}
+					// copy data in the new pool
+					int32_t nbElements = etk_min(requestSize, m_allocated);
+					if(true == m_mode) {
+						for(int32_t iii=0; iii<nbElements; iii++) {
+							m_dataTmp[iii] = m_data[iii];
+						}
+					} else {
+						memmove(m_dataTmp, m_data, nbElements*sizeof(MY_TYPE) );
+					}
+					// switch pointer:
+					MY_TYPE* m_dataTmp2 = m_data;
+					m_data = m_dataTmp;
+					// remove old pool
+					if (m_dataTmp2!= NULL) {
+						delete [] m_dataTmp2;
+					}
 				}
-				// Check result with assert : 
-				TK_ASSERT(NULL!=m_data, "Error in data allocation");
 				// set the new allocation size
 				m_allocated = requestSize;
 			}
@@ -680,7 +740,7 @@ namespace etk
 
 	
 	/**
-	 * @brief VectorP classes ...
+	 * @brief List classes ...
 	 *
 	 * @tparam[in] T The type of objects to store.
 	 * @tparam[in] INC Incrementation mode (0 : Exponential to 200 and increment by stemp of 200)
@@ -712,7 +772,7 @@ namespace etk
 	 *
 	 */
 	/*
-	template<class MY_CLASS> class VectorP private Vector<MY_CLASS*>
+	template<class MY_CLASS> class List
 	{
 		
 	};
