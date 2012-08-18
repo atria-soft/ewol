@@ -38,7 +38,7 @@ namespace etk
 	/**
 	 * @brief Vector classes ...
 	 *
-	 * @tparam[in] SIZE Size of the current element.
+	 * @tparam[in] MY_TYPE class type of the current element.
 	 *
 	 *              m_data
 	 *               <------------ m_dataSize ------------>
@@ -213,8 +213,6 @@ namespace etk
 			MY_TYPE *     m_data;         //!< pointer on the curetn table of Data
 			int32_t       m_size;         //!< nb Element in the buffer
 			int32_t       m_allocated;    //!< Current allocated size
-			int32_t       m_increment;    //!< methode of increment
-			bool          m_mode;         //!< if true the normal mode is used
 		public:
 			/**
 			 * @brief Create an empty vector
@@ -223,9 +221,7 @@ namespace etk
 			Vector(int32_t count = 0):
 				m_data(NULL),
 				m_size(0),
-				m_allocated(0),
-				m_increment(1),
-				m_mode(true)
+				m_allocated(0)
 			{
 				ChangeAllocation(count);
 			}
@@ -238,7 +234,6 @@ namespace etk
 			{
 				m_allocated = Evb.m_allocated;
 				m_size      = Evb.m_size;
-				m_increment = Evb.m_increment;
 				m_data      = NULL;
 				//TK_DEBUG("USE Specific vector allocator ... Evb.m_size=" << Evb.m_size << " Evb.m_increment=" << Evb.m_increment);
 				// allocate all same data
@@ -248,13 +243,9 @@ namespace etk
 					return;
 				}
 				// Copy all data ...
-				if(true == m_mode) {
-					for(int32_t iii=0; iii<m_allocated; iii++) {
-						// copy operator ...
-						m_data[iii] = Evb.m_data[iii];
-					}
-				} else {
-					memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+				for(int32_t iii=0; iii<m_allocated; iii++) {
+					// copy operator ...
+					m_data[iii] = Evb.m_data[iii];
 				}
 			}
 	
@@ -269,7 +260,6 @@ namespace etk
 				}
 				m_allocated = 0;
 				m_size = 0;
-				m_increment = 0;
 			}
 	
 			/**
@@ -289,21 +279,15 @@ namespace etk
 					// Set the new value
 					m_allocated = Evb.m_allocated;
 					m_size      = Evb.m_size;
-					m_increment = Evb.m_increment;
 					// allocate all same data
 					m_data = new MY_TYPE[m_allocated];
 					if (NULL==m_data) {
 						TK_CRITICAL("Vector : Error in data allocation ... might nor work corectly anymore");
 						return *this;
 					}
-					if(true == m_mode) {
-						for(int32_t iii=0; iii<m_allocated; iii++) {
-							// copy operator ...
-							m_data[iii] = Evb.m_data[iii];
-						}
-					} else {
-						// Copy all data ...
-						memcpy(m_data, Evb.m_data, m_allocated * sizeof(MY_TYPE) );
+					for(int32_t iii=0; iii<m_allocated; iii++) {
+						// copy operator ...
+						m_data[iii] = Evb.m_data[iii];
 					}
 				}
 				// Return the curent pointer
@@ -323,26 +307,14 @@ namespace etk
 					TK_CRITICAL("allocation error");
 					return *this;
 				}
-				if(true == m_mode) {
-					for(int32_t iii=0; iii<nbElememt; iii++) {
-						// copy operator ...
-						m_data[idx+iii] = Evb.m_data[iii];
-					}
-				} else {
-					memcpy(&m_data[idx], &Evb.m_data[0], nbElememt*sizeof(MY_TYPE) );
+				for(int32_t iii=0; iii<nbElememt; iii++) {
+					// copy operator ...
+					m_data[idx+iii] = Evb.m_data[iii];
 				}
 				// Return the curent pointer
 				return *this;
 			}
 			
-			/**
-			 * @brief Set increment mode of this vector (default it match corectly with the number of element inside)
-			 * @param[in] newIncrementNumber methode requested
-			 */
-			void SetIncrement(int32_t newIncrementNumber)
-			{
-				m_increment = newIncrementNumber;
-			}
 	
 			/**
 			 * @brief Get the number of element in the vector
@@ -422,12 +394,8 @@ namespace etk
 					TK_ERROR("Resize does not work corectly ... not added item");
 					return;
 				}
-				if(true == m_mode) {
-					for (int32_t iii=0; iii<nbElement; iii++) {
-						m_data[idx+iii] = item[iii];
-					}
-				} else {
-					memcpy(&m_data[idx], item, nbElement*sizeof(MY_TYPE));
+				for (int32_t iii=0; iii<nbElement; iii++) {
+					m_data[idx+iii] = item[iii];
 				}
 			}
 	
@@ -477,21 +445,13 @@ namespace etk
 				// move curent data (after the position)
 				int32_t sizeToMove = (idx - pos);
 				if ( 0 < sizeToMove) {
-					if(true == m_mode) {
-						for (int32_t iii=1; iii<=sizeToMove; iii++) {
-							m_data[m_size-iii] = m_data[idx-iii];
-						}
-					} else {
-						memmove(&m_data[idx-sizeToMove-1], &m_data[m_size-sizeToMove-1], sizeToMove*sizeof(MY_TYPE) );
+					for (int32_t iii=1; iii<=sizeToMove; iii++) {
+						m_data[m_size-iii] = m_data[idx-iii];
 					}
 				}
 				// affectation of all input element
-				if(true == m_mode) {
-					for (int32_t iii=0; iii<nbElement; iii++) {
-						m_data[pos+iii] = item[iii];
-					}
-				} else {
-					memcpy(&m_data[pos], item, nbElement*sizeof(MY_TYPE) );
+				for (int32_t iii=0; iii<nbElement; iii++) {
+					m_data[pos+iii] = item[iii];
 				}
 			}
 			
@@ -530,12 +490,8 @@ namespace etk
 				// move curent data
 				int32_t sizeToMove = (idx - (pos+nbElement));
 				if ( 0 < sizeToMove) {
-					if(true == m_mode) {
-						for (int32_t iii=0; iii<sizeToMove; iii++) {
-							m_data[pos+iii] = m_data[pos+nbElement+iii];
-						}
-					} else {
-						memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove*sizeof(MY_TYPE) );
+					for (int32_t iii=0; iii<sizeToMove; iii++) {
+						m_data[pos+iii] = m_data[pos+nbElement+iii];
 					}
 				}
 				// Request resize of the current buffer
@@ -578,12 +534,8 @@ namespace etk
 				// move curent data
 				int32_t sizeToMove = (tmpSize - (pos+nbElement));
 				if ( 0 < sizeToMove) {
-					if(true == m_mode) {
-						for (int32_t iii=0; iii<sizeToMove; iii++) {
-							m_data[pos+iii] = m_data[pos+nbElement+iii];
-						}
-					} else {
-						memmove((m_data + pos), (m_data + pos + nbElement), sizeToMove*sizeof(MY_TYPE) );
+					for (int32_t iii=0; iii<sizeToMove; iii++) {
+						m_data[pos+iii] = m_data[pos+nbElement+iii];
 					}
 				}
 				// Request resize of the current buffer
@@ -668,31 +620,16 @@ namespace etk
 				}
 				int32_t requestSize = m_allocated;
 				// set the size with the corect chose type : 
-				if (newSize == m_allocated) {
+				if (newSize == requestSize) {
 					return;
 				} else if (newSize < requestSize) {
-					// down the size of the vector:
-					if (0==m_increment) {
-						// never down size...
-					} else {
-						int32_t devide = m_increment;
-						if (devide == 0) {
-							devide = 1;
-						}
-						int32_t numberOfStep = m_allocated / devide;
-						if (newSize< ((numberOfStep-2)*devide + devide/2) ) {
-							//Allow Reallocation of a new size shorter
-							requestSize = ((newSize / devide)+1) * devide;
-						}
-					}
+					// we did not reove data ???
 				} else {
 					while(newSize > requestSize) {
 						if (0 == requestSize) {
 							requestSize = 1;
-						} else if (0==m_increment) {
-							requestSize = requestSize * 2;
 						} else {
-							requestSize = (requestSize + m_increment);
+							requestSize = requestSize * 2;
 						}
 					}
 				}
@@ -718,12 +655,8 @@ namespace etk
 					}
 					// copy data in the new pool
 					int32_t nbElements = etk_min(requestSize, m_allocated);
-					if(true == m_mode) {
-						for(int32_t iii=0; iii<nbElements; iii++) {
-							m_dataTmp[iii] = m_data[iii];
-						}
-					} else {
-						memmove(m_dataTmp, m_data, nbElements*sizeof(MY_TYPE) );
+					for(int32_t iii=0; iii<nbElements; iii++) {
+						m_dataTmp[iii] = m_data[iii];
 					}
 					// switch pointer:
 					MY_TYPE* m_dataTmp2 = m_data;
@@ -738,12 +671,10 @@ namespace etk
 			}
 	};
 
-	
 	/**
 	 * @brief List classes ...
 	 *
 	 * @tparam[in] T The type of objects to store.
-	 * @tparam[in] INC Incrementation mode (0 : Exponential to 200 and increment by stemp of 200)
 	 *
 	 *          m_data
 	 *         ----------         |-----------------------|                             
