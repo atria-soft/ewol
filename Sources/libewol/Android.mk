@@ -26,7 +26,7 @@ LOCAL_CFLAGS := -Wno-write-strings \
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := ewol/base/guiAndroid.cpp $(FILE_LIST)
+LOCAL_SRC_FILES := ewol/base/gui.Android.cpp $(FILE_LIST)
 
 # Ewol Test Software :
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz

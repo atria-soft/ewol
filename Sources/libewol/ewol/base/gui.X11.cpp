@@ -32,8 +32,7 @@
 
 #include <ewol/Texture.h>
 #include <ewol/Texture/TextureBMP.h>
-#include <ewol/base/MainThread.h>
-#include <ewol/threadMsg.h>
+#include <ewol/base/eSystem.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -50,7 +49,7 @@
 
 //#define DEBUG_X11_EVENT
 
-int64_t ewol::GetTime(void)
+int64_t guiInterface::GetTime(void)
 {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
@@ -64,7 +63,7 @@ int64_t ewol::GetTime(void)
 }
 
 #undef __class__
-#define __class__	"guiAbstraction"
+#define __class__	"guiInterface"
 
 // attributes for a single buffered visual in RGBA format with at least 4 bits per color and a 16 bit depth buffer
 static int attrListSgl[] = {
@@ -87,7 +86,7 @@ static int attrListDbl[] = {
 	None
 };
 
-static guiSystem::event::specialKey_ts guiKeyBoardMode;
+static eSystem::specialKey_ts guiKeyBoardMode;
 
 
 extern "C" {
@@ -120,21 +119,14 @@ int32_t        m_cursorEventY = 0;
 XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
-extern ewol::Windows* gui_uniqueWindows;
-extern float     gui_width;
-extern float     gui_height;
 
 int32_t separateClickTime = 300000;
 int32_t offsetMoveClicked = 10000;
 int32_t offsetMoveClickedDouble = 20000;
 
-bool l_titleChange = false;
-etk::UString l_title = "Ewol";
-
 bool inputIsPressed[20];
 
 // internal copy of the clipBoard ...
-static ewol::simpleMsg::simpleMsg_ts l_clipboardMessage; /// message to prevent the other thread that we have receive the requested data
 static bool                          l_clipBoardRequestPrimary = false;   // if false : request the copy/past buffer, if true : request current selection
 static bool                          l_clipBoardOwnerPrimary = false; // we are the owner of the current selection
 static bool                          l_clipBoardOwnerStd = false; // we are the owner of the current copy buffer
@@ -147,10 +139,6 @@ static Atom XAtomeTargetTarget = 0;
 static Atom XAtomeEWOL = 0;
 static Atom XAtomeDeleteWindows = 0;
 
-
-static void X11_ChangeSize(int32_t w, int32_t h);
-static void X11_ChangePos(int32_t x, int32_t y);
-static void X11_GetAbsPos(int32_t & x, int32_t & y);
 
 bool CreateX11Context(void)
 {
@@ -216,7 +204,7 @@ bool CreateX11Context(void)
 	// Create the window
 	int32_t tmp_width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
 	int32_t tmp_height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
-	EWOL_NativeResize(tmp_width, tmp_height);
+	eSystem::Resize(tmp_width, tmp_height);
 	x=tmp_width/2;
 	y=tmp_height/4;
 	
@@ -268,12 +256,19 @@ bool CreateX11Context(void)
 		XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 	}
 	
-	X11_ChangeSize(400, 300);
+	Vector2D<int32_t> tmpSize(400, 300);
+	guiInterface::ChangeSize(tmpSize);
 	
 	return true;
 }
 
-static void local_SetTitle(etk::UString title)
+
+/**
+ * @brief Set the new title of the windows
+ * @param title New desired title
+ * @return ---
+ */
+void guiInterface::SetTitle(etk::UString& title)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (START)");
@@ -290,19 +285,6 @@ static void local_SetTitle(etk::UString title)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Set Title (END)");
 	#endif
-}
-
-
-// the set title is abstract, because otherwise it generate latency in the display ...
-// TODO : We might generate system like this for evry other requested
-void ewol::SetTitle(etk::UString title)
-{
-	// set new title and inform that it change
-	if (true == l_titleChange) {
-		usleep(30);
-	}
-	l_title = title;
-	l_titleChange = true;
 }
 
 /* this variable will contain the ID of the newly created pixmap.    */
@@ -446,7 +428,6 @@ void X11_Init(void)
 	l_clipBoardRequestPrimary = false;
 	l_clipBoardOwnerPrimary = false;
 	l_clipBoardOwnerStd = false;
-	ewol::simpleMsg::Init(l_clipboardMessage);
 	// reset the Atom properties ...
 	XAtomeSelection        = XInternAtom(m_display, "PRIMARY", 0);
 	XAtomeClipBoard        = XInternAtom(m_display, "CLIPBOARD", 0);
@@ -473,11 +454,6 @@ void X11_Run(void)
 				EWOL_INFO("X11:Event");
 			#endif
 			XNextEvent(m_display, &event);
-			// change title if needed
-			if (l_titleChange) {
-				local_SetTitle(l_title);
-				l_titleChange = false;
-			}
 			switch (event.type)
 			{
 				case ClientMessage:
@@ -487,9 +463,7 @@ void X11_Run(void)
 						#endif
 						if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
 							EWOL_INFO("    ==> Kill Requested ...");
-							if (NULL != gui_uniqueWindows) {
-								gui_uniqueWindows->SysOnKill();
-							}
+							eSystem::OnKill();
 							m_run = false;
 						}
 					}
@@ -551,12 +525,12 @@ void X11_Run(void)
 							etk::UString tmpppp((char*)buf);
 							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_SELECTION, tmpppp);
 							// just transmit an event , we have the data in the system
-							guiSystem::event::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_SELECTION);
+							eSystem::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_SELECTION);
 						} else {
 							etk::UString tmpppp((char*)buf);
 							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_STD, tmpppp);
 							// just transmit an event , we have the data in the system
-							guiSystem::event::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_STD);
+							eSystem::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_STD);
 						}
 					}
 					break;
@@ -699,7 +673,7 @@ void X11_Run(void)
 					#endif
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
-					guiSystem::event::Resize(event.xconfigure.width, event.xconfigure.height);
+					eSystem::Resize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
 					#ifdef DEBUG_X11_EVENT
@@ -710,7 +684,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
-					guiSystem::event::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
+					eSystem::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case ButtonRelease:
 					#ifdef DEBUG_X11_EVENT
@@ -721,7 +695,7 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = false;
 					}
-					guiSystem::event::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
+					eSystem::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
 					break;
 				case EnterNotify:
 					#ifdef DEBUG_X11_EVENT
@@ -752,13 +726,13 @@ void X11_Run(void)
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
 								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-								guiSystem::event::SetMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
+								eSystem::SetMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
 							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-							guiSystem::event::SetMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+							eSystem::SetMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
 						}
 					}
 					break;
@@ -883,7 +857,7 @@ void X11_Run(void)
 							case 91: // Suppr on keypad
 								find = false;
 								{
-									guiSystem::event::keyboardKey_ts specialEvent;
+									eSystem::keyboardKey_ts specialEvent;
 									specialEvent.special = guiKeyBoardMode;
 									specialEvent.myChar = 0x0000007F;
 									if(event.type == KeyPress) {
@@ -891,13 +865,13 @@ void X11_Run(void)
 									} else {
 										specialEvent.isDown = false;
 									}
-									guiSystem::event::SetKeyboard(specialEvent);
+									eSystem::SetKeyboard(specialEvent);
 								}
 								break;
 							case 23: // special case for TAB
 								find = false;
 								{
-									guiSystem::event::keyboardKey_ts specialEvent;
+									eSystem::keyboardKey_ts specialEvent;
 									specialEvent.special = guiKeyBoardMode;
 									specialEvent.myChar = 0x00000009;
 									if(event.type == KeyPress) {
@@ -905,7 +879,7 @@ void X11_Run(void)
 									} else {
 										specialEvent.isDown = false;
 									}
-									guiSystem::event::SetKeyboard(specialEvent);
+									eSystem::SetKeyboard(specialEvent);
 								}
 								break;
 							default:
@@ -931,7 +905,7 @@ void X11_Run(void)
 									}
 									if (count>0) {
 										// transform iun unicode
-										guiSystem::event::keyboardKey_ts specialEvent;
+										eSystem::keyboardKey_ts specialEvent;
 										specialEvent.special = guiKeyBoardMode;
 										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], specialEvent.myChar);
 										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
@@ -940,7 +914,7 @@ void X11_Run(void)
 										} else {
 											specialEvent.isDown = false;
 										}
-										guiSystem::event::SetKeyboard(specialEvent);
+										eSystem::SetKeyboard(specialEvent);
 									} else {
 										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 									}
@@ -949,7 +923,7 @@ void X11_Run(void)
 						}
 						if (true == find) {
 							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-							guiSystem::event::keyboardMove_ts specialEvent;
+							eSystem::keyboardMove_ts specialEvent;
 							specialEvent.special = guiKeyBoardMode;
 							if(event.type == KeyPress) {
 								specialEvent.isDown = true;
@@ -957,7 +931,7 @@ void X11_Run(void)
 								specialEvent.isDown = false;
 							}
 							specialEvent.move = keyInput;
-							guiSystem::event::SetKeyboardMove(specialEvent);
+							eSystem::SetKeyboardMove(specialEvent);
 						}
 					}
 					break;
@@ -967,13 +941,13 @@ void X11_Run(void)
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event : MapNotify");
 					#endif
-					guiSystem::event::Show();
+					eSystem::Show();
 					break;
 				case UnmapNotify:
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event : UnmapNotify");
 					#endif
-					guiSystem::event::Hide();
+					eSystem::Hide();
 					break;
 				default:
 					#ifdef DEBUG_X11_EVENT
@@ -983,7 +957,7 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			(void)guiSystem::Draw(false);
+			(void)eSystem::Draw(false);
 			if (m_doubleBuffered) {
 				glXSwapBuffers(m_display, WindowHandle);
 			}
@@ -994,38 +968,17 @@ void X11_Run(void)
 	}
 };
 
-void X11_ChangeSize(int32_t w, int32_t h)
-{
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: X11_ChangeSize");
-	#endif
-	XResizeWindow(m_display, WindowHandle, w, h);
-};
 
-void X11_ChangePos(int32_t x, int32_t y)
-{
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: X11_ChangePos");
-	#endif
-	XMoveWindow(m_display, WindowHandle, x, y);
-};
+// -------------------------------------------------------------------------
+//         ClipBoard AREA :
+// -------------------------------------------------------------------------
 
-void X11_GetAbsPos(int32_t & x, int32_t & y)
-{
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: X11_GetAbsPos");
-	#endif
-	int tmp;
-	unsigned int tmp2;
-	Window fromroot, tmpwin;
-	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &x, &y, &tmp, &tmp, &tmp2);
-};
-
-
-
-// ClipBoard AREA :
-
-void guiAbstraction::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
+/**
+ * @brief Inform the Gui that we want to have a copy of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
@@ -1041,7 +994,7 @@ void guiAbstraction::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID
 				                  CurrentTime);
 			} else {
 				// just transmit an event , we have the data in the system
-				guiSystem::event::ClipBoardArrive(clipboardID);
+				eSystem::ClipBoardArrive(clipboardID);
 			}
 			break;
 		case ewol::clipBoard::CLIPBOARD_STD:
@@ -1056,7 +1009,7 @@ void guiAbstraction::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID
 				                  CurrentTime);
 			} else {
 				// just transmit an event , we have the data in the system
-				guiSystem::event::ClipBoardArrive(clipboardID);
+				eSystem::ClipBoardArrive(clipboardID);
 			}
 			break;
 		default:
@@ -1065,7 +1018,12 @@ void guiAbstraction::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID
 	}
 }
 
-void guiAbstraction::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
+/**
+ * @brief Inform the Gui that we are the new owner of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
@@ -1092,10 +1050,15 @@ void guiAbstraction::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID
 
 
 #undef __class__
-#define __class__ "guiAbstraction"
+#define __class__ "guiInterface"
 
 
-void guiAbstraction::Stop(void)
+/**
+ * @brief Stop the current program
+ * @param ---
+ * @return ---
+ */
+void guiInterface::Stop(void)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: Stop");
@@ -1103,70 +1066,81 @@ void guiAbstraction::Stop(void)
 	m_run = false;
 }
 
-
-void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
+/**
+ * @brief Display the virtal keyboard (for touch system only)
+ * @param ---
+ * @return ---
+ */
+void guiInterface::KeyboardShow(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
-void guiAbstraction::KeyboardHide(void)
+
+/**
+ * @brief Hide the virtal keyboard (for touch system only)
+ * @param ---
+ * @return ---
+ */
+void guiInterface::KeyboardHide(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-
-void guiAbstraction::ChangeSize(int32_t w, int32_t h)
+/**
+ * @brief Change the current Windows size
+ * @param size The requested size
+ * @return ---
+ */
+void guiInterface::ChangeSize(Vector2D<int32_t> size)
 {
-	X11_ChangeSize(w, h);
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: ChangeSize");
+	#endif
+	XResizeWindow(m_display, WindowHandle, size.x, size.y);
 }
 
-void guiAbstraction::ChangePos(int32_t x, int32_t y)
+
+/**
+ * @brief Change the current Windows position
+ * @param pos The position where the winsdows might be placed.
+ * @return ---
+ */
+void guiInterface::ChangePos(Vector2D<int32_t> pos)
 {
-	X11_ChangePos(x, y);
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: ChangePos");
+	#endif
+	XMoveWindow(m_display, WindowHandle, pos.x, pos.y);
 }
 
-void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
+
+/**
+ * @brief Get the current Windows position
+ * @param pos The position where the winsdows is.
+ * @return ---
+ */
+void guiInterface::GetAbsPos(Vector2D<int32_t>& pos)
 {
-	X11_GetAbsPos(x, y);
+	#ifdef DEBUG_X11_EVENT
+		EWOL_INFO("X11: GetAbsPos");
+	#endif
+	int tmp;
+	unsigned int tmp2;
+	Window fromroot, tmpwin;
+	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &pos.x, &pos.y, &tmp, &tmp, &tmp2);
 }
 
-bool guiAbstraction::IsPressedInput(int32_t inputID)
-{
-	if(    NB_MAX_INPUT > inputID
-	    && 0 <= inputID)
-	{
-		return inputIsPressed[inputID];
-	} else {
-		EWOL_WARNING("Wrong input ID : " << inputID);
-		return false;
-	}
-}
 
-#include <ewol/ewol.h>
-
-static etk::Vector<etk::UString*> listArgs;
-
-int32_t ewol::CmdLineNb(void)
-{
-	return listArgs.Size();
-}
-
-etk::UString ewol::CmdLineGet(int32_t id)
-{
-	if (id<0 && id>=listArgs.Size()) {
-		return "";
-	}
-	if (NULL == listArgs[id]) {
-		return "";
-	}
-	return *listArgs[id];
-}
-// might be declared by the application ....
-etk::File APP_Icon(void);
-
+/**
+ * @brief Main of the program
+ * @param std IO
+ * @return std IO
+ */
 int main(int argc, char *argv[])
 {
+	ewol::CmdLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
 		if (0==strncmp("-l0", argv[i], 256)) {
@@ -1184,10 +1158,8 @@ int main(int argc, char *argv[])
 		} else if (0==strncmp("-l6", argv[i], 256)) {
 			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
 		} else {
-			etk::UString* tmpString = new etk::UString(argv[i]);
-			if (NULL != tmpString) {
-				listArgs.PushBack(tmpString);
-			}
+			etk::UString tmpString(argv[i]);
+			ewol::CmdLine::Add(tmpString);
 		}
 	}
 	
@@ -1206,7 +1178,7 @@ int main(int argc, char *argv[])
 	// start X11 thread ...
 	X11_Init();
 	//start the basic thread : 
-	guiSystem::Init();
+	eSystem::Init();
 	// get the icon file : 
 	etk::File myIcon = APP_Icon();
 	SetIcon(myIcon);
@@ -1214,16 +1186,10 @@ int main(int argc, char *argv[])
 	// Run ...
 	X11_Run();
 	// close X11 :
-	guiAbstraction::Stop();
+	guiInterface::Stop();
 	// uninit ALL :
-	guiSystem::UnInit();
-	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
-		if (NULL != listArgs[iii]) {
-			delete listArgs[iii];
-			listArgs[iii] = NULL;
-		}
-	}
-	listArgs.Clear();
+	eSystem::UnInit();
+	ewol::CmdLine::Clean();
 	return 0;
 }
 

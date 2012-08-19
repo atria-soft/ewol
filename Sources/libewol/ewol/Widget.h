@@ -34,7 +34,6 @@ namespace ewol {
 #include <etk/Vector.h>
 #include <ewol/Debug.h>
 #include <ewol/OObject.h>
-#include <ewol/base/eventInputManagement.h>
 #include <ewol/ClipBoard.h>
 
 namespace ewol {
@@ -94,6 +93,12 @@ namespace ewol {
 		EVENT_KB_MOVE_TYPE_CONTEXT_MENU,
 		EVENT_KB_MOVE_TYPE_VER_NUM,
 	} eventKbMoveType_te;
+	
+	typedef enum {
+		INPUT_TYPE_UNKNOW,
+		INPUT_TYPE_MOUSE,
+		INPUT_TYPE_FINGER,
+	} inputType_te;
 	
 	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
 	

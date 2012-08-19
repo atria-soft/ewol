@@ -25,7 +25,7 @@
 
 
 #include <ewol/Texture.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 #include <ewol/ewol.h>
 #include <ewol/Texture/TextureBMP.h>
 #include <ewol/Texture/TextureSVG.h>

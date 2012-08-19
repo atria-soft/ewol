@@ -24,7 +24,7 @@
 
 #include <ewol/OObject/Sprite.h>
 #include <ewol/Texture.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 #include <math.h>
 
 #undef __class__

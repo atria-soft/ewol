@@ -27,7 +27,7 @@
 #include <etk/unicode.h>
 #include <etk/Vector.h>
 
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 extern "C" {
 	#include <freetype/ft2build.h>
 }

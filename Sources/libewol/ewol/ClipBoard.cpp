@@ -25,7 +25,7 @@
 #include <ewol/Debug.h>
 #include <ewol/ClipBoard.h>
 #include <ewol/base/gui.h>
-#include <ewol/base/MainThread.h>
+#include <ewol/base/eSystem.h>
 
 #undef __class__
 #define __class__	"ClipBoard"
@@ -92,7 +92,7 @@ void ewol::clipBoard::Set(ewol::clipBoard::clipboardListe_te clipboardID, etk::U
 	
 	if(    ewol::clipBoard::CLIPBOARD_STD == clipboardID
 	    || ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		guiAbstraction::ClipBoardSet(clipboardID);
+		guiInterface::ClipBoardSet(clipboardID);
 	}
 }
 
@@ -114,10 +114,10 @@ void ewol::clipBoard::Request(ewol::clipBoard::clipboardListe_te clipboardID)
 	
 	if(    ewol::clipBoard::CLIPBOARD_STD == clipboardID
 	    || ewol::clipBoard::CLIPBOARD_SELECTION == clipboardID) {
-		guiAbstraction::ClipBoardGet(clipboardID);
+		guiInterface::ClipBoardGet(clipboardID);
 	} else {
 		// generate an event on the main thread ...
-		guiSystem::event::ClipBoardArrive(clipboardID);
+		eSystem::ClipBoardArrive(clipboardID);
 	}
 }
 

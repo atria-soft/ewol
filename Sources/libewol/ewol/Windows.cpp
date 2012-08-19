@@ -30,9 +30,9 @@
 #include <ewol/Texture.h>
 #include <ewol/Font.h>
 #include <ewol/ewol.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/base/eventInputManagement.h>
+#include <ewol/base/eSystem.h>
 
 
 
@@ -191,7 +191,8 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	m_popUpWidgetList.PushBack(widget);
 	// Regenerate the size calculation :
 	CalculateSize(m_size.x, m_size.y);
-	ewol::eventInput::NewLayerSet();
+	// TODO : it is dansgerous to access directly to the system ...
+	eSystem::ResetIOEvent();
 }
 
 /**

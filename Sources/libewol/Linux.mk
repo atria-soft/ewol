@@ -27,7 +27,7 @@ LOCAL_CFLAGS := -Wno-write-strings \
 include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := \
-	ewol/base/guiX11.cpp \
+	ewol/base/gui.X11.cpp \
 	ewol/Audio/interfacePortAudio.cpp \
 	$(FILE_LIST)
 

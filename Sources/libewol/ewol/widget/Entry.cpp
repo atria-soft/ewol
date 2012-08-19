@@ -312,7 +312,7 @@ void ewol::Entry::UpdateTextPosition(void)
 void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
-	ewol::KeyboardShow(ewol::KEYBOARD_MODE_TEXT);
+	ewol::KeyboardShow();
 	MarkToRedraw();
 }
 

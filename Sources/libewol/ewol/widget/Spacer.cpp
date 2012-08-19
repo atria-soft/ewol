@@ -79,3 +79,4 @@ void ewol::Spacer::OnRegenerateDisplay(void)
 	BGOObjects->SetColor(m_color);
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 }
+

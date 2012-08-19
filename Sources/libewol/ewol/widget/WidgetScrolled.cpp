@@ -26,7 +26,7 @@
 
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 #include <ewol/ewol.h>
 
 
@@ -437,3 +437,4 @@ void ewol::WidgetScrooled::ScroolingMode(scrollingMode_te newMode)
 		m_zoom = 1;
 	}
 }
+

@@ -38,25 +38,19 @@ namespace ewol {
 	void Stop(void);
 	void DisplayWindows(ewol::Windows * windows);
 	// only on computer
-	void ChangeSize(int32_t w, int32_t h);
-	void ChangePos(int32_t x, int32_t y);
-	// TODO : Deprecated used FOR???
-	void GetAbsPos(int32_t & x, int32_t & y);
-	
-	// TODO : Deprecated remove it ...
-	bool IsPressedInput(int32_t inputID);
-	typedef enum {
-		KEYBOARD_MODE_TEXT,
-		KEYBOARD_MODE_NUMBER,
-		KEYBOARD_MODE_CODE,
-	} keyboardMode_te;
-	void KeyboardShow(ewol::keyboardMode_te mode);
+	void ChangeSize(Vector2D<int32_t> size);
+	void ChangePos(Vector2D<int32_t> pos);
+	void GetAbsPos(Vector2D<int32_t>& pos);
+	void KeyboardShow(void);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);
 	void PopUpWidgetPush(ewol::Widget * tmpWidget);
-	
-	int32_t      CmdLineNb(void);
-	etk::UString CmdLineGet(int32_t id);
+	namespace CmdLine {
+		void         Clean(void);
+		int32_t      Nb(void);
+		etk::UString Get(int32_t id);
+		void         Add(etk::UString& newElement);
+	};
 	// TODO : This might be deprecated ... 
 	bool IsSetCapsLock(void);
 	bool IsSetShift(void);

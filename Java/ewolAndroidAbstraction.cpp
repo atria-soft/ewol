@@ -28,14 +28,13 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <Debug.h>
-#include <ewol/base/MainThread.h>
+#include <ewol/base/eSystem.h>
 
 #include <ewol/threadMsg.h>
 #include <ewol/Audio/audio.h>
 
 // declaration of the ewol android abstraction ...
 void EWOL_NativeRender(void);
-void EWOL_NativeGLDestroy(void);
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
@@ -195,7 +194,7 @@ extern "C"
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
 		const char* str = env->GetStringUTFChars(myString, &isCopy);
-		guiSystem::SetArchiveDir(mode, str);
+		eSystem::SetArchiveDir(mode, str);
 		if (isCopy == JNI_TRUE) {
 			// from here str is reset ...
 			env->ReleaseStringUTFChars(myString, str);
@@ -274,7 +273,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Create                   **");
 		APPL_DEBUG("*******************************************");
-		guiSystem::Init();
+		eSystem::Init();
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnStart( JNIEnv*  env )
 	{
@@ -301,8 +300,7 @@ extern "C"
 		APPL_DEBUG("**  Activity On Pause                    **");
 		APPL_DEBUG("*******************************************");
 		// All the openGl has been destroyed ...
-		// TODO : Mark all the texture to be reloaded ...
-		EWOL_NativeGLDestroy();
+		eSystem::OpenGlContextDestroy();
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnStop( JNIEnv*  env )
 	{
@@ -315,7 +313,7 @@ extern "C"
 		APPL_DEBUG("*******************************************");
 		APPL_DEBUG("**  Activity On Destroy                  **");
 		APPL_DEBUG("*******************************************");
-		guiSystem::UnInit();
+		eSystem::UnInit();
 	}
 	
 	
@@ -325,22 +323,22 @@ extern "C"
 	 * ********************************************************************************************** */
 	void Java_org_ewol_interfaceJNI_IOInputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		guiSystem::event::SetInputMotion(pointerID+1, x, y);
+		eSystem::SetInputMotion(pointerID+1, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOInputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		guiSystem::event::SetInputState(pointerID+1, isUp, x, y);
+		eSystem::SetInputState(pointerID+1, isUp, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		guiSystem::event::SetMouseMotion(pointerID+1, x, y);
+		eSystem::SetMouseMotion(pointerID+1, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		guiSystem::event::SetMouseState(pointerID+1, isUp, x, y);
+		eSystem::SetMouseState(pointerID+1, isUp, x, y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
@@ -356,10 +354,10 @@ extern "C"
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
 	{
 		APPL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
-		guiSystem::event::keyboardKey_ts keyInput;
+		eSystem::keyboardKey_ts keyInput;
 		keyInput.myChar = uniChar;
 		keyInput.isDown = isdown;
-		guiSystem::event::SetKeyboard(keyInput);
+		eSystem::SetKeyboard(keyInput);
 	}
 	
 	enum {
@@ -370,6 +368,7 @@ extern "C"
 		SYSTEM_KEY__HOME,
 		SYSTEM_KEY__POWER,
 	};
+	// TODO : Set a return true or false if we want to grep this event ...
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventKeySystem( JNIEnv* env, jobject  thiz, jint keyVal, jboolean isdown)
 	{
 		switch (keyVal)
@@ -409,12 +408,12 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_RenderResize( JNIEnv* env, jobject thiz, jint w, jint h )
 	{
-		guiSystem::event::Resize(w, h);
+		eSystem::Resize(w, h);
 	}
 	
 	void Java_org_ewol_interfaceJNI_RenderDraw( JNIEnv*  env )
 	{
-		guiSystem::Draw(true);
+		eSystem::Draw(true);
 	}
 
 	void Java_org_ewol_interfaceJNI_IOAudioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)

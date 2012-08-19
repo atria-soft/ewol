@@ -23,7 +23,7 @@
  */
 
 #include <ewol/OObject/2DTextColored.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 #include <ewol/Texture.h>
 
 #undef __class__

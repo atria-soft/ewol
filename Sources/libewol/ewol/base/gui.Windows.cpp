@@ -33,13 +33,12 @@
 
 #include <ewol/Texture.h>
 #include <ewol/Texture/TextureBMP.h>
-#include <ewol/base/MainThread.h>
-#include <ewol/threadMsg.h>
-#include <ewol/importgl.h>
+#include <ewol/base/eSystem.h>
+#include <ewol/openGl.h>
 
 #include <sys/time.h>
 
-int64_t ewol::GetTime(void)
+int64_t guiInterface::GetTime(void)
 {
     struct timeval  now;
     gettimeofday(&now, NULL);
@@ -54,40 +53,29 @@ int32_t offsetMoveClickedDouble = 20000;
 
 bool inputIsPressed[20];
 
-static guiSystem::event::specialKey_ts guiKeyBoardMode;
+static eSystem::specialKey_ts guiKeyBoardMode;
 
-
-void ewol::SetTitle(etk::UString title)
+/**
+ * @brief Set the new title of the windows
+ * @param title New desired title
+ * @return ---
+ */
+void guiInterface::SetTitle(etk::UString& title)
 {
 	// TODO ...
 }
 
-
-static etk::Vector<etk::UString*> listArgs;
-
-int32_t ewol::CmdLineNb(void)
-{
-	return listArgs.Size();
-}
-
-etk::UString ewol::CmdLineGet(int32_t id)
-{
-	if (id<0 && id>=listArgs.Size()) {
-		return "";
-	}
-	if (NULL == listArgs[id]) {
-		return "";
-	}
-	return *listArgs[id];
-}
-
-
 #undef __class__
-#define __class__ "guiAbstraction"
+#define __class__ "guiInterface"
 
 bool m_run = true;
 
-void guiAbstraction::Stop(void)
+/**
+ * @brief Stop the current program
+ * @param ---
+ * @return ---
+ */
+void guiInterface::Stop(void)
 {
 	m_run = false;
 	// To exit program ...
@@ -95,67 +83,116 @@ void guiAbstraction::Stop(void)
 }
 
 
-void guiAbstraction::KeyboardShow(ewol::keyboardMode_te mode)
+/**
+ * @brief Display the virtal keyboard (for touch system only)
+ * @param ---
+ * @return ---
+ */
+void guiInterface::KeyboardShow(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
-void guiAbstraction::KeyboardHide(void)
+
+/**
+ * @brief Hide the virtal keyboard (for touch system only)
+ * @param ---
+ * @return ---
+ */
+void guiInterface::KeyboardHide(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
 
 
-void guiAbstraction::ChangeSize(int32_t w, int32_t h)
+/**
+ * @brief Change the current Windows size
+ * @param size The requested size
+ * @return ---
+ */
+void guiInterface::ChangeSize(Vector2D<int32_t> size)
 {
-	
+	// TODO : Later
 }
 
-void guiAbstraction::ChangePos(int32_t x, int32_t y)
+/**
+ * @brief Change the current Windows position
+ * @param pos The position where the winsdows might be placed.
+ * @return ---
+ */
+void guiInterface::ChangePos(Vector2D<int32_t> pos)
 {
-	
+	// TODO : Later
 }
 
-void guiAbstraction::GetAbsPos(int32_t & x, int32_t & y)
+/**
+ * @brief Get the current Windows position
+ * @param pos The position where the winsdows is.
+ * @return ---
+ */
+void guiInterface::GetAbsPos(Vector2D<int32_t>& pos)
 {
-	
+	// TODO : Later
 }
 
-bool guiAbstraction::IsPressedInput(int32_t inputID)
+
+
+// -------------------------------------------------------------------------
+//         ClipBoard AREA :
+// -------------------------------------------------------------------------
+
+bool l_clipBoardOwnerStd = false;
+/**
+ * @brief Inform the Gui that we want to have a copy of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	if(    NB_MAX_INPUT > inputID
-	    && 0 <= inputID)
+	// this is to force the local system to think we have the buffer
+	// TODO : Remove this 2 Line when code will be writen
+	l_clipBoardOwnerStd = true;
+	switch (clipboardID)
 	{
-		return inputIsPressed[inputID];
-	} else {
-		EWOL_WARNING("Wrong input ID : " << inputID);
-		return false;
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
+			// NOTE : Windows does not support the middle button the we do it internaly
+			// just transmit an event , we have the data in the system
+			eSystem::ClipBoardArrive(clipboardID);
+			break;
+		case ewol::clipBoard::CLIPBOARD_STD:
+			if (false == l_clipBoardOwnerStd) {
+				// Generate a request TO the OS
+				// TODO : Send the message to the OS "We disire to receive the copy buffer ...
+			} else {
+				// just transmit an event , we have the data in the system
+				eSystem::ClipBoardArrive(clipboardID);
+			}
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
 	}
 }
 
-
-
-// ClipBoard AREA :
-
-etk::UString l_clipBoardStd("");
-etk::UString l_clipBoardPrimary("");
-
-void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
+/**
+ * @brief Inform the Gui that we are the new owner of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("Request Get of a clipboard : " << mode << " size=" << newData.Size() );
-	#endif
-	newData = "";
-	switch (mode)
+	switch (clipboardID)
 	{
-		case CLIPBOARD_MODE_PRIMARY:
-			// get our own buffer ...
-			newData = l_clipBoardPrimary;
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
+			// NOTE : nothing to do : Windows deas ot supported Middle button
 			break;
-		case CLIPBOARD_MODE_STD:
-			// get our own buffer ...
-			newData = l_clipBoardStd;
+		case ewol::clipBoard::CLIPBOARD_STD:
+			// Request the clipBoard :
+			if (false == l_clipBoardOwnerStd) {
+				// TODO : Inform the OS that we have the current buffer of copy ...
+				l_clipBoardOwnerStd = true;
+			}
 			break;
 		default:
 			EWOL_ERROR("Request an unknow ClipBoard ...");
@@ -164,33 +201,6 @@ void guiAbstraction::ClipBoardGet(etk::UString &newData, clipBoardMode_te mode)
 }
 
 
-void guiAbstraction::ClipBoardSet(etk::UString &newData, clipBoardMode_te mode)
-{
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("Request set of a clipboard : " << mode << " size=" << newData.Size() );
-	#endif
-	switch (mode)
-	{
-		case CLIPBOARD_MODE_PRIMARY:
-			if (newData.Size() > 0) {
-				// copy it ...
-				l_clipBoardPrimary = newData;
-			}
-			break;
-		case CLIPBOARD_MODE_STD:
-			if (newData.Size() > 0) {
-				// copy it ...
-				l_clipBoardStd = newData;
-			}
-			break;
-		default:
-			EWOL_ERROR("Request an unknow ClipBoard ...");
-			break;
-	}
-}
-
-// might be declared by the application ....
-etk::File APP_Icon(void);
 
 #include <windows.h>
 #include <windowsx.h>
@@ -200,10 +210,11 @@ etk::File APP_Icon(void);
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL(HWND hWnd, HDC * hDC, HGLRC * hRC);
 void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
-int plop(void);
+int Windows_Run(void);
 
 int main(int argc, char *argv[])
 {
+	ewol::CmdLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
 		if (0==strncmp("-l0", argv[i], 256)) {
@@ -221,10 +232,8 @@ int main(int argc, char *argv[])
 		} else if (0==strncmp("-l6", argv[i], 256)) {
 			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
 		} else {
-			etk::UString* tmpString = new etk::UString(argv[i]);
-			if (NULL != tmpString) {
-				listArgs.PushBack(tmpString);
-			}
+			etk::UString tmpString(argv[i]);
+			ewol::CmdLine::Add(tmpString);
 		}
 	}
 	
@@ -243,31 +252,25 @@ int main(int argc, char *argv[])
 	// start X11 thread ...
 	// TODO : ...
 	//start the basic thread : 
-	guiSystem::Init();
+	eSystem::Init();
 	// get the icon file : 
 	etk::File myIcon = APP_Icon();
 	//SetIcon(myIcon);
 	
 	// Run ...
-	plop();
+	Windows_Run();
 	// close X11 :
-	guiAbstraction::Stop();
+	guiInterface::Stop();
 	// uninit ALL :
-	guiSystem::UnInit();
-	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
-		if (NULL != listArgs[iii]) {
-			delete listArgs[iii];
-			listArgs[iii] = NULL;
-		}
-	}
-	listArgs.Clear();
+	eSystem::UnInit();
+	ewol::CmdLine::Clean();
 	return 0;
 }
 
 
 // WinMain
 
-int plop(void)
+int Windows_Run(void)
 {
 	HINSTANCE hInstance = 0;
 	WNDCLASS wc;
@@ -295,7 +298,7 @@ int plop(void)
 	                     0, 0, 800, 600,
 	                     NULL, NULL, hInstance, NULL );
 	
-	guiSystem::event::Resize(800, 600-25);
+	eSystem::Resize(800, 600-25);
 	
 	// enable OpenGL for the window
 	EnableOpenGL( hWnd, &hDC, &hRC );
@@ -314,7 +317,7 @@ int plop(void)
 				DispatchMessage( &msg );
 			}
 		} else {
-			(void)guiSystem::Draw(true);
+			(void)eSystem::Draw(true);
 			SwapBuffers( hDC );
 		}
 	}
@@ -374,7 +377,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				WINDOWPOS* tmpVal = (WINDOWPOS*)lParam;
 				if (NULL != tmpVal) {
 					//EWOL_DEBUG("WM_WINDOWPOSCHANGING : : (" << tmpVal->x << "," << tmpVal->y << ") ( " << tmpVal->cx << "," << tmpVal->cy << ")");
-					guiSystem::event::Resize(tmpVal->cx-8, tmpVal->cy - 28);
+					eSystem::Resize(tmpVal->cx-8, tmpVal->cy - 28);
 				}
 			}
 			return 0;
@@ -486,17 +489,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				EWOL_DEBUG("kjhkjhkjhkjhkj = " << wParam);
 				if (tmpChar == 0) {
 					//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-					guiSystem::event::keyboardMove_ts specialEvent;
+					eSystem::keyboardMove_ts specialEvent;
 					specialEvent.special = guiKeyBoardMode;
 					specialEvent.move = keyInput;
 					specialEvent.isDown = buttonIsDown;
-					guiSystem::event::SetKeyboardMove(specialEvent);
+					eSystem::SetKeyboardMove(specialEvent);
 				} else {
-					guiSystem::event::keyboardKey_ts specialEvent;
+					eSystem::keyboardKey_ts specialEvent;
 					specialEvent.special = guiKeyBoardMode;
 					specialEvent.myChar = tmpChar;
 					specialEvent.isDown = buttonIsDown;
-					guiSystem::event::SetKeyboard(specialEvent);
+					eSystem::SetKeyboard(specialEvent);
 				}
 			}
 			return 0;
@@ -510,7 +513,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			pos.x = GET_X_LPARAM(lParam);
 			pos.y = GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			guiSystem::event::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
 		
 		case WM_MBUTTONUP:
@@ -520,7 +523,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			pos.x = GET_X_LPARAM(lParam);
 			pos.y = GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			guiSystem::event::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
 		
 		case WM_RBUTTONUP:
@@ -530,7 +533,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			pos.x = GET_X_LPARAM(lParam);
 			pos.y = GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			guiSystem::event::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
 		
 		case WM_MOUSEWHEEL:
@@ -543,8 +546,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 			pos.x = GET_X_LPARAM(lParam);
 			pos.y = GET_Y_LPARAM(lParam);
-			guiSystem::event::SetMouseState(mouseButtonId, true,  (float)pos.x, (float)pos.y);
-			guiSystem::event::SetMouseState(mouseButtonId, false, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, true,  (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, false, (float)pos.x, (float)pos.y);
 			return 0;
 		
 		case WM_MOUSEHOVER:
@@ -554,12 +557,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 				if (true == inputIsPressed[iii]) {
 					EWOL_VERBOSE("Windows event: bt=" << iii << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
-					guiSystem::event::SetMouseMotion(iii, (float)pos.x, (float)pos.y);
+					eSystem::SetMouseMotion(iii, (float)pos.x, (float)pos.y);
 					return 0;
 				}
 			}
 			EWOL_VERBOSE("Windows event: bt=" << 0 << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
-			guiSystem::event::SetMouseMotion(0, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseMotion(0, (float)pos.x, (float)pos.y);
 			return 0;
 		
 		default:
@@ -570,7 +573,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 // Enable OpenGL
-
 void EnableOpenGL(HWND hWnd, HDC * hDC, HGLRC * hRC)
 {
 	PIXELFORMATDESCRIPTOR pfd;

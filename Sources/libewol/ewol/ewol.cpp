@@ -25,7 +25,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/base/MainThread.h>
+#include <ewol/base/eSystem.h>
 
 #include <ewol/base/gui.h>
 
@@ -38,7 +38,7 @@ void ewol::DisplayWindows(ewol::Windows * windows)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	// set display of the windows :
-	guiAbstraction::SetDisplayOnWindows(windows);
+	eSystem::SetCurrentWindows(windows);
 	// Set the new default Focus :
 	ewol::widgetManager::FocusSetDefault(windows);
 }
@@ -46,48 +46,43 @@ void ewol::DisplayWindows(ewol::Windows * windows)
 
 void ewol::Stop(void)
 {
-	guiAbstraction::Stop();
+	guiInterface::Stop();
 }
 
 
-void ewol::ChangeSize(int32_t w, int32_t h)
+void ewol::ChangeSize(Vector2D<int32_t> size)
 {
-	guiAbstraction::ChangeSize(w, h);
+	guiInterface::ChangeSize(size);
 }
 
-void ewol::ChangePos(int32_t x, int32_t y)
+void ewol::ChangePos(Vector2D<int32_t> pos)
 {
-	guiAbstraction::ChangePos(x, y);
+	guiInterface::ChangePos(pos);
 }
 
-void ewol::GetAbsPos(int32_t & x, int32_t & y)
+void ewol::GetAbsPos(Vector2D<int32_t>& pos)
 {
-	guiAbstraction::GetAbsPos(x, y);
+	guiInterface::GetAbsPos(pos);
 }
 
 
-bool ewol::IsPressedInput(int32_t inputID)
+void ewol::KeyboardShow(void)
 {
-	return guiAbstraction::IsPressedInput(inputID);
-}
-
-void ewol::KeyboardShow(ewol::keyboardMode_te mode)
-{
-	guiAbstraction::KeyboardShow(mode);
+	guiInterface::KeyboardShow();
 }
 
 void ewol::KeyboardHide(void)
 {
-	guiAbstraction::KeyboardHide();
+	guiInterface::KeyboardHide();
 }
 
 void ewol::ForceRedrawAll(void)
 {
-	guiAbstraction::ForceRedrawAll();
+	eSystem::ForceRedrawAll();
 }
 
 
-guiSystem::event::specialKey_ts specialCurrentKey;
+eSystem::specialKey_ts specialCurrentKey;
 bool ewol::IsSetCapsLock(void)
 {
 	return specialCurrentKey.capLock;
@@ -134,3 +129,75 @@ etk::UString ewol::GetVersion(void)
 	return EWOL_VERSION_TAG_NAME;
 }
 
+
+int32_t ewol::GetCurrentWidth(void)
+{
+	Vector2D<int32_t> tmpSize = eSystem::GetSize();
+	return tmpSize.x;
+}
+
+int32_t ewol::GetCurrentHeight(void)
+{
+	Vector2D<int32_t> tmpSize = eSystem::GetSize();
+	return tmpSize.y;
+}
+
+
+void ewol::PopUpWidgetPush(ewol::Widget * tmpWidget)
+{
+	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
+	if (NULL != tmpWindows && NULL != tmpWidget) {
+		tmpWindows->PopUpWidgetPush(tmpWidget);
+	}
+}
+
+void ewol::SetTitle(etk::UString title)
+{
+	guiInterface::SetTitle(title);
+}
+
+// ------------------------------------------------------------------------
+//                 Command line arguments
+// ------------------------------------------------------------------------
+
+static etk::Vector<etk::UString*> listArgs;
+
+void ewol::CmdLine::Clean(void)
+{
+	for (int32_t iii=0; iii<listArgs.Size(); iii++) {
+		if (NULL != listArgs[iii]) {
+			delete listArgs[iii];
+			listArgs[iii] = NULL;
+		}
+	}
+	listArgs.Clear();
+}
+
+int32_t ewol::CmdLine::Nb(void)
+{
+	return listArgs.Size();
+}
+
+etk::UString ewol::CmdLine::Get(int32_t id)
+{
+	if (id<0 && id>=listArgs.Size()) {
+		return "";
+	}
+	if (NULL == listArgs[id]) {
+		return "";
+	}
+	return *listArgs[id];
+}
+
+void ewol::CmdLine::Add(etk::UString& newElement)
+{
+	etk::UString* tmpString = new etk::UString(newElement);
+	if (NULL != tmpString) {
+		listArgs.PushBack(tmpString);
+	}
+}
+
+int64_t ewol::GetTime(void)
+{
+	return guiInterface::GetTime();
+}

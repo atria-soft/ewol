@@ -2,9 +2,9 @@
 
 FILE_LIST = ewol/ewol.cpp \
 			ewol/threadMsg.cpp \
-			ewol/base/MainThread.cpp \
-			ewol/base/gui.cpp \
-			ewol/base/eventInputManagement.cpp \
+			ewol/openGl.cpp \
+			ewol/base/eSystem.cpp \
+			ewol/base/eSystemInput.cpp \
 			ewol/ClipBoard.cpp \
 			ewol/Debug.cpp \
 			ewol/EObject.cpp \

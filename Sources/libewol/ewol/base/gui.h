@@ -23,8 +23,8 @@
  */
 
 
-#ifndef __GUI_ABSTRACTION_H__
-#define __GUI_ABSTRACTION_H__
+#ifndef __GUI_INTERFACE_H__
+#define __GUI_INTERFACE_H__
 
 #include <etk/Types.h>
 #include <etk/UString.h>
@@ -32,36 +32,76 @@
 #include <ewol/ewol.h>
 #include <ewol/ClipBoard.h>
 
-void EWOL_NativeRender(void);
-void EWOL_NativeResize(int w, int h );
-void EWOL_GenericDraw(bool everyTime);
-void EWOL_NativeGLDestroy(void);
 
-void UpdateGuiSize(void);
-
-namespace guiAbstraction
+namespace guiInterface
 {
+	/**
+	 * @brief Get the curent time in micro-second
+	 * @param ---
+	 * @return ---
+	 */
+	int64_t GetTime(void);
+	/**
+	 * @brief Stop the current program
+	 * @param ---
+	 * @return ---
+	 */
 	void Stop(void);
-	void SetDisplayOnWindows(ewol::Windows * newOne);
-	void ChangeSize(int32_t w, int32_t h);
-	void ChangePos(int32_t x, int32_t y);
-	void GetAbsPos(int32_t & x, int32_t & y);
-	bool IsPressedInput(int32_t inputID);
-	void KeyboardShow(ewol::keyboardMode_te mode);
+	/**
+	 * @brief Change the current Windows size
+	 * @param size The requested size
+	 * @return ---
+	 */
+	void ChangeSize(Vector2D<int32_t> size);
+	/**
+	 * @brief Change the current Windows position
+	 * @param pos The position where the winsdows might be placed.
+	 * @return ---
+	 */
+	void ChangePos(Vector2D<int32_t> pos);
+	/**
+	 * @brief Get the current Windows position
+	 * @param pos The position where the winsdows is.
+	 * @return ---
+	 */
+	void GetAbsPos(Vector2D<int32_t>& pos);
+	/**
+	 * @brief Display the virtal keyboard (for touch system only)
+	 * @param ---
+	 * @return ---
+	 */
+	void KeyboardShow(void);
+	/**
+	 * @brief Hide the virtal keyboard (for touch system only)
+	 * @param ---
+	 * @return ---
+	 */
 	void KeyboardHide(void);
-	void ForceRedrawAll(void);
-	void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
-	void SendKeyboardEventMove(bool isDown, ewol::eventKbMoveType_te &keyInput);
-	void SendClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
-
+	/**
+	 * @brief Inform the Gui that we want to have a copy of the clipboard
+	 * @param ID of the clipboard (STD/SELECTION) only apear here
+	 * @return ---
+	 */
 	void ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID);
+	/**
+	 * @brief Inform the Gui that we are the new owner of the clipboard
+	 * @param ID of the clipboard (STD/SELECTION) only apear here
+	 * @return ---
+	 */
 	void ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID);
+	/**
+	 * @brief Set the new title of the windows
+	 * @param title New desired title
+	 * @return ---
+	 */
+	void SetTitle(etk::UString& title);
 };
 
 
-//!< must be define in CPP by the application ...
-void APP_Init(void);
-void APP_UnInit(void);
+//!< must be define in CPP by the application ... this are the main init and unInit of the Application
+void      APP_Init(void);
+void      APP_UnInit(void);
+etk::File APP_Icon(void);
 
 #define NB_MAX_INPUT                  (20)
 

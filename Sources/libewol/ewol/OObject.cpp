@@ -25,7 +25,6 @@
 #include <etk/Types.h>
 #include <etk/UString.h>
 #include <ewol/OObject.h>
-#include <ewol/importgl.h>
 
 
 #undef __class__

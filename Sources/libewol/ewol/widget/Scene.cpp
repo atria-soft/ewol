@@ -27,7 +27,7 @@
 
 #include <ewol/OObject.h>
 #include <ewol/WidgetManager.h>
-#include <ewol/importgl.h>
+#include <ewol/openGl.h>
 
 /**
  * @brief Initilise the basic widget property ==> due to the android system
@@ -201,3 +201,4 @@ Vector2D<float> ewol::Scene::RelativePosition(Vector2D<float>  pos)
 	
 	return pos;
 };
+

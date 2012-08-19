@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file eventInputManagement.cpp
+ * @file eSystemInput.cpp
  * @brief Input (mouse,finger) abstraction layer (Sources)
  * @author Edouard DUPIN
  * @date 00/04/2011
@@ -38,29 +38,22 @@
 #include <ewol/base/gui.h>
 #include <ewol/ewol.h>
 #include <ewol/Texture.h>
-#include <ewol/base/MainThread.h>
-#include <ewol/base/eventInputManagement.h>
+#include <ewol/base/eSystem.h>
+#include <ewol/base/eSystemInput.h>
 
 
-typedef struct {
-	bool          isUsed;
-	int32_t       destinationInputId;
-	int64_t       lastTimeEvent;
-	ewol::Widget* curentWidgetEvent;
-	Vector2D<float>    origin;
-	Vector2D<float>    size;
-	Vector2D<float>    downStart;
-	bool          isDown;
-	bool          isInside;
-	int32_t       nbClickEvent; // 0 .. 1 .. 2 .. 3
-} InputPoperty_ts;
+#define EVENT_DEBUG  EWOL_VERBOSE
+//#define EVENT_DEBUG  EWOL_DEBUG
+
+// defined by the platform specific file : 
+extern int32_t separateClickTime;
+extern int32_t offsetMoveClicked;
+extern int32_t offsetMoveClickedDouble;
 
 
-#define MAX_MANAGE_INPUT         (10)
-InputPoperty_ts eventInputSaved[MAX_MANAGE_INPUT];
-InputPoperty_ts eventMouseSaved[MAX_MANAGE_INPUT];
 
-static void CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
+
+void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
 {
 	eventTable[idInput].isUsed = false;
 	eventTable[idInput].destinationInputId = 0;
@@ -84,7 +77,7 @@ static void CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
  * @note : Sub classes must call this class
  * @return ---
  */
-void ewol::eventInput::OnObjectRemove(ewol::EObject * removeObject)
+void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		if (eventInputSaved[iii].curentWidgetEvent == removeObject) {
@@ -103,7 +96,7 @@ void ewol::eventInput::OnObjectRemove(ewol::EObject * removeObject)
  * @param ---
  * @return ---
  */
-void ewol::eventInput::NewLayerSet(void)
+void ewol::eSystemInput::NewLayerSet(void)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
@@ -112,29 +105,27 @@ void ewol::eventInput::NewLayerSet(void)
 	}
 }
 
+void ewol::eSystemInput::Reset(void)
+{
+	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
+		// remove the property of this input ...
+		CleanElement(eventInputSaved, iii);
+		CleanElement(eventMouseSaved, iii);
+	}
+}
 
-void ewol::eventInput::Init(void)
+ewol::eSystemInput::eSystemInput(void)
 {
 	EWOL_INFO("Init");
-	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		// remove the property of this input ...
-		CleanElement(eventInputSaved, iii);
-		CleanElement(eventMouseSaved, iii);
-	}
+	Reset();
 }
 
-void ewol::eventInput::UnInit(void)
+ewol::eSystemInput::~eSystemInput(void)
 {
 	EWOL_INFO("Un-Init");
-	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		// remove the property of this input ...
-		CleanElement(eventInputSaved, iii);
-		CleanElement(eventMouseSaved, iii);
-	}
+	Reset();
 }
 
-
-extern ewol::Windows* gui_uniqueWindows;
 
 /**
  * @brief generate the event on the destinated widger
@@ -145,7 +136,7 @@ extern ewol::Windows* gui_uniqueWindows;
  * @param[in] pos position of the event
  * @return true if event has been greped
  */
-static bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::eSystemInput::localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	if (NULL != destWidget) {
 		if (type == ewol::INPUT_TYPE_MOUSE || type == ewol::INPUT_TYPE_FINGER) {
@@ -164,7 +155,7 @@ static bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, i
  * @param[in] realInputId System Id
  * @return the ewol input id
  */
-static int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId)
+int32_t ewol::eSystemInput::localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId)
 {
 	if (type == ewol::INPUT_TYPE_FINGER) {
 		int32_t lastMinimum = 0;
@@ -182,16 +173,8 @@ static int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* dest
 	return realInputId;
 }
 
-#define EVENT_DEBUG  EWOL_VERBOSE
-//#define EVENT_DEBUG  EWOL_DEBUG
-
-// defined by the platform specific file : 
-extern int32_t separateClickTime;
-extern int32_t offsetMoveClicked;
-extern int32_t offsetMoveClickedDouble;
-
 // note if id<0 ==> the it was finger event ...
-void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<float> pos)
+void ewol::eSystemInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<float> pos)
 {
 	// convert position in Open-GL coordonates ...
 	pos.y = ewol::GetCurrentHeight() - pos.y;
@@ -210,11 +193,15 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 		// not manage input
 		return;
 	}
+	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
 	if (type == ewol::INPUT_TYPE_MOUSE && pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
-		ewol::Widget* tmpWidget = gui_uniqueWindows->GetWidgetAtPos(pos);
+		ewol::Widget* tmpWidget = NULL;
+		if (NULL != tmpWindows) {
+			tmpWidget = tmpWindows->GetWidgetAtPos(pos);
+		}
 		if(    tmpWidget != eventTable[pointerID].curentWidgetEvent
 		    || (    true == eventTable[pointerID].isInside
 		         && (     eventTable[pointerID].origin.x > pos.x
@@ -229,8 +216,8 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 			// Set the element inside ...
 			eventTable[pointerID].isInside = true;
 			// get destination widget :
-			if(NULL != gui_uniqueWindows) {
-				eventTable[pointerID].curentWidgetEvent = gui_uniqueWindows->GetWidgetAtPos(pos);
+			if(NULL != tmpWindows) {
+				eventTable[pointerID].curentWidgetEvent = tmpWindows->GetWidgetAtPos(pos);
 			} else {
 				eventTable[pointerID].curentWidgetEvent = NULL;
 			}
@@ -272,7 +259,7 @@ void ewol::eventInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<f
 	}
 }
 
-void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float> pos)
+void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float> pos)
 {
 	// convert position in Open-GL coordonates ...
 	pos.y = ewol::GetCurrentHeight() - pos.y;
@@ -292,6 +279,7 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::GetTime();
+	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	
 	if (true == isDown) {
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN] " << pos);
@@ -320,8 +308,8 @@ void ewol::eventInput::State(ewol::inputType_te type, int pointerID, bool isDown
 			// Set the element inside ...
 			eventTable[pointerID].isInside = true;
 			// get destination widget :
-			if(NULL != gui_uniqueWindows) {
-				eventTable[pointerID].curentWidgetEvent = gui_uniqueWindows->GetWidgetAtPos(pos);
+			if(NULL != tmpWindows) {
+				eventTable[pointerID].curentWidgetEvent = tmpWindows->GetWidgetAtPos(pos);
 			} else {
 				eventTable[pointerID].curentWidgetEvent = NULL;
 			}
