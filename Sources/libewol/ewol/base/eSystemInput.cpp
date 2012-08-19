@@ -45,13 +45,20 @@
 #define EVENT_DEBUG  EWOL_VERBOSE
 //#define EVENT_DEBUG  EWOL_DEBUG
 
-// defined by the platform specific file : 
-extern int32_t separateClickTime;
-extern int32_t offsetMoveClicked;
-extern int32_t offsetMoveClickedDouble;
+void ewol::eSystemInput::CalculateLimit(void)
+{
+	m_eventInputLimit.sepatateTime = 300000; // µs
+	m_eventInputLimit.DpiOffset = m_dpi*100;
+	m_eventMouseLimit.sepatateTime = 30000; // µs
+	m_eventMouseLimit.DpiOffset = (float)m_dpi*(float)0.1;
+}
 
-
-
+void ewol::eSystemInput::SetDpi(int32_t newDPI)
+{
+	m_dpi = newDPI;
+	// recalculate the DPI system ...
+	CalculateLimit();
+}
 
 void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
 {
@@ -80,13 +87,13 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
 void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		if (eventInputSaved[iii].curentWidgetEvent == removeObject) {
+		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...
-			CleanElement(eventInputSaved, iii);
+			CleanElement(m_eventInputSaved, iii);
 		}
-		if (eventMouseSaved[iii].curentWidgetEvent == removeObject) {
+		if (m_eventMouseSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...
-			CleanElement(eventMouseSaved, iii);
+			CleanElement(m_eventMouseSaved, iii);
 		}
 	}
 }
@@ -100,8 +107,8 @@ void ewol::eSystemInput::NewLayerSet(void)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
-		CleanElement(eventInputSaved, iii);
-		CleanElement(eventMouseSaved, iii);
+		CleanElement(m_eventInputSaved, iii);
+		CleanElement(m_eventMouseSaved, iii);
 	}
 }
 
@@ -109,13 +116,14 @@ void ewol::eSystemInput::Reset(void)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
-		CleanElement(eventInputSaved, iii);
-		CleanElement(eventMouseSaved, iii);
+		CleanElement(m_eventInputSaved, iii);
+		CleanElement(m_eventMouseSaved, iii);
 	}
 }
 
 ewol::eSystemInput::eSystemInput(void)
 {
+	SetDpi(200);
 	EWOL_INFO("Init");
 	Reset();
 }
@@ -160,10 +168,10 @@ int32_t ewol::eSystemInput::localGetDestinationId(ewol::inputType_te type, ewol:
 	if (type == ewol::INPUT_TYPE_FINGER) {
 		int32_t lastMinimum = 0;
 		for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-			if (true==eventInputSaved[iii].isUsed) {
-				if (eventInputSaved[iii].curentWidgetEvent == destWidget) {
+			if (true==m_eventInputSaved[iii].isUsed) {
+				if (m_eventInputSaved[iii].curentWidgetEvent == destWidget) {
 					if (iii != realInputId) {
-						lastMinimum = etk_max(lastMinimum, eventInputSaved[iii].destinationInputId);
+						lastMinimum = etk_max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
 					}
 				}
 			}
@@ -181,9 +189,9 @@ void ewol::eSystemInput::Motion(ewol::inputType_te type, int pointerID, Vector2D
 	
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::INPUT_TYPE_MOUSE) {
-		eventTable = eventMouseSaved;
+		eventTable = m_eventMouseSaved;
 	} else if (type == ewol::INPUT_TYPE_FINGER) {
-		eventTable = eventInputSaved;
+		eventTable = m_eventInputSaved;
 	} else {
 		EWOL_ERROR("Unknown type of event");
 		return;
@@ -264,10 +272,13 @@ void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDo
 	// convert position in Open-GL coordonates ...
 	pos.y = ewol::GetCurrentHeight() - pos.y;
 	InputPoperty_ts *eventTable = NULL;
+	inputLimit_ts   localLimit;
 	if (type == ewol::INPUT_TYPE_MOUSE) {
-		eventTable = eventMouseSaved;
+		eventTable = m_eventMouseSaved;
+		localLimit = m_eventMouseLimit;
 	} else if (type == ewol::INPUT_TYPE_FINGER) {
-		eventTable = eventInputSaved;
+		eventTable = m_eventInputSaved;
+		localLimit = m_eventInputLimit;
 	} else {
 		EWOL_ERROR("Unknown type of event");
 		return;
@@ -285,10 +296,10 @@ void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDo
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN] " << pos);
 		if(true == eventTable[pointerID].isUsed) {
 			// we have an event previously ... check delay between click and offset position
-			if (currentTime - eventTable[pointerID].lastTimeEvent > separateClickTime) {
+			if (currentTime - eventTable[pointerID].lastTimeEvent > localLimit.sepatateTime) {
 				CleanElement(eventTable, pointerID);
-			} else if(    abs(eventTable[pointerID].downStart.x - pos.x) >= offsetMoveClicked
-			           || abs(eventTable[pointerID].downStart.y - pos.y) >= offsetMoveClicked ){
+			} else if(    abs(eventTable[pointerID].downStart.x - pos.x) >= localLimit.DpiOffset
+			           || abs(eventTable[pointerID].downStart.y - pos.y) >= localLimit.DpiOffset ){
 				CleanElement(eventTable, pointerID);
 			}
 		}
@@ -338,8 +349,8 @@ void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDo
 			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [UP]     " << pos);
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, pointerID, ewol::EVENT_INPUT_TYPE_UP, pos);
 			// generate event (single)
-			if(    abs(eventTable[pointerID].downStart.x - pos.x) < offsetMoveClicked
-			    && abs(eventTable[pointerID].downStart.y - pos.y) < offsetMoveClicked ){
+			if(    abs(eventTable[pointerID].downStart.x - pos.x) < localLimit.DpiOffset
+			    && abs(eventTable[pointerID].downStart.y - pos.y) < localLimit.DpiOffset ){
 				// Save current position :
 				eventTable[pointerID].downStart = pos;
 				// save start time

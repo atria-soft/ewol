@@ -46,11 +46,6 @@ int64_t guiInterface::GetTime(void)
     return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
 
-
-int32_t separateClickTime = 300000;
-int32_t offsetMoveClicked = 10000;
-int32_t offsetMoveClickedDouble = 20000;
-
 bool inputIsPressed[20];
 
 static eSystem::specialKey_ts guiKeyBoardMode;
@@ -134,6 +129,8 @@ void guiInterface::ChangePos(Vector2D<int32_t> pos)
 void guiInterface::GetAbsPos(Vector2D<int32_t>& pos)
 {
 	// TODO : Later
+	size.x = 0;
+	size.y = 0;
 }
 
 
@@ -249,8 +246,6 @@ int main(int argc, char *argv[])
 	guiKeyBoardMode.verNum = false;
 	guiKeyBoardMode.insert = false;
 	
-	// start X11 thread ...
-	// TODO : ...
 	//start the basic thread : 
 	eSystem::Init();
 	// get the icon file : 
@@ -259,7 +254,7 @@ int main(int argc, char *argv[])
 	
 	// Run ...
 	Windows_Run();
-	// close X11 :
+	// close windows system :
 	guiInterface::Stop();
 	// uninit ALL :
 	eSystem::UnInit();

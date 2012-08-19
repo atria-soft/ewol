@@ -120,10 +120,6 @@ XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
 
-int32_t separateClickTime = 300000;
-int32_t offsetMoveClicked = 10000;
-int32_t offsetMoveClickedDouble = 20000;
-
 bool inputIsPressed[20];
 
 // internal copy of the clipBoard ...

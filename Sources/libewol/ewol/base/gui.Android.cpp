@@ -42,9 +42,6 @@
 
 #undef __class__
 #define __class__ "AndroidJNI"
-int32_t separateClickTime = 800000;
-int32_t offsetMoveClicked = 40000;
-int32_t offsetMoveClickedDouble = 300000;
 
 int64_t guiInterface::GetTime(void)
 {
@@ -53,22 +50,6 @@ int64_t guiInterface::GetTime(void)
     //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
     return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
-
-
-void Draw(void);
-#define OFFSET_MOVE_CLICKED             (20)
-#define OFFSET_MOVE_CLICKED_DOUBLE      (40)
-#undef SEPARATED_CLICK_TIME
-#define SEPARATED_CLICK_TIME          (300)
-
-//bool    inputIsPressed[NB_MAX_INPUT];// = {false, false, false};
-int32_t m_previousBouttonId = -1;
-int32_t m_previousDown_x = -1;
-int32_t m_previousDown_y = -1;
-int32_t m_previous_x = -1;
-int32_t m_previous_y = -1;
-int64_t m_previousTime = 0;
-bool    m_previousDouble = false;
 
 
 /**
@@ -150,7 +131,7 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 
 void guiInterface::Stop(void)
 {
-	// TODo : send a message to the android system to stop ...
+	// TODO : send a message to the android system to stop ...
 }
 
 // java system to send message : 

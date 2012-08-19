@@ -46,13 +46,21 @@ namespace ewol
 		int32_t         nbClickEvent; // 0 .. 1 .. 2 .. 3
 	} InputPoperty_ts;
 	
+	typedef struct {
+		int32_t sepatateTime;
+		int32_t DpiOffset;
+	} inputLimit_ts;
 	
 	class eSystemInput
 	{
 		private:
+			int32_t         m_dpi;
+			inputLimit_ts   m_eventInputLimit;
+			inputLimit_ts   m_eventMouseLimit;
+			void CalculateLimit(void);
 			#define MAX_MANAGE_INPUT         (10)
-			InputPoperty_ts eventInputSaved[MAX_MANAGE_INPUT];
-			InputPoperty_ts eventMouseSaved[MAX_MANAGE_INPUT];
+			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
+			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
 			void CleanElement(InputPoperty_ts *eventTable, int32_t idInput);
 			bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos);
 			int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId);
@@ -60,6 +68,7 @@ namespace ewol
 			eSystemInput(void);
 			~eSystemInput(void);
 			void Reset(void);
+			void SetDpi(int32_t newDPI);
 			
 			// note if id<0 ==> the it was finger event ...
 			void Motion(ewol::inputType_te type, int pointerID, Vector2D<float>  pos );

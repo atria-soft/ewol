@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file guiIPhone.cpp
- * @brief Gui abstraction layer (Sources)
+ * @file guiIOs.cpp
+ * @brief Gui abstraction layer for i-OS platform (Sources)
  * @author Edouard DUPIN
  * @date 20/10/2011
  * @par Project
@@ -22,25 +22,3 @@
  *******************************************************************************
  */
 
-
-#include <ewol/Debug.h>
-#include <base/guiIPhone.h>
-
-#undef __class__
-#define __class__ "guiAbstraction"
-
-void guiAbstraction::Init(int32_t argc, char *argv[])
-{
-	EWOL_INFO("INIT for IPhone environement");
-}
-
-void guiAbstraction::Run(void)
-{
-	EWOL_INFO("Start Running");
-	EWOL_INFO("Stop Running");
-}
-
-void guiAbstraction::UnInit(void)
-{
-	EWOL_INFO("UN-INIT for IPhone environement");
-}
