@@ -28,8 +28,8 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/widget/WidgetScrolled.h>
-#include <ewol/OObject/Sprite.h>
-#include <ewol/Game/GameElement.h>
+#include <ewol/oObject/Sprite.h>
+#include <ewol/game/GameElement.h>
 
 
 namespace ewol {

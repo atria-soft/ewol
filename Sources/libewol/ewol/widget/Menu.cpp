@@ -25,8 +25,8 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/EObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/eObject/EObject.h>
+#include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>

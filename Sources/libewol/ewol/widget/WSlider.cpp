@@ -24,7 +24,7 @@
 
 
 #include <ewol/widget/WSlider.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
 

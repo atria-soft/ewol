@@ -25,8 +25,8 @@
 #include <ewol/widget/Scene.h>
 #include <math.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 #include <ewol/openGl.h>
 
 /**

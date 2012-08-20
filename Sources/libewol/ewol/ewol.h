@@ -29,8 +29,8 @@
 #include <etk/Types.h>
 #include <etk/UString.h>
 #include <etk/File.h>
-#include <ewol/Widget.h>
-#include <ewol/Windows.h>
+#include <ewol/widget/Widget.h>
+#include <ewol/widget/Windows.h>
 
 #if 1
 

@@ -24,7 +24,7 @@
 
 
 #include <ewol/widget/SizerVert.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/widget/WidgetManager.h>
 
 
 #undef __class__

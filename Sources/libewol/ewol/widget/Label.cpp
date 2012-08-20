@@ -24,8 +24,8 @@
 
 #include <ewol/widget/Label.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 
 extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";

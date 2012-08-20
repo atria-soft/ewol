@@ -24,9 +24,9 @@
 
 #include <ewol/widget/ButtonColor.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
-#include <ewol/widgetMeta/ColorChooser.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/meta/ColorChooser.h>
 #include <ewol/ewol.h>
 
 

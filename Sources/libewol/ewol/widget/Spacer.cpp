@@ -24,8 +24,8 @@
 
 #include <ewol/widget/Spacer.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 
 #undef __class__

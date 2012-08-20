@@ -25,7 +25,7 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/ContextMenu.h>
 
 #undef __class__

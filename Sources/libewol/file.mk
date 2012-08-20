@@ -1,32 +1,46 @@
 
-
+# Basic elements
 FILE_LIST = ewol/ewol.cpp \
 			ewol/threadMsg.cpp \
 			ewol/openGl.cpp \
-			ewol/base/eSystem.cpp \
-			ewol/base/eSystemInput.cpp \
 			ewol/ClipBoard.cpp \
 			ewol/Debug.cpp \
-			ewol/EObject.cpp \
-			ewol/EObjectManager.cpp \
-			ewol/OObject.cpp \
-			ewol/Game/GameElement.cpp \
-			ewol/Game/GameElementLua.cpp \
-			ewol/Game/SceneElement.cpp \
-			ewol/OObject/2DText.cpp \
-			ewol/OObject/2DTextColored.cpp \
-			ewol/OObject/2DColored.cpp \
-			ewol/OObject/2DTextured.cpp \
-			ewol/OObject/Sprite.cpp \
-			ewol/Texture.cpp \
-			ewol/Texture/TextureBMP.cpp \
-			ewol/Texture/TexturePNG.cpp \
-			ewol/Texture/TextureSVG.cpp \
-			ewol/FontFreeType.cpp \
-			ewol/Widget.cpp \
-			ewol/WidgetManager.cpp \
-			ewol/Windows.cpp \
-			ewol/ShortCutManager.cpp \
+			ewol/ShortCutManager.cpp
+
+# Gui interface
+FILE_LIST+= ewol/os/eSystem.cpp \
+			ewol/os/eSystemInput.cpp
+
+# Basic Eobject of EWOL
+FILE_LIST+= ewol/eObject/EObject.cpp \
+			ewol/eObject/EObjectManager.cpp
+
+# Game elements
+FILE_LIST+= ewol/game/GameElement.cpp \
+			ewol/game/GameElementLua.cpp \
+			ewol/game/SceneElement.cpp
+
+# Object abstraction for OpenGl
+FILE_LIST+= ewol/oObject/OObject.cpp \
+			ewol/oObject/2DText.cpp \
+			ewol/oObject/2DTextColored.cpp \
+			ewol/oObject/2DColored.cpp \
+			ewol/oObject/2DTextured.cpp \
+			ewol/oObject/Sprite.cpp
+
+# texture management
+FILE_LIST+= ewol/texture/Texture.cpp \
+			ewol/texture/TextureBMP.cpp \
+			ewol/texture/TexturePNG.cpp \
+			ewol/texture/TextureSVG.cpp
+
+# fonst system
+FILE_LIST+= ewol/font/FontFreeType.cpp
+
+# all widgets
+FILE_LIST+= ewol/widget/Widget.cpp \
+			ewol/widget/WidgetManager.cpp \
+			ewol/widget/Windows.cpp \
 			ewol/widget/Button.cpp \
 			ewol/widget/ButtonImage.cpp \
 			ewol/widget/Image.cpp \
@@ -51,12 +65,16 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/widget/WSlider.cpp \
 			ewol/widget/Spacer.cpp \
 			ewol/widget/WidgetScrolled.cpp \
-			ewol/widgetMeta/FileChooser.cpp \
-			ewol/widgetMeta/ColorChooser.cpp \
-			ewol/widgetMeta/Parameter.cpp \
-			ewol/widgetMeta/ParameterList.cpp \
-			ewol/theme/Theme.cpp \
-			ewol/Audio/audio.cpp \
-			ewol/Audio/decWav.cpp
+			ewol/widget/meta/FileChooser.cpp \
+			ewol/widget/meta/ColorChooser.cpp \
+			ewol/widget/meta/Parameter.cpp \
+			ewol/widget/meta/ParameterList.cpp
+
+# Theme parsing ...
+FILE_LIST+= ewol/theme/Theme.cpp
+
+# Audio system
+FILE_LIST+= ewol/audio/audio.cpp \
+			ewol/audio/decWav.cpp
 
 

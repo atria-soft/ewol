@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Widget.h>
 #include <ewol/widget/Button.h>
 
 namespace ewol {

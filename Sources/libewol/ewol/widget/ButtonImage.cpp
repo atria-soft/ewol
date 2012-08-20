@@ -24,8 +24,8 @@
 
 #include <ewol/widget/ButtonImage.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 /**
  * @brief Initilise the basic widget property ==> due to the android system

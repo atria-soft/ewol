@@ -25,7 +25,7 @@
 
 
 #include <ewol/widget/PopUp.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"PopUp"

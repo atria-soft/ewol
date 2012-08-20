@@ -25,7 +25,7 @@
 #ifndef __EWOL_WIDGET_DRAWABLE_H__
 #define __EWOL_WIDGET_DRAWABLE_H__
 
-#include <ewol/Widget.h>
+#include <ewol/widget/Widget.h>
 
 
 namespace ewol {

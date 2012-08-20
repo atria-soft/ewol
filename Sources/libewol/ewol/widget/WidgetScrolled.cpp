@@ -24,8 +24,8 @@
 
 #include <ewol/widget/WidgetScrolled.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 #include <ewol/openGl.h>
 #include <ewol/ewol.h>
 

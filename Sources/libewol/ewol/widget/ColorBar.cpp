@@ -24,8 +24,8 @@
 
 #include <ewol/widget/ColorBar.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 #include <etk/Color.h>
 

@@ -24,10 +24,10 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/WidgetManager.h>
-#include <ewol/base/eSystem.h>
+#include <ewol/widget/WidgetManager.h>
+#include <ewol/os/eSystem.h>
 
-#include <ewol/base/gui.h>
+#include <ewol/os/gui.h>
 
 #undef __class__
 #define __class__	"ewol"

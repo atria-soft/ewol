@@ -24,8 +24,8 @@
 
 #include <ewol/widget/ProgressBar.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"Slider"

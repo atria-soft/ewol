@@ -25,8 +25,8 @@
 
 #include <ewol/widget/List.h>
 
-#include <ewol/OObject.h>
-#include <ewol/WidgetManager.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"List"

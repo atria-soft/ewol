@@ -28,7 +28,7 @@
 #include <etk/Types.h>
 #include <etk/UString.h>
 #include <ewol/Debug.h>
-#include <ewol/Widget.h>
+#include <ewol/widget/Widget.h>
 #include <ewol/widget/SizerHori.h>
 #include <ewol/widget/ContextMenu.h>
 

@@ -24,8 +24,8 @@
 
 #include <ewol/Debug.h>
 #include <ewol/ClipBoard.h>
-#include <ewol/base/gui.h>
-#include <ewol/base/eSystem.h>
+#include <ewol/os/gui.h>
+#include <ewol/os/eSystem.h>
 
 #undef __class__
 #define __class__	"ClipBoard"

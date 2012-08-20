@@ -24,7 +24,7 @@
 
 
 #include <ewol/ShortCutManager.h>
-#include <ewol/EObject.h>
+#include <ewol/eObject/EObject.h>
 #include <ewol/ewol.h>
 
 
