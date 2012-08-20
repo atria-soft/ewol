@@ -1,7 +1,6 @@
 
 # Basic elements
 FILE_LIST = ewol/ewol.cpp \
-			ewol/threadMsg.cpp \
 			ewol/openGl.cpp \
 			ewol/ClipBoard.cpp \
 			ewol/Debug.cpp \

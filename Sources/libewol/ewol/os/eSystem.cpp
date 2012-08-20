@@ -27,7 +27,7 @@
 #include <etk/File.h>
 #include <ewol/ewol.h>
 #include <ewol/Debug.h>
-#include <ewol/threadMsg.h>
+#include <etk/MessageFifo.h>
 #include <ewol/os/eSystem.h>
 #include <ewol/os/gui.h>
 #include <ewol/texture/Texture.h>
@@ -39,16 +39,11 @@
 #include <ewol/openGl.h>
 #include <ewol/os/Fps.h>
 
-static ewol::Windows*         windowsCurrent = NULL;
-static Vector2D<int32_t> windowsSize(320, 480);
-
-static ewol::threadMsg::threadMsg_ts    androidJniMsg;
-
+static ewol::Windows*     windowsCurrent = NULL;
+static Vector2D<int32_t>  windowsSize(320, 480);
 static ewol::eSystemInput l_managementInput;
 
 enum {
-	THREAD_INIT,
-	THREAD_UN_INIT,
 	THREAD_RECALCULATE_SIZE,
 	THREAD_RESIZE,
 	THREAD_HIDE,
@@ -59,7 +54,6 @@ enum {
 	
 	THREAD_KEYBORAD_KEY,
 	THREAD_KEYBORAD_MOVE,
-	THREAD_JUST_DISPLAY,
 	
 	THREAD_CLIPBOARD_ARRIVE,
 };
@@ -71,21 +65,28 @@ typedef struct {
 	int w;
 	int h;
 } eventResize_ts;
-
-typedef struct {
-	ewol::inputType_te type;
-	int pointerID;
-	float x;
-	float y;
-} eventInputMotion_ts;
-
 typedef struct {
 	ewol::inputType_te type;
 	int pointerID;
 	bool state;
 	float x;
 	float y;
-} eventInputState_ts;
+} eventInput_ts;
+
+typedef struct {
+	int32_t TypeMessage;
+	union {
+		ewol::clipBoard::clipboardListe_te clipboardID;
+		eventResize_ts resize;
+		eventInput_ts input;
+		eSystem::keyboardMove_ts keyboardMove;
+		eSystem::keyboardKey_ts  keyboardKey;
+	};
+} eSystemMessage_ts;
+
+// deblare the message system
+static etk::MessageFifo<eSystemMessage_ts> l_msgSystem;
+
 
 extern eSystem::specialKey_ts specialCurrentKey;
 
@@ -95,113 +96,100 @@ void ewolProcessEvents(void)
 {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
-	ewol::threadMsg::threadMsgContent_ts data;
-	data.type = THREAD_JUST_DISPLAY;
-	while (ewol::threadMsg::WaitingMessage(androidJniMsg)>0) 
+	eSystemMessage_ts data;
+	while (l_msgSystem.Count()>0) 
 	{
 		nbEvent++;
-		ewol::threadMsg::WaitMessage(androidJniMsg, data);
-		if (data.type != THREAD_JUST_DISPLAY) {
-			//EWOL_DEBUG("EVENT");
-			switch (data.type) {
-				case THREAD_INIT:
-					EWOL_DEBUG("Receive MSG : THREAD_INIT");
-					break;
-				case THREAD_UN_INIT:
-					EWOL_DEBUG("Receive MSG : THREAD_UN_INIT");
-					requestEndProcessing = true;
-					break;
-				case THREAD_RECALCULATE_SIZE:
-					eSystem::ForceRedrawAll();
-					break;
-				case THREAD_RESIZE:
-					//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
-					{
-						eventResize_ts * tmpData = (eventResize_ts*)data.data;
-						windowsSize.x = tmpData->w;
-						windowsSize.y = tmpData->h;
-						eSystem::ForceRedrawAll();
-					}
-					break;
-				case THREAD_INPUT_MOTION:
-					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
-					{
-						eventInputMotion_ts * tmpData = (eventInputMotion_ts*)data.data;
-						Vector2D<float> pos;
-						pos.x = tmpData->x;
-						pos.y = tmpData->y;
-						l_managementInput.Motion(tmpData->type, tmpData->pointerID, pos);
-					}
-					break;
-				case THREAD_INPUT_STATE:
-					//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
-					{
-						eventInputState_ts * tmpData = (eventInputState_ts*)data.data;
-						Vector2D<float> pos;
-						pos.x = tmpData->x;
-						pos.y = tmpData->y;
-						l_managementInput.State(tmpData->type, tmpData->pointerID, tmpData->state, pos);
-					}
-					break;
-				case THREAD_KEYBORAD_KEY:
-					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
-					{
-						eSystem::keyboardKey_ts * tmpData = (eSystem::keyboardKey_ts*)data.data;
-						specialCurrentKey = tmpData->special;
-						if (false==ewol::shortCut::Process(tmpData->special.shift, tmpData->special.ctrl, tmpData->special.alt, tmpData->special.meta, tmpData->myChar, tmpData->isDown)) {
-							// Get the current Focused Widget :
-							ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-							if (NULL != tmpWidget) {
-								if(true == tmpData->isDown) {
-									EWOL_VERBOSE("GUI PRESSED : \"" << tmpData->myChar << "\"");
-									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, tmpData->myChar);
-								} else {
-									EWOL_VERBOSE("GUI Release : \"" << tmpData->myChar << "\"");
-									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, tmpData->myChar);
-								}
-							}
-						}
-					}
-					break;
-				case THREAD_KEYBORAD_MOVE:
-					//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
-					{
-						eSystem::keyboardMove_ts * tmpData = (eSystem::keyboardMove_ts*)data.data;
-						specialCurrentKey = tmpData->special;
+		l_msgSystem.Wait(data);
+		//EWOL_DEBUG("EVENT");
+		switch (data.TypeMessage) {
+			case THREAD_RECALCULATE_SIZE:
+				eSystem::ForceRedrawAll();
+				break;
+			case THREAD_RESIZE:
+				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
+				windowsSize.x = data.resize.w;
+				windowsSize.y = data.resize.h;
+				eSystem::ForceRedrawAll();
+				break;
+			case THREAD_INPUT_MOTION:
+				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
+				{
+					Vector2D<float> pos;
+					pos.x = data.input.x;
+					pos.y = data.input.y;
+					l_managementInput.Motion(data.input.type, data.input.pointerID, pos);
+				}
+				break;
+			case THREAD_INPUT_STATE:
+				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
+				{
+					Vector2D<float> pos;
+					pos.x = data.input.x;
+					pos.y = data.input.y;
+					l_managementInput.State(data.input.type, data.input.pointerID, data.input.state, pos);
+				}
+				break;
+			case THREAD_KEYBORAD_KEY:
+				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
+				{
+					specialCurrentKey = data.keyboardKey.special;
+					if (false==ewol::shortCut::Process(data.keyboardKey.special.shift,
+					                                   data.keyboardKey.special.ctrl,
+					                                   data.keyboardKey.special.alt,
+					                                   data.keyboardKey.special.meta,
+					                                   data.keyboardKey.myChar,
+					                                   data.keyboardKey.isDown)) {
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 						if (NULL != tmpWidget) {
-							if(true == tmpData->isDown) {
-								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, tmpData->move);
+							if(true == data.keyboardKey.isDown) {
+								EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
+								tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, data.keyboardKey.myChar);
 							} else {
-								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, tmpData->move);
+								EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
+								tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, data.keyboardKey.myChar);
 							}
 						}
 					}
-					break;
-				case THREAD_CLIPBOARD_ARRIVE:
-					{
-						ewol::clipBoard::clipboardListe_te * tmpdata = (ewol::clipBoard::clipboardListe_te*)data.data;
-						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-						if (tmpWidget != NULL) {
-							tmpWidget->OnEventClipboard(*tmpdata);
+				}
+				break;
+			case THREAD_KEYBORAD_MOVE:
+				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
+				{
+					specialCurrentKey = data.keyboardMove.special;
+					// Get the current Focused Widget :
+					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+					if (NULL != tmpWidget) {
+						if(true == data.keyboardMove.isDown) {
+							tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, data.keyboardMove.move);
+						} else {
+							tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, data.keyboardMove.move);
 						}
 					}
-					break;
-				case THREAD_HIDE:
-					EWOL_DEBUG("Receive MSG : THREAD_HIDE");
-					//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
-					//gui_uniqueWindows->SysOnHide();
-					break;
-				case THREAD_SHOW:
-					EWOL_DEBUG("Receive MSG : THREAD_SHOW");
-					//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
-					//gui_uniqueWindows->SysOnShow();
-					break;
-				default:
-					EWOL_DEBUG("Receive MSG : UNKNOW");
-					break;
-			}
+				}
+				break;
+			case THREAD_CLIPBOARD_ARRIVE:
+				{
+					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+					if (tmpWidget != NULL) {
+						tmpWidget->OnEventClipboard(data.clipboardID);
+					}
+				}
+				break;
+			case THREAD_HIDE:
+				EWOL_DEBUG("Receive MSG : THREAD_HIDE");
+				//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
+				//gui_uniqueWindows->SysOnHide();
+				break;
+			case THREAD_SHOW:
+				EWOL_DEBUG("Receive MSG : THREAD_SHOW");
+				//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
+				//gui_uniqueWindows->SysOnShow();
+				break;
+			default:
+				EWOL_DEBUG("Receive MSG : UNKNOW");
+				break;
 		}
 	}
 }
@@ -246,9 +234,7 @@ void eSystem::Init(void)
 {
 	EWOL_INFO("==> Ewol System Init (BEGIN)");
 	if (false == isGlobalSystemInit) {
-		// create message system ...
-		EWOL_DEBUG("Init thread message system");
-		ewol::threadMsg::Init(androidJniMsg);
+		l_msgSystem.Clean();
 		requestEndProcessing = false;
 		EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 		EWOL_INFO("Build Date: " BUILD_TIME);
@@ -262,10 +248,8 @@ void eSystem::Init(void)
 		ewol::shortCut::Init();
 		APP_Init();
 		isGlobalSystemInit = true;
-		EWOL_DEBUG("Send Init message to the thread");
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INIT, ewol::threadMsg::MSG_PRIO_REAL_TIME);
-		EWOL_DEBUG("end basic init");
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RECALCULATE_SIZE, ewol::threadMsg::MSG_PRIO_MEDIUM);
+		// force a recalculation
+		ewol::RequestUpdateSize();
 	}
 	EWOL_INFO("==> Ewol System Init (END)");
 }
@@ -275,6 +259,7 @@ void eSystem::UnInit(void)
 	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
 	if (true == isGlobalSystemInit) {
 		isGlobalSystemInit = false;
+		requestEndProcessing = true;
 		// unset all windows
 		ewol::DisplayWindows(NULL);
 		// call application to uninit
@@ -286,7 +271,7 @@ void eSystem::UnInit(void)
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
 		l_managementInput.Reset();
-		ewol::threadMsg::UnInit(androidJniMsg);
+		l_msgSystem.Clean();
 	}
 	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
@@ -294,29 +279,31 @@ void eSystem::UnInit(void)
 void ewol::RequestUpdateSize(void)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RECALCULATE_SIZE, ewol::threadMsg::MSG_PRIO_MEDIUM);
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_RECALCULATE_SIZE;
+		l_msgSystem.Post(data);
 	}
 }
-
-
 
 void eSystem::Resize(int w, int h )
 {
 	if (true == isGlobalSystemInit) {
-		eventResize_ts tmpData;
-		tmpData.w = w;
-		tmpData.h = h;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_RESIZE;
+		data.resize.w = w;
+		data.resize.h = h;
+		l_msgSystem.Post(data);
 	}
 }
 void eSystem::Move(int w, int h )
 {
 	if (true == isGlobalSystemInit) {
 		/*
-		eventResize_ts tmpData;
-		tmpData.w = w;
-		tmpData.h = h;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_RESIZE, ewol::threadMsg::MSG_PRIO_MEDIUM, &tmpData, sizeof(eventResize_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_RESIZE;
+		data.resize.w = w;
+		data.resize.h = h;
+		l_msgSystem.Post(data);
 		*/
 	}
 }
@@ -324,12 +311,13 @@ void eSystem::Move(int w, int h )
 void eSystem::SetInputMotion(int pointerID, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eventInputMotion_ts tmpData;
-		tmpData.type = ewol::INPUT_TYPE_FINGER;
-		tmpData.pointerID = pointerID;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_INPUT_MOTION;
+		data.input.type = ewol::INPUT_TYPE_FINGER;
+		data.input.pointerID = pointerID;
+		data.input.x = x;
+		data.input.y = y;
+		l_msgSystem.Post(data);
 	}
 }
 
@@ -337,25 +325,28 @@ void eSystem::SetInputMotion(int pointerID, float x, float y )
 void eSystem::SetInputState(int pointerID, bool isUp, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eventInputState_ts tmpData;
-		tmpData.type = ewol::INPUT_TYPE_FINGER;
-		tmpData.pointerID = pointerID;
-		tmpData.state = isUp;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_INPUT_STATE;
+		data.input.type = ewol::INPUT_TYPE_FINGER;
+		data.input.pointerID = pointerID;
+		data.input.state = isUp;
+		data.input.x = x;
+		data.input.y = y;
+		l_msgSystem.Post(data);
 	}
 }
+
 
 void eSystem::SetMouseMotion(int pointerID, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eventInputMotion_ts tmpData;
-		tmpData.type = ewol::INPUT_TYPE_MOUSE;
-		tmpData.pointerID = pointerID;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_MOTION, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputMotion_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_INPUT_MOTION;
+		data.input.type = ewol::INPUT_TYPE_MOUSE;
+		data.input.pointerID = pointerID;
+		data.input.x = x;
+		data.input.y = y;
+		l_msgSystem.Post(data);
 	}
 }
 
@@ -363,41 +354,53 @@ void eSystem::SetMouseMotion(int pointerID, float x, float y )
 void eSystem::SetMouseState(int pointerID, bool isUp, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eventInputState_ts tmpData;
-		tmpData.type = ewol::INPUT_TYPE_MOUSE;
-		tmpData.pointerID = pointerID;
-		tmpData.state = isUp;
-		tmpData.x = x;
-		tmpData.y = y;
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_INPUT_STATE, ewol::threadMsg::MSG_PRIO_LOW, &tmpData, sizeof(eventInputState_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_INPUT_STATE;
+		data.input.type = ewol::INPUT_TYPE_MOUSE;
+		data.input.pointerID = pointerID;
+		data.input.state = isUp;
+		data.input.x = x;
+		data.input.y = y;
+		l_msgSystem.Post(data);
 	}
 }
 
 void eSystem::SetKeyboard(eSystem::keyboardKey_ts& keyInput)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_KEY, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eSystem::keyboardKey_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_KEYBORAD_KEY;
+		data.keyboardKey = keyInput;
+		l_msgSystem.Post(data);
 	}
 }
 
 void eSystem::SetKeyboardMove(eSystem::keyboardMove_ts& keyInput)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_KEYBORAD_MOVE, ewol::threadMsg::MSG_PRIO_LOW, &keyInput, sizeof(eSystem::keyboardMove_ts) );
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_KEYBORAD_MOVE;
+		data.keyboardMove = keyInput;
+		l_msgSystem.Post(data);
 	}
 }
+
 
 void eSystem::Hide(void)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_HIDE, ewol::threadMsg::MSG_PRIO_LOW);
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_HIDE;
+		l_msgSystem.Post(data);
 	}
 }
 
 void eSystem::Show(void)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_SHOW, ewol::threadMsg::MSG_PRIO_LOW);
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_SHOW;
+		l_msgSystem.Post(data);
 	}
 }
 
@@ -405,7 +408,10 @@ void eSystem::Show(void)
 void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	if (true == isGlobalSystemInit) {
-		ewol::threadMsg::SendMessage(androidJniMsg, THREAD_CLIPBOARD_ARRIVE, ewol::threadMsg::MSG_PRIO_LOW, &clipboardID, sizeof(uint8_t));
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
+		data.clipboardID = clipboardID;
+		l_msgSystem.Post(data);
 	}
 }
 
