@@ -6,6 +6,10 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/Debug.cpp \
 			ewol/ShortCutManager.cpp
 
+# Resources manager
+FILE_LIST+= ewol/resources/ResourcesManager.cpp \
+			ewol/resources/ResourcesImage.cpp
+
 # Gui interface
 FILE_LIST+= ewol/os/eSystem.cpp \
 			ewol/os/eSystemInput.cpp

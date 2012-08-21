@@ -22,9 +22,6 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEXTURE_MANAGER_H__
-#define __EWOL_TEXTURE_MANAGER_H__
-
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/File.h>

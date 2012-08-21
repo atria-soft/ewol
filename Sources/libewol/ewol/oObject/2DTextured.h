@@ -26,6 +26,7 @@
 #define __EWOL_O_OBJECT_2D_TEXTURED_H__
 
 #include <ewol/oObject/OObject.h>
+#include <ewol/Texture/Texture.h>
 
 namespace ewol {
 	class OObject2DTextured :public ewol::OObject
@@ -40,10 +41,10 @@ namespace ewol {
 			void Rectangle(float x, float y, float w, float h, float texX=0.0, float texY=0.0, float texSX=1.0, float texSY=1.0, draw::Color tmpColor=draw::color::white);
 			void Rectangle(float x, float y, float w, float h, draw::Color tmpColor);
 		protected:
-			int32_t                             m_textureId;   //!< texture internal ID
+			ewol::Texture
 			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
 			etk::Vector<texCoord_ts>        m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<draw::Color>           m_coordColor;  //!< internal color of the different point
+			etk::Vector<draw::Color>        m_coordColor;  //!< internal color of the different point
 	};
 };
 

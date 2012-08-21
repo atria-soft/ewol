@@ -31,6 +31,10 @@
 #include <ewol/openGl.h>
 
 namespace ewol {
+	// TODO : remove this deprecated element
+	namespace texture {
+		inline int32_t GetGLID(int32_t m_FontTextureId) { return 0; };
+	};
 	class Texture {
 		private:
 			uint32_t        m_uniqueId;
