@@ -37,17 +37,17 @@ namespace ewol {
 			virtual void Draw(void);
 		protected:
 			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
-			etk::Vector<etk::Color>         m_coordColor;  //!< internal color of the different point
+			etk::Vector<draw::Color>         m_coordColor;  //!< internal color of the different point
 			//etk::Vector<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
 			int32_t         m_triElement;
-			etk::Color      m_color[3];
+			draw::Color      m_color[3];
 			Vector2D<float> m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
 			void Clear(void);
 			void SetColor(float red, float green, float blue, float alpha = 1.0);
-			void SetColor(etk::Color color);
+			void SetColor(draw::Color color);
 			void SetPoint(Vector2D<float>  point);
 			void SetPoint(float x, float y);
 			void Line(float sx, float sy, float ex, float ey, float thickness);

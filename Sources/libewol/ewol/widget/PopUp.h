@@ -51,9 +51,9 @@ namespace ewol {
 			virtual void   SetExpendY(bool newExpend=false);
 			void           SetDisplayRatio(float ratio);
 		private:
-			etk::Color      m_colorBackGroung;
-			etk::Color      m_colorBorder;
-			etk::Color      m_colorEmptyArea;
+			draw::Color      m_colorBackGroung;
+			draw::Color      m_colorBorder;
+			draw::Color      m_colorEmptyArea;
 			ewol::Widget* m_subWidgetNext;
 			ewol::Widget* m_subWidget;
 			float    m_displayRatio;

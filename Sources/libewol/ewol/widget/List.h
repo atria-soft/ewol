@@ -74,21 +74,21 @@ namespace ewol {
 			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
 		protected:
 			// function call to display the list :
-			virtual etk::Color GetBasicBG(void) {
-				etk::Color bg(0xFFFFFFFF);
+			virtual draw::Color GetBasicBG(void) {
+				draw::Color bg(0xFFFFFFFF);
 				return bg;
 			}
 			virtual uint32_t GetNuberOfColomn(void) {
 				return 0;
 			};
-			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, etk::Color &fg, etk::Color &bg) {
+			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
 				myTitle = "";
 				return false;
 			};
 			virtual uint32_t GetNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, etk::Color &fg, etk::Color &bg) {
+			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg) {
 				myTextToWrite = "";
 				bg = 0xFFFFFFFF;
 				fg = 0x000000FF;

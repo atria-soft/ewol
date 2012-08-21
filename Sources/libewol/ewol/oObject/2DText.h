@@ -32,7 +32,7 @@ namespace ewol {
 	class OObject2DText :public ewol::OObject
 	{
 		public:
-			OObject2DText(etk::UString FontName, int32_t size, etk::Color textColorFg);
+			OObject2DText(etk::UString FontName, int32_t size, draw::Color textColorFg);
 			OObject2DText(void);
 			virtual ~OObject2DText(void);
 		public:
@@ -43,10 +43,10 @@ namespace ewol {
 			int32_t Text(Vector2D<float>  textPos, clipping_ts drawClipping, const uniChar_t     unicodeChar);
 		protected:
 			int32_t                       m_FontId;        //!< font internal ID
-			etk::Color                      m_textColorFg;   //!< text color ...
+			draw::Color                   m_textColorFg;   //!< text color ...
 			int32_t                       m_FontTextureId; //!< font internal Texture ID
-			etk::Vector<Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::Vector<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<Vector2D<float> > m_coord;         //!< internal coord of the object
+			etk::Vector<texCoord_ts>      m_coordTex;      //!< internal texture coordinate for every point
 	};
 };
 

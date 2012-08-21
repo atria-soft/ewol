@@ -27,210 +27,7 @@
 #include <ewol/texture/Texture.h>
 #include <ewol/openGl.h>
 #include <ewol/ewol.h>
-#include <ewol/texture/TextureBMP.h>
-#include <ewol/texture/TextureSVG.h>
-#include <ewol/texture/TexturePNG.h>
 
-//! One Texture element
-class LoadedTexture
-{
-	public:
-		etk::UString m_filename;
-		int32_t     m_nbTimeLoaded;
-		// openGl configuration : 
-		uint32_t    m_openGlTextureID;
-		int32_t     m_target;
-		int32_t     m_level;
-		int32_t     m_internalFormat;
-		int32_t     m_width;
-		int32_t     m_height;
-		int32_t     m_border;
-		int32_t     m_format;
-		int32_t     m_type;
-		char*       m_data;
-		int32_t     m_nbBytes;
-		bool        m_loaded;
-		bool        m_destroy;
-};
-//! List of all Texture loaded ...
-etk::Vector<LoadedTexture*> l_listLoadedTexture;
-#undef __class__
-#define __class__	"texture"
-
-
-/**
- * @brief Initialise the texture namespace (init a mutex)
- * @param ---
- * @return ---
- */
-void ewol::texture::Init(void)
-{
-	EWOL_DEBUG("==> Init Texture-Manager");
-}
-
-
-/**
- * @brief Un-Initialise the Texture namespace (Remove all loaded texture and temporary data and remove Mutex)
- * @param ---
- * @return ---
- */
-void ewol::texture::UnInit(void)
-{
-	EWOL_DEBUG("==> Un-Init Texture-Manager");
-	for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
-		if (l_listLoadedTexture[iii] != NULL) {
-			delete(l_listLoadedTexture[iii]);
-		}
-		l_listLoadedTexture[iii] = NULL;
-	}
-	l_listLoadedTexture.Clear();
-}
-
-
-/**
- * @brief Specific for Android, some configuration restart openGl context when the screen is rotate, then, 
- *        Android inform us that the openGl context has been destroy. We mark all the texture like not loaded
- *        To load it again when a new context will be enable (@ref UpdateContext)
- * @param ---
- * @return ---
- */
-void ewol::texture::UpdateContextIsDestroy(void)
-{
-	for (int32_t iii=0; iii < l_listLoadedTexture.Size(); iii++) {
-		if(    NULL != l_listLoadedTexture[iii]
-		    && NULL != l_listLoadedTexture[iii]->m_data)
-		{
-			l_listLoadedTexture[iii]->m_loaded = false;
-			EWOL_INFO("TEXTURE: Disable [" << iii << "]=(" << l_listLoadedTexture[iii]->m_width << "px," << 
-			          l_listLoadedTexture[iii]->m_height << "px) in file:" << 
-			          l_listLoadedTexture[iii]->m_filename << " OGl_Id=" <<l_listLoadedTexture[iii]->m_openGlTextureID);
-			// note : the context might be destroy... we can not remove the textures ...
-			//glDeleteTextures(1, &l_listLoadedTexture[iii]->m_openGlTextureID);
-		}
-	}
-}
-
-
-/**
- * @brief Check all texture and load/Remove/Reload all texture that has been Add/Remove/Change from the previous display cycle
- * @param ---
- * @return ---
- */
-void ewol::texture::UpdateContext(void)
-{
-	bool needRedraw = false;
-	for (int32_t iii=0; iii < l_listLoadedTexture.Size(); iii++) {
-		if(    NULL != l_listLoadedTexture[iii]
-		    && NULL != l_listLoadedTexture[iii]->m_data)
-		{
-			if(    false == l_listLoadedTexture[iii]->m_destroy
-			    && false == l_listLoadedTexture[iii]->m_loaded)
-			{
-				GLuint textureid;
-				glGenTextures(1, &textureid);
-				glBindTexture(l_listLoadedTexture[iii]->m_target, textureid);
-				//glTexParameteri(tmpTex->m_target, GL_TEXTURE_WRAP_S, GL_REPEAT);
-				//glTexParameteri(tmpTex->m_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
-				//--- mode nearest
-				//glTexParameteri(tmpTex->m_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-				//glTexParameteri(tmpTex->m_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				//--- Mode linear
-				glTexParameteri(l_listLoadedTexture[iii]->m_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(l_listLoadedTexture[iii]->m_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				EWOL_INFO("TEXTURE: Add [" << iii << "]=(" << l_listLoadedTexture[iii]->m_width << "px," << 
-				          l_listLoadedTexture[iii]->m_height << "px) in file:" << 
-				          l_listLoadedTexture[iii]->m_filename << " OGl_Id=" <<textureid);
-				glTexImage2D(l_listLoadedTexture[iii]->m_target,
-				             l_listLoadedTexture[iii]->m_level,
-				             l_listLoadedTexture[iii]->m_internalFormat,
-				             l_listLoadedTexture[iii]->m_width,
-				             l_listLoadedTexture[iii]->m_height,
-				             l_listLoadedTexture[iii]->m_border,
-				             l_listLoadedTexture[iii]->m_format,
-				             l_listLoadedTexture[iii]->m_type,
-				             l_listLoadedTexture[iii]->m_data);
-				l_listLoadedTexture[iii]->m_openGlTextureID = textureid;
-				l_listLoadedTexture[iii]->m_loaded = true;
-				needRedraw = true;
-			} else if (    true == l_listLoadedTexture[iii]->m_destroy
-			            && true == l_listLoadedTexture[iii]->m_loaded)
-			{
-				// Request remove texture ...
-				EWOL_INFO("TEXTURE: Rm [" << iii << "] file:" << l_listLoadedTexture[iii]->m_filename);
-				glDeleteTextures(1, &l_listLoadedTexture[iii]->m_openGlTextureID);
-				l_listLoadedTexture[iii]->m_loaded = false;
-				l_listLoadedTexture[iii]->m_openGlTextureID = -1;
-				if (NULL != l_listLoadedTexture[iii]->m_data) {
-					delete[] l_listLoadedTexture[iii]->m_data;
-					l_listLoadedTexture[iii]->m_data = NULL;
-				}
-				delete(l_listLoadedTexture[iii]);
-				l_listLoadedTexture[iii] = NULL;
-			}
-		}
-	}
-	if (true == needRedraw) {
-		ewol::ForceRedrawAll();
-	}
-}
-
-
-/**
- * @brief Register a texture in the automatic system to load and reload
- * @param[in] target Standard element of OpenGL target
- * @param[in] level Standard element of OpenGL level
- * @param[in] internalFormat Standard element of OpenGL internalFormat
- * @param[in] width Standard element of OpenGL width
- * @param[in] height Standard element of OpenGL height
- * @param[in] border Standard element of OpenGL border
- * @param[in] format Standard element of OpenGL format
- * @param[in] type Standard element of OpenGL type
- * @param[in] data Pointer on the buffer where are contain the data (a copy is done automaticly)
- * @param[in] nbBytes Number of byte in the buffer
- * @param[in] filename File Name of the texture or "---" if it is an internal loaded texture
- * @return The Internal ID of the texture, or -1 if an error occured ...
- */
-int32_t ewol::texture::Load(int32_t target, int32_t level, int32_t internalFormat, int32_t width, int32_t height,
-                            int32_t border, int32_t format, int32_t type,
-                            const void* data, int32_t nbBytes, etk::UString filename)
-{
-
-	LoadedTexture *tmpTex = new LoadedTexture();
-	int32_t outTextureID = -1;
-	if (NULL == tmpTex){
-		EWOL_ERROR("Texture : Allocation ERROR... " << filename);
-		return -1;
-	}
-	if (NULL == data){
-		EWOL_ERROR("Texture : Input pointer of the data texture =NULL... " << filename);
-		return -1;
-	}
-	
-	tmpTex->m_filename        = filename;
-	tmpTex->m_nbTimeLoaded    = 1;
-	tmpTex->m_openGlTextureID = -1;
-	tmpTex->m_target          = target;
-	tmpTex->m_level           = level;
-	tmpTex->m_internalFormat  = internalFormat;
-	tmpTex->m_width           = width;
-	tmpTex->m_height          = height;
-	tmpTex->m_border          = border;
-	tmpTex->m_format          = format;
-	tmpTex->m_type            = type;
-	tmpTex->m_nbBytes         = nbBytes;
-	tmpTex->m_data            = new char[tmpTex->m_nbBytes+4096];
-	tmpTex->m_loaded          = false;
-	tmpTex->m_destroy         = false;
-	if (NULL == tmpTex->m_data) {
-		EWOL_ERROR("Texture : Data Allocation ERROR... " << filename);
-		return -1;
-	}
-	memcpy(tmpTex->m_data, data, sizeof(char) * tmpTex->m_nbBytes);
-	
-	l_listLoadedTexture.PushBack(tmpTex);
-	outTextureID = l_listLoadedTexture.Size()-1;
-	return outTextureID;
-}
 
 
 /**
@@ -252,6 +49,96 @@ static int32_t nextP2(int32_t value)
 }
 
 
+
+ewol::Texture::Texture(void)
+{
+	// add it to the texture manager
+	m_uniqueId = ewol::textureManager::Add(this);
+	
+	m_loaded = false;
+	m_texId = 0;
+	m_endPointSize.x = 1.0;
+	m_endPointSize.y = 1.0;
+}
+
+ewol::Texture::~Texture(void)
+{
+	// unregister from the texture manager
+	ewol::textureManager::Rm(this);
+	RemoveContext();
+	
+}
+
+
+void ewol::Texture::UpdateContext(void)
+{
+	if (false == m_loaded) {
+		// Request a new texture at OpenGl :
+		glGenTextures(1, &m_texId);
+		// TODO : check error ???
+		glBindTexture(GL_TEXTURE_2D, m_texId);
+		// TODO : Check error ???
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		//--- mode nearest
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		//--- Mode linear
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		EWOL_INFO("TEXTURE: Add [" << m_uniqueId << "]=" << m_data.GetSize() << " OGl_Id=" <<m_texId);
+		glTexImage2D(GL_TEXTURE_2D, // Target
+		             0, // Level
+		             GL_RGBA, // Format internal
+		             m_data.GetWidth(),
+		             m_data.GetHeight(),
+		             0, // Border
+		             GL_RGBA, // format
+		             GL_UNSIGNED_BYTE, // type
+		             m_data.GetTextureDataPointer() );
+		// now the data is loaded
+		m_loaded = true;
+	} else {
+		EWOL_TODO("UPDATE Texture ...")
+	}
+}
+
+// really remove the texture
+void ewol::Texture::RemoveContext(void)
+{
+	if (true == m_loaded) {
+		// Request remove texture ...
+		EWOL_INFO("TEXTURE: Rm [" << m_uniqueId << "] texId=" << m_texId);
+		glDeleteTextures(1, &m_texId);
+		m_loaded = false;
+	}
+}
+
+// the OpenGl context is destroy, it is too late to remo it from nothing ... special case for Android
+void ewol::Texture::RemoveContextToLate(void)
+{
+	m_loaded = false;
+}
+
+
+void ewol::Texture::Flush(void)
+{
+	// request to the manager to be call at the next update ...
+	ewol::textureManager::Update(this);
+}
+
+
+
+
+
+/*
+#include <ewol/texture/TextureBMP.h>
+#include <ewol/texture/TextureSVG.h>
+#include <ewol/texture/TexturePNG.h>
+*/
+
+
+
 /**
  * @brief Load a specific file texture
  * @note : dimention must be a power of 2, otherwise, the display can be wrong... For the SVG, the texture automaticly generate the power of 2 dimention ...
@@ -261,6 +148,7 @@ static int32_t nextP2(int32_t value)
  */
 // TODO : Load non square texture ...
 // TODO : Check the size to regenerate the texture if the size change
+#if 0
 int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 {
 	int32_t outTextureID = -1;
@@ -328,67 +216,4 @@ int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
 	}
 	return outTextureID;
 }
-
-
-/**
- * @brief Remove a specific texture ID from the system
- * @note A texture can be loaded as many time we want, the texture will be destroy only when nobody want the texture anymore
- * @param[in] textureID The internal texture ID that might be remove
- * @return ---
- */
-void ewol::texture::UnLoad(uint32_t textureID)
-{
-	//EWOL_INFO("Unload a specific tecture ID=" << textureID);
-	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
-		if (NULL == l_listLoadedTexture[textureID]) {
-			EWOL_ERROR("Texture : " << textureID << " does not existe anymore...");
-			return;
-		}
-		l_listLoadedTexture[textureID]->m_nbTimeLoaded--;
-		if (0 == l_listLoadedTexture[textureID]->m_nbTimeLoaded) {
-			EWOL_DEBUG("Remove openGL texture ID=" << textureID << " file:" << l_listLoadedTexture[textureID]->m_filename);
-			l_listLoadedTexture[textureID]->m_destroy = true;
-		}
-		return;
-	}
-	EWOL_CRITICAL("Can not find TextureId=" << (int)textureID << " in the list of texture loaded...==> to remove it ...");
-}
-
-
-/**
- * @brief Get the openGL texture ID whith the internal ID
- * @param textureID the internal texture ID
- * @return the OpenGl texture ID (or 0 if an error occured...)
- */
-uint32_t ewol::texture::GetGLID(uint32_t textureID)
-{
-	if ((int32_t)textureID<l_listLoadedTexture.Size()) {
-		if (l_listLoadedTexture[textureID]!=NULL) {
-			return l_listLoadedTexture[textureID]->m_openGlTextureID;
-		} else {
-			EWOL_ERROR("Texture has been removed previously : " << textureID);
-		}
-	}
-	return 0;
-}
-
-
-/**
- * @brief Get the size of the specific texture
- * @param[in] textureID the internal texture ID
- * @return the width of the texture
- */
-int32_t ewol::texture::GetSize(uint32_t textureID)
-{
-	for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
-		if (l_listLoadedTexture[textureID]!=NULL) {
-			if (l_listLoadedTexture[iii]->m_openGlTextureID == textureID) {
-				return l_listLoadedTexture[iii]->m_width;
-			}
-		} else {
-			EWOL_ERROR("Texture has been removed previously : " << textureID);
-		}
-	}
-	EWOL_ERROR("Can not find TextureId=" << textureID << " in the list of texture loaded...");
-	return -1;
-}
+#endif

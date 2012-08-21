@@ -36,13 +36,13 @@ ewol::PopUp::PopUp(void) :
 	m_userExpendX = true;
 	m_userExpendY = true;
 	
-	m_colorBackGroung = etk::color::white;
+	m_colorBackGroung = draw::color::white;
 	
-	m_colorEmptyArea = etk::color::black;
-	m_colorEmptyArea.alpha = 0x7F;
+	m_colorEmptyArea = draw::color::black;
+	m_colorEmptyArea.a = 0x7F;
 	
-	m_colorBorder = etk::color::black;
-	m_colorBorder.alpha = 0x7F;
+	m_colorBorder = draw::color::black;
+	m_colorBorder.a = 0x7F;
 	
 	m_subWidget = 0;
 }

@@ -66,15 +66,15 @@ namespace ewol {
 			 */
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			
-			void     SetColor(etk::Color newColor);
-			etk::Color GetColor(void);
+			void     SetColor(draw::Color newColor);
+			draw::Color GetColor(void);
 		private:;
 			ewol::ColorBar*     m_widgetColorBar;
 			ewol::Slider*       m_widgetRed;
 			ewol::Slider*       m_widgetGreen;
 			ewol::Slider*       m_widgetBlue;
 			ewol::Slider*       m_widgetAlpha;
-			etk::Color            m_currentColor;
+			draw::Color            m_currentColor;
 	};
 	
 };

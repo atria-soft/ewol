@@ -144,7 +144,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		etk::Vector<int32_t> listSizeColomn;
 		
 		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-		etk::Color basicBG = GetBasicBG();
+		draw::Color basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		
@@ -172,8 +172,8 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite;
-			etk::Color fg;
-			etk::Color bg;
+			draw::Color fg;
+			draw::Color bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
 			BGOObjects->SetColor(bg);
 			BGOObjects->Rectangle(0, m_size.y - tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);

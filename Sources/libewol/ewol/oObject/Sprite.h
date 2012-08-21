@@ -40,14 +40,14 @@ namespace ewol {
 			void Clear(void);
 			void Element(Vector2D<float> pos, float size, float angle);
 			void Element(Vector3D<float> pos, float size, float angle);
-			void Element(Vector2D<float> pos, float size, float angle, etk::Color tmpColor);
-			void Element(Vector3D<float> pos, float size, float angle, etk::Color tmpColor);
+			void Element(Vector2D<float> pos, float size, float angle, draw::Color tmpColor);
+			void Element(Vector3D<float> pos, float size, float angle, draw::Color tmpColor);
 			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
 			int32_t                           m_textureId;   //!< texture internal ID
 			etk::Vector<Vector3D<float> > m_coord;       //!< internal coord of the object
 			etk::Vector<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<etk::Color>         m_coordColor;  //!< internal color of the different point
+			etk::Vector<draw::Color>         m_coordColor;  //!< internal color of the different point
 	};
 };
 

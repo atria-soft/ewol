@@ -39,7 +39,7 @@ extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
 void ewol::Label::Init(void)
 {
 	AddEventId(ewolEventLabelPressed);
-	m_textColorFg = etk::color::black;
+	m_textColorFg = draw::color::black;
 	SetCanHaveFocus(false);
 }
 

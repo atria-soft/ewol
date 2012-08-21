@@ -58,8 +58,8 @@ void ewol::Image::Init(void)
 		m_padding.x = 4;
 	#endif
 	
-	m_textColorBg = etk::color::black;
-	m_textColorBg.alpha = 0x00;
+	m_textColorBg = draw::color::black;
+	m_textColorBg.a = 0x00;
 	m_imageSize = 32;
 }
 

@@ -176,7 +176,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite = "???";
-			etk::Color fg(0x000000FF);
+			draw::Color fg(0x000000FF);
 			if (m_list[iii] != NULL) {
 				myTextToWrite = m_list[iii]->m_label;
 			}

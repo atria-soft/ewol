@@ -326,6 +326,26 @@ namespace etk
 			}
 	
 			/**
+			 * @brief Get the number of element in the vector
+			 * @return The number requested
+			 */
+			void ReSize(int32_t newSize, MY_TYPE& basicElement)
+			{
+				int32_t idx = m_size;
+				Resize(newSize);
+				if (m_size != newSize) {
+					TK_CRITICAL("error to resize vector");
+					return;
+				}
+				if (newSize > idx) {
+					// initialize data ...
+					for(int32_t iii=idx; iii<newSize; iii++) {
+						m_data[iii] = basicElement;
+					}
+				}
+			}
+	
+			/**
 			 * @brief Get the Allocated size in the vector
 			 * @return The size of allocation
 			 */

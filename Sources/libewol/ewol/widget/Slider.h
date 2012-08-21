@@ -49,13 +49,13 @@ namespace ewol {
 			int32_t        GetValue(void);
 			void           SetMin(int32_t val);
 			void           SetMax(int32_t val);
-			void           SetColor(etk::Color newColor) { m_textColorFg = newColor; };
+			void           SetColor(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
 			int32_t            m_value;
 			int32_t            m_min;
 			int32_t            m_max;
-			etk::Color           m_textColorFg;  //!< Text color
-			etk::Color           m_textColorBg;  //!< Background color
+			draw::Color           m_textColorFg;  //!< Text color
+			draw::Color           m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

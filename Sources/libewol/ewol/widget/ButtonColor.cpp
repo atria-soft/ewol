@@ -63,8 +63,8 @@ void ewol::ButtonColor::Init(void)
 	#endif
 	
 	
-	m_textColorBg = etk::color::black;
-	m_textColorBg.alpha = 0x3F;
+	m_textColorBg = draw::color::black;
+	m_textColorBg.a = 0x3F;
 	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
 }
@@ -159,10 +159,10 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_padding.x;
 		tmpSizeY -= 2*m_padding.y;
 		
-		if ((m_textColorBg.red>0.5) || (m_textColorBg.green>0.5) || (m_textColorBg.blue > 0.8) ) {
-			m_textColorFg = etk::color::black;
+		if ((m_textColorBg.r>0.5) || (m_textColorBg.g>0.5) || (m_textColorBg.b > 0.8) ) {
+			m_textColorFg = draw::color::black;
 		} else {
-			m_textColorFg = etk::color::white;
+			m_textColorFg = draw::color::white;
 		}
 		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		/*
@@ -241,7 +241,7 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 }
 
 
-void ewol::ButtonColor::SetCurrentColor(etk::Color color)
+void ewol::ButtonColor::SetCurrentColor(draw::Color color)
 {
 	m_selectedColor = color;
 	m_textColorBg = m_selectedColor;
@@ -262,8 +262,8 @@ void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 {
 	if (eventId == ewolEventColorChooserChange) {
 		// TODO : Parse the input color ...
-		//etk::Color tmpColor(data);
-		etk::Color tmpColor;
+		//draw::Color tmpColor(data);
+		draw::Color tmpColor;
 		m_selectedColor = tmpColor;
 		m_textColorBg = m_selectedColor;
 		char colorText[256];

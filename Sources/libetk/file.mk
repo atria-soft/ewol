@@ -10,7 +10,6 @@ FILE_LIST = \
 			etk/Stream.cpp \
 			etk/File.cpp \
 			etk/RegExp.cpp \
-			etk/Color.cpp \
 			etk/tool.cpp
 
 ifeq ("$(TARGET_OS)","Windows")

@@ -45,10 +45,10 @@ ewol::Slider::Slider(void)
 	m_min = 0;
 	m_max = 10;
 	
-	m_textColorFg = etk::color::black;
+	m_textColorFg = draw::color::black;
 	
-	m_textColorBg = etk::color::black;
-	m_textColorBg.alpha = 0x3F;
+	m_textColorBg = draw::color::black;
+	m_textColorBg.a = 0x3F;
 	SetCanHaveFocus(true);
 }
 
@@ -107,8 +107,8 @@ void ewol::Slider::OnRegenerateDisplay(void)
 		tmpOObjects->SetColor(m_textColorFg);
 		// draw a line :
 		tmpOObjects->Line(dotRadius, m_size.y/2, m_size.x-dotRadius, m_size.y/2, 1);
-		etk::Color borderDot = m_textColorFg;
-		borderDot.alpha /= 2;
+		draw::Color borderDot = m_textColorFg;
+		borderDot.a /= 2;
 		tmpOObjects->SetColor(borderDot);
 		tmpOObjects->Disc(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2, dotRadius);
 		

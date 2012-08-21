@@ -29,7 +29,7 @@
 #undef __class__
 #define __class__	"ewol::OObject2DText"
 
-ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, etk::Color textColorFg)
+ewol::OObject2DText::OObject2DText(etk::UString FontName, int32_t size, draw::Color textColorFg)
 {
 	m_textColorFg = textColorFg;
 	if (FontName == "") {
@@ -60,7 +60,7 @@ void ewol::OObject2DText::Draw(void)
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	glColor4ub(m_textColorFg.red, m_textColorFg.green, m_textColorFg.blue, m_textColorFg.alpha);
+	glColor4ub(m_textColorFg.r, m_textColorFg.g, m_textColorFg.b, m_textColorFg.a);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_FontTextureId));
 	glEnableClientState( GL_VERTEX_ARRAY );						// Enable Vertex Arrays

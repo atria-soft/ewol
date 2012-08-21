@@ -57,8 +57,8 @@ namespace ewol {
 			virtual void   SetExpendX(bool newExpend=false);
 			virtual void   SetExpendY(bool newExpend=false);
 		private:
-			etk::Color        m_colorBackGroung;
-			etk::Color        m_colorBorder;
+			draw::Color        m_colorBackGroung;
+			draw::Color        m_colorBorder;
 			Vector2D<float>       m_padding;
 			Vector2D<float>       m_arrowPos;
 			float      m_offset;

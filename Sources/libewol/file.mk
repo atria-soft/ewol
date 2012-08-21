@@ -29,6 +29,7 @@ FILE_LIST+= ewol/oObject/OObject.cpp \
 
 # texture management
 FILE_LIST+= ewol/texture/Texture.cpp \
+			ewol/texture/TextureManager.cpp \
 			ewol/texture/TextureBMP.cpp \
 			ewol/texture/TexturePNG.cpp \
 			ewol/texture/TextureSVG.cpp

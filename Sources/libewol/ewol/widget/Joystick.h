@@ -41,8 +41,8 @@ namespace ewol {
 	class Joystick :public ewol::Drawable
 	{
 		private:
-			etk::Color           m_colorFg;      //!< Forground  color
-			etk::Color           m_colorBg;      //!< Background color
+			draw::Color           m_colorFg;      //!< Forground  color
+			draw::Color           m_colorBg;      //!< Background color
 			Vector2D<float>          m_displayPos;   //!< direction of the cursor ...
 			float         m_distance;     //!< dintance from the center
 			float         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...

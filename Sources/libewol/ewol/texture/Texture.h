@@ -27,22 +27,40 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <etk/File.h>
+#include <draw/Image.h>
+#include <ewol/openGl.h>
 
-namespace ewol
-{
-	namespace texture {
-		void     Init(void);
-		void     UnInit(void);
-		int32_t  Load(etk::UString fileName, int32_t requestedWidth=-1);
-		int32_t  Load(int32_t target, int32_t level, int32_t internalFormat, int32_t width, int32_t height, int32_t border, int32_t format, int32_t type, const void* data, int32_t nbBytes, etk::UString filename);
-		void     UnLoad(uint32_t textureID);
-		int32_t  GetSize(uint32_t textureID);
-		uint32_t GetGLID(uint32_t textureID);
-		void     UpdateContext(void);
-		void     UpdateContextIsDestroy(void);
-		void     OGLContext(bool enable);
+namespace ewol {
+	class Texture {
+		private:
+			uint32_t        m_uniqueId;
+			// openGl Context propoerties :
+			draw::Image     m_data;
+			// OpenGl textureID :
+			GLuint          m_texId;
+			// some image are not square ==> we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
+			Vector2D<float> m_endPointSize;
+			// internal state of the openGl system :
+			bool            m_loaded;
+		// Ewol internal API:
+		public:
+			void UpdateContext(void);
+			void RemoveContext(void);
+			void RemoveContextToLate(void);
+		// middleware interface:
+		public:
+			GLuint GetId(void) { return m_texId; };
+			Vector2D<float> GetUsableSize(void) { return m_endPointSize; };
+		// Public API:
+		public:
+			Texture(void);
+			~Texture(void);
+			// get the reference on this image to draw nomething on it ...
+			inline draw::Image& Get(void) { return m_data; };
+			// Flush the data to send it at the OpenGl system
+			void Flush(void);
 	};
+	
 };
 
 #endif

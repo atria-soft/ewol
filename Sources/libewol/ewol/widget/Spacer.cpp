@@ -36,7 +36,8 @@ ewol::Spacer::Spacer(void)
 {
 	m_localSize = 10;
 	SetCanHaveFocus(false);
-	m_color = 0x00000000;
+	m_color = draw::color::black;
+	m_color.a = 0;
 }
 
 ewol::Spacer::~Spacer(void)
@@ -67,7 +68,7 @@ void ewol::Spacer::OnRegenerateDisplay(void)
 	}
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
-	if (m_color.alpha == 0) {
+	if (m_color.a == 0) {
 		return;
 	}
 	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();

@@ -298,7 +298,7 @@ void ewol::OObject2DColored::GenerateTriangle(void)
 }
 
 
-void ewol::OObject2DColored::SetColor(etk::Color color)
+void ewol::OObject2DColored::SetColor(draw::Color color)
 {
 	if (m_triElement < 1) {
 		m_color[0] = color;
@@ -315,13 +315,13 @@ void ewol::OObject2DColored::SetColor(etk::Color color)
 void ewol::OObject2DColored::SetColor(float red, float green, float blue, float alpha)
 {
 	if (m_triElement < 1) {
-		m_color[0] = etk::Color(red, green, blue, alpha);
+		m_color[0] = draw::Color(red, green, blue, alpha);
 	}
 	if (m_triElement < 2) {
-		m_color[1] = etk::Color(red, green, blue, alpha);
+		m_color[1] = draw::Color(red, green, blue, alpha);
 	}
 	if (m_triElement < 3) {
-		m_color[2] = etk::Color(red, green, blue, alpha);
+		m_color[2] = draw::Color(red, green, blue, alpha);
 	}
 	
 }

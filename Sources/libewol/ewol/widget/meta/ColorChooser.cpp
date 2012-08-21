@@ -71,8 +71,8 @@ ewol::ColorChooser::ColorChooser(void)
 			*/
 			SubWidgetAdd(m_widgetColorBar);
 		
-		etk::Color sliderColor;
-		sliderColor = etk::color::black;
+		draw::Color sliderColor;
+		sliderColor = draw::color::black;
 		
 		m_widgetRed = new ewol::Slider();
 			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
@@ -109,7 +109,7 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetAlpha->SetMax(255);
 			SubWidgetAdd(m_widgetAlpha);
 	
-	m_currentColor = etk::color::white;
+	m_currentColor = draw::color::white;
 }
 
 
@@ -119,20 +119,20 @@ ewol::ColorChooser::~ColorChooser(void)
 }
 
 
-void ewol::ColorChooser::SetColor(etk::Color newColor)
+void ewol::ColorChooser::SetColor(draw::Color newColor)
 {
 	m_currentColor = newColor;
 	if (NULL != m_widgetRed) {
-		m_widgetRed->SetValue(m_currentColor.red);
+		m_widgetRed->SetValue(m_currentColor.r);
 	}
 	if (NULL != m_widgetGreen) {
-		m_widgetGreen->SetValue(m_currentColor.green);
+		m_widgetGreen->SetValue(m_currentColor.g);
 	}
 	if (NULL != m_widgetBlue) {
-		m_widgetBlue->SetValue(m_currentColor.blue);
+		m_widgetBlue->SetValue(m_currentColor.b);
 	}
 	if (NULL != m_widgetAlpha) {
-		m_widgetAlpha->SetValue(m_currentColor.alpha);
+		m_widgetAlpha->SetValue(m_currentColor.a);
 	}
 	if (NULL != m_widgetColorBar) {
 		m_widgetColorBar->SetCurrentColor(m_currentColor);
@@ -140,7 +140,7 @@ void ewol::ColorChooser::SetColor(etk::Color newColor)
 }
 
 
-etk::Color ewol::ColorChooser::GetColor(void)
+draw::Color ewol::ColorChooser::GetColor(void)
 {
 	return m_currentColor;
 }
@@ -161,39 +161,39 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventColorBarHasChange == eventId) {
 		//==> colorBar has change ...
-		uint8_t tmpAlpha = m_currentColor.alpha;
+		uint8_t tmpAlpha = m_currentColor.a;
 		// the colorbar has no notion of the alpha ==> keep it ...
 		if (NULL != m_widgetColorBar) {
 			m_currentColor = m_widgetColorBar->GetCurrentColor();
 		}
-		m_currentColor.alpha = tmpAlpha;
+		m_currentColor.a = tmpAlpha;
 		if (NULL != m_widgetRed) {
-			m_widgetRed->SetValue(m_currentColor.red);
+			m_widgetRed->SetValue(m_currentColor.r);
 		}
 		if (NULL != m_widgetGreen) {
-			m_widgetGreen->SetValue(m_currentColor.green);
+			m_widgetGreen->SetValue(m_currentColor.g);
 		}
 		if (NULL != m_widgetBlue) {
-			m_widgetBlue->SetValue(m_currentColor.blue);
+			m_widgetBlue->SetValue(m_currentColor.b);
 		}
 		if (NULL != m_widgetAlpha) {
-			m_widgetAlpha->SetValue(m_currentColor.alpha);
+			m_widgetAlpha->SetValue(m_currentColor.a);
 		}
 		// TODO : send the real color ...
 		GenerateEventId(ewolEventColorChooserChange, "0x51452563");
 	} else if (eventColorSpecificHasChange == eventId) {
 		// Slider has changes his color ==> get the one change ...
 		if (CallerObject == m_widgetRed) {
-			m_currentColor.red   = m_widgetRed->GetValue();
+			m_currentColor.r = m_widgetRed->GetValue();
 		}
 		if (CallerObject == m_widgetGreen) {
-			m_currentColor.green = m_widgetGreen->GetValue();
+			m_currentColor.g = m_widgetGreen->GetValue();
 		}
 		if (CallerObject == m_widgetBlue) {
-			m_currentColor.blue  = m_widgetBlue->GetValue();
+			m_currentColor.b = m_widgetBlue->GetValue();
 		}
 		if (CallerObject == m_widgetAlpha) {
-			m_currentColor.alpha = m_widgetAlpha->GetValue();
+			m_currentColor.a = m_widgetAlpha->GetValue();
 		}
 		if (NULL != m_widgetColorBar) {
 			m_widgetColorBar->SetCurrentColor(m_currentColor);

@@ -53,8 +53,8 @@ namespace ewol {
 		private:
 			etk::UString   m_label;
 			bool           m_value;
-			etk::Color       m_textColorFg;  //!< Text color
-			etk::Color       m_textColorBg;  //!< Background color
+			draw::Color       m_textColorFg;  //!< Text color
+			draw::Color       m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

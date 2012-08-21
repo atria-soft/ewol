@@ -26,7 +26,7 @@
 #define __EWOL_O_OBJECT_H__
 
 #include <etk/Types.h>
-#include <etk/Color.h>
+#include <draw/Color.h>
 #include <etk/File.h>
 #include <ewol/Debug.h>
 #include <ewol/font/Font.h>

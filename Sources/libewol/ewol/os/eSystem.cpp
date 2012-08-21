@@ -30,7 +30,7 @@
 #include <etk/MessageFifo.h>
 #include <ewol/os/eSystem.h>
 #include <ewol/os/gui.h>
-#include <ewol/texture/Texture.h>
+#include <ewol/texture/TextureManager.h>
 #include <ewol/eObject/EObject.h>
 #include <ewol/eObject/EObjectManager.h>
 #include <ewol/widget/WidgetManager.h>
@@ -242,8 +242,8 @@ void eSystem::Init(void)
 		ewol::EObjectManager::Init();
 		ewol::EObjectMessageMultiCast::Init();
 		l_managementInput.Reset();
+		ewol::textureManager::Init();
 		ewol::widgetManager::Init();
-		ewol::texture::Init();
 		ewol::InitFont();
 		ewol::shortCut::Init();
 		APP_Init();
@@ -265,11 +265,11 @@ void eSystem::UnInit(void)
 		// call application to uninit
 		APP_UnInit();
 		ewol::shortCut::UnInit();
-		ewol::texture::UnInit();
 		ewol::UnInitFont();
 		ewol::widgetManager::UnInit();
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
+		ewol::textureManager::UnInit();
 		l_managementInput.Reset();
 		l_msgSystem.Clean();
 	}
@@ -542,7 +542,7 @@ bool eSystem::Draw(bool displayEveryTime)
 			// check if the regenerate is needed ...
 			if(    true == ewol::widgetManager::IsDrawingNeeded()
 			    || true == displayEveryTime) {
-				ewol::texture::UpdateContext();
+				ewol::textureManager::UpdateContext();
 				l_FpsSystem.IncrementCounter();
 				tmpWindows->SysDraw();
 			}
@@ -583,7 +583,7 @@ void eSystem::ResetIOEvent(void)
  */
 void eSystem::OpenGlContextDestroy(void)
 {
-	ewol::texture::UpdateContextIsDestroy();
+	ewol::textureManager::OpenGlContextHasBeenDestroyed();
 }
 
 

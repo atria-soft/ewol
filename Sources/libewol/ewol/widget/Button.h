@@ -62,16 +62,16 @@ namespace ewol {
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(Vector2D<float>  newPadding);
-			void           SetColorBg(etk::Color newColor) { m_textColorBg = newColor; };
-			void           SetColorFg(etk::Color newColor) { m_textColorFg = newColor; };
+			void           SetColorBg(draw::Color newColor) { m_textColorBg = newColor; };
+			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
 			bool               m_hasAnImage;
 			etk::UString       m_imageSelected;
 			textAlignement_te  m_alignement;
 			Vector2D<float>    m_padding;
 			etk::UString       m_label;
-			etk::Color           m_textColorFg;  //!< Text color
-			etk::Color           m_textColorBg;  //!< Background color
+			draw::Color           m_textColorFg;  //!< Text color
+			draw::Color           m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 			/**

@@ -68,10 +68,10 @@ void ewol::Button::Init(void)
 		m_padding.x = 4;
 	#endif
 	
-	m_textColorFg = etk::color::black;
+	m_textColorFg = draw::color::black;
 	
-	m_textColorBg = etk::color::black;
-	m_textColorBg.alpha = 0x3F;
+	m_textColorBg = draw::color::black;
+	m_textColorBg.a = 0x3F;
 	SetCanHaveFocus(true);
 }
 

@@ -27,7 +27,7 @@
 #include <ewol/oObject/OObject.h>
 #include <ewol/widget/WidgetManager.h>
 
-#include <etk/Color.h>
+#include <draw/Color.h>
 
 extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 
@@ -49,7 +49,7 @@ ewol::ColorBar::ColorBar(void)
 	#endif
 	m_currentUserPos.x=0;
 	m_currentUserPos.y=0;
-	m_currentColor = etk::color::black;
+	m_currentColor = draw::color::black;
 	SetCanHaveFocus(true);
 }
 
@@ -66,10 +66,10 @@ bool ewol::ColorBar::CalculateMinSize(void)
 	MarkToRedraw();
 	return true;
 }
-static etk::Color s_listColorWhite(0xFFFFFFFF);
-static etk::Color s_listColorBlack(0x000000FF);
+static draw::Color s_listColorWhite(0xFFFFFFFF);
+static draw::Color s_listColorBlack(0x000000FF);
 #define NB_BAND_COLOR		(6)
-static etk::Color s_listColor[NB_BAND_COLOR+1] = {
+static draw::Color s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF,
 	0xFFFF00FF,
 	0x00FF00FF,
@@ -79,14 +79,14 @@ static etk::Color s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF
 };
 
-etk::Color ewol::ColorBar::GetCurrentColor(void)
+draw::Color ewol::ColorBar::GetCurrentColor(void)
 {
 	return m_currentColor;
 }
-void ewol::ColorBar::SetCurrentColor(etk::Color newOne)
+void ewol::ColorBar::SetCurrentColor(draw::Color newOne)
 {
 	m_currentColor = newOne;
-	m_currentColor.alpha = 0xFF;
+	m_currentColor.a = 0xFF;
 	// estimate the cursor position :
 	// TODO : Later when really needed ...
 }
@@ -193,11 +193,11 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
 			*/
 		}
-		etk::Color tmpColor;
+		draw::Color tmpColor;
 		if (m_currentUserPos.y > 0.5) {
-			tmpColor = etk::color::white;
+			tmpColor = draw::color::white;
 		} else {
-			tmpColor = etk::color::black;
+			tmpColor = draw::color::black;
 		}
 		tmpOObjects->SetColor(tmpColor);
 		tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
@@ -236,49 +236,49 @@ bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			float localPos = relativePos.x - (m_size.x/6) * bandID;
 			float poroportionnalPos = localPos/(m_size.x/6);
 			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
-			etk::Color estimateColor = etk::color::white;
-			if (s_listColor[bandID].red == s_listColor[bandID+1].red) {
-				estimateColor.red = s_listColor[bandID].red;
-			} else if (s_listColor[bandID].red < s_listColor[bandID+1].red) {
-				estimateColor.red = s_listColor[bandID].red + (s_listColor[bandID+1].red-s_listColor[bandID].red)*poroportionnalPos;
+			draw::Color estimateColor = draw::color::white;
+			if (s_listColor[bandID].r == s_listColor[bandID+1].r) {
+				estimateColor.r = s_listColor[bandID].r;
+			} else if (s_listColor[bandID].r < s_listColor[bandID+1].r) {
+				estimateColor.r = s_listColor[bandID].r + (s_listColor[bandID+1].r-s_listColor[bandID].r)*poroportionnalPos;
 			} else {
-				estimateColor.red = s_listColor[bandID+1].red + (s_listColor[bandID].red-s_listColor[bandID+1].red)*(1-poroportionnalPos);
+				estimateColor.r = s_listColor[bandID+1].r + (s_listColor[bandID].r-s_listColor[bandID+1].r)*(1-poroportionnalPos);
 			}
-			if (s_listColor[bandID].green == s_listColor[bandID+1].green) {
-				estimateColor.green = s_listColor[bandID].green;
-			} else if (s_listColor[bandID].green < s_listColor[bandID+1].green) {
-				estimateColor.green = s_listColor[bandID].green + (s_listColor[bandID+1].green-s_listColor[bandID].green)*poroportionnalPos;
+			if (s_listColor[bandID].g == s_listColor[bandID+1].g) {
+				estimateColor.g = s_listColor[bandID].g;
+			} else if (s_listColor[bandID].g < s_listColor[bandID+1].g) {
+				estimateColor.g = s_listColor[bandID].g + (s_listColor[bandID+1].g-s_listColor[bandID].g)*poroportionnalPos;
 			} else {
-				estimateColor.green = s_listColor[bandID+1].green + (s_listColor[bandID].green-s_listColor[bandID+1].green)*(1-poroportionnalPos);
+				estimateColor.g = s_listColor[bandID+1].g + (s_listColor[bandID].g-s_listColor[bandID+1].g)*(1-poroportionnalPos);
 			}
-			if (s_listColor[bandID].blue == s_listColor[bandID+1].blue) {
-				estimateColor.blue = s_listColor[bandID].blue;
-			} else if (s_listColor[bandID].blue < s_listColor[bandID+1].blue) {
-				estimateColor.blue = s_listColor[bandID].blue + (s_listColor[bandID+1].blue-s_listColor[bandID].blue)*poroportionnalPos;
+			if (s_listColor[bandID].b == s_listColor[bandID+1].b) {
+				estimateColor.b = s_listColor[bandID].b;
+			} else if (s_listColor[bandID].b < s_listColor[bandID+1].b) {
+				estimateColor.b = s_listColor[bandID].b + (s_listColor[bandID+1].b-s_listColor[bandID].b)*poroportionnalPos;
 			} else {
-				estimateColor.blue = s_listColor[bandID+1].blue + (s_listColor[bandID].blue-s_listColor[bandID+1].blue)*(1-poroportionnalPos);
+				estimateColor.b = s_listColor[bandID+1].b + (s_listColor[bandID].b-s_listColor[bandID+1].b)*(1-poroportionnalPos);
 			}
 			// step 2 generate the white and black ...
 			if (relativePos.y == (m_size.y/2)) {
 				// nothing to do ... just get the current color ...
 			} else if (relativePos.y < (m_size.y/2)) {
 				float poroportionnalWhite = 1.0-relativePos.y/(m_size.y/2);
-				estimateColor.red   = estimateColor.red   + (1.0 - estimateColor.red  )*poroportionnalWhite;
-				estimateColor.green = estimateColor.green + (1.0 - estimateColor.green)*poroportionnalWhite;
-				estimateColor.blue  = estimateColor.blue  + (1.0 - estimateColor.blue )*poroportionnalWhite;
+				estimateColor.r = estimateColor.r + (1.0 - estimateColor.r)*poroportionnalWhite;
+				estimateColor.g = estimateColor.g + (1.0 - estimateColor.g)*poroportionnalWhite;
+				estimateColor.b = estimateColor.b + (1.0 - estimateColor.b)*poroportionnalWhite;
 			} else {
 				float poroportionnalBlack = (relativePos.y-(m_size.y/2))/(m_size.y/2);
-				estimateColor.red   = estimateColor.red   - (estimateColor.red  )*poroportionnalBlack;
-				estimateColor.green = estimateColor.green - (estimateColor.green)*poroportionnalBlack;
-				estimateColor.blue  = estimateColor.blue  - (estimateColor.blue )*poroportionnalBlack;
+				estimateColor.r = estimateColor.r - (estimateColor.r)*poroportionnalBlack;
+				estimateColor.g = estimateColor.g - (estimateColor.g)*poroportionnalBlack;
+				estimateColor.b = estimateColor.b - (estimateColor.b)*poroportionnalBlack;
 			}
 			/*
 			char colorText[256];
 			sprintf(colorText, "#%02X%02X%02X%02X",
-			        (uint8_t)(estimateColor.red   * 0xFF),
-			        (uint8_t)(estimateColor.green * 0xFF),
-			        (uint8_t)(estimateColor.blue  * 0xFF),
-			        (uint8_t)(estimateColor.alpha * 0xFF));
+			        (uint8_t)(estimateColor.r   * 0xFF),
+			        (uint8_t)(estimateColor.g * 0xFF),
+			        (uint8_t)(estimateColor.b  * 0xFF),
+			        (uint8_t)(estimateColor.a * 0xFF));
 			EWOL_DEBUG("new color : " << colorText);
 			*/
 			if(    m_currentColor != estimateColor) {
