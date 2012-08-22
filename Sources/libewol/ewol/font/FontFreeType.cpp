@@ -90,12 +90,15 @@ void ewol::FreeTypeUnInit(void)
 
 
 
-ewol::FontFreeType::FontFreeType(etk::UString fontName) :
-	Font(fontName)
+ewol::FontFreeType::FontFreeType(etk::UString fontFolder, etk::UString fontName) :
+	Font(fontFolder, fontName)
 {
+	m_init = false;
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
-	etk::File myfile(fontName);
+	etk::UString tmpFileName = fontFolder + "/" + fontName;
+	
+	etk::File myfile(tmpFileName, etk::FILE_TYPE_DATA);
 	if (false == myfile.Exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
@@ -112,7 +115,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 	// allocate data
 	m_FileBuffer = new FT_Byte[m_FileSize];
 	if (NULL == m_FileBuffer) {
-		EWOL_ERROR("Error Memory allocation size=" << m_FileSize);
+		EWOL_ERROR("Error Memory allocation size=" << tmpFileName);
 		return;
 	}
 	// load data from the file :
@@ -127,8 +130,9 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << myfile << "\" ");
+		EWOL_INFO("load font : \"" << tmpFileName << "\" ");
 		//Display();
+		m_init = true;
 	}
 }
 
@@ -139,6 +143,7 @@ ewol::FontFreeType::~FontFreeType(void)
 		delete[] m_FileBuffer;
 		m_FileBuffer = NULL;
 	}
+	// must be deleted fftFace
 }
 
 int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
@@ -147,6 +152,9 @@ int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
                                  const etk::UString&  unicodeString,
                                  draw::Color&         textColor)
 {
+	if(false==m_init) {
+		return 0;
+	}
 	return 0;
 }
 
@@ -156,11 +164,17 @@ int32_t ewol::FontFreeType::Draw(draw::Image&     imageOut,
                                  const uniChar_t  unicodeChar,
                                  draw::Color&     textColor)
 {
+	if(false==m_init) {
+		return 0;
+	}
 	return 0;
 }
 
 Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
 {
+	if(false==m_init) {
+		return Vector2D<float>(0,0);
+	}
 	Vector2D<float> outputSize(0,0);
 	return outputSize;
 }
@@ -172,6 +186,9 @@ int32_t ewol::FontFreeType::GetHeight(int32_t fontSize)
 
 bool ewol::FontFreeType::GenerateBitmapFont(int32_t size, int32_t &height, ewol::Texture & texture, etk::Vector<freeTypeFontElement_ts> & listElement)
 {
+	if(false==m_init) {
+		return false;
+	}
 	// get the pointer on the image :
 	draw::Image& myImage = texture.Get();
 	
@@ -280,7 +297,7 @@ bool ewol::FontFreeType::GenerateBitmapFont(int32_t size, int32_t &height, ewol:
 		for(int32_t j=0; j < tmpHeight;j++) {
 			for(int32_t i=0; i < tmpWidth; i++){
 				draw::Color tlpppp(0xFF,0xFF,0xFF,slot->bitmap.buffer[i + tmpWidth*j]);
-				EWOL_DEBUG(" plop : " << tlpppp);
+				//EWOL_DEBUG(" plop : " << tlpppp);
 				myImage.Set(Vector2D<int32_t>(tmpRowStartPos+i, tmpLineStartPos+j), tlpppp );
 			}
 		}
@@ -312,6 +329,9 @@ bool ewol::FontFreeType::GenerateBitmapFont(int32_t size, int32_t &height, ewol:
 
 void ewol::FontFreeType::Display(void)
 {
+	if(false==m_init) {
+		return;
+	}
 	EWOL_INFO("    nuber of glyph       = " << (int)m_fftFace->num_glyphs);
 	if ((FT_FACE_FLAG_SCALABLE & m_fftFace->face_flags) != 0) {
 		EWOL_INFO("    flags                = FT_FACE_FLAG_SCALABLE (enable)");

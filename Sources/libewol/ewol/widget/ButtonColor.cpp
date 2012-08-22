@@ -136,7 +136,8 @@ void ewol::ButtonColor::OnDraw(DrawProperty& displayProp)
 void ewol::ButtonColor::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		
+		m_oObjectDecoration.Clear();
+		m_oObjectText.Clear();
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
 		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;

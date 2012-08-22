@@ -105,6 +105,8 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
+		m_oObjectDecoration.Clear();
+		m_oObjectText.Clear();
 		int32_t borderWidth = 2;
 		
 		

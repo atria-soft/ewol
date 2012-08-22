@@ -104,18 +104,17 @@ int32_t ewol::font::GetDefaultSize(void)
 
 ewol::Font* ewol::font::Keep(etk::UString fontName)
 {
-	etk::UString tmpFileName = l_folderName + "/" + fontName;
 	for (int32_t iii=l_fontList.Size()-1; iii>=0; iii--) {
 		if (l_fontList[iii] != NULL) {
-			if(l_fontList[iii]->HasName(tmpFileName)) {
+			if(l_fontList[iii]->HasName(fontName)) {
 				l_fontList[iii]->Increment();
 				return l_fontList[iii];
 			}
 		}
 	}
-	ewol::FontFreeType* tmpResources = new ewol::FontFreeType(tmpFileName);
+	ewol::FontFreeType* tmpResources = new ewol::FontFreeType(l_folderName, fontName);
 	if (NULL == tmpResources) {
-		EWOL_ERROR("allocation error of a resource Font : " << tmpFileName);
+		EWOL_ERROR("allocation error of a resource Font : " << l_folderName << "/" << fontName);
 		return NULL;
 	}
 	l_fontList.PushBack(tmpResources);
@@ -144,18 +143,20 @@ void ewol::font::Release(ewol::Font*& object)
 
 ewol::TexturedFont* ewol::font::TexturedKeep(etk::UString fontName, int32_t size)
 {
-	etk::UString tmpFileName = l_folderName + "/" + fontName;
+	EWOL_VERBOSE("Textured font : try to find ... \"" << fontName << "\"");
 	for (int32_t iii=l_fontTexturedList.Size()-1; iii>=0; iii--) {
 		if (l_fontTexturedList[iii] != NULL) {
-			if(l_fontTexturedList[iii]->HasName(tmpFileName, size)) {
+			if(l_fontTexturedList[iii]->HasName(fontName, size)) {
+				EWOL_VERBOSE("    ==> Find prellocated");
 				l_fontTexturedList[iii]->Increment();
 				return l_fontTexturedList[iii];
 			}
 		}
 	}
-	ewol::TexturedFont* tmpResources = new ewol::TexturedFont(tmpFileName, size);
+	EWOL_VERBOSE("    ==> Create new One");
+	ewol::TexturedFont* tmpResources = new ewol::TexturedFont(fontName, size);
 	if (NULL == tmpResources) {
-		EWOL_ERROR("allocation error of a resource textured Font : " << tmpFileName);
+		EWOL_ERROR("allocation error of a resource textured Font : " << fontName);
 		return NULL;
 	}
 	l_fontTexturedList.PushBack(tmpResources);

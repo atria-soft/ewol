@@ -86,6 +86,7 @@ void ewol::Label::OnDraw(DrawProperty& displayProp)
 void ewol::Label::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		m_oObjectText.Clear();
 		int32_t paddingSize = 3;
 		
 		int32_t tmpOriginX = 0;

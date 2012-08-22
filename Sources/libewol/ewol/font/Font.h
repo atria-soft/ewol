@@ -49,7 +49,7 @@ namespace ewol
 			etk::UString m_name;
 			uint32_t     m_counter;
 		public:
-			Font(etk::UString fontName) :
+			Font(etk::UString fontFolder, etk::UString fontName) :
 				m_counter(1)
 			{
 				m_name = fontName;

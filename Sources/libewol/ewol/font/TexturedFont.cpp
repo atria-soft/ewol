@@ -37,6 +37,22 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) :
 	if (NULL == m_font) {
 		return;
 	}
+	
+	// set the bassic charset:
+	m_listElement.Clear();
+	freeTypeFontElement_ts tmpchar1;
+	tmpchar1.unicodeCharVal = 0;
+	m_listElement.PushBack(tmpchar1);
+	// TODO : dynamic generation of this : expected minimum of 0x20 => 0x7F ....
+	for (int32_t iii=0x20; iii<0xFF; iii++) {
+		freeTypeFontElement_ts tmpchar;
+		tmpchar.unicodeCharVal = iii;
+		m_listElement.PushBack(tmpchar);
+		if (0x7F == iii) {
+			iii = 0x9F;
+		}
+	}
+	
 	// initilize the texture ...
 	// TODO : Do a better methode that not initialize with a stupid language ... like now ...
 	m_font->GenerateBitmapFont(m_size, m_height, m_texture, m_listElement);

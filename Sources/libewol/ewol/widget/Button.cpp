@@ -163,7 +163,11 @@ void ewol::Button::OnDraw(DrawProperty& displayProp)
 void ewol::Button::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		
+		m_oObjectDecoration.Clear();
+		m_oObjectText.Clear();
+		if (NULL != m_oObjectImage) {
+			m_oObjectImage->Clear();
+		}
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
 		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;

@@ -114,6 +114,8 @@ void ewol::Entry::OnDraw(DrawProperty& displayProp)
 void ewol::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		m_oObjectDecoration.Clear();
+		m_oObjectText.Clear();
 		UpdateTextPosition();
 		
 		int32_t tmpSizeX = m_minSize.x;

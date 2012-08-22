@@ -40,9 +40,10 @@ namespace ewol
 			FT_Byte *    m_FileBuffer;
 			int32_t      m_FileSize;
 			FT_Face      m_fftFace;
+			bool         m_init;
 			void Display(void);
 		public:
-			FontFreeType(etk::UString fontName);
+			FontFreeType(etk::UString fontFolder, etk::UString fontName);
 			~FontFreeType(void);
 			int32_t Draw(draw::Image&         imageOut,
 			             int32_t              fontSize,
