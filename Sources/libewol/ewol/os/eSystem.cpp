@@ -38,6 +38,7 @@
 #include <ewol/os/eSystemInput.h>
 #include <ewol/openGl.h>
 #include <ewol/os/Fps.h>
+#include <ewol/font/FontManager.h>
 
 static ewol::Windows*     windowsCurrent = NULL;
 static Vector2D<int32_t>  windowsSize(320, 480);
@@ -244,7 +245,7 @@ void eSystem::Init(void)
 		l_managementInput.Reset();
 		ewol::textureManager::Init();
 		ewol::widgetManager::Init();
-		ewol::InitFont();
+		ewol::font::Init();
 		ewol::shortCut::Init();
 		APP_Init();
 		isGlobalSystemInit = true;
@@ -265,8 +266,8 @@ void eSystem::UnInit(void)
 		// call application to uninit
 		APP_UnInit();
 		ewol::shortCut::UnInit();
-		ewol::UnInitFont();
 		ewol::widgetManager::UnInit();
+		ewol::font::UnInit();
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
 		ewol::textureManager::UnInit();

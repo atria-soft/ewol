@@ -27,7 +27,8 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/Widget.h>
 
 extern const char * const ewolEventButtonPressed;
 extern const char * const ewolEventButtonDown;
@@ -40,7 +41,7 @@ namespace ewol {
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER,
 	} textAlignement_te;
-	class Button :public ewol::Drawable
+	class Button : public ewol::Widget
 	{
 		public:
 			Button(void);
@@ -65,15 +66,19 @@ namespace ewol {
 			void           SetColorBg(draw::Color newColor) { m_textColorBg = newColor; };
 			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
+			ewol::OObject2DTextColored m_oObjectText;
+			ewol::OObject2DColored     m_oObjectDecoration;
+			ewol::OObject2DTextured*   m_oObjectImage;
 			bool               m_hasAnImage;
 			etk::UString       m_imageSelected;
 			textAlignement_te  m_alignement;
 			Vector2D<float>    m_padding;
 			etk::UString       m_label;
-			draw::Color           m_textColorFg;  //!< Text color
-			draw::Color           m_textColorBg;  //!< Background color
+			draw::Color        m_textColorFg;  //!< Text color
+			draw::Color        m_textColorBg;  //!< Background color
 		public:
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)

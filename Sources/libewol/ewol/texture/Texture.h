@@ -31,10 +31,6 @@
 #include <ewol/openGl.h>
 
 namespace ewol {
-	// TODO : remove this deprecated element
-	namespace texture {
-		inline int32_t GetGLID(int32_t m_FontTextureId) { return 0; };
-	};
 	class Texture {
 		private:
 			uint32_t        m_uniqueId;
@@ -59,6 +55,8 @@ namespace ewol {
 		public:
 			Texture(void);
 			~Texture(void);
+			// you must set the size here, because it will be set in multiple of pow(2)
+			void SetImageSize(Vector2D<int32_t> newSize);
 			// get the reference on this image to draw nomething on it ...
 			inline draw::Image& Get(void) { return m_data; };
 			// Flush the data to send it at the OpenGl system

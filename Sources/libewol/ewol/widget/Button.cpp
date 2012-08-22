@@ -52,6 +52,7 @@ void ewol::WIDGET_ButtonInit(void)
 
 void ewol::Button::Init(void)
 {
+	m_oObjectImage=NULL;
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
 	AddEventId(ewolEventButtonUp);
@@ -112,16 +113,14 @@ void ewol::Button::SetPadding(Vector2D<float> newPadding)
 
 bool ewol::Button::CalculateMinSize(void)
 {
-	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label);
-	int32_t minHeight = ewol::GetHeight(fontId);
-	m_minSize.x = m_padding.x*2 + minWidth;
-	m_minSize.y = m_padding.y*2 + minHeight;
+	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	m_minSize.x = m_padding.x*2 + minSize.x;
+	m_minSize.y = m_padding.y*2 + minSize.y;
 	// Add the image element ...
 	if (true == m_hasAnImage) {
 		//m_minSize.x += -m_padding.x + m_padding.y*2 + minHeight;
 		//m_minSize.y += m_padding.y*2;
-		m_minSize.x += m_padding.x + minHeight;
+		m_minSize.x += m_padding.x + minSize.y;
 	}
 	
 	MarkToRedraw();
@@ -152,12 +151,18 @@ bool ewol::Button::GetValue(void)
 	return false;
 }
 
+void ewol::Button::OnDraw(DrawProperty& displayProp)
+{
+	m_oObjectDecoration.Draw();
+	if (NULL != m_oObjectImage) {
+		m_oObjectImage->Draw();
+	}
+	m_oObjectText.Draw();
+}
 
 void ewol::Button::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		// clean the object list ...
-		ClearOObjectList();
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
@@ -183,15 +188,9 @@ void ewol::Button::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_padding.x;
 		tmpSizeY -= 2*m_padding.y;
 		
-		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		/*
-		int32_t fontId = GetDefaultFontId();
-		int32_t fontHeight = ewol::GetHeight(fontId);
-		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-		*/
 		Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
 		
-		ewol::OObject2DTextured * tmpImage = NULL;
+		/*ewol::OObject2DTextured * tmpImage = NULL;
 		if (true == m_hasAnImage) {
 			int32_t fontId = GetDefaultFontId();
 			int32_t fontHeight = ewol::GetHeight(fontId);
@@ -200,31 +199,21 @@ void ewol::Button::OnRegenerateDisplay(void)
 			// update the text position ...
 			textPos.x += m_padding.x + fontHeight;
 		}
+		*/
 		clipping_ts drawClipping;
 		drawClipping.x = m_padding.x;
 		drawClipping.y = m_padding.y;
 		drawClipping.w = m_size.x - 2*m_padding.x;
 		drawClipping.h = m_size.y - 2*m_padding.y;
 		EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
-		tmpText->Text(textPos, drawClipping, m_label);
+		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-		tmpOObjects->SetColor(m_textColorBg);
+		m_oObjectDecoration.SetColor(m_textColorBg);
 		tmpOriginX -= m_padding.x/2;
 		tmpOriginY -= m_padding.y/2;
 		tmpSizeX += m_padding.x/1;
 		tmpSizeY += m_padding.y/1;
-		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		// add all needed objects ...
-		if (NULL != tmpOObjects) {
-			AddOObject(tmpOObjects);
-		}
-		if (NULL != tmpImage) {
-			AddOObject(tmpImage);
-		}
-		if (NULL != tmpText) {
-			AddOObject(tmpText);
-		}
+		m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 	}
 }
 

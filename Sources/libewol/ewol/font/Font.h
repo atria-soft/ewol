@@ -28,57 +28,51 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/File.h>
+#include <draw/Image.h>
+#include <ewol/texture/Texture.h>
 
 
 namespace ewol
 {
-	// TODO : Create a subNameSpace:
-	/*
-	namespace font {
-		...
-	};
-	*/
-	// set default folder name of the font : 
-	void        SetFontFolder(etk::UString folderName);
-	void        SetDefaultFont(etk::UString fontName, int32_t size);
-	// unload all font loaded
-	void        InitFont(void);
-	void        UnInitFont(void);
-	// load the fonts...
-	int32_t     LoadFont(etk::UString fontName, int32_t size); // return ID of font
-	int32_t     GetDefaultFontId(void);
-	void        UnloadFont(int32_t id);
+	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
+	typedef struct {
+		uniChar_t        unicodeCharVal;
+		texCoord_ts      posStart;
+		texCoord_ts      posStop;
+		Vector2D<float>  bearing;
+		Vector2D<float>  size;
+		int32_t          advance;
+	}freeTypeFontElement_ts;
 	
-	// get the size of a long string in UTF8 (note that \n and \r represent unknown char...)
-	int32_t     GetWidth(int32_t fontID, const etk::UString& unicodeString);
-	int32_t     GetHeight(int32_t fontID);
-	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                textPos,
-	                     clipping_ts &                  drawClipping,
-	                     const etk::UString &           unicodeString,
-	                     int32_t &                      fontTextureId,
-	                     etk::Vector<Vector2D<float> > &  coord,
-	                     etk::Vector<texCoord_ts> & coordTex);
-	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                textPos,
-	                     clipping_ts &                  drawClipping,
-	                     const uniChar_t                unicodeChar,
-	                     int32_t &                      fontTextureId,
-	                     etk::Vector<Vector2D<float> > &  coord,
-	                     etk::Vector<texCoord_ts> & coordTex);
-	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                textPos,
-	                     const etk::UString &           unicodeString,
-	                     int32_t &                      fontTextureId,
-	                     etk::Vector<Vector2D<float> > &  coord,
-	                     etk::Vector<texCoord_ts> & coordTex);
-	int32_t     DrawText(int32_t                        fontID,
-	                     Vector2D<float>                textPos,
-	                     const uniChar_t                unicodeChar,
-	                     int32_t &                      fontTextureId,
-	                     etk::Vector<Vector2D<float> > &  coord,
-	                     etk::Vector<texCoord_ts> & coordTex);
-	int32_t     LoadFont(etk::File fontFileName);
+	class Font {
+		private:
+			etk::UString m_name;
+			uint32_t     m_counter;
+		public:
+			Font(etk::UString fontName) :
+				m_counter(1)
+			{
+				m_name = fontName;
+			};
+			virtual ~Font(void) {};
+			bool HasName(etk::UString& fileName) { return fileName==m_name; };
+			etk::UString GetName(void) { return m_name; };
+			void Increment(void) { m_counter++; };
+			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
+			virtual int32_t Draw(draw::Image&         imageOut,
+			                     int32_t              fontSize,
+			                     Vector2D<float>      textPos,
+			                     const etk::UString&  unicodeString,
+			                     draw::Color&         textColor) = 0;
+			virtual int32_t Draw(draw::Image&     imageOut,
+			                     int32_t          fontSize,
+			                     Vector2D<float>  textPos,
+			                     const uniChar_t  unicodeChar,
+			                     draw::Color&     textColor) = 0;
+			virtual bool GenerateBitmapFont(int32_t size, int32_t& height, ewol::Texture& texture, etk::Vector<freeTypeFontElement_ts>& listElement) = 0;
+			virtual Vector2D<float> GetSize(int32_t fontSize, const etk::UString &  unicodeString) = 0;
+			virtual int32_t GetHeight(int32_t fontSize) = 0;
+	};
 };
 
 #endif

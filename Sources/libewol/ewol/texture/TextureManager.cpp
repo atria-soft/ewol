@@ -27,10 +27,11 @@
 #include <etk/File.h>
 #include <etk/Vector.h>
 #include <ewol/texture/TextureManager.h>
+#include <ewol/texture/TextureFile.h>
 
 
-static etk::Vector<ewol::Texture *object>  l_textureList;
-static etk::Vector<ewol::Texture *object>  l_textureListToUpdate;
+static etk::Vector<ewol::Texture*>  l_textureList;
+static etk::Vector<ewol::Texture*>  l_textureListToUpdate;
 
 static uint32_t l_uniqueIdTexture = 0;
 static bool     l_contextHasBeenRemoved = true;
@@ -117,7 +118,7 @@ void ewol::textureManager::Update(ewol::Texture *object)
 		}
 	}
 	// add it ...
-	l_textureListToUpdate.pushBack(object);
+	l_textureListToUpdate.PushBack(object);
 }
 
 // Specific to load or update the data in the openGl context ==> system use only
@@ -151,5 +152,51 @@ void ewol::textureManager::OpenGlContextHasBeenDestroyed(void)
 	}
 	// no context preent ...
 	l_contextHasBeenRemoved = true;
+}
+
+
+static etk::Vector<ewol::TextureFile *>  l_imageList;
+
+
+// this permit to keep a specific texture and prevent the multiple loading of this one ...
+ewol::Texture* ewol::textureManager::ImageKeep(etk::UString fileName, Vector2D<int32_t> size)
+{
+	
+	for (int32_t iii=l_imageList.Size()-1; iii>=0; iii--) {
+		if (l_imageList[iii] != NULL) {
+			if(    l_imageList[iii]->HasName(fileName)
+			    && l_imageList[iii]->Get().Get().GetWidth() == size.x
+			    && l_imageList[iii]->Get().Get().GetHeight() == size.y) {
+				l_imageList[iii]->Increment();
+				return &l_imageList[iii]->Get();
+			}
+		}
+	}
+	ewol::TextureFile* tmpResources = new ewol::TextureFile(fileName, size);
+	if (NULL == tmpResources) {
+		EWOL_ERROR("allocation error of a resource Image : " << fileName);
+		return NULL;
+	}
+	l_imageList.PushBack(tmpResources);
+	return &tmpResources->Get();
+}
+
+void ewol::textureManager::ImageRelease(ewol::Texture*& object)
+{
+	for (int32_t iii=l_imageList.Size()-1; iii>=0; iii--) {
+		if (l_imageList[iii] != NULL) {
+			if(&l_imageList[iii]->Get() == object) {
+				if (true == l_imageList[iii]->Decrement()) {
+					// delete element
+					delete(l_imageList[iii]);
+					// remove element from the list :
+					l_imageList.Erase(iii);
+				}
+				// insidiously remove the pointer for the caller ...
+				object = NULL;
+				return;
+			}
+		}
+	}
 }
 

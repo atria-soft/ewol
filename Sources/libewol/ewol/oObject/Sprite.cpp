@@ -24,6 +24,7 @@
 
 #include <ewol/oObject/Sprite.h>
 #include <ewol/texture/Texture.h>
+#include <ewol/texture/TextureManager.h>
 #include <ewol/openGl.h>
 #include <math.h>
 
@@ -31,26 +32,18 @@
 #define __class__	"Sprite"
 
 
-
-ewol::Sprite::Sprite(etk::UString spriteName)
-{
-	m_name = spriteName;
-	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
-	m_textureId = ewol::texture::Load(m_name);
-	
-}
 ewol::Sprite::Sprite(etk::UString spriteName, float sizeX, float sizeY)
 {
 	m_name = spriteName;
 	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
-	m_textureId = ewol::texture::Load(m_name, sizeX);
+	m_resource = ewol::textureManager::ImageKeep(m_name, Vector2D<int32_t>(sizeX,sizeY));
 }
 
 
 ewol::Sprite::~Sprite(void)
 {
-	if (-1 != m_textureId) {
-		ewol::texture::UnLoad(m_textureId);
+	if (NULL != m_resource) {
+		ewol::textureManager::ImageRelease(m_resource);
 	}
 }
 
@@ -60,13 +53,13 @@ void ewol::Sprite::Draw(void)
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
-	if (m_textureId == -1) {
+	if (NULL == m_resource) {
 		EWOL_WARNING("Texture does not exist ...");
 		return;
 	}
 	glEnable(GL_TEXTURE_2D);
 	//EWOL_WARNING("Draw with texture : " << m_textureId << " ==> ogl=" << ewol::texture::GetGLID(m_textureId));
-	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
+	glBindTexture(GL_TEXTURE_2D, m_resource->GetId());
 	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays

@@ -83,8 +83,7 @@ ewol::Entry::~Entry(void)
 
 bool ewol::Entry::CalculateMinSize(void)
 {
-	int32_t fontId = GetDefaultFontId();
-	int32_t minHeight = ewol::GetHeight(fontId);
+	int32_t minHeight = m_oObjectText.GetHeight();
 	m_minSize.x = m_userSize;
 	m_minSize.y = minHeight + 2*(m_borderSize + 2*m_paddingSize);
 	UpdateTextPosition();
@@ -106,15 +105,16 @@ etk::UString ewol::Entry::GetValue(void)
 	return m_data;
 }
 
+void ewol::Entry::OnDraw(DrawProperty& displayProp)
+{
+	m_oObjectDecoration.Draw();
+	m_oObjectText.Draw();
+}
 
 void ewol::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		UpdateTextPosition();
-		// clean the object list ...
-		ClearOObjectList();
-		
-		// TODO later : Add this in the basic element of the widget ...
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
@@ -137,7 +137,6 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_paddingSize;
 		tmpSizeY -= 2*m_paddingSize;
 		
-		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
 		
 		Vector2D<float> textPos;
 		textPos.x = tmpTextOriginX + m_displayStartPosition;
@@ -147,25 +146,20 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		drawClipping.y = 2*m_paddingSize + m_borderSize;
 		drawClipping.w = m_size.x;// - (m_borderSize + 2*m_paddingSize);
 		drawClipping.h = m_size.y;
-		tmpText->Text(textPos, drawClipping, m_data);
+		m_oObjectText.Text(textPos/*, drawClipping*/, m_data);
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-		tmpOObjects->SetColor(m_textColorBg);
-		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
+		m_oObjectDecoration.SetColor(m_textColorBg);
+		m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		m_oObjectDecoration.SetColor(m_textColorFg);
+		m_oObjectDecoration.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
 		if (true == m_displayCursor) {
-			int32_t fontId = GetDefaultFontId();
-			int32_t fontHeight = ewol::GetHeight(fontId);
 			etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
-			int32_t fontWidth = ewol::GetWidth(fontId, tmpDisplay);
-			int32_t XCursorPos = fontWidth + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
+			Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
+			int32_t XCursorPos = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
 			if (XCursorPos >= m_borderSize + 2*m_paddingSize) {
-				tmpOObjects->Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + fontHeight, 1);
+				m_oObjectDecoration.Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + minSize.y, 1);
 			}
 		}
-		AddOObject(tmpOObjects);
-		AddOObject(tmpText);
 	}
 }
 
@@ -188,15 +182,14 @@ bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventIn
 			MarkToRedraw();
 			Vector2D<float> relPos = RelativePosition(pos);
 			// try to find the new cursor position :
-			int32_t fontId = GetDefaultFontId();
 			etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
-			int32_t displayHidenSize = ewol::GetWidth(fontId, tmpDisplay);
+			int32_t displayHidenSize = m_oObjectText.GetSize(tmpDisplay).x;
 			//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 			int32_t newCursorPosition = -1;
 			int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
 			for (int32_t iii=0; iii<m_data.Size(); iii++) {
 				tmpDisplay = m_data.Extract(0, iii);
-				int32_t tmpWidth = ewol::GetWidth(fontId, tmpDisplay) - displayHidenSize;
+				int32_t tmpWidth = m_oObjectText.GetSize(tmpDisplay).x - displayHidenSize;
 				if (tmpWidth>=relPos.x-tmpTextOriginX) {
 					newCursorPosition = iii;
 					break;
@@ -293,14 +286,12 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 
 void ewol::Entry::UpdateTextPosition(void)
 {
-	int32_t fontId = GetDefaultFontId();
-	
 	int32_t tmpSizeX = m_minSize.x;
 	if (true==m_userFillX) {
 		tmpSizeX = m_size.x;
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
-	int32_t totalWidth = ewol::GetWidth(fontId, m_data);
+	int32_t totalWidth = m_oObjectText.GetSize(m_data).x;
 	if (totalWidth < tmpUserSize) {
 		m_displayStartPosition = 0;
 	} else {

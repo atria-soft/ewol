@@ -28,65 +28,13 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <etk/File.h>
+#include <draw/Image.h>
 
 namespace ewol
 {
-	namespace texture {
-		#pragma pack(push,1)
-		typedef struct
-		{
-			int16_t bfType;
-			int32_t bfSize;
-			int32_t bfReserved;
-			int32_t bfOffBits;
-		} bitmapFileHeader_ts;
-		
-		typedef struct
-		{
-			int32_t biSize;
-			int32_t biWidth;
-			int32_t biHeight;
-			int16_t biPlanes;
-			int16_t biBitCount;
-			int32_t biCompression;
-			int32_t biSizeImage;
-			int32_t biXPelsPerMeter;
-			int32_t biYPelsPerMeter;
-			int32_t biClrUsed;
-			int32_t biClrImportant;
-		} bitmapInfoHeader_ts;
-		#pragma pack(pop)
-		
-		typedef enum {
-			BITS_16_R5G6B5,
-			BITS_16_X1R5G5B5,
-			BITS_24_R8G8B8,
-			BITS_32_X8R8G8B8,
-			BITS_32_A8R8G8B8
-		} modeBitmap_te;
-		
-		class TextureBMP
-		{
-			private:
-				modeBitmap_te       m_dataMode;
-				int32_t             m_width;
-				int32_t             m_height;
-				int32_t             m_size;
-				uint8_t *           m_data;
-				uint8_t *           m_dataGenerate;
-				bitmapFileHeader_ts m_FileHeader;
-				bitmapInfoHeader_ts m_InfoHeader;
-			public:
-				TextureBMP(etk::File & fileName);
-				~TextureBMP(void);
-				bool LoadOK(void);
-				int32_t Width(void);
-				int32_t Height(void);
-				uint8_t * Data(void);
-				uint8_t * RawData(void);
-				uint32_t DataSize(void);
-				void Display(void);
-		};
+	namespace imageBMP
+	{
+		void GenerateImage(etk::File & fileName, draw::Image & ouputImage);
 	};
 };
 

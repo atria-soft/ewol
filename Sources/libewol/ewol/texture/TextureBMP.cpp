@@ -22,19 +22,54 @@
  *******************************************************************************
  */
 
-
+#include <etk/Types.h>
+#include <draw/Image.h>
 #include <ewol/texture/TextureBMP.h>
+
+#pragma pack(push,1)
+typedef struct
+{
+	int16_t bfType;
+	int32_t bfSize;
+	int32_t bfReserved;
+	int32_t bfOffBits;
+} bitmapFileHeader_ts;
+
+typedef struct
+{
+	int32_t biSize;
+	int32_t biWidth;
+	int32_t biHeight;
+	int16_t biPlanes;
+	int16_t biBitCount;
+	int32_t biCompression;
+	int32_t biSizeImage;
+	int32_t biXPelsPerMeter;
+	int32_t biYPelsPerMeter;
+	int32_t biClrUsed;
+	int32_t biClrImportant;
+} bitmapInfoHeader_ts;
+#pragma pack(pop)
+
+typedef enum {
+	BITS_16_R5G6B5,
+	BITS_16_X1R5G5B5,
+	BITS_24_R8G8B8,
+	BITS_32_X8R8G8B8,
+	BITS_32_A8R8G8B8
+} modeBitmap_te;
 
 
 #undef __class__
 #define __class__	"texture::TextureBMP"
 
-ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_dataGenerate(NULL)
+void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImage)
 {
-	m_dataMode = BITS_16_R5G6B5;
-	m_width = 0;
-	m_height = 0;
-	m_size = 0;
+	modeBitmap_te       m_dataMode = BITS_16_R5G6B5;
+	int32_t             m_width = 0;
+	int32_t             m_height = 0;
+	bitmapFileHeader_ts m_FileHeader;
+	bitmapInfoHeader_ts m_InfoHeader;
 
 	// Get the fileSize ...
 	/*if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
@@ -99,17 +134,21 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 	}
 	m_width = m_InfoHeader.biWidth;
 	m_height = m_InfoHeader.biHeight;
+	// reallocate the image 
+	ouputImage.Resize(Vector2D<int32_t>(m_width,m_height));
 	
+	uint8_t* m_data = NULL;
 	if(0 != m_InfoHeader.biSizeImage)
 	{
 		m_data=new uint8_t[m_InfoHeader.biSizeImage];
 		if (fileName.fRead(m_data,m_InfoHeader.biSizeImage,1) != 1){
 			EWOL_CRITICAL("Can not read the file with the good size...");
 		}
-		// allocate the destination data ...
-		m_dataGenerate=new uint8_t[m_width*m_height*4];
 	}
 	fileName.fClose();
+	
+	draw::Color tmpColor(0,0,0,0);
+	
 	// need now to generate RGBA data ...
 	switch(m_dataMode)
 	{
@@ -118,10 +157,11 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 				uint16_t * pointer = (uint16_t*)m_data;
 				for(int32_t yyy=0; yyy<m_height; yyy++) {
 					for(int32_t xxx=0; xxx<m_width; xxx++) {
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = (int8_t)((*pointer & 0xF800) >> 8);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 1] = (int8_t)((*pointer & 0x07E0) >> 3);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 2] = (int8_t)(*pointer << 3);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 3] = 0xFF;
+						tmpColor.r = (int8_t)((*pointer & 0xF800) >> 8);
+						tmpColor.g = (int8_t)((*pointer & 0x07E0) >> 3);
+						tmpColor.b = (int8_t)(*pointer << 3);
+						tmpColor.a = 0xFF;
+						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
 						pointer++;
 					}
 				}
@@ -132,10 +172,11 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 				uint16_t * pointer = (uint16_t*)m_data;
 				for(int32_t yyy=0; yyy<m_height; yyy++) {
 					for(int32_t xxx=0; xxx<m_width; xxx++) {
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = (int8_t)((*pointer & 0x7C00) >> 7);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 1] = (int8_t)((*pointer & 0x03E0) >> 2);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 2] = (int8_t)(*pointer << 3);
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 3] = 0xFF;
+						tmpColor.r = (int8_t)((*pointer & 0x7C00) >> 7);
+						tmpColor.g = (int8_t)((*pointer & 0x03E0) >> 2);
+						tmpColor.b = (int8_t)(*pointer << 3);
+						tmpColor.a = 0xFF;
+						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
 						pointer++;
 					}
 				}
@@ -146,10 +187,11 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 				uint8_t * pointer = m_data;
 				for(int32_t yyy=0; yyy<m_height; yyy++) {
 					for(int32_t xxx=0; xxx<m_width; xxx++) {
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 1] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 2] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 3] = 0xFF;
+						tmpColor.r = *pointer++;
+						tmpColor.g = *pointer++;
+						tmpColor.b = *pointer++;
+						tmpColor.a = 0xFF;
+						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}
@@ -160,10 +202,11 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 				for(int32_t yyy=0; yyy<m_height; yyy++) {
 					for(int32_t xxx=0; xxx<m_width; xxx++) {
 						pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 1] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 2] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 3] = 0xFF;
+						tmpColor.r = *pointer++;
+						tmpColor.g = *pointer++;
+						tmpColor.b = *pointer++;
+						tmpColor.a = 0xFF;
+						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}
@@ -173,10 +216,11 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 				uint8_t * pointer = m_data;
 				for(int32_t yyy=0; yyy<m_height; yyy++) {
 					for(int32_t xxx=0; xxx<m_width; xxx++) {
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 0] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 1] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 2] = *pointer++;
-						m_dataGenerate[4*((m_height-yyy-1) * m_width + xxx ) + 3] = *pointer++;
+						tmpColor.r = *pointer++;
+						tmpColor.g = *pointer++;
+						tmpColor.b = *pointer++;
+						tmpColor.a = *pointer++;
+						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}
@@ -185,55 +229,12 @@ ewol::texture::TextureBMP::TextureBMP(etk::File & fileName) : m_data(NULL), m_da
 			EWOL_DEBUG("        mode = ERROR");
 			break;
 	}
-}
-
-ewol::texture::TextureBMP::~TextureBMP(void)
-{
 	if (NULL != m_data) {
 		delete(m_data);
-	}
-	if (NULL != m_dataGenerate) {
-		delete(m_dataGenerate);
+		m_data=NULL;
 	}
 }
-
-bool ewol::texture::TextureBMP::LoadOK(void)
-{
-	if (NULL != m_dataGenerate) {
-		return true;
-	} else {
-		return false;
-	}
-};
-
-int32_t ewol::texture::TextureBMP::Width(void)
-{
-	return m_width;
-}
-
-
-int32_t ewol::texture::TextureBMP::Height(void)
-{
-	return m_height;
-}
-
-uint8_t * ewol::texture::TextureBMP::Data(void)
-{
-	return m_dataGenerate;
-};
-uint8_t * ewol::texture::TextureBMP::RawData(void)
-{
-	return m_data;
-};
-
-uint32_t ewol::texture::TextureBMP::DataSize(void)
-{
-	if (NULL == m_dataGenerate) {
-		return 0;
-	}
-	return m_width*m_height*4;
-}
-
+/*
 void ewol::texture::TextureBMP::Display(void)
 {
 	if (NULL == m_data) {
@@ -284,3 +285,4 @@ void ewol::texture::TextureBMP::Display(void)
 			break;
 	}
 }
+*/

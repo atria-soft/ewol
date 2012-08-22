@@ -27,14 +27,15 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/Widget.h>
 
 extern const char * const ewolEventEntryClick;
 extern const char * const ewolEventEntryEnter;
 extern const char * const ewolEventEntryModify; // return in the data the new string inside it ...
 
 namespace ewol {
-	class Entry :public ewol::Drawable
+	class Entry : public ewol::Widget
 	{
 		public:
 			Entry(void);
@@ -56,6 +57,8 @@ namespace ewol {
 				m_userSize = width;
 			}
 		private:
+			ewol::OObject2DTextColored m_oObjectText;
+			ewol::OObject2DColored     m_oObjectDecoration;
 			etk::UString   m_data;
 			draw::Color       m_textColorFg;  //!< Text color
 			draw::Color       m_textColorBg;  //!< Background color
@@ -67,7 +70,8 @@ namespace ewol {
 			void           UpdateTextPosition(void);
 			bool           m_displayCursor;
 		public:
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 		public:
 			/**
 			 * @brief Event on an input of this Widget

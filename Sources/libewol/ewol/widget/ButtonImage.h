@@ -55,15 +55,15 @@ namespace ewol {
 			etk::UString             m_image;
 			bool                     m_resetNeeded;
 			ewol::OObject2DTextured* m_OOImage;
-			draw::Color                 m_color;
+			draw::Color              m_color;
 			
 			etk::UString             m_imageBg1;
 			ewol::OObject2DTextured* m_OOImageBg1;
-			draw::Color                 m_colorBg1;
+			draw::Color              m_colorBg1;
 			
 			etk::UString             m_imageBg2;
 			ewol::OObject2DTextured* m_OOImageBG2;
-			draw::Color                 m_colorBg2;
+			draw::Color              m_colorBg2;
 			
 			bool                     m_over;
 			bool                     m_down;

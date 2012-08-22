@@ -26,13 +26,13 @@
 #define __EWOL_O_OBJECT_2D_TEXT_COLORED_H__
 
 #include <ewol/oObject/OObject.h>
+#include <ewol/font/TexturedFont.h>
 
 namespace ewol {
 	class OObject2DTextColored :public ewol::OObject
 	{
 		public:
 			OObject2DTextColored(etk::UString FontName, int32_t size);
-			OObject2DTextColored(int32_t fontID);
 			OObject2DTextColored(void);
 			virtual ~OObject2DTextColored(void);
 		public:
@@ -44,15 +44,18 @@ namespace ewol {
 			int32_t Text(Vector2D<float>  textPos, const etk::UString& unicodeString);
 			int32_t Text(Vector2D<float>  textPos, const uniChar_t     unicodeChar);
 		protected:
-			int32_t                       m_FontId;        //!< font internal ID
-			draw::Color                      m_color;         //!< tmp text color ...
-			int32_t                       m_FontTextureId; //!< font internal Texture ID
+			ewol::TexturedFont*             m_font;          //!< ewol font system
+			draw::Color                     m_color;         //!< tmp text color ...
 			etk::Vector<Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::Vector<texCoord_ts>  m_coordTex;      //!< internal texture coordinate for every point
-			etk::Vector<draw::Color>     m_coordColor;    //!< internal color of the different point
+			etk::Vector<texCoord_ts>        m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<draw::Color>        m_coordColor;    //!< internal color of the different point
 		public:
-			void    SetFontID(int32_t fontID) { m_FontId = fontID; };
-			int32_t GetFontID(void) { return m_FontId; };
+			void SetFont(etk::UString fontName);
+			void SetSize(int32_t fontSize);
+			void SetFontProperty(etk::UString fontName, int32_t fontSize);
+			int32_t GetHeight(void) { return (NULL!=m_font)?m_font->GetHeight():10; };
+			Vector2D<float> GetSize(const uniChar_t unicodeChar);
+			Vector2D<float> GetSize(const etk::UString& unicodeString);
 	};
 };
 

@@ -25,6 +25,7 @@
 
 
 #include <ewol/texture/Texture.h>
+#include <ewol/texture/TextureManager.h>
 #include <ewol/openGl.h>
 #include <ewol/ewol.h>
 
@@ -99,7 +100,7 @@ void ewol::Texture::UpdateContext(void)
 		// now the data is loaded
 		m_loaded = true;
 	} else {
-		EWOL_TODO("UPDATE Texture ...")
+		EWOL_TODO("UPDATE Texture ...");
 	}
 }
 
@@ -128,6 +129,12 @@ void ewol::Texture::Flush(void)
 }
 
 
+void ewol::Texture::SetImageSize(Vector2D<int32_t> newSize)
+{
+	newSize.x = nextP2(newSize.x);
+	newSize.y = nextP2(newSize.y);
+	m_data.Resize(newSize);
+}
 
 
 

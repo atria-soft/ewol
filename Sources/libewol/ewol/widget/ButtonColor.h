@@ -27,14 +27,15 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/widget/Drawable.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/Widget.h>
 
 extern const char * const ewolEventButtonColorChange;
 
 namespace ewol {
-	class ButtonColor :public ewol::Drawable
+	class ButtonColor : public ewol::Widget
 	{
 		public:
 			ButtonColor(void);
@@ -56,15 +57,18 @@ namespace ewol {
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(Vector2D<float>  newPadding);
 		private:
-			textAlignement_te    m_alignement;
+			ewol::OObject2DTextColored m_oObjectText;
+			ewol::OObject2DColored     m_oObjectDecoration;
+			textAlignement_te          m_alignement;
 			Vector2D<float>            m_padding;
-			etk::UString         m_label;
-			draw::Color             m_textColorFg;    //!< Text color
-			draw::Color             m_textColorBg;    //!< Background color
-			draw::Color             m_selectedColor;  //!< user current selected Color
-			ewol::ContextMenu*   m_widgetContextMenu;
+			etk::UString               m_label;
+			draw::Color                m_textColorFg;    //!< Text color
+			draw::Color                m_textColorBg;    //!< Background color
+			draw::Color                m_selectedColor;  //!< user current selected Color
+			ewol::ContextMenu*         m_widgetContextMenu;
 		public:
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 		public:
 			/**
 			 * @brief Event on an input of this Widget

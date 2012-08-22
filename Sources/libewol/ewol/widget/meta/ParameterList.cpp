@@ -136,10 +136,13 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		tmpOriginX += m_paddingSizeX;
 		tmpOriginY += m_paddingSizeY;
 	
+		/*
 		int32_t fontId = GetDefaultFontId();
 		//int32_t minWidth = ewol::GetWidth(fontId, m_label);
 		int32_t minHeight = ewol::GetHeight(fontId);
-	
+		*/
+		// TODO : Rework this ...
+		int32_t minHeight=20;
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
 		int32_t nbRaw    = m_list.Size();
@@ -181,7 +184,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 				myTextToWrite = m_list[iii]->m_label;
 			}
 			
-			ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, fg);
+			ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
 			
 			Vector2D<float> textPos;
 			textPos.x = (int32_t)tmpOriginX;
@@ -189,7 +192,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 				textPos.x += minHeight;
 			}
 			textPos.y = (int32_t)(tmpOriginY + m_paddingSizeY);
-			tmpText->Text(textPos, drawClipping, myTextToWrite);
+			tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
 			
 			AddOObject(tmpText);
 			tmpOriginY -= minHeight + 2* m_paddingSizeY;
@@ -221,10 +224,13 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 		Vector2D<float> relativePos = RelativePosition(pos);
 		// corection for the openGl abstraction
 		relativePos.y = m_size.y - relativePos.y;
+		// TODO : Rework this ...
+		/*
 		int32_t fontId = GetDefaultFontId();
 		//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t minHeight = ewol::GetHeight(fontId);
-		
+		*/
+		int32_t minHeight = 20;
 		int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
 		if (rawID >=0 && rawID<m_list.Size()) {

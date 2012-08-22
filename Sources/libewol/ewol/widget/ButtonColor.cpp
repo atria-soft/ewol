@@ -95,11 +95,9 @@ void ewol::ButtonColor::SetPadding(Vector2D<float> newPadding)
 
 bool ewol::ButtonColor::CalculateMinSize(void)
 {
-	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label);
-	int32_t minHeight = ewol::GetHeight(fontId);
-	m_minSize.x = m_padding.x*2 + minWidth;
-	m_minSize.y = m_padding.y*2 + minHeight;
+	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	m_minSize.x = m_padding.x*2 + minSize.x;
+	m_minSize.y = m_padding.y*2 + minSize.y;
 	MarkToRedraw();
 	return true;
 }
@@ -128,12 +126,16 @@ bool ewol::ButtonColor::GetValue(void)
 	return false;
 }
 
+void ewol::ButtonColor::OnDraw(DrawProperty& displayProp)
+{
+	m_oObjectDecoration.Draw();
+	m_oObjectText.Draw();
+}
+
 
 void ewol::ButtonColor::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		// clean the object list ...
-		ClearOObjectList();
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
@@ -164,12 +166,6 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		} else {
 			m_textColorFg = draw::color::white;
 		}
-		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		/*
-		int32_t fontId = GetDefaultFontId();
-		int32_t fontHeight = ewol::GetHeight(fontId);
-		int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-		*/
 		Vector2D<float> textPos;
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
@@ -178,18 +174,14 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		drawClipping.y = m_padding.y;
 		drawClipping.w = m_size.x - 2*m_padding.x;
 		drawClipping.h = m_size.y - 2*m_padding.y;
-		tmpText->Text(textPos, drawClipping, m_label);
+		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-		tmpOObjects->SetColor(m_textColorBg);
+		m_oObjectDecoration.SetColor(m_textColorBg);
 		tmpOriginX -= m_padding.x/2;
 		tmpOriginY -= m_padding.y/2;
 		tmpSizeX += m_padding.x/1;
 		tmpSizeY += m_padding.y/1;
-		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		AddOObject(tmpOObjects);
-		
-		AddOObject(tmpText);
+		m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
 	}
 }
 

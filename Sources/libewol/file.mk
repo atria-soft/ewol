@@ -6,10 +6,6 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/Debug.cpp \
 			ewol/ShortCutManager.cpp
 
-# Resources manager
-FILE_LIST+= ewol/resources/ResourcesManager.cpp \
-			ewol/resources/ResourcesImage.cpp
-
 # Gui interface
 FILE_LIST+= ewol/os/eSystem.cpp \
 			ewol/os/eSystemInput.cpp
@@ -25,7 +21,6 @@ FILE_LIST+= ewol/game/GameElement.cpp \
 
 # Object abstraction for OpenGl
 FILE_LIST+= ewol/oObject/OObject.cpp \
-			ewol/oObject/2DText.cpp \
 			ewol/oObject/2DTextColored.cpp \
 			ewol/oObject/2DColored.cpp \
 			ewol/oObject/2DTextured.cpp \
@@ -33,13 +28,16 @@ FILE_LIST+= ewol/oObject/OObject.cpp \
 
 # texture management
 FILE_LIST+= ewol/texture/Texture.cpp \
+			ewol/texture/TextureFile.cpp \
 			ewol/texture/TextureManager.cpp \
 			ewol/texture/TextureBMP.cpp \
 			ewol/texture/TexturePNG.cpp \
 			ewol/texture/TextureSVG.cpp
 
 # fonst system
-FILE_LIST+= ewol/font/FontFreeType.cpp
+FILE_LIST+= ewol/font/FontManager.cpp \
+			ewol/font/FontFreeType.cpp \
+			ewol/font/TexturedFont.cpp
 
 # all widgets
 FILE_LIST+= ewol/widget/Widget.cpp \

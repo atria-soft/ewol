@@ -24,29 +24,24 @@
 
 #include <ewol/oObject/2DTextured.h>
 #include <ewol/texture/Texture.h>
+#include <ewol/texture/TextureManager.h>
 #include <ewol/openGl.h>
 
 #undef __class__
 #define __class__	"ewol::OObject2DTextured"
 
 
-
-ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName)
-{
-	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
-	m_textureId = ewol::texture::Load(textureName);
-}
 ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX, float sizeY)
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
-	m_textureId = ewol::texture::Load(textureName, sizeX);
+	m_resource = ewol::textureManager::ImageKeep(textureName, Vector2D<int32_t>(sizeX,sizeY));
 }
 
 
 ewol::OObject2DTextured::~OObject2DTextured(void)
 {
-	if (-1 != m_textureId) {
-		ewol::texture::UnLoad(m_textureId);
+	if (NULL != m_resource) {
+		ewol::textureManager::ImageRelease(m_resource);
 	}
 }
 
@@ -55,14 +50,14 @@ void ewol::OObject2DTextured::Draw(void)
 	if (m_coord.Size()<=0) {
 		return;
 	}
-	if (m_textureId == -1) {
+	if (NULL == m_resource) {
 		EWOL_WARNING("Texture does not exist ...");
 		return;
 	}
 	glColor4f(1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_TEXTURE_2D);
 	//EWOL_WARNING("Draw with texture : " << m_textureId << " ==> ogl=" << ewol::texture::GetGLID(m_textureId));
-	glBindTexture(GL_TEXTURE_2D, ewol::texture::GetGLID(m_textureId));
+	glBindTexture(GL_TEXTURE_2D, m_resource->GetId() );
 	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays

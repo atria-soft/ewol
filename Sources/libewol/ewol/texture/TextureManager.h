@@ -41,6 +41,9 @@ namespace ewol
 		// Specific to load or update the data in the openGl context ==> system use only
 		void     UpdateContext(void);
 		void     OpenGlContextHasBeenDestroyed(void);
+		// this permit to keep a specific texture and prevent the multiple loading of this one ...
+		ewol::Texture*  ImageKeep(etk::UString fileName, Vector2D<int32_t> size);
+		void            ImageRelease(ewol::Texture*& object);
 	};
 };
 

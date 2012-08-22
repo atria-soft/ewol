@@ -73,6 +73,5 @@ namespace ewol {
 
 #include <ewol/oObject/2DTextured.h>
 #include <ewol/oObject/2DColored.h>
-#include <ewol/oObject/2DText.h>
 #include <ewol/oObject/2DTextColored.h>
 

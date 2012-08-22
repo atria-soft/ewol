@@ -27,12 +27,13 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/oObject/OObject.h>
+#include <ewol/widget/Widget.h>
 
 extern const char* const ewolEventCheckBoxClicked;
 
 namespace ewol {
-	class CheckBox :public ewol::Drawable
+	class CheckBox : public ewol::Widget
 	{
 		public:
 			CheckBox(void);
@@ -51,12 +52,15 @@ namespace ewol {
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:
+			ewol::OObject2DTextColored m_oObjectText;
+			ewol::OObject2DColored     m_oObjectDecoration;
 			etk::UString   m_label;
 			bool           m_value;
 			draw::Color       m_textColorFg;  //!< Text color
 			draw::Color       m_textColorBg;  //!< Background color
 		public:
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
+			virtual void OnDraw(DrawProperty& displayProp);
 		public:
 			/**
 			 * @brief Event on an input of this Widget

@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/resources/ResourcesImage.h
- * @brief ewol Resources image system (header)
+ * @file ewol/texture/TextureFile.cpp
+ * @brief ewol tecture file (sources)
  * @author Edouard DUPIN
- * @date 21/08/2012
+ * @date 22/08/2012
  * @par Project
  * ewol
  *
@@ -22,28 +22,28 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_RESOURCES_IMAGE_H__
-#define __EWOL_RESOURCES_IMAGE_H__
+#ifndef __EWOL_TEXTURE_FILE_H__
+#define __EWOL_TEXTURE_FILE_H__
 
 #include <etk/UString.h>
 #include <draw/Image.h>
+#include <ewol/texture/Texture.h>
 
 namespace ewol
 {
-	class ResourcesImage
+	class TextureFile
 	{
 		private:
-			uint32_t     m_resourceID;
-			uint32_t     m_counter;
-			draw::Image  m_image;
-			etk::UString m_fileName;
+			uint32_t      m_counter;
+			ewol::Texture m_texture;
+			etk::UString  m_fileName;
 		public:
-			ResourcesImage(etk::UString fileName, Vector2D<int32_t> size);
-			~ResourcesImage(void);
+			TextureFile(etk::UString fileName, Vector2D<int32_t> size);
+			~TextureFile(void);
 			bool HasName(etk::UString& fileName) { return fileName==m_fileName; };
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
-			draw::Image& Get(void) { return m_image; };
+			ewol::Texture& Get(void) { return m_texture; };
 	};
 };
 

@@ -66,12 +66,10 @@ ewol::CheckBox::~CheckBox(void)
 
 bool ewol::CheckBox::CalculateMinSize(void)
 {
-	int32_t fontId = GetDefaultFontId();
-	int32_t minWidth = ewol::GetWidth(fontId, m_label);
-	int32_t minHeight = ewol::GetHeight(fontId);
-	float boxSize = etk_max(20, minHeight) + 5;
-	m_minSize.x = boxSize+minWidth;
-	m_minSize.y = etk_max(boxSize, minHeight)+3;
+	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	float boxSize = etk_max(20, minSize.y) + 5;
+	m_minSize.x = boxSize+minSize.x;
+	m_minSize.y = etk_max(boxSize, minSize.y)+3;
 	MarkToRedraw();
 	return true;
 }
@@ -80,6 +78,7 @@ bool ewol::CheckBox::CalculateMinSize(void)
 void ewol::CheckBox::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
+	MarkToRedraw();
 }
 
 void ewol::CheckBox::SetValue(bool val)
@@ -96,22 +95,23 @@ bool ewol::CheckBox::GetValue(void)
 	return m_value;
 }
 
+void ewol::CheckBox::OnDraw(DrawProperty& displayProp)
+{
+	m_oObjectDecoration.Draw();
+	m_oObjectText.Draw();
+}
 
 void ewol::CheckBox::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		// clean the object list ...
-		ClearOObjectList();
 		
 		int32_t borderWidth = 2;
 		
 		
-		ewol::OObject2DText * tmpText = new ewol::OObject2DText("", -1, m_textColorFg);
-		int32_t fontId = GetDefaultFontId();
-		int32_t fontHeight = ewol::GetHeight(fontId);
-		float boxSize = etk_max(20, fontHeight);
+		Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+		float boxSize = etk_max(20, minSize.y) + 5;
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-		int32_t posy = (m_size.y - fontHeight - 6)/2 + 3;
+		int32_t posy = (m_size.y - minSize.y - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
@@ -124,22 +124,18 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		// note : pb on the clipping properties ...
 		drawClipping.w = m_size.x;// - (boxSize+5);
 		drawClipping.h = m_size.y;
-		tmpText->Text(textPos, drawClipping, m_label);
+		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
 		
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-		tmpOObjects->SetColor(m_textColorBg);
-		tmpOObjects->Rectangle( 2.5, 2.5, boxSize, boxSize);
-		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->RectangleBorder( 2.5, 2.5, boxSize, boxSize, borderWidth);
+		m_oObjectDecoration.SetColor(m_textColorBg);
+		m_oObjectDecoration.Rectangle( 2.5, 2.5, boxSize, boxSize);
+		m_oObjectDecoration.SetColor(m_textColorFg);
+		m_oObjectDecoration.RectangleBorder( 2.5, 2.5, boxSize, boxSize, borderWidth);
 		if (m_value) {
-			tmpOObjects->Line( 2.5, 2.5, boxSize+2.5, boxSize+2.5, borderWidth);
-			tmpOObjects->Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
+			m_oObjectDecoration.Line( 2.5, 2.5, boxSize+2.5, boxSize+2.5, borderWidth);
+			m_oObjectDecoration.Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
 		}
-		
-		AddOObject(tmpOObjects);
-		AddOObject(tmpText);
 	}
 }
 
