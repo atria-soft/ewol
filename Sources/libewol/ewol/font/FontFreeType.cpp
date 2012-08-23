@@ -41,33 +41,6 @@ extern "C" {
 // free Font hnadle of librairies ... entry for acces ...
 static FT_Library library;
 
-static int32_t nextP2(int32_t value)
-{
-	int32_t val=1;
-	for (int32_t iii=1; iii<31; iii++) {
-		if (value <= val) {
-			return val;
-		}
-		val *=2;
-	}
-	EWOL_CRITICAL("impossible CASE....");
-	return val;
-}
-
-static int32_t simpleSQRT(int32_t value)
-{
-	int32_t val=1;
-	for (int32_t iii=1; iii<1000; iii++) {
-		val =iii*iii;
-		if (value <= val) {
-			return iii;
-		}
-	}
-	EWOL_CRITICAL("impossible CASE....");
-	return val;
-}
-
-
 void ewol::FreeTypeInit(void)
 {
 	EWOL_DEBUG("==> Init Font-Manager");
@@ -155,6 +128,7 @@ int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
 	if(false==m_init) {
 		return 0;
 	}
+	// TODO : ...
 	return 0;
 }
 
@@ -167,6 +141,7 @@ int32_t ewol::FontFreeType::Draw(draw::Image&     imageOut,
 	if(false==m_init) {
 		return 0;
 	}
+	// TODO : ...
 	return 0;
 }
 
@@ -175,156 +150,106 @@ Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString
 	if(false==m_init) {
 		return Vector2D<float>(0,0);
 	}
+	// TODO : ...
 	Vector2D<float> outputSize(0,0);
 	return outputSize;
 }
 
 int32_t ewol::FontFreeType::GetHeight(int32_t fontSize)
 {
-	return 0;
+	return fontSize*1.43f; // this is a really "magic" number ...
 }
 
-bool ewol::FontFreeType::GenerateBitmapFont(int32_t size, int32_t &height, ewol::Texture & texture, etk::Vector<freeTypeFontElement_ts> & listElement)
+bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
+                                          ewol::GlyphProperty& property)
 {
 	if(false==m_init) {
 		return false;
 	}
-	// get the pointer on the image :
-	draw::Image& myImage = texture.Get();
-	
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
-	//int32_t fontQuality = 150;
-	//int32_t fontQuality = 300;
 	// Select Size ...
 	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
-	int32_t error = FT_Set_Char_Size(m_fftFace, size<<6, size<<6, fontQuality, fontQuality);
-	// the line height to have a correct display
-	height = size*1.43f;
-
+	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
+	if (0!=error ) {
+		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		return false;
+	}
 	// a small shortcut
 	FT_GlyphSlot slot = m_fftFace->glyph;
-	/*
-	EWOL_DEBUG("Max size for ths glyph size=" << size << 
-	           " is (" << m_fftFace->max_advance_width << "," << m_fftFace->max_advance_height << ")" <<
-	           "?=(" << (m_fftFace->max_advance_width>>6) << "," << (m_fftFace->max_advance_height>>6) << ")");
-	*/
 	// retrieve glyph index from character code 
-	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, 'A' );
+	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, property.m_UVal);
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
 	                      glyph_index, // glyph index
 	                      FT_LOAD_DEFAULT );
-	if ( error ) {
-		EWOL_ERROR("FT_Load_Glyph");
+	if (0!=error ) {
+		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		return false;
 	}
-	EWOL_DEBUG("linearHoriAdvance=" << (slot->linearHoriAdvance >> 6));
-	EWOL_DEBUG("linearVertAdvance=" << (slot->linearVertAdvance >> 6));
-	EWOL_DEBUG("metrics.horiAdvance=" << (slot->metrics.horiAdvance >> 6));
-	EWOL_DEBUG("metrics.vertAdvance=" << (slot->metrics.vertAdvance >> 6));
+	// convert to an anti-aliased bitmap
+	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
+	if (0!=error) {
+		EWOL_ERROR("FT_Render_Glyph");
+		return false;
+	}
+	// set properties :
+	property.m_glyphIndex = glyph_index;
+	property.m_sizeTexture.x = slot->bitmap.width;
+	property.m_sizeTexture.y = slot->bitmap.rows;
+	property.m_bearing.x = slot->metrics.horiBearingX>>6;
+	property.m_bearing.y = slot->metrics.horiBearingY>>6;
+	property.m_advance.x = slot->metrics.horiAdvance>>6;
+	property.m_advance.y = slot->metrics.vertAdvance>>6;
 	
-	int32_t nbElement = listElement.Size();
-	int32_t coter = simpleSQRT(nbElement);
-	// note : +1 is for the overlapping of the glyph (Part 1)
-	int32_t glyphMaxWidth = /*(m_fftFace->max_advance_width>>6); */(slot->metrics.horiAdvance>>6) +1;
-	int32_t glyphMaxHeight = /*(m_fftFace->max_advance_height>>6); */(slot->metrics.vertAdvance>>6) +1;
-	int32_t textureWidth = nextP2(coter*glyphMaxWidth);
-	int32_t nbRaws = textureWidth / glyphMaxWidth;
-	if (nbRaws <= 0) {
-		EWOL_ERROR("devide by 0");
-		nbRaws = 1;
-	}
-	int32_t nbLine = (nbElement / nbRaws) + 1;
-	int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
-	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
-	// resize must be done on the texture ...
-	texture.SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
-	// now we can acces directly on the image
-	myImage.SetFillColor(draw::Color(0xFFFFFF00));
-	myImage.Clear();
-	
-	int32_t tmpRowStartPos = 0;
-	int32_t tmpLineStartPos = 0;
-	int32_t CurrentLineHigh = 0;
-	// Generate for All Elements :
-	for (int32_t iii=0; iii<listElement.Size(); iii++) {
-		// increment the position of the texture
-		/*
-		if (iii!=0) {
-			tmpRowId++;
-			if (tmpRowId>=nbRaws) {
-				tmpRowId = 0;
-				tmpLineId++;
-			}
-		}
-		*/
-		// retrieve glyph index from character code 
-		glyph_index = FT_Get_Char_Index(m_fftFace, listElement[iii].unicodeCharVal );
-		/*
-		if (glyph_index < 1) {
-			EWOL_WARNING("Can not load Glyph : " << listElement[iii].unicodeCharVal);
-		}
-		*/
-		// load glyph image into the slot (erase previous one)
-		error = FT_Load_Glyph(m_fftFace, // handle to face object
-		                      glyph_index, // glyph index
-		                      FT_LOAD_DEFAULT );
-		if ( error ) {
-			EWOL_ERROR("FT_Load_Glyph");
-		}
-		
-		// convert to an anti-aliased bitmap
-		error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
-		if ( error ) {
-			EWOL_ERROR("FT_Render_Glyph");
-		}
-		int32_t tmpWidth=slot->bitmap.width;
-		int32_t tmpHeight=slot->bitmap.rows;
-		// check if we have enought place on the bitmap to add the current element : 
-		if (tmpRowStartPos+tmpWidth >= textureWidth) {
-			tmpRowStartPos = 0;
-			tmpLineStartPos += CurrentLineHigh;
-			CurrentLineHigh = 0;
-			EWOL_ASSERT(tmpLineStartPos+tmpHeight < textureHeight, "Texture dimention estimatiuon error for the current Font");
-		}
-		
-		/*
-		EWOL_VERBOSE("elem=" << listElement[iii].unicodeCharVal
-		              <<" size=(" << tmpWidth << "," << tmpHeight << ")"
-		              << " for bitmap (left=" << slot->bitmap_left << ",top=" << slot->bitmap_top << ")");
-		EWOL_VERBOSE(" BEARING=(" << (slot->metrics.horiBearingX>>6) << "," << (slot->metrics.vertBearingY>>6) << ")" );
-		*/
-		for(int32_t j=0; j < tmpHeight;j++) {
-			for(int32_t i=0; i < tmpWidth; i++){
-				draw::Color tlpppp(0xFF,0xFF,0xFF,slot->bitmap.buffer[i + tmpWidth*j]);
-				//EWOL_DEBUG(" plop : " << tlpppp);
-				myImage.Set(Vector2D<int32_t>(tmpRowStartPos+i, tmpLineStartPos+j), tlpppp );
-			}
-		}
-		listElement[iii].bearing.x  = slot->metrics.horiBearingX>>6;
-		listElement[iii].bearing.y  = slot->metrics.horiBearingY>>6;
-		listElement[iii].size.x     = tmpWidth;
-		listElement[iii].size.y     = tmpHeight;
-		listElement[iii].advance    = slot->metrics.horiAdvance>>6;
-		listElement[iii].posStart.u = (float)(tmpRowStartPos) / (float)textureWidth;
-		listElement[iii].posStart.v = (float)(tmpLineStartPos) / (float)textureHeight;
-		listElement[iii].posStop.u  = (float)(tmpRowStartPos + tmpWidth) / (float)textureWidth;
-		listElement[iii].posStop.v  = (float)(tmpLineStartPos + tmpHeight) / (float)textureHeight;
-		
-		// update the maximum of the line hight : 
-		if (CurrentLineHigh<tmpHeight) {
-			// note : +1 is for the overlapping of the glyph (Part 2)
-			CurrentLineHigh = tmpHeight+1;
-		}
-		// note : +1 is for the overlapping of the glyph (Part 3)
-		// update the Bitmap position drawing : 
-		tmpRowStartPos += tmpWidth+1;
-	}
-	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	texture.Flush();
-	EWOL_DEBUG("end load remode tmp data");
+	return true;
+}
 
-	return false;
+bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
+                                   int32_t              fontSize,
+                                   Vector2D<int32_t>    glyphPosition,
+                                   ewol::GlyphProperty& property)
+{
+
+	if(false==m_init) {
+		return false;
+	}
+	// 300dpi (hight quality) 96 dpi (normal quality)
+	int32_t fontQuality = 96;
+	// Select Size ...
+	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
+	if (0!=error ) {
+		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		return false;
+	}
+	// a small shortcut
+	FT_GlyphSlot slot = m_fftFace->glyph;
+	// load glyph image into the slot (erase previous one)
+	error = FT_Load_Glyph(m_fftFace, // handle to face object
+	                      property.m_glyphIndex, // glyph index
+	                      FT_LOAD_DEFAULT );
+	if (0!=error ) {
+		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		return false;
+	}
+	// convert to an anti-aliased bitmap
+	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL );
+	if (0!=error) {
+		EWOL_ERROR("FT_Render_Glyph");
+		return false;
+	}
+	// draw it on the output Image :
+	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
+	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
+		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
+			// set only alpha :
+			tlpppp.a = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
+			// real set of color
+			imageOut.Set(Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
+		}
+	}
+	return true;
 }
 
 void ewol::FontFreeType::Display(void)

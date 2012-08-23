@@ -209,7 +209,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		drawClipping.y = m_padding.y;
 		drawClipping.w = m_size.x - 2*m_padding.x;
 		drawClipping.h = m_size.y - 2*m_padding.y;
-		EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
+		//EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
 		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
 		m_oObjectDecoration.SetColor(m_textColorBg);

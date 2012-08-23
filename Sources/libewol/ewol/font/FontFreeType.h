@@ -34,6 +34,7 @@ extern "C" {
 
 namespace ewol
 {
+	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
 	class FontFreeType : public ewol::Font
 	{
 		private:
@@ -55,7 +56,12 @@ namespace ewol
 			             Vector2D<float>  textPos,
 			             const uniChar_t  unicodeChar,
 			             draw::Color&     textColor);
-			bool GenerateBitmapFont(int32_t size, int32_t& height, ewol::Texture& texture, etk::Vector<freeTypeFontElement_ts>& listElement);
+			bool GetGlyphProperty(int32_t              fontSize,
+			                      ewol::GlyphProperty& property);
+			bool DrawGlyph(draw::Image&         imageOut,
+			               int32_t              fontSize,
+			               Vector2D<int32_t>    glyphPosition,
+			               ewol::GlyphProperty& property);
 			Vector2D<float> GetSize(int32_t fontSize, const etk::UString & unicodeString);
 			int32_t GetHeight(int32_t fontSize);
 	};

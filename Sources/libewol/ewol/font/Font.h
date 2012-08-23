@@ -34,15 +34,47 @@
 
 namespace ewol
 {
-	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
+	/*
+	                             |            |          |            |            
+	                             |            |          |            |            
+	                             |            |          |            |            
+	                      Y      |            |          |            |            
+	                      ^      |------------|          |------------|            
+	                      |                                                        
+	     m_advance.y:/->  |                                                        
+	                 |    |                                                        
+	                 |    |                                                        
+	m_sizeTex.x/->   |    |         |------------|          |------------|         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |     A      |          |     G      |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           |     |    |         |            |          |            |         
+	           \->   |    |         |------------|          |------------|         
+	        /-->     |    |                                                        
+	        \-->     \->  |                                                        
+	m_bearing.y           |                                                        
+	                      |____*________________________*____________>>   X        
+	                                                                               
+	                                                                               
+	                           <------------------------> : m_advance.x            
+	                                                                               
+	                                <------------> : m_sizeTexture.x               
+	                                                                               
+	                           <---> : m_bearing.x                                 
+	                       
+	*/
 	typedef struct {
-		uniChar_t        unicodeCharVal;
-		texCoord_ts      posStart;
-		texCoord_ts      posStop;
-		Vector2D<float>  bearing;
-		Vector2D<float>  size;
-		int32_t          advance;
-	}freeTypeFontElement_ts;
+		uniChar_t         m_UVal;        // Unicode value
+		int32_t           m_glyphIndex;  // Glyph index in the system
+		Vector2D<int32_t> m_sizeTexture; // size of the element to display
+		Vector2D<int32_t> m_bearing;     // offset to display the data (can be negatif id the texture sise is bigger than the théoric places in the string)
+		Vector2D<int32_t> m_advance;     // space use in the display for this specific char
+	} GlyphProperty;
 	
 	class Font {
 		private:
@@ -69,7 +101,12 @@ namespace ewol
 			                     Vector2D<float>  textPos,
 			                     const uniChar_t  unicodeChar,
 			                     draw::Color&     textColor) = 0;
-			virtual bool GenerateBitmapFont(int32_t size, int32_t& height, ewol::Texture& texture, etk::Vector<freeTypeFontElement_ts>& listElement) = 0;
+			virtual bool GetGlyphProperty(int32_t              fontSize,
+			                              ewol::GlyphProperty& property) = 0;
+			virtual bool DrawGlyph(draw::Image&         imageOut,
+			                       int32_t              fontSize,
+			                       Vector2D<int32_t>    glyphPosition,
+			                       ewol::GlyphProperty& property) = 0;
 			virtual Vector2D<float> GetSize(int32_t fontSize, const etk::UString &  unicodeString) = 0;
 			virtual int32_t GetHeight(int32_t fontSize) = 0;
 	};

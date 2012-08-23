@@ -33,6 +33,12 @@
 namespace ewol
 {
 	class TexturedFont {
+		
+		typedef struct {
+			GlyphProperty    property;
+			texCoord_ts      posStart;
+			texCoord_ts      posStop;
+		}freeTypeFontElement_ts;
 		private:
 			int32_t                             m_size;
 			int32_t                             m_height;
@@ -40,6 +46,9 @@ namespace ewol
 			ewol::Texture                       m_texture;
 			uint32_t                            m_counter;
 			etk::Vector<freeTypeFontElement_ts> m_listElement;
+			// for the texture generation :
+			Vector2D<int32_t>                   m_lastGlyphPos;
+			int32_t                             m_lastRawHeigh;
 		public:
 			TexturedFont(etk::UString fontName, int32_t size);
 			~TexturedFont(void);
@@ -56,6 +65,7 @@ namespace ewol
 			             etk::Vector<texCoord_ts> &      coordTex);
 			Vector2D<float> GetSize(const etk::UString & unicodeString);
 			Vector2D<float> GetSize(const uniChar_t      unicodeChar);
+			// TODO : Remove this element, it is stupid ...
 			int32_t GetHeight(void) { return m_height; };
 			int32_t GetFontSize(void) { return m_size; };
 			ewol::Texture& GetTex(void) { return m_texture; };

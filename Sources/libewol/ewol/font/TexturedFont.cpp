@@ -28,9 +28,38 @@
 #include <ewol/font/FontManager.h>
 
 
+static int32_t nextP2(int32_t value)
+{
+	int32_t val=1;
+	for (int32_t iii=1; iii<31; iii++) {
+		if (value <= val) {
+			return val;
+		}
+		val *=2;
+	}
+	EWOL_CRITICAL("impossible CASE....");
+	return val;
+}
+
+static int32_t simpleSQRT(int32_t value)
+{
+	int32_t val=1;
+	for (int32_t iii=1; iii<1000; iii++) {
+		val =iii*iii;
+		if (value <= val) {
+			return iii;
+		}
+	}
+	EWOL_CRITICAL("impossible CASE....");
+	return val;
+}
+
+
 ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) : 
 	m_font(NULL),
-	m_counter(1)
+	m_counter(1),
+	m_lastGlyphPos(0,0),
+	m_lastRawHeigh(0)
 {
 	m_size = size;
 	m_font = ewol::font::Keep(fontName);
@@ -41,21 +70,115 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) :
 	// set the bassic charset:
 	m_listElement.Clear();
 	freeTypeFontElement_ts tmpchar1;
-	tmpchar1.unicodeCharVal = 0;
+	tmpchar1.property.m_UVal = 0;
 	m_listElement.PushBack(tmpchar1);
-	// TODO : dynamic generation of this : expected minimum of 0x20 => 0x7F ....
 	for (int32_t iii=0x20; iii<0xFF; iii++) {
 		freeTypeFontElement_ts tmpchar;
-		tmpchar.unicodeCharVal = iii;
+		tmpchar.property.m_UVal = iii;
 		m_listElement.PushBack(tmpchar);
 		if (0x7F == iii) {
 			iii = 0x9F;
 		}
 	}
+	// get the pointer on the image :
+	draw::Image& myImage = m_texture.Get();
+	
+	
+	/* this is a bad code for now ... */
+	// ==> determine the texture Size
+	GlyphProperty tmpproperty;
+	tmpproperty.m_UVal = 'A';
+	m_font->GetGlyphProperty(m_size, tmpproperty);
+	
+	int32_t nbElement = 0xFF - 0x20 + 1;
+	int32_t coter = simpleSQRT(nbElement);
+	// note : +1 is for the overlapping of the glyph (Part 1)
+	int32_t glyphMaxWidth = tmpproperty.m_advance.x +1;
+	int32_t glyphMaxHeight = tmpproperty.m_advance.y +1;
+	int32_t textureWidth = nextP2(coter*glyphMaxWidth);
+	int32_t nbRaws = textureWidth / glyphMaxWidth;
+	if (nbRaws <= 0) {
+		EWOL_ERROR("devide by 0");
+		nbRaws = 1;
+	}
+	int32_t nbLine = (nbElement / nbRaws) + 1;
+	int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
+	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
+	// resize must be done on the texture ...
+	m_texture.SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
+	// now we can acces directly on the image
+	myImage.SetFillColor(draw::Color(0xFFFFFF00));
+	myImage.Clear();
+	
+	m_height = m_font->GetHeight(m_size);
+	
+	int32_t CurrentLineHigh = 0;
+	Vector2D<int32_t>    glyphPosition(1,1);
+	for (int32_t iii=0; iii<m_listElement.Size(); iii++) {
+		if (true == m_font->GetGlyphProperty(m_size, m_listElement[iii].property)) {
+			/*
+			// check internal property:
+			// enought in the texture :
+			//if (myImage.GetWidth() < m_lastGlyphPos.x + m_listElement[iii].property.m_sizeTexture.x
+				// resize if needed ...
+			
+			// line size :
+			
+			// draw
+			
+			// move the curent pointer of drawing:
+			*/
+			// change line if needed ...
+			if (glyphPosition.x+m_listElement[iii].property.m_sizeTexture.x > textureWidth) {
+				glyphPosition.x = 0;
+				glyphPosition.y += CurrentLineHigh;
+				CurrentLineHigh = 0;
+			}
+			// draw the glyph
+			m_font->DrawGlyph(myImage, m_size, glyphPosition, m_listElement[iii].property);
+			// set video position
+			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
+			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
+			m_listElement[iii].posStop.u  = (float)(glyphPosition.x + m_listElement[iii].property.m_sizeTexture.x) / (float)textureWidth;
+			m_listElement[iii].posStop.v  = (float)(glyphPosition.y + m_listElement[iii].property.m_sizeTexture.y) / (float)textureHeight;
+			/*
+			EWOL_DEBUG("generate '" << (char)m_listElement[iii].property.m_UVal << "'");
+			EWOL_DEBUG("     in tex : " << glyphPosition << " ==> " << m_listElement[iii].posStart.u<< "," << m_listElement[iii].posStart.v );
+			EWOL_DEBUG("     m_sizeTexture =" << m_listElement[iii].property.m_sizeTexture );
+			EWOL_DEBUG("     m_bearing     =" << m_listElement[iii].property.m_bearing );
+			EWOL_DEBUG("     m_advance     =" << m_listElement[iii].property.m_advance );
+			*/
+			
+			// update the maximum of the line hight : 
+			if (CurrentLineHigh<m_listElement[iii].property.m_sizeTexture.y) {
+				// note : +1 is for the overlapping of the glyph (Part 2)
+				CurrentLineHigh = m_listElement[iii].property.m_sizeTexture.y+1;
+			}
+			// note : +1 is for the overlapping of the glyph (Part 3)
+			// update the Bitmap position drawing : 
+			glyphPosition.x += m_listElement[iii].property.m_sizeTexture.x+1;
+		}
+		
+	}
+	// For testing cheree the box are set)
+	#if 0
+	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
+	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
+		for(int32_t iii=0; iii < textureWidth; iii++){
+			tlpppp = myImage.Get(Vector2D<int32_t>(iii, jjj) );
+			// set only alpha :
+			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
+			// real set of color
+			myImage.Set(Vector2D<int32_t>(iii, jjj), tlpppp );
+		}
+	}
+	#endif
+	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
+	m_texture.Flush();
 	
 	// initilize the texture ...
 	// TODO : Do a better methode that not initialize with a stupid language ... like now ...
-	m_font->GenerateBitmapFont(m_size, m_height, m_texture, m_listElement);
+	//m_font->GenerateBitmapFont(m_size, m_height, m_texture, m_listElement);
 }
 
 ewol::TexturedFont::~TexturedFont(void)
@@ -75,7 +198,6 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 		tmpPos.x += ret;
 		totalSize += ret;
 	}
-	return totalSize;
 	
 	#if 0
 	// To display the texture ...
@@ -92,10 +214,10 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 			bitmapDrawPos[2].x = 400;
 			bitmapDrawPos[3].x = 10;
 			
-			bitmapDrawPos[0].y = 10;
-			bitmapDrawPos[1].y = 10;
-			bitmapDrawPos[2].y = 400;
-			bitmapDrawPos[3].y = 400;
+			bitmapDrawPos[0].y = 400;
+			bitmapDrawPos[1].y = 400;
+			bitmapDrawPos[2].y = 10;
+			bitmapDrawPos[3].y = 10;
 			/* texture Position : 
 			 *   0------1
 			 *   |      |
@@ -147,6 +269,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 			coord.PushBack(bitmapDrawPos[3]);
 		}
 	#endif
+	return totalSize;
 }
 
 int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
@@ -164,7 +287,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 	} else {
 		charIndex = 0;
 		for (int32_t iii=0x80-0x20; iii < m_listElement.Size(); iii++) {
-			if (m_listElement[iii].unicodeCharVal == unicodeChar) {
+			if (m_listElement[iii].property.m_UVal == unicodeChar) {
 				charIndex = iii;
 				break;
 			}
@@ -179,10 +302,10 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 		 *      |      |
 		 *   yD *------*
 		 */
-		float dxA = posDrawX + m_listElement[charIndex].bearing.x;
-		float dxB = posDrawX + m_listElement[charIndex].bearing.x + m_listElement[charIndex].size.x;
-		float dyC = textPos.y + m_listElement[charIndex].bearing.y + m_height - m_size;
-		float dyD = dyC - m_listElement[charIndex].size.y;
+		float dxA = posDrawX + m_listElement[charIndex].property.m_bearing.x;
+		float dxB = posDrawX + m_listElement[charIndex].property.m_bearing.x + m_listElement[charIndex].property.m_sizeTexture.x;
+		float dyC = textPos.y + m_listElement[charIndex].property.m_bearing.y + m_height - m_size;
+		float dyD = dyC - m_listElement[charIndex].property.m_sizeTexture.y;
 		
 		float tuA = m_listElement[charIndex].posStart.u;
 		float tuB = m_listElement[charIndex].posStop.u;
@@ -263,7 +386,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 			
 		}
 	}
-	posDrawX += m_listElement[charIndex].advance;
+	posDrawX += m_listElement[charIndex].property.m_advance.x;
 	int32_t sizeOut = posDrawX - textPos.x;
 	textPos.x = posDrawX;
 	return sizeOut;
@@ -292,7 +415,7 @@ Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
 		charIndex = unicodeChar - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement.Size(); iii++) {
-			if (m_listElement[iii].unicodeCharVal == unicodeChar) {
+			if (m_listElement[iii].property.m_UVal == unicodeChar) {
 				charIndex = iii;
 				break;
 			}
@@ -300,7 +423,7 @@ Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
 		// TODO : Update if possible the mapping
 		charIndex = 0;
 	}
-	outputSize.x = m_listElement[charIndex].advance;
+	outputSize.x = m_listElement[charIndex].property.m_advance.x;
 	return outputSize;
 }
 
