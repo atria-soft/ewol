@@ -16,7 +16,12 @@ LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua portaudio
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL -lGLU -lX11
+LOCAL_EXPORT_LDLIBS := -lGL -lX11
+# -lGLU -lGLEW
+
+#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
+# needed package on linux : libgl1-mesa-dev libglew1.5-dev
+
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \

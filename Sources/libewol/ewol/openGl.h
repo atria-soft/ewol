@@ -30,8 +30,13 @@ extern "C" {
 #endif
 
 #if defined(__TARGET_OS__Linux)
+	// TO ENABLE THE SHADER api ...
+	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
+	/*
 	#include <GL/glu.h>
+	#include <GL/glext.h>
+	*/
 #elif defined(__TARGET_OS__Android)
 	#include <GLES/gl.h>
 #elif defined(__TARGET_OS__Windows)
