@@ -126,7 +126,7 @@ void guiInterface::ChangePos(Vector2D<int32_t> pos)
  * @param pos The position where the winsdows is.
  * @return ---
  */
-void guiInterface::GetAbsPos(Vector2D<int32_t>& pos)
+void guiInterface::GetAbsPos(Vector2D<int32_t>& size)
 {
 	// TODO : Later
 	size.x = 0;

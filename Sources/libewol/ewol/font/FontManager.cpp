@@ -181,3 +181,4 @@ void ewol::font::TexturedRelease(ewol::TexturedFont*& object)
 		}
 	}
 }
+
