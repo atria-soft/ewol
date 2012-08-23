@@ -28,13 +28,8 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <Debug.h>
-#include <ewol/base/eSystem.h>
-
-#include <ewol/threadMsg.h>
-#include <ewol/Audio/audio.h>
-
-// declaration of the ewol android abstraction ...
-void EWOL_NativeRender(void);
+#include <ewol/os/eSystem.h>
+#include <ewol/audio/audio.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
