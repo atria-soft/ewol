@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file ewol/openGl.h
+ * @file ewol/openGL/openGL.h
  * @brief ewol openGl abstarction (header)
  * @author Edouard DUPIN
  * @date 19/09/2012
@@ -38,7 +38,8 @@ extern "C" {
 	#include <GL/glext.h>
 	*/
 #elif defined(__TARGET_OS__Android)
-	#include <GLES/gl.h>
+	#include <GLES2/gl2.h>
+	#include <GLES2/gl2ext.h>
 #elif defined(__TARGET_OS__Windows)
 	#include <GL/gl.h>
 #elif defined(__TARGET_OS__MacOs)
@@ -50,6 +51,9 @@ extern "C" {
 #endif
 
 void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);
+
+bool TESTsetupGraphics(int w, int h);
+void TEST_renderFrame(void);
 
 #ifdef __cplusplus
 }

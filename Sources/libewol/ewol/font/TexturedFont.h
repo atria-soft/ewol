@@ -52,6 +52,7 @@ namespace ewol
 		public:
 			TexturedFont(etk::UString fontName, int32_t size);
 			~TexturedFont(void);
+			int32_t getFontSize(void) { return m_size; };
 			bool HasName(etk::UString& fileName, int32_t size) { return (m_size!=size)?false:((m_font==NULL)?false:m_font->HasName(fileName)); };
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };

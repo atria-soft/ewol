@@ -30,6 +30,7 @@
 #include <etk/File.h>
 #include <draw/Image.h>
 #include <ewol/texture/Texture.h>
+#include <ewol/Resource.h>
 
 
 namespace ewol
@@ -76,21 +77,10 @@ namespace ewol
 		Vector2D<int32_t> m_advance;     // space use in the display for this specific char
 	} GlyphProperty;
 	
-	class Font {
-		private:
-			etk::UString m_name;
-			uint32_t     m_counter;
+	class Font : public ewol::Resource
 		public:
-			Font(etk::UString fontFolder, etk::UString fontName) :
-				m_counter(1)
-			{
-				m_name = fontName;
-			};
+			Font(etk::UString fontFolder, etk::UString fontName) : ewol::Resource(fontName) {};
 			virtual ~Font(void) {};
-			bool HasName(etk::UString& fileName) { return fileName==m_name; };
-			etk::UString GetName(void) { return m_name; };
-			void Increment(void) { m_counter++; };
-			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
 			virtual int32_t Draw(draw::Image&         imageOut,
 			                     int32_t              fontSize,
 			                     Vector2D<float>      textPos,

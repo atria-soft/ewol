@@ -16,12 +16,12 @@ LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua
 LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGLESv1_CM -ldl -llog
+
+LOCAL_EXPORT_LDLIBS := -lGLESv2 -ldl -llog
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
-                -DDATA_IN_APK \
-                -DLUA_COMPAT_ALL
+                -DDATA_IN_APK
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
@@ -29,7 +29,7 @@ include $(LOCAL_PATH)/file.mk
 LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_LIST)
 
 # Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_LDLIBS := -lGLESv2 -ldl -llog -lz
 
 include $(BUILD_STATIC_LIBRARY)
 

@@ -394,6 +394,8 @@ bool CreateOGlContext(void)
 	} else {
 		EWOL_INFO("XF86 DRI NOT available\n");
 	}
+	// start openGL shader mode ...
+	TESTsetupGraphics(400, 300);
 	return true;
 }
 
