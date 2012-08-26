@@ -26,7 +26,7 @@
 
 #include <ewol/texture/Texture.h>
 #include <ewol/texture/TextureManager.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/ewol.h>
 
 

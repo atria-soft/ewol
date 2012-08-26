@@ -45,7 +45,11 @@ namespace ewol
 		bool Keep(etk::UString& filename, ewol::Program*& object);
 		bool Keep(etk::UString& filename, ewol::Shader*& object);
 		
-		void Release(ewol::resource*& object);
+		void Release(ewol::Resource*& object);
+		void Release(ewol::TexturedFont*& object);
+		void Release(ewol::Font*& object);
+		void Release(ewol::Program*& object);
+		void Release(ewol::Shader*& object);
 	}
 };
 

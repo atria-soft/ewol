@@ -28,10 +28,11 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Resource.h>
+#include <ewol/openGL/openGL.h>
 
 namespace ewol
 {
-	Class Shader : public ewol::Resource
+	class Shader : public ewol::Resource
 	{
 		private :
 			GLuint         m_shader;
@@ -39,6 +40,7 @@ namespace ewol
 		public:
 			Shader(etk::UString& filename);
 			virtual ~Shader(void);
+			const char* GetType(void) { return "ewol::Shader"; };
 			GLuint GetGL_ID(void) { return m_shader; };
 			GLenum GetShaderType(void) { return m_type; };
 	};

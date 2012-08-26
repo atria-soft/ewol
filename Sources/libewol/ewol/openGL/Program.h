@@ -28,10 +28,11 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/Resource.h>
+#include <ewol/openGL/openGL.h>
 
 namespace ewol
 {
-	Class Program : public ewol::Resource
+	class Program : public ewol::Resource
 	{
 		private :
 			GLuint         m_program;
@@ -39,6 +40,7 @@ namespace ewol
 		public:
 			Program(etk::UString& filename);
 			virtual ~Program(void);
+			const char* GetType(void) { return "ewol::Program"; };
 			GLuint GetGL_ID(void) { return m_program; };
 	};
 };

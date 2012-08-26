@@ -23,9 +23,10 @@
  */
 
 #include <ewol/oObject/2DTextColored.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/font/FontManager.h>
+#include <ewol/ResourceManager.h>
 
 #undef __class__
 #define __class__	"ewol::OObject2DTextColored"
@@ -34,11 +35,13 @@ void ewol::OObject2DTextColored::SetFontProperty(etk::UString fontName, int32_t 
 {
 	// remove old one
 	if (NULL != m_font) {
-		ewol::font::TexturedRelease(m_font);
+		ewol::resource::Release(m_font);
 		m_font = NULL;
 	}
 	// link to new One
-	m_font = ewol::font::TexturedKeep(fontName, fontSize);
+	if (false == ewol::resource::Keep(fontName, m_font, fontSize)) {
+		
+	}
 }
 
 void ewol::OObject2DTextColored::SetFont(etk::UString fontName)
@@ -56,7 +59,7 @@ void ewol::OObject2DTextColored::SetSize(int32_t fontSize)
 	// get old size
 	etk::UString fontName = ewol::font::GetDefaultFont();
 	if (NULL != m_font) {
-		fontName = m_font->GetFontName();
+		fontName = m_font->GetName();
 	}
 	SetFontProperty(fontName, fontSize);
 }
@@ -81,7 +84,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(void) :
 ewol::OObject2DTextColored::~OObject2DTextColored(void)
 {
 	if (NULL != m_font) {
-		ewol::font::TexturedRelease(m_font);
+		ewol::resource::Release(m_font);
 		m_font = NULL;
 	}
 }

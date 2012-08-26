@@ -26,7 +26,7 @@
 
 #include <ewol/oObject/OObject.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/ewol.h>
 
 

@@ -23,7 +23,7 @@
  */
 
 #include <ewol/Debug.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 
 
 void glOrthoEwol(GLfloat left,

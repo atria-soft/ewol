@@ -36,7 +36,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ShortCutManager.h>
 #include <ewol/os/eSystemInput.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/os/Fps.h>
 #include <ewol/font/FontManager.h>
 

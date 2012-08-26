@@ -78,9 +78,11 @@ namespace ewol
 	} GlyphProperty;
 	
 	class Font : public ewol::Resource
+	{
 		public:
-			Font(etk::UString fontFolder, etk::UString fontName) : ewol::Resource(fontName) {};
+			Font(etk::UString fontName) : ewol::Resource(fontName) {};
 			virtual ~Font(void) {};
+			const char* GetType(void) { return "ewol::Font"; };
 			virtual int32_t Draw(draw::Image&         imageOut,
 			                     int32_t              fontSize,
 			                     Vector2D<float>      textPos,

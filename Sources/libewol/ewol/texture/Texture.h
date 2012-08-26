@@ -28,7 +28,7 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <draw/Image.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 
 namespace ewol {
 	class Texture {

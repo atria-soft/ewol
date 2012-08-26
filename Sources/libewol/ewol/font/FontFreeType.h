@@ -44,7 +44,7 @@ namespace ewol
 			bool         m_init;
 			void Display(void);
 		public:
-			FontFreeType(etk::UString fontFolder, etk::UString fontName);
+			FontFreeType(etk::UString fontName);
 			~FontFreeType(void);
 			int32_t Draw(draw::Image&         imageOut,
 			             int32_t              fontSize,

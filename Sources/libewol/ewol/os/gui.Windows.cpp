@@ -34,7 +34,7 @@
 #include <ewol/texture/Texture.h>
 #include <ewol/texture/TextureBMP.h>
 #include <ewol/os/eSystem.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 
 #include <sys/time.h>
 

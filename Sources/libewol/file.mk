@@ -1,10 +1,15 @@
 
 # Basic elements
 FILE_LIST = ewol/ewol.cpp \
-			ewol/openGl.cpp \
 			ewol/ClipBoard.cpp \
 			ewol/Debug.cpp \
-			ewol/ShortCutManager.cpp
+			ewol/ShortCutManager.cpp \
+			ewol/ResourceManager.cpp
+
+FILE_LIST+= ewol/openGL/openGL.cpp \
+			ewol/openGL/Shader.cpp \
+			ewol/openGL/Program.cpp
+
 
 # Gui interface
 FILE_LIST+= ewol/os/eSystem.cpp \

@@ -28,7 +28,7 @@
 #include <etk/Vector.h>
 #include <ewol/font/FontFreeType.h>
 
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 extern "C" {
 	#include <freetype/ft2build.h>
 }
@@ -63,15 +63,14 @@ void ewol::FreeTypeUnInit(void)
 
 
 
-ewol::FontFreeType::FontFreeType(etk::UString fontFolder, etk::UString fontName) :
-	Font(fontFolder, fontName)
+ewol::FontFreeType::FontFreeType(etk::UString fontName) :
+	Font(fontName)
 {
 	m_init = false;
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
-	etk::UString tmpFileName = fontFolder + "/" + fontName;
 	
-	etk::File myfile(tmpFileName, etk::FILE_TYPE_DATA);
+	etk::File myfile(fontName, etk::FILE_TYPE_DATA);
 	if (false == myfile.Exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
@@ -88,7 +87,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontFolder, etk::UString fontName)
 	// allocate data
 	m_FileBuffer = new FT_Byte[m_FileSize];
 	if (NULL == m_FileBuffer) {
-		EWOL_ERROR("Error Memory allocation size=" << tmpFileName);
+		EWOL_ERROR("Error Memory allocation size=" << fontName);
 		return;
 	}
 	// load data from the file :
@@ -103,7 +102,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontFolder, etk::UString fontName)
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << tmpFileName << "\" ");
+		EWOL_INFO("load font : \"" << fontName << "\" ");
 		//Display();
 		m_init = true;
 	}

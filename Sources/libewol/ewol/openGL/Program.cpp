@@ -26,7 +26,8 @@
 #include <ewol/Debug.h>
 #include <ewol/openGL/Program.h>
 
-ewol::Program::Program(etk::UString& filename) : ewol::Resource(filename)
+ewol::Program::Program(etk::UString& filename) :
+	ewol::Resource(filename),
 	m_program(0),
 	m_needToReleaseShader(false)
 {

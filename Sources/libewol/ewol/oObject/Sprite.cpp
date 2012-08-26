@@ -25,7 +25,7 @@
 #include <ewol/oObject/Sprite.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/texture/TextureManager.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <math.h>
 
 #undef __class__

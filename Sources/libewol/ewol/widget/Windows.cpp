@@ -30,7 +30,7 @@
 #include <ewol/texture/Texture.h>
 #include <ewol/font/Font.h>
 #include <ewol/ewol.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/os/eSystem.h>
 

@@ -26,6 +26,7 @@
 #define __RESOURCES_H__
 
 #include <etk/Types.h>
+#include <etk/UString.h>
 #include <ewol/Debug.h>
 
 namespace ewol

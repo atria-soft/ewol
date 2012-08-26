@@ -26,6 +26,7 @@
 #include <ewol/font/Font.h>
 #include <ewol/font/TexturedFont.h>
 #include <ewol/font/FontManager.h>
+#include <ewol/ResourceManager.h>
 
 
 static int32_t nextP2(int32_t value)
@@ -56,13 +57,13 @@ static int32_t simpleSQRT(int32_t value)
 
 
 ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) : 
+	ewol::Resource(fontName),
+	m_size(size),
 	m_font(NULL),
-	m_counter(1),
 	m_lastGlyphPos(0,0),
 	m_lastRawHeigh(0)
 {
-	m_size = size;
-	m_font = ewol::font::Keep(fontName);
+	ewol::resource::Keep(fontName, m_font);
 	if (NULL == m_font) {
 		return;
 	}
@@ -183,7 +184,9 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) :
 
 ewol::TexturedFont::~TexturedFont(void)
 {
-	ewol::font::Release(m_font);
+	if (NULL!= m_font) {
+		ewol::resource::Release(m_font);
+	}
 }
 
 int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,

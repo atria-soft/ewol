@@ -26,7 +26,7 @@
 #include <ewol/eObject/EObjectManager.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
-#include <ewol/openGl.h>
+#include <ewol/openGL/openGL.h>
 
 char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 {

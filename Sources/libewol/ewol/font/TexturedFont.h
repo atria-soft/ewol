@@ -29,10 +29,11 @@
 
 #include <ewol/font/Font.h>
 #include <ewol/texture/Texture.h>
+#include <ewol/Resource.h>
 
 namespace ewol
 {
-	class TexturedFont {
+	class TexturedFont : public ewol::Resource {
 		
 		typedef struct {
 			GlyphProperty    property;
@@ -44,7 +45,6 @@ namespace ewol
 			int32_t                             m_height;
 			ewol::Font*                         m_font;
 			ewol::Texture                       m_texture;
-			uint32_t                            m_counter;
 			etk::Vector<freeTypeFontElement_ts> m_listElement;
 			// for the texture generation :
 			Vector2D<int32_t>                   m_lastGlyphPos;
@@ -52,10 +52,8 @@ namespace ewol
 		public:
 			TexturedFont(etk::UString fontName, int32_t size);
 			~TexturedFont(void);
+			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
-			bool HasName(etk::UString& fileName, int32_t size) { return (m_size!=size)?false:((m_font==NULL)?false:m_font->HasName(fileName)); };
-			void Increment(void) { m_counter++; };
-			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
 			int32_t Draw(Vector2D<float>                 textPos,
 			             const etk::UString&             unicodeString,
 			             etk::Vector<Vector2D<float> > & coord,
@@ -70,7 +68,6 @@ namespace ewol
 			int32_t GetHeight(void) { return m_height; };
 			int32_t GetFontSize(void) { return m_size; };
 			ewol::Texture& GetTex(void) { return m_texture; };
-			etk::UString GetFontName(void) { if(NULL==m_font) { return "error"; } return m_font->GetName(); };
 	};
 	
 	

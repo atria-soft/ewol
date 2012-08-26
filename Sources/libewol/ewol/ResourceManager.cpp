@@ -26,6 +26,7 @@
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/ResourceManager.h>
+#include <ewol/font/FontFreeType.h>
 
 static etk::Vector<ewol::Resource*> l_resourceList;
 
@@ -53,7 +54,7 @@ void ewol::resource::UnInit(void)
 }
 
 // internal generic keeper ...
-static ewol::Resource* Keep(etk::UString name)
+static ewol::Resource* LocalKeep(etk::UString& name)
 {
 	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
 		if (l_resourceList[iii] != NULL) {
@@ -74,12 +75,12 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object, i
 	object = NULL;
 	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
 		if (l_resourceList[iii] != NULL) {
-			if(l_resourceList[iii]->HasName(name)) {
+			if(l_resourceList[iii]->HasName(filename)) {
 				ewol::TexturedFont* tmpObject = static_cast<ewol::TexturedFont*>(l_resourceList[iii]);
 				if (NULL!=tmpObject) {
 					if (tmpObject->getFontSize() == size) {
 						l_resourceList[iii]->Increment();
-						object = static_cast<ewol::TexturedFont*>l_resourceList[iii]
+						object = static_cast<ewol::TexturedFont*>(l_resourceList[iii]);
 						return false;
 					}
 				}
@@ -100,12 +101,12 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object, i
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 {
-	object = static_cast<ewol::Font*>(Keep(filename));
+	object = static_cast<ewol::Font*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::Font(filename, size);
+	object = new ewol::FontFreeType(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
@@ -117,12 +118,12 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 {
-	object = static_cast<ewol::Program*>(Keep(filename));
+	object = static_cast<ewol::Program*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::Program(filename, size);
+	object = new ewol::Program(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
@@ -134,12 +135,12 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 {
-	object = static_cast<ewol::Shader*>(Keep(filename));
+	object = static_cast<ewol::Shader*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::Shader(filename, size);
+	object = new ewol::Shader(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
@@ -151,7 +152,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 
 void ewol::resource::Release(ewol::Resource*& object)
 {
-	if (NUUL == object) {
+	if (NULL == object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return;
 	}
@@ -175,3 +176,28 @@ void ewol::resource::Release(ewol::Resource*& object)
 	object = NULL;
 }
 
+
+void ewol::resource::Release(ewol::TexturedFont*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::Font*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::Program*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::Shader*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
