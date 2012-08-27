@@ -35,6 +35,7 @@ namespace ewol
 	class Shader : public ewol::Resource
 	{
 		private :
+			char*          m_fileData;
 			GLuint         m_shader;
 			GLenum         m_type;
 		public:
@@ -43,6 +44,7 @@ namespace ewol
 			const char* GetType(void) { return "ewol::Shader"; };
 			GLuint GetGL_ID(void) { return m_shader; };
 			GLenum GetShaderType(void) { return m_type; };
+			bool CompileAndSendShader(void);
 	};
 };
 

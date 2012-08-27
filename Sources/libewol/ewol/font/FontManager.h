@@ -34,17 +34,10 @@ namespace ewol
 	namespace font {
 		void Init(void);
 		void UnInit(void);
-		void SetFontFolder(etk::UString folderName);
 		void SetDefaultFont(etk::UString fontName);
 		etk::UString& GetDefaultFont(void);
 		void SetDefaultSize(int32_t newSize);
 		int32_t GetDefaultSize(void);
-		
-		ewol::Font* Keep(etk::UString fontName);
-		void        Release(ewol::Font*& object);
-		
-		ewol::TexturedFont* TexturedKeep(etk::UString fontName, int32_t size);
-		void                TexturedRelease(ewol::TexturedFont*& object);
 	};
 };
 

@@ -33,16 +33,17 @@ namespace ewol
 {
 	// class resources is pure virtual
 	class Resource {
+		protected:
 			etk::UString m_name;
 			uint32_t     m_counter;
 		public:
 			Resource(etk::UString& filename) : m_name(filename), m_counter(1) { };
 			virtual ~Resource(void) { };
-			bool HasName(etk::UString& fileName) { return fileName==m_name; };
-			etk::UString GetName(void) { return m_name; };
+			virtual bool HasName(etk::UString& fileName) { return fileName==m_name; };
+			virtual etk::UString GetName(void) { return m_name; };
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
-			virtual const char* GetType(void)=0;
+			virtual const char* GetType(void) { return "unknow"; };
 	};
 };
 

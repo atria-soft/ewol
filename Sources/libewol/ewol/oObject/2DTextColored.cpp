@@ -38,8 +38,11 @@ void ewol::OObject2DTextColored::SetFontProperty(etk::UString fontName, int32_t 
 		ewol::resource::Release(m_font);
 		m_font = NULL;
 	}
+	etk::UString tmpName = fontName;
+	tmpName += ":";
+	tmpName += fontSize;
 	// link to new One
-	if (false == ewol::resource::Keep(fontName, m_font, fontSize)) {
+	if (false == ewol::resource::Keep(tmpName, m_font)) {
 		
 	}
 }

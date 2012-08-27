@@ -40,7 +40,7 @@ namespace ewol
 		void UnInit(void);
 		
 		// return the type of the resource ...
-		bool Keep(etk::UString& filename, ewol::TexturedFont*& object, int32_t size);
+		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
 		bool Keep(etk::UString& filename, ewol::Font*& object);
 		bool Keep(etk::UString& filename, ewol::Program*& object);
 		bool Keep(etk::UString& filename, ewol::Shader*& object);

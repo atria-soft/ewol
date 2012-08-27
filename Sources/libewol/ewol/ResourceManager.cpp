@@ -54,11 +54,12 @@ void ewol::resource::UnInit(void)
 }
 
 // internal generic keeper ...
-static ewol::Resource* LocalKeep(etk::UString& name)
+static ewol::Resource* LocalKeep(etk::UString& filename)
 {
+	EWOL_DEBUG("KEEP : DEFAULT : file : \"" << filename << "\"");
 	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
 		if (l_resourceList[iii] != NULL) {
-			if(l_resourceList[iii]->HasName(name)) {
+			if(l_resourceList[iii]->HasName(filename)) {
 				l_resourceList[iii]->Increment();
 				return l_resourceList[iii];
 			}
@@ -70,26 +71,15 @@ static ewol::Resource* LocalKeep(etk::UString& name)
 
 
 // return the type of the resource ...
-bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object, int32_t size)
+bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
 {
-	object = NULL;
-	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
-		if (l_resourceList[iii] != NULL) {
-			if(l_resourceList[iii]->HasName(filename)) {
-				ewol::TexturedFont* tmpObject = static_cast<ewol::TexturedFont*>(l_resourceList[iii]);
-				if (NULL!=tmpObject) {
-					if (tmpObject->getFontSize() == size) {
-						l_resourceList[iii]->Increment();
-						object = static_cast<ewol::TexturedFont*>(l_resourceList[iii]);
-						return false;
-					}
-				}
-				// good name but not good Size
-			}
-		}
+	EWOL_DEBUG("KEEP : TexturedFont : file : \"" << filename << "\"");
+	object = static_cast<ewol::TexturedFont*>(LocalKeep(filename));
+	if (NULL != object) {
+		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::TexturedFont(filename, size);
+	object = new ewol::TexturedFont(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
@@ -101,6 +91,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object, i
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 {
+	EWOL_DEBUG("KEEP : Font : file : \"" << filename << "\"");
 	object = static_cast<ewol::Font*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -118,6 +109,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 {
+	EWOL_DEBUG("KEEP : Program : file : \"" << filename << "\"");
 	object = static_cast<ewol::Program*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -135,6 +127,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 {
+	EWOL_DEBUG("KEEP : Shader : file : \"" << filename << "\"");
 	object = static_cast<ewol::Shader*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;

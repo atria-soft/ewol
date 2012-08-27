@@ -50,8 +50,9 @@ namespace ewol
 			Vector2D<int32_t>                   m_lastGlyphPos;
 			int32_t                             m_lastRawHeigh;
 		public:
-			TexturedFont(etk::UString fontName, int32_t size);
+			TexturedFont(etk::UString fontName);
 			~TexturedFont(void);
+			virtual bool HasName(etk::UString& fileName);
 			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
 			int32_t Draw(Vector2D<float>                 textPos,

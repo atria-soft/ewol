@@ -29,19 +29,21 @@
 #include <ewol/Debug.h>
 #include <ewol/Resource.h>
 #include <ewol/openGL/openGL.h>
+#include <ewol/openGL/Shader.h>
 
 namespace ewol
 {
 	class Program : public ewol::Resource
 	{
 		private :
-			GLuint         m_program;
-			bool           m_needToReleaseShader;
+			GLuint                     m_program;
+			etk::Vector<ewol::Shader*> m_shaderList;
 		public:
 			Program(etk::UString& filename);
 			virtual ~Program(void);
 			const char* GetType(void) { return "ewol::Program"; };
 			GLuint GetGL_ID(void) { return m_program; };
+			bool CreateAndLink(void);
 	};
 };
 

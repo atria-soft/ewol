@@ -56,13 +56,22 @@ static int32_t simpleSQRT(int32_t value)
 }
 
 
-ewol::TexturedFont::TexturedFont(etk::UString fontName, int32_t size) : 
+ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
 	ewol::Resource(fontName),
-	m_size(size),
 	m_font(NULL),
 	m_lastGlyphPos(0,0),
 	m_lastRawHeigh(0)
 {
+	char tmpName[1024] = "";
+	int32_t tmpSize = 0;
+	// extarct name and size :
+	if (sscanf(fontName.c_str(), "%s:%d", tmpName, &tmpSize)!=2) {
+		m_size = 1;
+		EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\"");
+		return;
+	}
+	m_size = tmpSize;
+	m_name = tmpName;
 	ewol::resource::Keep(fontName, m_font);
 	if (NULL == m_font) {
 		return;
@@ -188,6 +197,17 @@ ewol::TexturedFont::~TexturedFont(void)
 		ewol::resource::Release(m_font);
 	}
 }
+
+
+bool ewol::TexturedFont::HasName(etk::UString& fileName)
+{
+	etk::UString tmpName = m_name;
+	tmpName += ":";
+	tmpName += m_size;
+	return fileName==tmpName;
+}
+
+
 
 int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
                                  const etk::UString&             unicodeString,
