@@ -39,7 +39,11 @@ namespace ewol
 		public:
 			Resource(etk::UString& filename) : m_name(filename), m_counter(1) { };
 			virtual ~Resource(void) { };
-			virtual bool HasName(etk::UString& fileName) { return fileName==m_name; };
+			virtual bool HasName(etk::UString& fileName)
+			{
+				EWOL_DEBUG("check : " << fileName << " ?= " << m_name << " = " << (fileName==m_name) );
+				return fileName==m_name;
+			};
 			virtual etk::UString GetName(void) { return m_name; };
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };

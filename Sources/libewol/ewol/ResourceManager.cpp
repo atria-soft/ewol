@@ -57,7 +57,8 @@ void ewol::resource::UnInit(void)
 static ewol::Resource* LocalKeep(etk::UString& filename)
 {
 	EWOL_DEBUG("KEEP : DEFAULT : file : \"" << filename << "\"");
-	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+	//for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
 		if (l_resourceList[iii] != NULL) {
 			if(l_resourceList[iii]->HasName(filename)) {
 				l_resourceList[iii]->Increment();

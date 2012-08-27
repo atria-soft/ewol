@@ -62,17 +62,27 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_lastGlyphPos(0,0),
 	m_lastRawHeigh(0)
 {
-	char tmpName[1024] = "";
 	int32_t tmpSize = 0;
 	// extarct name and size :
-	if (sscanf(fontName.c_str(), "%s:%d", tmpName, &tmpSize)!=2) {
+	char * tmpData = fontName.c_str();
+	char * tmpPos = strchr(tmpData, ':');
+	
+	if (tmpPos==NULL) {
 		m_size = 1;
-		EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\"");
+		EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\" ??? ':' " );
 		return;
+	} else {
+		if (sscanf(tmpPos+1, "%d", &tmpSize)!=1) {
+			m_size = 1;
+			EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\" ==> size ???");
+			return;
+		}
+		*tmpPos = '\0';
 	}
 	m_size = tmpSize;
-	m_name = tmpName;
-	ewol::resource::Keep(fontName, m_font);
+	m_name = tmpData;
+	//EWOL_CRITICAL("Load FONT  name : \"" << m_name << "\" ==> size=" << m_size);
+	ewol::resource::Keep(m_name, m_font);
 	if (NULL == m_font) {
 		return;
 	}
@@ -204,6 +214,7 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 	etk::UString tmpName = m_name;
 	tmpName += ":";
 	tmpName += m_size;
+	EWOL_DEBUG("check : " << fileName << " ?= " << tmpName << " = " << (fileName==tmpName) );
 	return fileName==tmpName;
 }
 

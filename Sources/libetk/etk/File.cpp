@@ -80,7 +80,7 @@ void etk::SetBaseFolderData(const char * folder)
 		s_fileAPK = folder;
 		loadAPK(s_fileAPK);
 	#else
-		TK_ERROR("Not Availlable Outside Android");
+		TK_WARNING("Not Availlable Outside Android");
 	#endif
 }
 
@@ -89,7 +89,7 @@ void etk::SetBaseFolderDataUser(const char * folder)
 	#ifdef __TARGET_OS__Android
 		baseFolderDataUser = folder;
 	#else
-		TK_ERROR("Not Availlable Outside Android");
+		TK_WARNING("Not Availlable Outside Android");
 	#endif
 }
 
@@ -98,7 +98,7 @@ void etk::SetBaseFolderCache(const char * folder)
 	#ifdef __TARGET_OS__Android
 		baseFolderCache = folder;
 	#else
-		TK_ERROR("Not Availlable Outside Android");
+		TK_WARNING("Not Availlable Outside Android");
 	#endif
 }
 
@@ -143,10 +143,10 @@ void etk::InitDefaultFolder(const char * applName)
 			// start log
 		}
 	#endif
-	TK_ERROR("baseFolderHome     : \"" << baseFolderHome << "\"");
-	TK_ERROR("baseFolderData     : \"" << baseFolderData << "\"");
-	TK_ERROR("baseFolderDataUser : \"" << baseFolderDataUser << "\"");
-	TK_ERROR("baseFolderCache    : \"" << baseFolderCache << "\"");
+	TK_INFO("baseFolderHome     : \"" << baseFolderHome << "\"");
+	TK_INFO("baseFolderData     : \"" << baseFolderData << "\"");
+	TK_INFO("baseFolderDataUser : \"" << baseFolderDataUser << "\"");
+	TK_INFO("baseFolderCache    : \"" << baseFolderCache << "\"");
 }
 
 etk::UString etk::GetUserHomeFolder(void)
