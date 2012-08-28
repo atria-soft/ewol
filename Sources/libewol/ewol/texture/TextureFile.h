@@ -28,22 +28,15 @@
 #include <etk/UString.h>
 #include <draw/Image.h>
 #include <ewol/texture/Texture.h>
+#include <ewol/Resource.h>
 
 namespace ewol
 {
-	class TextureFile
+	class TextureFile : public ewol::Texture
 	{
-		private:
-			uint32_t      m_counter;
-			ewol::Texture m_texture;
-			etk::UString  m_fileName;
 		public:
-			TextureFile(etk::UString fileName, Vector2D<int32_t> size);
-			~TextureFile(void);
-			bool HasName(etk::UString& fileName) { return fileName==m_fileName; };
-			void Increment(void) { m_counter++; };
-			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
-			ewol::Texture& Get(void) { return m_texture; };
+			TextureFile(etk::UString genName, etk::UString fileName, Vector2D<int32_t> size);
+			~TextureFile(void) { };
 	};
 };
 

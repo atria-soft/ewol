@@ -30,7 +30,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/os/gui.h>
 
-#include <ewol/texture/TextureManager.h>
+#include <ewol/ResourceManager.h>
 #include <ewol/os/eSystem.h>
 
 #include <unistd.h>

@@ -36,8 +36,16 @@ namespace ewol
 		protected:
 			etk::UString m_name;
 			uint32_t     m_counter;
+			uint32_t     m_uniqueId;
 		public:
-			Resource(etk::UString& filename) : m_name(filename), m_counter(1) { };
+			Resource(etk::UString& filename) :
+				m_name(filename),
+				m_counter(1)
+			{
+				static uint32_t valBase=0;
+				m_uniqueId = valBase;
+				valBase++;
+			};
 			virtual ~Resource(void) { };
 			virtual bool HasName(etk::UString& fileName)
 			{
@@ -48,6 +56,10 @@ namespace ewol
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
 			virtual const char* GetType(void) { return "unknow"; };
+			virtual void UpdateContext(void) { };
+			virtual void RemoveContext(void) { };
+			virtual void RemoveContextToLate(void) { };
+			uint32_t GetUID(void) { return m_uniqueId; };
 	};
 };
 

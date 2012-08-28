@@ -44,6 +44,12 @@ namespace ewol
 			const char* GetType(void) { return "ewol::Program"; };
 			GLuint GetGL_ID(void) { return m_program; };
 			bool CreateAndLink(void);
+			GLint GetAttribute(etk::UString& tmpElement);
+			GLint GetAttribute(const char* tmpElement);
+			GLint GetUniform(etk::UString& tmpElement);
+			GLint GetUniform(const char* tmpElement);
+			void Use(void);
+			void UnUse(void);
 	};
 };
 

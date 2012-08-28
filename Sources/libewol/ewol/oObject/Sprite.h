@@ -26,7 +26,7 @@
 #define __EWOL_O_OBJECT_SPRITE_H__
 
 #include <ewol/oObject/OObject.h>
-#include <ewol/texture/Texture.h>
+#include <ewol/ResourceManager.h>
 
 namespace ewol {
 	class Sprite :public ewol::OObject
@@ -44,7 +44,7 @@ namespace ewol {
 			void Element(Vector3D<float> pos, float size, float angle, draw::Color tmpColor);
 			bool HasName(etk::UString& name) { return name == m_name; };
 		protected:
-			ewol::Texture*                m_resource;    //!< texture resources
+			ewol::TextureFile*            m_resource;    //!< texture resources
 			etk::Vector<Vector3D<float> > m_coord;       //!< internal coord of the object
 			etk::Vector<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
 			etk::Vector<draw::Color>      m_coordColor;  //!< internal color of the different point

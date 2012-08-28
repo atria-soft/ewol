@@ -57,7 +57,7 @@ static int32_t simpleSQRT(int32_t value)
 
 
 ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
-	ewol::Resource(fontName),
+	ewol::Texture(fontName),
 	m_font(NULL),
 	m_lastGlyphPos(0,0),
 	m_lastRawHeigh(0)
@@ -80,6 +80,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	m_name = fontName.Extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
+	
 	//EWOL_CRITICAL("Load FONT  name : \"" << m_name << "\" ==> size=" << m_size);
 	ewol::resource::Keep(m_name, m_font);
 	if (NULL == m_font) {
@@ -99,9 +100,6 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			iii = 0x9F;
 		}
 	}
-	// get the pointer on the image :
-	draw::Image& myImage = m_texture.Get();
-	
 	
 	/* this is a bad code for now ... */
 	// ==> determine the texture Size
@@ -124,10 +122,10 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
 	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 	// resize must be done on the texture ...
-	m_texture.SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
+	SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
 	// now we can acces directly on the image
-	myImage.SetFillColor(draw::Color(0xFFFFFF00));
-	myImage.Clear();
+	m_data.SetFillColor(draw::Color(0xFFFFFF00));
+	m_data.Clear();
 	
 	m_height = m_font->GetHeight(m_size);
 	
@@ -138,7 +136,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			/*
 			// check internal property:
 			// enought in the texture :
-			//if (myImage.GetWidth() < m_lastGlyphPos.x + m_listElement[iii].property.m_sizeTexture.x
+			//if (m_data.GetWidth() < m_lastGlyphPos.x + m_listElement[iii].property.m_sizeTexture.x
 				// resize if needed ...
 			
 			// line size :
@@ -154,7 +152,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 				CurrentLineHigh = 0;
 			}
 			// draw the glyph
-			m_font->DrawGlyph(myImage, m_size, glyphPosition, m_listElement[iii].property);
+			m_font->DrawGlyph(m_data, m_size, glyphPosition, m_listElement[iii].property);
 			// set video position
 			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
 			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
@@ -184,16 +182,16 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
 		for(int32_t iii=0; iii < textureWidth; iii++){
-			tlpppp = myImage.Get(Vector2D<int32_t>(iii, jjj) );
+			tlpppp = m_data.Get(Vector2D<int32_t>(iii, jjj) );
 			// set only alpha :
 			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
 			// real set of color
-			myImage.Set(Vector2D<int32_t>(iii, jjj), tlpppp );
+			m_data.Set(Vector2D<int32_t>(iii, jjj), tlpppp );
 		}
 	}
 	#endif
 	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	m_texture.Flush();
+	Flush();
 	
 	// initilize the texture ...
 	// TODO : Do a better methode that not initialize with a stupid language ... like now ...

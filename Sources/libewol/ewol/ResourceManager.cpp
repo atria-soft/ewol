@@ -29,7 +29,8 @@
 #include <ewol/font/FontFreeType.h>
 
 static etk::Vector<ewol::Resource*> l_resourceList;
-
+static etk::Vector<ewol::Resource*> l_resourceListToUpdate;
+static bool                         l_contextHasBeenRemoved = true;
 
 void ewol::resource::Init(void)
 {
@@ -38,20 +39,78 @@ void ewol::resource::Init(void)
 	if (l_resourceList.Size() != 0) {
 		EWOL_CRITICAL("Start with a resource manager Not empty, number of resources loaded : " << l_resourceList.Size());
 	}
+	l_resourceListToUpdate.Clear();
 	l_resourceList.Clear();
+	l_contextHasBeenRemoved = true;
 }
 
 void ewol::resource::UnInit(void)
 {
-	// remove textured font ...
+	l_resourceListToUpdate.Clear();
+	// remove all resources ...
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
 		if (l_resourceList[iii] != NULL) {
+			EWOL_WARNING("Find a resource that is not removed : [" << l_resourceList[iii]->GetUID() << "]");
 			delete(l_resourceList[iii]);
 			l_resourceList[iii] = NULL;
 		}
 	}
 	l_resourceList.Clear();
 }
+
+
+void ewol::resource::Update(ewol::Resource* object)
+{
+	// chek if not added before
+	for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
+		if (l_resourceListToUpdate[iii] != NULL) {
+			if (l_resourceListToUpdate[iii] == object) {
+				// just prevent some double add ...
+				return;
+			}
+		}
+	}
+	// add it ...
+	l_resourceListToUpdate.PushBack(object);
+}
+
+// Specific to load or update the data in the openGl context ==> system use only
+void ewol::resource::UpdateContext(void)
+{
+	if (true == l_contextHasBeenRemoved) {
+		// need to update all ...
+		l_contextHasBeenRemoved = false;
+		for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
+			if (l_resourceList[iii] != NULL) {
+				l_resourceList[iii]->UpdateContext();
+			}
+		}
+	}else {
+		for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
+			if (l_resourceListToUpdate[iii] != NULL) {
+				l_resourceListToUpdate[iii]->UpdateContext();
+			}
+		}
+	}
+	// Clean the update list
+	l_resourceListToUpdate.Clear();
+}
+
+// in this case, it is really too late ...
+void ewol::resource::ContextHasBeenDestroyed(void)
+{
+	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
+		if (l_resourceList[iii] != NULL) {
+			l_resourceList[iii]->RemoveContextToLate();
+		}
+	}
+	// no context preent ...
+	l_contextHasBeenRemoved = true;
+}
+
+
+
+
 
 // internal generic keeper ...
 static ewol::Resource* LocalKeep(etk::UString& filename)
@@ -72,13 +131,14 @@ static ewol::Resource* LocalKeep(etk::UString& filename)
 // internal generic keeper ...
 static void LocalAdd(ewol::Resource* object)
 {
-	EWOL_VERBOSE("Add ... find empty slot");
+	//Add ... find empty slot
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
 		if (l_resourceList[iii] == NULL) {
 			l_resourceList[iii] = object;
 			return;
 		}
 	}
+	// add at the end if no slot is free
 	l_resourceList.PushBack(object);
 }
 
@@ -154,12 +214,54 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 	return true;
 }
 
+bool ewol::resource::Keep(ewol::Texture*& object)
+{
+	// this element create a new one every time ....
+	object = new ewol::Texture("");
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??TEX??");
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
+bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size)
+{
+	etk::UString TmpFilename = filename;
+	TmpFilename += ":";
+	TmpFilename += size.x;
+	TmpFilename += "x";
+	TmpFilename += size.y;
+	
+	EWOL_VERBOSE("KEEP : TectureFile : file : \"" << TmpFilename << "\"");
+	object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
+	if (NULL != object) {
+		return true;
+	}
+	// need to crate a new one ...
+	object = new ewol::TextureFile(TmpFilename, filename, size);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << filename);
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
+
 
 void ewol::resource::Release(ewol::Resource*& object)
 {
 	if (NULL == object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return;
+	}
+	for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
+		if (l_resourceListToUpdate[iii] == object) {
+			l_resourceListToUpdate[iii] = NULL;
+			l_resourceListToUpdate.Erase(iii);
+		}
 	}
 	EWOL_VERBOSE("RELEASE (default) : file : \"" << object->GetName() << "\"");
 	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
@@ -202,6 +304,18 @@ void ewol::resource::Release(ewol::Program*& object)
 	object = NULL;
 }
 void ewol::resource::Release(ewol::Shader*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::Texture*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::TextureFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);

@@ -30,7 +30,7 @@
 #include <etk/MessageFifo.h>
 #include <ewol/os/eSystem.h>
 #include <ewol/os/gui.h>
-#include <ewol/texture/TextureManager.h>
+#include <ewol/ResourceManager.h>
 #include <ewol/eObject/EObject.h>
 #include <ewol/eObject/EObjectManager.h>
 #include <ewol/widget/WidgetManager.h>
@@ -243,7 +243,7 @@ void eSystem::Init(void)
 		ewol::EObjectManager::Init();
 		ewol::EObjectMessageMultiCast::Init();
 		l_managementInput.Reset();
-		ewol::textureManager::Init();
+		ewol::resource::Init();
 		ewol::widgetManager::Init();
 		ewol::font::Init();
 		ewol::shortCut::Init();
@@ -270,7 +270,7 @@ void eSystem::UnInit(void)
 		ewol::font::UnInit();
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
-		ewol::textureManager::UnInit();
+		ewol::resource::UnInit();
 		l_managementInput.Reset();
 		l_msgSystem.Clean();
 	}
@@ -526,7 +526,7 @@ bool eSystem::Draw(bool displayEveryTime)
 	// FPS display system
 	l_FpsSystem.Tic();
 	if (true == isGlobalSystemInit) {
-		/*
+		#if 1
 		// process the events
 		ewolProcessEvents();
 		// call all the widget that neded to do something periodicly
@@ -544,13 +544,14 @@ bool eSystem::Draw(bool displayEveryTime)
 			// check if the regenerate is needed ...
 			if(    true == ewol::widgetManager::IsDrawingNeeded()
 			    || true == displayEveryTime) {
-				ewol::textureManager::UpdateContext();
+				ewol::resource::UpdateContext();
 				l_FpsSystem.IncrementCounter();
 				tmpWindows->SysDraw();
 			}
 		}
-		*/
+		#else
 		TEST_renderFrame();
+		#endif
 		glFlush();
 	}
 	// FPS display system
@@ -587,7 +588,7 @@ void eSystem::ResetIOEvent(void)
  */
 void eSystem::OpenGlContextDestroy(void)
 {
-	ewol::textureManager::OpenGlContextHasBeenDestroyed();
+	ewol::resource::ContextHasBeenDestroyed();
 }
 
 

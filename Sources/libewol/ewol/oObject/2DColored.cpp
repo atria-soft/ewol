@@ -35,6 +35,14 @@ ewol::OObject2DColored::OObject2DColored(void)
 {
 	m_triElement = 0;
 	SetColor(1.0, 1.0, 1.0, 1.0);
+	etk::UString tmpString("color.prog");
+	// get the shader resource :
+	m_GLPosition = 0;
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+		m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+		//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+	}
 }
 
 
@@ -42,6 +50,7 @@ ewol::OObject2DColored::~OObject2DColored(void)
 {
 	m_coord.Clear();
 	m_coordColor.Clear();
+	ewol::resource::Release(m_GLprogram);
 }
 
 
@@ -50,6 +59,37 @@ void ewol::OObject2DColored::Draw(void)
 	if (m_coord.Size()<=0) {
 		return;
 	}
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	#if 1
+	glPushMatrix();
+	glScalef(m_scaling.x, m_scaling.y, 1.0);
+	m_GLprogram->Use();
+	// position :
+	glVertexAttribPointer(m_GLPosition,      // attribute ID of OpenGL
+	                      2,                 // number of elements per vertex, here (x,y)
+	                      GL_FLOAT,          // the type of each element
+	                      GL_FALSE,          // take our values as-is
+	                      0,                 // no extra data between each position
+	                      &m_coord[0]);      // Pointer on the buffer
+	glEnableVertexAttribArray(m_GLPosition);
+	// color :
+	glVertexAttribPointer(m_GLColor,         // attribute ID of OpenGL
+	                      4,                 // number of elements per vertex, here (r,g,b,a)
+	                      GL_FLOAT,          // the type of each element
+	                      GL_FALSE,          // take our values as-is
+	                      0,                 // no extra data between each position
+	                      &m_coordColor[0]); // Pointer on the buffer
+	glEnableVertexAttribArray(m_GLColor);
+	// Request the draw od the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
+	glPopMatrix();
+	
+	#else
+	
 	glPushMatrix();
 	// Enable Pointers
 	glEnableClientState( GL_VERTEX_ARRAY );
@@ -60,7 +100,7 @@ void ewol::OObject2DColored::Draw(void)
 	// Set the vertex pointer to our vertex data
 	glVertexPointer(2, GL_FLOAT, 0, &m_coord[0] );
 	//glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
+	glColorPointer(4, GL_FLOAT, 0, &m_coordColor[0] );
 	// Render : draw all of the triangles at once
 	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 	//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
@@ -70,6 +110,7 @@ void ewol::OObject2DColored::Draw(void)
 	glDisableClientState( GL_COLOR_ARRAY );
 	glDisableClientState( GL_VERTEX_ARRAY );
 	glPopMatrix();
+	#endif
 
 }
 
@@ -300,14 +341,15 @@ void ewol::OObject2DColored::GenerateTriangle(void)
 
 void ewol::OObject2DColored::SetColor(draw::Color color)
 {
+	draw::Colorf colorf = color;
 	if (m_triElement < 1) {
-		m_color[0] = color;
+		m_color[0] = colorf;
 	}
 	if (m_triElement < 2) {
-		m_color[1] = color;
+		m_color[1] = colorf;
 	}
 	if (m_triElement < 3) {
-		m_color[2] = color;
+		m_color[2] = colorf;
 	}
 }
 
@@ -392,7 +434,12 @@ void ewol::OObject2DColored::Line(float sx, float sy, float ex, float ey, float 
 void ewol::OObject2DColored::Rectangle(float x, float y, float w, float h)
 {
 	ResetCount();
-	
+	/*
+	x += 3;
+	y += 3;
+	w -= 6;
+	h -= 6;
+	*/
 	/* Bitmap position
 	 *      xA     xB
 	 *   yC *------*

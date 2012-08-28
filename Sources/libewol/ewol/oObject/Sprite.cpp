@@ -23,8 +23,7 @@
  */
 
 #include <ewol/oObject/Sprite.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/texture/TextureManager.h>
+#include <ewol/ResourceManager.h>
 #include <ewol/openGL/openGL.h>
 #include <math.h>
 
@@ -36,14 +35,16 @@ ewol::Sprite::Sprite(etk::UString spriteName, float sizeX, float sizeY)
 {
 	m_name = spriteName;
 	EWOL_VERBOSE("Create Sprite : \"" << m_name << "\"");
-	m_resource = ewol::textureManager::ImageKeep(m_name, Vector2D<int32_t>(sizeX,sizeY));
+	if (false == ewol::resource::Keep(m_name, m_resource, Vector2D<int32_t>(sizeX,sizeY)) ) {
+		EWOL_CRITICAL("can not get a resource Texture");
+	}
 }
 
 
 ewol::Sprite::~Sprite(void)
 {
 	if (NULL != m_resource) {
-		ewol::textureManager::ImageRelease(m_resource);
+		ewol::resource::Release(m_resource);
 	}
 }
 

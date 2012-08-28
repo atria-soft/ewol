@@ -52,6 +52,19 @@ extern "C" {
 
 void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);
 
+namespace ewol {
+	class OglMatrix{
+		public :
+			float m_Matrix[4*4];
+			OglMatrix(float left, float right, float bottom, float top, float nearVal, float farVal);
+			~OglMatrix();
+			void Generate(float left, float right, float bottom, float top, float nearVal, float farVal);
+			void Translate(float x=0.0, float y=0.0, float z=0.0);
+			void Scale(float x=1.0, float y=1.0, float z=1.0);
+			void rotate(float x, float y, float z, float angle=0.0);
+	};
+};
+
 bool TESTsetupGraphics(int w, int h);
 void TEST_renderFrame(void);
 

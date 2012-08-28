@@ -33,7 +33,7 @@
 
 namespace ewol
 {
-	class TexturedFont : public ewol::Resource {
+	class TexturedFont : public ewol::Texture {
 		
 		typedef struct {
 			GlyphProperty    property;
@@ -44,7 +44,6 @@ namespace ewol
 			int32_t                             m_size;
 			int32_t                             m_height;
 			ewol::Font*                         m_font;
-			ewol::Texture                       m_texture;
 			etk::Vector<freeTypeFontElement_ts> m_listElement;
 			// for the texture generation :
 			Vector2D<int32_t>                   m_lastGlyphPos;
@@ -68,7 +67,6 @@ namespace ewol
 			// TODO : Remove this element, it is stupid ...
 			int32_t GetHeight(void) { return m_height; };
 			int32_t GetFontSize(void) { return m_size; };
-			ewol::Texture& GetTex(void) { return m_texture; };
 	};
 	
 	

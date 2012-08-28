@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <ewol/texture/TextureManager.h>
+#include <ewol/ResourceManager.h>
 #include <ewol/texture/TextureFile.h>
 #include <ewol/texture/Texture.h>
 
@@ -32,42 +32,37 @@
 //#include <ewol/texture/TexturePNG.h>
 
 
-ewol::TextureFile::TextureFile(etk::UString tmpfileName, Vector2D<int32_t> size) :
-	m_counter(1),
-	m_fileName(tmpfileName)
+ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, Vector2D<int32_t> size) :
+	Texture(genName)
 {
+	// load data
 	etk::File fileName(tmpfileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("File does not Exist ... " << fileName);
 	} else {
 		// get the upper paw2 ot the size requested...
 		if (size.x>0 && size.y>0) {
-			m_texture.SetImageSize(size);
+			SetImageSize(size);
 		}
 		
 		etk::UString fileExtention = fileName.GetExtention();
 		if (fileExtention == "bmp") {
 			// generate the texture
-			ewol::imageBMP::GenerateImage(fileName, m_texture.Get());
+			ewol::imageBMP::GenerateImage(fileName, m_data);
 		} else if (fileExtention == "svg") {
 			svg::Parser m_element(fileName);
 			if (false == m_element.IsLoadOk()) {
 				EWOL_ERROR("Error To load SVG file " << fileName.GetCompleateName() );
 			} else {
-				m_element.GenerateAnImage(size, m_texture.Get());
+				// generate the texture
+				m_element.GenerateAnImage(size, m_data);
 			}
 		} else if (fileExtention ==  "png") {
 			EWOL_ERROR("Extention not supported now, but soon " << fileName );
 		} else {
 			EWOL_ERROR("Extention not managed " << fileName << " Sopported extention : .bmp / .svg / .png");
 		}
-		m_texture.Flush();
+		Flush();
 	}
-}
-
-
-ewol::TextureFile::~TextureFile(void)
-{
-	
 }
 

@@ -26,6 +26,7 @@
 #define __EWOL_O_OBJECT_2D_COLORED_H__
 
 #include <ewol/oObject/OObject.h>
+#include <ewol/ResourceManager.h>
 
 namespace ewol {
 	class OObject2DColored :public ewol::OObject
@@ -36,11 +37,15 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 		protected:
+			ewol::Program* m_GLprogram;
+			GLint          m_GLPosition;
+			GLint          m_GLMatrix;
+			GLint          m_GLColor;
 			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
-			etk::Vector<draw::Color>         m_coordColor;  //!< internal color of the different point
+			etk::Vector<draw::Colorf>       m_coordColor;  //!< internal color of the different point
 			//etk::Vector<linkCoord_ts> m_linkCoord;   //!< internal link between point to generate triangle
 			int32_t         m_triElement;
-			draw::Color      m_color[3];
+			draw::Colorf    m_color[3];
 			Vector2D<float> m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);

@@ -25,7 +25,6 @@
 
 
 #include <ewol/texture/Texture.h>
-#include <ewol/texture/TextureManager.h>
 #include <ewol/openGL/openGL.h>
 #include <ewol/ewol.h>
 
@@ -51,11 +50,9 @@ static int32_t nextP2(int32_t value)
 
 
 
-ewol::Texture::Texture(void)
+ewol::Texture::Texture(etk::UString tmpName) :
+	Resource(tmpName)
 {
-	// add it to the texture manager
-	m_uniqueId = ewol::textureManager::Add(this);
-	
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.x = 1.0;
@@ -64,10 +61,7 @@ ewol::Texture::Texture(void)
 
 ewol::Texture::~Texture(void)
 {
-	// unregister from the texture manager
-	ewol::textureManager::Rm(this);
 	RemoveContext();
-	
 }
 
 
@@ -125,7 +119,7 @@ void ewol::Texture::RemoveContextToLate(void)
 void ewol::Texture::Flush(void)
 {
 	// request to the manager to be call at the next update ...
-	ewol::textureManager::Update(this);
+	ewol::resource::Update(this);
 }
 
 
@@ -137,90 +131,3 @@ void ewol::Texture::SetImageSize(Vector2D<int32_t> newSize)
 }
 
 
-
-/*
-#include <ewol/texture/TextureBMP.h>
-#include <ewol/texture/TextureSVG.h>
-#include <ewol/texture/TexturePNG.h>
-*/
-
-
-
-/**
- * @brief Load a specific file texture
- * @note : dimention must be a power of 2, otherwise, the display can be wrong... For the SVG, the texture automaticly generate the power of 2 dimention ...
- * @param[in] fileName File that might be open
- * @param[in] requestedWidth Requested size of the file we desire (if we can not resize it, we load it whit his normal size)
- * @return The Internal ID of the texture, or -1 if an error occured ...
- */
-// TODO : Load non square texture ...
-// TODO : Check the size to regenerate the texture if the size change
-#if 0
-int32_t ewol::texture::Load(etk::UString tmpfileName, int32_t requestedWidth)
-{
-	int32_t outTextureID = -1;
-	if (l_listLoadedTexture.Size()!=0) {
-		for (int32_t iii=0; iii<l_listLoadedTexture.Size(); iii++) {
-			if (NULL != l_listLoadedTexture[iii]) {
-				if (l_listLoadedTexture[iii]->m_filename == tmpfileName) {
-					l_listLoadedTexture[iii]->m_nbTimeLoaded++;
-					// this prevent the removing of the texture while the cycle is not ended ...
-					l_listLoadedTexture[iii]->m_destroy = false;
-					return iii;
-				}
-			}
-		}
-	}
-	etk::File fileName(tmpfileName, etk::FILE_TYPE_DATA);
-	if (false == fileName.Exist()) {
-		EWOL_ERROR("File does not Exist ... " << fileName);
-	} else {
-		// get the upper paw2 ot the size requested...
-		requestedWidth = nextP2(requestedWidth);
-		
-		etk::UString fileExtention = fileName.GetExtention();
-		if (fileExtention ==  "bmp") {
-			// create the bitmap texture
-			ewol::texture::TextureBMP * myBitmap = new ewol::texture::TextureBMP(fileName);
-			// draw bitmap properties
-			//myBitmap->Display();
-			// check if all is OK
-			if (myBitmap->LoadOK() == true) {
-				if (myBitmap->Width() != nextP2(myBitmap->Width()) ) {
-					EWOL_ERROR("Texture has not the good dimention power of 2 : Width=" << myBitmap->Width() << "px ==> maybe not drawable ...");
-				}
-				if (myBitmap->Width() != myBitmap->Height()) {
-					EWOL_ERROR("Texture can not have Width=" << myBitmap->Width() << "px different of height=" << myBitmap->Height() << "px in file:" << fileName);
-					return -1;
-				}
-				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, myBitmap->Width(), myBitmap->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, myBitmap->Data(), myBitmap->DataSize(), tmpfileName);
-			}
-			// removet the bitmap handle
-			delete (myBitmap);
-		} else if (fileExtention ==  "svg") {
-			/*if (requestedWidth < 32) {
-				requestedWidth = 32;
-			}*/
-			// create the bitmap texture
-			ewol::texture::TextureSVG * mySvg = new ewol::texture::TextureSVG(fileName, requestedWidth, requestedWidth);
-			// draw bitmap properties
-			//mySvg->Display();
-			// check if all is OK
-			if (mySvg->LoadOK() == true) {
-				if (mySvg->Width() != mySvg->Height()) {
-					EWOL_ERROR("Texture can not have Width=" << mySvg->Width() << "px different of height=" << mySvg->Height() << "px in file:" << fileName);
-					return -1;
-				}
-				outTextureID = ewol::texture::Load(GL_TEXTURE_2D, 0, GL_RGBA, mySvg->Width(), mySvg->Height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, mySvg->Data(), mySvg->DataSize(), tmpfileName);
-			}
-			// removet the bitmap handle
-			delete (mySvg);
-		} else if (fileExtention ==  "png") {
-			EWOL_ERROR("Extention not supported now, but soon " << fileName );
-		} else {
-			EWOL_ERROR("Extention not managed " << fileName << " Sopported extention : .bmp / .svg / .png");
-		}
-	}
-	return outTextureID;
-}
-#endif

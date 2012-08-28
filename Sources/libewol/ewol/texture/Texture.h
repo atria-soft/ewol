@@ -29,11 +29,11 @@
 #include <ewol/Debug.h>
 #include <draw/Image.h>
 #include <ewol/openGL/openGL.h>
+#include <ewol/Resource.h>
 
 namespace ewol {
-	class Texture {
-		private:
-			uint32_t        m_uniqueId;
+	class Texture : public ewol::Resource {
+		protected:
 			// openGl Context propoerties :
 			draw::Image     m_data;
 			// OpenGl textureID :
@@ -53,7 +53,7 @@ namespace ewol {
 			Vector2D<float> GetUsableSize(void) { return m_endPointSize; };
 		// Public API:
 		public:
-			Texture(void);
+			Texture(etk::UString tmpName);
 			~Texture(void);
 			// you must set the size here, because it will be set in multiple of pow(2)
 			void SetImageSize(Vector2D<int32_t> newSize);

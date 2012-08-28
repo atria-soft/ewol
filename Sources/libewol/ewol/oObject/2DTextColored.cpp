@@ -99,8 +99,12 @@ void ewol::OObject2DTextColored::Draw(void)
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
+	if (m_font == NULL) {
+		EWOL_WARNING("no font...");
+		return;
+	}
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, m_font->GetTex().GetId());
+	glBindTexture(GL_TEXTURE_2D, m_font->GetId());
 	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays

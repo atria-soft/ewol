@@ -131,4 +131,55 @@ bool ewol::Program::CreateAndLink(void)
 	return true;
 }
 
+// TODO : Set it dynamic  to prevent reload system error ...
+GLint ewol::Program::GetAttribute(etk::UString& tmpElement)
+{
+	GLint elem = glGetAttribLocation(m_program, tmpElement.c_str());
+	if (elem<0) {
+		checkGlError("glGetAttribLocation");
+		EWOL_INFO("glGetAttribLocation(\"" << tmpElement << "\") = " << elem);
+	}
+	return elem;
+}
+GLint ewol::Program::GetAttribute(const char* tmpElement)
+{
+	GLint elem = glGetAttribLocation(m_program, tmpElement);
+	if (elem<0) {
+		checkGlError("glGetAttribLocation");
+		EWOL_INFO("glGetAttribLocation(\"" << tmpElement << "\") = " << elem);
+	}
+	return elem;
+}
 
+GLint ewol::Program::GetUniform(etk::UString& tmpElement)
+{
+	GLint elem = glGetUniformLocation(m_program, tmpElement.c_str());
+	if (elem<0) {
+		checkGlError("glGetUniformLocation");
+		EWOL_INFO("glGetUniformLocation(\"" << tmpElement << "\") = " << elem);
+	}
+	return elem;
+}
+
+
+GLint ewol::Program::GetUniform(const char* tmpElement)
+{
+	GLint elem = glGetUniformLocation(m_program, tmpElement);
+	if (elem<0) {
+		checkGlError("glGetUniformLocation");
+		EWOL_INFO("glGetUniformLocation(\"" << tmpElement << "\") = " << elem);
+	}
+	return elem;
+}
+
+void ewol::Program::Use(void)
+{
+	glUseProgram(m_program);
+	checkGlError("glUseProgram");
+}
+
+void ewol::Program::UnUse(void)
+{
+	glUseProgram(0);
+	checkGlError("glUseProgram");
+}

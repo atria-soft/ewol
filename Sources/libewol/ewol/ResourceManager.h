@@ -32,6 +32,8 @@
 #include <ewol/openGL/Program.h>
 #include <ewol/font/Font.h>
 #include <ewol/font/TexturedFont.h>
+#include <ewol/texture/Texture.h>
+#include <ewol/texture/TextureFile.h>
 
 namespace ewol
 {
@@ -39,17 +41,26 @@ namespace ewol
 		void Init(void);
 		void UnInit(void);
 		
+		void Update(ewol::Resource* object);
+		// Specific to load or update the data in the openGl context ==> system use only
+		void UpdateContext(void);
+		void ContextHasBeenDestroyed(void);
+		
 		// return the type of the resource ...
 		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
 		bool Keep(etk::UString& filename, ewol::Font*& object);
 		bool Keep(etk::UString& filename, ewol::Program*& object);
 		bool Keep(etk::UString& filename, ewol::Shader*& object);
+		bool Keep(ewol::Texture*& object); // no name needed here ...
+		bool Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size);
 		
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
 		void Release(ewol::Font*& object);
 		void Release(ewol::Program*& object);
 		void Release(ewol::Shader*& object);
+		void Release(ewol::Texture*& object);
+		void Release(ewol::TextureFile*& object);
 	}
 };
 
