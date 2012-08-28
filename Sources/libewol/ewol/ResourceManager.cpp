@@ -56,8 +56,7 @@ void ewol::resource::UnInit(void)
 // internal generic keeper ...
 static ewol::Resource* LocalKeep(etk::UString& filename)
 {
-	EWOL_DEBUG("KEEP : DEFAULT : file : \"" << filename << "\"");
-	//for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << filename << "\"");
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
 		if (l_resourceList[iii] != NULL) {
 			if(l_resourceList[iii]->HasName(filename)) {
@@ -70,11 +69,23 @@ static ewol::Resource* LocalKeep(etk::UString& filename)
 	return NULL;
 }
 
+// internal generic keeper ...
+static void LocalAdd(ewol::Resource* object)
+{
+	EWOL_VERBOSE("Add ... find empty slot");
+	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
+		if (l_resourceList[iii] == NULL) {
+			l_resourceList[iii] = object;
+			return;
+		}
+	}
+	l_resourceList.PushBack(object);
+}
 
 // return the type of the resource ...
 bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
 {
-	EWOL_DEBUG("KEEP : TexturedFont : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << filename << "\"");
 	object = static_cast<ewol::TexturedFont*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -85,14 +96,14 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	l_resourceList.PushBack(object);
+	LocalAdd(object);
 	return true;
 }
 
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 {
-	EWOL_DEBUG("KEEP : Font : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : Font : file : \"" << filename << "\"");
 	object = static_cast<ewol::Font*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -103,14 +114,14 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	l_resourceList.PushBack(object);
+	LocalAdd(object);
 	return true;
 }
 
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 {
-	EWOL_DEBUG("KEEP : Program : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : Program : file : \"" << filename << "\"");
 	object = static_cast<ewol::Program*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -121,14 +132,14 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	l_resourceList.PushBack(object);
+	LocalAdd(object);
 	return true;
 }
 
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 {
-	EWOL_DEBUG("KEEP : Shader : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : Shader : file : \"" << filename << "\"");
 	object = static_cast<ewol::Shader*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -139,7 +150,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	l_resourceList.PushBack(object);
+	LocalAdd(object);
 	return true;
 }
 
@@ -150,6 +161,7 @@ void ewol::resource::Release(ewol::Resource*& object)
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return;
 	}
+	EWOL_VERBOSE("RELEASE (default) : file : \"" << object->GetName() << "\"");
 	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
 		if (l_resourceList[iii] != NULL) {
 			if(l_resourceList[iii] == object) {
@@ -157,7 +169,7 @@ void ewol::resource::Release(ewol::Resource*& object)
 					// delete element
 					delete(l_resourceList[iii]);
 					// remove element from the list :
-					l_resourceList.Erase(iii);
+					l_resourceList[iii] = NULL;
 				}
 				// insidiously remove the pointer for the caller ...
 				object = NULL;

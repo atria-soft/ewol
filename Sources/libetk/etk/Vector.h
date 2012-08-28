@@ -657,6 +657,7 @@ namespace etk
 				if (requestSize == m_allocated) {
 					return;
 				}
+				//TK_INFO("Change vector allocation : " << m_allocated << "==>" << requestSize);
 				// check if something is allocated : 
 				if (NULL == m_data) {
 					// no data allocated ==> request an allocation (might be the first)

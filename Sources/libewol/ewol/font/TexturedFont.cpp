@@ -77,10 +77,9 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\" ==> size ???");
 			return;
 		}
-		*tmpPos = '\0';
 	}
+	m_name = fontName.Extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
-	m_name = tmpData;
 	//EWOL_CRITICAL("Load FONT  name : \"" << m_name << "\" ==> size=" << m_size);
 	ewol::resource::Keep(m_name, m_font);
 	if (NULL == m_font) {
@@ -214,8 +213,8 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 	etk::UString tmpName = m_name;
 	tmpName += ":";
 	tmpName += m_size;
-	EWOL_DEBUG("check : " << fileName << " ?= " << tmpName << " = " << (fileName==tmpName) );
-	return fileName==tmpName;
+	EWOL_VERBOSE("S : check : " << fileName << " ?= " << tmpName << " = " << (fileName==tmpName) );
+	return (fileName==tmpName);
 }
 
 

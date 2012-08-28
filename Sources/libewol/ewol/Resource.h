@@ -41,7 +41,7 @@ namespace ewol
 			virtual ~Resource(void) { };
 			virtual bool HasName(etk::UString& fileName)
 			{
-				EWOL_DEBUG("check : " << fileName << " ?= " << m_name << " = " << (fileName==m_name) );
+				EWOL_VERBOSE("G : check : " << fileName << " ?= " << m_name << " = " << (fileName==m_name) );
 				return fileName==m_name;
 			};
 			virtual etk::UString GetName(void) { return m_name; };
