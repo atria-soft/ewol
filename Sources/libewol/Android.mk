@@ -23,6 +23,10 @@ LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -DDATA_IN_APK
 
+
+LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
+LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 

@@ -68,8 +68,7 @@ void ewol::OObject2DColored::Draw(void)
 			EWOL_ERROR("No shader ...");
 			return;
 		}
-		glPushMatrix();
-		glScalef(m_scaling.x, m_scaling.y, 1.0);
+		//glScalef(m_scaling.x, m_scaling.y, 1.0);
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
 		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
@@ -81,7 +80,6 @@ void ewol::OObject2DColored::Draw(void)
 		// Request the draw od the elements : 
 		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 		m_GLprogram->UnUse();
-		glPopMatrix();
 	#else
 		glPushMatrix();
 		// Enable Pointers

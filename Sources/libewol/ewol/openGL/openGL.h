@@ -31,7 +31,7 @@
 extern "C" {
 #endif
 
-#if defined(__TARGET_OS__Linux) || defined(__TARGET_OS__Windows)
+#if defined(__TARGET_OS__Linux)
 	#ifdef __VIDEO__OPENGL_ES_2
 		// TO ENABLE THE SHADER api ...
 		#define GL_GLEXT_PROTOTYPES
@@ -57,6 +57,14 @@ extern "C" {
 		// Include openGL ES 1
 		#include <GLES/gl.h>
 	#endif
+#elif defined(__TARGET_OS__Windows)
+	#ifdef __VIDEO__OPENGL_ES_2
+		// TO ENABLE THE SHADER api ...
+		#define GL_GLEXT_PROTOTYPES
+	#endif
+	#include <GL/gl.h>
+	#include <GL/glu.h>
+	#include <GL/glext.h>
 #elif defined(__TARGET_OS__MacOs)
 	
 #elif defined(__TARGET_OS__IOs)
@@ -65,9 +73,10 @@ extern "C" {
 	#error you need to specify a __TAGET_OS__ ...
 #endif
 
-// TODO : Remove : deprecated ....
-void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);
-
+#ifndef __VIDEO__OPENGL_ES_2
+	// TODO : Remove : deprecated ....
+	void glOrthoEwol(GLfloat left, GLfloat right, GLfloat bottom, GLfloat top, GLfloat nearVal, GLfloat farVal);
+#endif
 namespace ewol {
 	namespace openGL {
 		void Init(void);

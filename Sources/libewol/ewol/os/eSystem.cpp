@@ -419,107 +419,6 @@ void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
 }
 
 
-
-
-static float gTriangleVertices[] = { 0.0f, 0.0f, 200.0f, 0.0f, 0.0f, 200.0f };
-static float gTriangleVertices5[] = { 200.0f, 200.0f, 100.0f, 200.0f, 200.0f, 100.0f,
-                                           200.0f, 200.0f, 300.0f, 200.0f, 200.0f, 300.0f };
-
-static void BasicOpenGlDraw(void)
-{
-	Vector2D<int32_t> tmpSize = eSystem::GetSize();
-	// set the size of the open GL system
-	glViewport(0, 0, tmpSize.x, tmpSize.y);
-	
-	// Clear the screen with transparency ...
-	glClearColor(0.0,0.0,0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	//glOrtho(0., width, 0., -height, 1., 20.);
-	glOrthoEwol(-tmpSize.x/2, tmpSize.x/2, tmpSize.y/2, -tmpSize.y/2, -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	
-	//glTranslatef(0, -height/2, -5);
-	glTranslatef(-tmpSize.x/2, -tmpSize.y/2, -1.0);
-	
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	
-	glEnableClientState( GL_VERTEX_ARRAY );
-	
-	//LOGI("engine_draw_frame (%d,%d)",width,height);
-	
-	glColor4f(0.0, 1.0, 1.0, 1.0);
-	glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices5 );
-	glDrawArrays( GL_TRIANGLES, 0, 6);
-	static int vallllll = 0;
-	static float transparency = 0.0;
-	if (vallllll <= 1) {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll++;
-			transparency = 0.0;
-			glColor4f(1.0, 0.0, 0.0, 1.0);
-		} else {
-			glColor4f(1.0, 0.0, 0.0, transparency);
-		}
-	} else if (vallllll <= 2) {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll++;
-			transparency = 0.0;
-			glColor4f(1.0, 1.0, 0.0, 1.0);
-		} else {
-			glColor4f(1.0, 1.0, 0.0, transparency);
-		}
-	} else if (vallllll <= 3) {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll++;
-			transparency = 0.0;
-			glColor4f(0.0, 1.0, 0.0, 1.0);
-		} else {
-			glColor4f(0.0, 1.0, 0.0, transparency);
-		}
-	} else if (vallllll <= 4) {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll++;
-			transparency = 0.0;
-			glColor4f(0.0, 1.0, 1.0, 1.0);
-		} else {
-			glColor4f(0.0, 1.0, 1.0, transparency);
-		}
-	} else if (vallllll <= 5) {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll++;
-			transparency = 0.0;
-			glColor4f(0.0, 0.0, 1.0, 1.0);
-		} else {
-			glColor4f(0.0, 0.0, 1.0, transparency);
-		}
-	} else {
-		transparency +=0.025;
-		if (transparency >= 1.0) {
-			vallllll = 0;
-			transparency = 0.0;
-			glColor4f(1.0, 0.0, 1.0, 1.0);
-		} else {
-			glColor4f(1.0, 0.0, 1.0, transparency);
-		}
-	}
-	glVertexPointer(2, GL_FLOAT, 0, gTriangleVertices );
-	glDrawArrays( GL_TRIANGLES, 0, 3);
-	
-	glDisableClientState( GL_VERTEX_ARRAY );
-
-	glDisable(GL_BLEND);
-}
-
 static ewol::Fps l_FpsSystem;
 
 bool eSystem::Draw(bool displayEveryTime)
@@ -538,7 +437,7 @@ bool eSystem::Draw(bool displayEveryTime)
 		ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 		// check if the user selected a windows
 		if (NULL == tmpWindows) {
-			BasicOpenGlDraw();
+			// TODO : Display a stipid texture
 		} else {
 			// Redraw all needed elements
 			tmpWindows->OnRegenerateDisplay();

@@ -263,7 +263,6 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 			glLoadIdentity();
 			glTranslatef(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
 		#endif
-			glLoadIdentity();
 		// Call the widget drawing methode
 		displayProp.m_origin.x = tmpOriginX;
 		displayProp.m_origin.y = tmpOriginY;
