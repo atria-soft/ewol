@@ -40,6 +40,7 @@ namespace ewol
 	namespace resource {
 		void Init(void);
 		void UnInit(void);
+		void Display(void);
 		
 		void Update(ewol::Resource* object);
 		// Specific to load or update the data in the openGl context ==> system use only

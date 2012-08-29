@@ -22,26 +22,26 @@
  *******************************************************************************
  */
 
-#include <ewol/oObject/2DTextured.h>
+#include <ewol/oObject/3DTextured.h>
 #include <ewol/ResourceManager.h>
 #include <ewol/openGL/openGL.h>
 
 #undef __class__
-#define __class__	"ewol::OObject2DTextured"
+#define __class__	"ewol::OObject3DTextured"
 
 
-ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX, float sizeY)
+ewol::OObject3DTextured::OObject3DTextured(etk::UString textureName, float sizeX, float sizeY)
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	if (false == ewol::resource::Keep(textureName, m_resource, Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("textured.prog");
+		etk::UString tmpString("textured3D.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 			//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
@@ -51,7 +51,7 @@ ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX
 }
 
 
-ewol::OObject2DTextured::~OObject2DTextured(void)
+ewol::OObject3DTextured::~OObject3DTextured(void)
 {
 	if (NULL != m_resource) {
 		ewol::resource::Release(m_resource);
@@ -61,7 +61,7 @@ ewol::OObject2DTextured::~OObject2DTextured(void)
 	#endif
 }
 
-void ewol::OObject2DTextured::Draw(void)
+void ewol::OObject3DTextured::Draw(void)
 {
 	if (m_coord.Size()<=0) {
 		return;
@@ -84,7 +84,7 @@ void ewol::OObject2DTextured::Draw(void)
 		glUniform1i(m_GLtexID, /*GL_TEXTURE*/0);
 		// position :
 		glVertexAttribPointer(m_GLPosition,      // attribute ID of OpenGL
-		                      2,                 // number of elements per vertex, here (x,y)
+		                      3,                 // number of elements per vertex, here (x,y)
 		                      GL_FLOAT,          // the type of each element
 		                      GL_FALSE,          // take our values as-is
 		                      0,                 // no extra data between each position
@@ -119,7 +119,7 @@ void ewol::OObject2DTextured::Draw(void)
 		glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
 		glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
 		glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
-		glVertexPointer( 2, GL_FLOAT, 0, &m_coord[0] );
+		glVertexPointer( 3, GL_FLOAT, 0, &m_coord[0] );
 		glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
 		glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
@@ -138,12 +138,12 @@ void ewol::OObject2DTextured::Clear(void)
 	m_coordColor.Clear();
 }
 
-void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, draw::Color tmpColor)
+void ewol::OObject3DTextured::Rectangle(float x, float y, float w, float h, draw::Color tmpColor)
 {
 	Rectangle(x, y, w, h, 0.0, 0.0, 1.0, 1.0, tmpColor);
 }
 
-void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, float texX, float texY, float texSX, float texSY, draw::Color tmpColor)
+void ewol::OObject3DTextured::Rectangle(float x, float y, float w, float h, float texX, float texY, float texSX, float texSY, draw::Color tmpColor)
 {
 	/*
 	x += 3;
@@ -152,8 +152,9 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	h -= 6;
 	*/
 	//EWOL_DEBUG("Add rectangle : ...");
-	Vector2D<float> point;
+	Vector3D<float> point;
 	texCoord_ts tex;
+	point.z = 0;
 
 	tex.u = texX;
 	tex.v = texSY;

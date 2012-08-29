@@ -37,6 +37,7 @@ namespace ewol
 		public:
 			TextureFile(etk::UString genName, etk::UString fileName, Vector2D<int32_t> size);
 			~TextureFile(void) { };
+			virtual const char* GetType(void) { return "ewol::TextureFile"; };
 	};
 };
 

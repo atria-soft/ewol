@@ -25,29 +25,22 @@
 #ifndef __EWOL_O_OBJECT_SPRITE_H__
 #define __EWOL_O_OBJECT_SPRITE_H__
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/oObject/3DTextured.h>
 #include <ewol/ResourceManager.h>
 
 namespace ewol {
-	class Sprite :public ewol::OObject
+	class Sprite :public ewol::OObject3DTextured
 	{
 		private:
 			etk::UString m_name;
 		public:
 			Sprite(etk::UString spriteName, float sizeX=-1, float sizeY=-1);
 			virtual ~Sprite(void);
-			virtual void Draw(void);
-			void Clear(void);
 			void Element(Vector2D<float> pos, float size, float angle);
 			void Element(Vector3D<float> pos, float size, float angle);
 			void Element(Vector2D<float> pos, float size, float angle, draw::Color tmpColor);
 			void Element(Vector3D<float> pos, float size, float angle, draw::Color tmpColor);
 			bool HasName(etk::UString& name) { return name == m_name; };
-		protected:
-			ewol::TextureFile*            m_resource;    //!< texture resources
-			etk::Vector<Vector3D<float> > m_coord;       //!< internal coord of the object
-			etk::Vector<texCoord_ts>      m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<draw::Color>      m_coordColor;  //!< internal color of the different point
 	};
 };
 

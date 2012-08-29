@@ -46,16 +46,34 @@ void ewol::resource::Init(void)
 
 void ewol::resource::UnInit(void)
 {
+	Display();
 	l_resourceListToUpdate.Clear();
 	// remove all resources ...
-	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
+	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
 		if (l_resourceList[iii] != NULL) {
-			EWOL_WARNING("Find a resource that is not removed : [" << l_resourceList[iii]->GetUID() << "]");
+			EWOL_WARNING("Find a resource that is not removed : [" << l_resourceList[iii]->GetUID() << "]"
+			             << "=\"" << l_resourceList[iii]->GetName() << "\" "
+			             << l_resourceList[iii]->GetCounter() << " elements");
 			delete(l_resourceList[iii]);
 			l_resourceList[iii] = NULL;
 		}
 	}
 	l_resourceList.Clear();
+}
+
+void ewol::resource::Display(void)
+{
+	EWOL_INFO("Resources loaded : ");
+	// remove all resources ...
+	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+		if (l_resourceList[iii] != NULL) {
+			EWOL_INFO("    [" << l_resourceList[iii]->GetUID() << "]"
+			          << l_resourceList[iii]->GetType()
+			          << "=\"" << l_resourceList[iii]->GetName() << "\" "
+			          << l_resourceList[iii]->GetCounter() << " elements");
+		}
+	}
+	EWOL_INFO("Resources ---");
 }
 
 

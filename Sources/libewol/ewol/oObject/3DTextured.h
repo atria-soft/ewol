@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file ewol/oObject/2DTextured.h
+ * @file ewol/oObject/3DTextured.h
  * @brief ewol OpenGl Object system (header)
  * @author Edouard DUPIN
- * @date 09/11/2011
+ * @date 29/08/2012
  * @par Project
  * ewol
  *
@@ -22,18 +22,18 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_O_OBJECT_2D_TEXTURED_H__
-#define __EWOL_O_OBJECT_2D_TEXTURED_H__
+#ifndef __EWOL_O_OBJECT_3D_TEXTURED_H__
+#define __EWOL_O_OBJECT_3D_TEXTURED_H__
 
 #include <ewol/oObject/OObject.h>
 #include <ewol/ResourceManager.h>
 
 namespace ewol {
-	class OObject2DTextured :public ewol::OObject
+	class OObject3DTextured :public ewol::OObject
 	{
 		public:
-			OObject2DTextured(etk::UString textureName, float sizeX=-1, float sizeY=-1);
-			virtual ~OObject2DTextured(void);
+			OObject3DTextured(etk::UString textureName, float sizeX=-1, float sizeY=-1);
+			virtual ~OObject3DTextured(void);
 		public:
 			virtual void Draw(void);
 			void Clear(void);
@@ -49,7 +49,7 @@ namespace ewol {
 				GLint          m_GLtexID;
 			#endif
 			ewol::TextureFile*              m_resource;    //!< texture resources
-			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
+			etk::Vector<Vector3D<float> >   m_coord;       //!< internal coord of the object
 			etk::Vector<texCoord_ts>        m_coordTex;    //!< internal texture coordinate for every point
 			#ifdef __VIDEO__OPENGL_ES_2
 				etk::Vector<draw::Colorf>   m_coordColor;  //!< internal color of the different point

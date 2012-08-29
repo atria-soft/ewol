@@ -43,7 +43,7 @@ void ewol::OObject2DTextColored::SetFontProperty(etk::UString fontName, int32_t 
 	tmpName += fontSize;
 	// link to new One
 	if (false == ewol::resource::Keep(tmpName, m_font)) {
-		
+		EWOL_ERROR("Can not get font resource");
 	}
 }
 
@@ -72,6 +72,18 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString fontName, int32_t 
 {
 	m_color = draw::color::black;
 	SetFontProperty(fontName, size);
+	#ifdef __VIDEO__OPENGL_ES_2
+		etk::UString tmpString("textured.prog");
+		// get the shader resource :
+		m_GLPosition = 0;
+		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
+			//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		}
+	#endif
 }
 
 
@@ -81,6 +93,18 @@ ewol::OObject2DTextColored::OObject2DTextColored(void) :
 {
 	m_color = draw::color::black;
 	SetFontProperty(ewol::font::GetDefaultFont(), ewol::font::GetDefaultSize());
+	etk::UString tmpString("textured.prog");
+	#ifdef __VIDEO__OPENGL_ES_2
+		// get the shader resource :
+		m_GLPosition = 0;
+		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
+			//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		}
+	#endif
 }
 
 
@@ -90,6 +114,9 @@ ewol::OObject2DTextColored::~OObject2DTextColored(void)
 		ewol::resource::Release(m_font);
 		m_font = NULL;
 	}
+	#ifdef __VIDEO__OPENGL_ES_2
+		ewol::resource::Release(m_GLprogram);
+	#endif
 }
 
 void ewol::OObject2DTextColored::Draw(void)
@@ -103,20 +130,63 @@ void ewol::OObject2DTextColored::Draw(void)
 		EWOL_WARNING("no font...");
 		return;
 	}
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, m_font->GetId());
-	glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
-	glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
-	glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
-	glVertexPointer(   2, GL_FLOAT, 0, &m_coord[0] );
-	glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
-	glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-	glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
-	//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
-	glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
-	glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
-	glDisableClientState( GL_TEXTURE_COORD_ARRAY );             // Disable Texture Coord Arrays
-	glDisable(GL_TEXTURE_2D);
+	#ifdef __VIDEO__OPENGL_ES_2
+		if (m_GLprogram==NULL) {
+			EWOL_ERROR("No shader ...");
+			return;
+		}
+		glColor4f(1.0, 1.0, 1.0, 1.0);
+		m_GLprogram->Use();
+		glEnable(GL_TEXTURE_2D);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_font->GetId());
+		// TextureID
+		glUniform1i(m_GLtexID, /*GL_TEXTURE*/0);
+		// position :
+		glVertexAttribPointer(m_GLPosition,      // attribute ID of OpenGL
+		                      2,                 // number of elements per vertex, here (x,y)
+		                      GL_FLOAT,          // the type of each element
+		                      GL_FALSE,          // take our values as-is
+		                      0,                 // no extra data between each position
+		                      &m_coord[0]);      // Pointer on the buffer
+		glEnableVertexAttribArray(m_GLPosition);
+		// Texture :
+		glVertexAttribPointer(m_GLtexture,       // attribute ID of OpenGL
+		                      2,                 // number of elements per vertex, here (u,v)
+		                      GL_FLOAT,          // the type of each element
+		                      GL_FALSE,          // take our values as-is
+		                      0,                 // no extra data between each position
+		                      &m_coordTex[0]);   // Pointer on the buffer
+		glEnableVertexAttribArray(m_GLtexture);
+		// color :
+		glVertexAttribPointer(m_GLColor,         // attribute ID of OpenGL
+		                      4,                 // number of elements per vertex, here (r,g,b,a)
+		                      GL_FLOAT,          // the type of each element
+		                      GL_FALSE,          // take our values as-is
+		                      0,                 // no extra data between each position
+		                      &m_coordColor[0]); // Pointer on the buffer
+		glEnableVertexAttribArray(m_GLColor);
+		
+		// Request the draw od the elements : 
+		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+		glDisable(GL_TEXTURE_2D);
+		m_GLprogram->UnUse();
+	#else
+		glEnable(GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, m_font->GetId());
+		glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
+		glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
+		glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
+		glVertexPointer(   2, GL_FLOAT, 0, &m_coord[0] );
+		glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
+		glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
+		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
+		//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
+		glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
+		glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
+		glDisableClientState( GL_TEXTURE_COORD_ARRAY );             // Disable Texture Coord Arrays
+		glDisable(GL_TEXTURE_2D);
+	#endif
 }
 
 void ewol::OObject2DTextColored::Clear(void)

@@ -55,6 +55,7 @@ namespace ewol {
 		public:
 			Texture(etk::UString tmpName);
 			~Texture(void);
+			virtual const char* GetType(void) { return "ewol::Texture"; };
 			// you must set the size here, because it will be set in multiple of pow(2)
 			void SetImageSize(Vector2D<int32_t> newSize);
 			// get the reference on this image to draw nomething on it ...

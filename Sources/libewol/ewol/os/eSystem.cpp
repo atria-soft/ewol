@@ -526,7 +526,6 @@ bool eSystem::Draw(bool displayEveryTime)
 	// FPS display system
 	l_FpsSystem.Tic();
 	if (true == isGlobalSystemInit) {
-		#if 1
 		// process the events
 		ewolProcessEvents();
 		// call all the widget that neded to do something periodicly
@@ -549,9 +548,6 @@ bool eSystem::Draw(bool displayEveryTime)
 				tmpWindows->SysDraw();
 			}
 		}
-		#else
-		TEST_renderFrame();
-		#endif
 		glFlush();
 	}
 	// FPS display system

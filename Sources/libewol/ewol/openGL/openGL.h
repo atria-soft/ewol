@@ -30,17 +30,23 @@ extern "C" {
 #endif
 
 #if defined(__TARGET_OS__Linux)
-	// TO ENABLE THE SHADER api ...
-	#define GL_GLEXT_PROTOTYPES
+	#ifdef __VIDEO__OPENGL_ES_2
+		// TO ENABLE THE SHADER api ...
+		#define GL_GLEXT_PROTOTYPES
+	#endif
 	#include <GL/gl.h>
-	/*
-	#include <GL/glu.h>
-	#include <GL/glext.h>
-	*/
 #elif defined(__TARGET_OS__Android)
-	#include <GLES2/gl2.h>
-	#include <GLES2/gl2ext.h>
+	#ifdef __VIDEO__OPENGL_ES_2
+		#include <GLES2/gl2.h>
+		#include <GLES2/gl2ext.h>
+	#else
+		
+	#endif
 #elif defined(__TARGET_OS__Windows)
+	#ifdef __VIDEO__OPENGL_ES_2
+		// TO ENABLE THE SHADER api ...
+		#define GL_GLEXT_PROTOTYPES
+	#endif
 	#include <GL/gl.h>
 #elif defined(__TARGET_OS__MacOs)
 	
@@ -64,9 +70,6 @@ namespace ewol {
 			void rotate(float x, float y, float z, float angle=0.0);
 	};
 };
-
-bool TESTsetupGraphics(int w, int h);
-void TEST_renderFrame(void);
 
 #ifdef __cplusplus
 }

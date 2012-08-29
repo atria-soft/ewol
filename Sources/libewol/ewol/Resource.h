@@ -55,6 +55,7 @@ namespace ewol
 			virtual etk::UString GetName(void) { return m_name; };
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
+			int32_t GetCounter(void) { return m_counter; };
 			virtual const char* GetType(void) { return "unknow"; };
 			virtual void UpdateContext(void) { };
 			virtual void RemoveContext(void) { };

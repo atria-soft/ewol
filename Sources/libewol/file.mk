@@ -29,6 +29,7 @@ FILE_LIST+= ewol/oObject/OObject.cpp \
 			ewol/oObject/2DTextColored.cpp \
 			ewol/oObject/2DColored.cpp \
 			ewol/oObject/2DTextured.cpp \
+			ewol/oObject/3DTextured.cpp \
 			ewol/oObject/Sprite.cpp
 
 # texture management
