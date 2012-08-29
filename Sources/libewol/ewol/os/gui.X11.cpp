@@ -1178,19 +1178,6 @@ int main(int argc, char *argv[])
 	etk::File myIcon = APP_Icon();
 	SetIcon(myIcon);
 	
-	GLuint shader;
-	/* creation */
-	shader = glCreateShader(GL_VERTEX_SHADER);
-	if(shader == 0) {
-		/* erreur de creation :( */
-		return -1;
-	}
-	/* utilisation ... */
-	/* suppression */
-	glDeleteShader(shader);
-	shader = 0;
-	
-	
 	// Run ...
 	X11_Run();
 	// close X11 :

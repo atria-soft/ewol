@@ -22,6 +22,8 @@
  *******************************************************************************
  */
 
+#ifdef __VIDEO__OPENGL_ES_2
+
 #include <etk/Types.h>
 #include <etk/File.h>
 #include <ewol/Debug.h>
@@ -131,4 +133,6 @@ bool ewol::Shader::CompileAndSendShader(void)
 	}
 	return true;
 }
+
+#endif
 

@@ -22,6 +22,8 @@
  *******************************************************************************
  */
 
+#ifdef __VIDEO__OPENGL_ES_2
+
 #include <etk/Types.h>
 #include <ewol/Debug.h>
 #include <ewol/openGL/Program.h>
@@ -29,7 +31,8 @@
 
 ewol::Program::Program(etk::UString& filename) :
 	ewol::Resource(filename),
-	m_program(0)
+	m_program(0),
+	m_hasTexture(false)
 {
 	
 	// load data from file "all the time ..."
@@ -89,6 +92,8 @@ ewol::Program::~Program(void)
 		glDeleteProgram(m_program);
 		m_program = 0;
 	}
+	m_elementList.Clear();
+	m_hasTexture = false;
 }
 
 static void checkGlError(const char* op)
@@ -131,46 +136,73 @@ bool ewol::Program::CreateAndLink(void)
 	return true;
 }
 
-// TODO : Set it dynamic  to prevent reload system error ...
-GLint ewol::Program::GetAttribute(etk::UString& tmpElement)
+int32_t ewol::Program::GetAttribute(etk::UString tmpElement)
 {
-	GLint elem = glGetAttribLocation(m_program, tmpElement.c_str());
-	if (elem<0) {
+	// check if it exist previously :
+	for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
+		if (m_elementList[iii].m_name == tmpElement) {
+			return iii;
+		}
+	}
+	progAttributeElement tmp;
+	tmp.m_name = tmpElement;
+	tmp.m_isAttribute = true;
+	tmp.m_elementId = glGetAttribLocation(m_program, tmp.m_name.c_str());
+	if (tmp.m_elementId<0) {
 		checkGlError("glGetAttribLocation");
-		EWOL_INFO("glGetAttribLocation(\"" << tmpElement << "\") = " << elem);
+		EWOL_INFO("glGetAttribLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
+		return -1;
 	}
-	return elem;
-}
-GLint ewol::Program::GetAttribute(const char* tmpElement)
-{
-	GLint elem = glGetAttribLocation(m_program, tmpElement);
-	if (elem<0) {
-		checkGlError("glGetAttribLocation");
-		EWOL_INFO("glGetAttribLocation(\"" << tmpElement << "\") = " << elem);
-	}
-	return elem;
+	m_elementList.PushBack(tmp);
+	return m_elementList.Size()-1;
 }
 
-GLint ewol::Program::GetUniform(etk::UString& tmpElement)
+int32_t ewol::Program::GetUniform(etk::UString tmpElement)
 {
-	GLint elem = glGetUniformLocation(m_program, tmpElement.c_str());
-	if (elem<0) {
+	// check if it exist previously :
+	for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
+		if (m_elementList[iii].m_name == tmpElement) {
+			return iii;
+		}
+	}
+	progAttributeElement tmp;
+	tmp.m_name = tmpElement;
+	tmp.m_isAttribute = false;
+	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
+	if (tmp.m_elementId<0) {
 		checkGlError("glGetUniformLocation");
-		EWOL_INFO("glGetUniformLocation(\"" << tmpElement << "\") = " << elem);
+		EWOL_INFO("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
+		return -1;
 	}
-	return elem;
+	m_elementList.PushBack(tmp);
+	return m_elementList.Size()-1;
 }
 
-
-GLint ewol::Program::GetUniform(const char* tmpElement)
+void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample)
 {
-	GLint elem = glGetUniformLocation(m_program, tmpElement);
-	if (elem<0) {
-		checkGlError("glGetUniformLocation");
-		EWOL_INFO("glGetUniformLocation(\"" << tmpElement << "\") = " << elem);
+	if (idElem<0 || idElem>m_elementList.Size()) {
+		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
+		return;
 	}
-	return elem;
+	glVertexAttribPointer(m_elementList[idElem].m_elementId,  // attribute ID of OpenGL
+	                      nbElement,                          // number of elements per vertex, here (r,g,b,a)
+	                      GL_FLOAT,                           // the type of each element
+	                      GL_FALSE,                           // take our values as-is
+	                      jumpBetweenSample,                  // no extra data between each position
+	                      pointer);                           // Pointer on the buffer
+	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
 }
+
+
+void ewol::Program::SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, float* pointer)
+{
+	if (idElem<0 || idElem>m_elementList.Size()) {
+		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
+		return;
+	}
+	glUniformMatrix4fv(m_elementList[idElem].m_elementId, nbElement, GL_TRUE, pointer);
+}
+
 
 void ewol::Program::Use(void)
 {
@@ -178,8 +210,30 @@ void ewol::Program::Use(void)
 	checkGlError("glUseProgram");
 }
 
+
+void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
+{
+	if (idElem<0 || idElem>m_elementList.Size()) {
+		return;
+	}
+	glEnable(GL_TEXTURE_2D);
+	glActiveTexture(GL_TEXTURE0);
+	// set the textureID
+	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
+	// Set the texture on the uniform attribute
+	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/0);
+	m_hasTexture = true;
+}
+
 void ewol::Program::UnUse(void)
 {
+	if (true == m_hasTexture) {
+		glDisable(GL_TEXTURE_2D);
+		m_hasTexture = false;
+	}
 	glUseProgram(0);
 	checkGlError("glUseProgram");
 }
+
+
+#endif

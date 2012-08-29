@@ -50,16 +50,20 @@ namespace ewol
 		// return the type of the resource ...
 		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
 		bool Keep(etk::UString& filename, ewol::Font*& object);
-		bool Keep(etk::UString& filename, ewol::Program*& object);
-		bool Keep(etk::UString& filename, ewol::Shader*& object);
+		#ifdef __VIDEO__OPENGL_ES_2
+			bool Keep(etk::UString& filename, ewol::Program*& object);
+			bool Keep(etk::UString& filename, ewol::Shader*& object);
+		#endif
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size);
 		
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
 		void Release(ewol::Font*& object);
-		void Release(ewol::Program*& object);
-		void Release(ewol::Shader*& object);
+		#ifdef __VIDEO__OPENGL_ES_2
+			void Release(ewol::Program*& object);
+			void Release(ewol::Shader*& object);
+		#endif
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
 	}

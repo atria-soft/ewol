@@ -36,13 +36,13 @@ ewol::OObject2DColored::OObject2DColored(void)
 	m_triElement = 0;
 	SetColor(1.0, 1.0, 1.0, 1.0);
 	#ifdef __VIDEO__OPENGL_ES_2
-	etk::UString tmpString("color.prog");
-	// get the shader resource :
+		etk::UString tmpString("color.prog");
+		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
 			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
 			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
-			//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		}
 	#endif
 }
@@ -52,7 +52,9 @@ ewol::OObject2DColored::~OObject2DColored(void)
 {
 	m_coord.Clear();
 	m_coordColor.Clear();
-	ewol::resource::Release(m_GLprogram);
+	#ifdef __VIDEO__OPENGL_ES_2
+		ewol::resource::Release(m_GLprogram);
+	#endif
 }
 
 
@@ -61,30 +63,21 @@ void ewol::OObject2DColored::Draw(void)
 	if (m_coord.Size()<=0) {
 		return;
 	}
-	if (m_GLprogram==NULL) {
-		EWOL_ERROR("No shader ...");
-		return;
-	}
 	#ifdef __VIDEO__OPENGL_ES_2
+		if (m_GLprogram==NULL) {
+			EWOL_ERROR("No shader ...");
+			return;
+		}
 		glPushMatrix();
 		glScalef(m_scaling.x, m_scaling.y, 1.0);
 		m_GLprogram->Use();
+		// set Matrix : translation/positionMatrix
+		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		m_GLprogram->SendUniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// position :
-		glVertexAttribPointer(m_GLPosition,      // attribute ID of OpenGL
-		                      2,                 // number of elements per vertex, here (x,y)
-		                      GL_FLOAT,          // the type of each element
-		                      GL_FALSE,          // take our values as-is
-		                      0,                 // no extra data between each position
-		                      &m_coord[0]);      // Pointer on the buffer
-		glEnableVertexAttribArray(m_GLPosition);
+		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
 		// color :
-		glVertexAttribPointer(m_GLColor,         // attribute ID of OpenGL
-		                      4,                 // number of elements per vertex, here (r,g,b,a)
-		                      GL_FLOAT,          // the type of each element
-		                      GL_FALSE,          // take our values as-is
-		                      0,                 // no extra data between each position
-		                      &m_coordColor[0]); // Pointer on the buffer
-		glEnableVertexAttribArray(m_GLColor);
+		m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 		// Request the draw od the elements : 
 		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 		m_GLprogram->UnUse();
@@ -99,8 +92,7 @@ void ewol::OObject2DColored::Draw(void)
 		
 		// Set the vertex pointer to our vertex data
 		glVertexPointer(2, GL_FLOAT, 0, &m_coord[0] );
-		//glColorPointer(4, oglTypeFloat_t, 0, &m_coordColor[0] );
-		glColorPointer(4, GL_FLOAT, 0, &m_coordColor[0] );
+		glColorPointer(4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
 		// Render : draw all of the triangles at once
 		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
 		//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());

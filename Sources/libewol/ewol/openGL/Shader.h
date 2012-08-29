@@ -24,30 +24,29 @@
 
 #ifndef __OPEN_GL__SHADER_H__
 #define __OPEN_GL__SHADER_H__
-
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/Resource.h>
-#include <ewol/openGL/openGL.h>
-
-namespace ewol
-{
-	class Shader : public ewol::Resource
-	{
-		private :
-			char*          m_fileData;
-			GLuint         m_shader;
-			GLenum         m_type;
-		public:
-			Shader(etk::UString& filename);
-			virtual ~Shader(void);
-			const char* GetType(void) { return "ewol::Shader"; };
-			GLuint GetGL_ID(void) { return m_shader; };
-			GLenum GetShaderType(void) { return m_type; };
-			bool CompileAndSendShader(void);
-	};
-};
-
-
+	#ifdef __VIDEO__OPENGL_ES_2
+		#include <etk/Types.h>
+		#include <ewol/Debug.h>
+		#include <ewol/Resource.h>
+		#include <ewol/openGL/openGL.h>
+		
+		namespace ewol
+		{
+			class Shader : public ewol::Resource
+			{
+				private :
+					char*          m_fileData;
+					GLuint         m_shader;
+					GLenum         m_type;
+				public:
+					Shader(etk::UString& filename);
+					virtual ~Shader(void);
+					const char* GetType(void) { return "ewol::Shader"; };
+					GLuint GetGL_ID(void) { return m_shader; };
+					GLenum GetShaderType(void) { return m_type; };
+					bool CompileAndSendShader(void);
+			};
+		};
+	#endif
 #endif
 

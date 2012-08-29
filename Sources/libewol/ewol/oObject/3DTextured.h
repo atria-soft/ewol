@@ -42,11 +42,11 @@ namespace ewol {
 		protected:
 			#ifdef __VIDEO__OPENGL_ES_2
 				ewol::Program* m_GLprogram;
-				GLint          m_GLPosition;
-				GLint          m_GLMatrix;
-				GLint          m_GLColor;
-				GLint          m_GLtexture;
-				GLint          m_GLtexID;
+				int32_t        m_GLPosition;
+				int32_t        m_GLMatrix;
+				int32_t        m_GLColor;
+				int32_t        m_GLtexture;
+				int32_t        m_GLtexID;
 			#endif
 			ewol::TextureFile*              m_resource;    //!< texture resources
 			etk::Vector<Vector3D<float> >   m_coord;       //!< internal coord of the object

@@ -26,12 +26,11 @@ LOCAL_EXPORT_LDLIBS := -lGL -lX11
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -DLUA_COMPAT_ALL \
-                -D__VIDEO__OPENGL_ES_2 \
                 -Wall
 
 
-#LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-#LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
+LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
 
 
 # load the common sources file of the platform

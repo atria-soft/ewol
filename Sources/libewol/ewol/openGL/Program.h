@@ -24,35 +24,44 @@
 
 #ifndef __OPEN_GL__PROGRAM_H__
 #define __OPEN_GL__PROGRAM_H__
-
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/Resource.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/openGL/Shader.h>
-
-namespace ewol
-{
-	class Program : public ewol::Resource
-	{
-		private :
-			GLuint                     m_program;
-			etk::Vector<ewol::Shader*> m_shaderList;
-		public:
-			Program(etk::UString& filename);
-			virtual ~Program(void);
-			const char* GetType(void) { return "ewol::Program"; };
-			GLuint GetGL_ID(void) { return m_program; };
-			bool CreateAndLink(void);
-			GLint GetAttribute(etk::UString& tmpElement);
-			GLint GetAttribute(const char* tmpElement);
-			GLint GetUniform(etk::UString& tmpElement);
-			GLint GetUniform(const char* tmpElement);
-			void Use(void);
-			void UnUse(void);
-	};
-};
-
-
+	#ifdef __VIDEO__OPENGL_ES_2
+		#include <etk/Types.h>
+		#include <ewol/Debug.h>
+		#include <ewol/Resource.h>
+		#include <ewol/openGL/openGL.h>
+		#include <ewol/openGL/Shader.h>
+		
+		namespace ewol
+		{
+			class progAttributeElement
+			{
+				public :
+					etk::UString m_name;
+					GLint        m_elementId;
+					bool         m_isAttribute;
+			};
+			
+			class Program : public ewol::Resource
+			{
+				private :
+					GLuint                                  m_program;
+					etk::Vector<ewol::Shader*>              m_shaderList;
+					etk::Vector<ewol::progAttributeElement> m_elementList;
+					bool                                    m_hasTexture;
+				public:
+					Program(etk::UString& filename);
+					virtual ~Program(void);
+					const char* GetType(void) { return "ewol::Program"; };
+					bool CreateAndLink(void);
+					int32_t GetAttribute(etk::UString tmpElement);
+					void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
+					int32_t GetUniform(etk::UString tmpElement);
+					void SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, float* pointer);
+					void Use(void);
+					void SetTexture0(int32_t idElem, GLint textureOpenGlID);
+					void UnUse(void);
+			};
+		};
+	#endif
 #endif
 

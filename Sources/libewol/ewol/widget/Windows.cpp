@@ -27,6 +27,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/oObject/OObject.h>
+#include <ewol/openGL/openGL.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/font/Font.h>
 #include <ewol/ewol.h>
@@ -123,6 +124,10 @@ void ewol::Windows::SysDraw(void)
 	glViewport(0,0,m_size.x,m_size.y);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+	// clear the matrix system :
+	etk::Matrix newOne;
+	ewol::openGL::SetBasicMatrix(newOne);
 	
 	ewol::DrawProperty displayProp;
 	displayProp.m_windowsSize = m_size;

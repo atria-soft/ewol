@@ -10,7 +10,8 @@ FILE_LIST = \
 			etk/Stream.cpp \
 			etk/File.cpp \
 			etk/RegExp.cpp \
-			etk/tool.cpp
+			etk/tool.cpp \
+			etk/Matrix.cpp
 
 ifeq ("$(TARGET_OS)","Windows")
 	FILE_LIST += etk/Mutex.Windows.cpp

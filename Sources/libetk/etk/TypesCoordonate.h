@@ -101,7 +101,7 @@ template <typename T> class Vector2D
 			Vector2D<T> tmpp(x,y);
 			tmpp.x -= (T)obj.x;
 			tmpp.y -= (T)obj.y;
-			return *this;
+			return tmpp;
 		}
 		/*****************************************************
 		 *    /= operator
@@ -118,7 +118,7 @@ template <typename T> class Vector2D
 			Vector2D<T> tmpp(x,y);
 			tmpp.x /= (T)obj.x;
 			tmpp.y /= (T)obj.y;
-			return *this;
+			return tmpp;
 		}
 		/*****************************************************
 		 *    *= operator
@@ -135,7 +135,7 @@ template <typename T> class Vector2D
 			Vector2D<T> tmpp(x,y);
 			tmpp.x *= (T)obj.x;
 			tmpp.y *= (T)obj.y;
-			return *this;
+			return tmpp;
 		}
 		/*****************************************************
 		 *    ++ operator

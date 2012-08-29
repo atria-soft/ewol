@@ -225,7 +225,11 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		// widget is hidden ...
 		return;
 	}
-	glPushMatrix();
+	#ifdef __VIDEO__OPENGL_ES_2
+		ewol::openGL::Push();
+	#else
+		glPushMatrix();
+	#endif
 	if(    (displayProp.m_origin.x > m_origin.x)
 	    || (displayProp.m_origin.x + displayProp.m_size.x < m_size.x + m_origin.x) ) {
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
@@ -243,14 +247,23 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            tmpOriginY,
 		            tmpclipX,
 		            m_size.y);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrthoEwol(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
-		//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
-		
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
+		#ifdef __VIDEO__OPENGL_ES_2
+			etk::Matrix tmpTranslate = etk::matrix::Translate(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
+			etk::Matrix tmpProjection = etk::matrix::Perspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+			etk::Matrix tmpMat = tmpProjection * tmpTranslate;
+			// set internal matrix system :
+			ewol::openGL::SetMatrix(tmpMat);
+		#else
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrthoEwol(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+			//glOrthoEwol(0., m_size.x, 0., -m_size.y, 1., 20.);
+			
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glTranslatef(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
+		#endif
+			glLoadIdentity();
 		// Call the widget drawing methode
 		displayProp.m_origin.x = tmpOriginX;
 		displayProp.m_origin.y = tmpOriginY;
@@ -262,19 +275,35 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrthoEwol(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-		
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+		#ifdef __VIDEO__OPENGL_ES_2
+			#if 1
+				etk::Matrix tmpTranslate = etk::matrix::Translate(-m_size.x/2, -m_size.y/2, -1.0);
+				etk::Matrix tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+				etk::Matrix tmpMat = tmpProjection * tmpTranslate;
+			#else
+				etk::Matrix tmpMat = etk::matrix::Perspective(0, m_size.x, 0, m_size.y, -1, 1);
+			#endif
+			// set internal matrix system :
+			ewol::openGL::SetMatrix(tmpMat);
+		#else
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrthoEwol(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+			
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+			glTranslatef(-m_size.x/2, -m_size.y/2, -1.0);
+		#endif
 		// Call the widget drawing methode
 		displayProp.m_origin = m_origin;
 		displayProp.m_size = m_size;
 		OnDraw(displayProp);
 	}
-	glPopMatrix();
+	#ifdef __VIDEO__OPENGL_ES_2
+		ewol::openGL::Pop();
+	#else
+		glPopMatrix();
+	#endif
 	return;
 }
 

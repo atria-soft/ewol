@@ -24,6 +24,7 @@
 
 #include <ewol/Debug.h>
 #include <ewol/openGL/openGL.h>
+#include <etk/Vector.h>
 
 
 void glOrthoMatrix(GLfloat left,
@@ -67,107 +68,72 @@ void glOrthoEwol(GLfloat left,
 }
 
 
-ewol::OglMatrix::OglMatrix(float left, float right, float bottom, float top, float nearVal, float farVal)
+etk::Vector<etk::Matrix> l_matrixList;
+
+void ewol::openGL::Init(void)
 {
-	Generate(left, right, bottom, top, nearVal, farVal);
+	// remove deprecated pb ...
+	l_matrixList.Clear();
+	etk::Matrix tmpMat;
+	l_matrixList.PushBack(tmpMat);
 }
 
-void ewol::OglMatrix::Generate(float left, float right, float bottom, float top, float nearVal, float farVal)
+
+void ewol::openGL::UnInit(void)
 {
-	int iii;
-	for(iii=0; iii<4*4 ; iii++) {
-		m_Matrix[iii] = 0;
-	}
-	m_Matrix[0] = 2.0 / (right - left);
-	m_Matrix[5] = 2.0 / (top - bottom);
-	m_Matrix[10] = -2.0 / (farVal - nearVal);
-	m_Matrix[3]  = -1*(right + left) / (right - left);
-	m_Matrix[7]  = -1*(top + bottom) / (top - bottom);
-	m_Matrix[11] = -1*(farVal + nearVal) / (farVal - nearVal);
-	m_Matrix[15] = 1;
+	l_matrixList.Clear();
 }
 
-ewol::OglMatrix::~OglMatrix()
+void ewol::openGL::SetBasicMatrix(etk::Matrix& newOne)
 {
-	
-}
-//http://www.siteduzero.com/tutoriel-3-5003-les-matrices.html
-static void MultiplyMatrix(float* inOut, float* mult)
-{
-	
-	// output Matrix
-	float matrixOut[4*4];
-	for(int32_t jjj=0; jjj<4 ; jjj++) {
-		float* tmpLeft = inOut + jjj*4;
-		for(int32_t iii=0; iii<4 ; iii++) {
-			float* tmpUpper = mult+iii;
-			float* tmpLeft2 = tmpLeft;
-			float tmpElement = 0;
-			for(int32_t kkk=0; kkk<4 ; kkk++) {
-				tmpElement += *tmpUpper * *tmpLeft2;
-				tmpUpper += 4;
-				tmpLeft2++;
-			}
-			matrixOut[jjj*4+iii] = tmpElement;
-		}
+	if (l_matrixList.Size()!=1) {
+		EWOL_ERROR("matrix is not corect size in the stack : " << l_matrixList.Size());
 	}
-	// set it at the output
-	for(int32_t iii=0; iii<4*4 ; iii++) {
-		inOut[iii] = matrixOut[iii];
-	}
+	l_matrixList.Clear();
+	l_matrixList.PushBack(newOne);
 }
 
-void ewol::OglMatrix::Translate(float x, float y, float z)
+void ewol::openGL::SetMatrix(etk::Matrix& newOne)
 {
-	float matrix[4*4];
-	for(int32_t iii=0; iii<4*4 ; iii++) {
-		matrix[iii] = 0;
+	if (l_matrixList.Size()==0) {
+		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
+		l_matrixList.PushBack(newOne);
+		return;
 	}
-	// set identity :
-	matrix[0] = 1;
-	matrix[5] = 1;
-	matrix[10] = 1;
-	matrix[15] = 1;
-	// set translation :
-	matrix[3] = x;
-	matrix[7] = y;
-	matrix[11] = y;
-	// generate output :
-	MultiplyMatrix(m_Matrix, matrix);
+	l_matrixList[l_matrixList.Size()-1] = newOne;
 }
 
-void ewol::OglMatrix::Scale(float x, float y, float z)
+void ewol::openGL::Push(void)
 {
-	float matrix[4*4];
-	for(int32_t iii=0; iii<4*4 ; iii++) {
-		matrix[iii] = 0;
+	if (l_matrixList.Size()==0) {
+		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
+		etk::Matrix tmp;
+		l_matrixList.PushBack(tmp);
+		return;
 	}
-	// set identity :
-	matrix[0] = 1;
-	matrix[5] = 1;
-	matrix[10] = 1;
-	matrix[15] = 1;
-	// set scale :
-	matrix[0] = x;
-	matrix[5] = y;
-	matrix[10] = z;
-	// generate output :
-	MultiplyMatrix(m_Matrix, matrix);
+	etk::Matrix tmp = l_matrixList[l_matrixList.Size()-1];
+	l_matrixList.PushBack(tmp);
 }
 
-void ewol::OglMatrix::rotate(float x, float y, float z, float angle)
+void ewol::openGL::Pop(void)
 {
-	float matrix[4*4];
-	for(int32_t iii=0; iii<4*4 ; iii++) {
-		matrix[iii] = 0;
+	if (l_matrixList.Size()<=1) {
+		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
+		l_matrixList.Clear();
+		etk::Matrix tmp;
+		l_matrixList.PushBack(tmp);
+		return;
 	}
-	// set identity :
-	matrix[0] = 1;
-	matrix[5] = 1;
-	matrix[10] = 1;
-	matrix[15] = 1;
-	// TODO ...
-	// generate output :
-	MultiplyMatrix(m_Matrix, matrix);
+	l_matrixList.PopBack();
+}
+
+etk::Matrix& ewol::openGL::GetMatrix(void)
+{
+	if (l_matrixList.Size()==0) {
+		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
+		etk::Matrix tmp;
+		l_matrixList.PushBack(tmp);
+	}
+	return l_matrixList[l_matrixList.Size()-1];
 }
 

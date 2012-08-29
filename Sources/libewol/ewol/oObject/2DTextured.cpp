@@ -44,7 +44,7 @@ ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX
 			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
 			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
-			//m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 			m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
 		}
 	#endif
@@ -77,39 +77,19 @@ void ewol::OObject2DTextured::Draw(void)
 		}
 		glColor4f(1.0, 1.0, 1.0, 1.0);
 		m_GLprogram->Use();
-		glEnable(GL_TEXTURE_2D);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_resource->GetId());
+		// set Matrix : translation/positionMatrix
+		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		m_GLprogram->SendUniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
-		glUniform1i(m_GLtexID, /*GL_TEXTURE*/0);
+		m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
 		// position :
-		glVertexAttribPointer(m_GLPosition,      // attribute ID of OpenGL
-		                      2,                 // number of elements per vertex, here (x,y)
-		                      GL_FLOAT,          // the type of each element
-		                      GL_FALSE,          // take our values as-is
-		                      0,                 // no extra data between each position
-		                      &m_coord[0]);      // Pointer on the buffer
-		glEnableVertexAttribArray(m_GLPosition);
+		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
 		// Texture :
-		glVertexAttribPointer(m_GLtexture,       // attribute ID of OpenGL
-		                      2,                 // number of elements per vertex, here (u,v)
-		                      GL_FLOAT,          // the type of each element
-		                      GL_FALSE,          // take our values as-is
-		                      0,                 // no extra data between each position
-		                      &m_coordTex[0]);   // Pointer on the buffer
-		glEnableVertexAttribArray(m_GLtexture);
+		m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
 		// color :
-		glVertexAttribPointer(m_GLColor,         // attribute ID of OpenGL
-		                      4,                 // number of elements per vertex, here (r,g,b,a)
-		                      GL_FLOAT,          // the type of each element
-		                      GL_FALSE,          // take our values as-is
-		                      0,                 // no extra data between each position
-		                      &m_coordColor[0]); // Pointer on the buffer
-		glEnableVertexAttribArray(m_GLColor);
-		
+		m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 		// Request the draw od the elements : 
 		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-		glDisable(GL_TEXTURE_2D);
 		m_GLprogram->UnUse();
 	#else
 		glColor4f(1.0, 1.0, 1.0, 1.0);

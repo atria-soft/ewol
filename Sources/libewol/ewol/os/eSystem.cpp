@@ -240,6 +240,7 @@ void eSystem::Init(void)
 		EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
 		EWOL_INFO("Build Date: " BUILD_TIME);
 		etk::InitDefaultFolder("ewolApplNoName");
+		ewol::openGL::Init();
 		ewol::EObjectManager::Init();
 		ewol::EObjectMessageMultiCast::Init();
 		l_managementInput.Reset();
@@ -271,6 +272,7 @@ void eSystem::UnInit(void)
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
 		ewol::resource::UnInit();
+		ewol::openGL::UnInit();
 		l_managementInput.Reset();
 		l_msgSystem.Clean();
 	}
