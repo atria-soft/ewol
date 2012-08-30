@@ -12,6 +12,8 @@ ifeq ("$(SHADER)","1")
 	# to enable open gl 2 mode
 	LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
 	LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+else
+	LOCAL_EXPORT_LDLIBS := -lopengl32 -lgdi32
 endif
 
 include $(BUILD_PREBUILT)
