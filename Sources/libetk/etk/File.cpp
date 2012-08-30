@@ -28,6 +28,7 @@
 #include <etk/File.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <etk/tool.h>
 
 #ifdef __TARGET_OS__Android
 #	include <stdio.h>
@@ -37,11 +38,16 @@
 // zip file of the apk file for Android ==> set to zip file apk access
 static etk::UString s_fileAPK = "";
 etk::UString baseApplName = "ewolNoName";
-#ifdef __TARGET_OS__Android
-	etk::UString baseFolderHome     = "/sdcard/";                  // home folder
-	etk::UString baseFolderData     = "assets/";            // program Data
+#if defined(__TARGET_OS__Android)
+	etk::UString baseFolderHome     = "/sdcard/";                 // home folder
+	etk::UString baseFolderData     = "assets/";                  // program Data
 	etk::UString baseFolderDataUser = "/sdcard/.tmp/userData/";   // Data specific user (local modification)
 	etk::UString baseFolderCache    = "/sdcard/.tmp/cache/";      // Temporary data (can be removed the next time)
+#elif defined(__TARGET_OS__Windows)
+	etk::UString baseFolderHome     = "c:/test";                  // home folder
+	etk::UString baseFolderData     = "c:/test/share/";           // program Data
+	etk::UString baseFolderDataUser = "c:/test/userData/";        // Data specific user (local modification)
+	etk::UString baseFolderCache    = "c:/Windows/Temp/ewol/";    // Temporary data (can be removed the next time)
 #else
 	etk::UString baseFolderHome     = "~";                  // home folder
 	etk::UString baseFolderData     = "share/";             // program Data
@@ -109,7 +115,11 @@ void etk::InitDefaultFolder(const char * applName)
 	char * basicPath = getenv("HOME");
 	if (NULL == basicPath) {
 		TK_ERROR("ERROR while trying to get the path of the home folder");
-		baseFolderHome = "~";
+		#if defined(__TARGET_OS__Windows)
+			baseFolderHome = "c:/";
+		#else
+			baseFolderHome = "~";
+		#endif
 	} else {
 		baseFolderHome = basicPath;
 	}
@@ -284,15 +294,12 @@ bool etk::File::operator!= (const etk::File &etkF) const
 
 void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te type)
 {
-	char buf[MAX_FILE_NAME];
-	memset(buf, 0, MAX_FILE_NAME);
-	char * ok;
 	#ifdef __TARGET_OS__Android
-	m_idZipFile = -1;
-	m_zipData = NULL;
-	m_zipDataSize = 0;
-	m_zipReadingOffset = 0;
-	//m_zipPointerFile = NULL;
+		m_idZipFile = -1;
+		m_zipData = NULL;
+		m_zipDataSize = 0;
+		m_zipReadingOffset = 0;
+		//m_zipPointerFile = NULL;
 	#endif
 	// Reset ALL DATA : 
 	m_folder = "";
@@ -305,8 +312,14 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	} else {
 		destFilename = newFilename;
 	}
-	TK_VERBOSE("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
-	if (true == destFilename.StartWith('/')) {
+	
+	#ifdef __TARGET_OS__Windows
+		TK_VERBOSE("2 : Get file Name : " << destFilename << "start with 'c:/'=" << destFilename.StartWith("c:/"));
+		if (true == destFilename.StartWith("c:/")) {
+	#else
+		TK_VERBOSE("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
+		if (true == destFilename.StartWith('/')) {
+	#endif
 		m_type = etk::FILE_TYPE_DIRECT;
 		if (type != etk::FILE_TYPE_DIRECT) {
 			TK_VERBOSE("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
@@ -399,48 +412,17 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	TK_VERBOSE("3 : Get file Name : " << destFilename );
 	if (true == needUnpack) {
 		// Get the real Path of the current File
-		#ifdef __TARGET_OS__Windows
-			ok = 0;
-		#else
-			ok = realpath(destFilename.c_str(), buf);
-		#endif
-		if (!ok) {
-			int32_t lastPos = destFilename.FindBack('/');
-			if (-1 != lastPos) {
-				// Get the FileName
-				etk::UString tmpFilename = destFilename.Extract(lastPos+1);
-				destFilename.Remove(lastPos, destFilename.Size() - lastPos);
-				TK_VERBOSE("try to find :\"" << destFilename << "\" / \"" << tmpFilename << "\" ");
-				#ifdef __TARGET_OS__Windows
-					ok = 0;
-				#else
-					ok = realpath(destFilename.c_str(), buf);
-				#endif
-				if (!ok) {
-					TK_VERBOSE("Can not find real Path name of \"" << destFilename << "\"");
-					m_shortFilename = tmpFilename;
-					m_folder        = destFilename;
-				} else {
-					// ALL is OK ...
-					m_shortFilename = tmpFilename;
-					m_folder        = destFilename;
-				}
-			} else {
-				TK_VERBOSE("file : \"" << destFilename << "\" ==> No data???");
-				// Basic ERROR ...
-				m_shortFilename = destFilename;
-			}
+		destFilename = etk::tool::SimplifyPath(destFilename);
+		
+		int32_t lastPos = destFilename.FindBack('/');
+		if (-1 != lastPos) {
+			m_shortFilename = destFilename.Extract(lastPos+1);
+			m_folder        = destFilename.Extract(0, lastPos);
 		} else {
-			destFilename = buf;
-			int32_t lastPos = destFilename.FindBack('/');
-			if (-1 != lastPos) {
-				m_shortFilename = destFilename.Extract(lastPos+1);
-				m_folder        = destFilename.Extract(0, lastPos);
-			} else {
-				// Basic ERROR ...
-				TK_VERBOSE("file : \"" << destFilename << "\" ==> No data???");
-				m_shortFilename = destFilename;
-			}
+			// Basic ERROR ...
+			TK_VERBOSE("file : \"" << destFilename << "\" ==> No data???");
+			m_shortFilename = destFilename;
+			m_folder = "";
 		}
 	} else {
 		int32_t lastPos = destFilename.FindBack('/');

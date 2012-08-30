@@ -68,7 +68,11 @@ ewol::ListFileSystem::ListFileSystem(void)
 	m_showTemporaryFile = true;
 	m_showHidden = true;
 	m_showFolder = true;
-	m_folder = "/";
+	#if defined(__TARGET_OS__Windows)
+		m_folder = "c:/";
+	#else
+		m_folder = "/";
+	#endif
 	AddEventId(ewolEventFSFileSelect);
 	AddEventId(ewolEventFSFileValidate);
 	AddEventId(ewolEventFSFolderSelect);
@@ -123,7 +127,12 @@ void ewol::ListFileSystem::RegenerateView(void)
 		}
 		tmpEmement = NULL;
 		// the ".." permit to show the upper folder (but not availlable for the "/" folder
-		if (m_folder != "/") {
+
+		#if defined(__TARGET_OS__Windows)
+			if (m_folder != "c:/") {
+		#else
+			if (m_folder != "/") {
+		#endif
 			tmpEmement = new ewol::elementFS("..", ewol::EFS_FOLDER);
 			if (NULL != tmpEmement) {
 				m_list.PushBack(tmpEmement);

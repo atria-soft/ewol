@@ -227,27 +227,39 @@ namespace etk{
 				switch (ccc)
 				{
 					case LOG_LEVEL_CRITICAL:
-						strncat(m_tmpChar, ETK_BASH_COLOR_BOLD_RED, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_BOLD_RED, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[C]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_ERROR:
-						strncat(m_tmpChar, ETK_BASH_COLOR_MAGENTA, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_MAGENTA, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[E]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_WARNING:
-						strncat(m_tmpChar, ETK_BASH_COLOR_BOLD_RED, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_BOLD_RED, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[W]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_INFO:
-						strncat(m_tmpChar, ETK_BASH_COLOR_CYAN, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_CYAN, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[I]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_DEBUG:
-						strncat(m_tmpChar, ETK_BASH_COLOR_YELLOW, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_YELLOW, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[D]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_VERBOSE:
-						strncat(m_tmpChar, ETK_BASH_COLOR_WHITE, MAX_LOG_SIZE);
+						#if !defined(__TARGET_OS__Windows)
+							strncat(m_tmpChar, ETK_BASH_COLOR_WHITE, MAX_LOG_SIZE);
+						#endif
 						strncat(m_tmpChar, "[V]", MAX_LOG_SIZE);
 						break;
 					default:

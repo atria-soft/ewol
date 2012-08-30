@@ -31,6 +31,7 @@
 #include <ewol/widget/WidgetManager.h>
 //#include <etk/Vector.h>
 #include <etk/Vector.h>
+#include <etk/tool.h>
 
 extern "C" {
 	// file browsing ...
@@ -81,9 +82,12 @@ ewol::FileChooser::FileChooser(void)
 	ewol::Spacer * mySpacer = NULL;
 	//ewol::Label * myLabel = NULL;
 	ewol::Image * myImage = NULL;
-	#ifdef __TARGET_OS__Android
+	#if defined(__TARGET_OS__Android)
 		m_folder = "/mnt/sdcard/";
 		SetDisplayRatio(0.90);
+	#elif defined(__TARGET_OS__Windows)
+		m_folder = "c:/";
+		SetDisplayRatio(0.80);
 	#else
 		m_folder = "/home/";
 		SetDisplayRatio(0.80);
@@ -347,26 +351,10 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		}
 	} else if (ewolEventFileChooserListFolder == eventId) {
 		//==> this is an internal event ...
-		EWOL_VERBOSE(" old PATH : \"" << m_folder << "\" + \"" << data << "\"");
+		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << data << "\"");
 		m_folder = m_folder + data;
-		char buf[MAX_FILE_NAME];
-		memset(buf, 0, MAX_FILE_NAME);
-		char * ok;
 		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
-		#ifdef __TARGET_OS__Windows
-			ok = 0;
-		#else
-			ok = realpath(m_folder.c_str(), buf);
-		#endif
-		if (!ok) {
-			EWOL_ERROR("Error to get the real path");
-			m_folder = "/";
-		} else {
-			m_folder = buf;
-		}
-		if (m_folder != "/" ) {
-			m_folder +=  "/";
-		}
+		m_folder = etk::tool::SimplifyPath(m_folder);
 		SetFileName("");
 		UpdateCurrentFolder();
 	} else if (ewolEventFileChooserListFile == eventId) {
@@ -385,25 +373,10 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 		AutoDestroy();
 	} else if(ewolEventFileChooserHome == eventId) {
 		etk::UString tmpUserFolder = etk::GetUserHomeFolder();
-		char buf[MAX_FILE_NAME];
-		memset(buf, 0, MAX_FILE_NAME);
-		char * ok;
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
-		#ifdef __TARGET_OS__Windows
-			ok = 0;
-		#else
-			ok = realpath(tmpUserFolder.c_str(), buf);
-		#endif
-		if (!ok) {
-			EWOL_ERROR("Error to get the real path");
-			m_folder = "/";
-		} else {
-			m_folder = buf;
-		}
-		if (m_folder != "/" ) {
-			m_folder +=  "/";
-		}
+		m_folder = etk::tool::SimplifyPath(tmpUserFolder);
+		
 		SetFileName("");
 		UpdateCurrentFolder();
 	}
@@ -414,6 +387,11 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 
 void ewol::FileChooser::UpdateCurrentFolder(void)
 {
+	if (m_folder != "" ) {
+		if (m_folder[m_folder.Size()-1] != '/') {
+			m_folder +=  "/";
+		}
+	}
 	if (NULL != m_widgetListFile) {
 		m_widgetListFile->SetFolder(m_folder);
 	}

@@ -108,6 +108,11 @@ void guiInterface::KeyboardHide(void)
  */
 void guiInterface::ChangeSize(Vector2D<int32_t> size)
 {
+	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
+	int title_size = GetSystemMetrics(SM_CYCAPTION);
+	size.x += border_thickness*2;
+	size.y += border_thickness*2 + title_size;
+	
 	// TODO : Later
 }
 
@@ -300,8 +305,9 @@ int Windows_Run(void)
 	                     WS_CAPTION | WS_POPUPWINDOW | WS_VISIBLE | WS_SIZEBOX,
 	                     0, 0, 800, 600,
 	                     NULL, NULL, hInstance, NULL );
-	
-	eSystem::Resize(800, 600-25);
+	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
+	int title_size = GetSystemMetrics(SM_CYCAPTION);
+	eSystem::Resize(800-2*border_thickness, 600-2*border_thickness -title_size);
 	
 	// enable OpenGL for the window
 	EnableOpenGL( hWnd, &hDC, &hRC );
@@ -380,7 +386,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				WINDOWPOS* tmpVal = (WINDOWPOS*)lParam;
 				if (NULL != tmpVal) {
 					//EWOL_DEBUG("WM_WINDOWPOSCHANGING : : (" << tmpVal->x << "," << tmpVal->y << ") ( " << tmpVal->cx << "," << tmpVal->cy << ")");
-					eSystem::Resize(tmpVal->cx-8, tmpVal->cy - 28);
+					// in windows system, we need to remove the size of the border elements : 
+					int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
+					int title_size = GetSystemMetrics(SM_CYCAPTION);
+					eSystem::Resize(tmpVal->cx-2*border_thickness, tmpVal->cy - 2*border_thickness - title_size);
 				}
 			}
 			return 0;

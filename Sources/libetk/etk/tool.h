@@ -34,6 +34,7 @@ namespace etk {
 		int32_t irand(int32_t a, int32_t b);
 		void SortList(etk::Vector<etk::UString *> &m_listDirectory);
 		bool strnCmpNoCase(const char * input1, const char * input2, int32_t maxLen);
+		etk::UString SimplifyPath(etk::UString input);
 	};
 };
 
