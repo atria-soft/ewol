@@ -110,7 +110,7 @@ void ewol::OObject3DTextured::Draw(void)
 	#endif
 }
 
-void ewol::OObject2DTextured::Clear(void)
+void ewol::OObject3DTextured::Clear(void)
 {
 	m_coord.Clear();
 	m_coordTex.Clear();
