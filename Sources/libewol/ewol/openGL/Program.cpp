@@ -29,12 +29,15 @@
 #include <ewol/openGL/Program.h>
 #include <ewol/ResourceManager.h>
 
+//#define LOCAL_DEBUG  EWOL_VERBOSE
+#define LOCAL_DEBUG  EWOL_DEBUG
+
 ewol::Program::Program(etk::UString& filename) :
 	ewol::Resource(filename),
 	m_program(0),
 	m_hasTexture(false)
 {
-	
+	EWOL_DEBUG("OGL : load PROGRAM \"" << filename << "\"");
 	// load data from file "all the time ..."
 	
 	etk::File file(m_name, etk::FILE_TYPE_DATA);
@@ -55,6 +58,7 @@ ewol::Program::Program(etk::UString& filename) :
 	#define MAX_LINE_SIZE   (2048)
 	char tmpData[MAX_LINE_SIZE];
 	while (file.fGets(tmpData, MAX_LINE_SIZE) != NULL) {
+		EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
 		int32_t len = strlen(tmpData);
 		if(    tmpData[len-1] == '\n'
 			|| tmpData[len-1] == '\r') {
@@ -96,10 +100,10 @@ ewol::Program::~Program(void)
 	m_hasTexture = false;
 }
 
-static void checkGlError(const char* op)
+static void checkGlError(const char* op, int32_t localLine)
 {
 	for (GLint error = glGetError(); error; error = glGetError()) {
-		EWOL_INFO("after " << op << "() glError (" << error << ")");
+		EWOL_INFO("after " << op << "():" << localLine << " glError(" << error << ")");
 	}
 }
 
@@ -118,18 +122,21 @@ bool ewol::Program::CreateAndLink(void)
 	for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
 		if (NULL != m_shaderList[iii]) {
 			glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
-			checkGlError("glAttachShader");
+			checkGlError("glAttachShader", __LINE__);
 		}
 	}
 	glLinkProgram(m_program);
+	checkGlError("glLinkProgram", __LINE__);
 	GLint linkStatus = GL_FALSE;
 	glGetProgramiv(m_program, GL_LINK_STATUS, &linkStatus);
+	checkGlError("glGetProgramiv", __LINE__);
 	if (linkStatus != GL_TRUE) {
 		GLint bufLength = 0;
 		l_bufferDisplayError[0] = '\0';
 		glGetProgramInfoLog(m_program, LOG_OGL_INTERNAL_BUFFER_LEN, &bufLength, l_bufferDisplayError);
 		EWOL_ERROR("Could not compile \"PROGRAM\": " << l_bufferDisplayError);
 		glDeleteProgram(m_program);
+		checkGlError("glDeleteProgram", __LINE__);
 		m_program = 0;
 		return false;
 	}
@@ -149,7 +156,7 @@ int32_t ewol::Program::GetAttribute(etk::UString tmpElement)
 	tmp.m_isAttribute = true;
 	tmp.m_elementId = glGetAttribLocation(m_program, tmp.m_name.c_str());
 	if (tmp.m_elementId<0) {
-		checkGlError("glGetAttribLocation");
+		checkGlError("glGetAttribLocation", __LINE__);
 		EWOL_INFO("glGetAttribLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 		return -1;
 	}
@@ -170,7 +177,7 @@ int32_t ewol::Program::GetUniform(etk::UString tmpElement)
 	tmp.m_isAttribute = false;
 	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
 	if (tmp.m_elementId<0) {
-		checkGlError("glGetUniformLocation");
+		checkGlError("glGetUniformLocation", __LINE__);
 		EWOL_INFO("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 		return -1;
 	}
@@ -190,24 +197,29 @@ void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* point
 	                      GL_FALSE,                           // take our values as-is
 	                      jumpBetweenSample,                  // no extra data between each position
 	                      pointer);                           // Pointer on the buffer
+	checkGlError("glVertexAttribPointer", __LINE__);
 	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
+	checkGlError("glEnableVertexAttribArray", __LINE__);
 }
 
 
-void ewol::Program::SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, float* pointer)
+void ewol::Program::SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix _matrix)
 {
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
 	}
-	glUniformMatrix4fv(m_elementList[idElem].m_elementId, nbElement, GL_TRUE, pointer);
+	// note : Android des not supported the transposition of the matrix, then we will done it oursef:
+	_matrix.Transpose();
+	glUniformMatrix4fv(m_elementList[idElem].m_elementId, nbElement, GL_FALSE, _matrix.m_mat);
+	checkGlError("glUniformMatrix4fv", __LINE__);
 }
 
 
 void ewol::Program::Use(void)
 {
 	glUseProgram(m_program);
-	checkGlError("glUseProgram");
+	checkGlError("glUseProgram", __LINE__);
 }
 
 
@@ -216,23 +228,32 @@ void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		return;
 	}
-	glEnable(GL_TEXTURE_2D);
+	#if 0
+		glEnable(GL_TEXTURE_2D);
+		checkGlError("glEnable", __LINE__);
+	#endif
 	glActiveTexture(GL_TEXTURE0);
+	checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
+	checkGlError("glBindTexture", __LINE__);
 	// Set the texture on the uniform attribute
 	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/0);
+	checkGlError("glUniform1i", __LINE__);
 	m_hasTexture = true;
 }
 
 void ewol::Program::UnUse(void)
 {
+	#if 0
 	if (true == m_hasTexture) {
 		glDisable(GL_TEXTURE_2D);
+		checkGlError("glDisable", __LINE__);
 		m_hasTexture = false;
 	}
+	#endif
 	glUseProgram(0);
-	checkGlError("glUseProgram");
+	checkGlError("glUseProgram", __LINE__);
 }
 
 

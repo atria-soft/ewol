@@ -56,7 +56,7 @@
 					int32_t GetAttribute(etk::UString tmpElement);
 					void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
 					int32_t GetUniform(etk::UString tmpElement);
-					void SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, float* pointer);
+					void SendUniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix pointer);
 					void Use(void);
 					void SetTexture0(int32_t idElem, GLint textureOpenGlID);
 					void UnUse(void);

@@ -120,6 +120,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	int32_t nbLine = (nbElement / nbRaws) + 1;
 	int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
+	// for android : 
+	textureHeight = etk_max(textureHeight, textureWidth);
+	textureWidth = textureHeight;
+	
+	
 	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 	// resize must be done on the texture ...
 	SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));

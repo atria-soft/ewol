@@ -186,6 +186,36 @@ namespace etk {
 				tmpp *= obj;
 				return tmpp;
 			}
+			/*****************************************************
+			 *  other basic function :
+			 *****************************************************/
+			void Transpose(void)
+			{
+				float tmpVal = m_mat[1];
+				m_mat[1] = m_mat[4];
+				m_mat[4] = tmpVal;
+				
+				tmpVal = m_mat[2];
+				m_mat[2] = m_mat[8];
+				m_mat[8] = tmpVal;
+				
+				tmpVal = m_mat[6];
+				m_mat[6] = m_mat[9];
+				m_mat[9] = tmpVal;
+				
+				tmpVal = m_mat[3];
+				m_mat[3] = m_mat[12];
+				m_mat[12] = tmpVal;
+				
+				tmpVal = m_mat[7];
+				m_mat[7] = m_mat[13];
+				m_mat[13] = tmpVal;
+				
+				tmpVal = m_mat[11];
+				m_mat[11] = m_mat[14];
+				m_mat[14] = tmpVal;
+				
+			}
 	};
 	namespace matrix {
 		Matrix Perspective(float left, float right, float bottom, float top, float nearVal, float farVal);

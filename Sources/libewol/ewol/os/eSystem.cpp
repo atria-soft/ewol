@@ -45,6 +45,7 @@ static Vector2D<int32_t>  windowsSize(320, 480);
 static ewol::eSystemInput l_managementInput;
 
 enum {
+	THREAD_INIT,
 	THREAD_RECALCULATE_SIZE,
 	THREAD_RESIZE,
 	THREAD_HIDE,
@@ -104,6 +105,10 @@ void ewolProcessEvents(void)
 		l_msgSystem.Wait(data);
 		//EWOL_DEBUG("EVENT");
 		switch (data.TypeMessage) {
+			case THREAD_INIT:
+				// this is due to the openGL context
+				APP_Init();
+				break;
 			case THREAD_RECALCULATE_SIZE:
 				eSystem::ForceRedrawAll();
 				break;
@@ -226,10 +231,17 @@ void eSystem::SetArchiveDir(int mode, const char* str)
 
 
 
-
-
-
 bool isGlobalSystemInit = false;
+
+void RequestInit(void)
+{
+	if (true == isGlobalSystemInit) {
+		eSystemMessage_ts data;
+		data.TypeMessage = THREAD_INIT;
+		l_msgSystem.Post(data);
+	}
+}
+
 
 void eSystem::Init(void)
 {
@@ -248,8 +260,9 @@ void eSystem::Init(void)
 		ewol::widgetManager::Init();
 		ewol::font::Init();
 		ewol::shortCut::Init();
-		APP_Init();
 		isGlobalSystemInit = true;
+		// request the init of the application in the main context of openGL ...
+		RequestInit();
 		// force a recalculation
 		ewol::RequestUpdateSize();
 	}
@@ -278,6 +291,7 @@ void eSystem::UnInit(void)
 	}
 	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
+
 
 void ewol::RequestUpdateSize(void)
 {

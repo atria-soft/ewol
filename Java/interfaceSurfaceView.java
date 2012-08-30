@@ -47,6 +47,9 @@ public class interfaceSurfaceView extends GLSurfaceView {
 		// super must be first statement in constructor
 		super(context);
 		
+		// Create an OpenGL ES 2.0 context
+		setEGLContextClientVersion(2);
+		
 		// je n'ai pas compris ...
 		m_ewolDrawer = new interfaceOpenGL();
 		setRenderer(m_ewolDrawer);

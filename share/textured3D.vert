@@ -1,3 +1,7 @@
+#ifdef GL_ES
+precision mediump float;
+precision mediump int;
+#endif
 // Input :
 attribute vec2 EW_coord3d;
 attribute vec2 EW_texture2d;

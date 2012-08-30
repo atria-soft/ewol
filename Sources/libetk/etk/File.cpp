@@ -724,6 +724,7 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 	memset(elementLine, 0, maxData);
 	#ifdef __TARGET_OS__Android
 	char * element = elementLine;
+	int32_t outSize = 0;
 	if (etk::FILE_TYPE_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 		if (NULL == m_zipData) {
 			element[0] = '\0';
@@ -750,8 +751,19 @@ char * etk::File::fGets(char * elementLine, int32_t maxData)
 				*element = '\0';
 				return elementLine;
 			}
+			// check maxData Size ...
+			if (outSize>=maxData-1) {
+				*element = '\0';
+				return elementLine;
+			}
+			outSize++;
 		}
-		return NULL;
+		if (outSize==0) {
+			return NULL;
+		} else {
+			// send last line
+			return elementLine;
+		}
 	}
 	#endif
 	return fgets(elementLine, maxData, m_PointerFile);

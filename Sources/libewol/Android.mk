@@ -18,6 +18,7 @@ LOCAL_C_INCLUDES :=
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_EXPORT_LDLIBS := -lGLESv2 -ldl -llog
+#LOCAL_EXPORT_LDLIBS := -lGLESv1_CM  -ldl -llog
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
@@ -31,9 +32,6 @@ LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
 include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_LIST)
-
-# Ewol Test Software :
-LOCAL_LDLIBS := -lGLESv2 -ldl -llog -lz
 
 include $(BUILD_STATIC_LIBRARY)
 
