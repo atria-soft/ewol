@@ -211,6 +211,14 @@ int Windows_Run(void);
 
 int main(int argc, char *argv[])
 {
+	#ifdef __VIDEO__OPENGL_ES_2
+		glewInit();
+		if (!glewIsSupported("GL_VERSION_2_0")) {
+			fprintf(stderr, "OpenGL 2.0 not available\n");
+			return 1;
+		}
+	#endif
+	
 	ewol::CmdLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {
 		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );

@@ -27,10 +27,10 @@ LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -Wall
 
-
-LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
-
+ifeq ("$(SHADER)","1")
+	LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
+	LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+endif
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

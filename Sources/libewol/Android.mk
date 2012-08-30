@@ -17,16 +17,19 @@ LOCAL_C_INCLUDES :=
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
-LOCAL_EXPORT_LDLIBS := -lGLESv2 -ldl -llog
-#LOCAL_EXPORT_LDLIBS := -lGLESv1_CM  -ldl -llog
-
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -DDATA_IN_APK
 
+ifeq ("$(SHADER)","1")
+	LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
+	LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+	LOCAL_EXPORT_LDLIBS := -lGLESv2
+else
+	LOCAL_EXPORT_LDLIBS := -lGLESv1_CM
+endif
 
-LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+LOCAL_EXPORT_LDLIBS += -ldl -llog
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

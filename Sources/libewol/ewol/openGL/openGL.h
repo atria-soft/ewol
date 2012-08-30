@@ -60,11 +60,14 @@ extern "C" {
 #elif defined(__TARGET_OS__Windows)
 	#ifdef __VIDEO__OPENGL_ES_2
 		// TO ENABLE THE SHADER api ...
-		#define GL_GLEXT_PROTOTYPES
+		//#define GL_GLEXT_PROTOTYPES
+		#define GLEW_STATIC
+		#include <GL/glew.h>
+	#else
+		#include <GL/gl.h>
+		#include <GL/glu.h>
+		#include <GL/glext.h>
 	#endif
-	#include <GL/gl.h>
-	#include <GL/glu.h>
-	#include <GL/glext.h>
 #elif defined(__TARGET_OS__MacOs)
 	
 #elif defined(__TARGET_OS__IOs)

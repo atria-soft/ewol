@@ -31,3 +31,6 @@
 [submodule "Sources/libz/zlib"]
 	path = Sources/libz/zlib
 	url = https://github.com/madler/zlib.git
+[submodule "Sources/libglew/glew"]
+	path = Sources/libglew/glew
+	url = https://github.com/HeeroYui/glew.git

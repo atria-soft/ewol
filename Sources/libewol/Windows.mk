@@ -11,20 +11,16 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua zlib
+LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua zlib glew
 
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lopengl32 -lgdi32
+LOCAL_EXPORT_LDLIBS := 
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -Wall
-
-
-#LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-#LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
