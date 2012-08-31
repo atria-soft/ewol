@@ -48,8 +48,8 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
-			etk::Vector<int32_t>        m_lineSize;
+			etk::Vector<ewol::OObject*>        m_listOObject;   //!< generic element to display...
+			etk::Vector<Vector2D<int32_t> >   m_lineSize;
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);

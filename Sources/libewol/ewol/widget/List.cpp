@@ -128,12 +128,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		}*/
 		tmpOriginX += m_paddingSizeX;
 		tmpOriginY += m_paddingSizeY;
-		// TODO : Rework this corectly ...
-	/*
-		int32_t fontId = GetDefaultFontId();
-		//int32_t minWidth = ewol::GetWidth(fontId, m_label);
-		int32_t minHeight = ewol::GetHeight(fontId);
-	*/
+		// TODO : Remove this ...
 		int32_t minHeight = 25;
 	
 		//uint32_t nbColomn = GetNuberOfColomn();
@@ -150,8 +145,6 @@ void ewol::List::OnRegenerateDisplay(void)
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 		
-		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
-		
 		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
 		
 		if (startRaw >= nbRaw-1 ) {
@@ -160,9 +153,6 @@ void ewol::List::OnRegenerateDisplay(void)
 		if (startRaw<0) {
 			startRaw = 0;
 		}
-		// Calculate the real position ...
-		tmpOriginY = -m_originScrooled.y + (startRaw+1)*(minHeight + 2*m_paddingSizeY);
-		
 		// We display only compleate lines ...
 		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << " ==> " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
 		
@@ -173,27 +163,40 @@ void ewol::List::OnRegenerateDisplay(void)
 		drawClipping.h = m_size.y;
 		// remove all the positions :
 		m_lineSize.Clear();
+		int32_t displayPositionY = m_size.y;
+		Vector2D<int32_t> tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
-		m_lineSize.PushBack(0);
-		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
+		m_lineSize.PushBack(tmpRegister);
+		for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 			etk::UString myTextToWrite;
 			draw::Color fg;
 			draw::Color bg;
 			GetElement(0, iii, myTextToWrite, fg, bg);
-			BGOObjects->SetColor(bg);
-			BGOObjects->Rectangle(0, m_size.y - tmpOriginY, m_size.x, minHeight+2*m_paddingSizeY);
 			
 			ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
-			
-			Vector2D<float> textPos;
-			textPos.x = tmpOriginX;
-			textPos.y = m_size.y - tmpOriginY + m_paddingSizeY;
-			tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
-			// add the raw position to remember it ...
-			m_lineSize.PushBack(tmpOriginY);
-			
-			AddOObject(tmpText);
-			tmpOriginY += minHeight + 2* m_paddingSizeY;
+			if (NULL != tmpText) {
+				// get font size : 
+				int32_t tmpFontHeight = tmpText->GetHeight();
+				displayPositionY-=(tmpFontHeight+m_paddingSizeY);
+				
+				BGOObjects->SetColor(bg);
+				BGOObjects->Rectangle(0, displayPositionY, m_size.x, tmpFontHeight+2*m_paddingSizeY);
+				
+				
+				Vector2D<float> textPos;
+				textPos.x = tmpOriginX;
+				textPos.y = displayPositionY;
+				tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
+				AddOObject(tmpText);
+				// madding move ...
+				displayPositionY -= m_paddingSizeY;
+				
+				// add the raw position to remember it ...
+				tmpRegister.x++;
+				tmpRegister.y = displayPositionY;
+				m_lineSize.PushBack(tmpRegister);
+				//EWOL_DEBUG("List indexation:" << tmpRegister);
+			}
 		}
 		//m_lineSize.PushBack(tmpOriginY);
 		AddOObject(BGOObjects, 0);
@@ -215,8 +218,6 @@ void ewol::List::OnRegenerateDisplay(void)
 bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
 	Vector2D<float> relativePos = RelativePosition(pos);
-	// corection for the openGl abstraction
-	relativePos.y = m_size.y - relativePos.y;
 	
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
@@ -226,15 +227,15 @@ bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInp
 	// parse all the loged row position to find the good one...
 	int32_t rawID = -1;
 	for(int32_t iii=0; iii<m_lineSize.Size()-1; iii++) {
-		if(    relativePos.y>=m_lineSize[iii]
-		    && relativePos.y<m_lineSize[iii+1] ) {
+		if(    relativePos.y<m_lineSize[iii].y
+		    && relativePos.y>=m_lineSize[iii+1].y ) {
 			// we find the raw :
-			rawID = iii;
+			rawID = m_lineSize[iii].x;
 			break;
 		}
 	}
 	
-	EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << relativePos << "");
+	//EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << pos << "");
 	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x, pos.y);
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
