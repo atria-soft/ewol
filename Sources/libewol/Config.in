@@ -1,0 +1,14 @@
+menu "General"
+	choice
+		prompt "OpenGl mode"
+		default EWOL_OPENGL_ES_V1
+		help
+			OpenGL mode possible :
+				0 : openGL basic mode, vertex buffer.
+				1 : OpenGl 2 ==> no vertex bufffer but enable Shader system
+		config EWOL_OPENGL_ES_V1
+			bool "0: openGl ES 1.0"
+		config EWOL_OPENGL_ES_V2
+			bool "1: openGl ES 2.0"
+	endchoice
+endmenu
