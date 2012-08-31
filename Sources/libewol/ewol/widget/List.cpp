@@ -171,7 +171,10 @@ void ewol::List::OnRegenerateDisplay(void)
 		drawClipping.y = 0;
 		drawClipping.w = m_size.x - (2*m_paddingSizeX);
 		drawClipping.h = m_size.y;
-		
+		// remove all the positions :
+		m_lineSize.Clear();
+		// add the default position raw :
+		m_lineSize.PushBack(0);
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite;
 			draw::Color fg;
@@ -186,10 +189,13 @@ void ewol::List::OnRegenerateDisplay(void)
 			textPos.x = tmpOriginX;
 			textPos.y = m_size.y - tmpOriginY + m_paddingSizeY;
 			tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
+			// add the raw position to remember it ...
+			m_lineSize.PushBack(tmpOriginY);
 			
 			AddOObject(tmpText);
 			tmpOriginY += minHeight + 2* m_paddingSizeY;
 		}
+		//m_lineSize.PushBack(tmpOriginY);
 		AddOObject(BGOObjects, 0);
 		
 		// call the herited class...
@@ -217,16 +223,18 @@ bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInp
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	// TODO : Rework this ...
-	/*
-	int32_t fontId = GetDefaultFontId();
-	//int32_t minWidth = ewol::GetWidth(fontId, m_label.c_str());
-	int32_t minHeight = ewol::GetHeight(fontId);
-	*/
-	int32_t minHeight =20;
+	// parse all the loged row position to find the good one...
+	int32_t rawID = -1;
+	for(int32_t iii=0; iii<m_lineSize.Size()-1; iii++) {
+		if(    relativePos.y>=m_lineSize[iii]
+		    && relativePos.y<m_lineSize[iii+1] ) {
+			// we find the raw :
+			rawID = iii;
+			break;
+		}
+	}
 	
-	int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
-	//EWOL_DEBUG("OnEventInput(" << IdInput << "," << typeEvent << ","  << 0 << "," << rawID << "," << x <<"," << y << ");");
+	EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << relativePos << "");
 	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x, pos.y);
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
