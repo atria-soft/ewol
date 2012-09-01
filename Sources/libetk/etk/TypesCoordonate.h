@@ -168,8 +168,17 @@ template <typename T> class Vector2D
 			--(*this);
 			return result;
 		}
+		
+		T QuadDist(void)
+		{
+			return x*x + y*y;
+		}
+		
+		T Dist(void)
+		{
+			return sqrt(x*x + y*y);
+		}
 };
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////:
 

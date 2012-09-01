@@ -234,6 +234,25 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 	}
 #endif
 
+#ifdef __VIDEO__OPENGL_ES_2
+	bool ewol::resource::Keep(etk::UString& filename, ewol::DistantFieldFont*& object)
+	{
+		EWOL_VERBOSE("KEEP : DistanceFieldFont : file : \"" << filename << "\"");
+		object = static_cast<ewol::DistantFieldFont*>(LocalKeep(filename));
+		if (NULL != object) {
+			return true;
+		}
+		// need to crate a new one ...
+		object = new ewol::DistantFieldFont(filename);
+		if (NULL == object) {
+			EWOL_ERROR("allocation error of a resource : " << filename);
+			return false;
+		}
+		LocalAdd(object);
+		return true;
+	}
+#endif
+
 bool ewol::resource::Keep(ewol::Texture*& object)
 {
 	// this element create a new one every time ....
@@ -327,6 +346,14 @@ void ewol::resource::Release(ewol::Font*& object)
 #endif
 #ifdef __VIDEO__OPENGL_ES_2
 	void ewol::resource::Release(ewol::Shader*& object)
+	{
+		ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+		Release(object2);
+		object = NULL;
+	}
+#endif
+#ifdef __VIDEO__OPENGL_ES_2
+	void ewol::resource::Release(ewol::DistantFieldFont*& object)
 	{
 		ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 		Release(object2);

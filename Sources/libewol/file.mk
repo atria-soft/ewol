@@ -27,6 +27,7 @@ FILE_LIST+= ewol/game/GameElement.cpp \
 # Object abstraction for OpenGl
 FILE_LIST+= ewol/oObject/OObject.cpp \
 			ewol/oObject/2DTextColored.cpp \
+			ewol/oObject/2DTextShader.cpp \
 			ewol/oObject/2DColored.cpp \
 			ewol/oObject/2DTextured.cpp \
 			ewol/oObject/3DTextured.cpp \
@@ -42,7 +43,8 @@ FILE_LIST+= ewol/texture/Texture.cpp \
 # fonst system
 FILE_LIST+= ewol/font/FontManager.cpp \
 			ewol/font/FontFreeType.cpp \
-			ewol/font/TexturedFont.cpp
+			ewol/font/TexturedFont.cpp \
+			ewol/font/DistantFieldFont.cpp
 
 # all widgets
 FILE_LIST+= ewol/widget/Widget.cpp \

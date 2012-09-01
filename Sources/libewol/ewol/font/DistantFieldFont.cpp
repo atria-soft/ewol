@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file ewol/font/TexturedFont.cpp
- * @brief ewol Textured Font system (Sources)
+ * @file ewol/font/DistanceFieldFont.cpp
+ * @brief ewol Textured distant field Font system (Sources)
  * @author Edouard DUPIN
  * @date 22/08/2012
  * @par Project
@@ -24,7 +24,7 @@
 
 #include <etk/Types.h>
 #include <ewol/font/Font.h>
-#include <ewol/font/TexturedFont.h>
+#include <ewol/font/DistantFieldFont.h>
 #include <ewol/font/FontManager.h>
 #include <ewol/ResourceManager.h>
 
@@ -56,7 +56,7 @@ static int32_t simpleSQRT(int32_t value)
 }
 
 
-ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
+ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) : 
 	ewol::Texture(fontName),
 	m_font(NULL),
 	m_lastGlyphPos(0,0),
@@ -196,11 +196,13 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	#endif
 	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	//m_data.DistanceField();
+	// generate the distance field from this element ...
+	m_data.DistanceField();
 	Flush();
+	
 }
 
-ewol::TexturedFont::~TexturedFont(void)
+ewol::DistantFieldFont::~DistantFieldFont(void)
 {
 	if (NULL!= m_font) {
 		ewol::resource::Release(m_font);
@@ -208,7 +210,7 @@ ewol::TexturedFont::~TexturedFont(void)
 }
 
 
-bool ewol::TexturedFont::HasName(etk::UString& fileName)
+bool ewol::DistantFieldFont::HasName(etk::UString& fileName)
 {
 	etk::UString tmpName = m_name;
 	tmpName += ":";
@@ -219,7 +221,7 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 
 
 
-int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
+int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
                                  const etk::UString&             unicodeString,
                                  etk::Vector<Vector2D<float> > & coord,
                                  etk::Vector<texCoord_ts> &      coordTex)
@@ -305,10 +307,10 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 	return totalSize;
 }
 
-int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
-                                 const uniChar_t                 unicodeChar,
-                                 etk::Vector<Vector2D<float> > & coord,
-                                 etk::Vector<texCoord_ts> &      coordTex)
+int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
+                                     const uniChar_t                 unicodeChar,
+                                     etk::Vector<Vector2D<float> > & coord,
+                                     etk::Vector<texCoord_ts> &      coordTex)
 {
 	float posDrawX = textPos.x;
 	
@@ -425,7 +427,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 	return sizeOut;
 }
 
-Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString)
+Vector2D<float> ewol::DistantFieldFont::GetSize(const etk::UString & unicodeString)
 {
 	Vector2D<float> outputSize(0,m_height);
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
@@ -436,7 +438,7 @@ Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString)
 }
 
 
-Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
+Vector2D<float> ewol::DistantFieldFont::GetSize(const uniChar_t unicodeChar)
 {
 	Vector2D<float> outputSize(0,m_height);
 	int32_t charIndex;

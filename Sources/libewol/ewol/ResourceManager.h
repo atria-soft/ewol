@@ -32,6 +32,7 @@
 #include <ewol/openGL/Program.h>
 #include <ewol/font/Font.h>
 #include <ewol/font/TexturedFont.h>
+#include <ewol/font/DistantFieldFont.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/texture/TextureFile.h>
 
@@ -53,6 +54,7 @@ namespace ewol
 		#ifdef __VIDEO__OPENGL_ES_2
 			bool Keep(etk::UString& filename, ewol::Program*& object);
 			bool Keep(etk::UString& filename, ewol::Shader*& object);
+			bool Keep(etk::UString& filename, ewol::DistantFieldFont*& object);
 		#endif
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size);
@@ -63,6 +65,7 @@ namespace ewol
 		#ifdef __VIDEO__OPENGL_ES_2
 			void Release(ewol::Program*& object);
 			void Release(ewol::Shader*& object);
+			void Release(ewol::DistantFieldFont*& object);
 		#endif
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
