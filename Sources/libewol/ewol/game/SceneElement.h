@@ -64,7 +64,10 @@ namespace ewol {
 			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
-			uint32_t               GetNearestEnemy(Vector2D<float>  position, int32_t groupId);
+			uint32_t               GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange=0);
+			void                   GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list);
+			uint32_t               GetNearestFriend(Vector2D<float> position, int32_t groupId, uint32_t us);
+			void                   GetNearestFriend(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list, uint32_t us);
 			bool                   HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
 			void                   Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power);
 			uint32_t               GetElementAtPos(Vector2D<float>  position, int32_t maxDistanceDetection);

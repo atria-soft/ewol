@@ -48,7 +48,8 @@ namespace ewol {
 		EVENT_INPUT_TYPE_UP,
 		EVENT_INPUT_TYPE_ENTER,
 		EVENT_INPUT_TYPE_LEAVE,
-		EVENT_INPUT_TYPE_ABORT, // SPecial event generate when an upper classes get an event ... (TBD)
+		EVENT_INPUT_TYPE_ABORT, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)
+		EVENT_INPUT_TYPE_TRANSFERT, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
 	} eventInputType_te;
 	
 	typedef enum {

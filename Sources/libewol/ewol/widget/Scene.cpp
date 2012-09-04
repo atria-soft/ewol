@@ -127,9 +127,11 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
 			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
 				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
-					// check if the element request an auto Kill ...
-					if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US) ) {
-						m_sceneElement.RmElement(jjj, iii);
+					if(true == m_sceneElement.listAnimatedElements[jjj][iii]->IsEnable() ) {
+						// check if the element request an auto Kill ...
+						if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US) ) {
+							m_sceneElement.RmElement(jjj, iii);
+						}
 					}
 				}
 			}

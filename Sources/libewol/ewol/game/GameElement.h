@@ -58,6 +58,7 @@ namespace ewol {
 			bool               m_canBeCibled;   //!< This is for automatic finding on an ennemy
 			bool               m_canHaveImpact; //!< detection of impact is done with this ...
 			float              m_specialParam[NB_SPECIAL_PARAM]; //!< specific game user parameter
+			bool               m_enable;        //!< Use to add element that can not be detected by the other when user select a place
 		public:
 			/**
 			 * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
@@ -79,18 +80,20 @@ namespace ewol {
 			
 			bool             HasName(etk::UString tmpName)        { return (tmpName == m_fileNameConfig); };
 			bool             IsVisible(void)                      { return m_visible; };
-			void             SetVisible(bool state)               { m_visible = state; };
+			void             SetVisible(bool state)               { m_visible = state; StatusUpdate();};
+			bool             IsEnable(void)                       { return m_enable; };
+			void             SetEnable(bool state)                { m_enable = state; StatusUpdate();};
 			Vector2D<float>  PositionGet(void)                    { return m_position; };
-			void             PositionSet(Vector2D<float> state)   { m_position = state; };
-			void             PositionSet(float xxx, float yyy)    { m_position.x = xxx; m_position.y = yyy; };
+			void             PositionSet(Vector2D<float> state)   { m_position = state; StatusUpdate();};
+			void             PositionSet(float xxx, float yyy)    { m_position.x = xxx; m_position.y = yyy; StatusUpdate();};
 			float    SpeedGet(void)                               { return m_speed; };
-			void     SpeedSet(float state)                        { m_speed = state; };
+			void     SpeedSet(float state)                        { m_speed = state; StatusUpdate();};
 			float    MassGet(void)                                { return m_mass; };
-			void     MassSet(float state)                         { m_mass = state; };
+			void     MassSet(float state)                         { m_mass = state; StatusUpdate();};
 			float    SizeGet(void)                                { return m_size; };
-			void     SizeSet(float state)                         { m_size = state; };
+			void     SizeSet(float state)                         { m_size = state; StatusUpdate();};
 			float    DisplaySizeGet(void)                         { return m_sizeDisplay; };
-			void     DisplaySizeSet(float state)                  { m_sizeDisplay = state; };
+			void     DisplaySizeSet(float state)                  { m_sizeDisplay = state; StatusUpdate();};
 			float    AngleGet(void)                               { return m_angle; };
 			void     AngleSet(float state)
 			{
@@ -101,21 +104,22 @@ namespace ewol {
 				while (m_angle < -M_PI) {
 					m_angle += 2.0*M_PI;
 				}
+				StatusUpdate();
 			};
 			float    PowerGet(void)                               { return m_power; };
-			void     PowerSet(float state)                        { m_power = state; };
+			void     PowerSet(float state)                        { m_power = state; StatusUpdate();};
 			bool     CanBeCibledGet(void)                         { return m_canBeCibled; };
-			void     CanBeCibledSet(bool state)                   { m_canBeCibled = state; };
+			void     CanBeCibledSet(bool state)                   { m_canBeCibled = state; StatusUpdate();};
 			bool     CanHaveImpactGet(void)                       { return m_canHaveImpact; };
-			void     CanHaveImpactSet(bool state)                 { m_canHaveImpact = state; };
+			void     CanHaveImpactSet(bool state)                 { m_canHaveImpact = state; StatusUpdate();};
 			
 			int32_t  GetType(void)                                { return m_type; }; // TODO : DEPRECATED ...
 			int32_t  TypeGet(void)                                { return m_type; };
 			uint16_t GroupGet(void)                               { return m_group; };
-			void     GroupSet(uint16_t state)                     { m_group = state; };
+			void     GroupSet(uint16_t state)                     { m_group = state; StatusUpdate();};
 			
 			float    SpecialParamGet(int32_t id)                  { if (id<0 || id>=NB_SPECIAL_PARAM) {return 0.0;} return m_specialParam[id]; };
-			void     SpecialParamSet(int32_t id, float state)     { if (id<0 || id>=NB_SPECIAL_PARAM) {return;} m_specialParam[id]=state; };
+			void     SpecialParamSet(int32_t id, float state)     { if (id<0 || id>=NB_SPECIAL_PARAM) {return;} m_specialParam[id]=state; StatusUpdate();};
 			
 			/**
 			 * @brief Periodicly this fuction will be call tu change property of all the dynamic obbjects
@@ -145,6 +149,7 @@ namespace ewol {
 			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power) { return false; } ;
 			
 			virtual void Message(etk::UString control, etk::UString message) { } ;
+			virtual void StatusUpdate(void) { };
 	};
 	
 };

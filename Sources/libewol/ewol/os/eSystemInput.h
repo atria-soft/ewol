@@ -41,6 +41,7 @@ namespace ewol
 		Vector2D<float> origin;
 		Vector2D<float> size;
 		Vector2D<float> downStart;
+		Vector2D<float> posEvent;
 		bool            isDown;
 		bool            isInside;
 		int32_t         nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -87,7 +88,15 @@ namespace ewol
 			 * @return ---
 			 */
 			void NewLayerSet(void);
+			/**
+			 * @brief This is to transfert the event from one widget to another one
+			 * @param source the widget where the event came from
+			 * @param destination the widget where the event mitgh be generated now
+			 * @return ---
+			 */
+			void TransfertEvent(ewol::Widget* source, ewol::Widget* destination);
 	};
+	
 };
 #endif
 

@@ -156,6 +156,20 @@ void ewol::SetTitle(etk::UString title)
 	guiInterface::SetTitle(title);
 }
 
+
+/**
+ * @brief This is to transfert the event from one widget to another one
+ * @param source the widget where the event came from
+ * @param destination the widget where the event mitgh be generated now
+ * @return ---
+ */
+void ewol::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
+{
+	eSystem::InputEventTransfertWidget(source, destination);
+}
+
+
+
 // ------------------------------------------------------------------------
 //                 Command line arguments
 // ------------------------------------------------------------------------

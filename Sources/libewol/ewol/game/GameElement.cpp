@@ -51,6 +51,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 	m_canBeCibled = false;
 	m_canHaveImpact = true;
 	m_life = 0;
+	m_enable = true;
 }
 
 

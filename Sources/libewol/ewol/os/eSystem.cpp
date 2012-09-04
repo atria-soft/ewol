@@ -44,6 +44,20 @@ static ewol::Windows*     windowsCurrent = NULL;
 static Vector2D<int32_t>  windowsSize(320, 480);
 static ewol::eSystemInput l_managementInput;
 
+
+
+/**
+ * @brief This is to transfert the event from one widget to another one
+ * @param source the widget where the event came from
+ * @param destination the widget where the event mitgh be generated now
+ * @return ---
+ */
+void eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
+{
+	l_managementInput.TransfertEvent(source, destination);
+}
+
+
 enum {
 	THREAD_INIT,
 	THREAD_RECALCULATE_SIZE,

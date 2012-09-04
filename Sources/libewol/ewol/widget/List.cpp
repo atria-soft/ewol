@@ -186,6 +186,7 @@ void ewol::List::OnRegenerateDisplay(void)
 				Vector2D<float> textPos;
 				textPos.x = tmpOriginX;
 				textPos.y = displayPositionY;
+				tmpText->SetColor(fg);
 				tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
 				AddOObject(tmpText);
 				// madding move ...
