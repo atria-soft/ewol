@@ -27,7 +27,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <pthread.h>
-#include <Debug.h>
+#include <ewol/Debug.h>
 #include <ewol/os/eSystem.h>
 #include <ewol/audio/audio.h>
 
@@ -49,9 +49,9 @@ static JavaVM* g_JavaVM = NULL;
 
 void SendJava_KeyboardShow(bool showIt)
 {
-	APPL_DEBUG("C->java : call java");
+	EWOL_DEBUG("C->java : call java");
 	if (NULL == g_JavaVM) {
-		APPL_DEBUG("C->java : JVM not initialised");
+		EWOL_DEBUG("C->java : JVM not initialised");
 		return;
 	}
 	JNIEnv *JavaVirtualMachinePointer_tmp;
@@ -63,23 +63,23 @@ void SendJava_KeyboardShow(bool showIt)
 		lJavaVMAttachArgs.group = NULL; 
 		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
 		if (status != JNI_OK) {
-			APPL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+			EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
 			return;
 		}
 		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-			APPL_DEBUG("C->java : EXEPTION ...");
+			EWOL_DEBUG("C->java : EXEPTION ...");
 			JavaVirtualMachinePointer->ExceptionDescribe();
 			JavaVirtualMachinePointer->ExceptionClear();
 		}
 	}
 	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		APPL_DEBUG("C->java : EXEPTION ...");
+		EWOL_DEBUG("C->java : EXEPTION ...");
 		JavaVirtualMachinePointer->ExceptionDescribe();
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
 
 	if (NULL == JavaVirtualMachinePointer) {
-		APPL_DEBUG("C->java : JVM not initialised");
+		EWOL_DEBUG("C->java : JVM not initialised");
 		return;
 	}
 
@@ -92,7 +92,7 @@ void SendJava_KeyboardShow(bool showIt)
 
 	// manage execption : 
 	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		APPL_DEBUG("C->java : EXEPTION ...");
+		EWOL_DEBUG("C->java : EXEPTION ...");
 		JavaVirtualMachinePointer->ExceptionDescribe();
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
@@ -103,9 +103,9 @@ void SendJava_KeyboardShow(bool showIt)
 
 void SendSystemMessage(const char * dataString)
 {
-	APPL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
+	EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
 	if (NULL == g_JavaVM) {
-		APPL_DEBUG("C->java : JVM not initialised");
+		EWOL_DEBUG("C->java : JVM not initialised");
 		return;
 	}
 	JNIEnv *JavaVirtualMachinePointer_tmp;
@@ -117,39 +117,39 @@ void SendSystemMessage(const char * dataString)
 		lJavaVMAttachArgs.group = NULL; 
 		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
 		if (status != JNI_OK) {
-			APPL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+			EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
 			return;
 		}
 	}
-	APPL_DEBUG("C->java : 111");
+	EWOL_DEBUG("C->java : 111");
 	if (NULL == JavaVirtualMachinePointer) {
-		APPL_DEBUG("C->java : JVM not initialised");
+		EWOL_ERROR("C->java : JVM not initialised");
 		return;
 	}
-	APPL_DEBUG("C->java : 222");
+	EWOL_DEBUG("C->java : 222");
 	if (NULL == dataString) {
-		APPL_DEBUG("C->java : No data to send ...");
+		EWOL_ERROR("C->java : No data to send ...");
 		return;
 	}
-	APPL_DEBUG("C->java : 333");
+	EWOL_DEBUG("C->java : 333");
 	// create the string to the java
 	jstring jstr = JavaVirtualMachinePointer->NewStringUTF(dataString);
 	if (jstr == 0) {
-		APPL_DEBUG("C->java : Out of memory" );
+		EWOL_ERROR("C->java : Out of memory" );
 		return;
 	}
-	APPL_DEBUG("C->java : 444");
+	EWOL_DEBUG("C->java : 444");
 	// create argument list
 	jobjectArray args = JavaVirtualMachinePointer->NewObjectArray(1, javaDefaultClassString, jstr);
 	if (args == 0) {
-		APPL_DEBUG("C->java : Out of memory" );
+		EWOL_ERROR("C->java : Out of memory" );
 		return;
 	}
-	APPL_DEBUG("C->java : 555");
+	EWOL_DEBUG("C->java : 555");
 	//Call java ...
 	JavaVirtualMachinePointer->CallStaticVoidMethod(javaClassActivity, javaClassActivityEntryPoint, args);
 	
-	APPL_DEBUG("C->java : 666");
+	EWOL_DEBUG("C->java : 666");
 	// manage execption : 
 	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
 		JavaVirtualMachinePointer->ExceptionDescribe();
@@ -171,14 +171,14 @@ extern "C"
 	{
 		// get the java virtual machine handle ...
 		g_JavaVM = jvm;
-		APPL_DEBUG("JNI-> load the jvm ..." );
+		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
 	}
 	// JNI OnUnLoad
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved)
 	{
 		g_JavaVM = NULL;
-		APPL_DEBUG("JNI-> Un-load the jvm ..." );
+		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}
 
 	
@@ -200,15 +200,15 @@ extern "C"
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env, jclass classBase, jobject obj)
 	//void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env)
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Set JVM Pointer                      **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Set JVM Pointer                      **");
+		EWOL_DEBUG("*******************************************");
 		JavaVirtualMachinePointer = env;
 		// get default needed all time elements : 
 		if (NULL != JavaVirtualMachinePointer) {
 			javaClassActivity = JavaVirtualMachinePointer->FindClass("com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__" );
 			if (javaClassActivity == 0) {
-				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
+				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -216,21 +216,21 @@ extern "C"
 			// get the activity object : 
 			javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
 			if (javaClassActivityEntryPoint == 0) {
-				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
+				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardShow = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardShow", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardShow == 0) {
-				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
+				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardHide = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardHide", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardHide == 0) {
-				APPL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
+				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -240,7 +240,7 @@ extern "C"
 			
 			javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
 			if (javaDefaultClassString == 0) {
-				APPL_DEBUG("C->java : Can't find java/lang/String" );
+				EWOL_DEBUG("C->java : Can't find java/lang/String" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -249,14 +249,14 @@ extern "C"
 	}
 	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStop( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Remove JVM Pointer                   **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Remove JVM Pointer                   **");
+		EWOL_DEBUG("*******************************************");
 		JavaVirtualMachinePointer = NULL;
 	}
 	void Java_org_ewol_interfaceJNI_TouchEvent( JNIEnv*  env )
 	{
-		APPL_DEBUG(" ==> Touch Event");
+		EWOL_DEBUG(" ==> Touch Event");
 		if (env->ExceptionOccurred()) {
 			env->ExceptionDescribe();
 			env->ExceptionClear();
@@ -265,49 +265,49 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_ActivityOnCreate( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Create                   **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Create                   **");
+		EWOL_DEBUG("*******************************************");
 		eSystem::Init();
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnStart( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Start                    **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Start                    **");
+		EWOL_DEBUG("*******************************************");
 		//SendSystemMessage(" testmessages ... ");
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnReStart( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Re-Start                 **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Re-Start                 **");
+		EWOL_DEBUG("*******************************************");
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnResume( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Resume                   **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Resume                   **");
+		EWOL_DEBUG("*******************************************");
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnPause( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Pause                    **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Pause                    **");
+		EWOL_DEBUG("*******************************************");
 		// All the openGl has been destroyed ...
 		eSystem::OpenGlContextDestroy();
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnStop( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Stop                     **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Stop                     **");
+		EWOL_DEBUG("*******************************************");
 	}
 	void Java_org_ewol_interfaceJNI_ActivityOnDestroy( JNIEnv*  env )
 	{
-		APPL_DEBUG("*******************************************");
-		APPL_DEBUG("**  Activity On Destroy                  **");
-		APPL_DEBUG("*******************************************");
+		EWOL_DEBUG("*******************************************");
+		EWOL_DEBUG("**  Activity On Destroy                  **");
+		EWOL_DEBUG("*******************************************");
 		eSystem::UnInit();
 	}
 	
@@ -338,17 +338,17 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
 	{
-		APPL_DEBUG("Unknown IO event : " << pointerID << " ???");
+		EWOL_DEBUG("Unknown IO event : " << pointerID << " ???");
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventMove( JNIEnv* env, jobject  thiz, jint type, jboolean isdown)
 	{
-		APPL_DEBUG("IO keyboard Move event : \"" << type << "\" is down=" << isdown);
+		EWOL_DEBUG("IO keyboard Move event : \"" << type << "\" is down=" << isdown);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
 	{
-		APPL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
+		EWOL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
 		eSystem::keyboardKey_ts keyInput;
 		keyInput.myChar = uniChar;
 		keyInput.isDown = isdown;
@@ -369,25 +369,25 @@ extern "C"
 		switch (keyVal)
 		{
 			case SYSTEM_KEY__VOLUME_UP:
-				APPL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << keyVal);
 				break;
 			case SYSTEM_KEY__VOLUME_DOWN:
-				APPL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << keyVal);
 				break;
 			case SYSTEM_KEY__MENU:
-				APPL_DEBUG("IO keyboard Key System \"MENU\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"MENU\" is down=" << keyVal);
 				break;
 			case SYSTEM_KEY__CAMERA:
-				APPL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << keyVal);
 				break;
 			case SYSTEM_KEY__HOME:
-				APPL_DEBUG("IO keyboard Key System \"HOME\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"HOME\" is down=" << keyVal);
 				break;
 			case SYSTEM_KEY__POWER:
-				APPL_DEBUG("IO keyboard Key System \"POWER\" is down=" << keyVal);
+				EWOL_DEBUG("IO keyboard Key System \"POWER\" is down=" << keyVal);
 				break;
 			default:
-				APPL_DEBUG("IO keyboard Key System event : \"" << keyVal << "\" is down=" << isdown);
+				EWOL_DEBUG("IO keyboard Key System event : \"" << keyVal << "\" is down=" << isdown);
 				break;
 		}
 	}

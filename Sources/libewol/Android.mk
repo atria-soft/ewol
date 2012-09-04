@@ -13,7 +13,7 @@ LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=
 $(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
 
 # name of the dependency
-LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua
+LOCAL_LIBRARIES := etk freetype tinyxml libpng parsersvg lua libzip
 
 LOCAL_C_INCLUDES :=
 
@@ -33,10 +33,27 @@ endif
 
 LOCAL_EXPORT_LDLIBS += -ldl -llog
 
+
+FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/os/AndroidAbstractionBase.cpp
+FILE_ABSTRACTION_DEST:=ewol/os/AndroidAbstraction.cpp
+
+EWOL_TMP_PATH:=$(LOCAL_PATH)
+
+$(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
+	@mkdir -p $(dir $(EWOL_TMP_PATH)/$@)
+	cp -f $(FILE_ABSTRACTION) $(EWOL_TMP_PATH)/$@
+	sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(EWOL_TMP_PATH)/$@
+	sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(EWOL_TMP_PATH)/$@
+	sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(EWOL_TMP_PATH)/$@
+
+
+# this is the abstraction file for Android
+LOCAL_PREREQUISITES := $(FILE_ABSTRACTION_DEST)
+
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_LIST)
+LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_ABSTRACTION_DEST) $(FILE_LIST)
 
 include $(BUILD_STATIC_LIBRARY)
 
