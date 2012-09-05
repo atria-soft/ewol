@@ -51,6 +51,7 @@ namespace ewol {
 		public:
 			SceneElement(void);
 			~SceneElement(void);
+			etk::Vector<uint32_t>                eventDestroy;                                     //!< element uid when element is destroy
 			int32_t                              numberOfGroup;                                    //!< curent scene number of group
 			etk::UString                         groupDescription[MAX_GROUP_NUMBER];               //!< name of all the groups
 			int32_t                              groupEnemy[MAX_GROUP_NUMBER][MAX_GROUP_NUMBER];   //!< list of the ennemy
@@ -60,11 +61,12 @@ namespace ewol {
 			etk::Vector<listRegisteElement*> listCreatorElement;                               //!< list of all creatable elements
 			int16_t                GetUniqueId(void) { int16_t iddd = m_id; m_id++; return iddd; };
 			void                   RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString);
-			void                   RmElement(int32_t group, int32_t idElement);
+			void                   RmElement(int16_t group, int16_t posInList);
+			void                   RmElement(int32_t elementID);
 			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
-			uint32_t               GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange=0);
+			uint32_t               GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange=9999999999999999.0);
 			void                   GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list);
 			uint32_t               GetNearestFriend(Vector2D<float> position, int32_t groupId, uint32_t us);
 			void                   GetNearestFriend(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list, uint32_t us);
@@ -88,6 +90,9 @@ namespace ewol {
 			 * @return ---
 			 */
 			void UnLoadSprite(int32_t spriteId);
+			void AddEarrerDestroy(uint32_t uId);
+			void RmEarrerDestroy(uint32_t uId);
+			void SendEventRemove(uint32_t uId);
 	};
 };
 

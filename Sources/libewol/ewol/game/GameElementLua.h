@@ -49,7 +49,7 @@ namespace ewol {
 			virtual void Draw(void);
 			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
 			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power);
-			virtual void Message(etk::UString control, etk::UString message);
+			virtual etk::UString Message(etk::UString control, etk::UString message);
 	};
 	void RegisterLuaElementInFolder(ewol::SceneElement & sceneElement, etk::UString folder);
 	void RegisterLuaElementSpecify(ewol::SceneElement & sceneElement, etk::UString folder, etk::UString name);

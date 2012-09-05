@@ -166,7 +166,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 	#ifdef __VIDEO__OPENGL_ES_2
 		etk::Matrix tmpProjection;
 		
-		if (ratio >= 0.0) {
+		if (ratio >= 1.0) {
 			tmpProjection = etk::matrix::Perspective(-ratio, ratio, -1, 1, -1, 1);
 		} else {
 			ratio = 1.0/ratio;
@@ -179,7 +179,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 	#else
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		if (ratio >= 0.0) {
+		if (ratio >= 1.0) {
 			glOrthoEwol(-ratio, ratio, -1, 1, -1, 1);
 		} else {
 			ratio = 1.0/ratio;
@@ -210,12 +210,30 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
  */
 Vector2D<float> ewol::Scene::RelativePosition(Vector2D<float>  pos)
 {
+	// Remove origin of the widget
 	pos.x -= m_origin.x;
 	pos.y -= m_origin.y;
+	// move the position at the center (openGl system
 	pos.x -= m_size.x/2;
 	pos.y -= m_size.y/2;
-	pos.x *= m_zoom;
-	pos.y *= m_zoom;
+	// scale the position with the ratio display of the screen
+	float ratio = m_size.x / m_size.y;
+	if (ratio >= 1.0) {
+		pos.x /= m_size.x;
+		pos.x *= ratio;
+		pos.y /= m_size.y;
+	} else {
+		ratio = 1.0/ratio;
+		pos.x /= m_size.x;
+		pos.y /= m_size.y;
+		pos.y *= ratio;
+	}
+	// integrate zoom
+	pos.x /= m_zoom;
+	pos.y /= m_zoom;
+	// all the position are half the size due to the fact -1 --> 1
+	pos.x *= 2;
+	pos.y *= 2;
 	
 	return pos;
 };

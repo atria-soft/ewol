@@ -104,7 +104,7 @@ void ewol::SceneElement::RegisterElementType(etk::UString name, creatorElement_t
 }
 
 
-void ewol::SceneElement::RmElement(int32_t group, int32_t idElement)
+void ewol::SceneElement::RmElement(int16_t group, int16_t idElement)
 {
 	if (group < 0 || group >= MAX_GROUP_NUMBER) {
 		EWOL_ERROR("group is wrong " << group << "!=[0," << MAX_GROUP_NUMBER << "]==> not rm at the system ...");
@@ -117,6 +117,9 @@ void ewol::SceneElement::RmElement(int32_t group, int32_t idElement)
 	if (NULL == listAnimatedElements[group][idElement]) {
 		return;
 	}
+	// inform remove system :
+	SendEventRemove(createUniqueId(listAnimatedElements[group][idElement]->GetUniqueId(), idElement) );
+	
 	// try to find an empty slot : 
 	for (int32_t iii=0; iii<listGarbage.Size(); iii++) {
 		if (NULL == listGarbage[iii]) {
@@ -130,6 +133,23 @@ void ewol::SceneElement::RmElement(int32_t group, int32_t idElement)
 	listGarbage.PushBack(listAnimatedElements[group][idElement]);
 	listAnimatedElements[group][idElement] = NULL;
 	return;
+}
+
+void ewol::SceneElement::RmElement(int32_t idElement)
+{
+	if (0 == idElement) {
+		return;
+	}
+	uint16_t realUniqueId = (uint16_t)((idElement >> 16 ) & 0x0000FFFF);
+	uint16_t posInList    = (uint16_t)(idElement & 0x0000FFFF);
+	for (int32_t iii=0; iii<numberOfGroup; iii++) {
+		if(    posInList < listAnimatedElements[iii].Size()
+		    && NULL != listAnimatedElements[iii][posInList]
+		    && realUniqueId == listAnimatedElements[iii][posInList]->GetUniqueId()) {
+			RmElement(iii, posInList);
+			return;
+		}
+	}
 }
 
 uint32_t ewol::SceneElement::AddElement(int32_t group, ewol::GameElement* newElement)
@@ -235,10 +255,7 @@ uint32_t ewol::SceneElement::GetNearestEnemy(Vector2D<float> position, int32_t g
 					Vector2D<float> tmpPos = listAnimatedElements[gId][iii]->PositionGet();
 					float distance = quadDist(position, tmpPos);
 					if(    distance <= lastQuadDistance
-					    && (    (    maxRange>0
-					              && maxRange >= lastQuadDistance)
-					         || maxRange==0)
-					   ) {
+					    && maxRange >= distance ) {
 						lastQuadDistance = distance;
 						result = createUniqueId(listAnimatedElements[gId][iii]->GetUniqueId(), iii);
 					}
@@ -456,3 +473,41 @@ void ewol::SceneElement::UnLoadSprite(int32_t spriteId)
 	}
 }
 
+void ewol::SceneElement::AddEarrerDestroy(uint32_t uId)
+{
+	//EWOL_DEBUG("ADD eraer : " << uId);
+	if (uId==0) {
+		return;
+	}
+	eventDestroy.PushBack(uId);
+}
+
+void ewol::SceneElement::RmEarrerDestroy(uint32_t uId)
+{
+	//EWOL_DEBUG("RM eraer : " << uId);
+	if (uId==0) {
+		return;
+	}
+	for (int32_t iii=0; iii<eventDestroy.Size(); iii++) {
+		if (eventDestroy[iii] == uId) {
+			eventDestroy.Erase(iii);
+			return;
+		}
+	}
+}
+
+void ewol::SceneElement::SendEventRemove(uint32_t uId)
+{
+	//EWOL_DEBUG("EVENT eraer : " << uId << "  nb earer " << eventDestroy.Size());
+	for (int32_t iii=0; iii<eventDestroy.Size(); iii++) {
+		if (eventDestroy[iii] == uId) {
+			eventDestroy.Erase(iii);
+			return;
+		} else {
+			ewol::GameElement* tmpElem = GetElement(eventDestroy[iii]);
+			if (tmpElem!=NULL) {
+				tmpElem->Message("Destroy", uId);
+			}
+		}
+	}
+}

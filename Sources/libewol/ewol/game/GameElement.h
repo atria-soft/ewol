@@ -148,7 +148,7 @@ namespace ewol {
 			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
 			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power) { return false; } ;
 			
-			virtual void Message(etk::UString control, etk::UString message) { } ;
+			virtual etk::UString Message(etk::UString control, etk::UString message) { return ""; } ;
 			virtual void StatusUpdate(void) { };
 	};
 	

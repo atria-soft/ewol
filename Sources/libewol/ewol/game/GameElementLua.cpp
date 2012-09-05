@@ -890,7 +890,7 @@ bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float
 	return retVal;
 }
 
-void ewol::GameElementLua::Message(etk::UString control, etk::UString message)
+etk::UString ewol::GameElementLua::Message(etk::UString control, etk::UString message)
 {
 	tmpObj = this;
 	if (NULL != m_luaState) {
@@ -908,6 +908,7 @@ void ewol::GameElementLua::Message(etk::UString control, etk::UString message)
 		}
 	}
 	tmpObj = NULL;
+	return "";
 }
 
 static ewol::GameElement* LoadSceneElement_lua(ewol::SceneElement & sceneElement, etk::UString& elementName, etk::UString& userString)
