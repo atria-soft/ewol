@@ -277,8 +277,9 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		#ifdef __VIDEO__OPENGL_ES_2
 			#if 1
 				etk::Matrix tmpTranslate = etk::matrix::Translate(-m_size.x/2, -m_size.y/2, -1.0);
+				/*etk::Matrix tmpScale = etk::matrix::Scale(5, 5, 1.0);*/
 				etk::Matrix tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-				etk::Matrix tmpMat = tmpProjection * tmpTranslate;
+				etk::Matrix tmpMat = tmpProjection * /*tmpScale * */ tmpTranslate;
 			#else
 				etk::Matrix tmpMat = etk::matrix::Perspective(0, m_size.x, 0, m_size.y, -1, 1);
 			#endif

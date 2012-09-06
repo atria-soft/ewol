@@ -110,32 +110,20 @@ bool ewol::Shader::CompileAndSendShader(void)
 		m_shader = 0;
 		return false;
 	}
-	EWOL_DEBUG("   --> Create");
 	m_shader = glCreateShader(m_type);
-	EWOL_DEBUG("   <-- Create");
 	if (!m_shader) {
 		EWOL_ERROR("glCreateShader return error ...");
-		EWOL_DEBUG("   --> checkGlError");
 		checkGlError("glCreateShader");
-		EWOL_DEBUG("   <-- checkGlError");
 		return false;
 	} else {
-		EWOL_DEBUG("   --> glShaderSource");
 		glShaderSource(m_shader, 1, (const char**)&m_fileData, NULL);
-		EWOL_DEBUG("   <-- glShaderSource");
-		EWOL_DEBUG("   --> glCompileShader");
 		glCompileShader(m_shader);
-		EWOL_DEBUG("   <-- glCompileShader");
 		GLint compiled = 0;
-		EWOL_DEBUG("   --> glGetShaderiv");
 		glGetShaderiv(m_shader, GL_COMPILE_STATUS, &compiled);
-		EWOL_DEBUG("   <-- glGetShaderiv");
 		if (!compiled) {
 			GLint infoLen = 0;
 			l_bufferDisplayError[0] = '\0';
-			EWOL_DEBUG("   --> glGetShaderInfoLog");
 			glGetShaderInfoLog(m_shader, LOG_OGL_INTERNAL_BUFFER_LEN, &infoLen, l_bufferDisplayError);
-			EWOL_DEBUG("   <-- glGetShaderInfoLog");
 			const char * tmpShaderType = "GL_FRAGMENT_SHADER";
 			if (m_type == GL_VERTEX_SHADER){
 				tmpShaderType = "GL_VERTEX_SHADER";

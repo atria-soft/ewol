@@ -55,6 +55,7 @@ static int32_t simpleSQRT(int32_t value)
 	return val;
 }
 
+#define SPECIAL_BORDER  (5)
 
 ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) : 
 	ewol::Texture(fontName),
@@ -92,7 +93,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	freeTypeFontElement_ts tmpchar1;
 	tmpchar1.property.m_UVal = 0;
 	m_listElement.PushBack(tmpchar1);
-	for (int32_t iii=0x20; iii<0xFF; iii++) {
+	for (int32_t iii=0x20/*'A'*/; iii</*'Z'*/0xFF; iii++) {
 		freeTypeFontElement_ts tmpchar;
 		tmpchar.property.m_UVal = iii;
 		m_listElement.PushBack(tmpchar);
@@ -110,8 +111,8 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	int32_t nbElement = 0xFF - 0x20 + 1;
 	int32_t coter = simpleSQRT(nbElement);
 	// note : +1 is for the overlapping of the glyph (Part 1)
-	int32_t glyphMaxWidth = tmpproperty.m_advance.x +1;
-	int32_t glyphMaxHeight = tmpproperty.m_advance.y +1;
+	int32_t glyphMaxWidth = tmpproperty.m_advance.x +1 + SPECIAL_BORDER*2;
+	int32_t glyphMaxHeight = tmpproperty.m_advance.y +1 + SPECIAL_BORDER*2;
 	int32_t textureWidth = nextP2(coter*glyphMaxWidth);
 	int32_t nbRaws = textureWidth / glyphMaxWidth;
 	if (nbRaws <= 0) {
@@ -134,10 +135,16 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	
 	m_height = m_font->GetHeight(m_size);
 	
+	draw::Image tmpUpScaledImage(Vector2D<int32_t>(1024,1024));
+	
 	int32_t CurrentLineHigh = 0;
 	Vector2D<int32_t>    glyphPosition(1,1);
 	for (int32_t iii=0; iii<m_listElement.Size(); iii++) {
 		if (true == m_font->GetGlyphProperty(m_size, m_listElement[iii].property)) {
+			EWOL_DEBUG("Generate Font Element : '" << m_listElement[iii].property.m_UVal << "'= '" << (char)m_listElement[iii].property.m_UVal << "'");
+			// clean the temporary image :
+			tmpUpScaledImage.SetFillColor(draw::Color(0xFFFFFF00));
+			tmpUpScaledImage.Clear();
 			/*
 			// check internal property:
 			// enought in the texture :
@@ -157,12 +164,12 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 				CurrentLineHigh = 0;
 			}
 			// draw the glyph
-			m_font->DrawGlyph(m_data, m_size, glyphPosition, m_listElement[iii].property);
+			m_font->DrawGlyph(tmpUpScaledImage, m_size*8, Vector2D<int32_t>(SPECIAL_BORDER*8,SPECIAL_BORDER*8), m_listElement[iii].property);
 			// set video position
 			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
 			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
-			m_listElement[iii].posStop.u  = (float)(glyphPosition.x + m_listElement[iii].property.m_sizeTexture.x) / (float)textureWidth;
-			m_listElement[iii].posStop.v  = (float)(glyphPosition.y + m_listElement[iii].property.m_sizeTexture.y) / (float)textureHeight;
+			m_listElement[iii].posStop.u  = (float)(glyphPosition.x + m_listElement[iii].property.m_sizeTexture.x+2*SPECIAL_BORDER) / (float)textureWidth;
+			m_listElement[iii].posStop.v  = (float)(glyphPosition.y + m_listElement[iii].property.m_sizeTexture.y+2*SPECIAL_BORDER) / (float)textureHeight;
 			/*
 			EWOL_DEBUG("generate '" << (char)m_listElement[iii].property.m_UVal << "'");
 			EWOL_DEBUG("     in tex : " << glyphPosition << " ==> " << m_listElement[iii].posStart.u<< "," << m_listElement[iii].posStart.v );
@@ -170,15 +177,24 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 			EWOL_DEBUG("     m_bearing     =" << m_listElement[iii].property.m_bearing );
 			EWOL_DEBUG("     m_advance     =" << m_listElement[iii].property.m_advance );
 			*/
+			// generate the distance field from this element ...
+			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(8,8)+Vector2D<int32_t>(2*SPECIAL_BORDER*8,2*SPECIAL_BORDER*8));
+			// copy data with downscaling : (subSampling)
+			Vector2D<int32_t> tmpPos(0,0);
+			for (tmpPos.y = 0; tmpPos.y<m_listElement[iii].property.m_sizeTexture.y+2*SPECIAL_BORDER; tmpPos.y++) {
+				for (tmpPos.x = 0; tmpPos.x<m_listElement[iii].property.m_sizeTexture.x+2*SPECIAL_BORDER; tmpPos.x++) {
+					m_data.Set(glyphPosition + tmpPos, tmpUpScaledImage.Get(tmpPos*Vector2D<int32_t>(8,8) + Vector2D<int32_t>(4,4)) );
+				}
+			}
 			
 			// update the maximum of the line hight : 
-			if (CurrentLineHigh<m_listElement[iii].property.m_sizeTexture.y) {
+			if (CurrentLineHigh<m_listElement[iii].property.m_sizeTexture.y+1+2*SPECIAL_BORDER) {
 				// note : +1 is for the overlapping of the glyph (Part 2)
-				CurrentLineHigh = m_listElement[iii].property.m_sizeTexture.y+1;
+				CurrentLineHigh = m_listElement[iii].property.m_sizeTexture.y+1 + 2*SPECIAL_BORDER;
 			}
 			// note : +1 is for the overlapping of the glyph (Part 3)
 			// update the Bitmap position drawing : 
-			glyphPosition.x += m_listElement[iii].property.m_sizeTexture.x+1;
+			glyphPosition.x += m_listElement[iii].property.m_sizeTexture.x+1 + 2*SPECIAL_BORDER;
 		}
 		
 	}
@@ -196,8 +212,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	}
 	#endif
 	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	// generate the distance field from this element ...
-	m_data.DistanceField();
+	//m_data.DistanceField();
 	Flush();
 	
 }
@@ -234,7 +249,7 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 		totalSize += ret;
 	}
 	
-	#if 0
+	#if 1
 	// To display the texture ...
 		{
 			/* Bitmap position
