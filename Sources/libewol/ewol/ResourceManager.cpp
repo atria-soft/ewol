@@ -76,6 +76,28 @@ void ewol::resource::Display(void)
 	EWOL_INFO("Resources ---");
 }
 
+/**
+ * @brief Reloade file resources
+ * @note : Does not reload all resources !!!
+ * @param ---
+ * @return ---
+ */
+void ReLoadResources(void)
+{
+	EWOL_INFO("-------------  Resources re-loaded  -------------");
+	// remove all resources ...
+	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+		if (l_resourceList[iii] != NULL) {
+			const char * mode = "keep same";
+			if (etk::UString(l_resourceList[iii]->GetType()) == "ewol::Program") {
+				mode = "Reload ...";
+				l_resourceList[iii]->Reload();
+			}
+			EWOL_INFO("    [" << l_resourceList[iii]->GetUID() << "]="<< l_resourceList[iii]->GetType() << " ==> " << mode);
+		}
+	}
+	EWOL_INFO("-------------  Resources  -------------");
+}
 
 void ewol::resource::Update(ewol::Resource* object)
 {

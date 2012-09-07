@@ -31,6 +31,12 @@
 #undef __class__
 #define __class__	"ewol::OObject2DTextShader"
 
+float DF_SoftEdge_min = 0.45;
+float DF_SoftEdge_max = 0.55;
+int32_t DF_SoftEdge = 0;
+
+
+
 void ewol::OObject2DTextShader::SetFontProperty(etk::UString fontName, int32_t fontSize)
 {
 	// remove old one
@@ -81,6 +87,9 @@ ewol::OObject2DTextShader::OObject2DTextShader(etk::UString fontName, int32_t si
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		m_GLSoftEdgeMin = m_GLprogram->GetUniform("EW_SoftEdgeMin");
+		m_GLSoftEdgeMax = m_GLprogram->GetUniform("EW_SoftEdgeMax");
+		m_GLSoftEdge    = m_GLprogram->GetUniform("EW_SoftEdge");
 	}
 }
 
@@ -100,6 +109,9 @@ ewol::OObject2DTextShader::OObject2DTextShader(void) :
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		m_GLSoftEdgeMin = m_GLprogram->GetUniform("EW_SoftEdgeMin");
+		m_GLSoftEdgeMax = m_GLprogram->GetUniform("EW_SoftEdgeMax");
+		m_GLSoftEdge    = m_GLprogram->GetUniform("EW_SoftEdge");
 	}
 }
 
@@ -131,7 +143,7 @@ void ewol::OObject2DTextShader::Draw(void)
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
 	etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
-	m_GLprogram->SendUniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_font->GetId());
 	// position :
@@ -140,6 +152,10 @@ void ewol::OObject2DTextShader::Draw(void)
 	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
 	// color :
 	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	// set some other specific properties :
+	m_GLprogram->Uniform1f(m_GLSoftEdgeMin, DF_SoftEdge_min);
+	m_GLprogram->Uniform1f(m_GLSoftEdgeMax, DF_SoftEdge_max);
+	m_GLprogram->Uniform1i(m_GLSoftEdge,    DF_SoftEdge);
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 	m_GLprogram->UnUse();

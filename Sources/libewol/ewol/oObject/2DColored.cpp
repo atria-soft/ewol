@@ -72,7 +72,7 @@ void ewol::OObject2DColored::Draw(void)
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
 		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->SendUniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// position :
 		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
 		// color :

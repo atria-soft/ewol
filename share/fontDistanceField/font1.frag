@@ -5,6 +5,9 @@ precision mediump int;
 
 // Input :
 uniform sampler2D EW_texID;
+uniform float     EW_SoftEdgeMin;
+uniform float     EW_SoftEdgeMax;
+uniform int       EW_SoftEdge;
 
 varying vec2 f_texcoord;
 varying vec4 f_color;
@@ -24,7 +27,15 @@ void main(void) {
 	}
 	*/
 	outColor = f_color;// * tmpcolor[3];
-	outColor[3] = smoothstep(0.45, 0.55, tmpcolor[3]);
+	if (1==EW_SoftEdge) {
+		outColor[3] = smoothstep(EW_SoftEdgeMin, EW_SoftEdgeMax, tmpcolor[3]);
+	} else {
+		if (tmpcolor[3]>0.5) {
+			outColor[3] = 1.0;
+		} else {
+			outColor[3] = 0.0;
+		}
+	}
 	//outColor = vec4(0,0,0,0);
 	//outColor[3] = tmpcolor[3];
 	gl_FragColor = outColor;

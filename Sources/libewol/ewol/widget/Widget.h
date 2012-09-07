@@ -139,6 +139,7 @@ namespace ewol {
 			bool                 m_hide; //!< hide a widget on the display
 		protected:
 			// internal element calculated by the system
+			float                m_zoom;          //!< generic widget zoom
 			Vector2D<float>      m_origin;        //!< internal ... I do not really known how i can use it ...
 			Vector2D<float>      m_size;          //!< internal : current size of the widget
 			Vector2D<float>      m_minSize;       //!< user define the minimum size of the widget
@@ -149,6 +150,18 @@ namespace ewol {
 			bool           m_userFillX;
 			bool           m_userFillY;
 		public:
+			/**
+			 * @brief Set the zoom property of the widget
+			 * @param[in] newVal newZoom value
+			 * @return ---
+			 */
+			void SetZoom(float newVal) { m_zoom = newVal; MarkToRedraw(); };
+			/**
+			 * @brief Get the zoom property of the widget
+			 * @param ---
+			 * @return the current zoom value
+			 */
+			float GetZoom(void) { return m_zoom; };
 			/**
 			 * @brief Set origin at the widget (must be an parrent widget that set this parameter).
 			 * This represent the absolute origin in the program windows

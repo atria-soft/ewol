@@ -56,6 +56,7 @@ static int32_t simpleSQRT(int32_t value)
 }
 
 #define SPECIAL_BORDER  (5)
+#define SPECIAL_UPSCALER  (8)
 
 ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) : 
 	ewol::Texture(fontName),
@@ -164,7 +165,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 				CurrentLineHigh = 0;
 			}
 			// draw the glyph
-			m_font->DrawGlyph(tmpUpScaledImage, m_size*8, Vector2D<int32_t>(SPECIAL_BORDER*8,SPECIAL_BORDER*8), m_listElement[iii].property);
+			m_font->DrawGlyph(tmpUpScaledImage, m_size*SPECIAL_UPSCALER, Vector2D<int32_t>(SPECIAL_BORDER*SPECIAL_UPSCALER,SPECIAL_BORDER*SPECIAL_UPSCALER), m_listElement[iii].property);
 			// set video position
 			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
 			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
@@ -178,12 +179,12 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 			EWOL_DEBUG("     m_advance     =" << m_listElement[iii].property.m_advance );
 			*/
 			// generate the distance field from this element ...
-			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(8,8)+Vector2D<int32_t>(2*SPECIAL_BORDER*8,2*SPECIAL_BORDER*8));
+			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER)+Vector2D<int32_t>(2*SPECIAL_BORDER*SPECIAL_UPSCALER,2*SPECIAL_BORDER*SPECIAL_UPSCALER));
 			// copy data with downscaling : (subSampling)
 			Vector2D<int32_t> tmpPos(0,0);
 			for (tmpPos.y = 0; tmpPos.y<m_listElement[iii].property.m_sizeTexture.y+2*SPECIAL_BORDER; tmpPos.y++) {
 				for (tmpPos.x = 0; tmpPos.x<m_listElement[iii].property.m_sizeTexture.x+2*SPECIAL_BORDER; tmpPos.x++) {
-					m_data.Set(glyphPosition + tmpPos, tmpUpScaledImage.Get(tmpPos*Vector2D<int32_t>(8,8) + Vector2D<int32_t>(4,4)) );
+					m_data.Set(glyphPosition + tmpPos, tmpUpScaledImage.Get(tmpPos*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER) + Vector2D<int32_t>(SPECIAL_UPSCALER/2,SPECIAL_UPSCALER/2)) );
 				}
 			}
 			
@@ -249,7 +250,7 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 		totalSize += ret;
 	}
 	
-	#if 1
+	#if 0
 	// To display the texture ...
 		{
 			/* Bitmap position
@@ -352,10 +353,10 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 		 *      |      |
 		 *   yD *------*
 		 */
-		float dxA = posDrawX + m_listElement[charIndex].property.m_bearing.x;
-		float dxB = posDrawX + m_listElement[charIndex].property.m_bearing.x + m_listElement[charIndex].property.m_sizeTexture.x;
-		float dyC = textPos.y + m_listElement[charIndex].property.m_bearing.y + m_height - m_size;
-		float dyD = dyC - m_listElement[charIndex].property.m_sizeTexture.y;
+		float dxA = -SPECIAL_BORDER + posDrawX + m_listElement[charIndex].property.m_bearing.x;
+		float dxB = +SPECIAL_BORDER + posDrawX + m_listElement[charIndex].property.m_bearing.x + m_listElement[charIndex].property.m_sizeTexture.x;
+		float dyC = +SPECIAL_BORDER + textPos.y + m_listElement[charIndex].property.m_bearing.y + m_height - m_size;
+		float dyD = -SPECIAL_BORDER + dyC - m_listElement[charIndex].property.m_sizeTexture.y;
 		
 		float tuA = m_listElement[charIndex].posStart.u;
 		float tuB = m_listElement[charIndex].posStop.u;

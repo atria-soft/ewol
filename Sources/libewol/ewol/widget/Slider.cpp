@@ -139,13 +139,13 @@ bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventI
 		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
 			// get the new position :
-			EWOL_DEBUG("Event on Slider (" << relativePos.x << "," << relativePos.y << ")");
+			EWOL_VERBOSE("Event on Slider (" << relativePos.x << "," << relativePos.y << ")");
 			int32_t oldValue = m_value;
 			m_value = m_min + (float)(relativePos.x - dotRadius) / (float)(m_size.x-2*dotRadius) * (float)(m_max-m_min);
 			m_value = etk_max(etk_min(m_value, m_max), m_min);
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
-				GenerateEventId(ewolEventSliderChange);
+				GenerateEventId(ewolEventSliderChange, m_value);
 				MarkToRedraw();
 			}
 			return true;

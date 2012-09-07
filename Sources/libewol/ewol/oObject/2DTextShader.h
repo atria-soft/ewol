@@ -51,12 +51,19 @@ namespace ewol {
 			int32_t        m_GLColor;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID;
-			ewol::DistantFieldFont*        m_font;          //!< ewol font system
+			int32_t        m_GLSoftEdgeMin;
+			int32_t        m_GLSoftEdgeMax;
+			int32_t        m_GLSoftEdge;
+			ewol::DistantFieldFont*         m_font;          //!< ewol font system
 			draw::Color                     m_color;         //!< tmp text color ...
 			etk::Vector<Vector2D<float> >   m_coord;         //!< internal coord of the object
 			etk::Vector<texCoord_ts>        m_coordTex;      //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf>   m_coordColor;    //!< internal color of the different point
+			etk::Vector<draw::Colorf>       m_coordColor;    //!< internal color of the different point
+			bool           m_bold;
+			bool           m_italic;
 		public:
+			void SetBold(bool newVal) { m_bold=newVal; };
+			void SetItalic(bool newVal) { m_italic=newVal; };
 			void SetFont(etk::UString fontName);
 			void SetSize(int32_t fontSize);
 			void SetFontProperty(etk::UString fontName, int32_t fontSize);

@@ -39,7 +39,6 @@ ewol::WidgetScrooled::WidgetScrooled(void)
 	m_highSpeedMode = SCROLL_DISABLE;
 	m_scroollingMode = SCROLL_MODE_NORMAL;
 	m_highSpeedType = ewol::INPUT_TYPE_UNKNOW;
-	m_zoom = 1.0;
 	m_highSpeedButton = -1;
 	m_limitScrolling = 0.5;
 }
@@ -137,18 +136,30 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 				}
 				return false;
 			} else if (4 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-				if(m_size.y < m_maxSize.y) {
-					m_originScrooled.y -= m_pixelScrolling;
-					m_originScrooled.y = etk_avg(0, m_originScrooled.y, (m_maxSize.y - m_size.y*m_limitScrolling));
-					MarkToRedraw();
-					return true;
+				if (true == ewol::IsSetCtrl()) {
+					float zoom = GetZoom()*1.1;
+					zoom = etk_avg(0.1, zoom, 5000);
+					SetZoom(zoom);
+				} else {
+					if(m_size.y < m_maxSize.y) {
+						m_originScrooled.y -= m_pixelScrolling;
+						m_originScrooled.y = etk_avg(0, m_originScrooled.y, (m_maxSize.y - m_size.y*m_limitScrolling));
+						MarkToRedraw();
+						return true;
+					}
 				}
 			} else if (5 == IdInput && ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
-				if(m_size.y < m_maxSize.y) {
-					m_originScrooled.y += m_pixelScrolling;
-					m_originScrooled.y = etk_avg(0, m_originScrooled.y, (m_maxSize.y - m_size.y*m_limitScrolling));
-					MarkToRedraw();
-					return true;
+				if (true == ewol::IsSetCtrl()) {
+					float zoom = GetZoom()*0.9;
+					zoom = etk_avg(0.1, zoom, 5000);
+					SetZoom(zoom);
+				} else {
+					if(m_size.y < m_maxSize.y) {
+						m_originScrooled.y += m_pixelScrolling;
+						m_originScrooled.y = etk_avg(0, m_originScrooled.y, (m_maxSize.y - m_size.y*m_limitScrolling));
+						MarkToRedraw();
+						return true;
+					}
 				}
 			}else if (2 == IdInput) {
 				if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {

@@ -78,7 +78,7 @@ void ewol::OObject2DTextured::Draw(void)
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
 		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->SendUniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
 		m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
 		// position :

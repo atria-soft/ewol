@@ -43,6 +43,9 @@ namespace ewol
 		void UnInit(void);
 		void Display(void);
 		
+		// specific for the test ...
+		void ReLoadResources(void);
+		
 		void Update(ewol::Resource* object);
 		// Specific to load or update the data in the openGl context ==> system use only
 		void UpdateContext(void);

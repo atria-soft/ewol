@@ -60,6 +60,7 @@ namespace ewol
 			virtual void UpdateContext(void) { };
 			virtual void RemoveContext(void) { };
 			virtual void RemoveContextToLate(void) { };
+			virtual void Reload(void) {};
 			uint32_t GetUID(void) { return m_uniqueId; };
 	};
 };

@@ -53,7 +53,6 @@ namespace ewol {
 		protected:
 			Vector2D<float>          m_originScrooled;
 			Vector2D<float>          m_maxSize;
-			float                    m_zoom; //!< current zoom on the display
 			float                    m_limitScrolling;
 		private:
 			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
