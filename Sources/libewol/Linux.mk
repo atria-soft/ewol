@@ -28,7 +28,7 @@ LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -Wall
 
-#ifdef CONFIG_EWOL_OPENGL_ES_V2
+#ifneq ("$(CONFIG__VIDEO__OPENGL_ES_2)","")
 LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
 LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
 $(info Compilation For openGL-ES-v2 compatibility)
