@@ -11,4 +11,42 @@ menu "General"
 		config __VIDEO__OPENGL_ES_2
 			bool "1: openGl ES 2.0"
 	endchoice
+	
+	config __EWOL_APPL_NAME__
+		prompt "Application Name"
+		string
+		default "Ewol"
+		help
+			This is the application name
+	
+	config __EWOL_APPL_BASIC_TITLE__
+		prompt "Application Title"
+		string
+		default "Ewol Basic Title"
+		help
+			This is the application Title
+	
+	config __EWOL_APPL_ORGANISATION_TYPE__
+		prompt "OrganisationType"
+		string 
+		default "com"
+		help
+			Can be manny things, but limit whith no  space no special char and no Maj ... [a..z]
+			com : Commercial
+			net : Network??
+			org : Organisation
+			gov : Governement
+			mil : Military
+			edu : Education
+			pri : Private
+			museum : ...
+	
+	
+	config __EWOL_APPL_COMPAGNY__
+		prompt "Compagny Name"
+		string
+		default "Unknow"
+		help
+			This is the c name ...
+	
 endmenu

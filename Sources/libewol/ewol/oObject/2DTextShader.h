@@ -25,6 +25,8 @@
 #ifndef __EWOL_O_OBJECT_2D_TEXT_SHADER_H__
 #define __EWOL_O_OBJECT_2D_TEXT_SHADER_H__
 
+#ifdef __VIDEO__OPENGL_ES_2
+
 #include <ewol/oObject/OObject.h>
 #include <ewol/font/DistantFieldFont.h>
 #include <ewol/ResourceManager.h>
@@ -75,3 +77,4 @@ namespace ewol {
 
 #endif
 
+#endif

@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 # name of the librairy
 LOCAL_MODULE := ewol
 
-LOCAL_CONFIG_FILES := Config.in
+LOCAL_CONFIG_FILES := Config.in ConfigAndroid.in
 
 # get the tag of the current project : 
 LOCAL_VERSION_TAG=$(shell cd $(LOCAL_PATH) ; git describe --tags)
@@ -23,13 +23,11 @@ LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
                 -DDATA_IN_APK
 
-#ifeq ("$(CONFIG__VIDEO__OPENGL_ES_2)","y")
-LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
+ifeq ("$(CONFIG___VIDEO__OPENGL_ES_2)","y")
 LOCAL_EXPORT_LDLIBS := -lGLESv2
-#else
-#	LOCAL_EXPORT_LDLIBS := -lGLESv1_CM
-#endif
+else
+LOCAL_EXPORT_LDLIBS := -lGLESv1_CM
+endif
 
 LOCAL_EXPORT_LDLIBS += -ldl -llog
 
@@ -41,10 +39,10 @@ EWOL_TMP_PATH:=$(LOCAL_PATH)
 
 $(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
 	@mkdir -p $(dir $(EWOL_TMP_PATH)/$@)
-	cp -f $(FILE_ABSTRACTION) $(EWOL_TMP_PATH)/$@
-	sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(EWOL_TMP_PATH)/$@
-	sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(EWOL_TMP_PATH)/$@
-	sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(EWOL_TMP_PATH)/$@
+	@cp -f $(FILE_ABSTRACTION) $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(EWOL_TMP_PATH)/$@
 
 
 # this is the abstraction file for Android

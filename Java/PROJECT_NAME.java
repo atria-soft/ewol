@@ -23,7 +23,7 @@
  */
 
 
-package com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__;
+package __PROJECT_ORG_TYPE__.__PROJECT_VENDOR__.__PROJECT_PACKAGE__;
 
 
 
@@ -90,6 +90,7 @@ public class __PROJECT_NAME__ extends Activity {
 		ActivityParamSetArchiveDir(1, getFilesDir().toString());
 		ActivityParamSetArchiveDir(2, getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
+		//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 		//ActivityParamSetArchiveDir(3, getExternalCacheDir().toString());
 		
 		// return apk file path (or null on error)
@@ -117,11 +118,9 @@ public class __PROJECT_NAME__ extends Activity {
 		//getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 		// hide keyboard : 
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		//Force landscape
-		//setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 		
 		// create bsurface system
-		mGLView = new interfaceSurfaceView(this);
+		mGLView = new interfaceSurfaceView(this, __CONF_OGL_ES_V__);
 		
 		// create element audio ...
 		mStreams = new interfaceAudio();
@@ -215,6 +214,20 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		// just for the test ...
 		interfaceJNI.TouchEvent();
+	}
+	
+	public void CPP_OrientationChange(int screenMode)
+	{
+		if (screenMode == 1) {
+			//Force landscape
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+		} else if (screenMode == 2) {
+			//Force portrait
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		} else {
+			//Force auto Rotation
+			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+		}
 	}
 }
 
