@@ -447,40 +447,52 @@ void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
 }
 
 
-static ewol::Fps l_FpsSystem;
+static ewol::Fps l_FpsSystemEvent(     "Event     ", false);
+static ewol::Fps l_FpsSystemContext(   "Context   ", false);
+static ewol::Fps l_FpsSystem(          "Draw      ", true);
 
 bool eSystem::Draw(bool displayEveryTime)
 {
 	int64_t currentTime = ewol::GetTime();
-	// FPS display system
-	l_FpsSystem.Tic();
 	if (true == isGlobalSystemInit) {
 		// process the events
+		l_FpsSystemEvent.Tic();
 		ewolProcessEvents();
 		// call all the widget that neded to do something periodicly
 		ewol::widgetManager::PeriodicCall(currentTime);
-		
 		// Remove all widget that they are no more usefull (these who decided to destroy themself)
 		ewol::EObjectManager::RemoveAllAutoRemove();
 		ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 		// check if the user selected a windows
-		if (NULL == tmpWindows) {
-			// TODO : Display a stipid texture
-		} else {
+		if (NULL != tmpWindows) {
 			// Redraw all needed elements
 			tmpWindows->OnRegenerateDisplay();
-			// check if the regenerate is needed ...
-			if(    true == ewol::widgetManager::IsDrawingNeeded()
+		}
+		l_FpsSystemEvent.IncrementCounter();
+		l_FpsSystemEvent.Toc();
+		bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
+		
+		l_FpsSystemContext.Tic();
+		if (NULL != tmpWindows) {
+			if(    true == needRedraw
 			    || true == displayEveryTime) {
 				ewol::resource::UpdateContext();
+				l_FpsSystemContext.IncrementCounter();
+			}
+		}
+		l_FpsSystemContext.Toc();
+		
+		l_FpsSystem.Tic();
+		if (NULL != tmpWindows) {
+			if(    true == needRedraw
+			    || true == displayEveryTime) {
 				l_FpsSystem.IncrementCounter();
 				tmpWindows->SysDraw();
 			}
 		}
+		l_FpsSystem.Toc();
 		glFlush();
 	}
-	// FPS display system
-	l_FpsSystem.Toc();
 	return true;
 }
 

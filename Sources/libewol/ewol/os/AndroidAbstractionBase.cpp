@@ -38,6 +38,7 @@ static jobject   javaObjectActivity = 0;
 static jmethodID javaClassActivityEntryPoint = 0;  // basic methode to call ...
 static jmethodID javaClassActivityEntryPoint__CPP_keyboardShow = 0;  // basic methode to call ...
 static jmethodID javaClassActivityEntryPoint__CPP_keyboardHide = 0;  // basic methode to call ...
+static jmethodID javaClassActivityEntryPoint__CPP_OrientationChange = 0;
 // generic classes
 static jclass    javaDefaultClassString = 0;       // default string class
 
@@ -100,6 +101,58 @@ void SendJava_KeyboardShow(bool showIt)
 	// Finished with the JVM.
 	g_JavaVM->DetachCurrentThread();
 }
+
+
+void SendJava_OrientationChange(bool showIt)
+{
+	EWOL_DEBUG("C->java : call java");
+	if (NULL == g_JavaVM) {
+		EWOL_DEBUG("C->java : JVM not initialised");
+		return;
+	}
+	JNIEnv *JavaVirtualMachinePointer_tmp;
+	int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+	if (status == JNI_EDETACHED) {
+		JavaVMAttachArgs lJavaVMAttachArgs;
+		lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+		lJavaVMAttachArgs.name = "EwolNativeThread";
+		lJavaVMAttachArgs.group = NULL; 
+		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
+		if (status != JNI_OK) {
+			EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+			return;
+		}
+		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+			EWOL_DEBUG("C->java : EXEPTION ...");
+			JavaVirtualMachinePointer->ExceptionDescribe();
+			JavaVirtualMachinePointer->ExceptionClear();
+		}
+	}
+	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+		EWOL_DEBUG("C->java : EXEPTION ...");
+		JavaVirtualMachinePointer->ExceptionDescribe();
+		JavaVirtualMachinePointer->ExceptionClear();
+	}
+
+	if (NULL == JavaVirtualMachinePointer) {
+		EWOL_DEBUG("C->java : JVM not initialised");
+		return;
+	}
+
+	//Call java ...
+	JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange);
+
+	// manage execption : 
+	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+		EWOL_DEBUG("C->java : EXEPTION ...");
+		JavaVirtualMachinePointer->ExceptionDescribe();
+		JavaVirtualMachinePointer->ExceptionClear();
+	}
+	
+	// Finished with the JVM.
+	g_JavaVM->DetachCurrentThread();
+}
+
 
 void SendSystemMessage(const char * dataString)
 {
@@ -183,8 +236,7 @@ extern "C"
 
 	
 	/* Call to initialize the graphics state */
-	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
+	void Java___PROJECT_ORG_TYPE_____PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivityParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
 	{
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
@@ -197,8 +249,7 @@ extern "C"
 		}
 	}
 	
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env, jclass classBase, jobject obj)
-	//void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env)
+	void Java___PROJECT_ORG_TYPE_____PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStart( JNIEnv*  env, jclass classBase, jobject obj)
 	{
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("**  Set JVM Pointer                      **");
@@ -206,9 +257,9 @@ extern "C"
 		JavaVirtualMachinePointer = env;
 		// get default needed all time elements : 
 		if (NULL != JavaVirtualMachinePointer) {
-			javaClassActivity = JavaVirtualMachinePointer->FindClass("com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__" );
+			javaClassActivity = JavaVirtualMachinePointer->FindClass("__PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__" );
 			if (javaClassActivity == 0) {
-				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
+				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -216,25 +267,33 @@ extern "C"
 			// get the activity object : 
 			javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
 			if (javaClassActivityEntryPoint == 0) {
-				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
+				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardShow = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardShow", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardShow == 0) {
-				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
+				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardHide = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardHide", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardHide == 0) {
-				EWOL_DEBUG("C->java : Can't find com/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
+				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
+			javaClassActivityEntryPoint__CPP_OrientationChange = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_OrientationChange", "(I)V" );
+			if (javaClassActivityEntryPoint__CPP_OrientationChange == 0) {
+				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_OrientationChange" );
+				// remove access on the virtual machine : 
+				JavaVirtualMachinePointer = NULL;
+				return;
+			}
+			
 			//javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
 			javaObjectActivity = obj;
 			
@@ -247,7 +306,7 @@ extern "C"
 			}
 		}
 	}
-	void Java_com___PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStop( JNIEnv*  env )
+	void Java___PROJECT_ORG_TYPE_____PROJECT_VENDOR_____PROJECT_PACKAGE_____PROJECT_NAME___ActivitySetJavaVortualMachineStop( JNIEnv*  env )
 	{
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("**  Remove JVM Pointer                   **");

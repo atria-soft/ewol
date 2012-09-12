@@ -75,7 +75,7 @@ public class __PROJECT_NAME__ extends Activity {
 	private Thread mAudioThread;
 
 	static {
-		System.loadLibrary("__PROJECT_PACKAGE__");
+		System.loadLibrary("__PROJECT_NAME__");
 	}
 
 	@Override protected void onCreate(Bundle savedInstanceState)
@@ -98,7 +98,7 @@ public class __PROJECT_NAME__ extends Activity {
 		ApplicationInfo appInfo = null;
 		PackageManager packMgmr = getPackageManager();
 		try {
-			appInfo = packMgmr.getApplicationInfo("com.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
+			appInfo = packMgmr.getApplicationInfo("__PROJECT_ORG_TYPE__.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Unable to locate assets, aborting...");

@@ -49,13 +49,15 @@ namespace ewol
 			int64_t ticTime;
 			bool display;
 			bool drwingDone;
+			const char * m_displayName;
+			bool m_displayFPS;
 		public:
 			/**
 			 * @brief Constructor
 			 * @param ---
 			 * @return ---
 			 */
-			Fps(void)
+			Fps(const char * displayName, bool displayFPS)
 			{
 				startTime = -1;
 				nbCallTime = 0;
@@ -69,6 +71,8 @@ namespace ewol
 				ticTime = 0;
 				display = false;
 				drwingDone = false;
+				m_displayName = displayName;
+				m_displayFPS = displayFPS;
 			}
 			/**
 			 * @brief Destructor
@@ -117,16 +121,20 @@ namespace ewol
 					avg_idle += processTimeLocal;
 				}
 				if (true == display) {
-					EWOL_DEBUG("display property : " << nbDisplayTime << "/" << nbCallTime << "fps");
 					if (nbDisplayTime>0) {
-						EWOL_DEBUG("Time Drawind : " << (float)((float)min / 1000.0) << "ms "
-						                             << (float)((float)avg/(float)nbDisplayTime / 1000.0) << "ms "
+						EWOL_DEBUG(m_displayName << " : Active : "
+						                             << (float)((float)min / 1000.0) << "ms "
+						                             << (float)((float)avg / (float)nbDisplayTime / 1000.0) << "ms "
 						                             << (float)((float)max / 1000.0) << "ms ");
 					}
 					if (nbCallTime-nbDisplayTime>0) {
-						EWOL_DEBUG("Time idle    : " << (float)((float)min_idle / 1000.0) << "ms "
-						                             << (float)((float)avg_idle/(float)(nbCallTime-nbDisplayTime) / 1000.0) << "ms "
+						EWOL_DEBUG(m_displayName << " : idle   : "
+						                             << (float)((float)min_idle / 1000.0) << "ms "
+						                             << (float)((float)avg_idle / (float)(nbCallTime-nbDisplayTime) / 1000.0) << "ms "
 						                             << (float)((float)max_idle / 1000.0) << "ms ");
+					}
+					if (true == m_displayFPS) {
+						EWOL_DEBUG("FPS : " << nbDisplayTime << "/" << nbCallTime << "fps");
 					}
 					max = 0;
 					min = 99999999999999LL;

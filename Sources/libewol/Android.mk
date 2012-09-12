@@ -40,9 +40,10 @@ EWOL_TMP_PATH:=$(LOCAL_PATH)
 $(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
 	@mkdir -p $(dir $(EWOL_TMP_PATH)/$@)
 	@cp -f $(FILE_ABSTRACTION) $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_VENDOR__|$(PROJECT_VENDOR)|" $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME)|" $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_PACKAGE)|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_ORG_TYPE__|$(call convert-special-char,$(CONFIG___EWOL_APPL_ORGANISATION_TYPE__))|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_VENDOR__|$(call convert-special-char,$(CONFIG___EWOL_APPL_COMPAGNY__))|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_NAME__|$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__))|" $(EWOL_TMP_PATH)/$@
+	@sed -i "s|__PROJECT_PACKAGE__|$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__))|" $(EWOL_TMP_PATH)/$@
 
 
 # this is the abstraction file for Android
