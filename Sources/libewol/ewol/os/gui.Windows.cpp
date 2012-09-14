@@ -620,3 +620,12 @@ void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC)
 	ReleaseDC( hWnd, hDC );
 }
 
+/**
+ * @brief Force the screen orientation (availlable on portable elements ...
+ * @param orientation Selected orientation.
+ * @return ---
+ */
+void guiInterface::ForceOrientation(ewol::orientation_te orientation)
+{
+	// nothing to do ...
+}

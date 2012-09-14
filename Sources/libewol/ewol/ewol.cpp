@@ -168,6 +168,10 @@ void ewol::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destina
 	eSystem::InputEventTransfertWidget(source, destination);
 }
 
+void ewol::ForceOrientation(ewol::orientation_te orientation)
+{
+	guiInterface::ForceOrientation(orientation);
+}
 
 
 // ------------------------------------------------------------------------

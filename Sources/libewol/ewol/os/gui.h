@@ -95,6 +95,12 @@ namespace guiInterface
 	 * @return ---
 	 */
 	void SetTitle(etk::UString& title);
+	/**
+	 * @brief Force the screen orientation (availlable on portable elements ...
+	 * @param orientation Selected orientation.
+	 * @return ---
+	 */
+	void ForceOrientation(ewol::orientation_te orientation);
 };
 
 

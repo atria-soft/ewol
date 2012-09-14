@@ -83,6 +83,12 @@ namespace ewol {
 	 * @return ---
 	 */
 	void InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination);
+	typedef enum {
+		SCREEN_ORIENTATION_AUTO = 0,
+		SCREEN_ORIENTATION_LANDSCAPE,
+		SCREEN_ORIENTATION_PORTRAIT,
+	} orientation_te;
+	void ForceOrientation(ewol::orientation_te orientation);
 };
 
 #else

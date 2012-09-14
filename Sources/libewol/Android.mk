@@ -32,18 +32,23 @@ endif
 LOCAL_EXPORT_LDLIBS += -ldl -llog
 
 
-FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/os/AndroidAbstractionBase.cpp
-FILE_ABSTRACTION_DEST:=ewol/os/AndroidAbstraction.cpp
+FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/os/gui.Android.base.cpp
+FILE_ABSTRACTION_DEST:=ewol/os/gui.Android.cpp
 
 EWOL_TMP_PATH:=$(LOCAL_PATH)
 
-$(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
-	@mkdir -p $(dir $(EWOL_TMP_PATH)/$@)
-	@cp -f $(FILE_ABSTRACTION) $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_ORG_TYPE__|$(call convert-special-char,$(CONFIG___EWOL_APPL_ORGANISATION_TYPE__))|" $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_VENDOR__|$(call convert-special-char,$(CONFIG___EWOL_APPL_COMPAGNY__))|" $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_NAME__|$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__))|" $(EWOL_TMP_PATH)/$@
-	@sed -i "s|__PROJECT_PACKAGE__|$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__))|" $(EWOL_TMP_PATH)/$@
+$(shell rm $(FILE_ABSTRACTION_DEST) $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST))
+
+$(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
+	$(Q)mkdir -p $(dir $@)
+	$(Q)cp -f $(FILE_ABSTRACTION) $@
+	$(Q)sed -i "s|__PROJECT_ORG_TYPE__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_ORGANISATION_TYPE__)))|" $@
+	$(Q)sed -i "s|__PROJECT_VENDOR__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_COMPAGNY__)))|" $@
+	$(Q)sed -i "s|__PROJECT_NAME__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__)))|" $@
+	$(Q)sed -i "s|__PROJECT_PACKAGE__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__)))|" $@
+
+$(FILE_ABSTRACTION_DEST): $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST)
+	
 
 
 # this is the abstraction file for Android
@@ -52,7 +57,7 @@ LOCAL_PREREQUISITES := $(FILE_ABSTRACTION_DEST)
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_ABSTRACTION_DEST) $(FILE_LIST)
+LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_LIST)
 
 include $(BUILD_STATIC_LIBRARY)
 

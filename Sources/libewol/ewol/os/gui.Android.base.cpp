@@ -30,6 +30,7 @@
 #include <ewol/Debug.h>
 #include <ewol/os/eSystem.h>
 #include <ewol/audio/audio.h>
+#include <ewol/os/gui.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
@@ -97,13 +98,14 @@ void SendJava_KeyboardShow(bool showIt)
 		JavaVirtualMachinePointer->ExceptionDescribe();
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
-	
-	// Finished with the JVM.
-	g_JavaVM->DetachCurrentThread();
+	if (status == JNI_EDETACHED) {
+		// Finished with the JVM.
+		g_JavaVM->DetachCurrentThread();
+	}
 }
 
-
-void SendJava_OrientationChange(bool showIt)
+// mode 0 : auto; 1 landscape, 2 portrait
+void SendJava_OrientationChange(int32_t mode)
 {
 	EWOL_DEBUG("C->java : call java");
 	if (NULL == g_JavaVM) {
@@ -139,8 +141,10 @@ void SendJava_OrientationChange(bool showIt)
 		return;
 	}
 
+	jint param = mode;
+	
 	//Call java ...
-	JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange);
+	JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange, param);
 
 	// manage execption : 
 	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
@@ -149,8 +153,10 @@ void SendJava_OrientationChange(bool showIt)
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
 	
-	// Finished with the JVM.
-	g_JavaVM->DetachCurrentThread();
+	if (status == JNI_EDETACHED) {
+		// Finished with the JVM.
+		g_JavaVM->DetachCurrentThread();
+	}
 }
 
 
@@ -208,9 +214,10 @@ void SendSystemMessage(const char * dataString)
 		JavaVirtualMachinePointer->ExceptionDescribe();
 		JavaVirtualMachinePointer->ExceptionClear();
 	}
-	
-	// Finished with the JVM.
-	g_JavaVM->DetachCurrentThread();
+	if (status == JNI_EDETACHED) {
+		// Finished with the JVM.
+		g_JavaVM->DetachCurrentThread();
+	}
 }
 
 namespace guiAbstraction {
@@ -257,9 +264,10 @@ extern "C"
 		JavaVirtualMachinePointer = env;
 		// get default needed all time elements : 
 		if (NULL != JavaVirtualMachinePointer) {
+			EWOL_DEBUG("C->java : try load __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
 			javaClassActivity = JavaVirtualMachinePointer->FindClass("__PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__" );
 			if (javaClassActivity == 0) {
-				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
+				EWOL_ERROR("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__ class");
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -267,28 +275,28 @@ extern "C"
 			// get the activity object : 
 			javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
 			if (javaClassActivityEntryPoint == 0) {
-				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
+				EWOL_ERROR("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.eventFromCPP" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardShow = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardShow", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardShow == 0) {
-				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
+				EWOL_ERROR("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardShow" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_keyboardHide = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardHide", "()V" );
 			if (javaClassActivityEntryPoint__CPP_keyboardHide == 0) {
-				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
+				EWOL_ERROR("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_keyboardHide" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
 			}
 			javaClassActivityEntryPoint__CPP_OrientationChange = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_OrientationChange", "(I)V" );
 			if (javaClassActivityEntryPoint__CPP_OrientationChange == 0) {
-				EWOL_DEBUG("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_OrientationChange" );
+				EWOL_ERROR("C->java : Can't find __PROJECT_ORG_TYPE__/__PROJECT_VENDOR__/__PROJECT_PACKAGE__/__PROJECT_NAME__.CPP_OrientationChange" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -299,7 +307,7 @@ extern "C"
 			
 			javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
 			if (javaDefaultClassString == 0) {
-				EWOL_DEBUG("C->java : Can't find java/lang/String" );
+				EWOL_ERROR("C->java : Can't find java/lang/String" );
 				// remove access on the virtual machine : 
 				JavaVirtualMachinePointer = NULL;
 				return;
@@ -489,3 +497,138 @@ extern "C"
 
 };
 
+
+#undef __class__
+#define __class__ "guiInterface"
+
+
+
+int64_t guiInterface::GetTime(void)
+{
+    struct timeval  now;
+    gettimeofday(&now, NULL);
+    //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
+    return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
+}
+
+
+/**
+ * @brief Set the new title of the windows
+ * @param title New desired title
+ * @return ---
+ */
+void guiInterface::SetTitle(etk::UString& title)
+{
+	// can not set the title in Android ...
+}
+
+
+// -------------------------------------------------------------------------
+//         ClipBoard AREA :
+// -------------------------------------------------------------------------
+
+bool l_clipBoardOwnerStd = false;
+/**
+ * @brief Inform the Gui that we want to have a copy of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	// this is to force the local system to think we have the buffer
+	// TODO : Remove this 2 Line when code will be writen
+	l_clipBoardOwnerStd = true;
+	switch (clipboardID)
+	{
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
+			// NOTE : Windows does not support the middle button the we do it internaly
+			// just transmit an event , we have the data in the system
+			eSystem::ClipBoardArrive(clipboardID);
+			break;
+		case ewol::clipBoard::CLIPBOARD_STD:
+			if (false == l_clipBoardOwnerStd) {
+				// Generate a request TO the OS
+				// TODO : Send the message to the OS "We disire to receive the copy buffer ...
+			} else {
+				// just transmit an event , we have the data in the system
+				eSystem::ClipBoardArrive(clipboardID);
+			}
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
+
+/**
+ * @brief Inform the Gui that we are the new owner of the clipboard
+ * @param ID of the clipboard (STD/SELECTION) only apear here
+ * @return ---
+ */
+void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	switch (clipboardID)
+	{
+		case ewol::clipBoard::CLIPBOARD_SELECTION:
+			// NOTE : nothing to do : Windows deas ot supported Middle button
+			break;
+		case ewol::clipBoard::CLIPBOARD_STD:
+			// Request the clipBoard :
+			if (false == l_clipBoardOwnerStd) {
+				// TODO : Inform the OS that we have the current buffer of copy ...
+				l_clipBoardOwnerStd = true;
+			}
+			break;
+		default:
+			EWOL_ERROR("Request an unknow ClipBoard ...");
+			break;
+	}
+}
+
+
+void guiInterface::Stop(void)
+{
+	// TODO : send a message to the android system to stop ...
+}
+
+// java system to send message : 
+void SendSystemMessage(const char * dataString);
+void SendJava_KeyboardShow(bool showIt);
+
+void guiInterface::KeyboardShow(void)
+{
+	// send a message at the java :
+	SendJava_KeyboardShow(true);
+}
+
+void guiInterface::KeyboardHide(void)
+{
+	// send a message at the java :
+	SendJava_KeyboardShow(false);
+}
+
+void guiInterface::ChangeSize(Vector2D<int32_t> size)
+{
+	// The size can not be change on android platform
+}
+
+void guiInterface::ChangePos(Vector2D<int32_t> size)
+{
+	// The position can not be change on Android platform
+}
+
+void guiInterface::GetAbsPos(Vector2D<int32_t>& size)
+{
+	size.x = 0;
+	size.y = 0;
+}
+
+/**
+ * @brief Force the screen orientation (availlable on portable elements ...
+ * @param orientation Selected orientation.
+ * @return ---
+ */
+void guiInterface::ForceOrientation(ewol::orientation_te orientation)
+{
+	SendJava_OrientationChange((int32_t)orientation);
+}

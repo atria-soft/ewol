@@ -279,6 +279,13 @@ void eSystem::Init(void)
 		RequestInit();
 		// force a recalculation
 		ewol::RequestUpdateSize();
+		#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
+			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
+		#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
+			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
+		#else
+			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
+		#endif
 	}
 	EWOL_INFO("==> Ewol System Init (END)");
 }

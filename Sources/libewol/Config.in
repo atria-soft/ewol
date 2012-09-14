@@ -15,7 +15,7 @@ menu "General"
 	config __EWOL_APPL_NAME__
 		prompt "Application Name"
 		string
-		default "Ewol"
+		default "Ewol__"
 		help
 			This is the application name
 	

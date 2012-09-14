@@ -1188,3 +1188,12 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
+/**
+ * @brief Force the screen orientation (availlable on portable elements ...
+ * @param orientation Selected orientation.
+ * @return ---
+ */
+void guiInterface::ForceOrientation(ewol::orientation_te orientation)
+{
+	// nothing to do ...
+}

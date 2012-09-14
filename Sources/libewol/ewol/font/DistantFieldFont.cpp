@@ -179,7 +179,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 			EWOL_DEBUG("     m_advance     =" << m_listElement[iii].property.m_advance );
 			*/
 			// generate the distance field from this element ...
-			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER)+Vector2D<int32_t>(2*SPECIAL_BORDER*SPECIAL_UPSCALER,2*SPECIAL_BORDER*SPECIAL_UPSCALER));
+			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER)+Vector2D<int32_t>(2*SPECIAL_BORDER*SPECIAL_UPSCALER,2*SPECIAL_BORDER*SPECIAL_UPSCALER), SPECIAL_UPSCALER, SPECIAL_UPSCALER/2);
 			// copy data with downscaling : (subSampling)
 			Vector2D<int32_t> tmpPos(0,0);
 			for (tmpPos.y = 0; tmpPos.y<m_listElement[iii].property.m_sizeTexture.y+2*SPECIAL_BORDER; tmpPos.y++) {
@@ -213,7 +213,6 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	}
 	#endif
 	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	//m_data.DistanceField();
 	Flush();
 	
 }
