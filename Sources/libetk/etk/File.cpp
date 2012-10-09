@@ -291,6 +291,8 @@ bool etk::File::operator!= (const etk::File &etkF) const
 	return !(*this == etkF);
 }
 
+#define TK_DBG_MODE TK_VERBOSE
+//#define TK_DBG_MODE TK_DEBUG
 
 void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te type)
 {
@@ -305,7 +307,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	m_folder = "";
 	m_shortFilename = "";
 	m_lineNumberOpen = 0;
-	TK_VERBOSE("1 :Set Name : " << newFilename );
+	TK_DBG_MODE("1 :Set Name : " << newFilename );
 	etk::UString destFilename;
 	if (newFilename.Size() == 0) {
 		destFilename = "no-name";
@@ -314,15 +316,15 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 	}
 	
 	#ifdef __TARGET_OS__Windows
-		TK_VERBOSE("2 : Get file Name : " << destFilename << "start with 'c:/'=" << destFilename.StartWith("c:/"));
+		TK_DBG_MODE("2 : Get file Name : " << destFilename << "start with 'c:/'=" << destFilename.StartWith("c:/"));
 		if (true == destFilename.StartWith("c:/")) {
 	#else
-		TK_VERBOSE("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
+		TK_DBG_MODE("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
 		if (true == destFilename.StartWith('/')) {
 	#endif
 		m_type = etk::FILE_TYPE_DIRECT;
 		if (type != etk::FILE_TYPE_DIRECT) {
-			TK_VERBOSE("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
+			TK_WARNING("Incompatible type with a file=\"" << newFilename << "\" ==> force it in direct mode ...");
 		}
 	} else {
 		if (type == etk::FILE_TYPE_DIRECT) {
@@ -370,7 +372,7 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 					if (-1 == m_idZipFile) {
 						TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
 					} else {
-						TK_VERBOSE("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
+						TK_DBG_MODE("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
 					}
 				#else
 					//etk::UString tmpFilename = destFilename;
@@ -409,10 +411,8 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			needUnpack = true;
 			break;
 	}
-	TK_VERBOSE("3 : Get file Name : " << destFilename );
+	TK_DBG_MODE("3 : Get file Name : " << destFilename );
 	if (true == needUnpack) {
-		// Get the real Path of the current File
-		destFilename = etk::tool::SimplifyPath(destFilename);
 		
 		int32_t lastPos = destFilename.FindBack('/');
 		if (-1 != lastPos) {
@@ -420,10 +420,12 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			m_folder        = destFilename.Extract(0, lastPos);
 		} else {
 			// Basic ERROR ...
-			TK_VERBOSE("file : \"" << destFilename << "\" ==> No data???");
+			TK_DBG_MODE("file : \"" << destFilename << "\" ==> No data???");
 			m_shortFilename = destFilename;
 			m_folder = "";
 		}
+		// Get the real Path of the current File
+		m_folder = etk::tool::SimplifyPath(m_folder);
 	} else {
 		int32_t lastPos = destFilename.FindBack('/');
 		if (-1 != lastPos) {
@@ -431,11 +433,12 @@ void etk::File::SetCompleateName(etk::UString &newFilename, etk::FileType_te typ
 			m_folder        = destFilename.Extract(0, lastPos);
 		} else {
 			// Basic ERROR ...
-			TK_VERBOSE("file : \"" << destFilename << "\" ==> No data???");
+			TK_DBG_MODE("file : \"" << destFilename << "\" ==> No data???");
 			m_shortFilename = destFilename;
 		}
 	}
-	TK_VERBOSE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\" mode=" << mode);
+	TK_DBG_MODE("Set FileName :\"" << m_folder << "\" / \"" << m_shortFilename << "\"");
+	TK_VERBOSE("        ==> mode=" << mode);
 }
 
 int32_t etk::File::GetLineNumber(void)

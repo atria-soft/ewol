@@ -366,7 +366,10 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 	           || (eventId == ewolEventFileChooserValidate       && m_file != "" )
 	           || (eventId == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the File ==> generate a validate
-		SetFileName(data);
+		if (data != "") {
+			SetFileName(data);
+		}
+		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
 		etk::UString tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
 		GenerateEventId(ewolEventFileChooserValidate, tmpFileCompleatName);
