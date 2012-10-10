@@ -28,6 +28,11 @@
 #include <ewol/ResourceManager.h>
 #include <ewol/font/FontFreeType.h>
 
+
+// Specific for the resource : 
+uint32_t ewol::Resource::valBase=0;
+
+
 static etk::Vector<ewol::Resource*> l_resourceList;
 static etk::Vector<ewol::Resource*> l_resourceListToUpdate;
 static bool                         l_contextHasBeenRemoved = true;
@@ -86,14 +91,16 @@ void ReLoadResources(void)
 {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...
-	for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
-		if (l_resourceList[iii] != NULL) {
-			const char * mode = "keep same";
-			if (etk::UString(l_resourceList[iii]->GetType()) == "ewol::Program") {
-				mode = "Reload ...";
-				l_resourceList[iii]->Reload();
+	if (l_resourceList.Size() != 0) {
+		for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
+			for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
+				if(    l_resourceList[iii] != NULL
+				    && jjj==l_resourceList[iii]->GetResourceLevel()) {
+					l_resourceList[iii]->Reload();
+					EWOL_INFO("        [" << l_resourceList[iii]->GetUID() << "]="<< l_resourceList[iii]->GetType());
+				}
 			}
-			EWOL_INFO("    [" << l_resourceList[iii]->GetUID() << "]="<< l_resourceList[iii]->GetType() << " ==> " << mode);
 		}
 	}
 	EWOL_INFO("-------------  Resources  -------------");
@@ -120,15 +127,27 @@ void ewol::resource::UpdateContext(void)
 	if (true == l_contextHasBeenRemoved) {
 		// need to update all ...
 		l_contextHasBeenRemoved = false;
-		for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
-			if (l_resourceList[iii] != NULL) {
-				l_resourceList[iii]->UpdateContext();
+		if (l_resourceList.Size() != 0) {
+			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+				EWOL_INFO("    UpdateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
+				for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
+					if(    l_resourceList[iii] != NULL
+					    && jjj==l_resourceList[iii]->GetResourceLevel()) {
+						l_resourceList[iii]->UpdateContext();
+					}
+				}
 			}
 		}
 	}else {
-		for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
-			if (l_resourceListToUpdate[iii] != NULL) {
-				l_resourceListToUpdate[iii]->UpdateContext();
+		if (l_resourceListToUpdate.Size() != 0) {
+			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+				EWOL_INFO("    UpdateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
+				for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
+					if(    l_resourceListToUpdate[iii] != NULL
+					    && jjj==l_resourceList[iii]->GetResourceLevel()) {
+						l_resourceListToUpdate[iii]->UpdateContext();
+					}
+				}
 			}
 		}
 	}
@@ -311,6 +330,18 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, Ve
 }
 
 
+bool ewol::resource::Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object)
+{
+	// this element create a new one every time ....
+	object = new ewol::VirtualBufferObject(accesMode);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??VBO??");
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
 
 void ewol::resource::Release(ewol::Resource*& object)
 {
@@ -394,3 +425,4 @@ void ewol::resource::Release(ewol::TextureFile*& object)
 	Release(object2);
 	object = NULL;
 }
+

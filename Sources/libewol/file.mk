@@ -8,7 +8,8 @@ FILE_LIST = ewol/ewol.cpp \
 
 FILE_LIST+= ewol/openGL/openGL.cpp \
 			ewol/openGL/Shader.cpp \
-			ewol/openGL/Program.cpp
+			ewol/openGL/Program.cpp \
+			ewol/openGL/VirtualBufferObject.cpp
 
 
 # Gui interface
@@ -78,9 +79,6 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/meta/ColorChooser.cpp \
 			ewol/widget/meta/Parameter.cpp \
 			ewol/widget/meta/ParameterList.cpp
-
-# Theme parsing ...
-FILE_LIST+= ewol/theme/Theme.cpp
 
 # Audio system
 FILE_LIST+= ewol/audio/audio.cpp \

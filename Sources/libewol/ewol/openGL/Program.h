@@ -44,6 +44,7 @@
 			class Program : public ewol::Resource
 			{
 				private :
+					bool                                    m_exist;
 					GLuint                                  m_program;
 					etk::Vector<ewol::Shader*>              m_shaderList;
 					etk::Vector<ewol::progAttributeElement> m_elementList;
@@ -52,8 +53,6 @@
 					Program(etk::UString& filename);
 					virtual ~Program(void);
 					const char* GetType(void) { return "ewol::Program"; };
-					virtual void Reload(void);
-					bool CreateAndLink(void);
 					int32_t GetAttribute(etk::UString tmpElement);
 					void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
 					int32_t GetUniform(etk::UString tmpElement);
@@ -83,6 +82,10 @@
 					void Use(void);
 					void SetTexture0(int32_t idElem, GLint textureOpenGlID);
 					void UnUse(void);
+					void UpdateContext(void);
+					void RemoveContext(void);
+					void RemoveContextToLate(void);
+					void Reload(void);
 			};
 		};
 	#endif

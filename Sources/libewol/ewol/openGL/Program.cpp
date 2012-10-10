@@ -34,9 +34,11 @@
 
 ewol::Program::Program(etk::UString& filename) :
 	ewol::Resource(filename),
+	m_exist(false),
 	m_program(0),
 	m_hasTexture(false)
 {
+	m_resourceLevel = 1;
 	EWOL_DEBUG("OGL : load PROGRAM \"" << filename << "\"");
 	// load data from file "all the time ..."
 	
@@ -81,7 +83,7 @@ ewol::Program::Program(etk::UString& filename) :
 	// close the file:
 	file.fClose();
 	
-	CreateAndLink();
+	UpdateContext();
 	
 }
 
@@ -93,18 +95,9 @@ ewol::Program::~Program(void)
 		m_shaderList[iii] = 0;
 	}
 	m_shaderList.Clear();
-	if (0!=m_program) {
-		glDeleteProgram(m_program);
-		m_program = 0;
-	}
+	RemoveContext();
 	m_elementList.Clear();
 	m_hasTexture = false;
-}
-
-
-void ewol::Program::Reload(void)
-{
-	// TODO ...
 }
 
 static void checkGlError(const char* op, int32_t localLine)
@@ -117,38 +110,6 @@ static void checkGlError(const char* op, int32_t localLine)
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-bool ewol::Program::CreateAndLink(void)
-{
-	EWOL_INFO("Create the Program ...");
-	m_program = glCreateProgram();
-	if (0 == m_program) {
-		EWOL_ERROR("program creation return error ...");
-		return false;
-	}
-	
-	for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
-		if (NULL != m_shaderList[iii]) {
-			glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
-			checkGlError("glAttachShader", __LINE__);
-		}
-	}
-	glLinkProgram(m_program);
-	checkGlError("glLinkProgram", __LINE__);
-	GLint linkStatus = GL_FALSE;
-	glGetProgramiv(m_program, GL_LINK_STATUS, &linkStatus);
-	checkGlError("glGetProgramiv", __LINE__);
-	if (linkStatus != GL_TRUE) {
-		GLint bufLength = 0;
-		l_bufferDisplayError[0] = '\0';
-		glGetProgramInfoLog(m_program, LOG_OGL_INTERNAL_BUFFER_LEN, &bufLength, l_bufferDisplayError);
-		EWOL_ERROR("Could not compile \"PROGRAM\": " << l_bufferDisplayError);
-		glDeleteProgram(m_program);
-		checkGlError("glDeleteProgram", __LINE__);
-		m_program = 0;
-		return false;
-	}
-	return true;
-}
 
 int32_t ewol::Program::GetAttribute(etk::UString tmpElement)
 {
@@ -170,6 +131,128 @@ int32_t ewol::Program::GetAttribute(etk::UString tmpElement)
 	m_elementList.PushBack(tmp);
 	return m_elementList.Size()-1;
 }
+
+
+
+void ewol::Program::UpdateContext(void)
+{
+	if (true==m_exist) {
+		// Do nothing ==> too dangerous ...
+	} else {
+		// create the Shader
+		EWOL_INFO("Create the Program ...");
+		m_program = glCreateProgram();
+		if (0 == m_program) {
+			EWOL_ERROR("program creation return error ...");
+			return;
+		}
+		
+		for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
+			if (NULL != m_shaderList[iii]) {
+				glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
+				checkGlError("glAttachShader", __LINE__);
+			}
+		}
+		glLinkProgram(m_program);
+		checkGlError("glLinkProgram", __LINE__);
+		GLint linkStatus = GL_FALSE;
+		glGetProgramiv(m_program, GL_LINK_STATUS, &linkStatus);
+		checkGlError("glGetProgramiv", __LINE__);
+		if (linkStatus != GL_TRUE) {
+			GLint bufLength = 0;
+			l_bufferDisplayError[0] = '\0';
+			glGetProgramInfoLog(m_program, LOG_OGL_INTERNAL_BUFFER_LEN, &bufLength, l_bufferDisplayError);
+			EWOL_ERROR("Could not compile \"PROGRAM\": " << l_bufferDisplayError);
+			glDeleteProgram(m_program);
+			checkGlError("glDeleteProgram", __LINE__);
+			m_program = 0;
+			return;
+		}
+		m_exist = true;
+		// now get the old attribute requested priviously ...
+		for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
+			m_elementList[iii].m_elementId = glGetAttribLocation(m_program, m_elementList[iii].m_name.c_str());
+			if (m_elementList[iii].m_elementId<0) {
+				checkGlError("glGetAttribLocation", __LINE__);
+				EWOL_INFO("glGetAttribLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+			}
+		}
+	}
+}
+
+void ewol::Program::RemoveContext(void)
+{
+	if (true==m_exist) {
+		glDeleteProgram(m_program);
+		m_program = 0;
+		m_exist = false;
+		for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
+			m_elementList[iii].m_elementId=0;
+		}
+	}
+}
+
+void ewol::Program::RemoveContextToLate(void)
+{
+	m_exist = false;
+	m_program = 0;
+}
+
+void ewol::Program::Reload(void)
+{
+/* TODO : ...
+	etk::File file(m_name, etk::FILE_TYPE_DATA);
+	if (false == file.Exist()) {
+		EWOL_ERROR("File does not Exist : \"" << file << "\"");
+		return;
+	}
+	
+	int32_t fileSize = file.Size();
+	if (0==fileSize) {
+		EWOL_ERROR("This file is empty : " << file);
+		return;
+	}
+	if (false == file.fOpenRead()) {
+		EWOL_ERROR("Can not open the file : " << file);
+		return;
+	}
+	// Remove previous data ...
+	if (NULL != m_fileData) {
+		delete[] m_fileData;
+		m_fileData = 0;
+	}
+	// allocate data
+	m_fileData = new char[fileSize+5];
+	if (NULL == m_fileData) {
+		EWOL_ERROR("Error Memory allocation size=" << fileSize);
+		return;
+	}
+	memset(m_fileData, 0, (fileSize+5)*sizeof(char));
+	// load data from the file :
+	file.fRead(m_fileData, 1, fileSize);
+	// close the file:
+	file.fClose();
+*/
+	// now change the OGL context ...
+	RemoveContext();
+	UpdateContext();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int32_t ewol::Program::GetUniform(etk::UString tmpElement)
 {

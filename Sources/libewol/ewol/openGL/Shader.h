@@ -35,6 +35,7 @@
 			class Shader : public ewol::Resource
 			{
 				private :
+					bool           m_exist;
 					char*          m_fileData;
 					GLuint         m_shader;
 					GLenum         m_type;
@@ -44,7 +45,10 @@
 					const char* GetType(void) { return "ewol::Shader"; };
 					GLuint GetGL_ID(void) { return m_shader; };
 					GLenum GetShaderType(void) { return m_type; };
-					bool CompileAndSendShader(void);
+					void UpdateContext(void);
+					void RemoveContext(void);
+					void RemoveContextToLate(void);
+					void Reload(void);
 			};
 		};
 	#endif

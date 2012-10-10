@@ -30,6 +30,7 @@
 #include <ewol/Resource.h>
 #include <ewol/openGL/Shader.h>
 #include <ewol/openGL/Program.h>
+#include <ewol/openGL/VirtualBufferObject.h>
 #include <ewol/font/Font.h>
 #include <ewol/font/TexturedFont.h>
 #include <ewol/font/DistantFieldFont.h>
@@ -61,6 +62,7 @@ namespace ewol
 		#endif
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size);
+		bool Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object);
 		
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
@@ -72,6 +74,7 @@ namespace ewol
 		#endif
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
+		void Release(ewol::VirtualBufferObject*& object);
 	}
 };
 
