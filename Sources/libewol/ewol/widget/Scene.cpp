@@ -88,6 +88,9 @@ void ewol::Scene::OnRegenerateDisplay(void)
 void ewol::Scene::OnDraw(DrawProperty& displayProp)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
+	// draw background :
+	// TODO : ...
+	//background
 	// draw elements
 	for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {
 		if (NULL != m_sceneElement.animated[iii]) {

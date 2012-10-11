@@ -134,6 +134,28 @@ int32_t ewol::Program::GetAttribute(etk::UString tmpElement)
 
 
 
+int32_t ewol::Program::GetUniform(etk::UString tmpElement)
+{
+	// check if it exist previously :
+	for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
+		if (m_elementList[iii].m_name == tmpElement) {
+			return iii;
+		}
+	}
+	progAttributeElement tmp;
+	tmp.m_name = tmpElement;
+	tmp.m_isAttribute = false;
+	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
+	if (tmp.m_elementId<0) {
+		checkGlError("glGetUniformLocation", __LINE__);
+		EWOL_INFO("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
+		return -1;
+	}
+	m_elementList.PushBack(tmp);
+	return m_elementList.Size()-1;
+}
+
+
 void ewol::Program::UpdateContext(void)
 {
 	if (true==m_exist) {
@@ -171,10 +193,18 @@ void ewol::Program::UpdateContext(void)
 		m_exist = true;
 		// now get the old attribute requested priviously ...
 		for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
-			m_elementList[iii].m_elementId = glGetAttribLocation(m_program, m_elementList[iii].m_name.c_str());
-			if (m_elementList[iii].m_elementId<0) {
-				checkGlError("glGetAttribLocation", __LINE__);
-				EWOL_INFO("glGetAttribLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+			if (true==m_elementList[iii].m_isAttribute) {
+				m_elementList[iii].m_elementId = glGetAttribLocation(m_program, m_elementList[iii].m_name.c_str());
+				if (m_elementList[iii].m_elementId<0) {
+					checkGlError("glGetAttribLocation", __LINE__);
+					EWOL_INFO("glGetAttribLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+				}
+			} else {
+				m_elementList[iii].m_elementId = glGetUniformLocation(m_program, m_elementList[iii].m_name.c_str());
+				if (m_elementList[iii].m_elementId<0) {
+					checkGlError("glGetUniformLocation", __LINE__);
+					EWOL_INFO("glGetUniformLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+				}
 			}
 		}
 	}
@@ -252,28 +282,6 @@ void ewol::Program::Reload(void)
 
 
 
-
-
-int32_t ewol::Program::GetUniform(etk::UString tmpElement)
-{
-	// check if it exist previously :
-	for(int32_t iii=0; iii<m_elementList.Size(); iii++) {
-		if (m_elementList[iii].m_name == tmpElement) {
-			return iii;
-		}
-	}
-	progAttributeElement tmp;
-	tmp.m_name = tmpElement;
-	tmp.m_isAttribute = false;
-	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
-	if (tmp.m_elementId<0) {
-		checkGlError("glGetUniformLocation", __LINE__);
-		EWOL_INFO("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
-		return -1;
-	}
-	m_elementList.PushBack(tmp);
-	return m_elementList.Size()-1;
-}
 
 void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample)
 {

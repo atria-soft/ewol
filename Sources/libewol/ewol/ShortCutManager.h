@@ -27,12 +27,13 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
+#include <ewol/widget/Widget.h>
 
 namespace ewol {
 	namespace shortCut {
 		void Init(void);
 		void UnInit(void);
-		bool Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, bool isDown);
+		bool Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown);
 	};
 };
 

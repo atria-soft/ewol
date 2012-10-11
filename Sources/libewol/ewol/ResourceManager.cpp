@@ -87,7 +87,7 @@ void ewol::resource::Display(void)
  * @param ---
  * @return ---
  */
-void ReLoadResources(void)
+void ewol::resource::ReLoadResources(void)
 {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...

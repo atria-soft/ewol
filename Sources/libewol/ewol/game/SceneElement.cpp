@@ -51,6 +51,10 @@ ewol::SceneElement::SceneElement(void)
 	}
 	retreviveElement = 0;
 	allocatedElements = 0;
+	if (false == ewol::resource::Keep(background) ) {
+		EWOL_ERROR("error to keep the scene background");
+		background = NULL;
+	}
 }
 
 ewol::SceneElement::~SceneElement(void)
@@ -87,6 +91,9 @@ ewol::SceneElement::~SceneElement(void)
 		}
 	}
 	animated.Clear();
+	if (NULL != background) {
+		ewol::resource::Release(background);
+	}
 }
 
 void ewol::SceneElement::RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString)

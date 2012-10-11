@@ -30,19 +30,33 @@
 
 class EventShortCut {
 	public:
-		const char *  generateEventId; // event generate ID (to be unique it was pointer on the string name)
-		etk::UString  eventData;
-		bool          shift;
-		bool          control;
-		bool          alt;
-		bool          meta;
-		uniChar_t     UnicodeValue;
+		const char *       generateEventId; // event generate ID (to be unique it was pointer on the string name)
+		etk::UString       eventData;
+		bool               shift;
+		bool               control;
+		bool               alt;
+		bool               meta;
+		uniChar_t          UnicodeValue;      // 0 if not used
+		ewol::eventKbMoveType_te keyboardMoveValue; // 0 if not used
 };
 
 static etk::Vector<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
 
+namespace ewol {
+	namespace shortCut {
+		void Add(bool shift, bool control, bool alt, bool meta, 
+		         uniChar_t unicodeValue,
+		         ewol::eventKbMoveType_te kbMove,
+		         const char * generateEventId,
+		         etk::UString data);
+	};
+};
 
-void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data)
+void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, 
+                         uniChar_t unicodeValue,
+                         ewol::eventKbMoveType_te kbMove,
+                         const char * generateEventId,
+                         etk::UString data)
 {
 	EventShortCut * newEvent = new EventShortCut();
 	if (NULL == newEvent) {
@@ -55,6 +69,7 @@ void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta, uniChar_
 	newEvent->alt = alt;
 	newEvent->meta = meta;
 	newEvent->UnicodeValue = unicodeValue;
+	newEvent->keyboardMoveValue = kbMove;
 	newEvent->eventData = data;
 	l_inputShortCutEvent.PushBack(newEvent);
 	return;
@@ -92,9 +107,65 @@ void ewol::shortCut::Add(const char * descriptiveString, const char * generateEv
 	if(NULL != tmp) {
 		meta = true;
 	}
-	UnicodeValue = descriptiveString[strlen(descriptiveString) -1];
-	// add with generic Adding function ...
-	ewol::shortCut::Add(shift, control, alt, meta, UnicodeValue, generateEventId, data);
+	if(NULL != strstr(descriptiveString, "F12") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F12, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F11") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F11, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F10") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F10, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F9") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F9, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F8") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F8, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F7") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F7, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F6") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F6, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F5") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F5, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F4") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F4, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F3") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F3, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F2") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F2, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "F1") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F1, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "LEFT") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_LEFT, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "RIGHT") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_RIGHT, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "UP") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_UP, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "DOWN") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_DOWN, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "PAGE_UP") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_PAGE_UP, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "PAGE_DOWN") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "START") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_START, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "END") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_END, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "CENTER") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_CENTER, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "ARRET_DEFIL") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "WAIT") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_WAIT, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "INSERT") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_INSERT, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "CAPLOCK") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_CAPLOCK, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "CONTEXT_MENU") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU, generateEventId, data);
+	} else if(NULL != strstr(descriptiveString, "VER_NUM") ) {
+		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_VER_NUM, generateEventId, data);
+	} else {
+		UnicodeValue = descriptiveString[strlen(descriptiveString) -1];
+		// add with generic Adding function ...
+		ewol::shortCut::Add(shift, control, alt, meta, UnicodeValue, ewol::EVENT_KB_MOVE_TYPE_NONE, generateEventId, data);
+	}
 }
 
 
@@ -123,7 +194,7 @@ void ewol::shortCut::UnInit(void)
 
 
 
-bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, bool isDown)
+bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
 {
 	if (unicodeValue >= 'A' && unicodeValue <='Z') {
 		unicodeValue += 'a' - 'A';
@@ -134,7 +205,11 @@ bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniC
 		    && l_inputShortCutEvent[iii]->control == control
 		    && l_inputShortCutEvent[iii]->alt == alt
 		    && l_inputShortCutEvent[iii]->meta == meta
-		    && l_inputShortCutEvent[iii]->UnicodeValue == unicodeValue)
+		    && (    (    l_inputShortCutEvent[iii]->keyboardMoveValue == ewol::EVENT_KB_MOVE_TYPE_NONE
+		              && l_inputShortCutEvent[iii]->UnicodeValue == unicodeValue)
+		         || (    l_inputShortCutEvent[iii]->keyboardMoveValue == kbMove
+		              && l_inputShortCutEvent[iii]->UnicodeValue == 0)
+		       ) )
 		{
 			if (isDown) {
 				ewol::EObjectMessageMultiCast::AnonymousSend(l_inputShortCutEvent[iii]->generateEventId, l_inputShortCutEvent[iii]->eventData);

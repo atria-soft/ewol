@@ -159,6 +159,7 @@ void ewolProcessEvents(void)
 					                                   data.keyboardKey.special.alt,
 					                                   data.keyboardKey.special.meta,
 					                                   data.keyboardKey.myChar,
+					                                   ewol::EVENT_KB_MOVE_TYPE_NONE,
 					                                   data.keyboardKey.isDown)) {
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
@@ -176,7 +177,13 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_KEYBORAD_MOVE:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
-				{
+				if (false==ewol::shortCut::Process(data.keyboardKey.special.shift,
+				                                   data.keyboardKey.special.ctrl,
+				                                   data.keyboardKey.special.alt,
+				                                   data.keyboardKey.special.meta,
+				                                   0,
+				                                   data.keyboardMove.move,
+				                                   data.keyboardKey.isDown)) {
 					specialCurrentKey = data.keyboardMove.special;
 					// Get the current Focused Widget :
 					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();

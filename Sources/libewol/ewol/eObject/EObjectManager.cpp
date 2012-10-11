@@ -113,6 +113,7 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* object)
 			EWOL_DEBUG("Auto-Remove EObject : [" << object->GetId() << "]");
 			informOneObjectIsRemoved(object);
 			m_eObjectAutoRemoveList.PushBack(object);
+			ewol::ForceRedrawAll();
 			return;
 		}
 	}

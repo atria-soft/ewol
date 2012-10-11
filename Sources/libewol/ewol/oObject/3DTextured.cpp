@@ -75,6 +75,7 @@ void ewol::OObject3DTextured::Draw(void)
 			EWOL_ERROR("No shader ...");
 			return;
 		}
+		//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
 		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();

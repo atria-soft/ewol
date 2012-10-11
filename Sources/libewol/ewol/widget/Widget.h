@@ -58,6 +58,7 @@ namespace ewol {
 	} eventKbType_te;
 	
 	typedef enum {
+		EVENT_KB_MOVE_TYPE_NONE,
 		EVENT_KB_MOVE_TYPE_LEFT,
 		EVENT_KB_MOVE_TYPE_RIGHT,
 		EVENT_KB_MOVE_TYPE_UP,
