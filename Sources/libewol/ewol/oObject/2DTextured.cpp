@@ -33,8 +33,36 @@
 ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX, float sizeY)
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
-	if (false == ewol::resource::Keep(textureName, m_resource, Vector2D<int32_t>(sizeX,sizeY)) ) {
+	ewol::TextureFile* resourceFile = NULL;
+	if (false == ewol::resource::Keep(textureName, resourceFile, Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
+	}
+	m_resource = resourceFile;
+	#ifdef __VIDEO__OPENGL_ES_2
+		etk::UString tmpString("textured.prog");
+		// get the shader resource :
+		m_GLPosition = 0;
+		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
+			m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		}
+	#endif
+}
+
+ewol::OObject2DTextured::OObject2DTextured( float sizeX, float sizeY)
+{
+	if (false == ewol::resource::Keep(m_resource) ) {
+		EWOL_CRITICAL("can not get a resource Texture");
+	}
+	if (NULL!=m_resource) {
+		m_resource->SetImageSize(Vector2D<int32_t>(sizeX,sizeY));
+		draw::Image& tmpImage = m_resource->Get();
+		tmpImage.SetFillColor(draw::color::black);
+		tmpImage.Clear();
+		m_resource->Flush();
 	}
 	#ifdef __VIDEO__OPENGL_ES_2
 		etk::UString tmpString("textured.prog");

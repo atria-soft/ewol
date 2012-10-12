@@ -130,4 +130,3 @@ void ewol::Texture::SetImageSize(Vector2D<int32_t> newSize)
 	m_data.Resize(newSize);
 }
 
-

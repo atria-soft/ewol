@@ -55,11 +55,11 @@ namespace ewol {
 			int32_t                              numberOfGroup;                                    //!< curent scene number of group
 			etk::UString                         groupDescription[MAX_GROUP_NUMBER];               //!< name of all the groups
 			int32_t                              groupEnemy[MAX_GROUP_NUMBER][MAX_GROUP_NUMBER];   //!< list of the ennemy
-			ewol::Texture*                   background;                                           //!< background element
-			etk::Vector<ewol::Sprite*>       animated;                                         //!< element that must be display the second
-			etk::Vector<ewol::GameElement*>  listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
-			etk::Vector<ewol::GameElement*>  listGarbage;                                      //!< garbage of the old element allocated ==> prevent multiple alloc and free
-			etk::Vector<listRegisteElement*> listCreatorElement;                               //!< list of all creatable elements
+			ewol::OObject2DTextured*             background;                                       //!< background element
+			etk::Vector<ewol::Sprite*>           animated;                                         //!< element that must be display the second
+			etk::Vector<ewol::GameElement*>      listAnimatedElements[MAX_GROUP_NUMBER];           //!< generic element to display order in the diffferent group
+			etk::Vector<ewol::GameElement*>      listGarbage;                                      //!< garbage of the old element allocated ==> prevent multiple alloc and free
+			etk::Vector<listRegisteElement*>     listCreatorElement;                               //!< list of all creatable elements
 			int16_t                GetUniqueId(void) { int16_t iddd = m_id; m_id++; return iddd; };
 			void                   RegisterElementType(etk::UString name, creatorElement_tf * loadElement, etk::UString userString);
 			void                   RmElement(int16_t group, int16_t posInList);
@@ -94,7 +94,7 @@ namespace ewol {
 			void AddEarrerDestroy(uint32_t uId);
 			void RmEarrerDestroy(uint32_t uId);
 			void SendEventRemove(uint32_t uId);
-			ewol::Texture* GetBackground(void) { return background; };
+			ewol::OObject2DTextured* GetBackground(void) { return background; };
 	};
 };
 

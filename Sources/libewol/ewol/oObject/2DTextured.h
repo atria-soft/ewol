@@ -33,6 +33,7 @@ namespace ewol {
 	{
 		public:
 			OObject2DTextured(etk::UString textureName, float sizeX=-1, float sizeY=-1);
+			OObject2DTextured(float sizeX=-1, float sizeY=-1);
 			virtual ~OObject2DTextured(void);
 		public:
 			virtual void Draw(void);
@@ -48,7 +49,7 @@ namespace ewol {
 				int32_t        m_GLtexture;
 				int32_t        m_GLtexID;
 			#endif
-			ewol::TextureFile*              m_resource;    //!< texture resources
+			ewol::Texture*                  m_resource;    //!< texture resources
 			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
 			etk::Vector<texCoord_ts>        m_coordTex;    //!< internal texture coordinate for every point
 			#ifdef __VIDEO__OPENGL_ES_2
@@ -56,6 +57,21 @@ namespace ewol {
 			#else
 				etk::Vector<draw::Color>    m_coordColor;  //!< internal color of the different point
 			#endif
+		public:
+			draw::Image* GetImage(void)
+			{
+				if (NULL == m_resource) {
+					return NULL;
+				}
+				draw::Image& tmpImage = m_resource->Get();
+				return &tmpImage;
+			};
+			void Flush(void)
+			{
+				if (NULL != m_resource) {
+					m_resource->Flush();
+				}
+			}
 	};
 };
 

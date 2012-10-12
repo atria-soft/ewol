@@ -90,6 +90,9 @@ void ewol::Scene::OnDraw(DrawProperty& displayProp)
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw background :
 	// TODO : ...
+	if (NULL != m_sceneElement.background) {
+		m_sceneElement.background->Draw();
+	}
 	//background
 	// draw elements
 	for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {

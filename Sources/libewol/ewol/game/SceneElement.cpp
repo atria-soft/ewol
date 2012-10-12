@@ -51,9 +51,10 @@ ewol::SceneElement::SceneElement(void)
 	}
 	retreviveElement = 0;
 	allocatedElements = 0;
-	if (false == ewol::resource::Keep(background) ) {
+	
+	background = new ewol::OObject2DTextured(1024,1024);
+	if (NULL == background ) {
 		EWOL_ERROR("error to keep the scene background");
-		background = NULL;
 	}
 }
 
@@ -92,7 +93,8 @@ ewol::SceneElement::~SceneElement(void)
 	}
 	animated.Clear();
 	if (NULL != background) {
-		ewol::resource::Release(background);
+		delete background;
+		background = NULL;
 	}
 }
 
