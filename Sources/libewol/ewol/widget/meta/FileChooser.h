@@ -42,7 +42,7 @@ namespace ewol {
 	{
 		public:
 			FileChooser(void);
-			~FileChooser(void);
+			virtual ~FileChooser(void);
 			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
