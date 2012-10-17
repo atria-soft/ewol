@@ -80,7 +80,7 @@ namespace ewol {
 				return bg;
 			}
 			virtual uint32_t GetNuberOfColomn(void) {
-				return 0;
+				return 1;
 			};
 			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
 				myTitle = "";

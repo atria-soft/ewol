@@ -116,7 +116,6 @@ void ewol::List::OnRegenerateDisplay(void)
 		// clean the object list ...
 		ClearOObjectList();
 		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
-		
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = 0;
 		/*
@@ -131,7 +130,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		// TODO : Remove this ...
 		int32_t minHeight = 25;
 	
-		//uint32_t nbColomn = GetNuberOfColomn();
+		uint32_t nbColomn = GetNuberOfColomn();
 		int32_t nbRaw    = GetNuberOfRaw();
 		// For the scrooling windows
 		m_maxSize.x = m_size.x;
@@ -164,40 +163,51 @@ void ewol::List::OnRegenerateDisplay(void)
 		// remove all the positions :
 		m_lineSize.Clear();
 		int32_t displayPositionY = m_size.y;
+		int32_t displayPositionX = 0;
 		Vector2D<int32_t> tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
 		m_lineSize.PushBack(tmpRegister);
-		for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
-			etk::UString myTextToWrite;
-			draw::Color fg;
-			draw::Color bg;
-			GetElement(0, iii, myTextToWrite, fg, bg);
-			
-			ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
-			if (NULL != tmpText) {
-				// get font size : 
-				int32_t tmpFontHeight = tmpText->GetHeight();
-				displayPositionY-=(tmpFontHeight+m_paddingSizeY);
+		
+		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x ; jjj++) {
+			int32_t sizeColom = 0;
+			displayPositionY = m_size.y;
+			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
+				etk::UString myTextToWrite;
+				draw::Color fg;
+				draw::Color bg;
+				GetElement(jjj, iii, myTextToWrite, fg, bg);
 				
-				BGOObjects->SetColor(bg);
-				BGOObjects->Rectangle(0, displayPositionY, m_size.x, tmpFontHeight+2*m_paddingSizeY);
-				
-				
-				Vector2D<float> textPos;
-				textPos.x = tmpOriginX;
-				textPos.y = displayPositionY;
-				tmpText->SetColor(fg);
-				tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
-				AddOObject(tmpText);
-				// madding move ...
-				displayPositionY -= m_paddingSizeY;
-				
-				// add the raw position to remember it ...
-				tmpRegister.x++;
-				tmpRegister.y = displayPositionY;
-				m_lineSize.PushBack(tmpRegister);
-				//EWOL_DEBUG("List indexation:" << tmpRegister);
+				ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
+				if (NULL != tmpText) {
+					// get font size : 
+					int32_t tmpFontHeight = tmpText->GetHeight();
+					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
+					
+					BGOObjects->SetColor(bg);
+					BGOObjects->Rectangle(displayPositionX, displayPositionY, m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY);
+					
+					// get the maximum size of the colomn :
+					Vector2D<float> textSize = tmpText->GetSize(myTextToWrite);
+					sizeColom = etk_max(sizeColom, textSize.x);
+					
+					Vector2D<float> textPos;
+					textPos.x = tmpOriginX + displayPositionX;
+					textPos.y = displayPositionY;
+					tmpText->SetColor(fg);
+					tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
+					AddOObject(tmpText);
+					// madding move ...
+					displayPositionY -= m_paddingSizeY;
+					
+					// add the raw position to remember it ...
+					tmpRegister.x++;
+					tmpRegister.y = displayPositionY;
+					m_lineSize.PushBack(tmpRegister);
+					//EWOL_DEBUG("List indexation:" << tmpRegister);
+				}
 			}
+			displayPositionX += sizeColom;
+			tmpOriginX += m_paddingSizeX*2*2;
 		}
 		//m_lineSize.PushBack(tmpOriginY);
 		AddOObject(BGOObjects, 0);
