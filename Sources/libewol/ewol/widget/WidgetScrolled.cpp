@@ -162,13 +162,20 @@ bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput
 					}
 				}
 			}else if (2 == IdInput) {
-				if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
-					m_highSpeedMode = ewol::SCROLL_INIT;
-					m_highSpeedType = ewol::INPUT_TYPE_MOUSE;
-					m_highSpeedStartPos.x = relativePos.x;
-					m_highSpeedStartPos.y = relativePos.y;
-					m_highSpeedButton = 2;
-					return true;
+				if (true == ewol::IsSetCtrl()) {
+					if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+						float zoom = 1.0;
+						SetZoom(zoom);
+					}
+				} else {
+					if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+						m_highSpeedMode = ewol::SCROLL_INIT;
+						m_highSpeedType = ewol::INPUT_TYPE_MOUSE;
+						m_highSpeedStartPos.x = relativePos.x;
+						m_highSpeedStartPos.y = relativePos.y;
+						m_highSpeedButton = 2;
+						return true;
+					}
 				}
 			} else if (ewol::SCROLL_DISABLE!=m_highSpeedMode && ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
 				m_highSpeedMode = ewol::SCROLL_DISABLE;
