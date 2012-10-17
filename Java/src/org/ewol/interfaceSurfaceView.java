@@ -176,22 +176,22 @@ public class interfaceSurfaceView extends GLSurfaceView {
 		{
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__VOLUME_DOWN, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_VOLUME_UP:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__VOLUME_UP, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_MENU:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__MENU, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_CAMERA:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__CAMERA, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_HOME:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__HOME, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_POWER:
 				interfaceJNI.IOKeyboardEventKeySystem(interfaceJNI.EWOL_SYSTEM_KEY__POWER, isDown);
-				return true;
+				return false;
 			case KeyEvent.KEYCODE_BACK:
 				// the back key is wrapped in the <esc> key to simplify PC validation ...
 				interfaceJNI.IOKeyboardEventKey(0x1B, isDown);
