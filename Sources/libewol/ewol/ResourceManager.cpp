@@ -306,21 +306,41 @@ bool ewol::resource::Keep(ewol::Texture*& object)
 	return true;
 }
 
+
+/**
+ * @brief get the next power 2 if the input
+ * @param[in] value Value that we want the next power of 2
+ * @return result value
+ */
+static int32_t nextP2(int32_t value)
+{
+	int32_t val=1;
+	for (int32_t iii=1; iii<31; iii++) {
+		if (value <= val) {
+			return val;
+		}
+		val *=2;
+	}
+	EWOL_CRITICAL("impossible CASE....");
+	return val;
+}
+
 bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size)
 {
+	 Vector2D<int32_t> size2(nextP2(size.x), nextP2(size.y));
 	etk::UString TmpFilename = filename;
 	TmpFilename += ":";
-	TmpFilename += size.x;
+	TmpFilename += size2.x;
 	TmpFilename += "x";
-	TmpFilename += size.y;
+	TmpFilename += size2.y;
 	
-	EWOL_VERBOSE("KEEP : TectureFile : file : \"" << TmpFilename << "\"");
+	EWOL_INFO("KEEP : TectureFile : file : \"" << TmpFilename << "\" basic size=" << size);
 	object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
 	if (NULL != object) {
 		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::TextureFile(TmpFilename, filename, size);
+	object = new ewol::TextureFile(TmpFilename, filename, size2);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
