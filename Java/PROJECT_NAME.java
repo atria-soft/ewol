@@ -82,7 +82,6 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		super.onCreate(savedInstanceState);
 		
-		
 		// set the java evironement in the C sources : 
 		ActivitySetJavaVortualMachineStart(this);
 		
@@ -198,8 +197,7 @@ public class __PROJECT_NAME__ extends Activity {
 	
 	public void CPP_keyboardShow()
 	{
-		interfaceJNI.TouchEvent();
-		
+		//interfaceJNI.TouchEvent();
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 	}
@@ -208,6 +206,7 @@ public class __PROJECT_NAME__ extends Activity {
 	{
 		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.toggleSoftInput(0 ,InputMethodManager.HIDE_IMPLICIT_ONLY + InputMethodManager.HIDE_NOT_ALWAYS);
+		//imm.hideSoftInputFromWindow(view.getWindowToken(),0); 
 	}
 	
 	public static void eventFromCPP(String[] args)
