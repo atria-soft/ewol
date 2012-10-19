@@ -222,12 +222,14 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
                                  const etk::UString&             unicodeString,
                                  etk::Vector<Vector2D<float> > & coord,
-                                 etk::Vector<texCoord_ts> &      coordTex)
+                                 etk::Vector<texCoord_ts> &      coordTex,
+                                 bool                            hasClipping,
+                                 clipping_ts&                    clipping)
 {
 	float totalSize = 0;
 	Vector2D<float> tmpPos = textPos;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		int32_t ret = Draw(tmpPos, unicodeString[iii], coord, coordTex);
+		int32_t ret = Draw(tmpPos, unicodeString[iii], coord, coordTex, hasClipping, clipping);
 		tmpPos.x += ret;
 		totalSize += ret;
 	}
@@ -308,7 +310,9 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
                                  const uniChar_t                 unicodeChar,
                                  etk::Vector<Vector2D<float> > & coord,
-                                 etk::Vector<texCoord_ts> &      coordTex)
+                                 etk::Vector<texCoord_ts> &      coordTex,
+                                 bool                            hasClipping,
+                                 clipping_ts&                    clipping)
 {
 	float posDrawX = textPos.x;
 	
@@ -347,76 +351,123 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 		
 		
 		// Clipping and drawing area
-		if(    dxB <= dxA
-		    || dyD >= dyC) {
-			// nothing to do ...
+			
+		if(    dxB < clipping.x
+		    || dxA > clipping.x + clipping.w)
+		{
+			// Nothing to diplay ...
 		} else {
-			/* Bitmap position
-			 *   0------1
-			 *   |      |
-			 *   |      |
-			 *   3------2
-			 */
-			Vector2D<int32_t> bitmapDrawPos[4];
-			bitmapDrawPos[0].x = (int32_t)dxA;
-			bitmapDrawPos[1].x = (int32_t)dxB;
-			bitmapDrawPos[2].x = (int32_t)dxB;
-			bitmapDrawPos[3].x = (int32_t)dxA;
-			
-			bitmapDrawPos[0].y = (int32_t)dyC;
-			bitmapDrawPos[1].y = (int32_t)dyC;
-			bitmapDrawPos[2].y = (int32_t)dyD;
-			bitmapDrawPos[3].y = (int32_t)dyD;
-			/* texture Position : 
-			 *   0------1
-			 *   |      |
-			 *   |      |
-			 *   3------2
-			 */
-			texCoord_ts texturePos[4];
-			texturePos[0].u = tuA;
-			texturePos[1].u = tuB;
-			texturePos[2].u = tuB;
-			texturePos[3].u = tuA;
-			
-			texturePos[0].v = tvC;
-			texturePos[1].v = tvC;
-			texturePos[2].v = tvD;
-			texturePos[3].v = tvD;
-			
-			// NOTE : Android does not support the Quads elements ...
-			/* Step 1 : 
-			 *   ********     
-			 *     ******     
-			 *       ****     
-			 *         **     
-			 *                
-			 */
-			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[1]);
-			coordTex.PushBack(texturePos[2]);
-			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[1]);
-			coord.PushBack(bitmapDrawPos[2]);
-			
-			/* Step 2 : 
-			 *              
-			 *   **         
-			 *   ****       
-			 *   ******     
-			 *   ********   
-			 */
-			// set texture coordonates :
-			coordTex.PushBack(texturePos[0]);
-			coordTex.PushBack(texturePos[2]);
-			coordTex.PushBack(texturePos[3]);
-			// set display positions :
-			coord.PushBack(bitmapDrawPos[0]);
-			coord.PushBack(bitmapDrawPos[2]);
-			coord.PushBack(bitmapDrawPos[3]);
-			
+			if (true == hasClipping) {
+				// generata positions...
+				float TexSizeX = tuB - tuA;
+				if (dxA < clipping.x) {
+					// clip display
+					float drawSize = clipping.x - dxA;
+					// Update element start display
+					dxA = clipping.x;
+					float addElement = TexSizeX * drawSize / (float)m_listElement[charIndex].property.m_sizeTexture.x;
+					// update texture start X Pos
+					tuA += addElement;
+				}
+				if (dxB > clipping.x + clipping.w) {
+					// clip display
+					float drawSize = dxB - (clipping.x + clipping.w);
+					// Update element start display
+					dxB = clipping.x + clipping.w;
+					float addElement = TexSizeX * drawSize / (float)m_listElement[charIndex].property.m_sizeTexture.x;
+					// update texture start X Pos
+					tuB -= addElement;
+				}
+				float TexSizeY = tvD - tvC;
+				if (dyC < clipping.y) {
+					// clip display
+					float drawSize = clipping.y - dyC;
+					// Update element start display
+					dyC = clipping.y;
+					float addElement = TexSizeY * drawSize / (float)m_listElement[charIndex].property.m_sizeTexture.x;
+					// update texture start X Pos
+					tvC += addElement;
+				}
+				if (dyD > clipping.y + clipping.h) {
+					// clip display
+					float drawSize = dyD - (clipping.y + clipping.h);
+					// Update element start display
+					dyD = clipping.y + clipping.h;
+					float addElement = TexSizeX * drawSize / (float)m_listElement[charIndex].property.m_sizeTexture.x;
+					// update texture start X Pos
+					tvD -= addElement;
+				}
+			}
+			if(    dxB <= dxA
+			    || dyD <= dyC) {
+				// nothing to do ...
+			} else {
+				/* Bitmap position
+				 *   0------1
+				 *   |      |
+				 *   |      |
+				 *   3------2
+				 */
+				Vector2D<int32_t> bitmapDrawPos[4];
+				bitmapDrawPos[0].x = (int32_t)dxA;
+				bitmapDrawPos[1].x = (int32_t)dxB;
+				bitmapDrawPos[2].x = (int32_t)dxB;
+				bitmapDrawPos[3].x = (int32_t)dxA;
+				
+				bitmapDrawPos[0].y = (int32_t)dyC;
+				bitmapDrawPos[1].y = (int32_t)dyC;
+				bitmapDrawPos[2].y = (int32_t)dyD;
+				bitmapDrawPos[3].y = (int32_t)dyD;
+				/* texture Position : 
+				 *   0------1
+				 *   |      |
+				 *   |      |
+				 *   3------2
+				 */
+				texCoord_ts texturePos[4];
+				texturePos[0].u = tuA;
+				texturePos[1].u = tuB;
+				texturePos[2].u = tuB;
+				texturePos[3].u = tuA;
+				
+				texturePos[0].v = tvC;
+				texturePos[1].v = tvC;
+				texturePos[2].v = tvD;
+				texturePos[3].v = tvD;
+				
+				// NOTE : Android does not support the Quads elements ...
+				/* Step 1 : 
+				 *   ********     
+				 *     ******     
+				 *       ****     
+				 *         **     
+				 *                
+				 */
+				// set texture coordonates :
+				coordTex.PushBack(texturePos[0]);
+				coordTex.PushBack(texturePos[1]);
+				coordTex.PushBack(texturePos[2]);
+				// set display positions :
+				coord.PushBack(bitmapDrawPos[0]);
+				coord.PushBack(bitmapDrawPos[1]);
+				coord.PushBack(bitmapDrawPos[2]);
+				
+				/* Step 2 : 
+				 *              
+				 *   **         
+				 *   ****       
+				 *   ******     
+				 *   ********   
+				 */
+				// set texture coordonates :
+				coordTex.PushBack(texturePos[0]);
+				coordTex.PushBack(texturePos[2]);
+				coordTex.PushBack(texturePos[3]);
+				// set display positions :
+				coord.PushBack(bitmapDrawPos[0]);
+				coord.PushBack(bitmapDrawPos[2]);
+				coord.PushBack(bitmapDrawPos[3]);
+			}
 		}
 	}
 	posDrawX += m_listElement[charIndex].property.m_advance.x;

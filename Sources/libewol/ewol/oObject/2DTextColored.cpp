@@ -183,11 +183,7 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::USt
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
 	int32_t size = 0;
-	if (true==m_hasClipping) {
-		size = m_font->Draw(textPos, unicodeString, m_coord, m_coordTex);
-	} else {
-		size = m_font->Draw(textPos, unicodeString, m_coord, m_coordTex);
-	}
+	size = m_font->Draw(textPos, unicodeString, m_coord, m_coordTex, m_hasClipping, m_clipping);
 	// set the color ...
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
@@ -203,11 +199,7 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const uniChar_
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
 	int32_t size = 0;
-	if (true==m_hasClipping) {
-		size = m_font->Draw(textPos, unicodeChar, m_coord, m_coordTex);
-	} else {
-		size = m_font->Draw(textPos, unicodeChar, m_coord, m_coordTex);
-	}
+	size = m_font->Draw(textPos, unicodeChar, m_coord, m_coordTex, m_hasClipping, m_clipping);
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
 	}

@@ -57,11 +57,15 @@ namespace ewol
 			int32_t Draw(Vector2D<float>                 textPos,
 			             const etk::UString&             unicodeString,
 			             etk::Vector<Vector2D<float> > & coord,
-			             etk::Vector<texCoord_ts> &      coordTex);
+			             etk::Vector<texCoord_ts> &      coordTex,
+			             bool                            hasClipping,
+			             clipping_ts&                    clipping);
 			int32_t Draw(Vector2D<float>                 textPos,
 			             const uniChar_t                 unicodeChar,
 			             etk::Vector<Vector2D<float> > & coord,
-			             etk::Vector<texCoord_ts> &      coordTex);
+			             etk::Vector<texCoord_ts> &      coordTex,
+			             bool                            hasClipping,
+			             clipping_ts&                    clipping);
 			Vector2D<float> GetSize(const etk::UString & unicodeString);
 			Vector2D<float> GetSize(const uniChar_t      unicodeChar);
 			// TODO : Remove this element, it is stupid ...
