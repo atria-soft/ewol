@@ -115,7 +115,7 @@ void ewol::WSlider::SetMinSise(float x, float y)
 
 bool ewol::WSlider::CanExpentX(void)
 {
-	if (m_userExpendX == true) {
+	if (m_userExpend.x == true) {
 		return true;
 	}
 	if (true == m_lockExpendContamination) {
@@ -126,7 +126,7 @@ bool ewol::WSlider::CanExpentX(void)
 
 bool ewol::WSlider::CanExpentY(void)
 {
-	if (m_userExpendY == true) {
+	if (m_userExpend.y == true) {
 		return true;
 	}
 	if (true == m_lockExpendContamination) {

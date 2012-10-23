@@ -111,6 +111,42 @@ namespace ewol {
 			Vector2D<int32_t> m_size;
 	};
 	
+	typedef struct {
+		bool capLock;
+		bool shift;
+		bool ctrl;
+		bool meta;
+		bool alt;
+		bool altGr;
+		bool verNum;
+		bool insert;
+	} specialKey_ts;
+	
+	class EventShortCut {
+		public:
+			bool                     broadcastEvent;    // if it is true, then the message is sent to all the system
+			const char *             generateEventId;   // Local generated event
+			etk::UString             eventData;         // data link with the event
+			ewol::specialKey_ts      specialKey;        // special board key
+			uniChar_t                unicodeValue;      // 0 if not used
+			ewol::eventKbMoveType_te keyboardMoveValue; // ewol::EVENT_KB_MOVE_TYPE_NONE if not used
+			EventShortCut(void) {
+				broadcastEvent = false;
+				generateEventId = NULL;
+				eventData = "";
+				specialKey.capLock = false;
+				specialKey.shift = false;
+				specialKey.ctrl = false;
+				specialKey.meta = false;
+				specialKey.alt = false;
+				specialKey.altGr = false;
+				specialKey.verNum = false;
+				specialKey.insert = false;
+				unicodeValue = 0;
+				keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_NONE;
+			};
+			~EventShortCut(void) { };
+	};
 	
 	class Widget : public EObject {
 		public:
@@ -146,10 +182,8 @@ namespace ewol {
 			Vector2D<float>      m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
 			Vector2D<float>      m_userMinSize;   //!< user define the minimum size of the widget
-			bool           m_userExpendX;
-			bool           m_userExpendY;
-			bool           m_userFillX;
-			bool           m_userFillY;
+			Vector2D<bool>       m_userExpend;
+			Vector2D<bool>       m_userFill;
 		public:
 			/**
 			 * @brief Set the zoom property of the widget
@@ -225,49 +259,49 @@ namespace ewol {
 			 * @param[in] newExpend new Expend state
 			 * @return ---
 			 */
-			virtual void SetExpendX(bool newExpend=false) { m_userExpendX = newExpend; };
+			virtual void SetExpendX(bool newExpend=false) { m_userExpend.x = newExpend; };
 			/**
 			 * @brief Get the horizontal expend capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentX(void) {  if (false==IsHide()) { return m_userExpendX; } return false; };
+			virtual bool CanExpentX(void) {  if (false==IsHide()) { return m_userExpend.x; } return false; };
 			/**
 			 * @brief Set the vertical expend capacity
 			 * @param[in] newExpend new Expend state
 			 * @return ---
 			 */
-			virtual void SetExpendY(bool newExpend=false) { m_userExpendY = newExpend; };
+			virtual void SetExpendY(bool newExpend=false) { m_userExpend.y = newExpend; };
 			/**
 			 * @brief Get the vertical expend capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentY(void) {  if (false==IsHide()) { return m_userExpendY; } return false; };
+			virtual bool CanExpentY(void) {  if (false==IsHide()) { return m_userExpend.y; } return false; };
 			/**
 			 * @brief Set the horizontal filling capacity
 			 * @param[in] newFill new fill state
 			 * @return ---
 			 */
-			virtual void SetFillX(bool newFill=false) { m_userFillX = newFill; };
+			virtual void SetFillX(bool newFill=false) { m_userFill.x = newFill; };
 			/**
 			 * @brief Get the horizontal filling capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to horizontal filling
 			 */
-			bool CanFillX(void) { return m_userFillX; };
+			bool CanFillX(void) { return m_userFill.x; };
 			/**
 			 * @brief Set the vertical filling capacity
 			 * @param[in] newFill new fill state
 			 * @return ---
 			 */
-			virtual void SetFillY(bool newFill=false) { m_userFillY = newFill; };
+			virtual void SetFillY(bool newFill=false) { m_userFill.y = newFill; };
 			/**
 			 * @brief Get the vertical filling capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to vertical filling
 			 */
-			bool CanFillY(void) { return m_userFillY; };
+			bool CanFillY(void) { return m_userFill.y; };
 			/**
 			 * @brief Set the widget hidden
 			 * @param ---
@@ -401,17 +435,6 @@ namespace ewol {
 			 */
 			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos) { return false; };
 			/**
-			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
-			 * @param[in] shift The key Shift (left or/and right) is pressed (if true)
-			 * @param[in] control The key control (left or/and right) is pressed (if true)
-			 * @param[in] alt The key Alt is pressed (if true)
-			 * @param[in] meta The key Meta (windows key/Apple key) (left or/and right) is pressed (if true)
-			 * @param[in] unicodeValue key pressed by the user
-			 * @return true if the event has been used
-			 * @return false if the event has not been used
-			 */
-			virtual bool OnEventShortCut(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue) { return false; };
-			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
 			 * @param[in] unicodeValue key pressed by the user
@@ -433,6 +456,37 @@ namespace ewol {
 			 */
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID) { };
 		
+		// ----------------------------------------------------------------------------------------------------------------
+		// -- Shortcut : management of the shortcut
+		// ----------------------------------------------------------------------------------------------------------------
+		private:
+			etk::Vector<EventShortCut*>    m_localShortcut;
+		protected:
+			/**
+			 * @brief Add a specific shortcut with his description
+			 * @param[in] descriptiveString Description string of the shortcut
+			 * @param[in] generateEventId Event generic of the element
+			 * @param[in] data Associate data wit the event
+			 * @return ---
+			 */
+			void ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data="", bool broadcast=false);
+			/**
+			 * @brief Remove all curent shortCut
+			 * @param ---
+			 * @return ---
+			 */
+			void ShortCutClean(void);
+		public:
+			/**
+			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
+			 * @param[in] special all the special kay pressed at this time
+			 * @param[in] unicodeValue key pressed by the user not used if the kbMove!=ewol::EVENT_KB_MOVE_TYPE_NONE
+			 * @param[in] kbMove special key of the keyboard
+			 * @return true if the event has been used
+			 * @return false if the event has not been used
+			 * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
+			 */
+			virtual bool OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------

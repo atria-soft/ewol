@@ -92,10 +92,10 @@ void ewol::Label::OnRegenerateDisplay(void)
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = 0;
 		
-		if (true==m_userFillX) {
+		if (true==m_userFill.x) {
 			tmpOriginX = (m_size.x - m_minSize.x) / 2;
 		}
-		if (true==m_userFillY) {
+		if (true==m_userFill.y) {
 			tmpOriginY = (m_size.y - m_minSize.y) / 2;
 		}
 		tmpOriginX += paddingSize;

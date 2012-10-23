@@ -48,26 +48,15 @@ namespace eSystem
 	void SetMouseState(int pointerID, bool isUp, float x, float y);
 	
 	typedef struct {
-		bool capLock;
-		bool shift;
-		bool ctrl;
-		bool meta;
-		bool alt;
-		bool altGr;
-		bool verNum;
-		bool insert;
-	} specialKey_ts;
-	
-	typedef struct {
-		bool                      isDown;
-		uniChar_t                 myChar;
-		eSystem::specialKey_ts    special;
+		bool                   isDown;
+		uniChar_t              myChar;
+		ewol::specialKey_ts    special;
 	} keyboardKey_ts;
 	
 	typedef struct {
 		bool                      isDown;
 		ewol::eventKbMoveType_te  move;
-		eSystem::specialKey_ts    special;
+		ewol::specialKey_ts       special;
 	} keyboardMove_ts;
 	
 	void SetKeyboard(eSystem::keyboardKey_ts& keyInput);

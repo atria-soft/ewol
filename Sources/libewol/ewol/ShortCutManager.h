@@ -33,7 +33,7 @@ namespace ewol {
 	namespace shortCut {
 		void Init(void);
 		void UnInit(void);
-		bool Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown);
+		bool Process(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown);
 	};
 };
 

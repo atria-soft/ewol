@@ -351,9 +351,9 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 		
 		
 		// Clipping and drawing area
-		if(    dxB < clipping.x
-		    || dxA > clipping.x + clipping.w)
-		{
+		if(     true == hasClipping
+		    && (    dxB < clipping.x
+		         || dxA > clipping.x + clipping.w) ) {
 			// Nothing to diplay ...
 		} else {
 			if (true == hasClipping) {

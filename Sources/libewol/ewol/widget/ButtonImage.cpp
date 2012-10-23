@@ -130,11 +130,11 @@ void ewol::ButtonImage::OnRegenerateDisplay(void)
 		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
 		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
 		
-		if (true==m_userFillX) {
+		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
 		}
-		if (true==m_userFillY) {
+		if (true==m_userFill.y) {
 			tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 		}
@@ -254,11 +254,11 @@ bool ewol::ButtonImage::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
 			int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
 			
-			if (true==m_userFillX) {
+			if (true==m_userFill.x) {
 				tmpSizeX = m_size.x;
 				tmpOriginX = 0;
 			}
-			if (true==m_userFillY) {
+			if (true==m_userFill.y) {
 				tmpSizeY = m_size.y;
 				tmpOriginY = 0;
 			}

@@ -33,8 +33,8 @@
 
 ewol::ContextMenu::ContextMenu(void)
 {
-	m_userExpendX = true;
-	m_userExpendY = true;
+	m_userExpend.x = true;
+	m_userExpend.y = true;
 	
 	m_padding.x = 4;
 	m_padding.y = 4;
@@ -134,8 +134,8 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 bool ewol::ContextMenu::CalculateMinSize(void)
 {
 	EWOL_DEBUG("CalculateMinSize");
-	m_userExpendX=false;
-	m_userExpendY=false;
+	m_userExpend.x=false;
+	m_userExpend.y=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {

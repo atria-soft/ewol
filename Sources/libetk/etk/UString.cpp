@@ -64,8 +64,8 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
  */
 etk::UString::~UString(void)
 {
-	m_data.Clear();
-	m_dataUtf8.Clear();
+	//m_data.Clear();
+	//m_dataUtf8.Clear();
 }
 
 

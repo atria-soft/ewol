@@ -34,6 +34,11 @@ extern const char * const ewolEventEntryClick      = "ewol-Entry-click";
 extern const char * const ewolEventEntryEnter      = "ewol-Entry-Enter";
 extern const char * const ewolEventEntryModify     = "ewol-Entry-Modify";
 
+const char * const ewolEventEntryCut               = "ewol-Entry-Cut";
+const char * const ewolEventEntryCopy              = "ewol-Entry-Copy";
+const char * const ewolEventEntryPaste             = "ewol-Entry-Paste";
+const char * const ewolEventEntryClean             = "ewol-Entry-Clean";
+const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
 
 
 #undef __class__
@@ -56,6 +61,12 @@ void ewol::Entry::Init(void)
 	m_textColorBg = draw::color::white;
 	m_textColorBg.a = 0xAF;
 	SetCanHaveFocus(true);
+	ShortCutAdd("ctrl+w",       ewolEventEntryClean);
+	ShortCutAdd("ctrl+x",       ewolEventEntryCut);
+	ShortCutAdd("ctrl+c",       ewolEventEntryCopy);
+	ShortCutAdd("ctrl+v",       ewolEventEntryPaste);
+	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
+	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
 }
 
 ewol::Entry::Entry(void)
@@ -126,10 +137,10 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
 		int32_t tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
 		
-		if (true==m_userFillX) {
+		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 		}
-		if (true==m_userFillY) {
+		if (true==m_userFill.y) {
 			//tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 			tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
@@ -166,6 +177,38 @@ void ewol::Entry::OnRegenerateDisplay(void)
 }
 
 /**
+ * @brief Change the cursor position with the curent position requested on the display
+ * @param[in] pos Absolute position of the event
+ * @note The display is automaticly requested when change apear.
+ * @return ---
+ */
+void ewol::Entry::UpdateCursorPosition(Vector2D<float>& pos)
+{
+	Vector2D<float> relPos = RelativePosition(pos);
+	// try to find the new cursor position :
+	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
+	int32_t displayHidenSize = m_oObjectText.GetSize(tmpDisplay).x;
+	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
+	int32_t newCursorPosition = -1;
+	int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
+	for (int32_t iii=0; iii<m_data.Size(); iii++) {
+		tmpDisplay = m_data.Extract(0, iii);
+		int32_t tmpWidth = m_oObjectText.GetSize(tmpDisplay).x - displayHidenSize;
+		if (tmpWidth>=relPos.x-tmpTextOriginX) {
+			newCursorPosition = iii;
+			break;
+		}
+	}
+	if (newCursorPosition == -1) {
+		newCursorPosition = m_data.Size();
+	}
+	if (m_displayCursorPos != newCursorPosition) {
+		m_displayCursorPos = newCursorPosition;
+		MarkToRedraw();
+	}
+}
+
+/**
  * @brief Event on an input of this Widget
  * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
  * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
@@ -176,36 +219,43 @@ void ewol::Entry::OnRegenerateDisplay(void)
  */
 bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
 {
-	//EWOL_DEBUG("Event on Entry ...");
+	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == IdInput) {
 		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
 			GenerateEventId(ewolEventEntryClick);
 			KeepFocus();
 			MarkToRedraw();
-			Vector2D<float> relPos = RelativePosition(pos);
-			// try to find the new cursor position :
-			etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
-			int32_t displayHidenSize = m_oObjectText.GetSize(tmpDisplay).x;
-			//EWOL_DEBUG("hidenSize : " << displayHidenSize);
-			int32_t newCursorPosition = -1;
-			int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
-			for (int32_t iii=0; iii<m_data.Size(); iii++) {
-				tmpDisplay = m_data.Extract(0, iii);
-				int32_t tmpWidth = m_oObjectText.GetSize(tmpDisplay).x - displayHidenSize;
-				if (tmpWidth>=relPos.x-tmpTextOriginX) {
-					newCursorPosition = iii;
-					break;
-				}
-			}
-			if (newCursorPosition == -1) {
-				newCursorPosition = m_data.Size();
-			}
-			m_displayCursorPos = newCursorPosition;
+			UpdateCursorPosition(pos);
 			return true;
 		} else if (ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent) {
 			// TODO : selected area ...
 		} else if (ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
 			// TODO : select all the line
+		}
+	}
+	else if(    ewol::INPUT_TYPE_MOUSE == type
+	         && 2 == IdInput) {
+		if(    typeEvent == ewol::EVENT_INPUT_TYPE_DOWN
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_MOVE
+		    || typeEvent == ewol::EVENT_INPUT_TYPE_UP) {
+			// updatethe cursor position : 
+			UpdateCursorPosition(pos);
+		}
+		// Paste current selection only when up button
+		if (typeEvent == ewol::EVENT_INPUT_TYPE_UP) {
+			// middle button => past data...
+			// get current selection :
+			etk::UString tmpData = Get(ewol::clipBoard::CLIPBOARD_SELECTION);
+			// add it on the current display :
+			if (tmpData.Size() >= 0) {
+				m_data.Add(m_displayCursorPos, &tmpData[0]);
+				if (m_data.Size() == tmpData.Size()) {
+					m_displayCursorPos = tmpData.Size()-1;
+				} else {
+					m_displayCursorPos += tmpData.Size();
+				}
+				MarkToRedraw();
+			}
 		}
 	}
 	return false;
@@ -284,12 +334,62 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 	}
 	return false;
 }
+/**
+ * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
+ * @note : need to have focus ...
+ * @param[in] mode Mode of data requested
+ * @return ---
+ */
+void ewol::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
+{
+	// get current selection :
+	etk::UString tmpData = Get(ewol::clipBoard::CLIPBOARD_STD);
+	// add it on the current display :
+	if (tmpData.Size() >= 0) {
+		m_data.Add(m_displayCursorPos, &tmpData[0]);
+		if (m_data.Size() == tmpData.Size()) {
+			m_displayCursorPos = tmpData.Size()-1;
+		} else {
+			m_displayCursorPos += tmpData.Size();
+		}
+		MarkToRedraw();
+	}
+}
 
+/**
+ * @brief Receive a message from an other EObject with a specific eventId and data
+ * @param[in] CallerObject Pointer on the EObject that information came from
+ * @param[in] eventId Message registered by this class
+ * @param[in] data Data registered by this class
+ * @return ---
+ */
+void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+{
+	ewol::Widget::OnReceiveMessage(CallerObject, eventId, data);
+	if(eventId == ewolEventEntryClean) {
+		m_data = "";
+		m_displayStartPosition = 0;
+		m_displayCursorPos = 0;
+		MarkToRedraw();
+	} else if(eventId == ewolEventEntryCut) {
+		
+	} else if(eventId == ewolEventEntryCopy) {
+		
+	} else if(eventId == ewolEventEntryPaste) {
+		ewol::clipBoard::Request(ewol::clipBoard::CLIPBOARD_STD);
+	} else if(eventId == ewolEventEntrySelect) {
+		if(data == "ALL") {
+			
+		} else {
+			
+		}
+	}
+}
 
 void ewol::Entry::UpdateTextPosition(void)
 {
 	int32_t tmpSizeX = m_minSize.x;
-	if (true==m_userFillX) {
+	if (true==m_userFill.x) {
 		tmpSizeX = m_size.x;
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);

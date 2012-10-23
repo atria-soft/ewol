@@ -82,7 +82,8 @@ void ewol::ForceRedrawAll(void)
 }
 
 
-eSystem::specialKey_ts specialCurrentKey;
+ewol::specialKey_ts specialCurrentKey;
+
 bool ewol::IsSetCapsLock(void)
 {
 	return specialCurrentKey.capLock;

@@ -638,12 +638,15 @@ namespace etk
 				if(newSize <= 0) {
 					newSize = 1;
 				}
+				if (m_allocated<0) {
+					m_allocated = 0;
+				}
 				int32_t requestSize = m_allocated;
 				// set the size with the corect chose type : 
 				if (newSize == requestSize) {
 					return;
 				} else if (newSize < requestSize) {
-					// we did not reove data ???
+					// we did not remove data ???
 				} else {
 					while(newSize > requestSize) {
 						if (0 == requestSize) {
@@ -654,7 +657,7 @@ namespace etk
 					}
 				}
 				// No reallocation needed :
-				if (requestSize == m_allocated) {
+				if (requestSize <= m_allocated) {
 					return;
 				}
 				//TK_INFO("Change vector allocation : " << m_allocated << "==>" << requestSize);
@@ -664,6 +667,7 @@ namespace etk
 					m_data = new MY_TYPE[requestSize];
 					if (NULL==m_data) {
 						TK_CRITICAL("Vector : Error in data allocation request allocation:" << requestSize << "*" << (int32_t)(sizeof(MY_TYPE)) << "bytes" );
+						m_allocated = 0;
 						return;
 					}
 					// no data to copy
@@ -672,6 +676,7 @@ namespace etk
 					MY_TYPE* m_dataTmp = new MY_TYPE[requestSize];
 					if (NULL==m_dataTmp) {
 						TK_CRITICAL("Vector : Error in data allocation request allocation:" << requestSize << "*" << (int32_t)(sizeof(MY_TYPE)) << "bytes" );
+						m_allocated = 0;
 						return;
 					}
 					// copy data in the new pool

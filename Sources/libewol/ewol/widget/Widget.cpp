@@ -32,6 +32,7 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 {
 	char * returnValue = "?";
 	switch(type) {
+		case ewol::EVENT_KB_MOVE_TYPE_NONE:				returnValue = "---";			break;
 		case ewol::EVENT_KB_MOVE_TYPE_LEFT:				returnValue = "LEFT";			break;
 		case ewol::EVENT_KB_MOVE_TYPE_RIGHT:			returnValue = "RIGHT";			break;
 		case ewol::EVENT_KB_MOVE_TYPE_UP:				returnValue = "UP";				break;
@@ -113,6 +114,9 @@ ewol::Widget::~Widget(void)
 {
 	// Remove his own focus...
 	ewol::widgetManager::Rm(this);
+	// clean all the short-cut ...
+	ShortCutClean();
+	
 }
 
 
@@ -333,3 +337,172 @@ void ewol::Widget::MarkToRedraw(void)
 	m_needRegenerateDisplay = true;
 	ewol::widgetManager::MarkDrawingIsNeeded();
 };
+
+
+
+// ----------------------------------------------------------------------------------------------------------------
+// -- Shortcut : management of the shortcut
+// ----------------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Add a specific shortcut with his description
+ * @param[in] descriptiveString Description string of the shortcut
+ * @param[in] generateEventId Event generic of the element
+ * @param[in] data Associate data wit the event
+ * @return ---
+ */
+void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data, bool broadcast)
+{
+	if(		NULL==descriptiveString
+		||	0==strlen(descriptiveString))
+	{
+		EWOL_ERROR("try to add shortcut with no descriptive string ...");
+		return;
+	}
+	
+	EventShortCut* tmpElement = new EventShortCut();
+	if (NULL == tmpElement) {
+		EWOL_ERROR("allocation error ... Memory error ...");
+		return;
+	}
+	tmpElement->broadcastEvent = broadcast;
+	tmpElement->generateEventId = generateEventId;
+	tmpElement->eventData = data;
+	// parsing of the string :
+	//"ctrl+shift+alt+meta+s"
+	const char * tmp = strstr(descriptiveString, "ctrl");
+	if(NULL != tmp) {
+		tmpElement->specialKey.ctrl = true;
+	}
+	tmp = strstr(descriptiveString, "shift");
+	if(NULL != tmp) {
+		tmpElement->specialKey.shift = true;
+	}
+	tmp = strstr(descriptiveString, "alt");
+	if(NULL != tmp) {
+		tmpElement->specialKey.alt = true;
+	}
+	tmp = strstr(descriptiveString, "meta");
+	if(NULL != tmp) {
+		tmpElement->specialKey.meta = true;
+	}
+	if(NULL != strstr(descriptiveString, "F12") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F12;
+	} else if(NULL != strstr(descriptiveString, "F11") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F11;
+	} else if(NULL != strstr(descriptiveString, "F10") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F10;
+	} else if(NULL != strstr(descriptiveString, "F9") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F9;
+	} else if(NULL != strstr(descriptiveString, "F8") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F8;
+	} else if(NULL != strstr(descriptiveString, "F7") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F7;
+	} else if(NULL != strstr(descriptiveString, "F6") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F6;
+	} else if(NULL != strstr(descriptiveString, "F5") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F5;
+	} else if(NULL != strstr(descriptiveString, "F4") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F4;
+	} else if(NULL != strstr(descriptiveString, "F3") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F3;
+	} else if(NULL != strstr(descriptiveString, "F2") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F2;
+	} else if(NULL != strstr(descriptiveString, "F1") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F1;
+	} else if(NULL != strstr(descriptiveString, "LEFT") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_LEFT;
+	} else if(NULL != strstr(descriptiveString, "RIGHT") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_RIGHT;
+	} else if(NULL != strstr(descriptiveString, "UP") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_UP;
+	} else if(NULL != strstr(descriptiveString, "DOWN") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_DOWN;
+	} else if(NULL != strstr(descriptiveString, "PAGE_UP") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;
+	} else if(NULL != strstr(descriptiveString, "PAGE_DOWN") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;
+	} else if(NULL != strstr(descriptiveString, "START") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_START;
+	} else if(NULL != strstr(descriptiveString, "END") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_END;
+	} else if(NULL != strstr(descriptiveString, "CENTER") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CENTER;
+	} else if(NULL != strstr(descriptiveString, "ARRET_DEFIL") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;
+	} else if(NULL != strstr(descriptiveString, "WAIT") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_WAIT;
+	} else if(NULL != strstr(descriptiveString, "INSERT") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+	} else if(NULL != strstr(descriptiveString, "CAPLOCK") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;
+	} else if(NULL != strstr(descriptiveString, "CONTEXT_MENU") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;
+	} else if(NULL != strstr(descriptiveString, "VER_NUM") ) {
+		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;
+	} else {
+		tmpElement->unicodeValue = descriptiveString[strlen(descriptiveString) -1];
+	}
+	// add it on the List ...
+	m_localShortcut.PushBack(tmpElement);
+}
+
+/**
+ * @brief Remove all curent shortCut
+ * @param ---
+ * @return ---
+ */
+void ewol::Widget::ShortCutClean(void)
+{
+	for (int32_t iii=0; iii<m_localShortcut.Size(); iii++) {
+		if (NULL != m_localShortcut[iii]) {
+			delete(m_localShortcut[iii]);
+			m_localShortcut[iii]=NULL;
+		}
+	}
+	m_localShortcut.Clear();
+}
+
+
+/**
+ * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
+ * @param[in] special all the special kay pressed at this time
+ * @param[in] unicodeValue key pressed by the user not used if the kbMove!=ewol::EVENT_KB_MOVE_TYPE_NONE
+ * @param[in] kbMove special key of the keyboard
+ * @return true if the event has been used
+ * @return false if the event has not been used
+ * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
+ */
+bool ewol::Widget::OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
+{
+	if (unicodeValue >= 'A' && unicodeValue <='Z') {
+		unicodeValue += 'a' - 'A';
+	}
+	//EWOL_INFO("Try to find generic shortcut ...");
+	for(int32_t iii=m_localShortcut.Size()-1; iii>=0; iii--) {
+		if(NULL != m_localShortcut[iii]) {
+			if(    m_localShortcut[iii]->specialKey.shift == special.shift
+			    && m_localShortcut[iii]->specialKey.ctrl  == special.ctrl
+			    && m_localShortcut[iii]->specialKey.alt   == special.alt
+			    && m_localShortcut[iii]->specialKey.meta  == special.meta
+			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::EVENT_KB_MOVE_TYPE_NONE
+			              && m_localShortcut[iii]->unicodeValue == unicodeValue)
+			         || (    m_localShortcut[iii]->keyboardMoveValue == kbMove
+			              && m_localShortcut[iii]->unicodeValue == 0)
+			       ) )
+			{
+				if (isDown) {
+					if (true == m_localShortcut[iii]->broadcastEvent) {
+						// send message at all the widget
+						SendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					} else {
+						// send message direct to the current widget
+						OnReceiveMessage(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					}
+				} // no else
+				return true;
+			}
+		}
+	}
+	return false;
+}

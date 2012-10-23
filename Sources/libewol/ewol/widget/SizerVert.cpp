@@ -99,18 +99,18 @@ bool ewol::SizerVert::CalculateSize(float availlableX, float availlableY)
 bool ewol::SizerVert::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
-	m_userExpendX=false;
-	m_userExpendY=false;
+	m_userExpend.x=false;
+	m_userExpend.y=false;
 	m_minSize.x = 0.0;
 	m_minSize.y = 0.0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
 			if (true == m_subWidget[iii]->CanExpentX()) {
-				m_userExpendX = true;
+				m_userExpend.x = true;
 			}
 			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_userExpendY = true;
+				m_userExpend.y = true;
 			}
 			Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
 			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
@@ -120,7 +120,7 @@ bool ewol::SizerVert::CalculateMinSize(void)
 			}
 		}
 	}
-	//EWOL_DEBUG("Result : expend  X="<< m_userExpendX << " Y=" << m_userExpendY);
+	//EWOL_DEBUG("Result : expend  X="<< m_userExpend.x << " Y=" << m_userExpend.y);
 	//EWOL_DEBUG("         minSize ("<< m_minSize.x << "," << m_minSize.y << ")");
 	return true;
 }
@@ -140,7 +140,7 @@ bool ewol::SizerVert::CanExpentX(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpendX;
+	return m_userExpend.x;
 }
 
 void ewol::SizerVert::SetExpendY(bool newExpend)
@@ -153,7 +153,7 @@ bool ewol::SizerVert::CanExpentY(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpendY;
+	return m_userExpend.y;
 }
 
 void ewol::SizerVert::LockExpendContamination(bool lockExpend)

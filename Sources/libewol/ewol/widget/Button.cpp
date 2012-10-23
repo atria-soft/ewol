@@ -176,14 +176,14 @@ void ewol::Button::OnRegenerateDisplay(void)
 		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + m_padding.x;
 		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + m_padding.y;
 		
-		if (true==m_userFillX) {
+		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
 			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
 				tmpTextOriginX = m_padding.x;
 			}
 		}
-		if (true==m_userFillY) {
+		if (true==m_userFill.y) {
 			tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 		}

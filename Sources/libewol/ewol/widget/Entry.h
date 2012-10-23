@@ -60,8 +60,8 @@ namespace ewol {
 			ewol::OObject2DTextColored m_oObjectText;
 			ewol::OObject2DColored     m_oObjectDecoration;
 			etk::UString   m_data;
-			draw::Color       m_textColorFg;  //!< Text color
-			draw::Color       m_textColorBg;  //!< Background color
+			draw::Color    m_textColorFg;  //!< Text color
+			draw::Color    m_textColorBg;  //!< Background color
 			int32_t        m_userSize;
 			int32_t        m_displayStartPosition;
 			int32_t        m_displayCursorPos;
@@ -97,7 +97,29 @@ namespace ewol {
 			 * @return false if the event has not been used
 			 */
 			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent);
+			/**
+			 * @brief Receive a message from an other EObject with a specific eventId and data
+			 * @param[in] CallerObject Pointer on the EObject that information came from
+			 * @param[in] eventId Message registered by this class
+			 * @param[in] data Data registered by this class
+			 * @return ---
+			 */
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			/**
+			 * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
+			 * @note : need to have focus ...
+			 * @param[in] mode Mode of data requested
+			 * @return ---
+			 */
+			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 		protected:
+			/**
+			 * @brief Change the cursor position with the curent position requested on the display
+			 * @param[in] pos Absolute position of the event
+			 * @note The display is automaticly requested when change apear.
+			 * @return ---
+			 */
+			virtual void UpdateCursorPosition(Vector2D<float>& pos);
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);
 	};

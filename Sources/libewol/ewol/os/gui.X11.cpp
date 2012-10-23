@@ -85,7 +85,7 @@ static int attrListDbl[] = {
 	None
 };
 
-static eSystem::specialKey_ts guiKeyBoardMode;
+static ewol::specialKey_ts guiKeyBoardMode;
 
 
 extern "C" {

@@ -27,7 +27,7 @@
 #include <ewol/eObject/EObject.h>
 #include <ewol/ewol.h>
 
-
+/*
 class EventShortCut {
 	public:
 		const char *       generateEventId; // event generate ID (to be unique it was pointer on the string name)
@@ -39,8 +39,9 @@ class EventShortCut {
 		uniChar_t          UnicodeValue;      // 0 if not used
 		ewol::eventKbMoveType_te keyboardMoveValue; // 0 if not used
 };
+*/
 
-static etk::Vector<EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
+static etk::Vector<ewol::EventShortCut *> l_inputShortCutEvent;  //!< generic short-cut event
 
 namespace ewol {
 	namespace shortCut {
@@ -58,17 +59,17 @@ void ewol::shortCut::Add(bool shift, bool control, bool alt, bool meta,
                          const char * generateEventId,
                          etk::UString data)
 {
-	EventShortCut * newEvent = new EventShortCut();
+	ewol::EventShortCut * newEvent = new ewol::EventShortCut();
 	if (NULL == newEvent) {
 		EWOL_ERROR("Allocation Error on the shortcut ...");
 		return;
 	}
 	newEvent->generateEventId = generateEventId;
-	newEvent->shift = shift;
-	newEvent->control = control;
-	newEvent->alt = alt;
-	newEvent->meta = meta;
-	newEvent->UnicodeValue = unicodeValue;
+	newEvent->specialKey.shift = shift;
+	newEvent->specialKey.ctrl = control;
+	newEvent->specialKey.alt = alt;
+	newEvent->specialKey.meta = meta;
+	newEvent->unicodeValue = unicodeValue;
 	newEvent->keyboardMoveValue = kbMove;
 	newEvent->eventData = data;
 	l_inputShortCutEvent.PushBack(newEvent);
@@ -194,21 +195,21 @@ void ewol::shortCut::UnInit(void)
 
 
 
-bool ewol::shortCut::Process(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
+bool ewol::shortCut::Process(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
 {
 	if (unicodeValue >= 'A' && unicodeValue <='Z') {
 		unicodeValue += 'a' - 'A';
 	}
 	//EWOL_INFO("Try to find generic shortcut ...");
 	for(int32_t iii=l_inputShortCutEvent.Size()-1; iii>=0; iii--) {
-		if(    l_inputShortCutEvent[iii]->shift == shift
-		    && l_inputShortCutEvent[iii]->control == control
-		    && l_inputShortCutEvent[iii]->alt == alt
-		    && l_inputShortCutEvent[iii]->meta == meta
+		if(    l_inputShortCutEvent[iii]->specialKey.shift == special.shift
+		    && l_inputShortCutEvent[iii]->specialKey.ctrl  == special.ctrl
+		    && l_inputShortCutEvent[iii]->specialKey.alt   == special.alt
+		    && l_inputShortCutEvent[iii]->specialKey.meta  == special.meta
 		    && (    (    l_inputShortCutEvent[iii]->keyboardMoveValue == ewol::EVENT_KB_MOVE_TYPE_NONE
-		              && l_inputShortCutEvent[iii]->UnicodeValue == unicodeValue)
+		              && l_inputShortCutEvent[iii]->unicodeValue == unicodeValue)
 		         || (    l_inputShortCutEvent[iii]->keyboardMoveValue == kbMove
-		              && l_inputShortCutEvent[iii]->UnicodeValue == 0)
+		              && l_inputShortCutEvent[iii]->unicodeValue == 0)
 		       ) )
 		{
 			if (isDown) {

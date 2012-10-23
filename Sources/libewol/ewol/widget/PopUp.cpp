@@ -33,8 +33,8 @@
 ewol::PopUp::PopUp(void) :
 	m_subWidgetNext(NULL)
 {
-	m_userExpendX = true;
-	m_userExpendY = true;
+	m_userExpend.x = true;
+	m_userExpend.y = true;
 	
 	m_colorBackGroung = draw::color::white;
 	
@@ -92,8 +92,8 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 bool ewol::PopUp::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("CalculateMinSize");
-	m_userExpendX=false;
-	m_userExpendY=false;
+	m_userExpend.x=false;
+	m_userExpend.y=false;
 	m_minSize.x = 50.0;
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {

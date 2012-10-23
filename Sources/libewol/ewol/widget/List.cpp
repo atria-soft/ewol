@@ -119,10 +119,10 @@ void ewol::List::OnRegenerateDisplay(void)
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = 0;
 		/*
-		if (true==m_userFillX) {
+		if (true==m_userFill.x) {
 			tmpOriginX = 0;
 		}
-		if (true==m_userFillY) {
+		if (true==m_userFill.y) {
 			tmpOriginY = 0;
 		}*/
 		tmpOriginX += m_paddingSizeX;

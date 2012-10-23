@@ -104,7 +104,7 @@ typedef struct {
 static etk::MessageFifo<eSystemMessage_ts> l_msgSystem;
 
 
-extern eSystem::specialKey_ts specialCurrentKey;
+extern ewol::specialKey_ts specialCurrentKey;
 
 static bool requestEndProcessing = false;
 
@@ -154,22 +154,27 @@ void ewolProcessEvents(void)
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				{
 					specialCurrentKey = data.keyboardKey.special;
-					if (false==ewol::shortCut::Process(data.keyboardKey.special.shift,
-					                                   data.keyboardKey.special.ctrl,
-					                                   data.keyboardKey.special.alt,
-					                                   data.keyboardKey.special.meta,
+					// check main shortcut
+					if (false==ewol::shortCut::Process(data.keyboardKey.special,
 					                                   data.keyboardKey.myChar,
 					                                   ewol::EVENT_KB_MOVE_TYPE_NONE,
 					                                   data.keyboardKey.isDown)) {
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 						if (NULL != tmpWidget) {
-							if(true == data.keyboardKey.isDown) {
-								EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
-								tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, data.keyboardKey.myChar);
-							} else {
-								EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
-								tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, data.keyboardKey.myChar);
+							// check Widget shortcut
+							if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
+							                                      data.keyboardKey.myChar,
+							                                      ewol::EVENT_KB_MOVE_TYPE_NONE,
+							                                      data.keyboardKey.isDown)) {
+								// generate the direct event ...
+								if(true == data.keyboardKey.isDown) {
+									EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
+									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, data.keyboardKey.myChar);
+								} else {
+									EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
+									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, data.keyboardKey.myChar);
+								}
 							}
 						}
 					}
@@ -177,10 +182,8 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_KEYBORAD_MOVE:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
-				if (false==ewol::shortCut::Process(data.keyboardKey.special.shift,
-				                                   data.keyboardKey.special.ctrl,
-				                                   data.keyboardKey.special.alt,
-				                                   data.keyboardKey.special.meta,
+				// check main shortcut
+				if (false==ewol::shortCut::Process(data.keyboardKey.special,
 				                                   0,
 				                                   data.keyboardMove.move,
 				                                   data.keyboardKey.isDown)) {
@@ -188,10 +191,17 @@ void ewolProcessEvents(void)
 					// Get the current Focused Widget :
 					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 					if (NULL != tmpWidget) {
-						if(true == data.keyboardMove.isDown) {
-							tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, data.keyboardMove.move);
-						} else {
-							tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, data.keyboardMove.move);
+						// check Widget shortcut
+						if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
+						                                      data.keyboardKey.myChar,
+						                                      ewol::EVENT_KB_MOVE_TYPE_NONE,
+						                                      data.keyboardKey.isDown)) {
+							// generate the direct event ...
+							if(true == data.keyboardMove.isDown) {
+								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, data.keyboardMove.move);
+							} else {
+								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, data.keyboardMove.move);
+							}
 						}
 					}
 				}
