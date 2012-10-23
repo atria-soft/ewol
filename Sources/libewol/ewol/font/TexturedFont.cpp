@@ -351,7 +351,6 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 		
 		
 		// Clipping and drawing area
-			
 		if(    dxB < clipping.x
 		    || dxA > clipping.x + clipping.w)
 		{
@@ -399,7 +398,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 				}
 			}
 			if(    dxB <= dxA
-			    || dyD <= dyC) {
+			    || dyD >= dyC) {
 				// nothing to do ...
 			} else {
 				/* Bitmap position
