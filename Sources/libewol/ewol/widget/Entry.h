@@ -64,11 +64,12 @@ namespace ewol {
 			draw::Color    m_textColorBg;  //!< Background color
 			int32_t        m_userSize;
 			int32_t        m_displayStartPosition;
-			int32_t        m_displayCursorPos;
 			int32_t        m_borderSize;
 			int32_t        m_paddingSize;
 			void           UpdateTextPosition(void);
 			bool           m_displayCursor;
+			int32_t        m_displayCursorPos;
+			int32_t        m_displayCursorPosSelection;
 		public:
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(DrawProperty& displayProp);
@@ -119,7 +120,19 @@ namespace ewol {
 			 * @note The display is automaticly requested when change apear.
 			 * @return ---
 			 */
-			virtual void UpdateCursorPosition(Vector2D<float>& pos);
+			virtual void UpdateCursorPosition(Vector2D<float>& pos, bool Selection=false);
+			/**
+			 * @brief Copy the selected data on the specify clipboard
+			 * @param[in] clipboardID Selected clipboard
+			 * @return ---
+			 */
+			virtual void CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te clipboardID);
+			/**
+			 * @brief Remove the selected area
+			 * @note This request a regeneration of the display
+			 * @return ---
+			 */
+			virtual void RemoveSelected(void);
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);
 	};
