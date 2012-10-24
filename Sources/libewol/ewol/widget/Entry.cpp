@@ -186,7 +186,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			int32_t XPosEnd = maxSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
 			XPos    = etk_avg(m_borderSize + 2*m_paddingSize, XPos,    m_size.x - 2*m_paddingSize );
 			XPosEnd = etk_avg(m_borderSize + 2*m_paddingSize, XPosEnd, m_size.x - 2*m_paddingSize );
-			m_oObjectDecoration.SetColor(0xFF0000FF);
+			m_oObjectDecoration.SetColor(0x4444FFAA);
 			m_oObjectDecoration.Rectangle( XPos, tmpTextOriginY, XPosEnd-XPos, maxSize.y);
 			m_oObjectDecoration.clippingDisable();
 		}
