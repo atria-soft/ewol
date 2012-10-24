@@ -18,6 +18,11 @@ Compile software and install :
 	For this you might use a priject that create binaies or somting else ...
 	Show http://github.com/HeeroYui/edn project
 
+Dependency packages
+===================
+
+	sudo apt-get install realpath
+
 License (DSB like)
 ==================
 
