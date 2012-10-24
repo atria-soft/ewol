@@ -410,7 +410,7 @@ namespace etk
 				}
 				int32_t idx = m_size;
 				Resize(m_size+nbElement);
-				if (idx >= m_size) {
+				if (idx > m_size) {
 					TK_ERROR("Resize does not work corectly ... not added item");
 					return;
 				}
