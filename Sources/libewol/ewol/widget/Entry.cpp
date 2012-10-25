@@ -316,6 +316,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			m_oObjectDecoration.clippingDisable();
 		}
 		if (true == m_displayCursor) {
+			m_oObjectDecoration.SetColor(m_textColorFg);
 			etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
 			Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
 			int32_t XCursorPos = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
