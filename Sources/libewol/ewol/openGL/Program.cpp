@@ -148,7 +148,7 @@ int32_t ewol::Program::GetUniform(etk::UString tmpElement)
 	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
 	if (tmp.m_elementId<0) {
 		checkGlError("glGetUniformLocation", __LINE__);
-		EWOL_INFO("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
+		EWOL_ERROR("glGetUniformLocation(\"" << tmp.m_name << "\") = " << tmp.m_elementId);
 		return -1;
 	}
 	m_elementList.PushBack(tmp);
@@ -197,13 +197,13 @@ void ewol::Program::UpdateContext(void)
 				m_elementList[iii].m_elementId = glGetAttribLocation(m_program, m_elementList[iii].m_name.c_str());
 				if (m_elementList[iii].m_elementId<0) {
 					checkGlError("glGetAttribLocation", __LINE__);
-					EWOL_INFO("glGetAttribLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+					EWOL_ERROR("glGetAttribLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
 				}
 			} else {
 				m_elementList[iii].m_elementId = glGetUniformLocation(m_program, m_elementList[iii].m_name.c_str());
 				if (m_elementList[iii].m_elementId<0) {
 					checkGlError("glGetUniformLocation", __LINE__);
-					EWOL_INFO("glGetUniformLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
+					EWOL_ERROR("glGetUniformLocation(\"" << m_elementList[iii].m_name << "\") = " << m_elementList[iii].m_elementId);
 				}
 			}
 		}

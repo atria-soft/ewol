@@ -68,6 +68,20 @@ void ewol::Entry::Init(void)
 	ShortCutAdd("ctrl+v",       ewolEventEntryPaste);
 	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
+	#ifdef __VIDEO__OPENGL_ES_2
+		etk::UString tmpString("widgetEntry.prog");
+		// get the shader resource :
+		m_GLPosition = 0;
+		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+			m_GLPosition     = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLMatrix       = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			m_GLsizeBorder   = m_GLprogram->GetUniform("EW_sizeBorder");
+			m_GLsizePadding  = m_GLprogram->GetUniform("EW_sizePadding");
+			m_GLsize         = m_GLprogram->GetUniform("EW_size");
+			m_GLposText      = m_GLprogram->GetUniform("EW_posText");
+			m_GLstate        = m_GLprogram->GetUniform("EW_state");
+		}
+	#endif
 }
 
 ewol::Entry::Entry(void)
@@ -118,6 +132,64 @@ etk::UString ewol::Entry::GetValue(void)
 	return m_data;
 }
 
+
+
+
+void ewol::Entry::SetPoint(float x, float y)
+{
+	Vector2D<float> triangle(x, y);
+	m_coord.PushBack(triangle);
+}
+
+void ewol::Entry::Rectangle(float x, float y, float w, float h)
+{
+	m_coord.Clear();
+	/*
+	x += 3;
+	y += 3;
+	w -= 6;
+	h -= 6;
+	*/
+	/* Bitmap position
+	 *      xA     xB
+	 *   yC *------*
+	 *      |      |
+	 *      |      |
+	 *   yD *------*
+	 */
+	float dxA = x;
+	float dxB = x + w;
+	float dyC = y;
+	float dyD = y + h;
+	/*
+	if (true == m_hasClipping) {
+		if (dxA < m_clipping.x) {
+			dxA = m_clipping.x;
+		}
+		if (dxB > m_clipping.x + m_clipping.w) {
+			dxB = m_clipping.x + m_clipping.w;
+		}
+		if (dyC < m_clipping.y) {
+			dyC = m_clipping.y;
+		}
+		if (dyD > m_clipping.y + m_clipping.h) {
+			dyD = m_clipping.y + m_clipping.h;
+		}
+	}
+	if(    dyC >= dyD
+	    || dxA >= dxB) {
+		return;
+	}
+	*/
+	SetPoint(dxA, dyD);
+	SetPoint(dxA, dyC);
+	SetPoint(dxB, dyC);
+
+	SetPoint(dxB, dyC);
+	SetPoint(dxB, dyD);
+	SetPoint(dxA, dyD);
+}
+
 /**
  * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
  * @param[in] displayProp properties of the current display
@@ -125,6 +197,38 @@ etk::UString ewol::Entry::GetValue(void)
  */
 void ewol::Entry::OnDraw(DrawProperty& displayProp)
 {
+	#ifdef __VIDEO__OPENGL_ES_2
+		if (m_GLprogram==NULL) {
+			EWOL_ERROR("No shader ...");
+			return;
+		}
+		//glScalef(m_scaling.x, m_scaling.y, 1.0);
+		m_GLprogram->Use();
+		// set Matrix : translation/positionMatrix
+		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+		// position :
+		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
+		// all entry parameters :
+		if (0<=m_GLsizeBorder) {
+			m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
+		}
+		if (0<=m_GLsizePadding) {
+			m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
+		}
+		if (0<=m_GLsize) {
+			m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
+		}
+		if (0<=m_GLposText) {
+			m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
+		}
+		if (0<=m_GLstate) {
+			m_GLprogram->Uniform1i(m_GLstate, 0);
+		}
+		// Request the draw of the elements : 
+		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+		m_GLprogram->UnUse();
+	#endif
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
@@ -176,10 +280,19 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		m_oObjectText.Text(textPos, m_data);
 		m_oObjectText.clippingDisable();
 		
-		m_oObjectDecoration.SetColor(m_textColorBg);
-		m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		m_oObjectDecoration.SetColor(m_textColorFg);
-		m_oObjectDecoration.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
+		#ifndef __VIDEO__OPENGL_ES_2
+			m_oObjectDecoration.SetColor(m_textColorBg);
+			m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+			m_oObjectDecoration.SetColor(m_textColorFg);
+			m_oObjectDecoration.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
+		#else
+			m_pos[0] = m_borderSize+2*drawClipping.x;
+			m_pos[1] = m_borderSize+2*drawClipping.y;
+			m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClipping.x);
+			m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClipping.y);
+			
+			Rectangle(0, 0, m_size.x, m_size.y);
+		#endif
 		int32_t pos1 = m_displayCursorPosSelection;
 		int32_t pos2 = m_displayCursorPos;
 		if(m_displayCursorPosSelection>m_displayCursorPos) {
@@ -187,6 +300,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			pos1 = m_displayCursorPos;
 		}
 		if(pos1!=pos2) {
+			m_oObjectDecoration.SetColor(m_textColorFg);
 			m_oObjectDecoration.clippingSet(drawClipping);
 			etk::UString tmpDisplay = m_data.Extract(0, pos1);
 			Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);

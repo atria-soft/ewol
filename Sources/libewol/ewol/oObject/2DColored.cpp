@@ -77,7 +77,7 @@ void ewol::OObject2DColored::Draw(void)
 		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
 		// color :
 		m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
-		// Request the draw od the elements : 
+		// Request the draw of the elements : 
 		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 		m_GLprogram->UnUse();
 	#else
