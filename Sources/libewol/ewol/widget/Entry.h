@@ -35,11 +35,43 @@ extern const char * const ewolEventEntryEnter;
 extern const char * const ewolEventEntryModify; // return in the data the new string inside it ...
 
 namespace ewol {
+	/**
+	 * @brief Entry box display :
+	 *
+	 * @code
+	 *  ----------------------------------------------
+	 *  | Mon Texte Modi|fiable                      |
+	 *  ----------------------------------------------
+	 * @endcode
+	 */
 	class Entry : public ewol::Widget
 	{
+		private:
+			ewol::OObject2DTextColored m_oObjectText;               //!< text display
+			ewol::OObject2DColored     m_oObjectDecoration;         //!< background display
+			etk::UString               m_data;                      //!< sting that must be displayed
+			draw::Color                m_textColorFg;               //!< Text color
+			draw::Color                m_textColorBg;               //!< Background color
+			int32_t                    m_userSize;                  //!< Display size requested by the user
+			int32_t                    m_displayStartPosition;      //!< ofset in pixel of the display of the UString
+			int32_t                    m_borderSize;                //!< Border size
+			int32_t                    m_paddingSize;               //!< space between border and the text and the border base and the border widget
+			bool                       m_displayCursor;             //!< Cursor mus be display only when the widget has the focus
+			int32_t                    m_displayCursorPos;          //!< Cursor position in number of Char
+			int32_t                    m_displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == m_displayCursorPos chan no selection availlable
 		public:
+			/**
+			 * @brief Contuctor
+			 */
 			Entry(void);
+			/**
+			 * @brief Contuctor
+			 * @param[in] newData The USting that might be set in the Entry box (no event generation!!)
+			 */
 			Entry(etk::UString newData);
+			/**
+			 * @brief Destuctor
+			 */
 			virtual ~Entry(void);
 			/**
 			 * @brief Get the current Object type of the EObject
@@ -56,24 +88,13 @@ namespace ewol {
 			{
 				m_userSize = width;
 			}
-		private:
-			ewol::OObject2DTextColored m_oObjectText;
-			ewol::OObject2DColored     m_oObjectDecoration;
-			etk::UString   m_data;
-			draw::Color    m_textColorFg;  //!< Text color
-			draw::Color    m_textColorBg;  //!< Background color
-			int32_t        m_userSize;
-			int32_t        m_displayStartPosition;
-			int32_t        m_borderSize;
-			int32_t        m_paddingSize;
-			void           UpdateTextPosition(void);
-			bool           m_displayCursor;
-			int32_t        m_displayCursorPos;
-			int32_t        m_displayCursorPosSelection;
 		public:
+			/**
+			 * @brief Event generated when a redraw is needed
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(DrawProperty& displayProp);
-		public:
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -115,12 +136,25 @@ namespace ewol {
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 		protected:
 			/**
+			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
+			 * @param[in] displayProp properties of the current display
+			 * @return ---
+			 */
+			virtual void OnDraw(DrawProperty& displayProp);
+			/**
 			 * @brief Change the cursor position with the curent position requested on the display
 			 * @param[in] pos Absolute position of the event
 			 * @note The display is automaticly requested when change apear.
 			 * @return ---
 			 */
 			virtual void UpdateCursorPosition(Vector2D<float>& pos, bool Selection=false);
+			/**
+			 * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
+			 * @param ---
+			 * @return ---
+			 * @change m_displayStartPosition <== updated
+			 */
+			virtual void UpdateTextPosition(void);
 			/**
 			 * @brief Copy the selected data on the specify clipboard
 			 * @param[in] clipboardID Selected clipboard
@@ -133,7 +167,17 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void RemoveSelected(void);
+			/**
+			 * @brief Event of the focus has been grep by the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnGetFocus(void);
+			/**
+			 * @brief Event of the focus has been lost by the current widget
+			 * @param ---
+			 * @return ---
+			 */
 			virtual void OnLostFocus(void);
 	};
 	

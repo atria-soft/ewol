@@ -118,12 +118,23 @@ etk::UString ewol::Entry::GetValue(void)
 	return m_data;
 }
 
+/**
+ * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
+ * @param[in] displayProp properties of the current display
+ * @return ---
+ */
 void ewol::Entry::OnDraw(DrawProperty& displayProp)
 {
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
 
+
+/**
+ * @brief Event generated when a redraw is needed
+ * @param ---
+ * @return ---
+ */
 void ewol::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
@@ -159,8 +170,8 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		clipping_ts drawClipping;
 		drawClipping.x = 2*m_paddingSize + m_borderSize;
 		drawClipping.y = 2*m_paddingSize + m_borderSize;
-		drawClipping.w = m_size.x;// - (m_borderSize + 2*m_paddingSize);
-		drawClipping.h = m_size.y;
+		drawClipping.w = m_size.x - 2*drawClipping.x;
+		drawClipping.h = m_size.y - 2*drawClipping.y;
 		m_oObjectText.clippingSet(drawClipping);
 		m_oObjectText.Text(textPos, m_data);
 		m_oObjectText.clippingDisable();
@@ -210,6 +221,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 void ewol::Entry::UpdateCursorPosition(Vector2D<float>& pos, bool selection)
 {
 	Vector2D<float> relPos = RelativePosition(pos);
+	relPos.x += -m_displayStartPosition - 2*m_paddingSize - m_borderSize;
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
 	int32_t displayHidenSize = m_oObjectText.GetSize(tmpDisplay).x;
@@ -238,6 +250,7 @@ void ewol::Entry::UpdateCursorPosition(Vector2D<float>& pos, bool selection)
 		m_displayCursorPos = newCursorPosition;
 		MarkToRedraw();
 	}
+	UpdateTextPosition();
 }
 
 /**
@@ -530,6 +543,12 @@ void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 	}
 }
 
+/**
+ * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
+ * @param ---
+ * @return ---
+ * @change m_displayStartPosition <== updated
+ */
 void ewol::Entry::UpdateTextPosition(void)
 {
 	int32_t tmpSizeX = m_minSize.x;
@@ -538,14 +557,35 @@ void ewol::Entry::UpdateTextPosition(void)
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
 	int32_t totalWidth = m_oObjectText.GetSize(m_data).x;
+	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
+		// all can be display :
 		m_displayStartPosition = 0;
 	} else {
-		m_displayStartPosition = -totalWidth + tmpUserSize;
+		// all can not be set :
+		etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
+		int32_t pixelCursorPos = m_oObjectText.GetSize(tmpDisplay).x;
+		// check if the Cussor is visible at 10px nearest the border :
+		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
+		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
+		if (tmp1<10) {
+			// set the cursor on le left
+			m_displayStartPosition = etk_min(-pixelCursorPos+10, 0);
+		} else if (tmp1>tmpUserSize-10) {
+			// Set the cursor of the Right
+			m_displayStartPosition = etk_min(-pixelCursorPos + tmpUserSize - 10, 0);
+		}
+		// else : the cursor is inside the display
+		//m_displayStartPosition = -totalWidth + tmpUserSize;
 	}
 }
 
 
+/**
+ * @brief Event of the focus has been grep by the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
@@ -553,6 +593,12 @@ void ewol::Entry::OnGetFocus(void)
 	MarkToRedraw();
 }
 
+
+/**
+ * @brief Event of the focus has been lost by the current widget
+ * @param ---
+ * @return ---
+ */
 void ewol::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
