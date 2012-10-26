@@ -127,18 +127,19 @@ void etk::InitDefaultFolder(const char * applName)
 		
 		#ifdef MODE_RELEASE
 			baseFolderData  = "/usr/share/";
-			baseFolderData += baseApplName;
-			baseFolderData += "/";
 		#else
 			char cCurrentPath[FILENAME_MAX];
 			if (!getcwd(cCurrentPath, FILENAME_MAX)) {
-				baseFolderData = "./share/";
+				baseFolderData = "./out/Linux/debug/staging/usr/share/";
 			} else {
 				cCurrentPath[FILENAME_MAX - 1] = '\0';
 				baseFolderData  = cCurrentPath;
-				baseFolderData += "/share/";
+				baseFolderData += "/out/Linux/debug/staging/usr/share/";
 			}
 		#endif
+		baseFolderData += baseApplName;
+		baseFolderData += "/";
+		
 		baseFolderDataUser  = baseFolderHome;
 		baseFolderDataUser += "/.";
 		baseFolderDataUser += baseApplName;
