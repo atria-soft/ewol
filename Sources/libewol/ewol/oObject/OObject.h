@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <draw/Color.h>
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <ewol/Debug.h>
 #include <ewol/font/Font.h>
 #include <etk/Vector.h>
@@ -47,14 +47,14 @@ namespace ewol {
 			int32_t     m_nbLoadedTime;     //!< specific in case of non multiple allocation
 			bool        m_hasClipping;
 			clipping_ts m_clipping;
-			Vector2D<float>   m_scaling;           //!< scaling ol the object
+			etk::Vector2D<float>   m_scaling;           //!< scaling ol the object
 		public:
 			OObject(void);
 			virtual ~OObject(void);
 			void clippingSet(clipping_ts clip) {m_clipping = clip; m_hasClipping = true;};
 			void clippingDisable(void) {m_hasClipping = false;};
 			void clippingEnable(void) {m_hasClipping = true;};
-			void scalingSet(Vector2D<float>  scale) {m_scaling = scale;};
+			void scalingSet(etk::Vector2D<float>  scale) {m_scaling = scale;};
 			virtual void Draw(void) = 0;
 			/**
 			 * @brief Increase the number of element registered on this class ==> this is specific to decrese the memory usage in special case (scene)

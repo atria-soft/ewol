@@ -23,7 +23,7 @@
  */
 
 #include <etk/UString.h>
-#include <etk/Memory.h>
+#include <etk/os/Memory.h>
 #include <etk/unicode.h>
 
 int32_t strlen(const uniChar_t * data)

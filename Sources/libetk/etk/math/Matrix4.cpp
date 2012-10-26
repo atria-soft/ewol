@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file etk/Matix.cpp
- * @brief Ewol Tool Kit : generique Matrix type (Sources)
+ * @file etk/math/Matix4.cpp
+ * @brief Ewol Tool Kit : generique Matrix4 type (Sources)
  * @author Edouard DUPIN
  * @date 29/08/2012
  * @par Project
@@ -25,13 +25,13 @@
 
 
 #include <etk/Types.h>
-#include <etk/Matrix.h>
+#include <etk/math/Matrix4.h>
 #include <etk/DebugInternal.h>
 #include <math.h>
 
-etk::Matrix etk::matrix::Perspective(float left, float right, float bottom, float top, float nearVal, float farVal)
+etk::Matrix4 etk::matrix::Perspective(float left, float right, float bottom, float top, float nearVal, float farVal)
 {
-	etk::Matrix tmp;
+	etk::Matrix4 tmp;
 	for(int32_t iii=0; iii<4*4 ; iii++) {
 		tmp.m_mat[iii] = 0;
 	}
@@ -47,9 +47,9 @@ etk::Matrix etk::matrix::Perspective(float left, float right, float bottom, floa
 	return tmp;
 }
 
-etk::Matrix etk::matrix::Translate(float x, float y, float z)
+etk::Matrix4 etk::matrix::Translate(float x, float y, float z)
 {
-	etk::Matrix tmp;
+	etk::Matrix4 tmp;
 	// set translation :
 	tmp.m_mat[3] = x;
 	tmp.m_mat[7] = y;
@@ -59,9 +59,9 @@ etk::Matrix etk::matrix::Translate(float x, float y, float z)
 	return tmp;
 }
 
-etk::Matrix etk::matrix::Scale(float x, float y, float z)
+etk::Matrix4 etk::matrix::Scale(float x, float y, float z)
 {
-	etk::Matrix tmp;
+	etk::Matrix4 tmp;
 	// set scale :
 	tmp.m_mat[0] = x;
 	tmp.m_mat[5] = y;
@@ -71,9 +71,9 @@ etk::Matrix etk::matrix::Scale(float x, float y, float z)
 	return tmp;
 }
 
-etk::Matrix etk::matrix::rotate(float x, float y, float z, float angleRad)
+etk::Matrix4 etk::matrix::rotate(float x, float y, float z, float angleRad)
 {
-	etk::Matrix tmp;
+	etk::Matrix4 tmp;
 	float cosVal = cos(angleRad);
 	float sinVal = sin(angleRad);
 	float invVal = 1.0-cosVal;
@@ -93,7 +93,7 @@ etk::Matrix etk::matrix::rotate(float x, float y, float z, float angleRad)
 }
 
 
-void etk::matrix::Display(etk::Matrix& tmp)
+void etk::matrix::Display(etk::Matrix4& tmp)
 {
 	TK_INFO("matrix : (" << tmp.m_mat[0] << " , " << tmp.m_mat[1] << " , " << tmp.m_mat[2] << " , " << tmp.m_mat[3] << " , ");
 	TK_INFO("          " << tmp.m_mat[4] << " , " << tmp.m_mat[5] << " , " << tmp.m_mat[6] << " , " << tmp.m_mat[7] << " , ");

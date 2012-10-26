@@ -43,25 +43,25 @@ ewol::Sprite::~Sprite(void)
 	
 }
 
-void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle)
+void ewol::Sprite::Element(etk::Vector2D<float> pos, float size, float angle)
 {
 	draw::Color tmpColor(0xFFFFFFFF);
-	Vector3D<float> pos2;
+	etk::Vector3D<float> pos2;
 	pos2.x = pos.x;
 	pos2.y = pos.y;
 	pos2.z = 0.0;
 	Element(pos2, size, angle, tmpColor);
 }
 
-void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle)
+void ewol::Sprite::Element(etk::Vector3D<float> pos, float size, float angle)
 {
 	draw::Color tmpColor(0xFFFFFFFF);
 	Element(pos, size, angle, tmpColor);
 }
 
-void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle, draw::Color tmpColor)
+void ewol::Sprite::Element(etk::Vector2D<float> pos, float size, float angle, draw::Color tmpColor)
 {
-	Vector3D<float> pos2;
+	etk::Vector3D<float> pos2;
 	pos2.x = pos.x;
 	pos2.y = pos.y;
 	pos2.z = 0.0;
@@ -69,7 +69,7 @@ void ewol::Sprite::Element(Vector2D<float> pos, float size, float angle, draw::C
 }
 
 
-void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle, draw::Color tmpColor)
+void ewol::Sprite::Element(etk::Vector3D<float> pos, float size, float angle, draw::Color tmpColor)
 {
 	angle -= M_PI/4;
 	size *= 0.7;
@@ -88,7 +88,7 @@ void ewol::Sprite::Element(Vector3D<float> pos, float size, float angle, draw::C
 	#else
 		draw::Color localColor = tmpColor;
 	#endif
-	Vector3D<float> point = pos;
+	etk::Vector3D<float> point = pos;
 	float yyySin = sin(angle) * size;
 	float xxxCos = cos(angle) * size;
 	

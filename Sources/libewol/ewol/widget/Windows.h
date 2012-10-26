@@ -64,7 +64,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
 		private:
 			bool m_hasDecoration;
 		public:

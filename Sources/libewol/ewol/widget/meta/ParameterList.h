@@ -93,7 +93,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 		protected:
 			void OnGetFocus(void);
 			void OnLostFocus(void);

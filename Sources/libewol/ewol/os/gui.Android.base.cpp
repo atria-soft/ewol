@@ -607,17 +607,17 @@ void guiInterface::KeyboardHide(void)
 	SendJava_KeyboardShow(false);
 }
 
-void guiInterface::ChangeSize(Vector2D<int32_t> size)
+void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	// The size can not be change on android platform
 }
 
-void guiInterface::ChangePos(Vector2D<int32_t> size)
+void guiInterface::ChangePos(etk::Vector2D<int32_t> size)
 {
 	// The position can not be change on Android platform
 }
 
-void guiInterface::GetAbsPos(Vector2D<int32_t>& size)
+void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
 {
 	size.x = 0;
 	size.y = 0;

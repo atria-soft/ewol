@@ -170,7 +170,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 		m_zoom = 1.0/1000.0;
 	//EWOL_INFO("ratio : " << ratio);
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::Matrix tmpProjection;
+		etk::Matrix4 tmpProjection;
 		
 		if (ratio >= 1.0) {
 			tmpProjection = etk::matrix::Perspective(-ratio, ratio, -1, 1, -1, 1);
@@ -178,8 +178,8 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 			ratio = 1.0/ratio;
 			tmpProjection = etk::matrix::Perspective(-1, 1, -ratio, ratio, -1, 1);
 		}
-		etk::Matrix tmpScale = etk::matrix::Scale(m_zoom, m_zoom, m_zoom);
-		etk::Matrix tmpMat = tmpProjection * tmpScale;
+		etk::Matrix4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, m_zoom);
+		etk::Matrix4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 	#else
@@ -214,7 +214,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
  * @param[in] pos Absolute position that you request convertion
  * @return the relative position
  */
-Vector2D<float> ewol::Scene::RelativePosition(Vector2D<float>  pos)
+etk::Vector2D<float> ewol::Scene::RelativePosition(etk::Vector2D<float>  pos)
 {
 	// Remove origin of the widget
 	pos.x -= m_origin.x;

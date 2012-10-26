@@ -58,7 +58,7 @@ namespace ewol {
 				float          m_pos[4];
 				int32_t        m_GLposText;
 				int32_t        m_GLstate;
-				etk::Vector<Vector2D<float> > m_coord;       //!< internal coord of the object
+				etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
 				draw::Colorf                  m_color[3];
 			void SetPoint(float x, float y);
 			void Rectangle(float x, float y, float w, float h);
@@ -121,7 +121,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos);
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
@@ -164,7 +164,7 @@ namespace ewol {
 			 * @note The display is automaticly requested when change apear.
 			 * @return ---
 			 */
-			virtual void UpdateCursorPosition(Vector2D<float>& pos, bool Selection=false);
+			virtual void UpdateCursorPosition(etk::Vector2D<float>& pos, bool Selection=false);
 			/**
 			 * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
 			 * @param ---

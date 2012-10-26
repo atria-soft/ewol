@@ -51,7 +51,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos) { return NULL; };
+			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos) { return NULL; };
 			virtual void   OnRegenerateDisplay(void);
 			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		private:

@@ -25,7 +25,7 @@
 #include <ewol/Debug.h>
 #include <ewol/ewol.h>
 
-#include <etk/TypesCoordonate.h>
+#include <etk/math/math.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
@@ -106,7 +106,7 @@ void guiInterface::KeyboardHide(void)
  * @param size The requested size
  * @return ---
  */
-void guiInterface::ChangeSize(Vector2D<int32_t> size)
+void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
 	int title_size = GetSystemMetrics(SM_CYCAPTION);
@@ -121,7 +121,7 @@ void guiInterface::ChangeSize(Vector2D<int32_t> size)
  * @param pos The position where the winsdows might be placed.
  * @return ---
  */
-void guiInterface::ChangePos(Vector2D<int32_t> pos)
+void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	// TODO : Later
 }
@@ -131,7 +131,7 @@ void guiInterface::ChangePos(Vector2D<int32_t> pos)
  * @param pos The position where the winsdows is.
  * @return ---
  */
-void guiInterface::GetAbsPos(Vector2D<int32_t>& size)
+void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
 {
 	// TODO : Later
 	size.x = 0;
@@ -346,7 +346,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	bool buttonIsDown = true;
 	int32_t mouseButtonId = 0;
-	Vector2D<int32_t> pos;
+	etk::Vector2D<int32_t> pos;
 	// to know all message : http://wiki.winehq.org/List_Of_Windows_Messages
 	switch (message)
 	{

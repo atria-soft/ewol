@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/File.h
+ * @file etk/os/File.h
  * @brief Ewol Tool Kit : File folder and name abstraction (header)
  * @author Edouard DUPIN
  * @date 16/07/2011

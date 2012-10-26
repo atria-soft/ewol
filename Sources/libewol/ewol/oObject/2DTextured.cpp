@@ -34,7 +34,7 @@ ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
 	ewol::TextureFile* resourceFile = NULL;
-	if (false == ewol::resource::Keep(textureName, resourceFile, Vector2D<int32_t>(sizeX,sizeY)) ) {
+	if (false == ewol::resource::Keep(textureName, resourceFile, etk::Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
 	m_resource = resourceFile;
@@ -58,7 +58,7 @@ ewol::OObject2DTextured::OObject2DTextured( float sizeX, float sizeY)
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
 	if (NULL!=m_resource) {
-		m_resource->SetImageSize(Vector2D<int32_t>(sizeX,sizeY));
+		m_resource->SetImageSize(etk::Vector2D<int32_t>(sizeX,sizeY));
 		draw::Image& tmpImage = m_resource->Get();
 		tmpImage.SetFillColor(draw::color::black);
 		tmpImage.Clear();
@@ -105,7 +105,7 @@ void ewol::OObject2DTextured::Draw(void)
 		}
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
-		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
 		m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
@@ -159,7 +159,7 @@ void ewol::OObject2DTextured::Rectangle(float x, float y, float w, float h, floa
 	h -= 6;
 	*/
 	//EWOL_DEBUG("Add rectangle : ...");
-	Vector2D<float> point;
+	etk::Vector2D<float> point;
 	texCoord_ts tex;
 
 	tex.u = texX;

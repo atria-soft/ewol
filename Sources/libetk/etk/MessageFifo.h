@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/Mutex.h
+ * @file etk/os/Mutex.h
  * @brief Ewol Tool Kit : basic mutex system (header)
  * @author Edouard DUPIN
  * @date 15/08/2012
@@ -25,8 +25,8 @@
 #ifndef __ETK_MESSAGE_FIFO_H__
 #define __ETK_MESSAGE_FIFO_H__
 
-#include <etk/Mutex.h>
-#include <etk/Semaphore.h>
+#include <etk/os/Mutex.h>
+#include <etk/os/Semaphore.h>
 #include <etk/Vector.h>
 
 namespace etk

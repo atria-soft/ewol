@@ -43,7 +43,7 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void) { return "EwolWSlider"; };
 		private:
-			Vector2D<bool> m_underExpend; // expend of the uner elements ...
+			etk::Vector2D<bool> m_underExpend; // expend of the uner elements ...
 		public:
 			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
 			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
@@ -76,7 +76,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

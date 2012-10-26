@@ -59,15 +59,15 @@ namespace ewol {
 		private:
 			draw::Color        m_colorBackGroung;
 			draw::Color        m_colorBorder;
-			Vector2D<float>       m_padding;
-			Vector2D<float>       m_arrowPos;
+			etk::Vector2D<float>       m_padding;
+			etk::Vector2D<float>       m_arrowPos;
 			float      m_offset;
 			markPosition_te m_arrawBorder;
 			ewol::Widget*   m_subWidget;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
-			void           SetPositionMark(markPosition_te position, Vector2D<float>  arrowPos);
+			void           SetPositionMark(markPosition_te position, etk::Vector2D<float>  arrowPos);
 		protected:
 			virtual void   OnDraw(DrawProperty& displayProp);
 		public:
@@ -79,7 +79,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -89,7 +89,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 	};
 	
 };

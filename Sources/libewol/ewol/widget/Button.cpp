@@ -106,14 +106,14 @@ void ewol::Button::SetImage(etk::UString imageName)
 }
 
 
-void ewol::Button::SetPadding(Vector2D<float> newPadding)
+void ewol::Button::SetPadding(etk::Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
 
 bool ewol::Button::CalculateMinSize(void)
 {
-	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
 	m_minSize.x = m_padding.x*2 + minSize.x;
 	m_minSize.y = m_padding.y*2 + minSize.y;
 	// Add the image element ...
@@ -192,7 +192,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_padding.x;
 		tmpSizeY -= 2*m_padding.y;
 		
-		Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
+		etk::Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
 		
 		/*ewol::OObject2DTextured * tmpImage = NULL;
 		if (true == m_hasAnImage) {
@@ -230,7 +230,7 @@ void ewol::Button::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

@@ -129,17 +129,17 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	
 	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 	// resize must be done on the texture ...
-	SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
+	SetImageSize(etk::Vector2D<int32_t>(textureWidth,textureHeight));
 	// now we can acces directly on the image
 	m_data.SetFillColor(draw::Color(0xFFFFFF00));
 	m_data.Clear();
 	
 	m_height = m_font->GetHeight(m_size);
 	
-	draw::Image tmpUpScaledImage(Vector2D<int32_t>(1024,1024));
+	draw::Image tmpUpScaledImage(etk::Vector2D<int32_t>(1024,1024));
 	
 	int32_t CurrentLineHigh = 0;
-	Vector2D<int32_t>    glyphPosition(1,1);
+	etk::Vector2D<int32_t>    glyphPosition(1,1);
 	for (int32_t iii=0; iii<m_listElement.Size(); iii++) {
 		if (true == m_font->GetGlyphProperty(m_size, m_listElement[iii].property)) {
 			EWOL_DEBUG("Generate Font Element : '" << m_listElement[iii].property.m_UVal << "'= '" << (char)m_listElement[iii].property.m_UVal << "'");
@@ -165,7 +165,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 				CurrentLineHigh = 0;
 			}
 			// draw the glyph
-			m_font->DrawGlyph(tmpUpScaledImage, m_size*SPECIAL_UPSCALER, Vector2D<int32_t>(SPECIAL_BORDER*SPECIAL_UPSCALER,SPECIAL_BORDER*SPECIAL_UPSCALER), m_listElement[iii].property);
+			m_font->DrawGlyph(tmpUpScaledImage, m_size*SPECIAL_UPSCALER, etk::Vector2D<int32_t>(SPECIAL_BORDER*SPECIAL_UPSCALER,SPECIAL_BORDER*SPECIAL_UPSCALER), m_listElement[iii].property);
 			// set video position
 			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
 			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
@@ -179,12 +179,12 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 			EWOL_DEBUG("     m_advance     =" << m_listElement[iii].property.m_advance );
 			*/
 			// generate the distance field from this element ...
-			tmpUpScaledImage.DistanceField(Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER)+Vector2D<int32_t>(2*SPECIAL_BORDER*SPECIAL_UPSCALER,2*SPECIAL_BORDER*SPECIAL_UPSCALER), SPECIAL_UPSCALER, SPECIAL_UPSCALER/2);
+			tmpUpScaledImage.DistanceField(etk::Vector2D<int32_t>(0,0), m_listElement[iii].property.m_sizeTexture*etk::Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER)+etk::Vector2D<int32_t>(2*SPECIAL_BORDER*SPECIAL_UPSCALER,2*SPECIAL_BORDER*SPECIAL_UPSCALER), SPECIAL_UPSCALER, SPECIAL_UPSCALER/2);
 			// copy data with downscaling : (subSampling)
-			Vector2D<int32_t> tmpPos(0,0);
+			etk::Vector2D<int32_t> tmpPos(0,0);
 			for (tmpPos.y = 0; tmpPos.y<m_listElement[iii].property.m_sizeTexture.y+2*SPECIAL_BORDER; tmpPos.y++) {
 				for (tmpPos.x = 0; tmpPos.x<m_listElement[iii].property.m_sizeTexture.x+2*SPECIAL_BORDER; tmpPos.x++) {
-					m_data.Set(glyphPosition + tmpPos, tmpUpScaledImage.Get(tmpPos*Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER) + Vector2D<int32_t>(SPECIAL_UPSCALER/2,SPECIAL_UPSCALER/2)) );
+					m_data.Set(glyphPosition + tmpPos, tmpUpScaledImage.Get(tmpPos*etk::Vector2D<int32_t>(SPECIAL_UPSCALER,SPECIAL_UPSCALER) + etk::Vector2D<int32_t>(SPECIAL_UPSCALER/2,SPECIAL_UPSCALER/2)) );
 				}
 			}
 			
@@ -204,11 +204,11 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
 		for(int32_t iii=0; iii < textureWidth; iii++){
-			tlpppp = m_data.Get(Vector2D<int32_t>(iii, jjj) );
+			tlpppp = m_data.Get(etk::Vector2D<int32_t>(iii, jjj) );
 			// set only alpha :
 			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
 			// real set of color
-			m_data.Set(Vector2D<int32_t>(iii, jjj), tlpppp );
+			m_data.Set(etk::Vector2D<int32_t>(iii, jjj), tlpppp );
 		}
 	}
 	#endif
@@ -236,13 +236,13 @@ bool ewol::DistantFieldFont::HasName(etk::UString& fileName)
 
 
 
-int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
+int32_t ewol::DistantFieldFont::Draw(etk::Vector2D<float>                 textPos,
                                  const etk::UString&             unicodeString,
-                                 etk::Vector<Vector2D<float> > & coord,
+                                 etk::Vector<etk::Vector2D<float> > & coord,
                                  etk::Vector<texCoord_ts> &      coordTex)
 {
 	float totalSize = 0;
-	Vector2D<float> tmpPos = textPos;
+	etk::Vector2D<float> tmpPos = textPos;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
 		int32_t ret = Draw(tmpPos, unicodeString[iii], coord, coordTex);
 		tmpPos.x += ret;
@@ -258,7 +258,7 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 			 *   |      |
 			 *   3------2
 			 */
-			Vector2D<float> bitmapDrawPos[4];
+			etk::Vector2D<float> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = 10;
 			bitmapDrawPos[1].x = 400;
 			bitmapDrawPos[2].x = 400;
@@ -322,9 +322,9 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 	return totalSize;
 }
 
-int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
+int32_t ewol::DistantFieldFont::Draw(etk::Vector2D<float>                 textPos,
                                      const uniChar_t                 unicodeChar,
-                                     etk::Vector<Vector2D<float> > & coord,
+                                     etk::Vector<etk::Vector2D<float> > & coord,
                                      etk::Vector<texCoord_ts> &      coordTex)
 {
 	float posDrawX = textPos.x;
@@ -374,7 +374,7 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 			 *   |      |
 			 *   3------2
 			 */
-			Vector2D<int32_t> bitmapDrawPos[4];
+			etk::Vector2D<int32_t> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = (int32_t)dxA;
 			bitmapDrawPos[1].x = (int32_t)dxB;
 			bitmapDrawPos[2].x = (int32_t)dxB;
@@ -442,20 +442,20 @@ int32_t ewol::DistantFieldFont::Draw(Vector2D<float>                 textPos,
 	return sizeOut;
 }
 
-Vector2D<float> ewol::DistantFieldFont::GetSize(const etk::UString & unicodeString)
+etk::Vector2D<float> ewol::DistantFieldFont::GetSize(const etk::UString & unicodeString)
 {
-	Vector2D<float> outputSize(0,m_height);
+	etk::Vector2D<float> outputSize(0,m_height);
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		Vector2D<float> tmpp = GetSize(unicodeString[iii]);
+		etk::Vector2D<float> tmpp = GetSize(unicodeString[iii]);
 		outputSize.x += tmpp.x;
 	}
 	return outputSize;
 }
 
 
-Vector2D<float> ewol::DistantFieldFont::GetSize(const uniChar_t unicodeChar)
+etk::Vector2D<float> ewol::DistantFieldFont::GetSize(const uniChar_t unicodeChar)
 {
-	Vector2D<float> outputSize(0,m_height);
+	etk::Vector2D<float> outputSize(0,m_height);
 	int32_t charIndex;
 	if (unicodeChar >= 0x80) {
 		charIndex = 0;

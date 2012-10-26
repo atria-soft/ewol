@@ -88,14 +88,14 @@ ewol::ButtonColor::~ButtonColor(void)
 }
 
 
-void ewol::ButtonColor::SetPadding(Vector2D<float> newPadding)
+void ewol::ButtonColor::SetPadding(etk::Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
 
 bool ewol::ButtonColor::CalculateMinSize(void)
 {
-	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
 	m_minSize.x = m_padding.x*2 + minSize.x;
 	m_minSize.y = m_padding.y*2 + minSize.y;
 	MarkToRedraw();
@@ -167,7 +167,7 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		} else {
 			m_textColorFg = draw::color::white;
 		}
-		Vector2D<float> textPos;
+		etk::Vector2D<float> textPos;
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
 		clipping_ts drawClipping;
@@ -195,7 +195,7 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
@@ -213,7 +213,7 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 				return true;
 			}
 			// Get the button widget : 
-			Vector2D<float> newPosition;
+			etk::Vector2D<float> newPosition;
 			newPosition.x = m_origin.x + m_size.x/2;
 			newPosition.y = m_origin.y;
 			

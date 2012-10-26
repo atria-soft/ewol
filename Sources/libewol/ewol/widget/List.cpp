@@ -164,7 +164,7 @@ void ewol::List::OnRegenerateDisplay(void)
 		m_lineSize.Clear();
 		int32_t displayPositionY = m_size.y;
 		int32_t displayPositionX = 0;
-		Vector2D<int32_t> tmpRegister(startRaw, displayPositionY);
+		etk::Vector2D<int32_t> tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
 		m_lineSize.PushBack(tmpRegister);
 		
@@ -187,10 +187,10 @@ void ewol::List::OnRegenerateDisplay(void)
 					BGOObjects->Rectangle(displayPositionX, displayPositionY, m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY);
 					
 					// get the maximum size of the colomn :
-					Vector2D<float> textSize = tmpText->GetSize(myTextToWrite);
+					etk::Vector2D<float> textSize = tmpText->GetSize(myTextToWrite);
 					sizeColom = etk_max(sizeColom, textSize.x);
 					
-					Vector2D<float> textPos;
+					etk::Vector2D<float> textPos;
 					textPos.x = tmpOriginX + displayPositionX;
 					textPos.y = displayPositionY;
 					tmpText->SetColor(fg);
@@ -226,9 +226,9 @@ void ewol::List::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);

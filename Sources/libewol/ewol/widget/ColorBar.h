@@ -49,8 +49,8 @@ namespace ewol {
 			void     SetCurrentColor(draw::Color newOne);
 		private:
 			draw::Color   m_currentColor;
-			Vector2D<float>  m_currentUserPos;
-			Vector2D<float>  m_padding;
+			etk::Vector2D<float>  m_currentUserPos;
+			etk::Vector2D<float>  m_padding;
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
@@ -63,7 +63,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 	};
 	
 };

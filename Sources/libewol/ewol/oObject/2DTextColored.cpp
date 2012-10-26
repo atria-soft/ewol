@@ -137,7 +137,7 @@ void ewol::OObject2DTextColored::Draw(void)
 		}
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
-		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
 		m_GLprogram->SetTexture0(m_GLtexID, m_font->GetId());
@@ -175,7 +175,7 @@ void ewol::OObject2DTextColored::Clear(void)
 	m_coordColor.Clear();
 }
 
-int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::UString& unicodeString)
+int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const etk::UString& unicodeString)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -191,7 +191,7 @@ int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const etk::USt
 	return size;
 }
 
-int32_t ewol::OObject2DTextColored::Text(Vector2D<float> textPos, const uniChar_t unicodeChar)
+int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const uniChar_t unicodeChar)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -218,20 +218,20 @@ void ewol::OObject2DTextColored::SetColor(float red, float green, float blue, fl
 	m_color = draw::Color(red, green, blue, alpha);
 }
 
-Vector2D<float> ewol::OObject2DTextColored::GetSize(const uniChar_t unicodeChar)
+etk::Vector2D<float> ewol::OObject2DTextColored::GetSize(const uniChar_t unicodeChar)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
-		return Vector2D<float>(0,0);
+		return etk::Vector2D<float>(0,0);
 	}
 	return m_font->GetSize(unicodeChar);
 }
 
-Vector2D<float> ewol::OObject2DTextColored::GetSize(const etk::UString& unicodeString)
+etk::Vector2D<float> ewol::OObject2DTextColored::GetSize(const etk::UString& unicodeString)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
-		return Vector2D<float>(0,0);
+		return etk::Vector2D<float>(0,0);
 	}
 	return m_font->GetSize(unicodeString);
 }

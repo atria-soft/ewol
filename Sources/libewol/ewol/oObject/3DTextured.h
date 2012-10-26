@@ -48,13 +48,13 @@ namespace ewol {
 				int32_t        m_GLtexture;
 				int32_t        m_GLtexID;
 			#endif
-			ewol::TextureFile*              m_resource;    //!< texture resources
-			etk::Vector<Vector3D<float> >   m_coord;       //!< internal coord of the object
-			etk::Vector<texCoord_ts>        m_coordTex;    //!< internal texture coordinate for every point
+			ewol::TextureFile*                   m_resource;    //!< texture resources
+			etk::Vector<etk::Vector3D<float> >   m_coord;       //!< internal coord of the object
+			etk::Vector<texCoord_ts>             m_coordTex;    //!< internal texture coordinate for every point
 			#ifdef __VIDEO__OPENGL_ES_2
-				etk::Vector<draw::Colorf>   m_coordColor;  //!< internal color of the different point
+				etk::Vector<draw::Colorf>        m_coordColor;  //!< internal color of the different point
 			#else
-				etk::Vector<draw::Color>    m_coordColor;  //!< internal color of the different point
+				etk::Vector<draw::Color>         m_coordColor;  //!< internal color of the different point
 			#endif
 	};
 };

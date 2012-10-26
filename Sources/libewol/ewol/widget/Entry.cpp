@@ -137,7 +137,7 @@ etk::UString ewol::Entry::GetValue(void)
 
 void ewol::Entry::SetPoint(float x, float y)
 {
-	Vector2D<float> triangle(x, y);
+	etk::Vector2D<float> triangle(x, y);
 	m_coord.PushBack(triangle);
 }
 
@@ -205,7 +205,7 @@ void ewol::Entry::OnDraw(DrawProperty& displayProp)
 		//glScalef(m_scaling.x, m_scaling.y, 1.0);
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
-		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// position :
 		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
@@ -268,7 +268,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*m_paddingSize;
 		
 		
-		Vector2D<float> textPos;
+		etk::Vector2D<float> textPos;
 		textPos.x = tmpTextOriginX + m_displayStartPosition;
 		textPos.y = tmpTextOriginY;
 		clipping_ts drawClipping;
@@ -303,9 +303,9 @@ void ewol::Entry::OnRegenerateDisplay(void)
 			m_oObjectDecoration.SetColor(m_textColorFg);
 			m_oObjectDecoration.clippingSet(drawClipping);
 			etk::UString tmpDisplay = m_data.Extract(0, pos1);
-			Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
+			etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
 			tmpDisplay = m_data.Extract(0, pos2);
-			Vector2D<int32_t> maxSize = m_oObjectText.GetSize(tmpDisplay);
+			etk::Vector2D<int32_t> maxSize = m_oObjectText.GetSize(tmpDisplay);
 			
 			int32_t XPos    = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
 			int32_t XPosEnd = maxSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
@@ -318,7 +318,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		if (true == m_displayCursor) {
 			m_oObjectDecoration.SetColor(m_textColorFg);
 			etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
-			Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
+			etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
 			int32_t XCursorPos = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
 			if (XCursorPos >= m_borderSize + 2*m_paddingSize) {
 				m_oObjectDecoration.Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + minSize.y, 1);
@@ -333,9 +333,9 @@ void ewol::Entry::OnRegenerateDisplay(void)
  * @note The display is automaticly requested when change apear.
  * @return ---
  */
-void ewol::Entry::UpdateCursorPosition(Vector2D<float>& pos, bool selection)
+void ewol::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
 {
-	Vector2D<float> relPos = RelativePosition(pos);
+	etk::Vector2D<float> relPos = RelativePosition(pos);
 	relPos.x += -m_displayStartPosition - 2*m_paddingSize - m_borderSize;
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
@@ -424,7 +424,7 @@ void ewol::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te cl
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == IdInput) {

@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file etk/Matix.h
- * @brief Ewol Tool Kit : generique Matrix type (header)
+ * @file etk/math/Matix4.h
+ * @brief Ewol Tool Kit : generique Matrix4 type (header)
  * @author Edouard DUPIN
  * @date 29/08/2012
  * @par Project
@@ -22,12 +22,12 @@
  *******************************************************************************
  */
 
-#ifndef __ETK_TYPES_MATRIX_H__
-#define __ETK_TYPES_MATRIX_H__
+#ifndef __ETK_TYPES_MATRIX4_H__
+#define __ETK_TYPES_MATRIX4_H__
 
 namespace etk {
 
-	class Matrix
+	class Matrix4
 	{
 		public:
 			float m_mat[4*4];
@@ -43,15 +43,15 @@ namespace etk {
 			/*****************************************************
 			 *    Constructor
 			 *****************************************************/
-			Matrix(void) {
+			Matrix4(void) {
 				Identity();
 			}
-			Matrix(const Matrix& obj) {
+			Matrix4(const Matrix4& obj) {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					m_mat[iii] = obj.m_mat[iii];
 				}
 			}
-			Matrix(float a1, float b1, float c1, float d1,
+			Matrix4(float a1, float b1, float c1, float d1,
 			       float a2, float b2, float c2, float d2,
 			       float a3, float b3, float c3, float d3,
 			       float a4, float b4, float c4, float d4) {
@@ -72,7 +72,7 @@ namespace etk {
 				m_mat[14] = c4;
 				m_mat[15] = d4;
 			}
-			Matrix(float * obj) {
+			Matrix4(float * obj) {
 				if (NULL == obj) {
 					Identity();
 					return;
@@ -84,13 +84,13 @@ namespace etk {
 			/*****************************************************
 			 *    Destructor
 			 *****************************************************/
-			~Matrix() {
+			virtual ~Matrix4(void) {
 				
 			}
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
-			const Matrix& operator= (const Matrix& obj ) {
+			const Matrix4& operator= (const Matrix4& obj ) {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					m_mat[iii] = obj.m_mat[iii];
 				}
@@ -99,7 +99,7 @@ namespace etk {
 			/*****************************************************
 			 *    == operator
 			 *****************************************************/
-			bool  operator== (const Matrix& obj) const {
+			bool  operator== (const Matrix4& obj) const {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					if(m_mat[iii] != obj.m_mat[iii]) {
 						return false;
@@ -110,7 +110,7 @@ namespace etk {
 			/*****************************************************
 			 *    != operator
 			 *****************************************************/
-			bool  operator!= (const Matrix& obj) const {
+			bool  operator!= (const Matrix4& obj) const {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					if(m_mat[iii] != obj.m_mat[iii]) {
 						return true;
@@ -121,7 +121,7 @@ namespace etk {
 			/*****************************************************
 			 *    += operator
 			 *****************************************************/
-			const Matrix& operator+= (const Matrix& obj) {
+			const Matrix4& operator+= (const Matrix4& obj) {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					m_mat[iii] += obj.m_mat[iii];
 				}
@@ -130,15 +130,15 @@ namespace etk {
 			/*****************************************************
 			 *    + operator
 			 *****************************************************/
-			Matrix operator+ (const Matrix& obj) {
-				Matrix tmpp(*this);
+			Matrix4 operator+ (const Matrix4& obj) {
+				Matrix4 tmpp(*this);
 				tmpp += obj;
 				return tmpp;
 			}
 			/*****************************************************
 			 *    -= operator
 			 *****************************************************/
-			const Matrix& operator-= (const Matrix& obj) {
+			const Matrix4& operator-= (const Matrix4& obj) {
 				for(int32_t iii=0; iii<4*4 ; iii++) {
 					m_mat[iii] -= obj.m_mat[iii];
 				}
@@ -147,15 +147,15 @@ namespace etk {
 			/*****************************************************
 			 *    - operator
 			 *****************************************************/
-			Matrix operator- (const Matrix& obj) {
-				Matrix tmpp(*this);
+			Matrix4 operator- (const Matrix4& obj) {
+				Matrix4 tmpp(*this);
 				tmpp += obj;
 				return tmpp;
 			}
 			/*****************************************************
 			 *    *= operator
 			 *****************************************************/
-			const Matrix& operator*= (const Matrix& obj) {
+			const Matrix4& operator*= (const Matrix4& obj) {
 				// output Matrix
 				float matrixOut[4*4];
 				for(int32_t jjj=0; jjj<4 ; jjj++) {
@@ -181,8 +181,8 @@ namespace etk {
 			/*****************************************************
 			 *    * operator
 			 *****************************************************/
-			Matrix operator* (const Matrix& obj) {
-				Matrix tmpp(*this);
+			Matrix4 operator* (const Matrix4& obj) {
+				Matrix4 tmpp(*this);
 				tmpp *= obj;
 				return tmpp;
 			}
@@ -218,11 +218,11 @@ namespace etk {
 			}
 	};
 	namespace matrix {
-		Matrix Perspective(float left, float right, float bottom, float top, float nearVal, float farVal);
-		Matrix Translate(float x=0.0, float y=0.0, float z=0.0);
-		Matrix Scale(float x=1.0, float y=1.0, float z=1.0);
-		Matrix rotate(float x, float y, float z, float angleRad=0.0);
-		void Display(Matrix& tmp);
+		Matrix4 Perspective(float left, float right, float bottom, float top, float nearVal, float farVal);
+		Matrix4 Translate(float x=0.0, float y=0.0, float z=0.0);
+		Matrix4 Scale(float x=1.0, float y=1.0, float z=1.0);
+		Matrix4 rotate(float x, float y, float z, float angleRad=0.0);
+		void Display(Matrix4& tmp);
 	};
 };
 

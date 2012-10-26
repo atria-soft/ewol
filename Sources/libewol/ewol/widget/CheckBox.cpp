@@ -66,7 +66,7 @@ ewol::CheckBox::~CheckBox(void)
 
 bool ewol::CheckBox::CalculateMinSize(void)
 {
-	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
 	float boxSize = etk_max(20, minSize.y) + 5;
 	m_minSize.x = boxSize+minSize.x;
 	m_minSize.y = etk_max(boxSize, minSize.y)+3;
@@ -110,14 +110,14 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
 		int32_t borderWidth = 2;
 		
 		
-		Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+		etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
 		float boxSize = etk_max(20, minSize.y) + 5;
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t posy = (m_size.y - minSize.y - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
-		Vector2D<float> textPos;
+		etk::Vector2D<float> textPos;
 		textPos.x = boxSize+5;
 		textPos.y = posy;
 		clipping_ts drawClipping;
@@ -150,7 +150,7 @@ void ewol::CheckBox::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {

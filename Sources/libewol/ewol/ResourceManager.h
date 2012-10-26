@@ -61,7 +61,7 @@ namespace ewol
 			bool Keep(etk::UString& filename, ewol::DistantFieldFont*& object);
 		#endif
 		bool Keep(ewol::Texture*& object); // no name needed here ...
-		bool Keep(etk::UString& filename, ewol::TextureFile*& object, Vector2D<int32_t> size);
+		bool Keep(etk::UString& filename, ewol::TextureFile*& object, etk::Vector2D<int32_t> size);
 		bool Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object);
 		
 		void Release(ewol::Resource*& object);

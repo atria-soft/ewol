@@ -32,7 +32,7 @@
 //#include <ewol/texture/TexturePNG.h>
 
 
-ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, Vector2D<int32_t> size) :
+ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, etk::Vector2D<int32_t> size) :
 	Texture(genName)
 {
 	// load data

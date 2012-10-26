@@ -55,12 +55,12 @@ namespace ewol {
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
-			void           SetPadding(Vector2D<float>  newPadding);
+			void           SetPadding(etk::Vector2D<float>  newPadding);
 		private:
 			ewol::OObject2DTextColored m_oObjectText;
 			ewol::OObject2DColored     m_oObjectDecoration;
 			textAlignement_te          m_alignement;
-			Vector2D<float>            m_padding;
+			etk::Vector2D<float>            m_padding;
 			etk::UString               m_label;
 			draw::Color                m_textColorFg;    //!< Text color
 			draw::Color                m_textColorBg;    //!< Background color
@@ -79,7 +79,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 			draw::Color GetCurrentColor(void) { return m_selectedColor; };
 			void     SetCurrentColor(draw::Color color);
 			/**

@@ -22,15 +22,28 @@
  *******************************************************************************
  */
 
+#ifndef __ETK_STREAM_DEC_H__
+#define __ETK_STREAM_DEC_H__
+
+namespace etk{
+	typedef enum {
+		LOG_LEVEL_NONE,
+		LOG_LEVEL_CRITICAL,
+		LOG_LEVEL_ERROR,
+		LOG_LEVEL_WARNING,
+		LOG_LEVEL_INFO,
+		LOG_LEVEL_DEBUG,
+		LOG_LEVEL_VERBOSE
+	} logLevel_te;
+};
+#endif
+
+#include <string.h>
+#include <etk/Types.h>
+#include <etk/os/Mutex.h>
 
 #ifndef __ETK_STREAM_H__
 #define __ETK_STREAM_H__
-
-//#include <cstdio>
-//#include <typeinfo>
-#include <string.h>
-#include <etk/Types.h>
-#include <etk/Mutex.h>
 
 #if defined(__TARGET_OS__Android)
 #	include <android/log.h>
@@ -81,15 +94,6 @@ namespace etk{
 	class CEndl{};
 	class CHex{};
 	class CStart{};
-	typedef enum {
-		LOG_LEVEL_NONE,
-		LOG_LEVEL_CRITICAL,
-		LOG_LEVEL_ERROR,
-		LOG_LEVEL_WARNING,
-		LOG_LEVEL_INFO,
-		LOG_LEVEL_DEBUG,
-		LOG_LEVEL_VERBOSE
-	} logLevel_te;
 	class CCout{
 		private:
 			bool             hex;

@@ -186,7 +186,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 			
 			ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
 			
-			Vector2D<float> textPos;
+			etk::Vector2D<float> textPos;
 			textPos.x = (int32_t)tmpOriginX;
 			if (m_list[iii]->m_group == false) {
 				textPos.x += minHeight;
@@ -213,7 +213,7 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
@@ -221,7 +221,7 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 		return true;
 	}
 	if (IdInput == 1 && typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
-		Vector2D<float> relativePos = RelativePosition(pos);
+		etk::Vector2D<float> relativePos = RelativePosition(pos);
 		// corection for the openGl abstraction
 		relativePos.y = m_size.y - relativePos.y;
 		// TODO : Rework this ...

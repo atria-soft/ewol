@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/Mutex.h
+ * @file etk/os/Mutex.h
  * @brief Ewol Tool Kit : basic mutex system (header)
  * @author Edouard DUPIN
  * @date 15/08/2012
@@ -22,10 +22,10 @@
  *******************************************************************************
  */
 
+#include <etk/Types.h>
+
 #ifndef __ETK_MUTEX_H__
 #define __ETK_MUTEX_H__
-
-#include <etk/Types.h>
 
 #ifdef __TARGET_OS__Windows
 	#include <windows.h>

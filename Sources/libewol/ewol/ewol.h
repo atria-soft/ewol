@@ -28,7 +28,7 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 
@@ -38,9 +38,9 @@ namespace ewol {
 	void Stop(void);
 	void DisplayWindows(ewol::Windows * windows);
 	// only on computer
-	void ChangeSize(Vector2D<int32_t> size);
-	void ChangePos(Vector2D<int32_t> pos);
-	void GetAbsPos(Vector2D<int32_t>& pos);
+	void ChangeSize(etk::Vector2D<int32_t> size);
+	void ChangePos(etk::Vector2D<int32_t> pos);
+	void GetAbsPos(etk::Vector2D<int32_t>& pos);
 	void KeyboardShow(void);
 	void KeyboardHide(void);
 	void ForceRedrawAll(void);

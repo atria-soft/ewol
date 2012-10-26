@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <etk/Semaphore.h>
+#include <etk/os/Semaphore.h>
 #include <etk/DebugInternal.h>
 #include <sys/time.h>
 

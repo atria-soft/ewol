@@ -22,10 +22,11 @@
  *******************************************************************************
  */
 
+#include "etk/Debug.h"
+
 #ifndef __ETK_DEBUG_INTERNAL_H__
 #define __ETK_DEBUG_INTERNAL_H__
 
-#include "etk/Debug.h"
 
 extern const char * etkLibName;
 

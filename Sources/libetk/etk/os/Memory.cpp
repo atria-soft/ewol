@@ -23,7 +23,7 @@
  */
 
 #include <etk/Types.h>
-#include <etk/Memory.h>
+#include <etk/os/Memory.h>
 
 // General 
 #if ETK_MEMORY_CHECKER > 0

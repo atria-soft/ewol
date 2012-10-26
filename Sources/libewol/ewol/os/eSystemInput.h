@@ -38,10 +38,10 @@ namespace ewol
 		int32_t         destinationInputId;
 		int64_t         lastTimeEvent;
 		ewol::Widget*   curentWidgetEvent;
-		Vector2D<float> origin;
-		Vector2D<float> size;
-		Vector2D<float> downStart;
-		Vector2D<float> posEvent;
+		etk::Vector2D<float> origin;
+		etk::Vector2D<float> size;
+		etk::Vector2D<float> downStart;
+		etk::Vector2D<float> posEvent;
 		bool            isDown;
 		bool            isInside;
 		int32_t         nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -63,7 +63,7 @@ namespace ewol
 			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
 			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
 			void CleanElement(InputPoperty_ts *eventTable, int32_t idInput);
-			bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos);
+			bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float> pos);
 			int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId);
 		public:
 			eSystemInput(void);
@@ -72,8 +72,8 @@ namespace ewol
 			void SetDpi(int32_t newDPI);
 			
 			// note if id<0 ==> the it was finger event ...
-			void Motion(ewol::inputType_te type, int pointerID, Vector2D<float>  pos );
-			void State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float>  pos);
+			void Motion(ewol::inputType_te type, int pointerID, etk::Vector2D<float>  pos );
+			void State(ewol::inputType_te type, int pointerID, bool isDown, etk::Vector2D<float>  pos);
 			
 			/**
 			 * @brief Inform object that an other object is removed ...

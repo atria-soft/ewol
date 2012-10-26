@@ -51,13 +51,13 @@ namespace ewol {
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			Vector2D<float>          m_originScrooled;
-			Vector2D<float>          m_maxSize;
+			etk::Vector2D<float>          m_originScrooled;
+			etk::Vector2D<float>          m_maxSize;
 			float                    m_limitScrolling;
 		private:
 			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
 			float              m_pixelScrolling;
-			Vector2D<float>    m_highSpeedStartPos;
+			etk::Vector2D<float>    m_highSpeedStartPos;
 			highSpeedMode_te   m_highSpeedMode;
 			int32_t            m_highSpeedButton;
 			ewol::inputType_te m_highSpeedType;
@@ -82,7 +82,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
@@ -109,7 +109,7 @@ namespace ewol {
 			 * @param[in] localSize new Maximum size
 			 * @return ---
 			 */
-			void SetMaxSize(Vector2D<float>  localSize) { m_maxSize = localSize; };
+			void SetMaxSize(etk::Vector2D<float>  localSize) { m_maxSize = localSize; };
 			/**
 			 * @brief Request a specific position for the scrolling of the current windows.
 			 * @param[in] borderWidth Size of the border that requested the element might not to be
@@ -117,7 +117,7 @@ namespace ewol {
 			 * @param[in] center True if the position might be at the center of the widget
 			 * @return ---
 			 */
-			void SetScrollingPositionDynamic(Vector2D<float>  borderWidth, Vector2D<float>  currentPosition, bool center = false);
+			void SetScrollingPositionDynamic(etk::Vector2D<float>  borderWidth, etk::Vector2D<float>  currentPosition, bool center = false);
 			/**
 			 * @brief Set the scrolling limit when arriving at he end of the widget
 			 * @param[in] poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...

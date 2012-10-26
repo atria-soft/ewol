@@ -71,7 +71,7 @@ void ewol::OObject2DColored::Draw(void)
 		//glScalef(m_scaling.x, m_scaling.y, 1.0);
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
-		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// position :
 		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
@@ -110,7 +110,7 @@ void ewol::OObject2DColored::Clear(void)
 }
 
 
-void generatePolyGone(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector2D<float> > & output )
+void generatePolyGone(etk::Vector<etk::Vector2D<float> > & input, etk::Vector<etk::Vector2D<float> > & output )
 {
 	if (input.Size()<3) {
 		return;
@@ -124,7 +124,7 @@ void generatePolyGone(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector2
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-void SutherlandHodgman(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector2D<float> > & output, float sx, float sy, float ex, float ey)
+void SutherlandHodgman(etk::Vector<etk::Vector2D<float> > & input, etk::Vector<etk::Vector2D<float> > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.Size() <0) {
@@ -132,8 +132,8 @@ void SutherlandHodgman(etk::Vector<Vector2D<float> > & input, etk::Vector<Vector
 	}
 	//int32_t sizeInit=input.Size();
 	// last element :
-	Vector2D<float> destPoint;
-	Vector2D<float> lastElement = input[input.Size()-1];
+	etk::Vector2D<float> destPoint;
+	etk::Vector2D<float> lastElement = input[input.Size()-1];
 	bool inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
@@ -356,10 +356,10 @@ void ewol::OObject2DColored::SetColor(float red, float green, float blue, float 
 	
 }
 
-void ewol::OObject2DColored::SetPoint(Vector2D<float> point)
+void ewol::OObject2DColored::SetPoint(etk::Vector2D<float> point)
 {
 	// TODO : Clean this :
-	Vector2D<float> tmpElement;
+	etk::Vector2D<float> tmpElement;
 	tmpElement.x = point.x;
 	tmpElement.y = point.y;
 	m_triangle[m_triElement] = tmpElement;

@@ -89,7 +89,7 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
  * @param[in] pos position of the event
  * @return true if event has been greped
  */
-bool ewol::eSystemInput::localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::eSystemInput::localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (NULL != destWidget) {
 		if (type == ewol::INPUT_TYPE_MOUSE || type == ewol::INPUT_TYPE_FINGER) {
@@ -221,7 +221,7 @@ int32_t ewol::eSystemInput::localGetDestinationId(ewol::inputType_te type, ewol:
 }
 
 // note if id<0 ==> the it was finger event ...
-void ewol::eSystemInput::Motion(ewol::inputType_te type, int pointerID, Vector2D<float> pos)
+void ewol::eSystemInput::Motion(ewol::inputType_te type, int pointerID, etk::Vector2D<float> pos)
 {
 	// convert position in Open-GL coordonates ...
 	pos.y = ewol::GetCurrentHeight() - pos.y;
@@ -312,7 +312,7 @@ void ewol::eSystemInput::Motion(ewol::inputType_te type, int pointerID, Vector2D
 	}
 }
 
-void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDown, Vector2D<float> pos)
+void ewol::eSystemInput::State(ewol::inputType_te type, int pointerID, bool isDown, etk::Vector2D<float> pos)
 {
 	// convert position in Open-GL coordonates ...
 	pos.y = ewol::GetCurrentHeight() - pos.y;

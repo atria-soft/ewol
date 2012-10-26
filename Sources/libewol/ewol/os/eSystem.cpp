@@ -24,7 +24,7 @@
 
 
 #include <etk/Types.h>
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <ewol/ewol.h>
 #include <ewol/Debug.h>
 #include <etk/MessageFifo.h>
@@ -41,7 +41,7 @@
 #include <ewol/font/FontManager.h>
 
 static ewol::Windows*     windowsCurrent = NULL;
-static Vector2D<int32_t>  windowsSize(320, 480);
+static etk::Vector2D<int32_t>  windowsSize(320, 480);
 static ewol::eSystemInput l_managementInput;
 
 
@@ -135,7 +135,7 @@ void ewolProcessEvents(void)
 			case THREAD_INPUT_MOTION:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
 				{
-					Vector2D<float> pos;
+					etk::Vector2D<float> pos;
 					pos.x = data.input.x;
 					pos.y = data.input.y;
 					l_managementInput.Motion(data.input.type, data.input.pointerID, pos);
@@ -144,7 +144,7 @@ void ewolProcessEvents(void)
 			case THREAD_INPUT_STATE:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 				{
-					Vector2D<float> pos;
+					etk::Vector2D<float> pos;
 					pos.x = data.input.x;
 					pos.y = data.input.y;
 					l_managementInput.State(data.input.type, data.input.pointerID, data.input.state, pos);
@@ -583,7 +583,7 @@ ewol::Windows* eSystem::GetCurrentWindows(void)
  * @param ---
  * @return the current size ...
  */
-Vector2D<int32_t> eSystem::GetSize(void)
+etk::Vector2D<int32_t> eSystem::GetSize(void)
 {
 	return windowsSize;
 }
@@ -598,7 +598,7 @@ void eSystem::ForceRedrawAll(void)
 {
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	if (NULL != tmpWindows) {
-		Vector2D<int32_t> tmpSize = eSystem::GetSize();
+		etk::Vector2D<int32_t> tmpSize = eSystem::GetSize();
 		tmpWindows->CalculateSize(tmpSize.x, tmpSize.y);
 	}
 }

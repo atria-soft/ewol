@@ -48,21 +48,21 @@ namespace ewol
 			~FontFreeType(void);
 			int32_t Draw(draw::Image&         imageOut,
 			             int32_t              fontSize,
-			             Vector2D<float>      textPos,
+			             etk::Vector2D<float>      textPos,
 			             const etk::UString&  unicodeString,
 			             draw::Color&         textColor);
 			int32_t Draw(draw::Image&     imageOut,
 			             int32_t          fontSize,
-			             Vector2D<float>  textPos,
+			             etk::Vector2D<float>  textPos,
 			             const uniChar_t  unicodeChar,
 			             draw::Color&     textColor);
 			bool GetGlyphProperty(int32_t              fontSize,
 			                      ewol::GlyphProperty& property);
 			bool DrawGlyph(draw::Image&         imageOut,
 			               int32_t              fontSize,
-			               Vector2D<int32_t>    glyphPosition,
+			               etk::Vector2D<int32_t>    glyphPosition,
 			               ewol::GlyphProperty& property);
-			Vector2D<float> GetSize(int32_t fontSize, const etk::UString & unicodeString);
+			etk::Vector2D<float> GetSize(int32_t fontSize, const etk::UString & unicodeString);
 			int32_t GetHeight(int32_t fontSize);
 	};
 	void FreeTypeInit(void);

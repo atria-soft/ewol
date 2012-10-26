@@ -27,7 +27,7 @@
 
 #include <etk/Types.h>
 #include <etk/DebugInternal.h>
-#include <etk/Memory.h>
+#include <etk/os/Memory.h>
 #include <etk/UString.h>
 #include <etk/Vector.h>
 

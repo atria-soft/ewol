@@ -61,8 +61,8 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget) {
-		Vector2D<float> subWidgetSize;
-		Vector2D<float> subWidgetOrigin;
+		etk::Vector2D<float> subWidgetSize;
+		etk::Vector2D<float> subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -98,7 +98,7 @@ bool ewol::PopUp::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
-		Vector2D<float> tmpSize = m_subWidget->GetMinSize();
+		etk::Vector2D<float> tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -169,8 +169,8 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
 	// set the area in white ...
 	if (NULL != m_subWidget) {
-		Vector2D<float> tmpSize = m_subWidget->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
+		etk::Vector2D<float> tmpSize = m_subWidget->GetSize();
+		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		BGOObjects->SetColor(m_colorBorder);
 		BGOObjects->Rectangle(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP, tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP);
 		BGOObjects->SetColor(m_colorBackGroung);
@@ -188,14 +188,14 @@ void ewol::PopUp::OnRegenerateDisplay(void)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::PopUp::GetWidgetAtPos(Vector2D<float> pos)
+ewol::Widget * ewol::PopUp::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// calculate relative position
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	// for the element in the pop-up ...
 	if (NULL != m_subWidget) {
-		Vector2D<float> tmpSize = m_subWidget->GetSize();
-		Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
+		etk::Vector2D<float> tmpSize = m_subWidget->GetSize();
+		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{

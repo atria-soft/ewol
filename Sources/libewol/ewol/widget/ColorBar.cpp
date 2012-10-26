@@ -215,9 +215,9 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		relativePos.x = etk_max(etk_min(relativePos.x, m_size.x),0);

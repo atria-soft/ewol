@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/Memory.h
+ * @file etk/os/Memory.h
  * @brief Ewol Tool Kit : Memory implementation (headers)
  * @author Edouard DUPIN
  * @date 12/01/2011

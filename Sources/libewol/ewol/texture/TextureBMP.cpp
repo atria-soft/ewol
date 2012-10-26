@@ -135,7 +135,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 	m_width = m_InfoHeader.biWidth;
 	m_height = m_InfoHeader.biHeight;
 	// reallocate the image 
-	ouputImage.Resize(Vector2D<int32_t>(m_width,m_height));
+	ouputImage.Resize(etk::Vector2D<int32_t>(m_width,m_height));
 	
 	uint8_t* m_data = NULL;
 	if(0 != m_InfoHeader.biSizeImage)
@@ -161,7 +161,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 						tmpColor.g = (int8_t)((*pointer & 0x07E0) >> 3);
 						tmpColor.b = (int8_t)(*pointer << 3);
 						tmpColor.a = 0xFF;
-						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
+						ouputImage.Set(etk::Vector2D<int32_t>(xxx,yyy), tmpColor);
 						pointer++;
 					}
 				}
@@ -176,7 +176,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 						tmpColor.g = (int8_t)((*pointer & 0x03E0) >> 2);
 						tmpColor.b = (int8_t)(*pointer << 3);
 						tmpColor.a = 0xFF;
-						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
+						ouputImage.Set(etk::Vector2D<int32_t>(xxx,yyy), tmpColor);
 						pointer++;
 					}
 				}
@@ -191,7 +191,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 						tmpColor.g = *pointer++;
 						tmpColor.b = *pointer++;
 						tmpColor.a = 0xFF;
-						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
+						ouputImage.Set(etk::Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}
@@ -206,7 +206,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 						tmpColor.g = *pointer++;
 						tmpColor.b = *pointer++;
 						tmpColor.a = 0xFF;
-						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
+						ouputImage.Set(etk::Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}
@@ -220,7 +220,7 @@ void ewol::imageBMP::GenerateImage(etk::File & fileName, draw::Image & ouputImag
 						tmpColor.g = *pointer++;
 						tmpColor.b = *pointer++;
 						tmpColor.a = *pointer++;
-						ouputImage.Set(Vector2D<int32_t>(xxx,yyy), tmpColor);
+						ouputImage.Set(etk::Vector2D<int32_t>(xxx,yyy), tmpColor);
 					}
 				}
 			}

@@ -47,8 +47,8 @@ namespace ewol {
 			virtual void UnInit(void);
 			virtual bool Process(int64_t time, int32_t deltaTime);
 			virtual void Draw(void);
-			virtual bool HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
-			virtual bool Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power);
+			virtual bool HaveImpact(int32_t group, int32_t type, etk::Vector2D<float>  position, float size);
+			virtual bool Explosion(int32_t group, int32_t type, etk::Vector2D<float>  position, float pxAtenuation, float power);
 			virtual etk::UString Message(etk::UString control, etk::UString message);
 	};
 	void RegisterLuaElementInFolder(ewol::SceneElement & sceneElement, etk::UString folder);

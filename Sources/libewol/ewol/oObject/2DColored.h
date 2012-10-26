@@ -43,7 +43,7 @@ namespace ewol {
 				int32_t        m_GLMatrix;
 				int32_t        m_GLColor;
 			#endif
-			etk::Vector<Vector2D<float> >   m_coord;       //!< internal coord of the object
+			etk::Vector<etk::Vector2D<float> >   m_coord;       //!< internal coord of the object
 			#ifdef __VIDEO__OPENGL_ES_2
 				etk::Vector<draw::Colorf>   m_coordColor;  //!< internal color of the different point
 				draw::Colorf                m_color[3];
@@ -52,14 +52,14 @@ namespace ewol {
 				draw::Color                 m_color[3];
 			#endif
 			int32_t         m_triElement;
-			Vector2D<float> m_triangle[3];
+			etk::Vector2D<float> m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:
 			void Clear(void);
 			void SetColor(float red, float green, float blue, float alpha = 1.0);
 			void SetColor(draw::Color color);
-			void SetPoint(Vector2D<float>  point);
+			void SetPoint(etk::Vector2D<float>  point);
 			void SetPoint(float x, float y);
 			void Line(float sx, float sy, float ex, float ey, float thickness);
 			void Rectangle(float x, float y, float w, float h);

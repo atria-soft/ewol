@@ -36,10 +36,10 @@ namespace ewol {
 		public:
 			Sprite(etk::UString spriteName, float sizeX=-1, float sizeY=-1);
 			virtual ~Sprite(void);
-			void Element(Vector2D<float> pos, float size, float angle);
-			void Element(Vector3D<float> pos, float size, float angle);
-			void Element(Vector2D<float> pos, float size, float angle, draw::Color tmpColor);
-			void Element(Vector3D<float> pos, float size, float angle, draw::Color tmpColor);
+			void Element(etk::Vector2D<float> pos, float size, float angle);
+			void Element(etk::Vector3D<float> pos, float size, float angle);
+			void Element(etk::Vector2D<float> pos, float size, float angle, draw::Color tmpColor);
+			void Element(etk::Vector3D<float> pos, float size, float angle, draw::Color tmpColor);
 			bool HasName(etk::UString& name) { return name == m_name; };
 	};
 };

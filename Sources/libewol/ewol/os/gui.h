@@ -52,19 +52,19 @@ namespace guiInterface
 	 * @param size The requested size
 	 * @return ---
 	 */
-	void ChangeSize(Vector2D<int32_t> size);
+	void ChangeSize(etk::Vector2D<int32_t> size);
 	/**
 	 * @brief Change the current Windows position
 	 * @param pos The position where the winsdows might be placed.
 	 * @return ---
 	 */
-	void ChangePos(Vector2D<int32_t> pos);
+	void ChangePos(etk::Vector2D<int32_t> pos);
 	/**
 	 * @brief Get the current Windows position
 	 * @param pos The position where the winsdows is.
 	 * @return ---
 	 */
-	void GetAbsPos(Vector2D<int32_t>& pos);
+	void GetAbsPos(etk::Vector2D<int32_t>& pos);
 	/**
 	 * @brief Display the virtal keyboard (for touch system only)
 	 * @param ---

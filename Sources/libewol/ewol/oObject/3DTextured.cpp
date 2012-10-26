@@ -33,7 +33,7 @@
 ewol::OObject3DTextured::OObject3DTextured(etk::UString textureName, float sizeX, float sizeY)
 {
 	EWOL_VERBOSE("Create OObject textured : \"" << textureName << "\"");
-	if (false == ewol::resource::Keep(textureName, m_resource, Vector2D<int32_t>(sizeX,sizeY)) ) {
+	if (false == ewol::resource::Keep(textureName, m_resource, etk::Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
 	#ifdef __VIDEO__OPENGL_ES_2
@@ -78,7 +78,7 @@ void ewol::OObject3DTextured::Draw(void)
 		//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 		m_GLprogram->Use();
 		// set Matrix : translation/positionMatrix
-		etk::Matrix tmpMatrix = ewol::openGL::GetMatrix();
+		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
 		m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
@@ -132,7 +132,7 @@ void ewol::OObject3DTextured::Rectangle(float x, float y, float w, float h, floa
 	h -= 6;
 	*/
 	//EWOL_DEBUG("Add rectangle : ...");
-	Vector3D<float> point;
+	etk::Vector3D<float> point;
 	texCoord_ts tex;
 	point.z = 0;
 

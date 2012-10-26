@@ -71,7 +71,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject

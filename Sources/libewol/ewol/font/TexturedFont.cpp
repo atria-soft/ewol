@@ -127,7 +127,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	
 	EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 	// resize must be done on the texture ...
-	SetImageSize(Vector2D<int32_t>(textureWidth,textureHeight));
+	SetImageSize(etk::Vector2D<int32_t>(textureWidth,textureHeight));
 	// now we can acces directly on the image
 	m_data.SetFillColor(draw::Color(0xFFFFFF00));
 	m_data.Clear();
@@ -135,7 +135,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_height = m_font->GetHeight(m_size);
 	
 	int32_t CurrentLineHigh = 0;
-	Vector2D<int32_t>    glyphPosition(1,1);
+	etk::Vector2D<int32_t>    glyphPosition(1,1);
 	for (int32_t iii=0; iii<m_listElement.Size(); iii++) {
 		if (true == m_font->GetGlyphProperty(m_size, m_listElement[iii].property)) {
 			/*
@@ -187,11 +187,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
 		for(int32_t iii=0; iii < textureWidth; iii++){
-			tlpppp = m_data.Get(Vector2D<int32_t>(iii, jjj) );
+			tlpppp = m_data.Get(etk::Vector2D<int32_t>(iii, jjj) );
 			// set only alpha :
 			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
 			// real set of color
-			m_data.Set(Vector2D<int32_t>(iii, jjj), tlpppp );
+			m_data.Set(etk::Vector2D<int32_t>(iii, jjj), tlpppp );
 		}
 	}
 	#endif
@@ -219,15 +219,15 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 
 
 
-int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
+int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
                                  const etk::UString&             unicodeString,
-                                 etk::Vector<Vector2D<float> > & coord,
+                                 etk::Vector<etk::Vector2D<float> > & coord,
                                  etk::Vector<texCoord_ts> &      coordTex,
                                  bool                            hasClipping,
                                  clipping_ts&                    clipping)
 {
 	float totalSize = 0;
-	Vector2D<float> tmpPos = textPos;
+	etk::Vector2D<float> tmpPos = textPos;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
 		int32_t ret = Draw(tmpPos, unicodeString[iii], coord, coordTex, hasClipping, clipping);
 		tmpPos.x += ret;
@@ -243,7 +243,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 			 *   |      |
 			 *   3------2
 			 */
-			Vector2D<float> bitmapDrawPos[4];
+			etk::Vector2D<float> bitmapDrawPos[4];
 			bitmapDrawPos[0].x = 10;
 			bitmapDrawPos[1].x = 400;
 			bitmapDrawPos[2].x = 400;
@@ -307,9 +307,9 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 	return totalSize;
 }
 
-int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
+int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
                                  const uniChar_t                 unicodeChar,
-                                 etk::Vector<Vector2D<float> > & coord,
+                                 etk::Vector<etk::Vector2D<float> > & coord,
                                  etk::Vector<texCoord_ts> &      coordTex,
                                  bool                            hasClipping,
                                  clipping_ts&                    clipping)
@@ -407,7 +407,7 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 				 *   |      |
 				 *   3------2
 				 */
-				Vector2D<int32_t> bitmapDrawPos[4];
+				etk::Vector2D<int32_t> bitmapDrawPos[4];
 				bitmapDrawPos[0].x = (int32_t)dxA;
 				bitmapDrawPos[1].x = (int32_t)dxB;
 				bitmapDrawPos[2].x = (int32_t)dxB;
@@ -475,20 +475,20 @@ int32_t ewol::TexturedFont::Draw(Vector2D<float>                 textPos,
 	return sizeOut;
 }
 
-Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString)
+etk::Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString)
 {
-	Vector2D<float> outputSize(0,m_height);
+	etk::Vector2D<float> outputSize(0,m_height);
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		Vector2D<float> tmpp = GetSize(unicodeString[iii]);
+		etk::Vector2D<float> tmpp = GetSize(unicodeString[iii]);
 		outputSize.x += tmpp.x;
 	}
 	return outputSize;
 }
 
 
-Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
+etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
 {
-	Vector2D<float> outputSize(0,m_height);
+	etk::Vector2D<float> outputSize(0,m_height);
 	int32_t charIndex;
 	if (unicodeChar >= 0x80) {
 		charIndex = 0;

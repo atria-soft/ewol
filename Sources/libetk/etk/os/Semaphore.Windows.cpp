@@ -22,7 +22,7 @@
  *******************************************************************************
  */
 
-#include <etk/Semaphore.h>
+#include <etk/os/Semaphore.h>
 #include <etk/DebugInternal.h>
 
 etk::Semaphore::Semaphore(uint32_t nbBasicElement, uint32_t nbMessageMax)

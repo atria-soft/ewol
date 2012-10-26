@@ -49,7 +49,7 @@ namespace ewol {
 		// Drawing capabilities ....
 		private:
 			etk::Vector<ewol::OObject*>        m_listOObject;   //!< generic element to display...
-			etk::Vector<Vector2D<int32_t> >   m_lineSize;
+			etk::Vector<etk::Vector2D<int32_t> >   m_lineSize;
 		public:
 			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
@@ -72,7 +72,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {

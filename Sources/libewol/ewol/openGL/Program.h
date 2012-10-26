@@ -57,7 +57,7 @@
 					void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
 					int32_t GetUniform(etk::UString tmpElement);
 					
-					void UniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix pointer, bool transpose=true);
+					void UniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix4 pointer, bool transpose=true);
 					
 					void Uniform1f(int32_t idElem, float value1);
 					void Uniform2f(int32_t idElem, float value1, float value2);

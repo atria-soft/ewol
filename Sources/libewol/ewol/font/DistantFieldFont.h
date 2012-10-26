@@ -46,7 +46,7 @@ namespace ewol
 			ewol::Font*                         m_font;
 			etk::Vector<freeTypeFontElement_ts> m_listElement;
 			// for the texture generation :
-			Vector2D<int32_t>                   m_lastGlyphPos;
+			etk::Vector2D<int32_t>                   m_lastGlyphPos;
 			int32_t                             m_lastRawHeigh;
 		public:
 			DistantFieldFont(etk::UString fontName);
@@ -54,16 +54,16 @@ namespace ewol
 			virtual bool HasName(etk::UString& fileName);
 			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
-			int32_t Draw(Vector2D<float>                 textPos,
+			int32_t Draw(etk::Vector2D<float>                 textPos,
 			             const etk::UString&             unicodeString,
-			             etk::Vector<Vector2D<float> > & coord,
+			             etk::Vector<etk::Vector2D<float> > & coord,
 			             etk::Vector<texCoord_ts> &      coordTex);
-			int32_t Draw(Vector2D<float>                 textPos,
+			int32_t Draw(etk::Vector2D<float>                 textPos,
 			             const uniChar_t                 unicodeChar,
-			             etk::Vector<Vector2D<float> > & coord,
+			             etk::Vector<etk::Vector2D<float> > & coord,
 			             etk::Vector<texCoord_ts> &      coordTex);
-			Vector2D<float> GetSize(const etk::UString & unicodeString);
-			Vector2D<float> GetSize(const uniChar_t      unicodeChar);
+			etk::Vector2D<float> GetSize(const etk::UString & unicodeString);
+			etk::Vector2D<float> GetSize(const uniChar_t      unicodeChar);
 			// TODO : Remove this element, it is stupid ...
 			int32_t GetHeight(void) { return m_height; };
 			int32_t GetFontSize(void) { return m_size; };

@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * @file etk/Mutex.Generic.cpp
- * @brief Ewol Tool Kit : basic mutex system (Sources) ==> Pthread implementation
+ * @file etk/Mutex.Windows.cpp
+ * @brief Ewol Tool Kit : basic mutex system (Sources) ==> windows implementation
  * @author Edouard DUPIN
  * @date 15/08/2012
  * @par Project
@@ -22,39 +22,34 @@
  *******************************************************************************
  */
 
-#include <etk/Mutex.h>
-#include <etk/DebugInternal.h>
+#include <etk/os/Mutex.h>
 
 etk::Mutex::Mutex(void)
 {
-	// create interface mutex :
-	int ret = pthread_mutex_init(&m_mutex, NULL);
-	TK_ASSERT(ret == 0, "Error creating Mutex ...");
+	InitializeCriticalSection(&m_mutex);
 }
 
 
 etk::Mutex::~Mutex(void)
 {
-	// Remove mutex
-	int ret = pthread_mutex_destroy(&m_mutex);
-	TK_ASSERT(ret == 0, "Error destroying Mutex ...");
+	DeleteCriticalSection(&m_mutex);
 }
 
 
 void etk::Mutex::Lock(void)
 {
-	pthread_mutex_lock(&m_mutex);
+	EnterCriticalSection(&m_mutex);
 }
 
 
 bool etk::Mutex::TryLock(void)
 {
-	return pthread_mutex_trylock(&m_mutex) != 0;
+	return TryEnterCriticalSection(&m_mutex) != 0;
 }
 
 
 void etk::Mutex::UnLock(void)
 {
-	pthread_mutex_unlock(&m_mutex);
+	LeaveCriticalSection(&m_mutex);
 }
 

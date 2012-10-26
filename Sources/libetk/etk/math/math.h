@@ -1,9 +1,9 @@
 /**
  *******************************************************************************
- * @file etk/Mutex.Windows.cpp
- * @brief Ewol Tool Kit : basic mutex system (Sources) ==> windows implementation
+ * @file etk/math/math.h
+ * @brief Ewol Tool Kit : Include all mathematic system of etk (header)
  * @author Edouard DUPIN
- * @date 15/08/2012
+ * @date 29/10/2012
  * @par Project
  * Ewol TK
  *
@@ -22,34 +22,12 @@
  *******************************************************************************
  */
 
-#include <etk/Mutex.h>
 
-etk::Mutex::Mutex(void)
-{
-	InitializeCriticalSection(&m_mutex);
-}
-
-
-etk::Mutex::~Mutex(void)
-{
-	DeleteCriticalSection(&m_mutex);
-}
-
-
-void etk::Mutex::Lock(void)
-{
-	EnterCriticalSection(&m_mutex);
-}
-
-
-bool etk::Mutex::TryLock(void)
-{
-	return TryEnterCriticalSection(&m_mutex) != 0;
-}
-
-
-void etk::Mutex::UnLock(void)
-{
-	LeaveCriticalSection(&m_mutex);
-}
+#include <math.h>
+#include <etk/math/Vector2D.h>
+#include <etk/math/Vector3D.h>
+#include <etk/math/Vector4D.h>
+#include <etk/math/Matrix.h>
+#include <etk/math/Matrix4.h>
+#include <etk/math/Plane.h>
 

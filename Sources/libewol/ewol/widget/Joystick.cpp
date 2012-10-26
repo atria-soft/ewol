@@ -206,13 +206,13 @@ Tangent Function: tan(teta) = Opposite / Adjacent
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (1 == IdInput) {
 		if(    ewol::EVENT_INPUT_TYPE_DOWN == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
 			// get local relative position
-			Vector2D<float> relativePos = RelativePosition(pos);
+			etk::Vector2D<float> relativePos = RelativePosition(pos);
 			float sizeElement = m_size.x*m_ratio;
 			// Calculate the position of the cursor...
 			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;

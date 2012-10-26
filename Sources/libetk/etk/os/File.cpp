@@ -25,7 +25,7 @@
 
 #include <etk/Types.h>
 #include <etk/DebugInternal.h>
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <etk/tool.h>

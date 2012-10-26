@@ -100,12 +100,12 @@ namespace ewol {
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
 		// camera properties :
 		private:
-			Vector3D<float>   m_camRotation;
-			Vector3D<float>   m_camTranslation;
-			float             m_camAngleView;
-			float             m_camdistanceViewStart;
-			float             m_camdistanceViewStop;
-			float             m_zoom;
+			etk::Vector3D<float>   m_camRotation;
+			etk::Vector3D<float>   m_camTranslation;
+			float                  m_camAngleView;
+			float                  m_camdistanceViewStart;
+			float                  m_camdistanceViewStop;
+			float                  m_zoom;
 		public:
 			void SetCamaraTranslation();
 			void SetCamaraRotation();
@@ -117,7 +117,7 @@ namespace ewol {
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual Vector2D<float>  RelativePosition(Vector2D<float>  pos);
+			virtual etk::Vector2D<float>  RelativePosition(etk::Vector2D<float>  pos);
 	};
 	
 	/**

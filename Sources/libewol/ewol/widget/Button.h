@@ -62,7 +62,7 @@ namespace ewol {
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
-			void           SetPadding(Vector2D<float>  newPadding);
+			void           SetPadding(etk::Vector2D<float>  newPadding);
 			void           SetColorBg(draw::Color newColor) { m_textColorBg = newColor; };
 			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
@@ -72,7 +72,7 @@ namespace ewol {
 			bool               m_hasAnImage;
 			etk::UString       m_imageSelected;
 			textAlignement_te  m_alignement;
-			Vector2D<float>    m_padding;
+			etk::Vector2D<float>    m_padding;
 			etk::UString       m_label;
 			draw::Color        m_textColorFg;  //!< Text color
 			draw::Color        m_textColorBg;  //!< Background color
@@ -88,7 +88,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
 	};
 	

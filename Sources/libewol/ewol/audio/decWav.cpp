@@ -24,7 +24,7 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
-#include <etk/File.h>
+#include <etk/os/File.h>
 #include <ewol/audio/decWav.h>
 #include <ewol/Debug.h>
 

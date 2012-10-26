@@ -98,9 +98,9 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::WidgetScrooled::OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	// corection due to the open Gl invertion ...
 	relativePos.y = m_size.y - relativePos.y;
 	if (SCROLL_MODE_NORMAL == m_scroollingMode) {
@@ -376,10 +376,10 @@ void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
 		            m_size.x,
 		            m_size.y);
 		#ifdef __VIDEO__OPENGL_ES_2
-			etk::Matrix tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-			etk::Matrix tmpScale = etk::matrix::Scale(m_zoom, m_zoom, 1.0);
-			etk::Matrix tmpTranslate = etk::matrix::Translate(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
-			etk::Matrix tmpMat = tmpProjection * tmpScale * tmpTranslate;
+			etk::Matrix4 tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+			etk::Matrix4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, 1.0);
+			etk::Matrix4 tmpTranslate = etk::matrix::Translate(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
+			etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 			// set internal matrix system :
 			ewol::openGL::SetMatrix(tmpMat);
 		#else
@@ -401,9 +401,9 @@ void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
 		            m_size.y);
 		
 		#ifdef __VIDEO__OPENGL_ES_2
-			etk::Matrix tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-			etk::Matrix tmpTranslate = etk::matrix::Translate(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
-			etk::Matrix tmpMat = tmpProjection * tmpTranslate;
+			etk::Matrix4 tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+			etk::Matrix4 tmpTranslate = etk::matrix::Translate(-m_maxSize.x/2, -m_maxSize.y/2, -1.0);
+			etk::Matrix4 tmpMat = tmpProjection * tmpTranslate;
 			// set internal matrix system :
 			ewol::openGL::SetMatrix(tmpMat);
 		#else
@@ -435,7 +435,7 @@ void ewol::WidgetScrooled::GenDraw(DrawProperty displayProp)
  * @param[in] center True if the position might be at the center of the widget
  * @return ---
  */
-void ewol::WidgetScrooled::SetScrollingPositionDynamic(Vector2D<float> borderWidth, Vector2D<float> currentPosition, bool center)
+void ewol::WidgetScrooled::SetScrollingPositionDynamic(etk::Vector2D<float> borderWidth, etk::Vector2D<float> currentPosition, bool center)
 {
 	if (true == center) {
 		borderWidth.x = m_size.x / 2 - borderWidth.x;

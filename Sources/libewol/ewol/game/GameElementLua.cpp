@@ -141,7 +141,7 @@ LUAMOD_API int lua_GetPos(lua_State *L)
 		lua_pushnumber(L, (lua_Number)0 );
 		return 2;
 	}
-	Vector2D<float> tmpPos = tmpObj->PositionGet();
+	etk::Vector2D<float> tmpPos = tmpObj->PositionGet();
 	lua_pushnumber(L, (lua_Number)tmpPos.x );
 	lua_pushnumber(L, (lua_Number)tmpPos.y );
 	// return number of parameters
@@ -156,7 +156,7 @@ LUAMOD_API int lua_SetPos(lua_State *L)
 	}
 	float x = luaL_checknumber(L, 1);
 	float y = luaL_checknumber(L, 2);
-	Vector2D<float> tmpPos;
+	etk::Vector2D<float> tmpPos;
 	tmpPos.x = x;
 	tmpPos.y = y;
 	tmpObj->PositionSet(tmpPos);
@@ -354,7 +354,7 @@ LUAMOD_API int lua_SpriteUnLoad(lua_State *L)
 		return 1;
 	}
 	float a = luaL_checkint(L, 1);
-	Vector2D<float> tmpPos = tmpObj->PositionGet();
+	etk::Vector2D<float> tmpPos = tmpObj->PositionGet();
 	tmpPos.y = a;
 	tmpObj->PositionSet(tmpPos);
 */
@@ -370,7 +370,7 @@ LUAMOD_API int lua_SpriteDraw(lua_State *L)
 		return 0;
 	}
 	float spriteID = luaL_checknumber(L, 1);
-	Vector2D<float> tmpPos;
+	etk::Vector2D<float> tmpPos;
 	tmpPos.x = luaL_checknumber(L, 2);
 	tmpPos.y = luaL_checknumber(L, 3);
 	float angle = luaL_checknumber(L, 4);
@@ -424,7 +424,7 @@ LUAMOD_API int lua_ElementSetPos(lua_State *L)
 	int32_t idElement = luaL_checkint(L, 1);
 	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
 	if (NULL != tmpElem) {
-		Vector2D<float> tmpPos;
+		etk::Vector2D<float> tmpPos;
 		tmpPos.x = luaL_checknumber(L, 2);
 		tmpPos.y = luaL_checknumber(L, 3);
 		tmpElem->PositionSet(tmpPos);
@@ -447,7 +447,7 @@ LUAMOD_API int lua_ElementGetPos(lua_State *L)
 	int32_t idElement = luaL_checkint(L, 1);
 	ewol::GameElement* tmpElem = tmpScene->GetElement(idElement);
 	if (NULL != tmpElem) {
-		Vector2D<float> tmpPos = tmpElem->PositionGet();
+		etk::Vector2D<float> tmpPos = tmpElem->PositionGet();
 		lua_pushnumber(L, (lua_Number)tmpPos.x );
 		lua_pushnumber(L, (lua_Number)tmpPos.y );
 	} else {
@@ -809,7 +809,7 @@ void ewol::GameElementLua::Draw(void)
 }
 
 
-bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<float> position, float size)
+bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, etk::Vector2D<float> position, float size)
 {
 	// todo set a flag that permit lua to direct control of this ...
 	if (false == ewol::GameElement::HaveImpact(group, type, position, size) ) {
@@ -852,7 +852,7 @@ bool ewol::GameElementLua::HaveImpact(int32_t group, int32_t type, Vector2D<floa
 }
 
 
-bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, Vector2D<float> position, float pxAtenuation, float power)
+bool ewol::GameElementLua::Explosion(int32_t group, int32_t type, etk::Vector2D<float> position, float pxAtenuation, float power)
 {
 	tmpObj = this;
 	bool retVal = false;

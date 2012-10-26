@@ -41,7 +41,7 @@ ewol::texture::TextureSVG::TextureSVG(etk::File & fileName, int32_t width, int32
 		m_loadOK = true;
 	}
 	if (width == -1) {
-		Vector2D<float> elementSize = m_elementParsed.GetDefinedSize();
+		etk::Vector2D<float> elementSize = m_elementParsed.GetDefinedSize();
 		m_width = elementSize.x;
 		m_height = elementSize.y;
 	} else {

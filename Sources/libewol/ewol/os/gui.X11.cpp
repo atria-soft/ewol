@@ -251,7 +251,7 @@ bool CreateX11Context(void)
 		XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 	}
 	
-	Vector2D<int32_t> tmpSize(400, 300);
+	etk::Vector2D<int32_t> tmpSize(400, 300);
 	guiInterface::ChangeSize(tmpSize);
 	
 	return true;
@@ -1088,7 +1088,7 @@ void guiInterface::KeyboardHide(void)
  * @param size The requested size
  * @return ---
  */
-void guiInterface::ChangeSize(Vector2D<int32_t> size)
+void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: ChangeSize");
@@ -1102,7 +1102,7 @@ void guiInterface::ChangeSize(Vector2D<int32_t> size)
  * @param pos The position where the winsdows might be placed.
  * @return ---
  */
-void guiInterface::ChangePos(Vector2D<int32_t> pos)
+void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: ChangePos");
@@ -1116,7 +1116,7 @@ void guiInterface::ChangePos(Vector2D<int32_t> pos)
  * @param pos The position where the winsdows is.
  * @return ---
  */
-void guiInterface::GetAbsPos(Vector2D<int32_t>& pos)
+void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: GetAbsPos");

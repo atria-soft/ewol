@@ -25,7 +25,7 @@
 #ifndef __OPEN_GL_H__
 #define __OPEN_GL_H__
 
-#include <etk/Matrix.h>
+#include <etk/math/Matrix4.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -85,12 +85,12 @@ namespace ewol {
 		void Init(void);
 		void UnInit(void);
 		// reset the basic element at this one ... remove all previous
-		void SetBasicMatrix(etk::Matrix& newOne);
+		void SetBasicMatrix(etk::Matrix4& newOne);
 		// this is the same system as openGL-ES-1 but in openGL-ES-2 (here is the abstraction)
-		void SetMatrix(etk::Matrix& newOne);
+		void SetMatrix(etk::Matrix4& newOne);
 		void Push(void);
 		void Pop(void);
-		etk::Matrix& GetMatrix(void);
+		etk::Matrix4& GetMatrix(void);
 	};
 };
 

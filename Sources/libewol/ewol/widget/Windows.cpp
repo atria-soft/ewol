@@ -96,10 +96,10 @@ bool ewol::Windows::CalculateSize(float availlableX, float availlableY)
  * @return NULL No widget found
  * @return pointer on the widget found
  */
-ewol::Widget * ewol::Windows::GetWidgetAtPos(Vector2D<float> pos)
+ewol::Widget * ewol::Windows::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// calculate relative position
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList.Size()) {
 		if (NULL == m_popUpWidgetList[m_popUpWidgetList.Size()-1]) {
@@ -126,7 +126,7 @@ void ewol::Windows::SysDraw(void)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
-	etk::Matrix newOne;
+	etk::Matrix4 newOne;
 	ewol::openGL::SetBasicMatrix(newOne);
 	
 	ewol::DrawProperty displayProp;

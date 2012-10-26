@@ -1,11 +1,11 @@
 /**
  *******************************************************************************
- * @file ewol/texture/TextureFile.cpp
- * @brief ewol tecture file (sources)
+ * @file etk/math/Vector4D.h
+ * @brief Ewol Tool Kit : Vector 4 dimention (x, y, z, w) or (x, y, width, height)
  * @author Edouard DUPIN
- * @date 22/08/2012
+ * @date 26/10/2012
  * @par Project
- * ewol
+ * Ewol TK
  *
  * @par Copyright
  * Copyright 2011 Edouard DUPIN, all right reserved
@@ -22,25 +22,13 @@
  *******************************************************************************
  */
 
-#ifndef __EWOL_TEXTURE_FILE_H__
-#define __EWOL_TEXTURE_FILE_H__
+#ifndef __ETK_MATH_VECTOR4D_H__
+#define __ETK_MATH_VECTOR4D_H__
 
-#include <etk/UString.h>
-#include <draw/Image.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/Resource.h>
-
-namespace ewol
+namespace etk
 {
-	class TextureFile : public ewol::Texture
-	{
-		public:
-			TextureFile(etk::UString genName, etk::UString fileName, etk::Vector2D<int32_t> size);
-			~TextureFile(void) { };
-			virtual const char* GetType(void) { return "ewol::TextureFile"; };
-	};
+//template <typename T> class Vector4D
 };
-
 
 #endif
 

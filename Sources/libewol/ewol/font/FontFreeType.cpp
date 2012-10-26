@@ -120,7 +120,7 @@ ewol::FontFreeType::~FontFreeType(void)
 
 int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
                                  int32_t              fontSize,
-                                 Vector2D<float>      textPos,
+                                 etk::Vector2D<float>      textPos,
                                  const etk::UString&  unicodeString,
                                  draw::Color&         textColor)
 {
@@ -133,7 +133,7 @@ int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
 
 int32_t ewol::FontFreeType::Draw(draw::Image&     imageOut,
                                  int32_t          fontSize,
-                                 Vector2D<float>  textPos,
+                                 etk::Vector2D<float>  textPos,
                                  const uniChar_t  unicodeChar,
                                  draw::Color&     textColor)
 {
@@ -144,13 +144,13 @@ int32_t ewol::FontFreeType::Draw(draw::Image&     imageOut,
 	return 0;
 }
 
-Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
+etk::Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
 {
 	if(false==m_init) {
-		return Vector2D<float>(0,0);
+		return etk::Vector2D<float>(0,0);
 	}
 	// TODO : ...
-	Vector2D<float> outputSize(0,0);
+	etk::Vector2D<float> outputSize(0,0);
 	return outputSize;
 }
 
@@ -206,7 +206,7 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 
 bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
                                    int32_t              fontSize,
-                                   Vector2D<int32_t>    glyphPosition,
+                                   etk::Vector2D<int32_t>    glyphPosition,
                                    ewol::GlyphProperty& property)
 {
 
@@ -245,7 +245,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
 			// set only alpha :
 			tlpppp.a = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// real set of color
-			imageOut.Set(Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
+			imageOut.Set(etk::Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
 		}
 	}
 	return true;

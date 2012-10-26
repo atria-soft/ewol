@@ -67,14 +67,14 @@ namespace ewol {
 			uint32_t               AddElement(int32_t group, ewol::GameElement* newElement);
 			uint32_t               AddElementNamed(int32_t group, etk::UString &elementName);
 			ewol::GameElement*     GetElement(uint32_t idElement);
-			uint32_t               GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange=9999999999999999.0);
-			void                   GetNearestEnemy(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list);
-			uint32_t               GetNearestFriend(Vector2D<float> position, int32_t groupId, uint32_t us);
-			void                   GetNearestFriend(Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list, uint32_t us);
-			bool                   HaveImpact(int32_t group, int32_t type, Vector2D<float>  position, float size);
-			void                   Explosion(int32_t group, int32_t type, Vector2D<float>  position, float pxAtenuation, float power);
-			uint32_t               GetElementAtPos(Vector2D<float>  position, int32_t maxDistanceDetection);
-			void                   SetEventInput(uint32_t id, Vector2D<float>  position);
+			uint32_t               GetNearestEnemy(etk::Vector2D<float> position, int32_t groupId, float maxRange=9999999999999999.0);
+			void                   GetNearestEnemy(etk::Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list);
+			uint32_t               GetNearestFriend(etk::Vector2D<float> position, int32_t groupId, uint32_t us);
+			void                   GetNearestFriend(etk::Vector2D<float> position, int32_t groupId, float maxRange, etk::Vector<uint32_t>& list, uint32_t us);
+			bool                   HaveImpact(int32_t group, int32_t type, etk::Vector2D<float>  position, float size);
+			void                   Explosion(int32_t group, int32_t type, etk::Vector2D<float>  position, float pxAtenuation, float power);
+			uint32_t               GetElementAtPos(etk::Vector2D<float>  position, int32_t maxDistanceDetection);
+			void                   SetEventInput(uint32_t id, etk::Vector2D<float>  position);
 			void                   SetEventExternButton(uint32_t id, int32_t btId, int32_t state);
 			void                   SetEventExternJoystick(uint32_t id, int32_t joyId, float angle, float distance, int32_t state);
 			/**

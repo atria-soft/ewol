@@ -129,9 +129,9 @@ void ewol::Slider::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
-	Vector2D<float> relativePos = RelativePosition(pos);
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on Slider ...");
 	if (1 == IdInput) {
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent

@@ -50,17 +50,17 @@ void ewol::Stop(void)
 }
 
 
-void ewol::ChangeSize(Vector2D<int32_t> size)
+void ewol::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	guiInterface::ChangeSize(size);
 }
 
-void ewol::ChangePos(Vector2D<int32_t> pos)
+void ewol::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	guiInterface::ChangePos(pos);
 }
 
-void ewol::GetAbsPos(Vector2D<int32_t>& pos)
+void ewol::GetAbsPos(etk::Vector2D<int32_t>& pos)
 {
 	guiInterface::GetAbsPos(pos);
 }
@@ -133,13 +133,13 @@ etk::UString ewol::GetVersion(void)
 
 int32_t ewol::GetCurrentWidth(void)
 {
-	Vector2D<int32_t> tmpSize = eSystem::GetSize();
+	etk::Vector2D<int32_t> tmpSize = eSystem::GetSize();
 	return tmpSize.x;
 }
 
 int32_t ewol::GetCurrentHeight(void)
 {
-	Vector2D<int32_t> tmpSize = eSystem::GetSize();
+	etk::Vector2D<int32_t> tmpSize = eSystem::GetSize();
 	return tmpSize.y;
 }
 

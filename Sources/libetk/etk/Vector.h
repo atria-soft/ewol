@@ -25,9 +25,9 @@
 #ifndef __ETK_VECTOR_H__
 #define __ETK_VECTOR_H__
 
-#include <etk/Types.h>
 #include <etk/DebugInternal.h>
-#include <etk/Memory.h>
+#include <etk/Types.h>
+#include <etk/os/Memory.h>
 
 #undef __class__
 #define __class__	"etk::Vector"
@@ -252,7 +252,7 @@ namespace etk
 			/**
 			 * @brief Destructor of the current Class
 			 */
-			~Vector()
+			~Vector(void)
 			{
 				if (NULL!=m_data) {
 					delete [] m_data;
@@ -694,6 +694,55 @@ namespace etk
 				}
 				// set the new allocation size
 				m_allocated = requestSize;
+			}
+		public :
+			/*****************************************************
+			 *    == operator
+			 *****************************************************/
+			bool  operator== (const Vector<MY_TYPE>& obj) const
+			{
+				// check if it was the same pointer
+				if( this == &obj ) {
+					return true;
+				}
+				// fiist step : check the size ...
+				if (m_size!=obj.m_size) {
+					return false;
+				}
+				if(    NULL==m_data
+				    || NULL==obj.m_data) {
+					return false;
+				}
+				for (int32_t iii=0; iii<m_size; iii++) {
+					if (m_data[iii]!=obj.m_data[iii]) {
+						return false;
+					}
+				}
+				return true;
+			}
+			/*****************************************************
+			 *    != operator
+			 *****************************************************/
+			bool  operator!= (const Vector<MY_TYPE>& obj) const
+			{
+				// check if it was the same pointer
+				if( this == &obj ) {
+					return false;
+				}
+				// fiist step : check the size ...
+				if (m_size!=obj.m_size) {
+					return true;
+				}
+				if(    NULL==m_data
+				    || NULL==obj.m_data) {
+					return false;
+				}
+				for (int32_t iii=0; iii<m_size; iii++) {
+					if (m_data[iii]!=obj.m_data[iii]) {
+						return true;
+					}
+				}
+				return false;
 			}
 	};
 

@@ -64,7 +64,7 @@ ewol::Label::~Label(void)
 
 bool ewol::Label::CalculateMinSize(void)
 {
-	Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
 	m_minSize.x = 3 + minSize.x;
 	m_minSize.y = 3 + minSize.y;
 	return true;
@@ -102,7 +102,7 @@ void ewol::Label::OnRegenerateDisplay(void)
 		tmpOriginY += paddingSize;
 		
 		
-		Vector2D<float> textPos(tmpOriginX, tmpOriginY);
+		etk::Vector2D<float> textPos(tmpOriginX, tmpOriginY);
 		clipping_ts drawClipping;
 		drawClipping.x = paddingSize;
 		drawClipping.y = paddingSize;
@@ -121,7 +121,7 @@ void ewol::Label::OnRegenerateDisplay(void)
  * @return true the event is used
  * @return false the event is not used
  */
-bool ewol::Label::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, Vector2D<float> pos)
+bool ewol::Label::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {

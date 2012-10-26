@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/Semaphore.h
+ * @file etk/os/Semaphore.h
  * @brief Ewol Tool Kit : basic semaphore system (header)
  * @author Edouard DUPIN
  * @date 15/08/2012
