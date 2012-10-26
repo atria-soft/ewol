@@ -43,4 +43,21 @@ LOCAL_SRC_FILES := \
 	$(FILE_LIST)
 
 
+LOCAL_COPY_FILES := ../../share/textured3D.prog:usr/share/edn/textured3D.prog \
+                    ../../share/textured3D.frag:usr/share/edn/textured3D.frag \
+                    ../../share/textured3D.vert:usr/share/edn/textured3D.vert \
+                    \
+                    ../../share/color.prog:usr/share/edn/color.prog \
+                    ../../share/color.frag:usr/share/edn/color.frag \
+                    ../../share/color.vert:usr/share/edn/color.vert \
+                    \
+                    ../../share/textured.prog:usr/share/edn/textured.prog \
+                    ../../share/textured.frag:usr/share/edn/textured.frag \
+                    ../../share/textured.vert:usr/share/edn/textured.vert \
+                    \
+                    ../../share/widgetEntry.prog:usr/share/edn/widgetEntry.prog \
+                    ../../share/widgetEntry.frag:usr/share/edn/widgetEntry.frag \
+                    ../../share/widgetEntry.vert:usr/share/edn/widgetEntry.vert
+
+
 include $(BUILD_STATIC_LIBRARY)
