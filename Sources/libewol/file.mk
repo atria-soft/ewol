@@ -85,3 +85,19 @@ FILE_LIST+= ewol/audio/audio.cpp \
 			ewol/audio/decWav.cpp
 
 
+LOCAL_COPY_FILES := ../../share/textured3D.prog:textured3D.prog \
+                    ../../share/textured3D.frag:textured3D.frag \
+                    ../../share/textured3D.vert:textured3D.vert \
+                    \
+                    ../../share/color.prog:color.prog \
+                    ../../share/color.frag:color.frag \
+                    ../../share/color.vert:color.vert \
+                    \
+                    ../../share/textured.prog:textured.prog \
+                    ../../share/textured.frag:textured.frag \
+                    ../../share/textured.vert:textured.vert \
+                    \
+                    ../../share/widgetEntry.prog:widgetEntry.prog \
+                    ../../share/widgetEntry.frag:widgetEntry.frag \
+                    ../../share/widgetEntry.vert:widgetEntry.vert
+

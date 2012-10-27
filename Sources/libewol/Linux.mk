@@ -42,23 +42,6 @@ LOCAL_SRC_FILES := \
 	ewol/audio/interfacePortAudio.cpp \
 	$(FILE_LIST)
 
-LOCAL_END_PROJECT_NAME := $(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__))
-
-LOCAL_COPY_FILES := ../../share/textured3D.prog:usr/share/$(LOCAL_END_PROJECT_NAME)/textured3D.prog \
-                    ../../share/textured3D.frag:usr/share/$(LOCAL_END_PROJECT_NAME)/textured3D.frag \
-                    ../../share/textured3D.vert:usr/share/$(LOCAL_END_PROJECT_NAME)/textured3D.vert \
-                    \
-                    ../../share/color.prog:usr/share/$(LOCAL_END_PROJECT_NAME)/color.prog \
-                    ../../share/color.frag:usr/share/$(LOCAL_END_PROJECT_NAME)/color.frag \
-                    ../../share/color.vert:usr/share/$(LOCAL_END_PROJECT_NAME)/color.vert \
-                    \
-                    ../../share/textured.prog:usr/share/$(LOCAL_END_PROJECT_NAME)/textured.prog \
-                    ../../share/textured.frag:usr/share/$(LOCAL_END_PROJECT_NAME)/textured.frag \
-                    ../../share/textured.vert:usr/share/$(LOCAL_END_PROJECT_NAME)/textured.vert \
-                    \
-                    ../../share/widgetEntry.prog:usr/share/$(LOCAL_END_PROJECT_NAME)/widgetEntry.prog \
-                    ../../share/widgetEntry.frag:usr/share/$(LOCAL_END_PROJECT_NAME)/widgetEntry.frag \
-                    ../../share/widgetEntry.vert:usr/share/$(LOCAL_END_PROJECT_NAME)/widgetEntry.vert
 
 
 include $(BUILD_STATIC_LIBRARY)
