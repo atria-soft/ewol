@@ -22,6 +22,9 @@
  *******************************************************************************
  */
 
+#ifndef EPSILON
+#define EPSILON 0.01f
+#endif
 
 #include <math.h>
 #include <etk/math/Vector2D.h>

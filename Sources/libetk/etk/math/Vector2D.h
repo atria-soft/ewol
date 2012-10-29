@@ -170,16 +170,89 @@ namespace etk
 				return result;
 			}
 			
-			T QuadDist(void)
+			/**
+			 * @brief Set the vector at (0,0)
+			 */
+			void Zero(void)
 			{
-				return x*x + y*y;
-			}
+				x=0;
+				y=0;
+			};
+			/**
+			 * @brief Set the vector at (1,1)
+			 */
+			void One(void)
+			{
+				x=0;
+				y=0;
+			};
 			
-			T Dist(void)
+			/**
+			 * @brief normalize the curent vector
+			 */
+			void Normalize(void)
 			{
-				return sqrt(x*x + y*y);
-			}
-	};
+				float length=GetLength();
+				if(    length==1
+				    || length==0) {
+					return;
+				}
+				float scalefactor = 1.0f/length;
+				x *= scalefactor;
+				y *= scalefactor;
+			};
+			
+			/**
+			 * @brief Get the normalized vector
+			 * @return a new vector normalized
+			 */
+			Vector2D<T> GetNormalized(void) const
+			{
+				Vector2D<T> tmp(*this);
+				tmp.Normalize();
+				return tmp;
+			};
+			
+			/**
+			 * @brief Get the size of the vector
+			 * @return the float value
+			 */
+			float GetLength(void) const
+			{
+				return (float)sqrt((x*x)+(y*y));
+			};
+			
+			/**
+			 * @brief Get the square size of the vector
+			 * @return flat value
+			 */
+			float GetSquaredLength(void) const
+			{
+				return (float)(x*x)+(y*y);
+			};
+			
+			/**
+			 * @brief Linar intermolation of the curent Vector
+			 * @param[in] input
+			 * @param[in] factor
+			 * @return the interpolate vector
+			 */
+			Vector2D<T> LinearInterpolate(const Vector2D<T> & input, float factor) const
+			{
+				return (*this)*(1.0f-factor) + input*factor;
+			};
+			
+			/**
+			 * @brief Quadratic intermolation of the curent Vector
+			 * @param[in] v1
+			 * @param[in] v2
+			 * @param[in] factor
+			 * @return the interpolate vector
+			 */
+			Vector2D<T> QuadraticInterpolate(const Vector2D<T> & v2, const Vector2D<T> & v3, float factor) const
+			{
+				return (*this)*(1.0f-factor)*(1.0f-factor) + 2*v2*factor*(1.0f-factor) + v3*factor*factor;}
+			};
 };
 
 #endif

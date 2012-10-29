@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * @file etk/Matix.h
+ * @file etk/math/Matix.h
  * @brief Ewol Tool Kit : generique Matrix type (header)
  * @author Edouard DUPIN
  * @date 29/08/2012
@@ -253,6 +253,9 @@ namespace etk {
 			T* operator[] (int32_t line) {
 				return &m_data[line*m_size.x];
 			}
+			/*****************************************************
+			 *    Other mathematical function
+			 *****************************************************/
 			/**
 			 * @ brief Transpose Matrix
 			 * @ return the transpose matrix
@@ -267,6 +270,39 @@ namespace etk {
 					}
 				}
 				return tmpMatrix;
+			};
+			/**
+			 * @ brief Create a convolution on the matrix : set convolution on the lines
+			 * @ param[in] obj The convolution operator
+			 * @ return the value of the convolution
+			 */
+			Matrix<T> Convolution(Matrix<T>& obj)
+			{
+				Matrix<T> tmppp(1,1);
+				// TODO : ...
+				return tmppp;
+			};
+			/**
+			 * @ brief generate a devide of the curent Matrix with the specify power of 2
+			 * @ param[in] decalage The power of 2 of the division
+			 * @ return the result
+			 */
+			Matrix<T>& Fix(int32_t decalage)
+			{
+				Matrix<T> tmppp(1,1);
+				// TODO : ...
+				return tmppp;
+			};
+			/**
+			 * @ brief generate a devide of the curent Matrix with the specify power of 2
+			 * @ param[in] decalage The power of 2 of the division
+			 * @ return the result
+			 */
+			Matrix<T>& Round2(int32_t decalage)
+			{
+				Matrix<T> tmppp(1,1);
+				// TODO : ...
+				return tmppp;
 			};
 			/*****************************************************
 			 *    other stupid action :

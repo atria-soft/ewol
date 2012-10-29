@@ -23,8 +23,18 @@ Dependency packages
 
 	sudo apt-get install realpath
 
-License (DSB like)
-==================
+
+Copyright (c)
+=============
+
+Note : only for etk and EWOL
+
+2011, Edouard DUPIN
+
+License (DSB)
+=============
+
+Note : only for etk and EWOL
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
