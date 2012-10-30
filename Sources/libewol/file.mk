@@ -47,6 +47,11 @@ FILE_LIST+= ewol/font/FontManager.cpp \
 			ewol/font/TexturedFont.cpp \
 			ewol/font/DistantFieldFont.cpp
 
+# Mesh management
+FILE_LIST+= ewol/Mesh/Mesh.cpp \
+			ewol/Mesh/MeshObj.cpp
+
+
 # all widgets
 FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/WidgetManager.cpp \

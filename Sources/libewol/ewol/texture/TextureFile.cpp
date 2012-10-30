@@ -38,7 +38,7 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, e
 	// load data
 	etk::File fileName(tmpfileName, etk::FILE_TYPE_DATA);
 	if (false == fileName.Exist()) {
-		EWOL_ERROR("File does not Exist ... " << fileName);
+		EWOL_ERROR("File does not Exist ... " << fileName << " from : " << tmpfileName);
 	} else {
 		// get the upper paw2 ot the size requested...
 		if (size.x>0 && size.y>0) {

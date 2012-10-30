@@ -22,12 +22,12 @@
  *******************************************************************************
  */
 
-#ifndef __RESOURCES_H__
-#define __RESOURCES_H__
-
 #include <etk/Types.h>
 #include <etk/UString.h>
 #include <ewol/Debug.h>
+
+#ifndef __RESOURCES_H__
+#define __RESOURCES_H__
 
 #define MAX_RESOURCE_LEVEL (5)
 

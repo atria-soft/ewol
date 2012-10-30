@@ -349,6 +349,18 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, et
 	return true;
 }
 
+bool ewol::resource::Keep(etk::UString& filename, ewol::MeshObj*& object)
+{
+	// this element create a new one every time ....
+	object = new ewol::MeshObj(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
 
 bool ewol::resource::Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object)
 {
@@ -446,3 +458,9 @@ void ewol::resource::Release(ewol::TextureFile*& object)
 	object = NULL;
 }
 
+void ewol::resource::Release(ewol::MeshObj*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}

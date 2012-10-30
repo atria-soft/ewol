@@ -25,16 +25,17 @@
 #ifndef __ETK_TYPES_MATRIX_H__
 #define __ETK_TYPES_MATRIX_H__
 
-#include <etk/DebugInternal.h>
+//#include <etk/DebugInternal.h>
 #include <etk/math/Vector2D.h>
 #include <etk/Vector.h>
 
-namespace etk {
+namespace etk
+{
 	template <typename T> class Matrix
 	{
 		private:
-			Vector2D<int32_t> m_size;
-			Vector<T>         m_data;
+			etk::Vector2D<int32_t> m_size;
+			etk::Vector<T>         m_data;
 		public:
 			/*****************************************************
 			 *    Constructor

@@ -36,6 +36,7 @@
 #include <ewol/font/DistantFieldFont.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/texture/TextureFile.h>
+#include <ewol/Mesh/MeshObj.h>
 
 namespace ewol
 {
@@ -63,6 +64,7 @@ namespace ewol
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, etk::Vector2D<int32_t> size);
 		bool Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object);
+		bool Keep(etk::UString& filename, ewol::MeshObj*& object);
 		
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
@@ -75,6 +77,7 @@ namespace ewol
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
 		void Release(ewol::VirtualBufferObject*& object);
+		void Release(ewol::MeshObj*& object);
 	}
 };
 

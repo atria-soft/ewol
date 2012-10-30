@@ -80,6 +80,6 @@ typedef struct {
 	float h;
 }clipping_ts;
 
-#endif
-
 #include <etk/math/math.h>
+
+#endif
