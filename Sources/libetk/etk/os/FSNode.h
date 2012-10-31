@@ -34,19 +34,20 @@
 namespace etk
 {
 	// Right Flags :
-	typedef enum {
-		RIGHT_OTHER_EXECUTE = 1 << 0;
-		RIGHT_OTHER_WRITE   = 1 << 1;
-		RIGHT_OTHER_READ    = 1 << 2;
-		RIGHT_GROUP_EXECUTE = 1 << 3;
-		RIGHT_GROUP_WRITE   = 1 << 4;
-		RIGHT_GROUP_READ    = 1 << 5;
-		RIGHT_USER_EXECUTE  = 1 << 6;
-		RIGHT_USER_WRITE    = 1 << 7;
-		RIGHT_USER_READ     = 1 << 8;
-		RIGHT_FILE          = 1 << 9;
-		RIGHT_FOLDER        = 1 << 10;
-		RIGHT_LINK          = 1 << 12;
+	enum {
+		RIGHT_OTHER_EXECUTE = 1 << 0,
+		RIGHT_OTHER_WRITE   = 1 << 1,
+		RIGHT_OTHER_READ    = 1 << 2,
+		RIGHT_GROUP_EXECUTE = 1 << 3,
+		RIGHT_GROUP_WRITE   = 1 << 4,
+		RIGHT_GROUP_READ    = 1 << 5,
+		RIGHT_USER_EXECUTE  = 1 << 6,
+		RIGHT_USER_WRITE    = 1 << 7,
+		RIGHT_USER_READ     = 1 << 8,
+		RIGHT_FILE          = 1 << 9,
+		RIGHT_FOLDER        = 1 << 10,
+		RIGHT_LINK          = 1 << 12,
+		RIGHT_PARSE_DONE    = 1 << 31  //!< a simple flag to know if the right has been checked
 	};
 
 	typedef enum {
@@ -55,6 +56,12 @@ namespace etk
 		FSN_TYPE_DIRECT,
 		FSN_TYPE_RELATIF,
 		
+		// depend on case
+		//     - PC      : ~/
+		//     - Android : /sdcard/
+		//     - Apple   : ????
+		FSN_TYPE_HOME,
+		
 		// depend of the case
 		//     - PC      : /usr/shared/programName/
 		//     - Android : Internal at the executable file (pointer on static area)
@@ -62,7 +69,7 @@ namespace etk
 		FSN_TYPE_DATA,
 		
 		// depend on case
-		//     - PC      : ~/.programName/
+		//     - PC      : ~/.local/programName/
 		//     - Android : /data/data/programName/files/
 		//     - Apple   : ????
 		FSN_TYPE_USER_DATA,
@@ -84,12 +91,14 @@ namespace etk
 		FSN_TYPE_THEME,
 	} FSNType_te;
 	
+	etk::CCout& operator <<(etk::CCout &os, const etk::FSNType_te &obj);
+	
 	/*
 	note : The filename can be
 		Direct mode :
 			DIRECT:/sdfsdfsdf/
 			/XX ==> for Linux / Mac / Android
-			c:/xxx ==> for Windows
+			[a-zA-Z]:/xxx ==> for Windows
 		
 		Data mode :
 			DATA:folder/File.ccc
@@ -106,7 +115,7 @@ namespace etk
 		Get the root folder :
 			ROOT:
 			/
-			C: ==> create more risk ...
+			[a-zA-Z]: ==> create more risk ...
 		
 		Get the Home folder :
 			HOME:
@@ -122,8 +131,8 @@ namespace etk
 			// specific when file Access :
 			FILE *           m_PointerFile;
 		private:
-			etk::UString     GetFileSystemName(void);
-			void             privateSetName(etk::UString& newName);
+			etk::UString     GetFileSystemName(void) const;
+			void             PrivateSetName(etk::UString& newName);
 		private:
 			#ifdef __TARGET_OS__Android
 				bool         LoadDataZip(void);
@@ -191,9 +200,9 @@ namespace etk
 			/*
 				Folder specific :
 			*/
-			int32_t                   FolderCount(void);
-			etk::Vector<ewol::FSNode> FolderGetSubList(void);
-			ewol::FSNode              FolderGetParent(void); // ordered by name ...
+			int32_t                  FolderCount(void);
+			etk::Vector<etk::FSNode> FolderGetSubList(void);
+			etk::FSNode              FolderGetParent(void); // ordered by name ...
 			
 			/*
 				File Specific :
@@ -211,13 +220,13 @@ namespace etk
 	};
 	
 	etk::CCout& operator <<(etk::CCout &os, const etk::FSNode &obj);
-	/*
+	
 	void SetBaseFolderData(const char * folder);
 	void SetBaseFolderDataUser(const char * folder);
 	void SetBaseFolderCache(const char * folder);
 	void InitDefaultFolder(const char * applName);
 	etk::UString GetUserHomeFolder(void);
-	*/
+	
 
 }
 
