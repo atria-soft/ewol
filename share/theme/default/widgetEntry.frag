@@ -10,7 +10,12 @@ uniform vec4   EW_posText;
 uniform int    EW_state;
 
 // transmit from the vertex shader
-varying vec2  v_position; // intermolated position ...
+varying vec2  v_position; // interpolated position ...
+
+// internal static define
+vec4  S_colorBg = vec4(0.0);
+vec4  S_colorFg = vec4(1.0,1.0,1.0,0.8);
+vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
 
 void main(void) {
 	float specialBorder = EW_sizeBorder+EW_sizePadding;
@@ -26,12 +31,12 @@ void main(void) {
 		    || v_position.x>  endStart.x
 		    || v_position.y>  endStart.y
 		  ) {
-			gl_FragColor = vec4(0.0,0.0,0.0,1.0);
+			gl_FragColor = S_colorBorder;
 		} else {
-			gl_FragColor = vec4(1.0,1.0,1.0,0.8);
+			gl_FragColor = S_colorFg;
 		}
 	} else {
-		gl_FragColor = vec4(0.0);
+		gl_FragColor = S_colorBg;
 	}
-	
 }
+

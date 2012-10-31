@@ -84,9 +84,9 @@ void ewol::Mesh::Draw(void)
 		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 		tmpMatrix =   etk::matrix::Scale(100,100,100)
 		            * etk::matrix::rotate(1,0,0,rotx)
-		            * etk::matrix::rotate(0,1,0,roty)
+		            * etk::matrix::rotate(0,1,0,roty)/*
 		            * etk::matrix::Translate(0.01,0,0)
-		            * etk::matrix::rotate(0,0,1,rotz)
+		            * etk::matrix::rotate(0,0,1,rotz)*/
 		            * tmpMatrix;
 		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 		// TextureID
