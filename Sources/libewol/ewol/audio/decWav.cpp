@@ -24,7 +24,7 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
-#include <etk/os/File.h>
+#include <etk/os/FSNode.h>
 #include <ewol/audio/decWav.h>
 #include <ewol/Debug.h>
 
@@ -81,7 +81,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	nbSampleOut = 0;
 	waveHeader myHeader;
 	memset(&myHeader, 0, sizeof(waveHeader));
-	etk::File fileAccess(filename, etk::FILE_TYPE_DATA);
+	etk::FSNode fileAccess(etk::UString("DATA:") + filename);
 	// Start loading the XML : 
 	EWOL_DEBUG("open file (WAV) \"" << fileAccess << "\"");
 
@@ -89,12 +89,12 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		EWOL_ERROR("File Does not exist : \"" << fileAccess << "\"");
 		return NULL;
 	}
-	int32_t fileSize = fileAccess.Size();
+	int32_t fileSize = fileAccess.FileSize();
 	if (0==fileSize) {
 		EWOL_ERROR("This file is empty : \"" << fileAccess << "\"");
 		return NULL;
 	}
-	if (false == fileAccess.fOpenRead()) {
+	if (false == fileAccess.FileOpenRead()) {
 		EWOL_ERROR("Can not open the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -106,7 +106,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	// ----------------------------------------------
 	// read the header :
 	// ----------------------------------------------
-	if (fileAccess.fRead(&myHeader.riffTag, 1, 4)!=4) {
+	if (fileAccess.FileRead(&myHeader.riffTag, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -124,14 +124,14 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	}
 	// get the data size :
 	unsigned char tmpData[32];
-	if (fileAccess.fRead(tmpData, 1, 4)!=4) {
+	if (fileAccess.FileRead(tmpData, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
 	myHeader.size = CONVERT_UINT32(littleEndien, tmpData);
 	
 	// get the data size :
-	if (fileAccess.fRead(&myHeader.waveTag, 1, 4)!=4) {
+	if (fileAccess.FileRead(&myHeader.waveTag, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -144,7 +144,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	}
 	
 	// get the data size :
-	if (fileAccess.fRead(&myHeader.fmtTag, 1, 4)!=4) {
+	if (fileAccess.FileRead(&myHeader.fmtTag, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -156,7 +156,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		return NULL;
 	}
 	// get the data size :
-	if (fileAccess.fRead(tmpData, 1, 4)!=4) {
+	if (fileAccess.FileRead(tmpData, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -166,7 +166,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		EWOL_ERROR("file : \"" << fileAccess << "\"  ==> header error ...");
 		return NULL;
 	}
-	if (fileAccess.fRead(tmpData, 1, 16)!=16) {
+	if (fileAccess.FileRead(tmpData, 1, 16)!=16) {
 		EWOL_ERROR("Can not 16 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -190,7 +190,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 	EWOL_DEBUG("    bytesPerFrame : " << myHeader.waveFormat.bytesPerFrame);
 	EWOL_DEBUG("    bitsPerSample : " << myHeader.waveFormat.bitsPerSample);
 	// get the data size :
-	if (fileAccess.fRead(&myHeader.dataTag, 1, 4)!=4) {
+	if (fileAccess.FileRead(&myHeader.dataTag, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -202,7 +202,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		return NULL;
 	}
 	// get the data size :
-	if (fileAccess.fRead(tmpData, 1, 4)!=4) {
+	if (fileAccess.FileRead(tmpData, 1, 4)!=4) {
 		EWOL_ERROR("Can not 4 element in the file : \"" << fileAccess << "\"");
 		return NULL;
 	}
@@ -248,14 +248,14 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		char audioSample[8];
 		if (myHeader.waveFormat.bitsPerSample == 16) {
 			if (myHeader.waveFormat.channelCount == 1) {
-				if (fileAccess.fRead(audioSample, 1, 2)!=2) {
+				if (fileAccess.FileRead(audioSample, 1, 2)!=2) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
 				left = ((int32_t)((int16_t)CONVERT_INT16(littleEndien, audioSample))) << 16;
 				right = left;
 			} else {
-				if (fileAccess.fRead(audioSample, 1, 4)!=4) {
+				if (fileAccess.FileRead(audioSample, 1, 4)!=4) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
@@ -264,14 +264,14 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 			}
 		} else if (myHeader.waveFormat.bitsPerSample == 24) {
 			if (myHeader.waveFormat.channelCount == 1) {
-				if (fileAccess.fRead(audioSample, 1, 3)!=3) {
+				if (fileAccess.FileRead(audioSample, 1, 3)!=3) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
 				left = CONVERT_INT24(littleEndien, audioSample);
 				right = left;
 			} else {
-				if (fileAccess.fRead(audioSample, 1, 6)!=6) {
+				if (fileAccess.FileRead(audioSample, 1, 6)!=6) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
@@ -280,14 +280,14 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 			}
 		} else if (myHeader.waveFormat.bitsPerSample == 32) {
 			if (myHeader.waveFormat.channelCount == 1) {
-				if (fileAccess.fRead(audioSample, 1, 4)!=4) {
+				if (fileAccess.FileRead(audioSample, 1, 4)!=4) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
 				left = CONVERT_INT32(littleEndien, audioSample);
 				right = left;
 			} else {
-				if (fileAccess.fRead(audioSample, 1, 8)!=8) {
+				if (fileAccess.FileRead(audioSample, 1, 8)!=8) {
 					EWOL_ERROR("Read Error at position : " << iii);
 					return NULL;
 				}
@@ -303,7 +303,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 		}
 	}
 	// close the file:
-	fileAccess.fClose();
+	fileAccess.FileClose();
 	nbSampleOut = nbSample;
 	return outputData;
 }

@@ -28,6 +28,7 @@
 #include <ewol/Debug.h>
 #include <ewol/openGL/Program.h>
 #include <ewol/ResourceManager.h>
+#include <etk/os/FSNode.h>
 
 //#define LOCAL_DEBUG  EWOL_VERBOSE
 #define LOCAL_DEBUG  EWOL_DEBUG
@@ -42,35 +43,36 @@ ewol::Program::Program(etk::UString& filename) :
 	EWOL_DEBUG("OGL : load PROGRAM \"" << filename << "\"");
 	// load data from file "all the time ..."
 	
-	etk::File file(m_name, etk::FILE_TYPE_DATA);
+	etk::FSNode file(m_name);
 	if (false == file.Exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
 	
-	etk::UString fileExtention = file.GetExtention();
+	etk::UString fileExtention = file.FileGetExtention();
 	if (fileExtention != "prog") {
 		EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
 		return;
 	}
-	if (false == file.fOpenRead()) {
+	if (false == file.FileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << file);
 		return;
 	}
 	#define MAX_LINE_SIZE   (2048)
 	char tmpData[MAX_LINE_SIZE];
-	while (file.fGets(tmpData, MAX_LINE_SIZE) != NULL) {
-		EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
+	while (file.FileGets(tmpData, MAX_LINE_SIZE) != NULL) {
 		int32_t len = strlen(tmpData);
 		if(    tmpData[len-1] == '\n'
 			|| tmpData[len-1] == '\r') {
 			tmpData[len-1] = '\0';
 			len--;
 		}
+		EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
 		if (len == 0) {
 			continue;
 		}
-		etk::UString tmpFilename = tmpData;
+		// get it with relative position :
+		etk::UString tmpFilename = file.GetRelativeFolder() + tmpData;
 		ewol::Shader* tmpShader = NULL;
 		if (false == ewol::resource::Keep(tmpFilename, tmpShader)) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
@@ -81,7 +83,7 @@ ewol::Program::Program(etk::UString& filename) :
 		
 	}
 	// close the file:
-	file.fClose();
+	file.FileClose();
 	
 	UpdateContext();
 	

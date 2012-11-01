@@ -27,6 +27,7 @@
 #include <etk/unicode.h>
 #include <etk/Vector.h>
 #include <ewol/font/FontFreeType.h>
+#include <etk/os/FSNode.h>
 
 #include <ewol/openGL/openGL.h>
 extern "C" {
@@ -70,17 +71,17 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
 	
-	etk::File myfile(fontName, etk::FILE_TYPE_DATA);
+	etk::FSNode myfile(etk::UString("DATA:") + fontName);
 	if (false == myfile.Exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
 	}
-	m_FileSize = myfile.Size();
+	m_FileSize = myfile.FileSize();
 	if (0==m_FileSize) {
 		EWOL_ERROR("This file is empty : " << myfile);
 		return;
 	}
-	if (false == myfile.fOpenRead()) {
+	if (false == myfile.FileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << myfile);
 		return;
 	}
@@ -91,9 +92,9 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 		return;
 	}
 	// load data from the file :
-	myfile.fRead(m_FileBuffer, 1, m_FileSize);
+	myfile.FileRead(m_FileBuffer, 1, m_FileSize);
 	// close the file:
-	myfile.fClose();
+	myfile.FileClose();
 	// load Face ...
 	int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
 	if( FT_Err_Unknown_File_Format == error) {

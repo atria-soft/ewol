@@ -25,7 +25,7 @@
 #ifdef __VIDEO__OPENGL_ES_2
 
 #include <etk/Types.h>
-#include <etk/os/File.h>
+#include <etk/os/FSNode.h>
 #include <ewol/Debug.h>
 #include <ewol/openGL/Shader.h>
 
@@ -42,13 +42,13 @@ ewol::Shader::Shader(etk::UString& filename):
 	EWOL_DEBUG("OGL : load SHADER \"" << filename << "\"");
 	// load data from file "all the time ..."
 	
-	etk::File file(m_name, etk::FILE_TYPE_DATA);
+	etk::FSNode file(m_name);
 	if (false == file.Exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
 	
-	etk::UString fileExtention = file.GetExtention();
+	etk::UString fileExtention = file.FileGetExtention();
 	if (fileExtention == "frag") {
 		m_type = GL_FRAGMENT_SHADER;
 	} else if (fileExtention == "vert") {
@@ -137,18 +137,18 @@ void ewol::Shader::RemoveContextToLate(void)
 
 void ewol::Shader::Reload(void)
 {
-	etk::File file(m_name, etk::FILE_TYPE_DATA);
+	etk::FSNode file(m_name);
 	if (false == file.Exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
 	
-	int32_t fileSize = file.Size();
+	int32_t fileSize = file.FileSize();
 	if (0==fileSize) {
 		EWOL_ERROR("This file is empty : " << file);
 		return;
 	}
-	if (false == file.fOpenRead()) {
+	if (false == file.FileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << file);
 		return;
 	}
@@ -165,9 +165,9 @@ void ewol::Shader::Reload(void)
 	}
 	memset(m_fileData, 0, (fileSize+5)*sizeof(char));
 	// load data from the file :
-	file.fRead(m_fileData, 1, fileSize);
+	file.FileRead(m_fileData, 1, fileSize);
 	// close the file:
-	file.fClose();
+	file.FileClose();
 	
 	// now change the OGL context ...
 	RemoveContext();

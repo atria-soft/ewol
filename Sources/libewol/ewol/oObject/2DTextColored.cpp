@@ -73,7 +73,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString fontName, int32_t 
 	m_color = draw::color::black;
 	SetFontProperty(fontName, size);
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("textured.prog");
+		etk::UString tmpString("DATA:textured.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -93,7 +93,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(void) :
 {
 	m_color = draw::color::black;
 	SetFontProperty(ewol::font::GetDefaultFont(), ewol::font::GetDefaultSize());
-	etk::UString tmpString("textured.prog");
+	etk::UString tmpString("DATA:textured.prog");
 	#ifdef __VIDEO__OPENGL_ES_2
 		// get the shader resource :
 		m_GLPosition = 0;

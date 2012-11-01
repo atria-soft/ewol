@@ -115,10 +115,10 @@ namespace etk
 			// End With ...
 			bool          EndWith(const etk::UString& data);
 			// Find element
-			int32_t       FindForward(const char      data, int32_t startPos=0);
-			int32_t       FindForward(const uniChar_t data, int32_t startPos=0);
-			int32_t       FindBack(const char         data, int32_t startPos=0x7FFFFFFF);
-			int32_t       FindBack(const uniChar_t    data, int32_t startPos=0x7FFFFFFF);
+			int32_t       FindForward(const char      data, int32_t startPos=0) const;
+			int32_t       FindForward(const uniChar_t data, int32_t startPos=0) const;
+			int32_t       FindBack(const char         data, int32_t startPos=0x7FFFFFFF) const;
+			int32_t       FindBack(const uniChar_t    data, int32_t startPos=0x7FFFFFFF) const;
 			
 			bool          IsEmpty(void) const;
 			int32_t       Size(void) const;
@@ -138,7 +138,7 @@ namespace etk
 			char *                 c_str(void);
 			
 			// Sting operation :
-			etk::UString  Extract(int32_t posStart=0, int32_t posEnd=0x7FFFFFFF);
+			etk::UString  Extract(int32_t posStart=0, int32_t posEnd=0x7FFFFFFF) const;
 	
 		private :
 			etk::Vector<uniChar_t> m_data;     //!< internal data is stored in the Unicode properties ...

@@ -24,7 +24,7 @@
 
 #include <ewol/Debug.h>
 #include <etk/Vector.h>
-#include <etk/os/File.h>
+#include <etk/os/FSNode.h>
 #include <ewol/Mesh/MeshObj.h>
 #include <ewol/ResourceManager.h>
 
@@ -32,14 +32,14 @@
 ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	ewol::Mesh(_fileName)
 {
-	etk::File fileName(_fileName, etk::FILE_TYPE_DATA);
+	etk::FSNode fileName(etk::UString("DATA:") + _fileName);
 	// Get the fileSize ...
-	int32_t size = fileName.Size();
+	int32_t size = fileName.FileSize();
 	if (size == 0 ) {
 		EWOL_ERROR("No data in the file named=\"" << fileName << "\"");
 		return;
 	}
-	if(false == fileName.fOpenRead() ) {
+	if(false == fileName.FileOpenRead() ) {
 		EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
 		return;
 	}
@@ -54,7 +54,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	etk::Vector< etk::Vector3D<float> > normals;
 	
 	
-	while (NULL != fileName.fGets(inputDataLine, 2048) )
+	while (NULL != fileName.FileGets(inputDataLine, 2048) )
 	{
 		if (inputDataLine[0]=='v') {
 			if (inputDataLine[1]=='n') {
@@ -132,7 +132,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			// ???? : mtllib cube.mtl
 		}
 	}
-	fileName.fClose();
+	fileName.FileClose();
 	// For each vertex of each triangle
 	for( uint32_t iii=0; iii<indicesVertices.Size(); iii++ ){
 		// Get the indices of its attributes

@@ -25,6 +25,9 @@
 #include <ewol/widget/ListFileSystem.h>
 #include <etk/tool.h>
 
+#include <etk/os/FSNode.h>
+
+// TODO : Remove the link with this at this level of abstraction ...
 extern "C" {
 	// file browsing ...
 	#include <dirent.h>

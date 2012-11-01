@@ -39,7 +39,7 @@ ewol::OObject2DTextured::OObject2DTextured(etk::UString textureName, float sizeX
 	}
 	m_resource = resourceFile;
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("textured.prog");
+		etk::UString tmpString("DATA:textured.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -65,7 +65,7 @@ ewol::OObject2DTextured::OObject2DTextured( float sizeX, float sizeY)
 		m_resource->Flush();
 	}
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("textured.prog");
+		etk::UString tmpString("DATA:textured.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {

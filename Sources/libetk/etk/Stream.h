@@ -238,13 +238,13 @@ namespace etk{
 						break;
 					case LOG_LEVEL_ERROR:
 						#if !defined(__TARGET_OS__Windows)
-							strncat(m_tmpChar, ETK_BASH_COLOR_MAGENTA, MAX_LOG_SIZE);
+							strncat(m_tmpChar, ETK_BASH_COLOR_RED, MAX_LOG_SIZE);
 						#endif
 						strncat(m_tmpChar, "[E]", MAX_LOG_SIZE);
 						break;
 					case LOG_LEVEL_WARNING:
 						#if !defined(__TARGET_OS__Windows)
-							strncat(m_tmpChar, ETK_BASH_COLOR_BOLD_RED, MAX_LOG_SIZE);
+							strncat(m_tmpChar, ETK_BASH_COLOR_MAGENTA, MAX_LOG_SIZE);
 						#endif
 						strncat(m_tmpChar, "[W]", MAX_LOG_SIZE);
 						break;

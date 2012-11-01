@@ -649,11 +649,11 @@ void etk::UString::Clear(void)
  * @return the position of the first occurence or -1 if not find...
  *
  */
-int32_t etk::UString::FindForward(const char element, int32_t startPos)
+int32_t etk::UString::FindForward(const char element, int32_t startPos) const
 {
 	return FindForward((uniChar_t)element, startPos);
 }
-int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos)
+int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos) const
 {
 	if (startPos < 0) {
 		startPos = 0;
@@ -678,11 +678,11 @@ int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos)
  * @return the position of the first occurence begining by the end or -1 if not find...
  *
  */
-int32_t etk::UString::FindBack(const char element, int32_t startPos)
+int32_t etk::UString::FindBack(const char element, int32_t startPos) const
 {
 	return FindBack((uniChar_t)element, startPos);
 }
-int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos)
+int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos) const
 {
 	if (startPos < 0) {
 		return -1;
@@ -707,7 +707,7 @@ int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos)
  * @return the extracted UString
  *
  */
-etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd)
+etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd) const
 {
 	etk::UString out;
 	if (posStart < 0) {

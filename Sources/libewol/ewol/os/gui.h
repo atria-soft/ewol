@@ -31,6 +31,7 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
 #include <ewol/ClipBoard.h>
+#include <etk/os/FSNode.h>
 
 
 namespace guiInterface
@@ -105,9 +106,9 @@ namespace guiInterface
 
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
-void      APP_Init(void);
-void      APP_UnInit(void);
-etk::File APP_Icon(void);
+void        APP_Init(void);
+void        APP_UnInit(void);
+etk::FSNode APP_Icon(void);
 
 #define NB_MAX_INPUT                  (20)
 

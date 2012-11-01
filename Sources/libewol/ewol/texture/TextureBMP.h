@@ -27,14 +27,14 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <etk/os/File.h>
 #include <draw/Image.h>
+#include <etk/os/FSNode.h>
 
 namespace ewol
 {
 	namespace imageBMP
 	{
-		void GenerateImage(etk::File & fileName, draw::Image & ouputImage);
+		void GenerateImage(etk::FSNode & fileName, draw::Image & ouputImage);
 	};
 };
 

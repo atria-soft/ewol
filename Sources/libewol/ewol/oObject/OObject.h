@@ -27,7 +27,6 @@
 
 #include <etk/Types.h>
 #include <draw/Color.h>
-#include <etk/os/File.h>
 #include <ewol/Debug.h>
 #include <ewol/font/Font.h>
 #include <etk/Vector.h>

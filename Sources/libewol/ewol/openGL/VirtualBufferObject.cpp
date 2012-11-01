@@ -23,7 +23,6 @@
  */
 
 #include <etk/Types.h>
-#include <etk/os/File.h>
 #include <ewol/Debug.h>
 #include <ewol/openGL/VirtualBufferObject.h>
 

@@ -23,7 +23,7 @@
  */
 
 #include <etk/tool.h>
-#include <etk/os/File.h>
+#include <etk/os/FSNode.h>
 // for the rand ...
 #include <time.h>
 #include <math.h>

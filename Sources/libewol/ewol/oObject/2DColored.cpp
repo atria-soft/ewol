@@ -36,7 +36,7 @@ ewol::OObject2DColored::OObject2DColored(void)
 	m_triElement = 0;
 	SetColor(1.0, 1.0, 1.0, 1.0);
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("color.prog");
+		etk::UString tmpString("DATA:color.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {

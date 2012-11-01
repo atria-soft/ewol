@@ -183,6 +183,7 @@ namespace etk
 			etk::UString GetNameFolder(void) const;
 			etk::UString GetName(void) const;
 			etk::UString GetNameFile(void) const;
+			etk::UString GetRelativeFolder(void) const;
 			bool         Touch(void);
 			FSNType_te   GetTypeAccess(void) { return m_type; };
 			bool         Remove(void);

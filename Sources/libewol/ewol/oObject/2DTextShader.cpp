@@ -79,7 +79,7 @@ ewol::OObject2DTextShader::OObject2DTextShader(etk::UString fontName, int32_t si
 {
 	m_color = draw::color::black;
 	SetFontProperty(fontName, size);
-	etk::UString tmpString("fontDistanceField/font1.prog");
+	etk::UString tmpString("DATA:fontDistanceField/font1.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -101,7 +101,7 @@ ewol::OObject2DTextShader::OObject2DTextShader(void) :
 {
 	m_color = draw::color::black;
 	SetFontProperty(ewol::font::GetDefaultFont(), ewol::font::GetDefaultSize());
-	etk::UString tmpString("fontDistanceField/font1.prog");
+	etk::UString tmpString("DATA:fontDistanceField/font1.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {

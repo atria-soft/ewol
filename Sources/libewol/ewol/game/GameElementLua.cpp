@@ -24,6 +24,7 @@
 
 
 #include <ewol/game/GameElementLua.h>
+#include <etk/os/FSNode.h>
 
 /*******************************************************************************
  ** Lua abstraction (START)
@@ -635,8 +636,8 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 {
 	tmpObj = this;
 	tmpScene = &m_sceneElement;
-	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
-	etk::UString tmpCompleatName = fileElement.GetCompleateName();
+	etk::FSNode fileElement(etk::UString("DATA:") + tmpName);
+	etk::UString tmpCompleatName = fileElement.GetName();
 	
 	// create state
 	m_luaState = luaL_newstate();
@@ -653,12 +654,12 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 	*myBool = false;
 	*myValue = 18;
 */
-	int32_t fileSize = fileElement.Size();
+	int32_t fileSize = fileElement.FileSize();
 	if (0==fileSize) {
 		EWOL_ERROR("This file is empty : " << fileElement);
 		return;
 	}
-	if (false == fileElement.fOpenRead()) {
+	if (false == fileElement.FileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << fileElement);
 		return;
 	}
@@ -670,9 +671,9 @@ ewol::GameElementLua::GameElementLua(ewol::SceneElement & sceneElement, etk::USt
 	}
 	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
 	// load data from the file :
-	fileElement.fRead(fileBuffer, 1, fileSize);
+	fileElement.FileRead(fileBuffer, 1, fileSize);
 	// close the file:
-	fileElement.fClose();
+	fileElement.FileClose();
 	
 	if (luaL_loadbuffer(m_luaState, fileBuffer, fileSize, tmpName.c_str())) {
 	//if (luaL_loadfile(m_luaState, "/home/heero/dev/perso/TethysDefender/assets/elementGame/Cube.lua"  ) ) {
@@ -918,7 +919,7 @@ static ewol::GameElement* LoadSceneElement_lua(ewol::SceneElement & sceneElement
 	tmpName += elementName;
 	tmpName += ".lua";
 	// added a new element :
-	etk::File fileElement(tmpName, etk::FILE_TYPE_DATA);
+	etk::FSNode fileElement(etk::UString("DATA:") + tmpName);
 	if (false == fileElement.Exist()) {
 		EWOL_ERROR("Can not find Game element : " << elementName << " ==> " << tmpName);
 		return NULL;

@@ -101,12 +101,12 @@ LOCAL_COPY_FILES := ../../share/textured3D.prog:textured3D.prog \
                     ../../share/textured.prog:textured.prog \
                     ../../share/textured.frag:textured.frag \
                     ../../share/textured.vert:textured.vert \
-
-
-
-LOCAL_PLOPPPPPPP := \
                     \
-                    ../../share/widgetEntry.prog:widgetEntry.prog \
-                    ../../share/widgetEntry.frag:widgetEntry.frag \
-                    ../../share/widgetEntry.vert:widgetEntry.vert
+                    ../../share/theme/default/widgetEntry.prog:theme/default/widgetEntry.prog \
+                    ../../share/theme/default/widgetEntry.frag:theme/default/widgetEntry.frag \
+                    ../../share/theme/default/widgetEntry.vert:theme/default/widgetEntry.vert \
+                    \
+                    ../../share/theme/rounded/widgetEntry.prog:theme/rounded/widgetEntry.prog \
+                    ../../share/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
+                    ../../share/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert
 

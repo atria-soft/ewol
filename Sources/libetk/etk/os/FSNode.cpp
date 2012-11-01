@@ -141,7 +141,7 @@ void etk::InitDefaultFolder(const char * applName)
 		baseFolderData += "/";
 		
 		baseFolderDataUser  = baseFolderHome;
-		baseFolderDataUser += "/.";
+		baseFolderDataUser += "/.local/share/";
 		baseFolderDataUser += baseApplName;
 		baseFolderDataUser += "/";
 		
@@ -265,8 +265,8 @@ etk::FSNode::~FSNode(void)
 	}
 }
 
-//#define TK_DBG_MODE TK_VERBOSE
-#define TK_DBG_MODE TK_DEBUG
+#define TK_DBG_MODE TK_VERBOSE
+//#define TK_DBG_MODE TK_DEBUG
 
 
 void etk::FSNode::PrivateSetName(etk::UString& newName)
@@ -364,11 +364,12 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 		m_type = etk::FSN_TYPE_RELATIF;
 	}
 	m_userFileName = destFilename;
-	TK_DBG_MODE("3 : parse done : [" << m_type << "->\"" << m_userFileName << "\"");
+	TK_DBG_MODE("3 : parse done : [" << m_type << "]->\"" << m_userFileName << "\"");
 	
 	// Now we reduce the path with all un-needed
-	m_userFileName = etk::tool::SimplifyPath(m_userFileName);
-	TK_DBG_MODE("4 : Path simplification : [" << m_type << "->\"" << m_userFileName << "\"");
+	// TODO : set it back again ...
+	//m_userFileName = etk::tool::SimplifyPath(m_userFileName);
+	TK_DBG_MODE("4 : Path simplification : [" << m_type << "]->\"" << m_userFileName << "\"");
 	
 	#ifdef __TARGET_OS__Android
 		// Get on android the property of the file ID ... in zip ... ==> maybe done this later ...
@@ -397,6 +398,25 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 	// TODO : Check if it is a file or a folder ...
 }
 
+bool DirectExistFile(etk::UString tmpFileNameDirect)
+{
+	#ifdef __TARGET_OS__Android
+	#error must do this code ... 
+	if (etk::FSN_TYPE_DATA == m_type) {
+		if (m_idZipFile >= -1  && m_idZipFile < s_APKnbFiles) {
+			return true;
+		}
+		return false;
+	}
+	#endif
+	FILE *myFile=myFile=fopen(tmpFileNameDirect.c_str(),"rb");
+	if(NULL == myFile) {
+		TK_DBG_MODE("check existance of : " << tmpFileNameDirect);
+		return false;
+	}
+	fclose(myFile);
+	return true;
+}
 
 etk::UString etk::FSNode::GetFileSystemName(void) const
 {
@@ -437,6 +457,46 @@ etk::UString etk::FSNode::GetFileSystemName(void) const
 			break;
 		case etk::FSN_TYPE_THEME:
 			output = baseFolderData + "/theme/";
+			{
+				//etk::UString myCompleateName=baseFolderData + "/theme/";
+				etk::UString themeName("");
+				etk::UString basicName(m_userFileName);
+				int32_t firstPos = m_userFileName.FindForward(':');
+				if (-1 != firstPos) {
+					// we find a theme name : We extracted it :
+					themeName = m_userFileName.Extract(0, firstPos);
+					basicName = m_userFileName.Extract(firstPos+1);
+				}
+				TK_DBG_MODE(" THEME party : \"" << themeName << "\" => \"" << basicName << "\"");
+				
+				if (themeName == "") {
+					TK_WARNING("no theme name detected : set it to \"default\"");
+				} else {
+					// Selected theme :
+					// check in the user data :
+					etk::UString tmpCompleateName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
+					if (true==DirectExistFile(tmpCompleateName)) {
+						return tmpCompleateName;
+					}
+					// check in the Appl data :
+					tmpCompleateName = baseFolderData + "theme/" + themeName + "/" + basicName;
+					if (true==DirectExistFile(tmpCompleateName)) {
+						return tmpCompleateName;
+					}
+				}
+				themeName = "default";
+				// default theme :
+				{
+					// check in the user data :
+					etk::UString tmpCompleateName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
+					if (true==DirectExistFile(tmpCompleateName)) {
+						return tmpCompleateName;
+					}
+					// check in the Appl data : In every case we return this one ...
+					tmpCompleateName = baseFolderData + "theme/" + themeName + "/" + basicName;
+					return tmpCompleateName;
+				}
+			}
 			break;
 	}
 	output += m_userFileName;
@@ -642,6 +702,21 @@ etk::UString etk::FSNode::GetNameFile(void) const
 	int32_t lastPos = myCompleateName.FindBack('/');
 	if (-1 != lastPos) {
 		return myCompleateName.Extract(lastPos+1);
+	}
+	return "";
+}
+
+etk::UString etk::FSNode::GetRelativeFolder(void) const
+{
+	etk::UString myCompleateName=GetName();
+	
+	int32_t lastPos = myCompleateName.FindBack('/');
+	if (-1 != lastPos) {
+		return myCompleateName.Extract(0, lastPos+1);
+	}
+	lastPos = myCompleateName.FindBack(':');
+	if (-1 != lastPos) {
+		return myCompleateName.Extract(0, lastPos+1);
 	}
 	return "";
 }

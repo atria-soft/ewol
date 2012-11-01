@@ -32,6 +32,7 @@
 //#include <etk/Vector.h>
 #include <etk/Vector.h>
 #include <etk/tool.h>
+#include <etk/os/FSNode.h>
 
 extern "C" {
 	// file browsing ...

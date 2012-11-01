@@ -24,7 +24,6 @@
 
 
 #include <etk/Types.h>
-#include <etk/os/File.h>
 #include <ewol/ewol.h>
 #include <ewol/Debug.h>
 #include <etk/MessageFifo.h>

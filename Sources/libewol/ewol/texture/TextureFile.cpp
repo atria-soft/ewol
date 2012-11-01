@@ -26,6 +26,7 @@
 #include <ewol/texture/TextureFile.h>
 #include <ewol/texture/Texture.h>
 
+#include <etk/os/FSNode.h>
 
 #include <ewol/texture/TextureBMP.h>
 #include <parserSVG/parserSVG.h>
@@ -36,7 +37,7 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, e
 	Texture(genName)
 {
 	// load data
-	etk::File fileName(tmpfileName, etk::FILE_TYPE_DATA);
+	etk::FSNode fileName(etk::UString("DATA:") + tmpfileName);
 	if (false == fileName.Exist()) {
 		EWOL_ERROR("File does not Exist ... " << fileName << " from : " << tmpfileName);
 	} else {
@@ -45,14 +46,14 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, e
 			SetImageSize(size);
 		}
 		
-		etk::UString fileExtention = fileName.GetExtention();
+		etk::UString fileExtention = fileName.FileGetExtention();
 		if (fileExtention == "bmp") {
 			// generate the texture
 			ewol::imageBMP::GenerateImage(fileName, m_data);
 		} else if (fileExtention == "svg") {
 			svg::Parser m_element(fileName);
 			if (false == m_element.IsLoadOk()) {
-				EWOL_ERROR("Error To load SVG file " << fileName.GetCompleateName() );
+				EWOL_ERROR("Error To load SVG file " << fileName );
 			} else {
 				// generate the texture
 				m_element.GenerateAnImage(size, m_data);

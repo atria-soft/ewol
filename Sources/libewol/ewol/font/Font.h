@@ -27,7 +27,6 @@
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
-#include <etk/os/File.h>
 #include <draw/Image.h>
 #include <ewol/texture/Texture.h>
 #include <ewol/Resource.h>

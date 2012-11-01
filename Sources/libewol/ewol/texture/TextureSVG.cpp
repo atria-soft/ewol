@@ -25,17 +25,18 @@
 
 
 #include <ewol/texture/TextureSVG.h>
+#include <etk/os/FSNode.h>
 
 
 #undef __class__
 #define __class__	"texture::TextureSVG"
 
 
-ewol::texture::TextureSVG::TextureSVG(etk::File & fileName, int32_t width, int32_t height) : m_elementParsed(fileName)
+ewol::texture::TextureSVG::TextureSVG(etk::FSNode & fileName, int32_t width, int32_t height) : m_elementParsed(fileName)
 {
 	m_loadOK = false;
 	if (false == m_elementParsed.IsLoadOk()) {
-		EWOL_ERROR("Error To load SVG file " << fileName.GetCompleateName() );
+		EWOL_ERROR("Error To load SVG file " << fileName );
 	} else {
 		m_elementParsed.GenerateAnImage(width, height);
 		m_loadOK = true;

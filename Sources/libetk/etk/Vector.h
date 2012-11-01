@@ -569,7 +569,7 @@ namespace etk
 			 * @param[in] posEnd End position to extract data
 			 * @return the extracted vector
 			 */
-			Vector<MY_TYPE> Extract(int32_t posStart = 0, int32_t posEnd=0x7FFFFFFF)
+			Vector<MY_TYPE> Extract(int32_t posStart = 0, int32_t posEnd=0x7FFFFFFF) const
 			{
 				Vector<MY_TYPE> out;
 				if (posStart < 0) {

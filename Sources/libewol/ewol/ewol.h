@@ -28,7 +28,6 @@
 
 #include <etk/Types.h>
 #include <etk/UString.h>
-#include <etk/os/File.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 

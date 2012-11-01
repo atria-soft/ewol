@@ -286,7 +286,7 @@ void guiInterface::SetTitle(etk::UString& title)
 Pixmap icon_pixmap;
 
 // TODO : I don't understand why it does not work ....
-void SetIcon(etk::File bitmapFile)
+void SetIcon(etk::FSNode bitmapFile)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: try to set icon : " << bitmapFile);
@@ -295,7 +295,7 @@ void SetIcon(etk::File bitmapFile)
 	if (false == bitmapFile.Exist()) {
 		EWOL_ERROR("X11 Icon File does not Exist ... " << bitmapFile);
 	} else {
-		etk::UString fileExtention = bitmapFile.GetExtention();
+		etk::UString fileExtention = bitmapFile.FileGetExtention();
 		if (fileExtention ==  "bmp") {
 			// pointer to the WM hints structure.
 			XWMHints* win_hints;
@@ -1175,7 +1175,7 @@ int main(int argc, char *argv[])
 	//start the basic thread : 
 	eSystem::Init();
 	// get the icon file : 
-	etk::File myIcon = APP_Icon();
+	etk::FSNode myIcon = APP_Icon();
 	SetIcon(myIcon);
 	
 	// Run ...
