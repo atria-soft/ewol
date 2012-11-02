@@ -34,7 +34,7 @@ namespace ewol
 {
 	namespace imageBMP
 	{
-		void GenerateImage(etk::FSNode & fileName, draw::Image & ouputImage);
+		bool GenerateImage(etk::UString & inputFile, draw::Image & ouputImage);
 	};
 };
 

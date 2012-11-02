@@ -334,7 +334,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, et
 	TmpFilename += "x";
 	TmpFilename += size2.y;
 	
-	EWOL_INFO("KEEP : TectureFile : file : \"" << TmpFilename << "\" basic size=" << size);
+	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << size);
 	object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
 	if (NULL != object) {
 		return true;

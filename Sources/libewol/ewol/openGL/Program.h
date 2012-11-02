@@ -39,6 +39,7 @@
 					etk::UString m_name;
 					GLint        m_elementId;
 					bool         m_isAttribute;
+					bool         m_isLinked;
 			};
 			
 			class Program : public ewol::Resource

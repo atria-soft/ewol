@@ -32,7 +32,8 @@
 #define __class__	"texture::TextureSVG"
 
 
-ewol::texture::TextureSVG::TextureSVG(etk::FSNode & fileName, int32_t width, int32_t height) : m_elementParsed(fileName)
+ewol::texture::TextureSVG::TextureSVG(etk::UString & fileName, int32_t width, int32_t height) :
+	m_elementParsed(fileName)
 {
 	m_loadOK = false;
 	if (false == m_elementParsed.IsLoadOk()) {

@@ -64,7 +64,7 @@ typedef enum {
 #undef __class__
 #define __class__	"texture::TextureBMP"
 
-void ewol::imageBMP::GenerateImage(etk::FSNode & fileName, draw::Image & ouputImage)
+bool ewol::imageBMP::GenerateImage(etk::UString & inputFile, draw::Image & ouputImage)
 {
 	modeBitmap_te       m_dataMode = BITS_16_R5G6B5;
 	int32_t             m_width = 0;
@@ -72,41 +72,46 @@ void ewol::imageBMP::GenerateImage(etk::FSNode & fileName, draw::Image & ouputIm
 	bitmapFileHeader_ts m_FileHeader;
 	bitmapInfoHeader_ts m_InfoHeader;
 
+	etk::FSNode fileName(inputFile);
 	// Get the fileSize ...
 	/*if (fileName.Size() < (int32_t)(sizeof(bitmapFileHeader_ts) + sizeof(bitmapInfoHeader_ts) ) ) {
 		EWOL_ERROR("not enought data in the file named=\"" << fileName << "\"");
 		return;
 	}*/
+	if (false==fileName.Exist()) {
+		EWOL_ERROR("File does not existed=\"" << fileName << "\"");
+		return false;
+	}
 	if(false == fileName.FileOpenRead() ) {
 		EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
-		return;
+		return false;
 	}
 	// get the data : 
 	if (fileName.FileRead(&m_FileHeader,sizeof(bitmapFileHeader_ts),1) != 1) {
 		EWOL_ERROR("error loading file header");
 		fileName.FileClose();
-		return;
+		return false;
 	}
 	if (fileName.FileRead(&m_InfoHeader,sizeof(bitmapInfoHeader_ts),1) != 1) {
 		EWOL_ERROR("error loading file header");
 		fileName.FileClose();
-		return;
+		return false;
 	}
 	if(false == fileName.FileSeek(m_FileHeader.bfOffBits, SEEK_SET)) {
 		EWOL_ERROR("error with the 'bfOffBits' in the file named=\"" << fileName << "\"");
 		fileName.FileClose();
-		return;
+		return false;
 	}
 	// Check the header error : 
 	if (m_FileHeader.bfType != 0x4D42) {
 		EWOL_ERROR("the file=\"" << fileName << "\" is not a bitmap file ...");
 		fileName.FileClose();
-		return;
+		return false;
 	}
 	if (m_FileHeader.bfReserved != 0x00000000) {
 		EWOL_ERROR("the bfReserved feald is not at 0 ==> not supported format ...");
 		fileName.FileClose();
-		return;
+		return false;
 	}
 	if(    m_InfoHeader.biBitCount == 16
 	    && m_InfoHeader.biCompression == 0)
@@ -131,7 +136,7 @@ void ewol::imageBMP::GenerateImage(etk::FSNode & fileName, draw::Image & ouputIm
 	} else {
 		EWOL_ERROR("the biBitCount & biCompression fealds are unknow ==> not supported format ...");
 		fileName.FileClose();;
-		return;
+		return false;
 	}
 	m_width = m_InfoHeader.biWidth;
 	m_height = m_InfoHeader.biHeight;
@@ -234,6 +239,7 @@ void ewol::imageBMP::GenerateImage(etk::FSNode & fileName, draw::Image & ouputIm
 		delete(m_data);
 		m_data=NULL;
 	}
+	return true;
 }
 /*
 void ewol::texture::TextureBMP::Display(void)

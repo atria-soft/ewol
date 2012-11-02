@@ -36,34 +36,30 @@
 ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, etk::Vector2D<int32_t> size) :
 	Texture(genName)
 {
-	// load data
-	etk::FSNode fileName(etk::UString("DATA:") + tmpfileName);
-	if (false == fileName.Exist()) {
-		EWOL_ERROR("File does not Exist ... " << fileName << " from : " << tmpfileName);
-	} else {
-		// get the upper paw2 ot the size requested...
-		if (size.x>0 && size.y>0) {
-			SetImageSize(size);
-		}
-		
-		etk::UString fileExtention = fileName.FileGetExtention();
-		if (fileExtention == "bmp") {
-			// generate the texture
-			ewol::imageBMP::GenerateImage(fileName, m_data);
-		} else if (fileExtention == "svg") {
-			svg::Parser m_element(fileName);
-			if (false == m_element.IsLoadOk()) {
-				EWOL_ERROR("Error To load SVG file " << fileName );
-			} else {
-				// generate the texture
-				m_element.GenerateAnImage(size, m_data);
-			}
-		} else if (fileExtention ==  "png") {
-			EWOL_ERROR("Extention not supported now, but soon " << fileName );
-		} else {
-			EWOL_ERROR("Extention not managed " << fileName << " Sopported extention : .bmp / .svg / .png");
-		}
-		Flush();
+	etk::UString tmpName = etk::UString("DATA:") + tmpfileName;
+	// get the upper paw2 ot the size requested...
+	if (size.x>0 && size.y>0) {
+		SetImageSize(size);
 	}
+	// load data
+	if (true == tmpName.EndWith(".bmp") ) {
+		// generate the texture
+		if (false == ewol::imageBMP::GenerateImage(tmpName, m_data)) {
+			EWOL_ERROR("Error To load BMP file " << tmpName );
+		}
+	} else if (true == tmpName.EndWith(".svg") ) {
+		svg::Parser m_element(tmpName);
+		if (false == m_element.IsLoadOk()) {
+			EWOL_ERROR("Error To load SVG file " << tmpName );
+		} else {
+			// generate the texture
+			m_element.GenerateAnImage(size, m_data);
+		}
+	} else if (true == tmpName.EndWith(".png") ) {
+		EWOL_ERROR("Extention not supported now, but soon " << tmpName );
+	} else {
+		EWOL_ERROR("Extention not managed " << tmpName << " Sopported extention : .bmp / .svg / .png");
+	}
+	Flush();
 }
 

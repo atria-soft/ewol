@@ -26,6 +26,7 @@
 #define __EWOL_LIST_FILE_H__
 
 #include <ewol/widget/List.h>
+#include <etk/os/FSNode.h>
 
 extern const char * const ewolEventFSFileSelect;
 extern const char * const ewolEventFSFileValidate;
@@ -33,35 +34,16 @@ extern const char * const ewolEventFSFolderSelect;
 extern const char * const ewolEventFSFolderValidate;
 
 namespace ewol {
-	typedef enum {
-		EFS_FOLDER,
-		EFS_FILE,
-		EFS_LINK,
-	} elementFS_te;
-	
-	class elementFS
-	{
-		public :
-			etk::UString    m_name;
-			elementFS_te    m_type;
-			int32_t         m_rights;
-			elementFS(etk::UString name, elementFS_te type) :
-				m_name(name),
-				m_type(type),
-				m_rights(0)
-			{ };
-			~elementFS(void) {};
-	};
 	class ListFileSystem : public ewol::List
 	{
 		private:
-			etk::Vector<ewol::elementFS *> m_list;
-			etk::UString                       m_folder;
-			int32_t                            m_selectedLine;
-			bool                               m_showFile;
-			bool                               m_showTemporaryFile;
-			bool                               m_showFolder;
-			bool                               m_showHidden;
+			etk::Vector<etk::FSNode *> m_list;
+			etk::UString               m_folder;
+			int32_t                    m_selectedLine;
+			bool                       m_showFile;
+			bool                       m_showTemporaryFile;
+			bool                       m_showFolder;
+			bool                       m_showHidden;
 		public:
 			ListFileSystem(void);
 			~ListFileSystem(void);

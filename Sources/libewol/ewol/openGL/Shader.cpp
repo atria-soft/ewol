@@ -42,19 +42,12 @@ ewol::Shader::Shader(etk::UString& filename):
 	EWOL_DEBUG("OGL : load SHADER \"" << filename << "\"");
 	// load data from file "all the time ..."
 	
-	etk::FSNode file(m_name);
-	if (false == file.Exist()) {
-		EWOL_ERROR("File does not Exist : \"" << file << "\"");
-		return;
-	}
-	
-	etk::UString fileExtention = file.FileGetExtention();
-	if (fileExtention == "frag") {
+	if (true == m_name.EndWith(".frag") ) {
 		m_type = GL_FRAGMENT_SHADER;
-	} else if (fileExtention == "vert") {
+	} else if (true == m_name.EndWith(".vert") ) {
 		m_type = GL_VERTEX_SHADER;
 	} else {
-		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << fileExtention << "\"");
+		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << m_name << "\"");
 		return;
 	}
 	Reload();
@@ -143,7 +136,7 @@ void ewol::Shader::Reload(void)
 		return;
 	}
 	
-	int32_t fileSize = file.FileSize();
+	int64_t fileSize = file.FileSize();
 	if (0==fileSize) {
 		EWOL_ERROR("This file is empty : " << file);
 		return;

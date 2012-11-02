@@ -42,7 +42,7 @@ namespace ewol
 				uint8_t *           m_data;
 				bool                m_loadOK;
 			public:
-				TextureSVG(etk::FSNode & fileName, int32_t width, int32_t height);
+				TextureSVG(etk::UString & fileName, int32_t width, int32_t height);
 				~TextureSVG(void);
 				bool LoadOK(void);
 				int32_t Width(void);

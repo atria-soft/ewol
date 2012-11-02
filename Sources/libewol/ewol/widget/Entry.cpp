@@ -210,21 +210,11 @@ void ewol::Entry::OnDraw(DrawProperty& displayProp)
 		// position :
 		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
 		// all entry parameters :
-		if (0<=m_GLsizeBorder) {
-			m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
-		}
-		if (0<=m_GLsizePadding) {
-			m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
-		}
-		if (0<=m_GLsize) {
-			m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
-		}
-		if (0<=m_GLposText) {
-			m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
-		}
-		if (0<=m_GLstate) {
-			m_GLprogram->Uniform1i(m_GLstate, 0);
-		}
+		m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
+		m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
+		m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
+		m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
+		m_GLprogram->Uniform1i(m_GLstate, 0);
 		// Request the draw of the elements : 
 		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 		m_GLprogram->UnUse();

@@ -18,6 +18,7 @@ FILE_LIST+= \
 
 FILE_LIST+= \
 			etk/os/FSNode.cpp \
+			etk/os/FSNodeRight.cpp \
 			etk/os/Memory.cpp \
 
 

@@ -33,6 +33,7 @@
 extern "C" {
 	// file browsing ...
 	#include <dirent.h>
+	#include <sys/stat.h>
 }
 
 #ifdef __TARGET_OS__Android
@@ -231,8 +232,10 @@ etk::FSNode::FSNode(void) :
 	m_userFileName(""),
 	m_type(etk::FSN_TYPE_UNKNOW),
 	m_typeNode(etk::FSN_UNKNOW),
-	m_rights(0),
-	m_PointerFile(NULL)
+	m_PointerFile(NULL),
+	m_timeCreate(0),
+	m_timeModify(0),
+	m_timeAccess(0)
 	#ifdef __TARGET_OS__Android
 		, m_idZipFile(-1),
 		m_zipData(NULL),
@@ -248,8 +251,10 @@ etk::FSNode::FSNode(etk::UString nodeName) :
 	m_userFileName(""),
 	m_type(etk::FSN_TYPE_UNKNOW),
 	m_typeNode(etk::FSN_UNKNOW),
-	m_rights(0),
-	m_PointerFile(NULL)
+	m_PointerFile(NULL),
+	m_timeCreate(0),
+	m_timeModify(0),
+	m_timeAccess(0)
 	#ifdef __TARGET_OS__Android
 		, m_idZipFile(-1),
 		m_zipData(NULL),
@@ -273,10 +278,99 @@ etk::FSNode::~FSNode(void)
 	}
 }
 
+static etk::UString SimplifyPathAbstractPath(etk::UString input)
+{
+	int32_t findStartPos = input.FindForward('/') + 1;
+	int32_t findPos = input.FindForward('/', findStartPos);
+	//TK_DEBUG("Siplify : \"" << input << "\"");
+	int32_t preventBadCode = 0;
+	while (findPos!=-1)
+	{
+		//TK_DEBUG("      string=\"" << input << "\"");
+		//TK_DEBUG("      '/' @" << findPos);
+		if (input.Size()<findPos+1) {
+			// no more element ...
+			break;
+		}
+		if(    input[findPos+1] == '/'
+		    || (    input[findPos+1] == '.'
+		         && input.Size()==findPos+2 )) {
+			// cleane the element path
+			input.Remove(findPos+1, 1);
+			//TK_DEBUG("      Remove // string=\"" << input << "\"");
+		} else {
+			if (input.Size()<findPos+2) {
+				// no more element ...
+				break;
+			}
+			if(    input[findPos+1] == '.'
+			    && input[findPos+2] == '.') {
+				// cleane the element path
+				input.Remove(findStartPos, findPos+3 - findStartPos );
+				//TK_DEBUG("      Remove xxx/.. string=\"" << input << "\"");
+			} else if(    input[findPos+1] == '.'
+			           && input[findPos+2] == '/') {
+				// cleane the element path
+				input.Remove(findPos+1, 2);
+				//TK_DEBUG("      Remove ./ string=\"" << input << "\"");
+			} else {
+				findStartPos = findPos+1;
+			}
+		}
+		findPos = input.FindForward('/', findStartPos);
+		preventBadCode++;
+		if (preventBadCode>5000) {
+			TK_CRITICAL("ERROR when getting the small path ... this is loop prevention...");
+			break;
+		}
+	}
+	/*
+	#ifndef __TARGET_OS__Windows
+		// for the target that supported the Realpath system :
+		char buf[MAX_FILE_NAME];
+		memset(buf, 0, MAX_FILE_NAME);
+		char * ok = realpath(input.c_str(), buf);
+		if (!ok) {
+			TK_ERROR("Error to get the real path");
+			input = "/";
+		} else {
+			input = buf;
+		}
+	#endif
+	*/
+	//TK_DEBUG("   ==> \"" << input << "\"");
+	return input;
+}
+
+
+static void SortElementList(etk::Vector<etk::FSNode *> &list)
+{
+	// TODO : ...
+	/*
+	etk::Vector<ewol::FSNode *> tmpList = list;
+	list.Clear();
+	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
+		if (NULL != tmpList[iii]) {
+			int32_t findPos = 0;
+			for(int32_t jjj=0; jjj<list.Size(); jjj++) {
+				//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
+				if (list[jjj]!=NULL) {
+					if (tmpList[iii]->m_name > list[jjj]->m_name) {
+						findPos = jjj+1;
+					}
+				}
+			}
+			//EWOL_DEBUG("position="<<findPos);
+			list.Insert(findPos, tmpList[iii]);
+		}
+	}
+	*/
+}
+
+
+
 //#define TK_DBG_MODE TK_VERBOSE
 #define TK_DBG_MODE TK_DEBUG
-
-
 void etk::FSNode::PrivateSetName(etk::UString& newName)
 {
 	if(    NULL != m_PointerFile
@@ -299,7 +393,7 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 	// Reset ALL DATA :
 	m_userFileName = "";
 	m_type = etk::FSN_TYPE_UNKNOW;
-	TK_DBG_MODE("1 :Set Name : " << newName );
+	TK_DBG_MODE("1 : Set Name :              \"" << newName << "\"");
 	
 	// generate destination name in case of the input error
 	etk::UString destFilename;
@@ -310,8 +404,8 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 		destFilename = newName;
 	}
 	
+	bool isRoofFolder = false;
 	#ifdef __TARGET_OS__Windows
-		bool isRoofFolder = false;
 		for (char iii='a' ; iii<='z' iii++) {
 			char tmpVal[10];
 			char tmpValMaj[10];
@@ -323,14 +417,18 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 				break;
 			}
 		}
-		TK_DBG_MODE("2 : Get file Name : " << destFilename << "start with 'X:/'=" << isRoofFolder);
-		if(true == isRoofFolder) {
-			destFilename.Remove(0, 3);
 	#else
-		TK_DBG_MODE("2 : Get file Name : " << destFilename << "start with '/'=" << destFilename.StartWith('/'));
-		if(true == destFilename.StartWith('/')){
-			destFilename.Remove(0, 1);
+		isRoofFolder = destFilename.StartWith('/');
 	#endif
+	if (true == destFilename.StartWith(baseFolderHome) ) {
+		destFilename.Remove(0, baseFolderHome.Size());
+		m_type = etk::FSN_TYPE_HOME;
+	} else if(true == isRoofFolder) {
+		#ifdef __TARGET_OS__Windows
+			destFilename.Remove(0, 3);
+		#else
+			destFilename.Remove(0, 1);
+		#endif
 		m_type = etk::FSN_TYPE_DIRECT;
 	} else if(    true == destFilename.StartWith("ROOT:")
 	           || true == destFilename.StartWith("root:") ) {
@@ -363,30 +461,155 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 	           || true == destFilename.StartWith("home:") ) {
 		destFilename.Remove(0, 5);
 		m_type = etk::FSN_TYPE_HOME;
-	} else if (true == destFilename.StartWith(baseFolderHome) ) {
-		destFilename.Remove(0, baseFolderHome.Size());
-		m_type = etk::FSN_TYPE_HOME;
 	} else {
 		// nothing to remove
 		//Other type is Relative : 
 		m_type = etk::FSN_TYPE_RELATIF;
 	}
 	m_userFileName = destFilename;
-	TK_DBG_MODE("3 : parse done : [" << m_type << "]->\"" << m_userFileName << "\"");
+	TK_DBG_MODE("3 : parse done :            [" << m_type << "]->\"" << m_userFileName << "\"");
 	
-	// Now we reduce the path with all un-needed
-	// TODO : set it back again ...
-	//m_userFileName = etk::tool::SimplifyPath(m_userFileName);
-	TK_DBG_MODE("4 : Path simplification : [" << m_type << "]->\"" << m_userFileName << "\"");
+	// Now we reduce the path with all un-needed ../ and other thinks ...
+	// TODO : Do it whith link and the other sub thinks ...
+	m_userFileName = SimplifyPathAbstractPath(m_userFileName);
+	TK_DBG_MODE("4 : Path simplification :   [" << m_type << "]->\"" << m_userFileName << "\"");
 	
-	// TODO : Get rights
-	// TODO : Check if it is a file or a folder ...
+	// Now we generate the real FS path:
+	GenerateFileSystemPath();
+	TK_DBG_MODE("5 : file System Real name : \"" << m_systemFileName << "\"");
+	
+	// now we get all the right if the file existed:
+	UpdateFileSystemProperty();
+	TK_DBG_MODE("6 : type :                  [" << m_typeNode << "]  right :" << m_rights);
 }
 
-bool etk::FSNode::DirectExistFile(etk::UString tmpFileNameDirect, bool checkInAPKIfNeeded)
+
+bool DirectCheckFile(etk::UString tmpFileNameDirect, bool checkInAPKIfNeeded=false)
 {
 	#ifdef __TARGET_OS__Android
 	if (true == checkInAPKIfNeeded) {
+		for (int iii=0; iii<s_APKnbFiles; iii++) {
+			const char* name = zip_get_name(s_APKArchive, iii, 0);
+			if (name == NULL) {
+				TK_ERROR("Can not get pointer on file in the APK file id " << iii);
+				continue;
+			}
+			if (tmpFileNameDirect == name) {
+				return true
+			}
+		}
+		return false;
+	}
+	#endif
+	// tmpStat Buffer :
+	struct stat statProperty;
+	if (-1 == stat(tmpFileNameDirect.c_str(), &statProperty)) {
+		return false;
+	}
+	return true;
+}
+
+// Now we generate the real FS path:
+void etk::FSNode::GenerateFileSystemPath(void)
+{
+	switch (m_type)
+	{
+		default:
+		case etk::FSN_TYPE_UNKNOW:
+			m_systemFileName = baseFolderHome;
+			break;
+		case etk::FSN_TYPE_DIRECT:
+			m_systemFileName = "/";
+			break;
+		case etk::FSN_TYPE_RELATIF:
+			{
+				// Get the command came from the running of the program : 
+				char cCurrentPath[FILENAME_MAX];
+				if (!getcwd(cCurrentPath, FILENAME_MAX)) {
+					TK_WARNING("Can not get the curent path");
+					cCurrentPath[0] = '/';
+					cCurrentPath[1] = '\0';
+				}
+				cCurrentPath[FILENAME_MAX - 1] = '\0';
+				m_systemFileName = cCurrentPath;
+				m_systemFileName += "/";
+			}
+			break;
+		case etk::FSN_TYPE_HOME:
+			m_systemFileName = baseFolderHome;
+			break;
+		case etk::FSN_TYPE_DATA:
+			m_systemFileName = baseFolderData;
+			break;
+		case etk::FSN_TYPE_USER_DATA:
+			m_systemFileName = baseFolderDataUser;
+			break;
+		case etk::FSN_TYPE_CACHE:
+			m_systemFileName = baseFolderCache;
+			break;
+		case etk::FSN_TYPE_THEME:
+		case etk::FSN_TYPE_THEME_DATA:
+			{
+				//etk::UString myCompleateName=baseFolderData + "/theme/";
+				etk::UString themeName("");
+				etk::UString basicName(m_userFileName);
+				int32_t firstPos = m_userFileName.FindForward(':');
+				if (-1 != firstPos) {
+					// we find a theme name : We extracted it :
+					themeName = m_userFileName.Extract(0, firstPos);
+					basicName = m_userFileName.Extract(firstPos+1);
+				}
+				TK_DBG_MODE(" THEME party : \"" << themeName << "\" => \"" << basicName << "\"");
+				// search the corect folder : 
+				if (themeName == "") {
+					TK_WARNING("no theme name detected : set it to \"default\"");
+				} else {
+					// Selected theme :
+					// check in the user data :
+					m_systemFileName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
+					if (true==DirectCheckFile(m_systemFileName)) {
+						return;
+					}
+					// check in the Appl data :
+					m_systemFileName = baseFolderData + "theme/" + themeName + "/" + basicName;
+					if (true==DirectCheckFile(m_systemFileName, true)) {
+						m_type = etk::FSN_TYPE_THEME_DATA;
+						return;
+					}
+				}
+				themeName = "default";
+				// default theme :
+				// check in the user data :
+				m_systemFileName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
+				if (true==DirectCheckFile(m_systemFileName)) {
+					return;
+				}
+				// check in the Appl data : In every case we return this one ...
+				m_systemFileName = baseFolderData + "theme/" + themeName + "/" + basicName;
+				m_type = etk::FSN_TYPE_THEME_DATA;
+				return;
+			}
+			break;
+	}
+	m_systemFileName += m_userFileName;
+
+}
+// now we get all the right if the file existed:
+void etk::FSNode::UpdateFileSystemProperty(void)
+{
+	// clean general properties : 
+	m_rights.Clear();
+	m_timeCreate = 0;
+	m_timeModify = 0;
+	m_timeAccess = 0;
+	m_idOwner = 0;
+	m_idGroup = 0;
+	// File type is not knowns ...
+	m_typeNode=FSN_UNKNOW;
+	
+	#ifdef __TARGET_OS__Android
+	if(    m_type == etk::FSN_TYPE_DATA
+	    || m_type == etk::FSN_TYPE_THEME_DATA) {
 		for (int iii=0; iii<s_APKnbFiles; iii++) {
 			const char* name = zip_get_name(s_APKArchive, iii, 0);
 			if (name == NULL) {
@@ -401,321 +624,54 @@ bool etk::FSNode::DirectExistFile(etk::UString tmpFileNameDirect, bool checkInAP
 		if(   -1 == m_idZipFile
 		   || m_idZipFile >= s_APKnbFiles)) {
 			TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
-			return false;
+			return;
 		}
+		// note : Zip does not support other think than file ...
+		// TODO : Suport folder parsing ...
+		m_typeNode=FSN_FILE;
+		m_rights.IsUserReadable(true);
+		// TODO : Set the time of the file (time program compilation)
+		// TODO : Set the USER ID in the group and the user Id ...
 		TK_DBG_MODE("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
-		return true;
+		return;
 	}
 	#endif
-	FILE *myFile=myFile=fopen(tmpFileNameDirect.c_str(),"rb");
-	if(NULL == myFile) {
-		TK_DBG_MODE("check existance of : " << tmpFileNameDirect);
-		return false;
+	// tmpStat Buffer :
+	struct stat statProperty;
+	if (-1 == stat(m_systemFileName.c_str(), &statProperty)) {
+		//Normal case when the file does not exist ... ==> the it was in unknow mode ...
+		return;
 	}
-	fclose(myFile);
 	
-	DIR *pDir = opendir (tmpFileNameDirect.c_str());
-	if (pDir != NULL) {
-		(void) closedir(pDir);
-		m_typeNode = etk::FSN_FILE;
-		return true;
+	switch (statProperty.st_mode & S_IFMT) {
+		case S_IFBLK:  m_typeNode=etk::FSN_BLOCK;     break;
+		case S_IFCHR:  m_typeNode=etk::FSN_CHARACTER; break;
+		case S_IFDIR:  m_typeNode=etk::FSN_FOLDER;    break;
+		case S_IFIFO:  m_typeNode=etk::FSN_FIFO;      break;
+		case S_IFLNK:  m_typeNode=etk::FSN_LINK;      break;
+		case S_IFREG:  m_typeNode=etk::FSN_FILE;      break;
+		case S_IFSOCK: m_typeNode=etk::FSN_SOCKET;    break;
+		default:       m_typeNode=etk::FSN_UNKNOW;    break;
 	}
-	m_typeNode = etk::FSN_FOLDER;
-	return false;
-}
-
-etk::UString etk::FSNode::GetFileSystemName(void) const
-{
-	etk::UString output;
-	switch (m_type)
-	{
-		default:
-		case etk::FSN_TYPE_UNKNOW:
-			output = baseFolderHome;
-			break;
-		case etk::FSN_TYPE_DIRECT:
-			output = "/";
-			break;
-		case etk::FSN_TYPE_RELATIF:
-			{
-				// Get the command came from the running of the program : 
-				char cCurrentPath[FILENAME_MAX];
-				if (!getcwd(cCurrentPath, FILENAME_MAX)) {
-					TK_WARNING("Can not get the curent path");
-					output = "/";
-				}
-				cCurrentPath[FILENAME_MAX - 1] = '\0';
-				output = cCurrentPath;
-				output += "/";
-			}
-			break;
-		case etk::FSN_TYPE_HOME:
-			output = baseFolderHome;
-			break;
-		case etk::FSN_TYPE_DATA:
-			output = baseFolderData;
-			break;
-		case etk::FSN_TYPE_USER_DATA:
-			output = baseFolderDataUser;
-			break;
-		case etk::FSN_TYPE_CACHE:
-			output = baseFolderCache;
-			break;
-		case etk::FSN_TYPE_THEME:
-		case etk::FSN_TYPE_THEME__USER_THEME:
-		case etk::FSN_TYPE_THEME__USER_DEFAULT:
-		case etk::FSN_TYPE_THEME__APPL_THEME:
-		case etk::FSN_TYPE_THEME__APPL_DEFAULT:
-			{
-				//etk::UString myCompleateName=baseFolderData + "/theme/";
-				etk::UString themeName("");
-				etk::UString basicName(m_userFileName);
-				int32_t firstPos = m_userFileName.FindForward(':');
-				if (-1 != firstPos) {
-					// we find a theme name : We extracted it :
-					themeName = m_userFileName.Extract(0, firstPos);
-					basicName = m_userFileName.Extract(firstPos+1);
-				}
-				TK_DBG_MODE(" THEME party : \"" << themeName << "\" => \"" << basicName << "\"");
-				switch (m_type)
-				{
-					default:
-					case etk::FSN_TYPE_THEME:
-						TK_ERROR("request compleate name without call the Exist function, that search the good folder ==> default appl theme");
-					case etk::FSN_TYPE_THEME__APPL_DEFAULT:
-						themeName = "default";
-						return baseFolderData + "theme/" + themeName + "/" + basicName;
-					case etk::FSN_TYPE_THEME__APPL_THEME:
-						return  baseFolderData + "theme/" + themeName + "/" + basicName;
-					case etk::FSN_TYPE_THEME__USER_THEME:
-						return baseFolderDataUser + "theme/" + themeName + "/" + basicName;
-					case etk::FSN_TYPE_THEME__USER_DEFAULT:
-						themeName = "default";
-						return baseFolderDataUser + "theme/" + themeName + "/" + basicName;
-				}
-			}
-			break;
-	}
-	output += m_userFileName;
-	return output;
-}
-
-
-etk::UString etk::FSNode::GetFileSystemNameTheme(void)
-{
-	//etk::UString myCompleateName=baseFolderData + "/theme/";
-	etk::UString themeName("");
-	etk::UString basicName(m_userFileName);
-	int32_t firstPos = m_userFileName.FindForward(':');
-	if (-1 != firstPos) {
-		// we find a theme name : We extracted it :
-		themeName = m_userFileName.Extract(0, firstPos);
-		basicName = m_userFileName.Extract(firstPos+1);
-	}
-	TK_DBG_MODE(" THEME party : \"" << themeName << "\" => \"" << basicName << "\"");
-	
-	if (themeName == "") {
-		TK_WARNING("no theme name detected : set it to \"default\"");
-	} else {
-		// Selected theme :
-		// check in the user data :
-		etk::UString tmpCompleateName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
-		if (true==DirectExistFile(tmpCompleateName)) {
-			m_type = FSN_TYPE_THEME__USER_THEME;
-			return tmpCompleateName;
-		}
-		// check in the Appl data :
-		tmpCompleateName = baseFolderData + "theme/" + themeName + "/" + basicName;
-		if (true==DirectExistFile(tmpCompleateName, etk::FSN_TYPE_DATA)) {
-			m_type = FSN_TYPE_THEME__APPL_THEME;
-			return tmpCompleateName;
-		}
-	}
-	themeName = "default";
-	// default theme :
-	// check in the user data :
-	etk::UString tmpCompleateName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
-	if (true==DirectExistFile(tmpCompleateName)) {
-		m_type = FSN_TYPE_THEME__USER_DEFAULT;
-		return tmpCompleateName;
-	}
-	// check in the Appl data : In every case we return this one ...
-	tmpCompleateName = baseFolderData + "theme/" + themeName + "/" + basicName;
-	m_type = FSN_TYPE_THEME__APPL_DEFAULT;
-	return tmpCompleateName;
+	// Right
+	m_rights = statProperty.st_mode;
+	m_idOwner = (int32_t) statProperty.st_uid;
+	m_idGroup = (int32_t) statProperty.st_gid;
+	m_timeCreate = statProperty.st_ctime;
+	m_timeModify = statProperty.st_mtime;
+	m_timeAccess = statProperty.st_atime;
+	return;
 }
 
 
 /*
 	All Right of the file
 */
-bool etk::FSNode::Exist(void)
+bool etk::FSNode::SetRight(etk::FSNodeRight newRight)
 {
-	etk::UString myCompleateName;
-	switch(m_type)
-	{
-		case etk::FSN_TYPE_THEME:
-		case etk::FSN_TYPE_THEME__USER_THEME:
-		case etk::FSN_TYPE_THEME__USER_DEFAULT:
-		case etk::FSN_TYPE_THEME__APPL_THEME:
-		case etk::FSN_TYPE_THEME__APPL_DEFAULT:
-			myCompleateName = GetFileSystemNameTheme();
-			break;
-		default:
-			myCompleateName = GetFileSystemName();
-			break;
-	}
-	bool tmpFlag = false;
-	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
-		tmpFlag = true;
-	}
-	return DirectExistFile(myCompleateName, tmpFlag);
-}
-
-bool etk::FSNode::IsFile(void)
-{
-	return (m_typeNode == etk::FSN_FILE);
-}
-
-bool etk::FSNode::IsFolder(void)
-{
-	return (m_typeNode == etk::FSN_FOLDER);
-}
-
-bool etk::FSNode::IsLink(void)
-{
-	return (m_typeNode == etk::FSN_LINK);
-}
-
-// User
-bool etk::FSNode::IsUserReadable(void)
-{
-	return ((m_rights&etk::RIGHT_USER_READ)!=0)?true:false;
-}
-
-bool etk::FSNode::IsUserWritable(void)
-{
-	return ((m_rights&etk::RIGHT_USER_WRITE)!=0)?true:false;
-}
-
-bool etk::FSNode::IsUserRunable(void)
-{
-	return ((m_rights&etk::RIGHT_USER_EXECUTE)!=0)?true:false;
-}
-
-void etk::FSNode::SetUserReadable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_USER_READ);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_USER_READ;
-	}
-}
-
-void etk::FSNode::SetUserWritable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_USER_WRITE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_USER_WRITE;
-	}
-}
-
-void etk::FSNode::SetUserRunable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_USER_EXECUTE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_USER_EXECUTE;
-	}
-}
-
-// group
-bool etk::FSNode::IsGroupReadable(void)
-{
-	return ((m_rights&etk::RIGHT_GROUP_READ)!=0)?true:false;
-}
-
-bool etk::FSNode::IsGroupWritable(void)
-{
-	return ((m_rights&etk::RIGHT_GROUP_WRITE)!=0)?true:false;
-}
-
-bool etk::FSNode::IsGroupRunable(void)
-{
-	return ((m_rights&etk::RIGHT_GROUP_EXECUTE)!=0)?true:false;
-}
-
-void etk::FSNode::SetGroupReadable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_GROUP_READ);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_GROUP_READ;
-	}
-}
-
-void etk::FSNode::SetGroupWritable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_GROUP_WRITE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_GROUP_WRITE;
-	}
-}
-
-void etk::FSNode::SetGroupRunable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_GROUP_EXECUTE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_GROUP_EXECUTE;
-	}
-}
-
-// other
-bool etk::FSNode::IsOtherReadable(void)
-{
-	return ((m_rights&etk::RIGHT_OTHER_READ)!=0)?true:false;
-}
-
-bool etk::FSNode::IsOtherWritable(void)
-{
-	return ((m_rights&etk::RIGHT_OTHER_WRITE)!=0)?true:false;
-}
-
-bool etk::FSNode::IsOtherRunable(void)
-{
-	return ((m_rights&etk::RIGHT_OTHER_EXECUTE)!=0)?true:false;
-}
-
-void etk::FSNode::SetOtherReadable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_OTHER_READ);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_OTHER_READ;
-	}
-}
-
-void etk::FSNode::SetOtherWritable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_OTHER_WRITE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_OTHER_WRITE;
-	}
-}
-
-void etk::FSNode::SetOtherRunable(bool newStatus)
-{
-	// reset the flag :
-	m_rights &= (0xFFFFFFFF - etk::RIGHT_OTHER_EXECUTE);
-	if (true == newStatus) {
-		m_rights |= etk::RIGHT_OTHER_EXECUTE;
-	}
+	// TODO : ...
+	TK_ERROR("Can not set the new rights ...");
+	return false;
 }
 
 
@@ -730,11 +686,9 @@ void etk::FSNode::SetName(etk::UString newName)
 
 etk::UString etk::FSNode::GetNameFolder(void) const
 {
-	etk::UString myCompleateName=GetFileSystemName();
-	
-	int32_t lastPos = myCompleateName.FindBack('/');
+	int32_t lastPos = m_systemFileName.FindBack('/');
 	if (-1 != lastPos) {
-		return myCompleateName.Extract(0, lastPos);
+		return m_systemFileName.Extract(0, lastPos);
 	}
 	return "";
 }
@@ -768,10 +722,7 @@ etk::UString etk::FSNode::GetName(void) const
 			output = "CACHE";
 			break;
 		case etk::FSN_TYPE_THEME:
-		case etk::FSN_TYPE_THEME__USER_THEME:
-		case etk::FSN_TYPE_THEME__USER_DEFAULT:
-		case etk::FSN_TYPE_THEME__APPL_THEME:
-		case etk::FSN_TYPE_THEME__APPL_DEFAULT:
+		case etk::FSN_TYPE_THEME_DATA:
 			output = "THEME:";
 			break;
 	}
@@ -782,26 +733,23 @@ etk::UString etk::FSNode::GetName(void) const
 
 etk::UString etk::FSNode::GetNameFile(void) const
 {
-	etk::UString myCompleateName=GetFileSystemName();
-	
-	int32_t lastPos = myCompleateName.FindBack('/');
+	int32_t lastPos = m_systemFileName.FindBack('/');
 	if (-1 != lastPos) {
-		return myCompleateName.Extract(lastPos+1);
+		return m_systemFileName.Extract(lastPos+1);
 	}
 	return "";
 }
 
 etk::UString etk::FSNode::GetRelativeFolder(void) const
 {
-	etk::UString myCompleateName=GetName();
-	
-	int32_t lastPos = myCompleateName.FindBack('/');
+	etk::UString tmppp = GetName();
+	int32_t lastPos = tmppp.FindBack('/');
 	if (-1 != lastPos) {
-		return myCompleateName.Extract(0, lastPos+1);
+		return tmppp.Extract(0, lastPos+1);
 	}
-	lastPos = myCompleateName.FindBack(':');
+	lastPos = tmppp.FindBack(':');
 	if (-1 != lastPos) {
-		return myCompleateName.Extract(0, lastPos+1);
+		return tmppp.Extract(0, lastPos+1);
 	}
 	return "";
 }
@@ -815,13 +763,37 @@ bool etk::FSNode::Remove(void)
 {
 	return false;
 }
-uint64_t etk::FSNode::TimeCreated(void)
+uint64_t etk::FSNode::TimeCreated(void) const
 {
-	return 0;
+	return m_timeCreate;
 }
-uint64_t etk::FSNode::TimeModified(void)
+
+etk::UString etk::FSNode::TimeCreatedString(void) const
 {
-	return 0;
+	time_t tmpVal = (int32_t)m_timeCreate;
+	return ctime(&tmpVal);
+}
+
+uint64_t etk::FSNode::TimeModified(void) const
+{
+	return m_timeModify;
+}
+
+etk::UString etk::FSNode::TimeModifiedString(void) const
+{
+	time_t tmpVal = (int32_t)m_timeModify;
+	return ctime(&tmpVal);
+}
+
+uint64_t etk::FSNode::TimeAccessed(void) const
+{
+	return m_timeAccess;
+}
+
+etk::UString etk::FSNode::TimeAccessedString(void) const
+{
+	time_t tmpVal = (int32_t)m_timeAccess;
+	return ctime(&tmpVal);
 }
 
 /*
@@ -831,9 +803,6 @@ const etk::FSNode& etk::FSNode::operator=  (const etk::FSNode &obj )
 {
 	if( this != &obj ) // avoid copy to itself
 	{
-		m_userFileName = obj.m_userFileName;
-		m_type = obj.m_type;
-		m_rights = obj.m_rights;
 		if(    NULL != m_PointerFile
 		#ifdef __TARGET_OS__Android
 		    || NULL != m_zipData
@@ -849,6 +818,8 @@ const etk::FSNode& etk::FSNode::operator=  (const etk::FSNode &obj )
 			m_zipDataSize = 0;
 			m_zipReadingOffset = 0;
 		#endif
+		etk::UString tmppp = obj.GetName();
+		PrivateSetName(tmppp);
 	}
 	return *this;
 }
@@ -856,6 +827,7 @@ bool etk::FSNode::operator== (const etk::FSNode &obj ) const
 {
 	if( this != &obj ) {
 		if(    obj.m_userFileName == m_userFileName
+		    && obj.m_systemFileName == m_systemFileName
 		    && obj.m_type == m_type ) {
 			return true;
 		} else {
@@ -905,20 +877,46 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::FSNType_te &obj)
 		case etk::FSN_TYPE_THEME:
 			os << "FSN_TYPE_THEME";
 			break;
-		case etk::FSN_TYPE_THEME__USER_THEME:
-			os << "FSN_TYPE_THEME(USER_THEME)";
-			break;
-		case etk::FSN_TYPE_THEME__USER_DEFAULT:
-			os << "FSN_TYPE_THEME(USER_DEFAULT)";
-			break;
-		case etk::FSN_TYPE_THEME__APPL_THEME:
-			os << "FSN_TYPE_THEME(APPL_THEME)";
-			break;
-		case etk::FSN_TYPE_THEME__APPL_DEFAULT:
-			os << "FSN_TYPE_THEME(APPL_DEFAULT)";
+		case etk::FSN_TYPE_THEME_DATA:
+			os << "FSN_TYPE_THEME(DATA)";
 			break;
 		default:
 			os << "FSN_TYPE_????";
+			break;
+	}
+	return os;
+}
+
+etk::CCout& etk::operator <<(etk::CCout &os, const etk::typeNode_te &obj)
+{
+	switch (obj)
+	{
+		case etk::FSN_UNKNOW:
+			os << "FSN_UNKNOW";
+			break;
+		case etk::FSN_BLOCK:
+			os << "FSN_BLOCK";
+			break;
+		case etk::FSN_CHARACTER:
+			os << "FSN_CHARACTER";
+			break;
+		case etk::FSN_FOLDER:
+			os << "FSN_FOLDER";
+			break;
+		case etk::FSN_FIFO:
+			os << "FSN_FIFO";
+			break;
+		case etk::FSN_LINK:
+			os << "FSN_LINK";
+			break;
+		case etk::FSN_FILE:
+			os << "FSN_FILE";
+			break;
+		case etk::FSN_SOCKET:
+			os << "FSN_SOCKET";
+			break;
+		default:
+			os << "FSN_????";
 			break;
 	}
 	return os;
@@ -931,9 +929,58 @@ int32_t etk::FSNode::FolderCount(void)
 {
 	return 0;
 }
-etk::Vector<etk::FSNode> etk::FSNode::FolderGetSubList(void)
+etk::Vector<etk::FSNode *> etk::FSNode::FolderGetSubList(bool showHidenFile, bool getFolderAndOther, bool getFile, bool temporaryFile)
 {
-	etk::Vector<etk::FSNode> tmpp;
+	etk::Vector<etk::FSNode*> tmpp;
+	if (m_typeNode != etk::FSN_FOLDER ) {
+		return tmpp;
+	}
+	
+	// regenerate the next list :
+	etk::FSNode * tmpEmement;
+	DIR *dir = NULL;
+	struct dirent *ent = NULL;
+	dir = opendir(m_systemFileName.c_str());
+	if (dir != NULL) {
+		// for each element in the drectory...
+		while ((ent = readdir(dir)) != NULL) {
+			etk::UString tmpName(ent->d_name);
+			TK_DEBUG(" search in folder\"" << tmpName << "\"");
+			if(    tmpName=="." 
+			    || tmpName==".." ) {
+				// do nothing ...
+				continue;
+			}
+			if(    false == tmpName.StartWith(".")
+			    || true == showHidenFile) {
+				tmpEmement = new etk::FSNode(GetRelativeFolder()+tmpName);
+				if (NULL == tmpEmement) {
+					TK_ERROR("allocation error ... of ewol::FSNode");
+					continue;
+				}
+				if(tmpEmement->GetNodeType() == etk::FSN_FILE) {
+					if (true == getFile) {
+						tmpp.PushBack(tmpEmement);
+					} else {
+						delete(tmpEmement);
+						tmpEmement = NULL;
+					}
+				} else if (getFolderAndOther) {
+					tmpp.PushBack(tmpEmement);
+				} else {
+					delete(tmpEmement);
+					tmpEmement = NULL;
+				}
+			}
+		}
+		closedir(dir);
+	} else {
+		TK_ERROR("could not open directory : \"" << *this << "\"");
+	}
+	
+	// reorder the files
+	SortElementList(tmpp);
+	
 	return tmpp;
 }
 etk::FSNode etk::FSNode::FolderGetParent(void)
@@ -971,38 +1018,43 @@ etk::UString etk::FSNode::FileGetExtention(void)
 	}
 	return tmpExt;
 }
-int32_t etk::FSNode::FileSize(void)
+
+uint64_t etk::FSNode::FileSize(void)
 {
+	if (etk::FSN_FILE != m_typeNode) {
+		TK_ERROR("pppppppppppppppppppppp" << m_typeNode);
+		return 0;
+	}
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		if (true == LoadDataZip()) {
 			return m_zipDataSize;
 		}
 		return 0;
 	}
 	#endif
-	FILE *myFile=NULL;
-	etk::UString myCompleateName = GetFileSystemName();
-	myFile=fopen(myCompleateName.c_str(),"rb");
-	if(NULL == myFile) {
-		//EWOL_ERROR("Can not find the file " << *this);
-		return -1;
+	// Note : this is a proper methode to get the file size for Big files ... otherwithe the size is limited at 2^31 bytes
+	// tmpStat Buffer :
+	struct stat statProperty;
+	if (-1 == stat(m_systemFileName.c_str(), &statProperty)) {
+		//Normal case when the file does not exist ... ==> the it was in unknow mode ...
+		TK_ERROR("mlkmlkmlkmlkmlkmlk");
+		return 0;
 	}
-	int32_t size = 0;
-	fseek(myFile, 0, SEEK_END);
-	size = ftell(myFile);
-	fseek(myFile, 0, SEEK_SET);
-	fclose(myFile);
-	return size;
+	TK_INFO(" file size : " << (int64_t)statProperty.st_size << " bytes");
+	if ((uint64_t)statProperty.st_size<=0) {
+		return 0;
+	}
+	return (uint64_t)statProperty.st_size;
 }
+
+
 bool etk::FSNode::FileOpenRead(void)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		return LoadDataZip();
 	}
 	#endif
@@ -1010,8 +1062,7 @@ bool etk::FSNode::FileOpenRead(void)
 		TK_CRITICAL("File Already open : " << *this);
 		return true;
 	}
-	etk::UString myCompleateName = GetFileSystemName();
-	m_PointerFile=fopen(myCompleateName.c_str(),"rb");
+	m_PointerFile=fopen(m_systemFileName.c_str(),"rb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file " << *this );
 		return false;
@@ -1022,8 +1073,7 @@ bool etk::FSNode::FileOpenWrite(void)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		return false;
 	}
 	#endif
@@ -1031,8 +1081,7 @@ bool etk::FSNode::FileOpenWrite(void)
 		TK_CRITICAL("File Already open : " << *this);
 		return true;
 	}
-	etk::UString myCompleateName = GetFileSystemName();
-	m_PointerFile=fopen(myCompleateName.c_str(),"wb");
+	m_PointerFile=fopen(m_systemFileName.c_str(),"wb");
 	if(NULL == m_PointerFile) {
 		TK_ERROR("Can not find the file " << *this);
 		return false;
@@ -1043,8 +1092,7 @@ bool etk::FSNode::FileClose(void)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		if (NULL == m_zipData) {
 			TK_CRITICAL("File Already closed : " << *this);
 			return false;
@@ -1071,8 +1119,7 @@ char* etk::FSNode::FileGets(char * elementLine, int32_t maxData)
 	char * element = elementLine;
 	int32_t outSize = 0;
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {//char * tmpData = internalDataFiles[iii].data + m_readingOffset;
 		if (NULL == m_zipData) {
 			element[0] = '\0';
 			return NULL;
@@ -1119,8 +1166,7 @@ int32_t etk::FSNode::FileRead(void * data, int32_t blockSize, int32_t nbBlock)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		if (NULL == m_zipData) {
 			((char*)data)[0] = '\0';
 			return 0;
@@ -1141,8 +1187,7 @@ int32_t etk::FSNode::FileWrite(void * data, int32_t blockSize, int32_t nbBlock)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		TK_CRITICAL("Can not write on data inside APK : " << *this);
 		return 0;
 	}
@@ -1153,8 +1198,7 @@ bool etk::FSNode::FileSeek(long int offset, int origin)
 {
 	#ifdef __TARGET_OS__Android
 	if(    etk::FSN_TYPE_DATA == m_type
-	    || etk::FSN_TYPE_THEME__APPL_THEME == m_type
-	    || etk::FSN_TYPE_THEME__APPL_DEFAULT == m_type) {
+	    || etk::FSN_TYPE_THEME_DATA == m_type) {
 		if (NULL == m_zipData) {
 			return false;
 		}
