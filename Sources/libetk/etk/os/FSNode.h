@@ -44,11 +44,15 @@ namespace etk
 		RIGHT_USER_EXECUTE  = 1 << 6,
 		RIGHT_USER_WRITE    = 1 << 7,
 		RIGHT_USER_READ     = 1 << 8,
-		RIGHT_FILE          = 1 << 9,
-		RIGHT_FOLDER        = 1 << 10,
-		RIGHT_LINK          = 1 << 12,
-		RIGHT_PARSE_DONE    = 1 << 31  //!< a simple flag to know if the right has been checked
 	};
+	
+	typedef enum {
+		FSN_UNKNOW,
+		FSN_FOLDER,
+		FSN_FILE,
+		FSN_LINK,
+	} typeNode_te;
+	
 
 	typedef enum {
 		FSN_TYPE_UNKNOW,
@@ -83,12 +87,16 @@ namespace etk
 		// depend on case
 		//     - try on FSN_TYPE_USER_DATA/theme/themeName/xxx
 		//     - try on FSN_TYPE_DATA/theme/themeName/xxx
-		//     - try on FSN_TYPE_EWOL_DATA/theme/themeName/xxx
+		//     - try on FSN_TYPE_EWOL_DATA/theme/themeName/xxx ==> later when the lib will be accessible in packages
 		//     and jump to the default theme file
 		//     - try on FSN_TYPE_USER_DATA/theme/default/xxx
 		//     - try on FSN_TYPE_DATA/theme/default/xxx
-		//     - try on FSN_TYPE_EWOL_DATA/theme/default/xxx
+		//     - try on FSN_TYPE_EWOL_DATA/theme/default/xxx ==> later when the lib will be accessible in packages
 		FSN_TYPE_THEME,
+		FSN_TYPE_THEME__USER_THEME,
+		FSN_TYPE_THEME__USER_DEFAULT,
+		FSN_TYPE_THEME__APPL_THEME,
+		FSN_TYPE_THEME__APPL_DEFAULT,
 	} FSNType_te;
 	
 	etk::CCout& operator <<(etk::CCout &os, const etk::FSNType_te &obj);
@@ -126,13 +134,16 @@ namespace etk
 		private:
 			etk::UString     m_userFileName;       //!< the name requested by the User
 			FSNType_te       m_type;               //!< the Type of data requested by the User
+			typeNode_te      m_typeNode;           //!< type of the current file/Folder/Link
 			//etk::UString     m_realFileSystemName; //!< the real FS name
 			uint32_t         m_rights;             //!< IO right of the current file
 			// specific when file Access :
 			FILE *           m_PointerFile;
 		private:
 			etk::UString     GetFileSystemName(void) const;
+			etk::UString     GetFileSystemNameTheme(void);
 			void             PrivateSetName(etk::UString& newName);
+			bool             DirectExistFile(etk::UString tmpFileNameDirect, bool checkInAPKIfNeeded = false);
 		private:
 			#ifdef __TARGET_OS__Android
 				bool         LoadDataZip(void);
@@ -218,6 +229,7 @@ namespace etk
 			int32_t      FileRead(void * data, int32_t blockSize, int32_t nbBlock);
 			int32_t      FileWrite(void * data, int32_t blockSize, int32_t nbBlock);
 			bool         FileSeek(long int offset, int origin);
+			
 	};
 	
 	etk::CCout& operator <<(etk::CCout &os, const etk::FSNode &obj);
@@ -229,7 +241,7 @@ namespace etk
 	etk::UString GetUserHomeFolder(void);
 	
 
-}
+};
 
 #endif
 
