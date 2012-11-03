@@ -60,7 +60,7 @@ void ewol::WidgetScrooled::OnRegenerateDisplay(void)
 		ewol::OObject2DColored* myOObjectsColored = NULL;
 		if(m_size.y < m_maxSize.y || m_size.x < m_maxSize.x) {
 			myOObjectsColored = new ewol::OObject2DColored();
-			myOObjectsColored->SetColor(1.0, 0.0, 0.0, 0.6);
+			myOObjectsColored->SetColor(0xFF00007F);
 		}
 		if(m_size.y < m_maxSize.y) {
 			//myOObjectsColored->Line(m_size.x-SCROLL_BAR_SPACE, SCROLL_BAR_SPACE, m_size.x-SCROLL_BAR_SPACE, m_size.y-SCROLL_BAR_SPACE, 1);
