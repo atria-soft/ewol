@@ -369,8 +369,9 @@ static void SortElementList(etk::Vector<etk::FSNode *> &list)
 
 
 
-//#define TK_DBG_MODE TK_VERBOSE
-#define TK_DBG_MODE TK_DEBUG
+#define TK_DBG_MODE TK_VERBOSE
+//#define TK_DBG_MODE TK_DEBUG
+
 void etk::FSNode::PrivateSetName(etk::UString& newName)
 {
 	if(    NULL != m_PointerFile
@@ -945,7 +946,7 @@ etk::Vector<etk::FSNode *> etk::FSNode::FolderGetSubList(bool showHidenFile, boo
 		// for each element in the drectory...
 		while ((ent = readdir(dir)) != NULL) {
 			etk::UString tmpName(ent->d_name);
-			TK_DEBUG(" search in folder\"" << tmpName << "\"");
+			TK_VERBOSE(" search in folder\"" << tmpName << "\"");
 			if(    tmpName=="." 
 			    || tmpName==".." ) {
 				// do nothing ...
