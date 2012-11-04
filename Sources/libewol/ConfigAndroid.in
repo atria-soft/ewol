@@ -29,14 +29,6 @@ menu "Android"
 			bool "2: Lock in portrait mode"
 	endchoice
 	
-	config __EWOL_ANDROID_ICON__
-		prompt "Select Icon"
-		string
-		default "@drawable/ic_luncher_ewol"
-		help
-			Select the source of the icon for the application ...
-	
-	
 	menu "Permissions"
 		config __ANDROID_PERMISSION__WRITE_EXTERNAL_STORAGE__
 			prompt "WRITE_EXTERNAL_STORAGE"

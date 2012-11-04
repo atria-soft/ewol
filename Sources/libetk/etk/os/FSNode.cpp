@@ -42,6 +42,12 @@ extern "C" {
 #endif
 
 
+#ifdef __TARGET_OS__Windows
+	// For ctime 
+	#include <time.h>
+#endif
+
+
 // zip file of the apk file for Android ==> set to zip file apk access
 static etk::UString s_fileAPK = "";
 static etk::UString baseApplName = "ewolNoName";
@@ -137,12 +143,14 @@ void etk::InitDefaultFolder(const char * applName)
 		#else
 			char cCurrentPath[FILENAME_MAX];
 			if (!getcwd(cCurrentPath, FILENAME_MAX)) {
-				baseFolderData = "./out/Linux/debug/staging/usr/share/";
+				baseFolderData = ".";
 			} else {
 				cCurrentPath[FILENAME_MAX - 1] = '\0';
 				baseFolderData  = cCurrentPath;
-				baseFolderData += "/out/Linux/debug/staging/usr/share/";
 			}
+			baseFolderData += "/out/Linux/debug/staging/";
+			baseFolderData += baseApplName;
+			baseFolderData += "/usr/share/";
 		#endif
 		baseFolderData += baseApplName;
 		baseFolderData += "/";
@@ -175,21 +183,21 @@ etk::UString etk::GetUserHomeFolder(void)
 
 
 #ifdef __TARGET_OS__Android
-bool etk::File::LoadDataZip(void)
+bool etk::FSNode::LoadDataZip(void)
 {
 	if (NULL != m_zipData) {
 		return true;
 	} else {
 		struct zip_file * m_zipPointerFile= zip_fopen_index(s_APKArchive, m_idZipFile, 0);
 		if (NULL == m_zipPointerFile) {
-			TK_ERROR("Can not find the file name=\"" << GetCompleateName() << "\"");
+			TK_ERROR("Can not find the file name" << *this);
 			return false;
 		}
 		// get the fileSize .... end read all the data from the zip files
 		struct zip_stat zipFileProperty;
 		zip_stat_init(&zipFileProperty);
 		zip_stat_index(s_APKArchive, m_idZipFile, 0, &zipFileProperty);
-		TK_VERBOSE("LOAD data from the files : \"" << GetCompleateName() << "\"");
+		TK_VERBOSE("LOAD data from the files : " << *this );
 		/*
 		TK_DEBUG("         name=" << zipFileProperty.name);
 		TK_DEBUG("         index=" << zipFileProperty.index);
@@ -203,14 +211,14 @@ bool etk::File::LoadDataZip(void)
 		m_zipDataSize = zipFileProperty.size;
 		m_zipData = new char[m_zipDataSize +10];
 		if (NULL == m_zipData) {
-			TK_ERROR("File allocation ERROR : \"" << GetCompleateName() << "\"");
+			TK_ERROR("File allocation ERROR : " << *this);
 			zip_fclose(m_zipPointerFile);
 			return false;
 		}
 		memset(m_zipData, 0, m_zipDataSize +10);
 		int32_t sizeTmp = zip_fread(m_zipPointerFile, m_zipData, m_zipDataSize);
 		if (sizeTmp != m_zipDataSize) {
-			TK_ERROR("File load data ERROR : \"" << GetCompleateName() << "\"");
+			TK_ERROR("File load data ERROR : " << *this);
 			zip_fclose(m_zipPointerFile);
 			delete[] m_zipData;
 			return false;
@@ -407,7 +415,7 @@ void etk::FSNode::PrivateSetName(etk::UString& newName)
 	
 	bool isRoofFolder = false;
 	#ifdef __TARGET_OS__Windows
-		for (char iii='a' ; iii<='z' iii++) {
+		for (char iii='a' ; iii<='z' ; iii++) {
 			char tmpVal[10];
 			char tmpValMaj[10];
 			sprintf(tmpVal, "%c:/", iii);
@@ -496,7 +504,7 @@ bool DirectCheckFile(etk::UString tmpFileNameDirect, bool checkInAPKIfNeeded=fal
 				continue;
 			}
 			if (tmpFileNameDirect == name) {
-				return true
+				return true;
 			}
 		}
 		return false;
@@ -617,23 +625,23 @@ void etk::FSNode::UpdateFileSystemProperty(void)
 				TK_ERROR("Can not get pointer on file in the APK file id " << iii);
 				continue;
 			}
-			if (tmpFileNameDirect == name) {
+			if (m_systemFileName == name) {
 				m_idZipFile = iii;
 				break;
 			}
 		}
 		if(   -1 == m_idZipFile
-		   || m_idZipFile >= s_APKnbFiles)) {
-			TK_ERROR("File Does not existed ... in APK : \"" << tmpFilename << "\"");
+		    || m_idZipFile >= s_APKnbFiles) {
+			TK_ERROR("File Does not existed ... in APK : \"" << m_systemFileName << "\"");
 			return;
 		}
 		// note : Zip does not support other think than file ...
 		// TODO : Suport folder parsing ...
 		m_typeNode=FSN_FILE;
-		m_rights.IsUserReadable(true);
+		m_rights.SetUserReadable(true);
 		// TODO : Set the time of the file (time program compilation)
 		// TODO : Set the USER ID in the group and the user Id ...
-		TK_DBG_MODE("File existed ... in APK : \"" << tmpFilename << "\" ==> id=" << m_idZipFile);
+		TK_DBG_MODE("File existed ... in APK : \"" << m_systemFileName << "\" ==> id=" << m_idZipFile);
 		return;
 	}
 	#endif
@@ -649,9 +657,13 @@ void etk::FSNode::UpdateFileSystemProperty(void)
 		case S_IFCHR:  m_typeNode=etk::FSN_CHARACTER; break;
 		case S_IFDIR:  m_typeNode=etk::FSN_FOLDER;    break;
 		case S_IFIFO:  m_typeNode=etk::FSN_FIFO;      break;
+		#ifndef __TARGET_OS__Windows
 		case S_IFLNK:  m_typeNode=etk::FSN_LINK;      break;
+		#endif
 		case S_IFREG:  m_typeNode=etk::FSN_FILE;      break;
+		#ifndef __TARGET_OS__Windows
 		case S_IFSOCK: m_typeNode=etk::FSN_SOCKET;    break;
+		#endif
 		default:       m_typeNode=etk::FSN_UNKNOW;    break;
 	}
 	// Right
@@ -814,7 +826,7 @@ const etk::FSNode& etk::FSNode::operator=  (const etk::FSNode &obj )
 			m_PointerFile = NULL;
 		}
 		#ifdef __TARGET_OS__Android
-			m_idZipFile = etkF.m_idZipFile;
+			m_idZipFile = obj.m_idZipFile;
 			m_zipData = NULL;
 			m_zipDataSize = 0;
 			m_zipReadingOffset = 0;

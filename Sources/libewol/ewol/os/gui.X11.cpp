@@ -286,8 +286,9 @@ void guiInterface::SetTitle(etk::UString& title)
 Pixmap icon_pixmap;
 
 // TODO : I don't understand why it does not work ....
-void SetIcon(etk::FSNode bitmapFile)
+void SetIcon(etk::UString inputFile)
 {
+	etk::FSNode bitmapFile(inputFile);
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: try to set icon : " << bitmapFile);
 	#endif
@@ -1175,7 +1176,7 @@ int main(int argc, char *argv[])
 	//start the basic thread : 
 	eSystem::Init();
 	// get the icon file : 
-	etk::FSNode myIcon = APP_Icon();
+	etk::UString myIcon = APP_Icon();
 	SetIcon(myIcon);
 	
 	// Run ...

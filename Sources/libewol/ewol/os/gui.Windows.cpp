@@ -48,7 +48,7 @@ int64_t guiInterface::GetTime(void)
 
 bool inputIsPressed[20];
 
-static eSystem::specialKey_ts guiKeyBoardMode;
+static ewol::specialKey_ts guiKeyBoardMode;
 
 /**
  * @brief Set the new title of the windows
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 	//start the basic thread : 
 	eSystem::Init();
 	// get the icon file : 
-	etk::File myIcon = APP_Icon();
+	etk::UString myIcon = APP_Icon();
 	//SetIcon(myIcon);
 	
 	// Run ...

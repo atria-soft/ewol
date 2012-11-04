@@ -19,27 +19,4 @@ menu "General"
 		help
 			This is the application Title
 	
-	config __EWOL_APPL_ORGANISATION_TYPE__
-		prompt "OrganisationType"
-		string 
-		default "com"
-		help
-			Can be manny things, but limit whith no  space no special char and no Maj ... [a..z]
-			com : Commercial
-			net : Network??
-			org : Organisation
-			gov : Governement
-			mil : Military
-			edu : Education
-			pri : Private
-			museum : ...
-	
-	
-	config __EWOL_APPL_COMPAGNY__
-		prompt "Compagny Name"
-		string
-		default "Unknow"
-		help
-			This is the c name ...
-	
 endmenu

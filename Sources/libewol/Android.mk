@@ -33,20 +33,19 @@ LOCAL_EXPORT_LDLIBS += -ldl -llog
 
 
 FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/os/gui.Android.base.cpp
-FILE_ABSTRACTION_DEST:=ewol/os/gui.Android.cpp
+FILE_ABSTRACTION_DEST:=ewol/os/gui.Android.tmp.cpp
 
 EWOL_TMP_PATH:=$(LOCAL_PATH)
 
-$(shell rm $(FILE_ABSTRACTION_DEST) $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST))
+$(shell rm -f $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST))
 
 $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST): $(FILE_ABSTRACTION)
 	$(Q)mkdir -p $(dir $@)
 	$(Q)cp -f $(FILE_ABSTRACTION) $@
-	$(Q)sed -i "s|__PROJECT_ORG_TYPE__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_ORGANISATION_TYPE__)))|" $@
-	$(Q)sed -i "s|__PROJECT_VENDOR__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_COMPAGNY__)))|" $@
-	$(Q)sed -i "s|__PROJECT_NAME__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__)))|" $@
-	$(Q)sed -i "s|__PROJECT_PACKAGE__|$(subst _,$(empty),$(call convert-special-char,$(CONFIG___EWOL_APPL_NAME__)))|" $@
-
+	$(Q)sed -i "s|__PROJECT_ORG_TYPE__|$(PROJECT_COMPAGNY_TYPE)|" $@
+	$(Q)sed -i "s|__PROJECT_VENDOR__|$(PROJECT_COMPAGNY_NAME2)|" $@
+	$(Q)sed -i "s|__PROJECT_NAME__|$(PROJECT_NAME2)|" $@
+	$(Q)sed -i "s|__PROJECT_PACKAGE__|$(PROJECT_NAME2)|" $@
 $(FILE_ABSTRACTION_DEST): $(LOCAL_PATH)/$(FILE_ABSTRACTION_DEST)
 	
 
