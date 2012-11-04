@@ -43,6 +43,33 @@ namespace ewol {
 	} textAlignement_te;
 	class Button : public ewol::Widget
 	{
+		private:
+			#ifdef __VIDEO__OPENGL_ES_2
+				ewol::Program* m_GLprogram;
+				int32_t        m_GLPosition;
+				int32_t        m_GLMatrix;
+				int32_t        m_GLsizeBorder;
+				int32_t        m_GLsizePadding;
+				int32_t        m_GLsize;
+				float          m_pos[4];
+				int32_t        m_GLposText;
+				int32_t        m_GLstate;
+				etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
+				draw::Colorf                       m_color[3];
+				void SetPoint(float x, float y);
+				void Rectangle(float x, float y, float w, float h);
+			#endif
+		private:
+			ewol::OObject2DTextColored m_oObjectText;
+			ewol::OObject2DColored     m_oObjectDecoration;
+			ewol::OObject2DTextured*   m_oObjectImage;
+			bool                       m_hasAnImage;
+			etk::UString               m_imageSelected;
+			textAlignement_te          m_alignement;
+			etk::Vector2D<float>       m_padding;
+			etk::UString               m_label;
+			draw::Color                m_textColorFg;  //!< Text color
+			draw::Color                m_textColorBg;  //!< Background color
 		public:
 			Button(void);
 			Button(etk::UString newLabel);
@@ -65,17 +92,6 @@ namespace ewol {
 			void           SetPadding(etk::Vector2D<float>  newPadding);
 			void           SetColorBg(draw::Color newColor) { m_textColorBg = newColor; };
 			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
-		private:
-			ewol::OObject2DTextColored m_oObjectText;
-			ewol::OObject2DColored     m_oObjectDecoration;
-			ewol::OObject2DTextured*   m_oObjectImage;
-			bool               m_hasAnImage;
-			etk::UString       m_imageSelected;
-			textAlignement_te  m_alignement;
-			etk::Vector2D<float>    m_padding;
-			etk::UString       m_label;
-			draw::Color        m_textColorFg;  //!< Text color
-			draw::Color        m_textColorBg;  //!< Background color
 		public:
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(DrawProperty& displayProp);

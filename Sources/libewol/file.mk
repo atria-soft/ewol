@@ -108,5 +108,9 @@ LOCAL_COPY_FILES := ../../share/textured3D.prog:textured3D.prog \
                     \
                     ../../share/theme/rounded/widgetEntry.prog:theme/rounded/widgetEntry.prog \
                     ../../share/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
-                    ../../share/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert
+                    ../../share/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert \
+                    \
+                    ../../share/theme/default/widgetButton.prog:theme/default/widgetButton.prog \
+                    ../../share/theme/default/widgetButton.frag:theme/default/widgetButton.frag \
+                    ../../share/theme/default/widgetButton.vert:theme/default/widgetButton.vert
 

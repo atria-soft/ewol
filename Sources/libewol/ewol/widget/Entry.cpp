@@ -134,61 +134,37 @@ etk::UString ewol::Entry::GetValue(void)
 
 
 
+#ifdef __VIDEO__OPENGL_ES_2
 
-void ewol::Entry::SetPoint(float x, float y)
-{
-	etk::Vector2D<float> triangle(x, y);
-	m_coord.PushBack(triangle);
-}
-
-void ewol::Entry::Rectangle(float x, float y, float w, float h)
-{
-	m_coord.Clear();
-	/*
-	x += 3;
-	y += 3;
-	w -= 6;
-	h -= 6;
-	*/
-	/* Bitmap position
-	 *      xA     xB
-	 *   yC *------*
-	 *      |      |
-	 *      |      |
-	 *   yD *------*
-	 */
-	float dxA = x;
-	float dxB = x + w;
-	float dyC = y;
-	float dyD = y + h;
-	/*
-	if (true == m_hasClipping) {
-		if (dxA < m_clipping.x) {
-			dxA = m_clipping.x;
-		}
-		if (dxB > m_clipping.x + m_clipping.w) {
-			dxB = m_clipping.x + m_clipping.w;
-		}
-		if (dyC < m_clipping.y) {
-			dyC = m_clipping.y;
-		}
-		if (dyD > m_clipping.y + m_clipping.h) {
-			dyD = m_clipping.y + m_clipping.h;
-		}
+	void ewol::Entry::SetPoint(float x, float y)
+	{
+		etk::Vector2D<float> triangle(x, y);
+		m_coord.PushBack(triangle);
 	}
-	if(    dyC >= dyD
-	    || dxA >= dxB) {
-		return;
+	
+	void ewol::Entry::Rectangle(float x, float y, float w, float h)
+	{
+		m_coord.Clear();
+		/* Bitmap position
+		 *      xA     xB
+		 *   yC *------*
+		 *      |      |
+		 *      |      |
+		 *   yD *------*
+		 */
+		float dxA = x;
+		float dxB = x + w;
+		float dyC = y;
+		float dyD = y + h;
+		SetPoint(dxA, dyD);
+		SetPoint(dxA, dyC);
+		SetPoint(dxB, dyC);
+	
+		SetPoint(dxB, dyC);
+		SetPoint(dxB, dyD);
+		SetPoint(dxA, dyD);
 	}
-	*/
-	SetPoint(dxA, dyD);
-	SetPoint(dxA, dyC);
-	SetPoint(dxB, dyC);
-
-	SetPoint(dxB, dyC);
-	SetPoint(dxB, dyD);
-	SetPoint(dxA, dyD);
-}
+#endif
 
 /**
  * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])

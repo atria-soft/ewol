@@ -60,8 +60,8 @@ namespace ewol {
 				int32_t        m_GLstate;
 				etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
 				draw::Colorf                  m_color[3];
-			void SetPoint(float x, float y);
-			void Rectangle(float x, float y, float w, float h);
+				void SetPoint(float x, float y);
+				void Rectangle(float x, float y, float w, float h);
 			#endif
 		private:
 			ewol::OObject2DTextColored m_oObjectText;               //!< text display
