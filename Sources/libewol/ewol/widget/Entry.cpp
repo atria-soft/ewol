@@ -69,7 +69,7 @@ void ewol::Entry::Init(void)
 	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("THEME:rounded:widgetEntry.prog");
+		etk::UString tmpString("THEME:GUI:widgetEntry.prog");
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {

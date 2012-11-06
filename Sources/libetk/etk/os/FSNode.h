@@ -228,7 +228,16 @@ namespace etk
 	void InitDefaultFolder(const char * applName);
 	etk::UString GetUserHomeFolder(void);
 	
-
+	namespace theme
+	{
+		// TODO : Add an INIT ...
+		// set the Folder of a subset of a theme ...
+		void       SetName(etk::UString refName, etk::UString folderName);
+		// get the folder from a Reference theme
+		etk::UString GetName(etk::UString refName);
+		// get the list of all the theme folder availlable in the user Home/appl
+		etk::Vector<etk::UString> List(void);
+	};
 };
 
 #endif

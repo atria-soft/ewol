@@ -374,6 +374,24 @@ bool ewol::resource::Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& o
 	return true;
 }
 
+bool ewol::resource::Keep(etk::UString& filename, ewol::SimpleConfigFile*& object)
+{
+	EWOL_INFO("KEEP : SimpleConfig : file : \"" << filename << "\"");
+	object = static_cast<ewol::SimpleConfigFile*>(LocalKeep(filename));
+	if (NULL != object) {
+		return true;
+	}
+	// this element create a new one every time ....
+	object = new ewol::SimpleConfigFile(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
+
 
 void ewol::resource::Release(ewol::Resource*& object)
 {
@@ -459,6 +477,13 @@ void ewol::resource::Release(ewol::TextureFile*& object)
 }
 
 void ewol::resource::Release(ewol::MeshObj*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+
+void ewol::resource::Release(ewol::SimpleConfigFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);

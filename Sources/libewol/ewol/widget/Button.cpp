@@ -60,7 +60,7 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonLeave);
 	m_hasAnImage = false;
 	m_alignement = ewol::TEXT_ALIGN_CENTER;
-	
+	/*
 	#ifdef __TARGET_OS__Android
 		m_padding.y = 12;
 		m_padding.x = 12;
@@ -68,24 +68,31 @@ void ewol::Button::Init(void)
 		m_padding.y = 4;
 		m_padding.x = 4;
 	#endif
-	
+	*/
 	m_textColorFg = draw::color::black;
 	
-	m_textColorBg = draw::color::black;
-	m_textColorBg.a = 0x3F;
 	SetCanHaveFocus(true);
 	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("THEME:rounded:widgetButton.prog");
+		etk::UString tmpString("THEME:GUI:widgetButton.conf");
+		if (true == ewol::resource::Keep(tmpString, m_config) ) {
+			m_confIdPaddingX   = m_config->Request("PaddingX");
+			m_confIdPaddingY   = m_config->Request("PaddingY");
+			m_confIdChangeTime = m_config->Request("ChangeTime");
+		}
+		tmpString ="THEME:GUI:widgetButton.prog";
 		// get the shader resource :
 		m_GLPosition = 0;
 		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition     = m_GLprogram->GetAttribute("EW_coord2d");
-			m_GLMatrix       = m_GLprogram->GetUniform("EW_MatrixTransformation");
-			m_GLsizeBorder   = m_GLprogram->GetUniform("EW_sizeBorder");
-			m_GLsizePadding  = m_GLprogram->GetUniform("EW_sizePadding");
-			m_GLsize         = m_GLprogram->GetUniform("EW_size");
-			m_GLposText      = m_GLprogram->GetUniform("EW_posText");
-			m_GLstate        = m_GLprogram->GetUniform("EW_state");
+			m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			// Widget property ==> for the Vertex shader
+			m_GLwidgetProperty.m_size       = m_GLprogram->GetUniform("EW_widgetProperty.size");
+			m_GLwidgetProperty.m_insidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
+			m_GLwidgetProperty.m_insideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
+			// status property ==> for the fragment shader
+			m_GLstatus.m_stateOld   = m_GLprogram->GetUniform("EW_status.stateOld");
+			m_GLstatus.m_stateNew   = m_GLprogram->GetUniform("EW_status.stateNew");
+			m_GLstatus.m_transition = m_GLprogram->GetUniform("EW_status.transition");
 		}
 	#endif
 }
@@ -119,22 +126,19 @@ void ewol::Button::SetImage(etk::UString imageName)
 	MarkToRedraw();
 }
 
-
-void ewol::Button::SetPadding(etk::Vector2D<float> newPadding)
-{
-	m_padding = newPadding;
-}
-
 bool ewol::Button::CalculateMinSize(void)
 {
+	etk::Vector2D<int32_t> padding;
+	padding.x = m_config->GetInteger(m_confIdPaddingX);
+	padding.y = m_config->GetInteger(m_confIdPaddingY);
 	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
-	m_minSize.x = m_padding.x*2 + minSize.x;
-	m_minSize.y = m_padding.y*2 + minSize.y;
+	m_minSize.x = padding.x*2 + minSize.x;
+	m_minSize.y = padding.y*2 + minSize.y;
 	// Add the image element ...
 	if (true == m_hasAnImage) {
 		//m_minSize.x += -m_padding.x + m_padding.y*2 + minHeight;
 		//m_minSize.y += m_padding.y*2;
-		m_minSize.x += m_padding.x + minSize.y;
+		m_minSize.x += padding.x + minSize.y;
 	}
 	
 	MarkToRedraw();
@@ -200,29 +204,32 @@ bool ewol::Button::GetValue(void)
 
 void ewol::Button::OnDraw(DrawProperty& displayProp)
 {
-	#ifdef __VIDEO__OPENGL_ES_2
-		if (m_GLprogram==NULL) {
-			EWOL_ERROR("No shader ...");
-			return;
-		}
-		//glScalef(m_scaling.x, m_scaling.y, 1.0);
-		m_GLprogram->Use();
-		// set Matrix : translation/positionMatrix
-		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-		// position :
-		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
-		// all entry parameters :
-		m_GLprogram->Uniform1f(m_GLsizeBorder, 3);
-		m_GLprogram->Uniform1f(m_GLsizePadding, m_padding.x);
-		m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
-		m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
-		m_GLprogram->Uniform1i(m_GLstate, 0);
-		// Request the draw of the elements : 
-		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-		m_GLprogram->UnUse();
-	#endif
-	m_oObjectDecoration.Draw();
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	//glScalef(m_scaling.x, m_scaling.y, 1.0);
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// position :
+	// Note : Must be all the time a [-1..1] square ...  
+	// TODO : plop ...
+	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
+	// all entry parameters :
+	m_GLprogram->Uniform2fv(m_GLwidgetProperty.m_size,       1, &m_size.x);
+	m_GLprogram->Uniform2fv(m_GLwidgetProperty.m_insidePos,  1, &m_widgetProperty.m_insidePos.x);
+	m_GLprogram->Uniform2fv(m_GLwidgetProperty.m_insideSize, 1, &m_widgetProperty.m_insideSize.x);
+	m_GLprogram->Uniform1i(m_GLstatus.m_stateOld,   m_status.m_stateOld);
+	m_GLprogram->Uniform1i(m_GLstatus.m_stateNew,   m_status.m_stateNew);
+	m_GLprogram->Uniform1f(m_GLstatus.m_transition, m_status.m_transition);
+	
+	// Request the draw of the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
+	
+	
 	if (NULL != m_oObjectImage) {
 		m_oObjectImage->Draw();
 	}
@@ -232,7 +239,11 @@ void ewol::Button::OnDraw(DrawProperty& displayProp)
 void ewol::Button::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		m_oObjectDecoration.Clear();
+		
+		etk::Vector2D<int32_t> padding;
+		padding.x = m_config->GetInteger(m_confIdPaddingX);
+		padding.y = m_config->GetInteger(m_confIdPaddingY);
+		
 		m_oObjectText.Clear();
 		if (NULL != m_oObjectImage) {
 			m_oObjectImage->Clear();
@@ -242,24 +253,24 @@ void ewol::Button::OnRegenerateDisplay(void)
 		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
 		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + m_padding.x;
-		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + m_padding.y;
+		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + padding.x;
+		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + padding.y;
 		
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
 			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
-				tmpTextOriginX = m_padding.x;
+				tmpTextOriginX = padding.x;
 			}
 		}
 		if (true==m_userFill.y) {
 			tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 		}
-		tmpOriginX += m_padding.x;
-		tmpOriginY += m_padding.y;
-		tmpSizeX -= 2*m_padding.x;
-		tmpSizeY -= 2*m_padding.y;
+		tmpOriginX += padding.x;
+		tmpOriginY += padding.y;
+		tmpSizeX -= 2*padding.x;
+		tmpSizeY -= 2*padding.y;
 		
 		etk::Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
 		
@@ -274,23 +285,20 @@ void ewol::Button::OnRegenerateDisplay(void)
 		}
 		*/
 		clipping_ts drawClipping;
-		drawClipping.x = m_padding.x;
-		drawClipping.y = m_padding.y;
-		drawClipping.w = m_size.x - 2*m_padding.x;
-		drawClipping.h = m_size.y - 2*m_padding.y;
+		drawClipping.x = padding.x;
+		drawClipping.y = padding.y;
+		drawClipping.w = m_size.x - 2*padding.x;
+		drawClipping.h = m_size.y - 2*padding.y;
 		//EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
 		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
-		#ifndef __VIDEO__OPENGL_ES_2
-			m_oObjectDecoration.SetColor(m_textColorBg);
-			tmpOriginX -= m_padding.x/2;
-			tmpOriginY -= m_padding.y/2;
-			tmpSizeX += m_padding.x/1;
-			tmpSizeY += m_padding.y/1;
-			m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-		#else
-			Rectangle(0, 0, m_size.x, m_size.y);
-		#endif
+		m_status.m_stateOld = 0;
+		m_status.m_stateNew = 0;
+		m_status.m_transition = 0;
+		m_widgetProperty.m_insidePos = textPos;
+		m_widgetProperty.m_insideSize = m_oObjectText.GetSize(m_label);
+		
+		Rectangle(0, 0, m_size.x, m_size.y);
 	}
 }
 

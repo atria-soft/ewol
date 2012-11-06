@@ -4,7 +4,8 @@ FILE_LIST = ewol/ewol.cpp \
 			ewol/ClipBoard.cpp \
 			ewol/Debug.cpp \
 			ewol/ShortCutManager.cpp \
-			ewol/ResourceManager.cpp
+			ewol/ResourceManager.cpp \
+			ewol/SimpleConfigFile.cpp
 
 FILE_LIST+= ewol/openGL/openGL.cpp \
 			ewol/openGL/Shader.cpp \
@@ -110,7 +111,13 @@ LOCAL_COPY_FILES := ../../share/textured3D.prog:textured3D.prog \
                     ../../share/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
                     ../../share/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert \
                     \
+                    ../../share/theme/default/widgetButton.conf:theme/default/widgetButton.conf \
                     ../../share/theme/default/widgetButton.prog:theme/default/widgetButton.prog \
                     ../../share/theme/default/widgetButton.frag:theme/default/widgetButton.frag \
-                    ../../share/theme/default/widgetButton.vert:theme/default/widgetButton.vert
+                    ../../share/theme/default/widgetButton.vert:theme/default/widgetButton.vert \
+                    \
+                    ../../share/theme/rounded/widgetButton.conf:theme/rounded/widgetButton.conf \
+                    ../../share/theme/rounded/widgetButton.prog:theme/rounded/widgetButton.prog \
+                    ../../share/theme/rounded/widgetButton.frag:theme/rounded/widgetButton.frag \
+                    ../../share/theme/rounded/widgetButton.vert:theme/rounded/widgetButton.vert
 

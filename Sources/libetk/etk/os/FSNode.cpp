@@ -29,6 +29,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <etk/tool.h>
+#include <etk/Vector.h>
 
 extern "C" {
 	// file browsing ...
@@ -569,10 +570,12 @@ void etk::FSNode::GenerateFileSystemPath(void)
 					basicName = m_userFileName.Extract(firstPos+1);
 				}
 				TK_DBG_MODE(" THEME party : \"" << themeName << "\" => \"" << basicName << "\"");
+				themeName = etk::theme::GetName(themeName);
+				TK_DBG_MODE("      ==> theme Folder \"" << themeName << "\"");
 				// search the corect folder : 
 				if (themeName == "") {
 					TK_WARNING("no theme name detected : set it to \"default\"");
-				} else {
+				} else if (themeName != "default") {
 					// Selected theme :
 					// check in the user data :
 					m_systemFileName = baseFolderDataUser + "theme/" + themeName + "/" + basicName;
@@ -1244,4 +1247,64 @@ bool etk::FSNode::FileSeek(long int offset, int origin)
 		return true;
 	}
 }
+
+
+
+// TODO : Add an INIT to reset all allocated parameter :
+
+class tmpThemeElement
+{
+	public:
+		etk::UString refName;
+		etk::UString folderName;
+};
+
+static etk::Vector<tmpThemeElement*> g_listTheme;
+
+// set the Folder of a subset of a theme ...
+void etk::theme::SetName(etk::UString refName, etk::UString folderName)
+{
+	for(int32_t iii=0; iii<g_listTheme.Size(); iii++) {
+		if (NULL != g_listTheme[iii]) {
+			if (g_listTheme[iii]->refName==refName) {
+				g_listTheme[iii]->folderName = folderName;
+				// action done
+				return;
+			}
+		}
+	}
+	// we did not find it ...
+	tmpThemeElement* tmpp = new tmpThemeElement();
+	if (NULL==tmpp) {
+		TK_ERROR("pb to add a reference theme");
+		return;
+	}
+	tmpp->refName = refName;
+	tmpp->folderName = folderName;
+	g_listTheme.PushBack(tmpp);
+}
+
+// get the folder from a Reference theme
+etk::UString etk::theme::GetName(etk::UString refName)
+{
+	for(int32_t iii=0; iii<g_listTheme.Size(); iii++) {
+		if (NULL != g_listTheme[iii]) {
+			if (g_listTheme[iii]->refName==refName) {
+				return g_listTheme[iii]->folderName;
+			}
+		}
+	}
+	// We did not find the theme
+	return refName;
+}
+
+// get the list of all the theme folder availlable in the user Home/appl
+etk::Vector<etk::UString> etk::theme::List(void)
+{
+	etk::Vector<etk::UString> tmpp;
+	return tmpp;
+	// TODO :
+}
+
+
 
