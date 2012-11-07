@@ -22,17 +22,11 @@ vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
 void main(void) {
 	// position form center : 
 	vec2 ratio = EW_size / 2.0;
-	vec2 positionCenter = v_position-ratio;
-	if(positionCenter.x<0.0) {
-		positionCenter.x = -1.0*positionCenter.x;
-	}
-	if(positionCenter.y<0.0) {
-		positionCenter.y = -1.0*positionCenter.y;
-	}
+	vec2 positionCenter = abs(v_position-ratio);
 	vec2 ratioHight = ratio - EW_sizePadding;
 	vec2 ratioLow   = ratioHight - (EW_sizeBorder+S_roundedRatio);
 	vec2 circleMode = smoothstep(ratioLow, ratioHight, positionCenter);
-	float tmpDist = sqrt(circleMode.x*circleMode.x + circleMode.y*circleMode.y);
+	float tmpDist = sqrt(dot(circleMode,circleMode));
 	
 	//float distanceInternal = (S_roundedRatio-EW_sizeBorder/2.0)/(S_roundedRatio-EW_sizeBorder);
 	//float distanceExternal = (S_roundedRatio+EW_sizeBorder/2.0)/(S_roundedRatio-EW_sizeBorder);;

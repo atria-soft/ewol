@@ -60,6 +60,12 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonLeave);
 	m_hasAnImage = false;
 	m_alignement = ewol::TEXT_ALIGN_CENTER;
+	
+	m_status.m_stateOld = 0;
+	m_status.m_stateNew = 0;
+	m_status.m_transition = 1.0;
+	m_time = -1;
+	m_nextStatusRequested = -1;
 	/*
 	#ifdef __TARGET_OS__Android
 		m_padding.y = 12;
@@ -292,9 +298,6 @@ void ewol::Button::OnRegenerateDisplay(void)
 		//EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
 		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
 		
-		m_status.m_stateOld = 0;
-		m_status.m_stateNew = 0;
-		m_status.m_transition = 0;
 		m_widgetProperty.m_insidePos = textPos;
 		m_widgetProperty.m_insideSize = m_oObjectText.GetSize(m_label);
 		
@@ -314,12 +317,21 @@ void ewol::Button::OnRegenerateDisplay(void)
 bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
+	if(ewol::EVENT_INPUT_TYPE_ENTER == typeEvent) {
+		ChangeStatusIn(2);
+	}else if(ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
+		ChangeStatusIn(0);
+	}
 	if (1 == IdInput) {
 		if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
 			GenerateEventId(ewolEventButtonDown);
+			ChangeStatusIn(1);
+			MarkToRedraw();
 		}
 		if(ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
 			GenerateEventId(ewolEventButtonUp);
+			ChangeStatusIn(0);
+			MarkToRedraw();
 		}
 		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
 		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
@@ -343,3 +355,49 @@ bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeDa
 	return false;
 }
 
+
+
+void ewol::Button::ChangeStatusIn(int32_t newStatusId)
+{
+	m_nextStatusRequested = newStatusId;
+	PeriodicCallSet(true);
+	MarkToRedraw();
+}
+/**
+ * @brief Periodic call of this widget
+ * @param localTime curent system time
+ * @return ---
+ */
+void ewol::Button::PeriodicCall(int64_t localTime)
+{
+	// start :
+	if (m_time == -1) {
+		m_time = localTime;
+		m_status.m_stateOld = m_status.m_stateNew;
+		m_status.m_stateNew = m_nextStatusRequested;
+		m_nextStatusRequested = -1;
+		m_status.m_transition = 0.0;
+		//EWOL_ERROR("     ##### START #####  ");
+	}
+	int64_t offset = localTime - m_time;
+	float timeRelativity = m_config->GetFloat(m_confIdChangeTime)*1000.0;
+	if (offset > timeRelativity) {
+		// check if no new state requested:
+		if (m_nextStatusRequested != -1) {
+			m_time = localTime;
+			m_status.m_stateOld = m_status.m_stateNew;
+			m_status.m_stateNew = m_nextStatusRequested;
+			m_nextStatusRequested = -1;
+			m_status.m_transition = 0.0;
+		} else {
+			m_status.m_transition = 1.0;
+			//EWOL_ERROR("     ##### STOP #####  ");
+			PeriodicCallSet(false);
+			m_time = -1;
+		}
+	} else {
+		m_status.m_transition = (float)offset / timeRelativity;
+		//EWOL_DEBUG("time=" << offset << " in " << timeRelativity << " Transition : " << m_status.m_transition);
+	}
+	MarkToRedraw();
+}

@@ -143,6 +143,16 @@ namespace ewol {
 			 */
 			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
 			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
+		private:
+			int32_t m_nextStatusRequested;
+			void ChangeStatusIn(int32_t newStatusId);
+			int64_t m_time;
+			/**
+			 * @brief Periodic call of this widget
+			 * @param localTime curent system time
+			 * @return ---
+			 */
+			virtual void PeriodicCall(int64_t localTime);
 	};
 	
 	/**
