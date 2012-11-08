@@ -82,17 +82,17 @@ namespace ewol {
 		private:
 			#ifdef __VIDEO__OPENGL_ES_2
 				// External theme config:
-				ewol::SimpleConfigFile* m_config;
-				int32_t                 m_confIdPaddingX;
-				int32_t                 m_confIdPaddingY;
-				int32_t                 m_confIdChangeTime;
+				ewol::SimpleConfigFile*     m_config;
+				int32_t                     m_confIdPaddingX;
+				int32_t                     m_confIdPaddingY;
+				int32_t                     m_confIdChangeTime;
 				// OpenGL shaders programs:
-				ewol::Program*          m_GLprogram;
-				int32_t                 m_GLPosition;
-				int32_t                 m_GLMatrix;
+				ewol::Program*              m_GLprogram;
+				int32_t                     m_GLPosition;
+				int32_t                     m_GLMatrix;
 				// widget property
-				ewol::GLWidgetPosProperty m_GLwidgetProperty; // id of the uniform
-				ewol::WidgetPosProperty   m_widgetProperty;   // structure of this uniform
+				ewol::GLWidgetPosProperty   m_GLwidgetProperty; // id of the uniform
+				ewol::WidgetPosProperty     m_widgetProperty;   // structure of this uniform
 				// state property
 				ewol::GLWidgetStateProperty m_GLstatus;
 				ewol::WidgetStateProperty   m_status;

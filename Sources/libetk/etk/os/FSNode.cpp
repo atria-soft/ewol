@@ -352,11 +352,9 @@ static etk::UString SimplifyPathAbstractPath(etk::UString input)
 }
 
 
-static void SortElementList(etk::Vector<etk::FSNode *> &list)
+void etk::FSNode::SortElementList(etk::Vector<etk::FSNode *> &list)
 {
-	// TODO : ...
-	/*
-	etk::Vector<ewol::FSNode *> tmpList = list;
+	etk::Vector<etk::FSNode *> tmpList = list;
 	list.Clear();
 	for(int32_t iii=0; iii<tmpList.Size(); iii++) {
 		if (NULL != tmpList[iii]) {
@@ -364,7 +362,7 @@ static void SortElementList(etk::Vector<etk::FSNode *> &list)
 			for(int32_t jjj=0; jjj<list.Size(); jjj++) {
 				//EWOL_DEBUG("compare : \""<<*tmpList[iii] << "\" and \"" << *m_listDirectory[jjj] << "\"");
 				if (list[jjj]!=NULL) {
-					if (tmpList[iii]->m_name > list[jjj]->m_name) {
+					if (tmpList[iii]->GetNameFile() > list[jjj]->GetNameFile()) {
 						findPos = jjj+1;
 					}
 				}
@@ -373,7 +371,6 @@ static void SortElementList(etk::Vector<etk::FSNode *> &list)
 			list.Insert(findPos, tmpList[iii]);
 		}
 	}
-	*/
 }
 
 
