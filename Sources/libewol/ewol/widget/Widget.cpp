@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/Widget.cpp
- * @brief basic ewol Widget (Sources)
  * @author Edouard DUPIN
- * @date 18/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <ewol/widget/Widget.h>
@@ -76,11 +60,6 @@ char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
 #undef __class__
 #define __class__	"Widget"
 
-/**
- * @brief Constructor of the widget classes
- * @param ---
- * @return (no execption generated (not managed in embended platform))
- */
 ewol::Widget::Widget(void)
 {
 	m_limitMouseEvent = 3;
@@ -105,11 +84,6 @@ ewol::Widget::Widget(void)
 }
 
 
-/**
- * @brief Destructor of the widget classes
- * @param ---
- * @return (no execption generated (not managed in embended platform))
- */
 ewol::Widget::~Widget(void)
 {
 	// Remove his own focus...
@@ -120,11 +94,6 @@ ewol::Widget::~Widget(void)
 }
 
 
-/**
- * @brief Set the widget hidden
- * @param ---
- * @return ---
- */
 void ewol::Widget::Hide(void)
 {
 	m_hide = true;
@@ -133,11 +102,6 @@ void ewol::Widget::Hide(void)
 }
 
 
-/**
- * @brief Set the widget visible
- * @param ---
- * @return ---
- */
 void ewol::Widget::Show(void)
 {
 	m_hide = false;
@@ -146,13 +110,6 @@ void ewol::Widget::Show(void)
 }
 
 
-/**
- * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
- *        By default this save the widget availlable size in the widget size
- * @param[in] availlableX Availlable horisantal pixel size
- * @param[in] availlableY Availlable vertical pixel size
- * @return ---
- */
 bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 {
 	m_size.x = availlableX;
@@ -162,11 +119,6 @@ bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 }
 
 
-/**
- * @brief Set focus on this widget
- * @param ---
- * @return return true if the widget keep the focus
- */
 bool ewol::Widget::SetFocus(void)
 {
 	if (true == m_canFocus) {
@@ -178,11 +130,6 @@ bool ewol::Widget::SetFocus(void)
 }
 
 
-/**
- * @brief Remove the focus on this widget
- * @param ---
- * @return return true if the widget have release his focus (if he has it)
- */
 bool ewol::Widget::RmFocus(void)
 {
 	if (true == m_canFocus) {
@@ -194,11 +141,6 @@ bool ewol::Widget::RmFocus(void)
 }
 
 
-/**
- * @brief Set the capability to have the focus
- * @param[in] canFocusState new focus capability
- * @return ---
- */
 void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 {
 	m_canFocus = canFocusState;
@@ -207,23 +149,13 @@ void ewol::Widget::SetCanHaveFocus(bool canFocusState)
 	}
 }
 
-/**
- * @brief Keep the focus on this widget ==> this remove the previous focus on all other widget
- * @param ---
- * @return ---
- */
+
 void ewol::Widget::KeepFocus(void)
 {
 	ewol::widgetManager::FocusKeep(this);
 }
 
-/**
- * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
- * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
- * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
- * @param[in] displayProp properties of the current display
- * @return ---
- */
+
 void ewol::Widget::GenDraw(DrawProperty displayProp)
 {
 	if (true==m_hide){
@@ -284,11 +216,7 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 	return;
 }
 
-/**
- * @brief Request that the current widegt have a periodic call
- * @param statusToSet true if the periodic call is needed
- * @return ---
- */
+
 void ewol::Widget::PeriodicCallSet(bool statusToSet)
 {
 	if (true == statusToSet) {
@@ -298,11 +226,7 @@ void ewol::Widget::PeriodicCallSet(bool statusToSet)
 	}
 }
 
-/**
- * @brief The widget mark itself that it need to regenerate the nest time.
- * @param ---
- * @return ---
- */
+
 void ewol::Widget::MarkToRedraw(void)
 {
 	m_needRegenerateDisplay = true;
@@ -315,13 +239,6 @@ void ewol::Widget::MarkToRedraw(void)
 // -- Shortcut : management of the shortcut
 // ----------------------------------------------------------------------------------------------------------------
 
-/**
- * @brief Add a specific shortcut with his description
- * @param[in] descriptiveString Description string of the shortcut
- * @param[in] generateEventId Event generic of the element
- * @param[in] data Associate data wit the event
- * @return ---
- */
 void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data, bool broadcast)
 {
 	if(		NULL==descriptiveString
@@ -418,11 +335,7 @@ void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * gene
 	m_localShortcut.PushBack(tmpElement);
 }
 
-/**
- * @brief Remove all curent shortCut
- * @param ---
- * @return ---
- */
+
 void ewol::Widget::ShortCutClean(void)
 {
 	for (int32_t iii=0; iii<m_localShortcut.Size(); iii++) {
@@ -435,15 +348,6 @@ void ewol::Widget::ShortCutClean(void)
 }
 
 
-/**
- * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
- * @param[in] special all the special kay pressed at this time
- * @param[in] unicodeValue key pressed by the user not used if the kbMove!=ewol::EVENT_KB_MOVE_TYPE_NONE
- * @param[in] kbMove special key of the keyboard
- * @return true if the event has been used
- * @return false if the event has not been used
- * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
- */
 bool ewol::Widget::OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
 {
 	if (unicodeValue >= 'A' && unicodeValue <='Z') {
@@ -477,3 +381,5 @@ bool ewol::Widget::OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unico
 	}
 	return false;
 }
+
+

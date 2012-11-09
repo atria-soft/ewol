@@ -1,33 +1,14 @@
 /**
- *******************************************************************************
- * @file ewol/texture/Texture.cpp
- * @brief ewol Texture loading system (sources)
  * @author Edouard DUPIN
- * @date 28/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
-
 
 #include <ewol/texture/Texture.h>
 #include <ewol/openGL/openGL.h>
 #include <ewol/ewol.h>
-
 
 
 /**
@@ -58,6 +39,7 @@ ewol::Texture::Texture(etk::UString tmpName) :
 	m_endPointSize.x = 1.0;
 	m_endPointSize.y = 1.0;
 }
+
 
 ewol::Texture::~Texture(void)
 {
@@ -98,7 +80,7 @@ void ewol::Texture::UpdateContext(void)
 	}
 }
 
-// really remove the texture
+
 void ewol::Texture::RemoveContext(void)
 {
 	if (true == m_loaded) {
@@ -109,7 +91,7 @@ void ewol::Texture::RemoveContext(void)
 	}
 }
 
-// the OpenGl context is destroy, it is too late to remo it from nothing ... special case for Android
+
 void ewol::Texture::RemoveContextToLate(void)
 {
 	m_loaded = false;

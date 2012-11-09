@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file etk/UString.cpp
- * @brief Ewol Tool Kit : normal Unicode string management... (sources)
  * @author Edouard DUPIN
- * @date 14/02/2012
- * @par Project
- * Ewol TK
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <etk/UString.h>
@@ -54,14 +38,6 @@ etk::CCout& etk::operator <<(etk::CCout &os, const etk::UString &obj)
 	return os;
 }
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString::~UString(void)
 {
 	//m_data.Clear();
@@ -69,14 +45,6 @@ etk::UString::~UString(void)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString::UString(void)
 {
 	//TK_INFO("new etk::UString()");
@@ -85,14 +53,6 @@ etk::UString::UString(void)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString::UString(const char* inputData, int32_t len)
 {
 	m_data.Clear();
@@ -101,14 +61,6 @@ etk::UString::UString(const char* inputData, int32_t len)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString::UString(const uniChar_t* inputData, int32_t len)
 {
 	m_data.Clear();
@@ -170,14 +122,8 @@ void etk::UString::Set(const uniChar_t * inputData, int32_t len)
 		m_data.PushBack('\0');
 	}
 }
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
+
+
 etk::UString::UString(char inputData)
 {
 	char tmpVal[2];
@@ -202,14 +148,6 @@ etk::UString::UString(int inputData)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString::UString(unsigned int inputData)
 {
 	char tmpVal[256];
@@ -250,14 +188,6 @@ etk::UString::UString(const etk::UString &etkS)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 const etk::UString& etk::UString::operator= (const etk::UString &etkS )
 {
 	//TK_INFO("OPERATOR de recopie");
@@ -268,14 +198,6 @@ const etk::UString& etk::UString::operator= (const etk::UString &etkS )
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 const etk::UString& etk::UString::operator= (etk::Vector<char> inputData)
 {
 	etk::Vector<uniChar_t> output_Unicode;
@@ -284,14 +206,6 @@ const etk::UString& etk::UString::operator= (etk::Vector<char> inputData)
 	return *this;
 }
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 const etk::UString& etk::UString::operator= (etk::Vector<int8_t> inputData)
 {
 	etk::Vector<uniChar_t> output_Unicode;
@@ -301,14 +215,6 @@ const etk::UString& etk::UString::operator= (etk::Vector<int8_t> inputData)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 const etk::UString& etk::UString::operator= (etk::Vector<uniChar_t> inputData)
 {
 	m_data = inputData;
@@ -422,14 +328,6 @@ bool etk::UString::operator<= (const etk::UString& etkS) const
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 bool etk::UString::operator== (const etk::UString& etkS) const
 {
 	if( this != &etkS ) {
@@ -449,29 +347,12 @@ bool etk::UString::operator== (const etk::UString& etkS) const
 }
 
 
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 bool etk::UString::operator!= (const etk::UString& etkS) const
 {
 	return !(*this == etkS);
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 const etk::UString& etk::UString::operator+= (const etk::UString &etkS)
 {
 	if (0 < etkS.Size()) {
@@ -489,14 +370,6 @@ const etk::UString& etk::UString::operator+= (const etk::UString &etkS)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 etk::UString etk::UString::operator+ (const etk::UString &etkS)
 {
 	etk::UString temp;
@@ -508,18 +381,6 @@ etk::UString etk::UString::operator+ (const etk::UString &etkS)
 }
 
 
-
-
-
-
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 bool etk::UString::IsEmpty(void) const
 {
 	if(1 >= m_data.Size() ) {
@@ -530,14 +391,6 @@ bool etk::UString::IsEmpty(void) const
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 int32_t etk::UString::Size(void) const
 {
 	if (m_data.Size() == 0) {
@@ -548,28 +401,13 @@ int32_t etk::UString::Size(void) const
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 void etk::UString::Add(int32_t currentID, const char* inputData)
 {
 	etk::UString tmpString(inputData);
 	Add(currentID, tmpString.pointer() );
 }
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
+
 void etk::UString::Add(int32_t currentID, const uniChar_t* inputData)
 {
 	// get the input lenght
@@ -588,14 +426,7 @@ void etk::UString::Add(int32_t currentID, const uniChar_t* inputData)
 	m_data.Insert(currentID, inputData, len);
 }
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
+
 void etk::UString::Add(int32_t currentID, const uniChar_t inputData)
 {
 	uniChar_t data[2];
@@ -605,14 +436,6 @@ void etk::UString::Add(int32_t currentID, const uniChar_t inputData)
 }
 
 
-/**
- * @brief 
- *
- * @param[in,out] 
- *
- * @return 
- *
- */
 void etk::UString::Remove(int32_t currentID, int32_t len)
 {
 	if (0 >= len) {
@@ -624,14 +447,6 @@ void etk::UString::Remove(int32_t currentID, int32_t len)
 }
 
 
-/**
- * @brief Remove all element in the UString
- *
- * @param ---
- *
- * @return ---
- *
- */
 void etk::UString::Clear(void)
 {
 	m_data.Clear();
@@ -639,20 +454,12 @@ void etk::UString::Clear(void)
 }
 
 
-
-/**
- * @brief find the first accurence after the position indicated
- *
- * @param[in] element Element that might be find in the UString
- * @param[in] startPos Stert position to begin the search
- *
- * @return the position of the first occurence or -1 if not find...
- *
- */
 int32_t etk::UString::FindForward(const char element, int32_t startPos) const
 {
 	return FindForward((uniChar_t)element, startPos);
 }
+
+
 int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos) const
 {
 	if (startPos < 0) {
@@ -669,19 +476,12 @@ int32_t etk::UString::FindForward(const uniChar_t element, int32_t startPos) con
 }
 
 
-/**
- * @brief find the first accurence before the position indicated.
- *
- * @param[in] element Element that might be find in the UString
- * @param[in] startPos Stert position to begin the search
- *
- * @return the position of the first occurence begining by the end or -1 if not find...
- *
- */
 int32_t etk::UString::FindBack(const char element, int32_t startPos) const
 {
 	return FindBack((uniChar_t)element, startPos);
 }
+
+
 int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos) const
 {
 	if (startPos < 0) {
@@ -698,15 +498,6 @@ int32_t etk::UString::FindBack(const uniChar_t element, int32_t startPos) const
 }
 
 
-/**
- * @brief Extract data from the data between two position
- *
- * @param[in] posStart Start position where to extract data
- * @param[in] posEnd End position where to extract data
- *
- * @return the extracted UString
- *
- */
 etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd) const
 {
 	etk::UString out;
@@ -726,14 +517,6 @@ etk::UString etk::UString::Extract(int32_t posStart, int32_t posEnd) const
 }
 
 
-/**
- * @brief Get a basic vector in int8 data with no \0 at the end of the UString
- *
- * @param ---
- *
- * @return The desired vector with data
- *
- */
 etk::Vector<uniChar_t> etk::UString::GetVector(void)
 {
 	etk::Vector<uniChar_t> out = m_data;
@@ -741,8 +524,6 @@ etk::Vector<uniChar_t> etk::UString::GetVector(void)
 	return out;
 }
 
-
-// Start With ...
 
 bool etk::UString::StartWith(const etk::UString& data)
 {

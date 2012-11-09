@@ -1,28 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/widget/Menu.cpp
- * @brief ewol Menu widget system (Sources)
  * @author Edouard DUPIN
- * @date 16/02/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
-
 
 #include <ewol/ewol.h>
 #include <ewol/eObject/EObject.h>
@@ -123,13 +105,6 @@ void ewol::Menu::AddSpacer(void)
 }
 
 
-/**
- * @brief Receive a message from an other EObject with a specific eventId and data
- * @param[in] CallerObject Pointer on the EObject that information came from
- * @param[in] eventId Message registered by this class
- * @param[in] data Data registered by this class
- * @return ---
- */
 void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	/*
@@ -219,12 +194,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 	}
 }
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- * @return ---
- */
+
 void ewol::Menu::OnObjectRemove(ewol::EObject * removeObject)
 {
 	ewol::SizerHori::OnObjectRemove(removeObject);

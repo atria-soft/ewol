@@ -1,28 +1,10 @@
 /**
- *******************************************************************************
- * @file os/eSystem.h
- * @brief Main Ewol system of management of the input events and drawing request (Header)
  * @author Edouard DUPIN
- * @date 27/01/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *O
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
-
 
 #ifndef __EWOL_SYSTEM_H__
 #define __EWOL_SYSTEM_H__

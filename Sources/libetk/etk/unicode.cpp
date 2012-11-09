@@ -1,28 +1,12 @@
 /**
- *******************************************************************************
- * @file unicode.cpp
- * @brief Editeur De N'ours : Abstraction Charset layer (Sources)
  * @author Edouard DUPIN
- * @date 18/01/2012
- * @par Project
- * Ewol TK
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
-// cf : http://unicode.org/fr/charts/symbols.html#CombiningDiacriticalMarks
+// see : http://unicode.org/fr/charts/symbols.html#CombiningDiacriticalMarks
 
 #include <etk/Types.h>
 #include <etk/Debug.h>
@@ -31,7 +15,6 @@
 
 
 
-// transform ISO <==> Unicode
 void unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, uniChar_t & output_Unicode)
 {
 	switch(inputCharset)
@@ -51,11 +34,6 @@ void unicode::convertIsoToUnicode(charset_te inputCharset, char input_ISO, uniCh
 		case EDN_CHARSET_ISO_8859_14:		output_Unicode = TableIso8859_14[(uint32_t)input_ISO&0xFF];			break;
 		case EDN_CHARSET_ISO_8859_15:		
 			output_Unicode = TableIso8859_15[(uint32_t)input_ISO&0xFF];
-			#if 0
-			if ((uint32_t)input_ISO&0xFF == 0xb0) {
-				printf("Change Element : 0x%02x ==> 0x%08x \n", (uint32_t)input_ISO&0xFF, output_Unicode);
-			}
-			#endif
 			break;
 		default :
 			TK_WARNING("Unknow charset ... " << inputCharset);
@@ -200,7 +178,6 @@ static uint32_t unicodeToUtf8(uniChar_t value)
 }
 
 
-// Transform UTF-8 <==> Unicode
 void unicode::convertUnicodeToUtf8(uniChar_t input_Unicode, char * output_UTF8)
 {
 	uint32_t value = unicodeToUtf8(input_Unicode);
@@ -479,16 +456,6 @@ int32_t unicode::convertUtf8ToIso(charset_te inputCharset, etk::Vector<char>& in
 	return 0;
 }
 
-/**
- * @brief Get the number of element of the curent UTF8 char (in the curent Buffer)
- *
- * @param[in]			data			pointer on the curent CHAR string (pointer on the allocated buffer)
- * @param[out]			size			Nb of char use in this UTF8 [0..4]
- * @param[out]			baseValid		true : the ase format of the UTF8 is CORRECT
- *
- * @return ---
- *
- */
 void unicode::Utf8_SizeElement(const char * data, int32_t lenMax , uint8_t &size, bool &baseValid)
 {
 	TK_ASSERT(0 <= lenMax, "size can not be < 0 ...");

@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file os/gui.X11.cpp
- * @brief Gui abstraction layer (Sources)
  * @author Edouard DUPIN
- * @date 20/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 
@@ -969,11 +953,7 @@ void X11_Run(void)
 //         ClipBoard AREA :
 // -------------------------------------------------------------------------
 
-/**
- * @brief Inform the Gui that we want to have a copy of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
+
 void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
@@ -1014,11 +994,7 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 	}
 }
 
-/**
- * @brief Inform the Gui that we are the new owner of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
+
 void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
@@ -1049,11 +1025,6 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 #define __class__ "guiInterface"
 
 
-/**
- * @brief Stop the current program
- * @param ---
- * @return ---
- */
 void guiInterface::Stop(void)
 {
 	#ifdef DEBUG_X11_EVENT
@@ -1062,33 +1033,18 @@ void guiInterface::Stop(void)
 	m_run = false;
 }
 
-/**
- * @brief Display the virtal keyboard (for touch system only)
- * @param ---
- * @return ---
- */
 void guiInterface::KeyboardShow(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-/**
- * @brief Hide the virtal keyboard (for touch system only)
- * @param ---
- * @return ---
- */
 void guiInterface::KeyboardHide(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-/**
- * @brief Change the current Windows size
- * @param size The requested size
- * @return ---
- */
 void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	#ifdef DEBUG_X11_EVENT
@@ -1098,11 +1054,6 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 }
 
 
-/**
- * @brief Change the current Windows position
- * @param pos The position where the winsdows might be placed.
- * @return ---
- */
 void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	#ifdef DEBUG_X11_EVENT
@@ -1112,11 +1063,6 @@ void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 }
 
 
-/**
- * @brief Get the current Windows position
- * @param pos The position where the winsdows is.
- * @return ---
- */
 void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
 {
 	#ifdef DEBUG_X11_EVENT
@@ -1189,11 +1135,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-/**
- * @brief Force the screen orientation (availlable on portable elements ...
- * @param orientation Selected orientation.
- * @return ---
- */
+
 void guiInterface::ForceOrientation(ewol::orientation_te orientation)
 {
 	// nothing to do ...

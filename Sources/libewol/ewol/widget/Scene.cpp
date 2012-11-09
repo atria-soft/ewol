@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/widget/Scene.cpp
- * @brief ewol Scene widget system (Sources)
  * @author Edouard DUPIN
- * @date 01/04/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <ewol/widget/Scene.h>
@@ -103,12 +87,6 @@ void ewol::Scene::OnDraw(DrawProperty& displayProp)
 }
 
 
-
-/**
- * @brief Periodic call of this widget
- * @param localTime curent system time
- * @return ---
- */
 void ewol::Scene::PeriodicCall(int64_t localTime)
 {
 	// First time : 
@@ -146,13 +124,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 	MarkToRedraw();
 }
 
-/**
- * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
- * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
- * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
- * @param ---
- * @return ---
- */
+
 void ewol::Scene::GenDraw(DrawProperty displayProp)
 {
 
@@ -186,11 +158,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 	ewol::openGL::Pop();
 }
 
-/**
- * @brief Convert the absolute position in the local Position (Relative)
- * @param[in] pos Absolute position that you request convertion
- * @return the relative position
- */
+
 etk::Vector2D<float> ewol::Scene::RelativePosition(etk::Vector2D<float>  pos)
 {
 	// Remove origin of the widget

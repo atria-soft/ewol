@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/eObject/EObjectManager.h
- * @brief basic ewol Object Manager (Header)
  * @author Edouard DUPIN
- * @date 27/02/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary :
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #ifndef __EWOL_E_OBJECT_MANAGER_H__

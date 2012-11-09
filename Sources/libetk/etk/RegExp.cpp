@@ -1,26 +1,11 @@
 /**
- *******************************************************************************
- * @file etk/RegExp.cpp
- * @brief Ewol Tool Kit : Regular expression annalyser (sources)
  * @author Edouard DUPIN
- * @date 04/04/2011
- * @par Project
- * Ewol TK
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
+
 
 #include <etk/RegExp.h>
 
@@ -80,14 +65,6 @@ const etk::convertionTable_ts etk::constConvertionTable[] = {
 const int32_t etk::constConvertionTableSize = sizeof(etk::constConvertionTable) / sizeof(etk::convertionTable_ts) ;
 
 
-/**
- * @brief Display the internal data of a node
- *
- * @param[in] data	element do display in the console
- *
- * @return ---
- *
- */
 void etk::DisplayData(etk::Vector<char> &data)
 {
 	int32_t i;
@@ -96,16 +73,6 @@ void etk::DisplayData(etk::Vector<char> &data)
 	}
 }
 
-/**
- * @brief Display of a part of the Regexp element
- *
- * @param[in] data		Vector where data is constain
- * @param[in] start		Position where the display might start
- * @param[in] stop		Position where the display might stop
- *
- * @return ---
- *
- */
 void etk::DisplayElem(etk::Vector<int16_t> &data, int32_t start, int32_t stop)
 {
 	int32_t i;
@@ -168,14 +135,6 @@ char * etk::levelSpace(int32_t level)
 }
 
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 int32_t etk::GetLenOfPTheseElem(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
@@ -217,14 +176,6 @@ int32_t etk::GetLenOfPTheseElem(etk::Vector<int16_t> &data, int32_t startPos)
 	return pos - startPos;
 }
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 int32_t etk::GetLenOfPThese(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
@@ -270,14 +221,6 @@ int32_t etk::GetLenOfPThese(etk::Vector<int16_t> &data, int32_t startPos)
 }
 
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 int32_t etk::GetLenOfBracket(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
@@ -314,14 +257,6 @@ int32_t etk::GetLenOfBracket(etk::Vector<int16_t> &data, int32_t startPos)
 }
 
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 int32_t etk::GetLenOfBrace(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
@@ -358,14 +293,6 @@ int32_t etk::GetLenOfBrace(etk::Vector<int16_t> &data, int32_t startPos)
 }
 
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 int32_t etk::GetLenOfNormal(etk::Vector<int16_t> &data, int32_t startPos)
 {
 	int32_t pos = startPos;
@@ -415,14 +342,6 @@ int32_t etk::GetLenOfNormal(etk::Vector<int16_t> &data, int32_t startPos)
 }
 
 
-/**
- * @brief
- *
- * @param[in,out] ---
- *
- * @return ---
- *
- */
 bool etk::ParseBrace(etk::Vector<int16_t> &data, int32_t &min, int32_t &max)
 {
 	//TK_INFO("parse {...} in "; DisplayElem(data); );

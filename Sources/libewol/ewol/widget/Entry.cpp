@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/widget/Entry.cpp
- * @brief ewol entry widget system (Sources)
  * @author Edouard DUPIN
- * @date 07/11/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <etk/unicode.h>
 #include <ewol/widget/Entry.h>
@@ -161,11 +144,7 @@ void ewol::Entry::Rectangle(float x, float y, float w, float h)
 	SetPoint(dxA, dyD);
 }
 
-/**
- * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
- * @param[in] displayProp properties of the current display
- * @return ---
- */
+
 void ewol::Entry::OnDraw(DrawProperty& displayProp)
 {
 	if (m_GLprogram==NULL) {
@@ -193,11 +172,6 @@ void ewol::Entry::OnDraw(DrawProperty& displayProp)
 }
 
 
-/**
- * @brief Event generated when a redraw is needed
- * @param ---
- * @return ---
- */
 void ewol::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
@@ -278,12 +252,7 @@ void ewol::Entry::OnRegenerateDisplay(void)
 	}
 }
 
-/**
- * @brief Change the cursor position with the curent position requested on the display
- * @param[in] pos Absolute position of the event
- * @note The display is automaticly requested when change apear.
- * @return ---
- */
+
 void ewol::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
 {
 	etk::Vector2D<float> relPos = RelativePosition(pos);
@@ -319,11 +288,7 @@ void ewol::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection
 	UpdateTextPosition();
 }
 
-/**
- * @brief Remove the selected area
- * @note This request a regeneration of the display
- * @return ---
- */
+
 void ewol::Entry::RemoveSelected(void)
 {
 	if (m_displayCursorPosSelection==m_displayCursorPos) {
@@ -343,11 +308,7 @@ void ewol::Entry::RemoveSelected(void)
 	MarkToRedraw();
 }
 
-/**
- * @brief Copy the selected data on the specify clipboard
- * @param[in] clipboardID Selected clipboard
- * @return ---
- */
+
 void ewol::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	if (m_displayCursorPosSelection==m_displayCursorPos) {
@@ -366,15 +327,6 @@ void ewol::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te cl
 }
 
 
-/**
- * @brief Event on an input of this Widget
- * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
- * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
- * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
- * @param[in] pos Absolute position of the event
- * @return true the event is used
- * @return false the event is not used
- */
 bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
@@ -469,13 +421,6 @@ bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventIn
 }
 
 
-/**
- * @brief Event on the keybord (if no shortcut has been detected before).
- * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
- * @param[in] unicodeValue key pressed by the user
- * @return true if the event has been used
- * @return false if the event has not been used
- */
 bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 {
 	if( typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
@@ -515,11 +460,6 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 }
 
 
-/**
- * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
- * @return true if the event has been used
- * @return false if the event has not been used
- */
 bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent)
 {
 	if(typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
@@ -548,12 +488,7 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 	return false;
 }
 
-/**
- * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
- * @note : need to have focus ...
- * @param[in] mode Mode of data requested
- * @return ---
- */
+
 void ewol::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	// remove curent selected data ...
@@ -574,13 +509,7 @@ void ewol::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardI
 	GenerateEventId(ewolEventEntryModify, m_data);
 }
 
-/**
- * @brief Receive a message from an other EObject with a specific eventId and data
- * @param[in] CallerObject Pointer on the EObject that information came from
- * @param[in] eventId Message registered by this class
- * @param[in] data Data registered by this class
- * @return ---
- */
+
 void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	ewol::Widget::OnReceiveMessage(CallerObject, eventId, data);
@@ -609,12 +538,7 @@ void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 	}
 }
 
-/**
- * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
- * @param ---
- * @return ---
- * @change m_displayStartPosition <== updated
- */
+
 void ewol::Entry::UpdateTextPosition(void)
 {
 	int32_t tmpSizeX = m_minSize.x;
@@ -647,11 +571,6 @@ void ewol::Entry::UpdateTextPosition(void)
 }
 
 
-/**
- * @brief Event of the focus has been grep by the current widget
- * @param ---
- * @return ---
- */
 void ewol::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
@@ -660,11 +579,6 @@ void ewol::Entry::OnGetFocus(void)
 }
 
 
-/**
- * @brief Event of the focus has been lost by the current widget
- * @param ---
- * @return ---
- */
 void ewol::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;

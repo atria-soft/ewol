@@ -1,26 +1,11 @@
 /**
- *******************************************************************************
- * @file ewol/widget/ButtonImage.h
- * @brief ewol Button Image widget system (header)
  * @author Edouard DUPIN
- * @date 06/06/2012
-  * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
+
 
 #ifndef __EWOL_BUTTON_IMAGE_H__
 #define __EWOL_BUTTON_IMAGE_H__

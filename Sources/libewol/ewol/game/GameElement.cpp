@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/game/GameElement.cpp
- * @brief ewol game element system (Sources)
  * @author Edouard DUPIN
- * @date 06/04/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <ewol/game/GameElement.h>
 
@@ -29,11 +12,6 @@
 #undef __class__
 #define __class__	"GameElement"
 
-/**
- * @brief Constructor : here are requested all the needed sprite and effect that can be used in the game
- * @param ---
- * @return ---
- */
 ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpName) : m_fileNameConfig(tmpName), m_sceneElement(sceneElement)
 {
 	m_uniqueId = sceneElement.GetUniqueId();

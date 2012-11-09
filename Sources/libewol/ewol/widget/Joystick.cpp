@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/widget/Joystick.cpp
- * @brief ewol Joystick widget system (Sources)
  * @author Edouard DUPIN
- * @date 30/03/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <ewol/widget/Joystick.h>
@@ -37,12 +21,6 @@ static etk::UString l_background("");
 static etk::UString l_foreground("");
 static float   l_ratio(1.0/7.0);
 
-/**
- * @brief Initilise the basic widget property ==> due to the android system
- * @note all widget that have template might have this initializer ...
- * @param ---
- * @return ---
- */
 void ewol::WIDGET_JoystickInit(void)
 {
 	l_displayBackground = true;
@@ -51,11 +29,6 @@ void ewol::WIDGET_JoystickInit(void)
 	l_ratio = 1.0/7.0;
 }
 
-/**
- * @brief Set the default ratio of the widget joystick
- * @param[in] newRatio the new ratio that might be set
- * @return ---
- */
 void ewol::WIDGET_JoystickDefaultRatio(float newRatio)
 {
 	if (newRatio > 1) {
@@ -65,11 +38,6 @@ void ewol::WIDGET_JoystickDefaultRatio(float newRatio)
 	EWOL_INFO("Set default Joystick ratio at " << l_ratio);
 }
 
-/**
- * @brief Set the default Background of the widget joystick
- * @param[in] imageNameInData the new rbackground that might be set
- * @return ---
- */
 void ewol::WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display)
 {
 	// TODO : check if it existed
@@ -78,11 +46,6 @@ void ewol::WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool d
 	EWOL_INFO("Set default Joystick background at " << l_background << " Display it=" << l_displayBackground);
 }
 
-/**
- * @brief Set the default Foreground of the widget joystick
- * @param[in] imageNameInData the new Foreground that might be set
- * @return ---
- */
 void ewol::WIDGET_JoystickDefaultForeground(etk::UString imageNameInData)
 {
 	// TODO : check if it existed
@@ -128,13 +91,6 @@ ewol::Joystick::~Joystick(void)
 }
 
 
-/**
- * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
- *        By default this save the widget availlable size in the widget size
- * @param[in] availlableX Availlable horisantal pixel size
- * @param[in] availlableY Availlable vertical pixel size
- * @return ---
- */
 bool ewol::Joystick::CalculateSize(float availlableX, float availlableY)
 {
 	float minimumSize = etk_min(availlableX, availlableY);
@@ -196,16 +152,6 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-
-/**
- * @brief Event on an input of this Widget
- * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
- * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
- * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
- * @param[in] pos Absolute position of the event
- * @return true the event is used
- * @return false the event is not used
- */
 bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (1 == IdInput) {
@@ -264,11 +210,6 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 }
 
 
-/**
- * @brief Set the ratio of the widget joystick
- * @param[in] newRatio the new ratio that might be set
- * @return ---
- */
 void ewol::Joystick::Ratio(float newRatio)
 {
 	if (newRatio > 1) {
@@ -278,11 +219,7 @@ void ewol::Joystick::Ratio(float newRatio)
 	EWOL_INFO("Set default Joystick ratio at " << m_ratio);
 }
 
-/**
- * @brief Set the Background of the widget joystick
- * @param[in] imageNameInData the new rbackground that might be set
- * @return ---
- */
+
 void ewol::Joystick::Background(etk::UString imageNameInData, bool display)
 {
 	// TODO : check if it existed
@@ -291,11 +228,7 @@ void ewol::Joystick::Background(etk::UString imageNameInData, bool display)
 	EWOL_INFO("Set default Joystick background at " << m_background << " Display it=" << m_displayBackground);
 }
 
-/**
- * @brief Set the Foreground of the widget joystick
- * @param[in] imageNameInData the new Foreground that might be set
- * @return ---
- */
+
 void ewol::Joystick::Foreground(etk::UString imageNameInData)
 {
 	// TODO : check if it existed
@@ -304,12 +237,6 @@ void ewol::Joystick::Foreground(etk::UString imageNameInData)
 }
 
 
-/**
- * @brief Get the property of the joystick
- * @param[out] distance distance to the center
- * @param[out] angle angle of the joy
- * @return ---
- */
 void ewol::Joystick::GetProperty(float& distance, float& angle)
 {
 	distance = m_distance;

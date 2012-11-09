@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/ShortCutManager.cpp
- * @brief ewol shortCut manager (Sources)
  * @author Edouard DUPIN
- * @date 22/02/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <ewol/ShortCutManager.h>
 #include <ewol/eObject/EObject.h>
@@ -108,6 +91,7 @@ void ewol::shortCut::Add(const char * descriptiveString, const char * generateEv
 	if(NULL != tmp) {
 		meta = true;
 	}
+	// TOTDO : Generate a simple Table ...
 	if(NULL != strstr(descriptiveString, "F12") ) {
 		ewol::shortCut::Add(shift, control, alt, meta, 0, ewol::EVENT_KB_MOVE_TYPE_F12, generateEventId, data);
 	} else if(NULL != strstr(descriptiveString, "F11") ) {

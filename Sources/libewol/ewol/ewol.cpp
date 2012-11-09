@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/ewol.cpp
- * @brief Main code of ewol (sources)
  * @author Edouard DUPIN
- * @date 17/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <ewol/ewol.h>
 #include <ewol/widget/WidgetManager.h>
@@ -158,12 +141,6 @@ void ewol::SetTitle(etk::UString title)
 }
 
 
-/**
- * @brief This is to transfert the event from one widget to another one
- * @param source the widget where the event came from
- * @param destination the widget where the event mitgh be generated now
- * @return ---
- */
 void ewol::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
 {
 	eSystem::InputEventTransfertWidget(source, destination);

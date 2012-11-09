@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file ewol/ResourcesManager.h
- * @brief ewol resources manager template (header)
  * @author Edouard DUPIN
- * @date 24/08/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
@@ -81,12 +64,6 @@ void ewol::resource::Display(void)
 	EWOL_INFO("Resources ---");
 }
 
-/**
- * @brief Reloade file resources
- * @note : Does not reload all resources !!!
- * @param ---
- * @return ---
- */
 void ewol::resource::ReLoadResources(void)
 {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");

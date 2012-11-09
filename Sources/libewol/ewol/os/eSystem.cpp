@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file os/eSystem.cpp
- * @brief Main Ewol thread for the abstraction of the OS problematics (Sources)
  * @author Edouard DUPIN
- * @date 27/01/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 
@@ -45,12 +29,6 @@ static ewol::eSystemInput l_managementInput;
 
 
 
-/**
- * @brief This is to transfert the event from one widget to another one
- * @param source the widget where the event came from
- * @param destination the widget where the event mitgh be generated now
- * @return ---
- */
 void eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
 {
 	l_managementInput.TransfertEvent(source, destination);
@@ -519,44 +497,25 @@ bool eSystem::Draw(bool displayEveryTime)
 	return true;
 }
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- * @return ---
- */
+
 void eSystem::OnObjectRemove(ewol::EObject * removeObject)
 {
 	l_managementInput.OnObjectRemove(removeObject);
 }
 
-/**
- * @brief reset event management for the IO like Input ou Mouse or keyborad
- * @param ---
- * @return ---
- */
+
 void eSystem::ResetIOEvent(void)
 {
 	l_managementInput.NewLayerSet();
 }
 
 
-/**
- * @brief Inform the system that the OpenGL constext has been destroy ==> use to automaticly reload the texture and other thinks ...
- * @param ---
- * @return ---
- */
 void eSystem::OpenGlContextDestroy(void)
 {
 	ewol::resource::ContextHasBeenDestroyed();
 }
 
 
-/**
- * @brief set the current windows to display :
- * @param windows windows that might be displayed
- * @return ---
- */
 void eSystem::SetCurrentWindows(ewol::Windows * windows)
 {
 	// set the new pointer as windows system
@@ -566,33 +525,18 @@ void eSystem::SetCurrentWindows(ewol::Windows * windows)
 }
 
 
-/**
- * @brief Get the current windows that is displayed
- * @param ---
- * @return the current handle on the windows (can be null)
- */
 ewol::Windows* eSystem::GetCurrentWindows(void)
 {
 	return windowsCurrent;
 }
 
 
-/**
- * @brief Get the current windows size
- * @param ---
- * @return the current size ...
- */
 etk::Vector2D<int32_t> eSystem::GetSize(void)
 {
 	return windowsSize;
 }
 
 
-/**
- * @brief Redraw all the windows
- * @param ---
- * @return ---
- */
 void eSystem::ForceRedrawAll(void)
 {
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
@@ -602,11 +546,7 @@ void eSystem::ForceRedrawAll(void)
 	}
 }
 
-/**
- * @brief Inform the system that the Application has been killed
- * @param ---
- * @return ---
- */
+
 void eSystem::OnKill(void)
 {
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();

@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewolAndroidAbstraction.cpp
- * @brief User abstraction for Android (Sources)
  * @author Edouard DUPIN
- * @date 14/12/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <jni.h>
@@ -512,11 +496,6 @@ int64_t guiInterface::GetTime(void)
 }
 
 
-/**
- * @brief Set the new title of the windows
- * @param title New desired title
- * @return ---
- */
 void guiInterface::SetTitle(etk::UString& title)
 {
 	// can not set the title in Android ...
@@ -528,11 +507,6 @@ void guiInterface::SetTitle(etk::UString& title)
 // -------------------------------------------------------------------------
 
 bool l_clipBoardOwnerStd = false;
-/**
- * @brief Inform the Gui that we want to have a copy of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
 void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	// this is to force the local system to think we have the buffer
@@ -560,11 +534,6 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 	}
 }
 
-/**
- * @brief Inform the Gui that we are the new owner of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
 void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
@@ -623,11 +592,6 @@ void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
 	size.y = 0;
 }
 
-/**
- * @brief Force the screen orientation (availlable on portable elements ...
- * @param orientation Selected orientation.
- * @return ---
- */
 void guiInterface::ForceOrientation(ewol::orientation_te orientation)
 {
 	SendJava_OrientationChange((int32_t)orientation);

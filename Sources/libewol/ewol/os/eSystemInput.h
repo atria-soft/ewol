@@ -1,28 +1,10 @@
 /**
- *******************************************************************************
- * @file os/eSystemInput.h
- * @brief Input (mouse,finger) abstraction layer (header)
  * @author Edouard DUPIN
- * @date 00/04/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
-
 
 #ifndef __EWOL_SYSTEM_INPUT_H__
 #define __EWOL_SYSTEM_INPUT_H__
@@ -63,7 +45,23 @@ namespace ewol
 			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
 			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
 			void CleanElement(InputPoperty_ts *eventTable, int32_t idInput);
+			/**
+			 * @brief generate the event on the destinated widger
+			 * @param[in] type Type of the event that might be sended
+			 * @param[in] destWidget Pointer on the requested widget that element might be sended
+			 * @param[in] IdInput Id of the event (PC : [0..9] and touch : [1..9])
+			 * @param[in] typeEvent type of the eventg generated
+			 * @param[in] pos position of the event
+			 * @return true if event has been greped
+			 */
 			bool localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float> pos);
+			/**
+			 * @brief Convert the system event id in the correct EWOL id depending of the system management mode
+			 * This function find the next input id unused on the specifiic widget ==> on PC, the ID does not change (IHM is not the same
+			 * @param[in] destWidget Pointer of the widget destination
+			 * @param[in] realInputId System Id
+			 * @return the ewol input id
+			 */
 			int32_t localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId);
 		public:
 			eSystemInput(void);

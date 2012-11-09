@@ -1,26 +1,11 @@
 /**
- *******************************************************************************
- * @file os/gui.Windows.cpp
- * @brief Gui abstraction layer for windows (Sources)
  * @author Edouard DUPIN
- * @date 20/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
+
 
 #include <ewol/Debug.h>
 #include <ewol/ewol.h>
@@ -50,11 +35,6 @@ bool inputIsPressed[20];
 
 static ewol::specialKey_ts guiKeyBoardMode;
 
-/**
- * @brief Set the new title of the windows
- * @param title New desired title
- * @return ---
- */
 void guiInterface::SetTitle(etk::UString& title)
 {
 	// TODO ...
@@ -65,11 +45,6 @@ void guiInterface::SetTitle(etk::UString& title)
 
 bool m_run = true;
 
-/**
- * @brief Stop the current program
- * @param ---
- * @return ---
- */
 void guiInterface::Stop(void)
 {
 	m_run = false;
@@ -78,22 +53,12 @@ void guiInterface::Stop(void)
 }
 
 
-/**
- * @brief Display the virtal keyboard (for touch system only)
- * @param ---
- * @return ---
- */
 void guiInterface::KeyboardShow(void)
 {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-/**
- * @brief Hide the virtal keyboard (for touch system only)
- * @param ---
- * @return ---
- */
 void guiInterface::KeyboardHide(void)
 {
 	// nothing to do : No keyboard on computer ...
@@ -101,11 +66,6 @@ void guiInterface::KeyboardHide(void)
 
 
 
-/**
- * @brief Change the current Windows size
- * @param size The requested size
- * @return ---
- */
 void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
@@ -116,21 +76,11 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 	// TODO : Later
 }
 
-/**
- * @brief Change the current Windows position
- * @param pos The position where the winsdows might be placed.
- * @return ---
- */
 void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	// TODO : Later
 }
 
-/**
- * @brief Get the current Windows position
- * @param pos The position where the winsdows is.
- * @return ---
- */
 void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
 {
 	// TODO : Later
@@ -145,11 +95,7 @@ void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
 // -------------------------------------------------------------------------
 
 bool l_clipBoardOwnerStd = false;
-/**
- * @brief Inform the Gui that we want to have a copy of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
+
 void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	// this is to force the local system to think we have the buffer
@@ -177,11 +123,7 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 	}
 }
 
-/**
- * @brief Inform the Gui that we are the new owner of the clipboard
- * @param ID of the clipboard (STD/SELECTION) only apear here
- * @return ---
- */
+
 void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)

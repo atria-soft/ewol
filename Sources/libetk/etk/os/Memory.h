@@ -1,27 +1,11 @@
 /**
- *******************************************************************************
- * @file etk/os/Memory.h
- * @brief Ewol Tool Kit : Memory implementation (headers)
  * @author Edouard DUPIN
- * @date 12/01/2011
- * @par Project
- * Ewol TK
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
- 
+
 #ifndef __ETK_TOOLS_MEMORY_H__
 #define __ETK_TOOLS_MEMORY_H__
 

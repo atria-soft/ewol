@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/EObject.cpp
- * @brief basic ewol object (Sources)
  * @author Edouard DUPIN
- * @date 24/02/2012
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <ewol/eObject/EObject.h>
@@ -118,9 +102,6 @@ void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const messageId, e
 
 
 
-/**
- * @brief Constructor
- */
 ewol::EObject::EObject(void)
 {
 	static int32_t ss_globalUniqueId = 0;
@@ -130,9 +111,6 @@ ewol::EObject::EObject(void)
 	ewol::EObjectManager::Add(this);
 }
 
-/**
- * @brief Destructor
- */
 ewol::EObject::~EObject(void)
 {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
@@ -150,33 +128,18 @@ ewol::EObject::~EObject(void)
 }
 
 
-/**
- * @brief Auto-destroy the object
- * @param ---
- * @return ---
- */
 void ewol::EObject::AutoDestroy(void)
 {
 	ewol::EObjectManager::AutoRemove(this);
 }
 
 
-/**
- * @brief Get the UniqueId of the EObject
- * @param ---
- * @return the requested ID
- */
 int32_t ewol::EObject::GetId(void)
 {
 	return m_uniqueId;
 };
 
 
-/**
- * @brief Add a specific event Id in the list to prevent wrong link on a EObject
- * @param[in] generateEventId event Id to add
- * @return ---
- */
 void ewol::EObject::AddEventId(const char * generateEventId)
 {
 	if (NULL != generateEventId) {
@@ -185,12 +148,6 @@ void ewol::EObject::AddEventId(const char * generateEventId)
 }
 
 
-/**
- * @brief Generate event on all registered EObject
- * @param[in] generateEventId event Id that is curetly generated
- * @param[in] data data associated with the event
- * @return ---
- */
 void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString data)
 {
 	// for every element registered ...
@@ -206,34 +163,19 @@ void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::USt
 	}
 }
 
-/**
- * @brief Generate Multicast event on all EObject requested the event
- * @param[in] messageId Event Id that is generated
- * @param[in] data String that is send at all the destinations
- * @return ---
- */
+
 void ewol::EObject::SendMultiCast(const char* const messageId, etk::UString data)
 {
 	MultiCastSend(this, messageId, data);
 }
 
-/**
- * @brief Register of the arrival of a Multicast message
- * @param[in] messageId Event Id waiting for...
- * @return ---
- */
+
 void ewol::EObject::RegisterMultiCast(const char* const messageId)
 {
 	MultiCastAdd(this, messageId);
 }
 
-/**
- * @brief Register an EObject over an other to get event on the second...
- * @param[in] destinationObject pointer on the object that might be call when an event is generated
- * @param[in] eventId Event generate inside the object
- * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
- * @return true if register corectly done
- */
+
 void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated)
 {
 	if (NULL == destinationObject) {
@@ -282,11 +224,6 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 }
 
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
- * @return ---
- */
 void ewol::EObject::OnObjectRemove(ewol::EObject * removeObject)
 {
 	for(int32_t iii=m_externEvent.Size()-1; iii>=0; iii--) {

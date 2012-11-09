@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file etk/tool.cpp
- * @brief Ewol Tool Kit : generique tools (Sources)
  * @author Edouard DUPIN
- * @date 26/06/2012
- * @par Project
- * Ewol TK
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <etk/tool.h>

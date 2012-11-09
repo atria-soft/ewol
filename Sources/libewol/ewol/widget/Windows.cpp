@@ -1,25 +1,9 @@
 /**
- *******************************************************************************
- * @file ewol/Windows.cpp
- * @brief ewol window system (sources)
  * @author Edouard DUPIN
- * @date 20/10/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
 
 #include <etk/Types.h>
@@ -90,12 +74,7 @@ bool ewol::Windows::CalculateSize(float availlableX, float availlableY)
 	return true;
 }
 
-/**
- * @brief Get the widget at the specific windows absolute position
- * @param[in] pos gAbsolute position of the requested widget knowledge
- * @return NULL No widget found
- * @return pointer on the widget found
- */
+
 ewol::Widget * ewol::Windows::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// calculate relative position
@@ -200,12 +179,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	eSystem::ResetIOEvent();
 }
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- * @return ---
- */
+
 void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 

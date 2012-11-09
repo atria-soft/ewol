@@ -1,27 +1,10 @@
 /**
- *******************************************************************************
- * @file os/eSystemInput.cpp
- * @brief Input (mouse,finger) abstraction layer (Sources)
  * @author Edouard DUPIN
- * @date 00/04/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
-
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
@@ -80,15 +63,6 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
 }
 
 
-/**
- * @brief generate the event on the destinated widger
- * @param[in] type Type of the event that might be sended
- * @param[in] destWidget Pointer on the requested widget that element might be sended
- * @param[in] IdInput Id of the event (PC : [0..9] and touch : [1..9])
- * @param[in] typeEvent type of the eventg generated
- * @param[in] pos position of the event
- * @return true if event has been greped
- */
 bool ewol::eSystemInput::localEventInput(ewol::inputType_te type, ewol::Widget* destWidget, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (NULL != destWidget) {
@@ -102,12 +76,6 @@ bool ewol::eSystemInput::localEventInput(ewol::inputType_te type, ewol::Widget* 
 }
 
 
-/**
- * @brief This is to transfert the event from one widget to another one
- * @param source the widget where the event came from
- * @param destination the widget where the event mitgh be generated now
- * @return ---
- */
 void ewol::eSystemInput::TransfertEvent(ewol::Widget* source, ewol::Widget* destination)
 {
 	if(    NULL == source
@@ -139,12 +107,6 @@ void ewol::eSystemInput::TransfertEvent(ewol::Widget* source, ewol::Widget* dest
 	}
 }
 
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- * @return ---
- */
 void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
@@ -159,11 +121,6 @@ void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
 	}
 }
 
-/**
- * @brief a new layer on the windows is set ==> might remove all the property of the current element ...
- * @param ---
- * @return ---
- */
 void ewol::eSystemInput::NewLayerSet(void)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
@@ -195,13 +152,7 @@ ewol::eSystemInput::~eSystemInput(void)
 	Reset();
 }
 
-/**
- * @brief Convert the system event id in the correct EWOL id depending of the system management mode
- * This function find the next input id unused on the specifiic widget ==> on PC, the ID does not change (IHM is not the same
- * @param[in] destWidget Pointer of the widget destination
- * @param[in] realInputId System Id
- * @return the ewol input id
- */
+
 int32_t ewol::eSystemInput::localGetDestinationId(ewol::inputType_te type, ewol::Widget* destWidget, int32_t realInputId)
 {
 	if (type == ewol::INPUT_TYPE_FINGER) {
