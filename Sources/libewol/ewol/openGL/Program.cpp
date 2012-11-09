@@ -22,7 +22,6 @@
  *******************************************************************************
  */
 
-#ifdef __VIDEO__OPENGL_ES_2
 
 #include <etk/Types.h>
 #include <ewol/Debug.h>
@@ -645,4 +644,3 @@ void ewol::Program::UnUse(void)
 }
 
 
-#endif

@@ -22,7 +22,6 @@
  *******************************************************************************
  */
 
-#ifdef __VIDEO__OPENGL_ES_2
 
 #include <etk/Types.h>
 #include <etk/os/FSNode.h>
@@ -168,5 +167,4 @@ void ewol::Shader::Reload(void)
 }
 
 
-#endif
 

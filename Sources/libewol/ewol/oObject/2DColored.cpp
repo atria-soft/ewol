@@ -35,16 +35,14 @@ ewol::OObject2DColored::OObject2DColored(void)
 {
 	m_triElement = 0;
 	SetColor(1.0, 1.0, 1.0, 1.0);
-	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("DATA:color.prog");
-		// get the shader resource :
-		m_GLPosition = 0;
-		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
-			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
-			m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
-		}
-	#endif
+	etk::UString tmpString("DATA:color.prog");
+	// get the shader resource :
+	m_GLPosition = 0;
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+		m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
+		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+	}
 }
 
 
@@ -52,9 +50,7 @@ ewol::OObject2DColored::~OObject2DColored(void)
 {
 	m_coord.Clear();
 	m_coordColor.Clear();
-	#ifdef __VIDEO__OPENGL_ES_2
-		ewol::resource::Release(m_GLprogram);
-	#endif
+	ewol::resource::Release(m_GLprogram);
 }
 
 
@@ -63,44 +59,22 @@ void ewol::OObject2DColored::Draw(void)
 	if (m_coord.Size()<=0) {
 		return;
 	}
-	#ifdef __VIDEO__OPENGL_ES_2
-		if (m_GLprogram==NULL) {
-			EWOL_ERROR("No shader ...");
-			return;
-		}
-		//glScalef(m_scaling.x, m_scaling.y, 1.0);
-		m_GLprogram->Use();
-		// set Matrix : translation/positionMatrix
-		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-		// position :
-		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
-		// color :
-		m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
-		// Request the draw of the elements : 
-		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-		m_GLprogram->UnUse();
-	#else
-		glPushMatrix();
-		// Enable Pointers
-		glEnableClientState( GL_VERTEX_ARRAY );
-		glEnableClientState( GL_COLOR_ARRAY );
-		
-		glScalef(m_scaling.x, m_scaling.y, 1.0);
-		
-		// Set the vertex pointer to our vertex data
-		glVertexPointer(2, GL_FLOAT, 0, &m_coord[0] );
-		glColorPointer(4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-		// Render : draw all of the triangles at once
-		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
-		//glDrawElements( GL_TRIANGLES, 0, m_coord.Size());
-		//EWOL_DEBUG("Draw ..." << m_coord.Size()/3 << " triangle(s)");
-		// Disable Pointers
-		glDisableClientState( GL_COLOR_ARRAY );
-		glDisableClientState( GL_VERTEX_ARRAY );
-		glPopMatrix();
-	#endif
-
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	//glScalef(m_scaling.x, m_scaling.y, 1.0);
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
+	// color :
+	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	// Request the draw of the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
 }
 
 void ewol::OObject2DColored::Clear(void)

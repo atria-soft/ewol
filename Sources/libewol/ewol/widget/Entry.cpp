@@ -68,20 +68,18 @@ void ewol::Entry::Init(void)
 	ShortCutAdd("ctrl+v",       ewolEventEntryPaste);
 	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
-	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("THEME:GUI:widgetEntry.prog");
-		// get the shader resource :
-		m_GLPosition = 0;
-		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition     = m_GLprogram->GetAttribute("EW_coord2d");
-			m_GLMatrix       = m_GLprogram->GetUniform("EW_MatrixTransformation");
-			m_GLsizeBorder   = m_GLprogram->GetUniform("EW_sizeBorder");
-			m_GLsizePadding  = m_GLprogram->GetUniform("EW_sizePadding");
-			m_GLsize         = m_GLprogram->GetUniform("EW_size");
-			m_GLposText      = m_GLprogram->GetUniform("EW_posText");
-			m_GLstate        = m_GLprogram->GetUniform("EW_state");
-		}
-	#endif
+	etk::UString tmpString("THEME:GUI:widgetEntry.prog");
+	// get the shader resource :
+	m_GLPosition = 0;
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+		m_GLPosition     = m_GLprogram->GetAttribute("EW_coord2d");
+		m_GLMatrix       = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		m_GLsizeBorder   = m_GLprogram->GetUniform("EW_sizeBorder");
+		m_GLsizePadding  = m_GLprogram->GetUniform("EW_sizePadding");
+		m_GLsize         = m_GLprogram->GetUniform("EW_size");
+		m_GLposText      = m_GLprogram->GetUniform("EW_posText");
+		m_GLstate        = m_GLprogram->GetUniform("EW_state");
+	}
 }
 
 ewol::Entry::Entry(void)
@@ -134,37 +132,34 @@ etk::UString ewol::Entry::GetValue(void)
 
 
 
-#ifdef __VIDEO__OPENGL_ES_2
+void ewol::Entry::SetPoint(float x, float y)
+{
+	etk::Vector2D<float> triangle(x, y);
+	m_coord.PushBack(triangle);
+}
 
-	void ewol::Entry::SetPoint(float x, float y)
-	{
-		etk::Vector2D<float> triangle(x, y);
-		m_coord.PushBack(triangle);
-	}
-	
-	void ewol::Entry::Rectangle(float x, float y, float w, float h)
-	{
-		m_coord.Clear();
-		/* Bitmap position
-		 *      xA     xB
-		 *   yC *------*
-		 *      |      |
-		 *      |      |
-		 *   yD *------*
-		 */
-		float dxA = x;
-		float dxB = x + w;
-		float dyC = y;
-		float dyD = y + h;
-		SetPoint(dxA, dyD);
-		SetPoint(dxA, dyC);
-		SetPoint(dxB, dyC);
-	
-		SetPoint(dxB, dyC);
-		SetPoint(dxB, dyD);
-		SetPoint(dxA, dyD);
-	}
-#endif
+void ewol::Entry::Rectangle(float x, float y, float w, float h)
+{
+	m_coord.Clear();
+	/* Bitmap position
+	 *      xA     xB
+	 *   yC *------*
+	 *      |      |
+	 *      |      |
+	 *   yD *------*
+	 */
+	float dxA = x;
+	float dxB = x + w;
+	float dyC = y;
+	float dyD = y + h;
+	SetPoint(dxA, dyD);
+	SetPoint(dxA, dyC);
+	SetPoint(dxB, dyC);
+
+	SetPoint(dxB, dyC);
+	SetPoint(dxB, dyD);
+	SetPoint(dxA, dyD);
+}
 
 /**
  * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
@@ -173,28 +168,26 @@ etk::UString ewol::Entry::GetValue(void)
  */
 void ewol::Entry::OnDraw(DrawProperty& displayProp)
 {
-	#ifdef __VIDEO__OPENGL_ES_2
-		if (m_GLprogram==NULL) {
-			EWOL_ERROR("No shader ...");
-			return;
-		}
-		//glScalef(m_scaling.x, m_scaling.y, 1.0);
-		m_GLprogram->Use();
-		// set Matrix : translation/positionMatrix
-		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-		// position :
-		m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
-		// all entry parameters :
-		m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
-		m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
-		m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
-		m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
-		m_GLprogram->Uniform1i(m_GLstate, 0);
-		// Request the draw of the elements : 
-		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-		m_GLprogram->UnUse();
-	#endif
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	//glScalef(m_scaling.x, m_scaling.y, 1.0);
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
+	// all entry parameters :
+	m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
+	m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
+	m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
+	m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
+	m_GLprogram->Uniform1i(m_GLstate, 0);
+	// Request the draw of the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
@@ -246,19 +239,11 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		m_oObjectText.Text(textPos, m_data);
 		m_oObjectText.clippingDisable();
 		
-		#ifndef __VIDEO__OPENGL_ES_2
-			m_oObjectDecoration.SetColor(m_textColorBg);
-			m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
-			m_oObjectDecoration.SetColor(m_textColorFg);
-			m_oObjectDecoration.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, m_borderSize);
-		#else
-			m_pos[0] = m_borderSize+2*drawClipping.x;
-			m_pos[1] = m_borderSize+2*drawClipping.y;
-			m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClipping.x);
-			m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClipping.y);
-			
-			Rectangle(0, 0, m_size.x, m_size.y);
-		#endif
+		m_pos[0] = m_borderSize+2*drawClipping.x;
+		m_pos[1] = m_borderSize+2*drawClipping.y;
+		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClipping.x);
+		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClipping.y);
+		Rectangle(0, 0, m_size.x, m_size.y);
 		int32_t pos1 = m_displayCursorPosSelection;
 		int32_t pos2 = m_displayCursorPos;
 		if(m_displayCursorPosSelection>m_displayCursorPos) {

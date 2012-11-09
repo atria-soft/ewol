@@ -45,23 +45,17 @@ namespace ewol {
 			int32_t Text(etk::Vector2D<float>  textPos, const etk::UString& unicodeString);
 			int32_t Text(etk::Vector2D<float>  textPos, const uniChar_t     unicodeChar);
 		protected:
-			#ifdef __VIDEO__OPENGL_ES_2
-				ewol::Program* m_GLprogram;
-				int32_t        m_GLPosition;
-				int32_t        m_GLMatrix;
-				int32_t        m_GLColor;
-				int32_t        m_GLtexture;
-				int32_t        m_GLtexID;
-			#endif
-			ewol::TexturedFont*             m_font;          //!< ewol font system
-			draw::Color                     m_color;         //!< tmp text color ...
+			ewol::Program* m_GLprogram;
+			int32_t        m_GLPosition;
+			int32_t        m_GLMatrix;
+			int32_t        m_GLColor;
+			int32_t        m_GLtexture;
+			int32_t        m_GLtexID;
+			ewol::TexturedFont*                  m_font;          //!< ewol font system
+			draw::Color                          m_color;         //!< tmp text color ...
 			etk::Vector<etk::Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::Vector<texCoord_ts>        m_coordTex;      //!< internal texture coordinate for every point
-			#ifdef __VIDEO__OPENGL_ES_2
-				etk::Vector<draw::Colorf>   m_coordColor;    //!< internal color of the different point
-			#else
-				etk::Vector<draw::Color>    m_coordColor;    //!< internal color of the different point
-			#endif
+			etk::Vector<texCoord_ts>             m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
 		public:
 			void SetFont(etk::UString fontName);
 			void SetSize(int32_t fontSize);

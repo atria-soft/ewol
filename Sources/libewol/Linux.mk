@@ -8,9 +8,8 @@ LOCAL_MODULE := ewol
 LOCAL_CONFIG_FILES := Config.in
 
 # get the tag of the current project : 
-LOCAL_VERSION_TAG=$(shell cd $(LOCAL_PATH) ; git describe --tags)
-LOCAL_VERSION_TAG_SHORT=$(shell cd $(LOCAL_PATH) ; git describe --tags --abbrev=0)
-$(info $(LOCAL_MODULE) version TAG : $(LOCAL_VERSION_TAG))
+LOCAL_VERSION=$(shell cat $(LOCAL_PATH)/tag)
+$(info [TAG:$(LOCAL_MODULE)] $(LOCAL_VERSION))
 
 # name of the dependency
 LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua portaudio
@@ -25,14 +24,10 @@ LOCAL_EXPORT_LDLIBS := -lGL -lX11
 
 
 LOCAL_CFLAGS := -Wno-write-strings \
-                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG_SHORT)-$(BUILD_DIRECTORY_MODE)\"" \
+                -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG)-$(BUILD_DIRECTORY_MODE)\"" \
                 -Wall
 
-#ifneq ("$(CONFIG__VIDEO__OPENGL_ES_2)","")
-LOCAL_CFLAGS += -D__VIDEO__OPENGL_ES_2
-LOCAL_EXPORT_CFLAGS := -D__VIDEO__OPENGL_ES_2
-$(info Compilation For openGL-ES-v2 compatibility)
-#endif
+LOCAL_EXPORT_CFLAGS := 
 
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk

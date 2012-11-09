@@ -78,29 +78,27 @@ void ewol::Button::Init(void)
 	m_textColorFg = draw::color::black;
 	
 	SetCanHaveFocus(true);
-	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("THEME:GUI:widgetButton.conf");
-		if (true == ewol::resource::Keep(tmpString, m_config) ) {
-			m_confIdPaddingX   = m_config->Request("PaddingX");
-			m_confIdPaddingY   = m_config->Request("PaddingY");
-			m_confIdChangeTime = m_config->Request("ChangeTime");
-		}
-		tmpString ="THEME:GUI:widgetButton.prog";
-		// get the shader resource :
-		m_GLPosition = 0;
-		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
-			m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
-			// Widget property ==> for the Vertex shader
-			m_GLwidgetProperty.m_size       = m_GLprogram->GetUniform("EW_widgetProperty.size");
-			m_GLwidgetProperty.m_insidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
-			m_GLwidgetProperty.m_insideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
-			// status property ==> for the fragment shader
-			m_GLstatus.m_stateOld   = m_GLprogram->GetUniform("EW_status.stateOld");
-			m_GLstatus.m_stateNew   = m_GLprogram->GetUniform("EW_status.stateNew");
-			m_GLstatus.m_transition = m_GLprogram->GetUniform("EW_status.transition");
-		}
-	#endif
+	etk::UString tmpString("THEME:GUI:widgetButton.conf");
+	if (true == ewol::resource::Keep(tmpString, m_config) ) {
+		m_confIdPaddingX   = m_config->Request("PaddingX");
+		m_confIdPaddingY   = m_config->Request("PaddingY");
+		m_confIdChangeTime = m_config->Request("ChangeTime");
+	}
+	tmpString ="THEME:GUI:widgetButton.prog";
+	// get the shader resource :
+	m_GLPosition = 0;
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+		m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
+		m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		// Widget property ==> for the Vertex shader
+		m_GLwidgetProperty.m_size       = m_GLprogram->GetUniform("EW_widgetProperty.size");
+		m_GLwidgetProperty.m_insidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
+		m_GLwidgetProperty.m_insideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
+		// status property ==> for the fragment shader
+		m_GLstatus.m_stateOld   = m_GLprogram->GetUniform("EW_status.stateOld");
+		m_GLstatus.m_stateNew   = m_GLprogram->GetUniform("EW_status.stateNew");
+		m_GLstatus.m_transition = m_GLprogram->GetUniform("EW_status.transition");
+	}
 }
 
 ewol::Button::Button(void)
@@ -175,37 +173,35 @@ bool ewol::Button::GetValue(void)
 	return false;
 }
 
-#ifdef __VIDEO__OPENGL_ES_2
 
-	void ewol::Button::SetPoint(float x, float y)
-	{
-		etk::Vector2D<float> triangle(x, y);
-		m_coord.PushBack(triangle);
-	}
-	
-	void ewol::Button::Rectangle(float x, float y, float w, float h)
-	{
-		m_coord.Clear();
-		/* Bitmap position
-		 *      xA     xB
-		 *   yC *------*
-		 *      |      |
-		 *      |      |
-		 *   yD *------*
-		 */
-		float dxA = x;
-		float dxB = x + w;
-		float dyC = y;
-		float dyD = y + h;
-		SetPoint(dxA, dyD);
-		SetPoint(dxA, dyC);
-		SetPoint(dxB, dyC);
-	
-		SetPoint(dxB, dyC);
-		SetPoint(dxB, dyD);
-		SetPoint(dxA, dyD);
-	}
-#endif
+void ewol::Button::SetPoint(float x, float y)
+{
+	etk::Vector2D<float> triangle(x, y);
+	m_coord.PushBack(triangle);
+}
+
+void ewol::Button::Rectangle(float x, float y, float w, float h)
+{
+	m_coord.Clear();
+	/* Bitmap position
+	 *      xA     xB
+	 *   yC *------*
+	 *      |      |
+	 *      |      |
+	 *   yD *------*
+	 */
+	float dxA = x;
+	float dxB = x + w;
+	float dyC = y;
+	float dyD = y + h;
+	SetPoint(dxA, dyD);
+	SetPoint(dxA, dyC);
+	SetPoint(dxB, dyC);
+
+	SetPoint(dxB, dyC);
+	SetPoint(dxB, dyD);
+	SetPoint(dxA, dyD);
+}
 
 
 void ewol::Button::OnDraw(DrawProperty& displayProp)

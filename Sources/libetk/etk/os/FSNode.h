@@ -214,6 +214,7 @@ namespace etk
 			bool         FileOpenWrite(void);
 			bool         FileClose(void);
 			char*        FileGets(char * elementLine, int32_t maxData);
+			// TODO : Set the return and the size of block in 64 bits
 			int32_t      FileRead(void * data, int32_t blockSize, int32_t nbBlock);
 			int32_t      FileWrite(void * data, int32_t blockSize, int32_t nbBlock);
 			bool         FileSeek(long int offset, int origin);

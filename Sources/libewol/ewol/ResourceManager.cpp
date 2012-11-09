@@ -237,62 +237,56 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
 	return true;
 }
 
-#ifdef __VIDEO__OPENGL_ES_2
-	bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
-	{
-		EWOL_VERBOSE("KEEP : Program : file : \"" << filename << "\"");
-		object = static_cast<ewol::Program*>(LocalKeep(filename));
-		if (NULL != object) {
-			return true;
-		}
-		// need to crate a new one ...
-		object = new ewol::Program(filename);
-		if (NULL == object) {
-			EWOL_ERROR("allocation error of a resource : " << filename);
-			return false;
-		}
-		LocalAdd(object);
+bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
+{
+	EWOL_VERBOSE("KEEP : Program : file : \"" << filename << "\"");
+	object = static_cast<ewol::Program*>(LocalKeep(filename));
+	if (NULL != object) {
 		return true;
 	}
-#endif
+	// need to crate a new one ...
+	object = new ewol::Program(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << filename);
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
 
-#ifdef __VIDEO__OPENGL_ES_2
-	bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
-	{
-		EWOL_VERBOSE("KEEP : Shader : file : \"" << filename << "\"");
-		object = static_cast<ewol::Shader*>(LocalKeep(filename));
-		if (NULL != object) {
-			return true;
-		}
-		// need to crate a new one ...
-		object = new ewol::Shader(filename);
-		if (NULL == object) {
-			EWOL_ERROR("allocation error of a resource : " << filename);
-			return false;
-		}
-		LocalAdd(object);
+bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
+{
+	EWOL_VERBOSE("KEEP : Shader : file : \"" << filename << "\"");
+	object = static_cast<ewol::Shader*>(LocalKeep(filename));
+	if (NULL != object) {
 		return true;
 	}
-#endif
+	// need to crate a new one ...
+	object = new ewol::Shader(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << filename);
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
 
-#ifdef __VIDEO__OPENGL_ES_2
-	bool ewol::resource::Keep(etk::UString& filename, ewol::DistantFieldFont*& object)
-	{
-		EWOL_VERBOSE("KEEP : DistanceFieldFont : file : \"" << filename << "\"");
-		object = static_cast<ewol::DistantFieldFont*>(LocalKeep(filename));
-		if (NULL != object) {
-			return true;
-		}
-		// need to crate a new one ...
-		object = new ewol::DistantFieldFont(filename);
-		if (NULL == object) {
-			EWOL_ERROR("allocation error of a resource : " << filename);
-			return false;
-		}
-		LocalAdd(object);
+bool ewol::resource::Keep(etk::UString& filename, ewol::DistantFieldFont*& object)
+{
+	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : \"" << filename << "\"");
+	object = static_cast<ewol::DistantFieldFont*>(LocalKeep(filename));
+	if (NULL != object) {
 		return true;
 	}
-#endif
+	// need to crate a new one ...
+	object = new ewol::DistantFieldFont(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << filename);
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
 
 bool ewol::resource::Keep(ewol::Texture*& object)
 {
@@ -439,30 +433,24 @@ void ewol::resource::Release(ewol::Font*& object)
 	Release(object2);
 	object = NULL;
 }
-#ifdef __VIDEO__OPENGL_ES_2
-	void ewol::resource::Release(ewol::Program*& object)
-	{
-		ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-		Release(object2);
-		object = NULL;
-	}
-#endif
-#ifdef __VIDEO__OPENGL_ES_2
-	void ewol::resource::Release(ewol::Shader*& object)
-	{
-		ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-		Release(object2);
-		object = NULL;
-	}
-#endif
-#ifdef __VIDEO__OPENGL_ES_2
-	void ewol::resource::Release(ewol::DistantFieldFont*& object)
-	{
-		ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-		Release(object2);
-		object = NULL;
-	}
-#endif
+void ewol::resource::Release(ewol::Program*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::Shader*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+void ewol::resource::Release(ewol::DistantFieldFont*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
 void ewol::resource::Release(ewol::Texture*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);

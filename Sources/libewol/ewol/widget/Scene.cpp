@@ -156,11 +156,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 void ewol::Scene::GenDraw(DrawProperty displayProp)
 {
 
-	#ifdef __VIDEO__OPENGL_ES_2
-		ewol::openGL::Push();
-	#else
-		glPushMatrix();
-	#endif
+	ewol::openGL::Push();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 	glViewport( m_origin.x,
 	            m_origin.y,
@@ -169,7 +165,6 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 	float ratio = m_size.x / m_size.y;
 		m_zoom = 1.0/1000.0;
 	//EWOL_INFO("ratio : " << ratio);
-	#ifdef __VIDEO__OPENGL_ES_2
 		etk::Matrix4 tmpProjection;
 		
 		if (ratio >= 1.0) {
@@ -182,31 +177,13 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 		etk::Matrix4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
-	#else
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		if (ratio >= 1.0) {
-			glOrthoEwol(-ratio, ratio, -1, 1, -1, 1);
-		} else {
-			ratio = 1.0/ratio;
-			glOrthoEwol(-1, 1, -ratio, ratio, -1, 1);
-		}
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glScalef(m_zoom, m_zoom, m_zoom);
-		
-	#endif
 	// Clear the screen with transparency ...
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	// Call the widget drawing methode
 	OnDraw(displayProp);
 	
-	#ifdef __VIDEO__OPENGL_ES_2
-		ewol::openGL::Pop();
-	#else
-		glPopMatrix();
-	#endif
+	ewol::openGL::Pop();
 }
 
 /**

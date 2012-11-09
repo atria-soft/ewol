@@ -21,7 +21,6 @@
  *
  *******************************************************************************
  */
-#ifdef __VIDEO__OPENGL_ES_2
 
 #include <ewol/oObject/2DTextShader.h>
 #include <ewol/openGL/openGL.h>
@@ -238,4 +237,3 @@ etk::Vector2D<float> ewol::OObject2DTextShader::GetSize(const etk::UString& unic
 	return m_font->GetSize(unicodeString);
 }
 
-#endif

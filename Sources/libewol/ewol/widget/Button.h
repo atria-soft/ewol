@@ -80,27 +80,25 @@ namespace ewol {
 	class Button : public ewol::Widget
 	{
 		private:
-			#ifdef __VIDEO__OPENGL_ES_2
-				// External theme config:
-				ewol::SimpleConfigFile*     m_config;
-				int32_t                     m_confIdPaddingX;
-				int32_t                     m_confIdPaddingY;
-				int32_t                     m_confIdChangeTime;
-				// OpenGL shaders programs:
-				ewol::Program*              m_GLprogram;
-				int32_t                     m_GLPosition;
-				int32_t                     m_GLMatrix;
-				// widget property
-				ewol::GLWidgetPosProperty   m_GLwidgetProperty; // id of the uniform
-				ewol::WidgetPosProperty     m_widgetProperty;   // structure of this uniform
-				// state property
-				ewol::GLWidgetStateProperty m_GLstatus;
-				ewol::WidgetStateProperty   m_status;
-				
-				etk::Vector<etk::Vector2D<float> > m_coord; //!< internal coord of the object
-				void SetPoint(float x, float y);
-				void Rectangle(float x, float y, float w, float h);
-			#endif
+			// External theme config:
+			ewol::SimpleConfigFile*     m_config;
+			int32_t                     m_confIdPaddingX;
+			int32_t                     m_confIdPaddingY;
+			int32_t                     m_confIdChangeTime;
+			// OpenGL shaders programs:
+			ewol::Program*              m_GLprogram;
+			int32_t                     m_GLPosition;
+			int32_t                     m_GLMatrix;
+			// widget property
+			ewol::GLWidgetPosProperty   m_GLwidgetProperty; // id of the uniform
+			ewol::WidgetPosProperty     m_widgetProperty;   // structure of this uniform
+			// state property
+			ewol::GLWidgetStateProperty m_GLstatus;
+			ewol::WidgetStateProperty   m_status;
+			
+			etk::Vector<etk::Vector2D<float> > m_coord; //!< internal coord of the object
+			void SetPoint(float x, float y);
+			void Rectangle(float x, float y, float w, float h);
 		private:
 			ewol::OObject2DTextColored m_oObjectText;
 			ewol::OObject2DTextured*   m_oObjectImage;

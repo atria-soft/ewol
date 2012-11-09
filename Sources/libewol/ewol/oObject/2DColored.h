@@ -37,22 +37,15 @@ namespace ewol {
 		public:
 			virtual void Draw(void);
 		protected:
-			#ifdef __VIDEO__OPENGL_ES_2
-				ewol::Program* m_GLprogram;
-				int32_t        m_GLPosition;
-				int32_t        m_GLMatrix;
-				int32_t        m_GLColor;
-			#endif
-			etk::Vector<etk::Vector2D<float> >   m_coord;       //!< internal coord of the object
-			#ifdef __VIDEO__OPENGL_ES_2
-				etk::Vector<draw::Colorf>   m_coordColor;  //!< internal color of the different point
-				draw::Colorf                m_color[3];
-			#else
-				etk::Vector<draw::Color>    m_coordColor;  //!< internal color of the different point
-				draw::Color                 m_color[3];
-			#endif
-			int32_t         m_triElement;
-			etk::Vector2D<float> m_triangle[3];
+			ewol::Program* m_GLprogram;
+			int32_t        m_GLPosition;
+			int32_t        m_GLMatrix;
+			int32_t        m_GLColor;
+			etk::Vector<etk::Vector2D<float> >  m_coord;       //!< internal coord of the object
+			etk::Vector<draw::Colorf>           m_coordColor;  //!< internal color of the different point
+			draw::Colorf                        m_color[3];
+			int32_t                             m_triElement;
+			etk::Vector2D<float>                m_triangle[3];
 			void GenerateTriangle(void);
 			void ResetCount(void);
 		public:

@@ -73,7 +73,4 @@ namespace ewol {
 #include <ewol/oObject/2DTextured.h>
 #include <ewol/oObject/2DColored.h>
 #include <ewol/oObject/2DTextColored.h>
-
-#ifdef __VIDEO__OPENGL_ES_2
 #include <ewol/oObject/2DTextShader.h>
-#endif

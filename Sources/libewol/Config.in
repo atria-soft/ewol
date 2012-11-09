@@ -1,17 +1,4 @@
 menu "General"
-	choice
-		prompt "OpenGl mode"
-		default __VIDEO__OPENGL_ES_1
-		help
-			OpenGL mode possible :
-				0 : openGL basic mode, vertex buffer.
-				1 : OpenGl 2 ==> no vertex bufffer but enable Shader system
-		config __VIDEO__OPENGL_ES_1
-			bool "0: openGl ES 1.0"
-		config __VIDEO__OPENGL_ES_2
-			bool "1: openGl ES 2.0"
-	endchoice
-	
 	config __EWOL_APPL_BASIC_TITLE__
 		prompt "Application Title"
 		string

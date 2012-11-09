@@ -36,18 +36,16 @@ ewol::OObject3DTextured::OObject3DTextured(etk::UString textureName, float sizeX
 	if (false == ewol::resource::Keep(textureName, m_resource, etk::Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
-	#ifdef __VIDEO__OPENGL_ES_2
-		etk::UString tmpString("textured3D.prog");
-		// get the shader resource :
-		m_GLPosition = 0;
-		if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-			m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
-			m_GLColor    = m_GLprogram->GetAttribute("EW_color");
-			m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
-			m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
-			m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
-		}
-	#endif
+	etk::UString tmpString("textured3D.prog");
+	// get the shader resource :
+	m_GLPosition = 0;
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
+		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
+		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+	}
 }
 
 
@@ -56,9 +54,7 @@ ewol::OObject3DTextured::~OObject3DTextured(void)
 	if (NULL != m_resource) {
 		ewol::resource::Release(m_resource);
 	}
-	#ifdef __VIDEO__OPENGL_ES_2
-		ewol::resource::Release(m_GLprogram);
-	#endif
+	ewol::resource::Release(m_GLprogram);
 }
 
 void ewol::OObject3DTextured::Draw(void)
@@ -70,45 +66,26 @@ void ewol::OObject3DTextured::Draw(void)
 		EWOL_WARNING("Texture does not exist ...");
 		return;
 	}
-	#ifdef __VIDEO__OPENGL_ES_2
-		if (m_GLprogram==NULL) {
-			EWOL_ERROR("No shader ...");
-			return;
-		}
-		//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
-		m_GLprogram->Use();
-		// set Matrix : translation/positionMatrix
-		etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-		m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-		// TextureID
-		m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
-		// position :
-		m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
-		// Texture :
-		m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
-		// color :
-		m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
-		// Request the draw od the elements : 
-		glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-		m_GLprogram->UnUse();
-	#else
-		glColor4f(1.0, 1.0, 1.0, 1.0);
-		glEnable(GL_TEXTURE_2D);
-		//EWOL_WARNING("Draw with texture : " << m_textureId << " ==> ogl=" << ewol::texture::GetGLID(m_textureId));
-		glBindTexture(GL_TEXTURE_2D, m_resource->GetId() );
-		glEnableClientState( GL_VERTEX_ARRAY );                     // Enable Vertex Arrays
-		glEnableClientState( GL_TEXTURE_COORD_ARRAY );              // Enable Texture Coord Arrays
-		glEnableClientState( GL_COLOR_ARRAY );                      // Enable Color Arrays
-		glVertexPointer( 3, GL_FLOAT, 0, &m_coord[0] );
-		glTexCoordPointer( 2, GL_FLOAT, 0, &m_coordTex[0] );
-		glColorPointer(    4, GL_UNSIGNED_BYTE, 0, &m_coordColor[0] );
-		glDrawArrays( GL_TRIANGLES, 0, m_coord.Size());
-		//EWOL_DEBUG("request draw of " << m_coord.Size() << " elements");
-		glDisableClientState( GL_COLOR_ARRAY );                     // Disable Color Arrays
-		glDisableClientState( GL_VERTEX_ARRAY );                    // Disable Vertex Arrays
-		glDisableClientState( GL_TEXTURE_COORD_ARRAY );             // Disable Texture Coord Arrays
-		glDisable(GL_TEXTURE_2D);
-	#endif
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// TextureID
+	m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
+	// Texture :
+	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
+	// color :
+	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	// Request the draw od the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
 }
 
 void ewol::OObject3DTextured::Clear(void)

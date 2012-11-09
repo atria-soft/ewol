@@ -83,11 +83,7 @@ void ewol::Sprite::Element(etk::Vector3D<float> pos, float size, float angle, dr
 	texD.u = 1.0;
 	texD.v = 0.0;
 	
-	#ifdef __VIDEO__OPENGL_ES_2
-		draw::Colorf localColor = tmpColor;
-	#else
-		draw::Color localColor = tmpColor;
-	#endif
+	draw::Colorf localColor = tmpColor;
 	etk::Vector3D<float> point = pos;
 	float yyySin = sin(angle) * size;
 	float xxxCos = cos(angle) * size;

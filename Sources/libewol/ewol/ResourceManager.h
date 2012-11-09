@@ -57,11 +57,9 @@ namespace ewol
 		// return the type of the resource ...
 		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
 		bool Keep(etk::UString& filename, ewol::Font*& object);
-		#ifdef __VIDEO__OPENGL_ES_2
-			bool Keep(etk::UString& filename, ewol::Program*& object);
-			bool Keep(etk::UString& filename, ewol::Shader*& object);
-			bool Keep(etk::UString& filename, ewol::DistantFieldFont*& object);
-		#endif
+		bool Keep(etk::UString& filename, ewol::Program*& object);
+		bool Keep(etk::UString& filename, ewol::Shader*& object);
+		bool Keep(etk::UString& filename, ewol::DistantFieldFont*& object);
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, etk::Vector2D<int32_t> size);
 		bool Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object);
@@ -71,11 +69,9 @@ namespace ewol
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
 		void Release(ewol::Font*& object);
-		#ifdef __VIDEO__OPENGL_ES_2
-			void Release(ewol::Program*& object);
-			void Release(ewol::Shader*& object);
-			void Release(ewol::DistantFieldFont*& object);
-		#endif
+		void Release(ewol::Program*& object);
+		void Release(ewol::Shader*& object);
+		void Release(ewol::DistantFieldFont*& object);
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
 		void Release(ewol::VirtualBufferObject*& object);

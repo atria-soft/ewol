@@ -48,21 +48,19 @@ namespace ewol {
 	class Entry : public ewol::Widget
 	{
 		private:
-			#ifdef __VIDEO__OPENGL_ES_2
-				ewol::Program* m_GLprogram;
-				int32_t        m_GLPosition;
-				int32_t        m_GLMatrix;
-				int32_t        m_GLsizeBorder;
-				int32_t        m_GLsizePadding;
-				int32_t        m_GLsize;
-				float          m_pos[4];
-				int32_t        m_GLposText;
-				int32_t        m_GLstate;
-				etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
-				draw::Colorf                  m_color[3];
-				void SetPoint(float x, float y);
-				void Rectangle(float x, float y, float w, float h);
-			#endif
+			ewol::Program* m_GLprogram;
+			int32_t        m_GLPosition;
+			int32_t        m_GLMatrix;
+			int32_t        m_GLsizeBorder;
+			int32_t        m_GLsizePadding;
+			int32_t        m_GLsize;
+			float          m_pos[4];
+			int32_t        m_GLposText;
+			int32_t        m_GLstate;
+			etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
+			draw::Colorf                  m_color[3];
+			void SetPoint(float x, float y);
+			void Rectangle(float x, float y, float w, float h);
 		private:
 			ewol::OObject2DTextColored m_oObjectText;               //!< text display
 			ewol::OObject2DColored     m_oObjectDecoration;         //!< background display
