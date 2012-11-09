@@ -127,7 +127,7 @@ ewol::FileChooser::FileChooser(void)
 			if (NULL == m_widgetValidate) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetValidate->SetImage("icon/Load.svg");
+				m_widgetValidate->SetImage("THEME:GUI:Load.svg");
 				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			}
@@ -135,7 +135,7 @@ ewol::FileChooser::FileChooser(void)
 			if (NULL == m_widgetCancel) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCancel->SetImage("icon/Remove.svg");
+				m_widgetCancel->SetImage("THEME:GUI:Remove.svg");
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
@@ -199,7 +199,7 @@ ewol::FileChooser::FileChooser(void)
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myImage = new ewol::Image("icon/File.svg");
+			myImage = new ewol::Image("THEME:GUI:File.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -223,7 +223,7 @@ ewol::FileChooser::FileChooser(void)
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myImage = new ewol::Image("icon/Folder.svg");
+			myImage = new ewol::Image("THEME:GUI:Folder.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -242,7 +242,7 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetCurrentFolder->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFolder);
 			}
-			myImage = new ewol::Image("icon/Home.svg");
+			myImage = new ewol::Image("THEME:GUI:Home.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
