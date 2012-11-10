@@ -91,33 +91,33 @@ FILE_LIST+= ewol/audio/audio.cpp \
 			ewol/audio/decWav.cpp
 
 
-LOCAL_COPY_FILES := ../../share/textured3D.prog:textured3D.prog \
-                    ../../share/textured3D.frag:textured3D.frag \
-                    ../../share/textured3D.vert:textured3D.vert \
+LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
+                    ../data/textured3D.frag:textured3D.frag \
+                    ../data/textured3D.vert:textured3D.vert \
                     \
-                    ../../share/color.prog:color.prog \
-                    ../../share/color.frag:color.frag \
-                    ../../share/color.vert:color.vert \
+                    ../data/color.prog:color.prog \
+                    ../data/color.frag:color.frag \
+                    ../data/color.vert:color.vert \
                     \
-                    ../../share/textured.prog:textured.prog \
-                    ../../share/textured.frag:textured.frag \
-                    ../../share/textured.vert:textured.vert \
+                    ../data/textured.prog:textured.prog \
+                    ../data/textured.frag:textured.frag \
+                    ../data/textured.vert:textured.vert \
                     \
-                    ../../share/theme/default/widgetEntry.prog:theme/default/widgetEntry.prog \
-                    ../../share/theme/default/widgetEntry.frag:theme/default/widgetEntry.frag \
-                    ../../share/theme/default/widgetEntry.vert:theme/default/widgetEntry.vert \
+                    ../data/theme/default/widgetEntry.prog:theme/default/widgetEntry.prog \
+                    ../data/theme/default/widgetEntry.frag:theme/default/widgetEntry.frag \
+                    ../data/theme/default/widgetEntry.vert:theme/default/widgetEntry.vert \
                     \
-                    ../../share/theme/rounded/widgetEntry.prog:theme/rounded/widgetEntry.prog \
-                    ../../share/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
-                    ../../share/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert \
+                    ../data/theme/rounded/widgetEntry.prog:theme/rounded/widgetEntry.prog \
+                    ../data/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
+                    ../data/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert \
                     \
-                    ../../share/theme/default/widgetButton.conf:theme/default/widgetButton.conf \
-                    ../../share/theme/default/widgetButton.prog:theme/default/widgetButton.prog \
-                    ../../share/theme/default/widgetButton.frag:theme/default/widgetButton.frag \
-                    ../../share/theme/default/widgetButton.vert:theme/default/widgetButton.vert \
+                    ../data/theme/default/widgetButton.conf:theme/default/widgetButton.conf \
+                    ../data/theme/default/widgetButton.prog:theme/default/widgetButton.prog \
+                    ../data/theme/default/widgetButton.frag:theme/default/widgetButton.frag \
+                    ../data/theme/default/widgetButton.vert:theme/default/widgetButton.vert \
                     \
-                    ../../share/theme/rounded/widgetButton.conf:theme/rounded/widgetButton.conf \
-                    ../../share/theme/rounded/widgetButton.prog:theme/rounded/widgetButton.prog \
-                    ../../share/theme/rounded/widgetButton.frag:theme/rounded/widgetButton.frag \
-                    ../../share/theme/rounded/widgetButton.vert:theme/rounded/widgetButton.vert
+                    ../data/theme/rounded/widgetButton.conf:theme/rounded/widgetButton.conf \
+                    ../data/theme/rounded/widgetButton.prog:theme/rounded/widgetButton.prog \
+                    ../data/theme/rounded/widgetButton.frag:theme/rounded/widgetButton.frag \
+                    ../data/theme/rounded/widgetButton.vert:theme/rounded/widgetButton.vert
 
