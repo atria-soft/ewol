@@ -1,39 +1,40 @@
+
+[submodule "external/glew/glew"]
+	path = external/glew/glew
+	url = https://github.com/HeeroYui/glew.git
 [submodule "build"]
 	path = build
 	url = https://github.com/HeeroYui/Build.git
-[submodule "agg"]
-	path = external/agg
-	url = https://github.com/HeeroYui/libagg.git
-[submodule "lua"]
-	path = external/lua
-	url = https://github.com/HeeroYui/liblua.git
-[submodule "ogg"]
-	path = external/ogg
-	url = https://github.com/HeeroYui/libogg.git
-[submodule "parsersvg"]
-	path = external/parsersvg
-	url = https://github.com/HeeroYui/libparsersvg.git
-[submodule "png"]
-	path = external/png
-	url = https://github.com/HeeroYui/libpng.git
-[submodule "portaudio"]
-	path = external/portaudio
-	url = https://github.com/HeeroYui/libportaudio.git
-[submodule "tinyxml"]
-	path = external/tinyxml
-	url = https://github.com/HeeroYui/libtinyxml.git
-[submodule "zip"]
-	path = external/zip
-	url = https://github.com/HeeroYui/libzip.git
-[submodule "freetype"]
-	path = external/freetype
-	url = https://github.com/HeeroYui/libfreetype.git
-[submodule "zlib"]
-	path = external/z/zlib
-	url = https://github.com/madler/zlib.git
-[submodule "glew"]
-	path = external/glew/glew
-	url = https://github.com/HeeroYui/glew.git
-[submodule "etk"]
+[submodule "external/etk"]
 	path = external/etk
 	url = https://github.com/HeeroYui/etk.git
+[submodule "external/agg"]
+	path = external/agg
+	url = https://github.com/HeeroYui/libagg.git
+[submodule "external/parsersvg"]
+	path = external/parsersvg
+	url = https://github.com/HeeroYui/libparsersvg.git
+[submodule "external/tinyxml"]
+	path = external/tinyxml
+	url = https://github.com/HeeroYui/libtinyxml.git
+[submodule "external/portaudio"]
+	path = external/portaudio
+	url = https://github.com/HeeroYui/libportaudio.git
+[submodule "external/freetype"]
+	path = external/freetype
+	url = https://github.com/HeeroYui/libfreetype.git
+[submodule "external/z/zlib"]
+	path = external/z/zlib
+	url = https://github.com/HeeroYui/glew.git
+[submodule "external/zip"]
+	path = external/zip
+	url = https://github.com/HeeroYui/libzip.git
+[submodule "external/png"]
+	path = external/png
+	url = https://github.com/HeeroYui/libpng.git
+[submodule "external/ogg"]
+	path = external/ogg
+	url = https://github.com/HeeroYui/libogg.git
+[submodule "external/lua"]
+	path = external/lua
+	url = https://github.com/HeeroYui/liblua.git
