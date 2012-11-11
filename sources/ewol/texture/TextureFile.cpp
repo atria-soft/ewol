@@ -14,7 +14,7 @@
 
 #include <ewol/texture/TextureBMP.h>
 #include <parserSVG/parserSVG.h>
-//#include <ewol/texture/TexturePNG.h>
+#include <ewol/texture/TexturePNG.h>
 
 
 ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, etk::Vector2D<int32_t> size) :
@@ -40,7 +40,10 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, e
 			m_element.GenerateAnImage(size, m_data);
 		}
 	} else if (true == tmpName.EndWith(".png") ) {
-		EWOL_ERROR("Extention not supported now, but soon " << tmpName );
+		// generate the texture
+		if (false == ewol::imagePNG::GenerateImage(tmpName, m_data)) {
+			EWOL_ERROR("Error To load PNG file " << tmpName );
+		}
 	} else {
 		EWOL_ERROR("Extention not managed " << tmpName << " Sopported extention : .bmp / .svg / .png");
 	}
