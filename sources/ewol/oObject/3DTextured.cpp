@@ -20,7 +20,7 @@ ewol::OObject3DTextured::OObject3DTextured(etk::UString textureName, float sizeX
 	if (false == ewol::resource::Keep(textureName, m_resource, etk::Vector2D<int32_t>(sizeX,sizeY)) ) {
 		EWOL_CRITICAL("can not get a resource Texture");
 	}
-	etk::UString tmpString("textured3D.prog");
+	etk::UString tmpString("DATA:textured3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
