@@ -74,7 +74,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	if (png_sig_cmp(header, 0, 8))
 	{
 		EWOL_ERROR("Invalid file :" << fileName);
-		return;
+		return false;
 	}
 	
 	// PNG read setup
@@ -118,7 +118,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	png_set_strip_16(png_ptr);
 	if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
 		EWOL_ERROR("Must be RGBA");
-		return;
+		return false;
 	}
 	
 	draw::Color tmpColor(0,0,0,0);

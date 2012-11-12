@@ -25,7 +25,7 @@
 	url = https://github.com/HeeroYui/libfreetype.git
 [submodule "external/z/zlib"]
 	path = external/z/zlib
-	url = https://github.com/HeeroYui/glew.git
+	url = https://github.com/madler/zlib.git
 [submodule "external/zip"]
 	path = external/zip
 	url = https://github.com/HeeroYui/libzip.git
