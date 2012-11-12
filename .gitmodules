@@ -23,9 +23,6 @@
 [submodule "external/freetype"]
 	path = external/freetype
 	url = https://github.com/HeeroYui/libfreetype.git
-[submodule "external/z/zlib"]
-	path = external/z/zlib
-	url = https://github.com/madler/zlib.git
 [submodule "external/zip"]
 	path = external/zip
 	url = https://github.com/HeeroYui/libzip.git
@@ -38,3 +35,6 @@
 [submodule "external/lua"]
 	path = external/lua
 	url = https://github.com/HeeroYui/liblua.git
+[submodule "external/z/zlib"]
+	path = external/z/zlib
+	url = https://github.com/madler/zlib.git
