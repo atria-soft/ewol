@@ -57,7 +57,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(etk::UString fontName, int32_t 
 {
 	m_color = draw::color::black;
 	SetFontProperty(fontName, size);
-	etk::UString tmpString("DATA:textured.prog");
+	etk::UString tmpString("DATA:text.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -76,7 +76,7 @@ ewol::OObject2DTextColored::OObject2DTextColored(void) :
 {
 	m_color = draw::color::black;
 	SetFontProperty(ewol::font::GetDefaultFont(), ewol::font::GetDefaultSize());
-	etk::UString tmpString("DATA:textured.prog");
+	etk::UString tmpString("DATA:text.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -135,9 +135,10 @@ void ewol::OObject2DTextColored::Clear(void)
 	m_coord.Clear();
 	m_coordTex.Clear();
 	m_coordColor.Clear();
+	m_displayMode.Clear();
 }
 
-int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const etk::UString& unicodeString)
+int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const etk::UString& unicodeString, ewol::font::mode_te displayMode)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -145,7 +146,7 @@ int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const etk
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
 	int32_t size = 0;
-	size = m_font->Draw(textPos, unicodeString, m_coord, m_coordTex, m_hasClipping, m_clipping);
+	size = m_font->Draw(textPos, unicodeString, m_coord, m_coordTex, m_displayMode, m_hasClipping, m_clipping, displayMode);
 	// set the color ...
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
@@ -153,7 +154,7 @@ int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const etk
 	return size;
 }
 
-int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const uniChar_t unicodeChar)
+int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const uniChar_t unicodeChar, ewol::font::mode_te displayMode)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -161,7 +162,7 @@ int32_t ewol::OObject2DTextColored::Text(etk::Vector2D<float> textPos, const uni
 	}
 	int32_t nbElementInTheArray = m_coord.Size();
 	int32_t size = 0;
-	size = m_font->Draw(textPos, unicodeChar, m_coord, m_coordTex, m_hasClipping, m_clipping);
+	size = m_font->Draw(textPos, unicodeChar, m_coord, m_coordTex, m_displayMode, m_hasClipping, m_clipping, displayMode);
 	for (int32_t iii=nbElementInTheArray; iii<m_coord.Size(); iii++) {
 		m_coordColor.PushBack(m_color);
 	}

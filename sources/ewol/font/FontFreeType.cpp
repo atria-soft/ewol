@@ -55,7 +55,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
 	
-	etk::FSNode myfile(etk::UString("DATA:") + fontName);
+	etk::FSNode myfile(fontName);
 	if (false == myfile.Exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
@@ -192,7 +192,8 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
                                    int32_t              fontSize,
                                    etk::Vector2D<int32_t>    glyphPosition,
-                                   ewol::GlyphProperty& property)
+                                   ewol::GlyphProperty& property,
+                                   int8_t posInImage)
 {
 
 	if(false==m_init) {
@@ -227,8 +228,25 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
+			tlpppp = imageOut.Get(etk::Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj));
+			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
-			tlpppp.a = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
+			switch(posInImage)
+			{
+				default:
+				case 0:
+					tlpppp.a = valueColor;
+					break;
+				case 1:
+					tlpppp.r = valueColor;
+					break;
+				case 2:
+					tlpppp.g = valueColor;
+					break;
+				case 3:
+					tlpppp.b = valueColor;
+					break;
+			}
 			// real set of color
 			imageOut.Set(etk::Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
 		}

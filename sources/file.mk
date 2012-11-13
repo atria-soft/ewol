@@ -103,6 +103,10 @@ LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/textured.frag:textured.frag \
                     ../data/textured.vert:textured.vert \
                     \
+                    ../data/text.prog:text.prog \
+                    ../data/text.frag:text.frag \
+                    ../data/text.vert:text.vert \
+                    \
                     ../data/theme/default/widgetEntry.prog:theme/default/widgetEntry.prog \
                     ../data/theme/default/widgetEntry.frag:theme/default/widgetEntry.frag \
                     ../data/theme/default/widgetEntry.vert:theme/default/widgetEntry.vert \

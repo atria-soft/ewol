@@ -149,7 +149,7 @@ ewol::DistantFieldFont::DistantFieldFont(etk::UString fontName) :
 				CurrentLineHigh = 0;
 			}
 			// draw the glyph
-			m_font->DrawGlyph(tmpUpScaledImage, m_size*SPECIAL_UPSCALER, etk::Vector2D<int32_t>(SPECIAL_BORDER*SPECIAL_UPSCALER,SPECIAL_BORDER*SPECIAL_UPSCALER), m_listElement[iii].property);
+			m_font->DrawGlyph(tmpUpScaledImage, m_size*SPECIAL_UPSCALER, etk::Vector2D<int32_t>(SPECIAL_BORDER*SPECIAL_UPSCALER,SPECIAL_BORDER*SPECIAL_UPSCALER), m_listElement[iii].property, 0);
 			// set video position
 			m_listElement[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
 			m_listElement[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;

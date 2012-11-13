@@ -45,7 +45,8 @@ namespace ewol
 			bool DrawGlyph(draw::Image&         imageOut,
 			               int32_t              fontSize,
 			               etk::Vector2D<int32_t>    glyphPosition,
-			               ewol::GlyphProperty& property);
+			               ewol::GlyphProperty& property,
+			               int8_t posInImage);
 			etk::Vector2D<float> GetSize(int32_t fontSize, const etk::UString & unicodeString);
 			int32_t GetHeight(int32_t fontSize);
 	};
