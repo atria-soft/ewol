@@ -30,25 +30,21 @@ namespace ewol
 		public:
 			FontFreeType(etk::UString fontName);
 			~FontFreeType(void);
-			int32_t Draw(draw::Image&         imageOut,
-			             int32_t              fontSize,
-			             etk::Vector2D<float>      textPos,
-			             const etk::UString&  unicodeString,
-			             draw::Color&         textColor);
-			int32_t Draw(draw::Image&     imageOut,
-			             int32_t          fontSize,
-			             etk::Vector2D<float>  textPos,
-			             const uniChar_t  unicodeChar,
-			             draw::Color&     textColor);
+			
 			bool GetGlyphProperty(int32_t              fontSize,
 			                      ewol::GlyphProperty& property);
-			bool DrawGlyph(draw::Image&         imageOut,
-			               int32_t              fontSize,
-			               etk::Vector2D<int32_t>    glyphPosition,
-			               ewol::GlyphProperty& property,
+			
+			bool DrawGlyph(draw::Image&                imageOut,
+			               int32_t                     fontSize,
+			               etk::Vector2D<int32_t>      glyphPosition,
+			               ewol::GlyphProperty&        property,
 			               int8_t posInImage);
+			
 			etk::Vector2D<float> GetSize(int32_t fontSize, const etk::UString & unicodeString);
+			
 			int32_t GetHeight(int32_t fontSize);
+			
+			void GenerateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph);
 	};
 	void FreeTypeInit(void);
 	void FreeTypeUnInit(void);

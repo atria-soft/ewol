@@ -26,11 +26,6 @@ namespace ewol
 	};
 	class TexturedFont : public ewol::Texture {
 		
-		typedef struct {
-			GlyphProperty    property;
-			texCoord_ts      posStart;
-			texCoord_ts      posStop;
-		}freeTypeFontElement_ts;
 		private:
 			etk::UString                        m_fileName[4];
 			int32_t                             m_size;
@@ -39,7 +34,7 @@ namespace ewol
 			// ==> otherwise I can just generate italic ...
 			// ==> Bold is a little more complicated (maybe with the bordersize)
 			ewol::Font*                         m_font[4];
-			etk::Vector<freeTypeFontElement_ts> m_listElement[4];
+			etk::Vector<GlyphProperty>          m_listElement[4];
 			// for the texture generation :
 			etk::Vector2D<int32_t>              m_lastGlyphPos[4];
 			int32_t                             m_lastRawHeigh[4];
@@ -65,12 +60,38 @@ namespace ewol
 			             etk::Vector<int32_t> &               vectDisplayMode,
 			             bool                                 hasClipping,
 			             clipping_ts&                         clipping,
-			             ewol::font::mode_te                  displayMode);
+			             ewol::font::mode_te                  displayMode,
+			             const uniChar_t                      unicodeCharPrevious = 0);
 			
-			etk::Vector2D<float> GetSize(const etk::UString & unicodeString);
-			etk::Vector2D<float> GetSize(const uniChar_t      unicodeChar);
-			// TODO : Remove this element, it is stupid ...
-			int32_t GetHeight(void) { return m_height[0]; };
+			/**
+			 * @brief Get the size of the specified String
+			 * @param[in] unicodeString The string that we might calculate the display size
+			 * @param[in] displayMode Mode to display the currrent font
+			 * @return Dimention of the string use
+			 */
+			etk::Vector2D<float> GetSize(const etk::UString & unicodeString,
+			                             const ewol::font::mode_te displayMode = ewol::font::Regular);
+			
+			/**
+			 * @brief Get the size of the specified unicode value
+			 * @param[in] unicodeChar the char that might be displayed
+			 * @param[in] unicodeCharPrevious Previous char of this One ==> 0 no previous char
+			 * @param[in] displayMode Mode to display the currrent font
+			 * @return Dimention of the font use
+			 */
+			etk::Vector2D<float> GetSize(const uniChar_t unicodeChar,
+			                             const uniChar_t unicodeCharPrevious = 0,
+			                             const ewol::font::mode_te displayMode = ewol::font::Regular);
+			/**
+			 * @brief Get the display height of this font
+			 * @param[in] displayMode Mode to display the currrent font
+			 * @return Dimention of the font need between 2 lines
+			 */
+			int32_t GetHeight(const ewol::font::mode_te displayMode = ewol::font::Regular) { return m_height[displayMode]; };
+			/**
+			 * @brief Get the font height (user friendly)
+			 * @return Dimention of the font the user requested
+			 */
 			int32_t GetFontSize(void) { return m_size; };
 	};
 	

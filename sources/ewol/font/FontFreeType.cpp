@@ -103,31 +103,6 @@ ewol::FontFreeType::~FontFreeType(void)
 	// must be deleted fftFace
 }
 
-int32_t ewol::FontFreeType::Draw(draw::Image&         imageOut,
-                                 int32_t              fontSize,
-                                 etk::Vector2D<float>      textPos,
-                                 const etk::UString&  unicodeString,
-                                 draw::Color&         textColor)
-{
-	if(false==m_init) {
-		return 0;
-	}
-	// TODO : ...
-	return 0;
-}
-
-int32_t ewol::FontFreeType::Draw(draw::Image&     imageOut,
-                                 int32_t          fontSize,
-                                 etk::Vector2D<float>  textPos,
-                                 const uniChar_t  unicodeChar,
-                                 draw::Color&     textColor)
-{
-	if(false==m_init) {
-		return 0;
-	}
-	// TODO : ...
-	return 0;
-}
 
 etk::Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
 {
@@ -189,11 +164,11 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 	return true;
 }
 
-bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
-                                   int32_t              fontSize,
-                                   etk::Vector2D<int32_t>    glyphPosition,
-                                   ewol::GlyphProperty& property,
-                                   int8_t posInImage)
+bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
+                                   int32_t                fontSize,
+                                   etk::Vector2D<int32_t> glyphPosition,
+                                   ewol::GlyphProperty&   property,
+                                   int8_t                 posInImage)
 {
 
 	if(false==m_init) {
@@ -253,6 +228,38 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&         imageOut,
 	}
 	return true;
 }
+
+
+void ewol::FontFreeType::GenerateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph)
+{
+	if(false==m_init) {
+		return;
+	}
+	// 300dpi (hight quality) 96 dpi (normal quality)
+	int32_t fontQuality = 96;
+	// Select Size ...
+	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
+	if (0!=error ) {
+		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		return;
+	}
+	// For all the kerning element we get the kerning value :
+	for(int32_t iii=0; iii<listGlyph.Size(); iii++) {
+		listGlyph[iii].KerningClear();
+		for(int32_t kkk=0; kkk<listGlyph.Size(); kkk++) {
+			FT_Vector kerning;
+			FT_Get_Kerning(m_fftFace, listGlyph[kkk].m_glyphIndex, listGlyph[iii].m_glyphIndex, FT_KERNING_UNFITTED, &kerning );
+			// add the kerning only if != 0 ... 
+			if (kerning.x != 0) {
+				listGlyph[iii].KerningAdd(listGlyph[kkk].m_UVal,
+				                          kerning.x/32.0f );
+				//EWOL_DEBUG("Kerning between : '" << (char)listGlyph[iii].m_UVal << "'&'" << (char)listGlyph[kkk].m_UVal << "' value : " << kerning.x << " => " << (kerning.x/64.0f));
+			}
+		}
+	}
+}
+
 
 void ewol::FontFreeType::Display(void)
 {

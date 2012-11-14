@@ -107,9 +107,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		} else if(    true == output[iii].EndWith(m_name+"-"+"bolditalic"+".ttf", false)
 		           || true == output[iii].EndWith(m_name+"-"+"boldoblique"+".ttf", false)
 		           || true == output[iii].EndWith(m_name+"-"+"bi"+".ttf", false)
+		           || true == output[iii].EndWith(m_name+"-"+"z"+".ttf", false)
 		           || true == output[iii].EndWith(m_name+"bolditalic"+".ttf", false)
 		           || true == output[iii].EndWith(m_name+"boldoblique"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"bi"+".ttf", false)) {
+		           || true == output[iii].EndWith(m_name+"bi"+".ttf", false)
+		           || true == output[iii].EndWith(m_name+"z"+".ttf", false)) {
 			EWOL_INFO(" find Font [Bold-Italic] : " << output[iii]);
 			m_fileName[ewol::font::BoldItalic] = output[iii];
 		} else if(    true == output[iii].EndWith(m_name+"-"+"regular"+".ttf", false)
@@ -135,12 +137,12 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		
 		// set the bassic charset:
 		m_listElement[iiiFontId].Clear();
-		freeTypeFontElement_ts tmpchar1;
-		tmpchar1.property.m_UVal = 0;
+		GlyphProperty tmpchar1;
+		tmpchar1.m_UVal = 0;
 		m_listElement[iiiFontId].PushBack(tmpchar1);
 		for (int32_t iii=0x20; iii<0xFF; iii++) {
-			freeTypeFontElement_ts tmpchar;
-			tmpchar.property.m_UVal = iii;
+			GlyphProperty tmpchar;
+			tmpchar.m_UVal = iii;
 			m_listElement[iiiFontId].PushBack(tmpchar);
 			if (0x7F == iii) {
 				iii = 0x9F;
@@ -183,32 +185,34 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		int32_t CurrentLineHigh = 0;
 		etk::Vector2D<int32_t>    glyphPosition(1,1);
 		for (int32_t iii=0; iii<m_listElement[iiiFontId].Size(); iii++) {
-			if (true == m_font[iiiFontId]->GetGlyphProperty(m_size, (m_listElement[iiiFontId])[iii].property)) {
+			if (true == m_font[iiiFontId]->GetGlyphProperty(m_size, (m_listElement[iiiFontId])[iii])) {
 				// change line if needed ...
-				if (glyphPosition.x+(m_listElement[iiiFontId])[iii].property.m_sizeTexture.x > textureWidth) {
+				if (glyphPosition.x+(m_listElement[iiiFontId])[iii].m_sizeTexture.x > textureWidth) {
 					glyphPosition.x = 0;
 					glyphPosition.y += CurrentLineHigh;
 					CurrentLineHigh = 0;
 				}
 				// draw the glyph
-				m_font[iiiFontId]->DrawGlyph(m_data, m_size, glyphPosition, (m_listElement[iiiFontId])[iii].property, iiiFontId);
+				m_font[iiiFontId]->DrawGlyph(m_data, m_size, glyphPosition, (m_listElement[iiiFontId])[iii], iiiFontId);
 				// set video position
-				(m_listElement[iiiFontId])[iii].posStart.u = (float)(glyphPosition.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].posStart.v = (float)(glyphPosition.y) / (float)textureHeight;
-				(m_listElement[iiiFontId])[iii].posStop.u  = (float)(glyphPosition.x + (m_listElement[iiiFontId])[iii].property.m_sizeTexture.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].posStop.v  = (float)(glyphPosition.y + (m_listElement[iiiFontId])[iii].property.m_sizeTexture.y) / (float)textureHeight;
+				(m_listElement[iiiFontId])[iii].m_texturePosStart.u = (float)(glyphPosition.x) / (float)textureWidth;
+				(m_listElement[iiiFontId])[iii].m_texturePosStart.v = (float)(glyphPosition.y) / (float)textureHeight;
+				(m_listElement[iiiFontId])[iii].m_texturePosStop.u  = (float)(glyphPosition.x + (m_listElement[iiiFontId])[iii].m_sizeTexture.x) / (float)textureWidth;
+				(m_listElement[iiiFontId])[iii].m_texturePosStop.v  = (float)(glyphPosition.y + (m_listElement[iiiFontId])[iii].m_sizeTexture.y) / (float)textureHeight;
 				
 				// update the maximum of the line hight : 
-				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].property.m_sizeTexture.y) {
+				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].m_sizeTexture.y) {
 					// note : +1 is for the overlapping of the glyph (Part 2)
-					CurrentLineHigh = (m_listElement[iiiFontId])[iii].property.m_sizeTexture.y+1;
+					CurrentLineHigh = (m_listElement[iiiFontId])[iii].m_sizeTexture.y+1;
 				}
 				// note : +1 is for the overlapping of the glyph (Part 3)
 				// update the Bitmap position drawing : 
-				glyphPosition.x += (m_listElement[iiiFontId])[iii].property.m_sizeTexture.x+1;
+				glyphPosition.x += (m_listElement[iiiFontId])[iii].m_sizeTexture.x+1;
 			}
 			
 		}
+		// generate the kerning for all the characters : 
+		m_font[iiiFontId]->GenerateKerning(m_size, m_listElement[iiiFontId]);
 	}
 	// For testing cheree the box are set)
 	#if 0
@@ -261,8 +265,11 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 {
 	float totalSize = 0;
 	etk::Vector2D<float> tmpPos = textPos;
+	uniChar_t unicodeCharPrevious = 0;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		int32_t ret = Draw(tmpPos, unicodeString[iii], coord, coordTex, vectDisplayMode, hasClipping, clipping, displayMode);
+		int32_t ret;
+		ret = Draw(tmpPos, unicodeString[iii], coord, coordTex, vectDisplayMode, hasClipping, clipping, displayMode, unicodeCharPrevious);
+		unicodeCharPrevious = unicodeString[iii];
 		tmpPos.x += ret;
 		totalSize += ret;
 	}
@@ -276,10 +283,10 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
                                  etk::Vector<int32_t> &               vectDisplayMode,
                                  bool                                 hasClipping,
                                  clipping_ts&                         clipping,
-                                 ewol::font::mode_te                  displayMode)
+                                 ewol::font::mode_te                  displayMode,
+                                 const uniChar_t                      unicodeCharPrevious)
 {
 	float posDrawX = textPos.x;
-	
 	int32_t charIndex;
 	if (unicodeChar < 0x20) {
 		charIndex = 0;
@@ -288,12 +295,18 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 	} else {
 		charIndex = 0;
 		for (int32_t iii=0x80-0x20; iii < m_listElement[0].Size(); iii++) {
-			if ((m_listElement[displayMode])[iii].property.m_UVal == unicodeChar) {
+			if ((m_listElement[displayMode])[iii].m_UVal == unicodeChar) {
 				charIndex = iii;
 				break;
 			}
 		}
 	}
+	float kerningOffset = (m_listElement[displayMode])[charIndex].KerningGet(unicodeCharPrevious);
+	/*
+	if (kerningOffset != 0) {
+		EWOL_DEBUG("Kerning between : '" << (char)unicodeCharPrevious << "'&'" << (char)(m_listElement[displayMode])[charIndex].m_UVal << "' value : " << kerningOffset);
+	}
+	*/
 	// 0x01 == 0x20 == ' ';
 	if (unicodeChar != 0x01) {
 		/* Bitmap position
@@ -303,15 +316,15 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 		 *      |      |
 		 *   yD *------*
 		 */
-		float dxA = posDrawX + (m_listElement[displayMode])[charIndex].property.m_bearing.x;
-		float dxB = posDrawX + (m_listElement[displayMode])[charIndex].property.m_bearing.x + (m_listElement[displayMode])[charIndex].property.m_sizeTexture.x;
-		float dyC = textPos.y + (m_listElement[displayMode])[charIndex].property.m_bearing.y + m_height[displayMode] - m_size;
-		float dyD = dyC - (m_listElement[displayMode])[charIndex].property.m_sizeTexture.y;
+		float dxA = posDrawX + (m_listElement[displayMode])[charIndex].m_bearing.x + kerningOffset;
+		float dxB = dxA + (m_listElement[displayMode])[charIndex].m_sizeTexture.x;
+		float dyC = textPos.y + (m_listElement[displayMode])[charIndex].m_bearing.y + m_height[displayMode] - m_size;
+		float dyD = dyC - (m_listElement[displayMode])[charIndex].m_sizeTexture.y;
 		
-		float tuA = (m_listElement[displayMode])[charIndex].posStart.u;
-		float tuB = (m_listElement[displayMode])[charIndex].posStop.u;
-		float tvC = (m_listElement[displayMode])[charIndex].posStart.v;
-		float tvD = (m_listElement[displayMode])[charIndex].posStop.v;
+		float tuA = (m_listElement[displayMode])[charIndex].m_texturePosStart.u;
+		float tuB = (m_listElement[displayMode])[charIndex].m_texturePosStop.u;
+		float tvC = (m_listElement[displayMode])[charIndex].m_texturePosStart.v;
+		float tvD = (m_listElement[displayMode])[charIndex].m_texturePosStop.v;
 		
 		
 		// Clipping and drawing area
@@ -328,7 +341,7 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 					float drawSize = clipping.x - dxA;
 					// Update element start display
 					dxA = clipping.x;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].property.m_sizeTexture.x;
+					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
 					// update texture start X Pos
 					tuA += addElement;
 				}
@@ -337,7 +350,7 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 					float drawSize = dxB - (clipping.x + clipping.w);
 					// Update element start display
 					dxB = clipping.x + clipping.w;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].property.m_sizeTexture.x;
+					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
 					// update texture start X Pos
 					tuB -= addElement;
 				}
@@ -347,7 +360,7 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 					float drawSize = clipping.y - dyC;
 					// Update element start display
 					dyC = clipping.y;
-					float addElement = TexSizeY * drawSize / (float)(m_listElement[displayMode])[charIndex].property.m_sizeTexture.x;
+					float addElement = TexSizeY * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
 					// update texture start X Pos
 					tvC += addElement;
 				}
@@ -356,7 +369,7 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 					float drawSize = dyD - (clipping.y + clipping.h);
 					// Update element start display
 					dyD = clipping.y + clipping.h;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].property.m_sizeTexture.x;
+					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
 					// update texture start X Pos
 					tvD -= addElement;
 				}
@@ -433,24 +446,28 @@ int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
 			}
 		}
 	}
-	posDrawX += (m_listElement[displayMode])[charIndex].property.m_advance.x;
+	posDrawX += (m_listElement[displayMode])[charIndex].m_advance.x + kerningOffset;
 	int32_t sizeOut = posDrawX - textPos.x;
 	textPos.x = posDrawX;
 	return sizeOut;
 }
 
-etk::Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString)
+etk::Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString, const ewol::font::mode_te displayMode)
 {
 	etk::Vector2D<float> outputSize(0,m_height[0]);
+	uniChar_t unicodeCharPrevious = 0;
 	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		etk::Vector2D<float> tmpp = GetSize(unicodeString[iii]);
+		etk::Vector2D<float> tmpp = GetSize(unicodeString[iii], unicodeCharPrevious, displayMode);
+		unicodeCharPrevious = unicodeString[iii];
 		outputSize.x += tmpp.x;
 	}
 	return outputSize;
 }
 
 
-etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
+etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar,
+                                                 const uniChar_t unicodeCharPrevious,
+                                                 const ewol::font::mode_te displayMode)
 {
 	etk::Vector2D<float> outputSize(0,m_height[0]);
 	int32_t charIndex;
@@ -462,7 +479,7 @@ etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
 		charIndex = unicodeChar - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement[0].Size(); iii++) {
-			if ((m_listElement[0])[iii].property.m_UVal == unicodeChar) {
+			if ((m_listElement[0])[iii].m_UVal == unicodeChar) {
 				charIndex = iii;
 				break;
 			}
@@ -470,7 +487,8 @@ etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar)
 		// TODO : Update if possible the mapping
 		charIndex = 0;
 	}
-	outputSize.x = (m_listElement[0])[charIndex].property.m_advance.x;
+	float kerningOffset = (m_listElement[displayMode])[charIndex].KerningGet(unicodeCharPrevious);
+	outputSize.x = (m_listElement[0])[charIndex].m_advance.x + kerningOffset;
 	return outputSize;
 }
 
