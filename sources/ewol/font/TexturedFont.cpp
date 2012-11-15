@@ -84,7 +84,15 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	
 	// find the real Font name :
 	etk::Vector<etk::UString> output;
-	etk::FSNode myFolder("/usr/share/fonts/truetype");
+	#ifdef __EWOL_INTEGRATED_FONT__
+		etk::FSNode myFolder("DATA:fonts");
+	#else
+		#if defined(__TARGET_OS__Android)
+			etk::FSNode myFolder("/system/font"); 
+		#elif defined(__TARGET_OS__Linux)
+			etk::FSNode myFolder("/usr/share/fonts/truetype");
+		#endif
+	#endif
 	myFolder.FolderGetRecursiveFiles(output);
 	for (int32_t iii=0; iii<output.Size(); iii++) {
 		//EWOL_DEBUG(" file : " << output[iii]);
@@ -211,6 +219,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			}
 			
 		}
+		//m_font[iiiFontId]->Display();
 		// generate the kerning for all the characters : 
 		m_font[iiiFontId]->GenerateKerning(m_size, m_listElement[iiiFontId]);
 	}

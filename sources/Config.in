@@ -6,4 +6,12 @@ menu "General"
 		help
 			This is the application Title
 	
+	config __EWOL_INTEGRATED_FONT__
+		prompt "Integrate Font in the appl data"
+		bool
+		default y
+		help
+			By default the application seach the font in the system folder.
+			If enable the system seach the font in the "DATA:fonts" folder.
+	
 endmenu

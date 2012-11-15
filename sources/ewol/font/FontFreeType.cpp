@@ -235,6 +235,9 @@ void ewol::FontFreeType::GenerateKerning(int32_t fontSize, etk::Vector<ewol::Gly
 	if(false==m_init) {
 		return;
 	}
+	if ((FT_FACE_FLAG_KERNING & m_fftFace->face_flags) == 0) {
+		EWOL_INFO("No kerning generation (Disable) in the font");
+	}
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
 	// Select Size ...
