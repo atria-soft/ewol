@@ -48,14 +48,38 @@ extern "C" {
 
 namespace ewol {
 	namespace openGL {
+		/**
+		 * @brief Initialize the open gl system (all the data register in the graphic card is all time duplicate in the memory)
+		 * this is due to the fact of some operating system destroy sometime the opengl context
+		 */
 		void Init(void);
+		/**
+		 * @brief un-init the opengl element from the graphic card
+		 */
 		void UnInit(void);
-		// reset the basic element at this one ... remove all previous
+		/**
+		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
+		 * @param[in] newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
+		 */
 		void SetBasicMatrix(etk::Matrix4& newOne);
-		// this is the same system as openGL-ES-1 but in openGL-ES-2 (here is the abstraction)
+		/**
+		 * @brief this funtion configure the current use matrix for the renderer (call @ref Push before, and @ref Pop when no more needed).
+		 * @param[in] newOne The new current matrix use for the render.
+		 * @note We did not use opengl standard system, due to the fact that is not supported in opengl ES-2
+		 */
 		void SetMatrix(etk::Matrix4& newOne);
+		/**
+		 * @brief Store current matrix in the matrix stack.
+		 */
 		void Push(void);
+		/**
+		 * @brief Remove the current matrix and get the last one from the matrix stack.
+		 */
 		void Pop(void);
+		/**
+		 * @brief Get a reference on the current matrix destinate to opengl renderer.
+		 * @return The requested matrix.
+		 */
 		etk::Matrix4& GetMatrix(void);
 	};
 };
