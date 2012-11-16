@@ -14,6 +14,7 @@
 #include <ewol/Debug.h>
 #include <ewol/oObject/OObject.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/compositing/Text.h>
 
 extern const char * const ewolEventButtonPressed;
 extern const char * const ewolEventButtonDown;
@@ -85,7 +86,7 @@ namespace ewol {
 			void SetPoint(float x, float y);
 			void Rectangle(float x, float y, float w, float h);
 		private:
-			ewol::OObject2DTextColored m_oObjectText;
+			ewol::Text                 m_displayText;
 			ewol::OObject2DTextured*   m_oObjectImage;
 			bool                       m_hasAnImage;
 			etk::UString               m_imageSelected;

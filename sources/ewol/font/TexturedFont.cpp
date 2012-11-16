@@ -98,7 +98,9 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		//EWOL_DEBUG(" file : " << output[iii]);
 		if(    true == output[iii].EndWith(m_name+"-"+"bold"+".ttf", false)
 		    || true == output[iii].EndWith(m_name+"-"+"b"+".ttf", false)
+		    || true == output[iii].EndWith(m_name+"-"+"bd"+".ttf", false)
 		    || true == output[iii].EndWith(m_name+"bold"+".ttf", false)
+		    || true == output[iii].EndWith(m_name+"bd"+".ttf", false)
 		    || true == output[iii].EndWith(m_name+"b"+".ttf", false)) {
 			EWOL_INFO(" find Font [Bold]        : " << output[iii]);
 			m_fileName[ewol::font::Bold] = output[iii];
@@ -502,3 +504,25 @@ etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar,
 }
 
 
+int32_t ewol::TexturedFont::GetIndex(const uniChar_t charcode, const ewol::font::mode_te displayMode) const
+{
+	if (charcode < 0x20) {
+		return 0;
+	} else if (charcode < 0x80) {
+		return charcode - 0x1F;
+	} else {
+		for (int32_t iii=0x80-0x20; iii < m_listElement[displayMode].Size(); iii++) {
+			if ((m_listElement[displayMode])[iii].m_UVal == charcode) {
+				return iii;
+			}
+		}
+	}
+	return 0;
+}
+
+
+ewol::GlyphProperty* ewol::TexturedFont::GetGlyphPointer(const uniChar_t charcode, const ewol::font::mode_te displayMode)
+{
+	int32_t index = GetIndex(charcode, displayMode);
+	return &((m_listElement[displayMode])[index]);
+}

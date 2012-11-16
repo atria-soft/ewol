@@ -27,13 +27,14 @@ namespace ewol
 	
 	class Text : public ewol::Compositing
 	{
-		typedef enum {
-			alignDisable,
-			alignRight,
-			alignLeft,
-			alignCenter,
-			alignJustify
-		} aligneMode_te;
+		public:
+			typedef enum {
+				alignDisable,
+				alignRight,
+				alignLeft,
+				alignCenter,
+				alignJustify
+			} aligneMode_te;
 		
 		private:
 			// curent Drawing position
@@ -45,7 +46,11 @@ namespace ewol
 			// Basic color
 			draw::Color          m_color;
 			draw::Color          m_colorBg;
-			// font property : 
+			// font property :
+			ewol::font::mode_te  m_mode;
+			bool                 m_kerning;
+			bool                 m_distanceField;
+			uniChar_t            m_previousCharcode;
 			// alignement propoerty
 			float                m_startTextpos;
 			float                m_stopTextPos;
@@ -55,7 +60,6 @@ namespace ewol
 			int32_t        m_GLPosition;
 			int32_t        m_GLMatrix;
 			int32_t        m_GLColor;
-			int32_t        m_GLtextMode;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID;
 			// Font resource :
@@ -162,7 +166,7 @@ namespace ewol
 			 * @brief Display a compleat string in the current element.
 			 * @param[in] text The string to display.
 			 */
-			void Print(etk::UString& text);
+			void Print(const etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element with the generic decoration specification.
 			 *   \<b\> ... \</b\> For bold text.
@@ -174,18 +178,18 @@ namespace ewol
 			 *   \<justify\> ... \</justify\> To align justify.
 			 * @param[in] text The string to display.
 			 */
-			void PrintDecorated(etk::UString& text);
+			void PrintDecorated(const etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] text The string to display.
 			 * @param[in] decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 			 */
-			void Print(etk::UString& text, etk::Vector<TextDecoration>& decoration);
+			void Print(const etk::UString& text, const etk::Vector<TextDecoration>& decoration);
 			/**
 			 * @brief Display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] char that might be dispalyed
 			 */
-			void Print(uniChar_t charcode);
+			void Print(const uniChar_t charcode);
 			/**
 			 * @brief This generate the possibility to generate the big text property
 			 * @param[in] startTextpos The x text start position of the display.
@@ -198,6 +202,29 @@ namespace ewol
 			 * @brief Disable the alignement system
 			 */
 			void DisableAlignement(void);
+			/**
+			 * @brief Calculate a theoric text size
+			 * @param[in] text The string to calculate dimention.
+			 * @return The theoric size used.
+			 */
+			etk::Vector3D<float> CalculateSize(const etk::UString& text);
+			/**
+			 * @brief Calculate a theoric charcode size
+			 * @param[in] charcode The µUnicode value to calculate dimention.
+			 * @return The theoric size used.
+			 */
+			etk::Vector3D<float> CalculateSize(const uniChar_t charcode);
+		private:
+			/**
+			 * @brief Calculate the element number that is the first out the alignement range 
+			 *        (start at the specify ID, and use start pos with current one)
+			 * @param[in] text The string that might be parsed.
+			 * @param[in] start The first elemnt that might be used to calculate.
+			 * @param[out] stop The last Id availlable in the current string.
+			 * @param[out] space Number of space in the string.
+			 * @return true if need not alligne justify (end  of string)
+			 */
+			bool ExtrapolateLastId(const etk::UString& text, const int32_t start, int32_t& stop, int32_t& space, int32_t& freeSpace);
 	};
 };
 

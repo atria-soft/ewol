@@ -114,7 +114,8 @@ bool ewol::Button::CalculateMinSize(void)
 	etk::Vector2D<int32_t> padding;
 	padding.x = m_config->GetInteger(m_confIdPaddingX);
 	padding.y = m_config->GetInteger(m_confIdPaddingY);
-	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	
+	etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
 	m_minSize.x = padding.x*2 + minSize.x;
 	m_minSize.y = padding.y*2 + minSize.y;
 	// Add the image element ...
@@ -214,7 +215,8 @@ void ewol::Button::OnDraw(DrawProperty& displayProp)
 	if (NULL != m_oObjectImage) {
 		m_oObjectImage->Draw();
 	}
-	m_oObjectText.Draw();
+	//m_oObjectText.Draw();
+	m_displayText.Draw();
 }
 
 void ewol::Button::OnRegenerateDisplay(void)
@@ -225,35 +227,36 @@ void ewol::Button::OnRegenerateDisplay(void)
 		padding.x = m_config->GetInteger(m_confIdPaddingX);
 		padding.y = m_config->GetInteger(m_confIdPaddingY);
 		
-		m_oObjectText.Clear();
 		if (NULL != m_oObjectImage) {
 			m_oObjectImage->Clear();
 		}
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
-		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
-		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
+		etk::Vector3D<float> tmpOrigin((float)((m_size.x - m_minSize.x) / 2.0),
+		                               (float)((m_size.y - m_minSize.y) / 2.0),
+		                               (float)(0.0));
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + padding.x;
-		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + padding.y;
+		etk::Vector3D<float> tmpTextOrigin((float)((m_size.x - m_minSize.x) / 2.0 + padding.x),
+		                                   (float)((m_size.y - m_minSize.y) / 2.0 + padding.y),
+		                                   (float)(0.0));
 		
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
-			tmpOriginX = 0;
+			tmpOrigin.x = 0.0;
 			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
-				tmpTextOriginX = padding.x;
+				tmpTextOrigin.x = padding.x;
 			}
 		}
 		if (true==m_userFill.y) {
 			tmpSizeY = m_size.y;
-			tmpOriginY = 0;
+			tmpOrigin.y = 0.0;
 		}
-		tmpOriginX += padding.x;
-		tmpOriginY += padding.y;
+		tmpOrigin.x += padding.x;
+		tmpOrigin.x += padding.y;
 		tmpSizeX -= 2*padding.x;
 		tmpSizeY -= 2*padding.y;
 		
-		etk::Vector2D<float> textPos(tmpTextOriginX, tmpTextOriginY);
+		etk::Vector2D<float> textPos(tmpTextOrigin.x, tmpTextOrigin.x);
 		
 		/*ewol::OObject2DTextured * tmpImage = NULL;
 		if (true == m_hasAnImage) {
@@ -265,16 +268,22 @@ void ewol::Button::OnRegenerateDisplay(void)
 			textPos.x += m_padding.x + fontHeight;
 		}
 		*/
-		clipping_ts drawClipping;
-		drawClipping.x = padding.x;
-		drawClipping.y = padding.y;
-		drawClipping.w = m_size.x - 2*padding.x;
-		drawClipping.h = m_size.y - 2*padding.y;
-		//EWOL_DEBUG("draw tex at pos : " <<textPos << "in element size:" << m_size);
-		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
+		etk::Vector3D<float> drawClippingPos((float)padding.x, (float)padding.y, (float)-0.5);
+		etk::Vector3D<float> drawClippingSize((float)(m_size.x - 2*padding.x),
+		                                      (float)(m_size.y - 2*padding.y),
+		                                      (float)1.0);
+		
+		// clean the element
+		m_displayText.Clear();
+		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
+		m_displayText.Print(m_label);
+		m_displayText.Tranlate(tmpTextOrigin);
+		
 		
 		m_widgetProperty.m_insidePos = textPos;
-		m_widgetProperty.m_insideSize = m_oObjectText.GetSize(m_label);
+		etk::Vector3D<float> tmpp = m_displayText.CalculateSize(m_label);
+		etk::Vector2D<float> tmpp2(tmpp.x, tmpp.y);
+		m_widgetProperty.m_insideSize = tmpp2;
 		
 		Rectangle(0, 0, m_size.x, m_size.y);
 	}

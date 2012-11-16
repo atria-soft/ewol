@@ -31,7 +31,11 @@ namespace ewol
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */
-			void virtual Draw(void)=0;
+			virtual void Draw(void)=0;
+			/**
+			 * @brief Clear alll tre registered element in the current element
+			 */
+			virtual void Clear(void);
 			/**
 			 * @brief Reset to the eye matrix the openGL mouving system
 			 */
@@ -45,7 +49,7 @@ namespace ewol
 			 * @brief Rotate the curent display of this element
 			 * @param[in] vect The rotation vector to apply at the transformation matrix
 			 */
-			void Rotate(etk::Vector3D<float> vect);
+			void Rotate(etk::Vector3D<float> vect, float angle);
 			/**
 			 * @brief Scale the current diaplsy of this element
 			 * @param[in] vect The scaling vector to apply at the transformation matrix

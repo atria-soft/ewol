@@ -30,17 +30,23 @@ void ewol::Compositing::ResetMatrix(void)
 
 void ewol::Compositing::Tranlate(etk::Vector3D<float> vect)
 {
-	m_matrixApply *= etk::matrix::Translate(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::Translate(vect);
 }
 
 
-void ewol::Compositing::Rotate(etk::Vector3D<float> vect)
+void ewol::Compositing::Rotate(etk::Vector3D<float> vect, float angle)
 {
-	m_matrixApply *= etk::matrix::rotate(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::Rotate(vect, angle);
 }
 
 
 void ewol::Compositing::Scale(etk::Vector3D<float> vect)
 {
-	m_matrixApply *= etk::matrix::Scale(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::Scale(vect);
+}
+
+
+void ewol::Compositing::Clear(void)
+{
+	m_matrixApply.Identity();
 }
