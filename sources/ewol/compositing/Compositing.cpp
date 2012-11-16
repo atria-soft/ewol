@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-
-#include <ewol/compositing/Compisiting.h>
+#include <ewol/Debug.h>
+#include <ewol/compositing/Compositing.h>
 
 
 ewol::Compositing::Compositing(void)
@@ -30,17 +30,17 @@ void ewol::Compositing::ResetMatrix(void)
 
 void ewol::Compositing::Tranlate(etk::Vector3D<float> vect)
 {
-	m_matrixApply *= ewol::matrix::Translate(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::Translate(vect.x, vect.y, vect.z);
 }
 
 
 void ewol::Compositing::Rotate(etk::Vector3D<float> vect)
 {
-	m_matrixApply *= ewol::matrix::rotate(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::rotate(vect.x, vect.y, vect.z);
 }
 
 
 void ewol::Compositing::Scale(etk::Vector3D<float> vect)
 {
-	m_matrixApply *= ewol::matrix::Scale(vect.x, vect.y, vect.z);
+	m_matrixApply *= etk::matrix::Scale(vect.x, vect.y, vect.z);
 }

@@ -9,6 +9,10 @@
 #ifndef __EWOL_COMPOSITING_H__
 #define __EWOL_COMPOSITING_H__
 
+#include <ewol/Debug.h>
+#include <etk/math/Matrix4.h>
+#include <etk/UString.h>
+
 namespace ewol
 {
 	class Compositing
@@ -27,7 +31,7 @@ namespace ewol
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */
-			virtual Draw(void)=0;
+			void virtual Draw(void)=0;
 			/**
 			 * @brief Reset to the eye matrix the openGL mouving system
 			 */

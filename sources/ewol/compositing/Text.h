@@ -9,15 +9,20 @@
 #ifndef __EWOL_TEXT_H__
 #define __EWOL_TEXT_H__
 
+#include <ewol/Debug.h>
+#include <ewol/compositing/Compositing.h>
+#include <draw/Color.h>
+#include <ewol/ResourceManager.h>
+
 namespace ewol
 {
 	class TextDecoration
 	{
 		public:
-			etk::Color          m_colorBg;
-			etk::Color          m_colorFg;
+			draw::Color          m_colorBg;
+			draw::Color          m_colorFg;
 			ewol::font::mode_te m_mode;
-	}
+	};
 	
 	
 	class Text : public ewol::Compositing
@@ -30,7 +35,7 @@ namespace ewol
 			alignJustify
 		} aligneMode_te;
 		
-		protected:
+		private:
 			// curent Drawing position
 			etk::Vector3D<float> m_position;         //!< the next position to draw the text
 			// clipping section
@@ -38,7 +43,34 @@ namespace ewol
 			etk::Vector3D<float> m_clippingSize;
 			bool                 m_clippingEnable;
 			// Basic color
-			etk::Color           m_color;
+			draw::Color          m_color;
+			draw::Color          m_colorBg;
+			// font property : 
+			// alignement propoerty
+			float                m_startTextpos;
+			float                m_stopTextPos;
+			aligneMode_te        m_alignement;
+			// OpenGL interface for shader
+			ewol::Program* m_GLprogram;
+			int32_t        m_GLPosition;
+			int32_t        m_GLMatrix;
+			int32_t        m_GLColor;
+			int32_t        m_GLtextMode;
+			int32_t        m_GLtexture;
+			int32_t        m_GLtexID;
+			// Font resource :
+			ewol::TexturedFont*                  m_font;          //!< ewol font system
+			// data vector for all the display :
+			// Note : the X texture range change to select the Regular / Bold / italic / BoldItalic mode , and the next is for no font but background color
+			//        ==> associate with a special shader
+			etk::Vector<etk::Vector2D<float> >   m_coord;         //!< internal coord of the object
+			etk::Vector<texCoord_ts>             m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
+		private:
+			/**
+			 * @brief Load the openGL program and get all the ID needed
+			 */
+			void LoadProgram(void);
 		public:
 			/**
 			 * @brief generic constructor
@@ -77,12 +109,12 @@ namespace ewol
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
 			 */
-			void SetColor(etk::Color color);
+			void SetColor(draw::Color color);
 			/**
 			 * @brief Set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] color Color to set on background (for next print)
 			 */
-			void SetColorBG(etk::Color color);
+			void SetColorBG(draw::Color color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos   Start position of the clipping
@@ -125,7 +157,7 @@ namespace ewol
 			 * @param[in] newMode Enable/Diasable the Distance Field on this font.
 			 * @todo : not implemented for now
 			 */
-			void SetDistanceFieldMode(bool newMode) { };
+			void SetDistanceFieldMode(bool newMode);
 			/**
 			 * @brief Display a compleat string in the current element.
 			 * @param[in] text The string to display.

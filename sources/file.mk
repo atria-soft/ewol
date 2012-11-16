@@ -26,6 +26,10 @@ FILE_LIST+= ewol/game/GameElement.cpp \
 			ewol/game/GameElementLua.cpp \
 			ewol/game/SceneElement.cpp
 
+# Compositing
+FILE_LIST+= ewol/compositing/Compositing.cpp \
+			ewol/compositing/Text.cpp
+
 # Object abstraction for OpenGl
 FILE_LIST+= ewol/oObject/OObject.cpp \
 			ewol/oObject/2DTextColored.cpp \
