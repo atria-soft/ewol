@@ -220,14 +220,14 @@ void ewol::Text::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posE
 		m_clippingPosStop.z = pos.z;
 	}
 	m_clippingEnable = true;
-	m_vectorialDraw.SetClipping(m_clippingPosStart, m_clippingPosStop);
+	//m_vectorialDraw.SetClipping(m_clippingPosStart, m_clippingPosStop);
 }
 
 
 void ewol::Text::SetClippingMode(bool newMode)
 {
 	m_clippingEnable = newMode;
-	m_vectorialDraw.SetClippingMode(m_clippingEnable);
+	//m_vectorialDraw.SetClippingMode(m_clippingEnable);
 }
 
 
@@ -320,10 +320,14 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				SetFontMode(decoration[iii].m_mode);
 			}
 			if (m_colorBg.a != 0) {
-				m_vectorialDraw.SetPos(m_position);
-				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(15,15,0) );
+				etk::Vector3D<float> pos = m_position;
+				m_vectorialDraw.SetPos(pos);
+				Print(text[iii]);
+				float fontHeigh = m_font->GetHeight(m_mode);
+				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+			} else {
+				Print(text[iii]);
 			}
-			Print(text[iii]);
 		}
 	} else {
 		float basicSpaceWidth = CalculateSize(' ').x;
@@ -361,18 +365,30 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 			}
 			// display all the elements
 			for(int32_t iii=currentId; iii<stop && iii<text.Size(); iii++) {
+				float fontHeigh = m_font->GetHeight(m_mode);
+				// Get specific decoration if provided
+				if (iii<decoration.Size()) {
+					SetColor(decoration[iii].m_colorFg);
+					SetColorBG(decoration[iii].m_colorBg);
+					SetFontMode(decoration[iii].m_mode);
+				}
+				// special for the justify mode
 				if (text[iii] == (uniChar_t)' ') {
+					m_vectorialDraw.SetPos(m_position);
 					// Must generate a dynamic space : 
 					SetPos(etk::Vector3D<float>(m_position.x + interpolation,
 					                            m_position.y,
 					                            m_position.z) );
+					m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(interpolation,fontHeigh,0.0f) );
 				} else {
-					if (iii<decoration.Size()) {
-						SetColor(decoration[iii].m_colorFg);
-						SetColorBG(decoration[iii].m_colorBg);
-						SetFontMode(decoration[iii].m_mode);
+					if (m_colorBg.a != 0) {
+						etk::Vector3D<float> pos = m_position;
+						m_vectorialDraw.SetPos(pos);
+						Print(text[iii]);
+						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+					} else {
+						Print(text[iii]);
 					}
-					Print(text[iii]);
 				}
 			}
 			if (currentId == stop) {

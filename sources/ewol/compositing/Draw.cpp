@@ -465,12 +465,6 @@ void ewol::Drawing::Rectangle(etk::Vector3D<float> dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
-	/*
-	x += 3;
-	y += 3;
-	w -= 6;
-	h -= 6;
-	*/
 	/* Bitmap position
 	 *      xA     xB
 	 *   yC *------*
@@ -482,7 +476,6 @@ void ewol::Drawing::Rectangle(etk::Vector3D<float> dest)
 	float dxB = dest.x;
 	float dyC = m_position.y;
 	float dyD = dest.y;
-	
 	if (true == m_clippingEnable) {
 		if (dxA < m_clippingPosStart.x) {
 			dxA = m_clippingPosStart.x;
