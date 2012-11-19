@@ -134,6 +134,26 @@ void ewol::Text::Draw(void)
 	m_GLprogram->UnUse();
 }
 
+void ewol::Text::Translate(etk::Vector3D<float> vect)
+{
+	ewol::Compositing::Translate(vect);
+	m_vectorialDraw.Translate(vect);
+}
+
+
+void ewol::Text::Rotate(etk::Vector3D<float> vect, float angle)
+{
+	ewol::Compositing::Rotate(vect, angle);
+	m_vectorialDraw.Rotate(vect, angle);
+}
+
+
+void ewol::Text::Scale(etk::Vector3D<float> vect)
+{
+	ewol::Compositing::Scale(vect);
+	m_vectorialDraw.Scale(vect);
+}
+
 
 void ewol::Text::Clear(void)
 {
@@ -161,6 +181,12 @@ void ewol::Text::Clear(void)
 }
 
 
+etk::Vector3D<float> ewol::Text::GetPos(void)
+{
+	return m_position;
+}
+
+
 void ewol::Text::SetPos(etk::Vector3D<float> pos)
 {
 	m_position = pos;
@@ -183,7 +209,7 @@ void ewol::Text::SetColor(draw::Color color)
 }
 
 
-void ewol::Text::SetColorBG(draw::Color color)
+void ewol::Text::SetColorBg(draw::Color color)
 {
 	m_colorBg = color;
 	m_vectorialDraw.SetColor(color);
@@ -278,6 +304,45 @@ void ewol::Text::SetFontMode(ewol::font::mode_te mode)
 }
 
 
+void ewol::Text::SetFontBold(bool status)
+{
+	if (true == status) {
+		// enable
+		if (m_mode == ewol::font::Regular) {
+			SetFontMode(ewol::font::Bold);
+		} else if (m_mode == ewol::font::Italic) {
+			SetFontMode(ewol::font::BoldItalic);
+		}
+	} else {
+		// disable
+		if (m_mode == ewol::font::Bold) {
+			SetFontMode(ewol::font::Regular);
+		} else if (m_mode == ewol::font::BoldItalic) {
+			SetFontMode(ewol::font::Italic);
+		}
+	}
+}
+
+void ewol::Text::SetFontItalic(bool status)
+{
+	if (true == status) {
+		// enable
+		if (m_mode == ewol::font::Regular) {
+			SetFontMode(ewol::font::Italic);
+		} else if (m_mode == ewol::font::Bold) {
+			SetFontMode(ewol::font::BoldItalic);
+		}
+	} else {
+		// disable
+		if (m_mode == ewol::font::Italic) {
+			SetFontMode(ewol::font::Regular);
+		} else if (m_mode == ewol::font::BoldItalic) {
+			SetFontMode(ewol::font::Bold);
+		}
+	}
+}
+
+
 void ewol::Text::SetKerningMode(bool newMode)
 {
 	m_kerning = newMode;
@@ -316,7 +381,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 		for(int32_t iii=0; iii<text.Size(); iii++) {
 			if (iii<decoration.Size()) {
 				SetColor(decoration[iii].m_colorFg);
-				SetColorBG(decoration[iii].m_colorBg);
+				SetColorBg(decoration[iii].m_colorBg);
 				SetFontMode(decoration[iii].m_mode);
 			}
 			if (m_colorBg.a != 0) {
@@ -369,7 +434,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				// Get specific decoration if provided
 				if (iii<decoration.Size()) {
 					SetColor(decoration[iii].m_colorFg);
-					SetColorBG(decoration[iii].m_colorBg);
+					SetColorBg(decoration[iii].m_colorBg);
 					SetFontMode(decoration[iii].m_mode);
 				}
 				// special for the justify mode
@@ -393,16 +458,17 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if(    text[stop] == (uniChar_t)' '
-			           || text[stop] == (uniChar_t)'\n') {
+			} else if(text[stop] == (uniChar_t)' ') {
 				currentId = stop+1;
+			} else if(text[stop] == (uniChar_t)'\n') {
+				currentId = stop+1;
+				// Reset position : 
+				SetPos(etk::Vector3D<float>(m_startTextpos,
+				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
+				                            m_position.z) );
 			} else {
 				currentId = stop;
 			}
-			// Reset position : 
-			SetPos(etk::Vector3D<float>(m_startTextpos,
-			                            (float)(m_position.y - m_font->GetHeight(m_mode)),
-			                            m_position.z) );
 		}
 	}
 }
@@ -606,6 +672,14 @@ void ewol::Text::Print(const uniChar_t charcode)
 	// Register the previous character
 	m_previousCharcode = charcode;
 	return;
+}
+
+void ewol::Text::ForceLineReturn(void)
+{
+	// Reset position : 
+	SetPos(etk::Vector3D<float>(m_startTextpos,
+	                            (float)(m_position.y - m_font->GetHeight(m_mode)),
+	                            m_position.z) );
 }
 
 

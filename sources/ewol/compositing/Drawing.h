@@ -83,6 +83,11 @@ namespace ewol
 			 */
 			void Clear(void);
 			/**
+			 * @brief Get the current display position (sometime needed in the gui control)
+			 * @return the current position.
+			 */
+			etk::Vector3D<float> GetPos(void);
+			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
@@ -101,7 +106,7 @@ namespace ewol
 			 * @brief Set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] color Color to set on background (for next print)
 			 */
-			void SetColorBG(draw::Color color);
+			void SetColorBg(draw::Color color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping

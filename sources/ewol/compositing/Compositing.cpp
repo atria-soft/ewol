@@ -28,7 +28,7 @@ void ewol::Compositing::ResetMatrix(void)
 }
 
 
-void ewol::Compositing::Tranlate(etk::Vector3D<float> vect)
+void ewol::Compositing::Translate(etk::Vector3D<float> vect)
 {
 	m_matrixApply *= etk::matrix::Translate(vect);
 }

@@ -39,22 +39,22 @@ namespace ewol
 			/**
 			 * @brief Reset to the eye matrix the openGL mouving system
 			 */
-			void ResetMatrix(void);
+			virtual void ResetMatrix(void);
 			/**
 			 * @brief Translate the current display of this element
 			 * @param[in] vect The translation vector to apply at the transformation matrix
 			 */
-			void Tranlate(etk::Vector3D<float> vect);
+			virtual void Translate(etk::Vector3D<float> vect);
 			/**
 			 * @brief Rotate the curent display of this element
 			 * @param[in] vect The rotation vector to apply at the transformation matrix
 			 */
-			void Rotate(etk::Vector3D<float> vect, float angle);
+			virtual void Rotate(etk::Vector3D<float> vect, float angle);
 			/**
 			 * @brief Scale the current diaplsy of this element
 			 * @param[in] vect The scaling vector to apply at the transformation matrix
 			 */
-			void Scale(etk::Vector3D<float> vect);
+			virtual void Scale(etk::Vector3D<float> vect);
 	};
 };
 

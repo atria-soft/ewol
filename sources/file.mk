@@ -29,7 +29,7 @@ FILE_LIST+= ewol/game/GameElement.cpp \
 # Compositing
 FILE_LIST+= ewol/compositing/Compositing.cpp \
 			ewol/compositing/Text.cpp \
-			ewol/compositing/Draw.cpp
+			ewol/compositing/Drawing.cpp
 
 # Object abstraction for OpenGl
 FILE_LIST+= ewol/oObject/OObject.cpp \

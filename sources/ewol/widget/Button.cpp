@@ -277,7 +277,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		m_displayText.Clear();
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
 		m_displayText.Print(m_label);
-		m_displayText.Tranlate(tmpTextOrigin);
+		m_displayText.Translate(tmpTextOrigin);
 		
 		
 		m_widgetProperty.m_insidePos = textPos;

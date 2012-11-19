@@ -7,7 +7,7 @@
  */
 
 #include <ewol/Debug.h>
-#include <ewol/compositing/Draw.h>
+#include <ewol/compositing/Drawing.h>
 
 
 #if 0
@@ -346,6 +346,12 @@ void ewol::Drawing::Clear(void)
 }
 
 
+etk::Vector3D<float> ewol::Drawing::GetPos(void)
+{
+	return m_position;
+}
+
+
 void ewol::Drawing::SetPos(etk::Vector3D<float> pos)
 {
 	m_position = pos;
@@ -364,7 +370,7 @@ void ewol::Drawing::SetColor(draw::Color color)
 }
 
 
-void ewol::Drawing::SetColorBG(draw::Color color)
+void ewol::Drawing::SetColorBg(draw::Color color)
 {
 	m_colorBg = color;
 }

@@ -11,7 +11,7 @@
 
 #include <ewol/Debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/compositing/Draw.h>
+#include <ewol/compositing/Drawing.h>
 #include <draw/Color.h>
 #include <ewol/ResourceManager.h>
 
@@ -97,7 +97,23 @@ namespace ewol
 			 * @brief generic destructor
 			 */
 			~Text(void);
-		public :
+		public:
+			/**
+			 * @brief Translate the current display of this element
+			 * @param[in] vect The translation vector to apply at the transformation matrix
+			 */
+			virtual void Translate(etk::Vector3D<float> vect);
+			/**
+			 * @brief Rotate the curent display of this element
+			 * @param[in] vect The rotation vector to apply at the transformation matrix
+			 */
+			virtual void Rotate(etk::Vector3D<float> vect, float angle);
+			/**
+			 * @brief Scale the current diaplsy of this element
+			 * @param[in] vect The scaling vector to apply at the transformation matrix
+			 */
+			virtual void Scale(etk::Vector3D<float> vect);
+		public:
 			/**
 			 * @brief Draw All the refistered text in the current element on openGL
 			 */
@@ -106,6 +122,11 @@ namespace ewol
 			 * @brief Clear alll tre registered element in the current element
 			 */
 			void Clear(void);
+			/**
+			 * @brief Get the current display position (sometime needed in the gui control)
+			 * @return the current position.
+			 */
+			etk::Vector3D<float> GetPos(void);
 			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
@@ -125,7 +146,7 @@ namespace ewol
 			 * @brief Set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] color Color to set on background (for next print)
 			 */
-			void SetColorBG(draw::Color color);
+			void SetColorBg(draw::Color color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
@@ -164,6 +185,16 @@ namespace ewol
 			 * @param[in] mode The font mode requested
 			 */
 			void SetFontMode(ewol::font::mode_te mode);
+			/**
+			 * @brief Enable or disable the bold mode
+			 * @param[in] status The new status for this display property
+			 */
+			void SetFontBold(bool status);
+			/**
+			 * @brief Enable or disable the italic mode
+			 * @param[in] status The new status for this display property
+			 */
+			void SetFontItalic(bool status);
 			/**
 			 * @brief Set the activation of the Kerning for the display (if it existed)
 			 * @param[in] newMode Enable/Diasable the kerning on this font.
@@ -204,6 +235,10 @@ namespace ewol
 			 * @param[in] char that might be dispalyed
 			 */
 			void Print(const uniChar_t charcode);
+			/**
+			 * @brief This Generate the line return ==> it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
+			 */
+			void ForceLineReturn(void);
 			/**
 			 * @brief This generate the possibility to generate the big text property
 			 * @param[in] startTextpos The x text start position of the display.
