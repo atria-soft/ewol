@@ -25,8 +25,8 @@
 
 ewol::Text::Text(void) :
 	m_position(0.0, 0.0, 0.0),
-	m_clippingPosition(0.0, 0.0, 0.0),
-	m_clippingSize(0.0, 0.0, 0.0),
+	m_clippingPosStart(0.0, 0.0, 0.0),
+	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
 	m_color(draw::color::black),
 	m_colorBg(draw::color::none),
@@ -52,8 +52,8 @@ ewol::Text::Text(void) :
 
 ewol::Text::Text(etk::UString fontName, int32_t fontSize) :
 	m_position(0.0, 0.0, 0.0),
-	m_clippingPosition(0.0, 0.0, 0.0),
-	m_clippingSize(0.0, 0.0, 0.0),
+	m_clippingPosStart(0.0, 0.0, 0.0),
+	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
 	m_color(draw::color::black),
 	m_colorBg(draw::color::none),
@@ -116,9 +116,10 @@ void ewol::Text::Draw(void)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	m_GLprogram->Use();
+	m_vectorialDraw.Draw();
 	// set Matrix : translation/positionMatrix
 	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
+	m_GLprogram->Use(); 
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_font->GetId());
@@ -138,14 +139,16 @@ void ewol::Text::Clear(void)
 {
 	// call upper class
 	ewol::Compositing::Clear();
+	// remove sub draw system
+	m_vectorialDraw.Clear();
 	// Reset Buffer :
 	m_coord.Clear();
 	m_coordTex.Clear();
 	m_coordColor.Clear();
 	// Reset temporal variables :
 	m_position = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosition = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingSize = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	m_color = draw::color::black;
 	m_colorBg = draw::color::none;
@@ -162,6 +165,7 @@ void ewol::Text::SetPos(etk::Vector3D<float> pos)
 {
 	m_position = pos;
 	m_previousCharcode = 0;
+	m_vectorialDraw.SetPos(m_position);
 }
 
 
@@ -169,6 +173,7 @@ void ewol::Text::SetRelPos(etk::Vector3D<float> pos)
 {
 	m_position += pos;
 	m_previousCharcode = 0;
+	m_vectorialDraw.SetPos(m_position);
 }
 
 
@@ -181,20 +186,48 @@ void ewol::Text::SetColor(draw::Color color)
 void ewol::Text::SetColorBG(draw::Color color)
 {
 	m_colorBg = color;
+	m_vectorialDraw.SetColor(color);
 }
 
 
-void ewol::Text::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> width)
+void ewol::Text::SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width)
 {
-	m_clippingPosition = pos;
-	m_clippingSize = width;
+	SetClipping(pos, pos+width);
+}
+
+void ewol::Text::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd)
+{
+	// note the internal system all time request to have a bounding all time in the same order
+	if (pos.x <= posEnd.x) {
+		m_clippingPosStart.x = pos.x;
+		m_clippingPosStop.x = posEnd.x;
+	} else {
+		m_clippingPosStart.x = posEnd.x;
+		m_clippingPosStop.x = pos.x;
+	}
+	if (pos.y <= posEnd.y) {
+		m_clippingPosStart.y = pos.y;
+		m_clippingPosStop.y = posEnd.y;
+	} else {
+		m_clippingPosStart.y = posEnd.y;
+		m_clippingPosStop.y = pos.y;
+	}
+	if (pos.z <= posEnd.z) {
+		m_clippingPosStart.z = pos.z;
+		m_clippingPosStop.z = posEnd.z;
+	} else {
+		m_clippingPosStart.z = posEnd.z;
+		m_clippingPosStop.z = pos.z;
+	}
 	m_clippingEnable = true;
+	m_vectorialDraw.SetClipping(m_clippingPosStart, m_clippingPosStop);
 }
 
 
 void ewol::Text::SetClippingMode(bool newMode)
 {
 	m_clippingEnable = newMode;
+	m_vectorialDraw.SetClippingMode(m_clippingEnable);
 }
 
 
@@ -239,7 +272,9 @@ void ewol::Text::SetFont(etk::UString fontName, int32_t fontSize)
 
 void ewol::Text::SetFontMode(ewol::font::mode_te mode)
 {
-	m_mode = mode;
+	if (NULL!=m_font) {
+		m_mode = m_font->GetWrappingMode(mode);
+	}
 }
 
 
@@ -258,58 +293,8 @@ void ewol::Text::SetDistanceFieldMode(bool newMode)
 
 void ewol::Text::Print(const etk::UString& text)
 {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return;
-	}
-	switch(m_alignement)
-	{
-		default:
-		case ewol::Text::alignDisable:
-			for(int32_t iii=0; iii<text.Size(); iii++) {
-				Print(text[iii]);
-			}
-			break;
-		case ewol::Text::alignJustify:
-			{
-				float basicSpaceWidth = CalculateSize(' ').x;
-				int32_t currentId = 0;
-				int32_t stop;
-				int32_t space;
-				int32_t freeSpace;
-				while (currentId < text.Size()) {
-					bool needNoJustify = ExtrapolateLastId(text, currentId, stop, space, freeSpace);
-					
-					float interpolation = basicSpaceWidth;
-					if (needNoJustify == false) {
-						interpolation += (float)freeSpace / (float)(space-1);
-					}
-					for(int32_t iii=currentId; iii<stop && iii<text.Size(); iii++) {
-						if (text[iii] == (uniChar_t)' ') {
-							// Must generate a dynamic space : 
-							SetPos(etk::Vector3D<float>(m_position.x + interpolation,
-							                            m_position.y,
-							                            m_position.z) );
-						} else {
-							Print(text[iii]);
-						}
-					}
-					if (currentId == stop) {
-						currentId++;
-					} else if(    text[stop] == (uniChar_t)' '
-					           || text[stop] == (uniChar_t)'\n') {
-						currentId = stop+1;
-					} else {
-						currentId = stop;
-					}
-					// Reset position : 
-					SetPos(etk::Vector3D<float>(m_startTextpos,
-					                            (float)(m_position.y - m_font->GetHeight(m_mode)),
-					                            m_position.z) );
-				}
-			}
-			break;
-	}
+	etk::Vector<TextDecoration> decorationEmpty;
+	Print(text, decorationEmpty);
 }
 
 
@@ -322,8 +307,88 @@ void ewol::Text::PrintDecorated(const etk::UString& text)
 
 void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoration>& decoration)
 {
-	EWOL_TODO("The Advenced print is not supported now ...");
-	Print(text);
+	if (m_font == NULL) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return;
+	}
+	if (m_alignement == ewol::Text::alignDisable) {
+		// note this is faster when nothing is requested ...
+		for(int32_t iii=0; iii<text.Size(); iii++) {
+			if (iii<decoration.Size()) {
+				SetColor(decoration[iii].m_colorFg);
+				SetColorBG(decoration[iii].m_colorBg);
+				SetFontMode(decoration[iii].m_mode);
+			}
+			if (m_colorBg.a != 0) {
+				m_vectorialDraw.SetPos(m_position);
+				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(15,15,0) );
+			}
+			Print(text[iii]);
+		}
+	} else {
+		float basicSpaceWidth = CalculateSize(' ').x;
+		int32_t currentId = 0;
+		int32_t stop;
+		int32_t space;
+		int32_t freeSpace;
+		while (currentId < text.Size()) {
+			bool needNoJustify = ExtrapolateLastId(text, currentId, stop, space, freeSpace);
+			
+			float interpolation = basicSpaceWidth;
+			switch (m_alignement)
+			{
+				case ewol::Text::alignJustify:
+					if (needNoJustify == false) {
+						interpolation += (float)freeSpace / (float)(space-1);
+					}
+					break;
+				case ewol::Text::alignDisable: // must not came from here ...
+				case ewol::Text::alignLeft:
+					// nothing to do ...
+					break;
+				case ewol::Text::alignRight:
+					// Move the first char at the right :
+					SetPos(etk::Vector3D<float>(m_position.x + freeSpace,
+					                            m_position.y,
+					                            m_position.z) );
+					break;
+				case ewol::Text::alignCenter:
+					// Move the first char at the right :
+					SetPos(etk::Vector3D<float>(m_position.x + freeSpace/2,
+					                            m_position.y,
+					                            m_position.z) );
+					break;
+			}
+			// display all the elements
+			for(int32_t iii=currentId; iii<stop && iii<text.Size(); iii++) {
+				if (text[iii] == (uniChar_t)' ') {
+					// Must generate a dynamic space : 
+					SetPos(etk::Vector3D<float>(m_position.x + interpolation,
+					                            m_position.y,
+					                            m_position.z) );
+				} else {
+					if (iii<decoration.Size()) {
+						SetColor(decoration[iii].m_colorFg);
+						SetColorBG(decoration[iii].m_colorBg);
+						SetFontMode(decoration[iii].m_mode);
+					}
+					Print(text[iii]);
+				}
+			}
+			if (currentId == stop) {
+				currentId++;
+			} else if(    text[stop] == (uniChar_t)' '
+			           || text[stop] == (uniChar_t)'\n') {
+				currentId = stop+1;
+			} else {
+				currentId = stop;
+			}
+			// Reset position : 
+			SetPos(etk::Vector3D<float>(m_startTextpos,
+			                            (float)(m_position.y - m_font->GetHeight(m_mode)),
+			                            m_position.z) );
+		}
+	}
 }
 
 
@@ -367,54 +432,54 @@ void ewol::Text::Print(const uniChar_t charcode)
 		
 		
 		// Clipping and drawing area
-		/*
-		if(     true == hasClipping
-		    && (    dxB < clipping.x
-		         || dxA > clipping.x + clipping.w) ) {
+		if(     true == m_clippingEnable
+		    && (    dxB < m_clippingPosStart.x
+		         || dxA > m_clippingPosStop.x
+		         || dyC < m_clippingPosStart.y
+		         || dyD > m_clippingPosStop.y ) ) {
 			// Nothing to diplay ...
 		} else {
-			if (true == hasClipping) {
+			if (true == m_clippingEnable) {
 				// generata positions...
 				float TexSizeX = tuB - tuA;
-				if (dxA < clipping.x) {
+				if (dxA < m_clippingPosStart.x) {
 					// clip display
-					float drawSize = clipping.x - dxA;
+					float drawSize = m_clippingPosStart.x - dxA;
 					// Update element start display
-					dxA = clipping.x;
+					dxA = m_clippingPosStart.x;
 					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x;
 					// update texture start X Pos
 					tuA += addElement;
 				}
-				if (dxB > clipping.x + clipping.w) {
+				if (dxB > m_clippingPosStop.x) {
 					// clip display
-					float drawSize = dxB - (clipping.x + clipping.w);
+					float drawSize = dxB - m_clippingPosStop.x;
 					// Update element start display
-					dxB = clipping.x + clipping.w;
+					dxB = m_clippingPosStop.x;
 					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x;
 					// update texture start X Pos
 					tuB -= addElement;
 				}
-				float TexSizeY = tvD - tvC;
-				if (dyC < clipping.y) {
+				float TexSizeY = tvC - tvD;
+				if (dyC > m_clippingPosStop.y) {
 					// clip display
-					float drawSize = clipping.y - dyC;
+					float drawSize = dyC - m_clippingPosStop.y;
 					// Update element start display
-					dyC = clipping.y;
-					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.x;
+					dyC = m_clippingPosStop.y;
+					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y;
 					// update texture start X Pos
-					tvC += addElement;
+					tvC -= addElement;
 				}
-				if (dyD > clipping.y + clipping.h) {
+				if (dyD < m_clippingPosStart.y) {
 					// clip display
-					float drawSize = dyD - (clipping.y + clipping.h);
+					float drawSize = m_clippingPosStart.y - dyD;
 					// Update element start display
-					dyD = clipping.y + clipping.h;
-					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x;
+					dyD = m_clippingPosStart.y;
+					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y;
 					// update texture start X Pos
-					tvD -= addElement;
+					tvD += addElement;
 				}
 			}
-		*/
 			if(    dxB <= dxA
 			    || dyD >= dyC) {
 				// nothing to do ...
@@ -472,7 +537,20 @@ void ewol::Text::Print(const uniChar_t charcode)
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
-				
+				/*
+				if (m_colorBg.a != 0) {
+					
+					m_vectorialDraw.SetPos();
+					// set display positions :
+					m_coordBg.PushBack(bitmapDrawPos[0]);
+					m_coordBg.PushBack(bitmapDrawPos[1]);
+					m_coordBg.PushBack(bitmapDrawPos[2]);
+					// set the color
+					m_coordColorBg.PushBack(m_colorBg);
+					m_coordColorBg.PushBack(m_colorBg);
+					m_coordColorBg.PushBack(m_colorBg);
+				}
+				*/
 				/* Step 2 : 
 				 *              
 				 *   **         
@@ -492,8 +570,20 @@ void ewol::Text::Print(const uniChar_t charcode)
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
+				/*
+				if (m_colorBg.a != 0) {
+					// set display positions :
+					m_coordBg.PushBack(bitmapDrawPos[0]);
+					m_coordBg.PushBack(bitmapDrawPos[2]);
+					m_coordBg.PushBack(bitmapDrawPos[3]);
+					// set the color
+					m_coordColorBg.PushBack(m_colorBg);
+					m_coordColorBg.PushBack(m_colorBg);
+					m_coordColorBg.PushBack(m_colorBg);
+				}
+				*/
 			}
-		//}
+		}
 	}
 	// move the position :
 	m_position.x += myGlyph->m_advance.x + kerningOffset;
@@ -581,8 +671,6 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 			stop = iii;
 			break;
 		}
-		// update local size :
-		endPos += tmpSize.x;
 		// save number of space :
 		if (text[iii] == (uniChar_t)' ') {
 			space++;
@@ -593,6 +681,8 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 			endOfLine = true;
 			break;
 		}
+		// update local size :
+		endPos += tmpSize.x;
 	}
 	freeSpace = m_stopTextPos - endPos;
 	// retore previous :

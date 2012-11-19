@@ -6,12 +6,12 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_DRAW_VECTORIAL_H__
-#define __EWOL_DRAW_VECTORIAL_H__
+#ifndef __EWOL_DRAW_BITMAP_H__
+#define __EWOL_DRAW_BITMAP_H__
 
 namespace ewol
 {
-	class DrawVectorial : public ewol::Compositing
+	class DrawBitmap : public ewol::Compositing
 	{
 		protected:
 			

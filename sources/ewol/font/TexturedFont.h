@@ -34,6 +34,7 @@ namespace ewol
 			// ==> otherwise I can just generate italic ...
 			// ==> Bold is a little more complicated (maybe with the bordersize)
 			ewol::Font*                         m_font[4];
+			ewol::font::mode_te                 m_modeWraping[4];     //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 		public:
 			etk::Vector<GlyphProperty>          m_listElement[4];
 		private:
@@ -114,6 +115,13 @@ namespace ewol
 			 * @return The pointer on the glyph ==> never NULL
 			 */
 			ewol::GlyphProperty* GetGlyphPointer(const uniChar_t charcode, const ewol::font::mode_te displayMode);
+			/**
+			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
+			 *        For exemple when a blod mode does not exist, this resend a regular mode.
+			 * @param[in] source The requested mode.
+			 * @return the best mode we have in stock.
+			 */
+			ewol::font::mode_te GetWrappingMode(ewol::font::mode_te source) { return m_modeWraping[source]; };
 	};
 	
 	

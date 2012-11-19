@@ -21,10 +21,11 @@ namespace ewol
 {
 	class Font : public ewol::Resource
 	{
+		protected:
 		public:
 			Font(etk::UString fontName) : ewol::Resource(fontName) {};
 			
-			virtual ~Font(void) {};
+			virtual ~Font(void) { };
 			
 			const char* GetType(void) { return "ewol::Font"; };
 			

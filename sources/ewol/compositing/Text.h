@@ -11,19 +11,29 @@
 
 #include <ewol/Debug.h>
 #include <ewol/compositing/Compositing.h>
+#include <ewol/compositing/Draw.h>
 #include <draw/Color.h>
 #include <ewol/ResourceManager.h>
 
 namespace ewol
 {
+	/**
+	 * @brief This class represent the specific display for every char in the string ...
+	 */
 	class TextDecoration
 	{
 		public:
-			draw::Color          m_colorBg;
-			draw::Color          m_colorFg;
-			ewol::font::mode_te m_mode;
+			draw::Color         m_colorBg; //!< Display background color
+			draw::Color         m_colorFg; //!< Display foreground color
+			ewol::font::mode_te m_mode;    //!< Display mode Regular/Bold/Italic/BoldItalic
+			TextDecoration(void)
+			{
+				m_colorBg = draw::color::blue;
+				m_colorBg = draw::color::green;
+				m_mode = ewol::font::Regular;
+				
+			}
 	};
-	
 	
 	class Text : public ewol::Compositing
 	{
@@ -35,38 +45,35 @@ namespace ewol
 				alignCenter,
 				alignJustify
 			} aligneMode_te;
-		
 		private:
-			// curent Drawing position
-			etk::Vector3D<float> m_position;         //!< the next position to draw the text
-			// clipping section
-			etk::Vector3D<float> m_clippingPosition;
-			etk::Vector3D<float> m_clippingSize;
-			bool                 m_clippingEnable;
-			// Basic color
-			draw::Color          m_color;
-			draw::Color          m_colorBg;
-			// font property :
-			ewol::font::mode_te  m_mode;
-			bool                 m_kerning;
-			bool                 m_distanceField;
-			uniChar_t            m_previousCharcode;
-			// alignement propoerty
-			float                m_startTextpos;
-			float                m_stopTextPos;
-			aligneMode_te        m_alignement;
-			// OpenGL interface for shader
-			ewol::Program* m_GLprogram;
-			int32_t        m_GLPosition;
-			int32_t        m_GLMatrix;
-			int32_t        m_GLColor;
-			int32_t        m_GLtexture;
-			int32_t        m_GLtexID;
-			// Font resource :
-			ewol::TexturedFont*                  m_font;          //!< ewol font system
-			// data vector for all the display :
-			// Note : the X texture range change to select the Regular / Bold / italic / BoldItalic mode , and the next is for no font but background color
-			//        ==> associate with a special shader
+			ewol::Drawing        m_vectorialDraw;      //!< This is used to draw background selection and other things ...
+		private:
+			etk::Vector3D<float> m_position;           //!< The current position to draw
+			etk::Vector3D<float> m_clippingPosStart;   //!< Clipping start position
+			etk::Vector3D<float> m_clippingPosStop;    //!< Clipping stop position
+			bool                 m_clippingEnable;     //!< true if the clipping must be activated
+		private:
+			draw::Color          m_color;              //!< The text foreground color
+			draw::Color          m_colorBg;            //!< The text background color
+		private:
+			ewol::font::mode_te  m_mode;               //!< font display property : Regular/Bold/Italic/BoldItalic
+			bool                 m_kerning;            //!< Kerning enable or disable on the next elements displayed
+			bool                 m_distanceField;      //!< Texture in distance Field mode ==> maybe move this in the font property.
+			uniChar_t            m_previousCharcode;   //!< we remember the previous charcode to perform the kerning. @ref Kerning
+		private:
+			float                m_startTextpos;       //!< start position of the Alignement (when \n the text return at this position)
+			float                m_stopTextPos;        //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
+			aligneMode_te        m_alignement;         //!< Current Alignement mode (justify/left/right ...)
+		private:
+			ewol::Program*       m_GLprogram;          //!< pointer on the opengl display program
+			int32_t              m_GLPosition;         //!< openGL id on the element (vertex buffer)
+			int32_t              m_GLMatrix;           //!< openGL id on the element (transformation matrix)
+			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
+			int32_t              m_GLtexture;          //!< openGL id on the element (Texture position)
+			int32_t              m_GLtexID;            //!< openGL id on the element (texture ID)
+		private:
+			ewol::TexturedFont*                  m_font;          //!< Font resources
+		private: // Text
 			etk::Vector<etk::Vector2D<float> >   m_coord;         //!< internal coord of the object
 			etk::Vector<texCoord_ts>             m_coordTex;      //!< internal texture coordinate for every point
 			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
@@ -121,10 +128,16 @@ namespace ewol
 			void SetColorBG(draw::Color color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
-			 * @param[in] pos   Start position of the clipping
-			 * @param[in] width End position of th clipping
+			 * @param[in] pos Start position of the clipping
+			 * @param[in] width Width size of the clipping
 			 */
-			void SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> width);
+			void SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width);
+			/**
+			 * @brief Request a clipping area for the text (next draw only)
+			 * @param[in] pos Start position of the clipping
+			 * @param[in] posEnd End position of the clipping
+			 */
+			void SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -177,6 +190,7 @@ namespace ewol
 			 *   \<center\> ... \</center\> To align center.
 			 *   \<justify\> ... \</justify\> To align justify.
 			 * @param[in] text The string to display.
+			 * @TODO : implementation not done ....
 			 */
 			void PrintDecorated(const etk::UString& text);
 			/**
@@ -222,7 +236,8 @@ namespace ewol
 			 * @param[in] start The first elemnt that might be used to calculate.
 			 * @param[out] stop The last Id availlable in the current string.
 			 * @param[out] space Number of space in the string.
-			 * @return true if need not alligne justify (end  of string)
+			 * @parma[out] freespace This represent the number of pixel present in the right white space.
+			 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
 			 */
 			bool ExtrapolateLastId(const etk::UString& text, const int32_t start, int32_t& stop, int32_t& space, int32_t& freeSpace);
 	};

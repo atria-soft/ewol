@@ -28,7 +28,8 @@ FILE_LIST+= ewol/game/GameElement.cpp \
 
 # Compositing
 FILE_LIST+= ewol/compositing/Compositing.cpp \
-			ewol/compositing/Text.cpp
+			ewol/compositing/Text.cpp \
+			ewol/compositing/Draw.cpp
 
 # Object abstraction for OpenGl
 FILE_LIST+= ewol/oObject/OObject.cpp \
@@ -102,6 +103,10 @@ LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/color.prog:color.prog \
                     ../data/color.frag:color.frag \
                     ../data/color.vert:color.vert \
+                    \
+                    ../data/color3.prog:color3.prog \
+                    ../data/color3.frag:color3.frag \
+                    ../data/color3.vert:color3.vert \
                     \
                     ../data/textured.prog:textured.prog \
                     ../data/textured.frag:textured.frag \

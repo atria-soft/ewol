@@ -49,6 +49,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_font[2] = NULL;
 	m_font[3] = NULL;
 	
+	m_modeWraping[0] = ewol::font::Regular;
+	m_modeWraping[1] = ewol::font::Regular;
+	m_modeWraping[2] = ewol::font::Regular;
+	m_modeWraping[3] = ewol::font::Regular;
+	
 	m_lastGlyphPos[0].x = 0;
 	m_lastGlyphPos[0].y = 0;
 	m_lastGlyphPos[1].x = 0;
@@ -133,6 +138,22 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			m_fileName[ewol::font::Regular] = output[iii];
 		}
 	}
+	// try to find the reference mode :
+	ewol::font::mode_te refMode = ewol::font::Regular;
+	for(int32_t iii=3; iii>=0; iii--) {
+		if (m_fileName[iii] != "") {
+			refMode = (ewol::font::mode_te)iii;
+		}
+	}
+	// generate the wrapping on the preventing error
+	for(int32_t iii=3; iii>=0; iii--) {
+		if (m_fileName[iii] != "") {
+			m_modeWraping[iii] = (ewol::font::mode_te)iii;
+		} else {
+			m_modeWraping[iii] = refMode;
+		}
+	}
+	
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		if (m_fileName[iiiFontId] == "") {
 			EWOL_CRITICAL("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size );

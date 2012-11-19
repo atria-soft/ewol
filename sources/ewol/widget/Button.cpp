@@ -268,7 +268,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 			textPos.x += m_padding.x + fontHeight;
 		}
 		*/
-		etk::Vector3D<float> drawClippingPos((float)padding.x, (float)padding.y, (float)-0.5);
+		etk::Vector3D<float> drawClippingPos(0.0, 0.0, -0.5);
 		etk::Vector3D<float> drawClippingSize((float)(m_size.x - 2*padding.x),
 		                                      (float)(m_size.y - 2*padding.y),
 		                                      (float)1.0);
