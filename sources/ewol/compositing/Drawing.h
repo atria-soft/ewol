@@ -139,6 +139,11 @@ namespace ewol
 			 */
 			void LineTo(etk::Vector3D<float> dest);
 			/**
+			 * @brief Relative drawing a line (spacial vector)
+			 * @param[in] vect Vector of the curent line.
+			 */
+			void LineRel(etk::Vector3D<float> vect);
+			/**
 			 * @brief Draw a 2D rectangle to the position requested.
 			 * @param[in] dest Position the the end of the rectangle
 			 */

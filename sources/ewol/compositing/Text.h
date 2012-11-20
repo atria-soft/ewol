@@ -186,6 +186,11 @@ namespace ewol
 			 */
 			void SetFontMode(ewol::font::mode_te mode);
 			/**
+			 * @brief Get the current font mode
+			 * @return The font mode applied
+			 */
+			ewol::font::mode_te GetFontMode(void);
+			/**
 			 * @brief Enable or disable the bold mode
 			 * @param[in] status The new status for this display property
 			 */
@@ -212,18 +217,37 @@ namespace ewol
 			 */
 			void Print(const etk::UString& text);
 			/**
-			 * @brief Display a compleat string in the current element with the generic decoration specification.
-			 *   \<b\> ... \</b\> For bold text.
-			 *   \<i\> ... \</i\> For italic text.
-			 *   \<color="#54325165"\> ... \</color\> To specify a color.
-			 *   \<left\> ... \</left\> To align left.
-			 *   \<right\> ... \</right\> To align right.
-			 *   \<center\> ... \</center\> To align center.
-			 *   \<justify\> ... \</justify\> To align justify.
+			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
+			 * <pre>
+			 *	<html>
+			 *		<body>
+			 *			<br/>
+			 *			<br/><br/><br/>
+			 *			<center>
+			 *				text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+			 *				<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+			 *				an an other thext
+			 *			</center>
+			 *			<br/><br/><br/>
+			 *			<left>
+			 *				plop 1
+			 *			</left>
+			 *			<br/><br/><br/>
+			 *			<right>
+			 *				plop 2
+			 *			</right>
+			 *			<br/><br/><br/>
+			 *			<justify>
+			 *				Un exemple de text
+			 *			</justify>
+			 *		</body>
+			 *	</html>
+			 * </pre>
+			 * @note This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
 			 * @param[in] text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintDecorated(const etk::UString& text);
+			void PrintDecorated(etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] text The string to display.
@@ -240,17 +264,27 @@ namespace ewol
 			 */
 			void ForceLineReturn(void);
 			/**
+			 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include)
+			 * @param[in] element the tynyXML element : TiXmlNode*
+			 */
+			void ParseHtmlNode( void* element);
+			/**
 			 * @brief This generate the possibility to generate the big text property
 			 * @param[in] startTextpos The x text start position of the display.
 			 * @param[in] stopTextPos The x text stop position of the display.
 			 * @param[in] alignement mode of alignement for the Text.
 			 * @note The text align in center change of line every display done (even if it was just a char)
 			 */
-			void SetTextAlignement(float startTextpos, float stopTextPos, aligneMode_te alignement);
+			void SetTextAlignement(float startTextpos, float stopTextPos, ewol::Text::aligneMode_te alignement);
 			/**
 			 * @brief Disable the alignement system
 			 */
 			void DisableAlignement(void);
+			/**
+			 * @brief Get the current alignement property
+			 * @return the curent alignement type
+			 */
+			ewol::Text::aligneMode_te GetAlignement(void);
 			/**
 			 * @brief Calculate a theoric text size
 			 * @param[in] text The string to calculate dimention.
@@ -263,6 +297,11 @@ namespace ewol
 			 * @return The theoric size used.
 			 */
 			etk::Vector3D<float> CalculateSize(const uniChar_t charcode);
+			/**
+			 * @brief Draw a cursor at the specify position
+			 * @param[in] isInsertMode True if the insert mode is activated
+			 */
+			void PrintCursor(bool isInsertMode);
 		private:
 			/**
 			 * @brief Calculate the element number that is the first out the alignement range 
@@ -275,6 +314,20 @@ namespace ewol
 			 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
 			 */
 			bool ExtrapolateLastId(const etk::UString& text, const int32_t start, int32_t& stop, int32_t& space, int32_t& freeSpace);
+		private:
+			// this section is reserved for HTML parsing and display:
+			etk::UString                 m_htmlCurrrentLine; //!< current line for HTML display
+			etk::Vector<TextDecoration>  m_htmlDecoration;   //!< current decoration for the HTML display
+			TextDecoration               m_htmlDecoTmp;      //!< current decoration
+			/**
+			 * @brief add a line with the current m_htmlDecoTmp decoration
+			 * @param[in] the cuurent data to add.
+			 */
+			void HtmlAddData(etk::UString data);
+			/**
+			 * @brief Draw the current line
+			 */
+			void HtmlFlush(void);
 	};
 };
 

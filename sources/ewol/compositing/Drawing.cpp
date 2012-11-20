@@ -466,6 +466,11 @@ void ewol::Drawing::LineTo(etk::Vector3D<float> dest)
 	m_position = dest;
 }
 
+void ewol::Drawing::LineRel(etk::Vector3D<float> vect)
+{
+	LineTo(m_position+vect);
+}
+
 
 void ewol::Drawing::Rectangle(etk::Vector3D<float> dest)
 {

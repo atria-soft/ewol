@@ -10,6 +10,7 @@
 #include <ewol/Debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/font/FontManager.h>
+#include <tinyXML/tinyxml.h>
 
 
 /*
@@ -178,6 +179,8 @@ void ewol::Text::Clear(void)
 	m_startTextpos = 0;
 	m_stopTextPos = 0;
 	m_alignement = ewol::Text::alignDisable;
+	m_htmlCurrrentLine = "";
+	m_htmlDecoration.Clear();
 }
 
 
@@ -304,6 +307,12 @@ void ewol::Text::SetFontMode(ewol::font::mode_te mode)
 }
 
 
+ewol::font::mode_te ewol::Text::GetFontMode(void)
+{
+	return m_mode;
+}
+
+
 void ewol::Text::SetFontBold(bool status)
 {
 	if (true == status) {
@@ -363,10 +372,111 @@ void ewol::Text::Print(const etk::UString& text)
 }
 
 
-void ewol::Text::PrintDecorated(const etk::UString& text)
+void ewol::Text::ParseHtmlNode(void* element2)
 {
-	EWOL_TODO("The Decorated print is not supported now ...");
-	Print(text);
+	TiXmlNode* element = static_cast<TiXmlNode*>(element2);
+	if (NULL != element) {
+		/*const char *myData = element->ToElement()->GetText();
+		if (NULL != myData) {
+			etk::UString outputData(myData);
+			Print(myData);
+		} else {
+		*/
+			for (TiXmlNode * child = element->FirstChild(); NULL != child ; child = child->NextSibling() ) {
+				if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
+					// nothing to do ...
+				} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
+					HtmlAddData(child->Value() );
+				} else if (!strcmp(child->Value(), "br")) {
+					HtmlFlush();
+					ForceLineReturn();
+				} else if (!strcmp(child->Value(), "font")) {
+					TextDecoration tmpDeco = m_htmlDecoTmp;
+					const char *colorValue = child->ToElement()->Attribute("color");
+					if (NULL != colorValue) {
+						draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
+					}
+					colorValue = child->ToElement()->Attribute("colorBg");
+					if (NULL != colorValue) {
+						draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
+					}
+					ParseHtmlNode(child);
+					m_htmlDecoTmp = tmpDeco;
+				} else if (!strcmp(child->Value(), "b")) {
+					TextDecoration tmpDeco = m_htmlDecoTmp;
+					if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+						m_htmlDecoTmp.m_mode = ewol::font::Bold;
+					} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
+						m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+					} 
+					ParseHtmlNode(child);
+					m_htmlDecoTmp = tmpDeco;
+				} else if (!strcmp(child->Value(), "i")) {
+					TextDecoration tmpDeco = m_htmlDecoTmp;
+					if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+						m_htmlDecoTmp.m_mode = ewol::font::Italic;
+					} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
+						m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+					} 
+					ParseHtmlNode(child);
+					m_htmlDecoTmp = tmpDeco;
+				} else if (!strcmp(child->Value(), "u")) {
+					ParseHtmlNode(child);
+				} else if (!strcmp(child->Value(), "p")) {
+					HtmlFlush();
+					m_alignement = ewol::Text::alignLeft;
+					ForceLineReturn();
+					ParseHtmlNode(child);
+					ForceLineReturn();
+				} else if (!strcmp(child->Value(), "center")) {
+					HtmlFlush();
+					m_alignement = ewol::Text::alignCenter;
+					ParseHtmlNode(child);
+				} else if (!strcmp(child->Value(), "left")) {
+					HtmlFlush();
+					m_alignement = ewol::Text::alignLeft;
+					ParseHtmlNode(child);
+				} else if (!strcmp(child->Value(), "right")) {
+					HtmlFlush();
+					m_alignement = ewol::Text::alignRight;
+					ParseHtmlNode(child);
+				} else if (!strcmp(child->Value(), "justify")) {
+					HtmlFlush();
+					m_alignement = ewol::Text::alignJustify;
+					ParseHtmlNode(child);
+				} else {
+					EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
+				}
+			//}
+		}
+	}
+}
+
+void ewol::Text::PrintDecorated(etk::UString& text)
+{
+	TiXmlDocument XmlDocument;
+	
+	// reset parameter :
+	m_htmlDecoTmp.m_colorBg = draw::color::none;
+	m_htmlDecoTmp.m_colorFg = draw::color::black;
+	m_htmlDecoTmp.m_mode = ewol::font::Regular;
+	
+	
+	// load the XML from the memory
+	bool loadError = XmlDocument.Parse((const char*)text.c_str(), 0, TIXML_ENCODING_UTF8);
+	if (false == loadError) {
+		EWOL_ERROR( "can not load Hightlight XML: PARSING error: Decorated text ");
+		return;
+	}
+
+	TiXmlElement* root = XmlDocument.FirstChildElement( "html" );
+	if (NULL == root) {
+		EWOL_ERROR( "can not load Hightlight XML: main node not find: \"html\"");
+		return;
+	}
+	TiXmlElement* bodyNode = root->FirstChildElement( "body" );
+	ParseHtmlNode(bodyNode);
+	HtmlFlush();
 }
 
 
@@ -395,6 +505,10 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 			}
 		}
 	} else {
+		// special start case at the right of the endpoint :
+		if (m_stopTextPos <= m_position.x) {
+			ForceLineReturn();
+		}
 		float basicSpaceWidth = CalculateSize(' ').x;
 		int32_t currentId = 0;
 		int32_t stop;
@@ -439,12 +553,16 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				}
 				// special for the justify mode
 				if (text[iii] == (uniChar_t)' ') {
-					m_vectorialDraw.SetPos(m_position);
+					if (m_colorBg.a != 0) {
+						m_vectorialDraw.SetPos(m_position);
+					}
 					// Must generate a dynamic space : 
 					SetPos(etk::Vector3D<float>(m_position.x + interpolation,
 					                            m_position.y,
 					                            m_position.z) );
-					m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(interpolation,fontHeigh,0.0f) );
+					if (m_colorBg.a != 0) {
+						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(interpolation,fontHeigh,0.0f) );
+					}
 				} else {
 					if (m_colorBg.a != 0) {
 						etk::Vector3D<float> pos = m_position;
@@ -460,6 +578,10 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				currentId++;
 			} else if(text[stop] == (uniChar_t)' ') {
 				currentId = stop+1;
+				// Reset position : 
+				SetPos(etk::Vector3D<float>(m_startTextpos,
+				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
+				                            m_position.z) );
 			} else if(text[stop] == (uniChar_t)'\n') {
 				currentId = stop+1;
 				// Reset position : 
@@ -619,20 +741,6 @@ void ewol::Text::Print(const uniChar_t charcode)
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
-				/*
-				if (m_colorBg.a != 0) {
-					
-					m_vectorialDraw.SetPos();
-					// set display positions :
-					m_coordBg.PushBack(bitmapDrawPos[0]);
-					m_coordBg.PushBack(bitmapDrawPos[1]);
-					m_coordBg.PushBack(bitmapDrawPos[2]);
-					// set the color
-					m_coordColorBg.PushBack(m_colorBg);
-					m_coordColorBg.PushBack(m_colorBg);
-					m_coordColorBg.PushBack(m_colorBg);
-				}
-				*/
 				/* Step 2 : 
 				 *              
 				 *   **         
@@ -652,18 +760,6 @@ void ewol::Text::Print(const uniChar_t charcode)
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
 				m_coordColor.PushBack(m_color);
-				/*
-				if (m_colorBg.a != 0) {
-					// set display positions :
-					m_coordBg.PushBack(bitmapDrawPos[0]);
-					m_coordBg.PushBack(bitmapDrawPos[2]);
-					m_coordBg.PushBack(bitmapDrawPos[3]);
-					// set the color
-					m_coordColorBg.PushBack(m_colorBg);
-					m_coordColorBg.PushBack(m_colorBg);
-					m_coordColorBg.PushBack(m_colorBg);
-				}
-				*/
 			}
 		}
 	}
@@ -683,7 +779,7 @@ void ewol::Text::ForceLineReturn(void)
 }
 
 
-void ewol::Text::SetTextAlignement(float startTextpos, float stopTextPos, aligneMode_te alignement)
+void ewol::Text::SetTextAlignement(float startTextpos, float stopTextPos, ewol::Text::aligneMode_te alignement)
 {
 	m_startTextpos = startTextpos;
 	m_stopTextPos = stopTextPos;
@@ -691,6 +787,12 @@ void ewol::Text::SetTextAlignement(float startTextpos, float stopTextPos, aligne
 	if (m_startTextpos >= m_stopTextPos) {
 		EWOL_ERROR("Request allignement with Borne position error : " << startTextpos << " => " << stopTextPos);
 	}
+}
+
+
+ewol::Text::aligneMode_te ewol::Text::GetAlignement(void)
+{
+	return m_alignement;
 }
 
 
@@ -738,6 +840,19 @@ etk::Vector3D<float> ewol::Text::CalculateSize(const uniChar_t charcode)
 	// Register the previous character
 	m_previousCharcode = charcode;
 	return outputSize;
+}
+
+
+void ewol::Text::PrintCursor(bool isInsertMode)
+{
+	int32_t fontHeigh = m_font->GetHeight(m_mode);
+	if (true == isInsertMode) {
+		m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(20, fontHeigh, 0) );
+	} else {
+		m_vectorialDraw.SetThickness(2);
+		m_vectorialDraw.LineRel( etk::Vector3D<float>(0, fontHeigh, 0) );
+		m_vectorialDraw.SetThickness(0);
+	}
 }
 
 
@@ -794,4 +909,30 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 	}
 }
 
+void ewol::Text::HtmlAddData(etk::UString data)
+{
+	if(    m_htmlCurrrentLine.Size()>0
+	    && m_htmlCurrrentLine[m_htmlCurrrentLine.Size()-1] != ' ') {
+		m_htmlCurrrentLine+=" ";
+		if(m_htmlDecoration.Size()>0) {
+			TextDecoration tmp = m_htmlDecoration[m_htmlDecoration.Size()-1];
+			m_htmlDecoration.PushBack(tmp);
+		} else {
+			m_htmlDecoration.PushBack(m_htmlDecoTmp);
+		}
+	}
+	m_htmlCurrrentLine += data;
+	for(int32_t iii=0; iii<data.Size() ; iii++) {
+		m_htmlDecoration.PushBack(m_htmlDecoTmp);
+	}
+}
 
+
+void ewol::Text::HtmlFlush(void)
+{
+	if (m_htmlCurrrentLine.Size()>0) {
+		Print(m_htmlCurrrentLine, m_htmlDecoration);
+	}
+	m_htmlCurrrentLine = "";
+	m_htmlDecoration.Clear();
+}
