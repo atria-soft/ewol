@@ -16,7 +16,7 @@
 ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	ewol::Mesh(_fileName)
 {
-	etk::FSNode fileName(etk::UString("DATA:") + _fileName);
+	etk::FSNode fileName(_fileName);
 	// Get the fileSize ...
 	int32_t size = fileName.FileSize();
 	if (size == 0 ) {
@@ -27,7 +27,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		EWOL_ERROR("Can not find the file name=\"" << fileName << "\"");
 		return;
 	}
-	char inputDataLine[2018];
+	char inputDataLine[2048];
 	
 	
 	etk::Vector<int32_t> indicesVertices;
@@ -104,7 +104,8 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 				EWOL_INFO("Release previous loaded texture ... ");
 				ewol::resource::Release(m_texture1);
 			}
-			if (false == ewol::resource::Keep(tmpVal, m_texture1, tmpSize)) {
+			etk::UString tmpFilename = fileName.GetRelativeFolder() + tmpVal;
+			if (false == ewol::resource::Keep(tmpFilename, m_texture1, tmpSize)) {
 				EWOL_ERROR("Can not load specific texture : " << tmpVal);
 			}
 		} else if(    inputDataLine[0]=='m'

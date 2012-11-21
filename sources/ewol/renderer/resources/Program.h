@@ -158,37 +158,6 @@ namespace ewol
 			void Uniform4i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3, int32_t value4);
 			
 			/**
-			 * @brief Send 1 unsigned integer uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] value1 Value to send at the Uniform
-			 */
-			void Uniform1ui(int32_t idElem, uint32_t value1);
-			/**
-			 * @brief Send 2 unsigned integer uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] value1 Value to send at the Uniform
-			 * @param[in] value2 Value to send at the Uniform
-			 */
-			void Uniform2ui(int32_t idElem, uint32_t value1, uint32_t value2);
-			/**
-			 * @brief Send 3 unsigned integer uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] value1 Value to send at the Uniform
-			 * @param[in] value2 Value to send at the Uniform
-			 * @param[in] value3 Value to send at the Uniform
-			 */
-			void Uniform3ui(int32_t idElem, uint32_t value1, uint32_t value2, uint32_t value3);
-			/**
-			 * @brief Send 4 unsigned integer uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] value1 Value to send at the Uniform
-			 * @param[in] value2 Value to send at the Uniform
-			 * @param[in] value3 Value to send at the Uniform
-			 * @param[in] value4 Value to send at the Uniform
-			 */
-			void Uniform4ui(int32_t idElem, uint32_t value1, uint32_t value2, uint32_t value3, uint32_t value4);
-			
-			/**
 			 * @brief Send "vec1" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
@@ -245,35 +214,6 @@ namespace ewol
 			 * @param[in] value Pointer on the data
 			 */
 			void Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value);
-			
-			/**
-			 * @brief Send "uvec1" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the Attribute that might be sended.
-			 * @param[in] nbElement Number of element sended
-			 * @param[in] value Pointer on the data
-			 */
-			void Uniform1uiv(int32_t idElem, int32_t nbElement, uint32_t *value);
-			/**
-			 * @brief Send "uvec2" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] nbElement Number of element sended
-			 * @param[in] value Pointer on the data
-			 */
-			void Uniform2uiv(int32_t idElem, int32_t nbElement, uint32_t *value);
-			/**
-			 * @brief Send "uvec3" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] nbElement Number of element sended
-			 * @param[in] value Pointer on the data
-			 */
-			void Uniform3uiv(int32_t idElem, int32_t nbElement, uint32_t *value);
-			/**
-			 * @brief Send "uvec4" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
-			 * @param[in] idElem Id of the uniform that might be sended.
-			 * @param[in] nbElement Number of element sended
-			 * @param[in] value Pointer on the data
-			 */
-			void Uniform4uiv(int32_t idElem, int32_t nbElement, uint32_t *value);
 			
 			/**
 			 * @brief Request the processing of this program

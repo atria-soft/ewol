@@ -15,7 +15,7 @@ ewol::Mesh::Mesh(etk::UString genName) :
 	ewol::Resource(genName),
 	m_texture1(NULL)
 {
-	etk::UString tmpString("textured3D.prog");
+	etk::UString tmpString("DATA:textured3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
@@ -56,6 +56,7 @@ void ewol::Mesh::Draw(void)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
+	glEnable(GL_DEPTH_TEST);
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -78,5 +79,6 @@ void ewol::Mesh::Draw(void)
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_vertices.Size());
 	m_GLprogram->UnUse();
+	glDisable(GL_DEPTH_TEST);
 }
 

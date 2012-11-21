@@ -14,49 +14,74 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 
-#if 1
-
-namespace ewol {
+namespace ewol
+{
+	/**
+	 * @brief This is the only one things the User might done in his main();
+	 * @note To answare you before you ask the question, this is really simple:
+	 *       Due to the fect that the current system is multiple-platform, you "main"
+	 *       Does not exist in the android platform, then ewol call other start 
+	 *       and stop function, to permit to have only one code
+	 * @note The main can not be in the ewol, due to the fact thet is an librairy
+	 * @param[in] argc Standard argc
+	 * @param[in] argv Standard argv
+	 * @return normal error int for the application error management
+	 */
+	int32_t Run(int32_t argc, const char* argv[]);
+	/**
+	 * @brief Request the stop of the program (teminate all the process) no more call at hte application without APP_UnInit();
+	 */
 	void Stop(void);
-	void DisplayWindows(ewol::Windows * windows);
-	// only on computer
-	void ChangeSize(etk::Vector2D<int32_t> size);
-	void ChangePos(etk::Vector2D<int32_t> pos);
-	void GetAbsPos(etk::Vector2D<int32_t>& pos);
-	void KeyboardShow(void);
-	void KeyboardHide(void);
+	/**
+	 * @brief Set a windows to diaplay
+	 * @param[in] windows The requested windows that migt be use for the display
+	 */
+	void WindowsSet(ewol::Windows * windows);
+	/**
+	 * @brief Add a PopUp at the current windows ==> this widget is display over the current element
+	 * @param[in] tmpWidget A pointer on the pop-up widget that might be displayed
+	 */
+	void WindowsPopUpAdd(ewol::Widget * tmpWidget);
+	/**
+	 * @brief Change the windows size
+	 * @note work only on computer
+	 * @param[in] size The new windows size
+	 */
+	void ChangeSize(etkVector2D<int32_t> size);
+	/**
+	 * @brief Change the windows curent position
+	 * @note work only on computer
+	 * @param[in] pos The new windows position
+	 */
+	void ChangePos(etkVector2D<int32_t> pos);
+	/**
+	 * @brief Generate the action of redrawing all the display.
+	 */
 	void ForceRedrawAll(void);
-	void PopUpWidgetPush(ewol::Widget * tmpWidget);
-	namespace CmdLine {
-		void         Clean(void);
-		int32_t      Nb(void);
-		etk::UString Get(int32_t id);
-		void         Add(etk::UString& newElement);
-	};
-	// TODO : This might be deprecated ... 
-	bool IsSetCapsLock(void);
-	bool IsSetShift(void);
-	bool IsSetCtrl(void);
-	bool IsSetMeta(void);
-	bool IsSetAlt(void);
-	bool IsSetAltGr(void);
-	bool IsSetVerNum(void);
-	bool IsSetInsert(void);
-	// basic shortcut setting (set default value, the configutration file will overloaded it automaticly
-	namespace shortCut {
-		void Add(bool shift, bool control, bool alt, bool meta, uniChar_t unicodeValue, const char * generateEventId, etk::UString data);
-		void Add(const char * descriptiveString, const char * generateEventId, etk::UString data);
-	};
-	// TODO : This is dangerous and might be deprecated ... Soon
-	int32_t GetCurrentWidth(void);
-	int32_t GetCurrentHeight(void);
-	
-	void SetTitle(etk::UString title);
+	/**
+	 * @brief Force the calculation of all the size of the widgets
+	 */
 	void RequestUpdateSize(void);
-	
+	/**
+	 * @brief Change the status of the Keyboard displat
+	 * @note Specific for mobile platform
+	 * @param[in] hide Status of the visibility of the keyboard
+	 */
+	void Keyboard(bool hide);
+	/**
+	 * @brief Change the title display.
+	 * @param[in] title the new title that might be displayed
+	 */
+	void SetTitle(etk::UString title);
+	/**
+	 * @brief Get EWOL version
+	 * @return The string that describe ewol version
+	 */
 	etk::UString GetVersion(void);
-	
-	// get current time in ms...
+	/**
+	 * @brief Get current time in us...
+	 * @return The current time
+	 */
 	int64_t GetTime(void);
 	/**
 	 * @brief This is to transfert the event from one widget to another one
@@ -70,49 +95,12 @@ namespace ewol {
 		SCREEN_ORIENTATION_LANDSCAPE,
 		SCREEN_ORIENTATION_PORTRAIT,
 	} orientation_te;
+	/**
+	 * @brief 
+	 * @param[in] 
+	 */
 	void ForceOrientation(ewol::orientation_te orientation);
+	
 };
-
-#else
-
-namespace ewol {
-	// stop the program :
-	void Stop(void);
-	// display a specific windows
-	void WindowsSet(ewol::Windows * windows);
-	void WindowsPopUpAdd(ewol::Widget * tmpWidget);
-	// only on computer
-	// change the windows size
-	void ChangeSize(int32_t w, int32_t h);
-	// change the windows curent position
-	void ChangePos(int32_t x, int32_t y);
-	// force the redraw of all the widget (this was a bad case ...
-	void ForceRedrawAll(void);
-	// force the calculation of all the sizes
-	void RequestUpdateSize(void);
-	// get the cmd line for computer call
-	etk::Vector<etk::UString> CmdLineGet(void);
-	// get the special key properties
-	enum {
-		EWOL_KEY_LEFT     = 1 <<  0,
-		EWOL_KEY_RIGHT    = 1 <<  1,
-		EWOL_KEY_CAP_LOCK = 1 <<  2,
-		EWOL_KEY_SHIFT    = 1 <<  3,
-		EWOL_KEY_CTRL     = 1 <<  4,
-		EWOL_KEY_META     = 1 <<  5,
-		EWOL_KEY_ALT      = 1 <<  6,
-		EWOL_KEY_ALT_GR   = 1 <<  7,
-		EWOL_KEY_VER_NUM  = 1 <<  8,
-		EWOL_KEY_INSERT   = 1 <<  9,
-	};
-	int32_t KeyboardGetStatus(void);
-	// set the vew title
-	void SetTitle(etk::UString title);
-	// get EWOL version
-	etk::UString GetVersion(void);
-	// get current time in ms...
-	int64_t GetTime(void);
-};
-#endif
 
 #endif

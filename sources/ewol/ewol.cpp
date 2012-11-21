@@ -15,6 +15,16 @@
 #undef __class__
 #define __class__	"ewol"
 
+
+int32_t ewol::Run(int32_t argc, const char* argv[]);
+{
+	
+	// call standard RUN ...
+	
+}
+
+
+
 void ewol::DisplayWindows(ewol::Windows * windows)
 {
 	// Remove current Focus :
@@ -197,3 +207,9 @@ int64_t ewol::GetTime(void)
 {
 	return guiInterface::GetTime();
 }
+
+
+
+
+
+

@@ -24,7 +24,7 @@ static void local_ReadData(png_structp png_ptr, png_bytep data, png_size_t lengt
 		fileNode->FileRead(data, 1, length);
 	}
 }
-
+/*
 static void LocalWriteData(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	etk::FSNode* fileNode = static_cast<etk::FSNode*>(png_get_io_ptr(png_ptr));
@@ -40,13 +40,10 @@ static void localFlushData(png_structp png_ptr)
 		fileNode->FileFlush();
 	}
 }
-
+*/
 
 bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouputImage)
 {
-	int32_t             m_width = 0;
-	int32_t             m_height = 0;
-
 	etk::FSNode fileName(inputFile);
 	
 	if (false==fileName.Exist()) {
@@ -59,7 +56,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	}
 	
 	// Vars
-	int x, y, address = 0;
+	int x, y = 0;
 	int rowbytes;
 	unsigned char header[8];
 	png_infop info_ptr;

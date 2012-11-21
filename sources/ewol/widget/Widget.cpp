@@ -12,50 +12,6 @@
 #include <ewol/ewol.h>
 #include <ewol/openGL/openGL.h>
 
-char* ewol::GetCharTypeMoveEvent(eventKbMoveType_te type)
-{
-	char * returnValue = "?";
-	switch(type) {
-		case ewol::EVENT_KB_MOVE_TYPE_NONE:				returnValue = "---";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_LEFT:				returnValue = "LEFT";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_RIGHT:			returnValue = "RIGHT";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_UP:				returnValue = "UP";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_DOWN:				returnValue = "DOWN";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_PAGE_UP:			returnValue = "PAGE_UP";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN:		returnValue = "PAGE_DOWN";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_START:			returnValue = "START";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_END:				returnValue = "END";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_CENTER:			returnValue = "CENTER";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL:		returnValue = "ARRET_DEFIL";	break;
-		case ewol::EVENT_KB_MOVE_TYPE_WAIT:				returnValue = "WAIT";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_INSERT:			returnValue = "INSERT";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_F1:				returnValue = "F1";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F2:				returnValue = "F2";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F3:				returnValue = "F3";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F4:				returnValue = "F4";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F5:				returnValue = "F5";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F6:				returnValue = "F6";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F7:				returnValue = "F7";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F8:				returnValue = "F8";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F9:				returnValue = "F9";				break;
-		case ewol::EVENT_KB_MOVE_TYPE_F10:				returnValue = "F10";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_F11:				returnValue = "F11";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_F12:				returnValue = "F12";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_CAPLOCK:			returnValue = "CAPLOCK";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT:		returnValue = "SHIFT_LEFT";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT:		returnValue = "SHIFT_RIGHT";	break;
-		case ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT:		returnValue = "CTRL_LEFT";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT:		returnValue = "CTRL_RIGHT";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_META_LEFT:		returnValue = "META_LEFT";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_META_RIGHT:		returnValue = "META_RIGHT";		break;
-		case ewol::EVENT_KB_MOVE_TYPE_ALT:				returnValue = "ALT";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_ALT_GR:			returnValue = "ALT_GR";			break;
-		case ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU:		returnValue = "CONTEXT_MENU";	break;
-		case ewol::EVENT_KB_MOVE_TYPE_VER_NUM:			returnValue = "VER_NUM";		break;
-	}
-	return returnValue;
-}
-
 
 #undef __class__
 #define __class__	"Widget"

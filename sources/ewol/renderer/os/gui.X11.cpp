@@ -365,6 +365,25 @@ void AddDecoration(void)
 	}
 }
 
+static void setVSync(bool sync)
+{
+	// Function pointer for the wgl extention function we need to enable/disable
+	typedef int32_t (APIENTRY *PFNWGLSWAPINTERVALPROC)( int );
+	PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
+	const char *extensions = (char*)glGetString( GL_EXTENSIONS );
+	if( strstr( extensions, "WGL_EXT_swap_control" ) == 0 ) {
+		EWOL_ERROR("Can not set the vertical synchronisation status" << sync);
+		return;
+	} else {
+		wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)glXGetProcAddress( (const GLubyte *)"wglSwapIntervalEXT" );
+		if(wglSwapIntervalEXT) {
+			wglSwapIntervalEXT(sync);
+		} else {
+			EWOL_ERROR("Can not set the vertical synchronisation status" << sync);
+		}
+	}
+}
+
 bool CreateOGlContext(void)
 {
 	#ifdef DEBUG_X11_EVENT
@@ -379,6 +398,10 @@ bool CreateOGlContext(void)
 	} else {
 		EWOL_INFO("XF86 DRI NOT available\n");
 	}
+	
+	// Enable vertical synchronisation : (some computer has synchronisation disable)
+	setVSync(true);
+	
 	return true;
 }
 
