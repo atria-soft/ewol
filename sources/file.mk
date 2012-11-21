@@ -1,38 +1,43 @@
 
 # Basic elements
-FILE_LIST = ewol/ewol.cpp \
-			ewol/ClipBoard.cpp \
-			ewol/Debug.cpp \
-			ewol/ShortCutManager.cpp \
-			ewol/ResourceManager.cpp \
-			ewol/SimpleConfigFile.cpp
+FILE_LIST:= ewol/ewol.cpp \
+			ewol/clipBoard.cpp \
+			ewol/debug.cpp \
+			ewol/config.cpp \
+			ewol/commandLine.cpp \
+			ewol/key.cpp
 
-FILE_LIST+= ewol/openGL/openGL.cpp \
+
+#PLOPPPPP = \
+			ewol/renderer/ResourceManager.cpp \
+			ewol/renderer/resources/SimpleConfigFile.cpp
+
+#FILE_LIST+= ewol/openGL/openGL.cpp \
 			ewol/openGL/Shader.cpp \
 			ewol/openGL/Program.cpp \
 			ewol/openGL/VirtualBufferObject.cpp
 
 
 # Gui interface
-FILE_LIST+= ewol/os/eSystem.cpp \
+#FILE_LIST+= ewol/os/eSystem.cpp \
 			ewol/os/eSystemInput.cpp
 
 # Basic Eobject of EWOL
-FILE_LIST+= ewol/eObject/EObject.cpp \
+#FILE_LIST+= ewol/eObject/EObject.cpp \
 			ewol/eObject/EObjectManager.cpp
 
 # Game elements
-FILE_LIST+= ewol/game/GameElement.cpp \
+#FILE_LIST+= ewol/game/GameElement.cpp \
 			ewol/game/GameElementLua.cpp \
 			ewol/game/SceneElement.cpp
 
 # Compositing
-FILE_LIST+= ewol/compositing/Compositing.cpp \
+#FILE_LIST+= ewol/compositing/Compositing.cpp \
 			ewol/compositing/Text.cpp \
 			ewol/compositing/Drawing.cpp
 
 # Object abstraction for OpenGl
-FILE_LIST+= ewol/oObject/OObject.cpp \
+#FILE_LIST+= ewol/oObject/OObject.cpp \
 			ewol/oObject/2DTextColored.cpp \
 			ewol/oObject/2DTextShader.cpp \
 			ewol/oObject/2DColored.cpp \
@@ -41,25 +46,25 @@ FILE_LIST+= ewol/oObject/OObject.cpp \
 			ewol/oObject/Sprite.cpp
 
 # texture management
-FILE_LIST+= ewol/texture/Texture.cpp \
+#FILE_LIST+= ewol/texture/Texture.cpp \
 			ewol/texture/TextureFile.cpp \
 			ewol/texture/TextureBMP.cpp \
 			ewol/texture/TexturePNG.cpp \
 			ewol/texture/TextureSVG.cpp
 
 # fonst system
-FILE_LIST+= ewol/font/FontManager.cpp \
+#FILE_LIST+= ewol/font/FontManager.cpp \
 			ewol/font/FontFreeType.cpp \
 			ewol/font/TexturedFont.cpp \
 			ewol/font/DistantFieldFont.cpp
 
 # Mesh management
-FILE_LIST+= ewol/Mesh/Mesh.cpp \
+#FILE_LIST+= ewol/Mesh/Mesh.cpp \
 			ewol/Mesh/MeshObj.cpp
 
 
 # all widgets
-FILE_LIST+= ewol/widget/Widget.cpp \
+#FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/WidgetManager.cpp \
 			ewol/widget/Windows.cpp \
 			ewol/widget/Button.cpp \
@@ -92,7 +97,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/meta/ParameterList.cpp
 
 # Audio system
-FILE_LIST+= ewol/audio/audio.cpp \
+#FILE_LIST+= ewol/audio/audio.cpp \
 			ewol/audio/decWav.cpp
 
 

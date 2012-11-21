@@ -9,7 +9,7 @@
 #ifndef __EWOL_E_OBJECT_H__
 #define __EWOL_E_OBJECT_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
 #include <etk/Vector.h>
 

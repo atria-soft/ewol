@@ -9,80 +9,97 @@
 #ifndef __EWOL_KEY_H__
 #define __EWOL_KEY_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/Stream.h>
 
 namespace ewol
 {
 	namespace keyEvent
 	{
-		// event from all the type of input :
+		/**
+		 * @brief type of input : Note that the keyboard is not prevent due to the fact that data is too different
+		 */
 		typedef enum {
-			None,
-			MouseDown,
-			MouseMove,
-			MouseSingle,
-			MouseDouble,
-			MouseTriple,
-			MouseQuad,
-			MouseQuinte,
-			MouseUp,
-			MouseEnter,
-			MouseLeave,
-			MouseAbort, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)
-			MouseTransfer, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
-			KeyboardLeft,
-			KeyboardRight,
-			KeyboardUp,
-			KeyboardDown,
-			KeyboardPageUp,
-			KeyboardPageDown,
-			KeyboardStart,
-			KeyboardEnd,
-			KeyboardCenter,
-			KeyboardStopDefil,
-			KeyboardWait,
-			KeyboardInsert,
-			KeyboardF1,
-			KeyboardF2,
-			KeyboardF3,
-			KeyboardF4,
-			KeyboardF5,
-			KeyboardF6,
-			KeyboardF7,
-			KeyboardF8,
-			KeyboardF9,
-			KeyboardF10,
-			KeyboardF11,
-			KeyboardF12,
-			KeyboardCapLock,
-			KeyboardShiftLeft,
-			KeyboardShiftRight,
-			KeyboardCtrlLeft,
-			KeyboardCtrlRight,
-			KeyboardMetaLeft,
-			KeyboardMetaRight,
-			KeyboardAlt,
-			KeyboardAltGr,
-			KeyboardContextMenu,
-			KeyboardVerNum,
-		} event_te;
+			typeUnknow = 0,
+			typeMouse,
+			typeFinger,
+			typeStylet,
+			typeCount
+		} type_te;
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::event_te obj);
+		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::type_te obj);
+		/**
+		 * @brief Keybord event or joyestick event
+		 */
+		typedef enum {
+			statusUnknow = 0,
+			statusDown, // availlable on Keyboard too
+			statusMove,
+			statusSingle,
+			statusDouble,
+			statusTriple,
+			statusQuad,
+			statusQuinte,
+			statusUp, // availlable on Keyboard too
+			statusEnter,
+			statusLeave,
+			statusAbort, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)
+			statusTransfer, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
+			statusCount, // number max of imput possible
+		} status_te;
+		/**
+		 * @brief Debug operator To display the curent element in a Human redeable information
+		 */
+		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::status_te obj);
+		/**
+		 * @brief Keybord event or joyestick event
+		 */
+		typedef enum {
+			keyboardUnknow = 0,
+			keyboardLeft,
+			keyboardRight,
+			keyboardUp,
+			keyboardDown,
+			keyboardPageUp,
+			keyboardPageDown,
+			keyboardStart,
+			keyboardEnd,
+			keyboardCenter,
+			keyboardStopDefil,
+			keyboardWait,
+			keyboardInsert,
+			keyboardF1,
+			keyboardF2,
+			keyboardF3,
+			keyboardF4,
+			keyboardF5,
+			keyboardF6,
+			keyboardF7,
+			keyboardF8,
+			keyboardF9,
+			keyboardF10,
+			keyboardF11,
+			keyboardF12,
+			keyboardCapLock,
+			keyboardShiftLeft,
+			keyboardShiftRight,
+			keyboardCtrlLeft,
+			keyboardCtrlRight,
+			keyboardMetaLeft,
+			keyboardMetaRight,
+			keyboardAlt,
+			keyboardAltGr,
+			keyboardContextMenu,
+			keyboardVerNum,
+			keyboardCount
+		} keyboard_te;
+		/**
+		 * @brief Debug operator To display the curent element in a Human redeable information
+		 */
+		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::keyboard_te obj);
 		
-		// type of input : Notye that the keyboard is not prevent due to the fact that data is too different
-		typedef enum {
-			Unknow,
-			Mouse,
-			Finger,
-			Stylet,
-		} input_te;
-		/**
-		 * @brief Debug operator To display the curent element in a Human redeable information
-		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::input_te obj);
 	};
 };
 

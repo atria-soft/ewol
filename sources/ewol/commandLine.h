@@ -9,6 +9,9 @@
 #ifndef __EWOL_COMMAND_LINE_H__
 #define __EWOL_COMMAND_LINE_H__
 
+#include <etk/Types.h>
+#include <etk/UString.h>
+
 namespace ewol
 {
 	namespace commandLine {

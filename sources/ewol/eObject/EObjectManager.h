@@ -9,8 +9,7 @@
 #ifndef __EWOL_E_OBJECT_MANAGER_H__
 #define __EWOL_E_OBJECT_MANAGER_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
 #include <ewol/eObject/EObject.h>
 
 namespace ewol {

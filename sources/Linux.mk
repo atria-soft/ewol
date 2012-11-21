@@ -33,9 +33,9 @@ LOCAL_EXPORT_CFLAGS :=
 include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := \
+	$(FILE_LIST) \
 	ewol/os/gui.X11.cpp \
-	ewol/audio/interfacePortAudio.cpp \
-	$(FILE_LIST)
+	ewol/audio/interfacePortAudio.cpp
 
 
 

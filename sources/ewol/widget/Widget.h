@@ -14,15 +14,14 @@
 namespace ewol {
 	class Widget;
 };
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/Vector.h>
-#include <ewol/Debug.h>
-#include <ewol/oObject/OObject.h>
-#include <ewol/ClipBoard.h>
+#include <etk/math/Vector2D.h>
+#include <ewol/debug.h>
+#include <ewol/clipBoard.h>
+#include <ewol/key.h>
 
 namespace ewol {
-	char* GetCharTypeMoveEvent(eventKbMoveType_te type);
-	
 	class DrawProperty{
 		public :
 			etk::Vector2D<int32_t> m_windowsSize;
@@ -43,12 +42,12 @@ namespace ewol {
 	
 	class EventShortCut {
 		public:
-			bool                     broadcastEvent;    // if it is true, then the message is sent to all the system
-			const char *             generateEventId;   // Local generated event
-			etk::UString             eventData;         // data link with the event
-			ewol::specialKey_ts      specialKey;        // special board key
-			uniChar_t                unicodeValue;      // 0 if not used
-			ewol::eventKbMoveType_te keyboardMoveValue; // ewol::EVENT_KB_MOVE_TYPE_NONE if not used
+			bool                        broadcastEvent;    // if it is true, then the message is sent to all the system
+			const char *                generateEventId;   // Local generated event
+			etk::UString                eventData;         // data link with the event
+			ewol::specialKey_ts         specialKey;        // special board key
+			uniChar_t                   unicodeValue;      // 0 if not used
+			ewol::keyEvent::keyboard_te keyboardMoveValue; // ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut(void) {
 				broadcastEvent = false;
 				generateEventId = NULL;
@@ -62,7 +61,7 @@ namespace ewol {
 				specialKey.verNum = false;
 				specialKey.insert = false;
 				unicodeValue = 0;
-				keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_NONE;
+				keyboardMoveValue = ewol::keyEvent::keyboardUnknow;
 			};
 			~EventShortCut(void) { };
 	};
@@ -352,7 +351,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos) { return false; };
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float>  pos) { return false; };
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
@@ -360,13 +359,13 @@ namespace ewol {
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData) { return false; };
+			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData) { return false; };
 			/**
 			 * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent) { return false; };
+			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent) { return false; };
 			/**
 			 * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
 			 * @note : need to have focus ...
@@ -405,7 +404,7 @@ namespace ewol {
 			 * @return false if the event has not been used
 			 * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
 			 */
-			virtual bool OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown);
+			virtual bool OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::keyEvent::keyboard_te kbMove, bool isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------

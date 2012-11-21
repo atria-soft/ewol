@@ -9,7 +9,7 @@
 #ifndef __EWOL_H__
 #define __EWOL_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>

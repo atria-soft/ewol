@@ -9,9 +9,8 @@
 #ifndef __EWOL_WIDGET_MANAGER_H__
 #define __EWOL_WIDGET_MANAGER_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/oObject/OObject.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <etk/Vector.h>
 #include <ewol/widget/Widget.h>
 

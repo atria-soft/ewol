@@ -15,7 +15,7 @@ static etk::UString l_fontConfigFolder = "DATA::fonts";
 static etk::UString l_fontConfigName = "Arial";
 static int32_t      l_fontConfigSize = 10;
 
-void ewol::config_PRIVATE::Init(void)
+void ewol::config::Init(void)
 {
 	// reset font properties
 	l_fontConfigFolder = "DATA::fonts";
@@ -24,7 +24,7 @@ void ewol::config_PRIVATE::Init(void)
 	ewol::FreeTypeInit();
 }
 
-void ewol::config_PRIVATE::UnInit(void)
+void ewol::config::UnInit(void)
 {
 	// UnInit FreeTypes
 	ewol::FreeTypeUnInit();

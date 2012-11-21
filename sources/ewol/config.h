@@ -34,9 +34,10 @@ namespace ewol
 		 * @return the font size.
 		 */
 		int32_t FontGetDefaultSize(void);
-	};
-	namespace config_PRIVATE
-	{
+		
+		
+		// Internal section :
+		
 		/**
 		 * Init the configuration
 		 */

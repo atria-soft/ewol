@@ -9,7 +9,7 @@
 #ifndef __EWOL_DEBUG_H__
 #define __EWOL_DEBUG_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/Debug.h>
 
 extern const char * ewolLibName;
