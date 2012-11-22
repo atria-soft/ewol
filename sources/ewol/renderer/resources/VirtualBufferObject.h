@@ -8,10 +8,11 @@
 
 #ifndef __OPEN_GL__VIRTUAL_BUFFER_OBJECT_H__
 #define __OPEN_GL__VIRTUAL_BUFFER_OBJECT_H__
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/Resource.h>
-#include <ewol/openGL/openGL.h>
+
+#include <etk/types.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/Resource.h>
+#include <ewol/renderer/openGL.h>
 
 namespace ewol
 {

@@ -7,60 +7,40 @@ FILE_LIST:= ewol/ewol.cpp \
 			ewol/commandLine.cpp \
 			ewol/key.cpp
 
-
-#PLOPPPPP = \
-			ewol/renderer/ResourceManager.cpp \
-			ewol/renderer/resources/SimpleConfigFile.cpp
-
-#FILE_LIST+= ewol/openGL/openGL.cpp \
-			ewol/openGL/Shader.cpp \
-			ewol/openGL/Program.cpp \
-			ewol/openGL/VirtualBufferObject.cpp
-
-
-# Gui interface
-#FILE_LIST+= ewol/os/eSystem.cpp \
-			ewol/os/eSystemInput.cpp
-
 # Basic Eobject of EWOL
-#FILE_LIST+= ewol/eObject/EObject.cpp \
+FILE_LIST+= ewol/eObject/EObject.cpp \
 			ewol/eObject/EObjectManager.cpp
 
-# Game elements
-#FILE_LIST+= ewol/game/GameElement.cpp \
-			ewol/game/GameElementLua.cpp \
-			ewol/game/SceneElement.cpp
+#openGl Basic access abstraction (for the model matrix and include
+FILE_LIST+= ewol/renderer/openGL.cpp
+
+# Operating System interface
+FILE_LIST+= ewol/renderer/os/eSystem.cpp \
+			ewol/renderer/os/eSystemInput.cpp
+
+# renderer : 
+FILE_LIST+= ewol/renderer/resources/Shader.cpp \
+			ewol/renderer/resources/Program.cpp \
+			ewol/renderer/resources/VirtualBufferObject.cpp \
+			ewol/renderer/resources/ConfigFile.cpp \
+			ewol/renderer/resources/FontFreeType.cpp \
+			ewol/renderer/resources/TexturedFont.cpp \
+			ewol/renderer/resources/Mesh.cpp \
+			ewol/renderer/resources/MeshObj.cpp \
+			ewol/renderer/resources/Texture.cpp \
+			ewol/renderer/resources/Image.cpp \
+			ewol/renderer/resources/image/ImageBMP.cpp \
+			ewol/renderer/resources/image/ImagePNG.cpp \
+			ewol/renderer/ResourceManager.cpp
+
 
 # Compositing
-#FILE_LIST+= ewol/compositing/Compositing.cpp \
+FILE_LIST+= ewol/compositing/Compositing.cpp \
 			ewol/compositing/Text.cpp \
-			ewol/compositing/Drawing.cpp
-
-# Object abstraction for OpenGl
-#FILE_LIST+= ewol/oObject/OObject.cpp \
-			ewol/oObject/2DTextColored.cpp \
-			ewol/oObject/2DTextShader.cpp \
-			ewol/oObject/2DColored.cpp \
-			ewol/oObject/2DTextured.cpp \
-			ewol/oObject/3DTextured.cpp \
-			ewol/oObject/Sprite.cpp
-
-# texture management
-#FILE_LIST+= ewol/texture/Texture.cpp \
-			ewol/texture/TextureFile.cpp \
-			ewol/texture/TextureBMP.cpp \
-			ewol/texture/TexturePNG.cpp \
-			ewol/texture/TextureSVG.cpp
-
-# fonst system
-#FILE_LIST+= ewol/font/FontManager.cpp \
-			ewol/font/FontFreeType.cpp \
-			ewol/font/TexturedFont.cpp \
-			ewol/font/DistantFieldFont.cpp
-
-# Mesh management
-#FILE_LIST+= ewol/Mesh/Mesh.cpp \
-			ewol/Mesh/MeshObj.cpp
+			ewol/compositing/Drawing.cpp \
+			ewol/compositing/Image.cpp \
+			ewol/compositing/Sprite.cpp \
+			ewol/compositing/Mesh.cpp
 
 
 # all widgets

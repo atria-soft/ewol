@@ -27,7 +27,7 @@ note: la copy dans le :
 static etk::UString mesCopy[ewol::clipBoard::clipboardCount];
 
 
-static const char* clipboardDescriptionString[clipboardCount] = {
+static const char* clipboardDescriptionString[ewol::clipBoard::clipboardCount+1] = {
 	"clipboard0",
 	"clipboard1",
 	"clipboard2",
@@ -45,7 +45,7 @@ static const char* clipboardDescriptionString[clipboardCount] = {
 
 etk::CCout& ewol::clipBoard::operator <<(etk::CCout &os, const ewol::clipBoard::clipboardListe_te obj)
 {
-	if (obj>=0 && obj <clipboardCount) {
+	if (obj>=0 && obj <ewol::clipBoard::clipboardCount) {
 		os << clipboardDescriptionString[obj];
 	} else {
 		os << "[ERROR]";

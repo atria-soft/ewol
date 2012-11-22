@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/Debug.h>
-#include <ewol/Mesh/Mesh.h>
-#include <ewol/ResourceManager.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/Mesh.h>
+#include <ewol/renderer/ResourceManager.h>
 
 
 ewol::Mesh::Mesh(etk::UString genName) :
@@ -61,11 +61,11 @@ void ewol::Mesh::Draw(void)
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
 	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix =   etk::matrix::Scale(100,100,100)
-	            * etk::matrix::rotate(1,0,0,rotx)
-	            * etk::matrix::rotate(0,1,0,roty)/*
-	            * etk::matrix::Translate(0.01,0,0)
-	            * etk::matrix::rotate(0,0,1,rotz)*/
+	tmpMatrix =   etk::Matrix4::Scale(etk::Vector3D<float>(100,100,100) )
+	            * etk::Matrix4::Rotate(etk::Vector3D<float>(1,0,0), rotx)
+	            * etk::Matrix4::Rotate(etk::Vector3D<float>(0,1,0), roty)/*
+	            * etk::Matrix4::Translate(etk::Vector3D<float>(0.01,0.0,0.0))
+	            * etk::Matrix4::Rotate(etk::Vector3D<float>(0,0,1), rotz)*/
 	            * tmpMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID

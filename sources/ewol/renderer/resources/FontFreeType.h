@@ -9,7 +9,8 @@
 #ifndef __EWOL_FONT_FREE_TYPE_H__
 #define __EWOL_FONT_FREE_TYPE_H__
 
-#include <ewol/font/Font.h>
+#include <etk/types.h>
+#include <ewol/renderer/resources/font/FontBase.h>
 
 extern "C" {
 	#include <freetype/ft2build.h>
@@ -19,7 +20,7 @@ extern "C" {
 namespace ewol
 {
 	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
-	class FontFreeType : public ewol::Font
+	class FontFreeType : public ewol::FontBase
 	{
 		private:
 			FT_Byte *    m_FileBuffer;

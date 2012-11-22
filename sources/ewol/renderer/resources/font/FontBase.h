@@ -9,23 +9,23 @@
 #ifndef __EWOL_FONT_H__
 #define __EWOL_FONT_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <draw/Image.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/Resource.h>
-#include <ewol/font/GlyphProperty.h>
+#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/resources/Resource.h>
+#include <ewol/renderer/resources/font/GlyphProperty.h>
 
 
 namespace ewol
 {
-	class Font : public ewol::Resource
+	class FontBase : public ewol::Resource
 	{
 		protected:
 		public:
-			Font(etk::UString fontName) : ewol::Resource(fontName) {};
+			FontBase(etk::UString fontName) : ewol::Resource(fontName) {};
 			
-			virtual ~Font(void) { };
+			virtual ~FontBase(void) { };
 			
 			const char* GetType(void) { return "ewol::Font"; };
 			

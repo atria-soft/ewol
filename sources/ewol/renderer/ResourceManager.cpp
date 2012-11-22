@@ -6,10 +6,10 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/ResourceManager.h>
-#include <ewol/font/FontFreeType.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/resources/FontFreeType.h>
 
 
 // Specific for the resource : 
@@ -197,10 +197,10 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
 }
 
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::Font*& object)
+bool ewol::resource::Keep(etk::UString& filename, ewol::FontBase*& object)
 {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << filename << "\"");
-	object = static_cast<ewol::Font*>(LocalKeep(filename));
+	object = static_cast<ewol::FontBase*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -233,30 +233,13 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 {
-	EWOL_VERBOSE("KEEP : Shader : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : ShSimpleader : file : \"" << filename << "\"");
 	object = static_cast<ewol::Shader*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
 	// need to crate a new one ...
 	object = new ewol::Shader(filename);
-	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : " << filename);
-		return false;
-	}
-	LocalAdd(object);
-	return true;
-}
-
-bool ewol::resource::Keep(etk::UString& filename, ewol::DistantFieldFont*& object)
-{
-	EWOL_VERBOSE("KEEP : DistanceFieldFont : file : \"" << filename << "\"");
-	object = static_cast<ewol::DistantFieldFont*>(LocalKeep(filename));
-	if (NULL != object) {
-		return true;
-	}
-	// need to crate a new one ...
-	object = new ewol::DistantFieldFont(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
@@ -345,15 +328,15 @@ bool ewol::resource::Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& o
 	return true;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::SimpleConfigFile*& object)
+bool ewol::resource::Keep(etk::UString& filename, ewol::ConfigFile*& object)
 {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << filename << "\"");
-	object = static_cast<ewol::SimpleConfigFile*>(LocalKeep(filename));
+	object = static_cast<ewol::ConfigFile*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
 	// this element create a new one every time ....
-	object = new ewol::SimpleConfigFile(filename);
+	object = new ewol::ConfigFile(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
 		return false;
@@ -404,7 +387,7 @@ void ewol::resource::Release(ewol::TexturedFont*& object)
 	Release(object2);
 	object = NULL;
 }
-void ewol::resource::Release(ewol::Font*& object)
+void ewol::resource::Release(ewol::FontBase*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);
@@ -417,12 +400,6 @@ void ewol::resource::Release(ewol::Program*& object)
 	object = NULL;
 }
 void ewol::resource::Release(ewol::Shader*& object)
-{
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	Release(object2);
-	object = NULL;
-}
-void ewol::resource::Release(ewol::DistantFieldFont*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);
@@ -448,7 +425,7 @@ void ewol::resource::Release(ewol::MeshObj*& object)
 	object = NULL;
 }
 
-void ewol::resource::Release(ewol::SimpleConfigFile*& object)
+void ewol::resource::Release(ewol::ConfigFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);

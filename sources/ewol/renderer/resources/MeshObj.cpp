@@ -6,11 +6,13 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/Debug.h>
+#include <etk/types.h>
 #include <etk/Vector.h>
 #include <etk/os/FSNode.h>
-#include <ewol/Mesh/MeshObj.h>
-#include <ewol/ResourceManager.h>
+
+#include <ewol/debug.h>
+#include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/resources/MeshObj.h>
 
 
 ewol::MeshObj::MeshObj(etk::UString _fileName) :

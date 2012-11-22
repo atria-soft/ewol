@@ -23,6 +23,9 @@
 
 #include <sys/time.h>
 
+int32_t m_currentHeight = 0;
+
+
 int64_t guiInterface::GetTime(void)
 {
     struct timeval  now;
@@ -33,7 +36,7 @@ int64_t guiInterface::GetTime(void)
 
 bool inputIsPressed[20];
 
-static ewol::specialKey_ts guiKeyBoardMode;
+static ewol::SpecialKey guiKeyBoardMode;
 
 void guiInterface::SetTitle(etk::UString& title)
 {
@@ -72,7 +75,7 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 	int title_size = GetSystemMetrics(SM_CYCAPTION);
 	size.x += border_thickness*2;
 	size.y += border_thickness*2 + title_size;
-	
+	//m_currentHeight = size.y;
 	// TODO : Later
 }
 
@@ -247,7 +250,8 @@ int Windows_Run(void)
 	                     NULL, NULL, hInstance, NULL );
 	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
 	int title_size = GetSystemMetrics(SM_CYCAPTION);
-	eSystem::Resize(800-2*border_thickness, 600-2*border_thickness -title_size);
+	m_currentHeight = 600-2*border_thickness -title_size;
+	eSystem::Resize(800-2*border_thickness, m_currentHeight);
 	
 	// enable OpenGL for the window
 	EnableOpenGL( hWnd, &hDC, &hRC );
@@ -329,7 +333,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					// in windows system, we need to remove the size of the border elements : 
 					int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
 					int title_size = GetSystemMetrics(SM_CYCAPTION);
-					eSystem::Resize(tmpVal->cx-2*border_thickness, tmpVal->cy - 2*border_thickness - title_size);
+					m_currentHeight = tmpVal->cy - 2*border_thickness - title_size;
+					eSystem::Resize(tmpVal->cx-2*border_thickness, m_currentHeight);
 				}
 			}
 			return 0;
@@ -463,7 +468,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_LBUTTONDOWN:
 			mouseButtonId = 1;
 			pos.x = GET_X_LPARAM(lParam);
-			pos.y = GET_Y_LPARAM(lParam);
+			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
 			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
@@ -473,7 +478,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_MBUTTONDOWN:
 			mouseButtonId = 2;
 			pos.x = GET_X_LPARAM(lParam);
-			pos.y = GET_Y_LPARAM(lParam);
+			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
 			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
@@ -483,7 +488,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_RBUTTONDOWN:
 			mouseButtonId = 3;
 			pos.x = GET_X_LPARAM(lParam);
-			pos.y = GET_Y_LPARAM(lParam);
+			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
 			inputIsPressed[mouseButtonId] = buttonIsDown;
 			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
 			return 0;
@@ -497,7 +502,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				mouseButtonId = 5;
 			}
 			pos.x = GET_X_LPARAM(lParam);
-			pos.y = GET_Y_LPARAM(lParam);
+			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
 			eSystem::SetMouseState(mouseButtonId, true,  (float)pos.x, (float)pos.y);
 			eSystem::SetMouseState(mouseButtonId, false, (float)pos.x, (float)pos.y);
 			return 0;
@@ -505,7 +510,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_MOUSEHOVER:
 		case WM_MOUSEMOVE:
 			pos.x = GET_X_LPARAM(lParam);
-			pos.y = GET_Y_LPARAM(lParam);
+			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
 			for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 				if (true == inputIsPressed[iii]) {
 					EWOL_VERBOSE("Windows event: bt=" << iii << " " << message << " = \"WM_MOUSEMOVE\" " << pos );

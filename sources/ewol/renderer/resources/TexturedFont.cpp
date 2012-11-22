@@ -6,12 +6,15 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
-#include <ewol/font/Font.h>
-#include <ewol/font/TexturedFont.h>
-#include <ewol/font/FontManager.h>
+#include <etk/types.h>
 #include <etk/os/FSNode.h>
-#include <ewol/ResourceManager.h>
+
+#include <ewol/config.h>
+
+#include <ewol/renderer/ResourceManager.h>
+
+#include <ewol/renderer/resources/font/FontBase.h>
+#include <ewol/renderer/resources/TexturedFont.h>
 
 
 static int32_t nextP2(int32_t value)
@@ -226,10 +229,10 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 				// draw the glyph
 				m_font[iiiFontId]->DrawGlyph(m_data, m_size, glyphPosition, (m_listElement[iiiFontId])[iii], iiiFontId);
 				// set video position
-				(m_listElement[iiiFontId])[iii].m_texturePosStart.u = (float)(glyphPosition.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].m_texturePosStart.v = (float)(glyphPosition.y) / (float)textureHeight;
-				(m_listElement[iiiFontId])[iii].m_texturePosStop.u  = (float)(glyphPosition.x + (m_listElement[iiiFontId])[iii].m_sizeTexture.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].m_texturePosStop.v  = (float)(glyphPosition.y + (m_listElement[iiiFontId])[iii].m_sizeTexture.y) / (float)textureHeight;
+				(m_listElement[iiiFontId])[iii].m_texturePosStart.x = (float)(glyphPosition.x) / (float)textureWidth;
+				(m_listElement[iiiFontId])[iii].m_texturePosStart.y = (float)(glyphPosition.y) / (float)textureHeight;
+				(m_listElement[iiiFontId])[iii].m_texturePosStop.x  = (float)(glyphPosition.x + (m_listElement[iiiFontId])[iii].m_sizeTexture.x) / (float)textureWidth;
+				(m_listElement[iiiFontId])[iii].m_texturePosStop.y  = (float)(glyphPosition.y + (m_listElement[iiiFontId])[iii].m_sizeTexture.y) / (float)textureHeight;
 				
 				// update the maximum of the line hight : 
 				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].m_sizeTexture.y) {
@@ -282,246 +285,6 @@ bool ewol::TexturedFont::HasName(etk::UString& fileName)
 	tmpName += m_size;
 	EWOL_VERBOSE("S : check : " << fileName << " ?= " << tmpName << " = " << (fileName==tmpName) );
 	return (fileName==tmpName);
-}
-
-
-
-int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
-                                 const etk::UString&                  unicodeString,
-                                 etk::Vector<etk::Vector2D<float> > & coord,
-                                 etk::Vector<texCoord_ts> &           coordTex,
-                                 etk::Vector<int32_t> &               vectDisplayMode,
-                                 bool                                 hasClipping,
-                                 clipping_ts&                         clipping,
-                                 ewol::font::mode_te                  displayMode)
-{
-	float totalSize = 0;
-	etk::Vector2D<float> tmpPos = textPos;
-	uniChar_t unicodeCharPrevious = 0;
-	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		int32_t ret;
-		ret = Draw(tmpPos, unicodeString[iii], coord, coordTex, vectDisplayMode, hasClipping, clipping, displayMode, unicodeCharPrevious);
-		unicodeCharPrevious = unicodeString[iii];
-		tmpPos.x += ret;
-		totalSize += ret;
-	}
-	return totalSize;
-}
-
-int32_t ewol::TexturedFont::Draw(etk::Vector2D<float>                 textPos,
-                                 const uniChar_t                      unicodeChar,
-                                 etk::Vector<etk::Vector2D<float> > & coord,
-                                 etk::Vector<texCoord_ts> &           coordTex,
-                                 etk::Vector<int32_t> &               vectDisplayMode,
-                                 bool                                 hasClipping,
-                                 clipping_ts&                         clipping,
-                                 ewol::font::mode_te                  displayMode,
-                                 const uniChar_t                      unicodeCharPrevious)
-{
-	float posDrawX = textPos.x;
-	int32_t charIndex;
-	if (unicodeChar < 0x20) {
-		charIndex = 0;
-	} else if (unicodeChar < 0x80) {
-		charIndex = unicodeChar - 0x1F;
-	} else {
-		charIndex = 0;
-		for (int32_t iii=0x80-0x20; iii < m_listElement[0].Size(); iii++) {
-			if ((m_listElement[displayMode])[iii].m_UVal == unicodeChar) {
-				charIndex = iii;
-				break;
-			}
-		}
-	}
-	float kerningOffset = (m_listElement[displayMode])[charIndex].KerningGet(unicodeCharPrevious);
-	/*
-	if (kerningOffset != 0) {
-		EWOL_DEBUG("Kerning between : '" << (char)unicodeCharPrevious << "'&'" << (char)(m_listElement[displayMode])[charIndex].m_UVal << "' value : " << kerningOffset);
-	}
-	*/
-	// 0x01 == 0x20 == ' ';
-	if (unicodeChar != 0x01) {
-		/* Bitmap position
-		 *      xA     xB
-		 *   yC *------*
-		 *      |      |
-		 *      |      |
-		 *   yD *------*
-		 */
-		float dxA = posDrawX + (m_listElement[displayMode])[charIndex].m_bearing.x + kerningOffset;
-		float dxB = dxA + (m_listElement[displayMode])[charIndex].m_sizeTexture.x;
-		float dyC = textPos.y + (m_listElement[displayMode])[charIndex].m_bearing.y + m_height[displayMode] - m_size;
-		float dyD = dyC - (m_listElement[displayMode])[charIndex].m_sizeTexture.y;
-		
-		float tuA = (m_listElement[displayMode])[charIndex].m_texturePosStart.u;
-		float tuB = (m_listElement[displayMode])[charIndex].m_texturePosStop.u;
-		float tvC = (m_listElement[displayMode])[charIndex].m_texturePosStart.v;
-		float tvD = (m_listElement[displayMode])[charIndex].m_texturePosStop.v;
-		
-		
-		// Clipping and drawing area
-		if(     true == hasClipping
-		    && (    dxB < clipping.x
-		         || dxA > clipping.x + clipping.w) ) {
-			// Nothing to diplay ...
-		} else {
-			if (true == hasClipping) {
-				// generata positions...
-				float TexSizeX = tuB - tuA;
-				if (dxA < clipping.x) {
-					// clip display
-					float drawSize = clipping.x - dxA;
-					// Update element start display
-					dxA = clipping.x;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
-					// update texture start X Pos
-					tuA += addElement;
-				}
-				if (dxB > clipping.x + clipping.w) {
-					// clip display
-					float drawSize = dxB - (clipping.x + clipping.w);
-					// Update element start display
-					dxB = clipping.x + clipping.w;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
-					// update texture start X Pos
-					tuB -= addElement;
-				}
-				float TexSizeY = tvD - tvC;
-				if (dyC < clipping.y) {
-					// clip display
-					float drawSize = clipping.y - dyC;
-					// Update element start display
-					dyC = clipping.y;
-					float addElement = TexSizeY * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
-					// update texture start X Pos
-					tvC += addElement;
-				}
-				if (dyD > clipping.y + clipping.h) {
-					// clip display
-					float drawSize = dyD - (clipping.y + clipping.h);
-					// Update element start display
-					dyD = clipping.y + clipping.h;
-					float addElement = TexSizeX * drawSize / (float)(m_listElement[displayMode])[charIndex].m_sizeTexture.x;
-					// update texture start X Pos
-					tvD -= addElement;
-				}
-			}
-			if(    dxB <= dxA
-			    || dyD >= dyC) {
-				// nothing to do ...
-			} else {
-				/* Bitmap position
-				 *   0------1
-				 *   |      |
-				 *   |      |
-				 *   3------2
-				 */
-				etk::Vector2D<int32_t> bitmapDrawPos[4];
-				bitmapDrawPos[0].x = (int32_t)dxA;
-				bitmapDrawPos[1].x = (int32_t)dxB;
-				bitmapDrawPos[2].x = (int32_t)dxB;
-				bitmapDrawPos[3].x = (int32_t)dxA;
-				
-				bitmapDrawPos[0].y = (int32_t)dyC;
-				bitmapDrawPos[1].y = (int32_t)dyC;
-				bitmapDrawPos[2].y = (int32_t)dyD;
-				bitmapDrawPos[3].y = (int32_t)dyD;
-				/* texture Position : 
-				 *   0------1
-				 *   |      |
-				 *   |      |
-				 *   3------2
-				 */
-				texCoord_ts texturePos[4];
-				texturePos[0].u = tuA+displayMode;
-				texturePos[1].u = tuB+displayMode;
-				texturePos[2].u = tuB+displayMode;
-				texturePos[3].u = tuA+displayMode;
-				
-				texturePos[0].v = tvC;
-				texturePos[1].v = tvC;
-				texturePos[2].v = tvD;
-				texturePos[3].v = tvD;
-				
-				// NOTE : Android does not support the Quads elements ...
-				/* Step 1 : 
-				 *   ********     
-				 *     ******     
-				 *       ****     
-				 *         **     
-				 *                
-				 */
-				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[1]);
-				coordTex.PushBack(texturePos[2]);
-				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[1]);
-				coord.PushBack(bitmapDrawPos[2]);
-				
-				/* Step 2 : 
-				 *              
-				 *   **         
-				 *   ****       
-				 *   ******     
-				 *   ********   
-				 */
-				// set texture coordonates :
-				coordTex.PushBack(texturePos[0]);
-				coordTex.PushBack(texturePos[2]);
-				coordTex.PushBack(texturePos[3]);
-				// set display positions :
-				coord.PushBack(bitmapDrawPos[0]);
-				coord.PushBack(bitmapDrawPos[2]);
-				coord.PushBack(bitmapDrawPos[3]);
-			}
-		}
-	}
-	posDrawX += (m_listElement[displayMode])[charIndex].m_advance.x + kerningOffset;
-	int32_t sizeOut = posDrawX - textPos.x;
-	textPos.x = posDrawX;
-	return sizeOut;
-}
-
-etk::Vector2D<float> ewol::TexturedFont::GetSize(const etk::UString & unicodeString, const ewol::font::mode_te displayMode)
-{
-	etk::Vector2D<float> outputSize(0,m_height[0]);
-	uniChar_t unicodeCharPrevious = 0;
-	for(int32_t iii=0; iii<unicodeString.Size(); iii++) {
-		etk::Vector2D<float> tmpp = GetSize(unicodeString[iii], unicodeCharPrevious, displayMode);
-		unicodeCharPrevious = unicodeString[iii];
-		outputSize.x += tmpp.x;
-	}
-	return outputSize;
-}
-
-
-etk::Vector2D<float> ewol::TexturedFont::GetSize(const uniChar_t unicodeChar,
-                                                 const uniChar_t unicodeCharPrevious,
-                                                 const ewol::font::mode_te displayMode)
-{
-	etk::Vector2D<float> outputSize(0,m_height[0]);
-	int32_t charIndex;
-	if (unicodeChar >= 0x80) {
-		charIndex = 0;
-	} else if (unicodeChar < 0x20) {
-		charIndex = 0;
-	} else if (unicodeChar < 0x80) {
-		charIndex = unicodeChar - 0x1F;
-	} else {
-		for (int32_t iii=0x80-0x20; iii < m_listElement[0].Size(); iii++) {
-			if ((m_listElement[0])[iii].m_UVal == unicodeChar) {
-				charIndex = iii;
-				break;
-			}
-		}
-		// TODO : Update if possible the mapping
-		charIndex = 0;
-	}
-	float kerningOffset = (m_listElement[displayMode])[charIndex].KerningGet(unicodeCharPrevious);
-	outputSize.x = (m_listElement[0])[charIndex].m_advance.x + kerningOffset;
-	return outputSize;
 }
 
 

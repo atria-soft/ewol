@@ -9,6 +9,10 @@
 #ifndef __EWOL_SPRITE_H__
 #define __EWOL_SPRITE_H__
 
+#include <ewol/debug.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/renderer/ResourceManager.h>
+
 namespace ewol
 {
 	class Sprite : public ewol::Compositing

@@ -9,6 +9,9 @@
 #ifndef __EWOL_CONFIG_H__
 #define __EWOL_CONFIG_H__
 
+#include <etk/types.h>
+#include <etk/UString.h>
+
 namespace ewol
 {
 	namespace config

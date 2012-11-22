@@ -9,9 +9,9 @@
 #ifndef __MESH_OBJ_H__
 #define __MESH_OBJ_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
-#include <ewol/Mesh/Mesh.h>
+#include <ewol/renderer/resources/Mesh.h>
 
 namespace ewol
 {

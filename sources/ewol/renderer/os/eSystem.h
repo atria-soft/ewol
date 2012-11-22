@@ -9,7 +9,10 @@
 #ifndef __EWOL_SYSTEM_H__
 #define __EWOL_SYSTEM_H__
 
-#include <ewol/ewol.h>
+#include <etk/types.h>
+#include <ewol/key.h>
+#include <ewol/clipBoard.h>
+#include <ewol/widget/Windows.h>
 
 namespace eSystem
 {
@@ -30,15 +33,15 @@ namespace eSystem
 	void SetMouseState(int pointerID, bool isUp, float x, float y);
 	
 	typedef struct {
-		bool                   isDown;
-		uniChar_t              myChar;
-		ewol::specialKey_ts    special;
+		bool                isDown;
+		uniChar_t           myChar;
+		ewol::SpecialKey    special;
 	} keyboardKey_ts;
 	
 	typedef struct {
-		bool                      isDown;
-		ewol::eventKbMoveType_te  move;
-		ewol::specialKey_ts       special;
+		bool                        isDown;
+		ewol::keyEvent::keyboard_te move;
+		ewol::SpecialKey            special;
 	} keyboardMove_ts;
 	
 	void SetKeyboard(eSystem::keyboardKey_ts& keyInput);

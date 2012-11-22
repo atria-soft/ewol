@@ -8,10 +8,11 @@
 
 #ifndef __OPEN_GL__SHADER_H__
 #define __OPEN_GL__SHADER_H__
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/Resource.h>
-#include <ewol/openGL/openGL.h>
+
+#include <etk/types.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/openGL.h>
+#include <ewol/renderer/resources/Resource.h>
 
 namespace ewol
 {

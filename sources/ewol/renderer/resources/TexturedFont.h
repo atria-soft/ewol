@@ -9,9 +9,9 @@
 #ifndef __EWOL_TEXTURED_FONT_H__
 #define __EWOL_TEXTURED_FONT_H__
 
-#include <ewol/font/Font.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/Resource.h>
+#include <ewol/renderer/resources/font/FontBase.h>
+#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/resources/Resource.h>
 
 namespace ewol
 {
@@ -33,7 +33,7 @@ namespace ewol
 			// specific element to have the the know if the specify element is known...
 			// ==> otherwise I can just generate italic ...
 			// ==> Bold is a little more complicated (maybe with the bordersize)
-			ewol::Font*                         m_font[4];
+			ewol::FontBase*                     m_font[4];
 			ewol::font::mode_te                 m_modeWraping[4];     //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 		public:
 			etk::Vector<GlyphProperty>          m_listElement[4];
@@ -47,49 +47,6 @@ namespace ewol
 			virtual bool HasName(etk::UString& fileName);
 			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
-			// TODO : Remove : DEPRECATED ...
-			int32_t Draw(etk::Vector2D<float>                 textPos,
-			             const etk::UString&                  unicodeString,
-			             etk::Vector<etk::Vector2D<float> > & coord,
-			             etk::Vector<texCoord_ts> &           coordTex,
-			             etk::Vector<int32_t> &               vectDisplayMode,
-			             bool                                 hasClipping,
-			             clipping_ts&                         clipping,
-			             ewol::font::mode_te                  displayMode);
-			
-			// TODO : Remove : DEPRECATED ...
-			int32_t Draw(etk::Vector2D<float>                 textPos,
-			             const uniChar_t                      unicodeChar,
-			             etk::Vector<etk::Vector2D<float> > & coord,
-			             etk::Vector<texCoord_ts> &           coordTex,
-			             etk::Vector<int32_t> &               vectDisplayMode,
-			             bool                                 hasClipping,
-			             clipping_ts&                         clipping,
-			             ewol::font::mode_te                  displayMode,
-			             const uniChar_t                      unicodeCharPrevious = 0);
-			
-			// TODO : Remove : DEPRECATED ...
-			/**
-			 * @brief Get the size of the specified String
-			 * @param[in] unicodeString The string that we might calculate the display size
-			 * @param[in] displayMode Mode to display the currrent font
-			 * @return Dimention of the string use
-			 */
-			etk::Vector2D<float> GetSize(const etk::UString & unicodeString,
-			                             const ewol::font::mode_te displayMode = ewol::font::Regular);
-			
-			// TODO : Remove : DEPRECATED ...
-			/**
-			 * @brief Get the size of the specified unicode value
-			 * @param[in] unicodeChar the char that might be displayed
-			 * @param[in] unicodeCharPrevious Previous char of this One ==> 0 no previous char
-			 * @param[in] displayMode Mode to display the currrent font
-			 * @return Dimention of the font use
-			 */
-			etk::Vector2D<float> GetSize(const uniChar_t unicodeChar,
-			                             const uniChar_t unicodeCharPrevious = 0,
-			                             const ewol::font::mode_te displayMode = ewol::font::Regular);
-			
 			/**
 			 * @brief Get the display height of this font
 			 * @param[in] displayMode Mode to display the currrent font

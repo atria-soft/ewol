@@ -16,11 +16,10 @@
 #define __class__	"ewol"
 
 
-int32_t ewol::Run(int32_t argc, const char* argv[]);
+int32_t ewol::Run(int32_t argc, const char* argv[])
 {
-	
 	// call standard RUN ...
-	
+	return guiInterface::main(argc, argv);
 }
 
 
@@ -49,12 +48,12 @@ void ewol::WindowsPopUpAdd(ewol::Widget * tmpWidget)
 	}
 }
 
-void ewol::ChangeSize(etkVector2D<int32_t> size)
+void ewol::ChangeSize(etk::Vector2D<int32_t> size)
 {
 	guiInterface::ChangeSize(size);
 }
 
-void ewol::ChangePos(etkVector2D<int32_t> pos)
+void ewol::ChangePos(etk::Vector2D<int32_t> pos)
 {
 	guiInterface::ChangePos(pos);
 }

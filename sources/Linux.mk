@@ -34,6 +34,8 @@ include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := \
 	$(FILE_LIST) \
+
+QSDFQSDFQSDF = \
 	ewol/os/gui.X11.cpp \
 	ewol/audio/interfacePortAudio.cpp
 

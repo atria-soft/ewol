@@ -9,16 +9,17 @@
 #ifndef __GUI_INTERFACE_H__
 #define __GUI_INTERFACE_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
-#include <ewol/ClipBoard.h>
+#include <ewol/clipBoard.h>
 #include <etk/os/FSNode.h>
 
 
 namespace guiInterface
 {
+	int main(int argc, const char *argv[]);
 	/**
 	 * @brief Get the curent time in micro-second
 	 * @param ---

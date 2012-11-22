@@ -8,7 +8,7 @@
 
 #include <ewol/eObject/EObject.h>
 #include <ewol/eObject/EObjectManager.h>
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 
 
 #undef __class__

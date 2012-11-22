@@ -7,25 +7,30 @@
  */
 
 
-#include <etk/Types.h>
-#include <ewol/ewol.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
 #include <etk/MessageFifo.h>
-#include <ewol/os/eSystem.h>
-#include <ewol/os/gui.h>
-#include <ewol/ResourceManager.h>
+
+#include <ewol/ewol.h>
+#include <ewol/debug.h>
+
+#include <ewol/config.h>
+
 #include <ewol/eObject/EObject.h>
 #include <ewol/eObject/EObjectManager.h>
-#include <ewol/widget/WidgetManager.h>
-#include <ewol/ShortCutManager.h>
-#include <ewol/os/eSystemInput.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/os/Fps.h>
-#include <ewol/font/FontManager.h>
 
-static ewol::Windows*     windowsCurrent = NULL;
+#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/os/gui.h>
+#include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/os/eSystemInput.h>
+#include <ewol/renderer/openGL.h>
+#include <ewol/renderer/os/Fps.h>
+
+#include <ewol/widget/WidgetManager.h>
+
+
+static ewol::Windows*          windowsCurrent = NULL;
 static etk::Vector2D<int32_t>  windowsSize(320, 480);
-static ewol::eSystemInput l_managementInput;
+static ewol::eSystemInput      l_managementInput;
 
 
 
@@ -58,8 +63,9 @@ typedef struct {
 	int w;
 	int h;
 } eventResize_ts;
+
 typedef struct {
-	ewol::inputType_te type;
+	ewol::keyEvent::type_te type;
 	int pointerID;
 	bool state;
 	float x;
@@ -81,7 +87,7 @@ typedef struct {
 static etk::MessageFifo<eSystemMessage_ts> l_msgSystem;
 
 
-extern ewol::specialKey_ts specialCurrentKey;
+extern ewol::SpecialKey specialCurrentKey;
 
 static bool requestEndProcessing = false;
 
@@ -131,26 +137,27 @@ void ewolProcessEvents(void)
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				{
 					specialCurrentKey = data.keyboardKey.special;
-					// check main shortcut
-					if (false==ewol::shortCut::Process(data.keyboardKey.special,
-					                                   data.keyboardKey.myChar,
-					                                   ewol::EVENT_KB_MOVE_TYPE_NONE,
-					                                   data.keyboardKey.isDown)) {
-						// Get the current Focused Widget :
-						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-						if (NULL != tmpWidget) {
-							// check Widget shortcut
-							if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
-							                                      data.keyboardKey.myChar,
-							                                      ewol::EVENT_KB_MOVE_TYPE_NONE,
-							                                      data.keyboardKey.isDown)) {
-								// generate the direct event ...
-								if(true == data.keyboardKey.isDown) {
-									EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
-									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_DOWN, data.keyboardKey.myChar);
-								} else {
-									EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
-									tmpWidget->OnEventKb(ewol::EVENT_KB_TYPE_UP, data.keyboardKey.myChar);
+					if (NULL != windowsCurrent) {
+						if (false==windowsCurrent->OnEventShortCut(data.keyboardKey.special,
+						                                           data.keyboardKey.myChar,
+						                                           ewol::keyEvent::keyboardUnknow,
+						                                           data.keyboardKey.isDown)) {
+							// Get the current Focused Widget :
+							ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+							if (NULL != tmpWidget) {
+								// check Widget shortcut
+								if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
+								                                      data.keyboardKey.myChar,
+								                                      ewol::keyEvent::keyboardUnknow,
+								                                      data.keyboardKey.isDown)) {
+									// generate the direct event ...
+									if(true == data.keyboardKey.isDown) {
+										EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
+										tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardKey.myChar);
+									} else {
+										EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
+										tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardKey.myChar);
+									}
 								}
 							}
 						}
@@ -160,24 +167,26 @@ void ewolProcessEvents(void)
 			case THREAD_KEYBORAD_MOVE:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
 				// check main shortcut
-				if (false==ewol::shortCut::Process(data.keyboardKey.special,
-				                                   0,
-				                                   data.keyboardMove.move,
-				                                   data.keyboardKey.isDown)) {
-					specialCurrentKey = data.keyboardMove.special;
-					// Get the current Focused Widget :
-					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-					if (NULL != tmpWidget) {
-						// check Widget shortcut
-						if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
-						                                      data.keyboardKey.myChar,
-						                                      ewol::EVENT_KB_MOVE_TYPE_NONE,
-						                                      data.keyboardKey.isDown)) {
-							// generate the direct event ...
-							if(true == data.keyboardMove.isDown) {
-								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_DOWN, data.keyboardMove.move);
-							} else {
-								tmpWidget->OnEventKbMove(ewol::EVENT_KB_TYPE_UP, data.keyboardMove.move);
+				if (NULL != windowsCurrent) {
+					if (false==windowsCurrent->OnEventShortCut(data.keyboardKey.special,
+					                                           data.keyboardKey.myChar,
+					                                           ewol::keyEvent::keyboardUnknow,
+					                                           data.keyboardKey.isDown)) {
+						specialCurrentKey = data.keyboardMove.special;
+						// Get the current Focused Widget :
+						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+						if (NULL != tmpWidget) {
+							// check Widget shortcut
+							if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
+							                                      data.keyboardKey.myChar,
+							                                      ewol::keyEvent::keyboardUnknow,
+							                                      data.keyboardKey.isDown)) {
+								// generate the direct event ...
+								if(true == data.keyboardMove.isDown) {
+									tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove.move);
+								} else {
+									tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove.move);
+								}
 							}
 						}
 					}
@@ -266,8 +275,7 @@ void eSystem::Init(void)
 		l_managementInput.Reset();
 		ewol::resource::Init();
 		ewol::widgetManager::Init();
-		ewol::font::Init();
-		ewol::shortCut::Init();
+		ewol::config::Init();
 		isGlobalSystemInit = true;
 		// request the init of the application in the main context of openGL ...
 		RequestInit();
@@ -291,12 +299,11 @@ void eSystem::UnInit(void)
 		isGlobalSystemInit = false;
 		requestEndProcessing = true;
 		// unset all windows
-		ewol::DisplayWindows(NULL);
+		ewol::WindowsSet(NULL);
 		// call application to uninit
 		APP_UnInit();
-		ewol::shortCut::UnInit();
 		ewol::widgetManager::UnInit();
-		ewol::font::UnInit();
+		ewol::config::UnInit();
 		ewol::EObjectMessageMultiCast::UnInit();
 		ewol::EObjectManager::UnInit();
 		ewol::resource::UnInit();
@@ -345,7 +352,7 @@ void eSystem::SetInputMotion(int pointerID, float x, float y )
 	if (true == isGlobalSystemInit) {
 		eSystemMessage_ts data;
 		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.input.type = ewol::INPUT_TYPE_FINGER;
+		data.input.type = ewol::keyEvent::typeFinger;
 		data.input.pointerID = pointerID;
 		data.input.x = x;
 		data.input.y = y;
@@ -359,7 +366,7 @@ void eSystem::SetInputState(int pointerID, bool isUp, float x, float y )
 	if (true == isGlobalSystemInit) {
 		eSystemMessage_ts data;
 		data.TypeMessage = THREAD_INPUT_STATE;
-		data.input.type = ewol::INPUT_TYPE_FINGER;
+		data.input.type = ewol::keyEvent::typeFinger;
 		data.input.pointerID = pointerID;
 		data.input.state = isUp;
 		data.input.x = x;
@@ -374,7 +381,7 @@ void eSystem::SetMouseMotion(int pointerID, float x, float y )
 	if (true == isGlobalSystemInit) {
 		eSystemMessage_ts data;
 		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.input.type = ewol::INPUT_TYPE_MOUSE;
+		data.input.type = ewol::keyEvent::typeMouse;
 		data.input.pointerID = pointerID;
 		data.input.x = x;
 		data.input.y = y;
@@ -388,7 +395,7 @@ void eSystem::SetMouseState(int pointerID, bool isUp, float x, float y )
 	if (true == isGlobalSystemInit) {
 		eSystemMessage_ts data;
 		data.TypeMessage = THREAD_INPUT_STATE;
-		data.input.type = ewol::INPUT_TYPE_MOUSE;
+		data.input.type = ewol::keyEvent::typeMouse;
 		data.input.pointerID = pointerID;
 		data.input.state = isUp;
 		data.input.x = x;

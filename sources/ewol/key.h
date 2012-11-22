@@ -46,7 +46,7 @@ namespace ewol
 			statusEnter,
 			statusLeave,
 			statusAbort, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)
-			statusTransfer, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
+			statusTransfert, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
 			statusCount, // number max of imput possible
 		} status_te;
 		/**
@@ -99,6 +99,19 @@ namespace ewol
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
 		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::keyboard_te obj);
+		
+	};
+	
+	class SpecialKey {
+		public:
+			unsigned capLock   : 1;
+			unsigned shift     : 1;
+			unsigned ctrl      : 1;
+			unsigned meta      : 1;
+			unsigned alt       : 1;
+			unsigned altGr     : 1;
+			unsigned verNum    : 1;
+			unsigned insert    : 1;
 		
 	};
 };

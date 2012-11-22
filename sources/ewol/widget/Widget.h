@@ -29,23 +29,13 @@ namespace ewol {
 			etk::Vector2D<int32_t> m_size;
 	};
 	
-	typedef struct {
-		bool capLock;
-		bool shift;
-		bool ctrl;
-		bool meta;
-		bool alt;
-		bool altGr;
-		bool verNum;
-		bool insert;
-	} specialKey_ts;
 	
 	class EventShortCut {
 		public:
 			bool                        broadcastEvent;    // if it is true, then the message is sent to all the system
 			const char *                generateEventId;   // Local generated event
 			etk::UString                eventData;         // data link with the event
-			ewol::specialKey_ts         specialKey;        // special board key
+			ewol::SpecialKey            specialKey;        // special board key
 			uniChar_t                   unicodeValue;      // 0 if not used
 			ewol::keyEvent::keyboard_te keyboardMoveValue; // ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut(void) {
@@ -404,7 +394,7 @@ namespace ewol {
 			 * @return false if the event has not been used
 			 * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
 			 */
-			virtual bool OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::keyEvent::keyboard_te kbMove, bool isDown);
+			virtual bool OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeValue, ewol::keyEvent::keyboard_te kbMove, bool isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------

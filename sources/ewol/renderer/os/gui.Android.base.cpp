@@ -27,6 +27,7 @@ static jmethodID javaClassActivityEntryPoint__CPP_OrientationChange = 0;
 // generic classes
 static jclass    javaDefaultClassString = 0;       // default string class
 
+static int32_t m_currentHeight = 0;
 
 static JavaVM* g_JavaVM = NULL;
 
@@ -369,22 +370,22 @@ extern "C"
 	 * ********************************************************************************************** */
 	void Java_org_ewol_interfaceJNI_IOInputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		eSystem::SetInputMotion(pointerID+1, x, y);
+		eSystem::SetInputMotion(pointerID+1, x, m_currentHeight-y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOInputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		eSystem::SetInputState(pointerID+1, isUp, x, y);
+		eSystem::SetInputState(pointerID+1, isUp, x, m_currentHeight-y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
 	{
-		eSystem::SetMouseMotion(pointerID+1, x, y);
+		eSystem::SetMouseMotion(pointerID+1, x, m_currentHeight-y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
 	{
-		eSystem::SetMouseState(pointerID+1, isUp, x, y);
+		eSystem::SetMouseState(pointerID+1, isUp, x, m_currentHeight-y);
 	}
 	
 	void Java_org_ewol_interfaceJNI_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
@@ -454,6 +455,7 @@ extern "C"
 	
 	void Java_org_ewol_interfaceJNI_RenderResize( JNIEnv* env, jobject thiz, jint w, jint h )
 	{
+		m_currentHeight = h;
 		eSystem::Resize(w, h);
 	}
 	

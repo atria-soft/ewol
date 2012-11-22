@@ -9,6 +9,7 @@
 #ifndef __OPEN_GL_H__
 #define __OPEN_GL_H__
 
+#include <etk/types.h>
 #include <etk/math/Matrix4.h>
 
 #ifdef __cplusplus

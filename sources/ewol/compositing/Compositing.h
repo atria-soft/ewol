@@ -9,9 +9,9 @@
 #ifndef __EWOL_COMPOSITING_H__
 #define __EWOL_COMPOSITING_H__
 
-#include <ewol/Debug.h>
-#include <etk/math/Matrix4.h>
+#include <ewol/debug.h>
 #include <etk/UString.h>
+#include <etk/math/Matrix4.h>
 
 namespace ewol
 {

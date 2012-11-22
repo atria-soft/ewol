@@ -9,10 +9,11 @@
 #ifndef __EWOL_TEXTURE_FILE_H__
 #define __EWOL_TEXTURE_FILE_H__
 
+#include <etk/types.h>
 #include <etk/UString.h>
 #include <draw/Image.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/Resource.h>
+#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/resources/Resource.h>
 
 namespace ewol
 {

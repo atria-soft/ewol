@@ -6,9 +6,15 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/texture/Texture.h>
-#include <ewol/openGL/openGL.h>
+#include <etk/types.h>
+
 #include <ewol/ewol.h>
+
+#include <ewol/renderer/openGL.h>
+
+#include <ewol/renderer/ResourceManager.h>
+
+#include <ewol/renderer/resources/Texture.h>
 
 
 /**

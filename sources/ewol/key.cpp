@@ -8,7 +8,7 @@
 
 #include <ewol/key.h>
 
-static const char* statusDescriptionString[statusCount] = {
+static const char* statusDescriptionString[ewol::keyEvent::statusCount+1] = {
 	"statusUnknow",
 	"statusDown",
 	"statusMove",
@@ -21,13 +21,13 @@ static const char* statusDescriptionString[statusCount] = {
 	"statusEnter",
 	"statusLeave",
 	"statusAbort",
-	"statusTransfer",
+	"statusTransfert",
 	"statusCount"
 };
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::status_te obj)
 {
-	if (obj>=0 && obj <statusCount) {
+	if (obj>=0 && obj <ewol::keyEvent::statusCount) {
 		os << statusDescriptionString[obj];
 	} else {
 		os << "[ERROR]";
@@ -36,7 +36,7 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::st
 }
 
 
-static const char* keyboardDescriptionString[keyboardCount] = {
+static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = {
 	"keyboardUnknow",
 	"keyboardLeft",
 	"keyboardRight",
@@ -78,7 +78,7 @@ static const char* keyboardDescriptionString[keyboardCount] = {
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::keyboard_te obj)
 {
-	if (obj>=0 && obj <keyboardCount) {
+	if (obj>=0 && obj <ewol::keyEvent::keyboardCount) {
 		os << keyboardDescriptionString[obj];
 	} else {
 		os << "[ERROR]";
@@ -87,7 +87,7 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::ke
 }
 
 
-static const char* typeDescriptionString[typeCount] = {
+static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 	"typeUnknow",
 	"typeMouse",
 	"typeFinger",
@@ -97,7 +97,7 @@ static const char* typeDescriptionString[typeCount] = {
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::type_te obj)
 {
-	if (obj>=0 && obj < typeCount) {
+	if (obj>=0 && obj < ewol::keyEvent::typeCount) {
 		os << typeDescriptionString[obj];
 	} else {
 		os << "[ERROR]";

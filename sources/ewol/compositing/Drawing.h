@@ -9,10 +9,11 @@
 #ifndef __EWOL_DRAWING_H__
 #define __EWOL_DRAWING_H__
 
-#include <ewol/Debug.h>
-#include <ewol/compositing/Compositing.h>
 #include <draw/Color.h>
-#include <ewol/ResourceManager.h>
+
+#include <ewol/debug.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/renderer/ResourceManager.h>
 
 
 namespace ewol

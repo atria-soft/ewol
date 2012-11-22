@@ -6,15 +6,19 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/ResourceManager.h>
-#include <ewol/texture/TextureFile.h>
-#include <ewol/texture/Texture.h>
 
+#include <etk/types.h>
 #include <etk/os/FSNode.h>
 
-#include <ewol/texture/TextureBMP.h>
 #include <parserSVG/parserSVG.h>
-#include <ewol/texture/TexturePNG.h>
+
+#include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/resources/Image.h>
+#include <ewol/renderer/resources/Texture.h>
+
+
+#include <ewol/renderer/resources/image/ImageBMP.h>
+#include <ewol/renderer/resources/image/ImagePNG.h>
 
 
 ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, etk::Vector2D<int32_t> size) :

@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/openGL/VirtualBufferObject.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/VirtualBufferObject.h>
 
 
 

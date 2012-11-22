@@ -6,10 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
 #include <etk/os/FSNode.h>
-#include <ewol/Debug.h>
-#include <ewol/SimpleConfigFile.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/ConfigFile.h>
 
 
 void ewol::SimpleConfigElement::Parse(etk::UString value)
@@ -23,7 +22,7 @@ void ewol::SimpleConfigElement::Parse(etk::UString value)
 
 
 
-ewol::SimpleConfigFile::SimpleConfigFile(etk::UString& filename): 
+ewol::ConfigFile::ConfigFile(etk::UString& filename): 
 	ewol::Resource(filename)
 {
 	EWOL_DEBUG("SFP : load \"" << filename << "\"");
@@ -31,7 +30,7 @@ ewol::SimpleConfigFile::SimpleConfigFile(etk::UString& filename):
 }
 
 
-ewol::SimpleConfigFile::~SimpleConfigFile(void)
+ewol::ConfigFile::~ConfigFile(void)
 {
 	// remove all element
 	for (int32_t iii=0; iii<m_list.Size(); iii++){
@@ -44,7 +43,7 @@ ewol::SimpleConfigFile::~SimpleConfigFile(void)
 }
 
 
-void ewol::SimpleConfigFile::Reload(void)
+void ewol::ConfigFile::Reload(void)
 {
 	// Reset all parameters
 	for (int32_t iii=0; iii<m_list.Size(); iii++){
@@ -129,7 +128,7 @@ void ewol::SimpleConfigFile::Reload(void)
 }
 
 
-int32_t ewol::SimpleConfigFile::Request(etk::UString paramName)
+int32_t ewol::ConfigFile::Request(etk::UString paramName)
 {
 	// check if the parameters existed :
 	for (int32_t iii=0; iii<m_list.Size(); iii++){

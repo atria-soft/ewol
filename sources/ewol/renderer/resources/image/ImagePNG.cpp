@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <draw/Image.h>
-#include <ewol/texture/TexturePNG.h>
+#include <ewol/renderer/resources/image/ImagePNG.h>
 #include <etk/os/FSNode.h>
 #include <png/png.h>
 

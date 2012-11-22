@@ -7,7 +7,8 @@
  */
 
 #include <ewol/eObject/EObjectManager.h>
-#include <ewol/os/eSystem.h>
+#include <ewol/renderer/os/eSystem.h>
+#include <ewol/ewol.h>
 
 #undef __class__
 #define __class__	"EObjectManager"

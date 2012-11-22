@@ -6,12 +6,13 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
-#include <etk/UString.h>
-#include <ewol/Debug.h>
 
 #ifndef __RESOURCES_H__
 #define __RESOURCES_H__
+
+#include <etk/types.h>
+#include <etk/UString.h>
+#include <ewol/debug.h>
 
 #define MAX_RESOURCE_LEVEL (5)
 

@@ -9,11 +9,11 @@
 #ifndef __EWOL_TEXTURE_H__
 #define __EWOL_TEXTURE_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <draw/Image.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/Resource.h>
+#include <ewol/renderer/openGL.h>
+#include <ewol/renderer/resources/Resource.h>
 
 namespace ewol {
 	class Texture : public ewol::Resource {

@@ -69,7 +69,7 @@ static int attrListDbl[] = {
 	None
 };
 
-static ewol::specialKey_ts guiKeyBoardMode;
+static ewol::SpecialKey guiKeyBoardMode;
 
 
 extern "C" {
@@ -99,6 +99,7 @@ int32_t        m_originX = 0;
 int32_t        m_originY = 0;
 int32_t        m_cursorEventX = 0;
 int32_t        m_cursorEventY = 0;
+int32_t        m_currentHeight = 0;
 XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
@@ -117,6 +118,9 @@ static Atom XAtomeTargetStringUTF8 = 0;
 static Atom XAtomeTargetTarget = 0;
 static Atom XAtomeEWOL = 0;
 static Atom XAtomeDeleteWindows = 0;
+
+
+
 
 
 bool CreateX11Context(void)
@@ -676,6 +680,7 @@ void X11_Run(void)
 					#endif
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
+					m_currentHeight = event.xconfigure.height;
 					eSystem::Resize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
@@ -687,25 +692,25 @@ void X11_Run(void)
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
-					eSystem::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)event.xbutton.y);
+					eSystem::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)m_cursorEventY);
 					break;
 				case ButtonRelease:
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event ButtonRelease");
 					#endif
 					m_cursorEventX = event.xbutton.x;
-					m_cursorEventY = event.xbutton.y;
+					m_cursorEventY = (m_currentHeight-event.xbutton.y);
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = false;
 					}
-					eSystem::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)event.xbutton.y);
+					eSystem::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)m_cursorEventY);
 					break;
 				case EnterNotify:
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event EnterNotify");
 					#endif
 					m_cursorEventX = event.xcrossing.x;
-					m_cursorEventY = event.xcrossing.y;
+					m_cursorEventY = (m_currentHeight-event.xcrossing.y);
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (float)event.xcrossing.x, (float)event.xcrossing.y);
 					break;
@@ -714,7 +719,7 @@ void X11_Run(void)
 						EWOL_INFO("X11 event LeaveNotify");
 					#endif
 					m_cursorEventX = event.xcrossing.x;
-					m_cursorEventY = event.xcrossing.y;
+					m_cursorEventY = (m_currentHeight-event.xcrossing.y);
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 					break;
 				case MotionNotify:
@@ -722,20 +727,20 @@ void X11_Run(void)
 						EWOL_INFO("X11 event MotionNotify");
 					#endif
 					m_cursorEventX = event.xmotion.x;
-					m_cursorEventY = event.xmotion.y;
+					m_cursorEventY = (m_currentHeight-event.xmotion.y);
 					{
 						// For compatibility of the Android system : 
 						bool findOne = false;
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
-								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-								eSystem::SetMouseMotion(iii, (float)event.xmotion.x, (float)event.xmotion.y);
+								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
+								eSystem::SetMouseMotion(iii, (float)event.xmotion.x, (float)(m_currentHeight-event.xmotion.y));
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
-							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)event.xmotion.y << ")");
-							eSystem::SetMouseMotion(0, (float)event.xmotion.x, (float)event.xmotion.y);
+							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
+							eSystem::SetMouseMotion(0, (float)event.xmotion.x, (float)(m_currentHeight-event.xmotion.y));
 						}
 					}
 					break;
@@ -1073,6 +1078,7 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: ChangeSize");
 	#endif
+	m_currentHeight = size.y;
 	XResizeWindow(m_display, WindowHandle, size.x, size.y);
 }
 
@@ -1103,7 +1109,7 @@ void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
  * @param std IO
  * @return std IO
  */
-int main(int argc, char *argv[])
+int guiInterface::main(int argc, const char *argv[])
 {
 	ewol::CmdLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {

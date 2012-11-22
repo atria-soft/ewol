@@ -9,8 +9,8 @@
 #ifndef __EWOL_TEXTURE_BITMAP_H__
 #define __EWOL_TEXTURE_BITMAP_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <draw/Image.h>
 #include <etk/os/FSNode.h>
 

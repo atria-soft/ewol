@@ -9,11 +9,11 @@
 #ifndef __MESH_H__
 #define __MESH_H__
 
-#include <etk/Types.h>
-#include <ewol/Resource.h>
-#include <ewol/texture/TextureFile.h>
-#include <ewol/openGL/Shader.h>
-#include <ewol/openGL/Program.h>
+#include <etk/types.h>
+#include <ewol/renderer/resources/Resource.h>
+#include <ewol/renderer/resources/Image.h>
+#include <ewol/renderer/resources/Shader.h>
+#include <ewol/renderer/resources/Program.h>
 
 namespace ewol
 {

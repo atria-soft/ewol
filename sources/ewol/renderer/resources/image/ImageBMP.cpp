@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <draw/Image.h>
-#include <ewol/texture/TextureBMP.h>
+#include <ewol/renderer/resources/image/ImageBMP.h>
 #include <etk/os/FSNode.h>
 
 #pragma pack(push,1)

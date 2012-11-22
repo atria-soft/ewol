@@ -9,11 +9,12 @@
 #ifndef __EWOL_TEXT_H__
 #define __EWOL_TEXT_H__
 
-#include <ewol/Debug.h>
+#include <draw/Color.h>
+
+#include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
-#include <draw/Color.h>
-#include <ewol/ResourceManager.h>
+#include <ewol/renderer/ResourceManager.h>
 
 namespace ewol
 {
@@ -75,7 +76,7 @@ namespace ewol
 			ewol::TexturedFont*                  m_font;          //!< Font resources
 		private: // Text
 			etk::Vector<etk::Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::Vector<texCoord_ts>             m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<etk::Vector2D<float> >   m_coordTex;      //!< internal texture coordinate for every point
 			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
 		private:
 			/**

@@ -6,10 +6,10 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/os/FSNode.h>
-#include <ewol/Debug.h>
-#include <ewol/openGL/Shader.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/Shader.h>
 
 
 

@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/Debug.h>
-#include <ewol/openGL/openGL.h>
 #include <etk/Vector.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/openGL.h>
 
 etk::Vector<etk::Matrix4> l_matrixList;
 

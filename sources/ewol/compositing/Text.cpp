@@ -6,23 +6,11 @@
  * @license BSD v3 (see license file)
  */
 
-
-#include <ewol/Debug.h>
-#include <ewol/compositing/Text.h>
-#include <ewol/font/FontManager.h>
 #include <tinyXML/tinyxml.h>
 
-
-/*
-			// curent Drawing position
-			etk::Vector3D<float> m_position;         //!< the next position to draw the text
-			// clipping section
-			etk::Vector3D<float> m_clippingPosition;
-			etk::Vector3D<float> m_clippingSize;
-			bool                 m_clippingEnable;
-			// Basic color
-			etk::Color           m_color;
-*/
+#include <ewol/debug.h>
+#include <ewol/compositing/Text.h>
+#include <ewol/config.h>
 
 ewol::Text::Text(void) :
 	m_position(0.0, 0.0, 0.0),
@@ -46,7 +34,7 @@ ewol::Text::Text(void) :
 	m_GLtexID(-1),
 	m_font(NULL)
 {
-	SetFont(ewol::font::GetDefaultFont(), ewol::font::GetDefaultSize());
+	SetFont("", -1);
 	LoadProgram();
 }
 
@@ -263,7 +251,7 @@ void ewol::Text::SetClippingMode(bool newMode)
 void ewol::Text::SetFontSize(int32_t fontSize)
 {
 	// get old size
-	etk::UString fontName = ewol::font::GetDefaultFont();
+	etk::UString fontName = "";
 	if (NULL != m_font) {
 		fontName = m_font->GetName();
 	}
@@ -274,7 +262,7 @@ void ewol::Text::SetFontSize(int32_t fontSize)
 void ewol::Text::SetFontName(etk::UString fontName)
 {
 	// get old size
-	int32_t fontSize = ewol::font::GetDefaultSize();
+	int32_t fontSize = -1;
 	if (NULL != m_font) {
 		fontSize = m_font->GetFontSize();
 	}
@@ -284,16 +272,22 @@ void ewol::Text::SetFontName(etk::UString fontName)
 
 void ewol::Text::SetFont(etk::UString fontName, int32_t fontSize)
 {
+	Clear();
 	// remove old one
 	if (NULL != m_font) {
 		ewol::resource::Release(m_font);
 		m_font = NULL;
 	}
-	etk::UString tmpName = fontName;
-	tmpName += ":";
-	tmpName += fontSize;
+	if (fontSize <= 0) {
+		fontSize = ewol::config::FontGetDefaultSize();
+	}
+	if (fontName == "") {
+		fontName = ewol::config::FontGetDefaultName();
+	}
+	fontName += ":";
+	fontName += fontSize;
 	// link to new One
-	if (false == ewol::resource::Keep(tmpName, m_font)) {
+	if (false == ewol::resource::Keep(fontName, m_font)) {
 		EWOL_ERROR("Can not get font resource");
 	}
 }
@@ -629,10 +623,10 @@ void ewol::Text::Print(const uniChar_t charcode)
 		float dyC = m_position.y + myGlyph->m_bearing.y + fontHeigh - fontSize;
 		float dyD = dyC - myGlyph->m_sizeTexture.y;
 		
-		float tuA = myGlyph->m_texturePosStart.u;
-		float tuB = myGlyph->m_texturePosStop.u;
-		float tvC = myGlyph->m_texturePosStart.v;
-		float tvD = myGlyph->m_texturePosStop.v;
+		float tuA = myGlyph->m_texturePosStart.x;
+		float tuB = myGlyph->m_texturePosStop.x;
+		float tvC = myGlyph->m_texturePosStart.y;
+		float tvD = myGlyph->m_texturePosStop.y;
 		
 		
 		// Clipping and drawing area
@@ -710,16 +704,16 @@ void ewol::Text::Print(const uniChar_t charcode)
 				 *   |      |
 				 *   3------2
 				 */
-				texCoord_ts texturePos[4];
-				texturePos[0].u = tuA+m_mode;
-				texturePos[1].u = tuB+m_mode;
-				texturePos[2].u = tuB+m_mode;
-				texturePos[3].u = tuA+m_mode;
+				etk::Vector2D<float> texturePos[4];
+				texturePos[0].x = tuA+m_mode;
+				texturePos[1].x = tuB+m_mode;
+				texturePos[2].x = tuB+m_mode;
+				texturePos[3].x = tuA+m_mode;
 				
-				texturePos[0].v = tvC;
-				texturePos[1].v = tvC;
-				texturePos[2].v = tvD;
-				texturePos[3].v = tvD;
+				texturePos[0].y = tvC;
+				texturePos[1].y = tvC;
+				texturePos[2].y = tvD;
+				texturePos[3].y = tvD;
 				
 				// NOTE : Android does not support the Quads elements ...
 				/* Step 1 : 

@@ -6,18 +6,17 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/font/Font.h>
-#include <ewol/texture/Texture.h>
 #include <etk/unicode.h>
 #include <etk/Vector.h>
-#include <ewol/font/FontFreeType.h>
 #include <etk/os/FSNode.h>
 
-#include <ewol/openGL/openGL.h>
-extern "C" {
-	#include <freetype/ft2build.h>
-}
-#include FT_FREETYPE_H
+
+#include <ewol/renderer/openGL.h>
+
+#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/resources/FontFreeType.h>
+#include <ewol/renderer/resources/font/FontBase.h>
+
 
 #undef __class__
 #define __class__	"ewol::FontFreeType"
@@ -49,7 +48,7 @@ void ewol::FreeTypeUnInit(void)
 
 
 ewol::FontFreeType::FontFreeType(etk::UString fontName) :
-	Font(fontName)
+	FontBase(fontName)
 {
 	m_init = false;
 	m_FileBuffer = NULL;

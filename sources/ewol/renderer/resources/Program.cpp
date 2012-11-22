@@ -6,10 +6,10 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
-#include <ewol/openGL/Program.h>
-#include <ewol/ResourceManager.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/resources/Program.h>
+#include <ewol/renderer/ResourceManager.h>
 #include <etk/os/FSNode.h>
 
 //#define LOCAL_DEBUG  EWOL_VERBOSE

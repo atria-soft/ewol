@@ -304,7 +304,7 @@ void ewol::Widget::ShortCutClean(void)
 }
 
 
-bool ewol::Widget::OnEventShortCut(ewol::specialKey_ts& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
+bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
 {
 	if (unicodeValue >= 'A' && unicodeValue <='Z') {
 		unicodeValue += 'a' - 'A';

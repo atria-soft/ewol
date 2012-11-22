@@ -6,6 +6,6 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 
 const char * ewolLibName = "ewol     ";

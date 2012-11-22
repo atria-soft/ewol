@@ -47,13 +47,13 @@ namespace ewol
 	 * @note work only on computer
 	 * @param[in] size The new windows size
 	 */
-	void ChangeSize(etkVector2D<int32_t> size);
+	void ChangeSize(etk::Vector2D<int32_t> size);
 	/**
 	 * @brief Change the windows curent position
 	 * @note work only on computer
 	 * @param[in] pos The new windows position
 	 */
-	void ChangePos(etkVector2D<int32_t> pos);
+	void ChangePos(etk::Vector2D<int32_t> pos);
 	/**
 	 * @brief Generate the action of redrawing all the display.
 	 */
