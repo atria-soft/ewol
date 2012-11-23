@@ -10,8 +10,8 @@
 #ifndef __EWOL_BUTTON_H__
 #define __EWOL_BUTTON_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/oObject/OObject.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Text.h>

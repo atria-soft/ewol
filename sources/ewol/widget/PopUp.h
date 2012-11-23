@@ -9,8 +9,8 @@
 #ifndef __EWOL_POP_UP_H__
 #define __EWOL_POP_UP_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Drawable.h>
 

@@ -9,9 +9,9 @@
 #ifndef __EWOL_MENU_H__
 #define __EWOL_MENU_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/SizerHori.h>
 #include <ewol/widget/ContextMenu.h>

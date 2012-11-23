@@ -9,8 +9,8 @@
 #ifndef __EWOL_SCENE_H__
 #define __EWOL_SCENE_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 #include <ewol/oObject/Sprite.h>
 #include <ewol/game/GameElement.h>

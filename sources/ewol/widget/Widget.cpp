@@ -10,7 +10,7 @@
 #include <ewol/eObject/EObjectManager.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
+#include <ewol/renderer/openGL.h>
 
 
 #undef __class__
@@ -136,9 +136,9 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            tmpOriginY,
 		            tmpclipX,
 		            m_size.y);
-		etk::Matrix4 tmpTranslate = etk::matrix::Translate(-tmpclipX/2 - (tmpOriginX-m_origin.x), -m_size.y/2, -1.0);
-		etk::Matrix4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, 1.0);
-		etk::Matrix4 tmpProjection = etk::matrix::Perspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x)), (float)(-m_size.y/2.0), -1.0f));
+		etk::Matrix4 tmpScale = etk::Matrix4::Scale(etk::Vector3D<float>(m_zoom, m_zoom, 1.0f));
+		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
 		etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
@@ -153,14 +153,10 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
-		#if 1
-			etk::Matrix4 tmpTranslate = etk::matrix::Translate(-m_size.x/2, -m_size.y/2, -1.0);
-			etk::Matrix4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, 1.0);
-			etk::Matrix4 tmpProjection = etk::matrix::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-			etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
-		#else
-			etk::Matrix4 tmpMat = etk::matrix::Perspective(0, m_size.x, 0, m_size.y, -1, 1);
-		#endif
+		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>(-m_size.x/2, -m_size.y/2, -1.0f));
+		etk::Matrix4 tmpScale = etk::Matrix4::Scale(etk::Vector3D<float>(m_zoom, m_zoom, 1.0f));
+		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -231,59 +227,59 @@ void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * gene
 		tmpElement->specialKey.meta = true;
 	}
 	if(NULL != strstr(descriptiveString, "F12") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F12;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF12;
 	} else if(NULL != strstr(descriptiveString, "F11") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F11;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF11;
 	} else if(NULL != strstr(descriptiveString, "F10") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F10;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF10;
 	} else if(NULL != strstr(descriptiveString, "F9") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F9;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF9;
 	} else if(NULL != strstr(descriptiveString, "F8") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F8;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF8;
 	} else if(NULL != strstr(descriptiveString, "F7") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F7;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF7;
 	} else if(NULL != strstr(descriptiveString, "F6") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F6;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF6;
 	} else if(NULL != strstr(descriptiveString, "F5") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F5;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF5;
 	} else if(NULL != strstr(descriptiveString, "F4") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F4;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF4;
 	} else if(NULL != strstr(descriptiveString, "F3") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F3;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF3;
 	} else if(NULL != strstr(descriptiveString, "F2") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F2;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF2;
 	} else if(NULL != strstr(descriptiveString, "F1") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_F1;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF1;
 	} else if(NULL != strstr(descriptiveString, "LEFT") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_LEFT;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardLeft;
 	} else if(NULL != strstr(descriptiveString, "RIGHT") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_RIGHT;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardRight;
 	} else if(NULL != strstr(descriptiveString, "UP") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_UP;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardUp;
 	} else if(NULL != strstr(descriptiveString, "DOWN") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_DOWN;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardDown;
 	} else if(NULL != strstr(descriptiveString, "PAGE_UP") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPageUp;
 	} else if(NULL != strstr(descriptiveString, "PAGE_DOWN") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPageDown;
 	} else if(NULL != strstr(descriptiveString, "START") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_START;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStart;
 	} else if(NULL != strstr(descriptiveString, "END") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_END;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardEnd;
 	} else if(NULL != strstr(descriptiveString, "CENTER") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CENTER;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardCenter;
 	} else if(NULL != strstr(descriptiveString, "ARRET_DEFIL") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStopDefil;
 	} else if(NULL != strstr(descriptiveString, "WAIT") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_WAIT;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardWait;
 	} else if(NULL != strstr(descriptiveString, "INSERT") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardInsert;
 	} else if(NULL != strstr(descriptiveString, "CAPLOCK") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardCapLock;
 	} else if(NULL != strstr(descriptiveString, "CONTEXT_MENU") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardContextMenu;
 	} else if(NULL != strstr(descriptiveString, "VER_NUM") ) {
-		tmpElement->keyboardMoveValue = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardVerNum;
 	} else {
 		tmpElement->unicodeValue = descriptiveString[strlen(descriptiveString) -1];
 	}
@@ -304,7 +300,7 @@ void ewol::Widget::ShortCutClean(void)
 }
 
 
-bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeValue, ewol::eventKbMoveType_te kbMove, bool isDown)
+bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeValue, ewol::keyEvent::keyboard_te kbMove, bool isDown)
 {
 	if (unicodeValue >= 'A' && unicodeValue <='Z') {
 		unicodeValue += 'a' - 'A';
@@ -316,7 +312,7 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeV
 			    && m_localShortcut[iii]->specialKey.ctrl  == special.ctrl
 			    && m_localShortcut[iii]->specialKey.alt   == special.alt
 			    && m_localShortcut[iii]->specialKey.meta  == special.meta
-			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::EVENT_KB_MOVE_TYPE_NONE
+			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::keyEvent::keyboardUnknow
 			              && m_localShortcut[iii]->unicodeValue == unicodeValue)
 			         || (    m_localShortcut[iii]->keyboardMoveValue == kbMove
 			              && m_localShortcut[iii]->unicodeValue == 0)

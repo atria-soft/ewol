@@ -44,7 +44,7 @@ FILE_LIST+= ewol/compositing/Compositing.cpp \
 
 
 # all widgets
-#FILE_LIST+= ewol/widget/Widget.cpp \
+FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/WidgetManager.cpp \
 			ewol/widget/Windows.cpp \
 			ewol/widget/Button.cpp \

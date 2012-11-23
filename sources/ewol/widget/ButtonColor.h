@@ -9,8 +9,8 @@
 #ifndef __EWOL_BUTTON_COLOR_H__
 #define __EWOL_BUTTON_COLOR_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/oObject/OObject.h>

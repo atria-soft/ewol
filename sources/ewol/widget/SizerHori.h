@@ -9,8 +9,8 @@
 #ifndef __EWOL_SIZER_HORI_H__
 #define __EWOL_SIZER_HORI_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
 namespace ewol {

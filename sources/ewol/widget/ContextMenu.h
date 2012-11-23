@@ -9,8 +9,8 @@
 #ifndef __EWOL_CONTEXT_MENU_H__
 #define __EWOL_CONTEXT_MENU_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Drawable.h>
 
