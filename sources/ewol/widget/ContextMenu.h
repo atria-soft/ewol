@@ -10,11 +10,12 @@
 #define __EWOL_CONTEXT_MENU_H__
 
 #include <etk/types.h>
+#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Drawable.h>
 
-namespace ewol {
+namespace widget {
 	typedef enum {
 		CONTEXT_MENU_MARK_TOP,
 		CONTEXT_MENU_MARK_RIGHT,
@@ -22,7 +23,7 @@ namespace ewol {
 		CONTEXT_MENU_MARK_LEFT,
 		CONTEXT_MENU_MARK_NONE
 	}markPosition_te;
-	class ContextMenu : public ewol::Drawable
+	class ContextMenu : public widget::Drawable
 	{
 		public:
 			ContextMenu(void);
@@ -53,7 +54,7 @@ namespace ewol {
 			void           SubWidgetRemove(void);
 			void           SetPositionMark(markPosition_te position, etk::Vector2D<float>  arrowPos);
 		protected:
-			virtual void   OnDraw(DrawProperty& displayProp);
+			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
@@ -73,7 +74,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 	};
 	
 };

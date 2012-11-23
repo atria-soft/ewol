@@ -9,22 +9,23 @@
 #include <ewol/widget/meta/ParameterList.h>
 #include <etk/tool.h>
 
+#include <ewol/widget/List.h>
+
+#include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Text.h>
+#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"ParameterList"
 
 extern const char * const ewolEventParameterListSelect     = "ewol-event-parameter-list-select";
 
-#include <ewol/widget/List.h>
-
-#include <ewol/oObject/OObject.h>
-#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"List"
 
 
-ewol::ParameterList::ParameterList(void)
+widget::ParameterList::ParameterList(void)
 {
 	AddEventId(ewolEventParameterListSelect);
 	
@@ -38,7 +39,7 @@ ewol::ParameterList::ParameterList(void)
 	SetCanHaveFocus(true);
 }
 
-ewol::ParameterList::~ParameterList(void)
+widget::ParameterList::~ParameterList(void)
 {
 	//clean all the object
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
@@ -50,7 +51,7 @@ ewol::ParameterList::~ParameterList(void)
 }
 
 
-bool ewol::ParameterList::CalculateMinSize(void)
+bool widget::ParameterList::CalculateMinSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
@@ -64,7 +65,7 @@ bool ewol::ParameterList::CalculateMinSize(void)
 }
 
 
-void ewol::ParameterList::AddOObject(ewol::OObject* newObject, int32_t pos)
+void widget::ParameterList::AddOObject(ewol::Compositing* newObject, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
@@ -78,7 +79,7 @@ void ewol::ParameterList::AddOObject(ewol::OObject* newObject, int32_t pos)
 }
 
 
-void ewol::ParameterList::ClearOObjectList(void)
+void widget::ParameterList::ClearOObjectList(void)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -87,7 +88,7 @@ void ewol::ParameterList::ClearOObjectList(void)
 	m_listOObject.Clear();
 }
 
-void ewol::ParameterList::OnDraw(DrawProperty& displayProp)
+void widget::ParameterList::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
@@ -100,7 +101,7 @@ void ewol::ParameterList::OnDraw(DrawProperty& displayProp)
 
 
 
-void ewol::ParameterList::OnRegenerateDisplay(void)
+void widget::ParameterList::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
@@ -138,9 +139,10 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		etk::Vector<int32_t> listSizeColomn;
 		
 		// set background color :
-		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-		BGOObjects->SetColor(0xFFFFFFFF);
-		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+		ewol::Drawing * tmpDraw = new ewol::Drawing();
+		tmpDraw->SetColor(0xFFFFFFFF);
+		tmpDraw->SetPos(etk::Vector3D<float>(0,0,0) );
+		tmpDraw->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
 		
 		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
 		
@@ -155,12 +157,6 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 		// Calculate the real position ...
 		tmpOriginY = m_size.y - (-m_originScrooled.y + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
 		
-		clipping_ts drawClipping;
-		drawClipping.x = 0;
-		drawClipping.y = 0;
-		drawClipping.w = m_size.x - (2*m_paddingSizeX);
-		drawClipping.h = m_size.y;
-		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite = "???";
 			draw::Color fg(0x000000FF);
@@ -168,35 +164,36 @@ void ewol::ParameterList::OnRegenerateDisplay(void)
 				myTextToWrite = m_list[iii]->m_label;
 			}
 			
-			ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
+			ewol::Text * tmpText = new ewol::Text();
 			
-			etk::Vector2D<float> textPos;
+			etk::Vector3D<float> textPos;
 			textPos.x = (int32_t)tmpOriginX;
 			if (m_list[iii]->m_group == false) {
 				textPos.x += minHeight;
 			}
 			textPos.y = (int32_t)(tmpOriginY + m_paddingSizeY);
-			tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
+			tmpText->SetPos(textPos);
+			tmpText->Print(myTextToWrite);
 			
 			AddOObject(tmpText);
 			tmpOriginY -= minHeight + 2* m_paddingSizeY;
 		}
-		AddOObject(BGOObjects, 0);
+		AddOObject(tmpDraw, 0);
 		
 		// call the herited class...
-		WidgetScrooled::OnRegenerateDisplay();
+		widget::WidgetScrooled::OnRegenerateDisplay();
 	}
 }
 
 
-bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	if (IdInput == 1 && typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
+	if (IdInput == 1 && typeEvent == ewol::keyEvent::statusSingle) {
 		etk::Vector2D<float> relativePos = RelativePosition(pos);
 		// corection for the openGl abstraction
 		relativePos.y = m_size.y - relativePos.y;
@@ -225,19 +222,19 @@ bool ewol::ParameterList::OnEventInput(ewol::inputType_te type, int32_t IdInput,
 
 
 
-void ewol::ParameterList::OnGetFocus(void)
+void widget::ParameterList::OnGetFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Get Focus");
 }
 
-void ewol::ParameterList::OnLostFocus(void)
+void widget::ParameterList::OnLostFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Lost Focus");
 }
 
-void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UString& image)
+void widget::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UString& image)
 {
-	ewol::elementPL* tmpEmement = new ewol::elementPL(label, refId, image, false);
+	widget::elementPL* tmpEmement = new widget::elementPL(label, refId, image, false);
 	if (NULL != tmpEmement) {
 		m_list.PushBack(tmpEmement);
 		if (m_idSelected == -1 && label != "---" && refId>0) {
@@ -248,10 +245,10 @@ void ewol::ParameterList::MenuAdd(etk::UString& label, int32_t refId, etk::UStri
 }
 
 
-void ewol::ParameterList::MenuAddGroup(etk::UString& label)
+void widget::ParameterList::MenuAddGroup(etk::UString& label)
 {
 	etk::UString image = "";
-	ewol::elementPL* tmpEmement = new ewol::elementPL(label, -1, image, true);
+	widget::elementPL* tmpEmement = new widget::elementPL(label, -1, image, true);
 	if (NULL != tmpEmement) {
 		m_list.PushBack(tmpEmement);
 		MarkToRedraw();
@@ -259,7 +256,7 @@ void ewol::ParameterList::MenuAddGroup(etk::UString& label)
 }
 
 
-void ewol::ParameterList::MenuClear(void)
+void widget::ParameterList::MenuClear(void)
 {
 	m_idSelected = -1;
 	for (int32_t iii=0; iii<m_list.Size(); iii++) {
@@ -272,7 +269,7 @@ void ewol::ParameterList::MenuClear(void)
 }
 
 
-void ewol::ParameterList::MenuSeparator(void)
+void widget::ParameterList::MenuSeparator(void)
 {
 	if (m_list.Size()>0) {
 		etk::UString label = "";

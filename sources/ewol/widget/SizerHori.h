@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
-namespace ewol {
+namespace widget {
 	class SizerHori :public ewol::Widget
 	{
 		public:
@@ -45,7 +45,7 @@ namespace ewol {
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		protected:
-			virtual void   OnDraw(DrawProperty& displayProp);
+			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 			/**

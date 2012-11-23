@@ -10,9 +10,10 @@
 #define __EWOL_WIDGET_DRAWABLE_H__
 
 #include <ewol/widget/Widget.h>
+#include <ewol/compositing/Compositing.h>
 
 
-namespace ewol {
+namespace widget {
 	
 	class Drawable : public ewol::Widget {
 		public:
@@ -28,12 +29,12 @@ namespace ewol {
 			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
 			
 		private:
-			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 		public:
-			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 	};
 	
 };

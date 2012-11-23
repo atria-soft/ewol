@@ -17,40 +17,40 @@
 #undef __class__
 #define __class__	"Menu"
 
-ewol::Menu::Menu(void)
+widget::Menu::Menu(void)
 {
 	m_staticId = 0;
 	m_widgetContextMenu = NULL;
 }
 
-ewol::Menu::~Menu(void)
+widget::Menu::~Menu(void)
 {
 	Clear();
 }
 
 
-void ewol::Menu::SubWidgetRemoveAll(void)
+void widget::Menu::SubWidgetRemoveAll(void)
 {
 	Clear();
-	ewol::SizerHori::SubWidgetRemoveAll();
+	widget::SizerHori::SubWidgetRemoveAll();
 }
 
-void ewol::Menu::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::Menu::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::Menu::SubWidgetRemove(ewol::Widget* newWidget)
+void widget::Menu::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	EWOL_ERROR("Not availlable");
 }
 
-void ewol::Menu::Clear(void)
+void widget::Menu::Clear(void)
 {
 	for( int32_t iii=0; iii < m_listElement.Size(); iii++) {
 		if (m_listElement[iii] != NULL) {
@@ -61,14 +61,14 @@ void ewol::Menu::Clear(void)
 	m_listElement.Clear();
 }
 
-int32_t ewol::Menu::AddTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
+int32_t widget::Menu::AddTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
 {
 	return Add(-1, label, image, generateEvent, message);
 }
 
-int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
+int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
 {
-	ewol::MenuElement * tmpObject = new ewol::MenuElement();
+	widget::MenuElement * tmpObject = new widget::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
 		return -1;
@@ -82,8 +82,8 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 	tmpObject->m_message = message;
 	m_listElement.PushBack(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
-		ewol::Button * myButton = NULL;
-		myButton = new ewol::Button(label);
+		widget::Button * myButton = NULL;
+		myButton = new widget::Button(label);
 		if (NULL == myButton) {
 			EWOL_ERROR("Allocation button error");
 			return tmpObject->m_localId;
@@ -91,7 +91,7 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 		// set the image if one is present ...
 		myButton->SetImage(tmpObject->m_image);
 		// add it in the widget list
-		ewol::SizerHori::SubWidgetAdd(myButton);
+		widget::SizerHori::SubWidgetAdd(myButton);
 		// keep the specific event ...
 		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 		tmpObject->m_widgetPointer = myButton;
@@ -99,13 +99,13 @@ int32_t ewol::Menu::Add(int32_t parent, etk::UString label, etk::UString image, 
 	return tmpObject->m_localId;
 }
 
-void ewol::Menu::AddSpacer(void)
+void widget::Menu::AddSpacer(void)
 {
 	EWOL_TODO("NOT now...");
 }
 
 
-void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	/*
 	if (true == ewol::SizerHori::OnReceiveMessage(CallerObject, eventId, data)) {
@@ -140,7 +140,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						return;
 					}
 					// create a context menu : 
-					m_widgetContextMenu = new ewol::ContextMenu();
+					m_widgetContextMenu = new widget::ContextMenu();
 					if (NULL == m_widgetContextMenu) {
 						EWOL_ERROR("Allocation Error");
 						return;
@@ -156,12 +156,12 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						newPosition.y = tmpOri.y;
 					}
 					
-					m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_TOP, newPosition );
+					m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_TOP, newPosition );
 					
-					ewol::SizerVert * mySizerVert = NULL;
-					ewol::Button * myButton = NULL;
+					widget::SizerVert * mySizerVert = NULL;
+					widget::Button * myButton = NULL;
 					
-					mySizerVert = new ewol::SizerVert();
+					mySizerVert = new widget::SizerVert();
 						mySizerVert->LockExpendContamination(true);
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizerVert);
@@ -169,7 +169,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
-									myButton = new ewol::Button(m_listElement[jjj]->m_label);
+									myButton = new widget::Button(m_listElement[jjj]->m_label);
 									if (NULL == myButton) {
 										EWOL_ERROR("Allocation Error");
 									} else {
@@ -178,7 +178,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 										myButton->SetExpendX(true);
 										myButton->SetFillX(true);
-										myButton->SetAlignement(ewol::TEXT_ALIGN_LEFT);
+										myButton->SetAlignement(widget::TEXT_ALIGN_LEFT);
 										// add it in the widget list
 										mySizerVert->SubWidgetAdd(myButton);
 										m_listElement[jjj]->m_widgetPointer = myButton;
@@ -186,7 +186,7 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 								}
 							}
 						}
-					ewol::PopUpWidgetPush(m_widgetContextMenu);
+					ewol::WindowsPopUpAdd(m_widgetContextMenu);
 				}
 				return;
 			}
@@ -195,9 +195,9 @@ void ewol::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 }
 
 
-void ewol::Menu::OnObjectRemove(ewol::EObject * removeObject)
+void widget::Menu::OnObjectRemove(ewol::EObject * removeObject)
 {
-	ewol::SizerHori::OnObjectRemove(removeObject);
+	widget::SizerHori::OnObjectRemove(removeObject);
 	if (m_widgetContextMenu == removeObject) {
 		m_widgetContextMenu = NULL;
 	}

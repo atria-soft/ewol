@@ -12,8 +12,9 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/compositing/Compositing.h>
 
-namespace ewol {
+namespace widget {
 	typedef enum {
 		SCROLL_DISABLE,
 		SCROLL_INIT,
@@ -31,20 +32,20 @@ namespace ewol {
 	class WidgetScrooled : public ewol::Widget
 	{
 		private:
-			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
-			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
+			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			etk::Vector2D<float>          m_originScrooled;
-			etk::Vector2D<float>          m_maxSize;
-			float                    m_limitScrolling;
+			etk::Vector2D<float>    m_originScrooled;
+			etk::Vector2D<float>    m_maxSize;
+			float                   m_limitScrolling;
 		private:
-			scrollingMode_te   m_scroollingMode; //!< mode of management of the scrooling
-			float              m_pixelScrolling;
+			scrollingMode_te        m_scroollingMode; //!< mode of management of the scrooling
+			float                   m_pixelScrolling;
 			etk::Vector2D<float>    m_highSpeedStartPos;
-			highSpeedMode_te   m_highSpeedMode;
-			int32_t            m_highSpeedButton;
-			ewol::inputType_te m_highSpeedType;
+			highSpeedMode_te        m_highSpeedMode;
+			int32_t                 m_highSpeedButton;
+			ewol::keyEvent::type_te m_highSpeedType;
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
@@ -56,7 +57,7 @@ namespace ewol {
 			 */
 			virtual const char * const GetObjectType(void) { return "EwolWidgetScrooled"; };
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -66,7 +67,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, ewol::eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
@@ -74,7 +75,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			virtual void GenDraw(DrawProperty displayProp);
+			virtual void GenDraw(ewol::DrawProperty displayProp);
 		protected:
 			/**
 			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled

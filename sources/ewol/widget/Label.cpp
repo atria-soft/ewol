@@ -8,7 +8,7 @@
 
 #include <ewol/widget/Label.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Text.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -20,54 +20,54 @@ extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
 #define __class__	"Label"
 
 
-void ewol::Label::Init(void)
+void widget::Label::Init(void)
 {
 	AddEventId(ewolEventLabelPressed);
 	m_textColorFg = draw::color::black;
 	SetCanHaveFocus(false);
 }
 
-ewol::Label::Label(void)
+widget::Label::Label(void)
 {
 	m_label = "---";
 	Init();
 }
 
-ewol::Label::Label(etk::UString newLabel)
+widget::Label::Label(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
 }
 
 
-ewol::Label::~Label(void)
+widget::Label::~Label(void)
 {
 	
 }
 
 
-bool ewol::Label::CalculateMinSize(void)
+bool widget::Label::CalculateMinSize(void)
 {
-	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
 	m_minSize.x = 3 + minSize.x;
 	m_minSize.y = 3 + minSize.y;
 	return true;
 }
 
 
-void ewol::Label::SetLabel(etk::UString newLabel)
+void widget::Label::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
 }
 
-void ewol::Label::OnDraw(DrawProperty& displayProp)
+void widget::Label::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_oObjectText.Draw();
 }
 
 
-void ewol::Label::OnRegenerateDisplay(void)
+void widget::Label::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		m_oObjectText.Clear();
@@ -86,21 +86,18 @@ void ewol::Label::OnRegenerateDisplay(void)
 		tmpOriginY += paddingSize;
 		
 		
-		etk::Vector2D<float> textPos(tmpOriginX, tmpOriginY);
-		clipping_ts drawClipping;
-		drawClipping.x = paddingSize;
-		drawClipping.y = paddingSize;
-		drawClipping.w = m_size.x - 2*paddingSize;
-		drawClipping.h = m_size.y - 2*paddingSize;
-		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
+		etk::Vector3D<float> textPos(tmpOriginX, tmpOriginY, 0);
+		m_oObjectText.SetPos(textPos);
+		m_oObjectText.Print(m_label);
+		
 	}
 }
 
-bool ewol::Label::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {
-		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+		if (ewol::keyEvent::statusSingle == typeEvent) {
 			// nothing to do ...
 			GenerateEventId(ewolEventLabelPressed);
 			return true;

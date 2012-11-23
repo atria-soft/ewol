@@ -23,7 +23,7 @@ extern const char * const ewolEventFileStdPopUpButton5;
 extern const char * const ewolEventFileStdPopUpButton6;
 
 namespace ewol {
-	class StdPopUp : public ewol::PopUp
+	class StdPopUp : public widget::PopUp
 	{
 		public:
 			StdPopUp(void);

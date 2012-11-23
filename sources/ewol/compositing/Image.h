@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_IMAGE_H__
-#define __EWOL_IMAGE_H__
+#ifndef __EWOL_COMPOSITING_IMAGE_H__
+#define __EWOL_COMPOSITING_IMAGE_H__
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>

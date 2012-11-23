@@ -13,21 +13,10 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/openGL/openGL.h>
 
-/**
- * @brief Initilise the basic widget property ==> due to the android system
- * @note all widget that have template might have this initializer ...
- * @param ---
- * @return ---
- */
-void ewol::WIDGET_SceneInit(void)
-{
-	
-}
-
 #undef __class__
 #define __class__	"Scene"
 
-ewol::Scene::Scene(void)
+widget::Scene::Scene(void)
 {
 	m_isRunning = true;
 	SetCanHaveFocus(true);
@@ -37,13 +26,13 @@ ewol::Scene::Scene(void)
 }
 
 
-ewol::Scene::~Scene(void)
+widget::Scene::~Scene(void)
 {
 	
 }
 
 
-void ewol::Scene::OnRegenerateDisplay(void)
+void widget::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean elements
@@ -69,7 +58,7 @@ void ewol::Scene::OnRegenerateDisplay(void)
  * @return ---
  */
 //TODO : Il y a un bug : seg fault ... je ne sais pas trop ou ...
-void ewol::Scene::OnDraw(DrawProperty& displayProp)
+void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 {
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw background :
@@ -87,7 +76,7 @@ void ewol::Scene::OnDraw(DrawProperty& displayProp)
 }
 
 
-void ewol::Scene::PeriodicCall(int64_t localTime)
+void widget::Scene::PeriodicCall(int64_t localTime)
 {
 	// First time : 
 	if (-1 == m_lastCallTime) {
@@ -125,7 +114,7 @@ void ewol::Scene::PeriodicCall(int64_t localTime)
 }
 
 
-void ewol::Scene::GenDraw(DrawProperty displayProp)
+void widget::Scene::GenDraw(DrawProperty displayProp)
 {
 
 	ewol::openGL::Push();
@@ -159,7 +148,7 @@ void ewol::Scene::GenDraw(DrawProperty displayProp)
 }
 
 
-etk::Vector2D<float> ewol::Scene::RelativePosition(etk::Vector2D<float>  pos)
+etk::Vector2D<float> widget::Scene::RelativePosition(etk::Vector2D<float>  pos)
 {
 	// Remove origin of the widget
 	pos.x -= m_origin.x;

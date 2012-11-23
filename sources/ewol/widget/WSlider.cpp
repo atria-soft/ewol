@@ -15,7 +15,7 @@
 #define __class__	"WSlider"
 
 
-ewol::WSlider::WSlider(void)
+widget::WSlider::WSlider(void)
 {
 	// set contamination enable
 	LockExpendContamination();
@@ -26,13 +26,13 @@ ewol::WSlider::WSlider(void)
 	m_underExpend.y = false;
 }
 
-ewol::WSlider::~WSlider(void)
+widget::WSlider::~WSlider(void)
 {
 	SubWidgetRemoveAll();
 }
 
 
-bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
+bool widget::WSlider::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -67,7 +67,7 @@ bool ewol::WSlider::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::WSlider::CalculateMinSize(void)
+bool widget::WSlider::CalculateMinSize(void)
 {
 	EWOL_DEBUG("Calculate MinSize");
 	m_underExpend.x=false;
@@ -91,12 +91,12 @@ bool ewol::WSlider::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::WSlider::SetMinSise(float x, float y)
+void widget::WSlider::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-bool ewol::WSlider::CanExpentX(void)
+bool widget::WSlider::CanExpentX(void)
 {
 	if (m_userExpend.x == true) {
 		return true;
@@ -107,7 +107,7 @@ bool ewol::WSlider::CanExpentX(void)
 	return m_underExpend.x;
 }
 
-bool ewol::WSlider::CanExpentY(void)
+bool widget::WSlider::CanExpentY(void)
 {
 	if (m_userExpend.y == true) {
 		return true;
@@ -118,14 +118,14 @@ bool ewol::WSlider::CanExpentY(void)
 	return m_underExpend.y;
 }
 
-void ewol::WSlider::LockExpendContamination(bool lockExpend)
+void widget::WSlider::LockExpendContamination(bool lockExpend)
 {
 	m_lockExpendContamination = lockExpend;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
 
-void ewol::WSlider::SubWidgetRemoveAll(void)
+void widget::WSlider::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		delete(m_subWidget[iii]);
@@ -135,7 +135,7 @@ void ewol::WSlider::SubWidgetRemoveAll(void)
 }
 
 
-void ewol::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -146,7 +146,7 @@ void ewol::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 }
 
 
-void ewol::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
+void widget::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -163,7 +163,7 @@ void ewol::WSlider::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -179,7 +179,7 @@ void ewol::WSlider::SubWidgetUnLink(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::WSlider::SubWidgetSelectSet(int32_t id)
+void widget::WSlider::SubWidgetSelectSet(int32_t id)
 {
 	if (id<0 || id > m_subWidget.Size()) {
 		EWOL_ERROR("Can not change to a widget not present");
@@ -191,7 +191,7 @@ void ewol::WSlider::SubWidgetSelectSet(int32_t id)
 }
 
 
-void ewol::WSlider::PeriodicCall(int64_t localTime)
+void widget::WSlider::PeriodicCall(int64_t localTime)
 {
 	if (m_slidingProgress >= 1000) {
 		// end of periodic :
@@ -206,7 +206,7 @@ void ewol::WSlider::PeriodicCall(int64_t localTime)
 }
 
 
-void ewol::WSlider::OnDraw(DrawProperty& displayProp)
+void widget::WSlider::OnDraw(ewol::DrawProperty& displayProp)
 {
 	if (m_windowsDestination == m_windowsSources) {
 		//EWOL_DEBUG("Draw : " << m_windowsDestination);
@@ -239,7 +239,7 @@ void ewol::WSlider::OnDraw(DrawProperty& displayProp)
 }
 
 
-void ewol::WSlider::OnRegenerateDisplay(void)
+void widget::WSlider::OnRegenerateDisplay(void)
 {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
@@ -268,7 +268,7 @@ void ewol::WSlider::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::WSlider::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::WSlider::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// TODO : Review this ...
 	if (m_windowsDestination<0 || m_windowsDestination > m_subWidget.Size()) {
@@ -294,7 +294,7 @@ ewol::Widget * ewol::WSlider::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-void ewol::WSlider::OnObjectRemove(ewol::EObject * removeObject)
+void widget::WSlider::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

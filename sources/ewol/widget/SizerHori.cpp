@@ -12,19 +12,19 @@
 #undef __class__
 #define __class__	"SizerHori"
 
-ewol::SizerHori::SizerHori(void)
+widget::SizerHori::SizerHori(void)
 {
 	// set contamination enable
 	LockExpendContamination();
 }
 
-ewol::SizerHori::~SizerHori(void)
+widget::SizerHori::~SizerHori(void)
 {
 	SubWidgetRemoveAll();
 }
 
 
-bool ewol::SizerHori::CalculateSize(float availlableX, float availlableY)
+bool widget::SizerHori::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -76,7 +76,7 @@ bool ewol::SizerHori::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::SizerHori::CalculateMinSize(void)
+bool widget::SizerHori::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
 	m_userExpend.x=false;
@@ -104,17 +104,17 @@ bool ewol::SizerHori::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerHori::SetMinSize(float x, float y)
+void widget::SizerHori::SetMinSize(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::SizerHori::SetExpendX(bool newExpend)
+void widget::SizerHori::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
 }
 
-bool ewol::SizerHori::CanExpentX(void)
+bool widget::SizerHori::CanExpentX(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -122,12 +122,12 @@ bool ewol::SizerHori::CanExpentX(void)
 	return m_userExpend.x;
 }
 
-void ewol::SizerHori::SetExpendY(bool newExpend)
+void widget::SizerHori::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
-bool ewol::SizerHori::CanExpentY(void)
+bool widget::SizerHori::CanExpentY(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -135,14 +135,14 @@ bool ewol::SizerHori::CanExpentY(void)
 	return m_userExpend.y;
 }
 
-void ewol::SizerHori::LockExpendContamination(bool lockExpend)
+void widget::SizerHori::LockExpendContamination(bool lockExpend)
 {
 	m_lockExpendContamination = lockExpend;
 }
 
 //etk::Vector<ewol::Widget*> m_subWidget[m_currentCreateId];
 
-void ewol::SizerHori::SubWidgetRemoveAll(void)
+void widget::SizerHori::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -154,7 +154,7 @@ void ewol::SizerHori::SubWidgetRemoveAll(void)
 }
 
 
-void ewol::SizerHori::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::SizerHori::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -163,7 +163,7 @@ void ewol::SizerHori::SubWidgetAdd(ewol::Widget* newWidget)
 }
 
 
-void ewol::SizerHori::SubWidgetRemove(ewol::Widget* newWidget)
+void widget::SizerHori::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -180,7 +180,7 @@ void ewol::SizerHori::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::SizerHori::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::SizerHori::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -195,7 +195,7 @@ void ewol::SizerHori::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-void ewol::SizerHori::OnDraw(DrawProperty& displayProp)
+void widget::SizerHori::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -205,7 +205,7 @@ void ewol::SizerHori::OnDraw(DrawProperty& displayProp)
 }
 
 
-void ewol::SizerHori::OnRegenerateDisplay(void)
+void widget::SizerHori::OnRegenerateDisplay(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -215,7 +215,7 @@ void ewol::SizerHori::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::SizerHori::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::SizerHori::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	if (true == IsHide()) {
 		return NULL;
@@ -243,7 +243,7 @@ ewol::Widget * ewol::SizerHori::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-void ewol::SizerHori::OnObjectRemove(ewol::EObject * removeObject)
+void widget::SizerHori::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

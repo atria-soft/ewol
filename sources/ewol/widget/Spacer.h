@@ -10,11 +10,12 @@
 #define __EWOL_SPACER_H__
 
 #include <etk/types.h>
+#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
 
-namespace ewol {
-	class Spacer :public ewol::Drawable
+namespace widget {
+	class Spacer :public widget::Drawable
 	{
 		public:
 			Spacer(void);
@@ -39,7 +40,7 @@ namespace ewol {
 			virtual void   OnRegenerateDisplay(void);
 			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		private:
-			float     m_localSize;
+			float        m_localSize;
 			draw::Color  m_color;
 	};
 	

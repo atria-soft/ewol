@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_TEXT_H__
-#define __EWOL_TEXT_H__
+#ifndef __EWOL_COMPOSITING_TEXT_H__
+#define __EWOL_COMPOSITING_TEXT_H__
 
 #include <draw/Color.h>
 
@@ -164,6 +164,7 @@ namespace ewol
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
 			 */
+			// TODO : Rename SetClippingActivity
 			void SetClippingMode(bool newMode);
 			/**
 			 * @brief Specify the font size (this reset the internal element of the current text (system requirement)

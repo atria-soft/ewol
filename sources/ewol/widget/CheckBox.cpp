@@ -7,8 +7,6 @@
  */
 
 #include <ewol/widget/CheckBox.h>
-
-#include <ewol/oObject/OObject.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -18,7 +16,7 @@ extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 #define __class__	"CheckBox"
 
 
-void ewol::CheckBox::Init(void)
+void widget::CheckBox::Init(void)
 {
 	AddEventId(ewolEventCheckBoxClicked);
 	m_textColorFg = draw::color::black;
@@ -28,28 +26,28 @@ void ewol::CheckBox::Init(void)
 	SetMouseLimit(1);
 }
 
-ewol::CheckBox::CheckBox(void)
+widget::CheckBox::CheckBox(void)
 {
 	m_label = "No Label";
 	Init();
 }
 
-ewol::CheckBox::CheckBox(etk::UString newLabel)
+widget::CheckBox::CheckBox(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
 }
 
 
-ewol::CheckBox::~CheckBox(void)
+widget::CheckBox::~CheckBox(void)
 {
 	
 }
 
 
-bool ewol::CheckBox::CalculateMinSize(void)
+bool widget::CheckBox::CalculateMinSize(void)
 {
-	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
 	float boxSize = etk_max(20, minSize.y) + 5;
 	m_minSize.x = boxSize+minSize.x;
 	m_minSize.y = etk_max(boxSize, minSize.y)+3;
@@ -58,13 +56,13 @@ bool ewol::CheckBox::CalculateMinSize(void)
 }
 
 
-void ewol::CheckBox::SetLabel(etk::UString newLabel)
+void widget::CheckBox::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
 }
 
-void ewol::CheckBox::SetValue(bool val)
+void widget::CheckBox::SetValue(bool val)
 {
 	if (m_value == val) {
 		return;
@@ -73,62 +71,55 @@ void ewol::CheckBox::SetValue(bool val)
 	MarkToRedraw();
 }
 
-bool ewol::CheckBox::GetValue(void)
+bool widget::CheckBox::GetValue(void)
 {
 	return m_value;
 }
 
-void ewol::CheckBox::OnDraw(DrawProperty& displayProp)
+void widget::CheckBox::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
 
-void ewol::CheckBox::OnRegenerateDisplay(void)
+void widget::CheckBox::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
 		m_oObjectDecoration.Clear();
 		m_oObjectText.Clear();
-		int32_t borderWidth = 2;
 		
-		
-		etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+		etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
 		float boxSize = etk_max(20, minSize.y) + 5;
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t posy = (m_size.y - minSize.y - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
-		etk::Vector2D<float> textPos;
+		etk::Vector3D<float> textPos;
 		textPos.x = boxSize+5;
 		textPos.y = posy;
-		clipping_ts drawClipping;
-		drawClipping.x = 0;
-		drawClipping.y = 0;
-		// note : pb on the clipping properties ...
-		drawClipping.w = m_size.x;// - (boxSize+5);
-		drawClipping.h = m_size.y;
-		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
-		
-		
+		textPos.z = 0;
+		m_oObjectText.SetPos(textPos);
+		m_oObjectText.Print(m_label);
 		
 		m_oObjectDecoration.SetColor(m_textColorBg);
-		m_oObjectDecoration.Rectangle( 2.5, 2.5, boxSize, boxSize);
-		m_oObjectDecoration.SetColor(m_textColorFg);
-		m_oObjectDecoration.RectangleBorder( 2.5, 2.5, boxSize, boxSize, borderWidth);
+		m_oObjectDecoration.SetPos(etk::Vector3D<float>(2.5f, 2.5f, 0.0f) );
+		m_oObjectDecoration.RectangleWidth(etk::Vector3D<float>(boxSize, boxSize, 0.0f) );
 		if (m_value) {
-			m_oObjectDecoration.Line( 2.5, 2.5, boxSize+2.5, boxSize+2.5, borderWidth);
-			m_oObjectDecoration.Line( 2.5, boxSize+2.5, boxSize+2.5, 2.5, borderWidth);
+			m_oObjectDecoration.SetColor(m_textColorFg);
+			m_oObjectDecoration.SetPos(etk::Vector3D<float>(2.5f, 2.5f, 0.0f) );
+			m_oObjectDecoration.SetThickness(3);
+			m_oObjectDecoration.LineRel(etk::Vector3D<float>(boxSize, boxSize, 0.0f) );
 		}
 	}
 }
 
-bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {
-		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+		if (ewol::keyEvent::statusSingle == typeEvent) {
 			if(true == m_value) {
 				m_value = false;
 				GenerateEventId(ewolEventCheckBoxClicked, "false");
@@ -145,10 +136,10 @@ bool ewol::CheckBox::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 }
 
 
-bool ewol::CheckBox::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
+bool widget::CheckBox::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	if(    typeEvent == ewol::keyEvent::statusDown
 	    && (    unicodeData == '\r'
 	         || unicodeData == ' ')
 	       ) {

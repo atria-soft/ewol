@@ -11,7 +11,8 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Text.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Widget.h>
 #include <draw/Color.h>
 
@@ -19,7 +20,7 @@ extern const char * const ewolEventEntryClick;
 extern const char * const ewolEventEntryEnter;
 extern const char * const ewolEventEntryModify; // return in the data the new string inside it ...
 
-namespace ewol {
+namespace widget {
 	/**
 	 * @brief Entry box display :
 	 *
@@ -46,8 +47,8 @@ namespace ewol {
 			void SetPoint(float x, float y);
 			void Rectangle(float x, float y, float w, float h);
 		private:
-			ewol::OObject2DTextColored m_oObjectText;               //!< text display
-			ewol::OObject2DColored     m_oObjectDecoration;         //!< background display
+			ewol::Text        m_oObjectText;               //!< text display
+			ewol::Drawing     m_oObjectDecoration;         //!< background display
 			etk::UString               m_data;                      //!< sting that must be displayed
 			draw::Color                m_textColorFg;               //!< Text color
 			draw::Color                m_textColorBg;               //!< Background color
@@ -103,7 +104,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
@@ -111,13 +112,13 @@ namespace ewol {
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData);
+			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 			/**
 			 * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent);
+			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent);
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
 			 * @param[in] CallerObject Pointer on the EObject that information came from
@@ -139,7 +140,7 @@ namespace ewol {
 			 * @param[in] displayProp properties of the current display
 			 * @return ---
 			 */
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Change the cursor position with the curent position requested on the display
 			 * @param[in] pos Absolute position of the event

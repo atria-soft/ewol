@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_DRAWING_H__
-#define __EWOL_DRAWING_H__
+#ifndef __EWOL_COMPOSITING_DRAWING_H__
+#define __EWOL_COMPOSITING_DRAWING_H__
 
 #include <draw/Color.h>
 

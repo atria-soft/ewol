@@ -12,9 +12,9 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/oObject/OObject.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Text.h>
+#include <ewol/compositing/Image.h>
 
 extern const char * const ewolEventButtonPressed;
 extern const char * const ewolEventButtonDown;
@@ -58,7 +58,7 @@ namespace ewol {
 
 
 
-namespace ewol {
+namespace widget {
 	typedef enum {
 		TEXT_ALIGN_LEFT,
 		TEXT_ALIGN_CENTER,
@@ -67,7 +67,7 @@ namespace ewol {
 	{
 		private:
 			// External theme config:
-			ewol::SimpleConfigFile*     m_config;
+			ewol::ConfigFile*           m_config;
 			int32_t                     m_confIdPaddingX;
 			int32_t                     m_confIdPaddingY;
 			int32_t                     m_confIdChangeTime;
@@ -86,13 +86,13 @@ namespace ewol {
 			void SetPoint(float x, float y);
 			void Rectangle(float x, float y, float w, float h);
 		private:
-			ewol::Text                 m_displayText;
-			ewol::OObject2DTextured*   m_oObjectImage;
-			bool                       m_hasAnImage;
-			etk::UString               m_imageSelected;
-			textAlignement_te          m_alignement;
-			etk::UString               m_label;
-			draw::Color                m_textColorFg;  //!< Text color
+			ewol::Text                  m_displayText;
+			ewol::Image*                m_oObjectImage;
+			bool                        m_hasAnImage;
+			etk::UString                m_imageSelected;
+			textAlignement_te           m_alignement;
+			etk::UString                m_label;
+			draw::Color                 m_textColorFg;  //!< Text color
 		public:
 			Button(void);
 			Button(etk::UString newLabel);
@@ -115,7 +115,7 @@ namespace ewol {
 			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
 		public:
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -125,8 +125,8 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
-			virtual bool OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 		private:
 			int32_t m_nextStatusRequested;
 			void ChangeStatusIn(int32_t newStatusId);
@@ -138,15 +138,6 @@ namespace ewol {
 			 */
 			virtual void PeriodicCall(int64_t localTime);
 	};
-	
-	/**
-	 * @brief Initilise the basic widget property ==> due to the android system
-	 * @note all widget that have template might have this initializer ...
-	 * @param ---
-	 * @return ---
-	 */
-	void WIDGET_ButtonInit(void);
-	
 };
 
 #endif

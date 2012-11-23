@@ -17,8 +17,8 @@ extern const char * const ewolEventFSFileValidate;
 extern const char * const ewolEventFSFolderSelect;
 extern const char * const ewolEventFSFolderValidate;
 
-namespace ewol {
-	class ListFileSystem : public ewol::List
+namespace widget {
+	class ListFileSystem : public widget::List
 	{
 		private:
 			etk::Vector<etk::FSNode *> m_list;
@@ -37,7 +37,7 @@ namespace ewol {
 			bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg);
 			uint32_t GetNuberOfRaw(void);
 			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg);
-			bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
+			bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
 			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it

@@ -35,10 +35,6 @@ void ewol::widgetManager::Init(void)
 	l_listOfPeriodicWidget.Clear();
 	l_havePeriodic = false;
 	l_haveRedraw = true;
-	// init all the widget global parameters :
-	ewol::WIDGET_JoystickInit();
-	ewol::WIDGET_ButtonInit();
-	ewol::WIDGET_ButtonColorInit();
 	//ewol::WIDGET_SceneInit();
 	IsInit = true;
 }

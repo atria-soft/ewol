@@ -45,7 +45,7 @@ ewol::ColorChooser::ColorChooser(void)
 	m_widgetAlpha = NULL;
 	
 	LockExpendContamination(true);
-		m_widgetColorBar = new ewol::ColorBar();
+		m_widgetColorBar = new widget::ColorBar();
 			m_widgetColorBar->RegisterOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
 			m_widgetColorBar->SetFillY(true);
 			m_widgetColorBar->SetFillX(true);
@@ -58,7 +58,7 @@ ewol::ColorChooser::ColorChooser(void)
 		draw::Color sliderColor;
 		sliderColor = draw::color::black;
 		
-		m_widgetRed = new ewol::Slider();
+		m_widgetRed = new widget::Slider();
 			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetRed->SetExpendX(true);
 			m_widgetRed->SetFillX(true);
@@ -67,7 +67,7 @@ ewol::ColorChooser::ColorChooser(void)
 			sliderColor = 0xFF0000FF;
 			m_widgetRed->SetColor(sliderColor);
 			SubWidgetAdd(m_widgetRed);
-		m_widgetGreen = new ewol::Slider();
+		m_widgetGreen = new widget::Slider();
 			m_widgetGreen->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetGreen->SetExpendX(true);
 			m_widgetGreen->SetFillX(true);
@@ -76,7 +76,7 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetGreen->SetColor(sliderColor);
 			m_widgetGreen->SetMax(255);
 			SubWidgetAdd(m_widgetGreen);
-		m_widgetBlue = new ewol::Slider();
+		m_widgetBlue = new widget::Slider();
 			m_widgetBlue->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetBlue->SetExpendX(true);
 			m_widgetBlue->SetFillX(true);
@@ -85,7 +85,7 @@ ewol::ColorChooser::ColorChooser(void)
 			m_widgetBlue->SetColor(sliderColor);
 			m_widgetBlue->SetMax(255);
 			SubWidgetAdd(m_widgetBlue);
-		m_widgetAlpha = new ewol::Slider();
+		m_widgetAlpha = new widget::Slider();
 			m_widgetAlpha->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
 			m_widgetAlpha->SetExpendX(true);
 			m_widgetAlpha->SetFillX(true);
@@ -184,7 +184,7 @@ void ewol::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const ch
 void ewol::ColorChooser::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
-	ewol::SizerVert::OnObjectRemove(removeObject);
+	widget::SizerVert::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetRed) {
 		m_widgetRed = NULL;

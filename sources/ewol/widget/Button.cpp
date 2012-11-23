@@ -8,8 +8,6 @@
 
 
 #include <ewol/widget/Button.h>
-
-#include <ewol/oObject/OObject.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -19,17 +17,11 @@ extern const char * const ewolEventButtonUp         = "ewol-button-up";
 extern const char * const ewolEventButtonEnter      = "ewol-button-enter";
 extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
 
-
-void ewol::WIDGET_ButtonInit(void)
-{
-	
-}
-
 #undef __class__
 #define __class__	"Button"
 
 
-void ewol::Button::Init(void)
+void widget::Button::Init(void)
 {
 	m_oObjectImage=NULL;
 	AddEventId(ewolEventButtonPressed);
@@ -38,7 +30,7 @@ void ewol::Button::Init(void)
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
 	m_hasAnImage = false;
-	m_alignement = ewol::TEXT_ALIGN_CENTER;
+	m_alignement = widget::TEXT_ALIGN_CENTER;
 	
 	m_status.m_stateOld = 0;
 	m_status.m_stateNew = 0;
@@ -78,27 +70,29 @@ void ewol::Button::Init(void)
 		m_GLstatus.m_stateNew   = m_GLprogram->GetUniform("EW_status.stateNew");
 		m_GLstatus.m_transition = m_GLprogram->GetUniform("EW_status.transition");
 	}
+	// Limit event at 1:
+	SetMouseLimit(1);
 }
 
-ewol::Button::Button(void)
+widget::Button::Button(void)
 {
 	m_label = "No Label";
 	Init();
 }
 
-ewol::Button::Button(etk::UString newLabel)
+widget::Button::Button(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
 }
 
 
-ewol::Button::~Button(void)
+widget::Button::~Button(void)
 {
 	
 }
 
-void ewol::Button::SetImage(etk::UString imageName)
+void widget::Button::SetImage(etk::UString imageName)
 {
 	if (imageName == "") {
 		m_hasAnImage = false;
@@ -109,7 +103,7 @@ void ewol::Button::SetImage(etk::UString imageName)
 	MarkToRedraw();
 }
 
-bool ewol::Button::CalculateMinSize(void)
+bool widget::Button::CalculateMinSize(void)
 {
 	etk::Vector2D<int32_t> padding;
 	padding.x = m_config->GetInteger(m_confIdPaddingX);
@@ -130,37 +124,37 @@ bool ewol::Button::CalculateMinSize(void)
 }
 
 
-void ewol::Button::SetLabel(etk::UString newLabel)
+void widget::Button::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
 }
 
-void ewol::Button::SetValue(bool val)
+void widget::Button::SetValue(bool val)
 {
 	
 }
 
-void ewol::Button::SetAlignement(textAlignement_te typeAlign)
+void widget::Button::SetAlignement(textAlignement_te typeAlign)
 {
 	m_alignement = typeAlign;
 	MarkToRedraw();
 }
 
 
-bool ewol::Button::GetValue(void)
+bool widget::Button::GetValue(void)
 {
 	return false;
 }
 
 
-void ewol::Button::SetPoint(float x, float y)
+void widget::Button::SetPoint(float x, float y)
 {
 	etk::Vector2D<float> triangle(x, y);
 	m_coord.PushBack(triangle);
 }
 
-void ewol::Button::Rectangle(float x, float y, float w, float h)
+void widget::Button::Rectangle(float x, float y, float w, float h)
 {
 	m_coord.Clear();
 	/* Bitmap position
@@ -184,7 +178,7 @@ void ewol::Button::Rectangle(float x, float y, float w, float h)
 }
 
 
-void ewol::Button::OnDraw(DrawProperty& displayProp)
+void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 {
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
@@ -219,7 +213,7 @@ void ewol::Button::OnDraw(DrawProperty& displayProp)
 	m_displayText.Draw();
 }
 
-void ewol::Button::OnRegenerateDisplay(void)
+void widget::Button::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
@@ -243,7 +237,7 @@ void ewol::Button::OnRegenerateDisplay(void)
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOrigin.x = 0.0;
-			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
+			if (m_alignement == widget::TEXT_ALIGN_LEFT) {
 				tmpTextOrigin.x = padding.x;
 			}
 		}
@@ -290,28 +284,26 @@ void ewol::Button::OnRegenerateDisplay(void)
 }
 
 
-bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
-	if(ewol::EVENT_INPUT_TYPE_ENTER == typeEvent) {
+	if(ewol::keyEvent::statusEnter == typeEvent) {
 		ChangeStatusIn(2);
-	}else if(ewol::EVENT_INPUT_TYPE_LEAVE == typeEvent) {
+	}else if(ewol::keyEvent::statusLeave == typeEvent) {
 		ChangeStatusIn(0);
 	}
 	if (1 == IdInput) {
-		if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+		if(ewol::keyEvent::statusDown == typeEvent) {
 			GenerateEventId(ewolEventButtonDown);
 			ChangeStatusIn(1);
 			MarkToRedraw();
 		}
-		if(ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+		if(ewol::keyEvent::statusUp == typeEvent) {
 			GenerateEventId(ewolEventButtonUp);
 			ChangeStatusIn(0);
 			MarkToRedraw();
 		}
-		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+		if(ewol::keyEvent::statusSingle == typeEvent) {
 			GenerateEventId(ewolEventButtonPressed);
 			MarkToRedraw();
 			return true;
@@ -321,10 +313,10 @@ bool ewol::Button::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventI
 }
 
 
-bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeData)
+bool widget::Button::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    typeEvent == ewol::EVENT_KB_TYPE_DOWN
+	if(    typeEvent == ewol::keyEvent::statusDown
 	    && unicodeData == '\r') {
 		GenerateEventId(ewolEventButtonEnter);
 	}
@@ -333,7 +325,7 @@ bool ewol::Button::OnEventKb(ewol::eventKbType_te typeEvent, uniChar_t unicodeDa
 
 
 
-void ewol::Button::ChangeStatusIn(int32_t newStatusId)
+void widget::Button::ChangeStatusIn(int32_t newStatusId)
 {
 	m_nextStatusRequested = newStatusId;
 	PeriodicCallSet(true);
@@ -341,7 +333,7 @@ void ewol::Button::ChangeStatusIn(int32_t newStatusId)
 }
 
 
-void ewol::Button::PeriodicCall(int64_t localTime)
+void widget::Button::PeriodicCall(int64_t localTime)
 {
 	// start :
 	if (m_time == -1) {

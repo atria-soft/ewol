@@ -9,11 +9,12 @@
 #include <ewol/ewol.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/ContextMenu.h>
+#include <ewol/compositing/Drawing.h>
 
 #undef __class__
 #define __class__	"ContextMenu"
 
-ewol::ContextMenu::ContextMenu(void)
+widget::ContextMenu::ContextMenu(void)
 {
 	m_userExpend.x = true;
 	m_userExpend.y = true;
@@ -29,16 +30,17 @@ ewol::ContextMenu::ContextMenu(void)
 	
 	m_arrowPos.x = 0;
 	m_arrowPos.y = 0;
-	m_arrawBorder = ewol::CONTEXT_MENU_MARK_TOP;
+	m_arrawBorder = widget::CONTEXT_MENU_MARK_TOP;
+	SetMouseLimit(1);
 }
 
-ewol::ContextMenu::~ContextMenu(void)
+widget::ContextMenu::~ContextMenu(void)
 {
 	SubWidgetRemove();
 }
 
 
-bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
+bool widget::ContextMenu::CalculateSize(float availlableX, float availlableY)
 {
 	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
@@ -64,16 +66,16 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 		// set config to the Sub-widget
 		switch (m_arrawBorder)
 		{
-			case ewol::CONTEXT_MENU_MARK_TOP:
+			case widget::CONTEXT_MENU_MARK_TOP:
 				subWidgetOrigin.x = (int32_t)(m_arrowPos.x - subWidgetSize.x/2);
 				subWidgetOrigin.y = (int32_t)(m_arrowPos.y - m_offset - subWidgetSize.y);
 				break;
-			case ewol::CONTEXT_MENU_MARK_BOTTOM:
+			case widget::CONTEXT_MENU_MARK_BOTTOM:
 				subWidgetOrigin.x = (int32_t)(m_arrowPos.x - subWidgetSize.x/2);
 				subWidgetOrigin.y = (int32_t)(m_arrowPos.y + m_offset);
 				break;
-			case ewol::CONTEXT_MENU_MARK_RIGHT:
-			case ewol::CONTEXT_MENU_MARK_LEFT:
+			case widget::CONTEXT_MENU_MARK_RIGHT:
+			case widget::CONTEXT_MENU_MARK_LEFT:
 			default:
 				subWidgetOrigin.x = (int32_t)(m_size.x - m_origin.x - subWidgetSize.x)/2 + m_origin.x;
 				subWidgetOrigin.y = (int32_t)(m_size.y - m_origin.y - subWidgetSize.y)/2 + m_origin.y;
@@ -92,14 +94,14 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 		switch (m_arrawBorder)
 		{
 			default:
-			case ewol::CONTEXT_MENU_MARK_TOP:
-			case ewol::CONTEXT_MENU_MARK_BOTTOM:
+			case widget::CONTEXT_MENU_MARK_TOP:
+			case widget::CONTEXT_MENU_MARK_BOTTOM:
 				if (m_arrowPos.x <= m_offset ) {
 					subWidgetOrigin.x = m_arrowPos.x+m_padding.x;
 				}
 				break;
-			case ewol::CONTEXT_MENU_MARK_RIGHT:
-			case ewol::CONTEXT_MENU_MARK_LEFT:
+			case widget::CONTEXT_MENU_MARK_RIGHT:
+			case widget::CONTEXT_MENU_MARK_LEFT:
 				if (m_arrowPos.y <= m_offset ) {
 					subWidgetOrigin.y = m_arrowPos.y+m_padding.y;
 				}
@@ -113,7 +115,7 @@ bool ewol::ContextMenu::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::ContextMenu::CalculateMinSize(void)
+bool widget::ContextMenu::CalculateMinSize(void)
 {
 	EWOL_DEBUG("CalculateMinSize");
 	m_userExpend.x=false;
@@ -131,23 +133,23 @@ bool ewol::ContextMenu::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::ContextMenu::SetMinSise(float x, float y)
+void widget::ContextMenu::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::ContextMenu::SetExpendX(bool newExpend)
+void widget::ContextMenu::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings X (herited from under elements)");
 }
 
-void ewol::ContextMenu::SetExpendY(bool newExpend)
+void widget::ContextMenu::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings Y (herited from under elements)");
 }
 
 
-void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
+void widget::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -156,7 +158,7 @@ void ewol::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
 }
 
 
-void ewol::ContextMenu::SubWidgetRemove(void)
+void widget::ContextMenu::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
@@ -164,23 +166,23 @@ void ewol::ContextMenu::SubWidgetRemove(void)
 	}
 }
 
-void ewol::ContextMenu::OnDraw(DrawProperty& displayProp)
+void widget::ContextMenu::OnDraw(ewol::DrawProperty& displayProp)
 {
 	//EWOL_DEBUG("On Draw " << m_currentDrawId);
-	ewol::Drawable::OnDraw(displayProp);
+	widget::Drawable::OnDraw(displayProp);
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw(displayProp);
 	}
 }
 
 
-void ewol::ContextMenu::OnRegenerateDisplay(void)
+void widget::ContextMenu::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
-	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+	ewol::Drawing * BGOObjects = new ewol::Drawing();
 	AddOObject(BGOObjects);
 	
 	if (NULL != m_subWidget) {
@@ -191,41 +193,52 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 		BGOObjects->SetColor(m_colorBorder);
 		switch (m_arrawBorder)
 		{
-			case ewol::CONTEXT_MENU_MARK_TOP:
-				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
+			case widget::CONTEXT_MENU_MARK_TOP:
+				BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x, m_arrowPos.y, 0.0f) );
+				BGOObjects->AddVertex();
 				if (m_arrowPos.x <= tmpOrigin.x ) {
-					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y-laking);
-					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y-laking);
+					float laking = m_offset - m_padding.y;
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->AddVertex();
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x,        m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->AddVertex();
 				} else {
-					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y-laking);
-					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y-laking);
+					float laking = m_offset - m_padding.y;
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->AddVertex();
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x-laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->AddVertex();
 				}
 				break;
-			case ewol::CONTEXT_MENU_MARK_BOTTOM:
-				BGOObjects->SetPoint(m_arrowPos.x, m_arrowPos.y);
+			case widget::CONTEXT_MENU_MARK_BOTTOM:
+				BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x, m_arrowPos.y, 0.0f) );
+				BGOObjects->AddVertex();
 				if (m_arrowPos.x <= tmpOrigin.x ) {
 					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
-					BGOObjects->SetPoint(m_arrowPos.x,        m_arrowPos.y+laking);
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->AddVertex();
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x,        m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->AddVertex();
 				} else {
 					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPoint(m_arrowPos.x+laking, m_arrowPos.y+laking);
-					BGOObjects->SetPoint(m_arrowPos.x-laking, m_arrowPos.y+laking);
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->AddVertex();
+					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x-laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->AddVertex();
 				}
 				break;
 			default:
-			case ewol::CONTEXT_MENU_MARK_RIGHT:
-			case ewol::CONTEXT_MENU_MARK_LEFT:
+			case widget::CONTEXT_MENU_MARK_RIGHT:
+			case widget::CONTEXT_MENU_MARK_LEFT:
 				EWOL_TODO("later");
 				break;
 		}
-		
-		BGOObjects->Rectangle(tmpOrigin.x-m_padding.x, tmpOrigin.y - m_padding.y, tmpSize.x + m_padding.x*2, tmpSize.y + m_padding.y*2);
+		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x-m_padding.x, tmpOrigin.y - m_padding.y, 0.0f) );
+		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x + m_padding.x*2, tmpSize.y + m_padding.y*2, 0.0f) );
 		// set the area in white ...
 		BGOObjects->SetColor(m_colorBackGroung);
-		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
+		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x, tmpOrigin.y, 0.0f) );
+		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x, tmpSize.y, 0.0f) );
 	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
@@ -233,7 +246,7 @@ void ewol::ContextMenu::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::ContextMenu::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// calculate relative position
 	etk::Vector2D<float> relativePos = RelativePosition(pos);
@@ -251,18 +264,16 @@ ewol::Widget * ewol::ContextMenu::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_INFO("Event ouside the context menu");
 	if (IdInput > 0) {
-		if(    typeEvent == ewol::EVENT_INPUT_TYPE_DOWN
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_MOVE
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_DOUBLE
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_TRIPLE
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_UP
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_ENTER
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_LEAVE ) {
+		if(    typeEvent == ewol::keyEvent::statusDown
+		    || typeEvent == ewol::keyEvent::statusMove
+		    || typeEvent == ewol::keyEvent::statusSingle
+		    || typeEvent == ewol::keyEvent::statusUp
+		    || typeEvent == ewol::keyEvent::statusEnter
+		    || typeEvent == ewol::keyEvent::statusLeave ) {
 			// Auto-remove ...
 			AutoDestroy();
 			return true;
@@ -272,7 +283,7 @@ bool ewol::ContextMenu::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 }
 
 
-void ewol::ContextMenu::SetPositionMark(markPosition_te position, etk::Vector2D<float> arrowPos)
+void widget::ContextMenu::SetPositionMark(markPosition_te position, etk::Vector2D<float> arrowPos)
 {
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;

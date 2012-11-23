@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
-namespace ewol {
+namespace widget {
 	class Layer :public ewol::Widget
 	{
 		public:
@@ -36,7 +36,7 @@ namespace ewol {
 			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                           m_lockExpendContamination;
+			bool                         m_lockExpendContamination;
 			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
 			virtual void   SubWidgetRemoveAll(void);
@@ -44,7 +44,7 @@ namespace ewol {
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		protected:
-			virtual void   OnDraw(DrawProperty& displayProp);
+			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

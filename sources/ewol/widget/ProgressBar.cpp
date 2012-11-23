@@ -8,7 +8,7 @@
 
 #include <ewol/widget/ProgressBar.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
 #undef __class__
@@ -16,7 +16,7 @@
 
 const int32_t dotRadius = 6;
 
-ewol::ProgressBar::ProgressBar(void)
+widget::ProgressBar::ProgressBar(void)
 {
 	m_value = 0.0;
 	
@@ -29,13 +29,13 @@ ewol::ProgressBar::ProgressBar(void)
 	SetCanHaveFocus(true);
 }
 
-ewol::ProgressBar::~ProgressBar(void)
+widget::ProgressBar::~ProgressBar(void)
 {
 	
 }
 
 
-bool ewol::ProgressBar::CalculateMinSize(void)
+bool widget::ProgressBar::CalculateMinSize(void)
 {
 	m_minSize.x = etk_max(m_userMinSize.x, 40);
 	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
@@ -44,42 +44,45 @@ bool ewol::ProgressBar::CalculateMinSize(void)
 }
 
 
-void ewol::ProgressBar::ValueSet(float val)
+void widget::ProgressBar::ValueSet(float val)
 {
 	m_value = etk_avg(0.0, val, 1.0);
 	MarkToRedraw();
 }
 
 
-float ewol::ProgressBar::ValueGet(void)
+float widget::ProgressBar::ValueGet(void)
 {
 	return m_value;
 }
 
 
-void ewol::ProgressBar::OnRegenerateDisplay(void)
+void widget::ProgressBar::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
 		ClearOObjectList();
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		ewol::Drawing * tmpDraw = new ewol::Drawing;
 		
-		tmpOObjects->SetColor(m_textColorFg);
+		tmpDraw->SetColor(m_textColorFg);
 		
 		int32_t tmpSizeX = m_size.x - 10;
 		int32_t tmpSizeY = m_size.y - 10;
 		int32_t tmpOriginX = 5;
 		int32_t tmpOriginY = 5;
-		tmpOObjects->SetColor(m_textColorBgOn);
-		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX*m_value, tmpSizeY);
-		tmpOObjects->SetColor(m_textColorBgOff);
-		tmpOObjects->Rectangle( tmpOriginX+tmpSizeX*m_value, tmpOriginY, tmpSizeX*(1.0-m_value), tmpSizeY);
+		tmpDraw->SetColor(m_textColorBgOn);
+		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX*m_value, tmpSizeY, 0) );
+		tmpDraw->SetColor(m_textColorBgOff);
+		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
 		
-		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
+		// TODO : Create a better progress Bar ...
+		//tmpDraw->SetColor(m_textColorFg);
+		//tmpDraw->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 		
-		AddOObject(tmpOObjects);
+		AddOObject(tmpDraw);
 	}
 }
 

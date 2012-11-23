@@ -11,12 +11,13 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
+#include <draw/Color.h>
 #include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventColorBarChange;
 
-namespace ewol {
-	class ColorBar :public ewol::Drawable
+namespace widget {
+	class ColorBar :public widget::Drawable
 	{
 		public:
 			ColorBar(void);
@@ -28,9 +29,9 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void) { return "EwolColorBar"; };
-			virtual bool   CalculateMinSize(void);
+			virtual bool CalculateMinSize(void);
 			draw::Color GetCurrentColor(void);
-			void     SetCurrentColor(draw::Color newOne);
+			void SetCurrentColor(draw::Color newOne);
 		private:
 			draw::Color   m_currentColor;
 			etk::Vector2D<float>  m_currentUserPos;
@@ -47,7 +48,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 	};
 	
 };

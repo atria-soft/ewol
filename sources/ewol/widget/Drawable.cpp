@@ -9,12 +9,12 @@
 #include <ewol/widget/Drawable.h>
 
 
-ewol::Drawable::Drawable(void)
+widget::Drawable::Drawable(void)
 {
 	// nothing to do ...
 }
 
-ewol::Drawable::~Drawable(void)
+widget::Drawable::~Drawable(void)
 {
 	//clean all the object
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
@@ -27,7 +27,7 @@ ewol::Drawable::~Drawable(void)
 
 
 
-void ewol::Drawable::AddOObject(ewol::OObject* newObject, int32_t pos)
+void widget::Drawable::AddOObject(ewol::Compositing* newObject, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
@@ -41,7 +41,7 @@ void ewol::Drawable::AddOObject(ewol::OObject* newObject, int32_t pos)
 }
 
 
-void ewol::Drawable::ClearOObjectList(void)
+void widget::Drawable::ClearOObjectList(void)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -50,7 +50,7 @@ void ewol::Drawable::ClearOObjectList(void)
 	m_listOObject.Clear();
 }
 
-void ewol::Drawable::OnDraw(DrawProperty& displayProp)
+void widget::Drawable::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		if (NULL != m_listOObject[iii]) {

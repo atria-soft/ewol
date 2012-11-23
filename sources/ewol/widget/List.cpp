@@ -8,14 +8,15 @@
 
 #include <ewol/widget/List.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Text.h>
 #include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"List"
 
 
-void ewol::List::Init(void)
+void widget::List::Init(void)
 {
 	m_paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
@@ -26,12 +27,12 @@ void ewol::List::Init(void)
 	SetCanHaveFocus(true);
 }
 
-ewol::List::List(void)
+widget::List::List(void)
 {
 	Init();
 }
 
-ewol::List::~List(void)
+widget::List::~List(void)
 {
 	//clean all the object
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
@@ -42,7 +43,7 @@ ewol::List::~List(void)
 }
 
 
-bool ewol::List::CalculateMinSize(void)
+bool widget::List::CalculateMinSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
@@ -56,7 +57,7 @@ bool ewol::List::CalculateMinSize(void)
 }
 
 
-void ewol::List::AddOObject(ewol::OObject* newObject, int32_t pos)
+void widget::List::AddOObject(ewol::Compositing* newObject, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
@@ -70,7 +71,7 @@ void ewol::List::AddOObject(ewol::OObject* newObject, int32_t pos)
 }
 
 
-void ewol::List::ClearOObjectList(void)
+void widget::List::ClearOObjectList(void)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -79,7 +80,7 @@ void ewol::List::ClearOObjectList(void)
 	m_listOObject.Clear();
 }
 
-void ewol::List::OnDraw(DrawProperty& displayProp)
+void widget::List::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
@@ -92,7 +93,7 @@ void ewol::List::OnDraw(DrawProperty& displayProp)
 
 
 
-void ewol::List::OnRegenerateDisplay(void)
+void widget::List::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		
@@ -122,10 +123,11 @@ void ewol::List::OnRegenerateDisplay(void)
 		
 		etk::Vector<int32_t> listSizeColomn;
 		
-		ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+		ewol::Drawing * BGOObjects = new ewol::Drawing();
 		draw::Color basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
-		BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+		BGOObjects->SetPos(etk::Vector3D<float>(0, 0, 0) );
+		BGOObjects->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y, 0) );
 		
 		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
 		
@@ -138,11 +140,12 @@ void ewol::List::OnRegenerateDisplay(void)
 		// We display only compleate lines ...
 		//EWOL_DEBUG("Request drawing list : " << startRaw << "-->" << (startRaw+displayableRaw) << " in " << nbRaw << "raws ; start display : " << m_originScrooled.y << " ==> " << tmpOriginY << " line size=" << minHeight + 2*m_paddingSizeY );
 		
-		clipping_ts drawClipping;
+		/*clipping_ts drawClipping;
 		drawClipping.x = 0;
 		drawClipping.y = 0;
 		drawClipping.w = m_size.x - (2*m_paddingSizeX);
 		drawClipping.h = m_size.y;
+		*/
 		// remove all the positions :
 		m_lineSize.Clear();
 		int32_t displayPositionY = m_size.y;
@@ -160,24 +163,23 @@ void ewol::List::OnRegenerateDisplay(void)
 				draw::Color bg;
 				GetElement(jjj, iii, myTextToWrite, fg, bg);
 				
-				ewol::OObject2DTextColored * tmpText = new ewol::OObject2DTextColored();
+				ewol::Text * tmpText = new ewol::Text();
 				if (NULL != tmpText) {
 					// get font size : 
-					int32_t tmpFontHeight = tmpText->GetHeight();
+					int32_t tmpFontHeight = tmpText->CalculateSize('A').y;
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
 					
 					BGOObjects->SetColor(bg);
-					BGOObjects->Rectangle(displayPositionX, displayPositionY, m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY);
+					BGOObjects->SetPos(etk::Vector3D<float>(displayPositionX, displayPositionY, 0) );
+					BGOObjects->RectangleWidth(etk::Vector3D<float>(m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
 					
 					// get the maximum size of the colomn :
-					etk::Vector2D<float> textSize = tmpText->GetSize(myTextToWrite);
+					etk::Vector3D<float> textSize = tmpText->CalculateSize(myTextToWrite);
 					sizeColom = etk_max(sizeColom, textSize.x);
 					
-					etk::Vector2D<float> textPos;
-					textPos.x = tmpOriginX + displayPositionX;
-					textPos.y = displayPositionY;
 					tmpText->SetColor(fg);
-					tmpText->Text(textPos/*, drawClipping*/, myTextToWrite);
+					tmpText->SetPos(etk::Vector3D<float>(tmpOriginX + displayPositionX, displayPositionY, 0) );
+					tmpText->Print(myTextToWrite);
 					AddOObject(tmpText);
 					// madding move ...
 					displayPositionY -= m_paddingSizeY;
@@ -200,7 +202,7 @@ void ewol::List::OnRegenerateDisplay(void)
 	}
 }
 
-bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	
@@ -231,12 +233,12 @@ bool ewol::List::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInp
 
 
 
-void ewol::List::OnGetFocus(void)
+void widget::List::OnGetFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Get Focus");
 }
 
-void ewol::List::OnLostFocus(void)
+void widget::List::OnLostFocus(void)
 {
 	EWOL_DEBUG("Ewol::List Lost Focus");
 }

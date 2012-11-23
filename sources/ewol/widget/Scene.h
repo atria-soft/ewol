@@ -16,7 +16,7 @@
 #include <ewol/game/GameElement.h>
 
 
-namespace ewol {
+namespace widget {
 	class Scene :public ewol::Widget
 	{
 		// TODO : Set it in private ...
@@ -47,7 +47,7 @@ namespace ewol {
 			 * @param ---
 			 * @return ---
 			 */
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Set the scene in pause for a while
 			 * @param ---

@@ -7,23 +7,18 @@
  */
 
 #include <ewol/widget/Image.h>
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Image.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
 
 extern const char * const ewolEventImagePressed    = "ewol-image-Pressed";
 
-
-void ewol::WIDGET_ImageInit(void)
-{
-	
-}
-
 #undef __class__
 #define __class__	"Image"
 
 
-void ewol::Image::Init(void)
+void widget::Image::Init(void)
 {
 	AddEventId(ewolEventImagePressed);
 	
@@ -38,10 +33,12 @@ void ewol::Image::Init(void)
 	m_textColorBg = draw::color::black;
 	m_textColorBg.a = 0x00;
 	m_imageSize = 32;
+	// Limit event at 1:
+	SetMouseLimit(1);
 }
 
 
-ewol::Image::Image(etk::UString dataFile, int32_t size)
+widget::Image::Image(etk::UString dataFile, int32_t size)
 {
 	m_imageSelected = dataFile;
 	Init();
@@ -51,18 +48,18 @@ ewol::Image::Image(etk::UString dataFile, int32_t size)
 }
 
 
-ewol::Image::~Image(void)
+widget::Image::~Image(void)
 {
 	
 }
 
 
-void ewol::Image::SetPadding(etk::Vector2D<float> newPadding)
+void widget::Image::SetPadding(etk::Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
 
-bool ewol::Image::CalculateMinSize(void)
+bool widget::Image::CalculateMinSize(void)
 {
 	m_minSize.x = m_padding.x*2 + m_imageSize;
 	m_minSize.y = m_padding.y*2 + m_imageSize;
@@ -71,14 +68,14 @@ bool ewol::Image::CalculateMinSize(void)
 }
 
 
-void ewol::Image::SetFile(etk::UString newFile)
+void widget::Image::SetFile(etk::UString newFile)
 {
 	m_imageSelected = newFile;
 	MarkToRedraw();
 }
 
 
-void ewol::Image::OnRegenerateDisplay(void)
+void widget::Image::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
@@ -103,17 +100,19 @@ void ewol::Image::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*m_padding.y;
 		
 		
-		ewol::OObject2DTextured * tmpImage = NULL;
-		tmpImage = new ewol::OObject2DTextured(m_imageSelected, m_imageSize, m_imageSize);
-		tmpImage->Rectangle(tmpOriginX, tmpOriginY, m_imageSize, m_imageSize);
+		ewol::Image * tmpImage = NULL;
+		tmpImage = new ewol::Image(m_imageSelected); // TODO : Check if it was possible later : , m_imageSize, m_imageSize);
+		tmpImage->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
+		tmpImage->Print(etk::Vector2D<float>(m_imageSize, m_imageSize));
 
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
-		tmpOObjects->SetColor(m_textColorBg);
-		tmpOObjects->Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		ewol::Drawing * tmpDraw = new ewol::Drawing();
+		tmpDraw->SetColor(m_textColorBg);
+		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX, tmpSizeY, 0) );
 		// add all needed objects ...
-		if (NULL != tmpOObjects) {
-			AddOObject(tmpOObjects);
+		if (NULL != tmpDraw) {
+			AddOObject(tmpDraw);
 		}
 		if (NULL != tmpImage) {
 			AddOObject(tmpImage);
@@ -121,13 +120,11 @@ void ewol::Image::OnRegenerateDisplay(void)
 	}
 }
 
-bool ewol::Image::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
-		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+		if(    ewol::keyEvent::statusSingle == typeEvent) {
 			GenerateEventId(ewolEventImagePressed);
 			return true;
 		}

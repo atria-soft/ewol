@@ -11,12 +11,13 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Text.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Widget.h>
 
 extern const char* const ewolEventCheckBoxClicked;
 
-namespace ewol {
+namespace widget {
 	class CheckBox : public ewol::Widget
 	{
 		public:
@@ -36,15 +37,15 @@ namespace ewol {
 			void           SetValue(bool val);
 			bool           GetValue(void);
 		private:
-			ewol::OObject2DTextColored m_oObjectText;
-			ewol::OObject2DColored     m_oObjectDecoration;
+			ewol::Text     m_oObjectText;
+			ewol::Drawing  m_oObjectDecoration;
 			etk::UString   m_label;
 			bool           m_value;
-			draw::Color       m_textColorFg;  //!< Text color
-			draw::Color       m_textColorBg;  //!< Background color
+			draw::Color    m_textColorFg;  //!< Text color
+			draw::Color    m_textColorBg;  //!< Background color
 		public:
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			/**
 			 * @brief Event on an input of this Widget
@@ -55,8 +56,8 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
-			virtual bool OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 	};
 	
 };

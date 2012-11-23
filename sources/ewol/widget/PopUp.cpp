@@ -8,11 +8,12 @@
 
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/WidgetManager.h>
+#include <ewol/compositing/Drawing.h>
 
 #undef __class__
 #define __class__	"PopUp"
 
-ewol::PopUp::PopUp(void) :
+widget::PopUp::PopUp(void) :
 	m_subWidgetNext(NULL)
 {
 	m_userExpend.x = true;
@@ -29,13 +30,13 @@ ewol::PopUp::PopUp(void) :
 	m_subWidget = 0;
 }
 
-ewol::PopUp::~PopUp(void)
+widget::PopUp::~PopUp(void)
 {
 	SubWidgetRemove();
 }
 
 
-bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
+bool widget::PopUp::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
 	// pop-up fill all the display :
@@ -71,7 +72,7 @@ bool ewol::PopUp::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::PopUp::CalculateMinSize(void)
+bool widget::PopUp::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpend.x=false;
@@ -89,23 +90,23 @@ bool ewol::PopUp::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::PopUp::SetMinSise(float x, float y)
+void widget::PopUp::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::PopUp::SetExpendX(bool newExpend)
+void widget::PopUp::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings X (herited from under elements)");
 }
 
-void ewol::PopUp::SetExpendY(bool newExpend)
+void widget::PopUp::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings Y (herited from under elements)");
 }
 
 
-void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
+void widget::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		EWOL_ERROR("Try to set a sub wiget with NULL pointer ...");
@@ -118,7 +119,7 @@ void ewol::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 }
 
 
-void ewol::PopUp::SubWidgetRemove(void)
+void widget::PopUp::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
@@ -128,35 +129,38 @@ void ewol::PopUp::SubWidgetRemove(void)
 }
 
 
-void ewol::PopUp::OnDraw(DrawProperty& displayProp)
+void widget::PopUp::OnDraw(ewol::DrawProperty& displayProp)
 {
 	// draw upper classes
-	ewol::Drawable::OnDraw(displayProp);
+	widget::Drawable::OnDraw(displayProp);
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw(displayProp);
 	}
 }
 
 #define BORDER_SIZE_TMP         (4)
-void ewol::PopUp::OnRegenerateDisplay(void)
+void widget::PopUp::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 	}
 	// generate a white background and take gray on other surfaces
 	ClearOObjectList();
-	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
+	ewol::Drawing * BGOObjects = new ewol::Drawing();
 	AddOObject(BGOObjects);
 	
 	BGOObjects->SetColor(m_colorEmptyArea);
-	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+	BGOObjects->SetPos(etk::Vector3D<float>(0,0,0));
+	BGOObjects->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y, 0));
 	// set the area in white ...
 	if (NULL != m_subWidget) {
 		etk::Vector2D<float> tmpSize = m_subWidget->GetSize();
 		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		BGOObjects->SetColor(m_colorBorder);
-		BGOObjects->Rectangle(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP, tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP);
+		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP,0) );
+		BGOObjects->Rectangle(etk::Vector3D<float>(tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP, 0) );
 		BGOObjects->SetColor(m_colorBackGroung);
-		BGOObjects->Rectangle(tmpOrigin.x, tmpOrigin.y, tmpSize.x, tmpSize.y);
+		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x, tmpOrigin.y,0) );
+		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x, tmpSize.y, 0) );
 	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
@@ -164,7 +168,7 @@ void ewol::PopUp::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::PopUp::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::PopUp::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// calculate relative position
 	etk::Vector2D<float> relativePos = RelativePosition(pos);
@@ -185,17 +189,17 @@ ewol::Widget * ewol::PopUp::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-void ewol::PopUp::SetDisplayRatio(float ratio)
+void widget::PopUp::SetDisplayRatio(float ratio)
 {
 	m_displayRatio = ratio;
 	MarkToRedraw();
 }
 
 
-void ewol::PopUp::OnObjectRemove(ewol::EObject * removeObject)
+void widget::PopUp::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
-	ewol::Drawable::OnObjectRemove(removeObject);
+	widget::Drawable::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
 	if(m_subWidget == removeObject) {
 		EWOL_DEBUG("Remove pop-up sub Element ==> destroyed object");

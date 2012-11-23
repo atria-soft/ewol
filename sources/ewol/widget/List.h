@@ -10,12 +10,13 @@
 #define __EWOL_LIST_H__
 
 #include <etk/types.h>
+#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/compositing/Compositing.h>
 
-namespace ewol {
-	class List :public ewol::WidgetScrooled
+namespace widget {
+	class List :public widget::WidgetScrooled
 	{
 		public:
 			List(void);
@@ -32,13 +33,13 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::Vector<ewol::OObject*>        m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::Compositing*>        m_listOObject;   //!< generic element to display...
 			etk::Vector<etk::Vector2D<int32_t> >   m_lineSize;
 		public:
-			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		// list properties ...
 		private:
 			int32_t        m_paddingSizeX;
@@ -56,7 +57,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {
@@ -84,7 +85,7 @@ namespace ewol {
 				}
 				return false;
 			};
-			virtual bool OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
+			virtual bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
 				return false;
 			}
 		protected:

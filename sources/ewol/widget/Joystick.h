@@ -12,32 +12,33 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
+#include <draw/Color.h>
 
 extern const char * const ewolEventJoystickEnable;
 extern const char * const ewolEventJoystickDisable;
 extern const char * const ewolEventJoystickMove;
 
-namespace ewol {
+namespace widget {
 	typedef enum {
 		JOYSTICK_NORMAL_MODE,
 		JOYSTICK_ARROW_MODE,
 	} joystickMode_te;
-	class Joystick :public ewol::Drawable
+	class Joystick :public widget::Drawable
 	{
 		private:
 			draw::Color           m_colorFg;      //!< Forground  color
 			draw::Color           m_colorBg;      //!< Background color
-			etk::Vector2D<float>          m_displayPos;   //!< direction of the cursor ...
-			float         m_distance;     //!< dintance from the center
-			float         m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
-			bool               m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
-			joystickMode_te    m_displayMode;  //!< Type of fonctionnal mode of the joystick
+			etk::Vector2D<float>  m_displayPos;   //!< direction of the cursor ...
+			float                 m_distance;     //!< dintance from the center
+			float                 m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
+			bool                  m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
+			joystickMode_te       m_displayMode;  //!< Type of fonctionnal mode of the joystick
 		private:
 			// generic property of the joystick:
 			bool               m_displayBackground;
 			etk::UString       m_background;
 			etk::UString       m_foreground;
-			float         m_ratio;
+			float              m_ratio;
 		public:
 			Joystick(void);
 			virtual ~Joystick(void);
@@ -66,7 +67,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
 			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
 			/**
@@ -99,33 +100,6 @@ namespace ewol {
 			void GetProperty(float& distance, float& angle);
 			
 	};
-	
-	/**
-	 * @brief Initilise the basic widget property ==> due to the android system
-	 * @note all widget that have template might have this initializer ...
-	 * @param ---
-	 * @return ---
-	 */
-	void WIDGET_JoystickInit(void);
-	/**
-	 * @brief Set the default ratio of the widget joystick
-	 * @param[in] newRatio the new ratio that might be set
-	 * @return ---
-	 */
-	void WIDGET_JoystickDefaultRatio(float newRatio);
-	/**
-	 * @brief Set the default Background of the widget joystick
-	 * @param[in] imageNameInData the new rbackground that might be set
-	 * @return ---
-	 */
-	void WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display);
-	/**
-	 * @brief Set the default Foreground of the widget joystick
-	 * @param[in] imageNameInData the new Foreground that might be set
-	 * @return ---
-	 */
-	void WIDGET_JoystickDefaultForeground(etk::UString imageNameInData);
-	
 };
 
 #endif

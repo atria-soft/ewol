@@ -9,7 +9,7 @@
 #include <ewol/widget/Joystick.h>
 #include <math.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Image.h>
 #include <ewol/widget/WidgetManager.h>
 
 extern const char * const ewolEventJoystickEnable   = "ewol-joystick-enable";
@@ -21,50 +21,18 @@ static etk::UString l_background("");
 static etk::UString l_foreground("");
 static float   l_ratio(1.0/7.0);
 
-void ewol::WIDGET_JoystickInit(void)
-{
-	l_displayBackground = true;
-	l_background = "";
-	l_foreground = "";
-	l_ratio = 1.0/7.0;
-}
-
-void ewol::WIDGET_JoystickDefaultRatio(float newRatio)
-{
-	if (newRatio > 1) {
-		newRatio = 1;
-	}
-	l_ratio = newRatio;
-	EWOL_INFO("Set default Joystick ratio at " << l_ratio);
-}
-
-void ewol::WIDGET_JoystickDefaultBackground(etk::UString imageNameInData, bool display)
-{
-	// TODO : check if it existed
-	l_background = imageNameInData;
-	l_displayBackground = display;
-	EWOL_INFO("Set default Joystick background at " << l_background << " Display it=" << l_displayBackground);
-}
-
-void ewol::WIDGET_JoystickDefaultForeground(etk::UString imageNameInData)
-{
-	// TODO : check if it existed
-	l_foreground = imageNameInData;
-	EWOL_INFO("Set default Joystick Foreground at " << l_foreground);
-}
-
 
 #undef __class__
 #define __class__	"Joystick"
 
-ewol::Joystick::Joystick(void)
+widget::Joystick::Joystick(void)
 {
 	AddEventId(ewolEventJoystickEnable);
 	AddEventId(ewolEventJoystickDisable);
 	AddEventId(ewolEventJoystickMove);
 	// by default the joy does not lock when free out
 	m_lock = false;
-	m_displayMode = ewol::JOYSTICK_NORMAL_MODE;
+	m_displayMode = widget::JOYSTICK_NORMAL_MODE;
 	
 	m_colorFg = draw::color::blue;
 	
@@ -85,13 +53,13 @@ ewol::Joystick::Joystick(void)
 }
 
 
-ewol::Joystick::~Joystick(void)
+widget::Joystick::~Joystick(void)
 {
 	
 }
 
 
-bool ewol::Joystick::CalculateSize(float availlableX, float availlableY)
+bool widget::Joystick::CalculateSize(float availlableX, float availlableY)
 {
 	float minimumSize = etk_min(availlableX, availlableY);
 	m_size.x = minimumSize;
@@ -100,12 +68,12 @@ bool ewol::Joystick::CalculateSize(float availlableX, float availlableY)
 	return true;
 }
 
-void ewol::Joystick::OnRegenerateDisplay(void)
+void widget::Joystick::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
 		ClearOObjectList();
-		
+		/*
 		ewol::OObject2DColored * tmpOObjects = NULL;
 		ewol::OObject2DTextured * tmpOOtexBg = NULL;
 		ewol::OObject2DTextured * tmpOOtexFg = NULL;
@@ -144,6 +112,7 @@ void ewol::Joystick::OnRegenerateDisplay(void)
 		if (NULL != tmpOOtexFg) {
 			AddOObject(tmpOOtexFg);
 		}
+		*/
 	}
 }
 
@@ -152,11 +121,11 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Joystick::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	if (1 == IdInput) {
-		if(    ewol::EVENT_INPUT_TYPE_DOWN == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+		if(    ewol::keyEvent::statusDown == typeEvent
+		    || ewol::keyEvent::statusMove == typeEvent) {
 			// get local relative position
 			etk::Vector2D<float> relativePos = RelativePosition(pos);
 			float sizeElement = m_size.x*m_ratio;
@@ -181,7 +150,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 				m_displayPos.y = sin(m_angle)*m_distance;
 			}
 			MarkToRedraw();
-			if(ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+			if(ewol::keyEvent::statusDown == typeEvent) {
 				GenerateEventId(ewolEventJoystickEnable);
 			} else {
 				etk::UString tmp = etk::UString("distance=") + etk::UString(m_distance) + etk::UString("angle=") + etk::UString(m_angle+M_PI/2);
@@ -190,7 +159,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 			//teta += M_PI/2;
 			//EWOL_DEBUG("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
 			return true;
-		} else if( ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+		} else if( ewol::keyEvent::statusUp == typeEvent) {
 			if(    true == m_lock
 			    && m_distance == 1) {
 				// nothing to do ...
@@ -210,7 +179,7 @@ bool ewol::Joystick::OnEventInput(ewol::inputType_te type, int32_t IdInput, even
 }
 
 
-void ewol::Joystick::Ratio(float newRatio)
+void widget::Joystick::Ratio(float newRatio)
 {
 	if (newRatio > 1) {
 		newRatio = 1;
@@ -220,7 +189,7 @@ void ewol::Joystick::Ratio(float newRatio)
 }
 
 
-void ewol::Joystick::Background(etk::UString imageNameInData, bool display)
+void widget::Joystick::Background(etk::UString imageNameInData, bool display)
 {
 	// TODO : check if it existed
 	m_background = imageNameInData;
@@ -229,7 +198,7 @@ void ewol::Joystick::Background(etk::UString imageNameInData, bool display)
 }
 
 
-void ewol::Joystick::Foreground(etk::UString imageNameInData)
+void widget::Joystick::Foreground(etk::UString imageNameInData)
 {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
@@ -237,7 +206,7 @@ void ewol::Joystick::Foreground(etk::UString imageNameInData)
 }
 
 
-void ewol::Joystick::GetProperty(float& distance, float& angle)
+void widget::Joystick::GetProperty(float& distance, float& angle)
 {
 	distance = m_distance;
 	angle = m_angle+M_PI/2;

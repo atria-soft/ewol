@@ -33,6 +33,9 @@ FILE_LIST+= ewol/renderer/resources/Shader.cpp \
 			ewol/renderer/resources/image/ImagePNG.cpp \
 			ewol/renderer/ResourceManager.cpp
 
+# Audio system
+FILE_LIST+= ewol/renderer/audio/audio.cpp \
+			ewol/renderer/audio/decWav.cpp
 
 # Compositing
 FILE_LIST+= ewol/compositing/Compositing.cpp \
@@ -48,7 +51,6 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/WidgetManager.cpp \
 			ewol/widget/Windows.cpp \
 			ewol/widget/Button.cpp \
-			ewol/widget/ButtonImage.cpp \
 			ewol/widget/Image.cpp \
 			ewol/widget/ButtonColor.cpp \
 			ewol/widget/CheckBox.cpp \
@@ -64,7 +66,6 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/ProgressBar.cpp \
-			ewol/widget/Scene.cpp \
 			ewol/widget/SizerHori.cpp \
 			ewol/widget/SizerVert.cpp \
 			ewol/widget/Slider.cpp \
@@ -76,10 +77,9 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/meta/Parameter.cpp \
 			ewol/widget/meta/ParameterList.cpp
 
-# Audio system
-#FILE_LIST+= ewol/audio/audio.cpp \
-			ewol/audio/decWav.cpp
 
+OLD_WIDGET = \
+			ewol/widget/Scene.cpp \
 
 LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/textured3D.frag:textured3D.frag \

@@ -8,7 +8,6 @@
 
 #include <etk/unicode.h>
 #include <ewol/widget/Entry.h>
-#include <ewol/oObject/OObject.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
@@ -28,7 +27,7 @@ const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
 #define __class__	"Entry"
 
 
-void ewol::Entry::Init(void)
+void widget::Entry::Init(void)
 {
 	AddEventId(ewolEventEntryClick);
 	AddEventId(ewolEventEntryEnter);
@@ -65,7 +64,7 @@ void ewol::Entry::Init(void)
 	}
 }
 
-ewol::Entry::Entry(void)
+widget::Entry::Entry(void)
 {
 	Init();
 	m_data = "";
@@ -73,7 +72,7 @@ ewol::Entry::Entry(void)
 	MarkToRedraw();
 }
 
-ewol::Entry::Entry(etk::UString newData)
+widget::Entry::Entry(etk::UString newData)
 {
 	Init();
 	SetValue(newData);
@@ -82,15 +81,15 @@ ewol::Entry::Entry(etk::UString newData)
 }
 
 
-ewol::Entry::~Entry(void)
+widget::Entry::~Entry(void)
 {
 	
 }
 
 
-bool ewol::Entry::CalculateMinSize(void)
+bool widget::Entry::CalculateMinSize(void)
 {
-	int32_t minHeight = m_oObjectText.GetHeight();
+	int32_t minHeight = m_oObjectText.CalculateSize('A').y;
 	m_minSize.x = m_userSize;
 	m_minSize.y = minHeight + 2*(m_borderSize + 2*m_paddingSize);
 	UpdateTextPosition();
@@ -99,7 +98,7 @@ bool ewol::Entry::CalculateMinSize(void)
 }
 
 
-void ewol::Entry::SetValue(etk::UString newData)
+void widget::Entry::SetValue(etk::UString newData)
 {
 	m_data = newData;
 	m_displayCursorPos = m_data.Size();
@@ -108,20 +107,20 @@ void ewol::Entry::SetValue(etk::UString newData)
 	MarkToRedraw();
 }
 
-etk::UString ewol::Entry::GetValue(void)
+etk::UString widget::Entry::GetValue(void)
 {
 	return m_data;
 }
 
 
 
-void ewol::Entry::SetPoint(float x, float y)
+void widget::Entry::SetPoint(float x, float y)
 {
 	etk::Vector2D<float> triangle(x, y);
 	m_coord.PushBack(triangle);
 }
 
-void ewol::Entry::Rectangle(float x, float y, float w, float h)
+void widget::Entry::Rectangle(float x, float y, float w, float h)
 {
 	m_coord.Clear();
 	/* Bitmap position
@@ -145,7 +144,7 @@ void ewol::Entry::Rectangle(float x, float y, float w, float h)
 }
 
 
-void ewol::Entry::OnDraw(DrawProperty& displayProp)
+void widget::Entry::OnDraw(ewol::DrawProperty& displayProp)
 {
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
@@ -172,7 +171,7 @@ void ewol::Entry::OnDraw(DrawProperty& displayProp)
 }
 
 
-void ewol::Entry::OnRegenerateDisplay(void)
+void widget::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		m_oObjectDecoration.Clear();
@@ -201,23 +200,28 @@ void ewol::Entry::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*m_paddingSize;
 		
 		
-		etk::Vector2D<float> textPos;
-		textPos.x = tmpTextOriginX + m_displayStartPosition;
-		textPos.y = tmpTextOriginY;
-		clipping_ts drawClipping;
-		drawClipping.x = 2*m_paddingSize + m_borderSize;
-		drawClipping.y = 2*m_paddingSize + m_borderSize;
-		drawClipping.w = m_size.x - 2*drawClipping.x;
-		drawClipping.h = m_size.y - 2*drawClipping.y;
-		m_oObjectText.clippingSet(drawClipping);
-		m_oObjectText.Text(textPos, m_data);
-		m_oObjectText.clippingDisable();
-		
+		etk::Vector3D<float> textPos( tmpTextOriginX + m_displayStartPosition,
+		                              tmpTextOriginY,
+		                              0 );
+		etk::Vector3D<float> drawClippingPos( 2*m_paddingSize + m_borderSize,
+		                                      2*m_paddingSize + m_borderSize,
+		                                      -1 );
+		etk::Vector3D<float> drawClippingSize( m_size.x - 2*drawClippingPos.x,
+		                                       m_size.y - 2*drawClippingPos.y,
+		                                       1 );
+		m_oObjectText.SetClipping(drawClippingPos, drawClippingSize);
+		m_oObjectText.SetPos(textPos);
+		m_oObjectText.Print(m_data);
+		m_oObjectText.SetClippingMode(false);
+		/*
 		m_pos[0] = m_borderSize+2*drawClipping.x;
 		m_pos[1] = m_borderSize+2*drawClipping.y;
 		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClipping.x);
 		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClipping.y);
 		Rectangle(0, 0, m_size.x, m_size.y);
+		*/
+		/*
+		  Must be rework corectly ==> selection and Cursor are integrated at the system ...
 		int32_t pos1 = m_displayCursorPosSelection;
 		int32_t pos2 = m_displayCursorPos;
 		if(m_displayCursorPosSelection>m_displayCursorPos) {
@@ -249,23 +253,24 @@ void ewol::Entry::OnRegenerateDisplay(void)
 				m_oObjectDecoration.Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + minSize.y, 1);
 			}
 		}
+		*/
 	}
 }
 
 
-void ewol::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
+void widget::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
 {
 	etk::Vector2D<float> relPos = RelativePosition(pos);
 	relPos.x += -m_displayStartPosition - 2*m_paddingSize - m_borderSize;
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
-	int32_t displayHidenSize = m_oObjectText.GetSize(tmpDisplay).x;
+	int32_t displayHidenSize = m_oObjectText.CalculateSize(tmpDisplay).x;
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
 	for (int32_t iii=0; iii<m_data.Size(); iii++) {
 		tmpDisplay = m_data.Extract(0, iii);
-		int32_t tmpWidth = m_oObjectText.GetSize(tmpDisplay).x - displayHidenSize;
+		int32_t tmpWidth = m_oObjectText.CalculateSize(tmpDisplay).x - displayHidenSize;
 		if (tmpWidth>=relPos.x-tmpTextOriginX) {
 			newCursorPosition = iii;
 			break;
@@ -289,7 +294,7 @@ void ewol::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection
 }
 
 
-void ewol::Entry::RemoveSelected(void)
+void widget::Entry::RemoveSelected(void)
 {
 	if (m_displayCursorPosSelection==m_displayCursorPos) {
 		// nothing to cut ...
@@ -309,7 +314,7 @@ void ewol::Entry::RemoveSelected(void)
 }
 
 
-void ewol::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te clipboardID)
+void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	if (m_displayCursorPosSelection==m_displayCursorPos) {
 		// nothing to cut ...
@@ -327,16 +332,16 @@ void ewol::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te cl
 }
 
 
-bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == IdInput) {
-		if (ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent) {
+		if (ewol::keyEvent::statusSingle == typeEvent) {
 			KeepFocus();
 			GenerateEventId(ewolEventEntryClick);
 			//nothing to do ...
 			return true;
-		} else if (ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent) {
+		} else if (ewol::keyEvent::statusDouble == typeEvent) {
 			KeepFocus();
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
@@ -379,51 +384,51 @@ bool ewol::Entry::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventIn
 				}
 			}
 			// Copy to clipboard Middle ...
-			CopySelectionToClipBoard(ewol::clipBoard::CLIPBOARD_SELECTION);
+			CopySelectionToClipBoard(ewol::clipBoard::clipboardSelection);
 			MarkToRedraw();
-		} else if (ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+		} else if (ewol::keyEvent::statusTriple == typeEvent) {
 			KeepFocus();
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = m_data.Size();
-		} else if (ewol::EVENT_INPUT_TYPE_DOWN == typeEvent) {
+		} else if (ewol::keyEvent::statusDown == typeEvent) {
 			KeepFocus();
 			UpdateCursorPosition(pos);
 			MarkToRedraw();
-		} else if (ewol::EVENT_INPUT_TYPE_MOVE == typeEvent) {
+		} else if (ewol::keyEvent::statusMove == typeEvent) {
 			KeepFocus();
 			UpdateCursorPosition(pos, true);
 			MarkToRedraw();
-		} else if (ewol::EVENT_INPUT_TYPE_UP == typeEvent) {
+		} else if (ewol::keyEvent::statusUp == typeEvent) {
 			KeepFocus();
 			UpdateCursorPosition(pos, true);
 			// Copy to clipboard Middle ...
-			CopySelectionToClipBoard(ewol::clipBoard::CLIPBOARD_SELECTION);
+			CopySelectionToClipBoard(ewol::clipBoard::clipboardSelection);
 			MarkToRedraw();
 		}
 	}
-	else if(    ewol::INPUT_TYPE_MOUSE == type
+	else if(    ewol::keyEvent::typeMouse == type
 	         && 2 == IdInput) {
-		if(    typeEvent == ewol::EVENT_INPUT_TYPE_DOWN
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_MOVE
-		    || typeEvent == ewol::EVENT_INPUT_TYPE_UP) {
+		if(    typeEvent == ewol::keyEvent::statusDown
+		    || typeEvent == ewol::keyEvent::statusMove
+		    || typeEvent == ewol::keyEvent::statusUp) {
 			KeepFocus();
 			// updatethe cursor position : 
 			UpdateCursorPosition(pos);
 		}
 		// Paste current selection only when up button
-		if (typeEvent == ewol::EVENT_INPUT_TYPE_UP) {
+		if (typeEvent == ewol::keyEvent::statusUp) {
 			KeepFocus();
 			// middle button => past data...
-			ewol::clipBoard::Request(ewol::clipBoard::CLIPBOARD_SELECTION);
+			ewol::clipBoard::Request(ewol::clipBoard::clipboardSelection);
 		}
 	}
 	return false;
 }
 
 
-bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
+bool widget::Entry::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
 {
-	if( typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
+	if( typeEvent == ewol::keyEvent::statusDown) {
 		//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
 		//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
 		// remove curent selected data ...
@@ -460,21 +465,21 @@ bool ewol::Entry::OnEventKb(eventKbType_te typeEvent, uniChar_t unicodeData)
 }
 
 
-bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te moveTypeEvent)
+bool widget::Entry::OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent)
 {
-	if(typeEvent == ewol::EVENT_KB_TYPE_DOWN) {
+	if(typeEvent == ewol::keyEvent::statusDown) {
 		switch (moveTypeEvent)
 		{
-			case EVENT_KB_MOVE_TYPE_LEFT:
+			case ewol::keyEvent::keyboardLeft:
 				m_displayCursorPos--;
 				break;
-			case EVENT_KB_MOVE_TYPE_RIGHT:
+			case ewol::keyEvent::keyboardRight:
 				m_displayCursorPos++;
 				break;
-			case EVENT_KB_MOVE_TYPE_START:
+			case ewol::keyEvent::keyboardStart:
 				m_displayCursorPos = 0;
 				break;
-			case EVENT_KB_MOVE_TYPE_END:
+			case ewol::keyEvent::keyboardEnd:
 				m_displayCursorPos = m_data.Size();
 				break;
 			default:
@@ -489,7 +494,7 @@ bool ewol::Entry::OnEventKbMove(eventKbType_te typeEvent, eventKbMoveType_te mov
 }
 
 
-void ewol::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
+void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	// remove curent selected data ...
 	RemoveSelected();
@@ -510,7 +515,7 @@ void ewol::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardI
 }
 
 
-void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	ewol::Widget::OnReceiveMessage(CallerObject, eventId, data);
 	if(eventId == ewolEventEntryClean) {
@@ -520,13 +525,13 @@ void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 		m_displayCursorPosSelection = m_displayCursorPos;
 		MarkToRedraw();
 	} else if(eventId == ewolEventEntryCut) {
-		CopySelectionToClipBoard(ewol::clipBoard::CLIPBOARD_STD);
+		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 		RemoveSelected();
 		GenerateEventId(ewolEventEntryModify, m_data);
 	} else if(eventId == ewolEventEntryCopy) {
-		CopySelectionToClipBoard(ewol::clipBoard::CLIPBOARD_STD);
+		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 	} else if(eventId == ewolEventEntryPaste) {
-		ewol::clipBoard::Request(ewol::clipBoard::CLIPBOARD_STD);
+		ewol::clipBoard::Request(ewol::clipBoard::clipboardStd);
 	} else if(eventId == ewolEventEntrySelect) {
 		if(data == "ALL") {
 			m_displayCursorPosSelection = 0;
@@ -539,14 +544,14 @@ void ewol::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 }
 
 
-void ewol::Entry::UpdateTextPosition(void)
+void widget::Entry::UpdateTextPosition(void)
 {
 	int32_t tmpSizeX = m_minSize.x;
 	if (true==m_userFill.x) {
 		tmpSizeX = m_size.x;
 	}
 	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
-	int32_t totalWidth = m_oObjectText.GetSize(m_data).x;
+	int32_t totalWidth = m_oObjectText.CalculateSize(m_data).x;
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
 		// all can be display :
@@ -554,7 +559,7 @@ void ewol::Entry::UpdateTextPosition(void)
 	} else {
 		// all can not be set :
 		etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
-		int32_t pixelCursorPos = m_oObjectText.GetSize(tmpDisplay).x;
+		int32_t pixelCursorPos = m_oObjectText.CalculateSize(tmpDisplay).x;
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);
@@ -571,17 +576,17 @@ void ewol::Entry::UpdateTextPosition(void)
 }
 
 
-void ewol::Entry::OnGetFocus(void)
+void widget::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
-	ewol::KeyboardShow();
+	ewol::Keyboard(true);
 	MarkToRedraw();
 }
 
 
-void ewol::Entry::OnLostFocus(void)
+void widget::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
-	ewol::KeyboardHide();
+	ewol::Keyboard(false);
 	MarkToRedraw();
 }

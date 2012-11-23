@@ -9,6 +9,8 @@
 #include <ewol/widget/ListFileSystem.h>
 #include <etk/tool.h>
 
+#include <etk/os/FSNode.h>
+
 
 #undef __class__
 #define __class__	"ListFileSystem"
@@ -19,7 +21,7 @@ extern const char * const ewolEventFSFolderSelect   = "ewol-event-file-system-fo
 extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-folder-validate";
 
 
-ewol::ListFileSystem::ListFileSystem(void)
+widget::ListFileSystem::ListFileSystem(void)
 {
 	m_selectedLine = -1;
 	m_showFile = true;
@@ -38,7 +40,7 @@ ewol::ListFileSystem::ListFileSystem(void)
 	SetMouseLimit(1);
 };
 
-ewol::ListFileSystem::~ListFileSystem(void)
+widget::ListFileSystem::~ListFileSystem(void)
 {
 	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL != m_list[iii]) {
@@ -48,13 +50,13 @@ ewol::ListFileSystem::~ListFileSystem(void)
 	}
 };
 
-draw::Color ewol::ListFileSystem::GetBasicBG(void) {
+draw::Color widget::ListFileSystem::GetBasicBG(void) {
 	draw::Color bg(0x00000010);
 	return bg;
 }
 
 
-void ewol::ListFileSystem::RegenerateView(void)
+void widget::ListFileSystem::RegenerateView(void)
 {
 	// clean the list of files : 
 	for (int32_t iii=0; iii<m_list.Size(); iii++) {
@@ -75,45 +77,45 @@ void ewol::ListFileSystem::RegenerateView(void)
 	MarkToRedraw();
 }
 
-void ewol::ListFileSystem::SetShowHiddenFiles(bool state)
+void widget::ListFileSystem::SetShowHiddenFiles(bool state)
 {
 	m_showHidden = state;
 	RegenerateView();
 }
 
-void ewol::ListFileSystem::SetShowTemporaryFiles(bool state)
+void widget::ListFileSystem::SetShowTemporaryFiles(bool state)
 {
 	m_showTemporaryFile = state;
 	RegenerateView();
 }
 
-void ewol::ListFileSystem::SetShowFiles(bool state)
+void widget::ListFileSystem::SetShowFiles(bool state)
 {
 	m_showFile = state;
 	RegenerateView();
 }
 
-void ewol::ListFileSystem::SetShowFolder(bool state)
+void widget::ListFileSystem::SetShowFolder(bool state)
 {
 	m_showFolder = state;
 	RegenerateView();
 }
 
 
-void ewol::ListFileSystem::SetFolder(etk::UString newFolder)
+void widget::ListFileSystem::SetFolder(etk::UString newFolder)
 {
 	m_folder = newFolder;
 	RegenerateView();
 }
 
 
-etk::UString ewol::ListFileSystem::GetFolder(void)
+etk::UString widget::ListFileSystem::GetFolder(void)
 {
 	return m_folder;
 }
 
 
-etk::UString ewol::ListFileSystem::GetSelect(void)
+etk::UString widget::ListFileSystem::GetSelect(void)
 {
 	etk::UString tmpVal = "";
 	if (m_selectedLine >= 0) {
@@ -125,7 +127,7 @@ etk::UString ewol::ListFileSystem::GetSelect(void)
 }
 
 // select the specific file
-void ewol::ListFileSystem::SetSelect( etk::UString data) {
+void widget::ListFileSystem::SetSelect( etk::UString data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
@@ -141,14 +143,14 @@ void ewol::ListFileSystem::SetSelect( etk::UString data) {
 	MarkToRedraw();
 }
 
-uint32_t ewol::ListFileSystem::GetNuberOfColomn(void) {
+uint32_t widget::ListFileSystem::GetNuberOfColomn(void) {
 	return 1;
 };
-bool ewol::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
+bool widget::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
 	myTitle = "title";
 	return true;
 };
-uint32_t ewol::ListFileSystem::GetNuberOfRaw(void)
+uint32_t widget::ListFileSystem::GetNuberOfRaw(void)
 {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
@@ -156,7 +158,7 @@ uint32_t ewol::ListFileSystem::GetNuberOfRaw(void)
 	}
 	return m_list.Size() + offset;
 };
-bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg)
+bool widget::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg)
 {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
@@ -191,13 +193,13 @@ bool ewol::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString 
 };
 
 
-bool ewol::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::eventInputType_te typeEvent, int32_t colomn, int32_t raw, float x, float y)
+bool widget::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent, int32_t colomn, int32_t raw, float x, float y)
 {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;
 	}
-	if (typeEvent == ewol::EVENT_INPUT_TYPE_SINGLE) {
+	if (typeEvent == ewol::keyEvent::statusSingle) {
 		EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
 		if (1 == IdInput) {
 			int32_t previousRaw = m_selectedLine;

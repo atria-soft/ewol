@@ -11,12 +11,13 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
+#include <draw/Color.h>
 #include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventImagePressed;
 
-namespace ewol {
-	class Image :public ewol::Drawable
+namespace widget {
+	class Image :public widget::Drawable
 	{
 		public:
 			Image(etk::UString dataFile, int32_t size=-1); // automatic considering in the appl Data older
@@ -49,17 +50,9 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 	};
-	
-	/**
-	 * @brief Initilise the basic widget property ==> due to the android system
-	 * @note all widget that have template might have this initializer ...
-	 * @param ---
-	 * @return ---
-	 */
-	void WIDGET_ImageInit(void);
-	
 };
+
 
 #endif

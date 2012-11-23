@@ -9,7 +9,7 @@
 #ifndef __EWOL_AUDIO_DEC_WAV_H__
 #define __EWOL_AUDIO_DEC_WAV_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
 
 namespace ewol {

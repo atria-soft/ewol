@@ -6,9 +6,9 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 #include <ewol/audio/interfacePortAudio.h>
 #include <ewol/audio/audio.h>
 #include <stdio.h>

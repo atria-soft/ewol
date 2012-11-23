@@ -10,12 +10,13 @@
 #define __EWOL_PROGRESS_BAR_H__
 
 #include <etk/types.h>
+#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
 
 
-namespace ewol {
-	class ProgressBar :public ewol::Drawable
+namespace widget {
+	class ProgressBar :public widget::Drawable
 	{
 		public:
 			ProgressBar(void);
@@ -29,10 +30,10 @@ namespace ewol {
 			virtual const char * const GetObjectType(void) { return "EwolProgressBar"; };
 			virtual bool   CalculateMinSize(void);
 			void           ValueSet(float val);
-			float     ValueGet(void);
+			float          ValueGet(void);
 			void           SetColor(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
-			float         m_value;           //!< % used
+			float                 m_value;           //!< % used
 			draw::Color           m_textColorFg;     //!< forder bar color
 			draw::Color           m_textColorBgOn;   //!< bar color enable
 			draw::Color           m_textColorBgOff;  //!< bar color disable

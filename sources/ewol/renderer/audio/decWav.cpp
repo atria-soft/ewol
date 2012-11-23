@@ -6,11 +6,11 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
 #include <etk/os/FSNode.h>
-#include <ewol/audio/decWav.h>
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/audio/decWav.h>
 
 
 typedef struct {

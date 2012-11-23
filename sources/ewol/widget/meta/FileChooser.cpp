@@ -78,11 +78,11 @@ ewol::FileChooser::FileChooser(void)
 	m_widgetListFile = NULL;
 	m_widgetCheckBox = NULL;
 	
-	ewol::SizerVert * mySizerVert = NULL;
-	ewol::SizerHori * mySizerHori = NULL;
-	ewol::Spacer * mySpacer = NULL;
-	//ewol::Label * myLabel = NULL;
-	ewol::Image * myImage = NULL;
+	widget::SizerVert * mySizerVert = NULL;
+	widget::SizerHori * mySizerHori = NULL;
+	widget::Spacer * mySpacer = NULL;
+	//widget::Label * myLabel = NULL;
+	widget::Image * myImage = NULL;
 	#if defined(__TARGET_OS__Android)
 		m_folder = "/mnt/sdcard/";
 		SetDisplayRatio(0.90);
@@ -95,7 +95,7 @@ ewol::FileChooser::FileChooser(void)
 	#endif
 	m_file = "";
 	
-	mySizerVert = new ewol::SizerVert();
+	mySizerVert = new widget::SizerVert();
 	if (NULL == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
@@ -103,12 +103,12 @@ ewol::FileChooser::FileChooser(void)
 		// set it in the pop-up-system : 
 		SubWidgetSet(mySizerVert);
 		
-		mySizerHori = new ewol::SizerHori();
+		mySizerHori = new widget::SizerHori();
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			m_widgetCheckBox = new ewol::CheckBox("Show hiden files");
+			m_widgetCheckBox = new widget::CheckBox("Show hiden files");
 			if (NULL == m_widgetCheckBox) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -116,14 +116,14 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetCheckBox->SetValue(false);
 				mySizerHori->SubWidgetAdd(m_widgetCheckBox);
 			}
-			mySpacer = new ewol::Spacer();
+			mySpacer = new widget::Spacer();
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				mySpacer->SetExpendX(true);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
-			m_widgetValidate = new ewol::Button("Validate");
+			m_widgetValidate = new widget::Button("Validate");
 			if (NULL == m_widgetValidate) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -131,7 +131,7 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			}
-			m_widgetCancel = new ewol::Button("Cancel");
+			m_widgetCancel = new widget::Button("Cancel");
 			if (NULL == m_widgetCancel) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -140,19 +140,19 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
 		}
-		mySizerHori = new ewol::SizerHori();
+		mySizerHori = new widget::SizerHori();
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			mySpacer = new ewol::Spacer();
+			mySpacer = new widget::Spacer();
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
-			m_widgetListFolder = new ListFileSystem();
+			m_widgetListFolder = new widget::ListFileSystem();
 			if (NULL == m_widgetListFolder) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -164,14 +164,14 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetListFolder->SetFillY(true);
 				mySizerHori->SubWidgetAdd(m_widgetListFolder);
 			}
-			mySpacer = new ewol::Spacer();
+			mySpacer = new widget::Spacer();
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				mySpacer->SetSize(2);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
-			m_widgetListFile = new ListFileSystem();
+			m_widgetListFile = new widget::ListFileSystem();
 			if (NULL == m_widgetListFile) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -186,7 +186,7 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetListFile->SetFillY(true);
 				mySizerHori->SubWidgetAdd(m_widgetListFile);
 			}
-			mySpacer = new ewol::Spacer();
+			mySpacer = new widget::Spacer();
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -194,19 +194,19 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 		}
-		mySizerHori = new ewol::SizerHori();
+		mySizerHori = new widget::SizerHori();
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myImage = new ewol::Image("THEME:GUI:File.svg");
+			myImage = new widget::Image("THEME:GUI:File.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				myImage->SetFillY(true);
 				mySizerHori->SubWidgetAdd(myImage);
 			}
-			m_widgetCurrentFileName = new ewol::Entry(m_file);
+			m_widgetCurrentFileName = new widget::Entry(m_file);
 			if (NULL == m_widgetCurrentFileName) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -218,12 +218,12 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFileName);
 			}
 		}
-		mySizerHori = new ewol::SizerHori();
+		mySizerHori = new widget::SizerHori();
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySizerVert->SubWidgetAdd(mySizerHori);
-			myImage = new ewol::Image("THEME:GUI:Folder.svg");
+			myImage = new widget::Image("THEME:GUI:Folder.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -231,7 +231,7 @@ ewol::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 			
-			m_widgetCurrentFolder = new ewol::Entry(m_folder);
+			m_widgetCurrentFolder = new widget::Entry(m_folder);
 			if (NULL == m_widgetCurrentFolder) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -242,7 +242,7 @@ ewol::FileChooser::FileChooser(void)
 				m_widgetCurrentFolder->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFolder);
 			}
-			myImage = new ewol::Image("THEME:GUI:Home.svg");
+			myImage = new widget::Image("THEME:GUI:Home.svg");
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
@@ -252,7 +252,7 @@ ewol::FileChooser::FileChooser(void)
 			}
 		}
 		
-		m_widgetTitle = new ewol::Label("File chooser ...");
+		m_widgetTitle = new widget::Label("File chooser ...");
 		if (NULL == m_widgetTitle) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -427,7 +427,7 @@ etk::UString ewol::FileChooser::GetCompleateFileName(void)
 void ewol::FileChooser::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
-	ewol::PopUp::OnObjectRemove(removeObject);
+	widget::PopUp::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetTitle) {
 		m_widgetTitle = NULL;

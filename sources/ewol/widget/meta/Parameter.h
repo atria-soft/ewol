@@ -9,9 +9,9 @@
 #ifndef __EWOL_WIDGET_PARAMETER_H__
 #define __EWOL_WIDGET_PARAMETER_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Entry.h>
@@ -22,8 +22,8 @@
 
 extern const char * const ewolEventParameterClose;
 
-namespace ewol {
-	class Parameter : public ewol::PopUp
+namespace widget {
+	class Parameter : public widget::PopUp
 	{
 		public:
 			Parameter(void);
@@ -57,11 +57,11 @@ namespace ewol {
 			void MenuClear(void);
 			void MenuSeparator(void);
 		private:
-			int32_t               m_currentIdList;
-			ewol::Label*          m_widgetTitle;
-			ewol::Button*         m_widgetCancel;
-			ewol::ParameterList*  m_paramList;
-			ewol::WSlider*        m_wSlider;
+			int32_t                 m_currentIdList;
+			widget::Label*          m_widgetTitle;
+			widget::Button*         m_widgetCancel;
+			widget::ParameterList*  m_paramList;
+			widget::WSlider*        m_wSlider;
 	};
 	
 };

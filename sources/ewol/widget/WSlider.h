@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
-namespace ewol {
+namespace widget {
 	class WSlider :public ewol::Widget
 	{
 		public:
@@ -37,7 +37,7 @@ namespace ewol {
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
-			etk::Vector<ewol::Widget*> m_subWidget;
+			etk::Vector<ewol::Widget*>     m_subWidget;
 			int32_t                        m_windowsSources;     // widget source viewed
 			int32_t                        m_windowsDestination; // widget destinated viewed
 			int32_t                        m_slidingProgress;    // ratio progression of a sliding
@@ -50,7 +50,7 @@ namespace ewol {
 			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
 			        int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
 		protected:
-			virtual void   OnDraw(DrawProperty& displayProp);
+			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:

@@ -8,7 +8,7 @@
 
 #include <ewol/widget/ColorBar.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
 #include <draw/Color.h>
@@ -20,7 +20,7 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 #undef __class__
 #define __class__	"ColorBar"
 
-ewol::ColorBar::ColorBar(void)
+widget::ColorBar::ColorBar(void)
 {
 	AddEventId(ewolEventColorBarChange);
 	
@@ -35,15 +35,16 @@ ewol::ColorBar::ColorBar(void)
 	m_currentUserPos.y=0;
 	m_currentColor = draw::color::black;
 	SetCanHaveFocus(true);
+	SetMouseLimit(1);
 }
 
-ewol::ColorBar::~ColorBar(void)
+widget::ColorBar::~ColorBar(void)
 {
 	
 }
 
 
-bool ewol::ColorBar::CalculateMinSize(void)
+bool widget::ColorBar::CalculateMinSize(void)
 {
 	m_minSize.x = 80;
 	m_minSize.y = 80;
@@ -63,11 +64,11 @@ static draw::Color s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF
 };
 
-draw::Color ewol::ColorBar::GetCurrentColor(void)
+draw::Color widget::ColorBar::GetCurrentColor(void)
 {
 	return m_currentColor;
 }
-void ewol::ColorBar::SetCurrentColor(draw::Color newOne)
+void widget::ColorBar::SetCurrentColor(draw::Color newOne)
 {
 	m_currentColor = newOne;
 	m_currentColor.a = 0xFF;
@@ -75,7 +76,7 @@ void ewol::ColorBar::SetCurrentColor(draw::Color newOne)
 	// TODO : Later when really needed ...
 }
 
-void ewol::ColorBar::OnRegenerateDisplay(void)
+void widget::ColorBar::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
@@ -99,7 +100,7 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 		tmpSizeX -= 2*m_padding.x;
 		tmpSizeY -= 2*m_padding.y;
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		ewol::Drawing * tmpOObjects = new ewol::Drawing;
 		
 		tmpOriginX -= m_padding.x/2;
 		tmpOriginY -= m_padding.y/2;
@@ -107,7 +108,8 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 		tmpSizeY += m_padding.y;
 		
 		for(int32_t iii=0; iii<NB_BAND_COLOR ; iii++) {
-			
+			// TODO : ...
+			#if 0
 			/* Step 1 : 
 			 *              
 			 *   **         
@@ -176,6 +178,7 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			tmpOObjects->SetColor(s_listColorBlack);
 			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
 			*/
+			#endif
 		}
 		draw::Color tmpColor;
 		if (m_currentUserPos.y > 0.5) {
@@ -184,24 +187,23 @@ void ewol::ColorBar::OnRegenerateDisplay(void)
 			tmpColor = draw::color::black;
 		}
 		tmpOObjects->SetColor(tmpColor);
-		tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
+		// TODO : ... 
+		//tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
 		
 		AddOObject(tmpOObjects);
 	}
 }
 
 
-bool ewol::ColorBar::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		relativePos.x = etk_max(etk_min(relativePos.x, m_size.x),0);
 		relativePos.y = etk_max(etk_min(relativePos.y, m_size.y),0);
-		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
+		if(    ewol::keyEvent::statusSingle == typeEvent
+		    || ewol::keyEvent::statusMove   == typeEvent) {
 			// nothing to do ...
 			m_currentUserPos.x=relativePos.x/m_size.x;
 			m_currentUserPos.y=relativePos.y/m_size.y;

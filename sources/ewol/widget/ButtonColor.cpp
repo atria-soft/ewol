@@ -9,7 +9,7 @@
 
 #include <ewol/widget/ButtonColor.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/meta/ColorChooser.h>
 #include <ewol/ewol.h>
@@ -18,20 +18,15 @@
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
 
 
-void ewol::WIDGET_ButtonColorInit(void)
-{
-	
-}
-
 #undef __class__
 #define __class__	"ButtonColor"
 
 
-void ewol::ButtonColor::Init(void)
+void widget::ButtonColor::Init(void)
 {
 	AddEventId(ewolEventButtonColorChange);
 	
-	m_alignement = ewol::TEXT_ALIGN_CENTER;
+	m_alignement = widget::TEXT_ALIGN_CENTER;
 	
 	#ifdef __TARGET_OS__Android
 		m_padding.y = 12;
@@ -46,35 +41,37 @@ void ewol::ButtonColor::Init(void)
 	m_textColorBg.a = 0x3F;
 	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
+	// Limit event at 1:
+	SetMouseLimit(1);
 }
 
-ewol::ButtonColor::ButtonColor(void)
+widget::ButtonColor::ButtonColor(void)
 {
 	m_label = "No Label";
 	Init();
 }
 
-ewol::ButtonColor::ButtonColor(etk::UString newLabel)
+widget::ButtonColor::ButtonColor(etk::UString newLabel)
 {
 	m_label = newLabel;
 	Init();
 }
 
 
-ewol::ButtonColor::~ButtonColor(void)
+widget::ButtonColor::~ButtonColor(void)
 {
 	
 }
 
 
-void ewol::ButtonColor::SetPadding(etk::Vector2D<float> newPadding)
+void widget::ButtonColor::SetPadding(etk::Vector2D<float> newPadding)
 {
 	m_padding = newPadding;
 }
 
-bool ewol::ButtonColor::CalculateMinSize(void)
+bool widget::ButtonColor::CalculateMinSize(void)
 {
-	etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(m_label);
+	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
 	m_minSize.x = m_padding.x*2 + minSize.x;
 	m_minSize.y = m_padding.y*2 + minSize.y;
 	MarkToRedraw();
@@ -82,37 +79,37 @@ bool ewol::ButtonColor::CalculateMinSize(void)
 }
 
 
-void ewol::ButtonColor::SetLabel(etk::UString newLabel)
+void widget::ButtonColor::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
 }
 
-void ewol::ButtonColor::SetValue(bool val)
+void widget::ButtonColor::SetValue(bool val)
 {
 	
 }
 
-void ewol::ButtonColor::SetAlignement(textAlignement_te typeAlign)
+void widget::ButtonColor::SetAlignement(textAlignement_te typeAlign)
 {
 	m_alignement = typeAlign;
 	MarkToRedraw();
 }
 
 
-bool ewol::ButtonColor::GetValue(void)
+bool widget::ButtonColor::GetValue(void)
 {
 	return false;
 }
 
-void ewol::ButtonColor::OnDraw(DrawProperty& displayProp)
+void widget::ButtonColor::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
 
 
-void ewol::ButtonColor::OnRegenerateDisplay(void)
+void widget::ButtonColor::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		m_oObjectDecoration.Clear();
@@ -128,7 +125,7 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
-			if (m_alignement == ewol::TEXT_ALIGN_LEFT) {
+			if (m_alignement == widget::TEXT_ALIGN_LEFT) {
 				tmpTextOriginX = m_padding.x;
 			}
 		}
@@ -146,39 +143,35 @@ void ewol::ButtonColor::OnRegenerateDisplay(void)
 		} else {
 			m_textColorFg = draw::color::white;
 		}
-		etk::Vector2D<float> textPos;
+		etk::Vector3D<float> textPos;
 		textPos.x = tmpTextOriginX;
 		textPos.y = tmpTextOriginY;
-		clipping_ts drawClipping;
-		drawClipping.x = m_padding.x;
-		drawClipping.y = m_padding.y;
-		drawClipping.w = m_size.x - 2*m_padding.x;
-		drawClipping.h = m_size.y - 2*m_padding.y;
-		m_oObjectText.Text(textPos/*, drawClipping*/, m_label);
+		textPos.z = 0;
+		m_oObjectText.SetPos(textPos);
+		m_oObjectText.Print(m_label);
 		
 		m_oObjectDecoration.SetColor(m_textColorBg);
 		tmpOriginX -= m_padding.x/2;
 		tmpOriginY -= m_padding.y/2;
 		tmpSizeX += m_padding.x/1;
 		tmpSizeY += m_padding.y/1;
-		m_oObjectDecoration.Rectangle( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY);
+		m_oObjectDecoration.SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
+		m_oObjectDecoration.RectangleWidth(etk::Vector3D<float>(tmpSizeX, tmpSizeY, 0) );
 	}
 }
 
 
-bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
-		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent) {
+		if(    ewol::keyEvent::statusSingle == typeEvent) {
 			// nothing to do ...
 			//GenerateEventId(ewolEventButtonPressed);
 			// Display the pop-up menu ... 
 			
 			// create a context menu : 
-			m_widgetContextMenu = new ewol::ContextMenu();
+			m_widgetContextMenu = new widget::ContextMenu();
 			if (NULL == m_widgetContextMenu) {
 				EWOL_ERROR("Allocation Error");
 				return true;
@@ -188,14 +181,14 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 			newPosition.x = m_origin.x + m_size.x/2;
 			newPosition.y = m_origin.y;
 			
-			m_widgetContextMenu->SetPositionMark(ewol::CONTEXT_MENU_MARK_BOTTOM, newPosition );
+			m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, newPosition );
 			
 			ewol::ColorChooser * myColorChooser = new ewol::ColorChooser();
 			myColorChooser->SetColor(m_textColorBg);
 			// set it in the pop-up-system : 
 			m_widgetContextMenu->SubWidgetSet(myColorChooser);
 			myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
-			ewol::PopUpWidgetPush(m_widgetContextMenu);
+			ewol::WindowsPopUpAdd(m_widgetContextMenu);
 			MarkToRedraw();
 			
 			return true;
@@ -205,7 +198,7 @@ bool ewol::ButtonColor::OnEventInput(ewol::inputType_te type, int32_t IdInput, e
 }
 
 
-void ewol::ButtonColor::SetCurrentColor(draw::Color color)
+void widget::ButtonColor::SetCurrentColor(draw::Color color)
 {
 	m_selectedColor = color;
 	m_textColorBg = m_selectedColor;
@@ -216,7 +209,7 @@ void ewol::ButtonColor::SetCurrentColor(draw::Color color)
 }
 
 
-void ewol::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	if (eventId == ewolEventColorChooserChange) {
 		// TODO : Parse the input color ...

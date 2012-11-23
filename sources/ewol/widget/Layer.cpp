@@ -14,19 +14,19 @@
 #define __class__	"Layer"
 
 
-ewol::Layer::Layer(void)
+widget::Layer::Layer(void)
 {
 	// set contamination enable
 	LockExpendContamination();
 }
 
-ewol::Layer::~Layer(void)
+widget::Layer::~Layer(void)
 {
 	SubWidgetRemoveAll();
 }
 
 
-bool ewol::Layer::CalculateSize(float availlableX, float availlableY)
+bool widget::Layer::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -42,7 +42,7 @@ bool ewol::Layer::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::Layer::CalculateMinSize(void)
+bool widget::Layer::CalculateMinSize(void)
 {
 	m_userExpend.x=false;
 	m_userExpend.y=false;
@@ -65,17 +65,17 @@ bool ewol::Layer::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::Layer::SetMinSise(float x, float y)
+void widget::Layer::SetMinSise(float x, float y)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::Layer::SetExpendX(bool newExpend)
+void widget::Layer::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Layer can not have a user expend settings X (herited from under elements)");
 }
 
-bool ewol::Layer::CanExpentX(void)
+bool widget::Layer::CanExpentX(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -83,12 +83,12 @@ bool ewol::Layer::CanExpentX(void)
 	return m_userExpend.x;
 }
 
-void ewol::Layer::SetExpendY(bool newExpend)
+void widget::Layer::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
-bool ewol::Layer::CanExpentY(void)
+bool widget::Layer::CanExpentY(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -96,14 +96,14 @@ bool ewol::Layer::CanExpentY(void)
 	return m_userExpend.y;
 }
 
-void ewol::Layer::LockExpendContamination(bool lockExpend)
+void widget::Layer::LockExpendContamination(bool lockExpend)
 {
 	m_lockExpendContamination = lockExpend;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
 
-void ewol::Layer::SubWidgetRemoveAll(void)
+void widget::Layer::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		delete(m_subWidget[iii]);
@@ -113,7 +113,7 @@ void ewol::Layer::SubWidgetRemoveAll(void)
 }
 
 
-void ewol::Layer::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::Layer::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -122,7 +122,7 @@ void ewol::Layer::SubWidgetAdd(ewol::Widget* newWidget)
 }
 
 
-void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
+void widget::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -137,7 +137,7 @@ void ewol::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -152,7 +152,7 @@ void ewol::Layer::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-void ewol::Layer::OnDraw(DrawProperty& displayProp)
+void widget::Layer::OnDraw(ewol::DrawProperty& displayProp)
 {
 	// draw is done in the invert sense of inserting ... the first element inserted is on the top and the last is on the buttom
 	for (int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
@@ -164,7 +164,7 @@ void ewol::Layer::OnDraw(DrawProperty& displayProp)
 
 
 
-void ewol::Layer::OnRegenerateDisplay(void)
+void widget::Layer::OnRegenerateDisplay(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -174,7 +174,7 @@ void ewol::Layer::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::Layer::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::Layer::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
@@ -196,7 +196,7 @@ ewol::Widget * ewol::Layer::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-void ewol::Layer::OnObjectRemove(ewol::EObject * removeObject)
+void widget::Layer::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

@@ -14,19 +14,19 @@
 #define __class__	"SizerVert"
 
 
-ewol::SizerVert::SizerVert(void)
+widget::SizerVert::SizerVert(void)
 {
 	// set contamination enable
 	LockExpendContamination();
 }
 
-ewol::SizerVert::~SizerVert(void)
+widget::SizerVert::~SizerVert(void)
 {
 	SubWidgetRemoveAll();
 }
 
 
-bool ewol::SizerVert::CalculateSize(float availlableX, float availlableY)
+bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.x = availlableX;
@@ -79,7 +79,7 @@ bool ewol::SizerVert::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool ewol::SizerVert::CalculateMinSize(void)
+bool widget::SizerVert::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
 	m_userExpend.x=false;
@@ -108,17 +108,17 @@ bool ewol::SizerVert::CalculateMinSize(void)
 	return true;
 }
 
-void ewol::SizerVert::SetMinSize(float x, float y)
+void widget::SizerVert::SetMinSize(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }
 
-void ewol::SizerVert::SetExpendX(bool newExpend)
+void widget::SizerVert::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
 }
 
-bool ewol::SizerVert::CanExpentX(void)
+bool widget::SizerVert::CanExpentX(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -126,12 +126,12 @@ bool ewol::SizerVert::CanExpentX(void)
 	return m_userExpend.x;
 }
 
-void ewol::SizerVert::SetExpendY(bool newExpend)
+void widget::SizerVert::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
-bool ewol::SizerVert::CanExpentY(void)
+bool widget::SizerVert::CanExpentY(void)
 {
 	if (true == m_lockExpendContamination) {
 		return false;
@@ -139,14 +139,14 @@ bool ewol::SizerVert::CanExpentY(void)
 	return m_userExpend.y;
 }
 
-void ewol::SizerVert::LockExpendContamination(bool lockExpend)
+void widget::SizerVert::LockExpendContamination(bool lockExpend)
 {
 	m_lockExpendContamination = lockExpend;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
 
-void ewol::SizerVert::SubWidgetRemoveAll(void)
+void widget::SizerVert::SubWidgetRemoveAll(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		delete(m_subWidget[iii]);
@@ -156,7 +156,7 @@ void ewol::SizerVert::SubWidgetRemoveAll(void)
 }
 
 
-void ewol::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -165,7 +165,7 @@ void ewol::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
 }
 
 
-void ewol::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
+void widget::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -180,7 +180,7 @@ void ewol::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void ewol::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -195,7 +195,7 @@ void ewol::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-void ewol::SizerVert::OnDraw(DrawProperty& displayProp)
+void widget::SizerVert::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -206,7 +206,7 @@ void ewol::SizerVert::OnDraw(DrawProperty& displayProp)
 
 
 
-void ewol::SizerVert::OnRegenerateDisplay(void)
+void widget::SizerVert::OnRegenerateDisplay(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -216,7 +216,7 @@ void ewol::SizerVert::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * ewol::SizerVert::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::SizerVert::GetWidgetAtPos(etk::Vector2D<float> pos)
 {
 	if (true == IsHide()) {
 		return NULL;
@@ -244,7 +244,7 @@ ewol::Widget * ewol::SizerVert::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-void ewol::SizerVert::OnObjectRemove(ewol::EObject * removeObject)
+void widget::SizerVert::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

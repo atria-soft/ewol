@@ -8,7 +8,7 @@
 
 #include <ewol/widget/Slider.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -21,7 +21,7 @@ extern const char * const ewolEventSliderChange    = "ewol-event-slider-change";
 
 const int32_t dotRadius = 6;
 
-ewol::Slider::Slider(void)
+widget::Slider::Slider(void)
 {
 	AddEventId(ewolEventSliderChange);
 	
@@ -34,15 +34,17 @@ ewol::Slider::Slider(void)
 	m_textColorBg = draw::color::black;
 	m_textColorBg.a = 0x3F;
 	SetCanHaveFocus(true);
+	// Limit event at 1:
+	SetMouseLimit(1);
 }
 
-ewol::Slider::~Slider(void)
+widget::Slider::~Slider(void)
 {
 	
 }
 
 
-bool ewol::Slider::CalculateMinSize(void)
+bool widget::Slider::CalculateMinSize(void)
 {
 	m_minSize.x = etk_max(m_userMinSize.x, 40);
 	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
@@ -51,20 +53,20 @@ bool ewol::Slider::CalculateMinSize(void)
 }
 
 
-void ewol::Slider::SetValue(int32_t val)
+void widget::Slider::SetValue(int32_t val)
 {
 	m_value = etk_max(etk_min(val, m_max), m_min);
 	MarkToRedraw();
 }
 
 
-int32_t ewol::Slider::GetValue(void)
+int32_t widget::Slider::GetValue(void)
 {
 	return m_value;
 }
 
 
-void ewol::Slider::SetMin(int32_t val)
+void widget::Slider::SetMin(int32_t val)
 {
 	m_min = val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
@@ -72,7 +74,7 @@ void ewol::Slider::SetMin(int32_t val)
 }
 
 
-void ewol::Slider::SetMax(int32_t val)
+void widget::Slider::SetMax(int32_t val)
 {
 	m_max = val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
@@ -80,39 +82,40 @@ void ewol::Slider::SetMax(int32_t val)
 }
 
 
-void ewol::Slider::OnRegenerateDisplay(void)
+void widget::Slider::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
 		ClearOObjectList();
 		
-		ewol::OObject2DColored * tmpOObjects = new ewol::OObject2DColored;
+		ewol::Drawing * tmpDraw = new ewol::Drawing;
 		
-		tmpOObjects->SetColor(m_textColorFg);
+		tmpDraw->SetColor(m_textColorFg);
 		// draw a line :
-		tmpOObjects->Line(dotRadius, m_size.y/2, m_size.x-dotRadius, m_size.y/2, 1);
+		tmpDraw->SetThickness(1);
+		tmpDraw->SetPos(etk::Vector3D<float>(dotRadius, m_size.y/2) );
+		tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-dotRadius, m_size.y/2) );
+		tmpDraw->SetThickness(0);
+		
 		draw::Color borderDot = m_textColorFg;
 		borderDot.a /= 2;
-		tmpOObjects->SetColor(borderDot);
-		tmpOObjects->Disc(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2, dotRadius);
-		
-		tmpOObjects->SetColor(m_textColorFg);
-		tmpOObjects->Disc(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2, dotRadius/1.6);
-		
-		AddOObject(tmpOObjects);
+		tmpDraw->SetPos(etk::Vector3D<float>(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2) );
+		tmpDraw->SetColor(borderDot);
+		tmpDraw->Circle(dotRadius);
+		tmpDraw->SetColor(m_textColorFg);
+		tmpDraw->Circle(dotRadius/1.6);
+		AddOObject(tmpDraw);
 	}
 }
 
 
-bool ewol::Slider::OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
 	etk::Vector2D<float> relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on Slider ...");
 	if (1 == IdInput) {
-		if(    ewol::EVENT_INPUT_TYPE_SINGLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_DOUBLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_TRIPLE == typeEvent
-		    || ewol::EVENT_INPUT_TYPE_MOVE   == typeEvent) {
+		if(    ewol::keyEvent::statusSingle == typeEvent
+		    || ewol::keyEvent::statusMove   == typeEvent) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x << "," << relativePos.y << ")");
 			int32_t oldValue = m_value;

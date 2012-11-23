@@ -16,7 +16,7 @@
 #include <ewol/widget/SizerHori.h>
 #include <ewol/widget/ContextMenu.h>
 
-namespace ewol {
+namespace widget {
 	
 	class MenuElement {
 		public : 
@@ -29,7 +29,7 @@ namespace ewol {
 			const char *   m_generateEvent;
 			etk::UString   m_message;
 	};
-	class Menu :public ewol::SizerHori
+	class Menu :public widget::SizerHori
 	{
 		public:
 			Menu(void);
@@ -48,9 +48,9 @@ namespace ewol {
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		private:
-			etk::Vector<MenuElement*>  m_listElement;
-			int32_t                        m_staticId;      // unique ID for every element of the menu ...
-			ewol::ContextMenu*             m_widgetContextMenu;
+			etk::Vector<widget::MenuElement*> m_listElement;
+			int32_t                           m_staticId;      // unique ID for every element of the menu ...
+			widget::ContextMenu*              m_widgetContextMenu;
 		public:
 			void           Clear(void);
 			int32_t        AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");

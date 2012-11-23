@@ -9,15 +9,15 @@
 #ifndef __EWOL_WIDGET_PARAMETER_LIST_H__
 #define __EWOL_WIDGET_PARAMETER_LIST_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 #include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventParameterListSelect;
 
 
-namespace ewol {
+namespace widget {
 	
 	class elementPL
 	{
@@ -35,11 +35,11 @@ namespace ewol {
 			~elementPL(void) {};
 	};
 	
-	class ParameterList :public ewol::WidgetScrooled
+	class ParameterList :public widget::WidgetScrooled
 	{
 		private:
-			int32_t                            m_idSelected;
-			etk::Vector<ewol::elementPL *> m_list;
+			int32_t                          m_idSelected;
+			etk::Vector<widget::elementPL *> m_list;
 		public:
 			ParameterList(void);
 			/**
@@ -54,12 +54,12 @@ namespace ewol {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::Vector<ewol::OObject*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 		public:
-			void    AddOObject(ewol::OObject* newObject, int32_t pos=-1);
+			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			void OnDraw(DrawProperty& displayProp);
+			void OnDraw(ewol::DrawProperty& displayProp);
 		// list properties ...
 		private:
 			int32_t        m_paddingSizeX;
@@ -77,7 +77,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			bool   OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 		protected:
 			void OnGetFocus(void);
 			void OnLostFocus(void);

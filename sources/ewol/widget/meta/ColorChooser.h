@@ -9,8 +9,8 @@
 #ifndef __EWOL_COLOR_CHOOSER_H__
 #define __EWOL_COLOR_CHOOSER_H__
 
-#include <etk/Types.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/debug.h>
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Entry.h>
@@ -22,7 +22,7 @@
 extern const char * const ewolEventColorChooserChange;
 
 namespace ewol {
-	class ColorChooser : public ewol::SizerVert
+	class ColorChooser : public widget::SizerVert
 	{
 		public:
 			ColorChooser(void);
@@ -53,12 +53,12 @@ namespace ewol {
 			void     SetColor(draw::Color newColor);
 			draw::Color GetColor(void);
 		private:;
-			ewol::ColorBar*     m_widgetColorBar;
-			ewol::Slider*       m_widgetRed;
-			ewol::Slider*       m_widgetGreen;
-			ewol::Slider*       m_widgetBlue;
-			ewol::Slider*       m_widgetAlpha;
-			draw::Color            m_currentColor;
+			widget::ColorBar*     m_widgetColorBar;
+			widget::Slider*       m_widgetRed;
+			widget::Slider*       m_widgetGreen;
+			widget::Slider*       m_widgetBlue;
+			widget::Slider*       m_widgetAlpha;
+			draw::Color           m_currentColor;
 	};
 	
 };

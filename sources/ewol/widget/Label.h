@@ -11,12 +11,12 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Text.h>
 #include <ewol/widget/Widget.h>
 
 extern const char * const ewolEventLabelPressed;
 
-namespace ewol {
+namespace widget {
 	class Label : public ewol::Widget
 	{
 		public:
@@ -34,12 +34,12 @@ namespace ewol {
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
 		private:
-			ewol::OObject2DTextColored m_oObjectText;
+			ewol::Text     m_oObjectText;
 			etk::UString   m_label;
-			draw::Color       m_textColorFg;  //!< Text color
+			draw::Color    m_textColorFg;  //!< Text color
 		public:
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			/**
 			 * @brief Event on an input of this Widget
@@ -50,7 +50,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 	};
 	
 };

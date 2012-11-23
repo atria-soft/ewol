@@ -8,7 +8,7 @@
 
 #include <ewol/widget/Spacer.h>
 
-#include <ewol/oObject/OObject.h>
+#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -16,7 +16,7 @@
 #define __class__	"Spacer"
 
 
-ewol::Spacer::Spacer(void)
+widget::Spacer::Spacer(void)
 {
 	m_localSize = 10;
 	SetCanHaveFocus(false);
@@ -24,13 +24,13 @@ ewol::Spacer::Spacer(void)
 	m_color.a = 0;
 }
 
-ewol::Spacer::~Spacer(void)
+widget::Spacer::~Spacer(void)
 {
 	
 }
 
 
-bool ewol::Spacer::CalculateMinSize(void)
+bool widget::Spacer::CalculateMinSize(void)
 {
 	m_minSize.x = m_localSize;
 	m_minSize.y = m_localSize;
@@ -38,14 +38,14 @@ bool ewol::Spacer::CalculateMinSize(void)
 }
 
 
-void ewol::Spacer::SetSize(float size)
+void widget::Spacer::SetSize(float size)
 {
 	m_localSize = size;
 	MarkToRedraw();
 }
 
 #define BORDER_SIZE_TMP         (4)
-void ewol::Spacer::OnRegenerateDisplay(void)
+void widget::Spacer::OnRegenerateDisplay(void)
 {
 	if (false == NeedRedraw()) {
 		return;
@@ -55,13 +55,14 @@ void ewol::Spacer::OnRegenerateDisplay(void)
 	if (m_color.a == 0) {
 		return;
 	}
-	ewol::OObject2DColored * BGOObjects = new ewol::OObject2DColored();
-	if (NULL == BGOObjects) {
+	ewol::Drawing * tmpDraw = new ewol::Drawing();
+	if (NULL == tmpDraw) {
 		return;
 	}
-	AddOObject(BGOObjects);
+	AddOObject(tmpDraw);
 	
-	BGOObjects->SetColor(m_color);
-	BGOObjects->Rectangle(0, 0, m_size.x, m_size.y);
+	tmpDraw->SetColor(m_color);
+	tmpDraw->SetPos(etk::Vector3D<float>(0, 0, 0) );
+	tmpDraw->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
 }
 

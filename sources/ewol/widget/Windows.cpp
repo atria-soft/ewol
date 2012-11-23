@@ -6,18 +6,14 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/Types.h>
+#include <etk/types.h>
 #include <etk/UString.h>
+#include <ewol/ewol.h>
+#include <ewol/renderer/openGL.h>
+#include <ewol/renderer/os/eSystem.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
-#include <ewol/oObject/OObject.h>
-#include <ewol/openGL/openGL.h>
-#include <ewol/texture/Texture.h>
-#include <ewol/font/Font.h>
-#include <ewol/ewol.h>
-#include <ewol/openGL/openGL.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/os/eSystem.h>
 
 
 

@@ -9,7 +9,7 @@
 #ifndef __EWOL_PORT_AUDIO_H__
 #define __EWOL_PORT_AUDIO_H__
 
-#include <etk/Types.h>
+#include <etk/types.h>
 
 namespace ewol {
 	namespace portAudio {

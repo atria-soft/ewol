@@ -7,10 +7,10 @@
  */
 
 
-#include <etk/Types.h>
-#include <ewol/audio/audio.h>
-#include <ewol/audio/decWav.h>
-#include <ewol/Debug.h>
+#include <etk/types.h>
+#include <ewol/renderer/audio/audio.h>
+#include <ewol/renderer/audio/decWav.h>
+#include <ewol/debug.h>
 #include <math.h>
 
 static int64_t currentTimePlaying = 0;
@@ -27,7 +27,7 @@ static int32_t effectsVolumeApply = 1<<16;
 static bool isInit = false;
 
 #ifdef __TARGET_OS__Linux
-#	include <ewol/audio/interfacePortAudio.h>
+#	include <ewol/renderer/audio/interfacePortAudio.h>
 #endif
 
 void ewol::audio::Init(void)

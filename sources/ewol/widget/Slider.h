@@ -10,13 +10,14 @@
 #define __EWOL_SLIDER_H__
 
 #include <etk/types.h>
+#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventSliderChange;
 
-namespace ewol {
-	class Slider :public ewol::Drawable
+namespace widget {
+	class Slider :public widget::Drawable
 	{
 		public:
 			Slider(void);
@@ -38,8 +39,8 @@ namespace ewol {
 			int32_t            m_value;
 			int32_t            m_min;
 			int32_t            m_max;
-			draw::Color           m_textColorFg;  //!< Text color
-			draw::Color           m_textColorBg;  //!< Background color
+			draw::Color        m_textColorFg;  //!< Text color
+			draw::Color        m_textColorBg;  //!< Background color
 		public:
 			virtual void   OnRegenerateDisplay(void);
 		public:
@@ -52,7 +53,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::inputType_te type, int32_t IdInput, eventInputType_te typeEvent, etk::Vector2D<float>  pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 	};
 	
 };
