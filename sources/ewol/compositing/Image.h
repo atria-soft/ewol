@@ -49,7 +49,7 @@ namespace ewol
 			 * @brief generic constructor
 			 * @param[in] imageName Name of the file that might be loaded
 			 */
-			Image(etk::UString imageName);
+			Image(etk::UString imageName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -125,6 +125,11 @@ namespace ewol
 			 * @param[in] newFile New file of the Image
 			 */
 			void SetSource(etk::UString newFile);
+			/**
+			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
+			 * @return the validity od the resources.
+			 */
+			bool HasSources(void);
 	};
 };
 

@@ -27,26 +27,13 @@ namespace widget {
 		public:
 			Scene(void);
 			virtual ~Scene(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolScene"; };
+			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			
-			/**
-			 * @brief Periodic call of this widget
-			 * @param localTime curent system time
-			 * @return ---
-			 */
+			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
-			/**
-			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
-			 * @param ---
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Set the scene in pause for a while
@@ -103,15 +90,6 @@ namespace widget {
 			 */
 			virtual etk::Vector2D<float>  RelativePosition(etk::Vector2D<float>  pos);
 	};
-	
-	/**
-	 * @brief Initilise the basic widget property ==> due to the android system
-	 * @note all widget that have template might have this initializer ...
-	 * @param ---
-	 * @return ---
-	 */
-	void WIDGET_SceneInit(void);
-	
 };
 
 #endif

@@ -19,13 +19,7 @@ namespace widget {
 		public:
 			Drawable(void);
 			virtual ~Drawable(void);
-			
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
 			
 		private:
@@ -34,6 +28,7 @@ namespace widget {
 			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
+			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 	};
 	

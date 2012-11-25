@@ -17,7 +17,7 @@ ewol::Image::Image(etk::UString imageName) :
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
-	m_color(draw::color::black),
+	m_color(draw::color::white),
 	m_axes(0.0, 0.0, 0.0),
 	m_angle(0.0),
 	m_GLprogram(NULL),
@@ -62,7 +62,7 @@ void ewol::Image::Draw(void)
 		return;
 	}
 	if (m_resource == NULL) {
-		EWOL_WARNING("no resources ...");
+		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
 	if (m_GLprogram==NULL) {
@@ -99,7 +99,7 @@ void ewol::Image::Clear(void)
 	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
-	m_color = draw::color::black;
+	m_color = draw::color::white;
 	m_axes = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_angle = 0.0;
 }
@@ -247,9 +247,18 @@ void ewol::Image::SetSource(etk::UString newFile)
 		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	etk::Vector2D<int32_t> size(-1,-1);
-	// link to new One
-	if (false == ewol::resource::Keep(newFile, m_resource, size)) {
-		EWOL_ERROR("Can not get Image resource");
+	etk::Vector2D<int32_t> size(32,32);
+	// note that no image can be loaded...
+	if (newFile != "") {
+		// link to new One
+		if (false == ewol::resource::Keep(newFile, m_resource, size)) {
+			EWOL_ERROR("Can not get Image resource");
+		}
 	}
 }
+
+bool ewol::Image::HasSources(void)
+{
+	return m_resource!=NULL;
+}
+

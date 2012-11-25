@@ -23,13 +23,11 @@ extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
 
 void widget::Button::Init(void)
 {
-	m_oObjectImage=NULL;
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
 	AddEventId(ewolEventButtonUp);
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
-	m_hasAnImage = false;
 	m_alignement = widget::TEXT_ALIGN_CENTER;
 	
 	m_status.m_stateOld = 0;
@@ -37,15 +35,6 @@ void widget::Button::Init(void)
 	m_status.m_transition = 1.0;
 	m_time = -1;
 	m_nextStatusRequested = -1;
-	/*
-	#ifdef __TARGET_OS__Android
-		m_padding.y = 12;
-		m_padding.x = 12;
-	#else
-		m_padding.y = 4;
-		m_padding.x = 4;
-	#endif
-	*/
 	m_textColorFg = draw::color::black;
 	
 	SetCanHaveFocus(true);
@@ -94,14 +83,16 @@ widget::Button::~Button(void)
 
 void widget::Button::SetImage(etk::UString imageName)
 {
-	if (imageName == "") {
-		m_hasAnImage = false;
-	} else {
-		m_imageSelected = imageName;
-		m_hasAnImage = true;
-	}
+	m_displayImage.SetSource(imageName);
 	MarkToRedraw();
 }
+
+void widget::Button::SetImageToggle(etk::UString imageName)
+{
+	m_displayImageToggle.SetSource(imageName);
+	MarkToRedraw();
+}
+
 
 bool widget::Button::CalculateMinSize(void)
 {
@@ -113,9 +104,8 @@ bool widget::Button::CalculateMinSize(void)
 	m_minSize.x = padding.x*2 + minSize.x;
 	m_minSize.y = padding.y*2 + minSize.y;
 	// Add the image element ...
-	if (true == m_hasAnImage) {
-		//m_minSize.x += -m_padding.x + m_padding.y*2 + minHeight;
-		//m_minSize.y += m_padding.y*2;
+	if(    true == m_displayImage.HasSources()
+	    || true == m_displayImageToggle.HasSources()) {
 		m_minSize.x += padding.x + minSize.y;
 	}
 	
@@ -205,11 +195,12 @@ void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 	m_GLprogram->UnUse();
 	
-	
-	if (NULL != m_oObjectImage) {
-		m_oObjectImage->Draw();
+#warning generate the Toggle
+	if (true) {
+		m_displayImage.Draw();
+	} else {
+		m_displayImageToggle.Draw();
 	}
-	//m_oObjectText.Draw();
 	m_displayText.Draw();
 }
 
@@ -221,9 +212,9 @@ void widget::Button::OnRegenerateDisplay(void)
 		padding.x = m_config->GetInteger(m_confIdPaddingX);
 		padding.y = m_config->GetInteger(m_confIdPaddingY);
 		
-		if (NULL != m_oObjectImage) {
-			m_oObjectImage->Clear();
-		}
+		m_displayImage.Clear();
+		m_displayImageToggle.Clear();
+		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
 		etk::Vector3D<float> tmpOrigin((float)((m_size.x - m_minSize.x) / 2.0),
@@ -252,16 +243,19 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		etk::Vector2D<float> textPos(tmpTextOrigin.x, tmpTextOrigin.x);
 		
-		/*ewol::OObject2DTextured * tmpImage = NULL;
-		if (true == m_hasAnImage) {
-			int32_t fontId = GetDefaultFontId();
-			int32_t fontHeight = ewol::GetHeight(fontId);
-			tmpImage = new ewol::OObject2DTextured(m_imageSelected, fontHeight, fontHeight);
-			tmpImage->Rectangle(textPos.x, textPos.y, fontHeight, fontHeight);
+		if(    true == m_displayImage.HasSources()
+		    || true == m_displayImageToggle.HasSources()) {
+			etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
+			etk::Vector3D<int32_t> imagePos(tmpTextOrigin.x-padding.x/4, tmpTextOrigin.y-padding.x/4, 0);
+			etk::Vector2D<int32_t> imageSize(minSize.y+padding.x/2, minSize.y+padding.x/2);
+			m_displayImage.SetPos(imagePos);
+			m_displayImage.Print(imageSize);
+			m_displayImageToggle.SetPos(imagePos);
+			m_displayImageToggle.Print(imageSize);
 			// update the text position ...
-			textPos.x += m_padding.x + fontHeight;
+			tmpTextOrigin.x += padding.x/2 + minSize.y;
 		}
-		*/
+		
 		etk::Vector3D<float> drawClippingPos(0.0, 0.0, -0.5);
 		etk::Vector3D<float> drawClippingSize((float)(m_size.x - 2*padding.x),
 		                                      (float)(m_size.y - 2*padding.y),

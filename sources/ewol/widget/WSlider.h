@@ -19,20 +19,20 @@ namespace widget {
 		public:
 			WSlider(void);
 			virtual ~WSlider(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolWSlider"; };
 		private:
 			etk::Vector2D<bool> m_underExpend; // expend of the uner elements ...
 		public:
-			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
-			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
+			// Derived function
+			virtual bool   CalculateSize(float availlableX, float availlableY);
+			// Derived function
+			virtual bool   CalculateMinSize(void);
+			// Derived function
 			virtual void   SetMinSise(float x=-1, float y=-1);
+			// Derived function
 			virtual bool   CanExpentX(void);
+			// Derived function
 			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
@@ -50,29 +50,16 @@ namespace widget {
 			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
 			        int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
 		protected:
+			// Derived function
 			virtual void   OnDraw(ewol::DrawProperty& displayProp);
 		public:
+			// Derived function
 			virtual void   OnRegenerateDisplay(void);
-		public:
-			/**
-			 * @brief Get the widget at the specific windows absolute position
-			 * @param[in] pos gAbsolute position of the requested widget knowledge
-			 * @return NULL No widget found
-			 * @return pointer on the widget found
-			 */
+			// Derived function
 			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
-			/**
-			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
-			 * @note : Sub classes must call this class
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
-			/**
-			 * @brief Periodic call of this widget
-			 * @param localTime curent system time
-			 * @return ---
-			 */
+			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
 	};
 	

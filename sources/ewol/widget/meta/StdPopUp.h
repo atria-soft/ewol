@@ -22,18 +22,13 @@ extern const char * const ewolEventFileStdPopUpButton4;
 extern const char * const ewolEventFileStdPopUpButton5;
 extern const char * const ewolEventFileStdPopUpButton6;
 
-namespace ewol {
+namespace widget {
 	class StdPopUp : public widget::PopUp
 	{
 		public:
 			StdPopUp(void);
 			~StdPopUp(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolPopUp"; };
 			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y);
 			void SetTitle(etk::UString text);

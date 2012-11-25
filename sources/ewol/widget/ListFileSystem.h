@@ -31,19 +31,19 @@ namespace widget {
 		public:
 			ListFileSystem(void);
 			~ListFileSystem(void);
-			// display API :
+			// Derived function
 			virtual draw::Color GetBasicBG(void);
+			// Derived function
 			uint32_t GetNuberOfColomn(void);
+			// Derived function
 			bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg);
+			// Derived function
 			uint32_t GetNuberOfRaw(void);
+			// Derived function
 			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg);
+			// Derived function
 			bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			const char * const GetObjectType(void) { return "EwolListFileSystem"; };
 		public:
 			// extern API :

@@ -20,23 +20,14 @@ namespace widget {
 		public:
 			Spacer(void);
 			virtual ~Spacer(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolSpacer"; };
+			// Derived function
 			virtual bool   CalculateMinSize(void);
 			void SetSize(float size);
-			/**
-			 * @brief Get the widget at the specific windows absolute position
-			 * @note the sizer return NULL, because nothing can be done inside nothing
-			 * @param[in] pos gAbsolute position of the requested widget knowledge
-			 * @return NULL No widget found
-			 * @return pointer on the widget found
-			 */
+			// Derived function
 			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos) { return NULL; };
+			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		private:

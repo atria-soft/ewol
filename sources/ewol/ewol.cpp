@@ -65,7 +65,7 @@ void ewol::ForceRedrawAll(void)
 
 void ewol::RequestUpdateSize(void)
 {
-	
+	eSystem::RequestUpdateSize();
 }
 
 void ewol::Keyboard(bool hide)

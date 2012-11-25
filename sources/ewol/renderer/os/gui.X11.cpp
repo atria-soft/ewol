@@ -7,15 +7,18 @@
  */
 
 
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 #include <ewol/ewol.h>
+#include <ewol/key.h>
+#include <ewol/config.h>
+#include <ewol/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/os/gui.h>
+#include <ewol/renderer/os/gui.h>
 
-#include <ewol/ResourceManager.h>
-#include <ewol/os/eSystem.h>
+#include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/os/eSystem.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -530,14 +533,14 @@ void X11_Run(void)
 						                   );
 						if (true == l_clipBoardRequestPrimary) {
 							etk::UString tmpppp((char*)buf);
-							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_SELECTION, tmpppp);
+							ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardSelection, tmpppp);
 							// just transmit an event , we have the data in the system
-							eSystem::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_SELECTION);
+							eSystem::ClipBoardArrive(ewol::clipBoard::clipboardSelection);
 						} else {
 							etk::UString tmpppp((char*)buf);
-							ewol::clipBoard::SetSystem(ewol::clipBoard::CLIPBOARD_STD, tmpppp);
+							ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardStd, tmpppp);
 							// just transmit an event , we have the data in the system
-							eSystem::ClipBoardArrive(ewol::clipBoard::CLIPBOARD_STD);
+							eSystem::ClipBoardArrive(ewol::clipBoard::clipboardStd);
 						}
 					}
 					break;
@@ -562,9 +565,9 @@ void X11_Run(void)
 						
 						etk::UString tmpData = "";
 						if (req->selection == XAtomeSelection) {
-							tmpData = ewol::clipBoard::Get(ewol::clipBoard::CLIPBOARD_SELECTION);
+							tmpData = ewol::clipBoard::Get(ewol::clipBoard::clipboardSelection);
 						} else if (req->selection == XAtomeClipBoard) {
-							tmpData = ewol::clipBoard::Get(ewol::clipBoard::CLIPBOARD_STD);
+							tmpData = ewol::clipBoard::Get(ewol::clipBoard::clipboardStd);
 						}
 						magatTextToSend = tmpData.c_str();
 						Atom listOfAtom[4];
@@ -688,7 +691,7 @@ void X11_Run(void)
 						EWOL_INFO("X11 event ButtonPress");
 					#endif
 					m_cursorEventX = event.xbutton.x;
-					m_cursorEventY = event.xbutton.y;
+					m_cursorEventY = (m_currentHeight-event.xbutton.y);
 					if (event.xbutton.button < NB_MAX_INPUT) {
 						inputIsPressed[event.xbutton.button] = true;
 					}
@@ -807,29 +810,29 @@ void X11_Run(void)
 							guiKeyBoardMode.altGr = false;
 						}
 						bool find = true;
-						ewol::eventKbMoveType_te keyInput;
+						ewol::keyEvent::keyboard_te keyInput;
 						switch (event.xkey.keycode) {
 							//case 80: // keypad
-							case 111:	keyInput = ewol::EVENT_KB_MOVE_TYPE_UP;				break;
+							case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
 							//case 83: // keypad
-							case 113:	keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT;			break;
+							case 113:	keyInput = ewol::keyEvent::keyboardLeft;          break;
 							//case 85: // keypad
-							case 114:	keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT;			break;
+							case 114:	keyInput = ewol::keyEvent::keyboardRight;         break;
 							//case 88: // keypad
-							case 116:	keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN;			break;
+							case 116:	keyInput = ewol::keyEvent::keyboardDown;          break;
 							//case 81: // keypad
-							case 112:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP;		break;
+							case 112:	keyInput = ewol::keyEvent::keyboardPageUp;        break;
 							//case 89: // keypad
-							case 117:	keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN;		break;
+							case 117:	keyInput = ewol::keyEvent::keyboardPageDown;      break;
 							//case 79: // keypad
-							case 110:	keyInput = ewol::EVENT_KB_MOVE_TYPE_START;			break;
+							case 110:	keyInput = ewol::keyEvent::keyboardStart;         break;
 							//case 87: // keypad
-							case 115:	keyInput = ewol::EVENT_KB_MOVE_TYPE_END;			break;
-							case 78:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL;	break;
-							case 127:	keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT;			break;
+							case 115:	keyInput = ewol::keyEvent::keyboardEnd;           break;
+							case 78:	keyInput = ewol::keyEvent::keyboardStopDefil;     break;
+							case 127:	keyInput = ewol::keyEvent::keyboardWait;          break;
 							//case 90: // keypad
 							case 118:
-								keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+								keyInput = ewol::keyEvent::keyboardInsert;
 								if(event.type == KeyRelease) {
 									if (true == guiKeyBoardMode.insert) {
 										guiKeyBoardMode.insert = false;
@@ -838,30 +841,30 @@ void X11_Run(void)
 									}
 								}
 								break;
-							//case 84:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CENTER;			break; // Keypad
-							case 67:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F1;				break;
-							case 68:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F2;				break;
-							case 69:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F3;				break;
-							case 70:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F4;				break;
-							case 71:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F5;				break;
-							case 72:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F6;				break;
-							case 73:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F7;				break;
-							case 74:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F8;				break;
-							case 75:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F9;				break;
-							case 76:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F10;			break;
-							case 95:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F11;			break;
-							case 96:	keyInput = ewol::EVENT_KB_MOVE_TYPE_F12;			break;
-							case 66:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;		guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
-							case 50:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;		guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-							case 62:	keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT;	guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-							case 37:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;		guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-							case 105:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;		guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-							case 133:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;		guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-							case 134:	keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;		guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-							case 64:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;			guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
-							case 108:	keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;			guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
-							case 135:	keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU;	break;
-							case 77:	keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;		guiKeyBoardMode.verNum  = (event.type == KeyPress) ? true : false; break;
+							//case 84:  keyInput = ewol::keyEvent::keyboardCenter; break; // Keypad
+							case 67:    keyInput = ewol::keyEvent::keyboardF1; break;
+							case 68:    keyInput = ewol::keyEvent::keyboardF2; break;
+							case 69:    keyInput = ewol::keyEvent::keyboardF3; break;
+							case 70:    keyInput = ewol::keyEvent::keyboardF4; break;
+							case 71:    keyInput = ewol::keyEvent::keyboardF5; break;
+							case 72:    keyInput = ewol::keyEvent::keyboardF6; break;
+							case 73:    keyInput = ewol::keyEvent::keyboardF7; break;
+							case 74:    keyInput = ewol::keyEvent::keyboardF8; break;
+							case 75:    keyInput = ewol::keyEvent::keyboardF9; break;
+							case 76:    keyInput = ewol::keyEvent::keyboardF10; break;
+							case 95:    keyInput = ewol::keyEvent::keyboardF11; break;
+							case 96:    keyInput = ewol::keyEvent::keyboardF12; break;
+							case 66:    keyInput = ewol::keyEvent::keyboardCapLock;     guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
+							case 50:    keyInput = ewol::keyEvent::keyboardShiftLeft;   guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+							case 62:    keyInput = ewol::keyEvent::keyboardShiftRight;  guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+							case 37:    keyInput = ewol::keyEvent::keyboardCtrlLeft;    guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+							case 105:   keyInput = ewol::keyEvent::keyboardCtrlRight;   guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+							case 133:   keyInput = ewol::keyEvent::keyboardMetaLeft;    guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+							case 134:   keyInput = ewol::keyEvent::keyboardMetaRight;   guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+							case 64:    keyInput = ewol::keyEvent::keyboardAlt;         guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
+							case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
+							case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
+							case 77:    keyInput = ewol::keyEvent::keyboardVerNum;      guiKeyBoardMode.verNum  = (event.type == KeyPress) ? true : false; break;
 							case 91: // Suppr on keypad
 								find = false;
 								{
@@ -986,7 +989,7 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			if (false == l_clipBoardOwnerPrimary) {
 				l_clipBoardRequestPrimary = true;
 				// Generate a request on X11
@@ -1001,7 +1004,7 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 				eSystem::ClipBoardArrive(clipboardID);
 			}
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			if (false == l_clipBoardOwnerStd) {
 				l_clipBoardRequestPrimary = false;
 				// Generate a request on X11
@@ -1027,14 +1030,14 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			// Request the selection :
 			if (false == l_clipBoardOwnerPrimary) {
 				XSetSelectionOwner(m_display, XAtomeSelection, WindowHandle, CurrentTime);
 				l_clipBoardOwnerPrimary = true;
 			}
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			// Request the clipBoard :
 			if (false == l_clipBoardOwnerStd) {
 				XSetSelectionOwner(m_display, XAtomeClipBoard, WindowHandle, CurrentTime);
@@ -1111,9 +1114,9 @@ void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
  */
 int guiInterface::main(int argc, const char *argv[])
 {
-	ewol::CmdLine::Clean();
+	ewol::commandLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {
-		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
+		EWOL_INFO("commandLine : \"" << argv[i] << "\"" );
 		if (0==strncmp("-l0", argv[i], 256)) {
 			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
 		} else if (0==strncmp("-l1", argv[i], 256)) {
@@ -1130,7 +1133,7 @@ int guiInterface::main(int argc, const char *argv[])
 			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
 		} else {
 			etk::UString tmpString(argv[i]);
-			ewol::CmdLine::Add(tmpString);
+			ewol::commandLine::Add(tmpString);
 		}
 	}
 	
@@ -1160,7 +1163,7 @@ int guiInterface::main(int argc, const char *argv[])
 	guiInterface::Stop();
 	// uninit ALL :
 	eSystem::UnInit();
-	ewol::CmdLine::Clean();
+	ewol::commandLine::Clean();
 	return 0;
 }
 

@@ -73,14 +73,10 @@ namespace widget {
 			 * @brief Destuctor
 			 */
 			virtual ~Entry(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
 			void Init(void);
+			// Derived function
 			virtual bool   CalculateMinSize(void);
 			void           SetValue(etk::UString newData);
 			etk::UString   GetValue(void);
@@ -89,57 +85,20 @@ namespace widget {
 				m_userSize = width;
 			}
 		public:
-			/**
-			 * @brief Event generated when a redraw is needed
-			 * @param ---
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			/**
-			 * @brief Event on an input of this Widget
-			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
-			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
-			 * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
-			 * @param[in] pos Absolute position of the event
-			 * @return true the event is used
-			 * @return false the event is not used
-			 */
+			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
-			/**
-			 * @brief Event on the keybord (if no shortcut has been detected before).
-			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
-			 * @param[in] unicodeValue key pressed by the user
-			 * @return true if the event has been used
-			 * @return false if the event has not been used
-			 */
+			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
-			/**
-			 * @brief Event on the keyboard that is not a printable key (if no shortcut has been detected before).
-			 * @return true if the event has been used
-			 * @return false if the event has not been used
-			 */
+			// Derived function
 			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent);
-			/**
-			 * @brief Receive a message from an other EObject with a specific eventId and data
-			 * @param[in] CallerObject Pointer on the EObject that information came from
-			 * @param[in] eventId Message registered by this class
-			 * @param[in] data Data registered by this class
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
-			/**
-			 * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
-			 * @note : need to have focus ...
-			 * @param[in] mode Mode of data requested
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 		protected:
-			/**
-			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
-			 * @param[in] displayProp properties of the current display
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			/**
 			 * @brief Change the cursor position with the curent position requested on the display
@@ -167,17 +126,9 @@ namespace widget {
 			 * @return ---
 			 */
 			virtual void RemoveSelected(void);
-			/**
-			 * @brief Event of the focus has been grep by the current widget
-			 * @param ---
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnGetFocus(void);
-			/**
-			 * @brief Event of the focus has been lost by the current widget
-			 * @param ---
-			 * @return ---
-			 */
+			// Derived function
 			virtual void OnLostFocus(void);
 	};
 	

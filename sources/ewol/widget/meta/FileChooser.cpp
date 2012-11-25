@@ -64,7 +64,7 @@ extern const char * const ewolEventFileChooserListFileValidate = "ewol-event-fil
 extern const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
-ewol::FileChooser::FileChooser(void)
+widget::FileChooser::FileChooser(void)
 {
 	AddEventId(ewolEventFileChooserCancel);
 	AddEventId(ewolEventFileChooserValidate);
@@ -264,13 +264,13 @@ ewol::FileChooser::FileChooser(void)
 }
 
 
-ewol::FileChooser::~FileChooser(void)
+widget::FileChooser::~FileChooser(void)
 {
 	
 }
 
 
-void ewol::FileChooser::SetTitle(etk::UString label)
+void widget::FileChooser::SetTitle(etk::UString label)
 {
 	if (NULL == m_widgetTitle) {
 		return;
@@ -278,7 +278,7 @@ void ewol::FileChooser::SetTitle(etk::UString label)
 	m_widgetTitle->SetLabel(label);
 }
 
-void ewol::FileChooser::SetValidateLabel(etk::UString label)
+void widget::FileChooser::SetValidateLabel(etk::UString label)
 {
 	if (NULL == m_widgetValidate) {
 		return;
@@ -286,7 +286,7 @@ void ewol::FileChooser::SetValidateLabel(etk::UString label)
 	m_widgetValidate->SetLabel(label);
 }
 
-void ewol::FileChooser::SetCancelLabel(etk::UString label)
+void widget::FileChooser::SetCancelLabel(etk::UString label)
 {
 	if (NULL == m_widgetCancel) {
 		return;
@@ -294,13 +294,13 @@ void ewol::FileChooser::SetCancelLabel(etk::UString label)
 	m_widgetCancel->SetLabel(label);
 }
 
-void ewol::FileChooser::SetFolder(etk::UString folder)
+void widget::FileChooser::SetFolder(etk::UString folder)
 {
 	m_folder = folder + "/";
 	UpdateCurrentFolder();
 }
 
-void ewol::FileChooser::SetFileName(etk::UString filename)
+void widget::FileChooser::SetFileName(etk::UString filename)
 {
 	m_file = filename;
 	if (NULL == m_widgetCurrentFileName) {
@@ -317,7 +317,7 @@ void ewol::FileChooser::SetFileName(etk::UString filename)
  * @param[in] data Data registered by this class
  * @return ---
  */
-void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	EWOL_INFO("Receive Event from the LIST ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (ewolEventFileChooserEntryFolder == eventId) {
@@ -389,7 +389,7 @@ void ewol::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const cha
 
 
 
-void ewol::FileChooser::UpdateCurrentFolder(void)
+void widget::FileChooser::UpdateCurrentFolder(void)
 {
 	if (m_folder != "" ) {
 		if (m_folder[m_folder.Size()-1] != '/') {
@@ -409,7 +409,7 @@ void ewol::FileChooser::UpdateCurrentFolder(void)
 }
 
 
-etk::UString ewol::FileChooser::GetCompleateFileName(void)
+etk::UString widget::FileChooser::GetCompleateFileName(void)
 {
 	etk::UString tmpString = m_folder;
 	tmpString += "/";
@@ -424,7 +424,7 @@ etk::UString ewol::FileChooser::GetCompleateFileName(void)
  * @note : Sub classes must call this class
  * @return ---
  */
-void ewol::FileChooser::OnObjectRemove(ewol::EObject * removeObject)
+void widget::FileChooser::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	widget::PopUp::OnObjectRemove(removeObject);

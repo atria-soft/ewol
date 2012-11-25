@@ -9,8 +9,8 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <ewol/debug.h>
-#include <ewol/audio/interfacePortAudio.h>
-#include <ewol/audio/audio.h>
+#include <ewol/renderer/audio/interfacePortAudio.h>
+#include <ewol/renderer/audio/audio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>

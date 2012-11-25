@@ -427,7 +427,8 @@ void ewol::Drawing::SetThickness(float thickness)
 
 void ewol::Drawing::AddVertex(void)
 {
-	
+	InternalSetColor(m_color);
+	SetPoint(m_position);
 }
 
 

@@ -105,5 +105,9 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::ty
 	return os;
 }
 
+static ewol::SpecialKey l_LocalKeyStatus;
 
-
+ewol::SpecialKey& ewol::GetCurrentSpecialKeyStatus(void)
+{
+	return l_LocalKeyStatus;
+}

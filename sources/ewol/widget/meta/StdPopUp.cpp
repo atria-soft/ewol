@@ -28,7 +28,7 @@ extern const char * const ewolEventFileStdPopUpButton3 = "ewol event std_pop_up 
 extern const char * const ewolEventFileStdPopUpButton4 = "ewol event std_pop_up BT4";
 
 
-ewol::StdPopUp::StdPopUp(void)
+widget::StdPopUp::StdPopUp(void)
 {
 	AddEventId(ewolEventFileStdPopUpCancel);
 	AddEventId(ewolEventFileStdPopUpValidate);
@@ -106,13 +106,13 @@ ewol::StdPopUp::StdPopUp(void)
 }
 
 
-ewol::StdPopUp::~StdPopUp(void)
+widget::StdPopUp::~StdPopUp(void)
 {
 	
 }
 
 
-void ewol::StdPopUp::SetTitle(etk::UString label)
+void widget::StdPopUp::SetTitle(etk::UString label)
 {
 	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::Get(m_widgetTitleId);
 	if (NULL == tmpWidget) {
@@ -121,7 +121,7 @@ void ewol::StdPopUp::SetTitle(etk::UString label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetValidateLabel(etk::UString label)
+void widget::StdPopUp::SetValidateLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetValidateId);
 	if (NULL == tmpWidget) {
@@ -130,7 +130,7 @@ void ewol::StdPopUp::SetValidateLabel(etk::UString label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetCancelLabel(etk::UString label)
+void widget::StdPopUp::SetCancelLabel(etk::UString label)
 {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::Get(m_widgetCancelId);
 	if (NULL == tmpWidget) {
@@ -139,14 +139,14 @@ void ewol::StdPopUp::SetCancelLabel(etk::UString label)
 	tmpWidget->SetLabel(label);
 }
 
-void ewol::StdPopUp::SetFolder(etk::UString folder)
+void widget::StdPopUp::SetFolder(etk::UString folder)
 {
 	m_folder = folder;
 }
 
 
 
-bool ewol::StdPopUp::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y)
+bool widget::StdPopUp::OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y)
 {
 	EWOL_INFO("Receive Event from the BT ... : widgetid=" << widgetID << "\"" << generateEventId << "\" ==> internalEvent=\"" << eventExternId << "\"" );
 	if (ewolEventFileChooserCancel == eventExternId) {

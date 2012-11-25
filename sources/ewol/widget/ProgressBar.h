@@ -21,12 +21,7 @@ namespace widget {
 		public:
 			ProgressBar(void);
 			virtual ~ProgressBar(void);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolProgressBar"; };
 			virtual bool   CalculateMinSize(void);
 			void           ValueSet(float val);
@@ -38,6 +33,7 @@ namespace widget {
 			draw::Color           m_textColorBgOn;   //!< bar color enable
 			draw::Color           m_textColorBgOff;  //!< bar color disable
 		public:
+			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 	};
 	

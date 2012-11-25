@@ -48,7 +48,9 @@ namespace eSystem
 	void SetKeyboardMove(eSystem::keyboardMove_ts& keyInput);
 	
 	void ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID);
-
+	
+	void RequestUpdateSize(void);
+	
 	// return true if a flush is needed
 	bool Draw(bool displayEveryTime);
 	

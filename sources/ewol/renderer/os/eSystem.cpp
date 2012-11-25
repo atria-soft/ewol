@@ -86,9 +86,6 @@ typedef struct {
 // deblare the message system
 static etk::MessageFifo<eSystemMessage_ts> l_msgSystem;
 
-
-extern ewol::SpecialKey specialCurrentKey;
-
 static bool requestEndProcessing = false;
 
 void ewolProcessEvents(void)
@@ -136,6 +133,7 @@ void ewolProcessEvents(void)
 			case THREAD_KEYBORAD_KEY:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				{
+					ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
 					specialCurrentKey = data.keyboardKey.special;
 					if (NULL != windowsCurrent) {
 						if (false==windowsCurrent->OnEventShortCut(data.keyboardKey.special,
@@ -172,6 +170,7 @@ void ewolProcessEvents(void)
 					                                           data.keyboardKey.myChar,
 					                                           ewol::keyEvent::keyboardUnknow,
 					                                           data.keyboardKey.isDown)) {
+						ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
 						specialCurrentKey = data.keyboardMove.special;
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
@@ -315,7 +314,7 @@ void eSystem::UnInit(void)
 }
 
 
-void ewol::RequestUpdateSize(void)
+void eSystem::RequestUpdateSize(void)
 {
 	if (true == isGlobalSystemInit) {
 		eSystemMessage_ts data;

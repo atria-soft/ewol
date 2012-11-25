@@ -209,17 +209,17 @@ void widget::Entry::OnRegenerateDisplay(void)
 		etk::Vector3D<float> drawClippingSize( m_size.x - 2*drawClippingPos.x,
 		                                       m_size.y - 2*drawClippingPos.y,
 		                                       1 );
-		m_oObjectText.SetClipping(drawClippingPos, drawClippingSize);
+		m_oObjectText.SetClippingWidth(drawClippingPos, drawClippingSize);
 		m_oObjectText.SetPos(textPos);
 		m_oObjectText.Print(m_data);
 		m_oObjectText.SetClippingMode(false);
-		/*
-		m_pos[0] = m_borderSize+2*drawClipping.x;
-		m_pos[1] = m_borderSize+2*drawClipping.y;
-		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClipping.x);
-		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClipping.y);
+
+		m_pos[0] = m_borderSize+2*drawClippingPos.x;
+		m_pos[1] = m_borderSize+2*drawClippingPos.y;
+		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClippingPos.x);
+		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClippingPos.y);
 		Rectangle(0, 0, m_size.x, m_size.y);
-		*/
+
 		/*
 		  Must be rework corectly ==> selection and Cursor are integrated at the system ...
 		int32_t pos1 = m_displayCursorPosSelection;

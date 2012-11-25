@@ -46,7 +46,7 @@ void widget::WidgetScrooled::OnRegenerateDisplay(void)
 			tmpDraw = new ewol::Drawing();
 			tmpDraw->SetColor(0xFF00007F);
 		}
-		if (NULL!=tmpDraw) {
+		if (NULL==tmpDraw) {
 			return;
 		}
 		tmpDraw->SetThickness(1);

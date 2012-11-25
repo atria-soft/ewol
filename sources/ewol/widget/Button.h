@@ -87,55 +87,42 @@ namespace widget {
 			void Rectangle(float x, float y, float w, float h);
 		private:
 			ewol::Text                  m_displayText;
-			ewol::Image*                m_oObjectImage;
-			bool                        m_hasAnImage;
-			etk::UString                m_imageSelected;
+			ewol::Image                 m_displayImage;
+			ewol::Image                 m_displayImageToggle;
 			textAlignement_te           m_alignement;
 			etk::UString                m_label;
 			draw::Color                 m_textColorFg;  //!< Text color
 		public:
 			Button(void);
 			Button(etk::UString newLabel);
-			/**
-			 * @brief Get the current Object type of the EObject
-			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
+			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolButton"; };
 			void Init(void);
 			virtual ~Button(void);
+			// Derived function
 			virtual bool   CalculateMinSize(void);
 			void           SetLabel(etk::UString newLabel);
 			etk::UString   GetLabel(void) {return m_label;};
 			void           SetImage(etk::UString imageName);
+			void           SetImageToggle(etk::UString imageName);
 			void           SetValue(bool val);
 			bool           GetValue(void);
 			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetColorFg(draw::Color newColor) { m_textColorFg = newColor; };
 		public:
+			// Derived function
 			virtual void OnRegenerateDisplay(void);
+			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			/**
-			 * @brief Event on an input of this Widget
-			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
-			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))
-			 * @param[in] typeEvent ewol type of event like EVENT_INPUT_TYPE_DOWN/EVENT_INPUT_TYPE_MOVE/EVENT_INPUT_TYPE_UP/EVENT_INPUT_TYPE_SINGLE/EVENT_INPUT_TYPE_DOUBLE/...
-			 * @param[in] pos Absolute position of the event
-			 * @return true the event is used
-			 * @return false the event is not used
-			 */
+			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 		private:
 			int32_t m_nextStatusRequested;
 			void ChangeStatusIn(int32_t newStatusId);
 			int64_t m_time;
-			/**
-			 * @brief Periodic call of this widget
-			 * @param localTime curent system time
-			 * @return ---
-			 */
+			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
 	};
 };

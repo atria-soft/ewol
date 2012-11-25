@@ -112,8 +112,56 @@ namespace ewol
 			unsigned altGr     : 1;
 			unsigned verNum    : 1;
 			unsigned insert    : 1;
-		
 	};
+	/*
+		SpecialKey(void)
+		{
+			capLock = false;
+			shift = false;
+			ctrl = false;
+			meta = false;
+			alt = false;
+			altGr = false;
+			verNum = false;
+			insert = false;
+		}
+		bool IsSetCapsLock(void)
+		{
+			return capLock;
+		}
+		
+		bool IsSetShift(void)
+		{
+			return shift;
+		}
+		
+		bool IsSetCtrl(void)
+		{
+			return ctrl;
+		}
+		
+		bool IsSetMeta(void)
+		{
+			return meta;
+		}
+		
+		bool IsSetAlt(void)
+		{
+			return alt;
+		}
+		
+		bool IsSetAltGr(void)
+		{
+			return altGr;
+		}
+		
+		bool IsSetVerNum(void)
+		{
+			return verNum;
+		}
+	};
+	*/
+	SpecialKey& GetCurrentSpecialKeyStatus(void);
 };
 
 
