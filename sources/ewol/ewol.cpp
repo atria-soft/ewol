@@ -11,6 +11,7 @@
 #include <ewol/renderer/os/eSystem.h>
 
 #include <ewol/renderer/os/gui.h>
+#include <ewol/commandLine.h>
 
 #undef __class__
 #define __class__	"ewol"
@@ -18,8 +19,38 @@
 
 int32_t ewol::Run(int32_t argc, const char* argv[])
 {
+	EWOL_DEBUG("Store commangLine in the specific system");
+	ewol::commandLine::Clean();
+	for( int32_t i=1 ; i<argc; i++) {
+		EWOL_INFO("commandLine : \"" << argv[i] << "\"" );
+		if (0==strncmp("-l0", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
+		} else if (0==strncmp("-l1", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
+		} else if (0==strncmp("-l2", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
+		} else if (0==strncmp("-l3", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
+		} else if (0==strncmp("-l4", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
+		} else if (0==strncmp("-l5", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
+		} else if(    0==strncmp("-l6", argv[i], 256)
+		           || 0==strncmp("-l7", argv[i], 256)
+		           || 0==strncmp("-l8", argv[i], 256)
+		           || 0==strncmp("-l9", argv[i], 256)) {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
+		} else {
+			etk::UString tmpString(argv[i]);
+			ewol::commandLine::Add(tmpString);
+		}
+	}
 	// call standard RUN ...
-	return guiInterface::main(argc, argv);
+	int32_t error = guiInterface::main(argc, argv);
+	
+	ewol::commandLine::Clean();
+	
+	return error;
 }
 
 

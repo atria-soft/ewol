@@ -104,27 +104,26 @@ namespace ewol
 	
 	class SpecialKey {
 		public:
-			unsigned capLock   : 1;
-			unsigned shift     : 1;
-			unsigned ctrl      : 1;
-			unsigned meta      : 1;
-			unsigned alt       : 1;
-			unsigned altGr     : 1;
-			unsigned verNum    : 1;
-			unsigned insert    : 1;
+			union {
+				uint32_t value;
+				struct {
+					unsigned capLock   : 1;
+					unsigned shift     : 1;
+					unsigned ctrl      : 1;
+					unsigned meta      : 1;
+					unsigned alt       : 1;
+					unsigned altGr     : 1;
+					unsigned verNum    : 1;
+					unsigned insert    : 1;
+				};
+			};
+		SpecialKey(void) :
+			value(0)
+		{
+			
+		}
 	};
 	/*
-		SpecialKey(void)
-		{
-			capLock = false;
-			shift = false;
-			ctrl = false;
-			meta = false;
-			alt = false;
-			altGr = false;
-			verNum = false;
-			insert = false;
-		}
 		bool IsSetCapsLock(void)
 		{
 			return capLock;

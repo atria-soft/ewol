@@ -157,7 +157,7 @@ void widget::PopUp::OnRegenerateDisplay(void)
 		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
 		BGOObjects->SetColor(m_colorBorder);
 		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x-BORDER_SIZE_TMP, tmpOrigin.y-BORDER_SIZE_TMP,0) );
-		BGOObjects->Rectangle(etk::Vector3D<float>(tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP, 0) );
+		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x+2*BORDER_SIZE_TMP, tmpSize.y+2*BORDER_SIZE_TMP, 0) );
 		BGOObjects->SetColor(m_colorBackGroung);
 		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x, tmpOrigin.y,0) );
 		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x, tmpSize.y, 0) );

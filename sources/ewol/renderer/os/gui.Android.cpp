@@ -7,4 +7,4 @@
  */
 
 // this include a dynamic generating file ==> this is really stupid, but it is needed for the dependency coherency
-#include <ewol/os/gui.Android.tmp.cpp>
+#include <ewol/renderer/os/gui.Android.tmp.cpp>

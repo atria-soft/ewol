@@ -27,25 +27,17 @@ namespace eSystem
 	void Show(void);
 	
 	void SetInputMotion(int pointerID, float x, float y);
-	void SetInputState(int pointerID, bool isUp, float x, float y);
+	void SetInputState(int pointerID, bool isDown, float x, float y);
 	
 	void SetMouseMotion(int pointerID, float x, float y);
-	void SetMouseState(int pointerID, bool isUp, float x, float y);
+	void SetMouseState(int pointerID, bool isDown, float x, float y);
 	
-	typedef struct {
-		bool                isDown;
-		uniChar_t           myChar;
-		ewol::SpecialKey    special;
-	} keyboardKey_ts;
-	
-	typedef struct {
-		bool                        isDown;
-		ewol::keyEvent::keyboard_te move;
-		ewol::SpecialKey            special;
-	} keyboardMove_ts;
-	
-	void SetKeyboard(eSystem::keyboardKey_ts& keyInput);
-	void SetKeyboardMove(eSystem::keyboardMove_ts& keyInput);
+	void SetKeyboard(ewol::SpecialKey& special,
+	                 uniChar_t myChar,
+	                 bool isDown);
+	void SetKeyboardMove(ewol::SpecialKey& special,
+	                     ewol::keyEvent::keyboard_te move,
+	                     bool isDown);
 	
 	void ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID);
 	

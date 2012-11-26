@@ -7,19 +7,20 @@
  */
 
 
-#include <ewol/Debug.h>
+#include <ewol/debug.h>
 #include <ewol/ewol.h>
 
-#include <etk/math/math.h>
+#include <etk/math/Vector2D.h>
+#include <etk/math/Vector3D.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/os/gui.h>
+#include <ewol/renderer/os/gui.h>
 
-#include <ewol/texture/Texture.h>
-#include <ewol/texture/TextureBMP.h>
-#include <ewol/os/eSystem.h>
-#include <ewol/openGL/openGL.h>
+#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/resources/Image.h>
+#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/openGL.h>
 
 #include <sys/time.h>
 
@@ -106,12 +107,12 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 	l_clipBoardOwnerStd = true;
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			// NOTE : Windows does not support the middle button the we do it internaly
 			// just transmit an event , we have the data in the system
 			eSystem::ClipBoardArrive(clipboardID);
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			if (false == l_clipBoardOwnerStd) {
 				// Generate a request TO the OS
 				// TODO : Send the message to the OS "We disire to receive the copy buffer ...
@@ -131,10 +132,10 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			// NOTE : nothing to do : Windows deas ot supported Middle button
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			// Request the clipBoard :
 			if (false == l_clipBoardOwnerStd) {
 				// TODO : Inform the OS that we have the current buffer of copy ...
@@ -159,35 +160,18 @@ void EnableOpenGL(HWND hWnd, HDC * hDC, HGLRC * hRC);
 void DisableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
 int Windows_Run(void);
 
-int main(int argc, char *argv[])
+
+/**
+ * @brief Main of the program
+ * @param std IO
+ * @return std IO
+ */
+int guiInterface::main(int argc, const char *argv[])
 {
 	glewInit();
 	if (!glewIsSupported("GL_VERSION_2_0")) {
 		fprintf(stderr, "OpenGL 2.0 not available\n");
 		return 1;
-	}
-	
-	ewol::CmdLine::Clean();
-	for( int32_t i=1 ; i<argc; i++) {
-		EWOL_INFO("CmdLine : \"" << argv[i] << "\"" );
-		if (0==strncmp("-l0", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
-		} else if (0==strncmp("-l1", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
-		} else if (0==strncmp("-l2", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
-		} else if (0==strncmp("-l3", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
-		} else if (0==strncmp("-l4", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
-		} else if (0==strncmp("-l5", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
-		} else if (0==strncmp("-l6", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
-		} else {
-			etk::UString tmpString(argv[i]);
-			ewol::CmdLine::Add(tmpString);
-		}
 	}
 	
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
@@ -214,7 +198,6 @@ int main(int argc, char *argv[])
 	guiInterface::Stop();
 	// uninit ALL :
 	eSystem::UnInit();
-	ewol::CmdLine::Clean();
 	return 0;
 }
 
@@ -351,42 +334,42 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		case WM_KEYDOWN:
 			{
 				uniChar_t tmpChar = 0;
-				ewol::eventKbMoveType_te keyInput;
+				ewol::keyEvent::keyboard_te keyInput;
 				switch (wParam) {
 					//case 80: // keypad
-					case VK_UP:     keyInput = ewol::EVENT_KB_MOVE_TYPE_UP; break;
+					case VK_UP:     keyInput = ewol::keyEvent::keyboardUp; break;
 					//case 83: // keypad
-					case VK_LEFT:   keyInput = ewol::EVENT_KB_MOVE_TYPE_LEFT; break;
+					case VK_LEFT:   keyInput = ewol::keyEvent::keyboardLeft; break;
 					//case 85: // keypad
-					case VK_RIGHT:  keyInput = ewol::EVENT_KB_MOVE_TYPE_RIGHT; break;
+					case VK_RIGHT:  keyInput = ewol::keyEvent::keyboardRight; break;
 					//case 88: // keypad
-					case VK_DOWN:   keyInput = ewol::EVENT_KB_MOVE_TYPE_DOWN; break;
+					case VK_DOWN:   keyInput = ewol::keyEvent::keyboardDown; break;
 					//case 81: // keypad
-					case VK_PRIOR:  keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_UP; break;
+					case VK_PRIOR:  keyInput = ewol::keyEvent::keyboardPageUp; break;
 					//case 89: // keypad
-					case VK_NEXT:   keyInput = ewol::EVENT_KB_MOVE_TYPE_PAGE_DOWN; break;
+					case VK_NEXT:   keyInput = ewol::keyEvent::keyboardPageDown; break;
 					//case 79: // keypad
-					case VK_HOME:   keyInput = ewol::EVENT_KB_MOVE_TYPE_START; break;
+					case VK_HOME:   keyInput = ewol::keyEvent::keyboardStart; break;
 					//case 87: // keypad
-					case VK_END:    keyInput = ewol::EVENT_KB_MOVE_TYPE_END; break;
-					//case VK_:     keyInput = ewol::EVENT_KB_MOVE_TYPE_ARRET_DEFIL; break;
-					case VK_PAUSE:  keyInput = ewol::EVENT_KB_MOVE_TYPE_WAIT; break;
+					case VK_END:    keyInput = ewol::keyEvent::keyboardEnd; break;
+					//case VK_:     keyInput = ewol::keyEvent::keyboardStopDefil; break;
+					case VK_PAUSE:  keyInput = ewol::keyEvent::keyboardWait; break;
 					//case 90: // keypad
 					case VK_INSERT:
-						keyInput = ewol::EVENT_KB_MOVE_TYPE_INSERT;
+						keyInput = ewol::keyEvent::keyboardInsert;
 						guiKeyBoardMode.insert = buttonIsDown;
 						break;
-					case VK_F1: keyInput = ewol::EVENT_KB_MOVE_TYPE_F1; break;
-					case VK_F2: keyInput = ewol::EVENT_KB_MOVE_TYPE_F2; break;
-					case VK_F3: keyInput = ewol::EVENT_KB_MOVE_TYPE_F3; break;
-					case VK_F4: keyInput = ewol::EVENT_KB_MOVE_TYPE_F4; break;
-					case VK_F5: keyInput = ewol::EVENT_KB_MOVE_TYPE_F5; break;
-					case VK_F6: keyInput = ewol::EVENT_KB_MOVE_TYPE_F6; break;
-					case VK_F7: keyInput = ewol::EVENT_KB_MOVE_TYPE_F7; break;
-					case VK_F8: keyInput = ewol::EVENT_KB_MOVE_TYPE_F8; break;
-					case VK_F9: keyInput = ewol::EVENT_KB_MOVE_TYPE_F9; break;
-					case VK_F10: keyInput = ewol::EVENT_KB_MOVE_TYPE_F10; break;
-					case VK_F11: keyInput = ewol::EVENT_KB_MOVE_TYPE_F11; break;
+					case VK_F1: keyInput = ewol::keyEvent::keyboardF1; break;
+					case VK_F2: keyInput = ewol::keyEvent::keyboardF2; break;
+					case VK_F3: keyInput = ewol::keyEvent::keyboardF3; break;
+					case VK_F4: keyInput = ewol::keyEvent::keyboardF4; break;
+					case VK_F5: keyInput = ewol::keyEvent::keyboardF5; break;
+					case VK_F6: keyInput = ewol::keyEvent::keyboardF6; break;
+					case VK_F7: keyInput = ewol::keyEvent::keyboardF7; break;
+					case VK_F8: keyInput = ewol::keyEvent::keyboardF8; break;
+					case VK_F9: keyInput = ewol::keyEvent::keyboardF9; break;
+					case VK_F10: keyInput = ewol::keyEvent::keyboardF10; break;
+					case VK_F11: keyInput = ewol::keyEvent::keyboardF11; break;
 					case VK_F12:
 					case VK_F13:
 					case VK_F14:
@@ -399,25 +382,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					case VK_F21:
 					case VK_F22:
 					case VK_F23:
-					case VK_F24: keyInput = ewol::EVENT_KB_MOVE_TYPE_F12; break;
-					case VK_CAPITAL:   keyInput = ewol::EVENT_KB_MOVE_TYPE_CAPLOCK;     guiKeyBoardMode.capLock = buttonIsDown; break;
+					case VK_F24: keyInput = ewol::keyEvent::keyboardF12; break;
+					case VK_CAPITAL:   keyInput = ewol::keyEvent::keyboardCapLock;    guiKeyBoardMode.capLock = buttonIsDown; break;
 					
 					case VK_SHIFT:
-					case VK_LSHIFT:    keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_LEFT;  guiKeyBoardMode.shift   = buttonIsDown; break;
-					case VK_RSHIFT:    keyInput = ewol::EVENT_KB_MOVE_TYPE_SHIFT_RIGHT; guiKeyBoardMode.shift   = buttonIsDown; break;
+					case VK_LSHIFT:    keyInput = ewol::keyEvent::keyboardShiftLeft;  guiKeyBoardMode.shift   = buttonIsDown; break;
+					case VK_RSHIFT:    keyInput = ewol::keyEvent::keyboardShiftRight; guiKeyBoardMode.shift   = buttonIsDown; break;
 					
 					case VK_CONTROL:
-					case VK_LCONTROL:  keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_LEFT;   guiKeyBoardMode.ctrl    = buttonIsDown; break;
-					case VK_RCONTROL:  keyInput = ewol::EVENT_KB_MOVE_TYPE_CTRL_RIGHT;  guiKeyBoardMode.ctrl    = buttonIsDown; break;
+					case VK_LCONTROL:  keyInput = ewol::keyEvent::keyboardCtrlLeft;   guiKeyBoardMode.ctrl    = buttonIsDown; break;
+					case VK_RCONTROL:  keyInput = ewol::keyEvent::keyboardCtrlRight;  guiKeyBoardMode.ctrl    = buttonIsDown; break;
 					
-					case VK_LWIN:      keyInput = ewol::EVENT_KB_MOVE_TYPE_META_LEFT;   guiKeyBoardMode.meta    = buttonIsDown; break;
-					case VK_RWIN:      keyInput = ewol::EVENT_KB_MOVE_TYPE_META_RIGHT;  guiKeyBoardMode.meta    = buttonIsDown; break;
+					case VK_LWIN:      keyInput = ewol::keyEvent::keyboardMetaLeft;   guiKeyBoardMode.meta    = buttonIsDown; break;
+					case VK_RWIN:      keyInput = ewol::keyEvent::keyboardMetaRight;  guiKeyBoardMode.meta    = buttonIsDown; break;
 					
 					case VK_MENU:
-					case VK_LMENU:     keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT;         guiKeyBoardMode.alt     = buttonIsDown; break;
-					case VK_RMENU:     keyInput = ewol::EVENT_KB_MOVE_TYPE_ALT_GR;      guiKeyBoardMode.altGr   = buttonIsDown; break;
-					//case :   keyInput = ewol::EVENT_KB_MOVE_TYPE_CONTEXT_MENU; break;
-					case VK_NUMLOCK:   keyInput = ewol::EVENT_KB_MOVE_TYPE_VER_NUM;     guiKeyBoardMode.verNum  = buttonIsDown; break;
+					case VK_LMENU:     keyInput = ewol::keyEvent::keyboardAlt;        guiKeyBoardMode.alt     = buttonIsDown; break;
+					case VK_RMENU:     keyInput = ewol::keyEvent::keyboardAltGr;      guiKeyBoardMode.altGr   = buttonIsDown; break;
+					//case :   keyInput = ewol::keyEvent::keyboardContextMenu; break;
+					case VK_NUMLOCK:   keyInput = ewol::keyEvent::keyboardVerNum;     guiKeyBoardMode.verNum  = buttonIsDown; break;
 					case VK_BACK: // DEL
 						tmpChar = 0x00000008;
 						break;
@@ -446,17 +429,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				EWOL_DEBUG("kjhkjhkjhkjhkj = " << wParam);
 				if (tmpChar == 0) {
 					//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-					eSystem::keyboardMove_ts specialEvent;
-					specialEvent.special = guiKeyBoardMode;
-					specialEvent.move = keyInput;
-					specialEvent.isDown = buttonIsDown;
-					eSystem::SetKeyboardMove(specialEvent);
+					eSystem::SetKeyboardMove(guiKeyBoardMode, keyInput, buttonIsDown);
 				} else {
-					eSystem::keyboardKey_ts specialEvent;
-					specialEvent.special = guiKeyBoardMode;
-					specialEvent.myChar = tmpChar;
-					specialEvent.isDown = buttonIsDown;
-					eSystem::SetKeyboard(specialEvent);
+					eSystem::SetKeyboard(guiKeyBoardMode, tmpChar, buttonIsDown);
 				}
 			}
 			return 0;

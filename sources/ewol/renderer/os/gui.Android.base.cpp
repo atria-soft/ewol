@@ -11,10 +11,10 @@
 #include <time.h>
 #include <stdint.h>
 #include <pthread.h>
-#include <ewol/Debug.h>
-#include <ewol/os/eSystem.h>
-#include <ewol/audio/audio.h>
-#include <ewol/os/gui.h>
+#include <ewol/debug.h>
+#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/audio/audio.h>
+#include <ewol/renderer/os/gui.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
@@ -30,6 +30,10 @@ static jclass    javaDefaultClassString = 0;       // default string class
 static int32_t m_currentHeight = 0;
 
 static JavaVM* g_JavaVM = NULL;
+
+// special key of the android system :
+static ewol::SpecialKey guiKeyBoardSpecialKeyMode;
+
 
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
@@ -401,10 +405,7 @@ extern "C"
 	void Java_org_ewol_interfaceJNI_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
 	{
 		EWOL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
-		eSystem::keyboardKey_ts keyInput;
-		keyInput.myChar = uniChar;
-		keyInput.isDown = isdown;
-		eSystem::SetKeyboard(keyInput);
+		eSystem::SetKeyboard(guiKeyBoardSpecialKeyMode, uniChar, isdown);
 	}
 	
 	enum {
@@ -488,6 +489,10 @@ extern "C"
 #define __class__ "guiInterface"
 
 
+int guiInterface::main(int argc, const char *argv[])
+{
+	// unneeded fuction, all is controlled by android java ...
+}
 
 int64_t guiInterface::GetTime(void)
 {
@@ -516,12 +521,12 @@ void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 	l_clipBoardOwnerStd = true;
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			// NOTE : Windows does not support the middle button the we do it internaly
 			// just transmit an event , we have the data in the system
 			eSystem::ClipBoardArrive(clipboardID);
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			if (false == l_clipBoardOwnerStd) {
 				// Generate a request TO the OS
 				// TODO : Send the message to the OS "We disire to receive the copy buffer ...
@@ -540,10 +545,10 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	switch (clipboardID)
 	{
-		case ewol::clipBoard::CLIPBOARD_SELECTION:
+		case ewol::clipBoard::clipboardSelection:
 			// NOTE : nothing to do : Windows deas ot supported Middle button
 			break;
-		case ewol::clipBoard::CLIPBOARD_STD:
+		case ewol::clipBoard::clipboardStd:
 			// Request the clipBoard :
 			if (false == l_clipBoardOwnerStd) {
 				// TODO : Inform the OS that we have the current buffer of copy ...

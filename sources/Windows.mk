@@ -26,7 +26,7 @@ LOCAL_CFLAGS := -Wno-write-strings \
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := $(FILE_LIST) ewol/os/gui.Windows.cpp
+LOCAL_SRC_FILES := $(FILE_LIST) ewol/renderer/os/gui.Windows.cpp
 
 
 

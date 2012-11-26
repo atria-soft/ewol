@@ -37,12 +37,11 @@ void ewol::FreeTypeInit(void)
 void ewol::FreeTypeUnInit(void)
 {
 	EWOL_DEBUG("==> Un-Init Font-Manager");
-	/*int32_t error = FT_Done_FreeType( library );
+	int32_t error = FT_Done_FreeType( library );
 	library = NULL;
 	if(0 != error) {
 		EWOL_CRITICAL(" when Un-loading FreeType Librairy ...");
 	}
-	*/
 }
 
 
@@ -100,6 +99,7 @@ ewol::FontFreeType::~FontFreeType(void)
 		m_FileBuffer = NULL;
 	}
 	// must be deleted fftFace
+	FT_Done_Face( m_fftFace );
 }
 
 

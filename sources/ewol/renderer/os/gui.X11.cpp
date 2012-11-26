@@ -867,31 +867,11 @@ void X11_Run(void)
 							case 77:    keyInput = ewol::keyEvent::keyboardVerNum;      guiKeyBoardMode.verNum  = (event.type == KeyPress) ? true : false; break;
 							case 91: // Suppr on keypad
 								find = false;
-								{
-									eSystem::keyboardKey_ts specialEvent;
-									specialEvent.special = guiKeyBoardMode;
-									specialEvent.myChar = 0x0000007F;
-									if(event.type == KeyPress) {
-										specialEvent.isDown = true;
-									} else {
-										specialEvent.isDown = false;
-									}
-									eSystem::SetKeyboard(specialEvent);
-								}
+								eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, (event.type==KeyPress));
 								break;
 							case 23: // special case for TAB
 								find = false;
-								{
-									eSystem::keyboardKey_ts specialEvent;
-									specialEvent.special = guiKeyBoardMode;
-									specialEvent.myChar = 0x00000009;
-									if(event.type == KeyPress) {
-										specialEvent.isDown = true;
-									} else {
-										specialEvent.isDown = false;
-									}
-									eSystem::SetKeyboard(specialEvent);
-								}
+								eSystem::SetKeyboard(guiKeyBoardMode, 0x09, (event.type==KeyPress));
 								break;
 							default:
 								find = false;
@@ -915,17 +895,11 @@ void X11_Run(void)
 										buf[1] = '\0';
 									}
 									if (count>0) {
-										// transform iun unicode
-										eSystem::keyboardKey_ts specialEvent;
-										specialEvent.special = guiKeyBoardMode;
-										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], specialEvent.myChar);
+										// transform it in unicode
+										uniChar_t tmpChar = 0;
+										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], tmpChar);
 										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
-										if(event.type == KeyPress) {
-											specialEvent.isDown = true;
-										} else {
-											specialEvent.isDown = false;
-										}
-										eSystem::SetKeyboard(specialEvent);
+										eSystem::SetKeyboard(guiKeyBoardMode, tmpChar, (event.type==KeyPress));
 									} else {
 										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 									}
@@ -934,15 +908,7 @@ void X11_Run(void)
 						}
 						if (true == find) {
 							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-							eSystem::keyboardMove_ts specialEvent;
-							specialEvent.special = guiKeyBoardMode;
-							if(event.type == KeyPress) {
-								specialEvent.isDown = true;
-							} else {
-								specialEvent.isDown = false;
-							}
-							specialEvent.move = keyInput;
-							eSystem::SetKeyboardMove(specialEvent);
+							eSystem::SetKeyboardMove(guiKeyBoardMode, keyInput, (event.type==KeyPress));
 						}
 					}
 					break;
@@ -1114,28 +1080,6 @@ void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
  */
 int guiInterface::main(int argc, const char *argv[])
 {
-	ewol::commandLine::Clean();
-	for( int32_t i=1 ; i<argc; i++) {
-		EWOL_INFO("commandLine : \"" << argv[i] << "\"" );
-		if (0==strncmp("-l0", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
-		} else if (0==strncmp("-l1", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
-		} else if (0==strncmp("-l2", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
-		} else if (0==strncmp("-l3", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
-		} else if (0==strncmp("-l4", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
-		} else if (0==strncmp("-l5", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
-		} else if (0==strncmp("-l6", argv[i], 256)) {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
-		} else {
-			etk::UString tmpString(argv[i]);
-			ewol::commandLine::Add(tmpString);
-		}
-	}
 	
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
@@ -1163,7 +1107,6 @@ int guiInterface::main(int argc, const char *argv[])
 	guiInterface::Stop();
 	// uninit ALL :
 	eSystem::UnInit();
-	ewol::commandLine::Clean();
 	return 0;
 }
 

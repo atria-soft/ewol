@@ -27,8 +27,8 @@ LOCAL_EXPORT_LDLIBS := -lGLESv2
 LOCAL_EXPORT_LDLIBS += -ldl -llog
 
 
-FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/os/gui.Android.base.cpp
-FILE_ABSTRACTION_DEST:=ewol/os/gui.Android.tmp.cpp
+FILE_ABSTRACTION:=$(LOCAL_PATH)/ewol/renderer/os/gui.Android.base.cpp
+FILE_ABSTRACTION_DEST:=ewol/renderer/os/gui.Android.tmp.cpp
 
 EWOL_TMP_PATH:=$(LOCAL_PATH)
 
@@ -51,7 +51,7 @@ LOCAL_PREREQUISITES := $(FILE_ABSTRACTION_DEST)
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := ewol/os/gui.Android.cpp $(FILE_LIST)
+LOCAL_SRC_FILES := ewol/renderer/os/gui.Android.cpp $(FILE_LIST)
 
 include $(BUILD_STATIC_LIBRARY)
 

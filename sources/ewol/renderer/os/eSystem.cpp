@@ -40,7 +40,8 @@ void eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* dest
 }
 
 
-enum {
+typedef enum {
+	THREAD_NONE,
 	THREAD_INIT,
 	THREAD_RECALCULATE_SIZE,
 	THREAD_RESIZE,
@@ -54,37 +55,44 @@ enum {
 	THREAD_KEYBORAD_MOVE,
 	
 	THREAD_CLIPBOARD_ARRIVE,
-};
+} theadMessage_te;
 
 
 #include <unistd.h>
 
-typedef struct {
-	int w;
-	int h;
-} eventResize_ts;
-
-typedef struct {
-	ewol::keyEvent::type_te type;
-	int pointerID;
-	bool state;
-	float x;
-	float y;
-} eventInput_ts;
-
-typedef struct {
-	int32_t TypeMessage;
-	union {
+class eSystemMessage {
+	public :
+		// specify the message type
+		theadMessage_te TypeMessage;
+		// can not set a union ...
 		ewol::clipBoard::clipboardListe_te clipboardID;
-		eventResize_ts resize;
-		eventInput_ts input;
-		eSystem::keyboardMove_ts keyboardMove;
-		eSystem::keyboardKey_ts  keyboardKey;
-	};
-} eSystemMessage_ts;
+		// InputId
+		ewol::keyEvent::type_te inputType;
+		int32_t                 inputId;
+		// generic dimentions
+		etk::Vector2D<float> dimention;
+		// keyboard events :
+		bool                        stateIsDown;
+		uniChar_t                   keyboardChar;
+		ewol::keyEvent::keyboard_te keyboardMove;
+		ewol::SpecialKey            keyboardSpecial;
+		
+		eSystemMessage(void) :
+			TypeMessage(THREAD_NONE),
+			clipboardID(ewol::clipBoard::clipboardStd),
+			inputType(ewol::keyEvent::typeUnknow),
+			inputId(-1),
+			dimention(0,0),
+			stateIsDown(false),
+			keyboardChar(0),
+			keyboardMove(ewol::keyEvent::keyboardUnknow)
+		{
+			
+		}
+};
 
 // deblare the message system
-static etk::MessageFifo<eSystemMessage_ts> l_msgSystem;
+static etk::MessageFifo<eSystemMessage> l_msgSystem;
 
 static bool requestEndProcessing = false;
 
@@ -92,7 +100,7 @@ void ewolProcessEvents(void)
 {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
-	eSystemMessage_ts data;
+	eSystemMessage data;
 	while (l_msgSystem.Count()>0) 
 	{
 		nbEvent++;
@@ -108,83 +116,52 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
-				windowsSize.x = data.resize.w;
-				windowsSize.y = data.resize.h;
+				windowsSize.x = data.dimention.x;
+				windowsSize.y = data.dimention.y;
 				eSystem::ForceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
-				{
-					etk::Vector2D<float> pos;
-					pos.x = data.input.x;
-					pos.y = data.input.y;
-					l_managementInput.Motion(data.input.type, data.input.pointerID, pos);
-				}
+				l_managementInput.Motion(data.inputType, data.inputId, data.dimention);
 				break;
 			case THREAD_INPUT_STATE:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
-				{
-					etk::Vector2D<float> pos;
-					pos.x = data.input.x;
-					pos.y = data.input.y;
-					l_managementInput.State(data.input.type, data.input.pointerID, data.input.state, pos);
-				}
+				l_managementInput.State(data.inputType, data.inputId, data.stateIsDown, data.dimention);
 				break;
 			case THREAD_KEYBORAD_KEY:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				{
 					ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
-					specialCurrentKey = data.keyboardKey.special;
-					if (NULL != windowsCurrent) {
-						if (false==windowsCurrent->OnEventShortCut(data.keyboardKey.special,
-						                                           data.keyboardKey.myChar,
-						                                           ewol::keyEvent::keyboardUnknow,
-						                                           data.keyboardKey.isDown)) {
-							// Get the current Focused Widget :
-							ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
-							if (NULL != tmpWidget) {
-								// check Widget shortcut
-								if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
-								                                      data.keyboardKey.myChar,
-								                                      ewol::keyEvent::keyboardUnknow,
-								                                      data.keyboardKey.isDown)) {
-									// generate the direct event ...
-									if(true == data.keyboardKey.isDown) {
-										EWOL_VERBOSE("GUI PRESSED : \"" << data.keyboardKey.myChar << "\"");
-										tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardKey.myChar);
-									} else {
-										EWOL_VERBOSE("GUI Release : \"" << data.keyboardKey.myChar << "\"");
-										tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardKey.myChar);
-									}
-								}
-							}
-						}
-					}
+					specialCurrentKey = data.keyboardSpecial;
 				}
-				break;
+				// no break ... (normal case ...)
 			case THREAD_KEYBORAD_MOVE:
-				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_MOVE");
-				// check main shortcut
 				if (NULL != windowsCurrent) {
-					if (false==windowsCurrent->OnEventShortCut(data.keyboardKey.special,
-					                                           data.keyboardKey.myChar,
-					                                           ewol::keyEvent::keyboardUnknow,
-					                                           data.keyboardKey.isDown)) {
-						ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
-						specialCurrentKey = data.keyboardMove.special;
+					if (false==windowsCurrent->OnEventShortCut(data.keyboardSpecial,
+					                                           data.keyboardChar,
+					                                           data.keyboardMove,
+					                                           data.stateIsDown) ) {
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 						if (NULL != tmpWidget) {
 							// check Widget shortcut
-							if (false==tmpWidget->OnEventShortCut(data.keyboardKey.special,
-							                                      data.keyboardKey.myChar,
-							                                      ewol::keyEvent::keyboardUnknow,
-							                                      data.keyboardKey.isDown)) {
+							if (false==tmpWidget->OnEventShortCut(data.keyboardSpecial,
+							                                      data.keyboardChar,
+							                                      data.keyboardMove,
+							                                      data.stateIsDown) ) {
 								// generate the direct event ...
-								if(true == data.keyboardMove.isDown) {
-									tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove.move);
-								} else {
-									tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove.move);
+								if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
+									if(true == data.stateIsDown) {
+										tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardChar);
+									} else {
+										tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardChar);
+									}
+								} else { // THREAD_KEYBORAD_MOVE
+									if(true == data.stateIsDown) {
+										tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove);
+									} else {
+										tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove);
+									}
 								}
 							}
 						}
@@ -252,7 +229,7 @@ bool isGlobalSystemInit = false;
 void RequestInit(void)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_INIT;
 		l_msgSystem.Post(data);
 	}
@@ -317,7 +294,7 @@ void eSystem::UnInit(void)
 void eSystem::RequestUpdateSize(void)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_RECALCULATE_SIZE;
 		l_msgSystem.Post(data);
 	}
@@ -326,10 +303,10 @@ void eSystem::RequestUpdateSize(void)
 void eSystem::Resize(int w, int h )
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_RESIZE;
-		data.resize.w = w;
-		data.resize.h = h;
+		data.dimention.x = w;
+		data.dimention.y = h;
 		l_msgSystem.Post(data);
 	}
 }
@@ -337,7 +314,7 @@ void eSystem::Move(int w, int h )
 {
 	if (true == isGlobalSystemInit) {
 		/*
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_RESIZE;
 		data.resize.w = w;
 		data.resize.h = h;
@@ -349,27 +326,27 @@ void eSystem::Move(int w, int h )
 void eSystem::SetInputMotion(int pointerID, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.input.type = ewol::keyEvent::typeFinger;
-		data.input.pointerID = pointerID;
-		data.input.x = x;
-		data.input.y = y;
+		data.inputType = ewol::keyEvent::typeFinger;
+		data.inputId = pointerID;
+		data.dimention.x = x;
+		data.dimention.y = y;
 		l_msgSystem.Post(data);
 	}
 }
 
 
-void eSystem::SetInputState(int pointerID, bool isUp, float x, float y )
+void eSystem::SetInputState(int pointerID, bool isDown, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_INPUT_STATE;
-		data.input.type = ewol::keyEvent::typeFinger;
-		data.input.pointerID = pointerID;
-		data.input.state = isUp;
-		data.input.x = x;
-		data.input.y = y;
+		data.inputType = ewol::keyEvent::typeFinger;
+		data.inputId = pointerID;
+		data.stateIsDown = isDown;
+		data.dimention.x = x;
+		data.dimention.y = y;
 		l_msgSystem.Post(data);
 	}
 }
@@ -378,47 +355,56 @@ void eSystem::SetInputState(int pointerID, bool isUp, float x, float y )
 void eSystem::SetMouseMotion(int pointerID, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.input.type = ewol::keyEvent::typeMouse;
-		data.input.pointerID = pointerID;
-		data.input.x = x;
-		data.input.y = y;
+		data.inputType = ewol::keyEvent::typeMouse;
+		data.inputId = pointerID;
+		data.dimention.x = x;
+		data.dimention.y = y;
 		l_msgSystem.Post(data);
 	}
 }
 
 
-void eSystem::SetMouseState(int pointerID, bool isUp, float x, float y )
+void eSystem::SetMouseState(int pointerID, bool isDown, float x, float y )
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_INPUT_STATE;
-		data.input.type = ewol::keyEvent::typeMouse;
-		data.input.pointerID = pointerID;
-		data.input.state = isUp;
-		data.input.x = x;
-		data.input.y = y;
+		data.inputType = ewol::keyEvent::typeMouse;
+		data.inputId = pointerID;
+		data.stateIsDown = isDown;
+		data.dimention.x = x;
+		data.dimention.y = y;
 		l_msgSystem.Post(data);
 	}
 }
 
-void eSystem::SetKeyboard(eSystem::keyboardKey_ts& keyInput)
+
+void eSystem::SetKeyboard(ewol::SpecialKey& special,
+                          uniChar_t myChar,
+                          bool isDown)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_KEYBORAD_KEY;
-		data.keyboardKey = keyInput;
+		data.stateIsDown = isDown;
+		data.keyboardChar = myChar;
+		data.keyboardSpecial = special;
 		l_msgSystem.Post(data);
 	}
 }
 
-void eSystem::SetKeyboardMove(eSystem::keyboardMove_ts& keyInput)
+void eSystem::SetKeyboardMove(ewol::SpecialKey& special,
+                              ewol::keyEvent::keyboard_te move,
+                              bool isDown)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_KEYBORAD_MOVE;
-		data.keyboardMove = keyInput;
+		data.stateIsDown = isDown;
+		data.keyboardMove = move;
+		data.keyboardSpecial = special;
 		l_msgSystem.Post(data);
 	}
 }
@@ -427,7 +413,7 @@ void eSystem::SetKeyboardMove(eSystem::keyboardMove_ts& keyInput)
 void eSystem::Hide(void)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_HIDE;
 		l_msgSystem.Post(data);
 	}
@@ -436,7 +422,7 @@ void eSystem::Hide(void)
 void eSystem::Show(void)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_SHOW;
 		l_msgSystem.Post(data);
 	}
@@ -446,7 +432,7 @@ void eSystem::Show(void)
 void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
 {
 	if (true == isGlobalSystemInit) {
-		eSystemMessage_ts data;
+		eSystemMessage data;
 		data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
 		data.clipboardID = clipboardID;
 		l_msgSystem.Post(data);
