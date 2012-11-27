@@ -50,18 +50,20 @@ void widget::WidgetScrooled::OnRegenerateDisplay(void)
 			return;
 		}
 		tmpDraw->SetThickness(1);
-		if(m_size.y < m_maxSize.y) {
+		if(    m_size.y < m_maxSize.y
+		    || m_originScrooled.y!=0) {
 			tmpDraw->SetPos(etk::Vector3D<float>(m_size.x-(SCROLL_BAR_SPACE/2), 0) );
-			tmpDraw->LineTo(etk::Vector3D<float>(SCROLL_BAR_SPACE, m_size.x-(SCROLL_BAR_SPACE/2), m_size.y ) );
-			float lenScrollBar = m_size.y*(m_size.y-SCROLL_BAR_SPACE) / m_maxSize.y;
-			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.y-SCROLL_BAR_SPACE));
+			tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-(SCROLL_BAR_SPACE/2), m_size.y ) );
+			float lenScrollBar = m_size.y*m_size.y / m_maxSize.y;
+			lenScrollBar = etk_avg(10, lenScrollBar, m_size.y);
 			float originScrollBar = m_originScrooled.y / (m_maxSize.y-m_size.y*m_limitScrolling);
 			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
-			originScrollBar *= (m_size.y-SCROLL_BAR_SPACE-lenScrollBar);
+			originScrollBar *= (m_size.y-lenScrollBar);
 			tmpDraw->SetPos(etk::Vector3D<float>(m_size.x-SCROLL_BAR_SPACE, m_size.y - originScrollBar - lenScrollBar) );
 			tmpDraw->RectangleWidth(etk::Vector3D<float>(SCROLL_BAR_SPACE, lenScrollBar));
 		}
-		if(m_size.x < m_maxSize.x) {
+		if(    m_size.x < m_maxSize.x
+		    || m_originScrooled.x!=0) {
 			tmpDraw->SetPos(etk::Vector3D<float>(0, (SCROLL_BAR_SPACE/2), 0) );
 			tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2) ) );
 			float lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE) / m_maxSize.x;
@@ -87,7 +89,8 @@ bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t 
 			if (1 == IdInput && ewol::keyEvent::statusDown == typeEvent) {
 				// check if selected the scrolling position whth the scrolling bar ...
 				if (relativePos.x >= (m_size.x-SCROLL_BAR_SPACE)) {
-					if(m_size.y < m_maxSize.y) {
+					if(    m_size.y < m_maxSize.y
+					    || m_originScrooled.y != 0) {
 						m_highSpeedMode = widget::SCROLL_ENABLE_VERTICAL;
 						m_highSpeedType = ewol::keyEvent::typeMouse;
 						m_highSpeedStartPos.x = relativePos.x;
@@ -100,7 +103,8 @@ bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t 
 						return true;
 					}
 				} else if (relativePos.y >= (m_size.y-SCROLL_BAR_SPACE)) {
-					if(m_size.x < m_maxSize.x) {
+					if(    m_size.x < m_maxSize.x
+					    || m_originScrooled.x!=0) {
 						m_highSpeedMode = widget::SCROLL_ENABLE_HORIZONTAL;
 						m_highSpeedType = ewol::keyEvent::typeMouse;
 						m_highSpeedStartPos.x = m_originScrooled.x / m_maxSize.x * (m_size.x-SCROLL_BAR_SPACE*2);
