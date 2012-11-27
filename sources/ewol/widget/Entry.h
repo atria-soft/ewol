@@ -13,6 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <draw/Color.h>
 
@@ -33,49 +34,34 @@ namespace widget {
 	class Entry : public ewol::Widget
 	{
 		private:
-			ewol::Program* m_GLprogram;
-			int32_t        m_GLPosition;
-			int32_t        m_GLMatrix;
-			int32_t        m_GLsizeBorder;
-			int32_t        m_GLsizePadding;
-			int32_t        m_GLsize;
 			float          m_pos[4];
 			int32_t        m_GLposText;
 			int32_t        m_GLstate;
-			etk::Vector<etk::Vector2D<float> > m_coord;       //!< internal coord of the object
-			draw::Colorf                  m_color[3];
-			void SetPoint(float x, float y);
-			void Rectangle(float x, float y, float w, float h);
 		private:
-			ewol::Text        m_oObjectText;               //!< text display
-			ewol::Drawing     m_oObjectDecoration;         //!< background display
+			ewol::Shaper               m_shaper;
+			ewol::Text                 m_oObjectText;               //!< text display
+			// TODO : remove this one : ...
+			ewol::Drawing              m_oObjectDecoration;         //!< background display
 			etk::UString               m_data;                      //!< sting that must be displayed
 			draw::Color                m_textColorFg;               //!< Text color
 			draw::Color                m_textColorBg;               //!< Background color
 			int32_t                    m_userSize;                  //!< Display size requested by the user
 			int32_t                    m_displayStartPosition;      //!< ofset in pixel of the display of the UString
-			int32_t                    m_borderSize;                //!< Border size
-			int32_t                    m_paddingSize;               //!< space between border and the text and the border base and the border widget
 			bool                       m_displayCursor;             //!< Cursor mus be display only when the widget has the focus
 			int32_t                    m_displayCursorPos;          //!< Cursor position in number of Char
 			int32_t                    m_displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == m_displayCursorPos chan no selection availlable
 		public:
 			/**
 			 * @brief Contuctor
-			 */
-			Entry(void);
-			/**
-			 * @brief Contuctor
 			 * @param[in] newData The USting that might be set in the Entry box (no event generation!!)
 			 */
-			Entry(etk::UString newData);
+			Entry(etk::UString newData = "");
 			/**
 			 * @brief Destuctor
 			 */
 			virtual ~Entry(void);
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
-			void Init(void);
 			// Derived function
 			virtual bool   CalculateMinSize(void);
 			void           SetValue(etk::UString newData);
@@ -130,6 +116,10 @@ namespace widget {
 			virtual void OnGetFocus(void);
 			// Derived function
 			virtual void OnLostFocus(void);
+			// change the current shaper display :
+			void ChangeStatusIn(int32_t newStatusId);
+			// Derived function
+			virtual void PeriodicCall(int64_t localTime);
 	};
 	
 };

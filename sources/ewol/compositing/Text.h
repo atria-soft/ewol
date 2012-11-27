@@ -56,6 +56,8 @@ namespace ewol
 		private:
 			draw::Color          m_color;              //!< The text foreground color
 			draw::Color          m_colorBg;            //!< The text background color
+			draw::Color          m_colorCursor;        //!< The text cursor color
+			draw::Color          m_colorSelection;     //!< The text Selection color
 		private:
 			ewol::font::mode_te  m_mode;               //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool                 m_kerning;            //!< Kerning enable or disable on the next elements displayed
@@ -72,6 +74,9 @@ namespace ewol
 			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
 			int32_t              m_GLtexture;          //!< openGL id on the element (Texture position)
 			int32_t              m_GLtexID;            //!< openGL id on the element (texture ID)
+		private:
+			int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
+			int32_t m_cursorPos;         //!< Cursor position (default no cursor ==> -100)
 		private:
 			ewol::TexturedFont*                  m_font;          //!< Font resources
 		private: // Text
@@ -321,6 +326,32 @@ namespace ewol
 			 * @brief Draw the current line
 			 */
 			void HtmlFlush(void);
+		public:
+			/**
+			 * @brief Remove the cursor display
+			 */
+			void DisableCursor(void);
+			/**
+			 * @brief Set a cursor at a specific position:
+			 * @param[in] cursorPos id of the cursor position
+			 */
+			void SetCursorPos(int32_t cursorPos);
+			/**
+			 * @brief Set a cursor at a specific position with his associated selection:
+			 * @param[in] cursorPos id of the cursor position
+			 * @param[in] selectionStartPos id of the starting of the selection
+			 */
+			void SetCursorSelection(int32_t cursorPos, int32_t selectionStartPos);
+			/**
+			 * @brief Change the selection color
+			 * @param[in] color New color for the Selection
+			 */
+			void SetSelectionColor(draw::Color color);
+			/**
+			 * @brief Change the cursor color
+			 * @param[in] color New color for the Selection
+			 */
+			void SetCursorColor(draw::Color color);
 	};
 };
 

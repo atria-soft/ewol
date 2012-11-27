@@ -19,6 +19,8 @@ ewol::Text::Text(void) :
 	m_clippingEnable(false),
 	m_color(draw::color::black),
 	m_colorBg(draw::color::none),
+	m_colorCursor(draw::color::black),
+	m_colorSelection(draw::color::olive),
 	m_mode(ewol::font::Regular),
 	m_kerning(true),
 	m_distanceField(false),
@@ -32,6 +34,8 @@ ewol::Text::Text(void) :
 	m_GLColor(-1),
 	m_GLtexture(-1),
 	m_GLtexID(-1),
+	m_selectionStartPos(-100),
+	m_cursorPos(-100),
 	m_font(NULL)
 {
 	SetFont("", -1);
@@ -46,6 +50,8 @@ ewol::Text::Text(etk::UString fontName, int32_t fontSize) :
 	m_clippingEnable(false),
 	m_color(draw::color::black),
 	m_colorBg(draw::color::none),
+	m_colorCursor(draw::color::black),
+	m_colorSelection(draw::color::olive),
 	m_mode(ewol::font::Regular),
 	m_kerning(true),
 	m_distanceField(false),
@@ -59,6 +65,8 @@ ewol::Text::Text(etk::UString fontName, int32_t fontSize) :
 	m_GLColor(-1),
 	m_GLtexture(-1),
 	m_GLtexID(-1),
+	m_selectionStartPos(-100),
+	m_cursorPos(-100),
 	m_font(NULL)
 {
 	SetFont(fontName, fontSize);
@@ -92,6 +100,9 @@ void ewol::Text::LoadProgram(void)
 
 void ewol::Text::Draw(void)
 {
+	// draw BG in any case:
+	m_vectorialDraw.Draw();
+	
 	if (m_coord.Size()<=0 || NULL == m_font) {
 		// TODO : a remètre ...
 		//EWOL_WARNING("Nothink to draw...");
@@ -105,7 +116,6 @@ void ewol::Text::Draw(void)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	m_vectorialDraw.Draw();
 	// set Matrix : translation/positionMatrix
 	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use(); 
@@ -168,6 +178,8 @@ void ewol::Text::Clear(void)
 	m_stopTextPos = 0;
 	m_alignement = ewol::Text::alignDisable;
 	m_htmlCurrrentLine = "";
+	m_selectionStartPos = -100;
+	m_cursorPos = -100;
 	m_htmlDecoration.Clear();
 }
 
@@ -480,13 +492,31 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
 	}
+	draw::Color tmpFg(m_color);
+	draw::Color tmpBg(m_colorBg);
 	if (m_alignement == ewol::Text::alignDisable) {
+		EWOL_DEBUG("kjhkjhkjhkjhkjh=" << m_cursorPos << "   klj"<< m_selectionStartPos);
+		if (0==m_cursorPos) {
+			m_vectorialDraw.SetPos(m_position);
+			SetColorBg(m_colorCursor);
+			PrintCursor(false);
+		}
 		// note this is faster when nothing is requested ...
 		for(int32_t iii=0; iii<text.Size(); iii++) {
 			if (iii<decoration.Size()) {
-				SetColor(decoration[iii].m_colorFg);
-				SetColorBg(decoration[iii].m_colorBg);
+				tmpFg = decoration[iii].m_colorFg;
+				tmpBg = decoration[iii].m_colorBg;
 				SetFontMode(decoration[iii].m_mode);
+			}
+			if(    (    m_selectionStartPos-1<iii
+			         && iii <=m_cursorPos-1)
+			    || (    m_selectionStartPos-1>=iii
+			         && iii > m_cursorPos-1) ) {
+				SetColor(  0x000000FF);
+				SetColorBg(m_colorSelection);
+			} else {
+				SetColor(  tmpFg);
+				SetColorBg(tmpBg);
 			}
 			if (m_colorBg.a != 0) {
 				etk::Vector3D<float> pos = m_position;
@@ -496,6 +526,11 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
 			} else {
 				Print(text[iii]);
+			}
+			if (iii==m_cursorPos-1) {
+				m_vectorialDraw.SetPos(m_position);
+				SetColorBg(m_colorCursor);
+				PrintCursor(false);
 			}
 		}
 	} else {
@@ -537,13 +572,28 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 					break;
 			}
 			// display all the elements
+			if (0==m_cursorPos) {
+				m_vectorialDraw.SetPos(m_position);
+				SetColorBg(m_colorCursor);
+				PrintCursor(false);
+			}
 			for(int32_t iii=currentId; iii<stop && iii<text.Size(); iii++) {
 				float fontHeigh = m_font->GetHeight(m_mode);
 				// Get specific decoration if provided
 				if (iii<decoration.Size()) {
-					SetColor(decoration[iii].m_colorFg);
-					SetColorBg(decoration[iii].m_colorBg);
+					tmpFg = decoration[iii].m_colorFg;
+					tmpBg = decoration[iii].m_colorBg;
 					SetFontMode(decoration[iii].m_mode);
+				}
+				if(    (    m_selectionStartPos-1<iii
+				         && iii <=m_cursorPos-1)
+				    || (    m_selectionStartPos-1>=iii
+				         && iii > m_cursorPos-1) ) {
+					SetColor(  0x000000FF);
+					SetColorBg(m_colorSelection);
+				} else {
+					SetColor(  tmpFg);
+					SetColorBg(tmpBg);
 				}
 				// special for the justify mode
 				if (text[iii] == (uniChar_t)' ') {
@@ -566,6 +616,11 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 					} else {
 						Print(text[iii]);
 					}
+				}
+				if (iii==m_cursorPos-1) {
+					m_vectorialDraw.SetPos(m_position);
+					SetColorBg(m_colorCursor);
+					PrintCursor(false);
 				}
 			}
 			if (currentId == stop) {
@@ -929,4 +984,33 @@ void ewol::Text::HtmlFlush(void)
 	}
 	m_htmlCurrrentLine = "";
 	m_htmlDecoration.Clear();
+}
+
+
+void ewol::Text::DisableCursor(void)
+{
+	m_selectionStartPos = -100;
+	m_cursorPos = -100;
+}
+
+void ewol::Text::SetCursorPos(int32_t cursorPos)
+{
+	m_selectionStartPos = cursorPos;
+	m_cursorPos = cursorPos;
+}
+
+void ewol::Text::SetCursorSelection(int32_t cursorPos, int32_t selectionStartPos)
+{
+	m_selectionStartPos = selectionStartPos;
+	m_cursorPos = cursorPos;
+}
+
+void ewol::Text::SetSelectionColor(draw::Color color)
+{
+	m_colorSelection = color;
+}
+
+void ewol::Text::SetCursorColor(draw::Color color)
+{
+	m_colorCursor = color;
 }

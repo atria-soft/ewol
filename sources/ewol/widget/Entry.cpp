@@ -26,8 +26,14 @@ const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
 #undef __class__
 #define __class__	"Entry"
 
+// DEFINE for the shader display system :
+#define STATUS_NORMAL    (0)
+#define STATUS_HOVER     (1)
+#define STATUS_SELECTED  (2)
 
-void widget::Entry::Init(void)
+
+widget::Entry::Entry(etk::UString newData) :
+	m_shaper("THEME:GUI:widgetEntry.conf")
 {
 	AddEventId(ewolEventEntryClick);
 	AddEventId(ewolEventEntryEnter);
@@ -36,8 +42,6 @@ void widget::Entry::Init(void)
 	m_displayCursorPos = 0;
 	m_displayCursorPosSelection = 0;
 	m_userSize = 50;
-	m_borderSize = 2;
-	m_paddingSize = 3;
 	m_displayCursor = false;
 	m_textColorFg = draw::color::black;
 	
@@ -50,31 +54,6 @@ void widget::Entry::Init(void)
 	ShortCutAdd("ctrl+v",       ewolEventEntryPaste);
 	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
-	etk::UString tmpString("THEME:GUI:widgetEntry.prog");
-	// get the shader resource :
-	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
-		m_GLPosition     = m_GLprogram->GetAttribute("EW_coord2d");
-		m_GLMatrix       = m_GLprogram->GetUniform("EW_MatrixTransformation");
-		m_GLsizeBorder   = m_GLprogram->GetUniform("EW_sizeBorder");
-		m_GLsizePadding  = m_GLprogram->GetUniform("EW_sizePadding");
-		m_GLsize         = m_GLprogram->GetUniform("EW_size");
-		m_GLposText      = m_GLprogram->GetUniform("EW_posText");
-		m_GLstate        = m_GLprogram->GetUniform("EW_state");
-	}
-}
-
-widget::Entry::Entry(void)
-{
-	Init();
-	m_data = "";
-	UpdateTextPosition();
-	MarkToRedraw();
-}
-
-widget::Entry::Entry(etk::UString newData)
-{
-	Init();
 	SetValue(newData);
 	UpdateTextPosition();
 	MarkToRedraw();
@@ -89,9 +68,11 @@ widget::Entry::~Entry(void)
 
 bool widget::Entry::CalculateMinSize(void)
 {
+	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	
 	int32_t minHeight = m_oObjectText.CalculateSize('A').y;
-	m_minSize.x = m_userSize;
-	m_minSize.y = minHeight + 2*(m_borderSize + 2*m_paddingSize);
+	m_minSize.x = m_userSize + 2*padding.x;
+	m_minSize.y = minHeight + 2*padding.y;
 	UpdateTextPosition();
 	MarkToRedraw();
 	return true;
@@ -113,59 +94,9 @@ etk::UString widget::Entry::GetValue(void)
 }
 
 
-
-void widget::Entry::SetPoint(float x, float y)
-{
-	etk::Vector2D<float> triangle(x, y);
-	m_coord.PushBack(triangle);
-}
-
-void widget::Entry::Rectangle(float x, float y, float w, float h)
-{
-	m_coord.Clear();
-	/* Bitmap position
-	 *      xA     xB
-	 *   yC *------*
-	 *      |      |
-	 *      |      |
-	 *   yD *------*
-	 */
-	float dxA = x;
-	float dxB = x + w;
-	float dyC = y;
-	float dyD = y + h;
-	SetPoint(dxA, dyD);
-	SetPoint(dxA, dyC);
-	SetPoint(dxB, dyC);
-
-	SetPoint(dxB, dyC);
-	SetPoint(dxB, dyD);
-	SetPoint(dxA, dyD);
-}
-
-
 void widget::Entry::OnDraw(ewol::DrawProperty& displayProp)
 {
-	if (m_GLprogram==NULL) {
-		EWOL_ERROR("No shader ...");
-		return;
-	}
-	//glScalef(m_scaling.x, m_scaling.y, 1.0);
-	m_GLprogram->Use();
-	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
-	// all entry parameters :
-	m_GLprogram->Uniform1f(m_GLsizeBorder, m_borderSize);
-	m_GLprogram->Uniform1f(m_GLsizePadding, m_paddingSize);
-	m_GLprogram->Uniform2fv(m_GLsize, 1, &m_size.x);
-	m_GLprogram->Uniform4fv(m_GLposText, 1, m_pos);
-	m_GLprogram->Uniform1i(m_GLstate, 0);
-	// Request the draw of the elements : 
-	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-	m_GLprogram->UnUse();
+	m_shaper.Draw();
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
@@ -174,17 +105,19 @@ void widget::Entry::OnDraw(ewol::DrawProperty& displayProp)
 void widget::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		m_shaper.Clear();
 		m_oObjectDecoration.Clear();
 		m_oObjectText.Clear();
 		UpdateTextPosition();
+		etk::Vector2D<float> padding = m_shaper.GetPadding();
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
 		int32_t tmpOriginX = 0;
 		int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
-		int32_t tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
+		int32_t tmpTextOriginX = padding.x;
+		int32_t tmpTextOriginY = tmpOriginY + padding.y;
 		
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
@@ -192,33 +125,39 @@ void widget::Entry::OnRegenerateDisplay(void)
 		if (true==m_userFill.y) {
 			//tmpSizeY = m_size.y;
 			tmpOriginY = 0;
-			tmpTextOriginY = tmpOriginY + m_borderSize + 2*m_paddingSize;
+			tmpTextOriginY = tmpOriginY + padding.y;
 		}
-		tmpOriginX += m_paddingSize;
-		tmpOriginY += m_paddingSize;
-		tmpSizeX -= 2*m_paddingSize;
-		tmpSizeY -= 2*m_paddingSize;
+		tmpOriginX += padding.x;
+		tmpOriginY += padding.y;
+		tmpSizeX -= 2*padding.x;
+		tmpSizeY -= 2*padding.y;
 		
 		
 		etk::Vector3D<float> textPos( tmpTextOriginX + m_displayStartPosition,
 		                              tmpTextOriginY,
 		                              0 );
-		etk::Vector3D<float> drawClippingPos( 2*m_paddingSize + m_borderSize,
-		                                      2*m_paddingSize + m_borderSize,
+		etk::Vector3D<float> drawClippingPos( padding.x,
+		                                      padding.y,
 		                                      -1 );
 		etk::Vector3D<float> drawClippingSize( m_size.x - 2*drawClippingPos.x,
 		                                       m_size.y - 2*drawClippingPos.y,
 		                                       1 );
 		m_oObjectText.SetClippingWidth(drawClippingPos, drawClippingSize);
 		m_oObjectText.SetPos(textPos);
+		if (m_displayCursorPosSelection != m_displayCursorPos) {
+			m_oObjectText.SetCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
+		} else {
+			m_oObjectText.SetCursorPos(m_displayCursorPos);
+		}
 		m_oObjectText.Print(m_data);
 		m_oObjectText.SetClippingMode(false);
-
+		/*
 		m_pos[0] = m_borderSize+2*drawClippingPos.x;
 		m_pos[1] = m_borderSize+2*drawClippingPos.y;
 		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClippingPos.x);
 		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClippingPos.y);
-		Rectangle(0, 0, m_size.x, m_size.y);
+		*/
+		m_shaper.SetSize(m_size);
 
 		/*
 		  Must be rework corectly ==> selection and Cursor are integrated at the system ...
@@ -260,14 +199,16 @@ void widget::Entry::OnRegenerateDisplay(void)
 
 void widget::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
 {
+	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	
 	etk::Vector2D<float> relPos = RelativePosition(pos);
-	relPos.x += -m_displayStartPosition - 2*m_paddingSize - m_borderSize;
+	relPos.x += -m_displayStartPosition - padding.x;
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
 	int32_t displayHidenSize = m_oObjectText.CalculateSize(tmpDisplay).x;
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
-	int32_t tmpTextOriginX = m_borderSize + 2*m_paddingSize;
+	int32_t tmpTextOriginX = padding.x;
 	for (int32_t iii=0; iii<m_data.Size(); iii++) {
 		tmpDisplay = m_data.Extract(0, iii);
 		int32_t tmpWidth = m_oObjectText.CalculateSize(tmpDisplay).x - displayHidenSize;
@@ -546,11 +487,13 @@ void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * 
 
 void widget::Entry::UpdateTextPosition(void)
 {
+	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	
 	int32_t tmpSizeX = m_minSize.x;
 	if (true==m_userFill.x) {
 		tmpSizeX = m_size.x;
 	}
-	int32_t tmpUserSize = tmpSizeX - 2*(m_borderSize + 2*m_paddingSize);
+	int32_t tmpUserSize = tmpSizeX - 2*(padding.x);
 	int32_t totalWidth = m_oObjectText.CalculateSize(m_data).x;
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
@@ -579,6 +522,7 @@ void widget::Entry::UpdateTextPosition(void)
 void widget::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
+	ChangeStatusIn(STATUS_SELECTED);
 	ewol::Keyboard(true);
 	MarkToRedraw();
 }
@@ -587,6 +531,25 @@ void widget::Entry::OnGetFocus(void)
 void widget::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
+	ChangeStatusIn(STATUS_NORMAL);
 	ewol::Keyboard(false);
+	MarkToRedraw();
+}
+
+
+void widget::Entry::ChangeStatusIn(int32_t newStatusId)
+{
+	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
+		PeriodicCallSet(true);
+		MarkToRedraw();
+	}
+}
+
+
+void widget::Entry::PeriodicCall(int64_t localTime)
+{
+	if (false == m_shaper.PeriodicCall(localTime) ) {
+		PeriodicCallSet(false);
+	}
 	MarkToRedraw();
 }

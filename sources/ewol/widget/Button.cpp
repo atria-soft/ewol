@@ -20,6 +20,12 @@ extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
 #undef __class__
 #define __class__	"Button"
 
+// DEFINE for the shader display system :
+#define STATUS_NORMAL    (0)
+#define STATUS_HOVER     (2)
+#define STATUS_PRESSED   (1)
+#define STATUS_DOWN      (3)
+
 
 widget::Button::Button(etk::UString newLabel) :
 	m_shaper("THEME:GUI:widgetButton.conf")
@@ -34,6 +40,8 @@ widget::Button::Button(etk::UString newLabel) :
 	m_alignement = widget::TEXT_ALIGN_CENTER;
 	
 	m_textColorFg = draw::color::black;
+	
+	m_shaper.ChangeStatusIn(STATUS_NORMAL);
 	
 	SetCanHaveFocus(true);
 	// Limit event at 1:
@@ -190,19 +198,19 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if(ewol::keyEvent::statusEnter == typeEvent) {
-		ChangeStatusIn(2);
+		ChangeStatusIn(STATUS_HOVER);
 	}else if(ewol::keyEvent::statusLeave == typeEvent) {
-		ChangeStatusIn(0);
+		ChangeStatusIn(STATUS_NORMAL);
 	}
 	if (1 == IdInput) {
 		if(ewol::keyEvent::statusDown == typeEvent) {
 			GenerateEventId(ewolEventButtonDown);
-			ChangeStatusIn(1);
+			ChangeStatusIn(STATUS_PRESSED);
 			MarkToRedraw();
 		}
 		if(ewol::keyEvent::statusUp == typeEvent) {
 			GenerateEventId(ewolEventButtonUp);
-			ChangeStatusIn(0);
+			ChangeStatusIn(STATUS_NORMAL);
 			MarkToRedraw();
 		}
 		if(ewol::keyEvent::statusSingle == typeEvent) {

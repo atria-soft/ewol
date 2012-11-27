@@ -100,23 +100,10 @@ LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     \
                     ../data/text.prog:text.prog \
                     ../data/text.frag:text.frag \
-                    ../data/text.vert:text.vert \
-                    \
-                    ../data/theme/default/widgetEntry.prog:theme/default/widgetEntry.prog \
-                    ../data/theme/default/widgetEntry.frag:theme/default/widgetEntry.frag \
-                    ../data/theme/default/widgetEntry.vert:theme/default/widgetEntry.vert \
-                    \
-                    ../data/theme/rounded/widgetEntry.prog:theme/rounded/widgetEntry.prog \
-                    ../data/theme/rounded/widgetEntry.frag:theme/rounded/widgetEntry.frag \
-                    ../data/theme/rounded/widgetEntry.vert:theme/rounded/widgetEntry.vert \
-                    \
-                    ../data/theme/default/widgetButton.conf:theme/default/widgetButton.conf \
-                    ../data/theme/default/widgetButton.prog:theme/default/widgetButton.prog \
-                    ../data/theme/default/widgetButton.frag:theme/default/widgetButton.frag \
-                    ../data/theme/default/widgetButton.vert:theme/default/widgetButton.vert \
-                    \
-                    ../data/theme/rounded/widgetButton.conf:theme/rounded/widgetButton.conf \
-                    ../data/theme/rounded/widgetButton.prog:theme/rounded/widgetButton.prog \
-                    ../data/theme/rounded/widgetButton.frag:theme/rounded/widgetButton.frag \
-                    ../data/theme/rounded/widgetButton.vert:theme/rounded/widgetButton.vert
+                    ../data/text.vert:text.vert
 
+LOCAL_COPY_FOLDERS := ../data/theme/default/widgetEntry.*:theme/default \
+                      ../data/theme/rounded/widgetEntry.*:theme/rounded \
+                      ../data/theme/default/widgetButton.*:theme/default \
+                      ../data/theme/rounded/widgetButton.*:theme/rounded \
+                      
