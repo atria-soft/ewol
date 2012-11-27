@@ -320,12 +320,11 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeV
 			{
 				if (isDown) {
 					if (true == m_localShortcut[iii]->broadcastEvent) {
-						// send message at all the widget
+						// send message at all the widget (exepted this one)
 						SendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
-					} else {
-						// send message direct to the current widget
-						OnReceiveMessage(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
+					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
+					OnReceiveMessage(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 				} // no else
 				return true;
 			}
