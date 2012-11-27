@@ -15,48 +15,13 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Image.h>
+#include <ewol/compositing/Shaper.h>
 
 extern const char * const ewolEventButtonPressed;
 extern const char * const ewolEventButtonDown;
 extern const char * const ewolEventButtonUp;
 extern const char * const ewolEventButtonEnter;
 extern const char * const ewolEventButtonLeave;
-
-
-namespace ewol {
-	class WidgetPosProperty
-	{
-		public:
-			etk::Vector2D<float> m_insidePos;
-			etk::Vector2D<float> m_insideSize;
-	};
-	
-	class GLWidgetPosProperty
-	{
-		public:
-			int32_t m_size;
-			int32_t m_insidePos;
-			int32_t m_insideSize;
-	};
-	// DATA
-	class WidgetStateProperty
-	{
-		public:
-			int32_t m_stateOld;
-			int32_t m_stateNew;
-			float   m_transition;
-	};
-	// ID of the UNIFORM element
-	class GLWidgetStateProperty
-	{
-		public:
-			int32_t m_stateOld;
-			int32_t m_stateNew;
-			int32_t m_transition;
-	};
-};
-
-
 
 namespace widget {
 	typedef enum {
@@ -66,26 +31,7 @@ namespace widget {
 	class Button : public ewol::Widget
 	{
 		private:
-			// External theme config:
-			ewol::ConfigFile*           m_config;
-			int32_t                     m_confIdPaddingX;
-			int32_t                     m_confIdPaddingY;
-			int32_t                     m_confIdChangeTime;
-			// OpenGL shaders programs:
-			ewol::Program*              m_GLprogram;
-			int32_t                     m_GLPosition;
-			int32_t                     m_GLMatrix;
-			// widget property
-			ewol::GLWidgetPosProperty   m_GLwidgetProperty; // id of the uniform
-			ewol::WidgetPosProperty     m_widgetProperty;   // structure of this uniform
-			// state property
-			ewol::GLWidgetStateProperty m_GLstatus;
-			ewol::WidgetStateProperty   m_status;
-			
-			etk::Vector<etk::Vector2D<float> > m_coord; //!< internal coord of the object
-			void SetPoint(float x, float y);
-			void Rectangle(float x, float y, float w, float h);
-		private:
+			ewol::Shaper                m_shaper;
 			ewol::Text                  m_displayText;
 			ewol::Image                 m_displayImage;
 			ewol::Image                 m_displayImageToggle;
@@ -93,11 +39,9 @@ namespace widget {
 			etk::UString                m_label;
 			draw::Color                 m_textColorFg;  //!< Text color
 		public:
-			Button(void);
-			Button(etk::UString newLabel);
+			Button(etk::UString newLabel="No Label");
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolButton"; };
-			void Init(void);
 			virtual ~Button(void);
 			// Derived function
 			virtual bool   CalculateMinSize(void);
@@ -119,9 +63,7 @@ namespace widget {
 			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 		private:
-			int32_t m_nextStatusRequested;
 			void ChangeStatusIn(int32_t newStatusId);
-			int64_t m_time;
 			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
 	};

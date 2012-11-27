@@ -43,7 +43,8 @@ FILE_LIST+= ewol/compositing/Compositing.cpp \
 			ewol/compositing/Drawing.cpp \
 			ewol/compositing/Image.cpp \
 			ewol/compositing/Sprite.cpp \
-			ewol/compositing/Mesh.cpp
+			ewol/compositing/Mesh.cpp \
+			ewol/compositing/Shaper.cpp
 
 
 # all widgets

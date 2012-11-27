@@ -12,6 +12,9 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/config.h>
 
+#undef __class__
+#define __class__	"ewol::Image"
+
 ewol::Image::Image(etk::UString imageName) :
 	m_position(0.0, 0.0, 0.0),
 	m_clippingPosStart(0.0, 0.0, 0.0),

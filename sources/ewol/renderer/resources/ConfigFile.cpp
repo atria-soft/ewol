@@ -18,6 +18,7 @@ void ewol::SimpleConfigElement::Parse(etk::UString value)
 	m_valuefloat = 0;
 	sscanf(tmp, "%d", &m_valueInt);
 	sscanf(tmp, "%f", &m_valuefloat);
+	m_value = tmp;
 }
 
 
