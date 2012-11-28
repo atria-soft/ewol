@@ -19,7 +19,6 @@
 #include <ewol/widget/List.h>
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/widget/PopUp.h>
-#include <ewol/widget/Spacer.h>
 #include <ewol/widget/Slider.h>
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/meta/FileChooser.h>
@@ -70,6 +69,13 @@ MainWindows::MainWindows(void)
 				myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeExpendY);
 				mySizerHori->SubWidgetAdd(myButton);
 			}
+		
+		mySizerHori = new widget::SizerHori();
+		if (NULL == mySizerHori) {
+			APPL_DEBUG("Allocation error mySizerHori");
+			return;
+		}
+		mySizerVert->SubWidgetAdd(mySizerHori);
 			myButton = new widget::Button("<center>Fill X (false)</center>");
 			if (NULL != myButton) {
 				myButton->SetToggleMode(true);
@@ -84,15 +90,70 @@ MainWindows::MainWindows(void)
 				myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeFillY);
 				mySizerHori->SubWidgetAdd(myButton);
 			}
-		
-		m_button = new widget::Button("My Button");
-		if (NULL != m_button) {
-			m_button->SetExpendX(false);
-			m_button->SetExpendY(false);
-			m_button->SetFillX(false);
-			m_button->SetFillY(false);
-			mySizerVert->SubWidgetAdd(m_button);
+		int32_t idSpacer=0;
+		m_spacer[idSpacer] = new widget::Spacer();
+		if (NULL != m_spacer[idSpacer]) {
+			m_spacer[idSpacer]->SetExpendX(false);
+			m_spacer[idSpacer]->SetExpendY(false);
+			m_spacer[idSpacer]->SetFillX(true);
+			m_spacer[idSpacer]->SetFillY(false);
+			m_spacer[idSpacer]->SetSize(10);
+			m_spacer[idSpacer]->SetColor(0xFF000080);
+			mySizerVert->SubWidgetAdd(m_spacer[idSpacer]);
 		}
+		
+		mySizerHori = new widget::SizerHori();
+		if (NULL == mySizerHori) {
+			APPL_DEBUG("Allocation error mySizerHori");
+			return;
+		}
+		mySizerVert->SubWidgetAdd(mySizerHori);
+		
+			idSpacer++;
+			m_spacer[idSpacer] = new widget::Spacer();
+			if (NULL != m_spacer[idSpacer]) {
+				m_spacer[idSpacer]->SetExpendX(false);
+				m_spacer[idSpacer]->SetExpendY(false);
+				m_spacer[idSpacer]->SetFillX(false);
+				m_spacer[idSpacer]->SetFillY(true);
+				m_spacer[idSpacer]->SetSize(10);
+				m_spacer[idSpacer]->SetColor(0x00FF0080);
+				mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+			}
+			
+			m_button = new widget::Button("My <font color=\"#FF0000\">Button</font>");
+			if (NULL != m_button) {
+				m_button->SetExpendX(false);
+				m_button->SetExpendY(false);
+				m_button->SetFillX(false);
+				m_button->SetFillY(false);
+				mySizerHori->SubWidgetAdd(m_button);
+			}
+			
+			idSpacer++;
+			m_spacer[idSpacer] = new widget::Spacer();
+			if (NULL != m_spacer[idSpacer]) {
+				m_spacer[idSpacer]->SetExpendX(false);
+				m_spacer[idSpacer]->SetExpendY(false);
+				m_spacer[idSpacer]->SetFillX(false);
+				m_spacer[idSpacer]->SetFillY(true);
+				m_spacer[idSpacer]->SetSize(10);
+				m_spacer[idSpacer]->SetColor(0x0000FF80);
+				mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+			}
+			
+		idSpacer++;
+		m_spacer[idSpacer] = new widget::Spacer();
+		if (NULL != m_spacer[idSpacer]) {
+			m_spacer[idSpacer]->SetExpendX(false);
+			m_spacer[idSpacer]->SetExpendY(false);
+			m_spacer[idSpacer]->SetFillX(true);
+			m_spacer[idSpacer]->SetFillY(false);
+			m_spacer[idSpacer]->SetSize(10);
+			m_spacer[idSpacer]->SetColor(0x00FFFF80);
+			mySizerVert->SubWidgetAdd(m_spacer[idSpacer]);
+		}
+		
 	
 }
 

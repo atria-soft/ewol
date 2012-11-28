@@ -165,6 +165,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		etk::Vector3D<float> tmpOrigin((float)((m_size.x - m_minSize.x) / 2.0),
 		                               (float)((m_size.y - m_minSize.y) / 2.0),
 		                               (float)(0.0));
+		                               
 		// no change for the text orogin : 
 		etk::Vector3D<float> tmpTextOrigin((float)((m_size.x - m_minSize.x) / 2.0 + padding.x),
 		                                   (float)((m_size.y - m_minSize.y) / 2.0 + padding.y),
@@ -176,7 +177,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		}
 		if (true==m_userFill.y) {
 			localSize.y = m_size.y;
-			tmpOrigin.y = 0.0;
+			//tmpOrigin.y = 0.0;
 		}
 		tmpOrigin.x += padding.x;
 		tmpOrigin.y += padding.y;
@@ -209,7 +210,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		// clean the element
 		m_displayText.Clear();
-		m_displayText.SetTextAlignement(0, localSize.x + 2*padding.x);
+		m_displayText.SetTextAlignement(0, localSize.x + 2*padding.x, ewol::Text::alignCenter);
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
 		if(    false == m_toggleMode
 		    || false == m_value) {
@@ -219,10 +220,16 @@ void widget::Button::OnRegenerateDisplay(void)
 		}
 		m_displayText.Translate(tmpOrigin);
 		
-		//m_shaper.SetOrigin(etk::Vector2D<float>(tmpTextOrigin.x-padding.x, tmpTextOrigin.y-padding.y) );
-		localSize.x += 2*padding.x;
-		localSize.y += 2*padding.y;
-		m_shaper.SetSize(localSize);
+		
+		if (true==m_userFill.y) {
+			tmpOrigin.y = padding.y;
+		}
+		
+		// selection area :
+		m_selectableAreaPos = etk::Vector2D<float>(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
+		m_selectableAreaSize = localSize + etk::Vector2D<float>(2,2)*padding;
+		m_shaper.SetOrigin(m_selectableAreaPos );
+		m_shaper.SetSize(m_selectableAreaSize);
 		m_shaper.SetInsidePos(etk::Vector2D<float>(tmpTextOrigin.x, tmpTextOrigin.y) );
 		etk::Vector3D<float> tmpp = m_displayText.CalculateSize(m_label);
 		etk::Vector2D<float> tmpp2(tmpp.x, tmpp.y);
@@ -234,11 +241,21 @@ void widget::Button::OnRegenerateDisplay(void)
 
 bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
+	if(ewol::keyEvent::statusLeave == typeEvent) {
+		ChangeStatusIn(STATUS_UP);
+	}
+	
+	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	// prevent error from ouside the button
+	if(    relativePos.x < m_selectableAreaPos.x
+	    || relativePos.y < m_selectableAreaPos.y
+	    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
+	    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
+		return false;
+	}
 	//EWOL_DEBUG("Event on BT ...");
 	if(ewol::keyEvent::statusEnter == typeEvent) {
 		ChangeStatusIn(STATUS_HOVER);
-	}else if(ewol::keyEvent::statusLeave == typeEvent) {
-		ChangeStatusIn(STATUS_UP);
 	}
 	if (1 == IdInput) {
 		if(ewol::keyEvent::statusDown == typeEvent) {

@@ -5,6 +5,7 @@ precision mediump int;
 
 struct displayProperty {
 	vec2 size;
+	vec2 origin;
 	vec2 insidePos;
 	vec2 insideSize;
 };
@@ -33,7 +34,11 @@ float S_roundedRatio = 10.0;
 void main(void) {
 	// position form center : 
 	vec2 ratio = EW_widgetProperty.size / 2.0;
-	vec2 positionCenter = abs(v_position-ratio);
+	
+	// prevent origin moving ... 
+	vec2 position = v_position - EW_widgetProperty.origin;
+	
+	vec2 positionCenter = abs(position-ratio);
 	vec2 ratioHight = ratio - S_sizePadding;
 	vec2 ratioLow   = ratioHight - (S_sizeBorder+S_roundedRatio);
 	vec2 circleMode = smoothstep(ratioLow, ratioHight, positionCenter);

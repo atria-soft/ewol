@@ -5,6 +5,7 @@ precision mediump int;
 
 struct displayProperty {
 	vec2 size;
+	vec2 origin;
 	vec2 insidePos;
 	vec2 insideSize;
 };
@@ -34,6 +35,10 @@ float S_roundedRatio = 10.0;
 void main(void) {
 	// position form center : 
 	vec2 ratio = EW_widgetProperty.size / 2.0;
+	
+	// prevent origin moving ... 
+	vec2 position = v_position - EW_widgetProperty.origin;
+	
 	/* generate a central simetry
 	  ____       _____
 	      \     /
@@ -41,7 +46,7 @@ void main(void) {
 	        \ /
 	         -
 	*/
-	vec2 positionCenter = abs(v_position-ratio);
+	vec2 positionCenter = abs(position-ratio);
 	// This is a clip to remove center of the display of the widget
 	vec2 ratioLow   = ratio - (S_roundedRatio+S_sizePadding);
 	vec2 circleMode = smoothstep(ratioLow, ratio, positionCenter)*(S_roundedRatio+S_sizePadding);

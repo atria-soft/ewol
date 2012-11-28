@@ -123,7 +123,7 @@ namespace ewol {
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual etk::Vector2D<float> RelativePosition(etk::Vector2D<float>  pos);
+			virtual etk::Vector2D<float> RelativePosition(etk::Vector2D<float> pos);
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size

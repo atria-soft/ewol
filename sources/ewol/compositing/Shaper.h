@@ -36,6 +36,7 @@ namespace ewol
 			int32_t        m_GLPosition;           //!< openGL id on the element (vertex buffer)
 			int32_t        m_GLMatrix;             //!< openGL id on the element (transformation matrix)
 			int32_t        m_GLPropertySize;       //!< openGL id on the element (widget size)
+			int32_t        m_GLPropertyOrigin;     //!< openGL id on the element (widget origin)
 			int32_t        m_GLPropertyInsidePos;  //!< openGL id on the element (widget internal element position)
 			int32_t        m_GLPropertyInsideSize; //!< openGL id on the element (widget internal element size)
 			int32_t        m_GLStateOld;           //!< openGL id on the element (old state displayed)
@@ -128,6 +129,11 @@ namespace ewol
 			 * @return the validity od the resources.
 			 */
 			bool HasSources(void);
+		private:
+			/**
+			 * @brief Update the internal vertex table.
+			 */
+			void UpdateVectex(void);
 	};
 };
 

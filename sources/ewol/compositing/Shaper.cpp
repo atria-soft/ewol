@@ -40,24 +40,7 @@ ewol::Shaper::Shaper(etk::UString shaperName) :
 	m_stateTransition(1.0)
 {
 	LoadProgram();
-	m_coord[0].x= 0;
-	m_coord[0].y= m_propertySize.y;
-	
-	m_coord[1].x= 0;
-	m_coord[1].y= 0;
-	
-	m_coord[2].x= m_propertySize.x;
-	m_coord[2].y= 0;
-	
-	
-	m_coord[3].x= m_propertySize.x;
-	m_coord[3].y= 0;
-	
-	m_coord[4].x= m_propertySize.x;
-	m_coord[4].y= m_propertySize.y;
-	
-	m_coord[5].x= 0;
-	m_coord[5].y= m_propertySize.y;
+	UpdateVectex();
 }
 
 ewol::Shaper::~Shaper(void)
@@ -101,6 +84,7 @@ void ewol::Shaper::LoadProgram(void)
 		m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		// Widget property ==> for the Vertex shader
 		m_GLPropertySize       = m_GLprogram->GetUniform("EW_widgetProperty.size");
+		m_GLPropertyOrigin     = m_GLprogram->GetUniform("EW_widgetProperty.origin");
 		m_GLPropertyInsidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
 		m_GLPropertyInsideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
 		// status property ==> for the fragment shader
@@ -139,6 +123,7 @@ void ewol::Shaper::Draw(void)
 	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
 	// all entry parameters :
 	m_GLprogram->Uniform2fv(m_GLPropertySize,       1, &m_propertySize.x);
+	m_GLprogram->Uniform2fv(m_GLPropertyOrigin,     1, &m_propertyOrigin.x);
 	m_GLprogram->Uniform2fv(m_GLPropertyInsidePos,  1, &m_propertyInsidePosition.x);
 	m_GLprogram->Uniform2fv(m_GLPropertyInsideSize, 1, &m_propertyInsideSize.x);
 	m_GLprogram->Uniform1i(m_GLStateOld,        m_stateOld);
@@ -202,26 +187,29 @@ bool ewol::Shaper::PeriodicCall(int64_t localTime)
 	return true;
 }
 
+void ewol::Shaper::UpdateVectex(void)
+{
+	// set coord ==> must be a static VBO ...
+	m_coord[0].x= m_propertyOrigin.x;
+	m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
+	m_coord[1].x= m_propertyOrigin.x;
+	m_coord[1].y= m_propertyOrigin.y;
+	m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
+	m_coord[2].y= m_propertyOrigin.y;
+	
+	m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
+	m_coord[3].y= m_propertyOrigin.y;
+	m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
+	m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
+	m_coord[5].x= m_propertyOrigin.x;
+	m_coord[5].y= m_propertyOrigin.y+m_propertySize.y;
+}
 
 void ewol::Shaper::SetOrigin(etk::Vector2D<float> newOri)
 {
 	if (m_propertyOrigin != newOri) {
 		m_propertyOrigin = newOri;
-		EWOL_CRITICAL("Set ori : " << m_propertyOrigin);
-		// set coord ==> must be a static VBO ...
-		m_coord[0].x= m_propertyOrigin.x;
-		m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
-		m_coord[1].x= m_propertyOrigin.x;
-		m_coord[1].y= m_propertyOrigin.y;
-		m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[2].y= m_propertyOrigin.y;
-		
-		m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[3].y= m_propertyOrigin.y;
-		m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
-		m_coord[5].x= m_propertyOrigin.x;
-		m_coord[5].y= m_propertyOrigin.x+m_propertySize.y;
+		UpdateVectex();
 	}
 
 }
@@ -230,20 +218,7 @@ void ewol::Shaper::SetSize(etk::Vector2D<float> newSize)
 {
 	if (m_propertySize != newSize) {
 		m_propertySize = newSize;
-		// set coord ==> must be a static VBO ...
-		m_coord[0].x= m_propertyOrigin.x;
-		m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
-		m_coord[1].x= m_propertyOrigin.x;
-		m_coord[1].y= m_propertyOrigin.y;
-		m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[2].y= m_propertyOrigin.y;
-		
-		m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[3].y= m_propertyOrigin.y;
-		m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
-		m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
-		m_coord[5].x= m_propertyOrigin.x;
-		m_coord[5].y= m_propertyOrigin.x+m_propertySize.y;
+		UpdateVectex();
 	}
 }
 

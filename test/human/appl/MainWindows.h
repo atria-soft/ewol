@@ -13,11 +13,13 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/Button.h>
+#include <ewol/widget/Spacer.h>
 
 class MainWindows : public ewol::Windows
 {
 	private:
 		widget::Button*  m_button;
+		widget::Spacer*  m_spacer[4];
 	public:
 		// Constructeur
 		MainWindows(void);

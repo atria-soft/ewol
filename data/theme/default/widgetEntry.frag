@@ -5,6 +5,7 @@ precision mediump int;
 
 struct displayProperty {
 	vec2 size;
+	vec2 origin;
 	vec2 insidePos;
 	vec2 insideSize;
 };
@@ -34,19 +35,22 @@ void main(void) {
 	S_colorFg[1] = vec4(1.0,1.0,1.0,0.4);
 	S_colorFg[2] = vec4(0.0,0.0,1.0,0.1);
 	
+	// prevent origin moving ... 
+	vec2 position = v_position - EW_widgetProperty.origin;
+	
 	float specialBorder = S_sizeBorder+S_sizePadding;
 	vec2  endStart = EW_widgetProperty.size - vec2(S_sizePadding) - vec2(S_sizeBorder);
 	vec2  endStop  = EW_widgetProperty.size - vec2(S_sizePadding);
-	if(    v_position.x>  S_sizePadding
-	    && v_position.y>  S_sizePadding
-	    && v_position.x<= endStop.x
-	    && v_position.y<= endStop.y
+	if(    position.x>  S_sizePadding
+	    && position.y>  S_sizePadding
+	    && position.x<= endStop.x
+	    && position.y<= endStop.y
 	  ) {
 		// inside element
-		if(    v_position.x<= specialBorder
-		    || v_position.y<= specialBorder
-		    || v_position.x>  endStart.x
-		    || v_position.y>  endStart.y
+		if(    position.x<= specialBorder
+		    || position.y<= specialBorder
+		    || position.x>  endStart.x
+		    || position.y>  endStart.y
 		  ) {
 			// border ...
 			gl_FragColor = S_colorBorder;

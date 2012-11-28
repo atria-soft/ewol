@@ -36,6 +36,9 @@ namespace widget {
 			etk::UString                m_labelToggle;        //!< Label to display when toggle mode is set ("" whenit is the same).
 			bool                        m_toggleMode;         //!< The button is able to toggle.
 			bool                        m_value;              //!< Current state of the button.
+			// hover area :
+			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
+			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Constructor
