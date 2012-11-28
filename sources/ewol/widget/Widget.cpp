@@ -183,9 +183,119 @@ void ewol::Widget::MarkToRedraw(void)
 {
 	m_needRegenerateDisplay = true;
 	ewol::widgetManager::MarkDrawingIsNeeded();
-};
+}
 
 
+void ewol::Widget::SetZoom(float newVal)
+{
+	m_zoom = newVal;
+	MarkToRedraw();
+}
+
+float ewol::Widget::GetZoom(void)
+{
+	return m_zoom;
+}
+
+void ewol::Widget::SetOrigin(float x, float y)
+{
+	m_origin.x=x;
+	m_origin.y=y;
+}
+
+etk::Vector2D<float> ewol::Widget::GetOrigin(void)
+{
+	return m_origin;
+}
+
+etk::Vector2D<float> ewol::Widget::RelativePosition(etk::Vector2D<float> pos)
+{
+	pos.x -= m_origin.x;
+	pos.y -= m_origin.y;
+	return pos;
+}
+
+bool ewol::Widget::CalculateMinSize(void)
+{
+	m_minSize.x = m_userMinSize.x;
+	m_minSize.y = m_userMinSize.y;
+	MarkToRedraw();
+	return true;
+}
+
+void ewol::Widget::SetMinSize(float x, float y)
+{
+	m_userMinSize.x = x;
+	m_userMinSize.y = y;
+}
+
+etk::Vector2D<float> ewol::Widget::GetMinSize(void)
+{
+	if (false==IsHide()) {
+		return m_minSize;
+	}
+	return etk::Vector2D<float>(0,0);
+}
+
+etk::Vector2D<float> ewol::Widget::GetSize(void)
+{
+	if (false==IsHide()) {
+		return m_size;
+	}
+	return etk::Vector2D<float>(0,0);
+}
+
+void ewol::Widget::SetExpendX(bool newExpend)
+{
+	m_userExpend.x = newExpend;
+	ewol::RequestUpdateSize();
+	MarkToRedraw();
+}
+
+bool ewol::Widget::CanExpentX(void)
+{
+	if (false==IsHide()) {
+		return m_userExpend.x;
+	}
+	return false;
+}
+
+void ewol::Widget::SetExpendY(bool newExpend)
+{
+	m_userExpend.y = newExpend;
+	ewol::RequestUpdateSize();
+	MarkToRedraw();
+}
+
+bool ewol::Widget::CanExpentY(void)
+{
+	if (false==IsHide()) {
+		return m_userExpend.y;
+	}
+	return false;
+}
+
+void ewol::Widget::SetFillX(bool newFill)
+{
+	m_userFill.x = newFill;
+	MarkToRedraw();
+}
+
+bool ewol::Widget::CanFillX(void)
+{
+	return m_userFill.x;
+}
+
+void ewol::Widget::SetFillY(bool newFill)
+{
+	m_userFill.y = newFill;
+	MarkToRedraw();
+}
+
+bool ewol::Widget::CanFillY(void)
+{
+	return m_userFill.y;
+}
 
 // ----------------------------------------------------------------------------------------------------------------
 // -- Shortcut : management of the shortcut

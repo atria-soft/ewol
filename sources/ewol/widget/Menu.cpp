@@ -178,7 +178,6 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 										myButton->SetExpendX(true);
 										myButton->SetFillX(true);
-										myButton->SetAlignement(widget::TEXT_ALIGN_LEFT);
 										// add it in the widget list
 										mySizerVert->SubWidgetAdd(myButton);
 										m_listElement[jjj]->m_widgetPointer = myButton;

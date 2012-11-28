@@ -30,6 +30,7 @@ namespace ewol
 			int32_t           m_confIdPaddingY;   //!< ConfigFile padding property Y
 			int32_t           m_confIdChangeTime; //!< ConfigFile padding transition time property
 			int32_t           m_confProgramFile;  //!< ConfigFile OpengGl program Name
+			int32_t           m_confImageFile;    //!< ConfigFile OpengGl program Name
 			// OpenGL shaders programs:
 			ewol::Program* m_GLprogram;            //!< pointer on the opengl display program
 			int32_t        m_GLPosition;           //!< openGL id on the element (vertex buffer)
@@ -40,9 +41,13 @@ namespace ewol
 			int32_t        m_GLStateOld;           //!< openGL id on the element (old state displayed)
 			int32_t        m_GLStateNew;           //!< openGL id on the element (new state displayed)
 			int32_t        m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
+			int32_t        m_GLtexID;              //!< openGL id on the element (texture image)
+			// For the Image :
+			ewol::TextureFile* m_resourceTexture; //!< texture resources (for the image)
 			// internal needed data :
 			int32_t              m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
 			int64_t              m_time;                   //!< The last time of the dispaly (-1 if nothing progressing)
+			etk::Vector2D<float> m_propertyOrigin;         //!< widget origin
 			etk::Vector2D<float> m_propertySize;           //!< widget size
 			etk::Vector2D<float> m_propertyInsidePosition; //!< internal subwidget position
 			etk::Vector2D<float> m_propertyInsideSize;     //!< internal subwidget size
@@ -88,6 +93,11 @@ namespace ewol
 			 * @return false No need to request the periodic call.
 			 */
 			bool PeriodicCall(int64_t localTime);
+			/**
+			 * @brief Set the widget origin (needed fot the display)
+			 * @param[in] newOri : the new widget origin
+			 */
+			void SetOrigin(etk::Vector2D<float> newOri);
 			/**
 			 * @brief Set the widget size (needed fot the display)
 			 * @param[in] newSize : the new widget size

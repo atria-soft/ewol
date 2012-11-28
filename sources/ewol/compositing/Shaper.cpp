@@ -32,6 +32,7 @@ ewol::Shaper::Shaper(etk::UString shaperName) :
 	m_GLStateOld(-1),
 	m_GLStateNew(-1),
 	m_GLStateTransition(-1),
+	m_resourceTexture(NULL),
 	m_nextStatusRequested(-1),
 	m_time(-1),
 	m_stateOld(0),
@@ -65,6 +66,10 @@ ewol::Shaper::~Shaper(void)
 		ewol::resource::Release(m_GLprogram);
 		m_GLprogram = NULL;
 	}
+	if (NULL != m_resourceTexture) {
+		ewol::resource::Release(m_resourceTexture);
+		m_resourceTexture = NULL;
+	}
 	if (NULL != m_config) {
 		ewol::resource::Release(m_config);
 		m_config = NULL;
@@ -82,6 +87,7 @@ void ewol::Shaper::LoadProgram(void)
 		m_confIdPaddingY   = m_config->Request("PaddingY");
 		m_confIdChangeTime = m_config->Request("ChangeTime");
 		m_confProgramFile  = m_config->Request("program");
+		m_confImageFile    = m_config->Request("image");
 	}
 	etk::UString basicShaderFile = m_config->GetString(m_confProgramFile);
 	// Get the relative position of the current file ...
@@ -101,6 +107,15 @@ void ewol::Shaper::LoadProgram(void)
 		m_GLStateOld           = m_GLprogram->GetUniform("EW_status.stateOld");
 		m_GLStateNew           = m_GLprogram->GetUniform("EW_status.stateNew");
 		m_GLStateTransition    = m_GLprogram->GetUniform("EW_status.transition");
+		// for the texture ID : 
+		m_GLtexID              = m_GLprogram->GetUniform("EW_texID");
+	}
+	
+	etk::UString basicImageFile = m_config->GetString(m_confImageFile);
+	tmpFilename = file.GetRelativeFolder() + basicImageFile;
+	etk::Vector2D<int32_t> size(64,64);
+	if (true == ewol::resource::Keep(tmpFilename, m_resourceTexture, size) ) {
+		// nothing else to do ...
 	}
 }
 
@@ -121,8 +136,6 @@ void ewol::Shaper::Draw(void)
 	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	// Note : Must be all the time a [-1..1] square ...  
-	// TODO : plop ...
 	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
 	// all entry parameters :
 	m_GLprogram->Uniform2fv(m_GLPropertySize,       1, &m_propertySize.x);
@@ -132,6 +145,10 @@ void ewol::Shaper::Draw(void)
 	m_GLprogram->Uniform1i(m_GLStateNew,        m_stateNew);
 	m_GLprogram->Uniform1f(m_GLStateTransition, m_stateTransition);
 	
+	if (NULL!=m_resourceTexture) {
+		// TextureID
+		m_GLprogram->SetTexture0(m_GLtexID, m_resourceTexture->GetId());
+	}
 	// Request the draw of the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	m_GLprogram->UnUse();
@@ -186,24 +203,47 @@ bool ewol::Shaper::PeriodicCall(int64_t localTime)
 }
 
 
+void ewol::Shaper::SetOrigin(etk::Vector2D<float> newOri)
+{
+	if (m_propertyOrigin != newOri) {
+		m_propertyOrigin = newOri;
+		EWOL_CRITICAL("Set ori : " << m_propertyOrigin);
+		// set coord ==> must be a static VBO ...
+		m_coord[0].x= m_propertyOrigin.x;
+		m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
+		m_coord[1].x= m_propertyOrigin.x;
+		m_coord[1].y= m_propertyOrigin.y;
+		m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[2].y= m_propertyOrigin.y;
+		
+		m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[3].y= m_propertyOrigin.y;
+		m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
+		m_coord[5].x= m_propertyOrigin.x;
+		m_coord[5].y= m_propertyOrigin.x+m_propertySize.y;
+	}
+
+}
+
 void ewol::Shaper::SetSize(etk::Vector2D<float> newSize)
 {
 	if (m_propertySize != newSize) {
 		m_propertySize = newSize;
 		// set coord ==> must be a static VBO ...
-		m_coord[0].x= 0;
-		m_coord[0].y= m_propertySize.y;
-		m_coord[1].x= 0;
-		m_coord[1].y= 0;
-		m_coord[2].x= m_propertySize.x;
-		m_coord[2].y= 0;
+		m_coord[0].x= m_propertyOrigin.x;
+		m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
+		m_coord[1].x= m_propertyOrigin.x;
+		m_coord[1].y= m_propertyOrigin.y;
+		m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[2].y= m_propertyOrigin.y;
 		
-		m_coord[3].x= m_propertySize.x;
-		m_coord[3].y= 0;
-		m_coord[4].x= m_propertySize.x;
-		m_coord[4].y= m_propertySize.y;
-		m_coord[5].x= 0;
-		m_coord[5].y= m_propertySize.y;
+		m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[3].y= m_propertyOrigin.y;
+		m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
+		m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
+		m_coord[5].x= m_propertyOrigin.x;
+		m_coord[5].y= m_propertyOrigin.x+m_propertySize.y;
 	}
 }
 

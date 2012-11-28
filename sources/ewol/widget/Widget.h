@@ -97,13 +97,13 @@ namespace ewol {
 			 * @param[in] newVal newZoom value
 			 * @return ---
 			 */
-			void SetZoom(float newVal) { m_zoom = newVal; MarkToRedraw(); };
+			void SetZoom(float newVal);
 			/**
 			 * @brief Get the zoom property of the widget
 			 * @param ---
 			 * @return the current zoom value
 			 */
-			float GetZoom(void) { return m_zoom; };
+			float GetZoom(void);
 			/**
 			 * @brief Set origin at the widget (must be an parrent widget that set this parameter).
 			 * This represent the absolute origin in the program windows
@@ -111,19 +111,19 @@ namespace ewol {
 			 * @param[in] y Position ot hte vertical origin
 			 * @return ---
 			 */
-			void SetOrigin(float x, float y) { m_origin.x=x; m_origin.y=y;};
+			void SetOrigin(float x, float y);
 			/**
 			 * @brief Get the origin (obsolute position in the windows)
 			 * @param ---
 			 * @return coordonate of the origin requested
 			 */
-			etk::Vector2D<float>  GetOrigin(void) { return m_origin; };
+			etk::Vector2D<float> GetOrigin(void);
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual etk::Vector2D<float>  RelativePosition(etk::Vector2D<float>  pos) { pos.x -= m_origin.x; pos.y -= m_origin.y; return pos; };
+			virtual etk::Vector2D<float> RelativePosition(etk::Vector2D<float>  pos);
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size
@@ -141,74 +141,74 @@ namespace ewol {
 			 * @return ---
 			 */
 			// TODO : Remove bool ==> deprecated ...
-			virtual bool CalculateMinSize(void) {m_minSize.x = m_userMinSize.x; m_minSize.y = m_userMinSize.y; MarkToRedraw(); return true; };
+			virtual bool CalculateMinSize(void);
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] x Set minimum horizontal size (-1 : no requested)
 			 * @param[in] y Set minimum vertical size (-1 : no requested)
 			 * @return ---
 			 */
-			virtual void SetMinSize(float x=-1, float y=-1) { m_userMinSize.x = x; m_userMinSize.y = y; };
+			virtual void SetMinSize(float x=-1, float y=-1);
 			/**
 			 * @brief Get the current calculated min size
 			 * @param ---
 			 * @return re size requested
 			 */
-			etk::Vector2D<float>  GetMinSize(void) { if (false==IsHide()) { return m_minSize; } return etk::Vector2D<float>(0,0); };
+			etk::Vector2D<float> GetMinSize(void);
 			/**
 			 * @brief Get the widget size
 			 * @param ---
 			 * @return Requested size
 			 */
-			etk::Vector2D<float>  GetSize(void) { if (false==IsHide()) { return m_size; } return etk::Vector2D<float>(0,0); };
+			etk::Vector2D<float> GetSize(void);
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
 			 * @return ---
 			 */
-			virtual void SetExpendX(bool newExpend=false) { m_userExpend.x = newExpend; };
+			virtual void SetExpendX(bool newExpend=false);
 			/**
 			 * @brief Get the horizontal expend capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentX(void) {  if (false==IsHide()) { return m_userExpend.x; } return false; };
+			virtual bool CanExpentX(void);
 			/**
 			 * @brief Set the vertical expend capacity
 			 * @param[in] newExpend new Expend state
 			 * @return ---
 			 */
-			virtual void SetExpendY(bool newExpend=false) { m_userExpend.y = newExpend; };
+			virtual void SetExpendY(bool newExpend=false);
 			/**
 			 * @brief Get the vertical expend capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
-			virtual bool CanExpentY(void) {  if (false==IsHide()) { return m_userExpend.y; } return false; };
+			virtual bool CanExpentY(void);
 			/**
 			 * @brief Set the horizontal filling capacity
 			 * @param[in] newFill new fill state
 			 * @return ---
 			 */
-			virtual void SetFillX(bool newFill=false) { m_userFill.x = newFill; };
+			virtual void SetFillX(bool newFill=false);
 			/**
 			 * @brief Get the horizontal filling capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to horizontal filling
 			 */
-			bool CanFillX(void) { return m_userFill.x; };
+			bool CanFillX(void);
 			/**
 			 * @brief Set the vertical filling capacity
 			 * @param[in] newFill new fill state
 			 * @return ---
 			 */
-			virtual void SetFillY(bool newFill=false) { m_userFill.y = newFill; };
+			virtual void SetFillY(bool newFill=false);
 			/**
 			 * @brief Get the vertical filling capabilities
 			 * @param ---
 			 * @return boolean repensent the capacity to vertical filling
 			 */
-			bool CanFillY(void) { return m_userFill.y; };
+			bool CanFillY(void);
 			/**
 			 * @brief Set the widget hidden
 			 * @param ---

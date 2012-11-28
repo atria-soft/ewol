@@ -217,6 +217,34 @@ namespace ewol
 			/**
 			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
+			 *	<br/>
+			 *	<br/><br/><br/>
+			 *	<center>
+			 *		text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+			 *		<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+			 *		an an other thext
+			 *	</center>
+			 *	<br/><br/><br/>
+			 *	<left>
+			 *		plop 1
+			 *	</left>
+			 *	<br/><br/><br/>
+			 *	<right>
+			 *		plop 2
+			 *	</right>
+			 *	<br/><br/><br/>
+			 *	<justify>
+			 *		Un exemple de text
+			 *	</justify>
+			 * </pre>
+			 * @note This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
+			 * @param[in] text The string to display.
+			 * @TODO : implementation not done ....
+			 */
+			void PrintDecorated(etk::UString& text);
+			/**
+			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
+			 * <pre>
 			 *	<html>
 			 *		<body>
 			 *			<br/>
@@ -245,7 +273,7 @@ namespace ewol
 			 * @param[in] text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintDecorated(etk::UString& text);
+			void PrintHTML(etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] text The string to display.
@@ -273,7 +301,7 @@ namespace ewol
 			 * @param[in] alignement mode of alignement for the Text.
 			 * @note The text align in center change of line every display done (even if it was just a char)
 			 */
-			void SetTextAlignement(float startTextpos, float stopTextPos, ewol::Text::aligneMode_te alignement);
+			void SetTextAlignement(float startTextpos, float stopTextPos, ewol::Text::aligneMode_te alignement=ewol::Text::alignDisable);
 			/**
 			 * @brief Disable the alignement system
 			 */

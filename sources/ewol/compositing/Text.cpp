@@ -460,6 +460,15 @@ void ewol::Text::ParseHtmlNode(void* element2)
 
 void ewol::Text::PrintDecorated(etk::UString& text)
 {
+	etk::UString tmpData("<html><body>\n");
+	tmpData+=text;
+	tmpData+="\n</body></html>\n";
+	//EWOL_DEBUG("plop : " << tmpData);
+	PrintHTML(tmpData);
+}
+
+void ewol::Text::PrintHTML(etk::UString& text)
+{
 	TiXmlDocument XmlDocument;
 	
 	// reset parameter :
@@ -485,7 +494,6 @@ void ewol::Text::PrintDecorated(etk::UString& text)
 	HtmlFlush();
 }
 
-
 void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoration>& decoration)
 {
 	if (m_font == NULL) {
@@ -495,7 +503,6 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 	draw::Color tmpFg(m_color);
 	draw::Color tmpBg(m_colorBg);
 	if (m_alignement == ewol::Text::alignDisable) {
-		EWOL_DEBUG("kjhkjhkjhkjhkjh=" << m_cursorPos << "   klj"<< m_selectionStartPos);
 		if (0==m_cursorPos) {
 			m_vectorialDraw.SetPos(m_position);
 			SetColorBg(m_colorCursor);

@@ -26,8 +26,6 @@ void widget::ButtonColor::Init(void)
 {
 	AddEventId(ewolEventButtonColorChange);
 	
-	m_alignement = widget::TEXT_ALIGN_CENTER;
-	
 	#ifdef __TARGET_OS__Android
 		m_padding.y = 12;
 		m_padding.x = 12;
@@ -90,12 +88,6 @@ void widget::ButtonColor::SetValue(bool val)
 	
 }
 
-void widget::ButtonColor::SetAlignement(textAlignement_te typeAlign)
-{
-	m_alignement = typeAlign;
-	MarkToRedraw();
-}
-
 
 bool widget::ButtonColor::GetValue(void)
 {
@@ -125,9 +117,6 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		if (true==m_userFill.x) {
 			tmpSizeX = m_size.x;
 			tmpOriginX = 0;
-			if (m_alignement == widget::TEXT_ALIGN_LEFT) {
-				tmpTextOriginX = m_padding.x;
-			}
 		}
 		if (true==m_userFill.y) {
 			tmpSizeY = m_size.y;

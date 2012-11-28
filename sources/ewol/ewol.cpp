@@ -12,6 +12,7 @@
 
 #include <ewol/renderer/os/gui.h>
 #include <ewol/commandLine.h>
+#include <etk/os/FSNode.h>
 
 #undef __class__
 #define __class__	"ewol"
@@ -19,6 +20,7 @@
 
 int32_t ewol::Run(int32_t argc, const char* argv[])
 {
+	
 	EWOL_DEBUG("Store commangLine in the specific system");
 	ewol::commandLine::Clean();
 	for( int32_t i=1 ; i<argc; i++) {

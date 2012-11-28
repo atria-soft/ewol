@@ -97,7 +97,6 @@ etk::UString widget::Entry::GetValue(void)
 void widget::Entry::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_shaper.Draw();
-	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();
 }
 
@@ -106,7 +105,6 @@ void widget::Entry::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		m_shaper.Clear();
-		m_oObjectDecoration.Clear();
 		m_oObjectText.Clear();
 		UpdateTextPosition();
 		etk::Vector2D<float> padding = m_shaper.GetPadding();
@@ -151,48 +149,7 @@ void widget::Entry::OnRegenerateDisplay(void)
 		}
 		m_oObjectText.Print(m_data);
 		m_oObjectText.SetClippingMode(false);
-		/*
-		m_pos[0] = m_borderSize+2*drawClippingPos.x;
-		m_pos[1] = m_borderSize+2*drawClippingPos.y;
-		m_pos[2] = m_size.x - 2*(m_borderSize+2*drawClippingPos.x);
-		m_pos[3] = m_size.y - 2*(m_borderSize+2*drawClippingPos.y);
-		*/
 		m_shaper.SetSize(m_size);
-
-		/*
-		  Must be rework corectly ==> selection and Cursor are integrated at the system ...
-		int32_t pos1 = m_displayCursorPosSelection;
-		int32_t pos2 = m_displayCursorPos;
-		if(m_displayCursorPosSelection>m_displayCursorPos) {
-			pos2 = m_displayCursorPosSelection;
-			pos1 = m_displayCursorPos;
-		}
-		if(pos1!=pos2) {
-			m_oObjectDecoration.SetColor(m_textColorFg);
-			m_oObjectDecoration.clippingSet(drawClipping);
-			etk::UString tmpDisplay = m_data.Extract(0, pos1);
-			etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
-			tmpDisplay = m_data.Extract(0, pos2);
-			etk::Vector2D<int32_t> maxSize = m_oObjectText.GetSize(tmpDisplay);
-			
-			int32_t XPos    = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
-			int32_t XPosEnd = maxSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
-			XPos    = etk_avg(m_borderSize + 2*m_paddingSize, XPos,    m_size.x - 2*m_paddingSize );
-			XPosEnd = etk_avg(m_borderSize + 2*m_paddingSize, XPosEnd, m_size.x - 2*m_paddingSize );
-			m_oObjectDecoration.SetColor(0x4444FFAA);
-			m_oObjectDecoration.Rectangle( XPos, tmpTextOriginY, XPosEnd-XPos, maxSize.y);
-			m_oObjectDecoration.clippingDisable();
-		}
-		if (true == m_displayCursor) {
-			m_oObjectDecoration.SetColor(m_textColorFg);
-			etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
-			etk::Vector2D<int32_t> minSize = m_oObjectText.GetSize(tmpDisplay);
-			int32_t XCursorPos = minSize.x + m_borderSize + 2*m_paddingSize + m_displayStartPosition;
-			if (XCursorPos >= m_borderSize + 2*m_paddingSize) {
-				m_oObjectDecoration.Line(XCursorPos, tmpTextOriginY, XCursorPos, tmpTextOriginY + minSize.y, 1);
-			}
-		}
-		*/
 	}
 }
 

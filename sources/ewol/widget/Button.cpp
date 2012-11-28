@@ -16,32 +16,32 @@ extern const char * const ewolEventButtonDown       = "ewol-button-down";
 extern const char * const ewolEventButtonUp         = "ewol-button-up";
 extern const char * const ewolEventButtonEnter      = "ewol-button-enter";
 extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
+extern const char * const ewolEventButtonValue      = "ewol-button-value";
 
 #undef __class__
 #define __class__	"Button"
 
 // DEFINE for the shader display system :
-#define STATUS_NORMAL    (0)
+#define STATUS_UP        (0)
 #define STATUS_HOVER     (2)
 #define STATUS_PRESSED   (1)
 #define STATUS_DOWN      (3)
 
 
 widget::Button::Button(etk::UString newLabel) :
-	m_shaper("THEME:GUI:widgetButton.conf")
+	m_shaper("THEME:GUI:widgetButton.conf"),
+	m_label(newLabel),
+	m_toggleMode(false),
+	m_value(false)
 {
-	m_label = newLabel;
-	
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
 	AddEventId(ewolEventButtonUp);
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
-	m_alignement = widget::TEXT_ALIGN_CENTER;
+	AddEventId(ewolEventButtonValue);
 	
-	m_textColorFg = draw::color::black;
-	
-	m_shaper.ChangeStatusIn(STATUS_NORMAL);
+	m_shaper.ChangeStatusIn(STATUS_UP);
 	
 	SetCanHaveFocus(true);
 	// Limit event at 1:
@@ -70,8 +70,14 @@ void widget::Button::SetImageToggle(etk::UString imageName)
 bool widget::Button::CalculateMinSize(void)
 {
 	etk::Vector2D<float> padding = m_shaper.GetPadding();
-	
 	etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
+	if(    true == m_toggleMode
+	    && m_labelToggle.Size()!=0) {
+		etk::Vector3D<int32_t> minSizeToggle = m_displayText.CalculateSize(m_labelToggle);
+		minSize.x = etk_max(minSize.x, minSizeToggle.x);
+		minSize.y = etk_max(minSize.y, minSizeToggle.y);
+		minSize.z = etk_max(minSize.z, minSizeToggle.z);
+	}
 	m_minSize.x = padding.x*2 + minSize.x;
 	m_minSize.y = padding.y*2 + minSize.y;
 	// Add the image element ...
@@ -79,7 +85,6 @@ bool widget::Button::CalculateMinSize(void)
 	    || true == m_displayImageToggle.HasSources()) {
 		m_minSize.x += padding.x + minSize.y;
 	}
-	
 	MarkToRedraw();
 	return true;
 }
@@ -91,29 +96,53 @@ void widget::Button::SetLabel(etk::UString newLabel)
 	MarkToRedraw();
 }
 
-void widget::Button::SetValue(bool val)
+etk::UString widget::Button::GetLabel(void)
 {
-	
+	return m_label;
 }
 
-void widget::Button::SetAlignement(textAlignement_te typeAlign)
+void widget::Button::SetLabelToggle(etk::UString newLabel)
 {
-	m_alignement = typeAlign;
+	m_labelToggle = newLabel;
 	MarkToRedraw();
 }
 
+etk::UString widget::Button::GetLabelToggle(void)
+{
+	return m_labelToggle;
+}
+
+void widget::Button::SetValue(bool val)
+{
+	if (m_value != val) {
+		m_value = val;
+		MarkToRedraw();
+	}
+}
 
 bool widget::Button::GetValue(void)
 {
-	return false;
+	return m_value;
 }
 
+void widget::Button::SetToggleMode(bool togg)
+{
+	if (m_toggleMode != togg) {
+		m_toggleMode = togg;
+		if (m_value == true) {
+			m_value = false;
+			// TODO : Change display and send event ...
+		}
+		MarkToRedraw();
+	}
+}
 
 void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_shaper.Draw();
 #warning generate the Toggle
-	if (true) {
+	if(    false == m_toggleMode
+	    || false == m_value) {
 		m_displayImage.Draw();
 	} else {
 		m_displayImageToggle.Draw();
@@ -131,8 +160,8 @@ void widget::Button::OnRegenerateDisplay(void)
 		m_displayImageToggle.Clear();
 		m_shaper.Clear();
 		
-		int32_t tmpSizeX = m_minSize.x;
-		int32_t tmpSizeY = m_minSize.y;
+		etk::Vector2D<int32_t> localSize = m_minSize;
+		
 		etk::Vector3D<float> tmpOrigin((float)((m_size.x - m_minSize.x) / 2.0),
 		                               (float)((m_size.y - m_minSize.y) / 2.0),
 		                               (float)(0.0));
@@ -142,20 +171,17 @@ void widget::Button::OnRegenerateDisplay(void)
 		                                   (float)(0.0));
 		
 		if (true==m_userFill.x) {
-			tmpSizeX = m_size.x;
+			localSize.x = m_size.x;
 			tmpOrigin.x = 0.0;
-			if (m_alignement == widget::TEXT_ALIGN_LEFT) {
-				tmpTextOrigin.x = padding.x;
-			}
 		}
 		if (true==m_userFill.y) {
-			tmpSizeY = m_size.y;
+			localSize.y = m_size.y;
 			tmpOrigin.y = 0.0;
 		}
 		tmpOrigin.x += padding.x;
-		tmpOrigin.x += padding.y;
-		tmpSizeX -= 2*padding.x;
-		tmpSizeY -= 2*padding.y;
+		tmpOrigin.y += padding.y;
+		localSize.x -= 2*padding.x;
+		localSize.y -= 2*padding.y;
 		
 		etk::Vector2D<float> textPos(tmpTextOrigin.x, tmpTextOrigin.x);
 		
@@ -164,10 +190,14 @@ void widget::Button::OnRegenerateDisplay(void)
 			etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
 			etk::Vector3D<int32_t> imagePos(tmpTextOrigin.x-padding.x/4, tmpTextOrigin.y-padding.x/4, 0);
 			etk::Vector2D<int32_t> imageSize(minSize.y+padding.x/2, minSize.y+padding.x/2);
-			m_displayImage.SetPos(imagePos);
-			m_displayImage.Print(imageSize);
-			m_displayImageToggle.SetPos(imagePos);
-			m_displayImageToggle.Print(imageSize);
+			if(    false==m_toggleMode
+			    || false==m_value) {
+				m_displayImage.SetPos(imagePos);
+				m_displayImage.Print(imageSize);
+			} else {
+				m_displayImageToggle.SetPos(imagePos);
+				m_displayImageToggle.Print(imageSize);
+			}
 			// update the text position ...
 			tmpTextOrigin.x += padding.x/2 + minSize.y;
 		}
@@ -179,13 +209,21 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		// clean the element
 		m_displayText.Clear();
+		m_displayText.SetTextAlignement(0, localSize.x + 2*padding.x);
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
-		m_displayText.Print(m_label);
-		m_displayText.Translate(tmpTextOrigin);
+		if(    false == m_toggleMode
+		    || false == m_value) {
+			m_displayText.PrintDecorated(m_label);
+		} else {
+			m_displayText.PrintDecorated(m_labelToggle);
+		}
+		m_displayText.Translate(tmpOrigin);
 		
-		
-		m_shaper.SetSize(m_size);
-		m_shaper.SetInsidePos(textPos);
+		//m_shaper.SetOrigin(etk::Vector2D<float>(tmpTextOrigin.x-padding.x, tmpTextOrigin.y-padding.y) );
+		localSize.x += 2*padding.x;
+		localSize.y += 2*padding.y;
+		m_shaper.SetSize(localSize);
+		m_shaper.SetInsidePos(etk::Vector2D<float>(tmpTextOrigin.x, tmpTextOrigin.y) );
 		etk::Vector3D<float> tmpp = m_displayText.CalculateSize(m_label);
 		etk::Vector2D<float> tmpp2(tmpp.x, tmpp.y);
 		m_shaper.SetInsideSize(tmpp2);
@@ -200,7 +238,7 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 	if(ewol::keyEvent::statusEnter == typeEvent) {
 		ChangeStatusIn(STATUS_HOVER);
 	}else if(ewol::keyEvent::statusLeave == typeEvent) {
-		ChangeStatusIn(STATUS_NORMAL);
+		ChangeStatusIn(STATUS_UP);
 	}
 	if (1 == IdInput) {
 		if(ewol::keyEvent::statusDown == typeEvent) {
@@ -210,11 +248,19 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 		}
 		if(ewol::keyEvent::statusUp == typeEvent) {
 			GenerateEventId(ewolEventButtonUp);
-			ChangeStatusIn(STATUS_NORMAL);
+			ChangeStatusIn(STATUS_UP);
 			MarkToRedraw();
 		}
 		if(ewol::keyEvent::statusSingle == typeEvent) {
+			// inverse value :
+			m_value = (m_value)?false:true;
 			GenerateEventId(ewolEventButtonPressed);
+			GenerateEventId(ewolEventButtonValue, m_value);
+			if(    false == m_toggleMode
+			    && true == m_value) {
+				m_value = false;
+				GenerateEventId(ewolEventButtonValue, m_value);
+			}
 			MarkToRedraw();
 			return true;
 		}

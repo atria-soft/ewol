@@ -40,8 +40,6 @@ namespace widget {
 		private:
 			ewol::Shaper               m_shaper;
 			ewol::Text                 m_oObjectText;               //!< text display
-			// TODO : remove this one : ...
-			ewol::Drawing              m_oObjectDecoration;         //!< background display
 			etk::UString               m_data;                      //!< sting that must be displayed
 			draw::Color                m_textColorFg;               //!< Text color
 			draw::Color                m_textColorBg;               //!< Background color

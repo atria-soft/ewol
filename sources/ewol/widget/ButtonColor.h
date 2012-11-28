@@ -34,12 +34,10 @@ namespace widget {
 			etk::UString   GetLabel(void) {return m_label;};
 			void           SetValue(bool val);
 			bool           GetValue(void);
-			void           SetAlignement(textAlignement_te typeAlign);
 			void           SetPadding(etk::Vector2D<float>  newPadding);
 		private:
 			ewol::Text                 m_oObjectText;
 			ewol::Drawing              m_oObjectDecoration;
-			textAlignement_te          m_alignement;
 			etk::Vector2D<float>       m_padding;
 			etk::UString               m_label;
 			draw::Color                m_textColorFg;    //!< Text color
