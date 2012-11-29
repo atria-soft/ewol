@@ -49,6 +49,11 @@ namespace ewol
 		private:
 			ewol::Drawing        m_vectorialDraw;      //!< This is used to draw background selection and other things ...
 		private:
+			int32_t              m_nbCharDisplayed;    //!< prevent some error in calculation size.
+			etk::Vector3D<float> m_sizeDisplayStart;   //!< The start windows of the display.
+			etk::Vector3D<float> m_sizeDisplayStop;    //!< The end windows of the display.
+			bool                 m_needDisplay;        //!< This just need the display and not the size rendering.
+			
 			etk::Vector3D<float> m_position;           //!< The current position to draw
 			etk::Vector3D<float> m_clippingPosStart;   //!< Clipping start position
 			etk::Vector3D<float> m_clippingPosStop;    //!< Clipping stop position
@@ -116,9 +121,13 @@ namespace ewol
 			 */
 			void Draw(void);
 			/**
-			 * @brief Clear alll tre registered element in the current element
+			 * @brief Clear all the registered element in the current element
 			 */
 			void Clear(void);
+			/**
+			 * @brief Clear all the intermediate result detween 2 prints
+			 */
+			void Reset(void);
 			/**
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
@@ -273,7 +282,7 @@ namespace ewol
 			 * @param[in] text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintHTML(etk::UString& text);
+			void PrintHTML(etk::UString text);
 			/**
 			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] text The string to display.
@@ -289,11 +298,13 @@ namespace ewol
 			 * @brief This Generate the line return ==> it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 			 */
 			void ForceLineReturn(void);
+		private:
 			/**
-			 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include)
-			 * @param[in] element the tynyXML element : TiXmlNode*
+			 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
+			 * @param[in] element the tynyXML element : TiXmlNode* .
 			 */
-			void ParseHtmlNode( void* element);
+			void ParseHtmlNode(void* element);
+		public:
 			/**
 			 * @brief This generate the possibility to generate the big text property
 			 * @param[in] startTextpos The x text start position of the display.
@@ -311,6 +322,18 @@ namespace ewol
 			 * @return the curent alignement type
 			 */
 			ewol::Text::aligneMode_te GetAlignement(void);
+			/**
+			 * @brief Calculate a theoric text size
+			 * @param[in] text The string to calculate dimention.
+			 * @return The theoric size used.
+			 */
+			etk::Vector3D<float> CalculateSizeHTML(const etk::UString& text);
+			/**
+			 * @brief Calculate a theoric text size
+			 * @param[in] text The string to calculate dimention.
+			 * @return The theoric size used.
+			 */
+			etk::Vector3D<float> CalculateSizeDecorated(const etk::UString& text);
 			/**
 			 * @brief Calculate a theoric text size
 			 * @param[in] text The string to calculate dimention.

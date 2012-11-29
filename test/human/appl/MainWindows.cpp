@@ -55,17 +55,17 @@ MainWindows::MainWindows(void)
 			return;
 		}
 		mySizerVert->SubWidgetAdd(mySizerHori);
-			myButton = new widget::Button("<center>Expend X (false)</center>");
+			myButton = new widget::Button("<center>Expend X <br/> (false)</center>");
 			if (NULL != myButton) {
 				myButton->SetToggleMode(true);
-				myButton->SetLabelToggle("<center>Expend X (true)</center>");
+				myButton->SetLabelToggle("<center>Expend X <br/> (true)</center>");
 				myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeExpendX);
 				mySizerHori->SubWidgetAdd(myButton);
 			}
-			myButton = new widget::Button("<center>Expend Y (false)</center>");
+			myButton = new widget::Button("<center>Expend Y <br/> (false)</center>");
 			if (NULL != myButton) {
 				myButton->SetToggleMode(true);
-				myButton->SetLabelToggle("<center>Expend Y (true)</center>");
+				myButton->SetLabelToggle("<center>Expend Y <br/> (true)</center>");
 				myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeExpendY);
 				mySizerHori->SubWidgetAdd(myButton);
 			}
@@ -121,7 +121,7 @@ MainWindows::MainWindows(void)
 				mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
 			}
 			
-			m_button = new widget::Button("My <font color=\"#FF0000\">Button</font>");
+			m_button = new widget::Button("My <font color=\"#FF0000\">Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...");
 			if (NULL != m_button) {
 				m_button->SetExpendX(false);
 				m_button->SetExpendY(false);

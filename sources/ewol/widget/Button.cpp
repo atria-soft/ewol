@@ -70,10 +70,12 @@ void widget::Button::SetImageToggle(etk::UString imageName)
 bool widget::Button::CalculateMinSize(void)
 {
 	etk::Vector2D<float> padding = m_shaper.GetPadding();
-	etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
+	m_displayText.Clear();
+	etk::Vector3D<int32_t> minSize = m_displayText.CalculateSizeDecorated(m_label);
 	if(    true == m_toggleMode
 	    && m_labelToggle.Size()!=0) {
-		etk::Vector3D<int32_t> minSizeToggle = m_displayText.CalculateSize(m_labelToggle);
+		m_displayText.Clear();
+		etk::Vector3D<int32_t> minSizeToggle = m_displayText.CalculateSizeDecorated(m_labelToggle);
 		minSize.x = etk_max(minSize.x, minSizeToggle.x);
 		minSize.y = etk_max(minSize.y, minSizeToggle.y);
 		minSize.z = etk_max(minSize.z, minSizeToggle.z);
@@ -155,40 +157,55 @@ void widget::Button::OnRegenerateDisplay(void)
 	if (true == NeedRedraw()) {
 		
 		etk::Vector2D<float> padding = m_shaper.GetPadding();
+		// to know the size of one Line : 
+		etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize('A');
+		etk::Vector3D<int32_t> curentTextSize;
+		if(    false == m_toggleMode
+		    || false == m_value) {
+			curentTextSize = m_displayText.CalculateSizeDecorated(m_label);
+		} else {
+			curentTextSize = m_displayText.CalculateSizeDecorated(m_labelToggle);
+		}
 		
 		m_displayImage.Clear();
 		m_displayImageToggle.Clear();
 		m_shaper.Clear();
+		m_displayText.Clear();
 		
 		etk::Vector2D<int32_t> localSize = m_minSize;
 		
-		etk::Vector3D<float> tmpOrigin((float)((m_size.x - m_minSize.x) / 2.0),
-		                               (float)((m_size.y - m_minSize.y) / 2.0),
-		                               (float)(0.0));
+		etk::Vector3D<float> tmpOrigin((m_size.x - m_minSize.x) / 2.0,
+		                               (m_size.y - m_minSize.y) / 2.0,
+		                               0.0);
 		                               
 		// no change for the text orogin : 
-		etk::Vector3D<float> tmpTextOrigin((float)((m_size.x - m_minSize.x) / 2.0 + padding.x),
-		                                   (float)((m_size.y - m_minSize.y) / 2.0 + padding.y),
-		                                   (float)(0.0));
+		etk::Vector3D<float> tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
+		                                   (m_size.y - m_minSize.y) / 2.0,
+		                                   0.0);
 		
 		if (true==m_userFill.x) {
 			localSize.x = m_size.x;
 			tmpOrigin.x = 0.0;
+			tmpTextOrigin.x = 0.0;
 		}
 		if (true==m_userFill.y) {
 			localSize.y = m_size.y;
-			//tmpOrigin.y = 0.0;
 		}
 		tmpOrigin.x += padding.x;
 		tmpOrigin.y += padding.y;
+		tmpTextOrigin.x += padding.x;
+		tmpTextOrigin.y += padding.y;
 		localSize.x -= 2*padding.x;
 		localSize.y -= 2*padding.y;
 		
-		etk::Vector2D<float> textPos(tmpTextOrigin.x, tmpTextOrigin.x);
+		tmpTextOrigin.y += (m_minSize.y-2*padding.y) - minSize.y;
+		
+		etk::Vector2D<float> textPos(tmpTextOrigin.x, tmpTextOrigin.y);
 		
 		if(    true == m_displayImage.HasSources()
 		    || true == m_displayImageToggle.HasSources()) {
-			etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize(m_label);
+			// TODO : Remove this size calculation ==> can regenrate siomme errro
+			etk::Vector3D<int32_t> minSize = m_displayText.CalculateSizeDecorated(m_label);
 			etk::Vector3D<int32_t> imagePos(tmpTextOrigin.x-padding.x/4, tmpTextOrigin.y-padding.x/4, 0);
 			etk::Vector2D<int32_t> imageSize(minSize.y+padding.x/2, minSize.y+padding.x/2);
 			if(    false==m_toggleMode
@@ -203,14 +220,15 @@ void widget::Button::OnRegenerateDisplay(void)
 			tmpTextOrigin.x += padding.x/2 + minSize.y;
 		}
 		
-		etk::Vector3D<float> drawClippingPos(0.0, 0.0, -0.5);
-		etk::Vector3D<float> drawClippingSize((float)(m_size.x - 2*padding.x),
-		                                      (float)(m_size.y - 2*padding.y),
+		etk::Vector3D<float> drawClippingPos(padding.x, padding.y, -0.5);
+		etk::Vector3D<float> drawClippingSize((float)(m_size.x - padding.x),
+		                                      (float)(m_size.y - padding.y),
 		                                      (float)1.0);
 		
 		// clean the element
-		m_displayText.Clear();
-		m_displayText.SetTextAlignement(0, localSize.x + 2*padding.x, ewol::Text::alignCenter);
+		m_displayText.Reset();
+		m_displayText.SetPos(tmpTextOrigin);
+		m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
 		if(    false == m_toggleMode
 		    || false == m_value) {
@@ -218,7 +236,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		} else {
 			m_displayText.PrintDecorated(m_labelToggle);
 		}
-		m_displayText.Translate(tmpOrigin);
+		//m_displayText.Translate(tmpOrigin);
 		
 		
 		if (true==m_userFill.y) {

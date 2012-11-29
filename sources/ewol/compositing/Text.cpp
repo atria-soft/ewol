@@ -165,14 +165,21 @@ void ewol::Text::Clear(void)
 	m_coordTex.Clear();
 	m_coordColor.Clear();
 	// Reset temporal variables :
+	Reset();
+}
+
+void ewol::Text::Reset(void)
+{
 	m_position = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
 	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_sizeDisplayStart = m_position;
+	m_sizeDisplayStop = m_position;
+	m_nbCharDisplayed = 0;
 	m_clippingEnable = false;
 	m_color = draw::color::black;
 	m_colorBg = draw::color::none;
 	m_mode = ewol::font::Regular;
-	m_kerning = false;
 	m_previousCharcode = 0;
 	m_startTextpos = 0;
 	m_stopTextPos = 0;
@@ -181,6 +188,8 @@ void ewol::Text::Clear(void)
 	m_selectionStartPos = -100;
 	m_cursorPos = -100;
 	m_htmlDecoration.Clear();
+	m_needDisplay = true;
+	m_nbCharDisplayed = 0;
 }
 
 
@@ -192,9 +201,33 @@ etk::Vector3D<float> ewol::Text::GetPos(void)
 
 void ewol::Text::SetPos(etk::Vector3D<float> pos)
 {
+	// check min max for display area
+	if (m_nbCharDisplayed != 0) {
+		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
+		m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
+		m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
+		m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+	}
+	// update position
 	m_position = pos;
 	m_previousCharcode = 0;
 	m_vectorialDraw.SetPos(m_position);
+	// update min max of the display area:
+	if (m_nbCharDisplayed == 0) {
+		m_sizeDisplayStart = m_position;
+		m_sizeDisplayStop = m_position;
+		m_sizeDisplayStop.y += m_font->GetHeight(m_mode);
+		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+	} else {
+		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+		m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
+		m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
+		m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
+		m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
+	}
 }
 
 
@@ -380,80 +413,85 @@ void ewol::Text::Print(const etk::UString& text)
 
 void ewol::Text::ParseHtmlNode(void* element2)
 {
+	// get the static real pointer
 	TiXmlNode* element = static_cast<TiXmlNode*>(element2);
 	if (NULL != element) {
-		/*const char *myData = element->ToElement()->GetText();
-		if (NULL != myData) {
-			etk::UString outputData(myData);
-			Print(myData);
-		} else {
-		*/
-			for (TiXmlNode * child = element->FirstChild(); NULL != child ; child = child->NextSibling() ) {
-				if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
-					// nothing to do ...
-				} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
-					HtmlAddData(child->Value() );
-				} else if (!strcmp(child->Value(), "br")) {
-					HtmlFlush();
-					ForceLineReturn();
-				} else if (!strcmp(child->Value(), "font")) {
-					TextDecoration tmpDeco = m_htmlDecoTmp;
-					const char *colorValue = child->ToElement()->Attribute("color");
-					if (NULL != colorValue) {
-						draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
-					}
-					colorValue = child->ToElement()->Attribute("colorBg");
-					if (NULL != colorValue) {
-						draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
-					}
-					ParseHtmlNode(child);
-					m_htmlDecoTmp = tmpDeco;
-				} else if (!strcmp(child->Value(), "b")) {
-					TextDecoration tmpDeco = m_htmlDecoTmp;
-					if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-						m_htmlDecoTmp.m_mode = ewol::font::Bold;
-					} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
-						m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
-					} 
-					ParseHtmlNode(child);
-					m_htmlDecoTmp = tmpDeco;
-				} else if (!strcmp(child->Value(), "i")) {
-					TextDecoration tmpDeco = m_htmlDecoTmp;
-					if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-						m_htmlDecoTmp.m_mode = ewol::font::Italic;
-					} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
-						m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
-					} 
-					ParseHtmlNode(child);
-					m_htmlDecoTmp = tmpDeco;
-				} else if (!strcmp(child->Value(), "u")) {
-					ParseHtmlNode(child);
-				} else if (!strcmp(child->Value(), "p")) {
-					HtmlFlush();
-					m_alignement = ewol::Text::alignLeft;
-					ForceLineReturn();
-					ParseHtmlNode(child);
-					ForceLineReturn();
-				} else if (!strcmp(child->Value(), "center")) {
-					HtmlFlush();
-					m_alignement = ewol::Text::alignCenter;
-					ParseHtmlNode(child);
-				} else if (!strcmp(child->Value(), "left")) {
-					HtmlFlush();
-					m_alignement = ewol::Text::alignLeft;
-					ParseHtmlNode(child);
-				} else if (!strcmp(child->Value(), "right")) {
-					HtmlFlush();
-					m_alignement = ewol::Text::alignRight;
-					ParseHtmlNode(child);
-				} else if (!strcmp(child->Value(), "justify")) {
-					HtmlFlush();
-					m_alignement = ewol::Text::alignJustify;
-					ParseHtmlNode(child);
-				} else {
-					EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
+		for (TiXmlNode * child = element->FirstChild(); NULL != child ; child = child->NextSibling() ) {
+			if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
+				// nothing to do ...
+			} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
+				HtmlAddData(child->Value() );
+				EWOL_VERBOSE("XML Add : " << child->Value());
+			} else if (!strcmp(child->Value(), "br")) {
+				HtmlFlush();
+				EWOL_VERBOSE("XML flush & newLine");
+				ForceLineReturn();
+			} else if (!strcmp(child->Value(), "font")) {
+				EWOL_VERBOSE("XML Font ...");
+				TextDecoration tmpDeco = m_htmlDecoTmp;
+				const char *colorValue = child->ToElement()->Attribute("color");
+				if (NULL != colorValue) {
+					draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
 				}
-			//}
+				colorValue = child->ToElement()->Attribute("colorBg");
+				if (NULL != colorValue) {
+					draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
+				}
+				ParseHtmlNode(child);
+				m_htmlDecoTmp = tmpDeco;
+			} else if (!strcmp(child->Value(), "b")) {
+				EWOL_VERBOSE("XML b ...");
+				TextDecoration tmpDeco = m_htmlDecoTmp;
+				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+					m_htmlDecoTmp.m_mode = ewol::font::Bold;
+				} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
+					m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+				} 
+				ParseHtmlNode(child);
+				m_htmlDecoTmp = tmpDeco;
+			} else if (!strcmp(child->Value(), "i")) {
+				EWOL_VERBOSE("XML i ...");
+				TextDecoration tmpDeco = m_htmlDecoTmp;
+				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+					m_htmlDecoTmp.m_mode = ewol::font::Italic;
+				} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
+					m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+				} 
+				ParseHtmlNode(child);
+				m_htmlDecoTmp = tmpDeco;
+			} else if (!strcmp(child->Value(), "u")) {
+				EWOL_VERBOSE("XML u ...");
+				ParseHtmlNode(child);
+			} else if (!strcmp(child->Value(), "p")) {
+				EWOL_VERBOSE("XML p ...");
+				HtmlFlush();
+				m_alignement = ewol::Text::alignLeft;
+				ForceLineReturn();
+				ParseHtmlNode(child);
+				ForceLineReturn();
+			} else if (!strcmp(child->Value(), "center")) {
+				EWOL_VERBOSE("XML center ...");
+				HtmlFlush();
+				m_alignement = ewol::Text::alignCenter;
+				ParseHtmlNode(child);
+			} else if (!strcmp(child->Value(), "left")) {
+				EWOL_VERBOSE("XML left ...");
+				HtmlFlush();
+				m_alignement = ewol::Text::alignLeft;
+				ParseHtmlNode(child);
+			} else if (!strcmp(child->Value(), "right")) {
+				EWOL_VERBOSE("XML right ...");
+				HtmlFlush();
+				m_alignement = ewol::Text::alignRight;
+				ParseHtmlNode(child);
+			} else if (!strcmp(child->Value(), "justify")) {
+				EWOL_VERBOSE("XML justify ...");
+				HtmlFlush();
+				m_alignement = ewol::Text::alignJustify;
+				ParseHtmlNode(child);
+			} else {
+				EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
+			}
 		}
 	}
 }
@@ -467,7 +505,7 @@ void ewol::Text::PrintDecorated(etk::UString& text)
 	PrintHTML(tmpData);
 }
 
-void ewol::Text::PrintHTML(etk::UString& text)
+void ewol::Text::PrintHTML(etk::UString text)
 {
 	TiXmlDocument XmlDocument;
 	
@@ -490,7 +528,7 @@ void ewol::Text::PrintHTML(etk::UString& text)
 		return;
 	}
 	TiXmlElement* bodyNode = root->FirstChildElement( "body" );
-	ParseHtmlNode(bodyNode);
+	(void)ParseHtmlNode(bodyNode);
 	HtmlFlush();
 }
 
@@ -503,10 +541,12 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 	draw::Color tmpFg(m_color);
 	draw::Color tmpBg(m_colorBg);
 	if (m_alignement == ewol::Text::alignDisable) {
-		if (0==m_cursorPos) {
-			m_vectorialDraw.SetPos(m_position);
-			SetColorBg(m_colorCursor);
-			PrintCursor(false);
+		if (true == m_needDisplay) {
+			if (0==m_cursorPos) {
+				m_vectorialDraw.SetPos(m_position);
+				SetColorBg(m_colorCursor);
+				PrintCursor(false);
+			}
 		}
 		// note this is faster when nothing is requested ...
 		for(int32_t iii=0; iii<text.Size(); iii++) {
@@ -515,34 +555,41 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				tmpBg = decoration[iii].m_colorBg;
 				SetFontMode(decoration[iii].m_mode);
 			}
-			if(    (    m_selectionStartPos-1<iii
-			         && iii <=m_cursorPos-1)
-			    || (    m_selectionStartPos-1>=iii
-			         && iii > m_cursorPos-1) ) {
-				SetColor(  0x000000FF);
-				SetColorBg(m_colorSelection);
-			} else {
-				SetColor(  tmpFg);
-				SetColorBg(tmpBg);
+			if (true == m_needDisplay) {
+				if(    (    m_selectionStartPos-1<iii
+				         && iii <=m_cursorPos-1)
+				    || (    m_selectionStartPos-1>=iii
+				         && iii > m_cursorPos-1) ) {
+					SetColor(  0x000000FF);
+					SetColorBg(m_colorSelection);
+				} else {
+					SetColor(  tmpFg);
+					SetColorBg(tmpBg);
+				}
 			}
-			if (m_colorBg.a != 0) {
+			if(    true == m_needDisplay
+			    && m_colorBg.a != 0) {
 				etk::Vector3D<float> pos = m_position;
 				m_vectorialDraw.SetPos(pos);
 				Print(text[iii]);
 				float fontHeigh = m_font->GetHeight(m_mode);
 				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+				m_nbCharDisplayed++;
 			} else {
 				Print(text[iii]);
+				m_nbCharDisplayed++;
 			}
-			if (iii==m_cursorPos-1) {
-				m_vectorialDraw.SetPos(m_position);
-				SetColorBg(m_colorCursor);
-				PrintCursor(false);
+			if (true == m_needDisplay) {
+				if (iii==m_cursorPos-1) {
+					m_vectorialDraw.SetPos(m_position);
+					SetColorBg(m_colorCursor);
+					PrintCursor(false);
+				}
 			}
 		}
 	} else {
 		// special start case at the right of the endpoint :
-		if (m_stopTextPos <= m_position.x) {
+		if (m_stopTextPos < m_position.x) {
 			ForceLineReturn();
 		}
 		float basicSpaceWidth = CalculateSize(' ').x;
@@ -566,20 +613,25 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 					// nothing to do ...
 					break;
 				case ewol::Text::alignRight:
-					// Move the first char at the right :
-					SetPos(etk::Vector3D<float>(m_position.x + freeSpace,
-					                            m_position.y,
-					                            m_position.z) );
+					if (m_needDisplay == true) {
+						// Move the first char at the right :
+						SetPos(etk::Vector3D<float>(m_position.x + freeSpace,
+						                            m_position.y,
+						                            m_position.z) );
+					}
 					break;
 				case ewol::Text::alignCenter:
-					// Move the first char at the right :
-					SetPos(etk::Vector3D<float>(m_position.x + freeSpace/2,
-					                            m_position.y,
-					                            m_position.z) );
+					if (m_needDisplay == true) {
+						// Move the first char at the right :
+						SetPos(etk::Vector3D<float>(m_position.x + freeSpace/2,
+						                            m_position.y,
+						                            m_position.z) );
+					}
 					break;
 			}
 			// display all the elements
-			if (0==m_cursorPos) {
+			if(    true == m_needDisplay
+			    && 0==m_cursorPos) {
 				m_vectorialDraw.SetPos(m_position);
 				SetColorBg(m_colorCursor);
 				PrintCursor(false);
@@ -592,42 +644,53 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 					tmpBg = decoration[iii].m_colorBg;
 					SetFontMode(decoration[iii].m_mode);
 				}
-				if(    (    m_selectionStartPos-1<iii
-				         && iii <=m_cursorPos-1)
-				    || (    m_selectionStartPos-1>=iii
-				         && iii > m_cursorPos-1) ) {
-					SetColor(  0x000000FF);
-					SetColorBg(m_colorSelection);
-				} else {
-					SetColor(  tmpFg);
-					SetColorBg(tmpBg);
+				if (true == m_needDisplay) {
+					if(    (    m_selectionStartPos-1<iii
+					         && iii <=m_cursorPos-1)
+					    || (    m_selectionStartPos-1>=iii
+					         && iii > m_cursorPos-1) ) {
+						SetColor(  0x000000FF);
+						SetColorBg(m_colorSelection);
+					} else {
+						SetColor(  tmpFg);
+						SetColorBg(tmpBg);
+					}
 				}
 				// special for the justify mode
 				if (text[iii] == (uniChar_t)' ') {
-					if (m_colorBg.a != 0) {
+					//EWOL_DEBUG(" generateString : \" \"");
+					if(    true == m_needDisplay
+					    && m_colorBg.a != 0) {
 						m_vectorialDraw.SetPos(m_position);
 					}
 					// Must generate a dynamic space : 
 					SetPos(etk::Vector3D<float>(m_position.x + interpolation,
 					                            m_position.y,
 					                            m_position.z) );
-					if (m_colorBg.a != 0) {
+					if(    true == m_needDisplay
+					    && m_colorBg.a != 0) {
 						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
-					if (m_colorBg.a != 0) {
+					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
+					if(    true == m_needDisplay
+					    && m_colorBg.a != 0) {
 						etk::Vector3D<float> pos = m_position;
 						m_vectorialDraw.SetPos(pos);
 						Print(text[iii]);
 						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+						m_nbCharDisplayed++;
 					} else {
 						Print(text[iii]);
+						m_nbCharDisplayed++;
 					}
 				}
-				if (iii==m_cursorPos-1) {
-					m_vectorialDraw.SetPos(m_position);
-					SetColorBg(m_colorCursor);
-					PrintCursor(false);
+				if (m_needDisplay == true) {
+					if (iii==m_cursorPos-1) {
+						m_vectorialDraw.SetPos(m_position);
+						SetColorBg(m_colorCursor);
+						PrintCursor(false);
+					}
 				}
 			}
 			if (currentId == stop) {
@@ -638,12 +701,14 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				SetPos(etk::Vector3D<float>(m_startTextpos,
 				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
 				                            m_position.z) );
+				m_nbCharDisplayed++;
 			} else if(text[stop] == (uniChar_t)'\n') {
 				currentId = stop+1;
 				// Reset position : 
 				SetPos(etk::Vector3D<float>(m_startTextpos,
 				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
 				                            m_position.z) );
+				m_nbCharDisplayed++;
 			} else {
 				currentId = stop;
 			}
@@ -750,72 +815,74 @@ void ewol::Text::Print(const uniChar_t charcode)
 				 *   |      |
 				 *   3------2
 				 */
-				etk::Vector2D<int32_t> bitmapDrawPos[4];
-				bitmapDrawPos[0].x = (int32_t)dxA;
-				bitmapDrawPos[1].x = (int32_t)dxB;
-				bitmapDrawPos[2].x = (int32_t)dxB;
-				bitmapDrawPos[3].x = (int32_t)dxA;
-				
-				bitmapDrawPos[0].y = (int32_t)dyC;
-				bitmapDrawPos[1].y = (int32_t)dyC;
-				bitmapDrawPos[2].y = (int32_t)dyD;
-				bitmapDrawPos[3].y = (int32_t)dyD;
-				/* texture Position : 
-				 *   0------1
-				 *   |      |
-				 *   |      |
-				 *   3------2
-				 */
-				etk::Vector2D<float> texturePos[4];
-				texturePos[0].x = tuA+m_mode;
-				texturePos[1].x = tuB+m_mode;
-				texturePos[2].x = tuB+m_mode;
-				texturePos[3].x = tuA+m_mode;
-				
-				texturePos[0].y = tvC;
-				texturePos[1].y = tvC;
-				texturePos[2].y = tvD;
-				texturePos[3].y = tvD;
-				
-				// NOTE : Android does not support the Quads elements ...
-				/* Step 1 : 
-				 *   ********     
-				 *     ******     
-				 *       ****     
-				 *         **     
-				 *                
-				 */
-				// set texture coordonates :
-				m_coordTex.PushBack(texturePos[0]);
-				m_coordTex.PushBack(texturePos[1]);
-				m_coordTex.PushBack(texturePos[2]);
-				// set display positions :
-				m_coord.PushBack(bitmapDrawPos[0]);
-				m_coord.PushBack(bitmapDrawPos[1]);
-				m_coord.PushBack(bitmapDrawPos[2]);
-				// set the color
-				m_coordColor.PushBack(m_color);
-				m_coordColor.PushBack(m_color);
-				m_coordColor.PushBack(m_color);
-				/* Step 2 : 
-				 *              
-				 *   **         
-				 *   ****       
-				 *   ******     
-				 *   ********   
-				 */
-				// set texture coordonates :
-				m_coordTex.PushBack(texturePos[0]);
-				m_coordTex.PushBack(texturePos[2]);
-				m_coordTex.PushBack(texturePos[3]);
-				// set display positions :
-				m_coord.PushBack(bitmapDrawPos[0]);
-				m_coord.PushBack(bitmapDrawPos[2]);
-				m_coord.PushBack(bitmapDrawPos[3]);
-				// set the color
-				m_coordColor.PushBack(m_color);
-				m_coordColor.PushBack(m_color);
-				m_coordColor.PushBack(m_color);
+				if (m_needDisplay == true) {
+					etk::Vector2D<int32_t> bitmapDrawPos[4];
+					bitmapDrawPos[0].x = (int32_t)dxA;
+					bitmapDrawPos[1].x = (int32_t)dxB;
+					bitmapDrawPos[2].x = (int32_t)dxB;
+					bitmapDrawPos[3].x = (int32_t)dxA;
+					
+					bitmapDrawPos[0].y = (int32_t)dyC;
+					bitmapDrawPos[1].y = (int32_t)dyC;
+					bitmapDrawPos[2].y = (int32_t)dyD;
+					bitmapDrawPos[3].y = (int32_t)dyD;
+					/* texture Position : 
+					 *   0------1
+					 *   |      |
+					 *   |      |
+					 *   3------2
+					 */
+					etk::Vector2D<float> texturePos[4];
+					texturePos[0].x = tuA+m_mode;
+					texturePos[1].x = tuB+m_mode;
+					texturePos[2].x = tuB+m_mode;
+					texturePos[3].x = tuA+m_mode;
+					
+					texturePos[0].y = tvC;
+					texturePos[1].y = tvC;
+					texturePos[2].y = tvD;
+					texturePos[3].y = tvD;
+					
+					// NOTE : Android does not support the Quads elements ...
+					/* Step 1 : 
+					 *   ********     
+					 *     ******     
+					 *       ****     
+					 *         **     
+					 *                
+					 */
+					// set texture coordonates :
+					m_coordTex.PushBack(texturePos[0]);
+					m_coordTex.PushBack(texturePos[1]);
+					m_coordTex.PushBack(texturePos[2]);
+					// set display positions :
+					m_coord.PushBack(bitmapDrawPos[0]);
+					m_coord.PushBack(bitmapDrawPos[1]);
+					m_coord.PushBack(bitmapDrawPos[2]);
+					// set the color
+					m_coordColor.PushBack(m_color);
+					m_coordColor.PushBack(m_color);
+					m_coordColor.PushBack(m_color);
+					/* Step 2 : 
+					 *              
+					 *   **         
+					 *   ****       
+					 *   ******     
+					 *   ********   
+					 */
+					// set texture coordonates :
+					m_coordTex.PushBack(texturePos[0]);
+					m_coordTex.PushBack(texturePos[2]);
+					m_coordTex.PushBack(texturePos[3]);
+					// set display positions :
+					m_coord.PushBack(bitmapDrawPos[0]);
+					m_coord.PushBack(bitmapDrawPos[2]);
+					m_coord.PushBack(bitmapDrawPos[3]);
+					// set the color
+					m_coordColor.PushBack(m_color);
+					m_coordColor.PushBack(m_color);
+					m_coordColor.PushBack(m_color);
+				}
 			}
 		}
 	}
@@ -829,16 +896,14 @@ void ewol::Text::Print(const uniChar_t charcode)
 void ewol::Text::ForceLineReturn(void)
 {
 	// Reset position : 
-	SetPos(etk::Vector3D<float>(m_startTextpos,
-	                            (float)(m_position.y - m_font->GetHeight(m_mode)),
-	                            m_position.z) );
+	SetPos(etk::Vector3D<float>(m_startTextpos, m_position.y - m_font->GetHeight(m_mode), 0) );
 }
 
 
 void ewol::Text::SetTextAlignement(float startTextpos, float stopTextPos, ewol::Text::aligneMode_te alignement)
 {
 	m_startTextpos = startTextpos;
-	m_stopTextPos = stopTextPos;
+	m_stopTextPos = stopTextPos+1;
 	m_alignement = alignement;
 	if (m_startTextpos >= m_stopTextPos) {
 		EWOL_ERROR("Request allignement with Borne position error : " << startTextpos << " => " << stopTextPos);
@@ -855,6 +920,41 @@ ewol::Text::aligneMode_te ewol::Text::GetAlignement(void)
 void ewol::Text::DisableAlignement(void)
 {
 	m_alignement = ewol::Text::alignDisable;
+}
+
+
+etk::Vector3D<float> ewol::Text::CalculateSizeHTML(const etk::UString& text)
+{
+	// remove intermediate result 
+	Reset();
+	
+	// disable display system
+	m_needDisplay = false;
+	
+	SetPos(etk::Vector3D<float>(0,0,0) );
+	// same as print without the end display ...
+	PrintHTML(text);
+	// get the last elements
+	m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
+	m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
+	m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
+	m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+	
+	// set back the display system
+	m_needDisplay = true;
+	
+	return etk::Vector3D<float>( m_sizeDisplayStop.x-m_sizeDisplayStart.x,
+	                             m_sizeDisplayStop.y-m_sizeDisplayStart.y,
+	                             m_sizeDisplayStop.z-m_sizeDisplayStart.z);
+}
+
+etk::Vector3D<float> ewol::Text::CalculateSizeDecorated(const etk::UString& text)
+{
+	etk::UString tmpData("<html><body>\n");
+	tmpData+=text;
+	tmpData+="\n</body></html>\n";
+	etk::Vector3D<float> tmpVal = CalculateSizeHTML(tmpData);
+	return tmpVal;
 }
 
 etk::Vector3D<float> ewol::Text::CalculateSize(const etk::UString& text)
@@ -925,10 +1025,17 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 	
 	float endPos = m_position.x;
 	bool endOfLine = false;
+	
+	float stopPosition = m_stopTextPos;
+	if(    false == m_needDisplay
+	    || m_stopTextPos == m_startTextpos) {
+		stopPosition = m_startTextpos + 3999999999.0;
+	}
+	
 	for (int32_t iii=start; iii<text.Size(); iii++) {
 		etk::Vector3D<float> tmpSize = CalculateSize(text[iii]);
 		// check oveflow :
-		if (endPos + tmpSize.x > m_stopTextPos) {
+		if (endPos + tmpSize.x > stopPosition) {
 			stop = iii;
 			break;
 		}
@@ -936,7 +1043,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 		if (text[iii] == (uniChar_t)' ') {
 			space++;
 			lastSpacePosition = iii;
-			lastSpacefreeSize = m_stopTextPos - endPos;
+			lastSpacefreeSize = stopPosition - endPos;
 		} else if (text[iii] == (uniChar_t)'\n') {
 			stop = iii;
 			endOfLine = true;
@@ -945,7 +1052,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 		// update local size :
 		endPos += tmpSize.x;
 	}
-	freeSpace = m_stopTextPos - endPos;
+	freeSpace = stopPosition - endPos;
 	// retore previous :
 	m_previousCharcode = storePrevious;
 	// need to align left or right ...
