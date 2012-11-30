@@ -32,7 +32,9 @@ widget::Button::Button(etk::UString newLabel) :
 	m_shaper("THEME:GUI:widgetButton.conf"),
 	m_label(newLabel),
 	m_toggleMode(false),
-	m_value(false)
+	m_value(false),
+	m_mouseHover(false),
+	m_buttonPressed(false)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -259,48 +261,68 @@ void widget::Button::OnRegenerateDisplay(void)
 
 bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
+	bool previousHoverState = m_mouseHover;
 	if(ewol::keyEvent::statusLeave == typeEvent) {
-		ChangeStatusIn(STATUS_UP);
-	}
-	
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
-	// prevent error from ouside the button
-	if(    relativePos.x < m_selectableAreaPos.x
-	    || relativePos.y < m_selectableAreaPos.y
-	    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
-	    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
-		return false;
-	}
-	//EWOL_DEBUG("Event on BT ...");
-	if(ewol::keyEvent::statusEnter == typeEvent) {
-		ChangeStatusIn(STATUS_HOVER);
-	}
-	if (1 == IdInput) {
-		if(ewol::keyEvent::statusDown == typeEvent) {
-			GenerateEventId(ewolEventButtonDown);
-			ChangeStatusIn(STATUS_PRESSED);
-			MarkToRedraw();
+		m_mouseHover = false;
+		m_buttonPressed = false;
+	} else {
+		etk::Vector2D<float> relativePos = RelativePosition(pos);
+		// prevent error from ouside the button
+		if(    relativePos.x < m_selectableAreaPos.x
+		    || relativePos.y < m_selectableAreaPos.y
+		    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
+		    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
+			m_mouseHover = false;
+			m_buttonPressed = false;
+		} else {
+			m_mouseHover = true;
 		}
-		if(ewol::keyEvent::statusUp == typeEvent) {
-			GenerateEventId(ewolEventButtonUp);
-			ChangeStatusIn(STATUS_UP);
-			MarkToRedraw();
-		}
-		if(ewol::keyEvent::statusSingle == typeEvent) {
-			// inverse value :
-			m_value = (m_value)?false:true;
-			GenerateEventId(ewolEventButtonPressed);
-			GenerateEventId(ewolEventButtonValue, m_value);
-			if(    false == m_toggleMode
-			    && true == m_value) {
-				m_value = false;
-				GenerateEventId(ewolEventButtonValue, m_value);
+	}
+	bool previousPressed = m_buttonPressed;
+	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
+	if (true == m_mouseHover) {
+		if (1 == IdInput) {
+			if(ewol::keyEvent::statusDown == typeEvent) {
+				GenerateEventId(ewolEventButtonDown);
+				m_buttonPressed = true;
+				MarkToRedraw();
 			}
-			MarkToRedraw();
-			return true;
+			if(ewol::keyEvent::statusUp == typeEvent) {
+				GenerateEventId(ewolEventButtonUp);
+				m_buttonPressed = false;
+				MarkToRedraw();
+			}
+			if(ewol::keyEvent::statusSingle == typeEvent) {
+				// inverse value :
+				m_value = (m_value)?false:true;
+				GenerateEventId(ewolEventButtonPressed);
+				GenerateEventId(ewolEventButtonValue, m_value);
+				if(    false == m_toggleMode
+				    && true == m_value) {
+					m_value = false;
+					GenerateEventId(ewolEventButtonValue, m_value);
+				}
+				MarkToRedraw();
+			}
 		}
 	}
-	return false;
+	if(    m_mouseHover != previousHoverState
+	    || m_buttonPressed != previousPressed) {
+		if (true==m_buttonPressed) {
+			ChangeStatusIn(STATUS_PRESSED);
+		} else {
+			if (true==m_mouseHover) {
+				ChangeStatusIn(STATUS_HOVER);
+			} else {
+				if (true == m_value) {
+					ChangeStatusIn(STATUS_DOWN);
+				} else {
+					ChangeStatusIn(STATUS_UP);
+				}
+			}
+		}
+	}
+	return true;
 }
 
 

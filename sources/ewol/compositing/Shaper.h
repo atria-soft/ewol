@@ -88,6 +88,16 @@ namespace ewol
 			 */
 			bool ChangeStatusIn(int32_t newStatusId);
 			/**
+			 * @brief Get the current displayed status of the shaper
+			 * @return The Status Id
+			 */
+			int32_t GetCurrentDisplayedStatus(void);;
+			/**
+			 * @brief Get the next displayed status of the shaper
+			 * @return The next status Id (-1 if no status in next)
+			 */
+			int32_t GetNextDisplayedStatus(void);
+			/**
 			 * @brief Same as the widfget periodic call (this is for change display)
 			 * @param[in] localTime The current time of the call.
 			 * @return true The widget must call this fuction periodicly (and redraw itself)

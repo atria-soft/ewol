@@ -144,13 +144,20 @@ void ewol::Shaper::Clear(void)
 	// nothing to do ...
 }
 
-
-
-
 bool ewol::Shaper::ChangeStatusIn(int32_t newStatusId)
 {
 	m_nextStatusRequested = newStatusId;
 	return true;
+}
+
+int32_t ewol::Shaper::GetCurrentDisplayedStatus(void)
+{
+	return m_stateNew;
+}
+
+int32_t ewol::Shaper::GetNextDisplayedStatus(void)
+{
+	return m_nextStatusRequested;
 }
 
 bool ewol::Shaper::PeriodicCall(int64_t localTime)
