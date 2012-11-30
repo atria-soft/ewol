@@ -422,7 +422,8 @@ void ewol::Text::ParseHtmlNode(void* element2)
 			} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
 				HtmlAddData(child->Value() );
 				EWOL_VERBOSE("XML Add : " << child->Value());
-			} else if (!strcmp(child->Value(), "br")) {
+			} else if(    !strcmp(child->Value(), "br")
+			           || !strcmp(child->Value(), "BR")) {
 				HtmlFlush();
 				EWOL_VERBOSE("XML flush & newLine");
 				ForceLineReturn();
@@ -439,8 +440,9 @@ void ewol::Text::ParseHtmlNode(void* element2)
 				}
 				ParseHtmlNode(child);
 				m_htmlDecoTmp = tmpDeco;
-			} else if (!strcmp(child->Value(), "b")) {
-				EWOL_VERBOSE("XML b ...");
+			} else if(    !strcmp(child->Value(), "b")
+			           || !strcmp(child->Value(), "bold")) {
+				EWOL_VERBOSE("XML bold ...");
 				TextDecoration tmpDeco = m_htmlDecoTmp;
 				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
 					m_htmlDecoTmp.m_mode = ewol::font::Bold;
@@ -449,8 +451,9 @@ void ewol::Text::ParseHtmlNode(void* element2)
 				} 
 				ParseHtmlNode(child);
 				m_htmlDecoTmp = tmpDeco;
-			} else if (!strcmp(child->Value(), "i")) {
-				EWOL_VERBOSE("XML i ...");
+			} else if(    !strcmp(child->Value(), "i")
+			           || !strcmp(child->Value(), "italic")) {
+				EWOL_VERBOSE("XML italic ...");
 				TextDecoration tmpDeco = m_htmlDecoTmp;
 				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
 					m_htmlDecoTmp.m_mode = ewol::font::Italic;
@@ -459,11 +462,13 @@ void ewol::Text::ParseHtmlNode(void* element2)
 				} 
 				ParseHtmlNode(child);
 				m_htmlDecoTmp = tmpDeco;
-			} else if (!strcmp(child->Value(), "u")) {
-				EWOL_VERBOSE("XML u ...");
+			} else if(    !strcmp(child->Value(), "u")
+			           || !strcmp(child->Value(), "underline")) {
+				EWOL_VERBOSE("XML underline ...");
 				ParseHtmlNode(child);
-			} else if (!strcmp(child->Value(), "p")) {
-				EWOL_VERBOSE("XML p ...");
+			} else if(    !strcmp(child->Value(), "p")
+			           || !strcmp(child->Value(), "paragraph")) {
+				EWOL_VERBOSE("XML paragraph ...");
 				HtmlFlush();
 				m_alignement = ewol::Text::alignLeft;
 				ForceLineReturn();

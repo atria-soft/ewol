@@ -21,38 +21,16 @@ extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Cha
 #undef __class__
 #define __class__	"ButtonColor"
 
-
-void widget::ButtonColor::Init(void)
+widget::ButtonColor::ButtonColor(draw::Color baseColor) :
+	m_shaper("THEME:GUI:widgetButton.conf"),
+	m_textColorFg(baseColor),
+	m_widgetContextMenu(NULL)
 {
 	AddEventId(ewolEventButtonColorChange);
 	
-	#ifdef __TARGET_OS__Android
-		m_padding.y = 12;
-		m_padding.x = 12;
-	#else
-		m_padding.y = 4;
-		m_padding.x = 4;
-	#endif
-	
-	
-	m_textColorBg = draw::color::black;
-	m_textColorBg.a = 0x3F;
-	m_widgetContextMenu = NULL;
 	SetCanHaveFocus(true);
 	// Limit event at 1:
 	SetMouseLimit(1);
-}
-
-widget::ButtonColor::ButtonColor(void)
-{
-	m_label = "No Label";
-	Init();
-}
-
-widget::ButtonColor::ButtonColor(etk::UString newLabel)
-{
-	m_label = newLabel;
-	Init();
 }
 
 
@@ -62,50 +40,34 @@ widget::ButtonColor::~ButtonColor(void)
 }
 
 
-void widget::ButtonColor::SetPadding(etk::Vector2D<float> newPadding)
-{
-	m_padding = newPadding;
-}
 
 bool widget::ButtonColor::CalculateMinSize(void)
 {
-	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
-	m_minSize.x = m_padding.x*2 + minSize.x;
-	m_minSize.y = m_padding.y*2 + minSize.y;
+	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	char colorText[256];
+	sprintf(colorText, "#%08X", m_textColorFg.Get());
+	etk::Vector3D<int32_t> minSize = m_text.CalculateSize(colorText);
+	m_minSize.x = padding.x*2 + minSize.x;
+	m_minSize.y = padding.y*2 + minSize.y;
 	MarkToRedraw();
 	return true;
 }
 
 
-void widget::ButtonColor::SetLabel(etk::UString newLabel)
-{
-	m_label = newLabel;
-	MarkToRedraw();
-}
-
-void widget::ButtonColor::SetValue(bool val)
-{
-	
-}
-
-
-bool widget::ButtonColor::GetValue(void)
-{
-	return false;
-}
 
 void widget::ButtonColor::OnDraw(ewol::DrawProperty& displayProp)
 {
-	m_oObjectDecoration.Draw();
-	m_oObjectText.Draw();
+	m_shaper.Draw();
+	m_text.Draw();
 }
 
 
 void widget::ButtonColor::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		m_oObjectDecoration.Clear();
-		m_oObjectText.Clear();
+		m_text.Clear();
+		m_shaper.Clear();
+		/*
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
 		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
@@ -146,12 +108,14 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		tmpSizeY += m_padding.y/1;
 		m_oObjectDecoration.SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
 		m_oObjectDecoration.RectangleWidth(etk::Vector3D<float>(tmpSizeX, tmpSizeY, 0) );
+		*/
 	}
 }
 
 
 bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
+/*
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		if(    ewol::keyEvent::statusSingle == typeEvent) {
@@ -183,24 +147,32 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 			return true;
 		}
 	}
+*/
 	return false;
 }
 
 
-void widget::ButtonColor::SetCurrentColor(draw::Color color)
+void widget::ButtonColor::SetValue(draw::Color color)
 {
-	m_selectedColor = color;
-	m_textColorBg = m_selectedColor;
+	m_textColorFg = color;
+	/*
 	char colorText[256];
 	sprintf(colorText, "#%08X", color.Get());
 	//set the new label ...
 	SetLabel(colorText);
+	*/
+}
+
+draw::Color widget::ButtonColor::GetValue(void)
+{
+	return m_textColorFg;
 }
 
 
 void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	if (eventId == ewolEventColorChooserChange) {
+	/*
 		// TODO : Parse the input color ...
 		//draw::Color tmpColor(data);
 		draw::Color tmpColor;
@@ -211,5 +183,6 @@ void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const c
 		//set the new label ...
 		SetLabel(colorText);
 		GenerateEventId(ewolEventButtonColorChange);
+	*/
 	}
 }

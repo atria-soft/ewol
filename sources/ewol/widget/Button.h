@@ -38,6 +38,7 @@ namespace widget {
 			bool                        m_value;              //!< Current state of the button.
 			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)
 			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed
+			int32_t                     m_imageDisplaySize;   //!< Display size of the Image
 			// hover area :
 			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
 			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
@@ -98,6 +99,11 @@ namespace widget {
 			 * @param[in] togg New toggle mode
 			 */
 			void SetToggleMode(bool togg);
+			/**
+			 * @brief Set the new image Size (default 32).
+			 * @param[in] size The new display size.
+			 */
+			void SetImageSize(int32_t size);
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Button"; };

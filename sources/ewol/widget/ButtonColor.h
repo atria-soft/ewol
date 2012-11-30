@@ -13,8 +13,8 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
-#include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Text.h>
+#include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 
 extern const char * const ewolEventButtonColorChange;
@@ -23,36 +23,35 @@ namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
 		public:
-			ButtonColor(void);
-			ButtonColor(etk::UString newLabel);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolButtonColor"; };
-			void Init(void);
+			ButtonColor(draw::Color baseColor=draw::color::black);
 			virtual ~ButtonColor(void);
-			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::UString newLabel);
-			etk::UString   GetLabel(void) {return m_label;};
-			void           SetValue(bool val);
-			bool           GetValue(void);
-			void           SetPadding(etk::Vector2D<float>  newPadding);
 		private:
-			ewol::Text                 m_oObjectText;
-			ewol::Drawing              m_oObjectDecoration;
-			etk::Vector2D<float>       m_padding;
-			etk::UString               m_label;
-			draw::Color                m_textColorFg;    //!< Text color
-			draw::Color                m_textColorBg;    //!< Background color
-			draw::Color                m_selectedColor;  //!< user current selected Color
+			ewol::Shaper               m_shaper;             //!< Compositing theme.
+			ewol::Text                 m_text;
+			draw::Color                m_textColorFg;    //!< Text color && user selected color
 			widget::ContextMenu*       m_widgetContextMenu;
 		public:
+			/**
+			 * @brief Get the current color of the color selection widget
+			 * @return The current color
+			 */
+			draw::Color GetValue(void);
+			/**
+			 * @brief Specify the current color.
+			 * @param[in] color The new display color.
+			 */
+			void SetValue(draw::Color color);
+		public:
+			// Derived function
+			virtual bool CalculateMinSize(void);
+			// Derived function
+			virtual const char * const GetObjectType(void) { return "EwolButtonColor"; };
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
-			draw::Color GetCurrentColor(void) { return m_selectedColor; };
-			void     SetCurrentColor(draw::Color color);
 			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 	};

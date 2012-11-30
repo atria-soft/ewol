@@ -7,6 +7,7 @@
  */
 
 
+#include <ewol/ewol.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/WidgetManager.h>
 
@@ -34,7 +35,8 @@ widget::Button::Button(etk::UString newLabel) :
 	m_toggleMode(false),
 	m_value(false),
 	m_mouseHover(false),
-	m_buttonPressed(false)
+	m_buttonPressed(false),
+	m_imageDisplaySize(32)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -60,12 +62,14 @@ void widget::Button::SetImage(etk::UString imageName)
 {
 	m_displayImage.SetSource(imageName);
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 void widget::Button::SetImageToggle(etk::UString imageName)
 {
 	m_displayImageToggle.SetSource(imageName);
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 
@@ -87,7 +91,7 @@ bool widget::Button::CalculateMinSize(void)
 	// Add the image element ...
 	if(    true == m_displayImage.HasSources()
 	    || true == m_displayImageToggle.HasSources()) {
-		m_minSize.x += padding.x + minSize.y;
+		m_minSize.x += padding.x/2 + m_imageDisplaySize;
 	}
 	MarkToRedraw();
 	return true;
@@ -98,6 +102,7 @@ void widget::Button::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 etk::UString widget::Button::GetLabel(void)
@@ -109,6 +114,7 @@ void widget::Button::SetLabelToggle(etk::UString newLabel)
 {
 	m_labelToggle = newLabel;
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 etk::UString widget::Button::GetLabelToggle(void)
@@ -144,7 +150,6 @@ void widget::Button::SetToggleMode(bool togg)
 void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_shaper.Draw();
-#warning generate the Toggle
 	if(    false == m_toggleMode
 	    || false == m_value) {
 		m_displayImage.Draw();
@@ -163,7 +168,8 @@ void widget::Button::OnRegenerateDisplay(void)
 		etk::Vector3D<int32_t> minSize = m_displayText.CalculateSize('A');
 		etk::Vector3D<int32_t> curentTextSize;
 		if(    false == m_toggleMode
-		    || false == m_value) {
+		    || false == m_value
+		    || m_labelToggle.Size()==0) {
 			curentTextSize = m_displayText.CalculateSizeDecorated(m_label);
 		} else {
 			curentTextSize = m_displayText.CalculateSizeDecorated(m_labelToggle);
@@ -206,10 +212,11 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		if(    true == m_displayImage.HasSources()
 		    || true == m_displayImageToggle.HasSources()) {
-			// TODO : Remove this size calculation ==> can regenrate siomme errro
-			etk::Vector3D<int32_t> minSize = m_displayText.CalculateSizeDecorated(m_label);
-			etk::Vector3D<int32_t> imagePos(tmpTextOrigin.x-padding.x/4, tmpTextOrigin.y-padding.x/4, 0);
-			etk::Vector2D<int32_t> imageSize(minSize.y+padding.x/2, minSize.y+padding.x/2);
+			etk::Vector3D<int32_t> imagePos(tmpOrigin.x-padding.x/4,
+			                                tmpOrigin.y-padding.x/4+(m_minSize.y-m_imageDisplaySize-2*padding.y)/2.0,
+			                                0);
+			etk::Vector2D<int32_t> imageSize(m_imageDisplaySize,
+			                                 m_imageDisplaySize);
 			if(    false==m_toggleMode
 			    || false==m_value) {
 				m_displayImage.SetPos(imagePos);
@@ -219,7 +226,7 @@ void widget::Button::OnRegenerateDisplay(void)
 				m_displayImageToggle.Print(imageSize);
 			}
 			// update the text position ...
-			tmpTextOrigin.x += padding.x/2 + minSize.y;
+			tmpTextOrigin.x += padding.x/2 + m_imageDisplaySize;
 		}
 		
 		etk::Vector3D<float> drawClippingPos(padding.x, padding.y, -0.5);
@@ -230,10 +237,16 @@ void widget::Button::OnRegenerateDisplay(void)
 		// clean the element
 		m_displayText.Reset();
 		m_displayText.SetPos(tmpTextOrigin);
-		m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
+		if(    true == m_displayImage.HasSources()
+		    || true == m_displayImageToggle.HasSources()) {
+			m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x-m_imageDisplaySize, ewol::Text::alignCenter);
+		} else {
+			m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
+		}
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
 		if(    false == m_toggleMode
-		    || false == m_value) {
+		    || false == m_value
+		    || m_labelToggle.Size()==0) {
 			m_displayText.PrintDecorated(m_label);
 		} else {
 			m_displayText.PrintDecorated(m_labelToggle);
@@ -354,3 +367,13 @@ void widget::Button::PeriodicCall(int64_t localTime)
 	}
 	MarkToRedraw();
 }
+
+void widget::Button::SetImageSize(int32_t size)
+{
+	MarkToRedraw();
+	ewol::RequestUpdateSize();
+	m_imageDisplaySize = size;
+}
+
+
+

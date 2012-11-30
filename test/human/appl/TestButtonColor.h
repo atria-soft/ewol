@@ -6,28 +6,27 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __MAIN_WINDOWS_H__
-#define __MAIN_WINDOWS_H__
+#ifndef __TEST_BUTTON_COLOR_H__
+#define __TEST_BUTTON_COLOR_H__
 
 #include <appl/Debug.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/Windows.h>
-#include <ewol/widget/SizerVert.h>
 #include <ewol/widget/Button.h>
+#include <ewol/widget/ButtonColor.h>
 #include <ewol/widget/Spacer.h>
+#include <ewol/widget/SizerVert.h>
 
-class MainWindows : public ewol::Windows
+class TestButtonColor : public widget::SizerVert
 {
 	private:
-		widget::SizerVert* m_sizerVert;
-		ewol::Widget*      m_subWidget;
-		int32_t            m_idWidget;
+		widget::ButtonColor*  m_button;
+		widget::Spacer*  m_spacer[4];
 	public:
 		// Constructeur
-		MainWindows(void);
-		~MainWindows(void);
+		TestButtonColor(void);
+		virtual ~TestButtonColor(void);
 		// Derived function
-		const char * const GetObjectType(void) { return "MainWindows"; };
+		virtual const char * const GetObjectType(void) { return "TestButton"; };
 		// Derived function
 		virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 		// Derived function
@@ -35,5 +34,3 @@ class MainWindows : public ewol::Windows
 };
 
 #endif
-
-
