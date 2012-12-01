@@ -18,6 +18,13 @@
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
 
 
+// DEFINE for the shader display system :
+#define STATUS_UP        (0)
+#define STATUS_HOVER     (2)
+#define STATUS_PRESSED   (1)
+#define STATUS_DOWN      (3)
+
+
 #undef __class__
 #define __class__	"ButtonColor"
 
@@ -27,7 +34,7 @@ widget::ButtonColor::ButtonColor(draw::Color baseColor) :
 	m_widgetContextMenu(NULL)
 {
 	AddEventId(ewolEventButtonColorChange);
-	
+	ChangeStatusIn(STATUS_UP);
 	SetCanHaveFocus(true);
 	// Limit event at 1:
 	SetMouseLimit(1);
@@ -44,10 +51,9 @@ widget::ButtonColor::~ButtonColor(void)
 bool widget::ButtonColor::CalculateMinSize(void)
 {
 	etk::Vector2D<float> padding = m_shaper.GetPadding();
-	char colorText[256];
-	sprintf(colorText, "#%08X", m_textColorFg.Get());
-	etk::Vector3D<int32_t> minSize = m_text.CalculateSize(colorText);
-	m_minSize.x = padding.x*2 + minSize.x;
+	etk::UString label = draw::GetString(m_textColorFg);
+	etk::Vector3D<int32_t> minSize = m_text.CalculateSize(label);
+	m_minSize.x = padding.x*2 + minSize.x + 7;
 	m_minSize.y = padding.y*2 + minSize.y;
 	MarkToRedraw();
 	return true;
@@ -67,100 +73,143 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 	if (true == NeedRedraw()) {
 		m_text.Clear();
 		m_shaper.Clear();
-		/*
-		int32_t tmpSizeX = m_minSize.x;
-		int32_t tmpSizeY = m_minSize.y;
-		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
-		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
+		
+		etk::Vector2D<float> padding = m_shaper.GetPadding();
+		
+		etk::UString label = draw::GetString(m_textColorFg);
+		
+		etk::Vector2D<int32_t> localSize = m_minSize;
+		
+		etk::Vector3D<float> tmpOrigin((m_size.x - m_minSize.x) / 2.0,
+		                               (m_size.y - m_minSize.y) / 2.0,
+		                               0.0);
+		                               
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = (m_size.x - m_minSize.x) / 2 + m_padding.x;
-		int32_t tmpTextOriginY = (m_size.y - m_minSize.y) / 2 + m_padding.y;
+		etk::Vector3D<float> tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
+		                                   (m_size.y - m_minSize.y) / 2.0,
+		                                   0.0);
 		
 		if (true==m_userFill.x) {
-			tmpSizeX = m_size.x;
-			tmpOriginX = 0;
+			localSize.x = m_size.x;
+			tmpOrigin.x = 0.0;
+			tmpTextOrigin.x = 0.0;
 		}
 		if (true==m_userFill.y) {
-			tmpSizeY = m_size.y;
-			tmpOriginY = 0;
+			localSize.y = m_size.y;
 		}
-		tmpOriginX += m_padding.x;
-		tmpOriginY += m_padding.y;
-		tmpSizeX -= 2*m_padding.x;
-		tmpSizeY -= 2*m_padding.y;
+		tmpOrigin.x += padding.x;
+		tmpOrigin.y += padding.y;
+		tmpTextOrigin.x += padding.x;
+		tmpTextOrigin.y += padding.y;
+		localSize.x -= 2*padding.x;
+		localSize.y -= 2*padding.y;
 		
-		if ((m_textColorBg.r>0.5) || (m_textColorBg.g>0.5) || (m_textColorBg.b > 0.8) ) {
-			m_textColorFg = draw::color::black;
+		// clean the element
+		m_text.Reset();
+		if(    m_textColorFg.r < 100
+		    || m_textColorFg.g < 100
+		    || m_textColorFg.b < 100) {
+			m_text.SetColor(draw::color::white);
 		} else {
-			m_textColorFg = draw::color::white;
+			m_text.SetColor(draw::color::black);
 		}
-		etk::Vector3D<float> textPos;
-		textPos.x = tmpTextOriginX;
-		textPos.y = tmpTextOriginY;
-		textPos.z = 0;
-		m_oObjectText.SetPos(textPos);
-		m_oObjectText.Print(m_label);
+		m_text.SetPos(tmpTextOrigin);
+		m_text.SetColorBg(m_textColorFg);
+		m_text.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
+		m_text.Print(label);
 		
-		m_oObjectDecoration.SetColor(m_textColorBg);
-		tmpOriginX -= m_padding.x/2;
-		tmpOriginY -= m_padding.y/2;
-		tmpSizeX += m_padding.x/1;
-		tmpSizeY += m_padding.y/1;
-		m_oObjectDecoration.SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
-		m_oObjectDecoration.RectangleWidth(etk::Vector3D<float>(tmpSizeX, tmpSizeY, 0) );
-		*/
+		
+		if (true==m_userFill.y) {
+			tmpOrigin.y = padding.y;
+		}
+		
+		// selection area :
+		m_selectableAreaPos = etk::Vector2D<float>(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
+		m_selectableAreaSize = localSize + etk::Vector2D<float>(2,2)*padding;
+		m_shaper.SetOrigin(m_selectableAreaPos );
+		m_shaper.SetSize(m_selectableAreaSize);
+		m_shaper.SetInsidePos(etk::Vector2D<float>(tmpTextOrigin.x, tmpTextOrigin.y) );
+		etk::Vector3D<float> tmpp = m_text.CalculateSize(label);
+		etk::Vector2D<float> tmpp2(tmpp.x, tmpp.y);
+		m_shaper.SetInsideSize(tmpp2);
 	}
 }
 
 
 bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
 {
-/*
-	//EWOL_DEBUG("Event on BT ...");
-	if (1 == IdInput) {
-		if(    ewol::keyEvent::statusSingle == typeEvent) {
-			// nothing to do ...
-			//GenerateEventId(ewolEventButtonPressed);
-			// Display the pop-up menu ... 
-			
-			// create a context menu : 
-			m_widgetContextMenu = new widget::ContextMenu();
-			if (NULL == m_widgetContextMenu) {
-				EWOL_ERROR("Allocation Error");
-				return true;
-			}
-			// Get the button widget : 
-			etk::Vector2D<float> newPosition;
-			newPosition.x = m_origin.x + m_size.x/2;
-			newPosition.y = m_origin.y;
-			
-			m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, newPosition );
-			
-			widget::ColorChooser * myColorChooser = new widget::ColorChooser();
-			myColorChooser->SetColor(m_textColorBg);
-			// set it in the pop-up-system : 
-			m_widgetContextMenu->SubWidgetSet(myColorChooser);
-			myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
-			ewol::WindowsPopUpAdd(m_widgetContextMenu);
-			MarkToRedraw();
-			
-			return true;
+	bool previousHoverState = m_mouseHover;
+	if(ewol::keyEvent::statusLeave == typeEvent) {
+		m_mouseHover = false;
+		m_buttonPressed = false;
+	} else {
+		etk::Vector2D<float> relativePos = RelativePosition(pos);
+		// prevent error from ouside the button
+		if(    relativePos.x < m_selectableAreaPos.x
+		    || relativePos.y < m_selectableAreaPos.y
+		    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
+		    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
+			m_mouseHover = false;
+			m_buttonPressed = false;
+		} else {
+			m_mouseHover = true;
 		}
 	}
-*/
-	return false;
+	bool previousPressed = m_buttonPressed;
+	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
+	if (true == m_mouseHover) {
+		if (1 == IdInput) {
+			if(ewol::keyEvent::statusDown == typeEvent) {
+				m_buttonPressed = true;
+				MarkToRedraw();
+			}
+			if(ewol::keyEvent::statusUp == typeEvent) {
+				m_buttonPressed = false;
+				MarkToRedraw();
+			}
+			if(ewol::keyEvent::statusSingle == typeEvent) {
+				m_buttonPressed = false;
+				m_mouseHover = false;
+				// create a context menu : 
+				m_widgetContextMenu = new widget::ContextMenu();
+				if (NULL == m_widgetContextMenu) {
+					EWOL_ERROR("Allocation Error");
+					return true;
+				}
+				etk::Vector2D<float> tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
+				tmpPos.x -= m_minSize.x/2.0;
+				m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, tmpPos );
+				
+				widget::ColorChooser * myColorChooser = new widget::ColorChooser();
+				myColorChooser->SetColor(m_textColorFg);
+				// set it in the pop-up-system : 
+				m_widgetContextMenu->SubWidgetSet(myColorChooser);
+				myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
+				ewol::WindowsPopUpAdd(m_widgetContextMenu);
+				MarkToRedraw();
+			}
+		}
+	}
+	if(    m_mouseHover != previousHoverState
+	    || m_buttonPressed != previousPressed) {
+		if (true==m_buttonPressed) {
+			ChangeStatusIn(STATUS_PRESSED);
+		} else {
+			if (true==m_mouseHover) {
+				ChangeStatusIn(STATUS_HOVER);
+			} else {
+				ChangeStatusIn(STATUS_UP);
+			}
+		}
+	}
+	return m_mouseHover;
 }
 
 
 void widget::ButtonColor::SetValue(draw::Color color)
 {
 	m_textColorFg = color;
-	/*
-	char colorText[256];
-	sprintf(colorText, "#%08X", color.Get());
-	//set the new label ...
-	SetLabel(colorText);
-	*/
+	MarkToRedraw();
 }
 
 draw::Color widget::ButtonColor::GetValue(void)
@@ -171,18 +220,29 @@ draw::Color widget::ButtonColor::GetValue(void)
 
 void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
+	EWOL_INFO("Receive MSG : \"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventId == ewolEventColorChooserChange) {
-	/*
-		// TODO : Parse the input color ...
-		//draw::Color tmpColor(data);
-		draw::Color tmpColor;
-		m_selectedColor = tmpColor;
-		m_textColorBg = m_selectedColor;
-		char colorText[256];
-		sprintf(colorText, "#%08X", tmpColor.Get());
-		//set the new label ...
-		SetLabel(colorText);
-		GenerateEventId(ewolEventButtonColorChange);
-	*/
+		draw::ParseColor(data.c_str(), m_textColorFg);
+		GenerateEventId(ewolEventButtonColorChange, data);
+		MarkToRedraw();
 	}
+}
+
+
+void widget::ButtonColor::ChangeStatusIn(int32_t newStatusId)
+{
+	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
+		PeriodicCallSet(true);
+		MarkToRedraw();
+	}
+}
+
+
+
+void widget::ButtonColor::PeriodicCall(int64_t localTime)
+{
+	if (false == m_shaper.PeriodicCall(localTime) ) {
+		PeriodicCallSet(false);
+	}
+	MarkToRedraw();
 }

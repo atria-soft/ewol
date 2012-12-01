@@ -100,9 +100,9 @@ void widget::Slider::OnRegenerateDisplay(void)
 		draw::Color borderDot = m_textColorFg;
 		borderDot.a /= 2;
 		tmpDraw->SetPos(etk::Vector3D<float>(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2) );
-		tmpDraw->SetColor(borderDot);
+		tmpDraw->SetColorBg(borderDot);
 		tmpDraw->Circle(dotRadius);
-		tmpDraw->SetColor(m_textColorFg);
+		tmpDraw->SetColorBg(m_textColorFg);
 		tmpDraw->Circle(dotRadius/1.6);
 		AddOObject(tmpDraw);
 	}

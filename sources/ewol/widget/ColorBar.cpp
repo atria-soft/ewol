@@ -23,14 +23,6 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 widget::ColorBar::ColorBar(void)
 {
 	AddEventId(ewolEventColorBarChange);
-	
-	#ifdef __TARGET_OS__Android
-		m_padding.y = 12;
-		m_padding.x = 12;
-	#else
-		m_padding.y = 4;
-		m_padding.x = 4;
-	#endif
 	m_currentUserPos.x=0;
 	m_currentUserPos.y=0;
 	m_currentColor = draw::color::black;
@@ -46,7 +38,7 @@ widget::ColorBar::~ColorBar(void)
 
 bool widget::ColorBar::CalculateMinSize(void)
 {
-	m_minSize.x = 80;
+	m_minSize.x = 160;
 	m_minSize.y = 80;
 	MarkToRedraw();
 	return true;
@@ -76,11 +68,17 @@ void widget::ColorBar::SetCurrentColor(draw::Color newOne)
 	// TODO : Later when really needed ...
 }
 
+void widget::ColorBar::OnDraw(ewol::DrawProperty& displayProp)
+{
+	m_draw.Draw();
+}
+
+
 void widget::ColorBar::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
-		ClearOObjectList();
+		m_draw.Clear();
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
@@ -95,21 +93,8 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			tmpSizeY = m_size.y;
 			tmpOriginY = 0;
 		}
-		tmpOriginX += m_padding.x;
-		tmpOriginY += m_padding.y;
-		tmpSizeX -= 2*m_padding.x;
-		tmpSizeY -= 2*m_padding.y;
-		
-		ewol::Drawing * tmpOObjects = new ewol::Drawing;
-		
-		tmpOriginX -= m_padding.x/2;
-		tmpOriginY -= m_padding.y/2;
-		tmpSizeX += m_padding.x;
-		tmpSizeY += m_padding.y;
 		
 		for(int32_t iii=0; iii<NB_BAND_COLOR ; iii++) {
-			// TODO : ...
-			#if 0
 			/* Step 1 : 
 			 *              
 			 *   **         
@@ -117,13 +102,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			tmpOObjects->SetColor(s_listColorWhite);
-			tmpOObjects->SetPoint(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			
+			m_draw.SetColor(s_listColorWhite);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColor[iii+1]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColor[iii]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.AddVertex();
 			/* Step 2 : 
 			 *   ********     
 			 *     ******     
@@ -131,12 +118,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			tmpOObjects->SetColor(s_listColorWhite);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
-			tmpOObjects->SetColor(s_listColorWhite);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
+			m_draw.SetColor(s_listColorWhite);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColorWhite);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColor[iii+1]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.AddVertex();
 			/* Step 3 : 
 			 *              
 			 *   **         
@@ -144,12 +134,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			tmpOObjects->SetColor(s_listColor[iii]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColorBlack);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
-			tmpOObjects->SetColor(s_listColorBlack);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
+			m_draw.SetColor(s_listColor[iii]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColorBlack);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColorBlack);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.AddVertex();
 			/* Step 4 : 
 			 *   ********     
 			 *     ******     
@@ -157,40 +150,25 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			tmpOObjects->SetColor(s_listColor[iii]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii+1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColorBlack);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
-			/*
-			tmpOObjects->SetColor(s_listColorWhite);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY);
-			tmpOObjects->SetColor(s_listColor[iii+1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			
-			tmpOObjects->SetColor(s_listColor[iii]);
-			tmpOObjects->SetPoint(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColor[iii+1]);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2);
-			tmpOObjects->SetColor(s_listColorBlack);
-			tmpOObjects->SetPoint(tmpOriginX + (iii+0.5)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY);
-			*/
-			#endif
+			m_draw.SetColor(s_listColor[iii]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColor[iii+1]);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.AddVertex();
+			m_draw.SetColor(s_listColorBlack);
+			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.AddVertex();
 		}
-		draw::Color tmpColor;
 		if (m_currentUserPos.y > 0.5) {
-			tmpColor = draw::color::white;
+			m_draw.SetColor(draw::color::white);
 		} else {
-			tmpColor = draw::color::black;
+			m_draw.SetColor(draw::color::black);
 		}
-		tmpOObjects->SetColor(tmpColor);
-		// TODO : ... 
-		//tmpOObjects->Circle(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y, 3.0, 1.0);
+		m_draw.SetPos(etk::Vector3D<float>(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y) );
+		m_draw.SetThickness(1);
+		m_draw.Circle(3.0);
 		
-		AddOObject(tmpOObjects);
 	}
 }
 
@@ -237,29 +215,20 @@ bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInpu
 				estimateColor.b = s_listColor[bandID+1].b + (s_listColor[bandID].b-s_listColor[bandID+1].b)*(1-poroportionnalPos);
 			}
 			// step 2 generate the white and black ...
-			if (relativePos.y == (m_size.y/2)) {
+			if (m_currentUserPos.y == 0.5) {
 				// nothing to do ... just get the current color ...
-			} else if (relativePos.y < (m_size.y/2)) {
-				float poroportionnalWhite = 1.0-relativePos.y/(m_size.y/2);
-				estimateColor.r = estimateColor.r + (1.0 - estimateColor.r)*poroportionnalWhite;
-				estimateColor.g = estimateColor.g + (1.0 - estimateColor.g)*poroportionnalWhite;
-				estimateColor.b = estimateColor.b + (1.0 - estimateColor.b)*poroportionnalWhite;
+			} else if (m_currentUserPos.y < 0.5) {
+				float poroportionnalWhite = (0.5-m_currentUserPos.y)*2.0;
+				estimateColor.r = estimateColor.r + (0xFF-estimateColor.r)*poroportionnalWhite;
+				estimateColor.g = estimateColor.g + (0xFF-estimateColor.g)*poroportionnalWhite;
+				estimateColor.b = estimateColor.b + (0xFF-estimateColor.b)*poroportionnalWhite;
 			} else {
-				float poroportionnalBlack = (relativePos.y-(m_size.y/2))/(m_size.y/2);
-				estimateColor.r = estimateColor.r - (estimateColor.r)*poroportionnalBlack;
-				estimateColor.g = estimateColor.g - (estimateColor.g)*poroportionnalBlack;
-				estimateColor.b = estimateColor.b - (estimateColor.b)*poroportionnalBlack;
+				float poroportionnalBlack = (m_currentUserPos.y-0.5)*2.0;
+				estimateColor.r = estimateColor.r - estimateColor.r*poroportionnalBlack;
+				estimateColor.g = estimateColor.g - estimateColor.g*poroportionnalBlack;
+				estimateColor.b = estimateColor.b - estimateColor.b*poroportionnalBlack;
 			}
-			/*
-			char colorText[256];
-			sprintf(colorText, "#%02X%02X%02X%02X",
-			        (uint8_t)(estimateColor.r   * 0xFF),
-			        (uint8_t)(estimateColor.g * 0xFF),
-			        (uint8_t)(estimateColor.b  * 0xFF),
-			        (uint8_t)(estimateColor.a * 0xFF));
-			EWOL_DEBUG("new color : " << colorText);
-			*/
-			if(    m_currentColor != estimateColor) {
+			if(m_currentColor != estimateColor) {
 				m_currentColor = estimateColor;
 				GenerateEventId(ewolEventColorBarChange);
 			}

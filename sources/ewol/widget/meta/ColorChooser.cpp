@@ -156,8 +156,7 @@ void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const 
 		if (NULL != m_widgetAlpha) {
 			m_widgetAlpha->SetValue(m_currentColor.a);
 		}
-		// TODO : send the real color ...
-		GenerateEventId(ewolEventColorChooserChange, "0x51452563");
+		GenerateEventId(ewolEventColorChooserChange, draw::GetString(m_currentColor));
 	} else if (eventColorSpecificHasChange == eventId) {
 		// Slider has changes his color ==> get the one change ...
 		if (CallerObject == m_widgetRed) {
@@ -175,8 +174,7 @@ void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const 
 		if (NULL != m_widgetColorBar) {
 			m_widgetColorBar->SetCurrentColor(m_currentColor);
 		}
-		// TODO : send the real color ...
-		GenerateEventId(ewolEventColorChooserChange, "0x51452563");
+		GenerateEventId(ewolEventColorChooserChange, draw::GetString(m_currentColor));
 	}
 };
 

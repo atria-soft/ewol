@@ -23,13 +23,24 @@ namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
 		public:
+			/**
+			 * @brief Main constructor
+			 */
 			ButtonColor(draw::Color baseColor=draw::color::black);
+			/**
+			 * @brief Main destructor
+			 */
 			virtual ~ButtonColor(void);
 		private:
-			ewol::Shaper               m_shaper;             //!< Compositing theme.
-			ewol::Text                 m_text;
-			draw::Color                m_textColorFg;    //!< Text color && user selected color
-			widget::ContextMenu*       m_widgetContextMenu;
+			ewol::Shaper                m_shaper;             //!< Compositing theme.
+			ewol::Text                  m_text;               //!< Compositing Test display.
+			draw::Color                 m_textColorFg;        //!< Current color.
+			widget::ContextMenu*        m_widgetContextMenu;  //!< Specific context menu.
+			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed.
+			// hover area :
+			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
+			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Get the current color of the color selection widget
@@ -54,6 +65,14 @@ namespace widget {
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
 			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+		private:
+			/**
+			 * @brief Internal system to Change the property of the current status
+			 * @param[in] new state
+			 */
+			void ChangeStatusIn(int32_t newStatusId);
+			// Derived function
+			virtual void PeriodicCall(int64_t localTime);
 	};
 };
 

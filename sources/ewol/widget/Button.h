@@ -36,9 +36,9 @@ namespace widget {
 			etk::UString                m_labelToggle;        //!< Label to display when toggle mode is set ("" whenit is the same).
 			bool                        m_toggleMode;         //!< The button is able to toggle.
 			bool                        m_value;              //!< Current state of the button.
-			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)
-			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed
-			int32_t                     m_imageDisplaySize;   //!< Display size of the Image
+			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed.
+			int32_t                     m_imageDisplaySize;   //!< Display size of the Image.
 			// hover area :
 			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
 			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
@@ -118,6 +118,10 @@ namespace widget {
 			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 		private:
+			/**
+			 * @brief Internal system to Change the property of the current status
+			 * @param[in] new state
+			 */
 			void ChangeStatusIn(int32_t newStatusId);
 			// Derived function
 			virtual void PeriodicCall(int64_t localTime);

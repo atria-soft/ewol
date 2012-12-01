@@ -165,7 +165,7 @@ namespace ewol
 			 * @param[in] angleStart start angle of this circle ([0..2PI] otherwithe ==> disable)
 			 * @param[in] angleStop stop angle of this circle ([0..2PI] otherwithe ==> disable)
 			 */
-			void Circle(float radius, float angleStart = -1, float angleStop = -1);
+			void Circle(float radius, float angleStart = 0, float angleStop = 2*M_PI);
 	};
 };
 

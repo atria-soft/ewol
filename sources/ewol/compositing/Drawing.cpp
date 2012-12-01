@@ -531,6 +531,67 @@ void ewol::Drawing::Cube(etk::Vector3D<float> dest)
 
 void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 {
+	ResetCount();
 	
+	if (radius<0) {
+		radius *= -1;
+	}
+	angleStop = angleStop-angleStart;
+	
+	
+	int32_t nbOcurence = radius;
+	if (nbOcurence < 10)
+	{
+		nbOcurence = 10;
+	}
+	
+	// display background :
+	if (m_colorBg.a!=0) {
+		InternalSetColor(m_colorBg);
+		for (int32_t iii=0; iii<nbOcurence; iii++) {
+			SetPoint(etk::Vector3D<float>(m_position.x, m_position.y) );
+			
+			float angleOne = angleStart + (angleStop* iii / nbOcurence) ;
+			float offsety = sin(angleOne) * radius;
+			float offsetx = cos(angleOne) * radius;
+			
+			SetPoint(etk::Vector3D<float>(m_position.x + offsetx, m_position.y + offsety) );
+			
+			float angleTwo = angleStart + (angleStop* (iii+1) / nbOcurence) ;
+			offsety = sin(angleTwo) * radius;
+			offsetx = cos(angleTwo) * radius;
+			
+			SetPoint(etk::Vector3D<float>(m_position.x + offsetx, m_position.y + offsety) );
+		}
+	}
+	
+	// show if we have a border :
+	if(    m_thickness==0
+	    || m_color.a==0) {
+		return;
+	}
+	InternalSetColor(m_color);
+	for (int32_t iii=0; iii<nbOcurence; iii++) {
+		
+		float angleOne =  angleStart + (angleStop* iii     / nbOcurence) ;
+		float offsetExty = sin(angleOne) * (radius+m_thickness/2);
+		float offsetExtx = cos(angleOne) * (radius+m_thickness/2);
+		float offsetInty = sin(angleOne) * (radius-m_thickness/2);
+		float offsetIntx = cos(angleOne) * (radius-m_thickness/2);
+		
+		float angleTwo =  angleStart + (angleStop*  (iii+1) / nbOcurence );
+		float offsetExt2y = sin(angleTwo) * (radius+m_thickness/2);
+		float offsetExt2x = cos(angleTwo) * (radius+m_thickness/2);
+		float offsetInt2y = sin(angleTwo) * (radius-m_thickness/2);
+		float offsetInt2x = cos(angleTwo) * (radius-m_thickness/2);
+		
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetIntx,  m_position.y + offsetInty));
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetExtx,  m_position.y + offsetExty));
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
+		
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetInt2x, m_position.y + offsetInt2y));
+		SetPoint(etk::Vector3D<float>(m_position.x + offsetIntx,  m_position.y + offsetInty));
+	}
 }
 

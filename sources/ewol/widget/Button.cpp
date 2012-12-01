@@ -335,7 +335,7 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 			}
 		}
 	}
-	return true;
+	return m_mouseHover;
 }
 
 
