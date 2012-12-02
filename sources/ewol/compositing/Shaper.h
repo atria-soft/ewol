@@ -61,6 +61,10 @@ namespace ewol
 			 * @brief Load the openGL program and get all the ID needed
 			 */
 			void LoadProgram(void);
+			/**
+			 * @brief Un-Load the openGL program and get all the ID needed
+			 */
+			void UnLoadProgram(void);
 		public:
 			/**
 			 * @brief generic constructor

@@ -28,8 +28,8 @@ extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Cha
 #undef __class__
 #define __class__	"ButtonColor"
 
-widget::ButtonColor::ButtonColor(draw::Color baseColor) :
-	m_shaper("THEME:GUI:widgetButton.conf"),
+widget::ButtonColor::ButtonColor(draw::Color baseColor, etk::UString shaperName) :
+	m_shaper(shaperName),
 	m_textColorFg(baseColor),
 	m_widgetContextMenu(NULL)
 {
@@ -46,6 +46,11 @@ widget::ButtonColor::~ButtonColor(void)
 	
 }
 
+
+void widget::ButtonColor::SetShaperName(etk::UString shaperName)
+{
+	m_shaper.SetSource(shaperName);
+}
 
 
 bool widget::ButtonColor::CalculateMinSize(void)

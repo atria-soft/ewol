@@ -20,7 +20,7 @@ namespace widget {
 			Drawable(void);
 			virtual ~Drawable(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolDrawable"; };
+			virtual const char * const GetObjectType(void) { return "widget::Drawable"; };
 			
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...

@@ -31,7 +31,7 @@ namespace widget {
 			etk::Vector2D<float>  m_currentUserPos;
 		public:
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolColorBar"; };
+			virtual const char * const GetObjectType(void) { return "widget::ColorBar"; };
 			// Derived function
 			virtual bool CalculateMinSize(void);
 			// Derived function

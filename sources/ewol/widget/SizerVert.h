@@ -19,23 +19,6 @@ namespace widget {
 		public:
 			SizerVert(void);
 			virtual ~SizerVert(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolSizerVert"; };
-		public:
-			// Derived function
-			virtual bool   CalculateSize(float availlableX, float availlableY);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			// Derived function
-			virtual void   SetMinSize(float x=-1, float y=-1);
-			// Derived function
-			virtual void   SetExpendX(bool newExpend=false);
-			// Derived function
-			virtual bool   CanExpentX(void);
-			// Derived function
-			virtual void   SetExpendY(bool newExpend=false);
-			// Derived function
-			virtual bool   CanExpentY(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
 			bool                           m_lockExpendContamination;
@@ -55,6 +38,22 @@ namespace widget {
 			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
 			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			// Derived function
+			virtual const char * const GetObjectType(void) { return "EwolSizerVert"; };
+			// Derived function
+			virtual bool   CalculateSize(float availlableX, float availlableY);
+			// Derived function
+			virtual bool   CalculateMinSize(void);
+			// Derived function
+			virtual void   SetMinSize(float x=-1, float y=-1);
+			// Derived function
+			virtual void   SetExpendX(bool newExpend=false);
+			// Derived function
+			virtual bool   CanExpentX(void);
+			// Derived function
+			virtual void   SetExpendY(bool newExpend=false);
+			// Derived function
+			virtual bool   CanExpentY(void);
 	};
 	
 };

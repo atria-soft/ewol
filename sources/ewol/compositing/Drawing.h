@@ -50,6 +50,10 @@ namespace ewol
 			 * @brief Load the openGL program and get all the ID needed
 			 */
 			void LoadProgram(void);
+			/**
+			 * @brief Un-Load the openGL program and get all the ID needed
+			 */
+			void UnLoadProgram(void);
 			float                               m_thickness;     //!< when drawing line and other things
 			int32_t                             m_triElement;    //!< special counter of the single dot generated
 			etk::Vector3D<float>                m_triangle[3];   //!< Register every system with a combinaison of tiangle

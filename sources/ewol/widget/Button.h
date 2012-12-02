@@ -31,7 +31,9 @@ namespace widget {
 			ewol::Shaper                m_shaper;             //!< Compositing theme.
 			ewol::Text                  m_displayText;        //!< compositing Text.
 			ewol::Image                 m_displayImage;       //!< Image to display in normal mode.
+			draw::Color                 m_imageColor;         //!< Image color to display it.
 			ewol::Image                 m_displayImageToggle; //!< Image to display in toggle mode.
+			draw::Color                 m_imageColorToggle;   //!< Image color Toggle to display it.
 			etk::UString                m_label;              //!< Labe to display in normal mode.
 			etk::UString                m_labelToggle;        //!< Label to display when toggle mode is set ("" whenit is the same).
 			bool                        m_toggleMode;         //!< The button is able to toggle.
@@ -47,11 +49,16 @@ namespace widget {
 			 * @brief Constructor
 			 * @param[in] newLabel Button Label to display
 			 */
-			Button(etk::UString newLabel="No Label");
+			Button(etk::UString newLabel="No Label", etk::UString shaperName="THEME:GUI:widgetButton.conf");
 			/**
 			 * @brief Destructor
 			 */
 			virtual ~Button(void);
+			/**
+			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
+			 * @param[in] shaperName The new shaper filename
+			 */
+			void SetShaperName(etk::UString shaperName);
 			/**
 			 * @brief Specify the current label of the Button
 			 * @param[in] newLabel The string that might be displayed
@@ -75,13 +82,15 @@ namespace widget {
 			/**
 			 * @brief Set an image to set at the button.
 			 * @param[in] imageName Filename of the image.
+			 * @param[in] color The required color for the image.
 			 */
-			void SetImage(etk::UString imageName);
+			void SetImage(etk::UString imageName, draw::Color color=draw::color::white);
 			/**
 			 * @brief Set the image when button is pressed.
 			 * @param[in] imageName Filename of the image.
+			 * @param[in] color The required color for the image.
 			 */
-			void SetImageToggle(etk::UString imageName);
+			void SetImageToggle(etk::UString imageName, draw::Color color=draw::color::white);
 			/**
 			 * @brief Set the currentValue of the Button (pressed or not)
 			 * @note Work only in toggle mode

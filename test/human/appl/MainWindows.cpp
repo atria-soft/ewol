@@ -39,7 +39,8 @@ static const char * l_basicLabel = "<center>Test software for EWOL</center>";
 #define __class__	"MainWindows"
 
 MainWindows::MainWindows(void) :
-	m_idWidget(0)
+	m_idWidget(0),
+	m_subWidget(NULL)
 {
 	APPL_DEBUG("CREATE WINDOWS ... ");
 	widget::SizerHori* mySizerHori = NULL;

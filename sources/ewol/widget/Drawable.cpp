@@ -16,15 +16,8 @@ widget::Drawable::Drawable(void)
 
 widget::Drawable::~Drawable(void)
 {
-	//clean all the object
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
-		delete(m_listOObject[iii]);
-		m_listOObject[iii] = NULL;
-	}
-	m_listOObject.Clear();
-
+	ClearOObjectList();
 }
-
 
 
 void widget::Drawable::AddOObject(ewol::Compositing* newObject, int32_t pos)

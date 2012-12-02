@@ -241,7 +241,7 @@ ewol::Drawing::Drawing(void) :
 
 ewol::Drawing::~Drawing(void)
 {
-	ewol::resource::Release(m_GLprogram);
+	UnLoadProgram();
 }
 
 
@@ -286,8 +286,19 @@ void ewol::Drawing::ResetCount(void)
 	m_triElement = 0;
 }
 
+void ewol::Drawing::UnLoadProgram(void)
+{
+	if (NULL!=m_GLprogram) {
+		ewol::resource::Release(m_GLprogram);
+		m_GLprogram = NULL;
+	}
+}
+
 void ewol::Drawing::LoadProgram(void)
 {
+	// remove previous loading ... in case
+	UnLoadProgram();
+	// oad the new ...
 	etk::UString tmpString("DATA:color3.prog");
 	// get the shader resource :
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {

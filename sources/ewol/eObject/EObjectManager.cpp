@@ -36,6 +36,7 @@ void ewol::EObjectManager::UnInit(void)
 	EWOL_INFO(" Remove missing user widget");
 	while(0<m_eObjectList.Size()) {
 		if (m_eObjectList[0]!=NULL) {
+			EWOL_WARNING("Un-INIT : Remove EObject type=\"" << m_eObjectList[0]->GetObjectType() << "\"");
 			delete(m_eObjectList[0]);
 			m_eObjectList[0] = NULL;
 		} else {
@@ -95,7 +96,7 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* object)
 			// Remove Element
 			m_eObjectList[iii] = NULL;
 			m_eObjectList.Erase(iii);
-			EWOL_DEBUG("Auto-Remove EObject : [" << object->GetId() << "]");
+			EWOL_DEBUG("Auto-Remove EObject : [" << object->GetId() << "] type=\"" << object->GetObjectType() << "\"");
 			informOneObjectIsRemoved(object);
 			m_eObjectAutoRemoveList.PushBack(object);
 			ewol::ForceRedrawAll();
@@ -110,6 +111,7 @@ void ewol::EObjectManager::RemoveAllAutoRemove(void)
 {
 	while(0<m_eObjectAutoRemoveList.Size()) {
 		if (m_eObjectAutoRemoveList[0]!=NULL) {
+			EWOL_DEBUG("Real Auto-Remove EObject type=\"" << m_eObjectAutoRemoveList[0]->GetObjectType() << "\"");
 			delete(m_eObjectAutoRemoveList[0]);
 			m_eObjectAutoRemoveList[0] = NULL;
 		} else {

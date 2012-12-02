@@ -45,6 +45,11 @@ ewol::Shaper::Shaper(etk::UString shaperName) :
 
 ewol::Shaper::~Shaper(void)
 {
+	UnLoadProgram();
+}
+
+void ewol::Shaper::UnLoadProgram(void)
+{
 	if (NULL != m_GLprogram) {
 		ewol::resource::Release(m_GLprogram);
 		m_GLprogram = NULL;
@@ -73,33 +78,36 @@ void ewol::Shaper::LoadProgram(void)
 		m_confImageFile    = m_config->Request("image");
 	}
 	etk::UString basicShaderFile = m_config->GetString(m_confProgramFile);
-	// Get the relative position of the current file ...
-	etk::FSNode file(m_name);
-	etk::UString tmpFilename = file.GetRelativeFolder() + basicShaderFile;
-	EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
-	// get the shader resource :
-	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpFilename, m_GLprogram) ) {
-		m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
-		m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
-		// Widget property ==> for the Vertex shader
-		m_GLPropertySize       = m_GLprogram->GetUniform("EW_widgetProperty.size");
-		m_GLPropertyOrigin     = m_GLprogram->GetUniform("EW_widgetProperty.origin");
-		m_GLPropertyInsidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
-		m_GLPropertyInsideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
-		// status property ==> for the fragment shader
-		m_GLStateOld           = m_GLprogram->GetUniform("EW_status.stateOld");
-		m_GLStateNew           = m_GLprogram->GetUniform("EW_status.stateNew");
-		m_GLStateTransition    = m_GLprogram->GetUniform("EW_status.transition");
-		// for the texture ID : 
-		m_GLtexID              = m_GLprogram->GetUniform("EW_texID");
-	}
-	
-	etk::UString basicImageFile = m_config->GetString(m_confImageFile);
-	tmpFilename = file.GetRelativeFolder() + basicImageFile;
-	etk::Vector2D<int32_t> size(64,64);
-	if (true == ewol::resource::Keep(tmpFilename, m_resourceTexture, size) ) {
-		// nothing else to do ...
+	if (basicShaderFile!="") {
+		// Get the relative position of the current file ...
+		etk::FSNode file(m_name);
+		etk::UString tmpFilename = file.GetRelativeFolder() + basicShaderFile;
+		EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
+		// get the shader resource :
+		m_GLPosition = 0;
+		if (true == ewol::resource::Keep(tmpFilename, m_GLprogram) ) {
+			m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
+			m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
+			// Widget property ==> for the Vertex shader
+			m_GLPropertySize       = m_GLprogram->GetUniform("EW_widgetProperty.size");
+			m_GLPropertyOrigin     = m_GLprogram->GetUniform("EW_widgetProperty.origin");
+			m_GLPropertyInsidePos  = m_GLprogram->GetUniform("EW_widgetProperty.insidePos");
+			m_GLPropertyInsideSize = m_GLprogram->GetUniform("EW_widgetProperty.insideSize");
+			// status property ==> for the fragment shader
+			m_GLStateOld           = m_GLprogram->GetUniform("EW_status.stateOld");
+			m_GLStateNew           = m_GLprogram->GetUniform("EW_status.stateNew");
+			m_GLStateTransition    = m_GLprogram->GetUniform("EW_status.transition");
+			// for the texture ID : 
+			m_GLtexID              = m_GLprogram->GetUniform("EW_texID");
+		}
+		etk::UString basicImageFile = m_config->GetString(m_confImageFile);
+		if (basicImageFile != "") {
+			tmpFilename = file.GetRelativeFolder() + basicImageFile;
+			etk::Vector2D<int32_t> size(64,64);
+			if (true == ewol::resource::Keep(tmpFilename, m_resourceTexture, size) ) {
+				// nothing else to do ...
+			}
+		}
 	}
 }
 
@@ -243,8 +251,10 @@ void ewol::Shaper::SetInsidePos(etk::Vector2D<float> newInsidePos)
 etk::Vector2D<float> ewol::Shaper::GetPadding(void)
 {
 	etk::Vector2D<float> padding;
-	padding.x = m_config->GetFloat(m_confIdPaddingX);
-	padding.y = m_config->GetFloat(m_confIdPaddingY);
+	if (m_config!=NULL) {
+		padding.x = m_config->GetFloat(m_confIdPaddingX);
+		padding.y = m_config->GetFloat(m_confIdPaddingY);
+	}
 	return padding;
 }
 
@@ -252,14 +262,8 @@ etk::Vector2D<float> ewol::Shaper::GetPadding(void)
 void ewol::Shaper::SetSource(etk::UString newFile)
 {
 	Clear();
-	if (NULL != m_GLprogram) {
-		ewol::resource::Release(m_GLprogram);
-		m_GLprogram = NULL;
-	}
-	if (NULL != m_config) {
-		ewol::resource::Release(m_config);
-		m_config = NULL;
-	}
+	UnLoadProgram();
+	m_name = newFile;
 	LoadProgram();
 }
 

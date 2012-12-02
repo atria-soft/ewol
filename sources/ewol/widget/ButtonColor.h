@@ -22,15 +22,6 @@ extern const char * const ewolEventButtonColorChange;
 namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
-		public:
-			/**
-			 * @brief Main constructor
-			 */
-			ButtonColor(draw::Color baseColor=draw::color::black);
-			/**
-			 * @brief Main destructor
-			 */
-			virtual ~ButtonColor(void);
 		private:
 			ewol::Shaper                m_shaper;             //!< Compositing theme.
 			ewol::Text                  m_text;               //!< Compositing Test display.
@@ -42,6 +33,21 @@ namespace widget {
 			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
 			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
 		public:
+			/**
+			 * @brief Main constructor.
+			 * @param[in] baseColor basic displayed color.
+			 * @param[in] shaperName The new shaper filename.
+			 */
+			ButtonColor(draw::Color baseColor=draw::color::black, etk::UString shaperName="THEME:GUI:widgetButton.conf");
+			/**
+			 * @brief Main destructor.
+			 */
+			virtual ~ButtonColor(void);
+			/**
+			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper).
+			 * @param[in] shaperName The new shaper filename.
+			 */
+			void SetShaperName(etk::UString shaperName);
 			/**
 			 * @brief Get the current color of the color selection widget
 			 * @return The current color
@@ -56,7 +62,7 @@ namespace widget {
 			// Derived function
 			virtual bool CalculateMinSize(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolButtonColor"; };
+			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function

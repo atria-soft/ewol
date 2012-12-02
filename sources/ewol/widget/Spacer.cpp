@@ -44,25 +44,26 @@ void widget::Spacer::SetSize(float size)
 	MarkToRedraw();
 }
 
+
+void widget::Spacer::OnDraw(ewol::DrawProperty& displayProp)
+{
+	m_draw.Draw();
+}
+
+
 #define BORDER_SIZE_TMP         (4)
 void widget::Spacer::OnRegenerateDisplay(void)
 {
 	if (false == NeedRedraw()) {
 		return;
 	}
-	// generate a white background and take gray on other surfaces
-	ClearOObjectList();
+	m_draw.Clear();
+	
 	if (m_color.a == 0) {
 		return;
 	}
-	ewol::Drawing * tmpDraw = new ewol::Drawing();
-	if (NULL == tmpDraw) {
-		return;
-	}
-	AddOObject(tmpDraw);
-	
-	tmpDraw->SetColor(m_color);
-	tmpDraw->SetPos(etk::Vector3D<float>(0, 0, 0) );
-	tmpDraw->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
+	m_draw.SetColor(m_color);
+	m_draw.SetPos(etk::Vector3D<float>(0, 0, 0) );
+	m_draw.RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
 }
 

@@ -12,27 +12,46 @@
 #include <etk/types.h>
 #include <draw/Color.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/widget/Widget.h>
+#include <ewol/compositing/Drawing.h>
 
 namespace widget {
-	class Spacer :public widget::Drawable
+	class Spacer :public ewol::Widget
 	{
+		private:
+			ewol::Drawing  m_draw;      //!< Compositing drawing element
+			float          m_localSize; //!< Local request size of the display
+			draw::Color    m_color;     //!< Background color
 		public:
+			/**
+			 * @brief Main constructer
+			 */
 			Spacer(void);
+			/**
+			 * @brief Main destructer
+			 */
 			virtual ~Spacer(void);
+			/**
+			 * @brief Set the minimum size requested
+			 * @param[in] size Requested size of the minimum display (in X and Y)
+			 */
+			void SetSize(float size);
+			/**
+			 * @brief Spziby the background color (basicly transparent)
+			 * @param[in] newColor the display background color
+			 */
+			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
+		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolSpacer"; };
 			// Derived function
-			virtual bool   CalculateMinSize(void);
-			void SetSize(float size);
+			virtual bool CalculateMinSize(void);
 			// Derived function
 			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos) { return NULL; };
 			// Derived function
-			virtual void   OnRegenerateDisplay(void);
-			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
-		private:
-			float        m_localSize;
-			draw::Color  m_color;
+			virtual void OnRegenerateDisplay(void);
+			// Derived function
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 	};
 	
 };

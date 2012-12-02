@@ -122,8 +122,6 @@ namespace ewol
 		{
 			
 		}
-	};
-	/*
 		bool IsSetCapsLock(void)
 		{
 			return capLock;
@@ -158,8 +156,12 @@ namespace ewol
 		{
 			return verNum;
 		}
+		bool IsSetInsert(void)
+		{
+			return insert;
+		}
 	};
-	*/
+	
 	SpecialKey& GetCurrentSpecialKeyStatus(void);
 };
 

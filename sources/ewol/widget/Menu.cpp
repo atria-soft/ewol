@@ -76,7 +76,7 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 	tmpObject->m_localId = m_staticId++;
 	tmpObject->m_parentId = parent;
 	tmpObject->m_widgetPointer = NULL;
-	tmpObject->m_label = label;
+	tmpObject->m_label = etk::UString("<left>") + label + "</left>";
 	tmpObject->m_image = image;
 	tmpObject->m_generateEvent = generateEvent;
 	tmpObject->m_message = message;

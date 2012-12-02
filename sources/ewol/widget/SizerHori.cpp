@@ -144,10 +144,11 @@ void widget::SizerHori::LockExpendContamination(bool lockExpend)
 
 void widget::SizerHori::SubWidgetRemoveAll(void)
 {
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			delete(m_subWidget[iii]);
-			m_subWidget[iii] = NULL;
+	// the size automaticly decrement with the auto call of the OnObjectRemove function
+	while (m_subWidget.Size() > 0 ) {
+		if (NULL != m_subWidget[0]) {
+			delete(m_subWidget[0]);
+			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
 		}
 	}
 	m_subWidget.Clear();
@@ -250,7 +251,7 @@ void widget::SizerHori::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	for(int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
 		if(m_subWidget[iii] == removeObject) {
-			EWOL_DEBUG("Remove sizer sub Element [" << iii << "] ==> destroyed object");
+			EWOL_VERBOSE("Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 		}

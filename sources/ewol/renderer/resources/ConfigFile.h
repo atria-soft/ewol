@@ -40,6 +40,7 @@ namespace ewol
 	{
 		private:
 			etk::Vector<ewol::SimpleConfigElement*> m_list;
+			etk::UString                            m_errorString;
 		public:
 			ConfigFile(etk::UString& filename);
 			virtual ~ConfigFile(void);
@@ -48,9 +49,9 @@ namespace ewol
 			
 			int32_t Request(etk::UString paramName);
 			
-			int32_t       GetInteger(int32_t id) { return m_list[id]->GetInteger(); };
-			float         GetFloat(int32_t id)   { return m_list[id]->GetFloat();   };
-			etk::UString& GetString(int32_t id)  { return m_list[id]->GetString();  };
+			int32_t       GetInteger(int32_t id) { if (id<0) { return 0; } return m_list[id]->GetInteger(); };
+			float         GetFloat(int32_t id)   { if (id<0) { return 0; } return m_list[id]->GetFloat();   };
+			etk::UString& GetString(int32_t id)  { if (id<0) { return m_errorString; } return m_list[id]->GetString();  };
 	};
 };
 

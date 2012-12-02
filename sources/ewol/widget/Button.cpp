@@ -29,8 +29,8 @@ extern const char * const ewolEventButtonValue      = "ewol-button-value";
 #define STATUS_DOWN      (3)
 
 
-widget::Button::Button(etk::UString newLabel) :
-	m_shaper("THEME:GUI:widgetButton.conf"),
+widget::Button::Button(etk::UString newLabel, etk::UString shaperName) :
+	m_shaper(shaperName),
 	m_label(newLabel),
 	m_toggleMode(false),
 	m_value(false),
@@ -58,15 +58,22 @@ widget::Button::~Button(void)
 	
 }
 
-void widget::Button::SetImage(etk::UString imageName)
+void widget::Button::SetShaperName(etk::UString shaperName)
 {
+	m_shaper.SetSource(shaperName);
+}
+
+void widget::Button::SetImage(etk::UString imageName, draw::Color color)
+{
+	m_imageColor = color;
 	m_displayImage.SetSource(imageName);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
-void widget::Button::SetImageToggle(etk::UString imageName)
+void widget::Button::SetImageToggle(etk::UString imageName, draw::Color color)
 {
+	m_imageColorToggle = color;
 	m_displayImageToggle.SetSource(imageName);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
@@ -220,9 +227,11 @@ void widget::Button::OnRegenerateDisplay(void)
 			if(    false==m_toggleMode
 			    || false==m_value) {
 				m_displayImage.SetPos(imagePos);
+				m_displayImage.SetColor(m_imageColor);
 				m_displayImage.Print(imageSize);
 			} else {
 				m_displayImageToggle.SetPos(imagePos);
+				m_displayImageToggle.SetColor(m_imageColorToggle);
 				m_displayImageToggle.Print(imageSize);
 			}
 			// update the text position ...
