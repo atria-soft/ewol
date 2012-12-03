@@ -52,7 +52,7 @@ void APP_Init(void)
 		#endif
 	#endif
 	etk::InitDefaultFolder(PROJECT_NAME);
-	ewol::ChangeSize(etk::Vector2D<int32_t>(800, 600));
+	ewol::ChangeSize(ivec2(800, 600));
 	#ifdef __TARGET_OS__Android
 		ewol::config::FontSetDefault("FreeSerif", 19);
 	#else

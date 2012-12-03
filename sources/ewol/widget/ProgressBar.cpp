@@ -72,11 +72,11 @@ void widget::ProgressBar::OnRegenerateDisplay(void)
 		int32_t tmpOriginX = 5;
 		int32_t tmpOriginY = 5;
 		tmpDraw->SetColor(m_textColorBgOn);
-		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
-		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX*m_value, tmpSizeY, 0) );
+		tmpDraw->SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
 		tmpDraw->SetColor(m_textColorBgOff);
-		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
-		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
+		tmpDraw->SetPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
 		
 		// TODO : Create a better progress Bar ...
 		//tmpDraw->SetColor(m_textColorFg);

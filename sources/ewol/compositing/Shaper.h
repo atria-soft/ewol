@@ -48,14 +48,14 @@ namespace ewol
 			// internal needed data :
 			int32_t              m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
 			int64_t              m_time;                   //!< The last time of the dispaly (-1 if nothing progressing)
-			etk::Vector2D<float> m_propertyOrigin;         //!< widget origin
-			etk::Vector2D<float> m_propertySize;           //!< widget size
-			etk::Vector2D<float> m_propertyInsidePosition; //!< internal subwidget position
-			etk::Vector2D<float> m_propertyInsideSize;     //!< internal subwidget size
+			vec2 m_propertyOrigin;         //!< widget origin
+			vec2 m_propertySize;           //!< widget size
+			vec2 m_propertyInsidePosition; //!< internal subwidget position
+			vec2 m_propertyInsideSize;     //!< internal subwidget size
 			int32_t              m_stateOld;               //!< previous state
 			int32_t              m_stateNew;               //!< destination state
 			float                m_stateTransition;        //!< working state between 2 states
-			etk::Vector2D<float> m_coord[6];               //!< the double triangle coordonates
+			vec2 m_coord[6];               //!< the double triangle coordonates
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
@@ -112,27 +112,27 @@ namespace ewol
 			 * @brief Set the widget origin (needed fot the display)
 			 * @param[in] newOri : the new widget origin
 			 */
-			void SetOrigin(etk::Vector2D<float> newOri);
+			void SetOrigin(vec2 newOri);
 			/**
 			 * @brief Set the widget size (needed fot the display)
 			 * @param[in] newSize : the new widget size
 			 */
-			void SetSize(etk::Vector2D<float> newSize);
+			void SetSize(vec2 newSize);
 			/**
 			 * @brief Set the internal widget size
 			 * @param[in] newInsidePos : the subelement size.
 			 */
-			void SetInsideSize(etk::Vector2D<float> newInsideSize);
+			void SetInsideSize(vec2 newInsideSize);
 			/**
 			 * @brief Set the internal widget position
 			 * @param[in] newInsidePos : the subelement position
 			 */
-			void SetInsidePos(etk::Vector2D<float> newInsidePos);
+			void SetInsidePos(vec2 newInsidePos);
 			/**
 			 * @brief Get the padding declared by the user in the config file
 			 * @return the padding property
 			 */
-			etk::Vector2D<float> GetPadding(void);
+			vec2 GetPadding(void);
 			/**
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
 			 * @param[in] newFile New file of the Image

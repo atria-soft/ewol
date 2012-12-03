@@ -279,9 +279,9 @@ static int32_t nextP2(int32_t value)
 	return val;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, etk::Vector2D<int32_t> size)
+bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
 {
-	 etk::Vector2D<int32_t> size2(nextP2(size.x), nextP2(size.y));
+	 ivec2 size2(nextP2(size.x), nextP2(size.y));
 	etk::UString TmpFilename = filename;
 	TmpFilename += ":";
 	TmpFilename += size2.x;

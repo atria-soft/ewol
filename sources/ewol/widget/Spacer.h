@@ -47,7 +47,7 @@ namespace widget {
 			// Derived function
 			virtual bool CalculateMinSize(void);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos) { return NULL; };
+			virtual ewol::Widget * GetWidgetAtPos(vec2  pos) { return NULL; };
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function

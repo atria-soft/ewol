@@ -22,7 +22,7 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolWSlider"; };
 		private:
-			etk::Vector2D<bool> m_underExpend; // expend of the uner elements ...
+			bvec2 m_underExpend; // expend of the uner elements ...
 		public:
 			// Derived function
 			virtual bool   CalculateSize(float availlableX, float availlableY);
@@ -56,7 +56,7 @@ namespace widget {
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
 			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			// Derived function

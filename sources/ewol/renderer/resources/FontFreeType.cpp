@@ -103,13 +103,13 @@ ewol::FontFreeType::~FontFreeType(void)
 }
 
 
-etk::Vector2D<float> ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
+vec2 ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
 {
 	if(false==m_init) {
-		return etk::Vector2D<float>(0,0);
+		return vec2(0,0);
 	}
 	// TODO : ...
-	etk::Vector2D<float> outputSize(0,0);
+	vec2 outputSize(0,0);
 	return outputSize;
 }
 
@@ -165,7 +165,7 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 
 bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
                                    int32_t                fontSize,
-                                   etk::Vector2D<int32_t> glyphPosition,
+                                   ivec2 glyphPosition,
                                    ewol::GlyphProperty&   property,
                                    int8_t                 posInImage)
 {
@@ -202,7 +202,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
-			tlpppp = imageOut.Get(etk::Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj));
+			tlpppp = imageOut.Get(ivec2(glyphPosition.x+iii, glyphPosition.y+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
 			switch(posInImage)
@@ -222,7 +222,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 					break;
 			}
 			// real set of color
-			imageOut.Set(etk::Vector2D<int32_t>(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
+			imageOut.Set(ivec2(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
 		}
 	}
 	return true;

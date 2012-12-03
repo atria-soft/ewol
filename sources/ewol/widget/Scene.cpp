@@ -126,7 +126,7 @@ void widget::Scene::GenDraw(DrawProperty displayProp)
 	float ratio = m_size.x / m_size.y;
 		m_zoom = 1.0/1000.0;
 	//EWOL_INFO("ratio : " << ratio);
-		etk::Matrix4 tmpProjection;
+		mat4 tmpProjection;
 		
 		if (ratio >= 1.0) {
 			tmpProjection = etk::matrix::Perspective(-ratio, ratio, -1, 1, -1, 1);
@@ -134,8 +134,8 @@ void widget::Scene::GenDraw(DrawProperty displayProp)
 			ratio = 1.0/ratio;
 			tmpProjection = etk::matrix::Perspective(-1, 1, -ratio, ratio, -1, 1);
 		}
-		etk::Matrix4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, m_zoom);
-		etk::Matrix4 tmpMat = tmpProjection * tmpScale;
+		mat4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, m_zoom);
+		mat4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 	// Clear the screen with transparency ...
@@ -148,7 +148,7 @@ void widget::Scene::GenDraw(DrawProperty displayProp)
 }
 
 
-etk::Vector2D<float> widget::Scene::RelativePosition(etk::Vector2D<float>  pos)
+vec2 widget::Scene::RelativePosition(vec2  pos)
 {
 	// Remove origin of the widget
 	pos.x -= m_origin.x;

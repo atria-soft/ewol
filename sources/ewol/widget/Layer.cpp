@@ -57,7 +57,7 @@ bool widget::Layer::CalculateMinSize(void)
 			if (true == m_subWidget[iii]->CanExpentY()) {
 				m_userExpend.y = true;
 			}
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			m_minSize.x = etk_max(tmpSize.x, m_minSize.x);
 			m_minSize.y = etk_max(tmpSize.y, m_minSize.y);
 		}
@@ -174,13 +174,13 @@ void widget::Layer::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::Layer::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::Layer::GetWidgetAtPos(vec2 pos)
 {
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetSize();
-			etk::Vector2D<float> tmpOrigin = m_subWidget[iii]->GetOrigin();
+			vec2 tmpSize = m_subWidget[iii]->GetSize();
+			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
 			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 			{

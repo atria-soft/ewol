@@ -39,15 +39,15 @@ namespace widget {
 		private:
 			draw::Color        m_colorBackGroung;
 			draw::Color        m_colorBorder;
-			etk::Vector2D<float>       m_padding;
-			etk::Vector2D<float>       m_arrowPos;
+			vec2       m_padding;
+			vec2       m_arrowPos;
 			float      m_offset;
 			markPosition_te m_arrawBorder;
 			ewol::Widget*   m_subWidget;
 		public:
 			void           SubWidgetSet(ewol::Widget* newWidget);
 			void           SubWidgetRemove(void);
-			void           SetPositionMark(markPosition_te position, etk::Vector2D<float>  arrowPos);
+			void           SetPositionMark(markPosition_te position, vec2  arrowPos);
 		protected:
 			// Derived function
 			virtual void   OnDraw(ewol::DrawProperty& displayProp);
@@ -55,9 +55,9 @@ namespace widget {
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 	};
 	
 };

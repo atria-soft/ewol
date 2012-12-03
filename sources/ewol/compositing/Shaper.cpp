@@ -103,7 +103,7 @@ void ewol::Shaper::LoadProgram(void)
 		etk::UString basicImageFile = m_config->GetString(m_confImageFile);
 		if (basicImageFile != "") {
 			tmpFilename = file.GetRelativeFolder() + basicImageFile;
-			etk::Vector2D<int32_t> size(64,64);
+			ivec2 size(64,64);
 			if (true == ewol::resource::Keep(tmpFilename, m_resourceTexture, size) ) {
 				// nothing else to do ...
 			}
@@ -125,7 +125,7 @@ void ewol::Shaper::Draw(void)
 	//glScalef(m_scaling.x, m_scaling.y, 1.0);
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
+	mat4 tmpMatrix = ewol::openGL::GetMatrix();
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
 	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
@@ -220,7 +220,7 @@ void ewol::Shaper::UpdateVectex(void)
 	m_coord[5].y= m_propertyOrigin.y+m_propertySize.y;
 }
 
-void ewol::Shaper::SetOrigin(etk::Vector2D<float> newOri)
+void ewol::Shaper::SetOrigin(vec2 newOri)
 {
 	if (m_propertyOrigin != newOri) {
 		m_propertyOrigin = newOri;
@@ -229,7 +229,7 @@ void ewol::Shaper::SetOrigin(etk::Vector2D<float> newOri)
 
 }
 
-void ewol::Shaper::SetSize(etk::Vector2D<float> newSize)
+void ewol::Shaper::SetSize(vec2 newSize)
 {
 	if (m_propertySize != newSize) {
 		m_propertySize = newSize;
@@ -237,20 +237,20 @@ void ewol::Shaper::SetSize(etk::Vector2D<float> newSize)
 	}
 }
 
-void ewol::Shaper::SetInsideSize(etk::Vector2D<float> newInsideSize)
+void ewol::Shaper::SetInsideSize(vec2 newInsideSize)
 {
 	m_propertyInsideSize = newInsideSize;
 }
 
-void ewol::Shaper::SetInsidePos(etk::Vector2D<float> newInsidePos)
+void ewol::Shaper::SetInsidePos(vec2 newInsidePos)
 {
 	m_propertyInsidePosition = newInsidePos;
 }
 
 
-etk::Vector2D<float> ewol::Shaper::GetPadding(void)
+vec2 ewol::Shaper::GetPadding(void)
 {
-	etk::Vector2D<float> padding;
+	vec2 padding;
 	if (m_config!=NULL) {
 		padding.x = m_config->GetFloat(m_confIdPaddingX);
 		padding.y = m_config->GetFloat(m_confIdPaddingY);

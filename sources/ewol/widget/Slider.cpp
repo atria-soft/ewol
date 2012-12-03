@@ -93,13 +93,13 @@ void widget::Slider::OnRegenerateDisplay(void)
 		tmpDraw->SetColor(m_textColorFg);
 		// draw a line :
 		tmpDraw->SetThickness(1);
-		tmpDraw->SetPos(etk::Vector3D<float>(dotRadius, m_size.y/2) );
-		tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-dotRadius, m_size.y/2) );
+		tmpDraw->SetPos(vec3(dotRadius, m_size.y/2) );
+		tmpDraw->LineTo(vec3(m_size.x-dotRadius, m_size.y/2) );
 		tmpDraw->SetThickness(0);
 		
 		draw::Color borderDot = m_textColorFg;
 		borderDot.a /= 2;
-		tmpDraw->SetPos(etk::Vector3D<float>(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2) );
+		tmpDraw->SetPos(vec3(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x-2*dotRadius), m_size.y/2) );
 		tmpDraw->SetColorBg(borderDot);
 		tmpDraw->Circle(dotRadius);
 		tmpDraw->SetColorBg(m_textColorFg);
@@ -109,9 +109,9 @@ void widget::Slider::OnRegenerateDisplay(void)
 }
 
 
-bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on Slider ...");
 	if (1 == IdInput) {
 		if(    ewol::keyEvent::statusSingle == typeEvent

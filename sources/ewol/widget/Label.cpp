@@ -48,7 +48,7 @@ widget::Label::~Label(void)
 
 bool widget::Label::CalculateMinSize(void)
 {
-	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
+	ivec3 minSize = m_oObjectText.CalculateSize(m_label);
 	m_minSize.x = 3 + minSize.x;
 	m_minSize.y = 3 + minSize.y;
 	return true;
@@ -86,14 +86,14 @@ void widget::Label::OnRegenerateDisplay(void)
 		tmpOriginY += paddingSize;
 		
 		
-		etk::Vector3D<float> textPos(tmpOriginX, tmpOriginY, 0);
+		vec3 textPos(tmpOriginX, tmpOriginY, 0);
 		m_oObjectText.SetPos(textPos);
 		m_oObjectText.Print(m_label);
 		
 	}
 }
 
-bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {

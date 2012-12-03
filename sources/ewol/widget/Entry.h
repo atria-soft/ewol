@@ -72,7 +72,7 @@ namespace widget {
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 			// Derived function
@@ -90,7 +90,7 @@ namespace widget {
 			 * @note The display is automaticly requested when change apear.
 			 * @return ---
 			 */
-			virtual void UpdateCursorPosition(etk::Vector2D<float>& pos, bool Selection=false);
+			virtual void UpdateCursorPosition(vec2& pos, bool Selection=false);
 			/**
 			 * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
 			 * @param ---

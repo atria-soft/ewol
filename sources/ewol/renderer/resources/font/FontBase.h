@@ -34,11 +34,11 @@ namespace ewol
 			
 			virtual bool DrawGlyph(draw::Image&         imageOut,
 			                       int32_t              fontSize,
-			                       etk::Vector2D<int32_t>    glyphPosition,
+			                       ivec2    glyphPosition,
 			                       ewol::GlyphProperty& property,
 			                       int8_t posInImage) = 0;
 			
-			virtual etk::Vector2D<float> GetSize(int32_t fontSize, const etk::UString &  unicodeString) = 0;
+			virtual vec2 GetSize(int32_t fontSize, const etk::UString &  unicodeString) = 0;
 			
 			virtual int32_t GetHeight(int32_t fontSize) = 0;
 			

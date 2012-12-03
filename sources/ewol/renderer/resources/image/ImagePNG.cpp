@@ -97,7 +97,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	int32_t width = png_get_image_width(png_ptr, info_ptr);
 	int32_t height = png_get_image_height(png_ptr, info_ptr);
 	// reallocate the image 
-	ouputImage.Resize(etk::Vector2D<int32_t>(width,height));
+	ouputImage.Resize(ivec2(width,height));
 	
 	int32_t bit_depth = png_get_bit_depth(png_ptr, info_ptr);
 	png_read_update_info(png_ptr, info_ptr);
@@ -131,7 +131,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 			tmpColor.g = ptr[1];
 			tmpColor.b = ptr[2];
 			tmpColor.a = ptr[3];
-			ouputImage.Set(etk::Vector2D<int32_t>(x,y), tmpColor);
+			ouputImage.Set(ivec2(x,y), tmpColor);
 		}
 		delete row_pointers[y];
 	}

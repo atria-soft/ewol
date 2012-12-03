@@ -20,10 +20,10 @@ namespace ewol
 		int32_t              destinationInputId;
 		int64_t              lastTimeEvent;
 		ewol::Widget*        curentWidgetEvent;
-		etk::Vector2D<float> origin;
-		etk::Vector2D<float> size;
-		etk::Vector2D<float> downStart;
-		etk::Vector2D<float> posEvent;
+		vec2 origin;
+		vec2 size;
+		vec2 downStart;
+		vec2 posEvent;
 		bool                 isDown;
 		bool                 isInside;
 		int32_t              nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -58,7 +58,7 @@ namespace ewol
 			                     ewol::Widget* destWidget,
 			                     int32_t IdInput,
 			                     ewol::keyEvent::status_te typeEvent,
-			                     etk::Vector2D<float> pos);
+			                     vec2 pos);
 			/**
 			 * @brief Convert the system event id in the correct EWOL id depending of the system management mode
 			 *        This function find the next input id unused on the specifiic widget
@@ -77,8 +77,8 @@ namespace ewol
 			void SetDpi(int32_t newDPI);
 			
 			// note if id<0 ==> the it was finger event ...
-			void Motion(ewol::keyEvent::type_te type, int pointerID, etk::Vector2D<float>  pos );
-			void State(ewol::keyEvent::type_te type, int pointerID, bool isDown, etk::Vector2D<float>  pos);
+			void Motion(ewol::keyEvent::type_te type, int pointerID, vec2  pos );
+			void State(ewol::keyEvent::type_te type, int pointerID, bool isDown, vec2  pos);
 			
 			/**
 			 * @brief Inform object that an other object is removed ...

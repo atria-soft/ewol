@@ -121,13 +121,13 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool widget::Joystick::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Joystick::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	if (1 == IdInput) {
 		if(    ewol::keyEvent::statusDown == typeEvent
 		    || ewol::keyEvent::statusMove == typeEvent) {
 			// get local relative position
-			etk::Vector2D<float> relativePos = RelativePosition(pos);
+			vec2 relativePos = RelativePosition(pos);
 			float sizeElement = m_size.x*m_ratio;
 			// Calculate the position of the cursor...
 			m_displayPos.x = (relativePos.x-sizeElement)/(m_size.x-sizeElement*2)*2.0 - 1.0;

@@ -35,7 +35,7 @@ namespace widget {
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
 			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			// Derived function

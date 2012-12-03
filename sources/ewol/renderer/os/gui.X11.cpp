@@ -242,7 +242,7 @@ bool CreateX11Context(void)
 		XSetWMProtocols(m_display, WindowHandle, &m_delAtom, 1);
 	}
 	
-	etk::Vector2D<int32_t> tmpSize(400, 300);
+	ivec2 tmpSize(400, 300);
 	guiInterface::ChangeSize(tmpSize);
 	
 	return true;
@@ -1042,7 +1042,7 @@ void guiInterface::KeyboardHide(void)
 }
 
 
-void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
+void guiInterface::ChangeSize(ivec2 size)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: ChangeSize");
@@ -1052,7 +1052,7 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 }
 
 
-void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
+void guiInterface::ChangePos(ivec2 pos)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: ChangePos");
@@ -1061,7 +1061,7 @@ void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
 }
 
 
-void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& pos)
+void guiInterface::GetAbsPos(ivec2& pos)
 {
 	#ifdef DEBUG_X11_EVENT
 		EWOL_INFO("X11: GetAbsPos");

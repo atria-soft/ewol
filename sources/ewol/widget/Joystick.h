@@ -28,7 +28,7 @@ namespace widget {
 		private:
 			draw::Color           m_colorFg;      //!< Forground  color
 			draw::Color           m_colorBg;      //!< Background color
-			etk::Vector2D<float>  m_displayPos;   //!< direction of the cursor ...
+			vec2  m_displayPos;   //!< direction of the cursor ...
 			float                 m_distance;     //!< dintance from the center
 			float                 m_angle;        //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 			bool                  m_lock;         //!< flag to mark the lock when the cursor is free when we are outside the circle
@@ -49,7 +49,7 @@ namespace widget {
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
 			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
 			/**

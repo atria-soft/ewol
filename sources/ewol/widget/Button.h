@@ -42,8 +42,8 @@ namespace widget {
 			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed.
 			int32_t                     m_imageDisplaySize;   //!< Display size of the Image.
 			// hover area :
-			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
-			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
+			vec2        m_selectableAreaPos;  //!< Start position of the events
+			vec2        m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Constructor
@@ -123,7 +123,7 @@ namespace widget {
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 		private:

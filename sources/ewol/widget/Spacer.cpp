@@ -63,7 +63,7 @@ void widget::Spacer::OnRegenerateDisplay(void)
 		return;
 	}
 	m_draw.SetColor(m_color);
-	m_draw.SetPos(etk::Vector3D<float>(0, 0, 0) );
-	m_draw.RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
+	m_draw.SetPos(vec3(0, 0, 0) );
+	m_draw.RectangleWidth(vec3(m_size.x, m_size.y) );
 }
 

@@ -29,7 +29,7 @@
 
 
 static ewol::Windows*          windowsCurrent = NULL;
-static etk::Vector2D<int32_t>  windowsSize(320, 480);
+static ivec2  windowsSize(320, 480);
 static ewol::eSystemInput      l_managementInput;
 
 
@@ -70,7 +70,7 @@ class eSystemMessage {
 		ewol::keyEvent::type_te inputType;
 		int32_t                 inputId;
 		// generic dimentions
-		etk::Vector2D<float> dimention;
+		vec2 dimention;
 		// keyboard events :
 		bool                        stateIsDown;
 		uniChar_t                   keyboardChar;
@@ -523,7 +523,7 @@ ewol::Windows* eSystem::GetCurrentWindows(void)
 }
 
 
-etk::Vector2D<int32_t> eSystem::GetSize(void)
+ivec2 eSystem::GetSize(void)
 {
 	return windowsSize;
 }
@@ -533,7 +533,7 @@ void eSystem::ForceRedrawAll(void)
 {
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	if (NULL != tmpWindows) {
-		etk::Vector2D<int32_t> tmpSize = eSystem::GetSize();
+		ivec2 tmpSize = eSystem::GetSize();
 		tmpWindows->CalculateSize(tmpSize.x, tmpSize.y);
 	}
 }

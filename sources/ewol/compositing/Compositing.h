@@ -18,7 +18,7 @@ namespace ewol
 	class Compositing
 	{
 		protected:
-			etk::Matrix4 m_matrixApply;
+			mat4 m_matrixApply;
 		public:
 			/**
 			 * @brief generic constructor
@@ -44,17 +44,17 @@ namespace ewol
 			 * @brief Translate the current display of this element
 			 * @param[in] vect The translation vector to apply at the transformation matrix
 			 */
-			virtual void Translate(etk::Vector3D<float> vect);
+			virtual void Translate(vec3 vect);
 			/**
 			 * @brief Rotate the curent display of this element
 			 * @param[in] vect The rotation vector to apply at the transformation matrix
 			 */
-			virtual void Rotate(etk::Vector3D<float> vect, float angle);
+			virtual void Rotate(vec3 vect, float angle);
 			/**
 			 * @brief Scale the current diaplsy of this element
 			 * @param[in] vect The scaling vector to apply at the transformation matrix
 			 */
-			virtual void Scale(etk::Vector3D<float> vect);
+			virtual void Scale(vec3 vect);
 	};
 };
 

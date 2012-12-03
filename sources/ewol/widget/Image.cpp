@@ -54,7 +54,7 @@ widget::Image::~Image(void)
 }
 
 
-void widget::Image::SetPadding(etk::Vector2D<float> newPadding)
+void widget::Image::SetPadding(vec2 newPadding)
 {
 	m_padding = newPadding;
 }
@@ -102,14 +102,14 @@ void widget::Image::OnRegenerateDisplay(void)
 		
 		ewol::Image * tmpImage = NULL;
 		tmpImage = new ewol::Image(m_imageSelected); // TODO : Check if it was possible later : , m_imageSize, m_imageSize);
-		tmpImage->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
-		tmpImage->Print(etk::Vector2D<float>(m_imageSize, m_imageSize));
+		tmpImage->SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
+		tmpImage->Print(vec2(m_imageSize, m_imageSize));
 
 		
 		ewol::Drawing * tmpDraw = new ewol::Drawing();
 		tmpDraw->SetColor(m_textColorBg);
-		tmpDraw->SetPos(etk::Vector3D<float>(tmpOriginX, tmpOriginY, 0) );
-		tmpDraw->RectangleWidth(etk::Vector3D<float>(tmpSizeX, tmpSizeY, 0) );
+		tmpDraw->SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
+		tmpDraw->RectangleWidth(vec3(tmpSizeX, tmpSizeY, 0) );
 		// add all needed objects ...
 		if (NULL != tmpDraw) {
 			AddOObject(tmpDraw);
@@ -120,7 +120,7 @@ void widget::Image::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

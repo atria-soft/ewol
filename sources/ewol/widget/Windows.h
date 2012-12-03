@@ -38,7 +38,7 @@ namespace ewol {
 			// Derived function
 			virtual bool CalculateSize(float availlableX, float availlableY);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos);
+			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
 		private:
 			bool m_hasDecoration;
 		public:

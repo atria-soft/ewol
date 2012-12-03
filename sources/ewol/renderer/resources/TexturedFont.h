@@ -39,7 +39,7 @@ namespace ewol
 			etk::Vector<GlyphProperty>          m_listElement[4];
 		private:
 			// for the texture generation :
-			etk::Vector2D<int32_t>              m_lastGlyphPos[4];
+			ivec2              m_lastGlyphPos[4];
 			int32_t                             m_lastRawHeigh[4];
 		public:
 			TexturedFont(etk::UString fontName);

@@ -45,7 +45,7 @@ namespace widget {
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 	};

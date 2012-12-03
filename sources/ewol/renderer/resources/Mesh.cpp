@@ -60,12 +60,12 @@ void ewol::Mesh::Draw(void)
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix =   etk::Matrix4::Scale(etk::Vector3D<float>(100,100,100) )
-	            * etk::Matrix4::Rotate(etk::Vector3D<float>(1,0,0), rotx)
-	            * etk::Matrix4::Rotate(etk::Vector3D<float>(0,1,0), roty)/*
-	            * etk::Matrix4::Translate(etk::Vector3D<float>(0.01,0.0,0.0))
-	            * etk::Matrix4::Rotate(etk::Vector3D<float>(0,0,1), rotz)*/
+	mat4 tmpMatrix = ewol::openGL::GetMatrix();
+	tmpMatrix =   mat4::Scale(vec3(100,100,100) )
+	            * mat4::Rotate(vec3(1,0,0), rotx)
+	            * mat4::Rotate(vec3(0,1,0), roty)/*
+	            * mat4::Translate(vec3(0.01,0.0,0.0))
+	            * mat4::Rotate(vec3(0,0,1), rotz)*/
 	            * tmpMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID

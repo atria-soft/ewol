@@ -141,8 +141,8 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 		// set background color :
 		ewol::Drawing * tmpDraw = new ewol::Drawing();
 		tmpDraw->SetColor(0xFFFFFFFF);
-		tmpDraw->SetPos(etk::Vector3D<float>(0,0,0) );
-		tmpDraw->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y) );
+		tmpDraw->SetPos(vec3(0,0,0) );
+		tmpDraw->RectangleWidth(vec3(m_size.x, m_size.y) );
 		
 		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
 		
@@ -166,7 +166,7 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 			
 			ewol::Text * tmpText = new ewol::Text();
 			
-			etk::Vector3D<float> textPos;
+			vec3 textPos;
 			textPos.x = (int32_t)tmpOriginX;
 			if (m_list[iii]->m_group == false) {
 				textPos.x += minHeight;
@@ -186,7 +186,7 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);
@@ -194,7 +194,7 @@ bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t I
 		return true;
 	}
 	if (IdInput == 1 && typeEvent == ewol::keyEvent::statusSingle) {
-		etk::Vector2D<float> relativePos = RelativePosition(pos);
+		vec2 relativePos = RelativePosition(pos);
 		// corection for the openGl abstraction
 		relativePos.y = m_size.y - relativePos.y;
 		// TODO : Rework this ...

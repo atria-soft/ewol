@@ -73,7 +73,7 @@ void ewol::Image::Draw(void)
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
+	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use(); 
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
@@ -98,29 +98,29 @@ void ewol::Image::Clear(void)
 	m_coordTex.Clear();
 	m_coordColor.Clear();
 	// Reset temporal variables :
-	m_position = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_position = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	m_color = draw::color::white;
-	m_axes = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_axes = vec3(0.0, 0.0, 0.0);
 	m_angle = 0.0;
 }
 
 
-etk::Vector3D<float> ewol::Image::GetPos(void)
+vec3 ewol::Image::GetPos(void)
 {
 	return m_position;
 }
 
 
-void ewol::Image::SetPos(etk::Vector3D<float> pos)
+void ewol::Image::SetPos(vec3 pos)
 {
 	m_position = pos;
 }
 
 
-void ewol::Image::SetRelPos(etk::Vector3D<float> pos)
+void ewol::Image::SetRelPos(vec3 pos)
 {
 	m_position += pos;
 }
@@ -132,12 +132,12 @@ void ewol::Image::SetColor(draw::Color color)
 }
 
 
-void ewol::Image::SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width)
+void ewol::Image::SetClippingWidth(vec3 pos, vec3 width)
 {
 	SetClipping(pos, pos+width);
 }
 
-void ewol::Image::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd)
+void ewol::Image::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (pos.x <= posEnd.x) {
@@ -171,7 +171,7 @@ void ewol::Image::SetClippingMode(bool newMode)
 }
 
 
-void ewol::Image::SetAngle(etk::Vector3D<float> axes, float angle)
+void ewol::Image::SetAngle(vec3 axes, float angle)
 {
 	m_axes = axes;
 	m_angle = angle;
@@ -182,10 +182,10 @@ void ewol::Image::SetAngle(etk::Vector3D<float> axes, float angle)
 	}
 }
 
-void ewol::Image::Print(etk::Vector2D<int32_t> size)
+void ewol::Image::Print(ivec2 size)
 {
-	etk::Vector3D<float> point;
-	etk::Vector2D<float> tex;
+	vec3 point;
+	vec2 tex;
 	point.z = 0;
 
 	tex.x = 0;
@@ -235,9 +235,9 @@ void ewol::Image::Print(etk::Vector2D<int32_t> size)
 	m_coordColor.PushBack(m_color);
 }
 
-void ewol::Image::PrintPart(etk::Vector2D<int32_t> size,
-               etk::Vector2D<float> sourcePosStart,
-               etk::Vector2D<float> sourcePosStop)
+void ewol::Image::PrintPart(ivec2 size,
+               vec2 sourcePosStart,
+               vec2 sourcePosStop)
 {
 	
 }
@@ -250,7 +250,7 @@ void ewol::Image::SetSource(etk::UString newFile)
 		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	etk::Vector2D<int32_t> size(32,32);
+	ivec2 size(32,32);
 	// note that no image can be loaded...
 	if (newFile != "") {
 		// link to new One

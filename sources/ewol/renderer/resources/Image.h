@@ -20,7 +20,7 @@ namespace ewol
 	class TextureFile : public ewol::Texture
 	{
 		public:
-			TextureFile(etk::UString genName, etk::UString fileName, etk::Vector2D<int32_t> size);
+			TextureFile(etk::UString genName, etk::UString fileName, ivec2 size);
 			~TextureFile(void) { };
 			virtual const char* GetType(void) { return "ewol::TextureFile"; };
 	};

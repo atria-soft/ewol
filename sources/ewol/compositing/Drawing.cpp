@@ -12,7 +12,7 @@
 
 #if 0
 
-static void generatePolyGone(etk::Vector<etk::Vector2D<float> > & input, etk::Vector<etk::Vector2D<float> > & output )
+static void generatePolyGone(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output )
 {
 	if (input.Size()<3) {
 		return;
@@ -26,7 +26,7 @@ static void generatePolyGone(etk::Vector<etk::Vector2D<float> > & input, etk::Ve
 	//EWOL_DEBUG("generate Plygone : " << input.Size() << " ==> " << output.Size() );
 }
 
-static void SutherlandHodgman(etk::Vector<etk::Vector2D<float> > & input, etk::Vector<etk::Vector2D<float> > & output, float sx, float sy, float ex, float ey)
+static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.Size() <0) {
@@ -34,8 +34,8 @@ static void SutherlandHodgman(etk::Vector<etk::Vector2D<float> > & input, etk::V
 	}
 	//int32_t sizeInit=input.Size();
 	// last element :
-	etk::Vector2D<float> destPoint;
-	etk::Vector2D<float> lastElement = input[input.Size()-1];
+	vec2 destPoint;
+	vec2 lastElement = input[input.Size()-1];
 	bool inside = true;
 	if (lastElement.x < sx) {
 		inside = false;
@@ -271,7 +271,7 @@ void ewol::Drawing::InternalSetColor(draw::Color& color)
 }
 
 
-void ewol::Drawing::SetPoint(etk::Vector3D<float> point)
+void ewol::Drawing::SetPoint(vec3 point)
 {
 	m_triangle[m_triElement] = point;
 	m_triElement++;
@@ -320,7 +320,7 @@ void ewol::Drawing::Draw(void)
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
+	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use();
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
@@ -341,10 +341,10 @@ void ewol::Drawing::Clear(void)
 	m_coord.Clear();
 	m_coordColor.Clear();
 	// Reset temporal variables :
-	m_position = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_position = vec3(0.0, 0.0, 0.0);
 	
-	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	
 	m_color = draw::color::black;
@@ -357,19 +357,19 @@ void ewol::Drawing::Clear(void)
 }
 
 
-etk::Vector3D<float> ewol::Drawing::GetPos(void)
+vec3 ewol::Drawing::GetPos(void)
 {
 	return m_position;
 }
 
 
-void ewol::Drawing::SetPos(etk::Vector3D<float> pos)
+void ewol::Drawing::SetPos(vec3 pos)
 {
 	m_position = pos;
 }
 
 
-void ewol::Drawing::SetRelPos(etk::Vector3D<float> pos)
+void ewol::Drawing::SetRelPos(vec3 pos)
 {
 	m_position += pos;
 }
@@ -387,12 +387,12 @@ void ewol::Drawing::SetColorBg(draw::Color color)
 }
 
 
-void ewol::Drawing::SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width)
+void ewol::Drawing::SetClippingWidth(vec3 pos, vec3 width)
 {
 	SetClipping(pos, pos+width);
 }
 
-void ewol::Drawing::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd)
+void ewol::Drawing::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (pos.x <= posEnd.x) {
@@ -443,7 +443,7 @@ void ewol::Drawing::AddVertex(void)
 }
 
 
-void ewol::Drawing::LineTo(etk::Vector3D<float> dest)
+void ewol::Drawing::LineTo(vec3 dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
@@ -467,24 +467,24 @@ void ewol::Drawing::LineTo(etk::Vector3D<float> dest)
 	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
 	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
 
-	SetPoint(etk::Vector3D<float>(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(m_position.x + offsetx, m_position.y + offsety, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dest.x + offsetx, dest.y + offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety, (float)0.0) );
+	SetPoint(vec3(dest.x + offsetx, dest.y + offsety, (float)0.0) );
 	
-	SetPoint(etk::Vector3D<float>(dest.x + offsetx, dest.y + offsety, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dest.x - offsetx, dest.y - offsety, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
+	SetPoint(vec3(dest.x + offsetx, dest.y + offsety, (float)0.0) );
+	SetPoint(vec3(dest.x - offsetx, dest.y - offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
 	// update the system position :
 	m_position = dest;
 }
 
-void ewol::Drawing::LineRel(etk::Vector3D<float> vect)
+void ewol::Drawing::LineRel(vec3 vect)
 {
 	LineTo(m_position+vect);
 }
 
 
-void ewol::Drawing::Rectangle(etk::Vector3D<float> dest)
+void ewol::Drawing::Rectangle(vec3 dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
@@ -517,24 +517,24 @@ void ewol::Drawing::Rectangle(etk::Vector3D<float> dest)
 	    || dxA >= dxB) {
 		return;
 	}
-	SetPoint(etk::Vector3D<float>(dxA, dyD, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dxA, dyC, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dxB, dyC, (float)0.0) );
+	SetPoint(vec3(dxA, dyD, (float)0.0) );
+	SetPoint(vec3(dxA, dyC, (float)0.0) );
+	SetPoint(vec3(dxB, dyC, (float)0.0) );
 
-	SetPoint(etk::Vector3D<float>(dxB, dyC, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dxB, dyD, (float)0.0) );
-	SetPoint(etk::Vector3D<float>(dxA, dyD, (float)0.0) );
+	SetPoint(vec3(dxB, dyC, (float)0.0) );
+	SetPoint(vec3(dxB, dyD, (float)0.0) );
+	SetPoint(vec3(dxA, dyD, (float)0.0) );
 }
 
 
-void ewol::Drawing::RectangleWidth(etk::Vector3D<float> size)
+void ewol::Drawing::RectangleWidth(vec3 size)
 {
 	Rectangle(m_position+size);
 }
 
 
 
-void ewol::Drawing::Cube(etk::Vector3D<float> dest)
+void ewol::Drawing::Cube(vec3 dest)
 {
 	
 }
@@ -560,19 +560,19 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 	if (m_colorBg.a!=0) {
 		InternalSetColor(m_colorBg);
 		for (int32_t iii=0; iii<nbOcurence; iii++) {
-			SetPoint(etk::Vector3D<float>(m_position.x, m_position.y) );
+			SetPoint(vec3(m_position.x, m_position.y) );
 			
 			float angleOne = angleStart + (angleStop* iii / nbOcurence) ;
 			float offsety = sin(angleOne) * radius;
 			float offsetx = cos(angleOne) * radius;
 			
-			SetPoint(etk::Vector3D<float>(m_position.x + offsetx, m_position.y + offsety) );
+			SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety) );
 			
 			float angleTwo = angleStart + (angleStop* (iii+1) / nbOcurence) ;
 			offsety = sin(angleTwo) * radius;
 			offsetx = cos(angleTwo) * radius;
 			
-			SetPoint(etk::Vector3D<float>(m_position.x + offsetx, m_position.y + offsety) );
+			SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety) );
 		}
 	}
 	
@@ -596,13 +596,13 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 		float offsetInt2y = sin(angleTwo) * (radius-m_thickness/2);
 		float offsetInt2x = cos(angleTwo) * (radius-m_thickness/2);
 		
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetIntx,  m_position.y + offsetInty));
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetExtx,  m_position.y + offsetExty));
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
+		SetPoint(vec3(m_position.x + offsetIntx,  m_position.y + offsetInty));
+		SetPoint(vec3(m_position.x + offsetExtx,  m_position.y + offsetExty));
+		SetPoint(vec3(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
 		
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetInt2x, m_position.y + offsetInt2y));
-		SetPoint(etk::Vector3D<float>(m_position.x + offsetIntx,  m_position.y + offsetInty));
+		SetPoint(vec3(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
+		SetPoint(vec3(m_position.x + offsetInt2x, m_position.y + offsetInt2y));
+		SetPoint(vec3(m_position.x + offsetIntx,  m_position.y + offsetInty));
 	}
 }
 

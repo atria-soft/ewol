@@ -55,9 +55,9 @@ void widget::ButtonColor::SetShaperName(etk::UString shaperName)
 
 bool widget::ButtonColor::CalculateMinSize(void)
 {
-	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	vec2 padding = m_shaper.GetPadding();
 	etk::UString label = draw::GetString(m_textColorFg);
-	etk::Vector3D<int32_t> minSize = m_text.CalculateSize(label);
+	ivec3 minSize = m_text.CalculateSize(label);
 	m_minSize.x = padding.x*2 + minSize.x + 7;
 	m_minSize.y = padding.y*2 + minSize.y;
 	MarkToRedraw();
@@ -79,18 +79,18 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		m_text.Clear();
 		m_shaper.Clear();
 		
-		etk::Vector2D<float> padding = m_shaper.GetPadding();
+		vec2 padding = m_shaper.GetPadding();
 		
 		etk::UString label = draw::GetString(m_textColorFg);
 		
-		etk::Vector2D<int32_t> localSize = m_minSize;
+		ivec2 localSize = m_minSize;
 		
-		etk::Vector3D<float> tmpOrigin((m_size.x - m_minSize.x) / 2.0,
+		vec3 tmpOrigin((m_size.x - m_minSize.x) / 2.0,
 		                               (m_size.y - m_minSize.y) / 2.0,
 		                               0.0);
 		                               
 		// no change for the text orogin : 
-		etk::Vector3D<float> tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
+		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
 		                                   (m_size.y - m_minSize.y) / 2.0,
 		                                   0.0);
 		
@@ -129,26 +129,26 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		}
 		
 		// selection area :
-		m_selectableAreaPos = etk::Vector2D<float>(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
-		m_selectableAreaSize = localSize + etk::Vector2D<float>(2,2)*padding;
+		m_selectableAreaPos = vec2(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
+		m_selectableAreaSize = localSize + vec2(2,2)*padding;
 		m_shaper.SetOrigin(m_selectableAreaPos );
 		m_shaper.SetSize(m_selectableAreaSize);
-		m_shaper.SetInsidePos(etk::Vector2D<float>(tmpTextOrigin.x, tmpTextOrigin.y) );
-		etk::Vector3D<float> tmpp = m_text.CalculateSize(label);
-		etk::Vector2D<float> tmpp2(tmpp.x, tmpp.y);
+		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x, tmpTextOrigin.y) );
+		vec3 tmpp = m_text.CalculateSize(label);
+		vec2 tmpp2(tmpp.x, tmpp.y);
 		m_shaper.SetInsideSize(tmpp2);
 	}
 }
 
 
-bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	bool previousHoverState = m_mouseHover;
 	if(ewol::keyEvent::statusLeave == typeEvent) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		etk::Vector2D<float> relativePos = RelativePosition(pos);
+		vec2 relativePos = RelativePosition(pos);
 		// prevent error from ouside the button
 		if(    relativePos.x < m_selectableAreaPos.x
 		    || relativePos.y < m_selectableAreaPos.y
@@ -181,7 +181,7 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}
-				etk::Vector2D<float> tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
+				vec2 tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
 				tmpPos.x -= m_minSize.x/2.0;
 				m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, tmpPos );
 				

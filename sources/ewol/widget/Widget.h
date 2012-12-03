@@ -24,9 +24,9 @@ namespace ewol {
 namespace ewol {
 	class DrawProperty{
 		public :
-			etk::Vector2D<int32_t> m_windowsSize;
-			etk::Vector2D<int32_t> m_origin;
-			etk::Vector2D<int32_t> m_size;
+			ivec2 m_windowsSize;
+			ivec2 m_origin;
+			ivec2 m_size;
 	};
 	
 	
@@ -84,13 +84,13 @@ namespace ewol {
 		protected:
 			// internal element calculated by the system
 			float                m_zoom;          //!< generic widget zoom
-			etk::Vector2D<float>      m_origin;        //!< internal ... I do not really known how i can use it ...
-			etk::Vector2D<float>      m_size;          //!< internal : current size of the widget
-			etk::Vector2D<float>      m_minSize;       //!< user define the minimum size of the widget
+			vec2                 m_origin;        //!< internal ... I do not really known how i can use it ...
+			vec2                 m_size;          //!< internal : current size of the widget
+			vec2                 m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
-			etk::Vector2D<float>      m_userMinSize;   //!< user define the minimum size of the widget
-			etk::Vector2D<bool>       m_userExpend;
-			etk::Vector2D<bool>       m_userFill;
+			vec2                 m_userMinSize;   //!< user define the minimum size of the widget
+			bvec2  m_userExpend;
+			bvec2  m_userFill;
 		public:
 			/**
 			 * @brief Set the zoom property of the widget
@@ -117,13 +117,13 @@ namespace ewol {
 			 * @param ---
 			 * @return coordonate of the origin requested
 			 */
-			etk::Vector2D<float> GetOrigin(void);
+			vec2 GetOrigin(void);
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual etk::Vector2D<float> RelativePosition(etk::Vector2D<float> pos);
+			virtual vec2 RelativePosition(vec2 pos);
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size
@@ -154,13 +154,13 @@ namespace ewol {
 			 * @param ---
 			 * @return re size requested
 			 */
-			etk::Vector2D<float> GetMinSize(void);
+			vec2 GetMinSize(void);
 			/**
 			 * @brief Get the widget size
 			 * @param ---
 			 * @return Requested size
 			 */
-			etk::Vector2D<float> GetSize(void);
+			vec2 GetSize(void);
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
@@ -330,7 +330,7 @@ namespace ewol {
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(etk::Vector2D<float>  pos) { if (false==IsHide()) { return this; } return NULL; };
+			virtual ewol::Widget * GetWidgetAtPos(vec2 pos) { if (false==IsHide()) { return this; } return NULL; };
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -340,7 +340,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos) { return false; };
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos) { return false; };
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)

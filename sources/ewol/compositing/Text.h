@@ -50,13 +50,13 @@ namespace ewol
 			ewol::Drawing        m_vectorialDraw;      //!< This is used to draw background selection and other things ...
 		private:
 			int32_t              m_nbCharDisplayed;    //!< prevent some error in calculation size.
-			etk::Vector3D<float> m_sizeDisplayStart;   //!< The start windows of the display.
-			etk::Vector3D<float> m_sizeDisplayStop;    //!< The end windows of the display.
+			vec3 m_sizeDisplayStart;   //!< The start windows of the display.
+			vec3 m_sizeDisplayStop;    //!< The end windows of the display.
 			bool                 m_needDisplay;        //!< This just need the display and not the size rendering.
 			
-			etk::Vector3D<float> m_position;           //!< The current position to draw
-			etk::Vector3D<float> m_clippingPosStart;   //!< Clipping start position
-			etk::Vector3D<float> m_clippingPosStop;    //!< Clipping stop position
+			vec3 m_position;           //!< The current position to draw
+			vec3 m_clippingPosStart;   //!< Clipping start position
+			vec3 m_clippingPosStop;    //!< Clipping stop position
 			bool                 m_clippingEnable;     //!< true if the clipping must be activated
 		private:
 			draw::Color          m_color;              //!< The text foreground color
@@ -85,8 +85,8 @@ namespace ewol
 		private:
 			ewol::TexturedFont*                  m_font;          //!< Font resources
 		private: // Text
-			etk::Vector<etk::Vector2D<float> >   m_coord;         //!< internal coord of the object
-			etk::Vector<etk::Vector2D<float> >   m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<vec2 >   m_coord;         //!< internal coord of the object
+			etk::Vector<vec2 >   m_coordTex;      //!< internal texture coordinate for every point
 			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
 		private:
 			/**
@@ -110,11 +110,11 @@ namespace ewol
 			~Text(void);
 		public:
 			// Derived function
-			virtual void Translate(etk::Vector3D<float> vect);
+			virtual void Translate(vec3 vect);
 			// Derived function
-			virtual void Rotate(etk::Vector3D<float> vect, float angle);
+			virtual void Rotate(vec3 vect, float angle);
 			// Derived function
-			virtual void Scale(etk::Vector3D<float> vect);
+			virtual void Scale(vec3 vect);
 		public:
 			/**
 			 * @brief Draw All the refistered text in the current element on openGL
@@ -132,17 +132,17 @@ namespace ewol
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			etk::Vector3D<float> GetPos(void);
+			vec3 GetPos(void);
 			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
-			void SetPos(etk::Vector3D<float> pos);
+			void SetPos(vec3 pos);
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(etk::Vector3D<float> pos);
+			void SetRelPos(vec3 pos);
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
@@ -158,13 +158,13 @@ namespace ewol
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] width Width size of the clipping
 			 */
-			void SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width);
+			void SetClippingWidth(vec3 pos, vec3 width);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
-			void SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd);
+			void SetClipping(vec3 pos, vec3 posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -327,25 +327,25 @@ namespace ewol
 			 * @param[in] text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			etk::Vector3D<float> CalculateSizeHTML(const etk::UString& text);
+			vec3 CalculateSizeHTML(const etk::UString& text);
 			/**
 			 * @brief Calculate a theoric text size
 			 * @param[in] text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			etk::Vector3D<float> CalculateSizeDecorated(const etk::UString& text);
+			vec3 CalculateSizeDecorated(const etk::UString& text);
 			/**
 			 * @brief Calculate a theoric text size
 			 * @param[in] text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			etk::Vector3D<float> CalculateSize(const etk::UString& text);
+			vec3 CalculateSize(const etk::UString& text);
 			/**
 			 * @brief Calculate a theoric charcode size
 			 * @param[in] charcode The µUnicode value to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			etk::Vector3D<float> CalculateSize(const uniChar_t charcode);
+			vec3 CalculateSize(const uniChar_t charcode);
 			/**
 			 * @brief Draw a cursor at the specify position
 			 * @param[in] isInsertMode True if the insert mode is activated

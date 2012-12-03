@@ -136,10 +136,10 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            tmpOriginY,
 		            tmpclipX,
 		            m_size.y);
-		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x)), (float)(-m_size.y/2.0), -1.0f));
-		etk::Matrix4 tmpScale = etk::Matrix4::Scale(etk::Vector3D<float>(m_zoom, m_zoom, 1.0f));
-		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
-		etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+		mat4 tmpTranslate = etk::Matrix4::Translate(vec3((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x)), (float)(-m_size.y/2.0), -1.0f));
+		mat4 tmpScale = etk::Matrix4::Scale(vec3(m_zoom, m_zoom, 1.0f));
+		mat4 tmpProjection = etk::Matrix4::Perspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -153,10 +153,10 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
-		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>(-m_size.x/2, -m_size.y/2, -1.0f));
-		etk::Matrix4 tmpScale = etk::Matrix4::Scale(etk::Vector3D<float>(m_zoom, m_zoom, 1.0f));
-		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-		etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+		mat4 tmpTranslate = etk::Matrix4::Translate(vec3(-m_size.x/2, -m_size.y/2, -1.0f));
+		mat4 tmpScale = etk::Matrix4::Scale(vec3(m_zoom, m_zoom, 1.0f));
+		mat4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -203,12 +203,12 @@ void ewol::Widget::SetOrigin(float x, float y)
 	m_origin.y=y;
 }
 
-etk::Vector2D<float> ewol::Widget::GetOrigin(void)
+vec2 ewol::Widget::GetOrigin(void)
 {
 	return m_origin;
 }
 
-etk::Vector2D<float> ewol::Widget::RelativePosition(etk::Vector2D<float> pos)
+vec2 ewol::Widget::RelativePosition(vec2 pos)
 {
 	pos.x -= m_origin.x;
 	pos.y -= m_origin.y;
@@ -229,20 +229,20 @@ void ewol::Widget::SetMinSize(float x, float y)
 	m_userMinSize.y = y;
 }
 
-etk::Vector2D<float> ewol::Widget::GetMinSize(void)
+vec2 ewol::Widget::GetMinSize(void)
 {
 	if (false==IsHide()) {
 		return m_minSize;
 	}
-	return etk::Vector2D<float>(0,0);
+	return vec2(0,0);
 }
 
-etk::Vector2D<float> ewol::Widget::GetSize(void)
+vec2 ewol::Widget::GetSize(void)
 {
 	if (false==IsHide()) {
 		return m_size;
 	}
-	return etk::Vector2D<float>(0,0);
+	return vec2(0,0);
 }
 
 void ewol::Widget::SetExpendX(bool newExpend)

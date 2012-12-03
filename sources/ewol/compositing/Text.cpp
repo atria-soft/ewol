@@ -117,7 +117,7 @@ void ewol::Text::Draw(void)
 		return;
 	}
 	// set Matrix : translation/positionMatrix
-	etk::Matrix4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
+	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use(); 
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
@@ -133,21 +133,21 @@ void ewol::Text::Draw(void)
 	m_GLprogram->UnUse();
 }
 
-void ewol::Text::Translate(etk::Vector3D<float> vect)
+void ewol::Text::Translate(vec3 vect)
 {
 	ewol::Compositing::Translate(vect);
 	m_vectorialDraw.Translate(vect);
 }
 
 
-void ewol::Text::Rotate(etk::Vector3D<float> vect, float angle)
+void ewol::Text::Rotate(vec3 vect, float angle)
 {
 	ewol::Compositing::Rotate(vect, angle);
 	m_vectorialDraw.Rotate(vect, angle);
 }
 
 
-void ewol::Text::Scale(etk::Vector3D<float> vect)
+void ewol::Text::Scale(vec3 vect)
 {
 	ewol::Compositing::Scale(vect);
 	m_vectorialDraw.Scale(vect);
@@ -170,9 +170,9 @@ void ewol::Text::Clear(void)
 
 void ewol::Text::Reset(void)
 {
-	m_position = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosStart = etk::Vector3D<float>(0.0, 0.0, 0.0);
-	m_clippingPosStop = etk::Vector3D<float>(0.0, 0.0, 0.0);
+	m_position = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
+	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_sizeDisplayStart = m_position;
 	m_sizeDisplayStop = m_position;
 	m_nbCharDisplayed = 0;
@@ -193,13 +193,13 @@ void ewol::Text::Reset(void)
 }
 
 
-etk::Vector3D<float> ewol::Text::GetPos(void)
+vec3 ewol::Text::GetPos(void)
 {
 	return m_position;
 }
 
 
-void ewol::Text::SetPos(etk::Vector3D<float> pos)
+void ewol::Text::SetPos(vec3 pos)
 {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
@@ -231,7 +231,7 @@ void ewol::Text::SetPos(etk::Vector3D<float> pos)
 }
 
 
-void ewol::Text::SetRelPos(etk::Vector3D<float> pos)
+void ewol::Text::SetRelPos(vec3 pos)
 {
 	m_position += pos;
 	m_previousCharcode = 0;
@@ -252,12 +252,12 @@ void ewol::Text::SetColorBg(draw::Color color)
 }
 
 
-void ewol::Text::SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width)
+void ewol::Text::SetClippingWidth(vec3 pos, vec3 width)
 {
 	SetClipping(pos, pos+width);
 }
 
-void ewol::Text::SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd)
+void ewol::Text::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (pos.x <= posEnd.x) {
@@ -574,11 +574,11 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 			}
 			if(    true == m_needDisplay
 			    && m_colorBg.a != 0) {
-				etk::Vector3D<float> pos = m_position;
+				vec3 pos = m_position;
 				m_vectorialDraw.SetPos(pos);
 				Print(text[iii]);
 				float fontHeigh = m_font->GetHeight(m_mode);
-				m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+				m_vectorialDraw.RectangleWidth(vec3(m_position.x-pos.x,fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
 				Print(text[iii]);
@@ -620,7 +620,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				case ewol::Text::alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						SetPos(etk::Vector3D<float>(m_position.x + freeSpace,
+						SetPos(vec3(m_position.x + freeSpace,
 						                            m_position.y,
 						                            m_position.z) );
 					}
@@ -628,7 +628,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				case ewol::Text::alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						SetPos(etk::Vector3D<float>(m_position.x + freeSpace/2,
+						SetPos(vec3(m_position.x + freeSpace/2,
 						                            m_position.y,
 						                            m_position.z) );
 					}
@@ -669,21 +669,21 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 						m_vectorialDraw.SetPos(m_position);
 					}
 					// Must generate a dynamic space : 
-					SetPos(etk::Vector3D<float>(m_position.x + interpolation,
+					SetPos(vec3(m_position.x + interpolation,
 					                            m_position.y,
 					                            m_position.z) );
 					if(    true == m_needDisplay
 					    && m_colorBg.a != 0) {
-						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(interpolation,fontHeigh,0.0f) );
+						m_vectorialDraw.RectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
 					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
 					if(    true == m_needDisplay
 					    && m_colorBg.a != 0) {
-						etk::Vector3D<float> pos = m_position;
+						vec3 pos = m_position;
 						m_vectorialDraw.SetPos(pos);
 						Print(text[iii]);
-						m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(m_position.x-pos.x,fontHeigh,0.0f) );
+						m_vectorialDraw.RectangleWidth(vec3(m_position.x-pos.x,fontHeigh,0.0f) );
 						m_nbCharDisplayed++;
 					} else {
 						Print(text[iii]);
@@ -703,14 +703,14 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 			} else if(text[stop] == (uniChar_t)' ') {
 				currentId = stop+1;
 				// Reset position : 
-				SetPos(etk::Vector3D<float>(m_startTextpos,
+				SetPos(vec3(m_startTextpos,
 				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
 				                            m_position.z) );
 				m_nbCharDisplayed++;
 			} else if(text[stop] == (uniChar_t)'\n') {
 				currentId = stop+1;
 				// Reset position : 
-				SetPos(etk::Vector3D<float>(m_startTextpos,
+				SetPos(vec3(m_startTextpos,
 				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
 				                            m_position.z) );
 				m_nbCharDisplayed++;
@@ -821,7 +821,7 @@ void ewol::Text::Print(const uniChar_t charcode)
 				 *   3------2
 				 */
 				if (m_needDisplay == true) {
-					etk::Vector2D<int32_t> bitmapDrawPos[4];
+					ivec2 bitmapDrawPos[4];
 					bitmapDrawPos[0].x = (int32_t)dxA;
 					bitmapDrawPos[1].x = (int32_t)dxB;
 					bitmapDrawPos[2].x = (int32_t)dxB;
@@ -837,7 +837,7 @@ void ewol::Text::Print(const uniChar_t charcode)
 					 *   |      |
 					 *   3------2
 					 */
-					etk::Vector2D<float> texturePos[4];
+					vec2 texturePos[4];
 					texturePos[0].x = tuA+m_mode;
 					texturePos[1].x = tuB+m_mode;
 					texturePos[2].x = tuB+m_mode;
@@ -901,7 +901,7 @@ void ewol::Text::Print(const uniChar_t charcode)
 void ewol::Text::ForceLineReturn(void)
 {
 	// Reset position : 
-	SetPos(etk::Vector3D<float>(m_startTextpos, m_position.y - m_font->GetHeight(m_mode), 0) );
+	SetPos(vec3(m_startTextpos, m_position.y - m_font->GetHeight(m_mode), 0) );
 }
 
 
@@ -928,7 +928,7 @@ void ewol::Text::DisableAlignement(void)
 }
 
 
-etk::Vector3D<float> ewol::Text::CalculateSizeHTML(const etk::UString& text)
+vec3 ewol::Text::CalculateSizeHTML(const etk::UString& text)
 {
 	// remove intermediate result 
 	Reset();
@@ -936,7 +936,7 @@ etk::Vector3D<float> ewol::Text::CalculateSizeHTML(const etk::UString& text)
 	// disable display system
 	m_needDisplay = false;
 	
-	SetPos(etk::Vector3D<float>(0,0,0) );
+	SetPos(vec3(0,0,0) );
 	// same as print without the end display ...
 	PrintHTML(text);
 	// get the last elements
@@ -948,29 +948,29 @@ etk::Vector3D<float> ewol::Text::CalculateSizeHTML(const etk::UString& text)
 	// set back the display system
 	m_needDisplay = true;
 	
-	return etk::Vector3D<float>( m_sizeDisplayStop.x-m_sizeDisplayStart.x,
+	return vec3( m_sizeDisplayStop.x-m_sizeDisplayStart.x,
 	                             m_sizeDisplayStop.y-m_sizeDisplayStart.y,
 	                             m_sizeDisplayStop.z-m_sizeDisplayStart.z);
 }
 
-etk::Vector3D<float> ewol::Text::CalculateSizeDecorated(const etk::UString& text)
+vec3 ewol::Text::CalculateSizeDecorated(const etk::UString& text)
 {
 	etk::UString tmpData("<html><body>\n");
 	tmpData+=text;
 	tmpData+="\n</body></html>\n";
-	etk::Vector3D<float> tmpVal = CalculateSizeHTML(tmpData);
+	vec3 tmpVal = CalculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-etk::Vector3D<float> ewol::Text::CalculateSize(const etk::UString& text)
+vec3 ewol::Text::CalculateSize(const etk::UString& text)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
-		return etk::Vector3D<float>(0,0,0);
+		return vec3(0,0,0);
 	}
-	etk::Vector3D<float> outputSize(0, 0, 0);
+	vec3 outputSize(0, 0, 0);
 	for(int32_t iii=0; iii<text.Size(); iii++) {
-		etk::Vector3D<float> tmpp = CalculateSize(text[iii]);
+		vec3 tmpp = CalculateSize(text[iii]);
 		if (outputSize.y == 0) {
 			outputSize.y += tmpp.y;
 		}
@@ -979,11 +979,11 @@ etk::Vector3D<float> ewol::Text::CalculateSize(const etk::UString& text)
 	return outputSize;
 }
 
-etk::Vector3D<float> ewol::Text::CalculateSize(const uniChar_t charcode)
+vec3 ewol::Text::CalculateSize(const uniChar_t charcode)
 {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
-		return etk::Vector3D<float>(0,0,0);
+		return vec3(0,0,0);
 	}
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = m_font->GetGlyphPointer(charcode, m_mode);
@@ -995,7 +995,7 @@ etk::Vector3D<float> ewol::Text::CalculateSize(const uniChar_t charcode)
 		kerningOffset = myGlyph->KerningGet(m_previousCharcode);
 	}
 	
-	etk::Vector3D<float> outputSize((float)(myGlyph->m_advance.x + kerningOffset),
+	vec3 outputSize((float)(myGlyph->m_advance.x + kerningOffset),
 	                                (float)(fontHeigh),
 	                                (float)(0.0));
 	// Register the previous character
@@ -1008,10 +1008,10 @@ void ewol::Text::PrintCursor(bool isInsertMode)
 {
 	int32_t fontHeigh = m_font->GetHeight(m_mode);
 	if (true == isInsertMode) {
-		m_vectorialDraw.RectangleWidth(etk::Vector3D<float>(20, fontHeigh, 0) );
+		m_vectorialDraw.RectangleWidth(vec3(20, fontHeigh, 0) );
 	} else {
 		m_vectorialDraw.SetThickness(2);
-		m_vectorialDraw.LineRel( etk::Vector3D<float>(0, fontHeigh, 0) );
+		m_vectorialDraw.LineRel( vec3(0, fontHeigh, 0) );
 		m_vectorialDraw.SetThickness(0);
 	}
 }
@@ -1038,7 +1038,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 	}
 	
 	for (int32_t iii=start; iii<text.Size(); iii++) {
-		etk::Vector3D<float> tmpSize = CalculateSize(text[iii]);
+		vec3 tmpSize = CalculateSize(text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x > stopPosition) {
 			stop = iii;

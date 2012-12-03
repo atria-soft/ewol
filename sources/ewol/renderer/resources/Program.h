@@ -95,7 +95,7 @@ namespace ewol
 			 * @param[in] pointer Pointer on the data that might be sended
 			 * @param[in] transpose Transpose the matrix (needed all the taime in the normal openGl access (only not done in the openGL-ES2 due to the fact we must done it ourself)
 			 */
-			void UniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix4 pointer, bool transpose=true);
+			void UniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 pointer, bool transpose=true);
 			/**
 			 * @brief Send 1 float uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.

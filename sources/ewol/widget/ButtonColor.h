@@ -30,8 +30,8 @@ namespace widget {
 			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed.
 			// hover area :
-			etk::Vector2D<float>        m_selectableAreaPos;  //!< Start position of the events
-			etk::Vector2D<float>        m_selectableAreaSize; //!< Size of the event positions
+			vec2        m_selectableAreaPos;  //!< Start position of the events
+			vec2        m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Main constructor.
@@ -68,7 +68,7 @@ namespace widget {
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
 		private:

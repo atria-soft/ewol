@@ -103,13 +103,13 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ********   
 			 */
 			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.SetPos(vec3(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
 			m_draw.AddVertex();
 			/* Step 2 : 
 			 *   ********     
@@ -119,13 +119,13 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *                
 			 */
 			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY) );
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2) );
 			m_draw.AddVertex();
 			/* Step 3 : 
 			 *              
@@ -135,13 +135,13 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ********   
 			 */
 			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
 			m_draw.AddVertex();
 			/* Step 4 : 
 			 *   ********     
@@ -151,13 +151,13 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *                
 			 */
 			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2));
 			m_draw.AddVertex();
 			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(etk::Vector3D<float>(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
+			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY));
 			m_draw.AddVertex();
 		}
 		if (m_currentUserPos.y > 0.5) {
@@ -165,7 +165,7 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 		} else {
 			m_draw.SetColor(draw::color::black);
 		}
-		m_draw.SetPos(etk::Vector3D<float>(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y) );
+		m_draw.SetPos(vec3(m_currentUserPos.x*m_size.x, m_currentUserPos.y*m_size.y) );
 		m_draw.SetThickness(1);
 		m_draw.Circle(3.0);
 		
@@ -173,9 +173,9 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {
 		relativePos.x = etk_max(etk_min(relativePos.x, m_size.x),0);

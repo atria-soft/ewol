@@ -70,7 +70,7 @@ void guiInterface::KeyboardHide(void)
 
 
 
-void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
+void guiInterface::ChangeSize(ivec2 size)
 {
 	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
 	int title_size = GetSystemMetrics(SM_CYCAPTION);
@@ -80,12 +80,12 @@ void guiInterface::ChangeSize(etk::Vector2D<int32_t> size)
 	// TODO : Later
 }
 
-void guiInterface::ChangePos(etk::Vector2D<int32_t> pos)
+void guiInterface::ChangePos(ivec2 pos)
 {
 	// TODO : Later
 }
 
-void guiInterface::GetAbsPos(etk::Vector2D<int32_t>& size)
+void guiInterface::GetAbsPos(ivec2& size)
 {
 	// TODO : Later
 	size.x = 0;
@@ -273,7 +273,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	bool buttonIsDown = true;
 	int32_t mouseButtonId = 0;
-	etk::Vector2D<int32_t> pos;
+	ivec2 pos;
 	// to know all message : http://wiki.winehq.org/List_Of_Windows_Messages
 	switch (message)
 	{

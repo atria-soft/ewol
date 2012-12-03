@@ -83,7 +83,7 @@ bool widget::WSlider::CalculateMinSize(void)
 			if (true == m_subWidget[iii]->CanExpentY()) {
 				m_underExpend.y = true;
 			}
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			m_minSize.x = etk_max(tmpSize.x, m_minSize.x);
 			m_minSize.y = etk_max(tmpSize.y, m_minSize.y);
 		}
@@ -268,7 +268,7 @@ void widget::WSlider::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::WSlider::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::WSlider::GetWidgetAtPos(vec2 pos)
 {
 	// TODO : Review this ...
 	if (m_windowsDestination<0 || m_windowsDestination > m_subWidget.Size()) {
@@ -278,8 +278,8 @@ ewol::Widget * widget::WSlider::GetWidgetAtPos(etk::Vector2D<float> pos)
 	int32_t iii = m_windowsDestination;
 	
 	if (NULL != m_subWidget[iii]) {
-		etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetSize();
-		etk::Vector2D<float> tmpOrigin = m_subWidget[iii]->GetOrigin();
+		vec2 tmpSize = m_subWidget[iii]->GetSize();
+		vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
 		if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 		    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 		{

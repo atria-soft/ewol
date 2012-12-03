@@ -35,7 +35,7 @@ ewol::GameElement::GameElement(SceneElement & sceneElement, etk::UString& tmpNam
 
 
 
-float quadDist(etk::Vector2D<float> pos1, etk::Vector2D<float> pos2)
+float quadDist(vec2 pos1, vec2 pos2)
 {
 	float tmpVal1 = pos1.x - pos2.x;
 	float tmpVal2 = pos1.y - pos2.y;
@@ -44,7 +44,7 @@ float quadDist(etk::Vector2D<float> pos1, etk::Vector2D<float> pos2)
 }
 
 
-bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, etk::Vector2D<float> position, float size)
+bool ewol::GameElement::HaveImpact(int32_t group, int32_t type, vec2 position, float size)
 {
 	if (true != m_canHaveImpact) {
 		return false;

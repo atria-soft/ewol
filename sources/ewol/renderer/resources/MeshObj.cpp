@@ -35,9 +35,9 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	etk::Vector<int32_t> indicesVertices;
 	etk::Vector<int32_t> indicesUv;
 	etk::Vector<int32_t> indicesNormal;
-	etk::Vector< etk::Vector3D<float> > vertices;
-	etk::Vector< etk::Vector2D<float> > uvTextures;
-	etk::Vector< etk::Vector3D<float> > normals;
+	etk::Vector< vec3 > vertices;
+	etk::Vector< vec2 > uvTextures;
+	etk::Vector< vec3 > normals;
 	
 	
 	while (NULL != fileName.FileGets(inputDataLine, 2048) )
@@ -45,17 +45,17 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		if (inputDataLine[0]=='v') {
 			if (inputDataLine[1]=='n') {
 				// Vertice normal   : vn 0.000000 0.000000 -1.000000
-				etk::Vector3D<float> vertex;
+				vec3 vertex;
 				sscanf(&inputDataLine[3], "%f %f %f", &vertex.x, &vertex.y, &vertex.z );
 				normals.PushBack(vertex);
 			} else if (inputDataLine[1]=='t') {
 				// Texture position : vt 0.748573 0.750412
-				etk::Vector2D<float> vertex;
+				vec2 vertex;
 				sscanf(&inputDataLine[3], "%f %f", &vertex.x, &vertex.y);
 				uvTextures.PushBack(vertex);
 			} else {
 				// Vertice position : v 1.000000 -1.000000 -1.000000
-				etk::Vector3D<float> vertex;
+				vec3 vertex;
 				sscanf(&inputDataLine[2], "%f %f %f", &vertex.x, &vertex.y, &vertex.z );
 				vertices.PushBack(vertex);
 			}
@@ -101,7 +101,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 				inputDataLine[strlen(inputDataLine)-1] = '\0';
 			}
 			etk::UString tmpVal(&inputDataLine[7]);
-			etk::Vector2D<int32_t> tmpSize(256, 256);
+			ivec2 tmpSize(256, 256);
 			if (NULL != m_texture1) {
 				EWOL_INFO("Release previous loaded texture ... ");
 				ewol::resource::Release(m_texture1);

@@ -21,9 +21,9 @@ namespace ewol
 	class Drawing : public ewol::Compositing
 	{
 		private:
-			etk::Vector3D<float> m_position;           //!< The current position to draw
-			etk::Vector3D<float> m_clippingPosStart;   //!< Clipping start position
-			etk::Vector3D<float> m_clippingPosStop;    //!< Clipping stop position
+			vec3 m_position;           //!< The current position to draw
+			vec3 m_clippingPosStart;   //!< Clipping start position
+			vec3 m_clippingPosStop;    //!< Clipping stop position
 			bool                 m_clippingEnable;     //!< true if the clipping must be activated
 		private:
 			draw::Color          m_color;              //!< The text foreground color
@@ -34,7 +34,7 @@ namespace ewol
 			int32_t              m_GLMatrix;           //!< openGL id on the element (transformation matrix)
 			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
 		private: // Background Color (display only when needed)
-			etk::Vector<etk::Vector3D<float> >   m_coord;        //!< internal position for the text display
+			etk::Vector<vec3 >   m_coord;        //!< internal position for the text display
 			etk::Vector<draw::Colorf>            m_coordColor;   //!< internal color of the background
 		public:
 			/**
@@ -56,7 +56,7 @@ namespace ewol
 			void UnLoadProgram(void);
 			float                               m_thickness;     //!< when drawing line and other things
 			int32_t                             m_triElement;    //!< special counter of the single dot generated
-			etk::Vector3D<float>                m_triangle[3];   //!< Register every system with a combinaison of tiangle
+			vec3                m_triangle[3];   //!< Register every system with a combinaison of tiangle
 			draw::Colorf                        m_tricolor[3];   //!< Register every the associated color foreground
 		// internal API for the generation abstraction of triangles
 			/**
@@ -76,7 +76,7 @@ namespace ewol
 			 * @brief internal add of the specific point
 			 * @param[in] point The requeste dpoint to add
 			 */
-			void SetPoint(etk::Vector3D<float> point);
+			void SetPoint(vec3 point);
 			
 		public:
 			/**
@@ -91,17 +91,17 @@ namespace ewol
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			etk::Vector3D<float> GetPos(void);
+			vec3 GetPos(void);
 			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
-			void SetPos(etk::Vector3D<float> pos);
+			void SetPos(vec3 pos);
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(etk::Vector3D<float> pos);
+			void SetRelPos(vec3 pos);
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
@@ -117,13 +117,13 @@ namespace ewol
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] width Width size of the clipping
 			 */
-			void SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width);
+			void SetClippingWidth(vec3 pos, vec3 width);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
-			void SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd);
+			void SetClipping(vec3 pos, vec3 posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -142,27 +142,27 @@ namespace ewol
 			 * @brief Draw a line to a specific position
 			 * @param[in] dest Position of the end of the line.
 			 */
-			void LineTo(etk::Vector3D<float> dest);
+			void LineTo(vec3 dest);
 			/**
 			 * @brief Relative drawing a line (spacial vector)
 			 * @param[in] vect Vector of the curent line.
 			 */
-			void LineRel(etk::Vector3D<float> vect);
+			void LineRel(vec3 vect);
 			/**
 			 * @brief Draw a 2D rectangle to the position requested.
 			 * @param[in] dest Position the the end of the rectangle
 			 */
-			void Rectangle(etk::Vector3D<float> dest);
+			void Rectangle(vec3 dest);
 			/**
 			 * @brief Draw a 2D rectangle to the requested size.
 			 * @param[in] width size of the rectangle
 			 */
-			void RectangleWidth(etk::Vector3D<float> size);
+			void RectangleWidth(vec3 size);
 			/**
 			 * @brief Draw a 3D rectangle to the position requested.
 			 * @param[in] dest Position the the end of the rectangle
 			 */
-			void Cube(etk::Vector3D<float> dest);
+			void Cube(vec3 dest);
 			/**
 			 * @brief Draw a 2D circle with the specify rafdius parameter.
 			 * @param[in] radius Distence to the dorder

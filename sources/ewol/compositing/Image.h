@@ -19,13 +19,13 @@ namespace ewol
 	{
 		private:
 		private:
-			etk::Vector3D<float> m_position;           //!< The current position to draw
-			etk::Vector3D<float> m_clippingPosStart;   //!< Clipping start position
-			etk::Vector3D<float> m_clippingPosStop;    //!< Clipping stop position
+			vec3 m_position;           //!< The current position to draw
+			vec3 m_clippingPosStart;   //!< Clipping start position
+			vec3 m_clippingPosStop;    //!< Clipping stop position
 			bool                 m_clippingEnable;     //!< true if the clipping must be activated
 		private:
 			draw::Color          m_color;              //!< The text foreground color
-			etk::Vector3D<float> m_axes;               //!< Rotation axes (instant)
+			vec3 m_axes;               //!< Rotation axes (instant)
 			float                m_angle;              //!< Angle to set at the axes
 		private:
 			ewol::Program*       m_GLprogram;          //!< pointer on the opengl display program
@@ -36,8 +36,8 @@ namespace ewol
 			int32_t              m_GLtexID;            //!< openGL id on the element (texture ID)
 		private:
 			ewol::TextureFile*                   m_resource;    //!< texture resources
-			etk::Vector<etk::Vector3D<float> >   m_coord;       //!< internal coord of the object
-			etk::Vector<etk::Vector2D<float> >   m_coordTex;    //!< internal texture coordinate for every point
+			etk::Vector<vec3 >   m_coord;       //!< internal coord of the object
+			etk::Vector<vec2 >   m_coordTex;    //!< internal texture coordinate for every point
 			etk::Vector<draw::Colorf>            m_coordColor;  //!< internal color of the different point
 		private:
 			/**
@@ -67,17 +67,17 @@ namespace ewol
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			etk::Vector3D<float> GetPos(void);
+			vec3 GetPos(void);
 			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
-			void SetPos(etk::Vector3D<float> pos);
+			void SetPos(vec3 pos);
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(etk::Vector3D<float> pos);
+			void SetRelPos(vec3 pos);
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
@@ -88,13 +88,13 @@ namespace ewol
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] width Width size of the clipping
 			 */
-			void SetClippingWidth(etk::Vector3D<float> pos, etk::Vector3D<float> width);
+			void SetClippingWidth(vec3 pos, vec3 width);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
-			void SetClipping(etk::Vector3D<float> pos, etk::Vector3D<float> posEnd);
+			void SetClipping(vec3 pos, vec3 posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -105,21 +105,21 @@ namespace ewol
 			 * @param[in] axes Rotation axes selection
 			 * @param[in] angle Angle to set on this axes
 			 */
-			void SetAngle(etk::Vector3D<float> axes, float angle);
+			void SetAngle(vec3 axes, float angle);
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
 			 * @param[in] size Size of the output image
 			 */
-			void Print(etk::Vector2D<int32_t> size);
+			void Print(ivec2 size);
 			/**
 			 * @brief Add a part of the image to display with the requested size
 			 * @param[in] size Size of the output image
 			 * @param[in] sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
 			 * @param[in] sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 			 */
-			void PrintPart(etk::Vector2D<int32_t> size,
-			               etk::Vector2D<float> sourcePosStart,
-			               etk::Vector2D<float> sourcePosStop);
+			void PrintPart(ivec2 size,
+			               vec2 sourcePosStart,
+			               vec2 sourcePosStop);
 			/**
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
 			 * @param[in] newFile New file of the Image

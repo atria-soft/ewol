@@ -35,7 +35,7 @@ bool widget::SizerHori::CalculateSize(float availlableX, float availlableY)
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			unexpendableSize += tmpSize.x;
 			if (false == m_subWidget[iii]->CanExpentX()) {
 				nbWidgetFixedSize++;
@@ -52,12 +52,12 @@ bool widget::SizerHori::CalculateSize(float availlableX, float availlableY)
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	etk::Vector2D<float> tmpOrigin;
+	vec2 tmpOrigin;
 	tmpOrigin.x = m_origin.x;
 	tmpOrigin.y = m_origin.y;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
@@ -92,7 +92,7 @@ bool widget::SizerHori::CalculateMinSize(void)
 			if (true == m_subWidget[iii]->CanExpentY()) {
 				m_userExpend.y = true;
 			}
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			m_minSize.x += tmpSize.x;
 			if (tmpSize.y>m_minSize.y) {
 				m_minSize.y = tmpSize.y;
@@ -216,7 +216,7 @@ void widget::SizerHori::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::SizerHori::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::SizerHori::GetWidgetAtPos(vec2 pos)
 {
 	if (true == IsHide()) {
 		return NULL;
@@ -224,8 +224,8 @@ ewol::Widget * widget::SizerHori::GetWidgetAtPos(etk::Vector2D<float> pos)
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			etk::Vector2D<float> tmpSize = m_subWidget[iii]->GetSize();
-			etk::Vector2D<float> tmpOrigin = m_subWidget[iii]->GetOrigin();
+			vec2 tmpSize = m_subWidget[iii]->GetSize();
+			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
 			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
 			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
 			{

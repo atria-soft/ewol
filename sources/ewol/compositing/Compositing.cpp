@@ -31,21 +31,21 @@ void ewol::Compositing::ResetMatrix(void)
 }
 
 
-void ewol::Compositing::Translate(etk::Vector3D<float> vect)
+void ewol::Compositing::Translate(vec3 vect)
 {
-	m_matrixApply *= etk::Matrix4::Translate(vect);
+	m_matrixApply *= mat4::Translate(vect);
 }
 
 
-void ewol::Compositing::Rotate(etk::Vector3D<float> vect, float angle)
+void ewol::Compositing::Rotate(vec3 vect, float angle)
 {
-	m_matrixApply *= etk::Matrix4::Rotate(vect, angle);
+	m_matrixApply *= mat4::Rotate(vect, angle);
 }
 
 
-void ewol::Compositing::Scale(etk::Vector3D<float> vect)
+void ewol::Compositing::Scale(vec3 vect)
 {
-	m_matrixApply *= etk::Matrix4::Scale(vect);
+	m_matrixApply *= mat4::Scale(vect);
 }
 
 

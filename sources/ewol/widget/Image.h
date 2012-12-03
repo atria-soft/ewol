@@ -28,17 +28,17 @@ namespace widget {
 			// Derived function
 			virtual bool   CalculateMinSize(void);
 			void           SetFile(etk::UString newFile);
-			void           SetPadding(etk::Vector2D<float>  newPadding);
+			void           SetPadding(vec2  newPadding);
 		private:
 			etk::UString          m_imageSelected;
-			etk::Vector2D<float>  m_padding;
+			vec2  m_padding;
 			draw::Color           m_textColorBg;  //!< Background color
 			int32_t               m_imageSize;
 		public:
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 	};
 };
 

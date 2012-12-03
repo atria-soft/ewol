@@ -21,7 +21,7 @@
 #include <ewol/renderer/resources/image/ImagePNG.h>
 
 
-ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, etk::Vector2D<int32_t> size) :
+ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, ivec2 size) :
 	Texture(genName)
 {
 	etk::UString tmpName = tmpfileName;

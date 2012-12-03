@@ -126,8 +126,8 @@ void widget::List::OnRegenerateDisplay(void)
 		ewol::Drawing * BGOObjects = new ewol::Drawing();
 		draw::Color basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
-		BGOObjects->SetPos(etk::Vector3D<float>(0, 0, 0) );
-		BGOObjects->RectangleWidth(etk::Vector3D<float>(m_size.x, m_size.y, 0) );
+		BGOObjects->SetPos(vec3(0, 0, 0) );
+		BGOObjects->RectangleWidth(vec3(m_size.x, m_size.y, 0) );
 		
 		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
 		
@@ -150,7 +150,7 @@ void widget::List::OnRegenerateDisplay(void)
 		m_lineSize.Clear();
 		int32_t displayPositionY = m_size.y;
 		int32_t displayPositionX = 0;
-		etk::Vector2D<int32_t> tmpRegister(startRaw, displayPositionY);
+		ivec2 tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
 		m_lineSize.PushBack(tmpRegister);
 		
@@ -170,15 +170,15 @@ void widget::List::OnRegenerateDisplay(void)
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
 					
 					BGOObjects->SetColor(bg);
-					BGOObjects->SetPos(etk::Vector3D<float>(displayPositionX, displayPositionY, 0) );
-					BGOObjects->RectangleWidth(etk::Vector3D<float>(m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
+					BGOObjects->SetPos(vec3(displayPositionX, displayPositionY, 0) );
+					BGOObjects->RectangleWidth(vec3(m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
 					
 					// get the maximum size of the colomn :
-					etk::Vector3D<float> textSize = tmpText->CalculateSize(myTextToWrite);
+					vec3 textSize = tmpText->CalculateSize(myTextToWrite);
 					sizeColom = etk_max(sizeColom, textSize.x);
 					
 					tmpText->SetColor(fg);
-					tmpText->SetPos(etk::Vector3D<float>(tmpOriginX + displayPositionX, displayPositionY, 0) );
+					tmpText->SetPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
 					tmpText->Print(myTextToWrite);
 					AddOObject(tmpText);
 					// madding move ...
@@ -202,9 +202,9 @@ void widget::List::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(pos);
 	
 	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
 		ewol::widgetManager::FocusKeep(this);

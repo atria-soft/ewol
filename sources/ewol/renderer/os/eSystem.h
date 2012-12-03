@@ -94,7 +94,7 @@ namespace eSystem
 	 * @param ---
 	 * @return the current size ...
 	 */
-	etk::Vector2D<int32_t> GetSize(void);
+	ivec2 GetSize(void);
 	
 	/**
 	 * @brief Redraw all the windows

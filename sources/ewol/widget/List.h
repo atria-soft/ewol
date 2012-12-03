@@ -29,7 +29,7 @@ namespace widget {
 		// Drawing capabilities ....
 		private:
 			etk::Vector<ewol::Compositing*>        m_listOObject;   //!< generic element to display...
-			etk::Vector<etk::Vector2D<int32_t> >   m_lineSize;
+			etk::Vector<ivec2 >   m_lineSize;
 		public:
 			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
@@ -46,7 +46,7 @@ namespace widget {
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {

@@ -81,12 +81,12 @@ void ewol::WindowsPopUpAdd(ewol::Widget * tmpWidget)
 	}
 }
 
-void ewol::ChangeSize(etk::Vector2D<int32_t> size)
+void ewol::ChangeSize(ivec2 size)
 {
 	guiInterface::ChangeSize(size);
 }
 
-void ewol::ChangePos(etk::Vector2D<int32_t> pos)
+void ewol::ChangePos(ivec2 pos)
 {
 	guiInterface::ChangePos(pos);
 }

@@ -111,7 +111,7 @@ void ewol::Texture::Flush(void)
 }
 
 
-void ewol::Texture::SetImageSize(etk::Vector2D<int32_t> newSize)
+void ewol::Texture::SetImageSize(ivec2 newSize)
 {
 	newSize.x = nextP2(newSize.x);
 	newSize.y = nextP2(newSize.y);

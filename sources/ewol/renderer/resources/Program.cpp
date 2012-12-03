@@ -285,7 +285,7 @@ void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* point
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::UniformMatrix4fv(int32_t idElem, int32_t nbElement, etk::Matrix4 _matrix, bool transpose)
+void ewol::Program::UniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 _matrix, bool transpose)
 {
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");

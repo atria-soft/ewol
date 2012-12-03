@@ -68,7 +68,7 @@ widget::Entry::~Entry(void)
 
 bool widget::Entry::CalculateMinSize(void)
 {
-	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	vec2 padding = m_shaper.GetPadding();
 	
 	int32_t minHeight = m_oObjectText.CalculateSize('A').y;
 	m_minSize.x = m_userSize + 2*padding.x;
@@ -107,7 +107,7 @@ void widget::Entry::OnRegenerateDisplay(void)
 		m_shaper.Clear();
 		m_oObjectText.Clear();
 		UpdateTextPosition();
-		etk::Vector2D<float> padding = m_shaper.GetPadding();
+		vec2 padding = m_shaper.GetPadding();
 		
 		int32_t tmpSizeX = m_minSize.x;
 		int32_t tmpSizeY = m_minSize.y;
@@ -131,13 +131,13 @@ void widget::Entry::OnRegenerateDisplay(void)
 		tmpSizeY -= 2*padding.y;
 		
 		
-		etk::Vector3D<float> textPos( tmpTextOriginX + m_displayStartPosition,
+		vec3 textPos( tmpTextOriginX + m_displayStartPosition,
 		                              tmpTextOriginY,
 		                              0 );
-		etk::Vector3D<float> drawClippingPos( padding.x,
+		vec3 drawClippingPos( padding.x,
 		                                      padding.y,
 		                                      -1 );
-		etk::Vector3D<float> drawClippingSize( m_size.x - 2*drawClippingPos.x,
+		vec3 drawClippingSize( m_size.x - 2*drawClippingPos.x,
 		                                       m_size.y - 2*drawClippingPos.y,
 		                                       1 );
 		m_oObjectText.SetClippingWidth(drawClippingPos, drawClippingSize);
@@ -154,11 +154,11 @@ void widget::Entry::OnRegenerateDisplay(void)
 }
 
 
-void widget::Entry::UpdateCursorPosition(etk::Vector2D<float>& pos, bool selection)
+void widget::Entry::UpdateCursorPosition(vec2& pos, bool selection)
 {
-	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	vec2 padding = m_shaper.GetPadding();
 	
-	etk::Vector2D<float> relPos = RelativePosition(pos);
+	vec2 relPos = RelativePosition(pos);
 	relPos.x += -m_displayStartPosition - padding.x;
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
@@ -230,7 +230,7 @@ void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te 
 }
 
 
-bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == IdInput) {
@@ -444,7 +444,7 @@ void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * 
 
 void widget::Entry::UpdateTextPosition(void)
 {
-	etk::Vector2D<float> padding = m_shaper.GetPadding();
+	vec2 padding = m_shaper.GetPadding();
 	
 	int32_t tmpSizeX = m_minSize.x;
 	if (true==m_userFill.x) {

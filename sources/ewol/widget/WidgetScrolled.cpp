@@ -52,36 +52,36 @@ void widget::WidgetScrooled::OnRegenerateDisplay(void)
 		tmpDraw->SetThickness(1);
 		if(    m_size.y < m_maxSize.y
 		    || m_originScrooled.y!=0) {
-			tmpDraw->SetPos(etk::Vector3D<float>(m_size.x-(SCROLL_BAR_SPACE/2), 0) );
-			tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-(SCROLL_BAR_SPACE/2), m_size.y ) );
+			tmpDraw->SetPos(vec3(m_size.x-(SCROLL_BAR_SPACE/2), 0) );
+			tmpDraw->LineTo(vec3(m_size.x-(SCROLL_BAR_SPACE/2), m_size.y ) );
 			float lenScrollBar = m_size.y*m_size.y / m_maxSize.y;
 			lenScrollBar = etk_avg(10, lenScrollBar, m_size.y);
 			float originScrollBar = m_originScrooled.y / (m_maxSize.y-m_size.y*m_limitScrolling);
 			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 			originScrollBar *= (m_size.y-lenScrollBar);
-			tmpDraw->SetPos(etk::Vector3D<float>(m_size.x-SCROLL_BAR_SPACE, m_size.y - originScrollBar - lenScrollBar) );
-			tmpDraw->RectangleWidth(etk::Vector3D<float>(SCROLL_BAR_SPACE, lenScrollBar));
+			tmpDraw->SetPos(vec3(m_size.x-SCROLL_BAR_SPACE, m_size.y - originScrollBar - lenScrollBar) );
+			tmpDraw->RectangleWidth(vec3(SCROLL_BAR_SPACE, lenScrollBar));
 		}
 		if(    m_size.x < m_maxSize.x
 		    || m_originScrooled.x!=0) {
-			tmpDraw->SetPos(etk::Vector3D<float>(0, (SCROLL_BAR_SPACE/2), 0) );
-			tmpDraw->LineTo(etk::Vector3D<float>(m_size.x-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2) ) );
+			tmpDraw->SetPos(vec3(0, (SCROLL_BAR_SPACE/2), 0) );
+			tmpDraw->LineTo(vec3(m_size.x-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2) ) );
 			float lenScrollBar = m_size.x*(m_size.x-SCROLL_BAR_SPACE) / m_maxSize.x;
 			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x-SCROLL_BAR_SPACE));
 			float originScrollBar = m_originScrooled.x / (m_maxSize.x-m_size.x*m_limitScrolling);
 			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 			originScrollBar *= (m_size.x-SCROLL_BAR_SPACE-lenScrollBar);
-			tmpDraw->SetPos(etk::Vector3D<float>(originScrollBar, 0, 0) );
-			tmpDraw->Rectangle(etk::Vector3D<float>(lenScrollBar, SCROLL_BAR_SPACE) );
+			tmpDraw->SetPos(vec3(originScrollBar, 0, 0) );
+			tmpDraw->Rectangle(vec3(lenScrollBar, SCROLL_BAR_SPACE) );
 		}
 		AddOObject(tmpDraw);
 	}
 }
 
 
-bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(pos);
 	// corection due to the open Gl invertion ...
 	relativePos.y = m_size.y - relativePos.y;
 	if (SCROLL_MODE_NORMAL == m_scroollingMode) {
@@ -351,10 +351,10 @@ void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
 		            m_origin.y,
 		            m_size.x,
 		            m_size.y);
-		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-		etk::Matrix4 tmpScale = etk::Matrix4::Scale(etk::Vector3D<float>(m_zoom, m_zoom, 1.0) );
-		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>(-m_maxSize.x/2, -m_maxSize.y/2, -1.0) );
-		etk::Matrix4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+		mat4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpScale = etk::Matrix4::Scale(vec3(m_zoom, m_zoom, 1.0) );
+		mat4 tmpTranslate = etk::Matrix4::Translate(vec3(-m_maxSize.x/2, -m_maxSize.y/2, -1.0) );
+		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -366,9 +366,9 @@ void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
 		            m_size.x,
 		            m_size.y);
 		
-		etk::Matrix4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-		etk::Matrix4 tmpTranslate = etk::Matrix4::Translate(etk::Vector3D<float>( -m_maxSize.x/2, -m_maxSize.y/2, -1.0) );
-		etk::Matrix4 tmpMat = tmpProjection * tmpTranslate;
+		mat4 tmpProjection = etk::Matrix4::Perspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpTranslate = etk::Matrix4::Translate(vec3( -m_maxSize.x/2, -m_maxSize.y/2, -1.0) );
+		mat4 tmpMat = tmpProjection * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
@@ -380,7 +380,7 @@ void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
 }
 
 
-void widget::WidgetScrooled::SetScrollingPositionDynamic(etk::Vector2D<float> borderWidth, etk::Vector2D<float> currentPosition, bool center)
+void widget::WidgetScrooled::SetScrollingPositionDynamic(vec2 borderWidth, vec2 currentPosition, bool center)
 {
 	if (true == center) {
 		borderWidth.x = m_size.x / 2 - borderWidth.x;

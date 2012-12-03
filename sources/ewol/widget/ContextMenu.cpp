@@ -48,8 +48,8 @@ bool widget::ContextMenu::CalculateSize(float availlableX, float availlableY)
 	m_size.y = availlableY;
 	
 	if (NULL != m_subWidget) {
-		etk::Vector2D<float> subWidgetSize;
-		etk::Vector2D<float> subWidgetOrigin;
+		vec2 subWidgetSize;
+		vec2 subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
 		if (true == m_subWidget->CanExpentX()) {
 			subWidgetSize.x = m_size.x;
@@ -124,7 +124,7 @@ bool widget::ContextMenu::CalculateMinSize(void)
 	m_minSize.y = 50.0;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
-		etk::Vector2D<float> tmpSize = m_subWidget->GetMinSize();
+		vec2 tmpSize = m_subWidget->GetMinSize();
 		m_minSize.x = tmpSize.x;
 		m_minSize.y = tmpSize.y;
 	}
@@ -186,44 +186,44 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 	AddOObject(BGOObjects);
 	
 	if (NULL != m_subWidget) {
-		etk::Vector2D<float> tmpSize = m_subWidget->GetSize();
-		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
+		vec2 tmpSize = m_subWidget->GetSize();
+		vec2 tmpOrigin = m_subWidget->GetOrigin();
 		
 		// display border ...
 		BGOObjects->SetColor(m_colorBorder);
 		switch (m_arrawBorder)
 		{
 			case widget::CONTEXT_MENU_MARK_TOP:
-				BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x, m_arrowPos.y, 0.0f) );
+				BGOObjects->SetPos(vec3(m_arrowPos.x, m_arrowPos.y, 0.0f) );
 				BGOObjects->AddVertex();
 				if (m_arrowPos.x <= tmpOrigin.x ) {
 					float laking = m_offset - m_padding.y;
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
 					BGOObjects->AddVertex();
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x,        m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x,        m_arrowPos.y-laking, 0.0f) );
 					BGOObjects->AddVertex();
 				} else {
 					float laking = m_offset - m_padding.y;
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x+laking, m_arrowPos.y-laking, 0.0f) );
 					BGOObjects->AddVertex();
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x-laking, m_arrowPos.y-laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x-laking, m_arrowPos.y-laking, 0.0f) );
 					BGOObjects->AddVertex();
 				}
 				break;
 			case widget::CONTEXT_MENU_MARK_BOTTOM:
-				BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x, m_arrowPos.y, 0.0f) );
+				BGOObjects->SetPos(vec3(m_arrowPos.x, m_arrowPos.y, 0.0f) );
 				BGOObjects->AddVertex();
 				if (m_arrowPos.x <= tmpOrigin.x ) {
 					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
 					BGOObjects->AddVertex();
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x,        m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x,        m_arrowPos.y+laking, 0.0f) );
 					BGOObjects->AddVertex();
 				} else {
 					int32_t laking = m_offset - m_padding.y;
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x+laking, m_arrowPos.y+laking, 0.0f) );
 					BGOObjects->AddVertex();
-					BGOObjects->SetPos(etk::Vector3D<float>(m_arrowPos.x-laking, m_arrowPos.y+laking, 0.0f) );
+					BGOObjects->SetPos(vec3(m_arrowPos.x-laking, m_arrowPos.y+laking, 0.0f) );
 					BGOObjects->AddVertex();
 				}
 				break;
@@ -233,12 +233,12 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 				EWOL_TODO("later");
 				break;
 		}
-		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x-m_padding.x, tmpOrigin.y - m_padding.y, 0.0f) );
-		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x + m_padding.x*2, tmpSize.y + m_padding.y*2, 0.0f) );
+		BGOObjects->SetPos(vec3(tmpOrigin.x-m_padding.x, tmpOrigin.y - m_padding.y, 0.0f) );
+		BGOObjects->RectangleWidth(vec3(tmpSize.x + m_padding.x*2, tmpSize.y + m_padding.y*2, 0.0f) );
 		// set the area in white ...
 		BGOObjects->SetColor(m_colorBackGroung);
-		BGOObjects->SetPos(etk::Vector3D<float>(tmpOrigin.x, tmpOrigin.y, 0.0f) );
-		BGOObjects->RectangleWidth(etk::Vector3D<float>(tmpSize.x, tmpSize.y, 0.0f) );
+		BGOObjects->SetPos(vec3(tmpOrigin.x, tmpOrigin.y, 0.0f) );
+		BGOObjects->RectangleWidth(vec3(tmpSize.x, tmpSize.y, 0.0f) );
 	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
@@ -246,14 +246,14 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::ContextMenu::GetWidgetAtPos(etk::Vector2D<float> pos)
+ewol::Widget * widget::ContextMenu::GetWidgetAtPos(vec2 pos)
 {
 	// calculate relative position
-	etk::Vector2D<float> relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(pos);
 	// Check for sub Element
 	if (NULL != m_subWidget) {
-		etk::Vector2D<float> tmpSize = m_subWidget->GetSize();
-		etk::Vector2D<float> tmpOrigin = m_subWidget->GetOrigin();
+		vec2 tmpSize = m_subWidget->GetSize();
+		vec2 tmpOrigin = m_subWidget->GetOrigin();
 		if(    (tmpOrigin.x <= relativePos.x && tmpOrigin.x + tmpSize.x >= relativePos.x)
 		    && (tmpOrigin.y <= relativePos.y && tmpOrigin.y + tmpSize.y >= relativePos.y) )
 		{
@@ -264,7 +264,7 @@ ewol::Widget * widget::ContextMenu::GetWidgetAtPos(etk::Vector2D<float> pos)
 }
 
 
-bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	//EWOL_INFO("Event ouside the context menu");
 	if (IdInput > 0) {
@@ -283,7 +283,7 @@ bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 }
 
 
-void widget::ContextMenu::SetPositionMark(markPosition_te position, etk::Vector2D<float> arrowPos)
+void widget::ContextMenu::SetPositionMark(markPosition_te position, vec2 arrowPos)
 {
 	EWOL_DEBUG("set context menu at the position : (" << arrowPos.x << "," << arrowPos.y << ")");
 	m_arrawBorder = position;

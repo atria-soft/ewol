@@ -47,7 +47,7 @@ widget::CheckBox::~CheckBox(void)
 
 bool widget::CheckBox::CalculateMinSize(void)
 {
-	etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
+	ivec3 minSize = m_oObjectText.CalculateSize(m_label);
 	float boxSize = etk_max(20, minSize.y) + 5;
 	m_minSize.x = boxSize+minSize.x;
 	m_minSize.y = etk_max(boxSize, minSize.y)+3;
@@ -89,14 +89,14 @@ void widget::CheckBox::OnRegenerateDisplay(void)
 		m_oObjectDecoration.Clear();
 		m_oObjectText.Clear();
 		
-		etk::Vector3D<int32_t> minSize = m_oObjectText.CalculateSize(m_label);
+		ivec3 minSize = m_oObjectText.CalculateSize(m_label);
 		float boxSize = etk_max(20, minSize.y) + 5;
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
 		int32_t posy = (m_size.y - minSize.y - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
-		etk::Vector3D<float> textPos;
+		vec3 textPos;
 		textPos.x = boxSize+5;
 		textPos.y = posy;
 		textPos.z = 0;
@@ -104,18 +104,18 @@ void widget::CheckBox::OnRegenerateDisplay(void)
 		m_oObjectText.Print(m_label);
 		
 		m_oObjectDecoration.SetColor(m_textColorBg);
-		m_oObjectDecoration.SetPos(etk::Vector3D<float>(2.5f, 2.5f, 0.0f) );
-		m_oObjectDecoration.RectangleWidth(etk::Vector3D<float>(boxSize, boxSize, 0.0f) );
+		m_oObjectDecoration.SetPos(vec3(2.5f, 2.5f, 0.0f) );
+		m_oObjectDecoration.RectangleWidth(vec3(boxSize, boxSize, 0.0f) );
 		if (m_value) {
 			m_oObjectDecoration.SetColor(m_textColorFg);
-			m_oObjectDecoration.SetPos(etk::Vector3D<float>(2.5f, 2.5f, 0.0f) );
+			m_oObjectDecoration.SetPos(vec3(2.5f, 2.5f, 0.0f) );
 			m_oObjectDecoration.SetThickness(3);
-			m_oObjectDecoration.LineRel(etk::Vector3D<float>(boxSize, boxSize, 0.0f) );
+			m_oObjectDecoration.LineRel(vec3(boxSize, boxSize, 0.0f) );
 		}
 	}
 }
 
-bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos)
+bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {

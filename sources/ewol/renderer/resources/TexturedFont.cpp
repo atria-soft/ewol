@@ -209,7 +209,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		if (iiiFontId == 0) {
 			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
 			// resize must be done on the texture ...
-			SetImageSize(etk::Vector2D<int32_t>(textureWidth,textureHeight));
+			SetImageSize(ivec2(textureWidth,textureHeight));
 			// now we can acces directly on the image
 			m_data.SetFillColor(draw::Color(0x00000000));
 			m_data.Clear();
@@ -217,7 +217,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		m_height[iiiFontId] = m_font[iiiFontId]->GetHeight(m_size);
 		
 		int32_t CurrentLineHigh = 0;
-		etk::Vector2D<int32_t>    glyphPosition(1,1);
+		ivec2    glyphPosition(1,1);
 		for (int32_t iii=0; iii<m_listElement[iiiFontId].Size(); iii++) {
 			if (true == m_font[iiiFontId]->GetGlyphProperty(m_size, (m_listElement[iiiFontId])[iii])) {
 				// change line if needed ...
@@ -254,11 +254,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
 		for(int32_t iii=0; iii < textureWidth; iii++){
-			tlpppp = m_data.Get(etk::Vector2D<int32_t>(iii, jjj) );
+			tlpppp = m_data.Get(ivec2(iii, jjj) );
 			// set only alpha :
 			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
 			// real set of color
-			m_data.Set(etk::Vector2D<int32_t>(iii, jjj), tlpppp );
+			m_data.Set(ivec2(iii, jjj), tlpppp );
 		}
 	}
 	#endif

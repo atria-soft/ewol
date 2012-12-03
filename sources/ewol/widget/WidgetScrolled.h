@@ -36,13 +36,13 @@ namespace widget {
 			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
 		protected:
-			etk::Vector2D<float>    m_originScrooled;
-			etk::Vector2D<float>    m_maxSize;
+			vec2    m_originScrooled;
+			vec2    m_maxSize;
 			float                   m_limitScrolling;
 		private:
 			scrollingMode_te        m_scroollingMode; //!< mode of management of the scrooling
 			float                   m_pixelScrolling;
-			etk::Vector2D<float>    m_highSpeedStartPos;
+			vec2    m_highSpeedStartPos;
 			highSpeedMode_te        m_highSpeedMode;
 			int32_t                 m_highSpeedButton;
 			ewol::keyEvent::type_te m_highSpeedType;
@@ -56,7 +56,7 @@ namespace widget {
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, etk::Vector2D<float> pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 			// Derived function
 			virtual void GenDraw(ewol::DrawProperty displayProp);
 		protected:
@@ -77,7 +77,7 @@ namespace widget {
 			 * @param[in] localSize new Maximum size
 			 * @return ---
 			 */
-			void SetMaxSize(etk::Vector2D<float>  localSize) { m_maxSize = localSize; };
+			void SetMaxSize(vec2  localSize) { m_maxSize = localSize; };
 			/**
 			 * @brief Request a specific position for the scrolling of the current windows.
 			 * @param[in] borderWidth Size of the border that requested the element might not to be
@@ -85,7 +85,7 @@ namespace widget {
 			 * @param[in] center True if the position might be at the center of the widget
 			 * @return ---
 			 */
-			void SetScrollingPositionDynamic(etk::Vector2D<float>  borderWidth, etk::Vector2D<float>  currentPosition, bool center = false);
+			void SetScrollingPositionDynamic(vec2  borderWidth, vec2  currentPosition, bool center = false);
 			/**
 			 * @brief Set the scrolling limit when arriving at he end of the widget
 			 * @param[in] poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...

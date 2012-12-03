@@ -23,7 +23,7 @@ namespace ewol {
 			// OpenGl textureID :
 			GLuint          m_texId;
 			// some image are not square ==> we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
-			etk::Vector2D<float> m_endPointSize;
+			vec2 m_endPointSize;
 			// internal state of the openGl system :
 			bool            m_loaded;
 		// Ewol internal API:
@@ -34,14 +34,14 @@ namespace ewol {
 		// middleware interface:
 		public:
 			GLuint GetId(void) { return m_texId; };
-			etk::Vector2D<float> GetUsableSize(void) { return m_endPointSize; };
+			vec2 GetUsableSize(void) { return m_endPointSize; };
 		// Public API:
 		public:
 			Texture(etk::UString tmpName);
 			~Texture(void);
 			virtual const char* GetType(void) { return "ewol::Texture"; };
 			// you must set the size here, because it will be set in multiple of pow(2)
-			void SetImageSize(etk::Vector2D<int32_t> newSize);
+			void SetImageSize(ivec2 newSize);
 			// get the reference on this image to draw nomething on it ...
 			inline draw::Image& Get(void) { return m_data; };
 			// Flush the data to send it at the OpenGl system

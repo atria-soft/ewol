@@ -71,8 +71,8 @@ namespace widget {
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
 		// camera properties :
 		private:
-			etk::Vector3D<float>   m_camRotation;
-			etk::Vector3D<float>   m_camTranslation;
+			vec3   m_camRotation;
+			vec3   m_camTranslation;
 			float                  m_camAngleView;
 			float                  m_camdistanceViewStart;
 			float                  m_camdistanceViewStop;
@@ -88,7 +88,7 @@ namespace widget {
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual etk::Vector2D<float>  RelativePosition(etk::Vector2D<float>  pos);
+			virtual vec2  RelativePosition(vec2  pos);
 	};
 };
 
