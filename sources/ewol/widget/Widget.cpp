@@ -376,8 +376,8 @@ void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * gene
 		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStart;
 	} else if(NULL != strstr(descriptiveString, "END") ) {
 		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardEnd;
-	} else if(NULL != strstr(descriptiveString, "CENTER") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardCenter;
+	} else if(NULL != strstr(descriptiveString, "PRINT") ) {
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPrint;
 	} else if(NULL != strstr(descriptiveString, "ARRET_DEFIL") ) {
 		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStopDefil;
 	} else if(NULL != strstr(descriptiveString, "WAIT") ) {
@@ -388,8 +388,8 @@ void ewol::Widget::ShortCutAdd(const char * descriptiveString, const char * gene
 		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardCapLock;
 	} else if(NULL != strstr(descriptiveString, "CONTEXT_MENU") ) {
 		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardContextMenu;
-	} else if(NULL != strstr(descriptiveString, "VER_NUM") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardVerNum;
+	} else if(NULL != strstr(descriptiveString, "NUM_LOCK") ) {
+		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardNumLock;
 	} else {
 		tmpElement->unicodeValue = descriptiveString[strlen(descriptiveString) -1];
 	}

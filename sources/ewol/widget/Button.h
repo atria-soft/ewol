@@ -28,22 +28,22 @@ namespace widget {
 	class Button : public ewol::Widget
 	{
 		private:
-			ewol::Shaper                m_shaper;             //!< Compositing theme.
-			ewol::Text                  m_displayText;        //!< compositing Text.
-			ewol::Image                 m_displayImage;       //!< Image to display in normal mode.
-			draw::Color                 m_imageColor;         //!< Image color to display it.
-			ewol::Image                 m_displayImageToggle; //!< Image to display in toggle mode.
-			draw::Color                 m_imageColorToggle;   //!< Image color Toggle to display it.
-			etk::UString                m_label;              //!< Labe to display in normal mode.
-			etk::UString                m_labelToggle;        //!< Label to display when toggle mode is set ("" whenit is the same).
-			bool                        m_toggleMode;         //!< The button is able to toggle.
-			bool                        m_value;              //!< Current state of the button.
-			bool                        m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-			bool                        m_buttonPressed;      //!< Flag to know if the button is curently pressed.
-			int32_t                     m_imageDisplaySize;   //!< Display size of the Image.
+			ewol::Shaper m_shaper;             //!< Compositing theme.
+			ewol::Text   m_displayText;        //!< compositing Text.
+			ewol::Image  m_displayImage;       //!< Image to display in normal mode.
+			draw::Color  m_imageColor;         //!< Image color to display it.
+			ewol::Image  m_displayImageToggle; //!< Image to display in toggle mode.
+			draw::Color  m_imageColorToggle;   //!< Image color Toggle to display it.
+			etk::UString m_label;              //!< Labe to display in normal mode.
+			etk::UString m_labelToggle;        //!< Label to display when toggle mode is set ("" whenit is the same).
+			bool         m_toggleMode;         //!< The button is able to toggle.
+			bool         m_value;              //!< Current state of the button.
+			bool         m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+			bool         m_buttonPressed;      //!< Flag to know if the button is curently pressed.
+			int32_t      m_imageDisplaySize;   //!< Display size of the Image.
 			// hover area :
-			vec2        m_selectableAreaPos;  //!< Start position of the events
-			vec2        m_selectableAreaSize; //!< Size of the event positions
+			vec2         m_selectableAreaPos;  //!< Start position of the events
+			vec2         m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Constructor

@@ -790,9 +790,9 @@ void X11_Run(void)
 						}
 						if (event.xkey.state & (1<<4) ) {
 							//EWOL_DEBUG("    Special Key : VER_num");
-							guiKeyBoardMode.verNum = true;
+							guiKeyBoardMode.numLock = true;
 						} else {
-							guiKeyBoardMode.verNum = false;
+							guiKeyBoardMode.numLock = false;
 						}
 						if (event.xkey.state & (1<<5) ) {
 							EWOL_DEBUG("    Special Key : MOD");
@@ -864,10 +864,14 @@ void X11_Run(void)
 							case 64:    keyInput = ewol::keyEvent::keyboardAlt;         guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
 							case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
 							case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
-							case 77:    keyInput = ewol::keyEvent::keyboardVerNum;      guiKeyBoardMode.verNum  = (event.type == KeyPress) ? true : false; break;
+							case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
 							case 91: // Suppr on keypad
 								find = false;
-								eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, (event.type==KeyPress));
+								if(guiKeyBoardMode.numLock==true){
+									eSystem::SetKeyboard(guiKeyBoardMode, '.', (event.type==KeyPress));
+								} else {
+									eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, (event.type==KeyPress));
+								}
 								break;
 							case 23: // special case for TAB
 								find = false;
@@ -1084,14 +1088,6 @@ int guiInterface::main(int argc, const char *argv[])
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
 	}
-	guiKeyBoardMode.capLock = false;
-	guiKeyBoardMode.shift = false;
-	guiKeyBoardMode.ctrl = false;
-	guiKeyBoardMode.meta = false;
-	guiKeyBoardMode.alt = false;
-	guiKeyBoardMode.altGr = false;
-	guiKeyBoardMode.verNum = false;
-	guiKeyBoardMode.insert = false;
 	
 	// start X11 thread ...
 	X11_Init();

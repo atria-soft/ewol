@@ -42,14 +42,6 @@ namespace ewol {
 				broadcastEvent = false;
 				generateEventId = NULL;
 				eventData = "";
-				specialKey.capLock = false;
-				specialKey.shift = false;
-				specialKey.ctrl = false;
-				specialKey.meta = false;
-				specialKey.alt = false;
-				specialKey.altGr = false;
-				specialKey.verNum = false;
-				specialKey.insert = false;
 				unicodeValue = 0;
 				keyboardMoveValue = ewol::keyEvent::keyboardUnknow;
 			};
@@ -89,8 +81,8 @@ namespace ewol {
 			vec2                 m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
 			vec2                 m_userMinSize;   //!< user define the minimum size of the widget
-			bvec2  m_userExpend;
-			bvec2  m_userFill;
+			bvec2                m_userExpend;
+			bvec2                m_userFill;
 		public:
 			/**
 			 * @brief Set the zoom property of the widget

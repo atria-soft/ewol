@@ -46,7 +46,7 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 	"keyboardPageDown",
 	"keyboardStart",
 	"keyboardEnd",
-	"keyboardCenter",
+	"keyboardPrint",
 	"keyboardStopDefil",
 	"keyboardWait",
 	"keyboardInsert",
@@ -72,7 +72,7 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 	"keyboardAlt",
 	"keyboardAltGr",
 	"keyboardContextMenu",
-	"keyboardVerNum",
+	"keyboardNumLock",
 	"keyboardCount"
 };
 
@@ -110,4 +110,65 @@ static ewol::SpecialKey l_LocalKeyStatus;
 ewol::SpecialKey& ewol::GetCurrentSpecialKeyStatus(void)
 {
 	return l_LocalKeyStatus;
+}
+
+
+ewol::SpecialKey::SpecialKey(void) :
+	value(0)
+{
+	
+}
+
+bool ewol::SpecialKey::IsSetCapsLock(void)
+{
+	return capLock;
+}
+
+bool ewol::SpecialKey::IsSetShift(void)
+{
+	return shift;
+}
+
+bool ewol::SpecialKey::IsSetCtrl(void)
+{
+	return ctrl;
+}
+
+bool ewol::SpecialKey::IsSetMeta(void)
+{
+	return meta;
+}
+
+bool ewol::SpecialKey::IsSetAlt(void)
+{
+	return alt;
+}
+
+bool ewol::SpecialKey::IsSetAltGr(void)
+{
+	return altGr;
+}
+
+bool ewol::SpecialKey::IsSetNumLock(void)
+{
+	return numLock;
+}
+bool ewol::SpecialKey::IsSetInsert(void)
+{
+	return insert;
+}
+
+
+
+etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::SpecialKey obj)
+{
+	os << " capLock=" << obj.capLock;
+	os << " shift=" << obj.shift;
+	os << " ctrl=" << obj.ctrl;
+	os << " meta=" << obj.meta;
+	os << " alt=" << obj.alt;
+	os << " altGr=" << obj.altGr;
+	os << " verNum=" << obj.numLock;
+	os << " insert=" << obj.insert;
+	return os;
 }
