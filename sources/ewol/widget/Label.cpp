@@ -48,7 +48,7 @@ widget::Label::~Label(void)
 
 bool widget::Label::CalculateMinSize(void)
 {
-	ivec3 minSize = m_oObjectText.CalculateSize(m_label);
+	ivec3 minSize = m_oObjectText.CalculateSizeDecorated(m_label);
 	m_minSize.x = 3 + minSize.x;
 	m_minSize.y = 3 + minSize.y;
 	return true;
@@ -88,7 +88,7 @@ void widget::Label::OnRegenerateDisplay(void)
 		
 		vec3 textPos(tmpOriginX, tmpOriginY, 0);
 		m_oObjectText.SetPos(textPos);
-		m_oObjectText.Print(m_label);
+		m_oObjectText.PrintDecorated(m_label);
 		
 	}
 }

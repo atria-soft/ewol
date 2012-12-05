@@ -19,8 +19,7 @@
 class TestButtonColor : public widget::SizerVert
 {
 	private:
-		widget::ButtonColor*  m_button;
-		widget::Spacer*  m_spacer[4];
+		widget::ButtonColor* m_testWidget;
 	public:
 		// Constructeur
 		TestButtonColor(void);

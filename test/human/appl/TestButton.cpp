@@ -120,16 +120,15 @@ TestButton::TestButton(void)
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventChangeText);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
-	int32_t idSpacer=0;
-	m_spacer[idSpacer] = new widget::Spacer();
-	if (NULL != m_spacer[idSpacer]) {
-		m_spacer[idSpacer]->SetExpendX(false);
-		m_spacer[idSpacer]->SetExpendY(false);
-		m_spacer[idSpacer]->SetFillX(true);
-		m_spacer[idSpacer]->SetFillY(false);
-		m_spacer[idSpacer]->SetSize(10);
-		m_spacer[idSpacer]->SetColor(0xFF000080);
-		SubWidgetAdd(m_spacer[idSpacer]);
+	widget::Spacer* mySpacer = new widget::Spacer();
+	if (NULL != mySpacer) {
+		mySpacer->SetExpendX(false);
+		mySpacer->SetExpendY(false);
+		mySpacer->SetFillX(true);
+		mySpacer->SetFillY(false);
+		mySpacer->SetSize(10);
+		mySpacer->SetColor(0xFF000080);
+		SubWidgetAdd(mySpacer);
 	}
 	
 	mySizerHori = new widget::SizerHori();
@@ -139,55 +138,52 @@ TestButton::TestButton(void)
 	}
 	SubWidgetAdd(mySizerHori);
 	
-		idSpacer++;
-		m_spacer[idSpacer] = new widget::Spacer();
-		if (NULL != m_spacer[idSpacer]) {
-			m_spacer[idSpacer]->SetExpendX(false);
-			m_spacer[idSpacer]->SetExpendY(false);
-			m_spacer[idSpacer]->SetFillX(false);
-			m_spacer[idSpacer]->SetFillY(true);
-			m_spacer[idSpacer]->SetSize(10);
-			m_spacer[idSpacer]->SetColor(0x00FF0080);
-			mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+		mySpacer = new widget::Spacer();
+		if (NULL != mySpacer) {
+			mySpacer->SetExpendX(false);
+			mySpacer->SetExpendY(false);
+			mySpacer->SetFillX(false);
+			mySpacer->SetFillY(true);
+			mySpacer->SetSize(10);
+			mySpacer->SetColor(0x00FF0080);
+			mySizerHori->SubWidgetAdd(mySpacer);
 		}
 		
-		m_button = new widget::Button("My <font color=\"#FF0000\">Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...");
-		if (NULL != m_button) {
-			m_button->SetExpendX(false);
-			m_button->SetExpendY(false);
-			m_button->SetFillX(false);
-			m_button->SetFillY(false);
-			m_button->RegisterOnEvent(this, ewolEventButtonPressed);
-			m_button->RegisterOnEvent(this, ewolEventButtonDown);
-			m_button->RegisterOnEvent(this, ewolEventButtonUp);
-			m_button->RegisterOnEvent(this, ewolEventButtonEnter);
-			m_button->RegisterOnEvent(this, ewolEventButtonLeave);
-			m_button->RegisterOnEvent(this, ewolEventButtonValue);
-			mySizerHori->SubWidgetAdd(m_button);
+		m_testWidget = new widget::Button("My <font color=\"#FF0000\">Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...");
+		if (NULL != m_testWidget) {
+			m_testWidget->SetExpendX(false);
+			m_testWidget->SetExpendY(false);
+			m_testWidget->SetFillX(false);
+			m_testWidget->SetFillY(false);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonPressed);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonDown);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonUp);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonEnter);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonLeave);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonValue);
+			mySizerHori->SubWidgetAdd(m_testWidget);
 		}
 		
-		idSpacer++;
-		m_spacer[idSpacer] = new widget::Spacer();
-		if (NULL != m_spacer[idSpacer]) {
-			m_spacer[idSpacer]->SetExpendX(false);
-			m_spacer[idSpacer]->SetExpendY(false);
-			m_spacer[idSpacer]->SetFillX(false);
-			m_spacer[idSpacer]->SetFillY(true);
-			m_spacer[idSpacer]->SetSize(10);
-			m_spacer[idSpacer]->SetColor(0x0000FF80);
-			mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+		mySpacer = new widget::Spacer();
+		if (NULL != mySpacer) {
+			mySpacer->SetExpendX(false);
+			mySpacer->SetExpendY(false);
+			mySpacer->SetFillX(false);
+			mySpacer->SetFillY(true);
+			mySpacer->SetSize(10);
+			mySpacer->SetColor(0x0000FF80);
+			mySizerHori->SubWidgetAdd(mySpacer);
 		}
 		
-	idSpacer++;
-	m_spacer[idSpacer] = new widget::Spacer();
-	if (NULL != m_spacer[idSpacer]) {
-		m_spacer[idSpacer]->SetExpendX(false);
-		m_spacer[idSpacer]->SetExpendY(false);
-		m_spacer[idSpacer]->SetFillX(true);
-		m_spacer[idSpacer]->SetFillY(false);
-		m_spacer[idSpacer]->SetSize(10);
-		m_spacer[idSpacer]->SetColor(0x00FFFF80);
-		SubWidgetAdd(m_spacer[idSpacer]);
+	mySpacer = new widget::Spacer();
+	if (NULL != mySpacer) {
+		mySpacer->SetExpendX(false);
+		mySpacer->SetExpendY(false);
+		mySpacer->SetFillX(true);
+		mySpacer->SetFillY(false);
+		mySpacer->SetSize(10);
+		mySpacer->SetColor(0x00FFFF80);
+		SubWidgetAdd(mySpacer);
 	}
 	APPL_CRITICAL("Create "__class__" (end)");
 }
@@ -204,108 +200,108 @@ void TestButton::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 	widget::SizerVert::OnReceiveMessage(CallerObject, eventId, data);
 	
 	//APPL_INFO("Receive Event from the main windows ... : \"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (m_button == CallerObject) {
+	if (m_testWidget == CallerObject) {
 		APPL_WARNING("Receive Event from tested Button ... : \"" << eventId << "\" ==> data=\"" << data << "\"" );
 	}
 	if (eventId == l_eventChangeExpendX) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetExpendX(true);
+				m_testWidget->SetExpendX(true);
 			} else {
-				m_button->SetExpendX(false);
+				m_testWidget->SetExpendX(false);
 			}
 		}
 	} else if (eventId == l_eventChangeExpendY) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetExpendY(true);
+				m_testWidget->SetExpendY(true);
 			} else {
-				m_button->SetExpendY(false);
+				m_testWidget->SetExpendY(false);
 			}
 		}
 	} else if (eventId == l_eventChangeFillX) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetFillX(true);
+				m_testWidget->SetFillX(true);
 			} else {
-				m_button->SetFillX(false);
+				m_testWidget->SetFillX(false);
 			}
 		}
 	} else if (eventId == l_eventChangeFillY) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetFillY(true);
+				m_testWidget->SetFillY(true);
 			} else {
-				m_button->SetFillY(false);
+				m_testWidget->SetFillY(false);
 			}
 		}
 	} else if (eventId == l_eventChangeToggle) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetToggleMode(true);
+				m_testWidget->SetToggleMode(true);
 			} else {
-				m_button->SetToggleMode(false);
+				m_testWidget->SetToggleMode(false);
 			}
 		}
 	} else if (eventId == l_eventChangeTextToggle) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetLabelToggle("A stupid very long text on toggle <br/><br/> and on multiple lines");
+				m_testWidget->SetLabelToggle("A stupid very long text on toggle <br/><br/> and on multiple lines");
 			} else {
-				m_button->SetLabelToggle("");
+				m_testWidget->SetLabelToggle("");
 			}
 		}
 	} else if (eventId == l_eventChangeImage) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetImage("THEME:GUI:icon.png");
-				m_button->SetImageSize(50);
+				m_testWidget->SetImage("THEME:GUI:icon.png");
+				m_testWidget->SetImageSize(50);
 			} else {
-				m_button->SetImage("");
+				m_testWidget->SetImage("");
 			}
 		}
 	} else if (eventId == l_eventChangeImageToggle) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetImageToggle("THEME:GUI:icon.png");
+				m_testWidget->SetImageToggle("THEME:GUI:icon.png");
 			} else {
-				m_button->SetImageToggle("");
+				m_testWidget->SetImageToggle("");
 			}
 		}
 	} else if (eventId == l_eventChangeText) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			static int32_t countTextID = 1;
 			switch (countTextID%10)
 			{
 				case 0:
-					m_button->SetLabel("simple Text");
+					m_testWidget->SetLabel("simple Text");
 					break;
 				case 1:
-					m_button->SetLabel("<left>Align Left</left>");
+					m_testWidget->SetLabel("<left>Align Left</left>");
 					break;
 				case 2:
-					m_button->SetLabel("<right>Align right</right>");
+					m_testWidget->SetLabel("<right>Align right</right>");
 					break;
 				case 3:
-					m_button->SetLabel("simple Text<br/> With Some Other Lines<br/> and more if you want ...<br/> plop");
+					m_testWidget->SetLabel("simple Text<br/> With Some Other Lines<br/> and more if you want ...<br/> plop");
 					break;
 				case 4:
-					m_button->SetLabel("simple <bold>Text</bold> with bold");
+					m_testWidget->SetLabel("simple <bold>Text</bold> with bold");
 					break;
 				case 5:
-					m_button->SetLabel("simple <italic>Text</italic> with italic");
+					m_testWidget->SetLabel("simple <italic>Text</italic> with italic");
 					break;
 				case 6:
-					m_button->SetLabel("simple <italic><bold>Text</bold></italic> with italic bold");
+					m_testWidget->SetLabel("simple <italic><bold>Text</bold></italic> with italic bold");
 					break;
 				case 7:
-					m_button->SetLabel("");
+					m_testWidget->SetLabel("");
 					break;
 				case 8:
-					m_button->SetLabel("simple <font color=\"#FFFF0088\">Text</font> with colored text");
+					m_testWidget->SetLabel("simple <font color=\"#FFFF0088\">Text</font> with colored text");
 					break;
 				default:
-					m_button->SetLabel("My <font color=\"#FF0000\">Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...");
+					m_testWidget->SetLabel("My <font color=\"#FF0000\">Button</font> <br/> And Some under line<br/> plop <br/> and an other super long line ...");
 					break;
 			}
 			countTextID++;
@@ -318,19 +314,7 @@ void TestButton::OnReceiveMessage(ewol::EObject * CallerObject, const char * eve
 void TestButton::OnObjectRemove(ewol::EObject * removeObject)
 {
 	widget::SizerVert::OnObjectRemove(removeObject);
-	if (m_button == removeObject) {
-		m_button = NULL;
-	}
-	if (m_spacer[0] == removeObject) {
-		m_spacer[0] = NULL;
-	}
-	if (m_spacer[1] == removeObject) {
-		m_spacer[1] = NULL;
-	}
-	if (m_spacer[2] == removeObject) {
-		m_spacer[2] = NULL;
-	}
-	if (m_spacer[3] == removeObject) {
-		m_spacer[3] = NULL;
+	if (m_testWidget == removeObject) {
+		m_testWidget = NULL;
 	}
 }

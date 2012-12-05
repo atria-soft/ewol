@@ -18,8 +18,7 @@
 class TestButton : public widget::SizerVert
 {
 	private:
-		widget::Button*  m_button;
-		widget::Spacer*  m_spacer[4];
+		widget::Button* m_testWidget;
 	public:
 		// Constructeur
 		TestButton(void);

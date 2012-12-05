@@ -25,6 +25,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <appl/TestButton.h>
 #include <appl/TestButtonColor.h>
+#include <appl/TestLabel.h>
 
 
 static const char * l_eventChangeTheme           = "event-change-theme";
@@ -32,7 +33,7 @@ static const char * l_eventChangeWidgetNext      = "event-change-widget-test-nex
 static const char * l_eventChangeWidgetPrevious  = "event-change-widget-test-previous";
 
 
-static const char * l_basicLabel = "<center>Test software for EWOL</center>";
+static const char * l_basicLabel = "Test software for EWOL";
 
 
 #undef __class__
@@ -89,6 +90,8 @@ MainWindows::MainWindows(void) :
 		// basic generation ...
 		m_subWidget = (ewol::Widget*)new widget::Label(l_basicLabel);
 		if (NULL != m_subWidget) {
+			m_subWidget->SetExpendX(true);
+			m_subWidget->SetExpendY(true);
 			m_sizerVert->SubWidgetAdd(m_subWidget);
 		}
 	
@@ -133,6 +136,8 @@ void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 		case 0:
 			m_subWidget = (ewol::Widget*)new widget::Label(l_basicLabel);
 			if (NULL != m_subWidget) {
+				m_subWidget->SetExpendX(true);
+				m_subWidget->SetExpendY(true);
 				m_sizerVert->SubWidgetAdd(m_subWidget);
 			}
 			break;
@@ -144,6 +149,12 @@ void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 			break;
 		case 2:
 			m_subWidget = (ewol::Widget*)new TestButtonColor();
+			if (NULL != m_subWidget) {
+				m_sizerVert->SubWidgetAdd(m_subWidget);
+			}
+			break;
+		case 3:
+			m_subWidget = (ewol::Widget*)new TestLabel();
 			if (NULL != m_subWidget) {
 				m_sizerVert->SubWidgetAdd(m_subWidget);
 			}

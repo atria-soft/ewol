@@ -76,16 +76,15 @@ TestButtonColor::TestButtonColor(void)
 			mySizerHori->SubWidgetAdd(myButton);
 		}
 		
-	int32_t idSpacer=0;
-	m_spacer[idSpacer] = new widget::Spacer();
-	if (NULL != m_spacer[idSpacer]) {
-		m_spacer[idSpacer]->SetExpendX(false);
-		m_spacer[idSpacer]->SetExpendY(false);
-		m_spacer[idSpacer]->SetFillX(true);
-		m_spacer[idSpacer]->SetFillY(false);
-		m_spacer[idSpacer]->SetSize(10);
-		m_spacer[idSpacer]->SetColor(0xFF000080);
-		SubWidgetAdd(m_spacer[idSpacer]);
+	widget::Spacer* mySpacer = new widget::Spacer();
+	if (NULL != mySpacer) {
+		mySpacer->SetExpendX(false);
+		mySpacer->SetExpendY(false);
+		mySpacer->SetFillX(true);
+		mySpacer->SetFillY(false);
+		mySpacer->SetSize(10);
+		mySpacer->SetColor(0xFF000080);
+		SubWidgetAdd(mySpacer);
 	}
 	
 	mySizerHori = new widget::SizerHori();
@@ -95,50 +94,47 @@ TestButtonColor::TestButtonColor(void)
 	}
 	SubWidgetAdd(mySizerHori);
 	
-		idSpacer++;
-		m_spacer[idSpacer] = new widget::Spacer();
-		if (NULL != m_spacer[idSpacer]) {
-			m_spacer[idSpacer]->SetExpendX(false);
-			m_spacer[idSpacer]->SetExpendY(false);
-			m_spacer[idSpacer]->SetFillX(false);
-			m_spacer[idSpacer]->SetFillY(true);
-			m_spacer[idSpacer]->SetSize(10);
-			m_spacer[idSpacer]->SetColor(0x00FF0080);
-			mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+		mySpacer = new widget::Spacer();
+		if (NULL != mySpacer) {
+			mySpacer->SetExpendX(false);
+			mySpacer->SetExpendY(false);
+			mySpacer->SetFillX(false);
+			mySpacer->SetFillY(true);
+			mySpacer->SetSize(10);
+			mySpacer->SetColor(0x00FF0080);
+			mySizerHori->SubWidgetAdd(mySpacer);
 		}
 		
-		m_button = new widget::ButtonColor(draw::color::olive);
-		if (NULL != m_button) {
-			m_button->SetExpendX(false);
-			m_button->SetExpendY(false);
-			m_button->SetFillX(false);
-			m_button->SetFillY(false);
-			m_button->RegisterOnEvent(this, ewolEventButtonColorChange);
-			mySizerHori->SubWidgetAdd(m_button);
+		m_testWidget = new widget::ButtonColor(draw::color::olive);
+		if (NULL != m_testWidget) {
+			m_testWidget->SetExpendX(false);
+			m_testWidget->SetExpendY(false);
+			m_testWidget->SetFillX(false);
+			m_testWidget->SetFillY(false);
+			m_testWidget->RegisterOnEvent(this, ewolEventButtonColorChange);
+			mySizerHori->SubWidgetAdd(m_testWidget);
 		}
 		
-		idSpacer++;
-		m_spacer[idSpacer] = new widget::Spacer();
-		if (NULL != m_spacer[idSpacer]) {
-			m_spacer[idSpacer]->SetExpendX(false);
-			m_spacer[idSpacer]->SetExpendY(false);
-			m_spacer[idSpacer]->SetFillX(false);
-			m_spacer[idSpacer]->SetFillY(true);
-			m_spacer[idSpacer]->SetSize(10);
-			m_spacer[idSpacer]->SetColor(0x0000FF80);
-			mySizerHori->SubWidgetAdd(m_spacer[idSpacer]);
+		mySpacer = new widget::Spacer();
+		if (NULL != mySpacer) {
+			mySpacer->SetExpendX(false);
+			mySpacer->SetExpendY(false);
+			mySpacer->SetFillX(false);
+			mySpacer->SetFillY(true);
+			mySpacer->SetSize(10);
+			mySpacer->SetColor(0x0000FF80);
+			mySizerHori->SubWidgetAdd(mySpacer);
 		}
 		
-	idSpacer++;
-	m_spacer[idSpacer] = new widget::Spacer();
-	if (NULL != m_spacer[idSpacer]) {
-		m_spacer[idSpacer]->SetExpendX(false);
-		m_spacer[idSpacer]->SetExpendY(false);
-		m_spacer[idSpacer]->SetFillX(true);
-		m_spacer[idSpacer]->SetFillY(false);
-		m_spacer[idSpacer]->SetSize(10);
-		m_spacer[idSpacer]->SetColor(0x00FFFF80);
-		SubWidgetAdd(m_spacer[idSpacer]);
+	mySpacer = new widget::Spacer();
+	if (NULL != mySpacer) {
+		mySpacer->SetExpendX(false);
+		mySpacer->SetExpendY(false);
+		mySpacer->SetFillX(true);
+		mySpacer->SetFillY(false);
+		mySpacer->SetSize(10);
+		mySpacer->SetColor(0x00FFFF80);
+		SubWidgetAdd(mySpacer);
 	}
 }
 
@@ -154,39 +150,39 @@ void TestButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char 
 	widget::SizerVert::OnReceiveMessage(CallerObject, eventId, data);
 	
 	//APPL_INFO("Receive Event from the main windows ... : \"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (m_button == CallerObject) {
+	if (m_testWidget == CallerObject) {
 		APPL_WARNING("Receive Event from tested Button ... : \"" << eventId << "\" ==> data=\"" << data << "\"" );
 	}
 	if (eventId == l_eventChangeExpendX) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetExpendX(true);
+				m_testWidget->SetExpendX(true);
 			} else {
-				m_button->SetExpendX(false);
+				m_testWidget->SetExpendX(false);
 			}
 		}
 	} else if (eventId == l_eventChangeExpendY) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetExpendY(true);
+				m_testWidget->SetExpendY(true);
 			} else {
-				m_button->SetExpendY(false);
+				m_testWidget->SetExpendY(false);
 			}
 		}
 	} else if (eventId == l_eventChangeFillX) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetFillX(true);
+				m_testWidget->SetFillX(true);
 			} else {
-				m_button->SetFillX(false);
+				m_testWidget->SetFillX(false);
 			}
 		}
 	} else if (eventId == l_eventChangeFillY) {
-		if (NULL!=m_button) {
+		if (NULL!=m_testWidget) {
 			if (data=="1") {
-				m_button->SetFillY(true);
+				m_testWidget->SetFillY(true);
 			} else {
-				m_button->SetFillY(false);
+				m_testWidget->SetFillY(false);
 			}
 		}
 	}
@@ -197,19 +193,7 @@ void TestButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char 
 void TestButtonColor::OnObjectRemove(ewol::EObject * removeObject)
 {
 	widget::SizerVert::OnObjectRemove(removeObject);
-	if (m_button == removeObject) {
-		m_button = NULL;
-	}
-	if (m_spacer[0] == removeObject) {
-		m_spacer[0] = NULL;
-	}
-	if (m_spacer[1] == removeObject) {
-		m_spacer[1] = NULL;
-	}
-	if (m_spacer[2] == removeObject) {
-		m_spacer[2] = NULL;
-	}
-	if (m_spacer[3] == removeObject) {
-		m_spacer[3] = NULL;
+	if (m_testWidget == removeObject) {
+		m_testWidget = NULL;
 	}
 }
