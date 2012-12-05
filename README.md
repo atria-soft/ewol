@@ -21,8 +21,9 @@ Compile software and install :
 Dependency packages
 ===================
 
-	sudo apt-get install realpath
-
+	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
+	# if you want to compile with clang : 
+	sudo apt-get install clang
 
 Copyright (c)
 =============
