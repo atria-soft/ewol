@@ -16,7 +16,8 @@
 #undef __class__
 #define __class__	"Widget"
 
-ewol::Widget::Widget(void)
+ewol::Widget::Widget(void) :
+	m_userMaxSize(-1,-1)
 {
 	m_limitMouseEvent = 3;
 	m_needRegenerateDisplay = true;
@@ -235,6 +236,17 @@ vec2 ewol::Widget::GetMinSize(void)
 		return m_minSize;
 	}
 	return vec2(0,0);
+}
+
+void ewol::Widget::SetMaxSize(vec2 size)
+{
+	m_userMaxSize = size;
+	ewol::RequestUpdateSize();
+}
+
+vec2 ewol::Widget::GetMaxSize(void)
+{
+	return m_userMaxSize;
 }
 
 vec2 ewol::Widget::GetSize(void)

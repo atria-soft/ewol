@@ -72,17 +72,18 @@ namespace ewol {
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			bool                 m_hide; //!< hide a widget on the display
+			bool   m_hide; //!< hide a widget on the display
 		protected:
 			// internal element calculated by the system
-			float                m_zoom;          //!< generic widget zoom
-			vec2                 m_origin;        //!< internal ... I do not really known how i can use it ...
-			vec2                 m_size;          //!< internal : current size of the widget
-			vec2                 m_minSize;       //!< user define the minimum size of the widget
+			float  m_zoom;          //!< generic widget zoom
+			vec2   m_origin;        //!< internal ... I do not really known how i can use it ...
+			vec2   m_size;          //!< internal : current size of the widget
+			vec2   m_minSize;       //!< user define the minimum size of the widget
 			// user configuaration
-			vec2                 m_userMinSize;   //!< user define the minimum size of the widget
-			bvec2                m_userExpend;
-			bvec2                m_userFill;
+			vec2   m_userMinSize;   //!< user define the minimum size of the widget
+			vec2   m_userMaxSize;   //!< user define the maximum size of the widget
+			bvec2  m_userExpend;
+			bvec2  m_userFill;
 		public:
 			/**
 			 * @brief Set the zoom property of the widget
@@ -144,9 +145,21 @@ namespace ewol {
 			/**
 			 * @brief Get the current calculated min size
 			 * @param ---
-			 * @return re size requested
+			 * @return the size requested
 			 */
 			vec2 GetMinSize(void);
+			/**
+			 * @brief User set the maximum size he want to set the display
+			 * @param[in] size The new maximum size requested (vec2(-1,-1) to unset)
+			 * @return ---
+			 */
+			virtual void SetMaxSize(vec2 size);
+			/**
+			 * @brief Get the current maximum size
+			 * @param ---
+			 * @return the size requested
+			 */
+			vec2 GetMaxSize(void);
 			/**
 			 * @brief Get the widget size
 			 * @param ---

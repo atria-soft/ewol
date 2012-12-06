@@ -19,21 +19,33 @@ extern const char * const ewolEventLabelPressed;
 namespace widget {
 	class Label : public ewol::Widget
 	{
+		private:
+			ewol::Text   m_text;  //!< Compositing text element.
+			etk::UString m_label; //!< decorated text to display.
 		public:
-			Label(void);
-			Label(etk::UString newLabel);
+			/**
+			 * @brief Constructor
+			 * @param[in] newLabel The displayed decorated text.
+			 */
+			Label(etk::UString newLabel="---");
+			/**
+			 * @brief destructor
+			 */
+			virtual ~Label(void);
+			/**
+			 * @brief Change the label displayed
+			 * @param[in] newLabel The displayed decorated text.
+			 */
+			void SetLabel(etk::UString newLabel);
+			/**
+			 * @brief Get the current displayed label
+			 * @return The displayed decorated text.
+			 */
+			etk::UString GetLabel(void);
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolLabel"; };
-			void Init(void);
-			virtual ~Label(void);
 			// Derived function
 			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::UString newLabel);
-		private:
-			ewol::Text     m_oObjectText;
-			etk::UString   m_label;
-			draw::Color    m_textColorFg;  //!< Text color
-		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function

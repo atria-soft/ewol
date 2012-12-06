@@ -22,8 +22,13 @@ class TestLabel : public widget::SizerVert
 		widget::Label* m_testWidget;
 		int32_t        m_labelId;
 	public:
-		// Constructeur
+		/**
+		 * @brief Constructeur
+		 */
 		TestLabel(void);
+		/**
+		 * @brief Destructor
+		 */
 		virtual ~TestLabel(void);
 		// Derived function
 		virtual const char * const GetObjectType(void) { return "TestButton"; };

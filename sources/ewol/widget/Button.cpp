@@ -190,18 +190,17 @@ void widget::Button::OnRegenerateDisplay(void)
 		ivec2 localSize = m_minSize;
 		
 		vec3 tmpOrigin((m_size.x - m_minSize.x) / 2.0,
-		                               (m_size.y - m_minSize.y) / 2.0,
-		                               0.0);
-		                               
+		               (m_size.y - m_minSize.y) / 2.0,
+		               0);
 		// no change for the text orogin : 
 		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
-		                                   (m_size.y - m_minSize.y) / 2.0,
-		                                   0.0);
+		                   (m_size.y - m_minSize.y) / 2.0,
+		                   0);
 		
 		if (true==m_userFill.x) {
 			localSize.x = m_size.x;
-			tmpOrigin.x = 0.0;
-			tmpTextOrigin.x = 0.0;
+			tmpOrigin.x = 0;
+			tmpTextOrigin.x = 0;
 		}
 		if (true==m_userFill.y) {
 			localSize.y = m_size.y;
@@ -220,10 +219,10 @@ void widget::Button::OnRegenerateDisplay(void)
 		if(    true == m_displayImage.HasSources()
 		    || true == m_displayImageToggle.HasSources()) {
 			ivec3 imagePos(tmpOrigin.x-padding.x/4,
-			                                tmpOrigin.y-padding.x/4+(m_minSize.y-m_imageDisplaySize-2*padding.y)/2.0,
-			                                0);
+			               tmpOrigin.y-padding.x/4+(m_minSize.y-m_imageDisplaySize-2*padding.y)/2.0,
+			               0);
 			ivec2 imageSize(m_imageDisplaySize,
-			                                 m_imageDisplaySize);
+			                m_imageDisplaySize);
 			if(    false==m_toggleMode
 			    || false==m_value) {
 				m_displayImage.SetPos(imagePos);
@@ -239,9 +238,9 @@ void widget::Button::OnRegenerateDisplay(void)
 		}
 		
 		vec3 drawClippingPos(padding.x, padding.y, -0.5);
-		vec3 drawClippingSize((float)(m_size.x - padding.x),
-		                                      (float)(m_size.y - padding.y),
-		                                      (float)1.0);
+		vec3 drawClippingSize((m_size.x - padding.x),
+		                      (m_size.y - padding.y),
+		                      1);
 		
 		// clean the element
 		m_displayText.Reset();

@@ -30,6 +30,7 @@ static const char * l_eventChangeExpendX     = "event-change-expend-X";
 static const char * l_eventChangeExpendY     = "event-change-expend-Y";
 static const char * l_eventChangeFillX       = "event-change-fill-X";
 static const char * l_eventChangeFillY       = "event-change-fill-Y";
+static const char * l_eventChangeMaxSize     = "event-change-maxSize";
 static const char * l_eventChangeLabel       = "event-change-label";
 
 #undef __class__
@@ -75,6 +76,13 @@ TestLabel::TestLabel(void) :
 			myButton->SetToggleMode(true);
 			myButton->SetLabelToggle("Fill Y (true)");
 			myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeFillY);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("maxSize (-1,-1)");
+		if (NULL != myButton) {
+			myButton->SetToggleMode(true);
+			myButton->SetLabelToggle("maxSize (400,-1)");
+			myButton->RegisterOnEvent(this, ewolEventButtonValue, l_eventChangeMaxSize);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
 		myButton = new widget::Button("Next Label");
@@ -192,6 +200,14 @@ void TestLabel::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 				m_testWidget->SetFillY(false);
 			}
 		}
+	} else if (eventId == l_eventChangeMaxSize) {
+		if (NULL!=m_testWidget) {
+			if (data=="1") {
+				m_testWidget->SetMaxSize(vec2(400,-1));
+			} else {
+				m_testWidget->SetMaxSize(vec2(-1,-1));
+			}
+		}
 	} else if (eventId == l_eventChangeLabel) {
 		if (NULL!=m_testWidget) {
 			m_labelId++;
@@ -204,6 +220,26 @@ void TestLabel::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 					break;
 				case 1:
 					m_testWidget->SetLabel("Basic <bold>label</bold>");
+					break;
+				case 2:
+					m_testWidget->SetLabel("<center>\n"
+					                       "	Un jour Cosette se <b>regarda</b> par hasard dans son miroir et se dit: Tiens! <b>Il lui semblait presque <i>qu'elle était jolie.</i></b> Ceci la jeta dans un trouble singulier. <font color=\"#FF0000\">Jusqu'à ce moment elle <b>n'avait</b> point <i>songé</i> à sa figure.</font> Elle se voyait dans son miroir, mais elle ne s'y regardait pas. Et puis, on lui avait souvent dit qu'elle était laide;<br/> Jean Valjean seul disait doucement : <br/> Mais non!<br/>  mais non!<br/>  Quoi qu'il en fut, Cosette s'était toujours crue laide, et avait grandi dans cette idée avec la résignation facile de l'enfance. Voici que tout d'un coup son miroir lui disait comme Jean Valjean : Mais non! Elle ne dormit pas de la nuit. Si j'étais jolie ? pensait-elle, comme cela serait drole que je fusse jolie! Et elle se rappelait celles de ses compagnes dont la beauté faisait effet dans le couvent, et elle se disait : Comment! je serais comme mademoiselle une telle!\n"
+					                       "</center>\n");
+					break;
+				case 3:
+					m_testWidget->SetLabel("<left>\n"
+					                       "	Un jour Cosette se <b>regarda</b> par hasard dans son miroir et se dit: Tiens! <b>Il lui semblait presque <i>qu'elle était jolie.</i></b> Ceci la jeta dans un trouble singulier. <font color=\"#0F0\">Jusqu'à ce moment elle <b>n'avait</b> point <i>songé</i> à sa figure.</font> Elle se voyait dans son miroir, mais elle ne s'y regardait pas. Et puis, on lui avait souvent dit qu'elle était laide;<br/> Jean Valjean seul disait doucement :<br/>  Mais non!<br/>  mais non!<br/>  Quoi qu'il en fut, Cosette s'était toujours crue laide, et avait grandi dans cette idée avec la résignation facile de l'enfance. Voici que tout d'un coup son miroir lui disait comme Jean Valjean : Mais non! Elle ne dormit pas de la nuit. Si j'étais jolie ? pensait-elle, comme cela serait drole que je fusse jolie! Et elle se rappelait celles de ses compagnes dont la beauté faisait effet dans le couvent, et elle se disait : Comment! je serais comme mademoiselle une telle!\n"
+					                       "</left>\n");
+					break;
+				case 4:
+					m_testWidget->SetLabel("<right>\n"
+					                       "	Un jour Cosette se <b>regarda</b> par hasard dans son miroir et se dit: Tiens! <b>Il lui semblait presque <i>qu'elle était jolie.</i></b> Ceci la jeta dans un trouble singulier. <font color=\"#00F\">Jusqu'à ce moment elle<b> n'avait</b> point <i>songé</i> à sa figure.</font> Elle se voyait dans son miroir, mais elle ne s'y regardait pas. Et puis, on lui avait souvent dit qu'elle était laide;<br/> Jean Valjean seul disait doucement :<br/>  Mais non! <br/> mais non!<br/>  Quoi qu'il en fut, Cosette s'était toujours crue laide, et avait grandi dans cette idée avec la résignation facile de l'enfance. Voici que tout d'un coup son miroir lui disait comme Jean Valjean : Mais non! Elle ne dormit pas de la nuit. Si j'étais jolie ? pensait-elle, comme cela serait drole que je fusse jolie! Et elle se rappelait celles de ses compagnes dont la beauté faisait effet dans le couvent, et elle se disait : Comment! je serais comme mademoiselle une telle!\n"
+					                       "</right>\n");
+					break;
+				case 5:
+					m_testWidget->SetLabel("<justify>\n"
+					                       "	Un jour Cosette se <b>regarda</b> par hasard dans son miroir et se dit: Tiens! <b>Il lui semblait presque <i>qu'elle était jolie.</i></b> Ceci la jeta dans un trouble singulier. <font color=\"#FF0\">Jusqu'à ce moment elle <b>n'avait</b> point <i>songé</i> à sa figure.</font> Elle se voyait dans son miroir, mais elle ne s'y regardait pas. Et puis, on lui avait souvent dit qu'elle était laide;<br/> Jean Valjean seul disait doucement :<br/>  Mais non!<br/>  mais non!<br/>  Quoi qu'il en fut, Cosette s'était toujours crue laide, et avait grandi dans cette idée avec la résignation facile de l'enfance. Voici que tout d'un coup son miroir lui disait comme Jean Valjean : Mais non! Elle ne dormit pas de la nuit. Si j'étais jolie ? pensait-elle, comme cela serait drole que je fusse jolie! Et elle se rappelait celles de ses compagnes dont la beauté faisait effet dans le couvent, et elle se disait : Comment! je serais comme mademoiselle une telle!\n"
+					                       "</justify>\n");
 					break;
 			}
 		}

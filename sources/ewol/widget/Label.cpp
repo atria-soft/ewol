@@ -10,6 +10,7 @@
 
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/WidgetManager.h>
+#include <ewol/ewol.h>
 
 
 extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
@@ -20,37 +21,34 @@ extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
 #define __class__	"Label"
 
 
-void widget::Label::Init(void)
-{
-	AddEventId(ewolEventLabelPressed);
-	m_textColorFg = draw::color::black;
-	SetCanHaveFocus(false);
-}
-
-widget::Label::Label(void)
-{
-	m_label = "---";
-	Init();
-}
-
 widget::Label::Label(etk::UString newLabel)
 {
 	m_label = newLabel;
-	Init();
+	AddEventId(ewolEventLabelPressed);
+	SetCanHaveFocus(false);
 }
-
 
 widget::Label::~Label(void)
 {
 	
 }
 
-
 bool widget::Label::CalculateMinSize(void)
 {
-	ivec3 minSize = m_oObjectText.CalculateSizeDecorated(m_label);
-	m_minSize.x = 3 + minSize.x;
-	m_minSize.y = 3 + minSize.y;
+	if (m_userMaxSize.x != -1) {
+		m_text.SetTextAlignement(0, m_userMaxSize.x-4, ewol::Text::alignLeft);
+	}
+	ivec3 minSize = m_text.CalculateSizeDecorated(m_label);
+	if (m_userMaxSize.x!=-1) {
+		m_minSize.x = etk_min(4 + minSize.x, m_userMaxSize.x);
+	} else {
+		m_minSize.x = 4 + minSize.x;
+	}
+	if (m_userMaxSize.y!=-1) {
+		m_minSize.y = etk_min(4 + minSize.y, m_userMaxSize.y);
+	} else {
+		m_minSize.y = 4 + minSize.y;
+	}
 	return true;
 }
 
@@ -59,37 +57,71 @@ void widget::Label::SetLabel(etk::UString newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
+
+
+etk::UString widget::Label::GetLabel(void)
+{
+	return m_label;
+}
+
 
 void widget::Label::OnDraw(ewol::DrawProperty& displayProp)
 {
-	m_oObjectText.Draw();
+	m_text.Draw();
 }
 
 
 void widget::Label::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		m_oObjectText.Clear();
-		int32_t paddingSize = 3;
+		m_text.Clear();
+		int32_t paddingSize = 2;
 		
-		int32_t tmpOriginX = 0;
-		int32_t tmpOriginY = 0;
+		
+		// to know the size of one Line : 
+		ivec3 minSize = m_text.CalculateSize('A');
+		if (m_userMaxSize.x != -1) {
+			m_text.SetTextAlignement(0, m_userMaxSize.x-2*paddingSize, ewol::Text::alignLeft);
+		}
+		ivec3 curentTextSize = m_text.CalculateSizeDecorated(m_label);
+		
+		ivec2 localSize = m_minSize;
+		
+		// no change for the text orogin : 
+		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
+		                   (m_size.y - m_minSize.y) / 2.0,
+		                   0);
 		
 		if (true==m_userFill.x) {
-			tmpOriginX = (m_size.x - m_minSize.x) / 2;
+			localSize.x = m_size.x;
+			tmpTextOrigin.x = 0;
 		}
 		if (true==m_userFill.y) {
-			tmpOriginY = (m_size.y - m_minSize.y) / 2;
+			localSize.y = m_size.y;
+			tmpTextOrigin.y = m_size.y - 2*paddingSize - curentTextSize.y;
 		}
-		tmpOriginX += paddingSize;
-		tmpOriginY += paddingSize;
+		tmpTextOrigin.x += paddingSize;
+		tmpTextOrigin.y += paddingSize;
+		localSize.x -= 2*paddingSize;
+		localSize.y -= 2*paddingSize;
 		
+		tmpTextOrigin.y += (m_minSize.y-2*paddingSize) - minSize.y;
 		
-		vec3 textPos(tmpOriginX, tmpOriginY, 0);
-		m_oObjectText.SetPos(textPos);
-		m_oObjectText.PrintDecorated(m_label);
+		vec2 textPos(tmpTextOrigin.x, tmpTextOrigin.y);
 		
+		vec3 drawClippingPos(paddingSize, paddingSize, -0.5);
+		vec3 drawClippingSize((m_size.x - paddingSize),
+		                      (m_size.y - paddingSize),
+		                      1);
+		
+		// clean the element
+		m_text.Reset();
+		m_text.SetPos(tmpTextOrigin);
+		m_text.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignLeft);
+		m_text.SetClipping(drawClippingPos, drawClippingSize);
+		m_text.PrintDecorated(m_label);
 	}
 }
 

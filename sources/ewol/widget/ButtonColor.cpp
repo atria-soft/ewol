@@ -86,18 +86,17 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		ivec2 localSize = m_minSize;
 		
 		vec3 tmpOrigin((m_size.x - m_minSize.x) / 2.0,
-		                               (m_size.y - m_minSize.y) / 2.0,
-		                               0.0);
-		                               
+		               (m_size.y - m_minSize.y) / 2.0,
+		               0);
 		// no change for the text orogin : 
 		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
-		                                   (m_size.y - m_minSize.y) / 2.0,
-		                                   0.0);
+		                   (m_size.y - m_minSize.y) / 2.0,
+		                   0);
 		
 		if (true==m_userFill.x) {
 			localSize.x = m_size.x;
-			tmpOrigin.x = 0.0;
-			tmpTextOrigin.x = 0.0;
+			tmpOrigin.x = 0;
+			tmpTextOrigin.x = 0;
 		}
 		if (true==m_userFill.y) {
 			localSize.y = m_size.y;
