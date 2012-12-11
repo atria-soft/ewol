@@ -40,7 +40,8 @@ extern "C" {
 	#define GLEW_STATIC
 	#include <GL/glew.h>
 #elif defined(__TARGET_OS__MacOs)
-	
+	#include <OpenGL/gl.h>
+	#include <OpenGL/glu.h>
 #elif defined(__TARGET_OS__IOs)
 	
 #else

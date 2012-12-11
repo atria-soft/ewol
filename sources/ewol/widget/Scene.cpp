@@ -8,20 +8,19 @@
 
 #include <ewol/widget/Scene.h>
 #include <math.h>
-
-#include <ewol/oObject/OObject.h>
-#include <ewol/widget/WidgetManager.h>
-#include <ewol/openGL/openGL.h>
+#include <ewol/renderer/openGL.h>
+#include <etk/math/Matrix4.h>
 
 #undef __class__
 #define __class__	"Scene"
 
-widget::Scene::Scene(void)
+widget::Scene::Scene(ewol::GameEngine* gameEngine) :
+	m_gameEngine(gameEngine),
+	m_isRunning(true),
+	m_lastCallTime(-1)
 {
-	m_isRunning = true;
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
-	m_lastCallTime = -1;
 	m_zoom = 1.0;
 }
 
@@ -35,6 +34,7 @@ widget::Scene::~Scene(void)
 void widget::Scene::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		/*
 		// clean elements
 		for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {
 			if (NULL != m_sceneElement.animated[iii]) {
@@ -49,17 +49,36 @@ void widget::Scene::OnRegenerateDisplay(void)
 				}
 			}
 		}
+		*/
 	}
 }
 
-/**
- * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
- * @param ---
- * @return ---
- */
-//TODO : Il y a un bug : seg fault ... je ne sais pas trop ou ...
+
+void widget::Scene::Pause(void)
+{
+	m_isRunning = false;
+}
+
+
+void widget::Scene::Resume(void)
+{
+	m_isRunning = true;
+}
+
+
+void widget::Scene::PauseToggle(void)
+{
+	if(true==m_isRunning) {
+		m_isRunning=false;
+	} else {
+		m_isRunning=true;
+	}
+}
+
+
 void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 {
+	/*
 	//EWOL_ERROR(" On draw : " << m_currentDrawId);
 	// draw background :
 	// TODO : ...
@@ -73,6 +92,7 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 			m_sceneElement.animated[iii]->Draw();
 		}
 	}
+	*/
 }
 
 
@@ -90,6 +110,10 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 	}
 	// cut the processing in small slot of time to prevent error in the real-time Display (Android call us between 30 to 60 fps)
 	int32_t deltaTime = (int32_t) (localTime - m_lastCallTime);
+	if (NULL != m_gameEngine) {
+		m_gameEngine->Process(m_lastCallTime, deltaTime);
+	}
+	/*
 	//EWOL_DEBUG(" currentTime = " << localTime << " last=" << m_lastCallTime << "  delta=" << deltaTime);
 	while (deltaTime >= CYCLIC_CALL_PERIODE_US) {
 		//EWOL_DEBUG(" process = " << CYCLIC_CALL_PERIODE_US);
@@ -110,13 +134,13 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			}
 		}
 	}
+	*/
 	MarkToRedraw();
 }
 
 
-void widget::Scene::GenDraw(DrawProperty displayProp)
+void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 {
-
 	ewol::openGL::Push();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 	glViewport( m_origin.x,
@@ -129,12 +153,12 @@ void widget::Scene::GenDraw(DrawProperty displayProp)
 		mat4 tmpProjection;
 		
 		if (ratio >= 1.0) {
-			tmpProjection = etk::matrix::Perspective(-ratio, ratio, -1, 1, -1, 1);
+			tmpProjection = etk::Matrix4::Perspective(-ratio, ratio, -1, 1, -1, 1);
 		} else {
 			ratio = 1.0/ratio;
-			tmpProjection = etk::matrix::Perspective(-1, 1, -ratio, ratio, -1, 1);
+			tmpProjection = etk::Matrix4::Perspective(-1, 1, -ratio, ratio, -1, 1);
 		}
-		mat4 tmpScale = etk::matrix::Scale(m_zoom, m_zoom, m_zoom);
+		mat4 tmpScale = etk::Matrix4::Scale(vec3(m_zoom, m_zoom, m_zoom) );
 		mat4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);

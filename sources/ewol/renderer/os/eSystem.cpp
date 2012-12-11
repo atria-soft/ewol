@@ -444,9 +444,21 @@ static ewol::Fps l_FpsSystemEvent(     "Event     ", false);
 static ewol::Fps l_FpsSystemContext(   "Context   ", false);
 static ewol::Fps l_FpsSystem(          "Draw      ", true);
 
+// this is to limit framerate ... in case...
+static int64_t previousDisplayTime = 0;
+
+
+
 bool eSystem::Draw(bool displayEveryTime)
 {
 	int64_t currentTime = ewol::GetTime();
+	// this is to prevent the multiple display at the a high frequency ...
+	if(currentTime - previousDisplayTime < 1000000/120) {
+		usleep(1000);
+		return false;
+	}
+	previousDisplayTime = currentTime;
+	
 	if (true == isGlobalSystemInit) {
 		// process the events
 		l_FpsSystemEvent.Tic();
@@ -474,19 +486,21 @@ bool eSystem::Draw(bool displayEveryTime)
 			}
 		}
 		l_FpsSystemContext.Toc();
-		
+		bool hasDisplayDone = false;
 		l_FpsSystem.Tic();
 		if (NULL != tmpWindows) {
 			if(    true == needRedraw
 			    || true == displayEveryTime) {
 				l_FpsSystem.IncrementCounter();
 				tmpWindows->SysDraw();
+				hasDisplayDone = true;
 			}
 		}
 		l_FpsSystem.Toc();
 		glFlush();
+		return hasDisplayDone;
 	}
-	return true;
+	return false;
 }
 
 

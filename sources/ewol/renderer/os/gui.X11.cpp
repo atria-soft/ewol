@@ -419,6 +419,7 @@ void X11_Init(void)
 	#endif
 	if (m_doubleBuffered) {
 		glXSwapBuffers(m_display, WindowHandle);
+		XSync (m_display,0);
 	}
 	m_visual = NULL;
 	m_previousBouttonId = 0;
@@ -938,9 +939,10 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			(void)eSystem::Draw(false);
-			if (m_doubleBuffered) {
+			bool hasDisplay = eSystem::Draw(false);
+			if (m_doubleBuffered && hasDisplay) {
 				glXSwapBuffers(m_display, WindowHandle);
+				XSync(m_display,0);
 			}
 		}
 		#ifdef DEBUG_X11_EVENT

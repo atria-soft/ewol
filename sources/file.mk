@@ -78,9 +78,10 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/meta/Parameter.cpp \
 			ewol/widget/meta/ParameterList.cpp
 
+# game mode area :
+FILE_LIST+= ewol/widget/Scene.cpp \
+			ewol/game/GameEngine.cpp
 
-OLD_WIDGET = \
-			ewol/widget/Scene.cpp \
 
 LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/textured3D.frag:textured3D.frag \
