@@ -11,8 +11,10 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector3D.h>
+#include <etk/Vector.h>
 #include <ewol/debug.h>
 #include <ewol/game/Engine.h>
+#include <ewol/game/Element.h>
 #include <ewol/widget/Widget.h>
 
 
@@ -28,7 +30,7 @@ namespace widget {
 			 * @brief Main scene constructor
 			 * @param[in] gameEngine Used game engine for the display (can be NULL).
 			 */
-			Scene(ewol::GameEngine* gameEngine=NULL);
+			Scene(game::Engine* gameEngine=NULL);
 			/**
 			 * @brief Destructor 
 			 * @note The engine is not destroy, it is the reponsability of the user

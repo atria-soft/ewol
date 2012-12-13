@@ -12,6 +12,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
+#include <ewol/game/Element.h>
 
 namespace game
 {

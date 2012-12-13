@@ -80,7 +80,8 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 
 # game mode area :
 FILE_LIST+= ewol/widget/Scene.cpp \
-			ewol/game/GameEngine.cpp
+			ewol/game/Engine.cpp \
+			ewol/game/Element.cpp
 
 
 LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \

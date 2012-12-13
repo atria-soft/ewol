@@ -11,6 +11,8 @@
 
 
 #include <etk/types.h>
+#include <etk/math/Vector3D.h>
+#include <etk/Vector.h>
 #include <ewol/debug.h>
 
 namespace game

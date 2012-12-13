@@ -14,7 +14,7 @@
 #undef __class__
 #define __class__	"Scene"
 
-widget::Scene::Scene(ewol::GameEngine* gameEngine) :
+widget::Scene::Scene(game::Engine* gameEngine) :
 	m_gameEngine(gameEngine),
 	m_isRunning(true),
 	m_lastCallTime(-1)

@@ -38,6 +38,3 @@
 [submodule "external/z/zlib"]
 	path = external/z/zlib
 	url = https://github.com/madler/zlib.git
-[submodule "external/ode"]
-	path = external/ode
-	url = https://github.com/HeeroYui/ode.git

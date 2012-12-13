@@ -19,7 +19,7 @@ USER_PACKAGES+= $(TMP_DIR)/external/portaudio
 USER_PACKAGES+= $(TMP_DIR)/external/tinyxml
 USER_PACKAGES+= $(TMP_DIR)/external/z
 USER_PACKAGES+= $(TMP_DIR)/external/zip
-USER_PACKAGES+= $(TMP_DIR)/external/ode
+USER_PACKAGES+= $(TMP_DIR)/external/ePhysics
 
 #include te generic toolchain :
 include $(TMP_DIR)/build/Makefile.mk

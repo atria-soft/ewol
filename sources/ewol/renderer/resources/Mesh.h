@@ -26,12 +26,12 @@ namespace ewol
 			int32_t        m_GLColor;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID;
-			etk::Vector<uint32_t> m_indices;
-			etk::Vector< vec3 > m_vertices;
-			etk::Vector< vec2 > m_uvTextures;
-			etk::Vector< vec3 > m_normals;
-			ewol::TextureFile*                  m_texture1;
-			etk::Vector<draw::Colorf>        m_coordColor;  //!< internal color of the different point
+			etk::Vector<uint32_t>      m_indices;
+			etk::Vector< vec3 >        m_vertices;
+			etk::Vector< vec2 >        m_uvTextures;
+			etk::Vector< vec3 >        m_normals;
+			ewol::TextureFile*         m_texture1;
+			etk::Vector<draw::Colorf>  m_coordColor;  //!< internal color of the different point
 		public:
 			Mesh(etk::UString genName);
 			virtual ~Mesh(void);
