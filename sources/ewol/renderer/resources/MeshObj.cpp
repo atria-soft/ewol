@@ -128,9 +128,9 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		uint32_t normalIndex = indicesNormal[iii];
 		
 		// Put the attributes in buffers
-		m_vertices.PushBack(vertices[vertexIndex-1]);
-		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
-		m_normals.PushBack(normals[normalIndex-1]);
+		m_object.m_vertices.PushBack(vertices[vertexIndex-1]);
+		m_object.m_uvTextures.PushBack(uvTextures[uvIndex-1]);
+		m_object.m_normals.PushBack(normals[normalIndex-1]);
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
 		m_coordColor.PushBack(tmppppp);

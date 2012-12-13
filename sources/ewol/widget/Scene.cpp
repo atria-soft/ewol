@@ -153,12 +153,12 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 		mat4 tmpProjection;
 		
 		if (ratio >= 1.0) {
-			tmpProjection = etk::Matrix4::Perspective(-ratio, ratio, -1, 1, -1, 1);
+			tmpProjection = etk::matPerspective(-ratio, ratio, -1, 1, -1, 1);
 		} else {
 			ratio = 1.0/ratio;
-			tmpProjection = etk::Matrix4::Perspective(-1, 1, -ratio, ratio, -1, 1);
+			tmpProjection = etk::matPerspective(-1, 1, -ratio, ratio, -1, 1);
 		}
-		mat4 tmpScale = etk::Matrix4::Scale(vec3(m_zoom, m_zoom, m_zoom) );
+		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, m_zoom) );
 		mat4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);

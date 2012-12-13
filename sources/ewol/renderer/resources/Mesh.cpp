@@ -45,7 +45,7 @@ void ewol::Mesh::Draw(void)
 	rotx += 0.01;
 	roty += 0.02;
 	rotz += 0.005;
-	if (m_vertices.Size()<=0) {
+	if (m_object.m_vertices.Size()<=0) {
 		return;
 	}
 	if (NULL == m_texture1) {
@@ -61,23 +61,23 @@ void ewol::Mesh::Draw(void)
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix =   mat4::Scale(vec3(100,100,100) )
-	            * mat4::Rotate(vec3(1,0,0), rotx)
-	            * mat4::Rotate(vec3(0,1,0), roty)/*
-	            * mat4::Translate(vec3(0.01,0.0,0.0))
-	            * mat4::Rotate(vec3(0,0,1), rotz)*/
+	tmpMatrix =   etk::matScale(vec3(100,100,100) )
+	            * etk::matRotate(vec3(1,0,0), rotx)
+	            * etk::matRotate(vec3(0,1,0), roty)/*
+	            * etk::matTranslate(vec3(0.01,0.0,0.0))
+	            * etk::matRotate(vec3(0,0,1), rotz)*/
 	            * tmpMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_vertices[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_object.m_vertices[0]);
 	// Texture :
-	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_uvTextures[0]);
+	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_object.m_uvTextures[0]);
 	// color :
 	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 
-	glDrawArrays(GL_TRIANGLES, 0, m_vertices.Size());
+	glDrawArrays(GL_TRIANGLES, 0, m_object.m_vertices.Size());
 	m_GLprogram->UnUse();
 	glDisable(GL_DEPTH_TEST);
 }

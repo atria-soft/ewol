@@ -33,19 +33,19 @@ void ewol::Compositing::ResetMatrix(void)
 
 void ewol::Compositing::Translate(vec3 vect)
 {
-	m_matrixApply *= mat4::Translate(vect);
+	m_matrixApply *= etk::matTranslate(vect);
 }
 
 
 void ewol::Compositing::Rotate(vec3 vect, float angle)
 {
-	m_matrixApply *= mat4::Rotate(vect, angle);
+	m_matrixApply *= etk::matRotate(vect, angle);
 }
 
 
 void ewol::Compositing::Scale(vec3 vect)
 {
-	m_matrixApply *= mat4::Scale(vect);
+	m_matrixApply *= etk::matScale(vect);
 }
 
 
