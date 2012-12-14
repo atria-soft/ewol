@@ -26,6 +26,7 @@
 #include <appl/TestButton.h>
 #include <appl/TestButtonColor.h>
 #include <appl/TestLabel.h>
+#include <appl/TestScene.h>
 
 
 static const char * l_eventChangeTheme           = "event-change-theme";
@@ -155,6 +156,12 @@ void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 			break;
 		case 3:
 			m_subWidget = (ewol::Widget*)new TestLabel();
+			if (NULL != m_subWidget) {
+				m_sizerVert->SubWidgetAdd(m_subWidget);
+			}
+			break;
+		case 4:
+			m_subWidget = (ewol::Widget*)new TestScene();
 			if (NULL != m_subWidget) {
 				m_sizerVert->SubWidgetAdd(m_subWidget);
 			}

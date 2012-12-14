@@ -13,6 +13,8 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/game/Element.h>
+#include <ewol/widget/Widget.h>
+#include <ePhysics/World.h>
 
 namespace game
 {
@@ -22,6 +24,7 @@ namespace game
 			//game::Map*         m_map;        //!< basic system map (BSD or other ...)
 			etk::Vector<game::Element*> m_elementsStatic;
 			etk::Vector<game::Element*> m_elementsDynamic;
+			ephysics::World             m_world; //!< physical world engine
 		public:
 			/**
 			 * @brief Basic constructor.
@@ -31,7 +34,6 @@ namespace game
 			 * @brief Basic destructor.
 			 */
 			~Engine(void);
-			
 			/**
 			 * @brief periodic call for processing.
 			 * @param[in] lastTime Previous call time (if the system is in pause this time does restart at the same time the next time.
@@ -41,7 +43,13 @@ namespace game
 			/**
 			 * @brief Display the environement.
 			 */
-			void Draw(void);
+			void Draw(ewol::DrawProperty& displayProp);
+			/**
+			 * @brief Add an element on the system.
+			 * @param[in] newElement element to display.
+			 * @param[in] dynamic this element change of place.
+			 */
+			void AddElement(game::Element* newElement, bool dynamic);
 	};
 };
 

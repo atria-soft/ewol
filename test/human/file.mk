@@ -10,6 +10,8 @@ FILE_LIST:=		appl/Debug.cpp \
                 appl/MainWindows.cpp \
                 appl/TestButton.cpp \
                 appl/TestButtonColor.cpp \
-                appl/TestLabel.cpp
+                appl/TestLabel.cpp \
+                appl/TestScene.cpp
 
-LOCAL_COPY_FOLDERS := data/*:theme/default \
+LOCAL_COPY_FOLDERS := data/icon.*:theme/default \
+                      data/cube.*: \

@@ -93,6 +93,9 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 		}
 	}
 	*/
+	if (NULL != m_gameEngine) {
+		m_gameEngine->Draw(displayProp);
+	}
 }
 
 
@@ -113,28 +116,6 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 	if (NULL != m_gameEngine) {
 		m_gameEngine->Process(m_lastCallTime, deltaTime);
 	}
-	/*
-	//EWOL_DEBUG(" currentTime = " << localTime << " last=" << m_lastCallTime << "  delta=" << deltaTime);
-	while (deltaTime >= CYCLIC_CALL_PERIODE_US) {
-		//EWOL_DEBUG(" process = " << CYCLIC_CALL_PERIODE_US);
-		m_lastCallTime += CYCLIC_CALL_PERIODE_US;
-		deltaTime -= CYCLIC_CALL_PERIODE_US;
-		ScenePeriodicCall(m_lastCallTime, CYCLIC_CALL_PERIODE_US);
-		//EWOL_ERROR("Periodic Call ... " << localTime);
-		for (int32_t jjj=0; jjj<MAX_GROUP_NUMBER; jjj++) {
-			for (int32_t iii=0; iii<m_sceneElement.listAnimatedElements[jjj].Size(); iii++) {
-				if (NULL != m_sceneElement.listAnimatedElements[jjj][iii]) {
-					if(true == m_sceneElement.listAnimatedElements[jjj][iii]->IsEnable() ) {
-						// check if the element request an auto Kill ...
-						if (true == m_sceneElement.listAnimatedElements[jjj][iii]->Process(m_lastCallTime, CYCLIC_CALL_PERIODE_US) ) {
-							m_sceneElement.RmElement(jjj, iii);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
 	MarkToRedraw();
 }
 
@@ -148,8 +129,19 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	            m_size.x,
 	            m_size.y);
 	float ratio = m_size.x / m_size.y;
+	if (true) {
+		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x/2, -m_size.y/2, -1.0f));
+		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
+		mat4 tmpProjection = etk::matPerspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+		// set internal matrix system :
+		ewol::openGL::SetMatrix(tmpMat);
+		// Call the widget drawing methode
+		displayProp.m_origin = m_origin;
+		displayProp.m_size = m_size;
+	} else {
 		m_zoom = 1.0/1000.0;
-	//EWOL_INFO("ratio : " << ratio);
+		//EWOL_INFO("ratio : " << ratio);
 		mat4 tmpProjection;
 		
 		if (ratio >= 1.0) {
@@ -162,9 +154,10 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 		mat4 tmpMat = tmpProjection * tmpScale;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
-	// Clear the screen with transparency ...
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		// Clear the screen with transparency ...
+		glClearColor(0.0, 0.0, 0.0, 1.0);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
 	// Call the widget drawing methode
 	OnDraw(displayProp);
 	

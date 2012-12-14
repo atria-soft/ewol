@@ -14,32 +14,42 @@
 #include <etk/math/Vector3D.h>
 #include <etk/Vector.h>
 #include <ewol/debug.h>
+#include <ePhysics/MeshProperty.h>
+#include <ewol/renderer/resources/Mesh.h>
 
 namespace game
 {
 	class Element
 	{
 		private:
-			//ewol::??? m_resource;   //!< Resource to display the element.
+			ewol::Mesh*             m_resource;   //!< Resource to display the element.
+			ephysics::MeshProperty  m_property;   //!< display property f the element.
 		protected:
-			vec3     m_position;    //!< Current position of the element.
-			vec3     m_speed;       //!< Speed of the element.
-			vec3     m_orientation; //!< Display orientation ==> speed does not generate the orientation.
-			uint32_t m_uniqueId;    //!< General element ID (uint16_t, because all is reference with the groupId like this only a uint32_t reference an element)
-			uint32_t m_groupId;     //!< General group Id More than 65000 group can be really interesting to create supid game ...
-			int32_t  m_type;        //!< type of this element
-			bool     m_visible;     //!< This is to know if the element is displayed or not ==> TODO : check if usefull ...
-			float    m_mass;        //!< Current element Mass ==> for the physical calculation
+			uint32_t m_uniqueId; //!< General element ID (uint16_t, because all is reference with the groupId like this only a uint32_t reference an element)
+			uint32_t m_groupId;  //!< General group Id More than 65000 group can be really interesting to create supid game ...
+			int32_t  m_type;     //!< type of this element
+			bool     m_visible;  //!< This is to know if the element is displayed or not ==> TODO : check if usefull ...
+			float    m_mass;     //!< Current element Mass ==> for the physical calculation
 		public:
 			/**
 			 * @brief Basic constructor.
+			 * @param[in] meshResource Resource name.
 			 */
-			Element(void);
+			Element(etk::UString meshResource);
 			/**
 			 * @brief Basic destructor.
 			 */
 			~Element(void);
-			
+			/**
+			 * @brief Draw the element.
+			 */
+			void Draw(void);
+			/**
+			 * @brief Process IA of this element.
+			 * @param[in] deltaMicroSecond delta from the last call.
+			 * @return true if this element must be destroyed
+			 */
+			bool ArtificialIntelligence(int32_t deltaMicroSecond);
 	};
 };
 

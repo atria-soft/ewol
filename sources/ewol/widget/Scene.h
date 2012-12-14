@@ -90,6 +90,7 @@ namespace widget {
 			virtual void PeriodicCall(int64_t localTime);
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			
 	};
 };
 
