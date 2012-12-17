@@ -37,7 +37,7 @@ ewol::Mesh::~Mesh(void)
 }
 
 
-void ewol::Mesh::Draw(void)
+void ewol::Mesh::Draw(mat4& positionMatrix)
 {
 	static float rotx = 0;
 	static float roty = 0;
@@ -61,12 +61,7 @@ void ewol::Mesh::Draw(void)
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix =   etk::matScale(vec3(100,100,100) )
-	            * etk::matRotate(vec3(1,0,0), rotx)
-	            * etk::matRotate(vec3(0,1,0), roty)/*
-	            * etk::matTranslate(vec3(0.01,0.0,0.0))
-	            * etk::matRotate(vec3(0,0,1), rotz)*/
-	            * tmpMatrix;
+	tmpMatrix = positionMatrix * tmpMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());

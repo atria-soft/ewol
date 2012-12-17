@@ -34,7 +34,7 @@ namespace ewol
 			Mesh(etk::UString genName);
 			virtual ~Mesh(void);
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
-			virtual void Draw(void);
+			virtual void Draw(mat4& positionMatrix);
 			
 	};
 };

@@ -137,23 +137,3 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		
 	}
 }
-
-
-
-
-
-/*
-
-// Read our .obj file
-std::vector vertices;
-std::vector uvs;
-std::vector normals; // Won't be used at the moment.
-bool res = loadOBJ("cube.obj", vertices, uvs, normals);
-
-
-
-
-glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-
-*/
-

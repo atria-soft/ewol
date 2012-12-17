@@ -43,7 +43,10 @@ game::Element::~Element(void)
 void game::Element::Draw(void)
 {
 	if (NULL != m_resource) {
-		m_resource->Draw();
+		m_property.m_matrix =   etk::matScale(vec3(100,100,100) )
+		                      /* etk::matRotate(m_property.m_angle, rotx)*/
+		                      * etk::matTranslate(vec3(0.01,0.0,0.0));
+		m_resource->Draw(m_property.m_matrix);
 	}
 }
 

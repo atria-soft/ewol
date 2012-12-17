@@ -39,6 +39,7 @@ void game::Engine::Process(int64_t lastTime, int32_t deltaTime)
 
 void game::Engine::Draw(ewol::DrawProperty& displayProp)
 {
+	EWOL_DEBUG("Draw ...");
 	for (int32_t iii=0; iii<m_elementsStatic.Size() ; iii++) {
 		if (NULL != m_elementsStatic[iii]) {
 			m_elementsStatic[iii]->Draw();

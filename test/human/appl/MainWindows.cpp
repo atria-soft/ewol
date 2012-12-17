@@ -34,9 +34,6 @@ static const char * l_eventChangeWidgetNext      = "event-change-widget-test-nex
 static const char * l_eventChangeWidgetPrevious  = "event-change-widget-test-previous";
 
 
-static const char * l_basicLabel = "Test software for EWOL";
-
-
 #undef __class__
 #define __class__	"MainWindows"
 
@@ -88,14 +85,8 @@ MainWindows::MainWindows(void) :
 			mySpacer->SetColor(0x000000FF);
 			m_sizerVert->SubWidgetAdd(mySpacer);
 		}
-		// basic generation ...
-		m_subWidget = (ewol::Widget*)new widget::Label(l_basicLabel);
-		if (NULL != m_subWidget) {
-			m_subWidget->SetExpendX(true);
-			m_subWidget->SetExpendY(true);
-			m_sizerVert->SubWidgetAdd(m_subWidget);
-		}
-	
+		// add the basic widget with a strange methode ...
+		OnReceiveMessage(NULL, NULL, "");
 }
 
 
@@ -107,8 +98,10 @@ MainWindows::~MainWindows(void)
 
 void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
-	ewol::Windows::OnReceiveMessage(CallerObject, eventId, data);
-	
+	if(    CallerObject != this
+	    && CallerObject != NULL) {
+		ewol::Windows::OnReceiveMessage(CallerObject, eventId, data);
+	}
 	APPL_INFO("Receive Event from the main windows ... : \"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventId == l_eventChangeTheme) {
 		if (data=="1") {
@@ -130,12 +123,16 @@ void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * ev
 		// inn theory it must be removed ...
 		m_subWidget = NULL;
 	}
+	// special init forcing ...
+	if(CallerObject == NULL) {
+		m_idWidget = 4;
+	}
 	switch(m_idWidget)
 	{
 		default:
 			m_idWidget = 0;
 		case 0:
-			m_subWidget = (ewol::Widget*)new widget::Label(l_basicLabel);
+			m_subWidget = (ewol::Widget*)new widget::Label("Test software for EWOL");
 			if (NULL != m_subWidget) {
 				m_subWidget->SetExpendX(true);
 				m_subWidget->SetExpendY(true);
