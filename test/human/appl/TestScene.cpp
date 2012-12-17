@@ -28,6 +28,9 @@
 
 static const char * l_eventAddBox       = "event-add-box";
 static const char * l_eventAddSphere    = "event-add-sphere";
+static const char * l_eventRotationX    = "event-rotation-X";
+static const char * l_eventRotationY    = "event-rotation-Y";
+static const char * l_eventRotationZ    = "event-rotation-Z";
 
 
 
@@ -56,6 +59,21 @@ TestScene::TestScene(void)
 		myButton = new widget::Button("Add Sphere");
 		if (NULL != myButton) {
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventAddSphere);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("Rotation X");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotationX);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("Rotation Y");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotationY);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("Rotation Z");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotationZ);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
 	
@@ -129,10 +147,19 @@ TestScene::~TestScene(void)
 
 
 #include <ewol/game/Element.h>
+
+vec3 baseRotationVect;
 class stupidCube : public game::Element
 {
 	public:
 		stupidCube(void) : game::Element("DATA:cube.obj") {};
+		
+		// herited methode
+		virtual bool ArtificialIntelligence(int32_t deltaMicroSecond)
+		{
+			m_property.Rotate(baseRotationVect, 0.01);
+			return false;
+		}
 	
 };
 
@@ -158,6 +185,12 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 		if (NULL!=m_testWidget) {
 			
 		}
+	} else if (eventId == l_eventRotationX) {
+		baseRotationVect = vec3(1,0,0);
+	} else if (eventId == l_eventRotationY) {
+		baseRotationVect = vec3(0,1,0);
+	} else if (eventId == l_eventRotationZ) {
+		baseRotationVect = vec3(0,0,1);
 	}
 	
 	return;

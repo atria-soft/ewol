@@ -29,6 +29,10 @@ game::Element::Element(etk::UString meshResource) :
 		m_resource = tmpObject;
 	}
 	uniqueId++;
+	
+	m_property.Scale(vec3(100,100,100) );
+	//m_property.Rotate(m_property.m_angle, rotx);
+	m_property.Translate(vec3(0.01,0.0,0.0));
 }
 
 game::Element::~Element(void)
@@ -43,10 +47,7 @@ game::Element::~Element(void)
 void game::Element::Draw(void)
 {
 	if (NULL != m_resource) {
-		m_property.m_matrix =   etk::matScale(vec3(100,100,100) )
-		                      /* etk::matRotate(m_property.m_angle, rotx)*/
-		                      * etk::matTranslate(vec3(0.01,0.0,0.0));
-		m_resource->Draw(m_property.m_matrix);
+		m_resource->Draw(m_property.GetMatrix());
 	}
 }
 

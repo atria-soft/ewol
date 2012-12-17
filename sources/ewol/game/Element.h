@@ -14,16 +14,16 @@
 #include <etk/math/Vector3D.h>
 #include <etk/Vector.h>
 #include <ewol/debug.h>
-#include <ePhysics/MeshProperty.h>
+#include <ewol/game/MeshProperty.h>
 #include <ewol/renderer/resources/Mesh.h>
 
 namespace game
 {
 	class Element
 	{
-		private:
-			ewol::Mesh*             m_resource;   //!< Resource to display the element.
-			ephysics::MeshProperty  m_property;   //!< display property f the element.
+		protected:
+			ewol::Mesh*         m_resource;   //!< Resource to display the element.
+			game::MeshProperty  m_property;   //!< display property f the element.
 		protected:
 			uint32_t m_uniqueId; //!< General element ID (uint16_t, because all is reference with the groupId like this only a uint32_t reference an element)
 			uint32_t m_groupId;  //!< General group Id More than 65000 group can be really interesting to create supid game ...
@@ -39,17 +39,17 @@ namespace game
 			/**
 			 * @brief Basic destructor.
 			 */
-			~Element(void);
+			virtual ~Element(void);
 			/**
 			 * @brief Draw the element.
 			 */
-			void Draw(void);
+			virtual void Draw(void);
 			/**
 			 * @brief Process IA of this element.
 			 * @param[in] deltaMicroSecond delta from the last call.
 			 * @return true if this element must be destroyed
 			 */
-			bool ArtificialIntelligence(int32_t deltaMicroSecond);
+			virtual bool ArtificialIntelligence(int32_t deltaMicroSecond);
 	};
 };
 

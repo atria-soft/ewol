@@ -14,7 +14,7 @@
 #include <ewol/renderer/resources/Image.h>
 #include <ewol/renderer/resources/Shader.h>
 #include <ewol/renderer/resources/Program.h>
-#include <ePhysics/MeshObject.h>
+#include <ewol/game/MeshObject.h>
 
 namespace ewol
 {
@@ -27,7 +27,7 @@ namespace ewol
 			int32_t        m_GLColor;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID;
-			ephysics::MeshObject       m_object;
+			game::MeshObject           m_object;
 			ewol::TextureFile*         m_texture1;
 			etk::Vector<draw::Colorf>  m_coordColor;  //!< internal color of the different point
 		public:

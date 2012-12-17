@@ -15,3 +15,4 @@ FILE_LIST:=		appl/Debug.cpp \
 
 LOCAL_COPY_FOLDERS := data/icon.*:theme/default \
                       data/cube.*: \
+                      data/stone*: \

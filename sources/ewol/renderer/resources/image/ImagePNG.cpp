@@ -14,7 +14,7 @@
 
 
 #undef __class__
-#define __class__	"texture::TextureBMP"
+#define __class__	"texture::TexturePNG"
 
 // we must change the access of the IO of the png lib :
 static void local_ReadData(png_structp png_ptr, png_bytep data, png_size_t length)
@@ -97,6 +97,7 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	int32_t width = png_get_image_width(png_ptr, info_ptr);
 	int32_t height = png_get_image_height(png_ptr, info_ptr);
 	// reallocate the image 
+	EWOL_DEBUG("Load PNG image : (" << width << "," << height << ")" );
 	ouputImage.Resize(ivec2(width,height));
 	
 	int32_t bit_depth = png_get_bit_depth(png_ptr, info_ptr);
@@ -113,27 +114,47 @@ bool ewol::imagePNG::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 	png_read_image(png_ptr, row_pointers);
 	png_set_expand(png_ptr);
 	png_set_strip_16(png_ptr);
-	if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
-		EWOL_ERROR("Must be RGBA");
-		return false;
-	}
 	
 	draw::Color tmpColor(0,0,0,0);
-	// Conversion to OpenGL texture
-	//texture = (GLubyte*)malloc (width * height * 4 * sizeof(GLubyte));
-	for (y = 0; y < height; y++)
+	switch (png_get_color_type(png_ptr, info_ptr) )
 	{
-		png_byte* row = row_pointers[y];
-		for (x = 0; x < width; x++)
-		{
-			png_byte* ptr = &(row[x*4]);
-			tmpColor.r = ptr[0];
-			tmpColor.g = ptr[1];
-			tmpColor.b = ptr[2];
-			tmpColor.a = ptr[3];
-			ouputImage.Set(ivec2(x,y), tmpColor);
-		}
-		delete row_pointers[y];
+		case PNG_COLOR_TYPE_RGBA:
+			// Conversion to OpenGL texture
+			for (y = 0; y < height; y++)
+			{
+				png_byte* row = row_pointers[y];
+				for (x = 0; x < width; x++)
+				{
+					png_byte* ptr = &(row[x*4]);
+					tmpColor.r = ptr[0];
+					tmpColor.g = ptr[1];
+					tmpColor.b = ptr[2];
+					tmpColor.a = ptr[3];
+					ouputImage.Set(ivec2(x,y), tmpColor);
+				}
+				delete row_pointers[y];
+			}
+			break;
+		case PNG_COLOR_TYPE_RGB:
+			// Conversion to OpenGL texture
+			for (y = 0; y < height; y++)
+			{
+				png_byte* row = row_pointers[y];
+				for (x = 0; x < width; x++)
+				{
+					png_byte* ptr = &(row[x*3]);
+					tmpColor.r = ptr[0];
+					tmpColor.g = ptr[1];
+					tmpColor.b = ptr[2];
+					tmpColor.a = 0xFF;
+					ouputImage.Set(ivec2(x,y), tmpColor);
+				}
+				delete row_pointers[y];
+			}
+			break;
+		default:
+			EWOL_ERROR("Must be RGBA/RGB");
+			return false;
 	}
 
 	fileName.FileClose();

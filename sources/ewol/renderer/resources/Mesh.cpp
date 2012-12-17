@@ -61,7 +61,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix = positionMatrix * tmpMatrix;
+	tmpMatrix = tmpMatrix * positionMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());

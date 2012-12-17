@@ -14,17 +14,14 @@
 #include <ewol/debug.h>
 #include <ewol/game/Element.h>
 #include <ewol/widget/Widget.h>
-#include <ePhysics/World.h>
 
 namespace game
 {
 	class Engine
 	{
 		private:
-			//game::Map*         m_map;        //!< basic system map (BSD or other ...)
 			etk::Vector<game::Element*> m_elementsStatic;
 			etk::Vector<game::Element*> m_elementsDynamic;
-			ephysics::World             m_world; //!< physical world engine
 		public:
 			/**
 			 * @brief Basic constructor.

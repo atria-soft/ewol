@@ -48,18 +48,10 @@ namespace widget {
 			 * @brief Toggle between pause and running
 			 */
 			void PauseToggle(void);
-			/**
-			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
-			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
-			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
-			 */
+			// Derived function
 			virtual void GenDraw(ewol::DrawProperty displayProp);
 		protected:
-			/**
-			 * @brief Periodic call in the sub element timed
-			 * @param localTime curent system time
-			 * @param deltaTime delta time while the previous call
-			 */
+			// Derived function
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
 		// camera properties :
 		private:
@@ -91,6 +83,12 @@ namespace widget {
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			
+			// Derived function
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, vec2 pos);
+			// Derived function
+			virtual bool OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData);
+			// Derived function
+			virtual bool OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey);
 	};
 };
 

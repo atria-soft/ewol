@@ -21,7 +21,7 @@ widget::Scene::Scene(game::Engine* gameEngine) :
 {
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
-	m_zoom = 1.0;
+	m_zoom = 1.0/1000.0;
 }
 
 
@@ -63,21 +63,6 @@ void widget::Scene::PauseToggle(void)
 
 void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 {
-	/*
-	//EWOL_ERROR(" On draw : " << m_currentDrawId);
-	// draw background :
-	// TODO : ...
-	if (NULL != m_sceneElement.background) {
-		m_sceneElement.background->Draw();
-	}
-	//background
-	// draw elements
-	for (int32_t iii=0; iii<m_sceneElement.animated.Size(); iii++) {
-		if (NULL != m_sceneElement.animated[iii]) {
-			m_sceneElement.animated[iii]->Draw();
-		}
-	}
-	*/
 	if (NULL != m_gameEngine) {
 		m_gameEngine->Draw(displayProp);
 	}
@@ -122,7 +107,6 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 	} else {
-		m_zoom = 1.0/1000.0;
 		//EWOL_INFO("ratio : " << ratio);
 		mat4 tmpProjection;
 		
@@ -176,4 +160,48 @@ vec2 widget::Scene::RelativePosition(vec2  pos)
 	
 	return pos;
 };
+
+
+bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, vec2 pos)
+{
+	vec2 relativePos = RelativePosition(pos);
+	//EWOL_DEBUG("type : " << type << " IdInput=" << IdInput << " " << "status=" << statusEvent << " RelPos=" << relativePos);
+	
+	if (type == ewol::keyEvent::typeMouse) {
+		if (4 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
+			m_zoom *= 0.91;
+		} else if (5 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
+			m_zoom *= 1.1;
+		}
+	} else if (type == ewol::keyEvent::typeFinger) {
+		
+	}
+	// note : we did not parse the oether media ...
+
+	return false;
+}
+
+
+bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData)
+{
+	/*
+	EWOL_DEBUG("KB EVENT : \"" << unicodeData << "\"" << "type=" << statusEvent);
+	if (statusEvent == ewol::ewol::keyEvent::statusDown) {
+		
+	}
+	*/
+	return false;
+}
+
+
+bool widget::Scene::OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey)
+{
+	/*
+	if (statusEvent == ewol::ewol::keyEvent::statusDown) {
+		MarkToRedraw();
+	}
+	return true;
+	*/
+	return false;
+}
 
