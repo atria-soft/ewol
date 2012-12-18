@@ -51,14 +51,12 @@ void game::Engine::ProcessGravity(float deltaTime)
 			if (NULL != m_elementsStatic[iii]) {
 				m_elementsStatic[iii]->ProcessGravity(deltaTime, m_gravity[jjj]);
 			}
-			m_elementsStatic[iii]->ProcessSpeed(deltaTime);
 			m_elementsStatic[iii]->ProcessPosition(deltaTime);
 		}
 		for (int32_t iii=0; iii<m_elementsDynamic.Size() ; iii++) {
 			if (NULL != m_elementsDynamic[iii]) {
 				m_elementsDynamic[iii]->ProcessGravity(deltaTime, m_gravity[jjj]);
 			}
-			m_elementsDynamic[iii]->ProcessSpeed(deltaTime);
 			m_elementsDynamic[iii]->ProcessPosition(deltaTime);
 		}
 	}

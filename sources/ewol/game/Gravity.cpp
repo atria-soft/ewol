@@ -36,11 +36,11 @@ extern const float game::GravityConst = 0.0000000000667f;
 // Earth
 extern const float game::earthMass = 5973600000000000000000000.0f; // in kg
 extern const float game::earthRadius = 6378137.0f; // in meter
-extern const game::Gravity game::gravityEarth(true, earthMass, vec3(0, 0, -(float)((GravityConst*earthMass)/(earthRadius*earthRadius))) );
+extern const game::Gravity game::gravityEarth(true, earthMass, vec3(0, -(float)((GravityConst*earthMass)/(earthRadius*earthRadius)), 0) );
 // Mars
 extern const float game::marsMass = 25000000000000000.0f; // in kg
 extern const float game::marsRadius = 3396200.0f; // in meter
-extern const game::Gravity game::gravityMars(true, marsMass, vec3(0, 0, -(float)((GravityConst*marsMass)/(marsRadius*marsRadius))) );
+extern const game::Gravity game::gravityMars(true, marsMass, vec3(0, -(float)((GravityConst*marsMass)/(marsRadius*marsRadius)), 0) );
 
 
 

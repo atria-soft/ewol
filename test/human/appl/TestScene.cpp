@@ -32,6 +32,9 @@ static const char * l_eventRotationX    = "event-rotation-X";
 static const char * l_eventRotationY    = "event-rotation-Y";
 static const char * l_eventRotationZ    = "event-rotation-Z";
 static const char * l_eventLunch        = "event-lunch";
+static const char * l_eventChangeTimeSpeed2 = "event-speed2";
+static const char * l_eventChangeTimeSpeed0 = "event-speed0.5";
+static const char * l_eventChangeTimeSpeed1 = "event-speed1";
 
 
 
@@ -80,6 +83,21 @@ TestScene::TestScene(void)
 		myButton = new widget::Button("lunch object");
 		if (NULL != myButton) {
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventLunch);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("1x speed");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventChangeTimeSpeed1);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("0.5x speed");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventChangeTimeSpeed0);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("2x speed");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventChangeTimeSpeed2);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
 	
@@ -209,7 +227,20 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 		baseRotationVect = vec3(0,0,1);
 	} else if (eventId == l_eventLunch) {
 		stupidCube * tmpp = new stupidCube(250);
+		tmpp->SetSpeed(vec3(10,50,0));
 		m_gameEngine.AddElement(tmpp, true);
+	} else if (eventId == l_eventChangeTimeSpeed1) {
+		if (NULL!=m_testWidget) {
+			m_testWidget->SetRatioTime(1);
+		}
+	} else if (eventId == l_eventChangeTimeSpeed0) {
+		if (NULL!=m_testWidget) {
+			m_testWidget->SetRatioTime(0.5);
+		}
+	} else if (eventId == l_eventChangeTimeSpeed2) {
+		if (NULL!=m_testWidget) {
+			m_testWidget->SetRatioTime(2);
+		}
 	}
 	
 	return;

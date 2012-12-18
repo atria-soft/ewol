@@ -89,6 +89,7 @@ FILE_LIST+= ewol/widget/Scene.cpp \
 			ewol/game/BoundingSphere.cpp \
 			ewol/game/Geometry.cpp \
 			ewol/game/Gravity.cpp \
+			ewol/game/Camera.cpp \
 			ewol/game/Map.cpp \
 			ewol/game/Mass.cpp \
 			ewol/game/Sky.cpp

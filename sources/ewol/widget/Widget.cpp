@@ -139,7 +139,7 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            m_size.y);
 		mat4 tmpTranslate = etk::matTranslate(vec3((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x)), (float)(-m_size.y/2.0), -1.0f));
 		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-		mat4 tmpProjection = etk::matPerspective(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
@@ -156,7 +156,7 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		            m_size.y);
 		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x/2, -m_size.y/2, -1.0f));
 		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-		mat4 tmpProjection = etk::matPerspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpProjection = etk::matOrtho(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);

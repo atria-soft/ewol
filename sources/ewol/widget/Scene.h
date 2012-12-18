@@ -15,6 +15,7 @@
 #include <ewol/debug.h>
 #include <ewol/game/Engine.h>
 #include <ewol/game/Element.h>
+#include <ewol/game/Camera.h>
 #include <ewol/widget/Widget.h>
 
 
@@ -22,9 +23,11 @@ namespace widget {
 	class Scene :public ewol::Widget
 	{
 		protected:
+			game::Camera      m_camera;       //!< Display point of view
 			game::Engine*     m_gameEngine;   //!< display engine system
 			bool              m_isRunning;    //!< the display is running (not in pause)
 			double            m_lastCallTime; //!< previous call Time
+			float             m_ratioTime;    //!< Ratio time for the speed of the game ...
 		public:
 			/**
 			 * @brief Main scene constructor
@@ -55,18 +58,18 @@ namespace widget {
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
 		// camera properties :
 		private:
-			vec3  m_camRotation;
-			vec3  m_camTranslation;
-			float m_camAngleView;
-			float m_camdistanceViewStart;
-			float m_camdistanceViewStop;
 			float m_zoom;
+			int32_t modeMoving;
+			vec2 oldCursorPos;
 		public:
-			void SetCamaraTranslation();
-			void SetCamaraRotation();
-			void SetCamaraAngleView();
-			void SetCamaraDistanceViewStart();
-			void SetCamaraDistanceViewStop();
+			/**
+			 * @brief Get the current camera reference for the scene rendering
+			 */
+			game::Camera& GetCamera(void) { return m_camera; };
+			/**
+			 * @brief Set the curent Time Ratio (default 1)
+			 */
+			void SetRatioTime(float newRatio) { m_ratioTime = newRatio; };
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion

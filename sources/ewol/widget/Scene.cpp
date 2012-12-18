@@ -17,11 +17,13 @@
 widget::Scene::Scene(game::Engine* gameEngine) :
 	m_gameEngine(gameEngine),
 	m_isRunning(true),
-	m_lastCallTime(-1)
+	m_lastCallTime(-1),
+	modeMoving(0)
 {
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
 	m_zoom = 1.0/1000.0;
+	m_ratioTime = 1.0f;
 }
 
 
@@ -72,6 +74,12 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 void widget::Scene::PeriodicCall(int64_t localTime)
 {
 	double curentTime=(double)localTime/1000000.0;
+	// small hack to change speed ...
+	if (m_ratioTime != 1) {
+		double ellapseTime = curentTime - m_lastCallTime;
+		ellapseTime *= m_ratioTime;
+		m_lastCallTime = curentTime - ellapseTime;
+	}
 	// First time : 
 	if (-1 == m_lastCallTime) {
 		m_lastCallTime = curentTime;
@@ -104,28 +112,21 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	            m_size.x,
 	            m_size.y);
 	float ratio = m_size.x / m_size.y;
-	if (false) {
-		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x/2, -m_size.y/2, -1.0f));
-		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-		mat4 tmpProjection = etk::matPerspective(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
-		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
-		// set internal matrix system :
-		ewol::openGL::SetMatrix(tmpMat);
+	//EWOL_INFO("ratio : " << ratio);
+	mat4 tmpProjection;// = etk::matPerspective( M_PI/2.0, ratio, -1, 1);
+	
+	if (ratio >= 1.0) {
+		tmpProjection = etk::matOrtho(-ratio, ratio, -1, 1, -1, 1);
 	} else {
-		//EWOL_INFO("ratio : " << ratio);
-		mat4 tmpProjection;
-		
-		if (ratio >= 1.0) {
-			tmpProjection = etk::matPerspective(-ratio, ratio, -1, 1, -1, 1);
-		} else {
-			ratio = 1.0/ratio;
-			tmpProjection = etk::matPerspective(-1, 1, -ratio, ratio, -1, 1);
-		}
-		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, m_zoom) );
-		mat4 tmpMat = tmpProjection * tmpScale;
-		// set internal matrix system :
-		ewol::openGL::SetMatrix(tmpMat);
+		ratio = 1.0/ratio;
+		tmpProjection = etk::matOrtho(-1, 1, -ratio, ratio, -1, 1);
 	}
+	
+	mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, m_zoom) );
+	mat4 tmpMat = tmpProjection * tmpScale * m_camera.GetMatrix();
+	// set internal matrix system :
+	ewol::openGL::SetMatrix(tmpMat);
+	
 	// Call the widget drawing methode
 	displayProp.m_origin = m_origin;
 	displayProp.m_size = m_size;
@@ -177,6 +178,35 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 			m_zoom *= 0.91;
 		} else if (5 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
 			m_zoom *= 1.1;
+		} else if (1 == IdInput) {
+			if(modeMoving==1 && ewol::keyEvent::statusUp == statusEvent) {
+				modeMoving = 0;
+			} else if (modeMoving==0 && ewol::keyEvent::statusDown == statusEvent) {
+				modeMoving = 1;
+				oldCursorPos = relativePos;
+			} else if (modeMoving==1 && ewol::keyEvent::statusMove == statusEvent) {
+				vec2 offset = relativePos - oldCursorPos;
+				vec3 oldPos = m_camera.GetPosition();
+				oldPos.x += offset.x;
+				oldPos.y += offset.y;
+				m_camera.SetPosition(oldPos);
+				oldCursorPos = relativePos;
+			}
+		} else if (3 == IdInput) {
+			if(modeMoving==3 && ewol::keyEvent::statusUp == statusEvent) {
+				modeMoving = 0;
+			} else if (modeMoving==0 && ewol::keyEvent::statusDown == statusEvent) {
+				modeMoving = 3;
+				oldCursorPos = relativePos;
+			} else if (modeMoving==3 && ewol::keyEvent::statusMove == statusEvent) {
+				vec2 offset = relativePos - oldCursorPos;
+				offset *= M_PI/(360.0f*6);
+				vec3 oldAngles = m_camera.GetAngle();
+				oldAngles.x -= offset.y;
+				oldAngles.y += offset.x;
+				m_camera.SetAngle(oldAngles);
+				oldCursorPos = relativePos;
+			}
 		}
 	} else if (type == ewol::keyEvent::typeFinger) {
 		

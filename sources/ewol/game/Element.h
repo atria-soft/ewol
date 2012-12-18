@@ -74,11 +74,6 @@ namespace game
 			 */
 			virtual void ProcessGravity(float delta, game::Gravity& gravity);
 			/**
-			 * @brief Update the speed of the curent element
-			 * @param[in] delta delta from the last call.
-			 */
-			virtual void ProcessSpeed(float delta);
-			/**
 			 * @brief Update the position of the element
 			 * @param[in] delta delta from the last call.
 			 */
@@ -136,6 +131,10 @@ namespace game
 				}
 				return m_matrix;
 			};
+			void SetSpeed(vec3 newSpeed)
+			{
+				m_speed = newSpeed;
+			}
 	};
 };
 
