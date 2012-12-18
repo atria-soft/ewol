@@ -24,7 +24,7 @@ namespace widget {
 		protected:
 			game::Engine*     m_gameEngine;   //!< display engine system
 			bool              m_isRunning;    //!< the display is running (not in pause)
-			int64_t           m_lastCallTime; //!< previous call Time
+			double            m_lastCallTime; //!< previous call Time
 		public:
 			/**
 			 * @brief Main scene constructor

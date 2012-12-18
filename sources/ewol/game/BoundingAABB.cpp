@@ -22,15 +22,17 @@ game::BoundingAABB::~BoundingAABB(void)
 	
 }
 
-void game::BoundingAABB::Update(game::MeshObject& object, game::MeshProperty& property)
+void game::BoundingAABB::Update(game::MeshObject& object)
 {
 	if (true==m_markedToUpdate) {
+		/*
 		mat4 transMat = etk::matRotate(property.m_angle) * etk::matTranslate(property.m_position);
 		m_markedToUpdate=false;
 		for (int32_t iii=0; iii<object.m_vertices.Size(); iii++) {
 			vec3 point = transMat * object.m_vertices[iii];
 			
 		}
+		*/
 	}
 }
 

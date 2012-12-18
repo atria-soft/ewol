@@ -71,21 +71,26 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 
 void widget::Scene::PeriodicCall(int64_t localTime)
 {
+	double curentTime=(double)localTime/1000000.0;
 	// First time : 
 	if (-1 == m_lastCallTime) {
-		m_lastCallTime = localTime;
+		m_lastCallTime = curentTime;
 	}
 	// check if the processing is availlable
 	if (false == m_isRunning) {
-		m_lastCallTime = localTime;
+		m_lastCallTime = curentTime;
 		MarkToRedraw();
 		return;
 	}
 	// cut the processing in small slot of time to prevent error in the real-time Display (Android call us between 30 to 60 fps)
-	int32_t deltaTime = (int32_t) (localTime - m_lastCallTime);
+	float deltaTime = (float) (curentTime - m_lastCallTime);
+	//EWOL_DEBUG("Time: m_lastCallTime=" << m_lastCallTime << " deltaTime=" << deltaTime);
 	if (NULL != m_gameEngine) {
-		m_gameEngine->Process(m_lastCallTime, deltaTime);
+		if (true == m_isRunning) {
+			m_gameEngine->Process(m_lastCallTime, deltaTime);
+		}
 	}
+	m_lastCallTime = curentTime;
 	MarkToRedraw();
 }
 

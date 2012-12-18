@@ -10,7 +10,7 @@
 #include <ewol/game/BoundingOBB.h>
 
 
-game::BoundingOBB::BoundingOBB(game::MeshObject& object, game::MeshProperty& property) :
+game::BoundingOBB::BoundingOBB(game::MeshObject& object) :
 	Bounding(game::BoundingModeOBB)
 {
 	
@@ -21,7 +21,7 @@ game::BoundingOBB::~BoundingOBB(void)
 	
 }
 
-void game::BoundingOBB::Update(game::MeshObject& object, game::MeshProperty& property)
+void game::BoundingOBB::Update(game::MeshObject& object)
 {
 	
 }

@@ -21,7 +21,7 @@ game::BoundingSphere::~BoundingSphere(void)
 	
 }
 
-void game::BoundingSphere::Update(game::MeshObject& object, game::MeshProperty& property)
+void game::BoundingSphere::Update(game::MeshObject& object)
 {
 	
 }

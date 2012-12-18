@@ -14,10 +14,9 @@
 #include <ewol/game/BoundingPlane.h>
 #include <ewol/game/BoundingSphere.h>
 
-game::Geometry::Geometry(game::MeshObject& object, game::MeshProperty& property) :
+game::Geometry::Geometry(game::MeshObject& object) :
 	m_dynamic(false),
 	m_object(object),
-	m_property(property),
 	m_bounding(NULL),
 	m_mass(NULL)
 {
@@ -49,6 +48,7 @@ void game::Geometry::SetBoundingMode(game::boundingMode type)
 			return;
 		}
 	}
+	/*
 	switch(type)
 	{
 		default:
@@ -67,12 +67,13 @@ void game::Geometry::SetBoundingMode(game::boundingMode type)
 			m_bounding = new game::BoundingOBB(m_object, m_property);
 			break;
 	}
+	*/
 }
 
 void game::Geometry::BoundingUpdate(void)
 {
 	if (NULL != m_bounding) {
-		m_bounding->Update(m_object, m_property);
+		m_bounding->Update(m_object);
 	}
 }
 

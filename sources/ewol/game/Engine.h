@@ -13,15 +13,19 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/game/Element.h>
+#include <ewol/game/Gravity.h>
 #include <ewol/widget/Widget.h>
+
+
 
 namespace game
 {
 	class Engine
 	{
 		private:
-			etk::Vector<game::Element*> m_elementsStatic;
-			etk::Vector<game::Element*> m_elementsDynamic;
+			etk::Vector<game::Gravity>  m_gravity;          //!< list of gravity element
+			etk::Vector<game::Element*> m_elementsStatic;   //!< List of the game element (bounding does not move)
+			etk::Vector<game::Element*> m_elementsDynamic;  //!< List of the game element (change position all the time)
 		public:
 			/**
 			 * @brief Basic constructor.
@@ -36,7 +40,22 @@ namespace game
 			 * @param[in] lastTime Previous call time (if the system is in pause this time does restart at the same time the next time.
 			 * @param[in] deltaTime delta time in µs from the previous call.
 			 */
-			void Process(int64_t lastTime, int32_t deltaTime);
+			void Process(double lastTime, float deltaTime);
+			/**
+			 * @brief Processing the gravity properties.
+			 * @param[in] deltaTime delta time in µs from the previous call.
+			 */
+			void ProcessGravity(float deltaTime);
+			/**
+			 * @brief Processing the Artificial Intelligence.
+			 * @param[in] deltaTime delta time in Âµs from the previous call.
+			 */
+			void ProcessIA(float deltaTime);
+			/**
+			 * @brief Processing the collision.
+			 * @param[in] deltaTime delta time in µs from the previous call.
+			 */
+			void ProcessCollision(float deltaTime);
 			/**
 			 * @brief Display the environement.
 			 */
@@ -47,6 +66,11 @@ namespace game
 			 * @param[in] dynamic this element change of place.
 			 */
 			void AddElement(game::Element* newElement, bool dynamic);
+			/**
+			 * @brief Add a gravity on the system.
+			 * @param[in] gravity The gravity to add.
+			 */
+			void AddGravity(game::Gravity gravity);
 	};
 };
 

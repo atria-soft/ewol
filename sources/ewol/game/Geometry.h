@@ -21,16 +21,14 @@ namespace game
 		private :
 			bool                m_dynamic;  //!< Set at true if the Geometry can move or not (bounding can change)
 			game::MeshObject&   m_object;   //!< Object vertex/ normal and other properties
-			game::MeshProperty& m_property; //!< Display properties of this element.
 			game::Bounding*     m_bounding; //!< Bounding interface.
 			game::Mass*         m_mass;     //!< Mass properties.
 		public:
 			/**
 			 * @brief main constructor
 			 * @param[in] object the reference mesh object (must not be NULL)
-			 * @param[in] property the reference mesh property (must not be NULL)
 			 */
-			Geometry(game::MeshObject& object, game::MeshProperty& property);
+			Geometry(game::MeshObject& object);
 			/**
 			 * @brief main destructor
 			 */

@@ -11,7 +11,6 @@
 
 #include "ewol/debug.h"
 #include "ewol/game/MeshObject.h"
-#include "ewol/game/MeshProperty.h"
 
 namespace game
 {
@@ -51,7 +50,7 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object, game::MeshProperty& property) = 0;
+			virtual void Update(game::MeshObject& object) = 0;
 	};
 	
 };

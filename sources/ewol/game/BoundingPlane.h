@@ -31,7 +31,7 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object, game::MeshProperty& property);
+			virtual void Update(game::MeshObject& object);
 	};
 }
 

@@ -25,7 +25,7 @@ namespace game
 			 * @biref Main constructor.
 			 * @param[in] mode Bounding mode.
 			 */
-			BoundingOBB(game::MeshObject& object, game::MeshProperty& property);
+			BoundingOBB(game::MeshObject& object);
 			/**
 			 * @biref Main constructor.
 			 */
@@ -33,7 +33,7 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object, game::MeshProperty& property);
+			virtual void Update(game::MeshObject& object);
 	};
 }
 

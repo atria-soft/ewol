@@ -31,6 +31,7 @@ static const char * l_eventAddSphere    = "event-add-sphere";
 static const char * l_eventRotationX    = "event-rotation-X";
 static const char * l_eventRotationY    = "event-rotation-Y";
 static const char * l_eventRotationZ    = "event-rotation-Z";
+static const char * l_eventLunch        = "event-lunch";
 
 
 
@@ -74,6 +75,11 @@ TestScene::TestScene(void)
 		myButton = new widget::Button("Rotation Z");
 		if (NULL != myButton) {
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotationZ);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("lunch object");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventLunch);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
 	
@@ -136,6 +142,11 @@ TestScene::TestScene(void)
 		mySpacer->SetColor(0x00FFFF80);
 		SubWidgetAdd(mySpacer);
 	}
+	// et other property on the Engine :
+	m_gameEngine.AddGravity(game::gravityEarth);
+	
+	
+	
 	APPL_CRITICAL("Create "__class__" (end)");
 }
 
@@ -152,12 +163,17 @@ vec3 baseRotationVect;
 class stupidCube : public game::Element
 {
 	public:
-		stupidCube(void) : game::Element("DATA:cube.obj") {};
+		stupidCube(float poidKg=0.0f) : game::Element("DATA:cube.obj")
+		{
+			m_mass = poidKg;
+		};
 		
 		// herited methode
 		virtual bool ArtificialIntelligence(int32_t deltaMicroSecond)
 		{
-			m_property.Rotate(baseRotationVect, 0.01);
+			if (m_mass == 0.0f) {
+				Rotate(baseRotationVect, 0.01);
+			}
 			return false;
 		}
 	
@@ -191,6 +207,9 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 		baseRotationVect = vec3(0,1,0);
 	} else if (eventId == l_eventRotationZ) {
 		baseRotationVect = vec3(0,0,1);
+	} else if (eventId == l_eventLunch) {
+		stupidCube * tmpp = new stupidCube(250);
+		m_gameEngine.AddElement(tmpp, true);
 	}
 	
 	return;

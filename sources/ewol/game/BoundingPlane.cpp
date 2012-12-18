@@ -21,7 +21,7 @@ game::BoundingPlane::~BoundingPlane(void)
 	
 }
 
-void game::BoundingPlane::Update(game::MeshObject& object, game::MeshProperty& property)
+void game::BoundingPlane::Update(game::MeshObject& object)
 {
 	
 }
