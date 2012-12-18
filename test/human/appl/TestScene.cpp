@@ -10,6 +10,7 @@
 #include <appl/Debug.h>
 #include <appl/TestScene.h>
 
+#include <etk/tool.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/SizerHori.h>
@@ -190,7 +191,9 @@ class stupidCube : public game::Element
 		virtual bool ArtificialIntelligence(int32_t deltaMicroSecond)
 		{
 			if (m_mass == 0.0f) {
-				Rotate(baseRotationVect, 0.01);
+				if (baseRotationVect != vec3(0,0,0) ) {
+					Rotate(baseRotationVect, 0.01);
+				}
 			}
 			return false;
 		}
@@ -214,6 +217,11 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 	}
 	if (eventId == l_eventAddBox) {
 		stupidCube * tmpp = new stupidCube();
+		static bool firstTime = true;
+		if (firstTime==false) {
+			tmpp->Translate(vec3(etk::tool::frand(-1,1),etk::tool::frand(-1,1),etk::tool::frand(-1,1)));
+		}
+		firstTime = false;
 		m_gameEngine.AddElement(tmpp, true);
 	} else if (eventId == l_eventAddSphere) {
 		if (NULL!=m_testWidget) {

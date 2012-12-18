@@ -30,9 +30,8 @@ game::Element::Element(etk::UString meshResource) :
 	}
 	uniqueId++;
 	
-	Scale(vec3(100,100,100) );
-	//m_property.Rotate(m_property.m_angle, rotx);
-	//Translate(vec3(0.01,0.0,0.0));
+	//Scale(vec3(100,100,100) );
+	//Translate(vec3(0.0,0.0,-10.0));
 }
 
 game::Element::~Element(void)
@@ -89,8 +88,11 @@ void game::Element::ProcessPosition(float delta)
 	vec3 m_speed0(m_speed);
 	vec3 curentAcceleration(m_gravityForce + m_userAcceleration);
 	m_speed += curentAcceleration*delta;
-	m_position += m_speed0*delta + curentAcceleration*delta*delta/2.0f ;
-	m_matrixNeedUpdate = true;
-	//EWOL_DEBUG("modify m_position=" << m_position << "m   m_speed=" << m_speed << "m/s m_gravityForce=" << m_gravityForce << "+" << m_userAcceleration << "m/s2");
+	vec3 tmpPos = m_position +m_speed0*delta + curentAcceleration*delta*delta/2.0f ;
+	if (m_position != tmpPos) {
+		m_position = tmpPos;
+		m_matrixNeedUpdate = true;
+		//EWOL_DEBUG("modify m_position=" << m_position << "m   m_speed=" << m_speed << "m/s m_gravityForce=" << m_gravityForce << "+" << m_userAcceleration << "m/s2");
+	}
 }
 

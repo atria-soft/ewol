@@ -113,17 +113,9 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	            m_size.y);
 	float ratio = m_size.x / m_size.y;
 	//EWOL_INFO("ratio : " << ratio);
-	mat4 tmpProjection;// = etk::matPerspective( M_PI/2.0, ratio, -1, 1);
+	mat4 tmpProjection = etk::matPerspective( M_PI/2.0, ratio, -1, 1);
 	
-	if (ratio >= 1.0) {
-		tmpProjection = etk::matOrtho(-ratio, ratio, -1, 1, -1, 1);
-	} else {
-		ratio = 1.0/ratio;
-		tmpProjection = etk::matOrtho(-1, 1, -ratio, ratio, -1, 1);
-	}
-	
-	mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, m_zoom) );
-	mat4 tmpMat = tmpProjection * tmpScale * m_camera.GetMatrix();
+	mat4 tmpMat = tmpProjection * m_camera.GetMatrix();
 	// set internal matrix system :
 	ewol::openGL::SetMatrix(tmpMat);
 	
@@ -175,9 +167,13 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 	
 	if (type == ewol::keyEvent::typeMouse) {
 		if (4 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
-			m_zoom *= 0.91;
+			vec3 oldPos = m_camera.GetPosition();
+			oldPos.z -= 0.5;
+			m_camera.SetPosition(oldPos);
 		} else if (5 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
-			m_zoom *= 1.1;
+			vec3 oldPos = m_camera.GetPosition();
+			oldPos.z += 0.5;
+			m_camera.SetPosition(oldPos);
 		} else if (1 == IdInput) {
 			if(modeMoving==1 && ewol::keyEvent::statusUp == statusEvent) {
 				modeMoving = 0;
@@ -187,8 +183,8 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 			} else if (modeMoving==1 && ewol::keyEvent::statusMove == statusEvent) {
 				vec2 offset = relativePos - oldCursorPos;
 				vec3 oldPos = m_camera.GetPosition();
-				oldPos.x += offset.x;
-				oldPos.y += offset.y;
+				oldPos.x -= offset.x/50.0;
+				oldPos.y -= offset.y/50.0;
 				m_camera.SetPosition(oldPos);
 				oldCursorPos = relativePos;
 			}
