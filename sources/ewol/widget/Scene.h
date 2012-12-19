@@ -28,6 +28,7 @@ namespace widget {
 			bool              m_isRunning;    //!< the display is running (not in pause)
 			double            m_lastCallTime; //!< previous call Time
 			float             m_ratioTime;    //!< Ratio time for the speed of the game ...
+			uint32_t          m_walk;         //!< Wolk properties
 		public:
 			/**
 			 * @brief Main scene constructor

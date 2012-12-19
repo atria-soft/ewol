@@ -14,10 +14,18 @@
 #undef __class__
 #define __class__	"Scene"
 
+#define  WALK_FLAG_FORWARD  (1<<0)
+#define  WALK_FLAG_BACK     (1<<1)
+#define  WALK_FLAG_LEFT     (1<<2)
+#define  WALK_FLAG_RIGHT    (1<<3)
+#define  WALK_FLAG_CAUTION  (1<<4)
+
+
 widget::Scene::Scene(game::Engine* gameEngine) :
 	m_gameEngine(gameEngine),
 	m_isRunning(true),
 	m_lastCallTime(-1),
+	m_walk(0),
 	modeMoving(0)
 {
 	SetCanHaveFocus(true);
@@ -70,9 +78,46 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 	}
 }
 
+#define  WALK_FLAG_FORWARD  (1<<0)
+#define  WALK_FLAG_BACK     (1<<1)
+#define  WALK_FLAG_LEFT     (1<<2)
+#define  WALK_FLAG_RIGHT    (1<<3)
+#define  WALK_FLAG_CAUTION  (1<<4)
 
 void widget::Scene::PeriodicCall(int64_t localTime)
 {
+	if (m_walk!=0) {
+		if ( (m_walk&(WALK_FLAG_FORWARD|WALK_FLAG_BACK))!=0) {
+			// request back and forward in the same time ... this is really bad ....
+		} else if ( (m_walk&WALK_FLAG_FORWARD)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z);
+			angles.y = sinf(angles.z);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			pos += angles;
+			EWOL_DEBUG("walk = " << angles);
+			m_camera.SetPosition(pos);
+		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z);
+			angles.y = sinf(angles.z);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			pos -= angles;
+			EWOL_DEBUG("walk = " << angles*-1);
+			m_camera.SetPosition(pos);
+		}
+		
+		if ( (m_walk&(WALK_FLAG_LEFT|WALK_FLAG_RIGHT))!=0) {
+			// request left and right in the same time ... this is really bad ....
+		} else if ( (m_walk&WALK_FLAG_LEFT)!=0) {
+			
+		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
+			
+		}
+	}
+
 	double curentTime=(double)localTime/1000000.0;
 	// small hack to change speed ...
 	if (m_ratioTime != 1) {
@@ -113,11 +158,12 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	            m_size.y);
 	float ratio = m_size.x / m_size.y;
 	//EWOL_INFO("ratio : " << ratio);
-	mat4 tmpProjection = etk::matPerspective( M_PI/2.0, ratio, -1, 1);
-	
-	mat4 tmpMat = tmpProjection * m_camera.GetMatrix();
+	mat4 tmpProjection = etk::matPerspective( M_PI/2.0, ratio, 1, 4000);
+	ewol::openGL::SetCameraMatrix(m_camera.GetMatrix());
+	//mat4 tmpMat = tmpProjection * m_camera.GetMatrix();
 	// set internal matrix system :
-	ewol::openGL::SetMatrix(tmpMat);
+	//ewol::openGL::SetMatrix(tmpMat);
+	ewol::openGL::SetMatrix(tmpProjection);
 	
 	// Call the widget drawing methode
 	displayProp.m_origin = m_origin;
@@ -164,7 +210,7 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 {
 	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("type : " << type << " IdInput=" << IdInput << " " << "status=" << statusEvent << " RelPos=" << relativePos);
-	
+	KeepFocus();
 	if (type == ewol::keyEvent::typeMouse) {
 		if (4 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
 			vec3 oldPos = m_camera.GetPosition();
@@ -183,8 +229,8 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 			} else if (modeMoving==1 && ewol::keyEvent::statusMove == statusEvent) {
 				vec2 offset = relativePos - oldCursorPos;
 				vec3 oldPos = m_camera.GetPosition();
-				oldPos.x -= offset.x/50.0;
-				oldPos.y -= offset.y/50.0;
+				oldPos.x += offset.x/50.0;
+				oldPos.y += offset.y/50.0;
 				m_camera.SetPosition(oldPos);
 				oldCursorPos = relativePos;
 			}
@@ -198,8 +244,8 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 				vec2 offset = relativePos - oldCursorPos;
 				offset *= M_PI/(360.0f*6);
 				vec3 oldAngles = m_camera.GetAngle();
-				oldAngles.x -= offset.y;
-				oldAngles.y += offset.x;
+				oldAngles.z -= offset.x;
+				oldAngles.y += offset.y;
 				m_camera.SetAngle(oldAngles);
 				oldCursorPos = relativePos;
 			}
@@ -221,18 +267,99 @@ bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t u
 		
 	}
 	*/
+	if(    unicodeData == 'z'
+	    || unicodeData == 'Z') {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_FORWARD;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_FORWARD) != 0) {
+				m_walk -= WALK_FLAG_FORWARD;
+			}
+		}
+	}
+	if(    unicodeData == 's'
+	    || unicodeData == 'S') {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_BACK;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_BACK) != 0) {
+				m_walk -= WALK_FLAG_BACK;
+			}
+		}
+	}
+	if(    unicodeData == 'q'
+	    || unicodeData == 'Q') {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_LEFT;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_LEFT) != 0) {
+				m_walk -= WALK_FLAG_LEFT;
+			}
+		}
+	}
+	if(    unicodeData == 'd'
+	    || unicodeData == 'D') {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_RIGHT;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
+				m_walk -= WALK_FLAG_RIGHT;
+			}
+		}
+	}
+	EWOL_DEBUG("m_walk=" << m_walk);
 	return false;
 }
 
 
 bool widget::Scene::OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey)
 {
-	/*
-	if (statusEvent == ewol::ewol::keyEvent::statusDown) {
-		MarkToRedraw();
+	if (specialKey == ewol::keyEvent::keyboardUp) {
+		EWOL_DEBUG("test ..." << specialKey << "  " << statusEvent);
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_FORWARD;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_FORWARD) != 0) {
+				m_walk -= WALK_FLAG_FORWARD;
+			}
+		}
 	}
-	return true;
-	*/
+	if (specialKey == ewol::keyEvent::keyboardDown) {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_BACK;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_BACK) != 0) {
+				m_walk -= WALK_FLAG_BACK;
+			}
+		}
+	}
+	if (specialKey == ewol::keyEvent::keyboardLeft) {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_LEFT;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_LEFT) != 0) {
+				m_walk -= WALK_FLAG_LEFT;
+			}
+		}
+	}
+	if (specialKey == ewol::keyEvent::keyboardRight) {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			m_walk |= WALK_FLAG_RIGHT;
+		}
+		if (statusEvent == ewol::keyEvent::statusUp) {
+			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
+				m_walk -= WALK_FLAG_RIGHT;
+			}
+		}
+	}
+	EWOL_DEBUG("m_walk=" << m_walk);
 	return false;
 }
 

@@ -16,6 +16,7 @@ static int32_t uniqueId = 0;
 
 game::Element::Element(etk::UString meshResource) :
 	m_resource(NULL),
+	m_scale(1,1,1),
 	m_mass(0.0f),
 	m_uniqueId(uniqueId),
 	m_groupId(0),
@@ -29,9 +30,6 @@ game::Element::Element(etk::UString meshResource) :
 		m_resource = tmpObject;
 	}
 	uniqueId++;
-	
-	//Scale(vec3(100,100,100) );
-	//Translate(vec3(0.0,0.0,-10.0));
 }
 
 game::Element::~Element(void)
@@ -46,6 +44,7 @@ game::Element::~Element(void)
 void game::Element::Draw(void)
 {
 	if (NULL != m_resource) {
+		//EWOL_DEBUG("draw " << m_uniqueId);
 		m_resource->Draw(GetMatrix());
 	}
 }

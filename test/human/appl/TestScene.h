@@ -18,6 +18,8 @@
 class TestScene : public widget::SizerVert
 {
 	private:
+		game::Element* m_ground;
+		//game::Element  m_sky;
 		game::Engine   m_gameEngine;
 		widget::Scene* m_testWidget;
 	public:

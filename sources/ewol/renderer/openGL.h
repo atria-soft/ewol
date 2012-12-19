@@ -83,6 +83,16 @@ namespace ewol {
 		 * @return The requested matrix.
 		 */
 		mat4& GetMatrix(void);
+		/**
+		 * @brief Get a reference on the current matrix camera destinate to opengl renderer.
+		 * @return The requested matrix.
+		 */
+		mat4& GetCameraMatrix(void);
+		/**
+		 * @brief Set a reference on the current camera to opengl renderer.
+		 * @param[in] newOne The requested matrix.
+		 */
+		void SetCameraMatrix(mat4& newOne);
 	};
 };
 

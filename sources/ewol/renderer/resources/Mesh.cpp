@@ -39,12 +39,6 @@ ewol::Mesh::~Mesh(void)
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
-	static float rotx = 0;
-	static float roty = 0;
-	static float rotz = 0;
-	rotx += 0.01;
-	roty += 0.02;
-	rotz += 0.005;
 	if (m_object.m_vertices.Size()<=0) {
 		return;
 	}
@@ -60,8 +54,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::GetMatrix();
-	tmpMatrix = tmpMatrix * positionMatrix;
+	mat4 projMatrix = ewol::openGL::GetMatrix();
+	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 tmpMatrix = projMatrix * camMatrix * positionMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());

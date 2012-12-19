@@ -130,11 +130,11 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_KEYBORAD_KEY:
 			case THREAD_KEYBORAD_MOVE:
-				EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
+				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				{
 					ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
 					specialCurrentKey = data.keyboardSpecial;
-					EWOL_DEBUG("newStatus Key" << specialCurrentKey);
+					//EWOL_DEBUG("newStatus Key" << specialCurrentKey);
 				}
 				if (NULL != windowsCurrent) {
 					if (false==windowsCurrent->OnEventShortCut(data.keyboardSpecial,

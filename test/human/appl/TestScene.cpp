@@ -32,12 +32,13 @@ static const char * l_eventAddSphere    = "event-add-sphere";
 static const char * l_eventRotationX    = "event-rotation-X";
 static const char * l_eventRotationY    = "event-rotation-Y";
 static const char * l_eventRotationZ    = "event-rotation-Z";
+static const char * l_eventRotation0    = "event-rotation-0";
 static const char * l_eventLunch        = "event-lunch";
 static const char * l_eventChangeTimeSpeed2 = "event-speed2";
 static const char * l_eventChangeTimeSpeed0 = "event-speed0.5";
 static const char * l_eventChangeTimeSpeed1 = "event-speed1";
-
-
+static const char * l_eventUp = "event-up";
+static const char * l_eventDown = "event-down";
 
 
 #undef __class__
@@ -45,6 +46,9 @@ static const char * l_eventChangeTimeSpeed1 = "event-speed1";
 
 TestScene::TestScene(void)
 {
+	m_ground = new game::Element("DATA:grass.obj");
+	m_gameEngine.AddElement(m_ground, true);
+	
 	APPL_CRITICAL("Create "__class__" (start)");
 	widget::SizerVert* mySizerVert2 = NULL;
 	widget::SizerHori* mySizerHori = NULL;
@@ -81,6 +85,27 @@ TestScene::TestScene(void)
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotationZ);
 			mySizerHori->SubWidgetAdd(myButton);
 		}
+		myButton = new widget::Button("Rotation -");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventRotation0);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("UP");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventUp);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+		myButton = new widget::Button("DOWN");
+		if (NULL != myButton) {
+			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventDown);
+			mySizerHori->SubWidgetAdd(myButton);
+		}
+	mySizerHori = new widget::SizerHori();
+	if (NULL == mySizerHori) {
+		APPL_DEBUG("Allocation error mySizerHori");
+		return;
+	}
+	SubWidgetAdd(mySizerHori);
 		myButton = new widget::Button("lunch object");
 		if (NULL != myButton) {
 			myButton->RegisterOnEvent(this, ewolEventButtonPressed, l_eventLunch);
@@ -179,6 +204,7 @@ TestScene::~TestScene(void)
 #include <ewol/game/Element.h>
 
 vec3 baseRotationVect;
+vec3 baseMove;
 class stupidCube : public game::Element
 {
 	public:
@@ -193,6 +219,10 @@ class stupidCube : public game::Element
 			if (m_mass == 0.0f) {
 				if (baseRotationVect != vec3(0,0,0) ) {
 					Rotate(baseRotationVect, 0.01);
+				}
+				if (baseMove != vec3(0,0,0) ) {
+					Translate(baseMove);
+					baseMove = vec3(0,0,0);
 				}
 			}
 			return false;
@@ -219,7 +249,9 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 		stupidCube * tmpp = new stupidCube();
 		static bool firstTime = true;
 		if (firstTime==false) {
-			tmpp->Translate(vec3(etk::tool::frand(-1,1),etk::tool::frand(-1,1),etk::tool::frand(-1,1)));
+			vec3 newPos = vec3(etk::tool::frand(-20,20),etk::tool::frand(-20,20),etk::tool::frand(1,8));
+			APPL_DEBUG("add a box at the pos : " << newPos);
+			tmpp->Translate(newPos);
 		}
 		firstTime = false;
 		m_gameEngine.AddElement(tmpp, true);
@@ -227,15 +259,21 @@ void TestScene::OnReceiveMessage(ewol::EObject * CallerObject, const char * even
 		if (NULL!=m_testWidget) {
 			
 		}
+	} else if (eventId == l_eventUp) {
+		baseMove = vec3(0.1,0,0);
+	} else if (eventId == l_eventDown) {
+		baseMove = vec3(-0.1,0,0);
 	} else if (eventId == l_eventRotationX) {
 		baseRotationVect = vec3(1,0,0);
 	} else if (eventId == l_eventRotationY) {
 		baseRotationVect = vec3(0,1,0);
 	} else if (eventId == l_eventRotationZ) {
 		baseRotationVect = vec3(0,0,1);
+	} else if (eventId == l_eventRotation0) {
+		baseRotationVect = vec3(0,0,0);
 	} else if (eventId == l_eventLunch) {
 		stupidCube * tmpp = new stupidCube(250);
-		tmpp->SetSpeed(vec3(10,50,0));
+		tmpp->SetSpeed(vec3(10,10,50));
 		m_gameEngine.AddElement(tmpp, true);
 	} else if (eventId == l_eventChangeTimeSpeed1) {
 		if (NULL!=m_testWidget) {

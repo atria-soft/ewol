@@ -764,7 +764,9 @@ void X11_Run(void)
 						EWOL_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					#endif
 					{
-						EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+						#ifdef DEBUG_X11_EVENT
+							EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+						#endif
 						if (event.xkey.state & (1<<0) ) {
 							//EWOL_DEBUG("    Special Key : SHIFT");
 							guiKeyBoardMode.shift = true;
