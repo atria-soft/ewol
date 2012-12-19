@@ -21,7 +21,7 @@ void game::Camera::Update(void)
 	m_matrix.Rotate(vec3(0,0,1), m_angles.z );
 	vec3 tmpp = m_position * -1;
 	m_matrix.Translate(tmpp);
-	EWOL_DEBUG("camera: pos=" << m_position << " angle=" << m_angles);
+	//EWOL_DEBUG("camera: pos=" << m_position << " angle=" << m_angles);
 }
 
 game::Camera::Camera(vec3 pos, vec3 angles) :

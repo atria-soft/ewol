@@ -86,38 +86,6 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 
 void widget::Scene::PeriodicCall(int64_t localTime)
 {
-	if (m_walk!=0) {
-		if ( (m_walk&(WALK_FLAG_FORWARD|WALK_FLAG_BACK))!=0) {
-			// request back and forward in the same time ... this is really bad ....
-		} else if ( (m_walk&WALK_FLAG_FORWARD)!=0) {
-			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z);
-			angles.y = sinf(angles.z);
-			angles.z = 0;
-			vec3 pos = m_camera.GetPosition();
-			pos += angles;
-			EWOL_DEBUG("walk = " << angles);
-			m_camera.SetPosition(pos);
-		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
-			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z);
-			angles.y = sinf(angles.z);
-			angles.z = 0;
-			vec3 pos = m_camera.GetPosition();
-			pos -= angles;
-			EWOL_DEBUG("walk = " << angles*-1);
-			m_camera.SetPosition(pos);
-		}
-		
-		if ( (m_walk&(WALK_FLAG_LEFT|WALK_FLAG_RIGHT))!=0) {
-			// request left and right in the same time ... this is really bad ....
-		} else if ( (m_walk&WALK_FLAG_LEFT)!=0) {
-			
-		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
-			
-		}
-	}
-
 	double curentTime=(double)localTime/1000000.0;
 	// small hack to change speed ...
 	if (m_ratioTime != 1) {
@@ -145,6 +113,54 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 	}
 	m_lastCallTime = curentTime;
 	MarkToRedraw();
+	
+	if (m_walk!=0) {
+		if(    (m_walk&WALK_FLAG_FORWARD)!=0
+		    && (m_walk&WALK_FLAG_BACK)!=0) {
+			// request back and forward in the same time ... this is really bad ....
+		} else if ( (m_walk&WALK_FLAG_FORWARD)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z);
+			angles.y = sinf(angles.z);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			// walk is 6 km/h
+			pos += angles*0.001666f/deltaTime;
+			m_camera.SetPosition(pos);
+		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z);
+			angles.y = sinf(angles.z);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			// walk is 6 km/h
+			pos -= angles*0.001666f/deltaTime;
+			m_camera.SetPosition(pos);
+		}
+		
+		if(    (m_walk&WALK_FLAG_LEFT)!=0
+		    && (m_walk&WALK_FLAG_RIGHT)!=0) {
+			// request left and right in the same time ... this is really bad ....
+		} else if ( (m_walk&WALK_FLAG_LEFT)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z+M_PI/2.0);
+			angles.y = sinf(angles.z+M_PI/2.0);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			// lateral walk is 4 km/h
+			pos += angles*0.0011f/deltaTime;
+			m_camera.SetPosition(pos);
+		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
+			vec3 angles = m_camera.GetAngle();
+			angles.x = cosf(angles.z+M_PI/2.0);
+			angles.y = sinf(angles.z+M_PI/2.0);
+			angles.z = 0;
+			vec3 pos = m_camera.GetPosition();
+			// lateral walk is 4 km/h
+			pos -= angles*0.0011f/deltaTime;
+			m_camera.SetPosition(pos);
+		}
+	}
 }
 
 

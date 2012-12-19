@@ -157,6 +157,7 @@ void ewolProcessEvents(void)
 										tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardChar);
 									}
 								} else { // THREAD_KEYBORAD_MOVE
+									EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
 									if(true == data.stateIsDown) {
 										tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove);
 									} else {

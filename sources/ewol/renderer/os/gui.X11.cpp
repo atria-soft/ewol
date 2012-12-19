@@ -760,6 +760,20 @@ void X11_Run(void)
 					break;
 				case KeyPress:
 				case KeyRelease:
+					// filter repeate key : 
+					if(    event.type == KeyRelease
+					    && XEventsQueued(m_display, QueuedAfterReading)) {
+						XEvent nev;
+						XPeekEvent(m_display, &nev);
+						if(    nev.type == KeyPress
+						    && nev.xkey.time == event.xkey.time
+						    && nev.xkey.keycode == event.xkey.keycode) {
+							// Key was not actually released
+							// remove next event too ...
+							XNextEvent(m_display, &nev);
+							break;
+						}
+					}
 					#ifdef DEBUG_X11_EVENT
 						EWOL_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					#endif
