@@ -103,9 +103,11 @@ int32_t        m_originY = 0;
 int32_t        m_cursorEventX = 0;
 int32_t        m_cursorEventY = 0;
 int32_t        m_currentHeight = 0;
+int32_t        m_currentWidth = 0;
 XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
+bool           m_grabAllEvent = false;
 
 bool inputIsPressed[20];
 
@@ -685,6 +687,7 @@ void X11_Run(void)
 					m_originX = event.xconfigure.x;
 					m_originY = event.xconfigure.y;
 					m_currentHeight = event.xconfigure.height;
+					m_currentWidth = event.xconfigure.width;
 					eSystem::Resize(event.xconfigure.width, event.xconfigure.height);
 					break;
 				case ButtonPress:
@@ -747,6 +750,22 @@ void X11_Run(void)
 							eSystem::SetMouseMotion(0, (float)event.xmotion.x, (float)(m_currentHeight-event.xmotion.y));
 						}
 					}
+					if (m_grabAllEvent == true) {
+						XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_currentWidth/2, m_currentHeight/2);
+						XFlush(m_display);
+						XEvent nev;
+						// remove next generated event ...
+						XNextEvent(m_display, &nev);
+					}
+					/*
+					if (m_grabAllEvent == true) {
+						EWOL_DEBUG("X11 mouse move(" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
+						if (BadWindow == XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, 200, 200)) {
+							EWOL_WARNING("X11 mouse mouve (BadWindow)");
+						}
+						XSync(m_display, False);
+					}
+					*/
 					break;
 				case FocusIn:
 					#ifdef DEBUG_X11_EVENT
@@ -1070,6 +1089,7 @@ void guiInterface::ChangeSize(ivec2 size)
 		EWOL_INFO("X11: ChangeSize");
 	#endif
 	m_currentHeight = size.y;
+	m_currentWidth = size.x;
 	XResizeWindow(m_display, WindowHandle, size.x, size.y);
 }
 
@@ -1094,6 +1114,78 @@ void guiInterface::GetAbsPos(ivec2& pos)
 	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &pos.x, &pos.y, &tmp, &tmp, &tmp2);
 }
 
+void guiInterface::CursorDisplay(bool isVisible)
+{
+	if (false == isVisible) {
+		EWOL_DEBUG("Hide Cursor");
+		Cursor invisibleCursor;
+		Pixmap bitmapNoData;
+		XColor black;
+		static char noData[] = { 0,0,0,0,0,0,0,0 };
+		black.red = 0;
+		black.green = 0;
+		black.blue = 0;
+		bitmapNoData = XCreateBitmapFromData(m_display, WindowHandle, noData, 8, 8);
+		invisibleCursor = XCreatePixmapCursor(m_display, bitmapNoData, bitmapNoData, 
+		                                     &black, &black, 0, 0);
+		XDefineCursor(m_display,WindowHandle, invisibleCursor);
+		XFreeCursor(m_display, invisibleCursor);
+	} else {
+		EWOL_DEBUG("Show Cursor");
+		XUndefineCursor(m_display, WindowHandle);
+	}
+}
+
+void guiInterface::GrabPointerEvents(bool isGrabbed)
+{
+	if (true == isGrabbed) {
+		EWOL_DEBUG("Grab Events");
+		
+						//EWOL_DEBUG("X11 mouse move(" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
+						if (BadWindow == XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, 20, 20)) {
+							EWOL_WARNING("X11 mouse mouve (BadWindow)");
+						}
+						XSync(m_display, False);
+						XFlush(m_display);
+						/*
+		int32_t test = XGrabPointer(m_display,RootWindow(m_display, DefaultScreen(m_display)), True,
+		                            ButtonPressMask |
+		                            ButtonReleaseMask |
+		                            PointerMotionMask |
+		                            FocusChangeMask |
+		                            EnterWindowMask |
+		                            LeaveWindowMask,
+		                            GrabModeAsync,
+		                            GrabModeAsync,
+		                            RootWindow(m_display, DefaultScreen(m_display)),
+		                            None,
+		                            CurrentTime);
+		
+		if (GrabSuccess != test)
+		{
+			EWOL_CRITICAL("Display error " << test);
+			switch (test)
+			{
+				case BadCursor:
+					EWOL_CRITICAL(" BadCursor");
+					break;
+				case BadValue:
+					EWOL_CRITICAL(" BadValue");
+					break;
+				case BadWindow:
+					EWOL_CRITICAL(" BadWindow");
+					break;
+			}
+		}
+		*/
+		m_grabAllEvent = true;
+	} else {
+		EWOL_DEBUG("Un-Grab Events");
+		XUngrabPointer(m_display, CurrentTime);
+		m_grabAllEvent = false;
+	}
+}
+
 
 /**
  * @brief Main of the program
@@ -1106,7 +1198,7 @@ int guiInterface::main(int argc, const char *argv[])
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
 	}
-	
+	m_grabAllEvent = false;
 	// start X11 thread ...
 	X11_Init();
 	//start the basic thread : 
@@ -1114,7 +1206,8 @@ int guiInterface::main(int argc, const char *argv[])
 	// get the icon file : 
 	etk::UString myIcon = APP_Icon();
 	SetIcon(myIcon);
-	
+	CursorDisplay(true);
+	GrabPointerEvents(true);
 	// Run ...
 	X11_Run();
 	// close X11 :

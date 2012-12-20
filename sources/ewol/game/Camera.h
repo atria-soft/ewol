@@ -19,9 +19,10 @@ namespace game
 	class Camera
 	{
 		private:
-			vec3  m_position; //!< position of the camera.
-			vec3  m_angles;   //!< Angles to the camera is seing.
-			mat4  m_matrix;   //!< transformation matrix.
+			vec3  m_position;   //!< position of the camera.
+			vec3  m_angles;     //!< Angles to the camera is seing.
+			mat4  m_matrix;     //!< transformation matrix.
+			bool  m_needUpdate; //!< matrix is nor anymore correct...
 			/**
 			 * @brief Update the matrix property
 			 */
@@ -56,7 +57,7 @@ namespace game
 			 * @brief Get the transformation matix for the camera.
 			 * @return the current transformation matrix
 			 */
-			mat4& GetMatrix(void) { return m_matrix; };
+			mat4& GetMatrix(void);
 			
 	};
 };

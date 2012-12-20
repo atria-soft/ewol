@@ -113,7 +113,6 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 	}
 	m_lastCallTime = curentTime;
 	MarkToRedraw();
-	
 	if (m_walk!=0) {
 		if(    (m_walk&WALK_FLAG_FORWARD)!=0
 		    && (m_walk&WALK_FLAG_BACK)!=0) {
@@ -121,20 +120,22 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 		} else if ( (m_walk&WALK_FLAG_FORWARD)!=0) {
 			vec3 angles = m_camera.GetAngle();
 			angles.x = cosf(angles.z);
-			angles.y = sinf(angles.z);
+			angles.y = -sinf(angles.z);
 			angles.z = 0;
+			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
-			pos += angles*0.001666f/deltaTime;
+			pos += angles*3.333f*deltaTime;
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z);
+			angles.x = -cosf(angles.z);
 			angles.y = sinf(angles.z);
 			angles.z = 0;
+			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
-			pos -= angles*0.001666f/deltaTime;
+			pos += angles*3.333f*deltaTime;
 			m_camera.SetPosition(pos);
 		}
 		
@@ -143,21 +144,23 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			// request left and right in the same time ... this is really bad ....
 		} else if ( (m_walk&WALK_FLAG_LEFT)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z+M_PI/2.0);
-			angles.y = sinf(angles.z+M_PI/2.0);
+			angles.x = cosf(angles.z-M_PI/2.0);
+			angles.y = -sinf(angles.z-M_PI/2.0);
 			angles.z = 0;
+			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
-			pos += angles*0.0011f/deltaTime;
+			pos += angles*2.2f*deltaTime;
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z+M_PI/2.0);
-			angles.y = sinf(angles.z+M_PI/2.0);
+			angles.x = -cosf(angles.z-M_PI/2.0);
+			angles.y = sinf(angles.z-M_PI/2.0);
 			angles.z = 0;
+			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
-			pos -= angles*0.0011f/deltaTime;
+			pos += angles*2.2f*deltaTime;
 			m_camera.SetPosition(pos);
 		}
 	}
@@ -174,7 +177,7 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	            m_size.y);
 	float ratio = m_size.x / m_size.y;
 	//EWOL_INFO("ratio : " << ratio);
-	mat4 tmpProjection = etk::matPerspective( M_PI/2.0, ratio, 1, 4000);
+	mat4 tmpProjection = etk::matPerspective( M_PI/3.0, ratio, 1, 4000);
 	ewol::openGL::SetCameraMatrix(m_camera.GetMatrix());
 	//mat4 tmpMat = tmpProjection * m_camera.GetMatrix();
 	// set internal matrix system :
