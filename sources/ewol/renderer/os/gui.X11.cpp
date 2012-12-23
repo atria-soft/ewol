@@ -1207,7 +1207,7 @@ int guiInterface::main(int argc, const char *argv[])
 	etk::UString myIcon = APP_Icon();
 	SetIcon(myIcon);
 	CursorDisplay(true);
-	GrabPointerEvents(true);
+	//GrabPointerEvents(true);
 	// Run ...
 	X11_Run();
 	// close X11 :

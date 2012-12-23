@@ -440,6 +440,17 @@ namespace ewol {
 			 * @return ---
 			 */
 			virtual void OnRegenerateDisplay(void) { };
+		// grab cursor mode
+		private:
+			/**
+			 * @brief Grab the cursor (hide it and mouvement is now an offset)
+			 */
+			void GrabCursor(void);
+			/**
+			 * @brief Un-Grab the cursor (default mode cursor ofset)
+			 */
+			void UnGrabCursor(void);
+		
 
 	}; // end of the class Widget declaration
 

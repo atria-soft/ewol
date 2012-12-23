@@ -1,3 +1,0 @@
-
-all:
-	cd human ; make
