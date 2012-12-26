@@ -25,8 +25,7 @@ widget::Scene::Scene(game::Engine* gameEngine) :
 	m_gameEngine(gameEngine),
 	m_isRunning(true),
 	m_lastCallTime(-1),
-	m_walk(0),
-	modeMoving(0)
+	m_walk(0)
 {
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
@@ -84,6 +83,9 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 #define  WALK_FLAG_RIGHT    (1<<3)
 #define  WALK_FLAG_CAUTION  (1<<4)
 
+static const float l_walkRatio = 6.666f;
+static const float l_walkLateralRatio = 3.333f;
+
 void widget::Scene::PeriodicCall(int64_t localTime)
 {
 	double curentTime=(double)localTime/1000000.0;
@@ -125,7 +127,7 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
-			pos += angles*3.333f*deltaTime;
+			pos += angles*l_walkRatio*deltaTime;
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
 			vec3 angles = m_camera.GetAngle();
@@ -135,7 +137,7 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
-			pos += angles*3.333f*deltaTime;
+			pos += angles*l_walkRatio*deltaTime;
 			m_camera.SetPosition(pos);
 		}
 		
@@ -150,7 +152,7 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
-			pos += angles*2.2f*deltaTime;
+			pos += angles*l_walkLateralRatio*deltaTime;
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
 			vec3 angles = m_camera.GetAngle();
@@ -160,7 +162,7 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
-			pos += angles*2.2f*deltaTime;
+			pos += angles*l_walkLateralRatio*deltaTime;
 			m_camera.SetPosition(pos);
 		}
 	}
@@ -227,50 +229,25 @@ vec2 widget::Scene::RelativePosition(vec2  pos)
 
 bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, vec2 pos)
 {
-	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("type : " << type << " IdInput=" << IdInput << " " << "status=" << statusEvent << " RelPos=" << relativePos);
-	KeepFocus();
+	
 	if (type == ewol::keyEvent::typeMouse) {
-		if (4 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
-			vec3 oldPos = m_camera.GetPosition();
-			oldPos.z -= 0.5;
-			m_camera.SetPosition(oldPos);
-		} else if (5 == IdInput && ewol::keyEvent::statusUp == statusEvent) {
-			vec3 oldPos = m_camera.GetPosition();
-			oldPos.z += 0.5;
-			m_camera.SetPosition(oldPos);
-		} else if (1 == IdInput) {
-			if(modeMoving==1 && ewol::keyEvent::statusUp == statusEvent) {
-				modeMoving = 0;
-			} else if (modeMoving==0 && ewol::keyEvent::statusDown == statusEvent) {
-				modeMoving = 1;
-				oldCursorPos = relativePos;
-			} else if (modeMoving==1 && ewol::keyEvent::statusMove == statusEvent) {
-				vec2 offset = relativePos - oldCursorPos;
-				vec3 oldPos = m_camera.GetPosition();
-				oldPos.x += offset.x/50.0;
-				oldPos.y += offset.y/50.0;
-				m_camera.SetPosition(oldPos);
-				oldCursorPos = relativePos;
-			}
-		} else if (3 == IdInput) {
-			if(modeMoving==3 && ewol::keyEvent::statusUp == statusEvent) {
-				modeMoving = 0;
-			} else if (modeMoving==0 && ewol::keyEvent::statusDown == statusEvent) {
-				modeMoving = 3;
-				oldCursorPos = relativePos;
-			} else if (modeMoving==3 && ewol::keyEvent::statusMove == statusEvent) {
-				vec2 offset = relativePos - oldCursorPos;
-				offset *= M_PI/(360.0f*6);
+		if (0 != IdInput) {
+			KeepFocus();
+			GrabCursor();
+			SetCursor(ewol::cursorNone);
+		}
+		if (true == GetGrabStatus() ) {
+			if (ewol::keyEvent::statusMove == statusEvent) {
+				pos *= M_PI/(360.0f*6);
 				vec3 oldAngles = m_camera.GetAngle();
-				oldAngles.z -= offset.x;
-				oldAngles.y += offset.y;
+				oldAngles.z += pos.x;
+				oldAngles.y += pos.y;
 				m_camera.SetAngle(oldAngles);
-				oldCursorPos = relativePos;
 			}
 		}
 	} else if (type == ewol::keyEvent::typeFinger) {
-		
+		KeepFocus();
 	}
 	// note : we did not parse the oether media ...
 
@@ -280,12 +257,9 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 
 bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData)
 {
-	/*
+	
 	EWOL_DEBUG("KB EVENT : \"" << unicodeData << "\"" << "type=" << statusEvent);
-	if (statusEvent == ewol::ewol::keyEvent::statusDown) {
-		
-	}
-	*/
+	
 	if(    unicodeData == 'z'
 	    || unicodeData == 'Z') {
 		if (statusEvent == ewol::keyEvent::statusDown) {
@@ -328,6 +302,13 @@ bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t u
 			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
 				m_walk -= WALK_FLAG_RIGHT;
 			}
+		}
+	}
+	// escape case :
+	if(unicodeData == 27) {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			UnGrabCursor();
+			SetCursor(ewol::cursorArrow);
 		}
 	}
 	EWOL_DEBUG("m_walk=" << m_walk);
@@ -381,4 +362,16 @@ bool widget::Scene::OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::k
 	EWOL_DEBUG("m_walk=" << m_walk);
 	return false;
 }
+
+
+void widget::Scene::OnGetFocus(void)
+{
+	//GrabCursor();
+}
+
+void widget::Scene::OnLostFocus(void)
+{
+	UnGrabCursor();
+}
+
 

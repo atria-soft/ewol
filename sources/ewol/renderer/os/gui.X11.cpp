@@ -34,7 +34,17 @@
 */
 
 //#define DEBUG_X11_EVENT
-
+#ifdef DEBUG_X11_EVENT
+	#define X11_DEBUG      EWOL_DEBUG
+	#define X11_VERBOSE    EWOL_VERBOSE
+	#define X11_INFO       EWOL_INFO
+	#define X11_CRITICAL   EWOL_CRITICAL
+#else
+	#define X11_DEBUG      EWOL_VERBOSE
+	#define X11_VERBOSE    EWOL_VERBOSE
+	#define X11_INFO       EWOL_VERBOSE
+	#define X11_CRITICAL   EWOL_VERBOSE
+#endif
 int64_t guiInterface::GetTime(void)
 {
 	struct timespec now;
@@ -107,7 +117,11 @@ int32_t        m_currentWidth = 0;
 XVisualInfo *  m_visual = NULL;
 bool           m_doubleBuffered = 0;
 bool           m_run = 0;
-bool           m_grabAllEvent = false;
+//forcing the position
+bool           m_grabAllEvent = false;    //!< grab mode enable...
+vec2           m_forcePos = vec2(0,0);    //!< position to reset the cursor
+bool           m_positionChangeRequested = false; //!< the position modifiquation has been requested
+vec2           m_curentGrabDelta = vec2(0,0); //!< the position in X11 will arrive by pool
 
 bool inputIsPressed[20];
 
@@ -130,9 +144,7 @@ static Atom XAtomeDeleteWindows = 0;
 
 bool CreateX11Context(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: CreateX11Context");
-	#endif
+	X11_INFO("X11: CreateX11Context");
 	int x,y, attr_mask;
 	XSizeHints hints;
 	XWMHints *StartupState;
@@ -190,12 +202,14 @@ bool CreateX11Context(void)
 	// select internal attribute
 	attr_mask = CWBackPixmap | CWColormap | CWBorderPixel | CWEventMask;
 	// Create the window
-	int32_t tmp_width = DisplayWidth(m_display, DefaultScreen(m_display))/2;
-	int32_t tmp_height = DisplayHeight(m_display, DefaultScreen(m_display))/2;
+	int32_t tmp_width = 640;//DisplayWidth(m_display, DefaultScreen(m_display))/2;
+	int32_t tmp_height = 480;//DisplayHeight(m_display, DefaultScreen(m_display))/2;
 	eSystem::Resize(tmp_width, tmp_height);
-	x=tmp_width/2;
-	y=tmp_height/4;
-	
+	x=20;
+	y=20;
+	m_originX = x;
+	m_originY = y;
+	EWOL_INFO("X11 request creating windows at pos=(" << m_originX << "," << m_originY << ") size=(" << tmp_width << "," << tmp_height << ")" );
 	// Real create of the window
 	WindowHandle = XCreateWindow(m_display,
 	                             Xroot,
@@ -258,9 +272,7 @@ bool CreateX11Context(void)
  */
 void guiInterface::SetTitle(etk::UString& title)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: Set Title (START)");
-	#endif
+	X11_INFO("X11: Set Title (START)");
 	XTextProperty tp;
 	tp.value = (unsigned char *)title.c_str();
 	tp.encoding = XA_WM_NAME;
@@ -270,9 +282,7 @@ void guiInterface::SetTitle(etk::UString& title)
 	XStoreName(m_display, WindowHandle, (const char*)tp.value);
 	XSetIconName(m_display, WindowHandle, (const char*)tp.value);
 	XSetWMIconName(m_display, WindowHandle, &tp);
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: Set Title (END)");
-	#endif
+	X11_INFO("X11: Set Title (END)");
 }
 
 /* this variable will contain the ID of the newly created pixmap.    */
@@ -282,9 +292,7 @@ Pixmap icon_pixmap;
 void SetIcon(etk::UString inputFile)
 {
 	etk::FSNode bitmapFile(inputFile);
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: try to set icon : " << bitmapFile);
-	#endif
+	X11_INFO("X11: try to set icon : " << bitmapFile);
 	// load bitmap
 	if (false == bitmapFile.Exist()) {
 		EWOL_ERROR("X11 Icon File does not Exist ... " << bitmapFile);
@@ -340,9 +348,7 @@ void SetIcon(etk::UString inputFile)
 
 void RemoveDecoration(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11:RemoveDecoration");
-	#endif
+	X11_INFO("X11:RemoveDecoration");
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
@@ -358,9 +364,7 @@ void RemoveDecoration(void)
 
 void AddDecoration(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11:AddDecoration");
-	#endif
+	X11_INFO("X11:AddDecoration");
 	Hints hints;
 	Atom property;
 	hints.flags = 2;// Specify that we're changing the window decorations.
@@ -381,23 +385,21 @@ static void setVSync(bool sync)
 	PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
 	const char *extensions = (char*)glGetString( GL_EXTENSIONS );
 	if( strstr( extensions, "WGL_EXT_swap_control" ) == 0 ) {
-		EWOL_ERROR("Can not set the vertical synchronisation status" << sync);
+		EWOL_ERROR("Can not set the vertical synchronisation status" << sync << "   (1)");
 		return;
 	} else {
 		wglSwapIntervalEXT = (PFNWGLSWAPINTERVALPROC)glXGetProcAddress( (const GLubyte *)"wglSwapIntervalEXT" );
 		if(wglSwapIntervalEXT) {
 			wglSwapIntervalEXT(sync);
 		} else {
-			EWOL_ERROR("Can not set the vertical synchronisation status" << sync);
+			EWOL_ERROR("Can not set the vertical synchronisation status" << sync << "   (2)");
 		}
 	}
 }
 
 bool CreateOGlContext(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11:CreateOGlContext");
-	#endif
+	X11_INFO("X11:CreateOGlContext");
 	/* create a GLX context */
 	GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
 	/* connect the glx-context to the window */
@@ -416,9 +418,7 @@ bool CreateOGlContext(void)
 
 void X11_Init(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11:INIT");
-	#endif
+	X11_INFO("X11:INIT");
 	if (m_doubleBuffered) {
 		glXSwapBuffers(m_display, WindowHandle);
 		XSync (m_display,0);
@@ -463,17 +463,12 @@ void X11_Run(void)
 		XEvent respond;
 		// main X boucle :
 		while (XPending(m_display)) {
-			#ifdef DEBUG_X11_EVENT
-				EWOL_INFO("X11:Event");
-			#endif
 			XNextEvent(m_display, &event);
 			switch (event.type)
 			{
 				case ClientMessage:
 					{
-						#ifdef DEBUG_X11_EVENT
-							EWOL_INFO("Receive : ClientMessage");
-						#endif
+						X11_INFO("Receive : ClientMessage");
 						if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
 							EWOL_INFO("    ==> Kill Requested ...");
 							eSystem::OnKill();
@@ -486,9 +481,7 @@ void X11_Run(void)
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case SelectionClear:
 					// Selection has been done on an other program ==> clear ours ...
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event SelectionClear");
-					#endif
+					X11_INFO("X11 event SelectionClear");
 					{
 						#ifdef DEBUG_X11_EVENT
 						{
@@ -511,9 +504,7 @@ void X11_Run(void)
 					}
 					break;
 				case SelectionNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event SelectionNotify");
-					#endif
+					X11_INFO("X11 event SelectionNotify");
 					if (event.xselection.property == None) {
 						EWOL_VERBOSE("    ==> no data ...");
 					} else {
@@ -548,9 +539,7 @@ void X11_Run(void)
 					}
 					break;
 				case SelectionRequest:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event SelectionRequest");
-					#endif
+					X11_INFO("X11 event SelectionRequest");
 					{
 						XSelectionRequestEvent *req=&(event.xselectionrequest);
 						#ifdef DEBUG_X11_EVENT
@@ -631,69 +620,50 @@ void X11_Run(void)
 					break;
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case Expose:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event Expose");
-					#endif
+					X11_INFO("X11 event Expose");
 					break;
 				case GraphicsExpose:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event GraphicsExpose");
-					#endif
+					X11_INFO("X11 event GraphicsExpose");
 					break;
 				case NoExpose:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event NoExpose");
-					#endif
+					X11_INFO("X11 event NoExpose");
 					break;
 				case CreateNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event CreateNotify");
-					#endif
+					X11_INFO("X11 event CreateNotify");
 					break;
 				case DestroyNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event DestroyNotify");
-					#endif
+					X11_INFO("X11 event DestroyNotify");
 					break;
 				case GravityNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event GravityNotify");
-					#endif
+					X11_INFO("X11 event GravityNotify");
 					break;
 				case VisibilityNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event VisibilityNotify");
-					#endif
+					X11_INFO("X11 event VisibilityNotify");
 					break;
 				case CirculateNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event CirculateNotify");
-					#endif
+					X11_INFO("X11 event CirculateNotify");
 					break;
 				case ReparentNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event ReparentNotify");
-					#endif
+					X11_INFO("X11 event ReparentNotify");
 					break;
 				case PropertyNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event PropertyNotify");
-					#endif
+					X11_INFO("X11 event PropertyNotify");
 					break;
 				case ConfigureNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event ConfigureNotify");
-					#endif
-					m_originX = event.xconfigure.x;
-					m_originY = event.xconfigure.y;
-					m_currentHeight = event.xconfigure.height;
-					m_currentWidth = event.xconfigure.width;
-					eSystem::Resize(event.xconfigure.width, event.xconfigure.height);
+					X11_INFO("X11 event ConfigureNotify");
+					if (m_display == event.xconfigure.display) {
+						//EWOL_INFO("X11 event ConfigureNotify event=" << (int32_t)event.xconfigure.event << "  Window=" << (int32_t)event.xconfigure.window << "  above=" << (int32_t)event.xconfigure.above << "  border_width=" << (int32_t)event.xconfigure.border_width );
+						m_originX = event.xconfigure.x;
+						m_originY = event.xconfigure.y;
+						X11_INFO("X11 configure windows position : (" << m_originX << "," << m_originY << ")");
+						m_currentHeight = event.xconfigure.height;
+						m_currentWidth = event.xconfigure.width;
+						X11_INFO("X11 configure windows size : (" << m_currentHeight << "," << m_currentWidth << ")");
+						eSystem::Resize(event.xconfigure.width, event.xconfigure.height);
+					}
 					break;
 				case ButtonPress:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event ButtonPress");
-					#endif
+					X11_INFO("X11 event ButtonPress");
 					m_cursorEventX = event.xbutton.x;
 					m_cursorEventY = (m_currentHeight-event.xbutton.y);
 					if (event.xbutton.button < NB_MAX_INPUT) {
@@ -702,9 +672,7 @@ void X11_Run(void)
 					eSystem::SetMouseState(event.xbutton.button, true, (float)event.xbutton.x, (float)m_cursorEventY);
 					break;
 				case ButtonRelease:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event ButtonRelease");
-					#endif
+					X11_INFO("X11 event ButtonRelease");
 					m_cursorEventX = event.xbutton.x;
 					m_cursorEventY = (m_currentHeight-event.xbutton.y);
 					if (event.xbutton.button < NB_MAX_INPUT) {
@@ -713,69 +681,72 @@ void X11_Run(void)
 					eSystem::SetMouseState(event.xbutton.button, false, (float)event.xbutton.x, (float)m_cursorEventY);
 					break;
 				case EnterNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event EnterNotify");
-					#endif
+					X11_INFO("X11 event EnterNotify");
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = (m_currentHeight-event.xcrossing.y);
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"EnterNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
 					//gui_uniqueWindows->GenEventInput(0, ewol::EVENT_INPUT_TYPE_ENTER, (float)event.xcrossing.x, (float)event.xcrossing.y);
+					m_curentGrabDelta -= vec2(m_originX, -m_originY);
+					EWOL_DEBUG("change grab delta of : " << vec2(m_originX, m_originY) );
 					break;
 				case LeaveNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event LeaveNotify");
-					#endif
+					X11_INFO("X11 event LeaveNotify");
 					m_cursorEventX = event.xcrossing.x;
 					m_cursorEventY = (m_currentHeight-event.xcrossing.y);
 					//EWOL_DEBUG("X11 event : " << event.type << " = \"LeaveNotify\" (" << (float)event.xcrossing.x << "," << (float)event.xcrossing.y << ")");
+					m_curentGrabDelta += vec2(m_originX, -m_originY);
+					EWOL_DEBUG("change grab delta of : " << vec2(m_originX, m_originY) );
 					break;
 				case MotionNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event MotionNotify");
-					#endif
-					m_cursorEventX = event.xmotion.x;
-					m_cursorEventY = (m_currentHeight-event.xmotion.y);
-					{
+					X11_INFO("X11 event MotionNotify");
+					if(    true==m_grabAllEvent
+					    && event.xmotion.x == (int32_t)m_forcePos.x
+					    && event.xmotion.y == (int32_t)m_forcePos.y) {
+						X11_VERBOSE("X11 reject mouse move (grab mode)");
+						// we get our requested position...
+						m_positionChangeRequested = false;
+						m_curentGrabDelta = vec2(0,0);
+					} else {
+						m_cursorEventX = event.xmotion.x;
+						m_cursorEventY = (m_currentHeight-event.xmotion.y);
+						if(true==m_grabAllEvent) {
+							m_cursorEventX -= m_forcePos.x;
+							m_cursorEventY -= (m_currentHeight-m_forcePos.y);
+						}
+						vec2 newDelta = vec2(m_cursorEventX, m_cursorEventY);
+						if(true==m_grabAllEvent) {
+							m_cursorEventX -= m_curentGrabDelta.x;
+							m_cursorEventY -= m_curentGrabDelta.y;
+						}
+						m_curentGrabDelta = newDelta;
 						// For compatibility of the Android system : 
 						bool findOne = false;
 						for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 							if (true == inputIsPressed[iii]) {
-								EWOL_VERBOSE("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
-								eSystem::SetMouseMotion(iii, (float)event.xmotion.x, (float)(m_currentHeight-event.xmotion.y));
+								X11_DEBUG("X11 event: bt=" << iii << " " << event.type << " = \"MotionNotify\" (" << m_cursorEventX << "," << m_cursorEventY << ")");
+								eSystem::SetMouseMotion(iii, m_cursorEventX, m_cursorEventY);
 								findOne = true;
 							}
 						}
 						if (false == findOne) {
-							EWOL_VERBOSE("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
-							eSystem::SetMouseMotion(0, (float)event.xmotion.x, (float)(m_currentHeight-event.xmotion.y));
+							X11_DEBUG("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << m_cursorEventX << "," << m_cursorEventY << ")");
+							eSystem::SetMouseMotion(0, m_cursorEventX, m_cursorEventY);
+						}
+						if (true==m_grabAllEvent) {
+							if (m_positionChangeRequested == false) {
+								X11_DEBUG("X11 Set pointer position : " << m_forcePos);
+								XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x, m_forcePos.y);
+								XFlush(m_display);
+								m_positionChangeRequested = true;
+							}
 						}
 					}
-					if (m_grabAllEvent == true) {
-						XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_currentWidth/2, m_currentHeight/2);
-						XFlush(m_display);
-						XEvent nev;
-						// remove next generated event ...
-						XNextEvent(m_display, &nev);
-					}
-					/*
-					if (m_grabAllEvent == true) {
-						EWOL_DEBUG("X11 mouse move(" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
-						if (BadWindow == XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, 200, 200)) {
-							EWOL_WARNING("X11 mouse mouve (BadWindow)");
-						}
-						XSync(m_display, False);
-					}
-					*/
 					break;
 				case FocusIn:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event FocusIn");
-					#endif
+					X11_INFO("X11 event FocusIn");
 					break;
 				case FocusOut:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event : FocusOut");
-					#endif
+					X11_INFO("X11 event : FocusOut");
 					break;
 				case KeyPress:
 				case KeyRelease:
@@ -793,13 +764,9 @@ void X11_Run(void)
 							break;
 						}
 					}
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
-					#endif
+					X11_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					{
-						#ifdef DEBUG_X11_EVENT
-							EWOL_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
-						#endif
+						X11_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
 						if (event.xkey.state & (1<<0) ) {
 							//EWOL_DEBUG("    Special Key : SHIFT");
 							guiKeyBoardMode.shift = true;
@@ -955,21 +922,15 @@ void X11_Run(void)
 				//case DestroyNotify:
 				//	break;
 				case MapNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event : MapNotify");
-					#endif
+					X11_INFO("X11 event : MapNotify");
 					eSystem::Show();
 					break;
 				case UnmapNotify:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event : UnmapNotify");
-					#endif
+					X11_INFO("X11 event : UnmapNotify");
 					eSystem::Hide();
 					break;
 				default:
-					#ifdef DEBUG_X11_EVENT
-						EWOL_INFO("X11 event : " << event.type << " = \"???\"");
-					#endif
+					X11_INFO("X11 event : " << event.type << " = \"???\"");
 					break;
 			}
 		}
@@ -980,9 +941,6 @@ void X11_Run(void)
 				XSync(m_display,0);
 			}
 		}
-		#ifdef DEBUG_X11_EVENT
-			//EWOL_INFO("X11 endEvent --- ");
-		#endif
 	}
 };
 
@@ -1065,9 +1023,7 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 
 void guiInterface::Stop(void)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: Stop");
-	#endif
+	X11_INFO("X11-API: Stop");
 	m_run = false;
 }
 
@@ -1085,9 +1041,7 @@ void guiInterface::KeyboardHide(void)
 
 void guiInterface::ChangeSize(ivec2 size)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: ChangeSize");
-	#endif
+	X11_INFO("X11-API: ChangeSize=" << size);
 	m_currentHeight = size.y;
 	m_currentWidth = size.x;
 	XResizeWindow(m_display, WindowHandle, size.x, size.y);
@@ -1096,58 +1050,121 @@ void guiInterface::ChangeSize(ivec2 size)
 
 void guiInterface::ChangePos(ivec2 pos)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: ChangePos");
-	#endif
+	X11_INFO("X11-API: ChangePos=" << pos);
 	XMoveWindow(m_display, WindowHandle, pos.x, pos.y);
+	m_originX = pos.x;
+	m_originY = pos.y;
 }
 
 
 void guiInterface::GetAbsPos(ivec2& pos)
 {
-	#ifdef DEBUG_X11_EVENT
-		EWOL_INFO("X11: GetAbsPos");
-	#endif
+	X11_INFO("X11-API: GetAbsPos");
 	int tmp;
 	unsigned int tmp2;
 	Window fromroot, tmpwin;
 	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &pos.x, &pos.y, &tmp, &tmp, &tmp2);
 }
 
-void guiInterface::CursorDisplay(bool isVisible)
+#include <X11/cursorfont.h>
+// select the current cursor to display :
+static ewol::cursorDisplay_te l_currentCursor = ewol::cursorArrow;
+
+void guiInterface::SetCursor(ewol::cursorDisplay_te newCursor)
 {
-	if (false == isVisible) {
-		EWOL_DEBUG("Hide Cursor");
-		Cursor invisibleCursor;
-		Pixmap bitmapNoData;
-		XColor black;
-		static char noData[] = { 0,0,0,0,0,0,0,0 };
-		black.red = 0;
-		black.green = 0;
-		black.blue = 0;
-		bitmapNoData = XCreateBitmapFromData(m_display, WindowHandle, noData, 8, 8);
-		invisibleCursor = XCreatePixmapCursor(m_display, bitmapNoData, bitmapNoData, 
-		                                     &black, &black, 0, 0);
-		XDefineCursor(m_display,WindowHandle, invisibleCursor);
-		XFreeCursor(m_display, invisibleCursor);
-	} else {
-		EWOL_DEBUG("Show Cursor");
+	if (newCursor != l_currentCursor) {
+		X11_DEBUG("X11-API: Set New Cursor : " << newCursor);
+		// undefine previous cursors ...
 		XUndefineCursor(m_display, WindowHandle);
+		// set the new one :
+		l_currentCursor = newCursor;
+		Cursor myCursor = None;
+		switch (l_currentCursor) {
+			case ewol::cursorNone:
+				{
+					Pixmap bitmapNoData;
+					XColor black;
+					static char noData[] = { 0,0,0,0,0,0,0,0 };
+					black.red = 0;
+					black.green = 0;
+					black.blue = 0;
+					bitmapNoData = XCreateBitmapFromData(m_display, WindowHandle, noData, 8, 8);
+					myCursor = XCreatePixmapCursor(m_display, bitmapNoData, bitmapNoData, 
+					                               &black, &black, 0, 0);
+				}
+				break;
+			case ewol::cursorLeftArrow:
+				myCursor = XCreateFontCursor(m_display, XC_top_left_arrow);
+				break;
+			case ewol::cursorInfo:
+				myCursor = XCreateFontCursor(m_display, XC_hand1);
+				break;
+			case ewol::cursorDestroy:
+				myCursor = XCreateFontCursor(m_display, XC_pirate);
+				break;
+			case ewol::cursorHelp:
+				myCursor = XCreateFontCursor(m_display, XC_question_arrow);
+				break;
+			case ewol::cursorCycle:
+				myCursor = XCreateFontCursor(m_display, XC_exchange);
+				break;
+			case ewol::cursorSpray:
+				myCursor = XCreateFontCursor(m_display, XC_spraycan);
+				break;
+			case ewol::cursorWait:
+				myCursor = XCreateFontCursor(m_display, XC_watch);
+				break;
+			case ewol::cursorText:
+				myCursor = XCreateFontCursor(m_display, XC_xterm);
+				break;
+			case ewol::cursorCrossHair:
+				myCursor = XCreateFontCursor(m_display, XC_crosshair);
+				break;
+			case ewol::cursorSlideUpDown:
+				myCursor = XCreateFontCursor(m_display, XC_sb_v_double_arrow);
+				break;
+			case ewol::cursorSlideLeftRight:
+				myCursor = XCreateFontCursor(m_display, XC_sb_h_double_arrow);
+				break;
+			case ewol::cursorResizeUp:
+				myCursor = XCreateFontCursor(m_display, XC_top_side);
+				break;
+			case ewol::cursorResizeDown:
+				myCursor = XCreateFontCursor(m_display, XC_bottom_side);
+				break;
+			case ewol::cursorResizeLeft:
+				myCursor = XCreateFontCursor(m_display, XC_left_side);
+				break;
+			case ewol::cursorResizeRight:
+				myCursor = XCreateFontCursor(m_display, XC_right_side);
+				break;
+			case ewol::cursorCornerTopLeft:
+				myCursor = XCreateFontCursor(m_display, XC_top_left_corner);
+				break;
+			case ewol::cursorCornerTopRight:
+				myCursor = XCreateFontCursor(m_display, XC_top_right_corner);
+				break;
+			case ewol::cursorCornerButtomLeft:
+				myCursor = XCreateFontCursor(m_display, XC_bottom_right_corner);
+				break;
+			case ewol::cursorCornerButtomRight:
+				myCursor = XCreateFontCursor(m_display, XC_bottom_left_corner);
+				break;
+			default :
+				// nothing to do ... basic pointer ...
+				break;
+		}
+		if (myCursor != None) {
+			XDefineCursor(m_display,WindowHandle, myCursor);
+			XFreeCursor(m_display, myCursor);
+		}
 	}
 }
 
-void guiInterface::GrabPointerEvents(bool isGrabbed)
+void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
 {
 	if (true == isGrabbed) {
-		EWOL_DEBUG("Grab Events");
-		
-						//EWOL_DEBUG("X11 mouse move(" << (float)event.xmotion.x << "," << (float)(m_currentHeight-event.xmotion.y) << ")");
-						if (BadWindow == XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, 20, 20)) {
-							EWOL_WARNING("X11 mouse mouve (BadWindow)");
-						}
-						XSync(m_display, False);
-						XFlush(m_display);
-						/*
+		X11_DEBUG("X11-API: Grab Events");
 		int32_t test = XGrabPointer(m_display,RootWindow(m_display, DefaultScreen(m_display)), True,
 		                            ButtonPressMask |
 		                            ButtonReleaseMask |
@@ -1177,12 +1194,21 @@ void guiInterface::GrabPointerEvents(bool isGrabbed)
 					break;
 			}
 		}
-		*/
+		m_forcePos = forcedPosition;
+		m_forcePos.y = m_currentHeight - m_forcePos.y;
 		m_grabAllEvent = true;
+		// change the pointer position to generate a good mouving at the start ...
+		X11_DEBUG("X11-API: Set pointer position : " << m_forcePos);
+		XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x, m_forcePos.y);
+		XFlush(m_display);
+		m_positionChangeRequested = true;
+		m_curentGrabDelta = vec2(0,0);
 	} else {
-		EWOL_DEBUG("Un-Grab Events");
+		X11_DEBUG("X11-API: Un-Grab Events");
 		XUngrabPointer(m_display, CurrentTime);
 		m_grabAllEvent = false;
+		m_forcePos = vec2(0,0);
+		m_curentGrabDelta = vec2(0,0);
 	}
 }
 
@@ -1206,8 +1232,6 @@ int guiInterface::main(int argc, const char *argv[])
 	// get the icon file : 
 	etk::UString myIcon = APP_Icon();
 	SetIcon(myIcon);
-	CursorDisplay(true);
-	//GrabPointerEvents(true);
 	// Run ...
 	X11_Run();
 	// close X11 :

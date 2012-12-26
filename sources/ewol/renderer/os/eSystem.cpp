@@ -40,6 +40,16 @@ void eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* dest
 }
 
 
+void eSystem::InputEventGrabPointer(ewol::Widget* widget)
+{
+	l_managementInput.GrabPointer(widget);
+}
+
+void eSystem::InputEventUnGrabPointer(void)
+{
+	l_managementInput.UnGrabPointer();
+}
+
 typedef enum {
 	THREAD_NONE,
 	THREAD_INIT,

@@ -45,71 +45,58 @@ namespace eSystem
 	
 	// return true if a flush is needed
 	bool Draw(bool displayEveryTime);
-	
 	/**
 	 * @brief Inform object that an other object is removed ...
 	 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
 	 * @note : Sub classes must call this class
-	 * @return ---
 	 */
 	void OnObjectRemove(ewol::EObject * removeObject);
-	
 	/**
 	 * @brief reset event management for the IO like Input ou Mouse or keyborad
-	 * @param ---
-	 * @return ---
 	 */
 	void ResetIOEvent(void);
-	
 	/**
 	 * @brief Inform the system that the OpenGL constext has been destroy ==> use to automaticly reload the texture and other thinks ...
-	 * @param ---
-	 * @return ---
 	 */
 	void OpenGlContextDestroy(void);
-	
 	/**
 	 * @brief Inform the system that the Application has been killed
-	 * @param ---
-	 * @return ---
 	 */
 	void OnKill(void);
-	
 	/**
 	 * @brief set the current windows to display :
 	 * @param windows windows that might be displayed
-	 * @return ---
 	 */
 	void SetCurrentWindows(ewol::Windows * windows);
-	
 	/**
 	 * @brief Get the current windows that is displayed
-	 * @param ---
 	 * @return the current handle on the windows (can be null)
 	 */
 	ewol::Windows* GetCurrentWindows(void);
-	
 	/**
 	 * @brief Get the current windows size
-	 * @param ---
 	 * @return the current size ...
 	 */
 	ivec2 GetSize(void);
-	
 	/**
 	 * @brief Redraw all the windows
-	 * @param ---
-	 * @return ---
 	 */
 	void ForceRedrawAll(void);
-	
 	/**
 	 * @brief This is to transfert the event from one widget to another one
 	 * @param source the widget where the event came from
 	 * @param destination the widget where the event mitgh be generated now
-	 * @return ---
 	 */
 	void InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination);
+	/**
+	 * @brief This fonction lock the pointer properties to move in relative instead of absolute
+	 * @param[in] widget The widget that lock the pointer events
+	 */
+	void InputEventGrabPointer(ewol::Widget* widget);
+	/**
+	 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
+	 */
+	void InputEventUnGrabPointer(void);
 };
 
 

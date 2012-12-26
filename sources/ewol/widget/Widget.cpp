@@ -11,6 +11,9 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 #include <ewol/renderer/openGL.h>
+#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/os/gui.h>
+
 
 
 #undef __class__
@@ -38,6 +41,8 @@ ewol::Widget::Widget(void) :
 	m_hasFocus = false;
 	m_hide = false;
 	m_zoom = 1.0;
+	m_grabCursor = false;
+	m_cursorDisplay = ewol::cursorArrow;
 }
 
 
@@ -456,3 +461,38 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& special, uniChar_t unicodeV
 }
 
 
+void ewol::Widget::GrabCursor(void)
+{
+	if (false == m_grabCursor) {
+		eSystem::InputEventGrabPointer(this);
+		m_grabCursor = true;
+	}
+}
+
+void ewol::Widget::UnGrabCursor(void)
+{
+	if (true==m_grabCursor) {
+		eSystem::InputEventUnGrabPointer();
+		m_grabCursor = false;
+	}
+}
+
+
+bool ewol::Widget::GetGrabStatus(void)
+{
+	return m_grabCursor;
+}
+
+
+
+void ewol::Widget::SetCursor(ewol::cursorDisplay_te newCursor)
+{
+	EWOL_DEBUG("Change Cursor in " << newCursor);
+	m_cursorDisplay = newCursor;
+	guiInterface::SetCursor(m_cursorDisplay);
+}
+
+ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
+{
+	return m_cursorDisplay;
+}

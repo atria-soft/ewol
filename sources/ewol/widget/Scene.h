@@ -60,8 +60,6 @@ namespace widget {
 		// camera properties :
 		private:
 			float m_zoom;
-			int32_t modeMoving;
-			vec2 oldCursorPos;
 		public:
 			/**
 			 * @brief Get the current camera reference for the scene rendering
@@ -93,6 +91,10 @@ namespace widget {
 			virtual bool OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData);
 			// Derived function
 			virtual bool OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey);
+			// Derived function
+			virtual void OnGetFocus(void);
+			// Derived function
+			virtual void OnLostFocus(void);
 	};
 };
 

@@ -51,17 +51,13 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
 	eventTable[idInput].destinationInputId = 0;
 	eventTable[idInput].lastTimeEvent = 0;
 	eventTable[idInput].curentWidgetEvent = NULL;
-	eventTable[idInput].origin.x = 0;
-	eventTable[idInput].origin.y = 0;
-	eventTable[idInput].size.x = 99999999;
-	eventTable[idInput].size.y = 99999999;
-	eventTable[idInput].downStart.x = 0;
-	eventTable[idInput].downStart.y = 0;
+	eventTable[idInput].origin = vec2(0,0);
+	eventTable[idInput].size = vec2(99999999,99999999);
+	eventTable[idInput].downStart = vec2(0,0);
 	eventTable[idInput].isDown = false;
 	eventTable[idInput].isInside = false;
 	eventTable[idInput].nbClickEvent = 0;
-	eventTable[idInput].posEvent.x = 0;
-	eventTable[idInput].posEvent.y = 0;
+	eventTable[idInput].posEvent = vec2(0,0);
 }
 
 
@@ -113,6 +109,21 @@ void ewol::eSystemInput::TransfertEvent(ewol::Widget* source, ewol::Widget* dest
 	}
 }
 
+void ewol::eSystemInput::GrabPointer(ewol::Widget* widget)
+{
+	if(NULL==widget) {
+		return;
+	}
+	m_grabWidget = widget;
+	guiInterface::GrabPointerEvents(true, widget->GetOrigin() + widget->GetSize()/2.0f);
+}
+
+void ewol::eSystemInput::UnGrabPointer(void)
+{
+	m_grabWidget = NULL;
+	guiInterface::GrabPointerEvents(false, vec2(0,0));
+}
+
 void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
@@ -147,6 +158,7 @@ void ewol::eSystemInput::Reset(void)
 
 ewol::eSystemInput::eSystemInput(void)
 {
+	m_grabWidget = NULL;
 	SetDpi(200);
 	EWOL_INFO("Init");
 	Reset();
@@ -203,8 +215,13 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
 		ewol::Widget* tmpWidget = NULL;
-		if (NULL != tmpWindows) {
-			tmpWidget = tmpWindows->GetWidgetAtPos(pos);
+		if (m_grabWidget != NULL) {
+			// grab all events ...
+			tmpWidget = m_grabWidget;
+		} else {
+			if (NULL != tmpWindows) {
+				tmpWidget = tmpWindows->GetWidgetAtPos(pos);
+			}
 		}
 		if(    tmpWidget != eventTable[pointerID].curentWidgetEvent
 		    || (    true == eventTable[pointerID].isInside
@@ -221,11 +238,7 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 			// Set the element inside ...
 			eventTable[pointerID].isInside = true;
 			// get destination widget :
-			if(NULL != tmpWindows) {
-				eventTable[pointerID].curentWidgetEvent = tmpWindows->GetWidgetAtPos(pos);
-			} else {
-				eventTable[pointerID].curentWidgetEvent = NULL;
-			}
+			eventTable[pointerID].curentWidgetEvent = tmpWidget;
 			if (NULL == eventTable[pointerID].curentWidgetEvent) {
 				eventTable[pointerID].isInside = false;
 			}
@@ -322,7 +335,11 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 			eventTable[pointerID].isInside = true;
 			// get destination widget :
 			if(NULL != tmpWindows) {
-				eventTable[pointerID].curentWidgetEvent = tmpWindows->GetWidgetAtPos(pos);
+				if (m_grabWidget != NULL && type == ewol::keyEvent::typeMouse) {
+					eventTable[pointerID].curentWidgetEvent = m_grabWidget;
+				} else {
+					eventTable[pointerID].curentWidgetEvent = tmpWindows->GetWidgetAtPos(pos);
+				}
 			} else {
 				eventTable[pointerID].curentWidgetEvent = NULL;
 			}
@@ -366,7 +383,10 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 						nbClickMax = 5;
 					}
 				}
-				if(eventTable[pointerID].nbClickEvent < nbClickMax) {
+				// in grab mode the single to quinte event are not generated ....
+				if(    (    m_grabWidget == NULL
+				         || type != ewol::keyEvent::typeMouse )
+				    && eventTable[pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :
 					eventTable[pointerID].nbClickEvent++;
 					EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [" << eventTable[pointerID].nbClickEvent << "] " << pos);

@@ -20,8 +20,10 @@ namespace ewol {
 #include <ewol/debug.h>
 #include <ewol/clipBoard.h>
 #include <ewol/key.h>
+#include <ewol/cursor.h>
 
 namespace ewol {
+	
 	class DrawProperty{
 		public :
 			ivec2 m_windowsSize;
@@ -52,14 +54,11 @@ namespace ewol {
 		public:
 			/**
 			 * @brief Constructor of the widget classes
-			 * @param ---
 			 * @return (no execption generated (not managed in embended platform))
 			 */
 			Widget(void);
 			/**
 			 * @brief Destructor of the widget classes
-			 * @param ---
-			 * @return ---
 			 */
 			virtual ~Widget(void);
 			/**
@@ -88,12 +87,10 @@ namespace ewol {
 			/**
 			 * @brief Set the zoom property of the widget
 			 * @param[in] newVal newZoom value
-			 * @return ---
 			 */
 			void SetZoom(float newVal);
 			/**
 			 * @brief Get the zoom property of the widget
-			 * @param ---
 			 * @return the current zoom value
 			 */
 			float GetZoom(void);
@@ -102,12 +99,10 @@ namespace ewol {
 			 * This represent the absolute origin in the program windows
 			 * @param[in] x Position ot hte horizantal origin
 			 * @param[in] y Position ot hte vertical origin
-			 * @return ---
 			 */
 			void SetOrigin(float x, float y);
 			/**
 			 * @brief Get the origin (obsolute position in the windows)
-			 * @param ---
 			 * @return coordonate of the origin requested
 			 */
 			vec2 GetOrigin(void);
@@ -122,7 +117,6 @@ namespace ewol {
 			 *        By default this save the widget availlable size in the widget size
 			 * @param[in] availlableX Availlable horisantal pixel size
 			 * @param[in] availlableY Availlable vertical pixel size
-			 * @return ---
 			 */
 			// TODO : Remove bool ==> deprecated ...
 			// TODO : Rename in SetSize()
@@ -130,8 +124,6 @@ namespace ewol {
 			//update the min Size ... and the expend parameters for the sizer
 			/**
 			 * @brief Calculate the minimum size of the widget that is needed to display or the user requested)
-			 * @param ---
-			 * @return ---
 			 */
 			// TODO : Remove bool ==> deprecated ...
 			virtual bool CalculateMinSize(void);
@@ -139,96 +131,78 @@ namespace ewol {
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] x Set minimum horizontal size (-1 : no requested)
 			 * @param[in] y Set minimum vertical size (-1 : no requested)
-			 * @return ---
 			 */
 			virtual void SetMinSize(float x=-1, float y=-1);
 			/**
 			 * @brief Get the current calculated min size
-			 * @param ---
 			 * @return the size requested
 			 */
 			vec2 GetMinSize(void);
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] size The new maximum size requested (vec2(-1,-1) to unset)
-			 * @return ---
 			 */
 			virtual void SetMaxSize(vec2 size);
 			/**
 			 * @brief Get the current maximum size
-			 * @param ---
 			 * @return the size requested
 			 */
 			vec2 GetMaxSize(void);
 			/**
 			 * @brief Get the widget size
-			 * @param ---
 			 * @return Requested size
 			 */
 			vec2 GetSize(void);
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
-			 * @return ---
 			 */
 			virtual void SetExpendX(bool newExpend=false);
 			/**
 			 * @brief Get the horizontal expend capabilities
-			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
 			virtual bool CanExpentX(void);
 			/**
 			 * @brief Set the vertical expend capacity
 			 * @param[in] newExpend new Expend state
-			 * @return ---
 			 */
 			virtual void SetExpendY(bool newExpend=false);
 			/**
 			 * @brief Get the vertical expend capabilities
-			 * @param ---
 			 * @return boolean repensent the capacity to expend
 			 */
 			virtual bool CanExpentY(void);
 			/**
 			 * @brief Set the horizontal filling capacity
 			 * @param[in] newFill new fill state
-			 * @return ---
 			 */
 			virtual void SetFillX(bool newFill=false);
 			/**
 			 * @brief Get the horizontal filling capabilities
-			 * @param ---
 			 * @return boolean repensent the capacity to horizontal filling
 			 */
 			bool CanFillX(void);
 			/**
 			 * @brief Set the vertical filling capacity
 			 * @param[in] newFill new fill state
-			 * @return ---
 			 */
 			virtual void SetFillY(bool newFill=false);
 			/**
 			 * @brief Get the vertical filling capabilities
-			 * @param ---
 			 * @return boolean repensent the capacity to vertical filling
 			 */
 			bool CanFillY(void);
 			/**
 			 * @brief Set the widget hidden
-			 * @param ---
-			 * @return ---
 			 */
 			void Hide(void);
 			/**
 			 * @brief Set the widget visible
-			 * @param ---
-			 * @return ---
 			 */
 			void Show(void);
 			/**
 			 * @brief Get the visibility of the widget
-			 * @param ---
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
 			bool IsHide(void) { return m_hide; };
@@ -243,51 +217,40 @@ namespace ewol {
 		public:
 			/**
 			 * @brief Get the focus state of the widget
-			 * @param ---
 			 * @return Focus state
 			 */
 			bool GetFocus(void) { return m_hasFocus;};
 			/**
 			 * @brief Get the capability to have focus
-			 * @param ---
 			 * @return State capability to have focus
 			 */
 			bool CanHaveFocus(void) { return m_canFocus;};
 			/**
 			 * @brief Set focus on this widget
-			 * @param ---
 			 * @return return true if the widget keep the focus
 			 */
 			bool SetFocus(void);
 			/**
 			 * @brief Remove the focus on this widget
-			 * @param ---
 			 * @return return true if the widget have release his focus (if he has it)
 			 */
 			bool RmFocus(void);
 			/**
 			 * @brief Set the capability to have the focus
 			 * @param[in] canFocusState new focus capability
-			 * @return ---
 			 */
 			void SetCanHaveFocus(bool canFocusState);
 			/**
 			 * @brief Keep the focus on this widget ==> this remove the previous focus on all other widget
-			 * @param ---
-			 * @return ---
 			 */
 			void KeepFocus(void);
 		protected:
 			/**
 			 * @brief Event of the focus has been grep by the current widget
-			 * @param ---
-			 * @return ---
 			 */
 			virtual void OnGetFocus(void) {};
 			/**
 			 * @brief Event of the focus has been lost by the current widget
-			 * @param ---
-			 * @return ---
 			 */
 			virtual void OnLostFocus(void) {};
 		
@@ -299,14 +262,12 @@ namespace ewol {
 		public:
 			/**
 			 * @brief Get the number of mouse event supported
-			 * @param ---
 			 * @return return the number of event that the mouse supported [0..3]
 			 */
 			int32_t GetMouseLimit(void) { return m_limitMouseEvent; };
 			/**
 			 * @brief Get the number of mouse event supported
 			 * @param[in] numberState The number of event that the mouse supported [0..3]
-			 * @return ---
 			 */
 			void SetMouseLimit(int32_t numberState) { m_limitMouseEvent = numberState; };
 		
@@ -317,14 +278,12 @@ namespace ewol {
 			/**
 			 * @brief Request that the current widegt have a periodic call
 			 * @param statusToSet true if the periodic call is needed
-			 * @return ---
 			 */
 			void PeriodicCallSet(bool statusToSet);
 		public:
 			/**
 			 * @brief Periodic call of this widget
 			 * @param localTime curent system time
-			 * @return ---
 			 */
 			virtual void PeriodicCall(int64_t localTime) { };
 			
@@ -364,7 +323,6 @@ namespace ewol {
 			 * @brief Event on a past event ==> this event is asynchronous due to all system does not support direct getting datas
 			 * @note : need to have focus ...
 			 * @param[in] mode Mode of data requested
-			 * @return ---
 			 */
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID) { };
 		
@@ -379,13 +337,10 @@ namespace ewol {
 			 * @param[in] descriptiveString Description string of the shortcut
 			 * @param[in] generateEventId Event generic of the element
 			 * @param[in] data Associate data wit the event
-			 * @return ---
 			 */
 			void ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data="", bool broadcast=false);
 			/**
 			 * @brief Remove all curent shortCut
-			 * @param ---
-			 * @return ---
 			 */
 			void ShortCutClean(void);
 		public:
@@ -406,13 +361,10 @@ namespace ewol {
 			bool         m_needRegenerateDisplay; //!< the display might be done the next regeneration
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
-			 * @param ---
-			 * @return ---
 			 */
 			void MarkToRedraw(void);
 			/**
 			 * @brief Get the need of the redrawing of the widget and reset it to false
-			 * @param ---
 			 * @return true if we need to redraw
 			 * @return false if we have no need to redraw
 			 */
@@ -423,33 +375,52 @@ namespace ewol {
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
 			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
 			 * @param[in] displayProp properties of the current display
-			 * @return ---
 			 */
 			virtual void GenDraw(DrawProperty displayProp);
 		protected:
 			/**
 			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
 			 * @param[in] displayProp properties of the current display
-			 * @return ---
 			 */
 			virtual void OnDraw(DrawProperty& displayProp) { };
 		public:
 			/**
 			 * @brief Event generated when a redraw is needed
-			 * @param ---
-			 * @return ---
 			 */
 			virtual void OnRegenerateDisplay(void) { };
 		// grab cursor mode
 		private:
+			bool m_grabCursor;
+		public:
 			/**
-			 * @brief Grab the cursor (hide it and mouvement is now an offset)
+			 * @brief Grab the cursor : This get all the mouvement of the mouse in PC mode, and generate an ofset instead of a position.
+			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
+			 * @note This done nothing in "Finger" or "Stylet" mode.
 			 */
 			void GrabCursor(void);
 			/**
-			 * @brief Un-Grab the cursor (default mode cursor ofset)
+			 * @brief Un-Grab the cursor (default mode cursor offset)
 			 */
 			void UnGrabCursor(void);
+			/**
+			 * @brief Get the grabbing status of the cursor.
+			 * @return true if the cursor is curently grabbed
+			 */
+			bool GetGrabStatus(void);
+		// DisplayCursorType
+		private:
+			ewol::cursorDisplay_te m_cursorDisplay;
+		public:
+			/**
+			 * @brief Set the cursor display type.
+			 * @param[in] newCursor selected new cursor.
+			 */
+			void SetCursor(ewol::cursorDisplay_te newCursor);
+			/**
+			 * @brief Get the currrent cursor.
+			 * @return the type of the cursor.
+			 */
+			ewol::cursorDisplay_te GetCursor(void);
 		
 
 	}; // end of the class Widget declaration

@@ -72,15 +72,16 @@ namespace guiInterface
 	 */
 	void ForceOrientation(ewol::orientation_te orientation);
 	/**
-	 * @brief Set the cursor visible or not.
-	 * @param isVisible set the cursor visible of hiden (sometime neede to hide system cursor).
-	 */
-	void CursorDisplay(bool isVisible);
-	/**
 	 * @brief Get all the event from the X system
-	 * @param isGrabbed true if all the event will be get, false if we want only ours.
+	 * @param[in] isGrabbed "true" if all the event will be get, false if we want only ours.
+	 * @param[in] forcedPosition the position where the mouse might be reset at  every events ...
 	 */
-	void GrabPointerEvents(bool isGrabbed);
+	void GrabPointerEvents(bool isGrabbed, vec2 forcedPosition);
+	/**
+	 * @brief Set the cursor display type.
+	 * @param[in] newCursor selected new cursor.
+	 */
+	void SetCursor(ewol::cursorDisplay_te newCursor);
 };
 
 

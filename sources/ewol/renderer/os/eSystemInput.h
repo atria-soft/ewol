@@ -20,10 +20,10 @@ namespace ewol
 		int32_t              destinationInputId;
 		int64_t              lastTimeEvent;
 		ewol::Widget*        curentWidgetEvent;
-		vec2 origin;
-		vec2 size;
-		vec2 downStart;
-		vec2 posEvent;
+		vec2                 origin;
+		vec2                 size;
+		vec2                 downStart;
+		vec2                 posEvent;
 		bool                 isDown;
 		bool                 isInside;
 		int32_t              nbClickEvent; // 0 .. 1 .. 2 .. 3
@@ -36,6 +36,9 @@ namespace ewol
 	
 	class eSystemInput
 	{
+		// special grab pointer mode : 
+		private:
+			ewol::Widget*   m_grabWidget;      //!< widget that grab the curent pointer.
 		private:
 			int32_t         m_dpi;
 			inputLimit_ts   m_eventInputLimit;
@@ -100,6 +103,15 @@ namespace ewol
 			 * @return ---
 			 */
 			void TransfertEvent(ewol::Widget* source, ewol::Widget* destination);
+			/**
+			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
+			 * @param[in] widget The widget that lock the pointer events
+			 */
+			void GrabPointer(ewol::Widget* widget);
+			/**
+			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
+			 */
+			void UnGrabPointer(void);
 	};
 	
 };
