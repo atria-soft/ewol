@@ -603,3 +603,16 @@ void guiInterface::ForceOrientation(ewol::orientation_te orientation)
 {
 	SendJava_OrientationChange((int32_t)orientation);
 }
+
+void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
+{
+	// nothing to do ...
+}
+
+void guiInterface::SetCursor(ewol::cursorDisplay_te newCursor)
+{
+	// nothing to do ...
+}
+
+
+

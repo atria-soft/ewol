@@ -15,15 +15,17 @@ download the software :
 
 Compile software and install :
 
-	For this you might use a priject that create binaies or somting else ...
+	For this you might use a project that create binaries or something else ...
 	Show http://github.com/HeeroYui/edn project
 
 Dependency packages
 ===================
 
 	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
-	# if you want to compile with clang : 
+	# if you want to compile with clang :
 	sudo apt-get install clang
+	# if you want to compile for windows :
+	sudo apt-get install mingw32
 
 Copyright (c)
 =============
