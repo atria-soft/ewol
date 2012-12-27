@@ -260,6 +260,18 @@ bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t u
 	
 	EWOL_DEBUG("KB EVENT : \"" << unicodeData << "\"" << "type=" << statusEvent);
 	
+	// escape case :
+	if(unicodeData == 27) {
+		if (statusEvent == ewol::keyEvent::statusDown) {
+			UnGrabCursor();
+			SetCursor(ewol::cursorArrow);
+		}
+		return false;
+	}
+	if (false == GetGrabStatus()) {
+		GrabCursor();
+		SetCursor(ewol::cursorNone);
+	}
 	if(    unicodeData == 'z'
 	    || unicodeData == 'Z') {
 		if (statusEvent == ewol::keyEvent::statusDown) {
@@ -302,13 +314,6 @@ bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t u
 			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
 				m_walk -= WALK_FLAG_RIGHT;
 			}
-		}
-	}
-	// escape case :
-	if(unicodeData == 27) {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			UnGrabCursor();
-			SetCursor(ewol::cursorArrow);
 		}
 	}
 	EWOL_DEBUG("m_walk=" << m_walk);

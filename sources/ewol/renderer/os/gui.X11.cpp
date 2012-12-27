@@ -285,64 +285,169 @@ void guiInterface::SetTitle(etk::UString& title)
 	X11_INFO("X11: Set Title (END)");
 }
 
-/* this variable will contain the ID of the newly created pixmap.    */
-Pixmap icon_pixmap;
+#include <ewol/renderer/resources/image/ImageBMP.h>
+#include <ewol/renderer/resources/image/ImagePNG.h>
+#include <parserSVG/parserSVG.h>
 
-// TODO : I don't understand why it does not work ....
 void SetIcon(etk::UString inputFile)
 {
-	etk::FSNode bitmapFile(inputFile);
-	X11_INFO("X11: try to set icon : " << bitmapFile);
-	// load bitmap
-	if (false == bitmapFile.Exist()) {
-		EWOL_ERROR("X11 Icon File does not Exist ... " << bitmapFile);
-	} else {
-		etk::UString fileExtention = bitmapFile.FileGetExtention();
-		if (fileExtention ==  "bmp") {
-			// pointer to the WM hints structure.
-			XWMHints* win_hints;
-			
-			unsigned int bitmap_width, bitmap_height;
-			int hotspot_x, hotspot_y;
-			int rc = XReadBitmapFile(m_display, WindowHandle,
-			                         "assets/iconEdn.xpm",
-			                         &bitmap_width, &bitmap_height,
-			                         &icon_pixmap,
-			                         &hotspot_x, &hotspot_y);
-			switch (rc) {
-				case BitmapOpenFailed:
-					EWOL_ERROR("XReadBitmapFile - could not open file ");
-					return;
-				case BitmapFileInvalid:
-					EWOL_ERROR("XReadBitmapFile - file doesn't contain a valid bitmap.");
-					return;
-				case BitmapNoMemory:
-					EWOL_ERROR("XReadBitmapFile - not enough memory.");
-					return;
-				case BitmapSuccess:
-					/* bitmap loaded successfully - do something with it... */
-					EWOL_INFO("XReadBitmapFile - bitmap loaded successfully.");
-					break;
-			}
-			// allocate a WM hints structure.
-			win_hints = XAllocWMHints();
-			if (!win_hints) {
-				EWOL_ERROR("XAllocWMHints - out of memory");
-				return;
-			}
-			// initialize the structure appropriately. first, specify which size hints we want to fill in. in our case - setting the icon's pixmap.
-			win_hints->flags = IconPixmapHint;
-			// next, specify the desired hints data. in our case - supply the icon's desired pixmap.
-			win_hints->icon_pixmap = icon_pixmap;
-			// pass the hints to the window manager.
-			XSetWMHints(m_display, WindowHandle, win_hints);
-			EWOL_INFO("    ==> might be done ");
-			// finally, we can free the WM hints structure.
-			XFree(win_hints);
-		} else {
-			EWOL_ERROR("X11 Icon Extention not managed " << bitmapFile << " Sopported extention : .bmp ");
+	draw::Image dataImage;
+	// load data
+	if (true == inputFile.EndWith(".bmp") ) {
+		// generate the texture
+		if (false == ewol::imageBMP::GenerateImage(inputFile, dataImage)) {
+			EWOL_ERROR("Error To load BMP file " << inputFile );
+			return;
 		}
+	} else if (true == inputFile.EndWith(".svg") ) {
+		svg::Parser m_element(inputFile);
+		if (false == m_element.IsLoadOk()) {
+			EWOL_ERROR("Error To load SVG file " << inputFile );
+			return;
+		} else {
+			// generate the texture
+			ivec2 tmpSize(32,32);
+			m_element.GenerateAnImage(tmpSize, dataImage);
+		}
+	} else if (true == inputFile.EndWith(".png") ) {
+		// generate the texture
+		if (false == ewol::imagePNG::GenerateImage(inputFile, dataImage)) {
+			EWOL_ERROR("Error To load PNG file " << inputFile );
+			return;
+		}
+	} else {
+		EWOL_ERROR("Extention not managed " << inputFile << " Sopported extention : .bmp / .svg / .png");
+		return;
 	}
+	int32_t depth = DefaultDepth(m_display, DefaultScreen(m_display) );
+	EWOL_DEBUG("X11 Create icon Size=(" << dataImage.GetWidth() << "," << dataImage.GetHeight() << ") depth=" << depth);
+	switch(depth) {
+		case 8:
+			EWOL_CRITICAL("Not manage pixmap in 8 bit... ==> no icon ...");
+			return;
+		case 16:
+			break;
+		case 24:
+			break;
+		case 32:
+			break;
+		default:
+			EWOL_CRITICAL("Unknow thys type of bitDepth : " << depth);
+			return;
+	}
+	char* tmpVal = new char[4*dataImage.GetWidth()*dataImage.GetHeight()];
+	if (NULL == tmpVal) {
+		EWOL_CRITICAL("Allocation error ...");
+		return;
+	}
+	char* tmpPointer = tmpVal;
+	switch(depth) {
+		case 16:
+			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
+				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+					draw::Color tmpColor = dataImage.Get(pos);
+					int16_t tmpVal =   ((uint16_t)((uint16_t)tmpColor.r>>3))<<11
+					                 + ((uint16_t)((uint16_t)tmpColor.g>>2))<<5
+					                 + ((uint16_t)((uint16_t)tmpColor.b>>3));
+					*tmpPointer++ = (uint8_t)(tmpVal>>8);
+					*tmpPointer++ = (uint8_t)(tmpVal&0x00FF);
+				}
+			}
+			break;
+		case 24:
+			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
+				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+					draw::Color tmpColor = dataImage.Get(pos);
+					*tmpPointer++ = tmpColor.b;
+					*tmpPointer++ = tmpColor.g;
+					*tmpPointer++ = tmpColor.r;
+					tmpPointer++;
+				}
+			}
+			break;
+		case 32:
+			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
+				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+					draw::Color tmpColor = dataImage.Get(pos);
+					*tmpPointer++ = tmpColor.a;
+					*tmpPointer++ = tmpColor.b;
+					*tmpPointer++ = tmpColor.g;
+					*tmpPointer++ = tmpColor.r;
+				}
+			}
+			break;
+		default:
+			return;
+	}
+	
+	XImage* myImage = XCreateImage(m_display,
+	                              m_visual->visual,
+	                              depth,
+	                              ZPixmap,
+	                              0,
+	                              (char*)tmpVal,
+	                              dataImage.GetWidth(),
+	                              dataImage.GetHeight(),
+	                              32,
+	                              0);
+	
+	Pixmap tmpPixmap = XCreatePixmap(m_display, WindowHandle, dataImage.GetWidth(), dataImage.GetHeight(), depth);
+	switch(tmpPixmap) {
+		case BadAlloc:
+			EWOL_ERROR("X11: BadAlloc");
+			break;
+		case BadDrawable:
+			EWOL_ERROR("X11: BadDrawable");
+			break;
+		case BadValue:
+			EWOL_ERROR("X11: BadValue");
+			break;
+		default:
+			EWOL_DEBUG("Create Pixmap OK");
+			break;
+	}
+	GC tmpGC = DefaultGC(m_display, DefaultScreen(m_display) );
+	int error = XPutImage(m_display, tmpPixmap, tmpGC, myImage, 0, 0, 0, 0, dataImage.GetWidth(), dataImage.GetHeight());
+	switch(error) {
+		case BadDrawable:
+			EWOL_ERROR("X11: BadDrawable");
+			break;
+		case BadGC:
+			EWOL_ERROR("X11: BadGC");
+			break;
+		case BadMatch:
+			EWOL_ERROR("X11: BadMatch");
+			break;
+		case BadValue:
+			EWOL_ERROR("X11: BadValue");
+			break;
+		default:
+			EWOL_DEBUG("insert image OK");
+			break;
+	}
+	// allocate a WM hints structure.
+	XWMHints* win_hints = XAllocWMHints();
+	if (!win_hints) {
+		EWOL_ERROR("XAllocWMHints - out of memory");
+		return;
+	}
+	// initialize the structure appropriately. first, specify which size hints we want to fill in. in our case - setting the icon's pixmap.
+	win_hints->flags = IconPixmapHint;
+	// next, specify the desired hints data. in our case - supply the icon's desired pixmap.
+	win_hints->icon_pixmap = tmpPixmap;
+	// pass the hints to the window manager.
+	XSetWMHints(m_display, WindowHandle, win_hints);
+	EWOL_INFO("    ==> might be done ");
+	// finally, we can free the WM hints structure.
+	XFree(win_hints);
+	
+	// Note when we free the pixmap ... the icon is removed ... ==> this is a real memory leek ...
+	//XFreePixmap(m_display, tmpPixmap);
+	
+	myImage->data = NULL;
+	XDestroyImage(myImage);
+	delete[] tmpVal;
+	
 }
 
 
