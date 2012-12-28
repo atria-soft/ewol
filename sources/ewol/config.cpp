@@ -51,3 +51,6 @@ int32_t ewol::config::FontGetDefaultSize(void)
 {
 	return l_fontConfigSize;
 }
+
+
+

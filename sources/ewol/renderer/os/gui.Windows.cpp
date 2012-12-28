@@ -177,15 +177,6 @@ int guiInterface::main(int argc, const char *argv[])
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
 	}
-	guiKeyBoardMode.capLock = false;
-	guiKeyBoardMode.shift = false;
-	guiKeyBoardMode.ctrl = false;
-	guiKeyBoardMode.meta = false;
-	guiKeyBoardMode.alt = false;
-	guiKeyBoardMode.altGr = false;
-	guiKeyBoardMode.verNum = false;
-	guiKeyBoardMode.insert = false;
-	
 	//start the basic thread : 
 	eSystem::Init();
 	// get the icon file : 
@@ -400,7 +391,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					case VK_LMENU:     keyInput = ewol::keyEvent::keyboardAlt;        guiKeyBoardMode.alt     = buttonIsDown; break;
 					case VK_RMENU:     keyInput = ewol::keyEvent::keyboardAltGr;      guiKeyBoardMode.altGr   = buttonIsDown; break;
 					//case :   keyInput = ewol::keyEvent::keyboardContextMenu; break;
-					case VK_NUMLOCK:   keyInput = ewol::keyEvent::keyboardVerNum;     guiKeyBoardMode.verNum  = buttonIsDown; break;
+					case VK_NUMLOCK:   keyInput = ewol::keyEvent::keyboardNumLock;    guiKeyBoardMode.numLock = buttonIsDown; break;
 					case VK_BACK: // DEL
 						tmpChar = 0x00000008;
 						break;
