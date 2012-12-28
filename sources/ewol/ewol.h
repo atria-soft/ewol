@@ -87,7 +87,6 @@ namespace ewol
 	 * @brief This is to transfert the event from one widget to another one
 	 * @param source the widget where the event came from
 	 * @param destination the widget where the event mitgh be generated now
-	 * @return ---
 	 */
 	void InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination);
 	typedef enum {
@@ -96,11 +95,16 @@ namespace ewol
 		SCREEN_ORIENTATION_PORTRAIT,
 	} orientation_te;
 	/**
-	 * @brief 
-	 * @param[in] 
+	 * @brief Force a specific orientation for mobile devices
+	 * @param[in] orientation the requested position.
 	 */
 	void ForceOrientation(ewol::orientation_te orientation);
-	
+	/**
+	 * @brief Set the Icon of the program
+	 * @param[in] icon new filename icon of the curent program.
+	 * @note Does not work on Andoid
+	 */
+	void SetIcon(etk::UString icon);
 };
 
 #endif

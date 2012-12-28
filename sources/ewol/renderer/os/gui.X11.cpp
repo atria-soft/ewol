@@ -289,7 +289,7 @@ void guiInterface::SetTitle(etk::UString& title)
 #include <ewol/renderer/resources/image/ImagePNG.h>
 #include <parserSVG/parserSVG.h>
 
-void SetIcon(etk::UString inputFile)
+void guiInterface::SetIcon(etk::UString inputFile)
 {
 	draw::Image dataImage;
 	// load data
@@ -1334,9 +1334,6 @@ int guiInterface::main(int argc, const char *argv[])
 	X11_Init();
 	//start the basic thread : 
 	eSystem::Init();
-	// get the icon file : 
-	etk::UString myIcon = APP_Icon();
-	SetIcon(myIcon);
 	// Run ...
 	X11_Run();
 	// close X11 :

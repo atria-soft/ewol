@@ -82,13 +82,17 @@ namespace guiInterface
 	 * @param[in] newCursor selected new cursor.
 	 */
 	void SetCursor(ewol::cursorDisplay_te newCursor);
+	/**
+	 * @brief Set the Icon of the program
+	 * @param[in] inputFile new filename icon of the curent program.
+	 */
+	void SetIcon(etk::UString inputFile);
 };
 
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
-void         APP_Init(void);
-void         APP_UnInit(void);
-etk::UString APP_Icon(void);
+void APP_Init(void);
+void APP_UnInit(void);
 
 #define NB_MAX_INPUT                  (20)
 

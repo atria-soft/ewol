@@ -148,6 +148,10 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 	}
 }
 
+void guiInterface::SetIcon(etk::UString inputFile)
+{
+	// TODO : ...
+}
 
 
 #include <windows.h>
@@ -179,10 +183,6 @@ int guiInterface::main(int argc, const char *argv[])
 	}
 	//start the basic thread : 
 	eSystem::Init();
-	// get the icon file : 
-	etk::UString myIcon = APP_Icon();
-	//SetIcon(myIcon);
-	
 	// Run ...
 	Windows_Run();
 	// close windows system :

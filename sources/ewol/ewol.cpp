@@ -135,6 +135,10 @@ void ewol::ForceOrientation(ewol::orientation_te orientation)
 }
 
 
+void ewol::SetIcon(etk::UString icon)
+{
+	guiInterface::SetIcon(icon);
+}
 
 
 

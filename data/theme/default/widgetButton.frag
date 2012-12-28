@@ -2,7 +2,6 @@
 precision mediump float;
 precision mediump int;
 #endif
-
 struct displayProperty {
 	vec2 size;
 	vec2 origin;
@@ -37,7 +36,6 @@ void main(void) {
 	S_colorFg[3] = vec4(0.0,0.7,0.0,0.4);
 	// prevent origin moving ... 
 	vec2 position = v_position - EW_widgetProperty.origin;
-	
 	float specialBorder = S_sizeBorder+S_sizePadding;
 	vec2  endStart = EW_widgetProperty.size - vec2(S_sizePadding) - vec2(S_sizeBorder);
 	vec2  endStop  = EW_widgetProperty.size - vec2(S_sizePadding);
@@ -53,8 +51,9 @@ void main(void) {
 		  ) {
 			gl_FragColor = S_colorBorder;
 		} else {
-			gl_FragColor =   S_colorFg[EW_status.stateOld]*(1.0-EW_status.transition)
-			               + S_colorFg[EW_status.stateNew]*EW_status.transition;
+			// note : int() is needed for the OpenGL ES platform
+			gl_FragColor =   S_colorFg[int(EW_status.stateOld)]*(1.0-EW_status.transition)
+			               + S_colorFg[int(EW_status.stateNew)]*EW_status.transition;
 		}
 	} else {
 		gl_FragColor = S_colorBg;

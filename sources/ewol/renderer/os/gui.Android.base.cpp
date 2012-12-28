@@ -614,5 +614,9 @@ void guiInterface::SetCursor(ewol::cursorDisplay_te newCursor)
 	// nothing to do ...
 }
 
+void guiInterface::SetIcon(etk::UString inputFile)
+{
+	// nothing to do ...
+}
 
 

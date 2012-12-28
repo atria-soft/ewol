@@ -55,8 +55,9 @@ void main(void) {
 			// border ...
 			gl_FragColor = S_colorBorder;
 		} else {
-			gl_FragColor =   S_colorFg[EW_status.stateOld]*(1.0-EW_status.transition)
-			               + S_colorFg[EW_status.stateNew]*EW_status.transition;
+			// note : int() is needed for the OpenGL ES platform
+			gl_FragColor =   S_colorFg[int(EW_status.stateOld)]*(1.0-EW_status.transition)
+			               + S_colorFg[int(EW_status.stateNew)]*EW_status.transition;
 		}
 	} else {
 		gl_FragColor = S_colorBg;
