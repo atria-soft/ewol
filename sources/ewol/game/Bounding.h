@@ -11,6 +11,7 @@
 
 #include "ewol/debug.h"
 #include "ewol/game/MeshObject.h"
+#include <etk/math/Matrix4.h>
 
 namespace game
 {
@@ -26,7 +27,6 @@ namespace game
 	class Bounding
 	{
 		protected :
-			bool         m_markedToUpdate; //!< Marked to update the bounding properties.
 			boundingMode m_mode;           //!< bounding mode of this system.
 		public:
 			/**
@@ -39,10 +39,6 @@ namespace game
 			 */
 			virtual ~Bounding(void);
 			/**
-			 * @brief Request the update of the bounding for the next step
-			 */
-			void NeedUpdate(void) { m_markedToUpdate = true; };
-			/**
 			 * @brief Get the bounding type
 			 * @return the bounding type;
 			 */
@@ -50,8 +46,14 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object) = 0;
+			virtual void Update(game::MeshObject& object, mat4& transformMatrix) {};
+			/**
+			 * Draw the bounding ==> for test ...
+			 */
+			virtual void Draw(void) {};
 	};
+	
+	Bounding* CreateBounding(boundingMode mode);
 	
 };
 

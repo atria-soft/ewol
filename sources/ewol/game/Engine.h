@@ -14,6 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/game/Element.h>
 #include <ewol/game/Gravity.h>
+#include <ewol/game/Contact.h>
 #include <ewol/widget/Widget.h>
 
 
@@ -26,6 +27,7 @@ namespace game
 			etk::Vector<game::Gravity>  m_gravity;          //!< list of gravity element
 			etk::Vector<game::Element*> m_elementsStatic;   //!< List of the game element (bounding does not move)
 			etk::Vector<game::Element*> m_elementsDynamic;  //!< List of the game element (change position all the time)
+			etk::Vector<game::Contact>  m_contacts;         //!< list of all contact that existe in the system
 		public:
 			/**
 			 * @brief Basic constructor.

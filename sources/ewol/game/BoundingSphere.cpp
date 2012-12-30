@@ -21,7 +21,7 @@ game::BoundingSphere::~BoundingSphere(void)
 	
 }
 
-void game::BoundingSphere::Update(game::MeshObject& object)
+void game::BoundingSphere::Update(game::MeshObject& object, mat4& transformMatrix)
 {
 	
 }

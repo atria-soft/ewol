@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __MESH_H__
-#define __MESH_H__
+#ifndef __COLORED_3D_OBJECT_H__
+#define __COLORED_3D_OBJECT_H__
 
 #include <etk/types.h>
 #include <ewol/renderer/resources/Resource.h>
@@ -18,25 +18,20 @@
 
 namespace ewol
 {
-	class Mesh : public ewol::Resource
+	class Colored3DObject : public ewol::Resource
 	{
 		protected:
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;
 			int32_t        m_GLMatrix;
 			int32_t        m_GLColor;
-			int32_t        m_GLtexture;
-			int32_t        m_GLtexID;
 		public:
-			game::MeshObject           m_object;
-		protected:
-			ewol::TextureFile*         m_texture1;
-			etk::Vector<draw::Colorf>  m_coordColor;  //!< internal color of the different point
-		public:
-			Mesh(etk::UString genName);
-			virtual ~Mesh(void);
-			virtual const char* GetType(void) { return "ewol::Mesh"; };
-			virtual void Draw(mat4& positionMatrix);
+			Colored3DObject(etk::UString genName);
+			virtual ~Colored3DObject(void);
+			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
+			virtual void Draw(etk::Vector<vec3>& vertices,
+			                  etk::Vector<draw::Colorf>& color,
+			                  bool updateDepthBuffer=true);
 			
 	};
 };

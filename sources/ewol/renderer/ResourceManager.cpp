@@ -233,7 +233,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
 {
-	EWOL_VERBOSE("KEEP : ShSimpleader : file : \"" << filename << "\"");
+	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << filename << "\"");
 	object = static_cast<ewol::Shader*>(LocalKeep(filename));
 	if (NULL != object) {
 		return true;
@@ -260,6 +260,23 @@ bool ewol::resource::Keep(ewol::Texture*& object)
 	return true;
 }
 
+bool ewol::resource::Keep(ewol::Colored3DObject*& object)
+{
+	EWOL_VERBOSE("KEEP : direct Colored3DObject");
+	etk::UString filename = "?metaObject?Colored3DObject";
+	object = static_cast<ewol::Colored3DObject*>(LocalKeep(filename));
+	if (NULL != object) {
+		return true;
+	}
+	// need to crate a new one ...
+	object = new ewol::Colored3DObject(filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
 
 /**
  * @brief get the next power 2 if the input
@@ -426,6 +443,13 @@ void ewol::resource::Release(ewol::MeshObj*& object)
 }
 
 void ewol::resource::Release(ewol::ConfigFile*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+
+void ewol::resource::Release(ewol::Colored3DObject*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);

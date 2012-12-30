@@ -16,6 +16,8 @@ static int32_t uniqueId = 0;
 
 game::Element::Element(etk::UString meshResource) :
 	m_resource(NULL),
+	m_bounding(NULL),
+	m_matrixNeedUpdate(true),
 	m_scale(1,1,1),
 	m_mass(0.0f),
 	m_uniqueId(uniqueId),
@@ -30,6 +32,7 @@ game::Element::Element(etk::UString meshResource) :
 		m_resource = tmpObject;
 	}
 	uniqueId++;
+	m_bounding = game::CreateBounding(game::BoundingModeAABB);
 }
 
 game::Element::~Element(void)
@@ -39,6 +42,10 @@ game::Element::~Element(void)
 		ewol::resource::Release(tmpObject);
 		m_resource = NULL;
 	}
+	if (NULL != m_bounding) {
+		delete(m_bounding);
+		m_bounding = NULL;
+	}
 }
 
 void game::Element::Draw(void)
@@ -46,6 +53,14 @@ void game::Element::Draw(void)
 	if (NULL != m_resource) {
 		//EWOL_DEBUG("draw " << m_uniqueId);
 		m_resource->Draw(GetMatrix());
+	}
+}
+
+void game::Element::DrawDebug(void)
+{
+	if (NULL != m_bounding) {
+		//EWOL_DEBUG("draw bounding" << m_uniqueId);
+		m_bounding->Draw();
 	}
 }
 

@@ -7,10 +7,10 @@
  */
 
 #include <ewol/game/Bounding.h>
+#include <ewol/game/BoundingAABB.h>
 
 
 game::Bounding::Bounding(boundingMode mode) :
-	m_markedToUpdate(true),
 	m_mode(mode)
 {
 	
@@ -22,3 +22,13 @@ game::Bounding::~Bounding(void)
 }
 
 
+game::Bounding* game::CreateBounding(game::boundingMode mode)
+{
+	switch(mode) {
+		case game::BoundingModeAABB:
+			
+			return new game::BoundingAABB();
+		default:
+			return NULL;
+	}
+}

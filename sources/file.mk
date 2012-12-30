@@ -29,6 +29,7 @@ FILE_LIST+= ewol/renderer/resources/Shader.cpp \
 			ewol/renderer/resources/Mesh.cpp \
 			ewol/renderer/resources/MeshObj.cpp \
 			ewol/renderer/resources/Texture.cpp \
+			ewol/renderer/resources/Colored3DObject.cpp \
 			ewol/renderer/resources/Image.cpp \
 			ewol/renderer/resources/image/ImageBMP.cpp \
 			ewol/renderer/resources/image/ImagePNG.cpp \
@@ -91,6 +92,7 @@ FILE_LIST+= ewol/widget/Scene.cpp \
 			ewol/game/Geometry.cpp \
 			ewol/game/Gravity.cpp \
 			ewol/game/Camera.cpp \
+			ewol/game/Contact.cpp \
 			ewol/game/Map.cpp \
 			ewol/game/Mass.cpp \
 			ewol/game/Sky.cpp

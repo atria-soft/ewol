@@ -21,7 +21,7 @@ game::BoundingPlane::~BoundingPlane(void)
 	
 }
 
-void game::BoundingPlane::Update(game::MeshObject& object)
+void game::BoundingPlane::Update(game::MeshObject& object, mat4& transformMatrix)
 {
 	
 }

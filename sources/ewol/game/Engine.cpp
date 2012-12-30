@@ -96,6 +96,18 @@ void game::Engine::Draw(ewol::DrawProperty& displayProp)
 			m_elementsDynamic[iii]->Draw();
 		}
 	}
+	#ifdef DEBUG
+		for (int32_t iii=0; iii<m_elementsStatic.Size() ; iii++) {
+			if (NULL != m_elementsStatic[iii]) {
+				m_elementsStatic[iii]->DrawDebug();
+			}
+		}
+		for (int32_t iii=0; iii<m_elementsDynamic.Size() ; iii++) {
+			if (NULL != m_elementsDynamic[iii]) {
+				m_elementsDynamic[iii]->DrawDebug();
+			}
+		}
+	#endif
 }
 
 

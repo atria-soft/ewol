@@ -33,7 +33,7 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object);
+			virtual void Update(game::MeshObject& object, mat4& transformMatrix);
 	};
 }
 

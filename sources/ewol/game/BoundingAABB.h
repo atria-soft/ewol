@@ -11,6 +11,8 @@
 
 #include "ewol/game/Bounding.h"
 #include "etk/math/Vector3D.h"
+#include "etk/math/Matrix4.h"
+#include "ewol/renderer/resources/Colored3DObject.h"
 
 namespace game
 {
@@ -19,6 +21,11 @@ namespace game
 		private :
 			vec3    m_PointStart;
 			vec3    m_PointStop;
+			#ifdef DEBUG
+				ewol::Colored3DObject*    m_displayBounding;
+				etk::Vector<vec3>         m_vertices;
+				etk::Vector<draw::Colorf> m_color;
+			#endif
 		public:
 			/**
 			 * @biref Main constructor.
@@ -29,10 +36,10 @@ namespace game
 			 * @biref Main constructor.
 			 */
 			virtual ~BoundingAABB(void);
-			/**
-			 * @brief Update Bounding properties.
-			 */
-			virtual void Update(game::MeshObject& object);
+			// herited methodes
+			virtual void Update(game::MeshObject& object, mat4& transformMatrix);
+			// herited methodes
+			virtual void Draw(void);
 	};
 }
 

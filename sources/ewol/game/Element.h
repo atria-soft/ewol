@@ -16,6 +16,7 @@
 #include <ewol/debug.h>
 #include <ewol/game/Gravity.h>
 #include <ewol/renderer/resources/Mesh.h>
+#include <ewol/game/Bounding.h>
 
 namespace game
 {
@@ -23,6 +24,7 @@ namespace game
 	{
 		protected:
 			ewol::Mesh*         m_resource;   //!< Resource to display the element.
+			game::Bounding*     m_bounding;   //!< Bounding of this element
 		private:
 			bool     m_matrixNeedUpdate; //!< the matrix need to be regenerated
 			mat4     m_matrix;           //!< generated display matrix.
@@ -57,6 +59,10 @@ namespace game
 			 * @brief Draw the element.
 			 */
 			virtual void Draw(void);
+			/**
+			 * @brief Draw Debug information of the element.
+			 */
+			virtual void DrawDebug(void);
 			/**
 			 * @brief Process IA of this element.
 			 * @param[in] deltaMicroSecond delta from the last call.
@@ -127,7 +133,10 @@ namespace game
 			{
 				if (m_matrixNeedUpdate == true) {
 					m_matrixNeedUpdate = false;
-					m_matrix = etk::matScale(m_scale) * m_displayRotation * etk::matTranslate(m_position);
+					m_matrix = etk::matTranslate(m_position) * etk::matScale(m_scale) * m_displayRotation;
+					if (m_bounding!=NULL) {
+						m_bounding->Update(m_resource->m_object, m_matrix);
+					}
 				}
 				return m_matrix;
 			};

@@ -73,7 +73,7 @@ void game::Geometry::SetBoundingMode(game::boundingMode type)
 void game::Geometry::BoundingUpdate(void)
 {
 	if (NULL != m_bounding) {
-		m_bounding->Update(m_object);
+		//m_bounding->Update(m_object);
 	}
 }
 

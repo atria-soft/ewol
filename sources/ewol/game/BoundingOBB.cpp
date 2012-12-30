@@ -21,7 +21,7 @@ game::BoundingOBB::~BoundingOBB(void)
 	
 }
 
-void game::BoundingOBB::Update(game::MeshObject& object)
+void game::BoundingOBB::Update(game::MeshObject& object, mat4& transformMatrix)
 {
 	
 }

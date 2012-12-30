@@ -33,7 +33,8 @@ namespace game
 			 * @param[in] pos Position of the camera.
 			 * @param[in] angles Rotations angles of the camera
 			 */
-			Camera(vec3 pos=vec3(0,0,2), vec3 angles=vec3(0,0,0));/**
+			Camera(vec3 pos=vec3(0,0,0), vec3 angles=vec3(0,0,0));
+			/**
 			 * @brief Set the position of the camera.
 			 * @param[in] pos Position of the camera.
 			 */
