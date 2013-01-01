@@ -11,7 +11,8 @@
 
 
 game::Bounding::Bounding(boundingMode mode) :
-	m_mode(mode)
+	m_mode(mode),
+	m_hasContact(false)
 {
 	
 }

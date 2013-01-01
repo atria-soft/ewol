@@ -21,12 +21,8 @@ game::BoundingAABB::BoundingAABB(void) :
 		if (false == ewol::resource::Keep(m_displayBounding) ) {
 			EWOL_DEBUG("Can not keep ewol::Colored3DObject ...");
 		}
-		// color never change ...
-		draw::Color tmpColorNormal(0xFF000055);
-		draw::Colorf tmpColor(tmpColorNormal);
 		vec3 tmpPos(0,0,0);
 		for(int32_t iii=0; iii<36; iii++) {
-			m_color.PushBack(tmpColor);
 			m_vertices.PushBack(tmpPos);
 		}
 	#endif
@@ -156,9 +152,13 @@ void game::BoundingAABB::Update(game::MeshObject& object, mat4& transformMatrix)
 void game::BoundingAABB::Draw(void)
 {
 	#ifdef DEBUG
+		draw::Colorf color(0.0, 1.0, 0.0, 0.2);
+		if (true == m_hasContact) {
+			color = draw::Colorf(1.0, 0.0, 0.0, 0.2);
+		}
 		if (0 != m_vertices.Size()) {
 			if (NULL != m_displayBounding) {
-				m_displayBounding->Draw(m_vertices, m_color, false);
+				m_displayBounding->Draw(m_vertices, color, false);
 			}
 		} else {
 			EWOL_DEBUG("Bounding size is not correct...");
@@ -166,5 +166,27 @@ void game::BoundingAABB::Draw(void)
 	#endif
 }
 
+
+bool game::BoundingAABB::HasContact(game::Bounding& otherbounding)
+{
+	switch(otherbounding.GetType()) {
+		case game::BoundingModeAABB:
+			{
+				game::BoundingAABB& other = static_cast<game::BoundingAABB&>(otherbounding);
+				if(    m_PointStart.x > other.m_PointStop.x
+				    || m_PointStop.x < other.m_PointStart.x
+				    || m_PointStart.y > other.m_PointStop.y
+				    || m_PointStop.y < other.m_PointStart.y
+				    || m_PointStart.z > other.m_PointStop.z
+				    || m_PointStop.z < other.m_PointStart.z) {
+					return false;
+				}
+				return true;
+			}
+		default:
+			EWOL_DEBUG("TODO ... ");
+			return false;
+	}
+}
 
 

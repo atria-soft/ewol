@@ -15,12 +15,12 @@ ewol::Colored3DObject::Colored3DObject(etk::UString genName) :
 	ewol::Resource(genName),
 	m_GLprogram(NULL)
 {
-	etk::UString tmpString("DATA:color3.prog");
+	etk::UString tmpString("DATA:simple3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+		m_GLColor    = m_GLprogram->GetUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 	}
 }
@@ -33,7 +33,7 @@ ewol::Colored3DObject::~Colored3DObject(void)
 
 
 void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
-                                 etk::Vector<draw::Colorf>& color,
+                                 draw::Colorf& color,
                                  bool updateDepthBuffer)
 {
 	if (vertices.Size()<=0) {
@@ -57,7 +57,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	// position :
 	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
 	// color :
-	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &color[0]);
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, vertices.Size());
 	m_GLprogram->UnUse();

@@ -36,6 +36,7 @@ namespace game
 			// specific for the physical engine :
 			vec3     m_position;         //!< position of the element. (in m)
 			vec3     m_speed;            //!< Speed of the element. (in m/s)
+			vec3     m_speedMax;         //!< Speed maximum limitation. (in m/s)
 			float    m_mass;             //!< object mass (in kg)
 			vec3     m_gravityForce;     //!< curent gravity force in newton of the object (m/s^2)
 			vec3     m_userAcceleration; //!< the only one parameter that the user can change (m/s^2), if the coder want that the equation do not take stipid things ...
@@ -68,7 +69,7 @@ namespace game
 			 * @param[in] deltaMicroSecond delta from the last call.
 			 * @return true if this element must be destroyed
 			 */
-			virtual bool ArtificialIntelligence(int32_t deltaMicroSecond);
+			virtual bool ArtificialIntelligence(float delta);
 			/**
 			 * @brief Clear the current gravity reference
 			 */
@@ -143,6 +144,11 @@ namespace game
 			void SetSpeed(vec3 newSpeed)
 			{
 				m_speed = newSpeed;
+			}
+			
+			game::Bounding* GetBounding(void)
+			{
+				return m_bounding;
 			}
 	};
 };

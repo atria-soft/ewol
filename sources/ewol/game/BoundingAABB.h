@@ -24,7 +24,6 @@ namespace game
 			#ifdef DEBUG
 				ewol::Colored3DObject*    m_displayBounding;
 				etk::Vector<vec3>         m_vertices;
-				etk::Vector<draw::Colorf> m_color;
 			#endif
 		public:
 			/**
@@ -40,6 +39,8 @@ namespace game
 			virtual void Update(game::MeshObject& object, mat4& transformMatrix);
 			// herited methodes
 			virtual void Draw(void);
+			// herited methodes
+			virtual bool HasContact(game::Bounding& otherbounding);
 	};
 }
 

@@ -24,10 +24,9 @@ namespace game
 	class Engine
 	{
 		private:
-			etk::Vector<game::Gravity>  m_gravity;          //!< list of gravity element
-			etk::Vector<game::Element*> m_elementsStatic;   //!< List of the game element (bounding does not move)
-			etk::Vector<game::Element*> m_elementsDynamic;  //!< List of the game element (change position all the time)
-			etk::Vector<game::Contact>  m_contacts;         //!< list of all contact that existe in the system
+			etk::Vector<game::Gravity>  m_gravity;    //!< list of gravity element
+			etk::Vector<game::Element*> m_elements;   //!< List of the game element
+			etk::Vector<game::Contact>  m_contacts;   //!< list of all contact that existe in the system
 		public:
 			/**
 			 * @brief Basic constructor.
@@ -65,9 +64,8 @@ namespace game
 			/**
 			 * @brief Add an element on the system.
 			 * @param[in] newElement element to display.
-			 * @param[in] dynamic this element change of place.
 			 */
-			void AddElement(game::Element* newElement, bool dynamic);
+			void AddElement(game::Element* newElement);
 			/**
 			 * @brief Add a gravity on the system.
 			 * @param[in] gravity The gravity to add.

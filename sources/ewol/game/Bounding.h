@@ -9,25 +9,26 @@
 #ifndef __GAME_BOUNDING_H__
 #define __GAME_BOUNDING_H__
 
-#include "ewol/debug.h"
-#include "ewol/game/MeshObject.h"
+#include <ewol/debug.h>
+#include <ewol/game/MeshObject.h>
 #include <etk/math/Matrix4.h>
+//#include <ewol/game/Contact.h>
 
 namespace game
 {
 	typedef enum {
-		BoundingModeNone,   //!< No Bounding.
 		BoundingModePlane,  //!< plane Bounding.
-		BoundingModeAABB,   //!< Anti-aligned Bounding Boxes.
 		BoundingModeSphere, //!< Sphere.
+		BoundingModeAABB,   //!< Anti-aligned Bounding Boxes.
 		BoundingModeOBB,    //!< Oriented Bounding Box.
 		// TODO : Add more if needed to implement
 	} boundingMode;
 	
 	class Bounding
 	{
-		protected :
+		protected:
 			boundingMode m_mode;           //!< bounding mode of this system.
+			bool         m_hasContact;     //!< this bounding is on contact with something else ...
 		public:
 			/**
 			 * @biref Main constructor.
@@ -48,9 +49,20 @@ namespace game
 			 */
 			virtual void Update(game::MeshObject& object, mat4& transformMatrix) {};
 			/**
-			 * Draw the bounding ==> for test ...
+			 * @brief Draw the bounding ==> for test ...
 			 */
 			virtual void Draw(void) {};
+			/**
+			 * @brief Detect the colision positions.
+			 */
+			//virtual void GenerateContact(game::Element* ourElement, game::Bounding* otherbounding, game::Element* otherElements, etk::Vector<game::Contact>& contactList);
+			virtual bool HasContact(game::Bounding& otherbounding) { return false; };
+			/**
+			 * @brief Set the contact property at a specific value ...
+			 */
+			void SetContactMode(bool newStatus) { m_hasContact=newStatus; };
+			
+			bool GetContactStatus(void) { return m_hasContact; };
 	};
 	
 	Bounding* CreateBounding(boundingMode mode);

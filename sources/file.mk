@@ -110,6 +110,10 @@ LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/color3.frag:color3.frag \
                     ../data/color3.vert:color3.vert \
                     \
+                    ../data/simple3D.prog:simple3D.prog \
+                    ../data/simple3D.frag:simple3D.frag \
+                    ../data/simple3D.vert:simple3D.vert \
+                    \
                     ../data/textured.prog:textured.prog \
                     ../data/textured.frag:textured.frag \
                     ../data/textured.vert:textured.vert \

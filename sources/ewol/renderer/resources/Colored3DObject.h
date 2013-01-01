@@ -30,7 +30,7 @@ namespace ewol
 			virtual ~Colored3DObject(void);
 			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
 			virtual void Draw(etk::Vector<vec3>& vertices,
-			                  etk::Vector<draw::Colorf>& color,
+			                  draw::Colorf& color,
 			                  bool updateDepthBuffer=true);
 			
 	};

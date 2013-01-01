@@ -19,6 +19,7 @@ game::Element::Element(etk::UString meshResource) :
 	m_bounding(NULL),
 	m_matrixNeedUpdate(true),
 	m_scale(1,1,1),
+	m_speedMax(2000000, 2000000, 2000000),
 	m_mass(0.0f),
 	m_uniqueId(uniqueId),
 	m_groupId(0),
@@ -65,7 +66,7 @@ void game::Element::DrawDebug(void)
 }
 
 
-bool game::Element::ArtificialIntelligence(int32_t deltaMicroSecond)
+bool game::Element::ArtificialIntelligence(float deltaMicroSecond)
 {
 	return false;
 }
@@ -99,10 +100,15 @@ void game::Element::ProcessGravity(float delta, game::Gravity& gravity)
 
 void game::Element::ProcessPosition(float delta)
 {
+	if(    NULL!=m_bounding
+	    && true == m_bounding->GetContactStatus()) {
+		return;
+	}
 	vec3 m_speed0(m_speed);
 	vec3 curentAcceleration(m_gravityForce + m_userAcceleration);
 	m_speed += curentAcceleration*delta;
 	vec3 tmpPos = m_position +m_speed0*delta + curentAcceleration*delta*delta/2.0f ;
+	
 	if (m_position != tmpPos) {
 		m_position = tmpPos;
 		m_matrixNeedUpdate = true;
