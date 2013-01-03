@@ -9,18 +9,19 @@
 #ifndef __GAME_BOUNDING_AABB_H__
 #define __GAME_BOUNDING_AABB_H__
 
-#include "ewol/game/Bounding.h"
 #include "etk/math/Vector3D.h"
 #include "etk/math/Matrix4.h"
 #include "ewol/renderer/resources/Colored3DObject.h"
 
 namespace game
 {
-	class BoundingAABB : public Bounding
+	class BoundingAABB
 	{
 		private :
-			vec3    m_PointStart;
-			vec3    m_PointStop;
+			bool    m_hasContact;     //!< this bounding is on contact with something else ...
+			vec3    m_center;
+			vec3    m_size;
+			vec3    m_oldUserPosition; // this is due to the fact object are never centered ...
 			#ifdef DEBUG
 				ewol::Colored3DObject*    m_displayBounding;
 				etk::Vector<vec3>         m_vertices;
@@ -28,19 +29,32 @@ namespace game
 		public:
 			/**
 			 * @biref Main constructor.
-			 * @param[in] mode Bounding mode.
 			 */
 			BoundingAABB(void);
 			/**
 			 * @biref Main constructor.
 			 */
 			virtual ~BoundingAABB(void);
-			// herited methodes
-			virtual void Update(game::MeshObject& object, mat4& transformMatrix);
-			// herited methodes
+			/**
+			 * @brief Update Bounding properties.
+			 */
+			virtual void Update(game::MeshObject& object, mat4& rotation, vec3& position, vec3& scale);
+			/**
+			 * @brief Draw the bounding ==> for test ...
+			 */
 			virtual void Draw(void);
-			// herited methodes
-			virtual bool HasContact(game::Bounding& otherbounding);
+			/**
+			 * @brief Detect the colision positions.
+			 */
+			virtual bool HasContact(game::BoundingAABB& otherbounding);
+			/**
+			 * @brief Set the contact property at a specific value ...
+			 */
+			void SetContactMode(bool newStatus) { m_hasContact=newStatus; };
+			/**
+			 * @brief Get the current contact status
+			 */
+			bool GetContactStatus(void) { return m_hasContact; };
 	};
 }
 

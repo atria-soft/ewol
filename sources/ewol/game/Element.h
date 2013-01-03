@@ -16,7 +16,7 @@
 #include <ewol/debug.h>
 #include <ewol/game/Gravity.h>
 #include <ewol/renderer/resources/Mesh.h>
-#include <ewol/game/Bounding.h>
+#include <ewol/game/BoundingAABB.h>
 
 namespace game
 {
@@ -24,12 +24,11 @@ namespace game
 	{
 		protected:
 			ewol::Mesh*         m_resource;   //!< Resource to display the element.
-			game::Bounding*     m_bounding;   //!< Bounding of this element
+			game::BoundingAABB  m_bounding;   //!< Bounding of this element
 		private:
 			bool     m_matrixNeedUpdate; //!< the matrix need to be regenerated
 			mat4     m_matrix;           //!< generated display matrix.
 			vec3     m_scale;            //!< scale of the element. (change the size in dynamic from the loaded model)
-			vec3     m_displayAngle;     //!< Rotate the model.
 			mat4     m_displayRotation;  //!< Associated matrix of totation associated with m_displayAngle.
 		
 		protected:
@@ -93,7 +92,6 @@ namespace game
 			{
 				m_position = vec3(0,0,0);
 				m_speed = vec3(0,0,0);
-				m_displayAngle = vec3(0,0,0);
 				m_displayRotation.Identity();
 				m_matrix.Identity();
 			};
@@ -116,13 +114,12 @@ namespace game
 				m_matrixNeedUpdate = true;
 			}
 			/**
-			 * @brief Rotate the curent object
+			 * @brief Rotate the current object
 			 * @param[in] vect rotation angle
 			 * @param[in] angleRad radian angle
 			 */
 			void Rotate(etk::Vector3D<float> vect, float angleRad=0.0)
 			{
-				m_displayAngle.RotateAxis(angleRad, vect);
 				m_displayRotation = etk::matRotate(vect, angleRad) * m_displayRotation;
 				m_matrixNeedUpdate = true;
 			}
@@ -134,10 +131,10 @@ namespace game
 			{
 				if (m_matrixNeedUpdate == true) {
 					m_matrixNeedUpdate = false;
-					m_matrix = etk::matTranslate(m_position) * etk::matScale(m_scale) * m_displayRotation;
-					if (m_bounding!=NULL) {
-						m_bounding->Update(m_resource->m_object, m_matrix);
-					}
+					m_matrix =   etk::matTranslate(m_position)
+					           * etk::matScale(m_scale)
+					           * m_displayRotation;
+					m_bounding.Update(m_resource->m_object, m_displayRotation, m_position, m_scale);
 				}
 				return m_matrix;
 			};
@@ -146,7 +143,7 @@ namespace game
 				m_speed = newSpeed;
 			}
 			
-			game::Bounding* GetBounding(void)
+			game::BoundingAABB& GetBounding(void)
 			{
 				return m_bounding;
 			}

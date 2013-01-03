@@ -84,12 +84,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 FILE_LIST+= ewol/widget/Scene.cpp \
 			ewol/game/Engine.cpp \
 			ewol/game/Element.cpp \
-			ewol/game/Bounding.cpp \
 			ewol/game/BoundingAABB.cpp \
-			ewol/game/BoundingOBB.cpp \
-			ewol/game/BoundingPlane.cpp \
-			ewol/game/BoundingSphere.cpp \
-			ewol/game/Geometry.cpp \
 			ewol/game/Gravity.cpp \
 			ewol/game/Camera.cpp \
 			ewol/game/Contact.cpp \

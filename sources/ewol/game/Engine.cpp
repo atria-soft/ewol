@@ -65,34 +65,20 @@ void game::Engine::ProcessCollision(float deltaTime)
 	m_contacts.Clear();
 	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
 		if (NULL != m_elements[iii]) {
-			game::Bounding* bounding1 = m_elements[iii]->GetBounding();
-			if (NULL != bounding1) {
-				bounding1->SetContactMode(false);
-			}
+			game::BoundingAABB& bounding1 = m_elements[iii]->GetBounding();
+			bounding1.SetContactMode(false);
 		}
 	}
 	
 	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
 		if (NULL != m_elements[iii]) {
-			game::Bounding* bounding1 = m_elements[iii]->GetBounding();
-			if (NULL != bounding1) {
-				for (int32_t jjj=iii+1; jjj<m_elements.Size() ; jjj++) {
-					if (NULL!=m_elements[jjj]) {
-						game::Bounding* bounding2 = m_elements[jjj]->GetBounding();
-						if (NULL != bounding2) {
-							bool hasContactConfirmed = false;
-							if (bounding1->GetType() < bounding2->GetType()) {
-								//bounding2->GenerateContact(m_elements[jjj], bounding1, m_elements[iii], m_contacts);
-								hasContactConfirmed = bounding2->HasContact(*bounding1);
-							} else {
-								//bounding1->GenerateContact(m_elements[iii], bounding2, m_elements[jjj], m_contacts);
-								hasContactConfirmed = bounding1->HasContact(*bounding2);
-							}
-							if (true == hasContactConfirmed) {
-								bounding2->SetContactMode(true);
-								bounding1->SetContactMode(true);
-							}
-						}
+			game::BoundingAABB& bounding1 = m_elements[iii]->GetBounding();
+			for (int32_t jjj=iii+1; jjj<m_elements.Size() ; jjj++) {
+				if (NULL!=m_elements[jjj]) {
+					game::BoundingAABB& bounding2 = m_elements[jjj]->GetBounding();
+					if (true == bounding2.HasContact(bounding1)) {
+						bounding2.SetContactMode(true);
+						bounding1.SetContactMode(true);
 					}
 				}
 			}

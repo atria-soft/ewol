@@ -16,7 +16,6 @@ static int32_t uniqueId = 0;
 
 game::Element::Element(etk::UString meshResource) :
 	m_resource(NULL),
-	m_bounding(NULL),
 	m_matrixNeedUpdate(true),
 	m_scale(1,1,1),
 	m_speedMax(2000000, 2000000, 2000000),
@@ -33,7 +32,6 @@ game::Element::Element(etk::UString meshResource) :
 		m_resource = tmpObject;
 	}
 	uniqueId++;
-	m_bounding = game::CreateBounding(game::BoundingModeAABB);
 }
 
 game::Element::~Element(void)
@@ -42,10 +40,6 @@ game::Element::~Element(void)
 		ewol::MeshObj* tmpObject = static_cast<ewol::MeshObj*>(m_resource);
 		ewol::resource::Release(tmpObject);
 		m_resource = NULL;
-	}
-	if (NULL != m_bounding) {
-		delete(m_bounding);
-		m_bounding = NULL;
 	}
 }
 
@@ -59,10 +53,8 @@ void game::Element::Draw(void)
 
 void game::Element::DrawDebug(void)
 {
-	if (NULL != m_bounding) {
-		//EWOL_DEBUG("draw bounding" << m_uniqueId);
-		m_bounding->Draw();
-	}
+	//EWOL_DEBUG("draw bounding" << m_uniqueId);
+	m_bounding.Draw();
 }
 
 
@@ -100,15 +92,14 @@ void game::Element::ProcessGravity(float delta, game::Gravity& gravity)
 
 void game::Element::ProcessPosition(float delta)
 {
-	if(    NULL!=m_bounding
-	    && true == m_bounding->GetContactStatus()) {
+	if(true == m_bounding.GetContactStatus()) {
 		return;
 	}
 	vec3 m_speed0(m_speed);
 	vec3 curentAcceleration(m_gravityForce + m_userAcceleration);
 	m_speed += curentAcceleration*delta;
-	vec3 tmpPos = m_position +m_speed0*delta + curentAcceleration*delta*delta/2.0f ;
-	
+	vec3 tmpPos = m_position +m_speed*delta;
+	// TODO : Detect collision of other elements ...
 	if (m_position != tmpPos) {
 		m_position = tmpPos;
 		m_matrixNeedUpdate = true;
