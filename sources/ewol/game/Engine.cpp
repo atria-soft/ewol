@@ -69,22 +69,44 @@ void game::Engine::ProcessCollision(float deltaTime)
 			bounding1.SetContactMode(false);
 		}
 	}
-	
+	// Brut force bounding detection :
 	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
 		if (NULL != m_elements[iii]) {
-			game::BoundingAABB& bounding1 = m_elements[iii]->GetBounding();
-			for (int32_t jjj=iii+1; jjj<m_elements.Size() ; jjj++) {
-				if (NULL!=m_elements[jjj]) {
-					game::BoundingAABB& bounding2 = m_elements[jjj]->GetBounding();
-					if (true == bounding2.HasContact(bounding1)) {
-						bounding2.SetContactMode(true);
-						bounding1.SetContactMode(true);
+			// If the element is static, the bounding detection is not needed...
+			if (true) {//false == m_elements[iii]->GetStaticMode()) {
+				game::BoundingAABB& bounding1 = m_elements[iii]->GetBounding();
+				for (int32_t jjj=iii+1; jjj<m_elements.Size() ; jjj++) {
+					if (NULL!=m_elements[jjj]) {
+						game::BoundingAABB& bounding2 = m_elements[jjj]->GetBounding();
+						if (true == bounding2.HasContact(bounding1)) {
+							bounding2.SetContactMode(true);
+							bounding1.SetContactMode(true);
+						}
 					}
 				}
 			}
 		}
 	}
 }
+
+
+bool game::Engine::HasCollision(game::BoundingAABB& bounding, game::Element* currentElement)
+{
+	// Brut force bounding detection :
+	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
+		if (currentElement == m_elements[iii]) {
+			continue;
+		}
+		if (NULL != m_elements[iii]) {
+			if (true == bounding.HasContact(m_elements[iii]->GetBounding())) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+
 
 void game::Engine::Draw(ewol::DrawProperty& displayProp)
 {
@@ -107,6 +129,9 @@ void game::Engine::Draw(ewol::DrawProperty& displayProp)
 void game::Engine::AddElement(game::Element* newElement)
 {
 	bool find=false;
+	if (NULL == newElement) {
+		EWOL_ERROR("try to set a NULL pointer game::Element");
+	}
 	for (int32_t iii=0 ; iii<m_elements.Size() ; iii++) {
 		if (NULL == m_elements[iii]) {
 			m_elements[iii] = newElement;
@@ -116,6 +141,7 @@ void game::Engine::AddElement(game::Element* newElement)
 	}
 	if (false==find) {
 		m_elements.PushBack(newElement);
+		newElement->SetEngine(this);
 	}
 }
 

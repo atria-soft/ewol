@@ -20,9 +20,11 @@
 
 namespace game
 {
+	class Engine;
 	class Element
 	{
 		protected:
+			game::Engine*       m_engine;
 			ewol::Mesh*         m_resource;   //!< Resource to display the element.
 			game::BoundingAABB  m_bounding;   //!< Bounding of this element
 		private:
@@ -45,6 +47,7 @@ namespace game
 			uint32_t m_groupId;  //!< General group Id More than 65000 group can be really interesting to create supid game ...
 			int32_t  m_type;     //!< type of this element
 			bool     m_visible;  //!< This is to know if the element is displayed or not ==> TODO : check if usefull ...
+			bool     m_static;   //!< This element is static...
 		public:
 			/**
 			 * @brief Basic constructor.
@@ -55,6 +58,11 @@ namespace game
 			 * @brief Basic destructor.
 			 */
 			virtual ~Element(void);
+			/**
+			 * @brief Link with a specific engine.
+			 * @param[in] engine Engine pointer
+			 */
+			void SetEngine(game::Engine* engine) { m_engine = engine; };
 			/**
 			 * @brief Draw the element.
 			 */
@@ -114,6 +122,15 @@ namespace game
 				m_matrixNeedUpdate = true;
 			}
 			/**
+			 * @brief Scale the element to an other size
+			 * @param[in] proportion scale value in all direction ...
+			 */
+			void Scale(float proportion)
+			{
+				m_scale = vec3(proportion,proportion,proportion);
+				m_matrixNeedUpdate = true;
+			}
+			/**
 			 * @brief Rotate the current object
 			 * @param[in] vect rotation angle
 			 * @param[in] angleRad radian angle
@@ -147,6 +164,14 @@ namespace game
 			{
 				return m_bounding;
 			}
+			/**
+			 * @brief Set this element Static or not
+			 */
+			void SetStaticMode(bool newMode) { m_static = newMode; };
+			/**
+			 * @brief Get the current static or dynamic mode
+			 */
+			bool GetStaticMode(void) { return m_static; };
 	};
 };
 

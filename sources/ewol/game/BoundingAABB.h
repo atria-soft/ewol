@@ -18,9 +18,9 @@ namespace game
 	class BoundingAABB
 	{
 		private :
+			vec3    m_PointStart;
+			vec3    m_PointStop;
 			bool    m_hasContact;     //!< this bounding is on contact with something else ...
-			vec3    m_center;
-			vec3    m_size;
 			vec3    m_oldUserPosition; // this is due to the fact object are never centered ...
 			#ifdef DEBUG
 				ewol::Colored3DObject*    m_displayBounding;
@@ -55,6 +55,8 @@ namespace game
 			 * @brief Get the current contact status
 			 */
 			bool GetContactStatus(void) { return m_hasContact; };
+			
+			vec3 Size(void) { return m_PointStop-m_PointStart; };
 	};
 }
 

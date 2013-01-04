@@ -13,10 +13,9 @@
 
 
 game::BoundingAABB::BoundingAABB(void) :
-	m_hasContact(false),
-	m_center(0,0,0),
-	m_size(1,1,1),
-	m_oldUserPosition(0,0,0)
+	m_PointStart(-1,-1,-1),
+	m_PointStop(1,1,1),
+	m_hasContact(false)
 {
 	#ifdef DEBUG
 		if (false == ewol::resource::Keep(m_displayBounding) ) {
@@ -39,44 +38,38 @@ game::BoundingAABB::~BoundingAABB(void)
 
 void game::BoundingAABB::Update(game::MeshObject& object, mat4& rotation, vec3& position, vec3& scale)
 {
-	vec3 pointStart;
-	vec3 pointStop;
 	mat4 transformMatrix =   etk::matTranslate(position)
 	                       * etk::matScale(scale)
 	                       * rotation;
 	for (int32_t iii=0; iii<object.m_vertices.Size(); iii++) {
 		vec3 point = transformMatrix * object.m_vertices[iii];
 		if (0 == iii) {
-			pointStart = point;
-			pointStop = point;
+			m_PointStart = point;
+			m_PointStop = point;
 		} else {
-			if (pointStart.x > point.x) {
-				pointStart.x = point.x;
-			} else if (pointStop.x < point.x) {
-				pointStop.x = point.x;
+			if (m_PointStart.x > point.x) {
+				m_PointStart.x = point.x;
+			} else if (m_PointStop.x < point.x) {
+				m_PointStop.x = point.x;
 			}
 			
-			if (pointStart.y > point.y) {
-				pointStart.y = point.y;
-			} else if (pointStop.y < point.y) {
-				pointStop.y = point.y;
+			if (m_PointStart.y > point.y) {
+				m_PointStart.y = point.y;
+			} else if (m_PointStop.y < point.y) {
+				m_PointStop.y = point.y;
 			}
 			
-			if (pointStart.z > point.z) {
-				pointStart.z = point.z;
-			} else if (pointStop.z < point.z) {
-				pointStop.z = point.z;
+			if (m_PointStart.z > point.z) {
+				m_PointStart.z = point.z;
+			} else if (m_PointStop.z < point.z) {
+				m_PointStop.z = point.z;
 			}
 		}
 	}
-	m_size = (pointStop - pointStart) / 2;
-	m_center = pointStop - m_size;
-	m_oldUserPosition = position;
-	
 	#ifdef DEBUG
 		vec3 tmpBB(0.001,0.001,0.001);
-		vec3 tmpStart = pointStart - tmpBB;
-		vec3 tmpStop = pointStop + tmpBB;
+		vec3 tmpStart = m_PointStart - tmpBB;
+		vec3 tmpStop = m_PointStop + tmpBB;
 		// (start) X / Y
 		vec3 tmpPos = tmpStart;
 		m_vertices[0] = tmpStart;
@@ -179,12 +172,16 @@ void game::BoundingAABB::Draw(void)
 
 bool game::BoundingAABB::HasContact(game::BoundingAABB& obj)
 {
-	if(    (abs(m_center.x-obj.m_center.x) > m_size.x+obj.m_size.x)
-	    || (abs(m_center.y-obj.m_center.y) > m_size.y+obj.m_size.y)
-	    || (abs(m_center.z-obj.m_center.z) > m_size.z+obj.m_size.z) ) {
+	if(    m_PointStart.x > obj.m_PointStop.x
+	    || m_PointStop.x < obj.m_PointStart.x
+	    || m_PointStart.y > obj.m_PointStop.y
+	    || m_PointStop.y < obj.m_PointStart.y
+	    || m_PointStart.z > obj.m_PointStop.z
+	    || m_PointStop.z < obj.m_PointStart.z) {
 		return false;
 	}
 	return true;
 }
+
 
 

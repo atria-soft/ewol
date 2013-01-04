@@ -39,9 +39,10 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	etk::Vector< vec2 > uvTextures;
 	etk::Vector< vec3 > normals;
 	
-	
+	int32_t lineID = 0;
 	while (NULL != fileName.FileGets(inputDataLine, 2048) )
 	{
+		lineID++;
 		if (inputDataLine[0]=='v') {
 			if (inputDataLine[1]=='n') {
 				// Vertice normal   : vn 0.000000 0.000000 -1.000000
@@ -61,25 +62,77 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			}
 		} else if (inputDataLine[0]=='f') {
 			// face : f 5/1/1 1/2/1 4/3/1*
-			uint32_t vertexIndex[3], uvIndex[3], normalIndex[3];
-			int32_t matches = sscanf(&inputDataLine[2], "%d/%d/%d %d/%d/%d %d/%d/%d\n",
+			uint32_t vertexIndex[4], uvIndex[4], normalIndex[4];
+			bool quadMode = true;
+			int32_t matches = sscanf(&inputDataLine[2], "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n",
 			                         &vertexIndex[0], &uvIndex[0], &normalIndex[0],
 			                         &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-			                         &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-			if (9 != matches){
-				EWOL_ERROR("Parsing error in the .obj files : " << fileName);
-				continue;
+			                         &vertexIndex[2], &uvIndex[2], &normalIndex[2],
+			                         &vertexIndex[3], &uvIndex[3], &normalIndex[3] );
+			if (12 != matches){
+				// no normal mode :
+				matches = sscanf(&inputDataLine[2], "%d/%d %d/%d %d/%d %d/%d\n",
+				                         &vertexIndex[0], &uvIndex[0],
+				                         &vertexIndex[1], &uvIndex[1],
+				                         &vertexIndex[2], &uvIndex[2],
+				                         &vertexIndex[3], &uvIndex[3] );
+				if (8 != matches){
+					quadMode = false;
+					matches = sscanf(&inputDataLine[2], "%d/%d/%d %d/%d/%d %d/%d/%d\n",
+					                         &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+					                         &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+					                         &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+					if (9 != matches){
+						// no normal mode :
+						matches = sscanf(&inputDataLine[2], "%d/%d %d/%d %d/%d\n",
+						                         &vertexIndex[0], &uvIndex[0],
+						                         &vertexIndex[1], &uvIndex[1],
+						                         &vertexIndex[2], &uvIndex[2] );
+						if (6 != matches){
+							EWOL_ERROR("Parsing error in the .obj files : " << fileName << " (l=" << lineID << ") in 'f' section : \"" << &inputDataLine[2] << "\" expected : %d/%d(/%d) %d/%d(/%d) %d/%d(/%d) (%d/%d(/%d)) () for option");
+							continue;
+						}
+					}
+				}
 			}
-			indicesVertices.PushBack(vertexIndex[0]);
-			indicesVertices.PushBack(vertexIndex[1]);
-			indicesVertices.PushBack(vertexIndex[2]);
-			indicesUv.PushBack(uvIndex[0]);
-			indicesUv.PushBack(uvIndex[1]);
-			indicesUv.PushBack(uvIndex[2]);
-			indicesNormal.PushBack(normalIndex[0]);
-			indicesNormal.PushBack(normalIndex[1]);
-			indicesNormal.PushBack(normalIndex[2]);
-			
+			if (true==quadMode) {
+				indicesVertices.PushBack(vertexIndex[0]);
+				indicesVertices.PushBack(vertexIndex[1]);
+				indicesVertices.PushBack(vertexIndex[2]);
+				// second triangle
+				indicesVertices.PushBack(vertexIndex[0]);
+				indicesVertices.PushBack(vertexIndex[2]);
+				indicesVertices.PushBack(vertexIndex[3]);
+				indicesUv.PushBack(uvIndex[0]);
+				indicesUv.PushBack(uvIndex[1]);
+				indicesUv.PushBack(uvIndex[2]);
+				// second triangle
+				indicesUv.PushBack(uvIndex[0]);
+				indicesUv.PushBack(uvIndex[2]);
+				indicesUv.PushBack(uvIndex[3]);
+				if (12 == matches) {
+					indicesNormal.PushBack(normalIndex[0]);
+					indicesNormal.PushBack(normalIndex[1]);
+					indicesNormal.PushBack(normalIndex[2]);
+					// second triangle
+					indicesNormal.PushBack(normalIndex[0]);
+					indicesNormal.PushBack(normalIndex[2]);
+					indicesNormal.PushBack(normalIndex[3]);
+				}
+			} else {
+				indicesVertices.PushBack(vertexIndex[0]);
+				indicesVertices.PushBack(vertexIndex[1]);
+				indicesVertices.PushBack(vertexIndex[2]);
+				indicesUv.PushBack(uvIndex[0]);
+				indicesUv.PushBack(uvIndex[1]);
+				indicesUv.PushBack(uvIndex[2]);
+				if (9 == matches) {
+					indicesNormal.PushBack(normalIndex[0]);
+					indicesNormal.PushBack(normalIndex[1]);
+					indicesNormal.PushBack(normalIndex[2]);
+				}
+			}
+			// TODO : Calculate normal when none is provided ...
 		} else if (inputDataLine[0]=='s') {
 			// ??? : s off
 		} else if (inputDataLine[0]=='#') {
@@ -125,15 +178,17 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		// Get the indices of its attributes
 		uint32_t vertexIndex = indicesVertices[iii];
 		uint32_t uvIndex     = indicesUv[iii];
-		uint32_t normalIndex = indicesNormal[iii];
 		
 		// Put the attributes in buffers
 		m_object.m_vertices.PushBack(vertices[vertexIndex-1]);
 		m_object.m_uvTextures.PushBack(uvTextures[uvIndex-1]);
-		m_object.m_normals.PushBack(normals[normalIndex-1]);
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
 		m_coordColor.PushBack(tmppppp);
 		
+		if (indicesNormal.Size()>iii) {
+			uint32_t normalIndex = indicesNormal[iii];
+			m_object.m_normals.PushBack(normals[normalIndex-1]);
+		}
 	}
 }

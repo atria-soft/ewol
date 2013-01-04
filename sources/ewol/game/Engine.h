@@ -57,6 +57,7 @@ namespace game
 			 * @param[in] deltaTime delta time in µs from the previous call.
 			 */
 			void ProcessCollision(float deltaTime);
+			bool HasCollision(game::BoundingAABB& bounding, game::Element* currentElement);
 			/**
 			 * @brief Display the environement.
 			 */
