@@ -28,7 +28,6 @@ namespace game
 			ewol::Mesh*         m_resource;   //!< Resource to display the element.
 			game::BoundingAABB  m_bounding;   //!< Bounding of this element
 		private:
-			bool     m_matrixNeedUpdate; //!< the matrix need to be regenerated
 			mat4     m_matrix;           //!< generated display matrix.
 			vec3     m_scale;            //!< scale of the element. (change the size in dynamic from the loaded model)
 			mat4     m_displayRotation;  //!< Associated matrix of totation associated with m_displayAngle.
@@ -92,69 +91,42 @@ namespace game
 			 * @param[in] delta delta from the last call.
 			 */
 			virtual void ProcessPosition(float delta);
-			
 			/**
 			 * @param reset the position / speed / angle / and result matrix
 			 */
-			void Identity(void)
-			{
-				m_position = vec3(0,0,0);
-				m_speed = vec3(0,0,0);
-				m_displayRotation.Identity();
-				m_matrix.Identity();
-			};
+			void Identity(void);
 			/**
 			 * @brief Translate The curent element to a new position
 			 * @param[in] vect new position
 			 */
-			void Translate(etk::Vector3D<float> vect)
-			{
-				m_position += vect;
-				m_matrixNeedUpdate = true;
-			}
+			void Translate(etk::Vector3D<float> vect);
 			/**
 			 * @brief Scale the element to an other size
 			 * @param[in] vect new object scaling
 			 */
-			void Scale(etk::Vector3D<float> vect)
-			{
-				m_scale = vect;
-				m_matrixNeedUpdate = true;
-			}
+			void Scale(etk::Vector3D<float> vect);
 			/**
 			 * @brief Scale the element to an other size
 			 * @param[in] proportion scale value in all direction ...
 			 */
-			void Scale(float proportion)
-			{
-				m_scale = vec3(proportion,proportion,proportion);
-				m_matrixNeedUpdate = true;
-			}
+			void Scale(float proportion);
 			/**
 			 * @brief Rotate the current object
 			 * @param[in] vect rotation angle
 			 * @param[in] angleRad radian angle
 			 */
-			void Rotate(etk::Vector3D<float> vect, float angleRad=0.0)
-			{
-				m_displayRotation = etk::matRotate(vect, angleRad) * m_displayRotation;
-				m_matrixNeedUpdate = true;
-			}
+			void Rotate(etk::Vector3D<float> vect, float angleRad=0.0);
 			/**
 			 * @brief Get the Current matrix of the element (never access it directly, it might be sometime updated)
 			 * @return the reference on the matrix (updated if needed)
 			 */
-			mat4& GetMatrix(void)
-			{
-				if (m_matrixNeedUpdate == true) {
-					m_matrixNeedUpdate = false;
-					m_matrix =   etk::matTranslate(m_position)
-					           * etk::matScale(m_scale)
-					           * m_displayRotation;
-					m_bounding.Update(m_resource->m_object, m_displayRotation, m_position, m_scale);
-				}
-				return m_matrix;
-			};
+			mat4& GetMatrix(void);
+		private:
+			/**
+			 * @brief when position or rotation is set, the system call this function ...
+			 */
+			void UpdateMatrix(void);
+		public:
 			void SetSpeed(vec3 newSpeed)
 			{
 				m_speed = newSpeed;

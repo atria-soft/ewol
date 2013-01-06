@@ -32,8 +32,8 @@ game::Engine::~Engine(void)
 void game::Engine::Process(double lastTime, float deltaTime)
 {
 	ProcessGravity(deltaTime);
-	ProcessIA(deltaTime);
 	ProcessCollision(deltaTime);
+	ProcessIA(deltaTime);
 }
 
 void game::Engine::ProcessGravity(float deltaTime)

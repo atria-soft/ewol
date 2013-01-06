@@ -36,11 +36,8 @@ game::BoundingAABB::~BoundingAABB(void)
 }
 
 
-void game::BoundingAABB::Update(game::MeshObject& object, mat4& rotation, vec3& position, vec3& scale)
+void game::BoundingAABB::Update(game::MeshObject& object, mat4& transformMatrix)
 {
-	mat4 transformMatrix =   etk::matTranslate(position)
-	                       * etk::matScale(scale)
-	                       * rotation;
 	for (int32_t iii=0; iii<object.m_vertices.Size(); iii++) {
 		vec3 point = transformMatrix * object.m_vertices[iii];
 		if (0 == iii) {

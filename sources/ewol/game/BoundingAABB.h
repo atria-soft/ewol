@@ -38,7 +38,7 @@ namespace game
 			/**
 			 * @brief Update Bounding properties.
 			 */
-			virtual void Update(game::MeshObject& object, mat4& rotation, vec3& position, vec3& scale);
+			virtual void Update(game::MeshObject& object, mat4& transformMatrix);
 			/**
 			 * @brief Draw the bounding ==> for test ...
 			 */

@@ -18,7 +18,6 @@ static int32_t uniqueId = 0;
 game::Element::Element(etk::UString meshResource) :
 	m_engine(NULL),
 	m_resource(NULL),
-	m_matrixNeedUpdate(true),
 	m_scale(1,1,1),
 	m_speedMax(2000000, 2000000, 2000000),
 	m_mass(0.0f),
@@ -35,6 +34,7 @@ game::Element::Element(etk::UString meshResource) :
 		m_resource = tmpObject;
 	}
 	uniqueId++;
+	UpdateMatrix();
 }
 
 game::Element::~Element(void)
@@ -96,6 +96,7 @@ void game::Element::ProcessGravity(float delta, game::Gravity& gravity)
 void game::Element::ProcessPosition(float delta)
 {
 	if(true == m_bounding.GetContactStatus()) {
+		//EWOL_DEBUG("[" << m_uniqueId << "]   ==> colisionDetection");
 		return;
 	}
 	vec3 m_speed0(m_speed);
@@ -103,17 +104,18 @@ void game::Element::ProcessPosition(float delta)
 	m_speed += curentAcceleration*delta;
 	vec3 tmpPos = m_position +m_speed*delta;
 	if (m_position != tmpPos) {
+		//EWOL_DEBUG("[" << m_uniqueId << "] pos=" << m_position << "m ==>" << tmpPos << "m");
 		// TODO : Detect collision of other elements ...
 		vec3 size = m_bounding.Size();
 		vec3 move = tmpPos - m_position;
 		vec3 moveAbs = move;
 		moveAbs.Abs();
 		if(    (    0 < size.x
-		         && moveAbs.x > 2*size.x )
+		         && moveAbs.x > size.x*0.75 )
 		    || (    0 < size.y
-		         && moveAbs.y > 2*size.y )
+		         && moveAbs.y > size.y*0.75 )
 		    || (    0 < size.z
-		         && moveAbs.z > 2*size.z )) {
+		         && moveAbs.z > size.z*0.75 )) {
 			int32_t maxIterations = 0;
 			// generate a subdivide channel to prevent tunel effects ...
 			// Get the smallest axis to test : 
@@ -122,36 +124,85 @@ void game::Element::ProcessPosition(float delta)
 				//Test on X :
 				//estimate the number of subdivision needed in recursive mode :
 				maxIterations = moveAbs.x/abs(size.x);
-				EWOL_DEBUG("XXX move with dist=" << move << "m <" << size*2 << "m");
+				//EWOL_DEBUG("[" << m_uniqueId << "] XXX move with dist=" << move << "m <" << size*0.75 << "m");
 			} else if (    moveAbs.y >= moveAbs.x
 			            && moveAbs.y >= moveAbs.z) {
 				//Test on Y :
 				//estimate the number of subdivision needed in recursive mode :
 				maxIterations = moveAbs.y/abs(size.y);
-				EWOL_DEBUG("YYY move with dist=" << move << "m <" << size*2 << "m");
+				//EWOL_DEBUG("[" << m_uniqueId << "] YYY move with dist=" << move << "m <" << size*0.75 << "m");
 			} else {
 				//Test on Z :
 				//estimate the number of subdivision needed in recursive mode :
 				maxIterations = moveAbs.z/abs(size.z);
-				EWOL_DEBUG("ZZZ move with dist=" << move << "m <" << size*2 << "m");
+				//EWOL_DEBUG("[" << m_uniqueId << "] ZZZ move with dist=" << move << "m <" << size*0.75 << "m");
 			}
 			vec3 deltaMove = move/maxIterations;
 			vec3 tmppppPos = m_position;
 			game::BoundingAABB tmpBounding;
+			
 			// linear test :
 			for (int32_t iii=0; iii<maxIterations-1 ; iii++) {
 				tmppppPos+=deltaMove;
-				tmpBounding.Update(m_resource->m_object, m_displayRotation, tmppppPos, m_scale);
+				mat4 transformMatrix =   etk::matTranslate(tmppppPos)
+				                       * etk::matScale(m_scale)
+				                       * m_displayRotation;
+				tmpBounding.Update(m_resource->m_object, transformMatrix);
 				if (true == m_engine->HasCollision(tmpBounding, this)) {
 					tmpPos = tmppppPos;
 					// the tunnel effect is catch ...
-					EWOL_CRITICAL("Tunel effect catch : (" << iii << "/" << maxIterations-1 << ")");
+					EWOL_CRITICAL("[" << m_uniqueId << "] Tunel effect catch : (" << iii << "/" << maxIterations-1 << ") ==> " << tmppppPos);
 					break;
 				}
 			}
 		}
+		//EWOL_DEBUG("[" << m_uniqueId << "] New pos:" << tmpPos << "m");
 		m_position = tmpPos;
-		m_matrixNeedUpdate = true;
+		UpdateMatrix();
 	}
 }
 
+void game::Element::UpdateMatrix(void)
+{
+	m_matrix =   etk::matTranslate(m_position)
+	           * etk::matScale(m_scale)
+	           * m_displayRotation;
+	m_bounding.Update(m_resource->m_object, m_matrix);
+}
+
+void game::Element::Identity(void)
+{
+	m_position = vec3(0,0,0);
+	m_speed = vec3(0,0,0);
+	m_displayRotation.Identity();
+	m_matrix.Identity();
+}
+
+void game::Element::Translate(etk::Vector3D<float> vect)
+{
+	m_position += vect;
+	UpdateMatrix();
+}
+
+void game::Element::Scale(etk::Vector3D<float> vect)
+{
+	m_scale = vect;
+	UpdateMatrix();
+}
+
+void game::Element::Scale(float proportion)
+{
+	m_scale = vec3(proportion,proportion,proportion);
+	UpdateMatrix();
+}
+
+void game::Element::Rotate(etk::Vector3D<float> vect, float angleRad)
+{
+	m_displayRotation = etk::matRotate(vect, angleRad) * m_displayRotation;
+	UpdateMatrix();
+}
+
+mat4& game::Element::GetMatrix(void)
+{
+	return m_matrix;
+};
