@@ -157,8 +157,10 @@ void game::Element::ProcessPosition(float delta)
 			}
 		}
 		//EWOL_DEBUG("[" << m_uniqueId << "] New pos:" << tmpPos << "m");
+		vec3 moving = tmpPos - m_position;
 		m_position = tmpPos;
 		UpdateMatrix();
+		m_engine->ObjectMove(this, moving);
 	}
 }
 
@@ -205,4 +207,12 @@ void game::Element::Rotate(etk::Vector3D<float> vect, float angleRad)
 mat4& game::Element::GetMatrix(void)
 {
 	return m_matrix;
-};
+}
+
+
+void game::Element::CollisionDetected(game::Element* elementCollide, vec3& penetrate)
+{
+	m_position -= penetrate;
+	UpdateMatrix();
+}
+

@@ -57,7 +57,18 @@ namespace game
 			 * @param[in] deltaTime delta time in µs from the previous call.
 			 */
 			void ProcessCollision(float deltaTime);
+			/**
+			 * @brief parse all the element to know if a bounding has a contact with some other elements ...
+			 * @param[in] bounding the reference bounding
+			 * @param[in] currentElement The element that request the detection ==> permit to not detect itself...
+			 */
 			bool HasCollision(game::BoundingAABB& bounding, game::Element* currentElement);
+			/**
+			 * @brief : this object has move, we need to update some collition, and some other things ...
+			 * @param[in] currentElement The element that request the detection ==> permit to not detect itself...
+			 * @param[in] movingVect : the vector that has move the current element.
+			 */
+			void ObjectMove(game::Element* currentElement, vec3& movingVect);
 			/**
 			 * @brief Display the environement.
 			 */

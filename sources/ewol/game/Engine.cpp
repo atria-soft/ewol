@@ -92,6 +92,9 @@ void game::Engine::ProcessCollision(float deltaTime)
 
 bool game::Engine::HasCollision(game::BoundingAABB& bounding, game::Element* currentElement)
 {
+	if (NULL == currentElement) {
+		return false;
+	}
 	// Brut force bounding detection :
 	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
 		if (currentElement == m_elements[iii]) {
@@ -106,6 +109,25 @@ bool game::Engine::HasCollision(game::BoundingAABB& bounding, game::Element* cur
 	return false;
 }
 
+void game::Engine::ObjectMove(game::Element* currentElement, vec3& movingVect)
+{
+	if (NULL == currentElement) {
+		return;
+	}
+	game::BoundingAABB& bounding = currentElement->GetBounding();
+	// Brut force bounding detection :
+	for (int32_t iii=0; iii<m_elements.Size() ; iii++) {
+		if (currentElement == m_elements[iii]) {
+			continue;
+		}
+		if (NULL != m_elements[iii]) {
+			if (true == bounding.HasContact(m_elements[iii]->GetBounding())) {
+				vec3 penetrate = bounding.CalculatePetetration(m_elements[iii]->GetBounding(), movingVect);
+				currentElement->CollisionDetected(m_elements[iii], penetrate);
+			}
+		}
+	}
+}
 
 
 void game::Engine::Draw(ewol::DrawProperty& displayProp)

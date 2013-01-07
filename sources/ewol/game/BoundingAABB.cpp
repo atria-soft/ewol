@@ -181,4 +181,120 @@ bool game::BoundingAABB::HasContact(game::BoundingAABB& obj)
 }
 
 
+vec3 game::BoundingAABB::CalculatePetetration(game::BoundingAABB& bbb, vec3& movingVect)
+{
+	float tmin = 0;
+	// note : We considere the AAA has this is the moving element...
+	// B is condered has a fixed element ...
+	vec3 penetration(0,0,0);
+	// X
+	if (movingVect.x >= 0) {
+		// case 1 :
+		//            ==>
+		//       AAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 2 :
+		//                  ==>
+		//      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 3 :
+		//                  ==>
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBB
+		// case 4 :
+		//                  ==>
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+		penetration.x = m_PointStop.x - bbb.m_PointStart.x;
+	} else {
+		// case 1 :
+		//            <==
+		//       AAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 2 :
+		//                  <==
+		//      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 3 :
+		//                  <==
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBB
+		// case 4 :
+		//                  <==
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+		penetration.x = m_PointStart.x - bbb.m_PointStop.x;
+	}
+	// Y
+	if (movingVect.y >= 0) {
+		penetration.y = m_PointStop.y - bbb.m_PointStart.y;
+	} else {
+		penetration.y = m_PointStart.y - bbb.m_PointStop.y;
+	}
+	// Z
+	if (movingVect.z >= 0) {
+		penetration.z = m_PointStop.z - bbb.m_PointStart.z;
+	} else {
+		penetration.z = m_PointStart.z - bbb.m_PointStop.z;
+	}
+	return penetration;
+	
+
+/*
+	// note : We considere the AAA has this is the moving element...
+	// B is condered has a fixed element ...
+	vec3 penetration(0,0,0);
+	// X
+	if (movingVect.x >= 0) {
+		// case 1 :
+		//            ==>
+		//       AAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 2 :
+		//                  ==>
+		//      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 3 :
+		//                  ==>
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBB
+		// case 4 :
+		//                  ==>
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+		penetration.x = m_PointStop.x - bbb.m_PointStart.x;
+	} else {
+		// case 1 :
+		//            <==
+		//       AAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 2 :
+		//                  <==
+		//      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+		//              BBBBBBBBBBBBB
+		// case 3 :
+		//                  <==
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBB
+		// case 4 :
+		//                  <==
+		//              AAAAAAAAAAAAA
+		//      BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB
+		penetration.x = m_PointStart.x - bbb.m_PointStop.x;
+	}
+	// Y
+	if (movingVect.y >= 0) {
+		penetration.y = m_PointStop.y - bbb.m_PointStart.y;
+	} else {
+		penetration.y = m_PointStart.y - bbb.m_PointStop.y;
+	}
+	// Z
+	if (movingVect.z >= 0) {
+		penetration.z = m_PointStop.z - bbb.m_PointStart.z;
+	} else {
+		penetration.z = m_PointStart.z - bbb.m_PointStop.z;
+	}
+	return penetration;
+*/
+}
 

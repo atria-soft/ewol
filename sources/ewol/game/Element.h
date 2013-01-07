@@ -144,6 +144,12 @@ namespace game
 			 * @brief Get the current static or dynamic mode
 			 */
 			bool GetStaticMode(void) { return m_static; };
+			/**
+			 * @brief A collision has bee detected ...
+			 * @param[in] elementCollide the element that has been collided
+			 * @param[in] penetrate The size of the penetration ...
+			 */
+			virtual void CollisionDetected(game::Element* elementCollide, vec3& penetrate);
 	};
 };
 

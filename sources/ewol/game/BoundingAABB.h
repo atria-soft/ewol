@@ -48,6 +48,10 @@ namespace game
 			 */
 			virtual bool HasContact(game::BoundingAABB& otherbounding);
 			/**
+			 * @brief Calculate the penetration size in 2 bounding.
+			 */
+			virtual vec3 CalculatePetetration(game::BoundingAABB& otherbounding, vec3& movingVect);
+			/**
 			 * @brief Set the contact property at a specific value ...
 			 */
 			void SetContactMode(bool newStatus) { m_hasContact=newStatus; };
