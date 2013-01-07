@@ -38,3 +38,6 @@
 [submodule "external/z/zlib"]
 	path = external/z/zlib
 	url = https://github.com/madler/zlib.git
+[submodule "external/bullet/bullet"]
+	path = external/bullet/bullet
+	url = https://github.com/HeeroYui/bullet.git

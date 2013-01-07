@@ -22,8 +22,9 @@
 
 
 widget::Scene::Scene(game::Engine* gameEngine) :
+	m_dynamicsWorld(NULL),
 	m_camera(vec3(-6,0,2), vec3(0,0,0)),
-	m_gameEngine(gameEngine),
+	//m_gameEngine(gameEngine),
 	m_isRunning(true),
 	m_lastCallTime(-1),
 	m_walk(0)

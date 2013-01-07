@@ -7,6 +7,7 @@ TMP_DIR := $(shell readlink -m -n $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LI
 EWOL_FOLDER:=$(TMP_DIR)
 USER_PACKAGES+= $(TMP_DIR)/sources/
 # Add external librairy (direct folder to reduce the search time (really special case for windows ...))
+USER_PACKAGES+= $(TMP_DIR)/external/bullet
 USER_PACKAGES+= $(TMP_DIR)/external/etk
 USER_PACKAGES+= $(TMP_DIR)/external/agg
 USER_PACKAGES+= $(TMP_DIR)/external/freetype

@@ -18,13 +18,16 @@
 #include <ewol/game/Camera.h>
 #include <ewol/widget/Widget.h>
 
+class btDynamicsWorld;
 
 namespace widget {
 	class Scene :public ewol::Widget
 	{
 		protected:
+			///this is the most important class
+			btDynamicsWorld*  m_dynamicsWorld;
 			game::Camera      m_camera;       //!< Display point of view
-			game::Engine*     m_gameEngine;   //!< display engine system
+			//game::Engine*     m_gameEngine;   //!< display engine system
 			bool              m_isRunning;    //!< the display is running (not in pause)
 			double            m_lastCallTime; //!< previous call Time
 			float             m_ratioTime;    //!< Ratio time for the speed of the game ...
