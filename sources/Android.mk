@@ -12,7 +12,7 @@ LOCAL_VERSION=$(shell cat $(LOCAL_PATH)/tag)
 $(info [TAG:$(LOCAL_MODULE)] $(LOCAL_VERSION))
 
 # name of the dependency
-LOCAL_LIBRARIES := etk freetype tinyxml libpng parsersvg lua libzip
+LOCAL_LIBRARIES := etk freetype tinyxml libpng parsersvg lua libzip bullet
 
 LOCAL_C_INCLUDES :=
 

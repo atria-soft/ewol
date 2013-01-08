@@ -17,21 +17,41 @@
 #include <ewol/game/Element.h>
 #include <ewol/game/Camera.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/renderer/openGL.h>
 
+class btBroadphaseInterface;
+class btCollisionShape;
+class btOverlappingPairCache;
+class btCollisionDispatcher;
+class btConstraintSolver;
+struct btCollisionAlgorithmCreateFunc;
+class btDefaultCollisionConfiguration;
 class btDynamicsWorld;
+#include <LinearMath/btScalar.h>
+class btVector3;
 
 namespace widget {
 	class Scene :public ewol::Widget
 	{
 		protected:
 			///this is the most important class
-			btDynamicsWorld*  m_dynamicsWorld;
+			btDefaultCollisionConfiguration* m_collisionConfiguration;
+			btCollisionDispatcher*           m_dispatcher;
+			btBroadphaseInterface*           m_broadphase;
+			btConstraintSolver*              m_solver;
+			btDynamicsWorld*                 m_dynamicsWorld;
+			//keep the collision shapes, for deletion/cleanup
+			etk::Vector<btCollisionShape*>   m_collisionShapes;
 			game::Camera      m_camera;       //!< Display point of view
 			//game::Engine*     m_gameEngine;   //!< display engine system
 			bool              m_isRunning;    //!< the display is running (not in pause)
 			double            m_lastCallTime; //!< previous call Time
 			float             m_ratioTime;    //!< Ratio time for the speed of the game ...
 			uint32_t          m_walk;         //!< Wolk properties
+			int32_t           m_debugMode;
+			bool m_textureinitialized;
+			bool m_textureenabled;
+	unsigned int						m_texturehandle;
 		public:
 			/**
 			 * @brief Main scene constructor
@@ -98,6 +118,13 @@ namespace widget {
 			virtual void OnGetFocus(void);
 			// Derived function
 			virtual void OnLostFocus(void);
+			void renderscene(int pass);
+			void DrawOpenGL(btScalar* m, 
+                const btCollisionShape* shape,
+                const btVector3& color,
+                int32_t	debugMode,
+                const btVector3& worldBoundsMin,
+                const btVector3& worldBoundsMax);
 	};
 };
 
