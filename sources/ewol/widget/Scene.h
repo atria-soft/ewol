@@ -37,7 +37,7 @@ namespace widget {
 			 * @brief Main scene constructor
 			 * @param[in] gameEngine Used game engine for the display (can be NULL).
 			 */
-			Scene(game::Engine* gameEngine=NULL);
+			Scene(btDynamicsWorld* gameEngine=NULL);
 			/**
 			 * @brief Destructor 
 			 * @note The engine is not destroy, it is the reponsability of the user

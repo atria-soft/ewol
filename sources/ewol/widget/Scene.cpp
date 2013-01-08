@@ -10,6 +10,8 @@
 #include <math.h>
 #include <ewol/renderer/openGL.h>
 #include <etk/math/Matrix4.h>
+#include <bullet/src/BulletDynamics/Dynamics/btDynamicsWorld.h>
+
 
 #undef __class__
 #define __class__	"Scene"
@@ -21,7 +23,7 @@
 #define  WALK_FLAG_CAUTION  (1<<4)
 
 
-widget::Scene::Scene(game::Engine* gameEngine) :
+widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 	m_dynamicsWorld(NULL),
 	m_camera(vec3(-6,0,2), vec3(0,0,0)),
 	//m_gameEngine(gameEngine),
@@ -71,12 +73,96 @@ void widget::Scene::PauseToggle(void)
 	}
 }
 
+/*
+void widget::Scene::::renderscene(int pass)
+{
+	btScalar m[16];
+	btMatrix3x3 rot;
+	rot.setIdentity();
+	const int32_t numObjects=m_dynamicsWorld->getNumCollisionObjects();
+	btVector3 wireColor(1,0,0);
+	for(int32_t iii=0;iii<numObjects;iii++)
+	{
+		btCollisionObject* colObj=m_dynamicsWorld->getCollisionObjectArray()[iii];
+		btRigidBody* body=btRigidBody::upcast(colObj);
+		if(    NULL != body
+		    && body->getMotionState() ) {
+			btDefaultMotionState* myMotionState = (btDefaultMotionState*)body->getMotionState();
+			myMotionState->m_graphicsWorldTrans.getOpenGLMatrix(m);
+			rot=myMotionState->m_graphicsWorldTrans.getBasis();
+		} else {
+			colObj->getWorldTransform().getOpenGLMatrix(m);
+			rot=colObj->getWorldTransform().getBasis();
+		}
+		btVector3 wireColor(1.f,1.0f,0.5f); //wants deactivation
+		if(iii&1) {
+			wireColor=btVector3(0.f,0.0f,1.f);
+		}
+		///color differently for active, sleeping, wantsdeactivation states
+		if (colObj->getActivationState() == 1) {
+			//active
+			if (iii & 1) {
+				wireColor += btVector3 (1.f,0.f,0.f);
+			} else {
+				wireColor += btVector3 (.5f,0.f,0.f);
+			}
+		}
+		if(colObj->getActivationState()==2) {
+			//ISLAND_SLEEPING
+			if(iii&1) {
+				wireColor += btVector3 (0.f,1.f, 0.f);
+			} else {
+				wireColor += btVector3 (0.f,0.5f,0.f);
+			}
+		}
+
+		btVector3 aabbMin,aabbMax;
+		m_dynamicsWorld->getBroadphase()->getBroadphaseAabb(aabbMin,aabbMax);
+		
+		aabbMin-=btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+		aabbMax+=btVector3(BT_LARGE_FLOAT, BT_LARGE_FLOAT, BT_LARGE_FLOAT);
+
+
+		if (!(getDebugMode()& btIDebugDraw::DBG_DrawWireframe))
+		{
+			switch(pass)
+			{
+				case 0:
+					m_shapeDrawer->drawOpenGL(m,
+					                          colObj->getCollisionShape(),
+					                          wireColor,
+					                          getDebugMode(),
+					                          aabbMin,
+					                          aabbMax);
+					break;
+				case 1:
+					m_shapeDrawer->drawShadow(m,
+					                          m_sundirection*rot,
+					                          colObj->getCollisionShape(),
+					                          aabbMin,
+					                          aabbMax);
+					break;
+				case 2:
+					m_shapeDrawer->drawOpenGL(m,
+					                          colObj->getCollisionShape(),
+					                          wireColor*btScalar(0.3),
+					                          0,
+					                          aabbMin,
+					                          aabbMax);
+					break;
+			}
+		}
+	}
+}
+*/
 
 void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 {
+/*
 	if (NULL != m_gameEngine) {
 		m_gameEngine->Draw(displayProp);
 	}
+*/
 }
 
 #define  WALK_FLAG_FORWARD  (1<<0)
@@ -110,11 +196,13 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 	// cut the processing in small slot of time to prevent error in the real-time Display (Android call us between 30 to 60 fps)
 	float deltaTime = (float) (curentTime - m_lastCallTime);
 	//EWOL_DEBUG("Time: m_lastCallTime=" << m_lastCallTime << " deltaTime=" << deltaTime);
+	/*
 	if (NULL != m_gameEngine) {
 		if (true == m_isRunning) {
 			m_gameEngine->Process(m_lastCallTime, deltaTime);
 		}
 	}
+	*/
 	m_lastCallTime = curentTime;
 	MarkToRedraw();
 	if (m_walk!=0) {

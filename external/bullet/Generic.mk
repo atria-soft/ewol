@@ -4,9 +4,10 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := bullet
 
-LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
+LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH) \
+                           $(LOCAL_PATH)/bullet/src/
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/bullet/src/ \
+LOCAL_C_INCLUDES :=  \
                     $(LOCAL_PATH)/bullet/Extras/ConvexDecomposition
 
 LOCAL_CFLAGS := -Wno-write-strings \
