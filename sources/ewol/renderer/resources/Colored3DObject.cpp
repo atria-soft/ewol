@@ -61,9 +61,69 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, vertices.Size());
 	m_GLprogram->UnUse();
+	// Request the draw od the elements : 
+	glDrawArrays(GL_LINES, 0, vertices.Size());
+	m_GLprogram->UnUse();
 	if (false==updateDepthBuffer) {
 		glDepthMask(GL_TRUE);
 	}
 	glDisable(GL_DEPTH_TEST);
 }
 
+void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
+                                 draw::Colorf& color,
+                                 mat4& transformationMatrix)
+{
+	if (vertices.Size()<=0) {
+		return;
+	}
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	glEnable(GL_DEPTH_TEST);
+	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	mat4 projMatrix = ewol::openGL::GetMatrix();
+	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
+	// color :
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
+	// Request the draw od the elements : 
+	glDrawArrays(GL_TRIANGLES, 0, vertices.Size());
+	m_GLprogram->UnUse();
+	glDisable(GL_DEPTH_TEST);
+}
+
+void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
+                                     draw::Colorf& color,
+                                     mat4& transformationMatrix)
+{
+	if (vertices.Size()<=0) {
+		return;
+	}
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	glEnable(GL_DEPTH_TEST);
+	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	mat4 projMatrix = ewol::openGL::GetMatrix();
+	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
+	// color :
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
+	// Request the draw od the elements : 
+	glDrawArrays(GL_LINES, 0, vertices.Size());
+	m_GLprogram->UnUse();
+	glDisable(GL_DEPTH_TEST);
+}

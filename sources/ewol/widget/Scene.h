@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/math/Vector3D.h>
+#include <etk/math/Matrix4.h>
 #include <etk/Vector.h>
 #include <ewol/debug.h>
 #include <ewol/game/Engine.h>
@@ -18,6 +19,7 @@
 #include <ewol/game/Camera.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/renderer/openGL.h>
+#include <ewol/renderer/ResourceManager.h>
 
 class btBroadphaseInterface;
 class btCollisionShape;
@@ -52,6 +54,7 @@ namespace widget {
 			bool m_textureinitialized;
 			bool m_textureenabled;
 	unsigned int						m_texturehandle;
+			ewol::Colored3DObject*    m_directDrawObject; // system to draw special object ...
 		public:
 			/**
 			 * @brief Main scene constructor

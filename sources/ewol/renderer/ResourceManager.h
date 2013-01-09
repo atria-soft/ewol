@@ -25,19 +25,47 @@
 namespace ewol
 {
 	namespace resource {
+		/**
+		 * @brief Initialize the internal variable
+		 */
 		void Init(void);
+		/**
+		 * @brief Uninitiamize the resource manager, free all resources previously requested
+		 * @note when not free ==> generate warning, because the segfault can appear after...
+		 */
 		void UnInit(void);
+		/**
+		 * @brief Display in the log all the resources loaded ...
+		 */
 		void Display(void);
-		
-		// specific for the test ...
+		/**
+		 * @brief Reload all resources from files, and send there in openGL card if needed.
+		 * @note If File is reference at THEME:XXX:filename if the Theme change the file will reload the newOne
+		 */
 		void ReLoadResources(void);
-		
+		/**
+		 * @brief Call by the system to send all the needed data on the graphic card chen they change ...
+		 * @param[in] object The resources that might be updated
+		 */
 		void Update(ewol::Resource* object);
-		// Specific to load or update the data in the openGl context ==> system use only
+		/**
+		 * @brief Call by the system chen the openGL Context has been unexpectially removed ==> This reload all the texture, VBO and other ....
+		 */
 		void UpdateContext(void);
+		/**
+		 * @brief This is to inform the resources manager that we have no more openGl context ...
+		 */
 		void ContextHasBeenDestroyed(void);
 		
-		// return the type of the resource ...
+		/**
+		 * @brief Load the specify resources type
+		 * @param[in] filename The filename of the resources
+		 * @param[in,out] object The resources that might be instanciate.
+		 * @return true if the resource has been loaded corectly.
+		 * @return false An error occured ...
+		 * @note when you call the Keep function, you must call the Realease function ==> otherwise the resources will never be freed
+		 * @note The resources with the same name are loaded only one time, a counter prevent multiple loading...
+		 */
 		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
 		bool Keep(etk::UString& filename, ewol::FontBase*& object);
 		bool Keep(etk::UString& filename, ewol::Program*& object);
@@ -49,6 +77,10 @@ namespace ewol
 		bool Keep(etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);
 		
+		/**
+		 * @brief Release a resources and free it if the Last release is call.
+		 * @param[in,out] object element to realease ==> is return at NULL value.
+		 */
 		void Release(ewol::Resource*& object);
 		void Release(ewol::TexturedFont*& object);
 		void Release(ewol::FontBase*& object);
