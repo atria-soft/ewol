@@ -15,19 +15,7 @@
 #include <BulletDynamics/Dynamics/btDynamicsWorld.h>
 #include <BulletCollision/CollisionShapes/btCollisionShape.h>
 #include <LinearMath/btIDebugDraw.h>
-#include <BulletCollision/CollisionShapes/btPolyhedralConvexShape.h>
-#include <BulletCollision/CollisionShapes/btTriangleMeshShape.h>
-#include <BulletCollision/CollisionShapes/btBoxShape.h>
-#include <BulletCollision/CollisionShapes/btSphereShape.h>
-#include <BulletCollision/CollisionShapes/btConeShape.h>
-#include <BulletCollision/CollisionShapes/btCylinderShape.h>
-#include <BulletCollision/CollisionShapes/btTetrahedronShape.h>
-#include <BulletCollision/CollisionShapes/btCompoundShape.h>
-#include <BulletCollision/CollisionShapes/btCapsuleShape.h>
-#include <BulletCollision/CollisionShapes/btConvexTriangleMeshShape.h>
-#include <BulletCollision/CollisionShapes/btUniformScalingShape.h>
-#include <BulletCollision/CollisionShapes/btStaticPlaneShape.h>
-#include <BulletCollision/CollisionShapes/btMultiSphereShape.h>
+#include <btBulletCollisionCommon.h>
 #include <BulletCollision/CollisionShapes/btConvexPolyhedron.h>
 #include <BulletCollision/CollisionShapes/btShapeHull.h>
 #include <LinearMath/btTransformUtil.h>
@@ -170,20 +158,17 @@ SceneDebugDrawer completeDebugger;
 
 widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 	m_dynamicsWorld(NULL),
-	m_camera(vec3(-6,0,2), vec3(DEG_TO_RAD(0),0,0)),
+	m_camera(vec3(-6,0,10), vec3(DEG_TO_RAD(0),0,0)),
 	//m_gameEngine(gameEngine),
 	m_isRunning(true),
 	m_lastCallTime(-1),
 	m_walk(0),
 	m_debugMode(0),
-	m_textureinitialized(false),
-	m_textureenabled(true),
 	m_directDrawObject(NULL)
 {
 	// this permit to display direct element ...
 	ewol::resource::Keep(m_directDrawObject);
 	
-m_texturehandle			=	0;
 	SetCanHaveFocus(true);
 	PeriodicCallSet(true);
 	m_zoom = 1.0/1000.0;
@@ -205,12 +190,12 @@ m_texturehandle			=	0;
 	
 	
 	// Create The ground
-	btBoxShape* groundShape = new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.)));
+	btBoxShape* groundShape = new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(5.)));
 	m_collisionShapes.PushBack(groundShape);
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0,0,-50));
+	groundTransform.setOrigin(btVector3(0,0,-5));
 	btScalar mass(0.0);
 	btVector3 localInertia(0,0,0);
 	//rigidbody is dynamic if and only if mass is non zero, otherwise static
@@ -228,9 +213,15 @@ m_texturehandle			=	0;
 	{
 		// Create a few dynamic rigidbodies
 		// Re-using the same collision is better for memory usage and performance
-		btBoxShape* colShape = new btBoxShape(btVector3(SCALING*1,SCALING*1,SCALING*1));
+		btBoxShape* colBoxShape = new btBoxShape(btVector3(SCALING*1,SCALING*1,SCALING*1));
 		//btCollisionShape* colShape = new btSphereShape(btScalar(1.));
-		m_collisionShapes.PushBack(colShape);
+		m_collisionShapes.PushBack(colBoxShape);
+		
+		// Re-using the same collision is better for memory usage and performance
+		btSphereShape* colSphereShape = new btSphereShape(btScalar(SCALING*1));
+		//btCollisionShape* colShape = new btSphereShape(btScalar(1.));
+		m_collisionShapes.PushBack(colSphereShape);
+		
 		/// Create Dynamic Objects
 		btTransform startTransform;
 		startTransform.setIdentity();
@@ -238,7 +229,8 @@ m_texturehandle			=	0;
 		btVector3 localInertia(0,0,0);
 		//rigidbody is dynamic if and only if mass is non zero, otherwise static
 		if (mass != 0.0f) {
-			colShape->calculateLocalInertia(mass, localInertia);
+			colBoxShape->calculateLocalInertia(mass, localInertia);
+			colSphereShape->calculateLocalInertia(mass, localInertia);
 		}
 		float start_x = START_POS_X - ARRAY_SIZE_X/2;
 		float start_y = START_POS_Y;
@@ -246,14 +238,22 @@ m_texturehandle			=	0;
 		for (int kkk=0 ; kkk<ARRAY_SIZE_Y ; kkk++) {
 			for (int iii=0 ; iii<ARRAY_SIZE_X ; iii++) {
 				for(int jjj=0 ; jjj<ARRAY_SIZE_Z ; jjj++) {
-					startTransform.setOrigin(SCALING*btVector3(btScalar(20+2.0*iii + start_x),
-					                                           btScalar(0+2.0*kkk + start_y),
+					btQuaternion tmpAngle(DEG_TO_RAD(45), DEG_TO_RAD(45), 0);
+					startTransform.setRotation(tmpAngle);
+					startTransform.setOrigin(SCALING*btVector3(btScalar(20+2.2*iii + start_x),
+					                                           btScalar(0+2.2*kkk + start_y),
 					                                           btScalar(20+3.0*jjj + start_z)     ) );
 					//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 					btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
-					btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colShape,localInertia);
-					btRigidBody* body = new btRigidBody(rbInfo);
-					m_dynamicsWorld->addRigidBody(body);
+					if(jjj%2==0) {
+						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colBoxShape,localInertia);
+						btRigidBody* body = new btRigidBody(rbInfo);
+						m_dynamicsWorld->addRigidBody(body);
+					} else {
+						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colSphereShape,localInertia);
+						btRigidBody* body = new btRigidBody(rbInfo);
+						m_dynamicsWorld->addRigidBody(body);
+					}
 				}
 			}
 		}
@@ -320,11 +320,10 @@ void widget::Scene::PauseToggle(void)
 }
 
 
-void DrawSphere(btScalar radius, int lats, int longs) 
+void widget::Scene::DrawSphere(btScalar radius, int lats, int longs, mat4& transformationMatrix, draw::Colorf& tmpColor)
 {
-	EWOL_DEBUG("BasicDrawSphere");
 	int i, j;
-	etk::Vector<vec3> vertices;
+	etk::Vector<vec3> EwolVertices;
 	for(i = 0; i <= lats; i++) {
 		btScalar lat0 = SIMD_PI * (-btScalar(0.5) + (btScalar) (i - 1) / lats);
 		btScalar z0  = radius*sin(lat0);
@@ -336,36 +335,49 @@ void DrawSphere(btScalar radius, int lats, int longs)
 
 
 		//glBegin(GL_QUAD_STRIP);
-		for(j = 0; j <= longs; j++) {
+		for(j = 0; j < longs; j++) {
 			btScalar lng = 2 * SIMD_PI * (btScalar) (j - 1) / longs;
 			btScalar x = cos(lng);
 			btScalar y = sin(lng);
-			//vec3
-			//glNormal3f(x * zr1, y * zr1, z1);
-			//glVertex3f(x * zr1, y * zr1, z1);
-			//glNormal3f(x * zr0, y * zr0, z0);
-			//glVertex3f(x * zr0, y * zr0, z0);
+			vec3 v1 = vec3(x * zr1, y * zr1, z1);
+			vec3 v4 = vec3(x * zr0, y * zr0, z0);
+			
+			lng = 2 * SIMD_PI * (btScalar) (j) / longs;
+			x = cos(lng);
+			y = sin(lng);
+			vec3 v2 = vec3(x * zr1, y * zr1, z1);
+			vec3 v3 = vec3(x * zr0, y * zr0, z0);
+			
+			EwolVertices.PushBack(v1);
+			EwolVertices.PushBack(v2);
+			EwolVertices.PushBack(v3);
+			
+			EwolVertices.PushBack(v1);
+			EwolVertices.PushBack(v3);
+			EwolVertices.PushBack(v4);
 		}
-		//glEnd();
-		
 	}
+	m_directDrawObject->Draw(EwolVertices, tmpColor, transformationMatrix);
 }
 
 
 inline void glDrawVector(const btVector3& v) { glVertex3d(v[0], v[1], v[2]); }
 
 void widget::Scene::DrawOpenGL(btScalar* mmm, 
-                const btCollisionShape* shape,
-                const btVector3& color,
-                int32_t	debugMode,
-                const btVector3& worldBoundsMin,
-                const btVector3& worldBoundsMax)
+                               const btCollisionShape* shape,
+                               const btVector3& color,
+                               int32_t	debugMode,
+                               const btVector3& worldBoundsMin,
+                               const btVector3& worldBoundsMax)
 {
-	mat4 transformationMatrix;
+	mat4 transformationMatrix(mmm);
+	transformationMatrix.Transpose();
+	/*
 	transformationMatrix.Identity();
 	transformationMatrix.m_mat[3] = mmm[12];
 	transformationMatrix.m_mat[7] = mmm[13];
 	transformationMatrix.m_mat[11] = mmm[14];
+	*/
 	//EWOL_DEBUG("Matrix : " << transformationMatrix);
 	
 	etk::Vector<vec3> EwolVertices;
@@ -461,80 +473,25 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 			           worldBoundsMax);
 		}
 	} else {
-		/**************************************************************/
-		//EWOL_DEBUG("    Draw (5): !=COMPOUND_SHAPE_PROXYTYPE");
-		/*
-		if(m_textureenabled&&(!m_textureinitialized)) {
-			GLubyte*	image=new GLubyte[256*256*3];
-			for(int y=0;y<256;++y) {
-				const int	t=y>>4;
-				GLubyte*	pi=image+y*256*3;
-				for(int x=0;x<256;++x) {
-					const int		s=x>>4;
-					const GLubyte	b=180;
-					GLubyte			c=b+((s+t&1)&1)*(255-b);
-					pi[0]=pi[1]=pi[2]=c;pi+=3;
-				}
-			}
-			glGenTextures(1,(GLuint*)&m_texturehandle);
-			glBindTexture(GL_TEXTURE_2D,m_texturehandle);
-			glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-			glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
-			glTexParameterf(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
-			gluBuild2DMipmaps(GL_TEXTURE_2D,3,256,256,GL_RGB,GL_UNSIGNED_BYTE,image);
-			delete[] image;
-		}*/
-		/*
-		glMatrixMode(GL_TEXTURE);
-		glLoadIdentity();
-		glScalef(0.025f,0.025f,0.025f);
-		glMatrixMode(GL_MODELVIEW);
-		static const GLfloat	planex[]={1,0,0,0};
-		//	static const GLfloat	planey[]={0,1,0,0};
-			static const GLfloat	planez[]={0,0,1,0};
-			glTexGenfv(GL_S,GL_OBJECT_PLANE,planex);
-			glTexGenfv(GL_T,GL_OBJECT_PLANE,planez);
-			glTexGeni(GL_S,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-			glTexGeni(GL_T,GL_TEXTURE_GEN_MODE,GL_OBJECT_LINEAR);
-			glEnable(GL_TEXTURE_GEN_S);
-			glEnable(GL_TEXTURE_GEN_T);
-			glEnable(GL_TEXTURE_GEN_R);
-			
-			//m_textureinitialized=true;
-		glEnable(GL_COLOR_MATERIAL);
-		/*if(m_textureenabled) {
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D,m_texturehandle);
-		} else {
-		*/
-		//	glDisable(GL_TEXTURE_2D);
-		//}
-		//glColor3f(color.x(),color.y(), color.z());
-		
+		draw::Colorf tmpColor(color.x(),color.y(), color.z(), 0.5);
 		bool useWireframeFallback = true;
 		if (!(debugMode & btIDebugDraw::DBG_DrawWireframe)) {
-			/**************************************************************/
 			//EWOL_DEBUG("        Draw (6): !btIDebugDraw::DBG_DrawWireframe");
-			///you can comment out any of the specific cases, and use the default
-			///the benefit of 'default' is that it approximates the actual collision shape including collision margin
-			//int shapetype=m_textureenabled?MAX_BROADPHASE_COLLISION_TYPES:shape->getShapeType();
 			int shapetype=shape->getShapeType();
 			switch (shapetype) {
 				case SPHERE_SHAPE_PROXYTYPE:
 				{
-					EWOL_DEBUG("            Draw (101): SPHERE_SHAPE_PROXYTYPE");
+					/** Bounding Sphere ==> model shape **/
+					//EWOL_DEBUG("            Draw (101): SPHERE_SHAPE_PROXYTYPE");
 					const btSphereShape* sphereShape = static_cast<const btSphereShape*>(shape);
 					float radius = sphereShape->getMargin();//radius doesn't include the margin, so draw with margin
-					DrawSphere(radius,10,10);
+					DrawSphere(radius, 10, 10, transformationMatrix, tmpColor);
 					useWireframeFallback = false;
 					break;
 				}
 				case BOX_SHAPE_PROXYTYPE:
 				{
-					// this is a simple box .. nothing special ...
-				/**************************************************************/
+					/** Bounding box ==> model shape **/
 					//EWOL_DEBUG("            Draw (102): BOX_SHAPE_PROXYTYPE");
 					const btBoxShape* boxShape = static_cast<const btBoxShape*>(shape);
 					btVector3 halfExtent = boxShape->getHalfExtentsWithMargin();
@@ -569,7 +526,6 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 						EwolVertices.PushBack(vertices[indices[iii+1]]);
 						EwolVertices.PushBack(vertices[indices[iii+2]]);
 					}
-					draw::Colorf tmpColor(color.x(),color.y(), color.z(), 0.5);
 					m_directDrawObject->Draw(EwolVertices, tmpColor, transformationMatrix);
 					useWireframeFallback = false;
 					break;

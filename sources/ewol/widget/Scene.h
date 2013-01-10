@@ -51,9 +51,6 @@ namespace widget {
 			float             m_ratioTime;    //!< Ratio time for the speed of the game ...
 			uint32_t          m_walk;         //!< Wolk properties
 			int32_t           m_debugMode;
-			bool m_textureinitialized;
-			bool m_textureenabled;
-	unsigned int						m_texturehandle;
 			ewol::Colored3DObject*    m_directDrawObject; // system to draw special object ...
 		public:
 			/**
@@ -123,11 +120,12 @@ namespace widget {
 			virtual void OnLostFocus(void);
 			void renderscene(int pass);
 			void DrawOpenGL(btScalar* m, 
-                const btCollisionShape* shape,
-                const btVector3& color,
-                int32_t	debugMode,
-                const btVector3& worldBoundsMin,
-                const btVector3& worldBoundsMax);
+			                const btCollisionShape* shape,
+			                const btVector3& color,
+			                int32_t	debugMode,
+			                const btVector3& worldBoundsMin,
+			                const btVector3& worldBoundsMax);
+			void DrawSphere(btScalar radius, int lats, int longs, mat4& transformationMatrix, draw::Colorf& tmpColor);
 	};
 };
 
