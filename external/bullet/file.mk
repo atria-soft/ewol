@@ -146,7 +146,7 @@ FILE_LIST+= \
 			bullet/Extras/GIMPACTUtils/btGImpactConvexDecompositionShape.cpp
 
 # lib convexdecomposition
-FILE_LIST+= \
+#FILE_LIST+= \
 			bullet/Extras/ConvexDecomposition/concavity.cpp \
 			bullet/Extras/ConvexDecomposition/ConvexDecomposition.cpp \
 			bullet/Extras/ConvexDecomposition/vlookup.cpp \
@@ -164,7 +164,7 @@ FILE_LIST+= \
 
 
 # lib HACD
-FILE_LIST+= \
+#FILE_LIST+= \
 			bullet/Extras/HACD/hacdGraph.cpp \
 			bullet/Extras/HACD/hacdHACD.cpp \
 			bullet/Extras/HACD/hacdICHull.cpp \

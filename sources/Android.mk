@@ -20,7 +20,10 @@ LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG)-$(BUILD_DIRECTORY_MODE)\"" \
-                -DDATA_IN_APK
+                -DDATA_IN_APK \
+                -O2
+
+#LOCAL_EXPORT_CFLAGS := -DBT_USE_NEON
 
 LOCAL_EXPORT_LDLIBS := -lGLESv2
 

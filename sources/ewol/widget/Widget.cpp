@@ -124,6 +124,12 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		// widget is hidden ...
 		return;
 	}
+	// check if the element is displayable in the windows : 
+	if(    displayProp.m_windowsSize.x < m_origin.x
+	    || displayProp.m_windowsSize.y < m_origin.y ) {
+		// out of the windows ==> nothing to display ...
+		return;
+	}
 	ewol::openGL::Push();
 	if(    (displayProp.m_origin.x > m_origin.x)
 	    || (displayProp.m_origin.x + displayProp.m_size.x < m_size.x + m_origin.x) ) {

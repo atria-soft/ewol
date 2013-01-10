@@ -173,7 +173,22 @@ void ewol::Program::UpdateContext(void)
 			GLint bufLength = 0;
 			l_bufferDisplayError[0] = '\0';
 			glGetProgramInfoLog(m_program, LOG_OGL_INTERNAL_BUFFER_LEN, &bufLength, l_bufferDisplayError);
-			EWOL_ERROR("Could not compile \"PROGRAM\": " << l_bufferDisplayError);
+			char tmpLog[256];
+			int32_t idOut=0;
+			EWOL_ERROR("Could not compile \"PROGRAM\": ");
+			for (int32_t iii=0; iii<LOG_OGL_INTERNAL_BUFFER_LEN ; iii++) {
+				tmpLog[idOut] = l_bufferDisplayError[iii];
+				if (tmpLog[idOut] == '\n' || tmpLog[idOut] == '\0') {
+					tmpLog[idOut] = '\0';
+					EWOL_ERROR("    | " << tmpLog);
+					idOut=0;
+				} else {
+					idOut++;
+				}
+				if (l_bufferDisplayError[iii] == '\0') {
+					break;
+				}
+			}
 			glDeleteProgram(m_program);
 			checkGlError("glDeleteProgram", __LINE__);
 			m_program = 0;
@@ -265,6 +280,9 @@ void ewol::Program::Reload(void)
 
 void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -287,6 +305,9 @@ void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* point
 
 void ewol::Program::UniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 _matrix, bool transpose)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -306,6 +327,9 @@ void ewol::Program::UniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 _ma
 
 void ewol::Program::Uniform1f(int32_t idElem, float value1)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -318,6 +342,9 @@ void ewol::Program::Uniform1f(int32_t idElem, float value1)
 }
 void ewol::Program::Uniform2f(int32_t idElem, float value1, float value2)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -330,6 +357,9 @@ void ewol::Program::Uniform2f(int32_t idElem, float value1, float value2)
 }
 void ewol::Program::Uniform3f(int32_t idElem, float value1, float value2, float value3)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -342,6 +372,9 @@ void ewol::Program::Uniform3f(int32_t idElem, float value1, float value2, float 
 }
 void ewol::Program::Uniform4f(int32_t idElem, float value1, float value2, float value3, float value4)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -357,6 +390,9 @@ void ewol::Program::Uniform4f(int32_t idElem, float value1, float value2, float 
 
 void ewol::Program::Uniform1i(int32_t idElem, int32_t value1)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -369,6 +405,9 @@ void ewol::Program::Uniform1i(int32_t idElem, int32_t value1)
 }
 void ewol::Program::Uniform2i(int32_t idElem, int32_t value1, int32_t value2)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -381,6 +420,9 @@ void ewol::Program::Uniform2i(int32_t idElem, int32_t value1, int32_t value2)
 }
 void ewol::Program::Uniform3i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -393,6 +435,9 @@ void ewol::Program::Uniform3i(int32_t idElem, int32_t value1, int32_t value2, in
 }
 void ewol::Program::Uniform4i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3, int32_t value4)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -409,6 +454,9 @@ void ewol::Program::Uniform4i(int32_t idElem, int32_t value1, int32_t value2, in
 
 void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, float *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -429,6 +477,9 @@ void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, float *value)
 }
 void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -449,6 +500,9 @@ void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
 }
 void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -469,6 +523,9 @@ void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
 }
 void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -492,6 +549,9 @@ void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
 
 void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -512,6 +572,9 @@ void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value
 }
 void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -532,6 +595,9 @@ void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value
 }
 void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -552,6 +618,9 @@ void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value
 }
 void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
 		return;
@@ -577,6 +646,9 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value
 
 void ewol::Program::Use(void)
 {
+	if (0==m_program) {
+		return;
+	}
 	glUseProgram(m_program);
 	checkGlError("glUseProgram", __LINE__);
 }
@@ -584,6 +656,9 @@ void ewol::Program::Use(void)
 
 void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 {
+	if (0==m_program) {
+		return;
+	}
 	if (idElem<0 || idElem>m_elementList.Size()) {
 		return;
 	}
@@ -607,6 +682,9 @@ void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 
 void ewol::Program::UnUse(void)
 {
+	if (0==m_program) {
+		return;
+	}
 	#if 0
 	if (true == m_hasTexture) {
 		glDisable(GL_TEXTURE_2D);

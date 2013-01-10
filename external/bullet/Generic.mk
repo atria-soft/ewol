@@ -11,7 +11,8 @@ LOCAL_C_INCLUDES :=  \
                     $(LOCAL_PATH)/bullet/Extras/ConvexDecomposition
 
 LOCAL_CFLAGS := -Wno-write-strings \
-                -DHAVE_CONFIG_H
+                -DHAVE_CONFIG_H \
+                -O2
 
 
 # load the common sources file of the platform

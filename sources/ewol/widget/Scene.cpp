@@ -41,12 +41,14 @@ class SceneDebugDrawer : public btIDebugDraw
 		virtual void drawLine(const btVector3& from,const btVector3& to,const btVector3& fromColor, const btVector3& toColor)
 		{
 			EWOL_DEBUG("DebugDisplay : drawLine");
+			/*
 			glBegin(GL_LINES);
 				glColor3f(fromColor.getX(), fromColor.getY(), fromColor.getZ());
 				glVertex3d(from.getX(), from.getY(), from.getZ());
 				glColor3f(toColor.getX(), toColor.getY(), toColor.getZ());
 				glVertex3d(to.getX(), to.getY(), to.getZ());
 			glEnd();
+			*/
 		}
 		virtual void drawLine(const btVector3& from,const btVector3& to,const btVector3& color)
 		{
@@ -55,9 +57,11 @@ class SceneDebugDrawer : public btIDebugDraw
 		virtual void drawSphere (const btVector3& p, btScalar radius, const btVector3& color)
 		{
 			EWOL_DEBUG("DebugDisplay : drawSphere");
+			/*
 			glColor4f (color.getX(), color.getY(), color.getZ(), btScalar(1.0f));
 			glPushMatrix ();
 			glTranslatef (p.getX(), p.getY(), p.getZ());
+			*/
 			int lats = 5;
 			int longs = 5;
 			int i, j;
@@ -68,6 +72,7 @@ class SceneDebugDrawer : public btIDebugDraw
 				btScalar lat1 = SIMD_PI * (-btScalar(0.5) + (btScalar) i / lats);
 				btScalar z1 = radius*sin(lat1);
 				btScalar zr1 = radius*cos(lat1);
+				/*
 				glBegin(GL_QUAD_STRIP);
 				for(j = 0; j <= longs; j++) {
 					btScalar lng = 2 * SIMD_PI * (btScalar) (j - 1) / longs;
@@ -79,8 +84,9 @@ class SceneDebugDrawer : public btIDebugDraw
 					glVertex3f(x * zr1, y * zr1, z1);
 				}
 				glEnd();
+				*/
 			}
-			glPopMatrix();
+			//glPopMatrix();
 		}
 		
 		virtual void drawTriangle(const btVector3& a,const btVector3& b,const btVector3& c,const btVector3& color,btScalar alpha)
@@ -88,6 +94,7 @@ class SceneDebugDrawer : public btIDebugDraw
 			EWOL_DEBUG("DebugDisplay : drawTriangle");
 		//	if (m_debugMode > 0)
 			{
+				/*
 				const btVector3	n=btCross(b-a,c-a).normalized();
 				glBegin(GL_TRIANGLES);		
 				glColor4f(color.getX(), color.getY(), color.getZ(),alpha);
@@ -96,6 +103,7 @@ class SceneDebugDrawer : public btIDebugDraw
 				glVertex3d(b.getX(),b.getY(),b.getZ());
 				glVertex3d(c.getX(),c.getY(),c.getZ());
 				glEnd();
+				*/
 			}
 		}
 		
@@ -103,6 +111,7 @@ class SceneDebugDrawer : public btIDebugDraw
 		virtual void drawContactPoint(const btVector3& pointOnB,const btVector3& normalOnB,btScalar distance,int lifeTime,const btVector3& color)
 		{
 			EWOL_DEBUG("DebugDisplay : drawContactPoint");
+			/*
 			btVector3 to=pointOnB+normalOnB*1;//distance;
 			const btVector3&from = pointOnB;
 			glColor4f(color.getX(), color.getY(), color.getZ(),1.f);
@@ -111,6 +120,7 @@ class SceneDebugDrawer : public btIDebugDraw
 			glVertex3d(from.getX(), from.getY(), from.getZ());
 			glVertex3d(to.getX(), to.getY(), to.getZ());
 			glEnd();
+			*/
 		}
 		
 		virtual void reportErrorWarning(const char* warningString)
@@ -122,7 +132,7 @@ class SceneDebugDrawer : public btIDebugDraw
 		virtual void draw3dText(const btVector3& location,const char* textString)
 		{
 			EWOL_DEBUG("DebugDisplay : draw3dText");
-			glRasterPos3f(location.x(),  location.y(),  location.z());
+			//glRasterPos3f(location.x(),  location.y(),  location.z());
 			//BMF_DrawString(BMF_GetFont(BMF_kHelvetica10),textString);
 		}
 		
@@ -247,8 +257,8 @@ widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 					btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 					if(jjj%2==0) {
 						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colBoxShape,localInertia);
-						btRigidBody* body = new btRigidBody(rbInfo);
-						m_dynamicsWorld->addRigidBody(body);
+					btRigidBody* body = new btRigidBody(rbInfo);
+					m_dynamicsWorld->addRigidBody(body);
 					} else {
 						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colSphereShape,localInertia);
 						btRigidBody* body = new btRigidBody(rbInfo);
@@ -341,7 +351,7 @@ void widget::Scene::DrawSphere(btScalar radius, int lats, int longs, mat4& trans
 			btScalar y = sin(lng);
 			vec3 v1 = vec3(x * zr1, y * zr1, z1);
 			vec3 v4 = vec3(x * zr0, y * zr0, z0);
-			
+		
 			lng = 2 * SIMD_PI * (btScalar) (j) / longs;
 			x = cos(lng);
 			y = sin(lng);
@@ -361,14 +371,14 @@ void widget::Scene::DrawSphere(btScalar radius, int lats, int longs, mat4& trans
 }
 
 
-inline void glDrawVector(const btVector3& v) { glVertex3d(v[0], v[1], v[2]); }
+inline void glDrawVector(const btVector3& v) { /*glVertex3d(v[0], v[1], v[2]);*/ }
 
 void widget::Scene::DrawOpenGL(btScalar* mmm, 
-                               const btCollisionShape* shape,
-                               const btVector3& color,
-                               int32_t	debugMode,
-                               const btVector3& worldBoundsMin,
-                               const btVector3& worldBoundsMax)
+                const btCollisionShape* shape,
+                const btVector3& color,
+                int32_t	debugMode,
+                const btVector3& worldBoundsMin,
+                const btVector3& worldBoundsMax)
 {
 	mat4 transformationMatrix(mmm);
 	transformationMatrix.Transpose();
@@ -390,6 +400,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 		btVector3 halfExtent = boxShape->getHalfExtentsWithMargin();
 		dx *= halfExtent[0];
 		dy *= halfExtent[1];
+		/*
 		glColor3f(1,1,1);
 		glDisable(GL_LIGHTING);
 		glLineWidth(2);
@@ -399,6 +410,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 		glDrawVector(org + dx + dy);
 		glDrawVector(org + dx - dy);
 		glEnd();
+		*/
 		return;
 	} else if((shape->getShapeType() == BOX_SHAPE_PROXYTYPE) && (debugMode & btIDebugDraw::DBG_FastWireframe)) {
 		EWOL_DEBUG("    Draw (2): BOX_SHAPE_PROXYTYPE");
@@ -411,6 +423,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 		dx *= halfExtent[0];
 		dy *= halfExtent[1];
 		dz *= halfExtent[2];
+		/*
 		glBegin(GL_LINE_LOOP);
 		glDrawVector(org - dx - dy - dz);
 		glDrawVector(org + dx - dy - dz);
@@ -431,6 +444,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 		glDrawVector(org - dx - dy + dz);
 		glDrawVector(org - dx + dy + dz);
 		glEnd();
+		*/
 		return;
 	}
 	/*
@@ -454,7 +468,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 			           worldBoundsMin,
 			           worldBoundsMax);
 		}
-		glPopMatrix();
+		//glPopMatrix();
 		return;
 	}
 	if (shape->getShapeType() == COMPOUND_SHAPE_PROXYTYPE) {
@@ -581,7 +595,7 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 						EWOL_DEBUG("                shape->isConvex()");
 						const btConvexPolyhedron* poly = shape->isPolyhedral() ? ((btPolyhedralConvexShape*) shape)->getConvexPolyhedron() : 0;
 						if (NULL!=poly) {
-							glBegin(GL_TRIANGLES);
+							//glBegin(GL_TRIANGLES);
 							for (int32_t iii=0 ; iii<poly->m_faces.size() ; iii++) {
 								btVector3 centroid(0,0,0);
 								int numVerts = poly->m_faces[iii].m_indices.size();
@@ -592,14 +606,16 @@ void widget::Scene::DrawOpenGL(btScalar* mmm,
 										btVector3 v3 = poly->m_vertices[poly->m_faces[iii].m_indices[vvv+2]];
 										btVector3 normal = (v3-v1).cross(v2-v1);
 										normal.normalize ();
+										/*
 										glNormal3f(normal.getX(),normal.getY(),normal.getZ());
 										glVertex3f (v1.x(), v1.y(), v1.z());
 										glVertex3f (v2.x(), v2.y(), v2.z());
 										glVertex3f (v3.x(), v3.y(), v3.z());
+										*/
 									}
 								}
 							}
-							glEnd();
+							//glEnd();
 						} else {
 							// TODO : Set it back ...
 							/*
@@ -670,8 +686,8 @@ void DrawShadow(btScalar* mmm,
                 const btVector3& worldBoundsMin,
                 const btVector3& worldBoundsMax)
 {
-	glPushMatrix(); 
-	glMultMatrixf(mmm);
+	//glPushMatrix(); 
+	//glMultMatrixf(mmm);
 	if(shape->getShapeType() == UNIFORM_SCALING_SHAPE_PROXYTYPE) {
 		const btUniformScalingShape* scalingShape = static_cast<const btUniformScalingShape*>(shape);
 		const btConvexShape* convexShape = scalingShape->getChildShape();
@@ -685,7 +701,7 @@ void DrawShadow(btScalar* mmm,
 		           convexShape,
 		           worldBoundsMin,
 		           worldBoundsMax);
-		glPopMatrix();
+		//glPopMatrix();
 		return;
 	} else if(shape->getShapeType()==COMPOUND_SHAPE_PROXYTYPE) {
 		const btCompoundShape* compoundShape = static_cast<const btCompoundShape*>(shape);
@@ -719,8 +735,8 @@ void DrawShadow(btScalar* mmm,
 					glVertex3f(a[0]+extrusion[0],a[1]+extrusion[1],a[2]+extrusion[2]);
 				}
 			}
-			*/
 			glEnd();
+			*/
 		}
 	}
 	if (shape->isConcave()) {
@@ -732,7 +748,7 @@ void DrawShadow(btScalar* mmm,
 		concaveMesh->processAllTriangles(&drawCallback,worldBoundsMin,worldBoundsMax);
 		*/
 	}
-	glPopMatrix();
+	//glPopMatrix();
 
 }
 
@@ -740,7 +756,7 @@ void DrawShadow(btScalar* mmm,
 void widget::Scene::renderscene(int pass)
 {
 	//glPushMatrix();
-	EWOL_DEBUG("Render Scene pass=" << pass);
+	//EWOL_DEBUG("Render Scene pass=" << pass);
 	//mat4& myMatrix = ewol::openGL::GetMatrix();
 	//myMatrix = m_camera.GetMatrix() * myMatrix;
 	//myMatrix.Transpose();
@@ -824,7 +840,7 @@ void widget::Scene::renderscene(int pass)
 			}
 		}
 	}
-	glPopMatrix();
+	//glPopMatrix();
 }
 
 
