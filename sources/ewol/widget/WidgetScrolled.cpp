@@ -230,7 +230,7 @@ bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t 
 			}
 		} else if (ewol::keyEvent::typeFinger==type && ( ewol::keyEvent::typeUnknow==m_highSpeedType || ewol::keyEvent::typeFinger==m_highSpeedType )) {
 			if (1 == IdInput) {
-				EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
+				//EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
 				if (ewol::keyEvent::statusDown == typeEvent) {
 					m_highSpeedMode = widget::SCROLL_INIT;
 					m_highSpeedType = ewol::keyEvent::typeFinger;

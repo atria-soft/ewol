@@ -47,6 +47,10 @@ void ewol::eSystemInput::SetDpi(int32_t newDPI)
 
 void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
 {
+	if (NULL==eventTable) {
+		return;
+	}
+	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
 	eventTable[idInput].isUsed = false;
 	eventTable[idInput].destinationInputId = 0;
 	eventTable[idInput].lastTimeEvent = 0;
@@ -156,18 +160,20 @@ void ewol::eSystemInput::Reset(void)
 	}
 }
 
-ewol::eSystemInput::eSystemInput(void)
+ewol::eSystemInput::eSystemInput(void) :
+	m_grabWidget(NULL)
 {
-	m_grabWidget = NULL;
 	SetDpi(200);
-	EWOL_INFO("Init");
+	EWOL_INFO("Init (start)");
 	Reset();
+	EWOL_INFO("Init (end)");
 }
 
 ewol::eSystemInput::~eSystemInput(void)
 {
-	EWOL_INFO("Un-Init");
+	EWOL_INFO("Un-Init (start)");
 	Reset();
+	EWOL_INFO("Un-Init (end)");
 }
 
 

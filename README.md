@@ -24,8 +24,12 @@ Dependency packages
 	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
 	# if you want to compile with clang :
 	sudo apt-get install clang
+	# For andoid compilation (jdk 7 does not work...)
+	sudo apt-get install javacc openjdk-6-jdk
 	# if you want to compile for windows :
 	sudo apt-get install mingw32
+	# on 64 bits processor for compatibility
+	sudo apt-get install ia32-libs
 
 Copyright (c)
 =============

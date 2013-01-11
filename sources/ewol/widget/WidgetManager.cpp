@@ -68,7 +68,7 @@ void ewol::widgetManager::FocusKeep(ewol::Widget * newWidget)
 		return;
 	}
 	if (false == newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << ewol::widgetManager::Get(newWidget));
+		EWOL_VERBOSE("Widget can not have Focus, id=" << 9999999999.999);
 		return;
 	}
 	if (newWidget == m_focusWidgetCurrent) {
