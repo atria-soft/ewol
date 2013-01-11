@@ -14,8 +14,6 @@
 #include <etk/math/Matrix4.h>
 #include <etk/Vector.h>
 #include <ewol/debug.h>
-#include <ewol/game/Engine.h>
-#include <ewol/game/Element.h>
 #include <ewol/game/Camera.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/renderer/openGL.h>
@@ -45,7 +43,6 @@ namespace widget {
 			//keep the collision shapes, for deletion/cleanup
 			etk::Vector<btCollisionShape*>   m_collisionShapes;
 			game::Camera      m_camera;       //!< Display point of view
-			//game::Engine*     m_gameEngine;   //!< display engine system
 			bool              m_isRunning;    //!< the display is running (not in pause)
 			double            m_lastCallTime; //!< previous call Time
 			float             m_ratioTime;    //!< Ratio time for the speed of the game ...

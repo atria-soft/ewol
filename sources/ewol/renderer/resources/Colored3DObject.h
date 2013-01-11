@@ -14,7 +14,6 @@
 #include <ewol/renderer/resources/Image.h>
 #include <ewol/renderer/resources/Shader.h>
 #include <ewol/renderer/resources/Program.h>
-#include <ewol/game/MeshObject.h>
 
 namespace ewol
 {

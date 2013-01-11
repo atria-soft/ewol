@@ -82,15 +82,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 
 # game mode area :
 FILE_LIST+= ewol/widget/Scene.cpp \
-			ewol/game/Engine.cpp \
-			ewol/game/Element.cpp \
-			ewol/game/BoundingAABB.cpp \
-			ewol/game/Gravity.cpp \
-			ewol/game/Camera.cpp \
-			ewol/game/Contact.cpp \
-			ewol/game/Map.cpp \
-			ewol/game/Mass.cpp \
-			ewol/game/Sky.cpp
+			ewol/game/Camera.cpp
 
 
 LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
