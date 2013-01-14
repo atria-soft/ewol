@@ -322,7 +322,10 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, iv
 
 bool ewol::resource::Keep(etk::UString& filename, ewol::MeshObj*& object)
 {
-	// this element create a new one every time ....
+	object = static_cast<ewol::MeshObj*>(LocalKeep(filename));
+	if (NULL != object) {
+		return true;
+	}
 	object = new ewol::MeshObj(filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
