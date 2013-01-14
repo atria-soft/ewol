@@ -9,6 +9,7 @@
 #include <ewol/widget/Scene.h>
 #include <math.h>
 #include <ewol/renderer/openGL.h>
+#include <ewol/renderer/ResourceManager.h>
 #include <etk/math/Matrix4.h>
 #include <BulletDynamics/Dynamics/btRigidBody.h>
 #include <LinearMath/btDefaultMotionState.h>
@@ -30,6 +31,34 @@
 #define  WALK_FLAG_LEFT     (1<<2)
 #define  WALK_FLAG_RIGHT    (1<<3)
 #define  WALK_FLAG_CAUTION  (1<<4)
+
+
+
+class GameElement : public btRigidBody
+{
+	ewol::MeshObj * m_mesh;
+	public :
+		GameElement(btRigidBody::btRigidBodyConstructionInfo info, etk::UString elementName) :
+			btRigidBody(info),
+			m_mesh(NULL)
+		{
+			ewol::resource::Keep(elementName, m_mesh);
+		}
+		
+		~GameElement(void)
+		{
+			ewol::resource::Release(m_mesh);
+		}
+		
+		void Draw(mat4& transformMatrix)
+		{
+			if (NULL != m_mesh) {
+				m_mesh->Draw(transformMatrix);
+			}
+		}
+	
+};
+
 
 
 class SceneDebugDrawer : public btIDebugDraw
@@ -200,12 +229,12 @@ widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 	
 	
 	// Create The ground
-	btBoxShape* groundShape = new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(5.)));
+	btBoxShape* groundShape = new btBoxShape(btVector3(btScalar(100.),btScalar(100.),btScalar(0.1)));
 	m_collisionShapes.PushBack(groundShape);
 
 	btTransform groundTransform;
 	groundTransform.setIdentity();
-	groundTransform.setOrigin(btVector3(0,0,-5));
+	groundTransform.setOrigin(btVector3(0,0,-0.1));
 	btScalar mass(0.0);
 	btVector3 localInertia(0,0,0);
 	//rigidbody is dynamic if and only if mass is non zero, otherwise static
@@ -215,7 +244,7 @@ widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 	//using motionstate is recommended, it provides interpolation capabilities, and only synchronizes 'active' objects
 	btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,groundShape,localInertia);
-	btRigidBody* body = new btRigidBody(rbInfo);
+	GameElement* body = new GameElement(rbInfo, "DATA:grass.obj");
 	//add the body to the dynamics world
 	m_dynamicsWorld->addRigidBody(body);
 	
@@ -257,11 +286,11 @@ widget::Scene::Scene(btDynamicsWorld* gameEngine) :
 					btDefaultMotionState* myMotionState = new btDefaultMotionState(startTransform);
 					if(jjj%2==0) {
 						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colBoxShape,localInertia);
-					btRigidBody* body = new btRigidBody(rbInfo);
-					m_dynamicsWorld->addRigidBody(body);
+						GameElement* body = new GameElement(rbInfo, "DATA:cube.obj");
+						m_dynamicsWorld->addRigidBody(body);
 					} else {
 						btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,colSphereShape,localInertia);
-						btRigidBody* body = new btRigidBody(rbInfo);
+						GameElement* body = new GameElement(rbInfo, "DATA:sphere.obj");
 						m_dynamicsWorld->addRigidBody(body);
 					}
 				}
@@ -781,6 +810,13 @@ void widget::Scene::renderscene(int pass)
 			colObj->getWorldTransform().getOpenGLMatrix(mmm);
 			rot=colObj->getWorldTransform().getBasis(); // ==> for the sun ...
 		}
+		GameElement* tmpGameElement = static_cast<GameElement*>(body);
+		if (NULL != tmpGameElement) {
+			mat4 transformationMatrix(mmm);
+			transformationMatrix.Transpose();
+			tmpGameElement->Draw(transformationMatrix);
+		}
+		/*
 		btVector3 wireColor(1.f,1.0f,0.5f); //wants deactivation
 		if(iii&1) {
 			wireColor=btVector3(0.f,0.0f,1.f);
@@ -839,6 +875,7 @@ void widget::Scene::renderscene(int pass)
 					break;
 			}
 		}
+		*/
 	}
 	//glPopMatrix();
 }
