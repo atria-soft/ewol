@@ -14,6 +14,7 @@
 #include <ewol/renderer/resources/Image.h>
 #include <ewol/renderer/resources/Shader.h>
 #include <ewol/renderer/resources/Program.h>
+#include <ewol/renderer/resources/VirtualBufferObject.h>
 
 namespace ewol
 {
@@ -28,6 +29,7 @@ namespace ewol
 			int32_t        m_GLtexID;
 		public:
 			etk::Vector<uint32_t> m_indices;
+			ewol::VirtualBufferObject*  m_verticesVBO;
 			etk::Vector<vec3>     m_vertices;
 			etk::Vector<vec2>     m_uvTextures;
 			etk::Vector<vec3>     m_normals;

@@ -25,13 +25,14 @@ namespace ewol
 		private :
 			bool               m_exist;  //!< This data is availlable in the Graphic card
 			GLuint             m_vbo;    //!< OpenGl ID of this VBO
+			GLuint      m_vao;
 			etk::Vector<float> m_buffer; //!< data that is availlable in the VBO system ...
 		public:
 			/**
 			 * @brief Constructor of this VBO.
 			 * @param[in] accesMode Acces mode : ???
 			 */
-			VirtualBufferObject(etk::UString& accesMode);
+			VirtualBufferObject(const etk::UString& accesMode);
 			/**
 			 * @brief Destructor of this VBO.
 			 */
@@ -58,7 +59,7 @@ namespace ewol
 			/**
 			 * @brief Send the data to the graphic card.
 			 */
-			void Flush(void) {};
+			void Flush(void) { UpdateContext(); };
 			/**
 			 * @brief This load/reload the data in the opengl context, needed when removed previously.
 			 */

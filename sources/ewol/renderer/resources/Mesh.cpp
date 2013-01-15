@@ -25,6 +25,7 @@ ewol::Mesh::Mesh(etk::UString genName) :
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
 	}
+	//ewol::resource::Keep("w", m_verticesVBO);
 }
 
 ewol::Mesh::~Mesh(void)
@@ -34,6 +35,7 @@ ewol::Mesh::~Mesh(void)
 		ewol::resource::Release(m_texture1);
 	}
 	ewol::resource::Release(m_GLprogram);
+	//ewol::resource::Release(m_verticesVBO);
 }
 
 

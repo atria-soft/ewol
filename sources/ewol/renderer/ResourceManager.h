@@ -72,7 +72,7 @@ namespace ewol
 		bool Keep(etk::UString& filename, ewol::Shader*& object);
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(etk::UString& filename, ewol::TextureFile*& object, ivec2 size);
-		bool Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object);
+		bool Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object);
 		bool Keep(etk::UString& filename, ewol::MeshObj*& object);
 		bool Keep(etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);

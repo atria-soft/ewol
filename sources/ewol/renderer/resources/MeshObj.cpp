@@ -181,6 +181,9 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		
 		// Put the attributes in buffers
 		m_vertices.PushBack(vertices[vertexIndex-1]);
+		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].x);
+		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].y);
+		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].z);
 		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
@@ -191,6 +194,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			m_normals.PushBack(normals[normalIndex-1]);
 		}
 	}
+	m_verticesVBO->Flush();
 }
 
 

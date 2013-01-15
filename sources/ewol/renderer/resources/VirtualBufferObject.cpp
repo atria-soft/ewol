@@ -12,20 +12,13 @@
 
 
 
-ewol::VirtualBufferObject::VirtualBufferObject(etk::UString& accesMode): 
+ewol::VirtualBufferObject::VirtualBufferObject(const etk::UString& accesMode): 
 	ewol::Resource(),
 	m_exist(false),
 	m_vbo(0)
 {
 	m_resourceLevel = 3;
-	EWOL_DEBUG("OGL : load VBO mode\"" << accesMode << "\"");
-	// load data from file "all the time ..."
-	
-	/*
-	glGenBuffers(1, &m_vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_vertices), cube_vertices, GL_STATIC_DRAW);
-	*/
+	EWOL_DEBUG("OGL : load VBO mode=\"" << accesMode << "\"");
 }
 
 
@@ -48,16 +41,24 @@ void ewol::VirtualBufferObject::UpdateContext(void)
 		if (m_buffer.Size()<=0) {
 			RemoveContext();
 		} else {
+			EWOL_INFO("VBO: Update [" << m_uniqueId << "]=" << m_buffer.Size() << "*sizeof(float) OGl_Id=" << m_vbo);
 			glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer.Size(), &m_buffer[0], GL_STATIC_DRAW);
+			//
 		}
 	} else {
 		// create the Buffer
 		if (m_buffer.Size()>0) {
+			// Allocate and assign a Vertex Array Object to our handle
+			glGenVertexArrays(1, &m_vao);
 			glGenBuffers(1, &m_vbo);
+			EWOL_INFO("VBO: Add [" << m_uniqueId << "]=" << m_buffer.Size() << "*sizeof(float) OGl_Id=" << m_vbo);
 			m_exist = true;
 			glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer.Size(), &m_buffer[0], GL_STATIC_DRAW);
+			//glEnableVertexAttribArray(0);
+			//glDisableVertexAttribArray(0);
 		}
 		// Note we did not create the buffer when no data is needed
 	}
@@ -66,6 +67,7 @@ void ewol::VirtualBufferObject::UpdateContext(void)
 void ewol::VirtualBufferObject::RemoveContext(void)
 {
 	if (true==m_exist) {
+		EWOL_INFO("VBO: Remove [" << m_uniqueId << "]=" << m_buffer.Size() << "*sizeof(float) OGl_Id=" << m_vbo);
 		glDeleteBuffers(1, &m_vbo);
 		m_exist = false;
 		m_vbo = 0;

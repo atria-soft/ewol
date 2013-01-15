@@ -336,7 +336,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::MeshObj*& object)
 }
 
 
-bool ewol::resource::Keep(etk::UString& accesMode, ewol::VirtualBufferObject*& object)
+bool ewol::resource::Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object)
 {
 	// this element create a new one every time ....
 	object = new ewol::VirtualBufferObject(accesMode);
@@ -453,6 +453,13 @@ void ewol::resource::Release(ewol::ConfigFile*& object)
 }
 
 void ewol::resource::Release(ewol::Colored3DObject*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+
+void ewol::resource::Release(ewol::VirtualBufferObject*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);
