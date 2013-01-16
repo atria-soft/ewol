@@ -173,6 +173,8 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		}
 	}
 	fileName.FileClose();
+	// update the number of element in the display ...
+	m_numberOfElments = indicesVertices.Size();
 	// For each vertex of each triangle
 	for( uint32_t iii=0; iii<indicesVertices.Size(); iii++ ){
 		// Get the indices of its attributes
@@ -203,6 +205,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].z);
 		}
 	}
+	// update all the VBO elements ...
 	m_verticesVBO->Flush();
 }
 

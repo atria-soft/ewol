@@ -71,7 +71,6 @@ ewol::Program::Program(etk::UString& filename) :
 	file.FileClose();
 	
 	UpdateContext();
-	
 }
 
 
@@ -301,7 +300,7 @@ void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* point
 	//checkGlError("glEnableVertexAttribArray", __LINE__);
 }
 
-void ewol::Program::SendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample)
+void ewol::Program::SendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample, int32_t offset)
 {
 	if (0==m_program) {
 		return;
@@ -319,7 +318,7 @@ void ewol::Program::SendAttributePointer(int32_t idElem, int32_t nbElement, ewol
 	                      GL_FLOAT,                           // the type of each element
 	                      GL_FALSE,                           // take our values as-is
 	                      jumpBetweenSample,                  // no extra data between each position
-	                      0);                                 // Pointer on the buffer
+	                      (GLvoid *)offset);                            // Pointer on the buffer
 	//checkGlError("glVertexAttribPointer", __LINE__);
 	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
 	//checkGlError("glEnableVertexAttribArray", __LINE__);

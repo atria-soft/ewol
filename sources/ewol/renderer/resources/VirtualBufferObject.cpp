@@ -46,8 +46,10 @@ void ewol::VirtualBufferObject::UpdateContext(void)
 	for (int32_t iii=0; iii<m_nbVBO; iii++) {
 		EWOL_INFO("VBO    : Add [" << m_uniqueId << "]=" << m_buffer[iii].Size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		// select the buffer to set data inside it ...
-		glBindBuffer(GL_ARRAY_BUFFER, m_vbo[iii]);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer[iii].Size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
+		if (m_buffer[iii].Size()>0) {
+			glBindBuffer(GL_ARRAY_BUFFER, m_vbo[iii]);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer[iii].Size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
+		}
 	}
 	// un-bind it to permet to have no erreor in the next display ...
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

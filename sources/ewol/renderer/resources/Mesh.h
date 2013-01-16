@@ -20,6 +20,15 @@ namespace ewol
 {
 	class Mesh : public ewol::Resource
 	{
+		// 3 "float" elements
+		#define MESH_VBO_VERTICES  (0)
+		// 2 "float" elements
+		#define MESH_VBO_TEXTURE   (1)
+		// 4 "float" elements
+		#define MESH_VBO_COLOR     (2)
+		// 3 "float" elements
+		#define MESH_VBO_NORMAL    (3)
+		// TODO : Use indice system ...
 		protected:
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;
@@ -27,15 +36,17 @@ namespace ewol
 			int32_t        m_GLColor;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID;
+			int32_t        m_bufferOfset;
+			int32_t        m_numberOfElments;
 		public:
-			etk::Vector<uint32_t> m_indices;
-			ewol::VirtualBufferObject*  m_verticesVBO;
-			etk::Vector<vec3>     m_vertices;
-			etk::Vector<vec2>     m_uvTextures;
-			etk::Vector<vec3>     m_normals;
-		protected:
-			ewol::TextureFile*         m_texture1;
+			etk::Vector<uint32_t>      m_indices;
+			etk::Vector<vec3>          m_vertices;
+			etk::Vector<vec2>          m_uvTextures;
+			etk::Vector<vec3>          m_normals;
 			etk::Vector<draw::Colorf>  m_coordColor;  //!< internal color of the different point
+		protected:
+			ewol::VirtualBufferObject*  m_verticesVBO;
+			ewol::TextureFile*          m_texture1;
 		public:
 			Mesh(etk::UString genName);
 			virtual ~Mesh(void);
