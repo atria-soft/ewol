@@ -25,7 +25,7 @@ ewol::Mesh::Mesh(etk::UString genName) :
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
 	}
-	//ewol::resource::Keep("w", m_verticesVBO);
+	ewol::resource::Keep("w", m_verticesVBO);
 }
 
 ewol::Mesh::~Mesh(void)
@@ -35,7 +35,7 @@ ewol::Mesh::~Mesh(void)
 		ewol::resource::Release(m_texture1);
 	}
 	ewol::resource::Release(m_GLprogram);
-	//ewol::resource::Release(m_verticesVBO);
+	ewol::resource::Release(m_verticesVBO);
 }
 
 
@@ -63,14 +63,18 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_vertices[0]);
+	//m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_vertices[0]);
+	m_GLprogram->SendAttributePointer(m_GLPosition, 3/*x,y,z*/, m_verticesVBO, 0);
 	// Texture :
-	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_uvTextures[0]);
+	//m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_uvTextures[0]);
+	//m_GLprogram->SendAttributePointer(m_GLPosition, 2/*u,v*/, m_verticesVBO, 1);
 	// color :
-	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	//m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	//m_GLprogram->SendAttributePointer(m_GLPosition, 4/*r,g,b,a*/, m_verticesVBO, 2);
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_vertices.Size());
 	m_GLprogram->UnUse();
 	glDisable(GL_DEPTH_TEST);
+	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 

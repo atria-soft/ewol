@@ -181,17 +181,26 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		
 		// Put the attributes in buffers
 		m_vertices.PushBack(vertices[vertexIndex-1]);
-		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].x);
-		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].y);
-		m_verticesVBO->GetRefBuffer().PushBack(vertices[vertexIndex-1].z);
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].x);
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].y);
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].z);
 		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
+		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].x);
+		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].y);
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
 		m_coordColor.PushBack(tmppppp);
+		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.r);
+		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.g);
+		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.b);
+		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.a);
 		
 		if (indicesNormal.Size()>iii) {
 			uint32_t normalIndex = indicesNormal[iii];
 			m_normals.PushBack(normals[normalIndex-1]);
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].x);
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].y);
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].z);
 		}
 	}
 	m_verticesVBO->Flush();

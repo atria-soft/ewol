@@ -14,6 +14,7 @@
 #include <ewol/renderer/openGL.h>
 #include <ewol/renderer/resources/Resource.h>
 #include <ewol/renderer/resources/Shader.h>
+#include <ewol/renderer/resources/VirtualBufferObject.h>
 
 namespace ewol
 {
@@ -81,6 +82,7 @@ namespace ewol
 			 * @param[in] jumpBetweenSample Number of byte to jump between 2 vertex (this permit to enterlace informations)
 			 */
 			void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
+			void SendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample=0);
 			/**
 			 * @brief User request an Uniform on this program.
 			 * @note uniform value is availlable for all the fragment shader in the program (only one value for all)

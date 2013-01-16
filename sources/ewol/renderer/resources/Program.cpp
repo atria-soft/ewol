@@ -296,9 +296,33 @@ void ewol::Program::SendAttribute(int32_t idElem, int32_t nbElement, void* point
 	                      GL_FALSE,                           // take our values as-is
 	                      jumpBetweenSample,                  // no extra data between each position
 	                      pointer);                           // Pointer on the buffer
-	checkGlError("glVertexAttribPointer", __LINE__);
+	//checkGlError("glVertexAttribPointer", __LINE__);
 	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
-	checkGlError("glEnableVertexAttribArray", __LINE__);
+	//checkGlError("glEnableVertexAttribArray", __LINE__);
+}
+
+void ewol::Program::SendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample)
+{
+	if (0==m_program) {
+		return;
+	}
+	if (idElem<0 || idElem>m_elementList.Size()) {
+		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.Size()-1) << "]");
+		return;
+	}
+	if (false == m_elementList[idElem].m_isLinked) {
+		return;
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, vbo->GetGL_ID(index));
+	glVertexAttribPointer(m_elementList[idElem].m_elementId,  // attribute ID of OpenGL
+	                      nbElement,                          // number of elements per vertex, here (r,g,b,a)
+	                      GL_FLOAT,                           // the type of each element
+	                      GL_FALSE,                           // take our values as-is
+	                      jumpBetweenSample,                  // no extra data between each position
+	                      0);                                 // Pointer on the buffer
+	//checkGlError("glVertexAttribPointer", __LINE__);
+	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
+	//checkGlError("glEnableVertexAttribArray", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -320,7 +344,7 @@ void ewol::Program::UniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 _ma
 		_matrix.Transpose();
 	}
 	glUniformMatrix4fv(m_elementList[idElem].m_elementId, nbElement, GL_FALSE, _matrix.m_mat);
-	checkGlError("glUniformMatrix4fv", __LINE__);
+	//checkGlError("glUniformMatrix4fv", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -338,7 +362,7 @@ void ewol::Program::Uniform1f(int32_t idElem, float value1)
 		return;
 	}
 	glUniform1f(m_elementList[idElem].m_elementId, value1);
-	checkGlError("glUniform1f", __LINE__);
+	//checkGlError("glUniform1f", __LINE__);
 }
 void ewol::Program::Uniform2f(int32_t idElem, float value1, float value2)
 {
@@ -353,7 +377,7 @@ void ewol::Program::Uniform2f(int32_t idElem, float value1, float value2)
 		return;
 	}
 	glUniform2f(m_elementList[idElem].m_elementId, value1, value2);
-	checkGlError("glUniform2f", __LINE__);
+	//checkGlError("glUniform2f", __LINE__);
 }
 void ewol::Program::Uniform3f(int32_t idElem, float value1, float value2, float value3)
 {
@@ -368,7 +392,7 @@ void ewol::Program::Uniform3f(int32_t idElem, float value1, float value2, float 
 		return;
 	}
 	glUniform3f(m_elementList[idElem].m_elementId, value1, value2, value3);
-	checkGlError("glUniform3f", __LINE__);
+	//checkGlError("glUniform3f", __LINE__);
 }
 void ewol::Program::Uniform4f(int32_t idElem, float value1, float value2, float value3, float value4)
 {
@@ -383,7 +407,7 @@ void ewol::Program::Uniform4f(int32_t idElem, float value1, float value2, float 
 		return;
 	}
 	glUniform4f(m_elementList[idElem].m_elementId, value1, value2, value3, value4);
-	checkGlError("glUniform4f", __LINE__);
+	//checkGlError("glUniform4f", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -401,7 +425,7 @@ void ewol::Program::Uniform1i(int32_t idElem, int32_t value1)
 		return;
 	}
 	glUniform1i(m_elementList[idElem].m_elementId, value1);
-	checkGlError("glUniform1i", __LINE__);
+	//checkGlError("glUniform1i", __LINE__);
 }
 void ewol::Program::Uniform2i(int32_t idElem, int32_t value1, int32_t value2)
 {
@@ -416,7 +440,7 @@ void ewol::Program::Uniform2i(int32_t idElem, int32_t value1, int32_t value2)
 		return;
 	}
 	glUniform2i(m_elementList[idElem].m_elementId, value1, value2);
-	checkGlError("glUniform2i", __LINE__);
+	//checkGlError("glUniform2i", __LINE__);
 }
 void ewol::Program::Uniform3i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3)
 {
@@ -431,7 +455,7 @@ void ewol::Program::Uniform3i(int32_t idElem, int32_t value1, int32_t value2, in
 		return;
 	}
 	glUniform3i(m_elementList[idElem].m_elementId, value1, value2, value3);
-	checkGlError("glUniform3i", __LINE__);
+	//checkGlError("glUniform3i", __LINE__);
 }
 void ewol::Program::Uniform4i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3, int32_t value4)
 {
@@ -446,7 +470,7 @@ void ewol::Program::Uniform4i(int32_t idElem, int32_t value1, int32_t value2, in
 		return;
 	}
 	glUniform4i(m_elementList[idElem].m_elementId, value1, value2, value3, value4);
-	checkGlError("glUniform4i", __LINE__);
+	//checkGlError("glUniform4i", __LINE__);
 }
 
 
@@ -473,7 +497,7 @@ void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, float *value)
 		return;
 	}
 	glUniform1fv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform1fv", __LINE__);
+	//checkGlError("glUniform1fv", __LINE__);
 }
 void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
 {
@@ -496,7 +520,7 @@ void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
 		return;
 	}
 	glUniform2fv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform2fv", __LINE__);
+	//checkGlError("glUniform2fv", __LINE__);
 }
 void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
 {
@@ -519,7 +543,7 @@ void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
 		return;
 	}
 	glUniform3fv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform3fv", __LINE__);
+	//checkGlError("glUniform3fv", __LINE__);
 }
 void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
 {
@@ -542,7 +566,7 @@ void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
 		return;
 	}
 	glUniform4fv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform4fv", __LINE__);
+	//checkGlError("glUniform4fv", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -568,7 +592,7 @@ void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value
 		return;
 	}
 	glUniform1iv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform1iv", __LINE__);
+	//checkGlError("glUniform1iv", __LINE__);
 }
 void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
@@ -591,7 +615,7 @@ void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value
 		return;
 	}
 	glUniform2iv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform2iv", __LINE__);
+	//checkGlError("glUniform2iv", __LINE__);
 }
 void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
@@ -614,7 +638,7 @@ void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value
 		return;
 	}
 	glUniform3iv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform3iv", __LINE__);
+	//checkGlError("glUniform3iv", __LINE__);
 }
 void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value)
 {
@@ -637,7 +661,7 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value
 		return;
 	}
 	glUniform4iv(m_elementList[idElem].m_elementId, nbElement, value);
-	checkGlError("glUniform4iv", __LINE__);
+	//checkGlError("glUniform4iv", __LINE__);
 }
 
 
@@ -650,7 +674,7 @@ void ewol::Program::Use(void)
 		return;
 	}
 	glUseProgram(m_program);
-	checkGlError("glUseProgram", __LINE__);
+	//checkGlError("glUseProgram", __LINE__);
 }
 
 
@@ -670,13 +694,13 @@ void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 		checkGlError("glEnable", __LINE__);
 	#endif
 	glActiveTexture(GL_TEXTURE0);
-	checkGlError("glActiveTexture", __LINE__);
+	//checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
-	checkGlError("glBindTexture", __LINE__);
+	//checkGlError("glBindTexture", __LINE__);
 	// Set the texture on the uniform attribute
 	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/0);
-	checkGlError("glUniform1i", __LINE__);
+	//checkGlError("glUniform1i", __LINE__);
 	m_hasTexture = true;
 }
 
