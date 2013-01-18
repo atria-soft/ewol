@@ -96,56 +96,61 @@ void SendJava_KeyboardShow(bool showIt)
 // mode 0 : auto; 1 landscape, 2 portrait
 void SendJava_OrientationChange(int32_t mode)
 {
-	EWOL_DEBUG("C->java : call java");
-	if (NULL == g_JavaVM) {
-		EWOL_DEBUG("C->java : JVM not initialised");
+	#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
+		EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
 		return;
-	}
-	JNIEnv *JavaVirtualMachinePointer_tmp;
-	int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-	if (status == JNI_EDETACHED) {
-		JavaVMAttachArgs lJavaVMAttachArgs;
-		lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-		lJavaVMAttachArgs.name = "EwolNativeThread";
-		lJavaVMAttachArgs.group = NULL; 
-		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-		if (status != JNI_OK) {
-			EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+	#else
+		EWOL_DEBUG("C->java : call java");
+		if (NULL == g_JavaVM) {
+			EWOL_DEBUG("C->java : JVM not initialised");
 			return;
+		}
+		JNIEnv *JavaVirtualMachinePointer_tmp;
+		int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+		if (status == JNI_EDETACHED) {
+			JavaVMAttachArgs lJavaVMAttachArgs;
+			lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+			lJavaVMAttachArgs.name = "EwolNativeThread";
+			lJavaVMAttachArgs.group = NULL; 
+			status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
+			if (status != JNI_OK) {
+				EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+				return;
+			}
+			if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+				EWOL_DEBUG("C->java : EXEPTION ...");
+				JavaVirtualMachinePointer->ExceptionDescribe();
+				JavaVirtualMachinePointer->ExceptionClear();
+			}
 		}
 		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
 			EWOL_DEBUG("C->java : EXEPTION ...");
 			JavaVirtualMachinePointer->ExceptionDescribe();
 			JavaVirtualMachinePointer->ExceptionClear();
 		}
-	}
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		EWOL_DEBUG("C->java : EXEPTION ...");
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
-
-	if (NULL == JavaVirtualMachinePointer) {
-		EWOL_DEBUG("C->java : JVM not initialised");
-		return;
-	}
-
-	jint param = mode;
 	
-	//Call java ...
-	JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange, param);
-
-	// manage execption : 
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		EWOL_DEBUG("C->java : EXEPTION ...");
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
+		if (NULL == JavaVirtualMachinePointer) {
+			EWOL_DEBUG("C->java : JVM not initialised");
+			return;
+		}
 	
-	if (status == JNI_EDETACHED) {
-		// Finished with the JVM.
-		g_JavaVM->DetachCurrentThread();
-	}
+		jint param = mode;
+		
+		//Call java ...
+		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange, param);
+	
+		// manage execption : 
+		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+			EWOL_DEBUG("C->java : EXEPTION ...");
+			JavaVirtualMachinePointer->ExceptionDescribe();
+			JavaVirtualMachinePointer->ExceptionClear();
+		}
+		
+		if (status == JNI_EDETACHED) {
+			// Finished with the JVM.
+			g_JavaVM->DetachCurrentThread();
+		}
+	#endif
 }
 
 

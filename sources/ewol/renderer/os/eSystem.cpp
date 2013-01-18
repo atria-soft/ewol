@@ -6,6 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
+#include <unistd.h>
 
 #include <etk/types.h>
 #include <etk/MessageFifo.h>
@@ -28,9 +29,15 @@
 #include <ewol/widget/WidgetManager.h>
 
 
-static ewol::Windows*          windowsCurrent = NULL;
-static ivec2  windowsSize(320, 480);
-static ewol::eSystemInput      l_managementInput;
+static bool                             requestEndProcessing = false;
+static bool                             isGlobalSystemInit = false;
+static ewol::Windows*                   windowsCurrent = NULL;
+static int64_t                          previousDisplayTime = 0;  // this is to limit framerate ... in case...
+static ivec2                            windowsSize(320, 480);
+static ewol::eSystemInput               l_managementInput;
+static ewol::Fps                        l_FpsSystemEvent(     "Event     ", false);
+static ewol::Fps                        l_FpsSystemContext(   "Context   ", false);
+static ewol::Fps                        l_FpsSystem(          "Draw      ", true);
 
 
 
@@ -68,7 +75,6 @@ typedef enum {
 } theadMessage_te;
 
 
-#include <unistd.h>
 
 class eSystemMessage {
 	public :
@@ -101,10 +107,8 @@ class eSystemMessage {
 		}
 };
 
-// deblare the message system
 static etk::MessageFifo<eSystemMessage> l_msgSystem;
 
-static bool requestEndProcessing = false;
 
 void ewolProcessEvents(void)
 {
@@ -235,7 +239,6 @@ void eSystem::SetArchiveDir(int mode, const char* str)
 
 
 
-bool isGlobalSystemInit = false;
 
 void RequestInit(void)
 {
@@ -449,15 +452,6 @@ void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
 		l_msgSystem.Post(data);
 	}
 }
-
-
-static ewol::Fps l_FpsSystemEvent(     "Event     ", false);
-static ewol::Fps l_FpsSystemContext(   "Context   ", false);
-static ewol::Fps l_FpsSystem(          "Draw      ", true);
-
-// this is to limit framerate ... in case...
-static int64_t previousDisplayTime = 0;
-
 
 
 bool eSystem::Draw(bool displayEveryTime)
