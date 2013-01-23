@@ -1,18 +1,6 @@
 
-
-# lib LinearMath
-FILE_LIST = \
-			bullet/src/LinearMath/btQuickprof.cpp \
-			bullet/src/LinearMath/btGeometryUtil.cpp \
-			bullet/src/LinearMath/btAlignedAllocator.cpp \
-			bullet/src/LinearMath/btSerializer.cpp \
-			bullet/src/LinearMath/btConvexHull.cpp \
-			bullet/src/LinearMath/btPolarDecomposition.cpp \
-			bullet/src/LinearMath/btVector3.cpp \
-			bullet/src/LinearMath/btConvexHullComputer.cpp
-
 # lib BulletCollision
-FILE_LIST+= \
+FILE_LIST:= \
 			bullet/src/BulletCollision/NarrowPhaseCollision/btRaycastCallback.cpp \
 			bullet/src/BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.cpp \
 			bullet/src/BulletCollision/NarrowPhaseCollision/btSubSimplexConvexCast.cpp \

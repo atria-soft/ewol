@@ -20,6 +20,11 @@ namespace ewol
 {
 	// class resources is pure virtual
 	class Resource {
+		/*
+		public:
+			void* operator new(size_t elmeentSize);
+			void  operator delete(void* elementPointer);
+		*/
 		private:
 			static uint32_t valBase;
 		protected:
