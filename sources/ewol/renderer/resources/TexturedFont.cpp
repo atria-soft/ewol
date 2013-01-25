@@ -57,14 +57,10 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_modeWraping[2] = ewol::font::Regular;
 	m_modeWraping[3] = ewol::font::Regular;
 	
-	m_lastGlyphPos[0].x = 0;
-	m_lastGlyphPos[0].y = 0;
-	m_lastGlyphPos[1].x = 0;
-	m_lastGlyphPos[1].y = 0;
-	m_lastGlyphPos[2].x = 0;
-	m_lastGlyphPos[2].y = 0;
-	m_lastGlyphPos[3].x = 0;
-	m_lastGlyphPos[3].y = 0;
+	m_lastGlyphPos[0].setValue(0,0);
+	m_lastGlyphPos[1].setValue(0,0);
+	m_lastGlyphPos[2].setValue(0,0);
+	m_lastGlyphPos[3].setValue(0,0);
 	
 	m_lastRawHeigh[0] = 0;
 	m_lastRawHeigh[1] = 0;
@@ -192,8 +188,8 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		int32_t nbElement = 0xFF - 0x20 + 1;
 		int32_t coter = simpleSQRT(nbElement);
 		// note : +1 is for the overlapping of the glyph (Part 1)
-		int32_t glyphMaxWidth = tmpproperty.m_advance.x +1;
-		int32_t glyphMaxHeight = tmpproperty.m_advance.y +1;
+		int32_t glyphMaxWidth = tmpproperty.m_advance.x() +1;
+		int32_t glyphMaxHeight = tmpproperty.m_advance.y() +1;
 		int32_t textureWidth = nextP2(coter*glyphMaxWidth);
 		int32_t nbRaws = textureWidth / glyphMaxWidth;
 		if (nbRaws <= 0) {
@@ -221,27 +217,27 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		for (int32_t iii=0; iii<m_listElement[iiiFontId].Size(); iii++) {
 			if (true == m_font[iiiFontId]->GetGlyphProperty(m_size, (m_listElement[iiiFontId])[iii])) {
 				// change line if needed ...
-				if (glyphPosition.x+(m_listElement[iiiFontId])[iii].m_sizeTexture.x > textureWidth) {
-					glyphPosition.x = 0;
-					glyphPosition.y += CurrentLineHigh;
+				if (glyphPosition.x()+(m_listElement[iiiFontId])[iii].m_sizeTexture.x() > textureWidth) {
+					glyphPosition.setX(0);
+					glyphPosition.setY(glyphPosition.y()+CurrentLineHigh);
 					CurrentLineHigh = 0;
 				}
 				// draw the glyph
 				m_font[iiiFontId]->DrawGlyph(m_data, m_size, glyphPosition, (m_listElement[iiiFontId])[iii], iiiFontId);
 				// set video position
-				(m_listElement[iiiFontId])[iii].m_texturePosStart.x = (float)(glyphPosition.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].m_texturePosStart.y = (float)(glyphPosition.y) / (float)textureHeight;
-				(m_listElement[iiiFontId])[iii].m_texturePosStop.x  = (float)(glyphPosition.x + (m_listElement[iiiFontId])[iii].m_sizeTexture.x) / (float)textureWidth;
-				(m_listElement[iiiFontId])[iii].m_texturePosStop.y  = (float)(glyphPosition.y + (m_listElement[iiiFontId])[iii].m_sizeTexture.y) / (float)textureHeight;
+				(m_listElement[iiiFontId])[iii].m_texturePosStart.setValue( (float)(glyphPosition.x()) / (float)textureWidth,
+				                                                            (float)(glyphPosition.y()) / (float)textureHeight );
+				(m_listElement[iiiFontId])[iii].m_texturePosStop.setValue( (float)(glyphPosition.x() + (m_listElement[iiiFontId])[iii].m_sizeTexture.x()) / (float)textureWidth,
+				                                                           (float)(glyphPosition.y() + (m_listElement[iiiFontId])[iii].m_sizeTexture.y()) / (float)textureHeight );
 				
 				// update the maximum of the line hight : 
-				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].m_sizeTexture.y) {
+				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].m_sizeTexture.y()) {
 					// note : +1 is for the overlapping of the glyph (Part 2)
-					CurrentLineHigh = (m_listElement[iiiFontId])[iii].m_sizeTexture.y+1;
+					CurrentLineHigh = (m_listElement[iiiFontId])[iii].m_sizeTexture.y()+1;
 				}
 				// note : +1 is for the overlapping of the glyph (Part 3)
 				// update the Bitmap position drawing : 
-				glyphPosition.x += (m_listElement[iiiFontId])[iii].m_sizeTexture.x+1;
+				glyphPosition.setX(glyphPosition.x() + (m_listElement[iiiFontId])[iii].m_sizeTexture.x()+1);
 			}
 			
 		}

@@ -152,8 +152,8 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 						vec2 tmpOri  = eventFromWidget->GetOrigin();
 						vec2 tmpSize = eventFromWidget->GetSize();
 						// calculate the correct position
-						newPosition.x = tmpOri.x + tmpSize.x/2;
-						newPosition.y = tmpOri.y;
+						newPosition.setValue(tmpOri.x() + tmpSize.x()/2,
+						                     tmpOri.y() );
 					}
 					
 					m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_TOP, newPosition );

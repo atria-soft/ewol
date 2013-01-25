@@ -70,9 +70,9 @@ bool widget::Entry::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
-	int32_t minHeight = m_oObjectText.CalculateSize('A').y;
-	m_minSize.x = m_userSize + 2*padding.x;
-	m_minSize.y = minHeight + 2*padding.y;
+	int32_t minHeight = m_oObjectText.CalculateSize('A').y();
+	m_minSize.setValue(m_userSize + 2*padding.x(),
+	                   minHeight + 2*padding.y());
 	UpdateTextPosition();
 	MarkToRedraw();
 	return true;
@@ -109,37 +109,37 @@ void widget::Entry::OnRegenerateDisplay(void)
 		UpdateTextPosition();
 		vec2 padding = m_shaper.GetPadding();
 		
-		int32_t tmpSizeX = m_minSize.x;
-		int32_t tmpSizeY = m_minSize.y;
+		int32_t tmpSizeX = m_minSize.x();
+		int32_t tmpSizeY = m_minSize.y();
 		int32_t tmpOriginX = 0;
-		int32_t tmpOriginY = (m_size.y - tmpSizeY) / 2;
+		int32_t tmpOriginY = (m_size.y() - tmpSizeY) / 2;
 		// no change for the text orogin : 
-		int32_t tmpTextOriginX = padding.x;
-		int32_t tmpTextOriginY = tmpOriginY + padding.y;
+		int32_t tmpTextOriginX = padding.x();
+		int32_t tmpTextOriginY = tmpOriginY + padding.y();
 		
-		if (true==m_userFill.x) {
-			tmpSizeX = m_size.x;
+		if (true==m_userFill.x()) {
+			tmpSizeX = m_size.x();
 		}
-		if (true==m_userFill.y) {
+		if (true==m_userFill.y()) {
 			//tmpSizeY = m_size.y;
 			tmpOriginY = 0;
-			tmpTextOriginY = tmpOriginY + padding.y;
+			tmpTextOriginY = tmpOriginY + padding.y();
 		}
-		tmpOriginX += padding.x;
-		tmpOriginY += padding.y;
-		tmpSizeX -= 2*padding.x;
-		tmpSizeY -= 2*padding.y;
+		tmpOriginX += padding.x();
+		tmpOriginY += padding.y();
+		tmpSizeX -= 2*padding.x();
+		tmpSizeY -= 2*padding.y();
 		
 		
 		vec3 textPos( tmpTextOriginX + m_displayStartPosition,
-		                              tmpTextOriginY,
-		                              0 );
-		vec3 drawClippingPos( padding.x,
-		                                      padding.y,
-		                                      -1 );
-		vec3 drawClippingSize( m_size.x - 2*drawClippingPos.x,
-		                                       m_size.y - 2*drawClippingPos.y,
-		                                       1 );
+		              tmpTextOriginY,
+		              0 );
+		vec3 drawClippingPos( padding.x(),
+		                      padding.y(),
+		                      -1 );
+		vec3 drawClippingSize( m_size.x() - 2*drawClippingPos.x(),
+		                       m_size.y() - 2*drawClippingPos.y(),
+		                       1 );
 		m_oObjectText.SetClippingWidth(drawClippingPos, drawClippingSize);
 		m_oObjectText.SetPos(textPos);
 		if (m_displayCursorPosSelection != m_displayCursorPos) {
@@ -159,17 +159,17 @@ void widget::Entry::UpdateCursorPosition(vec2& pos, bool selection)
 	vec2 padding = m_shaper.GetPadding();
 	
 	vec2 relPos = RelativePosition(pos);
-	relPos.x += -m_displayStartPosition - padding.x;
+	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
-	int32_t displayHidenSize = m_oObjectText.CalculateSize(tmpDisplay).x;
+	int32_t displayHidenSize = m_oObjectText.CalculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
-	int32_t tmpTextOriginX = padding.x;
+	int32_t tmpTextOriginX = padding.x();
 	for (int32_t iii=0; iii<m_data.Size(); iii++) {
 		tmpDisplay = m_data.Extract(0, iii);
-		int32_t tmpWidth = m_oObjectText.CalculateSize(tmpDisplay).x - displayHidenSize;
-		if (tmpWidth>=relPos.x-tmpTextOriginX) {
+		int32_t tmpWidth = m_oObjectText.CalculateSize(tmpDisplay).x() - displayHidenSize;
+		if (tmpWidth>=relPos.x()-tmpTextOriginX) {
 			newCursorPosition = iii;
 			break;
 		}
@@ -446,12 +446,12 @@ void widget::Entry::UpdateTextPosition(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
-	int32_t tmpSizeX = m_minSize.x;
-	if (true==m_userFill.x) {
-		tmpSizeX = m_size.x;
+	int32_t tmpSizeX = m_minSize.x();
+	if (true==m_userFill.x()) {
+		tmpSizeX = m_size.x();
 	}
-	int32_t tmpUserSize = tmpSizeX - 2*(padding.x);
-	int32_t totalWidth = m_oObjectText.CalculateSize(m_data).x;
+	int32_t tmpUserSize = tmpSizeX - 2*(padding.x());
+	int32_t totalWidth = m_oObjectText.CalculateSize(m_data).x();
 	// Check if the data inside the display can be contain in the entry box
 	if (totalWidth < tmpUserSize) {
 		// all can be display :
@@ -459,7 +459,7 @@ void widget::Entry::UpdateTextPosition(void)
 	} else {
 		// all can not be set :
 		etk::UString tmpDisplay = m_data.Extract(0, m_displayCursorPos);
-		int32_t pixelCursorPos = m_oObjectText.CalculateSize(tmpDisplay).x;
+		int32_t pixelCursorPos = m_oObjectText.CalculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
 		EWOL_DEBUG("cursorPos=" << pixelCursorPos << "px maxSize=" << tmpUserSize << "px tmp1=" << tmp1);

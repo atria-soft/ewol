@@ -55,13 +55,13 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
 	eventTable[idInput].destinationInputId = 0;
 	eventTable[idInput].lastTimeEvent = 0;
 	eventTable[idInput].curentWidgetEvent = NULL;
-	eventTable[idInput].origin = vec2(0,0);
-	eventTable[idInput].size = vec2(99999999,99999999);
-	eventTable[idInput].downStart = vec2(0,0);
+	eventTable[idInput].origin.setValue(0,0);
+	eventTable[idInput].size.setValue(99999999,99999999);
+	eventTable[idInput].downStart.setValue(0,0);
 	eventTable[idInput].isDown = false;
 	eventTable[idInput].isInside = false;
 	eventTable[idInput].nbClickEvent = 0;
-	eventTable[idInput].posEvent = vec2(0,0);
+	eventTable[idInput].posEvent.setValue(0,0);
 }
 
 
@@ -119,7 +119,7 @@ void ewol::eSystemInput::GrabPointer(ewol::Widget* widget)
 		return;
 	}
 	m_grabWidget = widget;
-	guiInterface::GrabPointerEvents(true, widget->GetOrigin() + widget->GetSize()/2.0f);
+	guiInterface::GrabPointerEvents(true, widget->GetOrigin() + ivec2(widget->GetSize().x()/2.0f, widget->GetSize().y()/2.0f) );
 }
 
 void ewol::eSystemInput::UnGrabPointer(void)
@@ -198,9 +198,6 @@ int32_t ewol::eSystemInput::localGetDestinationId(ewol::keyEvent::type_te type, 
 // note if id<0 ==> the it was finger event ...
 void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec2 pos)
 {
-	// convert position in Open-GL coordonates ...
-	pos.y = pos.y;
-	
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::keyEvent::typeMouse) {
 		eventTable = m_eventMouseSaved;
@@ -231,10 +228,10 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 		}
 		if(    tmpWidget != eventTable[pointerID].curentWidgetEvent
 		    || (    true == eventTable[pointerID].isInside
-		         && (     eventTable[pointerID].origin.x > pos.x
-		              ||  eventTable[pointerID].origin.y > pos.y
-		              || (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) < pos.x
-		              || (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) < pos.y) ) ) {
+		         && (     eventTable[pointerID].origin.x() > pos.x()
+		              ||  eventTable[pointerID].origin.y() > pos.y()
+		              || (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
+		              || (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()) ) ) {
 			eventTable[pointerID].isInside = false;
 			EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
 			eventTable[pointerID].posEvent = pos;
@@ -262,20 +259,20 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 		localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::keyEvent::statusMove, pos);
 	} else if (true == eventTable[pointerID].isUsed) {
 		if (true == eventTable[pointerID].isInside) {
-			if(     eventTable[pointerID].origin.x > pos.x
-			    ||  eventTable[pointerID].origin.y > pos.y
-			    || (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) < pos.x
-			    || (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) < pos.y) {
+			if(     eventTable[pointerID].origin.x() > pos.x()
+			    ||  eventTable[pointerID].origin.y() > pos.y()
+			    || (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) < pos.x()
+			    || (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) < pos.y()) {
 				eventTable[pointerID].isInside = false;
 				EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [LEAVE] " << pos);
 				eventTable[pointerID].posEvent = pos;
 				localEventInput(type, eventTable[pointerID].curentWidgetEvent, eventTable[pointerID].destinationInputId, ewol::keyEvent::statusLeave, pos);
 			}
 		} else {
-			if(    (     eventTable[pointerID].origin.x <= pos.x
-			         && (eventTable[pointerID].origin.x + eventTable[pointerID].size.x) >= pos.x )
-			    && (     eventTable[pointerID].origin.y <= pos.y
-			         && (eventTable[pointerID].origin.y + eventTable[pointerID].size.y) >= pos.y ) ) {
+			if(    (     eventTable[pointerID].origin.x() <= pos.x()
+			         && (eventTable[pointerID].origin.x() + eventTable[pointerID].size.x()) >= pos.x() )
+			    && (     eventTable[pointerID].origin.y() <= pos.y()
+			         && (eventTable[pointerID].origin.y() + eventTable[pointerID].size.y()) >= pos.y() ) ) {
 				eventTable[pointerID].isInside = true;
 				EVENT_DEBUG("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [ENTER] " << pos);
 				eventTable[pointerID].posEvent = pos;
@@ -318,8 +315,8 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 			// we have an event previously ... check delay between click and offset position
 			if (currentTime - eventTable[pointerID].lastTimeEvent > localLimit.sepatateTime) {
 				CleanElement(eventTable, pointerID);
-			} else if(    abs(eventTable[pointerID].downStart.x - pos.x) >= localLimit.DpiOffset
-			           || abs(eventTable[pointerID].downStart.y - pos.y) >= localLimit.DpiOffset ){
+			} else if(    abs(eventTable[pointerID].downStart.x() - pos.x()) >= localLimit.DpiOffset
+			           || abs(eventTable[pointerID].downStart.y() - pos.y()) >= localLimit.DpiOffset ){
 				CleanElement(eventTable, pointerID);
 			}
 		}
@@ -376,8 +373,8 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 			eventTable[pointerID].posEvent = pos;
 			localEventInput(type, eventTable[pointerID].curentWidgetEvent, pointerID, ewol::keyEvent::statusUp, pos);
 			// generate event (single)
-			if(    abs(eventTable[pointerID].downStart.x - pos.x) < localLimit.DpiOffset
-			    && abs(eventTable[pointerID].downStart.y - pos.y) < localLimit.DpiOffset ){
+			if(    abs(eventTable[pointerID].downStart.x() - pos.x()) < localLimit.DpiOffset
+			    && abs(eventTable[pointerID].downStart.y() - pos.y()) < localLimit.DpiOffset ){
 				// Save current position :
 				eventTable[pointerID].downStart = pos;
 				// save start time

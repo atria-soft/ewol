@@ -23,11 +23,9 @@ void widget::Image::Init(void)
 	AddEventId(ewolEventImagePressed);
 	
 	#ifdef __TARGET_OS__Android
-		m_padding.y = 12;
-		m_padding.x = 12;
+		m_padding.setValue(12,12);
 	#else
-		m_padding.y = 4;
-		m_padding.x = 4;
+		m_padding.setValue(4,4);
 	#endif
 	
 	m_textColorBg = draw::color::black;
@@ -61,8 +59,8 @@ void widget::Image::SetPadding(vec2 newPadding)
 
 bool widget::Image::CalculateMinSize(void)
 {
-	m_minSize.x = m_padding.x*2 + m_imageSize;
-	m_minSize.y = m_padding.y*2 + m_imageSize;
+	m_minSize.setValue(m_padding.x()*2 + m_imageSize,
+	                   m_padding.y()*2 + m_imageSize );
 	MarkToRedraw();
 	return true;
 }
@@ -81,23 +79,23 @@ void widget::Image::OnRegenerateDisplay(void)
 		// clean the object list ...
 		ClearOObjectList();
 		
-		int32_t tmpSizeX = m_minSize.x;
-		int32_t tmpSizeY = m_minSize.y;
-		int32_t tmpOriginX = (m_size.x - m_minSize.x) / 2;
-		int32_t tmpOriginY = (m_size.y - m_minSize.y) / 2;
+		int32_t tmpSizeX = m_minSize.x();
+		int32_t tmpSizeY = m_minSize.y();
+		int32_t tmpOriginX = (m_size.x() - m_minSize.x()) / 2;
+		int32_t tmpOriginY = (m_size.y() - m_minSize.y()) / 2;
 		
-		if (true==m_userFill.x) {
-			tmpSizeX = m_size.x;
+		if (true==m_userFill.x()) {
+			tmpSizeX = m_size.x();
 			tmpOriginX = 0;
 		}
-		if (true==m_userFill.y) {
-			tmpSizeY = m_size.y;
+		if (true==m_userFill.y()) {
+			tmpSizeY = m_size.y();
 			tmpOriginY = 0;
 		}
-		tmpOriginX += m_padding.x;
-		tmpOriginY += m_padding.y;
-		tmpSizeX -= 2*m_padding.x;
-		tmpSizeY -= 2*m_padding.y;
+		tmpOriginX += m_padding.x();
+		tmpOriginY += m_padding.y();
+		tmpSizeX -= 2*m_padding.x();
+		tmpSizeY -= 2*m_padding.y();
 		
 		
 		ewol::Image * tmpImage = NULL;

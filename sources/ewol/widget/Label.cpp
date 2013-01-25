@@ -35,19 +35,19 @@ widget::Label::~Label(void)
 
 bool widget::Label::CalculateMinSize(void)
 {
-	if (m_userMaxSize.x != -1) {
-		m_text.SetTextAlignement(0, m_userMaxSize.x-4, ewol::Text::alignLeft);
+	if (m_userMaxSize.x() != -1) {
+		m_text.SetTextAlignement(0, m_userMaxSize.x()-4, ewol::Text::alignLeft);
 	}
-	ivec3 minSize = m_text.CalculateSizeDecorated(m_label);
-	if (m_userMaxSize.x!=-1) {
-		m_minSize.x = etk_min(4 + minSize.x, m_userMaxSize.x);
+	vec3 minSize = m_text.CalculateSizeDecorated(m_label);
+	if (m_userMaxSize.x()!=-1) {
+		m_minSize.setX(etk_min(4 + minSize.x(), m_userMaxSize.x()));
 	} else {
-		m_minSize.x = 4 + minSize.x;
+		m_minSize.setX(4 + minSize.x());
 	}
-	if (m_userMaxSize.y!=-1) {
-		m_minSize.y = etk_min(4 + minSize.y, m_userMaxSize.y);
+	if (m_userMaxSize.y()!=-1) {
+		m_minSize.setY(etk_min(4 + minSize.y(), m_userMaxSize.y()));
 	} else {
-		m_minSize.y = 4 + minSize.y;
+		m_minSize.setY(4 + minSize.y());
 	}
 	return true;
 }
@@ -81,45 +81,43 @@ void widget::Label::OnRegenerateDisplay(void)
 		
 		
 		// to know the size of one Line : 
-		ivec3 minSize = m_text.CalculateSize('A');
-		if (m_userMaxSize.x != -1) {
-			m_text.SetTextAlignement(0, m_userMaxSize.x-2*paddingSize, ewol::Text::alignLeft);
+		vec3 minSize = m_text.CalculateSize('A');
+		if (m_userMaxSize.x() != -1) {
+			m_text.SetTextAlignement(0, m_userMaxSize.x()-2*paddingSize, ewol::Text::alignLeft);
 		}
-		ivec3 curentTextSize = m_text.CalculateSizeDecorated(m_label);
+		vec3 curentTextSize = m_text.CalculateSizeDecorated(m_label);
 		
 		ivec2 localSize = m_minSize;
 		
 		// no change for the text orogin : 
-		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
-		                   (m_size.y - m_minSize.y) / 2.0,
+		vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+		                   (m_size.y() - m_minSize.y()) / 2.0,
 		                   0);
 		
-		if (true==m_userFill.x) {
-			localSize.x = m_size.x;
-			tmpTextOrigin.x = 0;
+		if (true==m_userFill.x()) {
+			localSize.setX(m_size.x());
+			tmpTextOrigin.setX(0);
 		}
-		if (true==m_userFill.y) {
-			localSize.y = m_size.y;
-			tmpTextOrigin.y = m_size.y - 2*paddingSize - curentTextSize.y;
+		if (true==m_userFill.y()) {
+			localSize.setY(m_size.y());
+			tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 		}
-		tmpTextOrigin.x += paddingSize;
-		tmpTextOrigin.y += paddingSize;
-		localSize.x -= 2*paddingSize;
-		localSize.y -= 2*paddingSize;
+		tmpTextOrigin += vec3(paddingSize, paddingSize, 0);
+		localSize -= vec2(2*paddingSize,2*paddingSize);
 		
-		tmpTextOrigin.y += (m_minSize.y-2*paddingSize) - minSize.y;
+		tmpTextOrigin.setY( tmpTextOrigin.y() + (m_minSize.y()-2*paddingSize) - minSize.y());
 		
-		vec2 textPos(tmpTextOrigin.x, tmpTextOrigin.y);
+		vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
 		
 		vec3 drawClippingPos(paddingSize, paddingSize, -0.5);
-		vec3 drawClippingSize((m_size.x - paddingSize),
-		                      (m_size.y - paddingSize),
+		vec3 drawClippingSize((m_size.x() - paddingSize),
+		                      (m_size.y() - paddingSize),
 		                      1);
 		
 		// clean the element
 		m_text.Reset();
 		m_text.SetPos(tmpTextOrigin);
-		m_text.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignLeft);
+		m_text.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignLeft);
 		m_text.SetClipping(drawClippingPos, drawClippingSize);
 		m_text.PrintDecorated(m_label);
 	}

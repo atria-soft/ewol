@@ -343,8 +343,8 @@ void guiInterface::SetIcon(etk::UString inputFile)
 	char* tmpPointer = tmpVal;
 	switch(depth) {
 		case 16:
-			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
-				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
+				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
 					draw::Color tmpColor = dataImage.Get(pos);
 					int16_t tmpVal =   ((uint16_t)((uint16_t)tmpColor.r>>3))<<11
 					                 + ((uint16_t)((uint16_t)tmpColor.g>>2))<<5
@@ -355,8 +355,8 @@ void guiInterface::SetIcon(etk::UString inputFile)
 			}
 			break;
 		case 24:
-			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
-				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
+				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
 					draw::Color tmpColor = dataImage.Get(pos);
 					*tmpPointer++ = tmpColor.b;
 					*tmpPointer++ = tmpColor.g;
@@ -366,8 +366,8 @@ void guiInterface::SetIcon(etk::UString inputFile)
 			}
 			break;
 		case 32:
-			for(ivec2 pos(0,0); pos.y<dataImage.GetHeight(); pos.y++) {
-				for(pos.x=0; pos.x<dataImage.GetHeight(); pos.x++) {
+			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
+				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
 					draw::Color tmpColor = dataImage.Get(pos);
 					*tmpPointer++ = tmpColor.a;
 					*tmpPointer++ = tmpColor.b;
@@ -805,8 +805,8 @@ void X11_Run(void)
 				case MotionNotify:
 					X11_INFO("X11 event MotionNotify");
 					if(    true==m_grabAllEvent
-					    && event.xmotion.x == (int32_t)m_forcePos.x
-					    && event.xmotion.y == (int32_t)m_forcePos.y) {
+					    && event.xmotion.x == (int32_t)m_forcePos.x()
+					    && event.xmotion.y == (int32_t)m_forcePos.y()) {
 						X11_VERBOSE("X11 reject mouse move (grab mode)");
 						// we get our requested position...
 						m_positionChangeRequested = false;
@@ -815,13 +815,13 @@ void X11_Run(void)
 						m_cursorEventX = event.xmotion.x;
 						m_cursorEventY = (m_currentHeight-event.xmotion.y);
 						if(true==m_grabAllEvent) {
-							m_cursorEventX -= m_forcePos.x;
-							m_cursorEventY -= (m_currentHeight-m_forcePos.y);
+							m_cursorEventX -= m_forcePos.x();
+							m_cursorEventY -= (m_currentHeight-m_forcePos.y());
 						}
 						vec2 newDelta = vec2(m_cursorEventX, m_cursorEventY);
 						if(true==m_grabAllEvent) {
-							m_cursorEventX -= m_curentGrabDelta.x;
-							m_cursorEventY -= m_curentGrabDelta.y;
+							m_cursorEventX -= m_curentGrabDelta.x();
+							m_cursorEventY -= m_curentGrabDelta.y();
 						}
 						m_curentGrabDelta = newDelta;
 						// For compatibility of the Android system : 
@@ -840,7 +840,7 @@ void X11_Run(void)
 						if (true==m_grabAllEvent) {
 							if (m_positionChangeRequested == false) {
 								X11_DEBUG("X11 Set pointer position : " << m_forcePos);
-								XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x, m_forcePos.y);
+								XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x(), m_forcePos.y());
 								XFlush(m_display);
 								m_positionChangeRequested = true;
 							}
@@ -1147,18 +1147,18 @@ void guiInterface::KeyboardHide(void)
 void guiInterface::ChangeSize(ivec2 size)
 {
 	X11_INFO("X11-API: ChangeSize=" << size);
-	m_currentHeight = size.y;
-	m_currentWidth = size.x;
-	XResizeWindow(m_display, WindowHandle, size.x, size.y);
+	m_currentHeight = size.y();
+	m_currentWidth = size.x();
+	XResizeWindow(m_display, WindowHandle, size.x(), size.y());
 }
 
 
 void guiInterface::ChangePos(ivec2 pos)
 {
 	X11_INFO("X11-API: ChangePos=" << pos);
-	XMoveWindow(m_display, WindowHandle, pos.x, pos.y);
-	m_originX = pos.x;
-	m_originY = pos.y;
+	XMoveWindow(m_display, WindowHandle, pos.x(), pos.y());
+	m_originX = pos.x();
+	m_originY = pos.y();
 }
 
 
@@ -1168,7 +1168,7 @@ void guiInterface::GetAbsPos(ivec2& pos)
 	int tmp;
 	unsigned int tmp2;
 	Window fromroot, tmpwin;
-	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &pos.x, &pos.y, &tmp, &tmp, &tmp2);
+	XQueryPointer(m_display, WindowHandle, &fromroot, &tmpwin, &pos.m_floats[0], &pos.m_floats[1], &tmp, &tmp, &tmp2);
 }
 
 #include <X11/cursorfont.h>
@@ -1300,11 +1300,11 @@ void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
 			}
 		}
 		m_forcePos = forcedPosition;
-		m_forcePos.y = m_currentHeight - m_forcePos.y;
+		m_forcePos.setY(m_currentHeight - m_forcePos.y());
 		m_grabAllEvent = true;
 		// change the pointer position to generate a good mouving at the start ...
 		X11_DEBUG("X11-API: Set pointer position : " << m_forcePos);
-		XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x, m_forcePos.y);
+		XWarpPointer(m_display, None, WindowHandle, 0,0, 0, 0, m_forcePos.x(), m_forcePos.y());
 		XFlush(m_display);
 		m_positionChangeRequested = true;
 		m_curentGrabDelta = vec2(0,0);

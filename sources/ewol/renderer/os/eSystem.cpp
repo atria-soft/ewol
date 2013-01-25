@@ -130,8 +130,7 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
-				windowsSize.x = data.dimention.x;
-				windowsSize.y = data.dimention.y;
+				windowsSize = data.dimention;
 				eSystem::ForceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
@@ -319,8 +318,7 @@ void eSystem::Resize(int w, int h )
 	if (true == isGlobalSystemInit) {
 		eSystemMessage data;
 		data.TypeMessage = THREAD_RESIZE;
-		data.dimention.x = w;
-		data.dimention.y = h;
+		data.dimention.setValue(w,h);
 		l_msgSystem.Post(data);
 	}
 }
@@ -344,8 +342,7 @@ void eSystem::SetInputMotion(int pointerID, float x, float y )
 		data.TypeMessage = THREAD_INPUT_MOTION;
 		data.inputType = ewol::keyEvent::typeFinger;
 		data.inputId = pointerID;
-		data.dimention.x = x;
-		data.dimention.y = y;
+		data.dimention.setValue(x,y);
 		l_msgSystem.Post(data);
 	}
 }
@@ -359,8 +356,7 @@ void eSystem::SetInputState(int pointerID, bool isDown, float x, float y )
 		data.inputType = ewol::keyEvent::typeFinger;
 		data.inputId = pointerID;
 		data.stateIsDown = isDown;
-		data.dimention.x = x;
-		data.dimention.y = y;
+		data.dimention.setValue(x,y);
 		l_msgSystem.Post(data);
 	}
 }
@@ -373,8 +369,7 @@ void eSystem::SetMouseMotion(int pointerID, float x, float y )
 		data.TypeMessage = THREAD_INPUT_MOTION;
 		data.inputType = ewol::keyEvent::typeMouse;
 		data.inputId = pointerID;
-		data.dimention.x = x;
-		data.dimention.y = y;
+		data.dimention.setValue(x,y);
 		l_msgSystem.Post(data);
 	}
 }
@@ -388,8 +383,7 @@ void eSystem::SetMouseState(int pointerID, bool isDown, float x, float y )
 		data.inputType = ewol::keyEvent::typeMouse;
 		data.inputId = pointerID;
 		data.stateIsDown = isDown;
-		data.dimention.x = x;
-		data.dimention.y = y;
+		data.dimention.setValue(x,y);
 		l_msgSystem.Post(data);
 	}
 }
@@ -553,7 +547,7 @@ void eSystem::ForceRedrawAll(void)
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	if (NULL != tmpWindows) {
 		ivec2 tmpSize = eSystem::GetSize();
-		tmpWindows->CalculateSize(tmpSize.x, tmpSize.y);
+		tmpWindows->CalculateSize(tmpSize.x(), tmpSize.y());
 	}
 }
 

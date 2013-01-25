@@ -68,8 +68,7 @@ void widget::ListFileSystem::RegenerateView(void)
 	
 	m_selectedLine = -1;
 	m_list.Clear();
-	m_originScrooled.x = 0;
-	m_originScrooled.y = 0;
+	m_originScrooled.setValue(0,0);
 	etk::FSNode tmpFolder(m_folder);
 	// Get the new list : 
 	m_list = tmpFolder.FolderGetSubList(m_showHidden, m_showFolder, m_showFile, m_showTemporaryFile);

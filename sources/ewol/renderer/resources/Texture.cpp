@@ -42,8 +42,7 @@ ewol::Texture::Texture(etk::UString tmpName) :
 {
 	m_loaded = false;
 	m_texId = 0;
-	m_endPointSize.x = 1.0;
-	m_endPointSize.y = 1.0;
+	m_endPointSize.setValue(1.0,1.0);
 }
 
 
@@ -113,8 +112,7 @@ void ewol::Texture::Flush(void)
 
 void ewol::Texture::SetImageSize(ivec2 newSize)
 {
-	newSize.x = nextP2(newSize.x);
-	newSize.y = nextP2(newSize.y);
+	newSize.setValue( nextP2(newSize.x()), nextP2(newSize.y()) );
 	m_data.Resize(newSize);
 }
 

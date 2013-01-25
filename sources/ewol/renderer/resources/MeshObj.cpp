@@ -47,17 +47,17 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			if (inputDataLine[1]=='n') {
 				// Vertice normal   : vn 0.000000 0.000000 -1.000000
 				vec3 vertex;
-				sscanf(&inputDataLine[3], "%f %f %f", &vertex.x, &vertex.y, &vertex.z );
+				sscanf(&inputDataLine[3], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[1] );
 				normals.PushBack(vertex);
 			} else if (inputDataLine[1]=='t') {
 				// Texture position : vt 0.748573 0.750412
 				vec2 vertex;
-				sscanf(&inputDataLine[3], "%f %f", &vertex.x, &vertex.y);
+				sscanf(&inputDataLine[3], "%f %f", &vertex.m_floats[0], &vertex.m_floats[1]);
 				uvTextures.PushBack(vertex);
 			} else {
 				// Vertice position : v 1.000000 -1.000000 -1.000000
 				vec3 vertex;
-				sscanf(&inputDataLine[2], "%f %f %f", &vertex.x, &vertex.y, &vertex.z );
+				sscanf(&inputDataLine[2], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[1] );
 				vertices.PushBack(vertex);
 			}
 		} else if (inputDataLine[0]=='f') {
@@ -183,12 +183,12 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		
 		// Put the attributes in buffers
 		m_vertices.PushBack(vertices[vertexIndex-1]);
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].x);
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].y);
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].z);
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].x());
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].y());
+		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].z());
 		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
-		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].x);
-		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].y);
+		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].x());
+		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].y());
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
 		m_coordColor.PushBack(tmppppp);
@@ -200,9 +200,9 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		if (indicesNormal.Size()>iii) {
 			uint32_t normalIndex = indicesNormal[iii];
 			m_normals.PushBack(normals[normalIndex-1]);
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].x);
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].y);
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].z);
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].x());
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].y());
+			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].z());
 		}
 	}
 	// update all the VBO elements ...

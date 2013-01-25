@@ -37,8 +37,8 @@ widget::ProgressBar::~ProgressBar(void)
 
 bool widget::ProgressBar::CalculateMinSize(void)
 {
-	m_minSize.x = etk_max(m_userMinSize.x, 40);
-	m_minSize.y = etk_max(m_userMinSize.y, dotRadius*2);
+	m_minSize.setValue( etk_max(m_userMinSize.x(), 40),
+	                    etk_max(m_userMinSize.y(), dotRadius*2) );
 	MarkToRedraw();
 	return true;
 }
@@ -46,7 +46,7 @@ bool widget::ProgressBar::CalculateMinSize(void)
 
 void widget::ProgressBar::ValueSet(float val)
 {
-	m_value = etk_avg(0.0, val, 1.0);
+	m_value = etk_avg(0, val, 1);
 	MarkToRedraw();
 }
 
@@ -67,8 +67,8 @@ void widget::ProgressBar::OnRegenerateDisplay(void)
 		
 		tmpDraw->SetColor(m_textColorFg);
 		
-		int32_t tmpSizeX = m_size.x - 10;
-		int32_t tmpSizeY = m_size.y - 10;
+		int32_t tmpSizeX = m_size.x() - 10;
+		int32_t tmpSizeY = m_size.y() - 10;
 		int32_t tmpOriginX = 5;
 		int32_t tmpOriginY = 5;
 		tmpDraw->SetColor(m_textColorBgOn);

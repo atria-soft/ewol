@@ -47,10 +47,10 @@ widget::CheckBox::~CheckBox(void)
 
 bool widget::CheckBox::CalculateMinSize(void)
 {
-	ivec3 minSize = m_oObjectText.CalculateSize(m_label);
-	float boxSize = etk_max(20, minSize.y) + 5;
-	m_minSize.x = boxSize+minSize.x;
-	m_minSize.y = etk_max(boxSize, minSize.y)+3;
+	vec3 minSize = m_oObjectText.CalculateSize(m_label);
+	float boxSize = etk_max(20, minSize.y()) + 5;
+	m_minSize.setX(boxSize+minSize.x());
+	m_minSize.setY(etk_max(boxSize, minSize.y())+3);
 	MarkToRedraw();
 	return true;
 }
@@ -89,17 +89,14 @@ void widget::CheckBox::OnRegenerateDisplay(void)
 		m_oObjectDecoration.Clear();
 		m_oObjectText.Clear();
 		
-		ivec3 minSize = m_oObjectText.CalculateSize(m_label);
-		float boxSize = etk_max(20, minSize.y) + 5;
+		vec3 minSize = m_oObjectText.CalculateSize(m_label);
+		float boxSize = etk_max(20, minSize.y()) + 5;
 		//int32_t fontWidth = ewol::GetWidth(fontId, m_label.c_str());
-		int32_t posy = (m_size.y - minSize.y - 6)/2 + 3;
+		int32_t posy = (m_size.y() - minSize.y() - 6)/2 + 3;
 		//int32_t posx = (m_size.x - fontWidth - 6)/2 + 25;
 		
 		
-		vec3 textPos;
-		textPos.x = boxSize+5;
-		textPos.y = posy;
-		textPos.z = 0;
+		vec3 textPos(boxSize+5, posy, 0);
 		m_oObjectText.SetPos(textPos);
 		m_oObjectText.Print(m_label);
 		

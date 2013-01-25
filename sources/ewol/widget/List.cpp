@@ -51,8 +51,7 @@ bool widget::List::CalculateMinSize(void)
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
 	*/
-	m_minSize.x = 200;
-	m_minSize.y = 150;
+	m_minSize.setValue(200, 150);
 	return true;
 }
 
@@ -117,8 +116,8 @@ void widget::List::OnRegenerateDisplay(void)
 		uint32_t nbColomn = GetNuberOfColomn();
 		int32_t nbRaw    = GetNuberOfRaw();
 		// For the scrooling windows
-		m_maxSize.x = m_size.x;
-		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
+		m_maxSize = ivec2(m_size.x(),
+		                  (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
 		etk::Vector<int32_t> listSizeColomn;
@@ -127,9 +126,9 @@ void widget::List::OnRegenerateDisplay(void)
 		draw::Color basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->SetPos(vec3(0, 0, 0) );
-		BGOObjects->RectangleWidth(vec3(m_size.x, m_size.y, 0) );
+		BGOObjects->RectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
 		
-		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
+		int32_t startRaw = m_originScrooled.y() / (minHeight + 2*m_paddingSizeY);
 		
 		if (startRaw >= nbRaw-1 ) {
 			startRaw = nbRaw - 1;
@@ -148,15 +147,15 @@ void widget::List::OnRegenerateDisplay(void)
 		*/
 		// remove all the positions :
 		m_lineSize.Clear();
-		int32_t displayPositionY = m_size.y;
+		int32_t displayPositionY = m_size.y();
 		int32_t displayPositionX = 0;
 		ivec2 tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
 		m_lineSize.PushBack(tmpRegister);
 		
-		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x ; jjj++) {
+		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
 			int32_t sizeColom = 0;
-			displayPositionY = m_size.y;
+			displayPositionY = m_size.y();
 			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				etk::UString myTextToWrite;
 				draw::Color fg;
@@ -166,16 +165,16 @@ void widget::List::OnRegenerateDisplay(void)
 				ewol::Text * tmpText = new ewol::Text();
 				if (NULL != tmpText) {
 					// get font size : 
-					int32_t tmpFontHeight = tmpText->CalculateSize('A').y;
+					int32_t tmpFontHeight = tmpText->CalculateSize('A').y();
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
 					
 					BGOObjects->SetColor(bg);
 					BGOObjects->SetPos(vec3(displayPositionX, displayPositionY, 0) );
-					BGOObjects->RectangleWidth(vec3(m_size.x-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
+					BGOObjects->RectangleWidth(vec3(m_size.x()-displayPositionX, tmpFontHeight+2*m_paddingSizeY, 0));
 					
 					// get the maximum size of the colomn :
 					vec3 textSize = tmpText->CalculateSize(myTextToWrite);
-					sizeColom = etk_max(sizeColom, textSize.x);
+					sizeColom = etk_max(sizeColom, textSize.x());
 					
 					tmpText->SetColor(fg);
 					tmpText->SetPos(vec3(tmpOriginX + displayPositionX, displayPositionY, 0) );
@@ -185,8 +184,8 @@ void widget::List::OnRegenerateDisplay(void)
 					displayPositionY -= m_paddingSizeY;
 					
 					// add the raw position to remember it ...
-					tmpRegister.x++;
-					tmpRegister.y = displayPositionY;
+					tmpRegister.setX(tmpRegister.x()+1);
+					tmpRegister.setY(displayPositionY);
 					m_lineSize.PushBack(tmpRegister);
 					//EWOL_DEBUG("List indexation:" << tmpRegister);
 				}
@@ -214,16 +213,16 @@ bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, e
 	// parse all the loged row position to find the good one...
 	int32_t rawID = -1;
 	for(int32_t iii=0; iii<m_lineSize.Size()-1; iii++) {
-		if(    relativePos.y<m_lineSize[iii].y
-		    && relativePos.y>=m_lineSize[iii+1].y ) {
+		if(    relativePos.y()<m_lineSize[iii].y()
+		    && relativePos.y()>=m_lineSize[iii+1].y() ) {
 			// we find the raw :
-			rawID = m_lineSize[iii].x;
+			rawID = m_lineSize[iii].x();
 			break;
 		}
 	}
 	
 	//EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << pos << "");
-	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x, pos.y);
+	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x(), pos.y());
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::widgetManager::FocusKeep(this);

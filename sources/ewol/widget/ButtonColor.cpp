@@ -57,9 +57,9 @@ bool widget::ButtonColor::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	etk::UString label = draw::GetString(m_textColorFg);
-	ivec3 minSize = m_text.CalculateSize(label);
-	m_minSize.x = padding.x*2 + minSize.x + 7;
-	m_minSize.y = padding.y*2 + minSize.y;
+	vec3 minSize = m_text.CalculateSize(label);
+	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
+	m_minSize.setY(padding.y()*2 + minSize.y() );
 	MarkToRedraw();
 	return true;
 }
@@ -85,28 +85,25 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		
 		ivec2 localSize = m_minSize;
 		
-		vec3 tmpOrigin((m_size.x - m_minSize.x) / 2.0,
-		               (m_size.y - m_minSize.y) / 2.0,
+		vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
+		               (m_size.y() - m_minSize.y()) / 2.0,
 		               0);
 		// no change for the text orogin : 
-		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
-		                   (m_size.y - m_minSize.y) / 2.0,
+		vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+		                   (m_size.y() - m_minSize.y()) / 2.0,
 		                   0);
 		
-		if (true==m_userFill.x) {
-			localSize.x = m_size.x;
-			tmpOrigin.x = 0;
-			tmpTextOrigin.x = 0;
+		if (true==m_userFill.x()) {
+			localSize.setX(m_size.x());
+			tmpOrigin.setX(0);
+			tmpTextOrigin.setX(0);
 		}
-		if (true==m_userFill.y) {
-			localSize.y = m_size.y;
+		if (true==m_userFill.y()) {
+			localSize.setY(m_size.y());
 		}
-		tmpOrigin.x += padding.x;
-		tmpOrigin.y += padding.y;
-		tmpTextOrigin.x += padding.x;
-		tmpTextOrigin.y += padding.y;
-		localSize.x -= 2*padding.x;
-		localSize.y -= 2*padding.y;
+		tmpOrigin += vec3(padding.x(), padding.y(), 0);
+		tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
+		localSize -= ivec2(2*padding.x(), 2*padding.y());
 		
 		// clean the element
 		m_text.Reset();
@@ -119,22 +116,22 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		}
 		m_text.SetPos(tmpTextOrigin);
 		m_text.SetColorBg(m_textColorFg);
-		m_text.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
+		m_text.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
 		m_text.Print(label);
 		
 		
-		if (true==m_userFill.y) {
-			tmpOrigin.y = padding.y;
+		if (true==m_userFill.y()) {
+			tmpOrigin.setY(padding.y());
 		}
 		
 		// selection area :
-		m_selectableAreaPos = vec2(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
+		m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
 		m_selectableAreaSize = localSize + vec2(2,2)*padding;
 		m_shaper.SetOrigin(m_selectableAreaPos );
 		m_shaper.SetSize(m_selectableAreaSize);
-		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x, tmpTextOrigin.y) );
+		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
 		vec3 tmpp = m_text.CalculateSize(label);
-		vec2 tmpp2(tmpp.x, tmpp.y);
+		vec2 tmpp2(tmpp.x(), tmpp.y());
 		m_shaper.SetInsideSize(tmpp2);
 	}
 }
@@ -149,10 +146,10 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 	} else {
 		vec2 relativePos = RelativePosition(pos);
 		// prevent error from ouside the button
-		if(    relativePos.x < m_selectableAreaPos.x
-		    || relativePos.y < m_selectableAreaPos.y
-		    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
-		    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
+		if(    relativePos.x() < m_selectableAreaPos.x()
+		    || relativePos.y() < m_selectableAreaPos.y()
+		    || relativePos.x() > m_selectableAreaPos.x() + m_selectableAreaSize.x()
+		    || relativePos.y() > m_selectableAreaPos.y() + m_selectableAreaSize.y() ) {
 			m_mouseHover = false;
 			m_buttonPressed = false;
 		} else {
@@ -181,7 +178,7 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 					return true;
 				}
 				vec2 tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
-				tmpPos.x -= m_minSize.x/2.0;
+				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
 				m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, tmpPos );
 				
 				widget::ColorChooser * myColorChooser = new widget::ColorChooser();

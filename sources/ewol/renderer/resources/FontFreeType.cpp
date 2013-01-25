@@ -153,12 +153,9 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 	}
 	// set properties :
 	property.m_glyphIndex = glyph_index;
-	property.m_sizeTexture.x = slot->bitmap.width;
-	property.m_sizeTexture.y = slot->bitmap.rows;
-	property.m_bearing.x = slot->metrics.horiBearingX>>6;
-	property.m_bearing.y = slot->metrics.horiBearingY>>6;
-	property.m_advance.x = slot->metrics.horiAdvance>>6;
-	property.m_advance.y = slot->metrics.vertAdvance>>6;
+	property.m_sizeTexture.setValue(slot->bitmap.width, slot->bitmap.rows);
+	property.m_bearing.setValue( slot->metrics.horiBearingX>>6 , slot->metrics.horiBearingY>>6 );
+	property.m_advance.setValue( slot->metrics.horiAdvance>>6 , slot->metrics.vertAdvance>>6 );
 	
 	return true;
 }
@@ -202,7 +199,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
-			tlpppp = imageOut.Get(ivec2(glyphPosition.x+iii, glyphPosition.y+jjj));
+			tlpppp = imageOut.Get(ivec2(glyphPosition.x()+iii, glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
 			switch(posInImage)
@@ -222,7 +219,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 					break;
 			}
 			// real set of color
-			imageOut.Set(ivec2(glyphPosition.x+iii, glyphPosition.y+jjj), tlpppp );
+			imageOut.Set(ivec2(glyphPosition.x()+iii, glyphPosition.y()+jjj), tlpppp );
 		}
 	}
 	return true;

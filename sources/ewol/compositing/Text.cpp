@@ -204,10 +204,10 @@ void ewol::Text::SetPos(vec3 pos)
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
 		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
-		m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
-		m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
-		m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 2 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 	// update position
@@ -218,14 +218,14 @@ void ewol::Text::SetPos(vec3 pos)
 	if (m_nbCharDisplayed == 0) {
 		m_sizeDisplayStart = m_position;
 		m_sizeDisplayStop = m_position;
-		m_sizeDisplayStop.y += m_font->GetHeight(m_mode);
+		m_sizeDisplayStop.setY( m_sizeDisplayStop.y()+ m_font->GetHeight(m_mode));
 		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
 		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
-		m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
-		m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
-		m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
-		m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+		m_sizeDisplayStop.setX(etk_max(m_position.x(), m_sizeDisplayStop.x()));
+		m_sizeDisplayStop.setY(etk_max(m_position.y(), m_sizeDisplayStop.y()));
+		m_sizeDisplayStart.setX(etk_min(m_position.x(), m_sizeDisplayStart.x()));
+		m_sizeDisplayStart.setY(etk_min(m_position.y(), m_sizeDisplayStart.y()));
 		EWOL_VERBOSE("update size 4 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	}
 }
@@ -260,26 +260,26 @@ void ewol::Text::SetClippingWidth(vec3 pos, vec3 width)
 void ewol::Text::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
-	if (pos.x <= posEnd.x) {
-		m_clippingPosStart.x = pos.x;
-		m_clippingPosStop.x = posEnd.x;
+	if (pos.x() <= posEnd.x()) {
+		m_clippingPosStart.setX(pos.x());
+		m_clippingPosStop.setX(posEnd.x());
 	} else {
-		m_clippingPosStart.x = posEnd.x;
-		m_clippingPosStop.x = pos.x;
+		m_clippingPosStart.setX(posEnd.x());
+		m_clippingPosStop.setX(pos.x());
 	}
-	if (pos.y <= posEnd.y) {
-		m_clippingPosStart.y = pos.y;
-		m_clippingPosStop.y = posEnd.y;
+	if (pos.y() <= posEnd.y()) {
+		m_clippingPosStart.setY(pos.y());
+		m_clippingPosStop.setY(posEnd.y());
 	} else {
-		m_clippingPosStart.y = posEnd.y;
-		m_clippingPosStop.y = pos.y;
+		m_clippingPosStart.setY(posEnd.y());
+		m_clippingPosStop.setY(pos.y());
 	}
-	if (pos.z <= posEnd.z) {
-		m_clippingPosStart.z = pos.z;
-		m_clippingPosStop.z = posEnd.z;
+	if (pos.z() <= posEnd.z()) {
+		m_clippingPosStart.setZ(pos.z());
+		m_clippingPosStop.setZ(posEnd.z());
 	} else {
-		m_clippingPosStart.z = posEnd.z;
-		m_clippingPosStop.z = pos.z;
+		m_clippingPosStart.setZ(posEnd.z());
+		m_clippingPosStop.setZ(pos.z());
 	}
 	m_clippingEnable = true;
 	//m_vectorialDraw.SetClipping(m_clippingPosStart, m_clippingPosStop);
@@ -578,7 +578,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				m_vectorialDraw.SetPos(pos);
 				Print(text[iii]);
 				float fontHeigh = m_font->GetHeight(m_mode);
-				m_vectorialDraw.RectangleWidth(vec3(m_position.x-pos.x,fontHeigh,0.0f) );
+				m_vectorialDraw.RectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
 				Print(text[iii]);
@@ -594,10 +594,10 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 		}
 	} else {
 		// special start case at the right of the endpoint :
-		if (m_stopTextPos < m_position.x) {
+		if (m_stopTextPos < m_position.x()) {
 			ForceLineReturn();
 		}
-		float basicSpaceWidth = CalculateSize(' ').x;
+		float basicSpaceWidth = CalculateSize(' ').x();
 		int32_t currentId = 0;
 		int32_t stop;
 		int32_t space;
@@ -620,17 +620,17 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				case ewol::Text::alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						SetPos(vec3(m_position.x + freeSpace,
-						                            m_position.y,
-						                            m_position.z) );
+						SetPos(vec3(m_position.x() + freeSpace,
+						            m_position.y(),
+						            m_position.z()) );
 					}
 					break;
 				case ewol::Text::alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
-						SetPos(vec3(m_position.x + freeSpace/2,
-						                            m_position.y,
-						                            m_position.z) );
+						SetPos(vec3(m_position.x() + freeSpace/2,
+						            m_position.y(),
+						            m_position.z()) );
 					}
 					break;
 			}
@@ -669,9 +669,9 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 						m_vectorialDraw.SetPos(m_position);
 					}
 					// Must generate a dynamic space : 
-					SetPos(vec3(m_position.x + interpolation,
-					                            m_position.y,
-					                            m_position.z) );
+					SetPos(vec3(m_position.x() + interpolation,
+					            m_position.y(),
+					            m_position.z()) );
 					if(    true == m_needDisplay
 					    && m_colorBg.a != 0) {
 						m_vectorialDraw.RectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
@@ -683,7 +683,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 						vec3 pos = m_position;
 						m_vectorialDraw.SetPos(pos);
 						Print(text[iii]);
-						m_vectorialDraw.RectangleWidth(vec3(m_position.x-pos.x,fontHeigh,0.0f) );
+						m_vectorialDraw.RectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
 						m_nbCharDisplayed++;
 					} else {
 						Print(text[iii]);
@@ -704,15 +704,15 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				currentId = stop+1;
 				// Reset position : 
 				SetPos(vec3(m_startTextpos,
-				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
-				                            m_position.z) );
+				            (float)(m_position.y() - m_font->GetHeight(m_mode)),
+				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else if(text[stop] == (uniChar_t)'\n') {
 				currentId = stop+1;
 				// Reset position : 
 				SetPos(vec3(m_startTextpos,
-				                            (float)(m_position.y - m_font->GetHeight(m_mode)),
-				                            m_position.z) );
+				            (float)(m_position.y() - m_font->GetHeight(m_mode)),
+				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else {
 				currentId = stop;
@@ -750,62 +750,62 @@ void ewol::Text::Print(const uniChar_t charcode)
 		 *      |      |
 		 *   yD *------*
 		 */
-		float dxA = m_position.x + myGlyph->m_bearing.x + kerningOffset;
-		float dxB = dxA + myGlyph->m_sizeTexture.x;
-		float dyC = m_position.y + myGlyph->m_bearing.y + fontHeigh - fontSize;
-		float dyD = dyC - myGlyph->m_sizeTexture.y;
+		float dxA = m_position.x() + myGlyph->m_bearing.x() + kerningOffset;
+		float dxB = dxA + myGlyph->m_sizeTexture.x();
+		float dyC = m_position.y() + myGlyph->m_bearing.y() + fontHeigh - fontSize;
+		float dyD = dyC - myGlyph->m_sizeTexture.y();
 		
-		float tuA = myGlyph->m_texturePosStart.x;
-		float tuB = myGlyph->m_texturePosStop.x;
-		float tvC = myGlyph->m_texturePosStart.y;
-		float tvD = myGlyph->m_texturePosStop.y;
+		float tuA = myGlyph->m_texturePosStart.x();
+		float tuB = myGlyph->m_texturePosStop.x();
+		float tvC = myGlyph->m_texturePosStart.y();
+		float tvD = myGlyph->m_texturePosStop.y();
 		
 		
 		// Clipping and drawing area
 		if(     true == m_clippingEnable
-		    && (    dxB < m_clippingPosStart.x
-		         || dxA > m_clippingPosStop.x
-		         || dyC < m_clippingPosStart.y
-		         || dyD > m_clippingPosStop.y ) ) {
+		    && (    dxB < m_clippingPosStart.x()
+		         || dxA > m_clippingPosStop.x()
+		         || dyC < m_clippingPosStart.y()
+		         || dyD > m_clippingPosStop.y() ) ) {
 			// Nothing to diplay ...
 		} else {
 			if (true == m_clippingEnable) {
 				// generata positions...
 				float TexSizeX = tuB - tuA;
-				if (dxA < m_clippingPosStart.x) {
+				if (dxA < m_clippingPosStart.x()) {
 					// clip display
-					float drawSize = m_clippingPosStart.x - dxA;
+					float drawSize = m_clippingPosStart.x() - dxA;
 					// Update element start display
-					dxA = m_clippingPosStart.x;
-					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x;
+					dxA = m_clippingPosStart.x();
+					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x();
 					// update texture start X Pos
 					tuA += addElement;
 				}
-				if (dxB > m_clippingPosStop.x) {
+				if (dxB > m_clippingPosStop.x()) {
 					// clip display
-					float drawSize = dxB - m_clippingPosStop.x;
+					float drawSize = dxB - m_clippingPosStop.x();
 					// Update element start display
-					dxB = m_clippingPosStop.x;
-					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x;
+					dxB = m_clippingPosStop.x();
+					float addElement = TexSizeX * drawSize / (float)myGlyph->m_sizeTexture.x();
 					// update texture start X Pos
 					tuB -= addElement;
 				}
 				float TexSizeY = tvC - tvD;
-				if (dyC > m_clippingPosStop.y) {
+				if (dyC > m_clippingPosStop.y()) {
 					// clip display
-					float drawSize = dyC - m_clippingPosStop.y;
+					float drawSize = dyC - m_clippingPosStop.y();
 					// Update element start display
-					dyC = m_clippingPosStop.y;
-					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y;
+					dyC = m_clippingPosStop.y();
+					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y();
 					// update texture start X Pos
 					tvC -= addElement;
 				}
-				if (dyD < m_clippingPosStart.y) {
+				if (dyD < m_clippingPosStart.y()) {
 					// clip display
-					float drawSize = m_clippingPosStart.y - dyD;
+					float drawSize = m_clippingPosStart.y() - dyD;
 					// Update element start display
-					dyD = m_clippingPosStart.y;
-					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y;
+					dyD = m_clippingPosStart.y();
+					float addElement = TexSizeY * drawSize / (float)myGlyph->m_sizeTexture.y();
 					// update texture start X Pos
 					tvD += addElement;
 				}
@@ -822,15 +822,10 @@ void ewol::Text::Print(const uniChar_t charcode)
 				 */
 				if (m_needDisplay == true) {
 					ivec2 bitmapDrawPos[4];
-					bitmapDrawPos[0].x = (int32_t)dxA;
-					bitmapDrawPos[1].x = (int32_t)dxB;
-					bitmapDrawPos[2].x = (int32_t)dxB;
-					bitmapDrawPos[3].x = (int32_t)dxA;
-					
-					bitmapDrawPos[0].y = (int32_t)dyC;
-					bitmapDrawPos[1].y = (int32_t)dyC;
-					bitmapDrawPos[2].y = (int32_t)dyD;
-					bitmapDrawPos[3].y = (int32_t)dyD;
+					bitmapDrawPos[0].setValue((int32_t)dxA, (int32_t)dyC);
+					bitmapDrawPos[1].setValue((int32_t)dxB, (int32_t)dyC);
+					bitmapDrawPos[2].setValue((int32_t)dxB, (int32_t)dyD);
+					bitmapDrawPos[3].setValue((int32_t)dxA, (int32_t)dyD);
 					/* texture Position : 
 					 *   0------1
 					 *   |      |
@@ -838,15 +833,10 @@ void ewol::Text::Print(const uniChar_t charcode)
 					 *   3------2
 					 */
 					vec2 texturePos[4];
-					texturePos[0].x = tuA+m_mode;
-					texturePos[1].x = tuB+m_mode;
-					texturePos[2].x = tuB+m_mode;
-					texturePos[3].x = tuA+m_mode;
-					
-					texturePos[0].y = tvC;
-					texturePos[1].y = tvC;
-					texturePos[2].y = tvD;
-					texturePos[3].y = tvD;
+					texturePos[0].setValue(tuA+m_mode, tvC);
+					texturePos[1].setValue(tuB+m_mode, tvC);
+					texturePos[2].setValue(tuB+m_mode, tvD);
+					texturePos[3].setValue(tuA+m_mode, tvD);
 					
 					// NOTE : Android does not support the Quads elements ...
 					/* Step 1 : 
@@ -892,7 +882,7 @@ void ewol::Text::Print(const uniChar_t charcode)
 		}
 	}
 	// move the position :
-	m_position.x += myGlyph->m_advance.x + kerningOffset;
+	m_position.setX(m_position.x() + myGlyph->m_advance.x() + kerningOffset);
 	// Register the previous character
 	m_previousCharcode = charcode;
 	return;
@@ -901,7 +891,7 @@ void ewol::Text::Print(const uniChar_t charcode)
 void ewol::Text::ForceLineReturn(void)
 {
 	// Reset position : 
-	SetPos(vec3(m_startTextpos, m_position.y - m_font->GetHeight(m_mode), 0) );
+	SetPos(vec3(m_startTextpos, m_position.y() - m_font->GetHeight(m_mode), 0) );
 }
 
 
@@ -940,17 +930,19 @@ vec3 ewol::Text::CalculateSizeHTML(const etk::UString& text)
 	// same as print without the end display ...
 	PrintHTML(text);
 	// get the last elements
-	m_sizeDisplayStop.x = etk_max(m_position.x, m_sizeDisplayStop.x);
-	m_sizeDisplayStop.y = etk_max(m_position.y, m_sizeDisplayStop.y);
-	m_sizeDisplayStart.x = etk_min(m_position.x, m_sizeDisplayStart.x);
-	m_sizeDisplayStart.y = etk_min(m_position.y, m_sizeDisplayStart.y);
+	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	                           0);
+	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	                            0);
 	
 	// set back the display system
 	m_needDisplay = true;
 	
-	return vec3( m_sizeDisplayStop.x-m_sizeDisplayStart.x,
-	                             m_sizeDisplayStop.y-m_sizeDisplayStart.y,
-	                             m_sizeDisplayStop.z-m_sizeDisplayStart.z);
+	return vec3( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
+	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
+	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
 vec3 ewol::Text::CalculateSizeDecorated(const etk::UString& text)
@@ -971,10 +963,10 @@ vec3 ewol::Text::CalculateSize(const etk::UString& text)
 	vec3 outputSize(0, 0, 0);
 	for(int32_t iii=0; iii<text.Size(); iii++) {
 		vec3 tmpp = CalculateSize(text[iii]);
-		if (outputSize.y == 0) {
-			outputSize.y += tmpp.y;
+		if (outputSize.y() == 0) {
+			outputSize.setY(tmpp.y());
 		}
-		outputSize.x += tmpp.x;
+		outputSize.setX( outputSize.x() + tmpp.x());
 	}
 	return outputSize;
 }
@@ -995,9 +987,9 @@ vec3 ewol::Text::CalculateSize(const uniChar_t charcode)
 		kerningOffset = myGlyph->KerningGet(m_previousCharcode);
 	}
 	
-	vec3 outputSize((float)(myGlyph->m_advance.x + kerningOffset),
-	                                (float)(fontHeigh),
-	                                (float)(0.0));
+	vec3 outputSize((float)(myGlyph->m_advance.x() + kerningOffset),
+	                (float)(fontHeigh),
+	                (float)(0.0));
 	// Register the previous character
 	m_previousCharcode = charcode;
 	return outputSize;
@@ -1028,7 +1020,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 	int32_t lastSpacePosition = start;
 	int32_t lastSpacefreeSize;
 	
-	float endPos = m_position.x;
+	float endPos = m_position.x();
 	bool endOfLine = false;
 	
 	float stopPosition = m_stopTextPos;
@@ -1040,7 +1032,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 	for (int32_t iii=start; iii<text.Size(); iii++) {
 		vec3 tmpSize = CalculateSize(text[iii]);
 		// check oveflow :
-		if (endPos + tmpSize.x > stopPosition) {
+		if (endPos + tmpSize.x() > stopPosition) {
 			stop = iii;
 			break;
 		}
@@ -1055,7 +1047,7 @@ bool ewol::Text::ExtrapolateLastId(const etk::UString& text, const int32_t start
 			break;
 		}
 		// update local size :
-		endPos += tmpSize.x;
+		endPos += tmpSize.x();
 	}
 	freeSpace = stopPosition - endPos;
 	// retore previous :

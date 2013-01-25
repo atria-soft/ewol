@@ -29,8 +29,7 @@ widget::SizerVert::~SizerVert(void)
 bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.x = availlableX;
-	m_size.y = availlableY;
+	m_size.setValue(availlableX, availlableY);
 	// calculate unExpendable Size :
 	float unexpendableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
@@ -38,7 +37,7 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
-			unexpendableSize += tmpSize.y;
+			unexpendableSize += tmpSize.y();
 			if (false == m_subWidget[iii]->CanExpentY()) {
 				nbWidgetFixedSize++;
 			} else {
@@ -50,27 +49,25 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expend, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
-		sizeToAddAtEveryOne = (m_size.y - unexpendableSize) / nbWidgetNotFixedSize;
+		sizeToAddAtEveryOne = (m_size.y() - unexpendableSize) / nbWidgetNotFixedSize;
 		if (sizeToAddAtEveryOne<0.0) {
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	vec2 tmpOrigin;
-	tmpOrigin.x = m_origin.x;
-	tmpOrigin.y = m_origin.y;
+	vec2 tmpOrigin = m_origin;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
-			m_subWidget[iii]->SetOrigin(tmpOrigin.x, tmpOrigin.y);
+			m_subWidget[iii]->SetOrigin(tmpOrigin.x(), tmpOrigin.y());
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_subWidget[iii]->CalculateSize(m_size.x, tmpSize.y+sizeToAddAtEveryOne);
-				tmpOrigin.y += tmpSize.y+sizeToAddAtEveryOne;
+				m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne);
+				tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 			} else {
-				m_subWidget[iii]->CalculateSize(m_size.x, tmpSize.y);
-				tmpOrigin.y += tmpSize.y;
+				m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y());
+				tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
 			}
 		}
 	}
@@ -82,24 +79,22 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 bool widget::SizerVert::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
-	m_userExpend.x=false;
-	m_userExpend.y=false;
-	m_minSize.x = 0.0;
-	m_minSize.y = 0.0;
+	m_userExpend.setValue(false, false);
+	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
 			if (true == m_subWidget[iii]->CanExpentX()) {
-				m_userExpend.x = true;
+				m_userExpend.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_userExpend.y = true;
+				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
-			m_minSize.y += tmpSize.y;
-			if (tmpSize.x>m_minSize.x) {
-				m_minSize.x = tmpSize.x;
+			m_minSize.setY(m_minSize.y() + tmpSize.y());
+			if (tmpSize.x()>m_minSize.x()) {
+				m_minSize.setX(tmpSize.x());
 			}
 		}
 	}
@@ -123,7 +118,7 @@ bool widget::SizerVert::CanExpentX(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpend.x;
+	return m_userExpend.x();
 }
 
 void widget::SizerVert::SetExpendY(bool newExpend)
@@ -136,7 +131,7 @@ bool widget::SizerVert::CanExpentY(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpend.y;
+	return m_userExpend.y();
 }
 
 void widget::SizerVert::LockExpendContamination(bool lockExpend)
@@ -229,8 +224,8 @@ ewol::Widget * widget::SizerVert::GetWidgetAtPos(vec2 pos)
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetSize();
 			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
-			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
-			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
+			if(    (tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
+			    && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y()) )
 			{
 				ewol::Widget * tmpWidget = m_subWidget[iii]->GetWidgetAtPos(pos);
 				if (NULL != tmpWidget) {

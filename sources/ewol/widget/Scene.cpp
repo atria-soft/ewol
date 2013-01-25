@@ -1026,9 +1026,9 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			// request back and forward in the same time ... this is really bad ....
 		} else if ( (m_walk&WALK_FLAG_FORWARD)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z);
-			angles.y = -sinf(angles.z);
-			angles.z = 0;
+			angles.setValue( cosf(angles.z()),
+			                -sinf(angles.z()),
+			                 0);
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
@@ -1036,9 +1036,9 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_BACK)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = -cosf(angles.z);
-			angles.y = sinf(angles.z);
-			angles.z = 0;
+			angles.setValue(-cosf(angles.z()),
+			                 sinf(angles.z()),
+			                 0);
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// walk is 6 km/h
@@ -1051,9 +1051,9 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			// request left and right in the same time ... this is really bad ....
 		} else if ( (m_walk&WALK_FLAG_LEFT)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = cosf(angles.z-M_PI/2.0);
-			angles.y = -sinf(angles.z-M_PI/2.0);
-			angles.z = 0;
+			angles.setValue( cosf(angles.z()-M_PI/2.0),
+			                -sinf(angles.z()-M_PI/2.0),
+			                0);
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
@@ -1061,9 +1061,9 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 			m_camera.SetPosition(pos);
 		} else if ( (m_walk&WALK_FLAG_RIGHT)!=0) {
 			vec3 angles = m_camera.GetAngle();
-			angles.x = -cosf(angles.z-M_PI/2.0);
-			angles.y = sinf(angles.z-M_PI/2.0);
-			angles.z = 0;
+			angles.setValue(-cosf(angles.z()-M_PI/2.0),
+			                 sinf(angles.z()-M_PI/2.0),
+			                 0);
 			//EWOL_DEBUG("Walk : " << ((int32_t)(angles.z/M_PI*180+180)%360-180) << " ==> " << angles);
 			vec3 pos = m_camera.GetPosition();
 			// lateral walk is 4 km/h
@@ -1078,11 +1078,11 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 {
 	ewol::openGL::Push();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-	glViewport( m_origin.x,
-	            m_origin.y,
-	            m_size.x,
-	            m_size.y);
-	float ratio = m_size.x / m_size.y;
+	glViewport( m_origin.x(),
+	            m_origin.y(),
+	            m_size.x(),
+	            m_size.y());
+	float ratio = m_size.x() / m_size.y();
 	//EWOL_INFO("ratio : " << ratio);
 	mat4 tmpProjection = etk::matPerspective( M_PI/3.0, ratio, 1, 4000);
 	ewol::openGL::SetCameraMatrix(m_camera.GetMatrix());
@@ -1101,33 +1101,28 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 }
 
 
-vec2 widget::Scene::RelativePosition(vec2  pos)
+vec2 widget::Scene::RelativePosition(vec2 pos)
 {
 	// Remove origin of the widget
-	pos.x -= m_origin.x;
-	pos.y -= m_origin.y;
+	pos -= vec2(m_origin.x(), m_origin.y());
 	// move the position at the center (openGl system
-	pos.x -= m_size.x/2;
-	pos.y -= m_size.y/2;
+	pos -= vec2(m_size.x()/2, m_size.y()/2);
 	// scale the position with the ratio display of the screen
-	float ratio = m_size.x / m_size.y;
+	float ratio = m_size.x() / m_size.y();
 	if (ratio >= 1.0) {
-		pos.x /= m_size.x;
-		pos.x *= ratio;
-		pos.y /= m_size.y;
+		pos.setX((pos.x() / m_size.x()) * ratio);
+		pos.setY(pos.y() / m_size.y());
 	} else {
 		ratio = 1.0/ratio;
-		pos.x /= m_size.x;
-		pos.y /= m_size.y;
-		pos.y *= ratio;
+		pos.setX(pos.x() / m_size.x());
+		pos.setY((pos.y() / m_size.y())* ratio);
 	}
 	// integrate zoom
-	pos.x /= m_zoom;
-	pos.y /= m_zoom;
+	pos.setValue( pos.x()/m_zoom,
+	              pos.y()/m_zoom);
 	// all the position are half the size due to the fact -1 --> 1
-	pos.x *= 2;
-	pos.y *= 2;
-	
+	pos.setValue( pos.x()*2,
+	              pos.y()*2);
 	return pos;
 };
 
@@ -1146,8 +1141,8 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 			if (ewol::keyEvent::statusMove == statusEvent) {
 				pos *= M_PI/(360.0f*6);
 				vec3 oldAngles = m_camera.GetAngle();
-				oldAngles.z += pos.x;
-				oldAngles.y += pos.y;
+				oldAngles.setZ(oldAngles.z() + pos.x());
+				oldAngles.setY(oldAngles.y() + pos.y());
 				m_camera.SetAngle(oldAngles);
 			}
 		}

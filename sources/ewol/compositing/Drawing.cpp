@@ -395,26 +395,26 @@ void ewol::Drawing::SetClippingWidth(vec3 pos, vec3 width)
 void ewol::Drawing::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
-	if (pos.x <= posEnd.x) {
-		m_clippingPosStart.x = pos.x;
-		m_clippingPosStop.x = posEnd.x;
+	if (pos.x() <= posEnd.x()) {
+		m_clippingPosStart.setX(pos.x());
+		m_clippingPosStop.setX(posEnd.x());
 	} else {
-		m_clippingPosStart.x = posEnd.x;
-		m_clippingPosStop.x = pos.x;
+		m_clippingPosStart.setX(posEnd.x());
+		m_clippingPosStop.setX(pos.x());
 	}
-	if (pos.y <= posEnd.y) {
-		m_clippingPosStart.y = pos.y;
-		m_clippingPosStop.y = posEnd.y;
+	if (pos.y() <= posEnd.y()) {
+		m_clippingPosStart.setY(pos.y());
+		m_clippingPosStop.setY(posEnd.y());
 	} else {
-		m_clippingPosStart.y = posEnd.y;
-		m_clippingPosStop.y = pos.y;
+		m_clippingPosStart.setY(posEnd.y());
+		m_clippingPosStop.setY(pos.y());
 	}
-	if (pos.z <= posEnd.z) {
-		m_clippingPosStart.z = pos.z;
-		m_clippingPosStop.z = posEnd.z;
+	if (pos.z() <= posEnd.z()) {
+		m_clippingPosStart.setZ(pos.z());
+		m_clippingPosStop.setZ(posEnd.z());
 	} else {
-		m_clippingPosStart.z = posEnd.z;
-		m_clippingPosStop.z = pos.z;
+		m_clippingPosStart.setZ(posEnd.z());
+		m_clippingPosStop.setZ(pos.z());
 	}
 	m_clippingEnable = true;
 }
@@ -447,16 +447,16 @@ void ewol::Drawing::LineTo(vec3 dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
-	if (m_position.x == dest.x && m_position.y == dest.y) {
+	if (m_position.x() == dest.x() && m_position.y() == dest.y()) {
 		EWOL_WARNING("Try to draw an line width 0");
 		return;
 	}
 	//teta = tan-1(oposer/adjacent)
 	float teta = 0;
-	if (m_position.x <= dest.x) {
-		teta = atan((dest.y-m_position.y)/(dest.x-m_position.x));
+	if (m_position.x() <= dest.x()) {
+		teta = atan((dest.y()-m_position.y())/(dest.x()-m_position.x()));
 	} else {
-		teta = M_PI + atan((dest.y-m_position.y)/(dest.x-m_position.x));
+		teta = M_PI + atan((dest.y()-m_position.y())/(dest.x()-m_position.x()));
 	}
 	if (teta < 0) {
 		teta += 2*M_PI;
@@ -467,13 +467,13 @@ void ewol::Drawing::LineTo(vec3 dest)
 	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
 	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
 
-	SetPoint(vec3(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
-	SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety, (float)0.0) );
-	SetPoint(vec3(dest.x + offsetx, dest.y + offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, (float)0.0) );
+	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, (float)0.0) );
 	
-	SetPoint(vec3(dest.x + offsetx, dest.y + offsety, (float)0.0) );
-	SetPoint(vec3(dest.x - offsetx, dest.y - offsety, (float)0.0) );
-	SetPoint(vec3(m_position.x - offsetx, m_position.y - offsety, (float)0.0) );
+	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, (float)0.0) );
+	SetPoint(vec3(dest.x() - offsetx, dest.y() - offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, (float)0.0) );
 	// update the system position :
 	m_position = dest;
 }
@@ -495,35 +495,35 @@ void ewol::Drawing::Rectangle(vec3 dest)
 	 *      |      |
 	 *   yD *------*
 	 */
-	float dxA = m_position.x;
-	float dxB = dest.x;
-	float dyC = m_position.y;
-	float dyD = dest.y;
+	float dxA = m_position.x();
+	float dxB = dest.x();
+	float dyC = m_position.y();
+	float dyD = dest.y();
 	if (true == m_clippingEnable) {
-		if (dxA < m_clippingPosStart.x) {
-			dxA = m_clippingPosStart.x;
+		if (dxA < m_clippingPosStart.x()) {
+			dxA = m_clippingPosStart.x();
 		}
-		if (dxB > m_clippingPosStop.x) {
-			dxB = m_clippingPosStop.x;
+		if (dxB > m_clippingPosStop.x()) {
+			dxB = m_clippingPosStop.x();
 		}
-		if (dyC < m_clippingPosStart.y) {
-			dyC = m_clippingPosStart.y;
+		if (dyC < m_clippingPosStart.y()) {
+			dyC = m_clippingPosStart.y();
 		}
-		if (dyD > m_clippingPosStop.y) {
-			dyD = m_clippingPosStop.y;
+		if (dyD > m_clippingPosStop.y()) {
+			dyD = m_clippingPosStop.y();
 		}
 	}
 	if(    dyC >= dyD
 	    || dxA >= dxB) {
 		return;
 	}
-	SetPoint(vec3(dxA, dyD, (float)0.0) );
-	SetPoint(vec3(dxA, dyC, (float)0.0) );
-	SetPoint(vec3(dxB, dyC, (float)0.0) );
+	SetPoint(vec3(dxA, dyD, 0) );
+	SetPoint(vec3(dxA, dyC, 0) );
+	SetPoint(vec3(dxB, dyC, 0) );
 
-	SetPoint(vec3(dxB, dyC, (float)0.0) );
-	SetPoint(vec3(dxB, dyD, (float)0.0) );
-	SetPoint(vec3(dxA, dyD, (float)0.0) );
+	SetPoint(vec3(dxB, dyC, 0) );
+	SetPoint(vec3(dxB, dyD, 0) );
+	SetPoint(vec3(dxA, dyD, 0) );
 }
 
 
@@ -560,19 +560,25 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 	if (m_colorBg.a!=0) {
 		InternalSetColor(m_colorBg);
 		for (int32_t iii=0; iii<nbOcurence; iii++) {
-			SetPoint(vec3(m_position.x, m_position.y) );
+			SetPoint(vec3(m_position.x(),
+			              m_position.y(),
+			              0) );
 			
 			float angleOne = angleStart + (angleStop* iii / nbOcurence) ;
 			float offsety = sin(angleOne) * radius;
 			float offsetx = cos(angleOne) * radius;
 			
-			SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety) );
+			SetPoint(vec3(m_position.x() + offsetx,
+			              m_position.y() + offsety,
+			              0) );
 			
 			float angleTwo = angleStart + (angleStop* (iii+1) / nbOcurence) ;
 			offsety = sin(angleTwo) * radius;
 			offsetx = cos(angleTwo) * radius;
 			
-			SetPoint(vec3(m_position.x + offsetx, m_position.y + offsety) );
+			SetPoint(vec3(m_position.x() + offsetx,
+			              m_position.y() + offsety,
+			              0) );
 		}
 	}
 	
@@ -596,13 +602,13 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 		float offsetInt2y = sin(angleTwo) * (radius-m_thickness/2);
 		float offsetInt2x = cos(angleTwo) * (radius-m_thickness/2);
 		
-		SetPoint(vec3(m_position.x + offsetIntx,  m_position.y + offsetInty));
-		SetPoint(vec3(m_position.x + offsetExtx,  m_position.y + offsetExty));
-		SetPoint(vec3(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
+		SetPoint(vec3(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
+		SetPoint(vec3(m_position.x() + offsetExtx,  m_position.y() + offsetExty,  0));
+		SetPoint(vec3(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
 		
-		SetPoint(vec3(m_position.x + offsetExt2x, m_position.y + offsetExt2y));
-		SetPoint(vec3(m_position.x + offsetInt2x, m_position.y + offsetInt2y));
-		SetPoint(vec3(m_position.x + offsetIntx,  m_position.y + offsetInty));
+		SetPoint(vec3(m_position.x() + offsetExt2x, m_position.y() + offsetExt2y, 0));
+		SetPoint(vec3(m_position.x() + offsetInt2x, m_position.y() + offsetInt2y, 0));
+		SetPoint(vec3(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
 	}
 }
 

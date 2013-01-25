@@ -59,8 +59,7 @@ bool widget::ParameterList::CalculateMinSize(void)
 	m_minSize.x = 3+minWidth;
 	m_minSize.y = 3+minHeight;
 	*/
-	m_minSize.x = 150;
-	m_minSize.y = 150;
+	m_minSize.setValue(150, 150);
 	return true;
 }
 
@@ -132,8 +131,8 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 		//uint32_t nbColomn = GetNuberOfColomn();
 		int32_t nbRaw    = m_list.Size();
 		// For the scrooling windows
-		m_maxSize.x = m_size.x;
-		m_maxSize.y = (minHeight + 2*m_paddingSizeY) * nbRaw;
+		m_maxSize.setValue(m_size.x(),
+		                   (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
 		etk::Vector<int32_t> listSizeColomn;
@@ -142,11 +141,11 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 		ewol::Drawing * tmpDraw = new ewol::Drawing();
 		tmpDraw->SetColor(0xFFFFFFFF);
 		tmpDraw->SetPos(vec3(0,0,0) );
-		tmpDraw->RectangleWidth(vec3(m_size.x, m_size.y) );
+		tmpDraw->RectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
 		
-		uint32_t displayableRaw = m_size.y / (minHeight + 2*m_paddingSizeY) +2;
+		uint32_t displayableRaw = m_size.y() / (minHeight + 2*m_paddingSizeY) +2;
 		
-		int32_t startRaw = m_originScrooled.y / (minHeight + 2*m_paddingSizeY);
+		int32_t startRaw = m_originScrooled.y() / (minHeight + 2*m_paddingSizeY);
 		
 		if (startRaw >= nbRaw-1 ) {
 			startRaw = nbRaw - 1;
@@ -155,7 +154,7 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 			startRaw = 0;
 		}
 		// Calculate the real position ...
-		tmpOriginY = m_size.y - (-m_originScrooled.y + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
+		tmpOriginY = m_size.y() - (-m_originScrooled.y() + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
 			etk::UString myTextToWrite = "???";
@@ -167,11 +166,11 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 			ewol::Text * tmpText = new ewol::Text();
 			
 			vec3 textPos;
-			textPos.x = (int32_t)tmpOriginX;
+			textPos.setX((int32_t)tmpOriginX);
 			if (m_list[iii]->m_group == false) {
-				textPos.x += minHeight;
+				textPos.setX(textPos.x() + minHeight);
 			}
-			textPos.y = (int32_t)(tmpOriginY + m_paddingSizeY);
+			textPos.setY((int32_t)(tmpOriginY + m_paddingSizeY));
 			tmpText->SetPos(textPos);
 			tmpText->Print(myTextToWrite);
 			
@@ -196,7 +195,7 @@ bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t I
 	if (IdInput == 1 && typeEvent == ewol::keyEvent::statusSingle) {
 		vec2 relativePos = RelativePosition(pos);
 		// corection for the openGl abstraction
-		relativePos.y = m_size.y - relativePos.y;
+		relativePos.setY(m_size.y() - relativePos.y());
 		// TODO : Rework this ...
 		/*
 		int32_t fontId = GetDefaultFontId();
@@ -204,7 +203,7 @@ bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t I
 		int32_t minHeight = ewol::GetHeight(fontId);
 		*/
 		int32_t minHeight = 20;
-		int32_t rawID = (relativePos.y+m_originScrooled.y) / (minHeight + 2*m_paddingSizeY);
+		int32_t rawID = (relativePos.y()+m_originScrooled.y()) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
 		if (rawID >=0 && rawID<m_list.Size()) {
 			if (m_list[rawID]!=NULL) {

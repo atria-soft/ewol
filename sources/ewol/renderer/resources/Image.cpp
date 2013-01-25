@@ -26,7 +26,7 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 {
 	etk::UString tmpName = tmpfileName;
 	// get the upper paw2 ot the size requested...
-	if (size.x>0 && size.y>0) {
+	if (size.x()>0 && size.y()>0) {
 		SetImageSize(size);
 	}
 	// load data

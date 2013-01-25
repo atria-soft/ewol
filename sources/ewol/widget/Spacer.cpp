@@ -32,8 +32,7 @@ widget::Spacer::~Spacer(void)
 
 bool widget::Spacer::CalculateMinSize(void)
 {
-	m_minSize.x = m_localSize;
-	m_minSize.y = m_localSize;
+	m_minSize.setValue(m_localSize, m_localSize);
 	return true;
 }
 
@@ -64,6 +63,6 @@ void widget::Spacer::OnRegenerateDisplay(void)
 	}
 	m_draw.SetColor(m_color);
 	m_draw.SetPos(vec3(0, 0, 0) );
-	m_draw.RectangleWidth(vec3(m_size.x, m_size.y) );
+	m_draw.RectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 

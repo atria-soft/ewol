@@ -84,21 +84,21 @@ bool widget::Button::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	m_displayText.Clear();
-	ivec3 minSize = m_displayText.CalculateSizeDecorated(m_label);
+	vec3 minSize = m_displayText.CalculateSizeDecorated(m_label);
 	if(    true == m_toggleMode
 	    && m_labelToggle.Size()!=0) {
 		m_displayText.Clear();
-		ivec3 minSizeToggle = m_displayText.CalculateSizeDecorated(m_labelToggle);
-		minSize.x = etk_max(minSize.x, minSizeToggle.x);
-		minSize.y = etk_max(minSize.y, minSizeToggle.y);
-		minSize.z = etk_max(minSize.z, minSizeToggle.z);
+		vec3 minSizeToggle = m_displayText.CalculateSizeDecorated(m_labelToggle);
+		minSize.setValue(etk_max(minSize.x(), minSizeToggle.x()),
+		                 etk_max(minSize.y(), minSizeToggle.y()),
+		                 etk_max(minSize.z(), minSizeToggle.z()));
 	}
-	m_minSize.x = padding.x*2 + minSize.x;
-	m_minSize.y = padding.y*2 + minSize.y;
+	m_minSize.setX(padding.x()*2 + minSize.x());
+	m_minSize.setY(padding.y()*2 + minSize.y());
 	// Add the image element ...
 	if(    true == m_displayImage.HasSources()
 	    || true == m_displayImageToggle.HasSources()) {
-		m_minSize.x += padding.x/2 + m_imageDisplaySize;
+		m_minSize.setX(m_minSize.x()+ padding.x()/2 + m_imageDisplaySize);
 	}
 	MarkToRedraw();
 	return true;
@@ -172,8 +172,8 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		vec2 padding = m_shaper.GetPadding();
 		// to know the size of one Line : 
-		ivec3 minSize = m_displayText.CalculateSize('A');
-		ivec3 curentTextSize;
+		vec3 minSize = m_displayText.CalculateSize('A');
+		vec3 curentTextSize;
 		if(    false == m_toggleMode
 		    || false == m_value
 		    || m_labelToggle.Size()==0) {
@@ -189,40 +189,37 @@ void widget::Button::OnRegenerateDisplay(void)
 		
 		ivec2 localSize = m_minSize;
 		
-		vec3 tmpOrigin((m_size.x - m_minSize.x) / 2.0,
-		               (m_size.y - m_minSize.y) / 2.0,
+		vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
+		               (m_size.y() - m_minSize.y()) / 2.0,
 		               0);
 		// no change for the text orogin : 
-		vec3 tmpTextOrigin((m_size.x - m_minSize.x) / 2.0,
-		                   (m_size.y - m_minSize.y) / 2.0,
+		vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+		                   (m_size.y() - m_minSize.y()) / 2.0,
 		                   0);
 		
-		if (true==m_userFill.x) {
-			localSize.x = m_size.x;
-			tmpOrigin.x = 0;
-			tmpTextOrigin.x = 0;
+		if (true==m_userFill.x()) {
+			localSize.setX(m_size.x());
+			tmpOrigin.setX(0);
+			tmpTextOrigin.setX(0);
 		}
-		if (true==m_userFill.y) {
-			localSize.y = m_size.y;
+		if (true==m_userFill.y()) {
+			localSize.setY(m_size.y());
 		}
-		tmpOrigin.x += padding.x;
-		tmpOrigin.y += padding.y;
-		tmpTextOrigin.x += padding.x;
-		tmpTextOrigin.y += padding.y;
-		localSize.x -= 2*padding.x;
-		localSize.y -= 2*padding.y;
+		tmpOrigin += vec3(padding.x(),padding.y(),0);
+		tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
+		localSize -= ivec2(2*padding.x(), 2*padding.y());
 		
-		tmpTextOrigin.y += (m_minSize.y-2*padding.y) - minSize.y;
+		tmpTextOrigin.setY(tmpTextOrigin.x()+ (m_minSize.y()-2*padding.y()) - minSize.y());
 		
-		vec2 textPos(tmpTextOrigin.x, tmpTextOrigin.y);
+		vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
 		
 		if(    true == m_displayImage.HasSources()
 		    || true == m_displayImageToggle.HasSources()) {
-			ivec3 imagePos(tmpOrigin.x-padding.x/4,
-			               tmpOrigin.y-padding.x/4+(m_minSize.y-m_imageDisplaySize-2*padding.y)/2.0,
-			               0);
-			ivec2 imageSize(m_imageDisplaySize,
-			                m_imageDisplaySize);
+			vec3 imagePos(tmpOrigin.x()-padding.x()/4,
+			              tmpOrigin.y()-padding.x()/4+(m_minSize.y()-m_imageDisplaySize-2*padding.y())/2.0,
+			              0);
+			vec2 imageSize(m_imageDisplaySize,
+			               m_imageDisplaySize);
 			if(    false==m_toggleMode
 			    || false==m_value) {
 				m_displayImage.SetPos(imagePos);
@@ -234,12 +231,12 @@ void widget::Button::OnRegenerateDisplay(void)
 				m_displayImageToggle.Print(imageSize);
 			}
 			// update the text position ...
-			tmpTextOrigin.x += padding.x/2 + m_imageDisplaySize;
+			tmpTextOrigin.setX(tmpTextOrigin.x() + padding.x()/2 + m_imageDisplaySize);
 		}
 		
-		vec3 drawClippingPos(padding.x, padding.y, -0.5);
-		vec3 drawClippingSize((m_size.x - padding.x),
-		                      (m_size.y - padding.y),
+		vec3 drawClippingPos(padding.x(), padding.y(), -0.5);
+		vec3 drawClippingSize((m_size.x() - padding.x()),
+		                      (m_size.y() - padding.y()),
 		                      1);
 		
 		// clean the element
@@ -247,9 +244,9 @@ void widget::Button::OnRegenerateDisplay(void)
 		m_displayText.SetPos(tmpTextOrigin);
 		if(    true == m_displayImage.HasSources()
 		    || true == m_displayImageToggle.HasSources()) {
-			m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x-m_imageDisplaySize, ewol::Text::alignCenter);
+			m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x()-m_imageDisplaySize, ewol::Text::alignCenter);
 		} else {
-			m_displayText.SetTextAlignement(tmpTextOrigin.x, tmpTextOrigin.x+localSize.x, ewol::Text::alignCenter);
+			m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
 		}
 		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
 		if(    false == m_toggleMode
@@ -262,18 +259,18 @@ void widget::Button::OnRegenerateDisplay(void)
 		//m_displayText.Translate(tmpOrigin);
 		
 		
-		if (true==m_userFill.y) {
-			tmpOrigin.y = padding.y;
+		if (true==m_userFill.y()) {
+			tmpOrigin.setY(padding.y());
 		}
 		
 		// selection area :
-		m_selectableAreaPos = vec2(tmpOrigin.x-padding.x, tmpOrigin.y-padding.y);
+		m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
 		m_selectableAreaSize = localSize + vec2(2,2)*padding;
 		m_shaper.SetOrigin(m_selectableAreaPos );
 		m_shaper.SetSize(m_selectableAreaSize);
-		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x, tmpTextOrigin.y) );
+		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
 		vec3 tmpp = m_displayText.CalculateSize(m_label);
-		vec2 tmpp2(tmpp.x, tmpp.y);
+		vec2 tmpp2(tmpp.x(), tmpp.y());
 		m_shaper.SetInsideSize(tmpp2);
 		
 	}
@@ -289,10 +286,10 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 	} else {
 		vec2 relativePos = RelativePosition(pos);
 		// prevent error from ouside the button
-		if(    relativePos.x < m_selectableAreaPos.x
-		    || relativePos.y < m_selectableAreaPos.y
-		    || relativePos.x > m_selectableAreaPos.x + m_selectableAreaSize.x
-		    || relativePos.y > m_selectableAreaPos.y + m_selectableAreaSize.y ) {
+		if(    relativePos.x() < m_selectableAreaPos.x()
+		    || relativePos.y() < m_selectableAreaPos.y()
+		    || relativePos.x() > m_selectableAreaPos.x() + m_selectableAreaSize.x()
+		    || relativePos.y() > m_selectableAreaPos.y() + m_selectableAreaSize.y() ) {
 			m_mouseHover = false;
 			m_buttonPressed = false;
 		} else {

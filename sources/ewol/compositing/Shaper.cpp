@@ -130,10 +130,10 @@ void ewol::Shaper::Draw(void)
 	// position :
 	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
 	// all entry parameters :
-	m_GLprogram->Uniform2fv(m_GLPropertySize,       1, &m_propertySize.x);
-	m_GLprogram->Uniform2fv(m_GLPropertyOrigin,     1, &m_propertyOrigin.x);
-	m_GLprogram->Uniform2fv(m_GLPropertyInsidePos,  1, &m_propertyInsidePosition.x);
-	m_GLprogram->Uniform2fv(m_GLPropertyInsideSize, 1, &m_propertyInsideSize.x);
+	m_GLprogram->Uniform2fv(m_GLPropertySize,       1, &m_propertySize.m_floats[0]);
+	m_GLprogram->Uniform2fv(m_GLPropertyOrigin,     1, &m_propertyOrigin.m_floats[0]);
+	m_GLprogram->Uniform2fv(m_GLPropertyInsidePos,  1, &m_propertyInsidePosition.m_floats[0]);
+	m_GLprogram->Uniform2fv(m_GLPropertyInsideSize, 1, &m_propertyInsideSize.m_floats[0]);
 	m_GLprogram->Uniform1i(m_GLStateOld,        m_stateOld);
 	m_GLprogram->Uniform1i(m_GLStateNew,        m_stateNew);
 	m_GLprogram->Uniform1f(m_GLStateTransition, m_stateTransition);
@@ -205,19 +205,19 @@ bool ewol::Shaper::PeriodicCall(int64_t localTime)
 void ewol::Shaper::UpdateVectex(void)
 {
 	// set coord ==> must be a static VBO ...
-	m_coord[0].x= m_propertyOrigin.x;
-	m_coord[0].y= m_propertyOrigin.y+m_propertySize.y;
-	m_coord[1].x= m_propertyOrigin.x;
-	m_coord[1].y= m_propertyOrigin.y;
-	m_coord[2].x= m_propertyOrigin.x+m_propertySize.x;
-	m_coord[2].y= m_propertyOrigin.y;
+	m_coord[0].setValue( m_propertyOrigin.x(),
+	                     m_propertyOrigin.y()+m_propertySize.y());
+	m_coord[1].setValue( m_propertyOrigin.x(),
+	                     m_propertyOrigin.y());
+	m_coord[2].setValue( m_propertyOrigin.x()+m_propertySize.x(),
+	                     m_propertyOrigin.y());
 	
-	m_coord[3].x= m_propertyOrigin.x+m_propertySize.x;
-	m_coord[3].y= m_propertyOrigin.y;
-	m_coord[4].x= m_propertyOrigin.x+m_propertySize.x;
-	m_coord[4].y= m_propertyOrigin.y+m_propertySize.y;
-	m_coord[5].x= m_propertyOrigin.x;
-	m_coord[5].y= m_propertyOrigin.y+m_propertySize.y;
+	m_coord[3].setValue( m_propertyOrigin.x()+m_propertySize.x(),
+	                     m_propertyOrigin.y());
+	m_coord[4].setValue( m_propertyOrigin.x()+m_propertySize.x(),
+	                     m_propertyOrigin.y()+m_propertySize.y());
+	m_coord[5].setValue( m_propertyOrigin.x(),
+	                     m_propertyOrigin.y()+m_propertySize.y());
 }
 
 void ewol::Shaper::SetOrigin(vec2 newOri)
@@ -252,8 +252,8 @@ vec2 ewol::Shaper::GetPadding(void)
 {
 	vec2 padding;
 	if (m_config!=NULL) {
-		padding.x = m_config->GetFloat(m_confIdPaddingX);
-		padding.y = m_config->GetFloat(m_confIdPaddingY);
+		padding.setValue(m_config->GetFloat(m_confIdPaddingX),
+		                 m_config->GetFloat(m_confIdPaddingY));
 	}
 	return padding;
 }

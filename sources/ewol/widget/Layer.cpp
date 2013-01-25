@@ -29,12 +29,11 @@ widget::Layer::~Layer(void)
 bool widget::Layer::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.x = availlableX;
-	m_size.y = availlableY;
+	m_size.setValue(availlableX, availlableY);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->SetOrigin(m_origin.x, m_origin.y);
-			m_subWidget[iii]->CalculateSize(m_size.x, m_size.y);
+			m_subWidget[iii]->SetOrigin(m_origin.x(), m_origin.y());
+			m_subWidget[iii]->CalculateSize(m_size.x(), m_size.y());
 		}
 	}
 	MarkToRedraw();
@@ -44,22 +43,20 @@ bool widget::Layer::CalculateSize(float availlableX, float availlableY)
 
 bool widget::Layer::CalculateMinSize(void)
 {
-	m_userExpend.x=false;
-	m_userExpend.y=false;
-	m_minSize.x = 0.0;
-	m_minSize.y = 0.0;
+	m_userExpend.setValue(false, false);
+	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
 			if (true == m_subWidget[iii]->CanExpentX()) {
-				m_userExpend.x = true;
+				m_userExpend.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_userExpend.y = true;
+				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
-			m_minSize.x = etk_max(tmpSize.x, m_minSize.x);
-			m_minSize.y = etk_max(tmpSize.y, m_minSize.y);
+			m_minSize.setValue( etk_max(tmpSize.x(), m_minSize.x()),
+			                    etk_max(tmpSize.y(), m_minSize.y()) );
 		}
 	}
 	return true;
@@ -80,7 +77,7 @@ bool widget::Layer::CanExpentX(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpend.x;
+	return m_userExpend.x();
 }
 
 void widget::Layer::SetExpendY(bool newExpend)
@@ -93,7 +90,7 @@ bool widget::Layer::CanExpentY(void)
 	if (true == m_lockExpendContamination) {
 		return false;
 	}
-	return m_userExpend.y;
+	return m_userExpend.y();
 }
 
 void widget::Layer::LockExpendContamination(bool lockExpend)
@@ -181,8 +178,8 @@ ewol::Widget * widget::Layer::GetWidgetAtPos(vec2 pos)
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetSize();
 			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
-			if(    (tmpOrigin.x <= pos.x && tmpOrigin.x + tmpSize.x >= pos.x)
-			    && (tmpOrigin.y <= pos.y && tmpOrigin.y + tmpSize.y >= pos.y) )
+			if(    (tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
+			    && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y()) )
 			{
 				ewol::Widget * tmpWidget = m_subWidget[iii]->GetWidgetAtPos(pos);
 				if (NULL != tmpWidget) {

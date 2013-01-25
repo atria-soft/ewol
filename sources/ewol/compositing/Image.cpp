@@ -140,26 +140,26 @@ void ewol::Image::SetClippingWidth(vec3 pos, vec3 width)
 void ewol::Image::SetClipping(vec3 pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
-	if (pos.x <= posEnd.x) {
-		m_clippingPosStart.x = pos.x;
-		m_clippingPosStop.x = posEnd.x;
+	if (pos.x() <= posEnd.x()) {
+		m_clippingPosStart.setX(pos.x());
+		m_clippingPosStop.setX(posEnd.x());
 	} else {
-		m_clippingPosStart.x = posEnd.x;
-		m_clippingPosStop.x = pos.x;
+		m_clippingPosStart.setX(posEnd.x());
+		m_clippingPosStop.setX(pos.x());
 	}
-	if (pos.y <= posEnd.y) {
-		m_clippingPosStart.y = pos.y;
-		m_clippingPosStop.y = posEnd.y;
+	if (pos.y() <= posEnd.y()) {
+		m_clippingPosStart.setY(pos.y());
+		m_clippingPosStop.setY(posEnd.y());
 	} else {
-		m_clippingPosStart.y = posEnd.y;
-		m_clippingPosStop.y = pos.y;
+		m_clippingPosStart.setY(posEnd.y());
+		m_clippingPosStop.setY(pos.y());
 	}
-	if (pos.z <= posEnd.z) {
-		m_clippingPosStart.z = pos.z;
-		m_clippingPosStop.z = posEnd.z;
+	if (pos.z() <= posEnd.z()) {
+		m_clippingPosStart.setZ(pos.z());
+		m_clippingPosStop.setZ(posEnd.z());
 	} else {
-		m_clippingPosStart.z = posEnd.z;
-		m_clippingPosStop.z = pos.z;
+		m_clippingPosStart.setZ(posEnd.z());
+		m_clippingPosStop.setZ(pos.z());
 	}
 	m_clippingEnable = true;
 }
@@ -175,41 +175,36 @@ void ewol::Image::SetAngle(vec3 axes, float angle)
 {
 	m_axes = axes;
 	m_angle = angle;
-	if(    m_axes.x == 0
-	    && m_axes.y == 0
-	    && m_axes.z == 0) {
+	if(    m_axes.x() == 0
+	    && m_axes.y() == 0
+	    && m_axes.z() == 0) {
 		m_angle = 0;
 	}
 }
 
 void ewol::Image::Print(ivec2 size)
 {
-	vec3 point;
-	vec2 tex;
-	point.z = 0;
+	vec3 point(0,0,0);
+	vec2 tex(0,1);
 
-	tex.x = 0;
-	tex.y = 1;
-	point.x = m_position.x;
-	point.y = m_position.y;
+	point.setX(m_position.x());
+	point.setY(m_position.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
 
 
-	tex.x = 1;
-	tex.y = 1;
-	point.x = m_position.x + size.x;
-	point.y = m_position.y;
+	tex.setValue(1,1);
+	point.setX(m_position.x() + size.x());
+	point.setY(m_position.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
 
 
-	tex.x = 1;
-	tex.y = 0;
-	point.x = m_position.x + size.x;
-	point.y = m_position.y + size.y;
+	tex.setValue(1,0);
+	point.setX(m_position.x() + size.x());
+	point.setY(m_position.y() + size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
@@ -218,26 +213,24 @@ void ewol::Image::Print(ivec2 size)
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
 
-	tex.x = 0;
-	tex.y = 0;
-	point.x = m_position.x;
-	point.y = m_position.y + size.y;
+	tex.setValue(0,0);
+	point.setX(m_position.x());
+	point.setY(m_position.y() + size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
 
-	tex.x = 0;
-	tex.y = 1;
-	point.x = m_position.x;
-	point.y = m_position.y;
+	tex.setValue(0,1);
+	point.setX(m_position.x());
+	point.setY(m_position.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
 }
 
 void ewol::Image::PrintPart(ivec2 size,
-               vec2 sourcePosStart,
-               vec2 sourcePosStop)
+                            vec2 sourcePosStart,
+                            vec2 sourcePosStop)
 {
 	
 }

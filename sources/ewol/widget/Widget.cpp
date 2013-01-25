@@ -24,15 +24,11 @@ ewol::Widget::Widget(void) :
 {
 	m_limitMouseEvent = 3;
 	m_needRegenerateDisplay = true;
-	m_origin.x = 0.0;
-	m_origin.y = 0.0;
-	m_size.x = 10.0;
-	m_size.y = 10.0;
-	m_minSize.x = -1.0;
-	m_minSize.y = -1.0;
+	m_origin.setValue(0,0);
+	m_size.setValue(10,10);
+	m_minSize.setValue(-1,-1);
 	// user settings :
-	m_userMinSize.x = -1.0;
-	m_userMinSize.y = -1.0;
+	m_userMinSize.setValue(-1,-1);
 	SetExpendX();
 	SetExpendY();
 	SetFillX();
@@ -74,8 +70,7 @@ void ewol::Widget::Show(void)
 
 bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
 {
-	m_size.x = availlableX;
-	m_size.y = availlableY;
+	m_size.setValue(availlableX, availlableY);
 	MarkToRedraw();
 	return true;
 }
@@ -125,49 +120,47 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		return;
 	}
 	// check if the element is displayable in the windows : 
-	if(    displayProp.m_windowsSize.x < m_origin.x
-	    || displayProp.m_windowsSize.y < m_origin.y ) {
+	if(    displayProp.m_windowsSize.x() < m_origin.x()
+	    || displayProp.m_windowsSize.y() < m_origin.y() ) {
 		// out of the windows ==> nothing to display ...
 		return;
 	}
 	ewol::openGL::Push();
-	if(    (displayProp.m_origin.x > m_origin.x)
-	    || (displayProp.m_origin.x + displayProp.m_size.x < m_size.x + m_origin.x) ) {
+	if(    (displayProp.m_origin.x() > m_origin.x())
+	    || (displayProp.m_origin.x() + displayProp.m_size.x() < m_size.x() + m_origin.x()) ) {
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
-		int32_t tmpOriginX = etk_max(displayProp.m_origin.x, m_origin.x);
-		int32_t tmppp1 = displayProp.m_origin.x + displayProp.m_size.x;
-		int32_t tmppp2 = m_origin.x + m_size.x;
+		int32_t tmpOriginX = etk_max(displayProp.m_origin.x(), m_origin.x());
+		int32_t tmppp1 = displayProp.m_origin.x() + displayProp.m_size.x();
+		int32_t tmppp2 = m_origin.x() + m_size.x();
 		int32_t tmpclipX = etk_min(tmppp1, tmppp2) - tmpOriginX;
 		
-		int32_t tmpOriginY = etk_max(displayProp.m_origin.y, m_origin.y);
-		tmppp1 = displayProp.m_origin.y + displayProp.m_size.y;
-		tmppp2 = m_origin.y + m_size.y;
+		int32_t tmpOriginY = etk_max(displayProp.m_origin.y(), m_origin.y());
+		tmppp1 = displayProp.m_origin.y() + displayProp.m_size.y();
+		tmppp2 = m_origin.y() + m_size.y();
 		//int32_t tmpclipY = etk_min(tmppp1, tmppp2) - tmpOriginX;
 		
 		glViewport( tmpOriginX,
 		            tmpOriginY,
 		            tmpclipX,
-		            m_size.y);
-		mat4 tmpTranslate = etk::matTranslate(vec3((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x)), (float)(-m_size.y/2.0), -1.0f));
-		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y/2, m_size.y/2, -1, 1);
+		            m_size.y());
+		mat4 tmpTranslate = etk::matTranslate(vec3((float)(-tmpclipX/2 - (tmpOriginX-m_origin.x())), (float)(-m_size.y()/2.0), -1.0f));
+		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1));
+		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
-		displayProp.m_origin.x = tmpOriginX;
-		displayProp.m_origin.y = tmpOriginY;
-		displayProp.m_size.x = tmpclipX;
-		displayProp.m_size.y = m_size.y;
+		displayProp.m_origin.setValue(tmpOriginX, tmpOriginY);
+		displayProp.m_size.setValue(tmpclipX, m_size.y());
 		OnDraw(displayProp);
 	} else {
-		glViewport( m_origin.x,
-		            m_origin.y,
-		            m_size.x,
-		            m_size.y);
-		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x/2, -m_size.y/2, -1.0f));
+		glViewport( m_origin.x(),
+		            m_origin.y(),
+		            m_size.x(),
+		            m_size.y());
+		mat4 tmpTranslate = etk::matTranslate(vec3(-m_size.x()/2, -m_size.y()/2, -1.0f));
 		mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-		mat4 tmpProjection = etk::matOrtho(-m_size.x/2, m_size.x/2, -m_size.y/2, m_size.y/2, -1, 1);
+		mat4 tmpProjection = etk::matOrtho(-m_size.x()/2, m_size.x()/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
@@ -211,8 +204,7 @@ float ewol::Widget::GetZoom(void)
 
 void ewol::Widget::SetOrigin(float x, float y)
 {
-	m_origin.x=x;
-	m_origin.y=y;
+	m_origin.setValue(x, y);
 }
 
 vec2 ewol::Widget::GetOrigin(void)
@@ -222,23 +214,19 @@ vec2 ewol::Widget::GetOrigin(void)
 
 vec2 ewol::Widget::RelativePosition(vec2 pos)
 {
-	pos.x -= m_origin.x;
-	pos.y -= m_origin.y;
-	return pos;
+	return pos - m_origin;
 }
 
 bool ewol::Widget::CalculateMinSize(void)
 {
-	m_minSize.x = m_userMinSize.x;
-	m_minSize.y = m_userMinSize.y;
+	m_minSize = m_userMinSize;
 	MarkToRedraw();
 	return true;
 }
 
 void ewol::Widget::SetMinSize(float x, float y)
 {
-	m_userMinSize.x = x;
-	m_userMinSize.y = y;
+	m_userMinSize.setValue(x, y);
 }
 
 vec2 ewol::Widget::GetMinSize(void)
@@ -270,7 +258,7 @@ vec2 ewol::Widget::GetSize(void)
 
 void ewol::Widget::SetExpendX(bool newExpend)
 {
-	m_userExpend.x = newExpend;
+	m_userExpend.setX(newExpend);
 	ewol::RequestUpdateSize();
 	MarkToRedraw();
 }
@@ -278,14 +266,14 @@ void ewol::Widget::SetExpendX(bool newExpend)
 bool ewol::Widget::CanExpentX(void)
 {
 	if (false==IsHide()) {
-		return m_userExpend.x;
+		return m_userExpend.x();
 	}
 	return false;
 }
 
 void ewol::Widget::SetExpendY(bool newExpend)
 {
-	m_userExpend.y = newExpend;
+	m_userExpend.setY(newExpend);
 	ewol::RequestUpdateSize();
 	MarkToRedraw();
 }
@@ -293,31 +281,31 @@ void ewol::Widget::SetExpendY(bool newExpend)
 bool ewol::Widget::CanExpentY(void)
 {
 	if (false==IsHide()) {
-		return m_userExpend.y;
+		return m_userExpend.y();
 	}
 	return false;
 }
 
 void ewol::Widget::SetFillX(bool newFill)
 {
-	m_userFill.x = newFill;
+	m_userFill.setX(newFill);
 	MarkToRedraw();
 }
 
 bool ewol::Widget::CanFillX(void)
 {
-	return m_userFill.x;
+	return m_userFill.x();
 }
 
 void ewol::Widget::SetFillY(bool newFill)
 {
-	m_userFill.y = newFill;
+	m_userFill.setY(newFill);
 	MarkToRedraw();
 }
 
 bool ewol::Widget::CanFillY(void)
 {
-	return m_userFill.y;
+	return m_userFill.y();
 }
 
 // ----------------------------------------------------------------------------------------------------------------
