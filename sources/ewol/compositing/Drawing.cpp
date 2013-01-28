@@ -324,7 +324,7 @@ void ewol::Drawing::Draw(void)
 	m_GLprogram->Use();
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4);
 	// color :
 	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 

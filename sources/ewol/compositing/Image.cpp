@@ -79,7 +79,7 @@ void ewol::Image::Draw(void)
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &m_coord[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4);
 	// Texture :
 	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
 	// color :

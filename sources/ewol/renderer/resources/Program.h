@@ -81,8 +81,16 @@ namespace ewol
 			 * @param[in] pointer Pointer on the data that might be sended.
 			 * @param[in] jumpBetweenSample Number of byte to jump between 2 vertex (this permit to enterlace informations)
 			 */
-			void SendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample=0);
-			void SendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample=0, int32_t offset=0);
+			void SendAttribute(int32_t idElem,
+			                   int32_t nbElement,
+			                   void* pointer,
+			                   int32_t jumpBetweenSample=0);
+			void SendAttributePointer(int32_t idElem,
+			                          int32_t nbElement,
+			                          ewol::VirtualBufferObject* vbo,
+			                          int32_t index,
+			                          int32_t jumpBetweenSample=0,
+			                          int32_t offset=0);
 			/**
 			 * @brief User request an Uniform on this program.
 			 * @note uniform value is availlable for all the fragment shader in the program (only one value for all)

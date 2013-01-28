@@ -55,7 +55,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &vertices[0], 4);
 	// color :
 	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
 	// Request the draw od the elements : 

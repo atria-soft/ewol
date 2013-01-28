@@ -46,17 +46,17 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		if (inputDataLine[0]=='v') {
 			if (inputDataLine[1]=='n') {
 				// Vertice normal   : vn 0.000000 0.000000 -1.000000
-				vec3 vertex;
+				vec3 vertex(0,0,0);
 				sscanf(&inputDataLine[3], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[1] );
 				normals.PushBack(vertex);
 			} else if (inputDataLine[1]=='t') {
 				// Texture position : vt 0.748573 0.750412
-				vec2 vertex;
+				vec2 vertex(0,0);
 				sscanf(&inputDataLine[3], "%f %f", &vertex.m_floats[0], &vertex.m_floats[1]);
 				uvTextures.PushBack(vertex);
 			} else {
 				// Vertice position : v 1.000000 -1.000000 -1.000000
-				vec3 vertex;
+				vec3 vertex(0,0,0);
 				sscanf(&inputDataLine[2], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[1] );
 				vertices.PushBack(vertex);
 			}
