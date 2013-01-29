@@ -209,7 +209,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
 		localSize -= ivec2(2*padding.x(), 2*padding.y());
 		
-		tmpTextOrigin.setY(tmpTextOrigin.x()+ (m_minSize.y()-2*padding.y()) - minSize.y());
+		tmpTextOrigin.setY(tmpTextOrigin.y()+ (m_minSize.y()-2*padding.y()) - minSize.y());
 		
 		vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
 		

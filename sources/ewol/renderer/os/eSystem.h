@@ -34,10 +34,12 @@ namespace eSystem
 	
 	void SetKeyboard(ewol::SpecialKey& special,
 	                 uniChar_t myChar,
-	                 bool isDown);
+	                 bool isDown,
+	                 bool isARepeateKey=false);
 	void SetKeyboardMove(ewol::SpecialKey& special,
 	                     ewol::keyEvent::keyboard_te move,
-	                     bool isDown);
+	                     bool isDown,
+	                     bool isARepeateKey=false);
 	
 	void ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID);
 	

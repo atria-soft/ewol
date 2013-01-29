@@ -13,7 +13,7 @@
 
 
 
-ewol::Shader::Shader(etk::UString& filename): 
+ewol::Shader::Shader(const etk::UString& filename): 
 	ewol::Resource(filename),
 	m_exist(false),
 	m_fileData(NULL),

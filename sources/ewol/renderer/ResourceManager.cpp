@@ -149,7 +149,7 @@ void ewol::resource::ContextHasBeenDestroyed(void)
 
 
 // internal generic keeper ...
-static ewol::Resource* LocalKeep(etk::UString& filename)
+static ewol::Resource* LocalKeep(const etk::UString& filename)
 {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << filename << "\"");
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
@@ -179,7 +179,7 @@ static void LocalAdd(ewol::Resource* object)
 }
 
 // return the type of the resource ...
-bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::TexturedFont*& object)
 {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << filename << "\"");
 	object = static_cast<ewol::TexturedFont*>(LocalKeep(filename));
@@ -197,7 +197,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TexturedFont*& object)
 }
 
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::FontBase*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::FontBase*& object)
 {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << filename << "\"");
 	object = static_cast<ewol::FontBase*>(LocalKeep(filename));
@@ -214,7 +214,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::FontBase*& object)
 	return true;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::Program*& object)
 {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << filename << "\"");
 	object = static_cast<ewol::Program*>(LocalKeep(filename));
@@ -231,7 +231,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::Program*& object)
 	return true;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::Shader*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::Shader*& object)
 {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << filename << "\"");
 	object = static_cast<ewol::Shader*>(LocalKeep(filename));
@@ -296,7 +296,7 @@ static int32_t nextP2(int32_t value)
 	return val;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
 {
 	 ivec2 size2(nextP2(size.x()), nextP2(size.y()));
 	etk::UString TmpFilename = filename;
@@ -320,7 +320,7 @@ bool ewol::resource::Keep(etk::UString& filename, ewol::TextureFile*& object, iv
 	return true;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::MeshObj*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::MeshObj*& object)
 {
 	object = static_cast<ewol::MeshObj*>(LocalKeep(filename));
 	if (NULL != object) {
@@ -348,7 +348,7 @@ bool ewol::resource::Keep(const etk::UString& accesMode, ewol::VirtualBufferObje
 	return true;
 }
 
-bool ewol::resource::Keep(etk::UString& filename, ewol::ConfigFile*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::ConfigFile*& object)
 {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << filename << "\"");
 	object = static_cast<ewol::ConfigFile*>(LocalKeep(filename));

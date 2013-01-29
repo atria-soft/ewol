@@ -23,7 +23,7 @@ void ewol::SimpleConfigElement::Parse(etk::UString value)
 
 
 
-ewol::ConfigFile::ConfigFile(etk::UString& filename): 
+ewol::ConfigFile::ConfigFile(const etk::UString& filename): 
 	ewol::Resource(filename)
 {
 	EWOL_DEBUG("SFP : load \"" << filename << "\"");

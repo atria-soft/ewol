@@ -88,6 +88,7 @@ class eSystemMessage {
 		// generic dimentions
 		vec2 dimention;
 		// keyboard events :
+		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
 		bool                        stateIsDown;
 		uniChar_t                   keyboardChar;
 		ewol::keyEvent::keyboard_te keyboardMove;
@@ -99,6 +100,7 @@ class eSystemMessage {
 			inputType(ewol::keyEvent::typeUnknow),
 			inputId(-1),
 			dimention(0,0),
+			repeateKey(false),
 			stateIsDown(false),
 			keyboardChar(0),
 			keyboardMove(ewol::keyEvent::keyboardUnknow)
@@ -157,25 +159,33 @@ void ewolProcessEvents(void)
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 						if (NULL != tmpWidget) {
-							// check Widget shortcut
-							if (false==tmpWidget->OnEventShortCut(data.keyboardSpecial,
-							                                      data.keyboardChar,
-							                                      data.keyboardMove,
-							                                      data.stateIsDown) ) {
-								// generate the direct event ...
-								if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
-									if(true == data.stateIsDown) {
-										tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardChar);
-									} else {
-										tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardChar);
+							// check if the widget allow repeating key events.
+							//EWOL_DEBUG("repeating test :" << data.repeateKey << " widget=" << tmpWidget->GetKeyboardRepeate() << " state=" << data.stateIsDown);
+							if(    false==data.repeateKey
+							    || (    true==data.repeateKey
+							         && true==tmpWidget->GetKeyboardRepeate()) ) {
+								// check Widget shortcut
+								if (false==tmpWidget->OnEventShortCut(data.keyboardSpecial,
+								                                      data.keyboardChar,
+								                                      data.keyboardMove,
+								                                      data.stateIsDown) ) {
+									// generate the direct event ...
+									if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
+										if(true == data.stateIsDown) {
+											tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardChar);
+										} else {
+											tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardChar);
+										}
+									} else { // THREAD_KEYBORAD_MOVE
+										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
+										if(true == data.stateIsDown) {
+											tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove);
+										} else {
+											tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove);
+										}
 									}
-								} else { // THREAD_KEYBORAD_MOVE
-									EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
-									if(true == data.stateIsDown) {
-										tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove);
-									} else {
-										tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove);
-									}
+								} else {
+									EWOL_DEBUG("remove Repeate key ...");
 								}
 							}
 						}
@@ -391,7 +401,8 @@ void eSystem::SetMouseState(int pointerID, bool isDown, float x, float y )
 
 void eSystem::SetKeyboard(ewol::SpecialKey& special,
                           uniChar_t myChar,
-                          bool isDown)
+                          bool isDown,
+                          bool isARepeateKey)
 {
 	if (true == isGlobalSystemInit) {
 		eSystemMessage data;
@@ -399,13 +410,15 @@ void eSystem::SetKeyboard(ewol::SpecialKey& special,
 		data.stateIsDown = isDown;
 		data.keyboardChar = myChar;
 		data.keyboardSpecial = special;
+		data.repeateKey = isARepeateKey;
 		l_msgSystem.Post(data);
 	}
 }
 
 void eSystem::SetKeyboardMove(ewol::SpecialKey& special,
                               ewol::keyEvent::keyboard_te move,
-                              bool isDown)
+                              bool isDown,
+                              bool isARepeateKey)
 {
 	if (true == isGlobalSystemInit) {
 		eSystemMessage data;
@@ -413,6 +426,7 @@ void eSystem::SetKeyboardMove(ewol::SpecialKey& special,
 		data.stateIsDown = isDown;
 		data.keyboardMove = move;
 		data.keyboardSpecial = special;
+		data.repeateKey = isARepeateKey;
 		l_msgSystem.Post(data);
 	}
 }

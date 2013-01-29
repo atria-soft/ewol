@@ -15,7 +15,7 @@
 //#define LOCAL_DEBUG  EWOL_VERBOSE
 #define LOCAL_DEBUG  EWOL_DEBUG
 
-ewol::Program::Program(etk::UString& filename) :
+ewol::Program::Program(const etk::UString& filename) :
 	ewol::Resource(filename),
 	m_exist(false),
 	m_program(0),

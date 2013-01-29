@@ -42,7 +42,7 @@ namespace ewol
 			etk::Vector<ewol::SimpleConfigElement*> m_list;
 			etk::UString                            m_errorString;
 		public:
-			ConfigFile(etk::UString& filename);
+			ConfigFile(const etk::UString& filename);
 			virtual ~ConfigFile(void);
 			const char* GetType(void) { return "ewol::SimpleConfigFile"; };
 			void Reload(void);

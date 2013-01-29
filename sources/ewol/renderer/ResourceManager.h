@@ -66,15 +66,15 @@ namespace ewol
 		 * @note when you call the Keep function, you must call the Realease function ==> otherwise the resources will never be freed
 		 * @note The resources with the same name are loaded only one time, a counter prevent multiple loading...
 		 */
-		bool Keep(etk::UString& filename, ewol::TexturedFont*& object);
-		bool Keep(etk::UString& filename, ewol::FontBase*& object);
-		bool Keep(etk::UString& filename, ewol::Program*& object);
-		bool Keep(etk::UString& filename, ewol::Shader*& object);
+		bool Keep(const etk::UString& filename, ewol::TexturedFont*& object);
+		bool Keep(const etk::UString& filename, ewol::FontBase*& object);
+		bool Keep(const etk::UString& filename, ewol::Program*& object);
+		bool Keep(const etk::UString& filename, ewol::Shader*& object);
 		bool Keep(ewol::Texture*& object); // no name needed here ...
-		bool Keep(etk::UString& filename, ewol::TextureFile*& object, ivec2 size);
+		bool Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size);
 		bool Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object);
-		bool Keep(etk::UString& filename, ewol::MeshObj*& object);
-		bool Keep(etk::UString& filename, ewol::ConfigFile*& object);
+		bool Keep(const etk::UString& filename, ewol::MeshObj*& object);
+		bool Keep(const etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);
 		
 		/**

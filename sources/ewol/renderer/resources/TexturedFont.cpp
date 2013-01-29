@@ -274,7 +274,7 @@ ewol::TexturedFont::~TexturedFont(void)
 }
 
 
-bool ewol::TexturedFont::HasName(etk::UString& fileName)
+bool ewol::TexturedFont::HasName(const etk::UString& fileName)
 {
 	etk::UString tmpName = m_name;
 	tmpName += ":";

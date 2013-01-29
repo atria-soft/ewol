@@ -31,7 +31,7 @@ namespace ewol
 			 * @brief Contructor of an opengl Shader
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
 			 */
-			Shader(etk::UString& filename);
+			Shader(const etk::UString& filename);
 			/**
 			 * @brief Destructor, remove the current Shader
 			 */

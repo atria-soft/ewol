@@ -44,7 +44,7 @@ namespace ewol
 		public:
 			TexturedFont(etk::UString fontName);
 			~TexturedFont(void);
-			virtual bool HasName(etk::UString& fileName);
+			virtual bool HasName(const etk::UString& fileName);
 			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
 			/**

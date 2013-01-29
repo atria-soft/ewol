@@ -855,172 +855,194 @@ void X11_Run(void)
 					break;
 				case KeyPress:
 				case KeyRelease:
-					// filter repeate key : 
-					if(    event.type == KeyRelease
-					    && XEventsQueued(m_display, QueuedAfterReading)) {
-						XEvent nev;
-						XPeekEvent(m_display, &nev);
-						if(    nev.type == KeyPress
-						    && nev.xkey.time == event.xkey.time
-						    && nev.xkey.keycode == event.xkey.keycode) {
-							// Key was not actually released
-							// remove next event too ...
-							XNextEvent(m_display, &nev);
-							break;
-						}
-					}
-					X11_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
 					{
-						X11_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
-						if (event.xkey.state & (1<<0) ) {
-							//EWOL_DEBUG("    Special Key : SHIFT");
-							guiKeyBoardMode.shift = true;
-						} else {
-							guiKeyBoardMode.shift = false;
+						bool thisIsAReapeateKey = false;
+						// filter repeate key : 
+						if(    event.type == KeyRelease
+						    && XEventsQueued(m_display, QueuedAfterReading)) {
+							XEvent nev;
+							XPeekEvent(m_display, &nev);
+							if(    nev.type == KeyPress
+							    && nev.xkey.time == event.xkey.time
+							    && nev.xkey.keycode == event.xkey.keycode) {
+								// Key was not actually released
+								// remove next event too ...
+								
+								//This remove repeate key
+								XNextEvent(m_display, &nev);
+								//break;
+								
+								thisIsAReapeateKey = true;
+							}
 						}
-						if (event.xkey.state & (1<<1) ) {
-							//EWOL_DEBUG("    Special Key : CAPS_LOCK");
-							guiKeyBoardMode.capLock = true;
-						} else {
-							guiKeyBoardMode.capLock = false;
-						}
-						if (event.xkey.state & (1<<2) ) {
-							//EWOL_DEBUG("    Special Key : Ctrl");
-							guiKeyBoardMode.ctrl = true;
-						} else {
-							guiKeyBoardMode.ctrl = false;
-						}
-						if (event.xkey.state & (1<<3) ) {
-							//EWOL_DEBUG("    Special Key : Alt");
-							guiKeyBoardMode.alt = true;
-						} else {
-							guiKeyBoardMode.alt = false;
-						}
-						if (event.xkey.state & (1<<4) ) {
-							//EWOL_DEBUG("    Special Key : VER_num");
-							guiKeyBoardMode.numLock = true;
-						} else {
-							guiKeyBoardMode.numLock = false;
-						}
-						if (event.xkey.state & (1<<5) ) {
-							EWOL_DEBUG("    Special Key : MOD");
-						}
-						if (event.xkey.state & (1<<6) ) {
-							//EWOL_DEBUG("    Special Key : META");
-							guiKeyBoardMode.meta = true;
-						} else {
-							guiKeyBoardMode.meta = false;
-						}
-						if (event.xkey.state & (1<<7) ) {
-							//EWOL_DEBUG("    Special Key : ALT_GR");
-							guiKeyBoardMode.altGr = true;
-						} else {
-							guiKeyBoardMode.altGr = false;
-						}
-						bool find = true;
-						ewol::keyEvent::keyboard_te keyInput;
-						switch (event.xkey.keycode) {
-							//case 80: // keypad
-							case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
-							//case 83: // keypad
-							case 113:	keyInput = ewol::keyEvent::keyboardLeft;          break;
-							//case 85: // keypad
-							case 114:	keyInput = ewol::keyEvent::keyboardRight;         break;
-							//case 88: // keypad
-							case 116:	keyInput = ewol::keyEvent::keyboardDown;          break;
-							//case 81: // keypad
-							case 112:	keyInput = ewol::keyEvent::keyboardPageUp;        break;
-							//case 89: // keypad
-							case 117:	keyInput = ewol::keyEvent::keyboardPageDown;      break;
-							//case 79: // keypad
-							case 110:	keyInput = ewol::keyEvent::keyboardStart;         break;
-							//case 87: // keypad
-							case 115:	keyInput = ewol::keyEvent::keyboardEnd;           break;
-							case 78:	keyInput = ewol::keyEvent::keyboardStopDefil;     break;
-							case 127:	keyInput = ewol::keyEvent::keyboardWait;          break;
-							//case 90: // keypad
-							case 118:
-								keyInput = ewol::keyEvent::keyboardInsert;
-								if(event.type == KeyRelease) {
-									if (true == guiKeyBoardMode.insert) {
-										guiKeyBoardMode.insert = false;
+						X11_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+						{
+							X11_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+							if (event.xkey.state & (1<<0) ) {
+								//EWOL_DEBUG("    Special Key : SHIFT");
+								guiKeyBoardMode.shift = true;
+							} else {
+								guiKeyBoardMode.shift = false;
+							}
+							if (event.xkey.state & (1<<1) ) {
+								//EWOL_DEBUG("    Special Key : CAPS_LOCK");
+								guiKeyBoardMode.capLock = true;
+							} else {
+								guiKeyBoardMode.capLock = false;
+							}
+							if (event.xkey.state & (1<<2) ) {
+								//EWOL_DEBUG("    Special Key : Ctrl");
+								guiKeyBoardMode.ctrl = true;
+							} else {
+								guiKeyBoardMode.ctrl = false;
+							}
+							if (event.xkey.state & (1<<3) ) {
+								//EWOL_DEBUG("    Special Key : Alt");
+								guiKeyBoardMode.alt = true;
+							} else {
+								guiKeyBoardMode.alt = false;
+							}
+							if (event.xkey.state & (1<<4) ) {
+								//EWOL_DEBUG("    Special Key : VER_num");
+								guiKeyBoardMode.numLock = true;
+							} else {
+								guiKeyBoardMode.numLock = false;
+							}
+							if (event.xkey.state & (1<<5) ) {
+								EWOL_DEBUG("    Special Key : MOD");
+							}
+							if (event.xkey.state & (1<<6) ) {
+								//EWOL_DEBUG("    Special Key : META");
+								guiKeyBoardMode.meta = true;
+							} else {
+								guiKeyBoardMode.meta = false;
+							}
+							if (event.xkey.state & (1<<7) ) {
+								//EWOL_DEBUG("    Special Key : ALT_GR");
+								guiKeyBoardMode.altGr = true;
+							} else {
+								guiKeyBoardMode.altGr = false;
+							}
+							bool find = true;
+							ewol::keyEvent::keyboard_te keyInput;
+							switch (event.xkey.keycode) {
+								//case 80: // keypad
+								case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
+								//case 83: // keypad
+								case 113:	keyInput = ewol::keyEvent::keyboardLeft;          break;
+								//case 85: // keypad
+								case 114:	keyInput = ewol::keyEvent::keyboardRight;         break;
+								//case 88: // keypad
+								case 116:	keyInput = ewol::keyEvent::keyboardDown;          break;
+								//case 81: // keypad
+								case 112:	keyInput = ewol::keyEvent::keyboardPageUp;        break;
+								//case 89: // keypad
+								case 117:	keyInput = ewol::keyEvent::keyboardPageDown;      break;
+								//case 79: // keypad
+								case 110:	keyInput = ewol::keyEvent::keyboardStart;         break;
+								//case 87: // keypad
+								case 115:	keyInput = ewol::keyEvent::keyboardEnd;           break;
+								case 78:	keyInput = ewol::keyEvent::keyboardStopDefil;     break;
+								case 127:	keyInput = ewol::keyEvent::keyboardWait;          break;
+								//case 90: // keypad
+								case 118:
+									keyInput = ewol::keyEvent::keyboardInsert;
+									if(event.type == KeyRelease) {
+										if (true == guiKeyBoardMode.insert) {
+											guiKeyBoardMode.insert = false;
+										} else {
+											guiKeyBoardMode.insert = true;
+										}
+									}
+									break;
+								//case 84:  keyInput = ewol::keyEvent::keyboardCenter; break; // Keypad
+								case 67:    keyInput = ewol::keyEvent::keyboardF1; break;
+								case 68:    keyInput = ewol::keyEvent::keyboardF2; break;
+								case 69:    keyInput = ewol::keyEvent::keyboardF3; break;
+								case 70:    keyInput = ewol::keyEvent::keyboardF4; break;
+								case 71:    keyInput = ewol::keyEvent::keyboardF5; break;
+								case 72:    keyInput = ewol::keyEvent::keyboardF6; break;
+								case 73:    keyInput = ewol::keyEvent::keyboardF7; break;
+								case 74:    keyInput = ewol::keyEvent::keyboardF8; break;
+								case 75:    keyInput = ewol::keyEvent::keyboardF9; break;
+								case 76:    keyInput = ewol::keyEvent::keyboardF10; break;
+								case 95:    keyInput = ewol::keyEvent::keyboardF11; break;
+								case 96:    keyInput = ewol::keyEvent::keyboardF12; break;
+								case 66:    keyInput = ewol::keyEvent::keyboardCapLock;     guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
+								case 50:    keyInput = ewol::keyEvent::keyboardShiftLeft;   guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+								case 62:    keyInput = ewol::keyEvent::keyboardShiftRight;  guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+								case 37:    keyInput = ewol::keyEvent::keyboardCtrlLeft;    guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+								case 105:   keyInput = ewol::keyEvent::keyboardCtrlRight;   guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+								case 133:   keyInput = ewol::keyEvent::keyboardMetaLeft;    guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+								case 134:   keyInput = ewol::keyEvent::keyboardMetaRight;   guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+								case 64:    keyInput = ewol::keyEvent::keyboardAlt;         guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
+								case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
+								case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
+								case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
+								case 91: // Suppr on keypad
+									find = false;
+									if(guiKeyBoardMode.numLock==true){
+										eSystem::SetKeyboard(guiKeyBoardMode, '.', (event.type==KeyPress), thisIsAReapeateKey);
+										if (true==thisIsAReapeateKey) {
+											eSystem::SetKeyboard(guiKeyBoardMode, '.', !(event.type==KeyPress), thisIsAReapeateKey);
+										}
 									} else {
-										guiKeyBoardMode.insert = true;
+										eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, (event.type==KeyPress), thisIsAReapeateKey);
+										if (true==thisIsAReapeateKey) {
+											eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, !(event.type==KeyPress), thisIsAReapeateKey);
+										}
 									}
+									break;
+								case 23: // special case for TAB
+									find = false;
+									eSystem::SetKeyboard(guiKeyBoardMode, 0x09, (event.type==KeyPress), thisIsAReapeateKey);
+									if (true==thisIsAReapeateKey) {
+										eSystem::SetKeyboard(guiKeyBoardMode, 0x09, !(event.type==KeyPress), thisIsAReapeateKey);
+									}
+									break;
+								default:
+									find = false;
+									{
+										char buf[11];
+										//EWOL_DEBUG("Keycode: " << event.xkey.keycode);
+										// change keystate for simple reson of the ctrl error...
+										int32_t keyStateSave = event.xkey.state;
+										if (event.xkey.state & (1<<2) ) {
+											event.xkey.state = event.xkey.state & 0xFFFFFFFB;
+										}
+										KeySym keysym;
+										XComposeStatus status;
+										int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
+										// retreave real keystate
+										event.xkey.state = keyStateSave;
+										buf[count] = '\0';
+										// Replace \r error ...
+										if (buf[0] == '\r') {
+											buf[0] = '\n';
+											buf[1] = '\0';
+										}
+										if (count>0) {
+											// transform it in unicode
+											uniChar_t tmpChar = 0;
+											unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], tmpChar);
+											//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
+											eSystem::SetKeyboard(guiKeyBoardMode, tmpChar, (event.type==KeyPress), thisIsAReapeateKey);
+											if (true==thisIsAReapeateKey) {
+												eSystem::SetKeyboard(guiKeyBoardMode, tmpChar, !(event.type==KeyPress), thisIsAReapeateKey);
+											}
+										} else {
+											EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
+										}
+									}
+									break;
+							}
+							if (true == find) {
+								//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+								eSystem::SetKeyboardMove(guiKeyBoardMode, keyInput, (event.type==KeyPress), thisIsAReapeateKey);
+								if (true==thisIsAReapeateKey) {
+									eSystem::SetKeyboardMove(guiKeyBoardMode, keyInput, !(event.type==KeyPress), thisIsAReapeateKey);
 								}
-								break;
-							//case 84:  keyInput = ewol::keyEvent::keyboardCenter; break; // Keypad
-							case 67:    keyInput = ewol::keyEvent::keyboardF1; break;
-							case 68:    keyInput = ewol::keyEvent::keyboardF2; break;
-							case 69:    keyInput = ewol::keyEvent::keyboardF3; break;
-							case 70:    keyInput = ewol::keyEvent::keyboardF4; break;
-							case 71:    keyInput = ewol::keyEvent::keyboardF5; break;
-							case 72:    keyInput = ewol::keyEvent::keyboardF6; break;
-							case 73:    keyInput = ewol::keyEvent::keyboardF7; break;
-							case 74:    keyInput = ewol::keyEvent::keyboardF8; break;
-							case 75:    keyInput = ewol::keyEvent::keyboardF9; break;
-							case 76:    keyInput = ewol::keyEvent::keyboardF10; break;
-							case 95:    keyInput = ewol::keyEvent::keyboardF11; break;
-							case 96:    keyInput = ewol::keyEvent::keyboardF12; break;
-							case 66:    keyInput = ewol::keyEvent::keyboardCapLock;     guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
-							case 50:    keyInput = ewol::keyEvent::keyboardShiftLeft;   guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-							case 62:    keyInput = ewol::keyEvent::keyboardShiftRight;  guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-							case 37:    keyInput = ewol::keyEvent::keyboardCtrlLeft;    guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-							case 105:   keyInput = ewol::keyEvent::keyboardCtrlRight;   guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-							case 133:   keyInput = ewol::keyEvent::keyboardMetaLeft;    guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-							case 134:   keyInput = ewol::keyEvent::keyboardMetaRight;   guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-							case 64:    keyInput = ewol::keyEvent::keyboardAlt;         guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
-							case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
-							case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
-							case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
-							case 91: // Suppr on keypad
-								find = false;
-								if(guiKeyBoardMode.numLock==true){
-									eSystem::SetKeyboard(guiKeyBoardMode, '.', (event.type==KeyPress));
-								} else {
-									eSystem::SetKeyboard(guiKeyBoardMode, 0x7F, (event.type==KeyPress));
-								}
-								break;
-							case 23: // special case for TAB
-								find = false;
-								eSystem::SetKeyboard(guiKeyBoardMode, 0x09, (event.type==KeyPress));
-								break;
-							default:
-								find = false;
-								{
-									char buf[11];
-									//EWOL_DEBUG("Keycode: " << event.xkey.keycode);
-									// change keystate for simple reson of the ctrl error...
-									int32_t keyStateSave = event.xkey.state;
-									if (event.xkey.state & (1<<2) ) {
-										event.xkey.state = event.xkey.state & 0xFFFFFFFB;
-									}
-									KeySym keysym;
-									XComposeStatus status;
-									int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
-									// retreave real keystate
-									event.xkey.state = keyStateSave;
-									buf[count] = '\0';
-									// Replace \r error ...
-									if (buf[0] == '\r') {
-										buf[0] = '\n';
-										buf[1] = '\0';
-									}
-									if (count>0) {
-										// transform it in unicode
-										uniChar_t tmpChar = 0;
-										unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], tmpChar);
-										//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
-										eSystem::SetKeyboard(guiKeyBoardMode, tmpChar, (event.type==KeyPress));
-									} else {
-										EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
-									}
-								}
-								break;
-						}
-						if (true == find) {
-							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-							eSystem::SetKeyboardMove(guiKeyBoardMode, keyInput, (event.type==KeyPress));
+							}
 						}
 					}
 					break;

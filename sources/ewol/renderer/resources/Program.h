@@ -57,7 +57,7 @@ namespace ewol
 			 * @brief Contructor of an opengl Program.
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
 			 */
-			Program(etk::UString& filename);
+			Program(const etk::UString& filename);
 			/**
 			 * @brief Destructor, remove the current Program.
 			 */

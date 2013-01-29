@@ -22,6 +22,7 @@
 ewol::Widget::Widget(void) :
 	m_userMaxSize(-1,-1)
 {
+	m_allowRepeateKeyboardEvent = true;
 	m_limitMouseEvent = 3;
 	m_needRegenerateDisplay = true;
 	m_origin.setValue(0,0);

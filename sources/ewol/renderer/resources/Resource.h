@@ -41,7 +41,7 @@ namespace ewol
 				m_uniqueId = valBase;
 				valBase++;
 			};
-			Resource(etk::UString& filename) :
+			Resource(const etk::UString& filename) :
 				m_name(filename),
 				m_counter(1),
 				m_resourceLevel(MAX_RESOURCE_LEVEL-1)
@@ -50,7 +50,7 @@ namespace ewol
 				valBase++;
 			};
 			virtual ~Resource(void) { };
-			virtual bool HasName(etk::UString& fileName)
+			virtual bool HasName(const etk::UString& fileName)
 			{
 				EWOL_VERBOSE("G : check : " << fileName << " ?= " << m_name << " = " << (fileName==m_name) );
 				return fileName==m_name;

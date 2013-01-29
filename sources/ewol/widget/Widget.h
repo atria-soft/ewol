@@ -272,6 +272,24 @@ namespace ewol {
 			void SetMouseLimit(int32_t numberState) { m_limitMouseEvent = numberState; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
+		// -- keyboard event properties Area
+		// ----------------------------------------------------------------------------------------------------------------
+		private:
+			bool m_allowRepeateKeyboardEvent; //!< This remove the repeating keybord event due to the constant pressing key.
+		public:
+			/**
+			 * @brief Get the keyboard repeating event supporting.
+			 * @return true : the event can be repeated.
+			 * @return false : the event must not be repeated.
+			 */
+			bool GetKeyboardRepeate(void) { return m_allowRepeateKeyboardEvent; };
+			/**
+			 * @brief Set the keyboard repeating event supporting.
+			 * @param[in] state The repeating status (true: enable, false disable).
+			 */
+			void SetKeyboardRepeate(bool state) { m_allowRepeateKeyboardEvent = state; };
+		
+		// ----------------------------------------------------------------------------------------------------------------
 		// -- Periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
