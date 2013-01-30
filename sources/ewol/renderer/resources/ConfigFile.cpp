@@ -61,7 +61,7 @@ void ewol::ConfigFile::Reload(void)
 	}
 	etk::UString fileExtention = file.FileGetExtention();
 	if (fileExtention != "conf") {
-		EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
+		EWOL_ERROR("File does not have extention \".conf\" for program but : \"" << fileExtention << "\"");
 		return;
 	}
 	if (false == file.FileOpenRead()) {
