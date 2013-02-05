@@ -600,8 +600,7 @@ void guiInterface::ChangePos(ivec2 size)
 
 void guiInterface::GetAbsPos(ivec2& size)
 {
-	size.x = 0;
-	size.y = 0;
+	size.setValue(0,0);
 }
 
 void guiInterface::ForceOrientation(ewol::orientation_te orientation)
