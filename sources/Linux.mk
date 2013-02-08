@@ -25,7 +25,7 @@ ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
 LOCAL_EXPORT_LDLIBS += -lX11
 endif
 ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-LOCAL_EXPORT_LDLIBS += -ldirectfb
+LOCAL_EXPORT_LDLIBS +=  -L/usr/local/lib  -ldirectfb -lfusion -ldirect
 endif
 
 #http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
@@ -48,7 +48,7 @@ ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
 LOCAL_SRC_FILES += ewol/renderer/os/gui.X11.cpp
 endif
 ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-LOCAL_CFLAGS += -I/usr/include/directfb
+LOCAL_CFLAGS += -I/usr/local/include/directfb
 LOCAL_SRC_FILES += ewol/renderer/os/gui.directFB.cpp
 endif
 

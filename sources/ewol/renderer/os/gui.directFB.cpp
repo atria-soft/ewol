@@ -17,8 +17,12 @@
 	
 	
 	http://mail.directfb.org/pipermail/directfb-users/2010-February/002115.html
-	
-	
+	on X11 :
+	http://stackoverflow.com/questions/521957/how-to-develop-a-directfb-app-without-leaving-x-11-environment
+	$ sudo apt-get install libdirectfb-extra  # for Debian and Ubuntu, anyhow
+	$ cat ~/.directfbrc
+		system=x11
+		force-windowed
 */
 
 #include <ewol/debug.h>
@@ -83,18 +87,6 @@ IDirectFBEventBuffer *events = NULL;
 static int screen_width =800;
 static int screen_height = 600;
 
-static unsigned long T0 = 0;
-static GLint Frames = 0;
-static GLfloat fps = 0;
-
-static inline unsigned long get_millis()
-{
-	struct timeval tv;
-
-	gettimeofday (&tv, NULL);
-	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
-}
-
 
 /**
  * @brief Set the new title of the windows
@@ -111,6 +103,7 @@ void guiInterface::SetIcon(etk::UString inputFile)
 {
 	// TODO : ...
 }
+
 
 void DirectFB_Init(int argc, const char *argv[])
 {
@@ -134,30 +127,23 @@ void DirectFB_Init(int argc, const char *argv[])
 		DirectFBErrorFatal("DirectFBCreate", err);
 		exit(-1);
 	}
-
-	EWOL_INFO("call CreateInputEventBuffer");
-	// create an event buffer for all devices with these caps
-	err = dfb->CreateInputEventBuffer(dfb, (DFBInputDeviceCapabilities)(DICAPS_KEYS | DICAPS_AXES), DFB_FALSE, &events);
-	if (DFB_OK!=err) {
-		EWOL_ERROR("dfb->CreateInputEventBuffer");
-		exit(-1);
-	}
-
+	
 	EWOL_INFO("call SetCooperativeLevel");
 	// set our cooperative level to DFSCL_FULLSCREEN for exclusive access to the primary layer
-	//dfb->SetCooperativeLevel(dfb, DFSCL_FULLSCREEN);
-	dfb->SetCooperativeLevel(dfb, DFSCL_NORMAL);
+	dfb->SetCooperativeLevel(dfb, DFSCL_FULLSCREEN);
+	//dfb->SetCooperativeLevel(dfb, DFSCL_NORMAL);
 
 	// get the primary surface, i.e. the surface of the primary layer we have exclusive access to
 	dsc.flags = (DFBSurfaceDescriptionFlags)(DSDESC_CAPS);// | DSDESC_PIXELFORMAT);
 	//dsc.caps  = (DFBSurfaceCapabilities)(DSCAPS_PRIMARY | DSCAPS_DOUBLE | DSCAPS_DEPTH); // DSCAPS_SHARED
-	dsc.caps  = (DFBSurfaceCapabilities)(DSCAPS_PRIMARY | DSCAPS_FLIPPING);
+	dsc.caps  = (DFBSurfaceCapabilities)(DSCAPS_PRIMARY | DSCAPS_DOUBLE | DSCAPS_GL);// | DSCAPS_FLIPPING);
 	//dsc.caps  = (DFBSurfaceCapabilities) (DSCAPS_SUBSURFACE | DSCAPS_VIDEOONLY | DSCAPS_PREMULTIPLIED | DSCAPS_FLIPPING);
 
+	
 	dsc.pixelformat = DSPF_ARGB;
-              dsc.width = 800;
-              dsc.height = 600;
-
+	dsc.width = 600;
+	dsc.height = 400;
+	
 	EWOL_INFO("call CreateSurface");
 	err = dfb->CreateSurface(dfb, &dsc, &primary);
 	if (DFB_OK!=err) {
@@ -166,12 +152,12 @@ void DirectFB_Init(int argc, const char *argv[])
 		exit(-1);
 	}
 	
-              primary->SetBlittingFlags(primary, DSBLIT_BLEND_ALPHACHANNEL);
-              primary->SetPorterDuff( primary, DSPD_ADD );
-              primary->SetDstBlendFunction(primary, DSBF_SRCALPHA);
-              primary->SetDrawingFlags(primary, DSDRAW_BLEND);
-              
-              primary->Blit(primary, primary, NULL, 0, 0);
+	primary->SetBlittingFlags(primary, DSBLIT_BLEND_ALPHACHANNEL);
+	primary->SetPorterDuff( primary, DSPD_ADD );
+	primary->SetDstBlendFunction(primary, DSBF_SRCALPHA);
+	primary->SetDrawingFlags(primary, DSDRAW_BLEND);
+	
+	primary->Blit(primary, primary, NULL, 0, 0);
 	
 	
 	EWOL_INFO("call GetSize");
@@ -182,10 +168,21 @@ void DirectFB_Init(int argc, const char *argv[])
 		DirectFBErrorFatal("primary->GetSize", err);
 		exit(-1);
 	}
+	
+
+	EWOL_INFO("call CreateInputEventBuffer");
+	// create an event buffer for all devices with these caps
+	err = dfb->CreateInputEventBuffer(dfb, (DFBInputDeviceCapabilities)(DICAPS_KEYS | DICAPS_AXES), DFB_FALSE, &events);
+	if (DFB_OK!=err) {
+		EWOL_ERROR("dfb->CreateInputEventBuffer");
+		DirectFBErrorFatal("CreateInputEventBuffer", err);
+		exit(-1);
+	}
+	
 	EWOL_INFO("call Flip");
 	primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
-	//sleep(3);
 
+	// NOTE : we need to force it on X11 display ...
 	EWOL_INFO("call GetGL");
 	// get the GL context
 	err = primary->GetGL(primary, &primary_gl);
@@ -196,8 +193,6 @@ void DirectFB_Init(int argc, const char *argv[])
 	}
 
 	EWOL_INFO("DirectFB Init (STOP)");
-	
-	T0 = get_millis();
 }
 
 void DirectFB_UnInit(void)
@@ -211,15 +206,25 @@ void DirectFB_UnInit(void)
 
 void DirectFB_Run(void)
 {
+	EWOL_INFO("X11 configure windows size : (" << screen_height << "," << screen_width << ")");
+	eSystem::Resize(screen_width, screen_height);
+	
 	DFBResult err;
+	int32_t position = 0;
 	while (true==m_run) {
 		DFBInputEvent evt;
 		unsigned long t;
-	
-	primary->SetColor (primary, 0x00, 0xFF, 0x00, 0x55);
-	primary->FillRectangle(primary, 200, 200, 300, 300);
+	/*
+	primary->SetColor (primary, 0x00, 0x00, 0x00, 0xFF);
+	primary->FillRectangle(primary, 0, 0, screen_width, screen_height);
+	primary->SetColor (primary, 0xFF, (uint8_t)position, 0x00, 0xFF);
+	primary->FillRectangle(primary, position, position, 300, 300);
 	primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
-		/*
+		position++;
+		if (position>600) {
+			position = 0;
+		}
+		*/
 		if(true == m_run) {
 			err = primary_gl->Lock(primary_gl);
 			if (DFB_OK!=err) {
@@ -236,26 +241,57 @@ void DirectFB_Run(void)
 				EWOL_ERROR("primary_gl->Unlock");
 				DirectFBErrorFatal("primary_gl->Unlock", err);
 			}
+			primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);//DSFLIP_ONSYNC);
 		}
-		*/
-		usleep(25);
-		if (fps) {
-			char buf[64];
-			snprintf(buf, 64, "%4.1f FPS\n", fps);
-			primary->SetColor(primary, 0xff, 0, 0, 0xff);
-			primary->DrawString(primary, buf, -1, screen_width - 5, 5, DSTF_TOPRIGHT);
-		}
-		primary->Flip(primary, NULL, (DFBSurfaceFlipFlags)0);
-		Frames++;
-		t = get_millis();
-		if (t - T0 >= 2000) {
-			GLfloat seconds = (t - T0) / 1000.0;
-			fps = Frames / seconds;
-			T0 = t;
-			Frames = 0;
-		}
+		
 		while (events->GetEvent(events, DFB_EVENT(&evt)) == DFB_OK) {
 			switch (evt.type) {
+				default:
+				case DIET_UNKNOWN: /* unknown event */
+					EWOL_DEBUG("event unknown type : " << evt.type << " symbole=\"" << (char)evt.key_symbol << "\"=" << ((int32_t)evt.key_symbol) << " ...");
+					break;
+				case DIET_KEYPRESS: /* a key is been pressed */
+				case DIET_KEYRELEASE: /* a key is been released */
+					{
+						bool isPressed = (evt.type==DIET_KEYPRESS);
+						//EWOL_DEBUG("event KeyBoard isPressed : " << isPressed << " symbole=\"" << (char)evt.key_symbol << "\"=" << ((int32_t)evt.key_symbol) << " ...");
+						if( 1 <= evt.key_symbol && evt.key_symbol <= 0x7F ) {
+							eSystem::SetKeyboard(guiKeyBoardMode, evt.key_symbol, isPressed, false);
+						} else {
+							EWOL_DEBUG("event KeyBoard isPressed : " << isPressed << " symbole=\"" << (char)evt.key_symbol << "\"=" << ((int32_t)evt.key_symbol) << " ==> not managed key");
+						}
+					}
+					break;
+				case DIET_AXISMOTION: /* mouse/joystick movement */
+					{
+						/*
+						if (evt.flags & DIEF_AXISREL) {
+							switch (evt.axis) {
+								case DIAI_X:
+									//view_roty += evt.axisrel / 2.0;
+									break;
+								case DIAI_Y:
+									//view_rotx += evt.axisrel / 2.0;
+									break;
+								case DIAI_Z:
+									//view_rotz += evt.axisrel / 2.0;
+									break;
+								default:
+									;
+							}
+						}
+						*/
+						EWOL_DEBUG("event mouse motion flag" << (char)evt.flags << " axis=" << evt.axis << " value=" << evt.axisrel);
+					}
+					break;
+				case DIET_BUTTONPRESS:   /* a (mouse) button is been pressed */
+				case DIET_BUTTONRELEASE: /* a (mouse) button is been released */
+					{
+						bool isPressed = (evt.type==DIET_KEYPRESS);
+						EWOL_DEBUG("event mouse event pressed=" << isPressed << " flag" << (char)evt.flags << " axis=" << evt.axis << " value=" << evt.axisrel);
+					}
+					break;
+				/*
 				case DIET_KEYPRESS:
 					switch (evt.key_symbol) {
 						case DIKS_ESCAPE:
@@ -326,9 +362,12 @@ void DirectFB_Run(void)
 					break;
 				default:
 					;
+				*/
 			}
 		}
 	}
+	// Note : if we not stop like this the system break ...
+	exit(-1);
 };
 
 
