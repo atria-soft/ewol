@@ -33,7 +33,7 @@ ewol::Colored3DObject::~Colored3DObject(void)
 
 
 void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
-                                 draw::Colorf& color,
+                                 const draw::Colorf& color,
                                  bool updateDepthBuffer)
 {
 	if (vertices.Size()<=0) {
@@ -55,7 +55,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &vertices[0], 4);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
 	// Request the draw od the elements : 
@@ -71,7 +71,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 }
 
 void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
-                                 draw::Colorf& color,
+                                 const draw::Colorf& color,
                                  mat4& transformationMatrix)
 {
 	if (vertices.Size()<=0) {
@@ -90,7 +90,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
 	// Request the draw od the elements : 
@@ -100,7 +100,7 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 }
 
 void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
-                                     draw::Colorf& color,
+                                     const draw::Colorf& color,
                                      mat4& transformationMatrix)
 {
 	if (vertices.Size()<=0) {
@@ -119,7 +119,7 @@ void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
 	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0]);
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0], 4*sizeof(float));
 	// color :
 	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
 	// Request the draw od the elements : 

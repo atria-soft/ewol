@@ -21,21 +21,21 @@ namespace ewol
 	class Drawing : public ewol::Compositing
 	{
 		private:
-			vec3 m_position;           //!< The current position to draw
-			vec3 m_clippingPosStart;   //!< Clipping start position
-			vec3 m_clippingPosStop;    //!< Clipping stop position
-			bool                 m_clippingEnable;     //!< true if the clipping must be activated
+			vec3 m_position;         //!< The current position to draw
+			vec3 m_clippingPosStart; //!< Clipping start position
+			vec3 m_clippingPosStop;  //!< Clipping stop position
+			bool m_clippingEnable;   //!< true if the clipping must be activated
 		private:
-			draw::Color          m_color;              //!< The text foreground color
-			draw::Color          m_colorBg;            //!< The text background color
+			draw::Color  m_color;   //!< The text foreground color
+			draw::Color  m_colorBg; //!< The text background color
 		private:
-			ewol::Program*       m_GLprogram;          //!< pointer on the opengl display program
-			int32_t              m_GLPosition;         //!< openGL id on the element (vertex buffer)
-			int32_t              m_GLMatrix;           //!< openGL id on the element (transformation matrix)
-			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
+			ewol::Program*  m_GLprogram;  //!< pointer on the opengl display program
+			int32_t         m_GLPosition; //!< openGL id on the element (vertex buffer)
+			int32_t         m_GLMatrix;   //!< openGL id on the element (transformation matrix)
+			int32_t         m_GLColor;    //!< openGL id on the element (color buffer)
 		private: // Background Color (display only when needed)
-			etk::Vector<vec3 >   m_coord;        //!< internal position for the text display
-			etk::Vector<draw::Colorf>            m_coordColor;   //!< internal color of the background
+			etk::Vector<vec3 >        m_coord;      //!< internal position for the text display
+			etk::Vector<draw::Colorf> m_coordColor; //!< internal color of the background
 		public:
 			/**
 			 * @brief Basic constructor
@@ -54,10 +54,10 @@ namespace ewol
 			 * @brief Un-Load the openGL program and get all the ID needed
 			 */
 			void UnLoadProgram(void);
-			float                               m_thickness;     //!< when drawing line and other things
-			int32_t                             m_triElement;    //!< special counter of the single dot generated
-			vec3                m_triangle[3];   //!< Register every system with a combinaison of tiangle
-			draw::Colorf                        m_tricolor[3];   //!< Register every the associated color foreground
+			float        m_thickness;     //!< when drawing line and other things
+			int32_t      m_triElement;    //!< special counter of the single dot generated
+			vec3         m_triangle[3];   //!< Register every system with a combinaison of tiangle
+			draw::Colorf m_tricolor[3];   //!< Register every the associated color foreground
 		// internal API for the generation abstraction of triangles
 			/**
 			 * @brief Lunch the generation of triangle

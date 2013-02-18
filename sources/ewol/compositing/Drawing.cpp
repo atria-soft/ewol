@@ -447,7 +447,8 @@ void ewol::Drawing::LineTo(vec3 dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
-	if (m_position.x() == dest.x() && m_position.y() == dest.y()) {
+	EWOL_DEBUG("DrawLine : " << m_position << " to " << dest);
+	if (m_position.x() == dest.x() && m_position.y() == dest.y() && m_position.z() == dest.z()) {
 		EWOL_WARNING("Try to draw an line width 0");
 		return;
 	}
@@ -467,13 +468,13 @@ void ewol::Drawing::LineTo(vec3 dest)
 	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
 	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
 
-	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, (float)0.0) );
-	SetPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, (float)0.0) );
-	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, (float)0.0) );
+	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
+	SetPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
+	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, m_position.z()) );
 	
-	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, (float)0.0) );
-	SetPoint(vec3(dest.x() - offsetx, dest.y() - offsety, (float)0.0) );
-	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, (float)0.0) );
+	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, dest.z()) );
+	SetPoint(vec3(dest.x() - offsetx, dest.y() - offsety, dest.z()) );
+	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, dest.z()) );
 	// update the system position :
 	m_position = dest;
 }

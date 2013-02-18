@@ -280,7 +280,8 @@ void widget::Button::OnRegenerateDisplay(void)
 bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
 {
 	bool previousHoverState = m_mouseHover;
-	if(ewol::keyEvent::statusLeave == typeEvent) {
+	if(    ewol::keyEvent::statusLeave == typeEvent
+	    || ewol::keyEvent::statusAbort == typeEvent) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {

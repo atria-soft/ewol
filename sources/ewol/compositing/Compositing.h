@@ -55,6 +55,11 @@ namespace ewol
 			 * @param[in] vect The scaling vector to apply at the transformation matrix
 			 */
 			virtual void Scale(vec3 vect);
+			/**
+			 * @brief set the transformation matrix
+			 * @param[in] mat The new matrix.
+			 */
+			virtual void SetMatrix(mat4 mat);
 	};
 };
 

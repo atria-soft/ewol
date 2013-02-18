@@ -53,3 +53,9 @@ void ewol::Compositing::Clear(void)
 {
 	m_matrixApply.Identity();
 }
+
+
+void ewol::Compositing::SetMatrix(mat4 mat)
+{
+	m_matrixApply = mat;
+}
