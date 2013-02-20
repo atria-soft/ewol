@@ -188,7 +188,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].z());
 		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
 		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].x());
-		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].y());
+		m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-uvTextures[uvIndex-1].y());
 		draw::Color  tmpppp(0xFFFFFFFF);
 		draw::Colorf tmppppp(tmpppp);
 		m_coordColor.PushBack(tmppppp);
