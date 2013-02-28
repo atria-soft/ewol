@@ -46,7 +46,8 @@ FILE_LIST+= ewol/compositing/Compositing.cpp \
 			ewol/compositing/Image.cpp \
 			ewol/compositing/Sprite.cpp \
 			ewol/compositing/Mesh.cpp \
-			ewol/compositing/Shaper.cpp
+			ewol/compositing/Shaper.cpp \
+			ewol/compositing/Area.cpp
 
 
 # all widgets

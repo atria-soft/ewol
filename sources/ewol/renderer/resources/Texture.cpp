@@ -57,32 +57,31 @@ void ewol::Texture::UpdateContext(void)
 	if (false == m_loaded) {
 		// Request a new texture at OpenGl :
 		glGenTextures(1, &m_texId);
-		// TODO : check error ???
-		glBindTexture(GL_TEXTURE_2D, m_texId);
-		// TODO : Check error ???
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-		//--- mode nearest
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		//--- Mode linear
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		EWOL_INFO("TEXTURE: Add [" << m_uniqueId << "]=" << m_data.GetSize() << " OGl_Id=" <<m_texId);
-		glTexImage2D(GL_TEXTURE_2D, // Target
-		             0, // Level
-		             GL_RGBA, // Format internal
-		             m_data.GetWidth(),
-		             m_data.GetHeight(),
-		             0, // Border
-		             GL_RGBA, // format
-		             GL_UNSIGNED_BYTE, // type
-		             m_data.GetTextureDataPointer() );
-		// now the data is loaded
-		m_loaded = true;
-	} else {
-		EWOL_TODO("UPDATE Texture ...");
 	}
+	// in all case we set the texture properties :
+	// TODO : check error ???
+	glBindTexture(GL_TEXTURE_2D, m_texId);
+	// TODO : Check error ???
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//--- mode nearest
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//--- Mode linear
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	EWOL_INFO("TEXTURE: Add [" << m_uniqueId << "]=" << m_data.GetSize() << " OGl_Id=" <<m_texId);
+	glTexImage2D(GL_TEXTURE_2D, // Target
+	             0, // Level
+	             GL_RGBA, // Format internal
+	             m_data.GetWidth(),
+	             m_data.GetHeight(),
+	             0, // Border
+	             GL_RGBA, // format
+	             GL_UNSIGNED_BYTE, // type
+	             m_data.GetTextureDataPointer() );
+	// now the data is loaded
+	m_loaded = true;
 }
 
 

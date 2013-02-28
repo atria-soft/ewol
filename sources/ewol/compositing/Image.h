@@ -18,27 +18,26 @@ namespace ewol
 	class Image : public ewol::Compositing
 	{
 		private:
+			vec3 m_position;         //!< The current position to draw
+			vec3 m_clippingPosStart; //!< Clipping start position
+			vec3 m_clippingPosStop;  //!< Clipping stop position
+			bool m_clippingEnable;   //!< true if the clipping must be activated
 		private:
-			vec3 m_position;           //!< The current position to draw
-			vec3 m_clippingPosStart;   //!< Clipping start position
-			vec3 m_clippingPosStop;    //!< Clipping stop position
-			bool                 m_clippingEnable;     //!< true if the clipping must be activated
+			draw::Color m_color; //!< The text foreground color
+			vec3        m_axes;  //!< Rotation axes (instant)
+			float       m_angle; //!< Angle to set at the axes
 		private:
-			draw::Color          m_color;              //!< The text foreground color
-			vec3 m_axes;               //!< Rotation axes (instant)
-			float                m_angle;              //!< Angle to set at the axes
+			ewol::Program* m_GLprogram;  //!< pointer on the opengl display program
+			int32_t        m_GLPosition; //!< openGL id on the element (vertex buffer)
+			int32_t        m_GLMatrix;   //!< openGL id on the element (transformation matrix)
+			int32_t        m_GLColor;    //!< openGL id on the element (color buffer)
+			int32_t        m_GLtexture;  //!< openGL id on the element (Texture position)
+			int32_t        m_GLtexID;    //!< openGL id on the element (texture ID)
 		private:
-			ewol::Program*       m_GLprogram;          //!< pointer on the opengl display program
-			int32_t              m_GLPosition;         //!< openGL id on the element (vertex buffer)
-			int32_t              m_GLMatrix;           //!< openGL id on the element (transformation matrix)
-			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
-			int32_t              m_GLtexture;          //!< openGL id on the element (Texture position)
-			int32_t              m_GLtexID;            //!< openGL id on the element (texture ID)
-		private:
-			ewol::TextureFile*                   m_resource;    //!< texture resources
-			etk::Vector<vec3 >   m_coord;       //!< internal coord of the object
-			etk::Vector<vec2 >   m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf>            m_coordColor;  //!< internal color of the different point
+			ewol::TextureFile*        m_resource;    //!< texture resources
+			etk::Vector<vec3 >        m_coord;       //!< internal coord of the object
+			etk::Vector<vec2 >        m_coordTex;    //!< internal texture coordinate for every point
+			etk::Vector<draw::Colorf> m_coordColor;  //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed

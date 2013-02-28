@@ -376,7 +376,7 @@ namespace ewol {
 		// -- Drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
-			bool         m_needRegenerateDisplay; //!< the display might be done the next regeneration
+			bool m_needRegenerateDisplay; //!< the display might be done the next regeneration
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
 			 */
