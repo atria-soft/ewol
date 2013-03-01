@@ -36,7 +36,9 @@ widget::Button::Button(etk::UString newLabel, etk::UString shaperName) :
 	m_value(false),
 	m_mouseHover(false),
 	m_buttonPressed(false),
-	m_imageDisplaySize(32)
+	m_imageDisplaySize(32),
+	m_selectableAreaPos(0,0),
+	m_selectableAreaSize(0,0)
 {
 	AddEventId(ewolEventButtonPressed);
 	AddEventId(ewolEventButtonDown);
@@ -173,7 +175,7 @@ void widget::Button::OnRegenerateDisplay(void)
 		vec2 padding = m_shaper.GetPadding();
 		// to know the size of one Line : 
 		vec3 minSize = m_displayText.CalculateSize('A');
-		vec3 curentTextSize;
+		vec3 curentTextSize(0,0,0);
 		if(    false == m_toggleMode
 		    || false == m_value
 		    || m_labelToggle.Size()==0) {

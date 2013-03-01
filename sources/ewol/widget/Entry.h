@@ -34,20 +34,16 @@ namespace widget {
 	class Entry : public ewol::Widget
 	{
 		private:
-			float          m_pos[4];
-			int32_t        m_GLposText;
-			int32_t        m_GLstate;
-		private:
-			ewol::Shaper               m_shaper;
-			ewol::Text                 m_oObjectText;               //!< text display
-			etk::UString               m_data;                      //!< sting that must be displayed
-			draw::Color                m_textColorFg;               //!< Text color
-			draw::Color                m_textColorBg;               //!< Background color
-			int32_t                    m_userSize;                  //!< Display size requested by the user
-			int32_t                    m_displayStartPosition;      //!< ofset in pixel of the display of the UString
-			bool                       m_displayCursor;             //!< Cursor mus be display only when the widget has the focus
-			int32_t                    m_displayCursorPos;          //!< Cursor position in number of Char
-			int32_t                    m_displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == m_displayCursorPos chan no selection availlable
+			ewol::Shaper m_shaper;
+			ewol::Text   m_oObjectText;               //!< text display
+			etk::UString m_data;                      //!< sting that must be displayed
+			draw::Color  m_textColorFg;               //!< Text color
+			draw::Color  m_textColorBg;               //!< Background color
+			int32_t      m_userSize;                  //!< Display size requested by the user
+			int32_t      m_displayStartPosition;      //!< ofset in pixel of the display of the UString
+			bool         m_displayCursor;             //!< Cursor mus be display only when the widget has the focus
+			int32_t      m_displayCursorPos;          //!< Cursor position in number of Char
+			int32_t      m_displayCursorPosSelection; //!< Selection position end (can be befor or after cursor and == m_displayCursorPos chan no selection availlable
 		public:
 			/**
 			 * @brief Contuctor

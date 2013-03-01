@@ -20,26 +20,24 @@
 #define __class__	"Widget"
 
 ewol::Widget::Widget(void) :
-	m_userMaxSize(-1,-1)
+	m_hide(false),
+	m_zoom(1.0f),
+	m_origin(0,0),
+	m_size(10,10),
+	m_minSize(-1,-1),
+	m_userMinSize(-1,-1),
+	m_userMaxSize(-1,-1),
+	m_userExpend(false,false),
+	m_userFill(false,false),
+	m_hasFocus(false),
+	m_canFocus(false),
+	m_limitMouseEvent(3),
+	m_allowRepeateKeyboardEvent(true),
+	m_needRegenerateDisplay(true),
+	m_grabCursor(false),
+	m_cursorDisplay(ewol::cursorArrow)
 {
-	m_allowRepeateKeyboardEvent = true;
-	m_limitMouseEvent = 3;
-	m_needRegenerateDisplay = true;
-	m_origin.setValue(0,0);
-	m_size.setValue(10,10);
-	m_minSize.setValue(-1,-1);
-	// user settings :
-	m_userMinSize.setValue(-1,-1);
-	SetExpendX();
-	SetExpendY();
-	SetFillX();
-	SetFillY();
-	m_canFocus = false;
-	m_hasFocus = false;
-	m_hide = false;
-	m_zoom = 1.0;
-	m_grabCursor = false;
-	m_cursorDisplay = ewol::cursorArrow;
+	
 }
 
 
@@ -49,7 +47,6 @@ ewol::Widget::~Widget(void)
 	ewol::widgetManager::Rm(this);
 	// clean all the short-cut ...
 	ShortCutClean();
-	
 }
 
 

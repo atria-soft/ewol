@@ -47,22 +47,21 @@ namespace ewol
 				alignJustify
 			} aligneMode_te;
 		private:
-			ewol::Drawing        m_vectorialDraw;      //!< This is used to draw background selection and other things ...
+			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 		private:
-			int32_t              m_nbCharDisplayed;    //!< prevent some error in calculation size.
-			vec3 m_sizeDisplayStart;   //!< The start windows of the display.
-			vec3 m_sizeDisplayStop;    //!< The end windows of the display.
-			bool                 m_needDisplay;        //!< This just need the display and not the size rendering.
-			
-			vec3 m_position;           //!< The current position to draw
-			vec3 m_clippingPosStart;   //!< Clipping start position
-			vec3 m_clippingPosStop;    //!< Clipping stop position
-			bool                 m_clippingEnable;     //!< true if the clipping must be activated
+			int32_t m_nbCharDisplayed;    //!< prevent some error in calculation size.
+			vec3    m_sizeDisplayStart;   //!< The start windows of the display.
+			vec3    m_sizeDisplayStop;    //!< The end windows of the display.
+			bool    m_needDisplay;        //!< This just need the display and not the size rendering.
+			vec3    m_position;           //!< The current position to draw
+			vec3    m_clippingPosStart;   //!< Clipping start position
+			vec3    m_clippingPosStop;    //!< Clipping stop position
+			bool    m_clippingEnable;     //!< true if the clipping must be activated
 		private:
-			draw::Color          m_color;              //!< The text foreground color
-			draw::Color          m_colorBg;            //!< The text background color
-			draw::Color          m_colorCursor;        //!< The text cursor color
-			draw::Color          m_colorSelection;     //!< The text Selection color
+			draw::Color m_color;          //!< The text foreground color
+			draw::Color m_colorBg;        //!< The text background color
+			draw::Color m_colorCursor;    //!< The text cursor color
+			draw::Color m_colorSelection; //!< The text Selection color
 		private:
 			ewol::font::mode_te  m_mode;               //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool                 m_kerning;            //!< Kerning enable or disable on the next elements displayed

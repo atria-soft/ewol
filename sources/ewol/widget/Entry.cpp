@@ -33,21 +33,21 @@ const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
 
 
 widget::Entry::Entry(etk::UString newData) :
-	m_shaper("THEME:GUI:widgetEntry.conf")
+	m_shaper("THEME:GUI:widgetEntry.conf"),
+	m_data(""),
+	m_textColorFg(draw::color::black),
+	m_textColorBg(draw::color::white),
+	m_userSize(50),
+	m_displayStartPosition(0),
+	m_displayCursor(false),
+	m_displayCursorPos(0),
+	m_displayCursorPosSelection(0)
 {
+	m_textColorBg.a = 0xAF;
+	SetCanHaveFocus(true);
 	AddEventId(ewolEventEntryClick);
 	AddEventId(ewolEventEntryEnter);
 	AddEventId(ewolEventEntryModify);
-	m_displayStartPosition = 0;
-	m_displayCursorPos = 0;
-	m_displayCursorPosSelection = 0;
-	m_userSize = 50;
-	m_displayCursor = false;
-	m_textColorFg = draw::color::black;
-	
-	m_textColorBg = draw::color::white;
-	m_textColorBg.a = 0xAF;
-	SetCanHaveFocus(true);
 	ShortCutAdd("ctrl+w",       ewolEventEntryClean);
 	ShortCutAdd("ctrl+x",       ewolEventEntryCut);
 	ShortCutAdd("ctrl+c",       ewolEventEntryCopy);
