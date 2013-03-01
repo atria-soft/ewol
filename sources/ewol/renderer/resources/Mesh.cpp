@@ -16,12 +16,12 @@ ewol::Mesh::Mesh(etk::UString genName) :
 	m_numberOfElments(0),
 	m_texture1(NULL)
 {
-	etk::UString tmpString("DATA:textured3D.prog");
+	etk::UString tmpString("DATA:textured3D2.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
 	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
+//		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
@@ -69,11 +69,78 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// Texture :
 	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, 1);
 	// color :
-	m_GLprogram->SendAttributePointer(m_GLColor, 4/*r,g,b,a*/, m_verticesVBO, 2);
+	//m_GLprogram->SendAttributePointer(m_GLColor, 4/*r,g,b,a*/, m_verticesVBO, 2);
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
 	m_GLprogram->UnUse();
 	glDisable(GL_DEPTH_TEST);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
+}
+
+void ewol::Mesh::GenerateVBO(void)
+{
+	m_numberOfElments = 0;
+	// TODO : Set a better display system, this one is the worst I known ...
+	for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+		m_numberOfElments += m_listFaces[iii].m_nbElement;
+		// 2 possibilities : triangle or quad :
+		int32_t indice = 0;
+		vec3 tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+		vec2 tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+		m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+		m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+		
+		indice = 1;
+		tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+		m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+		m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+		
+		indice = 2;
+		tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+		m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+		m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+		m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+		
+		if (m_listFaces[iii].m_nbElement==4) {
+			indice = 0;
+			tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+			m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+			m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+			
+			indice = 2;
+			tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+			m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+			m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+			
+			indice = 3;
+			tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.x());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.y());
+			m_verticesVBO->GetRefBuffer(0).PushBack(tmpPos.z());
+			m_verticesVBO->GetRefBuffer(1).PushBack(tmpUV.x());
+			m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-tmpUV.y());
+		}
+	}
+	// update all the VBO elements ...
+	m_verticesVBO->Flush();
 }
 

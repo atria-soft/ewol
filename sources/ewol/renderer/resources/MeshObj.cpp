@@ -31,14 +31,6 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	}
 	char inputDataLine[2048];
 	
-	
-	etk::Vector<int32_t> indicesVertices;
-	etk::Vector<int32_t> indicesUv;
-	etk::Vector<int32_t> indicesNormal;
-	etk::Vector< vec3 > vertices;
-	etk::Vector< vec2 > uvTextures;
-	etk::Vector< vec3 > normals;
-	
 	int32_t lineID = 0;
 	while (NULL != fileName.FileGets(inputDataLine, 2048) )
 	{
@@ -46,19 +38,17 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		if (inputDataLine[0]=='v') {
 			if (inputDataLine[1]=='n') {
 				// Vertice normal   : vn 0.000000 0.000000 -1.000000
-				vec3 vertex(0,0,0);
-				sscanf(&inputDataLine[3], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[2] );
-				normals.PushBack(vertex);
+				// we did not use normal ==> we recalculated it if needed (some .obj does not export normal, then it is simple like this ...
 			} else if (inputDataLine[1]=='t') {
 				// Texture position : vt 0.748573 0.750412
 				vec2 vertex(0,0);
 				sscanf(&inputDataLine[3], "%f %f", &vertex.m_floats[0], &vertex.m_floats[1]);
-				uvTextures.PushBack(vertex);
+				m_listUV.PushBack(vertex);
 			} else {
 				// Vertice position : v 1.000000 -1.000000 -1.000000
 				vec3 vertex(0,0,0);
 				sscanf(&inputDataLine[2], "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[2] );
-				vertices.PushBack(vertex);
+				m_listVertex.PushBack(vertex);
 			}
 		} else if (inputDataLine[0]=='f') {
 			// face : f 5/1/1 1/2/1 4/3/1*
@@ -95,44 +85,20 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 					}
 				}
 			}
+			Face tmpFace;
+			tmpFace.m_nbElement = 3;
+			tmpFace.m_vertex[0] = vertexIndex[0];
+			tmpFace.m_uv[0] = uvIndex[0];
+			tmpFace.m_vertex[1] = vertexIndex[1];
+			tmpFace.m_uv[1] = uvIndex[1];
+			tmpFace.m_vertex[2] = vertexIndex[2];
+			tmpFace.m_uv[2] = uvIndex[2];
 			if (true==quadMode) {
-				indicesVertices.PushBack(vertexIndex[0]);
-				indicesVertices.PushBack(vertexIndex[1]);
-				indicesVertices.PushBack(vertexIndex[2]);
-				// second triangle
-				indicesVertices.PushBack(vertexIndex[0]);
-				indicesVertices.PushBack(vertexIndex[2]);
-				indicesVertices.PushBack(vertexIndex[3]);
-				indicesUv.PushBack(uvIndex[0]);
-				indicesUv.PushBack(uvIndex[1]);
-				indicesUv.PushBack(uvIndex[2]);
-				// second triangle
-				indicesUv.PushBack(uvIndex[0]);
-				indicesUv.PushBack(uvIndex[2]);
-				indicesUv.PushBack(uvIndex[3]);
-				if (12 == matches) {
-					indicesNormal.PushBack(normalIndex[0]);
-					indicesNormal.PushBack(normalIndex[1]);
-					indicesNormal.PushBack(normalIndex[2]);
-					// second triangle
-					indicesNormal.PushBack(normalIndex[0]);
-					indicesNormal.PushBack(normalIndex[2]);
-					indicesNormal.PushBack(normalIndex[3]);
-				}
-			} else {
-				indicesVertices.PushBack(vertexIndex[0]);
-				indicesVertices.PushBack(vertexIndex[1]);
-				indicesVertices.PushBack(vertexIndex[2]);
-				indicesUv.PushBack(uvIndex[0]);
-				indicesUv.PushBack(uvIndex[1]);
-				indicesUv.PushBack(uvIndex[2]);
-				if (9 == matches) {
-					indicesNormal.PushBack(normalIndex[0]);
-					indicesNormal.PushBack(normalIndex[1]);
-					indicesNormal.PushBack(normalIndex[2]);
-				}
+				tmpFace.m_nbElement++;
+				tmpFace.m_vertex[3] = vertexIndex[3];
+				tmpFace.m_uv[3] = uvIndex[3];
 			}
-			// TODO : Calculate normal when none is provided ...
+			m_listFaces.PushBack(tmpFace);
 		} else if (inputDataLine[0]=='s') {
 			// ??? : s off
 		} else if (inputDataLine[0]=='#') {
@@ -173,40 +139,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 		}
 	}
 	fileName.FileClose();
-	// update the number of element in the display ...
-	m_numberOfElments = indicesVertices.Size();
-	// For each vertex of each triangle
-	for( uint32_t iii=0; iii<indicesVertices.Size(); iii++ ){
-		// Get the indices of its attributes
-		uint32_t vertexIndex = indicesVertices[iii];
-		uint32_t uvIndex     = indicesUv[iii];
-		
-		// Put the attributes in buffers
-		m_vertices.PushBack(vertices[vertexIndex-1]);
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].x());
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].y());
-		m_verticesVBO->GetRefBuffer(0).PushBack(vertices[vertexIndex-1].z());
-		m_uvTextures.PushBack(uvTextures[uvIndex-1]);
-		m_verticesVBO->GetRefBuffer(1).PushBack(uvTextures[uvIndex-1].x());
-		m_verticesVBO->GetRefBuffer(1).PushBack(1.0f-uvTextures[uvIndex-1].y());
-		draw::Color  tmpppp(0xFFFFFFFF);
-		draw::Colorf tmppppp(tmpppp);
-		m_coordColor.PushBack(tmppppp);
-		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.r);
-		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.g);
-		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.b);
-		m_verticesVBO->GetRefBuffer(2).PushBack(tmppppp.a);
-		
-		if (indicesNormal.Size()>iii) {
-			uint32_t normalIndex = indicesNormal[iii];
-			m_normals.PushBack(normals[normalIndex-1]);
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].x());
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].y());
-			m_verticesVBO->GetRefBuffer(3).PushBack(normals[normalIndex-1].z());
-		}
-	}
-	// update all the VBO elements ...
-	m_verticesVBO->Flush();
+	GenerateVBO();
 }
 
 
