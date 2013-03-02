@@ -59,15 +59,15 @@ void ewol::VirtualBufferObject::RemoveContext(void)
 {
 	if (true==m_exist) {
 		EWOL_INFO("VBO: Remove [" << m_uniqueId << "] OGl_Id=" << m_vbo[0]
-			                                                   << "/" << m_vbo[1]
-			                                                   << "/" << m_vbo[2]
-			                                                   << "/" << m_vbo[3]
-			                                                   << "/" << m_vbo[4]
-			                                                   << "/" << m_vbo[5]
-			                                                   << "/" << m_vbo[6]
-			                                                   << "/" << m_vbo[7]
-			                                                   << "/" << m_vbo[8]
-			                                                   << "/" << m_vbo[9]);
+		                                                << "/" << m_vbo[1]
+		                                                << "/" << m_vbo[2]
+		                                                << "/" << m_vbo[3]
+		                                                << "/" << m_vbo[4]
+		                                                << "/" << m_vbo[5]
+		                                                << "/" << m_vbo[6]
+		                                                << "/" << m_vbo[7]
+		                                                << "/" << m_vbo[8]
+		                                                << "/" << m_vbo[9]);
 		glDeleteBuffers(m_nbVBO, m_vbo);
 		m_exist = false;
 		for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {

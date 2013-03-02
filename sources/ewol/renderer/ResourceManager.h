@@ -74,6 +74,7 @@ namespace ewol
 		bool Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size);
 		bool Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object);
 		bool Keep(const etk::UString& filename, ewol::MeshObj*& object);
+		bool Keep(const etk::UString& meshName, ewol::Mesh*& object);
 		bool Keep(const etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);
 		
@@ -90,6 +91,7 @@ namespace ewol
 		void Release(ewol::TextureFile*& object);
 		void Release(ewol::VirtualBufferObject*& object);
 		void Release(ewol::MeshObj*& object);
+		void Release(ewol::Mesh*& object);
 		void Release(ewol::ConfigFile*& object);
 		void Release(ewol::Colored3DObject*& object);
 	}

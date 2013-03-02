@@ -14,7 +14,6 @@ varying vec2 f_texcoord;
 
 void main(void) {
 	gl_Position = EW_MatrixTransformation * vec4(EW_coord3d, 1.0);
-	//gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * vec4(EW_coord3d, 1.0);
 	// set texture output coord
 	f_texcoord = EW_texture2d;
 	// set output color :

@@ -85,20 +85,21 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 					}
 				}
 			}
-			Face tmpFace;
-			tmpFace.m_nbElement = 3;
-			tmpFace.m_vertex[0] = vertexIndex[0];
-			tmpFace.m_uv[0] = uvIndex[0];
-			tmpFace.m_vertex[1] = vertexIndex[1];
-			tmpFace.m_uv[1] = uvIndex[1];
-			tmpFace.m_vertex[2] = vertexIndex[2];
-			tmpFace.m_uv[2] = uvIndex[2];
 			if (true==quadMode) {
-				tmpFace.m_nbElement++;
-				tmpFace.m_vertex[3] = vertexIndex[3];
-				tmpFace.m_uv[3] = uvIndex[3];
+				m_listFaces.PushBack(Face(vertexIndex[0]-1, uvIndex[0]-1,
+				                          vertexIndex[1]-1, uvIndex[1]-1,
+				                          vertexIndex[2]-1, uvIndex[2]-1,
+				                          vertexIndex[3]-1, uvIndex[3]-1));
+			} else {
+				m_listFaces.PushBack(Face(vertexIndex[0]-1, uvIndex[0]-1,
+				                          vertexIndex[1]-1, uvIndex[1]-1,
+				                          vertexIndex[2]-1, uvIndex[2]-1));
 			}
-			m_listFaces.PushBack(tmpFace);
+			/*
+			EWOL_DEBUG(" plop : " << tmpFace.m_nbElement << " ? " << m_listFaces[m_listFaces.Size()-1].m_nbElement);
+			EWOL_DEBUG("      : " << tmpFace.m_vertex[0] << " ? " << m_listFaces[m_listFaces.Size()-1].m_vertex[0]);
+			EWOL_DEBUG("      : " << tmpFace.m_uv[0] << " ? " << m_listFaces[m_listFaces.Size()-1].m_uv[0]);
+			*/
 		} else if (inputDataLine[0]=='s') {
 			// ??? : s off
 		} else if (inputDataLine[0]=='#') {
@@ -120,15 +121,7 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 				inputDataLine[strlen(inputDataLine)-1] = '\0';
 			}
 			etk::UString tmpVal(&inputDataLine[7]);
-			ivec2 tmpSize(256, 256);
-			if (NULL != m_texture1) {
-				EWOL_INFO("Release previous loaded texture ... ");
-				ewol::resource::Release(m_texture1);
-			}
-			etk::UString tmpFilename = fileName.GetRelativeFolder() + tmpVal;
-			if (false == ewol::resource::Keep(tmpFilename, m_texture1, tmpSize)) {
-				EWOL_ERROR("Can not load specific texture : " << tmpVal);
-			}
+			SetTexture(fileName.GetRelativeFolder() + tmpVal);
 		} else if(    inputDataLine[0]=='m'
 		           && inputDataLine[1]=='t'
 		           && inputDataLine[2]=='l'

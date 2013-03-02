@@ -90,9 +90,9 @@ LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
                     ../data/textured3D.frag:textured3D.frag \
                     ../data/textured3D.vert:textured3D.vert \
                     \
-                    ../data/textured3D.prog:textured3D2.prog \
-                    ../data/textured3D.frag:textured3D2.frag \
-                    ../data/textured3D.vert:textured3D2.vert \
+                    ../data/textured3D2.prog:textured3D2.prog \
+                    ../data/textured3D2.frag:textured3D2.frag \
+                    ../data/textured3D2.vert:textured3D2.vert \
                     \
                     ../data/color.prog:color.prog \
                     ../data/color.frag:color.frag \

@@ -310,6 +310,7 @@ bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& obje
 	if (NULL != object) {
 		return true;
 	}
+	EWOL_INFO("        ==> create new one...");
 	// need to crate a new one ...
 	object = new ewol::TextureFile(TmpFilename, filename, size2);
 	if (NULL == object) {
@@ -328,7 +329,23 @@ bool ewol::resource::Keep(const etk::UString& filename, ewol::MeshObj*& object)
 	}
 	object = new ewol::MeshObj(filename);
 	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
+		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??" << filename);
+		return false;
+	}
+	LocalAdd(object);
+	return true;
+}
+
+
+bool ewol::resource::Keep(const etk::UString& meshName, ewol::Mesh*& object)
+{
+	object = static_cast<ewol::Mesh*>(LocalKeep(meshName));
+	if (NULL != object) {
+		return true;
+	}
+	object = new ewol::Mesh(meshName);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh??" << meshName);
 		return false;
 	}
 	LocalAdd(object);
@@ -434,11 +451,19 @@ void ewol::resource::Release(ewol::Texture*& object)
 void ewol::resource::Release(ewol::TextureFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	//EWOL_INFO("RELEASE : TextureFile :  nb=" << object2->GetCounter());
 	Release(object2);
 	object = NULL;
 }
 
 void ewol::resource::Release(ewol::MeshObj*& object)
+{
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
+	Release(object2);
+	object = NULL;
+}
+
+void ewol::resource::Release(ewol::Mesh*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);
