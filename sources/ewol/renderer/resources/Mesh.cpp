@@ -10,6 +10,52 @@
 #include <ewol/renderer/resources/Mesh.h>
 #include <ewol/renderer/ResourceManager.h>
 
+typedef enum {
+	VERTEX_OLD,
+	VERTEX_CENTER_FACE,
+	VERTEX_CERTER_EDGE
+} vertex_te;
+
+class VertexNode {
+	private:
+		vertex_te            m_type;
+		vec3                 m_pos;
+		etk::Vector<int32_t> m_link;
+	public:
+		VertexNode(vertex_te type, const vec3& pos) :
+			m_type(type),
+			m_pos(pos)
+		{
+			
+		};
+		void AddLink(int32_t id)
+		{
+			for(int32_t iii=0; iii<m_link.Size(); iii++) {
+				if (m_link[iii] == id) {
+					return;
+				}
+			}
+			m_link.PushBack(id);
+		};
+		const vec3& GetPos(void)
+		{
+			return m_pos;
+		};
+		void SetPos(const vec3& pos)
+		{
+			m_pos = pos;
+		};
+		const vertex_te GetType(void)
+		{
+			return m_type;
+		};
+		etk::Vector<int32_t>& GetLink(void)
+		{
+			return m_link;
+		};
+	
+};
+
 
 // 3 "float" elements
 #define MESH_VBO_VERTICES  (0)
@@ -250,6 +296,21 @@ int32_t CreateOrGetNewPointId(const vec3& point, etk::Vector<vec3>& list)
 	return list.Size()-1;
 }
 
+int32_t CreateOrGetNewPointId2(vertex_te type, const vec3& point, etk::Vector<VertexNode*>& list)
+{
+	for (int32_t iii=0; iii<list.Size(); iii++) {
+		if (list[iii]->GetPos() == point) {
+			return iii;
+		}
+	}
+	VertexNode* tmpElement = new VertexNode(type, point);
+	if (NULL==tmpElement) {
+		EWOL_CRITICAL ("allocation error");
+	}
+	list.PushBack(tmpElement);
+	return list.Size()-1;
+}
+
 int32_t CreateOrGetNewTexId(const vec2& point, etk::Vector<vec2>& list)
 {
 	for (int32_t iii=0; iii<list.Size(); iii++) {
@@ -263,108 +324,317 @@ int32_t CreateOrGetNewTexId(const vec2& point, etk::Vector<vec2>& list)
 
 void ewol::Mesh::InternalSubdivide(bool smooth)
 {
-	//Copy the mesh for modify this one and not his parrent (that one is needed for smoothing)
-	etk::Vector<vec3> listVertex(m_listVertex);
-	etk::Vector<vec2> listUV(m_listUV);
-	etk::Vector<Face> listFaces; // no face here ...
-	etk::Vector<int32_t> listElementHalfPoint(16);// preallocate at 16..
-	etk::Vector<int32_t> listElementHalfUV(16);// preallocate at 16..
-	
-	for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
-		vec3 centerPoint;
-		vec2 centerTex;
-		if (3==m_listFaces[iii].m_nbElement) {
-			// create the center point:
-			centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[1]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[2]] ) / vec3(3,3,3);
-			// create the center Texture coord:
-			centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
-			              + listUV[m_listFaces[iii].m_uv[1]]
-			              + listUV[m_listFaces[iii].m_uv[2]] ) / vec2(3,3);
-			/*
-			                                                         
-			                o                          o             
-			               / \                        / \            
-			              /   \                      /   \           
-			             /     \                    /     \          
-			            /       \                  /       \         
-			           /         \       ==>      o..     ..o        
-			          /           \              /   ''o''   \       
-			         /             \            /      |      \      
-			        /               \          /       |       \     
-			       /                 \        /        |        \    
-			      o-------------------o      o---------o---------o   
-			                                                         
-			*/
-		} else {
-			// create the center point:
-			centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[1]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[2]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[3]] ) / vec3(4,4,4);
-			// create the center Texture coord:
-			centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
-			              + listUV[m_listFaces[iii].m_uv[1]]
-			              + listUV[m_listFaces[iii].m_uv[2]]
-			              + listUV[m_listFaces[iii].m_uv[3]] ) / vec2(4,4);
-			/*
-			                                                              
-			     o---------------------o         o----------o----------o  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |   ==>   o----------o----------o  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     o---------------------o         o----------o----------o  
-			                                                              
-			*/
-		}
+	if (false==smooth) {
+		//Copy the mesh for modify this one and not his parrent (that one is needed for smoothing)
+		etk::Vector<vec3> listVertex(m_listVertex);
+		etk::Vector<vec2> listUV(m_listUV);
+		etk::Vector<Face> listFaces; // no face here ...
+		etk::Vector<int32_t> listElementHalfPoint(16);// preallocate at 16..
+		etk::Vector<int32_t> listElementHalfUV(16);// preallocate at 16..
 		
-		int32_t newCenterVertexID = CreateOrGetNewPointId(centerPoint, listVertex);
-		int32_t newCenterTexID = CreateOrGetNewTexId(centerTex, listUV);
-		
-		listElementHalfPoint.Clear();
-		listElementHalfUV.Clear();
-		// generate list f the forder elements
-		for (int32_t jjj=0; jjj<m_listFaces[iii].m_nbElement ; jjj++) {
-			// for the last element finding at the good position...
-			int32_t cyclicID = (jjj+1) % m_listFaces[iii].m_nbElement;
+		for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+			vec3 centerPoint;
+			vec2 centerTex;
+			if (3==m_listFaces[iii].m_nbElement) {
+				// create the center point:
+				centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[1]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[2]] ) / vec3(3,3,3);
+				// create the center Texture coord:
+				centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
+				              + listUV[m_listFaces[iii].m_uv[1]]
+				              + listUV[m_listFaces[iii].m_uv[2]] ) / vec2(3,3);
+				/*
+				                                                         
+				                o                          o             
+				               / \                        / \            
+				              /   \                      /   \           
+				             /     \                    /     \          
+				            /       \                  /       \         
+				           /         \       ==>      o..     ..o        
+				          /           \              /   ''o''   \       
+				         /             \            /      |      \      
+				        /               \          /       |       \     
+				       /                 \        /        |        \    
+				      o-------------------o      o---------o---------o   
+				                                                         
+				*/
+			} else {
+				// create the center point:
+				centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[1]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[2]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[3]] ) / vec3(4,4,4);
+				// create the center Texture coord:
+				centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
+				              + listUV[m_listFaces[iii].m_uv[1]]
+				              + listUV[m_listFaces[iii].m_uv[2]]
+				              + listUV[m_listFaces[iii].m_uv[3]] ) / vec2(4,4);
+				/*
+				                                                              
+				     o---------------------o         o----------o----------o  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |   ==>   o----------o----------o  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     o---------------------o         o----------o----------o  
+				                                                              
+				*/
+			}
 			
-			listElementHalfPoint.PushBack(m_listFaces[iii].m_vertex[jjj]);
-			listElementHalfUV.PushBack(m_listFaces[iii].m_uv[jjj]);
-			// calculate and add middle point : 
-			vec3 middlePoint = (   m_listVertex[m_listFaces[iii].m_vertex[jjj]]
-			                     + m_listVertex[m_listFaces[iii].m_vertex[cyclicID]] ) / 2.0f;
-			int32_t newMiddleVertexID = CreateOrGetNewPointId(middlePoint, listVertex);
-			listElementHalfPoint.PushBack(newMiddleVertexID);
-			// create the center Texture coord:
-			vec2 middleTex = (   listUV[m_listFaces[iii].m_uv[jjj]]
-			                   + listUV[m_listFaces[iii].m_uv[cyclicID]]) / 2.0f;
-			int32_t newMiddleTexID = CreateOrGetNewTexId(middleTex, listUV);
-			listElementHalfUV.PushBack(newMiddleTexID);
+			int32_t newCenterVertexID = CreateOrGetNewPointId(centerPoint, listVertex);
+			int32_t newCenterTexID = CreateOrGetNewTexId(centerTex, listUV);
+			
+			listElementHalfPoint.Clear();
+			listElementHalfUV.Clear();
+			// generate list f the forder elements
+			for (int32_t jjj=0; jjj<m_listFaces[iii].m_nbElement ; jjj++) {
+				// for the last element finding at the good position...
+				int32_t cyclicID = (jjj+1) % m_listFaces[iii].m_nbElement;
+				
+				listElementHalfPoint.PushBack(m_listFaces[iii].m_vertex[jjj]);
+				listElementHalfUV.PushBack(m_listFaces[iii].m_uv[jjj]);
+				// calculate and add middle point : 
+				vec3 middlePoint = (   m_listVertex[m_listFaces[iii].m_vertex[jjj]]
+				                     + m_listVertex[m_listFaces[iii].m_vertex[cyclicID]] ) / 2.0f;
+				int32_t newMiddleVertexID = CreateOrGetNewPointId(middlePoint, listVertex);
+				listElementHalfPoint.PushBack(newMiddleVertexID);
+				// create the center Texture coord:
+				vec2 middleTex = (   listUV[m_listFaces[iii].m_uv[jjj]]
+				                   + listUV[m_listFaces[iii].m_uv[cyclicID]]) / 2.0f;
+				int32_t newMiddleTexID = CreateOrGetNewTexId(middleTex, listUV);
+				listElementHalfUV.PushBack(newMiddleTexID);
+			}
+			// generate faces:
+			for (int32_t jjj=0; jjj<listElementHalfPoint.Size() ; jjj+=2) {
+				int32_t cyclicID = (jjj-1 + listElementHalfPoint.Size()) % listElementHalfPoint.Size();
+				listFaces.PushBack(Face(listElementHalfPoint[jjj], listElementHalfUV[jjj],
+				                        listElementHalfPoint[jjj+1], listElementHalfUV[jjj+1],
+				                        newCenterVertexID, newCenterTexID,
+				                        listElementHalfPoint[cyclicID], listElementHalfUV[cyclicID]) );
+			}
 		}
-		// generate faces:
-		for (int32_t jjj=0; jjj<listElementHalfPoint.Size() ; jjj+=2) {
-			int32_t cyclicID = (jjj-1 + listElementHalfPoint.Size()) % listElementHalfPoint.Size();
-			listFaces.PushBack(Face(listElementHalfPoint[jjj], listElementHalfUV[jjj],
-			                        listElementHalfPoint[jjj+1], listElementHalfUV[jjj+1],
-			                        newCenterVertexID, newCenterTexID,
-			                        listElementHalfPoint[cyclicID], listElementHalfUV[cyclicID]) );
+		// copy all the element in the internal structure : 
+		m_listVertex = listVertex;
+		m_listUV = listUV;
+		m_listFaces = listFaces;
+	} else {
+		// smooth mode
+		//Copy the mesh for modify this one and not his parrent (that one is needed for smoothing)
+		etk::Vector<VertexNode*> listVertex;
+		for(int32_t iii=0; iii<m_listVertex.Size(); iii++) {
+			VertexNode* tmpElement = new VertexNode(VERTEX_OLD, m_listVertex[iii]);
+			listVertex.PushBack(tmpElement);
 		}
-	}
-	// TODO SMOOTH :
-	if (true==smooth) {
+		etk::Vector<vec2> listUV(m_listUV);
+		etk::Vector<Face> listFaces; // no face here ...
+		etk::Vector<int32_t> listElementHalfPoint(16);// preallocate at 16..
+		etk::Vector<int32_t> listElementHalfUV(16);// preallocate at 16..
 		
+		for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+			vec3 centerPoint;
+			vec2 centerTex;
+			if (3==m_listFaces[iii].m_nbElement) {
+				// create the center point:
+				centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[1]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[2]] ) / vec3(3,3,3);
+				// create the center Texture coord:
+				centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
+				              + listUV[m_listFaces[iii].m_uv[1]]
+				              + listUV[m_listFaces[iii].m_uv[2]] ) / vec2(3,3);
+				/*
+				                                                         
+				                o                          o             
+				               / \                        / \            
+				              /   \                      /   \           
+				             /     \                    /     \          
+				            /       \                  /       \         
+				           /         \       ==>      o..     ..o        
+				          /           \              /   ''o''   \       
+				         /             \            /      |      \      
+				        /               \          /       |       \     
+				       /                 \        /        |        \    
+				      o-------------------o      o---------o---------o   
+				                                                         
+				*/
+			} else {
+				// create the center point:
+				centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[1]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[2]]
+				                + m_listVertex[m_listFaces[iii].m_vertex[3]] ) / vec3(4,4,4);
+				// create the center Texture coord:
+				centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
+				              + listUV[m_listFaces[iii].m_uv[1]]
+				              + listUV[m_listFaces[iii].m_uv[2]]
+				              + listUV[m_listFaces[iii].m_uv[3]] ) / vec2(4,4);
+				/*
+				                                                              
+				     o---------------------o         o----------o----------o  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |   ==>   o----------o----------o  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     |                     |         |          |          |  
+				     o---------------------o         o----------o----------o  
+				                                                              
+				*/
+			}
+			
+			int32_t newCenterVertexID = CreateOrGetNewPointId2(VERTEX_CENTER_FACE, centerPoint, listVertex);
+			int32_t newCenterTexID = CreateOrGetNewTexId(centerTex, listUV);
+			
+			listElementHalfPoint.Clear();
+			listElementHalfUV.Clear();
+			// generate list f the forder elements
+			for (int32_t jjj=0; jjj<m_listFaces[iii].m_nbElement ; jjj++) {
+				// for the last element finding at the good position...
+				int32_t cyclicID = (jjj+1) % m_listFaces[iii].m_nbElement;
+				
+				listElementHalfPoint.PushBack(m_listFaces[iii].m_vertex[jjj]);
+				listElementHalfUV.PushBack(m_listFaces[iii].m_uv[jjj]);
+				// calculate and add middle point : 
+				vec3 middlePoint = (   m_listVertex[m_listFaces[iii].m_vertex[jjj]]
+				                     + m_listVertex[m_listFaces[iii].m_vertex[cyclicID]] ) / 2.0f;
+				int32_t newMiddleVertexID = CreateOrGetNewPointId2(VERTEX_CERTER_EDGE, middlePoint, listVertex);
+				// add center : at the middle point
+				listVertex[newMiddleVertexID]->AddLink(newCenterVertexID);
+				// add center of edge end face at the old element point :
+				listVertex[m_listFaces[iii].m_vertex[jjj]]->AddLink(newCenterVertexID);
+				listVertex[m_listFaces[iii].m_vertex[jjj]]->AddLink(newMiddleVertexID);
+				listVertex[m_listFaces[iii].m_vertex[cyclicID]]->AddLink(newCenterVertexID);
+				listVertex[m_listFaces[iii].m_vertex[cyclicID]]->AddLink(newMiddleVertexID);
+				// list of all middle point to recontitute the faces
+				listElementHalfPoint.PushBack(newMiddleVertexID);
+				// create the center Texture coord:
+				vec2 middleTex = (   listUV[m_listFaces[iii].m_uv[jjj]]
+				                   + listUV[m_listFaces[iii].m_uv[cyclicID]]) / 2.0f;
+				int32_t newMiddleTexID = CreateOrGetNewTexId(middleTex, listUV);
+				listElementHalfUV.PushBack(newMiddleTexID);
+			}
+			// generate faces:
+			//EWOL_DEBUG(" ==> Generatedd faces");
+			for (int32_t jjj=0; jjj<listElementHalfPoint.Size() ; jjj+=2) {
+				int32_t cyclicID = (jjj-1 + listElementHalfPoint.Size()) % listElementHalfPoint.Size();
+				listFaces.PushBack(Face(listElementHalfPoint[jjj], listElementHalfUV[jjj],
+				                        listElementHalfPoint[jjj+1], listElementHalfUV[jjj+1],
+				                        newCenterVertexID, newCenterTexID,
+				                        listElementHalfPoint[cyclicID], listElementHalfUV[cyclicID]) );
+			}
+		}
+		EWOL_DEBUG(" ==> Update middle edge points position");
+		// reposition the Middle point of the edge
+		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
+			if(NULL == listVertex[iii]) {
+				continue;
+			}
+			if (VERTEX_CERTER_EDGE == listVertex[iii]->GetType()) {
+				// generate barycenter of all link point if > 1...
+				etk::Vector<int32_t>& link = listVertex[iii]->GetLink();
+				if (1<link.Size()) {
+					int32_t nbDivide = 1;
+					vec3 posBase = listVertex[iii]->GetPos();
+					for(int32_t jjj=0; jjj<link.Size(); jjj++) {
+						if (link[jjj] >= listVertex.Size()) {
+							EWOL_ERROR("Id is out of bounds ... : " << iii << " link=" << link[jjj] << " / " << listVertex.Size());
+							continue;
+						}
+						if(NULL == listVertex[link[jjj]]) {
+							continue;
+						}
+						if (VERTEX_CENTER_FACE != listVertex[link[jjj]]->GetType()) {
+							EWOL_ERROR("Center face error type ..." << (int32_t)listVertex[link[jjj]]->GetType());
+							continue;
+						}
+						nbDivide++;
+						posBase += listVertex[link[jjj]]->GetPos();
+					}
+					posBase /= nbDivide;
+					// update the position :
+					listVertex[iii]->SetPos(posBase);
+				}
+			}
+		}
+		EWOL_DEBUG(" ==> Update old points position");
+		/*
+		   Formule de calcule : 
+		      - calculate F the barycenter of k Face center nearest
+		      - Calculate R the barycenter of k Edge point nearest
+		      - Move P with equation :     F + 2R + (k-3)P 
+		                                  -----------------
+		                                           k
+		*/
+		// reposition the old pont of the system
+		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
+			if(    NULL != listVertex[iii]
+			    && VERTEX_OLD == listVertex[iii]->GetType()) {
+				vec3 val_P = listVertex[iii]->GetPos();
+				vec3 val_F(0,0,0);
+				vec3 val_R(0,0,0);
+				int32_t countFace = 0;
+				int32_t countEdge = 0;
+				// generate barycenter of all link point if > 1...
+				etk::Vector<int32_t>& link = listVertex[iii]->GetLink();
+				for(int32_t jjj=0; jjj<link.Size(); jjj++) {
+					if (link[jjj] >= listVertex.Size()) {
+						EWOL_ERROR("Id is out of bounds ... : " << iii << " link=" << link[jjj] << " / " << listVertex.Size());
+						continue;
+					}
+					if(NULL == listVertex[link[jjj]]) {
+						continue;
+					}
+					if (VERTEX_OLD == listVertex[link[jjj]]->GetType()) {
+						EWOL_ERROR("Center face error type ... old???");
+						continue;
+					}
+					if (VERTEX_CENTER_FACE == listVertex[link[jjj]]->GetType()) {
+						countFace++;
+						val_F += listVertex[link[jjj]]->GetPos();
+					} else {
+						countEdge++;
+						val_R += listVertex[link[jjj]]->GetPos();
+					}
+				}
+				val_F /= countFace;
+				val_R /= countEdge;
+				if (countFace != countEdge) {
+					EWOL_WARNING("Case not coded, result not predictible ...");
+				} else {
+					vec3 newPos = (val_F + 2*val_R + (countFace-3)*val_P)/countFace;
+					if (newPos != val_P) {
+						EWOL_DEBUG("update position : " << newPos << " <== " << val_P << " count=" << countFace);
+					}
+					// update the position :
+					listVertex[iii]->SetPos(newPos);
+				}
+			}
+		}
+		EWOL_DEBUG(" ==> Back to the normal list of element:");
+		// copy all the element in the internal structure : 
+		m_listUV = listUV;
+		m_listFaces = listFaces;
+		m_listVertex.Clear();
+		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
+			if (NULL != listVertex[iii]) {
+				m_listVertex.PushBack(listVertex[iii]->GetPos());
+				delete(listVertex[iii]);
+				listVertex[iii] = NULL;
+			}
+		}
+		listVertex.Clear();
 	}
-	// copy all the element in the internal structure : 
-	m_listVertex = listVertex;
-	m_listUV = listUV;
-	m_listFaces = listFaces;
 }

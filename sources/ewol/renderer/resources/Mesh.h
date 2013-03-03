@@ -16,9 +16,6 @@
 #include <ewol/renderer/resources/Program.h>
 #include <ewol/renderer/resources/VirtualBufferObject.h>
 
-// note using modify Half-Edge system to store data (modify is for storing UV mapping too
-// help on : http://www.flipcode.com/archives/The_Half-Edge_Data_Structure.shtml
-
 namespace ewol
 {
 	class Face
