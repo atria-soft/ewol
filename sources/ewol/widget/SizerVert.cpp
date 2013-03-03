@@ -91,6 +91,7 @@ bool widget::SizerVert::CalculateMinSize(void)
 				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			//EWOL_DEBUG("VERT : NewMinSize=" << tmpSize);
 			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
 			m_minSize.setY(m_minSize.y() + tmpSize.y());
 			if (tmpSize.x()>m_minSize.x()) {
@@ -98,8 +99,7 @@ bool widget::SizerVert::CalculateMinSize(void)
 			}
 		}
 	}
-	//EWOL_DEBUG("Result : expend  X="<< m_userExpend.x << " Y=" << m_userExpend.y);
-	//EWOL_DEBUG("         minSize ("<< m_minSize.x << "," << m_minSize.y << ")");
+	//EWOL_DEBUG("Vert Result : expend="<< m_userExpend << "  minSize="<< m_minSize);
 	return true;
 }
 

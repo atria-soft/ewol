@@ -82,11 +82,11 @@ namespace ewol
 			int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
 			int32_t m_cursorPos;         //!< Cursor position (default no cursor ==> -100)
 		private:
-			ewol::TexturedFont*                  m_font;          //!< Font resources
+			ewol::TexturedFont*       m_font;          //!< Font resources
 		private: // Text
-			etk::Vector<vec2 >   m_coord;         //!< internal coord of the object
-			etk::Vector<vec2 >   m_coordTex;      //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf>            m_coordColor;    //!< internal color of the different point
+			etk::Vector<vec2 >        m_coord;         //!< internal coord of the object
+			etk::Vector<vec2 >        m_coordTex;      //!< internal texture coordinate for every point
+			etk::Vector<draw::Colorf> m_coordColor;    //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed

@@ -21,7 +21,7 @@ namespace widget {
 			virtual ~SizerVert(void);
 			void           LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                           m_lockExpendContamination;
+			bool                       m_lockExpendContamination;
 			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
 			virtual void   SubWidgetRemoveAll(void);

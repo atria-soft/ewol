@@ -35,6 +35,10 @@ ewol::Shaper::Shaper(etk::UString shaperName) :
 	m_resourceTexture(NULL),
 	m_nextStatusRequested(-1),
 	m_time(-1),
+	m_propertyOrigin(0,0),
+	m_propertySize(0,0),
+	m_propertyInsidePosition(0,0),
+	m_propertyInsideSize(0,0),
 	m_stateOld(0),
 	m_stateNew(0),
 	m_stateTransition(1.0)
@@ -250,7 +254,7 @@ void ewol::Shaper::SetInsidePos(vec2 newInsidePos)
 
 vec2 ewol::Shaper::GetPadding(void)
 {
-	vec2 padding;
+	vec2 padding(0,0);
 	if (m_config!=NULL) {
 		padding.setValue(m_config->GetFloat(m_confIdPaddingX),
 		                 m_config->GetFloat(m_confIdPaddingY));

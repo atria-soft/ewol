@@ -88,14 +88,14 @@ bool widget::SizerHori::CalculateMinSize(void)
 				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			//EWOL_DEBUG("HORI : NewMinSize=" << tmpSize);
 			m_minSize.setX(m_minSize.x() + tmpSize.x());
 			if (tmpSize.y()>m_minSize.y()) {
 				m_minSize.setY(tmpSize.y());
 			}
 		}
 	}
-	//EWOL_DEBUG("Result : expend  X="<< m_userExpend.x << " Y=" << m_userExpend.y);
-	//EWOL_DEBUG("         minSize ("<< m_minSize.x << "," << m_minSize.y << ")");
+	//EWOL_DEBUG("Hori Result : expend="<< m_userExpend << "  minSize="<< m_minSize);
 	return true;
 }
 

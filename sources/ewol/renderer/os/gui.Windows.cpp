@@ -74,8 +74,8 @@ void guiInterface::ChangeSize(ivec2 size)
 {
 	int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
 	int title_size = GetSystemMetrics(SM_CYCAPTION);
-	size.x += border_thickness*2;
-	size.y += border_thickness*2 + title_size;
+	size.setValue(size.x() + border_thickness*2,
+	              size.y() + border_thickness*2 + title_size);
 	//m_currentHeight = size.y;
 	// TODO : Later
 }
@@ -88,8 +88,7 @@ void guiInterface::ChangePos(ivec2 pos)
 void guiInterface::GetAbsPos(ivec2& size)
 {
 	// TODO : Later
-	size.x = 0;
-	size.y = 0;
+	size.setValue(0,0);
 }
 
 
@@ -433,30 +432,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			buttonIsDown = false;
 		case WM_LBUTTONDOWN:
 			mouseButtonId = 1;
-			pos.x = GET_X_LPARAM(lParam);
-			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
+			pos.setValue(GET_X_LPARAM(lParam),
+			             m_currentHeight-GET_Y_LPARAM(lParam));
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x(), (float)pos.y());
 			return 0;
 		
 		case WM_MBUTTONUP:
 			buttonIsDown = false;
 		case WM_MBUTTONDOWN:
 			mouseButtonId = 2;
-			pos.x = GET_X_LPARAM(lParam);
-			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
+			pos.setValue(GET_X_LPARAM(lParam),
+			             m_currentHeight-GET_Y_LPARAM(lParam));
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x(), (float)pos.y());
 			return 0;
 		
 		case WM_RBUTTONUP:
 			buttonIsDown = false;
 		case WM_RBUTTONDOWN:
 			mouseButtonId = 3;
-			pos.x = GET_X_LPARAM(lParam);
-			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
+			pos.setValue(GET_X_LPARAM(lParam),
+			             m_currentHeight-GET_Y_LPARAM(lParam));
 			inputIsPressed[mouseButtonId] = buttonIsDown;
-			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseState(mouseButtonId, buttonIsDown, (float)pos.x(), (float)pos.y());
 			return 0;
 		
 		case WM_MOUSEWHEEL:
@@ -467,25 +466,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 				EWOL_DEBUG("event SCROOL DOWN");
 				mouseButtonId = 5;
 			}
-			pos.x = GET_X_LPARAM(lParam);
-			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
-			eSystem::SetMouseState(mouseButtonId, true,  (float)pos.x, (float)pos.y);
-			eSystem::SetMouseState(mouseButtonId, false, (float)pos.x, (float)pos.y);
+			pos.setValue(GET_X_LPARAM(lParam),
+			             m_currentHeight-GET_Y_LPARAM(lParam));
+			eSystem::SetMouseState(mouseButtonId, true,  (float)pos.x(), (float)pos.y());
+			eSystem::SetMouseState(mouseButtonId, false, (float)pos.x(), (float)pos.y());
 			return 0;
 		
 		case WM_MOUSEHOVER:
 		case WM_MOUSEMOVE:
-			pos.x = GET_X_LPARAM(lParam);
-			pos.y = m_currentHeight-GET_Y_LPARAM(lParam);
+			pos.setValue(GET_X_LPARAM(lParam),
+			             m_currentHeight-GET_Y_LPARAM(lParam));
 			for (int32_t iii=0; iii<NB_MAX_INPUT ; iii++) {
 				if (true == inputIsPressed[iii]) {
 					EWOL_VERBOSE("Windows event: bt=" << iii << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
-					eSystem::SetMouseMotion(iii, (float)pos.x, (float)pos.y);
+					eSystem::SetMouseMotion(iii, (float)pos.x(), (float)pos.y());
 					return 0;
 				}
 			}
 			EWOL_VERBOSE("Windows event: bt=" << 0 << " " << message << " = \"WM_MOUSEMOVE\" " << pos );
-			eSystem::SetMouseMotion(0, (float)pos.x, (float)pos.y);
+			eSystem::SetMouseMotion(0, (float)pos.x(), (float)pos.y());
 			return 0;
 		
 		default:

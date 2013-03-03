@@ -46,16 +46,16 @@ namespace ewol
 			// For the Image :
 			ewol::TextureFile* m_resourceTexture; //!< texture resources (for the image)
 			// internal needed data :
-			int32_t              m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
-			int64_t              m_time;                   //!< The last time of the dispaly (-1 if nothing progressing)
-			vec2 m_propertyOrigin;         //!< widget origin
-			vec2 m_propertySize;           //!< widget size
-			vec2 m_propertyInsidePosition; //!< internal subwidget position
-			vec2 m_propertyInsideSize;     //!< internal subwidget size
-			int32_t              m_stateOld;               //!< previous state
-			int32_t              m_stateNew;               //!< destination state
-			float                m_stateTransition;        //!< working state between 2 states
-			vec2 m_coord[6];               //!< the double triangle coordonates
+			int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
+			int64_t m_time;                   //!< The last time of the dispaly (-1 if nothing progressing)
+			vec2    m_propertyOrigin;         //!< widget origin
+			vec2    m_propertySize;           //!< widget size
+			vec2    m_propertyInsidePosition; //!< internal subwidget position
+			vec2    m_propertyInsideSize;     //!< internal subwidget size
+			int32_t m_stateOld;               //!< previous state
+			int32_t m_stateNew;               //!< destination state
+			float   m_stateTransition;        //!< working state between 2 states
+			vec2    m_coord[6];               //!< the double triangle coordonates
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
