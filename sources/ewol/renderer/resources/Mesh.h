@@ -56,6 +56,9 @@ namespace ewol
 	};
 	class Mesh : public ewol::Resource
 	{
+		private:
+			bool           m_enableFaceNormal;
+			bool           m_enableVertexNormal;
 		protected:
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;
@@ -66,8 +69,10 @@ namespace ewol
 			int32_t        m_numberOfElments;
 		protected:
 			etk::Vector<vec3> m_listVertex; //!< List of all vertex in the element
-			etk::Vector<vec2> m_listUV;     //!< List of all UV point in the mesh (for the specify texture)
-			etk::Vector<Face> m_listFaces;  //!< List of all Face for the mesh
+			etk::Vector<vec2> m_listUV; //!< List of all UV point in the mesh (for the specify texture)
+			etk::Vector<Face> m_listFaces; //!< List of all Face for the mesh
+			etk::Vector<vec3> m_listFacesNormal; //!< List of all Face normal, when calculated
+			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
 		protected:
 			ewol::VirtualBufferObject*  m_verticesVBO;
 			ewol::TextureFile*          m_texture1;
@@ -77,7 +82,6 @@ namespace ewol
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);
 			void GenerateVBO(void);
-			
 		public:
 			// some addition basic funtion that permit to create or overwrite some caracterstics :
 			void CreateCube(void);
@@ -85,6 +89,16 @@ namespace ewol
 			void Subdivide(int32_t numberOfTime, bool smooth);
 		protected:
 			void InternalSubdivide(bool smooth);
+		public:
+			void StatusFaceNormal(bool newState) {
+				m_enableFaceNormal = newState;
+			}
+			void StatusVertexNormal(bool newState) {
+				m_enableVertexNormal  = newState;
+			}
+		private:
+			void CalculateNormaleFace(void);
+			void CalculateNormaleEdge(void);
 	};
 };
 

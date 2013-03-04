@@ -69,6 +69,8 @@ class VertexNode {
 
 ewol::Mesh::Mesh(etk::UString genName) :
 	ewol::Resource(genName),
+	m_enableFaceNormal(false),
+	m_enableVertexNormal(false),
 	m_numberOfElments(0),
 	m_texture1(NULL)
 {
@@ -81,7 +83,8 @@ ewol::Mesh::Mesh(etk::UString genName) :
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
 	}
-	ewol::resource::Keep("w", m_verticesVBO);
+	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
+	ewol::resource::Keep("w-fff", m_verticesVBO);
 }
 
 ewol::Mesh::~Mesh(void)
@@ -129,6 +132,49 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	glDisable(GL_DEPTH_TEST);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
+// normal calculation of the normal face is really easy :
+void ewol::Mesh::CalculateNormaleFace(void)
+{
+	m_listFacesNormal.Clear();
+	// TODO : Preallocation of the vertex :
+	
+	if(    true==m_enableFaceNormal
+	    || true==m_enableVertexNormal) {
+		for(int32_t iii=0 ; iii<m_listFaces.Size() ; iii++) {
+			// for all case, We use only the 3 vertex for quad element, in theory 3D modeler export element in triangle if it is not a real plane.
+			vec3 normal = btCross(m_listVertex[m_listFaces[iii].m_vertex[0]]-m_listVertex[m_listFaces[iii].m_vertex[1]],
+			                      m_listVertex[m_listFaces[iii].m_vertex[1]]-m_listVertex[m_listFaces[iii].m_vertex[2]]);
+			m_listFacesNormal.PushBack(normal.normalized());
+		}
+	}
+}
+
+void ewol::Mesh::CalculateNormaleEdge(void)
+{
+	m_listVertexNormal.Clear();
+	// TODO : Preallocation of the vertex :
+	
+	if(true==m_enableVertexNormal) {
+		for(int32_t iii=0 ; iii<m_listVertex.Size() ; iii++) {
+			vec3 normal(0,0,0);
+			// add the vertex from all the element in the list for face when the element in the face ...
+			for(int32_t jjj=0 ; jjj<m_listFaces.Size() ; jjj++) {
+				if(    m_listFaces[jjj].m_vertex[0] == iii
+				    || m_listFaces[jjj].m_vertex[1] == iii
+				    || m_listFaces[jjj].m_vertex[2] == iii
+				    || (    m_listFaces[jjj].m_nbElement == 4
+				         && m_listFaces[jjj].m_vertex[3] == iii) ) {
+					normal += m_listFacesNormal[jjj];
+				}
+			}
+			if (normal == vec3(0,0,0)) {
+				m_listVertexNormal.PushBack(vec3(1,1,1));
+			} else {
+				m_listVertexNormal.PushBack(normal.normalized());
+			}
+		}
+	}
+}
 
 // for debugging ...
 //#define PRINT_HALF (1)
@@ -136,6 +182,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 void ewol::Mesh::GenerateVBO(void)
 {
 	m_numberOfElments = 0;
+	// calculate the normal of all faces if needed
+	CalculateNormaleFace();
+	CalculateNormaleEdge();
 	// TODO : Set a better display system, this one is the worst I known ...
 	for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
 		#ifdef PRINT_HALF
@@ -425,7 +474,7 @@ void ewol::Mesh::InternalSubdivide(bool smooth)
 		}
 	}
 	if (true==smooth) {
-		EWOL_DEBUG(" ==> Update middle edge points position");
+		//EWOL_DEBUG(" ==> Update middle edge points position");
 		// reposition the Middle point of the edge
 		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
 			if(NULL == listVertex[iii]) {
@@ -458,7 +507,7 @@ void ewol::Mesh::InternalSubdivide(bool smooth)
 				}
 			}
 		}
-		EWOL_DEBUG(" ==> Update old points position");
+		//EWOL_DEBUG(" ==> Update old points position");
 		/*
 		   Formule de calcule : 
 		      - calculate F the barycenter of k Face center nearest
@@ -504,9 +553,11 @@ void ewol::Mesh::InternalSubdivide(bool smooth)
 					EWOL_WARNING("Case not coded, result not predictible ...");
 				} else {
 					vec3 newPos = (val_F + 2*val_R + (countFace-3)*val_P)/countFace;
+					/*
 					if (newPos != val_P) {
 						EWOL_DEBUG("update position : " << newPos << " <== " << val_P << " count=" << countFace);
 					}
+					*/
 					// update the position :
 					listVertex[iii]->SetPos(newPos);
 				}
