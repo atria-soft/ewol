@@ -57,6 +57,10 @@ namespace ewol
 		 */
 		void ContextHasBeenDestroyed(void);
 		
+		// internal API to extent eResources in extern Soft
+		ewol::Resource* LocalKeep(const etk::UString& filename);
+		void LocalAdd(ewol::Resource* object);
+		
 		/**
 		 * @brief Load the specify resources type
 		 * @param[in] filename The filename of the resources

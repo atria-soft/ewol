@@ -97,3 +97,34 @@ void ewol::VirtualBufferObject::Flush(void)
 	ewol::resource::Update(this);
 }
 
+void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const ivec3& data)
+{
+	EWOL_ERROR("Type does not supported yet...");
+	/*
+	m_buffer[id].PushBack(data.x());
+	m_buffer[id].PushBack(data.y());
+	m_buffer[id].PushBack(data.z());
+	*/
+}
+
+void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const vec3& data)
+{
+	m_buffer[id].PushBack(data.x());
+	m_buffer[id].PushBack(data.y());
+	m_buffer[id].PushBack(data.z());
+}
+
+void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const ivec2& data)
+{
+	EWOL_ERROR("Type does not supported yet...");
+	/*
+	m_buffer[id].PushBack(data.x());
+	m_buffer[id].PushBack(data.y());
+	*/
+}
+
+void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const vec2& data)
+{
+	m_buffer[id].PushBack(data.x());
+	m_buffer[id].PushBack(data.y());
+}

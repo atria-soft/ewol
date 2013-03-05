@@ -10,6 +10,7 @@
 #define __OPEN_GL__VIRTUAL_BUFFER_OBJECT_H__
 
 #include <etk/types.h>
+#include <etk/math/Vector2D.h>
 #include <ewol/debug.h>
 #include <ewol/renderer/resources/Resource.h>
 #include <ewol/renderer/openGL.h>
@@ -33,7 +34,7 @@ namespace ewol
 			 * @brief Constructor of this VBO.
 			 * @param[in] accesMode Acces mode : ???
 			 */
-			VirtualBufferObject(const etk::UString& accesMode, int32_t nbElement=2);
+			VirtualBufferObject(const etk::UString& accesMode, int32_t nbElement=3);
 			/**
 			 * @brief Destructor of this VBO.
 			 */
@@ -50,9 +51,34 @@ namespace ewol
 			GLuint GetGL_ID(int32_t id) { return m_vbo[id]; };
 			/**
 			 * @brief Get a reference on hte buffer data for this VBO.
+			 * @param[in] id Id of the buffer requested
 			 * @return A reference on the data.
 			 */
 			etk::Vector<float>& GetRefBuffer(int32_t id) { return m_buffer[id]; };
+			/**
+			 * @brief push data on a buffer with a custum type :
+			 * @param[in] id Id of the buffer requested.
+			 * @param[in] data Direct data that might be set.
+			 */
+			void PushOnBuffer(int32_t id, const ivec3& data);
+			/**
+			 * @brief push data on a buffer with a custum type :
+			 * @param[in] id Id of the buffer requested.
+			 * @param[in] data Direct data that might be set.
+			 */
+			void PushOnBuffer(int32_t id, const vec3& data);
+			/**
+			 * @brief push data on a buffer with a custum type :
+			 * @param[in] id Id of the buffer requested.
+			 * @param[in] data Direct data that might be set.
+			 */
+			void PushOnBuffer(int32_t id, const ivec2& data);
+			/**
+			 * @brief push data on a buffer with a custum type :
+			 * @param[in] id Id of the buffer requested.
+			 * @param[in] data Direct data that might be set.
+			 */
+			void PushOnBuffer(int32_t id, const vec2& data);
 			/**
 			 * @brief Get the data from the graphic card.
 			 */

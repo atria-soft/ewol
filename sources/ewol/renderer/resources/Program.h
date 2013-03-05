@@ -52,6 +52,7 @@ namespace ewol
 			etk::Vector<ewol::Shader*>              m_shaderList;  //!< List of all the shader loaded
 			etk::Vector<ewol::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
 			bool                                    m_hasTexture;  //!< A texture has been set to the current shader
+			bool                                    m_hasTexture1; //!< A texture has been set to the current shader
 		public:
 			/**
 			 * @brief Contructor of an opengl Program.
@@ -236,6 +237,7 @@ namespace ewol
 			 * @param[in] textureOpenGlID Real openGL texture ID
 			 */
 			void SetTexture0(int32_t idElem, GLint textureOpenGlID);
+			void SetTexture1(int32_t idElem, GLint textureOpenGlID);
 			/**
 			 * @brief Stop the processing of this program
 			 */

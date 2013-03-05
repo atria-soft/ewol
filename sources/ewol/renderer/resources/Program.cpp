@@ -19,7 +19,8 @@ ewol::Program::Program(const etk::UString& filename) :
 	ewol::Resource(filename),
 	m_exist(false),
 	m_program(0),
-	m_hasTexture(false)
+	m_hasTexture(false),
+	m_hasTexture1(false)
 {
 	m_resourceLevel = 1;
 	EWOL_DEBUG("OGL : load PROGRAM \"" << filename << "\"");
@@ -84,6 +85,7 @@ ewol::Program::~Program(void)
 	RemoveContext();
 	m_elementList.Clear();
 	m_hasTexture = false;
+	m_hasTexture1 = false;
 }
 
 static void checkGlError(const char* op, int32_t localLine)
@@ -702,6 +704,33 @@ void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 	//checkGlError("glUniform1i", __LINE__);
 	m_hasTexture = true;
 }
+
+void ewol::Program::SetTexture1(int32_t idElem, GLint textureOpenGlID)
+{
+	if (0==m_program) {
+		return;
+	}
+	if (idElem<0 || idElem>m_elementList.Size()) {
+		return;
+	}
+	if (false == m_elementList[idElem].m_isLinked) {
+		return;
+	}
+	#if 0
+		glEnable(GL_TEXTURE_2D);
+		checkGlError("glEnable", __LINE__);
+	#endif
+	glActiveTexture(GL_TEXTURE1);
+	//checkGlError("glActiveTexture", __LINE__);
+	// set the textureID
+	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
+	//checkGlError("glBindTexture", __LINE__);
+	// Set the texture on the uniform attribute
+	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/1);
+	//checkGlError("glUniform1i", __LINE__);
+	m_hasTexture1 = true;
+}
+
 
 void ewol::Program::UnUse(void)
 {

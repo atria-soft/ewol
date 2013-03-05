@@ -16,6 +16,15 @@
 #include <ewol/renderer/resources/Program.h>
 #include <ewol/renderer/resources/VirtualBufferObject.h>
 
+// 3 "float" elements
+#define MESH_VBO_VERTICES  (0)
+// 2 "float" elements
+#define MESH_VBO_TEXTURE   (1)
+// 3 "float" elements
+#define MESH_VBO_VERTICES_NORMAL    (2)
+// 4 "float" elements
+#define MESH_VBO_COLOR     (3)
+
 namespace ewol
 {
 	class Face
@@ -63,8 +72,9 @@ namespace ewol
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;
 			int32_t        m_GLMatrix;
+			int32_t        m_GLNormal;
 			int32_t        m_GLtexture;
-			int32_t        m_GLtexID;
+			int32_t        m_GLtexID0;
 			int32_t        m_bufferOfset;
 			int32_t        m_numberOfElments;
 		protected:
@@ -75,9 +85,9 @@ namespace ewol
 			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
 		protected:
 			ewol::VirtualBufferObject*  m_verticesVBO;
-			ewol::TextureFile*          m_texture1;
+			ewol::TextureFile*          m_texture0;
 		public:
-			Mesh(etk::UString genName);
+			Mesh(etk::UString genName, etk::UString shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);

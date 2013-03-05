@@ -149,7 +149,7 @@ void ewol::resource::ContextHasBeenDestroyed(void)
 
 
 // internal generic keeper ...
-static ewol::Resource* LocalKeep(const etk::UString& filename)
+ewol::Resource* ewol::resource::LocalKeep(const etk::UString& filename)
 {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << filename << "\"");
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
@@ -165,7 +165,7 @@ static ewol::Resource* LocalKeep(const etk::UString& filename)
 }
 
 // internal generic keeper ...
-static void LocalAdd(ewol::Resource* object)
+void ewol::resource::LocalAdd(ewol::Resource* object)
 {
 	//Add ... find empty slot
 	for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {

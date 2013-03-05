@@ -62,22 +62,22 @@ ewol::MeshObj::MeshObj(etk::UString _fileName) :
 			if (12 != matches){
 				// no normal mode :
 				matches = sscanf(&inputDataLine[2], "%d/%d %d/%d %d/%d %d/%d\n",
-				                         &vertexIndex[0], &uvIndex[0],
-				                         &vertexIndex[1], &uvIndex[1],
-				                         &vertexIndex[2], &uvIndex[2],
-				                         &vertexIndex[3], &uvIndex[3] );
+				                 &vertexIndex[0], &uvIndex[0],
+				                 &vertexIndex[1], &uvIndex[1],
+				                 &vertexIndex[2], &uvIndex[2],
+				                 &vertexIndex[3], &uvIndex[3] );
 				if (8 != matches){
 					quadMode = false;
 					matches = sscanf(&inputDataLine[2], "%d/%d/%d %d/%d/%d %d/%d/%d\n",
-					                         &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-					                         &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-					                         &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+					                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+					                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+					                 &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 					if (9 != matches){
 						// no normal mode :
 						matches = sscanf(&inputDataLine[2], "%d/%d %d/%d %d/%d\n",
-						                         &vertexIndex[0], &uvIndex[0],
-						                         &vertexIndex[1], &uvIndex[1],
-						                         &vertexIndex[2], &uvIndex[2] );
+						                 &vertexIndex[0], &uvIndex[0],
+						                 &vertexIndex[1], &uvIndex[1],
+						                 &vertexIndex[2], &uvIndex[2] );
 						if (6 != matches){
 							EWOL_ERROR("Parsing error in the .obj files : " << fileName << " (l=" << lineID << ") in 'f' section : \"" << &inputDataLine[2] << "\" expected : %d/%d(/%d) %d/%d(/%d) %d/%d(/%d) (%d/%d(/%d)) () for option");
 							continue;

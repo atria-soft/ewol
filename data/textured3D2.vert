@@ -5,6 +5,7 @@ precision mediump int;
 // Input :
 attribute vec3 EW_coord3d;
 attribute vec2 EW_texture2d;
+attribute vec3 EW_normal;
 uniform mat4 EW_MatrixTransformation;
 
 // output :

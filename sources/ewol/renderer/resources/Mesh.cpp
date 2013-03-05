@@ -57,31 +57,22 @@ class VertexNode {
 };
 
 
-// 3 "float" elements
-#define MESH_VBO_VERTICES  (0)
-// 2 "float" elements
-#define MESH_VBO_TEXTURE   (1)
-// 4 "float" elements
-#define MESH_VBO_COLOR     (2)
-// 3 "float" elements
-#define MESH_VBO_NORMAL    (3)
 
-
-ewol::Mesh::Mesh(etk::UString genName) :
+ewol::Mesh::Mesh(etk::UString genName, etk::UString shaderName) :
 	ewol::Resource(genName),
 	m_enableFaceNormal(false),
-	m_enableVertexNormal(false),
+	m_enableVertexNormal(true),
 	m_numberOfElments(0),
-	m_texture1(NULL)
+	m_texture0(NULL)
 {
-	etk::UString tmpString("DATA:textured3D2.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	if (true == ewol::resource::Keep(shaderName, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
+		m_GLNormal   = m_GLprogram->GetAttribute("EW_normal");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
-		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		m_GLtexID0   = m_GLprogram->GetUniform("EW_texID");
 	}
 	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
 	ewol::resource::Keep("w-fff", m_verticesVBO);
@@ -90,8 +81,8 @@ ewol::Mesh::Mesh(etk::UString genName) :
 ewol::Mesh::~Mesh(void)
 {
 	// remove dynamics dependencies :
-	if(NULL!=m_texture1) {
-		ewol::resource::Release(m_texture1);
+	if(NULL!=m_texture0) {
+		ewol::resource::Release(m_texture0);
 	}
 	ewol::resource::Release(m_GLprogram);
 	ewol::resource::Release(m_verticesVBO);
@@ -104,7 +95,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	if (m_numberOfElments<=0) {
 		return;
 	}
-	if (NULL == m_texture1) {
+	if (NULL == m_texture0) {
 		EWOL_WARNING("Texture does not exist ...");
 		return;
 	}
@@ -121,17 +112,20 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	mat4 tmpMatrix = projMatrix * camMatrix * positionMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
-	m_GLprogram->SetTexture0(m_GLtexID, m_texture1->GetId());
+	m_GLprogram->SetTexture0(m_GLtexID0, m_texture0->GetId());
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLPosition, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES);
 	// Texture :
 	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
+	// position :
+	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
 	m_GLprogram->UnUse();
 	glDisable(GL_DEPTH_TEST);
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
+
 // normal calculation of the normal face is really easy :
 void ewol::Mesh::CalculateNormaleFace(void)
 {
@@ -194,59 +188,53 @@ void ewol::Mesh::GenerateVBO(void)
 		#endif
 		// 2 possibilities : triangle or quad :
 		int32_t indice = 0;
-		vec3 tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 		vec2 tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+		if(true==m_enableVertexNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+		}
 		
 		indice = 1;
-		tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+		if(true==m_enableVertexNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+		}
 		
 		indice = 2;
-		tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-		m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+		if(true==m_enableVertexNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+		}
 		#ifndef PRINT_HALF
 			if (m_listFaces[iii].m_nbElement==4) {
 				indice = 0;
-				tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+				if(true==m_enableVertexNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+				}
 				
 				indice = 2;
-				tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+				if(true==m_enableVertexNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+				}
 				
 				indice = 3;
-				tmpPos = m_listVertex[m_listFaces[iii].m_vertex[indice]];
 				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.y());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_VERTICES).PushBack(tmpPos.z());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(tmpUV.x());
-				m_verticesVBO->GetRefBuffer(MESH_VBO_TEXTURE).PushBack(1.0f-tmpUV.y());
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+				if(true==m_enableVertexNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+				}
 			}
 		#endif
 	}
@@ -313,12 +301,12 @@ void ewol::Mesh::SetTexture(const etk::UString& myTexture)
 {
 	ivec2 tmpSize(256, 256);
 	// prevent overloard error :
-	ewol::TextureFile* tmpCopy = m_texture1;
-	m_texture1 = NULL;
-	if (false == ewol::resource::Keep(myTexture, m_texture1, tmpSize)) {
+	ewol::TextureFile* tmpCopy = m_texture0;
+	m_texture0 = NULL;
+	if (false == ewol::resource::Keep(myTexture, m_texture0, tmpSize)) {
 		EWOL_ERROR("Can not load specific texture : " << myTexture);
 		// retreave previous texture:
-		m_texture1 = tmpCopy;
+		m_texture0 = tmpCopy;
 		return;
 	}
 	if (NULL != tmpCopy) {
