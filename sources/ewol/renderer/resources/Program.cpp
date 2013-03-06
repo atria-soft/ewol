@@ -477,7 +477,7 @@ void ewol::Program::Uniform4i(int32_t idElem, int32_t value1, int32_t value2, in
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, float *value)
+void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, const float *value)
 {
 	if (0==m_program) {
 		return;
@@ -500,7 +500,7 @@ void ewol::Program::Uniform1fv(int32_t idElem, int32_t nbElement, float *value)
 	glUniform1fv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform1fv", __LINE__);
 }
-void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
+void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, const float *value)
 {
 	if (0==m_program) {
 		return;
@@ -523,7 +523,7 @@ void ewol::Program::Uniform2fv(int32_t idElem, int32_t nbElement, float *value)
 	glUniform2fv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform2fv", __LINE__);
 }
-void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
+void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, const float *value)
 {
 	if (0==m_program) {
 		return;
@@ -546,7 +546,7 @@ void ewol::Program::Uniform3fv(int32_t idElem, int32_t nbElement, float *value)
 	glUniform3fv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform3fv", __LINE__);
 }
-void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
+void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, const float *value)
 {
 	if (0==m_program) {
 		return;
@@ -572,7 +572,7 @@ void ewol::Program::Uniform4fv(int32_t idElem, int32_t nbElement, float *value)
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value)
+void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, const int32_t *value)
 {
 	if (0==m_program) {
 		return;
@@ -595,7 +595,7 @@ void ewol::Program::Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value
 	glUniform1iv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform1iv", __LINE__);
 }
-void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value)
+void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, const int32_t *value)
 {
 	if (0==m_program) {
 		return;
@@ -618,7 +618,7 @@ void ewol::Program::Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value
 	glUniform2iv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform2iv", __LINE__);
 }
-void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value)
+void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, const int32_t *value)
 {
 	if (0==m_program) {
 		return;
@@ -641,7 +641,7 @@ void ewol::Program::Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value
 	glUniform3iv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform3iv", __LINE__);
 }
-void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value)
+void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, const int32_t *value)
 {
 	if (0==m_program) {
 		return;
@@ -664,6 +664,7 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value
 	glUniform4iv(m_elementList[idElem].m_elementId, nbElement, value);
 	//checkGlError("glUniform4iv", __LINE__);
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////

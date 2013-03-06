@@ -10,6 +10,7 @@
 #define __OPEN_GL__PROGRAM_H__
 
 #include <etk/types.h>
+#include <etk/math/Vector4D.h>
 #include <ewol/debug.h>
 #include <ewol/renderer/openGL.h>
 #include <ewol/renderer/resources/Resource.h>
@@ -175,28 +176,28 @@ namespace ewol
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform1fv(int32_t idElem, int32_t nbElement, float *value);
+			void Uniform1fv(int32_t idElem, int32_t nbElement, const float *value);
 			/**
 			 * @brief Send "vec2" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform2fv(int32_t idElem, int32_t nbElement, float *value);
+			void Uniform2fv(int32_t idElem, int32_t nbElement, const float *value);
 			/**
 			 * @brief Send "vec3" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform3fv(int32_t idElem, int32_t nbElement, float *value);
+			void Uniform3fv(int32_t idElem, int32_t nbElement, const float *value);
 			/**
 			 * @brief Send "vec4" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform4fv(int32_t idElem, int32_t nbElement, float *value);
+			void Uniform4fv(int32_t idElem, int32_t nbElement, const float *value);
 			
 			/**
 			 * @brief Send "ivec1" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
@@ -204,28 +205,35 @@ namespace ewol
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform1iv(int32_t idElem, int32_t nbElement, int32_t *value);
+			void Uniform1iv(int32_t idElem, int32_t nbElement, const int32_t *value);
 			/**
 			 * @brief Send "ivec2" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the Attribute that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform2iv(int32_t idElem, int32_t nbElement, int32_t *value);
+			void Uniform2iv(int32_t idElem, int32_t nbElement, const int32_t *value);
 			/**
 			 * @brief Send "ivec3" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform3iv(int32_t idElem, int32_t nbElement, int32_t *value);
+			void Uniform3iv(int32_t idElem, int32_t nbElement, const int32_t *value);
 			/**
 			 * @brief Send "ivec4" uniform element to the spefified ID (not send if does not really exist in the OpenGL program)
 			 * @param[in] idElem Id of the uniform that might be sended.
 			 * @param[in] nbElement Number of element sended
 			 * @param[in] value Pointer on the data
 			 */
-			void Uniform4iv(int32_t idElem, int32_t nbElement, int32_t *value);
+			void Uniform4iv(int32_t idElem, int32_t nbElement, const int32_t *value);
+			
+			inline void Uniform2(int32_t idElem, const vec2& value) { Uniform2fv(idElem, 1, &value.m_floats[0]); };
+			inline void Uniform3(int32_t idElem, const vec3& value) { Uniform3fv(idElem, 1, &value.m_floats[0]); };
+			inline void Uniform4(int32_t idElem, const vec4& value) { Uniform4fv(idElem, 1, &value.m_floats[0]); };
+			inline void Uniform2(int32_t idElem, const ivec2& value){ Uniform2iv(idElem, 1, &value.m_floats[0]); };
+			inline void Uniform3(int32_t idElem, const ivec3& value){ Uniform3iv(idElem, 1, &value.m_floats[0]); };
+			inline void Uniform4(int32_t idElem, const ivec4& value){ Uniform4iv(idElem, 1, &value.m_floats[0]); };
 			
 			/**
 			 * @brief Request the processing of this program

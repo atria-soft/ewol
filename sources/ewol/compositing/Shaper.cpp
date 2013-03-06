@@ -134,10 +134,10 @@ void ewol::Shaper::Draw(void)
 	// position :
 	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, m_coord);
 	// all entry parameters :
-	m_GLprogram->Uniform2fv(m_GLPropertySize,       1, &m_propertySize.m_floats[0]);
-	m_GLprogram->Uniform2fv(m_GLPropertyOrigin,     1, &m_propertyOrigin.m_floats[0]);
-	m_GLprogram->Uniform2fv(m_GLPropertyInsidePos,  1, &m_propertyInsidePosition.m_floats[0]);
-	m_GLprogram->Uniform2fv(m_GLPropertyInsideSize, 1, &m_propertyInsideSize.m_floats[0]);
+	m_GLprogram->Uniform2(m_GLPropertySize,       m_propertySize);
+	m_GLprogram->Uniform2(m_GLPropertyOrigin,     m_propertyOrigin);
+	m_GLprogram->Uniform2(m_GLPropertyInsidePos,  m_propertyInsidePosition);
+	m_GLprogram->Uniform2(m_GLPropertyInsideSize, m_propertyInsideSize);
 	m_GLprogram->Uniform1i(m_GLStateOld,        m_stateOld);
 	m_GLprogram->Uniform1i(m_GLStateNew,        m_stateNew);
 	m_GLprogram->Uniform1f(m_GLStateTransition, m_stateTransition);

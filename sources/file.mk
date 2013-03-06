@@ -13,7 +13,9 @@ FILE_LIST+= ewol/eObject/EObject.cpp \
 			ewol/eObject/EObjectManager.cpp
 
 #openGl Basic access abstraction (for the model matrix and include
-FILE_LIST+= ewol/renderer/openGL.cpp
+FILE_LIST+= ewol/renderer/openGL.cpp \
+			ewol/renderer/Light.cpp \
+			ewol/renderer/Material.cpp
 
 # Operating System interface
 FILE_LIST+= ewol/renderer/os/eSystem.cpp \

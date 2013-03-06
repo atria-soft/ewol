@@ -72,6 +72,7 @@ namespace ewol
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;
 			int32_t        m_GLMatrix;
+			int32_t        m_GLMatrixPosition;
 			int32_t        m_GLNormal;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID0;

@@ -71,7 +71,8 @@ ewol::Mesh::Mesh(etk::UString genName, etk::UString shaderName) :
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLNormal   = m_GLprogram->GetAttribute("EW_normal");
-		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		m_GLMatrix         = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		m_GLMatrixPosition = m_GLprogram->GetUniform("EW_MatrixPosition");
 		m_GLtexID0   = m_GLprogram->GetUniform("EW_texID");
 	}
 	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
@@ -109,8 +110,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// set Matrix : translation/positionMatrix
 	mat4 projMatrix = ewol::openGL::GetMatrix();
 	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
-	mat4 tmpMatrix = projMatrix * camMatrix * positionMatrix;
+	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->UniformMatrix4fv(m_GLMatrixPosition, 1, positionMatrix.m_mat);
 	// TextureID
 	m_GLprogram->SetTexture0(m_GLtexID0, m_texture0->GetId());
 	// position :
