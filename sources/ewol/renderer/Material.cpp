@@ -29,6 +29,9 @@ ewol::Material::~Material(void)
 
 void ewol::Material::Link(ewol::Program* prog, const etk::UString& baseName)
 {
+	if (NULL == prog) {
+		return;
+	}
 	m_GL_ambientFactor = prog->GetUniform(baseName+".ambientFactor");
 	m_GL_diffuseFactor = prog->GetUniform(baseName+".diffuseFactor");
 	m_GL_specularFactor = prog->GetUniform(baseName+".specularFactor");

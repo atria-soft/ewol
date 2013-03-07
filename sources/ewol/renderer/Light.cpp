@@ -31,6 +31,9 @@ ewol::Light::~Light(void)
 
 void ewol::Light::Link(ewol::Program* prog, const etk::UString& baseName)
 {
+	if (NULL == prog) {
+		return;
+	}
 	m_GL_direction = prog->GetUniform(baseName+".direction");
 	m_GL_halfplane = prog->GetUniform(baseName+".halfplane");
 	m_GL_ambientColor = prog->GetUniform(baseName+".ambientColor");

@@ -60,20 +60,37 @@ class VertexNode {
 
 ewol::Mesh::Mesh(etk::UString genName, etk::UString shaderName) :
 	ewol::Resource(genName),
-	m_enableFaceNormal(false),
+	m_enableFaceNormal(true),
 	m_enableVertexNormal(true),
 	m_numberOfElments(0),
 	m_texture0(NULL)
 {
 	// get the shader resource :
 	m_GLPosition = 0;
+	
+	// set the element material properties : 
+	m_material.SetAmbientFactor(vec4(0.200000,0.200000,0.200000, 1.0));
+	m_material.SetDiffuseFactor(vec4(0.640000, 0.640000, 0.640000, 1.0));
+	m_material.SetSpecularFactor(vec4(0.500000, 0.500000, 0.500000, 1.0));
+	m_material.SetShininess(0.96078431);
+	
+	m_light.SetDirection(vec3(0,cos(M_PI/4),sin(M_PI/4)));
+	m_light.SetHalfPlane(vec3(1,0,0));
+	m_light.SetAmbientColor(vec4(1,1,1,1));
+	m_light.SetDiffuseColor(vec4(1.0,1.0,1.0,1));
+	m_light.SetSpecularColor(vec4(0.0,0.0,0.0,1));
+	
 	if (true == ewol::resource::Keep(shaderName, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLNormal   = m_GLprogram->GetAttribute("EW_normal");
+		m_GLNormalFace = m_GLprogram->GetAttribute("EW_faceNormal");
 		m_GLMatrix         = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLMatrixPosition = m_GLprogram->GetUniform("EW_MatrixPosition");
 		m_GLtexID0   = m_GLprogram->GetUniform("EW_texID");
+		// Link material and Lights
+		m_material.Link(m_GLprogram, "EW_material");
+		m_light.Link(m_GLprogram, "EW_directionalLight");
 	}
 	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
 	ewol::resource::Keep("w-fff", m_verticesVBO);
@@ -121,6 +138,12 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
+	// position :
+	m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
+	// draw materials :
+	m_material.Draw(m_GLprogram);
+	m_light.Draw(m_GLprogram);
+	
 	// Request the draw od the elements : 
 	glDrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
 	m_GLprogram->UnUse();
@@ -196,6 +219,9 @@ void ewol::Mesh::GenerateVBO(void)
 		if(true==m_enableVertexNormal) {
 			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
 		}
+		if(true==m_enableFaceNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+		}
 		
 		indice = 1;
 		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
@@ -204,6 +230,9 @@ void ewol::Mesh::GenerateVBO(void)
 		if(true==m_enableVertexNormal) {
 			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
 		}
+		if(true==m_enableFaceNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+		}
 		
 		indice = 2;
 		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
@@ -211,6 +240,9 @@ void ewol::Mesh::GenerateVBO(void)
 		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
 		if(true==m_enableVertexNormal) {
 			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+		}
+		if(true==m_enableFaceNormal) {
+			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
 		}
 		#ifndef PRINT_HALF
 			if (m_listFaces[iii].m_nbElement==4) {
@@ -221,6 +253,9 @@ void ewol::Mesh::GenerateVBO(void)
 				if(true==m_enableVertexNormal) {
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
 				}
+				if(true==m_enableFaceNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+				}
 				
 				indice = 2;
 				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
@@ -228,6 +263,9 @@ void ewol::Mesh::GenerateVBO(void)
 				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
 				if(true==m_enableVertexNormal) {
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+				}
+				if(true==m_enableFaceNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
 				}
 				
 				indice = 3;
@@ -237,6 +275,9 @@ void ewol::Mesh::GenerateVBO(void)
 				if(true==m_enableVertexNormal) {
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
 				}
+				if(true==m_enableFaceNormal) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+				}
 			}
 		#endif
 	}
@@ -245,7 +286,7 @@ void ewol::Mesh::GenerateVBO(void)
 }
 
 
-void ewol::Mesh::CreateCube(void)
+void ewol::Mesh::CreateCube(float size)
 {
 	m_listVertex.Clear();
 	m_listUV.Clear();
@@ -276,14 +317,14 @@ void ewol::Mesh::CreateCube(void)
 			     o---------------------o          
 			    0                       3         
 	*/
-	m_listVertex.PushBack(vec3( 1.0, -1.0, -1.0)); // 0
-	m_listVertex.PushBack(vec3( 1.0, -1.0,  1.0)); // 1
-	m_listVertex.PushBack(vec3(-1.0, -1.0,  1.0)); // 2
-	m_listVertex.PushBack(vec3(-1.0, -1.0, -1.0)); // 3
-	m_listVertex.PushBack(vec3( 1.0,  1.0, -1.0)); // 4
-	m_listVertex.PushBack(vec3( 1.0,  1.0,  1.0)); // 5
-	m_listVertex.PushBack(vec3(-1.0,  1.0,  1.0)); // 6
-	m_listVertex.PushBack(vec3(-1.0,  1.0, -1.0)); // 7
+	m_listVertex.PushBack(vec3( size, -size, -size)); // 0
+	m_listVertex.PushBack(vec3( size, -size,  size)); // 1
+	m_listVertex.PushBack(vec3(-size, -size,  size)); // 2
+	m_listVertex.PushBack(vec3(-size, -size, -size)); // 3
+	m_listVertex.PushBack(vec3( size,  size, -size)); // 4
+	m_listVertex.PushBack(vec3( size,  size,  size)); // 5
+	m_listVertex.PushBack(vec3(-size,  size,  size)); // 6
+	m_listVertex.PushBack(vec3(-size,  size, -size)); // 7
 	
 	m_listUV.PushBack(vec2(0.0, 0.0));
 	m_listUV.PushBack(vec2(1.0, 0.0));
@@ -296,6 +337,89 @@ void ewol::Mesh::CreateCube(void)
 	m_listFaces.PushBack(Face(4,0, 7,1, 6,2, 5,3));
 	m_listFaces.PushBack(Face(1,0, 5,1, 6,2, 2,3));
 	m_listFaces.PushBack(Face(0,0, 4,1, 5,2, 1,3));
+	
+}
+
+void ewol::Mesh::CreateViewBox(float size)
+{
+	m_listVertex.Clear();
+	m_listUV.Clear();
+	m_listFaces.Clear();
+	m_numberOfElments = 0;
+	// This is the direct generation basis on the .obj system
+	/*
+			           5                       6  
+			            o---------------------o   
+			           /.                    /|   
+			          / .                   / |   
+			         /  .                  /  |   
+			        /   .                 /   |   
+			       /    .                /    |   
+			    4 /     .               /     |   
+			     o---------------------o      |   
+			     |      .              |7     |   
+			     |      .              |      |   
+			     |      .              |      |   
+			     |      .              |      |   
+			     |      o..............|......o   
+			     |     . 1             |     / 2  
+			     |    .                |    /     
+			     |   .                 |   /      
+			     |  .                  |  /       
+			     | .                   | /        
+			     |.                    |/         
+			     o---------------------o          
+			    0                       3         
+	*/
+	m_listVertex.PushBack(vec3( size, -size, -size)); // 0
+	m_listVertex.PushBack(vec3( size, -size,  size)); // 1
+	m_listVertex.PushBack(vec3(-size, -size,  size)); // 2
+	m_listVertex.PushBack(vec3(-size, -size, -size)); // 3
+	m_listVertex.PushBack(vec3( size,  size, -size)); // 4
+	m_listVertex.PushBack(vec3( size,  size,  size)); // 5
+	m_listVertex.PushBack(vec3(-size,  size,  size)); // 6
+	m_listVertex.PushBack(vec3(-size,  size, -size)); // 7
+	/*
+		     o----------o----------o----------o
+		     |8         |9         |10        |11
+		     |          |          |          |
+		     |          |          |          |
+		     |    0     |    1     |    2     |
+		     |          |          |          |
+		     |          |          |          |
+		     |          |          |          |
+		     |          |          |          |
+		     o----------o----------o----------o
+		     |4         |5         |6         |7
+		     |          |          |          |
+		     |          |          |          |
+		     |    3     |    4     |    5     |
+		     |          |          |          |
+		     |          |          |          |
+		     |          |          |          |
+		     |          |          |          |
+		     o----------o----------o----------o
+		     0          1          2          3
+	*/
+	m_listUV.PushBack(vec2(0.0    , 0.0    )); // 0
+	m_listUV.PushBack(vec2(1.0/3.0, 0.0    )); // 1
+	m_listUV.PushBack(vec2(2.0/3.0, 0.0    )); // 2
+	m_listUV.PushBack(vec2(1.0    , 0.0    )); // 3
+	m_listUV.PushBack(vec2(0.0    , 0.5    )); // 4
+	m_listUV.PushBack(vec2(1.0/3.0, 0.5    )); // 5
+	m_listUV.PushBack(vec2(2.0/3.0, 0.5    )); // 6
+	m_listUV.PushBack(vec2(1.0    , 0.5    )); // 7
+	m_listUV.PushBack(vec2(0.0    , 1.0    )); // 8
+	m_listUV.PushBack(vec2(1.0/3.0, 1.0    )); // 9
+	m_listUV.PushBack(vec2(2.0/3.0, 1.0    )); // 10
+	m_listUV.PushBack(vec2(1.0    , 1.0    )); // 11
+	
+	m_listFaces.PushBack(Face(0,1, 1,5,  2,6,  3,2)); // 4
+	m_listFaces.PushBack(Face(4,4, 0,0,  3,1,  7,5)); // 3
+	m_listFaces.PushBack(Face(2,6, 6,10, 7,11, 3,7)); // 2
+	m_listFaces.PushBack(Face(4,2, 7,3,  6,7,  5,6)); // 5
+	m_listFaces.PushBack(Face(1,5, 5,9,  6,10, 2,6)); // 1
+	m_listFaces.PushBack(Face(0,4, 4,8,  5,9,  1,5)); // 0
 	
 }
 
@@ -568,3 +692,17 @@ void ewol::Mesh::InternalSubdivide(bool smooth)
 	}
 	listVertex.Clear();
 }
+
+
+
+void ewol::Mesh::LoadMaterial(const etk::UString& name)
+{
+	
+}
+
+void ewol::Mesh::DisplaceElement(const ewol::DisplacementTable& displacement)
+{
+	
+}
+
+

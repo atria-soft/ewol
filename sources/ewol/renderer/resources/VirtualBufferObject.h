@@ -34,7 +34,7 @@ namespace ewol
 			 * @brief Constructor of this VBO.
 			 * @param[in] accesMode Acces mode : ???
 			 */
-			VirtualBufferObject(const etk::UString& accesMode, int32_t nbElement=3);
+			VirtualBufferObject(const etk::UString& accesMode, int32_t nbElement=4);
 			/**
 			 * @brief Destructor of this VBO.
 			 */

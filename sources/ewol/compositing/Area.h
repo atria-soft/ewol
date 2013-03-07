@@ -53,7 +53,7 @@ namespace ewol
 			 */
 			void Draw(void);
 			/**
-			 * @brief Clear alll tre registered element in the current element
+			 * @brief Clear alll the registered element in the current element
 			 */
 			void Clear(void);
 			/**

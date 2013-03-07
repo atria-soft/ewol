@@ -15,18 +15,55 @@
 #include <ewol/renderer/resources/Shader.h>
 #include <ewol/renderer/resources/Program.h>
 #include <ewol/renderer/resources/VirtualBufferObject.h>
-
+#include <ewol/renderer/Light.h>
+#include <ewol/renderer/Material.h>
 // 3 "float" elements
 #define MESH_VBO_VERTICES  (0)
 // 2 "float" elements
 #define MESH_VBO_TEXTURE   (1)
 // 3 "float" elements
 #define MESH_VBO_VERTICES_NORMAL    (2)
+#define MESH_VBO_FACE_NORMAL       (3)
 // 4 "float" elements
-#define MESH_VBO_COLOR     (3)
+#define MESH_VBO_COLOR     (4)
 
 namespace ewol
 {
+	class DisplacementTable
+	{
+		private:
+			ivec2 m_size;
+		public:
+			etk::Vector<float> m_data;
+			DisplacementTable(const ivec2& size) :
+				m_size(size),
+				m_data(size.x()*size.y())
+			{
+				// TODO : Check input ...
+				m_data.ReSize(m_size.x()*m_size.y(), 0);
+				for(int32_t iii=0; iii<m_size.x()*m_size.y(); iii++) {
+					m_data[iii] = 0;
+				}
+			}
+			float Get(int32_t x, int32_t y) const
+			{
+				// We increment of the size to prevent the <0 result due to the "%" methode ...
+				x += m_size.x();
+				y += m_size.y();
+				x %= m_size.x();
+				y %= m_size.y();
+				return m_data[x + y*m_size.x()];
+			}
+			void Set(int32_t x, int32_t y, float val)
+			{
+				// We increment of the size to prevent the <0 result due to the "%" methode ...
+				x += m_size.x();
+				y += m_size.y();
+				x %= m_size.x();
+				y %= m_size.y();
+				m_data[x + y*m_size.x()] = val;
+			}
+	};
 	class Face
 	{
 		public:
@@ -74,10 +111,13 @@ namespace ewol
 			int32_t        m_GLMatrix;
 			int32_t        m_GLMatrixPosition;
 			int32_t        m_GLNormal;
+			int32_t        m_GLNormalFace;
 			int32_t        m_GLtexture;
 			int32_t        m_GLtexID0;
 			int32_t        m_bufferOfset;
 			int32_t        m_numberOfElments;
+			ewol::Material m_material;
+			ewol::Light    m_light;
 		protected:
 			etk::Vector<vec3> m_listVertex; //!< List of all vertex in the element
 			etk::Vector<vec2> m_listUV; //!< List of all UV point in the mesh (for the specify texture)
@@ -95,9 +135,7 @@ namespace ewol
 			void GenerateVBO(void);
 		public:
 			// some addition basic funtion that permit to create or overwrite some caracterstics :
-			void CreateCube(void);
 			void SetTexture(const etk::UString& myTexture);
-			void Subdivide(int32_t numberOfTime, bool smooth);
 		protected:
 			void InternalSubdivide(bool smooth);
 		public:
@@ -110,6 +148,16 @@ namespace ewol
 		private:
 			void CalculateNormaleFace(void);
 			void CalculateNormaleEdge(void);
+		public:
+			void LoadMaterial(const etk::UString& name);
+			/*
+			 * Element modification area :
+			 */
+		public :
+			void CreateCube(float size=1.0);
+			void CreateViewBox(float size=1.0);
+			void Subdivide(int32_t numberOfTime, bool smooth);
+			void DisplaceElement(const ewol::DisplacementTable& displacement);
 	};
 };
 

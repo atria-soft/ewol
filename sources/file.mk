@@ -88,36 +88,19 @@ FILE_LIST+= ewol/widget/Scene.cpp \
 			ewol/game/Camera.cpp
 
 
-LOCAL_COPY_FILES := ../data/textured3D.prog:textured3D.prog \
-                    ../data/textured3D.frag:textured3D.frag \
-                    ../data/textured3D.vert:textured3D.vert \
-                    \
-                    ../data/textured3D2.prog:textured3D2.prog \
-                    ../data/textured3D2.frag:textured3D2.frag \
-                    ../data/textured3D2.vert:textured3D2.vert \
-                    \
-                    ../data/color.prog:color.prog \
-                    ../data/color.frag:color.frag \
-                    ../data/color.vert:color.vert \
-                    \
-                    ../data/color3.prog:color3.prog \
-                    ../data/color3.frag:color3.frag \
-                    ../data/color3.vert:color3.vert \
-                    \
-                    ../data/simple3D.prog:simple3D.prog \
-                    ../data/simple3D.frag:simple3D.frag \
-                    ../data/simple3D.vert:simple3D.vert \
-                    \
-                    ../data/textured.prog:textured.prog \
-                    ../data/textured.frag:textured.frag \
-                    ../data/textured.vert:textured.vert \
-                    \
-                    ../data/text.prog:text.prog \
-                    ../data/text.frag:text.frag \
-                    ../data/text.vert:text.vert
-
 LOCAL_COPY_FOLDERS := ../data/theme/default/widgetEntry.*:theme/default \
                       ../data/theme/rounded/widgetEntry.*:theme/rounded \
                       ../data/theme/default/widgetButton.*:theme/default \
                       ../data/theme/rounded/widgetButton.*:theme/rounded \
-                      
+                      ../data/textured.*: \
+                      ../data/texturedNoMaterial.*: \
+                      ../data/text.*: \
+                      ../data/simple3D.*: \
+                      ../data/color.*: \
+                      ../data/color3.*: \
+                      ../data/textured3D2.*: \
+                      ../data/textured3D.*:
+
+
+
+
