@@ -1,7 +1,6 @@
 
 # get the local dir in a good form :
-TMP_DIR := $(shell readlink -m -n $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST)))))
-
+TMP_DIR := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
 
 # Add ewol packages
 EWOL_FOLDER:=$(TMP_DIR)

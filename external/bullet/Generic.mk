@@ -11,7 +11,7 @@ LOCAL_MODULE := linearmath
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)/bullet/src/
 
 LOCAL_CFLAGS := -Wno-write-strings \
-                -DHAVE_CONFIG_H \
+                -DHAVE_CONFIG_H\
                 -O2
 
 LOCAL_SRC_FILES := \
@@ -43,7 +43,7 @@ LOCAL_C_INCLUDES :=  \
                     $(LOCAL_PATH)/bullet/Extras/ConvexDecomposition
 
 LOCAL_CFLAGS := -Wno-write-strings \
-                -DHAVE_CONFIG_H \
+                -DHAVE_CONFIG_H\
                 -O2
 
 

@@ -24,7 +24,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#if defined(__TARGET_OS__Linux)
 #include <GL/glx.h>
+#elif defined(__TARGET_OS__MacOs)
+#include <OpenGL/glx.h>
+#endif
+
 #include <X11/Xatom.h>
 #include <sys/times.h>
 
