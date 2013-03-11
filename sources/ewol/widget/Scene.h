@@ -9,6 +9,8 @@
 #ifndef __EWOL_SCENE_H__
 #define __EWOL_SCENE_H__
 
+#ifdef BUILD_BULLET
+
 #include <etk/types.h>
 #include <etk/math/Vector3D.h>
 #include <etk/math/Matrix4.h>
@@ -125,5 +127,7 @@ namespace widget {
 			void DrawSphere(btScalar radius, int lats, int longs, mat4& transformationMatrix, draw::Colorf& tmpColor);
 	};
 };
+
+#endif
 
 #endif

@@ -12,7 +12,19 @@ LOCAL_VERSION=$(shell cat $(LOCAL_PATH)/tag)
 $(info [TAG:$(LOCAL_MODULE)] $(LOCAL_VERSION))
 
 # name of the dependency
-LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua bullet
+LOCAL_LIBRARIES := etk freetype tinyxml libpng parsersvg
+ifeq ("$(CONFIG_BUILD_BULLET)","y")
+LOCAL_LIBRARIES += bullet
+endif
+ifeq ("$(CONFIG_BUILD_LUA)","y")
+LOCAL_LIBRARIES += lua
+endif
+ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
+LOCAL_LIBRARIES += portaudio
+endif
+ifeq ("$(CONFIG_BUILD_LIBZIP)","y")
+LOCAL_LIBRARIES += libzip
+endif
 
 LOCAL_C_INCLUDES := 
 

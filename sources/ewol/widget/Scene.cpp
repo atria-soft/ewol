@@ -5,6 +5,7 @@
  * 
  * @license BSD v3 (see license file)
  */
+#ifdef BUILD_BULLET
 
 #include <ewol/widget/Scene.h>
 #include <math.h>
@@ -1282,4 +1283,5 @@ void widget::Scene::OnLostFocus(void)
 	UnGrabCursor();
 }
 
+#endif
 

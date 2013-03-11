@@ -12,7 +12,16 @@ LOCAL_VERSION=$(shell cat $(LOCAL_PATH)/tag)
 $(info [TAG:$(LOCAL_MODULE)] $(LOCAL_VERSION))
 
 # name of the dependency
-LOCAL_LIBRARIES := etk freetype tinyxml libzip libpng parsersvg lua portaudio bullet
+LOCAL_LIBRARIES := etk freetype tinyxml libpng parsersvg
+ifeq ("$(CONFIG_BUILD_BULLET)","y")
+LOCAL_LIBRARIES += bullet
+endif
+ifeq ("$(CONFIG_BUILD_LUA)","y")
+LOCAL_LIBRARIES += lua
+endif
+ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
+LOCAL_LIBRARIES += portaudio
+endif
 
 LOCAL_C_INCLUDES := 
 
@@ -41,8 +50,11 @@ LOCAL_EXPORT_CFLAGS :=
 # load the common sources file of the platform
 include $(LOCAL_PATH)/file.mk
 
-LOCAL_SRC_FILES := $(FILE_LIST) \
-					ewol/renderer/audio/interfacePortAudio.cpp
+LOCAL_SRC_FILES := $(FILE_LIST)
+
+ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
+LOCAL_SRC_FILES += ewol/renderer/audio/interfacePortAudio.cpp
+endif
 
 ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
 LOCAL_SRC_FILES += ewol/renderer/os/gui.X11.cpp
