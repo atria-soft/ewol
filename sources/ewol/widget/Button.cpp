@@ -65,18 +65,20 @@ void widget::Button::SetShaperName(etk::UString shaperName)
 	m_shaper.SetSource(shaperName);
 }
 
-void widget::Button::SetImage(etk::UString imageName, draw::Color color)
+void widget::Button::SetImage(etk::UString imageName, draw::Color color, int32_t size)
 {
 	m_imageColor = color;
-	m_displayImage.SetSource(imageName);
+	m_imageDisplaySize = size;
+	m_displayImage.SetSource(imageName, size);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
-void widget::Button::SetImageToggle(etk::UString imageName, draw::Color color)
+void widget::Button::SetImageToggle(etk::UString imageName, draw::Color color, int32_t size)
 {
 	m_imageColorToggle = color;
-	m_displayImageToggle.SetSource(imageName);
+	m_imageDisplaySize = size;
+	m_displayImageToggle.SetSource(imageName, size);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
@@ -86,22 +88,36 @@ bool widget::Button::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	m_displayText.Clear();
-	vec3 minSize = m_displayText.CalculateSizeDecorated(m_label);
-	if(    true == m_toggleMode
-	    && m_labelToggle.Size()!=0) {
-		m_displayText.Clear();
-		vec3 minSizeToggle = m_displayText.CalculateSizeDecorated(m_labelToggle);
-		minSize.setValue(etk_max(minSize.x(), minSizeToggle.x()),
-		                 etk_max(minSize.y(), minSizeToggle.y()),
-		                 etk_max(minSize.z(), minSizeToggle.z()));
+	if(    m_label.Size()==0
+	    && m_labelToggle.Size()==0
+	    && (    true == m_displayImage.HasSources()
+	         || true == m_displayImageToggle.HasSources()) ) {
+		// special case of only one image display ==> certer it ...
+		m_minSize.setX(padding.x()*2 + m_imageDisplaySize);
+		m_minSize.setY(padding.y()*2 + m_imageDisplaySize);
+	} else {
+		vec3 minSize(0,0,0);
+		//faster if no text set ...
+		if (m_label.Size()!=0) {
+			minSize = m_displayText.CalculateSizeDecorated(m_label);
+		}
+		if(    true == m_toggleMode
+		    && m_labelToggle.Size()!=0) {
+			m_displayText.Clear();
+			vec3 minSizeToggle = m_displayText.CalculateSizeDecorated(m_labelToggle);
+			minSize.setValue(etk_max(minSize.x(), minSizeToggle.x()),
+			                 etk_max(minSize.y(), minSizeToggle.y()),
+			                 etk_max(minSize.z(), minSizeToggle.z()));
+		}
+		m_minSize.setX(padding.x()*2 + minSize.x());
+		m_minSize.setY(padding.y()*2 + minSize.y());
+		// Add the image element ...
+		if(    true == m_displayImage.HasSources()
+		    || true == m_displayImageToggle.HasSources()) {
+			m_minSize.setX(m_minSize.x()+ padding.x()/2 + m_imageDisplaySize);
+		}
 	}
-	m_minSize.setX(padding.x()*2 + minSize.x());
-	m_minSize.setY(padding.y()*2 + minSize.y());
-	// Add the image element ...
-	if(    true == m_displayImage.HasSources()
-	    || true == m_displayImageToggle.HasSources()) {
-		m_minSize.setX(m_minSize.x()+ padding.x()/2 + m_imageDisplaySize);
-	}
+	CheckMinSize();
 	MarkToRedraw();
 	return true;
 }
@@ -171,25 +187,19 @@ void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 void widget::Button::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		
-		vec2 padding = m_shaper.GetPadding();
-		// to know the size of one Line : 
-		vec3 minSize = m_displayText.CalculateSize('A');
-		vec3 curentTextSize(0,0,0);
-		if(    false == m_toggleMode
-		    || false == m_value
-		    || m_labelToggle.Size()==0) {
-			curentTextSize = m_displayText.CalculateSizeDecorated(m_label);
-		} else {
-			curentTextSize = m_displayText.CalculateSizeDecorated(m_labelToggle);
-		}
-		
+		// clear the previous display :
 		m_displayImage.Clear();
 		m_displayImageToggle.Clear();
 		m_shaper.Clear();
 		m_displayText.Clear();
 		
+		// know the current padding
+		vec2 padding = m_shaper.GetPadding();
+		// to know the size of one Line : 
+		vec3 minSize = m_displayText.CalculateSize('A');
 		ivec2 localSize = m_minSize;
+		
+		vec3 sizeText(0,0,0);
 		
 		vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
 		               (m_size.y() - m_minSize.y()) / 2.0,
@@ -211,12 +221,10 @@ void widget::Button::OnRegenerateDisplay(void)
 		tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
 		localSize -= ivec2(2*padding.x(), 2*padding.y());
 		
-		tmpTextOrigin.setY(tmpTextOrigin.y()+ (m_minSize.y()-2*padding.y()) - minSize.y());
-		
-		vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
-		
-		if(    true == m_displayImage.HasSources()
-		    || true == m_displayImageToggle.HasSources()) {
+		if(    m_label.Size()==0
+		    && m_labelToggle.Size()==0
+		    && (    true == m_displayImage.HasSources()
+		         || true == m_displayImageToggle.HasSources()) ) {
 			vec3 imagePos(tmpOrigin.x()-padding.x()/4,
 			              tmpOrigin.y()-padding.x()/4+(m_minSize.y()-m_imageDisplaySize-2*padding.y())/2.0,
 			              0);
@@ -232,49 +240,78 @@ void widget::Button::OnRegenerateDisplay(void)
 				m_displayImageToggle.SetColor(m_imageColorToggle);
 				m_displayImageToggle.Print(imageSize);
 			}
-			// update the text position ...
-			tmpTextOrigin.setX(tmpTextOrigin.x() + padding.x()/2 + m_imageDisplaySize);
-		}
-		
-		vec3 drawClippingPos(padding.x(), padding.y(), -0.5);
-		vec3 drawClippingSize((m_size.x() - padding.x()),
-		                      (m_size.y() - padding.y()),
-		                      1);
-		
-		// clean the element
-		m_displayText.Reset();
-		m_displayText.SetPos(tmpTextOrigin);
-		if(    true == m_displayImage.HasSources()
-		    || true == m_displayImageToggle.HasSources()) {
-			m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x()-m_imageDisplaySize, ewol::Text::alignCenter);
 		} else {
-			m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
+			vec3 curentTextSize(0,0,0);
+			if(    false == m_toggleMode
+			    || false == m_value
+			    || m_labelToggle.Size()==0) {
+				curentTextSize = m_displayText.CalculateSizeDecorated(m_label);
+			} else {
+				curentTextSize = m_displayText.CalculateSizeDecorated(m_labelToggle);
+			}
+			
+			tmpTextOrigin.setY(tmpTextOrigin.y()+ (m_minSize.y()-2*padding.y()) - minSize.y());
+			
+			vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
+			
+			if(    true == m_displayImage.HasSources()
+			    || true == m_displayImageToggle.HasSources()) {
+				vec3 imagePos(tmpOrigin.x()-padding.x()/4,
+				              tmpOrigin.y()-padding.x()/4+(m_minSize.y()-m_imageDisplaySize-2*padding.y())/2.0,
+				              0);
+				vec2 imageSize(m_imageDisplaySize,
+				               m_imageDisplaySize);
+				if(    false==m_toggleMode
+				    || false==m_value) {
+					m_displayImage.SetPos(imagePos);
+					m_displayImage.SetColor(m_imageColor);
+					m_displayImage.Print(imageSize);
+				} else {
+					m_displayImageToggle.SetPos(imagePos);
+					m_displayImageToggle.SetColor(m_imageColorToggle);
+					m_displayImageToggle.Print(imageSize);
+				}
+				// update the text position ...
+				tmpTextOrigin.setX(tmpTextOrigin.x() + padding.x()/2 + m_imageDisplaySize);
+			}
+			
+			vec3 drawClippingPos(padding.x(), padding.y(), -0.5);
+			vec3 drawClippingSize((m_size.x() - padding.x()),
+			                      (m_size.y() - padding.y()),
+			                      1);
+			
+			// clean the element
+			m_displayText.Reset();
+			m_displayText.SetPos(tmpTextOrigin);
+			if(    true == m_displayImage.HasSources()
+			    || true == m_displayImageToggle.HasSources()) {
+				m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x()-m_imageDisplaySize, ewol::Text::alignCenter);
+			} else {
+				m_displayText.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
+			}
+			m_displayText.SetClipping(drawClippingPos, drawClippingSize);
+			if(    false == m_toggleMode
+			    || false == m_value
+			    || m_labelToggle.Size()==0) {
+				m_displayText.PrintDecorated(m_label);
+			} else {
+				m_displayText.PrintDecorated(m_labelToggle);
+			}
+			//m_displayText.Translate(tmpOrigin);
+			sizeText = m_displayText.CalculateSize(m_label);
+			
+			if (true==m_userFill.y()) {
+				tmpOrigin.setY(padding.y());
+			}
 		}
-		m_displayText.SetClipping(drawClippingPos, drawClippingSize);
-		if(    false == m_toggleMode
-		    || false == m_value
-		    || m_labelToggle.Size()==0) {
-			m_displayText.PrintDecorated(m_label);
-		} else {
-			m_displayText.PrintDecorated(m_labelToggle);
-		}
-		//m_displayText.Translate(tmpOrigin);
-		
-		
-		if (true==m_userFill.y()) {
-			tmpOrigin.setY(padding.y());
-		}
-		
 		// selection area :
 		m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
 		m_selectableAreaSize = localSize + vec2(2,2)*padding;
 		m_shaper.SetOrigin(m_selectableAreaPos );
 		m_shaper.SetSize(m_selectableAreaSize);
 		m_shaper.SetInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
-		vec3 tmpp = m_displayText.CalculateSize(m_label);
-		vec2 tmpp2(tmpp.x(), tmpp.y());
+		vec2 tmpp2(sizeText.x(), sizeText.y());
 		m_shaper.SetInsideSize(tmpp2);
-		
 	}
 }
 

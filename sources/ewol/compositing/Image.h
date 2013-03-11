@@ -122,8 +122,9 @@ namespace ewol
 			/**
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
 			 * @param[in] newFile New file of the Image
+			 * @param[in] size for the image when Verctorial image loading is requested
 			 */
-			void SetSource(etk::UString newFile);
+			void SetSource(etk::UString newFile, int32_t size=32);
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

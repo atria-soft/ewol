@@ -84,13 +84,13 @@ namespace widget {
 			 * @param[in] imageName Filename of the image.
 			 * @param[in] color The required color for the image.
 			 */
-			void SetImage(etk::UString imageName, draw::Color color=draw::color::white);
+			void SetImage(etk::UString imageName, draw::Color color=draw::color::white, int32_t size=32);
 			/**
 			 * @brief Set the image when button is pressed.
 			 * @param[in] imageName Filename of the image.
 			 * @param[in] color The required color for the image.
 			 */
-			void SetImageToggle(etk::UString imageName, draw::Color color=draw::color::white);
+			void SetImageToggle(etk::UString imageName, draw::Color color=draw::color::white, int32_t size=32);
 			/**
 			 * @brief Set the currentValue of the Button (pressed or not)
 			 * @note Work only in toggle mode

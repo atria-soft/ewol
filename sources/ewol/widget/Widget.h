@@ -139,6 +139,11 @@ namespace ewol {
 			 */
 			vec2 GetMinSize(void);
 			/**
+			 * @brief Check if the current min size is compatible wit hte user minimum size
+			 *        If it is not the user minimum size will overWrite the minimum size set.
+			 */
+			void CheckMinSize(void);
+			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] size The new maximum size requested (vec2(-1,-1) to unset)
 			 */

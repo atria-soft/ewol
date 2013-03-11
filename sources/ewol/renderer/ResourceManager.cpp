@@ -298,7 +298,7 @@ static int32_t nextP2(int32_t value)
 
 bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
 {
-	 ivec2 size2(nextP2(size.x()), nextP2(size.y()));
+	ivec2 size2(nextP2(size.x()), nextP2(size.y()));
 	etk::UString TmpFilename = filename;
 	TmpFilename += ":";
 	TmpFilename += size2.x();

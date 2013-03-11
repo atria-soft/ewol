@@ -227,6 +227,16 @@ void ewol::Widget::SetMinSize(float x, float y)
 	m_userMinSize.setValue(x, y);
 }
 
+void ewol::Widget::CheckMinSize(void)
+{
+	if (m_userMinSize.x() > 0) {
+		m_minSize.setX(etk_max(m_minSize.x(), m_userMinSize.x()));
+	}
+	if (m_userMinSize.y() > 0) {
+		m_minSize.setY(etk_max(m_minSize.y(), m_userMinSize.y()));
+	}
+}
+
 vec2 ewol::Widget::GetMinSize(void)
 {
 	if (false==IsHide()) {

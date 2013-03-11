@@ -235,7 +235,7 @@ void ewol::Image::PrintPart(ivec2 size,
 	
 }
 
-void ewol::Image::SetSource(etk::UString newFile)
+void ewol::Image::SetSource(etk::UString newFile, int32_t size)
 {
 	Clear();
 	// remove old one
@@ -243,11 +243,11 @@ void ewol::Image::SetSource(etk::UString newFile)
 		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	ivec2 size(32,32);
+	ivec2 tmpSize(size,size);
 	// note that no image can be loaded...
 	if (newFile != "") {
 		// link to new One
-		if (false == ewol::resource::Keep(newFile, m_resource, size)) {
+		if (false == ewol::resource::Keep(newFile, m_resource, tmpSize)) {
 			EWOL_ERROR("Can not get Image resource");
 		}
 	}
