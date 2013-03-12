@@ -93,6 +93,50 @@ namespace ewol {
 		 * @param[in] newOne The requested matrix.
 		 */
 		void SetCameraMatrix(mat4& newOne);
+		/**
+		 * @brief
+		 */
+		void Finish(void);
+		/**
+		 * @brief
+		 */
+		void Flush(void);
+		/**
+		 * @brief
+		 */
+		void Swap(void);
+		/**
+		 * @brief Enable a flag on the system
+		 * @param[in] flagID The flag requested
+		 */
+		void Enable(uint32_t flagID);
+		/**
+		 * @brief Disable a flag on the system
+		 * @param[in] flagID The flag requested
+		 */
+		void Disable(uint32_t flagID);
+		/**
+		 * @brief Enable Texture on the system
+		 * @param[in] flagID The flag requested
+		 */
+		void ActiveTexture(uint32_t flagID);
+		/**
+		 * @brief Disable Texture on the system
+		 * @param[in] flagID The flag requested
+		 */
+		void DesActiveTexture(uint32_t flagID);
+		/**
+		 * @brief draw a specific array ==> this enable mode difference ...
+		 */
+		void DrawArrays(uint32_t mode, int32_t first, int32_t count);
+		void DrawArraysInstanced(uint32_t mode, int32_t first, int32_t count, int32_t primcount);
+		void DrawElements(uint32_t mode, int32_t count, uint32_t type, const void*  indices);
+		void DrawRangeElements(uint32_t mode, int32_t start, int32_t end, int32_t count, uint32_t type, const void* indices);
+		/**
+		 * @brief Use openGL program
+		 * @param[in] id Id of the program that might be used
+		 */
+		void UseProgram(int32_t id);
 	};
 };
 

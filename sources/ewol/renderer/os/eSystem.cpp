@@ -38,6 +38,7 @@ static ewol::eSystemInput               l_managementInput;
 static ewol::Fps                        l_FpsSystemEvent(     "Event     ", false);
 static ewol::Fps                        l_FpsSystemContext(   "Context   ", false);
 static ewol::Fps                        l_FpsSystem(          "Draw      ", true);
+static ewol::Fps                        l_FpsFlush(           "Flush     ", false);
 
 
 
@@ -474,7 +475,7 @@ bool eSystem::Draw(bool displayEveryTime)
 	
 	if (true == isGlobalSystemInit) {
 		// process the events
-		l_FpsSystemEvent.Tic();
+l_FpsSystemEvent.Tic();
 		ewolProcessEvents();
 		// call all the widget that neded to do something periodicly
 		ewol::widgetManager::PeriodicCall(currentTime);
@@ -486,31 +487,39 @@ bool eSystem::Draw(bool displayEveryTime)
 			// Redraw all needed elements
 			tmpWindows->OnRegenerateDisplay();
 		}
-		l_FpsSystemEvent.IncrementCounter();
-		l_FpsSystemEvent.Toc();
+l_FpsSystemEvent.IncrementCounter();
+l_FpsSystemEvent.Toc();
 		bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
 		
-		l_FpsSystemContext.Tic();
+l_FpsSystemContext.Tic();
 		if (NULL != tmpWindows) {
 			if(    true == needRedraw
 			    || true == displayEveryTime) {
 				ewol::resource::UpdateContext();
-				l_FpsSystemContext.IncrementCounter();
+l_FpsSystemContext.IncrementCounter();
 			}
 		}
-		l_FpsSystemContext.Toc();
+l_FpsSystemContext.Toc();
 		bool hasDisplayDone = false;
-		l_FpsSystem.Tic();
+l_FpsSystem.Tic();
 		if (NULL != tmpWindows) {
 			if(    true == needRedraw
 			    || true == displayEveryTime) {
-				l_FpsSystem.IncrementCounter();
+l_FpsSystem.IncrementCounter();
 				tmpWindows->SysDraw();
 				hasDisplayDone = true;
 			}
 		}
-		l_FpsSystem.Toc();
+l_FpsSystem.Toc();
+l_FpsFlush.Tic();
+l_FpsFlush.IncrementCounter();
 		glFlush();
+l_FpsFlush.Toc();
+
+l_FpsSystemEvent.Draw();
+l_FpsSystemContext.Draw();
+l_FpsSystem.Draw();
+l_FpsFlush.Draw();
 		return hasDisplayDone;
 	}
 	return false;

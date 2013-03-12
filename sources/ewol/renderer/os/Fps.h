@@ -87,13 +87,16 @@ namespace ewol
 			}
 			/**
 			 * @brief this might be call every time a diplay stop, it do the display every second
-			 * @param ---
+			 * @param[in] displayTime Display curent time of the frame.
 			 * @return ---
 			 */
-			void Toc(void)
+			void Toc(bool displayTime=false)
 			{
 				int64_t currentTime = ewol::GetTime();
 				int64_t processTimeLocal = (currentTime - ticTime);
+				if (displayTime==true) {
+					EWOL_DEBUG(m_displayName << " : processTime : " << (float)((float)processTimeLocal / 1000.0) << "ms ");
+				}
 				if (drwingDone) {
 					min = etk_min(min, processTimeLocal);
 					max = etk_max(max, processTimeLocal);
@@ -104,6 +107,20 @@ namespace ewol
 					max_idle = etk_max(max_idle, processTimeLocal);
 					avg_idle += processTimeLocal;
 				}
+			}
+			/**
+			 * @brief this might be call when a display is really done
+			 */
+			void IncrementCounter(void)
+			{
+				nbDisplayTime++;
+				drwingDone = true;
+			}
+			/**
+			 * @brief Draw debug display ...
+			 */
+			void Draw(void)
+			{
 				if (true == display) {
 					if (nbDisplayTime>0) {
 						EWOL_DEBUG(m_displayName << " : Active : "
@@ -131,16 +148,6 @@ namespace ewol
 					startTime = -1;
 					display = false;
 				}
-			}
-			/**
-			 * @brief this might be call when a display is really done
-			 * @param ---
-			 * @return ---
-			 */
-			void IncrementCounter(void)
-			{
-				nbDisplayTime++;
-				drwingDone = true;
 			}
 	};
 };

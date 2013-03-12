@@ -147,7 +147,7 @@ void ewol::Shaper::Draw(void)
 		m_GLprogram->SetTexture0(m_GLtexID, m_resourceTexture->GetId());
 	}
 	// Request the draw of the elements : 
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, 6);
 	m_GLprogram->UnUse();
 }
 

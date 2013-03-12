@@ -11,6 +11,7 @@
 #include <ewol/renderer/resources/Program.h>
 #include <ewol/renderer/ResourceManager.h>
 #include <etk/os/FSNode.h>
+#include <ewol/ewol.h>
 
 //#define LOCAL_DEBUG  EWOL_VERBOSE
 #define LOCAL_DEBUG  EWOL_DEBUG
@@ -668,6 +669,9 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, const int32_t 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
+#ifdef PROGRAM_DISPLAY_SPEED
+	int64_t g_startTime = 0;
+#endif
 
 
 void ewol::Program::Use(void)
@@ -675,7 +679,10 @@ void ewol::Program::Use(void)
 	if (0==m_program) {
 		return;
 	}
-	glUseProgram(m_program);
+	#ifdef PROGRAM_DISPLAY_SPEED
+		g_startTime = ewol::GetTime();
+	#endif
+	ewol::openGL::UseProgram(m_program);
 	//checkGlError("glUseProgram", __LINE__);
 }
 
@@ -692,10 +699,10 @@ void ewol::Program::SetTexture0(int32_t idElem, GLint textureOpenGlID)
 		return;
 	}
 	#if 0
-		glEnable(GL_TEXTURE_2D);
+		ewol::openGL::Enable(GL_TEXTURE_2D);
 		checkGlError("glEnable", __LINE__);
 	#endif
-	glActiveTexture(GL_TEXTURE0);
+	ewol::openGL::ActiveTexture(GL_TEXTURE0);
 	//checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
@@ -718,10 +725,10 @@ void ewol::Program::SetTexture1(int32_t idElem, GLint textureOpenGlID)
 		return;
 	}
 	#if 0
-		glEnable(GL_TEXTURE_2D);
+		ewol::openGL::Enable(GL_TEXTURE_2D);
 		checkGlError("glEnable", __LINE__);
 	#endif
-	glActiveTexture(GL_TEXTURE1);
+	ewol::openGL::ActiveTexture(GL_TEXTURE1);
 	//checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
 	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
@@ -740,13 +747,22 @@ void ewol::Program::UnUse(void)
 	}
 	#if 0
 	if (true == m_hasTexture) {
-		glDisable(GL_TEXTURE_2D);
-		checkGlError("glDisable", __LINE__);
+		ewol::openGL::Disable(GL_TEXTURE_2D);
+		//checkGlError("glDisable", __LINE__);
 		m_hasTexture = false;
 	}
 	#endif
-	glUseProgram(0);
-	checkGlError("glUseProgram", __LINE__);
+	// no need to disable program ==> this only generate perturbation on speed ...
+	ewol::openGL::UseProgram(0);
+	#ifdef PROGRAM_DISPLAY_SPEED
+		float localTime = (float)(ewol::GetTime() - g_startTime) / 1000.0f;
+		if (localTime>1) {
+			EWOL_ERROR("      prog : " << localTime << "ms    resource=\"" << m_name << "\"");
+		} else {
+			EWOL_DEBUG("      prog : " << localTime << "ms    resource=\"" << m_name << "\"");
+		}
+	#endif
+	//checkGlError("glUseProgram", __LINE__);
 }
 
 

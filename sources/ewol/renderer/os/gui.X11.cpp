@@ -38,7 +38,7 @@
 #define GUI_LOCK()          XLockDisplay(m_display)
 #define GUI_UNLOCK()        XUnlockDisplay(m_display)
 */
-
+bool hasDisplay = false;
 //#define DEBUG_X11_EVENT
 #ifdef DEBUG_X11_EVENT
 	#define X11_DEBUG      EWOL_DEBUG
@@ -1068,11 +1068,12 @@ void X11_Run(void)
 			}
 		}
 		if(true == m_run) {
-			bool hasDisplay = eSystem::Draw(false);
 			if (m_doubleBuffered && hasDisplay) {
 				glXSwapBuffers(m_display, WindowHandle);
 				XSync(m_display,0);
 			}
+			// draw after switch the previous windows ...
+			hasDisplay = eSystem::Draw(false);
 		}
 	}
 };

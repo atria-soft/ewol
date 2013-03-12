@@ -22,6 +22,6 @@ void main(void) {
 	MatrixPosition[3][0] = 0.0;
 	MatrixPosition[3][1] = 0.0;
 	MatrixPosition[3][2] = 0.0;
-	//v_ecNormal = vec3(MatrixPosition * vec4(EW_normal, 1.0) );
-	v_ecNormal = vec3(MatrixPosition * vec4(EW_faceNormal, 1.0) );
+	v_ecNormal = vec3(MatrixPosition * vec4(EW_normal, 1.0) );
+	//v_ecNormal = vec3(MatrixPosition * vec4(EW_faceNormal, 1.0) );
 }

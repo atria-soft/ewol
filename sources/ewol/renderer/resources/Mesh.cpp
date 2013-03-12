@@ -69,7 +69,7 @@ ewol::Mesh::Mesh(etk::UString genName, etk::UString shaderName) :
 	m_GLPosition = 0;
 	
 	// set the element material properties : 
-	m_material.SetAmbientFactor(vec4(0.200000,0.200000,0.200000, 1.0));
+	m_material.SetAmbientFactor(vec4(0.100000,0.100000,0.100000, 1.0));
 	m_material.SetDiffuseFactor(vec4(0.640000, 0.640000, 0.640000, 1.0));
 	m_material.SetSpecularFactor(vec4(0.500000, 0.500000, 0.500000, 1.0));
 	m_material.SetShininess(0.96078431);
@@ -121,7 +121,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	glEnable(GL_DEPTH_TEST);
+	ewol::openGL::Enable(GL_DEPTH_TEST);
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -145,10 +145,10 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	m_light.Draw(m_GLprogram);
 	
 	// Request the draw od the elements : 
-	glDrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
 	m_GLprogram->UnUse();
-	glDisable(GL_DEPTH_TEST);
-	glBindBuffer(GL_ARRAY_BUFFER,0);
+	ewol::openGL::Disable(GL_DEPTH_TEST);
+	//glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 
 // normal calculation of the normal face is really easy :
@@ -702,7 +702,39 @@ void ewol::Mesh::LoadMaterial(const etk::UString& name)
 
 void ewol::Mesh::DisplaceElement(const ewol::DisplacementTable& displacement)
 {
-	
+	CalculateNormaleFace();
+	CalculateNormaleEdge();
+	// displacement is done from the center of the element:
+	for (int32_t iii=0; iii<m_listVertex.Size(); iii++) {
+		vec3 position = m_listVertex[iii].normalized();
+		vec3 positionBase = vec3(position.x(), position.y(), 0).normalized();
+		vec3 positionBase2 = vec3(0, position.y(), position.z()).normalized();
+		
+		float modifx = 0.5f;
+		float modify = 0.5f;
+		if (position.x()!=0.0 || position.y()!=0.0) {
+			modifx = (acos(positionBase.x())/M_PI)/2.0f;
+			if (positionBase.y()>=0) {
+				modifx = 0.5f - modifx;
+			} else {
+				modifx = 0.5f + modifx;
+			}
+		}
+		if (position.y()!=0.0 || position.z()!=0.0) {
+			modify = (acos(positionBase2.z())/M_PI)/2.0f;
+			if (positionBase2.y()>=0) {
+				modify = 0.5f - modify;
+			} else {
+				modify = 0.5f + modify;
+			}
+		}
+		
+		float move = displacement.GetInterpolate(modifx,modify);
+		//EWOL_DEBUG("Get interpolate : from=" << position << " ==> (" << modifx << "," << modify << ") ==> " << move);
+		
+		vec3 translate = m_listVertexNormal[iii] * (move*4.0);
+		m_listVertex[iii] += translate;
+	}
 }
 
 

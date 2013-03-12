@@ -96,7 +96,19 @@ void ewol::Windows::SysDraw(void)
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
-	glEnable(GL_BLEND);
+	
+	ewol::openGL::Disable(GL_DITHER);
+	//ewol::openGL::Disable(GL_BLEND);
+	ewol::openGL::Disable(GL_STENCIL_TEST);
+	#ifndef __TARGET_OS__Android
+		ewol::openGL::Disable(GL_ALPHA_TEST);
+		ewol::openGL::Disable(GL_FOG);
+		glPixelZoom(1.0,1.0);
+	#endif
+	ewol::openGL::Disable(GL_TEXTURE_2D);
+	ewol::openGL::Disable(GL_DEPTH_TEST);
+	
+	ewol::openGL::Enable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
@@ -110,7 +122,7 @@ void ewol::Windows::SysDraw(void)
 	
 	GenDraw(displayProp);
 
-	glDisable(GL_BLEND);
+	ewol::openGL::Disable(GL_BLEND);
 	return;
 }
 

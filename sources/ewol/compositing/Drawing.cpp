@@ -328,7 +328,7 @@ void ewol::Drawing::Draw(void)
 	// color :
 	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 
-	glDrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 	m_GLprogram->UnUse();
 }
 
