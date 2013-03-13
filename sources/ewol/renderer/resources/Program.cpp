@@ -666,7 +666,7 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, const int32_t 
 	//checkGlError("glUniform4iv", __LINE__);
 }
 
-
+//#define PROGRAM_DISPLAY_SPEED
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef PROGRAM_DISPLAY_SPEED

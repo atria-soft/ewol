@@ -467,10 +467,12 @@ bool eSystem::Draw(bool displayEveryTime)
 {
 	int64_t currentTime = ewol::GetTime();
 	// this is to prevent the multiple display at the a high frequency ...
+	#ifndef __PLATFORM__Android
 	if(currentTime - previousDisplayTime < 1000000/120) {
 		usleep(1000);
 		return false;
 	}
+	#endif
 	previousDisplayTime = currentTime;
 	
 	if (true == isGlobalSystemInit) {
@@ -511,9 +513,11 @@ l_FpsSystem.IncrementCounter();
 			}
 		}
 l_FpsSystem.Toc();
+
 l_FpsFlush.Tic();
 l_FpsFlush.IncrementCounter();
 		glFlush();
+		//glFinish();
 l_FpsFlush.Toc();
 
 l_FpsSystemEvent.Draw();

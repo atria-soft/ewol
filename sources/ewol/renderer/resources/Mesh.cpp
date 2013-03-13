@@ -121,7 +121,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Enable(GL_DEPTH_TEST);
+	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -147,8 +147,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// Request the draw od the elements : 
 	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
 	m_GLprogram->UnUse();
-	ewol::openGL::Disable(GL_DEPTH_TEST);
-	//glBindBuffer(GL_ARRAY_BUFFER,0);
+	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	// TODO : UNDERSTAND why ... it is needed
+	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 
 // normal calculation of the normal face is really easy :

@@ -150,7 +150,10 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		// Call the widget drawing methode
 		displayProp.m_origin.setValue(tmpOriginX, tmpOriginY);
 		displayProp.m_size.setValue(tmpclipX, m_size.y());
+		//int64_t ___startTime = ewol::GetTime();
 		OnDraw(displayProp);
+		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
+		//EWOL_DEBUG("      Widget1  : " << ___localTime << "ms ");
 	} else {
 		glViewport( m_origin.x(),
 		            m_origin.y(),
@@ -165,7 +168,10 @@ void ewol::Widget::GenDraw(DrawProperty displayProp)
 		// Call the widget drawing methode
 		displayProp.m_origin = m_origin;
 		displayProp.m_size = m_size;
+		//int64_t ___startTime = ewol::GetTime();
 		OnDraw(displayProp);
+		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
+		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}
 	ewol::openGL::Pop();
 	return;

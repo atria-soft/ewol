@@ -97,18 +97,18 @@ void ewol::Windows::SysDraw(void)
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
 	
-	ewol::openGL::Disable(GL_DITHER);
-	//ewol::openGL::Disable(GL_BLEND);
-	ewol::openGL::Disable(GL_STENCIL_TEST);
+	ewol::openGL::Disable(ewol::openGL::FLAG_DITHER);
+	//ewol::openGL::Disable(ewol::openGL::FLAG_BLEND);
+	ewol::openGL::Disable(ewol::openGL::FLAG_STENCIL_TEST);
+	ewol::openGL::Disable(ewol::openGL::FLAG_ALPHA_TEST);
+	ewol::openGL::Disable(ewol::openGL::FLAG_FOG);
 	#ifndef __TARGET_OS__Android
-		ewol::openGL::Disable(GL_ALPHA_TEST);
-		ewol::openGL::Disable(GL_FOG);
 		glPixelZoom(1.0,1.0);
 	#endif
-	ewol::openGL::Disable(GL_TEXTURE_2D);
-	ewol::openGL::Disable(GL_DEPTH_TEST);
+	ewol::openGL::Disable(ewol::openGL::FLAG_TEXTURE_2D);
+	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	
-	ewol::openGL::Enable(GL_BLEND);
+	ewol::openGL::Enable(ewol::openGL::FLAG_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
 	// clear the matrix system :
@@ -122,7 +122,7 @@ void ewol::Windows::SysDraw(void)
 	
 	GenDraw(displayProp);
 
-	ewol::openGL::Disable(GL_BLEND);
+	ewol::openGL::Disable(ewol::openGL::FLAG_BLEND);
 	return;
 }
 
@@ -138,20 +138,35 @@ void ewol::Windows::OnRegenerateDisplay(void)
 	}
 }
 
+//#define TEST_PERFO_WINDOWS
 
 void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 {
-
+	#ifdef TEST_PERFO_WINDOWS
+	int64_t ___startTime0 = ewol::GetTime();
+	#endif
+	
 	// Clear the screen with transparency ...
 	glClearColor(0.750, 0.750, 0.750, 0.5);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	#ifdef TEST_PERFO_WINDOWS
+	float ___localTime0 = (float)(ewol::GetTime() - ___startTime0) / 1000.0f;
+	EWOL_ERROR("      Windows000  : " << ___localTime0 << "ms ");
 	
+	int64_t ___startTime1 = ewol::GetTime();
+	#endif
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw(displayProp);
 		//EWOL_DEBUG("Draw Windows");
 	}
+	#ifdef TEST_PERFO_WINDOWS
+	float ___localTime1 = (float)(ewol::GetTime() - ___startTime1) / 1000.0f;
+	EWOL_ERROR("      Windows111  : " << ___localTime1 << "ms ");
+	
+	int64_t ___startTime2 = ewol::GetTime();
+	#endif
 	// second display the pop-up
 	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
@@ -159,6 +174,10 @@ void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 			//EWOL_DEBUG("Draw Pop-up");
 		}
 	}
+	#ifdef TEST_PERFO_WINDOWS
+	float ___localTime2 = (float)(ewol::GetTime() - ___startTime2) / 1000.0f;
+	EWOL_ERROR("      Windows222  : " << ___localTime2 << "ms ");
+	#endif
 }
 
 

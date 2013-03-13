@@ -906,26 +906,26 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 		glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular);
 		glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
 		
-		ewol::openGL::Enable(GL_LIGHTING);
-		ewol::openGL::Enable(GL_LIGHT0);
-		ewol::openGL::Enable(GL_LIGHT1);
+		ewol::openGL::Enable(ewol::openGL::FLAG_LIGHTING);
+		ewol::openGL::Enable(ewol::openGL::FLAG_LIGHT0);
+		ewol::openGL::Enable(ewol::openGL::FLAG_LIGHT1);
 		
 		
 		glShadeModel(GL_SMOOTH);
-		ewol::openGL::Enable(GL_DEPTH_TEST);
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 		*/
 		//updateCamera();
 		if(false/*m_enableshadows*/) {
 			/*
 			glClear(GL_STENCIL_BUFFER_BIT);
-			ewol::openGL::Enable(GL_CULL_FACE);
+			ewol::openGL::Enable(ewol::openGL::FLAG_CULL_FACE);
 			renderscene(0);
 			
-			ewol::openGL::Disable(GL_LIGHTING);
+			ewol::openGL::Disable(ewol::openGL::FLAG_LIGHTING);
 			glDepthMask(GL_FALSE);
 			glDepthFunc(GL_LEQUAL);
-			ewol::openGL::Enable(GL_STENCIL_TEST);
+			ewol::openGL::Enable(ewol::openGL::FLAG_STENCIL_TEST);
 			glColorMask(GL_FALSE,GL_FALSE,GL_FALSE,GL_FALSE);
 			glStencilFunc(GL_ALWAYS,1,0xFFFFFFFFL);
 			glFrontFace(GL_CCW);
@@ -939,34 +939,34 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 			glPolygonMode(GL_FRONT,GL_FILL);
 			glPolygonMode(GL_BACK,GL_FILL);
 			glShadeModel(GL_SMOOTH);
-			ewol::openGL::Enable(GL_DEPTH_TEST);
+			ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
 			glDepthFunc(GL_LESS);
-			ewol::openGL::Enable(GL_LIGHTING);
+			ewol::openGL::Enable(ewol::openGL::FLAG_LIGHTING);
 			glDepthMask(GL_TRUE);
 			glCullFace(GL_BACK);
 			glFrontFace(GL_CCW);
-			ewol::openGL::Enable(GL_CULL_FACE);
+			ewol::openGL::Enable(ewol::openGL::FLAG_CULL_FACE);
 			glColorMask(GL_TRUE,GL_TRUE,GL_TRUE,GL_TRUE);
 			
 			glDepthFunc(GL_LEQUAL);
 			glStencilFunc( GL_NOTEQUAL, 0, 0xFFFFFFFFL );
 			glStencilOp( GL_KEEP, GL_KEEP, GL_KEEP );
-			ewol::openGL::Disable(GL_LIGHTING);
+			ewol::openGL::Disable(ewol::openGL::FLAG_LIGHTING);
 			renderscene(2);
-			ewol::openGL::Enable(GL_LIGHTING);
+			ewol::openGL::Enable(ewol::openGL::FLAG_LIGHTING);
 			glDepthFunc(GL_LESS);
-			ewol::openGL::Disable(GL_STENCIL_TEST);
-			ewol::openGL::Disable(GL_CULL_FACE);
+			ewol::openGL::Disable(ewol::openGL::FLAG_STENCIL_TEST);
+			ewol::openGL::Disable(ewol::openGL::FLAG_CULL_FACE);
 			*/
 		} else {
-			//ewol::openGL::Disable(GL_CULL_FACE);
+			//ewol::openGL::Disable(ewol::openGL::FLAG_CULL_FACE);
 			renderscene(0);
 		}
 		/*
 		int32_t	xOffset = 10;
 		int32_t yStart = 20;
 		int32_t yIncr = 20;
-		ewol::openGL::Disable(GL_LIGHTING);
+		ewol::openGL::Disable(ewol::openGL::FLAG_LIGHTING);
 		
 		glColor3f(0, 0, 0);
 		if ((m_debugMode & btIDebugDraw::DBG_NoHelpText)==0) {
@@ -974,7 +974,7 @@ void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
 			showProfileInfo(xOffset,yStart,yIncr);
 			resetPerspectiveProjection();
 		}
-		ewol::openGL::Disable(GL_LIGHTING);
+		ewol::openGL::Disable(ewol::openGL::FLAG_LIGHTING);
 		*/
 		//updateCamera();
 		
