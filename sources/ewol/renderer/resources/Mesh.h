@@ -23,10 +23,12 @@
 #define MESH_VBO_TEXTURE   (1)
 // 3 "float" elements
 #define MESH_VBO_VERTICES_NORMAL    (2)
+// Face normal position :
 #define MESH_VBO_FACE_NORMAL       (3)
 // 4 "float" elements
 #define MESH_VBO_COLOR     (4)
 
+#define USE_INDEXED_MESH
 namespace ewol
 {
 	class DisplacementTable
@@ -104,6 +106,9 @@ namespace ewol
 			int32_t m_nbElement;
 			int32_t m_vertex[4];
 			int32_t m_uv[4];
+			#ifdef USE_INDEXED_MESH
+			int32_t m_vertexVBOId[4]; // used to be an entry point of the rework of the dynamic generating of mesh
+			#endif
 		public:
 			Face(void) {};
 			Face(int32_t v1, int32_t t1,
@@ -158,6 +163,9 @@ namespace ewol
 			etk::Vector<Face> m_listFaces; //!< List of all Face for the mesh
 			etk::Vector<vec3> m_listFacesNormal; //!< List of all Face normal, when calculated
 			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
+			#ifdef USE_INDEXED_MESH
+			etk::Vector<uint32_t> m_listIndexFaces;
+			#endif
 		protected:
 			ewol::VirtualBufferObject*  m_verticesVBO;
 			ewol::TextureFile*          m_texture0;

@@ -98,6 +98,47 @@ void ewol::Text::LoadProgram(void)
 	}
 }
 
+void ewol::Text::Draw(const mat4& transformationMatrix)
+{
+	
+	// draw BG in any case:
+	m_vectorialDraw.Draw();
+	
+	if (m_coord.Size()<=0 || NULL == m_font) {
+		// TODO : a remÃštre ...
+		//EWOL_WARNING("Nothink to draw...");
+		return;
+	}
+	if (m_font == NULL) {
+		EWOL_WARNING("no font...");
+		return;
+	}
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	// set Matrix : translation/positionMatrix
+	mat4 projMatrix = ewol::openGL::GetMatrix();
+	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
+	m_GLprogram->Use(); 
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	// TextureID
+	m_GLprogram->SetTexture0(m_GLtexID, m_font->GetId());
+	// position :
+	m_GLprogram->SendAttribute(m_GLPosition, 2/*x,y*/, &m_coord[0]);
+	// Texture :
+	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
+	// color :
+	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	// Request the draw od the elements : 
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_coord.Size());
+	m_GLprogram->UnUse();
+	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+}
+
+
 void ewol::Text::Draw(void)
 {
 	// draw BG in any case:

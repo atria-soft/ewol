@@ -55,7 +55,7 @@ void ewol::Compositing::Clear(void)
 }
 
 
-void ewol::Compositing::SetMatrix(mat4 mat)
+void ewol::Compositing::SetMatrix(const mat4& mat)
 {
 	m_matrixApply = mat;
 }

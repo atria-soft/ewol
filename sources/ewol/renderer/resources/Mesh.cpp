@@ -110,9 +110,15 @@ ewol::Mesh::~Mesh(void)
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
-	if (m_numberOfElments<=0) {
-		return;
-	}
+	#ifndef USE_INDEXED_MESH
+		if (m_numberOfElments<=0) {
+			return;
+		}
+	#else
+		if (m_listIndexFaces.Size()<=0) {
+			return;
+		}
+	#endif
 	if (NULL == m_texture0) {
 		EWOL_WARNING("Texture does not exist ...");
 		return;
@@ -139,13 +145,19 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
 	// position :
-	m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
+	#ifndef USE_INDEXED_MESH
+		m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
+	#endif
 	// draw materials :
 	m_material.Draw(m_GLprogram);
 	m_light.Draw(m_GLprogram);
 	
-	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
+	#ifndef USE_INDEXED_MESH
+		// Request the draw od the elements : 
+		ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
+	#else
+		ewol::openGL::DrawElements(GL_TRIANGLES, m_listIndexFaces);
+	#endif
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
@@ -205,83 +217,128 @@ void ewol::Mesh::GenerateVBO(void)
 	// calculate the normal of all faces if needed
 	CalculateNormaleFace();
 	CalculateNormaleEdge();
-	// TODO : Set a better display system, this one is the worst I known ...
-	for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
-		#ifdef PRINT_HALF
-			m_numberOfElments += 3*3;
-		#else
-			m_numberOfElments += m_listFaces[iii].m_nbElement*3;
-		#endif
-		// 2 possibilities : triangle or quad :
-		int32_t indice = 0;
-		vec2 tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-		if(true==m_enableVertexNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-		}
-		if(true==m_enableFaceNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-		}
-		
-		indice = 1;
-		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-		if(true==m_enableVertexNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-		}
-		if(true==m_enableFaceNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-		}
-		
-		indice = 2;
-		tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-		m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-		m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-		if(true==m_enableVertexNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-		}
-		if(true==m_enableFaceNormal) {
-			m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-		}
-		#ifndef PRINT_HALF
-			if (m_listFaces[iii].m_nbElement==4) {
-				indice = 0;
-				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-				if(true==m_enableVertexNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+	#ifdef USE_INDEXED_MESH
+		// remove old elements
+		m_listIndexFaces.Clear();
+		// Generate element in 2 pass : 
+		//    - create new index dependeng a vertex is a unique componenet of position, texture, normal
+		//    - the index list generation (can be dynamic ... (TODO later)
+		for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+			for(int32_t indice=0 ; indice<m_listFaces[iii].m_nbElement; indice++) {
+				vec3 position = m_listVertex[m_listFaces[iii].m_vertex[indice]];
+				vec3 normal = m_listVertexNormal[m_listFaces[iii].m_vertex[indice]];
+				vec2 texturepos(m_listUV[m_listFaces[iii].m_uv[indice]].x(),1.0f-m_listUV[m_listFaces[iii].m_uv[indice]].y());
+				// try to find it in the list :
+				bool elementFind = false;
+				for (int32_t jjj=0; jjj<m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES); jjj++) {
+					if(    m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES,jjj) == position
+					    && m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES_NORMAL,jjj) == normal
+					    && m_verticesVBO->GetOnBufferVec2(MESH_VBO_TEXTURE,jjj) == texturepos) {
+						m_listFaces[iii].m_vertexVBOId[indice] = jjj;
+						elementFind = true;
+						// stop searching ...
+						break;
+					}
 				}
-				if(true==m_enableFaceNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-				}
-				
-				indice = 2;
-				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-				if(true==m_enableVertexNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-				}
-				if(true==m_enableFaceNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-				}
-				
-				indice = 3;
-				tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-				m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-				if(true==m_enableVertexNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-				}
-				if(true==m_enableFaceNormal) {
-					m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+				if (false == elementFind) {
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES, position);
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL, normal);
+					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, texturepos);
+					m_listFaces[iii].m_vertexVBOId[indice] = m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES)-1;
 				}
 			}
-		#endif
-	}
+		}
+		for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+			m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[0]);
+			m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[1]);
+			m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[2]);
+			#ifndef PRINT_HALF
+				if (m_listFaces[iii].m_nbElement==4) {
+					m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[0]);
+					m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[2]);
+					m_listIndexFaces.PushBack(m_listFaces[iii].m_vertexVBOId[3]);
+				}
+			#endif
+		}
+	#else
+		// TODO : Set a better display system, this one is the worst I known ...
+		for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
+			#ifdef PRINT_HALF
+				m_numberOfElments += 3*3;
+			#else
+				m_numberOfElments += m_listFaces[iii].m_nbElement*3;
+			#endif
+			// 2 possibilities : triangle or quad :
+			int32_t indice = 0;
+			vec2 tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+			if(true==m_enableVertexNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+			}
+			if(true==m_enableFaceNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+			}
+			
+			indice = 1;
+			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+			if(true==m_enableVertexNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+			}
+			if(true==m_enableFaceNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+			}
+			
+			indice = 2;
+			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+			if(true==m_enableVertexNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+			}
+			if(true==m_enableFaceNormal) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+			}
+			#ifndef PRINT_HALF
+				if (m_listFaces[iii].m_nbElement==4) {
+					indice = 0;
+					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+					if(true==m_enableVertexNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+					}
+					if(true==m_enableFaceNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+					}
+					
+					indice = 2;
+					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+					if(true==m_enableVertexNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+					}
+					if(true==m_enableFaceNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+					}
+					
+					indice = 3;
+					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
+					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
+					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
+					if(true==m_enableVertexNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
+					}
+					if(true==m_enableFaceNormal) {
+						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
+					}
+				}
+			#endif
+		}
+	#endif
 	// update all the VBO elements ...
 	m_verticesVBO->Flush();
 }

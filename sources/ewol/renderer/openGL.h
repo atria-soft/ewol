@@ -10,6 +10,7 @@
 #define __OPEN_GL_H__
 
 #include <etk/types.h>
+#include <etk/Vector.h>
 #include <etk/math/Matrix4.h>
 
 #ifdef __cplusplus
@@ -166,7 +167,9 @@ namespace ewol {
 		 * @brief draw a specific array ==> this enable mode difference ...
 		 */
 		void DrawArrays(uint32_t mode, int32_t first, int32_t count);
-		void DrawElements(uint32_t mode, int32_t count, uint32_t type, const void*  indices);
+		void DrawElements  (uint32_t mode, const etk::Vector<uint32_t>& indices);
+		void DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices);
+		void DrawElements8 (uint32_t mode, const etk::Vector<uint8_t>& indices);
 		/**
 		 * @brief Use openGL program
 		 * @param[in] id Id of the program that might be used

@@ -250,10 +250,23 @@ void ewol::openGL::DrawArrays(uint32_t mode, int32_t first, int32_t count)
 	glDrawArrays(mode, first, count);
 }
 
-void ewol::openGL::DrawElements(uint32_t mode, int32_t count, uint32_t type, const void*  indices)
+void ewol::openGL::DrawElements(uint32_t mode, const etk::Vector<uint32_t>& indices)
 {
 	UpdateAllFlags();
-	glDrawElements(mode, count,  type, indices);
+	//EWOL_DEBUG("Request draw of " << indices.Size() << "elements");
+	glDrawElements(mode, indices.Size(), GL_UNSIGNED_INT, &indices[0]);
+}
+
+void ewol::openGL::DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices)
+{
+	UpdateAllFlags();
+	glDrawElements(mode, indices.Size(), GL_UNSIGNED_SHORT, &indices[0]);
+}
+
+void ewol::openGL::DrawElements8(uint32_t mode, const etk::Vector<uint8_t>& indices)
+{
+	UpdateAllFlags();
+	glDrawElements(mode, indices.Size(), GL_UNSIGNED_BYTE, &indices[0]);
 }
 
 

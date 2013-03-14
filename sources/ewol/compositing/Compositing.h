@@ -59,7 +59,7 @@ namespace ewol
 			 * @brief set the transformation matrix
 			 * @param[in] mat The new matrix.
 			 */
-			virtual void SetMatrix(mat4 mat);
+			virtual void SetMatrix(const mat4& mat);
 	};
 };
 
