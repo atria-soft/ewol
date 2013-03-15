@@ -98,7 +98,7 @@ void ewol::Text::LoadProgram(void)
 	}
 }
 
-void ewol::Text::Draw(const mat4& transformationMatrix)
+void ewol::Text::Draw(const mat4& transformationMatrix, bool enableDepthTest)
 {
 	
 	// draw BG in any case:
@@ -117,7 +117,9 @@ void ewol::Text::Draw(const mat4& transformationMatrix)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==enableDepthTest) {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 	// set Matrix : translation/positionMatrix
 	mat4 projMatrix = ewol::openGL::GetMatrix();
 	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
@@ -135,7 +137,9 @@ void ewol::Text::Draw(const mat4& transformationMatrix)
 	// Request the draw od the elements : 
 	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_coord.Size());
 	m_GLprogram->UnUse();
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==enableDepthTest) {
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 }
 
 
