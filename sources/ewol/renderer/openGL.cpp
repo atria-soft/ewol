@@ -37,7 +37,7 @@ void ewol::openGL::UnInit(void)
 	l_matrixCamera.Identity();
 }
 
-void ewol::openGL::SetBasicMatrix(mat4& newOne)
+void ewol::openGL::SetBasicMatrix(const mat4& newOne)
 {
 	if (l_matrixList.Size()!=1) {
 		EWOL_ERROR("matrix is not corect size in the stack : " << l_matrixList.Size());
@@ -46,7 +46,7 @@ void ewol::openGL::SetBasicMatrix(mat4& newOne)
 	l_matrixList.PushBack(newOne);
 }
 
-void ewol::openGL::SetMatrix(mat4& newOne)
+void ewol::openGL::SetMatrix(const mat4& newOne)
 {
 	if (l_matrixList.Size()==0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
@@ -82,7 +82,7 @@ void ewol::openGL::Pop(void)
 	l_matrixCamera.Identity();
 }
 
-mat4& ewol::openGL::GetMatrix(void)
+const mat4& ewol::openGL::GetMatrix(void)
 {
 	if (l_matrixList.Size()==0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.Size());
@@ -92,12 +92,12 @@ mat4& ewol::openGL::GetMatrix(void)
 	return l_matrixList[l_matrixList.Size()-1];
 }
 
-mat4& ewol::openGL::GetCameraMatrix(void)
+const mat4& ewol::openGL::GetCameraMatrix(void)
 {
 	return l_matrixCamera;
 }
 
-void ewol::openGL::SetCameraMatrix(mat4& newOne)
+void ewol::openGL::SetCameraMatrix(const mat4& newOne)
 {
 	l_matrixCamera = newOne;
 }

@@ -64,13 +64,13 @@ namespace ewol {
 		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
 		 * @param[in] newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
 		 */
-		void SetBasicMatrix(mat4& newOne);
+		void SetBasicMatrix(const mat4& newOne);
 		/**
 		 * @brief this funtion configure the current use matrix for the renderer (call @ref Push before, and @ref Pop when no more needed).
 		 * @param[in] newOne The new current matrix use for the render.
 		 * @note We did not use opengl standard system, due to the fact that is not supported in opengl ES-2
 		 */
-		void SetMatrix(mat4& newOne);
+		void SetMatrix(const mat4& newOne);
 		/**
 		 * @brief Store current matrix in the matrix stack.
 		 */
@@ -83,17 +83,17 @@ namespace ewol {
 		 * @brief Get a reference on the current matrix destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		mat4& GetMatrix(void);
+		const mat4& GetMatrix(void);
 		/**
 		 * @brief Get a reference on the current matrix camera destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		mat4& GetCameraMatrix(void);
+		const mat4& GetCameraMatrix(void);
 		/**
 		 * @brief Set a reference on the current camera to opengl renderer.
 		 * @param[in] newOne The requested matrix.
 		 */
-		void SetCameraMatrix(mat4& newOne);
+		void SetCameraMatrix(const mat4& newOne);
 		/**
 		 * @brief
 		 */
