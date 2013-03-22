@@ -13,7 +13,7 @@
 #include <etk/UString.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/SizerHori.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/ContextMenu.h>
 
 namespace widget {
@@ -29,7 +29,7 @@ namespace widget {
 			const char *   m_generateEvent;
 			etk::UString   m_message;
 	};
-	class Menu :public widget::SizerHori
+	class Menu :public widget::Sizer
 	{
 		public:
 			Menu(void);

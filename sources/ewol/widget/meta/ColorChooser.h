@@ -15,14 +15,14 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/Label.h>
-#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/ColorBar.h>
 #include <ewol/widget/Slider.h>
 
 extern const char * const ewolEventColorChooserChange;
 
 namespace widget {
-	class ColorChooser : public widget::SizerVert
+	class ColorChooser : public widget::Sizer
 	{
 		public:
 			ColorChooser(void);

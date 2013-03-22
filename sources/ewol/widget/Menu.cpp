@@ -12,7 +12,6 @@
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
-#include <ewol/widget/SizerVert.h>
 
 #undef __class__
 #define __class__	"Menu"
@@ -32,7 +31,7 @@ widget::Menu::~Menu(void)
 void widget::Menu::SubWidgetRemoveAll(void)
 {
 	Clear();
-	widget::SizerHori::SubWidgetRemoveAll();
+	widget::Sizer::SubWidgetRemoveAll();
 }
 
 void widget::Menu::SubWidgetAdd(ewol::Widget* newWidget)
@@ -91,7 +90,7 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 		// set the image if one is present ...
 		myButton->SetImage(tmpObject->m_image);
 		// add it in the widget list
-		widget::SizerHori::SubWidgetAdd(myButton);
+		widget::Sizer::SubWidgetAdd(myButton);
 		// keep the specific event ...
 		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 		tmpObject->m_widgetPointer = myButton;
@@ -108,7 +107,7 @@ void widget::Menu::AddSpacer(void)
 void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	/*
-	if (true == ewol::SizerHori::OnReceiveMessage(CallerObject, eventId, data)) {
+	if (true == ewol::Sizer$::OnReceiveMessage(CallerObject, eventId, data)) {
 		return true;
 	}
 	*/
@@ -158,13 +157,13 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					
 					m_widgetContextMenu->SetPositionMark(widget::CONTEXT_MENU_MARK_TOP, newPosition );
 					
-					widget::SizerVert * mySizerVert = NULL;
+					widget::Sizer * mySizer = NULL;
 					widget::Button * myButton = NULL;
 					
-					mySizerVert = new widget::SizerVert();
-						mySizerVert->LockExpendContamination(true);
+					mySizer = new widget::Sizer(widget::Sizer::modeVert);
+						mySizer->LockExpendContamination(true);
 						// set it in the pop-up-system : 
-						m_widgetContextMenu->SubWidgetSet(mySizerVert);
+						m_widgetContextMenu->SubWidgetSet(mySizer);
 						
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
@@ -179,7 +178,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 										myButton->SetExpendX(true);
 										myButton->SetFillX(true);
 										// add it in the widget list
-										mySizerVert->SubWidgetAdd(myButton);
+										mySizer->SubWidgetAdd(myButton);
 										m_listElement[jjj]->m_widgetPointer = myButton;
 									}
 								}
@@ -196,7 +195,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 
 void widget::Menu::OnObjectRemove(ewol::EObject * removeObject)
 {
-	widget::SizerHori::OnObjectRemove(removeObject);
+	widget::Sizer::OnObjectRemove(removeObject);
 	if (m_widgetContextMenu == removeObject) {
 		m_widgetContextMenu = NULL;
 	}

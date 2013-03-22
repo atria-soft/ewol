@@ -23,8 +23,7 @@
  */
 
 #include <ewol/widget/meta/FileChooser.h>
-#include <ewol/widget/SizerHori.h>
-#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/List.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
@@ -78,8 +77,8 @@ widget::FileChooser::FileChooser(void)
 	m_widgetListFile = NULL;
 	m_widgetCheckBox = NULL;
 	
-	widget::SizerVert * mySizerVert = NULL;
-	widget::SizerHori * mySizerHori = NULL;
+	widget::Sizer * mySizerVert = NULL;
+	widget::Sizer * mySizerHori = NULL;
 	widget::Spacer * mySpacer = NULL;
 	//widget::Label * myLabel = NULL;
 	widget::Image * myImage = NULL;
@@ -95,7 +94,7 @@ widget::FileChooser::FileChooser(void)
 	#endif
 	m_file = "";
 	
-	mySizerVert = new widget::SizerVert();
+	mySizerVert = new widget::Sizer(widget::Sizer::modeVert);
 	if (NULL == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
@@ -103,7 +102,7 @@ widget::FileChooser::FileChooser(void)
 		// set it in the pop-up-system : 
 		SubWidgetSet(mySizerVert);
 		
-		mySizerHori = new widget::SizerHori();
+		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -140,7 +139,7 @@ widget::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
 		}
-		mySizerHori = new widget::SizerHori();
+		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -194,7 +193,7 @@ widget::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 		}
-		mySizerHori = new widget::SizerHori();
+		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -218,7 +217,7 @@ widget::FileChooser::FileChooser(void)
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFileName);
 			}
 		}
-		mySizerHori = new widget::SizerHori();
+		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {

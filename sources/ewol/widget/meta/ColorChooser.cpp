@@ -7,8 +7,7 @@
  */
 
 #include <ewol/widget/meta/ColorChooser.h>
-#include <ewol/widget/SizerHori.h>
-#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/List.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/WidgetManager.h>
@@ -33,7 +32,8 @@ const char * const eventColorBarHasChange          = "event-color-bar-has-change
 const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
 
 
-widget::ColorChooser::ColorChooser(void)
+widget::ColorChooser::ColorChooser(void) :
+	widget::Sizer(widget::Sizer::modeVert)
 {
 	AddEventId(ewolEventColorChooserChange);
 	
@@ -182,7 +182,7 @@ void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const 
 void widget::ColorChooser::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
-	widget::SizerVert::OnObjectRemove(removeObject);
+	widget::Sizer::OnObjectRemove(removeObject);
 	// second step find if in all the elements ...
 	if(removeObject == m_widgetRed) {
 		m_widgetRed = NULL;

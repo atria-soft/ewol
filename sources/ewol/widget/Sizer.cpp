@@ -6,27 +6,38 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/WidgetManager.h>
 
 
 #undef __class__
-#define __class__	"SizerVert"
+#define __class__	"Sizer"
 
 
-widget::SizerVert::SizerVert(void)
+widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
+	m_mode(mode),
+	m_lockExpendContamination(false,false)
 {
-	// set contamination enable
-	LockExpendContamination();
+	
 }
 
-widget::SizerVert::~SizerVert(void)
+widget::Sizer::~Sizer(void)
 {
 	SubWidgetRemoveAll();
 }
 
+void widget::Sizer::SetMode(widget::Sizer::displayMode_te mode)
+{
+	m_mode = mode;
+	MarkToRedraw();
+}
 
-bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
+widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
+{
+	return m_mode;
+}
+
+bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.setValue(availlableX, availlableY);
@@ -37,11 +48,20 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
-			unexpendableSize += tmpSize.y();
-			if (false == m_subWidget[iii]->CanExpentY()) {
-				nbWidgetFixedSize++;
+			if (m_mode==widget::Sizer::modeVert) {
+				unexpendableSize += tmpSize.y();
+				if (false == m_subWidget[iii]->CanExpentY()) {
+					nbWidgetFixedSize++;
+				} else {
+					nbWidgetNotFixedSize++;
+				}
 			} else {
-				nbWidgetNotFixedSize++;
+				unexpendableSize += tmpSize.x();
+				if (false == m_subWidget[iii]->CanExpentX()) {
+					nbWidgetFixedSize++;
+				} else {
+					nbWidgetNotFixedSize++;
+				}
 			}
 		}
 	}
@@ -49,7 +69,11 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expend, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
-		sizeToAddAtEveryOne = (m_size.y() - unexpendableSize) / nbWidgetNotFixedSize;
+		if (m_mode==widget::Sizer::modeVert) {
+			sizeToAddAtEveryOne = (m_size.y() - unexpendableSize) / nbWidgetNotFixedSize;
+		} else {
+			sizeToAddAtEveryOne = (m_size.x() - unexpendableSize) / nbWidgetNotFixedSize;
+		}
 		if (sizeToAddAtEveryOne<0.0) {
 			sizeToAddAtEveryOne=0;
 		}
@@ -62,12 +86,22 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin.x(), tmpOrigin.y());
 			// Now Update his Size  his size in X and the curent sizer size in Y:
-			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne);
-				tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
+			if (m_mode==widget::Sizer::modeVert) {
+				if (true == m_subWidget[iii]->CanExpentY()) {
+					m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne);
+					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
+				} else {
+					m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y());
+					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
+				}
 			} else {
-				m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y());
-				tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
+				if (true == m_subWidget[iii]->CanExpentX()) {
+					m_subWidget[iii]->CalculateSize(tmpSize.x()+sizeToAddAtEveryOne, m_size.y());
+					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
+				} else {
+					m_subWidget[iii]->CalculateSize(tmpSize.x(), m_size.y());
+					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
+				}
 			}
 		}
 	}
@@ -76,7 +110,7 @@ bool widget::SizerVert::CalculateSize(float availlableX, float availlableY)
 }
 
 
-bool widget::SizerVert::CalculateMinSize(void)
+bool widget::Sizer::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
 	m_userExpend.setValue(false, false);
@@ -92,10 +126,17 @@ bool widget::SizerVert::CalculateMinSize(void)
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			//EWOL_DEBUG("VERT : NewMinSize=" << tmpSize);
-			//EWOL_DEBUG("             Get minSize[" << iii << "] ("<< tmpSize.x << "," << tmpSize.y << ")");
-			m_minSize.setY(m_minSize.y() + tmpSize.y());
-			if (tmpSize.x()>m_minSize.x()) {
-				m_minSize.setX(tmpSize.x());
+			//EWOL_DEBUG("             Get minSize[" << iii << "] "<< tmpSize);
+			if (m_mode==widget::Sizer::modeVert) {
+				m_minSize.setY(m_minSize.y() + tmpSize.y());
+				if (tmpSize.x()>m_minSize.x()) {
+					m_minSize.setX(tmpSize.x());
+				}
+			} else {
+				m_minSize.setX(m_minSize.x() + tmpSize.x());
+				if (tmpSize.y()>m_minSize.y()) {
+					m_minSize.setY(tmpSize.y());
+				}
 			}
 		}
 	}
@@ -103,45 +144,51 @@ bool widget::SizerVert::CalculateMinSize(void)
 	return true;
 }
 
-void widget::SizerVert::SetMinSize(float x, float y)
+void widget::Sizer::SetMinSize(float x, float y)
 {
 	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::SizerVert::SetExpendX(bool newExpend)
+void widget::Sizer::SetExpendX(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
 }
 
-bool widget::SizerVert::CanExpentX(void)
+bool widget::Sizer::CanExpentX(void)
 {
-	if (true == m_lockExpendContamination) {
+	if (true == m_lockExpendContamination.x()) {
 		return false;
 	}
 	return m_userExpend.x();
 }
 
-void widget::SizerVert::SetExpendY(bool newExpend)
+void widget::Sizer::SetExpendY(bool newExpend)
 {
 	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
-bool widget::SizerVert::CanExpentY(void)
+bool widget::Sizer::CanExpentY(void)
 {
-	if (true == m_lockExpendContamination) {
+	if (true == m_lockExpendContamination.y()) {
 		return false;
 	}
 	return m_userExpend.y();
 }
 
-void widget::SizerVert::LockExpendContamination(bool lockExpend)
+void widget::Sizer::LockExpendContamination(bool lockExpend)
 {
-	m_lockExpendContamination = lockExpend;
+	m_lockExpendContamination.setValue(lockExpend,lockExpend);
+}
+void widget::Sizer::LockExpendContaminationVert(bool lockExpend)
+{
+	m_lockExpendContamination.setY(lockExpend);
+}
+void widget::Sizer::LockExpendContaminationHori(bool lockExpend)
+{
+	m_lockExpendContamination.setX(lockExpend);
 }
 
-//etk::Vector<ewol::Widget*> m_SubWidget;
-
-void widget::SizerVert::SubWidgetRemoveAll(void)
+void widget::Sizer::SubWidgetRemoveAll(void)
 {
 	// the size automaticly decrement with the auto call of the OnObjectRemove function
 	while (m_subWidget.Size() > 0 ) {
@@ -154,7 +201,7 @@ void widget::SizerVert::SubWidgetRemoveAll(void)
 }
 
 
-void widget::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
+void widget::Sizer::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -162,8 +209,16 @@ void widget::SizerVert::SubWidgetAdd(ewol::Widget* newWidget)
 	m_subWidget.PushBack(newWidget);
 }
 
+void widget::Sizer::SubWidgetAddStart(ewol::Widget* newWidget)
+{
+	if (NULL == newWidget) {
+		return;
+	}
+	m_subWidget.PushFront(newWidget);
+}
 
-void widget::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
+
+void widget::Sizer::SubWidgetRemove(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -178,7 +233,7 @@ void widget::SizerVert::SubWidgetRemove(ewol::Widget* newWidget)
 	}
 }
 
-void widget::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::Sizer::SubWidgetUnLink(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
 		return;
@@ -193,7 +248,7 @@ void widget::SizerVert::SubWidgetUnLink(ewol::Widget* newWidget)
 }
 
 
-void widget::SizerVert::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Sizer::OnDraw(ewol::DrawProperty& displayProp)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -204,7 +259,7 @@ void widget::SizerVert::OnDraw(ewol::DrawProperty& displayProp)
 
 
 
-void widget::SizerVert::OnRegenerateDisplay(void)
+void widget::Sizer::OnRegenerateDisplay(void)
 {
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -214,7 +269,7 @@ void widget::SizerVert::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::SizerVert::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::Sizer::GetWidgetAtPos(vec2 pos)
 {
 	if (true == IsHide()) {
 		return NULL;
@@ -242,7 +297,7 @@ ewol::Widget * widget::SizerVert::GetWidgetAtPos(vec2 pos)
 }
 
 
-void widget::SizerVert::OnObjectRemove(ewol::EObject * removeObject)
+void widget::Sizer::OnObjectRemove(ewol::EObject * removeObject)
 {
 	// First step call parrent : 
 	ewol::Widget::OnObjectRemove(removeObject);

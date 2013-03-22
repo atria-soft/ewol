@@ -72,8 +72,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/Menu.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/ProgressBar.cpp \
-			ewol/widget/SizerHori.cpp \
-			ewol/widget/SizerVert.cpp \
+			ewol/widget/Sizer.cpp \
 			ewol/widget/Slider.cpp \
 			ewol/widget/WSlider.cpp \
 			ewol/widget/Spacer.cpp \
