@@ -31,7 +31,7 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolParameter"; };
 			// Derived function
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			

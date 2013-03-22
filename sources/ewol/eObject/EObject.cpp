@@ -74,7 +74,7 @@ static void MultiCastRm(ewol::EObject* object)
 	}
 }
 
-static void MultiCastSend(ewol::EObject* object, const char* const message, etk::UString& data)
+static void MultiCastSend(ewol::EObject* object, const char* const message, const etk::UString& data)
 {
 	EWOL_VERBOSE("SendMulticast message \"" << message << "\" data=\"" << data << "\" to :");
 	
@@ -92,7 +92,7 @@ static void MultiCastSend(ewol::EObject* object, const char* const message, etk:
 	}
 }
 
-void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const messageId, etk::UString& data)
+void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const messageId, const etk::UString& data)
 {
 	MultiCastSend(NULL, messageId, data);
 }
@@ -148,7 +148,7 @@ void ewol::EObject::AddEventId(const char * generateEventId)
 }
 
 
-void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString data)
+void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString& data)
 {
 	// for every element registered ...
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
@@ -164,7 +164,7 @@ void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::USt
 }
 
 
-void ewol::EObject::SendMultiCast(const char* const messageId, etk::UString data)
+void ewol::EObject::SendMultiCast(const char* const messageId, const etk::UString& data)
 {
 	MultiCastSend(this, messageId, data);
 }

@@ -24,13 +24,13 @@ namespace ewol
 			int32_t      m_valueInt;
 			float        m_valuefloat;
 		public:
-			SimpleConfigElement(etk::UString name) :
+			SimpleConfigElement(const etk::UString& name) :
 				m_paramName(name),
 				m_value(""),
 				m_valueInt(0),
 				m_valuefloat(0.0) { };
 			~SimpleConfigElement(void) { };
-			void          Parse(etk::UString value);
+			void          Parse(const etk::UString& value);
 			int32_t       GetInteger(void) { return m_valueInt; };
 			float         GetFloat(void)   { return m_valuefloat; };
 			etk::UString& GetString(void)  { return m_value; };

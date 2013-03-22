@@ -74,7 +74,7 @@ namespace widget {
 			// Derived function
 			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent);
 			// Derived function
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data);
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 			// Derived function
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 		protected:

@@ -15,9 +15,9 @@
 
 namespace ewol {
 	namespace EObjectMessageMultiCast {
-		void Init(  void);
+		void Init(void);
 		void UnInit(void);
-		void AnonymousSend(const char* const messageId, etk::UString& data);
+		void AnonymousSend(const char* const messageId, const etk::UString& data);
 	};
 	
 	class EObject;
@@ -26,9 +26,9 @@ namespace ewol {
 	 */
 	class EventExtGen {
 		public:
-			const char*    localEventId;       //!< local event Id generation
-			ewol::EObject* destEObject;        //!< destination widget that might be call
-			const char*    destEventId;        //!< Generated event ID on the distant widget
+			const char* localEventId; //!< local event Id generation
+			ewol::EObject* destEObject; //!< destination widget that might be call
+			const char* destEventId; //!< Generated event ID on the distant widget
 	};
 	
 	/**
@@ -38,9 +38,9 @@ namespace ewol {
 	 */
 	class EObject {
 		private:
-			int32_t                        m_uniqueId;          //!< Object UniqueID ==> TODO : Check if it use is needed
-			etk::Vector<EventExtGen*>  m_externEvent;       //!< Generic list of event generation for output link
-			etk::Vector<const char*>   m_availlableEventId; //!< List of all event availlable for this widget
+			int32_t m_uniqueId; //!< Object UniqueID ==> TODO : Check if it use is needed
+			etk::Vector<EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
+			etk::Vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
 		public:
 			/**
 			 * @brief Constructor
@@ -87,7 +87,7 @@ namespace ewol {
 			 * @param[in] data data associated with the event
 			 * @return ---
 			 */
-			void GenerateEventId(const char * generateEventId, const etk::UString data = "");
+			void GenerateEventId(const char * generateEventId, const etk::UString& data = "");
 			
 			/**
 			 * @brief Generate Multicast event on all EObject requested the event
@@ -95,7 +95,7 @@ namespace ewol {
 			 * @param[in] data String that is send at all the destinations
 			 * @return ---
 			 */
-			void SendMultiCast(const char* const messageId, etk::UString data = "");
+			void SendMultiCast(const char* const messageId, const etk::UString& data = "");
 			
 			/**
 			 * @brief Register of the arrival of a Multicast message
@@ -128,7 +128,7 @@ namespace ewol {
 			 * @param[in] data Data registered by this class
 			 * @return ---
 			 */
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data) { };
+			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data) { };
 	};
 };
 

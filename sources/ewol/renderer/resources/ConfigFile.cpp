@@ -11,14 +11,14 @@
 #include <ewol/renderer/resources/ConfigFile.h>
 
 
-void ewol::SimpleConfigElement::Parse(etk::UString value)
+void ewol::SimpleConfigElement::Parse(const etk::UString& value)
 {
-	char* tmp = value.c_str();
+	etk::Char tmp = value.c_str();
 	m_valueInt = 0;
 	m_valuefloat = 0;
 	sscanf(tmp, "%d", &m_valueInt);
 	sscanf(tmp, "%f", &m_valuefloat);
-	m_value = tmp;
+	m_value = value;
 }
 
 

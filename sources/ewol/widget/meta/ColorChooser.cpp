@@ -130,7 +130,7 @@ draw::Color widget::ColorChooser::GetColor(void)
 }
 
 
-void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	if (NULL == CallerObject) {
 		return;

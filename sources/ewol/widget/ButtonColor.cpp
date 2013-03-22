@@ -219,7 +219,7 @@ draw::Color widget::ButtonColor::GetValue(void)
 }
 
 
-void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	EWOL_INFO("Receive MSG : \"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (eventId == ewolEventColorChooserChange) {

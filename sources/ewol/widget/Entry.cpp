@@ -413,7 +413,7 @@ void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboar
 }
 
 
-void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	ewol::Widget::OnReceiveMessage(CallerObject, eventId, data);
 	if(eventId == ewolEventEntryClean) {

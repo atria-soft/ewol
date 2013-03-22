@@ -69,8 +69,9 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	
 	int32_t tmpSize = 0;
 	// extarct name and size :
-	char * tmpData = fontName.c_str();
-	char * tmpPos = strchr(tmpData, ':');
+	etk::Char tmpChar = fontName.c_str();
+	const char * tmpData = tmpChar;
+	const char * tmpPos = strchr(tmpData, ':');
 	
 	if (tmpPos==NULL) {
 		m_size = 1;

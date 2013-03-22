@@ -168,7 +168,7 @@ void widget::Parameter::SetTitle(etk::UString label)
 }
 
 
-void widget::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	widget::PopUp::OnReceiveMessage(CallerObject, eventId, data);
 	EWOL_DEBUG("event on the parameter : " << eventId << " data=\"" << data << "\"");

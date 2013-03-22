@@ -317,7 +317,7 @@ void widget::FileChooser::SetFileName(etk::UString filename)
  * @param[in] data Data registered by this class
  * @return ---
  */
-void widget::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	EWOL_INFO("Receive Event from the LIST ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
 	if (ewolEventFileChooserEntryFolder == eventId) {

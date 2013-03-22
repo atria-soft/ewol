@@ -280,7 +280,8 @@ void guiInterface::SetTitle(etk::UString& title)
 {
 	X11_INFO("X11: Set Title (START)");
 	XTextProperty tp;
-	tp.value = (unsigned char *)title.c_str();
+	etk::Char tmpChar = title.c_str();
+	tp.value = (unsigned char *)((const char*)tmpChar);
 	tp.encoding = XA_WM_NAME;
 	tp.format = 8;
 	tp.nitems = strlen((const char*)tp.value);

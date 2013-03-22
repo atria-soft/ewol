@@ -105,7 +105,7 @@ void widget::Menu::AddSpacer(void)
 }
 
 
-void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
+void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
 {
 	/*
 	if (true == ewol::SizerHori::OnReceiveMessage(CallerObject, eventId, data)) {
