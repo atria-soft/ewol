@@ -52,6 +52,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.util.DisplayMetrics;
 
 // inport the ewol package :
 import org.ewol.interfaceJNI;
@@ -105,6 +106,10 @@ public class __PROJECT_NAME__ extends Activity {
 		apkFilePath = appInfo.sourceDir;
 		ActivityParamSetArchiveDir(0, apkFilePath);
 		
+		
+		DisplayMetrics metrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(metrics);
+		interfaceJNI.DisplayPropertyMetrics(metrics.xdpi, metrics.ydpi);
 		
 		// call C init ...
 		interfaceJNI.ActivityOnCreate();

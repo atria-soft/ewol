@@ -19,6 +19,7 @@
 
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/os/eSystem.h>
+#include <ewol/DisplayConv.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -168,6 +169,9 @@ bool CreateX11Context(void)
 		EWOL_INFO("Display opened.");
 	}
 	int Xscreen = DefaultScreen(m_display);
+	// set the DPI for the current screen :
+	ewol::SetPixelPerMillimeter(vec2((float)DisplayWidth(m_display, Xscreen)/(float)DisplayWidthMM(m_display, Xscreen),
+	                                 (float)DisplayHeight(m_display, Xscreen)/(float)DisplayHeightMM(m_display, Xscreen)));
 	// get an appropriate visual
 	m_visual = glXChooseVisual(m_display, Xscreen, attrListDbl);
 	if (NULL == m_visual) {

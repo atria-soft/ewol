@@ -34,6 +34,8 @@ public class interfaceJNI {
 	public static native void ActivityOnPause();
 	public static native void ActivityOnStop();
 	public static native void ActivityOnDestroy();
+	// set display properties :
+	public static native void DisplayPropertyMetrics(float ratioX, float ratioY);
 	// IO native function :
 	// Specific for the type of input : TOOL_TYPE_FINGER and TOOL_TYPE_STYLUS (work as the same)
 	public static native void IOInputEventMotion(int pointerID, float x, float y);

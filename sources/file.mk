@@ -6,7 +6,8 @@ FILE_LIST:= ewol/ewol.cpp \
 			ewol/config.cpp \
 			ewol/commandLine.cpp \
 			ewol/key.cpp \
-			ewol/cursor.cpp
+			ewol/cursor.cpp \
+			ewol/DisplayConv.cpp
 
 # Basic Eobject of EWOL
 FILE_LIST+= ewol/eObject/EObject.cpp \

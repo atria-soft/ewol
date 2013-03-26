@@ -15,6 +15,7 @@
 #include <ewol/renderer/os/eSystem.h>
 #include <ewol/renderer/audio/audio.h>
 #include <ewol/renderer/os/gui.h>
+#include <ewol/DisplayConv.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
@@ -413,6 +414,12 @@ extern "C"
 		eSystem::SetKeyboard(guiKeyBoardSpecialKeyMode, uniChar, isdown);
 	}
 	
+	void Java_org_ewol_interfaceJNI_DisplayPropertyMetrics( JNIEnv* env, jobject  thiz, jfloat ratioX, jfloat ratioY)
+	{
+		// set the internal system ratio properties ...
+		ewol::SetPixelPerInch(vec2(ratioX,ratioY));
+	}
+	
 	enum {
 		SYSTEM_KEY__VOLUME_UP = 1,
 		SYSTEM_KEY__VOLUME_DOWN,
@@ -485,7 +492,6 @@ extern "C"
 			env->ReleaseShortArrayElements(location, dst, 0);
 		//}
 	}
-
 
 };
 
