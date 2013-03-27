@@ -30,13 +30,18 @@ namespace ewol
 			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
 			virtual void Draw(etk::Vector<vec3>& vertices,
 			                  const draw::Colorf& color,
-			                  bool updateDepthBuffer=true);
+			                  bool updateDepthBuffer=true,
+			                  bool depthtest=true);
 			virtual void Draw(etk::Vector<vec3>& vertices,
 			                  const draw::Colorf& color,
-			                  mat4& transformationMatrix);
+			                  mat4& transformationMatrix,
+			                  bool updateDepthBuffer=true,
+			                  bool depthtest=true);
 			virtual void DrawLine(etk::Vector<vec3>& vertices,
 			                      const draw::Colorf& color,
-			                      mat4& transformationMatrix);
+			                      mat4& transformationMatrix,
+			                      bool updateDepthBuffer=true,
+			                      bool depthtest=true);
 			
 	};
 };

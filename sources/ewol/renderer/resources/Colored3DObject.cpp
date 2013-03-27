@@ -34,7 +34,8 @@ ewol::Colored3DObject::~Colored3DObject(void)
 
 void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
                                  const draw::Colorf& color,
-                                 bool updateDepthBuffer)
+                                 bool updateDepthBuffer,
+                                 bool depthtest)
 {
 	if (vertices.Size()<=0) {
 		return;
@@ -43,9 +44,11 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-	if (false==updateDepthBuffer) {
-		glDepthMask(GL_FALSE);
+	if (true==depthtest) {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_FALSE);
+		}
 	}
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
@@ -64,15 +67,19 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.Size());
 	//m_GLprogram->UnUse();
-	if (false==updateDepthBuffer) {
-		glDepthMask(GL_TRUE);
+	if (true==depthtest) {
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_TRUE);
+		}
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 }
 
 void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
                                  const draw::Colorf& color,
-                                 mat4& transformationMatrix)
+                                 mat4& transformationMatrix,
+                                 bool updateDepthBuffer,
+                                 bool depthtest)
 {
 	if (vertices.Size()<=0) {
 		return;
@@ -81,7 +88,12 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==depthtest) {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_FALSE);
+		}
+	}
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -96,12 +108,19 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	// Request the draw od the elements : 
 	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, vertices.Size());
 	m_GLprogram->UnUse();
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==depthtest) {
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_TRUE);
+		}
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 }
 
 void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
                                      const draw::Colorf& color,
-                                     mat4& transformationMatrix)
+                                     mat4& transformationMatrix,
+                                     bool updateDepthBuffer,
+                                     bool depthtest)
 {
 	if (vertices.Size()<=0) {
 		return;
@@ -110,7 +129,12 @@ void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==depthtest) {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_FALSE);
+		}
+	}
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -125,5 +149,10 @@ void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
 	// Request the draw od the elements : 
 	ewol::openGL::DrawArrays(GL_LINES, 0, vertices.Size());
 	m_GLprogram->UnUse();
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (true==depthtest) {
+		if (false==updateDepthBuffer) {
+			glDepthMask(GL_TRUE);
+		}
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 }
