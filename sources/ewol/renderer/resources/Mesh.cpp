@@ -163,6 +163,60 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// TODO : UNDERSTAND why ... it is needed
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
+void ewol::Mesh::Draw2(mat4& positionMatrix)
+{
+	#ifndef USE_INDEXED_MESH
+		if (m_numberOfElments<=0) {
+			return;
+		}
+	#else
+		if (m_listIndexFaces.Size()<=0) {
+			return;
+		}
+	#endif
+	if (NULL == m_texture0) {
+		EWOL_WARNING("Texture does not exist ...");
+		return;
+	}
+	if (m_GLprogram==NULL) {
+		EWOL_ERROR("No shader ...");
+		return;
+	}
+	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
+	m_GLprogram->Use();
+	// set Matrix : translation/positionMatrix
+	mat4 projMatrix = ewol::openGL::GetMatrix();
+	mat4 tmpMatrix = projMatrix;
+	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->UniformMatrix4fv(m_GLMatrixPosition, 1, positionMatrix.m_mat);
+	// TextureID
+	m_GLprogram->SetTexture0(m_GLtexID0, m_texture0->GetId());
+	// position :
+	m_GLprogram->SendAttributePointer(m_GLPosition, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES);
+	// Texture :
+	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
+	// position :
+	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
+	// position :
+	#ifndef USE_INDEXED_MESH
+		m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
+	#endif
+	// draw materials :
+	m_material.Draw(m_GLprogram);
+	m_light.Draw(m_GLprogram);
+	
+	#ifndef USE_INDEXED_MESH
+		// Request the draw od the elements : 
+		ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
+	#else
+		ewol::openGL::DrawElements(GL_TRIANGLES, m_listIndexFaces);
+	#endif
+	m_GLprogram->UnUse();
+	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	// TODO : UNDERSTAND why ... it is needed
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+}
 
 // normal calculation of the normal face is really easy :
 void ewol::Mesh::CalculateNormaleFace(void)

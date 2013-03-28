@@ -71,6 +71,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/ListFileSystem.cpp \
 			ewol/widget/Layer.cpp \
 			ewol/widget/Menu.cpp \
+			ewol/widget/Mesh.cpp \
 			ewol/widget/PopUp.cpp \
 			ewol/widget/ProgressBar.cpp \
 			ewol/widget/Sizer.cpp \

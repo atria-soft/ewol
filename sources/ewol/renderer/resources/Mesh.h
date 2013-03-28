@@ -174,6 +174,7 @@ namespace ewol
 			virtual ~Mesh(void);
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);
+			virtual void Draw2(mat4& positionMatrix);
 			void GenerateVBO(void);
 		public:
 			// some addition basic funtion that permit to create or overwrite some caracterstics :
