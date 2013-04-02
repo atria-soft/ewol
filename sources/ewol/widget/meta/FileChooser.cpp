@@ -82,14 +82,12 @@ widget::FileChooser::FileChooser(void)
 	widget::Spacer * mySpacer = NULL;
 	//widget::Label * myLabel = NULL;
 	widget::Image * myImage = NULL;
+	m_folder = etk::GetUserHomeFolder();
 	#if defined(__TARGET_OS__Android)
-		m_folder = "/mnt/sdcard/";
 		SetDisplayRatio(0.90);
 	#elif defined(__TARGET_OS__Windows)
-		m_folder = "c:/";
 		SetDisplayRatio(0.80);
 	#else
-		m_folder = "/home/";
 		SetDisplayRatio(0.80);
 	#endif
 	m_file = "";

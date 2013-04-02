@@ -41,16 +41,16 @@ namespace widget {
 			etk::UString GetCompleateFileName(void);
 			void UpdateCurrentFolder(void);
 		private:
-			widget::Label*          m_widgetTitle;
-			widget::Button*         m_widgetValidate;
-			widget::Button*         m_widgetCancel;
-			widget::Entry*          m_widgetCurrentFolder;
-			widget::Entry*          m_widgetCurrentFileName;
+			widget::Label* m_widgetTitle;
+			widget::Button* m_widgetValidate;
+			widget::Button* m_widgetCancel;
+			widget::Entry* m_widgetCurrentFolder;
+			widget::Entry* m_widgetCurrentFileName;
 			widget::ListFileSystem* m_widgetListFolder;
 			widget::ListFileSystem* m_widgetListFile;
-			widget::CheckBox*       m_widgetCheckBox;
-			etk::UString          m_folder;
-			etk::UString          m_file;
+			widget::CheckBox* m_widgetCheckBox;
+			etk::UString m_folder;
+			etk::UString m_file;
 	};
 	
 };
