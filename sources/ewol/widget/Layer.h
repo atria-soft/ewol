@@ -38,6 +38,7 @@ namespace widget {
 		public:
 			virtual void   SubWidgetRemoveAll(void);
 			virtual void   SubWidgetAdd(ewol::Widget* newWidget);
+			virtual void   SubWidgetAddFront(ewol::Widget* newWidget);
 			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
 		protected:

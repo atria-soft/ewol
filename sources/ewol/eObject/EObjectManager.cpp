@@ -109,6 +109,7 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* object)
 // clean all EObject that request an autoRemove ...
 void ewol::EObjectManager::RemoveAllAutoRemove(void)
 {
+	//EWOL_DEBUG("Auto-Remove EObject section : " << m_eObjectAutoRemoveList.Size() << " elemeents");
 	while(0<m_eObjectAutoRemoveList.Size()) {
 		if (m_eObjectAutoRemoveList[0]!=NULL) {
 			EWOL_DEBUG("Real Auto-Remove EObject type=\"" << m_eObjectAutoRemoveList[0]->GetObjectType() << "\"");

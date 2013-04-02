@@ -54,17 +54,19 @@ namespace ewol {
 			
 			/**
 			 * @brief Get the UniqueId of the EObject
-			 * @param ---
 			 * @return the requested ID
 			 */
 			int32_t GetId(void);
 			
 			/**
 			 * @brief Auto-destroy the object
-			 * @param ---
-			 * @return ---
 			 */
 			void AutoDestroy(void);
+			
+			/**
+			 * @brief Asynchronous removing the object
+			 */
+			void RemoveObject(void);
 			
 			/**
 			 * @brief Get the current Object type of the EObject
@@ -77,7 +79,6 @@ namespace ewol {
 			/**
 			 * @brief Add a specific event Id in the list to prevent wrong link on a EObject
 			 * @param[in] generateEventId event Id to add
-			 * @return ---
 			 */
 			void AddEventId(const char * generateEventId);
 			
@@ -85,7 +86,6 @@ namespace ewol {
 			 * @brief Generate event on all registered EObject
 			 * @param[in] generateEventId event Id that is curetly generated
 			 * @param[in] data data associated with the event
-			 * @return ---
 			 */
 			void GenerateEventId(const char * generateEventId, const etk::UString& data = "");
 			
@@ -93,14 +93,12 @@ namespace ewol {
 			 * @brief Generate Multicast event on all EObject requested the event
 			 * @param[in] messageId Event Id that is generated
 			 * @param[in] data String that is send at all the destinations
-			 * @return ---
 			 */
 			void SendMultiCast(const char* const messageId, const etk::UString& data = "");
 			
 			/**
 			 * @brief Register of the arrival of a Multicast message
 			 * @param[in] messageId Event Id waiting for...
-			 * @return ---
 			 */
 			void RegisterMultiCast(const char* const messageId);
 		public:
@@ -109,7 +107,6 @@ namespace ewol {
 			 * @param[in] destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] eventId Event generate inside the object
 			 * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
-			 * @return ---
 			 */
 			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL);
 			
@@ -117,7 +114,6 @@ namespace ewol {
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
-			 * @return ---
 			 */
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			
@@ -126,7 +122,6 @@ namespace ewol {
 			 * @param[in] CallerObject Pointer on the EObject that information came from
 			 * @param[in] eventId Message registered by this class
 			 * @param[in] data Data registered by this class
-			 * @return ---
 			 */
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data) { };
 	};

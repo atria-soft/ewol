@@ -132,6 +132,10 @@ void ewol::EObject::AutoDestroy(void)
 {
 	ewol::EObjectManager::AutoRemove(this);
 }
+void ewol::EObject::RemoveObject(void)
+{
+	ewol::EObjectManager::AutoRemove(this);
+}
 
 
 int32_t ewol::EObject::GetId(void)

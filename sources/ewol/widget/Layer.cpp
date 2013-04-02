@@ -118,6 +118,13 @@ void widget::Layer::SubWidgetAdd(ewol::Widget* newWidget)
 	m_subWidget.PushBack(newWidget);
 }
 
+void widget::Layer::SubWidgetAddFront(ewol::Widget* newWidget)
+{
+	if (NULL == newWidget) {
+		return;
+	}
+	m_subWidget.PushFront(newWidget);
+}
 
 void widget::Layer::SubWidgetRemove(ewol::Widget* newWidget)
 {
