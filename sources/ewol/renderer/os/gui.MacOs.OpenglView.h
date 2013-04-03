@@ -1,9 +1,9 @@
 
 
-#import <UIKit/UIKit.h>
+#import <Cocoa/Cocoa.h>
+#if 0
 #import <OpenGLES/ES2/gl.h> 
 #import <QuartzCore/QuartzCore.h>
-
 @interface OpenglView : UIView {
     
     EAGLContext *mimContext;
@@ -14,3 +14,4 @@
 }
 - (void)drawView;
 @end
+#endif

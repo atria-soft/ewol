@@ -2,13 +2,11 @@
 
 
 
-#import <UIKit/UIKit.h>
+#import <Cocoa/Cocoa.h>
+#import <ewol/renderer/os/gui.MacOs.AppDelegate.h>
 
-int mm_main(int argc, char *argv[])
+int mm_main(int argc, const char *argv[])
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    int retVal = UIApplicationMain(argc, argv, nil, nil);
-    [pool release];
-    return retVal;
+	return NSApplicationMain(argc, (const char **)argv);
 }
 

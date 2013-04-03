@@ -2,6 +2,7 @@
 
 #import <ewol/renderer/os/gui.MacOs.OpenglView.h>
 
+#if 0
 
 @implementation OpenglView
 
@@ -65,3 +66,5 @@
 }
 
 @end
+#endif
+

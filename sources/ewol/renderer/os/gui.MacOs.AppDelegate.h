@@ -1,10 +1,8 @@
 
-#import <UIKit/UIKit.h>
+#import <Cocoa/Cocoa.h>
 
-@interface MacOsAppDelegate : NSObject <UIApplicationDelegate> {
+@interface MacOsAppDelegate : NSObject <NSApplicationDelegate>
 
-}
-
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (assign) IBOutlet NSWindow *window;
 
 @end

@@ -29,12 +29,7 @@ endif
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -framework OpenGL
-
-
-#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
-# needed package on linux : libgl1-mesa-dev libglew1.5-dev
-
+LOCAL_EXPORT_LDLIBS := -I /usr/include/GNUstep/ -fconstant-string-class=NSConstantString -framework Cocoa -framework QuartzCore -framework OpenGL -framework AppKit 
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG)-$(BUILD_DIRECTORY_MODE)\"" \

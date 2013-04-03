@@ -3,6 +3,20 @@
 #import <ewol/renderer/os/gui.MacOs.AppDelegate.h>
 #import <ewol/renderer/os/gui.MacOs.OpenglView.h>
 
+
+@implementation MacOsAppDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+	// Insert code here to initialize your application
+}
+
+@end
+
+
+
+#if 0
+
 @implementation MacOsAppDelegate
 
 
@@ -63,3 +77,4 @@
 }
 
 @end
+#endif
