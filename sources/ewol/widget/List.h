@@ -28,8 +28,8 @@ namespace widget {
 			void           SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
-			etk::Vector<ewol::Compositing*>        m_listOObject;   //!< generic element to display...
-			etk::Vector<ivec2 >   m_lineSize;
+			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ivec2 > m_lineSize;
 		public:
 			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
@@ -38,10 +38,10 @@ namespace widget {
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		// list properties ...
 		private:
-			int32_t        m_paddingSizeX;
-			int32_t        m_paddingSizeY;
-			int32_t        m_displayStartRaw;           //!< Current starting diaplayed raw
-			int32_t        m_displayCurrentNbLine;      //!< Number of line in the display
+			int32_t m_paddingSizeX;
+			int32_t m_paddingSizeY;
+			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
+			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);

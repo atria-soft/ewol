@@ -22,6 +22,7 @@ widget::Layer::Layer(void)
 
 widget::Layer::~Layer(void)
 {
+	EWOL_DEBUG("[" << GetId() << "] Layer : destroy");
 	SubWidgetRemoveAll();
 }
 
@@ -207,7 +208,7 @@ void widget::Layer::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	for(int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
 		if(m_subWidget[iii] == removeObject) {
-			EWOL_DEBUG("Remove sizer sub Element [" << iii << "] ==> destroyed object");
+			EWOL_DEBUG("Remove layer sub Element [" << iii << "] ==> destroyed object");
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 		}

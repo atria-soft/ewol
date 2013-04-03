@@ -6,6 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
+#include <ewol/ewol.h>
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/WidgetManager.h>
 
@@ -16,20 +17,39 @@
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
 	m_mode(mode),
-	m_lockExpendContamination(false,false)
+	m_lockExpendContamination(false,false),
+	m_borderSize(0,0)
 {
 	
 }
 
 widget::Sizer::~Sizer(void)
 {
+	EWOL_DEBUG("[" << GetId() << "]={" << GetObjectType() << "}  Sizer : destroy (mode=" << (m_mode==widget::Sizer::modeVert?"Vert":"Hori") << ")");
 	SubWidgetRemoveAll();
+}
+
+
+void widget::Sizer::SetBorderSize(const ivec2& newBorderSize)
+{
+	m_borderSize = newBorderSize;
+	if (m_borderSize.x() < 0) {
+		EWOL_ERROR("Try to set a border size <0 on x : " << m_borderSize.x() << " ==> restore to 0");
+		m_borderSize.setX(0);
+	}
+	if (m_borderSize.y() < 0) {
+		EWOL_ERROR("Try to set a border size <0 on y : " << m_borderSize.y() << " ==> restore to 0");
+		m_borderSize.setY(0);
+	}
+	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 void widget::Sizer::SetMode(widget::Sizer::displayMode_te mode)
 {
 	m_mode = mode;
 	MarkToRedraw();
+	ewol::RequestUpdateSize();
 }
 
 widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
@@ -41,6 +61,7 @@ bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
 {
 	//EWOL_DEBUG("Update Size");
 	m_size.setValue(availlableX, availlableY);
+	m_size -= m_borderSize*2;
 	// calculate unExpendable Size :
 	float unexpendableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
@@ -78,7 +99,7 @@ bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	vec2 tmpOrigin = m_origin;
+	vec2 tmpOrigin = m_origin + m_borderSize;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
@@ -105,6 +126,7 @@ bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
 			}
 		}
 	}
+	m_size += m_borderSize*2;
 	MarkToRedraw();
 	return true;
 }
@@ -115,6 +137,13 @@ bool widget::Sizer::CalculateMinSize(void)
 	//EWOL_DEBUG("Update minimum Size");
 	m_userExpend.setValue(false, false);
 	m_minSize.setValue(0,0);
+	if (m_userMinSize.x()>0) {
+		m_minSize.setX(m_userMinSize.x());
+	}
+	if (m_userMinSize.y()>0) {
+		m_minSize.setY(m_userMinSize.y());
+	}
+	m_minSize += m_borderSize*2;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
@@ -146,12 +175,12 @@ bool widget::Sizer::CalculateMinSize(void)
 
 void widget::Sizer::SetMinSize(float x, float y)
 {
-	EWOL_ERROR("Sizer can not have a user Minimum size (herited from under elements)");
+	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user Minimum size (herited from under elements)");
 }
 
 void widget::Sizer::SetExpendX(bool newExpend)
 {
-	EWOL_ERROR("Sizer can not have a user expend settings X (herited from under elements)");
+	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings X (herited from under elements)");
 }
 
 bool widget::Sizer::CanExpentX(void)
@@ -164,7 +193,7 @@ bool widget::Sizer::CanExpentX(void)
 
 void widget::Sizer::SetExpendY(bool newExpend)
 {
-	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
+	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings Y (herited from under elements)");
 }
 
 bool widget::Sizer::CanExpentY(void)
@@ -190,12 +219,21 @@ void widget::Sizer::LockExpendContaminationHori(bool lockExpend)
 
 void widget::Sizer::SubWidgetRemoveAll(void)
 {
+	int32_t errorControl = m_subWidget.Size();
 	// the size automaticly decrement with the auto call of the OnObjectRemove function
 	while (m_subWidget.Size() > 0 ) {
 		if (NULL != m_subWidget[0]) {
 			delete(m_subWidget[0]);
 			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
+			if (errorControl == m_subWidget.Size()) {
+				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+				m_subWidget[0] = NULL;
+			}
+		} else {
+			EWOL_WARNING("[" << GetId() << "] Must not have null pointer on the subWidget list ...");
+			m_subWidget.Erase(0);
 		}
+		errorControl = m_subWidget.Size();
 	}
 	m_subWidget.Clear();
 }
@@ -223,11 +261,16 @@ void widget::Sizer::SubWidgetRemove(ewol::Widget* newWidget)
 	if (NULL == newWidget) {
 		return;
 	}
+	int32_t errorControl = m_subWidget.Size();
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (newWidget == m_subWidget[iii]) {
 			delete(m_subWidget[iii]);
-			m_subWidget[iii] = NULL;
-			m_subWidget.Erase(iii);
+			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
+			if (errorControl == m_subWidget.Size()) {
+				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+				m_subWidget[iii] = NULL;
+				m_subWidget.Erase(iii);
+			}
 			return;
 		}
 	}
@@ -304,7 +347,7 @@ void widget::Sizer::OnObjectRemove(ewol::EObject * removeObject)
 	// second step find if in all the elements ...
 	for(int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
 		if(m_subWidget[iii] == removeObject) {
-			EWOL_VERBOSE("Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
+			EWOL_VERBOSE("[" << GetId() << "]={" << GetObjectType() << "} Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 		}

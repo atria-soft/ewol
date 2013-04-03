@@ -23,24 +23,23 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
 		public:
 			// Derived function
-			virtual bool   CalculateSize(float availlableX, float availlableY);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			virtual void   SetMinSise(float x=-1, float y=-1);
-			virtual void   SetExpendX(bool newExpend=false);
-			virtual bool   CanExpentX(void);
-			virtual void   SetExpendY(bool newExpend=false);
-			virtual bool   CanExpentY(void);
-			void           LockExpendContamination(bool lockExpend=false);
+			virtual bool CalculateSize(float availlableX, float availlableY);
+			virtual bool CalculateMinSize(void);
+			virtual void SetMinSise(float x=-1, float y=-1);
+			virtual void SetExpendX(bool newExpend=false);
+			virtual bool CanExpentX(void);
+			virtual void SetExpendY(bool newExpend=false);
+			virtual bool CanExpentY(void);
+			void LockExpendContamination(bool lockExpend=false);
 		private:
-			bool                         m_lockExpendContamination;
+			bool m_lockExpendContamination;
 			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
-			virtual void   SubWidgetRemoveAll(void);
-			virtual void   SubWidgetAdd(ewol::Widget* newWidget);
-			virtual void   SubWidgetAddFront(ewol::Widget* newWidget);
-			virtual void   SubWidgetRemove(ewol::Widget* newWidget);
-			virtual void   SubWidgetUnLink(ewol::Widget* newWidget);
+			virtual void SubWidgetRemoveAll(void);
+			virtual void SubWidgetAdd(ewol::Widget* newWidget);
+			virtual void SubWidgetAddFront(ewol::Widget* newWidget);
+			virtual void SubWidgetRemove(ewol::Widget* newWidget);
+			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
 		protected:
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);

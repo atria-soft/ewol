@@ -18,8 +18,8 @@ namespace widget {
 	{
 		public:
 			typedef enum {
-				modeVert,
-				modeHori,
+				modeVert, //!< Vertical mode
+				modeHori, //!< Horizontal mode
 			} displayMode_te;
 		private:
 			etk::Vector<ewol::Widget*> m_subWidget; //!< all sub widget are contained in this element
@@ -45,7 +45,7 @@ namespace widget {
 			 */
 			displayMode_te GetMode(void);
 		private:
-			etk::Vector2D<bool> m_lockExpendContamination; //!< If some sub-widget request the expend==> this permit to unpropagate the problem
+			bvec2 m_lockExpendContamination; //!< If some sub-widget request the expend==> this permit to unpropagate the problem
 		public:
 			/**
 			 * @brief Change state of the expend contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
@@ -87,31 +87,32 @@ namespace widget {
 			 * @param[in] newWidget the element pointer.
 			 */
 			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
-		protected:
-			// Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+		private:
+			ivec2 m_borderSize; //!< Border size needed for all the display
 		public:
-			// Derived function
+			/**
+			 * @brief Set the current border size of the current element:
+			 * @param[in] newBorderSize The border size to set (0 if not used)
+			 */
+			void SetBorderSize(const ivec2& newBorderSize);
+			/**
+			 * @brief Get the current border size of the current element:
+			 * @return the border size (0 if not used)
+			 */
+			const ivec2& GetBorderSize(void) { return m_borderSize; };
+		protected: // Derived function
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
+		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
-			// Derived function
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolSizerVert"; };
-			// Derived function
+			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
 			virtual bool CalculateSize(float availlableX, float availlableY);
-			// Derived function
 			virtual bool CalculateMinSize(void);
-			// Derived function
 			virtual void SetMinSize(float x=-1, float y=-1);
-			// Derived function
 			virtual void SetExpendX(bool newExpend=false);
-			// Derived function
 			virtual bool CanExpentX(void);
-			// Derived function
 			virtual void SetExpendY(bool newExpend=false);
-			// Derived function
 			virtual bool CanExpentY(void);
 	};
 	

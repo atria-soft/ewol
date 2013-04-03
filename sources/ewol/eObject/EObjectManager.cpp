@@ -63,6 +63,12 @@ void informOneObjectIsRemoved(ewol::EObject* object)
 			m_eObjectList[iii]->OnObjectRemove(object);
 		}
 	}
+	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
+		if(    m_eObjectAutoRemoveList[iii] != NULL
+		    && m_eObjectAutoRemoveList[iii] != object) {
+			m_eObjectAutoRemoveList[iii]->OnObjectRemove(object);
+		}
+	}
 	// call input event manager to remove linked widget ...
 	eSystem::OnObjectRemove(object);
 }
@@ -82,6 +88,14 @@ void ewol::EObjectManager::Rm(ewol::EObject* object)
 			return;
 		}
 	}
+	// check if the object has not been auto removed ... or remove in defered time ...
+	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
+		if(    m_eObjectAutoRemoveList[iii] != NULL
+		    && m_eObjectAutoRemoveList[iii] == object) {
+			return;
+		}
+	}
+	// in this case, we have an error ...
 	EWOL_ERROR("Try to remove EObject that is not referenced ...");
 }
 

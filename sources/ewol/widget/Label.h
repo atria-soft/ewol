@@ -43,7 +43,7 @@ namespace widget {
 			 */
 			etk::UString GetLabel(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolLabel"; };
+			virtual const char * const GetObjectType(void) { return "Ewol::Label"; };
 			// Derived function
 			virtual bool   CalculateMinSize(void);
 			// Derived function

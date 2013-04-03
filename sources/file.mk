@@ -58,6 +58,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/WidgetManager.cpp \
 			ewol/widget/Windows.cpp \
 			ewol/widget/Button.cpp \
+			ewol/widget/Gird.cpp \
 			ewol/widget/Image.cpp \
 			ewol/widget/ButtonColor.cpp \
 			ewol/widget/CheckBox.cpp \
