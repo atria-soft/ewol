@@ -29,16 +29,8 @@ endif
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -lGL
+LOCAL_EXPORT_LDLIBS := -framework OpenGL
 
-#`pkg-config --cflags directfb` `pkg-config --libs directfb`
-
-ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-LOCAL_EXPORT_LDLIBS += -lX11
-endif
-ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-LOCAL_EXPORT_LDLIBS +=  -L/usr/local/lib  -ldirectfb -lfusion -ldirect
-endif
 
 #http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
 # needed package on linux : libgl1-mesa-dev libglew1.5-dev
@@ -55,13 +47,10 @@ include $(LOCAL_PATH)/file.mk
 
 LOCAL_SRC_FILES := $(FILE_LIST)
 
-ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-LOCAL_SRC_FILES += ewol/renderer/os/gui.X11.cpp
-endif
-ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-LOCAL_CFLAGS += -I/usr/local/include/directfb
-LOCAL_SRC_FILES += ewol/renderer/os/gui.directFB.cpp
-endif
+LOCAL_SRC_FILES += ewol/renderer/os/gui.MacOs.cpp \
+                   ewol/renderer/os/gui.MacOs.Interface.mm \
+                   ewol/renderer/os/gui.MacOs.AppDelegate.mm \
+                   ewol/renderer/os/gui.MacOs.OpenglView.mm
 
 
 include $(BUILD_STATIC_LIBRARY)

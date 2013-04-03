@@ -49,6 +49,10 @@ extern "C" {
 	#error you need to specify a __TAGET_OS__ ...
 #endif
 
+#ifdef __cplusplus
+}
+#endif
+
 namespace ewol {
 	namespace openGL {
 		/**
@@ -177,10 +181,6 @@ namespace ewol {
 		void UseProgram(int32_t id);
 	};
 };
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif
