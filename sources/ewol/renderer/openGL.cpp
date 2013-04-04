@@ -236,43 +236,56 @@ void ewol::openGL::UpdateAllFlags(void)
 
 void ewol::openGL::ActiveTexture(uint32_t flagID)
 {
-	glActiveTexture(flagID);
+	if (l_programId>0) {
+		glActiveTexture(flagID);
+	}
 }
 
 void ewol::openGL::DesActiveTexture(uint32_t flagID)
 {
-	
+	if (l_programId>0) {
+		
+	}
 }
 
 void ewol::openGL::DrawArrays(uint32_t mode, int32_t first, int32_t count)
 {
-	UpdateAllFlags();
-	glDrawArrays(mode, first, count);
+	if (l_programId>0) {
+		UpdateAllFlags();
+		glDrawArrays(mode, first, count);
+	}
 }
 
 void ewol::openGL::DrawElements(uint32_t mode, const etk::Vector<uint32_t>& indices)
 {
-	UpdateAllFlags();
-	//EWOL_DEBUG("Request draw of " << indices.Size() << "elements");
-	glDrawElements(mode, indices.Size(), GL_UNSIGNED_INT, &indices[0]);
+	if (l_programId>0) {
+		UpdateAllFlags();
+		//EWOL_DEBUG("Request draw of " << indices.Size() << "elements");
+		glDrawElements(mode, indices.Size(), GL_UNSIGNED_INT, &indices[0]);
+	}
 }
 
 void ewol::openGL::DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices)
 {
-	UpdateAllFlags();
-	glDrawElements(mode, indices.Size(), GL_UNSIGNED_SHORT, &indices[0]);
+	if (l_programId>0) {
+		UpdateAllFlags();
+		glDrawElements(mode, indices.Size(), GL_UNSIGNED_SHORT, &indices[0]);
+	}
 }
 
 void ewol::openGL::DrawElements8(uint32_t mode, const etk::Vector<uint8_t>& indices)
 {
-	UpdateAllFlags();
-	glDrawElements(mode, indices.Size(), GL_UNSIGNED_BYTE, &indices[0]);
+	if (l_programId>0) {
+		UpdateAllFlags();
+		glDrawElements(mode, indices.Size(), GL_UNSIGNED_BYTE, &indices[0]);
+	}
 }
 
 
 void ewol::openGL::UseProgram(int32_t id)
 {
-	if (0==id) {
+	// note : program at -1 mean that no use of a program on open GL (here we did not use it ) when 0 ==> program error ...
+	if (-1==id) {
 		// not used ==> because it is unneded
 		return;
 	}

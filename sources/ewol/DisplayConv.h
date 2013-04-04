@@ -36,7 +36,7 @@ namespace ewol
 	 * @param[in] pourcent Dimention in pourcent
 	 * @return dimention in Pixel
 	 */
-	//vec2 PourcentToPixel(const vec2& pourcent);
+	vec2 PourcentToPixel(const vec2& pourcent);
 	/**
 	 * @brief convert a dimention in Pixel to a inch dimension
 	 * @param[in] pixel Dimention in pixel
@@ -54,7 +54,7 @@ namespace ewol
 	 * @param[in] pixel Dimention in pixel
 	 * @return dimention in pourcent
 	 */
-	//vec2 PixelToPourcent(const vec2& pixel);
+	vec2 PixelToPourcent(const vec2& pixel);
 	/**
 	 * @brief Set the Inch ratio for calculation
 	 * @param[in] Ratio Inch ration for the screen calculation interpolation
@@ -67,6 +67,31 @@ namespace ewol
 	 * @note: same as @ref SetPixelPerInch (internal manage convertion)
 	 */
 	void SetPixelPerMillimeter(const vec2& ratio);
+	/**
+	 * @brief Set the current Windows Size
+	 * @param[in] size Size of the current windows in pixel.
+	 */
+	void SetPixelWindowsSize(const vec2& size);
+	/**
+	 * @brief Get the Windows Size in the request unit
+	 * @return the requested size
+	 */
+	vec2 GetWindowsSizeMilimeter(void);
+	/**
+	 * @brief Get the Windows Size in the request unit
+	 * @return the requested size
+	 */
+	vec2 GetWindowsSizeInch(void);
+	/**
+	 * @brief Get the Windows diagonal size in the request unit
+	 * @return the requested size
+	 */
+	float GetWindowsDiagSizeMilimeter(void);
+	/**
+	 * @brief Get the Windows diagonal size in the request unit
+	 * @return the requested size
+	 */
+	float GetWindowsDiagSizeInch(void);
 };
 
 #endif

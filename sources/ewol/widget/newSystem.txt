@@ -1,0 +1,51 @@
+I need to organize widget by style (Like GTK): 
+
+
+ewol::EObject
+	ewol::Widget
+		## Windows :
+			widget::Windows main application windows
+			widget::PopUp Widget to display basic pop-up
+		## Meta-widget : 
+				// (multiple and complex widget commonly used)
+			widget::MessageBox [*TODO*] Dispaly a simple message with multiple choice, or critical error ...
+			widget::FileChooser Widget to display list of files to open/save ....
+			widget::ColorChooser Select a specific color
+			widget::Calendar [*TODO*] display the current calendar
+		## Basics :
+			widget::Image 
+			widget::Label 
+			widget::Entry 
+			widget::EntryNumericSpin [*TODO*] 
+			widget::Checkbox 
+			widget::Joystick 
+			widget::ProgressBar 
+			widget::Slider 
+			widget::Spacer 
+			widget::Mesh 
+			widget::Spinner [*TODO*] waiting widget
+			widget::ComboBox [*TODO*] List of selection of element
+			*widget::Button  ==> move in container widget
+				widget::ButtonColor 
+				widget::ButtonText 
+				widget::ButtonImage 
+				widget::ButtonImageText 
+		## contener :
+			widget::Sizer 
+			widget::Gird 
+			widget::Layer 
+			widget::WSlider 
+			widget::FreePosition [*TODO*] set the widget at the desird position
+
+
+widget::ColorBar.cpp
+widget::ContextMenu.cpp
+widget::List.cpp
+widget::ListFileSystem.h
+widget::Menu.cpp
+widget::Scene.cpp
+widget::WidgetScrolled.cpp
+
+widget::meta::Parameter.cpp
+widget::meta::ParameterList.cpp
+

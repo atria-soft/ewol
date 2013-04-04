@@ -29,6 +29,7 @@ namespace widget {
 			etk::Vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
 			etk::Vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
 			ewol::Widget* m_tmpWidget; //!< use when replace a widget ...
+			bool m_gavityButtom;
 		public:
 			/**
 			 * @brief Constructor
@@ -65,6 +66,22 @@ namespace widget {
 			 * @return The size of the lines.
 			 */
 			int32_t GetRowSize(void);
+			/**
+			 * @brief Set the gravity of the widget on the Button (index 0 is on buttom)
+			 */
+			void SetGravityButtom(void)
+			{
+				m_gavityButtom = true;
+				MarkToRedraw();
+			}
+			/**
+			 * @brief Set the gravity of the widget on the Top (index 0 is on top)
+			 */
+			void SetGravityTop(void)
+			{
+				m_gavityButtom = false;
+				MarkToRedraw();
+			}
 		public:
 			/**
 			 * @brief Remove all sub element from the widget.

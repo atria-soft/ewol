@@ -24,54 +24,71 @@ ewol::Program::Program(const etk::UString& filename) :
 	m_hasTexture1(false)
 {
 	m_resourceLevel = 1;
-	EWOL_DEBUG("OGL : load PROGRAM \"" << filename << "\"");
+	EWOL_DEBUG("OGL : load PROGRAM \"" << m_name << "\"");
 	// load data from file "all the time ..."
 	
 	etk::FSNode file(m_name);
 	if (false == file.Exist()) {
-		EWOL_ERROR("File does not Exist : \"" << file << "\"");
-		return;
-	}
-	
-	etk::UString fileExtention = file.FileGetExtention();
-	if (fileExtention != "prog") {
-		EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
-		return;
-	}
-	if (false == file.FileOpenRead()) {
-		EWOL_ERROR("Can not open the file : " << file);
-		return;
-	}
-	#define MAX_LINE_SIZE   (2048)
-	char tmpData[MAX_LINE_SIZE];
-	while (file.FileGets(tmpData, MAX_LINE_SIZE) != NULL) {
-		int32_t len = strlen(tmpData);
-		if(    tmpData[len-1] == '\n'
-			|| tmpData[len-1] == '\r') {
-			tmpData[len-1] = '\0';
-			len--;
-		}
-		EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
-		if (len == 0) {
-			continue;
-		}
-		if (tmpData[0] == '#') {
-			continue;
-		}
-		// get it with relative position :
-		etk::UString tmpFilename = file.GetRelativeFolder() + tmpData;
+		EWOL_INFO("File does not Exist : \"" << file << "\" ==> automatic load of framment and shader with same names... ");
+		etk::UString tmpFilename = m_name;
+		// remove extention ...
+		tmpFilename.Remove(tmpFilename.Size()-4, 4);
 		ewol::Shader* tmpShader = NULL;
-		if (false == ewol::resource::Keep(tmpFilename, tmpShader)) {
+		if (false == ewol::resource::Keep(tmpFilename+"vert", tmpShader)) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+			return;
 		} else {
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename);
 			m_shaderList.PushBack(tmpShader);
 		}
+		if (false == ewol::resource::Keep(tmpFilename+"frag", tmpShader)) {
+			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+			return;
+		} else {
+			EWOL_DEBUG("Add shader on program : "<< tmpFilename);
+			m_shaderList.PushBack(tmpShader);
+		}
+	} else {
 		
+		etk::UString fileExtention = file.FileGetExtention();
+		if (fileExtention != "prog") {
+			EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
+			return;
+		}
+		if (false == file.FileOpenRead()) {
+			EWOL_ERROR("Can not open the file : \"" << file << "\"");
+			return;
+		}
+		#define MAX_LINE_SIZE   (2048)
+		char tmpData[MAX_LINE_SIZE];
+		while (file.FileGets(tmpData, MAX_LINE_SIZE) != NULL) {
+			int32_t len = strlen(tmpData);
+			if(    tmpData[len-1] == '\n'
+				|| tmpData[len-1] == '\r') {
+				tmpData[len-1] = '\0';
+				len--;
+			}
+			EWOL_DEBUG(" Read data : \"" << tmpData << "\"");
+			if (len == 0) {
+				continue;
+			}
+			if (tmpData[0] == '#') {
+				continue;
+			}
+			// get it with relative position :
+			etk::UString tmpFilename = file.GetRelativeFolder() + tmpData;
+			ewol::Shader* tmpShader = NULL;
+			if (false == ewol::resource::Keep(tmpFilename, tmpShader)) {
+				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
+			} else {
+				EWOL_DEBUG("Add shader on program : "<< tmpFilename);
+				m_shaderList.PushBack(tmpShader);
+			}
+			
+		}
+		// close the file:
+		file.FileClose();
 	}
-	// close the file:
-	file.FileClose();
-	
 	UpdateContext();
 }
 
@@ -153,17 +170,28 @@ void ewol::Program::UpdateContext(void)
 		// Do nothing ==> too dangerous ...
 	} else {
 		// create the Shader
-		EWOL_INFO("Create the Program ...");
+		EWOL_INFO("Create the Program ... \"" << m_name << "\"");
 		m_program = glCreateProgram();
 		if (0 == m_program) {
 			EWOL_ERROR("program creation return error ...");
+			checkGlError("glCreateProgram", __LINE__);
 			return;
 		}
-		
+		// first attach vertex shader, and after fragment shader
 		for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
 			if (NULL != m_shaderList[iii]) {
-				glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
-				checkGlError("glAttachShader", __LINE__);
+				if (m_shaderList[iii]->GetShaderType() == GL_VERTEX_SHADER) {
+					glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
+					checkGlError("glAttachShader", __LINE__);
+				}
+			}
+		}
+		for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
+			if (NULL != m_shaderList[iii]) {
+				if (m_shaderList[iii]->GetShaderType() == GL_FRAGMENT_SHADER) {
+					glAttachShader(m_program, m_shaderList[iii]->GetGL_ID());
+					checkGlError("glAttachShader", __LINE__);
+				}
 			}
 		}
 		glLinkProgram(m_program);
@@ -177,12 +205,12 @@ void ewol::Program::UpdateContext(void)
 			glGetProgramInfoLog(m_program, LOG_OGL_INTERNAL_BUFFER_LEN, &bufLength, l_bufferDisplayError);
 			char tmpLog[256];
 			int32_t idOut=0;
-			EWOL_ERROR("Could not compile \"PROGRAM\": ");
+			EWOL_ERROR("Could not compile \"PROGRAM\": \"" << m_name << "\"");
 			for (int32_t iii=0; iii<LOG_OGL_INTERNAL_BUFFER_LEN ; iii++) {
 				tmpLog[idOut] = l_bufferDisplayError[iii];
-				if (tmpLog[idOut] == '\n' || tmpLog[idOut] == '\0') {
+				if (tmpLog[idOut] == '\n' || tmpLog[idOut] == '\0' || idOut>=256) {
 					tmpLog[idOut] = '\0';
-					EWOL_ERROR("    | " << tmpLog);
+					EWOL_ERROR("    ==> " << tmpLog);
 					idOut=0;
 				} else {
 					idOut++;
@@ -190,6 +218,10 @@ void ewol::Program::UpdateContext(void)
 				if (l_bufferDisplayError[iii] == '\0') {
 					break;
 				}
+			}
+			if (idOut != 0) {
+				tmpLog[idOut] = '\0';
+				EWOL_ERROR("    ==> " << tmpLog);
 			}
 			glDeleteProgram(m_program);
 			checkGlError("glDeleteProgram", __LINE__);
@@ -676,12 +708,10 @@ void ewol::Program::Uniform4iv(int32_t idElem, int32_t nbElement, const int32_t 
 
 void ewol::Program::Use(void)
 {
-	if (0==m_program) {
-		return;
-	}
 	#ifdef PROGRAM_DISPLAY_SPEED
 		g_startTime = ewol::GetTime();
 	#endif
+	// event if it was 0 ==> set it to prevent other use of the previous shader display ...
 	ewol::openGL::UseProgram(m_program);
 	//checkGlError("glUseProgram", __LINE__);
 }
@@ -753,7 +783,7 @@ void ewol::Program::UnUse(void)
 	}
 	#endif
 	// no need to disable program ==> this only generate perturbation on speed ...
-	ewol::openGL::UseProgram(0);
+	ewol::openGL::UseProgram(-1);
 	#ifdef PROGRAM_DISPLAY_SPEED
 		float localTime = (float)(ewol::GetTime() - g_startTime) / 1000.0f;
 		if (localTime>1) {

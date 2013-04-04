@@ -18,7 +18,8 @@
 widget::Gird::Gird(int32_t colNumber) :
 	m_tmpWidget(NULL),
 	m_sizeRow(0),
-	m_borderSize(0,0)
+	m_borderSize(0,0),
+	m_gavityButtom(true)
 {
 	SetColNumber(colNumber);
 	ewol::RequestUpdateSize();
@@ -59,15 +60,21 @@ bool widget::Gird::CalculateSize(float availlableX, float availlableY)
 		if (NULL != m_subWidget[iii].widget) {
 			//calculate the origin :
 			vec2 tmpOrigin = m_origin + m_borderSize;
-			// adding X origin : 
+			if (false == m_gavityButtom) {
+				tmpOrigin += vec2(0, m_size.y()-m_borderSize.y());
+			}
 			
 			int32_t tmpSizeWidth = 0;
 			for (int32_t jjj=0; jjj<m_subWidget[iii].col; jjj++ ){
 				tmpSizeWidth += abs(m_sizeCol[jjj]);
 			}
-			// adding Y orogin : 
-			int32_t addingPos = (m_subWidget[iii].row+1)*m_uniformSizeRow;
-			
+			// adding Y origin : 
+			int32_t addingPos = 0;
+			if (true == m_gavityButtom) {
+				addingPos = (m_subWidget[iii].row)*m_uniformSizeRow;
+			} else {
+				addingPos = -(m_subWidget[iii].row+1)*m_uniformSizeRow;
+			}
 			tmpOrigin += vec2(tmpSizeWidth, addingPos);
 			
 			EWOL_DEBUG("     [" << iii << "] set subwidget origin=" <<tmpOrigin << " size=" << ivec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow) );
