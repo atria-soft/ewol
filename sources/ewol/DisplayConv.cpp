@@ -70,7 +70,7 @@ void ewol::SetPixelPerMillimeter(const vec2& ratio)
 void ewol::SetPixelWindowsSize(const vec2& size)
 {
 	windowsSize = size;
-	EWOL_CRITICAL("Set a new Windows property size " << windowsSize << "px");
+	EWOL_VERBOSE("Set a new Windows property size " << windowsSize << "px");
 }
 
 vec2 ewol::GetWindowsSizeMilimeter(void)

@@ -36,6 +36,7 @@ ewol::EObject
 			widget::Layer 
 			widget::WSlider 
 			widget::FreePosition [*TODO*] set the widget at the desird position
+			widget::WSlider 
 
 
 widget::ColorBar.cpp

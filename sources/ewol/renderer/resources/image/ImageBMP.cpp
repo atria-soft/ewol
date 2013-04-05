@@ -81,7 +81,7 @@ bool ewol::imageBMP::GenerateImage(etk::UString & inputFile, draw::Image & ouput
 		fileName.FileClose();
 		return false;
 	}
-	if(false == fileName.FileSeek(m_FileHeader.bfOffBits, SEEK_SET)) {
+	if(false == fileName.FileSeek(m_FileHeader.bfOffBits, etk::FSN_SEEK_START)) {
 		EWOL_ERROR("error with the 'bfOffBits' in the file named=\"" << fileName << "\"");
 		fileName.FileClose();
 		return false;
