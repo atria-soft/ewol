@@ -16,7 +16,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        
+         
         CAEAGLLayer* eaglLayer = (CAEAGLLayer*) super.layer;
         eaglLayer.opaque = YES;
         
