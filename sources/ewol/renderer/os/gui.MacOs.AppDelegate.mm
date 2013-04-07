@@ -3,35 +3,21 @@
 #import <ewol/renderer/os/gui.MacOs.AppDelegate.h>
 #import <ewol/renderer/os/gui.MacOs.OpenglView.h>
 
-
-@implementation MacOsAppDelegate
-
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
-{ 
-	// Insert code here to initialize your application
-}
-
-@end
-
-
-
-#if 0
-
 @implementation MacOsAppDelegate
 
 
 @synthesize window=_window;
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+- (BOOL)application:(MacOsAppDelegate *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    OpenglView *view=[[OpenglView alloc]initWithFrame:[[UIScreen mainScreen] bounds]];
+    OpenGLView *view=[[OpenGLView alloc]initWithFrame:[[NSScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     [self.window addSubview:view];
     [self.window makeKeyAndVisible];
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
+- (void)applicationWillResignActive:(MacOsAppDelegate *)application
 {
     /*
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -39,7 +25,7 @@
      */
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void)applicationDidEnterBackground:(MacOsAppDelegate *)application
 {
     /*
      Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
@@ -47,21 +33,21 @@
      */
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void)applicationWillEnterForeground:(MacOsAppDelegate *)application
 {
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (void)applicationDidBecomeActive:(MacOsAppDelegate *)application
 {
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
 }
 
-- (void)applicationWillTerminate:(UIApplication *)application
+- (void)applicationWillTerminate:(MacOsAppDelegate *)application
 {
     /*
      Called when the application is about to terminate.
@@ -77,4 +63,6 @@
 }
 
 @end
-#endif
+
+
+

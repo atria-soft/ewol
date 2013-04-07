@@ -29,7 +29,7 @@ endif
 LOCAL_C_INCLUDES := 
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_EXPORT_LDLIBS := -framework Cocoa  -framework OpenGL
+LOCAL_EXPORT_LDLIBS := -framework Cocoa  -framework OpenGL -framework QuartzCore -framework AppKit 
 
 LOCAL_CFLAGS := -Wno-write-strings \
                 -DEWOL_VERSION_TAG_NAME="\"$(LOCAL_VERSION_TAG)-$(BUILD_DIRECTORY_MODE)\"" \
@@ -44,10 +44,8 @@ LOCAL_SRC_FILES := $(FILE_LIST)
 
 LOCAL_SRC_FILES += ewol/renderer/os/gui.MacOs.cpp \
                    ewol/renderer/os/gui.MacOs.Interface.mm \
-
-#DFGSDFGSFDGDSFGSDFG := \
-#                   ewol/renderer/os/gui.MacOs.AppDelegate.mm \
-#                   ewol/renderer/os/gui.MacOs.OpenglView.mm
+                   ewol/renderer/os/gui.MacOs.AppDelegate.mm \
+                   ewol/renderer/os/gui.MacOs.OpenglView.mm
 
 # xcode compilation exemple sources : 
 ## basic truchage
