@@ -81,8 +81,6 @@ namespace ewol {
 			// user configuaration
 			vec2   m_userMinSize;   //!< user define the minimum size of the widget
 			vec2   m_userMaxSize;   //!< user define the maximum size of the widget
-			bvec2  m_userExpend;
-			bvec2  m_userFill;
 		public:
 			/**
 			 * @brief Set the zoom property of the widget
@@ -158,6 +156,9 @@ namespace ewol {
 			 * @return Requested size
 			 */
 			vec2 GetSize(void);
+		protected:
+			bvec2 m_userExpend;
+		public:
 			/**
 			 * @brief Set the horizontal expend capacity
 			 * @param[in] newExpend new Expend state
@@ -178,6 +179,14 @@ namespace ewol {
 			 * @return boolean repensent the capacity to expend
 			 */
 			virtual bool CanExpentY(void);
+			/**
+			 * @brief Get the expend capabilities (x&y)
+			 * @return 2D boolean repensent the capacity to expend
+			 */
+			virtual bvec2 CanExpent(void);
+		protected:
+			bvec2 m_userFill;
+		public:
 			/**
 			 * @brief Set the horizontal filling capacity
 			 * @param[in] newFill new fill state

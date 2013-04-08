@@ -81,6 +81,8 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 	tmpObject->m_message = message;
 	m_listElement.PushBack(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
+		// TODO : When button are back ...
+		/*
 		widget::Button * myButton = NULL;
 		myButton = new widget::Button(label);
 		if (NULL == myButton) {
@@ -94,6 +96,7 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 		// keep the specific event ...
 		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 		tmpObject->m_widgetPointer = myButton;
+		*/
 	}
 	return tmpObject->m_localId;
 }
@@ -168,6 +171,8 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
+									// TODO : When button are back ...
+									/*
 									myButton = new widget::Button(m_listElement[jjj]->m_label);
 									if (NULL == myButton) {
 										EWOL_ERROR("Allocation Error");
@@ -181,6 +186,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 										mySizer->SubWidgetAdd(myButton);
 										m_listElement[jjj]->m_widgetPointer = myButton;
 									}
+									*/
 								}
 							}
 						}

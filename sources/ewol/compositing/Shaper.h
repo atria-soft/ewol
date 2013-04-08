@@ -70,7 +70,7 @@ namespace ewol
 			 * @brief generic constructor
 			 * @param[in] imageName Name of the file that might be loaded
 			 */
-			Shaper(etk::UString shaperName="");
+			Shaper(const etk::UString& shaperName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -137,7 +137,7 @@ namespace ewol
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
 			 * @param[in] newFile New file of the Image
 			 */
-			void SetSource(etk::UString newFile);
+			void SetSource(const etk::UString& newFile);
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

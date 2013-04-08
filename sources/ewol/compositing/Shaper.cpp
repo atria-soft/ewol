@@ -16,7 +16,7 @@
 #undef __class__
 #define __class__	"ewol::Shaper"
 
-ewol::Shaper::Shaper(etk::UString shaperName) :
+ewol::Shaper::Shaper(const etk::UString& shaperName) :
 	m_name(shaperName),
 	m_config(NULL),
 	m_confIdPaddingX(-1),
@@ -263,7 +263,7 @@ vec2 ewol::Shaper::GetPadding(void)
 }
 
 
-void ewol::Shaper::SetSource(etk::UString newFile)
+void ewol::Shaper::SetSource(const etk::UString& newFile)
 {
 	Clear();
 	UnLoadProgram();

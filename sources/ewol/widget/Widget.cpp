@@ -300,6 +300,16 @@ bool ewol::Widget::CanExpentY(void)
 	return false;
 }
 
+bvec2 ewol::Widget::CanExpent(void)
+{
+	if (false==IsHide()) {
+		return m_userExpend;
+	}
+	return bvec2(false,false);
+}
+
+
+
 void ewol::Widget::SetFillX(bool newFill)
 {
 	m_userFill.setX(newFill);

@@ -1,26 +1,11 @@
 /**
- *******************************************************************************
- * @file ewol/widget/meta/FileChooser.cpp
- * @brief ewol File chooser meta widget system (Sources)
  * @author Edouard DUPIN
- * @date 29/12/2011
- * @par Project
- * ewol
- *
- * @par Copyright
- * Copyright 2011 Edouard DUPIN, all right reserved
- *
- * This software is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY.
- *
- * Licence summary : 
- *    You can modify and redistribute the sources code and binaries.
- *    You can send me the bug-fix
- *
- * Term of the licence in in the file licence.txt.
- *
- *******************************************************************************
+ * 
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ * 
+ * @license BSD v3 (see license file)
  */
+
 
 #include <ewol/widget/meta/FileChooser.h>
 #include <ewol/widget/Sizer.h>
@@ -120,6 +105,8 @@ widget::FileChooser::FileChooser(void)
 				mySpacer->SetExpendX(true);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
+			// TODO : set if back :
+			/*
 			m_widgetValidate = new widget::Button("Validate");
 			if (NULL == m_widgetValidate) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
@@ -136,6 +123,7 @@ widget::FileChooser::FileChooser(void)
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
+			*/
 		}
 		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
@@ -280,7 +268,10 @@ void widget::FileChooser::SetValidateLabel(etk::UString label)
 	if (NULL == m_widgetValidate) {
 		return;
 	}
+	// TODO : set if back :
+	/*
 	m_widgetValidate->SetLabel(label);
+	*/
 }
 
 void widget::FileChooser::SetCancelLabel(etk::UString label)
@@ -288,7 +279,10 @@ void widget::FileChooser::SetCancelLabel(etk::UString label)
 	if (NULL == m_widgetCancel) {
 		return;
 	}
+	// TODO : set if back :
+	/*
 	m_widgetCancel->SetLabel(label);
+	*/
 }
 
 void widget::FileChooser::SetFolder(etk::UString folder)

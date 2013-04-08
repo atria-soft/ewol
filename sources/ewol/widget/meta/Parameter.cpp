@@ -66,6 +66,8 @@ widget::Parameter::Parameter(void) :
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 			
+			// TODO : set if back :
+			/*
 			m_widgetCancel = new widget::Button("Close");
 			if (NULL == m_widgetCancel) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
@@ -74,6 +76,7 @@ widget::Parameter::Parameter(void) :
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventParameterClose);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
+			*/
 		}
 		
 		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
