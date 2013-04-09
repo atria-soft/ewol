@@ -13,7 +13,7 @@
 #include <ewol/renderer/os/gui.h>
 #include <ewol/commandLine.h>
 #include <etk/os/FSNode.h>
-#include <ewol/DisplayConv.h>
+#include <ewol/Dimension.h>
 #undef __class__
 #define __class__	"ewol"
 
@@ -21,7 +21,7 @@
 int32_t ewol::Run(int32_t argc, const char* argv[])
 {
 	// init display convertions:
-	ewol::DC_Init();
+	ewol::dimension::Init();
 	
 	EWOL_DEBUG("Store commangLine in the specific system");
 	ewol::commandLine::Clean();
