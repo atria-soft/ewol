@@ -22,17 +22,17 @@ namespace widget {
 			List(void);
 			void Init(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolList"; };
+			virtual const char * const GetObjectType(void) { return "ewol::List"; };
 			virtual ~List(void);
-			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::UString newLabel);
+			virtual void CalculateMinSize(void);
+			void SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 			etk::Vector<ivec2 > m_lineSize;
 		public:
-			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
-			void    ClearOObjectList(void);
+			void AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
+			void ClearOObjectList(void);
 		protected:
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
@@ -44,7 +44,7 @@ namespace widget {
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
 			// Derived function
-			virtual void   OnRegenerateDisplay(void);
+			virtual void OnRegenerateDisplay(void);
 			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 		protected:

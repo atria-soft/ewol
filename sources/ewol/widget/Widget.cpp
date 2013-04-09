@@ -20,15 +20,15 @@
 #define __class__	"Widget"
 
 ewol::Widget::Widget(void) :
-	m_hide(false),
-	m_zoom(1.0f),
-	m_origin(0,0),
 	m_size(10,10),
 	m_minSize(-1,-1),
+	m_zoom(1.0f),
+	m_origin(0,0),
 	m_userMinSize(-1,-1),
 	m_userMaxSize(-1,-1),
 	m_userExpend(false,false),
 	m_userFill(false,false),
+	m_hide(false),
 	m_hasFocus(false),
 	m_canFocus(false),
 	m_limitMouseEvent(3),
@@ -66,11 +66,10 @@ void ewol::Widget::Show(void)
 }
 
 
-bool ewol::Widget::CalculateSize(float availlableX, float availlableY)
+void ewol::Widget::CalculateSize(const vec2& availlable)
 {
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	MarkToRedraw();
-	return true;
 }
 
 
@@ -206,9 +205,9 @@ float ewol::Widget::GetZoom(void)
 	return m_zoom;
 }
 
-void ewol::Widget::SetOrigin(float x, float y)
+void ewol::Widget::SetOrigin(const vec2& pos)
 {
-	m_origin.setValue(x, y);
+	m_origin = pos;
 }
 
 vec2 ewol::Widget::GetOrigin(void)
@@ -221,16 +220,15 @@ vec2 ewol::Widget::RelativePosition(vec2 pos)
 	return pos - m_origin;
 }
 
-bool ewol::Widget::CalculateMinSize(void)
+void ewol::Widget::CalculateMinSize(void)
 {
 	m_minSize = m_userMinSize;
 	MarkToRedraw();
-	return true;
 }
 
-void ewol::Widget::SetMinSize(float x, float y)
+void ewol::Widget::SetMinSize(const vec2& size)
 {
-	m_userMinSize.setValue(x, y);
+	m_userMinSize = size;
 }
 
 void ewol::Widget::CheckMinSize(void)
@@ -270,37 +268,17 @@ vec2 ewol::Widget::GetSize(void)
 	return vec2(0,0);
 }
 
-void ewol::Widget::SetExpendX(bool newExpend)
+void ewol::Widget::SetExpand(const bvec2& newExpend)
 {
-	m_userExpend.setX(newExpend);
-	ewol::RequestUpdateSize();
-	MarkToRedraw();
-}
-
-bool ewol::Widget::CanExpentX(void)
-{
-	if (false==IsHide()) {
-		return m_userExpend.x();
+	if(    m_userExpend.x() != newExpend.x()
+	    || m_userExpend.y() != newExpend.y()) {
+		m_userExpend = newExpend;
+		ewol::RequestUpdateSize();
+		MarkToRedraw();
 	}
-	return false;
 }
 
-void ewol::Widget::SetExpendY(bool newExpend)
-{
-	m_userExpend.setY(newExpend);
-	ewol::RequestUpdateSize();
-	MarkToRedraw();
-}
-
-bool ewol::Widget::CanExpentY(void)
-{
-	if (false==IsHide()) {
-		return m_userExpend.y();
-	}
-	return false;
-}
-
-bvec2 ewol::Widget::CanExpent(void)
+bvec2 ewol::Widget::CanExpand(void)
 {
 	if (false==IsHide()) {
 		return m_userExpend;
@@ -309,27 +287,19 @@ bvec2 ewol::Widget::CanExpent(void)
 }
 
 
-
-void ewol::Widget::SetFillX(bool newFill)
+void ewol::Widget::SetFill(const bvec2& newFill)
 {
-	m_userFill.setX(newFill);
-	MarkToRedraw();
+	if(    m_userFill.x() != newFill.x()
+	    || m_userFill.y() != newFill.y()) {
+		m_userFill = newFill;
+		ewol::RequestUpdateSize();
+		MarkToRedraw();
+	}
 }
 
-bool ewol::Widget::CanFillX(void)
+const bvec2& ewol::Widget::CanFill(void)
 {
-	return m_userFill.x();
-}
-
-void ewol::Widget::SetFillY(bool newFill)
-{
-	m_userFill.setY(newFill);
-	MarkToRedraw();
-}
-
-bool ewol::Widget::CanFillY(void)
-{
-	return m_userFill.y();
+	return m_userFill;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -514,3 +484,118 @@ ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
 {
 	return m_cursorDisplay;
 }
+
+bool ewol::Widget::LoadXML(TiXmlNode* node)
+{
+	if (NULL==node) {
+		return false;
+	}
+	bool ret = true;
+	const char *tmpAttributeValue = node->ToElement()->Attribute("name");
+	if (NULL != tmpAttributeValue) {
+		m_widgetName = tmpAttributeValue;
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("fill");
+	if (NULL != tmpAttributeValue) {
+		if (strcmp("false,false", tmpAttributeValue)==0) {
+			SetFill(bvec2(false,false));
+		} else if (strcmp("false,true", tmpAttributeValue)==0) {
+			SetFill(bvec2(false,true));
+		} else if (strcmp("true,false", tmpAttributeValue)==0) {
+			SetFill(bvec2(true,false));
+		} else if (strcmp("false", tmpAttributeValue)==0) {
+			SetFill(bvec2(false,false));
+		} else {
+			SetFill(bvec2(true,true));
+		}
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("expand");
+	if (NULL != tmpAttributeValue) {
+		if (strcmp("false,false", tmpAttributeValue)==0) {
+			SetExpand(bvec2(false,false));
+		} else if (strcmp("false,true", tmpAttributeValue)==0) {
+			SetExpand(bvec2(false,true));
+		} else if (strcmp("true,false", tmpAttributeValue)==0) {
+			SetExpand(bvec2(true,false));
+		} else if (strcmp("false", tmpAttributeValue)==0) {
+			SetExpand(bvec2(false,false));
+		} else {
+			SetExpand(bvec2(true,true));
+		}
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("hide");
+	if (NULL != tmpAttributeValue) {
+		if (strcmp("true", tmpAttributeValue)==0) {
+			Hide();
+		} else {
+			Show();
+		}
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("focus");
+	if (NULL != tmpAttributeValue) {
+		if (strcmp("true", tmpAttributeValue)==0) {
+			KeepFocus();
+		}
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("min-size");
+	if (NULL != tmpAttributeValue) {
+		float x,y;
+		if (2!=sscanf(tmpAttributeValue, "%f,%f", &x, &y)) {
+			SetMinSize(vec2(x,y));
+		} else {
+			EWOL_ERROR("(l "<<node->Row()<<") An error occured when parsing element min-size : " << tmpAttributeValue);
+			ret = false;
+		}
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("max-size");
+	if (NULL != tmpAttributeValue) {
+		float x,y;
+		if (2!=sscanf(tmpAttributeValue, "%f,%f", &x, &y)) {
+			SetMaxSize(vec2(x,y));
+		} else {
+			EWOL_ERROR("(l "<<node->Row()<<") An error occured when parsing element max-size : " << tmpAttributeValue);
+			ret = false;
+		}
+	}
+	return ret;
+}
+
+bool ewol::Widget::StoreXML(TiXmlNode* node)
+{
+	if (NULL==node) {
+		return false;
+	}
+	/*
+	TiXmlElement * element = new TiXmlElement(__class__);
+	if (NULL == element) {
+		EWOL_ERROR("TinyXML node allocation error");
+		return false;
+	}
+	node->LinkEndChild(element);
+	*/
+	if (m_widgetName.Size()!=0) {
+		node->ToElement()->SetAttribute("name", m_widgetName.c_str() );
+	}
+	if (m_userMinSize != vec2(-1,-1)) {
+		etk::UString tmpVal = etk::UString(m_userMinSize.x()) + "," + etk::UString(m_userMinSize.y());
+		node->ToElement()->SetAttribute("min-size", tmpVal.c_str() );
+	}
+	if (m_userMaxSize != vec2(-1,-1)) {
+		etk::UString tmpVal = etk::UString(m_userMaxSize.x()) + "," + etk::UString(m_userMaxSize.y());
+		node->ToElement()->SetAttribute("max-size", tmpVal.c_str() );
+	}
+	if (m_userExpend != bvec2(false,false)) {
+		etk::UString tmpVal = etk::UString(m_userExpend.x()) + "," + etk::UString(m_userExpend.y());
+		node->ToElement()->SetAttribute("expand", tmpVal.c_str() );
+	}
+	if (m_userFill != bvec2(false,false)) {
+		etk::UString tmpVal = etk::UString(m_userFill.x()) + "," + etk::UString(m_userFill.y());
+		node->ToElement()->SetAttribute("fill", tmpVal.c_str() );
+	}
+	if (IsHide() != false) {
+		node->ToElement()->SetAttribute("hide", "true" );
+	}
+	return true;
+}
+
+

@@ -31,32 +31,29 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolContextMenu"; };
 		public:
-			virtual bool   CalculateSize(float availlableX, float availlableY); // this generate the current size ...
-			virtual bool   CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
-			virtual void   SetMinSise(float x=-1, float y=-1);
-			virtual void   SetExpendX(bool newExpend=false);
-			virtual void   SetExpendY(bool newExpend=false);
+			virtual void CalculateSize(const vec2& availlable); // this generate the current size ...
+			virtual void CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
+			virtual void SetMinSize(const vec2& size);
+			virtual void SetExpand(const bvec2& newExpend);
 		private:
-			draw::Color        m_colorBackGroung;
-			draw::Color        m_colorBorder;
-			vec2       m_padding;
-			vec2       m_arrowPos;
-			float      m_offset;
+			draw::Color m_colorBackGroung;
+			draw::Color m_colorBorder;
+			vec2 m_padding;
+			vec2 m_arrowPos;
+			float m_offset;
 			markPosition_te m_arrawBorder;
-			ewol::Widget*   m_subWidget;
+			ewol::Widget* m_subWidget;
 		public:
-			void           SubWidgetSet(ewol::Widget* newWidget);
-			void           SubWidgetRemove(void);
-			void           SetPositionMark(markPosition_te position, vec2  arrowPos);
+			void SubWidgetSet(ewol::Widget* newWidget);
+			void SubWidgetRemove(void);
+			void SetPositionMark(markPosition_te position, vec2  arrowPos);
 		protected:
 			// Derived function
-			virtual void   OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public:
 			// Derived function
-			virtual void   OnRegenerateDisplay(void);
-			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
-			// Derived function
+			virtual void OnRegenerateDisplay(void);
+			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 	};
 	

@@ -64,6 +64,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/CheckBox.cpp \
 			ewol/widget/ColorBar.cpp \
 			ewol/widget/ContextMenu.cpp \
+			ewol/widget/Composer.cpp \
 			ewol/widget/Drawable.cpp \
 			ewol/widget/Entry.cpp \
 			ewol/widget/Joystick.cpp \

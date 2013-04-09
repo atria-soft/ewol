@@ -10,6 +10,7 @@
 #define __EWOL_WIDGET_H__
 
 #include <ewol/eObject/EObject.h>
+#include <tinyXML/tinyxml.h>
 
 namespace ewol {
 	class Widget;
@@ -70,40 +71,10 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
-		private:
-			bool   m_hide; //!< hide a widget on the display
 		protected:
-			// internal element calculated by the system
-			float  m_zoom;          //!< generic widget zoom
-			vec2   m_origin;        //!< internal ... I do not really known how i can use it ...
-			vec2   m_size;          //!< internal : current size of the widget
-			vec2   m_minSize;       //!< user define the minimum size of the widget
-			// user configuaration
-			vec2   m_userMinSize;   //!< user define the minimum size of the widget
-			vec2   m_userMaxSize;   //!< user define the maximum size of the widget
+			vec2 m_size; //!< internal : current size of the widget
+			vec2 m_minSize; //!< user define the minimum size of the widget
 		public:
-			/**
-			 * @brief Set the zoom property of the widget
-			 * @param[in] newVal newZoom value
-			 */
-			void SetZoom(float newVal);
-			/**
-			 * @brief Get the zoom property of the widget
-			 * @return the current zoom value
-			 */
-			float GetZoom(void);
-			/**
-			 * @brief Set origin at the widget (must be an parrent widget that set this parameter).
-			 * This represent the absolute origin in the program windows
-			 * @param[in] x Position ot hte horizantal origin
-			 * @param[in] y Position ot hte vertical origin
-			 */
-			void SetOrigin(float x, float y);
-			/**
-			 * @brief Get the origin (obsolute position in the windows)
-			 * @return coordonate of the origin requested
-			 */
-			vec2 GetOrigin(void);
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion
@@ -113,34 +84,62 @@ namespace ewol {
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size
-			 * @param[in] availlableX Availlable horisantal pixel size
-			 * @param[in] availlableY Availlable vertical pixel size
+			 * @param[in] availlable Availlable x&y pixel size
 			 */
-			// TODO : Remove bool ==> deprecated ...
-			// TODO : Rename in SetSize()
-			virtual bool CalculateSize(float availlableX, float availlableY);
-			//update the min Size ... and the expend parameters for the sizer
+			virtual void CalculateSize(const vec2& availlable);
 			/**
 			 * @brief Calculate the minimum size of the widget that is needed to display or the user requested)
 			 */
-			// TODO : Remove bool ==> deprecated ...
-			virtual bool CalculateMinSize(void);
+			virtual void CalculateMinSize(void);
+		protected:
+			// internal element calculated by the system
+			float m_zoom; //!< generic widget zoom
+		public:
+			/**
+			 * @brief Set the zoom property of the widget
+			 * @param[in] newVal newZoom value
+			 */
+			virtual void SetZoom(float newVal);
+			/**
+			 * @brief Get the zoom property of the widget
+			 * @return the current zoom value
+			 */
+			virtual float GetZoom(void);
+		protected:
+			vec2 m_origin; //!< internal ... I do not really known how i can use it ...
+		public:
+			/**
+			 * @brief Set origin at the widget (must be an parrent widget that set this parameter).
+			 * This represent the absolute origin in the program windows
+			 * @param[in] pos Position of the origin
+			 */
+			virtual void SetOrigin(const vec2& pos);
+			/**
+			 * @brief Get the origin (obsolute position in the windows)
+			 * @return coordonate of the origin requested
+			 */
+			virtual vec2 GetOrigin(void);
+		protected:
+			vec2 m_userMinSize; //!< user define the minimum size of the widget
+		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
-			 * @param[in] x Set minimum horizontal size (-1 : no requested)
-			 * @param[in] y Set minimum vertical size (-1 : no requested)
+			 * @param[in] size Set minimum size (none : 0)
 			 */
-			virtual void SetMinSize(float x=-1, float y=-1);
+			virtual void SetMinSize(const vec2& size);
 			/**
 			 * @brief Get the current calculated min size
 			 * @return the size requested
 			 */
-			vec2 GetMinSize(void);
+			virtual vec2 GetMinSize(void);
 			/**
 			 * @brief Check if the current min size is compatible wit hte user minimum size
 			 *        If it is not the user minimum size will overWrite the minimum size set.
 			 */
-			void CheckMinSize(void);
+			virtual void CheckMinSize(void);
+		protected:
+			vec2 m_userMaxSize; //!< user define the maximum size of the widget
+		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] size The new maximum size requested (vec2(-1,-1) to unset)
@@ -150,114 +149,90 @@ namespace ewol {
 			 * @brief Get the current maximum size
 			 * @return the size requested
 			 */
-			vec2 GetMaxSize(void);
+			virtual vec2 GetMaxSize(void);
 			/**
 			 * @brief Get the widget size
 			 * @return Requested size
 			 */
-			vec2 GetSize(void);
+			virtual vec2 GetSize(void);
 		protected:
-			bvec2 m_userExpend;
+			bvec2 m_userExpend; // TODO : Rename expand ... :p
 		public:
 			/**
-			 * @brief Set the horizontal expend capacity
-			 * @param[in] newExpend new Expend state
+			 * @brief Set the expend capabilities (x&y)
+			 * @param[in] newExpend 2D boolean repensent the capacity to expend
 			 */
-			virtual void SetExpendX(bool newExpend=false);
-			/**
-			 * @brief Get the horizontal expend capabilities
-			 * @return boolean repensent the capacity to expend
-			 */
-			virtual bool CanExpentX(void);
-			/**
-			 * @brief Set the vertical expend capacity
-			 * @param[in] newExpend new Expend state
-			 */
-			virtual void SetExpendY(bool newExpend=false);
-			/**
-			 * @brief Get the vertical expend capabilities
-			 * @return boolean repensent the capacity to expend
-			 */
-			virtual bool CanExpentY(void);
+			virtual void SetExpand(const bvec2& newExpend);
 			/**
 			 * @brief Get the expend capabilities (x&y)
 			 * @return 2D boolean repensent the capacity to expend
 			 */
-			virtual bvec2 CanExpent(void);
+			virtual bvec2 CanExpand(void);
 		protected:
 			bvec2 m_userFill;
 		public:
 			/**
-			 * @brief Set the horizontal filling capacity
-			 * @param[in] newFill new fill state
+			 * @brief Set the x&y filling capacity
+			 * @param[in] newFill new x&y fill state
 			 */
-			virtual void SetFillX(bool newFill=false);
+			virtual void SetFill(const bvec2& newFill);
 			/**
-			 * @brief Get the horizontal filling capabilities
-			 * @return boolean repensent the capacity to horizontal filling
+			 * @brief Get the filling capabilities x&y
+			 * @return bvec2 repensent the capacity to x&y filling
 			 */
-			bool CanFillX(void);
-			/**
-			 * @brief Set the vertical filling capacity
-			 * @param[in] newFill new fill state
-			 */
-			virtual void SetFillY(bool newFill=false);
-			/**
-			 * @brief Get the vertical filling capabilities
-			 * @return boolean repensent the capacity to vertical filling
-			 */
-			bool CanFillY(void);
+			const bvec2& CanFill(void);
+		protected:
+			bool m_hide; //!< hide a widget on the display
+		public:
 			/**
 			 * @brief Set the widget hidden
 			 */
-			void Hide(void);
+			virtual void Hide(void);
 			/**
 			 * @brief Set the widget visible
 			 */
-			void Show(void);
+			virtual void Show(void);
 			/**
 			 * @brief Get the visibility of the widget
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
-			bool IsHide(void) { return m_hide; };
-			
-		
+			virtual bool IsHide(void) { return m_hide; };
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			bool    m_hasFocus;        //!< set the focus on this widget
-			bool    m_canFocus;        //!< the focus can be done on this widget
+			bool m_hasFocus; //!< set the focus on this widget
+			bool m_canFocus; //!< the focus can be done on this widget
 		public:
 			/**
 			 * @brief Get the focus state of the widget
 			 * @return Focus state
 			 */
-			bool GetFocus(void) { return m_hasFocus;};
+			virtual bool GetFocus(void) { return m_hasFocus;};
 			/**
 			 * @brief Get the capability to have focus
 			 * @return State capability to have focus
 			 */
-			bool CanHaveFocus(void) { return m_canFocus;};
+			virtual bool CanHaveFocus(void) { return m_canFocus;};
 			/**
 			 * @brief Set focus on this widget
 			 * @return return true if the widget keep the focus
 			 */
-			bool SetFocus(void);
+			virtual bool SetFocus(void);
 			/**
 			 * @brief Remove the focus on this widget
 			 * @return return true if the widget have release his focus (if he has it)
 			 */
-			bool RmFocus(void);
+			virtual bool RmFocus(void);
 			/**
 			 * @brief Set the capability to have the focus
 			 * @param[in] canFocusState new focus capability
 			 */
-			void SetCanHaveFocus(bool canFocusState);
+			virtual void SetCanHaveFocus(bool canFocusState);
 			/**
 			 * @brief Keep the focus on this widget ==> this remove the previous focus on all other widget
 			 */
-			void KeepFocus(void);
+			virtual void KeepFocus(void);
 		protected:
 			/**
 			 * @brief Event of the focus has been grep by the current widget
@@ -278,12 +253,12 @@ namespace ewol {
 			 * @brief Get the number of mouse event supported
 			 * @return return the number of event that the mouse supported [0..3]
 			 */
-			int32_t GetMouseLimit(void) { return m_limitMouseEvent; };
+			virtual int32_t GetMouseLimit(void) { return m_limitMouseEvent; };
 			/**
 			 * @brief Get the number of mouse event supported
 			 * @param[in] numberState The number of event that the mouse supported [0..3]
 			 */
-			void SetMouseLimit(int32_t numberState) { m_limitMouseEvent = numberState; };
+			virtual void SetMouseLimit(int32_t numberState) { m_limitMouseEvent = numberState; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- keyboard event properties Area
@@ -296,12 +271,12 @@ namespace ewol {
 			 * @return true : the event can be repeated.
 			 * @return false : the event must not be repeated.
 			 */
-			bool GetKeyboardRepeate(void) { return m_allowRepeateKeyboardEvent; };
+			virtual bool GetKeyboardRepeate(void) { return m_allowRepeateKeyboardEvent; };
 			/**
 			 * @brief Set the keyboard repeating event supporting.
 			 * @param[in] state The repeating status (true: enable, false disable).
 			 */
-			void SetKeyboardRepeate(bool state) { m_allowRepeateKeyboardEvent = state; };
+			virtual void SetKeyboardRepeate(bool state) { m_allowRepeateKeyboardEvent = state; };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Periodic call Area
@@ -311,7 +286,7 @@ namespace ewol {
 			 * @brief Request that the current widegt have a periodic call
 			 * @param statusToSet true if the periodic call is needed
 			 */
-			void PeriodicCallSet(bool statusToSet);
+			virtual void PeriodicCallSet(bool statusToSet);
 		public:
 			/**
 			 * @brief Periodic call of this widget
@@ -370,11 +345,11 @@ namespace ewol {
 			 * @param[in] generateEventId Event generic of the element
 			 * @param[in] data Associate data wit the event
 			 */
-			void ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data="", bool broadcast=false);
+			virtual void ShortCutAdd(const char * descriptiveString, const char * generateEventId, etk::UString data="", bool broadcast=false);
 			/**
 			 * @brief Remove all curent shortCut
 			 */
-			void ShortCutClean(void);
+			virtual void ShortCutClean(void);
 		public:
 			/**
 			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
@@ -394,13 +369,13 @@ namespace ewol {
 			/**
 			 * @brief The widget mark itself that it need to regenerate the nest time.
 			 */
-			void MarkToRedraw(void);
+			virtual void MarkToRedraw(void);
 			/**
 			 * @brief Get the need of the redrawing of the widget and reset it to false
 			 * @return true if we need to redraw
 			 * @return false if we have no need to redraw
 			 */
-			bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
+			virtual bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
 			/**
 			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
@@ -429,16 +404,16 @@ namespace ewol {
 			 * @note : the generation of the offset is due to the fact the cursor position is forced at the center of the widget.
 			 * @note This done nothing in "Finger" or "Stylet" mode.
 			 */
-			void GrabCursor(void);
+			virtual void GrabCursor(void);
 			/**
 			 * @brief Un-Grab the cursor (default mode cursor offset)
 			 */
-			void UnGrabCursor(void);
+			virtual void UnGrabCursor(void);
 			/**
 			 * @brief Get the grabbing status of the cursor.
 			 * @return true if the cursor is curently grabbed
 			 */
-			bool GetGrabStatus(void);
+			virtual bool GetGrabStatus(void);
 		// DisplayCursorType
 		private:
 			ewol::cursorDisplay_te m_cursorDisplay;
@@ -447,13 +422,29 @@ namespace ewol {
 			 * @brief Set the cursor display type.
 			 * @param[in] newCursor selected new cursor.
 			 */
-			void SetCursor(ewol::cursorDisplay_te newCursor);
+			virtual void SetCursor(ewol::cursorDisplay_te newCursor);
 			/**
 			 * @brief Get the currrent cursor.
 			 * @return the type of the cursor.
 			 */
-			ewol::cursorDisplay_te GetCursor(void);
-		
+			virtual ewol::cursorDisplay_te GetCursor(void);
+		private:
+			etk::UString m_widgetName;
+		public:
+			/**
+			 * @brief Load properties with an XML node.
+			 * @param[in] node Pointer on the tinyXML node.
+			 * @return true : All has been done corectly.
+			 * @return false : An error occured.
+			 */
+			virtual bool LoadXML(TiXmlNode* node);
+			/**
+			 * @brief Store properties in this XML node.
+			 * @param[in,out] node Pointer on the tinyXML node.
+			 * @return true : All has been done corectly.
+			 * @return false : An error occured.
+			 */
+			virtual bool StoreXML(TiXmlNode* node);
 
 	}; // end of the class Widget declaration
 

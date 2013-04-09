@@ -15,11 +15,27 @@
 #define __class__	"Gird"
 
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Gird();
+}
+
+void widget::Gird::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Gird::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
 widget::Gird::Gird(int32_t colNumber) :
-	m_tmpWidget(NULL),
 	m_sizeRow(0),
-	m_borderSize(0,0),
-	m_gavityButtom(true)
+	m_tmpWidget(NULL),
+	m_gavityButtom(true),
+	m_borderSize(0,0)
 {
 	SetColNumber(colNumber);
 	ewol::RequestUpdateSize();
@@ -46,15 +62,11 @@ void widget::Gird::SetBorderSize(const ivec2& newBorderSize)
 	ewol::RequestUpdateSize();
 }
 
-bool widget::Gird::CalculateSize(float availlableX, float availlableY)
+void widget::Gird::CalculateSize(const vec2& availlable)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	m_size -= m_borderSize*2;
-	// calculate unExpendable Size :
-	float unexpendableSize=0.0;
-	int32_t nbWidgetFixedSize=0;
-	int32_t nbWidgetNotFixedSize=0;
 	
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
@@ -79,18 +91,17 @@ bool widget::Gird::CalculateSize(float availlableX, float availlableY)
 			
 			EWOL_DEBUG("     [" << iii << "] set subwidget origin=" <<tmpOrigin << " size=" << ivec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow) );
 			// Set the origin :
-			m_subWidget[iii].widget->SetOrigin(tmpOrigin.x(), tmpOrigin.y());
+			m_subWidget[iii].widget->SetOrigin(tmpOrigin);
 			// all time set oll the space .
-			m_subWidget[iii].widget->CalculateSize(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow);
+			m_subWidget[iii].widget->CalculateSize(vec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow));
 		}
 	}
 	m_size += m_borderSize*2;
 	EWOL_DEBUG("Calculate size : " << m_size);
 	MarkToRedraw();
-	return true;
 }
 
-bool widget::Gird::CalculateMinSize(void)
+void widget::Gird::CalculateMinSize(void)
 {
 	for (int32_t iii=0; iii<m_sizeCol.Size(); iii++ ){
 		if (m_sizeCol[iii] <= 0) {
@@ -140,7 +151,6 @@ bool widget::Gird::CalculateMinSize(void)
 	EWOL_DEBUG("Calculate min size : " << m_minSize);
 	
 	//EWOL_DEBUG("Vert Result : expend="<< m_userExpend << "  minSize="<< m_minSize);
-	return true;
 }
 
 void widget::Gird::SetColNumber(int32_t colNumber)
@@ -343,7 +353,6 @@ void widget::Gird::SubWidgetUnLink(int32_t colId, int32_t rowId)
 		EWOL_WARNING("[" << GetId() << "] try to Unlink widget with id < 0 col=" << colId << " row=" << rowId);
 		return;
 	}
-	int32_t errorControl = m_subWidget.Size();
 	// try to find it ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if(    m_subWidget[iii].row == rowId

@@ -50,23 +50,22 @@ ewol::Windows::~Windows(void)
 }
 
 
-bool ewol::Windows::CalculateSize(float availlableX, float availlableY)
+void ewol::Windows::CalculateSize(const vec2& availlable)
 {
 	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinSize();
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
-		m_subWidget->CalculateSize(m_size.x(), m_size.y());
+		m_subWidget->CalculateSize(m_size);
 	}
 	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			m_popUpWidgetList[iii]->CalculateMinSize();
-			m_popUpWidgetList[iii]->CalculateSize(m_size.x(), m_size.y());
+			m_popUpWidgetList[iii]->CalculateSize(m_size);
 		}
 	}
-	return true;
 }
 
 
@@ -191,7 +190,7 @@ void ewol::Windows::SetSubWidget(ewol::Widget * widget)
 	}
 	m_subWidget = widget;
 	// Regenerate the size calculation :
-	CalculateSize(m_size.x(), m_size.y());
+	CalculateSize(m_size);
 }
 
 
@@ -199,7 +198,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 {
 	m_popUpWidgetList.PushBack(widget);
 	// Regenerate the size calculation :
-	CalculateSize(m_size.x(), m_size.y());
+	CalculateSize(m_size);
 	// TODO : it is dansgerous to access directly to the system ...
 	eSystem::ResetIOEvent();
 }

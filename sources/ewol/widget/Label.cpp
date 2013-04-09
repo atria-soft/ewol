@@ -20,6 +20,21 @@ extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
 #undef __class__
 #define __class__	"Label"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Label();
+}
+
+void widget::Label::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Label::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 widget::Label::Label(etk::UString newLabel)
 {
@@ -33,7 +48,7 @@ widget::Label::~Label(void)
 	
 }
 
-bool widget::Label::CalculateMinSize(void)
+void widget::Label::CalculateMinSize(void)
 {
 	if (m_userMaxSize.x() != -1) {
 		m_text.SetTextAlignement(0, m_userMaxSize.x()-4, ewol::Text::alignLeft);
@@ -49,7 +64,6 @@ bool widget::Label::CalculateMinSize(void)
 	} else {
 		m_minSize.setY(4 + minSize.y());
 	}
-	return true;
 }
 
 
@@ -136,4 +150,14 @@ bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 	return false;
 }
 
-
+bool widget::Label::LoadXML(TiXmlNode* node)
+{
+	if (NULL==node) {
+		return false;
+	}
+	ewol::Widget::LoadXML(node);
+	// get internal data : 
+	// TODO : Unparse data type XML ...
+	SetLabel(node->ToElement()->GetText());
+	return true;
+}

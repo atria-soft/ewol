@@ -35,20 +35,20 @@ widget::PopUp::~PopUp(void)
 }
 
 
-bool widget::PopUp::CalculateSize(float availlableX, float availlableY)
+void widget::PopUp::CalculateSize(const vec2& availlable)
 {
-	//EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
+	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize;
 		vec2 subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
-		if (true == m_subWidget->CanExpentX()) {
+		if (true == m_subWidget->CanExpand().x()) {
 			subWidgetSize.setX(m_size.x());
 		}
-		if (true == m_subWidget->CanExpentY()) {
+		if (true == m_subWidget->CanExpand().y()) {
 			subWidgetSize.setY(m_size.y());
 		}
 		if (m_displayRatio>0.1 && m_displayRatio<=1) {
@@ -65,11 +65,10 @@ bool widget::PopUp::CalculateSize(float availlableX, float availlableY)
 		m_subWidget->CalculateSize(subWidgetSize.x(), subWidgetSize.y());
 	}
 	MarkToRedraw();
-	return true;
 }
 
 
-bool widget::PopUp::CalculateMinSize(void)
+void widget::PopUp::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpend.setValue(false,false);
@@ -81,24 +80,17 @@ bool widget::PopUp::CalculateMinSize(void)
 	}
 	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
 	MarkToRedraw();
-	return true;
 }
 
-void widget::PopUp::SetMinSise(float x, float y)
+void widget::PopUp::SetMinSize(const vec2& size)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::PopUp::SetExpendX(bool newExpend)
+void widget::PopUp::SetExpand(const bvec2& newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings X (herited from under elements)");
 }
-
-void widget::PopUp::SetExpendY(bool newExpend)
-{
-	EWOL_ERROR("Pop-up can not have a user expend settings Y (herited from under elements)");
-}
-
 
 void widget::PopUp::SubWidgetSet(ewol::Widget* newWidget)
 {

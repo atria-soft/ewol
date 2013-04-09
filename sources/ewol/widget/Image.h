@@ -20,24 +20,23 @@ namespace widget {
 	class Image :public widget::Drawable
 	{
 		public:
-			Image(etk::UString dataFile, int32_t size=-1); // automatic considering in the appl Data older
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolImage"; };
-			void Init(void);
+			static void Init(void);
+			static void UnInit(void);
+		public:
+			Image(const etk::UString& dataFile="", int32_t size=-1); // automatic considering in the appl Data older
 			virtual ~Image(void);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			void           SetFile(etk::UString newFile);
-			void           SetPadding(vec2  newPadding);
+			void SetFile(etk::UString newFile);
+			void SetPadding(vec2  newPadding);
 		private:
-			etk::UString          m_imageSelected;
+			etk::UString m_imageSelected;
 			vec2  m_padding;
-			draw::Color           m_textColorBg;  //!< Background color
-			int32_t               m_imageSize;
+			draw::Color m_textColorBg;  //!< Background color
+			int32_t m_imageSize;
 		public:
 			// Derived function
-			virtual void   OnRegenerateDisplay(void);
-			// Derived function
+			virtual const char * const GetObjectType(void) { return "Ewol::Image"; };
+			virtual void CalculateMinSize(void);
+			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 	};
 };

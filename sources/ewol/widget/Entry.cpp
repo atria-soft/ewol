@@ -31,6 +31,21 @@ const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
 #define STATUS_HOVER     (1)
 #define STATUS_SELECTED  (2)
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Entry();
+}
+
+void widget::Entry::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Entry::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 widget::Entry::Entry(etk::UString newData) :
 	m_shaper("THEME:GUI:widgetEntry.conf"),
@@ -66,7 +81,7 @@ widget::Entry::~Entry(void)
 }
 
 
-bool widget::Entry::CalculateMinSize(void)
+void widget::Entry::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
@@ -75,7 +90,6 @@ bool widget::Entry::CalculateMinSize(void)
 	                   minHeight + 2*padding.y());
 	UpdateTextPosition();
 	MarkToRedraw();
-	return true;
 }
 
 

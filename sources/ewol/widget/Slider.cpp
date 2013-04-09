@@ -19,6 +19,24 @@ extern const char * const ewolEventSliderChange    = "ewol-event-slider-change";
 #undef __class__
 #define __class__	"Slider"
 
+
+static ewol::Widget* Create(void)
+{
+	return new widget::Slider();
+}
+
+void widget::Slider::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Slider::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
+
 const int32_t dotRadius = 6;
 
 widget::Slider::Slider(void)
@@ -44,12 +62,11 @@ widget::Slider::~Slider(void)
 }
 
 
-bool widget::Slider::CalculateMinSize(void)
+void widget::Slider::CalculateMinSize(void)
 {
 	m_minSize.setValue(etk_max(m_userMinSize.x(), 40),
 	                   etk_max(m_userMinSize.y(), dotRadius*2) );
 	MarkToRedraw();
-	return true;
 }
 
 

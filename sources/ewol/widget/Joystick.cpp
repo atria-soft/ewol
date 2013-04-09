@@ -58,12 +58,11 @@ widget::Joystick::~Joystick(void)
 }
 
 
-bool widget::Joystick::CalculateSize(float availlableX, float availlableY)
+void widget::Joystick::CalculateSize(const vec2& availlable)
 {
-	float minimumSize = etk_min(availlableX, availlableY);
+	float minimumSize = etk_min(availlable.x(), availlable.y());
 	m_size.setValue(minimumSize, minimumSize);
 	MarkToRedraw();
-	return true;
 }
 
 void widget::Joystick::OnRegenerateDisplay(void)

@@ -14,6 +14,21 @@
 #undef __class__
 #define __class__	"Sizer"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Sizer();
+}
+
+void widget::Sizer::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Sizer::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
 	m_mode(mode),
@@ -57,10 +72,10 @@ widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
 	return m_mode;
 }
 
-bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
+void widget::Sizer::CalculateSize(const vec2& availlable)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	m_size -= m_borderSize*2;
 	// calculate unExpendable Size :
 	float unexpendableSize=0.0;
@@ -128,11 +143,10 @@ bool widget::Sizer::CalculateSize(float availlableX, float availlableY)
 	}
 	m_size += m_borderSize*2;
 	MarkToRedraw();
-	return true;
 }
 
 
-bool widget::Sizer::CalculateMinSize(void)
+void widget::Sizer::CalculateMinSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
 	m_userExpend.setValue(false, false);
@@ -169,52 +183,29 @@ bool widget::Sizer::CalculateMinSize(void)
 			}
 		}
 	}
-	//EWOL_DEBUG("Vert Result : expend="<< m_userExpend << "  minSize="<< m_minSize);
-	return true;
 }
 
-void widget::Sizer::SetMinSize(float x, float y)
+void widget::Sizer::SetMinSize(const vec2& size)
 {
 	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::Sizer::SetExpendX(bool newExpend)
+void widget::Sizer::SetExpand(const bvec2& newExpend)
 {
-	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings X (herited from under elements)");
+	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings (herited from under elements)");
 }
 
-bool widget::Sizer::CanExpentX(void)
+bvec2 widget::Sizer::CanExpentY(void)
 {
-	if (true == m_lockExpendContamination.x()) {
-		return false;
+	if (true == m_lockExpendContamination)) {
+		return bvec2(false,false);
 	}
-	return m_userExpend.x();
+	return m_userExpend;
 }
 
-void widget::Sizer::SetExpendY(bool newExpend)
+void widget::Sizer::LockExpendContamination(const bvec2& lockExpend)
 {
-	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings Y (herited from under elements)");
-}
-
-bool widget::Sizer::CanExpentY(void)
-{
-	if (true == m_lockExpendContamination.y()) {
-		return false;
-	}
-	return m_userExpend.y();
-}
-
-void widget::Sizer::LockExpendContamination(bool lockExpend)
-{
-	m_lockExpendContamination.setValue(lockExpend,lockExpend);
-}
-void widget::Sizer::LockExpendContaminationVert(bool lockExpend)
-{
-	m_lockExpendContamination.setY(lockExpend);
-}
-void widget::Sizer::LockExpendContaminationHori(bool lockExpend)
-{
-	m_lockExpendContamination.setX(lockExpend);
+	m_lockExpendContamination = lockExpend;
 }
 
 void widget::Sizer::SubWidgetRemoveAll(void)

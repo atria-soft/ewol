@@ -10,7 +10,16 @@
 #include <ewol/widget/Joystick.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ButtonColor.h>
-//#include <ewol/widget/Scene.h>
+#include <ewol/widget/Spacer.h>
+#include <ewol/widget/Slider.h>
+#include <ewol/widget/Sizer.h>
+#include <ewol/widget/ProgressBar.h>
+#include <ewol/widget/Layer.h>
+#include <ewol/widget/Label.h>
+#include <ewol/widget/Image.h>
+#include <ewol/widget/Gird.h>
+#include <ewol/widget/Entry.h>
+#include <ewol/widget/CheckBox.h>
 #include <etk/Vector.h>
 
 #undef __class__
@@ -22,9 +31,21 @@ static bool IsInit = false;
 static ewol::Widget * m_focusWidgetDefault = NULL;
 static ewol::Widget * m_focusWidgetCurrent = NULL;
 static etk::Vector<ewol::Widget*> l_listOfPeriodicWidget;
-static bool                           l_havePeriodic = false;
+static bool l_havePeriodic = false;
 
-static bool                           l_haveRedraw = true;
+static bool l_haveRedraw = true;
+
+
+class dataStructCreator
+{
+	public:
+		etk::UString name;
+		ewol::widgetManager::creator_tf pointer;
+};
+
+static etk::Vector<dataStructCreator> l_creatorList;
+
+
 
 void ewol::widgetManager::Init(void)
 {
@@ -32,10 +53,23 @@ void ewol::widgetManager::Init(void)
 	// prevent android error ==> can create memory leak but I prefer
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
+	l_creatorList.Clear();
 	l_listOfPeriodicWidget.Clear();
 	l_havePeriodic = false;
 	l_haveRedraw = true;
 	//ewol::WIDGET_SceneInit();
+	widget::Button::Init();
+	widget::ButtonColor::Init();
+	widget::Spacer::Init();
+	widget::Slider::Init();
+	widget::Sizer::Init();
+	widget::ProgressBar::Init();
+	widget::Layer::Init();
+	widget::Label::Init();
+	widget::Image::Init();
+	widget::Gird::Init();
+	widget::Entry::Init();
+	widget::CheckBox::Init();
 	IsInit = true;
 }
 
@@ -46,9 +80,24 @@ void ewol::widgetManager::UnInit(void)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	
+	
+	widget::CheckBox::UnInit();
+	widget::Entry::UnInit();
+	widget::Gird::UnInit();
+	widget::Image::UnInit();
+	widget::Label::UnInit();
+	widget::Layer::UnInit();
+	widget::ProgressBar::UnInit();
+	widget::Sizer::UnInit();
+	widget::Slider::UnInit();
+	widget::Spacer::UnInit();
+	widget::ButtonColor::UnInit();
+	widget::Button::UnInit();
+	
 	IsInit = false;
 	
 	l_listOfPeriodicWidget.Clear();
+	l_creatorList.Clear();
 }
 
 void ewol::widgetManager::Rm(ewol::Widget * newWidget)
@@ -203,3 +252,64 @@ bool ewol::widgetManager::IsDrawingNeeded(void)
 	l_haveRedraw = false;
 	return tmp;
 }
+
+
+
+// element that generate the list of elements
+void ewol::widgetManager::AddWidgetCreator(const etk::UString& name, ewol::widgetManager::creator_tf pointer)
+{
+	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
+		if (name == l_creatorList[iii].name) {
+			if (NULL==pointer) {
+				EWOL_INFO("Remove Creator of a specify widget : " << name);
+			} else {
+				EWOL_WARNING("Replace Creator of a specify widget : " << name);
+				l_creatorList[iii].pointer = pointer;
+			}
+			return;
+		}
+	}
+	if (NULL==pointer) {
+		return;
+	}
+	EWOL_INFO("Add Creator of a specify widget : " << name);
+	dataStructCreator tmpStruct;
+	tmpStruct.name = name;
+	tmpStruct.pointer = pointer;
+	l_creatorList.PushBack(tmpStruct);
+}
+
+ewol::Widget* ewol::widgetManager::Create(const etk::UString& name)
+{
+	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
+		if (name == l_creatorList[iii].name) {
+			if (NULL != l_creatorList[iii].pointer) {
+				return (*l_creatorList[iii].pointer)();
+			}
+		}
+	}
+	EWOL_WARNING("try to create an UnExistant widget : " << name);
+	return NULL;
+}
+
+bool ewol::widgetManager::Exist(const etk::UString& name)
+{
+	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
+		if (name == l_creatorList[iii].name) {
+			return true;
+		}
+	}
+	return false;
+}
+
+etk::UString ewol::widgetManager::List(void)
+{
+	etk::UString tmpVal;
+	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
+		tmpVal += l_creatorList[iii].name;
+		tmpVal += ",";
+	}
+	return tmpVal;
+}
+
+

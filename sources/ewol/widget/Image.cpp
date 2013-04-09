@@ -17,9 +17,25 @@ extern const char * const ewolEventImagePressed    = "ewol-image-Pressed";
 #undef __class__
 #define __class__	"Image"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Image();
+}
 
 void widget::Image::Init(void)
 {
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Image::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
+widget::Image::Image(const etk::UString& dataFile, int32_t size)
+{
+	m_imageSelected = dataFile;
 	AddEventId(ewolEventImagePressed);
 	
 	#ifdef __TARGET_OS__Android
@@ -33,13 +49,6 @@ void widget::Image::Init(void)
 	m_imageSize = 32;
 	// Limit event at 1:
 	SetMouseLimit(1);
-}
-
-
-widget::Image::Image(etk::UString dataFile, int32_t size)
-{
-	m_imageSelected = dataFile;
-	Init();
 	if (size>0) {
 		m_imageSize = size;
 	}
@@ -57,12 +66,11 @@ void widget::Image::SetPadding(vec2 newPadding)
 	m_padding = newPadding;
 }
 
-bool widget::Image::CalculateMinSize(void)
+void widget::Image::CalculateMinSize(void)
 {
 	m_minSize.setValue(m_padding.x()*2 + m_imageSize,
 	                   m_padding.y()*2 + m_imageSize );
 	MarkToRedraw();
-	return true;
 }
 
 

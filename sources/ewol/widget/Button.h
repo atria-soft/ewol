@@ -31,6 +31,9 @@ namespace widget {
 	 */
 	class Button : public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 			ewol::Widget* m_subWidget[2]; //!< subwidget of the button
@@ -58,15 +61,25 @@ namespace widget {
 			 */
 			void SetShaperName(const etk::UString& shaperName);
 			/**
-			 * @brief Specify the current composition string
-			 * @param[in] newLabel The string that might be displayed
+			 * @brief Specify the current widget
+			 * @param[in] subWidget Widget to add normal
 			 */
-			void SetSubWidget(ewol::Widget* subWidget, bool forToggle=false);
+			void SetSubWidget(ewol::Widget* subWidget);
+			/**
+			 * @brief Specify the current widget
+			 * @param[in] subWidget Widget to add Toggle
+			 */
+			void SetSubWidgetToggle(ewol::Widget* subWidget);
 			/**
 			 * @brief Get the current displayed composition
-			 * @return The displayed string.
+			 * @return The base widget
 			 */
-			ewol::Widget* GetSubWidget(bool fromToggle=false);
+			ewol::Widget* GetSubWidget(void);
+			/**
+			 * @brief Get the current displayed composition
+			 * @return The toggle widget
+			 */
+			ewol::Widget* GetSubWidgetToggle(void);
 			/**
 			 * @brief Set the currentValue of the Button (pressed or not)
 			 * @note Work only in toggle mode
@@ -90,11 +103,15 @@ namespace widget {
 			 * @param[in] new state
 			 */
 			void ChangeStatusIn(int32_t newStatusId);
+			/**
+			 * @brief update the status with the internal satte of the button ...
+			 */
+			void CheckStatus(void);
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Button"; };
-			virtual bool CalculateMinSize(void);
-			virtual bool CalculateSize(float availlableX, float availlableY);
+			virtual void CalculateMinSize(void);
+			virtual void CalculateSize(const vec2& availlable);
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);

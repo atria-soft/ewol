@@ -22,16 +22,19 @@ extern const char * const ewolEventButtonColorChange;
 namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
-			ewol::Shaper          m_shaper;             //!< Compositing theme.
-			ewol::Text            m_text;               //!< Compositing Test display.
-			draw::Color           m_textColorFg;        //!< Current color.
-			widget::ContextMenu*  m_widgetContextMenu;  //!< Specific context menu.
-			bool                  m_mouseHover;         //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-			bool                  m_buttonPressed;      //!< Flag to know if the button is curently pressed.
+			ewol::Shaper m_shaper; //!< Compositing theme.
+			ewol::Text m_text; //!< Compositing Test display.
+			draw::Color m_textColorFg; //!< Current color.
+			widget::ContextMenu* m_widgetContextMenu; //!< Specific context menu.
+			bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 			// hover area :
-			vec2                  m_selectableAreaPos;  //!< Start position of the events
-			vec2                  m_selectableAreaSize; //!< Size of the event positions
+			vec2 m_selectableAreaPos; //!< Start position of the events
+			vec2 m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Main constructor.
@@ -60,16 +63,11 @@ namespace widget {
 			void SetValue(draw::Color color);
 		public:
 			// Derived function
-			virtual bool CalculateMinSize(void);
-			// Derived function
+			virtual void CalculateMinSize(void);
 			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
-			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
-			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 		private:
 			/**

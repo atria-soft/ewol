@@ -576,8 +576,8 @@ void eSystem::ForceRedrawAll(void)
 {
 	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
 	if (NULL != tmpWindows) {
-		ivec2 tmpSize = eSystem::GetSize();
-		tmpWindows->CalculateSize(tmpSize.x(), tmpSize.y());
+		ivec2 systemSize = eSystem::GetSize();
+		tmpWindows->CalculateSize(vec2(systemSize.x(), systemSize.y()));
 	}
 }
 

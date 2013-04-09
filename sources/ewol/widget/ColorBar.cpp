@@ -35,11 +35,10 @@ widget::ColorBar::~ColorBar(void)
 }
 
 
-bool widget::ColorBar::CalculateMinSize(void)
+void widget::ColorBar::CalculateMinSize(void)
 {
 	m_minSize.setValue(160, 80);
 	MarkToRedraw();
-	return true;
 }
 static draw::Color s_listColorWhite(0xFFFFFFFF);
 static draw::Color s_listColorBlack(0x000000FF);

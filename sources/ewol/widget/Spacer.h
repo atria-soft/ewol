@@ -18,10 +18,13 @@
 namespace widget {
 	class Spacer :public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
-			ewol::Drawing  m_draw;      //!< Compositing drawing element
-			float          m_localSize; //!< Local request size of the display
-			draw::Color    m_color;     //!< Background color
+			ewol::Drawing m_draw; //!< Compositing drawing element
+			float m_localSize; //!< Local request size of the display
+			draw::Color m_color; //!< Background color
 		public:
 			/**
 			 * @brief Main constructer
@@ -43,14 +46,10 @@ namespace widget {
 			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		public:
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolSpacer"; };
-			// Derived function
-			virtual bool CalculateMinSize(void);
-			// Derived function
+			virtual const char * const GetObjectType(void) { return "Ewol::Spacer"; };
+			virtual void CalculateMinSize(void);
 			virtual ewol::Widget * GetWidgetAtPos(vec2  pos) { return NULL; };
-			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 	};
 	

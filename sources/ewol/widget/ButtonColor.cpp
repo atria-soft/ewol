@@ -28,6 +28,24 @@ extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Cha
 #undef __class__
 #define __class__	"ButtonColor"
 
+
+
+static ewol::Widget* Create(void)
+{
+	return new widget::ButtonColor();
+}
+
+void widget::ButtonColor::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::ButtonColor::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
 widget::ButtonColor::ButtonColor(draw::Color baseColor, etk::UString shaperName) :
 	m_shaper(shaperName),
 	m_textColorFg(baseColor),
@@ -53,7 +71,7 @@ void widget::ButtonColor::SetShaperName(etk::UString shaperName)
 }
 
 
-bool widget::ButtonColor::CalculateMinSize(void)
+void widget::ButtonColor::CalculateMinSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	etk::UString label = draw::GetString(m_textColorFg);
@@ -61,7 +79,6 @@ bool widget::ButtonColor::CalculateMinSize(void)
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
 	MarkToRedraw();
-	return true;
 }
 
 

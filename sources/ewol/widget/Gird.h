@@ -17,6 +17,9 @@
 namespace widget {
 	class Gird :public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
 			class GirdProperties {
 				public:
@@ -136,8 +139,8 @@ namespace widget {
 			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
-			virtual bool CalculateSize(float availlableX, float availlableY);
-			virtual bool CalculateMinSize(void);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinSize(void);
 	};
 	
 };

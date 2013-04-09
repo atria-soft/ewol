@@ -15,6 +15,21 @@
 #undef __class__
 #define __class__	"Spacer"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Spacer();
+}
+
+void widget::Spacer::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Spacer::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 widget::Spacer::Spacer(void)
 {
@@ -30,10 +45,9 @@ widget::Spacer::~Spacer(void)
 }
 
 
-bool widget::Spacer::CalculateMinSize(void)
+void widget::Spacer::CalculateMinSize(void)
 {
 	m_minSize.setValue(m_localSize, m_localSize);
-	return true;
 }
 
 
@@ -50,7 +64,7 @@ void widget::Spacer::OnDraw(ewol::DrawProperty& displayProp)
 }
 
 
-#define BORDER_SIZE_TMP         (4)
+#define BORDER_SIZE_TMP  (4)
 void widget::Spacer::OnRegenerateDisplay(void)
 {
 	if (false == NeedRedraw()) {

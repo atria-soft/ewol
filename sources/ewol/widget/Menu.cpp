@@ -164,7 +164,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					widget::Button * myButton = NULL;
 					
 					mySizer = new widget::Sizer(widget::Sizer::modeVert);
-						mySizer->LockExpendContamination(true);
+						mySizer->LockExpendContamination(vec2(true,true));
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizer);
 						

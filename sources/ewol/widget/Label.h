@@ -19,6 +19,9 @@ extern const char * const ewolEventLabelPressed;
 namespace widget {
 	class Label : public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
 			ewol::Text   m_text;  //!< Compositing text element.
 			etk::UString m_label; //!< decorated text to display.
@@ -42,16 +45,14 @@ namespace widget {
 			 * @return The displayed decorated text.
 			 */
 			etk::UString GetLabel(void);
+		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Label"; };
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			// Derived function
+			virtual void CalculateMinSize(void);
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool LoadXML(TiXmlNode* node);
 	};
 	
 };

@@ -32,13 +32,9 @@ namespace widget {
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "widget::ColorBar"; };
-			// Derived function
-			virtual bool CalculateMinSize(void);
-			// Derived function
+			virtual void CalculateMinSize(void);
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
 	};
 	

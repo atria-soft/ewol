@@ -25,16 +25,11 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "EwolPopUp"; };
 		public:
 			// Derived function
-			virtual bool   CalculateSize(float availlableX, float availlableY);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			// Derived function
-			virtual void   SetMinSise(float x=-1, float y=-1);
-			// Derived function
-			virtual void   SetExpendX(bool newExpend=false);
-			// Derived function
-			virtual void   SetExpendY(bool newExpend=false);
-			void           SetDisplayRatio(float ratio);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinSize(void);
+			virtual void SetMinSize(const vec2& size);
+			virtual void SetExpand(const bvec2& newExpend);
+			void SetDisplayRatio(float ratio);
 		private:
 			draw::Color      m_colorBackGroung;
 			draw::Color      m_colorBorder;

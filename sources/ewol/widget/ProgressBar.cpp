@@ -12,7 +12,23 @@
 #include <ewol/widget/WidgetManager.h>
 
 #undef __class__
-#define __class__	"Slider"
+#define __class__	"ProgressBar"
+
+static ewol::Widget* Create(void)
+{
+	return new widget::ProgressBar();
+}
+
+void widget::ProgressBar::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::ProgressBar::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 const int32_t dotRadius = 6;
 
@@ -35,12 +51,11 @@ widget::ProgressBar::~ProgressBar(void)
 }
 
 
-bool widget::ProgressBar::CalculateMinSize(void)
+void widget::ProgressBar::CalculateMinSize(void)
 {
 	m_minSize.setValue( etk_max(m_userMinSize.x(), 40),
 	                    etk_max(m_userMinSize.y(), dotRadius*2) );
 	MarkToRedraw();
-	return true;
 }
 
 

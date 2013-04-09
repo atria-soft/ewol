@@ -21,32 +21,28 @@ namespace widget {
 	class CheckBox : public ewol::Widget
 	{
 		public:
-			CheckBox(void);
-			CheckBox(etk::UString newLabel);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolCheckBox"; };
-			void Init(void);
+			static void Init(void);
+			static void UnInit(void);
+		public:
+			CheckBox(const etk::UString& newLabel = "No Label");
 			virtual ~CheckBox(void);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			void           SetLabel(etk::UString newLabel);
-			void           SetValue(bool val);
-			bool           GetValue(void);
+			void SetLabel(etk::UString newLabel);
+			void SetValue(bool val);
+			bool GetValue(void);
 		private:
-			ewol::Text     m_oObjectText;
-			ewol::Drawing  m_oObjectDecoration;
-			etk::UString   m_label;
-			bool           m_value;
-			draw::Color    m_textColorFg;  //!< Text color
-			draw::Color    m_textColorBg;  //!< Background color
+			ewol::Text m_oObjectText;
+			ewol::Drawing m_oObjectDecoration;
+			etk::UString m_label;
+			bool m_value;
+			draw::Color m_textColorFg; //!< Text color
+			draw::Color m_textColorBg; //!< Background color
 		public:
 			// Derived function
+			virtual const char * const GetObjectType(void) { return "Ewol::CheckBox"; };
+			virtual void CalculateMinSize(void);
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
-			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 	};
 	

@@ -37,20 +37,20 @@ widget::ContextMenu::~ContextMenu(void)
 }
 
 
-bool widget::ContextMenu::CalculateSize(float availlableX, float availlableY)
+void widget::ContextMenu::CalculateSize(const vec2& availlable)
 {
-	EWOL_DEBUG("CalculateSize(" << availlableX << "," << availlableY << ")");
+	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize;
 		vec2 subWidgetOrigin;
 		subWidgetSize = m_subWidget->GetMinSize();
-		if (true == m_subWidget->CanExpentX()) {
+		if (true == m_subWidget->CanExpand().x()) {
 			subWidgetSize.setX(m_size.x());
 		}
-		if (true == m_subWidget->CanExpentY()) {
+		if (true == m_subWidget->CanExpand().y()) {
 			subWidgetSize.setY(m_size.y());
 		}
 		int32_t minWidth = 100;
@@ -98,15 +98,14 @@ bool widget::ContextMenu::CalculateSize(float availlableX, float availlableY)
 				}
 				break;
 		}
-		m_subWidget->SetOrigin(subWidgetOrigin.x(), subWidgetOrigin.y());
-		m_subWidget->CalculateSize(subWidgetSize.x(), subWidgetSize.y());
+		m_subWidget->SetOrigin(subWidgetOrigin);
+		m_subWidget->CalculateSize(subWidgetSize);
 	}
 	MarkToRedraw();
-	return true;
 }
 
 
-bool widget::ContextMenu::CalculateMinSize(void)
+void widget::ContextMenu::CalculateMinSize(void)
 {
 	EWOL_DEBUG("CalculateMinSize");
 	m_userExpend.setValue(false,false);
@@ -117,22 +116,16 @@ bool widget::ContextMenu::CalculateMinSize(void)
 	}
 	EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	MarkToRedraw();
-	return true;
 }
 
-void widget::ContextMenu::SetMinSise(float x, float y)
+void widget::ContextMenu::SetMinSize(const vec2& size)
 {
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::ContextMenu::SetExpendX(bool newExpend)
+void widget::ContextMenu::SetExpand(const bvec2& newExpend)
 {
 	EWOL_ERROR("Pop-up can not have a user expend settings X (herited from under elements)");
-}
-
-void widget::ContextMenu::SetExpendY(bool newExpend)
-{
-	EWOL_ERROR("Pop-up can not have a user expend settings Y (herited from under elements)");
 }
 
 

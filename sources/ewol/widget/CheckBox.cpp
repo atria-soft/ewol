@@ -15,27 +15,31 @@ extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 #undef __class__
 #define __class__	"CheckBox"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::CheckBox();
+}
 
 void widget::CheckBox::Init(void)
 {
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::CheckBox::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
+widget::CheckBox::CheckBox(const etk::UString& newLabel)
+{
+	m_label = newLabel;
 	AddEventId(ewolEventCheckBoxClicked);
 	m_textColorFg = draw::color::black;
 	m_textColorBg = draw::color::white;
 	m_value = false;
 	SetCanHaveFocus(true);
 	SetMouseLimit(1);
-}
-
-widget::CheckBox::CheckBox(void)
-{
-	m_label = "No Label";
-	Init();
-}
-
-widget::CheckBox::CheckBox(etk::UString newLabel)
-{
-	m_label = newLabel;
-	Init();
 }
 
 
@@ -45,14 +49,13 @@ widget::CheckBox::~CheckBox(void)
 }
 
 
-bool widget::CheckBox::CalculateMinSize(void)
+void widget::CheckBox::CalculateMinSize(void)
 {
 	vec3 minSize = m_oObjectText.CalculateSize(m_label);
 	float boxSize = etk_max(20, minSize.y()) + 5;
 	m_minSize.setX(boxSize+minSize.x());
 	m_minSize.setY(etk_max(boxSize, minSize.y())+3);
 	MarkToRedraw();
-	return true;
 }
 
 

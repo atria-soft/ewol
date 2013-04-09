@@ -33,6 +33,9 @@ namespace widget {
 	 */
 	class Entry : public ewol::Widget
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
 		private:
 			ewol::Shaper m_shaper;
 			ewol::Text   m_oObjectText;               //!< text display
@@ -54,29 +57,22 @@ namespace widget {
 			 * @brief Destuctor
 			 */
 			virtual ~Entry(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			void           SetValue(etk::UString newData);
-			etk::UString   GetValue(void);
-			void           SetWidth(int32_t width)
+			void SetValue(etk::UString newData);
+			etk::UString GetValue(void);
+			void SetWidth(int32_t width)
 			{
 				m_userSize = width;
 			}
 		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
-			// Derived function
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
-			// Derived function
 			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent);
-			// Derived function
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
-			// Derived function
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
+			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
+			virtual void CalculateMinSize(void);
 		protected:
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);

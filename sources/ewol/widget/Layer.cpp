@@ -13,6 +13,21 @@
 #undef __class__
 #define __class__	"Layer"
 
+static ewol::Widget* Create(void)
+{
+	return new widget::Layer();
+}
+
+void widget::Layer::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::Layer::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
 
 widget::Layer::Layer(void)
 {
@@ -27,32 +42,31 @@ widget::Layer::~Layer(void)
 }
 
 
-bool widget::Layer::CalculateSize(float availlableX, float availlableY)
+void widget::Layer::CalculateSize(const vec2& availlable)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->SetOrigin(m_origin.x(), m_origin.y());
-			m_subWidget[iii]->CalculateSize(m_size.x(), m_size.y());
+			m_subWidget[iii]->SetOrigin(m_origin);
+			m_subWidget[iii]->CalculateSize(m_size);
 		}
 	}
 	MarkToRedraw();
-	return true;
 }
 
 
-bool widget::Layer::CalculateMinSize(void)
+void widget::Layer::CalculateMinSize(void)
 {
 	m_userExpend.setValue(false, false);
 	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
-			if (true == m_subWidget[iii]->CanExpentX()) {
+			if (true == m_subWidget[iii]->CanExpand().x()) {
 				m_userExpend.setX(true);
 			}
-			if (true == m_subWidget[iii]->CanExpentY()) {
+			if (true == m_subWidget[iii]->CanExpand().y()) {
 				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
@@ -60,38 +74,20 @@ bool widget::Layer::CalculateMinSize(void)
 			                    etk_max(tmpSize.y(), m_minSize.y()) );
 		}
 	}
-	return true;
 }
 
-void widget::Layer::SetMinSise(float x, float y)
+void widget::Layer::SetMinSize(const vec2& size)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::Layer::SetExpendX(bool newExpend)
-{
-	EWOL_ERROR("Layer can not have a user expend settings X (herited from under elements)");
-}
 
-bool widget::Layer::CanExpentX(void)
+bvec2 widget::Layer::CanExpand(void)
 {
 	if (true == m_lockExpendContamination) {
-		return false;
+		return bvec2(false,false);
 	}
-	return m_userExpend.x();
-}
-
-void widget::Layer::SetExpendY(bool newExpend)
-{
-	EWOL_ERROR("Sizer can not have a user expend settings Y (herited from under elements)");
-}
-
-bool widget::Layer::CanExpentY(void)
-{
-	if (true == m_lockExpendContamination) {
-		return false;
-	}
-	return m_userExpend.y();
+	return m_userExpend;
 }
 
 void widget::Layer::LockExpendContamination(bool lockExpend)

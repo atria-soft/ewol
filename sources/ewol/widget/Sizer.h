@@ -17,6 +17,9 @@ namespace widget {
 	class Sizer :public ewol::Widget
 	{
 		public:
+			static void Init(void);
+			static void UnInit(void);
+		public:
 			typedef enum {
 				modeVert, //!< Vertical mode
 				modeHori, //!< Horizontal mode
@@ -51,17 +54,7 @@ namespace widget {
 			 * @brief Change state of the expend contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
 			 * @param[in] lockExpend New expend state in vertical and horisantal
 			 */
-			void LockExpendContamination(bool lockExpend);
-			/**
-			 * @brief Change state of the expend contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
-			 * @param[in] lockExpend New expend state in vertical
-			 */
-			void LockExpendContaminationVert(bool lockExpend);
-			/**
-			 * @brief Change state of the expend contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
-			 * @param[in] lockExpend New expend state in horisantal
-			 */
-			void LockExpendContaminationHori(bool lockExpend);
+			void LockExpendContamination(const bvec2& lockExpend);
 		public:
 			/**
 			 * @brief Remove all sub element from the widget.
@@ -107,13 +100,11 @@ namespace widget {
 			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
-			virtual bool CalculateSize(float availlableX, float availlableY);
-			virtual bool CalculateMinSize(void);
-			virtual void SetMinSize(float x=-1, float y=-1);
-			virtual void SetExpendX(bool newExpend=false);
-			virtual bool CanExpentX(void);
-			virtual void SetExpendY(bool newExpend=false);
-			virtual bool CanExpentY(void);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinSize(void);
+			virtual void SetMinSize(const vec2& size);
+			virtual void SetExpand(const bvec2& newExpend);
+			virtual bvec2 CanExpent(void);;
 	};
 	
 };

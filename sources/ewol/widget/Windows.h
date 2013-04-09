@@ -21,7 +21,7 @@ namespace ewol {
 			Windows(void);
 			virtual ~Windows(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolWindows"; };
+			virtual const char * const GetObjectType(void) { return "Ewol::Windows"; };
 		// internal event at ewol system : 
 		public:
 			void SysDraw(void);
@@ -36,9 +36,9 @@ namespace ewol {
 			virtual void On(void) { };
 		public:
 			// Derived function
-			virtual bool CalculateSize(float availlableX, float availlableY);
+			virtual void CalculateSize(const vec2& availlable);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
+			virtual ewol::Widget * GetWidgetAtPos(vec2 pos);
 		private:
 			bool m_hasDecoration;
 		public:
@@ -52,8 +52,8 @@ namespace ewol {
 				m_hasDecoration = true;
 			}
 		private:
-			ewol::Widget*                   m_subWidget;
-			etk::Vector<ewol::Widget*>  m_popUpWidgetList;
+			ewol::Widget* m_subWidget;
+			etk::Vector<ewol::Widget*> m_popUpWidgetList;
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);

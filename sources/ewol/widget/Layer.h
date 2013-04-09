@@ -17,19 +17,11 @@ namespace widget {
 	class Layer :public ewol::Widget
 	{
 		public:
+			static void Init(void);
+			static void UnInit(void);
+		public:
 			Layer(void);
 			virtual ~Layer(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
-		public:
-			// Derived function
-			virtual bool CalculateSize(float availlableX, float availlableY);
-			virtual bool CalculateMinSize(void);
-			virtual void SetMinSise(float x=-1, float y=-1);
-			virtual void SetExpendX(bool newExpend=false);
-			virtual bool CanExpentX(void);
-			virtual void SetExpendY(bool newExpend=false);
-			virtual bool CanExpentY(void);
 			void LockExpendContamination(bool lockExpend=false);
 		private:
 			bool m_lockExpendContamination;
@@ -46,10 +38,14 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
-			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinSize(void);
+			virtual void SetMinSize(const vec2& size);
+			virtual void SetExpand(const bvec2& newExpend);
+			virtual bvec2 CanExpand(void);
+			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
 	};
 	
 };
