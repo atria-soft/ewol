@@ -43,7 +43,6 @@ namespace widget {
 			virtual void CalculateSize(const vec2& availlable);
 			virtual void CalculateMinSize(void);
 			virtual void SetMinSize(const vec2& size);
-			virtual void SetExpand(const bvec2& newExpend);
 			virtual bvec2 CanExpand(void);
 			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
 	};

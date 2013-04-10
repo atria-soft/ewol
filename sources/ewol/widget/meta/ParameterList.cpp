@@ -51,7 +51,7 @@ widget::ParameterList::~ParameterList(void)
 }
 
 
-bool widget::ParameterList::CalculateMinSize(void)
+void widget::ParameterList::CalculateMinSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
@@ -60,7 +60,6 @@ bool widget::ParameterList::CalculateMinSize(void)
 	m_minSize.y = 3+minHeight;
 	*/
 	m_minSize.setValue(150, 150);
-	return true;
 }
 
 

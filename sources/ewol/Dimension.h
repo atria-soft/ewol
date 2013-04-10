@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __DIMENSION_H__
-#define __DIMENSION_H__
+#ifndef __EWOL_DIMENSION_H__
+#define __EWOL_DIMENSION_H__
 
 #include <etk/types.h>
 #include <etk/UString.h>

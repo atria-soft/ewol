@@ -12,7 +12,7 @@
 #include <etk/MessageFifo.h>
 
 #include <ewol/ewol.h>
-#include <ewol/DisplayConv.h>
+#include <ewol/Dimension.h>
 #include <ewol/debug.h>
 
 #include <ewol/config.h>
@@ -135,7 +135,7 @@ void ewolProcessEvents(void)
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
 				windowsSize = data.dimention;
-				ewol::SetPixelWindowsSize(vec2(windowsSize.x(),windowsSize.y()));
+				ewol::dimension::SetPixelWindowsSize(vec2(windowsSize.x(),windowsSize.y()));
 				eSystem::ForceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
@@ -329,7 +329,7 @@ void eSystem::RequestUpdateSize(void)
 void eSystem::Resize(int w, int h )
 {
 	// TODO : Better in the thread ... ==> but generate some init error ...
-	ewol::SetPixelWindowsSize(vec2(w,h));
+	ewol::dimension::SetPixelWindowsSize(vec2(w,h));
 	if (true == isGlobalSystemInit) {
 		eSystemMessage data;
 		data.TypeMessage = THREAD_RESIZE;

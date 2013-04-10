@@ -40,9 +40,9 @@ void ewol::dimension::UnInit(void)
 	windowsSize.Set(vec2(9999999,88888), ewol::Dimension::Pixel);
 }
 
-void ewol::dimension::SetPixelRatio(const vec2& ratio, ewol::Dimension::distance_te type)
+void ewol::dimension::SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te type)
 {
-	ewol::Dimension conversion(ratio, type);
+	ewol::Dimension conversion(_ratio, type);
 	ratio = conversion.GetMillimeter();
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	EWOL_INFO("Set a new screen ratio for the screen : ratioMm=" << ratio);
@@ -105,28 +105,28 @@ void ewol::Dimension::Set(const vec2& size, ewol::Dimension::distance_te type)
 {
 	switch(type) {
 		case ewol::Dimension::Pourcent:
-			m_data = size*0.01f;
+			m_data = vec2(size.x()*0.01f, size.y()*0.01f);
 			break;
 		case ewol::Dimension::Pixel:
 			m_data = size;
 			break;
 		case ewol::Dimension::Meter:
-			m_data = (size*meterToMillimeter)*ratio;
+			m_data = vec2(size.x()*meterToMillimeter*ratio.x(), size.y()*meterToMillimeter*ratio.y());
 			break;
 		case ewol::Dimension::Centimeter:
-			m_data = (size*centimeterToMillimeter)*ratio;
+			m_data = vec2(size.x()*centimeterToMillimeter*ratio.x(), size.y()*centimeterToMillimeter*ratio.y());
 			break;
 		case ewol::Dimension::Millimeter:
-			m_data = size*ratio;
+			m_data = vec2(size.x()*ratio.x(), size.y()*ratio.y());
 			break;
 		case ewol::Dimension::Kilometer:
-			m_data = (size*kilometerToMillimeter)*ratio;
+			m_data = vec2(size.x()*kilometerToMillimeter*ratio.x(), size.y()*kilometerToMillimeter*ratio.y());
 			break;
 		case ewol::Dimension::Inch:
-			m_data = (size*inchToMillimeter)*ratio;
+			m_data = vec2(size.x()*inchToMillimeter*ratio.x(), size.y()*inchToMillimeter*ratio.y());
 			break;
 		case ewol::Dimension::foot:
-			m_data = (size*footToMillimeter)*ratio;
+			m_data = vec2(size.x()*footToMillimeter*ratio.x(), size.y()*footToMillimeter*ratio.y());
 			break;
 	}
 	m_type = type;
@@ -134,16 +134,18 @@ void ewol::Dimension::Set(const vec2& size, ewol::Dimension::distance_te type)
 
 vec2 ewol::Dimension::GetPixel(void)
 {
-	if (type!=ewol::Dimension::Pourcent) {
+	if (m_type!=ewol::Dimension::Pourcent) {
 		return m_data;
 	}
-	return windowsSize*m_data;
+	vec2 windDim = windowsSize.GetPixel();
+	return vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
 }
 
 vec2 ewol::Dimension::GetPourcent(void)
 {
-	if (type!=ewol::Dimension::Pourcent) {
-		return m_data/windowsSize*100.0f;
+	if (m_type!=ewol::Dimension::Pourcent) {
+		vec2 windDim = windowsSize.GetPixel();
+		return vec2(m_data.x()/windDim.x()*100.0f, m_data.y()/windDim.y()*100.0f);
 	}
 	return m_data*100.0f;
 }

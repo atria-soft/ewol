@@ -44,11 +44,10 @@ widget::ColorChooser::ColorChooser(void) :
 	m_widgetBlue = NULL;
 	m_widgetAlpha = NULL;
 	
-	LockExpendContamination(true);
+	LockExpendContamination(bvec2(true,true));
 		m_widgetColorBar = new widget::ColorBar();
 			m_widgetColorBar->RegisterOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
-			m_widgetColorBar->SetFillY(true);
-			m_widgetColorBar->SetFillX(true);
+			m_widgetColorBar->SetFill(bvec2(true,true));
 			/*
 			m_widgetColorBar->SetWidth(200);
 			m_widgetColorBar->SetHeigh(200);
@@ -60,8 +59,8 @@ widget::ColorChooser::ColorChooser(void) :
 		
 		m_widgetRed = new widget::Slider();
 			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetRed->SetExpendX(true);
-			m_widgetRed->SetFillX(true);
+			m_widgetRed->SetExpand(bvec2(true,false));
+			m_widgetRed->SetFill(bvec2(true,false));
 			m_widgetRed->SetMin(0);
 			m_widgetRed->SetMax(255);
 			sliderColor = 0xFF0000FF;
@@ -69,8 +68,8 @@ widget::ColorChooser::ColorChooser(void) :
 			SubWidgetAdd(m_widgetRed);
 		m_widgetGreen = new widget::Slider();
 			m_widgetGreen->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetGreen->SetExpendX(true);
-			m_widgetGreen->SetFillX(true);
+			m_widgetGreen->SetExpand(bvec2(true,false));
+			m_widgetGreen->SetFill(bvec2(true,false));
 			m_widgetGreen->SetMin(0);
 			sliderColor = 0x00FF00FF;
 			m_widgetGreen->SetColor(sliderColor);
@@ -78,8 +77,8 @@ widget::ColorChooser::ColorChooser(void) :
 			SubWidgetAdd(m_widgetGreen);
 		m_widgetBlue = new widget::Slider();
 			m_widgetBlue->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetBlue->SetExpendX(true);
-			m_widgetBlue->SetFillX(true);
+			m_widgetBlue->SetExpand(bvec2(true,false));
+			m_widgetBlue->SetFill(bvec2(true,false));
 			m_widgetBlue->SetMin(0);
 			sliderColor = 0x0000FFFF;
 			m_widgetBlue->SetColor(sliderColor);
@@ -87,8 +86,8 @@ widget::ColorChooser::ColorChooser(void) :
 			SubWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = new widget::Slider();
 			m_widgetAlpha->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetAlpha->SetExpendX(true);
-			m_widgetAlpha->SetFillX(true);
+			m_widgetAlpha->SetExpand(bvec2(true,false));
+			m_widgetAlpha->SetFill(bvec2(true,false));
 			m_widgetAlpha->SetMin(0);
 			m_widgetAlpha->SetMax(255);
 			SubWidgetAdd(m_widgetAlpha);

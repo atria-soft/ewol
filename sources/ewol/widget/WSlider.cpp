@@ -18,11 +18,11 @@
 widget::WSlider::WSlider(void)
 {
 	// set contamination enable
-	LockExpendContamination();
+	LockExpendContamination(bvec2(false,false));
 	m_windowsDestination = 0;
 	m_slidingProgress = 0;
 	m_windowsSources = 0;
-	m_underExpend.setValue(false,false);
+	m_underExpand.setValue(false,false);
 }
 
 widget::WSlider::~WSlider(void)
@@ -31,92 +31,86 @@ widget::WSlider::~WSlider(void)
 }
 
 
-bool widget::WSlider::CalculateSize(float availlableX, float availlableY)
+void widget::WSlider::CalculateSize(const vec2& availlable)
 {
 	//EWOL_DEBUG("Update Size");
-	m_size.setValue(availlableX, availlableY);
+	m_size = availlable;
 	
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
 		if (iii < m_subWidget.Size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SetOrigin(m_origin.x(), m_origin.y());
-				m_subWidget[iii]->CalculateSize(m_size.x(), m_size.y());
+				m_subWidget[iii]->SetOrigin(m_origin);
+				m_subWidget[iii]->CalculateSize(m_size);
 			}
 		}
 	} else {
 		int32_t iii = m_windowsSources;
 		if (iii < m_subWidget.Size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SetOrigin(m_origin.x() - (m_size.x()*(float)m_slidingProgress/1000.0),  m_origin.y());
-				m_subWidget[iii]->CalculateSize(m_size.x(), m_size.y());
+				m_subWidget[iii]->SetOrigin(vec2(m_origin.x() - (m_size.x()*(float)m_slidingProgress/1000.0),  m_origin.y()));
+				m_subWidget[iii]->CalculateSize(m_size);
 			}
 		}
 		iii = m_windowsDestination;
 		if (iii < m_subWidget.Size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SetOrigin(m_origin.x() - (m_size.x()*((float)m_slidingProgress/1000.0) - m_size.x()),  m_origin.y());
-				m_subWidget[iii]->CalculateSize(m_size.x(), m_size.y());
+				m_subWidget[iii]->SetOrigin(vec2(m_origin.x() - (m_size.x()*((float)m_slidingProgress/1000.0) - m_size.x()),  m_origin.y()));
+				m_subWidget[iii]->CalculateSize(m_size);
 			}
 		}
 	}
 	MarkToRedraw();
-	return true;
 }
 
 
-bool widget::WSlider::CalculateMinSize(void)
+void widget::WSlider::CalculateMinSize(void)
 {
 	EWOL_DEBUG("Calculate MinSize");
-	m_underExpend.setValue(false,false);
+	m_underExpand.setValue(false,false);
 	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
-			if (true == m_subWidget[iii]->CanExpentX()) {
-				m_underExpend.setX(true);
+			if (true == m_subWidget[iii]->CanExpand().x()) {
+				m_underExpand.setX(true);
 			}
-			if (true == m_subWidget[iii]->CanExpentY()) {
-				m_underExpend.setY(true);
+			if (true == m_subWidget[iii]->CanExpand().y()) {
+				m_underExpand.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			m_minSize.setValue(etk_max(tmpSize.x(), m_minSize.x()),
 			                   etk_max(tmpSize.y(), m_minSize.y()));
 		}
 	}
-	return true;
 }
 
-void widget::WSlider::SetMinSise(float x, float y)
+void widget::WSlider::SetMinSize(const vec2& size)
 {
 	EWOL_ERROR("Layer can not have a user Minimum size (herited from under elements)");
 }
 
-bool widget::WSlider::CanExpentX(void)
+bvec2 widget::WSlider::CanExpand(void)
 {
-	if (m_userExpend.x() == true) {
-		return true;
+	bvec2 res = m_userExpend;
+	if (true == m_underExpand.x()) {
+		res.setX(true);
 	}
-	if (true == m_lockExpendContamination) {
-		return false;
+	if (true == m_underExpand.y()) {
+		res.setY(true);
 	}
-	return m_underExpend.x();
+	if (true == m_lockExpendContamination.x()) {
+		res.setX(false);
+	}
+	if (true == m_lockExpendContamination.y()) {
+		res.setY(false);
+	}
+	return res;
 }
 
-bool widget::WSlider::CanExpentY(void)
+void widget::WSlider::LockExpendContamination(const bvec2& lockExpand)
 {
-	if (m_userExpend.y() == true) {
-		return true;
-	}
-	if (true == m_lockExpendContamination) {
-		return false;
-	}
-	return m_underExpend.y();
-}
-
-void widget::WSlider::LockExpendContamination(bool lockExpend)
-{
-	m_lockExpendContamination = lockExpend;
+	m_lockExpendContamination = lockExpand;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
@@ -197,7 +191,7 @@ void widget::WSlider::PeriodicCall(int64_t localTime)
 		m_slidingProgress += 30;
 		m_slidingProgress = etk_avg(0, m_slidingProgress, 1000);
 	}
-	CalculateSize(m_size.x(), m_size.y());
+	CalculateSize(m_size);
 	MarkToRedraw();
 }
 

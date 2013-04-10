@@ -61,8 +61,8 @@ void widget::PopUp::CalculateSize(const vec2& availlable)
 		subWidgetOrigin.setValue((int32_t)(m_size.x() - m_origin.x() - subWidgetSize.x())/2 + m_origin.x(),
 		                         (int32_t)(m_size.y() - m_origin.y() - subWidgetSize.y())/2 + m_origin.y());
 		
-		m_subWidget->SetOrigin(subWidgetOrigin.x(), subWidgetOrigin.y());
-		m_subWidget->CalculateSize(subWidgetSize.x(), subWidgetSize.y());
+		m_subWidget->SetOrigin(subWidgetOrigin);
+		m_subWidget->CalculateSize(subWidgetSize);
 	}
 	MarkToRedraw();
 }

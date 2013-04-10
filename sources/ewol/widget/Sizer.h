@@ -104,7 +104,7 @@ namespace widget {
 			virtual void CalculateMinSize(void);
 			virtual void SetMinSize(const vec2& size);
 			virtual void SetExpand(const bvec2& newExpend);
-			virtual bvec2 CanExpent(void);;
+			virtual bvec2 CanExpand(void);;
 	};
 	
 };

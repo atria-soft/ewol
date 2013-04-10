@@ -22,33 +22,28 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolWSlider"; };
 		private:
-			bvec2 m_underExpend; // expend of the uner elements ...
+			bvec2 m_underExpand; // expend of the uner elements ...
 		public:
 			// Derived function
-			virtual bool   CalculateSize(float availlableX, float availlableY);
-			// Derived function
-			virtual bool   CalculateMinSize(void);
-			// Derived function
-			virtual void   SetMinSise(float x=-1, float y=-1);
-			// Derived function
-			virtual bool   CanExpentX(void);
-			// Derived function
-			virtual bool   CanExpentY(void);
-			void           LockExpendContamination(bool lockExpend=false);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinSize(void);
+			virtual void SetMinSize(const vec2& size);
+			virtual bvec2 CanExpand(void);
+			void LockExpendContamination(const bvec2& lockExpend);
 		private:
-			bool                           m_lockExpendContamination;
-			etk::Vector<ewol::Widget*>     m_subWidget;
-			int32_t                        m_windowsSources;     // widget source viewed
-			int32_t                        m_windowsDestination; // widget destinated viewed
-			int32_t                        m_slidingProgress;    // ratio progression of a sliding
+			bvec2 m_lockExpendContamination;
+			etk::Vector<ewol::Widget*> m_subWidget;
+			int32_t m_windowsSources; // widget source viewed
+			int32_t m_windowsDestination; // widget destinated viewed
+			int32_t m_slidingProgress; // ratio progression of a sliding
 		public:
-			virtual void    SubWidgetRemoveAll(void);
-			virtual void    SubWidgetAdd(ewol::Widget* newWidget);
-			virtual void    SubWidgetRemove(ewol::Widget* newWidget);
-			virtual void    SubWidgetUnLink(ewol::Widget* newWidget);
-			        void    SubWidgetSelectSet(int32_t id);
-			        int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
-			        int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
+			virtual void SubWidgetRemoveAll(void);
+			virtual void SubWidgetAdd(ewol::Widget* newWidget);
+			virtual void SubWidgetRemove(ewol::Widget* newWidget);
+			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
+			void SubWidgetSelectSet(int32_t id);
+			int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
+			int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
 		protected:
 			// Derived function
 			virtual void   OnDraw(ewol::DrawProperty& displayProp);

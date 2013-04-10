@@ -30,19 +30,19 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "widget::ColorChooser"; };
 			// Derived function
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
+			virtual void OnReceiveMessage(ewol::EObject* CallerObject, const char * eventId, const etk::UString& data);
 			// Derived function
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			
-			void     SetColor(draw::Color newColor);
+			void SetColor(draw::Color newColor);
 			draw::Color GetColor(void);
 		private:;
-			widget::ColorBar*     m_widgetColorBar;
-			widget::Slider*       m_widgetRed;
-			widget::Slider*       m_widgetGreen;
-			widget::Slider*       m_widgetBlue;
-			widget::Slider*       m_widgetAlpha;
-			draw::Color           m_currentColor;
+			widget::ColorBar* m_widgetColorBar;
+			widget::Slider* m_widgetRed;
+			widget::Slider* m_widgetGreen;
+			widget::Slider* m_widgetBlue;
+			widget::Slider* m_widgetAlpha;
+			draw::Color m_currentColor;
 	};
 	
 };

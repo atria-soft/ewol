@@ -81,7 +81,7 @@ widget::FileChooser::FileChooser(void)
 	if (NULL == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
-		mySizerVert->LockExpendContamination(true);
+		mySizerVert->LockExpendContamination(bvec2(true,true));
 		// set it in the pop-up-system : 
 		SubWidgetSet(mySizerVert);
 		
@@ -102,7 +102,7 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				mySpacer->SetExpendX(true);
+				mySpacer->SetExpand(bvec2(true,false));
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 			// TODO : set if back :
@@ -145,8 +145,8 @@ widget::FileChooser::FileChooser(void)
 				m_widgetListFolder->SetShowFiles(false);
 				m_widgetListFolder->SetShowHiddenFiles(false);
 				m_widgetListFolder->RegisterOnEvent(this, ewolEventFSFolderValidate, ewolEventFileChooserListFolder);
-				m_widgetListFolder->SetExpendY(true);
-				m_widgetListFolder->SetFillY(true);
+				m_widgetListFolder->SetExpand(bvec2(false,true));
+				m_widgetListFolder->SetFill(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(m_widgetListFolder);
 			}
 			mySpacer = new widget::Spacer();
@@ -165,10 +165,8 @@ widget::FileChooser::FileChooser(void)
 				m_widgetListFile->SetShowHiddenFiles(false);
 				m_widgetListFile->RegisterOnEvent(this, ewolEventFSFileSelect, ewolEventFileChooserListFile);
 				m_widgetListFile->RegisterOnEvent(this, ewolEventFSFileValidate, ewolEventFileChooserListFileValidate);
-				m_widgetListFile->SetExpendX(true);
-				m_widgetListFile->SetFillX(true);
-				m_widgetListFile->SetExpendY(true);
-				m_widgetListFile->SetFillY(true);
+				m_widgetListFile->SetExpand(bvec2(true,true));
+				m_widgetListFile->SetFill(bvec2(true,true));
 				mySizerHori->SubWidgetAdd(m_widgetListFile);
 			}
 			mySpacer = new widget::Spacer();
@@ -188,7 +186,7 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				myImage->SetFillY(true);
+				myImage->SetFill(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 			m_widgetCurrentFileName = new widget::Entry(m_file);
@@ -197,8 +195,8 @@ widget::FileChooser::FileChooser(void)
 			} else {
 				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFile);
 				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFileEnter);
-				m_widgetCurrentFileName->SetExpendX(true);
-				m_widgetCurrentFileName->SetFillX(true);
+				m_widgetCurrentFileName->SetExpand(bvec2(true,false));
+				m_widgetCurrentFileName->SetFill(bvec2(true,false));
 				m_widgetCurrentFileName->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFileName);
 			}
@@ -212,7 +210,7 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				myImage->SetFillY(true);
+				myImage->SetFill(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 			
@@ -222,8 +220,8 @@ widget::FileChooser::FileChooser(void)
 			} else {
 				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFolder);
 				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFolderEnter);
-				m_widgetCurrentFolder->SetExpendX(true);
-				m_widgetCurrentFolder->SetFillX(true);
+				m_widgetCurrentFolder->SetExpand(bvec2(true,false));
+				m_widgetCurrentFolder->SetFill(bvec2(true,false));
 				m_widgetCurrentFolder->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFolder);
 			}
@@ -232,7 +230,7 @@ widget::FileChooser::FileChooser(void)
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				myImage->RegisterOnEvent(this, ewolEventImagePressed, ewolEventFileChooserHome);
-				myImage->SetFillY(true);
+				myImage->SetFill(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 		}

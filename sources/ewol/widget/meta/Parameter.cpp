@@ -48,7 +48,7 @@ widget::Parameter::Parameter(void) :
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
 		EWOL_INFO("add widget");
-		mySizerVert->LockExpendContamination(true);
+		mySizerVert->LockExpendContamination(bvec2(true,true));
 		// set it in the pop-up-system :
 		SubWidgetSet(mySizerVert);
 		
@@ -62,7 +62,7 @@ widget::Parameter::Parameter(void) :
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				mySpacer->SetExpendX(true);
+				mySpacer->SetExpand(bvec2(true,false));
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 			
@@ -91,15 +91,15 @@ widget::Parameter::Parameter(void) :
 			} else {
 			
 				m_paramList->RegisterOnEvent(this, ewolEventParameterListSelect, l_eventMenuSelected);
-				m_paramList->SetFillY(true);
-				m_paramList->SetExpendY(true);
+				m_paramList->SetFill(bvec2(false,true));
+				m_paramList->SetExpand(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(m_paramList);
 			}
 			mySpacer = new widget::Spacer();
 			if (NULL == mySpacer) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				mySpacer->SetExpendY(true);
+				mySpacer->SetFill(bvec2(false,true));
 				mySpacer->SetSize(5);
 				mySpacer->SetColor(0x000000BF);
 				mySizerHori->SubWidgetAdd(mySpacer);
@@ -115,7 +115,7 @@ widget::Parameter::Parameter(void) :
 				if (NULL == mySpacer) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
-					mySpacer->SetExpendX(true);
+					mySpacer->SetExpand(bvec2(true,false));
 					mySpacer->SetSize(5);
 					mySpacer->SetColor(0x000000BF);
 					mySizerVert2->SubWidgetAdd(mySpacer);
@@ -125,8 +125,7 @@ widget::Parameter::Parameter(void) :
 				if (NULL == m_wSlider) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
-					m_wSlider->SetExpendX(true);
-					m_wSlider->SetExpendY(true);
+					m_wSlider->SetExpand(bvec2(true,true));
 					mySizerVert2->SubWidgetAdd(m_wSlider);
 				}
 			}
@@ -136,7 +135,7 @@ widget::Parameter::Parameter(void) :
 		if (NULL == mySpacer) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			mySpacer->SetExpendX(true);
+			mySpacer->SetExpand(bvec2(true,false));
 			mySpacer->SetSize(5);
 			mySpacer->SetColor(0x000000BF);
 			mySizerVert->SubWidgetAdd(mySpacer);
@@ -146,7 +145,7 @@ widget::Parameter::Parameter(void) :
 		if (NULL == m_widgetTitle) {
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
-			m_widgetTitle->SetExpendX(true);
+			m_widgetTitle->SetExpand(bvec2(true,false));
 			mySizerVert->SubWidgetAdd(m_widgetTitle);
 		}
 	}
@@ -225,8 +224,7 @@ void widget::Parameter::MenuAdd(etk::UString label, etk::UString image, ewol::Wi
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
-					myLabel->SetExpendY(true);
-					myLabel->SetExpendX(true);
+					myLabel->SetExpand(bvec2(true,true));
 					m_wSlider->SubWidgetAdd(myLabel);
 				}
 			}

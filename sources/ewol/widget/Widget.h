@@ -142,7 +142,7 @@ namespace ewol {
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
-			 * @param[in] size The new maximum size requested (vec2(-1,-1) to unset)
+			 * @param[in] size The new maximum size requested (vec2(0,0) to unset)
 			 */
 			virtual void SetMaxSize(vec2 size);
 			/**
@@ -164,6 +164,11 @@ namespace ewol {
 			 */
 			virtual void SetExpand(const bvec2& newExpend);
 			/**
+			 * @brief Get the expend capabilities (x&y) (set by the user)
+			 * @return 2D boolean repensent the capacity to expend
+			 */
+			virtual bvec2 GetExpand(void) { return m_userExpend; };
+			/**
 			 * @brief Get the expend capabilities (x&y)
 			 * @return 2D boolean repensent the capacity to expend
 			 */
@@ -176,6 +181,11 @@ namespace ewol {
 			 * @param[in] newFill new x&y fill state
 			 */
 			virtual void SetFill(const bvec2& newFill);
+			/**
+			 * @brief Set the x&y filling capacity set by the user
+			 * @return bvec2 repensent the capacity to x&y filling (set by the user)
+			 */
+			virtual const bvec2& GetFill(void) { return m_userFill; };
 			/**
 			 * @brief Get the filling capabilities x&y
 			 * @return bvec2 repensent the capacity to x&y filling

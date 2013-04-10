@@ -86,14 +86,14 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			if (m_mode==widget::Sizer::modeVert) {
 				unexpendableSize += tmpSize.y();
-				if (false == m_subWidget[iii]->CanExpentY()) {
+				if (false == m_subWidget[iii]->CanExpand().y()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
 				}
 			} else {
 				unexpendableSize += tmpSize.x();
-				if (false == m_subWidget[iii]->CanExpentX()) {
+				if (false == m_subWidget[iii]->CanExpand().x()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
@@ -120,22 +120,22 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
-			m_subWidget[iii]->SetOrigin(tmpOrigin.x(), tmpOrigin.y());
+			m_subWidget[iii]->SetOrigin(tmpOrigin);
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {
-				if (true == m_subWidget[iii]->CanExpentY()) {
-					m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne);
+				if (true == m_subWidget[iii]->CanExpand().y()) {
+					m_subWidget[iii]->CalculateSize(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(m_size.x(), tmpSize.y());
+					m_subWidget[iii]->CalculateSize(vec2(m_size.x(), tmpSize.y()));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
 				}
 			} else {
-				if (true == m_subWidget[iii]->CanExpentX()) {
-					m_subWidget[iii]->CalculateSize(tmpSize.x()+sizeToAddAtEveryOne, m_size.y());
+				if (true == m_subWidget[iii]->CanExpand().x()) {
+					m_subWidget[iii]->CalculateSize(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y()));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(tmpSize.x(), m_size.y());
+					m_subWidget[iii]->CalculateSize(vec2(tmpSize.x(), m_size.y()));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
 				}
 			}
@@ -161,10 +161,10 @@ void widget::Sizer::CalculateMinSize(void)
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinSize();
-			if (true == m_subWidget[iii]->CanExpentX()) {
+			if (true == m_subWidget[iii]->CanExpand().x()) {
 				m_userExpend.setX(true);
 			}
-			if (true == m_subWidget[iii]->CanExpentY()) {
+			if (true == m_subWidget[iii]->CanExpand().y()) {
 				m_userExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
@@ -190,17 +190,21 @@ void widget::Sizer::SetMinSize(const vec2& size)
 	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::Sizer::SetExpand(const bvec2& newExpend)
+void widget::Sizer::SetExpand(const bvec2& newExpand)
 {
 	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings (herited from under elements)");
 }
 
-bvec2 widget::Sizer::CanExpentY(void)
+bvec2 widget::Sizer::CanExpand(void)
 {
-	if (true == m_lockExpendContamination)) {
-		return bvec2(false,false);
+	bvec2 res = m_userExpend;
+	if (true == m_lockExpendContamination.x()) {
+		res.setX(false);
 	}
-	return m_userExpend;
+	if (true == m_lockExpendContamination.y()) {
+		res.setY(false);
+	}
+	return res;
 }
 
 void widget::Sizer::LockExpendContamination(const bvec2& lockExpend)
