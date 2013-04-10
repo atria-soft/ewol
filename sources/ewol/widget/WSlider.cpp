@@ -18,7 +18,7 @@
 widget::WSlider::WSlider(void)
 {
 	// set contamination enable
-	LockExpendContamination(bvec2(false,false));
+	LockExpandContamination(bvec2(false,false));
 	m_windowsDestination = 0;
 	m_slidingProgress = 0;
 	m_windowsSources = 0;
@@ -64,21 +64,21 @@ void widget::WSlider::CalculateSize(const vec2& availlable)
 }
 
 
-void widget::WSlider::CalculateMinSize(void)
+void widget::WSlider::CalculateMinMaxSize(void)
 {
 	EWOL_DEBUG("Calculate MinSize");
 	m_underExpand.setValue(false,false);
 	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->CalculateMinSize();
+			m_subWidget[iii]->CalculateMinMaxSize();
 			if (true == m_subWidget[iii]->CanExpand().x()) {
 				m_underExpand.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpand().y()) {
 				m_underExpand.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			m_minSize.setValue(etk_max(tmpSize.x(), m_minSize.x()),
 			                   etk_max(tmpSize.y(), m_minSize.y()));
 		}
@@ -92,25 +92,25 @@ void widget::WSlider::SetMinSize(const vec2& size)
 
 bvec2 widget::WSlider::CanExpand(void)
 {
-	bvec2 res = m_userExpend;
+	bvec2 res = m_userExpand;
 	if (true == m_underExpand.x()) {
 		res.setX(true);
 	}
 	if (true == m_underExpand.y()) {
 		res.setY(true);
 	}
-	if (true == m_lockExpendContamination.x()) {
+	if (true == m_lockExpandContamination.x()) {
 		res.setX(false);
 	}
-	if (true == m_lockExpendContamination.y()) {
+	if (true == m_lockExpandContamination.y()) {
 		res.setY(false);
 	}
 	return res;
 }
 
-void widget::WSlider::LockExpendContamination(const bvec2& lockExpand)
+void widget::WSlider::LockExpandContamination(const bvec2& lockExpand)
 {
-	m_lockExpendContamination = lockExpand;
+	m_lockExpandContamination = lockExpand;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
@@ -258,7 +258,7 @@ void widget::WSlider::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::WSlider::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::WSlider::GetWidgetAtPos(const vec2& pos)
 {
 	// TODO : Review this ...
 	if (m_windowsDestination<0 || m_windowsDestination > m_subWidget.Size()) {

@@ -14,19 +14,20 @@
 #include <ewol/renderer/os/eSystem.h>
 #include <ewol/renderer/os/gui.h>
 
-
+#define ULTIMATE_MAX_SIZE  (99999999)
 
 #undef __class__
 #define __class__	"Widget"
 
 ewol::Widget::Widget(void) :
 	m_size(10,10),
-	m_minSize(-1,-1),
+	m_minSize(0,0),
+	m_maxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
 	m_zoom(1.0f),
 	m_origin(0,0),
-	m_userMinSize(-1,-1),
-	m_userMaxSize(-1,-1),
-	m_userExpend(false,false),
+	m_userMinSize(vec2(0,0),ewol::Dimension::Pixel),
+	m_userMaxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel),
+	m_userExpand(false,false),
 	m_userFill(false,false),
 	m_hide(false),
 	m_hasFocus(false),
@@ -196,7 +197,7 @@ void ewol::Widget::MarkToRedraw(void)
 
 void ewol::Widget::SetZoom(float newVal)
 {
-	m_zoom = newVal;
+	m_zoom = etk_avg(0.0000001,newVal,1000000.0);
 	MarkToRedraw();
 }
 
@@ -215,33 +216,19 @@ vec2 ewol::Widget::GetOrigin(void)
 	return m_origin;
 }
 
-vec2 ewol::Widget::RelativePosition(vec2 pos)
+vec2 ewol::Widget::RelativePosition(const vec2& pos)
 {
 	return pos - m_origin;
 }
 
-void ewol::Widget::CalculateMinSize(void)
+void ewol::Widget::CalculateMinMaxSize(void)
 {
-	m_minSize = m_userMinSize;
+	m_minSize = m_userMinSize.GetPixel();
+	m_maxSize = m_userMaxSize.GetPixel();
 	MarkToRedraw();
 }
 
-void ewol::Widget::SetMinSize(const vec2& size)
-{
-	m_userMinSize = size;
-}
-
-void ewol::Widget::CheckMinSize(void)
-{
-	if (m_userMinSize.x() > 0) {
-		m_minSize.setX(etk_max(m_minSize.x(), m_userMinSize.x()));
-	}
-	if (m_userMinSize.y() > 0) {
-		m_minSize.setY(etk_max(m_minSize.y(), m_userMinSize.y()));
-	}
-}
-
-vec2 ewol::Widget::GetMinSize(void)
+vec2 ewol::Widget::GetCalculateMinSize(void)
 {
 	if (false==IsHide()) {
 		return m_minSize;
@@ -249,15 +236,76 @@ vec2 ewol::Widget::GetMinSize(void)
 	return vec2(0,0);
 }
 
-void ewol::Widget::SetMaxSize(vec2 size)
+vec2 ewol::Widget::GetCalculateMaxSize(void)
 {
+	if (false==IsHide()) {
+		return m_maxSize;
+	}
+	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
+}
+
+void ewol::Widget::SetMinSize(const ewol::Dimension& size)
+{
+	vec2 pixelMin = size.GetPixel();
+	vec2 pixelMax = m_userMaxSize.GetPixel();
+	// check minimum & maximum compatibility :
+	bool error=false;
+	if (pixelMin.x()>pixelMax.x()) {
+		error=true;
+	}
+	if (pixelMin.y()>pixelMax.y()) {
+		error=true;
+	}
+	if (error==true) {
+		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
+		return;
+	}
+	m_userMinSize = size;
+	ewol::RequestUpdateSize();
+}
+
+void ewol::Widget::SetNoMinSize(void)
+{
+	m_userMinSize.Set(vec2(0,0),ewol::Dimension::Pixel);
+}
+
+void ewol::Widget::CheckMinSize(void)
+{
+	vec2 pixelSize = m_userMinSize.GetPixel();
+	m_minSize.setX(etk_max(m_minSize.x(), pixelSize.x()));
+	m_minSize.setY(etk_max(m_minSize.y(), pixelSize.y()));
+}
+
+void ewol::Widget::SetMaxSize(const ewol::Dimension& size)
+{
+	vec2 pixelMin = m_userMinSize.GetPixel();
+	vec2 pixelMax = size.GetPixel();
+	// check minimum & maximum compatibility :
+	bool error=false;
+	if (pixelMin.x()>pixelMax.x()) {
+		error=true;
+	}
+	if (pixelMin.y()>pixelMax.y()) {
+		error=true;
+	}
+	if (error==true) {
+		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
+		return;
+	}
 	m_userMaxSize = size;
 	ewol::RequestUpdateSize();
 }
 
-vec2 ewol::Widget::GetMaxSize(void)
+void ewol::Widget::SetNoMaxSize(void)
 {
-	return m_userMaxSize;
+	m_userMaxSize.Set(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
+}
+
+void ewol::Widget::CheckMaxSize(void)
+{
+	vec2 pixelSize = m_userMaxSize.GetPixel();
+	m_maxSize.setX(etk_min(m_maxSize.x(), pixelSize.x()));
+	m_maxSize.setY(etk_min(m_maxSize.y(), pixelSize.y()));
 }
 
 vec2 ewol::Widget::GetSize(void)
@@ -268,11 +316,11 @@ vec2 ewol::Widget::GetSize(void)
 	return vec2(0,0);
 }
 
-void ewol::Widget::SetExpand(const bvec2& newExpend)
+void ewol::Widget::SetExpand(const bvec2& newExpand)
 {
-	if(    m_userExpend.x() != newExpend.x()
-	    || m_userExpend.y() != newExpend.y()) {
-		m_userExpend = newExpend;
+	if(    m_userExpand.x() != newExpand.x()
+	    || m_userExpand.y() != newExpand.y()) {
+		m_userExpand = newExpand;
 		ewol::RequestUpdateSize();
 		MarkToRedraw();
 	}
@@ -281,7 +329,7 @@ void ewol::Widget::SetExpand(const bvec2& newExpend)
 bvec2 ewol::Widget::CanExpand(void)
 {
 	if (false==IsHide()) {
-		return m_userExpend;
+		return m_userExpand;
 	}
 	return bvec2(false,false);
 }
@@ -493,7 +541,7 @@ bool ewol::Widget::LoadXML(TiXmlNode* node)
 	bool ret = true;
 	const char *tmpAttributeValue = node->ToElement()->Attribute("name");
 	if (NULL != tmpAttributeValue) {
-		m_widgetName = tmpAttributeValue;
+		SetName(tmpAttributeValue);
 	}
 	tmpAttributeValue = node->ToElement()->Attribute("fill");
 	if (NULL != tmpAttributeValue) {
@@ -539,23 +587,11 @@ bool ewol::Widget::LoadXML(TiXmlNode* node)
 	}
 	tmpAttributeValue = node->ToElement()->Attribute("min-size");
 	if (NULL != tmpAttributeValue) {
-		float x,y;
-		if (2!=sscanf(tmpAttributeValue, "%f,%f", &x, &y)) {
-			SetMinSize(vec2(x,y));
-		} else {
-			EWOL_ERROR("(l "<<node->Row()<<") An error occured when parsing element min-size : " << tmpAttributeValue);
-			ret = false;
-		}
+		m_userMinSize.SetString(tmpAttributeValue);
 	}
 	tmpAttributeValue = node->ToElement()->Attribute("max-size");
 	if (NULL != tmpAttributeValue) {
-		float x,y;
-		if (2!=sscanf(tmpAttributeValue, "%f,%f", &x, &y)) {
-			SetMaxSize(vec2(x,y));
-		} else {
-			EWOL_ERROR("(l "<<node->Row()<<") An error occured when parsing element max-size : " << tmpAttributeValue);
-			ret = false;
-		}
+		m_userMaxSize.SetString(tmpAttributeValue);
 	}
 	return ret;
 }
@@ -573,19 +609,18 @@ bool ewol::Widget::StoreXML(TiXmlNode* node)
 	}
 	node->LinkEndChild(element);
 	*/
-	if (m_widgetName.Size()!=0) {
-		node->ToElement()->SetAttribute("name", m_widgetName.c_str() );
+	if (GetName().Size()!=0) {
+		node->ToElement()->SetAttribute("name", GetName().c_str() );
 	}
-	if (m_userMinSize != vec2(-1,-1)) {
-		etk::UString tmpVal = etk::UString(m_userMinSize.x()) + "," + etk::UString(m_userMinSize.y());
-		node->ToElement()->SetAttribute("min-size", tmpVal.c_str() );
+	
+	if (m_userMinSize.GetPixel() != vec2(0,0)) {
+		node->ToElement()->SetAttribute("min-size", m_userMinSize.GetString().c_str() );
 	}
-	if (m_userMaxSize != vec2(-1,-1)) {
-		etk::UString tmpVal = etk::UString(m_userMaxSize.x()) + "," + etk::UString(m_userMaxSize.y());
-		node->ToElement()->SetAttribute("max-size", tmpVal.c_str() );
+	if (m_userMaxSize.GetPixel() != vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)) {
+		node->ToElement()->SetAttribute("max-size", m_userMaxSize.GetString().c_str() );
 	}
-	if (m_userExpend != bvec2(false,false)) {
-		etk::UString tmpVal = etk::UString(m_userExpend.x()) + "," + etk::UString(m_userExpend.y());
+	if (m_userExpand != bvec2(false,false)) {
+		etk::UString tmpVal = etk::UString(m_userExpand.x()) + "," + etk::UString(m_userExpand.y());
 		node->ToElement()->SetAttribute("expand", tmpVal.c_str() );
 	}
 	if (m_userFill != bvec2(false,false)) {

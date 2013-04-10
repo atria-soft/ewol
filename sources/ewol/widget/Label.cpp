@@ -48,22 +48,16 @@ widget::Label::~Label(void)
 	
 }
 
-void widget::Label::CalculateMinSize(void)
+void widget::Label::CalculateMinMaxSize(void)
 {
-	if (m_userMaxSize.x() != -1) {
-		m_text.SetTextAlignement(0, m_userMaxSize.x()-4, ewol::Text::alignLeft);
+	vec2 tmpMax = m_userMaxSize.GetPixel();
+	if (tmpMax.x() <= 999999) {
+		m_text.SetTextAlignement(0, tmpMax.x()-4, ewol::Text::alignLeft);
 	}
 	vec3 minSize = m_text.CalculateSizeDecorated(m_label);
-	if (m_userMaxSize.x()!=-1) {
-		m_minSize.setX(etk_min(4 + minSize.x(), m_userMaxSize.x()));
-	} else {
-		m_minSize.setX(4 + minSize.x());
-	}
-	if (m_userMaxSize.y()!=-1) {
-		m_minSize.setY(etk_min(4 + minSize.y(), m_userMaxSize.y()));
-	} else {
-		m_minSize.setY(4 + minSize.y());
-	}
+	
+	m_minSize.setX(etk_min(4 + minSize.x(), tmpMax.x()));
+	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
 }
 
 
@@ -93,11 +87,11 @@ void widget::Label::OnRegenerateDisplay(void)
 		m_text.Clear();
 		int32_t paddingSize = 2;
 		
-		
+		vec2 tmpMax = m_userMaxSize.GetPixel();
 		// to know the size of one Line : 
 		vec3 minSize = m_text.CalculateSize('A');
-		if (m_userMaxSize.x() != -1) {
-			m_text.SetTextAlignement(0, m_userMaxSize.x()-2*paddingSize, ewol::Text::alignLeft);
+		if (tmpMax.x() <= 999999) {
+			m_text.SetTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
 		}
 		vec3 curentTextSize = m_text.CalculateSizeDecorated(m_label);
 		
@@ -137,7 +131,7 @@ void widget::Label::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == IdInput) {

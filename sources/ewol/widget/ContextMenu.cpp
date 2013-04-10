@@ -16,7 +16,7 @@
 
 widget::ContextMenu::ContextMenu(void)
 {
-	m_userExpend.setValue(true,true);
+	m_userExpand.setValue(true,true);
 	
 	m_padding.setValue(4,4);
 	m_offset = 20;
@@ -46,7 +46,7 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize;
 		vec2 subWidgetOrigin;
-		subWidgetSize = m_subWidget->GetMinSize();
+		subWidgetSize = m_subWidget->GetCalculateMinSize();
 		if (true == m_subWidget->CanExpand().x()) {
 			subWidgetSize.setX(m_size.x());
 		}
@@ -105,14 +105,14 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 }
 
 
-void widget::ContextMenu::CalculateMinSize(void)
+void widget::ContextMenu::CalculateMinMaxSize(void)
 {
 	EWOL_DEBUG("CalculateMinSize");
-	m_userExpend.setValue(false,false);
+	m_userExpand.setValue(false,false);
 	m_minSize.setValue(50,50);
 	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
-		m_minSize = m_subWidget->GetMinSize();
+		m_subWidget->CalculateMinMaxSize();
+		m_minSize = m_subWidget->GetCalculateMinSize();
 	}
 	EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	MarkToRedraw();
@@ -123,9 +123,9 @@ void widget::ContextMenu::SetMinSize(const vec2& size)
 	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
 }
 
-void widget::ContextMenu::SetExpand(const bvec2& newExpend)
+void widget::ContextMenu::SetExpand(const bvec2& newExpand)
 {
-	EWOL_ERROR("Pop-up can not have a user expend settings X (herited from under elements)");
+	EWOL_ERROR("Pop-up can not have a user expand settings X (herited from under elements)");
 }
 
 
@@ -226,7 +226,7 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::ContextMenu::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::ContextMenu::GetWidgetAtPos(const vec2& pos)
 {
 	// calculate relative position
 	vec2 relativePos = RelativePosition(pos);
@@ -244,7 +244,7 @@ ewol::Widget * widget::ContextMenu::GetWidgetAtPos(vec2 pos)
 }
 
 
-bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_INFO("Event ouside the context menu");
 	if (IdInput > 0) {

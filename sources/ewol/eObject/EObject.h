@@ -124,6 +124,20 @@ namespace ewol {
 			 * @param[in] data Data registered by this class
 			 */
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data) { };
+			
+		protected:
+			etk::UString m_name; //!< name of the element ...
+		public:
+			/**
+			 * @brief Get the eObject name
+			 * @return The requested name
+			 */
+			const etk::UString& GetName(void) { return m_name; };
+			/**
+			 * @brief Get the Widget name
+			 * @param[in] name The new name
+			 */
+			void SetName(const etk::UString& name) { m_name=name; };
 	};
 };
 

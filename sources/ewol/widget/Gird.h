@@ -136,11 +136,11 @@ namespace widget {
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 	};
 	
 };

@@ -35,7 +35,7 @@ widget::ColorBar::~ColorBar(void)
 }
 
 
-void widget::ColorBar::CalculateMinSize(void)
+void widget::ColorBar::CalculateMinMaxSize(void)
 {
 	m_minSize.setValue(160, 80);
 	MarkToRedraw();
@@ -170,7 +170,7 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on BT ...");

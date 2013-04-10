@@ -10,6 +10,7 @@
 #define __EWOL_WIDGET_H__
 
 #include <ewol/eObject/EObject.h>
+#include <ewol/Dimension.h>
 #include <tinyXML/tinyxml.h>
 
 namespace ewol {
@@ -50,7 +51,6 @@ namespace ewol {
 			};
 			~EventShortCut(void) { };
 	};
-	
 	class Widget : public EObject {
 		public:
 			/**
@@ -67,30 +67,51 @@ namespace ewol {
 			 * @param[in] objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
-			virtual const char * const GetObjectType(void) { return "EwolWidget"; };
+			virtual const char * const GetObjectType(void) { return "Ewol::Widget"; };
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Widget Size:
 		// ----------------------------------------------------------------------------------------------------------------
 		protected:
 			vec2 m_size; //!< internal : current size of the widget
-			vec2 m_minSize; //!< user define the minimum size of the widget
+			vec2 m_minSize; //!< internal : minimum size of the widget
+			vec2 m_maxSize; //!< internal : maximum size of the widget
 		public:
 			/**
 			 * @brief Convert the absolute position in the local Position (Relative)
 			 * @param[in] pos Absolute position that you request convertion
 			 * @return the relative position
 			 */
-			virtual vec2 RelativePosition(vec2 pos);
+			virtual vec2 RelativePosition(const vec2& pos);
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget availlable size in the widget size
 			 * @param[in] availlable Availlable x&y pixel size
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void CalculateSize(const vec2& availlable);
 			/**
-			 * @brief Calculate the minimum size of the widget that is needed to display or the user requested)
+			 * @brief Get the widget size
+			 * @return Requested size
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void CalculateMinSize(void);
+			virtual vec2 GetSize(void);
+			/**
+			 * @brief Calculate the minimum and maximum size (need to estimate expend properties of the widget)
+			 * @note : INTERNAL EWOL SYSTEM
+			 */
+			virtual void CalculateMinMaxSize(void);
+			/**
+			 * @brief Get the widget minimum size calculated
+			 * @return Requested size
+			 * @note : INTERNAL EWOL SYSTEM
+			 */
+			virtual vec2 GetCalculateMinSize(void);
+			/**
+			 * @brief Get the widget maximum size calculated
+			 * @return Requested size
+			 * @note : INTERNAL EWOL SYSTEM
+			 */
+			virtual vec2 GetCalculateMaxSize(void);
 		protected:
 			// internal element calculated by the system
 			float m_zoom; //!< generic widget zoom
@@ -112,6 +133,7 @@ namespace ewol {
 			 * @brief Set origin at the widget (must be an parrent widget that set this parameter).
 			 * This represent the absolute origin in the program windows
 			 * @param[in] pos Position of the origin
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void SetOrigin(const vec2& pos);
 			/**
@@ -120,57 +142,68 @@ namespace ewol {
 			 */
 			virtual vec2 GetOrigin(void);
 		protected:
-			vec2 m_userMinSize; //!< user define the minimum size of the widget
+			ewol::Dimension::Dimension m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] size Set minimum size (none : 0)
 			 */
-			virtual void SetMinSize(const vec2& size);
+			void SetMinSize(const ewol::Dimension::Dimension& size);
+			/**
+			 * @brief User set No minimum size.
+			 */
+			void SetNoMinSize(void);
 			/**
 			 * @brief Get the current calculated min size
 			 * @return the size requested
 			 */
-			virtual vec2 GetMinSize(void);
+			const ewol::Dimension::Dimension& GetMinSize(void) { return m_userMinSize; };
 			/**
-			 * @brief Check if the current min size is compatible wit hte user minimum size
+			 * @brief Check if the current min size is compatible with the user minimum size
 			 *        If it is not the user minimum size will overWrite the minimum size set.
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void CheckMinSize(void);
 		protected:
-			vec2 m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::Dimension::Dimension m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] size The new maximum size requested (vec2(0,0) to unset)
 			 */
-			virtual void SetMaxSize(vec2 size);
+			void SetMaxSize(const ewol::Dimension::Dimension& size);
+			/**
+			 * @brief User set No maximum size.
+			 */
+			void SetNoMaxSize(void);
 			/**
 			 * @brief Get the current maximum size
 			 * @return the size requested
 			 */
-			virtual vec2 GetMaxSize(void);
+			const ewol::Dimension::Dimension& GetMaxSize(void) { return m_userMaxSize; };
 			/**
-			 * @brief Get the widget size
-			 * @return Requested size
+			 * @brief Check if the current max size is compatible with the user maximum size
+			 *        If it is not the user maximum size will overWrite the maximum size set.
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual vec2 GetSize(void);
+			virtual void CheckMaxSize(void);
 		protected:
-			bvec2 m_userExpend; // TODO : Rename expand ... :p
+			bvec2 m_userExpand;
 		public:
 			/**
 			 * @brief Set the expend capabilities (x&y)
 			 * @param[in] newExpend 2D boolean repensent the capacity to expend
 			 */
-			virtual void SetExpand(const bvec2& newExpend);
+			virtual void SetExpand(const bvec2& newExpand);
 			/**
 			 * @brief Get the expend capabilities (x&y) (set by the user)
 			 * @return 2D boolean repensent the capacity to expend
 			 */
-			virtual bvec2 GetExpand(void) { return m_userExpend; };
+			virtual bvec2 GetExpand(void) { return m_userExpand; };
 			/**
 			 * @brief Get the expend capabilities (x&y)
 			 * @return 2D boolean repensent the capacity to expend
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual bvec2 CanExpand(void);
 		protected:
@@ -189,6 +222,7 @@ namespace ewol {
 			/**
 			 * @brief Get the filling capabilities x&y
 			 * @return bvec2 repensent the capacity to x&y filling
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			const bvec2& CanFill(void);
 		protected:
@@ -310,8 +344,9 @@ namespace ewol {
 			 * @param[in] pos gAbsolute position of the requested widget knowledge
 			 * @return NULL No widget found
 			 * @return pointer on the widget found
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual ewol::Widget * GetWidgetAtPos(vec2 pos) { if (false==IsHide()) { return this; } return NULL; };
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos) { if (false==IsHide()) { return this; } return NULL; };
 			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
@@ -321,7 +356,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos) { return false; };
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos) { return false; };
 			/**
 			 * @brief Event on the keybord (if no shortcut has been detected before).
 			 * @param[in] type of the event (ewol::EVENT_KB_TYPE_DOWN or ewol::EVENT_KB_TYPE_UP)
@@ -392,6 +427,7 @@ namespace ewol {
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
 			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
 			 * @param[in] displayProp properties of the current display
+			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual void GenDraw(DrawProperty displayProp);
 		protected:
@@ -424,7 +460,6 @@ namespace ewol {
 			 * @return true if the cursor is curently grabbed
 			 */
 			virtual bool GetGrabStatus(void);
-		// DisplayCursorType
 		private:
 			ewol::cursorDisplay_te m_cursorDisplay;
 		public:
@@ -438,8 +473,6 @@ namespace ewol {
 			 * @return the type of the cursor.
 			 */
 			virtual ewol::cursorDisplay_te GetCursor(void);
-		private:
-			etk::UString m_widgetName;
 		public:
 			/**
 			 * @brief Load properties with an XML node.
@@ -455,7 +488,6 @@ namespace ewol {
 			 * @return false : An error occured.
 			 */
 			virtual bool StoreXML(TiXmlNode* node);
-
 	}; // end of the class Widget declaration
 
 };// end of namespace

@@ -1131,7 +1131,7 @@ vec2 widget::Scene::RelativePosition(vec2 pos)
 };
 
 
-bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, vec2 pos)
+bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("type : " << type << " IdInput=" << IdInput << " " << "status=" << statusEvent << " RelPos=" << relativePos);
 	
@@ -1143,10 +1143,10 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 		}
 		if (true == GetGrabStatus() ) {
 			if (ewol::keyEvent::statusMove == statusEvent) {
-				pos *= M_PI/(360.0f*6);
+				vec2 tmpPos = pos * M_PI/(360.0f*6);
 				vec3 oldAngles = m_camera.GetAngle();
-				oldAngles.setZ(oldAngles.z() + pos.x());
-				oldAngles.setY(oldAngles.y() + pos.y());
+				oldAngles.setZ(oldAngles.z() + tmpPos.x());
+				oldAngles.setY(oldAngles.y() + tmpPos.y());
 				m_camera.SetAngle(oldAngles);
 			}
 		}

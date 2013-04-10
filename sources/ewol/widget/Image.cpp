@@ -66,7 +66,7 @@ void widget::Image::SetPadding(vec2 newPadding)
 	m_padding = newPadding;
 }
 
-void widget::Image::CalculateMinSize(void)
+void widget::Image::CalculateMinMaxSize(void)
 {
 	m_minSize.setValue(m_padding.x()*2 + m_imageSize,
 	                   m_padding.y()*2 + m_imageSize );
@@ -126,7 +126,7 @@ void widget::Image::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

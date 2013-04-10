@@ -26,7 +26,7 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual void SetMinSize(const vec2& size);
 			virtual void SetExpand(const bvec2& newExpend);
 			void SetDisplayRatio(float ratio);
@@ -47,7 +47,7 @@ namespace widget {
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
 			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
+			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
 			// Derived function
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 	};

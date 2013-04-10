@@ -62,10 +62,11 @@ widget::Slider::~Slider(void)
 }
 
 
-void widget::Slider::CalculateMinSize(void)
+void widget::Slider::CalculateMinMaxSize(void)
 {
-	m_minSize.setValue(etk_max(m_userMinSize.x(), 40),
-	                   etk_max(m_userMinSize.y(), dotRadius*2) );
+	vec2 minTmp = m_userMinSize.GetPixel();
+	m_minSize.setValue(etk_max(minTmp.x(), 40),
+	                   etk_max(minTmp.y(), dotRadius*2) );
 	MarkToRedraw();
 }
 
@@ -126,7 +127,7 @@ void widget::Slider::OnRegenerateDisplay(void)
 }
 
 
-bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	vec2 relativePos = RelativePosition(pos);
 	//EWOL_DEBUG("Event on Slider ...");

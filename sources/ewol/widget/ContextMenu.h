@@ -32,7 +32,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "EwolContextMenu"; };
 		public:
 			virtual void CalculateSize(const vec2& availlable); // this generate the current size ...
-			virtual void CalculateMinSize(void); //update the min Size ... and the expend parameters for the sizer
+			virtual void CalculateMinMaxSize(void); //update the min Size ... and the expend parameters for the sizer
 			virtual void SetMinSize(const vec2& size);
 			virtual void SetExpand(const bvec2& newExpend);
 		private:
@@ -53,8 +53,8 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 	};
 	
 };

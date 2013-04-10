@@ -45,7 +45,7 @@ widget::Spacer::~Spacer(void)
 }
 
 
-void widget::Spacer::CalculateMinSize(void)
+void widget::Spacer::CalculateMinMaxSize(void)
 {
 	m_minSize.setValue(m_localSize, m_localSize);
 }

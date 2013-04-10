@@ -43,7 +43,7 @@ widget::List::~List(void)
 }
 
 
-void widget::List::CalculateMinSize(void)
+void widget::List::CalculateMinMaxSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);
@@ -200,7 +200,7 @@ void widget::List::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	vec2 relativePos = RelativePosition(pos);
 	

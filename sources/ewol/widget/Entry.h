@@ -66,13 +66,13 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
 			virtual bool OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent);
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID);
 			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 		protected:
 			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
@@ -82,7 +82,7 @@ namespace widget {
 			 * @note The display is automaticly requested when change apear.
 			 * @return ---
 			 */
-			virtual void UpdateCursorPosition(vec2& pos, bool Selection=false);
+			virtual void UpdateCursorPosition(const vec2& pos, bool Selection=false);
 			/**
 			 * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
 			 * @param ---

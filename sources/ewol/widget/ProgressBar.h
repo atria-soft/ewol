@@ -26,7 +26,7 @@ namespace widget {
 			virtual ~ProgressBar(void);
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolProgressBar"; };
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			void ValueSet(float val);
 			float ValueGet(void);
 			void SetColor(draw::Color newColor) { m_textColorFg = newColor; };

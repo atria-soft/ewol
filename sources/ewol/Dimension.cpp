@@ -79,7 +79,7 @@ ewol::Dimension::~Dimension(void)
 	// nothing to do ...
 }
 
-vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type)
+vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type) const
 {
 	switch(m_type) {
 		case ewol::Dimension::Pourcent:
@@ -101,8 +101,11 @@ vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type)
 	}
 }
 
-void ewol::Dimension::Set(const vec2& size, ewol::Dimension::distance_te type)
+void ewol::Dimension::Set(const vec2& _size, ewol::Dimension::distance_te type)
 {
+	// Set min max on input to limit error : 
+	vec2 size(etk_avg(0,_size.x(),999999999999999.0),
+	          etk_avg(0,_size.y(),999999999999999.0));
 	switch(type) {
 		case ewol::Dimension::Pourcent:
 			m_data = vec2(size.x()*0.01f, size.y()*0.01f);
@@ -132,7 +135,7 @@ void ewol::Dimension::Set(const vec2& size, ewol::Dimension::distance_te type)
 	m_type = type;
 }
 
-vec2 ewol::Dimension::GetPixel(void)
+vec2 ewol::Dimension::GetPixel(void) const
 {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		return m_data;
@@ -141,43 +144,119 @@ vec2 ewol::Dimension::GetPixel(void)
 	return vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
 }
 
-vec2 ewol::Dimension::GetPourcent(void)
+vec2 ewol::Dimension::GetPourcent(void) const
 {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		vec2 windDim = windowsSize.GetPixel();
 		return vec2(m_data.x()/windDim.x()*100.0f, m_data.y()/windDim.y()*100.0f);
 	}
-	return m_data*100.0f;
+	return vec2(m_data.x()*100.0f, m_data.y()*100.0f);;
 }
 
-vec2 ewol::Dimension::GetMeter(void)
+vec2 ewol::Dimension::GetMeter(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToMeter;
 }
 
-vec2 ewol::Dimension::GetCentimeter(void)
+vec2 ewol::Dimension::GetCentimeter(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToMeter;
 }
 
-vec2 ewol::Dimension::GetMillimeter(void)
+vec2 ewol::Dimension::GetMillimeter(void) const
 {
 	return ewol::Dimension::GetPixel()*invRatio;
 }
 
-vec2 ewol::Dimension::GetKilometer(void)
+vec2 ewol::Dimension::GetKilometer(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToKilometer;
 }
 
-vec2 ewol::Dimension::GetInch(void)
+vec2 ewol::Dimension::GetInch(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToInch;
 }
 
-vec2 ewol::Dimension::GetFoot(void)
+vec2 ewol::Dimension::GetFoot(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToFoot;
 }
 
+etk::UString ewol::Dimension::GetString(void)
+{
+	etk::UString ret;
+	vec2 size = Get(GetType());
+	ret += etk::UString(size.x());
+	ret += ",";
+	ret += etk::UString(size.y());
+	switch(m_type) {
+		case ewol::Dimension::Pourcent:
+			ret += "%";
+			break;
+		case ewol::Dimension::Pixel:
+			ret += "px";
+			break;
+		case ewol::Dimension::Meter:
+			ret += "m";
+			break;
+		case ewol::Dimension::Centimeter:
+			ret += "cm";
+			break;
+		case ewol::Dimension::Millimeter:
+			ret += "mm";
+			break;
+		case ewol::Dimension::Kilometer:
+			ret += "km";
+			break;
+		case ewol::Dimension::Inch:
+			ret += "in";
+			break;
+		case ewol::Dimension::foot:
+			ret += "ft";
+			break;
+	}
+	return ret;
+}
+void ewol::Dimension::SetString(const etk::UString& value)
+{
+	EWOL_TODO(" not done yet ...");
+}
 
+
+etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension::distance_te& obj)
+{
+	switch(obj) {
+		case ewol::Dimension::Pourcent:
+			os << "%";
+			break;
+		case ewol::Dimension::Pixel:
+			os << "px";
+			break;
+		case ewol::Dimension::Meter:
+			os << "m";
+			break;
+		case ewol::Dimension::Centimeter:
+			os << "cm";
+			break;
+		case ewol::Dimension::Millimeter:
+			os << "mm";
+			break;
+		case ewol::Dimension::Kilometer:
+			os << "km";
+			break;
+		case ewol::Dimension::Inch:
+			os << "in";
+			break;
+		case ewol::Dimension::foot:
+			os << "ft";
+			break;
+	}
+	return os;
+}
+
+etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension& obj)
+{
+	os << obj.Get(obj.GetType()) << obj.GetType();
+	return os;
+}

@@ -24,7 +24,7 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "ewol::List"; };
 			virtual ~List(void);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			void SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
@@ -46,7 +46,7 @@ namespace widget {
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {

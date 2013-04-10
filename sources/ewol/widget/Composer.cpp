@@ -168,10 +168,10 @@ void widget::Composer::CalculateSize(const vec2& availlable)
 		m_hide = m_subWidget->IsHide();
 	}
 }
-void widget::Composer::CalculateMinSize(void)
+void widget::Composer::CalculateMinMaxSize(void)
 {
 	if (NULL!=m_subWidget) {
-		m_subWidget->CalculateMinSize();
+		m_subWidget->CalculateMinMaxSize();
 		// copy all sub parameters :
 		m_hide = m_subWidget->IsHide();
 		m_userFill = m_subWidget->CanFill();

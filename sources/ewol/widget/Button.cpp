@@ -138,11 +138,11 @@ void widget::Button::CalculateSize(const vec2& availlable)
 	
 	vec2 minimumSizeBase(0,0);
 	vec2 minimumSizeToggle(0,0);
-	// Checking the expend properties :
-	if (m_userExpend.x() == true) {
+	// Checking the expand properties :
+	if (m_userExpand.x() == true) {
 		m_size.setX(availlable.x());
 	}
-	if (m_userExpend.y() == true) {
+	if (m_userExpand.y() == true) {
 		m_size.setY(availlable.y());
 	}
 	// Checkin the filling properties ==> for the subElements:
@@ -170,18 +170,18 @@ void widget::Button::CalculateSize(const vec2& availlable)
 }
 
 
-void widget::Button::CalculateMinSize(void)
+void widget::Button::CalculateMinMaxSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	vec2 minimumSizeBase(0,0);
 	vec2 minimumSizeToggle(0,0);
 	if (NULL!=m_subWidget[0]) {
-		m_subWidget[0]->CalculateMinSize();
-		minimumSizeBase = m_subWidget[0]->GetMinSize();
+		m_subWidget[0]->CalculateMinMaxSize();
+		minimumSizeBase = m_subWidget[0]->GetCalculateMinSize();
 	}
 	if (NULL!=m_subWidget[1]) {
-		m_subWidget[1]->CalculateMinSize();
-		minimumSizeToggle = m_subWidget[1]->GetMinSize();
+		m_subWidget[1]->CalculateMinMaxSize();
+		minimumSizeToggle = m_subWidget[1]->GetCalculateMinSize();
 	}
 	// get the maxixmum min size of the 2 sub-widget (if they are present indeed):
 	m_minSize.setX(etk_max(minimumSizeBase.x(), minimumSizeToggle.x()) );
@@ -259,7 +259,7 @@ void widget::Button::SetToggleMode(bool togg)
 	}
 }
 
-bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	bool previousHoverState = m_mouseHover;
 	if(    ewol::keyEvent::statusLeave == typeEvent

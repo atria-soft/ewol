@@ -51,10 +51,11 @@ widget::ProgressBar::~ProgressBar(void)
 }
 
 
-void widget::ProgressBar::CalculateMinSize(void)
+void widget::ProgressBar::CalculateMinMaxSize(void)
 {
-	m_minSize.setValue( etk_max(m_userMinSize.x(), 40),
-	                    etk_max(m_userMinSize.y(), dotRadius*2) );
+	vec2 tmpMin = m_userMinSize.GetPixel();
+	m_minSize.setValue( etk_max(tmpMin.x(), 40),
+	                    etk_max(tmpMin.y(), dotRadius*2) );
 	MarkToRedraw();
 }
 

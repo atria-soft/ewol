@@ -81,7 +81,7 @@ widget::Entry::~Entry(void)
 }
 
 
-void widget::Entry::CalculateMinSize(void)
+void widget::Entry::CalculateMinMaxSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
@@ -168,7 +168,7 @@ void widget::Entry::OnRegenerateDisplay(void)
 }
 
 
-void widget::Entry::UpdateCursorPosition(vec2& pos, bool selection)
+void widget::Entry::UpdateCursorPosition(const vec2& pos, bool selection)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
@@ -244,7 +244,7 @@ void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te 
 }
 
 
-bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
 	if (1 == IdInput) {

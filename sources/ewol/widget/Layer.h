@@ -22,9 +22,9 @@ namespace widget {
 		public:
 			Layer(void);
 			virtual ~Layer(void);
-			void LockExpendContamination(bool lockExpend=false);
+			void LockExpandContamination(bool lockExpend=false);
 		private:
-			bool m_lockExpendContamination;
+			bool m_lockExpandContamination;
 			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
 			virtual void SubWidgetRemoveAll(void);
@@ -38,10 +38,10 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
+			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual void SetMinSize(const vec2& size);
 			virtual bvec2 CanExpand(void);
 			virtual const char * const GetObjectType(void) { return "EwolLayer"; };

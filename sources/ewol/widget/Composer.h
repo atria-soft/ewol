@@ -81,7 +81,7 @@ namespace widget
 		public:// Derived function
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			// TODO : Call all sub element getter an setter ==> this object might be transparent ...
 	};
 };

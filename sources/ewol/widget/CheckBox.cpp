@@ -49,7 +49,7 @@ widget::CheckBox::~CheckBox(void)
 }
 
 
-void widget::CheckBox::CalculateMinSize(void)
+void widget::CheckBox::CalculateMinMaxSize(void)
 {
 	vec3 minSize = m_oObjectText.CalculateSize(m_label);
 	float boxSize = etk_max(20, minSize.y()) + 5;
@@ -115,7 +115,7 @@ void widget::CheckBox::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == IdInput) {

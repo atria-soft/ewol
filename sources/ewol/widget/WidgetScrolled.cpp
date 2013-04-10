@@ -78,7 +78,7 @@ void widget::WidgetScrooled::OnRegenerateDisplay(void)
 }
 
 
-bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::WidgetScrooled::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	vec2 relativePos = RelativePosition(pos);
 	// corection due to the open Gl invertion ...

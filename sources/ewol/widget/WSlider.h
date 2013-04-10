@@ -22,16 +22,16 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "EwolWSlider"; };
 		private:
-			bvec2 m_underExpand; // expend of the uner elements ...
+			bvec2 m_underExpand; // expand of the uner elements ...
 		public:
 			// Derived function
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual void SetMinSize(const vec2& size);
 			virtual bvec2 CanExpand(void);
-			void LockExpendContamination(const bvec2& lockExpend);
+			void LockExpandContamination(const bvec2& lockExpand);
 		private:
-			bvec2 m_lockExpendContamination;
+			bvec2 m_lockExpandContamination;
 			etk::Vector<ewol::Widget*> m_subWidget;
 			int32_t m_windowsSources; // widget source viewed
 			int32_t m_windowsDestination; // widget destinated viewed
@@ -50,11 +50,8 @@ namespace widget {
 		public:
 			// Derived function
 			virtual void   OnRegenerateDisplay(void);
-			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos);
-			// Derived function
+			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
-			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
 	};
 	

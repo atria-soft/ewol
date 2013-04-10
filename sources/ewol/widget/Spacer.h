@@ -47,8 +47,8 @@ namespace widget {
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Spacer"; };
-			virtual void CalculateMinSize(void);
-			virtual ewol::Widget * GetWidgetAtPos(vec2  pos) { return NULL; };
+			virtual void CalculateMinMaxSize(void);
+			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos) { return NULL; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 	};

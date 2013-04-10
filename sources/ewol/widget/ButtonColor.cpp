@@ -71,7 +71,7 @@ void widget::ButtonColor::SetShaperName(etk::UString shaperName)
 }
 
 
-void widget::ButtonColor::CalculateMinSize(void)
+void widget::ButtonColor::CalculateMinMaxSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
 	etk::UString label = draw::GetString(m_textColorFg);
@@ -154,7 +154,7 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	bool previousHoverState = m_mouseHover;
 	if(ewol::keyEvent::statusLeave == typeEvent) {

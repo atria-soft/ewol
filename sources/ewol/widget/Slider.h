@@ -39,9 +39,9 @@ namespace widget {
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Slider"; } ;
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 	};
 	
 };

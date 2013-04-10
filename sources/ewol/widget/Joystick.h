@@ -46,7 +46,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "Ewol::Joystick"; };
 			virtual void CalculateSize(const vec2& availlable);
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 			
 			void SetLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
 			void SetDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };

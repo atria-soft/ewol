@@ -32,7 +32,7 @@ void widget::Sizer::UnInit(void)
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
 	m_mode(mode),
-	m_lockExpendContamination(false,false),
+	m_lockExpandContamination(false,false),
 	m_borderSize(0,0)
 {
 	
@@ -77,22 +77,22 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 	//EWOL_DEBUG("Update Size");
 	m_size = availlable;
 	m_size -= m_borderSize*2;
-	// calculate unExpendable Size :
-	float unexpendableSize=0.0;
+	// calculate unExpandable Size :
+	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			if (m_mode==widget::Sizer::modeVert) {
-				unexpendableSize += tmpSize.y();
+				unexpandableSize += tmpSize.y();
 				if (false == m_subWidget[iii]->CanExpand().y()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
 				}
 			} else {
-				unexpendableSize += tmpSize.x();
+				unexpandableSize += tmpSize.x();
 				if (false == m_subWidget[iii]->CanExpand().x()) {
 					nbWidgetFixedSize++;
 				} else {
@@ -101,14 +101,14 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			}
 		}
 	}
-	// 2 cases : 1 or more can Expend, or all is done ...
+	// 2 cases : 1 or more can Expand, or all is done ...
 	float sizeToAddAtEveryOne = 0;
-	// 2 cases : 1 or more can Expend, or all is done ...
+	// 2 cases : 1 or more can Expand, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
 		if (m_mode==widget::Sizer::modeVert) {
-			sizeToAddAtEveryOne = (m_size.y() - unexpendableSize) / nbWidgetNotFixedSize;
+			sizeToAddAtEveryOne = (m_size.y() - unexpandableSize) / nbWidgetNotFixedSize;
 		} else {
-			sizeToAddAtEveryOne = (m_size.x() - unexpendableSize) / nbWidgetNotFixedSize;
+			sizeToAddAtEveryOne = (m_size.x() - unexpandableSize) / nbWidgetNotFixedSize;
 		}
 		if (sizeToAddAtEveryOne<0.0) {
 			sizeToAddAtEveryOne=0;
@@ -117,7 +117,7 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 	vec2 tmpOrigin = m_origin + m_borderSize;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
 			m_subWidget[iii]->SetOrigin(tmpOrigin);
@@ -146,28 +146,23 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 }
 
 
-void widget::Sizer::CalculateMinSize(void)
+void widget::Sizer::CalculateMinMaxSize(void)
 {
 	//EWOL_DEBUG("Update minimum Size");
-	m_userExpend.setValue(false, false);
-	m_minSize.setValue(0,0);
-	if (m_userMinSize.x()>0) {
-		m_minSize.setX(m_userMinSize.x());
-	}
-	if (m_userMinSize.y()>0) {
-		m_minSize.setY(m_userMinSize.y());
-	}
+	m_userExpand.setValue(false, false);
+	m_minSize = m_userMinSize.GetPixel();
+	
 	m_minSize += m_borderSize*2;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->CalculateMinSize();
+			m_subWidget[iii]->CalculateMinMaxSize();
 			if (true == m_subWidget[iii]->CanExpand().x()) {
-				m_userExpend.setX(true);
+				m_userExpand.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpand().y()) {
-				m_userExpend.setY(true);
+				m_userExpand.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			//EWOL_DEBUG("VERT : NewMinSize=" << tmpSize);
 			//EWOL_DEBUG("             Get minSize[" << iii << "] "<< tmpSize);
 			if (m_mode==widget::Sizer::modeVert) {
@@ -192,24 +187,24 @@ void widget::Sizer::SetMinSize(const vec2& size)
 
 void widget::Sizer::SetExpand(const bvec2& newExpand)
 {
-	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expend settings (herited from under elements)");
+	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expand settings (herited from under elements)");
 }
 
 bvec2 widget::Sizer::CanExpand(void)
 {
-	bvec2 res = m_userExpend;
-	if (true == m_lockExpendContamination.x()) {
+	bvec2 res = m_userExpand;
+	if (true == m_lockExpandContamination.x()) {
 		res.setX(false);
 	}
-	if (true == m_lockExpendContamination.y()) {
+	if (true == m_lockExpandContamination.y()) {
 		res.setY(false);
 	}
 	return res;
 }
 
-void widget::Sizer::LockExpendContamination(const bvec2& lockExpend)
+void widget::Sizer::LockExpandContamination(const bvec2& lockExpand)
 {
-	m_lockExpendContamination = lockExpend;
+	m_lockExpandContamination = lockExpand;
 }
 
 void widget::Sizer::SubWidgetRemoveAll(void)
@@ -307,7 +302,7 @@ void widget::Sizer::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::Sizer::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::Sizer::GetWidgetAtPos(const vec2& pos)
 {
 	if (true == IsHide()) {
 		return NULL;

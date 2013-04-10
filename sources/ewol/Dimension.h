@@ -43,7 +43,7 @@ namespace ewol
 			 * @param[in] type Type of unit requested.
 			 * @return dimention requested.
 			 */
-			vec2 Get(ewol::Dimension::distance_te type);
+			vec2 Get(ewol::Dimension::distance_te type) const;
 			/**
 			 * @brief Set the current dimention in requested type
 			 * @param[in] size Dimention to set
@@ -54,44 +54,68 @@ namespace ewol
 			 * @brief Get the current dimention in pixel
 			 * @return dimention in Pixel
 			 */
-			vec2 GetPixel(void);
+			vec2 GetPixel(void) const;
 			/**
 			 * @brief Get the current dimention in Pourcent
 			 * @return dimention in Pourcent
 			 */
-			vec2 GetPourcent(void);
+			vec2 GetPourcent(void) const;
 			/**
 			 * @brief Get the current dimention in Meter
 			 * @return dimention in Meter
 			 */
-			vec2 GetMeter(void);
+			vec2 GetMeter(void) const;
 			/**
 			 * @brief Get the current dimention in Centimeter
 			 * @return dimention in Centimeter
 			 */
-			vec2 GetCentimeter(void);
+			vec2 GetCentimeter(void) const;
 			/**
 			 * @brief Get the current dimention in Millimeter
 			 * @return dimention in Millimeter
 			 */
-			vec2 GetMillimeter(void);
+			vec2 GetMillimeter(void) const;
 			/**
 			 * @brief Get the current dimention in Kilometer
 			 * @return dimention in Kilometer
 			 */
-			vec2 GetKilometer(void);
+			vec2 GetKilometer(void) const;
 			/**
 			 * @brief Get the current dimention in Inch
 			 * @return dimention in Inch
 			 */
-			vec2 GetInch(void);
+			vec2 GetInch(void) const;
 			/**
 			 * @brief Get the current dimention in Foot
 			 * @return dimention in Foot
 			 */
-			vec2 GetFoot(void);
-			
+			vec2 GetFoot(void) const;
+			/*****************************************************
+			 *    = assigment
+			 *****************************************************/
+			const Dimension& operator= (const Dimension& obj ) {
+				m_data = obj.m_data;
+				m_type = obj.m_type;
+				return *this;
+			}
+			/**
+			 * @breif get the dimension type
+			 * @return the type
+			 */
+			ewol::Dimension::distance_te GetType(void) const { return m_type; };
+			/**
+			 * @get the descriptive string
+			 * @return string describe the dimention
+			 */
+			etk::UString GetString(void);
+			/**
+			 * @brief Set the descriptive string in this dimention
+			 * @param[in] value String describe the dimention
+			 */
+			void SetString(const etk::UString& value);
 	};
+	etk::CCout& operator <<(etk::CCout &os, const ewol::Dimension::distance_te& obj);
+	etk::CCout& operator <<(etk::CCout &os, const ewol::Dimension& obj);
 	
 	namespace dimension
 	{

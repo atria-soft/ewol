@@ -101,7 +101,7 @@ void widget::Gird::CalculateSize(const vec2& availlable)
 	MarkToRedraw();
 }
 
-void widget::Gird::CalculateMinSize(void)
+void widget::Gird::CalculateMinMaxSize(void)
 {
 	for (int32_t iii=0; iii<m_sizeCol.Size(); iii++ ){
 		if (m_sizeCol[iii] <= 0) {
@@ -109,13 +109,8 @@ void widget::Gird::CalculateMinSize(void)
 		}
 	}
 	//EWOL_DEBUG("Update minimum Size");
-	m_minSize.setValue(0,0);
-	if (m_userMinSize.x()>0) {
-		m_minSize.setX(m_userMinSize.x());
-	}
-	if (m_userMinSize.y()>0) {
-		m_minSize.setY(m_userMinSize.y());
-	}
+	m_minSize = m_userMinSize.GetPixel();
+	m_maxSize = m_userMaxSize.GetPixel();
 	m_uniformSizeRow = 0;
 	m_minSize += m_borderSize*2;
 	int32_t lastLineID = 0;
@@ -125,8 +120,8 @@ void widget::Gird::CalculateMinSize(void)
 			lastLineID = m_subWidget[iii].row;
 		}
 		if (NULL != m_subWidget[iii].widget) {
-			m_subWidget[iii].widget->CalculateMinSize();
-			vec2 tmpSize = m_subWidget[iii].widget->GetMinSize();
+			m_subWidget[iii].widget->CalculateMinMaxSize();
+			vec2 tmpSize = m_subWidget[iii].widget->GetCalculateMinSize();
 			EWOL_DEBUG("     [" << iii << "] subWidgetMinSize=" << tmpSize);
 			// for all we get the max Size :
 			m_uniformSizeRow = etk_max(tmpSize.y(), m_uniformSizeRow);
@@ -150,7 +145,7 @@ void widget::Gird::CalculateMinSize(void)
 	
 	EWOL_DEBUG("Calculate min size : " << m_minSize);
 	
-	//EWOL_DEBUG("Vert Result : expend="<< m_userExpend << "  minSize="<< m_minSize);
+	//EWOL_DEBUG("Vert Result : expand="<< m_userExpand << "  minSize="<< m_minSize);
 }
 
 void widget::Gird::SetColNumber(int32_t colNumber)
@@ -385,7 +380,7 @@ void widget::Gird::OnRegenerateDisplay(void)
 	}
 }
 
-ewol::Widget * widget::Gird::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::Gird::GetWidgetAtPos(const vec2& pos)
 {
 	if (true == IsHide()) {
 		return NULL;

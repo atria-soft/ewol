@@ -63,11 +63,11 @@ namespace widget {
 			void SetValue(draw::Color color);
 		public:
 			// Derived function
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos);
+			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 		private:
 			/**

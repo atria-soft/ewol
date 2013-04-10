@@ -102,7 +102,7 @@ void widget::Mesh::PeriodicCall(int64_t localTime)
 	m_lastTime = localTime;
 }
 
-bool widget::Mesh::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, vec2 pos)
+bool widget::Mesh::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == IdInput) {

@@ -52,24 +52,24 @@ ewol::Windows::~Windows(void)
 
 void ewol::Windows::CalculateSize(const vec2& availlable)
 {
-	//EWOL_DEBUG("calculateMinSize on : " << m_currentCreateId);
+	//EWOL_DEBUG("calculateSize on : " << m_currentCreateId);
 	m_size = availlable;
 	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinSize();
+		m_subWidget->CalculateMinMaxSize();
 		// TODO : Check if min Size is possible ...
 		// TODO : Herited from MinSize .. and expand ???
 		m_subWidget->CalculateSize(m_size);
 	}
 	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->CalculateMinSize();
+			m_popUpWidgetList[iii]->CalculateMinMaxSize();
 			m_popUpWidgetList[iii]->CalculateSize(m_size);
 		}
 	}
 }
 
 
-ewol::Widget * ewol::Windows::GetWidgetAtPos(vec2 pos)
+ewol::Widget * ewol::Windows::GetWidgetAtPos(const vec2& pos)
 {
 	// calculate relative position
 	vec2 relativePos = RelativePosition(pos);

@@ -164,7 +164,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					widget::Button * myButton = NULL;
 					
 					mySizer = new widget::Sizer(widget::Sizer::modeVert);
-						mySizer->LockExpendContamination(vec2(true,true));
+						mySizer->LockExpandContamination(vec2(true,true));
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizer);
 						
@@ -180,7 +180,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 										// set the image if one is present ...
 										myButton->SetImage(m_listElement[jjj]->m_image);
 										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
-										myButton->SetExpendX(true);
+										myButton->SetExpandX(true);
 										myButton->SetFillX(true);
 										// add it in the widget list
 										mySizer->SubWidgetAdd(myButton);

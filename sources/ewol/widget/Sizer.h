@@ -48,13 +48,13 @@ namespace widget {
 			 */
 			displayMode_te GetMode(void);
 		private:
-			bvec2 m_lockExpendContamination; //!< If some sub-widget request the expend==> this permit to unpropagate the problem
+			bvec2 m_lockExpandContamination; //!< If some sub-widget request the expand==> this permit to unpropagate the problem
 		public:
 			/**
-			 * @brief Change state of the expend contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
-			 * @param[in] lockExpend New expend state in vertical and horisantal
+			 * @brief Change state of the expand contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
+			 * @param[in] lockExpand New expand state in vertical and horisantal
 			 */
-			void LockExpendContamination(const bvec2& lockExpend);
+			void LockExpandContamination(const bvec2& lockExpand);
 		public:
 			/**
 			 * @brief Remove all sub element from the widget.
@@ -97,13 +97,13 @@ namespace widget {
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(vec2 pos);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			virtual void SetMinSize(const vec2& size);
-			virtual void SetExpand(const bvec2& newExpend);
+			virtual void SetExpand(const bvec2& newExpand);
 			virtual bvec2 CanExpand(void);;
 	};
 	

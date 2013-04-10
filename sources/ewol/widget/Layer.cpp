@@ -32,7 +32,7 @@ void widget::Layer::UnInit(void)
 widget::Layer::Layer(void)
 {
 	// set contamination enable
-	LockExpendContamination();
+	LockExpandContamination();
 }
 
 widget::Layer::~Layer(void)
@@ -56,20 +56,20 @@ void widget::Layer::CalculateSize(const vec2& availlable)
 }
 
 
-void widget::Layer::CalculateMinSize(void)
+void widget::Layer::CalculateMinMaxSize(void)
 {
-	m_userExpend.setValue(false, false);
+	m_userExpand.setValue(false, false);
 	m_minSize.setValue(0,0);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->CalculateMinSize();
+			m_subWidget[iii]->CalculateMinMaxSize();
 			if (true == m_subWidget[iii]->CanExpand().x()) {
-				m_userExpend.setX(true);
+				m_userExpand.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpand().y()) {
-				m_userExpend.setY(true);
+				m_userExpand.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->GetMinSize();
+			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			m_minSize.setValue( etk_max(tmpSize.x(), m_minSize.x()),
 			                    etk_max(tmpSize.y(), m_minSize.y()) );
 		}
@@ -84,15 +84,15 @@ void widget::Layer::SetMinSize(const vec2& size)
 
 bvec2 widget::Layer::CanExpand(void)
 {
-	if (true == m_lockExpendContamination) {
+	if (true == m_lockExpandContamination) {
 		return bvec2(false,false);
 	}
-	return m_userExpend;
+	return m_userExpand;
 }
 
-void widget::Layer::LockExpendContamination(bool lockExpend)
+void widget::Layer::LockExpandContamination(bool lockExpand)
 {
-	m_lockExpendContamination = lockExpend;
+	m_lockExpandContamination = lockExpand;
 }
 
 //etk::Vector<ewol::Widget*> m_SubWidget;
@@ -175,7 +175,7 @@ void widget::Layer::OnRegenerateDisplay(void)
 }
 
 
-ewol::Widget * widget::Layer::GetWidgetAtPos(vec2 pos)
+ewol::Widget * widget::Layer::GetWidgetAtPos(const vec2& pos)
 {
 	// for all element in the sizer ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
