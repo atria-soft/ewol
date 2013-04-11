@@ -345,3 +345,72 @@ void widget::Sizer::OnObjectRemove(ewol::EObject * removeObject)
 }
 
 
+bool widget::Sizer::LoadXML(TiXmlNode* node)
+{
+	if (NULL==node) {
+		return false;
+	}
+	// parse generic properties :
+	ewol::Widget::LoadXML(node);
+	// remove previous element :
+	SubWidgetRemoveAll();
+	
+	const char *tmpAttributeValue = node->ToElement()->Attribute("lock");
+	if (NULL != tmpAttributeValue) {
+		etk::UString val(tmpAttributeValue);
+		m_lockExpandContamination = val;
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("borderSize");
+	if (NULL != tmpAttributeValue) {
+		etk::UString val(tmpAttributeValue);
+		m_borderSize = val;
+	}
+	tmpAttributeValue = node->ToElement()->Attribute("mode");
+	if (NULL != tmpAttributeValue) {
+		etk::UString val(tmpAttributeValue);
+		if(    val.CompareNoCase("vert")
+		    || val.CompareNoCase("vertical")) {
+			m_mode = widget::Sizer::modeVert;
+		} else {
+			m_mode = widget::Sizer::modeHori;
+		}
+	}
+	bool invertAdding=false;
+	tmpAttributeValue = node->ToElement()->Attribute("addmode");
+	if (NULL != tmpAttributeValue) {
+		etk::UString val(tmpAttributeValue);
+		if(val.CompareNoCase("invert")) {
+			invertAdding=true;
+		}
+	}
+	// parse all the elements :
+	for(TiXmlNode * pNode = node->FirstChild() ;
+	    NULL != pNode ;
+	    pNode = pNode->NextSibling() ) {
+		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+			// nothing to do, just proceed to next step
+			continue;
+		}
+		etk::UString widgetName = pNode->Value();
+		if (ewol::widgetManager::Exist(widgetName) == false) {
+			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			continue;
+		}
+		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
+		if (subWidget == NULL) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			continue;
+		}
+		// add sub element : 
+		if (false==invertAdding) {
+			SubWidgetAdd(subWidget);
+		} else {
+			SubWidgetAddStart(subWidget);
+		}
+		if (false == subWidget->LoadXML(pNode)) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+			return false;
+		}
+	}
+	return true;
+}

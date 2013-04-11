@@ -12,33 +12,32 @@
 #include <etk/os/FSNode.h>
 #include <ewol/widget/WidgetManager.h>
 
-widget::Composer::Composer(void) :
-	m_subWidget(NULL)
+
+widget::Composer::Composer(void)
 {
 	// nothing to do ...
-	
 }
+
+widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::UString& fileName)
+{
+	switch(mode) {
+		case widget::Composer::None:
+			// nothing to do ...
+			break;
+		case widget::Composer::String:
+			LoadFromString(fileName);
+			break;
+		case widget::Composer::File:
+			LoadFromFile(fileName);
+			break;
+	}
+}
+
 
 widget::Composer::~Composer(void)
 {
-	Clean();
+	
 }
-
-void widget::Composer::Clean(void)
-{
-	if (NULL != m_subWidget) {
-		delete(m_subWidget);
-		// might have been destroy first here : 
-		if (m_subWidget!=NULL) {
-			EWOL_ERROR("Composer : An error Occured when removing main node");
-		}
-	}
-	// nothing else to do .. all node in the list might have been removed now ...
-	if (0!=m_list.Size()) {
-		EWOL_ERROR("the subName element in the list are incorect...");
-	}
-}
-
 
 bool widget::Composer::LoadFromFile(const etk::UString& _fileName)
 {
@@ -98,7 +97,7 @@ bool widget::Composer::CommonLoadXML(const char* data)
 		return false;
 	}
 	// remove previous elements ...
-	Clean();
+	RemoveSubWidget();
 	ewol::Widget::LoadXML(root);
 	
 	for(TiXmlNode * pNode = root->FirstChild() ;
@@ -113,7 +112,7 @@ bool widget::Composer::CommonLoadXML(const char* data)
 			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
-		if (NULL != m_subWidget) {
+		if (NULL != GetSubWidget()) {
 			EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 			continue;
 		}
@@ -122,6 +121,8 @@ bool widget::Composer::CommonLoadXML(const char* data)
 			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
+		// add widget :
+		SetSubWidget(tmpWidget);
 		if (false == tmpWidget->LoadXML(pNode)) {
 			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
@@ -131,50 +132,3 @@ bool widget::Composer::CommonLoadXML(const char* data)
 }
 
 
-ewol::Widget* widget::Composer::GetWidgetNamed(const etk::UString& widgetName)
-{
-	for (int32_t iii=0; iii<m_list.Size(); iii++) {
-		if (m_list[iii].widgetName == widgetName) {
-			return m_list[iii].widget;
-		}
-	}
-	return NULL;
-}
-
-void widget::Composer::OnObjectRemove(ewol::EObject* removeObject)
-{
-	for (int32_t iii=0; iii<m_list.Size(); iii++) {
-		if (m_list[iii].widget == removeObject) {
-			m_list.Erase(iii);
-		}
-	}
-	if (m_subWidget==removeObject) {
-		m_subWidget=NULL;
-	}
-}
-
-void widget::Composer::OnDraw(ewol::DrawProperty& displayProp)
-{
-	if (NULL!=m_subWidget) {
-		m_subWidget->GenDraw(displayProp);
-	}
-}
-
-void widget::Composer::CalculateSize(const vec2& availlable)
-{
-	if (NULL!=m_subWidget) {
-		m_subWidget->CalculateSize(availlable);
-		// copy all sub parameters:
-		m_hide = m_subWidget->IsHide();
-	}
-}
-void widget::Composer::CalculateMinMaxSize(void)
-{
-	if (NULL!=m_subWidget) {
-		m_subWidget->CalculateMinMaxSize();
-		// copy all sub parameters :
-		m_hide = m_subWidget->IsHide();
-		m_userFill = m_subWidget->CanFill();
-		
-	}
-}

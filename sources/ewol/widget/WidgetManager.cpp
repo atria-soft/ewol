@@ -259,7 +259,7 @@ bool ewol::widgetManager::IsDrawingNeeded(void)
 void ewol::widgetManager::AddWidgetCreator(const etk::UString& name, ewol::widgetManager::creator_tf pointer)
 {
 	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
-		if (name == l_creatorList[iii].name) {
+		if (name.CompareNoCase(l_creatorList[iii].name)) {
 			if (NULL==pointer) {
 				EWOL_INFO("Remove Creator of a specify widget : " << name);
 			} else {
@@ -282,7 +282,7 @@ void ewol::widgetManager::AddWidgetCreator(const etk::UString& name, ewol::widge
 ewol::Widget* ewol::widgetManager::Create(const etk::UString& name)
 {
 	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
-		if (name == l_creatorList[iii].name) {
+		if (name.CompareNoCase(l_creatorList[iii].name)) {
 			if (NULL != l_creatorList[iii].pointer) {
 				return (*l_creatorList[iii].pointer)();
 			}
@@ -295,7 +295,7 @@ ewol::Widget* ewol::widgetManager::Create(const etk::UString& name)
 bool ewol::widgetManager::Exist(const etk::UString& name)
 {
 	for (int32_t iii=0; iii<l_creatorList.Size() ; iii++) {
-		if (name == l_creatorList[iii].name) {
+		if (name.CompareNoCase(l_creatorList[iii].name)) {
 			return true;
 		}
 	}

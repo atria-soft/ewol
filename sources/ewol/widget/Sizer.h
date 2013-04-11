@@ -104,7 +104,8 @@ namespace widget {
 			virtual void CalculateMinMaxSize(void);
 			virtual void SetMinSize(const vec2& size);
 			virtual void SetExpand(const bvec2& newExpand);
-			virtual bvec2 CanExpand(void);;
+			virtual bvec2 CanExpand(void);
+			virtual bool LoadXML(TiXmlNode* node);
 	};
 	
 };

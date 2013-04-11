@@ -23,10 +23,10 @@ namespace widget {
 			static void Init(void);
 			static void UnInit(void);
 		public:
-			Image(const etk::UString& dataFile="", int32_t size=-1); // automatic considering in the appl Data older
+			Image(const etk::UString& dataFile="", int32_t size=-1);
 			virtual ~Image(void);
 			void SetFile(etk::UString newFile);
-			void SetPadding(vec2  newPadding);
+			void SetPadding(vec2 newPadding);
 		private:
 			etk::UString m_imageSelected;
 			vec2  m_padding;

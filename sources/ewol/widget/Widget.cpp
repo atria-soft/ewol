@@ -593,6 +593,8 @@ bool ewol::Widget::LoadXML(TiXmlNode* node)
 	if (NULL != tmpAttributeValue) {
 		m_userMaxSize.SetString(tmpAttributeValue);
 	}
+	EWOL_DEBUG("Widget parse: m_hide=" << m_hide << "  m_userMinSize=" << m_userMinSize << "  m_userMaxSize=" << m_userMaxSize << "  m_userFill=" << m_userFill << "  m_userExpand=" << m_userExpand);
+	MarkToRedraw();
 	return ret;
 }
 
@@ -631,6 +633,15 @@ bool ewol::Widget::StoreXML(TiXmlNode* node)
 		node->ToElement()->SetAttribute("hide", "true" );
 	}
 	return true;
+}
+
+
+ewol::Widget* ewol::Widget::GetWidgetNamed(const etk::UString& widgetName)
+{
+	if (GetName()==widgetName) {
+		return this;
+	}
+	return NULL;
 }
 
 

@@ -348,6 +348,12 @@ namespace ewol {
 			 */
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos) { if (false==IsHide()) { return this; } return NULL; };
 			/**
+			 * @brief Get the widget if it have this name or one of the subwidget with the same name
+			 * @param[in] widgetName name of the widget
+			 * @return the requested pointer on the node (or NULL pointer)
+			 */
+			virtual ewol::Widget* GetWidgetNamed(const etk::UString& widgetName);
+			/**
 			 * @brief Event on an input of this Widget
 			 * @param[in] type Type of the input (ewol::INPUT_TYPE_MOUSE/ewol::INPUT_TYPE_FINGER ...)
 			 * @param[in] IdInput Id of the current Input (PC : left=1, right=2, middle=3, none=0 / Tactil : first finger=1 , second=2 (only on this widget, no knowledge at ouside finger))

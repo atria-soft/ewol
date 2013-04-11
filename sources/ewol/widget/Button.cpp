@@ -100,6 +100,7 @@ void widget::Button::SetSubWidget(ewol::Widget* subWidget)
 	m_subWidget[idWidget] = subWidget;
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
+	MarkToRedraw();
 }
 
 void widget::Button::SetSubWidgetToggle(ewol::Widget* subWidget)

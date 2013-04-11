@@ -61,7 +61,7 @@ void widget::Label::CalculateMinMaxSize(void)
 }
 
 
-void widget::Label::SetLabel(etk::UString newLabel)
+void widget::Label::SetLabel(const etk::UString& newLabel)
 {
 	m_label = newLabel;
 	MarkToRedraw();
@@ -152,6 +152,7 @@ bool widget::Label::LoadXML(TiXmlNode* node)
 	ewol::Widget::LoadXML(node);
 	// get internal data : 
 	// TODO : Unparse data type XML ...
+	EWOL_DEBUG("Load label:" << node->ToElement()->GetText());
 	SetLabel(node->ToElement()->GetText());
 	return true;
 }

@@ -39,7 +39,7 @@ namespace widget {
 			 * @brief Change the label displayed
 			 * @param[in] newLabel The displayed decorated text.
 			 */
-			void SetLabel(etk::UString newLabel);
+			void SetLabel(const etk::UString& newLabel);
 			/**
 			 * @brief Get the current displayed label
 			 * @return The displayed decorated text.
