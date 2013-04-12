@@ -11,13 +11,19 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Widget.h>
+#include <ewol/widget/ContainerN.h>
 
 namespace widget {
-	class Sizer :public ewol::Widget
+	class Sizer : public widget::ContainerN
 	{
 		public:
+			/**
+			 * @brief Main call of recording the widget on the List of "widget named creator"
+			 */
 			static void Init(void);
+			/**
+			 * @brief Main call to unrecord the widget from the list of "widget named creator"
+			 */
 			static void UnInit(void);
 		public:
 			typedef enum {
@@ -25,7 +31,6 @@ namespace widget {
 				modeHori, //!< Horizontal mode
 			} displayMode_te;
 		private:
-			etk::Vector<ewol::Widget*> m_subWidget; //!< all sub widget are contained in this element
 			displayMode_te m_mode; //!< Methode to display the widget list (vert/hory ...)
 		public:
 			/**
@@ -48,63 +53,22 @@ namespace widget {
 			 */
 			displayMode_te GetMode(void);
 		private:
-			bvec2 m_lockExpandContamination; //!< If some sub-widget request the expand==> this permit to unpropagate the problem
-		public:
-			/**
-			 * @brief Change state of the expand contatmination (if some sub-widget request the expent this permit to not propagate if at this widget)
-			 * @param[in] lockExpand New expand state in vertical and horisantal
-			 */
-			void LockExpandContamination(const bvec2& lockExpand);
-		public:
-			/**
-			 * @brief Remove all sub element from the widget.
-			 */
-			virtual void SubWidgetRemoveAll(void);
-			/**
-			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-			 * @param[in] newWidget the element pointer
-			 */
-			virtual void SubWidgetAdd(ewol::Widget* newWidget);
-			/**
-			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-			 * @param[in] newWidget the element pointer
-			 */
-			virtual void SubWidgetAddStart(ewol::Widget* newWidget);
-			/**
-			 * @brief Remove definitly a widget from the system and this layer.
-			 * @param[in] newWidget the element pointer.
-			 */
-			virtual void SubWidgetRemove(ewol::Widget* newWidget);
-			/**
-			 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
-			 * @param[in] newWidget the element pointer.
-			 */
-			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
-		private:
-			ivec2 m_borderSize; //!< Border size needed for all the display
+			ewol::Dimension m_borderSize; //!< Border size needed for all the display
 		public:
 			/**
 			 * @brief Set the current border size of the current element:
 			 * @param[in] newBorderSize The border size to set (0 if not used)
 			 */
-			void SetBorderSize(const ivec2& newBorderSize);
+			void SetBorderSize(const ewol::Dimension& newBorderSize);
 			/**
 			 * @brief Get the current border size of the current element:
 			 * @return the border size (0 if not used)
 			 */
-			const ivec2& GetBorderSize(void) { return m_borderSize; };
-		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			const ewol::Dimension& GetBorderSize(void) { return m_borderSize; };
 		public: // Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
-			virtual void OnObjectRemove(ewol::EObject* removeObject);
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
 			virtual void CalculateSize(const vec2& availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual void SetMinSize(const vec2& size);
-			virtual void SetExpand(const bvec2& newExpand);
-			virtual bvec2 CanExpand(void);
 			virtual bool LoadXML(TiXmlNode* node);
 	};
 	

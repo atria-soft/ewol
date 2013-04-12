@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__	"ewol::Image"
 
-ewol::Image::Image(etk::UString imageName) :
+ewol::Image::Image(const etk::UString& imageName) :
 	m_position(0.0, 0.0, 0.0),
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
@@ -114,30 +114,30 @@ vec3 ewol::Image::GetPos(void)
 }
 
 
-void ewol::Image::SetPos(vec3 pos)
+void ewol::Image::SetPos(const vec3& pos)
 {
 	m_position = pos;
 }
 
 
-void ewol::Image::SetRelPos(vec3 pos)
+void ewol::Image::SetRelPos(const vec3& pos)
 {
 	m_position += pos;
 }
 
 
-void ewol::Image::SetColor(draw::Color color)
+void ewol::Image::SetColor(const draw::Color& color)
 {
 	m_color = color;
 }
 
 
-void ewol::Image::SetClippingWidth(vec3 pos, vec3 width)
+void ewol::Image::SetClippingWidth(const vec3& pos, vec3 width)
 {
 	SetClipping(pos, pos+width);
 }
 
-void ewol::Image::SetClipping(vec3 pos, vec3 posEnd)
+void ewol::Image::SetClipping(const vec3& pos, vec3 posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (pos.x() <= posEnd.x()) {
@@ -171,7 +171,7 @@ void ewol::Image::SetClippingMode(bool newMode)
 }
 
 
-void ewol::Image::SetAngle(vec3 axes, float angle)
+void ewol::Image::SetAngle(const vec3& axes, float angle)
 {
 	m_axes = axes;
 	m_angle = angle;
@@ -182,7 +182,12 @@ void ewol::Image::SetAngle(vec3 axes, float angle)
 	}
 }
 
-void ewol::Image::Print(ivec2 size)
+void ewol::Image::Print(const ivec2& size)
+{
+	Print(vec2(size.x(),size.y()));
+}
+
+void ewol::Image::Print(const vec2& size)
 {
 	vec3 point(0,0,0);
 	vec2 tex(0,1);
@@ -228,14 +233,19 @@ void ewol::Image::Print(ivec2 size)
 	m_coordColor.PushBack(m_color);
 }
 
-void ewol::Image::PrintPart(ivec2 size,
-                            vec2 sourcePosStart,
-                            vec2 sourcePosStop)
+void ewol::Image::PrintPart(const ivec2& size,
+                            const vec2& sourcePosStart,
+                            const vec2& sourcePosStop)
 {
 	
 }
 
-void ewol::Image::SetSource(etk::UString newFile, int32_t size)
+void ewol::Image::SetSource(const etk::UString& newFile, int32_t size)
+{
+	SetSource(newFile, vec2(size,size));
+}
+
+void ewol::Image::SetSource(const etk::UString& newFile, const vec2& size)
 {
 	Clear();
 	// remove old one
@@ -243,7 +253,7 @@ void ewol::Image::SetSource(etk::UString newFile, int32_t size)
 		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	ivec2 tmpSize(size,size);
+	ivec2 tmpSize(size.x(),size.y());
 	// note that no image can be loaded...
 	if (newFile != "") {
 		// link to new One

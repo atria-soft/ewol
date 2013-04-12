@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_WIDGET_CONTAINER_H__
-#define __EWOL_WIDGET_CONTAINER_H__
+#ifndef __EWOL_WIDGET_CONTAINER_N_H__
+#define __EWOL_WIDGET_CONTAINER_N_H__
 
 #include <etk/types.h>
 #include <ewol/debug.h>
@@ -20,35 +20,56 @@ namespace widget
 	 */
 	class ContainerN : public ewol::Widget
 	{
-		private:
-			int32_t m_limitElement;
-			etk::Vector<ewol::Widget*> m_subList;
+		protected:
+			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
 			/**
 			 * @brief Constructor
 			 */
-			ContainerN(int32_t limitElement=-1);
+			ContainerN(void);
 			/**
 			 * @brief Destructor
 			 */
 			~ContainerN(void);
+		protected:
+			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one ==> this permit to limit bigger subWidget
+			bvec2 m_subExpend; //!< reference of the sub element expention requested.
 		public:
 			/**
-			 * @brief Get the main node widget
-			 * @return the requested pointer on the node
+			 * @brief Limit the expend properties to the current widget (no contamination)
+			 * @param[in] lockExpend Lock mode of the expend properties
 			 */
-			ewol::Widget* GetSubWidget(int32_t id);
+			void LockExpand(const bvec2& lockExpand);
+			// herited function
+			bvec2 CanExpand(void);
+		public:
 			/**
-			 * @brief Set the subWidget node widget.
-			 * @param[in] newWidget The widget to Add.
+			 * @brief Remove all sub element from the widget.
 			 */
-			void SubWidgetAdd(ewol::Widget* newWidget);
-			void SubWidgetAddStart(ewol::Widget* newWidget);
+			virtual void SubWidgetRemoveAll(void);
 			/**
-			 * @brief Remove the subWidget node.
+			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+			 * @param[in] newWidget the element pointer
 			 */
-			void RemoveSubWidget(void);
-			
+			virtual void SubWidgetAdd(ewol::Widget* newWidget);
+			inline  void SubWidgetAddBack(ewol::Widget* newWidget) { SubWidgetAdd(newWidget); };
+			inline  void SubWidgetAddEnd(ewol::Widget* newWidget)  { SubWidgetAdd(newWidget); };
+			/**
+			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+			 * @param[in] newWidget the element pointer
+			 */
+			virtual void SubWidgetAddStart(ewol::Widget* newWidget);
+			inline  void SubWidgetAddFront(ewol::Widget* newWidget) { SubWidgetAddStart(newWidget); };
+			/**
+			 * @brief Remove definitly a widget from the system and this layer.
+			 * @param[in] newWidget the element pointer.
+			 */
+			virtual void SubWidgetRemove(ewol::Widget* newWidget);
+			/**
+			 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
+			 * @param[in] newWidget the element pointer.
+			 */
+			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
 		protected: // Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public:// Derived function
@@ -58,6 +79,8 @@ namespace widget
 			virtual void CalculateMinMaxSize(void);
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 			virtual ewol::Widget* GetWidgetNamed(const etk::UString& widgetName);
+			virtual const char * const GetObjectType(void) { return "Ewol::ContainerN"; };
+			virtual bool LoadXML(TiXmlNode* node);
 	};
 };
 

@@ -8,8 +8,7 @@
 
 
 #include <ewol/ewol.h>
-#include <ewol/widget/Composer.h>
-#include <etk/os/FSNode.h>
+#include <ewol/widget/Container.h>
 #include <ewol/widget/WidgetManager.h>
 
 
@@ -21,7 +20,7 @@ widget::Container::Container(ewol::Widget* subElement) :
 
 widget::Container::~Container(void)
 {
-	RemoveSubWidget();
+	SubWidgetRemove();
 }
 
 ewol::Widget* widget::Container::GetSubWidget(void)
@@ -34,14 +33,14 @@ void widget::Container::SetSubWidget(ewol::Widget* newWidget)
 	if (NULL==newWidget) {
 		return;
 	}
-	RemoveSubWidget();
+	SubWidgetRemove();
 	m_subWidget = newWidget;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
 
-void widget::Container::RemoveSubWidget(void)
+void widget::Container::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
@@ -123,3 +122,46 @@ ewol::Widget* widget::Container::GetWidgetAtPos(const vec2& pos)
 	}
 	return NULL;
 };
+
+
+bool widget::Container::LoadXML(TiXmlNode* node)
+{
+	if (NULL==node) {
+		return false;
+	}
+	// parse generic properties :
+	ewol::Widget::LoadXML(node);
+	// remove previous element :
+	SubWidgetRemove();
+	
+	// parse all the elements :
+	for(TiXmlNode * pNode = node->FirstChild() ;
+	    NULL != pNode ;
+	    pNode = pNode->NextSibling() ) {
+		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+			// nothing to do, just proceed to next step
+			continue;
+		}
+		etk::UString widgetName = pNode->Value();
+		if (ewol::widgetManager::Exist(widgetName) == false) {
+			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			continue;
+		}
+		if (NULL != GetSubWidget()) {
+			EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+			continue;
+		}
+		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
+		if (tmpWidget == NULL) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			continue;
+		}
+		// add widget :
+		SetSubWidget(tmpWidget);
+		if (false == tmpWidget->LoadXML(pNode)) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+			return false;
+		}
+	}
+	return true;
+}

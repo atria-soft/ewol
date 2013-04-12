@@ -69,6 +69,13 @@ float ewol::dimension::GetWindowsDiag(ewol::Dimension::distance_te type)
 
 
 
+ewol::Dimension::Dimension(void) :
+	m_data(0,0),
+	m_type(ewol::Dimension::Pixel)
+{
+	// notinh to do ...
+}
+
 ewol::Dimension::Dimension(const vec2& size, ewol::Dimension::distance_te type)
 {
 	Set(size, type);

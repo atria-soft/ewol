@@ -32,30 +32,20 @@ void widget::Sizer::UnInit(void)
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
 	m_mode(mode),
-	m_lockExpandContamination(false,false),
-	m_borderSize(0,0)
+	m_borderSize()
 {
 	
 }
 
 widget::Sizer::~Sizer(void)
 {
-	EWOL_DEBUG("[" << GetId() << "]={" << GetObjectType() << "}  Sizer : destroy (mode=" << (m_mode==widget::Sizer::modeVert?"Vert":"Hori") << ")");
-	SubWidgetRemoveAll();
+	//EWOL_DEBUG("[" << GetId() << "]={" << GetObjectType() << "}  Sizer : destroy (mode=" << (m_mode==widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }
 
 
-void widget::Sizer::SetBorderSize(const ivec2& newBorderSize)
+void widget::Sizer::SetBorderSize(const ewol::Dimension& newBorderSize)
 {
 	m_borderSize = newBorderSize;
-	if (m_borderSize.x() < 0) {
-		EWOL_ERROR("Try to set a border size <0 on x : " << m_borderSize.x() << " ==> restore to 0");
-		m_borderSize.setX(0);
-	}
-	if (m_borderSize.y() < 0) {
-		EWOL_ERROR("Try to set a border size <0 on y : " << m_borderSize.y() << " ==> restore to 0");
-		m_borderSize.setY(0);
-	}
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
@@ -74,9 +64,10 @@ widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
 
 void widget::Sizer::CalculateSize(const vec2& availlable)
 {
-	//EWOL_DEBUG("Update Size");
+	vec2 tmpBorderSize = m_borderSize.GetPixel();
+	//EWOL_DEBUG("[" << GetId() << "] Update Size : " << availlable << " nbElement : " << m_subWidget.Size());
 	m_size = availlable;
-	m_size -= m_borderSize*2;
+	m_size -= tmpBorderSize*2;
 	// calculate unExpandable Size :
 	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
@@ -114,12 +105,12 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			sizeToAddAtEveryOne=0;
 		}
 	}
-	vec2 tmpOrigin = m_origin + m_borderSize;
+	vec2 tmpOrigin = m_origin + tmpBorderSize;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
-			//EWOL_DEBUG("Set ORIGIN : " << tmpOrigin.x << "," << tmpOrigin.y << ")");
+			//EWOL_DEBUG("[" << GetId() << "] Set ORIGIN : " << tmpOrigin);
 			m_subWidget[iii]->SetOrigin(tmpOrigin);
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {
@@ -141,18 +132,19 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			}
 		}
 	}
-	m_size += m_borderSize*2;
+	m_size += tmpBorderSize*2;
 	MarkToRedraw();
 }
 
 
 void widget::Sizer::CalculateMinMaxSize(void)
 {
-	//EWOL_DEBUG("Update minimum Size");
+	//EWOL_DEBUG("[" << GetId() << "] Update minimum Size");
 	m_userExpand.setValue(false, false);
 	m_minSize = m_userMinSize.GetPixel();
+	vec2 tmpBorderSize = m_borderSize.GetPixel();
 	
-	m_minSize += m_borderSize*2;
+	m_minSize += tmpBorderSize*2;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinMaxSize();
@@ -163,8 +155,8 @@ void widget::Sizer::CalculateMinMaxSize(void)
 				m_userExpand.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
-			//EWOL_DEBUG("VERT : NewMinSize=" << tmpSize);
-			//EWOL_DEBUG("             Get minSize[" << iii << "] "<< tmpSize);
+			//EWOL_DEBUG("[" << GetId() << "] NewMinSize=" << tmpSize);
+			//EWOL_DEBUG("[" << GetId() << "]     Get minSize[" << iii << "] "<< tmpSize);
 			if (m_mode==widget::Sizer::modeVert) {
 				m_minSize.setY(m_minSize.y() + tmpSize.y());
 				if (tmpSize.x()>m_minSize.x()) {
@@ -180,190 +172,17 @@ void widget::Sizer::CalculateMinMaxSize(void)
 	}
 }
 
-void widget::Sizer::SetMinSize(const vec2& size)
-{
-	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user Minimum size (herited from under elements)");
-}
-
-void widget::Sizer::SetExpand(const bvec2& newExpand)
-{
-	EWOL_ERROR("[" << GetId() << "] Sizer can not have a user expand settings (herited from under elements)");
-}
-
-bvec2 widget::Sizer::CanExpand(void)
-{
-	bvec2 res = m_userExpand;
-	if (true == m_lockExpandContamination.x()) {
-		res.setX(false);
-	}
-	if (true == m_lockExpandContamination.y()) {
-		res.setY(false);
-	}
-	return res;
-}
-
-void widget::Sizer::LockExpandContamination(const bvec2& lockExpand)
-{
-	m_lockExpandContamination = lockExpand;
-}
-
-void widget::Sizer::SubWidgetRemoveAll(void)
-{
-	int32_t errorControl = m_subWidget.Size();
-	// the size automaticly decrement with the auto call of the OnObjectRemove function
-	while (m_subWidget.Size() > 0 ) {
-		if (NULL != m_subWidget[0]) {
-			delete(m_subWidget[0]);
-			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
-			if (errorControl == m_subWidget.Size()) {
-				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[0] = NULL;
-			}
-		} else {
-			EWOL_WARNING("[" << GetId() << "] Must not have null pointer on the subWidget list ...");
-			m_subWidget.Erase(0);
-		}
-		errorControl = m_subWidget.Size();
-	}
-	m_subWidget.Clear();
-}
-
-
-void widget::Sizer::SubWidgetAdd(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		return;
-	}
-	m_subWidget.PushBack(newWidget);
-}
-
-void widget::Sizer::SubWidgetAddStart(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		return;
-	}
-	m_subWidget.PushFront(newWidget);
-}
-
-
-void widget::Sizer::SubWidgetRemove(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		return;
-	}
-	int32_t errorControl = m_subWidget.Size();
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (newWidget == m_subWidget[iii]) {
-			delete(m_subWidget[iii]);
-			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
-			if (errorControl == m_subWidget.Size()) {
-				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
-				m_subWidget[iii] = NULL;
-				m_subWidget.Erase(iii);
-			}
-			return;
-		}
-	}
-}
-
-void widget::Sizer::SubWidgetUnLink(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		return;
-	}
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (newWidget == m_subWidget[iii]) {
-			m_subWidget[iii] = NULL;
-			m_subWidget.Erase(iii);
-			return;
-		}
-	}
-}
-
-
-void widget::Sizer::OnDraw(ewol::DrawProperty& displayProp)
-{
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw(displayProp);
-		}
-	}
-}
-
-
-
-void widget::Sizer::OnRegenerateDisplay(void)
-{
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->OnRegenerateDisplay();
-		}
-	}
-}
-
-
-ewol::Widget * widget::Sizer::GetWidgetAtPos(const vec2& pos)
-{
-	if (true == IsHide()) {
-		return NULL;
-	}
-	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
-		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetSize();
-			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
-			if(    (tmpOrigin.x() <= pos.x() && tmpOrigin.x() + tmpSize.x() >= pos.x())
-			    && (tmpOrigin.y() <= pos.y() && tmpOrigin.y() + tmpSize.y() >= pos.y()) )
-			{
-				ewol::Widget * tmpWidget = m_subWidget[iii]->GetWidgetAtPos(pos);
-				if (NULL != tmpWidget) {
-					return tmpWidget;
-				}
-				// stop searching
-				break;
-			}
-		}
-	}
-	// TODO : Check if we have a mover, otherwire return NULL;
-	return NULL;
-	//return this;
-}
-
-
-void widget::Sizer::OnObjectRemove(ewol::EObject * removeObject)
-{
-	// First step call parrent : 
-	ewol::Widget::OnObjectRemove(removeObject);
-	// second step find if in all the elements ...
-	for(int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
-		if(m_subWidget[iii] == removeObject) {
-			EWOL_VERBOSE("[" << GetId() << "]={" << GetObjectType() << "} Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
-			m_subWidget[iii] = NULL;
-			m_subWidget.Erase(iii);
-		}
-	}
-}
-
-
 bool widget::Sizer::LoadXML(TiXmlNode* node)
 {
 	if (NULL==node) {
 		return false;
 	}
 	// parse generic properties :
-	ewol::Widget::LoadXML(node);
-	// remove previous element :
-	SubWidgetRemoveAll();
+	widget::ContainerN::LoadXML(node);
 	
-	const char *tmpAttributeValue = node->ToElement()->Attribute("lock");
+	const char* tmpAttributeValue = node->ToElement()->Attribute("borderSize");
 	if (NULL != tmpAttributeValue) {
-		etk::UString val(tmpAttributeValue);
-		m_lockExpandContamination = val;
-	}
-	tmpAttributeValue = node->ToElement()->Attribute("borderSize");
-	if (NULL != tmpAttributeValue) {
-		etk::UString val(tmpAttributeValue);
-		m_borderSize = val;
+		m_borderSize = tmpAttributeValue;
 	}
 	tmpAttributeValue = node->ToElement()->Attribute("mode");
 	if (NULL != tmpAttributeValue) {
@@ -373,43 +192,6 @@ bool widget::Sizer::LoadXML(TiXmlNode* node)
 			m_mode = widget::Sizer::modeVert;
 		} else {
 			m_mode = widget::Sizer::modeHori;
-		}
-	}
-	bool invertAdding=false;
-	tmpAttributeValue = node->ToElement()->Attribute("addmode");
-	if (NULL != tmpAttributeValue) {
-		etk::UString val(tmpAttributeValue);
-		if(val.CompareNoCase("invert")) {
-			invertAdding=true;
-		}
-	}
-	// parse all the elements :
-	for(TiXmlNode * pNode = node->FirstChild() ;
-	    NULL != pNode ;
-	    pNode = pNode->NextSibling() ) {
-		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
-			// nothing to do, just proceed to next step
-			continue;
-		}
-		etk::UString widgetName = pNode->Value();
-		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
-			continue;
-		}
-		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
-		if (subWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
-			continue;
-		}
-		// add sub element : 
-		if (false==invertAdding) {
-			SubWidgetAdd(subWidget);
-		} else {
-			SubWidgetAddStart(subWidget);
-		}
-		if (false == subWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
-			return false;
 		}
 	}
 	return true;

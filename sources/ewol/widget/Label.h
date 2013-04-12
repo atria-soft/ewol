@@ -20,10 +20,16 @@ namespace widget {
 	class Label : public ewol::Widget
 	{
 		public:
+			/**
+			 * @brief Main call of recording the widget on the List of "widget named creator"
+			 */
 			static void Init(void);
+			/**
+			 * @brief Main call to unrecord the widget from the list of "widget named creator"
+			 */
 			static void UnInit(void);
 		private:
-			ewol::Text   m_text;  //!< Compositing text element.
+			ewol::Text m_text; //!< Compositing text element.
 			etk::UString m_label; //!< decorated text to display.
 		public:
 			/**
@@ -34,7 +40,7 @@ namespace widget {
 			/**
 			 * @brief destructor
 			 */
-			virtual ~Label(void);
+			virtual ~Label(void) { };
 			/**
 			 * @brief Change the label displayed
 			 * @param[in] newLabel The displayed decorated text.

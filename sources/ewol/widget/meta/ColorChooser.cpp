@@ -44,7 +44,7 @@ widget::ColorChooser::ColorChooser(void) :
 	m_widgetBlue = NULL;
 	m_widgetAlpha = NULL;
 	
-	LockExpandContamination(bvec2(true,true));
+	LockExpand(bvec2(true,true));
 		m_widgetColorBar = new widget::ColorBar();
 			m_widgetColorBar->RegisterOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
 			m_widgetColorBar->SetFill(bvec2(true,true));

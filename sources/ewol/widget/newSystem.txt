@@ -1,6 +1,30 @@
 I need to organize widget by style (Like GTK): 
 
 
+
+ewol::EObject [OK]
+     .
+    /|\
+     |
+ewol::Widget [OK]
+     .
+    /|\
+     |== widget::Windows [ TOEND ]
+     |
+     |== widget::Container [OK]
+     |         .
+     |        /|\
+     |         |== widget::Button [OK]
+     |         |
+     |         \== widget::Composer [OK]
+     |
+     |== widget::ContainerN [OK]
+     |         .
+     |        /|\
+     |         |== widget::Layer [OK]
+     |         |
+     |         \== widget::Sizer [OK]
+
 ewol::EObject
 	ewol::Widget
 		## Windows :

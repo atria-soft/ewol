@@ -163,8 +163,9 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					widget::Sizer * mySizer = NULL;
 					widget::Button * myButton = NULL;
 					
+					// TODO : Set a gird ...
 					mySizer = new widget::Sizer(widget::Sizer::modeVert);
-						mySizer->LockExpandContamination(vec2(true,true));
+						mySizer->LockExpand(vec2(true,true));
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SubWidgetSet(mySizer);
 						

@@ -24,6 +24,8 @@ namespace ewol {
 #include <ewol/key.h>
 #include <ewol/cursor.h>
 
+#define ULTIMATE_MAX_SIZE  (99999999)
+
 namespace ewol {
 	
 	class DrawProperty{

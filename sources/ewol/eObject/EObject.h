@@ -56,7 +56,7 @@ namespace ewol {
 			 * @brief Get the UniqueId of the EObject
 			 * @return the requested ID
 			 */
-			int32_t GetId(void);
+			int32_t GetId(void){ return m_uniqueId; };
 			
 			/**
 			 * @brief Auto-destroy the object

@@ -11,40 +11,31 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Widget.h>
+#include <ewol/widget/ContainerN.h>
 
 namespace widget {
-	class Layer :public ewol::Widget
+	class Layer : public widget::ContainerN
 	{
 		public:
+			/**
+			 * @brief Main call of recording the widget on the List of "widget named creator"
+			 */
 			static void Init(void);
+			/**
+			 * @brief Main call to unrecord the widget from the list of "widget named creator"
+			 */
 			static void UnInit(void);
 		public:
+			/**
+			 * @brief Constructor
+			 */
 			Layer(void);
+			/**
+			 * @brief Desstructor
+			 */
 			virtual ~Layer(void);
-			void LockExpandContamination(bool lockExpend=false);
-		private:
-			bool m_lockExpandContamination;
-			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
-			virtual void SubWidgetRemoveAll(void);
-			virtual void SubWidgetAdd(ewol::Widget* newWidget);
-			virtual void SubWidgetAddFront(ewol::Widget* newWidget);
-			virtual void SubWidgetRemove(ewol::Widget* newWidget);
-			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
-		protected:
-			// Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
-		public:
-			// Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
-			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinMaxSize(void);
-			virtual void SetMinSize(const vec2& size);
-			virtual bvec2 CanExpand(void);
-			virtual const char * const GetObjectType(void) { return "EwolLayer"; };
+			virtual const char * const GetObjectType(void) { return "Ewol::Layer"; };
 	};
 	
 };

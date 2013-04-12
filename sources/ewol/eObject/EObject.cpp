@@ -137,20 +137,12 @@ void ewol::EObject::RemoveObject(void)
 	ewol::EObjectManager::AutoRemove(this);
 }
 
-
-int32_t ewol::EObject::GetId(void)
-{
-	return m_uniqueId;
-};
-
-
 void ewol::EObject::AddEventId(const char * generateEventId)
 {
 	if (NULL != generateEventId) {
 		m_availlableEventId.PushBack(generateEventId);
 	}
 }
-
 
 void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString& data)
 {
@@ -167,18 +159,15 @@ void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::USt
 	}
 }
 
-
 void ewol::EObject::SendMultiCast(const char* const messageId, const etk::UString& data)
 {
 	MultiCastSend(this, messageId, data);
 }
 
-
 void ewol::EObject::RegisterMultiCast(const char* const messageId)
 {
 	MultiCastAdd(this, messageId);
 }
-
 
 void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated)
 {

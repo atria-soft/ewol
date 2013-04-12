@@ -48,7 +48,7 @@ namespace ewol
 			 * @brief generic constructor
 			 * @param[in] imageName Name of the file that might be loaded
 			 */
-			Image(etk::UString imageName="");
+			Image(const etk::UString& imageName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -71,29 +71,29 @@ namespace ewol
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
-			void SetPos(vec3 pos);
+			void SetPos(const vec3& pos);
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(vec3 pos);
+			void SetRelPos(const vec3& pos);
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
 			 */
-			void SetColor(draw::Color color);
+			void SetColor(const draw::Color& color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] width Width size of the clipping
 			 */
-			void SetClippingWidth(vec3 pos, vec3 width);
+			void SetClippingWidth(const vec3& pos, vec3 width);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
-			void SetClipping(vec3 pos, vec3 posEnd);
+			void SetClipping(const vec3& pos, vec3 posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -104,27 +104,29 @@ namespace ewol
 			 * @param[in] axes Rotation axes selection
 			 * @param[in] angle Angle to set on this axes
 			 */
-			void SetAngle(vec3 axes, float angle);
+			void SetAngle(const vec3& axes, float angle);
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
 			 * @param[in] size Size of the output image
 			 */
-			void Print(ivec2 size);
+			void Print(const ivec2& size);
+			void Print(const vec2& size);
 			/**
 			 * @brief Add a part of the image to display with the requested size
 			 * @param[in] size Size of the output image
 			 * @param[in] sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
 			 * @param[in] sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 			 */
-			void PrintPart(ivec2 size,
-			               vec2 sourcePosStart,
-			               vec2 sourcePosStop);
+			void PrintPart(const ivec2& size,
+			               const vec2& sourcePosStart,
+			               const vec2& sourcePosStop);
 			/**
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
 			 * @param[in] newFile New file of the Image
 			 * @param[in] size for the image when Verctorial image loading is requested
 			 */
-			void SetSource(etk::UString newFile, int32_t size=32);
+			void SetSource(const etk::UString& newFile, int32_t size=32);
+			void SetSource(const etk::UString& newFile, const vec2& size);
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

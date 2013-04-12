@@ -66,6 +66,7 @@ FILE_LIST+= ewol/widget/Widget.cpp \
 			ewol/widget/ContextMenu.cpp \
 			ewol/widget/Composer.cpp \
 			ewol/widget/Container.cpp \
+			ewol/widget/ContainerN.cpp \
 			ewol/widget/Drawable.cpp \
 			ewol/widget/Entry.cpp \
 			ewol/widget/Joystick.cpp \

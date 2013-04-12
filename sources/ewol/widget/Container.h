@@ -45,7 +45,7 @@ namespace widget
 			/**
 			 * @brief Remove the subWidget node.
 			 */
-			void RemoveSubWidget(void);
+			void SubWidgetRemove(void);
 			
 		protected: // Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
@@ -56,6 +56,8 @@ namespace widget
 			virtual void CalculateMinMaxSize(void);
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 			virtual ewol::Widget* GetWidgetNamed(const etk::UString& widgetName);
+			virtual const char * const GetObjectType(void) { return "Ewol::Container"; };
+			virtual bool LoadXML(TiXmlNode* node);
 	};
 };
 

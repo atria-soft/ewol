@@ -12,10 +12,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
-
 extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
-
-
 
 #undef __class__
 #define __class__	"Label"
@@ -35,17 +32,11 @@ void widget::Label::UnInit(void)
 	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
 }
 
-
 widget::Label::Label(etk::UString newLabel)
 {
 	m_label = newLabel;
 	AddEventId(ewolEventLabelPressed);
 	SetCanHaveFocus(false);
-}
-
-widget::Label::~Label(void)
-{
-	
 }
 
 void widget::Label::CalculateMinMaxSize(void)
@@ -60,7 +51,6 @@ void widget::Label::CalculateMinMaxSize(void)
 	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
 }
 
-
 void widget::Label::SetLabel(const etk::UString& newLabel)
 {
 	m_label = newLabel;
@@ -68,18 +58,15 @@ void widget::Label::SetLabel(const etk::UString& newLabel)
 	ewol::RequestUpdateSize();
 }
 
-
 etk::UString widget::Label::GetLabel(void)
 {
 	return m_label;
 }
 
-
 void widget::Label::OnDraw(ewol::DrawProperty& displayProp)
 {
 	m_text.Draw();
 }
-
 
 void widget::Label::OnRegenerateDisplay(void)
 {

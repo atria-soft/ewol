@@ -96,38 +96,9 @@ bool widget::Composer::CommonLoadXML(const char* data)
 		EWOL_ERROR("(l ?) main node not find: \"composer\" ...");
 		return false;
 	}
-	// remove previous elements ...
-	RemoveSubWidget();
-	ewol::Widget::LoadXML(root);
+	// call upper class to parse his elements ...
+	widget::Container::LoadXML(root);
 	
-	for(TiXmlNode * pNode = root->FirstChild() ;
-	    NULL != pNode ;
-	    pNode = pNode->NextSibling() ) {
-		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
-			// nothing to do, just proceed to next step
-			continue;
-		}
-		etk::UString widgetName = pNode->Value();
-		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
-			continue;
-		}
-		if (NULL != GetSubWidget()) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
-			continue;
-		}
-		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
-		if (tmpWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
-			continue;
-		}
-		// add widget :
-		SetSubWidget(tmpWidget);
-		if (false == tmpWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
-			return false;
-		}
-	}
 	return true;
 }
 

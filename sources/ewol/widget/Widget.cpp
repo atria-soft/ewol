@@ -14,7 +14,6 @@
 #include <ewol/renderer/os/eSystem.h>
 #include <ewol/renderer/os/gui.h>
 
-#define ULTIMATE_MAX_SIZE  (99999999)
 
 #undef __class__
 #define __class__	"Widget"

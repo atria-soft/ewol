@@ -36,7 +36,19 @@ namespace ewol
 			vec2 m_data;
 			distance_te m_type;
 		public:
+			/**
+			 * @brief Constructor (default :0,0 mode pixel)
+			 */
+			Dimension(void);
+			/**
+			 * @brief Constructor
+			 * @param[in] size Requested dimention
+			 * @param[in] type Unit of the Dimention
+			 */
 			Dimension(const vec2& size, ewol::Dimension::distance_te type=ewol::Dimension::Pixel);
+			/**
+			 * @brief Destructor
+			 */
 			~Dimension(void);
 			/**
 			 * @brief Get the current dimention in requested type
@@ -94,8 +106,14 @@ namespace ewol
 			 *    = assigment
 			 *****************************************************/
 			const Dimension& operator= (const Dimension& obj ) {
-				m_data = obj.m_data;
-				m_type = obj.m_type;
+				if (this!=&obj) {
+					m_data = obj.m_data;
+					m_type = obj.m_type;
+				}
+				return *this;
+			}
+			const Dimension& operator= (const etk::UString& obj ) {
+				SetString(obj);
 				return *this;
 			}
 			/**

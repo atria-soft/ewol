@@ -27,7 +27,7 @@ namespace widget {
 	 *
 	 * @code
 	 *  ----------------------------------------------
-	 *  | Mon Texte Modi|fiable                      |
+	 *  | Editable Text                              |
 	 *  ----------------------------------------------
 	 * @endcode
 	 */
