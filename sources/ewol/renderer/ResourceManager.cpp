@@ -298,12 +298,17 @@ static int32_t nextP2(int32_t value)
 
 bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
 {
-	ivec2 size2(nextP2(size.x()), nextP2(size.y()));
 	etk::UString TmpFilename = filename;
-	TmpFilename += ":";
-	TmpFilename += size2.x();
-	TmpFilename += "x";
-	TmpFilename += size2.y();
+	if (false == filename.EndWith(".svg") ) {
+		size = ivec2(-1,-1);
+	}
+	if (size.x()>0 && size.y()>0) {
+		ivec2 size2(nextP2(size.x()), nextP2(size.y()));
+		TmpFilename += ":";
+		TmpFilename += size2.x();
+		TmpFilename += "x";
+		TmpFilename += size2.y();
+	}
 	
 	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << size);
 	object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
@@ -312,7 +317,7 @@ bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& obje
 	}
 	EWOL_INFO("        ==> create new one...");
 	// need to crate a new one ...
-	object = new ewol::TextureFile(TmpFilename, filename, size2);
+	object = new ewol::TextureFile(TmpFilename, filename, size);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;

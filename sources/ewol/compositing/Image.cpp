@@ -268,3 +268,14 @@ bool ewol::Image::HasSources(void)
 	return m_resource!=NULL;
 }
 
+
+vec2 ewol::Image::GetRealSize(void)
+{
+	if (NULL==m_resource) {
+		return vec2(0,0);
+	}
+	return m_resource->GetRealSize();
+}
+
+
+

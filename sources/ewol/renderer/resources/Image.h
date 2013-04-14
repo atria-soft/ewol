@@ -19,10 +19,13 @@ namespace ewol
 {
 	class TextureFile : public ewol::Texture
 	{
+		private:
+			vec2 m_realImageSize;
 		public:
 			TextureFile(etk::UString genName, etk::UString fileName, ivec2 size);
 			~TextureFile(void) { };
 			virtual const char* GetType(void) { return "ewol::TextureFile"; };
+			const vec2& GetRealSize(void) { return m_realImageSize; };
 	};
 };
 

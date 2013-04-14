@@ -25,10 +25,6 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 	Texture(genName)
 {
 	etk::UString tmpName = tmpfileName;
-	// get the upper paw2 ot the size requested...
-	if (size.x()>0 && size.y()>0) {
-		SetImageSize(size);
-	}
 	// load data
 	if (true == tmpName.EndWith(".bmp") ) {
 		// generate the texture
@@ -40,8 +36,13 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 		if (false == m_element.IsLoadOk()) {
 			EWOL_ERROR("Error To load SVG file " << tmpName );
 		} else {
-			// generate the texture
-			m_element.GenerateAnImage(size, m_data);
+			if (size.x()>0 && size.y()>0) {
+				// generate the texture
+				m_element.GenerateAnImage(size, m_data);
+			} else {
+				// generate the texture
+				m_element.GenerateAnImage(m_data);
+			}
 		}
 	} else if (true == tmpName.EndWith(".png") ) {
 		// generate the texture
@@ -51,6 +52,8 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 	} else {
 		EWOL_ERROR("Extention not managed " << tmpName << " Sopported extention : .bmp / .svg / .png");
 	}
+	ivec2 tmp = m_data.GetSize();
+	m_realImageSize = vec2(tmp.x(), tmp.y());
 	Flush();
 }
 

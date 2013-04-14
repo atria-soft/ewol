@@ -18,26 +18,26 @@ namespace ewol
 	class Image : public ewol::Compositing
 	{
 		private:
-			vec3 m_position;         //!< The current position to draw
+			vec3 m_position; //!< The current position to draw
 			vec3 m_clippingPosStart; //!< Clipping start position
-			vec3 m_clippingPosStop;  //!< Clipping stop position
-			bool m_clippingEnable;   //!< true if the clipping must be activated
+			vec3 m_clippingPosStop; //!< Clipping stop position
+			bool m_clippingEnable; //!< true if the clipping must be activated
 		private:
 			draw::Color m_color; //!< The text foreground color
-			vec3        m_axes;  //!< Rotation axes (instant)
-			float       m_angle; //!< Angle to set at the axes
+			vec3 m_axes; //!< Rotation axes (instant)
+			float m_angle; //!< Angle to set at the axes
 		private:
-			ewol::Program* m_GLprogram;  //!< pointer on the opengl display program
-			int32_t        m_GLPosition; //!< openGL id on the element (vertex buffer)
-			int32_t        m_GLMatrix;   //!< openGL id on the element (transformation matrix)
-			int32_t        m_GLColor;    //!< openGL id on the element (color buffer)
-			int32_t        m_GLtexture;  //!< openGL id on the element (Texture position)
-			int32_t        m_GLtexID;    //!< openGL id on the element (texture ID)
+			ewol::Program* m_GLprogram; //!< pointer on the opengl display program
+			int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
+			int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
+			int32_t m_GLColor; //!< openGL id on the element (color buffer)
+			int32_t m_GLtexture; //!< openGL id on the element (Texture position)
+			int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 		private:
-			ewol::TextureFile*        m_resource;    //!< texture resources
-			etk::Vector<vec3 >        m_coord;       //!< internal coord of the object
-			etk::Vector<vec2 >        m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf> m_coordColor;  //!< internal color of the different point
+			ewol::TextureFile* m_resource; //!< texture resources
+			etk::Vector<vec3 > m_coord; //!< internal coord of the object
+			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
+			etk::Vector<draw::Colorf> m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
@@ -72,11 +72,13 @@ namespace ewol
 			 * @param[in] pos Position of the text (in 3D)
 			 */
 			void SetPos(const vec3& pos);
+			inline void SetPos(const vec2& pos) { SetPos(vec3(pos.x(),pos.y(),0)); };
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
 			void SetRelPos(const vec3& pos);
+			inline void SetRelPos(const vec2& pos) { SetRelPos(vec3(pos.x(),pos.y(),0)); };
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
@@ -88,12 +90,14 @@ namespace ewol
 			 * @param[in] width Width size of the clipping
 			 */
 			void SetClippingWidth(const vec3& pos, vec3 width);
+			inline void SetClippingWidth(const vec2& pos, const vec2& width)  { SetClippingWidth(vec3(pos.x(),pos.y(),0), vec3(width.x(),width.y(),0)); };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
 			void SetClipping(const vec3& pos, vec3 posEnd);
+			inline void SetClipping(const vec2& pos, const vec2& posEnd)  { SetClipping(vec3(pos.x(),pos.y(),0), vec3(posEnd.x(),posEnd.y(),0)); };
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -132,6 +136,11 @@ namespace ewol
 			 * @return the validity od the resources.
 			 */
 			bool HasSources(void);
+			/**
+			 * @brief Get the source image registered size in the file (<0 when multiple size image)
+			 * @return tre image registered size
+			 */
+			vec2 GetRealSize(void);
 	};
 };
 

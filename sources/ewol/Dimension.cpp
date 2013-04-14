@@ -14,16 +14,16 @@ static vec2 ratio(9999999,888888);
 static vec2 invRatio(1,1);
 static ewol::Dimension windowsSize(vec2(9999999,888888), ewol::Dimension::Pixel);
 
-static const float       inchToMillimeter = 1.0f/25.4f;
-static const float       footToMillimeter = 1.0f/304.8f;
-static const float      meterToMillimeter = 1.0f/1000.0f;
-static const float centimeterToMillimeter = 1.0f/10.0f;
-static const float  kilometerToMillimeter = 1.0f/1000000.0f;
-static const float millimeterToInch = 25.4f;
-static const float millimeterToFoot = 304.8f;
-static const float millimeterToMeter = 1000.0f;
-static const float millimeterToCentimeter = 10.0f;
-static const float millimeterToKilometer = 1000000.0f;
+static const float       inchToMillimeter = 25.4f;
+static const float       footToMillimeter = 304.8f;
+static const float      meterToMillimeter = 1000.0f;
+static const float centimeterToMillimeter = 10.0f;
+static const float  kilometerToMillimeter = 1000000.0f;
+static const float millimeterToInch = 1.0f/25.4f;
+static const float millimeterToFoot = 1.0f/304.8f;
+static const float millimeterToMeter = 1.0f/1000.0f;
+static const float millimeterToCentimeter = 1.0f/10.0f;
+static const float millimeterToKilometer = 1.0f/1000000.0f;
 
 
 void ewol::dimension::Init(void)
@@ -146,16 +146,20 @@ vec2 ewol::Dimension::GetPixel(void) const
 {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		return m_data;
+	} else {
+		vec2 windDim = windowsSize.GetPixel();
+		return vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
 	}
-	vec2 windDim = windowsSize.GetPixel();
-	return vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
 }
 
 vec2 ewol::Dimension::GetPourcent(void) const
 {
 	if (m_type!=ewol::Dimension::Pourcent) {
 		vec2 windDim = windowsSize.GetPixel();
-		return vec2(m_data.x()/windDim.x()*100.0f, m_data.y()/windDim.y()*100.0f);
+		//EWOL_DEBUG(" windows dimention : " /*<< windowsSize*/ << " ==> " << windDim << "px"); // ==> infinite loop ...
+		//printf(" windows dimention : %f,%f", windDim.x(),windDim.y());
+		//printf(" data : %f,%f", m_data.x(),m_data.y());
+		return vec2((m_data.x()/windDim.x())*100.0f, (m_data.y()/windDim.y())*100.0f);
 	}
 	return vec2(m_data.x()*100.0f, m_data.y()*100.0f);;
 }
@@ -167,7 +171,7 @@ vec2 ewol::Dimension::GetMeter(void) const
 
 vec2 ewol::Dimension::GetCentimeter(void) const
 {
-	return ewol::Dimension::GetMillimeter()*millimeterToMeter;
+	return ewol::Dimension::GetMillimeter()*millimeterToCentimeter;
 }
 
 vec2 ewol::Dimension::GetMillimeter(void) const
@@ -225,9 +229,46 @@ etk::UString ewol::Dimension::GetString(void)
 	}
 	return ret;
 }
+
+
 void ewol::Dimension::SetString(const etk::UString& value)
 {
-	EWOL_TODO(" not done yet ...");
+	etk::UString value2 = value;
+	int32_t nbElementToRemove=0;
+	vec2 data;
+	distance_te type;
+	if (value.EndWith("%")==true) {
+		nbElementToRemove=1;
+		type = ewol::Dimension::Pourcent;
+	} else if (value.EndWith("px")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::Pixel;
+	} else if (value.EndWith("cm")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::Centimeter;
+	} else if (value.EndWith("mm")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::Millimeter;
+	} else if (value.EndWith("km")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::Kilometer;
+	} else if (value.EndWith("m")==true) {
+		nbElementToRemove=1;
+		type = ewol::Dimension::Meter;
+	} else if (value.EndWith("in")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::Inch;
+	} else if (value.EndWith("ft")==true) {
+		nbElementToRemove=2;
+		type = ewol::Dimension::foot;
+	} else {
+		EWOL_WARNING("you might st an unit at : \"" << value << "\"");
+		nbElementToRemove=0;
+		type = ewol::Dimension::Pixel;
+	}
+	value2.Remove(value2.Size()-nbElementToRemove, nbElementToRemove);
+	data=value2;
+	Set(data, type);
 }
 
 

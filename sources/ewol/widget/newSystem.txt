@@ -14,8 +14,6 @@ ewol::Widget [OK]
      |== widget::Container [OK]
      |         .
      |        /|\
-     |         |== widget::Button [OK]
-     |         |
      |         \== widget::Composer [OK]
      |
      |== widget::ContainerN [OK]
@@ -24,11 +22,19 @@ ewol::Widget [OK]
      |         |== widget::Layer [OK]
      |         |
      |         \== widget::Sizer [OK]
+     |
+     |== widget::Button [OK]
+     |
+     |== widget::Entry [TOEND]
+     |
+     |== widget::Label [OK]
+     |
+     |== widget::Image [TOEND]
+     |
 
 ewol::EObject
 	ewol::Widget
 		## Windows :
-			widget::Windows main application windows
 			widget::PopUp Widget to display basic pop-up
 		## Meta-widget : 
 				// (multiple and complex widget commonly used)
@@ -37,9 +43,6 @@ ewol::EObject
 			widget::ColorChooser Select a specific color
 			widget::Calendar [*TODO*] display the current calendar
 		## Basics :
-			widget::Image 
-			widget::Label 
-			widget::Entry 
 			widget::EntryNumericSpin [*TODO*] 
 			widget::Checkbox 
 			widget::Joystick 
@@ -55,12 +58,9 @@ ewol::EObject
 				widget::ButtonImage 
 				widget::ButtonImageText 
 		## contener :
-			widget::Sizer 
 			widget::Gird 
-			widget::Layer 
 			widget::WSlider 
 			widget::FreePosition [*TODO*] set the widget at the desird position
-			widget::WSlider 
 
 
 widget::ColorBar.cpp

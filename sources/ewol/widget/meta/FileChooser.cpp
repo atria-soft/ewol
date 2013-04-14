@@ -12,6 +12,7 @@
 #include <ewol/widget/List.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
+#include <ewol/widget/Composer.h>
 #include <ewol/widget/WidgetManager.h>
 //#include <etk/Vector.h>
 #include <etk/Vector.h>
@@ -77,6 +78,42 @@ widget::FileChooser::FileChooser(void)
 	#endif
 	m_file = "";
 	
+	
+	
+	/*
+	SubWidgetSet(new widget::Composer(widget::Composer::String,
+	        "<composer>\n"
+	        "	<sizer mode=\"vert\" lock=\"true\">\n"
+	        "		<sizer mode=\"hori\">\n"
+	        "			<checkbox name=\"EWOL:file-shooser:show-hiden-file\"/>\n"
+	        "			<label>Show hiden files</label>\n"
+	        "			<spacer expand=\"true,false\"/>\n"
+	        "			<button name=\"EWOL:file-shooser:button-validate\">\n"
+	        "				<sizer mode=\"hori\">\n"
+	        "					<image src=\"THEME:GUI:Load.svg\" fill=\"true\" size=\"70,70mm\"/>\n"
+	        "					<label>Validate</label>\n"
+	        "				</sizer>\n"
+	        "			</button>\n"
+	        "			<button name=\"EWOL:file-shooser:button-cancel\">\n"
+	        "				<sizer mode=\"hori\">\n"
+	        "					<image src=\"THEME:GUI:Remove.svg\" fill=\"true\" size=\"70,70mm\"/>\n"
+	        "					<label>Cancel</label>\n"
+	        "				</sizer>\n"
+	        "			</button>\n"
+	        "		</sizer>\n"
+	        "		<sizer mode=\"hori\">\n"
+	        "			<spacer min-size=\"2,2mm\"/>\n"
+	        "			<ListFileSystem name=\"EWOL:file-shooser:list-folder\" min-size=\"20,0%\" expand=\"false,true\"/>\n"
+	        "			<spacer min-size=\"2,2mm\"/>\n"
+	        "			<ListFileSystem name=\"EWOL:file-shooser:list-files\" expand=\"true,true\"/>\n"
+	        "			<spacer min-size=\"2,2mm\"/>\n"
+	        "		</sizer>\n"
+	        "		<sizer mode=\"hori\">\n"
+	        "			\n"
+	        "		</sizer>\n"
+	        "	</sizer>\n"
+	        "</composer\n"));
+	*/
 	mySizerVert = new widget::Sizer(widget::Sizer::modeVert);
 	if (NULL == mySizerVert) {
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
@@ -105,25 +142,36 @@ widget::FileChooser::FileChooser(void)
 				mySpacer->SetExpand(bvec2(true,false));
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
-			// TODO : set if back :
-			/*
-			m_widgetValidate = new widget::Button("Validate");
+			m_widgetValidate = new widget::Button();
 			if (NULL == m_widgetValidate) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetValidate->SetImage("THEME:GUI:Load.svg");
+				m_widgetValidate->SetSubWidget(
+				    new widget::Composer(widget::Composer::String,
+				        "<composer>\n"
+				        "	<sizer mode=\"hori\">\n"
+				        "		<image src=\"THEME:GUI:Load.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<label>Validate</label>\n"
+				        "	</sizer>\n"
+				        "</composer\n"));
 				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			}
-			m_widgetCancel = new widget::Button("Cancel");
+			m_widgetCancel = new widget::Button();
 			if (NULL == m_widgetCancel) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCancel->SetImage("THEME:GUI:Remove.svg");
+				m_widgetCancel->SetSubWidget(
+				    new widget::Composer(widget::Composer::String,
+				        "<composer>\n"
+				        "	<sizer mode=\"hori\">\n"
+				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<label>Cancel</label>\n"
+				        "	</sizer>\n"
+				        "</composer\n"));
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
-			*/
 		}
 		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
@@ -186,7 +234,8 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				myImage->SetFill(bvec2(false,true));
+				myImage->SetImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
+				//myImage->SetExpand(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 			m_widgetCurrentFileName = new widget::Entry(m_file);
@@ -210,7 +259,8 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				myImage->SetFill(bvec2(false,true));
+				myImage->SetImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
+				//myImage->SetExpand(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 			
@@ -229,8 +279,9 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
+				myImage->SetImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
 				myImage->RegisterOnEvent(this, ewolEventImagePressed, ewolEventFileChooserHome);
-				myImage->SetFill(bvec2(false,true));
+				//myImage->SetExpand(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}
 		}

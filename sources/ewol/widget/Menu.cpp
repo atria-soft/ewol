@@ -12,6 +12,8 @@
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
+#include <ewol/widget/Composer.h>
+#include <ewol/widget/Label.h>
 
 #undef __class__
 #define __class__	"Menu"
@@ -81,22 +83,30 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 	tmpObject->m_message = message;
 	m_listElement.PushBack(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
-		// TODO : When button are back ...
-		/*
 		widget::Button * myButton = NULL;
-		myButton = new widget::Button(label);
+		myButton = new widget::Button();
 		if (NULL == myButton) {
 			EWOL_ERROR("Allocation button error");
 			return tmpObject->m_localId;
 		}
-		// set the image if one is present ...
-		myButton->SetImage(tmpObject->m_image);
+		if (tmpObject->m_image.Size()!=0) {
+			myButton->SetSubWidget(
+			    new widget::Composer(widget::Composer::String,
+			        etk::UString("<composer>\n") + 
+			        "	<sizer mode=\"hori\">\n"
+			        "		<image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n"
+			        "		<label>" + label + "</label>\n"
+			        "	</sizer>\n"
+			        "</composer\n"));
+		} else {
+			myButton->SetSubWidget( new widget::Label(label) );
+		}
+		
 		// add it in the widget list
 		widget::Sizer::SubWidgetAdd(myButton);
 		// keep the specific event ...
 		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
 		tmpObject->m_widgetPointer = myButton;
-		*/
 	}
 	return tmpObject->m_localId;
 }
@@ -172,22 +182,30 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
-									// TODO : When button are back ...
-									/*
-									myButton = new widget::Button(m_listElement[jjj]->m_label);
+									myButton = new widget::Button();
 									if (NULL == myButton) {
 										EWOL_ERROR("Allocation Error");
 									} else {
+										/*if (m_listElement[jjj]->m_image.Size()!=0) {
+											myButton->SetSubWidget(
+											    new widget::Composer(widget::Composer::String,
+											        etk::UString("<composer>\n") + 
+											        "	<sizer mode=\"hori\">\n"
+											        "		<image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n"
+											        "		<label exand=\"true,false\">" + m_listElement[jjj]->m_label + "</label>\n"
+											        "	</sizer>\n"
+											        "</composer\n"));
+										} else */ {
+											myButton->SetSubWidget( new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>") );
+										}
 										// set the image if one is present ...
-										myButton->SetImage(m_listElement[jjj]->m_image);
 										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
-										myButton->SetExpandX(true);
-										myButton->SetFillX(true);
+										myButton->SetExpand(bvec2(true,false));
+										myButton->SetFill(bvec2(true,false));
 										// add it in the widget list
 										mySizer->SubWidgetAdd(myButton);
 										m_listElement[jjj]->m_widgetPointer = myButton;
 									}
-									*/
 								}
 							}
 						}
