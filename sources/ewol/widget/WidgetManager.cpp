@@ -214,7 +214,7 @@ void ewol::widgetManager::PeriodicCallAdd(ewol::Widget * pWidget)
 void ewol::widgetManager::PeriodicCallRm(ewol::Widget * pWidget)
 {
 	int32_t nbElement = 0;
-	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+	for (int32_t iii=l_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
 		if (l_listOfPeriodicWidget[iii] == pWidget) {
 			l_listOfPeriodicWidget[iii] = NULL;
 		} else {
@@ -228,7 +228,7 @@ void ewol::widgetManager::PeriodicCallRm(ewol::Widget * pWidget)
 
 void ewol::widgetManager::PeriodicCall(int64_t localTime)
 {
-	for (int32_t iii=0; iii < l_listOfPeriodicWidget.Size(); iii++) {
+	for (int32_t iii=l_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
 		if (NULL != l_listOfPeriodicWidget[iii]) {
 			l_listOfPeriodicWidget[iii]->PeriodicCall(localTime);
 		}

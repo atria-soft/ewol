@@ -16,13 +16,13 @@
 
 widget::ContextMenu::ContextMenu(void)
 {
-	m_userExpand.setValue(true,true);
+	m_userExpand.setValue(false,false);
 	
 	m_padding.setValue(4,4);
 	m_offset = 20;
-
+	
 	m_colorBackGroung = draw::color::white;
-
+	
 	m_colorBorder = draw::color::black;
 	m_colorBorder.a = 0x7F;
 	
@@ -33,7 +33,7 @@ widget::ContextMenu::ContextMenu(void)
 
 widget::ContextMenu::~ContextMenu(void)
 {
-	SubWidgetRemove();
+	
 }
 
 
@@ -107,49 +107,21 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 
 void widget::ContextMenu::CalculateMinMaxSize(void)
 {
-	EWOL_DEBUG("CalculateMinSize");
+	//EWOL_DEBUG("CalculateMinSize");
 	m_userExpand.setValue(false,false);
 	m_minSize.setValue(50,50);
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinMaxSize();
 		m_minSize = m_subWidget->GetCalculateMinSize();
 	}
-	EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
+	//EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	MarkToRedraw();
-}
-
-void widget::ContextMenu::SetMinSize(const vec2& size)
-{
-	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
-}
-
-void widget::ContextMenu::SetExpand(const bvec2& newExpand)
-{
-	EWOL_ERROR("Pop-up can not have a user expand settings X (herited from under elements)");
-}
-
-
-void widget::ContextMenu::SubWidgetSet(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		return;
-	}
-	m_subWidget = newWidget;
-}
-
-
-void widget::ContextMenu::SubWidgetRemove(void)
-{
-	if (NULL != m_subWidget) {
-		delete(m_subWidget);
-		m_subWidget = NULL;
-	}
 }
 
 void widget::ContextMenu::OnDraw(ewol::DrawProperty& displayProp)
 {
 	//EWOL_DEBUG("On Draw " << m_currentDrawId);
-	widget::Drawable::OnDraw(displayProp);
+	m_compositing.Draw();
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw(displayProp);
 	}
@@ -159,90 +131,67 @@ void widget::ContextMenu::OnDraw(ewol::DrawProperty& displayProp)
 void widget::ContextMenu::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-	}
-	// generate a white background and take gray on other surfaces
-	ClearOObjectList();
-	ewol::Drawing * BGOObjects = new ewol::Drawing();
-	AddOObject(BGOObjects);
-	
-	if (NULL != m_subWidget) {
-		vec2 tmpSize = m_subWidget->GetSize();
-		vec2 tmpOrigin = m_subWidget->GetOrigin();
-		
-		// display border ...
-		BGOObjects->SetColor(m_colorBorder);
-		switch (m_arrawBorder)
-		{
-			case widget::CONTEXT_MENU_MARK_TOP:
-				BGOObjects->SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
-				BGOObjects->AddVertex();
-				if (m_arrowPos.x() <= tmpOrigin.x() ) {
-					float laking = m_offset - m_padding.y();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
-					BGOObjects->AddVertex();
-					BGOObjects->SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
-					BGOObjects->AddVertex();
-				} else {
-					float laking = m_offset - m_padding.y();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
-					BGOObjects->AddVertex();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
-					BGOObjects->AddVertex();
-				}
-				break;
-			case widget::CONTEXT_MENU_MARK_BOTTOM:
-				BGOObjects->SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
-				BGOObjects->AddVertex();
-				if (m_arrowPos.x() <= tmpOrigin.x() ) {
-					int32_t laking = m_offset - m_padding.y();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
-					BGOObjects->AddVertex();
-					BGOObjects->SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
-					BGOObjects->AddVertex();
-				} else {
-					int32_t laking = m_offset - m_padding.y();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
-					BGOObjects->AddVertex();
-					BGOObjects->SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
-					BGOObjects->AddVertex();
-				}
-				break;
-			default:
-			case widget::CONTEXT_MENU_MARK_RIGHT:
-			case widget::CONTEXT_MENU_MARK_LEFT:
-				EWOL_TODO("later");
-				break;
+		m_compositing.Clear();
+		if (NULL != m_subWidget) {
+			vec2 tmpSize = m_subWidget->GetSize();
+			vec2 tmpOrigin = m_subWidget->GetOrigin();
+			
+			// display border ...
+			m_compositing.SetColor(m_colorBorder);
+			switch (m_arrawBorder)
+			{
+				case widget::CONTEXT_MENU_MARK_TOP:
+					m_compositing.SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
+					m_compositing.AddVertex();
+					if (m_arrowPos.x() <= tmpOrigin.x() ) {
+						float laking = m_offset - m_padding.y();
+						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
+						m_compositing.AddVertex();
+						m_compositing.SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
+						m_compositing.AddVertex();
+					} else {
+						float laking = m_offset - m_padding.y();
+						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
+						m_compositing.AddVertex();
+						m_compositing.SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
+						m_compositing.AddVertex();
+					}
+					break;
+				case widget::CONTEXT_MENU_MARK_BOTTOM:
+					m_compositing.SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
+					m_compositing.AddVertex();
+					if (m_arrowPos.x() <= tmpOrigin.x() ) {
+						int32_t laking = m_offset - m_padding.y();
+						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
+						m_compositing.AddVertex();
+						m_compositing.SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
+						m_compositing.AddVertex();
+					} else {
+						int32_t laking = m_offset - m_padding.y();
+						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
+						m_compositing.AddVertex();
+						m_compositing.SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
+						m_compositing.AddVertex();
+					}
+					break;
+				default:
+				case widget::CONTEXT_MENU_MARK_RIGHT:
+				case widget::CONTEXT_MENU_MARK_LEFT:
+					EWOL_TODO("later");
+					break;
+			}
+			m_compositing.SetPos(vec3(tmpOrigin.x()-m_padding.x(), tmpOrigin.y() - m_padding.y(), 0.0f) );
+			m_compositing.RectangleWidth(vec3(tmpSize.x() + m_padding.x()*2, tmpSize.y() + m_padding.y()*2, 0.0f) );
+			// set the area in white ...
+			m_compositing.SetColor(m_colorBackGroung);
+			m_compositing.SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(), 0.0f) );
+			m_compositing.RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0.0f) );
 		}
-		BGOObjects->SetPos(vec3(tmpOrigin.x()-m_padding.x(), tmpOrigin.y() - m_padding.y(), 0.0f) );
-		BGOObjects->RectangleWidth(vec3(tmpSize.x() + m_padding.x()*2, tmpSize.y() + m_padding.y()*2, 0.0f) );
-		// set the area in white ...
-		BGOObjects->SetColor(m_colorBackGroung);
-		BGOObjects->SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(), 0.0f) );
-		BGOObjects->RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0.0f) );
 	}
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
 }
-
-
-ewol::Widget * widget::ContextMenu::GetWidgetAtPos(const vec2& pos)
-{
-	// calculate relative position
-	vec2 relativePos = RelativePosition(pos);
-	// Check for sub Element
-	if (NULL != m_subWidget) {
-		vec2 tmpSize = m_subWidget->GetSize();
-		vec2 tmpOrigin = m_subWidget->GetOrigin();
-		if(    (tmpOrigin.x() <= relativePos.x() && tmpOrigin.x() + tmpSize.x() >= relativePos.x())
-		    && (tmpOrigin.y() <= relativePos.y() && tmpOrigin.y() + tmpSize.y() >= relativePos.y()) )
-		{
-			return m_subWidget->GetWidgetAtPos(pos);
-		}
-	}
-	return this;
-}
-
 
 bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
 {
@@ -271,3 +220,11 @@ void widget::ContextMenu::SetPositionMark(markPosition_te position, vec2 arrowPo
 	MarkToRedraw();
 }
 
+ewol::Widget* widget::ContextMenu::GetWidgetAtPos(const vec2& pos)
+{
+	ewol::Widget* val = widget::Container::GetWidgetAtPos(pos);
+	if (NULL != val) {
+		return val;
+	}
+	return this;
+}

@@ -146,6 +146,7 @@ void ewol::EObject::AddEventId(const char * generateEventId)
 
 void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::UString& data)
 {
+	int32_t nbObject = ewol::EObjectManager::GetNumberObject();
 	// for every element registered ...
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
@@ -157,11 +158,18 @@ void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::USt
 			}
 		}
 	}
+	if (nbObject > ewol::EObjectManager::GetNumberObject()) {
+		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
+	}
 }
 
 void ewol::EObject::SendMultiCast(const char* const messageId, const etk::UString& data)
 {
+	int32_t nbObject = ewol::EObjectManager::GetNumberObject();
 	MultiCastSend(this, messageId, data);
+	if (nbObject > ewol::EObjectManager::GetNumberObject()) {
+		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
+	}
 }
 
 void ewol::EObject::RegisterMultiCast(const char* const messageId)

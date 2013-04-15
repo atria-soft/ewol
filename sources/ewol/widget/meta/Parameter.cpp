@@ -38,9 +38,9 @@ widget::Parameter::Parameter(void) :
 	widget::Sizer * mySizerHori = NULL;
 	widget::Spacer * mySpacer = NULL;
 	#ifdef __TARGET_OS__Android
-		SetDisplayRatio(0.90);
+		SetMinSize(ewol::Dimension(vec2(90,90),ewol::Dimension::Pourcent));
 	#else
-		SetDisplayRatio(0.80);
+		SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	#endif
 	
 	mySizerVert = new widget::Sizer(widget::Sizer::modeVert);
@@ -50,7 +50,7 @@ widget::Parameter::Parameter(void) :
 		EWOL_INFO("add widget");
 		mySizerVert->LockExpand(bvec2(true,true));
 		// set it in the pop-up-system :
-		SubWidgetSet(mySizerVert);
+		SetSubWidget(mySizerVert);
 		
 		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);
 		if (NULL == mySizerHori) {
@@ -100,7 +100,7 @@ widget::Parameter::Parameter(void) :
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				mySpacer->SetFill(bvec2(false,true));
-				mySpacer->SetSize(5);
+				mySpacer->SetMinSize(vec2(5,5));
 				mySpacer->SetColor(0x000000BF);
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
@@ -116,7 +116,7 @@ widget::Parameter::Parameter(void) :
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
 					mySpacer->SetExpand(bvec2(true,false));
-					mySpacer->SetSize(5);
+					mySpacer->SetMinSize(vec2(5,5));
 					mySpacer->SetColor(0x000000BF);
 					mySizerVert2->SubWidgetAdd(mySpacer);
 				}
@@ -136,7 +136,7 @@ widget::Parameter::Parameter(void) :
 			EWOL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
 			mySpacer->SetExpand(bvec2(true,false));
-			mySpacer->SetSize(5);
+			mySpacer->SetMinSize(vec2(5,5));
 			mySpacer->SetColor(0x000000BF);
 			mySizerVert->SubWidgetAdd(mySpacer);
 		}

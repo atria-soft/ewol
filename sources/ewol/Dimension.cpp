@@ -111,11 +111,16 @@ vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type) const
 void ewol::Dimension::Set(const vec2& _size, ewol::Dimension::distance_te type)
 {
 	// Set min max on input to limit error : 
-	vec2 size(etk_avg(0,_size.x(),999999999999999.0),
-	          etk_avg(0,_size.y(),999999999999999.0));
+	vec2 size(etk_avg(0.0f,_size.x(),9999999.0f),
+	          etk_avg(0.0f,_size.y(),9999999.0f));
 	switch(type) {
 		case ewol::Dimension::Pourcent:
-			m_data = vec2(size.x()*0.01f, size.y()*0.01f);
+			{
+				vec2 size2(etk_avg(0.0f,_size.x(),100.0f),
+				           etk_avg(0.0f,_size.y(),100.0f));
+				m_data = vec2(size2.x()*0.01f, size2.y()*0.01f);
+				//EWOL_VERBOSE("Set % : " << size2 << " ==> " << m_data);
+			}
 			break;
 		case ewol::Dimension::Pixel:
 			m_data = size;
@@ -148,7 +153,9 @@ vec2 ewol::Dimension::GetPixel(void) const
 		return m_data;
 	} else {
 		vec2 windDim = windowsSize.GetPixel();
-		return vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
+		vec2 res = vec2(windDim.x()*m_data.x(), windDim.y()*m_data.y());
+		//EWOL_DEBUG("Get % : " << m_data << " / " << windDim << "==> " << res);
+		return res;
 	}
 }
 

@@ -14,12 +14,13 @@
 
 namespace ewol {
 	namespace EObjectManager {
-		void  Init(         void);
-		void  UnInit(       void);
-		void  Add(          ewol::EObject* object);
-		void  Rm(           ewol::EObject* object);
+		void  Init(void);
+		void  UnInit(void);
+		void  Add(ewol::EObject* object);
+		void  Rm(ewol::EObject* object);
+		int32_t GetNumberObject(void);
 		
-		void  AutoRemove(   ewol::EObject* object);
+		void  AutoRemove(ewol::EObject* object);
 		void  RemoveAllAutoRemove(void);
 	};
 };

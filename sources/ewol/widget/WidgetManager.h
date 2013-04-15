@@ -28,8 +28,8 @@ namespace ewol {
 		ewol::Widget* FocusGet(void);
 		void FocusRemoveIfRemove(ewol::Widget * newWidget);
 		
-		void PeriodicCallAdd(ewol::Widget * pWidget);
-		void PeriodicCallRm( ewol::Widget * pWidget);
+		void PeriodicCallAdd(ewol::Widget* pWidget);
+		void PeriodicCallRm(ewol::Widget* pWidget);
 		void PeriodicCall(int64_t localTime);
 		bool PeriodicCallHave(void);
 		

@@ -13,53 +13,45 @@
 #undef __class__
 #define __class__	"PopUp"
 
-widget::PopUp::PopUp(void) :
-	m_subWidgetNext(NULL)
+widget::PopUp::PopUp(void)
 {
-	m_userExpand.setValue(true, true);
+	m_userExpand.setValue(false, false);
+	SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	
 	m_colorBackGroung = draw::color::white;
-	
 	m_colorEmptyArea = draw::color::black;
 	m_colorEmptyArea.a = 0x7F;
-	
 	m_colorBorder = draw::color::black;
 	m_colorBorder.a = 0x7F;
-	
-	m_subWidget = 0;
 }
 
 widget::PopUp::~PopUp(void)
 {
-	SubWidgetRemove();
+	
 }
 
 
 void widget::PopUp::CalculateSize(const vec2& availlable)
 {
-	//EWOL_DEBUG("CalculateSize=" << availlable);
-	// pop-up fill all the display :
 	m_size = availlable;
-	
 	if (NULL != m_subWidget) {
-		vec2 subWidgetSize;
-		vec2 subWidgetOrigin;
-		subWidgetSize = m_subWidget->GetCalculateMinSize();
+		vec2 subElementSize = m_minSize;
+		vec2 subElementOrigin = m_origin + (m_size-m_minSize)/2.0f;
+		
+		vec2 subWidgetSize = m_subWidget->GetCalculateMinSize();
 		if (true == m_subWidget->CanExpand().x()) {
-			subWidgetSize.setX(m_size.x());
+			subWidgetSize.setX(m_minSize.x());
 		}
 		if (true == m_subWidget->CanExpand().y()) {
-			subWidgetSize.setY(m_size.y());
+			subWidgetSize.setY(m_minSize.y());
 		}
-		if (m_displayRatio>0.1 && m_displayRatio<=1) {
-			subWidgetSize.setValue(etk_max(m_size.x()*m_displayRatio, subWidgetSize.x()),
-			                       etk_max(m_size.y()*m_displayRatio, subWidgetSize.y()) );
-		}
-		// force to be an integer ...
-		subWidgetSize.setValue((int32_t)subWidgetSize.x(), (int32_t)subWidgetSize.y());
+		// limit the size of the element :
+		subWidgetSize.setMin(m_minSize);
+		// posiition at a int32_t pos :
+		subWidgetSize = vec2ClipInt32(subWidgetSize);
+		
 		// set config to the Sub-widget
-		subWidgetOrigin.setValue((int32_t)(m_size.x() - m_origin.x() - subWidgetSize.x())/2 + m_origin.x(),
-		                         (int32_t)(m_size.y() - m_origin.y() - subWidgetSize.y())/2 + m_origin.y());
+		vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
 		
 		m_subWidget->SetOrigin(subWidgetOrigin);
 		m_subWidget->CalculateSize(subWidgetSize);
@@ -70,55 +62,28 @@ void widget::PopUp::CalculateSize(const vec2& availlable)
 
 void widget::PopUp::CalculateMinMaxSize(void)
 {
-	//EWOL_DEBUG("CalculateMinMaxSize");
+	// remove expand of sub widget ==> not needed ...
 	m_userExpand.setValue(false,false);
-	m_minSize.setValue(50, 50);
+	
+	if (m_userMinSize.GetType() != ewol::Dimension::Pourcent) {
+		EWOL_ERROR(" ==> Please set pourcent size of the popo_up view");
+		m_minSize.setValue(50, 50);
+	} else {
+		m_minSize = m_userMinSize.GetPixel();
+	}
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinMaxSize();
 		vec2 tmpSize = m_subWidget->GetCalculateMinSize();
-		m_minSize = tmpSize;
+		m_minSize.setMax(tmpSize);
 	}
-	//EWOL_DEBUG("CalculateMinSize(" << m_minSize.x << "," << m_minSize.y << ")");
+	EWOL_DEBUG("CalculateMinSize=" << m_minSize);
 	MarkToRedraw();
 }
-
-void widget::PopUp::SetMinSize(const vec2& size)
-{
-	EWOL_ERROR("Pop-up can not have a user Minimum size (herited from under elements)");
-}
-
-void widget::PopUp::SetExpand(const bvec2& newExpand)
-{
-	EWOL_ERROR("Pop-up can not have a user expand settings X (herited from under elements)");
-}
-
-void widget::PopUp::SubWidgetSet(ewol::Widget* newWidget)
-{
-	if (NULL == newWidget) {
-		EWOL_ERROR("Try to set a sub wiget with NULL pointer ...");
-		return;
-	}
-	SubWidgetRemove();
-	m_subWidget = newWidget;
-	//EWOL_DEBUG("SetSubWidget on Pop-Up : " << (int64_t)m_subWidget);
-	MarkToRedraw();
-}
-
-
-void widget::PopUp::SubWidgetRemove(void)
-{
-	if (NULL != m_subWidget) {
-		delete(m_subWidget);
-		m_subWidget = NULL;
-	}
-	MarkToRedraw();
-}
-
 
 void widget::PopUp::OnDraw(ewol::DrawProperty& displayProp)
 {
 	// draw upper classes
-	widget::Drawable::OnDraw(displayProp);
+	m_compositing.Draw();
 	if (NULL != m_subWidget) {
 		m_subWidget->GenDraw(displayProp);
 	}
@@ -128,68 +93,33 @@ void widget::PopUp::OnDraw(ewol::DrawProperty& displayProp)
 void widget::PopUp::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
+		m_compositing.Clear();
+		m_compositing.SetColor(m_colorEmptyArea);
+		m_compositing.SetPos(vec3(0,0,0));
+		m_compositing.RectangleWidth(vec3(m_size.x(), m_size.y(), 0));
+		// set the area in white ...
+		if (NULL != m_subWidget) {
+			vec2 tmpSize = m_subWidget->GetSize();
+			vec2 tmpOrigin = m_subWidget->GetOrigin();
+			m_compositing.SetColor(m_colorBorder);
+			m_compositing.SetPos(vec3(tmpOrigin.x()-BORDER_SIZE_TMP, tmpOrigin.y()-BORDER_SIZE_TMP,0) );
+			m_compositing.RectangleWidth(vec3(tmpSize.x()+2*BORDER_SIZE_TMP, tmpSize.y()+2*BORDER_SIZE_TMP, 0) );
+			m_compositing.SetColor(m_colorBackGroung);
+			m_compositing.SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(),0) );
+			m_compositing.RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0) );
+		}
 	}
-	// generate a white background and take gray on other surfaces
-	ClearOObjectList();
-	ewol::Drawing * BGOObjects = new ewol::Drawing();
-	AddOObject(BGOObjects);
-	
-	BGOObjects->SetColor(m_colorEmptyArea);
-	BGOObjects->SetPos(vec3(0,0,0));
-	BGOObjects->RectangleWidth(vec3(m_size.x(), m_size.y(), 0));
-	// set the area in white ...
-	if (NULL != m_subWidget) {
-		vec2 tmpSize = m_subWidget->GetSize();
-		vec2 tmpOrigin = m_subWidget->GetOrigin();
-		BGOObjects->SetColor(m_colorBorder);
-		BGOObjects->SetPos(vec3(tmpOrigin.x()-BORDER_SIZE_TMP, tmpOrigin.y()-BORDER_SIZE_TMP,0) );
-		BGOObjects->RectangleWidth(vec3(tmpSize.x()+2*BORDER_SIZE_TMP, tmpSize.y()+2*BORDER_SIZE_TMP, 0) );
-		BGOObjects->SetColor(m_colorBackGroung);
-		BGOObjects->SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(),0) );
-		BGOObjects->RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0) );
-	}
+	// SUBwIDGET GENERATION ...
 	if (NULL != m_subWidget) {
 		m_subWidget->OnRegenerateDisplay();
 	}
 }
 
-
-ewol::Widget * widget::PopUp::GetWidgetAtPos(const vec2& pos)
+ewol::Widget* widget::PopUp::GetWidgetAtPos(const vec2& pos)
 {
-	// calculate relative position
-	vec2 relativePos = RelativePosition(pos);
-	// for the element in the pop-up ...
-	if (NULL != m_subWidget) {
-		vec2 tmpSize = m_subWidget->GetSize();
-		vec2 tmpOrigin = m_subWidget->GetOrigin();
-		if(    (tmpOrigin.x() <= relativePos.x() && tmpOrigin.x() + tmpSize.x() >= relativePos.x())
-		    && (tmpOrigin.y() <= relativePos.y() && tmpOrigin.y() + tmpSize.y() >= relativePos.y()) )
-		{
-			return m_subWidget->GetWidgetAtPos(pos);
-		} else {
-			//EWOL_INFO("Event ouside the Pop-up");
-		}
+	ewol::Widget* val = widget::Container::GetWidgetAtPos(pos);
+	if (NULL != val) {
+		return val;
 	}
-	// otherwise the event go to this widget ...
 	return this;
 }
-
-
-void widget::PopUp::SetDisplayRatio(float ratio)
-{
-	m_displayRatio = ratio;
-	MarkToRedraw();
-}
-
-
-void widget::PopUp::OnObjectRemove(ewol::EObject * removeObject)
-{
-	// First step call parrent : 
-	widget::Drawable::OnObjectRemove(removeObject);
-	// second step find if in all the elements ...
-	if(m_subWidget == removeObject) {
-		EWOL_DEBUG("Remove pop-up sub Element ==> destroyed object");
-		m_subWidget = NULL;
-	}
-}
-

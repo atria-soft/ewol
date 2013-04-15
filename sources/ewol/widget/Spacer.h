@@ -23,8 +23,6 @@ namespace widget {
 			static void UnInit(void);
 		private:
 			ewol::Drawing m_draw; //!< Compositing drawing element
-			float m_localSize; //!< Local request size of the display
-			draw::Color m_color; //!< Background color
 		public:
 			/**
 			 * @brief Main constructer
@@ -34,11 +32,9 @@ namespace widget {
 			 * @brief Main destructer
 			 */
 			virtual ~Spacer(void);
-			/**
-			 * @brief Set the minimum size requested
-			 * @param[in] size Requested size of the minimum display (in X and Y)
-			 */
-			void SetSize(float size);
+		protected:
+			draw::Color m_color; //!< Background color
+		public:
 			/**
 			 * @brief Spziby the background color (basicly transparent)
 			 * @param[in] newColor the display background color
@@ -46,8 +42,7 @@ namespace widget {
 			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
 		public:
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::Spacer"; };
-			virtual void CalculateMinMaxSize(void);
+			virtual const char * const GetObjectType(void) { return "ewol::spacer"; };
 			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos) { return NULL; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);

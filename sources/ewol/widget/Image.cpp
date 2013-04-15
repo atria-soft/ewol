@@ -127,7 +127,7 @@ void widget::Image::OnRegenerateDisplay(void)
 		// set the somposition properties :
 		m_compositing.SetPos(origin);
 		m_compositing.Print(imageRealSize);
-		EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
+		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
 	}
 }
 

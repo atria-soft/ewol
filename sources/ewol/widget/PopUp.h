@@ -13,43 +13,28 @@
 #include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/widget/Container.h>
+#include <ewol/compositing/Drawing.h>
 
 namespace widget {
-	class PopUp : public widget::Drawable
+	class PopUp : public widget::Container
 	{
 		public:
 			PopUp(void);
 			virtual ~PopUp(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolPopUp"; };
-		public:
-			// Derived function
+		private:
+			draw::Color m_colorBackGroung;
+			draw::Color m_colorBorder;
+			draw::Color m_colorEmptyArea;
+			ewol::Drawing m_compositing;
+		protected: // Derived function
+			virtual void OnDraw(ewol::DrawProperty& displayProp);
+		public: // Derived function
+			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual void SetMinSize(const vec2& size);
-			virtual void SetExpand(const bvec2& newExpend);
-			void SetDisplayRatio(float ratio);
-		private:
-			draw::Color      m_colorBackGroung;
-			draw::Color      m_colorBorder;
-			draw::Color      m_colorEmptyArea;
-			ewol::Widget* m_subWidgetNext;
-			ewol::Widget* m_subWidget;
-			float    m_displayRatio;
-		public:
-			void           SubWidgetSet(ewol::Widget* newWidget);
-			void           SubWidgetRemove(void);
-		protected:
-			// Derived function
-			virtual void   OnDraw(ewol::DrawProperty& displayProp);
-		public:
-			// Derived function
-			virtual void   OnRegenerateDisplay(void);
-			// Derived function
-			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
-			// Derived function
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 	};
 	
 };

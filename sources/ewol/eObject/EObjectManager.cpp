@@ -20,6 +20,7 @@ static etk::Vector<ewol::EObject*>   m_eObjectList;             // all widget al
 static etk::Vector<ewol::EObject*>   m_eObjectAutoRemoveList;   // all widget allocated
 
 
+
 void ewol::EObjectManager::Init(void)
 {
 	EWOL_DEBUG("==> Init EObject-Manager");
@@ -54,6 +55,11 @@ void ewol::EObjectManager::Add(ewol::EObject* object)
 	} else {
 		EWOL_ERROR("try to add an inexistant EObject in manager");
 	}
+}
+
+int32_t ewol::EObjectManager::GetNumberObject(void)
+{
+	return m_eObjectList.Size() + m_eObjectAutoRemoveList.Size();
 }
 
 void informOneObjectIsRemoved(ewol::EObject* object)

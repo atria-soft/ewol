@@ -20,7 +20,7 @@ namespace widget
 	 */
 	class Container : public ewol::Widget
 	{
-		private:
+		protected:
 			ewol::Widget* m_subWidget;
 		public:
 			/**

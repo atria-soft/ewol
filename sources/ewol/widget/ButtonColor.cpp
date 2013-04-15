@@ -201,7 +201,7 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 				widget::ColorChooser * myColorChooser = new widget::ColorChooser();
 				myColorChooser->SetColor(m_textColorFg);
 				// set it in the pop-up-system : 
-				m_widgetContextMenu->SubWidgetSet(myColorChooser);
+				m_widgetContextMenu->SetSubWidget(myColorChooser);
 				myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
 				ewol::WindowsPopUpAdd(m_widgetContextMenu);
 				MarkToRedraw();

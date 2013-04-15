@@ -447,7 +447,7 @@ void ewol::Drawing::LineTo(vec3 dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
-	EWOL_DEBUG("DrawLine : " << m_position << " to " << dest);
+	//EWOL_DEBUG("DrawLine : " << m_position << " to " << dest);
 	if (m_position.x() == dest.x() && m_position.y() == dest.y() && m_position.z() == dest.z()) {
 		EWOL_WARNING("Try to draw an line width 0");
 		return;

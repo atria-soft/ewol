@@ -12,8 +12,8 @@
 #include <etk/types.h>
 #include <draw/Color.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Widget.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/widget/Container.h>
+#include <ewol/compositing/Drawing.h>
 
 namespace widget {
 	typedef enum {
@@ -23,38 +23,30 @@ namespace widget {
 		CONTEXT_MENU_MARK_LEFT,
 		CONTEXT_MENU_MARK_NONE
 	}markPosition_te;
-	class ContextMenu : public widget::Drawable
+	class ContextMenu : public widget::Container
 	{
 		public:
 			ContextMenu(void);
 			virtual ~ContextMenu(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolContextMenu"; };
-		public:
-			virtual void CalculateSize(const vec2& availlable); // this generate the current size ...
-			virtual void CalculateMinMaxSize(void); //update the min Size ... and the expend parameters for the sizer
-			virtual void SetMinSize(const vec2& size);
-			virtual void SetExpand(const bvec2& newExpend);
 		private:
+			ewol::Drawing m_compositing;
 			draw::Color m_colorBackGroung;
 			draw::Color m_colorBorder;
 			vec2 m_padding;
 			vec2 m_arrowPos;
 			float m_offset;
 			markPosition_te m_arrawBorder;
-			ewol::Widget* m_subWidget;
 		public:
-			void SubWidgetSet(ewol::Widget* newWidget);
-			void SubWidgetRemove(void);
-			void SetPositionMark(markPosition_te position, vec2  arrowPos);
-		protected:
-			// Derived function
+			void SetPositionMark(markPosition_te position, vec2 arrowPos);
+		protected: // Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-		public:
-			// Derived function
+		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
+			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateMinMaxSize(void);
+			virtual const char * const GetObjectType(void) { return "ewol::ContextMenu"; };
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 	};
 	
 };

@@ -134,7 +134,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					SendMultiCast(m_listElement[iii]->m_generateEvent, m_listElement[iii]->m_message);
 					if (NULL != m_widgetContextMenu) {
 						EWOL_DEBUG("Mark the menu to remove ...");
-						delete(m_widgetContextMenu);
+						m_widgetContextMenu->RemoveObject();
 						m_widgetContextMenu = NULL;
 					}
 					return;
@@ -177,7 +177,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					mySizer = new widget::Sizer(widget::Sizer::modeVert);
 						mySizer->LockExpand(vec2(true,true));
 						// set it in the pop-up-system : 
-						m_widgetContextMenu->SubWidgetSet(mySizer);
+						m_widgetContextMenu->SetSubWidget(mySizer);
 						
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {

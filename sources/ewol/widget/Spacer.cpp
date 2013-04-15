@@ -33,7 +33,7 @@ void widget::Spacer::UnInit(void)
 
 widget::Spacer::Spacer(void)
 {
-	m_localSize = 10;
+	m_userMinSize = vec2(10,10);
 	SetCanHaveFocus(false);
 	m_color = draw::color::black;
 	m_color.a = 0;
@@ -43,20 +43,6 @@ widget::Spacer::~Spacer(void)
 {
 	
 }
-
-
-void widget::Spacer::CalculateMinMaxSize(void)
-{
-	m_minSize.setValue(m_localSize, m_localSize);
-}
-
-
-void widget::Spacer::SetSize(float size)
-{
-	m_localSize = size;
-	MarkToRedraw();
-}
-
 
 void widget::Spacer::OnDraw(ewol::DrawProperty& displayProp)
 {
