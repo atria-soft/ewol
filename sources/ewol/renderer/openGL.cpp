@@ -236,21 +236,21 @@ void ewol::openGL::UpdateAllFlags(void)
 
 void ewol::openGL::ActiveTexture(uint32_t flagID)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		glActiveTexture(flagID);
 	}
 }
 
 void ewol::openGL::DesActiveTexture(uint32_t flagID)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		
 	}
 }
 
 void ewol::openGL::DrawArrays(uint32_t mode, int32_t first, int32_t count)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		UpdateAllFlags();
 		glDrawArrays(mode, first, count);
 	}
@@ -258,7 +258,7 @@ void ewol::openGL::DrawArrays(uint32_t mode, int32_t first, int32_t count)
 
 void ewol::openGL::DrawElements(uint32_t mode, const etk::Vector<uint32_t>& indices)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		UpdateAllFlags();
 		//EWOL_DEBUG("Request draw of " << indices.Size() << "elements");
 		glDrawElements(mode, indices.Size(), GL_UNSIGNED_INT, &indices[0]);
@@ -267,7 +267,7 @@ void ewol::openGL::DrawElements(uint32_t mode, const etk::Vector<uint32_t>& indi
 
 void ewol::openGL::DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		UpdateAllFlags();
 		glDrawElements(mode, indices.Size(), GL_UNSIGNED_SHORT, &indices[0]);
 	}
@@ -275,7 +275,7 @@ void ewol::openGL::DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& in
 
 void ewol::openGL::DrawElements8(uint32_t mode, const etk::Vector<uint8_t>& indices)
 {
-	if (l_programId>0) {
+	if (l_programId>=0) {
 		UpdateAllFlags();
 		glDrawElements(mode, indices.Size(), GL_UNSIGNED_BYTE, &indices[0]);
 	}
@@ -284,15 +284,27 @@ void ewol::openGL::DrawElements8(uint32_t mode, const etk::Vector<uint8_t>& indi
 
 void ewol::openGL::UseProgram(int32_t id)
 {
-	// note : program at -1 mean that no use of a program on open GL (here we did not use it ) when 0 ==> program error ...
-	if (-1==id) {
-		// not used ==> because it is unneded
-		return;
-	}
-	if (l_programId != id) {
-		l_programId = id;
-		glUseProgram(l_programId);
-	}
+	//EWOL_DEBUG("USE prog : " << id);
+	#if 1
+		// note : In normal openGL case, the system might call with the program ID and at the end with 0, 
+		//        here, we wrap this use to prevent over call of glUseProgram ==> then we set -1 when the 
+		//        user no more use this program, and just stop grnerating. (chen 0 ==> this is an errored program ...
+		if (-1==id) {
+			// not used ==> because it is unneded
+			return;
+		}
+		if (l_programId != id) {
+			l_programId = id;
+			glUseProgram(l_programId);
+		}
+	#else
+		if (-1==id) {
+			glUseProgram(0);
+		} else {
+			l_programId = id;
+			glUseProgram(id);
+		}
+	#endif
 }
 
 

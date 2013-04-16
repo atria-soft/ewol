@@ -10,6 +10,9 @@
 #include <ewol/renderer/resources/Mesh.h>
 #include <ewol/renderer/ResourceManager.h>
 
+#undef __class__
+#define __class__	"Mesh"
+
 typedef enum {
 	VERTEX_OLD,
 	VERTEX_CENTER_FACE,

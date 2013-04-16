@@ -11,6 +11,9 @@
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/WidgetManager.h>
 
+#undef __class__
+#define __class__	"ContainerN"
+
 
 widget::ContainerN::ContainerN(void) :
 	m_lockExpand(false,false),
@@ -33,11 +36,12 @@ bvec2 widget::ContainerN::CanExpand(void)
 			res.setX(true);
 		}
 	}
-	if (false==m_lockExpand.x()) {
-		if (true==m_subExpend.x()) {
-			res.setX(false);
+	if (false==m_lockExpand.y()) {
+		if (true==m_subExpend.y()) {
+			res.setY(true);
 		}
 	}
+	//EWOL_DEBUG("Expend check : user=" << m_userExpand << " lock=" << m_lockExpand << " sub=" << m_subExpend << " res=" << res);
 	return res;
 }
 

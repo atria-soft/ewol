@@ -9,6 +9,9 @@
 #include <ewol/Dimension.h>
 #include <ewol/debug.h>
 
+#undef __class__
+#define __class__	"Dimension"
+
 // ratio in milimeter :
 static vec2 ratio(9999999,888888);
 static vec2 invRatio(1,1);

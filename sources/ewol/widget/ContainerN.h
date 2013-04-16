@@ -41,7 +41,7 @@ namespace widget
 			 */
 			void LockExpand(const bvec2& lockExpand);
 			// herited function
-			bvec2 CanExpand(void);
+			virtual bvec2 CanExpand(void);
 		public:
 			/**
 			 * @brief Remove all sub element from the widget.

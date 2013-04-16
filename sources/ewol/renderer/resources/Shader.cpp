@@ -12,6 +12,8 @@
 #include <ewol/renderer/resources/Shader.h>
 
 
+#undef __class__
+#define __class__	"Shader"
 
 ewol::Shader::Shader(const etk::UString& filename): 
 	ewol::Resource(filename),

@@ -11,6 +11,9 @@
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/VirtualBufferObject.h>
 
+#undef __class__
+#define __class__	"VirtualBufferObject"
+
 ewol::VirtualBufferObject::VirtualBufferObject(const etk::UString& accesMode): 
 	ewol::Resource(),
 	m_exist(false)

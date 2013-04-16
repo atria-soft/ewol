@@ -16,6 +16,8 @@
 #include <ewol/renderer/resources/font/FontBase.h>
 #include <ewol/renderer/resources/TexturedFont.h>
 
+#undef __class__
+#define __class__	"TexturedFont"
 
 static int32_t nextP2(int32_t value)
 {

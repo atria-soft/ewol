@@ -10,6 +10,9 @@
 #include <ewol/debug.h>
 #include <ewol/renderer/resources/ConfigFile.h>
 
+#undef __class__
+#define __class__	"ConfigFile"
+
 
 void ewol::SimpleConfigElement::Parse(const etk::UString& value)
 {

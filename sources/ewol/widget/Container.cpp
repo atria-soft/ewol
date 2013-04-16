@@ -12,6 +12,10 @@
 #include <ewol/widget/WidgetManager.h>
 
 
+#undef __class__
+#define __class__	"Container"
+
+
 widget::Container::Container(ewol::Widget* subElement) :
 	m_subWidget(subElement)
 {

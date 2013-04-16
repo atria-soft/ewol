@@ -16,6 +16,8 @@
 
 #include <ewol/renderer/resources/Texture.h>
 
+#undef __class__
+#define __class__	"Texture"
 
 /**
  * @brief get the next power 2 if the input

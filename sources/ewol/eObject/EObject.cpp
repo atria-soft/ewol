@@ -153,7 +153,12 @@ void ewol::EObject::GenerateEventId(const char * generateEventId, const etk::USt
 			// if we find the event ...
 			if (m_externEvent[iii]->localEventId == generateEventId) {
 				if (NULL != m_externEvent[iii]->destEObject) {
-					m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, data);
+					if (m_externEvent[iii]->overloadData.Size()<=0){
+						m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, data);
+					} else {
+						// set the user requested data ...
+						m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+					}
 				}
 			}
 		}
@@ -177,7 +182,7 @@ void ewol::EObject::RegisterMultiCast(const char* const messageId)
 	MultiCastAdd(this, messageId);
 }
 
-void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated)
+void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated, const etk::UString& overloadData)
 {
 	if (NULL == destinationObject) {
 		EWOL_ERROR("Input ERROR NULL pointer EObject ...");
@@ -216,6 +221,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * destinationObject, const cha
 	}
 	tmpEvent->localEventId = eventId;
 	tmpEvent->destEObject = destinationObject;
+	tmpEvent->overloadData = overloadData;
 	if (NULL != eventIdgenerated) {
 		tmpEvent->destEventId = eventIdgenerated;
 	} else {

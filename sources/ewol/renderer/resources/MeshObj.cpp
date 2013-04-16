@@ -14,6 +14,8 @@
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/MeshObj.h>
 
+#undef __class__
+#define __class__	"MeshObj"
 
 ewol::MeshObj::MeshObj(etk::UString _fileName) :
 	ewol::Mesh(_fileName)

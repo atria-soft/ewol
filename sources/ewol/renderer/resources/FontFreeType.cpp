@@ -19,7 +19,7 @@
 
 
 #undef __class__
-#define __class__	"ewol::FontFreeType"
+#define __class__	"FontFreeType"
 
 
 // free Font hnadle of librairies ... entry for acces ...

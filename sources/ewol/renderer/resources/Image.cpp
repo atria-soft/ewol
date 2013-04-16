@@ -20,6 +20,8 @@
 #include <ewol/renderer/resources/image/ImageBMP.h>
 #include <ewol/renderer/resources/image/ImagePNG.h>
 
+#undef __class__
+#define __class__	"TextureFile"
 
 ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, ivec2 size) :
 	Texture(genName)

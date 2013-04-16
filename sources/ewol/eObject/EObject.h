@@ -29,6 +29,7 @@ namespace ewol {
 			const char* localEventId; //!< local event Id generation
 			ewol::EObject* destEObject; //!< destination widget that might be call
 			const char* destEventId; //!< Generated event ID on the distant widget
+			etk::UString overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 	};
 	
 	/**
@@ -107,8 +108,9 @@ namespace ewol {
 			 * @param[in] destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] eventId Event generate inside the object
 			 * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL);
+			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL, const etk::UString& overloadData="");
 			
 			/**
 			 * @brief Inform object that an other object is removed ...

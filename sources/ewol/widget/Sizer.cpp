@@ -140,7 +140,7 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 void widget::Sizer::CalculateMinMaxSize(void)
 {
 	//EWOL_DEBUG("[" << GetId() << "] Update minimum Size");
-	m_userExpand.setValue(false, false);
+	m_subExpend.setValue(false, false);
 	m_minSize = m_userMinSize.GetPixel();
 	vec2 tmpBorderSize = m_borderSize.GetPixel();
 	
@@ -149,10 +149,10 @@ void widget::Sizer::CalculateMinMaxSize(void)
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinMaxSize();
 			if (true == m_subWidget[iii]->CanExpand().x()) {
-				m_userExpand.setX(true);
+				m_subExpend.setX(true);
 			}
 			if (true == m_subWidget[iii]->CanExpand().y()) {
-				m_userExpand.setY(true);
+				m_subExpend.setY(true);
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			//EWOL_DEBUG("[" << GetId() << "] NewMinSize=" << tmpSize);

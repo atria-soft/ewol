@@ -16,6 +16,9 @@
 //#define LOCAL_DEBUG  EWOL_VERBOSE
 #define LOCAL_DEBUG  EWOL_DEBUG
 
+#undef __class__
+#define __class__	"Program"
+
 ewol::Program::Program(const etk::UString& filename) :
 	ewol::Resource(filename),
 	m_exist(false),
@@ -177,6 +180,7 @@ void ewol::Program::UpdateContext(void)
 			checkGlError("glCreateProgram", __LINE__);
 			return;
 		}
+		EWOL_DEBUG("Create program with oglID=" << m_program);
 		// first attach vertex shader, and after fragment shader
 		for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
 			if (NULL != m_shaderList[iii]) {

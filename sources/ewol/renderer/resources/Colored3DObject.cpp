@@ -10,6 +10,9 @@
 #include <ewol/renderer/resources/Colored3DObject.h>
 #include <ewol/renderer/ResourceManager.h>
 
+#undef __class__
+#define __class__	"Colored3DObject"
+
 
 ewol::Colored3DObject::Colored3DObject(etk::UString genName) :
 	ewol::Resource(genName),
