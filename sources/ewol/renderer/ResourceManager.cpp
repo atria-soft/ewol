@@ -302,6 +302,10 @@ bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& obje
 	if (false == filename.EndWith(".svg") ) {
 		size = ivec2(-1,-1);
 	}
+	#ifdef __TARGET_OS__MacOs
+		EWOL_WARNING("TODO : Remove this strange hack");
+		size = ivec2(64,64);
+	#endif
 	if (size.x()>0 && size.y()>0) {
 		ivec2 size2(nextP2(size.x()), nextP2(size.y()));
 		TmpFilename += ":";
