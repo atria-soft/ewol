@@ -1,11 +1,12 @@
 #!/usr/bin/python
-import make
+import module
+import buildTools
 
 # prevent erro integration
 #del myModule
 
 # module name is 'edn' and type binary.
-myModule = make.module(__file__, 'ewol', 'LIBRARY')
+myModule = module.module(__file__, 'ewol', 'LIBRARY')
 # add the file to compile:
 myModule.AddSrcFile([
 	'ewol/ewol.cpp',
@@ -137,7 +138,7 @@ myModule.AddModuleDepend(['etk', 'freetype', 'tinyxml', 'libpng', 'parsersvg'])
 #myModule.AddModuleDepend('portaudio')
 #endif
 
-myModule.AddExportPath(make.GetCurrentPath(__file__))
+myModule.AddExportPath(buildTools.GetCurrentPath(__file__))
 myModule.AddExportflag_LD('-lGL')
 
 #`pkg-config --cflags directfb` `pkg-config --libs directfb`
@@ -172,4 +173,4 @@ myModule.AddSrcFile('ewol/renderer/os/gui.X11.cpp')
 
 
 # add the currrent module at the 
-make.AddModule(myModule)
+module.AddModule(myModule)
