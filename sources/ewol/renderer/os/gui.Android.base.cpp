@@ -15,7 +15,7 @@
 #include <ewol/renderer/os/eSystem.h>
 #include <ewol/renderer/audio/audio.h>
 #include <ewol/renderer/os/gui.h>
-#include <ewol/DisplayConv.h>
+#include <ewol/Dimension.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
@@ -417,7 +417,7 @@ extern "C"
 	void Java_org_ewol_interfaceJNI_DisplayPropertyMetrics( JNIEnv* env, jobject  thiz, jfloat ratioX, jfloat ratioY)
 	{
 		// set the internal system ratio properties ...
-		ewol::SetPixelPerInch(vec2(ratioX,ratioY));
+		ewol::dimension::SetPixelRatio(vec2(ratioX,ratioY), ewol::Dimension::Inch);
 	}
 	
 	enum {
