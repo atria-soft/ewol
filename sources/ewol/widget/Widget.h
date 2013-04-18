@@ -144,13 +144,13 @@ namespace ewol {
 			 */
 			virtual vec2 GetOrigin(void);
 		protected:
-			ewol::Dimension::Dimension m_userMinSize; //!< user define the minimum size of the widget
+			ewol::Dimension m_userMinSize; //!< user define the minimum size of the widget
 		public:
 			/**
 			 * @brief User set the minimum size he want to set the display
 			 * @param[in] size Set minimum size (none : 0)
 			 */
-			void SetMinSize(const ewol::Dimension::Dimension& size);
+			void SetMinSize(const ewol::Dimension& size);
 			/**
 			 * @brief User set No minimum size.
 			 */
@@ -159,7 +159,7 @@ namespace ewol {
 			 * @brief Get the current calculated min size
 			 * @return the size requested
 			 */
-			const ewol::Dimension::Dimension& GetMinSize(void) { return m_userMinSize; };
+			const ewol::Dimension& GetMinSize(void) { return m_userMinSize; };
 			/**
 			 * @brief Check if the current min size is compatible with the user minimum size
 			 *        If it is not the user minimum size will overWrite the minimum size set.
@@ -167,13 +167,13 @@ namespace ewol {
 			 */
 			virtual void CheckMinSize(void);
 		protected:
-			ewol::Dimension::Dimension m_userMaxSize; //!< user define the maximum size of the widget
+			ewol::Dimension m_userMaxSize; //!< user define the maximum size of the widget
 		public:
 			/**
 			 * @brief User set the maximum size he want to set the display
 			 * @param[in] size The new maximum size requested (vec2(0,0) to unset)
 			 */
-			void SetMaxSize(const ewol::Dimension::Dimension& size);
+			void SetMaxSize(const ewol::Dimension& size);
 			/**
 			 * @brief User set No maximum size.
 			 */
@@ -182,7 +182,7 @@ namespace ewol {
 			 * @brief Get the current maximum size
 			 * @return the size requested
 			 */
-			const ewol::Dimension::Dimension& GetMaxSize(void) { return m_userMaxSize; };
+			const ewol::Dimension& GetMaxSize(void) { return m_userMaxSize; };
 			/**
 			 * @brief Check if the current max size is compatible with the user maximum size
 			 *        If it is not the user maximum size will overWrite the maximum size set.

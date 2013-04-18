@@ -156,7 +156,7 @@ myModule.AddExportflag_LD('-lX11')
 
 myModule.CompileFlags_CC([
 	'-Wno-write-strings',
-	'-DEWOL_VERSION_TAG_NAME="\"TAG-build\""',
+	'-DEWOL_VERSION_TAG_NAME="\\"TAG-build\\""',
 	'-Wall'])
 
 #ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
