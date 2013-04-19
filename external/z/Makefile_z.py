@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import module
 
-myModule = module.module(__file__, 'zlib', 'LIBRARY')
+myModule = module.module(__file__, 'zlib', 'PREBUILD')
 
 myModule.AddExportflag_LD('-lz')
 

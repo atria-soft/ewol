@@ -174,3 +174,12 @@ myModule.AddSrcFile('ewol/renderer/os/gui.X11.cpp')
 
 # add the currrent module at the 
 module.AddModule(myModule)
+
+# a better way to do this : 
+#module.AddModule("moduleName")
+# and a function to create the module properties :
+#def createModule(target):
+#	# and inside target we have some other informations :
+#	if target.debugMode==0:
+#		...
+#		The idea is here ....
