@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import lutinModule
 import lutinTools
+import os
 
 def Create(target):
 	# module name is 'edn' and type binary.
@@ -137,38 +138,65 @@ def Create(target):
 	#endif
 	
 	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-	myModule.AddExportflag_LD('-lGL')
-	
-	#`pkg-config --cflags directfb` `pkg-config --libs directfb`
-	
-	#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-	myModule.AddExportflag_LD('-lX11')
-	#endif
-	#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-	#myModule.AddExportflag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
-	#endif
-	
-	#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
-	# needed package on linux : libgl1-mesa-dev libglew1.5-dev
-	
 	
 	myModule.CompileFlags_CC([
 		'-Wno-write-strings',
 		'-DEWOL_VERSION_TAG_NAME="\\"TAG-build\\""',
 		'-Wall'])
 	
-	#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
-	#myModule.AddSrcFile('ewol/renderer/audio/interfacePortAudio.cpp')
-	#endif
+	if target.name=="Linux":
+		myModule.AddExportflag_LD('-lGL')
+		
+		#`pkg-config --cflags directfb` `pkg-config --libs directfb`
+		
+		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
+		myModule.AddExportflag_LD('-lX11')
+		#endif
+		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
+		#myModule.AddExportflag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
+		#endif
+		
+		#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
+		# needed package on linux : libgl1-mesa-dev libglew1.5-dev
+		
+		#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
+		#myModule.AddSrcFile('ewol/renderer/audio/interfacePortAudio.cpp')
+		#endif
+		
+		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
+		myModule.AddSrcFile('ewol/renderer/os/gui.X11.cpp')
+		#endif
+		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
+		#myModule.CompileFlags_CC('-I/usr/local/include/directfb')
+		#myModule.AddSrcFile('ewol/renderer/os/gui.directFB.cpp')
+		#endif
 	
-	#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-	myModule.AddSrcFile('ewol/renderer/os/gui.X11.cpp')
-	#endif
-	#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-	#myModule.CompileFlags_CC('-I/usr/local/include/directfb')
-	#myModule.AddSrcFile('ewol/renderer/os/gui.directFB.cpp')
-	#endif
+	elif target.name=="Android":
+		myModule.AddExportflag_LD("-lGLESv2")
+		
+		myModule.AddExportflag_LD("-ldl")
+		myModule.AddExportflag_LD("-llog")
+		myModule.AddExportflag_LD("-landroid")
+		
+		tmp_src=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.base.cpp"
+		tmp_dst=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.tmp.cpp"
+		
+		# TODO : A really work to do here ...
+		os.system("cp -v " + tmp_src + " " + tmp_dst)
+		os.system("sed -i \"s|__PROJECT_ORG_TYPE__|org|\" " + tmp_dst)
+		os.system("sed -i \"s|__PROJECT_VENDOR__|edouarddupin|\" " + tmp_dst)
+		os.system("sed -i \"s|__PROJECT_NAME__|edn|\" "+ tmp_dst)
+		os.system("sed -i \"s|__PROJECT_PACKAGE__|edn|\" " + tmp_dst)
+		
+		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	
+	else:
+		debug.error("unknow mode...")
 	
 	# add the currrent module at the 
 	return myModule
+
+
+def GetDesc():
+	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
+
