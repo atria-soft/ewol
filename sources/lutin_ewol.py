@@ -4,6 +4,9 @@ import lutinTools
 import os
 
 def Create(target):
+	# set the ewol folder for Android basic sources ...
+	target.SetEwolFolder(lutinTools.GetCurrentPath(__file__) + "/../")
+	
 	# module name is 'edn' and type binary.
 	myModule = lutinModule.module(__file__, 'ewol', 'LIBRARY')
 	# add the file to compile:
@@ -182,7 +185,7 @@ def Create(target):
 		tmp_dst=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.tmp.cpp"
 		
 		# TODO : A really work to do here ...
-		os.system("cp -v " + tmp_src + " " + tmp_dst)
+		lutinTools.CopyFile(tmp_src,tmp_dst)
 		os.system("sed -i \"s|__PROJECT_ORG_TYPE__|org|\" " + tmp_dst)
 		os.system("sed -i \"s|__PROJECT_VENDOR__|edouarddupin|\" " + tmp_dst)
 		os.system("sed -i \"s|__PROJECT_NAME__|edn|\" "+ tmp_dst)
@@ -190,6 +193,10 @@ def Create(target):
 		
 		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	
+	elif target.name=="Windows":
+		myModule.AddModuleDepend("glew")
+		myModule.AddSrcFile("ewol/renderer/os/gui.Windows.cpp")
+		myModule.CompileFlags_CC('-D__EWOL_INTEGRATED_FONT__')
 	else:
 		debug.error("unknow mode...")
 	
