@@ -198,6 +198,17 @@ def Create(target):
 	elif target.name=="Windows":
 		myModule.AddModuleDepend("glew")
 		myModule.AddSrcFile("ewol/renderer/os/gui.Windows.cpp")
+	elif target.name=="MacOs":
+		myModule.AddExportflag_LD([
+			"-framework Cocoa",
+			"-framework OpenGL",
+			"-framework QuartzCore",
+			"-framework AppKit"])
+		myModule.AddSrcFile([
+			"ewol/renderer/os/gui.MacOs.cpp",
+			"ewol/renderer/os/gui.MacOs.Interface.mm",
+			"ewol/renderer/os/gui.MacOs.AppDelegate.mm",
+			"ewol/renderer/os/gui.MacOs.OpenglView.mm"])
 	else:
 		debug.error("unknow mode...")
 	

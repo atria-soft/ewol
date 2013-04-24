@@ -25,6 +25,9 @@ void ewol::SetFontSourcesFolder(bool inOsSystem)
 
 int32_t ewol::Run(int32_t argc, const char* argv[])
 {
+	if (NULL!=argv) {
+		etk::SetArgZero(argv[0]);
+	}
 	// init display convertions:
 	ewol::dimension::Init();
 	
