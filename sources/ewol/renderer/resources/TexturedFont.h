@@ -17,6 +17,7 @@ namespace ewol
 {
 	namespace font
 	{
+		void SetFontPropety(bool inOSSystem);
 		typedef enum {
 			Regular=0,
 			Italic,

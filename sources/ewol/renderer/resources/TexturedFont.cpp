@@ -45,6 +45,16 @@ static int32_t simpleSQRT(int32_t value)
 	return val;
 }
 
+static bool& GetFontInSystem(void)
+{
+	static bool fontInOs = true;
+	return fontInOs;
+}
+
+void ewol::font::SetFontPropety(bool inOSSystem)
+{
+	GetFontInSystem() = inOSSystem;
+}
 
 ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
 	ewol::Texture(fontName)
@@ -89,17 +99,18 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_name = fontName.Extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
 	
+	etk::UString fontBaseFolder("DATA:fonts");
+	if (true==GetFontInSystem()) {
+		#if defined(__TARGET_OS__Android)
+			fontBaseFolder = "/system/font";
+		#elif defined(__TARGET_OS__Linux)
+			fontBaseFolder = "/usr/share/fonts/truetype";
+		#endif
+	}
+	etk::FSNode myFolder(fontBaseFolder);
+	EWOL_INFO("try to find font named : '" << m_name << "' in : '" << myFolder <<"'");
 	// find the real Font name :
 	etk::Vector<etk::UString> output;
-	#ifdef __EWOL_INTEGRATED_FONT__
-		etk::FSNode myFolder("DATA:fonts");
-	#else
-		#if defined(__TARGET_OS__Android)
-			etk::FSNode myFolder("/system/font"); 
-		#elif defined(__TARGET_OS__Linux)
-			etk::FSNode myFolder("/usr/share/fonts/truetype");
-		#endif
-	#endif
 	myFolder.FolderGetRecursiveFiles(output);
 	for (int32_t iii=0; iii<output.Size(); iii++) {
 		//EWOL_DEBUG(" file : " << output[iii]);

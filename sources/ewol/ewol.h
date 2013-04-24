@@ -105,6 +105,11 @@ namespace ewol
 	 * @note Does not work on Andoid
 	 */
 	void SetIcon(etk::UString icon);
+	/**
+	 * @brief Select the position of the font folder (in the OS path or in the DATA: path)
+	 * @param[in] inOsSystem Set at true if you want to select the os system folder.
+	 */
+	void SetFontSourcesFolder(bool inOsSystem);
 };
 
 #endif

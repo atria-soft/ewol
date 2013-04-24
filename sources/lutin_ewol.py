@@ -2,6 +2,7 @@
 import lutinModule
 import lutinTools
 import os
+import datetime
 
 def Create(target):
 	# set the ewol folder for Android basic sources ...
@@ -141,10 +142,11 @@ def Create(target):
 	#endif
 	
 	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-	
+	now = datetime.datetime.now()
 	myModule.CompileFlags_CC([
 		'-Wno-write-strings',
 		'-DEWOL_VERSION_TAG_NAME="\\"TAG-build\\""',
+		"-DBUILD_TIME=\"\\\""+str(now.day)+"/"+str(now.month)+"/"+str(now.year)+"\\\"\"",
 		'-Wall'])
 	
 	if target.name=="Linux":
@@ -196,7 +198,6 @@ def Create(target):
 	elif target.name=="Windows":
 		myModule.AddModuleDepend("glew")
 		myModule.AddSrcFile("ewol/renderer/os/gui.Windows.cpp")
-		myModule.CompileFlags_CC('-D__EWOL_INTEGRATED_FONT__')
 	else:
 		debug.error("unknow mode...")
 	

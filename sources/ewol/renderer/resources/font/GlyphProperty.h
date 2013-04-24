@@ -52,15 +52,15 @@ namespace ewol
 	class GlyphProperty
 	{
 		public:
-			uniChar_t              m_UVal;            //!< Unicode value
-			int32_t                m_glyphIndex;      //!< Glyph index in the system
-			ivec2 m_sizeTexture;     //!< size of the element to display
-			ivec2 m_bearing;         //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
-			ivec2 m_advance;         //!< space use in the display for this specific char
-			vec2   m_texturePosStart; //!< Texture normalised position (START)
-			vec2   m_texturePosStop;  //!< Texture normalised position (STOP)
+			uniChar_t m_UVal; //!< Unicode value
+			int32_t m_glyphIndex; //!< Glyph index in the system
+			ivec2 m_sizeTexture; //!< size of the element to display
+			ivec2 m_bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
+			ivec2 m_advance; //!< space use in the display for this specific char
+			vec2 m_texturePosStart; //!< Texture normalised position (START)
+			vec2 m_texturePosStop; //!< Texture normalised position (STOP)
 		private:
-			etk::Vector<ewol::Kerning>   m_kerning;     //!< kerning values of link of all elements
+			etk::Vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
 			float KerningGet(const uniChar_t charcode)
 			{

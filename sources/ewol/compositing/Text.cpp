@@ -769,12 +769,16 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 
 void ewol::Text::Print(const uniChar_t charcode)
 {
-	if (m_font == NULL) {
+	if (NULL==m_font) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
 	}
 	// get a pointer on the glyph property : 
 	ewol::GlyphProperty * myGlyph = m_font->GetGlyphPointer(charcode, m_mode);
+	if (NULL==myGlyph) {
+		EWOL_ERROR(" font does not really existed ...");
+		return;
+	}
 	int32_t fontSize = m_font->GetFontSize();
 	int32_t fontHeigh = m_font->GetHeight(m_mode);
 	

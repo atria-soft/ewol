@@ -10,6 +10,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/renderer/os/eSystem.h>
 
+#include <ewol/renderer/resources/TexturedFont.h>
 #include <ewol/renderer/os/gui.h>
 #include <ewol/commandLine.h>
 #include <etk/os/FSNode.h>
@@ -17,6 +18,10 @@
 #undef __class__
 #define __class__	"ewol"
 
+void ewol::SetFontSourcesFolder(bool inOsSystem)
+{
+	ewol::font::SetFontPropety(inOsSystem);
+}
 
 int32_t ewol::Run(int32_t argc, const char* argv[])
 {
