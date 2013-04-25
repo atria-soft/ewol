@@ -91,9 +91,9 @@ void widget::Gird::CalculateSize(const vec2& availlable)
 			
 			EWOL_DEBUG("     [" << iii << "] set subwidget origin=" <<tmpOrigin << " size=" << ivec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow) );
 			// Set the origin :
-			m_subWidget[iii].widget->SetOrigin(tmpOrigin);
+			m_subWidget[iii].widget->SetOrigin(vec2ClipInt32(tmpOrigin));
 			// all time set oll the space .
-			m_subWidget[iii].widget->CalculateSize(vec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow));
+			m_subWidget[iii].widget->CalculateSize(vec2ClipInt32(vec2(abs(m_sizeCol[m_subWidget[iii].col]), m_uniformSizeRow)));
 		}
 	}
 	m_size += m_borderSize*2;

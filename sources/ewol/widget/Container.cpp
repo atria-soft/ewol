@@ -101,12 +101,7 @@ void widget::Container::CalculateMinMaxSize(void)
 	if (NULL!=m_subWidget) {
 		m_subWidget->CalculateMinMaxSize();
 		vec2 min = m_subWidget->GetCalculateMinSize();
-		if (m_minSize.x()<min.x()) {
-			m_minSize.setX(min.x());
-		}
-		if (m_minSize.y()<min.y()) {
-			m_minSize.setY(min.y());
-		}
+		m_minSize.setMax(min);
 	}
 }
 

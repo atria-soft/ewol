@@ -119,6 +119,7 @@ widget::FileChooser::FileChooser(void)
 		EWOL_ERROR("Can not allocate widget ==> display might be in error");
 	} else {
 		mySizerVert->LockExpand(bvec2(true,true));
+		mySizerVert->SetExpand(bvec2(true,true));
 		// set it in the pop-up-system : 
 		SetSubWidget(mySizerVert);
 		

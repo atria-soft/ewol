@@ -52,31 +52,11 @@ void widget::PopUp::CalculateSize(const vec2& availlable)
 		
 		// set config to the Sub-widget
 		vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
+		subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
 		
 		m_subWidget->SetOrigin(subWidgetOrigin);
 		m_subWidget->CalculateSize(subWidgetSize);
 	}
-	MarkToRedraw();
-}
-
-
-void widget::PopUp::CalculateMinMaxSize(void)
-{
-	// remove expand of sub widget ==> not needed ...
-	m_userExpand.setValue(false,false);
-	
-	if (m_userMinSize.GetType() != ewol::Dimension::Pourcent) {
-		EWOL_ERROR(" ==> Please set pourcent size of the popo_up view");
-		m_minSize.setValue(50, 50);
-	} else {
-		m_minSize = m_userMinSize.GetPixel();
-	}
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinMaxSize();
-		vec2 tmpSize = m_subWidget->GetCalculateMinSize();
-		m_minSize.setMax(tmpSize);
-	}
-	EWOL_DEBUG("CalculateMinSize=" << m_minSize);
 	MarkToRedraw();
 }
 

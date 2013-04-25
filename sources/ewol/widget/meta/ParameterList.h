@@ -46,7 +46,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "EwolParameterList"; };
 			virtual ~ParameterList(void);
 			// Derived function
-			virtual void CalculateMinSize(void);
+			virtual void CalculateMinMaxSize(void);
 			void SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:

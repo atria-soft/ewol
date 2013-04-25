@@ -12,6 +12,7 @@
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Image.h>
 #include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Composer.h>
 #include <etk/Vector.h>
 
 
@@ -49,6 +50,7 @@ widget::Parameter::Parameter(void) :
 	} else {
 		EWOL_INFO("add widget");
 		mySizerVert->LockExpand(bvec2(true,true));
+		mySizerVert->SetExpand(bvec2(true,true));
 		// set it in the pop-up-system :
 		SetSubWidget(mySizerVert);
 		
@@ -66,17 +68,21 @@ widget::Parameter::Parameter(void) :
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 			
-			// TODO : set if back :
-			/*
-			m_widgetCancel = new widget::Button("Close");
+			m_widgetCancel = new widget::Button();
 			if (NULL == m_widgetCancel) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCancel->SetImage("icon/Remove.svg");
+				m_widgetCancel->SetSubWidget(
+				    new widget::Composer(widget::Composer::String,
+				        "<composer>\n"
+				        "	<sizer mode=\"hori\">\n"
+				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<label>Close</label>\n"
+				        "	</sizer>\n"
+				        "</composer\n"));
 				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventParameterClose);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
-			*/
 		}
 		
 		mySizerHori = new widget::Sizer(widget::Sizer::modeHori);

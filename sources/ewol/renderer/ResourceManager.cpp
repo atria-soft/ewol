@@ -10,6 +10,7 @@
 #include <ewol/debug.h>
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/FontFreeType.h>
+#include <ewol/ewol.h>
 
 
 // Specific for the resource : 
@@ -80,6 +81,7 @@ void ewol::resource::ReLoadResources(void)
 			}
 		}
 	}
+	ewol::RequestUpdateSize();
 	EWOL_INFO("-------------  Resources  -------------");
 }
 

@@ -111,22 +111,22 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("[" << GetId() << "] Set ORIGIN : " << tmpOrigin);
-			m_subWidget[iii]->SetOrigin(tmpOrigin);
+			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin));
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {
 				if (true == m_subWidget[iii]->CanExpand().y()) {
-					m_subWidget[iii]->CalculateSize(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne));
+					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(vec2(m_size.x(), tmpSize.y()));
+					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
 				}
 			} else {
 				if (true == m_subWidget[iii]->CanExpand().x()) {
-					m_subWidget[iii]->CalculateSize(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y()));
+					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(vec2(tmpSize.x(), m_size.y()));
+					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
 				}
 			}

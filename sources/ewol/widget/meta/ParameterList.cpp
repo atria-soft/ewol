@@ -51,7 +51,7 @@ widget::ParameterList::~ParameterList(void)
 }
 
 
-void widget::ParameterList::CalculateMinSize(void)
+void widget::ParameterList::CalculateMinMaxSize(void)
 {
 	/*int32_t fontId = GetDefaultFontId();
 	int32_t minWidth = ewol::GetWidth(fontId, m_label);

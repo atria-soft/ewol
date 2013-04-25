@@ -32,7 +32,7 @@ namespace widget {
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinMaxSize(void);
+			//virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
 	};
