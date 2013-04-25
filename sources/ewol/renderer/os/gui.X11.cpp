@@ -670,7 +670,6 @@ void X11_Run(void)
 							if (NULL != atomNameTarget) { XFree(atomNameTarget); }
 						}
 						#endif
-						const char * magatTextToSend = NULL;
 						
 						etk::UString tmpData = "";
 						if (req->selection == XAtomeSelection) {
@@ -678,7 +677,8 @@ void X11_Run(void)
 						} else if (req->selection == XAtomeClipBoard) {
 							tmpData = ewol::clipBoard::Get(ewol::clipBoard::clipboardStd);
 						}
-						magatTextToSend = tmpData.c_str();
+						etk::Char tmpValueStoredTimeToSend = tmpData.c_str();
+						const char * magatTextToSend = tmpValueStoredTimeToSend;
 						Atom listOfAtom[4];
 						if(strlen(magatTextToSend) == 0 ) {
 							respond.xselection.property= None;
