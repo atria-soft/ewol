@@ -11,7 +11,9 @@ def Create(target):
 		myModule.AddExportflag_LD([
 			lutinTools.GetCurrentPath(__file__) + "/glew/lib/glew32s.lib",
 			"-lopengl32",
-			"-lgdi32"])
+			"-lgdi32",
+			"-static-libgcc",
+			"-static-libstdc++"])
 		
 		# add the currrent module at the 
 		return myModule
