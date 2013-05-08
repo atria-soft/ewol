@@ -31,17 +31,17 @@ namespace widget {
 			void SetMax(int32_t val);
 			void SetColor(draw::Color newColor) { m_textColorFg = newColor; };
 		private:
-			int32_t            m_value;
-			int32_t            m_min;
-			int32_t            m_max;
-			draw::Color        m_textColorFg;  //!< Text color
-			draw::Color        m_textColorBg;  //!< Background color
+			int32_t m_value;
+			int32_t m_min;
+			int32_t m_max;
+			draw::Color m_textColorFg; //!< Text color
+			draw::Color m_textColorBg; //!< Background color
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Slider"; } ;
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 	};
 	
 };

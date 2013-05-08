@@ -96,6 +96,7 @@ def Create(target):
 		'ewol/widget/Mesh.cpp',
 		'ewol/widget/PopUp.cpp',
 		'ewol/widget/ProgressBar.cpp',
+		'ewol/widget/Scroll.cpp',
 		'ewol/widget/Sizer.cpp',
 		'ewol/widget/Slider.cpp',
 		'ewol/widget/WSlider.cpp',

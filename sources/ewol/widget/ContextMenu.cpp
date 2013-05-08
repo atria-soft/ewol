@@ -192,17 +192,16 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 		m_subWidget->OnRegenerateDisplay();
 	}
 }
-
-bool widget::ContextMenu::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::ContextMenu::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_INFO("Event ouside the context menu");
-	if (IdInput > 0) {
-		if(    typeEvent == ewol::keyEvent::statusDown
-		    || typeEvent == ewol::keyEvent::statusMove
-		    || typeEvent == ewol::keyEvent::statusSingle
-		    || typeEvent == ewol::keyEvent::statusUp
-		    || typeEvent == ewol::keyEvent::statusEnter
-		    || typeEvent == ewol::keyEvent::statusLeave ) {
+	if (_event.GetId() > 0) {
+		if(    _event.GetStatus() == ewol::keyEvent::statusDown
+		    || _event.GetStatus() == ewol::keyEvent::statusMove
+		    || _event.GetStatus() == ewol::keyEvent::statusSingle
+		    || _event.GetStatus() == ewol::keyEvent::statusUp
+		    || _event.GetStatus() == ewol::keyEvent::statusEnter
+		    || _event.GetStatus() == ewol::keyEvent::statusLeave ) {
 			// Auto-remove ...
 			AutoDestroy();
 			return true;

@@ -34,59 +34,59 @@ void widget::Image::UnInit(void)
 }
 
 
-widget::Image::Image(const etk::UString& file, const ewol::Dimension& border) :
+widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) :
 	m_imageSize(vec2(0,0)),
 	m_keepRatio(true)
 {
 	AddEventId(ewolEventImagePressed);
-	Set(file, border);
+	Set(_file, _border);
 }
 
 
-void widget::Image::SetFile(const etk::UString& file)
+void widget::Image::SetFile(const etk::UString& _file)
 {
 	// copy data :
-	m_fileName = file;
+	m_fileName = _file;
 	// Force redraw all :
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 	m_compositing.SetSource(m_fileName, vec2(64,64));
 }
 
-void widget::Image::SetBorder(const ewol::Dimension& border)
+void widget::Image::SetBorder(const ewol::Dimension& _border)
 {
 	// copy data :
-	m_border = border;
+	m_border = _border;
 	// Force redraw all :
 	MarkToRedraw();
 	// TODO : Change the size with no size requested ...
 	ewol::RequestUpdateSize();
 }
 
-void widget::Image::SetKeepRatio(bool keep)
+void widget::Image::SetKeepRatio(bool _keep)
 {
-	if (m_keepRatio != keep) {
+	if (m_keepRatio != _keep) {
 		// copy data :
-		m_keepRatio = keep;
+		m_keepRatio = _keep;
 		// Force redraw all :
 		MarkToRedraw();
 		ewol::RequestUpdateSize();
 	}
 }
 
-void widget::Image::SetImageSize(const ewol::Dimension& size)
+void widget::Image::SetImageSize(const ewol::Dimension& _size)
 {
-	m_imageSize = size;
+	m_imageSize = _size;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 	m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
 }
 
-void widget::Image::Set(const etk::UString& file, const ewol::Dimension& border)
+void widget::Image::Set(const etk::UString& _file, const ewol::Dimension& _border)
 {
 	// copy data :
-	m_border = border;
-	m_fileName = file;
+	m_border = _border;
+	m_fileName = _file;
 	// Force redraw all :
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
@@ -94,7 +94,7 @@ void widget::Image::Set(const etk::UString& file, const ewol::Dimension& border)
 }
 
 
-void widget::Image::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Image::OnDraw(ewol::DrawProperty& _displayProp)
 {
 	m_compositing.Draw();
 }
@@ -153,11 +153,11 @@ void widget::Image::CalculateMinMaxSize(void)
 }
 
 
-bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Image::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == IdInput) {
-		if(    ewol::keyEvent::statusSingle == typeEvent) {
+	if (1 == _event.GetId()) {
+		if(    ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			GenerateEventId(ewolEventImagePressed);
 			return true;
 		}
@@ -165,15 +165,15 @@ bool widget::Image::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 	return false;
 }
 
-bool widget::Image::LoadXML(TiXmlNode* node)
+bool widget::Image::LoadXML(TiXmlNode* _node)
 {
-	if (NULL==node) {
+	if (NULL==_node) {
 		return false;
 	}
-	ewol::Widget::LoadXML(node);
+	ewol::Widget::LoadXML(_node);
 	// get internal data : 
 	
-	const char *tmpAttributeValue = node->ToElement()->Attribute("ratio");
+	const char *tmpAttributeValue = _node->ToElement()->Attribute("ratio");
 	if (NULL != tmpAttributeValue) {
 		if (strcmp(tmpAttributeValue,"true")==0) {
 			m_keepRatio = true;
@@ -183,21 +183,21 @@ bool widget::Image::LoadXML(TiXmlNode* node)
 			m_keepRatio = false;
 		}
 	}
-	tmpAttributeValue = node->ToElement()->Attribute("size");
+	tmpAttributeValue = _node->ToElement()->Attribute("size");
 	if (NULL != tmpAttributeValue) {
 		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
 		m_imageSize = tmpAttributeValue;
 		//EWOL_CRITICAL("              ==> " << m_imageSize);
 	}
-	tmpAttributeValue = node->ToElement()->Attribute("border");
+	tmpAttributeValue = _node->ToElement()->Attribute("border");
 	if (NULL != tmpAttributeValue) {
 		m_border = tmpAttributeValue;
 	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->GetText());
-	if (node->ToElement()->GetText() != NULL) {
-		SetFile(node->ToElement()->GetText());
+	if (_node->ToElement()->GetText() != NULL) {
+		SetFile(_node->ToElement()->GetText());
 	} else {
-		tmpAttributeValue = node->ToElement()->Attribute("src");
+		tmpAttributeValue = _node->ToElement()->Attribute("src");
 		if (NULL != tmpAttributeValue) {
 			SetFile(tmpAttributeValue);
 		}

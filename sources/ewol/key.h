@@ -58,6 +58,7 @@ namespace ewol
 		 */
 		typedef enum {
 			keyboardUnknow = 0,    //!< Unknown keyboard key
+			keyboardChar,          //!< Char input is arrived ...
 			keyboardLeft,          //!< Left key <--
 			keyboardRight,         //!< Right key -->
 			keyboardUp,            //!< Up key ^

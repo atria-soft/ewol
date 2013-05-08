@@ -224,7 +224,7 @@ void ewol::Shaper::UpdateVectex(void)
 	                     m_propertyOrigin.y()+m_propertySize.y());
 }
 
-void ewol::Shaper::SetOrigin(vec2 newOri)
+void ewol::Shaper::SetOrigin(const vec2& newOri)
 {
 	if (m_propertyOrigin != newOri) {
 		m_propertyOrigin = newOri;
@@ -233,7 +233,7 @@ void ewol::Shaper::SetOrigin(vec2 newOri)
 
 }
 
-void ewol::Shaper::SetSize(vec2 newSize)
+void ewol::Shaper::SetSize(const vec2& newSize)
 {
 	if (m_propertySize != newSize) {
 		m_propertySize = newSize;
@@ -241,12 +241,12 @@ void ewol::Shaper::SetSize(vec2 newSize)
 	}
 }
 
-void ewol::Shaper::SetInsideSize(vec2 newInsideSize)
+void ewol::Shaper::SetInsideSize(const vec2& newInsideSize)
 {
 	m_propertyInsideSize = newInsideSize;
 }
 
-void ewol::Shaper::SetInsidePos(vec2 newInsidePos)
+void ewol::Shaper::SetInsidePos(const vec2& newInsidePos)
 {
 	m_propertyInsidePosition = newInsidePos;
 }

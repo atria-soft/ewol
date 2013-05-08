@@ -97,25 +97,14 @@ namespace widget {
 			 * @return the relative position
 			 */
 			virtual vec2 RelativePosition(vec2 pos);
-			
-			// Derived function
+		public: // dericed function:
 			virtual const char * const GetObjectType(void) { return "Ewol::Scene"; };
-			// Derived function
 			virtual void OnRegenerateDisplay(void);
-			// Derived function
 			virtual void PeriodicCall(int64_t localTime);
-			// Derived function
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			
-			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, const vec2& pos);
-			// Derived function
-			virtual bool OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData);
-			// Derived function
-			virtual bool OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey);
-			// Derived function
+			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual bool OnEventEntry(const ewol::EventEntry& _event);
 			virtual void OnGetFocus(void);
-			// Derived function
 			virtual void OnLostFocus(void);
 			void renderscene(int pass);
 			void DrawOpenGL(btScalar* m, 

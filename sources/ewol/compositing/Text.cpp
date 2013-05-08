@@ -244,7 +244,7 @@ vec3 ewol::Text::GetPos(void)
 }
 
 
-void ewol::Text::SetPos(vec3 pos)
+void ewol::Text::SetPos(const vec3& pos)
 {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
@@ -276,7 +276,7 @@ void ewol::Text::SetPos(vec3 pos)
 }
 
 
-void ewol::Text::SetRelPos(vec3 pos)
+void ewol::Text::SetRelPos(const vec3& pos)
 {
 	m_position += pos;
 	m_previousCharcode = 0;
@@ -284,25 +284,35 @@ void ewol::Text::SetRelPos(vec3 pos)
 }
 
 
-void ewol::Text::SetColor(draw::Color color)
+void ewol::Text::SetColor(const draw::Color& color)
 {
 	m_color = color;
 }
 
 
-void ewol::Text::SetColorBg(draw::Color color)
+void ewol::Text::SetColorBg(const draw::Color& color)
 {
 	m_colorBg = color;
 	m_vectorialDraw.SetColor(color);
 }
 
 
-void ewol::Text::SetClippingWidth(vec3 pos, vec3 width)
+void ewol::Text::SetClippingWidth(const vec2& pos, const vec2& width)
 {
 	SetClipping(pos, pos+width);
 }
 
-void ewol::Text::SetClipping(vec3 pos, vec3 posEnd)
+void ewol::Text::SetClippingWidth(const vec3& pos, const vec3& width)
+{
+	SetClipping(pos, pos+width);
+}
+
+void ewol::Text::SetClipping(const vec2& pos, const vec2& posEnd)
+{
+	SetClipping(vec3(pos.x(),pos.y(),-1), vec3(posEnd.x(),posEnd.y(),1) );
+}
+
+void ewol::Text::SetClipping(const vec3& pos, const vec3& posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (pos.x() <= posEnd.x()) {
@@ -349,7 +359,7 @@ void ewol::Text::SetFontSize(int32_t fontSize)
 }
 
 
-void ewol::Text::SetFontName(etk::UString fontName)
+void ewol::Text::SetFontName(const etk::UString& fontName)
 {
 	// get old size
 	int32_t fontSize = -1;

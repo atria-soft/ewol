@@ -127,13 +127,13 @@ void widget::Slider::OnRegenerateDisplay(void)
 }
 
 
-bool widget::Slider::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Slider::OnEventInput(const ewol::EventInput& _event)
 {
-	vec2 relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(_event.GetPos());
 	//EWOL_DEBUG("Event on Slider ...");
-	if (1 == IdInput) {
-		if(    ewol::keyEvent::statusSingle == typeEvent
-		    || ewol::keyEvent::statusMove   == typeEvent) {
+	if (1 == _event.GetId()) {
+		if(    ewol::keyEvent::statusSingle == _event.GetStatus()
+		    || ewol::keyEvent::statusMove   == _event.GetStatus()) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			int32_t oldValue = m_value;

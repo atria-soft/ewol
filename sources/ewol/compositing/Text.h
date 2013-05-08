@@ -137,34 +137,38 @@ namespace ewol
 			 * @brief Set position for the next text writen
 			 * @param[in] pos Position of the text (in 3D)
 			 */
-			void SetPos(vec3 pos);
+			void SetPos(const vec3& pos);
+			inline void SetPos(const vec2& pos) { SetPos(vec3(pos.x(),pos.y(),0)); };
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(vec3 pos);
+			void SetRelPos(const vec3& pos);
+			inline void SetRelPos(const vec2& pos) { SetRelPos(vec3(pos.x(),pos.y(),0)); };
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
 			 */
-			void SetColor(draw::Color color);
+			void SetColor(const draw::Color& color);
 			/**
 			 * @brief Set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] color Color to set on background (for next print)
 			 */
-			void SetColorBg(draw::Color color);
+			void SetColorBg(const draw::Color& color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] width Width size of the clipping
 			 */
-			void SetClippingWidth(vec3 pos, vec3 width);
+			void SetClippingWidth(const vec3& pos, const vec3& width);
+			void SetClippingWidth(const vec2& pos, const vec2& width);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] pos Start position of the clipping
 			 * @param[in] posEnd End position of the clipping
 			 */
-			void SetClipping(vec3 pos, vec3 posEnd);
+			void SetClipping(const vec3& pos, const vec3& posEnd);
+			void SetClipping(const vec2& pos, const vec2& posEnd);
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
 			 * @brief newMode The new status of the clipping
@@ -180,7 +184,7 @@ namespace ewol
 			 * @brief Specify the font name (this reset the internal element of the current text (system requirement)
 			 * @param[in] fontName Current name of the selected font
 			 */
-			void SetFontName(etk::UString fontName);
+			void SetFontName(const etk::UString& fontName);
 			/**
 			 * @brief Specify the font property (this reset the internal element of the current text (system requirement)
 			 * @param[in] fontName Current name of the selected font

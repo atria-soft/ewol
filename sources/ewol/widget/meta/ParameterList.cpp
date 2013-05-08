@@ -184,15 +184,15 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ParameterList::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::ParameterList::OnEventInput(const ewol::EventInput& _event)
 {
-	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
+	if (true == WidgetScrooled::OnEventInput(_event)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	if (IdInput == 1 && typeEvent == ewol::keyEvent::statusSingle) {
-		vec2 relativePos = RelativePosition(pos);
+	if (_event.GetId() == 1 && _event.GetStatus() == ewol::keyEvent::statusSingle) {
+		vec2 relativePos = RelativePosition(_event.GetPos());
 		// corection for the openGl abstraction
 		relativePos.setY(m_size.y() - relativePos.y());
 		// TODO : Rework this ...

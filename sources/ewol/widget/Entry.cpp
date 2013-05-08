@@ -47,30 +47,32 @@ void widget::Entry::UnInit(void)
 }
 
 
-widget::Entry::Entry(etk::UString newData) :
+widget::Entry::Entry(etk::UString _newData) :
 	m_shaper("THEME:GUI:widgetEntry.conf"),
 	m_data(""),
-	m_textColorFg(draw::color::black),
-	m_textColorBg(draw::color::white),
-	m_userSize(50),
+	m_maxCharacter(0x7FFFFFFF),
+	m_regExp(".*"),
+	m_needUpdateTextPos(true),
 	m_displayStartPosition(0),
 	m_displayCursor(false),
 	m_displayCursorPos(0),
-	m_displayCursorPosSelection(0)
+	m_displayCursorPosSelection(0),
+	m_textColorFg(draw::color::black),
+	m_textColorBg(draw::color::white),
+	m_textWhenNothing("")
 {
 	m_textColorBg.a = 0xAF;
 	SetCanHaveFocus(true);
 	AddEventId(ewolEventEntryClick);
 	AddEventId(ewolEventEntryEnter);
 	AddEventId(ewolEventEntryModify);
-	ShortCutAdd("ctrl+w",       ewolEventEntryClean);
-	ShortCutAdd("ctrl+x",       ewolEventEntryCut);
-	ShortCutAdd("ctrl+c",       ewolEventEntryCopy);
-	ShortCutAdd("ctrl+v",       ewolEventEntryPaste);
-	ShortCutAdd("ctrl+a",       ewolEventEntrySelect, "ALL");
+	ShortCutAdd("ctrl+w", ewolEventEntryClean);
+	ShortCutAdd("ctrl+x", ewolEventEntryCut);
+	ShortCutAdd("ctrl+c", ewolEventEntryCopy);
+	ShortCutAdd("ctrl+v", ewolEventEntryPaste);
+	ShortCutAdd("ctrl+a", ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
-	SetValue(newData);
-	UpdateTextPosition();
+	SetValue(_newData);
 	MarkToRedraw();
 }
 
@@ -81,24 +83,51 @@ widget::Entry::~Entry(void)
 }
 
 
-void widget::Entry::CalculateMinMaxSize(void)
+void widget::Entry::SetMaxChar(int32_t _nbMax)
 {
-	vec2 padding = m_shaper.GetPadding();
-	
-	int32_t minHeight = m_oObjectText.CalculateSize('A').y();
-	m_minSize.setValue(m_userSize + 2*padding.x(),
-	                   minHeight + 2*padding.y());
-	UpdateTextPosition();
-	MarkToRedraw();
+	if (_nbMax<=0) {
+		m_maxCharacter = 0x7FFFFFFF;
+	} else {
+		m_maxCharacter = _nbMax;
+	}
+}
+
+int32_t widget::Entry::SetMaxChar(void)
+{
+	return m_maxCharacter;
 }
 
 
-void widget::Entry::SetValue(etk::UString newData)
+void widget::Entry::CalculateMinMaxSize(void)
 {
-	m_data = newData;
-	m_displayCursorPos = m_data.Size();
-	m_displayCursorPosSelection = m_displayCursorPos;
-	EWOL_DEBUG("Set ... " << newData);
+	// call main class
+	ewol::Widget::CalculateMinMaxSize();
+	// get generic padding
+	vec2 padding = m_shaper.GetPadding();
+	int32_t minHeight = m_oObjectText.CalculateSize('A').y();
+	vec2 minimumSizeBase(20, minHeight);
+	// add padding :
+	minimumSizeBase += padding*2.0f;
+	m_minSize.setMax(minimumSizeBase);
+	// verify the min max of the min size ...
+	CheckMinSize();
+}
+
+
+void widget::Entry::SetValue(const etk::UString& _newData)
+{
+	etk::UString newData = _newData;
+	if (newData.Size()>m_maxCharacter) {
+		newData = _newData.Extract(0, m_maxCharacter);
+		EWOL_DEBUG("Limit entry set of data... " << _newData.Extract(m_maxCharacter));
+	}
+	// set the value with the check of the RegExp ...
+	SetInternalValue(newData);
+	if (m_data==newData) {
+		m_displayCursorPos = m_data.Size();
+		m_displayCursorPosSelection = m_displayCursorPos;
+		EWOL_DEBUG("Set ... " << newData);
+	}
 	MarkToRedraw();
 }
 
@@ -108,7 +137,7 @@ etk::UString widget::Entry::GetValue(void)
 }
 
 
-void widget::Entry::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Entry::OnDraw(ewol::DrawProperty& _displayProp)
 {
 	m_shaper.Draw();
 	m_oObjectText.Draw();
@@ -123,56 +152,55 @@ void widget::Entry::OnRegenerateDisplay(void)
 		UpdateTextPosition();
 		vec2 padding = m_shaper.GetPadding();
 		
-		int32_t tmpSizeX = m_minSize.x();
-		int32_t tmpSizeY = m_minSize.y();
-		int32_t tmpOriginX = 0;
-		int32_t tmpOriginY = (m_size.y() - tmpSizeY) / 2;
-		// no change for the text orogin : 
-		int32_t tmpTextOriginX = padding.x();
-		int32_t tmpTextOriginY = tmpOriginY + padding.y();
-		
+		vec2 tmpSizeShaper = m_minSize;
 		if (true==m_userFill.x()) {
-			tmpSizeX = m_size.x();
+			tmpSizeShaper.setX(m_size.x());
 		}
 		if (true==m_userFill.y()) {
-			//tmpSizeY = m_size.y;
-			tmpOriginY = 0;
-			tmpTextOriginY = tmpOriginY + padding.y();
+			tmpSizeShaper.setY(m_size.y());
 		}
-		tmpOriginX += padding.x();
-		tmpOriginY += padding.y();
-		tmpSizeX -= 2*padding.x();
-		tmpSizeY -= 2*padding.y();
 		
+		vec2 tmpOriginShaper = (m_size - tmpSizeShaper) / 2.0f;
+		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
+		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
+		// sometimes, the user define an height bigger than the real size needed ==> in this case we need to center the text in the shaper ...
+		int32_t minHeight = m_oObjectText.CalculateSize('A').y();
+		if (tmpSizeText.y()>minHeight) {
+			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
+		}
+		// fix all the position in the int32_t class:
+		tmpSizeShaper = vec2ClipInt32(tmpSizeShaper);
+		tmpOriginShaper = vec2ClipInt32(tmpOriginShaper);
+		tmpSizeText = vec2ClipInt32(tmpSizeText);
+		tmpOriginText = vec2ClipInt32(tmpOriginText);
 		
-		vec3 textPos( tmpTextOriginX + m_displayStartPosition,
-		              tmpTextOriginY,
-		              0 );
-		vec3 drawClippingPos( padding.x(),
-		                      padding.y(),
-		                      -1 );
-		vec3 drawClippingSize( m_size.x() - 2*drawClippingPos.x(),
-		                       m_size.y() - 2*drawClippingPos.y(),
-		                       1 );
-		m_oObjectText.SetClippingWidth(drawClippingPos, drawClippingSize);
-		m_oObjectText.SetPos(textPos);
+		m_oObjectText.SetClippingWidth(tmpOriginText, tmpSizeText);
+		m_oObjectText.SetPos(tmpOriginText+vec2(m_displayStartPosition,0));
 		if (m_displayCursorPosSelection != m_displayCursorPos) {
 			m_oObjectText.SetCursorSelection(m_displayCursorPos, m_displayCursorPosSelection);
 		} else {
 			m_oObjectText.SetCursorPos(m_displayCursorPos);
 		}
-		m_oObjectText.Print(m_data);
+		if (0!=m_data.Size()) {
+			m_oObjectText.Print(m_data);
+		} else {
+			if (0!=m_textWhenNothing.Size()) {
+				m_oObjectText.PrintDecorated(m_textWhenNothing);
+			}
+		}
 		m_oObjectText.SetClippingMode(false);
-		m_shaper.SetSize(m_size);
+		
+		m_shaper.SetOrigin(tmpOriginShaper);
+		m_shaper.SetSize(tmpSizeShaper);
 	}
 }
 
 
-void widget::Entry::UpdateCursorPosition(const vec2& pos, bool selection)
+void widget::Entry::UpdateCursorPosition(const vec2& _pos, bool _selection)
 {
 	vec2 padding = m_shaper.GetPadding();
 	
-	vec2 relPos = RelativePosition(pos);
+	vec2 relPos = RelativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
 	// try to find the new cursor position :
 	etk::UString tmpDisplay = m_data.Extract(0, m_displayStartPosition);
@@ -191,7 +219,7 @@ void widget::Entry::UpdateCursorPosition(const vec2& pos, bool selection)
 	if (newCursorPosition == -1) {
 		newCursorPosition = m_data.Size();
 	}
-	if (false == selection) {
+	if (false == _selection) {
 		m_displayCursorPos = newCursorPosition;
 		m_displayCursorPosSelection = m_displayCursorPos;
 		MarkToRedraw();
@@ -202,7 +230,7 @@ void widget::Entry::UpdateCursorPosition(const vec2& pos, bool selection)
 		m_displayCursorPos = newCursorPosition;
 		MarkToRedraw();
 	}
-	UpdateTextPosition();
+	MarkToUpdateTextPosition();
 }
 
 
@@ -226,7 +254,7 @@ void widget::Entry::RemoveSelected(void)
 }
 
 
-void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te clipboardID)
+void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
 	if (m_displayCursorPosSelection==m_displayCursorPos) {
 		// nothing to cut ...
@@ -240,20 +268,20 @@ void widget::Entry::CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te 
 	}
 	// Copy
 	etk::UString tmpData = m_data.Extract(pos1, pos2);
-	ewol::clipBoard::Set(clipboardID, tmpData);
+	ewol::clipBoard::Set(_clipboardID, tmpData);
 }
 
 
-bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Entry::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on Entry ... type=" << (int32_t)type << " id=" << IdInput);
-	if (1 == IdInput) {
-		if (ewol::keyEvent::statusSingle == typeEvent) {
+	if (1 == _event.GetId()) {
+		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			KeepFocus();
 			GenerateEventId(ewolEventEntryClick);
 			//nothing to do ...
 			return true;
-		} else if (ewol::keyEvent::statusDouble == typeEvent) {
+		} else if (ewol::keyEvent::statusDouble == _event.GetStatus()) {
 			KeepFocus();
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
@@ -298,37 +326,37 @@ bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 			// Copy to clipboard Middle ...
 			CopySelectionToClipBoard(ewol::clipBoard::clipboardSelection);
 			MarkToRedraw();
-		} else if (ewol::keyEvent::statusTriple == typeEvent) {
+		} else if (ewol::keyEvent::statusTriple == _event.GetStatus()) {
 			KeepFocus();
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = m_data.Size();
-		} else if (ewol::keyEvent::statusDown == typeEvent) {
+		} else if (ewol::keyEvent::statusDown == _event.GetStatus()) {
 			KeepFocus();
-			UpdateCursorPosition(pos);
+			UpdateCursorPosition(_event.GetPos());
 			MarkToRedraw();
-		} else if (ewol::keyEvent::statusMove == typeEvent) {
+		} else if (ewol::keyEvent::statusMove == _event.GetStatus()) {
 			KeepFocus();
-			UpdateCursorPosition(pos, true);
+			UpdateCursorPosition(_event.GetPos(), true);
 			MarkToRedraw();
-		} else if (ewol::keyEvent::statusUp == typeEvent) {
+		} else if (ewol::keyEvent::statusUp == _event.GetStatus()) {
 			KeepFocus();
-			UpdateCursorPosition(pos, true);
+			UpdateCursorPosition(_event.GetPos(), true);
 			// Copy to clipboard Middle ...
 			CopySelectionToClipBoard(ewol::clipBoard::clipboardSelection);
 			MarkToRedraw();
 		}
 	}
-	else if(    ewol::keyEvent::typeMouse == type
-	         && 2 == IdInput) {
-		if(    typeEvent == ewol::keyEvent::statusDown
-		    || typeEvent == ewol::keyEvent::statusMove
-		    || typeEvent == ewol::keyEvent::statusUp) {
+	else if(    ewol::keyEvent::typeMouse == _event.GetType()
+	         && 2 == _event.GetId()) {
+		if(    _event.GetStatus() == ewol::keyEvent::statusDown
+		    || _event.GetStatus() == ewol::keyEvent::statusMove
+		    || _event.GetStatus() == ewol::keyEvent::statusUp) {
 			KeepFocus();
 			// updatethe cursor position : 
-			UpdateCursorPosition(pos);
+			UpdateCursorPosition(_event.GetPos());
 		}
 		// Paste current selection only when up button
-		if (typeEvent == ewol::keyEvent::statusUp) {
+		if (_event.GetStatus() == ewol::keyEvent::statusUp) {
 			KeepFocus();
 			// middle button => past data...
 			ewol::clipBoard::Request(ewol::clipBoard::clipboardSelection);
@@ -338,114 +366,142 @@ bool widget::Entry::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 }
 
 
-bool widget::Entry::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
+bool widget::Entry::OnEventEntry(const ewol::EventEntry& _event)
 {
-	if( typeEvent == ewol::keyEvent::statusDown) {
-		//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
-		//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
-		// remove curent selected data ...
-		RemoveSelected();
-		if(    '\n' == unicodeData
-		    || '\r' == unicodeData) {
-			GenerateEventId(ewolEventEntryEnter, m_data);
+	if (_event.GetType() == ewol::keyEvent::keyboardChar) {
+		if(_event.GetStatus() == ewol::keyEvent::statusDown) {
+			//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
+			//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
+			// remove curent selected data ...
+			RemoveSelected();
+			if(    '\n' == _event.GetChar()
+			    || '\r' == _event.GetChar()) {
+				GenerateEventId(ewolEventEntryEnter, m_data);
+				return true;
+			} else if (0x7F == _event.GetChar()) {
+				// SUPPR :
+				if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
+					m_data.Remove(m_displayCursorPos, 1);
+					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+					m_displayCursorPosSelection = m_displayCursorPos;
+				}
+			} else if (0x08 == _event.GetChar()) {
+				// DEL :
+				if (m_data.Size() > 0 && m_displayCursorPos != 0) {
+					m_data.Remove(m_displayCursorPos-1, 1);
+					m_displayCursorPos--;
+					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
+					m_displayCursorPosSelection = m_displayCursorPos;
+				}
+			} else if(_event.GetChar() >= 20) {
+				if (m_data.Size() > m_maxCharacter) {
+					EWOL_INFO("Reject data for entry : '" << _event.GetChar() << "'");
+				} else {
+					etk::UString newData = m_data;
+					newData.Add(m_displayCursorPos, _event.GetChar());
+					SetInternalValue(newData);
+					if (m_data==newData) {
+						m_displayCursorPos++;
+						m_displayCursorPosSelection = m_displayCursorPos;
+					}
+				}
+			}
+			GenerateEventId(ewolEventEntryModify, m_data);
+			MarkToRedraw();
 			return true;
-		} else if (0x7F == unicodeData) {
-			// SUPPR :
-			if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
-				m_data.Remove(m_displayCursorPos, 1);
-				m_displayCursorPos = etk_max(m_displayCursorPos, 0);
-				m_displayCursorPosSelection = m_displayCursorPos;
+		}
+		return false;
+	} else {
+		if(_event.GetStatus() == ewol::keyEvent::statusDown) {
+			switch (_event.GetType())
+			{
+				case ewol::keyEvent::keyboardLeft:
+					m_displayCursorPos--;
+					break;
+				case ewol::keyEvent::keyboardRight:
+					m_displayCursorPos++;
+					break;
+				case ewol::keyEvent::keyboardStart:
+					m_displayCursorPos = 0;
+					break;
+				case ewol::keyEvent::keyboardEnd:
+					m_displayCursorPos = m_data.Size();
+					break;
+				default:
+					return false;
 			}
-		} else if (0x08 == unicodeData) {
-			// DEL :
-			if (m_data.Size() > 0 && m_displayCursorPos != 0) {
-				m_data.Remove(m_displayCursorPos-1, 1);
-				m_displayCursorPos--;
-				m_displayCursorPos = etk_max(m_displayCursorPos, 0);
-				m_displayCursorPosSelection = m_displayCursorPos;
-			}
-		} else if(unicodeData >= 20) {
-			m_data.Add(m_displayCursorPos, unicodeData);
-			m_displayCursorPos++;
+			m_displayCursorPos = etk_avg(0, m_displayCursorPos, m_data.Size());
 			m_displayCursorPosSelection = m_displayCursorPos;
+			MarkToRedraw();
+			return true;
 		}
-		GenerateEventId(ewolEventEntryModify, m_data);
-		MarkToRedraw();
-		return true;
 	}
 	return false;
 }
 
-
-bool widget::Entry::OnEventKbMove(ewol::keyEvent::status_te typeEvent, ewol::keyEvent::keyboard_te moveTypeEvent)
+void widget::Entry::SetInternalValue(const etk::UString& _newData)
 {
-	if(typeEvent == ewol::keyEvent::statusDown) {
-		switch (moveTypeEvent)
-		{
-			case ewol::keyEvent::keyboardLeft:
-				m_displayCursorPos--;
-				break;
-			case ewol::keyEvent::keyboardRight:
-				m_displayCursorPos++;
-				break;
-			case ewol::keyEvent::keyboardStart:
-				m_displayCursorPos = 0;
-				break;
-			case ewol::keyEvent::keyboardEnd:
-				m_displayCursorPos = m_data.Size();
-				break;
-			default:
-				return false;
+	etk::UString previous = m_data;
+	// check the RegExp :
+	if (_newData.Size()>0) {
+		if (false==m_regExp.ProcessOneElement(_newData,0,_newData.Size()) ) {
+			EWOL_INFO("the input data does not match with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp.GetRegExp() << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
+			return;
 		}
-		m_displayCursorPos = etk_avg(0, m_displayCursorPos, m_data.Size());
-		m_displayCursorPosSelection = m_displayCursorPos;
-		MarkToRedraw();
-		return true;
+		//EWOL_INFO("find regExp : \"" << m_data << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
+		if(    0 != m_regExp.Start()
+		    || _newData.Size() != m_regExp.Stop() ) {
+			EWOL_INFO("The input data match not entirely with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp.GetRegExp() << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
+			return;
+		}
 	}
-	return false;
+	m_data = _newData;
 }
 
-
-void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te clipboardID)
+void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
 	// remove curent selected data ...
 	RemoveSelected();
 	// get current selection / Copy :
-	etk::UString tmpData = Get(clipboardID);
+	etk::UString tmpData = Get(_clipboardID);
 	// add it on the current display :
 	if (tmpData.Size() >= 0) {
-		m_data.Add(m_displayCursorPos, &tmpData[0]);
-		if (m_data.Size() == tmpData.Size()) {
-			m_displayCursorPos = tmpData.Size();
-		} else {
-			m_displayCursorPos += tmpData.Size();
+		etk::UString newData = m_data;
+		newData.Add(m_displayCursorPos, &tmpData[0]);
+		SetInternalValue(newData);
+		if (m_data == newData) {
+			if (m_data.Size() == tmpData.Size()) {
+				m_displayCursorPos = tmpData.Size();
+			} else {
+				m_displayCursorPos += tmpData.Size();
+			}
+			m_displayCursorPosSelection = m_displayCursorPos;
+			MarkToRedraw();
 		}
-		m_displayCursorPosSelection = m_displayCursorPos;
-		MarkToRedraw();
 	}
 	GenerateEventId(ewolEventEntryModify, m_data);
 }
 
 
-void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::Entry::OnReceiveMessage(ewol::EObject * _CallerObject, const char * _eventId, const etk::UString& _data)
 {
-	ewol::Widget::OnReceiveMessage(CallerObject, eventId, data);
-	if(eventId == ewolEventEntryClean) {
+	ewol::Widget::OnReceiveMessage(_CallerObject, _eventId, _data);
+	if(_eventId == ewolEventEntryClean) {
 		m_data = "";
 		m_displayStartPosition = 0;
 		m_displayCursorPos = 0;
 		m_displayCursorPosSelection = m_displayCursorPos;
 		MarkToRedraw();
-	} else if(eventId == ewolEventEntryCut) {
+	} else if(_eventId == ewolEventEntryCut) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 		RemoveSelected();
 		GenerateEventId(ewolEventEntryModify, m_data);
-	} else if(eventId == ewolEventEntryCopy) {
+	} else if(_eventId == ewolEventEntryCopy) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
-	} else if(eventId == ewolEventEntryPaste) {
+	} else if(_eventId == ewolEventEntryPaste) {
 		ewol::clipBoard::Request(ewol::clipBoard::clipboardStd);
-	} else if(eventId == ewolEventEntrySelect) {
-		if(data == "ALL") {
+	} else if(_eventId == ewolEventEntrySelect) {
+		if(_data == "ALL") {
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = m_data.Size();
 		} else {
@@ -455,9 +511,16 @@ void widget::Entry::OnReceiveMessage(ewol::EObject * CallerObject, const char * 
 	}
 }
 
+void widget::Entry::MarkToUpdateTextPosition(void)
+{
+	m_needUpdateTextPos=true;
+}
 
 void widget::Entry::UpdateTextPosition(void)
 {
+	if (false==m_needUpdateTextPos) {
+		return;
+	}
 	vec2 padding = m_shaper.GetPadding();
 	
 	int32_t tmpSizeX = m_minSize.x();
@@ -508,19 +571,89 @@ void widget::Entry::OnLostFocus(void)
 }
 
 
-void widget::Entry::ChangeStatusIn(int32_t newStatusId)
+void widget::Entry::ChangeStatusIn(int32_t _newStatusId)
 {
-	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
+	if (true == m_shaper.ChangeStatusIn(_newStatusId) ) {
 		PeriodicCallSet(true);
 		MarkToRedraw();
 	}
 }
 
 
-void widget::Entry::PeriodicCall(int64_t localTime)
+void widget::Entry::PeriodicCall(int64_t _localTime)
 {
-	if (false == m_shaper.PeriodicCall(localTime) ) {
+	if (false == m_shaper.PeriodicCall(_localTime) ) {
 		PeriodicCallSet(false);
 	}
 	MarkToRedraw();
 }
+
+
+
+void widget::Entry::SetRegExp(const etk::UString& _expression)
+{
+	etk::UString previousRegExp = m_regExp.GetRegExp();
+	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\" ==> \"" << _expression << "\"");
+	m_regExp.SetRegExp(_expression);
+	if (m_regExp.GetStatus()==false) {
+		EWOL_ERROR("error when adding regExp ... ==> set the previous back ...");
+		m_regExp.SetRegExp(previousRegExp);
+	}
+}
+
+
+void widget::Entry::SetColorText(const draw::Color& _color)
+{
+	m_textColorFg = _color;
+	MarkToRedraw();
+}
+
+void widget::Entry::SetColorTextSelected(const draw::Color& _color)
+{
+	m_textColorBg = _color;
+	MarkToRedraw();
+}
+
+void widget::Entry::SetEmptyText(const etk::UString& _text)
+{
+	m_textWhenNothing = _text;
+	MarkToRedraw();
+}
+
+bool widget::Entry::LoadXML(TiXmlNode* _node)
+{
+	if (NULL==_node) {
+		return false;
+	}
+	ewol::Widget::LoadXML(_node);
+	// get internal data : 
+	
+	const char *xmlData = _node->ToElement()->Attribute("color");
+	if (NULL != xmlData) {
+		m_textColorFg = xmlData;
+	}
+	xmlData = _node->ToElement()->Attribute("background");
+	if (NULL != xmlData) {
+		m_textColorBg = xmlData;
+	}
+	xmlData = _node->ToElement()->Attribute("regExp");
+	if (NULL != xmlData) {
+		SetRegExp(xmlData);
+	}
+	xmlData = _node->ToElement()->Attribute("max");
+	if (NULL != xmlData) {
+		int32_t tmpVal=0;
+		sscanf(xmlData, "%d", &tmpVal);
+		m_maxCharacter = tmpVal;
+	}
+	xmlData = _node->ToElement()->Attribute("emptytext");
+	if (NULL != xmlData) {
+		m_textWhenNothing = xmlData;
+	}
+	MarkToRedraw();
+	return true;
+}
+
+
+
+

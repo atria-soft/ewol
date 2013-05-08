@@ -102,11 +102,11 @@ void widget::Mesh::PeriodicCall(int64_t localTime)
 	m_lastTime = localTime;
 }
 
-bool widget::Mesh::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Mesh::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == IdInput) {
-		if(    ewol::keyEvent::statusSingle == typeEvent) {
+	if (1 == _event.GetId()) {
+		if(ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			GenerateEventId(ewolEventMeshPressed);
 			return true;
 		}

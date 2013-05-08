@@ -48,28 +48,28 @@ namespace widget {
 		public:
 			/**
 			 * @brief Constructor
-			 * @param[in] newLabel Button Label to display
+			 * @param[in] _newLabel Button Label to display
 			 */
-			Button(const etk::UString& shaperName="THEME:GUI:widgetButton.conf");
+			Button(const etk::UString& _shaperName="THEME:GUI:widgetButton.conf");
 			/**
 			 * @brief Destructor
 			 */
 			virtual ~Button(void);
 			/**
 			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
-			 * @param[in] shaperName The new shaper filename
+			 * @param[in] _shaperName The new shaper filename
 			 */
-			void SetShaperName(const etk::UString& shaperName);
+			void SetShaperName(const etk::UString& _shaperName);
 			/**
 			 * @brief Specify the current widget
-			 * @param[in] subWidget Widget to add normal
+			 * @param[in] _subWidget Widget to add normal
 			 */
-			void SetSubWidget(ewol::Widget* subWidget);
+			void SetSubWidget(ewol::Widget* _subWidget);
 			/**
 			 * @brief Specify the current widget
-			 * @param[in] subWidget Widget to add Toggle
+			 * @param[in] _subWidget Widget to add Toggle
 			 */
-			void SetSubWidgetToggle(ewol::Widget* subWidget);
+			void SetSubWidgetToggle(ewol::Widget* _subWidget);
 			/**
 			 * @brief Get the current displayed composition
 			 * @return The base widget
@@ -83,9 +83,9 @@ namespace widget {
 			/**
 			 * @brief Set the currentValue of the Button (pressed or not)
 			 * @note Work only in toggle mode
-			 * @param[in] val New value of the button
+			 * @param[in] _val New value of the button
 			 */
-			void SetValue(bool val);
+			void SetValue(bool _val);
 			/**
 			 * @brief Get the current button value.
 			 * @return True : The button is pressed.
@@ -94,15 +94,15 @@ namespace widget {
 			bool GetValue(void);
 			/**
 			 * @brief Change the Toggle mode.
-			 * @param[in] togg New toggle mode
+			 * @param[in] _togg New toggle mode
 			 */
-			void SetToggleMode(bool togg);
+			void SetToggleMode(bool _togg);
 		private:
 			/**
 			 * @brief Internal system to Change the property of the current status
-			 * @param[in] new state
+			 * @param[in] _newStatusId new state
 			 */
-			void ChangeStatusIn(int32_t newStatusId);
+			void ChangeStatusIn(int32_t _newStatusId);
 			/**
 			 * @brief update the status with the internal satte of the button ...
 			 */
@@ -111,14 +111,15 @@ namespace widget {
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Button"; };
 			virtual void CalculateMinMaxSize(void);
-			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateSize(const vec2& _availlable);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
-			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
+			virtual void OnDraw(ewol::DrawProperty& _displayProp);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual bool OnEventEntry(const ewol::EventEntry& _event);
+			virtual bool LoadXML(TiXmlNode* _node);
 		private:
 			// derived function
-			virtual void PeriodicCall(int64_t localTime);
+			virtual void PeriodicCall(int64_t _localTime);
 	};
 };
 

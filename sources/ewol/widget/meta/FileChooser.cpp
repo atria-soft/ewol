@@ -247,7 +247,7 @@ widget::FileChooser::FileChooser(void)
 				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFileEnter);
 				m_widgetCurrentFileName->SetExpand(bvec2(true,false));
 				m_widgetCurrentFileName->SetFill(bvec2(true,false));
-				m_widgetCurrentFileName->SetWidth(200);
+				//m_widgetCurrentFileName->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFileName);
 			}
 		}
@@ -273,7 +273,7 @@ widget::FileChooser::FileChooser(void)
 				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFolderEnter);
 				m_widgetCurrentFolder->SetExpand(bvec2(true,false));
 				m_widgetCurrentFolder->SetFill(bvec2(true,false));
-				m_widgetCurrentFolder->SetWidth(200);
+				//m_widgetCurrentFolder->SetWidth(200);
 				mySizerHori->SubWidgetAdd(m_widgetCurrentFolder);
 			}
 			myImage = new widget::Image("THEME:GUI:Home.svg");

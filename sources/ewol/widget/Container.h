@@ -26,7 +26,7 @@ namespace widget
 			/**
 			 * @brief Constructor
 			 */
-			Container(ewol::Widget* subElement=NULL);
+			Container(ewol::Widget* _subElement=NULL);
 			/**
 			 * @brief Destructor
 			 */
@@ -39,25 +39,25 @@ namespace widget
 			ewol::Widget* GetSubWidget(void);
 			/**
 			 * @brief Set the subWidget node widget.
-			 * @param[in] newWidget The widget to Add.
+			 * @param[in] _newWidget The widget to Add.
 			 */
-			void SetSubWidget(ewol::Widget* newWidget);
+			void SetSubWidget(ewol::Widget* _newWidget);
 			/**
 			 * @brief Remove the subWidget node.
 			 */
 			void SubWidgetRemove(void);
 			
 		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& _displayProp);
 		public:// Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnObjectRemove(ewol::EObject* removeObject);
-			virtual void CalculateSize(const vec2& availlable);
+			virtual void OnObjectRemove(ewol::EObject* _removeObject);
+			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
-			virtual ewol::Widget* GetWidgetNamed(const etk::UString& widgetName);
-			virtual const char * const GetObjectType(void) { return "Ewol::Container"; };
-			virtual bool LoadXML(TiXmlNode* node);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
+			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
+			virtual const char * const GetObjectType(void) { return "ewol::widget::Container"; };
+			virtual bool LoadXML(TiXmlNode* _node);
 	};
 };
 

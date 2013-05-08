@@ -115,11 +115,11 @@ void widget::CheckBox::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::CheckBox::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on checkbox ...");
-	if (1 == IdInput) {
-		if (ewol::keyEvent::statusSingle == typeEvent) {
+	if (1 == _event.GetId()) {
+		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			if(true == m_value) {
 				m_value = false;
 				GenerateEventId(ewolEventCheckBoxClicked, "false");
@@ -135,13 +135,13 @@ bool widget::CheckBox::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInpu
 	return false;
 }
 
-
-bool widget::CheckBox::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
+bool widget::CheckBox::OnEventEntry(const ewol::EventEntry& _event)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    typeEvent == ewol::keyEvent::statusDown
-	    && (    unicodeData == '\r'
-	         || unicodeData == ' ')
+	if(    _event.GetType() == ewol::keyEvent::keyboardChar
+	    && _event.GetStatus() == ewol::keyEvent::statusDown
+	    && (    _event.GetChar() == '\r'
+	         || _event.GetChar() == ' ')
 	       ) {
 		if(true == m_value) {
 			m_value = false;

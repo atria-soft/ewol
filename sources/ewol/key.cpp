@@ -38,6 +38,7 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::st
 
 static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = {
 	"keyboardUnknow",
+	"keyboardChar",
 	"keyboardLeft",
 	"keyboardRight",
 	"keyboardUp",

@@ -46,7 +46,7 @@ namespace widget {
 			// Derived function
 			virtual void OnRegenerateDisplay(void);
 			// Derived function
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {

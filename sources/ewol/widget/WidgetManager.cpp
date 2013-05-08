@@ -20,6 +20,7 @@
 #include <ewol/widget/Gird.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/CheckBox.h>
+#include <ewol/widget/Scroll.h>
 #include <etk/Vector.h>
 
 #undef __class__
@@ -70,6 +71,7 @@ void ewol::widgetManager::Init(void)
 	widget::Gird::Init();
 	widget::Entry::Init();
 	widget::CheckBox::Init();
+	widget::Scroll::Init();
 	IsInit = true;
 }
 
@@ -80,7 +82,7 @@ void ewol::widgetManager::UnInit(void)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	
-	
+	widget::Scroll::UnInit();
 	widget::CheckBox::UnInit();
 	widget::Entry::UnInit();
 	widget::Gird::UnInit();

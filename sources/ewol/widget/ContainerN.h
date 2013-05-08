@@ -37,9 +37,9 @@ namespace widget
 		public:
 			/**
 			 * @brief Limit the expend properties to the current widget (no contamination)
-			 * @param[in] lockExpend Lock mode of the expend properties
+			 * @param[in] _lockExpend Lock mode of the expend properties
 			 */
-			void LockExpand(const bvec2& lockExpand);
+			void LockExpand(const bvec2& _lockExpand);
 			// herited function
 			virtual bvec2 CanExpand(void);
 		public:
@@ -49,38 +49,38 @@ namespace widget
 			virtual void SubWidgetRemoveAll(void);
 			/**
 			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-			 * @param[in] newWidget the element pointer
+			 * @param[in] _newWidget the element pointer
 			 */
-			virtual void SubWidgetAdd(ewol::Widget* newWidget);
-			inline  void SubWidgetAddBack(ewol::Widget* newWidget) { SubWidgetAdd(newWidget); };
-			inline  void SubWidgetAddEnd(ewol::Widget* newWidget)  { SubWidgetAdd(newWidget); };
+			virtual void SubWidgetAdd(ewol::Widget* _newWidget);
+			inline  void SubWidgetAddBack(ewol::Widget* _newWidget) { SubWidgetAdd(_newWidget); };
+			inline  void SubWidgetAddEnd(ewol::Widget* _newWidget)  { SubWidgetAdd(_newWidget); };
 			/**
 			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
-			 * @param[in] newWidget the element pointer
+			 * @param[in] _newWidget the element pointer
 			 */
-			virtual void SubWidgetAddStart(ewol::Widget* newWidget);
-			inline  void SubWidgetAddFront(ewol::Widget* newWidget) { SubWidgetAddStart(newWidget); };
+			virtual void SubWidgetAddStart(ewol::Widget* _newWidget);
+			inline  void SubWidgetAddFront(ewol::Widget* _newWidget) { SubWidgetAddStart(_newWidget); };
 			/**
 			 * @brief Remove definitly a widget from the system and this layer.
-			 * @param[in] newWidget the element pointer.
+			 * @param[in] _newWidget the element pointer.
 			 */
-			virtual void SubWidgetRemove(ewol::Widget* newWidget);
+			virtual void SubWidgetRemove(ewol::Widget* _newWidget);
 			/**
 			 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
-			 * @param[in] newWidget the element pointer.
+			 * @param[in] _newWidget the element pointer.
 			 */
-			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
+			virtual void SubWidgetUnLink(ewol::Widget* _newWidget);
 		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(ewol::DrawProperty& _displayProp);
 		public:// Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnObjectRemove(ewol::EObject* removeObject);
-			virtual void CalculateSize(const vec2& availlable);
+			virtual void OnObjectRemove(ewol::EObject* _removeObject);
+			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
-			virtual ewol::Widget* GetWidgetNamed(const etk::UString& widgetName);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
+			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
 			virtual const char * const GetObjectType(void) { return "Ewol::ContainerN"; };
-			virtual bool LoadXML(TiXmlNode* node);
+			virtual bool LoadXML(TiXmlNode* _node);
 	};
 };
 

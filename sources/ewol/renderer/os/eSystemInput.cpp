@@ -65,15 +65,18 @@ void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInp
 }
 
 
-bool ewol::eSystemInput::localEventInput(ewol::keyEvent::type_te type,
-                                         ewol::Widget* destWidget,
-                                         int32_t IdInput,
-                                         ewol::keyEvent::status_te typeEvent,
-                                         vec2 pos)
+bool ewol::eSystemInput::localEventInput(ewol::keyEvent::type_te _type,
+                                         ewol::Widget* _destWidget,
+                                         int32_t _IdInput,
+                                         ewol::keyEvent::status_te _status,
+                                         vec2 _pos)
 {
-	if (NULL != destWidget) {
-		if (type == ewol::keyEvent::typeMouse || type == ewol::keyEvent::typeFinger) {
-			return destWidget->OnEventInput(type, IdInput, typeEvent, pos);
+	if (NULL != _destWidget) {
+		if (_type == ewol::keyEvent::typeMouse || _type == ewol::keyEvent::typeFinger) {
+			// create the system Event :
+			ewol::EventInputSystem tmpEventSystem(_type, _status, _IdInput, _pos);
+			// generate the event :
+			return _destWidget->SystemEventInput(tmpEventSystem);
 		} else {
 			return false;
 		}

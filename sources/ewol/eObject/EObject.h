@@ -17,7 +17,7 @@ namespace ewol {
 	namespace EObjectMessageMultiCast {
 		void Init(void);
 		void UnInit(void);
-		void AnonymousSend(const char* const messageId, const etk::UString& data);
+		void AnonymousSend(const char* const _messageId, const etk::UString& _data);
 	};
 	
 	class EObject;
@@ -72,60 +72,60 @@ namespace ewol {
 			/**
 			 * @brief Get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast ==> this will replace it
-			 * @param[in] objectType type description
+			 * @param[in] _objectType type description
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const GetObjectType(void) { return "EObject"; };
 		protected:
 			/**
 			 * @brief Add a specific event Id in the list to prevent wrong link on a EObject
-			 * @param[in] generateEventId event Id to add
+			 * @param[in] _generateEventId event Id to add
 			 */
-			void AddEventId(const char * generateEventId);
+			void AddEventId(const char * _generateEventId);
 			
 			/**
 			 * @brief Generate event on all registered EObject
-			 * @param[in] generateEventId event Id that is curetly generated
-			 * @param[in] data data associated with the event
+			 * @param[in] _generateEventId event Id that is curetly generated
+			 * @param[in] _data data associated with the event
 			 */
-			void GenerateEventId(const char * generateEventId, const etk::UString& data = "");
+			void GenerateEventId(const char * _generateEventId, const etk::UString& _data = "");
 			
 			/**
 			 * @brief Generate Multicast event on all EObject requested the event
-			 * @param[in] messageId Event Id that is generated
-			 * @param[in] data String that is send at all the destinations
+			 * @param[in] _messageId Event Id that is generated
+			 * @param[in] _data String that is send at all the destinations
 			 */
-			void SendMultiCast(const char* const messageId, const etk::UString& data = "");
+			void SendMultiCast(const char* const _messageId, const etk::UString& _data = "");
 			
 			/**
 			 * @brief Register of the arrival of a Multicast message
-			 * @param[in] messageId Event Id waiting for...
+			 * @param[in] _messageId Event Id waiting for...
 			 */
-			void RegisterMultiCast(const char* const messageId);
+			void RegisterMultiCast(const char* const _messageId);
 		public:
 			/**
 			 * @brief Register an EObject over an other to get event on the second...
-			 * @param[in] destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] eventId Event generate inside the object
-			 * @param[in] eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
-			 * @param[in] overloadData When the user prever to receive a data specificly for this event ...
+			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
+			 * @param[in] _eventId Event generate inside the object
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void RegisterOnEvent(ewol::EObject * destinationObject, const char * eventId, const char * eventIdgenerated = NULL, const etk::UString& overloadData="");
+			void RegisterOnEvent(ewol::EObject * _destinationObject, const char * _eventId, const char * _eventIdgenerated = NULL, const etk::UString& _overloadData="");
 			
 			/**
 			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @param[in] _removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual void OnObjectRemove(ewol::EObject * _removeObject);
 			
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
-			 * @param[in] CallerObject Pointer on the EObject that information came from
-			 * @param[in] eventId Message registered by this class
-			 * @param[in] data Data registered by this class
+			 * @param[in] _CallerObject Pointer on the EObject that information came from
+			 * @param[in] _eventId Message registered by this class
+			 * @param[in] _data Data registered by this class
 			 */
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data) { };
+			virtual void OnReceiveMessage(ewol::EObject * _CallerObject, const char * _eventId, const etk::UString& _data) { };
 			
 		protected:
 			etk::UString m_name; //!< name of the element ...
@@ -137,9 +137,9 @@ namespace ewol {
 			const etk::UString& GetName(void) { return m_name; };
 			/**
 			 * @brief Get the Widget name
-			 * @param[in] name The new name
+			 * @param[in] _name The new name
 			 */
-			void SetName(const etk::UString& name) { m_name=name; };
+			void SetName(const etk::UString& _name) { m_name=_name; };
 	};
 };
 

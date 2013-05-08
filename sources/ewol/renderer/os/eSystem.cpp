@@ -174,18 +174,18 @@ void ewolProcessEvents(void)
 								                                      data.stateIsDown) ) {
 									// generate the direct event ...
 									if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
+										ewol::EventEntrySystem tmpEntryEvent(ewol::keyEvent::keyboardChar, ewol::keyEvent::statusUp, data.keyboardChar);
 										if(true == data.stateIsDown) {
-											tmpWidget->OnEventKb(ewol::keyEvent::statusDown, data.keyboardChar);
-										} else {
-											tmpWidget->OnEventKb(ewol::keyEvent::statusUp, data.keyboardChar);
+											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
 										}
+										tmpWidget->SystemEventEntry(tmpEntryEvent);
 									} else { // THREAD_KEYBORAD_MOVE
 										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
+										ewol::EventEntrySystem tmpEntryEvent(data.keyboardMove, ewol::keyEvent::statusUp, 0);
 										if(true == data.stateIsDown) {
-											tmpWidget->OnEventKbMove(ewol::keyEvent::statusDown, data.keyboardMove);
-										} else {
-											tmpWidget->OnEventKbMove(ewol::keyEvent::statusUp, data.keyboardMove);
+											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
 										}
+										tmpWidget->SystemEventEntry(tmpEntryEvent);
 									}
 								} else {
 									EWOL_DEBUG("remove Repeate key ...");

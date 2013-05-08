@@ -112,22 +112,22 @@ namespace ewol
 			 * @brief Set the widget origin (needed fot the display)
 			 * @param[in] newOri : the new widget origin
 			 */
-			void SetOrigin(vec2 newOri);
+			void SetOrigin(const vec2& newOri);
 			/**
 			 * @brief Set the widget size (needed fot the display)
 			 * @param[in] newSize : the new widget size
 			 */
-			void SetSize(vec2 newSize);
+			void SetSize(const vec2& newSize);
 			/**
 			 * @brief Set the internal widget size
 			 * @param[in] newInsidePos : the subelement size.
 			 */
-			void SetInsideSize(vec2 newInsideSize);
+			void SetInsideSize(const vec2& newInsideSize);
 			/**
 			 * @brief Set the internal widget position
 			 * @param[in] newInsidePos : the subelement position
 			 */
-			void SetInsidePos(vec2 newInsidePos);
+			void SetInsidePos(const vec2& newInsidePos);
 			/**
 			 * @brief Get the padding declared by the user in the config file
 			 * @return the padding property

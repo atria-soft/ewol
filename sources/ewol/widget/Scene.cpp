@@ -1131,26 +1131,27 @@ vec2 widget::Scene::RelativePosition(vec2 pos)
 };
 
 
-bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, const vec2& pos)
+bool widget::Scene::OnEventInput(const ewol::EventInput& _event)
+OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te statusEvent, const vec2& pos)
 {
 	//EWOL_DEBUG("type : " << type << " IdInput=" << IdInput << " " << "status=" << statusEvent << " RelPos=" << relativePos);
 	
-	if (type == ewol::keyEvent::typeMouse) {
-		if (0 != IdInput) {
+	if (_event.GetType() == ewol::keyEvent::typeMouse) {
+		if (0 != _event.GetId()) {
 			KeepFocus();
 			GrabCursor();
 			SetCursor(ewol::cursorNone);
 		}
 		if (true == GetGrabStatus() ) {
 			if (ewol::keyEvent::statusMove == statusEvent) {
-				vec2 tmpPos = pos * M_PI/(360.0f*6);
+				vec2 tmpPos = _event.GetPos() * M_PI/(360.0f*6);
 				vec3 oldAngles = m_camera.GetAngle();
 				oldAngles.setZ(oldAngles.z() + tmpPos.x());
 				oldAngles.setY(oldAngles.y() + tmpPos.y());
 				m_camera.SetAngle(oldAngles);
 			}
 		}
-	} else if (type == ewol::keyEvent::typeFinger) {
+	} else if (_event.GetType() == ewol::keyEvent::typeFinger) {
 		KeepFocus();
 	}
 	// note : we did not parse the oether media ...
@@ -1159,117 +1160,117 @@ bool widget::Scene::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 }
 
 
-bool widget::Scene::OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData)
+bool widget::Scene::OnEventEntry(const ewol::EventEntry& _event)
+OnEventKb(ewol::keyEvent::status_te statusEvent, uniChar_t unicodeData)
 {
-	
-	EWOL_DEBUG("KB EVENT : \"" << unicodeData << "\"" << "type=" << statusEvent);
-	
-	// escape case :
-	if(unicodeData == 27) {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			UnGrabCursor();
-			SetCursor(ewol::cursorArrow);
+	if (_event.GetType() == ewol:::keyEvent:keyboardChar) {
+		EWOL_DEBUG("KB EVENT : \"" << _event.GetChar() << "\"" << "type=" << _event.GetStatus());
+		
+		// escape case :
+		if(_event.GetChar() == 27) {
+			if (_event.GetStatus() == ewol::keyEvent::statusDown) {
+				UnGrabCursor();
+				SetCursor(ewol::cursorArrow);
+			}
+			return false;
 		}
+		if (false == GetGrabStatus()) {
+			GrabCursor();
+			SetCursor(ewol::cursorNone);
+		}
+		if(    _event.GetChar() == 'z'
+		    || _event.GetChar() == 'Z') {
+			if (_event.GetStatus() == ewol::keyEvent::statusDown) {
+				m_walk |= WALK_FLAG_FORWARD;
+			}
+			if (_event.GetStatus() == ewol::keyEvent::statusUp) {
+				if ((m_walk&WALK_FLAG_FORWARD) != 0) {
+					m_walk -= WALK_FLAG_FORWARD;
+				}
+			}
+		}
+		if(    _event.GetChar() == 's'
+		    || _event.GetChar() == 'S') {
+			if (_event.GetStatus() == ewol::keyEvent::statusDown) {
+				m_walk |= WALK_FLAG_BACK;
+			}
+			if (_event.GetStatus() == ewol::keyEvent::statusUp) {
+				if ((m_walk&WALK_FLAG_BACK) != 0) {
+					m_walk -= WALK_FLAG_BACK;
+				}
+			}
+		}
+		if(    _event.GetChar() == 'q'
+		    || _event.GetChar() == 'Q') {
+			if (_event.GetStatus() == ewol::keyEvent::statusDown) {
+				m_walk |= WALK_FLAG_LEFT;
+			}
+			if (_event.GetStatus() == ewol::keyEvent::statusUp) {
+				if ((m_walk&WALK_FLAG_LEFT) != 0) {
+					m_walk -= WALK_FLAG_LEFT;
+				}
+			}
+		}
+		if(    _event.GetChar() == 'd'
+		    || _event.GetChar() == 'D') {
+			if (_event.GetStatus() == ewol::keyEvent::statusDown) {
+				m_walk |= WALK_FLAG_RIGHT;
+			}
+			if (_event.GetStatus() == ewol::keyEvent::statusUp) {
+				if ((m_walk&WALK_FLAG_RIGHT) != 0) {
+					m_walk -= WALK_FLAG_RIGHT;
+				}
+			}
+		}
+		EWOL_DEBUG("m_walk=" << m_walk);
 		return false;
 	}
-	if (false == GetGrabStatus()) {
-		GrabCursor();
-		SetCursor(ewol::cursorNone);
-	}
-	if(    unicodeData == 'z'
-	    || unicodeData == 'Z') {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			m_walk |= WALK_FLAG_FORWARD;
-		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
-			if ((m_walk&WALK_FLAG_FORWARD) != 0) {
-				m_walk -= WALK_FLAG_FORWARD;
-			}
-		}
-	}
-	if(    unicodeData == 's'
-	    || unicodeData == 'S') {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			m_walk |= WALK_FLAG_BACK;
-		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
-			if ((m_walk&WALK_FLAG_BACK) != 0) {
-				m_walk -= WALK_FLAG_BACK;
-			}
-		}
-	}
-	if(    unicodeData == 'q'
-	    || unicodeData == 'Q') {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			m_walk |= WALK_FLAG_LEFT;
-		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
-			if ((m_walk&WALK_FLAG_LEFT) != 0) {
-				m_walk -= WALK_FLAG_LEFT;
-			}
-		}
-	}
-	if(    unicodeData == 'd'
-	    || unicodeData == 'D') {
-		if (statusEvent == ewol::keyEvent::statusDown) {
-			m_walk |= WALK_FLAG_RIGHT;
-		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
-			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
-				m_walk -= WALK_FLAG_RIGHT;
-			}
-		}
-	}
-	EWOL_DEBUG("m_walk=" << m_walk);
-	return false;
-}
-
-
-bool widget::Scene::OnEventKbMove(ewol::keyEvent::status_te statusEvent, ewol::keyEvent::keyboard_te specialKey)
-{
-	if (specialKey == ewol::keyEvent::keyboardUp) {
+	// --------------------
+	// -- move mode : 
+	// --------------------
+	if (_event.GetType() == ewol::keyEvent::keyboardUp) {
 		EWOL_DEBUG("test ..." << specialKey << "  " << statusEvent);
-		if (statusEvent == ewol::keyEvent::statusDown) {
+		if (_event.GetStatus() == ewol::keyEvent::statusDown) {
 			m_walk |= WALK_FLAG_FORWARD;
 		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
+		if (_event.GetStatus() == ewol::keyEvent::statusUp) {
 			if ((m_walk&WALK_FLAG_FORWARD) != 0) {
 				m_walk -= WALK_FLAG_FORWARD;
 			}
 		}
 	}
-	if (specialKey == ewol::keyEvent::keyboardDown) {
-		if (statusEvent == ewol::keyEvent::statusDown) {
+	if (_event.GetType() == ewol::keyEvent::keyboardDown) {
+		if (_event.GetStatus() == ewol::keyEvent::statusDown) {
 			m_walk |= WALK_FLAG_BACK;
 		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
+		if (_event.GetStatus() == ewol::keyEvent::statusUp) {
 			if ((m_walk&WALK_FLAG_BACK) != 0) {
 				m_walk -= WALK_FLAG_BACK;
 			}
 		}
 	}
-	if (specialKey == ewol::keyEvent::keyboardLeft) {
-		if (statusEvent == ewol::keyEvent::statusDown) {
+	if (_event.GetType() == ewol::keyEvent::keyboardLeft) {
+		if (_event.GetStatus() == ewol::keyEvent::statusDown) {
 			m_walk |= WALK_FLAG_LEFT;
 		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
+		if (_event.GetStatus() == ewol::keyEvent::statusUp) {
 			if ((m_walk&WALK_FLAG_LEFT) != 0) {
 				m_walk -= WALK_FLAG_LEFT;
 			}
 		}
 	}
-	if (specialKey == ewol::keyEvent::keyboardRight) {
-		if (statusEvent == ewol::keyEvent::statusDown) {
+	if (_event.GetType() == ewol::keyEvent::keyboardRight) {
+		if (_event.GetStatus() == ewol::keyEvent::statusDown) {
 			m_walk |= WALK_FLAG_RIGHT;
 		}
-		if (statusEvent == ewol::keyEvent::statusUp) {
+		if (_event.GetStatus() == ewol::keyEvent::statusUp) {
 			if ((m_walk&WALK_FLAG_RIGHT) != 0) {
 				m_walk -= WALK_FLAG_RIGHT;
 			}
 		}
 	}
 	EWOL_DEBUG("m_walk=" << m_walk);
-	return false;
+	return true;
 }
 
 

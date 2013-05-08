@@ -32,9 +32,9 @@ void widget::Label::UnInit(void)
 	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
 }
 
-widget::Label::Label(etk::UString newLabel)
+widget::Label::Label(etk::UString _newLabel)
 {
-	m_label = newLabel;
+	m_label = _newLabel;
 	AddEventId(ewolEventLabelPressed);
 	SetCanHaveFocus(false);
 }
@@ -51,9 +51,9 @@ void widget::Label::CalculateMinMaxSize(void)
 	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
 }
 
-void widget::Label::SetLabel(const etk::UString& newLabel)
+void widget::Label::SetLabel(const etk::UString& _newLabel)
 {
-	m_label = newLabel;
+	m_label = _newLabel;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
@@ -63,7 +63,7 @@ etk::UString widget::Label::GetLabel(void)
 	return m_label;
 }
 
-void widget::Label::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Label::OnDraw(ewol::DrawProperty& _displayProp)
 {
 	m_text.Draw();
 }
@@ -118,11 +118,11 @@ void widget::Label::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Label::OnEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on Label ...");
-	if (1 == IdInput) {
-		if (ewol::keyEvent::statusSingle == typeEvent) {
+	if (1 == _event.GetId()) {
+		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			// nothing to do ...
 			GenerateEventId(ewolEventLabelPressed);
 			return true;
@@ -131,15 +131,15 @@ bool widget::Label::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, 
 	return false;
 }
 
-bool widget::Label::LoadXML(TiXmlNode* node)
+bool widget::Label::LoadXML(TiXmlNode* _node)
 {
-	if (NULL==node) {
+	if (NULL==_node) {
 		return false;
 	}
-	ewol::Widget::LoadXML(node);
+	ewol::Widget::LoadXML(_node);
 	// get internal data : 
 	// TODO : Unparse data type XML ...
-	EWOL_DEBUG("Load label:" << node->ToElement()->GetText());
-	SetLabel(node->ToElement()->GetText());
+	EWOL_DEBUG("Load label:" << _node->ToElement()->GetText());
+	SetLabel(_node->ToElement()->GetText());
 	return true;
 }

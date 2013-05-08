@@ -67,7 +67,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
 		private:
 			/**

@@ -200,11 +200,11 @@ void widget::List::OnRegenerateDisplay(void)
 	}
 }
 
-bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::List::OnEventInput(const ewol::EventInput& _event)
 {
-	vec2 relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(_event.GetPos());
 	
-	if (true == WidgetScrooled::OnEventInput(type, IdInput, typeEvent, pos)) {
+	if (true == WidgetScrooled::OnEventInput(_event)) {
 		ewol::widgetManager::FocusKeep(this);
 		// nothing to do ... done on upper widet ...
 		return true;
@@ -221,7 +221,7 @@ bool widget::List::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, e
 	}
 	
 	//EWOL_DEBUG("List event : idInput=" << IdInput << " typeEvent=" << typeEvent << "  raw=" << rawID << " pos=" << pos << "");
-	bool isUsed = OnItemEvent(IdInput, typeEvent, 0, rawID, pos.x(), pos.y());
+	bool isUsed = OnItemEvent(_event.GetId(), _event.GetStatus(), 0, rawID, _event.GetPos().x(), _event.GetPos().y());
 	if (true == isUsed) {
 		// TODO : this generate bugs ... I did not understand why ..
 		//ewol::widgetManager::FocusKeep(this);

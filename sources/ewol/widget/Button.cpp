@@ -46,8 +46,8 @@ void widget::Button::UnInit(void)
 
 
 
-widget::Button::Button(const etk::UString& shaperName) :
-	m_shaper(shaperName),
+widget::Button::Button(const etk::UString& _shaperName) :
+	m_shaper(_shaperName),
 	m_toggleMode(false),
 	m_value(false),
 	m_mouseHover(false),
@@ -80,12 +80,12 @@ widget::Button::~Button(void)
 	
 }
 
-void widget::Button::SetShaperName(const etk::UString& shaperName)
+void widget::Button::SetShaperName(const etk::UString& _shaperName)
 {
-	m_shaper.SetSource(shaperName);
+	m_shaper.SetSource(_shaperName);
 }
 
-void widget::Button::SetSubWidget(ewol::Widget* subWidget)
+void widget::Button::SetSubWidget(ewol::Widget* _subWidget)
 {
 	int32_t idWidget=0;
 	if (NULL!=m_subWidget[idWidget]) {
@@ -96,14 +96,14 @@ void widget::Button::SetSubWidget(ewol::Widget* subWidget)
 			m_subWidget[idWidget]=NULL;
 		}
 	}
-	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)subWidget);
-	m_subWidget[idWidget] = subWidget;
+	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
+	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
 	MarkToRedraw();
 }
 
-void widget::Button::SetSubWidgetToggle(ewol::Widget* subWidget)
+void widget::Button::SetSubWidgetToggle(ewol::Widget* _subWidget)
 {
 	int32_t idWidget=1;
 	if (NULL!=m_subWidget[idWidget]) {
@@ -114,8 +114,8 @@ void widget::Button::SetSubWidgetToggle(ewol::Widget* subWidget)
 			m_subWidget[idWidget]=NULL;
 		}
 	}
-	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)subWidget);
-	m_subWidget[idWidget] = subWidget;
+	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
+	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
 }
@@ -131,7 +131,7 @@ ewol::Widget* widget::Button::GetSubWidgetToggle(void)
 }
 
 
-void widget::Button::CalculateSize(const vec2& availlable)
+void widget::Button::CalculateSize(const vec2& _availlable)
 {
 	vec2 padding = m_shaper.GetPadding();
 	// set minimal size
@@ -141,10 +141,10 @@ void widget::Button::CalculateSize(const vec2& availlable)
 	vec2 minimumSizeToggle(0,0);
 	// Checking the expand properties :
 	if (m_userExpand.x() == true) {
-		m_size.setX(availlable.x());
+		m_size.setX(_availlable.x());
 	}
 	if (m_userExpand.y() == true) {
-		m_size.setY(availlable.y());
+		m_size.setY(_availlable.y());
 	}
 	// Checkin the filling properties ==> for the subElements:
 	vec2 subElementSize = m_minSize;
@@ -195,7 +195,7 @@ void widget::Button::CalculateMinMaxSize(void)
 	MarkToRedraw();
 }
 
-void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Button::OnDraw(ewol::DrawProperty& _displayProp)
 {
 	// draw the shaaper (if needed indeed)
 	m_shaper.Draw();
@@ -203,11 +203,11 @@ void widget::Button::OnDraw(ewol::DrawProperty& displayProp)
 	if(    false == m_toggleMode
 	    || false == m_value) {
 		if (NULL!=m_subWidget[0]) {
-			m_subWidget[0]->GenDraw(displayProp);
+			m_subWidget[0]->GenDraw(_displayProp);
 		}
 	} else {
 		if (NULL!=m_subWidget[1]) {
-			m_subWidget[1]->GenDraw(displayProp);
+			m_subWidget[1]->GenDraw(_displayProp);
 		}
 	}
 }
@@ -234,10 +234,10 @@ void widget::Button::OnRegenerateDisplay(void)
 	}
 }
 
-void widget::Button::SetValue(bool val)
+void widget::Button::SetValue(bool _val)
 {
-	if (m_value != val) {
-		m_value = val;
+	if (m_value != _val) {
+		m_value = _val;
 		MarkToRedraw();
 	}
 }
@@ -247,10 +247,10 @@ bool widget::Button::GetValue(void)
 	return m_value;
 }
 
-void widget::Button::SetToggleMode(bool togg)
+void widget::Button::SetToggleMode(bool _togg)
 {
-	if (m_toggleMode != togg) {
-		m_toggleMode = togg;
+	if (m_toggleMode != _togg) {
+		m_toggleMode = _togg;
 		if (m_value == true) {
 			m_value = false;
 			// TODO : Change display and send event ...
@@ -260,15 +260,15 @@ void widget::Button::SetToggleMode(bool togg)
 	}
 }
 
-bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Button::OnEventInput(const ewol::EventInput& _event)
 {
 	bool previousHoverState = m_mouseHover;
-	if(    ewol::keyEvent::statusLeave == typeEvent
-	    || ewol::keyEvent::statusAbort == typeEvent) {
+	if(    ewol::keyEvent::statusLeave == _event.GetStatus()
+	    || ewol::keyEvent::statusAbort == _event.GetStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		vec2 relativePos = RelativePosition(pos);
+		vec2 relativePos = RelativePosition(_event.GetPos());
 		// prevent error from ouside the button
 		if(    relativePos.x() < m_selectableAreaPos.x()
 		    || relativePos.y() < m_selectableAreaPos.y()
@@ -283,20 +283,20 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 	bool previousPressed = m_buttonPressed;
 	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
-		if (1 == IdInput) {
-			if(ewol::keyEvent::statusDown == typeEvent) {
+		if (1 == _event.GetId()) {
+			if(ewol::keyEvent::statusDown == _event.GetStatus()) {
 				//EWOL_DEBUG("Generate event : " << ewolEventButtonDown);
 				GenerateEventId(ewolEventButtonDown);
 				m_buttonPressed = true;
 				MarkToRedraw();
 			}
-			if(ewol::keyEvent::statusUp == typeEvent) {
+			if(ewol::keyEvent::statusUp == _event.GetStatus()) {
 				//EWOL_DEBUG("Generate event : " << ewolEventButtonUp);
 				GenerateEventId(ewolEventButtonUp);
 				m_buttonPressed = false;
 				MarkToRedraw();
 			}
-			if(ewol::keyEvent::statusSingle == typeEvent) {
+			if(ewol::keyEvent::statusSingle == _event.GetStatus()) {
 				// inverse value :
 				m_value = (m_value)?false:true;
 				//EWOL_DEBUG("Generate event : " << ewolEventButtonPressed);
@@ -321,12 +321,14 @@ bool widget::Button::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput,
 }
 
 
-bool widget::Button::OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData)
+bool widget::Button::OnEventEntry(const ewol::EventEntry& _event)
 {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    typeEvent == ewol::keyEvent::statusDown
-	    && unicodeData == '\r') {
+	if(    _event.GetType() == ewol::keyEvent::keyboardChar
+	    && _event.GetStatus() == ewol::keyEvent::statusDown
+	    && _event.GetChar() == '\r') {
 		GenerateEventId(ewolEventButtonEnter);
+		return true;
 	}
 	return false;
 }
@@ -348,21 +350,74 @@ void widget::Button::CheckStatus(void)
 	}
 }
 
-void widget::Button::ChangeStatusIn(int32_t newStatusId)
+void widget::Button::ChangeStatusIn(int32_t _newStatusId)
 {
-	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
+	if (true == m_shaper.ChangeStatusIn(_newStatusId) ) {
 		PeriodicCallSet(true);
 		MarkToRedraw();
 	}
 }
 
 
-void widget::Button::PeriodicCall(int64_t localTime)
+void widget::Button::PeriodicCall(int64_t _localTime)
 {
-	if (false == m_shaper.PeriodicCall(localTime) ) {
+	if (false == m_shaper.PeriodicCall(_localTime) ) {
 		PeriodicCallSet(false);
 	}
 	MarkToRedraw();
 }
 
+
+bool widget::Button::LoadXML(TiXmlNode* _node)
+{
+	if (NULL==_node) {
+		return false;
+	}
+	// parse generic properties :
+	ewol::Widget::LoadXML(_node);
+	// remove previous element :
+	SetSubWidget(NULL);
+	SetSubWidgetToggle(NULL);
+	
+	// parse all the elements :
+	for(TiXmlNode * pNode = _node->FirstChild() ;
+	    NULL != pNode ;
+	    pNode = pNode->NextSibling() ) {
+		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+			// nothing to do, just proceed to next step
+			continue;
+		}
+		etk::UString widgetName = pNode->Value();
+		if (ewol::widgetManager::Exist(widgetName) == false) {
+			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			continue;
+		}
+		bool toogleMode=false;
+		if (NULL != GetSubWidget()) {
+			toogleMode=true;
+			if (NULL != GetSubWidgetToggle()) {
+				EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+				continue;
+			}
+		}
+		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
+		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
+		if (tmpWidget == NULL) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			continue;
+		}
+		// add widget :
+		if (toogleMode==false) {
+			SetSubWidget(tmpWidget);
+		} else {
+			SetToggleMode(true);
+			SetSubWidgetToggle(tmpWidget);
+		}
+		if (false == tmpWidget->LoadXML(pNode)) {
+			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+			return false;
+		}
+	}
+	return true;
+}
 

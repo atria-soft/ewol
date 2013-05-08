@@ -170,15 +170,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ColorBar::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::ColorBar::OnEventInput(const ewol::EventInput& _event)
 {
-	vec2 relativePos = RelativePosition(pos);
+	vec2 relativePos = RelativePosition(_event.GetPos());
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == IdInput) {
+	if (1 == _event.GetId()) {
 		relativePos.setValue( etk_max(etk_min(relativePos.x(), m_size.x()),0),
 		                      etk_max(etk_min(relativePos.y(), m_size.y()),0));
-		if(    ewol::keyEvent::statusSingle == typeEvent
-		    || ewol::keyEvent::statusMove   == typeEvent) {
+		if(    ewol::keyEvent::statusSingle == _event.GetStatus()
+		    || ewol::keyEvent::statusMove   == _event.GetStatus()) {
 			// nothing to do ...
 			m_currentUserPos.setValue( relativePos.x()/m_size.x(),
 			                           relativePos.y()/m_size.y() );

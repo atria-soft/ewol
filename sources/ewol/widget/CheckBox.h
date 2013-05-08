@@ -42,8 +42,8 @@ namespace widget {
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
-			virtual bool OnEventKb(ewol::keyEvent::status_te typeEvent, uniChar_t unicodeData);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual bool OnEventEntry(const ewol::EventEntry& _event);
 	};
 	
 };

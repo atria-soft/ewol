@@ -118,7 +118,7 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool widget::Joystick::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::Joystick::OnEventInput(const ewol::EventInput& _event)
 {
 /*
 	if (1 == IdInput) {

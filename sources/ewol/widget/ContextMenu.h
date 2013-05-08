@@ -42,7 +42,7 @@ namespace widget {
 			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual void CalculateSize(const vec2& availlable);
 			virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "ewol::ContextMenu"; };

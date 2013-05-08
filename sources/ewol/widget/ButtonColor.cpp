@@ -154,14 +154,14 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 }
 
 
-bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos)
+bool widget::ButtonColor::OnEventInput(const ewol::EventInput& _event)
 {
 	bool previousHoverState = m_mouseHover;
-	if(ewol::keyEvent::statusLeave == typeEvent) {
+	if(ewol::keyEvent::statusLeave == _event.GetStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
-		vec2 relativePos = RelativePosition(pos);
+		vec2 relativePos = RelativePosition(_event.GetPos());
 		// prevent error from ouside the button
 		if(    relativePos.x() < m_selectableAreaPos.x()
 		    || relativePos.y() < m_selectableAreaPos.y()
@@ -176,16 +176,16 @@ bool widget::ButtonColor::OnEventInput(ewol::keyEvent::type_te type, int32_t IdI
 	bool previousPressed = m_buttonPressed;
 	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
-		if (1 == IdInput) {
-			if(ewol::keyEvent::statusDown == typeEvent) {
+		if (1 == _event.GetId()) {
+			if(ewol::keyEvent::statusDown == _event.GetStatus()) {
 				m_buttonPressed = true;
 				MarkToRedraw();
 			}
-			if(ewol::keyEvent::statusUp == typeEvent) {
+			if(ewol::keyEvent::statusUp == _event.GetStatus()) {
 				m_buttonPressed = false;
 				MarkToRedraw();
 			}
-			if(ewol::keyEvent::statusSingle == typeEvent) {
+			if(ewol::keyEvent::statusSingle == _event.GetStatus()) {
 				m_buttonPressed = false;
 				m_mouseHover = false;
 				// create a context menu : 

@@ -34,18 +34,18 @@ namespace widget {
 		public:
 			/**
 			 * @brief Constructor
-			 * @param[in] newLabel The displayed decorated text.
+			 * @param[in] _newLabel The displayed decorated text.
 			 */
-			Label(etk::UString newLabel="---");
+			Label(etk::UString _newLabel="---");
 			/**
 			 * @brief destructor
 			 */
 			virtual ~Label(void) { };
 			/**
 			 * @brief Change the label displayed
-			 * @param[in] newLabel The displayed decorated text.
+			 * @param[in] _newLabel The displayed decorated text.
 			 */
-			void SetLabel(const etk::UString& newLabel);
+			void SetLabel(const etk::UString& _newLabel);
 			/**
 			 * @brief Get the current displayed label
 			 * @return The displayed decorated text.
@@ -56,9 +56,9 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "Ewol::Label"; };
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
-			virtual bool OnEventInput(ewol::keyEvent::type_te type, int32_t IdInput, ewol::keyEvent::status_te typeEvent, const vec2& pos);
-			virtual bool LoadXML(TiXmlNode* node);
+			virtual void OnDraw(ewol::DrawProperty& _displayProp);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual bool LoadXML(TiXmlNode* _node);
 	};
 	
 };
