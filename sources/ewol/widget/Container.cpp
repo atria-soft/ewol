@@ -39,6 +39,9 @@ void widget::Container::SetSubWidget(ewol::Widget* _newWidget)
 	}
 	SubWidgetRemove();
 	m_subWidget = _newWidget;
+	if (m_subWidget!=NULL) {
+		m_subWidget->SetUpperWidget(this);
+	}
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
@@ -47,6 +50,7 @@ void widget::Container::SetSubWidget(ewol::Widget* _newWidget)
 void widget::Container::SubWidgetRemove(void)
 {
 	if (NULL != m_subWidget) {
+		m_subWidget->RemoveUpperWidget();
 		delete(m_subWidget);
 		// might have been destroy first here : 
 		if (m_subWidget!=NULL) {
@@ -77,17 +81,43 @@ void widget::Container::OnObjectRemove(ewol::EObject* _removeObject)
 	}
 }
 
-void widget::Container::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::Container::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
+	if (true==m_hide){
+		// widget is hidden ...
+		return;
+	}
+	ewol::Widget::SystemDraw(_displayProp);
 	if (NULL!=m_subWidget) {
-		m_subWidget->GenDraw(_displayProp);
+		ewol::DrawProperty prop = _displayProp;
+		prop.Limit(m_origin, m_size);
+		m_subWidget->SystemDraw(prop);
 	}
 }
 
 void widget::Container::CalculateSize(const vec2& _availlable)
 {
 	if (NULL!=m_subWidget) {
-		m_subWidget->SetOrigin(m_origin);
+		vec2 origin = m_origin+m_offset;
+		vec2 minSize = m_subWidget->GetCalculateMinSize();
+		bvec2 expand = m_subWidget->GetExpand();
+		if (    expand.x() == false
+		    || minSize.x()>_availlable.x()) {
+			if (m_gravity == ewol::gravityCenter) {
+				origin -= vec2((minSize.x() - _availlable.x())/2.0f, 0);
+			} else if (((int32_t)m_gravity & (int32_t)ewol::gravityRight) != 0) {
+				origin -= vec2((minSize.x() - _availlable.x()), 0);
+			}
+		}
+		if(    expand.y() == false
+		    || minSize.y()>_availlable.y()) {
+			if (m_gravity == ewol::gravityCenter) {
+				origin -= vec2(0, (minSize.y() - _availlable.y())/2.0f);
+			} else if (((int32_t)m_gravity & (int32_t)ewol::gravityTop) != 0) {
+				origin -= vec2(0, (minSize.y() - _availlable.y()));
+			}
+		}
+		m_subWidget->SetOrigin(origin);
 		m_subWidget->CalculateSize(_availlable);
 	}
 	ewol::Widget::CalculateSize(_availlable);
@@ -165,3 +195,14 @@ bool widget::Container::LoadXML(TiXmlNode* _node)
 	}
 	return true;
 }
+
+void widget::Container::SetOffset(const vec2& _newVal)
+{
+	if (m_offset != _newVal) {
+		ewol::Widget::SetOffset(_newVal);
+		// recalculate the new sise and position of sub widget ...
+		CalculateSize(m_size);
+	}
+}
+
+

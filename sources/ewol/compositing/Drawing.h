@@ -97,11 +97,13 @@ namespace ewol
 			 * @param[in] pos Position of the text (in 3D)
 			 */
 			void SetPos(vec3 pos);
+			inline void SetPos(const vec2& pos) { SetPos(vec3(pos.x(), pos.y(), 0)); };
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] pos ofset apply of the text (in 3D)
 			 */
 			void SetRelPos(vec3 pos);
+			inline void SetRelPos(const vec2& pos) { SetRelPos(vec3(pos.x(), pos.y(), 0)); };
 			/**
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] color Color to set on foreground (for next print)
@@ -143,21 +145,25 @@ namespace ewol
 			 * @param[in] dest Position of the end of the line.
 			 */
 			void LineTo(vec3 dest);
+			inline void LineTo(const vec2& dest) { LineTo(vec3(dest.x(), dest.y(), 0)); };
 			/**
 			 * @brief Relative drawing a line (spacial vector)
 			 * @param[in] vect Vector of the curent line.
 			 */
 			void LineRel(vec3 vect);
+			inline void LineRel(const vec2& vect) { LineRel(vec3(vect.x(), vect.y(), 0)); };
 			/**
 			 * @brief Draw a 2D rectangle to the position requested.
 			 * @param[in] dest Position the the end of the rectangle
 			 */
 			void Rectangle(vec3 dest);
+			inline void Rectangle(const vec2& dest) { Rectangle(vec3(dest.x(), dest.y(), 0)); };
 			/**
 			 * @brief Draw a 2D rectangle to the requested size.
 			 * @param[in] width size of the rectangle
 			 */
 			void RectangleWidth(vec3 size);
+			inline void RectangleWidth(const vec2& size) { RectangleWidth(vec3(size.x(), size.y(), 0)); };
 			/**
 			 * @brief Draw a 3D rectangle to the position requested.
 			 * @param[in] dest Position the the end of the rectangle

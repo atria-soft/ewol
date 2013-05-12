@@ -12,6 +12,12 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <etk/Vector.h>
+namespace ewol {
+	// some class need to define element befor other ...
+	class EObject;
+};
+
+#include <ewol/eObject/EMessage.h>
 
 namespace ewol {
 	namespace EObjectMessageMultiCast {
@@ -20,7 +26,6 @@ namespace ewol {
 		void AnonymousSend(const char* const _messageId, const etk::UString& _data);
 	};
 	
-	class EObject;
 	/**
 	 * local class for event generation
 	 */
@@ -110,7 +115,10 @@ namespace ewol {
 			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */
-			void RegisterOnEvent(ewol::EObject * _destinationObject, const char * _eventId, const char * _eventIdgenerated = NULL, const etk::UString& _overloadData="");
+			void RegisterOnEvent(ewol::EObject * _destinationObject,
+			                     const char * _eventId,
+			                     const char * _eventIdgenerated = NULL,
+			                     const etk::UString& _overloadData="");
 			
 			/**
 			 * @brief Inform object that an other object is removed ...
@@ -121,11 +129,9 @@ namespace ewol {
 			
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
-			 * @param[in] _CallerObject Pointer on the EObject that information came from
-			 * @param[in] _eventId Message registered by this class
-			 * @param[in] _data Data registered by this class
+			 * @param[in] _msg Message handle
 			 */
-			virtual void OnReceiveMessage(ewol::EObject * _CallerObject, const char * _eventId, const etk::UString& _data) { };
+			virtual void OnReceiveMessage(const ewol::EMessage& _msg) { };
 			
 		protected:
 			etk::UString m_name; //!< name of the element ...

@@ -885,7 +885,7 @@ void widget::Scene::renderscene(int pass)
 }
 
 
-void widget::Scene::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Scene::OnDraw(void)
 {
 	if (m_dynamicsWorld) {
 		/*
@@ -1078,7 +1078,7 @@ void widget::Scene::PeriodicCall(int64_t localTime)
 }
 
 
-void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
+void widget::Scene::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
 	ewol::openGL::Push();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
@@ -1095,11 +1095,10 @@ void widget::Scene::GenDraw(ewol::DrawProperty displayProp)
 	//ewol::openGL::SetMatrix(tmpMat);
 	ewol::openGL::SetMatrix(tmpProjection);
 	
+	ewol::DrawProperty prop = _displayProp;
+	_displayProp.Limit(m_origin, m_size);
 	// Call the widget drawing methode
-	displayProp.m_origin = m_origin;
-	displayProp.m_size = m_size;
-	// Call the widget drawing methode
-	OnDraw(displayProp);
+	OnDraw(prop);
 	
 	ewol::openGL::Pop();
 }

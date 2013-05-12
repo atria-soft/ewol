@@ -175,20 +175,20 @@ void widget::Parameter::SetTitle(etk::UString label)
 }
 
 
-void widget::Parameter::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::Parameter::OnReceiveMessage(const ewol::EMessage& _msg)
 {
-	widget::PopUp::OnReceiveMessage(CallerObject, eventId, data);
-	EWOL_DEBUG("event on the parameter : " << eventId << " data=\"" << data << "\"");
-	if (eventId == ewolEventParameterClose) {
+	widget::PopUp::OnReceiveMessage(_msg);
+	EWOL_DEBUG("event on the parameter : " << _msg);
+	if (_msg.GetMessage() == ewolEventParameterClose) {
 		// inform that the parameter windows is closed
 		GenerateEventId(ewolEventParameterClose);
 		// Close this widget ...
 		AutoDestroy();
-	} else if (eventId == l_eventMenuSelected) {
+	} else if (_msg.GetMessage() == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
 			int32_t value = 0;
-			sscanf(data.c_str(), "%d", &value);
-			EWOL_DEBUG("event on the parameter : " << eventId << " select ID=" << value << "");
+			sscanf(_msg.GetData().c_str(), "%d", &value);
+			EWOL_DEBUG("event on the parameter : " << _msg.GetMessage() << " select ID=" << value << "");
 			m_wSlider->SubWidgetSelectSet(value);
 		}
 	}

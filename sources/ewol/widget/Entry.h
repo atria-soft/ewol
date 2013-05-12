@@ -179,12 +179,12 @@ namespace widget {
 			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool OnEventEntry(const ewol::EventEntry& _event);
-			virtual void OnReceiveMessage(ewol::EObject * _CallerObject, const char * _eventId, const etk::UString& _data);
+			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
 			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
 			virtual void CalculateMinMaxSize(void);
 		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& _displayProp);
+			virtual void OnDraw(void);
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);
 			virtual void ChangeStatusIn(int32_t _newStatusId);

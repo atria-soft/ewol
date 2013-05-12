@@ -73,32 +73,33 @@ float widget::ProgressBar::ValueGet(void)
 }
 
 
+void widget::ProgressBar::OnDraw(void)
+{
+	m_draw.Draw();
+}
+
 void widget::ProgressBar::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
 		// clean the object list ...
-		ClearOObjectList();
+		m_draw.Clear();
 		
-		ewol::Drawing * tmpDraw = new ewol::Drawing;
-		
-		tmpDraw->SetColor(m_textColorFg);
+		m_draw.SetColor(m_textColorFg);
 		
 		int32_t tmpSizeX = m_size.x() - 10;
 		int32_t tmpSizeY = m_size.y() - 10;
 		int32_t tmpOriginX = 5;
 		int32_t tmpOriginY = 5;
-		tmpDraw->SetColor(m_textColorBgOn);
-		tmpDraw->SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
-		tmpDraw->RectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
-		tmpDraw->SetColor(m_textColorBgOff);
-		tmpDraw->SetPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
-		tmpDraw->RectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
+		m_draw.SetColor(m_textColorBgOn);
+		m_draw.SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
+		m_draw.RectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
+		m_draw.SetColor(m_textColorBgOff);
+		m_draw.SetPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
+		m_draw.RectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
 		
 		// TODO : Create a better progress Bar ...
-		//tmpDraw->SetColor(m_textColorFg);
-		//tmpDraw->RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
-		
-		AddOObject(tmpDraw);
+		//m_draw.SetColor(m_textColorFg);
+		//m_draw.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 	}
 }
 

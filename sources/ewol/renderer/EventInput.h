@@ -37,16 +37,29 @@ namespace ewol {
 			void SetPos(const vec2& _pos) { m_pos = _pos; };
 			inline const vec2& GetPos(void) const { return m_pos; };
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventInput& _obj);
 	
 	class EventInputSystem {
 		public:
 			EventInputSystem(ewol::keyEvent::type_te _type,
 			                 ewol::keyEvent::status_te _status,
 			                 uint8_t _id,
-			                 const vec2& _pos) :
-				m_event(_type, _status, _id, _pos)
+			                 const vec2& _pos,
+			                 ewol::Widget* _dest,
+			                 int32_t _realIdEvent) :
+				m_event(_type, _status, _id, _pos),
+				m_dest(_dest),
+				m_realIdEvent(_realIdEvent)
 			{ };
 			ewol::EventInput m_event;
+		private:
+			ewol::Widget* m_dest;
+			int32_t m_realIdEvent;
+		public:
+			void SetDestWidget(ewol::Widget* _dest) { m_dest = _dest; };
+			inline ewol::Widget* GetDestWidget(void) const { return m_dest; };
+			void SetRealId(int32_t _realIdEvent) { m_realIdEvent = _realIdEvent; };
+			inline int32_t GetRealId(void) const { return m_realIdEvent; };
 		/*
 		private:
 			int64_t m_lastTime;
@@ -61,6 +74,7 @@ namespace ewol {
 			vec2 m_pos;
 		*/
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventInputSystem& _obj);
 };
 
 #endif

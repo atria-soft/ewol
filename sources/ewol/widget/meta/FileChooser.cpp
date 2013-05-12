@@ -350,33 +350,25 @@ void widget::FileChooser::SetFileName(etk::UString filename)
 	m_widgetCurrentFileName->SetValue(filename);
 }
 
-
-/**
- * @brief Receive a message from an other EObject with a specific eventId and data
- * @param[in] CallerObject Pointer on the EObject that information came from
- * @param[in] eventId Message registered by this class
- * @param[in] data Data registered by this class
- * @return ---
- */
-void widget::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::FileChooser::OnReceiveMessage(const ewol::EMessage& _msg)
 {
-	EWOL_INFO("Receive Event from the LIST ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (ewolEventFileChooserEntryFolder == eventId) {
+	EWOL_INFO("Receive Event from the LIST ... : " << _msg);
+	if (ewolEventFileChooserEntryFolder == _msg.GetMessage()) {
 		//==> change the folder name
 		// TODO : Change the folder, if it exit ...
-	} else if (ewolEventFileChooserEntryFile == eventId) {
+	} else if (ewolEventFileChooserEntryFile == _msg.GetMessage()) {
 		//==> change the file name
-		m_file = data;
+		m_file = _msg.GetData();
 		// Update the selected file in the list : 
 		if (m_widgetListFile != NULL) {
 			m_widgetListFile->SetSelect(m_file);
 		}
-	} else if (ewolEventFileChooserCancel == eventId) {
+	} else if (ewolEventFileChooserCancel == _msg.GetMessage()) {
 		//==> Auto remove ...
-		GenerateEventId(eventId);
+		GenerateEventId(_msg.GetMessage());
 		AutoDestroy();
-	} else if (ewolEventFileChooserHidenFileChange == eventId) {
-		if (data == "true") {
+	} else if (ewolEventFileChooserHidenFileChange == _msg.GetMessage()) {
+		if (_msg.GetData() == "true") {
 			if (NULL!=m_widgetListFolder) {
 				m_widgetListFolder->SetShowHiddenFiles(true);
 			}
@@ -391,32 +383,32 @@ void widget::FileChooser::OnReceiveMessage(ewol::EObject * CallerObject, const c
 				m_widgetListFile->SetShowHiddenFiles(false);
 			}
 		}
-	} else if (ewolEventFileChooserListFolder == eventId) {
+	} else if (ewolEventFileChooserListFolder == _msg.GetMessage()) {
 		//==> this is an internal event ...
-		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << data << "\"");
-		m_folder = m_folder + data;
+		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << _msg.GetData() << "\"");
+		m_folder = m_folder + _msg.GetData();
 		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
 		m_folder = etk::tool::SimplifyPath(m_folder);
 		SetFileName("");
 		UpdateCurrentFolder();
-	} else if (ewolEventFileChooserListFile == eventId) {
-		SetFileName(data);
+	} else if (ewolEventFileChooserListFile == _msg.GetMessage()) {
+		SetFileName(_msg.GetData());
 		etk::UString tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
-		GenerateEventId(eventId, tmpFileCompleatName);
-	} else if(     eventId == ewolEventFileChooserListFileValidate 
-	           || (eventId == ewolEventFileChooserValidate       && m_file != "" )
-	           || (eventId == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
+		GenerateEventId(_msg.GetMessage(), tmpFileCompleatName);
+	} else if(     _msg.GetMessage() == ewolEventFileChooserListFileValidate 
+	           || (_msg.GetMessage() == ewolEventFileChooserValidate       && m_file != "" )
+	           || (_msg.GetMessage() == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the File ==> generate a validate
-		if (data != "") {
-			SetFileName(data);
+		if (_msg.GetData() != "") {
+			SetFileName(_msg.GetData());
 		}
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
 		etk::UString tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
 		GenerateEventId(ewolEventFileChooserValidate, tmpFileCompleatName);
 		AutoDestroy();
-	} else if(ewolEventFileChooserHome == eventId) {
+	} else if(ewolEventFileChooserHome == _msg.GetMessage()) {
 		etk::UString tmpUserFolder = etk::GetUserHomeFolder();
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		

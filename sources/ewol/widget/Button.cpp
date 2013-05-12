@@ -48,11 +48,11 @@ void widget::Button::UnInit(void)
 
 widget::Button::Button(const etk::UString& _shaperName) :
 	m_shaper(_shaperName),
-	m_toggleMode(false),
 	m_value(false),
+	m_lock(widget::Button::lockNone),
+	m_toggleMode(false),
 	m_mouseHover(false),
 	m_buttonPressed(false),
-	m_imageDisplaySize(32),
 	m_selectableAreaPos(0,0),
 	m_selectableAreaSize(0,0)
 {
@@ -66,8 +66,8 @@ widget::Button::Button(const etk::UString& _shaperName) :
 	AddEventId(ewolEventButtonEnter);
 	AddEventId(ewolEventButtonLeave);
 	AddEventId(ewolEventButtonValue);
-	// set basic status for the shaper :
-	m_shaper.ChangeStatusIn(STATUS_UP);
+	// shaper satatus update:
+	CheckStatus();
 	// This widget can have the focus ...
 	SetCanHaveFocus(true);
 	// Limit event at 1:
@@ -79,6 +79,7 @@ widget::Button::~Button(void)
 {
 	
 }
+
 
 void widget::Button::SetShaperName(const etk::UString& _shaperName)
 {
@@ -119,17 +120,6 @@ void widget::Button::SetSubWidgetToggle(ewol::Widget* _subWidget)
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
 }
-
-ewol::Widget* widget::Button::GetSubWidget(void)
-{
-	return m_subWidget[0];
-}
-
-ewol::Widget* widget::Button::GetSubWidgetToggle(void)
-{
-	return m_subWidget[1];
-}
-
 
 void widget::Button::CalculateSize(const vec2& _availlable)
 {
@@ -195,21 +185,30 @@ void widget::Button::CalculateMinMaxSize(void)
 	MarkToRedraw();
 }
 
-void widget::Button::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::Button::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
-	// draw the shaaper (if needed indeed)
-	m_shaper.Draw();
+	if (true==m_hide){
+		// widget is hidden ...
+		return;
+	}
+	ewol::Widget::SystemDraw(_displayProp);
 	// draw the widget that need something ...
 	if(    false == m_toggleMode
-	    || false == m_value) {
+	    || false == m_value
+	    || NULL==m_subWidget[1]) {
 		if (NULL!=m_subWidget[0]) {
-			m_subWidget[0]->GenDraw(_displayProp);
+			m_subWidget[0]->SystemDraw(_displayProp);
 		}
 	} else {
 		if (NULL!=m_subWidget[1]) {
-			m_subWidget[1]->GenDraw(_displayProp);
+			m_subWidget[1]->SystemDraw(_displayProp);
 		}
 	}
+}
+void widget::Button::OnDraw(void)
+{
+	// draw the shaaper (if needed indeed)
+	m_shaper.Draw();
 }
 
 void widget::Button::OnRegenerateDisplay(void)
@@ -223,7 +222,8 @@ void widget::Button::OnRegenerateDisplay(void)
 		m_shaper.SetInsideSize(vec2ClipInt32(m_selectableAreaSize-padding*2.0f));
 	}
 	if(    false == m_toggleMode
-	    || false == m_value) {
+	    || false == m_value
+	    || NULL==m_subWidget[1]) {
 		if (NULL!=m_subWidget[0]) {
 			m_subWidget[0]->OnRegenerateDisplay();
 		}
@@ -234,17 +234,26 @@ void widget::Button::OnRegenerateDisplay(void)
 	}
 }
 
-void widget::Button::SetValue(bool _val)
+void widget::Button::SetLock(buttonLock_te _lock)
 {
-	if (m_value != _val) {
-		m_value = _val;
+	if (m_lock != _lock) {
+		m_lock = _lock;
+		if(widget::Button::lockAccess == _lock) {
+			m_buttonPressed = false;
+			m_mouseHover = false;
+		}
+		CheckStatus();
 		MarkToRedraw();
 	}
 }
 
-bool widget::Button::GetValue(void)
+void widget::Button::SetValue(bool _val)
 {
-	return m_value;
+	if (m_value != _val) {
+		m_value = _val;
+		CheckStatus();
+		MarkToRedraw();
+	}
 }
 
 void widget::Button::SetToggleMode(bool _togg)
@@ -262,6 +271,10 @@ void widget::Button::SetToggleMode(bool _togg)
 
 bool widget::Button::OnEventInput(const ewol::EventInput& _event)
 {
+	// disable event in the lock access mode :
+	if(widget::Button::lockAccess == m_lock) {
+		return false;
+	}
 	bool previousHoverState = m_mouseHover;
 	if(    ewol::keyEvent::statusLeave == _event.GetStatus()
 	    || ewol::keyEvent::statusAbort == _event.GetStatus()) {
@@ -297,17 +310,25 @@ bool widget::Button::OnEventInput(const ewol::EventInput& _event)
 				MarkToRedraw();
 			}
 			if(ewol::keyEvent::statusSingle == _event.GetStatus()) {
-				// inverse value :
-				m_value = (m_value)?false:true;
-				//EWOL_DEBUG("Generate event : " << ewolEventButtonPressed);
-				GenerateEventId(ewolEventButtonPressed);
-				//EWOL_DEBUG("Generate event : " << ewolEventButtonValue << " val=" << m_value);
-				GenerateEventId(ewolEventButtonValue, m_value);
-				if(    false == m_toggleMode
-				    && true == m_value) {
-					m_value = false;
+				if(    (    m_value == true
+				         && widget::Button::lockWhenPressed == m_lock)
+				    || (    m_value == false
+				         && widget::Button::lockWhenReleased == m_lock) ) {
+					// nothing to do : Lock mode ...
+					// user might set himself the new correct value with @ref SetValue(xxx)
+				} else {
+					// inverse value :
+					m_value = (m_value)?false:true;
+					//EWOL_DEBUG("Generate event : " << ewolEventButtonPressed);
+					GenerateEventId(ewolEventButtonPressed);
 					//EWOL_DEBUG("Generate event : " << ewolEventButtonValue << " val=" << m_value);
 					GenerateEventId(ewolEventButtonValue, m_value);
+					if(    false == m_toggleMode
+					    && true == m_value) {
+						m_value = false;
+						//EWOL_DEBUG("Generate event : " << ewolEventButtonValue << " val=" << m_value);
+						GenerateEventId(ewolEventButtonValue, m_value);
+					}
 				}
 				MarkToRedraw();
 			}
@@ -378,6 +399,39 @@ bool widget::Button::LoadXML(TiXmlNode* _node)
 	// remove previous element :
 	SetSubWidget(NULL);
 	SetSubWidgetToggle(NULL);
+	
+	etk::UString tmpAttributeValue = _node->ToElement()->Attribute("toggle");
+	if (true == tmpAttributeValue.CompareNoCase("true")) {
+		m_toggleMode = true;
+	} else if (true == tmpAttributeValue.CompareNoCase("1")) {
+		m_toggleMode = true;
+	} else {
+		m_toggleMode = false;
+	}
+	tmpAttributeValue = _node->ToElement()->Attribute("lock");
+	if(    true == tmpAttributeValue.CompareNoCase("true")
+	    || true == tmpAttributeValue.CompareNoCase("1")) {
+		m_lock = widget::Button::lockAccess;
+	} else if(    true == tmpAttributeValue.CompareNoCase("down")
+	           || true == tmpAttributeValue.CompareNoCase("pressed")) {
+		m_lock = widget::Button::lockWhenPressed;
+	} else if(    true == tmpAttributeValue.CompareNoCase("up")
+	           || true == tmpAttributeValue.CompareNoCase("released")) {
+		m_lock = widget::Button::lockWhenReleased;
+	} else {
+		m_lock = widget::Button::lockNone;
+	}
+	tmpAttributeValue = _node->ToElement()->Attribute("value");
+	if(    true == tmpAttributeValue.CompareNoCase("true")
+	    || true == tmpAttributeValue.CompareNoCase("1")) {
+		if (m_toggleMode==true) {
+			m_value = true;
+		} else {
+			m_value = false;
+		}
+	} else {
+		m_value = false;
+	}
 	
 	// parse all the elements :
 	for(TiXmlNode * pNode = _node->FirstChild() ;

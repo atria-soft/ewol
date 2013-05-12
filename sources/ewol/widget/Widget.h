@@ -31,11 +31,53 @@ namespace ewol {
 namespace ewol {
 	
 	class DrawProperty{
+		/*
+		                                                          /--> m_windowsSize
+		      *--------------------------------------------------*
+		      |                                                  |
+		      |                                                  |
+		      |                                    m_size        |
+		      |                                   /              |
+		      |              o-------------------o               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              |                   |               |
+		      |              o-------------------o               |
+		      |             /                                    |
+		      |     m_origin                                     |
+		      |                                                  |
+		      *--------------------------------------------------*
+		     /
+		   (0,0)
+		 */
 		public :
-			ivec2 m_windowsSize;
-			ivec2 m_origin;
-			ivec2 m_size;
+			ivec2 m_windowsSize; //!< Windows compleate size
+			ivec2 m_origin; //!< Windows clipping upper widget (can not be <0)
+			ivec2 m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
+			void Limit(const vec2& _origin, const vec2& _size);
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj);
+	
+	typedef enum {
+		gravityCenter=0x00,
+		gravityTopLeft=0x05,
+		gravityTop=0x01,
+		gravityTopRight=0x03,
+		gravityRight=0x02,
+		gravityButtomRight=0x06,
+		gravityButtom=0x04,
+		gravityButtomLeft=0x0C,
+		gravityLeft=0x08,
+	}gravity_te;
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::gravity_te _obj);
+	etk::UString GravityToString(const ewol::gravity_te _obj);
+	ewol::gravity_te StringToGravity(const etk::UString& _obj);
+	
 	class EventShortCut {
 		public:
 			bool broadcastEvent; //!< if it is true, then the message is sent to all the system
@@ -134,6 +176,19 @@ namespace ewol {
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
 			virtual vec2 GetCalculateMaxSize(void);
+		protected:
+			vec2 m_offset; //!< Offset of the display in the viewport
+		public:
+			/**
+			 * @brief Set the zoom property of the widget.
+			 * @param[in] _newVal offset value.
+			 */
+			virtual void SetOffset(const vec2& _newVal);
+			/**
+			 * @brief Get the offset property of the widget.
+			 * @return The current offset value.
+			 */
+			virtual const vec2& GetOffset(void) { return m_offset; };
 		protected:
 			// internal element calculated by the system
 			float m_zoom; //!< generic widget zoom
@@ -263,6 +318,20 @@ namespace ewol {
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
 			virtual bool IsHide(void) { return m_hide; };
+		
+		protected:
+			gravity_te m_gravity; //!< Gravity of the widget
+		public:
+			/**
+			 * @brief Set the widget gravity
+			 * @param[in] _gravity New gravity of the widget
+			 */
+			virtual void SetGravity(gravity_te _gravity);
+			/**
+			 * @brief Get the widget gravity
+			 * @return the gravity type
+			 */
+			virtual gravity_te GetGravity(void) { return m_gravity; };
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Focus Area
 		// ----------------------------------------------------------------------------------------------------------------
@@ -472,14 +541,12 @@ namespace ewol {
 			 * @param[in] _displayProp properties of the current display
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			// TODO : Rename SystemDraw()
-			virtual void GenDraw(DrawProperty _displayProp);
+			virtual void SystemDraw(const DrawProperty& _displayProp);
 		protected:
 			/**
 			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])
-			 * @param[in] _displayProp properties of the current display
 			 */
-			virtual void OnDraw(DrawProperty& _displayProp) { };
+			virtual void OnDraw(void) { };
 		public:
 			/**
 			 * @brief Event generated when a redraw is needed

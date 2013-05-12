@@ -196,8 +196,9 @@ void widget::WSlider::PeriodicCall(int64_t localTime)
 }
 
 
-void widget::WSlider::OnDraw(ewol::DrawProperty& displayProp)
+void widget::WSlider::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
+	ewol::Widget::SystemDraw(_displayProp);
 	if (m_windowsDestination == m_windowsSources) {
 		//EWOL_DEBUG("Draw : " << m_windowsDestination);
 		int32_t iii = m_windowsDestination;
@@ -205,7 +206,7 @@ void widget::WSlider::OnDraw(ewol::DrawProperty& displayProp)
 			return;
 		}
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw(displayProp);
+			m_subWidget[iii]->SystemDraw(_displayProp);
 		}
 	} else {
 		//EWOL_DEBUG("Draw : " << m_windowsSources << "=>" << m_windowsDestination << "progress=" << ((float)m_slidingProgress/1000.) );
@@ -215,7 +216,7 @@ void widget::WSlider::OnDraw(ewol::DrawProperty& displayProp)
 			return;
 		}
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw(displayProp);
+			m_subWidget[iii]->SystemDraw(_displayProp);
 		}
 		// Draw Destination : 
 		iii = m_windowsDestination;
@@ -223,7 +224,7 @@ void widget::WSlider::OnDraw(ewol::DrawProperty& displayProp)
 			return;
 		}
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw(displayProp);
+			m_subWidget[iii]->SystemDraw(_displayProp);
 		}
 	}
 }

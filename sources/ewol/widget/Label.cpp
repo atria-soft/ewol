@@ -63,7 +63,7 @@ etk::UString widget::Label::GetLabel(void)
 	return m_label;
 }
 
-void widget::Label::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::Label::OnDraw(void)
 {
 	m_text.Draw();
 }

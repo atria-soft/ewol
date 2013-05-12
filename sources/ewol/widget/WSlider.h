@@ -44,11 +44,8 @@ namespace widget {
 			void SubWidgetSelectSet(int32_t id);
 			int32_t SubWidgetSelectGet(void) { return (int32_t)m_slidingProgress; };
 			int32_t SubWidgetNumber(void) { return m_subWidget.Size(); };
-		protected:
-			// Derived function
-			virtual void   OnDraw(ewol::DrawProperty& displayProp);
-		public:
-			// Derived function
+		public: // Derived function
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void   OnRegenerateDisplay(void);
 			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
 			virtual void OnObjectRemove(ewol::EObject * removeObject);

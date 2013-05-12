@@ -129,13 +129,13 @@ draw::Color widget::ColorChooser::GetColor(void)
 }
 
 
-void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::ColorChooser::OnReceiveMessage(const ewol::EMessage& _msg)
 {
-	if (NULL == CallerObject) {
+	if (NULL == _msg.GetCaller()) {
 		return;
 	}
 	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (eventColorBarHasChange == eventId) {
+	if (eventColorBarHasChange == _msg.GetMessage()) {
 		//==> colorBar has change ...
 		uint8_t tmpAlpha = m_currentColor.a;
 		// the colorbar has no notion of the alpha ==> keep it ...
@@ -156,18 +156,18 @@ void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const 
 			m_widgetAlpha->SetValue(m_currentColor.a);
 		}
 		GenerateEventId(ewolEventColorChooserChange, draw::GetString(m_currentColor));
-	} else if (eventColorSpecificHasChange == eventId) {
+	} else if (eventColorSpecificHasChange == _msg.GetMessage()) {
 		// Slider has changes his color ==> get the one change ...
-		if (CallerObject == m_widgetRed) {
+		if (_msg.GetCaller() == m_widgetRed) {
 			m_currentColor.r = m_widgetRed->GetValue();
 		}
-		if (CallerObject == m_widgetGreen) {
+		if (_msg.GetCaller() == m_widgetGreen) {
 			m_currentColor.g = m_widgetGreen->GetValue();
 		}
-		if (CallerObject == m_widgetBlue) {
+		if (_msg.GetCaller() == m_widgetBlue) {
 			m_currentColor.b = m_widgetBlue->GetValue();
 		}
-		if (CallerObject == m_widgetAlpha) {
+		if (_msg.GetCaller() == m_widgetAlpha) {
 			m_currentColor.a = m_widgetAlpha->GetValue();
 		}
 		if (NULL != m_widgetColorBar) {
@@ -178,24 +178,24 @@ void widget::ColorChooser::OnReceiveMessage(ewol::EObject * CallerObject, const 
 };
 
 
-void widget::ColorChooser::OnObjectRemove(ewol::EObject * removeObject)
+void widget::ColorChooser::OnObjectRemove(ewol::EObject * _removeObject)
 {
 	// First step call parrent : 
-	widget::Sizer::OnObjectRemove(removeObject);
+	widget::Sizer::OnObjectRemove(_removeObject);
 	// second step find if in all the elements ...
-	if(removeObject == m_widgetRed) {
+	if(_removeObject == m_widgetRed) {
 		m_widgetRed = NULL;
 	}
-	if(removeObject == m_widgetGreen) {
+	if(_removeObject == m_widgetGreen) {
 		m_widgetGreen = NULL;
 	}
-	if(removeObject == m_widgetBlue) {
+	if(_removeObject == m_widgetBlue) {
 		m_widgetBlue = NULL;
 	}
-	if(removeObject == m_widgetAlpha) {
+	if(_removeObject == m_widgetAlpha) {
 		m_widgetAlpha = NULL;
 	}
-	if(removeObject == m_widgetColorBar) {
+	if(_removeObject == m_widgetColorBar) {
 		m_widgetColorBar = NULL;
 	}
 }

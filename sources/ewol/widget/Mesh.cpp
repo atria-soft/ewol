@@ -46,7 +46,7 @@ widget::Mesh::~Mesh(void)
 		m_object = NULL;
 	}
 }
-void widget::Mesh::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Mesh::OnDraw(void)
 {
 	mat4 transformationMatrix =   etk::matTranslate(vec3(0,0,-m_cameraDistance))
 	                            * etk::matTranslate(m_position)
@@ -58,7 +58,7 @@ void widget::Mesh::OnDraw(ewol::DrawProperty& displayProp)
 	}
 }
 
-void widget::Mesh::GenDraw(ewol::DrawProperty displayProp)
+void widget::Mesh::SystemDraw(const ewol::DrawProperty& displayProp)
 {
 	ewol::openGL::Push();
 	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
@@ -74,11 +74,7 @@ void widget::Mesh::GenDraw(ewol::DrawProperty displayProp)
 	//ewol::openGL::SetMatrix(tmpMat);
 	ewol::openGL::SetMatrix(tmpProjection);
 	
-	// Call the widget drawing methode
-	displayProp.m_origin = m_origin;
-	displayProp.m_size = m_size;
-	// Call the widget drawing methode
-	OnDraw(displayProp);
+	OnDraw();
 	ewol::openGL::Pop();
 }
 

@@ -32,6 +32,7 @@ namespace ewol {
 			void SetChar(uniChar_t _char) { m_unicodeData = _char; };
 			inline const uniChar_t& GetChar(void) const { return m_unicodeData; };
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventEntry& _obj);
 	
 	class EventEntrySystem {
 		public:
@@ -42,6 +43,7 @@ namespace ewol {
 			{ };
 			ewol::EventEntry m_event;
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventEntrySystem& _obj);
 };
 
 #endif

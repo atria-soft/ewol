@@ -39,8 +39,9 @@ namespace widget {
 		public:
 			void SetPositionMark(markPosition_te position, vec2 arrowPos);
 		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(void);
 		public: // Derived function
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual void CalculateSize(const vec2& availlable);

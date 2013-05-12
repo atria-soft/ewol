@@ -44,7 +44,7 @@ widget::Spacer::~Spacer(void)
 	
 }
 
-void widget::Spacer::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Spacer::OnDraw(void)
 {
 	m_draw.Draw();
 }

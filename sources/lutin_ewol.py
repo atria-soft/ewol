@@ -23,12 +23,15 @@ def Create(target):
 	
 	# Basic Eobject of EWOL
 	myModule.AddSrcFile([
+		'ewol/eObject/EMessage.cpp',
 		'ewol/eObject/EObject.cpp',
 		'ewol/eObject/EObjectManager.cpp'])
 	
 	#openGl Basic access abstraction (for the model matrix and include
 	myModule.AddSrcFile([
 		'ewol/renderer/openGL.cpp',
+		'ewol/renderer/EventInput.cpp',
+		'ewol/renderer/EventEntry.cpp',
 		'ewol/renderer/Light.cpp',
 		'ewol/renderer/Material.cpp'])
 	

@@ -137,7 +137,7 @@ etk::UString widget::Entry::GetValue(void)
 }
 
 
-void widget::Entry::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::Entry::OnDraw(void)
 {
 	m_shaper.Draw();
 	m_oObjectText.Draw();
@@ -483,25 +483,25 @@ void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te _clipboa
 }
 
 
-void widget::Entry::OnReceiveMessage(ewol::EObject * _CallerObject, const char * _eventId, const etk::UString& _data)
+void widget::Entry::OnReceiveMessage(const ewol::EMessage& _msg)
 {
-	ewol::Widget::OnReceiveMessage(_CallerObject, _eventId, _data);
-	if(_eventId == ewolEventEntryClean) {
+	ewol::Widget::OnReceiveMessage(_msg);
+	if(_msg.GetMessage() == ewolEventEntryClean) {
 		m_data = "";
 		m_displayStartPosition = 0;
 		m_displayCursorPos = 0;
 		m_displayCursorPosSelection = m_displayCursorPos;
 		MarkToRedraw();
-	} else if(_eventId == ewolEventEntryCut) {
+	} else if(_msg.GetMessage() == ewolEventEntryCut) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 		RemoveSelected();
 		GenerateEventId(ewolEventEntryModify, m_data);
-	} else if(_eventId == ewolEventEntryCopy) {
+	} else if(_msg.GetMessage() == ewolEventEntryCopy) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
-	} else if(_eventId == ewolEventEntryPaste) {
+	} else if(_msg.GetMessage() == ewolEventEntryPaste) {
 		ewol::clipBoard::Request(ewol::clipBoard::clipboardStd);
-	} else if(_eventId == ewolEventEntrySelect) {
-		if(_data == "ALL") {
+	} else if(_msg.GetMessage() == ewolEventEntrySelect) {
+		if(_msg.GetData() == "ALL") {
 			m_displayCursorPosSelection = 0;
 			m_displayCursorPos = m_data.Size();
 		} else {

@@ -61,6 +61,9 @@ void widget::ContainerN::SubWidgetAdd(ewol::Widget* _newWidget)
 		EWOL_ERROR("[" << GetId() << "] Try to add An empty Widget ... ");
 		return;
 	}
+	if (_newWidget!=NULL) {
+		_newWidget->SetUpperWidget(this);
+	}
 	m_subWidget.PushBack(_newWidget);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
@@ -71,6 +74,9 @@ void widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
 	if (NULL == _newWidget) {
 		EWOL_ERROR("[" << GetId() << "] Try to add start An empty Widget ... ");
 		return;
+	}
+	if (_newWidget!=NULL) {
+		_newWidget->SetUpperWidget(this);
 	}
 	m_subWidget.PushFront(_newWidget);
 	MarkToRedraw();
@@ -85,6 +91,7 @@ void widget::ContainerN::SubWidgetRemove(ewol::Widget* _newWidget)
 	int32_t errorControl = m_subWidget.Size();
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (_newWidget == m_subWidget[iii]) {
+			m_subWidget[iii]->RemoveUpperWidget();
 			delete(m_subWidget[iii]);
 			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
 			if (errorControl == m_subWidget.Size()) {
@@ -106,6 +113,7 @@ void widget::ContainerN::SubWidgetUnLink(ewol::Widget* _newWidget)
 	}
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (_newWidget == m_subWidget[iii]) {
+			m_subWidget[iii]->RemoveUpperWidget();
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 			MarkToRedraw();
@@ -121,6 +129,7 @@ void widget::ContainerN::SubWidgetRemoveAll(void)
 	// the size automaticly decrement with the auto call of the OnObjectRemove function
 	while (m_subWidget.Size() > 0 ) {
 		if (NULL != m_subWidget[0]) {
+			m_subWidget[0]->RemoveUpperWidget();
 			delete(m_subWidget[0]);
 			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
 			if (errorControl == m_subWidget.Size()) {
@@ -166,11 +175,20 @@ void widget::ContainerN::OnObjectRemove(ewol::EObject* _removeObject)
 	}
 }
 
-void widget::ContainerN::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::ContainerN::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
+	if (true==m_hide){
+		// widget is hidden ...
+		return;
+	}
+	// local widget draw
+	ewol::Widget::SystemDraw(_displayProp);
+	// subwidget draw
+	ewol::DrawProperty prop = _displayProp;
+	prop.Limit(m_origin, m_size);
 	for (int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->GenDraw(_displayProp);
+			m_subWidget[iii]->SystemDraw(prop);
 		}
 	}
 }
@@ -181,7 +199,7 @@ void widget::ContainerN::CalculateSize(const vec2& _availlable)
 	m_size = _availlable;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->SetOrigin(m_origin);
+			m_subWidget[iii]->SetOrigin(m_origin+m_offset);
 			m_subWidget[iii]->CalculateSize(m_size);
 		}
 	}
@@ -298,3 +316,14 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 	}
 	return true;
 }
+
+
+void widget::ContainerN::SetOffset(const vec2& _newVal)
+{
+	if (m_offset != _newVal) {
+		ewol::Widget::SetOffset(_newVal);
+		// recalculate the new sise and position of sub widget ...
+		CalculateSize(m_size);
+	}
+}
+

@@ -85,8 +85,9 @@ static void MultiCastSend(ewol::EObject* _object, const char* const _message, co
 		{
 			if (NULL != m_messageList[iii].object) {
 				EWOL_VERBOSE("        id = " << m_messageList[iii].object->GetId() << " type=" << m_messageList[iii].object->GetObjectType());
-				// generate event ...
-				m_messageList[iii].object->OnReceiveMessage(_object, m_messageList[iii].message, _data);
+				// generate event ... (create message before ...
+				ewol::EMessage tmpMsg(_object, m_messageList[iii].message, _data);
+				m_messageList[iii].object->OnReceiveMessage(tmpMsg);
 			}
 		}
 	}
@@ -154,10 +155,12 @@ void ewol::EObject::GenerateEventId(const char * _generateEventId, const etk::US
 			if (m_externEvent[iii]->localEventId == _generateEventId) {
 				if (NULL != m_externEvent[iii]->destEObject) {
 					if (m_externEvent[iii]->overloadData.Size()<=0){
-						m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, _data);
+						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, _data);
+						m_externEvent[iii]->destEObject->OnReceiveMessage(tmpMsg);
 					} else {
 						// set the user requested data ...
-						m_externEvent[iii]->destEObject->OnReceiveMessage(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+						m_externEvent[iii]->destEObject->OnReceiveMessage(tmpMsg);
 					}
 				}
 			}

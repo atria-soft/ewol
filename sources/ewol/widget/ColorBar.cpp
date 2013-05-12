@@ -65,7 +65,7 @@ void widget::ColorBar::SetCurrentColor(draw::Color newOne)
 	// TODO : Later when really needed ...
 }
 
-void widget::ColorBar::OnDraw(ewol::DrawProperty& displayProp)
+void widget::ColorBar::OnDraw(void)
 {
 	m_draw.Draw();
 }

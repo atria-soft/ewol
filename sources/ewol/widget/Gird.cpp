@@ -360,19 +360,18 @@ void widget::Gird::SubWidgetUnLink(int32_t colId, int32_t rowId)
 	EWOL_WARNING("[" << GetId() << "] Can not unLink unExistant widget");
 }
 
-void widget::Gird::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Gird::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
-	// TODO : Only display the Widget inside the view ...
+	ewol::Widget::SystemDraw(_displayProp);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
-			m_subWidget[iii].widget->GenDraw(displayProp);
+			m_subWidget[iii].widget->SystemDraw(_displayProp);
 		}
 	}
 }
 
 void widget::Gird::OnRegenerateDisplay(void)
 {
-	// TODO : Only display the Widget inside the view ...
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->OnRegenerateDisplay();

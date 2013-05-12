@@ -12,17 +12,10 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/Scroll.h>
 #include <ewol/compositing/Compositing.h>
 
 namespace widget {
-	typedef enum {
-		SCROLL_DISABLE,
-		SCROLL_INIT,
-		SCROLL_ENABLE_FINGER,     // Specific for touchpad
-		SCROLL_ENABLE_HORIZONTAL, // Specific for mouse
-		SCROLL_ENABLE_VERTICAL,   // Specific for mouse
-		SCROLL_GREP_END_EVENT,
-	}highSpeedMode_te;
 	
 	typedef enum {
 		SCROLL_MODE_NORMAL, //!< No Zoom , can UP and down, left and right
@@ -49,12 +42,13 @@ namespace widget {
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
+		protected: // Derived function
+			virtual void OnDraw(void);
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "EwolWidgetScrooled"; };
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void GenDraw(ewol::DrawProperty displayProp);
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 		protected:
 			/**
 			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled

@@ -33,20 +33,12 @@ namespace widget {
 		public:
 			void AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void ClearOObjectList(void);
-		protected:
-			// Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
 		// list properties ...
 		private:
 			int32_t m_paddingSizeX;
 			int32_t m_paddingSizeY;
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
-		public:
-			// Derived function
-			virtual void OnRegenerateDisplay(void);
-			// Derived function
-			virtual bool OnEventInput(const ewol::EventInput& _event);
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {
@@ -77,11 +69,13 @@ namespace widget {
 			virtual bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
 				return false;
 			}
-		protected:
-			// Derived function
+		protected: // Derived function
 			virtual void OnGetFocus(void);
-			// Derived function
 			virtual void OnLostFocus(void);
+			virtual void OnDraw(void);
+		public: // Derived function
+			virtual void OnRegenerateDisplay(void);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 	};
 	
 };

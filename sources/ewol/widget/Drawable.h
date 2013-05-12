@@ -27,9 +27,8 @@ namespace widget {
 		public:
 			void    AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void    ClearOObjectList(void);
-		protected:
-			// Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+		protected: // Derived function
+			virtual void OnDraw(void);
 	};
 	
 };

@@ -35,18 +35,18 @@ namespace widget {
 		public:
 			/**
 			 * @brief Constructor
-			 * @param[in] mode The mode to display the elements
+			 * @param[in] _mode The mode to display the elements
 			 */
-			Sizer(displayMode_te mode=widget::Sizer::modeHori);
+			Sizer(displayMode_te _mode=widget::Sizer::modeHori);
 			/**
 			 * @brief Desstructor
 			 */
 			virtual ~Sizer(void);
 			/**
 			 * @brief Set the mode to display elements.
-			 * @param[in] mode The mode to display the elements.
+			 * @param[in] _mode The mode to display the elements.
 			 */
-			void SetMode(displayMode_te mode);
+			void SetMode(displayMode_te _mode);
 			/**
 			 * @brief Get the mode to display elements.
 			 * @return The current mode to display the elements.
@@ -57,9 +57,9 @@ namespace widget {
 		public:
 			/**
 			 * @brief Set the current border size of the current element:
-			 * @param[in] newBorderSize The border size to set (0 if not used)
+			 * @param[in] _newBorderSize The border size to set (0 if not used)
 			 */
-			void SetBorderSize(const ewol::Dimension& newBorderSize);
+			void SetBorderSize(const ewol::Dimension& _newBorderSize);
 			/**
 			 * @brief Get the current border size of the current element:
 			 * @return the border size (0 if not used)
@@ -67,9 +67,9 @@ namespace widget {
 			const ewol::Dimension& GetBorderSize(void) { return m_borderSize; };
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
-			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual bool LoadXML(TiXmlNode* node);
+			virtual bool LoadXML(TiXmlNode* _node);
 	};
 	
 };

@@ -51,8 +51,8 @@ namespace widget {
 			int32_t Add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
 			void AddSpacer(void);
 			// Derived function
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
+			virtual void OnObjectRemove(ewol::EObject * _removeObject);
 	};
 	
 };

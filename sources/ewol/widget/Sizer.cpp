@@ -30,8 +30,8 @@ void widget::Sizer::UnInit(void)
 }
 
 
-widget::Sizer::Sizer(widget::Sizer::displayMode_te mode):
-	m_mode(mode),
+widget::Sizer::Sizer(widget::Sizer::displayMode_te _mode):
+	m_mode(_mode),
 	m_borderSize()
 {
 	
@@ -43,16 +43,16 @@ widget::Sizer::~Sizer(void)
 }
 
 
-void widget::Sizer::SetBorderSize(const ewol::Dimension& newBorderSize)
+void widget::Sizer::SetBorderSize(const ewol::Dimension& _newBorderSize)
 {
-	m_borderSize = newBorderSize;
+	m_borderSize = _newBorderSize;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
 
-void widget::Sizer::SetMode(widget::Sizer::displayMode_te mode)
+void widget::Sizer::SetMode(widget::Sizer::displayMode_te _mode)
 {
-	m_mode = mode;
+	m_mode = _mode;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 }
@@ -62,11 +62,11 @@ widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
 	return m_mode;
 }
 
-void widget::Sizer::CalculateSize(const vec2& availlable)
+void widget::Sizer::CalculateSize(const vec2& _availlable)
 {
+	ewol::Widget::CalculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize.GetPixel();
 	//EWOL_DEBUG("[" << GetId() << "] Update Size : " << availlable << " nbElement : " << m_subWidget.Size());
-	m_size = availlable;
 	m_size -= tmpBorderSize*2;
 	// calculate unExpandable Size :
 	float unexpandableSize=0.0;
@@ -111,7 +111,7 @@ void widget::Sizer::CalculateSize(const vec2& availlable)
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
 			//EWOL_DEBUG("[" << GetId() << "] Set ORIGIN : " << tmpOrigin);
-			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin));
+			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin+m_offset));
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {
 				if (true == m_subWidget[iii]->CanExpand().y()) {
@@ -172,19 +172,19 @@ void widget::Sizer::CalculateMinMaxSize(void)
 	}
 }
 
-bool widget::Sizer::LoadXML(TiXmlNode* node)
+bool widget::Sizer::LoadXML(TiXmlNode* _node)
 {
-	if (NULL==node) {
+	if (NULL==_node) {
 		return false;
 	}
 	// parse generic properties :
-	widget::ContainerN::LoadXML(node);
+	widget::ContainerN::LoadXML(_node);
 	
-	const char* tmpAttributeValue = node->ToElement()->Attribute("borderSize");
+	const char* tmpAttributeValue = _node->ToElement()->Attribute("borderSize");
 	if (NULL != tmpAttributeValue) {
 		m_borderSize = tmpAttributeValue;
 	}
-	tmpAttributeValue = node->ToElement()->Attribute("mode");
+	tmpAttributeValue = _node->ToElement()->Attribute("mode");
 	if (NULL != tmpAttributeValue) {
 		etk::UString val(tmpAttributeValue);
 		if(    val.CompareNoCase("vert")
@@ -196,3 +196,5 @@ bool widget::Sizer::LoadXML(TiXmlNode* node)
 	}
 	return true;
 }
+
+

@@ -14,15 +14,91 @@
 #include <ewol/renderer/os/eSystem.h>
 #include <ewol/renderer/os/gui.h>
 
+#undef __class__
+#define __class__ "DrawProperty"
+
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj)
+{
+	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";
+	return _os;
+}
+
+void ewol::DrawProperty::Limit(const vec2& _origin, const vec2& _size)
+{
+	m_size += m_origin;
+	m_origin.setMax(_origin);
+	m_size.setMin(_origin+_size);
+	m_size -= m_origin;
+}
 
 #undef __class__
-#define __class__	"Widget"
+#define __class__ "gravity"
+
+
+etk::UString ewol::GravityToString(const ewol::gravity_te _obj)
+{
+	switch(_obj) {
+		case ewol::gravityCenter:
+			return "center";
+		case ewol::gravityTopLeft:
+			return "top-left";
+		case ewol::gravityTop:
+			return "top";
+		case ewol::gravityTopRight:
+			return "top-right";
+		case ewol::gravityRight:
+			return "right";
+		case ewol::gravityButtomRight:
+			return "buttom-right";
+		case ewol::gravityButtom:
+			return "buttom";
+		case ewol::gravityButtomLeft:
+			return "buttom-left";
+		case ewol::gravityLeft:
+			return "left";
+	}
+	return "unknow";
+}
+
+ewol::gravity_te ewol::StringToGravity(const etk::UString& _obj)
+{
+	if (_obj == "center") {
+		return ewol::gravityCenter;
+	} else if (_obj == "top-left") {
+		return ewol::gravityTopLeft;
+	} else if (_obj == "top") {
+		return ewol::gravityTop;
+	} else if (_obj == "top-right") {
+		return ewol::gravityTopRight;
+	} else if (_obj == "right") {
+		return ewol::gravityRight;
+	} else if (_obj == "buttom-right") {
+		return ewol::gravityButtomRight;
+	} else if (_obj == "buttom") {
+		return ewol::gravityButtom;
+	} else if (_obj == "buttom-left") {
+		return ewol::gravityButtomLeft;
+	} else if (_obj == "left") {
+		return ewol::gravityLeft;
+	}
+	return ewol::gravityCenter;
+}
+
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::gravity_te _obj)
+{
+	_os << ewol::GravityToString(_obj);
+	return _os;
+}
+
+#undef __class__
+#define __class__ "Widget"
 
 ewol::Widget::Widget(void) :
 	m_up(NULL),
 	m_size(10,10),
 	m_minSize(0,0),
 	m_maxSize(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)),
+	m_offset(0,0),
 	m_zoom(1.0f),
 	m_origin(0,0),
 	m_userMinSize(vec2(0,0),ewol::Dimension::Pixel),
@@ -30,6 +106,7 @@ ewol::Widget::Widget(void) :
 	m_userExpand(false,false),
 	m_userFill(false,false),
 	m_hide(false),
+	m_gravity(ewol::gravityButtomLeft),
 	m_hasFocus(false),
 	m_canFocus(false),
 	m_limitMouseEvent(3),
@@ -90,6 +167,7 @@ void ewol::Widget::Show(void)
 void ewol::Widget::CalculateSize(const vec2& _availlable)
 {
 	m_size = _availlable;
+	m_size.setMax(m_minSize);
 	MarkToRedraw();
 }
 
@@ -130,22 +208,92 @@ void ewol::Widget::KeepFocus(void)
 	ewol::widgetManager::FocusKeep(this);
 }
 
+void ewol::Widget::SetOffset(const vec2& _newVal)
+{
+	if (m_offset != _newVal) {
+		m_offset = _newVal;
+		MarkToRedraw();
+	}
+}
 
-void ewol::Widget::GenDraw(DrawProperty _displayProp)
+/*
+                                                              /--> _displayProp.m_windowsSize
+      *------------------------------------------------------*
+      |                                                      |
+      |                                              m_size  |
+      |                                                 /    |
+      |                        *-----------------------*     |
+      |                        '                       '     |
+      |                        '   _displayProp.m_size '     |
+      |              Viewport  '          /            '     |
+      |              o---------'---------o             '     |
+      |              |         '         |             '     |
+      |              |         '         |             '     |
+      |              |         '         |             '     |
+      |              |         '         |             '     |
+      |              |         *-----------------------*     |
+      |              |        /          |                   |
+      |              |   m_offset        |                   |
+      |              |                   |                   |
+      |              o-------------------o                   |
+      |             /                                        |
+      |  _displayProp.m_origin                               |
+      |                                                      |
+      *------------------------------------------------------*
+     /
+   (0,0)
+*/
+void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 {
 	if (true==m_hide){
 		// widget is hidden ...
 		return;
 	}
+	vec2 displayOrigin = m_origin + m_offset;
+	
 	// check if the element is displayable in the windows : 
 	if(    _displayProp.m_windowsSize.x() < m_origin.x()
 	    || _displayProp.m_windowsSize.y() < m_origin.y() ) {
 		// out of the windows ==> nothing to display ...
 		return;
 	}
+	
+	DrawProperty tmpSize = _displayProp;
+	tmpSize.Limit(m_origin, m_size);
+	if (tmpSize.m_size.x() <= 0 || tmpSize.m_size.y() <= 0) {
+		return;
+	}
+	
+	glViewport( tmpSize.m_origin.x(),
+	            tmpSize.m_origin.y(),
+	            tmpSize.m_size.x(),
+	            tmpSize.m_size.y());
+	// special case, when origin < display origin, we need to cut the display :
+	ivec2 downOffset = m_origin - tmpSize.m_origin;
+	downOffset.setMin(ivec2(0,0));
+	
+	mat4 tmpTranslate = etk::matTranslate(vec3(-tmpSize.m_size.x()/2+m_offset.x() + downOffset.x(),
+	                                           -tmpSize.m_size.y()/2+m_offset.y() + downOffset.y(),
+	                                           -1.0f));
+	mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
+	mat4 tmpProjection = etk::matOrtho(-tmpSize.m_size.x()/2,
+	                                    tmpSize.m_size.x()/2,
+	                                   -tmpSize.m_size.y()/2,
+	                                    tmpSize.m_size.y()/2,
+	                                   -1,
+	                                    1);
+	mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
+
 	ewol::openGL::Push();
+	// set internal matrix system :
+	ewol::openGL::SetMatrix(tmpMat);
+	//int64_t ___startTime = ewol::GetTime();
+	OnDraw();
+	
+	#ifdef old_PLOP
 	if(    (_displayProp.m_origin.x() > m_origin.x())
-	    || (_displayProp.m_origin.x() + _displayProp.m_size.x() < m_size.x() + m_origin.x()) ) {
+	    || (_displayProp.m_origin.x() + _displayewol::Widget::Prop.m_size.x() < m_size.x() + m_origin.x()) ) {
+		EWOL_CRITICAL("plop");
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 		int32_t tmpOriginX = etk_max(_displayProp.m_origin.x(), m_origin.x());
 		int32_t tmppp1 = _displayProp.m_origin.x() + _displayProp.m_size.x();
@@ -175,6 +323,7 @@ void ewol::Widget::GenDraw(DrawProperty _displayProp)
 		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget1  : " << ___localTime << "ms ");
 	} else {
+		EWOL_DEBUG("rasta..");
 		glViewport( m_origin.x(),
 		            m_origin.y(),
 		            m_size.x(),
@@ -193,6 +342,7 @@ void ewol::Widget::GenDraw(DrawProperty _displayProp)
 		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}
+	#endif
 	ewol::openGL::Pop();
 	return;
 }
@@ -507,7 +657,8 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicod
 						SendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
 					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
-					OnReceiveMessage(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					ewol::EMessage tmpMsg(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					OnReceiveMessage(tmpMsg);
 				} // no else
 				return true;
 			}
@@ -613,6 +764,10 @@ bool ewol::Widget::LoadXML(TiXmlNode* _node)
 	if (NULL != tmpAttributeValue) {
 		m_userMaxSize.SetString(tmpAttributeValue);
 	}
+	tmpAttributeValue = _node->ToElement()->Attribute("gravity");
+	if (NULL != tmpAttributeValue) {
+		m_gravity = StringToGravity(tmpAttributeValue);
+	}
 	EWOL_DEBUG("Widget parse: m_hide=" << m_hide << "  m_userMinSize=" << m_userMinSize << "  m_userMaxSize=" << m_userMaxSize << "  m_userFill=" << m_userFill << "  m_userExpand=" << m_userExpand);
 	MarkToRedraw();
 	return ret;
@@ -648,6 +803,9 @@ bool ewol::Widget::StoreXML(TiXmlNode* _node)
 	if (m_userFill != bvec2(false,false)) {
 		etk::UString tmpVal = etk::UString(m_userFill.x()) + "," + etk::UString(m_userFill.y());
 		_node->ToElement()->SetAttribute("fill", tmpVal.c_str() );
+	}
+	if (m_gravity != ewol::gravityButtomLeft) {
+		_node->ToElement()->SetAttribute("gravity", GravityToString(m_gravity).c_str() );
 	}
 	if (IsHide() != false) {
 		_node->ToElement()->SetAttribute("hide", "true" );
@@ -685,3 +843,9 @@ bool ewol::Widget::SystemEventInput(ewol::EventInputSystem& _event)
 	return OnEventInput(_event.m_event);
 }
 
+
+void ewol::Widget::SetGravity(gravity_te _gravity)
+{
+	m_gravity = _gravity;
+	MarkToRedraw();
+}

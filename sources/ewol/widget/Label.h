@@ -51,12 +51,12 @@ namespace widget {
 			 * @return The displayed decorated text.
 			 */
 			etk::UString GetLabel(void);
-		public:
-			// Derived function
+		protected: // Derived function
+			virtual void OnDraw(void);
+		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Label"; };
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& _displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool LoadXML(TiXmlNode* _node);
 	};

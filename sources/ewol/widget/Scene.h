@@ -75,7 +75,7 @@ namespace widget {
 			 */
 			void PauseToggle(void);
 			// Derived function
-			virtual void GenDraw(ewol::DrawProperty displayProp);
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 		protected:
 			// Derived function
 			virtual void ScenePeriodicCall(int64_t localTime, int32_t deltaTime) { };
@@ -97,11 +97,12 @@ namespace widget {
 			 * @return the relative position
 			 */
 			virtual vec2 RelativePosition(vec2 pos);
+		protected: // Derived function
+			virtual void OnDraw(void);
 		public: // dericed function:
 			virtual const char * const GetObjectType(void) { return "Ewol::Scene"; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void PeriodicCall(int64_t localTime);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool OnEventEntry(const ewol::EventEntry& _event);
 			virtual void OnGetFocus(void);

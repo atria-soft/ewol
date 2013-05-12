@@ -118,13 +118,18 @@ void widget::ContextMenu::CalculateMinMaxSize(void)
 	MarkToRedraw();
 }
 
-void widget::ContextMenu::OnDraw(ewol::DrawProperty& displayProp)
+void widget::ContextMenu::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
-	//EWOL_DEBUG("On Draw " << m_currentDrawId);
-	m_compositing.Draw();
+	ewol::Widget::SystemDraw(_displayProp);
 	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw(displayProp);
+		m_subWidget->SystemDraw(_displayProp);
 	}
+}
+
+
+void widget::ContextMenu::OnDraw(void)
+{
+	m_compositing.Draw();
 }
 
 

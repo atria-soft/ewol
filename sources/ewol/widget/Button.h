@@ -34,17 +34,14 @@ namespace widget {
 		public:
 			static void Init(void);
 			static void UnInit(void);
+			typedef enum {
+				lockNone, //!< normal status of the button
+				lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
+				lockWhenReleased, //!< When the state is set in not pressed, the status stay in this one
+				lockAccess, //!< all event are trashed ==> acctivity of the button is disable
+			} buttonLock_te;
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
-			ewol::Widget* m_subWidget[2]; //!< subwidget of the button
-			bool m_toggleMode; //!< The button is able to toggle.
-			bool m_value; //!< Current state of the button.
-			bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
-			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
-			int32_t m_imageDisplaySize; //!< Display size of the Image.
-			// hover area :
-			vec2 m_selectableAreaPos; //!< Start position of the events
-			vec2 m_selectableAreaSize; //!< Size of the event positions
 		public:
 			/**
 			 * @brief Constructor
@@ -60,6 +57,9 @@ namespace widget {
 			 * @param[in] _shaperName The new shaper filename
 			 */
 			void SetShaperName(const etk::UString& _shaperName);
+		protected:
+			ewol::Widget* m_subWidget[2]; //!< subwidget of the button
+		public:
 			/**
 			 * @brief Specify the current widget
 			 * @param[in] _subWidget Widget to add normal
@@ -74,12 +74,15 @@ namespace widget {
 			 * @brief Get the current displayed composition
 			 * @return The base widget
 			 */
-			ewol::Widget* GetSubWidget(void);
+			ewol::Widget* GetSubWidget(void) { return m_subWidget[0]; };
 			/**
 			 * @brief Get the current displayed composition
 			 * @return The toggle widget
 			 */
-			ewol::Widget* GetSubWidgetToggle(void);
+			ewol::Widget* GetSubWidgetToggle(void) { return m_subWidget[1]; };
+		protected:
+			bool m_value; //!< Current state of the button.
+		public:
 			/**
 			 * @brief Set the currentValue of the Button (pressed or not)
 			 * @note Work only in toggle mode
@@ -91,12 +94,39 @@ namespace widget {
 			 * @return True : The button is pressed.
 			 * @return false : The button is released.
 			 */
-			bool GetValue(void);
+			bool GetValue(void) { return m_value; };
+		protected:
+			buttonLock_te m_lock; //!< Current lock state of the button.
+		public:
 			/**
-			 * @brief Change the Toggle mode.
+			 * @brief Set the button lock state.
+			 * @param[in] _lock New lock mode of the button
+			 */
+			void SetLock(buttonLock_te _lock);
+			/**
+			 * @brief Get the current button lock value.
+			 * @return The requested lock mode
+			 */
+			buttonLock_te GetLock(void) { return m_lock; };
+		protected:
+			bool m_toggleMode; //!< The button is able to toggle.
+		public:
+			/**
+			 * @brief Change the toggle mode.
 			 * @param[in] _togg New toggle mode
 			 */
 			void SetToggleMode(bool _togg);
+			/**
+			 * @brief Get the current toggle mode.
+			 * @return the current toggle mode.
+			 */
+			bool GetToggleMode(void) { return m_toggleMode; };
+		private:
+			bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
+			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
+			// hover area :
+			vec2 m_selectableAreaPos; //!< Start position of the events
+			vec2 m_selectableAreaSize; //!< Size of the event positions
 		private:
 			/**
 			 * @brief Internal system to Change the property of the current status
@@ -107,18 +137,18 @@ namespace widget {
 			 * @brief update the status with the internal satte of the button ...
 			 */
 			void CheckStatus(void);
-		public:
-			// Derived function
+		protected: // Derived function
+			virtual void OnDraw(void);
+		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Button"; };
 			virtual void CalculateMinMaxSize(void);
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& _displayProp);
+			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool OnEventEntry(const ewol::EventEntry& _event);
 			virtual bool LoadXML(TiXmlNode* _node);
-		private:
-			// derived function
+		private: // derived function
 			virtual void PeriodicCall(int64_t _localTime);
 	};
 };

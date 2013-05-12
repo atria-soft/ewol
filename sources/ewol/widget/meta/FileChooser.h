@@ -29,7 +29,7 @@ namespace widget {
 			virtual ~FileChooser(void);
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::FileChooser"; };
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
+			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			void SetTitle(etk::UString label);
 			void SetValidateLabel(etk::UString label);

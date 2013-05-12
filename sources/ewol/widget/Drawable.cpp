@@ -43,7 +43,7 @@ void widget::Drawable::ClearOObjectList(void)
 	m_listOObject.Clear();
 }
 
-void widget::Drawable::OnDraw(ewol::DrawProperty& displayProp)
+void widget::Drawable::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		if (NULL != m_listOObject[iii]) {

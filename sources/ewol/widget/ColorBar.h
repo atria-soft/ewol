@@ -12,8 +12,8 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <draw/Color.h>
+#include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventColorBarChange;
 
@@ -29,12 +29,12 @@ namespace widget {
 			ewol::Drawing         m_draw;              //!< Compositing drawing element
 			draw::Color           m_currentColor;
 			vec2  m_currentUserPos;
-		public:
-			// Derived function
+		protected: // Derived function
+			virtual void OnDraw(void);
+		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "widget::ColorBar"; };
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 	};
 	

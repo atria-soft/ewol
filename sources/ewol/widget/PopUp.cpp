@@ -60,13 +60,17 @@ void widget::PopUp::CalculateSize(const vec2& availlable)
 	MarkToRedraw();
 }
 
-void widget::PopUp::OnDraw(ewol::DrawProperty& displayProp)
+void widget::PopUp::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
-	// draw upper classes
-	m_compositing.Draw();
+	ewol::Widget::SystemDraw(_displayProp);
 	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw(displayProp);
+		m_subWidget->SystemDraw(_displayProp);
 	}
+}
+
+void widget::PopUp::OnDraw(void)
+{
+	m_compositing.Draw();
 }
 
 #define BORDER_SIZE_TMP         (4)

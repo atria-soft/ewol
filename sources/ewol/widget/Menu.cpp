@@ -117,16 +117,16 @@ void widget::Menu::AddSpacer(void)
 }
 
 
-void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 {
 	/*
-	if (true == ewol::Sizer$::OnReceiveMessage(CallerObject, eventId, data)) {
+	if (true == ewol::Sizer$::OnReceiveMessage(_msg) {
 		return true;
 	}
 	*/
-	if (eventId == ewolEventButtonPressed) {
+	if (_msg.GetMessage() == ewolEventButtonPressed) {
 		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
-			if (CallerObject == m_listElement[iii]->m_widgetPointer) {
+			if (_msg.GetCaller() == m_listElement[iii]->m_widgetPointer) {
 				// 2 posible case (have a message or have a child ...
 				if (m_listElement[iii]->m_generateEvent != NULL) {
 					EWOL_DEBUG("Menu ==> Generate Event");
@@ -159,7 +159,7 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 					}
 					// Get the button widget : 
 					vec2 newPosition;
-					ewol::Widget * eventFromWidget = static_cast<ewol::Widget*>(CallerObject);
+					ewol::Widget * eventFromWidget = static_cast<ewol::Widget*>(_msg.GetCaller());
 					if (NULL != eventFromWidget) {
 						vec2 tmpOri  = eventFromWidget->GetOrigin();
 						vec2 tmpSize = eventFromWidget->GetSize();
@@ -218,15 +218,15 @@ void widget::Menu::OnReceiveMessage(ewol::EObject * CallerObject, const char * e
 }
 
 
-void widget::Menu::OnObjectRemove(ewol::EObject * removeObject)
+void widget::Menu::OnObjectRemove(ewol::EObject * _removeObject)
 {
-	widget::Sizer::OnObjectRemove(removeObject);
-	if (m_widgetContextMenu == removeObject) {
+	widget::Sizer::OnObjectRemove(_removeObject);
+	if (m_widgetContextMenu == _removeObject) {
 		m_widgetContextMenu = NULL;
 	}
 	for(int32_t jjj=0; jjj<m_listElement.Size(); jjj++) {
 		if (NULL != m_listElement[jjj]) {
-			if (m_listElement[jjj]->m_widgetPointer == removeObject) {
+			if (m_listElement[jjj]->m_widgetPointer == _removeObject) {
 				m_listElement[jjj]->m_widgetPointer = NULL;
 			}
 		}

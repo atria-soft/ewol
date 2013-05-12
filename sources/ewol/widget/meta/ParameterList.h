@@ -42,11 +42,7 @@ namespace widget {
 			etk::Vector<widget::elementPL *> m_list;
 		public:
 			ParameterList(void);
-			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolParameterList"; };
 			virtual ~ParameterList(void);
-			// Derived function
-			virtual void CalculateMinMaxSize(void);
 			void SetLabel(etk::UString newLabel);
 		// Drawing capabilities ....
 		private:
@@ -54,9 +50,6 @@ namespace widget {
 		public:
 			void AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
 			void ClearOObjectList(void);
-		protected:
-			// Derived function
-			void OnDraw(ewol::DrawProperty& displayProp);
 		// list properties ...
 		private:
 			int32_t m_paddingSizeX;
@@ -64,20 +57,20 @@ namespace widget {
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
-			// Derived function
-			void OnRegenerateDisplay(void);
-			// Derived function
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-		protected:
-			// Derived function
-			void OnGetFocus(void);
-			// Derived function
-			void OnLostFocus(void);
-		public:
 			void MenuAdd(etk::UString& label, int32_t refId, etk::UString& image);
 			void MenuAddGroup(etk::UString& label);
 			void MenuClear(void);
 			void MenuSeparator(void);
+			
+		public: // Derived function
+			virtual const char * const GetObjectType(void) { return "EwolParameterList"; };
+			virtual void OnRegenerateDisplay(void);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual void CalculateMinMaxSize(void);
+		protected: // Derived function
+			virtual void OnGetFocus(void);
+			virtual void OnLostFocus(void);
+			virtual void OnDraw(void);
 	};
 };
 

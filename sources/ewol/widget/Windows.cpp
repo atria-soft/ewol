@@ -119,7 +119,7 @@ void ewol::Windows::SysDraw(void)
 	displayProp.m_origin.setValue(0,0);
 	displayProp.m_size = m_size;
 	
-	GenDraw(displayProp);
+	SystemDraw(displayProp);
 
 	ewol::openGL::Disable(ewol::openGL::FLAG_BLEND);
 	return;
@@ -139,8 +139,9 @@ void ewol::Windows::OnRegenerateDisplay(void)
 
 //#define TEST_PERFO_WINDOWS
 
-void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
+void ewol::Windows::SystemDraw(const ewol::DrawProperty& _displayProp)
 {
+	ewol::Widget::SystemDraw(_displayProp);
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::GetTime();
 	#endif
@@ -157,7 +158,7 @@ void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 	//EWOL_WARNING(" WINDOWS draw on " << m_currentDrawId);
 	// first display the windows on the display
 	if (NULL != m_subWidget) {
-		m_subWidget->GenDraw(displayProp);
+		m_subWidget->SystemDraw(_displayProp);
 		//EWOL_DEBUG("Draw Windows");
 	}
 	#ifdef TEST_PERFO_WINDOWS
@@ -169,7 +170,7 @@ void ewol::Windows::OnDraw(ewol::DrawProperty& displayProp)
 	// second display the pop-up
 	for(int32_t iii=0; iii<m_popUpWidgetList.Size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
-			m_popUpWidgetList[iii]->GenDraw(displayProp);
+			m_popUpWidgetList[iii]->SystemDraw(_displayProp);
 			//EWOL_DEBUG("Draw Pop-up");
 		}
 	}

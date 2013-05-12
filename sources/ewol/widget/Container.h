@@ -47,9 +47,8 @@ namespace widget
 			 */
 			void SubWidgetRemove(void);
 			
-		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& _displayProp);
-		public:// Derived function
+		public: // Derived function
+			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnObjectRemove(ewol::EObject* _removeObject);
 			virtual void CalculateSize(const vec2& _availlable);
@@ -58,6 +57,7 @@ namespace widget
 			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
 			virtual const char * const GetObjectType(void) { return "ewol::widget::Container"; };
 			virtual bool LoadXML(TiXmlNode* _node);
+			virtual void SetOffset(const vec2& _newVal);
 	};
 };
 

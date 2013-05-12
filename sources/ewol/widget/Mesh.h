@@ -35,8 +35,8 @@ namespace widget {
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Mesh"; };
 			virtual void OnRegenerateDisplay(void);
-			virtual void GenDraw(ewol::DrawProperty displayProp);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
+			virtual void OnDraw(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual void PeriodicCall(int64_t localTime);
 		public:

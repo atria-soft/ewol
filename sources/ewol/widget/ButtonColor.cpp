@@ -83,7 +83,7 @@ void widget::ButtonColor::CalculateMinMaxSize(void)
 
 
 
-void widget::ButtonColor::OnDraw(ewol::DrawProperty& displayProp)
+void widget::ButtonColor::OnDraw(void)
 {
 	m_shaper.Draw();
 	m_text.Draw();
@@ -236,12 +236,12 @@ draw::Color widget::ButtonColor::GetValue(void)
 }
 
 
-void widget::ButtonColor::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data)
+void widget::ButtonColor::OnReceiveMessage(const ewol::EMessage& _msg)
 {
-	EWOL_INFO("Receive MSG : \"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (eventId == ewolEventColorChooserChange) {
-		draw::ParseColor(data.c_str(), m_textColorFg);
-		GenerateEventId(ewolEventButtonColorChange, data);
+	EWOL_INFO("Receive MSG : " <<  _msg.GetData());
+	if (_msg.GetMessage() == ewolEventColorChooserChange) {
+		draw::ParseColor(_msg.GetData().c_str(), m_textColorFg);
+		GenerateEventId(ewolEventButtonColorChange, _msg.GetData());
 		MarkToRedraw();
 	}
 }

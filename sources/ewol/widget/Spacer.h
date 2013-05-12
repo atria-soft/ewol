@@ -45,7 +45,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "ewol::spacer"; };
 			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos) { return NULL; };
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(void);
 	};
 	
 };

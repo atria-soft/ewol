@@ -79,7 +79,7 @@ bool widget::CheckBox::GetValue(void)
 	return m_value;
 }
 
-void widget::CheckBox::OnDraw(ewol::DrawProperty& displayProp)
+void widget::CheckBox::OnDraw(void)
 {
 	m_oObjectDecoration.Draw();
 	m_oObjectText.Draw();

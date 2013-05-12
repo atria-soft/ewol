@@ -28,8 +28,9 @@ namespace widget {
 			draw::Color m_colorEmptyArea;
 			ewol::Drawing m_compositing;
 		protected: // Derived function
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
+			virtual void OnDraw(void);
 		public: // Derived function
+			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& availlable);
 			//virtual void CalculateMinMaxSize(void);

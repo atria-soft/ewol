@@ -332,7 +332,7 @@ void widget::WidgetScrooled::ClearOObjectList(void)
 	m_listOObject.Clear();
 }
 
-void widget::WidgetScrooled::OnDraw(ewol::DrawProperty& displayProp)
+void widget::WidgetScrooled::OnDraw(void)
 {
 	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
@@ -342,7 +342,7 @@ void widget::WidgetScrooled::OnDraw(ewol::DrawProperty& displayProp)
 }
 
 
-void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
+void widget::WidgetScrooled::SystemDraw(const ewol::DrawProperty& displayProp)
 {
 	ewol::openGL::Push();
 	if (SCROLL_MODE_CENTER == m_scroollingMode) {
@@ -358,7 +358,7 @@ void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
-		OnDraw(displayProp);
+		OnDraw();
 	} if (SCROLL_MODE_GAME == m_scroollingMode) {
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 		glViewport( m_origin.x(),
@@ -372,9 +372,9 @@ void widget::WidgetScrooled::GenDraw(ewol::DrawProperty displayProp)
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
 		// Call the widget drawing methode
-		OnDraw(displayProp);
+		OnDraw();
 	} else {
-		ewol::Widget::GenDraw(displayProp);
+		ewol::Widget::SystemDraw(displayProp);
 	}
 	ewol::openGL::Pop();
 }

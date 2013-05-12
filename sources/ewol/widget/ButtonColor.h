@@ -61,14 +61,14 @@ namespace widget {
 			 * @param[in] color The new display color.
 			 */
 			void SetValue(draw::Color color);
-		public:
-			// Derived function
+		protected: // Derived function
+			virtual void OnDraw(void);
+		public: // Derived function
 			virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, const etk::UString& data);
+			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
 		private:
 			/**
 			 * @brief Internal system to Change the property of the current status

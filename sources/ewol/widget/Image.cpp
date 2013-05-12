@@ -94,7 +94,7 @@ void widget::Image::Set(const etk::UString& _file, const ewol::Dimension& _borde
 }
 
 
-void widget::Image::OnDraw(ewol::DrawProperty& _displayProp)
+void widget::Image::OnDraw(void)
 {
 	m_compositing.Draw();
 }

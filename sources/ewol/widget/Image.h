@@ -99,12 +99,12 @@ namespace widget {
 			 * @return The status of keeping the ratio of this image.
 			 */
 			bool GetKeepRatio(void) { return m_keepRatio; };
-		public:
-			// Derived function
+		protected: // Derived function
+			virtual void OnDraw(void);
+		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Image"; };
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(ewol::DrawProperty& _displayProp);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool LoadXML(TiXmlNode* _node);
 	};
