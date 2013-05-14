@@ -29,6 +29,8 @@ void widget::Scroll::UnInit(void)
 	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
 }
 
+const char* const widget::Scroll::configLimit = "limit";
+
 widget::Scroll::Scroll(void) :
 	m_limit(0.15,0.5),
 	m_pixelScrolling(20),
@@ -37,6 +39,7 @@ widget::Scroll::Scroll(void) :
 	m_highSpeedButton(-1),
 	m_highSpeedType(ewol::keyEvent::typeUnknow)
 {
+	RegisterConfig(configLimit, "vec2", NULL, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 	
 }
 
@@ -348,3 +351,29 @@ ewol::Widget* widget::Scroll::GetWidgetAtPos(const vec2& _pos)
 	}
 	return this;
 }
+
+bool widget::Scroll::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (true == widget::Container::OnSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.GetConfig() == configLimit) {
+		SetLimit(_conf.GetData());
+		return true;
+	}
+	return false;
+}
+
+bool widget::Scroll::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == widget::Container::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configLimit) {
+		_result = GetLimit();
+		return true;
+	}
+	return false;
+}
+
+

@@ -13,7 +13,7 @@
 
 
 #undef __class__
-#define __class__	"Spacer"
+#define __class__ "Spacer"
 
 static ewol::Widget* Create(void)
 {

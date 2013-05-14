@@ -55,6 +55,17 @@ namespace widget
 			 * @return false ==> some error occured
 			 */
 			bool LoadFromString(const etk::UString& composerXmlString);
+			/**
+			 * @brief Register an Event an named widget. @see RegisterOnEvent
+			 * @param[in] _subWidgetName Name of the subWidget.
+			 * @param[in] _eventId Event generate inside the object.
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
+			 */
+			void RegisterOnEventNameWidget(const etk::UString& _subWidgetName,
+			                               const char * _eventId,
+			                               const char * _eventIdgenerated = NULL,
+			                               const etk::UString& _overloadData="");
 		private:
 			/**
 			 * @brief Load a composition with a file.

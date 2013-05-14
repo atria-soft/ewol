@@ -28,6 +28,9 @@ namespace widget {
 	class Scroll : public widget::Container
 	{
 		public:
+			// Cinfig parameter list:
+			static const char* const configLimit;
+		public:
 			static void Init(void);
 			static void UnInit(void);
 		private:
@@ -53,7 +56,7 @@ namespace widget {
 			 * @brief Get the limit of scrolling
 			 * @return scrolling limit
 			 */
-			const vec2& GetLimit(void) { return m_limit; };
+			const vec2& GetLimit(void) const { return m_limit; };
 			
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "ewol::widget::Scroll"; };
@@ -64,6 +67,8 @@ namespace widget {
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
 		protected: // Derived function
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };

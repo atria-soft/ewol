@@ -180,7 +180,7 @@ bool widget::Sizer::LoadXML(TiXmlNode* _node)
 	// parse generic properties :
 	widget::ContainerN::LoadXML(_node);
 	
-	const char* tmpAttributeValue = _node->ToElement()->Attribute("borderSize");
+	const char* tmpAttributeValue = _node->ToElement()->Attribute("border");
 	if (NULL != tmpAttributeValue) {
 		m_borderSize = tmpAttributeValue;
 	}

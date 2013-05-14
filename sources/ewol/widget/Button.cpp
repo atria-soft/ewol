@@ -397,6 +397,27 @@ void widget::Button::PeriodicCall(int64_t _localTime)
 }
 
 
+ewol::Widget* widget::Button::GetWidgetNamed(const etk::UString& _widgetName)
+{
+	if (GetName()==_widgetName) {
+		return this;
+	}
+	if (m_subWidget[0]!= NULL) {
+		ewol::Widget* tmpWidget = m_subWidget[0]->GetWidgetNamed(_widgetName);
+		if (NULL != tmpWidget) {
+			return tmpWidget;
+		}
+	}
+	if (m_subWidget[1]!= NULL) {
+		ewol::Widget* tmpWidget = m_subWidget[1]->GetWidgetNamed(_widgetName);
+		if (NULL != tmpWidget) {
+			return tmpWidget;
+		}
+	}
+	return NULL;
+}
+
+
 bool widget::Button::LoadXML(TiXmlNode* _node)
 {
 	if (NULL==_node) {

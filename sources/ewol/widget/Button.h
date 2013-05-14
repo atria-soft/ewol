@@ -154,6 +154,7 @@ namespace widget {
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual bool OnEventEntry(const ewol::EventEntry& _event);
 			virtual bool LoadXML(TiXmlNode* _node);
+			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
 		private: // derived function
 			virtual void PeriodicCall(int64_t _localTime);
 	};

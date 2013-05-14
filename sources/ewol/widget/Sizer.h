@@ -66,7 +66,7 @@ namespace widget {
 			 */
 			const ewol::Dimension& GetBorderSize(void) { return m_borderSize; };
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::Sizer"; };
+			virtual const char * const GetObjectType(void) { return "ewol::widget::sizer"; };
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
 			virtual bool LoadXML(TiXmlNode* _node);
