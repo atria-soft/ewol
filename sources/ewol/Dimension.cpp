@@ -43,28 +43,28 @@ void ewol::dimension::UnInit(void)
 	windowsSize.Set(vec2(9999999,88888), ewol::Dimension::Pixel);
 }
 
-void ewol::dimension::SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te type)
+void ewol::dimension::SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type)
 {
-	ewol::Dimension conversion(_ratio, type);
+	ewol::Dimension conversion(_ratio, _type);
 	ratio = conversion.GetMillimeter();
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	EWOL_INFO("Set a new screen ratio for the screen : ratioMm=" << ratio);
 }
 
-void ewol::dimension::SetPixelWindowsSize(const vec2& size)
+void ewol::dimension::SetPixelWindowsSize(const vec2& _size)
 {
-	windowsSize = size;
+	windowsSize = _size;
 	EWOL_VERBOSE("Set a new Windows property size " << windowsSize << "px");
 }
 
-vec2 ewol::dimension::GetWindowsSize(ewol::Dimension::distance_te type)
+vec2 ewol::dimension::GetWindowsSize(ewol::Dimension::distance_te _type)
 {
-	return windowsSize.Get(type);
+	return windowsSize.Get(_type);
 }
 
-float ewol::dimension::GetWindowsDiag(ewol::Dimension::distance_te type)
+float ewol::dimension::GetWindowsDiag(ewol::Dimension::distance_te _type)
 {
-	vec2 size = ewol::dimension::GetWindowsSize(type);
+	vec2 size = ewol::dimension::GetWindowsSize(_type);
 	return size.length();
 }
 
@@ -79,9 +79,41 @@ ewol::Dimension::Dimension(void) :
 	// notinh to do ...
 }
 
-ewol::Dimension::Dimension(const vec2& size, ewol::Dimension::distance_te type)
+ewol::Dimension::Dimension(const vec2& _size, ewol::Dimension::distance_te _type)
 {
-	Set(size, type);
+	Set(_size, _type);
+}
+
+void ewol::Dimension::Set(etk::UString _config)
+{
+	distance_te type = ewol::Dimension::Pixel;
+	if (_config.EndWith("%",false)==true) {
+		type = ewol::Dimension::Pourcent;
+		_config.Remove(_config.Size()-1, 1);
+	} else if (_config.EndWith("px",false)==true) {
+		type = ewol::Dimension::Pixel;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("ft",false)==true) {
+		type = ewol::Dimension::foot;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("in",false)==true) {
+		type = ewol::Dimension::Inch;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("km",false)==true) {
+		type = ewol::Dimension::Kilometer;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("mm",false)==true) {
+		type = ewol::Dimension::Millimeter;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("cm",false)==true) {
+		type = ewol::Dimension::Centimeter;
+		_config.Remove(_config.Size()-2, 2);
+	} else if (_config.EndWith("m",false)==true) {
+		type = ewol::Dimension::Meter;
+		_config.Remove(_config.Size()-1, 1);
+	}
+	vec2 tmp = _config;
+	Set(tmp, type);
 }
 
 ewol::Dimension::~Dimension(void)
@@ -89,9 +121,43 @@ ewol::Dimension::~Dimension(void)
 	// nothing to do ...
 }
 
-vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type) const
+ewol::Dimension::operator etk::UString(void) const
 {
-	switch(m_type) {
+	etk::UString str;
+	str = Get(GetType());
+	
+	switch(GetType()) {
+		case ewol::Dimension::Pourcent:
+			str += "%";
+			break;
+		case ewol::Dimension::Pixel:
+			str += "px";
+			break;
+		case ewol::Dimension::Meter:
+			str += "m";
+			break;
+		case ewol::Dimension::Centimeter:
+			str += "cm";
+			break;
+		case ewol::Dimension::Millimeter:
+			str += "mm";
+			break;
+		case ewol::Dimension::Kilometer:
+			str += "km";
+			break;
+		case ewol::Dimension::Inch:
+			str += "in";
+			break;
+		case ewol::Dimension::foot:
+			str += "ft";
+			break;
+	}
+	return str;
+}
+
+vec2 ewol::Dimension::Get(ewol::Dimension::distance_te _type) const
+{
+	switch(_type) {
 		case ewol::Dimension::Pourcent:
 			return GetPourcent();
 		case ewol::Dimension::Pixel:
@@ -111,12 +177,12 @@ vec2 ewol::Dimension::Get(ewol::Dimension::distance_te type) const
 	}
 }
 
-void ewol::Dimension::Set(const vec2& _size, ewol::Dimension::distance_te type)
+void ewol::Dimension::Set(const vec2& _size, ewol::Dimension::distance_te _type)
 {
 	// Set min max on input to limit error : 
 	vec2 size(etk_avg(0.0f,_size.x(),9999999.0f),
 	          etk_avg(0.0f,_size.y(),9999999.0f));
-	switch(type) {
+	switch(_type) {
 		case ewol::Dimension::Pourcent:
 			{
 				vec2 size2(etk_avg(0.0f,_size.x(),100.0f),
@@ -147,7 +213,7 @@ void ewol::Dimension::Set(const vec2& _size, ewol::Dimension::distance_te type)
 			m_data = vec2(size.x()*footToMillimeter*ratio.x(), size.y()*footToMillimeter*ratio.y());
 			break;
 	}
-	m_type = type;
+	m_type = _type;
 }
 
 vec2 ewol::Dimension::GetPixel(void) const
@@ -203,84 +269,6 @@ vec2 ewol::Dimension::GetFoot(void) const
 {
 	return ewol::Dimension::GetMillimeter()*millimeterToFoot;
 }
-
-etk::UString ewol::Dimension::GetString(void)
-{
-	etk::UString ret;
-	vec2 size = Get(GetType());
-	ret += etk::UString(size.x());
-	ret += ",";
-	ret += etk::UString(size.y());
-	switch(m_type) {
-		case ewol::Dimension::Pourcent:
-			ret += "%";
-			break;
-		case ewol::Dimension::Pixel:
-			ret += "px";
-			break;
-		case ewol::Dimension::Meter:
-			ret += "m";
-			break;
-		case ewol::Dimension::Centimeter:
-			ret += "cm";
-			break;
-		case ewol::Dimension::Millimeter:
-			ret += "mm";
-			break;
-		case ewol::Dimension::Kilometer:
-			ret += "km";
-			break;
-		case ewol::Dimension::Inch:
-			ret += "in";
-			break;
-		case ewol::Dimension::foot:
-			ret += "ft";
-			break;
-	}
-	return ret;
-}
-
-
-void ewol::Dimension::SetString(const etk::UString& value)
-{
-	etk::UString value2 = value;
-	int32_t nbElementToRemove=0;
-	vec2 data;
-	distance_te type;
-	if (value.EndWith("%")==true) {
-		nbElementToRemove=1;
-		type = ewol::Dimension::Pourcent;
-	} else if (value.EndWith("px")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::Pixel;
-	} else if (value.EndWith("cm")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::Centimeter;
-	} else if (value.EndWith("mm")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::Millimeter;
-	} else if (value.EndWith("km")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::Kilometer;
-	} else if (value.EndWith("m")==true) {
-		nbElementToRemove=1;
-		type = ewol::Dimension::Meter;
-	} else if (value.EndWith("in")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::Inch;
-	} else if (value.EndWith("ft")==true) {
-		nbElementToRemove=2;
-		type = ewol::Dimension::foot;
-	} else {
-		EWOL_WARNING("you might st an unit at : \"" << value << "\"");
-		nbElementToRemove=0;
-		type = ewol::Dimension::Pixel;
-	}
-	value2.Remove(value2.Size()-nbElementToRemove, nbElementToRemove);
-	data=value2;
-	Set(data, type);
-}
-
 
 etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension::distance_te& obj)
 {

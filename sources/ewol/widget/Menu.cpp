@@ -105,7 +105,7 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 		// add it in the widget list
 		widget::Sizer::SubWidgetAdd(myButton);
 		// keep the specific event ...
-		myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
+		myButton->RegisterOnEvent(this, widget::Button::eventPressed, widget::Button::eventPressed);
 		tmpObject->m_widgetPointer = myButton;
 	}
 	return tmpObject->m_localId;
@@ -124,7 +124,7 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 		return true;
 	}
 	*/
-	if (_msg.GetMessage() == ewolEventButtonPressed) {
+	if (_msg.GetMessage() == widget::Button::eventPressed) {
 		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
 			if (_msg.GetCaller() == m_listElement[iii]->m_widgetPointer) {
 				// 2 posible case (have a message or have a child ...
@@ -199,7 +199,7 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 											myButton->SetSubWidget( new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>") );
 										}
 										// set the image if one is present ...
-										myButton->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventButtonPressed);
+										myButton->RegisterOnEvent(this, widget::Button::eventPressed, widget::Button::eventPressed);
 										myButton->SetExpand(bvec2(true,false));
 										myButton->SetFill(bvec2(true,false));
 										// add it in the widget list

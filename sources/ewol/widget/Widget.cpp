@@ -93,6 +93,14 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::gravity_te _obj)
 #undef __class__
 #define __class__ "Widget"
 
+const char* const ewol::Widget::configFill = "fill";
+const char* const ewol::Widget::configExpand = "expand";
+const char* const ewol::Widget::configHide = "hide";
+const char* const ewol::Widget::configFocus = "focus";
+const char* const ewol::Widget::configMinSize = "min-size";
+const char* const ewol::Widget::configMaxSize = "max-size";
+const char* const ewol::Widget::configGravity = "gravity";
+
 ewol::Widget::Widget(void) :
 	m_up(NULL),
 	m_size(10,10),
@@ -115,7 +123,14 @@ ewol::Widget::Widget(void) :
 	m_grabCursor(false),
 	m_cursorDisplay(ewol::cursorArrow)
 {
-	
+	// set all the config in the list :
+	RegisterConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget availlable size");
+	RegisterConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is availlable");
+	RegisterConfig(ewol::Widget::configHide, "bool", NULL, "The widget start hided");
+	RegisterConfig(ewol::Widget::configFocus, "bool", NULL, "The widget request focus");
+	RegisterConfig(ewol::Widget::configMinSize, "dimension", NULL, "User minimum size");
+	RegisterConfig(ewol::Widget::configMaxSize, "dimension", NULL, "User maximum size");
+	RegisterConfig(ewol::Widget::configGravity, "list", "center;top-left;top;top-right;right;buttom-right;buttom;buttom-left;left", "User maximum size");
 }
 
 
@@ -706,113 +721,11 @@ ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
 
 bool ewol::Widget::LoadXML(TiXmlNode* _node)
 {
-	if (NULL==_node) {
-		return false;
-	}
-	bool ret = true;
-	const char *tmpAttributeValue = _node->ToElement()->Attribute("name");
-	if (NULL != tmpAttributeValue) {
-		SetName(tmpAttributeValue);
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("fill");
-	if (NULL != tmpAttributeValue) {
-		if (strcmp("false,false", tmpAttributeValue)==0) {
-			SetFill(bvec2(false,false));
-		} else if (strcmp("false,true", tmpAttributeValue)==0) {
-			SetFill(bvec2(false,true));
-		} else if (strcmp("true,false", tmpAttributeValue)==0) {
-			SetFill(bvec2(true,false));
-		} else if (strcmp("false", tmpAttributeValue)==0) {
-			SetFill(bvec2(false,false));
-		} else {
-			SetFill(bvec2(true,true));
-		}
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("expand");
-	if (NULL != tmpAttributeValue) {
-		if (strcmp("false,false", tmpAttributeValue)==0) {
-			SetExpand(bvec2(false,false));
-		} else if (strcmp("false,true", tmpAttributeValue)==0) {
-			SetExpand(bvec2(false,true));
-		} else if (strcmp("true,false", tmpAttributeValue)==0) {
-			SetExpand(bvec2(true,false));
-		} else if (strcmp("false", tmpAttributeValue)==0) {
-			SetExpand(bvec2(false,false));
-		} else {
-			SetExpand(bvec2(true,true));
-		}
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("hide");
-	if (NULL != tmpAttributeValue) {
-		if (strcmp("true", tmpAttributeValue)==0) {
-			Hide();
-		} else {
-			Show();
-		}
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("focus");
-	if (NULL != tmpAttributeValue) {
-		if (strcmp("true", tmpAttributeValue)==0) {
-			KeepFocus();
-		}
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("min-size");
-	if (NULL != tmpAttributeValue) {
-		m_userMinSize.SetString(tmpAttributeValue);
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("max-size");
-	if (NULL != tmpAttributeValue) {
-		m_userMaxSize.SetString(tmpAttributeValue);
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("gravity");
-	if (NULL != tmpAttributeValue) {
-		m_gravity = StringToGravity(tmpAttributeValue);
-	}
-	EWOL_DEBUG("Widget parse: m_hide=" << m_hide << "  m_userMinSize=" << m_userMinSize << "  m_userMaxSize=" << m_userMaxSize << "  m_userFill=" << m_userFill << "  m_userExpand=" << m_userExpand);
+	// Call EObject basic parser
+	ewol::EObject::LoadXML(_node); // note : Load standard parameters (attribute in XML)
 	MarkToRedraw();
-	return ret;
-}
-
-bool ewol::Widget::StoreXML(TiXmlNode* _node)
-{
-	if (NULL==_node) {
-		return false;
-	}
-	/*
-	TiXmlElement * element = new TiXmlElement(__class__);
-	if (NULL == element) {
-		EWOL_ERROR("TinyXML node allocation error");
-		return false;
-	}
-	_node->LinkEndChild(element);
-	*/
-	if (GetName().Size()!=0) {
-		_node->ToElement()->SetAttribute("name", GetName().c_str() );
-	}
-	
-	if (m_userMinSize.GetPixel() != vec2(0,0)) {
-		_node->ToElement()->SetAttribute("min-size", m_userMinSize.GetString().c_str() );
-	}
-	if (m_userMaxSize.GetPixel() != vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE)) {
-		_node->ToElement()->SetAttribute("max-size", m_userMaxSize.GetString().c_str() );
-	}
-	if (m_userExpand != bvec2(false,false)) {
-		etk::UString tmpVal = etk::UString(m_userExpand.x()) + "," + etk::UString(m_userExpand.y());
-		_node->ToElement()->SetAttribute("expand", tmpVal.c_str() );
-	}
-	if (m_userFill != bvec2(false,false)) {
-		etk::UString tmpVal = etk::UString(m_userFill.x()) + "," + etk::UString(m_userFill.y());
-		_node->ToElement()->SetAttribute("fill", tmpVal.c_str() );
-	}
-	if (m_gravity != ewol::gravityButtomLeft) {
-		_node->ToElement()->SetAttribute("gravity", GravityToString(m_gravity).c_str() );
-	}
-	if (IsHide() != false) {
-		_node->ToElement()->SetAttribute("hide", "true" );
-	}
 	return true;
 }
-
 
 ewol::Widget* ewol::Widget::GetWidgetNamed(const etk::UString& _widgetName)
 {
@@ -848,4 +761,86 @@ void ewol::Widget::SetGravity(gravity_te _gravity)
 {
 	m_gravity = _gravity;
 	MarkToRedraw();
+}
+
+
+bool ewol::Widget::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (true == ewol::EObject::OnSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configFill) {
+		SetFill(_conf.GetData());
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configExpand) {
+		SetExpand(_conf.GetData());
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configHide) {
+		if(true == _conf.GetData().ToBool()) {
+			Hide();
+		} else {
+			Show();
+		}
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configFocus) {
+		if(true == _conf.GetData().ToBool()) {
+			KeepFocus();
+		} else {
+			//nothing to do ...
+		}
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configMinSize) {
+		m_userMinSize = _conf.GetData();
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configMaxSize) {
+		m_userMaxSize = _conf.GetData();
+		return true;
+	}
+	if (_conf.GetConfig() == ewol::Widget::configGravity) {
+		m_gravity = StringToGravity(_conf.GetData());
+		return true;
+	}
+	return false;
+}
+
+bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == ewol::EObject::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == ewol::Widget::configFill) {
+		_result = m_userFill;
+		return true;
+	}
+	if (_config == ewol::Widget::configExpand) {
+		_result = m_userExpand;
+		return true;
+	}
+	if (_config == ewol::Widget::configHide) {
+		// TODO : Understand why it does not work : _result = m_hide;
+		if (true==m_hide) {
+			_result = "true";
+		} else {
+			_result = "false";
+		}
+		return true;
+	}
+	if (_config == ewol::Widget::configMinSize) {
+		_result = m_userMinSize;
+		return true;
+	}
+	if (_config == ewol::Widget::configMaxSize) {
+		_result = m_userMaxSize;
+		return true;
+	}
+	if (_config == ewol::Widget::configGravity) {
+		_result = GravityToString(m_gravity);
+		return true;
+	}
+	return false;
 }

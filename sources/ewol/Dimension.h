@@ -42,26 +42,50 @@ namespace ewol
 			Dimension(void);
 			/**
 			 * @brief Constructor
-			 * @param[in] size Requested dimention
-			 * @param[in] type Unit of the Dimention
+			 * @param[in] _size Requested dimention
+			 * @param[in] _type Unit of the Dimention
 			 */
-			Dimension(const vec2& size, ewol::Dimension::distance_te type=ewol::Dimension::Pixel);
+			Dimension(const vec2& _size, ewol::Dimension::distance_te _type=ewol::Dimension::Pixel);
+			/**
+			 * @brief Constructor
+			 * @param[in] _config dimension configuration.
+			 */
+			Dimension(const etk::UString& _config) { Set(_config); };
+			/**
+			 * @brief Constructor
+			 * @param[in] _config dimension configuration.
+			 */
+			Dimension(const char* _config) { Set(_config); };
 			/**
 			 * @brief Destructor
 			 */
 			~Dimension(void);
+			
+			/**
+			 * @brief string cast :
+			 */
+			operator etk::UString(void) const;
+			
 			/**
 			 * @brief Get the current dimention in requested type
-			 * @param[in] type Type of unit requested.
+			 * @param[in] _type Type of unit requested.
 			 * @return dimention requested.
 			 */
-			vec2 Get(ewol::Dimension::distance_te type) const;
+			vec2 Get(ewol::Dimension::distance_te _type) const;
 			/**
 			 * @brief Set the current dimention in requested type
-			 * @param[in] size Dimention to set
-			 * @param[in] type Type of unit requested.
+			 * @param[in] _size Dimention to set
+			 * @param[in] _type Type of unit requested.
 			 */
-			void Set(const vec2& size, ewol::Dimension::distance_te type);
+			void Set(const vec2& _size, ewol::Dimension::distance_te _type);
+			
+		private:
+			/**
+			 * @brief Set the current dimention in requested type
+			 * @param[in] _config dimension configuration.
+			 */
+			void Set(etk::UString _config);
+		public:
 			/**
 			 * @brief Get the current dimention in pixel
 			 * @return dimention in Pixel
@@ -105,15 +129,11 @@ namespace ewol
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
-			const Dimension& operator= (const Dimension& obj ) {
-				if (this!=&obj) {
-					m_data = obj.m_data;
-					m_type = obj.m_type;
+			const Dimension& operator= (const Dimension& _obj ) {
+				if (this!=&_obj) {
+					m_data = _obj.m_data;
+					m_type = _obj.m_type;
 				}
-				return *this;
-			}
-			const Dimension& operator= (const etk::UString& obj ) {
-				SetString(obj);
 				return *this;
 			}
 			/**
@@ -121,19 +141,9 @@ namespace ewol
 			 * @return the type
 			 */
 			ewol::Dimension::distance_te GetType(void) const { return m_type; };
-			/**
-			 * @get the descriptive string
-			 * @return string describe the dimention
-			 */
-			etk::UString GetString(void);
-			/**
-			 * @brief Set the descriptive string in this dimention
-			 * @param[in] value String describe the dimention
-			 */
-			void SetString(const etk::UString& value);
 	};
-	etk::CCout& operator <<(etk::CCout &os, const ewol::Dimension::distance_te& obj);
-	etk::CCout& operator <<(etk::CCout &os, const ewol::Dimension& obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension::distance_te& _obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension& _obj);
 	
 	namespace dimension
 	{
@@ -152,24 +162,24 @@ namespace ewol
 		 * @param[in] type Unit type requested.
 		 * @note: same as @ref SetPixelPerInch (internal manage convertion)
 		 */
-		void SetPixelRatio(const vec2& ratio, ewol::Dimension::distance_te type);
+		void SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type);
 		/**
 		 * @brief Set the current Windows Size
 		 * @param[in] size Size of the current windows in pixel.
 		 */
-		void SetPixelWindowsSize(const vec2& size);
+		void SetPixelWindowsSize(const vec2& _size);
 		/**
 		 * @brief Get the Windows Size in the request unit
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		vec2 GetWindowsSize(ewol::Dimension::distance_te type);
+		vec2 GetWindowsSize(ewol::Dimension::distance_te _type);
 		/**
 		 * @brief Get the Windows diagonal size in the request unit
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		float GetWindowsDiag(ewol::Dimension::distance_te type);
+		float GetWindowsDiag(ewol::Dimension::distance_te _type);
 	};
 };
 

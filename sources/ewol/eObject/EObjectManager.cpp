@@ -142,3 +142,18 @@ void ewol::EObjectManager::RemoveAllAutoRemove(void)
 	m_eObjectAutoRemoveList.Clear();
 }
 
+ewol::EObject* ewol::EObjectManager::Get(const etk::UString& _name)
+{
+	if (_name=="") {
+		return NULL;
+	}
+	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+		if (m_eObjectList[iii] != NULL) {
+			if (m_eObjectList[iii]->GetName() == _name) {
+				return m_eObjectList[iii];
+			}
+		}
+	}
+	return NULL;
+}
+

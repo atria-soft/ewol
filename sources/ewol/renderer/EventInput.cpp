@@ -21,7 +21,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInput& _obj)
 	return _os;
 }
 
-etk::CCout& operator <<(etk::CCout& _os, const ewol::EventInputSystem& _obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInputSystem& _obj)
 {
 	_os << _obj.m_event;
 	return _os;

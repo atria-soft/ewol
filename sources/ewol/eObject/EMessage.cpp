@@ -11,14 +11,15 @@
 #undef __class__
 #define __class__	"EMessage"
 
-etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::EMessage &obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EMessage& _obj)
 {
-	if (NULL != obj.GetMessage()) {
-		os << " msg=\"" << obj.GetMessage() << "\"";
+	_os << "{";
+	if (NULL != _obj.GetMessage()) {
+		_os << "msg=\"" << _obj.GetMessage() << "\"";
 	} else {
-		os << " msg=\"NULL\"";
+		_os << "msg=\"NULL\"";
 	}
-	os << " data=\"" << obj.GetData() << "\"";
-	return os;
+	_os << " data=\"" << _obj.GetData() << "\"}";
+	return _os;
 }
 

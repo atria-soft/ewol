@@ -12,10 +12,10 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
-extern const char * const ewolEventLabelPressed    = "ewol Label Pressed";
-
 #undef __class__
 #define __class__	"Label"
+
+const char * const widget::Label::eventPressed    = "ewol-widget-label-event-pressed";
 
 static ewol::Widget* Create(void)
 {
@@ -35,7 +35,7 @@ void widget::Label::UnInit(void)
 widget::Label::Label(etk::UString _newLabel)
 {
 	m_label = _newLabel;
-	AddEventId(ewolEventLabelPressed);
+	AddEventId(eventPressed);
 	SetCanHaveFocus(false);
 }
 
@@ -124,7 +124,7 @@ bool widget::Label::OnEventInput(const ewol::EventInput& _event)
 	if (1 == _event.GetId()) {
 		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			// nothing to do ...
-			GenerateEventId(ewolEventLabelPressed);
+			GenerateEventId(eventPressed);
 			return true;
 		}
 	}

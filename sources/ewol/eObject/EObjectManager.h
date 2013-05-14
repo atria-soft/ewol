@@ -22,6 +22,8 @@ namespace ewol {
 		
 		void  AutoRemove(ewol::EObject* object);
 		void  RemoveAllAutoRemove(void);
+		
+		ewol::EObject* Get(const etk::UString& _name);
 	};
 };
 

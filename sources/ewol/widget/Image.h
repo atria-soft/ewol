@@ -21,6 +21,14 @@ namespace widget {
 	class Image :public ewol::Widget
 	{
 		public:
+			// Event list of properties
+			static const char * const eventPressed;
+			// Config list of properties
+			static const char * const configRatio;
+			static const char * const configSize;
+			static const char * const configBorder;
+			static const char * const configSource;
+		public:
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
@@ -59,7 +67,7 @@ namespace widget {
 			 * @brief Get the file displayed
 			 * @return the filename of the image
 			 */
-			const etk::UString& GetFile(void) { return m_fileName; };
+			const etk::UString& GetFile(void) const { return m_fileName; };
 		protected:
 			ewol::Dimension m_border; //!< border to add at the image.
 		public:
@@ -72,7 +80,7 @@ namespace widget {
 			 * @brief Get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& GetBorder(void) { return m_border; };
+			const ewol::Dimension& GetBorder(void) const { return m_border; };
 		protected:
 			ewol::Dimension m_imageSize; //!< border to add at the image.
 		public:
@@ -85,7 +93,7 @@ namespace widget {
 			 * @brief Get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& GetImageSize(void) { return m_imageSize; };
+			const ewol::Dimension& GetImageSize(void) const { return m_imageSize; };
 		protected:
 			bool m_keepRatio; //!< Keep the image ratio between width and hight
 		public:
@@ -98,9 +106,11 @@ namespace widget {
 			 * @brief Get the current status of keeping ratio.
 			 * @return The status of keeping the ratio of this image.
 			 */
-			bool GetKeepRatio(void) { return m_keepRatio; };
+			bool GetKeepRatio(void) const { return m_keepRatio; };
 		protected: // Derived function
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Image"; };
 			virtual void CalculateMinMaxSize(void);

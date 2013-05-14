@@ -22,8 +22,7 @@ extern "C" {
 };
 
 // internal element of the widget manager : 
-static etk::Vector<messageList_ts>   m_messageList;   // all widget allocated ==> all time increment ... never removed ...
-
+static etk::Vector<messageList_ts> m_messageList; // all widget allocated ==> all time increment ... never removed ...
 
 void ewol::EObjectMessageMultiCast::Init(void)
 {
@@ -102,6 +101,8 @@ void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const _messageId, 
 #define __class__	"ewol::EObject"
 
 
+const char* const ewol::EObject::configName = "name";
+
 
 ewol::EObject::EObject(void)
 {
@@ -110,6 +111,7 @@ ewol::EObject::EObject(void)
 	m_uniqueId = ss_globalUniqueId++;
 	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
 	ewol::EObjectManager::Add(this);
+	RegisterConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
 }
 
 ewol::EObject::~EObject(void)
@@ -246,6 +248,143 @@ void ewol::EObject::OnObjectRemove(ewol::EObject * _removeObject)
 			m_externEvent.Erase(iii);
 		}
 	}
+}
+
+
+void ewol::EObject::RegisterConfig(const char* _config, const char* _type, const char* _control, const char* _description, const char* _default)
+{
+	if (NULL == _config) {
+		EWOL_ERROR("Try to add NULL config");
+		return;
+	}
+	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
+		if (NULL != m_listConfig[iii].GetConfig()) {
+			if (0==strcmp(m_listConfig[iii].GetConfig(), _config) ) {
+				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
+			}
+		}
+	}
+	m_listConfig.PushBack(ewol::EConfigElement(_config, _type, _control, _description, _default));
+}
+
+
+bool ewol::EObject::LoadXML(TiXmlNode* _node)
+{
+	if (NULL==_node) {
+		return false;
+	}
+	bool errorOccured = true;
+	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
+		if (m_listConfig[iii].GetConfig() == NULL) {
+			continue;
+		}
+		const char* value = _node->ToElement()->Attribute(m_listConfig[iii].GetConfig());
+		if (NULL == value) {
+			continue;
+		}
+		if (false==SetConfig(ewol::EConfig(m_listConfig[iii].GetConfig(), value) ) ) {
+			errorOccured = false;
+		}
+	}
+	return errorOccured;
+}
+
+bool ewol::EObject::StoreXML(TiXmlNode* _node) const
+{
+	if (NULL==_node) {
+		return false;
+	}
+	bool errorOccured = true;
+	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
+		if (m_listConfig[iii].GetConfig() == NULL) {
+			continue;
+		}
+		etk::UString value = GetConfig(m_listConfig[iii].GetConfig());
+		if (NULL != m_listConfig[iii].GetDefault() ) {
+			if (value == m_listConfig[iii].GetDefault() ) {
+				// nothing to add on the XML :
+				continue;
+			}
+		}
+		// add attribute ... ==> note : Add special element when '"' element detected ...
+		_node->ToElement()->SetAttribute(m_listConfig[iii].GetConfig(), value.c_str() );
+	}
+	return errorOccured;
+}
+
+
+bool ewol::EObject::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (_conf.GetConfig() == ewol::EObject::configName) {
+		SetName(_conf.GetData());
+		return true;
+	}
+	return false;
+}
+
+bool ewol::EObject::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (_config == ewol::EObject::configName) {
+		_result = GetName();
+		return true;
+	}
+	return false;
+};
+
+bool ewol::EObject::SetConfig(const etk::UString& _config, const etk::UString& _value)
+{
+	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
+		if (NULL != m_listConfig[iii].GetConfig()) {
+			if (_config == m_listConfig[iii].GetConfig() ) {
+				// call config with standard parameter
+				return SetConfig(ewol::EConfig(m_listConfig[iii].GetConfig(), _value));
+			}
+		}
+	}
+	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
+	return false;
+}
+
+etk::UString ewol::EObject::GetConfig(const char* _config) const
+{
+	etk::UString res="";
+	if (NULL != _config) {
+		(void)OnGetConfig(_config, res);
+	}
+	return res;
+};
+
+etk::UString ewol::EObject::GetConfig(const etk::UString& _config) const
+{
+	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
+		if (NULL != m_listConfig[iii].GetConfig()) {
+			if (_config == m_listConfig[iii].GetConfig() ) {
+				// call config with standard parameter
+				return GetConfig(m_listConfig[iii].GetConfig());
+			}
+		}
+	}
+	EWOL_ERROR(" parameter is not in the list : \"" << _config << "\"" );
+	return "";
+}
+
+
+bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf)
+{
+	ewol::EObject* object = ewol::EObjectManager::Get(_name);
+	if (object == NULL) {
+		return false;
+	}
+	return object->SetConfig(_conf);
+}
+
+bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value)
+{
+	ewol::EObject* object = ewol::EObjectManager::Get(_name);
+	if (object == NULL) {
+		return false;
+	}
+	return object->SetConfig(_config, _value);
 }
 
 

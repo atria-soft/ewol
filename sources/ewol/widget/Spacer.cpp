@@ -33,7 +33,7 @@ void widget::Spacer::UnInit(void)
 
 widget::Spacer::Spacer(void)
 {
-	m_userMinSize = vec2(10,10);
+	m_userMinSize = ewol::Dimension(vec2(10,10));
 	SetCanHaveFocus(false);
 	m_color = draw::color::black;
 	m_color.a = 0;

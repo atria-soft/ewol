@@ -12,11 +12,13 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <etk/Vector.h>
+#include <tinyXML/tinyxml.h>
 namespace ewol {
 	// some class need to define element befor other ...
 	class EObject;
 };
 
+#include <ewol/eObject/EConfig.h>
 #include <ewol/eObject/EMessage.h>
 
 namespace ewol {
@@ -43,6 +45,9 @@ namespace ewol {
 	 * this class mermit at every EObject to communicate between them.
 	 */
 	class EObject {
+		public:
+			// Config list of properties
+			static const char* const configName;
 		private:
 			int32_t m_uniqueId; //!< Object UniqueID ==> TODO : Check if it use is needed
 			etk::Vector<EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
@@ -132,7 +137,53 @@ namespace ewol {
 			 * @param[in] _msg Message handle
 			 */
 			virtual void OnReceiveMessage(const ewol::EMessage& _msg) { };
-			
+		private:
+			etk::Vector<ewol::EConfigElement> m_listConfig;
+		protected:
+			/**
+			 * @brief the EObject add a configuration capabilities
+			 * @param[in] _config Configuration name.
+			 * @param[in] _type Type of the config.
+			 * @param[in] _control control of the current type.
+			 * @param[in] _description Descritpion on the current type.
+			 * @param[in] _default Default value of this parameter.
+			 */
+			void RegisterConfig(const char* _config, const char* _type=NULL, const char* _control=NULL, const char* _description=NULL, const char* _default=NULL);
+			/**
+			 * @brief Configuration requested to the curent EObject
+			 * @param[in] _conf Configuration handle.
+			 * @return true if the parametere has been used
+			 */
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			/**
+			 * @brief Receive a configuration message from an other element system or from the curent EObject
+			 * @param[in] _config Configuration name.
+			 * @param[out] _result Result of the request.
+			 * @return true if the config is set
+			 */
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const ;
+		public:
+			/** 
+			 * @brief Get all the configuration list
+			 * @return The list of all parameter availlable in the widget
+			 */
+			virtual const etk::Vector<ewol::EConfigElement>& GetConfigList(void) { return m_listConfig; };
+			/**
+			 * @brief Configuration requested to the curent EObject (systrem mode)
+			 * @param[in] _conf Configuration handle.
+			 * @return true if config set correctly...
+			 */
+			bool SetConfig(const ewol::EConfig& _conf) { return OnSetConfig(_conf); };
+			bool SetConfig(const etk::UString& _config, const etk::UString& _value); // need a search ...
+			bool SetConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value); // need a search ...
+			bool SetConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf);
+			/**
+			 * @brief Configuration Get from the curent EObject (systrem mode)
+			 * @param[in] _config Configuration name.
+			 * @return the config properties
+			 */
+			etk::UString GetConfig(const char* _config) const;
+			etk::UString GetConfig(const etk::UString& _config) const; // need search
 		protected:
 			etk::UString m_name; //!< name of the element ...
 		public:
@@ -140,12 +191,27 @@ namespace ewol {
 			 * @brief Get the eObject name
 			 * @return The requested name
 			 */
-			const etk::UString& GetName(void) { return m_name; };
+			const etk::UString& GetName(void) const { return m_name; };
 			/**
 			 * @brief Get the Widget name
 			 * @param[in] _name The new name
 			 */
 			void SetName(const etk::UString& _name) { m_name=_name; };
+		public:
+			/**
+			 * @brief Load properties with an XML node.
+			 * @param[in] _node Pointer on the tinyXML node.
+			 * @return true : All has been done corectly.
+			 * @return false : An error occured.
+			 */
+			virtual bool LoadXML(TiXmlNode* _node);
+			/**
+			 * @brief Store properties in this XML node.
+			 * @param[in,out] _node Pointer on the tinyXML node.
+			 * @return true : All has been done corectly.
+			 * @return false : An error occured.
+			 */
+			virtual bool StoreXML(TiXmlNode* _node) const;
 	};
 };
 

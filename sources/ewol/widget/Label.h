@@ -14,12 +14,12 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/Widget.h>
 
-extern const char * const ewolEventLabelPressed;
-
 namespace widget {
 	class Label : public ewol::Widget
 	{
 		public:
+			// Event list of properties
+			static const char * const eventPressed;
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */

@@ -155,7 +155,7 @@ widget::FileChooser::FileChooser(void)
 				        "		<label>Validate</label>\n"
 				        "	</sizer>\n"
 				        "</composer\n"));
-				m_widgetValidate->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserValidate);
+				m_widgetValidate->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			}
 			m_widgetCancel = new widget::Button();
@@ -170,7 +170,7 @@ widget::FileChooser::FileChooser(void)
 				        "		<label>Cancel</label>\n"
 				        "	</sizer>\n"
 				        "</composer\n"));
-				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventFileChooserCancel);
+				m_widgetCancel->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
 		}
@@ -243,8 +243,8 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == m_widgetCurrentFileName) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFile);
-				m_widgetCurrentFileName->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFileEnter);
+				m_widgetCurrentFileName->RegisterOnEvent(this, widget::Entry::eventModify, ewolEventFileChooserEntryFile);
+				m_widgetCurrentFileName->RegisterOnEvent(this, widget::Entry::eventEnter,  ewolEventFileChooserEntryFileEnter);
 				m_widgetCurrentFileName->SetExpand(bvec2(true,false));
 				m_widgetCurrentFileName->SetFill(bvec2(true,false));
 				//m_widgetCurrentFileName->SetWidth(200);
@@ -269,8 +269,8 @@ widget::FileChooser::FileChooser(void)
 			if (NULL == m_widgetCurrentFolder) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryModify, ewolEventFileChooserEntryFolder);
-				m_widgetCurrentFolder->RegisterOnEvent(this, ewolEventEntryEnter,  ewolEventFileChooserEntryFolderEnter);
+				m_widgetCurrentFolder->RegisterOnEvent(this, widget::Entry::eventModify, ewolEventFileChooserEntryFolder);
+				m_widgetCurrentFolder->RegisterOnEvent(this, widget::Entry::eventEnter,  ewolEventFileChooserEntryFolderEnter);
 				m_widgetCurrentFolder->SetExpand(bvec2(true,false));
 				m_widgetCurrentFolder->SetFill(bvec2(true,false));
 				//m_widgetCurrentFolder->SetWidth(200);
@@ -281,7 +281,7 @@ widget::FileChooser::FileChooser(void)
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
 				myImage->SetImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				myImage->RegisterOnEvent(this, ewolEventImagePressed, ewolEventFileChooserHome);
+				myImage->RegisterOnEvent(this, widget::Image::eventPressed, ewolEventFileChooserHome);
 				//myImage->SetExpand(bvec2(false,true));
 				mySizerHori->SubWidgetAdd(myImage);
 			}

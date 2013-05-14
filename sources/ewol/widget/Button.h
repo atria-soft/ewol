@@ -17,13 +17,6 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Shaper.h>
 
-extern const char * const ewolEventButtonPressed;
-extern const char * const ewolEventButtonDown;
-extern const char * const ewolEventButtonUp;
-extern const char * const ewolEventButtonEnter;
-extern const char * const ewolEventButtonLeave;
-extern const char * const ewolEventButtonValue;
-
 
 namespace widget {
 	/**
@@ -34,6 +27,17 @@ namespace widget {
 		public:
 			static void Init(void);
 			static void UnInit(void);
+			// Event list of properties
+			static const char* const eventPressed;
+			static const char* const eventDown;
+			static const char* const eventUp;
+			static const char* const eventEnter;
+			static const char* const eventLeave;
+			static const char* const eventValue;
+			// Config list of properties
+			static const char* const configToggle;
+			static const char* const configLock;
+			static const char* const configValue;
 			typedef enum {
 				lockNone, //!< normal status of the button
 				lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
@@ -74,12 +78,12 @@ namespace widget {
 			 * @brief Get the current displayed composition
 			 * @return The base widget
 			 */
-			ewol::Widget* GetSubWidget(void) { return m_subWidget[0]; };
+			ewol::Widget* GetSubWidget(void) const { return m_subWidget[0]; };
 			/**
 			 * @brief Get the current displayed composition
 			 * @return The toggle widget
 			 */
-			ewol::Widget* GetSubWidgetToggle(void) { return m_subWidget[1]; };
+			ewol::Widget* GetSubWidgetToggle(void) const { return m_subWidget[1]; };
 		protected:
 			bool m_value; //!< Current state of the button.
 		public:
@@ -94,7 +98,7 @@ namespace widget {
 			 * @return True : The button is pressed.
 			 * @return false : The button is released.
 			 */
-			bool GetValue(void) { return m_value; };
+			bool GetValue(void) const { return m_value; };
 		protected:
 			buttonLock_te m_lock; //!< Current lock state of the button.
 		public:
@@ -107,7 +111,7 @@ namespace widget {
 			 * @brief Get the current button lock value.
 			 * @return The requested lock mode
 			 */
-			buttonLock_te GetLock(void) { return m_lock; };
+			buttonLock_te GetLock(void) const { return m_lock; };
 		protected:
 			bool m_toggleMode; //!< The button is able to toggle.
 		public:
@@ -120,7 +124,7 @@ namespace widget {
 			 * @brief Get the current toggle mode.
 			 * @return the current toggle mode.
 			 */
-			bool GetToggleMode(void) { return m_toggleMode; };
+			bool GetToggleMode(void) const { return m_toggleMode; };
 		private:
 			bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
@@ -139,6 +143,8 @@ namespace widget {
 			void CheckStatus(void);
 		protected: // Derived function
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "widget::Button"; };
 			virtual void CalculateMinMaxSize(void);

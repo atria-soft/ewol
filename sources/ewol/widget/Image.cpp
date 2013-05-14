@@ -13,8 +13,6 @@
 #include <ewol/ewol.h>
 
 
-extern const char * const ewolEventImagePressed = "ewol-image-Pressed";
-
 #undef __class__
 #define __class__ "Image"
 
@@ -34,11 +32,22 @@ void widget::Image::UnInit(void)
 }
 
 
+const char * const widget::Image::eventPressed = "ewol-widget-image-event-pressed";
+
+const char * const widget::Image::configRatio = "ratio";
+const char * const widget::Image::configSize = "size";
+const char * const widget::Image::configBorder = "border";
+const char * const widget::Image::configSource = "src";
+
 widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) :
 	m_imageSize(vec2(0,0)),
 	m_keepRatio(true)
 {
-	AddEventId(ewolEventImagePressed);
+	AddEventId(eventPressed);
+	RegisterConfig(configRatio, "bool", NULL, "Keep ratio of the image");
+	RegisterConfig(configSize, "Dimension", NULL, "Basic display size of the image");
+	RegisterConfig(configBorder, "Dimension", NULL, "Border of the image");
+	RegisterConfig(configSource, "string", "Image source path");
 	Set(_file, _border);
 }
 
@@ -158,7 +167,7 @@ bool widget::Image::OnEventInput(const ewol::EventInput& _event)
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.GetId()) {
 		if(    ewol::keyEvent::statusSingle == _event.GetStatus()) {
-			GenerateEventId(ewolEventImagePressed);
+			GenerateEventId(eventPressed);
 			return true;
 		}
 	}
@@ -204,3 +213,57 @@ bool widget::Image::LoadXML(TiXmlNode* _node)
 	}
 	return true;
 }
+
+
+bool widget::Image::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (true == ewol::Widget::OnSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.GetConfig() == configRatio) {
+		SetKeepRatio(_conf.GetData().ToBool());
+		return true;
+	}
+	if (_conf.GetConfig() == configSize) {
+		SetImageSize(_conf.GetData());
+		return true;
+	}
+	if (_conf.GetConfig() == configBorder) {
+		SetBorder(_conf.GetData());
+		return true;
+	}
+	if (_conf.GetConfig() == configSource) {
+		SetFile(_conf.GetData());
+		return true;
+	}
+	return false;
+}
+
+bool widget::Image::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == ewol::Widget::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configRatio) {
+		if (true==GetKeepRatio()) {
+			_result = "true";
+		} else {
+			_result = "false";
+		}
+		return true;
+	}
+	if (_config == configSize) {
+		_result = GetImageSize();
+		return true;
+	}
+	if (_config == configBorder) {
+		_result = GetBorder();
+		return true;
+	}
+	if (_config == configSource) {
+		_result = GetFile();
+		return true;
+	}
+	return false;
+}
+

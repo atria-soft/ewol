@@ -23,6 +23,7 @@ def Create(target):
 	
 	# Basic Eobject of EWOL
 	myModule.AddSrcFile([
+		'ewol/eObject/EConfig.cpp',
 		'ewol/eObject/EMessage.cpp',
 		'ewol/eObject/EObject.cpp',
 		'ewol/eObject/EObjectManager.cpp'])

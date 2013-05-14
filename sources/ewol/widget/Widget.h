@@ -11,7 +11,6 @@
 
 #include <ewol/eObject/EObject.h>
 #include <ewol/Dimension.h>
-#include <tinyXML/tinyxml.h>
 
 namespace ewol {
 	class Widget;
@@ -96,6 +95,15 @@ namespace ewol {
 			~EventShortCut(void) { };
 	};
 	class Widget : public EObject {
+		public:
+			// Config list of properties
+			static const char* const configFill;
+			static const char* const configExpand;
+			static const char* const configHide;
+			static const char* const configFocus;
+			static const char* const configMinSize;
+			static const char* const configMaxSize;
+			static const char* const configGravity;
 		public:
 			/**
 			 * @brief Constructor of the widget classes
@@ -584,23 +592,12 @@ namespace ewol {
 			 * @return the type of the cursor.
 			 */
 			virtual ewol::cursorDisplay_te GetCursor(void);
-		public:
-			/**
-			 * @brief Load properties with an XML node.
-			 * @param[in] _node Pointer on the tinyXML node.
-			 * @return true : All has been done corectly.
-			 * @return false : An error occured.
-			 */
-			virtual bool LoadXML(TiXmlNode* _node);
-			/**
-			 * @brief Store properties in this XML node.
-			 * @param[in,out] _node Pointer on the tinyXML node.
-			 * @return true : All has been done corectly.
-			 * @return false : An error occured.
-			 */
-			virtual bool StoreXML(TiXmlNode* _node);
-		public: // herited function
+		public: // Derived function
 			virtual void OnObjectRemove(ewol::EObject* _removeObject);
+			virtual bool LoadXML(TiXmlNode* _node);
+		protected: // Derived function
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	}; // end of the class Widget declaration
 
 };// end of namespace

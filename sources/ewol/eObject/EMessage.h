@@ -33,7 +33,7 @@ namespace ewol {
 			void SetData(const etk::UString& _data) { m_data = _data; };
 			inline const etk::UString& GetData(void) const { return m_data; };
 	};
-	etk::CCout& operator <<(etk::CCout &os, const ewol::EMessage &obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::EMessage& _obj);
 };
 
 

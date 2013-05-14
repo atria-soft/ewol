@@ -80,7 +80,7 @@ widget::Parameter::Parameter(void) :
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer\n"));
-				m_widgetCancel->RegisterOnEvent(this, ewolEventButtonPressed, ewolEventParameterClose);
+				m_widgetCancel->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterClose);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}
 		}

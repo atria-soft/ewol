@@ -11,16 +11,21 @@
 #include <ewol/widget/Button.h>
 #include <ewol/widget/WidgetManager.h>
 
-
-extern const char * const ewolEventButtonPressed    = "ewol-button-Pressed";
-extern const char * const ewolEventButtonDown       = "ewol-button-down";
-extern const char * const ewolEventButtonUp         = "ewol-button-up";
-extern const char * const ewolEventButtonEnter      = "ewol-button-enter";
-extern const char * const ewolEventButtonLeave      = "ewol-button-leave";
-extern const char * const ewolEventButtonValue      = "ewol-button-value";
-
 #undef __class__
 #define __class__	"Button"
+
+
+const char* const widget::Button::eventPressed    = "ewol-widget-button-event-Pressed";
+const char* const widget::Button::eventDown       = "ewol-widget-button-event-down";
+const char* const widget::Button::eventUp         = "ewol-widget-button-event-up";
+const char* const widget::Button::eventEnter      = "ewol-widget-button-event-enter";
+const char* const widget::Button::eventLeave      = "ewol-widget-button-event-leave";
+const char* const widget::Button::eventValue      = "ewol-widget-button-event-value";
+
+const char* const widget::Button::configToggle = "toggle";
+const char* const widget::Button::configLock   = "lock";
+const char* const widget::Button::configValue  = "value";
+
 
 // DEFINE for the shader display system :
 #define STATUS_UP        (0)
@@ -44,8 +49,6 @@ void widget::Button::UnInit(void)
 	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
 }
 
-
-
 widget::Button::Button(const etk::UString& _shaperName) :
 	m_shaper(_shaperName),
 	m_value(false),
@@ -60,12 +63,17 @@ widget::Button::Button(const etk::UString& _shaperName) :
 	m_subWidget[0] = NULL;
 	m_subWidget[1] = NULL;
 	// add basic Event generated :
-	AddEventId(ewolEventButtonPressed);
-	AddEventId(ewolEventButtonDown);
-	AddEventId(ewolEventButtonUp);
-	AddEventId(ewolEventButtonEnter);
-	AddEventId(ewolEventButtonLeave);
-	AddEventId(ewolEventButtonValue);
+	AddEventId(eventPressed);
+	AddEventId(eventDown);
+	AddEventId(eventUp);
+	AddEventId(eventEnter);
+	AddEventId(eventLeave);
+	AddEventId(eventValue);
+	// Add configuration
+	RegisterConfig(configToggle, "bool", NULL, "The Button can toogle");
+	RegisterConfig(configValue, "bool", NULL, "Basic value of the widget");
+	RegisterConfig(configLock, "list", "none;true;released;pressed", "Lock the button in a special state to permit changing state only by the coder");
+	
 	// shaper satatus update:
 	CheckStatus();
 	// This widget can have the focus ...
@@ -298,14 +306,14 @@ bool widget::Button::OnEventInput(const ewol::EventInput& _event)
 	if (true == m_mouseHover) {
 		if (1 == _event.GetId()) {
 			if(ewol::keyEvent::statusDown == _event.GetStatus()) {
-				//EWOL_DEBUG("Generate event : " << ewolEventButtonDown);
-				GenerateEventId(ewolEventButtonDown);
+				//EWOL_DEBUG("Generate event : " << eventDown);
+				GenerateEventId(eventDown);
 				m_buttonPressed = true;
 				MarkToRedraw();
 			}
 			if(ewol::keyEvent::statusUp == _event.GetStatus()) {
-				//EWOL_DEBUG("Generate event : " << ewolEventButtonUp);
-				GenerateEventId(ewolEventButtonUp);
+				//EWOL_DEBUG("Generate event : " << eventUp);
+				GenerateEventId(eventUp);
 				m_buttonPressed = false;
 				MarkToRedraw();
 			}
@@ -319,15 +327,15 @@ bool widget::Button::OnEventInput(const ewol::EventInput& _event)
 				} else {
 					// inverse value :
 					m_value = (m_value)?false:true;
-					//EWOL_DEBUG("Generate event : " << ewolEventButtonPressed);
-					GenerateEventId(ewolEventButtonPressed);
-					//EWOL_DEBUG("Generate event : " << ewolEventButtonValue << " val=" << m_value);
-					GenerateEventId(ewolEventButtonValue, m_value);
+					//EWOL_DEBUG("Generate event : " << eventPressed);
+					GenerateEventId(eventPressed);
+					//EWOL_DEBUG("Generate event : " << eventValue << " val=" << m_value);
+					GenerateEventId(eventValue, m_value);
 					if(    false == m_toggleMode
 					    && true == m_value) {
 						m_value = false;
-						//EWOL_DEBUG("Generate event : " << ewolEventButtonValue << " val=" << m_value);
-						GenerateEventId(ewolEventButtonValue, m_value);
+						//EWOL_DEBUG("Generate event : " << widget::Button::eventValue << " val=" << m_value);
+						GenerateEventId(eventValue, m_value);
 					}
 				}
 				MarkToRedraw();
@@ -348,7 +356,7 @@ bool widget::Button::OnEventEntry(const ewol::EventEntry& _event)
 	if(    _event.GetType() == ewol::keyEvent::keyboardChar
 	    && _event.GetStatus() == ewol::keyEvent::statusDown
 	    && _event.GetChar() == '\r') {
-		GenerateEventId(ewolEventButtonEnter);
+		GenerateEventId(eventEnter);
 		return true;
 	}
 	return false;
@@ -400,39 +408,6 @@ bool widget::Button::LoadXML(TiXmlNode* _node)
 	SetSubWidget(NULL);
 	SetSubWidgetToggle(NULL);
 	
-	etk::UString tmpAttributeValue = _node->ToElement()->Attribute("toggle");
-	if (true == tmpAttributeValue.CompareNoCase("true")) {
-		m_toggleMode = true;
-	} else if (true == tmpAttributeValue.CompareNoCase("1")) {
-		m_toggleMode = true;
-	} else {
-		m_toggleMode = false;
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("lock");
-	if(    true == tmpAttributeValue.CompareNoCase("true")
-	    || true == tmpAttributeValue.CompareNoCase("1")) {
-		m_lock = widget::Button::lockAccess;
-	} else if(    true == tmpAttributeValue.CompareNoCase("down")
-	           || true == tmpAttributeValue.CompareNoCase("pressed")) {
-		m_lock = widget::Button::lockWhenPressed;
-	} else if(    true == tmpAttributeValue.CompareNoCase("up")
-	           || true == tmpAttributeValue.CompareNoCase("released")) {
-		m_lock = widget::Button::lockWhenReleased;
-	} else {
-		m_lock = widget::Button::lockNone;
-	}
-	tmpAttributeValue = _node->ToElement()->Attribute("value");
-	if(    true == tmpAttributeValue.CompareNoCase("true")
-	    || true == tmpAttributeValue.CompareNoCase("1")) {
-		if (m_toggleMode==true) {
-			m_value = true;
-		} else {
-			m_value = false;
-		}
-	} else {
-		m_value = false;
-	}
-	
 	// parse all the elements :
 	for(TiXmlNode * pNode = _node->FirstChild() ;
 	    NULL != pNode ;
@@ -474,4 +449,78 @@ bool widget::Button::LoadXML(TiXmlNode* _node)
 	}
 	return true;
 }
+
+bool widget::Button::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (true == ewol::Widget::OnSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.GetConfig() == configToggle) {
+		SetToggleMode(_conf.GetData().ToBool());
+		return true;
+	}
+	if (_conf.GetConfig() == configLock) {
+		buttonLock_te tmpLock = lockNone;
+		if(    true == _conf.GetData().CompareNoCase("true")
+		    || true == _conf.GetData().CompareNoCase("1")) {
+			tmpLock = lockAccess;
+		} else if(    true == _conf.GetData().CompareNoCase("down")
+		           || true == _conf.GetData().CompareNoCase("pressed")) {
+			tmpLock = lockWhenPressed;
+		} else if(    true == _conf.GetData().CompareNoCase("up")
+		           || true == _conf.GetData().CompareNoCase("released")) {
+			tmpLock = lockWhenReleased;
+		}
+		SetLock(tmpLock);
+		return true;
+	}
+	if (_conf.GetConfig() == configValue) {
+		SetValue(_conf.GetData().ToBool());
+		return true;
+	}
+	return false;
+}
+
+bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == ewol::Widget::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configToggle) {
+		if (true==GetToggleMode()) {
+			_result = "true";
+		} else {
+			_result = "false";
+		}
+		return true;
+	}
+	if (_config == configLock) {
+		switch(GetLock()){
+			default:
+			case lockNone:
+				_result = "none";
+				break;
+			case lockAccess:
+				_result = "true";
+				break;
+			case lockWhenPressed:
+				_result = "pressed";
+				break;
+			case lockWhenReleased:
+				_result = "released";
+				break;
+		}
+		return true;
+	}
+	if (_config == configValue) {
+		if (true==GetValue()) {
+			_result = "true";
+		} else {
+			_result = "false";
+		}
+		return true;
+	}
+	return false;
+}
+
 

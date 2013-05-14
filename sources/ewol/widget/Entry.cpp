@@ -12,15 +12,12 @@
 #include <ewol/ewol.h>
 
 
-extern const char * const ewolEventEntryClick      = "ewol-Entry-click";
-extern const char * const ewolEventEntryEnter      = "ewol-Entry-Enter";
-extern const char * const ewolEventEntryModify     = "ewol-Entry-Modify";
 
-const char * const ewolEventEntryCut               = "ewol-Entry-Cut";
-const char * const ewolEventEntryCopy              = "ewol-Entry-Copy";
-const char * const ewolEventEntryPaste             = "ewol-Entry-Paste";
-const char * const ewolEventEntryClean             = "ewol-Entry-Clean";
-const char * const ewolEventEntrySelect            = "ewol-Entry-Select";
+const char * const ewolEventEntryCut    = "ewol-widget-entry-event-internal-cut";
+const char * const ewolEventEntryCopy   = "ewol-widget-entry-event-internal-copy";
+const char * const ewolEventEntryPaste  = "ewol-widget-entry-event-internal-paste";
+const char * const ewolEventEntryClean  = "ewol-widget-entry-event-internal-clean";
+const char * const ewolEventEntrySelect = "ewol-widget-entry-event-internal-select";
 
 
 #undef __class__
@@ -46,6 +43,15 @@ void widget::Entry::UnInit(void)
 	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
 }
 
+const char * const widget::Entry::eventClick  = "ewol-widget-entry-event-click";
+const char * const widget::Entry::eventEnter  = "ewol-widget-entry-event-enter";
+const char * const widget::Entry::eventModify = "ewol-widget-entry-event-modify";
+
+const char* const widget::Entry::configMaxChar = "max";
+const char* const widget::Entry::configRegExp  = "regExp";
+const char* const widget::Entry::configColorFg = "color";
+const char* const widget::Entry::configColorBg = "background";
+const char* const widget::Entry::configEmptyMessage = "emptytext";
 
 widget::Entry::Entry(etk::UString _newData) :
 	m_shaper("THEME:GUI:widgetEntry.conf"),
@@ -63,15 +69,22 @@ widget::Entry::Entry(etk::UString _newData) :
 {
 	m_textColorBg.a = 0xAF;
 	SetCanHaveFocus(true);
-	AddEventId(ewolEventEntryClick);
-	AddEventId(ewolEventEntryEnter);
-	AddEventId(ewolEventEntryModify);
+	AddEventId(eventClick);
+	AddEventId(eventEnter);
+	AddEventId(eventModify);
 	ShortCutAdd("ctrl+w", ewolEventEntryClean);
 	ShortCutAdd("ctrl+x", ewolEventEntryCut);
 	ShortCutAdd("ctrl+c", ewolEventEntryCopy);
 	ShortCutAdd("ctrl+v", ewolEventEntryPaste);
 	ShortCutAdd("ctrl+a", ewolEventEntrySelect, "ALL");
 	ShortCutAdd("ctrl+shift+a", ewolEventEntrySelect, "NONE");
+	
+	RegisterConfig(configMaxChar, "int", NULL, "Maximum cgar that can be set on the Entry");
+	RegisterConfig(configRegExp, "string", NULL, "Control what it is write with a regular expression");
+	RegisterConfig(configColorFg, "color", NULL, "Color of the text displayed");
+	RegisterConfig(configColorBg, "color", NULL, "Color of the text selected");
+	RegisterConfig(configEmptyMessage, "string", NULL, "Text that is displayed when the Entry is empty (decorated text)");
+	
 	SetValue(_newData);
 	MarkToRedraw();
 }
@@ -90,11 +103,6 @@ void widget::Entry::SetMaxChar(int32_t _nbMax)
 	} else {
 		m_maxCharacter = _nbMax;
 	}
-}
-
-int32_t widget::Entry::SetMaxChar(void)
-{
-	return m_maxCharacter;
 }
 
 
@@ -129,11 +137,6 @@ void widget::Entry::SetValue(const etk::UString& _newData)
 		EWOL_DEBUG("Set ... " << newData);
 	}
 	MarkToRedraw();
-}
-
-etk::UString widget::Entry::GetValue(void)
-{
-	return m_data;
 }
 
 
@@ -278,7 +281,7 @@ bool widget::Entry::OnEventInput(const ewol::EventInput& _event)
 	if (1 == _event.GetId()) {
 		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
 			KeepFocus();
-			GenerateEventId(ewolEventEntryClick);
+			GenerateEventId(eventClick);
 			//nothing to do ...
 			return true;
 		} else if (ewol::keyEvent::statusDouble == _event.GetStatus()) {
@@ -371,12 +374,12 @@ bool widget::Entry::OnEventEntry(const ewol::EventEntry& _event)
 	if (_event.GetType() == ewol::keyEvent::keyboardChar) {
 		if(_event.GetStatus() == ewol::keyEvent::statusDown) {
 			//EWOL_DEBUG("Entry input data ... : \"" << unicodeData << "\" " );
-			//return GenEventInputExternal(ewolEventEntryEnter, -1, -1);
+			//return GenEventInputExternal(eventEnter, -1, -1);
 			// remove curent selected data ...
 			RemoveSelected();
 			if(    '\n' == _event.GetChar()
 			    || '\r' == _event.GetChar()) {
-				GenerateEventId(ewolEventEntryEnter, m_data);
+				GenerateEventId(eventEnter, m_data);
 				return true;
 			} else if (0x7F == _event.GetChar()) {
 				// SUPPR :
@@ -406,7 +409,7 @@ bool widget::Entry::OnEventEntry(const ewol::EventEntry& _event)
 					}
 				}
 			}
-			GenerateEventId(ewolEventEntryModify, m_data);
+			GenerateEventId(eventModify, m_data);
 			MarkToRedraw();
 			return true;
 		}
@@ -479,7 +482,7 @@ void widget::Entry::OnEventClipboard(ewol::clipBoard::clipboardListe_te _clipboa
 			MarkToRedraw();
 		}
 	}
-	GenerateEventId(ewolEventEntryModify, m_data);
+	GenerateEventId(eventModify, m_data);
 }
 
 
@@ -495,7 +498,7 @@ void widget::Entry::OnReceiveMessage(const ewol::EMessage& _msg)
 	} else if(_msg.GetMessage() == ewolEventEntryCut) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 		RemoveSelected();
-		GenerateEventId(ewolEventEntryModify, m_data);
+		GenerateEventId(eventModify, m_data);
 	} else if(_msg.GetMessage() == ewolEventEntryCopy) {
 		CopySelectionToClipBoard(ewol::clipBoard::clipboardStd);
 	} else if(_msg.GetMessage() == ewolEventEntryPaste) {
@@ -620,40 +623,65 @@ void widget::Entry::SetEmptyText(const etk::UString& _text)
 	MarkToRedraw();
 }
 
-bool widget::Entry::LoadXML(TiXmlNode* _node)
+bool widget::Entry::OnSetConfig(const ewol::EConfig& _conf)
 {
-	if (NULL==_node) {
-		return false;
+	if (true == ewol::Widget::OnSetConfig(_conf)) {
+		return true;
 	}
-	ewol::Widget::LoadXML(_node);
-	// get internal data : 
-	
-	const char *xmlData = _node->ToElement()->Attribute("color");
-	if (NULL != xmlData) {
-		m_textColorFg = xmlData;
+	if (_conf.GetConfig() == configMaxChar) {
+		SetMaxChar(_conf.GetData().ToInt32());
+		return true;
 	}
-	xmlData = _node->ToElement()->Attribute("background");
-	if (NULL != xmlData) {
-		m_textColorBg = xmlData;
+	if (_conf.GetConfig() == configRegExp) {
+		SetRegExp(_conf.GetData());
+		return true;
 	}
-	xmlData = _node->ToElement()->Attribute("regExp");
-	if (NULL != xmlData) {
-		SetRegExp(xmlData);
+	if (_conf.GetConfig() == configColorFg) {
+		draw::Color tmpColor;
+		draw::ParseColor(_conf.GetData().c_str(), tmpColor);
+		SetColorText(tmpColor);
+		return true;
 	}
-	xmlData = _node->ToElement()->Attribute("max");
-	if (NULL != xmlData) {
-		int32_t tmpVal=0;
-		sscanf(xmlData, "%d", &tmpVal);
-		m_maxCharacter = tmpVal;
+	if (_conf.GetConfig() == configColorBg) {
+		draw::Color tmpColor;
+		draw::ParseColor(_conf.GetData().c_str(), tmpColor);
+		SetColorTextSelected(tmpColor);
+		return true;
 	}
-	xmlData = _node->ToElement()->Attribute("emptytext");
-	if (NULL != xmlData) {
-		m_textWhenNothing = xmlData;
+	if (_conf.GetConfig() == configEmptyMessage) {
+		SetEmptyText(_conf.GetData());
+		return true;
 	}
-	MarkToRedraw();
-	return true;
+	return false;
 }
 
+bool widget::Entry::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == ewol::Widget::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configMaxChar) {
+		_result = etk::UString(GetMaxChar());
+		return true;
+	}
+	if (_config == configRegExp) {
+		_result = GetRegExp();
+		return true;
+	}
+	if (_config == configColorFg) {
+		_result = draw::GetString(GetColorText());
+		return true;
+	}
+	if (_config == configColorBg) {
+		_result = draw::GetString(GetColorTextSelected());
+		return true;
+	}
+	if (_config == configEmptyMessage) {
+		_result = GetEmptyText();
+		return true;
+	}
+	return false;
+}
 
 
 

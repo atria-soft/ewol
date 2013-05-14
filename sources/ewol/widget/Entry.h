@@ -18,10 +18,6 @@
 #include <ewol/widget/Widget.h>
 #include <draw/Color.h>
 
-extern const char * const ewolEventEntryClick;
-extern const char * const ewolEventEntryEnter;
-extern const char * const ewolEventEntryModify; // return in the data the new string inside it ...
-
 namespace widget {
 	/**
 	 * @brief Entry box display :
@@ -34,6 +30,17 @@ namespace widget {
 	 */
 	class Entry : public ewol::Widget
 	{
+		public:
+			// Event list of properties
+			static const char * const eventClick;
+			static const char * const eventEnter;
+			static const char * const eventModify; // return in the data the new string inside it ...
+			// Config list of properties
+			static const char* const configMaxChar;
+			static const char* const configRegExp;
+			static const char* const configColorFg;
+			static const char* const configColorBg;
+			static const char* const configEmptyMessage;
 		public:
 			static void Init(void);
 			static void UnInit(void);
@@ -69,7 +76,7 @@ namespace widget {
 			 * @brief Get the current value in the entry
 			 * @return The current display value
 			 */
-			etk::UString GetValue(void);
+			etk::UString GetValue(void) const { return m_data; };
 		
 		private:
 			int32_t m_maxCharacter; //!< number max of xharacter in the list
@@ -83,7 +90,7 @@ namespace widget {
 			 * @brief Limit the number of Unicode character in the entry
 			 * @return Number of max character set in the List.
 			 */
-			int32_t SetMaxChar(void);
+			int32_t GetMaxChar(void) const { return m_maxCharacter; };
 		
 		private:
 			etk::RegExp<etk::UString> m_regExp; //!< regular expression to limit the input of an entry
@@ -97,7 +104,7 @@ namespace widget {
 			 * @brief Get the regualar expression limitation
 			 * @param The regExp string
 			 */
-			etk::UString SetRegExp(void) { return m_regExp.GetRegExp(); };
+			const etk::UString& GetRegExp(void) const { return m_regExp.GetRegExp(); };
 		
 		private:
 			bool m_needUpdateTextPos; //!< text position can have change
@@ -146,7 +153,7 @@ namespace widget {
 			 * @brief Get the color for the text.
 			 * @return The color requested.
 			 */
-			draw::Color GetColorText(void) { return m_textColorFg; };
+			const draw::Color& GetColorText(void) const { return m_textColorFg; };
 		
 		private:
 			draw::Color m_textColorBg; //!< Background color.
@@ -160,7 +167,7 @@ namespace widget {
 			 * @brief Get the selected color for the text in selection mode.
 			 * @return The color requested.
 			 */
-			draw::Color GetColorTextSelected(void) { return m_textColorBg; };
+			const draw::Color& GetColorTextSelected(void) const { return m_textColorBg; };
 		
 		private:
 			etk::UString m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
@@ -174,7 +181,7 @@ namespace widget {
 			 * @brief Get The text displayed when nothing is in the entry.
 			 * @return Text display when nothing
 			 */
-			etk::UString GetEmptyText(void) { return m_textWhenNothing; };
+			const etk::UString& GetEmptyText(void) const { return m_textWhenNothing; };
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
@@ -189,7 +196,8 @@ namespace widget {
 			virtual void OnLostFocus(void);
 			virtual void ChangeStatusIn(int32_t _newStatusId);
 			virtual void PeriodicCall(int64_t _localTime);
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };
