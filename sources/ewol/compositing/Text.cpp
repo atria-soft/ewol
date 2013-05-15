@@ -652,7 +652,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 		if (m_stopTextPos < m_position.x()) {
 			ForceLineReturn();
 		}
-		float basicSpaceWidth = CalculateSize(' ').x();
+		float basicSpaceWidth = CalculateSize(etk::UniChar(' ')).x();
 		int32_t currentId = 0;
 		int32_t stop;
 		int32_t space;

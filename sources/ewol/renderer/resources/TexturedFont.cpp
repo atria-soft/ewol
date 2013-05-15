@@ -303,7 +303,7 @@ int32_t ewol::TexturedFont::GetIndex(const uniChar_t charcode, const ewol::font:
 	if (charcode < 0x20) {
 		return 0;
 	} else if (charcode < 0x80) {
-		return charcode - 0x1F;
+		return charcode.Get() - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement[displayMode].Size(); iii++) {
 			if ((m_listElement[displayMode])[iii].m_UVal == charcode) {

@@ -112,7 +112,7 @@ void widget::Entry::CalculateMinMaxSize(void)
 	ewol::Widget::CalculateMinMaxSize();
 	// get generic padding
 	vec2 padding = m_shaper.GetPadding();
-	int32_t minHeight = m_oObjectText.CalculateSize('A').y();
+	int32_t minHeight = m_oObjectText.CalculateSize(etk::UniChar('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
 	minimumSizeBase += padding*2.0f;
@@ -167,7 +167,7 @@ void widget::Entry::OnRegenerateDisplay(void)
 		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
 		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed ==> in this case we need to center the text in the shaper ...
-		int32_t minHeight = m_oObjectText.CalculateSize('A').y();
+		int32_t minHeight = m_oObjectText.CalculateSize(etk::UniChar('A')).y();
 		if (tmpSizeText.y()>minHeight) {
 			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}
@@ -377,18 +377,18 @@ bool widget::Entry::OnEventEntry(const ewol::EventEntry& _event)
 			//return GenEventInputExternal(eventEnter, -1, -1);
 			// remove curent selected data ...
 			RemoveSelected();
-			if(    '\n' == _event.GetChar()
-			    || '\r' == _event.GetChar()) {
+			if(    _event.GetChar() == '\n'
+			    || _event.GetChar() == '\r') {
 				GenerateEventId(eventEnter, m_data);
 				return true;
-			} else if (0x7F == _event.GetChar()) {
+			} else if (_event.GetChar() == 0x7F) {
 				// SUPPR :
 				if (m_data.Size() > 0 && m_displayCursorPos<m_data.Size()) {
 					m_data.Remove(m_displayCursorPos, 1);
 					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
-			} else if (0x08 == _event.GetChar()) {
+			} else if (_event.GetChar() == 0x08) {
 				// DEL :
 				if (m_data.Size() > 0 && m_displayCursorPos != 0) {
 					m_data.Remove(m_displayCursorPos-1, 1);

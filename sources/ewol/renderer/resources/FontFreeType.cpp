@@ -136,7 +136,7 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 	// a small shortcut
 	FT_GlyphSlot slot = m_fftFace->glyph;
 	// retrieve glyph index from character code 
-	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, property.m_UVal);
+	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, property.m_UVal.Get());
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
 	                      glyph_index, // glyph index
