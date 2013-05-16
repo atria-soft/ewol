@@ -50,12 +50,12 @@ namespace ewol
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const etk::UString& _config) { Set(_config); };
+			Dimension(const etk::UString& _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { Set(_config); };
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const char* _config) { Set(_config); };
+			Dimension(const char* _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { Set(_config); };
 			/**
 			 * @brief Destructor
 			 */

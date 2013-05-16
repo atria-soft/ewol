@@ -79,13 +79,17 @@ ewol::Dimension::Dimension(void) :
 	// notinh to do ...
 }
 
-ewol::Dimension::Dimension(const vec2& _size, ewol::Dimension::distance_te _type)
+ewol::Dimension::Dimension(const vec2& _size, ewol::Dimension::distance_te _type) :
+	m_data(0,0),
+	m_type(ewol::Dimension::Pixel)
 {
 	Set(_size, _type);
 }
 
 void ewol::Dimension::Set(etk::UString _config)
 {
+	m_data.setValue(0,0);
+	m_type = ewol::Dimension::Pixel;
 	distance_te type = ewol::Dimension::Pixel;
 	if (_config.EndWith("%",false)==true) {
 		type = ewol::Dimension::Pourcent;
@@ -111,9 +115,13 @@ void ewol::Dimension::Set(etk::UString _config)
 	} else if (_config.EndWith("m",false)==true) {
 		type = ewol::Dimension::Meter;
 		_config.Remove(_config.Size()-1, 1);
+	} else {
+		EWOL_CRITICAL("Can not parse dimention : \"" << _config << "\"");
+		return;
 	}
 	vec2 tmp = _config;
 	Set(tmp, type);
+	EWOL_ERROR(" config dimention : \"" << _config << "\" ==> " << *this );
 }
 
 ewol::Dimension::~Dimension(void)
