@@ -50,10 +50,10 @@ ewol::Windows::~Windows(void)
 }
 
 
-void ewol::Windows::CalculateSize(const vec2& availlable)
+void ewol::Windows::CalculateSize(const vec2& _availlable)
 {
-	//EWOL_DEBUG("calculateSize on : " << m_currentCreateId);
-	m_size = availlable;
+	EWOL_DEBUG(" _availlable : " << _availlable);
+	m_size = _availlable;
 	if (NULL != m_subWidget) {
 		m_subWidget->CalculateMinMaxSize();
 		// TODO : Check if min Size is possible ...

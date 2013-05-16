@@ -195,7 +195,6 @@ void widget::ContainerN::SystemDraw(const ewol::DrawProperty& _displayProp)
 
 void widget::ContainerN::CalculateSize(const vec2& _availlable)
 {
-	EWOL_DEBUG("Update Size ???");
 	m_size = _availlable;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {

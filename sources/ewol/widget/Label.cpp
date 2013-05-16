@@ -76,7 +76,7 @@ void widget::Label::OnRegenerateDisplay(void)
 		
 		vec2 tmpMax = m_userMaxSize.GetPixel();
 		// to know the size of one Line : 
-		vec3 minSize = m_text.CalculateSize('A');
+		vec3 minSize = m_text.CalculateSize(etk::UniChar('A'));
 		if (tmpMax.x() <= 999999) {
 			m_text.SetTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
 		}

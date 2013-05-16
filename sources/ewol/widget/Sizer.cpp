@@ -66,7 +66,7 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 {
 	ewol::Widget::CalculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize.GetPixel();
-	//EWOL_DEBUG("[" << GetId() << "] Update Size : " << availlable << " nbElement : " << m_subWidget.Size());
+	EWOL_DEBUG("[" << GetId() << "] Update Size : " << _availlable << " nbElement : " << m_subWidget.Size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
 	m_size -= tmpBorderSize*2;
 	// calculate unExpandable Size :
 	float unexpandableSize=0.0;
@@ -110,7 +110,7 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
-			//EWOL_DEBUG("[" << GetId() << "] Set ORIGIN : " << tmpOrigin);
+			EWOL_DEBUG("[" << GetId() << "] Set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
 			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin+m_offset));
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {

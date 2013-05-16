@@ -30,9 +30,9 @@ namespace widget {
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
+			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
-			virtual void CalculateSize(const vec2& availlable);
+			virtual void CalculateSize(const vec2& _availlable);
 			//virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);

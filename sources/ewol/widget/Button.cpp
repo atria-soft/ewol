@@ -135,6 +135,11 @@ void widget::Button::CalculateSize(const vec2& _availlable)
 	// set minimal size
 	m_size = m_minSize;
 	
+	if (m_origin.x()<0) {
+		EWOL_ERROR("[" << GetId() << "] position error ori=" << m_origin << " size=" << m_size);
+		etk::DisplayBacktrace();
+	}
+	
 	vec2 minimumSizeBase(0,0);
 	vec2 minimumSizeToggle(0,0);
 	// Checking the expand properties :

@@ -161,7 +161,7 @@ void widget::List::OnRegenerateDisplay(void)
 				ewol::Text * tmpText = new ewol::Text();
 				if (NULL != tmpText) {
 					// get font size : 
-					int32_t tmpFontHeight = tmpText->CalculateSize('A').y();
+					int32_t tmpFontHeight = tmpText->CalculateSize(etk::UniChar('A')).y();
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
 					
 					BGOObjects->SetColor(bg);

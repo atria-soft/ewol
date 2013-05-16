@@ -393,6 +393,12 @@ float ewol::Widget::GetZoom(void)
 
 void ewol::Widget::SetOrigin(const vec2& _pos)
 {
+	#if DEBUG_LEVEL > 2
+		if(    m_origin.x() < -5000
+		    || m_origin.y() < -5000) {
+			EWOL_WARNING("[" << GetId() << "] Set origin < 5000 : " << m_origin);
+		}
+	#endif
 	m_origin = _pos;
 }
 
