@@ -44,22 +44,22 @@ bool widget::Composer::LoadFromFile(const etk::UString& _fileName)
 	// open the curent File
 	etk::FSNode fileName(_fileName);
 	if (false == fileName.Exist()) {
-		EWOL_ERROR("File Does not exist : " << fileName);
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} File Does not exist : " << fileName);
 		return false;
 	}
 	int32_t fileSize = fileName.FileSize();
 	if (0==fileSize) {
-		EWOL_ERROR("This file is empty : " << fileName);
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} This file is empty : " << fileName);
 		return false;
 	}
 	if (false == fileName.FileOpenRead()) {
-		EWOL_ERROR("Can not open the file : " << fileName);
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Can not open the file : " << fileName);
 		return false;
 	}
 	// allocate data
 	char * fileBuffer = new char[fileSize+5];
 	if (NULL == fileBuffer) {
-		EWOL_ERROR("Error Memory allocation size=" << fileSize);
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Error Memory allocation size=" << fileSize);
 		return false;
 	}
 	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
@@ -93,7 +93,7 @@ bool widget::Composer::CommonLoadXML(const char* data)
 	
 	TiXmlElement* root = XmlDocument.FirstChildElement("composer");
 	if (NULL == root ) {
-		EWOL_ERROR("(l ?) main node not find: \"composer\" ...");
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
 		return false;
 	}
 	// call upper class to parse his elements ...
@@ -113,6 +113,6 @@ void widget::Composer::RegisterOnEventNameWidget(const etk::UString& _subWidgetN
 		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
 		tmpWidget->RegisterOnEvent(this, _eventId, _eventIdgenerated, _overloadData);
 	} else {
-		EWOL_WARNING("Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
+		EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
 	}
 }

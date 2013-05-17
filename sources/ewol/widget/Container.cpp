@@ -54,7 +54,7 @@ void widget::Container::SubWidgetRemove(void)
 		delete(m_subWidget);
 		// might have been destroy first here : 
 		if (m_subWidget!=NULL) {
-			EWOL_ERROR("Composer : An error Occured when removing main node");
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} An error Occured when removing main node");
 		}
 		MarkToRedraw();
 		ewol::RequestUpdateSize();
@@ -133,7 +133,7 @@ void widget::Container::CalculateMinMaxSize(void)
 		vec2 min = m_subWidget->GetCalculateMinSize();
 		m_minSize.setMax(min);
 	}
-	EWOL_ERROR("[" << GetId() << "] Result min size : " <<  m_minSize);
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
 }
 
 void widget::Container::OnRegenerateDisplay(void)
@@ -174,23 +174,23 @@ bool widget::Container::LoadXML(TiXmlNode* _node)
 		}
 		etk::UString widgetName = pNode->Value();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		if (NULL != GetSubWidget()) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 			continue;
 		}
-		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
+		EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} try to create subwidget : '" << widgetName << "'");
 		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
 		if (tmpWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add widget :
 		SetSubWidget(tmpWidget);
 		if (false == tmpWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}

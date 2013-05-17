@@ -121,7 +121,7 @@ void ewol::Dimension::Set(etk::UString _config)
 	}
 	vec2 tmp = _config;
 	Set(tmp, type);
-	EWOL_ERROR(" config dimention : \"" << _config << "\" ==> " << *this );
+	EWOL_VERBOSE(" config dimention : \"" << _config << "\" ==> " << *this );
 }
 
 ewol::Dimension::~Dimension(void)
@@ -309,8 +309,8 @@ etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension::distance_te
 	return os;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension& obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Dimension& _obj)
 {
-	os << obj.Get(obj.GetType()) << obj.GetType();
-	return os;
+	_os << _obj.Get(_obj.GetType()) << _obj.GetType();
+	return _os;
 }

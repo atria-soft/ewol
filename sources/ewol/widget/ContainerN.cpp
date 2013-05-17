@@ -58,7 +58,7 @@ void widget::ContainerN::LockExpand(const bvec2& _lockExpand)
 void widget::ContainerN::SubWidgetAdd(ewol::Widget* _newWidget)
 {
 	if (NULL == _newWidget) {
-		EWOL_ERROR("[" << GetId() << "] Try to add An empty Widget ... ");
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Try to add An empty Widget ... ");
 		return;
 	}
 	if (_newWidget!=NULL) {
@@ -72,7 +72,7 @@ void widget::ContainerN::SubWidgetAdd(ewol::Widget* _newWidget)
 void widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
 {
 	if (NULL == _newWidget) {
-		EWOL_ERROR("[" << GetId() << "] Try to add start An empty Widget ... ");
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Try to add start An empty Widget ... ");
 		return;
 	}
 	if (_newWidget!=NULL) {
@@ -95,7 +95,7 @@ void widget::ContainerN::SubWidgetRemove(ewol::Widget* _newWidget)
 			delete(m_subWidget[iii]);
 			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
 			if (errorControl == m_subWidget.Size()) {
-				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+				EWOL_CRITICAL("[" << GetId() << "] {" << GetObjectType() << "} The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 				m_subWidget[iii] = NULL;
 				m_subWidget.Erase(iii);
 			}
@@ -133,11 +133,11 @@ void widget::ContainerN::SubWidgetRemoveAll(void)
 			delete(m_subWidget[0]);
 			// no remove, this element is removed with the function OnObjectRemove ==> it does not exist anymore ...
 			if (errorControl == m_subWidget.Size()) {
-				EWOL_CRITICAL("[" << GetId() << "] The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
+				EWOL_CRITICAL("[" << GetId() << "] {" << GetObjectType() << "} The number of element might have been reduced ... ==> it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 				m_subWidget[0] = NULL;
 			}
 		} else {
-			EWOL_WARNING("[" << GetId() << "] Must not have null pointer on the subWidget list ...");
+			EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Must not have null pointer on the subWidget list ...");
 			m_subWidget.Erase(0);
 		}
 		errorControl = m_subWidget.Size();
@@ -168,7 +168,7 @@ void widget::ContainerN::OnObjectRemove(ewol::EObject* _removeObject)
 	// second step find if in all the elements ...
 	for(int32_t iii=m_subWidget.Size()-1; iii>=0; iii--) {
 		if(m_subWidget[iii] == _removeObject) {
-			EWOL_VERBOSE("[" << GetId() << "]={" << GetObjectType() << "} Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
+			EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} Remove sizer sub Element [" << iii << "/" << m_subWidget.Size()-1 << "] ==> destroyed object");
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 		}
@@ -210,6 +210,7 @@ void widget::ContainerN::CalculateMinMaxSize(void)
 	m_subExpend.setValue(false, false);
 	m_minSize.setValue(0,0);
 	m_maxSize.setValue(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Set min size : " <<  m_minSize);
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			m_subWidget[iii]->CalculateMinMaxSize();
@@ -225,6 +226,7 @@ void widget::ContainerN::CalculateMinMaxSize(void)
 			                    etk_max(tmpSize.y(), m_minSize.y()) );
 		}
 	}
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
 }
 
 void widget::ContainerN::OnRegenerateDisplay(void)
@@ -294,12 +296,12 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 		}
 		etk::UString widgetName = pNode->Value();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
 		if (subWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add sub element : 
@@ -309,7 +311,7 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 			SubWidgetAddStart(subWidget);
 		}
 		if (false == subWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}

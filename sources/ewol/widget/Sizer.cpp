@@ -66,7 +66,7 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 {
 	ewol::Widget::CalculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize.GetPixel();
-	EWOL_DEBUG("[" << GetId() << "] Update Size : " << _availlable << " nbElement : " << m_subWidget.Size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
+	//EWOL_DEBUG("[" << GetId() << "] Update Size : " << _availlable << " nbElement : " << m_subWidget.Size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
 	m_size -= tmpBorderSize*2;
 	// calculate unExpandable Size :
 	float unexpandableSize=0.0;
@@ -110,7 +110,7 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			// Set the origin :
-			EWOL_DEBUG("[" << GetId() << "] Set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
+			//EWOL_DEBUG("[" << GetId() << "] Set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
 			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin+m_offset));
 			// Now Update his Size  his size in X and the curent sizer size in Y:
 			if (m_mode==widget::Sizer::modeVert) {
@@ -143,7 +143,7 @@ void widget::Sizer::CalculateMinMaxSize(void)
 	m_subExpend.setValue(false, false);
 	m_minSize = m_userMinSize.GetPixel();
 	vec2 tmpBorderSize = m_borderSize.GetPixel();
-	
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -156,7 +156,7 @@ void widget::Sizer::CalculateMinMaxSize(void)
 			}
 			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
 			//EWOL_DEBUG("[" << GetId() << "] NewMinSize=" << tmpSize);
-			//EWOL_DEBUG("[" << GetId() << "]     Get minSize[" << iii << "] "<< tmpSize);
+			//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "}     Get minSize[" << iii << "] "<< tmpSize);
 			if (m_mode==widget::Sizer::modeVert) {
 				m_minSize.setY(m_minSize.y() + tmpSize.y());
 				if (tmpSize.x()>m_minSize.x()) {
@@ -170,6 +170,7 @@ void widget::Sizer::CalculateMinMaxSize(void)
 			}
 		}
 	}
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
 }
 
 bool widget::Sizer::LoadXML(TiXmlNode* _node)

@@ -25,23 +25,25 @@ namespace ewol
 			BoldItalic,
 		} mode_te;
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj);
+	
 	class TexturedFont : public ewol::Texture {
 		
 		private:
-			etk::UString                        m_fileName[4];
-			int32_t                             m_size;
-			int32_t                             m_height[4];
+			etk::UString m_fileName[4];
+			int32_t m_size;
+			int32_t m_height[4];
 			// specific element to have the the know if the specify element is known...
 			// ==> otherwise I can just generate italic ...
 			// ==> Bold is a little more complicated (maybe with the bordersize)
-			ewol::FontBase*                     m_font[4];
-			ewol::font::mode_te                 m_modeWraping[4];     //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
+			ewol::FontBase* m_font[4];
+			ewol::font::mode_te m_modeWraping[4];     //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 		public:
-			etk::Vector<GlyphProperty>          m_listElement[4];
+			etk::Vector<GlyphProperty> m_listElement[4];
 		private:
 			// for the texture generation :
-			ivec2              m_lastGlyphPos[4];
-			int32_t                             m_lastRawHeigh[4];
+			ivec2 m_lastGlyphPos[4];
+			int32_t m_lastRawHeigh[4];
 		public:
 			TexturedFont(etk::UString fontName);
 			~TexturedFont(void);
@@ -65,14 +67,14 @@ namespace ewol
 			 * @param[in] displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t GetIndex(const uniChar_t charcode, const ewol::font::mode_te displayMode) const;
+			int32_t GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode) const;
 			/**
 			 * @brief Get the pointer on the coresponding glyph
 			 * @param[in] charcode The unicodeValue
 			 * @param[in] displayMode Mode to display the currrent font
 			 * @return The pointer on the glyph ==> never NULL
 			 */
-			ewol::GlyphProperty* GetGlyphPointer(const uniChar_t charcode, const ewol::font::mode_te displayMode);
+			ewol::GlyphProperty* GetGlyphPointer(const uniChar_t& charcode, const ewol::font::mode_te displayMode);
 			/**
 			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 			 *        For exemple when a blod mode does not exist, this resend a regular mode.

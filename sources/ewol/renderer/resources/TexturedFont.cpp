@@ -16,6 +16,29 @@
 #include <ewol/renderer/resources/font/FontBase.h>
 #include <ewol/renderer/resources/TexturedFont.h>
 
+
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj)
+{
+	switch(_obj) {
+		default :
+			_os << "error";
+			break;
+		case ewol::font::Regular:
+			_os << "Regular";
+			break;
+		case ewol::font::Italic:
+			_os << "Italic";
+			break;
+		case ewol::font::Bold:
+			_os << "Bold";
+			break;
+		case ewol::font::BoldItalic:
+			_os << "BoldItalic";
+			break;
+	}
+	return _os;
+}
+
 #undef __class__
 #define __class__	"TexturedFont"
 
@@ -154,13 +177,14 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	// try to find the reference mode :
 	ewol::font::mode_te refMode = ewol::font::Regular;
 	for(int32_t iii=3; iii>=0; iii--) {
-		if (m_fileName[iii] != "") {
+		if (m_fileName[iii].IsEmpty()==false) {
 			refMode = (ewol::font::mode_te)iii;
 		}
 	}
+	EWOL_DEBUG("         Set reference mode : " << refMode);
 	// generate the wrapping on the preventing error
 	for(int32_t iii=3; iii>=0; iii--) {
-		if (m_fileName[iii] != "") {
+		if (m_fileName[iii].IsEmpty()==false) {
 			m_modeWraping[iii] = (ewol::font::mode_te)iii;
 		} else {
 			m_modeWraping[iii] = refMode;
@@ -168,8 +192,8 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		if (m_fileName[iiiFontId] == "") {
-			EWOL_CRITICAL("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size );
+		if (m_fileName[iiiFontId].IsEmpty()==false) {
+			EWOL_DEBUG("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size );
 			m_font[iiiFontId] = NULL;
 			continue;
 		}
@@ -275,6 +299,11 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
 	//m_data.DistanceField();
 	Flush();
+	EWOL_DEBUG("Wrapping properties : ");
+	EWOL_DEBUG("    " << ewol::font::Regular << "==>" << GetWrappingMode(ewol::font::Regular));
+	EWOL_DEBUG("    " << ewol::font::Italic << "==>" << GetWrappingMode(ewol::font::Italic));
+	EWOL_DEBUG("    " << ewol::font::Bold << "==>" << GetWrappingMode(ewol::font::Bold));
+	EWOL_DEBUG("    " << ewol::font::BoldItalic << "==>" << GetWrappingMode(ewol::font::BoldItalic));
 }
 
 ewol::TexturedFont::~TexturedFont(void)
@@ -298,7 +327,7 @@ bool ewol::TexturedFont::HasName(const etk::UString& fileName)
 }
 
 
-int32_t ewol::TexturedFont::GetIndex(const uniChar_t charcode, const ewol::font::mode_te displayMode) const
+int32_t ewol::TexturedFont::GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode) const
 {
 	if (charcode < 0x20) {
 		return 0;
@@ -306,7 +335,7 @@ int32_t ewol::TexturedFont::GetIndex(const uniChar_t charcode, const ewol::font:
 		return charcode.Get() - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement[displayMode].Size(); iii++) {
-			if ((m_listElement[displayMode])[iii].m_UVal == charcode) {
+			if (charcode == (m_listElement[displayMode])[iii].m_UVal) {
 				return iii;
 			}
 		}
@@ -315,8 +344,22 @@ int32_t ewol::TexturedFont::GetIndex(const uniChar_t charcode, const ewol::font:
 }
 
 
-ewol::GlyphProperty* ewol::TexturedFont::GetGlyphPointer(const uniChar_t charcode, const ewol::font::mode_te displayMode)
+ewol::GlyphProperty* ewol::TexturedFont::GetGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode)
 {
-	int32_t index = GetIndex(charcode, displayMode);
-	return &((m_listElement[displayMode])[index]);
+	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << " ==> wrapping index : " << m_modeWraping[_displayMode]);
+	int32_t index = GetIndex(_charcode, _displayMode);
+	if(    index <0 
+	    || index >=m_listElement[_displayMode].Size() ) {
+		EWOL_ERROR(" Try to get glyph index inexistant ... ==> return the index 0 ... id=" << index);
+		if (m_listElement[_displayMode].Size()>=0) {
+			return &((m_listElement[_displayMode])[0]);
+		}
+		return NULL;
+	}
+	//EWOL_ERROR("      index=" << index);
+	//EWOL_ERROR("      m_UVal=" << m_listElement[_displayMode][index].m_UVal);
+	//EWOL_ERROR("      m_glyphIndex=" << m_listElement[_displayMode][index].m_glyphIndex);
+	//EWOL_ERROR("      m_advance=" << m_listElement[_displayMode][index].m_advance);
+	//EWOL_ERROR("      m_bearing=" << m_listElement[_displayMode][index].m_bearing);
+	return &((m_listElement[_displayMode])[index]);
 }

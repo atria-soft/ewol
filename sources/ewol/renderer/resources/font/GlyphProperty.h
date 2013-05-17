@@ -62,6 +62,15 @@ namespace ewol
 		private:
 			etk::Vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
+			GlyphProperty(void) :
+				m_UVal(0),
+				m_glyphIndex(0),
+				m_sizeTexture(0,0),
+				m_bearing(0,0),
+				m_advance(0,0),
+				m_texturePosStart(0,0),
+				m_texturePosStop(0,0)
+			{ };
 			float KerningGet(const uniChar_t charcode)
 			{
 				for(int32_t iii=0; iii<m_kerning.Size(); iii++ ) {

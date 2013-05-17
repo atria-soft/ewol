@@ -254,7 +254,7 @@ namespace ewol
 			 * @param[in] text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintDecorated(etk::UString& text);
+			void PrintDecorated(const etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
@@ -286,7 +286,7 @@ namespace ewol
 			 * @param[in] text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintHTML(etk::UString text);
+			void PrintHTML(const etk::UString& text);
 			/**
 			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] text The string to display.
@@ -297,7 +297,7 @@ namespace ewol
 			 * @brief Display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] char that might be dispalyed
 			 */
-			void Print(const uniChar_t charcode);
+			void Print(const uniChar_t& charcode);
 			/**
 			 * @brief This Generate the line return ==> it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 			 */

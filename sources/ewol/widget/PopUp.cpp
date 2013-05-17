@@ -34,35 +34,26 @@ widget::PopUp::~PopUp(void)
 void widget::PopUp::CalculateSize(const vec2& _availlable)
 {
 	ewol::Widget::CalculateSize(_availlable);
-	EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (NULL != m_subWidget) {
 		vec2 subElementSize = m_minSize;
-		EWOL_DEBUG("[" << GetId() << "] popUP: m_minSize : " << subElementSize);
 		vec2 subElementOrigin = m_origin + (m_size-m_minSize)/2.0f;
-		EWOL_DEBUG("[" << GetId() << "] popUP: subElementOrigin : " << subElementOrigin);
 		
 		vec2 subWidgetSize = m_subWidget->GetCalculateMinSize();
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetSize : " << subWidgetSize);
 		if (true == m_subWidget->CanExpand().x()) {
 			subWidgetSize.setX(m_minSize.x());
 		}
 		if (true == m_subWidget->CanExpand().y()) {
 			subWidgetSize.setY(m_minSize.y());
 		}
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetSize : " << subWidgetSize);
 		// limit the size of the element :
 		subWidgetSize.setMin(m_minSize);
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetSize : " << subWidgetSize);
 		// posiition at a int32_t pos :
 		subWidgetSize = vec2ClipInt32(subWidgetSize);
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetSize : " << subWidgetSize);
 		
 		// set config to the Sub-widget
 		vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetOrigin : " << subWidgetOrigin);
 		subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
-		EWOL_DEBUG("[" << GetId() << "] popUP: subWidgetOrigin : " << subWidgetOrigin);
 		
 		m_subWidget->SetOrigin(subWidgetOrigin);
 		m_subWidget->CalculateSize(subWidgetSize);

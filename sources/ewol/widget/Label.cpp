@@ -42,13 +42,17 @@ widget::Label::Label(etk::UString _newLabel)
 void widget::Label::CalculateMinMaxSize(void)
 {
 	vec2 tmpMax = m_userMaxSize.GetPixel();
+	//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
 		m_text.SetTextAlignement(0, tmpMax.x()-4, ewol::Text::alignLeft);
+		//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "}     Forcez Alignement ");
 	}
 	vec3 minSize = m_text.CalculateSizeDecorated(m_label);
+	//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} minSize : " << minSize);
 	
 	m_minSize.setX(etk_min(4 + minSize.x(), tmpMax.x()));
 	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
+	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
 }
 
 void widget::Label::SetLabel(const etk::UString& _newLabel)

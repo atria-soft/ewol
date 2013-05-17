@@ -215,9 +215,9 @@ void ewol::Text::Clear(void)
 
 void ewol::Text::Reset(void)
 {
-	m_position = vec3(0.0, 0.0, 0.0);
-	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
-	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
+	m_position = vec3(0,0,0);
+	m_clippingPosStart = vec3(0,0,0);
+	m_clippingPosStop = vec3(0,0,0);
 	m_sizeDisplayStart = m_position;
 	m_sizeDisplayStop = m_position;
 	m_nbCharDisplayed = 0;
@@ -470,102 +470,105 @@ void ewol::Text::ParseHtmlNode(void* element2)
 {
 	// get the static real pointer
 	TiXmlNode* element = static_cast<TiXmlNode*>(element2);
-	if (NULL != element) {
-		for (TiXmlNode * child = element->FirstChild(); NULL != child ; child = child->NextSibling() ) {
-			if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
-				// nothing to do ...
-			} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
-				HtmlAddData(child->Value() );
-				EWOL_VERBOSE("XML Add : " << child->Value());
-			} else if(    !strcmp(child->Value(), "br")
-			           || !strcmp(child->Value(), "BR")) {
-				HtmlFlush();
-				EWOL_VERBOSE("XML flush & newLine");
-				ForceLineReturn();
-			} else if (!strcmp(child->Value(), "font")) {
-				EWOL_VERBOSE("XML Font ...");
-				TextDecoration tmpDeco = m_htmlDecoTmp;
-				const char *colorValue = child->ToElement()->Attribute("color");
-				if (NULL != colorValue) {
-					draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
-				}
-				colorValue = child->ToElement()->Attribute("colorBg");
-				if (NULL != colorValue) {
-					draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
-				}
-				ParseHtmlNode(child);
-				m_htmlDecoTmp = tmpDeco;
-			} else if(    !strcmp(child->Value(), "b")
-			           || !strcmp(child->Value(), "bold")) {
-				EWOL_VERBOSE("XML bold ...");
-				TextDecoration tmpDeco = m_htmlDecoTmp;
-				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-					m_htmlDecoTmp.m_mode = ewol::font::Bold;
-				} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
-					m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
-				} 
-				ParseHtmlNode(child);
-				m_htmlDecoTmp = tmpDeco;
-			} else if(    !strcmp(child->Value(), "i")
-			           || !strcmp(child->Value(), "italic")) {
-				EWOL_VERBOSE("XML italic ...");
-				TextDecoration tmpDeco = m_htmlDecoTmp;
-				if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
-					m_htmlDecoTmp.m_mode = ewol::font::Italic;
-				} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
-					m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
-				} 
-				ParseHtmlNode(child);
-				m_htmlDecoTmp = tmpDeco;
-			} else if(    !strcmp(child->Value(), "u")
-			           || !strcmp(child->Value(), "underline")) {
-				EWOL_VERBOSE("XML underline ...");
-				ParseHtmlNode(child);
-			} else if(    !strcmp(child->Value(), "p")
-			           || !strcmp(child->Value(), "paragraph")) {
-				EWOL_VERBOSE("XML paragraph ...");
-				HtmlFlush();
-				m_alignement = ewol::Text::alignLeft;
-				ForceLineReturn();
-				ParseHtmlNode(child);
-				ForceLineReturn();
-			} else if (!strcmp(child->Value(), "center")) {
-				EWOL_VERBOSE("XML center ...");
-				HtmlFlush();
-				m_alignement = ewol::Text::alignCenter;
-				ParseHtmlNode(child);
-			} else if (!strcmp(child->Value(), "left")) {
-				EWOL_VERBOSE("XML left ...");
-				HtmlFlush();
-				m_alignement = ewol::Text::alignLeft;
-				ParseHtmlNode(child);
-			} else if (!strcmp(child->Value(), "right")) {
-				EWOL_VERBOSE("XML right ...");
-				HtmlFlush();
-				m_alignement = ewol::Text::alignRight;
-				ParseHtmlNode(child);
-			} else if (!strcmp(child->Value(), "justify")) {
-				EWOL_VERBOSE("XML justify ...");
-				HtmlFlush();
-				m_alignement = ewol::Text::alignJustify;
-				ParseHtmlNode(child);
-			} else {
-				EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
+	if (NULL == element) {
+		EWOL_ERROR( "Error Input node does not existed ...");
+	}
+	for( TiXmlNode * child = element->FirstChild() ;
+	     NULL != child ;
+	     child = child->NextSibling() ) {
+		if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
+			// nothing to do ...
+		} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
+			HtmlAddData(child->Value() );
+			EWOL_VERBOSE("XML Add : " << child->Value());
+		} else if(    !strcmp(child->Value(), "br")
+		           || !strcmp(child->Value(), "BR")) {
+			HtmlFlush();
+			EWOL_VERBOSE("XML flush & newLine");
+			ForceLineReturn();
+		} else if (!strcmp(child->Value(), "font")) {
+			EWOL_VERBOSE("XML Font ...");
+			TextDecoration tmpDeco = m_htmlDecoTmp;
+			const char *colorValue = child->ToElement()->Attribute("color");
+			if (NULL != colorValue) {
+				draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
 			}
+			colorValue = child->ToElement()->Attribute("colorBg");
+			if (NULL != colorValue) {
+				draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
+			}
+			ParseHtmlNode(child);
+			m_htmlDecoTmp = tmpDeco;
+		} else if(    !strcmp(child->Value(), "b")
+		           || !strcmp(child->Value(), "bold")) {
+			EWOL_VERBOSE("XML bold ...");
+			TextDecoration tmpDeco = m_htmlDecoTmp;
+			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+				m_htmlDecoTmp.m_mode = ewol::font::Bold;
+			} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
+				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+			} 
+			ParseHtmlNode(child);
+			m_htmlDecoTmp = tmpDeco;
+		} else if(    !strcmp(child->Value(), "i")
+		           || !strcmp(child->Value(), "italic")) {
+			EWOL_VERBOSE("XML italic ...");
+			TextDecoration tmpDeco = m_htmlDecoTmp;
+			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
+				m_htmlDecoTmp.m_mode = ewol::font::Italic;
+			} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
+				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
+			} 
+			ParseHtmlNode(child);
+			m_htmlDecoTmp = tmpDeco;
+		} else if(    !strcmp(child->Value(), "u")
+		           || !strcmp(child->Value(), "underline")) {
+			EWOL_VERBOSE("XML underline ...");
+			ParseHtmlNode(child);
+		} else if(    !strcmp(child->Value(), "p")
+		           || !strcmp(child->Value(), "paragraph")) {
+			EWOL_VERBOSE("XML paragraph ...");
+			HtmlFlush();
+			m_alignement = ewol::Text::alignLeft;
+			ForceLineReturn();
+			ParseHtmlNode(child);
+			ForceLineReturn();
+		} else if (!strcmp(child->Value(), "center")) {
+			EWOL_VERBOSE("XML center ...");
+			HtmlFlush();
+			m_alignement = ewol::Text::alignCenter;
+			ParseHtmlNode(child);
+		} else if (!strcmp(child->Value(), "left")) {
+			EWOL_VERBOSE("XML left ...");
+			HtmlFlush();
+			m_alignement = ewol::Text::alignLeft;
+			ParseHtmlNode(child);
+		} else if (!strcmp(child->Value(), "right")) {
+			EWOL_VERBOSE("XML right ...");
+			HtmlFlush();
+			m_alignement = ewol::Text::alignRight;
+			ParseHtmlNode(child);
+		} else if (!strcmp(child->Value(), "justify")) {
+			EWOL_VERBOSE("XML justify ...");
+			HtmlFlush();
+			m_alignement = ewol::Text::alignJustify;
+			ParseHtmlNode(child);
+		} else {
+			EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
 		}
 	}
 }
 
-void ewol::Text::PrintDecorated(etk::UString& text)
+void ewol::Text::PrintDecorated(const etk::UString& _text)
 {
 	etk::UString tmpData("<html><body>\n");
-	tmpData+=text;
+	tmpData+=_text;
 	tmpData+="\n</body></html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	PrintHTML(tmpData);
 }
 
-void ewol::Text::PrintHTML(etk::UString text)
+void ewol::Text::PrintHTML(const etk::UString& _text)
 {
 	TiXmlDocument XmlDocument;
 	
@@ -574,20 +577,24 @@ void ewol::Text::PrintHTML(etk::UString text)
 	m_htmlDecoTmp.m_colorFg = draw::color::black;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
-	
+	etk::Char tmpChar = _text.c_str();
 	// load the XML from the memory
-	bool loadError = XmlDocument.Parse((const char*)text.c_str(), 0, TIXML_ENCODING_UTF8);
+	bool loadError = XmlDocument.Parse(tmpChar, 0, TIXML_ENCODING_UTF8);
 	if (false == loadError) {
-		EWOL_ERROR( "can not load Hightlight XML: PARSING error: Decorated text ");
+		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
 
 	TiXmlElement* root = XmlDocument.FirstChildElement( "html" );
 	if (NULL == root) {
-		EWOL_ERROR( "can not load Hightlight XML: main node not find: \"html\"");
+		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		return;
 	}
 	TiXmlElement* bodyNode = root->FirstChildElement( "body" );
+	if (NULL == root) {
+		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
+		return;
+	}
 	(void)ParseHtmlNode(bodyNode);
 	HtmlFlush();
 }
@@ -601,6 +608,8 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 	draw::Color tmpFg(m_color);
 	draw::Color tmpBg(m_colorBg);
 	if (m_alignement == ewol::Text::alignDisable) {
+		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		// display the cursor if needed (if it is at the start position...)
 		if (true == m_needDisplay) {
 			if (0==m_cursorPos) {
 				m_vectorialDraw.SetPos(m_position);
@@ -610,11 +619,13 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 		}
 		// note this is faster when nothing is requested ...
 		for(int32_t iii=0; iii<text.Size(); iii++) {
+			// check if ve have decoration
 			if (iii<decoration.Size()) {
 				tmpFg = decoration[iii].m_colorFg;
 				tmpBg = decoration[iii].m_colorBg;
 				SetFontMode(decoration[iii].m_mode);
 			}
+			// if real display : ( not display is for size calculation)
 			if (true == m_needDisplay) {
 				if(    (    m_selectionStartPos-1<iii
 				         && iii <=m_cursorPos-1)
@@ -639,6 +650,7 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				Print(text[iii]);
 				m_nbCharDisplayed++;
 			}
+			// display the cursor if needed (if it is at the other position...)
 			if (true == m_needDisplay) {
 				if (iii==m_cursorPos-1) {
 					m_vectorialDraw.SetPos(m_position);
@@ -647,7 +659,9 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				}
 			}
 		}
+		//EWOL_DEBUG(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	} else {
+		//EWOL_DEBUG(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// special start case at the right of the endpoint :
 		if (m_stopTextPos < m_position.x()) {
 			ForceLineReturn();
@@ -773,11 +787,12 @@ void ewol::Text::Print(const etk::UString& text, const etk::Vector<TextDecoratio
 				currentId = stop;
 			}
 		}
+		//EWOL_DEBUG(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	}
 }
 
 
-void ewol::Text::Print(const uniChar_t charcode)
+void ewol::Text::Print(const uniChar_t& charcode)
 {
 	if (NULL==m_font) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -793,11 +808,11 @@ void ewol::Text::Print(const uniChar_t charcode)
 	int32_t fontHeigh = m_font->GetHeight(m_mode);
 	
 	// Get the kerning ofset :
-	float kerningOffset = 0.0;
+	float kerningOffset = 0;
 	if (true==m_kerning) {
 		kerningOffset = myGlyph->KerningGet(m_previousCharcode);
 		if (kerningOffset != 0) {
-			//EWOL_DEBUG("Kerning between : '" << (char)m_previousCharcode << "'&'" << (char)myGlyph->m_UVal << "' value : " << kerningOffset);
+			//EWOL_DEBUG("Kerning between : '" << m_previousCharcode << "'&'" << myGlyph->m_UVal << "' value : " << kerningOffset);
 		}
 	}
 	// 0x01 == 0x20 == ' ';
@@ -941,7 +956,9 @@ void ewol::Text::Print(const uniChar_t charcode)
 		}
 	}
 	// move the position :
+	//EWOL_DEBUG(" 5 pos=" << m_position << " advance=" << myGlyph->m_advance.x() << " kerningOffset=" << kerningOffset);
 	m_position.setX(m_position.x() + myGlyph->m_advance.x() + kerningOffset);
+	//EWOL_DEBUG(" 6 print '" << charcode << "' : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	// Register the previous character
 	m_previousCharcode = charcode;
 	return;
@@ -981,13 +998,16 @@ vec3 ewol::Text::CalculateSizeHTML(const etk::UString& text)
 {
 	// remove intermediate result 
 	Reset();
-	
+	//EWOL_DEBUG("        0 size for=\n" << text);
 	// disable display system
 	m_needDisplay = false;
 	
 	SetPos(vec3(0,0,0) );
 	// same as print without the end display ...
 	PrintHTML(text);
+	//EWOL_DEBUG("        1 Start pos=" << m_sizeDisplayStart);
+	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
+	
 	// get the last elements
 	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
 	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
@@ -996,6 +1016,8 @@ vec3 ewol::Text::CalculateSizeHTML(const etk::UString& text)
 	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
 	                            0);
 	
+	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
+	//EWOL_DEBUG("        2 Stop pos=" << m_sizeDisplayStop);
 	// set back the display system
 	m_needDisplay = true;
 	
@@ -1006,6 +1028,9 @@ vec3 ewol::Text::CalculateSizeHTML(const etk::UString& text)
 
 vec3 ewol::Text::CalculateSizeDecorated(const etk::UString& text)
 {
+	if (text.Size()==0) {
+		return vec3(0,0,0);
+	}
 	etk::UString tmpData("<html><body>\n");
 	tmpData+=text;
 	tmpData+="\n</body></html>\n";
