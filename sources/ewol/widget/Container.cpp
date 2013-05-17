@@ -133,6 +133,7 @@ void widget::Container::CalculateMinMaxSize(void)
 		vec2 min = m_subWidget->GetCalculateMinSize();
 		m_minSize.setMax(min);
 	}
+	EWOL_ERROR("[" << GetId() << "] Result min size : " <<  m_minSize);
 }
 
 void widget::Container::OnRegenerateDisplay(void)

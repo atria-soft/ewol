@@ -415,6 +415,7 @@ vec2 ewol::Widget::RelativePosition(const vec2& _pos)
 void ewol::Widget::CalculateMinMaxSize(void)
 {
 	m_minSize = m_userMinSize.GetPixel();
+	EWOL_ERROR("[" << GetId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
 	m_maxSize = m_userMaxSize.GetPixel();
 	MarkToRedraw();
 }
