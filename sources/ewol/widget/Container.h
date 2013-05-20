@@ -46,6 +46,10 @@ namespace widget
 			 * @brief Remove the subWidget node.
 			 */
 			void SubWidgetRemove(void);
+			/**
+			 * @brief Remove the subWidget node (delayed to prevent remove in the callbback).
+			 */
+			virtual void SubWidgetRemoveDelayed(void);
 			
 		public: // Derived function
 			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);

@@ -48,6 +48,10 @@ namespace widget
 			 */
 			virtual void SubWidgetRemoveAll(void);
 			/**
+			 * @brief Remove all sub element from the widget (delayed to prevent remove in the callbback).
+			 */
+			virtual void SubWidgetRemoveAllDelayed(void);
+			/**
 			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
 			 */

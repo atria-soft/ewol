@@ -105,7 +105,7 @@ void widget::Button::SetSubWidget(ewol::Widget* _subWidget)
 			m_subWidget[idWidget]=NULL;
 		}
 	}
-	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
+	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
@@ -123,7 +123,7 @@ void widget::Button::SetSubWidgetToggle(ewol::Widget* _subWidget)
 			m_subWidget[idWidget]=NULL;
 		}
 	}
-	EWOL_DEBUG("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
+	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
 	ewol::RequestUpdateSize();
@@ -407,8 +407,9 @@ void widget::Button::PeriodicCall(int64_t _localTime)
 
 ewol::Widget* widget::Button::GetWidgetNamed(const etk::UString& _widgetName)
 {
-	if (GetName()==_widgetName) {
-		return this;
+	ewol::Widget* tmpUpperWidget = ewol::Widget::GetWidgetNamed(_widgetName);
+	if (NULL!=tmpUpperWidget) {
+		return tmpUpperWidget;
 	}
 	if (m_subWidget[0]!= NULL) {
 		ewol::Widget* tmpWidget = m_subWidget[0]->GetWidgetNamed(_widgetName);

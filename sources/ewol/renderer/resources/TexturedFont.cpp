@@ -192,7 +192,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		if (m_fileName[iiiFontId].IsEmpty()==false) {
+		if (m_fileName[iiiFontId].IsEmpty()==true) {
 			EWOL_DEBUG("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size );
 			m_font[iiiFontId] = NULL;
 			continue;

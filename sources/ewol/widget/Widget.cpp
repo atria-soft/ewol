@@ -396,7 +396,7 @@ void ewol::Widget::SetOrigin(const vec2& _pos)
 	#if DEBUG_LEVEL > 2
 		if(    m_origin.x() < -5000
 		    || m_origin.y() < -5000) {
-			EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Set origin < 5000 : " << m_origin);
+			EWOL_WARNING("[" << GetId() << "] Set origin < 5000 : " << m_origin);
 		}
 	#endif
 	m_origin = _pos;
@@ -415,9 +415,9 @@ vec2 ewol::Widget::RelativePosition(const vec2& _pos)
 void ewol::Widget::CalculateMinMaxSize(void)
 {
 	m_minSize = m_userMinSize.GetPixel();
+	//EWOL_ERROR("[" << GetId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
 	m_maxSize = m_userMaxSize.GetPixel();
 	MarkToRedraw();
-	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} convert in min size : " << m_userMinSize << " out=" << m_minSize);
 }
 
 vec2 ewol::Widget::GetCalculateMinSize(void)
@@ -449,7 +449,7 @@ void ewol::Widget::SetMinSize(const ewol::Dimension& _size)
 		error=true;
 	}
 	if (error==true) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Can not set a 'min Size' > 'max size' set nothing ...");
+		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
 		return;
 	}
 	m_userMinSize = _size;
@@ -481,7 +481,7 @@ void ewol::Widget::SetMaxSize(const ewol::Dimension& _size)
 		error=true;
 	}
 	if (error==true) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Can not set a 'min Size' > 'max size' set nothing ...");
+		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
 		return;
 	}
 	m_userMaxSize = _size;
@@ -551,13 +551,13 @@ void ewol::Widget::ShortCutAdd(const char * _descriptiveString, const char * _ge
 	if(		NULL==_descriptiveString
 		||	0==strlen(_descriptiveString))
 	{
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} try to add shortcut with no descriptive string ...");
+		EWOL_ERROR("try to add shortcut with no descriptive string ...");
 		return;
 	}
 	
 	EventShortCut* tmpElement = new EventShortCut();
 	if (NULL == tmpElement) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} allocation error ... Memory error ...");
+		EWOL_ERROR("allocation error ... Memory error ...");
 		return;
 	}
 	tmpElement->broadcastEvent = _broadcast;
@@ -736,6 +736,7 @@ bool ewol::Widget::LoadXML(TiXmlNode* _node)
 
 ewol::Widget* ewol::Widget::GetWidgetNamed(const etk::UString& _widgetName)
 {
+	EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} compare : " << GetName() << "==" << _widgetName );
 	if (GetName()==_widgetName) {
 		return this;
 	}

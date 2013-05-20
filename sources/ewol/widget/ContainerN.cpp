@@ -144,11 +144,27 @@ void widget::ContainerN::SubWidgetRemoveAll(void)
 	}
 	m_subWidget.Clear();
 }
+void widget::ContainerN::SubWidgetRemoveAllDelayed(void)
+{
+	// the size automaticly decrement with the auto call of the OnObjectRemove function
+	for(int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+		if (NULL != m_subWidget[iii]) {
+			m_subWidget[iii]->RemoveUpperWidget();
+			m_subWidget[iii]->RemoveObject();
+			m_subWidget[iii] = NULL;
+		} else {
+			EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Must not have null pointer on the subWidget list ...");
+		}
+	}
+	m_subWidget.Clear();
+}
+
 
 ewol::Widget* widget::ContainerN::GetWidgetNamed(const etk::UString& _widgetName)
 {
-	if (GetName()==_widgetName) {
-		return this;
+	ewol::Widget* tmpUpperWidget = ewol::Widget::GetWidgetNamed(_widgetName);
+	if (NULL!=tmpUpperWidget) {
+		return tmpUpperWidget;
 	}
 	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
@@ -299,6 +315,7 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
+		EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} load new element : \"" << widgetName << "\"");
 		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
 		if (subWidget == NULL) {
 			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");

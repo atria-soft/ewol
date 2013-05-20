@@ -36,6 +36,7 @@ namespace widget {
 			virtual ~Layer(void);
 		public:
 			virtual const char * const GetObjectType(void) { return "Ewol::Layer"; };
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
 	};
 	
 };
