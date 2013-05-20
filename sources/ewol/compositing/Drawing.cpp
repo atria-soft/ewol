@@ -498,8 +498,20 @@ void ewol::Drawing::Rectangle(vec3 dest)
 	 */
 	float dxA = m_position.x();
 	float dxB = dest.x();
+	if (dxA > dxB) {
+		// inverse order : 
+		float tmp = dxA;
+		dxA = dxB;
+		dxB = tmp;
+	}
 	float dyC = m_position.y();
 	float dyD = dest.y();
+	if (dyC > dyD) {
+		// inverse order : 
+		float tmp = dyC;
+		dyC = dyD;
+		dyD = tmp;
+	}
 	if (true == m_clippingEnable) {
 		if (dxA < m_clippingPosStart.x()) {
 			dxA = m_clippingPosStart.x();
