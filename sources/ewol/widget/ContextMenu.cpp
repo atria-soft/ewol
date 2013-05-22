@@ -199,8 +199,10 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 }
 bool widget::ContextMenu::OnEventInput(const ewol::EventInput& _event)
 {
-	//EWOL_INFO("Event ouside the context menu");
 	if (_event.GetId() > 0) {
+		if (NULL != widget::Container::GetWidgetAtPos(_event.GetPos())) {
+			return false;
+		}
 		if(    _event.GetStatus() == ewol::keyEvent::statusDown
 		    || _event.GetStatus() == ewol::keyEvent::statusMove
 		    || _event.GetStatus() == ewol::keyEvent::statusSingle

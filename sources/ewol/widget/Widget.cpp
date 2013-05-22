@@ -279,24 +279,24 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 		return;
 	}
 	
-	glViewport( tmpSize.m_origin.x(),
-	            tmpSize.m_origin.y(),
-	            tmpSize.m_size.x(),
-	            tmpSize.m_size.y());
+	glViewport( (int32_t)tmpSize.m_origin.x(),
+	            (int32_t)tmpSize.m_origin.y(),
+	            (int32_t)tmpSize.m_size.x(),
+	            (int32_t)tmpSize.m_size.y());
 	// special case, when origin < display origin, we need to cut the display :
 	ivec2 downOffset = m_origin - tmpSize.m_origin;
 	downOffset.setMin(ivec2(0,0));
 	
-	mat4 tmpTranslate = etk::matTranslate(vec3(-tmpSize.m_size.x()/2+m_offset.x() + downOffset.x(),
-	                                           -tmpSize.m_size.y()/2+m_offset.y() + downOffset.y(),
-	                                           -1.0f));
+	mat4 tmpTranslate = etk::matTranslate(vec3ClipInt32(vec3(-tmpSize.m_size.x()/2+m_offset.x() + downOffset.x(),
+	                                                         -tmpSize.m_size.y()/2+m_offset.y() + downOffset.y(),
+	                                                         -1.0f)));
 	mat4 tmpScale = etk::matScale(vec3(m_zoom, m_zoom, 1.0f));
-	mat4 tmpProjection = etk::matOrtho(-tmpSize.m_size.x()/2,
-	                                    tmpSize.m_size.x()/2,
-	                                   -tmpSize.m_size.y()/2,
-	                                    tmpSize.m_size.y()/2,
-	                                   -1,
-	                                    1);
+	mat4 tmpProjection = etk::matOrtho((int32_t)(-tmpSize.m_size.x())>>1,
+	                                   (int32_t)( tmpSize.m_size.x())>>1,
+	                                   (int32_t)(-tmpSize.m_size.y())>>1,
+	                                   (int32_t)( tmpSize.m_size.y())>>1,
+	                                   (int32_t)(-1),
+	                                   (int32_t)( 1));
 	mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 
 	ewol::openGL::Push();
@@ -307,8 +307,7 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 	
 	#ifdef old_PLOP
 	if(    (_displayProp.m_origin.x() > m_origin.x())
-	    || (_displayProp.m_origin.x() + _displayewol::Widget::Prop.m_size.x() < m_size.x() + m_origin.x()) ) {
-		EWOL_CRITICAL("plop");
+	    || (_displayProp.m_origin.x() + _displayProp.m_size.x() < m_size.x() + m_origin.x()) ) {
 		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
 		int32_t tmpOriginX = etk_max(_displayProp.m_origin.x(), m_origin.x());
 		int32_t tmppp1 = _displayProp.m_origin.x() + _displayProp.m_size.x();
@@ -330,11 +329,8 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
-		// Call the widget drawing methode
-		_displayProp.m_origin.setValue(tmpOriginX, tmpOriginY);
-		_displayProp.m_size.setValue(tmpclipX, m_size.y());
 		//int64_t ___startTime = ewol::GetTime();
-		OnDraw(_displayProp);
+		OnDraw();
 		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget1  : " << ___localTime << "ms ");
 	} else {
@@ -349,11 +345,8 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
 		ewol::openGL::SetMatrix(tmpMat);
-		// Call the widget drawing methode
-		_displayProp.m_origin = m_origin;
-		_displayProp.m_size = m_size;
 		//int64_t ___startTime = ewol::GetTime();
-		OnDraw(_displayProp);
+		OnDraw();
 		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}

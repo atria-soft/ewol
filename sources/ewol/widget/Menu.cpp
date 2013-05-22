@@ -120,10 +120,11 @@ void widget::Menu::AddSpacer(void)
 void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 {
 	/*
-	if (true == ewol::Sizer$::OnReceiveMessage(_msg) {
+	if (true == ewol::Sizer::OnReceiveMessage(_msg) {
 		return true;
 	}
 	*/
+	EWOL_ERROR(" receive message : " << _msg);
 	if (_msg.GetMessage() == widget::Button::eventPressed) {
 		for(int32_t iii=0; iii<m_listElement.Size(); iii++) {
 			if (_msg.GetCaller() == m_listElement[iii]->m_widgetPointer) {
@@ -173,8 +174,8 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 					widget::Sizer * mySizer = NULL;
 					widget::Button * myButton = NULL;
 					
-					// TODO : Set a gird ...
 					mySizer = new widget::Sizer(widget::Sizer::modeVert);
+					if (NULL != mySizer) {
 						mySizer->LockExpand(vec2(true,true));
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SetSubWidget(mySizer);
@@ -209,6 +210,7 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 								}
 							}
 						}
+					}
 					ewol::WindowsPopUpAdd(m_widgetContextMenu);
 				}
 				return;
