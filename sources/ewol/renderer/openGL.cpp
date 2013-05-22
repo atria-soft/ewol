@@ -129,25 +129,29 @@ typedef struct {
 
 static correspondenceTable_ts basicFlag[] = {
 	{(uint32_t)ewol::openGL::FLAG_BLEND, GL_BLEND},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_CLIP_DISTANCE_I, GL_CLIP_DISTANCE0},
 	{(uint32_t)ewol::openGL::FLAG_COLOR_LOGIC_OP, GL_COLOR_LOGIC_OP},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_CULL_FACE, GL_CULL_FACE},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+		!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_DEBUG_OUTPUT, GL_DEBUG_OUTPUT},
 	{(uint32_t)ewol::openGL::FLAG_DEBUG_OUTPUT_SYNCHRONOUS, GL_DEBUG_OUTPUT_SYNCHRONOUS},
 	{(uint32_t)ewol::openGL::FLAG_DEPTH_CLAMP, GL_DEPTH_CLAMP},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_DEPTH_TEST, GL_DEPTH_TEST},
 	{(uint32_t)ewol::openGL::FLAG_DITHER, GL_DITHER},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_FRAMEBUFFER_SRGB, GL_FRAMEBUFFER_SRGB},
 	{(uint32_t)ewol::openGL::FLAG_LINE_SMOOTH, GL_LINE_SMOOTH},
 	{(uint32_t)ewol::openGL::FLAG_MULTISAMPLE, GL_MULTISAMPLE},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_POLYGON_OFFSET_FILL, GL_POLYGON_OFFSET_FILL},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_POLYGON_OFFSET_LINE, GL_POLYGON_OFFSET_LINE},
 	{(uint32_t)ewol::openGL::FLAG_POLYGON_OFFSET_POINT, GL_POLYGON_OFFSET_POINT},
 	{(uint32_t)ewol::openGL::FLAG_POLYGON_SMOOTH, GL_POLYGON_SMOOTH},
@@ -155,21 +159,25 @@ static correspondenceTable_ts basicFlag[] = {
 	{(uint32_t)ewol::openGL::FLAG_PRIMITIVE_RESTART_FIXED_INDEX, GL_PRIMITIVE_RESTART_FIXED_INDEX},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_SAMPLE_ALPHA_TO_COVERAGE, GL_SAMPLE_ALPHA_TO_COVERAGE},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_SAMPLE_ALPHA_TO_ONE, GL_SAMPLE_ALPHA_TO_ONE},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_SAMPLE_COVERAGE, GL_SAMPLE_COVERAGE},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_SAMPLE_SHADING, GL_SAMPLE_SHADING},
 	{(uint32_t)ewol::openGL::FLAG_SAMPLE_MASK, GL_SAMPLE_MASK},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_SCISSOR_TEST, GL_SCISSOR_TEST},
 	{(uint32_t)ewol::openGL::FLAG_STENCIL_TEST, GL_STENCIL_TEST},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_PROGRAM_POINT_SIZE, GL_PROGRAM_POINT_SIZE},
 	#endif
 	{(uint32_t)ewol::openGL::FLAG_TEXTURE_2D, GL_TEXTURE_2D},
-	#if !(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
+	#if 0
+	!(defined(__TARGET_OS__Android) || defined(__TARGET_OS__MacOs))
 	{(uint32_t)ewol::openGL::FLAG_ALPHA_TEST, GL_ALPHA_TEST},
 	{(uint32_t)ewol::openGL::FLAG_FOG, GL_FOG}
 	#endif
