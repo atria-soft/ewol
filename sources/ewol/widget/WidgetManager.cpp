@@ -9,6 +9,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Joystick.h>
 #include <ewol/widget/Button.h>
+#include <ewol/widget/ContextMenu.h>
 #include <ewol/widget/ButtonColor.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Slider.h>
@@ -72,6 +73,7 @@ void ewol::widgetManager::Init(void)
 	widget::Entry::Init();
 	widget::CheckBox::Init();
 	widget::Scroll::Init();
+	widget::ContextMenu::Init();
 	IsInit = true;
 }
 
@@ -82,6 +84,7 @@ void ewol::widgetManager::UnInit(void)
 	ewol::widgetManager::FocusSetDefault(NULL);
 	ewol::widgetManager::FocusRelease();
 	
+	widget::ContextMenu::UnInit();
 	widget::Scroll::UnInit();
 	widget::CheckBox::UnInit();
 	widget::Entry::UnInit();

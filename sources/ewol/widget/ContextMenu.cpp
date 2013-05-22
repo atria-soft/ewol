@@ -10,12 +10,37 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/widget/WidgetManager.h>
 
 #undef __class__
 #define __class__	"ContextMenu"
 
+
+const char* const widget::ContextMenu::configArrowPosition = "ewol-widget-context-menu-config-arrow-position";
+const char* const widget::ContextMenu::configArrowMode     = "ewol-widget-context-menu-config-arrow-mode";
+
+static ewol::Widget* Create(void)
+{
+	return new widget::ContextMenu();
+}
+
+void widget::ContextMenu::Init(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+}
+
+void widget::ContextMenu::UnInit(void)
+{
+	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+}
+
+
+
 widget::ContextMenu::ContextMenu(void)
 {
+	RegisterConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
+	RegisterConfig(configArrowMode, "list", "none;left;buttom;right;top", "Position of the arrow in the pop-up");
+	
 	m_userExpand.setValue(false,false);
 	
 	m_padding.setValue(4,4);
@@ -234,3 +259,71 @@ ewol::Widget* widget::ContextMenu::GetWidgetAtPos(const vec2& pos)
 	}
 	return this;
 }
+
+
+const char* const widget::ContextMenu::configArrowPosition = "ewol-widget-context-menu-config-arrow-position";
+const char* const widget::ContextMenu::configArrowMode     = "ewol-widget-context-menu-config-arrow-mode";
+
+bool widget::Button::OnSetConfig(const ewol::EConfig& _conf)
+{
+	if (true == widget::Container::OnSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.GetConfig() == configArrowPosition) {
+		m_arrowPos = _conf.GetData();
+		return true;
+	}
+	if (_conf.GetConfig() == configArrowMode) {
+		if(true == _conf.GetData().CompareNoCase("top")) {
+			m_arrawBorder = CONTEXT_MENU_MARK_TOP;
+		} else if(true == _conf.GetData().CompareNoCase("right")) {
+			m_arrawBorder = CONTEXT_MENU_MARK_RIGHT;
+		} else if(true == _conf.GetData().CompareNoCase("buttom")) {
+			m_arrawBorder = CONTEXT_MENU_MARK_BOTTOM;
+		} else if(true == _conf.GetData().CompareNoCase("left")) {
+			m_arrawBorder = CONTEXT_MENU_MARK_LEFT;
+		} else {
+			m_arrawBorder = CONTEXT_MENU_MARK_NONE;
+		}
+		return true;
+	}
+	return false;
+}
+
+bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) const
+{
+	if (true == widget::Container::OnGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configArrowPosition) {
+		_result = m_arrowPos;
+		return true;
+	}
+	if (_config == configArrowMode) {
+		switch(m_arrawBorder) {
+			case CONTEXT_MENU_MARK_TOP:
+				_result = "top";
+				break;
+			case CONTEXT_MENU_MARK_RIGHT:
+				_result = "right";
+				break;
+			case CONTEXT_MENU_MARK_BOTTOM:
+				_result = "buttom";
+				break;
+			case CONTEXT_MENU_MARK_LEFT:
+				_result = "left";
+				break;
+			default:
+			case CONTEXT_MENU_MARK_NONE:
+				_result = "none";
+				break;
+		}
+		return true;
+	}
+	return false;
+}
+
+
+
+
+

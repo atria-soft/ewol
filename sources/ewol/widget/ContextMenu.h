@@ -26,12 +26,20 @@ namespace widget {
 	class ContextMenu : public widget::Container
 	{
 		public:
+			static void Init(void);
+			static void UnInit(void);
+			// Config list of properties
+			static const char* const configArrowPosition;
+			static const char* const configArrowMode;
+		public:
 			ContextMenu(void);
 			virtual ~ContextMenu(void);
 		private:
+			// TODO : Rework the displayer ....
 			ewol::Drawing m_compositing;
 			draw::Color m_colorBackGroung;
 			draw::Color m_colorBorder;
+			
 			vec2 m_padding;
 			vec2 m_arrowPos;
 			float m_offset;
@@ -40,6 +48,8 @@ namespace widget {
 			void SetPositionMark(markPosition_te position, vec2 arrowPos);
 		protected: // Derived function
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void OnRegenerateDisplay(void);
