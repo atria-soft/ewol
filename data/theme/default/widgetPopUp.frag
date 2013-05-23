@@ -17,7 +17,7 @@ uniform displayProperty     EW_widgetProperty;
 varying vec2  v_position; // interpolated position ...
 
 // internal static define
-vec4  S_colorBg = vec4(0.0);
+vec4  S_colorBg = vec4(0.5,0.5,0.5,0.8);
 vec4  S_colorFg = vec4(1.0,1.0,1.0,0.8);
 vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
 float S_sizePadding = 1.0;
@@ -25,10 +25,10 @@ float S_sizeBorder = 3.0;
 
 void main(void) {
 	// prevent origin moving ... 
-	vec2 position = v_position - EW_widgetProperty.origin;
+	vec2 position = v_position - EW_widgetProperty.insidePos;
 	float specialBorder = S_sizeBorder+S_sizePadding;
-	vec2  endStart = EW_widgetProperty.size - vec2(S_sizePadding) - vec2(S_sizeBorder);
-	vec2  endStop  = EW_widgetProperty.size - vec2(S_sizePadding);
+	vec2  endStart = EW_widgetProperty.insideSize - vec2(S_sizePadding) - vec2(S_sizeBorder);
+	vec2  endStop  = EW_widgetProperty.insideSize - vec2(S_sizePadding);
 	if(    position.x>  S_sizePadding
 	    && position.y>  S_sizePadding
 	    && position.x<= endStop.x

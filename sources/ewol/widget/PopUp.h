@@ -15,13 +15,28 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Shaper.h>
 
 namespace widget {
 	class PopUp : public widget::Container
 	{
+		private:
+			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
-			PopUp(void);
+			/**
+			 * @brief Constructor
+			 * @param[in] _shaperName Shaper file properties
+			 */
+			PopUp(const etk::UString& _shaperName="THEME:GUI:widgetPopUp.conf");
+			/**
+			 * @brief Destructor
+			 */
 			virtual ~PopUp(void);
+			/**
+			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
+			 * @param[in] _shaperName The new shaper filename
+			 */
+			void SetShaperName(const etk::UString& _shaperName);
 		private:
 			draw::Color m_colorBackGroung;
 			draw::Color m_colorBorder;
@@ -30,7 +45,6 @@ namespace widget {
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& _availlable);
 			//virtual void CalculateMinMaxSize(void);

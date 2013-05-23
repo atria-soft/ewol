@@ -50,7 +50,7 @@ namespace widget {
 		public:
 			/**
 			 * @brief Constructor
-			 * @param[in] _newLabel Button Label to display
+			 * @param[in] _shaperName Shaper file properties
 			 */
 			Button(const etk::UString& _shaperName="THEME:GUI:widgetButton.conf");
 			/**

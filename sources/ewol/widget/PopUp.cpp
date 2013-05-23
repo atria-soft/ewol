@@ -13,21 +13,22 @@
 #undef __class__
 #define __class__	"PopUp"
 
-widget::PopUp::PopUp(void)
+widget::PopUp::PopUp(const etk::UString& _shaperName) :
+	m_shaper(_shaperName)
 {
 	m_userExpand.setValue(false, false);
 	SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
-	
-	m_colorBackGroung = draw::color::white;
-	m_colorEmptyArea = draw::color::black;
-	m_colorEmptyArea.a = 0x7F;
-	m_colorBorder = draw::color::black;
-	m_colorBorder.a = 0x7F;
 }
 
 widget::PopUp::~PopUp(void)
 {
 	
+}
+
+void widget::PopUp::SetShaperName(const etk::UString& _shaperName)
+{
+	m_shaper.SetSource(_shaperName);
+	MarkToRedraw();
 }
 
 
@@ -61,37 +62,29 @@ void widget::PopUp::CalculateSize(const vec2& _availlable)
 	MarkToRedraw();
 }
 
-void widget::PopUp::SystemDraw(const ewol::DrawProperty& _displayProp)
-{
-	ewol::Widget::SystemDraw(_displayProp);
-	if (NULL != m_subWidget) {
-		m_subWidget->SystemDraw(_displayProp);
-	}
-}
-
 void widget::PopUp::OnDraw(void)
 {
-	m_compositing.Draw();
+	m_shaper.Draw();
 }
 
 #define BORDER_SIZE_TMP         (4)
 void widget::PopUp::OnRegenerateDisplay(void)
 {
 	if (true == NeedRedraw()) {
-		m_compositing.Clear();
-		m_compositing.SetColor(m_colorEmptyArea);
-		m_compositing.SetPos(vec3(0,0,0));
-		m_compositing.RectangleWidth(vec3(m_size.x(), m_size.y(), 0));
-		// set the area in white ...
+		m_shaper.Clear();
+		vec2 padding = m_shaper.GetPadding();
 		if (NULL != m_subWidget) {
 			vec2 tmpSize = m_subWidget->GetSize();
 			vec2 tmpOrigin = m_subWidget->GetOrigin();
-			m_compositing.SetColor(m_colorBorder);
-			m_compositing.SetPos(vec3(tmpOrigin.x()-BORDER_SIZE_TMP, tmpOrigin.y()-BORDER_SIZE_TMP,0) );
-			m_compositing.RectangleWidth(vec3(tmpSize.x()+2*BORDER_SIZE_TMP, tmpSize.y()+2*BORDER_SIZE_TMP, 0) );
-			m_compositing.SetColor(m_colorBackGroung);
-			m_compositing.SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(),0) );
-			m_compositing.RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0) );
+			m_shaper.SetOrigin(vec2ClipInt32(m_origin));
+			m_shaper.SetSize(vec2ClipInt32(m_size));
+			m_shaper.SetInsidePos(vec2ClipInt32(tmpOrigin-padding));
+			m_shaper.SetInsideSize(vec2ClipInt32(tmpSize + padding*2.0f));
+		} else {
+			m_shaper.SetOrigin(vec2ClipInt32(m_origin));
+			m_shaper.SetSize(vec2ClipInt32(m_size));
+			m_shaper.SetInsidePos(vec2ClipInt32(m_origin+padding));
+			m_shaper.SetInsideSize(vec2ClipInt32(m_size-padding*2.0f));
 		}
 	}
 	// SUBwIDGET GENERATION ...
@@ -108,3 +101,5 @@ ewol::Widget* widget::PopUp::GetWidgetAtPos(const vec2& pos)
 	}
 	return this;
 }
+
+

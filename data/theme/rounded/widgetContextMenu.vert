@@ -3,14 +3,6 @@ precision mediump float;
 precision mediump int;
 #endif
 
-struct widgetStateProperty {
-	int   stateOld;
-	int   stateNew;
-	float transition;
-};
-
-uniform widgetStateProperty EW_status;
-
 // Input :
 attribute vec2 EW_coord2d;
 uniform mat4   EW_MatrixTransformation;

@@ -22,13 +22,13 @@ uniform widgetStateProperty EW_status;
 
 // transmit from the vertex shader
 varying vec2  v_position; // interpolated position ...
-varying vec4  v_colorTansition;
 
 // internal static define
 vec4  S_colorBg = vec4(0.0);
+vec4  S_colorFg = vec4(1.0,1.0,1.0,0.8);
 vec4  S_colorBorder = vec4(0.0,0.0,0.0,1.0);
 float S_sizePadding  =  3.0; // must not be NULL
-float S_sizeBorder   =  1.0; //==> this id for 1 px border
+float S_sizeBorder   =  2.0; //==> this id for 1 px border
 float S_roundedRatio = 10.0;
 
 
@@ -59,7 +59,7 @@ void main(void) {
 	// set Background
 	gl_FragColor = S_colorBg;
 	// set foreground
-	gl_FragColor = gl_FragColor*tmpVal + v_colorTansition*(1.0-tmpVal);
+	gl_FragColor = gl_FragColor*tmpVal + S_colorFg*(1.0-tmpVal);
 	// set border
 	float tmpVal2 = abs(tmpVal-0.5)*2.0;
 	gl_FragColor = gl_FragColor*tmpVal2 + S_colorBorder*(1.0-tmpVal2);

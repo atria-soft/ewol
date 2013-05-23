@@ -119,9 +119,12 @@ def Create(target):
 	
 	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')
-	myModule.CopyFolder('../data/theme/default/widgetContextMenu.*','theme/default')
 	myModule.CopyFolder('../data/theme/default/widgetButton.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetButton.*','theme/rounded')
+	myModule.CopyFolder('../data/theme/default/widgetContextMenu.*','theme/default')
+	myModule.CopyFolder('../data/theme/rounded/widgetContextMenu.*','theme/rounded')
+	myModule.CopyFolder('../data/theme/default/widgetPopUp.*','theme/default')
+	myModule.CopyFolder('../data/theme/rounded/widgetPopUp.*','theme/rounded')
 	myModule.CopyFolder('../data/textured.*','')
 	myModule.CopyFolder('../data/texturedNoMaterial.*','')
 	myModule.CopyFolder('../data/text.*','')
