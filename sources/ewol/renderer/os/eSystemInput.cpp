@@ -45,26 +45,6 @@ void ewol::eSystemInput::SetDpi(int32_t newDPI)
 	CalculateLimit();
 }
 
-void ewol::eSystemInput::CleanElement(InputPoperty_ts *eventTable, int32_t idInput)
-{
-	if (NULL==eventTable) {
-		return;
-	}
-	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
-	eventTable[idInput].isUsed = false;
-	eventTable[idInput].destinationInputId = 0;
-	eventTable[idInput].lastTimeEvent = 0;
-	eventTable[idInput].curentWidgetEvent = NULL;
-	eventTable[idInput].origin.setValue(0,0);
-	eventTable[idInput].size.setValue(99999999,99999999);
-	eventTable[idInput].downStart.setValue(0,0);
-	eventTable[idInput].isDown = false;
-	eventTable[idInput].isInside = false;
-	eventTable[idInput].nbClickEvent = 0;
-	eventTable[idInput].posEvent.setValue(0,0);
-}
-
-
 bool ewol::eSystemInput::localEventInput(ewol::keyEvent::type_te _type,
                                          ewol::Widget* _destWidget,
                                          int32_t _IdInput,
@@ -83,6 +63,40 @@ bool ewol::eSystemInput::localEventInput(ewol::keyEvent::type_te _type,
 	}
 	return false;
 }
+
+void ewol::eSystemInput::AbortElement(InputPoperty_ts *_eventTable, int32_t _idInput, ewol::keyEvent::type_te _type)
+{
+	if (NULL==_eventTable) {
+		return;
+	}
+	if (_eventTable[_idInput].isUsed==true) {
+		localEventInput(_type, 
+		                _eventTable[_idInput].curentWidgetEvent,
+		                _eventTable[_idInput].destinationInputId,
+		                ewol::keyEvent::statusAbort,
+		                _eventTable[_idInput].posEvent);
+	}
+}
+
+void ewol::eSystemInput::CleanElement(InputPoperty_ts *_eventTable, int32_t _idInput)
+{
+	if (NULL==_eventTable) {
+		return;
+	}
+	//EWOL_INFO("CleanElement[" << idInput << "] = @" << (int64_t)eventTable);
+	_eventTable[_idInput].isUsed = false;
+	_eventTable[_idInput].destinationInputId = 0;
+	_eventTable[_idInput].lastTimeEvent = 0;
+	_eventTable[_idInput].curentWidgetEvent = NULL;
+	_eventTable[_idInput].origin.setValue(0,0);
+	_eventTable[_idInput].size.setValue(99999999,99999999);
+	_eventTable[_idInput].downStart.setValue(0,0);
+	_eventTable[_idInput].isDown = false;
+	_eventTable[_idInput].isInside = false;
+	_eventTable[_idInput].nbClickEvent = 0;
+	_eventTable[_idInput].posEvent.setValue(0,0);
+}
+
 
 
 void ewol::eSystemInput::TransfertEvent(ewol::Widget* source, ewol::Widget* destination)
@@ -149,7 +163,9 @@ void ewol::eSystemInput::NewLayerSet(void)
 {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
+		AbortElement(m_eventInputSaved, iii, ewol::keyEvent::typeFinger);
 		CleanElement(m_eventInputSaved, iii);
+		AbortElement(m_eventMouseSaved, iii, ewol::keyEvent::typeMouse);
 		CleanElement(m_eventMouseSaved, iii);
 	}
 }

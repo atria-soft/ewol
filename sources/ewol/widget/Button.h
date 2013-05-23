@@ -38,6 +38,7 @@ namespace widget {
 			static const char* const configToggle;
 			static const char* const configLock;
 			static const char* const configValue;
+			static const char* const configShaper;
 			typedef enum {
 				lockNone, //!< normal status of the button
 				lockWhenPressed, //!< When the state is set in pressed, the status stay in this one

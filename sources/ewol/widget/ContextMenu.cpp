@@ -16,8 +16,9 @@
 #define __class__	"ContextMenu"
 
 
-const char* const widget::ContextMenu::configArrowPosition = "ewol-widget-context-menu-config-arrow-position";
-const char* const widget::ContextMenu::configArrowMode     = "ewol-widget-context-menu-config-arrow-mode";
+const char* const widget::ContextMenu::configArrowPosition = "arrow-position";
+const char* const widget::ContextMenu::configArrowMode     = "arrow-mode";
+const char* const widget::ContextMenu::configShaper        = "shaper";
 
 static ewol::Widget* Create(void)
 {
@@ -36,14 +37,16 @@ void widget::ContextMenu::UnInit(void)
 
 
 
-widget::ContextMenu::ContextMenu(void)
+widget::ContextMenu::ContextMenu(const etk::UString& _shaperName) :
+	m_shaper(_shaperName)
 {
+	// add basic configurations :
 	RegisterConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
 	RegisterConfig(configArrowMode, "list", "none;left;buttom;right;top", "Position of the arrow in the pop-up");
+	RegisterConfig(configShaper, "string", NULL, "the display name for config file");
 	
 	m_userExpand.setValue(false,false);
 	
-	m_padding.setValue(4,4);
 	m_offset = 20;
 	
 	m_colorBackGroung = draw::color::white;
@@ -61,13 +64,20 @@ widget::ContextMenu::~ContextMenu(void)
 	
 }
 
+void widget::ContextMenu::SetShaperName(const etk::UString& _shaperName)
+{
+	m_shaper.SetSource(_shaperName);
+	MarkToRedraw();
+}
 
-void widget::ContextMenu::CalculateSize(const vec2& availlable)
+
+void widget::ContextMenu::CalculateSize(const vec2& _availlable)
 {
 	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
-	m_size = availlable;
-	
+	m_size = _availlable;
+	vec2 padding = m_shaper.GetPadding();
+	EWOL_DEBUG("our origin=" << m_origin << " size=" << m_size);
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize;
 		vec2 subWidgetOrigin;
@@ -85,8 +95,7 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 		subWidgetSize.setY((int32_t)subWidgetSize.y());
 		
 		// set config to the Sub-widget
-		switch (m_arrawBorder)
-		{
+		switch (m_arrawBorder) {
 			case widget::CONTEXT_MENU_MARK_TOP:
 				subWidgetOrigin.setX((int32_t)(m_arrowPos.x() - subWidgetSize.x()/2));
 				subWidgetOrigin.setY((int32_t)(m_arrowPos.y() - m_offset - subWidgetSize.y()));
@@ -103,26 +112,27 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 				break;
 		}
 		// set the widget position at the border of the screen
-		subWidgetOrigin.setX( (int32_t)(   etk_max(0, (subWidgetOrigin.x()-m_padding.x()*2))
-		                                 + m_padding.x()*2) );
-		subWidgetOrigin.setY( (int32_t)(   etk_max(0, (subWidgetOrigin.y()-m_padding.y()*2))
-		                                 + m_padding.y()*2) );
+		subWidgetOrigin.setX( (int32_t)(   etk_max(0, (subWidgetOrigin.x()-padding.x()*2))
+		                                 + padding.x()*2) );
+		subWidgetOrigin.setY( (int32_t)(   etk_max(0, (subWidgetOrigin.y()-padding.y()*2))
+		                                 + padding.y()*2) );
 		switch (m_arrawBorder)
 		{
 			default:
 			case widget::CONTEXT_MENU_MARK_TOP:
 			case widget::CONTEXT_MENU_MARK_BOTTOM:
 				if (m_arrowPos.x() <= m_offset ) {
-					subWidgetOrigin.setX(m_arrowPos.x()+m_padding.x());
+					subWidgetOrigin.setX(m_arrowPos.x()+padding.x());
 				}
 				break;
 			case widget::CONTEXT_MENU_MARK_RIGHT:
 			case widget::CONTEXT_MENU_MARK_LEFT:
 				if (m_arrowPos.y() <= m_offset ) {
-					subWidgetOrigin.setY(m_arrowPos.y()+m_padding.y());
+					subWidgetOrigin.setY(m_arrowPos.y()+padding.y());
 				}
 				break;
 		}
+		EWOL_DEBUG("      ==> sub origin=" << subWidgetOrigin << " size=" << subWidgetSize);
 		m_subWidget->SetOrigin(subWidgetOrigin);
 		m_subWidget->CalculateSize(subWidgetSize);
 	}
@@ -132,36 +142,31 @@ void widget::ContextMenu::CalculateSize(const vec2& availlable)
 
 void widget::ContextMenu::CalculateMinMaxSize(void)
 {
-	//EWOL_DEBUG("CalculateMinSize");
-	m_userExpand.setValue(false,false);
-	m_minSize.setValue(50,50);
-	if (NULL != m_subWidget) {
-		m_subWidget->CalculateMinMaxSize();
-		m_minSize = m_subWidget->GetCalculateMinSize();
-	}
+	// call main class to calculate the min size...
+	widget::Container::CalculateMinMaxSize();
+	// add padding of the display
+	m_minSize += m_shaper.GetPadding();
 	//EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
 	MarkToRedraw();
-}
-
-void widget::ContextMenu::SystemDraw(const ewol::DrawProperty& _displayProp)
-{
-	ewol::Widget::SystemDraw(_displayProp);
-	if (NULL != m_subWidget) {
-		m_subWidget->SystemDraw(_displayProp);
-	}
 }
 
 
 void widget::ContextMenu::OnDraw(void)
 {
 	m_compositing.Draw();
+	m_shaper.Draw();
 }
 
 
 void widget::ContextMenu::OnRegenerateDisplay(void)
 {
+	// call upper class :
+	widget::Container::OnRegenerateDisplay();
 	if (true == NeedRedraw()) {
 		m_compositing.Clear();
+		m_shaper.Clear();
+		vec2 padding = m_shaper.GetPadding();
+		
 		if (NULL != m_subWidget) {
 			vec2 tmpSize = m_subWidget->GetSize();
 			vec2 tmpOrigin = m_subWidget->GetOrigin();
@@ -174,13 +179,13 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 					m_compositing.SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
 					m_compositing.AddVertex();
 					if (m_arrowPos.x() <= tmpOrigin.x() ) {
-						float laking = m_offset - m_padding.y();
+						float laking = m_offset - padding.y();
 						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
 						m_compositing.AddVertex();
 						m_compositing.SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
 						m_compositing.AddVertex();
 					} else {
-						float laking = m_offset - m_padding.y();
+						float laking = m_offset - padding.y();
 						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
 						m_compositing.AddVertex();
 						m_compositing.SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
@@ -191,13 +196,13 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 					m_compositing.SetPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
 					m_compositing.AddVertex();
 					if (m_arrowPos.x() <= tmpOrigin.x() ) {
-						int32_t laking = m_offset - m_padding.y();
+						int32_t laking = m_offset - padding.y();
 						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
 						m_compositing.AddVertex();
 						m_compositing.SetPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
 						m_compositing.AddVertex();
 					} else {
-						int32_t laking = m_offset - m_padding.y();
+						int32_t laking = m_offset - padding.y();
 						m_compositing.SetPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
 						m_compositing.AddVertex();
 						m_compositing.SetPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
@@ -210,16 +215,14 @@ void widget::ContextMenu::OnRegenerateDisplay(void)
 					EWOL_TODO("later");
 					break;
 			}
-			m_compositing.SetPos(vec3(tmpOrigin.x()-m_padding.x(), tmpOrigin.y() - m_padding.y(), 0.0f) );
-			m_compositing.RectangleWidth(vec3(tmpSize.x() + m_padding.x()*2, tmpSize.y() + m_padding.y()*2, 0.0f) );
-			// set the area in white ...
-			m_compositing.SetColor(m_colorBackGroung);
-			m_compositing.SetPos(vec3(tmpOrigin.x(), tmpOrigin.y(), 0.0f) );
-			m_compositing.RectangleWidth(vec3(tmpSize.x(), tmpSize.y(), 0.0f) );
+			
+			vec2 shaperOrigin = tmpOrigin-padding;
+			vec2 shaperSize = tmpSize+padding*2.0f;
+			m_shaper.SetOrigin(vec2ClipInt32(shaperOrigin));
+			m_shaper.SetSize(vec2ClipInt32(shaperSize));
+			m_shaper.SetInsidePos(vec2ClipInt32(shaperOrigin+padding));
+			m_shaper.SetInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
 		}
-	}
-	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
 	}
 }
 bool widget::ContextMenu::OnEventInput(const ewol::EventInput& _event)
@@ -261,10 +264,7 @@ ewol::Widget* widget::ContextMenu::GetWidgetAtPos(const vec2& pos)
 }
 
 
-const char* const widget::ContextMenu::configArrowPosition = "ewol-widget-context-menu-config-arrow-position";
-const char* const widget::ContextMenu::configArrowMode     = "ewol-widget-context-menu-config-arrow-mode";
-
-bool widget::Button::OnSetConfig(const ewol::EConfig& _conf)
+bool widget::ContextMenu::OnSetConfig(const ewol::EConfig& _conf)
 {
 	if (true == widget::Container::OnSetConfig(_conf)) {
 		return true;
@@ -287,10 +287,14 @@ bool widget::Button::OnSetConfig(const ewol::EConfig& _conf)
 		}
 		return true;
 	}
+	if (_conf.GetConfig() == configShaper) {
+		SetShaperName(_conf.GetData());
+		return true;
+	}
 	return false;
 }
 
-bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) const
+bool widget::ContextMenu::OnGetConfig(const char* _config, etk::UString& _result) const
 {
 	if (true == widget::Container::OnGetConfig(_config, _result)) {
 		return true;
@@ -318,6 +322,10 @@ bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) con
 				_result = "none";
 				break;
 		}
+		return true;
+	}
+	if (_config == configShaper) {
+		_result = m_shaper.GetSource();;
 		return true;
 	}
 	return false;

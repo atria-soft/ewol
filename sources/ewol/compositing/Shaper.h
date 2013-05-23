@@ -68,9 +68,9 @@ namespace ewol
 		public:
 			/**
 			 * @brief generic constructor
-			 * @param[in] imageName Name of the file that might be loaded
+			 * @param[in] _shaperName Name of the file that might be loaded
 			 */
-			Shaper(const etk::UString& shaperName="");
+			Shaper(const etk::UString& _shaperName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -86,11 +86,11 @@ namespace ewol
 			void Clear(void);
 			/**
 			 * @brief change the current status in an other
-			 * @param[in] the next new status requested
+			 * @param[in] _newStatusId the next new status requested
 			 * @return true The widget must call this fuction periodicly (and redraw itself)
 			 * @return false No need to request the periodic call.
 			 */
-			bool ChangeStatusIn(int32_t newStatusId);
+			bool ChangeStatusIn(int32_t _newStatusId);
 			/**
 			 * @brief Get the current displayed status of the shaper
 			 * @return The Status Id
@@ -103,41 +103,46 @@ namespace ewol
 			int32_t GetNextDisplayedStatus(void);
 			/**
 			 * @brief Same as the widfget periodic call (this is for change display)
-			 * @param[in] localTime The current time of the call.
+			 * @param[in] _localTime The current time of the call.
 			 * @return true The widget must call this fuction periodicly (and redraw itself)
 			 * @return false No need to request the periodic call.
 			 */
-			bool PeriodicCall(int64_t localTime);
+			bool PeriodicCall(int64_t _localTime);
 			/**
 			 * @brief Set the widget origin (needed fot the display)
-			 * @param[in] newOri : the new widget origin
+			 * @param[in] _newOri : the new widget origin
 			 */
-			void SetOrigin(const vec2& newOri);
+			void SetOrigin(const vec2& _newOri);
 			/**
 			 * @brief Set the widget size (needed fot the display)
-			 * @param[in] newSize : the new widget size
+			 * @param[in] _newSize : the new widget size
 			 */
-			void SetSize(const vec2& newSize);
+			void SetSize(const vec2& _newSize);
 			/**
 			 * @brief Set the internal widget size
-			 * @param[in] newInsidePos : the subelement size.
+			 * @param[in] _newInsidePos : the subelement size.
 			 */
-			void SetInsideSize(const vec2& newInsideSize);
+			void SetInsideSize(const vec2& _newInsideSize);
 			/**
 			 * @brief Set the internal widget position
-			 * @param[in] newInsidePos : the subelement position
+			 * @param[in] _newInsidePos : the subelement position
 			 */
-			void SetInsidePos(const vec2& newInsidePos);
+			void SetInsidePos(const vec2& _newInsidePos);
 			/**
 			 * @brief Get the padding declared by the user in the config file
 			 * @return the padding property
 			 */
 			vec2 GetPadding(void);
 			/**
-			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
-			 * @param[in] newFile New file of the Image
+			 * @brief Change the shaper Source
+			 * @param[in] _newFile New file of the shaper
 			 */
-			void SetSource(const etk::UString& newFile);
+			void SetSource(const etk::UString& _newFile);
+			/**
+			 * @brief Get the shaper file Source
+			 * @return the shapper file name
+			 */
+			const etk::UString& GetSource(void) const { return m_name; };
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

@@ -14,6 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/compositing/Shaper.h>
 
 namespace widget {
 	typedef enum {
@@ -31,18 +32,27 @@ namespace widget {
 			// Config list of properties
 			static const char* const configArrowPosition;
 			static const char* const configArrowMode;
+			static const char* const configShaper;
 		public:
-			ContextMenu(void);
+			ContextMenu(const etk::UString& _shaperName="THEME:GUI:widgetContextMenu.conf");
 			virtual ~ContextMenu(void);
+		private:
+			ewol::Shaper m_shaper; //!< Compositing theme.
+		public:
+			/**
+			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
+			 * @param[in] _shaperName The new shaper filename
+			 */
+			void SetShaperName(const etk::UString& _shaperName);
 		private:
 			// TODO : Rework the displayer ....
 			ewol::Drawing m_compositing;
 			draw::Color m_colorBackGroung;
 			draw::Color m_colorBorder;
 			
-			vec2 m_padding;
-			vec2 m_arrowPos;
 			float m_offset;
+		private:
+			vec2 m_arrowPos;
 			markPosition_te m_arrawBorder;
 		public:
 			void SetPositionMark(markPosition_te position, vec2 arrowPos);
@@ -51,7 +61,6 @@ namespace widget {
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			virtual void CalculateSize(const vec2& availlable);

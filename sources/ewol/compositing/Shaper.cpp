@@ -16,8 +16,8 @@
 #undef __class__
 #define __class__	"ewol::Shaper"
 
-ewol::Shaper::Shaper(const etk::UString& shaperName) :
-	m_name(shaperName),
+ewol::Shaper::Shaper(const etk::UString& _shaperName) :
+	m_name(_shaperName),
 	m_config(NULL),
 	m_confIdPaddingX(-1),
 	m_confIdPaddingY(-1),
@@ -156,9 +156,9 @@ void ewol::Shaper::Clear(void)
 	// nothing to do ...
 }
 
-bool ewol::Shaper::ChangeStatusIn(int32_t newStatusId)
+bool ewol::Shaper::ChangeStatusIn(int32_t _newStatusId)
 {
-	m_nextStatusRequested = newStatusId;
+	m_nextStatusRequested = _newStatusId;
 	return true;
 }
 
@@ -172,23 +172,23 @@ int32_t ewol::Shaper::GetNextDisplayedStatus(void)
 	return m_nextStatusRequested;
 }
 
-bool ewol::Shaper::PeriodicCall(int64_t localTime)
+bool ewol::Shaper::PeriodicCall(int64_t _localTime)
 {
 	// start :
 	if (m_time == -1) {
-		m_time = localTime;
+		m_time = _localTime;
 		m_stateOld = m_stateNew;
 		m_stateNew = m_nextStatusRequested;
 		m_nextStatusRequested = -1;
 		m_stateTransition = 0.0;
 		EWOL_VERBOSE("     ##### START #####  ");
 	}
-	int64_t offset = localTime - m_time;
+	int64_t offset = _localTime - m_time;
 	float timeRelativity = m_config->GetFloat(m_confIdChangeTime)*1000.0;
 	if (offset > timeRelativity) {
 		// check if no new state requested:
 		if (m_nextStatusRequested != -1) {
-			m_time = localTime;
+			m_time = _localTime;
 			m_stateOld = m_stateNew;
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
@@ -224,31 +224,31 @@ void ewol::Shaper::UpdateVectex(void)
 	                     m_propertyOrigin.y()+m_propertySize.y());
 }
 
-void ewol::Shaper::SetOrigin(const vec2& newOri)
+void ewol::Shaper::SetOrigin(const vec2& _newOri)
 {
-	if (m_propertyOrigin != newOri) {
-		m_propertyOrigin = newOri;
+	if (m_propertyOrigin != _newOri) {
+		m_propertyOrigin = _newOri;
 		UpdateVectex();
 	}
 
 }
 
-void ewol::Shaper::SetSize(const vec2& newSize)
+void ewol::Shaper::SetSize(const vec2& _newSize)
 {
-	if (m_propertySize != newSize) {
-		m_propertySize = newSize;
+	if (m_propertySize != _newSize) {
+		m_propertySize = _newSize;
 		UpdateVectex();
 	}
 }
 
-void ewol::Shaper::SetInsideSize(const vec2& newInsideSize)
+void ewol::Shaper::SetInsideSize(const vec2& _newInsideSize)
 {
-	m_propertyInsideSize = newInsideSize;
+	m_propertyInsideSize = _newInsideSize;
 }
 
-void ewol::Shaper::SetInsidePos(const vec2& newInsidePos)
+void ewol::Shaper::SetInsidePos(const vec2& _newInsidePos)
 {
-	m_propertyInsidePosition = newInsidePos;
+	m_propertyInsidePosition = _newInsidePos;
 }
 
 
@@ -263,11 +263,11 @@ vec2 ewol::Shaper::GetPadding(void)
 }
 
 
-void ewol::Shaper::SetSource(const etk::UString& newFile)
+void ewol::Shaper::SetSource(const etk::UString& _newFile)
 {
 	Clear();
 	UnLoadProgram();
-	m_name = newFile;
+	m_name = _newFile;
 	LoadProgram();
 }
 

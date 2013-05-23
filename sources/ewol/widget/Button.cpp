@@ -25,6 +25,7 @@ const char* const widget::Button::eventValue      = "ewol-widget-button-event-va
 const char* const widget::Button::configToggle = "toggle";
 const char* const widget::Button::configLock   = "lock";
 const char* const widget::Button::configValue  = "value";
+const char* const widget::Button::configShaper = "shaper";
 
 
 // DEFINE for the shader display system :
@@ -73,6 +74,7 @@ widget::Button::Button(const etk::UString& _shaperName) :
 	RegisterConfig(configToggle, "bool", NULL, "The Button can toogle");
 	RegisterConfig(configValue, "bool", NULL, "Basic value of the widget");
 	RegisterConfig(configLock, "list", "none;true;released;pressed", "Lock the button in a special state to permit changing state only by the coder");
+	RegisterConfig(configShaper, "string", NULL, "the display name for config file");
 	
 	// shaper satatus update:
 	CheckStatus();
@@ -92,6 +94,7 @@ widget::Button::~Button(void)
 void widget::Button::SetShaperName(const etk::UString& _shaperName)
 {
 	m_shaper.SetSource(_shaperName);
+	MarkToRedraw();
 }
 
 void widget::Button::SetSubWidget(ewol::Widget* _subWidget)
@@ -508,6 +511,10 @@ bool widget::Button::OnSetConfig(const ewol::EConfig& _conf)
 		SetValue(_conf.GetData().ToBool());
 		return true;
 	}
+	if (_conf.GetConfig() == configShaper) {
+		SetShaperName(_conf.GetData());
+		return true;
+	}
 	return false;
 }
 
@@ -548,6 +555,10 @@ bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) con
 		} else {
 			_result = "false";
 		}
+		return true;
+	}
+	if (_config == configShaper) {
+		_result = m_shaper.GetSource();;
 		return true;
 	}
 	return false;

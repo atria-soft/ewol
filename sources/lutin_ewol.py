@@ -119,6 +119,7 @@ def Create(target):
 	
 	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')
+	myModule.CopyFolder('../data/theme/default/widgetContextMenu.*','theme/default')
 	myModule.CopyFolder('../data/theme/default/widgetButton.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetButton.*','theme/rounded')
 	myModule.CopyFolder('../data/textured.*','')
