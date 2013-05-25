@@ -108,10 +108,19 @@ void widget::Composer::RegisterOnEventNameWidget(const etk::UString& _subWidgetN
                                                  const char * _eventIdgenerated,
                                                  const etk::UString& _overloadData)
 {
+	RegisterOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
+}
+
+void widget::Composer::RegisterOnEventNameWidget(ewol::EObject * _destinationObject,
+                                                 const etk::UString& _subWidgetName,
+                                                 const char * _eventId,
+                                                 const char * _eventIdgenerated,
+                                                 const etk::UString& _overloadData)
+{
 	ewol::Widget* tmpWidget = GetWidgetNamed(_subWidgetName);
 	if (NULL != tmpWidget) {
 		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
-		tmpWidget->RegisterOnEvent(this, _eventId, _eventIdgenerated, _overloadData);
+		tmpWidget->RegisterOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
 	} else {
 		EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
 	}

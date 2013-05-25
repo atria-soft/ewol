@@ -61,8 +61,23 @@ namespace widget
 			 * @param[in] _eventId Event generate inside the object.
 			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
+			 * @note : To used when herited from this object.
 			 */
 			void RegisterOnEventNameWidget(const etk::UString& _subWidgetName,
+			                               const char * _eventId,
+			                               const char * _eventIdgenerated = NULL,
+			                               const etk::UString& _overloadData="");
+			/**
+			 * @brief Register an Event an named widget. @see RegisterOnEvent
+			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
+			 * @param[in] _subWidgetName Name of the subWidget.
+			 * @param[in] _eventId Event generate inside the object.
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
+			 * @note : To used when NOT herited from this object.
+			 */
+			void RegisterOnEventNameWidget(ewol::EObject * _destinationObject,
+			                               const etk::UString& _subWidgetName,
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
 			                               const etk::UString& _overloadData="");
