@@ -73,10 +73,11 @@ void ewol::resource::ReLoadResources(void)
 		for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 			for (int32_t iii=l_resourceList.Size()-1; iii>=0; iii--) {
-				if(    l_resourceList[iii] != NULL
-				    && jjj==l_resourceList[iii]->GetResourceLevel()) {
-					l_resourceList[iii]->Reload();
-					EWOL_INFO("        [" << l_resourceList[iii]->GetUID() << "]="<< l_resourceList[iii]->GetType());
+				if(l_resourceList[iii] != NULL) {
+					if (jjj==l_resourceList[iii]->GetResourceLevel()) {
+						l_resourceList[iii]->Reload();
+						EWOL_INFO("        [" << l_resourceList[iii]->GetUID() << "]="<< l_resourceList[iii]->GetType());
+					}
 				}
 			}
 		}
@@ -110,9 +111,10 @@ void ewol::resource::UpdateContext(void)
 			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    UpdateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 				for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
-					if(    l_resourceList[iii] != NULL
-					    && jjj==l_resourceList[iii]->GetResourceLevel()) {
-						l_resourceList[iii]->UpdateContext();
+					if(l_resourceList[iii] != NULL) {
+						if (jjj==l_resourceList[iii]->GetResourceLevel()) {
+							l_resourceList[iii]->UpdateContext();
+						}
 					}
 				}
 			}
@@ -122,9 +124,10 @@ void ewol::resource::UpdateContext(void)
 			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    UpdateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
 				for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
-					if(    l_resourceListToUpdate[iii] != NULL
-					    && jjj==l_resourceList[iii]->GetResourceLevel()) {
-						l_resourceListToUpdate[iii]->UpdateContext();
+					if(l_resourceListToUpdate[iii] != NULL) {
+						if (jjj==l_resourceListToUpdate[iii]->GetResourceLevel()) {
+							l_resourceListToUpdate[iii]->UpdateContext();
+						}
 					}
 				}
 			}
@@ -404,7 +407,7 @@ void ewol::resource::Release(ewol::Resource*& object)
 	for (int32_t iii=0; iii<l_resourceListToUpdate.Size(); iii++) {
 		if (l_resourceListToUpdate[iii] == object) {
 			l_resourceListToUpdate[iii] = NULL;
-			l_resourceListToUpdate.Erase(iii);
+			//l_resourceListToUpdate.Erase(iii);
 		}
 	}
 	EWOL_VERBOSE("RELEASE (default) : file : \"" << object->GetName() << "\"");

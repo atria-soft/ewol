@@ -59,13 +59,13 @@ namespace ewol
 			void Increment(void) { m_counter++; };
 			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
 			int32_t GetCounter(void) { return m_counter; };
+			uint32_t GetUID(void) { return m_uniqueId; };
+			uint8_t  GetResourceLevel(void) { return m_resourceLevel; };
 			virtual const char* GetType(void) { return "unknow"; };
 			virtual void UpdateContext(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
 			virtual void RemoveContext(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
 			virtual void RemoveContextToLate(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
 			virtual void Reload(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
-			uint32_t GetUID(void) { return m_uniqueId; };
-			uint8_t  GetResourceLevel(void) { return m_resourceLevel; };
 	};
 };
 
