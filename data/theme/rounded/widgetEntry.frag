@@ -38,25 +38,29 @@ void main(void) {
 	// prevent origin moving ... 
 	vec2 position = v_position - EW_widgetProperty.origin;
 	
+	/* generate a central simetry
+	  ____       _____
+	      \     /
+	       \   /
+	        \ /
+	         -
+	*/
 	vec2 positionCenter = abs(position-ratio);
-	vec2 ratioHight = ratio - S_sizePadding;
-	vec2 ratioLow   = ratioHight - (S_sizeBorder+S_roundedRatio);
-	vec2 circleMode = smoothstep(ratioLow, ratioHight, positionCenter);
-	float tmpDist = sqrt(dot(circleMode,circleMode));
-	
-	//float distanceInternal = (S_roundedRatio-S_sizeBorder/2.0)/(S_roundedRatio-S_sizeBorder);
-	//float distanceExternal = (S_roundedRatio+S_sizeBorder/2.0)/(S_roundedRatio-S_sizeBorder);;
-	if(tmpDist <= 0.7 ) {
-		gl_FragColor = S_colorFg;
-	} else if(tmpDist <= 0.9) {
-		float tmpVal = smoothstep(0.7, 0.9, tmpDist);
-		if (tmpVal<=0.5) {
-			gl_FragColor = S_colorBorder*(tmpVal*2.0) + S_colorFg*(1.0-tmpVal*2.0);
-		} else {
-			gl_FragColor = S_colorBorder*(1.0-(tmpVal-0.5)*2.0) + S_colorBg*((tmpVal-0.5)*2.0);
-		}
-	} else {
-		gl_FragColor = S_colorBg;
-	}
+	// This is a clip to remove center of the display of the widget
+	vec2 ratioLow   = ratio - (S_roundedRatio+S_sizePadding);
+	vec2 circleMode = smoothstep(ratioLow, ratio, positionCenter)*(S_roundedRatio+S_sizePadding);
+	// Calculate the distance of the radius
+	float tmpDist = float(int(sqrt(dot(circleMode,circleMode))));
+	// Generate the internal rampe for the the imput drawing
+	float tmpVal = smoothstep(S_roundedRatio - S_sizeBorder*1.5,
+	                          S_roundedRatio + S_sizeBorder*1.5,
+	                          tmpDist);
+	// set Background
+	gl_FragColor = S_colorBg;
+	// set foreground
+	gl_FragColor = gl_FragColor*tmpVal + S_colorFg*(1.0-tmpVal);
+	// set border
+	float tmpVal2 = abs(tmpVal-0.5)*2.0;
+	gl_FragColor = gl_FragColor*tmpVal2 + S_colorBorder*(1.0-tmpVal2);
 }
 

@@ -51,7 +51,7 @@ void main(void) {
 	vec2 ratioLow   = ratio - (S_roundedRatio+S_sizePadding);
 	vec2 circleMode = smoothstep(ratioLow, ratio, positionCenter)*(S_roundedRatio+S_sizePadding);
 	// Calculate the distance of the radius
-	float tmpDist = sqrt(dot(circleMode,circleMode));
+	float tmpDist = float(int(sqrt(dot(circleMode,circleMode))));
 	// Generate the internal rampe for the the imput drawing
 	float tmpVal = smoothstep(S_roundedRatio - S_sizeBorder*1.5,
 	                          S_roundedRatio + S_sizeBorder*1.5,
