@@ -15,6 +15,7 @@
 #include <ewol/commandLine.h>
 #include <etk/os/FSNode.h>
 #include <ewol/Dimension.h>
+#include <date/date.h>
 #undef __class__
 #define __class__	"ewol"
 
@@ -126,7 +127,13 @@ void ewol::SetTitle(etk::UString title)
 
 etk::UString ewol::GetVersion(void)
 {
-	return EWOL_VERSION_TAG_NAME;
+	#define FIRST_YEAR (2011)
+	etk::UString tmpOutput = (date::GetYear()-FIRST_YEAR);
+	tmpOutput += ".";
+	tmpOutput += date::GetMonth();
+	tmpOutput += ".";
+	tmpOutput += date::GetDay();
+	return tmpOutput;
 }
 
 int64_t ewol::GetTime(void)

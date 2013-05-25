@@ -2,7 +2,6 @@
 import lutinModule
 import lutinTools
 import os
-import datetime
 
 def Create(target):
 	# set the ewol folder for Android basic sources ...
@@ -138,7 +137,7 @@ def Create(target):
 	#myModule.SetConfig(['Config.in','ConfigLinux.in'])
 	
 	# name of the dependency
-	myModule.AddModuleDepend(['etk', 'freetype', 'tinyxml', 'png', 'parsersvg'])
+	myModule.AddModuleDepend(['etk', 'freetype', 'tinyxml', 'png', 'parsersvg', 'date'])
 	
 	#ifeq ("$(CONFIG_BUILD_BULLET)","y")
 	#myModule.AddModuleDepend('bullet')
@@ -151,11 +150,9 @@ def Create(target):
 	#endif
 	
 	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-	now = datetime.datetime.now()
+	
 	myModule.CompileFlags_CC([
 		'-Wno-write-strings',
-		'-DEWOL_VERSION_TAG_NAME="\\"TAG-build\\""',
-		"-DBUILD_TIME=\"\\\""+str(now.day)+"/"+str(now.month)+"/"+str(now.year)+"\\\"\"",
 		'-Wall'])
 	
 	if target.name=="Linux":

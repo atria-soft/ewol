@@ -29,6 +29,7 @@
 
 #include <ewol/widget/WidgetManager.h>
 
+#include <date/date.h>
 
 static bool                             requestEndProcessing = false;
 static bool                             isGlobalSystemInit = false;
@@ -268,8 +269,9 @@ void eSystem::Init(void)
 	if (false == isGlobalSystemInit) {
 		l_msgSystem.Clean();
 		requestEndProcessing = false;
-		EWOL_INFO("v" EWOL_VERSION_TAG_NAME);
-		EWOL_INFO("Build Date: " BUILD_TIME);
+		
+		EWOL_INFO("v:" << ewol::GetVersion());
+		EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
 		etk::InitDefaultFolder("ewolApplNoName");
 		ewol::openGL::Init();
 		ewol::EObjectManager::Init();
