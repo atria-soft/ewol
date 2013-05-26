@@ -38,7 +38,7 @@ namespace widget {
 			int32_t m_slidingProgress; // ratio progression of a sliding
 		public:
 			virtual void SubWidgetRemoveAll(void);
-			virtual void SubWidgetAdd(ewol::Widget* newWidget);
+			virtual int32_t SubWidgetAdd(ewol::Widget* newWidget);
 			virtual void SubWidgetRemove(ewol::Widget* newWidget);
 			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
 			void SubWidgetSelectSet(int32_t id);

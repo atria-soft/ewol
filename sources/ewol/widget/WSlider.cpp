@@ -125,14 +125,15 @@ void widget::WSlider::SubWidgetRemoveAll(void)
 }
 
 
-void widget::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
+int32_t widget::WSlider::SubWidgetAdd(ewol::Widget* newWidget)
 {
 	if (NULL == newWidget) {
-		return;
+		return -1;
 	}
 	m_subWidget.PushBack(newWidget);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
+	return m_subWidget.Size()-1;
 }
 
 
