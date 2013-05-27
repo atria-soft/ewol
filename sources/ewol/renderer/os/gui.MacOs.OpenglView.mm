@@ -9,7 +9,7 @@
 
 #import <ewol/renderer/os/gui.MacOs.OpenglView.h>
 #include <OpenGL/gl.h>
-#include <ewol/renderer/os/eSystemMacOSInterface.h>
+#include <ewol/renderer/os/eSystem.h>
  
 static int32_t width=0, height=0;
  
@@ -21,9 +21,9 @@ static int32_t width=0, height=0;
 	    || height!= bounds.size.height) {
 		width= bounds.size.width;
 		height= bounds.size.height;
-		eSystem_Resize(width,height);
+		eSystem::Resize(width,height);
 	}
-    eSystem_Draw(true);
+    eSystem::Draw(true);
     glFlush();
 }
 
