@@ -55,9 +55,9 @@ namespace widget
 			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
 			 */
-			virtual void SubWidgetAdd(ewol::Widget* _newWidget);
-			inline  void SubWidgetAddBack(ewol::Widget* _newWidget) { SubWidgetAdd(_newWidget); };
-			inline  void SubWidgetAddEnd(ewol::Widget* _newWidget)  { SubWidgetAdd(_newWidget); };
+			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
+			inline  int32_t SubWidgetAddBack(ewol::Widget* _newWidget) { return SubWidgetAdd(_newWidget); };
+			inline  int32_t SubWidgetAddEnd(ewol::Widget* _newWidget)  { return SubWidgetAdd(_newWidget); };
 			/**
 			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer

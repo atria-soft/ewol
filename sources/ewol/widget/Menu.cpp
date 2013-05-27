@@ -36,17 +36,18 @@ void widget::Menu::SubWidgetRemoveAll(void)
 	widget::Sizer::SubWidgetRemoveAll();
 }
 
-void widget::Menu::SubWidgetAdd(ewol::Widget* newWidget)
+int32_t widget::Menu::SubWidgetAdd(ewol::Widget* _newWidget)
+{
+	EWOL_ERROR("Not availlable");
+	return -1;
+}
+
+void widget::Menu::SubWidgetRemove(ewol::Widget* _newWidget)
 {
 	EWOL_ERROR("Not availlable");
 }
 
-void widget::Menu::SubWidgetRemove(ewol::Widget* newWidget)
-{
-	EWOL_ERROR("Not availlable");
-}
-
-void widget::Menu::SubWidgetUnLink(ewol::Widget* newWidget)
+void widget::Menu::SubWidgetUnLink(ewol::Widget* _newWidget)
 {
 	EWOL_ERROR("Not availlable");
 }

@@ -38,9 +38,9 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "EwolMenu"; };
 		private:
 			virtual void SubWidgetRemoveAll(void);
-			virtual void SubWidgetAdd(ewol::Widget* newWidget);
-			virtual void SubWidgetRemove(ewol::Widget* newWidget);
-			virtual void SubWidgetUnLink(ewol::Widget* newWidget);
+			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
+			virtual void SubWidgetRemove(ewol::Widget* _newWidget);
+			virtual void SubWidgetUnLink(ewol::Widget* _newWidget);
 		private:
 			etk::Vector<widget::MenuElement*> m_listElement;
 			int32_t m_staticId; // unique ID for every element of the menu ...
