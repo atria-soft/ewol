@@ -38,8 +38,6 @@ namespace widget {
 			int32_t m_windowsDestination; //!< widget destinated viewed
 			float m_slidingProgress; //!< ratio progression of a sliding
 			int64_t m_lastPeriodicCall;
-			float m_transitionSpeed; //!< speed of the transition (default 1 ==> 1s)
-			sladingMode_te m_transitionSlide; //!< mode to slide the widgets
 		public:
 			/** 
 			 * @brief Select a new subwidget to display
@@ -56,6 +54,22 @@ namespace widget {
 			 * @param[in] _widgetName Name of the subwidget name
 			 */
 			void SubWidgetSelectSet(const etk::UString& _widgetName);
+		private:
+			float m_transitionSpeed; //!< speed of the transition (default 1 ==> 1s)
+		public:
+			/** 
+			 * @brief Set transition speed element.
+			 * @param[in] _timeSecond number of second needed to do the transition.
+			 */
+			void SetTransitionSpeed(float _timeSecond) { m_transitionSpeed = _timeSecond; };
+			/** 
+			 * @brief Get transition speed element.
+			 * @return number of second needed to do the transition.
+			 */
+			float GetTransitionSpeed(void) { return m_transitionSpeed; };
+		private:
+			sladingMode_te m_transitionSlide; //!< mode to slide the widgets
+		public:
 			/** 
 			 * @brief Set a new mode of sliding element
 			 * @param[in] _mode new display mode
@@ -66,7 +80,6 @@ namespace widget {
 			 * @return The current sliding mode
 			 */
 			sladingMode_te GetTransitionMode(void) { return m_transitionSlide; };
-			
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::WSlider"; };
 			virtual void CalculateSize(const vec2& _availlable);

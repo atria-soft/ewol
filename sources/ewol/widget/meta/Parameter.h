@@ -43,7 +43,6 @@ namespace widget {
 		private:
 			int32_t                 m_currentIdList;
 			widget::Label*          m_widgetTitle;
-			widget::Button*         m_widgetCancel;
 			widget::ParameterList*  m_paramList;
 			widget::WSlider*        m_wSlider;
 	};

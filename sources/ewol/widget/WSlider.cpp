@@ -189,7 +189,7 @@ void widget::WSlider::PeriodicCall(int64_t _localTime)
 	} else {
 		if (m_lastPeriodicCall != -1) {
 			float delta = (double)(_localTime - m_lastPeriodicCall)/1000000.0;
-			m_slidingProgress += m_transitionSpeed*delta;
+			m_slidingProgress += delta/m_transitionSpeed;
 			m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
 		}
 		m_lastPeriodicCall = _localTime;

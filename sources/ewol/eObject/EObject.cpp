@@ -104,7 +104,8 @@ void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const _messageId, 
 const char* const ewol::EObject::configName = "name";
 
 
-ewol::EObject::EObject(void)
+ewol::EObject::EObject(void) :
+	m_static(false)
 {
 	static int32_t ss_globalUniqueId = 0;
 	// note this is nearly atomic ... (but it is enough)

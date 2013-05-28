@@ -181,6 +181,17 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 						// set it in the pop-up-system : 
 						m_widgetContextMenu->SetSubWidget(mySizer);
 						
+						bool menuHaveImage = false;
+						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
+							if (m_listElement[iii]!=NULL) {
+								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
+									if (m_listElement[jjj]->m_image.Size()!=0) {
+										menuHaveImage = true;
+										break;
+									}
+								}
+							}
+						}
 						for(int32_t jjj=m_listElement.Size()-1; jjj>=0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
@@ -188,17 +199,33 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 									if (NULL == myButton) {
 										EWOL_ERROR("Allocation Error");
 									} else {
-										/*if (m_listElement[jjj]->m_image.Size()!=0) {
+										if (m_listElement[jjj]->m_image.Size()!=0) {
 											myButton->SetSubWidget(
 											    new widget::Composer(widget::Composer::String,
-											        etk::UString("<composer>\n") + 
-											        "	<sizer mode=\"hori\">\n"
+											        etk::UString("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
+											        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 											        "		<image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n"
-											        "		<label exand=\"true,false\">" + m_listElement[jjj]->m_label + "</label>\n"
+											        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + "]]></label>\n"
 											        "	</sizer>\n"
-											        "</composer\n"));
-										} else */ {
-											myButton->SetSubWidget( new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>") );
+											        "</composer>\n"));
+										} else {
+											if (true == menuHaveImage) {
+												myButton->SetSubWidget(
+												    new widget::Composer(widget::Composer::String,
+												        etk::UString("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
+												        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
+												        "		<spacer min-size=\"8,0mm\"/>\n"
+												        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + "]]></label>\n"
+												        "	</sizer>\n"
+												        "</composer>\n"));
+											} else {
+												widget::Label* tmpLabel = new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>");
+												if (NULL != tmpLabel) {
+													tmpLabel->SetExpand(bvec2(true,false));
+													tmpLabel->SetFill(bvec2(true,true));
+													myButton->SetSubWidget(tmpLabel);
+												}
+											}
 										}
 										// set the image if one is present ...
 										myButton->RegisterOnEvent(this, widget::Button::eventPressed, widget::Button::eventPressed);

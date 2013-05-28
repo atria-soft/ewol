@@ -13,6 +13,7 @@
 #include <ewol/widget/Image.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Composer.h>
+#include <ewol/UserConfig.h>
 #include <etk/Vector.h>
 
 
@@ -24,13 +25,13 @@
 
 extern const char * const ewolEventParameterValidate            = "ewol-event-parameter-validate";
 extern const char * const ewolEventParameterClose               = "ewol-event-parameter-close";
+extern const char * const ewolEventParameterSave                = "ewol-event-parameter-save";
 
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
 widget::Parameter::Parameter(void) : 
 	m_currentIdList(0),
 	m_widgetTitle(NULL),
-	m_widgetCancel(NULL),
 	m_paramList(NULL)
 {
 	AddEventId(ewolEventParameterClose);
@@ -68,11 +69,36 @@ widget::Parameter::Parameter(void) :
 				mySizerHori->SubWidgetAdd(mySpacer);
 			}
 			
-			m_widgetCancel = new widget::Button();
-			if (NULL == m_widgetCancel) {
+			widget::Button* tmpButton = new widget::Button();
+			if (NULL == tmpButton) {
 				EWOL_ERROR("Can not allocate widget ==> display might be in error");
 			} else {
-				m_widgetCancel->SetSubWidget(
+				tmpButton->SetSubWidget(
+				    new widget::Composer(widget::Composer::String,
+				        "<composer>\n"
+				        "	<sizer mode=\"hori\">\n"
+				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
+				        "		<label>Save</label>\n"
+				        "	</sizer>\n"
+				        "</composer\n"));
+				tmpButton->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterSave);
+				mySizerHori->SubWidgetAdd(tmpButton);
+			}
+			
+			mySpacer = new widget::Spacer();
+			if (NULL == mySpacer) {
+				EWOL_ERROR("Can not allocate widget ==> display might be in error");
+			} else {
+				mySpacer->SetExpand(bvec2(false,false));
+				mySpacer->SetMinSize(ewol::Dimension(vec2(10,0)));
+				mySizerHori->SubWidgetAdd(mySpacer);
+			}
+			
+			tmpButton = new widget::Button();
+			if (NULL == tmpButton) {
+				EWOL_ERROR("Can not allocate widget ==> display might be in error");
+			} else {
+				tmpButton->SetSubWidget(
 				    new widget::Composer(widget::Composer::String,
 				        "<composer>\n"
 				        "	<sizer mode=\"hori\">\n"
@@ -80,8 +106,8 @@ widget::Parameter::Parameter(void) :
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer\n"));
-				m_widgetCancel->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterClose);
-				mySizerHori->SubWidgetAdd(m_widgetCancel);
+				tmpButton->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterClose);
+				mySizerHori->SubWidgetAdd(tmpButton);
 			}
 		}
 		
@@ -131,6 +157,8 @@ widget::Parameter::Parameter(void) :
 				if (NULL == m_wSlider) {
 					EWOL_ERROR("Can not allocate widget ==> display might be in error");
 				} else {
+					m_wSlider->SetTransitionSpeed(0.5);
+					m_wSlider->SetTransitionMode(widget::WSlider::sladingTransitionVert);
 					m_wSlider->SetExpand(bvec2(true,true));
 					mySizerVert2->SubWidgetAdd(m_wSlider);
 				}
@@ -184,6 +212,8 @@ void widget::Parameter::OnReceiveMessage(const ewol::EMessage& _msg)
 		GenerateEventId(ewolEventParameterClose);
 		// Close this widget ...
 		AutoDestroy();
+	} else if (_msg.GetMessage() == ewolEventParameterSave) {
+		ewol::userConfig::Save();
 	} else if (_msg.GetMessage() == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
 			int32_t value = 0;
@@ -207,9 +237,6 @@ void widget::Parameter::OnObjectRemove(ewol::EObject * removeObject)
 	}
 	if(removeObject == m_paramList) {
 		m_paramList = NULL;
-	}
-	if(removeObject == m_widgetCancel) {
-		m_widgetCancel = NULL;
 	}
 	if(removeObject == m_wSlider) {
 		m_wSlider = NULL;

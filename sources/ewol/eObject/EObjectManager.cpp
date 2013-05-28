@@ -35,13 +35,18 @@ void ewol::EObjectManager::UnInit(void)
 	EWOL_DEBUG("==> Un-Init EObject-Manager");
 	RemoveAllAutoRemove();
 	EWOL_INFO(" Remove missing user widget");
-	while(0<m_eObjectList.Size()) {
-		if (m_eObjectList[0]!=NULL) {
-			EWOL_WARNING("Un-INIT : Remove EObject type=\"" << m_eObjectList[0]->GetObjectType() << "\"");
-			delete(m_eObjectList[0]);
-			m_eObjectList[0] = NULL;
+	int32_t iii=0;
+	while(iii<m_eObjectList.Size()) {
+		if (m_eObjectList[iii]!=NULL) {
+			if (m_eObjectList[iii]->GetStatic() == true) {
+				iii++;
+			} else {
+				EWOL_WARNING("Un-INIT : Remove EObject type=\"" << m_eObjectList[iii]->GetObjectType() << "\"");
+				delete(m_eObjectList[iii]);
+				m_eObjectList[iii] = NULL;
+			}
 		} else {
-			m_eObjectList.Erase(0);
+			m_eObjectList.Erase(iii);
 		}
 	}
 	

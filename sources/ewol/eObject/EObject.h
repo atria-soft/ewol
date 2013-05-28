@@ -48,6 +48,8 @@ namespace ewol {
 		public:
 			// Config list of properties
 			static const char* const configName;
+		protected:
+			bool m_static; //!< set this variable at true if this element must not be auto destroy (exemple : use static object)
 		private:
 			int32_t m_uniqueId; //!< Object UniqueID ==> TODO : Check if it use is needed
 			etk::Vector<EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
@@ -62,6 +64,12 @@ namespace ewol {
 			 * @brief Destructor
 			 */
 			virtual ~EObject(void);
+			
+			/**
+			 * @brief Get the static status of the EObject ==> mark at true if the user set the object mark as static allocated element ==> not auto remove element
+			 * @return true if it might not be removed ==> usefull for conficuration class
+			 */
+			bool GetStatic(void){ return m_static; };
 			
 			/**
 			 * @brief Get the UniqueId of the EObject

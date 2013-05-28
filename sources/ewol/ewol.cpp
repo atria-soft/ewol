@@ -16,6 +16,7 @@
 #include <etk/os/FSNode.h>
 #include <ewol/Dimension.h>
 #include <date/date.h>
+#include <ewol/UserConfig.h>
 #undef __class__
 #define __class__	"ewol"
 
@@ -31,6 +32,7 @@ int32_t ewol::Run(int32_t argc, const char* argv[])
 	}
 	// init display convertions:
 	ewol::dimension::Init();
+	ewol::userConfig::Init();
 	
 	EWOL_DEBUG("Store commangLine in the specific system");
 	ewol::commandLine::Clean();

@@ -18,7 +18,8 @@ def Create(target):
 		'ewol/commandLine.cpp',
 		'ewol/key.cpp',
 		'ewol/cursor.cpp',
-		'ewol/Dimension.cpp'])
+		'ewol/Dimension.cpp',
+		'ewol/UserConfig.cpp'])
 	
 	# Basic Eobject of EWOL
 	myModule.AddSrcFile([
