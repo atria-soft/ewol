@@ -25,9 +25,11 @@ int mm_main(int argc, const char *argv[])
 #include "ewol/renderer/os/gui.MacOs.Interface.h"
 
 #import <ewol/renderer/os/gui.MacOs.OpenglView.h>
+#import <ewol/renderer/os/gui.MacOs.AppDelegate.h>
 
 int mm_main(int argc, const char *argv[])
 {
+
     [NSAutoreleasePool new];
     
     [NSApplication sharedApplication];
@@ -63,12 +65,14 @@ int mm_main(int argc, const char *argv[])
     // ---------------------------------------------------------------
     // create a windows of size 800/600
     id window = [ [ [NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
-                    styleMask:NSTitledWindowMask backing:NSBackingStoreBuffered defer:NO]
+                    styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
                    autorelease];
 	// set the windows at a specific position :
     [window cascadeTopLeftFromPoint:NSMakePoint(50,50)];
     // set the title
     [window setTitle:appName];
+    
+    [window setAcceptsMouseMovedEvents:YES];
     // ???
     [window makeKeyAndOrderFront:nil];
     [NSApp activateIgnoringOtherApps:YES];
