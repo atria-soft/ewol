@@ -31,7 +31,8 @@ static const float millimeterToKilometer = 1.0f/1000000.0f;
 
 void ewol::dimension::Init(void)
 {
-	ratio = vec2(96,96)*inchToMillimeter;
+	ewol::Dimension conversion(vec2(72,72), ewol::Dimension::Inch);
+	ratio = conversion.GetMillimeter();
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	windowsSize.Set(vec2(200,200), ewol::Dimension::Pixel);
 }

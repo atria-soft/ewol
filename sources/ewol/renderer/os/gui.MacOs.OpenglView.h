@@ -10,9 +10,10 @@
 
 #import <Cocoa/Cocoa.h>
  
-@interface OpenGLView : NSOpenGLView
+@interface OpenGLView : NSOpenGLView<NSWindowDelegate>
 {
 }
+- (void)prepareOpenGL;
 - (void)drawRect:(NSRect) bounds;
 - (void)mouseDown:(NSEvent *) event;
 - (void)mouseDragged:(NSEvent *) event;
@@ -27,6 +28,7 @@
 - (void)otherMouseDragged:(NSEvent *)event;
 - (void)otherMouseUp:(NSEvent *)event;
 //- (void)sendEvent:(NSEvent *)event
+- (void)keyDown:(NSEvent *)theEvent;
 @end
 
 

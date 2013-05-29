@@ -69,6 +69,9 @@ int mm_main(int argc, const char *argv[])
                    autorelease];
 	// set the windows at a specific position :
     [window cascadeTopLeftFromPoint:NSMakePoint(50,50)];
+    // set the windows resizable
+    [window setStyleMask:[window styleMask] | NSResizableWindowMask];
+    // oposite : [window setStyleMask:[window styleMask] & ~NSResizableWindowMask];
     // set the title
     [window setTitle:appName];
     
@@ -88,7 +91,7 @@ int mm_main(int argc, const char *argv[])
     //[window addChildWindow:view];
     //[window makeKeyAndVisible];
     
-    
+    [window setDelegate:view];
     // start application :
     [NSApp run];
     // return no error
