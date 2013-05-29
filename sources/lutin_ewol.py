@@ -190,16 +190,15 @@ def Create(target):
 		myModule.AddExportflag_LD("-llog")
 		myModule.AddExportflag_LD("-landroid")
 		
-		tmp_src=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.base.cpp"
-		tmp_dst=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.tmp.cpp"
+		#tmp_src=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.base.cpp"
+		#tmp_dst=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.tmp.cpp"
 		
 		# TODO : A really work to do here ...
-		lutinTools.CopyFile(tmp_src,tmp_dst)
-		os.system("sed -i \"s|__PROJECT_ORG_TYPE__|org|\" " + tmp_dst)
-		os.system("sed -i \"s|__PROJECT_VENDOR__|edouarddupin|\" " + tmp_dst)
-		os.system("sed -i \"s|__PROJECT_NAME__|edn|\" "+ tmp_dst)
-		os.system("sed -i \"s|__PROJECT_PACKAGE__|edn|\" " + tmp_dst)
-		
+		#lutinTools.CopyFile(tmp_src,tmp_dst)
+		#os.system("sed -i \"s|__PROJECT_ORG_TYPE__|org|\" " + tmp_dst)
+		#os.system("sed -i \"s|__PROJECT_VENDOR__|edouarddupin|\" " + tmp_dst)
+		#os.system("sed -i \"s|__PROJECT_NAME__|edn|\" "+ tmp_dst)
+		#os.system("sed -i \"s|__PROJECT_PACKAGE__|edn|\" " + tmp_dst)
 		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	
 	elif target.name=="Windows":

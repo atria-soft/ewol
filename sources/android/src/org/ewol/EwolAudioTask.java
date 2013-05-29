@@ -43,7 +43,7 @@ public class EwolAudioTask implements Runnable, EwolConstants
     private AudioTrack      m_musicTrack       = null;
 
     // constructor : 
-    public AudioTask()
+    public EwolAudioTask()
     {
 	// nothing to do ...
     }
