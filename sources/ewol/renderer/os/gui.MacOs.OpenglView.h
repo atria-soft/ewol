@@ -13,9 +13,9 @@
 @interface OpenGLView : NSOpenGLView
 {
 }
-- (void) drawRect: (NSRect) bounds;
-- (void)mouseDown: (NSEvent *) event;
-- (void)mouseDragged: (NSEvent *) event;
+- (void)drawRect:(NSRect) bounds;
+- (void)mouseDown:(NSEvent *) event;
+- (void)mouseDragged:(NSEvent *) event;
 - (void)mouseUp:(NSEvent *)event;
 - (void)mouseMoved:(NSEvent *)event;
 - (void)mouseEntered:(NSEvent *)event;
@@ -26,6 +26,7 @@
 - (void)otherMouseDown:(NSEvent *)event;
 - (void)otherMouseDragged:(NSEvent *)event;
 - (void)otherMouseUp:(NSEvent *)event;
+//- (void)sendEvent:(NSEvent *)event
 @end
 
 
