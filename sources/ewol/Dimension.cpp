@@ -12,6 +12,7 @@
 #undef __class__
 #define __class__	"Dimension"
 
+// TODO : Set this in a super class acced in a statin fuction...
 // ratio in milimeter :
 static vec2 ratio(9999999,888888);
 static vec2 invRatio(1,1);

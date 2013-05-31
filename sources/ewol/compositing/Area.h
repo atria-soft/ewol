@@ -40,9 +40,9 @@ namespace ewol
 		public:
 			/**
 			 * @brief generic constructor
-			 * @param[in] imageName Name of the file that might be loaded
+			 * @param[in] _size Basic size of the area.
 			 */
-			Area(ivec2 size);
+			Area(const ivec2& _size);
 			/**
 			 * @brief generic destructor
 			 */
@@ -63,14 +63,15 @@ namespace ewol
 			vec3 GetPos(void);
 			/**
 			 * @brief Set position for the next text writen
-			 * @param[in] pos Position of the text (in 3D)
+			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(vec3 pos);
+			void SetPos(const vec3& _pos);
+			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y())); };
 			/**
 			 * @brief Set relative position for the next text writen
-			 * @param[in] pos ofset apply of the text (in 3D)
+			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(vec3 pos);
+			void SetRelPos(const vec3& _pos);
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
 			 * @param[in] size Size of the output image

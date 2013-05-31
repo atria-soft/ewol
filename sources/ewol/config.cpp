@@ -31,18 +31,18 @@ void ewol::config::UnInit(void)
 	ewol::FreeTypeUnInit();
 }
 
-void ewol::config::FontFolder(etk::UString folder)
+void ewol::config::FontFolder(const etk::UString& _folder)
 {
-	l_fontConfigFolder = folder;
+	l_fontConfigFolder = _folder;
 }
 
-void ewol::config::FontSetDefault(etk::UString fontName, int32_t size)
+void ewol::config::FontSetDefault(const etk::UString& _fontName, int32_t _size)
 {
-	l_fontConfigName = fontName;
-	l_fontConfigSize = size;
+	l_fontConfigName = _fontName;
+	l_fontConfigSize = _size;
 }
 
-etk::UString& ewol::config::FontGetDefaultName(void)
+const etk::UString& ewol::config::FontGetDefaultName(void)
 {
 	return l_fontConfigName;
 }

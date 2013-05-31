@@ -8,4 +8,4 @@
 
 #include <ewol/debug.h>
 
-const char * ewolLibName = "ewol     ";
+const char * g_ewolLibName = "ewol     ";

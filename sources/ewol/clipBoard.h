@@ -35,37 +35,37 @@ namespace ewol {
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::clipBoard::clipboardListe_te obj);
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::clipBoard::clipboardListe_te _obj);
 		
 		/**
 		 * @brief Set the string data on a specific clipboard. The Gui system is notify that the clipboard "SELECTION" and "COPY" are change
-		 * @param[in] clipboardID Select the specific ID of the clipboard
-		 * @param[in] data The string that might be send to the clipboard
+		 * @param[in] _clipboardID Select the specific ID of the clipboard
+		 * @param[in] _data The string that might be send to the clipboard
 		 */
-		void Set(ewol::clipBoard::clipboardListe_te clipboardID, etk::UString &data);
+		void Set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data);
 		/**
 		 * @brief Call system to request the current clipboard.
 		 * @note Due to some system that manage the clipboard request asynchronous (like X11) and ewol managing the system with only one thread,
 		 *       we need the call the system to send us the buffer, this is really ambigous, but the widget (who has focus) receive the 
 		 *       notification of the arrival of this buffer id
-		 * @param[in] clipboardID the needed clipboard ID
+		 * @param[in] _clipboardID the needed clipboard ID
 		 */
-		void Request(ewol::clipBoard::clipboardListe_te clipboardID);
+		void Request(ewol::clipBoard::clipboardListe_te _clipboardID);
 		/**
 		 * @brief Set the ewol internal buffer (no notification at the GUI). This fuction might be use by the 
 		 *        Gui abstraction to set the buffer we receive. The end user must not use it.
-		 * @param[in] clipboardID selected clipboard ID
-		 * @param[in] data new buffer data
+		 * @param[in] _clipboardID selected clipboard ID
+		 * @param[in] _data new buffer data
 		 */
-		void SetSystem(ewol::clipBoard::clipboardListe_te clipboardID, etk::UString &data);
+		void SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID,const etk::UString& _data);
 		/**
 		 * @brief Get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
 		 *        the widget : @ref OnEventClipboard ==> we can nothe this function is the only one which permit it.
 		 * @note if we call this fuction withoutcallin @ref ewol::clipBoard::Request, we only get the previous clipboard
-		 * @param[in] clipboardID selected clipboard ID
+		 * @param[in] _clipboardID selected clipboard ID
 		 * @return the requested buffer
 		 */
-		etk::UString Get(ewol::clipBoard::clipboardListe_te clipboardID);
+		const etk::UString& Get(ewol::clipBoard::clipboardListe_te _clipboardID);
 		
 		// internal section
 		

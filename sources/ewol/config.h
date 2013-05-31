@@ -18,20 +18,20 @@ namespace ewol
 	{
 		/**
 		 * @brief Specify the default font folder for the Ewol search system (only needed when embended font)
-		 * @param[in] folder basic folder of the font (ex: DATA:fonts)
+		 * @param[in] _folder basic folder of the font (ex: DATA:fonts)
 		 */
-		void FontFolder(etk::UString folder);
+		void FontFolder(const etk::UString& _folder);
 		/**
 		 * @brief Set the defaut font for all the widgets and basics display.
-		 * @param[in] fontName The font name requested (not case sensitive) ex "Arial".
-		 * @param[in] size The default size of the font default=10.
+		 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial".
+		 * @param[in] _size The default size of the font default=10.
 		 */
-		void FontSetDefault(etk::UString fontName, int32_t size);
+		void FontSetDefault(const etk::UString& _fontName, int32_t _size);
 		/**
 		 * @brief Get the current default font name
 		 * @raturn a reference on the font name string
 		 */
-		etk::UString& FontGetDefaultName(void);
+		const etk::UString& FontGetDefaultName(void);
 		/**
 		 * @brief Get the default font size.
 		 * @return the font size.

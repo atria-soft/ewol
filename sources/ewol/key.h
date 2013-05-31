@@ -29,7 +29,7 @@ namespace ewol
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::type_te obj);
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj);
 		/**
 		 * @brief Keybord event or joyestick event
 		 */
@@ -52,7 +52,7 @@ namespace ewol
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::status_te obj);
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj);
 		/**
 		 * @brief Keybord event or joyestick event
 		 */
@@ -99,7 +99,7 @@ namespace ewol
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout &os, const ewol::keyEvent::keyboard_te obj);
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj);
 		
 	};
 	
@@ -167,7 +167,7 @@ namespace ewol
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
-	etk::CCout& operator <<(etk::CCout &os, const ewol::SpecialKey obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::SpecialKey _obj);
 	
 	SpecialKey& GetCurrentSpecialKeyStatus(void);
 };

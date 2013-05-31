@@ -25,12 +25,12 @@ static const char* statusDescriptionString[ewol::keyEvent::statusCount+1] = {
 	"statusCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::status_te obj)
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj)
 {
-	if (obj>=0 && obj <ewol::keyEvent::statusCount) {
-		os << statusDescriptionString[obj];
+	if (_obj>=0 && _obj <ewol::keyEvent::statusCount) {
+		_os << statusDescriptionString[_obj];
 	} else {
-		os << "[ERROR]";
+		_os << "[ERROR]";
 	}
 	return os;
 }
@@ -77,14 +77,14 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 	"keyboardCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::keyboard_te obj)
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj)
 {
-	if (obj>=0 && obj <ewol::keyEvent::keyboardCount) {
-		os << keyboardDescriptionString[obj];
+	if (_obj>=0 && _obj <ewol::keyEvent::keyboardCount) {
+		_os << keyboardDescriptionString[_obj];
 	} else {
-		os << "[ERROR]";
+		_os << "[ERROR]";
 	}
-	return os;
+	return _os;
 }
 
 
@@ -96,12 +96,12 @@ static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 	"typeCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout &os, const ewol::keyEvent::type_te obj)
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj)
 {
-	if (obj>=0 && obj < ewol::keyEvent::typeCount) {
-		os << typeDescriptionString[obj];
+	if (_obj>=0 && _obj < ewol::keyEvent::typeCount) {
+		_os << typeDescriptionString[_obj];
 	} else {
-		os << "[ERROR]";
+		_os << "[ERROR]";
 	}
 	return os;
 }
@@ -161,15 +161,15 @@ bool ewol::SpecialKey::IsSetInsert(void)
 
 
 
-etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::SpecialKey obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::SpecialKey _obj)
 {
-	os << " capLock=" << obj.capLock;
-	os << " shift=" << obj.shift;
-	os << " ctrl=" << obj.ctrl;
-	os << " meta=" << obj.meta;
-	os << " alt=" << obj.alt;
-	os << " altGr=" << obj.altGr;
-	os << " verNum=" << obj.numLock;
-	os << " insert=" << obj.insert;
-	return os;
+	_os << " capLock=" << _obj.capLock;
+	_os << " shift=" << _obj.shift;
+	_os << " ctrl=" << _obj.ctrl;
+	_os << " meta=" << _obj.meta;
+	_os << " alt=" << _obj.alt;
+	_os << " altGr=" << _obj.altGr;
+	_os << " verNum=" << _obj.numLock;
+	_os << " insert=" << _obj.insert;
+	return _os;
 }

@@ -41,7 +41,7 @@ namespace ewol
 	/**
 	 * @brief Debug operator To display the curent element in a Human readable information
 	 */
-	etk::CCout& operator <<(etk::CCout &os, const ewol::cursorDisplay_te obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::cursorDisplay_te _obj);
 };
 
 #endif

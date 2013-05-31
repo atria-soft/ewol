@@ -53,10 +53,10 @@ void ewol::EObjectManager::UnInit(void)
 	IsInit = false;
 }
 
-void ewol::EObjectManager::Add(ewol::EObject* object)
+void ewol::EObjectManager::Add(ewol::EObject* _object)
 {
-	if (NULL != object) {
-		m_eObjectList.PushBack(object);
+	if (NULL != _object) {
+		m_eObjectList.PushBack(_object);
 	} else {
 		EWOL_ERROR("try to add an inexistant EObject in manager");
 	}
@@ -67,7 +67,7 @@ int32_t ewol::EObjectManager::GetNumberObject(void)
 	return m_eObjectList.Size() + m_eObjectAutoRemoveList.Size();
 }
 
-void informOneObjectIsRemoved(ewol::EObject* object)
+void informOneObjectIsRemoved(ewol::EObject* _object)
 {
 	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
@@ -76,33 +76,33 @@ void informOneObjectIsRemoved(ewol::EObject* object)
 	}
 	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
-		    && m_eObjectAutoRemoveList[iii] != object) {
-			m_eObjectAutoRemoveList[iii]->OnObjectRemove(object);
+		    && m_eObjectAutoRemoveList[iii] != _object) {
+			m_eObjectAutoRemoveList[iii]->OnObjectRemove(_object);
 		}
 	}
 	// call input event manager to remove linked widget ...
-	eSystem::OnObjectRemove(object);
+	eSystem::OnObjectRemove(_object);
 }
 
-void ewol::EObjectManager::Rm(ewol::EObject* object)
+void ewol::EObjectManager::Rm(ewol::EObject* _object)
 {
-	if (NULL == object) {
+	if (NULL == _object) {
 		EWOL_ERROR("Try to remove (NULL) EObject");
 		return;
 	}
 	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
-		if (m_eObjectList[iii] == object) {
+		if (m_eObjectList[iii] == _object) {
 			// Remove Element
 			m_eObjectList[iii] = NULL;
 			m_eObjectList.Erase(iii);
-			informOneObjectIsRemoved(object);
+			informOneObjectIsRemoved(_object);
 			return;
 		}
 	}
 	// check if the object has not been auto removed ... or remove in defered time ...
 	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
-		    && m_eObjectAutoRemoveList[iii] == object) {
+		    && m_eObjectAutoRemoveList[iii] == _object) {
 			return;
 		}
 	}
@@ -110,20 +110,20 @@ void ewol::EObjectManager::Rm(ewol::EObject* object)
 	EWOL_ERROR("Try to remove EObject that is not referenced ...");
 }
 
-void ewol::EObjectManager::AutoRemove(ewol::EObject* object)
+void ewol::EObjectManager::AutoRemove(ewol::EObject* _object)
 {
-	if (NULL == object) {
+	if (NULL == _object) {
 		EWOL_ERROR("Try to Auto-Remove (NULL) EObject");
 		return;
 	}
 	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
-		if (m_eObjectList[iii] == object) {
+		if (m_eObjectList[iii] == _object) {
 			// Remove Element
 			m_eObjectList[iii] = NULL;
 			m_eObjectList.Erase(iii);
-			EWOL_DEBUG("Auto-Remove EObject : [" << object->GetId() << "] type=\"" << object->GetObjectType() << "\"");
-			informOneObjectIsRemoved(object);
-			m_eObjectAutoRemoveList.PushBack(object);
+			EWOL_DEBUG("Auto-Remove EObject : [" << _object->GetId() << "] type=\"" << _object->GetObjectType() << "\"");
+			informOneObjectIsRemoved(_object);
+			m_eObjectAutoRemoveList.PushBack(_object);
 			ewol::ForceRedrawAll();
 			return;
 		}

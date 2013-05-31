@@ -26,14 +26,14 @@ namespace ewol
 		int32_t Size(void);
 		/**
 		 * @brief Get an element with a specific ID
-		 * @return The cmdLine Id element
+		 * @return _id The cmdLine Id element
 		 */
-		etk::UString Get(int32_t id);
+		etk::UString Get(int32_t _id);
 		/**
 		 * @brief Add one element at the Command Line
-		 * @param[in] newElement String in the input that might be added.
+		 * @param[in] _newElement String in the input that might be added.
 		 */
-		void Add(etk::UString& newElement);
+		void Add(const etk::UString& _newElement);
 	};
 };
 

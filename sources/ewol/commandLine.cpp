@@ -29,17 +29,17 @@ int32_t ewol::commandLine::Size(void)
 	return listArgs.Size();
 }
 
-etk::UString ewol::commandLine::Get(int32_t id)
+etk::UString ewol::commandLine::Get(int32_t _id)
 {
-	if (id<0 && id>=listArgs.Size()) {
+	if (_id<0 && _id>=listArgs.Size()) {
 		return "";
 	}
-	return listArgs[id];
+	return listArgs[_id];
 }
 
-void ewol::commandLine::Add(etk::UString& newElement)
+void ewol::commandLine::Add(const etk::UString& _newElement)
 {
-	listArgs.PushBack(newElement);
+	listArgs.PushBack(_newElement);
 }
 
 

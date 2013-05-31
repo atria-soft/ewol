@@ -33,14 +33,14 @@ static const char* cursorDescriptionString[ewol::cursorCount+1] = {
 	"cursorCount"
 };
 
-etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::cursorDisplay_te obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::cursorDisplay_te _obj)
 {
-	if (obj>=0 && obj <ewol::cursorCount) {
-		os << cursorDescriptionString[obj];
+	if (_obj>=0 && _obj <ewol::cursorCount) {
+		_os << cursorDescriptionString[_obj];
 	} else {
-		os << "[ERROR]";
+		_os << "[ERROR]";
 	}
-	return os;
+	return _os;
 }
 
 
