@@ -558,7 +558,7 @@ bool widget::Button::OnGetConfig(const char* _config, etk::UString& _result) con
 		return true;
 	}
 	if (_config == configShaper) {
-		_result = m_shaper.GetSource();;
+		_result = m_shaper.GetSource();
 		return true;
 	}
 	return false;

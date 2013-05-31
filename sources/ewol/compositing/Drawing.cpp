@@ -257,23 +257,23 @@ void ewol::Drawing::GenerateTriangle(void)
 	m_coordColor.PushBack(m_tricolor[2]);
 }
 
-void ewol::Drawing::InternalSetColor(draw::Color& color)
+void ewol::Drawing::InternalSetColor(const draw::Color& _color)
 {
 	if (m_triElement < 1) {
-		m_tricolor[0] = color;
+		m_tricolor[0] = _color;
 	}
 	if (m_triElement < 2) {
-		m_tricolor[1] = color;
+		m_tricolor[1] = _color;
 	}
 	if (m_triElement < 3) {
-		m_tricolor[2] = color;
+		m_tricolor[2] = _color;
 	}
 }
 
 
-void ewol::Drawing::SetPoint(vec3 point)
+void ewol::Drawing::SetPoint(const vec3& _point)
 {
-	m_triangle[m_triElement] = point;
+	m_triangle[m_triElement] = _point;
 	m_triElement++;
 	if (m_triElement>=3) {
 		GenerateTriangle();
@@ -332,7 +332,6 @@ void ewol::Drawing::Draw(void)
 	m_GLprogram->UnUse();
 }
 
-
 void ewol::Drawing::Clear(void)
 {
 	// call upper class
@@ -356,85 +355,42 @@ void ewol::Drawing::Clear(void)
 	}
 }
 
-
-vec3 ewol::Drawing::GetPos(void)
-{
-	return m_position;
-}
-
-
-void ewol::Drawing::SetPos(vec3 pos)
-{
-	m_position = pos;
-}
-
-
-void ewol::Drawing::SetRelPos(vec3 pos)
-{
-	m_position += pos;
-}
-
-
-void ewol::Drawing::SetColor(draw::Color color)
-{
-	m_color = color;
-}
-
-
-void ewol::Drawing::SetColorBg(draw::Color color)
-{
-	m_colorBg = color;
-}
-
-
-void ewol::Drawing::SetClippingWidth(vec3 pos, vec3 width)
-{
-	SetClipping(pos, pos+width);
-}
-
-void ewol::Drawing::SetClipping(vec3 pos, vec3 posEnd)
+void ewol::Drawing::SetClipping(const vec3& _pos, const vec3& _posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
-	if (pos.x() <= posEnd.x()) {
-		m_clippingPosStart.setX(pos.x());
-		m_clippingPosStop.setX(posEnd.x());
+	if (_pos.x() <= _posEnd.x()) {
+		m_clippingPosStart.setX(_pos.x());
+		m_clippingPosStop.setX(_posEnd.x());
 	} else {
-		m_clippingPosStart.setX(posEnd.x());
-		m_clippingPosStop.setX(pos.x());
+		m_clippingPosStart.setX(_posEnd.x());
+		m_clippingPosStop.setX(_pos.x());
 	}
-	if (pos.y() <= posEnd.y()) {
-		m_clippingPosStart.setY(pos.y());
-		m_clippingPosStop.setY(posEnd.y());
+	if (_pos.y() <= _posEnd.y()) {
+		m_clippingPosStart.setY(_pos.y());
+		m_clippingPosStop.setY(_posEnd.y());
 	} else {
-		m_clippingPosStart.setY(posEnd.y());
-		m_clippingPosStop.setY(pos.y());
+		m_clippingPosStart.setY(_posEnd.y());
+		m_clippingPosStop.setY(_pos.y());
 	}
-	if (pos.z() <= posEnd.z()) {
-		m_clippingPosStart.setZ(pos.z());
-		m_clippingPosStop.setZ(posEnd.z());
+	if (_pos.z() <= _posEnd.z()) {
+		m_clippingPosStart.setZ(_pos.z());
+		m_clippingPosStop.setZ(_posEnd.z());
 	} else {
-		m_clippingPosStart.setZ(posEnd.z());
-		m_clippingPosStop.setZ(pos.z());
+		m_clippingPosStart.setZ(_posEnd.z());
+		m_clippingPosStop.setZ(_pos.z());
 	}
 	m_clippingEnable = true;
 }
 
 
-void ewol::Drawing::SetClippingMode(bool newMode)
+void ewol::Drawing::SetThickness(float _thickness)
 {
-	m_clippingEnable = newMode;
-}
-
-
-void ewol::Drawing::SetThickness(float thickness)
-{
-	m_thickness = thickness;
+	m_thickness = _thickness;
 	// thickness must be positive
 	if (m_thickness < 0) {
 		m_thickness *= -1;
 	}
 }
-
 
 void ewol::Drawing::AddVertex(void)
 {
@@ -442,22 +398,21 @@ void ewol::Drawing::AddVertex(void)
 	SetPoint(m_position);
 }
 
-
-void ewol::Drawing::LineTo(vec3 dest)
+void ewol::Drawing::LineTo(const vec3& _dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
 	//EWOL_DEBUG("DrawLine : " << m_position << " to " << dest);
-	if (m_position.x() == dest.x() && m_position.y() == dest.y() && m_position.z() == dest.z()) {
+	if (m_position.x() == _dest.x() && m_position.y() == _dest.y() && m_position.z() == _dest.z()) {
 		EWOL_WARNING("Try to draw an line width 0");
 		return;
 	}
 	//teta = tan-1(oposer/adjacent)
 	float teta = 0;
-	if (m_position.x() <= dest.x()) {
-		teta = atan((dest.y()-m_position.y())/(dest.x()-m_position.x()));
+	if (m_position.x() <= _dest.x()) {
+		teta = atan((_dest.y()-m_position.y())/(_dest.x()-m_position.x()));
 	} else {
-		teta = M_PI + atan((dest.y()-m_position.y())/(dest.x()-m_position.x()));
+		teta = M_PI + atan((_dest.y()-m_position.y())/(_dest.x()-m_position.x()));
 	}
 	if (teta < 0) {
 		teta += 2*M_PI;
@@ -470,22 +425,16 @@ void ewol::Drawing::LineTo(vec3 dest)
 
 	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
 	SetPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
-	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, m_position.z()) );
+	SetPoint(vec3(_dest.x()      + offsetx, _dest.y()      + offsety, m_position.z()) );
 	
-	SetPoint(vec3(dest.x() + offsetx, dest.y() + offsety, dest.z()) );
-	SetPoint(vec3(dest.x() - offsetx, dest.y() - offsety, dest.z()) );
-	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, dest.z()) );
+	SetPoint(vec3(_dest.x()      + offsetx, _dest.y()      + offsety, _dest.z()) );
+	SetPoint(vec3(_dest.x()      - offsetx, _dest.y()      - offsety, _dest.z()) );
+	SetPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, _dest.z()) );
 	// update the system position :
-	m_position = dest;
+	m_position = _dest;
 }
 
-void ewol::Drawing::LineRel(vec3 vect)
-{
-	LineTo(m_position+vect);
-}
-
-
-void ewol::Drawing::Rectangle(vec3 dest)
+void ewol::Drawing::Rectangle(const vec3& _dest)
 {
 	ResetCount();
 	InternalSetColor(m_color);
@@ -497,7 +446,7 @@ void ewol::Drawing::Rectangle(vec3 dest)
 	 *   yD *------*
 	 */
 	float dxA = m_position.x();
-	float dxB = dest.x();
+	float dxB = _dest.x();
 	if (dxA > dxB) {
 		// inverse order : 
 		float tmp = dxA;
@@ -505,7 +454,7 @@ void ewol::Drawing::Rectangle(vec3 dest)
 		dxB = tmp;
 	}
 	float dyC = m_position.y();
-	float dyD = dest.y();
+	float dyD = _dest.y();
 	if (dyC > dyD) {
 		// inverse order : 
 		float tmp = dyC;
@@ -539,31 +488,22 @@ void ewol::Drawing::Rectangle(vec3 dest)
 	SetPoint(vec3(dxA, dyD, 0) );
 }
 
-
-void ewol::Drawing::RectangleWidth(vec3 size)
-{
-	Rectangle(m_position+size);
-}
-
-
-
-void ewol::Drawing::Cube(vec3 dest)
+void ewol::Drawing::Cube(const vec3& _dest)
 {
 	
 }
 
-
-void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
+void ewol::Drawing::Circle(float _radius, float _angleStart, float _angleStop)
 {
 	ResetCount();
 	
-	if (radius<0) {
-		radius *= -1;
+	if (_radius<0) {
+		_radius *= -1;
 	}
-	angleStop = angleStop-angleStart;
+	_angleStop = _angleStop-_angleStart;
 	
 	
-	int32_t nbOcurence = radius;
+	int32_t nbOcurence = _radius;
 	if (nbOcurence < 10)
 	{
 		nbOcurence = 10;
@@ -577,17 +517,17 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 			              m_position.y(),
 			              0) );
 			
-			float angleOne = angleStart + (angleStop* iii / nbOcurence) ;
-			float offsety = sin(angleOne) * radius;
-			float offsetx = cos(angleOne) * radius;
+			float angleOne = _angleStart + (_angleStop* iii / nbOcurence) ;
+			float offsety = sin(angleOne) * _radius;
+			float offsetx = cos(angleOne) * _radius;
 			
 			SetPoint(vec3(m_position.x() + offsetx,
 			              m_position.y() + offsety,
 			              0) );
 			
-			float angleTwo = angleStart + (angleStop* (iii+1) / nbOcurence) ;
-			offsety = sin(angleTwo) * radius;
-			offsetx = cos(angleTwo) * radius;
+			float angleTwo = _angleStart + (_angleStop* (iii+1) / nbOcurence) ;
+			offsety = sin(angleTwo) * _radius;
+			offsetx = cos(angleTwo) * _radius;
 			
 			SetPoint(vec3(m_position.x() + offsetx,
 			              m_position.y() + offsety,
@@ -603,17 +543,17 @@ void ewol::Drawing::Circle(float radius, float angleStart, float angleStop)
 	InternalSetColor(m_color);
 	for (int32_t iii=0; iii<nbOcurence; iii++) {
 		
-		float angleOne =  angleStart + (angleStop* iii     / nbOcurence) ;
-		float offsetExty = sin(angleOne) * (radius+m_thickness/2);
-		float offsetExtx = cos(angleOne) * (radius+m_thickness/2);
-		float offsetInty = sin(angleOne) * (radius-m_thickness/2);
-		float offsetIntx = cos(angleOne) * (radius-m_thickness/2);
+		float angleOne =  _angleStart + (_angleStop* iii     / nbOcurence) ;
+		float offsetExty = sin(angleOne) * (_radius+m_thickness/2);
+		float offsetExtx = cos(angleOne) * (_radius+m_thickness/2);
+		float offsetInty = sin(angleOne) * (_radius-m_thickness/2);
+		float offsetIntx = cos(angleOne) * (_radius-m_thickness/2);
 		
-		float angleTwo =  angleStart + (angleStop*  (iii+1) / nbOcurence );
-		float offsetExt2y = sin(angleTwo) * (radius+m_thickness/2);
-		float offsetExt2x = cos(angleTwo) * (radius+m_thickness/2);
-		float offsetInt2y = sin(angleTwo) * (radius-m_thickness/2);
-		float offsetInt2x = cos(angleTwo) * (radius-m_thickness/2);
+		float angleTwo =  _angleStart + (_angleStop*  (iii+1) / nbOcurence );
+		float offsetExt2y = sin(angleTwo) * (_radius+m_thickness/2);
+		float offsetExt2x = cos(angleTwo) * (_radius+m_thickness/2);
+		float offsetInt2y = sin(angleTwo) * (_radius-m_thickness/2);
+		float offsetInt2x = cos(angleTwo) * (_radius-m_thickness/2);
 		
 		SetPoint(vec3(m_position.x() + offsetIntx,  m_position.y() + offsetInty,  0));
 		SetPoint(vec3(m_position.x() + offsetExtx,  m_position.y() + offsetExty,  0));

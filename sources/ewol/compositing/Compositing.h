@@ -42,24 +42,24 @@ namespace ewol
 			virtual void ResetMatrix(void);
 			/**
 			 * @brief Translate the current display of this element
-			 * @param[in] vect The translation vector to apply at the transformation matrix
+			 * @param[in] _vect The translation vector to apply at the transformation matrix
 			 */
-			virtual void Translate(vec3 vect);
+			virtual void Translate(const vec3& _vect);
 			/**
 			 * @brief Rotate the curent display of this element
-			 * @param[in] vect The rotation vector to apply at the transformation matrix
+			 * @param[in] _vect The rotation vector to apply at the transformation matrix
 			 */
-			virtual void Rotate(vec3 vect, float angle);
+			virtual void Rotate(const vec3& _vect, float _angle);
 			/**
 			 * @brief Scale the current diaplsy of this element
-			 * @param[in] vect The scaling vector to apply at the transformation matrix
+			 * @param[in] _vect The scaling vector to apply at the transformation matrix
 			 */
-			virtual void Scale(vec3 vect);
+			virtual void Scale(const vec3& _vect);
 			/**
 			 * @brief set the transformation matrix
-			 * @param[in] mat The new matrix.
+			 * @param[in] _mat The new matrix.
 			 */
-			virtual void SetMatrix(const mat4& mat);
+			virtual void SetMatrix(const mat4& _mat);
 	};
 };
 

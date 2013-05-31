@@ -71,7 +71,7 @@ void informOneObjectIsRemoved(ewol::EObject* _object)
 {
 	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
-			m_eObjectList[iii]->OnObjectRemove(object);
+			m_eObjectList[iii]->OnObjectRemove(_object);
 		}
 	}
 	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {

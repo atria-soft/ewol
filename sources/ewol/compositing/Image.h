@@ -46,9 +46,9 @@ namespace ewol
 		public:
 			/**
 			 * @brief generic constructor
-			 * @param[in] imageName Name of the file that might be loaded
+			 * @param[in] _imageName Name of the file that might be loaded
 			 */
-			Image(const etk::UString& imageName="");
+			Image(const etk::UString& _imageName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -66,71 +66,71 @@ namespace ewol
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			vec3 GetPos(void);
+			const vec3& GetPos(void) { return m_position; };
 			/**
 			 * @brief Set position for the next text writen
-			 * @param[in] pos Position of the text (in 3D)
+			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(const vec3& pos);
-			inline void SetPos(const vec2& pos) { SetPos(vec3(pos.x(),pos.y(),0)); };
+			void SetPos(const vec3& _pos) { m_position = _pos; };
+			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
 			 * @brief Set relative position for the next text writen
-			 * @param[in] pos ofset apply of the text (in 3D)
+			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(const vec3& pos);
-			inline void SetRelPos(const vec2& pos) { SetRelPos(vec3(pos.x(),pos.y(),0)); };
+			void SetRelPos(const vec3& _pos) { m_position += _pos; };
+			inline void SetRelPos(const vec2& _pos) { SetRelPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
 			 * @brief Set the Color of the current foreground font
-			 * @param[in] color Color to set on foreground (for next print)
+			 * @param[in] _color Color to set on foreground (for next print)
 			 */
-			void SetColor(const draw::Color& color);
+			void SetColor(const draw::Color& _color) { m_color = _color; };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
-			 * @param[in] pos Start position of the clipping
-			 * @param[in] width Width size of the clipping
+			 * @param[in] _pos Start position of the clipping
+			 * @param[in] _width Width size of the clipping
 			 */
-			void SetClippingWidth(const vec3& pos, vec3 width);
-			inline void SetClippingWidth(const vec2& pos, const vec2& width)  { SetClippingWidth(vec3(pos.x(),pos.y(),0), vec3(width.x(),width.y(),0)); };
+			void SetClippingWidth(const vec3& _pos, vec3 _width) { SetClipping(_pos, _pos+_width); };
+			inline void SetClippingWidth(const vec2& _pos, const vec2& _width)  { SetClippingWidth(vec3(_pos.x(),_pos.y(),0), vec3(_width.x(),_width.y(),0)); };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
-			 * @param[in] pos Start position of the clipping
-			 * @param[in] posEnd End position of the clipping
+			 * @param[in] _pos Start position of the clipping
+			 * @param[in] _posEnd End position of the clipping
 			 */
-			void SetClipping(const vec3& pos, vec3 posEnd);
-			inline void SetClipping(const vec2& pos, const vec2& posEnd)  { SetClipping(vec3(pos.x(),pos.y(),0), vec3(posEnd.x(),posEnd.y(),0)); };
+			void SetClipping(const vec3& _pos, vec3 _posEnd);
+			inline void SetClipping(const vec2& _pos, const vec2& _posEnd)  { SetClipping(vec3(_pos.x(),_pos.y(),0), vec3(_posEnd.x(),_posEnd.y(),0)); };
 			/**
 			 * @brief Enable/Disable the clipping (without lose the current clipping position)
-			 * @brief newMode The new status of the clipping
+			 * @brief _newMode The new status of the clipping
 			 */
-			void SetClippingMode(bool newMode);
+			void SetClippingMode(bool _newMode) { m_clippingEnable = _newMode; };
 			/**
 			 * @brief Set a unique rotation of this element (not set in the Rotate Generic system)
-			 * @param[in] axes Rotation axes selection
-			 * @param[in] angle Angle to set on this axes
+			 * @param[in] _axes Rotation axes selection
+			 * @param[in] _angle Angle to set on this axes
 			 */
-			void SetAngle(const vec3& axes, float angle);
+			void SetAngle(const vec3& _axes, float _angle);
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
-			 * @param[in] size Size of the output image
+			 * @param[in] _size Size of the output image
 			 */
-			void Print(const ivec2& size);
-			void Print(const vec2& size);
+			void Print(const ivec2& _size) { Print(vec2(_size.x(),_size.y())); };
+			void Print(const vec2& _size);
 			/**
 			 * @brief Add a part of the image to display with the requested size
-			 * @param[in] size Size of the output image
-			 * @param[in] sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
-			 * @param[in] sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
+			 * @param[in] _size Size of the output image
+			 * @param[in] _sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
+			 * @param[in] _sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 			 */
-			void PrintPart(const ivec2& size,
-			               const vec2& sourcePosStart,
-			               const vec2& sourcePosStop);
+			void PrintPart(const ivec2& _size,
+			               const vec2& _sourcePosStart,
+			               const vec2& _sourcePosStop);
 			/**
 			 * @brief Change the image Source ==> can not be done to display 2 images at the same time ...
-			 * @param[in] newFile New file of the Image
-			 * @param[in] size for the image when Verctorial image loading is requested
+			 * @param[in] _newFile New file of the Image
+			 * @param[in] _size for the image when Verctorial image loading is requested
 			 */
-			void SetSource(const etk::UString& newFile, int32_t size=32);
-			void SetSource(const etk::UString& newFile, const vec2& size);
+			void SetSource(const etk::UString& _newFile, int32_t _size=32) { SetSource(_newFile, vec2(_size,_size)); };
+			void SetSource(const etk::UString& _newFile, const vec2& _size);
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

@@ -75,7 +75,10 @@ void widget::PopUp::OnRegenerateDisplay(void)
 		vec2 padding = m_shaper.GetPadding();
 		if (NULL != m_subWidget) {
 			vec2 tmpSize = m_subWidget->GetSize();
-			vec2 tmpOrigin = m_subWidget->GetOrigin();
+			tmpSize.setMax(m_minSize);
+			vec2 tmpOrigin = m_origin + (m_size-tmpSize)/2.0f;
+			tmpOrigin = vec2ClipInt32(tmpOrigin);
+			
 			m_shaper.SetOrigin(vec2ClipInt32(m_origin));
 			m_shaper.SetSize(vec2ClipInt32(m_size));
 			m_shaper.SetInsidePos(vec2ClipInt32(tmpOrigin-padding));

@@ -123,7 +123,8 @@ void ewol::Keyboard(bool _hide)
 }
 void ewol::SetTitle(const etk::UString& _title)
 {
-	guiInterface::SetTitle(_title);
+	etk::UString title = _title;
+	guiInterface::SetTitle(title);
 }
 
 etk::UString ewol::GetVersion(void)

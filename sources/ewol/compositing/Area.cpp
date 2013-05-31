@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__	"ewol::Area"
 
-ewol::Area::Area(ivec2 size) :
+ewol::Area::Area(const ivec2& _size) :
 	m_position(0.0, 0.0, 0.0),
 	m_color(draw::color::white),
 	m_GLprogram(NULL),
@@ -27,7 +27,7 @@ ewol::Area::Area(ivec2 size) :
 	m_resource(NULL)
 {
 	ewol::resource::Keep(m_resource);
-	m_resource->SetImageSize(size);
+	m_resource->SetImageSize(_size);
 	m_resource->Flush();
 	LoadProgram();
 }
@@ -98,26 +98,7 @@ void ewol::Area::Clear(void)
 	m_position = vec3(0.0, 0.0, 0.0);
 }
 
-
-vec3 ewol::Area::GetPos(void)
-{
-	return m_position;
-}
-
-
-void ewol::Area::SetPos(vec3 pos)
-{
-	m_position = pos;
-}
-
-
-void ewol::Area::SetRelPos(vec3 pos)
-{
-	m_position += pos;
-}
-
-
-void ewol::Area::Print(ivec2 size)
+void ewol::Area::Print(const ivec2& _size)
 {
 	vec3 point(0,0,0);
 	vec2 tex(0,1);
@@ -130,7 +111,7 @@ void ewol::Area::Print(ivec2 size)
 
 
 	tex.setValue(1,1);
-	point.setX(m_position.x() + size.x());
+	point.setX(m_position.x() + _size.x());
 	point.setY(m_position.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
@@ -138,8 +119,8 @@ void ewol::Area::Print(ivec2 size)
 
 
 	tex.setValue(1,0);
-	point.setX(m_position.x() + size.x());
-	point.setY(m_position.y() + size.y());
+	point.setX(m_position.x() + _size.x());
+	point.setY(m_position.y() + _size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
@@ -150,7 +131,7 @@ void ewol::Area::Print(ivec2 size)
 
 	tex.setValue(0,0);
 	point.setX(m_position.x());
-	point.setY(m_position.y() + size.y());
+	point.setY(m_position.y() + _size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);

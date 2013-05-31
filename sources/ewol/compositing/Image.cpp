@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__	"ewol::Image"
 
-ewol::Image::Image(const etk::UString& imageName) :
+ewol::Image::Image(const etk::UString& _imageName) :
 	m_position(0.0, 0.0, 0.0),
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
@@ -31,7 +31,7 @@ ewol::Image::Image(const etk::UString& imageName) :
 	m_GLtexID(-1),
 	m_resource(NULL)
 {
-	SetSource(imageName);
+	SetSource(_imageName);
 	LoadProgram();
 }
 
@@ -107,74 +107,37 @@ void ewol::Image::Clear(void)
 	m_angle = 0.0;
 }
 
-
-vec3 ewol::Image::GetPos(void)
-{
-	return m_position;
-}
-
-
-void ewol::Image::SetPos(const vec3& pos)
-{
-	m_position = pos;
-}
-
-
-void ewol::Image::SetRelPos(const vec3& pos)
-{
-	m_position += pos;
-}
-
-
-void ewol::Image::SetColor(const draw::Color& color)
-{
-	m_color = color;
-}
-
-
-void ewol::Image::SetClippingWidth(const vec3& pos, vec3 width)
-{
-	SetClipping(pos, pos+width);
-}
-
-void ewol::Image::SetClipping(const vec3& pos, vec3 posEnd)
+void ewol::Image::SetClipping(const vec3& _pos, vec3 _posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
-	if (pos.x() <= posEnd.x()) {
-		m_clippingPosStart.setX(pos.x());
-		m_clippingPosStop.setX(posEnd.x());
+	if (_pos.x() <= _posEnd.x()) {
+		m_clippingPosStart.setX(_pos.x());
+		m_clippingPosStop.setX(_posEnd.x());
 	} else {
-		m_clippingPosStart.setX(posEnd.x());
-		m_clippingPosStop.setX(pos.x());
+		m_clippingPosStart.setX(_posEnd.x());
+		m_clippingPosStop.setX(_pos.x());
 	}
-	if (pos.y() <= posEnd.y()) {
-		m_clippingPosStart.setY(pos.y());
-		m_clippingPosStop.setY(posEnd.y());
+	if (_pos.y() <= _posEnd.y()) {
+		m_clippingPosStart.setY(_pos.y());
+		m_clippingPosStop.setY(_posEnd.y());
 	} else {
-		m_clippingPosStart.setY(posEnd.y());
-		m_clippingPosStop.setY(pos.y());
+		m_clippingPosStart.setY(_posEnd.y());
+		m_clippingPosStop.setY(_pos.y());
 	}
-	if (pos.z() <= posEnd.z()) {
-		m_clippingPosStart.setZ(pos.z());
-		m_clippingPosStop.setZ(posEnd.z());
+	if (_pos.z() <= _posEnd.z()) {
+		m_clippingPosStart.setZ(_pos.z());
+		m_clippingPosStop.setZ(_posEnd.z());
 	} else {
-		m_clippingPosStart.setZ(posEnd.z());
-		m_clippingPosStop.setZ(pos.z());
+		m_clippingPosStart.setZ(_posEnd.z());
+		m_clippingPosStop.setZ(_pos.z());
 	}
 	m_clippingEnable = true;
 }
 
-
-void ewol::Image::SetClippingMode(bool newMode)
+void ewol::Image::SetAngle(const vec3& _axes, float _angle)
 {
-	m_clippingEnable = newMode;
-}
-
-
-void ewol::Image::SetAngle(const vec3& axes, float angle)
-{
-	m_axes = axes;
-	m_angle = angle;
+	m_axes = _axes;
+	m_angle = _angle;
 	if(    m_axes.x() == 0
 	    && m_axes.y() == 0
 	    && m_axes.z() == 0) {
@@ -182,12 +145,7 @@ void ewol::Image::SetAngle(const vec3& axes, float angle)
 	}
 }
 
-void ewol::Image::Print(const ivec2& size)
-{
-	Print(vec2(size.x(),size.y()));
-}
-
-void ewol::Image::Print(const vec2& size)
+void ewol::Image::Print(const vec2& _size)
 {
 	vec3 point(0,0,0);
 	vec2 tex(0,1);
@@ -200,7 +158,7 @@ void ewol::Image::Print(const vec2& size)
 
 
 	tex.setValue(1,1);
-	point.setX(m_position.x() + size.x());
+	point.setX(m_position.x() + _size.x());
 	point.setY(m_position.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
@@ -208,8 +166,8 @@ void ewol::Image::Print(const vec2& size)
 
 
 	tex.setValue(1,0);
-	point.setX(m_position.x() + size.x());
-	point.setY(m_position.y() + size.y());
+	point.setX(m_position.x() + _size.x());
+	point.setY(m_position.y() + _size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
@@ -220,7 +178,7 @@ void ewol::Image::Print(const vec2& size)
 
 	tex.setValue(0,0);
 	point.setX(m_position.x());
-	point.setY(m_position.y() + size.y());
+	point.setY(m_position.y() + _size.y());
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
@@ -233,19 +191,14 @@ void ewol::Image::Print(const vec2& size)
 	m_coordColor.PushBack(m_color);
 }
 
-void ewol::Image::PrintPart(const ivec2& size,
-                            const vec2& sourcePosStart,
-                            const vec2& sourcePosStop)
+void ewol::Image::PrintPart(const ivec2& _size,
+                            const vec2& _sourcePosStart,
+                            const vec2& _sourcePosStop)
 {
 	
 }
 
-void ewol::Image::SetSource(const etk::UString& newFile, int32_t size)
-{
-	SetSource(newFile, vec2(size,size));
-}
-
-void ewol::Image::SetSource(const etk::UString& newFile, const vec2& size)
+void ewol::Image::SetSource(const etk::UString& _newFile, const vec2& _size)
 {
 	Clear();
 	// remove old one
@@ -253,11 +206,11 @@ void ewol::Image::SetSource(const etk::UString& newFile, const vec2& size)
 		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	ivec2 tmpSize(size.x(),size.y());
+	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
-	if (newFile != "") {
+	if (_newFile != "") {
 		// link to new One
-		if (false == ewol::resource::Keep(newFile, m_resource, tmpSize)) {
+		if (false == ewol::resource::Keep(_newFile, m_resource, tmpSize)) {
 			EWOL_ERROR("Can not get Image resource");
 		}
 	}

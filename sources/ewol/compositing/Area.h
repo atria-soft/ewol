@@ -60,23 +60,24 @@ namespace ewol
 			 * @brief Get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			vec3 GetPos(void);
+			const vec3& GetPos(void) { return m_position; };
 			/**
 			 * @brief Set position for the next text writen
 			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(const vec3& _pos);
-			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y())); };
+			void SetPos(const vec3& _pos) { m_position = _pos; };
+			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
 			 * @brief Set relative position for the next text writen
 			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(const vec3& _pos);
+			void SetRelPos(const vec3& _pos) { m_position += _pos; };
+			inline void SetRelPos(const vec2& _pos) { SetRelPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
-			 * @param[in] size Size of the output image
+			 * @param[in] _size Size of the output image
 			 */
-			void Print(ivec2 size);
+			void Print(const ivec2& _size);
 			
 			draw::Image& Get(void) { return m_resource->Get(); };
 			void Flush(void) { m_resource->Flush(); };

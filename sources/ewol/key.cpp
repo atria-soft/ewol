@@ -32,7 +32,7 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::s
 	} else {
 		_os << "[ERROR]";
 	}
-	return os;
+	return _os;
 }
 
 
@@ -103,7 +103,7 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::t
 	} else {
 		_os << "[ERROR]";
 	}
-	return os;
+	return _os;
 }
 
 static ewol::SpecialKey l_LocalKeyStatus;
