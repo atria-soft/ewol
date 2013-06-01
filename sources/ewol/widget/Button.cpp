@@ -393,16 +393,16 @@ void widget::Button::CheckStatus(void)
 void widget::Button::ChangeStatusIn(int32_t _newStatusId)
 {
 	if (true == m_shaper.ChangeStatusIn(_newStatusId) ) {
-		PeriodicCallSet(true);
+		PeriodicCallEnable();
 		MarkToRedraw();
 	}
 }
 
 
-void widget::Button::PeriodicCall(int64_t _localTime)
+void widget::Button::PeriodicCall(const ewol::EventTime& _event)
 {
-	if (false == m_shaper.PeriodicCall(_localTime) ) {
-		PeriodicCallSet(false);
+	if (false == m_shaper.PeriodicCall(_event) ) {
+		PeriodicCallDisable();
 	}
 	MarkToRedraw();
 }

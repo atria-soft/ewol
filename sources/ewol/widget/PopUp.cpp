@@ -73,22 +73,18 @@ void widget::PopUp::OnRegenerateDisplay(void)
 	if (true == NeedRedraw()) {
 		m_shaper.Clear();
 		vec2 padding = m_shaper.GetPadding();
+		vec2 tmpSize(0,0);
 		if (NULL != m_subWidget) {
 			vec2 tmpSize = m_subWidget->GetSize();
-			tmpSize.setMax(m_minSize);
-			vec2 tmpOrigin = m_origin + (m_size-tmpSize)/2.0f;
-			tmpOrigin = vec2ClipInt32(tmpOrigin);
-			
-			m_shaper.SetOrigin(vec2ClipInt32(m_origin));
-			m_shaper.SetSize(vec2ClipInt32(m_size));
-			m_shaper.SetInsidePos(vec2ClipInt32(tmpOrigin-padding));
-			m_shaper.SetInsideSize(vec2ClipInt32(tmpSize + padding*2.0f));
-		} else {
-			m_shaper.SetOrigin(vec2ClipInt32(m_origin));
-			m_shaper.SetSize(vec2ClipInt32(m_size));
-			m_shaper.SetInsidePos(vec2ClipInt32(m_origin+padding));
-			m_shaper.SetInsideSize(vec2ClipInt32(m_size-padding*2.0f));
 		}
+		tmpSize.setMax(m_minSize);
+		vec2 tmpOrigin = m_origin + (m_size-tmpSize)/2.0f;
+		tmpOrigin = vec2ClipInt32(tmpOrigin);
+		
+		m_shaper.SetOrigin(vec2ClipInt32(m_origin));
+		m_shaper.SetSize(vec2ClipInt32(m_size));
+		m_shaper.SetInsidePos(vec2ClipInt32(tmpOrigin-padding));
+		m_shaper.SetInsideSize(vec2ClipInt32(tmpSize + padding*2.0f));
 	}
 	// SUBwIDGET GENERATION ...
 	if (NULL != m_subWidget) {

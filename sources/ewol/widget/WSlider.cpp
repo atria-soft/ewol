@@ -52,7 +52,8 @@ void widget::WSlider::UnInit(void)
 widget::WSlider::WSlider(void) : 
 	m_windowsSources(0),
 	m_windowsDestination(0),
-	m_slidingProgress(0.0f),
+	m_windowsRequested(-1),
+	m_slidingProgress(1.0f),
 	m_transitionSpeed(1.0f),
 	m_transitionSlide(sladingTransitionHori)
 {
@@ -125,11 +126,12 @@ void widget::WSlider::SubWidgetSelectSet(int32_t _id)
 	if (_id<0 || _id >= m_subWidget.Size()) {
 		EWOL_ERROR("Can not change to a widget not present");
 	}
-	m_windowsDestination = _id;
-	m_slidingProgress = 0;
-	GenerateEventId(eventStartSlide);
-	PeriodicCallSet(true);
-	MarkToRedraw();
+	if (_id != m_windowsDestination) {
+		m_windowsRequested = _id;
+		GenerateEventId(eventStartSlide);
+		PeriodicCallEnable();
+		MarkToRedraw();
+	}
 }
 
 void widget::WSlider::SubWidgetSelectSet(ewol::Widget* _widgetPointer)
@@ -178,21 +180,35 @@ void widget::WSlider::SetTransitionMode(widget::WSlider::sladingMode_te _mode)
 
 
 
-void widget::WSlider::PeriodicCall(int64_t _localTime)
+void widget::WSlider::PeriodicCall(const ewol::EventTime& _event)
 {
 	if (m_slidingProgress >= 1.0) {
-		// end of periodic :
-		PeriodicCallSet(false);
 		m_windowsSources = m_windowsDestination;
-		m_lastPeriodicCall = -1;
-		GenerateEventId(eventStopSlide);
-	} else {
-		if (m_lastPeriodicCall != -1) {
-			float delta = (double)(_localTime - m_lastPeriodicCall)/1000000.0;
-			m_slidingProgress += delta/m_transitionSpeed;
-			m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
+		if(    m_windowsRequested != -1
+		    && m_windowsRequested != m_windowsSources) {
+			m_windowsDestination = m_windowsRequested;
+			m_slidingProgress = 0.0;
+		} else {
+			// end of periodic :
+			PeriodicCallDisable();
+			GenerateEventId(eventStopSlide);
 		}
-		m_lastPeriodicCall = _localTime;
+		m_windowsRequested = -1;
+	}
+	
+	if (m_slidingProgress < 1.0) {
+		if (m_windowsRequested != -1 && m_slidingProgress<0.5 ) {
+			// invert sources with destination
+			int32_t tmppp = m_windowsDestination;
+			m_windowsDestination = m_windowsSources;
+			m_windowsSources = tmppp;
+			m_slidingProgress = 1.0f - m_slidingProgress;
+			if (m_windowsRequested == m_windowsDestination) {
+				m_windowsRequested = -1;
+			}
+		}
+		m_slidingProgress += _event.GetDeltaCall()/m_transitionSpeed;
+		m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
 	}
 	CalculateSize(m_size);
 	MarkToRedraw();

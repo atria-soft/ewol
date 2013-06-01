@@ -76,7 +76,7 @@ namespace widget {
 			 */
 			void ChangeStatusIn(int32_t newStatusId);
 			// Derived function
-			virtual void PeriodicCall(int64_t localTime);
+			virtual void PeriodicCall(const ewol::EventTime& _event);
 	};
 };
 

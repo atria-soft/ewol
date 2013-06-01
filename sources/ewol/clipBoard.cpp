@@ -121,12 +121,13 @@ void ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID,
 	mesCopy[_clipboardID] = _data;
 }
 
+const etk::UString emptyString("");
 
 const etk::UString& ewol::clipBoard::Get(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
-		return "";
+		return emptyString;
 	}
 	// Copy datas ...
 	return mesCopy[_clipboardID];

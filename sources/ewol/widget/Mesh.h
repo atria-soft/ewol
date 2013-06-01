@@ -28,7 +28,6 @@ namespace widget {
 			vec3 m_angle;
 			vec3 m_angleSpeed;
 			float m_cameraDistance;
-			int64_t m_lastTime;
 		public:
 			Mesh(const etk::UString& filename); // automatic considering in the appl Data older
 			virtual ~Mesh(void);
@@ -38,7 +37,7 @@ namespace widget {
 			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
 			virtual void OnDraw(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void PeriodicCall(int64_t localTime);
+			virtual void PeriodicCall(const ewol::EventTime& _event);
 		public:
 			/**
 			 * @brief Set a mesh name file

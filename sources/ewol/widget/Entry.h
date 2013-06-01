@@ -195,7 +195,7 @@ namespace widget {
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);
 			virtual void ChangeStatusIn(int32_t _newStatusId);
-			virtual void PeriodicCall(int64_t _localTime);
+			virtual void PeriodicCall(const ewol::EventTime& _event);
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	};

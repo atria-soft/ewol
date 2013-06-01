@@ -6,6 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
+#include <ewol/ewol.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Joystick.h>
 #include <ewol/widget/Button.h>
@@ -47,11 +48,16 @@ class dataStructCreator
 
 static etk::Vector<dataStructCreator> l_creatorList;
 
-
+int64_t l_applWakeUpTime = 0; //!< Time of the application initialize
+int64_t l_lastPeriodicCallTime = 0; //!< last call time ...
 
 void ewol::widgetManager::Init(void)
 {
 	EWOL_DEBUG("==> Init Widget-Manager");
+	// set the basic time properties :
+	l_applWakeUpTime = ewol::GetTime();
+	l_lastPeriodicCallTime = ewol::GetTime();
+	
 	// prevent android error ==> can create memory leak but I prefer
 	m_focusWidgetDefault = NULL;
 	m_focusWidgetCurrent = NULL;
@@ -231,11 +237,39 @@ void ewol::widgetManager::PeriodicCallRm(ewol::Widget * pWidget)
 	}
 }
 
-void ewol::widgetManager::PeriodicCall(int64_t localTime)
+void ewol::widgetManager::PeriodicCall(int64_t _localTime)
 {
+	int64_t previousTime = l_lastPeriodicCallTime;
+	l_lastPeriodicCallTime = _localTime;
+	if (l_listOfPeriodicWidget.Size() <= 0) {
+		return;
+	}
+	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
+	
+	EventTime myTime(_localTime, l_applWakeUpTime, deltaTime, deltaTime);
+	
+	EWOL_VERBOSE("periodic : " << _localTime);
 	for (int32_t iii=l_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
 		if (NULL != l_listOfPeriodicWidget[iii]) {
-			l_listOfPeriodicWidget[iii]->PeriodicCall(localTime);
+			int64_t deltaTimeCallUser = l_listOfPeriodicWidget[iii]->SystemGetCallDeltaTime();
+			if (deltaTimeCallUser<=0) {
+				myTime.SetDeltaCall(deltaTime);
+				EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
+				l_listOfPeriodicWidget[iii]->SystemSetLastCallTime(_localTime);
+				l_listOfPeriodicWidget[iii]->PeriodicCall(myTime);
+			} else {
+				int64_t lastCallTime = l_listOfPeriodicWidget[iii]->SystemGetLastCallTime();
+				if (lastCallTime == 0) {
+					lastCallTime = _localTime;
+				}
+				float deltaLocalTime = (float)(_localTime-lastCallTime)/1000000.0;;
+				if (deltaLocalTime>= lastCallTime) {
+					myTime.SetDeltaCall(deltaLocalTime);
+					EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
+					l_listOfPeriodicWidget[iii]->SystemSetLastCallTime(_localTime);
+					l_listOfPeriodicWidget[iii]->PeriodicCall(myTime);
+				}
+			}
 		}
 	}
 }

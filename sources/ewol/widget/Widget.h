@@ -24,6 +24,7 @@ namespace ewol {
 #include <ewol/cursor.h>
 #include <ewol/renderer/EventInput.h>
 #include <ewol/renderer/EventEntry.h>
+#include <ewol/renderer/EventTime.h>
 
 #define ULTIMATE_MAX_SIZE  (99999999)
 
@@ -424,19 +425,40 @@ namespace ewol {
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------
+		private:
+			int64_t m_periodicCallDeltaTime; //!< -1 : Disable / 0 : every time / else in US
+			int64_t m_periodicCallTime; //!< Last call time
 		protected:
 			/**
-			 * @brief Request that the current widegt have a periodic call
-			 * @param statusToSet true if the periodic call is needed
+			 * @brief Disable the periodic call.
 			 */
-			virtual void PeriodicCallSet(bool statusToSet);
+			void PeriodicCallDisable(void);
+			/**
+			 * @brief Disable the periodic call.
+			 * @param[in] _callInSecond periodic call in second (float)
+			 */
+			void PeriodicCallEnable(float _callInSecond=0);
 		public:
 			/**
-			 * @brief Periodic call of this widget
-			 * @param _localTime curent system time
+			 * @brief {SYSTEM} Get a reference of the periodic call delta time
+			 * @return the perodic time delta call -1 : Disable / 0 : every time / else in US
 			 */
-			virtual void PeriodicCall(int64_t _localTime) { };
-			
+			int64_t SystemGetCallDeltaTime(void) const { return m_periodicCallDeltaTime; };
+			/**
+			 * @brief {SYSTEM} Get a reference of the periodic call time
+			 * @return Last call from the periodic call
+			 */
+			int64_t SystemGetLastCallTime(void) const { return m_periodicCallTime; };
+			/**
+			 * @brief {SYSTEM} Get a reference of the periodic call time
+			 * @return Last call from the periodic call
+			 */
+			void SystemSetLastCallTime(int64_t _time) { m_periodicCallTime=_time; };
+			/**
+			 * @brief Periodic call of this widget
+			 * @param _event Current time property
+			 */
+			virtual void PeriodicCall(const ewol::EventTime& _event) { };
 		public:
 			/**
 			 * @brief Get the widget at the specific windows absolute position
@@ -456,7 +478,7 @@ namespace ewol {
 		// event section:
 		public:
 			/**
-			 * @brief system event input (only meta widget might overwrite this function).
+			 * @brief {SYSTEM} system event input (only meta widget might overwrite this function).
 			 * @param[in] _event Event properties
 			 * @return true the event is used
 			 * @return false the event is not used
@@ -472,7 +494,7 @@ namespace ewol {
 			virtual bool OnEventInput(const ewol::EventInput& _event) { return false; };
 		public:
 			/**
-			 * @brief Entry event (only meta widget might overwrite this function).
+			 * @brief {SYSTEM} Entry event (only meta widget might overwrite this function).
 			 * @param[in] _event Event properties
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
@@ -543,7 +565,7 @@ namespace ewol {
 			virtual bool NeedRedraw(void) { bool tmpData=m_needRegenerateDisplay; m_needRegenerateDisplay=false; return tmpData; };
 		public:
 			/**
-			 * @brief extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+			 * @brief {SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
 			 * This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget
 			 * @note This function is virtual for the scrolled widget, and the more complicated OpenGl widget
 			 * @param[in] _displayProp properties of the current display

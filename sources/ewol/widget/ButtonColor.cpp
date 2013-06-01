@@ -250,17 +250,17 @@ void widget::ButtonColor::OnReceiveMessage(const ewol::EMessage& _msg)
 void widget::ButtonColor::ChangeStatusIn(int32_t newStatusId)
 {
 	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
-		PeriodicCallSet(true);
+		PeriodicCallEnable();
 		MarkToRedraw();
 	}
 }
 
 
 
-void widget::ButtonColor::PeriodicCall(int64_t localTime)
+void widget::ButtonColor::PeriodicCall(const ewol::EventTime& _event)
 {
-	if (false == m_shaper.PeriodicCall(localTime) ) {
-		PeriodicCallSet(false);
+	if (false == m_shaper.PeriodicCall(_event) ) {
+		PeriodicCallDisable();
 	}
 	MarkToRedraw();
 }

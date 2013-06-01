@@ -12,6 +12,7 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
 #include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/EventTime.h>
 
 namespace ewol
 {
@@ -103,11 +104,11 @@ namespace ewol
 			int32_t GetNextDisplayedStatus(void);
 			/**
 			 * @brief Same as the widfget periodic call (this is for change display)
-			 * @param[in] _localTime The current time of the call.
+			 * @param[in] _event The current time of the call.
 			 * @return true The widget must call this fuction periodicly (and redraw itself)
 			 * @return false No need to request the periodic call.
 			 */
-			bool PeriodicCall(int64_t _localTime);
+			bool PeriodicCall(const ewol::EventTime& _event);
 			/**
 			 * @brief Set the widget origin (needed fot the display)
 			 * @param[in] _newOri : the new widget origin

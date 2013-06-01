@@ -38,10 +38,12 @@ namespace widget {
 			 */
 			void SetShaperName(const etk::UString& _shaperName);
 		private:
-			draw::Color m_colorBackGroung;
-			draw::Color m_colorBorder;
-			draw::Color m_colorEmptyArea;
-			ewol::Drawing m_compositing;
+			float m_slidingProgress; //!< ratio progression of a sliding
+		public:
+			/**
+			 * @brief 
+			 */
+			
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function

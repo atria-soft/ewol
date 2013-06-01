@@ -24,8 +24,7 @@ widget::Mesh::Mesh(const etk::UString& filename) :
 	m_position(0,0,0),
 	m_angle(0,0,0),
 	m_angleSpeed(0,0,0),
-	m_cameraDistance(10.0),
-	m_lastTime(-1)
+	m_cameraDistance(10.0)
 {
 	AddEventId(ewolEventMeshPressed);
 	m_meshName = filename;
@@ -85,17 +84,10 @@ void widget::Mesh::OnRegenerateDisplay(void)
 	}
 }
 
-void widget::Mesh::PeriodicCall(int64_t localTime)
+void widget::Mesh::PeriodicCall(const ewol::EventTime& _event)
 {
-	if (m_lastTime==-1) {
-		m_lastTime = localTime;
-		return;
-	}
-	
-	float deltaTime = (float)(localTime - m_lastTime)/1000000.0f;;
-	m_angle += m_angleSpeed*deltaTime;
+	m_angle += m_angleSpeed*_event.GetDeltaCall();
 	MarkToRedraw();
-	m_lastTime = localTime;
 }
 
 bool widget::Mesh::OnEventInput(const ewol::EventInput& _event)
@@ -139,11 +131,10 @@ void widget::Mesh::SetAngle(const vec3& angle)
 void widget::Mesh::SetAngleSpeed(const vec3& speed)
 {
 	if (speed!=vec3(0,0,0)) {
-		PeriodicCallSet(true);
+		PeriodicCallEnable();
 	} else {
-		PeriodicCallSet(false);
+		PeriodicCallDisable();
 	}
-	m_lastTime = -1;
 	m_angleSpeed = speed;
 	MarkToRedraw();
 }

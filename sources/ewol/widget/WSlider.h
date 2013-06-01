@@ -36,8 +36,8 @@ namespace widget {
 		private:
 			int32_t m_windowsSources; //!< widget source viewed
 			int32_t m_windowsDestination; //!< widget destinated viewed
+			int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 			float m_slidingProgress; //!< ratio progression of a sliding
-			int64_t m_lastPeriodicCall;
 		public:
 			/** 
 			 * @brief Select a new subwidget to display
@@ -85,7 +85,7 @@ namespace widget {
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
-			virtual void PeriodicCall(int64_t _localTime);
+			virtual void PeriodicCall(const ewol::EventTime& _event);
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	};

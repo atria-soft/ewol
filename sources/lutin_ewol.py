@@ -33,6 +33,7 @@ def Create(target):
 		'ewol/renderer/openGL.cpp',
 		'ewol/renderer/EventInput.cpp',
 		'ewol/renderer/EventEntry.cpp',
+		'ewol/renderer/EventTime.cpp',
 		'ewol/renderer/Light.cpp',
 		'ewol/renderer/Material.cpp'])
 	

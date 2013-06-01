@@ -119,6 +119,8 @@ ewol::Widget::Widget(void) :
 	m_canFocus(false),
 	m_limitMouseEvent(3),
 	m_allowRepeateKeyboardEvent(true),
+	m_periodicCallDeltaTime(-1),
+	m_periodicCallTime(0),
 	m_needRegenerateDisplay(true),
 	m_grabCursor(false),
 	m_cursorDisplay(ewol::cursorArrow)
@@ -355,13 +357,21 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 	return;
 }
 
-
-void ewol::Widget::PeriodicCallSet(bool _statusToSet)
+void ewol::Widget::PeriodicCallDisable(void)
 {
-	if (true == _statusToSet) {
-		ewol::widgetManager::PeriodicCallAdd(this);
+	m_periodicCallDeltaTime=0;
+	m_periodicCallTime=-1;
+	ewol::widgetManager::PeriodicCallRm(this);
+}
+
+void ewol::Widget::PeriodicCallEnable(float _callInSecond)
+{
+	if (_callInSecond < 0) {
+		PeriodicCallDisable();
 	} else {
-		ewol::widgetManager::PeriodicCallRm(this);
+		ewol::widgetManager::PeriodicCallAdd(this);
+		m_periodicCallDeltaTime = _callInSecond*1000000.0;
+		m_periodicCallTime = ewol::GetTime();
 	}
 }
 

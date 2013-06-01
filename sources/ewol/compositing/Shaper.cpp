@@ -172,23 +172,23 @@ int32_t ewol::Shaper::GetNextDisplayedStatus(void)
 	return m_nextStatusRequested;
 }
 
-bool ewol::Shaper::PeriodicCall(int64_t _localTime)
+bool ewol::Shaper::PeriodicCall(const ewol::EventTime& _event)
 {
 	// start :
 	if (m_time == -1) {
-		m_time = _localTime;
+		m_time = _event.GetTime();
 		m_stateOld = m_stateNew;
 		m_stateNew = m_nextStatusRequested;
 		m_nextStatusRequested = -1;
 		m_stateTransition = 0.0;
 		EWOL_VERBOSE("     ##### START #####  ");
 	}
-	int64_t offset = _localTime - m_time;
+	int64_t offset = _event.GetTime() - m_time;
 	float timeRelativity = m_config->GetFloat(m_confIdChangeTime)*1000.0;
 	if (offset > timeRelativity) {
 		// check if no new state requested:
 		if (m_nextStatusRequested != -1) {
-			m_time = _localTime;
+			m_time =_event.GetTime();
 			m_stateOld = m_stateNew;
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
