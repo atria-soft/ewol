@@ -44,7 +44,7 @@ namespace ewol
 			inputLimit_ts   m_eventInputLimit;
 			inputLimit_ts   m_eventMouseLimit;
 			void CalculateLimit(void);
-			#define MAX_MANAGE_INPUT         (10)
+			#define MAX_MANAGE_INPUT         (15)
 			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
 			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
 			void AbortElement(InputPoperty_ts *eventTable, int32_t idInput, ewol::keyEvent::type_te _type);

@@ -217,6 +217,10 @@ int32_t ewol::eSystemInput::localGetDestinationId(ewol::keyEvent::type_te type, 
 // note if id<0 ==> the it was finger event ...
 void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec2 pos)
 {
+	if (MAX_MANAGE_INPUT<=pointerID) {
+		// reject pointer ==> out of IDs...
+		return;
+	}
 	InputPoperty_ts *eventTable = NULL;
 	if (type == ewol::keyEvent::typeMouse) {
 		eventTable = m_eventMouseSaved;
@@ -306,6 +310,11 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 
 void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool isDown, vec2 pos)
 {
+	if (MAX_MANAGE_INPUT<=pointerID) {
+		// reject pointer ==> out of IDs...
+		return;
+	}
+	EWOL_DEBUG("event pointerId=" << pointerID);
 	// convert position in Open-GL coordonates ...
 	InputPoperty_ts *eventTable = NULL;
 	inputLimit_ts   localLimit;

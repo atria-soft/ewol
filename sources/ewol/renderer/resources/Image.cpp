@@ -38,13 +38,15 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 		if (false == m_element.IsLoadOk()) {
 			EWOL_ERROR("Error To load SVG file " << tmpName );
 		} else {
+			/*
 			if (size.x()>0 && size.y()>0) {
 				// generate the texture
 				m_element.GenerateAnImage(size, m_data);
 			} else {
+			*/
 				// generate the texture
 				m_element.GenerateAnImage(m_data);
-			}
+			//}
 		}
 	} else if (true == tmpName.EndWith(".png") ) {
 		// generate the texture
