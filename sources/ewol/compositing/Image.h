@@ -52,7 +52,7 @@ namespace ewol
 			/**
 			 * @brief generic destructor
 			 */
-			~Image(void);
+			virtual ~Image(void);
 		public:
 			/**
 			 * @brief Draw All the refistered text in the current element on openGL
@@ -121,7 +121,7 @@ namespace ewol
 			 * @param[in] _sourcePosStart Start position in the image [0..1] (can be bigger but this repeate the image).
 			 * @param[in] _sourcePosStop Stop position in the image [0..1] (can be bigger but this repeate the image).
 			 */
-			void PrintPart(const ivec2& _size,
+			void PrintPart(const vec2& _size,
 			               const vec2& _sourcePosStart,
 			               const vec2& _sourcePosStop);
 			/**

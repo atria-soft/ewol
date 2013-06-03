@@ -34,7 +34,6 @@ ewol::Shaper::Shaper(const etk::UString& _shaperName) :
 	m_GLStateTransition(-1),
 	m_resourceTexture(NULL),
 	m_nextStatusRequested(-1),
-	m_time(-1),
 	m_propertyOrigin(0,0),
 	m_propertySize(0,0),
 	m_propertyInsidePosition(0,0),
@@ -44,7 +43,7 @@ ewol::Shaper::Shaper(const etk::UString& _shaperName) :
 	m_stateTransition(1.0)
 {
 	LoadProgram();
-	UpdateVectex();
+	UpdateVertex();
 }
 
 ewol::Shaper::~Shaper(void)
@@ -158,8 +157,15 @@ void ewol::Shaper::Clear(void)
 
 bool ewol::Shaper::ChangeStatusIn(int32_t _newStatusId)
 {
-	m_nextStatusRequested = _newStatusId;
-	return true;
+	if (_newStatusId != m_stateNew) {
+		m_nextStatusRequested = _newStatusId;
+		return true;
+	}
+	if(    m_nextStatusRequested != -1
+	    || m_stateNew != m_stateOld) {
+		return true;
+	}
+	return false;
 }
 
 int32_t ewol::Shaper::GetCurrentDisplayedStatus(void)
@@ -172,41 +178,48 @@ int32_t ewol::Shaper::GetNextDisplayedStatus(void)
 	return m_nextStatusRequested;
 }
 
+
 bool ewol::Shaper::PeriodicCall(const ewol::EventTime& _event)
 {
+	//EWOL_DEBUG("call=" << _event);
 	// start :
-	if (m_time == -1) {
-		m_time = _event.GetTime();
+	if (m_stateTransition>=1.0) {
 		m_stateOld = m_stateNew;
-		m_stateNew = m_nextStatusRequested;
-		m_nextStatusRequested = -1;
-		m_stateTransition = 0.0;
-		EWOL_VERBOSE("     ##### START #####  ");
-	}
-	int64_t offset = _event.GetTime() - m_time;
-	float timeRelativity = m_config->GetFloat(m_confIdChangeTime)*1000.0;
-	if (offset > timeRelativity) {
-		// check if no new state requested:
-		if (m_nextStatusRequested != -1) {
-			m_time =_event.GetTime();
-			m_stateOld = m_stateNew;
+		if(    m_nextStatusRequested != -1
+		    && m_nextStatusRequested != m_stateOld) {
 			m_stateNew = m_nextStatusRequested;
 			m_nextStatusRequested = -1;
 			m_stateTransition = 0.0;
+			//EWOL_DEBUG("     ##### START #####  ");
 		} else {
-			m_stateTransition = 1.0;
-			EWOL_VERBOSE("     ##### STOP #####  ");
+			m_nextStatusRequested = -1;
+			// disable periodic call ...
 			return false;
-			m_time = -1;
 		}
-	} else {
-		m_stateTransition = (float)offset / timeRelativity;
-		EWOL_VERBOSE("time=" << offset << " in " << timeRelativity << " Transition : " << m_stateTransition);
+	}
+	if (m_stateTransition<1.0) {
+		// check if no new state requested:
+		if (m_nextStatusRequested != -1 && m_stateTransition<0.5) {
+			// invert sources with destination
+			int32_t tmppp = m_stateOld;
+			m_stateOld = m_stateNew;
+			m_stateNew = tmppp;
+			m_stateTransition = 1.0 - m_stateTransition;
+			if (m_nextStatusRequested == m_stateNew) {
+				m_nextStatusRequested = -1;
+			}
+		}
+		float timeRelativity = m_config->GetFloat(m_confIdChangeTime)/1000.0;
+		m_stateTransition += _event.GetDeltaCall()/timeRelativity;
+		//m_stateTransition += _event.GetDeltaCall();
+		m_stateTransition = etk_avg(0.0f, m_stateTransition, 1.0f);
+		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);
 	}
 	return true;
 }
 
-void ewol::Shaper::UpdateVectex(void)
+
+void ewol::Shaper::UpdateVertex(void)
 {
 	// set coord ==> must be a static VBO ...
 	m_coord[0].setValue( m_propertyOrigin.x(),
@@ -228,7 +241,7 @@ void ewol::Shaper::SetOrigin(const vec2& _newOri)
 {
 	if (m_propertyOrigin != _newOri) {
 		m_propertyOrigin = _newOri;
-		UpdateVectex();
+		UpdateVertex();
 	}
 
 }
@@ -237,7 +250,7 @@ void ewol::Shaper::SetSize(const vec2& _newSize)
 {
 	if (m_propertySize != _newSize) {
 		m_propertySize = _newSize;
-		UpdateVectex();
+		UpdateVertex();
 	}
 }
 

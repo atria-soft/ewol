@@ -10,17 +10,20 @@
 #define __EWOL_COMPOSITING_SPRITE_H__
 
 #include <ewol/debug.h>
-#include <ewol/compositing/Compositing.h>
+#include <ewol/compositing/Image.h>
 #include <ewol/renderer/ResourceManager.h>
 
 namespace ewol
 {
-	class Sprite : public ewol::Compositing
+	class Sprite : public ewol::Image
 	{
 		protected:
-			
+			ivec2 m_nbSprite; //!< number of sprite in vertical and horizontal
+			vec2 m_unitarySpriteSize; //!< size of a unique sprite
 		public:
-			
+			Sprite(const etk::UString& _imageName, const ivec2& _nbSprite);
+			virtual ~Sprite() {};
+			void PrintSprite(const ivec2& _spriteID, const vec2& _size);
 	};
 };
 

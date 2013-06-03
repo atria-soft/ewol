@@ -147,6 +147,9 @@ void ewol::Image::SetAngle(const vec3& _axes, float _angle)
 
 void ewol::Image::Print(const vec2& _size)
 {
+	#if 1
+		PrintPart(_size, vec2(0,0), vec2(1,1));
+	#else
 	vec3 point(0,0,0);
 	vec2 tex(0,1);
 
@@ -189,13 +192,55 @@ void ewol::Image::Print(const vec2& _size)
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
+	#endif
 }
 
-void ewol::Image::PrintPart(const ivec2& _size,
+void ewol::Image::PrintPart(const vec2& _size,
                             const vec2& _sourcePosStart,
                             const vec2& _sourcePosStop)
 {
-	
+	vec3 point(0,0,0);
+	vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
+
+	point.setX(m_position.x());
+	point.setY(m_position.y());
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
+
+
+	tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
+	point.setX(m_position.x() + _size.x());
+	point.setY(m_position.y());
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
+
+
+	tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
+	point.setX(m_position.x() + _size.x());
+	point.setY(m_position.y() + _size.y());
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
+
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
+
+	tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
+	point.setX(m_position.x());
+	point.setY(m_position.y() + _size.y());
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
+
+	tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
+	point.setX(m_position.x());
+	point.setY(m_position.y());
+	m_coord.PushBack(point);
+	m_coordTex.PushBack(tex);
+	m_coordColor.PushBack(m_color);
 }
 
 void ewol::Image::SetSource(const etk::UString& _newFile, const vec2& _size)

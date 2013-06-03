@@ -48,7 +48,6 @@ namespace ewol
 			ewol::TextureFile* m_resourceTexture; //!< texture resources (for the image)
 			// internal needed data :
 			int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
-			int64_t m_time;                   //!< The last time of the dispaly (-1 if nothing progressing)
 			vec2    m_propertyOrigin;         //!< widget origin
 			vec2    m_propertySize;           //!< widget size
 			vec2    m_propertyInsidePosition; //!< internal subwidget position
@@ -153,7 +152,7 @@ namespace ewol
 			/**
 			 * @brief Update the internal vertex table.
 			 */
-			void UpdateVectex(void);
+			void UpdateVertex(void);
 	};
 };
 

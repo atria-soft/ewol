@@ -46,11 +46,13 @@ namespace widget {
 			 * @param[in] _newLabel The displayed decorated text.
 			 */
 			void SetLabel(const etk::UString& _newLabel);
+			inline void SetValue(const etk::UString& _newLabel) { SetLabel(_newLabel); };
 			/**
 			 * @brief Get the current displayed label
 			 * @return The displayed decorated text.
 			 */
 			etk::UString GetLabel(void);
+			inline etk::UString GetValue(void) { return GetLabel(); };
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function
