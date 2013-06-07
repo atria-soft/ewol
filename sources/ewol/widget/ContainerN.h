@@ -54,6 +54,7 @@ namespace widget
 			/**
 			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
+			 * @return the ID of the set element
 			 */
 			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
 			inline  int32_t SubWidgetAddBack(ewol::Widget* _newWidget) { return SubWidgetAdd(_newWidget); };
@@ -61,9 +62,10 @@ namespace widget
 			/**
 			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
+			 * @return the ID of the set element
 			 */
-			virtual void SubWidgetAddStart(ewol::Widget* _newWidget);
-			inline  void SubWidgetAddFront(ewol::Widget* _newWidget) { SubWidgetAddStart(_newWidget); };
+			virtual int32_t SubWidgetAddStart(ewol::Widget* _newWidget);
+			inline  int32_t SubWidgetAddFront(ewol::Widget* _newWidget) { return SubWidgetAddStart(_newWidget); };
 			/**
 			 * @brief Remove definitly a widget from the system and this layer.
 			 * @param[in] _newWidget the element pointer.

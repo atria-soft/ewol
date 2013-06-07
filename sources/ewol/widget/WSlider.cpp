@@ -123,11 +123,23 @@ void widget::WSlider::CalculateSize(const vec2& _availlable)
 
 void widget::WSlider::SubWidgetSelectSet(int32_t _id)
 {
-	if (_id<0 || _id >= m_subWidget.Size()) {
-		EWOL_ERROR("Can not change to a widget not present");
+	int32_t elementID = -1;
+	// search element in the list : 
+	for( int32_t iii=0 ; iii<m_subWidget.Size() ; iii++) {
+		if (m_subWidget[iii] != NULL) {
+			if (m_subWidget[iii]->GetId()==_id) {
+				elementID = iii;
+				break;
+			}
+		}
 	}
-	if (_id != m_windowsDestination) {
-		m_windowsRequested = _id;
+
+	if (elementID<0) {
+		EWOL_ERROR("Can not change to a widget not present : uid="<<_id);
+		return;
+	}
+	if (elementID != m_windowsDestination) {
+		m_windowsRequested = elementID;
 		GenerateEventId(eventStartSlide);
 		PeriodicCallEnable();
 		MarkToRedraw();

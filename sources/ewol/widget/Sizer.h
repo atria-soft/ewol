@@ -65,11 +65,51 @@ namespace widget {
 			 * @return the border size (0 if not used)
 			 */
 			const ewol::Dimension& GetBorderSize(void) { return m_borderSize; };
+		public:
+			typedef enum {
+				animationNone, //!< No annimation
+				animationTop, //!< element came from the top
+				animationbuttom, //!< element came from the buttom
+				animationLeft, //!< element came from the Left
+				animationRight //!< element came from the right
+				//animationZoom //!< element came from zooming
+			} animation_te;
+		private:
+			animation_te m_animation; //!< Methode add and remove element (animation)
+		public:
+			/**
+			 * @brief Set an animation mode for the new element set in the Widget container.
+			 * @param[in] _animation The new animation mode.
+			 */
+			void SetAnimationMode(animation_te _animation) { m_animation = _animation; };
+			/**
+			 * @brief Get the current animation mode.
+			 * @return The animation mode.
+			 */
+			animation_te GetAnimationMode(void) { return m_animation;};
+		private:
+			float m_animationTime; //!< Time in second to generate animation
+		public:
+			/**
+			 * @brief Set the time to produce animation.
+			 * @param[in] _time The new animation time.
+			 */
+			void SetAnimationTime(float _time) { m_animationTime = _time; };
+			/**
+			 * @brief Get the current animation time.
+			 * @return The time to produce the animation.
+			 */
+			float GetAnimationTime(void) { return m_animationTime;};
 		public: // Derived function
 			virtual const char * const GetObjectType(void) { return "ewol::widget::sizer"; };
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
 			virtual bool LoadXML(TiXmlNode* _node);
+			// overwrite the set fuction to start annimations ...
+			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
+			virtual int32_t SubWidgetAddStart(ewol::Widget* _newWidget);
+			virtual void SubWidgetRemove(ewol::Widget* _newWidget);
+			virtual void SubWidgetUnLink(ewol::Widget* _newWidget);
 	};
 	
 };

@@ -68,14 +68,14 @@ int32_t widget::ContainerN::SubWidgetAdd(ewol::Widget* _newWidget)
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
 	// added at the last eelement :
-	return m_subWidget.Size()-1;
+	return _newWidget->GetId();
 }
 
-void widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
+int32_t widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
 {
 	if (NULL == _newWidget) {
 		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Try to add start An empty Widget ... ");
-		return;
+		return -1;
 	}
 	if (_newWidget!=NULL) {
 		_newWidget->SetUpperWidget(this);
@@ -83,6 +83,7 @@ void widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
 	m_subWidget.PushFront(_newWidget);
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
+	return _newWidget->GetId();
 }
 
 void widget::ContainerN::SubWidgetRemove(ewol::Widget* _newWidget)

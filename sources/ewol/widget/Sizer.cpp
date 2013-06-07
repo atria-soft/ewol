@@ -32,13 +32,18 @@ void widget::Sizer::UnInit(void)
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te _mode):
 	m_mode(_mode),
-	m_borderSize()
+	m_borderSize(),
+	m_animation(animationNone),
+	m_animationTime(0)
 {
 	
 }
 
 widget::Sizer::~Sizer(void)
 {
+	// disable annimation to remore "remove" error
+	m_animation = animationNone;
+	m_animationTime = 0;
 	//EWOL_DEBUG("[" << GetId() << "]={" << GetObjectType() << "}  Sizer : destroy (mode=" << (m_mode==widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }
 
@@ -197,5 +202,46 @@ bool widget::Sizer::LoadXML(TiXmlNode* _node)
 	}
 	return true;
 }
+
+
+
+int32_t widget::Sizer::SubWidgetAdd(ewol::Widget* _newWidget)
+{
+	if (m_animation == animationNone) {
+		return widget::ContainerN::SubWidgetAdd(_newWidget);
+	}
+	// TODO : ...
+	return widget::ContainerN::SubWidgetAdd(_newWidget);
+}
+
+int32_t widget::Sizer::SubWidgetAddStart(ewol::Widget* _newWidget)
+{
+	if (m_animation == animationNone) {
+		return widget::ContainerN::SubWidgetAddStart(_newWidget);
+	}
+	// TODO : ...
+	return widget::ContainerN::SubWidgetAddStart(_newWidget);
+}
+
+void widget::Sizer::SubWidgetRemove(ewol::Widget* _newWidget)
+{
+	if (m_animation == animationNone) {
+		widget::ContainerN::SubWidgetRemove(_newWidget);
+		return;
+	}
+	// TODO : ...
+	widget::ContainerN::SubWidgetRemove(_newWidget);
+}
+
+void widget::Sizer::SubWidgetUnLink(ewol::Widget* _newWidget)
+{
+	if (m_animation == animationNone) {
+		widget::ContainerN::SubWidgetUnLink(_newWidget);
+		return;
+	}
+	// TODO : ...
+	widget::ContainerN::SubWidgetUnLink(_newWidget);
+}
+
 
 
