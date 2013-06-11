@@ -23,7 +23,8 @@ namespace ewol
 		public:
 			Sprite(const etk::UString& _imageName, const ivec2& _nbSprite);
 			virtual ~Sprite() {};
-			void PrintSprite(const ivec2& _spriteID, const vec2& _size);
+			void PrintSprite(const ivec2& _spriteID, const vec2& _size) { PrintSprite(_spriteID, vec3(_size.x(), _size.y(),0)); };
+			void PrintSprite(const ivec2& _spriteID, const vec3& _size);
 	};
 };
 

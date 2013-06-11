@@ -332,3 +332,54 @@ bool widget::WSlider::OnGetConfig(const char* _config, etk::UString& _result) co
 }
 
 
+ewol::Widget* widget::WSlider::GetWidgetAtPos(const vec2& _pos)
+{
+	if (true == IsHide()) {
+		return NULL;
+	}
+	if (m_windowsDestination == m_windowsSources) {
+		if (m_windowsDestination<m_subWidget.Size()) {
+			vec2 tmpSize = m_subWidget[m_windowsDestination]->GetSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->GetOrigin();
+			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
+			{
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->GetWidgetAtPos(_pos);
+				if (NULL != tmpWidget) {
+					return tmpWidget;
+				}
+				return NULL;
+			}
+		}
+	} else {
+		if (m_windowsDestination<m_subWidget.Size()) {
+			vec2 tmpSize = m_subWidget[m_windowsDestination]->GetSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->GetOrigin();
+			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
+			{
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->GetWidgetAtPos(_pos);
+				if (NULL != tmpWidget) {
+					return tmpWidget;
+				}
+				return NULL;
+			}
+		}
+		if (m_windowsSources<m_subWidget.Size()) {
+			vec2 tmpSize = m_subWidget[m_windowsSources]->GetSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsSources]->GetOrigin();
+			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
+			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
+			{
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsSources]->GetWidgetAtPos(_pos);
+				if (NULL != tmpWidget) {
+					return tmpWidget;
+				}
+				return NULL;
+			}
+		}
+		
+	}
+	return NULL;
+};
+

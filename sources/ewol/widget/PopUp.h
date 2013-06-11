@@ -20,6 +20,12 @@
 namespace widget {
 	class PopUp : public widget::Container
 	{
+		public:
+			static void Init(void);
+			static void UnInit(void);
+			// Config list of properties
+			static const char* const configShaper;
+			static const char* const configRemoveOnExternClick;
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
@@ -38,6 +44,19 @@ namespace widget {
 			 */
 			void SetShaperName(const etk::UString& _shaperName);
 		private:
+			bool m_closeOutEvent; //!< ratio progression of a sliding
+		public:
+			/**
+			 * @brief Request the Auto-remove when the event input is set outside the widget
+			 * @param[in] _state New status
+			 */
+			void SetRemoveOnExternClick(bool _state) { m_closeOutEvent = _state; };
+			/**
+			 * @brief Get the status of the request the Auto-remove when the event input is set outside the widget.
+			 * @return the status of the removing
+			 */
+			bool GetRemoveOnExternClick(void) const { return m_closeOutEvent; };
+		private:
 			float m_slidingProgress; //!< ratio progression of a sliding
 		public:
 			/**
@@ -46,9 +65,12 @@ namespace widget {
 			
 		protected: // Derived function
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& _availlable);
+			virtual bool OnEventInput(const ewol::EventInput& _event);
 			//virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);

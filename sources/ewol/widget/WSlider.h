@@ -85,6 +85,7 @@ namespace widget {
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
+			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
 			virtual void PeriodicCall(const ewol::EventTime& _event);
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
