@@ -573,6 +573,7 @@ void X11_Init(void)
 
 void X11_Run(void)
 {
+	bool specialEventThatNeedARedraw = false;
 	// main cycle
 	while(true == m_run) {
 		//EWOL_ERROR("plop1");
@@ -738,9 +739,11 @@ void X11_Run(void)
 				///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				case Expose:
 					X11_INFO("X11 event Expose");
+					specialEventThatNeedARedraw=true;
 					break;
 				case GraphicsExpose:
 					X11_INFO("X11 event GraphicsExpose");
+					specialEventThatNeedARedraw=true;
 					break;
 				case NoExpose:
 					X11_INFO("X11 event NoExpose");
@@ -764,9 +767,11 @@ void X11_Run(void)
 					X11_INFO("X11 event ReparentNotify");
 					break;
 				case PropertyNotify:
+					specialEventThatNeedARedraw=true;
 					X11_INFO("X11 event PropertyNotify");
 					break;
 				case ConfigureNotify:
+					specialEventThatNeedARedraw=true;
 					X11_INFO("X11 event ConfigureNotify");
 					if (m_display == event.xconfigure.display) {
 						//EWOL_INFO("X11 event ConfigureNotify event=" << (int32_t)event.xconfigure.event << "  Window=" << (int32_t)event.xconfigure.window << "  above=" << (int32_t)event.xconfigure.above << "  border_width=" << (int32_t)event.xconfigure.border_width );
@@ -861,9 +866,11 @@ void X11_Run(void)
 					break;
 				case FocusIn:
 					X11_INFO("X11 event FocusIn");
+					specialEventThatNeedARedraw=true;
 					break;
 				case FocusOut:
 					X11_INFO("X11 event : FocusOut");
+					specialEventThatNeedARedraw=true;
 					break;
 				case KeyPress:
 				case KeyRelease:
@@ -1062,10 +1069,12 @@ void X11_Run(void)
 				//	break;
 				case MapNotify:
 					X11_INFO("X11 event : MapNotify");
+					specialEventThatNeedARedraw=true;
 					eSystem::Show();
 					break;
 				case UnmapNotify:
 					X11_INFO("X11 event : UnmapNotify");
+					specialEventThatNeedARedraw=true;
 					eSystem::Hide();
 					break;
 				default:
@@ -1079,7 +1088,9 @@ void X11_Run(void)
 				XSync(m_display,0);
 			}
 			// draw after switch the previous windows ...
-			hasDisplay = eSystem::Draw(false);
+			//EWOL_DEBUG("specialEventThatNeedARedraw"<<specialEventThatNeedARedraw);
+			hasDisplay = eSystem::Draw(specialEventThatNeedARedraw);
+			specialEventThatNeedARedraw=false;
 		}
 	}
 };

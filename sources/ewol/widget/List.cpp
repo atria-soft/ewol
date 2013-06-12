@@ -16,7 +16,7 @@
 #define __class__	"List"
 
 
-void widget::List::Init(void)
+widget::List::List(void)
 {
 	m_paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
@@ -24,12 +24,8 @@ void widget::List::Init(void)
 	#else
 		m_paddingSizeY = 2;
 	#endif
+	m_nbVisibleRaw=0;
 	SetCanHaveFocus(true);
-}
-
-widget::List::List(void)
-{
-	Init();
 }
 
 widget::List::~List(void)
@@ -40,6 +36,34 @@ widget::List::~List(void)
 		m_listOObject[iii] = NULL;
 	}
 	m_listOObject.Clear();
+}
+
+
+void widget::List::SetRawVisible(int32_t _id)
+{
+	EWOL_DEBUG("Set Raw visible : " << _id);
+	if (_id<0) {
+		return;
+	}
+	if (_id == m_displayStartRaw) {
+		// nothing to do ...
+		return;
+	}
+	if (_id < m_displayStartRaw) {
+		m_displayStartRaw = _id-2;
+	} else {
+		if (m_displayStartRaw + m_nbVisibleRaw < _id) {
+			m_displayStartRaw = _id - m_nbVisibleRaw + 2;
+		}
+	}
+	if (m_displayStartRaw>GetNuberOfRaw()) {
+		m_displayStartRaw = GetNuberOfRaw()-2;
+	}
+	if (m_displayStartRaw<0) {
+		m_displayStartRaw = 0;
+	}
+	EWOL_DEBUG("Set start raw : " << m_displayStartRaw);
+	MarkToRedraw();
 }
 
 
@@ -152,7 +176,9 @@ void widget::List::OnRegenerateDisplay(void)
 		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
 			int32_t sizeColom = 0;
 			displayPositionY = m_size.y();
+			m_nbVisibleRaw = 0;
 			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
+				m_nbVisibleRaw++;
 				etk::UString myTextToWrite;
 				draw::Color fg;
 				draw::Color bg;

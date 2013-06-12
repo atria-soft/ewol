@@ -20,7 +20,6 @@ namespace widget {
 	{
 		public:
 			List(void);
-			void Init(void);
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "ewol::List"; };
 			virtual ~List(void);
@@ -39,6 +38,7 @@ namespace widget {
 			int32_t m_paddingSizeY;
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
+			int32_t m_nbVisibleRaw; // set the number of visible raw (calculate don display)
 		protected:
 			// function call to display the list :
 			virtual draw::Color GetBasicBG(void) {
@@ -69,6 +69,11 @@ namespace widget {
 			virtual bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
 				return false;
 			}
+			/**
+			 * @brief Set a raw visible in the main display
+			 * @param[in] _id Id of the raw that might be visible.
+			 */
+			void SetRawVisible(int32_t _id);
 		protected: // Derived function
 			virtual void OnGetFocus(void);
 			virtual void OnLostFocus(void);

@@ -18,6 +18,7 @@
 
 const char* const widget::PopUp::configShaper="shaper";
 const char* const widget::PopUp::configRemoveOnExternClick="out-click-remove";
+const char* const widget::PopUp::configAnimation="animation";
 
 static ewol::Widget* Create(void)
 {
@@ -43,6 +44,9 @@ widget::PopUp::PopUp(const etk::UString& _shaperName) :
 	SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	RegisterConfig(configShaper, "string", NULL, "The shaper properties");
 	RegisterConfig(configRemoveOnExternClick, "bool", NULL, "Remove the widget if the use click outside");
+	RegisterConfig(configAnimation, "list", "none;increase", "Remove the widget if the use click outside");
+	
+	SetAnimationMode(animationNone);
 }
 
 widget::PopUp::~PopUp(void)
@@ -83,6 +87,24 @@ void widget::PopUp::CalculateSize(const vec2& _availlable)
 	}
 	MarkToRedraw();
 }
+
+void widget::PopUp::SystemDraw(const ewol::DrawProperty& _displayProp)
+{
+	if (true==m_hide){
+		// widget is hidden ...
+		return;
+	}
+	ewol::Widget::SystemDraw(_displayProp);
+	if (NULL!=m_subWidget) {
+		if(    m_shaper.GetNextDisplayedStatus() == -1
+		    && m_shaper.GetTransitionStatus() >= 1.0) {
+			ewol::DrawProperty prop = _displayProp;
+			prop.Limit(m_origin, m_size);
+			m_subWidget->SystemDraw(prop);
+		}
+	}
+}
+
 
 void widget::PopUp::OnDraw(void)
 {
@@ -135,6 +157,14 @@ bool widget::PopUp::OnSetConfig(const ewol::EConfig& _conf)
 		SetRemoveOnExternClick(_conf.GetData().ToBool());
 		return true;
 	}
+	if (_conf.GetConfig() == configAnimation) {
+		if (_conf.GetData().CompareNoCase("increase")==true) {
+			SetAnimationMode(animationIncrease);
+		} else {
+			SetAnimationMode(animationNone);
+		}
+		return true;
+	}
 	return false;
 }
 
@@ -152,6 +182,14 @@ bool widget::PopUp::OnGetConfig(const char* _config, etk::UString& _result) cons
 			_result = "true";
 		} else {
 			_result = "false";
+		}
+		return true;
+	}
+	if (_config == configAnimation) {
+		if (m_animation == animationIncrease) {
+			_result = "increase";
+		} else {
+			_result = "none";
 		}
 		return true;
 	}
@@ -184,5 +222,21 @@ bool widget::PopUp::OnEventInput(const ewol::EventInput& _event)
 		}
 	}
 	return false;
+}
+
+void widget::PopUp::SetAnimationMode(animation_te _animation)
+{
+	m_animation = _animation;
+	if (true == m_shaper.ChangeStatusIn((int32_t)_animation) ) {
+		PeriodicCallEnable();
+	}
+}
+
+void widget::PopUp::PeriodicCall(const ewol::EventTime& _event)
+{
+	if (false == m_shaper.PeriodicCall(_event) ) {
+		PeriodicCallDisable();
+	}
+	MarkToRedraw();
 }
 

@@ -26,6 +26,7 @@ namespace widget {
 			// Config list of properties
 			static const char* const configShaper;
 			static const char* const configRemoveOnExternClick;
+			static const char* const configAnimation;
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
@@ -59,15 +60,31 @@ namespace widget {
 		private:
 			float m_slidingProgress; //!< ratio progression of a sliding
 		public:
+			typedef enum {
+				animationNone, //!< No annimation
+				animationIncrease, //!< element came strart with no size and increase with the corect size.
+			} animation_te;
+		private:
+			animation_te m_animation; //!< Methode add and remove element (animation)
+		public:
 			/**
-			 * @brief 
+			 * @brief Set an animation mode for the new element set in the Widget container.
+			 * @param[in] _animation The new animation mode.
 			 */
+			void SetAnimationMode(animation_te _animation);
+			/**
+			 * @brief Get the current animation mode.
+			 * @return The animation mode.
+			 */
+			animation_te GetAnimationMode(void) { return m_animation;};
 			
 		protected: // Derived function
 			virtual void OnDraw(void);
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
+			virtual void PeriodicCall(const ewol::EventTime& _event);
+			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual bool OnEventInput(const ewol::EventInput& _event);

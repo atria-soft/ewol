@@ -95,12 +95,17 @@ namespace ewol
 			 * @brief Get the current displayed status of the shaper
 			 * @return The Status Id
 			 */
-			int32_t GetCurrentDisplayedStatus(void);;
+			int32_t GetCurrentDisplayedStatus(void) { return m_stateNew; };
 			/**
 			 * @brief Get the next displayed status of the shaper
 			 * @return The next status Id (-1 if no status in next)
 			 */
-			int32_t GetNextDisplayedStatus(void);
+			int32_t GetNextDisplayedStatus(void) { return m_nextStatusRequested; };
+			/**
+			 * @brief Get the current trasion status
+			 * @return value of the transition status (0.0f when no activity)
+			 */
+			float GetTransitionStatus(void) { return m_stateTransition; };
 			/**
 			 * @brief Same as the widfget periodic call (this is for change display)
 			 * @param[in] _event The current time of the call.
