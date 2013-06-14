@@ -24,7 +24,7 @@
 
 package org.ewol;
 
-public interface NativeCallback {
+public interface EwolCallback {
 
     public void keyboardUpdate(boolean show);
     public void eventNotifier(String[] args);
