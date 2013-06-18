@@ -145,6 +145,5 @@ bool widget::Label::LoadXML(TiXmlNode* _node)
 	// TODO : Unparse data type XML ...
 	EWOL_DEBUG("Load label:" << _node->ToElement()->GetText());
 	SetLabel(_node->ToElement()->GetText());
-	EWOL_ERROR(" parse text : \"" << m_label << "\"");
 	return true;
 }

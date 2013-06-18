@@ -64,7 +64,6 @@ void widget::PopUp::SetShaperName(const etk::UString& _shaperName)
 void widget::PopUp::CalculateSize(const vec2& _availlable)
 {
 	ewol::Widget::CalculateSize(_availlable);
-	m_size = _availlable;
 	if (NULL != m_subWidget) {
 		vec2 subWidgetSize = m_subWidget->GetCalculateMinSize();
 		if (true == m_subWidget->CanExpand().x()) {
@@ -117,6 +116,14 @@ void widget::PopUp::OnRegenerateDisplay(void)
 		m_shaper.Clear();
 		vec2 padding = m_shaper.GetPadding();
 		vec2 tmpSize(0,0);
+		bvec2 expand = CanExpand();
+		bvec2 fill = CanFill();
+		if (fill.x()) {
+			tmpSize.setX(m_size.x()-padding.x()*2);
+		}
+		if (fill.y()) {
+			tmpSize.setY(m_size.y()-padding.y()*2);
+		}
 		if (NULL != m_subWidget) {
 			vec2 tmpSize = m_subWidget->GetSize();
 		}

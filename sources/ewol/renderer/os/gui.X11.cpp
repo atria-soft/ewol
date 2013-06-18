@@ -358,9 +358,9 @@ void guiInterface::SetIcon(etk::UString inputFile)
 			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
 				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
 					draw::Color tmpColor = dataImage.Get(pos);
-					int16_t tmpVal =   ((uint16_t)((uint16_t)tmpColor.r>>3))<<11
-					                 + ((uint16_t)((uint16_t)tmpColor.g>>2))<<5
-					                 + ((uint16_t)((uint16_t)tmpColor.b>>3));
+					int16_t tmpVal =   (((uint16_t)((uint16_t)tmpColor.r>>3))<<11)
+					                 + (((uint16_t)((uint16_t)tmpColor.g>>2))<<5)
+					                 +  ((uint16_t)((uint16_t)tmpColor.b>>3));
 					*tmpPointer++ = (uint8_t)(tmpVal>>8);
 					*tmpPointer++ = (uint8_t)(tmpVal&0x00FF);
 				}
