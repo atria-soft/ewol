@@ -174,7 +174,7 @@ bool widget::Image::OnEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-bool widget::Image::LoadXML(TiXmlNode* _node)
+bool widget::Image::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -182,32 +182,32 @@ bool widget::Image::LoadXML(TiXmlNode* _node)
 	ewol::Widget::LoadXML(_node);
 	// get internal data : 
 	
-	const char *tmpAttributeValue = _node->ToElement()->Attribute("ratio");
-	if (NULL != tmpAttributeValue) {
-		if (strcmp(tmpAttributeValue,"true")==0) {
+	etk::UString tmpAttributeValue = _node->GetAttribute("ratio");
+	if (tmpAttributeValue.Size()!=0) {
+		if (tmpAttributeValue.CompareNoCase("true")==true) {
 			m_keepRatio = true;
-		} else if (strcmp(tmpAttributeValue,"1")==0) {
+		} else if (tmpAttributeValue == "1") {
 			m_keepRatio = true;
 		} else {
 			m_keepRatio = false;
 		}
 	}
-	tmpAttributeValue = _node->ToElement()->Attribute("size");
-	if (NULL != tmpAttributeValue) {
+	tmpAttributeValue = _node->GetAttribute("size");
+	if (tmpAttributeValue.Size()!=0) {
 		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
 		m_imageSize = tmpAttributeValue;
 		//EWOL_CRITICAL("              ==> " << m_imageSize);
 	}
-	tmpAttributeValue = _node->ToElement()->Attribute("border");
-	if (NULL != tmpAttributeValue) {
+	tmpAttributeValue = _node->GetAttribute("border");
+	if (tmpAttributeValue.Size()!=0) {
 		m_border = tmpAttributeValue;
 	}
 	//EWOL_DEBUG("Load label:" << node->ToElement()->GetText());
-	if (_node->ToElement()->GetText() != NULL) {
-		SetFile(_node->ToElement()->GetText());
+	if (_node->Size()!=0) {
+		SetFile(_node->GetText());
 	} else {
-		tmpAttributeValue = _node->ToElement()->Attribute("src");
-		if (NULL != tmpAttributeValue) {
+		tmpAttributeValue = _node->GetAttribute("src");
+		if (tmpAttributeValue.Size()!=0) {
 			SetFile(tmpAttributeValue);
 		}
 	}

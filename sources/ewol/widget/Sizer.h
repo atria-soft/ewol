@@ -104,7 +104,7 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "ewol::widget::sizer"; };
 			virtual void CalculateSize(const vec2& _availlable);
 			virtual void CalculateMinMaxSize(void);
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool LoadXML(exml::Element* _node);
 			// overwrite the set fuction to start annimations ...
 			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
 			virtual int32_t SubWidgetAddStart(ewol::Widget* _newWidget);

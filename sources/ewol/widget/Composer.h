@@ -81,14 +81,6 @@ namespace widget
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
 			                               const etk::UString& _overloadData="");
-		private:
-			/**
-			 * @brief Load a composition with a file.
-			 * @param[in] data pointer on the file data.
-			 * @return true ==> all done OK.
-			 * @return false ==> some error occured.
-			 */
-			bool CommonLoadXML(const char* data);
 	};
 };
 

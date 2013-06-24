@@ -11,6 +11,7 @@
 #include <ewol/eObject/EObjectManager.h>
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
+#include <exml/Declaration.h>
 
 class UserConfig : public ewol::EObject
 {
@@ -95,67 +96,43 @@ void ewol::userConfig::SetConfigName(const etk::UString& _fileName)
 
 bool ewol::userConfig::Load(void)
 {
-	etk::FSNode file(l_obj().FileName());
-	if (file.Exist()==false) {
-		EWOL_ERROR("Can not load the file : " << l_obj().FileName());
-		return false;
-	}
 	// allocate the document in the stack
-	TiXmlDocument XmlDocument;
-	int32_t fileSize = file.FileSize();
-	if (0==fileSize) {
-		EWOL_ERROR("This file is empty : " << file);
+	exml::Document doc;
+	if (false == doc.Load(l_obj().FileName())) {
+		EWOL_ERROR("Error occured when loading XML : " << l_obj().FileName());
 		return false;
 	}
-	if (false == file.FileOpenRead()) {
-		EWOL_ERROR("Can not open the file : " << file);
+	if (0 == doc.Size() ) {
+		EWOL_ERROR("(l ?) No nodes in the xml file ... \"" << l_obj().FileName() << "\"");
 		return false;
 	}
-	// allocate data
-	char * fileBuffer = new char[fileSize+5];
-	if (NULL == fileBuffer) {
-		EWOL_ERROR("Error Memory allocation size=" << fileSize);
-		return false;
-	}
-	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
-	// load data from the file :
-	file.FileRead(fileBuffer, 1, fileSize);
-	// close the file:
-	file.FileClose();
-	// load the XML from the memory
-	XmlDocument.Parse((const char*)fileBuffer, 0, TIXML_ENCODING_UTF8);
-
-	TiXmlElement* root = XmlDocument.FirstChildElement("config");
+	exml::Element* root = (exml::Element*)doc.GetNamed("config");
 	if (NULL == root ) {
-		EWOL_ERROR("(l ?) main node not find: \"config\" in \"" << file << "\"");
-		if (NULL != fileBuffer) {
-			delete[] fileBuffer;
-		}
+		EWOL_ERROR("(l ?) main node not find: \"config\" in \"" << l_obj().FileName() << "\"");
 		return false;
 	}
-	for(TiXmlNode * pNode = root->FirstChild();
-	    NULL != pNode;
-	    pNode = pNode->NextSibling() ) {
-		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+	for(int32_t iii=0; iii< root->Size(); iii++) {
+		exml::Node* child = root->Get(iii);
+		if (child==NULL) {
+			continue;
+		}
+		if (!child->IsElement()) {
 			// nothing to do, just proceed to next step
-		} else {
-			bool elementFound = false;
-			for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {
-				if (l_obj().List()[iii] != NULL) {
-					if (l_obj().List()[iii]->GetName() == pNode->Value()) {
-						l_obj().List()[iii]->LoadXML(pNode);
-						elementFound = true;
-						break;
-					}
+			continue;
+		}
+		bool elementFound = false;
+		for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {
+			if (l_obj().List()[iii] != NULL) {
+				if (l_obj().List()[iii]->GetName() == child->GetValue()) {
+					l_obj().List()[iii]->LoadXML((exml::Element*)child);
+					elementFound = true;
+					break;
 				}
 			}
-			if (elementFound==false) {
-				EWOL_ERROR("(l "<<pNode->Row()<<") node not suported : \""<<pNode->Value());
-			}
 		}
-	}
-	if (NULL != fileBuffer) {
-		delete[] fileBuffer;
+		if (elementFound==false) {
+			EWOL_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue());
+		}
 	}
 	return true;
 }
@@ -174,31 +151,26 @@ bool ewol::userConfig::Save(void)
 	if (true==etk::FSNodeExist(l_obj().FileName()) ) {
 		etk::FSNodeMove(l_obj().FileName(),l_obj().FileName()+"-1");
 	}
-	// basic create file:
-	etk::FSNode myNode(l_obj().FileName());
-	// create basic folders ...
-	myNode.Touch();
-	etk::UString tmpCompleateName = myNode.GetFileSystemName();
-	// step 2 : save the file
-	TiXmlDocument doc;
-	TiXmlDeclaration * decl = new TiXmlDeclaration("1.0", "UTF-8", "");
-	doc.LinkEndChild(decl);
-	TiXmlElement * ElementBase = new TiXmlElement("config");
-	doc.LinkEndChild(ElementBase);
+	exml::Document doc;
+	doc.Append(new exml::Declaration("1.0", "UTF-8", ""));
+	exml::Element * ElementBase = new exml::Element("config");
+	doc.Append(ElementBase);
 	for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {
-		if (l_obj().List()[iii] != NULL) {
-			if (l_obj().List()[iii]->GetName().Size() != 0) {
-				TiXmlElement * element = new TiXmlElement(l_obj().List()[iii]->GetName().c_str());
-				if (NULL != element) {
-					l_obj().List()[iii]->StoreXML(element);
-					ElementBase->LinkEndChild(element);
-				}
-			}
+		if (l_obj().List()[iii] == NULL) {
+			continue;
+		}
+		if (l_obj().List()[iii]->GetName().Size() == 0) {
+			continue;
+		}
+		exml::Element* element = new exml::Element(l_obj().List()[iii]->GetName());
+		if (NULL != element) {
+			l_obj().List()[iii]->StoreXML(element);
+			ElementBase->Append(element);
 		}
 	}
 	//Save Document
-	doc.SaveFile( tmpCompleateName.c_str() );
-	EWOL_DEBUG("Save in file : " << tmpCompleateName);
+	doc.Store(l_obj().FileName());
+	EWOL_DEBUG("Save in file : " << l_obj().FileName());
 	// step 3 : Remove oldest save
 	return true;
 }

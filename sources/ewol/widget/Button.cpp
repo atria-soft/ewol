@@ -430,7 +430,7 @@ ewol::Widget* widget::Button::GetWidgetNamed(const etk::UString& _widgetName)
 }
 
 
-bool widget::Button::LoadXML(TiXmlNode* _node)
+bool widget::Button::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -442,30 +442,32 @@ bool widget::Button::LoadXML(TiXmlNode* _node)
 	SetSubWidgetToggle(NULL);
 	
 	// parse all the elements :
-	for(TiXmlNode * pNode = _node->FirstChild() ;
-	    NULL != pNode ;
-	    pNode = pNode->NextSibling() ) {
-		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+	for(int32_t iii=0; iii< _node->Size(); iii++) {
+		exml::Node* pNode = _node->Get(iii);
+		if (pNode==NULL) {
+			continue;
+		}
+		if (!pNode->IsElement()) {
 			// nothing to do, just proceed to next step
 			continue;
 		}
-		etk::UString widgetName = pNode->Value();
+		etk::UString widgetName = pNode->GetValue();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("(l "<<pNode->Pos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		bool toogleMode=false;
 		if (NULL != GetSubWidget()) {
 			toogleMode=true;
 			if (NULL != GetSubWidgetToggle()) {
-				EWOL_ERROR("(l "<<pNode->Row()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+				EWOL_ERROR("(l "<<pNode->Pos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 				continue;
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
 		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
 		if (tmpWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("(l "<<pNode->Pos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add widget :
@@ -475,8 +477,8 @@ bool widget::Button::LoadXML(TiXmlNode* _node)
 			SetToggleMode(true);
 			SetSubWidgetToggle(tmpWidget);
 		}
-		if (false == tmpWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+		if (false == tmpWidget->LoadXML((exml::Element*)pNode)) {
+			EWOL_ERROR ("(l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}

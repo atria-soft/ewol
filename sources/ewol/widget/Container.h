@@ -60,7 +60,7 @@ namespace widget
 			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
 			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
 			virtual const char * const GetObjectType(void) { return "ewol::widget::Container"; };
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool LoadXML(exml::Element* _node);
 			virtual void SetOffset(const vec2& _newVal);
 	};
 };

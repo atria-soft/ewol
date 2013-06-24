@@ -729,7 +729,7 @@ ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
 	return m_cursorDisplay;
 }
 
-bool ewol::Widget::LoadXML(TiXmlNode* _node)
+bool ewol::Widget::LoadXML(exml::Element* _node)
 {
 	// Call EObject basic parser
 	ewol::EObject::LoadXML(_node); // note : Load standard parameters (attribute in XML)

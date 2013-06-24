@@ -6,8 +6,6 @@
  * @license BSD v3 (see license file)
  */
 
-#include <tinyXML/tinyxml.h>
-
 #include <ewol/debug.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/config.h>

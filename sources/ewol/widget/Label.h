@@ -60,7 +60,7 @@ namespace widget {
 			virtual void CalculateMinMaxSize(void);
 			virtual void OnRegenerateDisplay(void);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool LoadXML(exml::Element* _node);
 	};
 	
 };

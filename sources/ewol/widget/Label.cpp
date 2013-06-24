@@ -135,7 +135,7 @@ bool widget::Label::OnEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-bool widget::Label::LoadXML(TiXmlNode* _node)
+bool widget::Label::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -143,7 +143,7 @@ bool widget::Label::LoadXML(TiXmlNode* _node)
 	ewol::Widget::LoadXML(_node);
 	// get internal data : 
 	// TODO : Unparse data type XML ...
-	EWOL_DEBUG("Load label:" << _node->ToElement()->GetText());
-	SetLabel(_node->ToElement()->GetText());
+	EWOL_DEBUG("Load label:" << _node->GetValue());
+	SetLabel(_node->GetValue());
 	return true;
 }

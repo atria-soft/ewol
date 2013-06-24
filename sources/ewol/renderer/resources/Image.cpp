@@ -10,7 +10,7 @@
 #include <etk/types.h>
 #include <etk/os/FSNode.h>
 
-#include <parserSVG/parserSVG.h>
+#include <esvg/esvg.h>
 
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/Image.h>
@@ -34,7 +34,7 @@ ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, i
 			EWOL_ERROR("Error To load BMP file " << tmpName );
 		}
 	} else if (true == tmpName.EndWith(".svg") ) {
-		svg::Parser m_element(tmpName);
+		esvg::Document m_element(tmpName);
 		if (false == m_element.IsLoadOk()) {
 			EWOL_ERROR("Error To load SVG file " << tmpName );
 		} else {

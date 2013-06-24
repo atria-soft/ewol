@@ -299,7 +299,7 @@ void guiInterface::SetTitle(etk::UString& title)
 
 #include <ewol/renderer/resources/image/ImageBMP.h>
 #include <ewol/renderer/resources/image/ImagePNG.h>
-#include <parserSVG/parserSVG.h>
+#include <esvg/esvg.h>
 
 void guiInterface::SetIcon(etk::UString inputFile)
 {
@@ -312,7 +312,7 @@ void guiInterface::SetIcon(etk::UString inputFile)
 			return;
 		}
 	} else if (true == inputFile.EndWith(".svg") ) {
-		svg::Parser m_element(inputFile);
+		esvg::Document m_element(inputFile);
 		if (false == m_element.IsLoadOk()) {
 			EWOL_ERROR("Error To load SVG file " << inputFile );
 			return;

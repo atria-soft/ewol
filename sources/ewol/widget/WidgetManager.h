@@ -13,7 +13,6 @@
 #include <ewol/debug.h>
 #include <etk/Vector.h>
 #include <ewol/widget/Widget.h>
-#include <tinyXML/tinyxml.h>
 
 namespace ewol {
 	namespace widgetManager {

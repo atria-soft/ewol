@@ -6,8 +6,6 @@
  * @license BSD v3 (see license file)
  */
 
-#include <tinyXML/tinyxml.h>
-
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/config.h>
@@ -436,41 +434,50 @@ void ewol::Text::Print(const etk::UString& _text)
 }
 
 
-void ewol::Text::ParseHtmlNode(void* _element2)
+void ewol::Text::ParseHtmlNode(exml::Element* _element)
 {
 	// get the static real pointer
-	TiXmlNode* element = static_cast<TiXmlNode*>(_element2);
-	if (NULL == element) {
+	if (NULL == _element) {
 		EWOL_ERROR( "Error Input node does not existed ...");
 	}
-	for( TiXmlNode * child = element->FirstChild() ;
-	     NULL != child ;
-	     child = child->NextSibling() ) {
-		if (child->Type()==TiXmlNode::TINYXML_COMMENT) {
+	for(int32_t iii=0; iii< _element->Size(); iii++) {
+		exml::Node* child = _element->Get(iii);
+		if (child==NULL) {
+			continue;
+		}
+		if (child->GetType()==exml::typeComment) {
 			// nothing to do ...
-		} else if (child->Type()==TiXmlNode::TINYXML_TEXT) {
-			HtmlAddData(child->Value() );
-			EWOL_VERBOSE("XML Add : " << child->Value());
-		} else if(    !strcmp(child->Value(), "br")
-		           || !strcmp(child->Value(), "BR")) {
+		} else if (child->GetType()==exml::typeText) {
+			HtmlAddData(child->GetValue() );
+			EWOL_VERBOSE("XML Add : " << child->GetValue());
+		} else if (child->GetType()!=exml::typeElement) {
+			EWOL_ERROR("(l "<< child->Pos() << ") node not suported type : " << child->GetType() << " val=\""<< child->GetValue() << "\"" );
+			continue;
+		}
+		exml::Element* elem = (exml::Element*)child;
+		if (elem==NULL) {
+			EWOL_ERROR("Cast error ...");
+			continue;
+		}
+		if(true==elem->GetValue().CompareNoCase("br")) {
 			HtmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			ForceLineReturn();
-		} else if (!strcmp(child->Value(), "font")) {
+		} else if (true==elem->GetValue().CompareNoCase("font")) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
-			const char *colorValue = child->ToElement()->Attribute("color");
-			if (NULL != colorValue) {
-				draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorFg);
+			etk::UString colorValue = elem->GetAttribute("color");
+			if (colorValue.Size()!=0) {
+				draw::ParseColor(colorValue.c_str(), m_htmlDecoTmp.m_colorFg);
 			}
-			colorValue = child->ToElement()->Attribute("colorBg");
-			if (NULL != colorValue) {
-				draw::ParseColor(colorValue, m_htmlDecoTmp.m_colorBg);
+			colorValue = elem->GetAttribute("colorBg");
+			if (colorValue.Size()!=0) {
+				draw::ParseColor(colorValue.c_str(), m_htmlDecoTmp.m_colorBg);
 			}
-			ParseHtmlNode(child);
+			ParseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    !strcmp(child->Value(), "b")
-		           || !strcmp(child->Value(), "bold")) {
+		} else if(    true==elem->GetValue().CompareNoCase("b")
+		           || true==elem->GetValue().CompareNoCase("bold")) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -478,10 +485,10 @@ void ewol::Text::ParseHtmlNode(void* _element2)
 			} else if (m_htmlDecoTmp.m_mode == ewol::font::Italic) {
 				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
 			} 
-			ParseHtmlNode(child);
+			ParseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    !strcmp(child->Value(), "i")
-		           || !strcmp(child->Value(), "italic")) {
+		} else if(    true==elem->GetValue().CompareNoCase("i")
+		           || true==elem->GetValue().CompareNoCase("italic")) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -489,42 +496,42 @@ void ewol::Text::ParseHtmlNode(void* _element2)
 			} else if (m_htmlDecoTmp.m_mode == ewol::font::Bold) {
 				m_htmlDecoTmp.m_mode = ewol::font::BoldItalic;
 			} 
-			ParseHtmlNode(child);
+			ParseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    !strcmp(child->Value(), "u")
-		           || !strcmp(child->Value(), "underline")) {
+		} else if(    true==elem->GetValue().CompareNoCase("u")
+		           || true==elem->GetValue().CompareNoCase("underline")) {
 			EWOL_VERBOSE("XML underline ...");
-			ParseHtmlNode(child);
-		} else if(    !strcmp(child->Value(), "p")
-		           || !strcmp(child->Value(), "paragraph")) {
+			ParseHtmlNode(elem);
+		} else if(    true==elem->GetValue().CompareNoCase("p")
+		           || true==elem->GetValue().CompareNoCase("paragraph")) {
 			EWOL_VERBOSE("XML paragraph ...");
 			HtmlFlush();
 			m_alignement = ewol::Text::alignLeft;
 			ForceLineReturn();
-			ParseHtmlNode(child);
+			ParseHtmlNode(elem);
 			ForceLineReturn();
-		} else if (!strcmp(child->Value(), "center")) {
+		} else if (true==elem->GetValue().CompareNoCase("center")) {
 			EWOL_VERBOSE("XML center ...");
 			HtmlFlush();
 			m_alignement = ewol::Text::alignCenter;
-			ParseHtmlNode(child);
-		} else if (!strcmp(child->Value(), "left")) {
+			ParseHtmlNode(elem);
+		} else if (true==elem->GetValue().CompareNoCase("left")) {
 			EWOL_VERBOSE("XML left ...");
 			HtmlFlush();
 			m_alignement = ewol::Text::alignLeft;
-			ParseHtmlNode(child);
-		} else if (!strcmp(child->Value(), "right")) {
+			ParseHtmlNode(elem);
+		} else if (true==elem->GetValue().CompareNoCase("right")) {
 			EWOL_VERBOSE("XML right ...");
 			HtmlFlush();
 			m_alignement = ewol::Text::alignRight;
-			ParseHtmlNode(child);
-		} else if (!strcmp(child->Value(), "justify")) {
+			ParseHtmlNode(elem);
+		} else if (true==elem->GetValue().CompareNoCase("justify")) {
 			EWOL_VERBOSE("XML justify ...");
 			HtmlFlush();
 			m_alignement = ewol::Text::alignJustify;
-			ParseHtmlNode(child);
+			ParseHtmlNode(elem);
 		} else {
-			EWOL_ERROR("(l "<< child->Row() << ") node not suported type : " << child->Type() << " val=\""<< child->Value() << "\"" );
+			EWOL_ERROR("(l "<< elem->Pos() << ") node not suported type : " << elem->GetType() << " val=\""<< elem->GetValue() << "\"" );
 		}
 	}
 }
@@ -540,27 +547,24 @@ void ewol::Text::PrintDecorated(const etk::UString& _text)
 
 void ewol::Text::PrintHTML(const etk::UString& _text)
 {
-	TiXmlDocument XmlDocument;
+	exml::Document doc;
 	
 	// reset parameter :
 	m_htmlDecoTmp.m_colorBg = draw::color::none;
 	m_htmlDecoTmp.m_colorFg = draw::color::black;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
-	etk::Char tmpChar = _text.c_str();
-	// load the XML from the memory
-	bool loadError = XmlDocument.Parse(tmpChar, 0, TIXML_ENCODING_UTF8);
-	if (false == loadError) {
+	if (false == doc.Parse(_text)) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
-
-	TiXmlElement* root = XmlDocument.FirstChildElement( "html" );
+	
+	exml::Element* root = (exml::Element*)doc.GetNamed( "html" );
 	if (NULL == root) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		return;
 	}
-	TiXmlElement* bodyNode = root->FirstChildElement( "body" );
+	exml::Element* bodyNode = (exml::Element*)root->GetNamed( "body" );
 	if (NULL == root) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;

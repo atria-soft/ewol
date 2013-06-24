@@ -12,7 +12,7 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <etk/Vector.h>
-#include <tinyXML/tinyxml.h>
+#include <exml/exml.h>
 namespace ewol {
 	// some class need to define element befor other ...
 	class EObject;
@@ -212,14 +212,14 @@ namespace ewol {
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool LoadXML(exml::Element* _node);
 			/**
 			 * @brief Store properties in this XML node.
 			 * @param[in,out] _node Pointer on the tinyXML node.
 			 * @return true : All has been done corectly.
 			 * @return false : An error occured.
 			 */
-			virtual bool StoreXML(TiXmlNode* _node) const;
+			virtual bool StoreXML(exml::Element* _node) const;
 	};
 };
 

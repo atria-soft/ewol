@@ -283,7 +283,7 @@ ewol::Widget* widget::ContainerN::GetWidgetAtPos(const vec2& _pos)
 };
 
 
-bool widget::ContainerN::LoadXML(TiXmlNode* _node)
+bool widget::ContainerN::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -293,35 +293,34 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 	// remove previous element :
 	SubWidgetRemoveAll();
 	
-	const char *tmpAttributeValue = _node->ToElement()->Attribute("lock");
-	if (NULL != tmpAttributeValue) {
+	etk::UString tmpAttributeValue = _node->GetAttribute("lock");
+	if (tmpAttributeValue.Size()!=0) {
 		m_lockExpand = tmpAttributeValue;
 	}
 	bool invertAdding=false;
-	tmpAttributeValue = _node->ToElement()->Attribute("addmode");
-	if (NULL != tmpAttributeValue) {
-		etk::UString val(tmpAttributeValue);
-		if(val.CompareNoCase("invert")) {
-			invertAdding=true;
-		}
+	tmpAttributeValue = _node->GetAttribute("addmode");
+	if(tmpAttributeValue.CompareNoCase("invert")) {
+		invertAdding=true;
 	}
 	// parse all the elements :
-	for(TiXmlNode * pNode = _node->FirstChild() ;
-	    NULL != pNode ;
-	    pNode = pNode->NextSibling() ) {
-		if (pNode->Type()==TiXmlNode::TINYXML_COMMENT) {
+	for(int32_t iii=0; iii< _node->Size(); iii++) {
+		exml::Node* pNode = _node->Get(iii);
+		if (pNode==NULL) {
+			continue;
+		}
+		if (!pNode->IsElement()) {
 			// nothing to do, just proceed to next step
 			continue;
 		}
-		etk::UString widgetName = pNode->Value();
+		etk::UString widgetName = pNode->GetValue();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} load new element : \"" << widgetName << "\"");
 		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
 		if (subWidget == NULL) {
-			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add sub element : 
@@ -330,8 +329,8 @@ bool widget::ContainerN::LoadXML(TiXmlNode* _node)
 		} else {
 			SubWidgetAddStart(subWidget);
 		}
-		if (false == subWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Row()<<") can not load widget properties : \"" << widgetName << "\"");
+		if (false == subWidget->LoadXML((exml::Element*)pNode)) {
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}

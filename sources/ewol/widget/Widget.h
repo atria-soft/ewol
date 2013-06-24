@@ -616,7 +616,7 @@ namespace ewol {
 			virtual ewol::cursorDisplay_te GetCursor(void);
 		public: // Derived function
 			virtual void OnObjectRemove(ewol::EObject* _removeObject);
-			virtual bool LoadXML(TiXmlNode* _node);
+			virtual bool LoadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;

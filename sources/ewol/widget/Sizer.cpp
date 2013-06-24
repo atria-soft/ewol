@@ -178,7 +178,7 @@ void widget::Sizer::CalculateMinMaxSize(void)
 	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-bool widget::Sizer::LoadXML(TiXmlNode* _node)
+bool widget::Sizer::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -186,15 +186,14 @@ bool widget::Sizer::LoadXML(TiXmlNode* _node)
 	// parse generic properties :
 	widget::ContainerN::LoadXML(_node);
 	
-	const char* tmpAttributeValue = _node->ToElement()->Attribute("border");
-	if (NULL != tmpAttributeValue) {
+	etk::UString tmpAttributeValue = _node->GetAttribute("border");
+	if (tmpAttributeValue.Size()!=0) {
 		m_borderSize = tmpAttributeValue;
 	}
-	tmpAttributeValue = _node->ToElement()->Attribute("mode");
-	if (NULL != tmpAttributeValue) {
-		etk::UString val(tmpAttributeValue);
-		if(    val.CompareNoCase("vert")
-		    || val.CompareNoCase("vertical")) {
+	tmpAttributeValue = _node->GetAttribute("mode");
+	if (tmpAttributeValue.Size()!=0) {
+		if(    tmpAttributeValue.CompareNoCase("vert")
+		    || tmpAttributeValue.CompareNoCase("vertical")) {
 			m_mode = widget::Sizer::modeVert;
 		} else {
 			m_mode = widget::Sizer::modeHori;

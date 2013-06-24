@@ -15,6 +15,7 @@
 #include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/renderer/ResourceManager.h>
+#include <exml/exml.h>
 
 namespace ewol
 {
@@ -305,9 +306,9 @@ namespace ewol
 		private:
 			/**
 			 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
-			 * @param[in] _element the tynyXML element : TiXmlNode* .
+			 * @param[in] _element the exml element.
 			 */
-			void ParseHtmlNode(void* _element);
+			void ParseHtmlNode(exml::Element* _element);
 		public:
 			/**
 			 * @brief This generate the possibility to generate the big text property

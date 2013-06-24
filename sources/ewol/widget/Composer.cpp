@@ -41,57 +41,30 @@ widget::Composer::~Composer(void)
 
 bool widget::Composer::LoadFromFile(const etk::UString& _fileName)
 {
-	// open the curent File
-	etk::FSNode fileName(_fileName);
-	if (false == fileName.Exist()) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} File Does not exist : " << fileName);
+	exml::Document doc;
+	if (doc.Load(_fileName)==false) {
+		EWOL_ERROR(" can not load file XML : " << _fileName);
 		return false;
 	}
-	int32_t fileSize = fileName.FileSize();
-	if (0==fileSize) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} This file is empty : " << fileName);
+	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
+	if (NULL == root ) {
+		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
 		return false;
 	}
-	if (false == fileName.FileOpenRead()) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Can not open the file : " << fileName);
-		return false;
-	}
-	// allocate data
-	char * fileBuffer = new char[fileSize+5];
-	if (NULL == fileBuffer) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Error Memory allocation size=" << fileSize);
-		return false;
-	}
-	memset(fileBuffer, 0, (fileSize+5)*sizeof(char));
-	// load data from the file :
-	fileName.FileRead(fileBuffer, 1, fileSize);
-	// close the file:
-	fileName.FileClose();
+	// call upper class to parse his elements ...
+	widget::Container::LoadXML(root);
 	
-	bool ret = CommonLoadXML((const char*)fileBuffer);
-	
-	if (NULL != fileBuffer) {
-		delete[] fileBuffer;
-	}
-	return ret;
+	return true;
 }
 
-bool widget::Composer::LoadFromString(const etk::UString& composerXmlString)
+bool widget::Composer::LoadFromString(const etk::UString& _composerXmlString)
 {
-	etk::Char tmpData = composerXmlString.c_str();
-	return CommonLoadXML(tmpData);
-}
-
-bool widget::Composer::CommonLoadXML(const char* data)
-{
-	if (NULL==data) {
+	exml::Document doc;
+	if (doc.Parse(_composerXmlString)==false) {
+		EWOL_ERROR(" can not load file XML string...");
 		return false;
 	}
-	TiXmlDocument XmlDocument;
-	// load the XML from the memory
-	XmlDocument.Parse(data, 0, TIXML_ENCODING_UTF8);
-	
-	TiXmlElement* root = XmlDocument.FirstChildElement("composer");
+	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
 	if (NULL == root ) {
 		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
 		return false;

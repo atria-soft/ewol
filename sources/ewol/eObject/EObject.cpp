@@ -269,7 +269,7 @@ void ewol::EObject::RegisterConfig(const char* _config, const char* _type, const
 }
 
 
-bool ewol::EObject::LoadXML(TiXmlNode* _node)
+bool ewol::EObject::LoadXML(exml::Element* _node)
 {
 	if (NULL==_node) {
 		return false;
@@ -279,8 +279,9 @@ bool ewol::EObject::LoadXML(TiXmlNode* _node)
 		if (m_listConfig[iii].GetConfig() == NULL) {
 			continue;
 		}
-		const char* value = _node->ToElement()->Attribute(m_listConfig[iii].GetConfig());
-		if (NULL == value) {
+		etk::UString value = _node->GetAttribute(m_listConfig[iii].GetConfig());
+		// check existance :
+		if (value.Size()==0) {
 			continue;
 		}
 		if (false==SetConfig(ewol::EConfig(m_listConfig[iii].GetConfig(), value) ) ) {
@@ -290,7 +291,7 @@ bool ewol::EObject::LoadXML(TiXmlNode* _node)
 	return errorOccured;
 }
 
-bool ewol::EObject::StoreXML(TiXmlNode* _node) const
+bool ewol::EObject::StoreXML(exml::Element* _node) const
 {
 	if (NULL==_node) {
 		return false;
@@ -308,7 +309,7 @@ bool ewol::EObject::StoreXML(TiXmlNode* _node) const
 			}
 		}
 		// add attribute ... ==> note : Add special element when '"' element detected ...
-		_node->ToElement()->SetAttribute(m_listConfig[iii].GetConfig(), value.c_str() );
+		_node->SetAttribute(m_listConfig[iii].GetConfig(), value);
 	}
 	return errorOccured;
 }
