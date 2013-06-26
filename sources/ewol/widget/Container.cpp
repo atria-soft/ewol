@@ -178,12 +178,9 @@ bool widget::Container::LoadXML(exml::Element* _node)
 	
 	// parse all the elements :
 	for(int32_t iii=0; iii< _node->Size(); iii++) {
-		exml::Node* pNode = _node->Get(iii);
+		exml::Element* pNode = _node->GetElement(iii);
 		if (pNode==NULL) {
-			continue;
-		}
-		if (!pNode->IsElement()) {
-			// nothing to do, just proceed to next step
+			// trash here all that is not element
 			continue;
 		}
 		etk::UString widgetName = pNode->GetValue();
@@ -203,7 +200,7 @@ bool widget::Container::LoadXML(exml::Element* _node)
 		}
 		// add widget :
 		SetSubWidget(tmpWidget);
-		if (false == tmpWidget->LoadXML((exml::Element*)pNode)) {
+		if (false == tmpWidget->LoadXML(pNode)) {
 			EWOL_ERROR ("(l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}

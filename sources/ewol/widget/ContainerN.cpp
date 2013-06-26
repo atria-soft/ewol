@@ -304,12 +304,9 @@ bool widget::ContainerN::LoadXML(exml::Element* _node)
 	}
 	// parse all the elements :
 	for(int32_t iii=0; iii< _node->Size(); iii++) {
-		exml::Node* pNode = _node->Get(iii);
+		exml::Element* pNode = _node->GetElement(iii);
 		if (pNode==NULL) {
-			continue;
-		}
-		if (!pNode->IsElement()) {
-			// nothing to do, just proceed to next step
+			// trash here all that is not element
 			continue;
 		}
 		etk::UString widgetName = pNode->GetValue();
@@ -329,7 +326,7 @@ bool widget::ContainerN::LoadXML(exml::Element* _node)
 		} else {
 			SubWidgetAddStart(subWidget);
 		}
-		if (false == subWidget->LoadXML((exml::Element*)pNode)) {
+		if (false == subWidget->LoadXML(pNode)) {
 			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}

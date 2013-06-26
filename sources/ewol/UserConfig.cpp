@@ -112,19 +112,16 @@ bool ewol::userConfig::Load(void)
 		return false;
 	}
 	for(int32_t iii=0; iii< root->Size(); iii++) {
-		exml::Node* child = root->Get(iii);
+		exml::Element* child = root->GetElement(iii);
 		if (child==NULL) {
-			continue;
-		}
-		if (!child->IsElement()) {
-			// nothing to do, just proceed to next step
+			// other than element is trash here
 			continue;
 		}
 		bool elementFound = false;
 		for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {
 			if (l_obj().List()[iii] != NULL) {
 				if (l_obj().List()[iii]->GetName() == child->GetValue()) {
-					l_obj().List()[iii]->LoadXML((exml::Element*)child);
+					l_obj().List()[iii]->LoadXML(child);
 					elementFound = true;
 					break;
 				}

@@ -98,7 +98,7 @@ int32_t widget::Menu::Add(int32_t parent, etk::UString label, etk::UString image
 			        "		<image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n"
 			        "		<label>" + label + "</label>\n"
 			        "	</sizer>\n"
-			        "</composer\n"));
+			        "</composer>\n"));
 		} else {
 			myButton->SetSubWidget( new widget::Label(label) );
 		}
@@ -205,7 +205,7 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 											        etk::UString("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
 											        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 											        "		<image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n"
-											        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + "]]></label>\n"
+											        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + " ]]></label>\n"
 											        "	</sizer>\n"
 											        "</composer>\n"));
 										} else {
@@ -219,7 +219,7 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 												        "	</sizer>\n"
 												        "</composer>\n"));
 											} else {
-												widget::Label* tmpLabel = new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>");
+												widget::Label* tmpLabel = new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>\n");
 												if (NULL != tmpLabel) {
 													tmpLabel->SetExpand(bvec2(true,false));
 													tmpLabel->SetFill(bvec2(true,true));

@@ -10,6 +10,10 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/config.h>
 
+
+#undef __class__
+#define __class__	"ewol::Text"
+
 ewol::Text::Text(void) :
 	m_position(0.0, 0.0, 0.0),
 	m_clippingPosStart(0.0, 0.0, 0.0),
@@ -441,20 +445,19 @@ void ewol::Text::ParseHtmlNode(exml::Element* _element)
 		EWOL_ERROR( "Error Input node does not existed ...");
 	}
 	for(int32_t iii=0; iii< _element->Size(); iii++) {
-		exml::Node* child = _element->Get(iii);
-		if (child==NULL) {
-			continue;
-		}
-		if (child->GetType()==exml::typeComment) {
+		
+		if (_element->GetType(iii)==exml::typeComment) {
 			// nothing to do ...
-		} else if (child->GetType()==exml::typeText) {
+		} else if (_element->GetType(iii)==exml::typeText) {
+			exml::Node* child = _element->GetNode(iii);
 			HtmlAddData(child->GetValue() );
 			EWOL_VERBOSE("XML Add : " << child->GetValue());
-		} else if (child->GetType()!=exml::typeElement) {
-			EWOL_ERROR("(l "<< child->Pos() << ") node not suported type : " << child->GetType() << " val=\""<< child->GetValue() << "\"" );
+			continue;
+		} else if (_element->GetType(iii)!=exml::typeElement) {
+			EWOL_ERROR("(l "<< _element->GetNode(iii)->Pos() << ") node not suported type : " << _element->GetType(iii) << " val=\""<< _element->GetNode(iii)->GetValue() << "\"" );
 			continue;
 		}
-		exml::Element* elem = (exml::Element*)child;
+		exml::Element* elem = _element->GetElement(iii);
 		if (elem==NULL) {
 			EWOL_ERROR("Cast error ...");
 			continue;
@@ -538,9 +541,9 @@ void ewol::Text::ParseHtmlNode(exml::Element* _element)
 
 void ewol::Text::PrintDecorated(const etk::UString& _text)
 {
-	etk::UString tmpData("<html><body>\n");
+	etk::UString tmpData("<html>\n<body>\n");
 	tmpData+=_text;
-	tmpData+="\n</body></html>\n";
+	tmpData+="\n</body>\n</html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	PrintHTML(tmpData);
 }
@@ -562,6 +565,7 @@ void ewol::Text::PrintHTML(const etk::UString& _text)
 	exml::Element* root = (exml::Element*)doc.GetNamed( "html" );
 	if (NULL == root) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
+		doc.Display();
 		return;
 	}
 	exml::Element* bodyNode = (exml::Element*)root->GetNamed( "body" );

@@ -154,7 +154,7 @@ widget::FileChooser::FileChooser(void)
 				        "		<image src=\"THEME:GUI:Load.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Validate</label>\n"
 				        "	</sizer>\n"
-				        "</composer\n"));
+				        "</composer>\n"));
 				m_widgetValidate->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserValidate);
 				mySizerHori->SubWidgetAdd(m_widgetValidate);
 			}
@@ -169,7 +169,7 @@ widget::FileChooser::FileChooser(void)
 				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Cancel</label>\n"
 				        "	</sizer>\n"
-				        "</composer\n"));
+				        "</composer>\n"));
 				m_widgetCancel->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserCancel);
 				mySizerHori->SubWidgetAdd(m_widgetCancel);
 			}

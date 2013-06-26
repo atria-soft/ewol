@@ -142,8 +142,7 @@ bool widget::Label::LoadXML(exml::Element* _node)
 	}
 	ewol::Widget::LoadXML(_node);
 	// get internal data : 
-	// TODO : Unparse data type XML ...
-	EWOL_DEBUG("Load label:" << _node->GetValue());
-	SetLabel(_node->GetValue());
+	EWOL_DEBUG("Load label:" << _node->GetText());
+	SetLabel(_node->GetText());
 	return true;
 }

@@ -80,7 +80,7 @@ widget::Parameter::Parameter(void) :
 				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
-				        "</composer\n"));
+				        "</composer llll>\n"));
 				tmpButton->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterSave);
 				mySizerHori->SubWidgetAdd(tmpButton);
 			}
@@ -105,7 +105,7 @@ widget::Parameter::Parameter(void) :
 				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
-				        "</composer\n"));
+				        "</composer>\n"));
 				tmpButton->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterClose);
 				mySizerHori->SubWidgetAdd(tmpButton);
 			}
