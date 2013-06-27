@@ -11,12 +11,6 @@
 [submodule "external/agg"]
 	path = external/agg
 	url = https://github.com/HeeroYui/libagg.git
-[submodule "external/parsersvg"]
-	path = external/parsersvg
-	url = https://github.com/HeeroYui/libparsersvg.git
-[submodule "external/tinyxml"]
-	path = external/tinyxml
-	url = https://github.com/HeeroYui/libtinyxml.git
 [submodule "external/portaudio"]
 	path = external/portaudio
 	url = https://github.com/HeeroYui/libportaudio.git
@@ -41,3 +35,9 @@
 [submodule "external/bullet/bullet"]
 	path = external/bullet/bullet
 	url = https://github.com/HeeroYui/bullet.git
+[submodule "external/esvg"]
+	path = external/esvg
+	url = https://github.com/HeeroYui/esvg.git
+[submodule "external/exml"]
+	path = external/exml
+	url = https://github.com/HeeroYui/exml.git
