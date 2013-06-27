@@ -23,7 +23,7 @@ namespace ewol
 		void FontFolder(const etk::UString& _folder);
 		/**
 		 * @brief Set the defaut font for all the widgets and basics display.
-		 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial".
+		 * @param[in] _fontName The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
 		 * @param[in] _size The default size of the font default=10.
 		 */
 		void FontSetDefault(const etk::UString& _fontName, int32_t _size);

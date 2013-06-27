@@ -430,20 +430,20 @@ ewol::Widget* widget::Button::GetWidgetNamed(const etk::UString& _widgetName)
 }
 
 
-bool widget::Button::LoadXML(exml::Element* _node)
+bool widget::Button::LoadXML(exml::Element* _element)
 {
-	if (NULL==_node) {
+	if (NULL==_element) {
 		return false;
 	}
 	// parse generic properties :
-	ewol::Widget::LoadXML(_node);
+	ewol::Widget::LoadXML(_element);
 	// remove previous element :
 	SetSubWidget(NULL);
 	SetSubWidgetToggle(NULL);
 	
 	// parse all the elements :
-	for(int32_t iii=0; iii< _node->Size(); iii++) {
-		exml::Element* pNode = _node->GetElement(iii);
+	for(int32_t iii=0; iii< _element->Size(); iii++) {
+		exml::Element* pNode = _element->GetElement(iii);
 		if (pNode==NULL) {
 			// trash here all that is not element
 			continue;

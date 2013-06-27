@@ -131,49 +131,67 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		#endif
 	}
 	etk::FSNode myFolder(fontBaseFolder);
-	EWOL_INFO("try to find font named : '" << m_name << "' in : '" << myFolder <<"'");
 	// find the real Font name :
 	etk::Vector<etk::UString> output;
 	myFolder.FolderGetRecursiveFiles(output);
-	for (int32_t iii=0; iii<output.Size(); iii++) {
-		//EWOL_DEBUG(" file : " << output[iii]);
-		if(    true == output[iii].EndWith(m_name+"-"+"bold"+".ttf", false)
-		    || true == output[iii].EndWith(m_name+"-"+"b"+".ttf", false)
-		    || true == output[iii].EndWith(m_name+"-"+"bd"+".ttf", false)
-		    || true == output[iii].EndWith(m_name+"bold"+".ttf", false)
-		    || true == output[iii].EndWith(m_name+"bd"+".ttf", false)
-		    || true == output[iii].EndWith(m_name+"b"+".ttf", false)) {
-			EWOL_INFO(" find Font [Bold]        : " << output[iii]);
-			m_fileName[ewol::font::Bold] = output[iii];
-		} else if(    true == output[iii].EndWith(m_name+"-"+"oblique"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"italic"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"Light"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"i"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"oblique"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"italic"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"light"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"i"+".ttf", false)) {
-			EWOL_INFO(" find Font [Italic]      : " << output[iii]);
-			m_fileName[ewol::font::Italic] = output[iii];
-		} else if(    true == output[iii].EndWith(m_name+"-"+"bolditalic"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"boldoblique"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"bi"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"z"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"bolditalic"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"boldoblique"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"bi"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"z"+".ttf", false)) {
-			EWOL_INFO(" find Font [Bold-Italic] : " << output[iii]);
-			m_fileName[ewol::font::BoldItalic] = output[iii];
-		} else if(    true == output[iii].EndWith(m_name+"-"+"regular"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"-"+"r"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"regular"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+"r"+".ttf", false)
-		           || true == output[iii].EndWith(m_name+".ttf", false)) {
-			EWOL_INFO(" find Font [Regular]     : " << output[iii]);
-			m_fileName[ewol::font::Regular] = output[iii];
+	etk::Vector<etk::UString> split = m_name.Split(';');
+	EWOL_INFO("try to find font named : '" << split << "' in : '" << myFolder <<"'");
+	//EWOL_CRITICAL("parse string : " << split);
+	
+	for (int32_t jjj=0; jjj<split.Size(); jjj++) {
+		EWOL_INFO("    try with : '" << split[jjj] << "'");
+		bool hasFindAFont = false;
+		for (int32_t iii=0; iii<output.Size(); iii++) {
+			//EWOL_DEBUG(" file : " << output[iii]);
+			if(    true == output[iii].EndWith(split[jjj]+"-"+"bold"+".ttf", false)
+			    || true == output[iii].EndWith(split[jjj]+"-"+"b"+".ttf", false)
+			    || true == output[iii].EndWith(split[jjj]+"-"+"bd"+".ttf", false)
+			    || true == output[iii].EndWith(split[jjj]+"bold"+".ttf", false)
+			    || true == output[iii].EndWith(split[jjj]+"bd"+".ttf", false)
+			    || true == output[iii].EndWith(split[jjj]+"b"+".ttf", false)) {
+				EWOL_INFO(" find Font [Bold]        : " << output[iii]);
+				m_fileName[ewol::font::Bold] = output[iii];
+				hasFindAFont=true;
+			} else if(    true == output[iii].EndWith(split[jjj]+"-"+"oblique"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"italic"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"Light"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"i"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"oblique"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"italic"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"light"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"i"+".ttf", false)) {
+				EWOL_INFO(" find Font [Italic]      : " << output[iii]);
+				m_fileName[ewol::font::Italic] = output[iii];
+				hasFindAFont=true;
+			} else if(    true == output[iii].EndWith(split[jjj]+"-"+"bolditalic"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"boldoblique"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"bi"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"z"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"bolditalic"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"boldoblique"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"bi"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"z"+".ttf", false)) {
+				EWOL_INFO(" find Font [Bold-Italic] : " << output[iii]);
+				m_fileName[ewol::font::BoldItalic] = output[iii];
+				hasFindAFont=true;
+			} else if(    true == output[iii].EndWith(split[jjj]+"-"+"regular"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"-"+"r"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"regular"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+"r"+".ttf", false)
+			           || true == output[iii].EndWith(split[jjj]+".ttf", false)) {
+				EWOL_INFO(" find Font [Regular]     : " << output[iii]);
+				m_fileName[ewol::font::Regular] = output[iii];
+				hasFindAFont=true;
+			}
+		}
+		if (hasFindAFont==true) {
+			EWOL_INFO("    Find this font : '" << split[jjj] << "'");
+			break;
+		} else if (jjj==split.Size()-1) {
+			EWOL_ERROR("Find NO font in the LIST ... " << split);
 		}
 	}
+	
 	// try to find the reference mode :
 	ewol::font::mode_te refMode = ewol::font::Regular;
 	for(int32_t iii=3; iii>=0; iii--) {
@@ -181,6 +199,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			refMode = (ewol::font::mode_te)iii;
 		}
 	}
+	
 	EWOL_DEBUG("         Set reference mode : " << refMode);
 	// generate the wrapping on the preventing error
 	for(int32_t iii=3; iii>=0; iii--) {

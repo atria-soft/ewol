@@ -134,22 +134,13 @@ bool ewol::userConfig::Load(void)
 	return true;
 }
 
-#define MAX_SAVING_FILE_HISTORY (9)
-
 bool ewol::userConfig::Save(void)
 {
 	// step 1 : Move the file to prevent writing error
-	//Get the first oldest save :
-	for (int32_t iii=MAX_SAVING_FILE_HISTORY-1; iii>0 ; iii--) {
-		if (true==etk::FSNodeExist(l_obj().FileName()+"-"+iii) ) {
-			etk::FSNodeMove(l_obj().FileName()+"-"+iii,l_obj().FileName()+"-"+(iii+1));
-		}
-	}
-	if (true==etk::FSNodeExist(l_obj().FileName()) ) {
-		etk::FSNodeMove(l_obj().FileName(),l_obj().FileName()+"-1");
-	}
+	etk::FSNodeHistory(l_obj().FileName(), 9);
+	
 	exml::Document doc;
-	doc.Append(new exml::Declaration("1.0", "UTF-8", ""));
+	doc.Append(new exml::Declaration("1.0", unicode::EDN_CHARSET_UTF8, ""));
 	exml::Element * ElementBase = new exml::Element("config");
 	doc.Append(ElementBase);
 	for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {

@@ -20,7 +20,7 @@ void ewol::config::Init(void)
 {
 	// reset font properties
 	l_fontConfigFolder = "DATA::fonts";
-	l_fontConfigName = "Arial";
+	l_fontConfigName = "Arial;Helvetica";
 	l_fontConfigSize = 10;
 	ewol::FreeTypeInit();
 }
