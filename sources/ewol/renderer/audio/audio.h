@@ -26,18 +26,18 @@ namespace ewol {
 		namespace music {
 			void           Fading(int32_t timeMs);
 			// list playing system : is cyclic ...
-			erreurCode_te  ListAdd(etk::UString file);
-			erreurCode_te  ListRm(etk::UString file);
-			erreurCode_te  ListClean(void);
-			erreurCode_te  ListPrevious(void);
-			erreurCode_te  ListNext(void);
-			erreurCode_te  ListFirst(void);
-			erreurCode_te  ListLast(void);
-			erreurCode_te  ListPlay(void); // List playing
-			erreurCode_te  ListStop(void); // List stopping
+			bool  ListAdd(etk::UString file);
+			bool  ListRm(etk::UString file);
+			bool  ListClean(void);
+			bool  ListPrevious(void);
+			bool  ListNext(void);
+			bool  ListFirst(void);
+			bool  ListLast(void);
+			bool  ListPlay(void); // List playing
+			bool  ListStop(void); // List stopping
 			
-			erreurCode_te  Play(etk::UString file); // play specific file ... pause the list element;
-			erreurCode_te  Stop(void);
+			bool  Play(etk::UString file); // play specific file ... pause the list element;
+			bool  Stop(void);
 			
 			// in db
 			float VolumeGet(void);

@@ -450,21 +450,21 @@ bool widget::Button::LoadXML(exml::Element* _element)
 		}
 		etk::UString widgetName = pNode->GetValue();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->Pos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("(l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		bool toogleMode=false;
 		if (NULL != GetSubWidget()) {
 			toogleMode=true;
 			if (NULL != GetSubWidgetToggle()) {
-				EWOL_ERROR("(l "<<pNode->Pos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
+				EWOL_ERROR("(l "<<pNode->GetPos()<<") " << __class__ << " Can only have one subWidget ??? node=\"" << widgetName << "\"" );
 				continue;
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
 		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
 		if (tmpWidget == NULL) {
-			EWOL_ERROR ("(l "<<pNode->Pos()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("(l "<<pNode->GetPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add widget :
@@ -475,7 +475,7 @@ bool widget::Button::LoadXML(exml::Element* _element)
 			SetSubWidgetToggle(tmpWidget);
 		}
 		if (false == tmpWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("(l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
+			EWOL_ERROR ("(l "<<pNode->GetPos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}

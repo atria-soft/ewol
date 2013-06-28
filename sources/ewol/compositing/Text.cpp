@@ -454,7 +454,7 @@ void ewol::Text::ParseHtmlNode(exml::Element* _element)
 			EWOL_VERBOSE("XML Add : " << child->GetValue());
 			continue;
 		} else if (_element->GetType(iii)!=exml::typeElement) {
-			EWOL_ERROR("(l "<< _element->GetNode(iii)->Pos() << ") node not suported type : " << _element->GetType(iii) << " val=\""<< _element->GetNode(iii)->GetValue() << "\"" );
+			EWOL_ERROR("(l "<< _element->GetNode(iii)->GetPos() << ") node not suported type : " << _element->GetType(iii) << " val=\""<< _element->GetNode(iii)->GetValue() << "\"" );
 			continue;
 		}
 		exml::Element* elem = _element->GetElement(iii);
@@ -534,7 +534,7 @@ void ewol::Text::ParseHtmlNode(exml::Element* _element)
 			m_alignement = ewol::Text::alignJustify;
 			ParseHtmlNode(elem);
 		} else {
-			EWOL_ERROR("(l "<< elem->Pos() << ") node not suported type : " << elem->GetType() << " val=\""<< elem->GetValue() << "\"" );
+			EWOL_ERROR("(l "<< elem->GetPos() << ") node not suported type : " << elem->GetType() << " val=\""<< elem->GetValue() << "\"" );
 		}
 	}
 }

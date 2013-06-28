@@ -128,7 +128,7 @@ bool ewol::userConfig::Load(void)
 			}
 		}
 		if (elementFound==false) {
-			EWOL_ERROR("(l "<<child->Pos()<<") node not suported : \""<<child->GetValue());
+			EWOL_ERROR("(l "<<child->GetPos()<<") node not suported : \""<<child->GetValue());
 		}
 	}
 	return true;

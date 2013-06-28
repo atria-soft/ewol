@@ -103,72 +103,72 @@ void ewol::audio::music::Fading(int32_t timeMs)
 }
 
 
-erreurCode_te ewol::audio::music::ListAdd(etk::UString file)
+bool ewol::audio::music::ListAdd(etk::UString file)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListRm(etk::UString file)
+bool ewol::audio::music::ListRm(etk::UString file)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListClean(void)
+bool ewol::audio::music::ListClean(void)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListPrevious(void)
+bool ewol::audio::music::ListPrevious(void)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListNext(void)
+bool ewol::audio::music::ListNext(void)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListFirst(void)
+bool ewol::audio::music::ListFirst(void)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::ListLast(void)
+bool ewol::audio::music::ListLast(void)
 {
-	return ERR_FAIL;
-}
-
-
-
-erreurCode_te ewol::audio::music::ListPlay(void)
-{
-	return ERR_FAIL;
-}
-
-
-erreurCode_te ewol::audio::music::ListStop(void)
-{
-	return ERR_FAIL;
+	return false;
 }
 
 
 
-
-erreurCode_te ewol::audio::music::Play(etk::UString file)
+bool ewol::audio::music::ListPlay(void)
 {
-	return ERR_FAIL;
+	return false;
 }
 
 
-erreurCode_te ewol::audio::music::Stop(void)
+bool ewol::audio::music::ListStop(void)
 {
-	return ERR_FAIL;
+	return false;
+}
+
+
+
+
+bool ewol::audio::music::Play(etk::UString file)
+{
+	return false;
+}
+
+
+bool ewol::audio::music::Stop(void)
+{
+	return false;
 }
 
 

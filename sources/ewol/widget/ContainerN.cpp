@@ -311,13 +311,13 @@ bool widget::ContainerN::LoadXML(exml::Element* _node)
 		}
 		etk::UString widgetName = pNode->GetValue();
 		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
 			continue;
 		}
 		EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} load new element : \"" << widgetName << "\"");
 		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
 		if (subWidget == NULL) {
-			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") Can not create the widget : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;
 		}
 		// add sub element : 
@@ -327,7 +327,7 @@ bool widget::ContainerN::LoadXML(exml::Element* _node)
 			SubWidgetAddStart(subWidget);
 		}
 		if (false == subWidget->LoadXML(pNode)) {
-			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->Pos()<<") can not load widget properties : \"" << widgetName << "\"");
+			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") can not load widget properties : \"" << widgetName << "\"");
 			return false;
 		}
 	}
