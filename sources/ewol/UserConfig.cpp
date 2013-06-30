@@ -140,7 +140,7 @@ bool ewol::userConfig::Save(void)
 	etk::FSNodeHistory(l_obj().FileName(), 9);
 	
 	exml::Document doc;
-	doc.Append(new exml::Declaration("1.0", unicode::EDN_CHARSET_UTF8, ""));
+	doc.Append(new exml::DeclarationXML("1.0"));
 	exml::Element * ElementBase = new exml::Element("config");
 	doc.Append(ElementBase);
 	for (int32_t iii=0; iii<l_obj().List().Size() ; iii++) {

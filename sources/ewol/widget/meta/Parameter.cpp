@@ -80,7 +80,7 @@ widget::Parameter::Parameter(void) :
 				        "		<image src=\"THEME:GUI:Save.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
-				        "</composer llll>\n"));
+				        "</composer>\n"));
 				tmpButton->RegisterOnEvent(this, widget::Button::eventPressed, ewolEventParameterSave);
 				mySizerHori->SubWidgetAdd(tmpButton);
 			}
