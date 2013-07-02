@@ -39,7 +39,7 @@ public class Ewol {
 	return instance;
     }
 
-    public static native void setJavaVirtualMachineStart(Activity activityInstance);
+    public static native <T extends Activity & EwolCallback> void setJavaVirtualMachineStart(T activityInstance);
     public static native void setJavaVirtualMachineStop();
     public static native void paramSetArchiveDir(int mode, String myString);
 
