@@ -157,11 +157,11 @@ namespace ewol {
 			virtual vec2 RelativePosition(const vec2& _pos);
 			/**
 			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
-			 *        By default this save the widget availlable size in the widget size
-			 * @param[in] _availlable Availlable x&y pixel size
+			 *        By default this save the widget available size in the widget size
+			 * @param[in] _available Available x&y pixel size
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void CalculateSize(const vec2& _availlable);
+			virtual void CalculateSize(const vec2& _available);
 			/**
 			 * @brief Get the widget size
 			 * @return Requested size

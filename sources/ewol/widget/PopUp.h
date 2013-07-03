@@ -27,6 +27,7 @@ namespace widget {
 			static const char* const configShaper;
 			static const char* const configRemoveOnExternClick;
 			static const char* const configAnimation;
+			static const char* const configLockExpand;
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
@@ -44,6 +45,14 @@ namespace widget {
 			 * @param[in] _shaperName The new shaper filename
 			 */
 			void SetShaperName(const etk::UString& _shaperName);
+		protected:
+			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one ==> this permit to limit bigger subWidget
+		public:
+			/**
+			 * @brief Limit the expend properties to the current widget (no contamination)
+			 * @param[in] _lockExpend Lock mode of the expend properties
+			 */
+			void LockExpand(const bvec2& _lockExpand);
 		private:
 			bool m_closeOutEvent; //!< ratio progression of a sliding
 		public:
@@ -86,7 +95,7 @@ namespace widget {
 			virtual void PeriodicCall(const ewol::EventTime& _event);
 			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void OnRegenerateDisplay(void);
-			virtual void CalculateSize(const vec2& _availlable);
+			virtual void CalculateSize(const vec2& _available);
 			virtual bool OnEventInput(const ewol::EventInput& _event);
 			//virtual void CalculateMinMaxSize(void);
 			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };

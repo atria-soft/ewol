@@ -10,6 +10,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
+#include <ewol/ewol.h>
 
 
 
@@ -19,6 +20,7 @@
 const char* const widget::PopUp::configShaper="shaper";
 const char* const widget::PopUp::configRemoveOnExternClick="out-click-remove";
 const char* const widget::PopUp::configAnimation="animation";
+const char* const widget::PopUp::configLockExpand="lock";
 
 static ewol::Widget* Create(void)
 {
@@ -38,12 +40,14 @@ void widget::PopUp::UnInit(void)
 
 widget::PopUp::PopUp(const etk::UString& _shaperName) :
 	m_shaper(_shaperName),
+	m_lockExpand(true,true),
 	m_closeOutEvent(false)
 {
 	m_userExpand.setValue(false, false);
 	SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	RegisterConfig(configShaper, "string", NULL, "The shaper properties");
 	RegisterConfig(configRemoveOnExternClick, "bool", NULL, "Remove the widget if the use click outside");
+	RegisterConfig(configLockExpand, "bool", NULL, "Lock expand contamination");
 	RegisterConfig(configAnimation, "list", "none;increase", "Remove the widget if the use click outside");
 	
 	SetAnimationMode(animationNone);
@@ -54,26 +58,43 @@ widget::PopUp::~PopUp(void)
 	
 }
 
+void widget::PopUp::LockExpand(const bvec2& _lockExpand)
+{
+	if (_lockExpand != m_lockExpand) {
+		m_lockExpand = _lockExpand;
+		MarkToRedraw();
+		ewol::RequestUpdateSize();
+	}
+}
+
 void widget::PopUp::SetShaperName(const etk::UString& _shaperName)
 {
 	m_shaper.SetSource(_shaperName);
 	MarkToRedraw();
 }
 
-
-void widget::PopUp::CalculateSize(const vec2& _availlable)
+void widget::PopUp::CalculateSize(const vec2& _available)
 {
-	ewol::Widget::CalculateSize(_availlable);
+	ewol::Widget::CalculateSize(_available);
 	if (NULL != m_subWidget) {
+		vec2 padding = m_shaper.GetPadding();
 		vec2 subWidgetSize = m_subWidget->GetCalculateMinSize();
 		if (true == m_subWidget->CanExpand().x()) {
-			subWidgetSize.setX(m_minSize.x());
+			if (m_lockExpand.x()==true) {
+				subWidgetSize.setX(m_minSize.x());
+			} else {
+				subWidgetSize.setX(m_size.x()-padding.x());
+			}
 		}
 		if (true == m_subWidget->CanExpand().y()) {
-			subWidgetSize.setY(m_minSize.y());
+			if (m_lockExpand.y()==true) {
+				subWidgetSize.setY(m_minSize.y());
+			} else {
+				subWidgetSize.setY(m_size.y()-padding.y());
+			}
 		}
 		// limit the size of the element :
-		subWidgetSize.setMin(m_minSize);
+		//subWidgetSize.setMin(m_minSize);
 		// posiition at a int32_t pos :
 		subWidgetSize = vec2ClipInt32(subWidgetSize);
 		
@@ -164,6 +185,10 @@ bool widget::PopUp::OnSetConfig(const ewol::EConfig& _conf)
 		SetRemoveOnExternClick(_conf.GetData().ToBool());
 		return true;
 	}
+	if (_conf.GetConfig() == configLockExpand) {
+		LockExpand(_conf.GetData());
+		return true;
+	}
 	if (_conf.GetConfig() == configAnimation) {
 		if (_conf.GetData().CompareNoCase("increase")==true) {
 			SetAnimationMode(animationIncrease);
@@ -182,6 +207,10 @@ bool widget::PopUp::OnGetConfig(const char* _config, etk::UString& _result) cons
 	}
 	if (_config == configShaper) {
 		_result = m_shaper.GetSource();
+		return true;
+	}
+	if (_config == configLockExpand) {
+		_result = m_lockExpand;
 		return true;
 	}
 	if (_config == configRemoveOnExternClick) {

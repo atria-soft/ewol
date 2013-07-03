@@ -126,8 +126,8 @@ ewol::Widget::Widget(void) :
 	m_cursorDisplay(ewol::cursorArrow)
 {
 	// set all the config in the list :
-	RegisterConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget availlable size");
-	RegisterConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is availlable");
+	RegisterConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget available size");
+	RegisterConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is available");
 	RegisterConfig(ewol::Widget::configHide, "bool", NULL, "The widget start hided");
 	RegisterConfig(ewol::Widget::configFocus, "bool", NULL, "The widget request focus");
 	RegisterConfig(ewol::Widget::configMinSize, "dimension", NULL, "User minimum size");
@@ -181,9 +181,9 @@ void ewol::Widget::Show(void)
 }
 
 
-void ewol::Widget::CalculateSize(const vec2& _availlable)
+void ewol::Widget::CalculateSize(const vec2& _available)
 {
-	m_size = _availlable;
+	m_size = _available;
 	m_size.setMax(m_minSize);
 	MarkToRedraw();
 }

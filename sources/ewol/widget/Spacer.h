@@ -21,6 +21,8 @@ namespace widget {
 		public:
 			static void Init(void);
 			static void UnInit(void);
+			// Config list of properties
+			static const char* const configColor;
 		private:
 			ewol::Drawing m_draw; //!< Compositing drawing element
 		public:
@@ -46,6 +48,8 @@ namespace widget {
 			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos) { return NULL; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(void);
+			virtual bool OnSetConfig(const ewol::EConfig& _conf);
+			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };

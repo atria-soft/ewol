@@ -12,6 +12,8 @@
 #include <etk/os/FSNode.h>
 #include <ewol/widget/WidgetManager.h>
 
+#undef __class__
+#define __class__	"widget::Composer"
 
 widget::Composer::Composer(void)
 {
@@ -48,8 +50,16 @@ bool widget::Composer::LoadFromFile(const etk::UString& _fileName)
 	}
 	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
 	if (NULL == root ) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
-		return false;
+		// Maybe a multiple node XML for internal config:
+		root = doc.ToElement();
+		if (NULL == root ) {
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
+			return false;
+		}
+		if (root->Size()==0) {
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) no node in the Container XML element.");
+			return false;
+		}
 	}
 	// call upper class to parse his elements ...
 	widget::Container::LoadXML(root);
@@ -66,8 +76,16 @@ bool widget::Composer::LoadFromString(const etk::UString& _composerXmlString)
 	}
 	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
 	if (NULL == root ) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
-		return false;
+		// Maybe a multiple node XML for internal config:
+		root = doc.ToElement();
+		if (NULL == root ) {
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
+			return false;
+		}
+		if (root->Size()==0) {
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) no node in the Container XML element.");
+			return false;
+		}
 	}
 	// call upper class to parse his elements ...
 	widget::Container::LoadXML(root);
