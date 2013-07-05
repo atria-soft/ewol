@@ -229,9 +229,9 @@ def Create(target):
 		'ogre/OgreMain/src/OgreWireBoundingBox.cpp',
 		'ogre/OgreMain/src/OgreWorkQueue.cpp',
 		'ogre/OgreMain/src/OgreDDSCodec.cpp',
-		#'ogre/OgreMain/src/GLX/OgreConfigDialog.cpp',
-		#'ogre/OgreMain/src/GLX/OgreErrorDialog.cpp',
-		#'ogre/OgreMain/src/GLX/OgreTimer.cpp',
+		'ogre/OgreMain/src/ewol/OgreConfigDialog.cpp',
+		'ogre/OgreMain/src/ewol/OgreErrorDialog.cpp',
+		'ogre/OgreMain/src/ewol/OgreTimer.cpp',
 		'ogre/OgreMain/src/OgreSearchOps.cpp',
 		'ogre/OgreMain/src/Threading/OgreDefaultWorkQueueStandard.cpp',])
 	
