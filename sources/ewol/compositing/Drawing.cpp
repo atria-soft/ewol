@@ -222,8 +222,8 @@ ewol::Drawing::Drawing(void) :
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
-	m_color(draw::color::black),
-	m_colorBg(draw::color::none),
+	m_color(etk::color::black),
+	m_colorBg(etk::color::none),
 	m_GLprogram(NULL),
 	m_GLPosition(-1),
 	m_GLMatrix(-1),
@@ -257,7 +257,7 @@ void ewol::Drawing::GenerateTriangle(void)
 	m_coordColor.PushBack(m_tricolor[2]);
 }
 
-void ewol::Drawing::InternalSetColor(const draw::Color& _color)
+void ewol::Drawing::InternalSetColor(const etk::Color<>& _color)
 {
 	if (m_triElement < 1) {
 		m_tricolor[0] = _color;
@@ -346,8 +346,8 @@ void ewol::Drawing::Clear(void)
 	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	
-	m_color = draw::color::black;
-	m_colorBg = draw::color::none;
+	m_color = etk::color::black;
+	m_colorBg = etk::color::none;
 	
 	for (int32_t iii=0; iii<3; iii++) {
 		m_triangle[iii] = m_position;
@@ -510,7 +510,7 @@ void ewol::Drawing::Circle(float _radius, float _angleStart, float _angleStop)
 	}
 	
 	// display background :
-	if (m_colorBg.a!=0) {
+	if (m_colorBg.a()!=0) {
 		InternalSetColor(m_colorBg);
 		for (int32_t iii=0; iii<nbOcurence; iii++) {
 			SetPoint(vec3(m_position.x(),
@@ -537,7 +537,7 @@ void ewol::Drawing::Circle(float _radius, float _angleStart, float _angleStop)
 	
 	// show if we have a border :
 	if(    m_thickness==0
-	    || m_color.a==0) {
+	    || m_color.a()==0) {
 		return;
 	}
 	InternalSetColor(m_color);

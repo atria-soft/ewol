@@ -23,7 +23,7 @@ namespace ewol
 			vec3 m_clippingPosStop; //!< Clipping stop position
 			bool m_clippingEnable; //!< true if the clipping must be activated
 		private:
-			draw::Color m_color; //!< The text foreground color
+			etk::Color<> m_color; //!< The text foreground color
 			vec3 m_axes; //!< Rotation axes (instant)
 			float m_angle; //!< Angle to set at the axes
 		private:
@@ -37,7 +37,7 @@ namespace ewol
 			ewol::TextureFile* m_resource; //!< texture resources
 			etk::Vector<vec3 > m_coord; //!< internal coord of the object
 			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf> m_coordColor; //!< internal color of the different point
+			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
@@ -83,7 +83,7 @@ namespace ewol
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] _color Color to set on foreground (for next print)
 			 */
-			void SetColor(const draw::Color& _color) { m_color = _color; };
+			void SetColor(const etk::Color<>& _color) { m_color = _color; };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping

@@ -22,42 +22,36 @@ namespace widget {
 	{
 		private:
 			etk::Vector<etk::FSNode *> m_list;
-			etk::UString               m_folder;
-			int32_t                    m_selectedLine;
-			bool                       m_showFile;
-			bool                       m_showTemporaryFile;
-			bool                       m_showFolder;
-			bool                       m_showHidden;
+			etk::UString m_folder;
+			int32_t m_selectedLine;
+			bool m_showFile;
+			bool m_showTemporaryFile;
+			bool m_showFolder;
+			bool m_showHidden;
 		public:
 			ListFileSystem(void);
 			~ListFileSystem(void);
 			// Derived function
-			virtual draw::Color GetBasicBG(void);
-			// Derived function
+			virtual etk::Color<> GetBasicBG(void);
 			uint32_t GetNuberOfColomn(void);
-			// Derived function
-			bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg);
-			// Derived function
+			bool GetTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
 			uint32_t GetNuberOfRaw(void);
-			// Derived function
-			bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg);
-			// Derived function
-			bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent, int32_t colomn, int32_t raw, float x, float y);
-			// Derived function
+			bool GetElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
+			bool OnItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
 			const char * const GetObjectType(void) { return "EwolListFileSystem"; };
 		public:
 			// extern API :
-			void         SetFolder(etk::UString newFolder);
+			void SetFolder(etk::UString _newFolder);
 			etk::UString GetFolder(void);
 			// select the specific file
-			void         SetSelect(etk::UString data);
+			void SetSelect(etk::UString _data);
 			etk::UString GetSelect(void);
 			// regenerate the view ....
-			void         RegenerateView(void);
-			void         SetShowFiles(bool state);
-			void         SetShowFolder(bool state);
-			void         SetShowHiddenFiles(bool state);
-			void         SetShowTemporaryFiles(bool state);
+			void RegenerateView(void);
+			void SetShowFiles(bool _state);
+			void SetShowFolder(bool _state);
+			void SetShowHiddenFiles(bool _state);
+			void SetShowTemporaryFiles(bool _state);
 	};
 };
 

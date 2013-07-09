@@ -73,7 +73,7 @@ namespace ewol
 			{ };
 			float KerningGet(const uniChar_t charcode)
 			{
-				for(int32_t iii=0; iii<m_kerning.Size(); iii++ ) {
+				for(esize_t iii=0; iii<m_kerning.Size(); iii++ ) {
 					if (m_kerning[iii].m_UVal == charcode) {
 						return m_kerning[iii].m_value;
 					}

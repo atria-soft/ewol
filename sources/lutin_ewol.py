@@ -55,8 +55,6 @@ def Create(target):
 		'ewol/renderer/resources/Texture.cpp',
 		'ewol/renderer/resources/Colored3DObject.cpp',
 		'ewol/renderer/resources/Image.cpp',
-		'ewol/renderer/resources/image/ImageBMP.cpp',
-		'ewol/renderer/resources/image/ImagePNG.cpp',
 		'ewol/renderer/ResourceManager.cpp'])
 	
 	# Audio system
@@ -139,7 +137,7 @@ def Create(target):
 	#myModule.SetConfig(['Config.in','ConfigLinux.in'])
 	
 	# name of the dependency
-	myModule.AddModuleDepend(['etk', 'freetype', 'png', 'esvg', 'date'])
+	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'egami', 'date'])
 	
 	#ifeq ("$(CONFIG_BUILD_BULLET)","y")
 	#myModule.AddModuleDepend('bullet')

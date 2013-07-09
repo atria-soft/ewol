@@ -34,8 +34,8 @@ namespace widget {
 			ewol::Drawing m_oObjectDecoration;
 			etk::UString m_label;
 			bool m_value;
-			draw::Color m_textColorFg; //!< Text color
-			draw::Color m_textColorBg; //!< Background color
+			etk::Color<> m_textColorFg; //!< Text color
+			etk::Color<> m_textColorBg; //!< Background color
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function

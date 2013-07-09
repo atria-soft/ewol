@@ -50,16 +50,15 @@ widget::ListFileSystem::~ListFileSystem(void)
 	}
 };
 
-draw::Color widget::ListFileSystem::GetBasicBG(void) {
-	draw::Color bg(0x00000010);
-	return bg;
+etk::Color<> widget::ListFileSystem::GetBasicBG(void) {
+	return etk::Color<>(0x00000010);
 }
 
 
 void widget::ListFileSystem::RegenerateView(void)
 {
 	// clean the list of files : 
-	for (int32_t iii=0; iii<m_list.Size(); iii++) {
+	for (esize_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
@@ -76,34 +75,34 @@ void widget::ListFileSystem::RegenerateView(void)
 	MarkToRedraw();
 }
 
-void widget::ListFileSystem::SetShowHiddenFiles(bool state)
+void widget::ListFileSystem::SetShowHiddenFiles(bool _state)
 {
-	m_showHidden = state;
+	m_showHidden = _state;
 	RegenerateView();
 }
 
-void widget::ListFileSystem::SetShowTemporaryFiles(bool state)
+void widget::ListFileSystem::SetShowTemporaryFiles(bool _state)
 {
-	m_showTemporaryFile = state;
+	m_showTemporaryFile = _state;
 	RegenerateView();
 }
 
-void widget::ListFileSystem::SetShowFiles(bool state)
+void widget::ListFileSystem::SetShowFiles(bool _state)
 {
-	m_showFile = state;
+	m_showFile = _state;
 	RegenerateView();
 }
 
-void widget::ListFileSystem::SetShowFolder(bool state)
+void widget::ListFileSystem::SetShowFolder(bool _state)
 {
-	m_showFolder = state;
+	m_showFolder = _state;
 	RegenerateView();
 }
 
 
-void widget::ListFileSystem::SetFolder(etk::UString newFolder)
+void widget::ListFileSystem::SetFolder(etk::UString _newFolder)
 {
-	m_folder = newFolder;
+	m_folder = _newFolder;
 	RegenerateView();
 }
 
@@ -126,13 +125,13 @@ etk::UString widget::ListFileSystem::GetSelect(void)
 }
 
 // select the specific file
-void widget::ListFileSystem::SetSelect( etk::UString data) {
+void widget::ListFileSystem::SetSelect( etk::UString _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
 	for (int32_t iii=0; iii<m_list.Size(); iii++) {
 		if (NULL!=m_list[iii]) {
-			if (m_list[iii]->GetNameFile() == data) {
+			if (m_list[iii]->GetNameFile() == _data) {
 				// we find the line :
 				m_selectedLine = iii;
 				break;
@@ -145,8 +144,8 @@ void widget::ListFileSystem::SetSelect( etk::UString data) {
 uint32_t widget::ListFileSystem::GetNuberOfColomn(void) {
 	return 1;
 };
-bool widget::ListFileSystem::GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
-	myTitle = "title";
+bool widget::ListFileSystem::GetTitle(int32_t _colomn, etk::UString &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
+	_myTitle = "title";
 	return true;
 };
 uint32_t widget::ListFileSystem::GetNuberOfRaw(void)
@@ -157,55 +156,55 @@ uint32_t widget::ListFileSystem::GetNuberOfRaw(void)
 	}
 	return m_list.Size() + offset;
 };
-bool widget::ListFileSystem::GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg)
+bool widget::ListFileSystem::GetElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg)
 {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;
-		if (raw==0) {
-			myTextToWrite = ".";
-		} else if (raw==1) {
-			myTextToWrite = "..";
+		if (_raw==0) {
+			_myTextToWrite = ".";
+		} else if (_raw==1) {
+			_myTextToWrite = "..";
 		}
 	}
-	if(    raw-offset >= 0
-	    && raw-offset < m_list.Size()
-	    && NULL != m_list[raw-offset]) {
+	if(    _raw-offset >= 0
+	    && _raw-offset < m_list.Size()
+	    && NULL != m_list[_raw-offset]) {
 		/*if (etk::FSN_FILE == m_list[raw-offset]->GetNodeType()) {
 			myTextToWrite = m_list[raw-offset]->GetRight().GetRight();
 			myTextToWrite += " ";
 			myTextToWrite += m_list[raw-offset]->GetNameFile();
 		} else */{
-			myTextToWrite = m_list[raw-offset]->GetNameFile();
+			_myTextToWrite = m_list[_raw-offset]->GetNameFile();
 		}
 	}
-	fg = draw::color::black;
-	if (raw % 2) {
-		bg = 0xFFFFFF00;
+	_fg = etk::color::black;
+	if (_raw % 2) {
+		_bg = 0xFFFFFF00;
 	} else {
-		bg = 0xBFBFBFFF;
+		_bg = 0xBFBFBFFF;
 	}
-	if (m_selectedLine == raw) {
-		bg = 0x8F8FFFFF;
+	if (m_selectedLine == _raw) {
+		_bg = 0x8F8FFFFF;
 	}
 	return true;
 };
 
 
-bool widget::ListFileSystem::OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent, int32_t colomn, int32_t raw, float x, float y)
+bool widget::ListFileSystem::OnItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y)
 {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;
 	}
-	if (typeEvent == ewol::keyEvent::statusSingle) {
-		EWOL_INFO("Event on List : IdInput=" << IdInput << " colomn=" << colomn << " raw=" << raw );
-		if (1 == IdInput) {
+	if (_typeEvent == ewol::keyEvent::statusSingle) {
+		EWOL_INFO("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
+		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
-			if (raw > m_list.Size()+offset ) {
+			if (_raw > m_list.Size()+offset ) {
 				m_selectedLine = -1;
 			} else {
-				m_selectedLine = raw;
+				m_selectedLine = _raw;
 			}
 			if (previousRaw != m_selectedLine) {
 				if(    true == m_showFolder

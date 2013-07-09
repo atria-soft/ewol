@@ -10,7 +10,6 @@
 #define __EWOL_POP_UP_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Container.h>

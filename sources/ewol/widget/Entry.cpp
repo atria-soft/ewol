@@ -63,11 +63,11 @@ widget::Entry::Entry(etk::UString _newData) :
 	m_displayCursor(false),
 	m_displayCursorPos(0),
 	m_displayCursorPosSelection(0),
-	m_textColorFg(draw::color::black),
-	m_textColorBg(draw::color::white),
+	m_textColorFg(etk::color::black),
+	m_textColorBg(etk::color::white),
 	m_textWhenNothing("")
 {
-	m_textColorBg.a = 0xAF;
+	m_textColorBg.SetA(0xAF);
 	SetCanHaveFocus(true);
 	AddEventId(eventClick);
 	AddEventId(eventEnter);
@@ -605,13 +605,13 @@ void widget::Entry::SetRegExp(const etk::UString& _expression)
 }
 
 
-void widget::Entry::SetColorText(const draw::Color& _color)
+void widget::Entry::SetColorText(const etk::Color<>& _color)
 {
 	m_textColorFg = _color;
 	MarkToRedraw();
 }
 
-void widget::Entry::SetColorTextSelected(const draw::Color& _color)
+void widget::Entry::SetColorTextSelected(const etk::Color<>& _color)
 {
 	m_textColorBg = _color;
 	MarkToRedraw();
@@ -637,15 +637,11 @@ bool widget::Entry::OnSetConfig(const ewol::EConfig& _conf)
 		return true;
 	}
 	if (_conf.GetConfig() == configColorFg) {
-		draw::Color tmpColor;
-		draw::ParseColor(_conf.GetData().c_str(), tmpColor);
-		SetColorText(tmpColor);
+		SetColorText(_conf.GetData());
 		return true;
 	}
 	if (_conf.GetConfig() == configColorBg) {
-		draw::Color tmpColor;
-		draw::ParseColor(_conf.GetData().c_str(), tmpColor);
-		SetColorTextSelected(tmpColor);
+		SetColorTextSelected(_conf.GetData());
 		return true;
 	}
 	if (_conf.GetConfig() == configEmptyMessage) {
@@ -669,11 +665,11 @@ bool widget::Entry::OnGetConfig(const char* _config, etk::UString& _result) cons
 		return true;
 	}
 	if (_config == configColorFg) {
-		_result = draw::GetString(GetColorText());
+		_result = GetColorText().GetString();
 		return true;
 	}
 	if (_config == configColorBg) {
-		_result = draw::GetString(GetColorTextSelected());
+		_result = GetColorTextSelected().GetString();
 		return true;
 	}
 	if (_config == configEmptyMessage) {

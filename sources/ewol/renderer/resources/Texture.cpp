@@ -7,13 +7,9 @@
  */
 
 #include <etk/types.h>
-
 #include <ewol/ewol.h>
-
 #include <ewol/renderer/openGL.h>
-
 #include <ewol/renderer/ResourceManager.h>
-
 #include <ewol/renderer/resources/Texture.h>
 
 #undef __class__
@@ -24,11 +20,11 @@
  * @param[in] value Value that we want the next power of 2
  * @return result value
  */
-static int32_t nextP2(int32_t value)
+static int32_t nextP2(int32_t _value)
 {
 	int32_t val=1;
 	for (int32_t iii=1; iii<31; iii++) {
-		if (value <= val) {
+		if (_value <= val) {
 			return val;
 		}
 		val *=2;
@@ -39,8 +35,8 @@ static int32_t nextP2(int32_t value)
 
 
 
-ewol::Texture::Texture(etk::UString tmpName) :
-	Resource(tmpName)
+ewol::Texture::Texture(etk::UString _tmpName) :
+	Resource(_tmpName)
 {
 	m_loaded = false;
 	m_texId = 0;
@@ -111,9 +107,9 @@ void ewol::Texture::Flush(void)
 }
 
 
-void ewol::Texture::SetImageSize(ivec2 newSize)
+void ewol::Texture::SetImageSize(ivec2 _newSize)
 {
-	newSize.setValue( nextP2(newSize.x()), nextP2(newSize.y()) );
-	m_data.Resize(newSize);
+	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
+	m_data.Resize(_newSize);
 }
 

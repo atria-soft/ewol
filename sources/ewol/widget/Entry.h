@@ -16,7 +16,7 @@
 #include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 
 namespace widget {
 	/**
@@ -142,32 +142,32 @@ namespace widget {
 			virtual void RemoveSelected(void);
 		
 		private:
-			draw::Color m_textColorFg; //!< Text color.
+			etk::Color<> m_textColorFg; //!< Text color.
 		public:
 			/**
 			 * @brief Set text color.
 			 * @param _color Color that is selected.
 			 */
-			void SetColorText(const draw::Color& _color);
+			void SetColorText(const etk::Color<>& _color);
 			/**
 			 * @brief Get the color for the text.
 			 * @return The color requested.
 			 */
-			const draw::Color& GetColorText(void) const { return m_textColorFg; };
+			const etk::Color<>& GetColorText(void) const { return m_textColorFg; };
 		
 		private:
-			draw::Color m_textColorBg; //!< Background color.
+			etk::Color<> m_textColorBg; //!< Background color.
 		public:
 			/**
 			 * @brief Set text backgroung color when selected.
 			 * @param _color Color that is selected.
 			 */
-			void SetColorTextSelected(const draw::Color& _color);
+			void SetColorTextSelected(const etk::Color<>& _color);
 			/**
 			 * @brief Get the selected color for the text in selection mode.
 			 * @return The color requested.
 			 */
-			const draw::Color& GetColorTextSelected(void) const { return m_textColorBg; };
+			const etk::Color<>& GetColorTextSelected(void) const { return m_textColorBg; };
 		
 		private:
 			etk::UString m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)

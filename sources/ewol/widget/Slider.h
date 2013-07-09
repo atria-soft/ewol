@@ -10,7 +10,7 @@
 #define __EWOL_SLIDER_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
 
@@ -29,13 +29,13 @@ namespace widget {
 			int32_t GetValue(void);
 			void SetMin(int32_t val);
 			void SetMax(int32_t val);
-			void SetColor(draw::Color newColor) { m_textColorFg = newColor; };
+			void SetColor(etk::Color<> newColor) { m_textColorFg = newColor; };
 		private:
 			int32_t m_value;
 			int32_t m_min;
 			int32_t m_max;
-			draw::Color m_textColorFg; //!< Text color
-			draw::Color m_textColorBg; //!< Background color
+			etk::Color<> m_textColorFg; //!< Text color
+			etk::Color<> m_textColorBg; //!< Background color
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "Ewol::Slider"; } ;

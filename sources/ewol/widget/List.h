@@ -10,7 +10,7 @@
 #define __EWOL_LIST_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 #include <ewol/compositing/Compositing.h>
@@ -41,32 +41,31 @@ namespace widget {
 			int32_t m_nbVisibleRaw; // set the number of visible raw (calculate don display)
 		protected:
 			// function call to display the list :
-			virtual draw::Color GetBasicBG(void) {
-				draw::Color bg(0xFFFFFFFF);
-				return bg;
+			virtual etk::Color<> GetBasicBG(void) {
+				return etk::Color<>(0xFFFFFFFF);
 			}
 			virtual uint32_t GetNuberOfColomn(void) {
 				return 1;
 			};
-			virtual bool GetTitle(int32_t colomn, etk::UString &myTitle, draw::Color &fg, draw::Color &bg) {
-				myTitle = "";
+			virtual bool GetTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
+				_myTitle = "";
 				return false;
 			};
 			virtual uint32_t GetNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool GetElement(int32_t colomn, int32_t raw, etk::UString &myTextToWrite, draw::Color &fg, draw::Color &bg) {
-				myTextToWrite = "";
-				bg = 0xFFFFFFFF;
-				fg = 0x000000FF;
-				if (raw % 2) {
-					bg = 0xFFFFFFFF;
+			virtual bool GetElement(int32_t _colomn, int32_t _raw, etk::UString &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
+				_myTextToWrite = "";
+				_bg = 0xFFFFFFFF;
+				_fg = 0x000000FF;
+				if (_raw % 2) {
+					_bg = 0xFFFFFFFF;
 				} else {
-					bg = 0x7F7F7FFF;
+					_bg = 0x7F7F7FFF;
 				}
 				return false;
 			};
-			virtual bool OnItemEvent(int32_t IdInput, ewol::keyEvent::status_te typeEvent,  int32_t colomn, int32_t raw, float x, float y) {
+			virtual bool OnItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
 				return false;
 			}
 			/**

@@ -10,7 +10,7 @@
 #define __EWOL_CONTEXT_MENU_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Drawing.h>
@@ -47,8 +47,8 @@ namespace widget {
 		private:
 			// TODO : Rework the displayer ....
 			ewol::Drawing m_compositing;
-			draw::Color m_colorBackGroung;
-			draw::Color m_colorBorder;
+			etk::Color<> m_colorBackGroung;
+			etk::Color<> m_colorBorder;
 			
 			float m_offset;
 		private:

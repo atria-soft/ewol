@@ -15,7 +15,7 @@
 
 ewol::Area::Area(const ivec2& _size) :
 	m_position(0.0, 0.0, 0.0),
-	m_color(draw::color::white),
+	m_color(etk::color::white),
 	m_GLprogram(NULL),
 	m_GLPosition(-1),
 	m_GLMatrix(-1),

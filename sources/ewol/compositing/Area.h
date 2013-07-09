@@ -18,8 +18,8 @@ namespace ewol
 	class Area : public ewol::Compositing
 	{
 		private:
-			vec3 m_position;         //!< The current position to draw
-			draw::Color m_color; //!< The text foreground color
+			vec3 m_position; //!< The current position to draw
+			etk::Color<> m_color; //!< The text foreground color
 		private:
 			ewol::Program* m_GLprogram;  //!< pointer on the opengl display program
 			int32_t        m_GLPosition; //!< openGL id on the element (vertex buffer)
@@ -28,10 +28,10 @@ namespace ewol
 			int32_t        m_GLtexture;  //!< openGL id on the element (Texture position)
 			int32_t        m_GLtexID;    //!< openGL id on the element (texture ID)
 		private:
-			ewol::Texture*            m_resource;    //!< texture resources
-			etk::Vector<vec3 >        m_coord;       //!< internal coord of the object
-			etk::Vector<vec2 >        m_coordTex;    //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf> m_coordColor;  //!< internal color of the different point
+			ewol::Texture* m_resource; //!< texture resources
+			etk::Vector<vec3 > m_coord; //!< internal coord of the object
+			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
+			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
@@ -79,7 +79,7 @@ namespace ewol
 			 */
 			void Print(const ivec2& _size);
 			
-			draw::Image& Get(void) { return m_resource->Get(); };
+			egami::Image& Get(void) { return m_resource->Get(); };
 			void Flush(void) { m_resource->Flush(); };
 			
 	};

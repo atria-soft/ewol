@@ -25,23 +25,23 @@ namespace ewol
 			int32_t        m_GLMatrix;
 			int32_t        m_GLColor;
 		public:
-			Colored3DObject(etk::UString genName);
+			Colored3DObject(etk::UString _genName);
 			virtual ~Colored3DObject(void);
 			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
-			virtual void Draw(etk::Vector<vec3>& vertices,
-			                  const draw::Colorf& color,
-			                  bool updateDepthBuffer=true,
-			                  bool depthtest=true);
-			virtual void Draw(etk::Vector<vec3>& vertices,
-			                  const draw::Colorf& color,
-			                  mat4& transformationMatrix,
-			                  bool updateDepthBuffer=true,
-			                  bool depthtest=true);
-			virtual void DrawLine(etk::Vector<vec3>& vertices,
-			                      const draw::Colorf& color,
-			                      mat4& transformationMatrix,
-			                      bool updateDepthBuffer=true,
-			                      bool depthtest=true);
+			virtual void Draw(etk::Vector<vec3>& _vertices,
+			                  const etk::Color<float>& _color,
+			                  bool _updateDepthBuffer=true,
+			                  bool _depthtest=true);
+			virtual void Draw(etk::Vector<vec3>& _vertices,
+			                  const etk::Color<float>& _color,
+			                  mat4& _transformationMatrix,
+			                  bool _updateDepthBuffer=true,
+			                  bool _depthtest=true);
+			virtual void DrawLine(etk::Vector<vec3>& _vertices,
+			                      const etk::Color<float>& _color,
+			                      mat4& _transformationMatrix,
+			                      bool _updateDepthBuffer=true,
+			                      bool _depthtest=true);
 			
 	};
 };

@@ -297,38 +297,14 @@ void guiInterface::SetTitle(etk::UString& title)
 	X11_INFO("X11: Set Title (END)");
 }
 
-#include <ewol/renderer/resources/image/ImageBMP.h>
-#include <ewol/renderer/resources/image/ImagePNG.h>
-#include <esvg/esvg.h>
+#include <egami/egami.h>
 
-void guiInterface::SetIcon(etk::UString inputFile)
+void guiInterface::SetIcon(etk::UString _inputFile)
 {
-	draw::Image dataImage;
+	egami::Image dataImage;
 	// load data
-	if (true == inputFile.EndWith(".bmp") ) {
-		// generate the texture
-		if (false == ewol::imageBMP::GenerateImage(inputFile, dataImage)) {
-			EWOL_ERROR("Error To load BMP file " << inputFile );
-			return;
-		}
-	} else if (true == inputFile.EndWith(".svg") ) {
-		esvg::Document m_element(inputFile);
-		if (false == m_element.IsLoadOk()) {
-			EWOL_ERROR("Error To load SVG file " << inputFile );
-			return;
-		} else {
-			// generate the texture
-			ivec2 tmpSize(32,32);
-			m_element.GenerateAnImage(tmpSize, dataImage);
-		}
-	} else if (true == inputFile.EndWith(".png") ) {
-		// generate the texture
-		if (false == ewol::imagePNG::GenerateImage(inputFile, dataImage)) {
-			EWOL_ERROR("Error To load PNG file " << inputFile );
-			return;
-		}
-	} else {
-		EWOL_ERROR("Extention not managed " << inputFile << " Sopported extention : .bmp / .svg / .png");
+	if (false == egami::Load(dataImage, _inputFile)) {
+		EWOL_ERROR("Error when loading Icon");
 		return;
 	}
 	int32_t depth = DefaultDepth(m_display, DefaultScreen(m_display) );
@@ -357,10 +333,10 @@ void guiInterface::SetIcon(etk::UString inputFile)
 		case 16:
 			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
 				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-					draw::Color tmpColor = dataImage.Get(pos);
-					int16_t tmpVal =   (((uint16_t)((uint16_t)tmpColor.r>>3))<<11)
-					                 + (((uint16_t)((uint16_t)tmpColor.g>>2))<<5)
-					                 +  ((uint16_t)((uint16_t)tmpColor.b>>3));
+					etk::Color<> tmpColor = dataImage.Get(pos);
+					int16_t tmpVal =   (((uint16_t)((uint16_t)tmpColor.r()>>3))<<11)
+					                 + (((uint16_t)((uint16_t)tmpColor.g()>>2))<<5)
+					                 +  ((uint16_t)((uint16_t)tmpColor.b()>>3));
 					*tmpPointer++ = (uint8_t)(tmpVal>>8);
 					*tmpPointer++ = (uint8_t)(tmpVal&0x00FF);
 				}
@@ -369,10 +345,10 @@ void guiInterface::SetIcon(etk::UString inputFile)
 		case 24:
 			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
 				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-					draw::Color tmpColor = dataImage.Get(pos);
-					*tmpPointer++ = tmpColor.b;
-					*tmpPointer++ = tmpColor.g;
-					*tmpPointer++ = tmpColor.r;
+					etk::Color<> tmpColor = dataImage.Get(pos);
+					*tmpPointer++ = tmpColor.b();
+					*tmpPointer++ = tmpColor.g();
+					*tmpPointer++ = tmpColor.r();
 					tmpPointer++;
 				}
 			}
@@ -380,11 +356,11 @@ void guiInterface::SetIcon(etk::UString inputFile)
 		case 32:
 			for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
 				for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-					draw::Color tmpColor = dataImage.Get(pos);
-					*tmpPointer++ = tmpColor.a;
-					*tmpPointer++ = tmpColor.b;
-					*tmpPointer++ = tmpColor.g;
-					*tmpPointer++ = tmpColor.r;
+					etk::Color<> tmpColor = dataImage.Get(pos);
+					*tmpPointer++ = tmpColor.a();
+					*tmpPointer++ = tmpColor.b();
+					*tmpPointer++ = tmpColor.g();
+					*tmpPointer++ = tmpColor.r();
 				}
 			}
 			break;

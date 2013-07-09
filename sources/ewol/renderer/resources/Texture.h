@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <draw/Image.h>
+#include <egami/Image.h>
 #include <ewol/renderer/openGL.h>
 #include <ewol/renderer/resources/Resource.h>
 
@@ -19,13 +19,13 @@ namespace ewol {
 	class Texture : public ewol::Resource {
 		protected:
 			// openGl Context propoerties :
-			draw::Image     m_data;
+			egami::Image m_data;
 			// OpenGl textureID :
-			GLuint          m_texId;
+			GLuint m_texId;
 			// some image are not square ==> we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
 			vec2 m_endPointSize;
 			// internal state of the openGl system :
-			bool            m_loaded;
+			bool m_loaded;
 		// Ewol internal API:
 		public:
 			void UpdateContext(void);
@@ -43,7 +43,7 @@ namespace ewol {
 			// you must set the size here, because it will be set in multiple of pow(2)
 			void SetImageSize(ivec2 newSize);
 			// get the reference on this image to draw nomething on it ...
-			inline draw::Image& Get(void) { return m_data; };
+			inline egami::Image& Get(void) { return m_data; };
 			// Flush the data to send it at the OpenGl system
 			void Flush(void);
 	};

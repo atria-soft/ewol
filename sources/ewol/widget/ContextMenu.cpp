@@ -49,10 +49,10 @@ widget::ContextMenu::ContextMenu(const etk::UString& _shaperName) :
 	
 	m_offset = 20;
 	
-	m_colorBackGroung = draw::color::white;
+	m_colorBackGroung = etk::color::white;
 	
-	m_colorBorder = draw::color::black;
-	m_colorBorder.a = 0x7F;
+	m_colorBorder = etk::color::black;
+	m_colorBorder.SetA(0x7F);
 	
 	m_arrowPos.setValue(0,0);
 	m_arrawBorder = widget::CONTEXT_MENU_MARK_TOP;

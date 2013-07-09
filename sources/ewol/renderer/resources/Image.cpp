@@ -8,53 +8,20 @@
 
 
 #include <etk/types.h>
-#include <etk/os/FSNode.h>
-
-#include <esvg/esvg.h>
-
+#include <egami/egami.h>
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/Image.h>
 #include <ewol/renderer/resources/Texture.h>
 
 
-#include <ewol/renderer/resources/image/ImageBMP.h>
-#include <ewol/renderer/resources/image/ImagePNG.h>
-
 #undef __class__
 #define __class__	"TextureFile"
 
-ewol::TextureFile::TextureFile(etk::UString genName, etk::UString tmpfileName, ivec2 size) :
-	Texture(genName)
+ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfileName, const ivec2& _size) :
+	Texture(_genName)
 {
-	etk::UString tmpName = tmpfileName;
-	// load data
-	if (true == tmpName.EndWith(".bmp") ) {
-		// generate the texture
-		if (false == ewol::imageBMP::GenerateImage(tmpName, m_data)) {
-			EWOL_ERROR("Error To load BMP file " << tmpName );
-		}
-	} else if (true == tmpName.EndWith(".svg") ) {
-		esvg::Document m_element(tmpName);
-		if (false == m_element.IsLoadOk()) {
-			EWOL_ERROR("Error To load SVG file " << tmpName );
-		} else {
-			/*
-			if (size.x()>0 && size.y()>0) {
-				// generate the texture
-				m_element.GenerateAnImage(size, m_data);
-			} else {
-			*/
-				// generate the texture
-				m_element.GenerateAnImage(m_data);
-			//}
-		}
-	} else if (true == tmpName.EndWith(".png") ) {
-		// generate the texture
-		if (false == ewol::imagePNG::GenerateImage(tmpName, m_data)) {
-			EWOL_ERROR("Error To load PNG file " << tmpName );
-		}
-	} else {
-		EWOL_ERROR("Extention not managed " << tmpName << " Sopported extention : .bmp / .svg / .png");
+	if (true == egami::Load(m_data, _tmpfileName, _size)) {
+		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}
 	ivec2 tmp = m_data.GetSize();
 	m_realImageSize = vec2(tmp.x(), tmp.y());

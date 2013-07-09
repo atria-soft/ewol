@@ -47,10 +47,10 @@ widget::Slider::Slider(void)
 	m_min = 0;
 	m_max = 10;
 	
-	m_textColorFg = draw::color::black;
+	m_textColorFg = etk::color::black;
 	
-	m_textColorBg = draw::color::black;
-	m_textColorBg.a = 0x3F;
+	m_textColorBg = etk::color::black;
+	m_textColorBg.SetA(0x3F);
 	SetCanHaveFocus(true);
 	// Limit event at 1:
 	SetMouseLimit(1);
@@ -115,8 +115,8 @@ void widget::Slider::OnRegenerateDisplay(void)
 		tmpDraw->LineTo(vec3(m_size.x()-dotRadius, m_size.y()/2, 0) );
 		tmpDraw->SetThickness(0);
 		
-		draw::Color borderDot = m_textColorFg;
-		borderDot.a /= 2;
+		etk::Color<> borderDot = m_textColorFg;
+		borderDot.SetA(borderDot.a()/2);
 		tmpDraw->SetPos(vec3(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
 		tmpDraw->SetColorBg(borderDot);
 		tmpDraw->Circle(dotRadius);

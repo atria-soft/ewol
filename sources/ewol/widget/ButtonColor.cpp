@@ -46,7 +46,7 @@ void widget::ButtonColor::UnInit(void)
 }
 
 
-widget::ButtonColor::ButtonColor(draw::Color baseColor, etk::UString shaperName) :
+widget::ButtonColor::ButtonColor(etk::Color<> baseColor, etk::UString shaperName) :
 	m_shaper(shaperName),
 	m_textColorFg(baseColor),
 	m_widgetContextMenu(NULL)
@@ -74,7 +74,7 @@ void widget::ButtonColor::SetShaperName(etk::UString shaperName)
 void widget::ButtonColor::CalculateMinMaxSize(void)
 {
 	vec2 padding = m_shaper.GetPadding();
-	etk::UString label = draw::GetString(m_textColorFg);
+	etk::UString label = m_textColorFg.GetString();
 	vec3 minSize = m_text.CalculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
@@ -98,7 +98,7 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		
 		vec2 padding = m_shaper.GetPadding();
 		
-		etk::UString label = draw::GetString(m_textColorFg);
+		etk::UString label = m_textColorFg.GetString();
 		
 		ivec2 localSize = m_minSize;
 		
@@ -124,12 +124,12 @@ void widget::ButtonColor::OnRegenerateDisplay(void)
 		
 		// clean the element
 		m_text.Reset();
-		if(    m_textColorFg.r < 100
-		    || m_textColorFg.g < 100
-		    || m_textColorFg.b < 100) {
-			m_text.SetColor(draw::color::white);
+		if(    m_textColorFg.r() < 100
+		    || m_textColorFg.g() < 100
+		    || m_textColorFg.b() < 100) {
+			m_text.SetColor(etk::color::white);
 		} else {
-			m_text.SetColor(draw::color::black);
+			m_text.SetColor(etk::color::black);
 		}
 		m_text.SetPos(tmpTextOrigin);
 		m_text.SetColorBg(m_textColorFg);
@@ -224,13 +224,13 @@ bool widget::ButtonColor::OnEventInput(const ewol::EventInput& _event)
 }
 
 
-void widget::ButtonColor::SetValue(draw::Color color)
+void widget::ButtonColor::SetValue(etk::Color<> _color)
 {
-	m_textColorFg = color;
+	m_textColorFg = _color;
 	MarkToRedraw();
 }
 
-draw::Color widget::ButtonColor::GetValue(void)
+etk::Color<> widget::ButtonColor::GetValue(void)
 {
 	return m_textColorFg;
 }
@@ -240,16 +240,16 @@ void widget::ButtonColor::OnReceiveMessage(const ewol::EMessage& _msg)
 {
 	EWOL_INFO("Receive MSG : " <<  _msg.GetData());
 	if (_msg.GetMessage() == ewolEventColorChooserChange) {
-		draw::ParseColor(_msg.GetData().c_str(), m_textColorFg);
+		m_textColorFg = _msg.GetData();
 		GenerateEventId(ewolEventButtonColorChange, _msg.GetData());
 		MarkToRedraw();
 	}
 }
 
 
-void widget::ButtonColor::ChangeStatusIn(int32_t newStatusId)
+void widget::ButtonColor::ChangeStatusIn(int32_t _newStatusId)
 {
-	if (true == m_shaper.ChangeStatusIn(newStatusId) ) {
+	if (true == m_shaper.ChangeStatusIn(_newStatusId) ) {
 		PeriodicCallEnable();
 		MarkToRedraw();
 	}

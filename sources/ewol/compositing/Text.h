@@ -9,7 +9,7 @@
 #ifndef __EWOL_COMPOSITING_TEXT_H__
 #define __EWOL_COMPOSITING_TEXT_H__
 
-#include <draw/Color.h>
+#include <etk/Color.h>
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
@@ -25,13 +25,13 @@ namespace ewol
 	class TextDecoration
 	{
 		public:
-			draw::Color         m_colorBg; //!< Display background color
-			draw::Color         m_colorFg; //!< Display foreground color
-			ewol::font::mode_te m_mode;    //!< Display mode Regular/Bold/Italic/BoldItalic
+			etk::Color<> m_colorBg; //!< Display background color
+			etk::Color<> m_colorFg; //!< Display foreground color
+			ewol::font::mode_te m_mode; //!< Display mode Regular/Bold/Italic/BoldItalic
 			TextDecoration(void)
 			{
-				m_colorBg = draw::color::blue;
-				m_colorBg = draw::color::green;
+				m_colorBg = etk::color::blue;
+				m_colorBg = etk::color::green;
 				m_mode = ewol::font::Regular;
 				
 			}
@@ -50,44 +50,44 @@ namespace ewol
 		private:
 			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 		private:
-			int32_t m_nbCharDisplayed;    //!< prevent some error in calculation size.
-			vec3    m_sizeDisplayStart;   //!< The start windows of the display.
-			vec3    m_sizeDisplayStop;    //!< The end windows of the display.
-			bool    m_needDisplay;        //!< This just need the display and not the size rendering.
-			vec3    m_position;           //!< The current position to draw
-			vec3    m_clippingPosStart;   //!< Clipping start position
-			vec3    m_clippingPosStop;    //!< Clipping stop position
-			bool    m_clippingEnable;     //!< true if the clipping must be activated
+			int32_t m_nbCharDisplayed; //!< prevent some error in calculation size.
+			vec3 m_sizeDisplayStart; //!< The start windows of the display.
+			vec3 m_sizeDisplayStop; //!< The end windows of the display.
+			bool m_needDisplay; //!< This just need the display and not the size rendering.
+			vec3 m_position; //!< The current position to draw
+			vec3 m_clippingPosStart; //!< Clipping start position
+			vec3 m_clippingPosStop; //!< Clipping stop position
+			bool m_clippingEnable; //!< true if the clipping must be activated
 		private:
-			draw::Color m_color;          //!< The text foreground color
-			draw::Color m_colorBg;        //!< The text background color
-			draw::Color m_colorCursor;    //!< The text cursor color
-			draw::Color m_colorSelection; //!< The text Selection color
+			etk::Color<> m_color; //!< The text foreground color
+			etk::Color<> m_colorBg; //!< The text background color
+			etk::Color<> m_colorCursor; //!< The text cursor color
+			etk::Color<> m_colorSelection; //!< The text Selection color
 		private:
-			ewol::font::mode_te  m_mode;               //!< font display property : Regular/Bold/Italic/BoldItalic
-			bool                 m_kerning;            //!< Kerning enable or disable on the next elements displayed
-			bool                 m_distanceField;      //!< Texture in distance Field mode ==> maybe move this in the font property.
-			uniChar_t            m_previousCharcode;   //!< we remember the previous charcode to perform the kerning. @ref Kerning
+			ewol::font::mode_te m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
+			bool m_kerning; //!< Kerning enable or disable on the next elements displayed
+			bool m_distanceField; //!< Texture in distance Field mode ==> maybe move this in the font property.
+			uniChar_t m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
 		private:
-			float                m_startTextpos;       //!< start position of the Alignement (when \n the text return at this position)
-			float                m_stopTextPos;        //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
-			aligneMode_te        m_alignement;         //!< Current Alignement mode (justify/left/right ...)
+			float m_startTextpos; //!< start position of the Alignement (when \n the text return at this position)
+			float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
+			aligneMode_te m_alignement; //!< Current Alignement mode (justify/left/right ...)
 		private:
-			ewol::Program*       m_GLprogram;          //!< pointer on the opengl display program
-			int32_t              m_GLPosition;         //!< openGL id on the element (vertex buffer)
-			int32_t              m_GLMatrix;           //!< openGL id on the element (transformation matrix)
-			int32_t              m_GLColor;            //!< openGL id on the element (color buffer)
-			int32_t              m_GLtexture;          //!< openGL id on the element (Texture position)
-			int32_t              m_GLtexID;            //!< openGL id on the element (texture ID)
+			ewol::Program* m_GLprogram; //!< pointer on the opengl display program
+			int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
+			int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
+			int32_t m_GLColor; //!< openGL id on the element (color buffer)
+			int32_t m_GLtexture; //!< openGL id on the element (Texture position)
+			int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 		private:
 			int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
-			int32_t m_cursorPos;         //!< Cursor position (default no cursor ==> -100)
+			int32_t m_cursorPos; //!< Cursor position (default no cursor ==> -100)
 		private:
-			ewol::TexturedFont*       m_font;          //!< Font resources
+			ewol::TexturedFont* m_font; //!< Font resources
 		private: // Text
-			etk::Vector<vec2 >        m_coord;         //!< internal coord of the object
-			etk::Vector<vec2 >        m_coordTex;      //!< internal texture coordinate for every point
-			etk::Vector<draw::Colorf> m_coordColor;    //!< internal color of the different point
+			etk::Vector<vec2 > m_coord; //!< internal coord of the object
+			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
+			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief Load the openGL program and get all the ID needed
@@ -150,12 +150,12 @@ namespace ewol
 			 * @brief Set the Color of the current foreground font
 			 * @param[in] _color Color to set on foreground (for next print)
 			 */
-			void SetColor(const draw::Color& _color) { m_color = _color; };
+			void SetColor(const etk::Color<>& _color) { m_color = _color; };
 			/**
 			 * @brief Set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] _color Color to set on background (for next print)
 			 */
-			void SetColorBg(const draw::Color& _color);
+			void SetColorBg(const etk::Color<>& _color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping
@@ -402,12 +402,12 @@ namespace ewol
 			 * @brief Change the selection color
 			 * @param[in] _color New color for the Selection
 			 */
-			void SetSelectionColor(const draw::Color& _color);
+			void SetSelectionColor(const etk::Color<>& _color);
 			/**
 			 * @brief Change the cursor color
 			 * @param[in] _color New color for the Selection
 			 */
-			void SetCursorColor(const draw::Color& _color);
+			void SetCursorColor(const etk::Color<>& _color);
 	};
 };
 

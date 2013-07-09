@@ -36,12 +36,12 @@ widget::ProgressBar::ProgressBar(void)
 {
 	m_value = 0.0;
 	
-	m_textColorFg = draw::color::black;
+	m_textColorFg = etk::color::black;
 	
 	m_textColorBgOn = 0x00FF00FF;
 	
-	m_textColorBgOff = draw::color::black;
-	m_textColorBgOff.a = 0x3F;
+	m_textColorBgOff = etk::color::black;
+	m_textColorBgOff.SetA(0x3F);
 	SetCanHaveFocus(true);
 }
 

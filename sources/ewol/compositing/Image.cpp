@@ -18,7 +18,7 @@ ewol::Image::Image(const etk::UString& _imageName) :
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
-	m_color(draw::color::white),
+	m_color(etk::color::white),
 	m_axes(0.0, 0.0, 0.0),
 	m_angle(0.0),
 	m_GLprogram(NULL),
@@ -100,7 +100,7 @@ void ewol::Image::Clear(void)
 	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
 	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
-	m_color = draw::color::white;
+	m_color = etk::color::white;
 	m_axes = vec3(0.0, 0.0, 0.0);
 	m_angle = 0.0;
 }

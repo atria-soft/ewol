@@ -46,14 +46,14 @@ void ewol::FreeTypeUnInit(void)
 
 
 
-ewol::FontFreeType::FontFreeType(etk::UString fontName) :
-	FontBase(fontName)
+ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
+	FontBase(_fontName)
 {
 	m_init = false;
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
 	
-	etk::FSNode myfile(fontName);
+	etk::FSNode myfile(_fontName);
 	if (false == myfile.Exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
@@ -70,7 +70,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 	// allocate data
 	m_FileBuffer = new FT_Byte[m_FileSize];
 	if (NULL == m_FileBuffer) {
-		EWOL_ERROR("Error Memory allocation size=" << fontName);
+		EWOL_ERROR("Error Memory allocation size=" << _fontName);
 		return;
 	}
 	// load data from the file :
@@ -85,7 +85,7 @@ ewol::FontFreeType::FontFreeType(etk::UString fontName) :
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << fontName << "\" ");
+		EWOL_INFO("load font : \"" << _fontName << "\" ");
 		//Display();
 		m_init = true;
 	}
@@ -103,7 +103,7 @@ ewol::FontFreeType::~FontFreeType(void)
 }
 
 
-vec2 ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeString)
+vec2 ewol::FontFreeType::GetSize(int32_t _fontSize, const etk::UString& _unicodeString)
 {
 	if(false==m_init) {
 		return vec2(0,0);
@@ -113,13 +113,12 @@ vec2 ewol::FontFreeType::GetSize(int32_t fontSize, const etk::UString & unicodeS
 	return outputSize;
 }
 
-int32_t ewol::FontFreeType::GetHeight(int32_t fontSize)
+int32_t ewol::FontFreeType::GetHeight(int32_t _fontSize)
 {
-	return fontSize*1.43f; // this is a really "magic" number ...
+	return _fontSize*1.43f; // this is a really "magic" number ...
 }
 
-bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
-                                          ewol::GlyphProperty& property)
+bool ewol::FontFreeType::GetGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property)
 {
 	if(false==m_init) {
 		return false;
@@ -128,7 +127,7 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 	int32_t fontQuality = 96;
 	// Select Size ...
 	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
-	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
+	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
 		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
 		return false;
@@ -136,7 +135,7 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 	// a small shortcut
 	FT_GlyphSlot slot = m_fftFace->glyph;
 	// retrieve glyph index from character code 
-	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, property.m_UVal.Get());
+	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, _property.m_UVal.Get());
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
 	                      glyph_index, // glyph index
@@ -152,19 +151,19 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t              fontSize,
 		return false;
 	}
 	// set properties :
-	property.m_glyphIndex = glyph_index;
-	property.m_sizeTexture.setValue(slot->bitmap.width, slot->bitmap.rows);
-	property.m_bearing.setValue( slot->metrics.horiBearingX>>6 , slot->metrics.horiBearingY>>6 );
-	property.m_advance.setValue( slot->metrics.horiAdvance>>6 , slot->metrics.vertAdvance>>6 );
+	_property.m_glyphIndex = glyph_index;
+	_property.m_sizeTexture.setValue(slot->bitmap.width, slot->bitmap.rows);
+	_property.m_bearing.setValue( slot->metrics.horiBearingX>>6 , slot->metrics.horiBearingY>>6 );
+	_property.m_advance.setValue( slot->metrics.horiAdvance>>6 , slot->metrics.vertAdvance>>6 );
 	
 	return true;
 }
 
-bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
-                                   int32_t                fontSize,
-                                   ivec2 glyphPosition,
-                                   ewol::GlyphProperty&   property,
-                                   int8_t                 posInImage)
+bool ewol::FontFreeType::DrawGlyph(egami::Image& _imageOut,
+                                   int32_t _fontSize,
+                                   ivec2 _glyphPosition,
+                                   ewol::GlyphProperty& _property,
+                                   int8_t _posInImage)
 {
 
 	if(false==m_init) {
@@ -174,7 +173,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 	int32_t fontQuality = 96;
 	// Select Size ...
 	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
-	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
+	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
 		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
 		return false;
@@ -183,7 +182,7 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 	FT_GlyphSlot slot = m_fftFace->glyph;
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
-	                      property.m_glyphIndex, // glyph index
+	                      _property.m_glyphIndex, // glyph index
 	                      FT_LOAD_DEFAULT );
 	if (0!=error ) {
 		EWOL_ERROR("FT_Load_Glyph specify Glyph");
@@ -196,30 +195,30 @@ bool ewol::FontFreeType::DrawGlyph(draw::Image&           imageOut,
 		return false;
 	}
 	// draw it on the output Image :
-	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
+	etk::Color<> tlpppp(0xFFFFFF00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
-			tlpppp = imageOut.Get(ivec2(glyphPosition.x()+iii, glyphPosition.y()+jjj));
+			tlpppp = _imageOut.Get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
-			switch(posInImage)
+			switch(_posInImage)
 			{
 				default:
 				case 0:
-					tlpppp.a = valueColor;
+					tlpppp.SetA(valueColor);
 					break;
 				case 1:
-					tlpppp.r = valueColor;
+					tlpppp.SetR(valueColor);
 					break;
 				case 2:
-					tlpppp.g = valueColor;
+					tlpppp.SetG(valueColor);
 					break;
 				case 3:
-					tlpppp.b = valueColor;
+					tlpppp.SetB(valueColor);
 					break;
 			}
 			// real set of color
-			imageOut.Set(ivec2(glyphPosition.x()+iii, glyphPosition.y()+jjj), tlpppp );
+			_imageOut.Set(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj), tlpppp );
 		}
 	}
 	return true;

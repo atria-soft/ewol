@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/UString.h>
-#include <draw/Image.h>
+#include <egami/Image.h>
 #include <ewol/renderer/resources/Texture.h>
 #include <ewol/renderer/resources/Resource.h>
 
@@ -22,7 +22,7 @@ namespace ewol
 		private:
 			vec2 m_realImageSize;
 		public:
-			TextureFile(etk::UString genName, etk::UString fileName, ivec2 size);
+			TextureFile(etk::UString _genName, const etk::UString& _fileName, const ivec2& _size);
 			~TextureFile(void) { };
 			virtual const char* GetType(void) { return "ewol::TextureFile"; };
 			const vec2& GetRealSize(void) { return m_realImageSize; };

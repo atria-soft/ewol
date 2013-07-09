@@ -35,8 +35,8 @@ widget::CheckBox::CheckBox(const etk::UString& newLabel)
 {
 	m_label = newLabel;
 	AddEventId(ewolEventCheckBoxClicked);
-	m_textColorFg = draw::color::black;
-	m_textColorBg = draw::color::white;
+	m_textColorFg = etk::color::black;
+	m_textColorBg = etk::color::white;
 	m_value = false;
 	SetCanHaveFocus(true);
 	SetMouseLimit(1);

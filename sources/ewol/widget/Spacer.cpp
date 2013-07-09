@@ -37,8 +37,8 @@ widget::Spacer::Spacer(void)
 {
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	SetCanHaveFocus(false);
-	m_color = draw::color::black;
-	m_color.a = 0;
+	m_color = etk::color::black;
+	m_color.SetA(0);
 	RegisterConfig(configColor, "color", NULL, "background of the spacer");
 }
 
@@ -61,7 +61,7 @@ void widget::Spacer::OnRegenerateDisplay(void)
 	}
 	m_draw.Clear();
 	
-	if (m_color.a == 0) {
+	if (m_color.a() == 0) {
 		return;
 	}
 	m_draw.SetColor(m_color);
@@ -75,7 +75,7 @@ bool widget::Spacer::OnSetConfig(const ewol::EConfig& _conf)
 		return true;
 	}
 	if (_conf.GetConfig() == configColor) {
-		draw::ParseColor(_conf.GetData().c_str(), m_color);
+		m_color = _conf.GetData();
 		MarkToRedraw();
 		return true;
 	}
@@ -88,7 +88,7 @@ bool widget::Spacer::OnGetConfig(const char* _config, etk::UString& _result) con
 		return true;
 	}
 	if (_config == configColor) {
-		_result = draw::GetString(m_color);
+		_result = m_color.GetString();
 		return true;
 	}
 	return false;

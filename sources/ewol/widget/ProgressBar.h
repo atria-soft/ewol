@@ -10,7 +10,7 @@
 #define __EWOL_PROGRESS_BAR_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
@@ -29,12 +29,12 @@ namespace widget {
 			virtual ~ProgressBar(void);
 			void ValueSet(float val);
 			float ValueGet(void);
-			void SetColor(draw::Color newColor) { m_textColorFg = newColor; };
+			void SetColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
 		private:
 			float m_value; //!< % used
-			draw::Color m_textColorFg; //!< forder bar color
-			draw::Color m_textColorBgOn; //!< bar color enable
-			draw::Color m_textColorBgOff; //!< bar color disable
+			etk::Color<> m_textColorFg; //!< forder bar color
+			etk::Color<> m_textColorBgOn; //!< bar color enable
+			etk::Color<> m_textColorBgOff; //!< bar color disable
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function

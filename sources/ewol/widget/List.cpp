@@ -143,7 +143,7 @@ void widget::List::OnRegenerateDisplay(void)
 		etk::Vector<int32_t> listSizeColomn;
 		
 		ewol::Drawing * BGOObjects = new ewol::Drawing();
-		draw::Color basicBG = GetBasicBG();
+		etk::Color<> basicBG = GetBasicBG();
 		BGOObjects->SetColor(basicBG);
 		BGOObjects->SetPos(vec3(0, 0, 0) );
 		BGOObjects->RectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
@@ -180,8 +180,8 @@ void widget::List::OnRegenerateDisplay(void)
 			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				m_nbVisibleRaw++;
 				etk::UString myTextToWrite;
-				draw::Color fg;
-				draw::Color bg;
+				etk::Color<> fg;
+				etk::Color<> bg;
 				GetElement(jjj, iii, myTextToWrite, fg, bg);
 				
 				ewol::Text * tmpText = new ewol::Text();

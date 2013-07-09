@@ -10,7 +10,7 @@
 #define __EWOL_SPACER_H__
 
 #include <etk/types.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
@@ -35,17 +35,17 @@ namespace widget {
 			 */
 			virtual ~Spacer(void);
 		protected:
-			draw::Color m_color; //!< Background color
+			etk::Color<> m_color; //!< Background color
 		public:
 			/**
 			 * @brief Spziby the background color (basicly transparent)
 			 * @param[in] newColor the display background color
 			 */
-			void SetColor(draw::Color newColor) { m_color = newColor; MarkToRedraw(); };
+			void SetColor(etk::Color<> _newColor) { m_color = _newColor; MarkToRedraw(); };
 		public:
 			// Derived function
 			virtual const char * const GetObjectType(void) { return "ewol::spacer"; };
-			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos) { return NULL; };
+			virtual ewol::Widget * GetWidgetAtPos(const vec2& _pos) { return NULL; };
 			virtual void OnRegenerateDisplay(void);
 			virtual void OnDraw(void);
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);

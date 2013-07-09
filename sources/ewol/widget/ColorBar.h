@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <draw/Color.h>
+#include <etk/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
 
@@ -23,12 +23,12 @@ namespace widget {
 		public:
 			ColorBar(void);
 			virtual ~ColorBar(void);
-			draw::Color GetCurrentColor(void);
-			void SetCurrentColor(draw::Color newOne);
+			etk::Color<> GetCurrentColor(void);
+			void SetCurrentColor(etk::Color<> _newOne);
 		private:
-			ewol::Drawing         m_draw;              //!< Compositing drawing element
-			draw::Color           m_currentColor;
-			vec2  m_currentUserPos;
+			ewol::Drawing m_draw; //!< Compositing drawing element
+			etk::Color<> m_currentColor;
+			vec2 m_currentUserPos;
 		protected: // Derived function
 			virtual void OnDraw(void);
 		public: // Derived function

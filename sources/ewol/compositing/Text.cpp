@@ -19,10 +19,10 @@ ewol::Text::Text(void) :
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
-	m_color(draw::color::black),
-	m_colorBg(draw::color::none),
-	m_colorCursor(draw::color::black),
-	m_colorSelection(draw::color::olive),
+	m_color(etk::color::black),
+	m_colorBg(etk::color::none),
+	m_colorCursor(etk::color::black),
+	m_colorSelection(etk::color::olive),
 	m_mode(ewol::font::Regular),
 	m_kerning(true),
 	m_distanceField(false),
@@ -50,10 +50,10 @@ ewol::Text::Text(const etk::UString& _fontName, int32_t _fontSize) :
 	m_clippingPosStart(0.0, 0.0, 0.0),
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
-	m_color(draw::color::black),
-	m_colorBg(draw::color::none),
-	m_colorCursor(draw::color::black),
-	m_colorSelection(draw::color::olive),
+	m_color(etk::color::black),
+	m_colorBg(etk::color::none),
+	m_colorCursor(etk::color::black),
+	m_colorSelection(etk::color::olive),
 	m_mode(ewol::font::Regular),
 	m_kerning(true),
 	m_distanceField(false),
@@ -224,8 +224,8 @@ void ewol::Text::Reset(void)
 	m_sizeDisplayStop = m_position;
 	m_nbCharDisplayed = 0;
 	m_clippingEnable = false;
-	m_color = draw::color::black;
-	m_colorBg = draw::color::none;
+	m_color = etk::color::black;
+	m_colorBg = etk::color::none;
 	m_mode = ewol::font::Regular;
 	m_previousCharcode = 0;
 	m_startTextpos = 0;
@@ -278,7 +278,7 @@ void ewol::Text::SetRelPos(const vec3& _pos)
 	m_vectorialDraw.SetPos(m_position);
 }
 
-void ewol::Text::SetColorBg(const draw::Color& _color)
+void ewol::Text::SetColorBg(const etk::Color<>& _color)
 {
 	m_colorBg = _color;
 	m_vectorialDraw.SetColor(_color);
@@ -470,13 +470,9 @@ void ewol::Text::ParseHtmlNode(exml::Element* _element)
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			etk::UString colorValue = elem->GetAttribute("color");
-			if (colorValue.Size()!=0) {
-				draw::ParseColor(colorValue.c_str(), m_htmlDecoTmp.m_colorFg);
-			}
+			m_htmlDecoTmp.m_colorFg = colorValue;
 			colorValue = elem->GetAttribute("colorBg");
-			if (colorValue.Size()!=0) {
-				draw::ParseColor(colorValue.c_str(), m_htmlDecoTmp.m_colorBg);
-			}
+			m_htmlDecoTmp.m_colorBg = colorValue;
 			ParseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
 		} else if(    true==elem->GetValue().CompareNoCase("b")
@@ -553,8 +549,8 @@ void ewol::Text::PrintHTML(const etk::UString& _text)
 	exml::Document doc;
 	
 	// reset parameter :
-	m_htmlDecoTmp.m_colorBg = draw::color::none;
-	m_htmlDecoTmp.m_colorFg = draw::color::black;
+	m_htmlDecoTmp.m_colorBg = etk::color::none;
+	m_htmlDecoTmp.m_colorFg = etk::color::black;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
 	if (false == doc.Parse(_text)) {
@@ -583,8 +579,8 @@ void ewol::Text::Print(const etk::UString& _text, const etk::Vector<TextDecorati
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
 	}
-	draw::Color tmpFg(m_color);
-	draw::Color tmpBg(m_colorBg);
+	etk::Color<> tmpFg(m_color);
+	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == ewol::Text::alignDisable) {
 		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
@@ -617,7 +613,7 @@ void ewol::Text::Print(const etk::UString& _text, const etk::Vector<TextDecorati
 				}
 			}
 			if(    true == m_needDisplay
-			    && m_colorBg.a != 0) {
+			    && m_colorBg.a() != 0) {
 				vec3 pos = m_position;
 				m_vectorialDraw.SetPos(pos);
 				Print(_text[iii]);
@@ -712,7 +708,7 @@ void ewol::Text::Print(const etk::UString& _text, const etk::Vector<TextDecorati
 				if (_text[iii] == etk::UniChar(' ')) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    true == m_needDisplay
-					    && m_colorBg.a != 0) {
+					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.SetPos(m_position);
 					}
 					// Must generate a dynamic space : 
@@ -720,13 +716,13 @@ void ewol::Text::Print(const etk::UString& _text, const etk::Vector<TextDecorati
 					            m_position.y(),
 					            m_position.z()) );
 					if(    true == m_needDisplay
-					    && m_colorBg.a != 0) {
+					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.RectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
 					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
 					if(    true == m_needDisplay
-					    && m_colorBg.a != 0) {
+					    && m_colorBg.a() != 0) {
 						vec3 pos = m_position;
 						m_vectorialDraw.SetPos(pos);
 						Print(_text[iii]);
@@ -1178,12 +1174,12 @@ void ewol::Text::SetCursorSelection(int32_t _cursorPos, int32_t _selectionStartP
 	m_cursorPos = _cursorPos;
 }
 
-void ewol::Text::SetSelectionColor(const draw::Color& _color)
+void ewol::Text::SetSelectionColor(const etk::Color<>& _color)
 {
 	m_colorSelection = _color;
 }
 
-void ewol::Text::SetCursorColor(const draw::Color& _color)
+void ewol::Text::SetCursorColor(const etk::Color<>& _color)
 {
 	m_colorCursor = _color;
 }

@@ -41,3 +41,6 @@
 [submodule "external/exml"]
 	path = external/exml
 	url = https://github.com/HeeroYui/exml.git
+[submodule "external/egami"]
+	path = external/egami
+	url = https://github.com/HeeroYui/egami.git

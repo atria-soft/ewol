@@ -264,8 +264,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			// resize must be done on the texture ...
 			SetImageSize(ivec2(textureWidth,textureHeight));
 			// now we can acces directly on the image
-			m_data.SetFillColor(draw::Color(0x00000000));
-			m_data.Clear();
+			m_data.Clear(etk::Color<>(0x00000000));
 		}
 		m_height[iiiFontId] = m_font[iiiFontId]->GetHeight(m_size);
 		

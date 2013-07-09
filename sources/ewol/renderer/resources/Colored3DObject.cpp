@@ -14,8 +14,8 @@
 #define __class__	"Colored3DObject"
 
 
-ewol::Colored3DObject::Colored3DObject(etk::UString genName) :
-	ewol::Resource(genName),
+ewol::Colored3DObject::Colored3DObject(etk::UString _genName) :
+	ewol::Resource(_genName),
 	m_GLprogram(NULL)
 {
 	etk::UString tmpString("DATA:simple3D.prog");
@@ -35,21 +35,21 @@ ewol::Colored3DObject::~Colored3DObject(void)
 }
 
 
-void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
-                                 const draw::Colorf& color,
-                                 bool updateDepthBuffer,
-                                 bool depthtest)
+void ewol::Colored3DObject::Draw(etk::Vector<vec3>& _vertices,
+                                 const etk::Color<float>& _color,
+                                 bool _updateDepthBuffer,
+                                 bool _depthtest)
 {
-	if (vertices.Size()<=0) {
+	if (_vertices.Size()<=0) {
 		return;
 	}
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==depthtest) {
+	if (true==_depthtest) {
 		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==updateDepthBuffer) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
@@ -61,39 +61,39 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &vertices[0], 4*sizeof(float));
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, vertices.Size());
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, _vertices.Size());
 	m_GLprogram->UnUse();
 	// Request the draw od the elements : 
 	//glDrawArrays(GL_LINES, 0, vertices.Size());
 	//m_GLprogram->UnUse();
-	if (true==depthtest) {
-		if (false==updateDepthBuffer) {
+	if (true==_depthtest) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
 		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
-void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
-                                 const draw::Colorf& color,
-                                 mat4& transformationMatrix,
-                                 bool updateDepthBuffer,
-                                 bool depthtest)
+void ewol::Colored3DObject::Draw(etk::Vector<vec3>& _vertices,
+                                 const etk::Color<float>& _color,
+                                 mat4& _transformationMatrix,
+                                 bool _updateDepthBuffer,
+                                 bool _depthtest)
 {
-	if (vertices.Size()<=0) {
+	if (_vertices.Size()<=0) {
 		return;
 	}
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==depthtest) {
+	if (true==_depthtest) {
 		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==updateDepthBuffer) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
@@ -102,39 +102,39 @@ void ewol::Colored3DObject::Draw(etk::Vector<vec3>& vertices,
 	// set Matrix : translation/positionMatrix
 	mat4 projMatrix = ewol::openGL::GetMatrix();
 	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
-	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
+	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0], 4*sizeof(float));
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, vertices.Size());
+	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, _vertices.Size());
 	m_GLprogram->UnUse();
-	if (true==depthtest) {
-		if (false==updateDepthBuffer) {
+	if (true==_depthtest) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
 		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
-void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
-                                     const draw::Colorf& color,
-                                     mat4& transformationMatrix,
-                                     bool updateDepthBuffer,
-                                     bool depthtest)
+void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& _vertices,
+                                     const etk::Color<float>& _color,
+                                     mat4& _transformationMatrix,
+                                     bool _updateDepthBuffer,
+                                     bool _depthtest)
 {
-	if (vertices.Size()<=0) {
+	if (_vertices.Size()<=0) {
 		return;
 	}
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==depthtest) {
+	if (true==_depthtest) {
 		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==updateDepthBuffer) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
@@ -143,17 +143,17 @@ void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& vertices,
 	// set Matrix : translation/positionMatrix
 	mat4 projMatrix = ewol::openGL::GetMatrix();
 	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
-	mat4 tmpMatrix = projMatrix * camMatrix * transformationMatrix;
+	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &vertices[0], 4*sizeof(float));
+	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&color);
+	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_LINES, 0, vertices.Size());
+	ewol::openGL::DrawArrays(GL_LINES, 0, _vertices.Size());
 	m_GLprogram->UnUse();
-	if (true==depthtest) {
-		if (false==updateDepthBuffer) {
+	if (true==_depthtest) {
+		if (false==_updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
 		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
