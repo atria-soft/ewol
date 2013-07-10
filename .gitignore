@@ -61,3 +61,4 @@ ehthumbs.db
 Icon?
 Thumbs.db
 Sources/libewol/ewol/os/AndroidAbstraction.cpp
+org_ewol_EwolConstants.h
