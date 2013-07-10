@@ -188,16 +188,15 @@ def Create(target):
 		myModule.AddExportflag_LD("-ldl")
 		myModule.AddExportflag_LD("-llog")
 		myModule.AddExportflag_LD("-landroid")
+
+		java_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/../../ewol/sources/android/src/"
+		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/"
+		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
+		os.system("javac " + java_tmp_src + ".java")
+		os.system("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
+		os.system("mv " + java_tmp_dir + "org_ewol_EwolConstants.h " + cpp_tmp_dir)
+		os.system("rm " + java_tmp_src + ".class")
 		
-		#tmp_src=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.base.cpp"
-		#tmp_dst=lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/gui.Android.tmp.cpp"
-		
-		# TODO : A really work to do here ...
-		#lutinTools.CopyFile(tmp_src,tmp_dst)
-		#os.system("sed -i \"s|__PROJECT_ORG_TYPE__|org|\" " + tmp_dst)
-		#os.system("sed -i \"s|__PROJECT_VENDOR__|edouarddupin|\" " + tmp_dst)
-		#os.system("sed -i \"s|__PROJECT_NAME__|edn|\" "+ tmp_dst)
-		#os.system("sed -i \"s|__PROJECT_PACKAGE__|edn|\" " + tmp_dst)
 		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	
 	elif target.name=="Windows":
