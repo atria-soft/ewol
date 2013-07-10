@@ -171,10 +171,15 @@ int Windows_Run(void);
  */
 int guiInterface::main(int argc, const char *argv[])
 {
-	glewInit();
+	GLenum err = glewInit();
+	if (GLEW_OK != err)
+	{
+		/* Problem: glewInit failed, something is seriously wrong. */
+		EWOL_ERROR("Error:" << glewGetErrorString(err));
+	}
 	if (!glewIsSupported("GL_VERSION_2_0")) {
-		fprintf(stderr, "OpenGL 2.0 not available\n");
-		return 1;
+		EWOL_ERROR("OpenGL 2.0 not available");
+		//return 1;
 	}
 	
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
@@ -323,7 +328,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			buttonIsDown = false;
 		case WM_KEYDOWN:
 			{
-				uniChar_t tmpChar = 0;
+				etk::UniChar tmpChar = 0;
 				ewol::keyEvent::keyboard_te keyInput;
 				switch (wParam) {
 					//case 80: // keypad
@@ -392,14 +397,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					//case :   keyInput = ewol::keyEvent::keyboardContextMenu; break;
 					case VK_NUMLOCK:   keyInput = ewol::keyEvent::keyboardNumLock;    guiKeyBoardMode.numLock = buttonIsDown; break;
 					case VK_BACK: // DEL
-						tmpChar = 0x00000008;
+						tmpChar.Set(0x08);
 						break;
 					// TODO : Really strang, need to understand why ...
 					case 46: // Suppr
-						tmpChar = 0x0000007F;
+						tmpChar.Set(0x7F);
 						break;
 					case VK_TAB: // special case for TAB
-						tmpChar = 0x00000009;
+						tmpChar.Set(0x09);
 						break;
 					case VK_RETURN: // special case for TAB
 						tmpChar = '\n';
@@ -412,7 +417,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 							WCHAR chars[BUFFER_LENGTH];
 							
 							ToUnicode(wParam,lParam,kbd,chars,BUFFER_LENGTH,0);
-							unicode::convertUtf8ToUnicode((char*)chars, tmpChar);
+							tmpChar.SetUtf8((char*)chars);
 						}
 						break;
 				}

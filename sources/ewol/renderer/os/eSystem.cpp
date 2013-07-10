@@ -472,7 +472,7 @@ bool eSystem::Draw(bool displayEveryTime)
 {
 	int64_t currentTime = ewol::GetTime();
 	// this is to prevent the multiple display at the a high frequency ...
-	#ifndef __PLATFORM__Android
+	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__Windows))
 	if(currentTime - previousDisplayTime < 1000000/120) {
 		usleep(1000);
 		return false;
