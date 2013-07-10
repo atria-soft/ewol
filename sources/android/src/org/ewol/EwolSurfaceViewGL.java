@@ -43,6 +43,7 @@ import static org.ewol.Ewol.EWOL;
  *
  */
 public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
+    public static final int  SDK_VERSION   = android.os.Build.VERSION.SDK_INT;
     private EwolRendererGL   m_ewolDrawer  = null;
     private boolean          inputDown1    = false;
     private boolean          inputDown2    = false;

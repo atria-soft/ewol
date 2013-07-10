@@ -27,7 +27,6 @@ package org.ewol;
 
 
 public interface EwolConstants {
-    public static final int  SDK_VERSION                      = android.os.Build.VERSION.SDK_INT;
     public static final int  NATIVE_AUDIO_BUFFER_SIZE         = 512;
     public static final int  EWOL_SYSTEM_KEY_VOLUME_UP        = 1;
     public static final int  EWOL_SYSTEM_KEY_VOLUME_DOWN      = 2;
