@@ -1,16 +1,5 @@
 /**
- * @author Edouard DUPIN
- * 
- * @copyright 2011, Edouard DUPIN, all right reserved
- * 
- * @license BSD v3 (see license file)
- */
-
-// this include a dynamic generating file ==> this is really stupid, but it is needed for the dependency coherency
-//#include <ewol/renderer/os/gui.Android.tmp.cpp>
-
-/**
- * @author Edouard DUPIN
+ * @author Edouard DUPIN, Kevin BILLONNEAU
  * 
  * @copyright 2011, Edouard DUPIN, all right reserved
  * 
@@ -27,15 +16,18 @@
 #include <ewol/renderer/audio/audio.h>
 #include <ewol/renderer/os/gui.h>
 #include <ewol/Dimension.h>
+/* include auto generated file */
+#include <ewol/renderer/os/org_ewol_EwolConstants.h>
 
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
-static jclass    javaClassActivity = 0;            // main activity class (android ...)
-static jobject   javaObjectActivity = 0;
-static jmethodID javaClassActivityEntryPoint = 0;  // basic methode to call ...
-static jmethodID javaClassActivityEntryPoint__CPP_keyboardShow = 0;  // basic methode to call ...
-static jmethodID javaClassActivityEntryPoint__CPP_keyboardHide = 0;  // basic methode to call ...
-static jmethodID javaClassActivityEntryPoint__CPP_OrientationChange = 0;
+static jclass    javaClassEwol = 0;            // main activity class (android ...)
+static jclass    javaClassEwolCallback = 0;
+static jobject   javaObjectEwolCallback = 0;
+
+static jmethodID javaMethodEwolCallbackEventNotifier = 0;  // basic methode to call ...
+static jmethodID javaMethodEwolCallbackKeyboardUpdate = 0;  // basic methode to call ...
+static jmethodID javaMethodEwolCallbackOrientationUpdate = 0;
 // generic classes
 static jclass    javaDefaultClassString = 0;       // default string class
 
@@ -50,459 +42,414 @@ static ewol::SpecialKey guiKeyBoardSpecialKeyMode;
 // jni doc : /usr/lib/jvm/java-1.6.0-openjdk/include
 
 
-void SendJava_KeyboardShow(bool showIt)
+#define __jni_safe_init_method_id(mid, cls, name, sign) ({		\
+    mid = JavaVirtualMachinePointer->GetMethodID(cls, name, sign);	\
+    if(mid == NULL) {							\
+      EWOL_ERROR("C->java : Can't find the method " << name);		\
+      /* remove access on the virtual machine : */			\
+      JavaVirtualMachinePointer = NULL;					\
+      return;								\
+    }									\
+  })
+
+static bool java_attach_current_thread(int *rstatus) {
+  EWOL_DEBUG("C->java : call java");
+  if (NULL == g_JavaVM) {
+    EWOL_DEBUG("C->java : JVM not initialised");
+    return false;
+  }
+  JNIEnv *JavaVirtualMachinePointer_tmp;
+  *rstatus = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+  if (*rstatus == JNI_EDETACHED) {
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "EwolNativeThread";
+    lJavaVMAttachArgs.group = NULL; 
+    int status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
+    if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+      EWOL_DEBUG("C->java : EXEPTION ...");
+      JavaVirtualMachinePointer->ExceptionDescribe();
+      JavaVirtualMachinePointer->ExceptionClear();
+    }
+    if (status != JNI_OK) {
+      EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+      return false;
+    }
+  }
+  return true;
+}
+static void java_detach_current_thread(int status) {
+  if(status == JNI_EDETACHED)  g_JavaVM->DetachCurrentThread();
+}
+
+
+
+
+void SendJavaKeyboardUpdate(bool showIt)
 {
-	EWOL_DEBUG("C->java : call java");
-	if (NULL == g_JavaVM) {
-		EWOL_DEBUG("C->java : JVM not initialised");
-		return;
-	}
-	JNIEnv *JavaVirtualMachinePointer_tmp;
-	int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-	if (status == JNI_EDETACHED) {
-		JavaVMAttachArgs lJavaVMAttachArgs;
-		lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-		lJavaVMAttachArgs.name = "EwolNativeThread";
-		lJavaVMAttachArgs.group = NULL; 
-		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-		if (status != JNI_OK) {
-			EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
-			return;
-		}
-		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-			EWOL_DEBUG("C->java : EXEPTION ...");
-			JavaVirtualMachinePointer->ExceptionDescribe();
-			JavaVirtualMachinePointer->ExceptionClear();
-		}
-	}
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		EWOL_DEBUG("C->java : EXEPTION ...");
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
+  int status;
+  if(!java_attach_current_thread(&status)) return;
 
-	if (NULL == JavaVirtualMachinePointer) {
-		EWOL_DEBUG("C->java : JVM not initialised");
-		return;
-	}
-
-	//Call java ...
-	if (true == showIt) {
-		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_keyboardShow);
-	} else {
-		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_keyboardHide);
-	}
-
-	// manage execption : 
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		EWOL_DEBUG("C->java : EXEPTION ...");
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
-	if (status == JNI_EDETACHED) {
-		// Finished with the JVM.
-		g_JavaVM->DetachCurrentThread();
-	}
+  //Call java ...
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallback, javaMethodEwolCallbackKeyboardUpdate, showIt ? JNI_TRUE : JNI_FALSE);
+  // manage execption : 
+  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+    EWOL_DEBUG("C->java : EXEPTION ...");
+    JavaVirtualMachinePointer->ExceptionDescribe();
+    JavaVirtualMachinePointer->ExceptionClear();
+  }
+  java_detach_current_thread(status);
 }
 
 // mode 0 : auto; 1 landscape, 2 portrait
-void SendJava_OrientationChange(int32_t mode)
+void SendJavaOrientationUpdate(int32_t mode)
 {
-	#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
-		EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
-		return;
-	#else
-		EWOL_DEBUG("C->java : call java");
-		if (NULL == g_JavaVM) {
-			EWOL_DEBUG("C->java : JVM not initialised");
-			return;
-		}
-		JNIEnv *JavaVirtualMachinePointer_tmp;
-		int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-		if (status == JNI_EDETACHED) {
-			JavaVMAttachArgs lJavaVMAttachArgs;
-			lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-			lJavaVMAttachArgs.name = "EwolNativeThread";
-			lJavaVMAttachArgs.group = NULL; 
-			status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-			if (status != JNI_OK) {
-				EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
-				return;
-			}
-			if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-				EWOL_DEBUG("C->java : EXEPTION ...");
-				JavaVirtualMachinePointer->ExceptionDescribe();
-				JavaVirtualMachinePointer->ExceptionClear();
-			}
-		}
-		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-			EWOL_DEBUG("C->java : EXEPTION ...");
-			JavaVirtualMachinePointer->ExceptionDescribe();
-			JavaVirtualMachinePointer->ExceptionClear();
-		}
-	
-		if (NULL == JavaVirtualMachinePointer) {
-			EWOL_DEBUG("C->java : JVM not initialised");
-			return;
-		}
-	
-		jint param = mode;
+#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
+  EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
+  return;
+#else
+  int status;
+  if(!java_attach_current_thread(&status)) return;
+  jint param = mode;
 		
-		//Call java ...
-		JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaClassActivityEntryPoint__CPP_OrientationChange, param);
+  //Call java ...
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaMethodEwolCallbackOrientationUpdate, param);
 	
-		// manage execption : 
-		if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-			EWOL_DEBUG("C->java : EXEPTION ...");
-			JavaVirtualMachinePointer->ExceptionDescribe();
-			JavaVirtualMachinePointer->ExceptionClear();
-		}
-		
-		if (status == JNI_EDETACHED) {
-			// Finished with the JVM.
-			g_JavaVM->DetachCurrentThread();
-		}
-	#endif
+  // manage execption : 
+  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+    EWOL_DEBUG("C->java : EXEPTION ...");
+    JavaVirtualMachinePointer->ExceptionDescribe();
+    JavaVirtualMachinePointer->ExceptionClear();
+  }
+  java_detach_current_thread(status);
+#endif
 }
 
 
 void SendSystemMessage(const char * dataString)
 {
-	EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
-	if (NULL == g_JavaVM) {
-		EWOL_DEBUG("C->java : JVM not initialised");
-		return;
-	}
-	JNIEnv *JavaVirtualMachinePointer_tmp;
-	int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-	if (status == JNI_EDETACHED) {
-		JavaVMAttachArgs lJavaVMAttachArgs;
-		lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-		lJavaVMAttachArgs.name = "EwolNativeThread";
-		lJavaVMAttachArgs.group = NULL; 
-		status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-		if (status != JNI_OK) {
-			EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
-			return;
-		}
-	}
-	EWOL_DEBUG("C->java : 111");
-	if (NULL == JavaVirtualMachinePointer) {
-		EWOL_ERROR("C->java : JVM not initialised");
-		return;
-	}
-	EWOL_DEBUG("C->java : 222");
-	if (NULL == dataString) {
-		EWOL_ERROR("C->java : No data to send ...");
-		return;
-	}
-	EWOL_DEBUG("C->java : 333");
-	// create the string to the java
-	jstring jstr = JavaVirtualMachinePointer->NewStringUTF(dataString);
-	if (jstr == 0) {
-		EWOL_ERROR("C->java : Out of memory" );
-		return;
-	}
-	EWOL_DEBUG("C->java : 444");
-	// create argument list
-	jobjectArray args = JavaVirtualMachinePointer->NewObjectArray(1, javaDefaultClassString, jstr);
-	if (args == 0) {
-		EWOL_ERROR("C->java : Out of memory" );
-		return;
-	}
-	EWOL_DEBUG("C->java : 555");
-	//Call java ...
-	JavaVirtualMachinePointer->CallStaticVoidMethod(javaClassActivity, javaClassActivityEntryPoint, args);
+  EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
+  if (NULL == g_JavaVM) {
+    EWOL_DEBUG("C->java : JVM not initialised");
+    return;
+  }
+  JNIEnv *JavaVirtualMachinePointer_tmp;
+  int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+  if (status == JNI_EDETACHED) {
+    JavaVMAttachArgs lJavaVMAttachArgs;
+    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
+    lJavaVMAttachArgs.name = "EwolNativeThread";
+    lJavaVMAttachArgs.group = NULL; 
+    status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
+    if (status != JNI_OK) {
+      EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
+      return;
+    }
+  }
+  EWOL_DEBUG("C->java : 111");
+  if (NULL == JavaVirtualMachinePointer) {
+    EWOL_ERROR("C->java : JVM not initialised");
+    return;
+  }
+  EWOL_DEBUG("C->java : 222");
+  if (NULL == dataString) {
+    EWOL_ERROR("C->java : No data to send ...");
+    return;
+  }
+  EWOL_DEBUG("C->java : 333");
+  // create the string to the java
+  jstring jstr = JavaVirtualMachinePointer->NewStringUTF(dataString);
+  if (jstr == 0) {
+    EWOL_ERROR("C->java : Out of memory" );
+    return;
+  }
+  EWOL_DEBUG("C->java : 444");
+  // create argument list
+  jobjectArray args = JavaVirtualMachinePointer->NewObjectArray(1, javaDefaultClassString, jstr);
+  if (args == 0) {
+    EWOL_ERROR("C->java : Out of memory" );
+    return;
+  }
+  EWOL_DEBUG("C->java : 555");
+  //Call java ...
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallback, javaMethodEwolCallbackEventNotifier, args);
 	
-	EWOL_DEBUG("C->java : 666");
-	// manage execption : 
-	if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-		JavaVirtualMachinePointer->ExceptionDescribe();
-		JavaVirtualMachinePointer->ExceptionClear();
-	}
-	if (status == JNI_EDETACHED) {
-		// Finished with the JVM.
-		g_JavaVM->DetachCurrentThread();
-	}
+  EWOL_DEBUG("C->java : 666");
+  // manage execption : 
+  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
+    JavaVirtualMachinePointer->ExceptionDescribe();
+    JavaVirtualMachinePointer->ExceptionClear();
+  }
+  if (status == JNI_EDETACHED) {
+    // Finished with the JVM.
+    g_JavaVM->DetachCurrentThread();
+  }
 }
 
 namespace guiAbstraction {
-void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
+  void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
 };
 
 extern "C"
 {
-	// JNI OnLoad
-	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved)
-	{
-		// get the java virtual machine handle ...
-		g_JavaVM = jvm;
-		EWOL_DEBUG("JNI-> load the jvm ..." );
-		return JNI_VERSION_1_6;
-	}
-	// JNI OnUnLoad
-	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved)
-	{
-		g_JavaVM = NULL;
-		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
-	}
+  // JNI OnLoad
+  JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* jvm, void* reserved)
+  {
+    // get the java virtual machine handle ...
+    g_JavaVM = jvm;
+    EWOL_DEBUG("JNI-> load the jvm ..." );
+    return JNI_VERSION_1_6;
+  }
+  // JNI OnUnLoad
+  JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void *reserved)
+  {
+    g_JavaVM = NULL;
+    EWOL_DEBUG("JNI-> Un-load the jvm ..." );
+  }
 
 	
-	/* Call to initialize the graphics state */
-	void Java_org_ewol_ActivityParamSetArchiveDir( JNIEnv* env, jobject  thiz, jint mode, jstring myString)
-	{
-		// direct setting of the date in the string system ...
-		jboolean isCopy;
-		const char* str = env->GetStringUTFChars(myString, &isCopy);
-		eSystem::SetArchiveDir(mode, str);
-		if (isCopy == JNI_TRUE) {
-			// from here str is reset ...
-			env->ReleaseStringUTFChars(myString, str);
-			str = NULL;
-		}
-	}
+  /* Call to initialize the graphics state */
+  void Java_org_ewol_Ewol_paramSetArchiveDir(JNIEnv* env, jclass  cls, jint mode, jstring myString)
+  {
+    // direct setting of the date in the string system ...
+    jboolean isCopy;
+    const char* str = env->GetStringUTFChars(myString, &isCopy);
+    eSystem::SetArchiveDir(mode, str);
+    if (isCopy == JNI_TRUE) {
+      // from here str is reset ...
+      env->ReleaseStringUTFChars(myString, str);
+      str = NULL;
+    }
+  }
 	
-	void Java_org_ewol_ActivitySetJavaVortualMachineStart( JNIEnv*  env, jclass classBase, jobject obj)
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Set JVM Pointer                      **");
-		EWOL_DEBUG("*******************************************");
-		JavaVirtualMachinePointer = env;
-		// get default needed all time elements : 
-		if (NULL != JavaVirtualMachinePointer) {
-			EWOL_DEBUG("C->java : try load org/edouarddupin/edn/edn class");
-			javaClassActivity = JavaVirtualMachinePointer->FindClass("org/edouarddupin/edn/edn" );
-			if (javaClassActivity == 0) {
-				EWOL_ERROR("C->java : Can't find org/edouarddupin/edn/edn class");
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
-			// get the activity object : 
-			javaClassActivityEntryPoint = JavaVirtualMachinePointer->GetStaticMethodID(javaClassActivity, "eventFromCPP", "([Ljava/lang/String;)V" );
-			if (javaClassActivityEntryPoint == 0) {
-				EWOL_ERROR("C->java : Can't find org/edouarddupin/edn/edn.eventFromCPP" );
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
-			javaClassActivityEntryPoint__CPP_keyboardShow = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardShow", "()V" );
-			if (javaClassActivityEntryPoint__CPP_keyboardShow == 0) {
-				EWOL_ERROR("C->java : Can't find org/edouarddupin/edn/edn.CPP_keyboardShow" );
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
-			javaClassActivityEntryPoint__CPP_keyboardHide = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_keyboardHide", "()V" );
-			if (javaClassActivityEntryPoint__CPP_keyboardHide == 0) {
-				EWOL_ERROR("C->java : Can't find org/edouarddupin/edn/edn.CPP_keyboardHide" );
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
-			javaClassActivityEntryPoint__CPP_OrientationChange = JavaVirtualMachinePointer->GetMethodID(javaClassActivity, "CPP_OrientationChange", "(I)V" );
-			if (javaClassActivityEntryPoint__CPP_OrientationChange == 0) {
-				EWOL_ERROR("C->java : Can't find org/edouarddupin/edn/edn.CPP_OrientationChange" );
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
+  void Java_org_ewol_Ewol_setJavaVirtualMachineStart(JNIEnv*  env, jclass classBase, jobject objCallback)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Set JVM Pointer                      **");
+    EWOL_DEBUG("*******************************************");
+    JavaVirtualMachinePointer = env;
+    // get default needed all time elements : 
+    if (NULL != JavaVirtualMachinePointer) {
+      EWOL_DEBUG("C->java : try load org/ewol/Ewol class");
+      javaClassEwol = JavaVirtualMachinePointer->FindClass("org/ewol/Ewol" );
+      if (javaClassEwol == 0) {
+	EWOL_ERROR("C->java : Can't find org/ewol/Ewol class");
+	// remove access on the virtual machine : 
+	JavaVirtualMachinePointer = NULL;
+	return;
+      }
+      /* The object field extends Activity and implement EwolCallback */
+      javaClassEwolCallback = JavaVirtualMachinePointer->GetObjectClass(objCallback);
+      if(javaClassEwolCallback == NULL) {
+	EWOL_ERROR("C->java : Can't find org/ewol/EwolCallback class");
+	// remove access on the virtual machine : 
+	JavaVirtualMachinePointer = NULL;
+	return;
+      }
+      __jni_safe_init_method_id(
+	javaMethodEwolCallbackEventNotifier, 
+	javaClassEwolCallback, 
+	"eventNotifier", "([Ljava/lang/String;)V");
+
+      __jni_safe_init_method_id(
+	javaMethodEwolCallbackKeyboardUpdate, 
+	javaClassEwolCallback, 
+	"keyboardUpdate", "(Z)V");
+
+      __jni_safe_init_method_id(
+	javaMethodEwolCallbackOrientationUpdate,
+	javaClassEwolCallback, 
+	"orientationUpdate", "(I)V");
+
 			
-			//javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
-			javaObjectActivity = obj;
+      //javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
+      /* realy unsafe... */
+      javaObjectEwolCallback = objCallback;
 			
-			javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
-			if (javaDefaultClassString == 0) {
-				EWOL_ERROR("C->java : Can't find java/lang/String" );
-				// remove access on the virtual machine : 
-				JavaVirtualMachinePointer = NULL;
-				return;
-			}
-		}
-	}
-	void Java_org_ewol_ActivitySetJavaVortualMachineStop( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Remove JVM Pointer                   **");
-		EWOL_DEBUG("*******************************************");
-		JavaVirtualMachinePointer = NULL;
-	}
-	void Java_org_ewol_TouchEvent( JNIEnv*  env )
-	{
-		EWOL_DEBUG(" ==> Touch Event");
-		if (env->ExceptionOccurred()) {
-			env->ExceptionDescribe();
-			env->ExceptionClear();
-		}
-	}
+      javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
+      if (javaDefaultClassString == 0) {
+	EWOL_ERROR("C->java : Can't find java/lang/String" );
+	// remove access on the virtual machine : 
+	JavaVirtualMachinePointer = NULL;
+	return;
+      }
+    }
+  }
+  void Java_org_ewol_Ewol_setJavaVirtualMachineStop(JNIEnv*  env, jclass cls) {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Remove JVM Pointer                   **");
+    EWOL_DEBUG("*******************************************");
+    JavaVirtualMachinePointer = NULL;
+  }
+  void Java_org_ewol_Ewol_touchEvent( JNIEnv*  env, jobject thiz )
+  {
+    EWOL_DEBUG(" ==> Touch Event");
+    if (env->ExceptionOccurred()) {
+      env->ExceptionDescribe();
+      env->ExceptionClear();
+    }
+  }
 	
-	void Java_org_ewol_ActivityOnCreate( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Create                   **");
-		EWOL_DEBUG("*******************************************");
-		eSystem::Init();
-	}
-	void Java_org_ewol_ActivityOnStart( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Start                    **");
-		EWOL_DEBUG("*******************************************");
-		//SendSystemMessage(" testmessages ... ");
-	}
-	void Java_org_ewol_ActivityOnReStart( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Re-Start                 **");
-		EWOL_DEBUG("*******************************************");
-	}
-	void Java_org_ewol_ActivityOnResume( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Resume                   **");
-		EWOL_DEBUG("*******************************************");
-	}
-	void Java_org_ewol_ActivityOnPause( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Pause                    **");
-		EWOL_DEBUG("*******************************************");
-		// All the openGl has been destroyed ...
-		eSystem::OpenGlContextDestroy();
-	}
-	void Java_org_ewol_ActivityOnStop( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Stop                     **");
-		EWOL_DEBUG("*******************************************");
-	}
-	void Java_org_ewol_ActivityOnDestroy( JNIEnv*  env )
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("**  Activity On Destroy                  **");
-		EWOL_DEBUG("*******************************************");
-		eSystem::UnInit();
-	}
-	
-	
-	
-	/* **********************************************************************************************
-	 * ** IO section :
-	 * ********************************************************************************************** */
-	void Java_org_ewol_IOInputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
-	{
-		eSystem::SetInputMotion(pointerID+1, x, m_currentHeight-y);
-	}
-	
-	void Java_org_ewol_IOInputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
-	{
-		eSystem::SetInputState(pointerID+1, isUp, x, m_currentHeight-y);
-	}
-	
-	void Java_org_ewol_IOMouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
-	{
-		eSystem::SetMouseMotion(pointerID+1, x, m_currentHeight-y);
-	}
-	
-	void Java_org_ewol_IOMouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
-	{
-		eSystem::SetMouseState(pointerID+1, isUp, x, m_currentHeight-y);
-	}
-	
-	void Java_org_ewol_IOUnknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
-	{
-		EWOL_DEBUG("Unknown IO event : " << pointerID << " ???");
-	}
-	
-	void Java_org_ewol_IOKeyboardEventMove( JNIEnv* env, jobject  thiz, jint type, jboolean isdown)
-	{
-		EWOL_DEBUG("IO keyboard Move event : \"" << type << "\" is down=" << isdown);
-	}
-	
-	void Java_org_ewol_IOKeyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
-	{
-		EWOL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
-		eSystem::SetKeyboard(guiKeyBoardSpecialKeyMode, uniChar, isdown);
-	}
-	
-	void Java_org_ewol_DisplayPropertyMetrics( JNIEnv* env, jobject  thiz, jfloat ratioX, jfloat ratioY)
-	{
-		// set the internal system ratio properties ...
-		ewol::dimension::SetPixelRatio(vec2(ratioX,ratioY), ewol::Dimension::Inch);
-	}
-	
-	enum {
-		SYSTEM_KEY__VOLUME_UP = 1,
-		SYSTEM_KEY__VOLUME_DOWN,
-		SYSTEM_KEY__MENU,
-		SYSTEM_KEY__CAMERA,
-		SYSTEM_KEY__HOME,
-		SYSTEM_KEY__POWER,
-	};
-	// TODO : Set a return true or false if we want to grep this event ...
-	void Java_org_ewol_IOKeyboardEventKeySystem( JNIEnv* env, jobject  thiz, jint keyVal, jboolean isdown)
-	{
-		switch (keyVal)
-		{
-			case SYSTEM_KEY__VOLUME_UP:
-				EWOL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << keyVal);
-				break;
-			case SYSTEM_KEY__VOLUME_DOWN:
-				EWOL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << keyVal);
-				break;
-			case SYSTEM_KEY__MENU:
-				EWOL_DEBUG("IO keyboard Key System \"MENU\" is down=" << keyVal);
-				break;
-			case SYSTEM_KEY__CAMERA:
-				EWOL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << keyVal);
-				break;
-			case SYSTEM_KEY__HOME:
-				EWOL_DEBUG("IO keyboard Key System \"HOME\" is down=" << keyVal);
-				break;
-			case SYSTEM_KEY__POWER:
-				EWOL_DEBUG("IO keyboard Key System \"POWER\" is down=" << keyVal);
-				break;
-			default:
-				EWOL_DEBUG("IO keyboard Key System event : \"" << keyVal << "\" is down=" << isdown);
-				break;
-		}
-	}
+  void Java_org_ewol_Ewol_onCreate( JNIEnv*  env, jobject thiz )
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Create                   **");
+    EWOL_DEBUG("*******************************************");
+    eSystem::Init();
+  }
+
+  void Java_org_ewol_Ewol_onStart(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Start                    **");
+    EWOL_DEBUG("*******************************************");
+    //SendSystemMessage(" testmessages ... ");
+  }
+  void Java_org_ewol_Ewol_onReStart(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Re-Start                 **");
+    EWOL_DEBUG("*******************************************");
+  }
+  void Java_org_ewol_Ewol_onResume(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Resume                   **");
+    EWOL_DEBUG("*******************************************");
+  }
+  void Java_org_ewol_Ewol_onPause(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Pause                    **");
+    EWOL_DEBUG("*******************************************");
+    // All the openGl has been destroyed ...
+    eSystem::OpenGlContextDestroy();
+  }
+  void Java_org_ewol_Ewol_onStop(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Stop                     **");
+    EWOL_DEBUG("*******************************************");
+  }
+  void Java_org_ewol_Ewol_onDestroy(JNIEnv* env, jobject thiz)
+  {
+    EWOL_DEBUG("*******************************************");
+    EWOL_DEBUG("**  Activity On Destroy                  **");
+    EWOL_DEBUG("*******************************************");
+    eSystem::UnInit();
+  }
 	
 	
-	/* **********************************************************************************************
-	 * **  Renderer section :
-	 * ********************************************************************************************** */
-	void Java_org_ewol_RenderInit( JNIEnv*  env )
-	{
+	
+  /* **********************************************************************************************
+   * ** IO section :
+   * ********************************************************************************************** */
+  void Java_org_ewol_Ewol_inputEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
+  {
+    eSystem::SetInputMotion(pointerID+1, x, m_currentHeight-y);
+  }
+	
+  void Java_org_ewol_Ewol_inputEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
+  {
+    eSystem::SetInputState(pointerID+1, isUp, x, m_currentHeight-y);
+  }
+	
+  void Java_org_ewol_Ewol_mouseEventMotion( JNIEnv* env, jobject  thiz, jint pointerID, jfloat x, jfloat y )
+  {
+    eSystem::SetMouseMotion(pointerID+1, x, m_currentHeight-y);
+  }
+	
+  void Java_org_ewol_Ewol_mouseEventState( JNIEnv* env, jobject  thiz, jint pointerID, jboolean isUp, jfloat x, jfloat y )
+  {
+    eSystem::SetMouseState(pointerID+1, isUp, x, m_currentHeight-y);
+  }
+	
+  void Java_org_ewol_Ewol_unknowEvent( JNIEnv* env, jobject  thiz, jint pointerID)
+  {
+    EWOL_DEBUG("Unknown IO event : " << pointerID << " ???");
+  }
+	
+  void Java_org_ewol_Ewol_keyboardEventMove( JNIEnv* env, jobject  thiz, jint type, jboolean isdown)
+  {
+    EWOL_DEBUG("IO keyboard Move event : \"" << type << "\" is down=" << isdown);
+  }
+	
+  void Java_org_ewol_Ewol_keyboardEventKey( JNIEnv* env, jobject  thiz, jint uniChar, jboolean isdown)
+  {
+    EWOL_DEBUG("IO keyboard Key event : \"" << uniChar << "\" is down=" << isdown);
+    eSystem::SetKeyboard(guiKeyBoardSpecialKeyMode, uniChar, isdown);
+  }
+	
+  void Java_org_ewol_Ewol_displayPropertyMetrics( JNIEnv* env, jobject  thiz, jfloat ratioX, jfloat ratioY)
+  {
+    // set the internal system ratio properties ...
+    ewol::dimension::SetPixelRatio(vec2(ratioX,ratioY), ewol::Dimension::Inch);
+  }
+	
+  // TODO : Set a return true or false if we want to grep this event ...
+  void Java_org_ewol_Ewol_keyboardEventKeySystem( JNIEnv* env, jobject  thiz, jint keyVal, jboolean isdown)
+  {
+    switch (keyVal)
+    {
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_UP:
+	EWOL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << isdown);
+	break;
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_DOWN:
+	EWOL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << isdown);
+	break;
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_MENU:
+	EWOL_DEBUG("IO keyboard Key System \"MENU\" is down=" << isdown);
+	break;
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_CAMERA:
+	EWOL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << isdown);
+	break;
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_HOME:
+	EWOL_DEBUG("IO keyboard Key System \"HOME\" is down=" << isdown);
+	break;
+      case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_POWER:
+	EWOL_DEBUG("IO keyboard Key System \"POWER\" is down=" << isdown);
+	break;
+      default:
+	EWOL_DEBUG("IO keyboard Key System event : \"" << keyVal << "\" is down=" << isdown);
+	break;
+    }
+  }
+	
+	
+  /* **********************************************************************************************
+   * **  Renderer section :
+   * ********************************************************************************************** */
+  void Java_org_ewol_Ewol_renderInit(JNIEnv* env, jobject thiz)
+  {
 		
-	}
+  }
 	
-	void Java_org_ewol_RenderResize( JNIEnv* env, jobject thiz, jint w, jint h )
-	{
-		m_currentHeight = h;
-		eSystem::Resize(w, h);
-	}
+  void Java_org_ewol_Ewol_renderResize( JNIEnv* env, jobject thiz, jint w, jint h )
+  {
+    m_currentHeight = h;
+    eSystem::Resize(w, h);
+  }
 	
-	void Java_org_ewol_RenderDraw( JNIEnv*  env )
-	{
-		eSystem::Draw(true);
-	}
+  void Java_org_ewol_Ewol_renderDraw(JNIEnv* env, jobject thiz)
+  {
+    eSystem::Draw(true);
+  }
 
-	void Java_org_ewol_IOAudioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)
-	{
-		// Get the short* pointer from the Java array
-		jboolean isCopy;
-		jshort* dst = env->GetShortArrayElements(location, &isCopy);
-		if (NULL != dst) {
-			ewol::audio::GetData(dst, frameRate, nbChannels);
-		}
-		//APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
-		// TODO : Understand why it did not work corectly ...
-		//if (isCopy == JNI_TRUE) {
-			// Release the short* pointer
-			env->ReleaseShortArrayElements(location, dst, 0);
-		//}
-	}
+  void Java_org_ewol_Ewol_audioPlayback(JNIEnv* env, void* reserved, jshortArray location, jint frameRate, jint nbChannels)
+  {
+    // Get the short* pointer from the Java array
+    jboolean isCopy;
+    jshort* dst = env->GetShortArrayElements(location, &isCopy);
+    if (NULL != dst) {
+      ewol::audio::GetData(dst, frameRate, nbChannels);
+    }
+    //APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
+    // TODO : Understand why it did not work corectly ...
+    //if (isCopy == JNI_TRUE) {
+    // Release the short* pointer
+    env->ReleaseShortArrayElements(location, dst, 0);
+    //}
+  }
 
 };
 
@@ -513,21 +460,22 @@ extern "C"
 
 int guiInterface::main(int argc, const char *argv[])
 {
-	// unneeded fuction, all is controlled by android java ...
+  // unneeded fuction, all is controlled by android java ...
+  return 0;
 }
 
 int64_t guiInterface::GetTime(void)
 {
-    struct timeval  now;
-    gettimeofday(&now, NULL);
-    //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
-    return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
+  struct timeval  now;
+  gettimeofday(&now, NULL);
+  //EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
+  return (int64_t)((int64_t)now.tv_sec*(int64_t)1000000 + (int64_t)now.tv_usec);
 }
 
 
 void guiInterface::SetTitle(etk::UString& title)
 {
-	// can not set the title in Android ...
+  // can not set the title in Android ...
 }
 
 
@@ -538,107 +486,106 @@ void guiInterface::SetTitle(etk::UString& title)
 bool l_clipBoardOwnerStd = false;
 void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	// this is to force the local system to think we have the buffer
-	// TODO : Remove this 2 Line when code will be writen
-	l_clipBoardOwnerStd = true;
-	switch (clipboardID)
-	{
-		case ewol::clipBoard::clipboardSelection:
-			// NOTE : Windows does not support the middle button the we do it internaly
-			// just transmit an event , we have the data in the system
-			eSystem::ClipBoardArrive(clipboardID);
-			break;
-		case ewol::clipBoard::clipboardStd:
-			if (false == l_clipBoardOwnerStd) {
-				// Generate a request TO the OS
-				// TODO : Send the message to the OS "We disire to receive the copy buffer ...
-			} else {
-				// just transmit an event , we have the data in the system
-				eSystem::ClipBoardArrive(clipboardID);
-			}
-			break;
-		default:
-			EWOL_ERROR("Request an unknow ClipBoard ...");
-			break;
-	}
+  // this is to force the local system to think we have the buffer
+  // TODO : Remove this 2 Line when code will be writen
+  l_clipBoardOwnerStd = true;
+  switch (clipboardID)
+  {
+    case ewol::clipBoard::clipboardSelection:
+      // NOTE : Windows does not support the middle button the we do it internaly
+      // just transmit an event , we have the data in the system
+      eSystem::ClipBoardArrive(clipboardID);
+      break;
+    case ewol::clipBoard::clipboardStd:
+      if (false == l_clipBoardOwnerStd) {
+	// Generate a request TO the OS
+	// TODO : Send the message to the OS "We disire to receive the copy buffer ...
+      } else {
+	// just transmit an event , we have the data in the system
+	eSystem::ClipBoardArrive(clipboardID);
+      }
+      break;
+    default:
+      EWOL_ERROR("Request an unknow ClipBoard ...");
+      break;
+  }
 }
 
 void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 {
-	switch (clipboardID)
-	{
-		case ewol::clipBoard::clipboardSelection:
-			// NOTE : nothing to do : Windows deas ot supported Middle button
-			break;
-		case ewol::clipBoard::clipboardStd:
-			// Request the clipBoard :
-			if (false == l_clipBoardOwnerStd) {
-				// TODO : Inform the OS that we have the current buffer of copy ...
-				l_clipBoardOwnerStd = true;
-			}
-			break;
-		default:
-			EWOL_ERROR("Request an unknow ClipBoard ...");
-			break;
-	}
+  switch (clipboardID)
+  {
+    case ewol::clipBoard::clipboardSelection:
+      // NOTE : nothing to do : Windows deas ot supported Middle button
+      break;
+    case ewol::clipBoard::clipboardStd:
+      // Request the clipBoard :
+      if (false == l_clipBoardOwnerStd) {
+	// TODO : Inform the OS that we have the current buffer of copy ...
+	l_clipBoardOwnerStd = true;
+      }
+      break;
+    default:
+      EWOL_ERROR("Request an unknow ClipBoard ...");
+      break;
+  }
 }
 
 
 void guiInterface::Stop(void)
 {
-	// TODO : send a message to the android system to stop ...
+  // TODO : send a message to the android system to stop ...
 }
 
 // java system to send message : 
 void SendSystemMessage(const char * dataString);
-void SendJava_KeyboardShow(bool showIt);
+void SendJavaKeyboardUpdate(bool showIt);
 
 void guiInterface::KeyboardShow(void)
 {
-	// send a message at the java :
-	SendJava_KeyboardShow(true);
+  // send a message at the java :
+  SendJavaKeyboardUpdate(true);
 }
 
 void guiInterface::KeyboardHide(void)
 {
-	// send a message at the java :
-	SendJava_KeyboardShow(false);
+  // send a message at the java :
+  SendJavaKeyboardUpdate(false);
 }
 
 void guiInterface::ChangeSize(ivec2 size)
 {
-	// The size can not be change on android platform
+  // The size can not be change on android platform
 }
 
 void guiInterface::ChangePos(ivec2 size)
 {
-	// The position can not be change on Android platform
+  // The position can not be change on Android platform
 }
 
 void guiInterface::GetAbsPos(ivec2& size)
 {
-	size.setValue(0,0);
+  size.setValue(0,0);
 }
 
 void guiInterface::ForceOrientation(ewol::orientation_te orientation)
 {
-	SendJava_OrientationChange((int32_t)orientation);
+  SendJavaOrientationUpdate((int32_t)orientation);
 }
 
 void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
 {
-	// nothing to do ...
+  // nothing to do ...
 }
 
 void guiInterface::SetCursor(ewol::cursorDisplay_te newCursor)
 {
-	// nothing to do ...
+  // nothing to do ...
 }
 
 void guiInterface::SetIcon(etk::UString inputFile)
 {
-	// nothing to do ...
+  // nothing to do ...
 }
-
 
 
