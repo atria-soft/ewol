@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol EwolAudioTask.java
+* @file EwolAudioTask.java
 * @brief Java Audio interface code.
-* @author Edouard DUPIN
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 29/06/2012
 * @par Project
 * ewol

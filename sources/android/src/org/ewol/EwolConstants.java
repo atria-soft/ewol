@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol EwolConstants.java
+* @file EwolConstants.java
 * @brief Java Contants interface.
-* @author Edouard DUPIN
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 29/06/2012
 * @par Project
 * ewol

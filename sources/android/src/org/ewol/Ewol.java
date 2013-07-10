@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol Ewol.java
+* @file Ewol.java
 * @brief Java interface to the CPP code.
-* @author Edouard DUPIN
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 20/04/2012
 * @par Project
 * ewol

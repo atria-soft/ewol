@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol EwolSurfaceViewGL.java
+* @file EwolSurfaceViewGL.java
 * @brief Java interface of the java Surface viewer code.
-* @author Edouard DUPIN
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 20/04/2012
 * @par Project
 * ewol

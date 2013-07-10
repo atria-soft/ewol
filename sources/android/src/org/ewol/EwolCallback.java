@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol EwolCallback.java
+* @file EwolCallback.java
 * @brief CPP callback.
-* @author Edouard DUPIN
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 20/04/2012
 * @par Project
 * ewol
