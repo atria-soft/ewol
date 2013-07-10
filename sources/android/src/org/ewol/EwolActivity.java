@@ -1,8 +1,8 @@
 /**
 *******************************************************************************
-* @file ewol __PROJECT_NAME__.java
-* @brief Java __PROJECT_NAME__ code.
-* @author Edouard DUPIN
+* @file EwolActivity.java
+* @brief Java EwolActivity code.
+* @author Edouard DUPIN, Kevin BILLONNEAU
 * @date 20/04/2012
 * @par Project
 * ewol
@@ -23,7 +23,7 @@
 */
 
 
-package __PROJECT_ORG_TYPE__.__PROJECT_VENDOR__.__PROJECT_PACKAGE__;
+package org.ewol;
 
 
 
@@ -54,12 +54,6 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.DisplayMetrics;
 
-// import the ewol package :
-import org.ewol.Ewol;
-import org.ewol.EwolSurfaceViewGL;
-import org.ewol.EwolAudioTask;
-import org.ewol.EwolCallback;
-import org.ewol.EwolConstants;
 
 import java.io.IOException;
 
@@ -69,14 +63,32 @@ import static org.ewol.Ewol.EWOL;
  * @brief Class : 
  *
  */
-public class __PROJECT_NAME__ extends Activity implements EwolCallback, EwolConstants{
+public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants{
 
     private EwolSurfaceViewGL mGLView;
     private EwolAudioTask     mStreams;
     private Thread            mAudioThread;
 
     static {
-	System.loadLibrary("__PROJECT_NAME__");
+	System.loadLibrary("ewol");
+    }
+
+    public void initApkPath(String org, String vendor, String project) {
+	StringBuilder sb = new StringBuilder();
+	sb.append(org).append(".");
+	sb.append(vendor).append(".");
+	sb.append(project);
+	String apkFilePath = null;
+	ApplicationInfo appInfo = null;
+	PackageManager packMgmr = getPackageManager();
+	try {
+	    appInfo = packMgmr.getApplicationInfo(sb.toString(), 0);
+	} catch (NameNotFoundException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Unable to locate assets, aborting...");
+	}
+	apkFilePath = appInfo.sourceDir;
+	Ewol.paramSetArchiveDir(0, apkFilePath);	
     }
 
     @Override protected void onCreate(Bundle savedInstanceState)
