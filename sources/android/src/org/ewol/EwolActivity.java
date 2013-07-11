@@ -106,17 +106,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
 		
 	// return apk file path (or null on error)
-	String apkFilePath = null;
-	ApplicationInfo appInfo = null;
-	PackageManager packMgmr = getPackageManager();
-	try {
-	    appInfo = packMgmr.getApplicationInfo("__PROJECT_ORG_TYPE__.__PROJECT_VENDOR__.__PROJECT_PACKAGE__", 0);
-	} catch (NameNotFoundException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException("Unable to locate assets, aborting...");
-	}
-	apkFilePath = appInfo.sourceDir;
-	Ewol.paramSetArchiveDir(0, apkFilePath);
+	initApkPath("__PROJECT_TYPE__", "__PROJECT_VENDOR__", "__PROJECT_PACKAGE__");
 		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -223,7 +213,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
     }
 	
-    @Override public static void eventNotifier(String[] args)
+    @Override public void eventNotifier(String[] args)
     {
 	// just for the test ...
 	EWOL.touchEvent();
