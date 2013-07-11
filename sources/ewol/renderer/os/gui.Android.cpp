@@ -22,12 +22,13 @@
 // get a resources from the java environement : 
 static JNIEnv*   JavaVirtualMachinePointer = NULL; // the JVM
 static jclass    javaClassEwol = 0;            // main activity class (android ...)
-static jclass    javaClassEwolCallback = 0;
-static jobject   javaObjectEwolCallback = 0;
+static jclass    javaClassEwolCallbackAndActivity = 0;
+static jobject   javaObjectEwolCallbackAndActivity = 0;
 
 static jmethodID javaMethodEwolCallbackEventNotifier = 0;  // basic methode to call ...
 static jmethodID javaMethodEwolCallbackKeyboardUpdate = 0;  // basic methode to call ...
 static jmethodID javaMethodEwolCallbackOrientationUpdate = 0;
+static jmethodID javaMethodEwolActivitySetTitle = 0;
 // generic classes
 static jclass    javaDefaultClassString = 0;       // default string class
 
@@ -52,6 +53,14 @@ static ewol::SpecialKey guiKeyBoardSpecialKeyMode;
     }									\
   })
 
+static void java_check_exception(JNIEnv* env) {
+  if (env->ExceptionOccurred()) {
+    EWOL_DEBUG("C->java : EXEPTION ...");
+    env->ExceptionDescribe();
+    env->ExceptionClear();
+  }
+}
+
 static bool java_attach_current_thread(int *rstatus) {
   EWOL_DEBUG("C->java : call java");
   if (NULL == g_JavaVM) {
@@ -66,11 +75,7 @@ static bool java_attach_current_thread(int *rstatus) {
     lJavaVMAttachArgs.name = "EwolNativeThread";
     lJavaVMAttachArgs.group = NULL; 
     int status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-    if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-      EWOL_DEBUG("C->java : EXEPTION ...");
-      JavaVirtualMachinePointer->ExceptionDescribe();
-      JavaVirtualMachinePointer->ExceptionClear();
-    }
+    java_check_exception(JavaVirtualMachinePointer);
     if (status != JNI_OK) {
       EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
       return false;
@@ -83,21 +88,15 @@ static void java_detach_current_thread(int status) {
 }
 
 
-
-
 void SendJavaKeyboardUpdate(bool showIt)
 {
   int status;
   if(!java_attach_current_thread(&status)) return;
 
   //Call java ...
-  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallback, javaMethodEwolCallbackKeyboardUpdate, showIt ? JNI_TRUE : JNI_FALSE);
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolCallbackKeyboardUpdate, showIt ? JNI_TRUE : JNI_FALSE);
   // manage execption : 
-  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-    EWOL_DEBUG("C->java : EXEPTION ...");
-    JavaVirtualMachinePointer->ExceptionDescribe();
-    JavaVirtualMachinePointer->ExceptionClear();
-  }
+  java_check_exception(JavaVirtualMachinePointer);
   java_detach_current_thread(status);
 }
 
@@ -116,41 +115,36 @@ void SendJavaOrientationUpdate(int32_t mode)
   JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaMethodEwolCallbackOrientationUpdate, param);
 	
   // manage execption : 
-  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-    EWOL_DEBUG("C->java : EXEPTION ...");
-    JavaVirtualMachinePointer->ExceptionDescribe();
-    JavaVirtualMachinePointer->ExceptionClear();
-  }
+  java_check_exception(JavaVirtualMachinePointer);
   java_detach_current_thread(status);
 #endif
 }
 
 
+void SendJavaSetTitle(const char * dataString)
+{
+  EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
+  int status;
+  if(!java_attach_current_thread(&status)) return;
+  EWOL_DEBUG("C->java : 222");
+  if (NULL == dataString) {
+    EWOL_ERROR("C->java : No data to send ...");
+    return;
+  }
+  //Call java ...
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolActivitySetTitle, JavaVirtualMachinePointer->NewStringUTF(dataString));
+  // manage execption : 
+  java_check_exception(JavaVirtualMachinePointer);
+  java_detach_current_thread(status);
+}
+
+
+
 void SendSystemMessage(const char * dataString)
 {
   EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
-  if (NULL == g_JavaVM) {
-    EWOL_DEBUG("C->java : JVM not initialised");
-    return;
-  }
-  JNIEnv *JavaVirtualMachinePointer_tmp;
-  int status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-  if (status == JNI_EDETACHED) {
-    JavaVMAttachArgs lJavaVMAttachArgs;
-    lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-    lJavaVMAttachArgs.name = "EwolNativeThread";
-    lJavaVMAttachArgs.group = NULL; 
-    status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-    if (status != JNI_OK) {
-      EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
-      return;
-    }
-  }
-  EWOL_DEBUG("C->java : 111");
-  if (NULL == JavaVirtualMachinePointer) {
-    EWOL_ERROR("C->java : JVM not initialised");
-    return;
-  }
+  int status;
+  if(!java_attach_current_thread(&status)) return;
   EWOL_DEBUG("C->java : 222");
   if (NULL == dataString) {
     EWOL_ERROR("C->java : No data to send ...");
@@ -172,19 +166,14 @@ void SendSystemMessage(const char * dataString)
   }
   EWOL_DEBUG("C->java : 555");
   //Call java ...
-  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallback, javaMethodEwolCallbackEventNotifier, args);
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolCallbackEventNotifier, args);
 	
   EWOL_DEBUG("C->java : 666");
-  // manage execption : 
-  if (JavaVirtualMachinePointer->ExceptionOccurred()) {
-    JavaVirtualMachinePointer->ExceptionDescribe();
-    JavaVirtualMachinePointer->ExceptionClear();
-  }
-  if (status == JNI_EDETACHED) {
-    // Finished with the JVM.
-    g_JavaVM->DetachCurrentThread();
-  }
+  java_check_exception(JavaVirtualMachinePointer);
+  java_detach_current_thread(status);
 }
+
+
 
 namespace guiAbstraction {
   void SendKeyboardEvent(bool isDown, uniChar_t keyInput);
@@ -239,32 +228,38 @@ extern "C"
 	return;
       }
       /* The object field extends Activity and implement EwolCallback */
-      javaClassEwolCallback = JavaVirtualMachinePointer->GetObjectClass(objCallback);
-      if(javaClassEwolCallback == NULL) {
+      javaClassEwolCallbackAndActivity = JavaVirtualMachinePointer->GetObjectClass(objCallback);
+      if(javaClassEwolCallbackAndActivity == NULL) {
 	EWOL_ERROR("C->java : Can't find org/ewol/EwolCallback class");
 	// remove access on the virtual machine : 
 	JavaVirtualMachinePointer = NULL;
 	return;
       }
+
+      __jni_safe_init_method_id(
+	javaMethodEwolActivitySetTitle, 
+	javaClassEwolCallbackAndActivity, 
+	"setTitle", "(Ljava/lang/CharSequence;)V");
+
       __jni_safe_init_method_id(
 	javaMethodEwolCallbackEventNotifier, 
-	javaClassEwolCallback, 
+	javaClassEwolCallbackAndActivity, 
 	"eventNotifier", "([Ljava/lang/String;)V");
 
       __jni_safe_init_method_id(
 	javaMethodEwolCallbackKeyboardUpdate, 
-	javaClassEwolCallback, 
+	javaClassEwolCallbackAndActivity, 
 	"keyboardUpdate", "(Z)V");
 
       __jni_safe_init_method_id(
 	javaMethodEwolCallbackOrientationUpdate,
-	javaClassEwolCallback, 
+	javaClassEwolCallbackAndActivity, 
 	"orientationUpdate", "(I)V");
 
 			
       //javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
       /* realy unsafe... */
-      javaObjectEwolCallback = objCallback;
+      javaObjectEwolCallbackAndActivity = objCallback;
 			
       javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
       if (javaDefaultClassString == 0) {
@@ -284,10 +279,7 @@ extern "C"
   void Java_org_ewol_Ewol_touchEvent( JNIEnv*  env, jobject thiz )
   {
     EWOL_DEBUG(" ==> Touch Event");
-    if (env->ExceptionOccurred()) {
-      env->ExceptionDescribe();
-      env->ExceptionClear();
-    }
+    java_check_exception(env);
   }
 	
   void Java_org_ewol_Ewol_onCreate( JNIEnv*  env, jobject thiz )
@@ -475,7 +467,7 @@ int64_t guiInterface::GetTime(void)
 
 void guiInterface::SetTitle(etk::UString& title)
 {
-  // can not set the title in Android ...
+  SendJavaSetTitle(title.c_str());
 }
 
 
