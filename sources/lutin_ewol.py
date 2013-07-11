@@ -2,6 +2,7 @@
 import lutinModule
 import lutinTools
 import os
+import lutinMultiprocess
 
 def Create(target):
 	# set the ewol folder for Android basic sources ...
@@ -192,10 +193,10 @@ def Create(target):
 		java_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/../../ewol/sources/android/src/"
 		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
-		os.system("javac " + java_tmp_src + ".java")
-		os.system("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
-		os.system("mv " + java_tmp_dir + "org_ewol_EwolConstants.h " + cpp_tmp_dir)
-		os.system("rm " + java_tmp_src + ".class")
+		lutinMultiprocess.RunCommand("javac " + java_tmp_src + ".java")
+		lutinMultiprocess.RunCommand("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
+		lutinMultiprocess.RunCommand("mv " + java_tmp_dir + "org_ewol_EwolConstants.h " + cpp_tmp_dir)
+		lutinMultiprocess.RunCommand("rm " + java_tmp_src + ".class")
 		
 		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	

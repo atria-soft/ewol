@@ -125,7 +125,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 	// create bsurface system
-	mGLView = new EwolSurfaceViewGL(this, __CONF_OGL_ES_V__);
+	mGLView = new EwolSurfaceViewGL(this, 2);
 		
 	// create element audio ...
 	mStreams = new EwolAudioTask();
