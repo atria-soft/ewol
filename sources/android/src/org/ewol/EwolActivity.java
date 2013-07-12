@@ -73,7 +73,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	System.loadLibrary("ewol");
     }
 
-    public void initApkPath(String org, String vendor, String project) {
+    protected void initApkPath(String org, String vendor, String project) {
 	StringBuilder sb = new StringBuilder();
 	sb.append(org).append(".");
 	sb.append(vendor).append(".");
@@ -106,7 +106,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
 		
 	// return apk file path (or null on error)
-	initApkPath("__PROJECT_TYPE__", "__PROJECT_VENDOR__", "__PROJECT_PACKAGE__");
+	//initApkPath("__PROJECT_ORG_TYPE__", "__PROJECT_VENDOR__", "__PROJECT_PACKAGE__");
 		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
