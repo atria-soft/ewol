@@ -297,41 +297,53 @@ static int32_t nextP2(int32_t value)
 		}
 		val *=2;
 	}
-	EWOL_CRITICAL("impossible CASE....");
+	EWOL_CRITICAL("impossible CASE.... request P2 of " << value);
 	return val;
 }
 
-bool ewol::resource::Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size)
+bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
 {
-	etk::UString TmpFilename = filename;
-	if (false == filename.EndWith(".svg") ) {
-		size = ivec2(-1,-1);
+	EWOL_ERROR("11111111111111 " << _filename << " " << _size);
+	if (_size.x()==0) {
+		_size.setX(-1);
+		EWOL_ERROR("Error Request the image size.x() =0 ???");
 	}
+	if (_size.y()==0) {
+		_size.setY(-1);
+		EWOL_ERROR("Error Request the image size.y() =0 ???");
+	}
+	EWOL_ERROR("222222222222222222 " << _size);
+	etk::UString TmpFilename = _filename;
+	if (false == _filename.EndWith(".svg") ) {
+		_size = ivec2(-1,-1);
+	}
+	EWOL_ERROR("3333333333333333 " << _size);
 	#ifdef __TARGET_OS__MacOs
 		EWOL_WARNING("TODO : Remove this strange hack");
-		size = ivec2(64,64);
+		_size = ivec2(64,64);
 	#endif
-	if (size.x()>0 && size.y()>0) {
-		ivec2 size2(nextP2(size.x()), nextP2(size.y()));
+	if (_size.x()>0 && _size.y()>0) {
+		EWOL_ERROR("44444444444444 " << _size);
+		ivec2 size2(nextP2(_size.x()), nextP2(_size.y()));
 		TmpFilename += ":";
 		TmpFilename += size2.x();
 		TmpFilename += "x";
 		TmpFilename += size2.y();
 	}
 	
-	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << size);
-	object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
-	if (NULL != object) {
+	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << _size);
+	_object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
+	if (NULL != _object) {
 		return true;
 	}
 	EWOL_INFO("        ==> create new one...");
 	// need to crate a new one ...
-	object = new ewol::TextureFile(TmpFilename, filename, size);
-	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : " << filename);
+	_object = new ewol::TextureFile(TmpFilename, _filename, _size);
+	if (NULL == _object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return false;
 	}
-	LocalAdd(object);
+	LocalAdd(_object);
 	return true;
 }
 

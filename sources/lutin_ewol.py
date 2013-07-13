@@ -195,8 +195,8 @@ def Create(target):
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
 		lutinMultiprocess.RunCommand("javac " + java_tmp_src + ".java")
 		lutinMultiprocess.RunCommand("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
-		lutinMultiprocess.RunCommand("mv " + java_tmp_dir + "org_ewol_EwolConstants.h " + cpp_tmp_dir)
-		lutinMultiprocess.RunCommand("rm " + java_tmp_src + ".class")
+		lutinTools.CopyFile(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
+		lutinTools.RemoveFile(java_tmp_src + ".class")
 		
 		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
 	

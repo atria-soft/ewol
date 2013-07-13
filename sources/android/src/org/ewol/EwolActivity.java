@@ -1,26 +1,10 @@
 /**
-*******************************************************************************
-* @file EwolActivity.java
-* @brief Java EwolActivity code.
-* @author Edouard DUPIN, Kevin BILLONNEAU
-* @date 20/04/2012
-* @par Project
-* ewol
-*
-* @par Copyright
-* Copyright 2011 Edouard DUPIN, all right reserved
-*
-* This software is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY.
-*
-* Licence summary : 
-*    You can modify and redistribute the sources code and binaries.
-*    You can send me the bug-fix
-*
-* Term of the licence in in the file licence.txt.
-*
-*******************************************************************************
-*/
+ * @author Edouard DUPIN, Kevin BILLONNEAU
+ *
+ * @copyright 2011, Edouard DUPIN, all right reserved
+ *
+ * @license BSD v3 (see license file)
+ */
 
 
 package org.ewol;
@@ -104,9 +88,6 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	// to enable extarnal storage: add in the manifest the restriction needed ...
 	//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 	//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
-		
-	// return apk file path (or null on error)
-	//initApkPath("__PROJECT_ORG_TYPE__", "__PROJECT_VENDOR__", "__PROJECT_PACKAGE__");
 		
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);

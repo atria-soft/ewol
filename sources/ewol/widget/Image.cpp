@@ -54,16 +54,19 @@ widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) 
 
 void widget::Image::SetFile(const etk::UString& _file)
 {
+	EWOL_DEBUG("Set Image : " << _file);
 	// copy data :
 	m_fileName = _file;
 	// Force redraw all :
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
+	EWOL_DEBUG("Set sources : " << m_fileName << " size=" << vec2(64,64));
 	m_compositing.SetSource(m_fileName, vec2(64,64));
 }
 
 void widget::Image::SetBorder(const ewol::Dimension& _border)
 {
+	EWOL_DEBUG("Set border=" << _border);
 	// copy data :
 	m_border = _border;
 	// Force redraw all :
@@ -85,20 +88,24 @@ void widget::Image::SetKeepRatio(bool _keep)
 
 void widget::Image::SetImageSize(const ewol::Dimension& _size)
 {
+	EWOL_DEBUG("Set Image size : " << _size);
 	m_imageSize = _size;
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
+	EWOL_DEBUG("Set sources : " << m_fileName << " size=" << m_imageSize);
 	m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
 }
 
 void widget::Image::Set(const etk::UString& _file, const ewol::Dimension& _border)
 {
+	EWOL_DEBUG("Set Image : " << _file << " border=" << _border);
 	// copy data :
 	m_border = _border;
 	m_fileName = _file;
 	// Force redraw all :
 	MarkToRedraw();
 	ewol::RequestUpdateSize();
+	EWOL_DEBUG("Set sources : " << m_fileName << " size=" << m_imageSize);
 	m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
 }
 

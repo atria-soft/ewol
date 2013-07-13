@@ -20,7 +20,7 @@
 ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfileName, const ivec2& _size) :
 	Texture(_genName)
 {
-	if (true == egami::Load(m_data, _tmpfileName, _size)) {
+	if (false == egami::Load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}
 	ivec2 tmp = m_data.GetSize();

@@ -14,32 +14,38 @@
 
 // TODO : Set this in a super class acced in a statin fuction...
 // ratio in milimeter :
+static bool isInit = false;
 static vec2 ratio(9999999,888888);
 static vec2 invRatio(1,1);
 static ewol::Dimension windowsSize(vec2(9999999,888888), ewol::Dimension::Pixel);
 
-static const float       inchToMillimeter = 25.4f;
-static const float       footToMillimeter = 304.8f;
-static const float      meterToMillimeter = 1000.0f;
-static const float centimeterToMillimeter = 10.0f;
-static const float  kilometerToMillimeter = 1000000.0f;
-static const float millimeterToInch = 1.0f/25.4f;
-static const float millimeterToFoot = 1.0f/304.8f;
-static const float millimeterToMeter = 1.0f/1000.0f;
-static const float millimeterToCentimeter = 1.0f/10.0f;
-static const float millimeterToKilometer = 1.0f/1000000.0f;
+static const float       inchToMillimeter = 1.0f/25.4f;
+static const float       footToMillimeter = 1.0f/304.8f;
+static const float      meterToMillimeter = 1.0f/1000.0f;
+static const float centimeterToMillimeter = 1.0f/10.0f;
+static const float  kilometerToMillimeter = 1.0f/1000000.0f;
+static const float millimeterToInch = 25.4f;
+static const float millimeterToFoot = 304.8f;
+static const float millimeterToMeter =1000.0f;
+static const float millimeterToCentimeter = 10.0f;
+static const float millimeterToKilometer = 1000000.0f;
 
 
 void ewol::dimension::Init(void)
 {
+	if (true==isInit) {
+		return;
+	}
 	ewol::Dimension conversion(vec2(72,72), ewol::Dimension::Inch);
 	ratio = conversion.GetMillimeter();
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	windowsSize.Set(vec2(200,200), ewol::Dimension::Pixel);
+	isInit = true;
 }
 
 void ewol::dimension::UnInit(void)
 {
+	isInit = false;
 	ratio.setValue(9999999,888888);
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	windowsSize.Set(vec2(9999999,88888), ewol::Dimension::Pixel);
@@ -47,7 +53,10 @@ void ewol::dimension::UnInit(void)
 
 void ewol::dimension::SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type)
 {
+	ewol::dimension::Init();
+	EWOL_INFO("Set a new screen ratio for the screen : ratio=" << _ratio << " type=" << _type);
 	ewol::Dimension conversion(_ratio, _type);
+	EWOL_INFO("    ==> " << conversion);
 	ratio = conversion.GetMillimeter();
 	invRatio.setValue(1.0f/ratio.x(),1.0f/ratio.y());
 	EWOL_INFO("Set a new screen ratio for the screen : ratioMm=" << ratio);
