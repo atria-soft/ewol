@@ -182,7 +182,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	super.onConfigurationChanged(newConfig);
     }
 	
-    @Override public void keyboardUpdate(boolean show)
+    public void keyboardUpdate(boolean show)
     {
 	final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 	if(show) {
@@ -194,7 +194,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
     }
 	
-    @Override public void eventNotifier(String[] args)
+    public void eventNotifier(String[] args)
     {
 	// just for the test ...
 	EWOL.touchEvent();
