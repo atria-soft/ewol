@@ -17,9 +17,6 @@
 [submodule "external/freetype"]
 	path = external/freetype
 	url = https://github.com/HeeroYui/libfreetype.git
-[submodule "external/zip"]
-	path = external/zip
-	url = https://github.com/HeeroYui/libzip.git
 [submodule "external/png"]
 	path = external/png
 	url = https://github.com/HeeroYui/libpng.git
