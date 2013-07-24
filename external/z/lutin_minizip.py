@@ -14,6 +14,9 @@ def Create(target):
 	
 	myModule.AddModuleDepend('z')
 	
+	myModule.CompileFlags_CC([
+		"-DNOCRYPT",
+		"-DIOAPI_NO_64"])
 	# add the currrent module at the 
 	return myModule
 

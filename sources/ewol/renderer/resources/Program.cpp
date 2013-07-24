@@ -27,7 +27,7 @@ ewol::Program::Program(const etk::UString& filename) :
 	m_hasTexture1(false)
 {
 	m_resourceLevel = 1;
-	EWOL_DEBUG("OGL : load PROGRAM \"" << m_name << "\"");
+	EWOL_DEBUG("OGL : load PROGRAM '" << m_name << "'");
 	// load data from file "all the time ..."
 	
 	etk::FSNode file(m_name);
