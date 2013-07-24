@@ -55,7 +55,7 @@ static ewol::SpecialKey guiKeyBoardSpecialKeyMode;
 
 static void java_check_exception(JNIEnv* env) {
   if (env->ExceptionOccurred()) {
-    EWOL_DEBUG("C->java : EXEPTION ...");
+    EWOL_ERROR("C->java : EXEPTION ...");
     env->ExceptionDescribe();
     env->ExceptionClear();
   }
@@ -64,7 +64,7 @@ static void java_check_exception(JNIEnv* env) {
 static bool java_attach_current_thread(int *rstatus) {
   EWOL_DEBUG("C->java : call java");
   if (NULL == g_JavaVM) {
-    EWOL_DEBUG("C->java : JVM not initialised");
+    EWOL_ERROR("C->java : JVM not initialised");
     return false;
   }
   JNIEnv *JavaVirtualMachinePointer_tmp;
@@ -77,7 +77,7 @@ static bool java_attach_current_thread(int *rstatus) {
     int status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
     java_check_exception(JavaVirtualMachinePointer);
     if (status != JNI_OK) {
-      EWOL_DEBUG("C->java : AttachCurrentThread failed : " << status);
+      EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
       return false;
     }
   }
