@@ -131,8 +131,11 @@ void SendJavaSetTitle(const char * dataString)
     EWOL_ERROR("C->java : No data to send ...");
     return;
   }
+
   //Call java ...
-  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolActivitySetTitle, JavaVirtualMachinePointer->NewStringUTF(dataString));
+  jstring title = JavaVirtualMachinePointer->NewStringUTF(dataString);
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolActivitySetTitle, title);
+  JavaVirtualMachinePointer->DeleteLocalRef(title);
   // manage execption : 
   java_check_exception(JavaVirtualMachinePointer);
   java_detach_current_thread(status);
@@ -257,9 +260,8 @@ extern "C"
 	"orientationUpdate", "(I)V");
 
 			
-      //javaObjectActivity = JavaVirtualMachinePointer->NewGlobalRef(obj);
-      /* realy unsafe... */
-      javaObjectEwolCallbackAndActivity = objCallback;
+      javaObjectEwolCallbackAndActivity = env->NewGlobalRef(objCallback);
+      //javaObjectEwolCallbackAndActivity = objCallback;
 			
       javaDefaultClassString = JavaVirtualMachinePointer->FindClass("java/lang/String" );
       if (javaDefaultClassString == 0) {
@@ -274,6 +276,7 @@ extern "C"
     EWOL_DEBUG("*******************************************");
     EWOL_DEBUG("**  Remove JVM Pointer                   **");
     EWOL_DEBUG("*******************************************");
+    env->DeleteGlobalRef(javaObjectEwolCallbackAndActivity);
     JavaVirtualMachinePointer = NULL;
   }
   void Java_org_ewol_Ewol_touchEvent( JNIEnv*  env, jobject thiz )
