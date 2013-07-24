@@ -317,9 +317,9 @@ bool ewol::EObject::StoreXML(exml::Element* _node) const
 
 bool ewol::EObject::OnSetConfig(const ewol::EConfig& _conf)
 {
-	EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} set config : " << _conf);
+	EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} set config : " << _conf);
 	if (_conf.GetConfig() == ewol::EObject::configName) {
-		EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Set config name : \"" << _conf.GetData() << "\"");
+		EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} Set config name : \"" << _conf.GetData() << "\"");
 		SetName(_conf.GetData());
 		return true;
 	}

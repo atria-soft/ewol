@@ -136,6 +136,26 @@ namespace ewol
 				}
 				return *this;
 			}
+			/*****************************************************
+			 *    == operator
+			 *****************************************************/
+			bool operator== (const Dimension& _obj) const {
+				if(    m_data == _obj.m_data
+				    && m_type == _obj.m_type) {
+					return true;
+				}
+				return false;
+			}
+			/*****************************************************
+			 *    != operator
+			 *****************************************************/
+			bool operator!= (const Dimension& _obj) const {
+				if(    m_data != _obj.m_data
+				    || m_type != _obj.m_type) {
+					return true;
+				}
+				return false;
+			}
 			/**
 			 * @breif get the dimension type
 			 * @return the type

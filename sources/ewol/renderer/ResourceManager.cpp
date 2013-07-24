@@ -282,7 +282,7 @@ bool ewol::resource::Keep(ewol::Colored3DObject*& object)
 	LocalAdd(object);
 	return true;
 }
-
+#ifdef __TARGET_OS__Android
 /**
  * @brief get the next power 2 if the input
  * @param[in] value Value that we want the next power of 2
@@ -300,35 +300,41 @@ static int32_t nextP2(int32_t value)
 	EWOL_CRITICAL("impossible CASE.... request P2 of " << value);
 	return val;
 }
+#endif
 
 bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
 {
-	EWOL_ERROR("11111111111111 " << _filename << " " << _size);
+	EWOL_VERBOSE(" keep image file : " << _filename << " " << _size);
 	if (_size.x()==0) {
 		_size.setX(-1);
-		EWOL_ERROR("Error Request the image size.x() =0 ???");
+		//EWOL_ERROR("Error Request the image size.x() =0 ???");
 	}
 	if (_size.y()==0) {
 		_size.setY(-1);
-		EWOL_ERROR("Error Request the image size.y() =0 ???");
+		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	EWOL_ERROR("222222222222222222 " << _size);
 	etk::UString TmpFilename = _filename;
 	if (false == _filename.EndWith(".svg") ) {
 		_size = ivec2(-1,-1);
 	}
-	EWOL_ERROR("3333333333333333 " << _size);
 	#ifdef __TARGET_OS__MacOs
-		EWOL_WARNING("TODO : Remove this strange hack");
+		EWOL_ERROR("TODO : Remove this strange hack");
 		_size = ivec2(64,64);
 	#endif
 	if (_size.x()>0 && _size.y()>0) {
-		EWOL_ERROR("44444444444444 " << _size);
-		ivec2 size2(nextP2(_size.x()), nextP2(_size.y()));
-		TmpFilename += ":";
-		TmpFilename += size2.x();
-		TmpFilename += "x";
-		TmpFilename += size2.y();
+		EWOL_VERBOSE("    ==> specific size : " << _size);
+		#ifdef __TARGET_OS__Android
+			ivec2 size2(nextP2(_size.x()), nextP2(_size.y()));
+			TmpFilename += ":";
+			TmpFilename += size2.x();
+			TmpFilename += "x";
+			TmpFilename += size2.y();
+		#else
+			TmpFilename += ":";
+			TmpFilename += _size.x();
+			TmpFilename += "x";
+			TmpFilename += _size.y();
+		#endif
 	}
 	
 	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << _size);

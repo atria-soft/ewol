@@ -739,7 +739,7 @@ bool ewol::Widget::LoadXML(exml::Element* _node)
 
 ewol::Widget* ewol::Widget::GetWidgetNamed(const etk::UString& _widgetName)
 {
-	EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} compare : " << GetName() << "==" << _widgetName );
+	EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} compare : " << GetName() << "==" << _widgetName );
 	if (GetName()==_widgetName) {
 		return this;
 	}
