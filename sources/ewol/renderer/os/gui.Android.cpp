@@ -112,7 +112,7 @@ void SendJavaOrientationUpdate(int32_t mode)
   jint param = mode;
 		
   //Call java ...
-  JavaVirtualMachinePointer->CallVoidMethod(javaObjectActivity, javaMethodEwolCallbackOrientationUpdate, param);
+  JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolCallbackOrientationUpdate, param);
 	
   // manage execption : 
   java_check_exception(JavaVirtualMachinePointer);
