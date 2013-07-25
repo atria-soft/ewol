@@ -80,6 +80,7 @@ void widget::WidgetScrooled::OnRegenerateDisplay(void)
 
 bool widget::WidgetScrooled::OnEventInput(const ewol::EventInput& _event)
 {
+	EWOL_VERBOSE("event XXX " << _event);
 	vec2 relativePos = RelativePosition(_event.GetPos());
 	// corection due to the open Gl invertion ...
 	relativePos.setY(m_size.y() - relativePos.y());
@@ -232,17 +233,17 @@ bool widget::WidgetScrooled::OnEventInput(const ewol::EventInput& _event)
 		           && (    ewol::keyEvent::typeUnknow==m_highSpeedType
 		                || ewol::keyEvent::typeFinger==m_highSpeedType ) ) {
 			if (1 == _event.GetId()) {
-				//EWOL_VERBOSE("event 1  << " << (int32_t)typeEvent << "(" << x << "," << y << ")");
+				EWOL_VERBOSE("event 1  " << _event);
 				if (ewol::keyEvent::statusDown == _event.GetStatus()) {
 					m_highSpeedMode = widget::SCROLL_INIT;
 					m_highSpeedType = ewol::keyEvent::typeFinger;
 					m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-					EWOL_VERBOSE("SCROOL ==> INIT");
+					EWOL_DEBUG("SCROOL ==> INIT");
 					return true;
 				} else if (ewol::keyEvent::statusUp == _event.GetStatus()) {
 					m_highSpeedMode = widget::SCROLL_DISABLE;
 					m_highSpeedType = ewol::keyEvent::typeUnknow;
-					EWOL_VERBOSE("SCROOL ==> DISABLE");
+					EWOL_DEBUG("SCROOL ==> DISABLE");
 					MarkToRedraw();
 					return true;
 				} else if (widget::SCROLL_INIT==m_highSpeedMode && ewol::keyEvent::statusMove == _event.GetStatus()) {
@@ -252,25 +253,25 @@ bool widget::WidgetScrooled::OnEventInput(const ewol::EventInput& _event)
 						// the scrooling can start : 
 						// select the direction :
 						m_highSpeedMode = widget::SCROLL_ENABLE_FINGER;
-						EWOL_VERBOSE("SCROOL ==> ENABLE");
+						EWOL_DEBUG("SCROOL ==> ENABLE");
 						MarkToRedraw();
 					}
 					return true;
 				} if (widget::SCROLL_ENABLE_FINGER==m_highSpeedMode && ewol::keyEvent::statusMove == _event.GetStatus()) {
 					//m_originScrooled.x = (int32_t)(m_maxSize.x * x / m_size.x);
-					m_originScrooled.setX(m_originScrooled.x() - relativePos.x() - m_highSpeedStartPos.x());
-					m_originScrooled.setY(m_originScrooled.y() - relativePos.y() - m_highSpeedStartPos.y());
+					m_originScrooled.setX(m_originScrooled.x() - (relativePos.x() - m_highSpeedStartPos.x()));
+					m_originScrooled.setY(m_originScrooled.y() - (relativePos.y() - m_highSpeedStartPos.y()));
 					m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
 					m_originScrooled.setY(etk_avg(0, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling)));
 					m_highSpeedStartPos.setValue(relativePos.x(), relativePos.y());
-					EWOL_VERBOSE("SCROOL ==> MOVE (" << m_originScrooled.x() << "," << m_originScrooled.y() << ")");
+					EWOL_DEBUG("SCROOL ==> MOVE m_originScrooled=" << m_originScrooled << " " << relativePos << " " << m_highSpeedStartPos);
 					MarkToRedraw();
 					return true;
 				}
 			} else if (widget::SCROLL_DISABLE!=m_highSpeedMode && ewol::keyEvent::statusLeave == _event.GetStatus()) {
 				m_highSpeedMode = widget::SCROLL_DISABLE;
 				m_highSpeedType = ewol::keyEvent::typeUnknow;
-				EWOL_VERBOSE("SCROOL ==> DISABLE");
+				EWOL_DEBUG("SCROOL ==> DISABLE");
 				MarkToRedraw();
 				return true;
 			}

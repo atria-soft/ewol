@@ -15,15 +15,15 @@
 #undef __class__
 #define __class__	"Shader"
 
-ewol::Shader::Shader(const etk::UString& filename): 
-	ewol::Resource(filename),
+ewol::Shader::Shader(const etk::UString& _filename): 
+	ewol::Resource(_filename),
 	m_exist(false),
 	m_fileData(NULL),
 	m_shader(0),
 	m_type(0)
 {
 	m_resourceLevel = 0;
-	EWOL_DEBUG("OGL : load SHADER \"" << filename << "\"");
+	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
 	if (true == m_name.EndWith(".frag") ) {
@@ -89,7 +89,12 @@ void ewol::Shader::UpdateContext(void)
 				if (m_type == GL_VERTEX_SHADER){
 					tmpShaderType = "GL_VERTEX_SHADER";
 				}
-				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\": " << l_bufferDisplayError);
+				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
+				EWOL_ERROR("Error " << l_bufferDisplayError);
+				etk::Vector<etk::UString> lines = etk::UString(m_fileData).Split('\n');
+				for (esize_t iii=0 ; iii<lines.Size() ; iii++) {
+					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
+				}
 				return;
 			}
 		}

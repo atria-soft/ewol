@@ -79,16 +79,16 @@ void widget::List::CalculateMinMaxSize(void)
 }
 
 
-void widget::List::AddOObject(ewol::Compositing* newObject, int32_t pos)
+void widget::List::AddOObject(ewol::Compositing* _newObject, int32_t _pos)
 {
-	if (NULL == newObject) {
+	if (NULL == _newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (pos < 0 || pos >= m_listOObject.Size() ) {
-		m_listOObject.PushBack(newObject);
+	if (_pos < 0 || _pos >= m_listOObject.Size() ) {
+		m_listOObject.PushBack(_newObject);
 	} else {
-		m_listOObject.Insert(pos, newObject);
+		m_listOObject.Insert(_pos, _newObject);
 	}
 }
 

@@ -304,7 +304,7 @@ static int32_t nextP2(int32_t value)
 
 bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
 {
-	EWOL_VERBOSE(" keep image file : " << _filename << " " << _size);
+	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
 	if (_size.x()==0) {
 		_size.setX(-1);
 		//EWOL_ERROR("Error Request the image size.x() =0 ???");
@@ -324,20 +324,15 @@ bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _ob
 	if (_size.x()>0 && _size.y()>0) {
 		EWOL_VERBOSE("    ==> specific size : " << _size);
 		#ifdef __TARGET_OS__Android
-			ivec2 size2(nextP2(_size.x()), nextP2(_size.y()));
-			TmpFilename += ":";
-			TmpFilename += size2.x();
-			TmpFilename += "x";
-			TmpFilename += size2.y();
-		#else
-			TmpFilename += ":";
-			TmpFilename += _size.x();
-			TmpFilename += "x";
-			TmpFilename += _size.y();
+			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
+		TmpFilename += ":";
+		TmpFilename += _size.x();
+		TmpFilename += "x";
+		TmpFilename += _size.y();
 	}
 	
-	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" basic size=" << _size);
+	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" new size=" << _size);
 	_object = static_cast<ewol::TextureFile*>(LocalKeep(TmpFilename));
 	if (NULL != _object) {
 		return true;

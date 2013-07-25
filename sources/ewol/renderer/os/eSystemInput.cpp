@@ -196,14 +196,14 @@ ewol::eSystemInput::~eSystemInput(void)
 }
 
 
-int32_t ewol::eSystemInput::localGetDestinationId(ewol::keyEvent::type_te type, ewol::Widget* destWidget, int32_t realInputId)
+int32_t ewol::eSystemInput::localGetDestinationId(ewol::keyEvent::type_te _type, ewol::Widget* _destWidget, int32_t _realInputId)
 {
-	if (type == ewol::keyEvent::typeFinger) {
+	if (_type == ewol::keyEvent::typeFinger) {
 		int32_t lastMinimum = 0;
 		for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 			if (true==m_eventInputSaved[iii].isUsed) {
-				if (m_eventInputSaved[iii].curentWidgetEvent == destWidget) {
-					if (iii != realInputId) {
+				if (m_eventInputSaved[iii].curentWidgetEvent == _destWidget) {
+					if (iii != _realInputId) {
 						lastMinimum = etk_max(lastMinimum, m_eventInputSaved[iii].destinationInputId);
 					}
 				}
@@ -211,12 +211,13 @@ int32_t ewol::eSystemInput::localGetDestinationId(ewol::keyEvent::type_te type, 
 		}
 		return lastMinimum+1;
 	}
-	return realInputId;
+	return _realInputId;
 }
 
 // note if id<0 ==> the it was finger event ...
 void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec2 pos)
 {
+	EVENT_DEBUG("motion event : " << type << " " << pointerID << " " << pos);
 	if (MAX_MANAGE_INPUT<=pointerID) {
 		// reject pointer ==> out of IDs...
 		return;

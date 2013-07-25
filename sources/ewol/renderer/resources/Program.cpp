@@ -41,14 +41,14 @@ ewol::Program::Program(const etk::UString& filename) :
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
-			EWOL_DEBUG("Add shader on program : "<< tmpFilename);
+			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
 			m_shaderList.PushBack(tmpShader);
 		}
 		if (false == ewol::resource::Keep(tmpFilename+"frag", tmpShader)) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
-			EWOL_DEBUG("Add shader on program : "<< tmpFilename);
+			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "frag");
 			m_shaderList.PushBack(tmpShader);
 		}
 	} else {

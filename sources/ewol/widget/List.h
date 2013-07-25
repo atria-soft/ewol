@@ -16,7 +16,7 @@
 #include <ewol/compositing/Compositing.h>
 
 namespace widget {
-	class List :public widget::WidgetScrooled
+	class List : public widget::WidgetScrooled
 	{
 		public:
 			List(void);
@@ -24,13 +24,13 @@ namespace widget {
 			virtual const char * const GetObjectType(void) { return "ewol::List"; };
 			virtual ~List(void);
 			virtual void CalculateMinMaxSize(void);
-			void SetLabel(etk::UString newLabel);
+			void SetLabel(etk::UString _newLabel);
 		// Drawing capabilities ....
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 			etk::Vector<ivec2 > m_lineSize;
 		public:
-			void AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
+			void AddOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 			void ClearOObjectList(void);
 		// list properties ...
 		private:
