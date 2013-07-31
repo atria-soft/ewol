@@ -41,3 +41,6 @@
 [submodule "external/egami"]
 	path = external/egami
 	url = https://github.com/HeeroYui/egami.git
+[submodule "external/ejson"]
+	path = external/ejson
+	url = https://github.com/HeeroYui/ejson.git
