@@ -138,7 +138,7 @@ def Create(target):
 	#myModule.SetConfig(['Config.in','ConfigLinux.in'])
 	
 	# name of the dependency
-	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'egami', 'date'])
+	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
 	
 	#ifeq ("$(CONFIG_BUILD_BULLET)","y")
 	#myModule.AddModuleDepend('bullet')
