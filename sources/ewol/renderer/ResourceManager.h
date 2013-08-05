@@ -19,7 +19,7 @@
 #include <ewol/renderer/resources/TexturedFont.h>
 #include <ewol/renderer/resources/Texture.h>
 #include <ewol/renderer/resources/Image.h>
-#include <ewol/renderer/resources/MeshObj.h>
+#include <ewol/renderer/resources/Mesh.h>
 #include <ewol/renderer/resources/Colored3DObject.h>
 
 namespace ewol
@@ -77,7 +77,6 @@ namespace ewol
 		bool Keep(ewol::Texture*& object); // no name needed here ...
 		bool Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size=ivec2(-1,-1));
 		bool Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object);
-		bool Keep(const etk::UString& filename, ewol::MeshObj*& object);
 		bool Keep(const etk::UString& meshName, ewol::Mesh*& object);
 		bool Keep(const etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);
@@ -94,7 +93,6 @@ namespace ewol
 		void Release(ewol::Texture*& object);
 		void Release(ewol::TextureFile*& object);
 		void Release(ewol::VirtualBufferObject*& object);
-		void Release(ewol::MeshObj*& object);
 		void Release(ewol::Mesh*& object);
 		void Release(ewol::ConfigFile*& object);
 		void Release(ewol::Colored3DObject*& object);

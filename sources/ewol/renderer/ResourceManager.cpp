@@ -348,47 +348,32 @@ bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _ob
 	return true;
 }
 
-bool ewol::resource::Keep(const etk::UString& filename, ewol::MeshObj*& object)
+
+bool ewol::resource::Keep(const etk::UString& _meshName, ewol::Mesh*& _object)
 {
-	object = static_cast<ewol::MeshObj*>(LocalKeep(filename));
-	if (NULL != object) {
+	_object = static_cast<ewol::Mesh*>(LocalKeep(_meshName));
+	if (NULL != _object) {
 		return true;
 	}
-	object = new ewol::MeshObj(filename);
-	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??" << filename);
+	_object = new ewol::Mesh(_meshName);
+	if (NULL == _object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh??" << _meshName);
 		return false;
 	}
-	LocalAdd(object);
+	LocalAdd(_object);
 	return true;
 }
 
 
-bool ewol::resource::Keep(const etk::UString& meshName, ewol::Mesh*& object)
-{
-	object = static_cast<ewol::Mesh*>(LocalKeep(meshName));
-	if (NULL != object) {
-		return true;
-	}
-	object = new ewol::Mesh(meshName);
-	if (NULL == object) {
-		EWOL_ERROR("allocation error of a resource : ??Mesh??" << meshName);
-		return false;
-	}
-	LocalAdd(object);
-	return true;
-}
-
-
-bool ewol::resource::Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object)
+bool ewol::resource::Keep(const etk::UString& _accesMode, ewol::VirtualBufferObject*& _object)
 {
 	// this element create a new one every time ....
-	object = new ewol::VirtualBufferObject(accesMode);
-	if (NULL == object) {
+	_object = new ewol::VirtualBufferObject(_accesMode);
+	if (NULL == _object) {
 		EWOL_ERROR("allocation error of a resource : ??VBO??");
 		return false;
 	}
-	LocalAdd(object);
+	LocalAdd(_object);
 	return true;
 }
 
@@ -479,13 +464,6 @@ void ewol::resource::Release(ewol::TextureFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	//EWOL_INFO("RELEASE : TextureFile :  nb=" << object2->GetCounter());
-	Release(object2);
-	object = NULL;
-}
-
-void ewol::resource::Release(ewol::MeshObj*& object)
-{
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	Release(object2);
 	object = NULL;
 }

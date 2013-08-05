@@ -10,6 +10,7 @@
 #define __MESH_H__
 
 #include <etk/types.h>
+#include <etk/Hach.h>
 #include <ewol/renderer/resources/Resource.h>
 #include <ewol/renderer/resources/Image.h>
 #include <ewol/renderer/resources/Shader.h>
@@ -152,25 +153,24 @@ namespace ewol
 			int32_t        m_GLNormal;
 			int32_t        m_GLNormalFace;
 			int32_t        m_GLtexture;
-			int32_t        m_GLtexID0;
 			int32_t        m_bufferOfset;
 			int32_t        m_numberOfElments;
-			ewol::Material m_material;
+			MaterialGlId   m_GLMaterial;
 			ewol::Light    m_light;
 		protected:
 			etk::Vector<vec3> m_listVertex; //!< List of all vertex in the element
 			etk::Vector<vec2> m_listUV; //!< List of all UV point in the mesh (for the specify texture)
-			etk::Vector<Face> m_listFaces; //!< List of all Face for the mesh
 			etk::Vector<vec3> m_listFacesNormal; //!< List of all Face normal, when calculated
 			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
+			etk::Hash<etk::Vector<Face> > m_listFaces; //!< List of all Face for the mesh
+			etk::Hash<ewol::Material*> m_materials;
 			#ifdef USE_INDEXED_MESH
 			etk::Vector<uint32_t> m_listIndexFaces;
 			#endif
 		protected:
-			ewol::VirtualBufferObject*  m_verticesVBO;
-			ewol::TextureFile*          m_texture0;
+			ewol::VirtualBufferObject* m_verticesVBO;
 		public:
-			Mesh(etk::UString genName, etk::UString shaderName="DATA:textured3D2.prog");
+			Mesh(const etk::UString& _fileName, const etk::UString& _shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);
@@ -201,6 +201,9 @@ namespace ewol
 			void CreateViewBox(float size=1.0);
 			void Subdivide(int32_t numberOfTime, bool smooth);
 			void DisplaceElement(const ewol::DisplacementTable& displacement);
+		private:
+			bool LoadOBJ(const etk::UString& _fileName);
+			bool LoadEMF(const etk::UString& _fileName);
 	};
 };
 

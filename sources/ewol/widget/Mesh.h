@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/renderer/resources/MeshObj.h>
+#include <ewol/renderer/resources/Mesh.h>
 
 extern const char * const ewolEventMeshPressed;
 
@@ -22,7 +22,7 @@ namespace widget {
 		private:
 			// mesh name :
 			etk::UString m_meshName;
-			ewol::MeshObj* m_object;
+			ewol::Mesh* m_object;
 			// mesh display properties:
 			vec3 m_position;
 			vec3 m_angle;

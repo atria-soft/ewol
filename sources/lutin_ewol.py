@@ -52,7 +52,6 @@ def Create(target):
 		'ewol/renderer/resources/FontFreeType.cpp',
 		'ewol/renderer/resources/TexturedFont.cpp',
 		'ewol/renderer/resources/Mesh.cpp',
-		'ewol/renderer/resources/MeshObj.cpp',
 		'ewol/renderer/resources/Texture.cpp',
 		'ewol/renderer/resources/Colored3DObject.cpp',
 		'ewol/renderer/resources/Image.cpp',
