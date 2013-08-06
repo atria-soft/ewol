@@ -273,6 +273,7 @@ void ewol::Mesh::GenerateVBO(void)
 	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
 		// clean faces indexes :
 		m_listFaces.GetValue(kkk).m_index.Clear();
+		int64_t tmpppppp=0;
 		FaceIndexing& tmpFaceList = m_listFaces.GetValue(kkk);
 		for (int32_t iii=0; iii<tmpFaceList.m_faces.Size() ; iii++) {
 			int32_t vertexVBOId[3];
@@ -293,6 +294,8 @@ void ewol::Mesh::GenerateVBO(void)
 					    && m_verticesVBO->GetOnBufferVec2(MESH_VBO_TEXTURE,jjj) == texturepos) {
 						vertexVBOId[indice] = jjj;
 						elementFind = true;
+						//EWOL_DEBUG("search indice : " << jjj);
+						tmpppppp += jjj;
 						// stop searching ...
 						break;
 					}
@@ -308,6 +311,7 @@ void ewol::Mesh::GenerateVBO(void)
 				tmpFaceList.m_index.PushBack(vertexVBOId[indice]);
 			}
 		}
+		EWOL_DEBUG("nb cycle ? : " << tmpppppp);
 	}
 	// update all the VBO elements ...
 	m_verticesVBO->Flush();
