@@ -34,10 +34,10 @@ void ewol::MaterialGlId::Link(ewol::Program* _prog, const etk::UString& _baseNam
 }
 
 ewol::Material::Material(void) :
-	m_ambientFactor(0,0,0,0),
-	m_diffuseFactor(0,0,0,0),
-	m_specularFactor(0,0,0,0),
-	m_shininess(0),
+	m_ambientFactor(1,1,1,1),
+	m_diffuseFactor(0,0,0,1),
+	m_specularFactor(0,0,0,1),
+	m_shininess(1),
 	m_texture0(NULL)
 {
 	// nothing to do else ...

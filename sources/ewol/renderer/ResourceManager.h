@@ -81,6 +81,23 @@ namespace ewol
 		bool Keep(const etk::UString& filename, ewol::ConfigFile*& object);
 		bool Keep(ewol::Colored3DObject*& object);
 		
+		// must became :
+		/*
+		ewol::Font* KeepFont(const etk::UString& _filename);
+		ewol::Program* KeepProgram(const etk::UString& _filename);
+		ewol::Shader* KeepShader(const etk::UString& _filename);
+		ewol::Texture* KeepTexture(void);
+		ewol::Texture* KeepTexture(const etk::UString& _filename, const ivec2& size=ivec2(-1,-1));
+		void AddTextureResourceCreator(pf* _plop, const etk::UString& _ext);
+		ewol::Audio* KeepAudio(const etk::UString& _filename, bool _inRam=false);
+		void AddAudioResourceCreator(pf* _plop, const etk::UString& _ext);
+		ewol::VirtualBufferObject* KeepVBO(const etk::UString& _accesMode);
+		ewol::Mesh* KeepMesh(const etk::UString& _filename);
+		ewol::ConfigFile* KeepConfigFile(const etk::UString& _filename);
+		ewol::Colored3DObject* Keep3DObject(void);
+		
+		void Release(ewol::Resource*& object);
+		*/
 		/**
 		 * @brief Release a resources and free it if the Last release is call.
 		 * @param[in,out] object element to realease ==> is return at NULL value.

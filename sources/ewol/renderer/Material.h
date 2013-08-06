@@ -39,6 +39,8 @@ namespace ewol
 			float m_shininess;
 			ewol::TextureFile* m_texture0;
 		public:
+			etk::Vector<uint32_t> m_listIndexFaces;
+		public:
 			Material(void);
 			~Material(void);
 			void Draw(ewol::Program* _prog, const MaterialGlId& _glID);
@@ -55,6 +57,12 @@ namespace ewol
 				m_shininess = _val;
 			}
 			void SetTexture0(const etk::UString& _filename);
+			
+			void SetImageSize(const ivec2& _newSize) { if (m_texture0==NULL){return;} m_texture0->SetImageSize(_newSize); };
+			// get the reference on this image to draw nomething on it ...
+			egami::Image* Get(void) { if (m_texture0==NULL){return NULL;} return &m_texture0->Get(); };
+			// Flush the data to send it at the OpenGl system
+			void Flush(void) { if (m_texture0==NULL){return;} m_texture0->Flush(); };
 	};
 	
 };

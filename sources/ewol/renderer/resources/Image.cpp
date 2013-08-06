@@ -16,6 +16,12 @@
 
 #undef __class__
 #define __class__	"TextureFile"
+ewol::TextureFile::TextureFile(const etk::UString& _genName) :
+	Texture(_genName)
+{
+	
+}
+
 
 ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfileName, const ivec2& _size) :
 	Texture(_genName)

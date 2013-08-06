@@ -265,34 +265,34 @@ bool ewol::resource::Keep(ewol::Texture*& object)
 	return true;
 }
 
-bool ewol::resource::Keep(ewol::Colored3DObject*& object)
+bool ewol::resource::Keep(ewol::Colored3DObject*& _object)
 {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	etk::UString filename = "?metaObject?Colored3DObject";
-	object = static_cast<ewol::Colored3DObject*>(LocalKeep(filename));
-	if (NULL != object) {
+	_object = static_cast<ewol::Colored3DObject*>(LocalKeep(filename));
+	if (NULL != _object) {
 		return true;
 	}
 	// need to crate a new one ...
-	object = new ewol::Colored3DObject(filename);
-	if (NULL == object) {
+	_object = new ewol::Colored3DObject(filename);
+	if (NULL == _object) {
 		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
 		return false;
 	}
-	LocalAdd(object);
+	LocalAdd(_object);
 	return true;
 }
 #ifdef __TARGET_OS__Android
 /**
  * @brief get the next power 2 if the input
- * @param[in] value Value that we want the next power of 2
+ * @param[in] _value Value that we want the next power of 2
  * @return result value
  */
-static int32_t nextP2(int32_t value)
+static int32_t nextP2(int32_t _value)
 {
 	int32_t val=1;
 	for (int32_t iii=1; iii<31; iii++) {
-		if (value <= val) {
+		if (_value <= val) {
 			return val;
 		}
 		val *=2;
@@ -305,6 +305,15 @@ static int32_t nextP2(int32_t value)
 bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
 {
 	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
+	if (_filename == "") {
+		_object = new ewol::TextureFile("");
+		if (NULL == _object) {
+			EWOL_ERROR("allocation error of a resource : ??TEX??");
+			return false;
+		}
+		LocalAdd(_object);
+		return true;
+	}
 	if (_size.x()==0) {
 		_size.setX(-1);
 		//EWOL_ERROR("Error Request the image size.x() =0 ???");

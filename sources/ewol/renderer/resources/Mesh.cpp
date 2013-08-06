@@ -64,9 +64,7 @@ class VertexNode {
 
 ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
 	ewol::Resource(_fileName),
-	m_enableFaceNormal(true),
-	m_enableVertexNormal(true),
-	m_numberOfElments(0)
+	m_normalMode(normalModeNone)
 {
 	EWOL_DEBUG("Load a new mesh : '" << _fileName << "'");
 	// get the shader resource :
@@ -122,22 +120,17 @@ ewol::Mesh::~Mesh(void)
 	// remove dynamics dependencies :
 	ewol::resource::Release(m_GLprogram);
 	ewol::resource::Release(m_verticesVBO);
-	m_numberOfElments=0;
 }
 
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
-	EWOL_DEBUG("Request Draw : " << m_listIndexFaces.Size() << " elements");
-	#ifndef USE_INDEXED_MESH
-		if (m_numberOfElments<=0) {
-			return;
-		}
-	#else
-		if (m_listIndexFaces.Size()<=0) {
-			return;
-		}
-	#endif
+	//EWOL_DEBUG("Request Draw : " << m_listFaces.GetValue(0).m_index.Size() << " elements");
+	/*
+	if (m_listIndexFaces.Size()<=0) {
+		return;
+	}
+	*/
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -157,21 +150,20 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
-	// position :
-	#ifndef USE_INDEXED_MESH
-		m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
-	#endif
-	// draw materials :
-	m_materials.GetValue(0)->Draw(m_GLprogram, m_GLMaterial);
+	// draw lights :
 	m_light.Draw(m_GLprogram);
 	
-	#ifndef USE_INDEXED_MESH
-		// Request the draw od the elements : 
-		ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
-	#else
-		ewol::openGL::DrawElements(GL_TRIANGLES, m_listIndexFaces);
-		EWOL_DEBUG("Draw : " << m_listIndexFaces.Size() << " elements");
-	#endif
+	int32_t nbElementDraw = 0;
+	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
+		if (false == m_materials.Exist(m_listFaces.GetKey(kkk))) {
+			EWOL_WARNING("missing materials : '" << m_listFaces.GetKey(kkk) << "'");
+			continue;
+		}
+		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
+		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
+		nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+	}
+	EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
@@ -179,16 +171,12 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 }
 void ewol::Mesh::Draw2(mat4& positionMatrix)
 {
-	EWOL_DEBUG("Request Draw2 : " << m_listIndexFaces.Size() << " elements");
-	#ifndef USE_INDEXED_MESH
-		if (m_numberOfElments<=0) {
-			return;
-		}
-	#else
-		if (m_listIndexFaces.Size()<=0) {
-			return;
-		}
-	#endif
+	//
+	/*
+	if (m_listIndexFaces.Size()<=0) {
+		return;
+	}
+	*/
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -207,20 +195,20 @@ void ewol::Mesh::Draw2(mat4& positionMatrix)
 	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
-	// position :
-	#ifndef USE_INDEXED_MESH
-		m_GLprogram->SendAttributePointer(m_GLNormalFace, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_FACE_NORMAL);
-	#endif
 	m_light.Draw(m_GLprogram);
 	
 	// draw materials :
-	m_materials.GetValue(0)->Draw(m_GLprogram, m_GLMaterial);
-	#ifndef USE_INDEXED_MESH
-		// Request the draw od the elements : 
-		ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_numberOfElments);
-	#else
-		ewol::openGL::DrawElements(GL_TRIANGLES, m_listIndexFaces);
-	#endif
+	int32_t nbElementDraw = 0;
+	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
+		if (false == m_materials.Exist(m_listFaces.GetKey(kkk))) {
+			EWOL_WARNING("missing materials : '" << m_listFaces.GetKey(kkk) << "'");
+			continue;
+		}
+		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
+		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
+		nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+	}
+	EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
@@ -232,36 +220,30 @@ void ewol::Mesh::Draw2(mat4& positionMatrix)
 void ewol::Mesh::CalculateNormaleFace(void)
 {
 	m_listFacesNormal.Clear();
-	// TODO : Preallocation of the vertex :
-	
-	if(    true==m_enableFaceNormal
-	    || true==m_enableVertexNormal) {
-		etk::Vector<Face>& tmpFaceList = m_listFaces.GetValue(0);
+	if (m_normalMode != ewol::Mesh::normalModeFace) {
+		etk::Vector<Face>& tmpFaceList = m_listFaces.GetValue(0).m_faces;
 		for(int32_t iii=0 ; iii<tmpFaceList.Size() ; iii++) {
 			// for all case, We use only the 3 vertex for quad element, in theory 3D modeler export element in triangle if it is not a real plane.
 			vec3 normal = btCross(m_listVertex[tmpFaceList[iii].m_vertex[0]]-m_listVertex[tmpFaceList[iii].m_vertex[1]],
 			                      m_listVertex[tmpFaceList[iii].m_vertex[1]]-m_listVertex[tmpFaceList[iii].m_vertex[2]]);
 			m_listFacesNormal.PushBack(normal.normalized());
 		}
+		m_normalMode = ewol::Mesh::normalModeFace;
 	}
 }
 
 void ewol::Mesh::CalculateNormaleEdge(void)
 {
 	m_listVertexNormal.Clear();
-	// TODO : Preallocation of the vertex :
-	
-	if(true==m_enableVertexNormal) {
+	if (m_normalMode != ewol::Mesh::normalModeVertex) {
 		for(int32_t iii=0 ; iii<m_listVertex.Size() ; iii++) {
-			etk::Vector<Face>& tmpFaceList = m_listFaces.GetValue(0);
+			etk::Vector<Face>& tmpFaceList = m_listFaces.GetValue(0).m_faces;
 			vec3 normal(0,0,0);
 			// add the vertex from all the element in the list for face when the element in the face ...
 			for(int32_t jjj=0 ; jjj<tmpFaceList.Size() ; jjj++) {
 				if(    tmpFaceList[jjj].m_vertex[0] == iii
 				    || tmpFaceList[jjj].m_vertex[1] == iii
-				    || tmpFaceList[jjj].m_vertex[2] == iii
-				    || (    tmpFaceList[jjj].m_nbElement == 4
-				         && tmpFaceList[jjj].m_vertex[3] == iii) ) {
+				    || tmpFaceList[jjj].m_vertex[2] == iii) {
 					normal += m_listFacesNormal[jjj];
 				}
 			}
@@ -271,6 +253,7 @@ void ewol::Mesh::CalculateNormaleEdge(void)
 				m_listVertexNormal.PushBack(normal.normalized());
 			}
 		}
+		m_normalMode = ewol::Mesh::normalModeVertex;
 	}
 }
 
@@ -279,29 +262,36 @@ void ewol::Mesh::CalculateNormaleEdge(void)
 
 void ewol::Mesh::GenerateVBO(void)
 {
-	m_numberOfElments = 0;
 	// calculate the normal of all faces if needed
-	CalculateNormaleFace();
-	CalculateNormaleEdge();
-	#ifdef USE_INDEXED_MESH
-		// remove old elements
-		m_listIndexFaces.Clear();
-		// Generate element in 2 pass : 
-		//    - create new index dependeng a vertex is a unique componenet of position, texture, normal
-		//    - the index list generation (can be dynamic ... (TODO later)
-		etk::Vector<Face>& tmpFaceList = m_listFaces.GetValue(0);
-		for (int32_t iii=0; iii<tmpFaceList.Size() ; iii++) {
-			for(int32_t indice=0 ; indice<tmpFaceList[iii].m_nbElement; indice++) {
-				vec3 position = m_listVertex[tmpFaceList[iii].m_vertex[indice]];
-				vec3 normal = m_listVertexNormal[tmpFaceList[iii].m_vertex[indice]];
-				vec2 texturepos(m_listUV[tmpFaceList[iii].m_uv[indice]].x(),1.0f-m_listUV[tmpFaceList[iii].m_uv[indice]].y());
+	if (m_normalMode == ewol::Mesh::normalModeNone) {
+		// when no normal detected ==> auto Generate Face normal ....
+		CalculateNormaleFace();
+	}
+	// Generate element in 2 pass : 
+	//    - create new index dependeng a vertex is a unique componenet of position, texture, normal
+	//    - the index list generation (can be dynamic ... (TODO later)
+	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
+		// clean faces indexes :
+		m_listFaces.GetValue(kkk).m_index.Clear();
+		FaceIndexing& tmpFaceList = m_listFaces.GetValue(kkk);
+		for (int32_t iii=0; iii<tmpFaceList.m_faces.Size() ; iii++) {
+			int32_t vertexVBOId[3];
+			for(int32_t indice=0 ; indice<3; indice++) {
+				vec3 position = m_listVertex[tmpFaceList.m_faces[iii].m_vertex[indice]];
+				vec3 normal;
+				if (m_normalMode == ewol::Mesh::normalModeVertex) {
+					normal = m_listVertexNormal[tmpFaceList.m_faces[iii].m_normal[indice]];
+				} else {
+					normal = m_listFacesNormal[tmpFaceList.m_faces[iii].m_normal[indice]];
+				}
+				vec2 texturepos(m_listUV[tmpFaceList.m_faces[iii].m_uv[indice]].x(),1.0f-m_listUV[tmpFaceList.m_faces[iii].m_uv[indice]].y());
 				// try to find it in the list :
 				bool elementFind = false;
 				for (int32_t jjj=0; jjj<m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES); jjj++) {
 					if(    m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES,jjj) == position
 					    && m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES_NORMAL,jjj) == normal
 					    && m_verticesVBO->GetOnBufferVec2(MESH_VBO_TEXTURE,jjj) == texturepos) {
-						tmpFaceList[iii].m_vertexVBOId[indice] = jjj;
+						vertexVBOId[indice] = jjj;
 						elementFind = true;
 						// stop searching ...
 						break;
@@ -311,101 +301,14 @@ void ewol::Mesh::GenerateVBO(void)
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES, position);
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL, normal);
 					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, texturepos);
-					tmpFaceList[iii].m_vertexVBOId[indice] = m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES)-1;
+					vertexVBOId[indice] = m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES)-1;
 				}
 			}
+			for(int32_t indice=0 ; indice<3; indice++) {
+				tmpFaceList.m_index.PushBack(vertexVBOId[indice]);
+			}
 		}
-		for (int32_t iii=0; iii<tmpFaceList.Size() ; iii++) {
-			m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[0]);
-			m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[1]);
-			m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[2]);
-			#ifndef PRINT_HALF
-				if (tmpFaceList[iii].m_nbElement==4) {
-					m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[0]);
-					m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[2]);
-					m_listIndexFaces.PushBack(tmpFaceList[iii].m_vertexVBOId[3]);
-				}
-			#endif
-		}
-	#else
-		// TODO : Set a better display system, this one is the worst I known ...
-		for (int32_t iii=0; iii<tmpFaceList.Size() ; iii++) {
-			#ifdef PRINT_HALF
-				m_numberOfElments += 3*3;
-			#else
-				m_numberOfElments += m_listFaces[iii].m_nbElement*3;
-			#endif
-			// 2 possibilities : triangle or quad :
-			int32_t indice = 0;
-			vec2 tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-			if(true==m_enableVertexNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-			}
-			if(true==m_enableFaceNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-			}
-			
-			indice = 1;
-			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-			if(true==m_enableVertexNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-			}
-			if(true==m_enableFaceNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-			}
-			
-			indice = 2;
-			tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-			m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-			m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-			if(true==m_enableVertexNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-			}
-			if(true==m_enableFaceNormal) {
-				m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-			}
-			#ifndef PRINT_HALF
-				if (m_listFaces[iii].m_nbElement==4) {
-					indice = 0;
-					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-					if(true==m_enableVertexNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-					}
-					if(true==m_enableFaceNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-					}
-					
-					indice = 2;
-					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-					if(true==m_enableVertexNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-					}
-					if(true==m_enableFaceNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-					}
-					
-					indice = 3;
-					tmpUV = m_listUV[m_listFaces[iii].m_uv[indice]];
-					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES,m_listVertex[m_listFaces[iii].m_vertex[indice]]);
-					m_verticesVBO->PushOnBuffer(MESH_VBO_TEXTURE, vec2(tmpUV.x(),1.0f-tmpUV.y()));
-					if(true==m_enableVertexNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL,m_listVertexNormal[m_listFaces[iii].m_vertex[indice]]);
-					}
-					if(true==m_enableFaceNormal) {
-						m_verticesVBO->PushOnBuffer(MESH_VBO_FACE_NORMAL,m_listFacesNormal[iii]);
-					}
-				}
-			#endif
-		}
-	#endif
+	}
 	// update all the VBO elements ...
 	m_verticesVBO->Flush();
 }
@@ -413,11 +316,11 @@ void ewol::Mesh::GenerateVBO(void)
 
 void ewol::Mesh::CreateCube(float size)
 {
+	m_normalMode = ewol::Mesh::normalModeNone;
 #if 0
 	m_listVertex.Clear();
 	m_listUV.Clear();
 	m_listFaces.Clear();
-	m_numberOfElments = 0;
 	// This is the direct generation basis on the .obj system
 	/*
 			           5                       6  
@@ -467,13 +370,9 @@ void ewol::Mesh::CreateCube(float size)
 #endif
 }
 
-void ewol::Mesh::CreateViewBox(float size)
+void ewol::Mesh::CreateViewBox(const etk::UString& _materialName,float _size)
 {
-#if 0
-	m_listVertex.Clear();
-	m_listUV.Clear();
-	m_listFaces.Clear();
-	m_numberOfElments = 0;
+	m_normalMode = ewol::Mesh::normalModeNone;
 	// This is the direct generation basis on the .obj system
 	/*
 			           5                       6  
@@ -499,14 +398,14 @@ void ewol::Mesh::CreateViewBox(float size)
 			     o---------------------o          
 			    0                       3         
 	*/
-	m_listVertex.PushBack(vec3( size, -size, -size)); // 0
-	m_listVertex.PushBack(vec3( size, -size,  size)); // 1
-	m_listVertex.PushBack(vec3(-size, -size,  size)); // 2
-	m_listVertex.PushBack(vec3(-size, -size, -size)); // 3
-	m_listVertex.PushBack(vec3( size,  size, -size)); // 4
-	m_listVertex.PushBack(vec3( size,  size,  size)); // 5
-	m_listVertex.PushBack(vec3(-size,  size,  size)); // 6
-	m_listVertex.PushBack(vec3(-size,  size, -size)); // 7
+	m_listVertex.PushBack(vec3( _size, -_size, -_size)); // 0
+	m_listVertex.PushBack(vec3( _size, -_size,  _size)); // 1
+	m_listVertex.PushBack(vec3(-_size, -_size,  _size)); // 2
+	m_listVertex.PushBack(vec3(-_size, -_size, -_size)); // 3
+	m_listVertex.PushBack(vec3( _size,  _size, -_size)); // 4
+	m_listVertex.PushBack(vec3( _size,  _size,  _size)); // 5
+	m_listVertex.PushBack(vec3(-_size,  _size,  _size)); // 6
+	m_listVertex.PushBack(vec3(-_size,  _size, -_size)); // 7
 	/*
 		     o----------o----------o----------o
 		     |8         |9         |10        |11
@@ -542,13 +441,26 @@ void ewol::Mesh::CreateViewBox(float size)
 	m_listUV.PushBack(vec2(2.0/3.0, 1.0    )); // 10
 	m_listUV.PushBack(vec2(1.0    , 1.0    )); // 11
 	
-	m_listFaces.PushBack(Face(0,1, 1,5,  2,6,  3,2)); // 4
-	m_listFaces.PushBack(Face(4,4, 0,0,  3,1,  7,5)); // 3
-	m_listFaces.PushBack(Face(2,6, 6,10, 7,11, 3,7)); // 2
-	m_listFaces.PushBack(Face(4,2, 7,3,  6,7,  5,6)); // 5
-	m_listFaces.PushBack(Face(1,5, 5,9,  6,10, 2,6)); // 1
-	m_listFaces.PushBack(Face(0,4, 4,8,  5,9,  1,5)); // 0
-#endif
+	if (m_listFaces.Exist(_materialName)==false) {
+		FaceIndexing empty;
+		m_listFaces.Add(_materialName, empty);
+	}
+	{
+		FaceIndexing& tmpElement = m_listFaces[_materialName];
+		tmpElement.m_faces.PushBack(Face(0,1, 1,5,  2,6)); // 4
+		tmpElement.m_faces.PushBack(Face(0,1, 2,6,  3,2)); // 4
+		tmpElement.m_faces.PushBack(Face(4,4, 0,0,  3,1)); // 3
+		tmpElement.m_faces.PushBack(Face(4,4, 3,1,  7,5)); // 3
+		tmpElement.m_faces.PushBack(Face(2,6, 6,10, 7,11)); // 2
+		tmpElement.m_faces.PushBack(Face(2,6, 7,11, 3,7)); // 2
+		tmpElement.m_faces.PushBack(Face(4,2, 7,3,  6,7)); // 5
+		tmpElement.m_faces.PushBack(Face(4,2, 6,7,  5,6)); // 5
+		tmpElement.m_faces.PushBack(Face(1,5, 5,9,  6,10)); // 1
+		tmpElement.m_faces.PushBack(Face(1,5, 6,10, 2,6)); // 1
+		tmpElement.m_faces.PushBack(Face(0,4, 4,8,  5,9)); // 0
+		tmpElement.m_faces.PushBack(Face(0,4, 5,9,  1,5)); // 0
+	}
+	CalculateNormaleFace();
 }
 
 void ewol::Mesh::Subdivide(int32_t numberOfTime, bool smooth)
@@ -816,12 +728,6 @@ void ewol::Mesh::InternalSubdivide(bool smooth)
 }
 
 
-
-void ewol::Mesh::LoadMaterial(const etk::UString& name)
-{
-	
-}
-
 void ewol::Mesh::DisplaceElement(const ewol::DisplacementTable& displacement)
 {
 #if 0
@@ -864,6 +770,7 @@ void ewol::Mesh::DisplaceElement(const ewol::DisplacementTable& displacement)
 
 bool ewol::Mesh::LoadOBJ(const etk::UString& _fileName)
 {
+	m_normalMode = ewol::Mesh::normalModeNone;
 #if 0
 	etk::FSNode fileName(_fileName);
 	// Get the fileSize ...
@@ -1036,6 +943,7 @@ char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, boo
 
 bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 {
+	m_normalMode = ewol::Mesh::normalModeNone;
 	etk::FSNode fileName(_fileName);
 	// Get the fileSize ...
 	int32_t size = fileName.FileSize();
@@ -1112,6 +1020,7 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 					continue;
 				}
 				if( 0 == strncmp(inputDataLine, "\tNormal(vertex) : ", 18) ) {
+					m_normalMode = ewol::Mesh::normalModeVertex;
 					// find the vertex Normal list.
 					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
 						if (inputDataLine[0] == '\0') {
@@ -1125,6 +1034,7 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 					continue;
 				}
 				if( 0 == strncmp(inputDataLine, "\tNormal(face) : ", 16) ) {
+					m_normalMode = ewol::Mesh::normalModeFace;
 					// find the face Normal list.
 					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
 						if (inputDataLine[0] == '\0') {
@@ -1150,7 +1060,7 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 							// find the material :
 							inputDataLine[len-1] = '\0';
 							etk::UString materialName = inputDataLine;
-							etk::Vector<Face> empty;
+							FaceIndexing empty;
 							m_listFaces.Add(materialName, empty);
 							elementID = m_listFaces.GetId(materialName);
 						} else {
@@ -1172,9 +1082,9 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 							                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
 							                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
 							                 &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-							m_listFaces.GetValue(elementID).PushBack(Face(vertexIndex[0], uvIndex[0],
-							                                              vertexIndex[1], uvIndex[1],
-							                                              vertexIndex[2], uvIndex[2]));
+							m_listFaces.GetValue(elementID).m_faces.PushBack(Face(vertexIndex[0], uvIndex[0], normalIndex[0],
+							                                                      vertexIndex[1], uvIndex[1], normalIndex[1],
+							                                                      vertexIndex[2], uvIndex[2], normalIndex[2]));
 							/*
 							EWOL_DEBUG("face :" << vertexIndex[0] << "/" << uvIndex[0] << "/" << normalIndex[0] <<
 							           " " << vertexIndex[1] << "/" << uvIndex[1] << "/" << normalIndex[1] <<
@@ -1184,7 +1094,7 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 					}
 					EWOL_DEBUG("Load " << m_listFaces.Size() << " faces (mode) :");
 					for (esize_t iii=0; iii< m_listFaces.Size(); iii++) {
-						EWOL_DEBUG("    mat='" << m_listFaces.GetKey(iii) << "' nb faces=" << m_listFaces.GetValue(iii).Size());
+						EWOL_DEBUG("    mat='" << m_listFaces.GetKey(iii) << "' nb faces=" << m_listFaces.GetValue(iii).m_faces.Size());
 					}
 					break;
 				}
@@ -1288,40 +1198,24 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 			}
 			continue;
 		}
-		
-/* exemple of file
-EMF(STRING)
-# Blender v2.66 (sub 1) EMF File: 'station.blend'
-Mesh : 1
-	Name : MainControl_mesh
-	Vertex : 174
-		0.500000 0.015097 -1.170499|-1.003113 0.010738 -1.000184|1.003173 0.013001 -0.998027|
-	UV-mapping :
-		0.964431 0.766844|0.939031 0.811940|1.050593 0.813877|0.815493 0.602993|0.783793 0.520610|
-	Normal(face) : 344
-		0.310313 -0.276298 0.909596|-0.426055 -0.318865 0.846642|-0.915346 -0.402637 -0.004953|
-	Face : 344
-		Material: 23/1/1 9/2/1 2/3/1| 18/4/2 20/5/2 1/6/2| 18/4/3 1/6/3 5/7/3| 
-
-Materials : 1
-	Material
-		Ns 96.078431
-		Ka 0.000000 0.000000 0.000000
-		Kd 0.640000 0.640000 0.640000
-		Ks 0.500000 0.500000 0.500000
-		Ni 1.000000
-		d 1.000000
-		illum 2
-		map_Kd station.png
-
-- Ka - material ambient is multiplied by the texture value
-- Kd - material diffuse is multiplied by the texture value
-- Ks - material specular is multiplied by the texture value
-- Ns - material specular exponent is multiplied by the texture value
-- d - material dissolve is multiplied by the texture value
-*/
 	}
 	fileName.FileClose();
 	GenerateVBO();
 	return true;
+}
+
+
+
+void ewol::Mesh::AddMaterial(const etk::UString& _name, ewol::Material* _data)
+{
+	if (NULL==_data) {
+		EWOL_ERROR(" can not add material with null pointer");
+		return;
+	}
+	if (_name=="") {
+		EWOL_ERROR(" can not add material with no name");
+		return;
+	}
+	// really add the material :
+	m_materials.Add(_name, _data);
 }

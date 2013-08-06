@@ -22,6 +22,7 @@ namespace ewol
 		private:
 			vec2 m_realImageSize;
 		public:
+			TextureFile(const etk::UString& _genName);
 			TextureFile(etk::UString _genName, const etk::UString& _fileName, const ivec2& _size);
 			~TextureFile(void) { };
 			virtual const char* GetType(void) { return "ewol::TextureFile"; };
