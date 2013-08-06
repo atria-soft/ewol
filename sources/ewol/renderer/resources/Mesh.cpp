@@ -259,6 +259,7 @@ void ewol::Mesh::CalculateNormaleEdge(void)
 
 // for debugging ...
 //#define PRINT_HALF (1)
+//#define TRY_MINIMAL_VBO
 
 void ewol::Mesh::GenerateVBO(void)
 {
@@ -273,7 +274,9 @@ void ewol::Mesh::GenerateVBO(void)
 	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
 		// clean faces indexes :
 		m_listFaces.GetValue(kkk).m_index.Clear();
-		int64_t tmpppppp=0;
+		#ifdef TRY_MINIMAL_VBO
+			int64_t tmpppppp=0;
+		#endif
 		FaceIndexing& tmpFaceList = m_listFaces.GetValue(kkk);
 		for (int32_t iii=0; iii<tmpFaceList.m_faces.Size() ; iii++) {
 			int32_t vertexVBOId[3];
@@ -288,6 +291,7 @@ void ewol::Mesh::GenerateVBO(void)
 				vec2 texturepos(m_listUV[tmpFaceList.m_faces[iii].m_uv[indice]].x(),1.0f-m_listUV[tmpFaceList.m_faces[iii].m_uv[indice]].y());
 				// try to find it in the list :
 				bool elementFind = false;
+				#ifdef TRY_MINIMAL_VBO
 				for (int32_t jjj=0; jjj<m_verticesVBO->SizeOnBufferVec3(MESH_VBO_VERTICES); jjj++) {
 					if(    m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES,jjj) == position
 					    && m_verticesVBO->GetOnBufferVec3(MESH_VBO_VERTICES_NORMAL,jjj) == normal
@@ -300,6 +304,7 @@ void ewol::Mesh::GenerateVBO(void)
 						break;
 					}
 				}
+				#endif
 				if (false == elementFind) {
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES, position);
 					m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL, normal);
@@ -311,7 +316,9 @@ void ewol::Mesh::GenerateVBO(void)
 				tmpFaceList.m_index.PushBack(vertexVBOId[indice]);
 			}
 		}
-		EWOL_DEBUG("nb cycle ? : " << tmpppppp);
+		#ifdef TRY_MINIMAL_VBO
+			EWOL_DEBUG("nb cycle ? : " << tmpppppp);
+		#endif
 	}
 	// update all the VBO elements ...
 	m_verticesVBO->Flush();
