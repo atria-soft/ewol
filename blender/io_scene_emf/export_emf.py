@@ -6,6 +6,235 @@ import bpy
 import mathutils
 import bpy_extras.io_utils
 
+"""
+bl_info = {
+	"name": "Export Physics Shapes (.yaml)",
+	"author": "Stuart Denman",
+	"version": (1, 0),
+	"blender": (2, 5, 7),
+#	"api": 35622,
+	"location": "File > Export",
+	"description": "Export physics shapes under the selected empty named 'physics'.",
+	"warning": "",
+	"wiki_url": "",
+	"tracker_url": "",
+	"category": "Import-Export"}
+
+'''
+Usage Notes:
+To create a compound physics collision shape for a mesh in blender:
+
+1. place the 3D cursor at the origin of the mesh object.
+2. Add > Empty, name it "physics"
+3. Create a physics shape with Add > Mesh > Cube, UV Sphere, Cylinder, Cone or create an arbitrary mesh for a ConvexHull shape.
+4. Parent the new shape to the "physics" Empty.
+5. The mesh name must start with: Box, Sphere, Cylinder, Cone, Capsule, or ConvexHull, depending on the shape you want.
+6. Position and scale the shape object, but do not modify the internal vertices, unless it is a ConvexHull type.
+7. Repeat step 3-6 until your shape is complete. Shapes can only be a 1-level deep hierarchy.
+8. IMPORTANT: Select the empty object you named "physics"
+9. Click File > Export > Physics Shapes (.yaml)
+'''
+
+import bpy
+from bpy.props import *
+import mathutils, math, struct
+from mathutils import *
+import os
+from os import remove
+import time
+import bpy_extras
+from bpy_extras.io_utils import ExportHelper 
+import time
+import shutil
+
+
+# Methods for writing point, scale, and quaternion types to a YAML file.
+# This particular implementation converts values to a Y-up coordinate system.
+def out_point3_y_up( v ):
+	return "[%g,%g,%g]" % ( v.x, v.z, -v.y )
+def out_scale3_y_up( s ):
+	return "[%g,%g,%g]" % ( s.x, s.z, s.y )
+def out_quaternion_y_up( q ):
+	return "[%g,%g,%g,%g]" % ( q.w, q.x, q.z, -q.y )
+# This implementation maintains blender's Z-up coordinate system.
+def out_point3_z_up( v ):
+	return "[%g,%g,%g]" % ( v.x, v.y, v.z )
+def out_scale3_z_up( s ):
+	return "[%g,%g,%g]" % ( s.x, s.y, s.z )
+def out_quaternion_z_up( q ):
+	return "[%g,%g,%g,%g]" % ( q.w, q.x, q.y, q.z )
+
+
+
+def getPhysicsShape( obj, use_y_up ):
+	shape = ""
+	props = { }
+	name = obj.name.lower()
+	scale = Vector(( abs(obj.scale.x), abs(obj.scale.y), abs(obj.scale.z) ))
+
+	if use_y_up:
+		out_point3 = out_point3_y_up
+		out_scale3 = out_scale3_y_up
+		out_quaternion = out_quaternion_y_up
+	else:
+		out_point3 = out_point3_z_up
+		out_scale3 = out_scale3_z_up
+		out_quaternion = out_quaternion_z_up	
+	
+	# BOX
+	if name.startswith('box'):
+		shape = "Box"
+		props["half-extents"] = out_scale3( scale )
+	# SPHERE
+	elif name.startswith('sph'):
+		shape = "Sphere"
+		props["radius"] = obj.scale.x
+	# CONE
+	elif name.startswith('cone'):
+		shape = "Cone"
+		props["radius"] = obj.scale.x
+		props["height"] = obj.scale.z * 2.0
+	# CYLINDER
+	elif name.startswith('cyl'):
+		shape = "Cylinder"
+		props["half-extents"] = out_scale3( scale )
+	# CAPSULE
+	elif name.startswith('cap'):
+		shape = "Capsule"
+		props["radius"] = obj.scale.x
+		props["height"] = obj.scale.z
+	# CONVEX-HULL
+	elif name.startswith('convex'):
+		shape = "ConvexHull"
+		mesh = obj.to_mesh( bpy.context.scene, True, 'PREVIEW' )
+		props["points"] = "\n"
+		for v in mesh.vertices:
+			props["points"] += "    - " + out_point3( v.co ) + "\n"
+		props["points"] = props["points"].rstrip("\n")
+		if scale != Vector((1,1,1)):
+			props["scale"] = out_scale3( scale )
+		# remove mesh
+	
+	if obj.location != Vector((0,0,0)):
+		props["origin"] = out_point3( obj.location )
+	if obj.rotation_mode == 'QUATERNION':
+		qrot = obj.rotation_quaternion
+	else:
+		qrot = obj.matrix_local.to_quaternion()
+	if qrot != Quaternion((1,0,0,0)):
+		props["rotate"] = out_quaternion( qrot )
+	
+	return (shape, props)
+
+
+###### EXPORT OPERATOR #######
+class ExportPhysicsShape(bpy.types.Operator, ExportHelper):
+	'''Export physics shapes under the selected empty named "physics".'''
+	bl_idname = "object.export_physics"
+	bl_label = "Export Physics Shapes"
+	
+	filename_file = ""
+	filename_ext = ".yaml"
+	
+	filter_glob = StringProperty(default="*.yaml", options={'HIDDEN'})
+	
+	append_to_existing = BoolProperty(name="Append To Existing File",
+							description="Appends the physics shapes to an existing file",
+							default=True)
+	
+	use_y_up = BoolProperty(name="Convert To Y-Up",
+							description="Converts the values to a Y-Axis Up coordinate system",
+							default=True)
+
+	object_name = StringProperty(name="Root Name",
+							description="The top-level name that will contain the physics shapes",
+							default="StaticMesh/object" )
+
+
+	@classmethod
+	def poll(cls, context):
+		return context.active_object.type in ['EMPTY'] and context.active_object.name == 'physics'
+
+	def execute(self, context):
+		filepath = self.filepath
+		filepath = bpy.path.ensure_ext(filepath, self.filename_ext)
+		ob_base = context.active_object
+
+		out = open( filepath, ["w","a"][self.append_to_existing] )
+		out.write( self.object_name + ":\n" )
+		out.write( "  physics:\n" )
+		
+		for c in ob_base.children:
+			if c.type != 'MESH':
+				continue
+			(shape, props) = getPhysicsShape( c, self.use_y_up )
+			out.write( "  - shape: " + shape + "\n" )
+			for (k,v) in props.items():
+				out.write( "    %s: %s\n" % (k, v) )
+				
+		out.close();	
+		self.report( {'INFO'}, "Export succeeded!" )
+		return {'FINISHED'}
+
+	def invoke(self, context, event):
+		wm = context.window_manager
+
+		# change the default object name to use the current .blend filename
+		name = bpy.path.display_name_from_filepath(bpy.data.filepath)
+		self.object_name = "StaticMesh/" + name
+		self.filepath = name
+
+		if True:
+			# File selector
+			wm.fileselect_add(self) # will run self.execute()
+			return {'RUNNING_MODAL'}
+		elif True:
+			# search the enum
+			wm.invoke_search_popup(self)
+			return {'RUNNING_MODAL'}
+		elif False:
+			# Redo popup
+			return wm.invoke_props_popup(self, event) #
+		elif False:
+			return self.execute(context)
+
+"""
+
+
+def getPhysicsShape(obj):
+	name = obj.name.lower()
+	# BOX
+	if name.startswith('box'):
+		shape = "Box"
+	# SPHERE
+	elif name.startswith('sph'):
+		shape = "Sphere"
+	# CONE
+	elif name.startswith('cone'):
+		shape = "Cone"
+	# CYLINDER
+	elif name.startswith('cyl'):
+		shape = "Cylinder"
+	# CAPSULE
+	elif name.startswith('cap'):
+		shape = "Capsule"
+	# CONVEX-HULL
+	elif name.startswith('convex'):
+		shape = "ConvexHull"
+	
+	print("find a '%s'" % shape)
+
+def writeCollisionShape(object, file, collisionName):
+	print("need write collision Shape ... \n")
+	fw = file.write
+	fw('\nCollisions shapes :\n')
+	fw('\t\n')
+	for c in object.children:
+		if c.type != 'MESH':
+			continue
+		getPhysicsShape( c )
+
+
 
 def name_compat(name):
 	if name is None:
@@ -98,10 +327,11 @@ def write_mtl(scene, file, filepath, path_mode, copy_set, mtl_dict):
 					image = mtex.texture.image
 					if image:
 						# texface overrides others
-						if	  (mtex.use_map_color_diffuse and
-								(face_img is None) and
-								(mtex.use_map_warp is False) and
-								(mtex.texture_coords != 'REFLECTION')):
+						if(     mtex.use_map_color_diffuse
+						    and (face_img is None)
+						    and (mtex.use_map_warp is False)
+						    and (mtex.texture_coords != 'REFLECTION')
+						   ):
 							image_map["map_Kd"] = image
 						if mtex.use_map_ambient:
 							image_map["map_Ka"] = image
@@ -141,6 +371,8 @@ def write_file(filepath,
                scene,
                EXPORT_GLOBAL_MATRIX=None,
                EXPORT_PATH_MODE='AUTO',
+               EXPORT_BINARY_MODE=False,
+               EXPORT_COLLISION_NAME="",
                ):
 	if EXPORT_GLOBAL_MATRIX is None:
 		EXPORT_GLOBAL_MATRIX = mathutils.Matrix()
@@ -183,6 +415,10 @@ def write_file(filepath,
 	
 	# Get all meshes
 	for ob_main in objects:
+		print("object : '%s'" % str(ob_main))
+		#print("name : '%s'" % ob_main.name)
+		#for plop in ob_main.child:
+		#	print("    child : '%s'" % plop.name)
 		# ignore dupli children
 		if ob_main.parent and ob_main.parent.dupli_type in {'VERTS', 'FACES'}:
 			# XXX
@@ -411,12 +647,19 @@ def write_file(filepath,
 		if ob_main.dupli_type != 'NONE':
 			ob_main.dupli_list_clear()
 	
-	###########################################################
-	## Now we have all our materials, save them
-	## material generation :
-	###########################################################
+	#####################################################################
+	## Now we have all our materials, save them in the material section
+	#####################################################################
 	write_mtl(scene, file, mtlfilepath, EXPORT_PATH_MODE, copy_set, mtl_dict)
+	#####################################################################
+	## Save collision shapes :
+	#####################################################################
+	#	writeCollisionShape(ob_main, file, EXPORT_COLLISION_NAME)
+	writeCollisionShape(objects, file, EXPORT_COLLISION_NAME)
 	
+	#####################################################################
+	## End of the file generation:
+	#####################################################################
 	file.close()
 	
 	# copy all collected files.
@@ -424,17 +667,28 @@ def write_file(filepath,
 	
 	print("EMF Export time: %.2f" % (time.time() - time1))
 
+def getChildren(obj, allObj):
+	children = []
+	for ob in allObj:
+		if ob.parent == obj:
+			children.append(ob)
+	if len(children) != 0:
+		return children
+	else:
+		return None
 
 """
  " @brief generate the requested object file ... with his material inside and ...
  " 
 """
 def _write(context,
-		   filepath,
-		   EXPORT_SEL_ONLY,
-		   EXPORT_GLOBAL_MATRIX,
-		   EXPORT_PATH_MODE,
-		   ):
+           filepath,
+           EXPORT_SEL_ONLY,
+           EXPORT_GLOBAL_MATRIX,
+           EXPORT_PATH_MODE,
+           EXPORT_BINARY_MODE,
+           EXPORT_COLLISION_NAME,
+           ):
 	# 
 	base_name, ext = os.path.splitext(filepath)
 	# create the output name : 
@@ -456,11 +710,18 @@ def _write(context,
 	
 	full_path = ''.join(context_name)
 	
+	for objj in objects:
+		print("Object : '%s'" % (objj.name))
+		for subObj in getChildren(objj, scene.objects):
+			print("     find subObject : '%s'" % (subObj.name))
+	
 	write_file(full_path,
 	           objects,
 	           scene,
 	           EXPORT_GLOBAL_MATRIX,
 	           EXPORT_PATH_MODE,
+	           EXPORT_BINARY_MODE,
+	           EXPORT_COLLISION_NAME,
 	           )
 	
 
@@ -474,6 +735,7 @@ def save(operator,
          filepath="",
          use_selection=True,
          use_binary=False,
+         collision_object_name="",
          global_matrix=None,
          path_mode='AUTO'
          ):
@@ -482,6 +744,8 @@ def save(operator,
 	       EXPORT_SEL_ONLY=use_selection,
 	       EXPORT_GLOBAL_MATRIX=global_matrix,
 	       EXPORT_PATH_MODE=path_mode,
+	       EXPORT_BINARY_MODE=use_binary,
+	       EXPORT_COLLISION_NAME=collision_object_name,
 	       )
 	
 	return {'FINISHED'}
