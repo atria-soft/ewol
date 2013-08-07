@@ -715,6 +715,18 @@ def _write(context,
 		for subObj in getChildren(objj, scene.objects):
 			print("     find subObject : '%s'" % (subObj.name))
 	
+	#print("-----------------------------------------------------------------------")
+	#print("Display object game property : ")
+	#for objj in objects:
+	#	print("    Object : '%s' : %s" % (objj.name, str(objj.game)))
+	#	for element
+	#	print("         actor : '%s'" % str(objj.game.use_actor))
+	#	print("         type : '%s'" % str(objj.game.collision_bounds_type))
+	#	print("         physique : '%s'" % str(objj.game.physics_type))
+	#print("-----------------------------------------------------------------------")
+	#print("plop:%s" % (str(dir(bpy.data.objects["Cube"].game)))
+	#result : plop:['__doc__', '__module__', '__slots__', 'actuators', 'bl_rna', 'collision_bounds_type', 'collision_group', 'collision_margin', 'collision_mask', 'controllers', 'damping', 'fall_speed', 'form_factor', 'friction_coefficients', 'jump_speed', 'lock_location_x', 'lock_location_y', 'lock_location_z', 'lock_rotation_x', 'lock_rotation_y', 'lock_rotation_z', 'mass', 'obstacle_radius', 'physics_type', 'properties', 'radius', 'rna_type', 'rotation_damping', 'sensors', 'show_actuators', 'show_controllers', 'show_debug_state', 'show_sensors', 'show_state_panel', 'soft_body', 'states_initial', 'states_visible', 'step_height', 'use_activity_culling', 'use_actor', 'use_all_states', 'use_anisotropic_friction', 'use_collision_bounds', 'use_collision_compound', 'use_ghost', 'use_material_physics_fh', 'use_obstacle_create', 'use_rotate_from_normal', 'use_sleep', 'used_states', 'velocity_max', 'velocity_min']
+	
 	write_file(full_path,
 	           objects,
 	           scene,
