@@ -210,7 +210,7 @@ class ExportEMF(bpy.types.Operator, ExportHelper):
 	collision_object_name = StringProperty(
 	    name="Collision root name",
 	    description="The top-level name that will contain the physics shapes",
-	    default="StaticMesh/object"
+	    default="physic"
 	    )
 	
 	axis_forward = EnumProperty(

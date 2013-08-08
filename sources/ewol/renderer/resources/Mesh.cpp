@@ -70,12 +70,6 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	// get the shader resource :
 	m_GLPosition = 0;
 	
-	// set the element material properties : 
-	//m_material.SetAmbientFactor(vec4(0.100000,0.100000,0.100000, 1.0));
-	//m_material.SetDiffuseFactor(vec4(0.640000, 0.640000, 0.640000, 1.0));
-	//m_material.SetSpecularFactor(vec4(0.500000, 0.500000, 0.500000, 1.0));
-	//m_material.SetShininess(0.96078431);
-	
 	m_light.SetDirection(vec3(0,cos(M_PI/4),sin(M_PI/4)));
 	m_light.SetHalfPlane(vec3(1,0,0));
 	m_light.SetAmbientColor(vec4(1,1,1,1));
