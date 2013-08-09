@@ -184,8 +184,6 @@ namespace ewol
 		public:
 			// some addition basic funtion that permit to create or overwrite some caracterstics :
 			void SetTexture(const etk::UString& myTexture);
-		protected:
-			void InternalSubdivide(bool smooth);
 		private:
 			void CalculateNormaleFace(void);
 			void CalculateNormaleEdge(void);
@@ -193,10 +191,7 @@ namespace ewol
 			 * Element modification area :
 			 */
 		public :
-			void CreateCube(float size=1.0);
 			void CreateViewBox(const etk::UString& _materialName,float _size=1.0);
-			void Subdivide(int32_t numberOfTime, bool smooth);
-			void DisplaceElement(const ewol::DisplacementTable& displacement);
 		private:
 			bool LoadOBJ(const etk::UString& _fileName);
 			bool LoadEMF(const etk::UString& _fileName);

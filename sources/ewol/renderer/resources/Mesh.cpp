@@ -319,62 +319,6 @@ void ewol::Mesh::GenerateVBO(void)
 }
 
 
-void ewol::Mesh::CreateCube(float size)
-{
-	m_normalMode = ewol::Mesh::normalModeNone;
-#if 0
-	m_listVertex.Clear();
-	m_listUV.Clear();
-	m_listFaces.Clear();
-	// This is the direct generation basis on the .obj system
-	/*
-			           5                       6  
-			            o---------------------o   
-			           /.                    /|   
-			          / .                   / |   
-			         /  .                  /  |   
-			        /   .                 /   |   
-			       /    .                /    |   
-			    4 /     .               /     |   
-			     o---------------------o      |   
-			     |      .              |7     |   
-			     |      .              |      |   
-			     |      .              |      |   
-			     |      .              |      |   
-			     |      o..............|......o   
-			     |     . 1             |     / 2  
-			     |    .                |    /     
-			     |   .                 |   /      
-			     |  .                  |  /       
-			     | .                   | /        
-			     |.                    |/         
-			     o---------------------o          
-			    0                       3         
-	*/
-	m_listVertex.PushBack(vec3( size, -size, -size)); // 0
-	m_listVertex.PushBack(vec3( size, -size,  size)); // 1
-	m_listVertex.PushBack(vec3(-size, -size,  size)); // 2
-	m_listVertex.PushBack(vec3(-size, -size, -size)); // 3
-	m_listVertex.PushBack(vec3( size,  size, -size)); // 4
-	m_listVertex.PushBack(vec3( size,  size,  size)); // 5
-	m_listVertex.PushBack(vec3(-size,  size,  size)); // 6
-	m_listVertex.PushBack(vec3(-size,  size, -size)); // 7
-	
-	m_listUV.PushBack(vec2(0.0, 0.0));
-	m_listUV.PushBack(vec2(1.0, 0.0));
-	m_listUV.PushBack(vec2(1.0, 1.0));
-	m_listUV.PushBack(vec2(0.0, 1.0));
-	
-	
-	m_listFaces.PushBack(Face(0,0, 1,1, 2,2, 3,3));
-	m_listFaces.PushBack(Face(4,0, 0,1, 3,2, 7,3));
-	m_listFaces.PushBack(Face(2,0, 6,1, 7,2, 3,3));
-	m_listFaces.PushBack(Face(4,0, 7,1, 6,2, 5,3));
-	m_listFaces.PushBack(Face(1,0, 5,1, 6,2, 2,3));
-	m_listFaces.PushBack(Face(0,0, 4,1, 5,2, 1,3));
-#endif
-}
-
 void ewol::Mesh::CreateViewBox(const etk::UString& _materialName,float _size)
 {
 	m_normalMode = ewol::Mesh::normalModeNone;
@@ -466,310 +410,6 @@ void ewol::Mesh::CreateViewBox(const etk::UString& _materialName,float _size)
 		tmpElement.m_faces.PushBack(Face(0,4, 5,9,  1,5)); // 0
 	}
 	CalculateNormaleFace();
-}
-
-void ewol::Mesh::Subdivide(int32_t numberOfTime, bool smooth)
-{
-#if 0
-	for(int32_t iii=0; iii<numberOfTime ; iii++) {
-		InternalSubdivide(smooth);
-	}
-#endif
-}
-
-int32_t CreateOrGetNewPointId(vertex_te type, const vec3& point, etk::Vector<VertexNode*>& list)
-{
-#if 0
-	for (int32_t iii=0; iii<list.Size(); iii++) {
-		if (list[iii]->GetPos() == point) {
-			return iii;
-		}
-	}
-	VertexNode* tmpElement = new VertexNode(type, point);
-	if (NULL==tmpElement) {
-		EWOL_CRITICAL ("allocation error");
-	}
-	list.PushBack(tmpElement);
-	return list.Size()-1;
-#else
-	return 0;
-#endif
-}
-
-int32_t CreateOrGetNewTexId(const vec2& point, etk::Vector<vec2>& list)
-{
-#if 0
-	for (int32_t iii=0; iii<list.Size(); iii++) {
-		if (list[iii] == point) {
-			return iii;
-		}
-	}
-	list.PushBack(point);
-	return list.Size()-1;
-#else
-	return 0;
-#endif
-}
-
-void ewol::Mesh::InternalSubdivide(bool smooth)
-{
-#if 0
-	//Copy the mesh for modify this one and not his parrent (that one is needed for smoothing)
-	etk::Vector<VertexNode*> listVertex;
-	for(int32_t iii=0; iii<m_listVertex.Size(); iii++) {
-		VertexNode* tmpElement = new VertexNode(VERTEX_OLD, m_listVertex[iii]);
-		listVertex.PushBack(tmpElement);
-	}
-	etk::Vector<vec2> listUV(m_listUV);
-	etk::Vector<Face> listFaces; // no face here ...
-	etk::Vector<int32_t> listElementHalfPoint(16);// preallocate at 16..
-	etk::Vector<int32_t> listElementHalfUV(16);// preallocate at 16..
-	
-	for (int32_t iii=0; iii<m_listFaces.Size() ; iii++) {
-		vec3 centerPoint;
-		vec2 centerTex;
-		if (3==m_listFaces[iii].m_nbElement) {
-			// create the center point:
-			centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[1]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[2]] ) / vec3(3,3,3);
-			// create the center Texture coord:
-			centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
-			              + listUV[m_listFaces[iii].m_uv[1]]
-			              + listUV[m_listFaces[iii].m_uv[2]] ) / vec2(3,3);
-			/*
-			                                                         
-			                o                          o             
-			               / \                        / \            
-			              /   \                      /   \           
-			             /     \                    /     \          
-			            /       \                  /       \         
-			           /         \       ==>      o..     ..o        
-			          /           \              /   ''o''   \       
-			         /             \            /      |      \      
-			        /               \          /       |       \     
-			       /                 \        /        |        \    
-			      o-------------------o      o---------o---------o   
-			                                                         
-			*/
-		} else {
-			// create the center point:
-			centerPoint = (   m_listVertex[m_listFaces[iii].m_vertex[0]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[1]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[2]]
-			                + m_listVertex[m_listFaces[iii].m_vertex[3]] ) / vec3(4,4,4);
-			// create the center Texture coord:
-			centerTex = (   listUV[m_listFaces[iii].m_uv[0]]
-			              + listUV[m_listFaces[iii].m_uv[1]]
-			              + listUV[m_listFaces[iii].m_uv[2]]
-			              + listUV[m_listFaces[iii].m_uv[3]] ) / vec2(4,4);
-			/*
-			                                                              
-			     o---------------------o         o----------o----------o  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |   ==>   o----------o----------o  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     |                     |         |          |          |  
-			     o---------------------o         o----------o----------o  
-			                                                              
-			*/
-		}
-		
-		int32_t newCenterVertexID = CreateOrGetNewPointId(VERTEX_CENTER_FACE, centerPoint, listVertex);
-		int32_t newCenterTexID = CreateOrGetNewTexId(centerTex, listUV);
-		
-		listElementHalfPoint.Clear();
-		listElementHalfUV.Clear();
-		// generate list f the forder elements
-		for (int32_t jjj=0; jjj<m_listFaces[iii].m_nbElement ; jjj++) {
-			// for the last element finding at the good position...
-			int32_t cyclicID = (jjj+1) % m_listFaces[iii].m_nbElement;
-			
-			listElementHalfPoint.PushBack(m_listFaces[iii].m_vertex[jjj]);
-			listElementHalfUV.PushBack(m_listFaces[iii].m_uv[jjj]);
-			// calculate and add middle point : 
-			vec3 middlePoint = (   m_listVertex[m_listFaces[iii].m_vertex[jjj]]
-			                     + m_listVertex[m_listFaces[iii].m_vertex[cyclicID]] ) / 2.0f;
-			int32_t newMiddleVertexID = CreateOrGetNewPointId(VERTEX_CERTER_EDGE, middlePoint, listVertex);
-			if (true==smooth) {
-				// add center : at the middle point
-				listVertex[newMiddleVertexID]->AddLink(newCenterVertexID);
-				// add center of edge end face at the old element point :
-				listVertex[m_listFaces[iii].m_vertex[jjj]]->AddLink(newCenterVertexID);
-				listVertex[m_listFaces[iii].m_vertex[jjj]]->AddLink(newMiddleVertexID);
-				listVertex[m_listFaces[iii].m_vertex[cyclicID]]->AddLink(newCenterVertexID);
-				listVertex[m_listFaces[iii].m_vertex[cyclicID]]->AddLink(newMiddleVertexID);
-			}
-			// list of all middle point to recontitute the faces
-			listElementHalfPoint.PushBack(newMiddleVertexID);
-			// create the center Texture coord:
-			vec2 middleTex = (   listUV[m_listFaces[iii].m_uv[jjj]]
-			                   + listUV[m_listFaces[iii].m_uv[cyclicID]]) / 2.0f;
-			int32_t newMiddleTexID = CreateOrGetNewTexId(middleTex, listUV);
-			listElementHalfUV.PushBack(newMiddleTexID);
-		}
-		// generate faces:
-		//EWOL_DEBUG(" ==> Generatedd faces");
-		for (int32_t jjj=0; jjj<listElementHalfPoint.Size() ; jjj+=2) {
-			int32_t cyclicID = (jjj-1 + listElementHalfPoint.Size()) % listElementHalfPoint.Size();
-			listFaces.PushBack(Face(listElementHalfPoint[jjj], listElementHalfUV[jjj],
-			                        listElementHalfPoint[jjj+1], listElementHalfUV[jjj+1],
-			                        newCenterVertexID, newCenterTexID,
-			                        listElementHalfPoint[cyclicID], listElementHalfUV[cyclicID]) );
-		}
-	}
-	if (true==smooth) {
-		//EWOL_DEBUG(" ==> Update middle edge points position");
-		// reposition the Middle point of the edge
-		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
-			if(NULL == listVertex[iii]) {
-				continue;
-			}
-			if (VERTEX_CERTER_EDGE == listVertex[iii]->GetType()) {
-				// generate barycenter of all link point if > 1...
-				etk::Vector<int32_t>& link = listVertex[iii]->GetLink();
-				if (1<link.Size()) {
-					int32_t nbDivide = 1;
-					vec3 posBase = listVertex[iii]->GetPos();
-					for(int32_t jjj=0; jjj<link.Size(); jjj++) {
-						if (link[jjj] >= listVertex.Size()) {
-							EWOL_ERROR("Id is out of bounds ... : " << iii << " link=" << link[jjj] << " / " << listVertex.Size());
-							continue;
-						}
-						if(NULL == listVertex[link[jjj]]) {
-							continue;
-						}
-						if (VERTEX_CENTER_FACE != listVertex[link[jjj]]->GetType()) {
-							EWOL_ERROR("Center face error type ..." << (int32_t)listVertex[link[jjj]]->GetType());
-							continue;
-						}
-						nbDivide++;
-						posBase += listVertex[link[jjj]]->GetPos();
-					}
-					posBase /= nbDivide;
-					// update the position :
-					listVertex[iii]->SetPos(posBase);
-				}
-			}
-		}
-		//EWOL_DEBUG(" ==> Update old points position");
-		/*
-		   Formule de calcule : 
-		      - calculate F the barycenter of k Face center nearest
-		      - Calculate R the barycenter of k Edge point nearest
-		      - Move P with equation :     F + 2R + (k-3)P 
-		                                  -----------------
-		                                           k
-		*/
-		// reposition the old pont of the system
-		for(int32_t iii=0; iii<listVertex.Size(); iii++) {
-			if(    NULL != listVertex[iii]
-			    && VERTEX_OLD == listVertex[iii]->GetType()) {
-				vec3 val_P = listVertex[iii]->GetPos();
-				vec3 val_F(0,0,0);
-				vec3 val_R(0,0,0);
-				int32_t countFace = 0;
-				int32_t countEdge = 0;
-				// generate barycenter of all link point if > 1...
-				etk::Vector<int32_t>& link = listVertex[iii]->GetLink();
-				for(int32_t jjj=0; jjj<link.Size(); jjj++) {
-					if (link[jjj] >= listVertex.Size()) {
-						EWOL_ERROR("Id is out of bounds ... : " << iii << " link=" << link[jjj] << " / " << listVertex.Size());
-						continue;
-					}
-					if(NULL == listVertex[link[jjj]]) {
-						continue;
-					}
-					if (VERTEX_OLD == listVertex[link[jjj]]->GetType()) {
-						EWOL_ERROR("Center face error type ... old???");
-						continue;
-					}
-					if (VERTEX_CENTER_FACE == listVertex[link[jjj]]->GetType()) {
-						countFace++;
-						val_F += listVertex[link[jjj]]->GetPos();
-					} else {
-						countEdge++;
-						val_R += listVertex[link[jjj]]->GetPos();
-					}
-				}
-				val_F /= countFace;
-				val_R /= countEdge;
-				if (countFace != countEdge) {
-					EWOL_WARNING("Case not coded, result not predictible ...");
-				} else {
-					vec3 newPos = (val_F + 2*val_R + (countFace-3)*val_P)/countFace;
-					/*
-					if (newPos != val_P) {
-						EWOL_DEBUG("update position : " << newPos << " <== " << val_P << " count=" << countFace);
-					}
-					*/
-					// update the position :
-					listVertex[iii]->SetPos(newPos);
-				}
-			}
-		}
-	}
-	//EWOL_DEBUG(" ==> Back to the normal list of element:");
-	// copy all the element in the internal structure : 
-	m_listUV = listUV;
-	m_listFaces = listFaces;
-	m_listVertex.Clear();
-	for(int32_t iii=0; iii<listVertex.Size(); iii++) {
-		if (NULL != listVertex[iii]) {
-			m_listVertex.PushBack(listVertex[iii]->GetPos());
-			delete(listVertex[iii]);
-			listVertex[iii] = NULL;
-		}
-	}
-	listVertex.Clear();
-#endif
-}
-
-
-void ewol::Mesh::DisplaceElement(const ewol::DisplacementTable& displacement)
-{
-#if 0
-	CalculateNormaleFace();
-	CalculateNormaleEdge();
-	// displacement is done from the center of the element:
-	for (int32_t iii=0; iii<m_listVertex.Size(); iii++) {
-		vec3 position = m_listVertex[iii].normalized();
-		vec3 positionBase = vec3(position.x(), position.y(), 0).normalized();
-		vec3 positionBase2 = vec3(0, position.y(), position.z()).normalized();
-		
-		float modifx = 0.5f;
-		float modify = 0.5f;
-		if (position.x()!=0.0 || position.y()!=0.0) {
-			modifx = (acos(positionBase.x())/M_PI)/2.0f;
-			if (positionBase.y()>=0) {
-				modifx = 0.5f - modifx;
-			} else {
-				modifx = 0.5f + modifx;
-			}
-		}
-		if (position.y()!=0.0 || position.z()!=0.0) {
-			modify = (acos(positionBase2.z())/M_PI)/2.0f;
-			if (positionBase2.y()>=0) {
-				modify = 0.5f - modify;
-			} else {
-				modify = 0.5f + modify;
-			}
-		}
-		
-		float move = displacement.GetInterpolate(modifx,modify);
-		//EWOL_DEBUG("Get interpolate : from=" << position << " ==> (" << modifx << "," << modify << ") ==> " << move);
-		
-		vec3 translate = m_listVertexNormal[iii] * (move*4.0);
-		m_listVertex[iii] += translate;
-	}
-#endif
 }
 
 
@@ -897,15 +537,25 @@ bool ewol::Mesh::LoadOBJ(const etk::UString& _fileName)
 	return true;
 }
 
+void JumpEndLine(etk::FSNode& _file)
+{
+	char current=_file.FileGet();
+	while(    current != '\0'
+	       && current != '\n') {
+		//printf("%c", current);
+		current=_file.FileGet();
+	}
+}
 
 int32_t CountIndent(etk::FSNode& _file)
 {
 	int32_t nbIndent=0;
 	int32_t nbSpacesTab=0;
 	int32_t nbChar=0;
-	
-	for(char current=_file.FileGet(); current != '\0', current=_file.FileGet()) {
+	//EWOL_DEBUG(" start count Indent");
+	for(char current=_file.FileGet(); current != '\0'; current=_file.FileGet()) {
 		nbChar++;
+		//EWOL_DEBUG("parse : " << current);
 		if (current=='\t') {
 			nbSpacesTab = 0;
 			nbIndent++;
@@ -915,14 +565,19 @@ int32_t CountIndent(etk::FSNode& _file)
 				nbSpacesTab = 0;
 				nbIndent++;
 			}
+		} else if (current=='#') {
+			// Auto remove comment ...
+			JumpEndLine(_file);
+			return CountIndent(_file);
 		} else {
+			
 			break;
 		}
 	}
-	_file.FileSeek(etk::FSN_SEEK_CURRENT, -nbChar);
-	return nbSpacesTab;
+	//EWOL_DEBUG("indent : " << nbIndent);
+	_file.FileSeek(-nbChar, etk::FSN_SEEK_CURRENT);
+	return nbIndent;
 }
-
 
 char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, bool _removeTabs=false, bool _stopColomn=false)
 {
@@ -972,6 +627,39 @@ char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, boo
 	return NULL;
 }
 
+void RemoveEndLine(char* _val)
+{
+	int32_t len = strlen(_val);
+	if(    len>0
+	    && (    _val[len-1] == '\n'
+	         || _val[len-1] == '\r' ) ) {
+		_val[len-1] = '\0';
+	}
+	len--;
+	if(    len>0
+	    && (    _val[len-1] == '\n'
+	         || _val[len-1] == '\r') ) {
+		_val[len-1] = '\0';
+	}
+}
+typedef enum {
+	EMFModuleNone,
+	EMFModuleMesh,
+	EMFModuleMeshNamed,
+	EMFModuleMeshVertex,
+	EMFModuleMeshUVMapping,
+	EMFModuleMeshNormalVertex,
+	EMFModuleMeshNormalFace,
+	EMFModuleMeshFace,
+	EMFModuleMeshFaceMaterial,
+	EMFModuleMeshPhysics,
+	EMFModuleMeshPhysicsNamed,
+	EMFModuleMesh_END,
+	EMFModuleMaterial,
+	EMFModuleMaterialNamed,
+	EMFModuleMaterial_END,
+} emfModuleMode_te;
+
 bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 {
 	m_normalMode = ewol::Mesh::normalModeNone;
@@ -998,238 +686,318 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 		EWOL_ERROR(" file mode is not supported now : 'EMF(? ? ?)' = '" << inputDataLine << "'");
 		return false;
 	}
-	while (NULL != LoadNextData(inputDataLine, 2048, fileName) ) {
-		//EWOL_DEBUG("min line : '" << inputDataLine << "'");
-		if(    inputDataLine[0]=='#'
-		    || inputDataLine[0]=='\0' ) {
-			// comment line ... or empty line
-			continue;
-		}
-		if(    inputDataLine[0]=='\t'
-		    || 0 == strncmp(inputDataLine, "    ", 4) ) {
-			// Sub section that is not parsed ...
-			continue;
-		}
-		if( 0 == strncmp(inputDataLine, "Mesh :", 6) ) {
-			//Find a mesh ==> parse it ...
-			while (NULL != LoadNextData(inputDataLine, 2048, fileName) ) {
-				if(    inputDataLine[0]=='#'
-				    || inputDataLine[0]=='\0' ) {
-					// comment line ... or empty line
+	emfModuleMode_te currentMode = EMFModuleNone;
+	EWOL_DEBUG("Start parsing Mesh file : " << fileName);
+	// mesh global param :
+	etk::UString currentMeshName = "";
+	int32_t meshFaceMaterialID = -1;
+	// material global param :
+	etk::UString materialName = "";
+	ewol::Material* material = NULL;
+	while(1) {
+		int32_t level = CountIndent(fileName);
+		if (level==0) {
+			// new section ...
+			if (NULL == LoadNextData(inputDataLine, 2048, fileName)) {
+				// reach end of file ...
+				break;
+			}
+			if(0==strncmp(inputDataLine, "Mesh :", 6) ) {
+				currentMode = EMFModuleMesh;
+				EWOL_DEBUG("Parse Mesh :");
+			} else if(0==strncmp(inputDataLine, "Materials : ", 11) ) {
+				currentMode = EMFModuleMaterial;
+				EWOL_DEBUG("Parse Material :");
+			} else {
+				currentMode = EMFModuleNone;
+			}
+		} else {
+			if (currentMode>=EMFModuleMesh && currentMode<=EMFModuleMesh_END) {
+				if (level == 1) {
+					//Find mesh name ...
+					if (NULL == LoadNextData(inputDataLine, 2048, fileName, true)) {
+						// reach end of file ...
+						break;
+					}
+					RemoveEndLine(inputDataLine);
+					currentMeshName = inputDataLine;
+					currentMode = EMFModuleMeshNamed;
+					EWOL_DEBUG("    "<< currentMeshName);
 					continue;
 				}
-				if( 0 == strncmp(inputDataLine, "\tName : ", 8) ) {
-					// find the mesh name.
-					etk::UString m_meshName = &inputDataLine[8];
-					EWOL_DEBUG("Load sub mesh named : '" << m_meshName << "'");
+				if (level == 2) {
+					// In the mesh level 2 the line size must not exced 2048
+					if (NULL == LoadNextData(inputDataLine, 2048, fileName, true)) {
+						// reach end of file ...
+						break;
+					}
+					RemoveEndLine(inputDataLine);
+					if(0==strncmp(inputDataLine, "Vertex", 6) ) {
+						currentMode = EMFModuleMeshVertex;
+						EWOL_DEBUG("        Vertex ...");
+					} else if(0==strncmp(inputDataLine, "UV-mapping", 10) ) {
+						currentMode = EMFModuleMeshUVMapping;
+						EWOL_DEBUG("        UV-mapping ...");
+					} else if(0==strncmp(inputDataLine, "Normal(vertex)", 14) ) {
+						currentMode = EMFModuleMeshNormalVertex;
+						EWOL_DEBUG("        Normal(vertex) ...");
+					} else if(0==strncmp(inputDataLine, "Normal(face)", 12) ) {
+						currentMode = EMFModuleMeshNormalFace;
+						EWOL_DEBUG("        Normal(face) ...");
+					} else if(0==strncmp(inputDataLine, "Face", 4) ) {
+						currentMode = EMFModuleMeshFace;
+						EWOL_DEBUG("        Face ...");
+					} else if(0==strncmp(inputDataLine, "Physics", 7) ) {
+						currentMode = EMFModuleMeshPhysics;
+						EWOL_DEBUG("        Physics ...");
+					} else {
+						EWOL_ERROR("        Unknow mesh property '"<<inputDataLine<<"'");
+						currentMode = EMFModuleMeshNamed;
+					}
 					continue;
 				}
-				if( 0 == strncmp(inputDataLine, "\tVertex : ", 10) ) {
-					// find the vertex list of elements.
-					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
-						if (inputDataLine[0] == '\0') {
-							break;
-						}
+				// level > 2
+				switch (currentMode) {
+					default:
+						EWOL_ERROR("Unknow ... "<< level);
+						JumpEndLine(fileName);
+						break;
+					case EMFModuleMeshVertex: {
 						vec3 vertex(0,0,0);
-						sscanf(inputDataLine, "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[2] );
-						m_listVertex.PushBack(vertex);
-					}
-					EWOL_DEBUG("Load " << m_listVertex.Size() << " vertex");
-					continue;
-				}
-				if( 0 == strncmp(inputDataLine, "\tUV-mapping :", 13) ) {
-					// find the UV mapping.
-					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
-						if (inputDataLine[0] == '\0') {
-							break;
-						}
-						vec2 uvMap(0,0);
-						sscanf(inputDataLine, "%f %f", &uvMap.m_floats[0], &uvMap.m_floats[1]);
-						m_listUV.PushBack(uvMap);
-					}
-					EWOL_DEBUG("Load " << m_listUV.Size() << " uv mapping point");
-					continue;
-				}
-				if( 0 == strncmp(inputDataLine, "\tNormal(vertex) : ", 18) ) {
-					m_normalMode = ewol::Mesh::normalModeVertex;
-					// find the vertex Normal list.
-					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
-						if (inputDataLine[0] == '\0') {
-							break;
-						}
-						vec3 normal(0,0,0);
-						sscanf(inputDataLine, "%f %f %f", &normal.m_floats[0], &normal.m_floats[1], &normal.m_floats[2] );
-						m_listVertexNormal.PushBack(normal);
-					}
-					EWOL_DEBUG("Load " << m_listVertexNormal.Size() << " vertex normal");
-					continue;
-				}
-				if( 0 == strncmp(inputDataLine, "\tNormal(face) : ", 16) ) {
-					m_normalMode = ewol::Mesh::normalModeFace;
-					// find the face Normal list.
-					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true) ) {
-						if (inputDataLine[0] == '\0') {
-							break;
-						}
-						vec3 normal(0,0,0);
-						sscanf(inputDataLine, "%f %f %f", &normal.m_floats[0], &normal.m_floats[1], &normal.m_floats[2] );
-						m_listFacesNormal.PushBack(normal);
-					}
-					EWOL_DEBUG("Load " << m_listFacesNormal.Size() << " face normal");
-					continue;
-				}
-				if( 0 == strncmp(inputDataLine, "\tFace : ", 8) ) {
-					// find the face list.
-					int32_t elementID = -1;
-					while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
-						if (inputDataLine[0] == '\0') {
-							break;
-						}
-						//EWOL_DEBUG("parse :'" << inputDataLine << "'");
-						int32_t len = strlen(inputDataLine);
-						if (inputDataLine[len-1] == ':') {
-							// find the material :
-							inputDataLine[len-1] = '\0';
-							etk::UString materialName = inputDataLine;
-							FaceIndexing empty;
-							m_listFaces.Add(materialName, empty);
-							elementID = m_listFaces.GetId(materialName);
-						} else {
-							if (elementID < 0) {
-								continue;
+						while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
+							if (inputDataLine[0] == '\0') {
+								break;
 							}
-							int32_t matches;
-							uint32_t vertexIndex[3], uvIndex[3], normalIndex[3];
-							vertexIndex[0] = 0;
-							vertexIndex[1] = 0;
-							vertexIndex[2] = 0;
-							uvIndex[0] = 0;
-							uvIndex[1] = 0;
-							uvIndex[2] = 0;
-							normalIndex[0] = 0;
-							normalIndex[1] = 0;
-							normalIndex[2] = 0;
-							matches = sscanf(inputDataLine, "%d/%d/%d %d/%d/%d %d/%d/%d",
-							                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-							                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-							                 &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
-							m_listFaces.GetValue(elementID).m_faces.PushBack(Face(vertexIndex[0], uvIndex[0], normalIndex[0],
-							                                                      vertexIndex[1], uvIndex[1], normalIndex[1],
-							                                                      vertexIndex[2], uvIndex[2], normalIndex[2]));
-							/*
-							EWOL_DEBUG("face :" << vertexIndex[0] << "/" << uvIndex[0] << "/" << normalIndex[0] <<
-							           " " << vertexIndex[1] << "/" << uvIndex[1] << "/" << normalIndex[1] <<
-							           " " << vertexIndex[2] << "/" << uvIndex[2] << "/" << normalIndex[2]);
-							*/
+							sscanf(inputDataLine, "%f %f %f", &vertex.m_floats[0], &vertex.m_floats[1], &vertex.m_floats[2] );
+							m_listVertex.PushBack(vertex);
+							int32_t len = strlen(inputDataLine)-1;
+							if(    inputDataLine[len] == '\n'
+							    || inputDataLine[len] == '\r') {
+								break;
+							}
 						}
+						EWOL_DEBUG("            " << m_listVertex.Size() << " vertex");
+						break;
 					}
-					EWOL_DEBUG("Load " << m_listFaces.Size() << " faces (mode) :");
-					for (esize_t iii=0; iii< m_listFaces.Size(); iii++) {
-						EWOL_DEBUG("    mat='" << m_listFaces.GetKey(iii) << "' nb faces=" << m_listFaces.GetValue(iii).m_faces.Size());
+					case EMFModuleMeshUVMapping: {
+						vec2 uvMap(0,0);
+						while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
+							if (inputDataLine[0] == '\0') {
+								break;
+							}
+							sscanf(inputDataLine, "%f %f", &uvMap.m_floats[0], &uvMap.m_floats[1]);
+							m_listUV.PushBack(uvMap);
+							int32_t len = strlen(inputDataLine)-1;
+							if(    inputDataLine[len] == '\n'
+							    || inputDataLine[len] == '\r') {
+								break;
+							}
+						}
+						EWOL_DEBUG("            " << m_listUV.Size() << " coord");
+						break;
 					}
+					case EMFModuleMeshNormalVertex: {
+						m_normalMode = ewol::Mesh::normalModeVertex;
+						vec3 normal(0,0,0);
+						// find the vertex Normal list.
+						while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
+							if (inputDataLine[0] == '\0') {
+								break;
+							}
+							sscanf(inputDataLine, "%f %f %f", &normal.m_floats[0], &normal.m_floats[1], &normal.m_floats[2] );
+							m_listVertexNormal.PushBack(normal);
+							int32_t len = strlen(inputDataLine)-1;
+							if(    inputDataLine[len] == '\n'
+							    || inputDataLine[len] == '\r') {
+								break;
+							}
+						}
+						EWOL_DEBUG("            " << m_listVertexNormal.Size() << " Normals");
+						break;
+					}
+					case EMFModuleMeshNormalFace: {
+						m_normalMode = ewol::Mesh::normalModeFace;
+						vec3 normal(0,0,0);
+						// find the face Normal list.
+						while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
+							if (inputDataLine[0] == '\0') {
+								break;
+							}
+							sscanf(inputDataLine, "%f %f %f", &normal.m_floats[0], &normal.m_floats[1], &normal.m_floats[2] );
+							m_listFacesNormal.PushBack(normal);
+							int32_t len = strlen(inputDataLine)-1;
+							if(    inputDataLine[len] == '\n'
+							    || inputDataLine[len] == '\r') {
+								break;
+							}
+						}
+						EWOL_DEBUG("            " << m_listFacesNormal.Size() << " Normals");
+						break;
+					}
+					case EMFModuleMeshFace:
+					case EMFModuleMeshFaceMaterial:
+						if (level == 3) {
+							//Find mesh name ...
+							if (NULL == LoadNextData(inputDataLine, 2048, fileName, true)) {
+								// reach end of file ...
+								break;
+							}
+							RemoveEndLine(inputDataLine);
+							// new maretial selection
+							currentMode = EMFModuleMeshFaceMaterial;
+							FaceIndexing empty;
+							m_listFaces.Add(inputDataLine, empty);
+							meshFaceMaterialID = m_listFaces.GetId(inputDataLine);
+							EWOL_DEBUG("            " << inputDataLine);
+						} else if (currentMode == EMFModuleMeshFaceMaterial) {
+							while (NULL != LoadNextData(inputDataLine, 2048, fileName, true, true) ) {
+								if (inputDataLine[0] == '\0') {
+									// end of line
+									break;
+								}
+								if (meshFaceMaterialID < 0) {
+									continue;
+								}
+								int32_t matches;
+								uint32_t vertexIndex[3], uvIndex[3], normalIndex[3];
+								vertexIndex[0] = 0;
+								vertexIndex[1] = 0;
+								vertexIndex[2] = 0;
+								uvIndex[0] = 0;
+								uvIndex[1] = 0;
+								uvIndex[2] = 0;
+								normalIndex[0] = 0;
+								normalIndex[1] = 0;
+								normalIndex[2] = 0;
+								matches = sscanf(inputDataLine, "%d/%d/%d %d/%d/%d %d/%d/%d",
+								                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+								                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+								                 &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+								m_listFaces.GetValue(meshFaceMaterialID).m_faces.PushBack(Face(vertexIndex[0], uvIndex[0], normalIndex[0],
+								                                                               vertexIndex[1], uvIndex[1], normalIndex[1],
+								                                                               vertexIndex[2], uvIndex[2], normalIndex[2]));
+								/*
+								EWOL_DEBUG("face :" << vertexIndex[0] << "/" << uvIndex[0] << "/" << normalIndex[0] <<
+								           " " << vertexIndex[1] << "/" << uvIndex[1] << "/" << normalIndex[1] <<
+								           " " << vertexIndex[2] << "/" << uvIndex[2] << "/" << normalIndex[2]);
+								*/
+								int32_t len = strlen(inputDataLine)-1;
+								if(    inputDataLine[len] == '\n'
+								    || inputDataLine[len] == '\r') {
+									break;
+								}
+							}
+							EWOL_DEBUG("                " << m_listFaces.GetValue(meshFaceMaterialID).m_faces.Size() << " faces");
+						} else {
+							// insert element without material ...
+							EWOL_ERROR(" try to add face without material selection ...");
+							JumpEndLine(fileName);
+						}
+						break;
+					case EMFModuleMeshPhysics:
+					case EMFModuleMeshPhysicsNamed:
+						JumpEndLine(fileName);
+						break;
+				}
+				continue;
+			} else if (currentMode>=EMFModuleMaterial && currentMode<=EMFModuleMaterial_END) {
+				// all material element is stored on 1 line (size < 2048)
+				if (NULL == LoadNextData(inputDataLine, 2048, fileName, true)) {
+					// reach end of file ...
 					break;
 				}
-			}
-			continue;
-		}
-		if( 0 == strncmp(inputDataLine, "Materials : ", 11) ) {
-			//Find Material section ==> parse it ...
-			//EWOL_DEBUG("find a Maretials section :");
-			// all object might have minimaly one material :
-			ewol::Material* material = NULL;
-			etk::UString name = "";
-			//Find a mesh ==> parse it ...
-			while (NULL != LoadNextData(inputDataLine, 2048, fileName) ) {
-				//EWOL_DEBUG("mat parse : '" << inputDataLine << "'");
-				if(    inputDataLine[0] == '\t'
-				    && inputDataLine[1] != '\t') {
-					if(    name != ""
+				RemoveEndLine(inputDataLine);
+				if (level == 1) {
+					// add previous material :
+					if(    materialName != ""
 					    && material!=NULL) {
-						m_materials.Add(name, material);
-						name = "";
+						m_materials.Add(materialName, material);
+						materialName = "";
 						material = NULL;
 					}
 					material = new ewol::Material();
-					inputDataLine[strlen(inputDataLine)-1] = '\0';
-					name = &inputDataLine[1];
-					EWOL_DEBUG("Create materials : '" << name << "'");
-				} else {
-					if (NULL != material) {
-						if(    inputDataLine[2] == 'N'
-						    && inputDataLine[3] == 's'
-						    && inputDataLine[4] == ' ' ) {
-							float tmpVal=0;
-							sscanf(&inputDataLine[5], "%f", &tmpVal);
-							material->SetShininess(tmpVal);
-						} else if(    inputDataLine[2] == 'K'
-						           && inputDataLine[3] == 'a'
-						           && inputDataLine[4] == ' ' ) {
-							float tmpVal1=0;
-							float tmpVal2=0;
-							float tmpVal3=0;
-							sscanf(&inputDataLine[5], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
-							vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
-							material->SetAmbientFactor(tmp);
-						} else if(    inputDataLine[2] == 'K'
-						           && inputDataLine[3] == 'd'
-						           && inputDataLine[4] == ' ' ) {
-							float tmpVal1=0;
-							float tmpVal2=0;
-							float tmpVal3=0;
-							sscanf(&inputDataLine[5], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
-							vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
-							material->SetDiffuseFactor(tmp);
-						} else if(    inputDataLine[2] == 'K'
-						           && inputDataLine[3] == 's'
-						           && inputDataLine[4] == ' ' ) {
-							float tmpVal1=0;
-							float tmpVal2=0;
-							float tmpVal3=0;
-							sscanf(&inputDataLine[5], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
-							vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
-							material->SetSpecularFactor(tmp);
-						} else if(    inputDataLine[2] == 'N'
-						           && inputDataLine[3] == 'i'
-						           && inputDataLine[4] == ' ' ) {
-							float tmpVal=0;
-							sscanf(&inputDataLine[5], "%f", &tmpVal);
-							// TODO : ...
-						} else if(    inputDataLine[2] == 'd'
-						           && inputDataLine[3] == ' ' ) {
-							float tmpVal=0;
-							sscanf(&inputDataLine[4], "%f", &tmpVal);
-							// TODO : ...
-						} else if(    inputDataLine[2] == 'i'
-						           && inputDataLine[3] == 'l'
-						           && inputDataLine[4] == 'l'
-						           && inputDataLine[5] == 'u'
-						           && inputDataLine[6] == 'm'
-						           && inputDataLine[7] == ' ' ) {
-							// TODO : ...
-						} else if(    inputDataLine[2] == 'm'
-						           && inputDataLine[3] == 'a'
-						           && inputDataLine[4] == 'p'
-						           && inputDataLine[5] == '_'
-						           && inputDataLine[6] == 'K'
-						           && inputDataLine[7] == 'd'
-						           && inputDataLine[8] == ' ' ) {
-							inputDataLine[strlen(inputDataLine)-1] = '\0';
-							material->SetTexture0(fileName.GetRelativeFolder() + &inputDataLine[9]);
-						} else {
-							EWOL_ERROR("unknow material property ... : '" << inputDataLine << "'");
-						}
-					}
+					materialName = inputDataLine;
+					currentMode = EMFModuleMaterialNamed;
+					EWOL_DEBUG("    "<< materialName);
+					continue;
 				}
+				// level >1
+				if (currentMode != EMFModuleMaterialNamed) {
+					EWOL_WARNING("        Unknow element ..."<< level);
+					JumpEndLine(fileName);
+					continue;
+				}
+				if (NULL == material) {
+					EWOL_ERROR("material allocation error");
+					JumpEndLine(fileName);
+					continue;
+				}
+				if(0==strncmp(inputDataLine,"Ns ",3)) {
+					float tmpVal=0;
+					sscanf(&inputDataLine[3], "%f", &tmpVal);
+					material->SetShininess(tmpVal);
+					EWOL_WARNING("        Shininess " << tmpVal);
+				} else if(0==strncmp(inputDataLine,"Ka ",3)) {
+					float tmpVal1=0;
+					float tmpVal2=0;
+					float tmpVal3=0;
+					sscanf(&inputDataLine[3], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
+					vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
+					material->SetAmbientFactor(tmp);
+					EWOL_WARNING("        AmbientFactor " << tmp);
+				} else if(0==strncmp(inputDataLine,"Kd ",3)) {
+					float tmpVal1=0;
+					float tmpVal2=0;
+					float tmpVal3=0;
+					sscanf(&inputDataLine[3], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
+					vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
+					material->SetDiffuseFactor(tmp);
+					EWOL_WARNING("        DiffuseFactor " << tmp);
+				} else if(0==strncmp(inputDataLine,"Ks ",3)) {
+					float tmpVal1=0;
+					float tmpVal2=0;
+					float tmpVal3=0;
+					sscanf(&inputDataLine[3], "%f %f %f", &tmpVal1, &tmpVal2, &tmpVal3);
+					vec4 tmp(tmpVal1, tmpVal2, tmpVal3, 1);
+					material->SetSpecularFactor(tmp);
+					EWOL_WARNING("        SpecularFactor " << tmp);
+				} else if(0==strncmp(inputDataLine,"Ni ",3)) {
+					float tmpVal=0;
+					sscanf(&inputDataLine[3], "%f", &tmpVal);
+					// TODO : ...
+					EWOL_WARNING("        Ni " << tmpVal);
+				} else if(0==strncmp(inputDataLine,"d ",2)) {
+					float tmpVal=0;
+					sscanf(&inputDataLine[2], "%f", &tmpVal);
+					// TODO : ...
+					EWOL_WARNING("        d " << tmpVal);
+				} else if(0==strncmp(inputDataLine,"illum ",6)) {
+					int tmpVal=0;
+					sscanf(&inputDataLine[6], "%d", &tmpVal);
+					// TODO : ...
+					EWOL_WARNING("        illum " << tmpVal);
+				} else if(0==strncmp(inputDataLine,"map_Kd ",7)) {
+					material->SetTexture0(fileName.GetRelativeFolder() + &inputDataLine[7]);
+					EWOL_WARNING("        Texture " << &inputDataLine[7]);
+				} else {
+					EWOL_ERROR("unknow material property ... : '" << inputDataLine << "'");
+				}
+			} else {
+				// unknow ...
+				EWOL_WARNING("Unknow type of line ==> jump end of line ... ");
+				JumpEndLine(fileName);
 			}
-			if(    name != ""
-			    && material!=NULL) {
-				m_materials.Add(name, material);
-				name = "";
-				material = NULL;
-			}
-			continue;
 		}
 	}
+	// add last material ...
+	if(    materialName != ""
+	    && material!=NULL) {
+		m_materials.Add(materialName, material);
+		materialName = "";
+		material = NULL;
+	}
+	EWOL_DEBUG("Stop parsing Mesh file");
+	
 	fileName.FileClose();
 	GenerateVBO();
 	return true;

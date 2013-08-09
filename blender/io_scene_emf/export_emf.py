@@ -135,7 +135,7 @@ def writeCollisionShape(object, file):
 		# no phisical shape ...
 		return
 	fw = file.write
-	fw('\t\tPhysique : \n')
+	fw('\t\tPhysics : \n')
 	for subObj in getChildren(object):
 		print("        element='%s' type '%s'" % (subObj.name,str(subObj.type)))
 		if subObj.type != 'MESH':
@@ -570,7 +570,7 @@ def write_file(filepath,
 		for subObj in getChildren(ob_main):
 			print("     child : '%s'" % (subObj.name))
 			if subObj.name.lower() == EXPORT_COLLISION_NAME:
-				print("     find physic : '%s'" % (subObj.name))
+				print("     find physics : '%s'" % (subObj.name))
 				writeCollisionShape(subObj, file)
 				
 	#####################################################################
