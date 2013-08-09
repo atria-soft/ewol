@@ -898,6 +898,32 @@ bool ewol::Mesh::LoadOBJ(const etk::UString& _fileName)
 }
 
 
+int32_t CountIndent(etk::FSNode& _file)
+{
+	int32_t nbIndent=0;
+	int32_t nbSpacesTab=0;
+	int32_t nbChar=0;
+	
+	for(char current=_file.FileGet(); current != '\0', current=_file.FileGet()) {
+		nbChar++;
+		if (current=='\t') {
+			nbSpacesTab = 0;
+			nbIndent++;
+		} else if (current==' ') {
+			nbSpacesTab++;
+			if (nbSpacesTab==4) {
+				nbSpacesTab = 0;
+				nbIndent++;
+			}
+		} else {
+			break;
+		}
+	}
+	_file.FileSeek(etk::FSN_SEEK_CURRENT, -nbChar);
+	return nbSpacesTab;
+}
+
+
 char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, bool _removeTabs=false, bool _stopColomn=false)
 {
 	memset(_elementLine, 0, _maxData);
