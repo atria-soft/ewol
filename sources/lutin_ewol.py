@@ -55,6 +55,13 @@ def Create(target):
 		'ewol/renderer/resources/Texture.cpp',
 		'ewol/renderer/resources/Colored3DObject.cpp',
 		'ewol/renderer/resources/Image.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsShape.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsBox.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsCapsule.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsCone.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsConvexHull.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsCylinder.cpp',
+		'ewol/renderer/resources/physicsShape/PhysicsSphere.cpp',
 		'ewol/renderer/ResourceManager.cpp'])
 	
 	# Audio system

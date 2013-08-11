@@ -14,54 +14,6 @@
 #undef __class__
 #define __class__	"Mesh"
 
-typedef enum {
-	VERTEX_OLD,
-	VERTEX_CENTER_FACE,
-	VERTEX_CERTER_EDGE
-} vertex_te;
-
-class VertexNode {
-	private:
-		vertex_te            m_type;
-		vec3                 m_pos;
-		etk::Vector<int32_t> m_link;
-	public:
-		VertexNode(vertex_te type, const vec3& pos) :
-			m_type(type),
-			m_pos(pos)
-		{
-			
-		};
-		void AddLink(int32_t id)
-		{
-			for(int32_t iii=0; iii<m_link.Size(); iii++) {
-				if (m_link[iii] == id) {
-					return;
-				}
-			}
-			m_link.PushBack(id);
-		};
-		const vec3& GetPos(void)
-		{
-			return m_pos;
-		};
-		void SetPos(const vec3& pos)
-		{
-			m_pos = pos;
-		};
-		const vertex_te GetType(void)
-		{
-			return m_type;
-		};
-		etk::Vector<int32_t>& GetLink(void)
-		{
-			return m_link;
-		};
-	
-};
-
-
-
 ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
 	ewol::Resource(_fileName),
 	m_normalMode(normalModeNone)
@@ -80,7 +32,6 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLNormal = m_GLprogram->GetAttribute("EW_normal");
-		m_GLNormalFace = m_GLprogram->GetAttribute("EW_faceNormal");
 		m_GLMatrix = m_GLprogram->GetUniform("EW_MatrixTransformation");
 		m_GLMatrixPosition = m_GLprogram->GetUniform("EW_MatrixPosition");
 		// Link material and Lights
@@ -579,7 +530,7 @@ int32_t CountIndent(etk::FSNode& _file)
 	return nbIndent;
 }
 
-char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, bool _removeTabs=false, bool _stopColomn=false)
+char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, bool _removeTabs=false, bool _stopColomn=false, bool _stopPipe=true)
 {
 	memset(_elementLine, 0, _maxData);
 	char * element = _elementLine;
@@ -599,7 +550,8 @@ char* LoadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, boo
 		}
 		if(    current == '\n'
 		    || current == '\r'
-		    || current == '|'
+		    || (    current == '|'
+		         && _stopPipe==true)
 		    || (    current == ':'
 		         && _stopColomn==true) )
 		{
@@ -694,6 +646,8 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 	// material global param :
 	etk::UString materialName = "";
 	ewol::Material* material = NULL;
+	// physical shape:
+	ewol::PhysicsShape* physics = NULL;
 	while(1) {
 		int32_t level = CountIndent(fileName);
 		if (level==0) {
@@ -896,7 +850,29 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 						break;
 					case EMFModuleMeshPhysics:
 					case EMFModuleMeshPhysicsNamed:
-						JumpEndLine(fileName);
+						if (NULL == LoadNextData(inputDataLine, 2048, fileName, true, false, false)) {
+							// reach end of file ...
+							break;
+						}
+						RemoveEndLine(inputDataLine);
+						if (level == 3) {
+							physics = ewol::PhysicsShape::Create(inputDataLine);
+							if (physics==NULL) {
+								EWOL_ERROR("Allocation error when creating physical shape ...");
+								continue;
+							}
+							m_physics.PushBack(physics);
+							EWOL_DEBUG("            " << inputDataLine);
+							currentMode = EMFModuleMeshPhysicsNamed;
+						} else if (currentMode == EMFModuleMeshPhysicsNamed) {
+							if (physics == NULL) {
+								EWOL_ERROR("Can not parse :'" << inputDataLine << "' in physical shape ...");
+								continue;
+							}
+							if (false == physics->Parse(inputDataLine)) {
+								EWOL_ERROR("ERROR when parsing :'" << inputDataLine << "' in physical shape ...");
+							}
+						}
 						break;
 				}
 				continue;

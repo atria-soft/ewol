@@ -6,7 +6,6 @@ precision mediump int;
 attribute vec3 EW_coord3d;
 attribute vec2 EW_texture2d;
 attribute vec3 EW_normal;
-attribute vec3 EW_faceNormal;
 uniform mat4 EW_MatrixTransformation;
 uniform mat4 EW_MatrixPosition;
 
@@ -23,5 +22,4 @@ void main(void) {
 	MatrixPosition[3][1] = 0.0;
 	MatrixPosition[3][2] = 0.0;
 	v_ecNormal = vec3(MatrixPosition * vec4(EW_normal, 1.0) );
-	//v_ecNormal = vec3(MatrixPosition * vec4(EW_faceNormal, 1.0) );
 }
