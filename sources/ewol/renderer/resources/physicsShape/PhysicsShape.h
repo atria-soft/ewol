@@ -40,7 +40,7 @@ namespace ewol
 				sphere
 			} type_te;
 		public:
-			PhysicsShape(void) {};
+			PhysicsShape(void) : m_quaternion(1,0,0,0), m_origin(0,0,0) {};
 			virtual ~PhysicsShape(void) {};
 		public:
 			virtual type_te GetType(void) { return ewol::PhysicsShape::unknow; };
