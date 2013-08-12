@@ -28,6 +28,11 @@ namespace ewol
 			virtual type_te GetType(void) { return ewol::PhysicsShape::sphere; };
 		private:
 			float m_radius; // props["radius"] = obj.scale.x
+		public:
+			float GetRadius(void) const { return m_radius; };
+		private:
+			virtual const PhysicsSphere* ToSphere(void) const { return this; };
+			virtual PhysicsSphere* ToSphere(void) { return this; };
 	};
 };
 

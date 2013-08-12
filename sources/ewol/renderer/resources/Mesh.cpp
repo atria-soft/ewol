@@ -67,15 +67,10 @@ ewol::Mesh::~Mesh(void)
 	ewol::resource::Release(m_verticesVBO);
 }
 
+//#define DISPLAY_NB_VERTEX_DISPLAYED
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
-	//EWOL_DEBUG("Request Draw : " << m_listFaces.GetValue(0).m_index.Size() << " elements");
-	/*
-	if (m_listIndexFaces.Size()<=0) {
-		return;
-	}
-	*/
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -97,8 +92,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
 	// draw lights :
 	m_light.Draw(m_GLprogram);
-	
+	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
 	int32_t nbElementDraw = 0;
+	#endif
 	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
 		if (false == m_materials.Exist(m_listFaces.GetKey(kkk))) {
 			EWOL_WARNING("missing materials : '" << m_listFaces.GetKey(kkk) << "'");
@@ -106,9 +102,13 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		}
 		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
 		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
+		#ifdef DISPLAY_NB_VERTEX_DISPLAYED
 		nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+		#endif
 	}
-	EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
+	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
+	#endif
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
@@ -116,12 +116,6 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 }
 void ewol::Mesh::Draw2(mat4& positionMatrix)
 {
-	//
-	/*
-	if (m_listIndexFaces.Size()<=0) {
-		return;
-	}
-	*/
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -143,7 +137,9 @@ void ewol::Mesh::Draw2(mat4& positionMatrix)
 	m_light.Draw(m_GLprogram);
 	
 	// draw materials :
-	int32_t nbElementDraw = 0;
+	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+		int32_t nbElementDraw = 0;
+	#endif
 	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
 		if (false == m_materials.Exist(m_listFaces.GetKey(kkk))) {
 			EWOL_WARNING("missing materials : '" << m_listFaces.GetKey(kkk) << "'");
@@ -151,9 +147,13 @@ void ewol::Mesh::Draw2(mat4& positionMatrix)
 		}
 		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
 		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
-		nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+		#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+			nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+		#endif
 	}
-	EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
+	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
+	#endif
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
@@ -862,7 +862,7 @@ bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 								continue;
 							}
 							m_physics.PushBack(physics);
-							EWOL_DEBUG("            " << inputDataLine);
+							EWOL_DEBUG("            " << m_physics.Size() << " " << inputDataLine);
 							currentMode = EMFModuleMeshPhysicsNamed;
 						} else if (currentMode == EMFModuleMeshPhysicsNamed) {
 							if (physics == NULL) {

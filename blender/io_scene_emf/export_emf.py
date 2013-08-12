@@ -64,7 +64,7 @@ def out_quaternion_z_up( q ):
 	return "%g %g %g %g" % ( q.w, q.x, q.y, q.z )
 
 
-def getPhysicsShape(obj, use_y_up=True):
+def getPhysicsShape(obj, mainObjScale, use_y_up=True):
 	shape = ""
 	props = { }
 	name = obj.name.lower()
@@ -87,7 +87,7 @@ def getPhysicsShape(obj, use_y_up=True):
 	# SPHERE
 	elif name.startswith('sph'):
 		shape = "Sphere"
-		props["radius"] = obj.scale.x
+		props["radius"] = obj.scale.x * mainObjScale.x
 	# CONE
 	elif name.startswith('cone'):
 		shape = "Cone"
@@ -130,7 +130,7 @@ def getPhysicsShape(obj, use_y_up=True):
 	return (shape, props)
 
 
-def writeCollisionShape(object, file):
+def writeCollisionShape(object, file, mainObjScale):
 	if len(getChildren(object))==0:
 		# no phisical shape ...
 		return
@@ -140,7 +140,7 @@ def writeCollisionShape(object, file):
 		print("        element='%s' type '%s'" % (subObj.name,str(subObj.type)))
 		if subObj.type != 'MESH':
 			continue
-		(shape, props) = getPhysicsShape(subObj)
+		(shape, props) = getPhysicsShape(subObj, mainObjScale)
 		if shape=="":
 			print("error of shape detection type ...");
 			continue
@@ -569,9 +569,9 @@ def write_file(filepath,
 		#####################################################################
 		for subObj in getChildren(ob_main):
 			print("     child : '%s'" % (subObj.name))
-			if subObj.name.lower() == EXPORT_COLLISION_NAME:
+			if subObj.name.lower().startswith(EXPORT_COLLISION_NAME):
 				print("     find physics : '%s'" % (subObj.name))
-				writeCollisionShape(subObj, file)
+				writeCollisionShape(subObj, file, ob_main.scale)
 				
 	#####################################################################
 	## Now we have all our materials, save them in the material section

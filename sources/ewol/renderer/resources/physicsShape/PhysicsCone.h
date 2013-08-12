@@ -27,8 +27,16 @@ namespace ewol
 		public:
 			virtual type_te GetType(void) { return ewol::PhysicsShape::cone; };
 		private:
-			float m_radius; // props["radius"] = obj.scale.x
-			float m_height; // props["height"] = obj.scale.z * 2.0
+			float m_radius;
+		public:
+			float GetRadius(void) const { return m_radius; };
+		private:
+			float m_height;
+		public:
+			float GetHeight(void) const { return m_height; };
+		public:
+			virtual const PhysicsCone* ToCone(void) const { return this; };
+			virtual PhysicsCone* ToCone(void) { return this; };
 	};
 };
 

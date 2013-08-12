@@ -208,9 +208,9 @@ class ExportEMF(bpy.types.Operator, ExportHelper):
 	    )
 	
 	collision_object_name = StringProperty(
-	    name="Collision root name",
+	    name="Collision root name (strat with)",
 	    description="The top-level name that will contain the physics shapes",
-	    default="physic"
+	    default="phys"
 	    )
 	
 	axis_forward = EnumProperty(

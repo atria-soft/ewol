@@ -27,8 +27,16 @@ namespace ewol
 		public:
 			virtual type_te GetType(void) { return ewol::PhysicsShape::capsule; };
 		private:
-			float m_radius; // props["radius"] = obj.scale.x
-			float m_height; // props["height"] = obj.scale.z
+			float m_radius;
+		public:
+			float GetRadius(void) const { return m_radius; };
+		private:
+			float m_height;
+		public:
+			float GetHeight(void) const { return m_height; };
+		public:
+			virtual const PhysicsCapsule* ToCapsule(void) const { return this; };
+			virtual PhysicsCapsule* ToCapsule(void) { return this; };
 	};
 };
 

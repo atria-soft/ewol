@@ -26,7 +26,12 @@ namespace ewol
 		public:
 			virtual type_te GetType(void) { return ewol::PhysicsShape::box; };
 		private:
-			vec3 m_size;
+			vec3 m_size; // Box size property in X, Y and Z
+		public:
+			const vec3& GetSize(void) const { return m_size; };
+		public:
+			virtual const PhysicsBox* ToBox(void) const { return this; };
+			virtual PhysicsBox* ToBox(void) { return this; };
 	};
 };
 

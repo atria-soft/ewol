@@ -103,7 +103,7 @@ namespace ewol
 			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
 			etk::Hash<FaceIndexing> m_listFaces; //!< List of all Face for the mesh
 			etk::Hash<ewol::Material*> m_materials;
-			etk::Vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ...
+			etk::Vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ... (independent of bullet lib)
 		protected:
 			ewol::VirtualBufferObject* m_verticesVBO;
 		public:
@@ -113,15 +113,9 @@ namespace ewol
 			virtual void Draw(mat4& positionMatrix);
 			virtual void Draw2(mat4& positionMatrix);
 			void GenerateVBO(void);
-		public:
-			// some addition basic funtion that permit to create or overwrite some caracterstics :
-			void SetTexture(const etk::UString& myTexture);
 		private:
 			void CalculateNormaleFace(void);
 			void CalculateNormaleEdge(void);
-			/*
-			 * Element modification area :
-			 */
 		public :
 			void CreateViewBox(const etk::UString& _materialName,float _size=1.0);
 		private:
@@ -129,6 +123,9 @@ namespace ewol
 			bool LoadEMF(const etk::UString& _fileName);
 		public:
 			void AddMaterial(const etk::UString& _name, ewol::Material* _data);
+		public:
+			
+			const etk::Vector<ewol::PhysicsShape*>& GetPhysicalProperties(void) const { return m_physics; };
 	};
 };
 

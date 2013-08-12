@@ -27,7 +27,12 @@ namespace ewol
 		public:
 			virtual type_te GetType(void) { return ewol::PhysicsShape::cylinder; };
 		private:
-			vec3 m_size; //props["half-extents"] = out_scale3( scale )
+			vec3 m_size;
+		public:
+			vec3 GetSize(void) const { return m_size; };
+		public:
+			virtual const PhysicsCylinder* ToCylinder(void) const { return this; };
+			virtual PhysicsCylinder* ToCylinder(void) { return this; };
 	};
 };
 

@@ -28,6 +28,9 @@ namespace ewol
 			virtual type_te GetType(void) { return ewol::PhysicsShape::convexHull; };
 		private:
 			vec3 m_scale;
+		public:
+			vec3 GetScale(void) const { return m_scale; };
+		private:
 			etk::Vector<vec3> m_points;
 			/*
 				mesh = obj.to_mesh( bpy.context.scene, True, 'PREVIEW' )
@@ -36,6 +39,9 @@ namespace ewol
 					props["points"] += "" + out_point3( v.co ) + "|"
 				props["points"] = props["points"].rstrip("|")
 			*/
+		public:
+			virtual const PhysicsConvexHull* ToConvexHull(void) const { return this; };
+			virtual PhysicsConvexHull* ToConvexHull(void) { return this; };
 	};
 };
 
