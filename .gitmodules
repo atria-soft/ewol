@@ -44,3 +44,6 @@
 [submodule "external/ejson"]
 	path = external/ejson
 	url = https://github.com/HeeroYui/ejson.git
+[submodule "external/ege"]
+	path = external/ege
+	url = https://github.com/HeeroYui/ege.git

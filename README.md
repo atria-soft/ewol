@@ -1,4 +1,4 @@
-Edn
+Ewol
 ====
 
 `Ewol` (Edn Widget OpenGl Layer) is a FREE software.
@@ -33,8 +33,6 @@ Dependency packages
 
 Copyright (c)
 =============
-
-Note : only for etk and EWOL
 
 2011, Edouard DUPIN
 
