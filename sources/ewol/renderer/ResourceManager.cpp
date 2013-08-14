@@ -297,7 +297,7 @@ static int32_t nextP2(int32_t _value)
 		}
 		val *=2;
 	}
-	EWOL_CRITICAL("impossible CASE.... request P2 of " << value);
+	EWOL_CRITICAL("impossible CASE.... request P2 of " << _value);
 	return val;
 }
 #endif
