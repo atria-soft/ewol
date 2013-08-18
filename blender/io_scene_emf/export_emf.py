@@ -64,7 +64,7 @@ def out_quaternion_z_up( q ):
 	return "%g %g %g %g" % ( q.w, q.x, q.y, q.z )
 
 
-def getPhysicsShape(obj, mainObjScale, use_y_up=True):
+def getPhysicsShape(obj, mainObjScale, use_y_up=False):
 	shape = ""
 	props = { }
 	name = obj.name.lower()

@@ -32,13 +32,8 @@ namespace ewol
 			vec3 GetScale(void) const { return m_scale; };
 		private:
 			etk::Vector<vec3> m_points;
-			/*
-				mesh = obj.to_mesh( bpy.context.scene, True, 'PREVIEW' )
-				props["points"] = ""
-				for v in mesh.vertices:
-					props["points"] += "" + out_point3( v.co ) + "|"
-				props["points"] = props["points"].rstrip("|")
-			*/
+		public:
+			const etk::Vector<vec3>& GetPointList(void) const { return m_points; };
 		public:
 			virtual const PhysicsConvexHull* ToConvexHull(void) const { return this; };
 			virtual PhysicsConvexHull* ToConvexHull(void) { return this; };

@@ -109,7 +109,7 @@ class ImportEMF(bpy.types.Operator, ImportHelper):
                    ('-Y', "-Y Forward", ""),
                    ('-Z', "-Z Forward", ""),
                    ),
-            default='-Z',
+            default='-X',
             )
 
     axis_up = EnumProperty(
@@ -121,7 +121,7 @@ class ImportEMF(bpy.types.Operator, ImportHelper):
                    ('-Y', "-Y Up", ""),
                    ('-Z', "-Z Up", ""),
                    ),
-            default='Y',
+            default='Z',
             )
 
     def execute(self, context):
