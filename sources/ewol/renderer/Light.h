@@ -52,7 +52,11 @@ namespace ewol
 			void SetSpecularColor(const vec4& val) {
 				m_specularColor = val;
 			}
+			
+		friend etk::CCout& operator <<(etk::CCout& _os, const ewol::Light& _obj);
 	};
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::Light& _obj);
+	
 };
 
 

@@ -50,3 +50,15 @@ void ewol::Light::Draw(ewol::Program* prog)
 	prog->Uniform4(m_GL_specularColor, m_specularColor);
 }
 
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Light& _obj)
+{
+	_os << "light:{";
+	_os << "dir=" << _obj.m_direction;
+	_os << " halfplan=" << _obj.m_halfplane;
+	_os << " color:{ anbiant=" << _obj.m_ambientColor;
+	_os << " diffuse=" << _obj.m_diffuseColor;
+	_os << " specular=" << _obj.m_specularColor;
+	_os << "}}";
+	return _os;
+}
+

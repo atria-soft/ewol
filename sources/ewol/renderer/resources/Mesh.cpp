@@ -28,6 +28,8 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	m_light.SetDiffuseColor(vec4(1.0,1.0,1.0,1));
 	m_light.SetSpecularColor(vec4(0.0,0.0,0.0,1));
 	
+	//EWOL_DEBUG(m_name << "  " << m_light);
+	
 	if (true == ewol::resource::Keep(_shaderName, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture = m_GLprogram->GetAttribute("EW_texture2d");
@@ -67,7 +69,7 @@ ewol::Mesh::~Mesh(void)
 	ewol::resource::Release(m_verticesVBO);
 }
 
-//#define DISPLAY_NB_VERTEX_DISPLAYED
+#define DISPLAY_NB_VERTEX_DISPLAYED
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
@@ -75,6 +77,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
+	//EWOL_DEBUG(m_name << "  " << m_light);
 	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
@@ -93,6 +96,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	// draw lights :
 	m_light.Draw(m_GLprogram);
 	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+	int32_t nbElementDrawTheoric = 0;
 	int32_t nbElementDraw = 0;
 	#endif
 	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
@@ -101,13 +105,52 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 			continue;
 		}
 		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
-		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
-		#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-		nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+		#if 0
+			ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
+			#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+				nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
+				nbElementDrawTheoric += m_listFaces.GetValue(kkk).m_index.Size();
+			#endif
+		#else
+			mat4 mattttt = (projMatrix * camMatrix) * positionMatrix;
+			mattttt.m_mat[3] = 0;
+			mattttt.m_mat[7] = 0;
+			mattttt.m_mat[11] = 0;
+			//vec3 cameraNormal = vec3(-mattttt.m_mat[2], -mattttt.m_mat[6], -mattttt.m_mat[10]);
+			vec3 cameraNormal = mattttt*vec3(0,0,-1);
+			cameraNormal.normalized();
+			// remove face that is notin the view ...
+			etk::Vector<uint32_t> tmpIndexResult;
+			etk::Vector<Face>& tmppFaces = m_listFaces.GetValue(kkk).m_faces;
+			etk::Vector<uint32_t>& tmppIndex = m_listFaces.GetValue(kkk).m_index;
+			if (normalModeFace == m_normalMode) {
+				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
+					if(btDot(mattttt*m_listFacesNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f) {
+						tmpIndexResult.PushBack(iii*3);
+						tmpIndexResult.PushBack(iii*3+1);
+						tmpIndexResult.PushBack(iii*3+2);
+					}
+				}
+			} else {
+				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
+					if(    (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f)
+					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= 0.0f)
+					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= 0.0f) ) {
+						tmpIndexResult.PushBack(iii*3);
+						tmpIndexResult.PushBack(iii*3+1);
+						tmpIndexResult.PushBack(iii*3+2);
+					}
+				}
+			}
+			ewol::openGL::DrawElements(GL_TRIANGLES, tmpIndexResult);
+			#ifdef DISPLAY_NB_VERTEX_DISPLAYED
+				nbElementDraw += tmpIndexResult.Size();
+				nbElementDrawTheoric += m_listFaces.GetValue(kkk).m_index.Size();
+			#endif
 		#endif
 	}
 	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
+		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << "/" << nbElementDrawTheoric << " elements [" << m_name << "]");
 	#endif
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
@@ -186,6 +229,7 @@ void ewol::Mesh::CalculateNormaleEdge(void)
 			vec3 normal(0,0,0);
 			// add the vertex from all the element in the list for face when the element in the face ...
 			for(int32_t jjj=0 ; jjj<tmpFaceList.Size() ; jjj++) {
+				m_verticesVBO->PushOnBuffer(MESH_VBO_VERTICES_NORMAL, normal);
 				if(    tmpFaceList[jjj].m_vertex[0] == iii
 				    || tmpFaceList[jjj].m_vertex[1] == iii
 				    || tmpFaceList[jjj].m_vertex[2] == iii) {

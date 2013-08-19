@@ -15,7 +15,7 @@
 #include <ewol/renderer/resources/Resource.h>
 #include <ewol/renderer/openGL.h>
 
-#define NB_VBO_MAX   (10)
+#define NB_VBO_MAX   (4)
 
 namespace ewol
 {
