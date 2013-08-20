@@ -84,7 +84,8 @@ namespace ewol
 				normalModeVertex,
 			} normalMode_te;
 		private:
-			normalMode_te m_normalMode;
+			normalMode_te m_normalMode; // select the normal mode of display
+			bool m_checkNormal; //!< when enable, this check the normal of the mesh before sending it at the 3d card
 		protected:
 			ewol::Program* m_GLprogram;
 			int32_t        m_GLPosition;

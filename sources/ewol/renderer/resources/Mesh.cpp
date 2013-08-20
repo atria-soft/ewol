@@ -16,7 +16,8 @@
 
 ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
 	ewol::Resource(_fileName),
-	m_normalMode(normalModeNone)
+	m_normalMode(normalModeNone),
+	m_checkNormal(false)
 {
 	EWOL_DEBUG("Load a new mesh : '" << _fileName << "'");
 	// get the shader resource :
@@ -105,19 +106,19 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 			continue;
 		}
 		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
-		#if 0
+		if (m_checkNormal==false) {
 			ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
 			#ifdef DISPLAY_NB_VERTEX_DISPLAYED
 				nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
 				nbElementDrawTheoric += m_listFaces.GetValue(kkk).m_index.Size();
 			#endif
-		#else
+		} else {
 			mat4 mattttt = (projMatrix * camMatrix) * positionMatrix;
 			mattttt.m_mat[3] = 0;
 			mattttt.m_mat[7] = 0;
 			mattttt.m_mat[11] = 0;
 			//vec3 cameraNormal = vec3(-mattttt.m_mat[2], -mattttt.m_mat[6], -mattttt.m_mat[10]);
-			vec3 cameraNormal = mattttt*vec3(0,0,-1);
+			vec3 cameraNormal = vec3(0,0,-1);
 			cameraNormal.normalized();
 			// remove face that is notin the view ...
 			etk::Vector<uint32_t> tmpIndexResult;
@@ -133,9 +134,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 				}
 			} else {
 				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
-					if(    (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f)
-					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= 0.0f)
-					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= 0.0f) ) {
+					if(    (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= -0.2f)
+					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= -0.2f)
+					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= -0.2f) ) {
 						tmpIndexResult.PushBack(iii*3);
 						tmpIndexResult.PushBack(iii*3+1);
 						tmpIndexResult.PushBack(iii*3+2);
@@ -147,7 +148,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 				nbElementDraw += tmpIndexResult.Size();
 				nbElementDrawTheoric += m_listFaces.GetValue(kkk).m_index.Size();
 			#endif
-		#endif
+		}
 	}
 	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
 		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << "/" << nbElementDrawTheoric << " elements [" << m_name << "]");
@@ -658,6 +659,7 @@ typedef enum {
 
 bool ewol::Mesh::LoadEMF(const etk::UString& _fileName)
 {
+	m_checkNormal = true;
 	m_normalMode = ewol::Mesh::normalModeNone;
 	etk::FSNode fileName(_fileName);
 	// Get the fileSize ...
