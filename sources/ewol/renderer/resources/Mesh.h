@@ -112,7 +112,6 @@ namespace ewol
 			virtual ~Mesh(void);
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);
-			virtual void Draw2(mat4& positionMatrix);
 			void GenerateVBO(void);
 		private:
 			void CalculateNormaleFace(void);

@@ -161,7 +161,7 @@ def mesh_triangulate(me):
 	import bmesh
 	bm = bmesh.new()
 	bm.from_mesh(me)
-	bmesh.ops.triangulate(bm, faces=bm.faces)
+	bmesh.ops.triangulate(bm, faces=bm.faces)#, use_beauty=False)
 	bm.to_mesh(me)
 	bm.free()
 
@@ -364,9 +364,13 @@ def write_file(filepath,
 			idMesh = idMesh+1;
 			fw('Mesh : %d\n' % idMesh)
 			me.transform(EXPORT_GLOBAL_MATRIX * ob_mat)
+			#print("ploppp : " + str(EXPORT_GLOBAL_MATRIX) )
+			#print("ploppp : " + str(ob_mat) )
 			# _must_ do this first since it re-allocs arrays
 			# triangulate all the mesh :
 			mesh_triangulate(me)
+			# calculated normals:
+			me.calc_normals()
 			# export UV mapping :
 			faceuv = len(me.uv_textures) > 0
 			if faceuv:
@@ -381,8 +385,7 @@ def write_file(filepath,
 				# clean up
 				bpy.data.meshes.remove(me)
 				continue  # dont bother with this mesh.
-			# calculated normals:
-			me.calc_normals()
+			
 			materials = me.materials[:]
 			material_names = [m.name if m else None for m in materials]
 			# avoid bad index errors

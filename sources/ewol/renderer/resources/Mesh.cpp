@@ -23,7 +23,7 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	// get the shader resource :
 	m_GLPosition = 0;
 	
-	m_light.SetDirection(vec3(0,cos(M_PI/4),sin(M_PI/4)));
+	m_light.SetDirection(vec3(0,-cos(M_PI/4),0));
 	m_light.SetHalfPlane(vec3(1,0,0));
 	m_light.SetAmbientColor(vec4(1,1,1,1));
 	m_light.SetDiffuseColor(vec4(1.0,1.0,1.0,1));
@@ -70,7 +70,7 @@ ewol::Mesh::~Mesh(void)
 	ewol::resource::Release(m_verticesVBO);
 }
 
-#define DISPLAY_NB_VERTEX_DISPLAYED
+//#define DISPLAY_NB_VERTEX_DISPLAYED
 
 void ewol::Mesh::Draw(mat4& positionMatrix)
 {
@@ -126,7 +126,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 			etk::Vector<uint32_t>& tmppIndex = m_listFaces.GetValue(kkk).m_index;
 			if (normalModeFace == m_normalMode) {
 				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
-					if(btDot(mattttt*m_listFacesNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f) {
+					if(btDot(mattttt * m_listFacesNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f) {
 						tmpIndexResult.PushBack(iii*3);
 						tmpIndexResult.PushBack(iii*3+1);
 						tmpIndexResult.PushBack(iii*3+2);
@@ -134,9 +134,9 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 				}
 			} else {
 				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
-					if(    (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= -0.2f)
-					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= -0.2f)
-					    || (btDot(mattttt*m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= -0.2f) ) {
+					if(    (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= -0.2f)
+					    || (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= -0.2f)
+					    || (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= -0.2f) ) {
 						tmpIndexResult.PushBack(iii*3);
 						tmpIndexResult.PushBack(iii*3+1);
 						tmpIndexResult.PushBack(iii*3+2);
@@ -151,59 +151,13 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		}
 	}
 	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << "/" << nbElementDrawTheoric << " elements [" << m_name << "]");
+		EWOL_DEBUG(((float)nbElementDraw/(float)nbElementDrawTheoric*100.0f) << "% Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << "/" << nbElementDrawTheoric << " elements [" << m_name << "]");
 	#endif
 	m_GLprogram->UnUse();
 	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// TODO : UNDERSTAND why ... it is needed
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
-void ewol::Mesh::Draw2(mat4& positionMatrix)
-{
-	if (m_GLprogram==NULL) {
-		EWOL_ERROR("No shader ...");
-		return;
-	}
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
-	m_GLprogram->Use();
-	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::GetMatrix();
-	mat4 tmpMatrix = projMatrix;
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	m_GLprogram->UniformMatrix4fv(m_GLMatrixPosition, 1, positionMatrix.m_mat);
-	// position :
-	m_GLprogram->SendAttributePointer(m_GLPosition, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES);
-	// Texture :
-	m_GLprogram->SendAttributePointer(m_GLtexture, 2/*u,v*/, m_verticesVBO, MESH_VBO_TEXTURE);
-	// position :
-	m_GLprogram->SendAttributePointer(m_GLNormal, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES_NORMAL);
-	m_light.Draw(m_GLprogram);
-	
-	// draw materials :
-	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-		int32_t nbElementDraw = 0;
-	#endif
-	for (esize_t kkk=0; kkk<m_listFaces.Size(); kkk++) {
-		if (false == m_materials.Exist(m_listFaces.GetKey(kkk))) {
-			EWOL_WARNING("missing materials : '" << m_listFaces.GetKey(kkk) << "'");
-			continue;
-		}
-		m_materials[m_listFaces.GetKey(kkk)]->Draw(m_GLprogram, m_GLMaterial);
-		ewol::openGL::DrawElements(GL_TRIANGLES, m_listFaces.GetValue(kkk).m_index);
-		#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-			nbElementDraw += m_listFaces.GetValue(kkk).m_index.Size();
-		#endif
-	}
-	#ifdef DISPLAY_NB_VERTEX_DISPLAYED
-		EWOL_DEBUG("Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << " elements [" << m_name << "]");
-	#endif
-	m_GLprogram->UnUse();
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
-	// TODO : UNDERSTAND why ... it is needed
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-}
-
 
 // normal calculation of the normal face is really easy :
 void ewol::Mesh::CalculateNormaleFace(void)

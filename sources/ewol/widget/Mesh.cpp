@@ -53,7 +53,7 @@ void widget::Mesh::OnDraw(void)
 	                            * etk::matRotate(vec3(0,1,0),m_angle.y())
 	                            * etk::matRotate(vec3(0,0,1),m_angle.z());
 	if (NULL != m_object) {
-		m_object->Draw2(transformationMatrix);
+		m_object->Draw(transformationMatrix);
 	}
 }
 

@@ -46,60 +46,6 @@ class ImportEMF(bpy.types.Operator, ImportHelper):
             options={'HIDDEN'},
             )
 
-    use_ngons = BoolProperty(
-            name="NGons",
-            description="Import faces with more than 4 verts as ngons",
-            default=True,
-            )
-    use_edges = BoolProperty(
-            name="Lines",
-            description="Import lines and faces with 2 verts as edge",
-            default=True,
-            )
-    use_smooth_groups = BoolProperty(
-            name="Smooth Groups",
-            description="Surround smooth groups by sharp edges",
-            default=True,
-            )
-
-    use_split_objects = BoolProperty(
-            name="Object",
-            description="Import EMF Objects into Blender Objects",
-            default=True,
-            )
-    use_split_groups = BoolProperty(
-            name="Group",
-            description="Import EMF Groups into Blender Objects",
-            default=True,
-            )
-
-    use_groups_as_vgroups = BoolProperty(
-            name="Poly Groups",
-            description="Import EMF groups as vertex groups",
-            default=False,
-            )
-
-    use_image_search = BoolProperty(
-            name="Image Search",
-            description="Search subdirs for any associated images "
-                        "(Warning, may be slow)",
-            default=True,
-            )
-
-    split_mode = EnumProperty(
-            name="Split",
-            items=(('ON', "Split", "Split geometry, omits unused verts"),
-                   ('OFF', "Keep Vert Order", "Keep vertex order from file"),
-                   ),
-            )
-
-    global_clamp_size = FloatProperty(
-            name="Clamp Size",
-            description="Clamp bounds under this value (zero to disable)",
-            min=0.0, max=1000.0,
-            soft_min=0.0, soft_max=1000.0,
-            default=0.0,
-            )
     axis_forward = EnumProperty(
             name="Forward",
             items=(('X', "X Forward", ""),
@@ -128,12 +74,6 @@ class ImportEMF(bpy.types.Operator, ImportHelper):
         # print("Selected: " + context.active_object.name)
         from . import import_obj
 
-        if self.split_mode == 'OFF':
-            self.use_split_objects = False
-            self.use_split_groups = False
-        else:
-            self.use_groups_as_vgroups = False
-
         keywords = self.as_keywords(ignore=("axis_forward",
                                             "axis_up",
                                             "filter_glob",
@@ -151,18 +91,6 @@ class ImportEMF(bpy.types.Operator, ImportHelper):
         layout = self.layout
 
         row = layout.row(align=True)
-
-        box = layout.box()
-        row = box.row()
-        row.prop(self, "split_mode", expand=True)
-
-        row = box.row()
-        if self.split_mode == 'ON':
-            row.label(text="Split by:")
-            row.prop(self, "use_split_objects")
-            row.prop(self, "use_split_groups")
-        else:
-            row.prop(self, "use_groups_as_vgroups")
 
         row = layout.split(percentage=0.67)
         row.prop(self, "global_clamp_size")
