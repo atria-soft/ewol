@@ -17,7 +17,9 @@
 ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
 	ewol::Resource(_fileName),
 	m_normalMode(normalModeNone),
-	m_checkNormal(false)
+	m_checkNormal(false),
+	m_pointerShape(NULL),
+	m_functionFreeShape(NULL)
 {
 	EWOL_DEBUG("Load a new mesh : '" << _fileName << "'");
 	// get the shader resource :
@@ -68,6 +70,10 @@ ewol::Mesh::~Mesh(void)
 	// remove dynamics dependencies :
 	ewol::resource::Release(m_GLprogram);
 	ewol::resource::Release(m_verticesVBO);
+	if (m_functionFreeShape!=NULL) {
+		m_functionFreeShape(m_pointerShape);
+		m_pointerShape = NULL;
+	}
 }
 
 //#define DISPLAY_NB_VERTEX_DISPLAYED
@@ -994,3 +1000,14 @@ void ewol::Mesh::AddMaterial(const etk::UString& _name, ewol::Material* _data)
 	// really add the material :
 	m_materials.Add(_name, _data);
 }
+
+
+
+void ewol::Mesh::SetShape(void* _shape)
+{
+	if (m_functionFreeShape!=NULL) {
+		m_functionFreeShape(m_pointerShape);
+		m_pointerShape = NULL;
+	}
+	m_pointerShape=_shape;
+};

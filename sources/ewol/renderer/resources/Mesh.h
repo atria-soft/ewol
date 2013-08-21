@@ -126,6 +126,23 @@ namespace ewol
 		public:
 			
 			const etk::Vector<ewol::PhysicsShape*>& GetPhysicalProperties(void) const { return m_physics; };
+		private:
+			void* m_pointerShape; //!< all mesh have a basic shape (bullet or other) the void pointer mermit to not depent on the bullet lib
+		public:
+			/**
+			 * @brief Set the shape pointer (no type ==> user might know it ...)
+			 * @param[in] _shape The new shape (this remove the previous one)
+			 */
+			void SetShape(void* _shape);
+			/**
+			 * @brief Get the pointer on the shame (no type)
+			 * @return Pointer on shape.
+			 */
+			void* GetShape(void) { return m_pointerShape; };
+		private:
+			void (*m_functionFreeShape)(void* _pointer);
+		public:
+			void SetFreeShapeFunction(void (*_functionFreeShape)(void* _pointer)) { m_functionFreeShape = _functionFreeShape; };
 	};
 };
 
