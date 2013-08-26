@@ -19,6 +19,13 @@
 /* include auto generated file */
 #include <ewol/renderer/os/org_ewol_EwolConstants.h>
 
+typedef enum {
+	appl_unknow,
+	appl_application,
+	appl_wallpaper
+} application_te;
+static application_te javaApplicationType = appl_unknow;
+
 // get a resources from the java environement : 
 static JNIEnv* JavaVirtualMachinePointer = NULL; // the JVM
 static jclass  javaClassEwol = 0; // main activity class (android ...)
@@ -127,23 +134,27 @@ void SendJavaOrientationUpdate(int32_t mode)
 void SendJavaSetTitle(const char * dataString)
 {
 	EWOL_DEBUG("C->java : send message to the java : \"" << dataString << "\"");
-	int status;
-	if(!java_attach_current_thread(&status)) {
-		return;
+	if (javaApplicationType == appl_application) {
+		int status;
+		if(!java_attach_current_thread(&status)) {
+			return;
+		}
+		EWOL_DEBUG("C->java : 222");
+		if (NULL == dataString) {
+			EWOL_ERROR("C->java : No data to send ...");
+			return;
+		}
+		
+		//Call java ...
+		jstring title = JavaVirtualMachinePointer->NewStringUTF(dataString);
+		JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolActivitySetTitle, title);
+		JavaVirtualMachinePointer->DeleteLocalRef(title);
+		// manage execption : 
+		java_check_exception(JavaVirtualMachinePointer);
+		java_detach_current_thread(status);
+	} else {
+		EWOL_ERROR("C->java : can not set title on appliation that is not real application");
 	}
-	EWOL_DEBUG("C->java : 222");
-	if (NULL == dataString) {
-		EWOL_ERROR("C->java : No data to send ...");
-		return;
-	}
-
-	//Call java ...
-	jstring title = JavaVirtualMachinePointer->NewStringUTF(dataString);
-	JavaVirtualMachinePointer->CallVoidMethod(javaObjectEwolCallbackAndActivity, javaMethodEwolActivitySetTitle, title);
-	JavaVirtualMachinePointer->DeleteLocalRef(title);
-	// manage execption : 
-	java_check_exception(JavaVirtualMachinePointer);
-	java_detach_current_thread(status);
 }
 
 
@@ -223,7 +234,11 @@ extern "C"
 	static void setJavaVirtualMachineStart(JNIEnv* env, jclass classBase, jobject objCallback)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Set JVM Pointer                       **");
+		if (javaApplicationType == appl_application) {
+			EWOL_DEBUG("** Set JVM Pointer (application)         **");
+		} else {
+			EWOL_DEBUG("** Set JVM Pointer (LiveWallpaper)       **");
+		}
 		EWOL_DEBUG("*******************************************");
 		JavaVirtualMachinePointer = env;
 		// get default needed all time elements : 
@@ -245,25 +260,27 @@ extern "C"
 				return;
 			}
 			
-			__jni_safe_init_method_id(
-			javaMethodEwolActivitySetTitle, 
-			javaClassEwolCallbackAndActivity, 
-			"setTitle", "(Ljava/lang/CharSequence;)V");
+			if (javaApplicationType == appl_application) {
+				__jni_safe_init_method_id(javaMethodEwolActivitySetTitle,
+				                          javaClassEwolCallbackAndActivity,
+				                          "setTitle",
+				                          "(Ljava/lang/CharSequence;)V");
+			}
 			
-			__jni_safe_init_method_id(
-			javaMethodEwolCallbackEventNotifier, 
-			javaClassEwolCallbackAndActivity, 
-			"eventNotifier", "([Ljava/lang/String;)V");
+			__jni_safe_init_method_id(javaMethodEwolCallbackEventNotifier,
+			                          javaClassEwolCallbackAndActivity,
+			                          "eventNotifier",
+			                          "([Ljava/lang/String;)V");
 			
-			__jni_safe_init_method_id(
-			javaMethodEwolCallbackKeyboardUpdate, 
-			javaClassEwolCallbackAndActivity, 
-			"keyboardUpdate", "(Z)V");
+			__jni_safe_init_method_id(javaMethodEwolCallbackKeyboardUpdate,
+			                          javaClassEwolCallbackAndActivity,
+			                          "keyboardUpdate",
+			                          "(Z)V");
 			
-			__jni_safe_init_method_id(
-			javaMethodEwolCallbackOrientationUpdate,
-			javaClassEwolCallbackAndActivity, 
-			"orientationUpdate", "(I)V");
+			__jni_safe_init_method_id(javaMethodEwolCallbackOrientationUpdate,
+			                          javaClassEwolCallbackAndActivity,
+			                          "orientationUpdate",
+			                          "(I)V");
 			
 			javaObjectEwolCallbackAndActivity = env->NewGlobalRef(objCallback);
 			//javaObjectEwolCallbackAndActivity = objCallback;
@@ -280,11 +297,13 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_setJavaVirtualMachineStart(JNIEnv* _env, jclass _classBase, jobject _objCallback)
 	{
+		javaApplicationType = appl_application;
 		setJavaVirtualMachineStart(_env, _classBase, _objCallback);
 	}
 	
 	void Java_org_ewol_Ewol_setJavaVirtualMachineStartWallpaperEngine(JNIEnv* _env, jclass _classBase, jobject _objCallback)
 	{
+		javaApplicationType = appl_wallpaper;
 		setJavaVirtualMachineStart(_env, _classBase, _objCallback);
 	}
 	

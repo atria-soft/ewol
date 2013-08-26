@@ -76,10 +76,10 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-				
+		
 		// set the java evironement in the C sources :
 		Ewol.setJavaVirtualMachineStart(this);
-				
+		
 		// Load the application directory
 		Ewol.paramSetArchiveDir(1, getFilesDir().toString());
 		Ewol.paramSetArchiveDir(2, getCacheDir().toString());
@@ -104,7 +104,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		// create bsurface system
-		mGLView = new EwolSurfaceViewGL(this, 2);
+		mGLView = new EwolSurfaceViewGL(this);
 		
 		// create element audio ...
 		mStreams = new EwolAudioTask();

@@ -26,7 +26,7 @@ public class Ewol {
 	}
 	
 	public static native <T extends Activity & EwolCallback> void setJavaVirtualMachineStart(T activityInstance);
-	public static native <T extends Engine & EwolCallback> void setJavaVirtualMachineStartWallpaperEngine(T serviceInstance);
+	public static native <T extends WallpaperService & EwolCallback> void setJavaVirtualMachineStartWallpaperEngine(T serviceInstance);
 	public static native void setJavaVirtualMachineStop();
 	public static native void paramSetArchiveDir(int mode, String myString);
 	
