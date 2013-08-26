@@ -23,18 +23,17 @@ import static org.ewol.Ewol.EWOL;
  * @brief Class : 
  *
  */
-public class EwolRendererGL implements GLSurfaceView.Renderer {
+public class EwolRendererGL implements GLSurfaceView.Renderer
+{
+	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+		EWOL.renderInit();
+	}
 	
-    public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-		
-	EWOL.renderInit();
-    }
+	public void onSurfaceChanged(GL10 gl, int w, int h) {
+		EWOL.renderResize(w, h);
+	}
 	
-    public void onSurfaceChanged(GL10 gl, int w, int h) {
-	EWOL.renderResize(w, h);
-    }
-	
-    public void onDrawFrame(GL10 gl) {
-	EWOL.renderDraw();
-    }
+	public void onDrawFrame(GL10 gl) {
+		EWOL.renderDraw();
+	}
 }
