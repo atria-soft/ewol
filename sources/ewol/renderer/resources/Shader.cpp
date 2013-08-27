@@ -77,6 +77,7 @@ void ewol::Shader::UpdateContext(void)
 			checkGlError("glCreateShader");
 			return;
 		} else {
+			//EWOL_INFO("Creater shader with GLID=" << m_shader);
 			glShaderSource(m_shader, 1, (const char**)&m_fileData, NULL);
 			glCompileShader(m_shader);
 			GLint compiled = 0;

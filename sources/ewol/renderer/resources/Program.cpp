@@ -776,6 +776,7 @@ void ewol::Program::SetTexture1(int32_t idElem, GLint textureOpenGlID)
 
 void ewol::Program::UnUse(void)
 {
+	//EWOL_WARNING("Will use program : " << m_program);
 	if (0==m_program) {
 		return;
 	}

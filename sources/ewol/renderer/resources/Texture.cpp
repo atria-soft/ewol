@@ -97,6 +97,7 @@ void ewol::Texture::RemoveContext(void)
 void ewol::Texture::RemoveContextToLate(void)
 {
 	m_loaded = false;
+	m_texId=0;
 }
 
 

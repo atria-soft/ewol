@@ -124,7 +124,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			
 			// On Honeycomb+ devices, this improves the performance when
 			// leaving and resuming the live wallpaper.
-			setPreserveEGLContextOnPause(true);
+			//setPreserveEGLContextOnPause(true);
 			
 		}
 		

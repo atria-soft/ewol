@@ -11,6 +11,7 @@
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/resources/FontFreeType.h>
 #include <ewol/ewol.h>
+#include <ewol/renderer/openGL.h>
 
 
 // Specific for the resource : 
@@ -113,6 +114,7 @@ void ewol::resource::UpdateContext(void)
 				for (int32_t iii=0; iii<l_resourceList.Size(); iii++) {
 					if(l_resourceList[iii] != NULL) {
 						if (jjj==l_resourceList[iii]->GetResourceLevel()) {
+							//EWOL_DEBUG("Update context of " << iii << " named : " << l_resourceList[iii]->GetName());
 							l_resourceList[iii]->UpdateContext();
 						}
 					}
@@ -145,6 +147,7 @@ void ewol::resource::ContextHasBeenDestroyed(void)
 			l_resourceList[iii]->RemoveContextToLate();
 		}
 	}
+	ewol::openGL::ContextIsRemoved();
 	// no context preent ...
 	l_contextHasBeenRemoved = true;
 }

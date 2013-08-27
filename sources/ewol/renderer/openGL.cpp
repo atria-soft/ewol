@@ -37,6 +37,12 @@ void ewol::openGL::UnInit(void)
 	l_matrixCamera.Identity();
 }
 
+void ewol::openGL::ContextIsRemoved(void)
+{
+	// same as call Init, but in case of changing...
+	ewol::openGL::Init();
+}
+
 void ewol::openGL::SetBasicMatrix(const mat4& newOne)
 {
 	if (l_matrixList.Size()!=1) {
