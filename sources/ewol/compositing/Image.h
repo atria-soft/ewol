@@ -24,7 +24,6 @@ namespace ewol
 			bool m_clippingEnable; //!< true if the clipping must be activated
 		private:
 			etk::Color<> m_color; //!< The text foreground color
-			vec3 m_axes; //!< Rotation axes (instant)
 			float m_angle; //!< Angle to set at the axes
 		private:
 			ewol::Program* m_GLprogram; //!< pointer on the opengl display program
@@ -105,10 +104,9 @@ namespace ewol
 			void SetClippingMode(bool _newMode) { m_clippingEnable = _newMode; };
 			/**
 			 * @brief Set a unique rotation of this element (not set in the Rotate Generic system)
-			 * @param[in] _axes Rotation axes selection
-			 * @param[in] _angle Angle to set on this axes
+			 * @param[in] _angle Angle to set in radiant.
 			 */
-			void SetAngle(const vec3& _axes, float _angle);
+			void SetAngle(float _angleRad);
 			/**
 			 * @brief Add a compleate of the image to display with the requested size
 			 * @param[in] _size Size of the output image

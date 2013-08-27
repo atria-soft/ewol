@@ -19,7 +19,6 @@ ewol::Image::Image(const etk::UString& _imageName) :
 	m_clippingPosStop(0.0, 0.0, 0.0),
 	m_clippingEnable(false),
 	m_color(etk::color::white),
-	m_axes(0.0, 0.0, 0.0),
 	m_angle(0.0),
 	m_GLprogram(NULL),
 	m_GLPosition(-1),
@@ -101,7 +100,6 @@ void ewol::Image::Clear(void)
 	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
 	m_clippingEnable = false;
 	m_color = etk::color::white;
-	m_axes = vec3(0.0, 0.0, 0.0);
 	m_angle = 0.0;
 }
 
@@ -132,110 +130,107 @@ void ewol::Image::SetClipping(const vec3& _pos, vec3 _posEnd)
 	m_clippingEnable = true;
 }
 
-void ewol::Image::SetAngle(const vec3& _axes, float _angle)
+void ewol::Image::SetAngle(float _angle)
 {
-	m_axes = _axes;
 	m_angle = _angle;
-	if(    m_axes.x() == 0
-	    && m_axes.y() == 0
-	    && m_axes.z() == 0) {
-		m_angle = 0;
-	}
 }
 
 void ewol::Image::Print(const vec2& _size)
 {
-	#if 1
-		PrintPart(_size, vec2(0,0), vec2(1,1));
-	#else
-	vec3 point(0,0,0);
-	vec2 tex(0,1);
-
-	point.setX(m_position.x());
-	point.setY(m_position.y());
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-
-
-	tex.setValue(1,1);
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y());
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-
-
-	tex.setValue(1,0);
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y() + _size.y());
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-
-	tex.setValue(0,0);
-	point.setX(m_position.x());
-	point.setY(m_position.y() + _size.y());
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-
-	tex.setValue(0,1);
-	point.setX(m_position.x());
-	point.setY(m_position.y());
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
-	#endif
+	PrintPart(_size, vec2(0,0), vec2(1,1));
 }
 
 void ewol::Image::PrintPart(const vec2& _size,
                             const vec2& _sourcePosStart,
                             const vec2& _sourcePosStop)
 {
+	if (m_angle==0.0f) {
+		vec3 point(0,0,0);
+		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
+		
+		point.setX(m_position.x());
+		point.setY(m_position.y());
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		
+		
+		tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
+		point.setX(m_position.x() + _size.x());
+		point.setY(m_position.y());
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		
+		
+		tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
+		point.setX(m_position.x() + _size.x());
+		point.setY(m_position.y() + _size.y());
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		
+		tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
+		point.setX(m_position.x());
+		point.setY(m_position.y() + _size.y());
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		
+		tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
+		point.setX(m_position.x());
+		point.setY(m_position.y());
+		m_coord.PushBack(point);
+		m_coordTex.PushBack(tex);
+		m_coordColor.PushBack(m_color);
+		return;
+	}
+	vec3 center = m_position + vec3(_size.x(),_size.y(),0)/2.0f;
+	vec3 limitedSize(_size.x()*0.5f, _size.y()*0.5f, 0.0f);
+	
 	vec3 point(0,0,0);
 	vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
-
-	point.setX(m_position.x());
-	point.setY(m_position.y());
+	
+	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
+	point = point.rotate(vec3(0,0,1), m_angle) + center;
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
-
-
+	
+	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y());
+	point.setValue(limitedSize.x(), -limitedSize.y(), 0);
+	point = point.rotate(vec3(0,0,1), m_angle) + center;
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
-
-
+	
+	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
-	point.setX(m_position.x() + _size.x());
-	point.setY(m_position.y() + _size.y());
+	point.setValue(limitedSize.x(), limitedSize.y(), 0);
+	point = point.rotate(vec3(0,0,1), m_angle) + center;
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
-
+	
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
-
+	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
-	point.setX(m_position.x());
-	point.setY(m_position.y() + _size.y());
+	point.setValue(-limitedSize.x(), limitedSize.y(), 0);
+	point = point.rotate(vec3(0,0,1), m_angle) + center;
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);
-
+	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
-	point.setX(m_position.x());
-	point.setY(m_position.y());
+	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
+	point = point.rotate(vec3(0,0,1), m_angle) + center;
 	m_coord.PushBack(point);
 	m_coordTex.PushBack(tex);
 	m_coordColor.PushBack(m_color);

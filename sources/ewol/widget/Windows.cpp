@@ -25,7 +25,8 @@
 extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
-ewol::Windows::Windows(void)
+ewol::Windows::Windows(void) :
+	m_backgroundColor(0.750, 0.750, 0.750, 0.5)
 {
 	SetCanHaveFocus(true);
 	m_subWidget = NULL;
@@ -147,7 +148,10 @@ void ewol::Windows::SystemDraw(const ewol::DrawProperty& _displayProp)
 	#endif
 	
 	// Clear the screen with transparency ...
-	glClearColor(0.750, 0.750, 0.750, 0.5);
+	glClearColor(m_backgroundColor.r(),
+	             m_backgroundColor.g(),
+	             m_backgroundColor.b(),
+	             m_backgroundColor.a());
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	#ifdef TEST_PERFO_WINDOWS
 	float ___localTime0 = (float)(ewol::GetTime() - ___startTime0) / 1000.0f;
@@ -225,3 +229,10 @@ void ewol::Windows::OnObjectRemove(ewol::EObject * removeObject)
 }
 
 
+void ewol::Windows::SetBackgroundColor(const etk::Color<float>& _color)
+{
+	if (m_backgroundColor != _color) {
+		m_backgroundColor = _color;
+		MarkToRedraw();
+	}
+}

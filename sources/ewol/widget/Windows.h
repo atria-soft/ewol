@@ -12,6 +12,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <etk/Color.h>
 
 namespace ewol {
 	
@@ -50,6 +51,19 @@ namespace ewol {
 		public:
 			void SetSubWidget(ewol::Widget * widget);
 			void PopUpWidgetPush(ewol::Widget * widget);
+		private:
+			etk::Color<float> m_backgroundColor; //!< reset color of the Main windows
+		public:
+			/**
+			 * @brief Get the background color.
+			 * @return A reference on the color
+			 */
+			const etk::Color<float>& GetBackgroundColor(void) { return m_backgroundColor; };
+			/**
+			 * @brief Set the background color.
+			 * @param[IN] the new requested color.
+			 */
+			void SetBackgroundColor(const etk::Color<float>& _color);
 		protected: // Derived function
 			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
 		public: // Derived function
