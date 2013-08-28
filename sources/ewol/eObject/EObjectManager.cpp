@@ -13,15 +13,7 @@
 #undef __class__
 #define __class__	"EObjectManager"
 
-static bool IsInit = false;
-
-// internal element of the widget manager : 
-static etk::Vector<ewol::EObject*>   m_eObjectList;             // all widget allocated ==> all time increment ... never removed ...
-static etk::Vector<ewol::EObject*>   m_eObjectAutoRemoveList;   // all widget allocated
-
-
-
-void ewol::EObjectManager::Init(void)
+ewol::EObjectManager::EObjectManager(void)
 {
 	EWOL_DEBUG("==> Init EObject-Manager");
 	// Can create mlemory leak ... ==> but not predictable comportement otherwise ...
@@ -30,7 +22,7 @@ void ewol::EObjectManager::Init(void)
 	IsInit = true;
 }
 
-void ewol::EObjectManager::UnInit(void)
+ewol::EObjectManager::~EObjectManager(void)
 {
 	EWOL_DEBUG("==> Un-Init EObject-Manager");
 	RemoveAllAutoRemove();

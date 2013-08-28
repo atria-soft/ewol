@@ -19,12 +19,12 @@
 #include <ewol/UserConfig.h>
 #undef __class__
 #define __class__	"ewol"
-
+/*
 void ewol::SetFontSourcesFolder(bool _inOsSystem)
 {
 	ewol::font::SetFontPropety(_inOsSystem);
 }
-
+*/
 int32_t ewol::Run(int32_t _argc, const char* _argv[])
 {
 	if (NULL!=_argv) {
@@ -60,14 +60,14 @@ int32_t ewol::Run(int32_t _argc, const char* _argv[])
 		}
 	}
 	// call standard RUN ...
-	int32_t error = guiInterface::main(_argc, _argv);
+	int32_t error = ewol::eSystem::main(_argc, _argv);
 	
 	ewol::commandLine::Clean();
 	
 	return error;
 }
 
-
+/*
 void ewol::Stop(void)
 {
 	guiInterface::Stop();
@@ -126,7 +126,7 @@ void ewol::SetTitle(const etk::UString& _title)
 	etk::UString title = _title;
 	guiInterface::SetTitle(title);
 }
-
+*/
 etk::UString ewol::GetVersion(void)
 {
 	#define FIRST_YEAR (2011)
@@ -140,9 +140,9 @@ etk::UString ewol::GetVersion(void)
 
 int64_t ewol::GetTime(void)
 {
-	return guiInterface::GetTime();
+	return ewol::eSystem::GetTime();
 }
-
+/*
 void ewol::InputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination)
 {
 	eSystem::InputEventTransfertWidget(_source, _destination);
@@ -158,7 +158,7 @@ void ewol::SetIcon(const etk::UString& _icon)
 {
 	guiInterface::SetIcon(_icon);
 }
-
+*/
 
 
 

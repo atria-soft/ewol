@@ -42,7 +42,7 @@ def Create(target):
 	myModule.AddSrcFile([
 		'ewol/renderer/os/eSystem.cpp',
 		'ewol/renderer/os/eSystemInput.cpp'])
-	
+	"""
 	# renderer : 
 	myModule.AddSrcFile([
 		'ewol/renderer/resources/Shader.cpp',
@@ -121,7 +121,7 @@ def Create(target):
 	myModule.AddSrcFile([
 		'ewol/widget/Scene.cpp',
 		'ewol/game/Camera.cpp'])
-	
+	"""
 	
 	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')
@@ -140,15 +140,9 @@ def Create(target):
 	myModule.CopyFolder('../data/textured3D2.*','')
 	myModule.CopyFolder('../data/textured3D.*','')
 	
-	# add the configuration files
-	#myModule.SetConfig(['Config.in','ConfigLinux.in'])
-	
 	# name of the dependency
 	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
 	
-	#ifeq ("$(CONFIG_BUILD_BULLET)","y")
-	#myModule.AddModuleDepend('bullet')
-	#endif
 	#ifeq ("$(CONFIG_BUILD_LUA)","y")
 	#myModule.AddModuleDepend('lua')
 	#endif

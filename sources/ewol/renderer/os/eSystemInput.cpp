@@ -136,13 +136,13 @@ void ewol::eSystemInput::GrabPointer(ewol::Widget* widget)
 		return;
 	}
 	m_grabWidget = widget;
-	guiInterface::GrabPointerEvents(true, widget->GetOrigin() + ivec2(widget->GetSize().x()/2.0f, widget->GetSize().y()/2.0f) );
+	m_system.GrabPointerEvents(true, widget->GetOrigin() + ivec2(widget->GetSize().x()/2.0f, widget->GetSize().y()/2.0f) );
 }
 
 void ewol::eSystemInput::UnGrabPointer(void)
 {
 	m_grabWidget = NULL;
-	guiInterface::GrabPointerEvents(false, vec2(0,0));
+	m_system.GrabPointerEvents(false, vec2(0,0));
 }
 
 void ewol::eSystemInput::OnObjectRemove(ewol::EObject * removeObject)
@@ -179,8 +179,9 @@ void ewol::eSystemInput::Reset(void)
 	}
 }
 
-ewol::eSystemInput::eSystemInput(void) :
-	m_grabWidget(NULL)
+ewol::eSystemInput::eSystemInput(ewol::eSystem& _system) :
+	m_grabWidget(NULL),
+	m_system(_system)
 {
 	SetDpi(200);
 	EWOL_INFO("Init (start)");
@@ -236,7 +237,7 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 		// not manage input
 		return;
 	}
-	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
+	ewol::Windows* tmpWindows = m_system.GetCurrentWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
 	if (type == ewol::keyEvent::typeMouse && pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
@@ -336,7 +337,7 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::GetTime();
-	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
+	ewol::Windows* tmpWindows = m_system.GetCurrentWindows();
 	
 	if (true == isDown) {
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN] " << pos);

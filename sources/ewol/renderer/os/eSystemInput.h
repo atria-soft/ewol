@@ -11,6 +11,8 @@
 
 #include <ewol/widget/Widget.h>
 
+#define MAX_MANAGE_INPUT (15)
+
 namespace ewol
 {
 	
@@ -33,7 +35,7 @@ namespace ewol
 		int32_t sepatateTime;
 		int32_t DpiOffset;
 	} inputLimit_ts;
-	
+	class eSystem;
 	class eSystemInput
 	{
 		// special grab pointer mode : 
@@ -44,7 +46,6 @@ namespace ewol
 			inputLimit_ts   m_eventInputLimit;
 			inputLimit_ts   m_eventMouseLimit;
 			void CalculateLimit(void);
-			#define MAX_MANAGE_INPUT         (15)
 			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
 			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
 			void AbortElement(InputPoperty_ts *eventTable, int32_t idInput, ewol::keyEvent::type_te _type);
@@ -74,8 +75,10 @@ namespace ewol
 			int32_t localGetDestinationId(ewol::keyEvent::type_te type,
 			                              ewol::Widget* destWidget,
 			                              int32_t realInputId);
+		private:
+			ewol::eSystem& m_system;
 		public:
-			eSystemInput(void);
+			eSystemInput(ewol::eSystem& _system);
 			~eSystemInput(void);
 			void Reset(void);
 			void SetDpi(int32_t newDPI);

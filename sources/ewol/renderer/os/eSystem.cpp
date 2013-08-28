@@ -9,7 +9,6 @@
 #include <unistd.h>
 
 #include <etk/types.h>
-#include <etk/MessageFifo.h>
 
 #include <ewol/ewol.h>
 #include <ewol/Dimension.h>
@@ -25,105 +24,41 @@
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/os/eSystemInput.h>
 #include <ewol/renderer/openGL.h>
-#include <ewol/renderer/os/Fps.h>
 
 #include <ewol/widget/WidgetManager.h>
 
+#include <etk/os/FSNode.h>
+
 #include <date/date.h>
 
-static bool                             requestEndProcessing = false;
-static bool                             isGlobalSystemInit = false;
-static ewol::Windows*                   windowsCurrent = NULL;
-static int64_t                          previousDisplayTime = 0;  // this is to limit framerate ... in case...
-static ivec2                            windowsSize(320, 480);
-static ewol::eSystemInput               l_managementInput;
-static ewol::Fps                        l_FpsSystemEvent(     "Event     ", false);
-static ewol::Fps                        l_FpsSystemContext(   "Context   ", false);
-static ewol::Fps                        l_FpsSystem(          "Draw      ", true);
-static ewol::Fps                        l_FpsFlush(           "Flush     ", false);
 
 
 
-void eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
+void ewol::eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
 {
-	l_managementInput.TransfertEvent(source, destination);
+	m_managementInput.TransfertEvent(source, destination);
 }
 
 
-void eSystem::InputEventGrabPointer(ewol::Widget* widget)
+void ewol::eSystem::InputEventGrabPointer(ewol::Widget* widget)
 {
-	l_managementInput.GrabPointer(widget);
+	m_managementInput.GrabPointer(widget);
 }
 
-void eSystem::InputEventUnGrabPointer(void)
+void ewol::eSystem::InputEventUnGrabPointer(void)
 {
-	l_managementInput.UnGrabPointer();
+	m_managementInput.UnGrabPointer();
 }
 
-typedef enum {
-	THREAD_NONE,
-	THREAD_INIT,
-	THREAD_RECALCULATE_SIZE,
-	THREAD_RESIZE,
-	THREAD_HIDE,
-	THREAD_SHOW,
-	
-	THREAD_INPUT_MOTION,
-	THREAD_INPUT_STATE,
-	
-	THREAD_KEYBORAD_KEY,
-	THREAD_KEYBORAD_MOVE,
-	
-	THREAD_CLIPBOARD_ARRIVE,
-} theadMessage_te;
-
-
-
-class eSystemMessage {
-	public :
-		// specify the message type
-		theadMessage_te TypeMessage;
-		// can not set a union ...
-		ewol::clipBoard::clipboardListe_te clipboardID;
-		// InputId
-		ewol::keyEvent::type_te inputType;
-		int32_t                 inputId;
-		// generic dimentions
-		vec2 dimention;
-		// keyboard events :
-		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
-		bool                        stateIsDown;
-		uniChar_t                   keyboardChar;
-		ewol::keyEvent::keyboard_te keyboardMove;
-		ewol::SpecialKey            keyboardSpecial;
-		
-		eSystemMessage(void) :
-			TypeMessage(THREAD_NONE),
-			clipboardID(ewol::clipBoard::clipboardStd),
-			inputType(ewol::keyEvent::typeUnknow),
-			inputId(-1),
-			dimention(0,0),
-			repeateKey(false),
-			stateIsDown(false),
-			keyboardChar(0),
-			keyboardMove(ewol::keyEvent::keyboardUnknow)
-		{
-			
-		}
-};
-
-static etk::MessageFifo<eSystemMessage> l_msgSystem;
-
-
-void ewolProcessEvents(void)
+void ewol::eSystem::ProcessEvents(void)
 {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
 	eSystemMessage data;
-	while (l_msgSystem.Count()>0) 
+	while (m_msgSystem.Count()>0) 
 	{
 		nbEvent++;
-		l_msgSystem.Wait(data);
+		m_msgSystem.Wait(data);
 		//EWOL_DEBUG("EVENT");
 		switch (data.TypeMessage) {
 			case THREAD_INIT:
@@ -135,17 +70,17 @@ void ewolProcessEvents(void)
 				break;
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
-				windowsSize = data.dimention;
-				ewol::dimension::SetPixelWindowsSize(vec2(windowsSize.x(),windowsSize.y()));
+				m_windowsSize = data.dimention;
+				ewol::dimension::SetPixelWindowsSize(m_windowsSize);
 				eSystem::ForceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
-				l_managementInput.Motion(data.inputType, data.inputId, data.dimention);
+				m_managementInput.Motion(data.inputType, data.inputId, data.dimention);
 				break;
 			case THREAD_INPUT_STATE:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
-				l_managementInput.State(data.inputType, data.inputId, data.stateIsDown, data.dimention);
+				m_managementInput.State(data.inputType, data.inputId, data.stateIsDown, data.dimention);
 				break;
 			case THREAD_KEYBORAD_KEY:
 			case THREAD_KEYBORAD_MOVE:
@@ -155,11 +90,11 @@ void ewolProcessEvents(void)
 					specialCurrentKey = data.keyboardSpecial;
 					//EWOL_DEBUG("newStatus Key" << specialCurrentKey);
 				}
-				if (NULL != windowsCurrent) {
-					if (false==windowsCurrent->OnEventShortCut(data.keyboardSpecial,
-					                                           data.keyboardChar,
-					                                           data.keyboardMove,
-					                                           data.stateIsDown) ) {
+				if (NULL != m_windowsCurrent) {
+					if (false==m_windowsCurrent->OnEventShortCut(data.keyboardSpecial,
+					                                             data.keyboardChar,
+					                                             data.keyboardMove,
+					                                             data.stateIsDown) ) {
 						// Get the current Focused Widget :
 						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
 						if (NULL != tmpWidget) {
@@ -221,9 +156,7 @@ void ewolProcessEvents(void)
 	}
 }
 
-
-
-void eSystem::SetArchiveDir(int mode, const char* str)
+void ewol::eSystem::SetArchiveDir(int mode, const char* str)
 {
 	switch(mode)
 	{
@@ -250,345 +183,295 @@ void eSystem::SetArchiveDir(int mode, const char* str)
 
 
 
-
-
-
-void RequestInit(void)
-{
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_INIT;
-		l_msgSystem.Post(data);
-	}
-}
-
-
-void eSystem::Init(void)
+ewol::eSystem::eSystem(void) :
+	m_previousDisplayTime(0),
+	m_managementInput(*this),
+	m_FpsSystemEvent(  "Event     ", false),
+	m_FpsSystemContext("Context   ", false),
+	m_FpsSystem(       "Draw      ", true),
+	m_FpsFlush(        "Flush     ", false),
+	m_windowsCurrent(NULL),
+	m_windowsSize(320,480)
 {
 	EWOL_INFO("==> Ewol System Init (BEGIN)");
-	if (false == isGlobalSystemInit) {
-		l_msgSystem.Clean();
-		requestEndProcessing = false;
-		
-		EWOL_INFO("v:" << ewol::GetVersion());
-		EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
-		etk::InitDefaultFolder("ewolApplNoName");
-		ewol::openGL::Init();
-		ewol::EObjectManager::Init();
-		ewol::EObjectMessageMultiCast::Init();
-		l_managementInput.Reset();
-		ewol::resource::Init();
-		ewol::widgetManager::Init();
-		ewol::config::Init();
-		isGlobalSystemInit = true;
-		// request the init of the application in the main context of openGL ...
-		RequestInit();
-		// force a recalculation
-		ewol::RequestUpdateSize();
-		#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
-			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
-		#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
-			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
-		#else
-			ewol::ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
-		#endif
+	EWOL_INFO("v:" << ewol::GetVersion());
+	EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
+	// TODO : Remove this ...
+	etk::InitDefaultFolder("ewolApplNoName");
+	// TODO : Remove all of this gloabals ...
+	ewol::openGL::Init();
+	ewol::EObjectManager::Init();
+	ewol::EObjectMessageMultiCast::Init();
+	m_managementInput.Reset();
+	ewol::resource::Init();
+	ewol::widgetManager::Init();
+	ewol::config::Init();
+	// request the init of the application in the main context of openGL ...
+	{
+		eSystemMessage data;
+		data.TypeMessage = THREAD_INIT;
+		m_msgSystem.Post(data);
 	}
+	// force a recalculation
+	RequestUpdateSize();
+	#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
+		ForceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
+	#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
+		ForceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
+	#else
+		ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
+	#endif
 	EWOL_INFO("==> Ewol System Init (END)");
 }
 
-void eSystem::UnInit(void)
+ewol::eSystem::~eSystem(void)
 {
 	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
-	if (true == isGlobalSystemInit) {
-		isGlobalSystemInit = false;
-		requestEndProcessing = true;
-		// unset all windows
-		ewol::WindowsSet(NULL);
-		// call application to uninit
-		APP_UnInit();
-		ewol::widgetManager::UnInit();
-		ewol::config::UnInit();
-		ewol::EObjectMessageMultiCast::UnInit();
-		ewol::EObjectManager::UnInit();
-		ewol::resource::UnInit();
-		ewol::openGL::UnInit();
-		l_managementInput.Reset();
-		l_msgSystem.Clean();
-	}
+	// call application to uninit
+	APP_UnInit();
+	// unset all windows
+	SetCurrentWindows(NULL);
+	ewol::widgetManager::UnInit();
+	ewol::config::UnInit();
+	ewol::EObjectMessageMultiCast::UnInit();
+	ewol::EObjectManager::UnInit();
+	ewol::resource::UnInit();
+	ewol::openGL::UnInit();
+	m_managementInput.Reset();
+	m_msgSystem.Clean();
 	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
 
 
-void eSystem::RequestUpdateSize(void)
+void ewol::eSystem::RequestUpdateSize(void)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_RECALCULATE_SIZE;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_RECALCULATE_SIZE;
+	m_msgSystem.Post(data);
 }
 
-void eSystem::Resize(int w, int h )
+void ewol::eSystem::OS_Resize(const vec2& _size)
 {
 	// TODO : Better in the thread ... ==> but generate some init error ...
-	ewol::dimension::SetPixelWindowsSize(vec2(w,h));
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_RESIZE;
-		data.dimention.setValue(w,h);
-		l_msgSystem.Post(data);
-	}
+	ewol::dimension::SetPixelWindowsSize(_size);
+	eSystemMessage data;
+	data.TypeMessage = THREAD_RESIZE;
+	data.dimention = _size;
+	m_msgSystem.Post(data);
 }
-void eSystem::Move(int w, int h )
+void ewol::eSystem::OS_Move(const vec2& _pos)
 {
-	if (true == isGlobalSystemInit) {
-		/*
-		eSystemMessage data;
-		data.TypeMessage = THREAD_RESIZE;
-		data.resize.w = w;
-		data.resize.h = h;
-		l_msgSystem.Post(data);
-		*/
-	}
+	/*
+	eSystemMessage data;
+	data.TypeMessage = THREAD_RESIZE;
+	data.resize.w = w;
+	data.resize.h = h;
+	m_msgSystem.Post(data);
+	*/
 }
 
-void eSystem::SetInputMotion(int pointerID, float x, float y )
+void ewol::eSystem::OS_SetInputMotion(int _pointerID, const vec2& _pos )
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.inputType = ewol::keyEvent::typeFinger;
-		data.inputId = pointerID;
-		data.dimention.setValue(x,y);
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_INPUT_MOTION;
+	data.inputType = ewol::keyEvent::typeFinger;
+	data.inputId = _pointerID;
+	data.dimention = _pos;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::SetInputState(int pointerID, bool isDown, float x, float y )
+void ewol::eSystem::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos )
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_INPUT_STATE;
-		data.inputType = ewol::keyEvent::typeFinger;
-		data.inputId = pointerID;
-		data.stateIsDown = isDown;
-		data.dimention.setValue(x,y);
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_INPUT_STATE;
+	data.inputType = ewol::keyEvent::typeFinger;
+	data.inputId = _pointerID;
+	data.stateIsDown = _isDown;
+	data.dimention = _pos;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::SetMouseMotion(int pointerID, float x, float y )
+void ewol::eSystem::OS_SetMouseMotion(int _pointerID, const vec2& _pos )
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_INPUT_MOTION;
-		data.inputType = ewol::keyEvent::typeMouse;
-		data.inputId = pointerID;
-		data.dimention.setValue(x,y);
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_INPUT_MOTION;
+	data.inputType = ewol::keyEvent::typeMouse;
+	data.inputId = _pointerID;
+	data.dimention = _pos;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::SetMouseState(int pointerID, bool isDown, float x, float y )
+void ewol::eSystem::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos )
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_INPUT_STATE;
-		data.inputType = ewol::keyEvent::typeMouse;
-		data.inputId = pointerID;
-		data.stateIsDown = isDown;
-		data.dimention.setValue(x,y);
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_INPUT_STATE;
+	data.inputType = ewol::keyEvent::typeMouse;
+	data.inputId = _pointerID;
+	data.stateIsDown = _isDown;
+	data.dimention = _pos;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::SetKeyboard(ewol::SpecialKey& special,
-                          uniChar_t myChar,
-                          bool isDown,
-                          bool isARepeateKey)
+void ewol::eSystem::OS_SetKeyboard(ewol::SpecialKey& _special,
+                                   uniChar_t _myChar,
+                                   bool _isDown,
+                                   bool _isARepeateKey)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_KEYBORAD_KEY;
-		data.stateIsDown = isDown;
-		data.keyboardChar = myChar;
-		data.keyboardSpecial = special;
-		data.repeateKey = isARepeateKey;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_KEYBORAD_KEY;
+	data.stateIsDown = _isDown;
+	data.keyboardChar = _myChar;
+	data.keyboardSpecial = _special;
+	data.repeateKey = _isARepeateKey;
+	m_msgSystem.Post(data);
 }
 
-void eSystem::SetKeyboardMove(ewol::SpecialKey& special,
-                              ewol::keyEvent::keyboard_te move,
-                              bool isDown,
-                              bool isARepeateKey)
+void ewol::eSystem::OS_SetKeyboardMove(ewol::SpecialKey& _special,
+                                       ewol::keyEvent::keyboard_te _move,
+                                       bool _isDown,
+                                       bool _isARepeateKey)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_KEYBORAD_MOVE;
-		data.stateIsDown = isDown;
-		data.keyboardMove = move;
-		data.keyboardSpecial = special;
-		data.repeateKey = isARepeateKey;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_KEYBORAD_MOVE;
+	data.stateIsDown = _isDown;
+	data.keyboardMove = _move;
+	data.keyboardSpecial = _special;
+	data.repeateKey = _isARepeateKey;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::Hide(void)
+void ewol::eSystem::OS_Hide(void)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_HIDE;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_HIDE;
+	m_msgSystem.Post(data);
 }
 
-void eSystem::Show(void)
+void ewol::eSystem::OS_Show(void)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_SHOW;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_SHOW;
+	m_msgSystem.Post(data);
 }
 
 
-void eSystem::ClipBoardArrive(ewol::clipBoard::clipboardListe_te clipboardID)
+void ewol::eSystem::OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
-	if (true == isGlobalSystemInit) {
-		eSystemMessage data;
-		data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
-		data.clipboardID = clipboardID;
-		l_msgSystem.Post(data);
-	}
+	eSystemMessage data;
+	data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
+	data.clipboardID = _clipboardID;
+	m_msgSystem.Post(data);
 }
 
-bool eSystem::Draw(bool displayEveryTime)
+bool ewol::eSystem::OS_Draw(bool _displayEveryTime)
 {
 	int64_t currentTime = ewol::GetTime();
 	// this is to prevent the multiple display at the a high frequency ...
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__Windows))
-	if(currentTime - previousDisplayTime < 1000000/120) {
+	if(currentTime - m_previousDisplayTime < 1000000/120) {
 		usleep(1000);
 		return false;
 	}
 	#endif
-	previousDisplayTime = currentTime;
+	m_previousDisplayTime = currentTime;
 	
-	if (true == isGlobalSystemInit) {
-		// process the events
-l_FpsSystemEvent.Tic();
-		ewolProcessEvents();
-		// call all the widget that neded to do something periodicly
-		ewol::widgetManager::PeriodicCall(currentTime);
-		// Remove all widget that they are no more usefull (these who decided to destroy themself)
-		ewol::EObjectManager::RemoveAllAutoRemove();
-		ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
-		// check if the user selected a windows
-		if (NULL != tmpWindows) {
-			// Redraw all needed elements
-			tmpWindows->OnRegenerateDisplay();
-		}
-l_FpsSystemEvent.IncrementCounter();
-l_FpsSystemEvent.Toc();
-		bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
-		
-l_FpsSystemContext.Tic();
-		if (NULL != tmpWindows) {
-			if(    true == needRedraw
-			    || true == displayEveryTime) {
-				ewol::resource::UpdateContext();
-l_FpsSystemContext.IncrementCounter();
-			}
-		}
-l_FpsSystemContext.Toc();
-		bool hasDisplayDone = false;
-l_FpsSystem.Tic();
-		if (NULL != tmpWindows) {
-			if(    true == needRedraw
-			    || true == displayEveryTime) {
-l_FpsSystem.IncrementCounter();
-				tmpWindows->SysDraw();
-				hasDisplayDone = true;
-			}
-		}
-l_FpsSystem.Toc();
-
-l_FpsFlush.Tic();
-l_FpsFlush.IncrementCounter();
-		glFlush();
-		//glFinish();
-l_FpsFlush.Toc();
-
-l_FpsSystemEvent.Draw();
-l_FpsSystemContext.Draw();
-l_FpsSystem.Draw();
-l_FpsFlush.Draw();
-		return hasDisplayDone;
+	// process the events
+	m_FpsSystemEvent.Tic();
+	ProcessEvents();
+	// call all the widget that neded to do something periodicly
+	ewol::widgetManager::PeriodicCall(currentTime);
+	// Remove all widget that they are no more usefull (these who decided to destroy themself)
+	ewol::EObjectManager::RemoveAllAutoRemove();
+	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
+	// check if the user selected a windows
+	if (NULL != tmpWindows) {
+		// Redraw all needed elements
+		tmpWindows->OnRegenerateDisplay();
 	}
+	m_FpsSystemEvent.IncrementCounter();
+	m_FpsSystemEvent.Toc();
+	bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
+	
+	m_FpsSystemContext.Tic();
+	if (NULL != tmpWindows) {
+		if(    true == needRedraw
+		    || true == _displayEveryTime) {
+			ewol::resource::UpdateContext();
+			m_FpsSystemContext.IncrementCounter();
+		}
+	}
+	m_FpsSystemContext.Toc();
+	bool hasDisplayDone = false;
+	m_FpsSystem.Tic();
+	if (NULL != tmpWindows) {
+		if(    true == needRedraw
+		    || true == _displayEveryTime) {
+			m_FpsSystem.IncrementCounter();
+			tmpWindows->SysDraw();
+			hasDisplayDone = true;
+		}
+	}
+	m_FpsSystem.Toc();
+	
+	m_FpsFlush.Tic();
+	m_FpsFlush.IncrementCounter();
+	glFlush();
+	//glFinish();
+	m_FpsFlush.Toc();
+	
+	m_FpsSystemEvent.Draw();
+	m_FpsSystemContext.Draw();
+	m_FpsSystem.Draw();
+	m_FpsFlush.Draw();
+	return hasDisplayDone;
 	return false;
 }
 
-
-void eSystem::OnObjectRemove(ewol::EObject * removeObject)
+/*
+void ewol::eSystem::OnObjectRemove(ewol::EObject * removeObject)
 {
-	l_managementInput.OnObjectRemove(removeObject);
+	m_managementInput.OnObjectRemove(removeObject);
+}
+*/
+
+void ewol::eSystem::ResetIOEvent(void)
+{
+	m_managementInput.NewLayerSet();
 }
 
 
-void eSystem::ResetIOEvent(void)
-{
-	l_managementInput.NewLayerSet();
-}
-
-
-void eSystem::OpenGlContextDestroy(void)
+void ewol::eSystem::OS_OpenGlContextDestroy(void)
 {
 	ewol::resource::ContextHasBeenDestroyed();
 }
 
 
-void eSystem::SetCurrentWindows(ewol::Windows * windows)
+void ewol::eSystem::SetCurrentWindows(ewol::Windows* _windows)
 {
 	// set the new pointer as windows system
-	windowsCurrent = windows;
+	m_windowsCurrent = _windows;
 	// request all the widget redrawing
-	eSystem::ForceRedrawAll();
+	ForceRedrawAll();
 }
 
 
-ewol::Windows* eSystem::GetCurrentWindows(void)
+void ewol::eSystem::ForceRedrawAll(void)
 {
-	return windowsCurrent;
-}
-
-
-ivec2 eSystem::GetSize(void)
-{
-	return windowsSize;
-}
-
-
-void eSystem::ForceRedrawAll(void)
-{
-	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
-	if (NULL != tmpWindows) {
-		ivec2 systemSize = eSystem::GetSize();
-		tmpWindows->CalculateSize(vec2(systemSize.x(), systemSize.y()));
+	if (NULL != m_windowsCurrent) {
+		m_windowsCurrent->CalculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
 	}
 }
 
 
-void eSystem::OnKill(void)
+void ewol::eSystem::OS_Stop(void)
 {
-	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
-	if (NULL != tmpWindows) {
-		tmpWindows->SysOnKill();
+	if (NULL != m_windowsCurrent) {
+		m_windowsCurrent->SysOnKill();
 	}
 }
 

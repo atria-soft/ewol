@@ -12,18 +12,24 @@
 #include <etk/types.h>
 #include <ewol/eObject/EObject.h>
 
-namespace ewol {
-	namespace EObjectManager {
-		void  Init(void);
-		void  UnInit(void);
-		void  Add(ewol::EObject* _object);
-		void  Rm(ewol::EObject* _object);
-		int32_t GetNumberObject(void);
-		
-		void  AutoRemove(ewol::EObject* _object);
-		void  RemoveAllAutoRemove(void);
-		
-		ewol::EObject* Get(const etk::UString& _name);
+namespace ewol
+{
+	class EObjectManager
+	{
+		private:
+			etk::Vector<ewol::EObject*> m_eObjectList; // all widget allocated ==> all time increment ... never removed ...
+			etk::Vector<ewol::EObject*> m_eObjectAutoRemoveList; // all widget allocated
+		public:
+			EObjectManager(void);
+			~EObjectManager(void);
+			void Add(ewol::EObject* _object);
+			void Rm(ewol::EObject* _object);
+			int32_t GetNumberObject(void);
+			
+			void AutoRemove(ewol::EObject* _object);
+			void RemoveAllAutoRemove(void);
+			
+			ewol::EObject* Get(const etk::UString& _name);
 	};
 };
 
