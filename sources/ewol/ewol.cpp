@@ -67,11 +67,33 @@ int32_t ewol::Run(int32_t _argc, const char* _argv[])
 	return error;
 }
 
-/*
-void ewol::Stop(void)
+etk::UString ewol::GetCompilationMode(void)
 {
-	guiInterface::Stop();
+	#ifdef MODE_RELEASE
+		return "Release";
+	#else
+		return "Debug";
+	#endif
 }
+
+etk::UString ewol::GetBoardType(void)
+{
+	#ifdef __TARGET_OS__Linux
+		return "Linux";
+	#elif defined(__TARGET_OS__Android)
+		return "Android";
+	#elif defined(__TARGET_OS__Windows)
+		return "Windows";
+	#elif defined(__TARGET_OS__IOs)
+		return "IOs";
+	#elif defined(__TARGET_OS__MacOs)
+		return "MacOs";
+	#else
+		return "Unknown";
+	#endif
+}
+
+/*
 
 
 void ewol::WindowsSet(ewol::Windows* _windows)

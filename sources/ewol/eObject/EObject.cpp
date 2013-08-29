@@ -8,94 +8,9 @@
 
 #include <ewol/eObject/EObject.h>
 #include <ewol/eObject/EObjectManager.h>
+#include <ewol/eObject/EObjectMessageMultiCast.h>
 #include <ewol/debug.h>
-
-
-#undef __class__
-#define __class__	"EObjectMessageMultiCast"
-
-extern "C" {
-	typedef struct {
-		const char*    message;
-		ewol::EObject* object;
-	} messageList_ts;
-};
-
-// internal element of the widget manager : 
-static etk::Vector<messageList_ts> m_messageList; // all widget allocated ==> all time increment ... never removed ...
-
-void ewol::EObjectMessageMultiCast::Init(void)
-{
-	EWOL_INFO("EObject message Multi-Cast");
-	m_messageList.Clear();
-}
-
-
-void ewol::EObjectMessageMultiCast::UnInit(void)
-{
-	EWOL_INFO("EObject message Multi-Cast");
-	m_messageList.Clear();
-}
-
-
-static void MultiCastAdd(ewol::EObject* _object, const char* const _message)
-{
-	if (NULL == _object) {
-		EWOL_ERROR("Add with NULL object");
-		return;
-	}
-	if (NULL == _message) {
-		EWOL_ERROR("Add with NULL Message");
-		return;
-	}
-	messageList_ts tmpMessage;
-	tmpMessage.object = _object;
-	tmpMessage.message = _message;
-	m_messageList.PushBack(tmpMessage);
-	EWOL_DEBUG("SendMulticast ADD listener :" << _object->GetId() << " on \"" << _message << "\"" );
-}
-
-
-static void MultiCastRm(ewol::EObject* _object)
-{
-	if (NULL == _object) {
-		EWOL_ERROR("Rm with NULL object");
-		return;
-	}
-	// send the message at all registered widget ...
-	for (int32_t iii=m_messageList.Size()-1; iii>=0; iii--) {
-		if(m_messageList[iii].object == _object) {
-			EWOL_DEBUG("SendMulticast RM listener :" << _object->GetId());
-			m_messageList[iii].message = NULL;
-			m_messageList[iii].object = NULL;
-			m_messageList.Erase(iii);
-		}
-	}
-}
-
-static void MultiCastSend(ewol::EObject* _object, const char* const _message, const etk::UString& _data)
-{
-	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
-	
-	// send the message at all registered widget ...
-	for (int32_t iii=0; iii<m_messageList.Size(); iii++) {
-		if(    m_messageList[iii].message == _message
-		    && m_messageList[iii].object != _object)
-		{
-			if (NULL != m_messageList[iii].object) {
-				EWOL_VERBOSE("        id = " << m_messageList[iii].object->GetId() << " type=" << m_messageList[iii].object->GetObjectType());
-				// generate event ... (create message before ...
-				ewol::EMessage tmpMsg(_object, m_messageList[iii].message, _data);
-				m_messageList[iii].object->OnReceiveMessage(tmpMsg);
-			}
-		}
-	}
-}
-
-void ewol::EObjectMessageMultiCast::AnonymousSend(const char* const _messageId, const etk::UString& _data)
-{
-	MultiCastSend(NULL, _messageId, _data);
-}
+#include <ewol/renderer/os/eSystem.h>
 
 #undef __class__
 #define __class__	"ewol::EObject"
@@ -111,15 +26,15 @@ ewol::EObject::EObject(void) :
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = ss_globalUniqueId++;
 	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
-	ewol::EObjectManager::Add(this);
+	GetEObjectManager().Add(this);
 	RegisterConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
 }
 
 ewol::EObject::~EObject(void)
 {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
-	ewol::EObjectManager::Rm(this);
-	MultiCastRm(this);
+	GetEObjectManager().Rm(this);
+	GetEObjectMessageMultiCast().Rm(this);
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
@@ -134,11 +49,11 @@ ewol::EObject::~EObject(void)
 
 void ewol::EObject::AutoDestroy(void)
 {
-	ewol::EObjectManager::AutoRemove(this);
+	GetEObjectManager().AutoRemove(this);
 }
 void ewol::EObject::RemoveObject(void)
 {
-	ewol::EObjectManager::AutoRemove(this);
+	GetEObjectManager().AutoRemove(this);
 }
 
 void ewol::EObject::AddEventId(const char * _generateEventId)
@@ -150,7 +65,7 @@ void ewol::EObject::AddEventId(const char * _generateEventId)
 
 void ewol::EObject::GenerateEventId(const char * _generateEventId, const etk::UString& _data)
 {
-	int32_t nbObject = ewol::EObjectManager::GetNumberObject();
+	int32_t nbObject = GetEObjectManager().GetNumberObject();
 	// for every element registered ...
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
@@ -169,23 +84,23 @@ void ewol::EObject::GenerateEventId(const char * _generateEventId, const etk::US
 			}
 		}
 	}
-	if (nbObject > ewol::EObjectManager::GetNumberObject()) {
+	if (nbObject > GetEObjectManager().GetNumberObject()) {
 		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
 	}
 }
 
 void ewol::EObject::SendMultiCast(const char* const _messageId, const etk::UString& _data)
 {
-	int32_t nbObject = ewol::EObjectManager::GetNumberObject();
-	MultiCastSend(this, _messageId, _data);
-	if (nbObject > ewol::EObjectManager::GetNumberObject()) {
+	int32_t nbObject = GetEObjectManager().GetNumberObject();
+	GetEObjectMessageMultiCast().Send(this, _messageId, _data);
+	if (nbObject > GetEObjectManager().GetNumberObject()) {
 		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
 	}
 }
 
 void ewol::EObject::RegisterMultiCast(const char* const _messageId)
 {
-	MultiCastAdd(this, _messageId);
+	GetEObjectMessageMultiCast().Add(this, _messageId);
 }
 
 void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
@@ -375,7 +290,7 @@ etk::UString ewol::EObject::GetConfig(const etk::UString& _config) const
 
 bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf)
 {
-	ewol::EObject* object = ewol::EObjectManager::Get(_name);
+	ewol::EObject* object = GetEObjectManager().Get(_name);
 	if (object == NULL) {
 		return false;
 	}
@@ -384,7 +299,7 @@ bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const ewol::EConfi
 
 bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value)
 {
-	ewol::EObject* object = ewol::EObjectManager::Get(_name);
+	ewol::EObject* object = GetEObjectManager().Get(_name);
 	if (object == NULL) {
 		return false;
 	}
@@ -392,3 +307,17 @@ bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const etk::UString
 }
 
 
+ewol::EObjectManager& ewol::EObject::GetEObjectManager(void)
+{
+	return ewol::eSystem::GetSystem().GetEObjectManager();
+}
+
+ewol::EObjectMessageMultiCast& ewol::EObject::GetEObjectMessageMultiCast(void)
+{
+	return ewol::eSystem::GetSystem().GetEObjectMessageMultiCast();
+}
+
+ewol::eSystem& ewol::EObject::GetSystem(void)
+{
+	return ewol::eSystem::GetSystem();
+}

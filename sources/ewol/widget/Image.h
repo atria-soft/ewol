@@ -14,6 +14,7 @@
 #include <draw/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Image.h>
+#include <ewol/widget/WidgetManager.h>
 
 extern const char * const ewolEventImagePressed;
 
@@ -32,11 +33,7 @@ namespace widget {
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
-			static void Init(void);
-			/**
-			 * @brief Main call to unrecord the widget from the list of "widget named creator"
-			 */
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		protected:
 			ewol::Image m_compositing; //!< compositing element of the image.
 		public:

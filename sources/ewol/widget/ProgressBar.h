@@ -14,14 +14,13 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	class ProgressBar : public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Drawing m_draw; // basic drawing element
 		public:

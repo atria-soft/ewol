@@ -17,6 +17,9 @@
 #include <ewol/renderer/os/eSystemInput.h>
 #include <ewol/renderer/os/Fps.h>
 #include <etk/MessageFifo.h>
+#include <ewol/widget/WidgetManager.h>
+#include <ewol/eObject/EObjectManager.h>
+#include <ewol/eObject/EObjectMessageMultiCast.h>
 
 
 // TODO : Remove this from here ...
@@ -74,9 +77,38 @@ namespace ewol
 {
 	class eSystem
 	{
+		private:
+			ewol::WidgetManager m_widgetManager; //!< global widget manager
+		public:
+			ewol::WidgetManager& GetWidgetManager(void) { return m_widgetManager; };
+		private:
+			ewol::EObjectManager m_EObjectManager; //!< eObject Manager main instance
+		public:
+			ewol::EObjectManager& GetEObjectManager(void) { return m_EObjectManager; };
+		private:
+			ewol::EObjectMessageMultiCast m_MessageMulticast; //!< global message multicastiong system
+		public:
+			ewol::EObjectMessageMultiCast& GetEObjectMessageMultiCast(void) { return m_MessageMulticast; };
 		public:
 			eSystem(void);
 			virtual ~eSystem(void);
+		public:
+			/**
+			 * @brief From everyware in the program, we can get the system inteface.
+			 * @return curent pointer on the instance.
+			 */
+			static eSystem& GetSystem(void);
+		protected:
+			/**
+			 * @brief Set the curent interface.
+			 * @note this lock the main mutex
+			 */
+			void SetSystem(void);
+			/**
+			 * @brief Set the curent interface at NULL.
+			 * @note this un-lock the main mutex
+			 */
+			void ReleaseSystem(void);
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::eSystemInput m_managementInput;
@@ -117,10 +149,12 @@ namespace ewol
 			bool OS_Draw(bool _displayEveryTime);
 			/**
 			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject remeved ==> the user must remove all reference on this EObject
+			 * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void OnObjectRemove(ewol::EObject * removeObject);
+			void OnObjectRemove(ewol::EObject * removeObject) {
+				// TODO : I did not remember what I must do ...
+			};
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
@@ -136,7 +170,7 @@ namespace ewol
 			/**
 			 * @brief The application request that the Window will be killed
 			 */
-			virtual void Stop(void);
+			virtual void Stop(void) { };
 		private:
 			ewol::Windows* m_windowsCurrent; //!< curent displayed windows
 		public:
@@ -144,12 +178,12 @@ namespace ewol
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void SetCurrentWindows(ewol::Windows* _windows);
+			void SetWindows(ewol::Windows* _windows);
 			/**
 			 * @brief Get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::Windows* GetCurrentWindows(void) { return m_windowsCurrent; };
+			ewol::Windows* GetWindows(void) { return m_windowsCurrent; };
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
@@ -219,11 +253,11 @@ namespace ewol
 			/**
 			 * @brief Display the virtal keyboard (for touch system only)
 			 */
-			void KeyboardShow(void);
+			void KeyboardShow(void) {};
 			/**
 			 * @brief Hide the virtal keyboard (for touch system only)
 			 */
-			void KeyboardHide(void);
+			void KeyboardHide(void) {};
 			
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
@@ -293,9 +327,9 @@ namespace ewol
 };
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
-
-ewol::Windows* APP_Init(void);
-void APP_UnInit(void);
+// return false if an error occured
+bool APP_Init(ewol::eSystem& _system);
+void APP_UnInit(ewol::eSystem& _system);
 
 
 #endif

@@ -25,16 +25,10 @@ static ewol::Widget* Create(void)
 	return new widget::Slider();
 }
 
-void widget::Slider::Init(void)
+void widget::Slider::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
-
-void widget::Slider::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
-}
-
 
 
 const int32_t dotRadius = 6;

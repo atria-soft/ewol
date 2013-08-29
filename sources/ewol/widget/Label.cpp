@@ -22,14 +22,9 @@ static ewol::Widget* Create(void)
 	return new widget::Label();
 }
 
-void widget::Label::Init(void)
+void widget::Label::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Label::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 widget::Label::Label(etk::UString _newLabel)
@@ -59,7 +54,7 @@ void widget::Label::SetLabel(const etk::UString& _newLabel)
 {
 	m_label = _newLabel;
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 etk::UString widget::Label::GetLabel(void)

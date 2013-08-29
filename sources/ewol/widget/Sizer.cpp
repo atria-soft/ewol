@@ -19,14 +19,9 @@ static ewol::Widget* Create(void)
 	return new widget::Sizer();
 }
 
-void widget::Sizer::Init(void)
+void widget::Sizer::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Sizer::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 
@@ -52,14 +47,14 @@ void widget::Sizer::SetBorderSize(const ewol::Dimension& _newBorderSize)
 {
 	m_borderSize = _newBorderSize;
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void widget::Sizer::SetMode(widget::Sizer::displayMode_te _mode)
 {
 	m_mode = _mode;
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 widget::Sizer::displayMode_te widget::Sizer::GetMode(void)

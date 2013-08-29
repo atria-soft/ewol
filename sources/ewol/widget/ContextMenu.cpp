@@ -25,14 +25,9 @@ static ewol::Widget* Create(void)
 	return new widget::ContextMenu();
 }
 
-void widget::ContextMenu::Init(void)
+void widget::ContextMenu::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::ContextMenu::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 

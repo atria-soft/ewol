@@ -21,14 +21,9 @@ static ewol::Widget* Create(void)
 	return new widget::Image();
 }
 
-void widget::Image::Init(void)
+void widget::Image::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Image::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 
@@ -73,7 +68,7 @@ void widget::Image::SetBorder(const ewol::Dimension& _border)
 	// Force redraw all :
 	MarkToRedraw();
 	// TODO : Change the size with no size requested ...
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void widget::Image::SetKeepRatio(bool _keep)
@@ -83,7 +78,7 @@ void widget::Image::SetKeepRatio(bool _keep)
 		m_keepRatio = _keep;
 		// Force redraw all :
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 
@@ -93,7 +88,7 @@ void widget::Image::SetImageSize(const ewol::Dimension& _size)
 	if (_size != m_imageSize) {
 		m_imageSize = _size;
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
 		m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
 	}
@@ -105,7 +100,7 @@ void widget::Image::Set(const etk::UString& _file, const ewol::Dimension& _borde
 	// copy data :
 	if (m_border != _border) {
 		m_border = _border;
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 		MarkToRedraw();
 	}
 	SetFile(_file);

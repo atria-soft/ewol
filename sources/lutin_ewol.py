@@ -27,7 +27,8 @@ def Create(target):
 		'ewol/eObject/EConfig.cpp',
 		'ewol/eObject/EMessage.cpp',
 		'ewol/eObject/EObject.cpp',
-		'ewol/eObject/EObjectManager.cpp'])
+		'ewol/eObject/EObjectManager.cpp',
+		'ewol/eObject/EObjectMessageMultiCast.cpp'])
 	
 	#openGl Basic access abstraction (for the model matrix and include
 	myModule.AddSrcFile([
@@ -42,7 +43,7 @@ def Create(target):
 	myModule.AddSrcFile([
 		'ewol/renderer/os/eSystem.cpp',
 		'ewol/renderer/os/eSystemInput.cpp'])
-	"""
+	
 	# renderer : 
 	myModule.AddSrcFile([
 		'ewol/renderer/resources/Shader.cpp',
@@ -116,12 +117,6 @@ def Create(target):
 		'ewol/widget/meta/ColorChooser.cpp',
 		'ewol/widget/meta/Parameter.cpp',
 		'ewol/widget/meta/ParameterList.cpp'])
-	
-	# game mode area :
-	myModule.AddSrcFile([
-		'ewol/widget/Scene.cpp',
-		'ewol/game/Camera.cpp'])
-	"""
 	
 	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')

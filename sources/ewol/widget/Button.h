@@ -16,6 +16,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Shaper.h>
+#include <ewol/widget/WidgetManager.h>
 
 
 namespace widget {
@@ -25,8 +26,7 @@ namespace widget {
 	class Button : public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 			// Event list of properties
 			static const char* const eventPressed;
 			static const char* const eventDown;

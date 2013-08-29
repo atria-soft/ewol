@@ -228,7 +228,7 @@ bool widget::List::OnEventInput(const ewol::EventInput& _event)
 	vec2 relativePos = RelativePosition(_event.GetPos());
 	
 	if (true == WidgetScrooled::OnEventInput(_event)) {
-		ewol::widgetManager::FocusKeep(this);
+		KeepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;
 	}

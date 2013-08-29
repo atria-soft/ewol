@@ -14,6 +14,8 @@
 
 namespace ewol {
 	class Widget;
+	class WidgetManager;
+	class Windows;
 };
 #include <etk/types.h>
 #include <etk/Vector.h>
@@ -34,7 +36,7 @@ namespace ewol {
 		/*
 		                                                          /--> m_windowsSize
 		      *--------------------------------------------------*
-		      |                                                  |
+		      |                                           g       |
 		      |                                                  |
 		      |                                    m_size        |
 		      |                                   /              |
@@ -620,6 +622,19 @@ namespace ewol {
 		protected: // Derived function
 			virtual bool OnSetConfig(const ewol::EConfig& _conf);
 			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+		public:
+			/**
+			 * @brief Need to be call When the size of the current widget have change ==> this force the system to recalculate all the widget positions
+			 */
+			void RequestUpdateSize(void);
+			/**
+			 * @brief Get the current Widget Manager
+			 */
+			ewol::WidgetManager& GetWidgetManager(void);
+			/**
+			 * @brief Get the curent Windows
+			 */
+			ewol::Windows* GetWindows(void);
 	}; // end of the class Widget declaration
 
 };// end of namespace

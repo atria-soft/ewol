@@ -13,13 +13,13 @@
 #include <etk/Vector.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	class Gird :public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		private:
 			class GirdProperties {
 				public:

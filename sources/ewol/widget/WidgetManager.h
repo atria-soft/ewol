@@ -12,35 +12,50 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <etk/Vector.h>
+#include <etk/Hach.h>
 #include <ewol/widget/Widget.h>
 
-namespace ewol {
-	namespace widgetManager {
-		void Init(void);
-		void UnInit(void);
-		// need to call when remove a widget to clear all dependency of the focus system
-		void Rm(ewol::Widget * newWidget);
-		
-		void FocusKeep(ewol::Widget * newWidget); // set the focus at the specific widget
-		void FocusSetDefault(ewol::Widget * newWidget); // select the default focus getter
-		void FocusRelease(void); // Release focus from the current widget to the default
-		ewol::Widget* FocusGet(void);
-		void FocusRemoveIfRemove(ewol::Widget * newWidget);
-		
-		void PeriodicCallAdd(ewol::Widget* pWidget);
-		void PeriodicCallRm(ewol::Widget* pWidget);
-		void PeriodicCall(int64_t localTime);
-		bool PeriodicCallHave(void);
-		
-		void MarkDrawingIsNeeded(void);
-		bool IsDrawingNeeded(void);
-		
-		typedef ewol::Widget* (*creator_tf)(void);
-		// element that generate the list of elements
-		void AddWidgetCreator(const etk::UString& name, creator_tf pointer);
-		ewol::Widget* Create(const etk::UString& name);
-		bool Exist(const etk::UString& name);
-		etk::UString List(void);
+namespace ewol
+{
+	class WidgetManager
+	{
+		public:
+			typedef ewol::Widget* (*creator_tf)(void);
+		private:
+			// For the focus Management
+			ewol::Widget * m_focusWidgetDefault;
+			ewol::Widget * m_focusWidgetCurrent;
+			etk::Vector<ewol::Widget*> m_listOfPeriodicWidget;
+			bool m_havePeriodic;
+			bool m_haveRedraw;
+			etk::Hash<creator_tf> m_creatorList;
+			int64_t m_applWakeUpTime; //!< Time of the application initialize
+			int64_t m_lastPeriodicCallTime; //!< last call time ...
+		public:
+			WidgetManager(void);
+			~WidgetManager(void);
+			// need to call when remove a widget to clear all dependency of the focus system
+			void Rm(ewol::Widget * newWidget);
+			
+			void FocusKeep(ewol::Widget * newWidget); // set the focus at the specific widget
+			void FocusSetDefault(ewol::Widget * newWidget); // select the default focus getter
+			void FocusRelease(void); // Release focus from the current widget to the default
+			ewol::Widget* FocusGet(void);
+			void FocusRemoveIfRemove(ewol::Widget * newWidget);
+			
+			void PeriodicCallAdd(ewol::Widget* pWidget);
+			void PeriodicCallRm(ewol::Widget* pWidget);
+			void PeriodicCall(int64_t localTime);
+			bool PeriodicCallHave(void);
+			
+			void MarkDrawingIsNeeded(void);
+			bool IsDrawingNeeded(void);
+			
+			// element that generate the list of elements
+			void AddWidgetCreator(const etk::UString& _name, creator_tf _pointer);
+			ewol::Widget* Create(const etk::UString& _name);
+			bool Exist(const etk::UString& _name);
+			etk::UString List(void);
 	};
 };
 

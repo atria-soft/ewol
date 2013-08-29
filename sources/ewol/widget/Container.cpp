@@ -43,7 +43,7 @@ void widget::Container::SetSubWidget(ewol::Widget* _newWidget)
 		m_subWidget->SetUpperWidget(this);
 	}
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 
@@ -57,7 +57,7 @@ void widget::Container::SubWidgetRemove(void)
 			EWOL_ERROR("Composer : An error Occured when removing main node");
 		}
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 
@@ -68,7 +68,7 @@ void widget::Container::SubWidgetRemoveDelayed(void)
 		m_subWidget->RemoveObject();
 		m_subWidget=NULL;
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 
@@ -89,7 +89,7 @@ void widget::Container::OnObjectRemove(ewol::EObject* _removeObject)
 	if (m_subWidget==_removeObject) {
 		m_subWidget=NULL;
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 
@@ -184,8 +184,8 @@ bool widget::Container::LoadXML(exml::Element* _node)
 			continue;
 		}
 		etk::UString widgetName = pNode->GetValue();
-		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+		if (GetWidgetManager().Exist(widgetName) == false) {
+			EWOL_ERROR("(l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << GetWidgetManager().List() << "]" );
 			continue;
 		}
 		if (NULL != GetSubWidget()) {
@@ -193,7 +193,7 @@ bool widget::Container::LoadXML(exml::Element* _node)
 			continue;
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
+		ewol::Widget* tmpWidget = GetWidgetManager().Create(widgetName);
 		if (tmpWidget == NULL) {
 			EWOL_ERROR ("(l "<<pNode->GetPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

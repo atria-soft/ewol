@@ -14,6 +14,7 @@
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	typedef enum {
@@ -31,8 +32,7 @@ namespace widget {
 			// Cinfig parameter list:
 			static const char* const configLimit;
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Drawing m_draw; // TODO : Change in shaper ... ==> better for annimation and dynamic display ...
 		protected:

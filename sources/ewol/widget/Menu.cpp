@@ -14,6 +14,7 @@
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/widget/Composer.h>
 #include <ewol/widget/Label.h>
+#include <ewol/widget/Windows.h>
 
 #undef __class__
 #define __class__	"Menu"
@@ -239,7 +240,14 @@ void widget::Menu::OnReceiveMessage(const ewol::EMessage& _msg)
 							}
 						}
 					}
-					ewol::WindowsPopUpAdd(m_widgetContextMenu);
+					ewol::Windows* currentWindows = GetWindows();
+					if (NULL == currentWindows) {
+						EWOL_ERROR("Can not get the curent Windows...");
+						delete(m_widgetContextMenu);
+						m_widgetContextMenu=NULL;
+					} else {
+						currentWindows->PopUpWidgetPush(m_widgetContextMenu);
+					}
 				}
 				return;
 			}

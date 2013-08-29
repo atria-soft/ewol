@@ -12,6 +12,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	class Layer : public widget::ContainerN
@@ -20,11 +21,7 @@ namespace widget {
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
-			static void Init(void);
-			/**
-			 * @brief Main call to unrecord the widget from the list of "widget named creator"
-			 */
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		public:
 			/**
 			 * @brief Constructor

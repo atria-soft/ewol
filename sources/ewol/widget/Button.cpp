@@ -9,7 +9,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Button.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/renderer/os/eSystem.h>
 
 #undef __class__
 #define __class__	"Button"
@@ -40,14 +40,9 @@ static ewol::Widget* Create(void)
 	return new widget::Button();
 }
 
-void widget::Button::Init(void)
+void widget::Button::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Button::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 widget::Button::Button(const etk::UString& _shaperName) :
@@ -111,7 +106,7 @@ void widget::Button::SetSubWidget(ewol::Widget* _subWidget)
 	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 	MarkToRedraw();
 }
 
@@ -129,7 +124,7 @@ void widget::Button::SetSubWidgetToggle(ewol::Widget* _subWidget)
 	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
 	// element change ... We need to recalculate all the subElments :
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void widget::Button::CalculateSize(const vec2& _availlable)
@@ -449,8 +444,8 @@ bool widget::Button::LoadXML(exml::Element* _element)
 			continue;
 		}
 		etk::UString widgetName = pNode->GetValue();
-		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("(l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+		if (GetWidgetManager().Exist(widgetName) == false) {
+			EWOL_ERROR("(l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << GetWidgetManager().List() << "]" );
 			continue;
 		}
 		bool toogleMode=false;
@@ -462,7 +457,7 @@ bool widget::Button::LoadXML(exml::Element* _element)
 			}
 		}
 		EWOL_DEBUG("try to create subwidget : '" << widgetName << "'");
-		ewol::Widget* tmpWidget = ewol::widgetManager::Create(widgetName);
+		ewol::Widget* tmpWidget = GetWidgetManager().Create(widgetName);
 		if (tmpWidget == NULL) {
 			EWOL_ERROR ("(l "<<pNode->GetPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

@@ -15,13 +15,13 @@
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Shaper.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	class PopUp : public widget::Container
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
 			static const char* const configShaper;
 			static const char* const configRemoveOnExternClick;

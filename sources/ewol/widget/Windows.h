@@ -72,6 +72,7 @@ namespace ewol {
 			virtual void OnObjectRemove(ewol::EObject * removeObject);
 			virtual void CalculateSize(const vec2& availlable);
 			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
+			void SetTitle(const etk::UString& _title);
 	};
 	
 };

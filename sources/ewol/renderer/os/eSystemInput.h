@@ -80,7 +80,6 @@ namespace ewol
 		public:
 			eSystemInput(ewol::eSystem& _system);
 			~eSystemInput(void);
-			void Reset(void);
 			void SetDpi(int32_t newDPI);
 			
 			// note if id<0 ==> the it was finger event ...

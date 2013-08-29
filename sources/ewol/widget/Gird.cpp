@@ -20,14 +20,9 @@ static ewol::Widget* Create(void)
 	return new widget::Gird();
 }
 
-void widget::Gird::Init(void)
+void widget::Gird::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Gird::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 
@@ -38,7 +33,7 @@ widget::Gird::Gird(int32_t colNumber) :
 	m_borderSize(0,0)
 {
 	SetColNumber(colNumber);
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 widget::Gird::~Gird(void)
@@ -59,7 +54,7 @@ void widget::Gird::SetBorderSize(const ivec2& newBorderSize)
 		m_borderSize.setY(0);
 	}
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void widget::Gird::CalculateSize(const vec2& availlable)

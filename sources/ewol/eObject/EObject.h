@@ -16,17 +16,15 @@
 namespace ewol {
 	// some class need to define element befor other ...
 	class EObject;
+	class EObjectManager;
+	class EObjectMessageMultiCast;
+	class eSystem;
 };
 
 #include <ewol/eObject/EConfig.h>
 #include <ewol/eObject/EMessage.h>
 
 namespace ewol {
-	namespace EObjectMessageMultiCast {
-		void Init(void);
-		void UnInit(void);
-		void AnonymousSend(const char* const _messageId, const etk::UString& _data);
-	};
 	
 	/**
 	 * local class for event generation
@@ -220,9 +218,26 @@ namespace ewol {
 			 * @return false : An error occured.
 			 */
 			virtual bool StoreXML(exml::Element* _node) const;
+		public:
+			/**
+			 * @breif Get the current EObject manager.
+			 * @return the requested object manager.
+			 */
+			ewol::EObjectManager& GetEObjectManager(void);
+			/**
+			 * @breif Get the current EObject Message Multicast manager.
+			 * @return the requested object manager.
+			 */
+			ewol::EObjectMessageMultiCast& GetEObjectMessageMultiCast(void);
+			/**
+			 * @brief Get the curent the system inteface.
+			 * @return current reference on the instance.
+			 */
+			eSystem& GetSystem(void);
 	};
 };
 
 #endif
+
 
 

@@ -36,6 +36,17 @@ namespace ewol
 	 * @return The current time
 	 */
 	int64_t GetTime(void);
+	/**
+	 * @brief Get compilation mode (release/debug)
+	 * @return the string of the mode of commpilation
+	 */
+	etk::UString GetCompilationMode(void);
+	/**
+	 * @brief Get the board type ()
+	 * @return the string of the mode of commpilation
+	 */
+	etk::UString GetBoardType(void);
+	
 	typedef enum {
 		SCREEN_ORIENTATION_AUTO = 0,
 		SCREEN_ORIENTATION_LANDSCAPE,

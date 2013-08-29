@@ -205,7 +205,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	// Regenerate the size calculation :
 	CalculateSize(m_size);
 	// TODO : it is dansgerous to access directly to the system ...
-	eSystem::ResetIOEvent();
+	GetSystem().ResetIOEvent();
 }
 
 
@@ -235,4 +235,11 @@ void ewol::Windows::SetBackgroundColor(const etk::Color<float>& _color)
 		m_backgroundColor = _color;
 		MarkToRedraw();
 	}
+}
+
+void ewol::Windows::SetTitle(const etk::UString& _title)
+{
+	// TODO : Remove this ...
+	etk::UString title = _title;
+	GetSystem().SetTitle(title);
 }

@@ -12,8 +12,9 @@
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/meta/ColorChooser.h>
+#include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
-
+#include <ewol/renderer/os/eSystem.h>
 
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
 
@@ -35,16 +36,10 @@ static ewol::Widget* Create(void)
 	return new widget::ButtonColor();
 }
 
-void widget::ButtonColor::Init(void)
+void widget::ButtonColor::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
-
-void widget::ButtonColor::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
-}
-
 
 widget::ButtonColor::ButtonColor(etk::Color<> baseColor, etk::UString shaperName) :
 	m_shaper(shaperName),
@@ -203,7 +198,14 @@ bool widget::ButtonColor::OnEventInput(const ewol::EventInput& _event)
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->SetSubWidget(myColorChooser);
 				myColorChooser->RegisterOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
-				ewol::WindowsPopUpAdd(m_widgetContextMenu);
+				ewol::Windows* currentWindows = GetWindows();
+				if (NULL == currentWindows) {
+					EWOL_ERROR("Can not get the curent Windows...");
+					delete(m_widgetContextMenu);
+					m_widgetContextMenu=NULL;
+				} else {
+					currentWindows->PopUpWidgetPush(m_widgetContextMenu);
+				}
 				MarkToRedraw();
 			}
 		}

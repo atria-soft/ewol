@@ -14,13 +14,13 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	class Spacer :public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
 			static const char* const configColor;
 		private:

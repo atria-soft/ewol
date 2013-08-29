@@ -13,6 +13,7 @@
 #include <etk/Color.h>
 #include <ewol/debug.h>
 #include <ewol/widget/Drawable.h>
+#include <ewol/widget/WidgetManager.h>
 
 extern const char * const ewolEventSliderChange;
 
@@ -20,8 +21,7 @@ namespace widget {
 	class Slider :public widget::Drawable
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		public:
 			Slider(void);
 			virtual ~Slider(void);

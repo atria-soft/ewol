@@ -50,7 +50,7 @@ void widget::ContainerN::LockExpand(const bvec2& _lockExpand)
 	if (_lockExpand != m_lockExpand) {
 		m_lockExpand = _lockExpand;
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 
@@ -66,7 +66,7 @@ int32_t widget::ContainerN::SubWidgetAdd(ewol::Widget* _newWidget)
 	}
 	m_subWidget.PushBack(_newWidget);
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 	// added at the last eelement :
 	return _newWidget->GetId();
 }
@@ -82,7 +82,7 @@ int32_t widget::ContainerN::SubWidgetAddStart(ewol::Widget* _newWidget)
 	}
 	m_subWidget.PushFront(_newWidget);
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 	return _newWidget->GetId();
 }
 
@@ -103,7 +103,7 @@ void widget::ContainerN::SubWidgetRemove(ewol::Widget* _newWidget)
 				m_subWidget.Erase(iii);
 			}
 			MarkToRedraw();
-			ewol::RequestUpdateSize();
+			RequestUpdateSize();
 			return;
 		}
 	}
@@ -120,7 +120,7 @@ void widget::ContainerN::SubWidgetUnLink(ewol::Widget* _newWidget)
 			m_subWidget[iii] = NULL;
 			m_subWidget.Erase(iii);
 			MarkToRedraw();
-			ewol::RequestUpdateSize();
+			RequestUpdateSize();
 			return;
 		}
 	}
@@ -310,12 +310,12 @@ bool widget::ContainerN::LoadXML(exml::Element* _node)
 			continue;
 		}
 		etk::UString widgetName = pNode->GetValue();
-		if (ewol::widgetManager::Exist(widgetName) == false) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << ewol::widgetManager::List() << "]" );
+		if (GetWidgetManager().Exist(widgetName) == false) {
+			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << GetWidgetManager().List() << "]" );
 			continue;
 		}
 		EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} load new element : \"" << widgetName << "\"");
-		ewol::Widget *subWidget = ewol::widgetManager::Create(widgetName);
+		ewol::Widget *subWidget = GetWidgetManager().Create(widgetName);
 		if (subWidget == NULL) {
 			EWOL_ERROR ("[" << GetId() << "] {" << GetObjectType() << "} (l "<<pNode->GetPos()<<") Can not create the widget : \"" << widgetName << "\"");
 			continue;

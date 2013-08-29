@@ -28,11 +28,62 @@
 #include <ewol/widget/WidgetManager.h>
 
 #include <etk/os/FSNode.h>
+#include <etk/os/Mutex.h>
 
 #include <date/date.h>
 
+/**
+ * @brief Get the main ewol mutex (event or periodic call mutex).
+ * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
+ * @return the main inteface Mutex
+ */
+static etk::Mutex& MutexInterface(void)
+{
+	static etk::Mutex s_interfaceMutex;
+	return s_interfaceMutex;
+}
 
+/**
+ * @brief Get the draw mutex (ewol render).
+ * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
+ * @return the main inteface Mutex
+ */
+static etk::Mutex& MutexDraw(void)
+{
+	static etk::Mutex s_drawMutex;
+	return s_drawMutex;
+}
 
+static ewol::eSystem* l_curentInterface=NULL;
+ewol::eSystem& ewol::eSystem::GetSystem(void)
+{
+	#if DEBUG_LEVEL > 2
+		if(NULL == l_curentInterface){
+			EWOL_CRITICAL("[CRITICAL] try acces at an empty interface");
+		}
+	#endif
+	return *l_curentInterface;
+}
+
+/**
+ * @brief Set the curent interface.
+ * @note this lock the main mutex
+ */
+void ewol::eSystem::SetSystem(void)
+{
+	MutexInterface().Lock();
+	l_curentInterface = this;
+}
+
+/**
+ * @brief Set the curent interface at NULL.
+ * @note this un-lock the main mutex
+ */
+void ewol::eSystem::ReleaseSystem(void)
+{
+	l_curentInterface = NULL;
+	MutexInterface().UnLock();
+}
 
 void ewol::eSystem::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
 {
@@ -63,7 +114,7 @@ void ewol::eSystem::ProcessEvents(void)
 		switch (data.TypeMessage) {
 			case THREAD_INIT:
 				// this is due to the openGL context
-				APP_Init();
+				/*bool returnVal = */APP_Init(*this);
 				break;
 			case THREAD_RECALCULATE_SIZE:
 				eSystem::ForceRedrawAll();
@@ -96,7 +147,7 @@ void ewol::eSystem::ProcessEvents(void)
 					                                             data.keyboardMove,
 					                                             data.stateIsDown) ) {
 						// Get the current Focused Widget :
-						ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+						ewol::Widget * tmpWidget = m_widgetManager.FocusGet();
 						if (NULL != tmpWidget) {
 							// check if the widget allow repeating key events.
 							//EWOL_DEBUG("repeating test :" << data.repeateKey << " widget=" << tmpWidget->GetKeyboardRepeate() << " state=" << data.stateIsDown);
@@ -133,7 +184,7 @@ void ewol::eSystem::ProcessEvents(void)
 				break;
 			case THREAD_CLIPBOARD_ARRIVE:
 				{
-					ewol::Widget * tmpWidget = ewol::widgetManager::FocusGet();
+					ewol::Widget * tmpWidget = m_widgetManager.FocusGet();
 					if (tmpWidget != NULL) {
 						tmpWidget->OnEventClipboard(data.clipboardID);
 					}
@@ -194,17 +245,15 @@ ewol::eSystem::eSystem(void) :
 	m_windowsSize(320,480)
 {
 	EWOL_INFO("==> Ewol System Init (BEGIN)");
+	// set the curent interface :
+	SetSystem();
 	EWOL_INFO("v:" << ewol::GetVersion());
 	EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
 	// TODO : Remove this ...
 	etk::InitDefaultFolder("ewolApplNoName");
 	// TODO : Remove all of this gloabals ...
 	ewol::openGL::Init();
-	ewol::EObjectManager::Init();
-	ewol::EObjectMessageMultiCast::Init();
-	m_managementInput.Reset();
 	ewol::resource::Init();
-	ewol::widgetManager::Init();
 	ewol::config::Init();
 	// request the init of the application in the main context of openGL ...
 	{
@@ -221,24 +270,26 @@ ewol::eSystem::eSystem(void) :
 	#else
 		ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
 	#endif
+	// release the curent interface :
+	ReleaseSystem();
 	EWOL_INFO("==> Ewol System Init (END)");
 }
 
 ewol::eSystem::~eSystem(void)
 {
 	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
+	// set the curent interface :
+	SetSystem();
 	// call application to uninit
-	APP_UnInit();
+	APP_UnInit(*this);
 	// unset all windows
-	SetCurrentWindows(NULL);
-	ewol::widgetManager::UnInit();
+	m_windowsCurrent = NULL;
 	ewol::config::UnInit();
-	ewol::EObjectMessageMultiCast::UnInit();
-	ewol::EObjectManager::UnInit();
 	ewol::resource::UnInit();
 	ewol::openGL::UnInit();
-	m_managementInput.Reset();
 	m_msgSystem.Clean();
+	// release the curent interface :
+	ReleaseSystem();
 	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
 
@@ -382,54 +433,68 @@ bool ewol::eSystem::OS_Draw(bool _displayEveryTime)
 	
 	// process the events
 	m_FpsSystemEvent.Tic();
-	ProcessEvents();
-	// call all the widget that neded to do something periodicly
-	ewol::widgetManager::PeriodicCall(currentTime);
-	// Remove all widget that they are no more usefull (these who decided to destroy themself)
-	ewol::EObjectManager::RemoveAllAutoRemove();
-	ewol::Windows* tmpWindows = eSystem::GetCurrentWindows();
-	// check if the user selected a windows
-	if (NULL != tmpWindows) {
-		// Redraw all needed elements
-		tmpWindows->OnRegenerateDisplay();
-	}
-	m_FpsSystemEvent.IncrementCounter();
-	m_FpsSystemEvent.Toc();
-	bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
-	
-	m_FpsSystemContext.Tic();
-	if (NULL != tmpWindows) {
-		if(    true == needRedraw
-		    || true == _displayEveryTime) {
-			ewol::resource::UpdateContext();
-			m_FpsSystemContext.IncrementCounter();
+	bool needRedraw = false;
+	//! Event management section ...
+	{
+		// set the curent interface :
+		SetSystem();
+		ProcessEvents();
+		// call all the widget that neded to do something periodicly
+		//! ewol::widgetManager::PeriodicCall(currentTime);
+		m_widgetManager.PeriodicCall(currentTime);
+		// Remove all widget that they are no more usefull (these who decided to destroy themself)
+		//! ewol::EObjectManager::RemoveAllAutoRemove();
+		m_EObjectManager.RemoveAllAutoRemove();
+		// check if the user selected a windows
+		if (NULL != m_windowsCurrent) {
+			// Redraw all needed elements
+			m_windowsCurrent->OnRegenerateDisplay();
 		}
+		m_FpsSystemEvent.IncrementCounter();
+		m_FpsSystemEvent.Toc();
+		//! bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
+		needRedraw = m_widgetManager.IsDrawingNeeded();
+		// release the curent interface :
+		ReleaseSystem();
 	}
-	m_FpsSystemContext.Toc();
 	bool hasDisplayDone = false;
-	m_FpsSystem.Tic();
-	if (NULL != tmpWindows) {
-		if(    true == needRedraw
-		    || true == _displayEveryTime) {
-			m_FpsSystem.IncrementCounter();
-			tmpWindows->SysDraw();
-			hasDisplayDone = true;
+	//! Drawing section :
+	{
+		// Lock OpenGl context:
+		MutexDraw().Lock();
+		m_FpsSystemContext.Tic();
+		if (NULL != m_windowsCurrent) {
+			if(    true == needRedraw
+			    || true == _displayEveryTime) {
+				ewol::resource::UpdateContext();
+				m_FpsSystemContext.IncrementCounter();
+			}
 		}
+		m_FpsSystemContext.Toc();
+		m_FpsSystem.Tic();
+		if (NULL != m_windowsCurrent) {
+			if(    true == needRedraw
+			    || true == _displayEveryTime) {
+				m_FpsSystem.IncrementCounter();
+				m_windowsCurrent->SysDraw();
+				hasDisplayDone = true;
+			}
+		}
+		m_FpsSystem.Toc();
+		
+		m_FpsFlush.Tic();
+		m_FpsFlush.IncrementCounter();
+		glFlush();
+		//glFinish();
+		m_FpsFlush.Toc();
+		// Release Open GL Context
+		MutexDraw().UnLock();
 	}
-	m_FpsSystem.Toc();
-	
-	m_FpsFlush.Tic();
-	m_FpsFlush.IncrementCounter();
-	glFlush();
-	//glFinish();
-	m_FpsFlush.Toc();
-	
 	m_FpsSystemEvent.Draw();
 	m_FpsSystemContext.Draw();
 	m_FpsSystem.Draw();
 	m_FpsFlush.Draw();
 	return hasDisplayDone;
-	return false;
 }
 
 /*
@@ -451,7 +516,7 @@ void ewol::eSystem::OS_OpenGlContextDestroy(void)
 }
 
 
-void ewol::eSystem::SetCurrentWindows(ewol::Windows* _windows)
+void ewol::eSystem::SetWindows(ewol::Windows* _windows)
 {
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;

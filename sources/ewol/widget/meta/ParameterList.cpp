@@ -187,7 +187,7 @@ void widget::ParameterList::OnRegenerateDisplay(void)
 bool widget::ParameterList::OnEventInput(const ewol::EventInput& _event)
 {
 	if (true == WidgetScrooled::OnEventInput(_event)) {
-		ewol::widgetManager::FocusKeep(this);
+		KeepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;
 	}

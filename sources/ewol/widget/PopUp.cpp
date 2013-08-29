@@ -27,14 +27,9 @@ static ewol::Widget* Create(void)
 	return new widget::PopUp();
 }
 
-void widget::PopUp::Init(void)
+void widget::PopUp::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::PopUp::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 
@@ -63,7 +58,7 @@ void widget::PopUp::LockExpand(const bvec2& _lockExpand)
 	if (_lockExpand != m_lockExpand) {
 		m_lockExpand = _lockExpand;
 		MarkToRedraw();
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 	}
 }
 

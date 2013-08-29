@@ -14,6 +14,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/WidgetManager.h>
 
 extern const char* const ewolEventCheckBoxClicked;
 
@@ -21,8 +22,7 @@ namespace widget {
 	class CheckBox : public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		public:
 			CheckBox(const etk::UString& newLabel = "No Label");
 			virtual ~CheckBox(void);

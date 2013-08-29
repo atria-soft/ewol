@@ -18,16 +18,10 @@ static ewol::Widget* Create(void)
 	return new widget::Layer();
 }
 
-void widget::Layer::Init(void)
+void widget::Layer::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
-
-void widget::Layer::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
-}
-
 
 widget::Layer::Layer(void)
 {

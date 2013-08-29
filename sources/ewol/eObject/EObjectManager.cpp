@@ -19,7 +19,6 @@ ewol::EObjectManager::EObjectManager(void)
 	// Can create mlemory leak ... ==> but not predictable comportement otherwise ...
 	m_eObjectAutoRemoveList.Clear();
 	m_eObjectList.Clear();
-	IsInit = true;
 }
 
 ewol::EObjectManager::~EObjectManager(void)
@@ -41,8 +40,6 @@ ewol::EObjectManager::~EObjectManager(void)
 			m_eObjectList.Erase(iii);
 		}
 	}
-	
-	IsInit = false;
 }
 
 void ewol::EObjectManager::Add(ewol::EObject* _object)
@@ -59,7 +56,7 @@ int32_t ewol::EObjectManager::GetNumberObject(void)
 	return m_eObjectList.Size() + m_eObjectAutoRemoveList.Size();
 }
 
-void informOneObjectIsRemoved(ewol::EObject* _object)
+void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object)
 {
 	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
@@ -73,7 +70,7 @@ void informOneObjectIsRemoved(ewol::EObject* _object)
 		}
 	}
 	// call input event manager to remove linked widget ...
-	eSystem::OnObjectRemove(_object);
+	ewol::eSystem::GetSystem().OnObjectRemove(_object);
 }
 
 void ewol::EObjectManager::Rm(ewol::EObject* _object)
@@ -116,7 +113,7 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* _object)
 			EWOL_DEBUG("Auto-Remove EObject : [" << _object->GetId() << "] type=\"" << _object->GetObjectType() << "\"");
 			informOneObjectIsRemoved(_object);
 			m_eObjectAutoRemoveList.PushBack(_object);
-			ewol::ForceRedrawAll();
+			ewol::eSystem::GetSystem().ForceRedrawAll();
 			return;
 		}
 	}

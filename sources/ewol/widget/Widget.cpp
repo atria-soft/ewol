@@ -139,7 +139,7 @@ ewol::Widget::Widget(void) :
 ewol::Widget::~Widget(void)
 {
 	// Remove his own focus...
-	ewol::widgetManager::Rm(this);
+	GetWidgetManager().Rm(this);
 	// clean all the short-cut ...
 	ShortCutClean();
 }
@@ -169,7 +169,7 @@ void ewol::Widget::Hide(void)
 {
 	m_hide = true;
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 
@@ -177,7 +177,7 @@ void ewol::Widget::Show(void)
 {
 	m_hide = false;
 	MarkToRedraw();
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 
@@ -222,7 +222,7 @@ void ewol::Widget::SetCanHaveFocus(bool _canFocusState)
 
 void ewol::Widget::KeepFocus(void)
 {
-	ewol::widgetManager::FocusKeep(this);
+	GetWidgetManager().FocusKeep(this);
 }
 
 void ewol::Widget::SetOffset(const vec2& _newVal)
@@ -361,7 +361,7 @@ void ewol::Widget::PeriodicCallDisable(void)
 {
 	m_periodicCallDeltaTime=0;
 	m_periodicCallTime=-1;
-	ewol::widgetManager::PeriodicCallRm(this);
+	GetWidgetManager().PeriodicCallRm(this);
 }
 
 void ewol::Widget::PeriodicCallEnable(float _callInSecond)
@@ -369,7 +369,7 @@ void ewol::Widget::PeriodicCallEnable(float _callInSecond)
 	if (_callInSecond < 0) {
 		PeriodicCallDisable();
 	} else {
-		ewol::widgetManager::PeriodicCallAdd(this);
+		GetWidgetManager().PeriodicCallAdd(this);
 		m_periodicCallDeltaTime = _callInSecond*1000000.0;
 		m_periodicCallTime = ewol::GetTime();
 	}
@@ -379,7 +379,7 @@ void ewol::Widget::PeriodicCallEnable(float _callInSecond)
 void ewol::Widget::MarkToRedraw(void)
 {
 	m_needRegenerateDisplay = true;
-	ewol::widgetManager::MarkDrawingIsNeeded();
+	GetWidgetManager().MarkDrawingIsNeeded();
 }
 
 
@@ -456,7 +456,7 @@ void ewol::Widget::SetMinSize(const ewol::Dimension& _size)
 		return;
 	}
 	m_userMinSize = _size;
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void ewol::Widget::SetNoMinSize(void)
@@ -488,7 +488,7 @@ void ewol::Widget::SetMaxSize(const ewol::Dimension& _size)
 		return;
 	}
 	m_userMaxSize = _size;
-	ewol::RequestUpdateSize();
+	RequestUpdateSize();
 }
 
 void ewol::Widget::SetNoMaxSize(void)
@@ -516,7 +516,7 @@ void ewol::Widget::SetExpand(const bvec2& _newExpand)
 	if(    m_userExpand.x() != _newExpand.x()
 	    || m_userExpand.y() != _newExpand.y()) {
 		m_userExpand = _newExpand;
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 		MarkToRedraw();
 	}
 }
@@ -535,7 +535,7 @@ void ewol::Widget::SetFill(const bvec2& _newFill)
 	if(    m_userFill.x() != _newFill.x()
 	    || m_userFill.y() != _newFill.y()) {
 		m_userFill = _newFill;
-		ewol::RequestUpdateSize();
+		RequestUpdateSize();
 		MarkToRedraw();
 	}
 }
@@ -696,7 +696,7 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicod
 void ewol::Widget::GrabCursor(void)
 {
 	if (false == m_grabCursor) {
-		eSystem::InputEventGrabPointer(this);
+		GetSystem().InputEventGrabPointer(this);
 		m_grabCursor = true;
 	}
 }
@@ -704,7 +704,7 @@ void ewol::Widget::GrabCursor(void)
 void ewol::Widget::UnGrabCursor(void)
 {
 	if (true==m_grabCursor) {
-		eSystem::InputEventUnGrabPointer();
+		GetSystem().InputEventUnGrabPointer();
 		m_grabCursor = false;
 	}
 }
@@ -721,7 +721,7 @@ void ewol::Widget::SetCursor(ewol::cursorDisplay_te _newCursor)
 {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
-	guiInterface::SetCursor(m_cursorDisplay);
+	GetSystem().SetCursor(m_cursorDisplay);
 }
 
 ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
@@ -854,4 +854,21 @@ bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
 		return true;
 	}
 	return false;
+}
+
+void ewol::Widget::RequestUpdateSize(void)
+{
+	GetSystem().RequestUpdateSize();
+}
+
+
+ewol::WidgetManager& ewol::Widget::GetWidgetManager(void)
+{
+	return GetSystem().GetWidgetManager();
+}
+
+
+ewol::Windows* ewol::Widget::GetWindows(void)
+{
+	return GetSystem().GetWindows();
 }

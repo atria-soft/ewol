@@ -10,6 +10,7 @@
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
+#include <ewol/renderer/os/eSystem.h>
 
 
 
@@ -33,14 +34,9 @@ static ewol::Widget* Create(void)
 	return new widget::Entry();
 }
 
-void widget::Entry::Init(void)
+void widget::Entry::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Entry::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 const char * const widget::Entry::eventClick  = "ewol-widget-entry-event-click";
@@ -560,7 +556,7 @@ void widget::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
 	ChangeStatusIn(STATUS_SELECTED);
-	ewol::Keyboard(true);
+	GetSystem().KeyboardShow();
 	MarkToRedraw();
 }
 
@@ -569,7 +565,7 @@ void widget::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
 	ChangeStatusIn(STATUS_NORMAL);
-	ewol::Keyboard(false);
+	GetSystem().KeyboardHide();
 	MarkToRedraw();
 }
 

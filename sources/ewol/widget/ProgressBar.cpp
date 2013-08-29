@@ -19,14 +19,9 @@ static ewol::Widget* Create(void)
 	return new widget::ProgressBar();
 }
 
-void widget::ProgressBar::Init(void)
+void widget::ProgressBar::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::ProgressBar::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 

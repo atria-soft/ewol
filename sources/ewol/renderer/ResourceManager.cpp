@@ -83,7 +83,8 @@ void ewol::resource::ReLoadResources(void)
 			}
 		}
 	}
-	ewol::RequestUpdateSize();
+	// TODO : UNderstand why it is set here ...
+	//ewol::RequestUpdateSize();
 	EWOL_INFO("-------------  Resources  -------------");
 }
 

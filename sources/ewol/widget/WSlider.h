@@ -12,14 +12,14 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
+#include <ewol/widget/WidgetManager.h>
 
 
 namespace widget {
 	class WSlider :public widget::ContainerN
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 			// Event list of properties
 			static const char* const eventStartSlide;
 			static const char* const eventStopSlide;

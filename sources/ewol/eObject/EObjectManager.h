@@ -30,6 +30,8 @@ namespace ewol
 			void RemoveAllAutoRemove(void);
 			
 			ewol::EObject* Get(const etk::UString& _name);
+		private:
+			void informOneObjectIsRemoved(ewol::EObject* _object);
 	};
 };
 

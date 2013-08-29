@@ -22,14 +22,9 @@ static ewol::Widget* Create(void)
 	return new widget::Spacer();
 }
 
-void widget::Spacer::Init(void)
+void widget::Spacer::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::Spacer::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 

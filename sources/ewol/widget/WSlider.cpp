@@ -7,7 +7,6 @@
  */
 
 #include <ewol/widget/WSlider.h>
-#include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
 
@@ -39,14 +38,9 @@ static ewol::Widget* Create(void)
 	return new widget::WSlider();
 }
 
-void widget::WSlider::Init(void)
+void widget::WSlider::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
-}
-
-void widget::WSlider::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
 
 widget::WSlider::WSlider(void) : 

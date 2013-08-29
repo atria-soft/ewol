@@ -16,6 +16,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
+#include <ewol/widget/WidgetManager.h>
 
 extern const char * const ewolEventButtonColorChange;
 
@@ -23,8 +24,7 @@ namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 			ewol::Text m_text; //!< Compositing Test display.

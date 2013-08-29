@@ -17,6 +17,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
+#include <ewol/widget/WidgetManager.h>
 
 namespace widget {
 	/**
@@ -42,8 +43,7 @@ namespace widget {
 			static const char* const configColorBg;
 			static const char* const configEmptyMessage;
 		public:
-			static void Init(void);
-			static void UnInit(void);
+			static void Init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Shaper m_shaper;
 			ewol::Text m_oObjectText; //!< text display m_text

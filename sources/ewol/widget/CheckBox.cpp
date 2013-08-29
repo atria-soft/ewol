@@ -20,16 +20,10 @@ static ewol::Widget* Create(void)
 	return new widget::CheckBox();
 }
 
-void widget::CheckBox::Init(void)
+void widget::CheckBox::Init(ewol::WidgetManager& _widgetManager)
 {
-	ewol::widgetManager::AddWidgetCreator(__class__,&Create);
+	_widgetManager.AddWidgetCreator(__class__,&Create);
 }
-
-void widget::CheckBox::UnInit(void)
-{
-	ewol::widgetManager::AddWidgetCreator(__class__,NULL);
-}
-
 
 widget::CheckBox::CheckBox(const etk::UString& newLabel)
 {
@@ -127,7 +121,7 @@ bool widget::CheckBox::OnEventInput(const ewol::EventInput& _event)
 				m_value = true;
 				GenerateEventId(ewolEventCheckBoxClicked, "true");
 			}
-			ewol::widgetManager::FocusKeep(this);
+			KeepFocus();
 			MarkToRedraw();
 			return true;
 		}

@@ -170,29 +170,23 @@ void ewol::eSystemInput::NewLayerSet(void)
 	}
 }
 
-void ewol::eSystemInput::Reset(void)
-{
-	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
-		// remove the property of this input ...
-		CleanElement(m_eventInputSaved, iii);
-		CleanElement(m_eventMouseSaved, iii);
-	}
-}
-
 ewol::eSystemInput::eSystemInput(ewol::eSystem& _system) :
 	m_grabWidget(NULL),
 	m_system(_system)
 {
 	SetDpi(200);
 	EWOL_INFO("Init (start)");
-	Reset();
+	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
+		// remove the property of this input ...
+		CleanElement(m_eventInputSaved, iii);
+		CleanElement(m_eventMouseSaved, iii);
+	}
 	EWOL_INFO("Init (end)");
 }
 
 ewol::eSystemInput::~eSystemInput(void)
 {
 	EWOL_INFO("Un-Init (start)");
-	Reset();
 	EWOL_INFO("Un-Init (end)");
 }
 
@@ -237,7 +231,7 @@ void ewol::eSystemInput::Motion(ewol::keyEvent::type_te type, int pointerID, vec
 		// not manage input
 		return;
 	}
-	ewol::Windows* tmpWindows = m_system.GetCurrentWindows();
+	ewol::Windows* tmpWindows = m_system.GetWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
 	if (type == ewol::keyEvent::typeMouse && pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
@@ -337,7 +331,7 @@ void ewol::eSystemInput::State(ewol::keyEvent::type_te type, int pointerID, bool
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::GetTime();
-	ewol::Windows* tmpWindows = m_system.GetCurrentWindows();
+	ewol::Windows* tmpWindows = m_system.GetWindows();
 	
 	if (true == isDown) {
 		EWOL_VERBOSE("GUI : Input ID=" << pointerID << "==>" << eventTable[pointerID].destinationInputId << " [DOWN] " << pos);
