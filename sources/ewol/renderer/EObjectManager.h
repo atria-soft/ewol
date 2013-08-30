@@ -10,7 +10,7 @@
 #define __EWOL_E_OBJECT_MANAGER_H__
 
 #include <etk/types.h>
-#include <ewol/eObject/EObject.h>
+#include <ewol/renderer/EObject.h>
 
 namespace ewol
 {

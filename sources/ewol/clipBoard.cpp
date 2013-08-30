@@ -10,8 +10,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/clipBoard.h>
-#include <ewol/renderer/os/gui.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 
 #undef __class__
 #define __class__	"ClipBoard"

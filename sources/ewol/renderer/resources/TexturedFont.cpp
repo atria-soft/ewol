@@ -9,9 +9,8 @@
 #include <etk/types.h>
 #include <etk/os/FSNode.h>
 
-#include <ewol/config.h>
-
 #include <ewol/renderer/ResourceManager.h>
+#include <ewol/renderer/eSystem.h>
 
 #include <ewol/renderer/resources/font/FontBase.h>
 #include <ewol/renderer/resources/TexturedFont.h>
@@ -68,16 +67,6 @@ static int32_t simpleSQRT(int32_t value)
 	return val;
 }
 
-static bool& GetFontInSystem(void)
-{
-	static bool fontInOs = true;
-	return fontInOs;
-}
-
-void ewol::font::SetFontPropety(bool inOSSystem)
-{
-	GetFontInSystem() = inOSSystem;
-}
 
 ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
 	ewol::Texture(fontName)
@@ -123,14 +112,14 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_size = tmpSize;
 	
 	etk::Vector<etk::UString> folderList;
-	if (true==GetFontInSystem()) {
+	if (true==ewol::eSystem::GetSystem().GetFontDefault().GetUseExternal()) {
 		#if defined(__TARGET_OS__Android)
 			folderList.PushBack("/system/fonts");
 		#elif defined(__TARGET_OS__Linux)
 			folderList.PushBack("/usr/share/fonts/truetype");
 		#endif
 	}
-	folderList.PushBack("DATA:fonts");
+	folderList.PushBack(ewol::eSystem::GetSystem().GetFontDefault().GetFolder());
 	for (int32_t folderID=0; folderID<folderList.Size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :

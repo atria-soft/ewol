@@ -9,7 +9,6 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/compositing/Shaper.h>
-#include <ewol/config.h>
 
 #undef __class__
 #define __class__	"ewol::Shaper"
@@ -52,15 +51,15 @@ ewol::Shaper::~Shaper(void)
 void ewol::Shaper::UnLoadProgram(void)
 {
 	if (NULL != m_GLprogram) {
-		ewol::resource::Release(m_GLprogram);
+		ewol::ResourceManager::Release(m_GLprogram);
 		m_GLprogram = NULL;
 	}
 	if (NULL != m_resourceTexture) {
-		ewol::resource::Release(m_resourceTexture);
+		ewol::ResourceManager::Release(m_resourceTexture);
 		m_resourceTexture = NULL;
 	}
 	if (NULL != m_config) {
-		ewol::resource::Release(m_config);
+		ewol::ResourceManager::Release(m_config);
 		m_config = NULL;
 	}
 }
@@ -71,7 +70,7 @@ void ewol::Shaper::LoadProgram(void)
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
 	}
-	if (true == ewol::resource::Keep(m_name, m_config) ) {
+	if (true == ewol::ResourceManager::Keep(m_name, m_config) ) {
 		m_confIdPaddingX   = m_config->Request("PaddingX");
 		m_confIdPaddingY   = m_config->Request("PaddingY");
 		m_confIdChangeTime = m_config->Request("ChangeTime");
@@ -86,7 +85,7 @@ void ewol::Shaper::LoadProgram(void)
 		EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
 		// get the shader resource :
 		m_GLPosition = 0;
-		if (true == ewol::resource::Keep(tmpFilename, m_GLprogram) ) {
+		if (true == ewol::ResourceManager::Keep(tmpFilename, m_GLprogram) ) {
 			m_GLPosition        = m_GLprogram->GetAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->GetUniform("EW_MatrixTransformation");
 			// Widget property ==> for the Vertex shader
@@ -105,7 +104,7 @@ void ewol::Shaper::LoadProgram(void)
 		if (basicImageFile != "") {
 			tmpFilename = file.GetRelativeFolder() + basicImageFile;
 			ivec2 size(64,64);
-			if (true == ewol::resource::Keep(tmpFilename, m_resourceTexture, size) ) {
+			if (true == ewol::ResourceManager::Keep(tmpFilename, m_resourceTexture, size) ) {
 				// nothing else to do ...
 			}
 		}

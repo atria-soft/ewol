@@ -8,7 +8,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Sprite.h>
-#include <ewol/config.h>
 
 #undef __class__
 #define __class__	"ewol::Sprite"

@@ -10,7 +10,7 @@
 #include <etk/UString.h>
 #include <ewol/ewol.h>
 #include <ewol/renderer/openGL.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/WidgetManager.h>

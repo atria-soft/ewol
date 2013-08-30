@@ -12,9 +12,8 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <ewol/debug.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/renderer/audio/audio.h>
-#include <ewol/renderer/os/gui.h>
 #include <ewol/Dimension.h>
 /* include auto generated file */
 #include <ewol/renderer/os/org_ewol_EwolConstants.h>

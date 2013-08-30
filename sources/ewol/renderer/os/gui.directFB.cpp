@@ -33,10 +33,9 @@
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/os/gui.h>
 
 #include <ewol/renderer/ResourceManager.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/renderer/openGL.h>
 
 #include <unistd.h>

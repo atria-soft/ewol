@@ -7,8 +7,8 @@
  */
 
 #include <ewol/debug.h>
-#include <ewol/eObject/EObjectMessageMultiCast.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/EObjectMessageMultiCast.h>
+#include <ewol/renderer/eSystem.h>
 
 #undef __class__
 #define __class__	"EObjectMessageMultiCast"

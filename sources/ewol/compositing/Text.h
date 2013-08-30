@@ -96,14 +96,10 @@ namespace ewol
 		public:
 			/**
 			 * @brief generic constructor
-			 */
-			Text(void);
-			/**
-			 * @brief generic constructor
 			 * @param[in] _fontName Name of the font that might be loaded
 			 * @param[in] _fontSize Size of the font that might be loaded
 			 */
-			Text(const etk::UString& _fontName, int32_t _fontSize);
+			Text(const etk::UString& _fontName="", int32_t _fontSize=-1);
 			/**
 			 * @brief generic destructor
 			 */

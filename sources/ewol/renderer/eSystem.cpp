@@ -14,15 +14,12 @@
 #include <ewol/Dimension.h>
 #include <ewol/debug.h>
 
-#include <ewol/config.h>
+#include <ewol/renderer/EObject.h>
+#include <ewol/renderer/EObjectManager.h>
 
-#include <ewol/eObject/EObject.h>
-#include <ewol/eObject/EObjectManager.h>
-
-#include <ewol/renderer/os/eSystem.h>
-#include <ewol/renderer/os/gui.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/renderer/ResourceManager.h>
-#include <ewol/renderer/os/eSystemInput.h>
+#include <ewol/renderer/eSystemInput.h>
 #include <ewol/renderer/openGL.h>
 
 #include <ewol/widget/WidgetManager.h>
@@ -43,16 +40,6 @@ static etk::Mutex& MutexInterface(void)
 	return s_interfaceMutex;
 }
 
-/**
- * @brief Get the draw mutex (ewol render).
- * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
- * @return the main inteface Mutex
- */
-static etk::Mutex& MutexDraw(void)
-{
-	static etk::Mutex s_drawMutex;
-	return s_drawMutex;
-}
 
 static ewol::eSystem* l_curentInterface=NULL;
 ewol::eSystem& ewol::eSystem::GetSystem(void)
@@ -251,10 +238,6 @@ ewol::eSystem::eSystem(void) :
 	EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
 	// TODO : Remove this ...
 	etk::InitDefaultFolder("ewolApplNoName");
-	// TODO : Remove all of this gloabals ...
-	ewol::openGL::Init();
-	ewol::resource::Init();
-	ewol::config::Init();
 	// request the init of the application in the main context of openGL ...
 	{
 		eSystemMessage data;
@@ -282,11 +265,11 @@ ewol::eSystem::~eSystem(void)
 	SetSystem();
 	// call application to uninit
 	APP_UnInit(*this);
+	if (NULL!=m_windowsCurrent) {
+		EWOL_ERROR("Main windows has not been removed... ==> memory leek");
+	}
 	// unset all windows
 	m_windowsCurrent = NULL;
-	ewol::config::UnInit();
-	ewol::resource::UnInit();
-	ewol::openGL::UnInit();
 	m_msgSystem.Clean();
 	// release the curent interface :
 	ReleaseSystem();
@@ -461,12 +444,12 @@ bool ewol::eSystem::OS_Draw(bool _displayEveryTime)
 	//! Drawing section :
 	{
 		// Lock OpenGl context:
-		MutexDraw().Lock();
+		ewol::openGL::Lock();
 		m_FpsSystemContext.Tic();
 		if (NULL != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
-				ewol::resource::UpdateContext();
+				m_resourceManager.UpdateContext();
 				m_FpsSystemContext.IncrementCounter();
 			}
 		}
@@ -488,7 +471,7 @@ bool ewol::eSystem::OS_Draw(bool _displayEveryTime)
 		//glFinish();
 		m_FpsFlush.Toc();
 		// Release Open GL Context
-		MutexDraw().UnLock();
+		ewol::openGL::UnLock();
 	}
 	m_FpsSystemEvent.Draw();
 	m_FpsSystemContext.Draw();
@@ -512,7 +495,7 @@ void ewol::eSystem::ResetIOEvent(void)
 
 void ewol::eSystem::OS_OpenGlContextDestroy(void)
 {
-	ewol::resource::ContextHasBeenDestroyed();
+	m_resourceManager.ContextHasBeenDestroyed();
 }
 
 

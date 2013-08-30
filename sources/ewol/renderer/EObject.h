@@ -21,8 +21,8 @@ namespace ewol {
 	class eSystem;
 };
 
-#include <ewol/eObject/EConfig.h>
-#include <ewol/eObject/EMessage.h>
+#include <ewol/renderer/EConfig.h>
+#include <ewol/renderer/EMessage.h>
 
 namespace ewol {
 	

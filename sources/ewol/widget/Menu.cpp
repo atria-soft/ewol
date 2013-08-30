@@ -7,7 +7,6 @@
  */
 
 #include <ewol/ewol.h>
-#include <ewol/eObject/EObject.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Menu.h>
 #include <ewol/widget/Button.h>

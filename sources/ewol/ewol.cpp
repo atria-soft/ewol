@@ -8,23 +8,16 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 
-#include <ewol/renderer/resources/TexturedFont.h>
-#include <ewol/renderer/os/gui.h>
 #include <ewol/commandLine.h>
 #include <etk/os/FSNode.h>
 #include <ewol/Dimension.h>
 #include <date/date.h>
-#include <ewol/UserConfig.h>
+
 #undef __class__
 #define __class__	"ewol"
-/*
-void ewol::SetFontSourcesFolder(bool _inOsSystem)
-{
-	ewol::font::SetFontPropety(_inOsSystem);
-}
-*/
+
 int32_t ewol::Run(int32_t _argc, const char* _argv[])
 {
 	if (NULL!=_argv) {
@@ -32,7 +25,6 @@ int32_t ewol::Run(int32_t _argc, const char* _argv[])
 	}
 	// init display convertions:
 	ewol::dimension::Init();
-	ewol::userConfig::Init();
 	
 	EWOL_DEBUG("Store commangLine in the specific system");
 	ewol::commandLine::Clean();

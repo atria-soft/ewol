@@ -13,12 +13,10 @@
 
 #include <ewol/ewol.h>
 
-#include <ewol/eObject/EObject.h>
-#include <ewol/eObject/EObjectManager.h>
-
-#include <ewol/renderer/os/gui.h>
-#include <ewol/renderer/os/eSystem.h>
-#include <ewol/renderer/os/eSystemInput.h>
+#include <ewol/renderer/EObject.h>
+#include <ewol/renderer/EObjectManager.h>
+#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eSystemInput.h>
 #include <ewol/renderer/resources/Texture.h>
 
 #include <ewol/widget/Widget.h>

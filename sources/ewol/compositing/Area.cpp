@@ -8,7 +8,6 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Area.h>
-#include <ewol/config.h>
 
 #undef __class__
 #define __class__	"ewol::Area"
@@ -24,7 +23,7 @@ ewol::Area::Area(const ivec2& _size) :
 	m_GLtexID(-1),
 	m_resource(NULL)
 {
-	ewol::resource::Keep(m_resource);
+	ewol::ResourceManager::Keep(m_resource);
 	m_resource->SetImageSize(_size);
 	m_resource->Flush();
 	LoadProgram();
@@ -33,10 +32,10 @@ ewol::Area::Area(const ivec2& _size) :
 ewol::Area::~Area(void)
 {
 	if (NULL != m_resource) {
-		ewol::resource::Release(m_resource);
+		ewol::ResourceManager::Release(m_resource);
 		m_resource = NULL;
 	}
-	ewol::resource::Release(m_GLprogram);
+	ewol::ResourceManager::Release(m_GLprogram);
 }
 
 void ewol::Area::LoadProgram(void)
@@ -44,7 +43,7 @@ void ewol::Area::LoadProgram(void)
 	etk::UString tmpString("DATA:textured3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	if (true == ewol::ResourceManager::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");

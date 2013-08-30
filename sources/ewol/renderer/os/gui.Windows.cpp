@@ -15,11 +15,10 @@
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/os/gui.h>
 
 #include <ewol/renderer/resources/Texture.h>
 #include <ewol/renderer/resources/Image.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/renderer/openGL.h>
 
 #include <sys/time.h>

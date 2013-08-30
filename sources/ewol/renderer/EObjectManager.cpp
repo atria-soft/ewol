@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/eObject/EObjectManager.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/EObjectManager.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/ewol.h>
 
 #undef __class__

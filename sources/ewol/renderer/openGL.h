@@ -56,18 +56,13 @@ extern "C" {
 namespace ewol {
 	namespace openGL {
 		/**
-		 * @brief Initialize the open gl system (all the data register in the graphic card is all time duplicate in the memory)
-		 * this is due to the fact of some operating system destroy sometime the opengl context
+		 * @brief Lock the OpenGL context for one user only ==> better to keep flags and other things ...
 		 */
-		void Init(void);
+		void Lock(void);
 		/**
-		 * @brief un-init the opengl element from the graphic card
+		 * @brief Un-lock the OpenGL context for an other user...
 		 */
-		void UnInit(void);
-		/**
-		 * @brief Need to call it when openGl context is removed ==> need to reset internal properties ...
-		 */
-		void ContextIsRemoved(void);
+		void UnLock(void);
 		/**
 		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
 		 * @param[in] newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived

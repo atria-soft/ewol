@@ -13,7 +13,6 @@
 #include <ewol/widget/Image.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/widget/Composer.h>
-#include <ewol/UserConfig.h>
 #include <etk/Vector.h>
 
 
@@ -213,7 +212,8 @@ void widget::Parameter::OnReceiveMessage(const ewol::EMessage& _msg)
 		// Close this widget ...
 		AutoDestroy();
 	} else if (_msg.GetMessage() == ewolEventParameterSave) {
-		ewol::userConfig::Save();
+		//ewol::userConfig::Save();
+		EWOL_TODO("Save Parameter !!! ");
 	} else if (_msg.GetMessage() == l_eventMenuSelected) {
 		if (NULL != m_wSlider) {
 			int32_t value = 0;

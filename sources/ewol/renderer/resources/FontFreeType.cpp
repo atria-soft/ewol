@@ -23,11 +23,17 @@
 
 
 // free Font hnadle of librairies ... entry for acces ...
+static int32_t l_countLoaded=0;
 static FT_Library library;
 
 void ewol::FreeTypeInit(void)
 {
 	EWOL_DEBUG("==> Init Font-Manager");
+	l_countLoaded++;
+	if (l_countLoaded>1) {
+		// already loaded ...
+		return;
+	}
 	int32_t error = FT_Init_FreeType( &library );
 	if(0 != error) {
 		EWOL_CRITICAL(" when loading FreeType Librairy ...");
@@ -37,6 +43,11 @@ void ewol::FreeTypeInit(void)
 void ewol::FreeTypeUnInit(void)
 {
 	EWOL_DEBUG("==> Un-Init Font-Manager");
+	l_countLoaded--;
+	if (l_countLoaded>0) {
+		// already needed ...
+		return;
+	}
 	int32_t error = FT_Done_FreeType( library );
 	library = NULL;
 	if(0 != error) {

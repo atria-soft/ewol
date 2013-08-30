@@ -8,41 +8,10 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
-#include <ewol/config.h>
-
+#include <ewol/renderer/eSystem.h>
 
 #undef __class__
 #define __class__	"ewol::Text"
-
-ewol::Text::Text(void) :
-	m_position(0.0, 0.0, 0.0),
-	m_clippingPosStart(0.0, 0.0, 0.0),
-	m_clippingPosStop(0.0, 0.0, 0.0),
-	m_clippingEnable(false),
-	m_color(etk::color::black),
-	m_colorBg(etk::color::none),
-	m_colorCursor(etk::color::black),
-	m_colorSelection(etk::color::olive),
-	m_mode(ewol::font::Regular),
-	m_kerning(true),
-	m_distanceField(false),
-	m_previousCharcode(0),
-	m_startTextpos(0),
-	m_stopTextPos(0),
-	m_alignement(ewol::Text::alignDisable),
-	m_GLprogram(NULL),
-	m_GLPosition(-1),
-	m_GLMatrix(-1),
-	m_GLColor(-1),
-	m_GLtexture(-1),
-	m_GLtexID(-1),
-	m_selectionStartPos(-100),
-	m_cursorPos(-100),
-	m_font(NULL)
-{
-	SetFont("", -1);
-	LoadProgram();
-}
 
 
 ewol::Text::Text(const etk::UString& _fontName, int32_t _fontSize) :
@@ -80,10 +49,10 @@ ewol::Text::~Text(void)
 {
 	
 	if (NULL != m_font) {
-		ewol::resource::Release(m_font);
+		ewol::ResourceManager::Release(m_font);
 		m_font = NULL;
 	}
-	ewol::resource::Release(m_GLprogram);
+	ewol::ResourceManager::Release(m_GLprogram);
 }
 
 void ewol::Text::LoadProgram(void)
@@ -91,7 +60,7 @@ void ewol::Text::LoadProgram(void)
 	etk::UString tmpString("DATA:text.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	if (true == ewol::ResourceManager::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
 		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
@@ -347,19 +316,19 @@ void ewol::Text::SetFont(etk::UString _fontName, int32_t _fontSize)
 	Clear();
 	// remove old one
 	if (NULL != m_font) {
-		ewol::resource::Release(m_font);
+		ewol::ResourceManager::Release(m_font);
 		m_font = NULL;
 	}
 	if (_fontSize <= 0) {
-		_fontSize = ewol::config::FontGetDefaultSize();
+		_fontSize = ewol::eSystem::GetSystem().GetFontDefault().GetSize();
 	}
 	if (_fontName == "") {
-		_fontName = ewol::config::FontGetDefaultName();
+		_fontName = ewol::eSystem::GetSystem().GetFontDefault().GetName();
 	}
 	_fontName += ":";
 	_fontName += _fontSize;
 	// link to new One
-	if (false == ewol::resource::Keep(_fontName, m_font)) {
+	if (false == ewol::ResourceManager::Keep(_fontName, m_font)) {
 		EWOL_ERROR("Can not get font resource");
 	}
 }

@@ -10,15 +10,13 @@
 #include <ewol/debug.h>
 #include <ewol/ewol.h>
 #include <ewol/key.h>
-#include <ewol/config.h>
 #include <ewol/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/os/gui.h>
 
 #include <ewol/renderer/ResourceManager.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 #include <ewol/Dimension.h>
 
 #include <unistd.h>

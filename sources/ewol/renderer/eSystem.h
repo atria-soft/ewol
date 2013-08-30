@@ -14,12 +14,14 @@
 #include <ewol/ewol.h>
 #include <ewol/clipBoard.h>
 #include <ewol/widget/Windows.h>
-#include <ewol/renderer/os/eSystemInput.h>
+#include <ewol/renderer/eSystemInput.h>
 #include <ewol/renderer/os/Fps.h>
 #include <etk/MessageFifo.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/eObject/EObjectManager.h>
-#include <ewol/eObject/EObjectMessageMultiCast.h>
+#include <ewol/renderer/ConfigFont.h>
+#include <ewol/renderer/EObjectManager.h>
+#include <ewol/renderer/EObjectMessageMultiCast.h>
+#include <ewol/renderer/ResourceManager.h>
 
 
 // TODO : Remove this from here ...
@@ -75,8 +77,13 @@ class eSystemMessage {
 
 namespace ewol
 {
+	// TODO : Rename this Context
 	class eSystem
 	{
+		private:
+			ewol::ConfigFont m_configFont; //!< global font configuration
+		public:
+			ewol::ConfigFont& GetFontDefault(void) { return m_configFont; };
 		private:
 			ewol::WidgetManager m_widgetManager; //!< global widget manager
 		public:
@@ -89,13 +96,17 @@ namespace ewol
 			ewol::EObjectMessageMultiCast m_MessageMulticast; //!< global message multicastiong system
 		public:
 			ewol::EObjectMessageMultiCast& GetEObjectMessageMultiCast(void) { return m_MessageMulticast; };
+		private:
+			ewol::ResourceManager m_resourceManager; //!< global resources Manager
+		public:
+			ewol::ResourceManager& GetResourcesManager(void) { return m_resourceManager; };
 		public:
 			eSystem(void);
 			virtual ~eSystem(void);
 		public:
 			/**
 			 * @brief From everyware in the program, we can get the system inteface.
-			 * @return curent pointer on the instance.
+			 * @return current reference on the instance.
 			 */
 			static eSystem& GetSystem(void);
 		protected:

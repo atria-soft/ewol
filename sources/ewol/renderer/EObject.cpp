@@ -6,11 +6,11 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/eObject/EObject.h>
-#include <ewol/eObject/EObjectManager.h>
-#include <ewol/eObject/EObjectMessageMultiCast.h>
+#include <ewol/renderer/EObject.h>
+#include <ewol/renderer/EObjectManager.h>
+#include <ewol/renderer/EObjectMessageMultiCast.h>
 #include <ewol/debug.h>
-#include <ewol/renderer/os/eSystem.h>
+#include <ewol/renderer/eSystem.h>
 
 #undef __class__
 #define __class__	"ewol::EObject"

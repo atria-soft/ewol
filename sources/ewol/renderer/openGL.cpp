@@ -10,6 +10,17 @@
 #include <ewol/debug.h>
 #include <ewol/renderer/openGL.h>
 
+/**
+ * @brief Get the draw mutex (ewol render).
+ * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
+ * @return the main inteface Mutex
+ */
+static etk::Mutex& MutexOpenGl(void)
+{
+	static etk::Mutex s_drawMutex;
+	return s_drawMutex;
+}
+
 etk::Vector<mat4> l_matrixList;
 mat4 l_matrixCamera;
 static uint32_t l_flagsCurrent = 0;
@@ -17,9 +28,10 @@ static uint32_t l_flagsMustBeSet = 0;
 static uint32_t l_textureflags = 0;
 static int32_t  l_programId = 0;
 
-void ewol::openGL::Init(void)
+
+void ewol::openGL::Lock(void)
 {
-	// remove deprecated pb ...
+	MutexOpenGl().Lock();
 	l_matrixList.Clear();
 	mat4 tmpMat;
 	l_matrixList.PushBack(tmpMat);
@@ -30,17 +42,9 @@ void ewol::openGL::Init(void)
 	l_programId = -1;
 }
 
-
-void ewol::openGL::UnInit(void)
+void ewol::openGL::UnLock(void)
 {
-	l_matrixList.Clear();
-	l_matrixCamera.Identity();
-}
-
-void ewol::openGL::ContextIsRemoved(void)
-{
-	// same as call Init, but in case of changing...
-	ewol::openGL::Init();
+	MutexOpenGl().UnLock();
 }
 
 void ewol::openGL::SetBasicMatrix(const mat4& newOne)

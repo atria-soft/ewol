@@ -9,7 +9,7 @@
 #ifndef __EWOL_WIDGET_H__
 #define __EWOL_WIDGET_H__
 
-#include <ewol/eObject/EObject.h>
+#include <ewol/renderer/EObject.h>
 #include <ewol/Dimension.h>
 
 namespace ewol {

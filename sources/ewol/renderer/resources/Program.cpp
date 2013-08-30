@@ -37,14 +37,14 @@ ewol::Program::Program(const etk::UString& filename) :
 		// remove extention ...
 		tmpFilename.Remove(tmpFilename.Size()-4, 4);
 		ewol::Shader* tmpShader = NULL;
-		if (false == ewol::resource::Keep(tmpFilename+"vert", tmpShader)) {
+		if (false == ewol::ResourceManager::Keep(tmpFilename+"vert", tmpShader)) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
 			m_shaderList.PushBack(tmpShader);
 		}
-		if (false == ewol::resource::Keep(tmpFilename+"frag", tmpShader)) {
+		if (false == ewol::ResourceManager::Keep(tmpFilename+"frag", tmpShader)) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
@@ -81,7 +81,7 @@ ewol::Program::Program(const etk::UString& filename) :
 			// get it with relative position :
 			etk::UString tmpFilename = file.GetRelativeFolder() + tmpData;
 			ewol::Shader* tmpShader = NULL;
-			if (false == ewol::resource::Keep(tmpFilename, tmpShader)) {
+			if (false == ewol::ResourceManager::Keep(tmpFilename, tmpShader)) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
 				EWOL_DEBUG("Add shader on program : "<< tmpFilename);
@@ -99,7 +99,7 @@ ewol::Program::Program(const etk::UString& filename) :
 ewol::Program::~Program(void)
 {
 	for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
-		ewol::resource::Release(m_shaderList[iii]);
+		ewol::ResourceManager::Release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
 	}
 	m_shaderList.Clear();

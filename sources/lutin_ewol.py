@@ -15,34 +15,30 @@ def Create(target):
 		'ewol/ewol.cpp',
 		'ewol/clipBoard.cpp',
 		'ewol/debug.cpp',
-		'ewol/config.cpp',
 		'ewol/commandLine.cpp',
 		'ewol/key.cpp',
 		'ewol/cursor.cpp',
-		'ewol/Dimension.cpp',
-		'ewol/UserConfig.cpp'])
+		'ewol/Dimension.cpp'])
 	
 	# Basic Eobject of EWOL
-	myModule.AddSrcFile([
-		'ewol/eObject/EConfig.cpp',
-		'ewol/eObject/EMessage.cpp',
-		'ewol/eObject/EObject.cpp',
-		'ewol/eObject/EObjectManager.cpp',
-		'ewol/eObject/EObjectMessageMultiCast.cpp'])
+	myModule.AddSrcFile([])
 	
 	#openGl Basic access abstraction (for the model matrix and include
 	myModule.AddSrcFile([
+		'ewol/renderer/EConfig.cpp',
+		'ewol/renderer/EMessage.cpp',
+		'ewol/renderer/EObject.cpp',
+		'ewol/renderer/EObjectManager.cpp',
+		'ewol/renderer/EObjectMessageMultiCast.cpp',
 		'ewol/renderer/openGL.cpp',
+		'ewol/renderer/ConfigFont.cpp',
 		'ewol/renderer/EventInput.cpp',
 		'ewol/renderer/EventEntry.cpp',
 		'ewol/renderer/EventTime.cpp',
 		'ewol/renderer/Light.cpp',
-		'ewol/renderer/Material.cpp'])
-	
-	# Operating System interface
-	myModule.AddSrcFile([
-		'ewol/renderer/os/eSystem.cpp',
-		'ewol/renderer/os/eSystemInput.cpp'])
+		'ewol/renderer/Material.cpp',
+		'ewol/renderer/eSystem.cpp',
+		'ewol/renderer/eSystemInput.cpp'])
 	
 	# renderer : 
 	myModule.AddSrcFile([
