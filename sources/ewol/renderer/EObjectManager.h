@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/renderer/EObject.h>
+#include <ewol/renderer/EMultiCast.h>
 
 namespace ewol
 {
@@ -32,6 +33,10 @@ namespace ewol
 			ewol::EObject* Get(const etk::UString& _name);
 		private:
 			void informOneObjectIsRemoved(ewol::EObject* _object);
+		private:
+			ewol::EMultiCast m_multiCast; //!< muticast manager
+		public:
+			ewol::EMultiCast MultiCast(void) { return m_multiCast; };
 	};
 };
 

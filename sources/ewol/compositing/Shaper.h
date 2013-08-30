@@ -11,7 +11,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/renderer/ResourceManager.h>
+#include <ewol/resources/ResourceManager.h>
 #include <ewol/renderer/EventTime.h>
 
 namespace ewol

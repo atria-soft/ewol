@@ -13,7 +13,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Compositing.h>
-#include <ewol/renderer/ResourceManager.h>
+#include <ewol/resources/ResourceManager.h>
 
 
 namespace ewol

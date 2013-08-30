@@ -8,9 +8,8 @@
 
 #include <ewol/renderer/EObject.h>
 #include <ewol/renderer/EObjectManager.h>
-#include <ewol/renderer/EObjectMessageMultiCast.h>
 #include <ewol/debug.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__	"ewol::EObject"
@@ -309,15 +308,15 @@ bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const etk::UString
 
 ewol::EObjectManager& ewol::EObject::GetEObjectManager(void)
 {
-	return ewol::eSystem::GetSystem().GetEObjectManager();
+	return ewol::GetContext().GetEObjectManager();
 }
 
-ewol::EObjectMessageMultiCast& ewol::EObject::GetEObjectMessageMultiCast(void)
+ewol::EMultiCast& ewol::EObject::GetEObjectMessageMultiCast(void)
 {
-	return ewol::eSystem::GetSystem().GetEObjectMessageMultiCast();
+	return ewol::GetContext().GetEObjectManager().MultiCast();
 }
 
 ewol::eSystem& ewol::EObject::GetSystem(void)
 {
-	return ewol::eSystem::GetSystem();
+	return ewol::GetContext();
 }

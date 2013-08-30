@@ -10,7 +10,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/clipBoard.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__	"ClipBoard"
@@ -123,10 +123,10 @@ void ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID,
 	mesCopy[_clipboardID] = _data;
 }
 
-const etk::UString emptyString("");
 
 const etk::UString& ewol::clipBoard::Get(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
+	static const etk::UString emptyString("");
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
 		return emptyString;

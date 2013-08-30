@@ -18,10 +18,9 @@ def Create(target):
 		'ewol/commandLine.cpp',
 		'ewol/key.cpp',
 		'ewol/cursor.cpp',
-		'ewol/Dimension.cpp'])
-	
-	# Basic Eobject of EWOL
-	myModule.AddSrcFile([])
+		'ewol/Dimension.cpp',
+		'ewol/Light.cpp',
+		'ewol/Material.cpp'])
 	
 	#openGl Basic access abstraction (for the model matrix and include
 	myModule.AddSrcFile([
@@ -35,31 +34,29 @@ def Create(target):
 		'ewol/renderer/EventInput.cpp',
 		'ewol/renderer/EventEntry.cpp',
 		'ewol/renderer/EventTime.cpp',
-		'ewol/renderer/Light.cpp',
-		'ewol/renderer/Material.cpp',
-		'ewol/renderer/eSystem.cpp',
-		'ewol/renderer/eSystemInput.cpp'])
+		'ewol/renderer/eContext.cpp',
+		'ewol/renderer/eInput.cpp'])
 	
 	# renderer : 
 	myModule.AddSrcFile([
-		'ewol/renderer/resources/Shader.cpp',
-		'ewol/renderer/resources/Program.cpp',
-		'ewol/renderer/resources/VirtualBufferObject.cpp',
-		'ewol/renderer/resources/ConfigFile.cpp',
-		'ewol/renderer/resources/FontFreeType.cpp',
-		'ewol/renderer/resources/TexturedFont.cpp',
-		'ewol/renderer/resources/Mesh.cpp',
-		'ewol/renderer/resources/Texture.cpp',
-		'ewol/renderer/resources/Colored3DObject.cpp',
-		'ewol/renderer/resources/Image.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsShape.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsBox.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsCapsule.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsCone.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsConvexHull.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsCylinder.cpp',
-		'ewol/renderer/resources/physicsShape/PhysicsSphere.cpp',
-		'ewol/renderer/ResourceManager.cpp'])
+		'ewol/resources/Shader.cpp',
+		'ewol/resources/Program.cpp',
+		'ewol/resources/VirtualBufferObject.cpp',
+		'ewol/resources/ConfigFile.cpp',
+		'ewol/resources/FontFreeType.cpp',
+		'ewol/resources/TexturedFont.cpp',
+		'ewol/resources/Mesh.cpp',
+		'ewol/resources/Texture.cpp',
+		'ewol/resources/Colored3DObject.cpp',
+		'ewol/resources/Image.cpp',
+		'ewol/resources/physicsShape/PhysicsShape.cpp',
+		'ewol/resources/physicsShape/PhysicsBox.cpp',
+		'ewol/resources/physicsShape/PhysicsCapsule.cpp',
+		'ewol/resources/physicsShape/PhysicsCone.cpp',
+		'ewol/resources/physicsShape/PhysicsConvexHull.cpp',
+		'ewol/resources/physicsShape/PhysicsCylinder.cpp',
+		'ewol/resources/physicsShape/PhysicsSphere.cpp',
+		'ewol/resources/ResourceManager.cpp'])
 	
 	# Audio system
 	myModule.AddSrcFile([

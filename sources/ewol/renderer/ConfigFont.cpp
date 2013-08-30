@@ -7,7 +7,7 @@
  */
 
 #include <ewol/renderer/ConfigFont.h>
-#include <ewol/renderer/resources/FontFreeType.h>
+#include <ewol/resources/FontFreeType.h>
 
 #undef __class__
 #define __class__	"ConfigFont"

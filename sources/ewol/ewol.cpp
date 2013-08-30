@@ -8,7 +8,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 
 #include <ewol/commandLine.h>
 #include <etk/os/FSNode.h>
@@ -52,7 +52,7 @@ int32_t ewol::Run(int32_t _argc, const char* _argv[])
 		}
 	}
 	// call standard RUN ...
-	int32_t error = ewol::eSystem::main(_argc, _argv);
+	int32_t error = ewol::eContext::main(_argc, _argv);
 	
 	ewol::commandLine::Clean();
 	
@@ -154,7 +154,7 @@ etk::UString ewol::GetVersion(void)
 
 int64_t ewol::GetTime(void)
 {
-	return ewol::eSystem::GetTime();
+	return ewol::eContext::GetTime();
 }
 /*
 void ewol::InputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination)

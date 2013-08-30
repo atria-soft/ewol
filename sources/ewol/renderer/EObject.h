@@ -17,7 +17,7 @@ namespace ewol {
 	// some class need to define element befor other ...
 	class EObject;
 	class EObjectManager;
-	class EObjectMessageMultiCast;
+	class EMultiCast;
 	class eSystem;
 };
 
@@ -228,7 +228,7 @@ namespace ewol {
 			 * @breif Get the current EObject Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::EObjectMessageMultiCast& GetEObjectMessageMultiCast(void);
+			ewol::EMultiCast& GetEObjectMessageMultiCast(void);
 			/**
 			 * @brief Get the curent the system inteface.
 			 * @return current reference on the instance.

@@ -8,7 +8,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__	"ewol::Text"
@@ -320,10 +320,10 @@ void ewol::Text::SetFont(etk::UString _fontName, int32_t _fontSize)
 		m_font = NULL;
 	}
 	if (_fontSize <= 0) {
-		_fontSize = ewol::eSystem::GetSystem().GetFontDefault().GetSize();
+		_fontSize = ewol::GetContext().GetFontDefault().GetSize();
 	}
 	if (_fontName == "") {
-		_fontName = ewol::eSystem::GetSystem().GetFontDefault().GetName();
+		_fontName = ewol::GetContext().GetFontDefault().GetName();
 	}
 	_fontName += ":";
 	_fontName += _fontSize;
