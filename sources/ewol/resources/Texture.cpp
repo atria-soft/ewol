@@ -11,6 +11,7 @@
 #include <ewol/renderer/openGL.h>
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/resources/Texture.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__	"Texture"
@@ -104,7 +105,7 @@ void ewol::Texture::RemoveContextToLate(void)
 void ewol::Texture::Flush(void)
 {
 	// request to the manager to be call at the next update ...
-	ewol::resource::Update(this);
+	ewol::GetContext().GetResourcesManager().Update(this);
 }
 
 

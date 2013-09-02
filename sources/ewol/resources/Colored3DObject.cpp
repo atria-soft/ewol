@@ -21,7 +21,7 @@ ewol::Colored3DObject::Colored3DObject(etk::UString _genName) :
 	etk::UString tmpString("DATA:simple3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::ResourceManager::Keep(tmpString, m_GLprogram) ) {
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->GetUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
@@ -31,7 +31,7 @@ ewol::Colored3DObject::Colored3DObject(etk::UString _genName) :
 ewol::Colored3DObject::~Colored3DObject(void)
 {
 	// remove dynamics dependencies :
-	ewol::ResourceManager::Release(m_GLprogram);
+	ewol::resource::Release(m_GLprogram);
 }
 
 

@@ -11,7 +11,7 @@
 
 
 #include <etk/types.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsShape.h>
+#include <ewol/physicsShape/PhysicsShape.h>
 
 
 namespace ewol

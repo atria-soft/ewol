@@ -18,7 +18,7 @@
 #include <ewol/resources/VirtualBufferObject.h>
 #include <ewol/Light.h>
 #include <ewol/Material.h>
-#include <ewol/resources/physicsShape/PhysicsShape.h>
+#include <ewol/physicsShape/PhysicsShape.h>
 // 3 "float" elements
 #define MESH_VBO_VERTICES  (0)
 // 2 "float" elements

@@ -9,7 +9,6 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Button.h>
-#include <ewol/renderer/eSystem.h>
 
 #undef __class__
 #define __class__	"Button"

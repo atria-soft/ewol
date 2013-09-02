@@ -33,7 +33,7 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	
 	//EWOL_DEBUG(m_name << "  " << m_light);
 	
-	if (true == ewol::ResourceManager::Keep(_shaderName, m_GLprogram) ) {
+	if (true == ewol::resource::Keep(_shaderName, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLNormal = m_GLprogram->GetAttribute("EW_normal");
@@ -44,7 +44,7 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 		m_light.Link(m_GLprogram, "EW_directionalLight");
 	}
 	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
-	ewol::ResourceManager::Keep("w-fff", m_verticesVBO);
+	ewol::resource::Keep("w-fff", m_verticesVBO);
 	
 	// load the curent file :
 	etk::UString tmpName = _fileName.ToLower();
@@ -68,8 +68,8 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 ewol::Mesh::~Mesh(void)
 {
 	// remove dynamics dependencies :
-	ewol::ResourceManager::Release(m_GLprogram);
-	ewol::ResourceManager::Release(m_verticesVBO);
+	ewol::resource::Release(m_GLprogram);
+	ewol::resource::Release(m_verticesVBO);
 	if (m_functionFreeShape!=NULL) {
 		m_functionFreeShape(m_pointerShape);
 		m_pointerShape = NULL;

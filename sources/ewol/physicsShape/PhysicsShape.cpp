@@ -6,13 +6,13 @@
  * @license BSD v3 (see license file)
  */
 #include <ewol/debug.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsShape.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsBox.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsCapsule.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsCone.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsConvexHull.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsCylinder.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsSphere.h>
+#include <ewol/physicsShape/PhysicsShape.h>
+#include <ewol/physicsShape/PhysicsBox.h>
+#include <ewol/physicsShape/PhysicsCapsule.h>
+#include <ewol/physicsShape/PhysicsCone.h>
+#include <ewol/physicsShape/PhysicsConvexHull.h>
+#include <ewol/physicsShape/PhysicsCylinder.h>
+#include <ewol/physicsShape/PhysicsSphere.h>
 
 
 ewol::PhysicsShape* ewol::PhysicsShape::Create(const etk::UString& _name)

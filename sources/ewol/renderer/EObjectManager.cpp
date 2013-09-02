@@ -7,7 +7,7 @@
  */
 
 #include <ewol/renderer/EObjectManager.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 #include <ewol/ewol.h>
 
 #undef __class__
@@ -70,7 +70,7 @@ void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object)
 		}
 	}
 	// call input event manager to remove linked widget ...
-	ewol::eSystem::GetSystem().OnObjectRemove(_object);
+	ewol::GetContext().OnObjectRemove(_object);
 }
 
 void ewol::EObjectManager::Rm(ewol::EObject* _object)
@@ -113,7 +113,7 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* _object)
 			EWOL_DEBUG("Auto-Remove EObject : [" << _object->GetId() << "] type=\"" << _object->GetObjectType() << "\"");
 			informOneObjectIsRemoved(_object);
 			m_eObjectAutoRemoveList.PushBack(_object);
-			ewol::eSystem::GetSystem().ForceRedrawAll();
+			ewol::GetContext().ForceRedrawAll();
 			return;
 		}
 	}

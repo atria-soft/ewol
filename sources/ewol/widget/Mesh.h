@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/renderer/resources/Mesh.h>
+#include <ewol/resources/Mesh.h>
 
 extern const char * const ewolEventMeshPressed;
 

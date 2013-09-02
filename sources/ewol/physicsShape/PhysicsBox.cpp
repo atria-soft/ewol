@@ -6,10 +6,11 @@
  * @license BSD v3 (see license file)
  */
 #include <ewol/debug.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsCylinder.h>
+#include <ewol/physicsShape/PhysicsBox.h>
 
 
-bool ewol::PhysicsCylinder::Parse(const char* _line)
+
+bool ewol::PhysicsBox::Parse(const char* _line)
 {
 	if (true== ewol::PhysicsShape::Parse(_line)) {
 		return true;

@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 #include <ewol/debug.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsCone.h>
+#include <ewol/physicsShape/PhysicsCone.h>
 
 
 

@@ -10,6 +10,7 @@
 #include <ewol/debug.h>
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/resources/VirtualBufferObject.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__	"VirtualBufferObject"
@@ -93,7 +94,7 @@ void ewol::VirtualBufferObject::Reload(void)
 void ewol::VirtualBufferObject::Flush(void)
 {
 	// request to the manager to be call at the next update ...
-	ewol::resource::Update(this);
+	ewol::GetContext().GetResourcesManager().Update(this);
 }
 
 void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const vec3& data)

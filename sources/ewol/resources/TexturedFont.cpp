@@ -112,14 +112,14 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_size = tmpSize;
 	
 	etk::Vector<etk::UString> folderList;
-	if (true==ewol::eSystem::GetSystem().GetFontDefault().GetUseExternal()) {
+	if (true==ewol::GetContext().GetFontDefault().GetUseExternal()) {
 		#if defined(__TARGET_OS__Android)
 			folderList.PushBack("/system/fonts");
 		#elif defined(__TARGET_OS__Linux)
 			folderList.PushBack("/usr/share/fonts/truetype");
 		#endif
 	}
-	folderList.PushBack(ewol::eSystem::GetSystem().GetFontDefault().GetFolder());
+	folderList.PushBack(ewol::GetContext().GetFontDefault().GetFolder());
 	for (int32_t folderID=0; folderID<folderList.Size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :

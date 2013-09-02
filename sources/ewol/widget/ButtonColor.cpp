@@ -14,7 +14,6 @@
 #include <ewol/widget/meta/ColorChooser.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/eSystem.h>
 
 extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
 

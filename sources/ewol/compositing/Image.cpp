@@ -34,10 +34,10 @@ ewol::Image::Image(const etk::UString& _imageName) :
 ewol::Image::~Image(void)
 {
 	if (NULL != m_resource) {
-		ewol::ResourceManager::Release(m_resource);
+		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
-	ewol::ResourceManager::Release(m_GLprogram);
+	ewol::resource::Release(m_GLprogram);
 }
 
 void ewol::Image::LoadProgram(void)
@@ -45,7 +45,7 @@ void ewol::Image::LoadProgram(void)
 	etk::UString tmpString("DATA:textured3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::ResourceManager::Keep(tmpString, m_GLprogram) ) {
+	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
@@ -240,14 +240,14 @@ void ewol::Image::SetSource(const etk::UString& _newFile, const vec2& _size)
 	Clear();
 	// remove old one
 	if (NULL != m_resource) {
-		ewol::ResourceManager::Release(m_resource);
+		ewol::resource::Release(m_resource);
 		m_resource = NULL;
 	}
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
 		// link to new One
-		if (false == ewol::ResourceManager::Keep(_newFile, m_resource, tmpSize)) {
+		if (false == ewol::resource::Keep(_newFile, m_resource, tmpSize)) {
 			EWOL_ERROR("Can not get Image resource");
 		}
 	}

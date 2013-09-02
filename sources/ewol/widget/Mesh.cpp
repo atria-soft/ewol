@@ -8,7 +8,7 @@
 
 #include <ewol/widget/Mesh.h>
 #include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/ResourceManager.h>
+#include <ewol/resources/ResourceManager.h>
 
 
 extern const char * const ewolEventMeshPressed    = "ewol-mesh-Pressed";

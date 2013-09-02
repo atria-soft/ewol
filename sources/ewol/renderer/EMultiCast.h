@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#ifndef __EWOL_E_OBJECT_MESSAGE_MULTICAST_H__
-#define __EWOL_E_OBJECT_MESSAGE_MULTICAST_H__
+#ifndef __EWOL_E_MULTICAST_H__
+#define __EWOL_E_MULTICAST_H__
 
 #include <etk/types.h>
 #include <etk/UString.h>

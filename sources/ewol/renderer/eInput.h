@@ -76,7 +76,7 @@ namespace ewol
 			                              ewol::Widget* destWidget,
 			                              int32_t realInputId);
 		private:
-			ewol::eContext& m_system;
+			ewol::eContext& m_context;
 		public:
 			eInput(ewol::eContext& _context);
 			~eInput(void);

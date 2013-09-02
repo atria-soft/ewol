@@ -10,8 +10,7 @@
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/eSystem.h>
-
+#include <ewol/renderer/eContext.h>
 
 
 const char * const ewolEventEntryCut    = "ewol-widget-entry-event-internal-cut";
@@ -556,7 +555,7 @@ void widget::Entry::OnGetFocus(void)
 {
 	m_displayCursor = true;
 	ChangeStatusIn(STATUS_SELECTED);
-	GetSystem().KeyboardShow();
+	ShowKeyboard();
 	MarkToRedraw();
 }
 
@@ -565,7 +564,7 @@ void widget::Entry::OnLostFocus(void)
 {
 	m_displayCursor = false;
 	ChangeStatusIn(STATUS_NORMAL);
-	GetSystem().KeyboardHide();
+	HideKeyboard();
 	MarkToRedraw();
 }
 

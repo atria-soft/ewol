@@ -34,6 +34,7 @@ namespace ewol
 	/**
 	 * @brief Get current time in us...
 	 * @return The current time
+	 * @note is implemented by the OS implementation cf renderer/X11/...
 	 */
 	int64_t GetTime(void);
 	/**
@@ -42,23 +43,10 @@ namespace ewol
 	 */
 	etk::UString GetCompilationMode(void);
 	/**
-	 * @brief Get the board type ()
+	 * @brief Get the board type (Android/Linux/MacOs/...)
 	 * @return the string of the mode of commpilation
 	 */
 	etk::UString GetBoardType(void);
-	
-	typedef enum {
-		SCREEN_ORIENTATION_AUTO = 0,
-		SCREEN_ORIENTATION_LANDSCAPE,
-		SCREEN_ORIENTATION_PORTRAIT,
-	} orientation_te;
-	/*
-	/ **
-	 * @brief Force a specific orientation for mobile devices
-	 * @param[in] orientation the requested position.
-	 * /
-	void ForceOrientation(ewol::orientation_te _orientation);
-	*/
 };
 
 #endif

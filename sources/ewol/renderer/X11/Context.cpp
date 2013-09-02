@@ -15,8 +15,8 @@
 #include <etk/unicode.h>
 #include <ewol/widget/WidgetManager.h>
 
-#include <ewol/renderer/ResourceManager.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/resources/ResourceManager.h>
+#include <ewol/renderer/eContext.h>
 #include <ewol/Dimension.h>
 
 #include <unistd.h>
@@ -50,7 +50,7 @@ bool hasDisplay = false;
 	#define X11_INFO       EWOL_VERBOSE
 	#define X11_CRITICAL   EWOL_VERBOSE
 #endif
-int64_t ewol::eSystem::GetTime(void)
+int64_t ewol::GetTime(void)
 {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
@@ -102,7 +102,7 @@ extern "C" {
 #undef __class__
 #define __class__ "x11Interface"
 
-class X11Interface : public ewol::eSystem
+class X11Interface : public ewol::eContext
 {
 	private:
 		ewol::SpecialKey m_guiKeyBoardMode;
@@ -139,7 +139,8 @@ class X11Interface : public ewol::eSystem
 		Atom XAtomeDeleteWindows;
 		ewol::cursorDisplay_te m_currentCursor; //!< select the current cursor to display :
 	public:
-		X11Interface(void) :
+		X11Interface(int32_t _argc, const char* _argv[]) :
+			ewol::eContext(_argc, _argv),
 			m_display(NULL),
 			m_originX(0),
 			m_originY(0),
@@ -210,7 +211,7 @@ class X11Interface : public ewol::eSystem
 								X11_INFO("Receive : ClientMessage");
 								if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
 									EWOL_INFO("    ==> Kill Requested ...");
-									eSystem::OS_Stop();
+									OS_Stop();
 									m_run = false;
 								}
 							}
@@ -1195,11 +1196,11 @@ class X11Interface : public ewol::eSystem
 			return true;
 		}
 		/****************************************************************************************/
-		void SetTitle(etk::UString& title)
+		void SetTitle(const etk::UString& _title)
 		{
 			X11_INFO("X11: Set Title (START)");
 			XTextProperty tp;
-			etk::Char tmpChar = title.c_str();
+			etk::Char tmpChar = _title.c_str();
 			tp.value = (unsigned char *)((const char*)tmpChar);
 			tp.encoding = XA_WM_NAME;
 			tp.format = 8;
@@ -1282,13 +1283,14 @@ class X11Interface : public ewol::eSystem
  * @param std IO
  * @return std IO
  */
-int ewol::eSystem::main(int _argc, const char *_argv[])
+int ewol::Run(int _argc, const char *_argv[])
 {
-	X11Interface* interface = new X11Interface();
+	X11Interface* interface = new X11Interface(_argc, _argv);
 	if (NULL == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
+	
 	int32_t retValue = interface->Run();
 	delete(interface);
 	interface = NULL;

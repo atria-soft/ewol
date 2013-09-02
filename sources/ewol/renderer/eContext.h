@@ -21,6 +21,7 @@
 #include <ewol/renderer/ConfigFont.h>
 #include <ewol/renderer/EObjectManager.h>
 #include <ewol/resources/ResourceManager.h>
+#include <ewol/commandLine.h>
 
 
 // TODO : Remove this from here ...
@@ -76,8 +77,18 @@ class eSystemMessage {
 
 namespace ewol
 {
+	typedef enum {
+		SCREEN_ORIENTATION_AUTO = 0,
+		SCREEN_ORIENTATION_LANDSCAPE,
+		SCREEN_ORIENTATION_PORTRAIT,
+	} orientation_te;
+	
 	class eContext
 	{
+		private:
+			ewol::CommandLine m_commandLine; //!< Start command line information
+		public:
+			ewol::CommandLine& GetCmd(void) { return m_commandLine; };
 		private:
 			ewol::ConfigFont m_configFont; //!< global font configuration
 		public:
@@ -95,7 +106,7 @@ namespace ewol
 		public:
 			ewol::ResourceManager& GetResourcesManager(void) { return m_resourceManager; };
 		public:
-			eContext(void);
+			eContext(int32_t _argc=0, const char* _argv[]=NULL);
 			virtual ~eContext(void);
 		protected:
 			/**
@@ -277,7 +288,7 @@ namespace ewol
 			 * @brief Set the new title of the windows
 			 * @param[in] title New desired title
 			 */
-			virtual void SetTitle(etk::UString& _title) { };
+			virtual void SetTitle(const etk::UString& _title) { };
 			/**
 			 * @brief Force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.
@@ -332,8 +343,8 @@ namespace ewol
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
 // return false if an error occured
-bool APP_Init(ewol::eSystem& _system);
-void APP_UnInit(ewol::eSystem& _system);
+bool APP_Init(ewol::eContext& _context);
+void APP_UnInit(ewol::eContext& _context);
 
 
 #endif

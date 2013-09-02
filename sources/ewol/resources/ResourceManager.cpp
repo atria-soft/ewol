@@ -179,10 +179,10 @@ void ewol::ResourceManager::LocalAdd(ewol::Resource* object)
 }
 
 // return the type of the resource ...
-bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::TexturedFont*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::TexturedFont*& object)
 {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << filename << "\"");
-	object = static_cast<ewol::TexturedFont*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	object = static_cast<ewol::TexturedFont*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -192,15 +192,15 @@ bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::TexturedFon
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
 
-bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::FontBase*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::FontBase*& object)
 {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << filename << "\"");
-	object = static_cast<ewol::FontBase*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	object = static_cast<ewol::FontBase*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -210,14 +210,14 @@ bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::FontBase*& 
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
-bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::Program*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::Program*& object)
 {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << filename << "\"");
-	object = static_cast<ewol::Program*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	object = static_cast<ewol::Program*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -227,14 +227,14 @@ bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::Program*& o
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
-bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::Shader*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::Shader*& object)
 {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << filename << "\"");
-	object = static_cast<ewol::Shader*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	object = static_cast<ewol::Shader*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -244,11 +244,11 @@ bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::Shader*& ob
 		EWOL_ERROR("allocation error of a resource : " << filename);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
-bool ewol::ResourceManager::Keep(ewol::Texture*& object)
+bool ewol::resource::Keep(ewol::Texture*& object)
 {
 	// this element create a new one every time ....
 	object = new ewol::Texture("");
@@ -256,15 +256,15 @@ bool ewol::ResourceManager::Keep(ewol::Texture*& object)
 		EWOL_ERROR("allocation error of a resource : ??TEX??");
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
-bool ewol::ResourceManager::Keep(ewol::Colored3DObject*& _object)
+bool ewol::resource::Keep(ewol::Colored3DObject*& _object)
 {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	etk::UString filename = "?metaObject?Colored3DObject";
-	_object = static_cast<ewol::Colored3DObject*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	_object = static_cast<ewol::Colored3DObject*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != _object) {
 		return true;
 	}
@@ -274,7 +274,7 @@ bool ewol::ResourceManager::Keep(ewol::Colored3DObject*& _object)
 		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(_object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(_object);
 	return true;
 }
 #ifdef __TARGET_OS__Android
@@ -297,7 +297,7 @@ static int32_t nextP2(int32_t _value)
 }
 #endif
 
-bool ewol::ResourceManager::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
+bool ewol::resource::Keep(const etk::UString& _filename, ewol::TextureFile*& _object, ivec2 _size)
 {
 	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
 	if (_filename == "") {
@@ -306,7 +306,7 @@ bool ewol::ResourceManager::Keep(const etk::UString& _filename, ewol::TextureFil
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return false;
 		}
-		ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(_object);
+		ewol::GetContext().GetResourcesManager().LocalAdd(_object);
 		return true;
 	}
 	if (_size.x()==0) {
@@ -337,7 +337,7 @@ bool ewol::ResourceManager::Keep(const etk::UString& _filename, ewol::TextureFil
 	}
 	
 	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" new size=" << _size);
-	_object = static_cast<ewol::TextureFile*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(TmpFilename));
+	_object = static_cast<ewol::TextureFile*>(ewol::GetContext().GetResourcesManager().LocalKeep(TmpFilename));
 	if (NULL != _object) {
 		return true;
 	}
@@ -348,14 +348,14 @@ bool ewol::ResourceManager::Keep(const etk::UString& _filename, ewol::TextureFil
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(_object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(_object);
 	return true;
 }
 
 
-bool ewol::ResourceManager::Keep(const etk::UString& _meshName, ewol::Mesh*& _object)
+bool ewol::resource::Keep(const etk::UString& _meshName, ewol::Mesh*& _object)
 {
-	_object = static_cast<ewol::Mesh*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(_meshName));
+	_object = static_cast<ewol::Mesh*>(ewol::GetContext().GetResourcesManager().LocalKeep(_meshName));
 	if (NULL != _object) {
 		return true;
 	}
@@ -364,12 +364,12 @@ bool ewol::ResourceManager::Keep(const etk::UString& _meshName, ewol::Mesh*& _ob
 		EWOL_ERROR("allocation error of a resource : ??Mesh??" << _meshName);
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(_object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(_object);
 	return true;
 }
 
 
-bool ewol::ResourceManager::Keep(const etk::UString& _accesMode, ewol::VirtualBufferObject*& _object)
+bool ewol::resource::Keep(const etk::UString& _accesMode, ewol::VirtualBufferObject*& _object)
 {
 	// this element create a new one every time ....
 	_object = new ewol::VirtualBufferObject(_accesMode);
@@ -377,14 +377,14 @@ bool ewol::ResourceManager::Keep(const etk::UString& _accesMode, ewol::VirtualBu
 		EWOL_ERROR("allocation error of a resource : ??VBO??");
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(_object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(_object);
 	return true;
 }
 
-bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::ConfigFile*& object)
+bool ewol::resource::Keep(const etk::UString& filename, ewol::ConfigFile*& object)
 {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << filename << "\"");
-	object = static_cast<ewol::ConfigFile*>(ewol::eSystem::GetSystem().GetResourcesManager().LocalKeep(filename));
+	object = static_cast<ewol::ConfigFile*>(ewol::GetContext().GetResourcesManager().LocalKeep(filename));
 	if (NULL != object) {
 		return true;
 	}
@@ -394,7 +394,7 @@ bool ewol::ResourceManager::Keep(const etk::UString& filename, ewol::ConfigFile*
 		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
 		return false;
 	}
-	ewol::eSystem::GetSystem().GetResourcesManager().LocalAdd(object);
+	ewol::GetContext().GetResourcesManager().LocalAdd(object);
 	return true;
 }
 
@@ -434,68 +434,68 @@ void ewol::ResourceManager::Release(ewol::Resource*& object)
 }
 
 
-void ewol::ResourceManager::Release(ewol::TexturedFont*& object)
+void ewol::resource::Release(ewol::TexturedFont*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
-void ewol::ResourceManager::Release(ewol::FontBase*& object)
+void ewol::resource::Release(ewol::FontBase*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
-void ewol::ResourceManager::Release(ewol::Program*& object)
+void ewol::resource::Release(ewol::Program*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
-void ewol::ResourceManager::Release(ewol::Shader*& object)
+void ewol::resource::Release(ewol::Shader*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
-void ewol::ResourceManager::Release(ewol::Texture*& object)
+void ewol::resource::Release(ewol::Texture*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
-void ewol::ResourceManager::Release(ewol::TextureFile*& object)
+void ewol::resource::Release(ewol::TextureFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
 	//EWOL_INFO("RELEASE : TextureFile :  nb=" << object2->GetCounter());
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
 
-void ewol::ResourceManager::Release(ewol::Mesh*& object)
+void ewol::resource::Release(ewol::Mesh*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
 
-void ewol::ResourceManager::Release(ewol::ConfigFile*& object)
+void ewol::resource::Release(ewol::ConfigFile*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
 
-void ewol::ResourceManager::Release(ewol::Colored3DObject*& object)
+void ewol::resource::Release(ewol::Colored3DObject*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }
 
-void ewol::ResourceManager::Release(ewol::VirtualBufferObject*& object)
+void ewol::resource::Release(ewol::VirtualBufferObject*& object)
 {
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(object);
-	ewol::eSystem::GetSystem().GetResourcesManager().Release(object2);
+	ewol::GetContext().GetResourcesManager().Release(object2);
 	object = NULL;
 }

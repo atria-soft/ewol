@@ -6,11 +6,11 @@
  * @license BSD v3 (see license file)
  */
 #include <ewol/debug.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsSphere.h>
+#include <ewol/physicsShape/PhysicsCapsule.h>
 
 
 
-bool ewol::PhysicsSphere::Parse(const char* _line)
+bool ewol::PhysicsCapsule::Parse(const char* _line)
 {
 	if (true== ewol::PhysicsShape::Parse(_line)) {
 		return true;
@@ -20,7 +20,10 @@ bool ewol::PhysicsSphere::Parse(const char* _line)
 		EWOL_DEBUG("                radius=" << m_radius);
 		return true;
 	}
+	if(0==strncmp(_line, "height : ", 9) ) {
+		sscanf(&_line[9], "%f", &m_height );
+		EWOL_DEBUG("                height=" << m_height);
+		return true;
+	}
 	return false;
 }
-
-

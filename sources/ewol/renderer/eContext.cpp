@@ -103,13 +103,13 @@ void ewol::eContext::ProcessEvents(void)
 				/*bool returnVal = */APP_Init(*this);
 				break;
 			case THREAD_RECALCULATE_SIZE:
-				eSystem::ForceRedrawAll();
+				ForceRedrawAll();
 				break;
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
 				m_windowsSize = data.dimention;
 				ewol::dimension::SetPixelWindowsSize(m_windowsSize);
-				eSystem::ForceRedrawAll();
+				ForceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
@@ -220,9 +220,9 @@ void ewol::eContext::SetArchiveDir(int mode, const char* str)
 
 
 
-ewol::eContext::eSystem(void) :
+ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	m_previousDisplayTime(0),
-	m_managementInput(*this),
+	m_input(*this),
 	m_FpsSystemEvent(  "Event     ", false),
 	m_FpsSystemContext("Context   ", false),
 	m_FpsSystem(       "Draw      ", true),
@@ -230,9 +230,35 @@ ewol::eContext::eSystem(void) :
 	m_windowsCurrent(NULL),
 	m_windowsSize(320,480)
 {
+	m_commandLine.Parse(_argc, _argv);
 	EWOL_INFO("==> Ewol System Init (BEGIN)");
 	// set the curent interface :
-	SetSystem();
+	LockContext();
+	// parse the debug level:
+	for(esize_t iii=m_commandLine.Size()-1 ; iii>=0 ; --iii) {
+		if (m_commandLine.Get(iii) == "-l0") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
+		} else if (m_commandLine.Get(iii) == "-l1") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
+		} else if (m_commandLine.Get(iii) == "-l2") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
+		} else if (m_commandLine.Get(iii) == "-l3") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
+		} else if (m_commandLine.Get(iii) == "-l4") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
+		} else if (m_commandLine.Get(iii) == "-l5") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
+		} else if(    m_commandLine.Get(iii) == "-l6"
+		           || m_commandLine.Get(iii) == "-l7"
+		           || m_commandLine.Get(iii) == "-l8"
+		           || m_commandLine.Get(iii) == "-l9") {
+			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
+		} else {
+			continue;
+		}
+		m_commandLine.Remove(iii);
+	}
+	
 	EWOL_INFO("v:" << ewol::GetVersion());
 	EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
 	// TODO : Remove this ...
@@ -253,15 +279,15 @@ ewol::eContext::eSystem(void) :
 		ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
 	#endif
 	// release the curent interface :
-	ReleaseSystem();
+	UnLockContext();
 	EWOL_INFO("==> Ewol System Init (END)");
 }
 
-ewol::eContext::~eSystem(void)
+ewol::eContext::~eContext(void)
 {
 	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
 	// set the curent interface :
-	SetSystem();
+	LockContext();
 	// call application to uninit
 	APP_UnInit(*this);
 	if (NULL!=m_windowsCurrent) {
@@ -271,7 +297,7 @@ ewol::eContext::~eSystem(void)
 	m_windowsCurrent = NULL;
 	m_msgSystem.Clean();
 	// release the curent interface :
-	ReleaseSystem();
+	UnLockContext();
 	EWOL_INFO("==> Ewol System Un-Init (END)");
 }
 
@@ -419,7 +445,7 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	//! Event management section ...
 	{
 		// set the curent interface :
-		SetSystem();
+		LockContext();
 		ProcessEvents();
 		// call all the widget that neded to do something periodicly
 		//! ewol::widgetManager::PeriodicCall(currentTime);
@@ -437,7 +463,7 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 		//! bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
 		needRedraw = m_widgetManager.IsDrawingNeeded();
 		// release the curent interface :
-		ReleaseSystem();
+		UnLockContext();
 	}
 	bool hasDisplayDone = false;
 	//! Drawing section :
@@ -480,7 +506,7 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 }
 
 /*
-void ewol::eSystem::OnObjectRemove(ewol::EObject * removeObject)
+void ewol::eContext::OnObjectRemove(ewol::EObject * removeObject)
 {
 	m_managementInput.OnObjectRemove(removeObject);
 }
@@ -500,8 +526,13 @@ void ewol::eContext::OS_OpenGlContextDestroy(void)
 
 void ewol::eContext::SetWindows(ewol::Windows* _windows)
 {
+	// Remove current Focus :
+	m_widgetManager.FocusSetDefault(NULL);
+	m_widgetManager.FocusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
+	// Set the new default Focus :
+	m_widgetManager.FocusSetDefault(_windows);
 	// request all the widget redrawing
 	ForceRedrawAll();
 }

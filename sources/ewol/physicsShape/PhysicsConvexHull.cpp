@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 #include <ewol/debug.h>
-#include <ewol/renderer/resources/physicsShape/PhysicsConvexHull.h>
+#include <ewol/physicsShape/PhysicsConvexHull.h>
 
 
 

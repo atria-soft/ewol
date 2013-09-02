@@ -18,7 +18,7 @@ namespace ewol {
 	class EObject;
 	class EObjectManager;
 	class EMultiCast;
-	class eSystem;
+	class eContext;
 };
 
 #include <ewol/renderer/EConfig.h>
@@ -228,12 +228,12 @@ namespace ewol {
 			 * @breif Get the current EObject Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::EMultiCast& GetEObjectMessageMultiCast(void);
+			ewol::EMultiCast& GetMultiCast(void);
 			/**
 			 * @brief Get the curent the system inteface.
 			 * @return current reference on the instance.
 			 */
-			eSystem& GetSystem(void);
+			eContext& GetContext(void);
 	};
 };
 

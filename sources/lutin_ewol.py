@@ -28,7 +28,7 @@ def Create(target):
 		'ewol/renderer/EMessage.cpp',
 		'ewol/renderer/EObject.cpp',
 		'ewol/renderer/EObjectManager.cpp',
-		'ewol/renderer/EObjectMessageMultiCast.cpp',
+		'ewol/renderer/EMultiCast.cpp',
 		'ewol/renderer/openGL.cpp',
 		'ewol/renderer/ConfigFont.cpp',
 		'ewol/renderer/EventInput.cpp',
@@ -37,7 +37,7 @@ def Create(target):
 		'ewol/renderer/eContext.cpp',
 		'ewol/renderer/eInput.cpp'])
 	
-	# renderer : 
+	# resources : 
 	myModule.AddSrcFile([
 		'ewol/resources/Shader.cpp',
 		'ewol/resources/Program.cpp',
@@ -49,14 +49,17 @@ def Create(target):
 		'ewol/resources/Texture.cpp',
 		'ewol/resources/Colored3DObject.cpp',
 		'ewol/resources/Image.cpp',
-		'ewol/resources/physicsShape/PhysicsShape.cpp',
-		'ewol/resources/physicsShape/PhysicsBox.cpp',
-		'ewol/resources/physicsShape/PhysicsCapsule.cpp',
-		'ewol/resources/physicsShape/PhysicsCone.cpp',
-		'ewol/resources/physicsShape/PhysicsConvexHull.cpp',
-		'ewol/resources/physicsShape/PhysicsCylinder.cpp',
-		'ewol/resources/physicsShape/PhysicsSphere.cpp',
 		'ewol/resources/ResourceManager.cpp'])
+	
+	# physical shape parser
+	myModule.AddSrcFile([
+		'ewol/physicsShape/PhysicsShape.cpp',
+		'ewol/physicsShape/PhysicsBox.cpp',
+		'ewol/physicsShape/PhysicsCapsule.cpp',
+		'ewol/physicsShape/PhysicsCone.cpp',
+		'ewol/physicsShape/PhysicsConvexHull.cpp',
+		'ewol/physicsShape/PhysicsCylinder.cpp',
+		'ewol/physicsShape/PhysicsSphere.cpp'])
 	
 	# Audio system
 	myModule.AddSrcFile([
@@ -164,7 +167,7 @@ def Create(target):
 		#endif
 		
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-		myModule.AddSrcFile('ewol/renderer/os/gui.X11.cpp')
+		myModule.AddSrcFile('ewol/renderer/X11/Context.cpp')
 		#endif
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
 		#myModule.CompileFlags_CC('-I/usr/local/include/directfb')
@@ -179,18 +182,18 @@ def Create(target):
 		myModule.AddExportflag_LD("-landroid")
 
 		java_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/../../ewol/sources/android/src/"
-		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/os/"
+		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
 		lutinMultiprocess.RunCommand("javac " + java_tmp_src + ".java")
 		lutinMultiprocess.RunCommand("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
 		lutinTools.CopyFile(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
 		lutinTools.RemoveFile(java_tmp_src + ".class")
 		
-		myModule.AddSrcFile("ewol/renderer/os/gui.Android.cpp")
+		myModule.AddSrcFile("ewol/renderer/Android/Context.cpp")
 	
 	elif target.name=="Windows":
 		myModule.AddModuleDepend("glew")
-		myModule.AddSrcFile("ewol/renderer/os/gui.Windows.cpp")
+		myModule.AddSrcFile("ewol/renderer/Windows/Context.cpp")
 	elif target.name=="MacOs":
 		myModule.AddExportflag_LD([
 			"-framework Cocoa",
@@ -198,10 +201,10 @@ def Create(target):
 			"-framework QuartzCore",
 			"-framework AppKit"])
 		myModule.AddSrcFile([
-			"ewol/renderer/os/gui.MacOs.cpp",
-			"ewol/renderer/os/gui.MacOs.Interface.mm",
-			"ewol/renderer/os/gui.MacOs.AppDelegate.mm",
-			"ewol/renderer/os/gui.MacOs.OpenglView.mm"])
+			"ewol/renderer/MacOs/Context.cpp",
+			"ewol/renderer/MacOs/Interface.mm",
+			"ewol/renderer/MacOs/AppDelegate.mm",
+			"ewol/renderer/MacOs/OpenglView.mm"])
 	else:
 		debug.error("unknow mode...")
 	

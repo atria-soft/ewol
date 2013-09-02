@@ -10,36 +10,37 @@
 #include <ewol/commandLine.h>
 #include <etk/Vector.h>
 
-// ------------------------------------------------------------------------
-//                 Command line arguments
-// ------------------------------------------------------------------------
-
-static etk::Vector<etk::UString> listArgs;
-
-
-void ewol::commandLine::Clean(void)
+void ewol::CommandLine::Parse(int32_t _argc, const char* _argv[])
 {
-	EWOL_DEBUG("Clean commandLine (START)");
-	listArgs.Clear();
-	EWOL_DEBUG("Clean commandLine (END)");
-}
-
-int32_t ewol::commandLine::Size(void)
-{
-	return listArgs.Size();
-}
-
-etk::UString ewol::commandLine::Get(int32_t _id)
-{
-	if (_id<0 && _id>=listArgs.Size()) {
-		return "";
+	for( int32_t i=1 ; i<_argc; i++) {
+		EWOL_INFO("commandLine : \"" << _argv[i] << "\"" );
+		m_listArgs.PushBack(_argv[i]);
 	}
-	return listArgs[_id];
 }
 
-void ewol::commandLine::Add(const etk::UString& _newElement)
+
+
+esize_t ewol::CommandLine::Size(void)
 {
-	listArgs.PushBack(_newElement);
+	return m_listArgs.Size();
 }
 
+const etk::UString& ewol::CommandLine::Get(int32_t _id)
+{
+	static const etk::UString errorArg("");
+	if (_id<0 && _id>=m_listArgs.Size()) {
+		return errorArg;
+	}
+	return m_listArgs[_id];
+}
+
+void ewol::CommandLine::Add(const etk::UString& _newElement)
+{
+	m_listArgs.PushBack(_newElement);
+}
+
+void ewol::CommandLine::Remove(esize_t _id)
+{
+	m_listArgs.Remove(_id);
+}
 

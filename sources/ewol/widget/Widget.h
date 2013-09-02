@@ -418,12 +418,20 @@ namespace ewol {
 			 * @return false : the event must not be repeated.
 			 */
 			virtual bool GetKeyboardRepeate(void) { return m_allowRepeateKeyboardEvent; };
+		protected:
 			/**
 			 * @brief Set the keyboard repeating event supporting.
 			 * @param[in] _state The repeating status (true: enable, false disable).
 			 */
 			virtual void SetKeyboardRepeate(bool _state) { m_allowRepeateKeyboardEvent = _state; };
-		
+			/**
+			 * @brief Display the virtual keyboard (if needed)
+			 */
+			virtual void ShowKeyboard(void);
+			/**
+			 * @brief Hide the virtual keyboard (if needed)
+			 */
+			virtual void HideKeyboard(void);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Periodic call Area
 		// ----------------------------------------------------------------------------------------------------------------

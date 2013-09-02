@@ -11,7 +11,7 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 #include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 
 #undef __class__
 #define __class__ "DrawProperty"
@@ -695,7 +695,7 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicod
 void ewol::Widget::GrabCursor(void)
 {
 	if (false == m_grabCursor) {
-		GetSystem().InputEventGrabPointer(this);
+		GetContext().InputEventGrabPointer(this);
 		m_grabCursor = true;
 	}
 }
@@ -703,7 +703,7 @@ void ewol::Widget::GrabCursor(void)
 void ewol::Widget::UnGrabCursor(void)
 {
 	if (true==m_grabCursor) {
-		GetSystem().InputEventUnGrabPointer();
+		GetContext().InputEventUnGrabPointer();
 		m_grabCursor = false;
 	}
 }
@@ -720,7 +720,7 @@ void ewol::Widget::SetCursor(ewol::cursorDisplay_te _newCursor)
 {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
-	GetSystem().SetCursor(m_cursorDisplay);
+	GetContext().SetCursor(m_cursorDisplay);
 }
 
 ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
@@ -857,17 +857,29 @@ bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
 
 void ewol::Widget::RequestUpdateSize(void)
 {
-	GetSystem().RequestUpdateSize();
+	GetContext().RequestUpdateSize();
 }
 
 
 ewol::WidgetManager& ewol::Widget::GetWidgetManager(void)
 {
-	return GetSystem().GetWidgetManager();
+	return GetContext().GetWidgetManager();
 }
 
 
 ewol::Windows* ewol::Widget::GetWindows(void)
 {
-	return GetSystem().GetWindows();
+	return GetContext().GetWindows();
 }
+
+
+void ewol::Widget::ShowKeyboard(void)
+{
+	GetContext().KeyboardShow();
+}
+
+void ewol::Widget::HideKeyboard(void)
+{
+	GetContext().KeyboardHide();
+}
+

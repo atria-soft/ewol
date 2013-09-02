@@ -15,9 +15,9 @@
 
 #include <ewol/renderer/EObject.h>
 #include <ewol/renderer/EObjectManager.h>
-#include <ewol/renderer/eSystem.h>
-#include <ewol/renderer/eSystemInput.h>
-#include <ewol/renderer/resources/Texture.h>
+#include <ewol/renderer/eContext.h>
+#include <ewol/renderer/eInput.h>
+#include <ewol/resources/Texture.h>
 
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>

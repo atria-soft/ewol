@@ -10,7 +10,7 @@
 #include <etk/UString.h>
 #include <ewol/ewol.h>
 #include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/renderer/eContext.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/WidgetManager.h>
@@ -205,7 +205,7 @@ void ewol::Windows::PopUpWidgetPush(ewol::Widget * widget)
 	// Regenerate the size calculation :
 	CalculateSize(m_size);
 	// TODO : it is dansgerous to access directly to the system ...
-	GetSystem().ResetIOEvent();
+	GetContext().ResetIOEvent();
 }
 
 
@@ -241,5 +241,5 @@ void ewol::Windows::SetTitle(const etk::UString& _title)
 {
 	// TODO : Remove this ...
 	etk::UString title = _title;
-	GetSystem().SetTitle(title);
+	GetContext().SetTitle(title);
 }

@@ -33,7 +33,7 @@ ewol::EObject::~EObject(void)
 {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	GetEObjectManager().Rm(this);
-	GetEObjectMessageMultiCast().Rm(this);
+	GetMultiCast().Rm(this);
 	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
@@ -91,7 +91,7 @@ void ewol::EObject::GenerateEventId(const char * _generateEventId, const etk::US
 void ewol::EObject::SendMultiCast(const char* const _messageId, const etk::UString& _data)
 {
 	int32_t nbObject = GetEObjectManager().GetNumberObject();
-	GetEObjectMessageMultiCast().Send(this, _messageId, _data);
+	GetMultiCast().Send(this, _messageId, _data);
 	if (nbObject > GetEObjectManager().GetNumberObject()) {
 		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
 	}
@@ -99,7 +99,7 @@ void ewol::EObject::SendMultiCast(const char* const _messageId, const etk::UStri
 
 void ewol::EObject::RegisterMultiCast(const char* const _messageId)
 {
-	GetEObjectMessageMultiCast().Add(this, _messageId);
+	GetMultiCast().Add(this, _messageId);
 }
 
 void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
@@ -311,12 +311,12 @@ ewol::EObjectManager& ewol::EObject::GetEObjectManager(void)
 	return ewol::GetContext().GetEObjectManager();
 }
 
-ewol::EMultiCast& ewol::EObject::GetEObjectMessageMultiCast(void)
+ewol::EMultiCast& ewol::EObject::GetMultiCast(void)
 {
 	return ewol::GetContext().GetEObjectManager().MultiCast();
 }
 
-ewol::eSystem& ewol::EObject::GetSystem(void)
+ewol::eContext& ewol::EObject::GetContext(void)
 {
 	return ewol::GetContext();
 }

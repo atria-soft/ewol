@@ -14,26 +14,35 @@
 
 namespace ewol
 {
-	namespace commandLine {
-		/**
-		 * @brief Remove all the element bufferised in the commandLine system
-		 */
-		void Clean(void);
-		/**
-		 * @brief Get the number of element in the Command Line
-		 * @return the number of element
-		 */
-		int32_t Size(void);
-		/**
-		 * @brief Get an element with a specific ID
-		 * @return _id The cmdLine Id element
-		 */
-		etk::UString Get(int32_t _id);
-		/**
-		 * @brief Add one element at the Command Line
-		 * @param[in] _newElement String in the input that might be added.
-		 */
-		void Add(const etk::UString& _newElement);
+	class CommandLine
+	{
+		private:
+			etk::Vector<etk::UString> m_listArgs; //!< list of all argument parsed
+		public:
+			/**
+			 * @brief Parse the command line parameters
+			 */
+			void Parse(int32_t _argc, const char* _argv[]);
+			/**
+			 * @brief Get the number of element in the Command Line
+			 * @return the number of element
+			 */
+			esize_t Size(void);
+			/**
+			 * @brief Get an element with a specific ID
+			 * @return _id The cmdLine Id element
+			 */
+			const etk::UString& Get(int32_t _id);
+			/**
+			 * @brief Add one element at the Command Line
+			 * @param[in] _newElement String in the input that might be added.
+			 */
+			void Add(const etk::UString& _newElement);
+			/**
+			 * @brief Remove an element
+			 * @param[in] _id Id of the element
+			 */
+			void Remove(esize_t _id);
 	};
 };
 
