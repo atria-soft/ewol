@@ -13,7 +13,7 @@
 #define __class__	"ConfigFont"
 
 ewol::ConfigFont::ConfigFont(void) : 
-	m_folder("DATA::fonts"),
+	m_folder("DATA:fonts"),
 	m_name("Arial;Helvetica"),
 	m_size(10),
 	m_useExternal(false)

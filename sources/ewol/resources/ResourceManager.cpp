@@ -28,6 +28,21 @@ ewol::ResourceManager::ResourceManager(void) :
 
 ewol::ResourceManager::~ResourceManager(void)
 {
+	bool hasError = false;
+	if (m_resourceListToUpdate.Size()!=0) {
+		EWOL_ERROR("Must not have anymore resources to update !!!");
+		hasError = true;
+	}
+	if (m_resourceList.Size()!=0) {
+		EWOL_ERROR("Must not have anymore resources !!!");
+		hasError = true;
+	}
+	if (true==hasError) {
+		EWOL_ERROR("Check if the function UnInit has been called !!!");
+	}
+}
+void ewol::ResourceManager::UnInit(void)
+{
 	Display();
 	m_resourceListToUpdate.Clear();
 	// remove all resources ...
@@ -42,6 +57,7 @@ ewol::ResourceManager::~ResourceManager(void)
 	}
 	m_resourceList.Clear();
 }
+
 
 void ewol::ResourceManager::Display(void)
 {

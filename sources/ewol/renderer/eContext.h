@@ -162,9 +162,7 @@ namespace ewol
 			 * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void OnObjectRemove(ewol::EObject * removeObject) {
-				// TODO : I did not remember what I must do ...
-			};
+			void OnObjectRemove(ewol::EObject * removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */

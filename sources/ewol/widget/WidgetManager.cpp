@@ -259,30 +259,34 @@ void ewol::WidgetManager::AddWidgetCreator(const etk::UString& _name, ewol::Widg
 	if (NULL==_pointer) {
 		return;
 	}
-	if (true==m_creatorList.Exist(_name)) {
-		EWOL_WARNING("Replace Creator of a specify widget : " << _name);
-		m_creatorList[_name] = _pointer;
+	//Keep name in lower case :
+	etk::UString nameLower = _name.ToLower();
+	if (true==m_creatorList.Exist(nameLower)) {
+		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
+		m_creatorList[nameLower] = _pointer;
 		return;
 	}
-	EWOL_INFO("Add Creator of a specify widget : " << _name);
-	m_creatorList.Add(_name, _pointer);
+	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
+	m_creatorList.Add(nameLower, _pointer);
 }
 
 ewol::Widget* ewol::WidgetManager::Create(const etk::UString& _name)
 {
-	if (true==m_creatorList.Exist(_name)) {
-		ewol::WidgetManager::creator_tf pointerFunction = m_creatorList[_name];
+	etk::UString nameLower = _name.ToLower();
+	if (true==m_creatorList.Exist(nameLower)) {
+		ewol::WidgetManager::creator_tf pointerFunction = m_creatorList[nameLower];
 		if (NULL != pointerFunction) {
 			return pointerFunction();
 		}
 	}
-	EWOL_WARNING("try to create an UnExistant widget : " << _name);
+	EWOL_WARNING("try to create an UnExistant widget : " << nameLower);
 	return NULL;
 }
 
 bool ewol::WidgetManager::Exist(const etk::UString& _name)
 {
-	return m_creatorList.Exist(_name);
+	etk::UString nameLower = _name.ToLower();
+	return m_creatorList.Exist(nameLower);
 }
 
 etk::UString ewol::WidgetManager::List(void)

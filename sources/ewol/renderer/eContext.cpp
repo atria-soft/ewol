@@ -296,6 +296,9 @@ ewol::eContext::~eContext(void)
 	// unset all windows
 	m_windowsCurrent = NULL;
 	m_msgSystem.Clean();
+	
+	m_EObjectManager.UnInit();
+	m_resourceManager.UnInit();
 	// release the curent interface :
 	UnLockContext();
 	EWOL_INFO("==> Ewol System Un-Init (END)");
@@ -505,12 +508,13 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	return hasDisplayDone;
 }
 
-/*
-void ewol::eContext::OnObjectRemove(ewol::EObject * removeObject)
+
+void ewol::eContext::OnObjectRemove(ewol::EObject * _removeObject)
 {
-	m_managementInput.OnObjectRemove(removeObject);
+	//EWOL_CRITICAL("element removed");
+	m_input.OnObjectRemove(_removeObject);
 }
-*/
+
 
 void ewol::eContext::ResetIOEvent(void)
 {

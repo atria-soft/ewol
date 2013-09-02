@@ -23,6 +23,22 @@ ewol::EObjectManager::EObjectManager(void)
 
 ewol::EObjectManager::~EObjectManager(void)
 {
+	bool hasError = false;
+	if (m_eObjectAutoRemoveList.Size()!=0) {
+		EWOL_ERROR("Must not have anymore eObject to auto-remove !!!");
+		hasError = true;
+	}
+	if (m_eObjectList.Size()!=0) {
+		EWOL_ERROR("Must not have anymore eObject !!!");
+		hasError = true;
+	}
+	if (true==hasError) {
+		EWOL_ERROR("Check if the function UnInit has been called !!!");
+	}
+}
+
+void ewol::EObjectManager::UnInit(void)
+{
 	EWOL_DEBUG("==> Un-Init EObject-Manager");
 	RemoveAllAutoRemove();
 	EWOL_INFO(" Remove missing user widget");

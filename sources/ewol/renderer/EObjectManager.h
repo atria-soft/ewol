@@ -23,6 +23,11 @@ namespace ewol
 		public:
 			EObjectManager(void);
 			~EObjectManager(void);
+			/**
+			 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
+			 */
+			void UnInit(void);
+			
 			void Add(ewol::EObject* _object);
 			void Rm(ewol::EObject* _object);
 			int32_t GetNumberObject(void);

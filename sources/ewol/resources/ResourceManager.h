@@ -41,6 +41,10 @@ namespace ewol
 			 */
 			~ResourceManager(void);
 			/**
+			 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
+			 */
+			void UnInit(void);
+			/**
 			 * @brief Display in the log all the resources loaded ...
 			 */
 			void Display(void);
