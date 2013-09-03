@@ -133,25 +133,25 @@ namespace ewol
 			void ProcessEvents(void);
 		public:
 			
-			void SetArchiveDir(int _mode, const char* _str);
+			virtual void SetArchiveDir(int _mode, const char* _str);
 			
 			
-			void OS_SetInputMotion(int _pointerID, const vec2& _pos);
-			void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos);
+			virtual void OS_SetInputMotion(int _pointerID, const vec2& _pos);
+			virtual void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos);
 			
-			void OS_SetMouseMotion(int _pointerID, const vec2& _pos);
-			void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
+			virtual void OS_SetMouseMotion(int _pointerID, const vec2& _pos);
+			virtual void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
 			
-			void OS_SetKeyboard(ewol::SpecialKey& _special,
-			                    uniChar_t _myChar,
-			                    bool _isDown,
-			                    bool _isARepeateKey=false);
-			void OS_SetKeyboardMove(ewol::SpecialKey& _special,
-			                        ewol::keyEvent::keyboard_te _move,
-			                        bool _isDown,
-			                        bool _isARepeateKey=false);
+			virtual void OS_SetKeyboard(ewol::SpecialKey& _special,
+			                            uniChar_t _myChar,
+			                            bool _isDown,
+			                            bool _isARepeateKey=false);
+			virtual void OS_SetKeyboardMove(ewol::SpecialKey& _special,
+			                                ewol::keyEvent::keyboard_te _move,
+			                                bool _isDown,
+			                                bool _isARepeateKey=false);
 			
-			void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			
 			void RequestUpdateSize(void);
 			
@@ -204,7 +204,7 @@ namespace ewol
 			 * @brief The OS inform that the current windows has change his size.
 			 * @param[in] _size new size of the windows.
 			 */
-			void OS_Resize(const vec2& _size);
+			virtual void OS_Resize(const vec2& _size);
 			/**
 			 * @brief The application request a change of his curent size.
 			 * @param[in] _size new Requested size of the windows.

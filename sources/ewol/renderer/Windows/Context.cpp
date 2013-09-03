@@ -40,7 +40,7 @@ int64_t ewol::GetTime(void)
 #define __class__ "ContextWindows"
 
 
-class WindowsContext : public eContext
+class WindowsContext : public ewol::eContext
 {
 	private:
 		int32_t m_currentHeight = 0;
