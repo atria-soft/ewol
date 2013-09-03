@@ -151,7 +151,7 @@ namespace ewol
 			                                bool _isDown,
 			                                bool _isARepeateKey=false);
 			
-			virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			//virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			
 			void RequestUpdateSize(void);
 			

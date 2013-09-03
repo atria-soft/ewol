@@ -20,7 +20,7 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
 
-import static org.ewol.Ewol.EWOL;
+import org.ewol.Ewol;
 
 /**
  * @brief Class : 
@@ -32,10 +32,12 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 	private boolean inputDown1 = false;
 	private boolean inputDown2 = false;
 	private boolean inputDown3 = false;
+	private Ewol EWOL;
 		
-	public EwolSurfaceViewGL(Context context) {
+	public EwolSurfaceViewGL(Context context, Ewol ewolInstance) {
 		// super must be first statement in constructor
 		super(context);
+		EWOL = ewolInstance;
 		/*
 		  List of the Android API :
 		  Android 4.1, 4.1.1          16  JELLY_BEAN               Platform Highlights
@@ -62,7 +64,7 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		setEGLContextClientVersion(2);
 		
 		// je n'ai pas compris ...
-		m_ewolDrawer = new EwolRendererGL();
+		m_ewolDrawer = new EwolRendererGL(EWOL);
 		setRenderer(m_ewolDrawer);
 		
 		// Can get the focus ==> get keyboard from JAVA : 

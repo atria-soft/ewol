@@ -17,7 +17,7 @@ import android.opengl.GLSurfaceView;
 /* no need in same package... */
 //import org.ewol.Ewol;
 
-import static org.ewol.Ewol.EWOL;
+import org.ewol.Ewol;
 
 /**
  * @brief Class : 
@@ -25,6 +25,12 @@ import static org.ewol.Ewol.EWOL;
  */
 public class EwolRendererGL implements GLSurfaceView.Renderer
 {
+	private Ewol EWOL;
+	
+	public EwolRendererGL(Ewol ewolInstance)
+	{
+		EWOL = ewolInstance;
+	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 		EWOL.renderInit();
 	}

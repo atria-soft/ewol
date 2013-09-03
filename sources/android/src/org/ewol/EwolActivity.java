@@ -39,20 +39,26 @@ import android.util.DisplayMetrics;
 
 import java.io.IOException;
 
-import static org.ewol.Ewol.EWOL;
+import org.ewol.Ewol;
 
 /**
  * @brief Class : 
  *
  */
-public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants{
-
+public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants
+{
 	private EwolSurfaceViewGL mGLView;
 	private EwolAudioTask     mStreams;
 	private Thread            mAudioThread;
-	
+	private Ewol              EWOL;
 	static {
 		System.loadLibrary("ewol");
+	}
+	public EwolActivity()
+	{
+		EWOL = new Ewol();
+		// set the java evironement in the C sources :
+		EWOL.setJavaVirtualMachineStart(this);
 	}
 	
 	protected void initApkPath(String org, String vendor, String project) {
@@ -70,19 +76,16 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			throw new RuntimeException("Unable to locate assets, aborting...");
 		}
 		apkFilePath = appInfo.sourceDir;
-		Ewol.paramSetArchiveDir(0, apkFilePath);
+		EWOL.paramSetArchiveDir(0, apkFilePath);
 	}
 	
 	@Override protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		// set the java evironement in the C sources :
-		Ewol.setJavaVirtualMachineStart(this);
-		
 		// Load the application directory
-		Ewol.paramSetArchiveDir(1, getFilesDir().toString());
-		Ewol.paramSetArchiveDir(2, getCacheDir().toString());
+		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
+		EWOL.paramSetArchiveDir(2, getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
 		//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 		//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
@@ -104,10 +107,10 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		
 		// create bsurface system
-		mGLView = new EwolSurfaceViewGL(this);
+		mGLView = new EwolSurfaceViewGL(this, EWOL);
 		
 		// create element audio ...
-		mStreams = new EwolAudioTask();
+		mStreams = new EwolAudioTask(EWOL);
 		
 		setContentView(mGLView);
 	}
@@ -166,7 +169,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		// call C
 		EWOL.onDestroy();
 		// Remove the java Virtual machine pointer form the C code
-		Ewol.setJavaVirtualMachineStop();
+		EWOL.setJavaVirtualMachineStop();
 	}
 	
 	@Override protected void finalize() throws Throwable
@@ -194,8 +197,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	
 	public void eventNotifier(String[] args)
 	{
-		// just for the test ...
-		EWOL.touchEvent();
+		// TODO : ...
 	}
 	
 	public void orientationUpdate(int screenMode)
@@ -210,6 +212,11 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			//Force auto Rotation
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
 		}
+	}
+	
+	public void titleSet(String value)
+	{
+		setTitle(value);
 	}
 }
 

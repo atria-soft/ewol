@@ -13,5 +13,6 @@ public interface EwolCallback {
     public void keyboardUpdate(boolean show);
     public void eventNotifier(String[] args);
     public void orientationUpdate(int screenMode);
+    public void titleSet(String value);
 
 }

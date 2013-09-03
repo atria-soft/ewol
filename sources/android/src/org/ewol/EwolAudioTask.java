@@ -17,7 +17,7 @@ import android.media.AudioRecord;
 /* no need in same package... */
 //import org.ewol.NativeInterface;
 
-import static org.ewol.Ewol.EWOL;
+import org.ewol.Ewol;
 
 
 public class EwolAudioTask implements Runnable, EwolConstants
@@ -25,12 +25,13 @@ public class EwolAudioTask implements Runnable, EwolConstants
     public static final int SAMPLE_FREQ_44100  = 44100;
     private boolean         m_stopAudioThreads = false;
     private AudioTrack      m_musicTrack       = null;
+	private Ewol EWOL;
 
-    // constructor : 
-    public EwolAudioTask()
-    {
-	// nothing to do ...
-    }
+	// constructor : 
+	public EwolAudioTask(Ewol ewolInstance)
+	{
+		EWOL = ewolInstance;
+	}
 
     public void run()
     {

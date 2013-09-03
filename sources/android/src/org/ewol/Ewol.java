@@ -12,55 +12,158 @@ import android.app.Activity;
 import android.service.wallpaper.WallpaperService;
 import android.service.wallpaper.WallpaperService.Engine;
 
+import android.util.Log;
+
 public class Ewol {
-	public static final Ewol EWOL = getInstance();
-	private static Ewol instance = null;
+	private static int counterInstance = -1; // Global instance increment at eveny new instance
+	private int instanceID = -1; // local and private instance ID
 	
 	/* Default constructor (why not ?)*/
-	private Ewol() {}
-	/* Use singleton */
-	public static Ewol getInstance() {
-		if(instance == null)
-			instance = new Ewol();
-		return instance;
+	public Ewol()
+	{
+		// TODO : Set an unique intance ID
+		counterInstance ++;
+		instanceID = counterInstance;
+		Log.d("Ewol", "new " + counterInstance + " : " + instanceID);
+	}
+	// internal Acces not at the native function ...
+	
+	public <T extends Activity & EwolCallback> void setJavaVirtualMachineStart(T activityInstance)
+	{
+		// TODO : Get the instance ID here ...
+		EWsetJavaVirtualMachineStart(activityInstance);
+	}
+	public <T extends WallpaperService & EwolCallback> void setJavaVirtualMachineStartWallpaperEngine(T serviceInstance)
+	{
+		// TODO : Get the instance ID here ...
+		EWsetJavaVirtualMachineStartWallpaperEngine(serviceInstance);
+	}
+	public void setJavaVirtualMachineStop()
+	{
+		EWsetJavaVirtualMachineStop(instanceID);
+	}
+	public void paramSetArchiveDir(int mode, String myString)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWparamSetArchiveDir(instanceID, mode, myString);
 	}
 	
-	public static native <T extends Activity & EwolCallback> void setJavaVirtualMachineStart(T activityInstance);
-	public static native <T extends WallpaperService & EwolCallback> void setJavaVirtualMachineStartWallpaperEngine(T serviceInstance);
-	public static native void setJavaVirtualMachineStop();
-	public static native void paramSetArchiveDir(int mode, String myString);
-	
-	public native void touchEvent();
 	// activity status
-	public native void onCreate();
-	public native void onStart();
-	public native void onReStart();
-	public native void onResume();
-	public native void onPause();
-	public native void onStop();
-	public native void onDestroy();
+	public void onCreate()  { EWonCreate(instanceID); }
+	public void onStart()   { EWonStart(instanceID); }
+	public void onReStart() { EWonReStart(instanceID); }
+	public void onResume()  { EWonResume(instanceID); }
+	public void onPause()   { EWonPause(instanceID); }
+	public void onStop()    { EWonStop(instanceID); }
+	public void onDestroy() { EWonDestroy(instanceID); }
 	// set display properties :
-	public native void displayPropertyMetrics(float ratioX, float ratioY);
+	public void displayPropertyMetrics(float ratioX, float ratioY)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWdisplayPropertyMetrics(instanceID, ratioX, ratioY);
+	}
 	// IO native function :
 	// Specific for the type of input : TOOL_TYPE_FINGER and TOOL_TYPE_STYLUS (work as the same)
-	public native void inputEventMotion(int pointerID, float x, float y);
-	public native void inputEventState(int pointerID, boolean isDown, float x, float y);
+	public void inputEventMotion(int pointerID, float x, float y)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWinputEventMotion(instanceID, pointerID, x, y);
+	}
+	public void inputEventState(int pointerID, boolean isDown, float x, float y)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWinputEventState(instanceID, pointerID, isDown, x, y);
+	}
 	// Specific for the type of input : TOOL_TYPE_MOUSE
-	public native void mouseEventMotion(int pointerID, float x, float y);
-	public native void mouseEventState(int pointerID, boolean isDown, float x, float y);
+	public void mouseEventMotion(int pointerID, float x, float y)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWmouseEventMotion(instanceID, pointerID, x, y);
+	}
+	public void mouseEventState(int pointerID, boolean isDown, float x, float y)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWmouseEventState(instanceID, pointerID, isDown, x, y);
+	}
 	// other unknow event ...
-	public native void unknowEvent(int eventID);
+	public void unknowEvent(int eventID)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWunknowEvent(instanceID, eventID);
+	}
 	
-	public native void keyboardEventMove(int type, boolean isDown);
-	public native void keyboardEventKey(int uniChar, boolean isDown);
+	public void keyboardEventMove(int type, boolean isDown)
+	{
+		EWkeyboardEventMove(instanceID, type, isDown);
+	}
+	public void keyboardEventKey(int uniChar, boolean isDown)
+	{
+		EWkeyboardEventKey(instanceID, uniChar, isDown);
+	}
 	
 	// Audio section ...
-	public native void audioPlayback(short[] bufferData, int frames, int nbChannels);
+	public void audioPlayback(short[] bufferData, int frames, int nbChannels)
+	{
+		EWaudioPlayback(instanceID, bufferData, frames, nbChannels);
+	}
 	
-	public native void keyboardEventKeySystem(int keyVal, boolean isDown);
+	public void keyboardEventKeySystem(int keyVal, boolean isDown)
+	{
+		EWkeyboardEventKeySystem(instanceID, keyVal, isDown);
+	}
 	// renderer Event : 
-	public native void renderInit();
-	public native void renderResize(int w, int h);
-	public native void renderDraw();
+	public void renderInit()
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWrenderInit(instanceID);
+	}
+	public void renderResize(int w, int h)
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWrenderResize(instanceID, w, h);
+	}
+	public void renderDraw()
+	{
+		Log.d("Ewol", "call : " + instanceID);
+		EWrenderDraw(instanceID);
+	}
+	
+	
+	private native <T extends Activity & EwolCallback> void EWsetJavaVirtualMachineStart(T activityInstance);
+	private native <T extends WallpaperService & EwolCallback> void EWsetJavaVirtualMachineStartWallpaperEngine(T serviceInstance);
+	private native void EWsetJavaVirtualMachineStop(int instanceId);
+	private native void EWparamSetArchiveDir(int instanceId, int mode, String myString);
+	
+	// activity status
+	private native void EWonCreate(int instanceId);
+	private native void EWonStart(int instanceId);
+	private native void EWonReStart(int instanceId);
+	private native void EWonResume(int instanceId);
+	private native void EWonPause(int instanceId);
+	private native void EWonStop(int instanceId);
+	private native void EWonDestroy(int instanceId);
+	// set display properties :
+	private native void EWdisplayPropertyMetrics(int instanceId, float ratioX, float ratioY);
+	// IO native function :
+	// Specific for the type of input : TOOL_TYPE_FINGER and TOOL_TYPE_STYLUS (work as the same)
+	private native void EWinputEventMotion(int instanceId, int pointerID, float x, float y);
+	private native void EWinputEventState(int instanceId, int pointerID, boolean isDown, float x, float y);
+	// Specific for the type of input : TOOL_TYPE_MOUSE
+	private native void EWmouseEventMotion(int instanceId, int pointerID, float x, float y);
+	private native void EWmouseEventState(int instanceId, int pointerID, boolean isDown, float x, float y);
+	// other unknow event ...
+	private native void EWunknowEvent(int instanceId, int eventID);
+	
+	private native void EWkeyboardEventMove(int instanceId, int type, boolean isDown);
+	private native void EWkeyboardEventKey(int instanceId, int uniChar, boolean isDown);
+	
+	// Audio section ...
+	public native void EWaudioPlayback(int instanceId, short[] bufferData, int frames, int nbChannels);
+	
+	private native void EWkeyboardEventKeySystem(int instanceId, int keyVal, boolean isDown);
+	// renderer Event : 
+	private native void EWrenderInit(int instanceId);
+	private native void EWrenderResize(int instanceId, int w, int h);
+	private native void EWrenderDraw(int instanceId);
 }
 

@@ -22,11 +22,12 @@ import android.view.SurfaceHolder;
 import org.ewol.EwolSurfaceViewGL;
 import android.view.MotionEvent;
 
-import static org.ewol.Ewol.EWOL;
+import org.ewol.Ewol;
 
 public abstract class EwolWallpaper extends WallpaperService implements EwolCallback, EwolConstants
 {
 	private GLEngine mGLView;
+	private Ewol EWOL;
 	static {
 		System.loadLibrary("ewol");
 	}
@@ -46,17 +47,18 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			throw new RuntimeException("Unable to locate assets, aborting...");
 		}
 		apkFilePath = appInfo.sourceDir;
-		Ewol.paramSetArchiveDir(0, apkFilePath);
+		EWOL.paramSetArchiveDir(0, apkFilePath);
 	}
 	
 	@Override public Engine onCreateEngine() {
 		
+		EWOL = new Ewol();
 		// set the java evironement in the C sources :
-		Ewol.setJavaVirtualMachineStartWallpaperEngine(this);
+		EWOL.setJavaVirtualMachineStartWallpaperEngine(this);
 		
 		// Load the application directory
-		Ewol.paramSetArchiveDir(1, getFilesDir().toString());
-		Ewol.paramSetArchiveDir(2, getCacheDir().toString());
+		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
+		EWOL.paramSetArchiveDir(2, getCacheDir().toString());
 		// to enable extarnal storage: add in the manifest the restriction needed ...
 		//packageManager.checkPermission("android.permission.READ_SMS", myPackage) == PERMISSION_GRANTED; 
 		//Ewol.paramSetArchiveDir(3, getExternalCacheDir().toString());
@@ -70,7 +72,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		EWOL.onCreate();
 		
 		// create bsurface system
-		mGLView = new GLEngine();
+		mGLView = new GLEngine(EWOL);
 		
 		return mGLView;
 	}
@@ -79,12 +81,18 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	
 	public class GLEngine extends Engine
 	{
+		private Ewol EWOL;
+		public GLEngine(Ewol ewolInstance)
+		{
+			EWOL = ewolInstance;
+		}
+		
 		class WallpaperGLSurfaceView extends EwolSurfaceViewGL
 		{
 			private static final String TAG = "WallpaperGLSurfaceView";
-			WallpaperGLSurfaceView(Context context)
+			WallpaperGLSurfaceView(Context context, Ewol ewolInstance)
 			{
-				super(context);
+				super(context, ewolInstance);
 				Log.d(TAG, "WallpaperGLSurfaceView(" + context + ")");
 			}
 			@Override
@@ -108,7 +116,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			Log.d(TAG, "onCreate(" + surfaceHolder + ")");
 			super.onCreate(surfaceHolder);
 			
-			glSurfaceView = new WallpaperGLSurfaceView(EwolWallpaper.this);
+			glSurfaceView = new WallpaperGLSurfaceView(EwolWallpaper.this, EWOL);
 			
 			// Check if the system supports OpenGL ES 2.0.
 			final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -181,12 +189,16 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	public void eventNotifier(String[] args)
 	{
 		// just for the test ...
-		EWOL.touchEvent();
+		
 	}
 	
 	public void orientationUpdate(int screenMode)
 	{
 		
 	}
+	
+	public void titleSet(String value)
+	{
+		// no title in the wallpaper ...
+	}
 }
-
