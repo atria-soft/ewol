@@ -50,11 +50,10 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		EWOL.paramSetArchiveDir(0, apkFilePath);
 	}
 	
-	@Override public Engine onCreateEngine() {
-		
-		EWOL = new Ewol();
+	@Override public Engine onCreateEngine()
+	{
 		// set the java evironement in the C sources :
-		EWOL.setJavaVirtualMachineStartWallpaperEngine(this);
+		EWOL = new Ewol(this, EWOL_APPL_TYPE_WALLPAPER);
 		
 		// Load the application directory
 		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
@@ -184,21 +183,28 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 	public void keyboardUpdate(boolean show)
 	{
 		// never display keyboard on wallpaer...
+		Log.d("EwolCallback", "KEABOARD UPDATE is not implemented ...");
 	}
 	
 	public void eventNotifier(String[] args)
 	{
 		// just for the test ...
+		Log.d("EwolCallback", "EVENT NOTIFIER is not implemented ...");
 		
 	}
 	
 	public void orientationUpdate(int screenMode)
 	{
-		
+		Log.d("EwolCallback", "SET ORIENTATION is not implemented ...");
 	}
 	
 	public void titleSet(String value)
 	{
 		// no title in the wallpaper ...
+		Log.d("EwolCallback", "SET TITLE is not implemented ...");
 	}
+	public void Stop()
+	{
+		Log.d("EwolCallback", "STOP is not implemented ...");
+	};
 }

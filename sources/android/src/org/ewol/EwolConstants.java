@@ -23,4 +23,8 @@ public interface EwolConstants {
 	public static final int  EWOL_ORIENTATION_AUTO            = 0;
 	public static final int  EWOL_ORIENTATION_LANDSCAPE       = 1;
 	public static final int  EWOL_ORIENTATION_PORTRAIT        = 2;
+	
+	
+	public static final int  EWOL_APPL_TYPE_ACTIVITY          = 0;
+	public static final int  EWOL_APPL_TYPE_WALLPAPER         = 1;
 }

@@ -7,12 +7,13 @@
  */
 
 package org.ewol;
+import android.util.Log;
 
-public interface EwolCallback {
-
-    public void keyboardUpdate(boolean show);
-    public void eventNotifier(String[] args);
-    public void orientationUpdate(int screenMode);
-    public void titleSet(String value);
-
+public interface EwolCallback
+{
+	public void keyboardUpdate(boolean show);
+	public void eventNotifier(String[] args);
+	public void orientationUpdate(int screenMode);
+	public void titleSet(String value);
+	public void stop();
 }

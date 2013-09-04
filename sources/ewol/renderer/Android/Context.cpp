@@ -55,7 +55,8 @@ class AndroidContext : public ewol::eContext
 		JNIEnv* m_JavaVirtualMachinePointer; //!< the JVM
 		jclass m_javaClassEwol; //!< main activity class (android ...)
 		jclass m_javaClassEwolCallback;
-		jobject m_javaObjectEwolCallbackAndActivity;
+		jobject m_javaObjectEwolCallback;
+		jmethodID m_javaMethodEwolCallbackStop; //!< Stop function identifier
 		jmethodID m_javaMethodEwolCallbackEventNotifier; //!< basic methode to call ...
 		jmethodID m_javaMethodEwolCallbackKeyboardUpdate; //!< basic methode to call ...
 		jmethodID m_javaMethodEwolCallbackOrientationUpdate;
@@ -82,7 +83,8 @@ class AndroidContext : public ewol::eContext
 			m_JavaVirtualMachinePointer(NULL),
 			m_javaClassEwol(0),
 			m_javaClassEwolCallback(0),
-			m_javaObjectEwolCallbackAndActivity(0),
+			m_javaObjectEwolCallback(0),
+			m_javaMethodEwolCallbackStop(0),
 			m_javaMethodEwolCallbackEventNotifier(0),
 			m_javaMethodEwolCallbackKeyboardUpdate(0),
 			m_javaMethodEwolCallbackOrientationUpdate(0),
@@ -126,6 +128,14 @@ class AndroidContext : public ewol::eContext
 					java_check_exception(_env);
 					return;
 				}
+				ret=SafeInitMethodID(m_javaMethodEwolCallbackStop,
+				                     m_javaClassEwolCallback,
+				                     "stop",
+				                     "()V");
+				if (ret==false) {
+					java_check_exception(_env);
+					return;
+				}
 				
 				ret=SafeInitMethodID(m_javaMethodEwolCallbackEventNotifier,
 				                     m_javaClassEwolCallback,
@@ -154,7 +164,7 @@ class AndroidContext : public ewol::eContext
 					return;
 				}
 				
-				m_javaObjectEwolCallbackAndActivity = _env->NewGlobalRef(_objCallback);
+				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
 				
 				m_javaDefaultClassString = m_JavaVirtualMachinePointer->FindClass("java/lang/String" );
@@ -174,8 +184,8 @@ class AndroidContext : public ewol::eContext
 		
 		void UnInit(JNIEnv* _env)
 		{
-			_env->DeleteGlobalRef(m_javaObjectEwolCallbackAndActivity);
-			m_javaObjectEwolCallbackAndActivity = NULL;
+			_env->DeleteGlobalRef(m_javaObjectEwolCallback);
+			m_javaObjectEwolCallback = NULL;
 		}
 		
 		
@@ -187,7 +197,16 @@ class AndroidContext : public ewol::eContext
 		
 		void Stop(void)
 		{
-			// TODO : send a message to the android system to stop ...
+			EWOL_DEBUG("C->java : send message to the java : STOP REQUESTED");
+			int status;
+			if(!java_attach_current_thread(&status)) {
+				return;
+			}
+			//Call java ...
+			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackStop);
+			// manage execption : 
+			java_check_exception(m_JavaVirtualMachinePointer);
+			java_detach_current_thread(status);
 		}
 		
 		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
@@ -278,7 +297,7 @@ class AndroidContext : public ewol::eContext
 			}
 			
 			//Call java ...
-			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallbackAndActivity, m_javaMethodEwolCallbackKeyboardUpdate, _showIt);
+			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackKeyboardUpdate, _showIt);
 			// manage execption : 
 			java_check_exception(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
@@ -300,7 +319,7 @@ class AndroidContext : public ewol::eContext
 			jint param = (jint)_orientation;
 			
 			//Call java ...
-			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallbackAndActivity, m_javaMethodEwolCallbackOrientationUpdate, param);
+			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackOrientationUpdate, param);
 			
 			// manage execption : 
 			java_check_exception(m_JavaVirtualMachinePointer);
@@ -319,7 +338,7 @@ class AndroidContext : public ewol::eContext
 				etk::Char tmpChar = _title.c_str();
 				//Call java ...
 				jstring title = m_JavaVirtualMachinePointer->NewStringUTF(tmpChar);
-				m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallbackAndActivity, m_javaMethodEwolActivitySetTitle, title);
+				m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivitySetTitle, title);
 				m_JavaVirtualMachinePointer->DeleteLocalRef(title);
 				// manage execption : 
 				java_check_exception(m_JavaVirtualMachinePointer);
@@ -359,7 +378,7 @@ class AndroidContext : public ewol::eContext
 			}
 			EWOL_DEBUG("C->java : 555");
 			//Call java ...
-			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallbackAndActivity, m_javaMethodEwolCallbackEventNotifier, args);
+			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackEventNotifier, args);
 			
 			EWOL_DEBUG("C->java : 666");
 			java_check_exception(m_JavaVirtualMachinePointer);
@@ -416,7 +435,7 @@ extern "C"
 	}
 	
 	/* Call to initialize the graphics state */
-	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env, jclass _cls, jint _mode, jstring _myString, jint _id)
+	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env, jclass _cls, jint _id, jint _mode, jstring _myString)
 	{
 		if(    _id>=s_listInstance.Size()
 		    || _id<0
@@ -425,6 +444,7 @@ extern "C"
 			// TODO : Generate error in java to stop the current instance
 			return;
 		}
+		//EWOL_CRITICAL(" call with ID : " << _id);
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
 		const char* str = _env->GetStringUTFChars(_myString, &isCopy);
@@ -436,52 +456,29 @@ extern "C"
 		}
 	}
 	
-	// TODO : Return the local ID ...
-	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStart(JNIEnv* _env, jclass _classBase, jobject _objCallback)
+	jint Java_org_ewol_Ewol_EWsetJavaVirtualMachineStart(JNIEnv* _env, jclass _classBase, jobject _objCallback, int _typeApplication)
 	{
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Creating EWOL context                 **");
 		EWOL_DEBUG("*******************************************");
-		AndroidContext* tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_application);
+		AndroidContext* tmpContext = NULL;
+		if (org_ewol_EwolConstants_EWOL_APPL_TYPE_ACTIVITY == _typeApplication) {
+			tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_application);
+		} else if (org_ewol_EwolConstants_EWOL_APPL_TYPE_WALLPAPER == _typeApplication) {
+			tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_wallpaper);
+		} else {
+			EWOL_CRITICAL(" try to create an instance with no apply type: " << _typeApplication);
+			return -1;
+		}
 		if (NULL == tmpContext) {
 			EWOL_ERROR("Can not allocate the main context instance _id=" << (s_listInstance.Size()-1));
-			// TODO : return -1;
+			return -1;
 		}
-		// TODO : Change this ==> this generate the new ID ...
-		if (s_listInstance.Size()>0) {
-			// note : For now : memory leek and errors ...
-			s_listInstance[0] = tmpContext;
-		} else {
-			// for future case : all time this ...
-			s_listInstance.PushBack(tmpContext);
-			// esize_t newID = s_listInstance.Size()-1;
-			// return newID;
-		}
+		// for future case : all time this ...
+		s_listInstance.PushBack(tmpContext);
+		int32_t newID = s_listInstance.Size()-1;
+		return newID;
 	}
-	
-	// TODO : Return the local ID ...
-	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStartWallpaperEngine(JNIEnv* _env, jclass _classBase, jobject _objCallback)
-	{
-		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Creating EWOL context                 **");
-		EWOL_DEBUG("*******************************************");
-		AndroidContext* tmpContext = new AndroidContext(_env, _classBase, _objCallback, AndroidContext::appl_wallpaper);
-		if (NULL == tmpContext) {
-			EWOL_ERROR("Can not allocate the main context instance _id=" << (s_listInstance.Size()-1));
-			// TODO : return -1;
-		}
-		// TODO : Change this ==> this generate the new ID ...
-		if (s_listInstance.Size()>0) {
-			// note : For now : memory leek and errors ...
-			s_listInstance[0] = tmpContext;
-		} else {
-			// for future case : all time this ...
-			s_listInstance.PushBack(tmpContext);
-			// esize_t newID = s_listInstance.Size()-1;
-			// return newID;
-		}
-	}
-	
 	
 	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStop(JNIEnv* _env, jclass _cls, jint _id)
 	{
@@ -489,10 +486,12 @@ extern "C"
 		EWOL_DEBUG("** Remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
 		if(    _id>=s_listInstance.Size()
-		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || _id<0) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			return;
+		}
+		if (NULL==s_listInstance[_id]) {
+			EWOL_ERROR("the requested instance _id=" << (int32_t)_id << " is already removed ...");
 			return;
 		}
 		s_listInstance[_id]->UnInit(_env);

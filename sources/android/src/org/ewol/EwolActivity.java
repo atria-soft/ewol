@@ -56,9 +56,8 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	public EwolActivity()
 	{
-		EWOL = new Ewol();
 		// set the java evironement in the C sources :
-		EWOL.setJavaVirtualMachineStart(this);
+		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
 	}
 	
 	protected void initApkPath(String org, String vendor, String project) {
@@ -217,6 +216,12 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	public void titleSet(String value)
 	{
 		setTitle(value);
+	}
+	
+	public void stop()
+	{
+		// end application is requested ...
+		finish();
 	}
 }
 

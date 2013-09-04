@@ -15,36 +15,21 @@ import android.service.wallpaper.WallpaperService.Engine;
 import android.util.Log;
 
 public class Ewol {
-	private static int counterInstance = -1; // Global instance increment at eveny new instance
 	private int instanceID = -1; // local and private instance ID
 	
-	/* Default constructor (why not ?)*/
-	public Ewol()
+	public <T extends EwolCallback> Ewol(T activityInstance, int typeApplication)
 	{
-		// TODO : Set an unique intance ID
-		counterInstance ++;
-		instanceID = counterInstance;
-		Log.d("Ewol", "new " + counterInstance + " : " + instanceID);
+		instanceID = -1;
+		instanceID = EWsetJavaVirtualMachineStart(activityInstance, typeApplication);
+		Log.d("Ewol", "new : " + instanceID);
 	}
-	// internal Acces not at the native function ...
 	
-	public <T extends Activity & EwolCallback> void setJavaVirtualMachineStart(T activityInstance)
-	{
-		// TODO : Get the instance ID here ...
-		EWsetJavaVirtualMachineStart(activityInstance);
-	}
-	public <T extends WallpaperService & EwolCallback> void setJavaVirtualMachineStartWallpaperEngine(T serviceInstance)
-	{
-		// TODO : Get the instance ID here ...
-		EWsetJavaVirtualMachineStartWallpaperEngine(serviceInstance);
-	}
 	public void setJavaVirtualMachineStop()
 	{
 		EWsetJavaVirtualMachineStop(instanceID);
 	}
 	public void paramSetArchiveDir(int mode, String myString)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWparamSetArchiveDir(instanceID, mode, myString);
 	}
 	
@@ -59,36 +44,30 @@ public class Ewol {
 	// set display properties :
 	public void displayPropertyMetrics(float ratioX, float ratioY)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWdisplayPropertyMetrics(instanceID, ratioX, ratioY);
 	}
 	// IO native function :
 	// Specific for the type of input : TOOL_TYPE_FINGER and TOOL_TYPE_STYLUS (work as the same)
 	public void inputEventMotion(int pointerID, float x, float y)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWinputEventMotion(instanceID, pointerID, x, y);
 	}
 	public void inputEventState(int pointerID, boolean isDown, float x, float y)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWinputEventState(instanceID, pointerID, isDown, x, y);
 	}
 	// Specific for the type of input : TOOL_TYPE_MOUSE
 	public void mouseEventMotion(int pointerID, float x, float y)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWmouseEventMotion(instanceID, pointerID, x, y);
 	}
 	public void mouseEventState(int pointerID, boolean isDown, float x, float y)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWmouseEventState(instanceID, pointerID, isDown, x, y);
 	}
 	// other unknow event ...
 	public void unknowEvent(int eventID)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWunknowEvent(instanceID, eventID);
 	}
 	
@@ -114,23 +93,19 @@ public class Ewol {
 	// renderer Event : 
 	public void renderInit()
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWrenderInit(instanceID);
 	}
 	public void renderResize(int w, int h)
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWrenderResize(instanceID, w, h);
 	}
 	public void renderDraw()
 	{
-		Log.d("Ewol", "call : " + instanceID);
 		EWrenderDraw(instanceID);
 	}
 	
 	
-	private native <T extends Activity & EwolCallback> void EWsetJavaVirtualMachineStart(T activityInstance);
-	private native <T extends WallpaperService & EwolCallback> void EWsetJavaVirtualMachineStartWallpaperEngine(T serviceInstance);
+	private native <T extends EwolCallback> int EWsetJavaVirtualMachineStart(T activityInstance, int typeApplication);
 	private native void EWsetJavaVirtualMachineStop(int instanceId);
 	private native void EWparamSetArchiveDir(int instanceId, int mode, String myString);
 	
