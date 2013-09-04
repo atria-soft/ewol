@@ -565,6 +565,7 @@ extern "C"
 			// TODO : Generate error in java to stop the current instance
 			return;
 		}
+		s_listInstance[_id]->OS_Resume();
 	}
 	void Java_org_ewol_Ewol_EWonPause(JNIEnv* _env, jobject _thiz, jint _id)
 	{
@@ -580,6 +581,7 @@ extern "C"
 		}
 		// All the openGl has been destroyed ...
 		s_listInstance[_id]->GetResourcesManager().ContextHasBeenDestroyed();
+		s_listInstance[_id]->OS_Suspend();
 	}
 	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id)
 	{
@@ -593,6 +595,7 @@ extern "C"
 			// TODO : Generate error in java to stop the current instance
 			return;
 		}
+		s_listInstance[_id]->OS_Stop();
 	}
 	void Java_org_ewol_Ewol_EWonDestroy(JNIEnv* _env, jobject _thiz, jint _id)
 	{

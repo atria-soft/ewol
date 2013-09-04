@@ -23,8 +23,8 @@ namespace ewol
 			typedef ewol::Widget* (*creator_tf)(void);
 		private:
 			// For the focus Management
-			ewol::Widget * m_focusWidgetDefault;
-			ewol::Widget * m_focusWidgetCurrent;
+			ewol::Widget* m_focusWidgetDefault;
+			ewol::Widget* m_focusWidgetCurrent;
 			etk::Vector<ewol::Widget*> m_listOfPeriodicWidget;
 			bool m_havePeriodic;
 			bool m_haveRedraw;
@@ -35,17 +35,18 @@ namespace ewol
 			WidgetManager(void);
 			~WidgetManager(void);
 			// need to call when remove a widget to clear all dependency of the focus system
-			void Rm(ewol::Widget * newWidget);
+			void Rm(ewol::Widget* _newWidget);
 			
-			void FocusKeep(ewol::Widget * newWidget); // set the focus at the specific widget
-			void FocusSetDefault(ewol::Widget * newWidget); // select the default focus getter
+			void FocusKeep(ewol::Widget* _newWidget); // set the focus at the specific widget
+			void FocusSetDefault(ewol::Widget* _newWidget); // select the default focus getter
 			void FocusRelease(void); // Release focus from the current widget to the default
 			ewol::Widget* FocusGet(void);
-			void FocusRemoveIfRemove(ewol::Widget * newWidget);
+			void FocusRemoveIfRemove(ewol::Widget* _newWidget);
 			
-			void PeriodicCallAdd(ewol::Widget* pWidget);
-			void PeriodicCallRm(ewol::Widget* pWidget);
-			void PeriodicCall(int64_t localTime);
+			void PeriodicCallAdd(ewol::Widget* _pWidget);
+			void PeriodicCallRm(ewol::Widget* _pWidget);
+			void PeriodicCall(int64_t _localTime);
+			void PeriodicCallResume(int64_t _localTime);
 			bool PeriodicCallHave(void);
 			
 			void MarkDrawingIsNeeded(void);

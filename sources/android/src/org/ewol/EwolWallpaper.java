@@ -203,8 +203,8 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		// no title in the wallpaper ...
 		Log.d("EwolCallback", "SET TITLE is not implemented ...");
 	}
-	public void Stop()
+	public void stop()
 	{
 		Log.d("EwolCallback", "STOP is not implemented ...");
-	};
+	}
 }

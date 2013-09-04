@@ -150,6 +150,14 @@ namespace ewol
 			                                ewol::keyEvent::keyboard_te _move,
 			                                bool _isDown,
 			                                bool _isARepeateKey=false);
+			/**
+			 * @brief The current context is suspended
+			 */
+			virtual void OS_Suspend(void);
+			/**
+			 * @brief The current context is Resumed
+			 */
+			virtual void OS_Resume(void);
 			
 			//virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			

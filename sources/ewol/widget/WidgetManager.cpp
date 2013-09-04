@@ -70,27 +70,27 @@ ewol::WidgetManager::~WidgetManager(void)
 	m_creatorList.Clear();
 }
 
-void ewol::WidgetManager::Rm(ewol::Widget * newWidget)
+void ewol::WidgetManager::Rm(ewol::Widget* _newWidget)
 {
-	PeriodicCallRm(newWidget);
-	FocusRemoveIfRemove(newWidget);
+	PeriodicCallRm(_newWidget);
+	FocusRemoveIfRemove(_newWidget);
 }
 
 /* *************************************************************************
  * Focus Area : 
  * *************************************************************************/
 
-void ewol::WidgetManager::FocusKeep(ewol::Widget * newWidget)
+void ewol::WidgetManager::FocusKeep(ewol::Widget* _newWidget)
 {
-	if (NULL == newWidget) {
+	if (NULL == _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	if (false == newWidget->CanHaveFocus()) {
+	if (false == _newWidget->CanHaveFocus()) {
 		EWOL_VERBOSE("Widget can not have Focus, id=" << 9999999999.999);
 		return;
 	}
-	if (newWidget == m_focusWidgetCurrent) {
+	if (_newWidget == m_focusWidgetCurrent) {
 		// nothing to do ...
 		return;
 	}
@@ -98,7 +98,7 @@ void ewol::WidgetManager::FocusKeep(ewol::Widget * newWidget)
 		EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->RmFocus();
 	}
-	m_focusWidgetCurrent = newWidget;
+	m_focusWidgetCurrent = _newWidget;
 	if (NULL != m_focusWidgetCurrent) {
 		EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 		m_focusWidgetCurrent->SetFocus();
@@ -106,10 +106,11 @@ void ewol::WidgetManager::FocusKeep(ewol::Widget * newWidget)
 }
 
 
-void ewol::WidgetManager::FocusSetDefault(ewol::Widget * newWidget)
+void ewol::WidgetManager::FocusSetDefault(ewol::Widget * _newWidget)
 {
-	if (NULL != newWidget && false == newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << newWidget->GetId() );
+	if(    NULL != _newWidget
+	    && false == _newWidget->CanHaveFocus() ) {
+		EWOL_VERBOSE("Widget can not have Focus, id=" << _newWidget->GetId() );
 		return;
 	}
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
@@ -117,13 +118,13 @@ void ewol::WidgetManager::FocusSetDefault(ewol::Widget * newWidget)
 			EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 			m_focusWidgetCurrent->RmFocus();
 		}
-		m_focusWidgetCurrent = newWidget;
+		m_focusWidgetCurrent = _newWidget;
 		if (NULL != m_focusWidgetCurrent) {
 			EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
 			m_focusWidgetCurrent->SetFocus();
 		}
 	}
-	m_focusWidgetDefault = newWidget;
+	m_focusWidgetDefault = _newWidget;
 }
 
 
@@ -150,13 +151,13 @@ ewol::Widget * ewol::WidgetManager::FocusGet(void)
 	return m_focusWidgetCurrent;
 }
 
-void ewol::WidgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
+void ewol::WidgetManager::FocusRemoveIfRemove(ewol::Widget* _newWidget)
 {
-	if (m_focusWidgetCurrent == newWidget) {
+	if (m_focusWidgetCurrent == _newWidget) {
 		EWOL_WARNING("Release Focus when remove widget");
 		FocusRelease();
 	}
-	if (m_focusWidgetDefault == newWidget) {
+	if (m_focusWidgetDefault == _newWidget) {
 		EWOL_WARNING("Release default Focus when remove widget");
 		FocusSetDefault(NULL);
 	}
@@ -164,28 +165,28 @@ void ewol::WidgetManager::FocusRemoveIfRemove(ewol::Widget * newWidget)
 
 
 
-void ewol::WidgetManager::PeriodicCallAdd(ewol::Widget * pWidget)
+void ewol::WidgetManager::PeriodicCallAdd(ewol::Widget* _pWidget)
 {
 	for (int32_t iii=0; iii < m_listOfPeriodicWidget.Size(); iii++) {
-		if (m_listOfPeriodicWidget[iii] == pWidget) {
+		if (m_listOfPeriodicWidget[iii] == _pWidget) {
 			return;
 		}
 	}
 	for (int32_t iii=0; iii < m_listOfPeriodicWidget.Size(); iii++) {
 		if (NULL == m_listOfPeriodicWidget[iii]) {
-			m_listOfPeriodicWidget[iii] = pWidget;
+			m_listOfPeriodicWidget[iii] = _pWidget;
 			return;
 		}
 	}
-	m_listOfPeriodicWidget.PushBack(pWidget);
+	m_listOfPeriodicWidget.PushBack(_pWidget);
 	m_havePeriodic = true;
 }
 
-void ewol::WidgetManager::PeriodicCallRm(ewol::Widget * pWidget)
+void ewol::WidgetManager::PeriodicCallRm(ewol::Widget * _pWidget)
 {
 	int32_t nbElement = 0;
 	for (int32_t iii=m_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
-		if (m_listOfPeriodicWidget[iii] == pWidget) {
+		if (m_listOfPeriodicWidget[iii] == _pWidget) {
 			m_listOfPeriodicWidget[iii] = NULL;
 		} else {
 			nbElement++;
@@ -194,6 +195,11 @@ void ewol::WidgetManager::PeriodicCallRm(ewol::Widget * pWidget)
 	if (0 == nbElement) {
 		m_havePeriodic = false;
 	}
+}
+
+void ewol::WidgetManager::PeriodicCallResume(int64_t _localTime)
+{
+	m_lastPeriodicCallTime = _localTime;
 }
 
 void ewol::WidgetManager::PeriodicCall(int64_t _localTime)

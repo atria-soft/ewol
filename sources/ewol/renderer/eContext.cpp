@@ -440,6 +440,7 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 		return false;
 	}
 	#endif
+	
 	m_previousDisplayTime = currentTime;
 	
 	// process the events
@@ -557,3 +558,13 @@ void ewol::eContext::OS_Stop(void)
 	}
 }
 
+void ewol::eContext::OS_Suspend(void)
+{
+	m_previousDisplayTime = -1;
+}
+
+void ewol::eContext::OS_Resume(void)
+{
+	m_previousDisplayTime = ewol::GetTime();
+	m_widgetManager.PeriodicCallResume(m_previousDisplayTime);
+}
