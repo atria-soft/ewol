@@ -68,6 +68,7 @@ void ewol::Image::Draw(void)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
+	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use(); 
@@ -144,11 +145,9 @@ void ewol::Image::PrintPart(const vec2& _size,
                             const vec2& _sourcePosStop)
 {
 	if (m_angle==0.0f) {
-		vec3 point(0,0,0);
+		vec3 point = m_position;
 		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
 		
-		point.setX(m_position.x());
-		point.setY(m_position.y());
 		m_coord.PushBack(point);
 		m_coordTex.PushBack(tex);
 		m_coordColor.PushBack(m_color);
