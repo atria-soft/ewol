@@ -107,9 +107,10 @@ namespace ewol
 			etk::Vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ... (independent of bullet lib)
 		protected:
 			ewol::VirtualBufferObject* m_verticesVBO;
-		public:
+		private:
 			Mesh(const etk::UString& _fileName, const etk::UString& _shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
+		public:
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
 			virtual void Draw(mat4& positionMatrix);
 			void GenerateVBO(void);
@@ -143,6 +144,19 @@ namespace ewol
 			void (*m_functionFreeShape)(void* _pointer);
 		public:
 			void SetFreeShapeFunction(void (*_functionFreeShape)(void* _pointer)) { m_functionFreeShape = _functionFreeShape; };
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the ewol mesh file.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::Mesh* Keep(const etk::UString& _meshname);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::Mesh*& _object);
 	};
 };
 

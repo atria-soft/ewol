@@ -36,15 +36,16 @@ ewol::Program::Program(const etk::UString& filename) :
 		etk::UString tmpFilename = m_name;
 		// remove extention ...
 		tmpFilename.Remove(tmpFilename.Size()-4, 4);
-		ewol::Shader* tmpShader = NULL;
-		if (false == ewol::resource::Keep(tmpFilename+"vert", tmpShader)) {
+		ewol::Shader* tmpShader = ewol::Shader::Keep(tmpFilename+"vert");
+		if (NULL==tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
 			m_shaderList.PushBack(tmpShader);
 		}
-		if (false == ewol::resource::Keep(tmpFilename+"frag", tmpShader)) {
+		tmpShader = ewol::Shader::Keep(tmpFilename+"frag");
+		if (NULL==tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
 		} else {
@@ -52,7 +53,6 @@ ewol::Program::Program(const etk::UString& filename) :
 			m_shaderList.PushBack(tmpShader);
 		}
 	} else {
-		
 		etk::UString fileExtention = file.FileGetExtention();
 		if (fileExtention != "prog") {
 			EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
@@ -80,8 +80,8 @@ ewol::Program::Program(const etk::UString& filename) :
 			}
 			// get it with relative position :
 			etk::UString tmpFilename = file.GetRelativeFolder() + tmpData;
-			ewol::Shader* tmpShader = NULL;
-			if (false == ewol::resource::Keep(tmpFilename, tmpShader)) {
+			ewol::Shader* tmpShader = ewol::Shader::Keep(tmpFilename);
+			if (NULL==tmpShader) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
 				EWOL_DEBUG("Add shader on program : "<< tmpFilename);
@@ -99,7 +99,7 @@ ewol::Program::Program(const etk::UString& filename) :
 ewol::Program::~Program(void)
 {
 	for (int32_t iii=0; iii<m_shaderList.Size(); iii++) {
-		ewol::resource::Release(m_shaderList[iii]);
+		ewol::Shader::Release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
 	}
 	m_shaderList.Clear();
@@ -801,3 +801,31 @@ void ewol::Program::UnUse(void)
 }
 
 
+
+ewol::Program* ewol::Program::Keep(const etk::UString& _filename)
+{
+	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
+	ewol::Program* object = static_cast<ewol::Program*>(GetManager().LocalKeep(_filename));
+	if (NULL != object) {
+		return object;
+	}
+	// need to crate a new one ...
+	object = new ewol::Program(_filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+
+void ewol::Program::Release(ewol::Program*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

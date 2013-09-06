@@ -16,6 +16,7 @@
 #include <ewol/resources/Texture.h>
 #include <ewol/resources/FontFreeType.h>
 #include <ewol/resources/font/FontBase.h>
+#include <ewol/resources/ResourceManager.h>
 
 
 #undef __class__
@@ -359,3 +360,29 @@ void ewol::FontFreeType::Display(void)
 
 
 
+ewol::FontBase* ewol::FontFreeType::Keep(const etk::UString& _filename)
+{
+	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
+	ewol::FontBase* object = static_cast<ewol::FontBase*>(GetManager().LocalKeep(_filename));
+	if (NULL != object) {
+		return object;
+	}
+	// need to crate a new one ...
+	object = new ewol::FontFreeType(_filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::FontFreeType::Release(ewol::FontBase*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

@@ -43,9 +43,10 @@ namespace ewol
 			// for the texture generation :
 			ivec2 m_lastGlyphPos[4];
 			int32_t m_lastRawHeigh[4];
-		public:
+		protected:
 			TexturedFont(etk::UString fontName);
 			~TexturedFont(void);
+		public:
 			virtual bool HasName(const etk::UString& fileName);
 			const char* GetType(void) { return "ewol::TexturedFont"; };
 			int32_t getFontSize(void) { return m_size; };
@@ -81,6 +82,19 @@ namespace ewol
 			 * @return the best mode we have in stock.
 			 */
 			ewol::font::mode_te GetWrappingMode(ewol::font::mode_te source) { return m_modeWraping[source]; };
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the texture font.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::TexturedFont* Keep(const etk::UString& _filename);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::TexturedFont*& _object);
 	};
 	
 	

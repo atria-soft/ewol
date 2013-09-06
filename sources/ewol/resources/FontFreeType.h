@@ -28,9 +28,10 @@ namespace ewol
 			FT_Face m_fftFace;
 			bool m_init;
 			void Display(void);
-		public:
+		protected:
 			FontFreeType(const etk::UString& _fontName);
 			~FontFreeType(void);
+		public:
 			
 			bool GetGlyphProperty(int32_t _fontSize,
 			                      ewol::GlyphProperty& _property);
@@ -46,6 +47,19 @@ namespace ewol
 			int32_t GetHeight(int32_t _fontSize);
 			
 			void GenerateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph);
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the base font.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::FontBase* Keep(const etk::UString& _filename);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::FontBase*& _object);
 	};
 	void FreeTypeInit(void);
 	void FreeTypeUnInit(void);

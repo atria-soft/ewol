@@ -36,9 +36,11 @@ namespace ewol {
 			GLuint GetId(void) { return m_texId; };
 			vec2 GetUsableSize(void) { return m_endPointSize; };
 		// Public API:
-		public:
-			Texture(etk::UString tmpName);
+		protected:
+			Texture(const etk::UString& _filename);
+			Texture(void);
 			~Texture(void);
+		public:
 			virtual const char* GetType(void) { return "ewol::Texture"; };
 			// you must set the size here, because it will be set in multiple of pow(2)
 			void SetImageSize(ivec2 newSize);
@@ -46,6 +48,18 @@ namespace ewol {
 			inline egami::Image& Get(void) { return m_data; };
 			// Flush the data to send it at the OpenGl system
 			void Flush(void);
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::Texture* Keep(void);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::Texture*& _object);
 	};
 	
 };

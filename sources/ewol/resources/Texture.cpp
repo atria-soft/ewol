@@ -35,9 +35,15 @@ static int32_t nextP2(int32_t _value)
 }
 
 
+ewol::Texture::Texture(const etk::UString& _filename) :
+	ewol::Resource(_filename)
+{
+	m_loaded = false;
+	m_texId = 0;
+	m_endPointSize.setValue(1.0,1.0);
+}
 
-ewol::Texture::Texture(etk::UString _tmpName) :
-	Resource(_tmpName)
+ewol::Texture::Texture(void)
 {
 	m_loaded = false;
 	m_texId = 0;
@@ -105,7 +111,7 @@ void ewol::Texture::RemoveContextToLate(void)
 void ewol::Texture::Flush(void)
 {
 	// request to the manager to be call at the next update ...
-	ewol::GetContext().GetResourcesManager().Update(this);
+	GetManager().Update(this);
 }
 
 
@@ -115,3 +121,24 @@ void ewol::Texture::SetImageSize(ivec2 _newSize)
 	m_data.Resize(_newSize);
 }
 
+ewol::Texture* ewol::Texture::Keep(void)
+{
+	// this element create a new one every time ....
+	ewol::Texture* object = new ewol::Texture();
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??TEX??");
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::Texture::Release(ewol::Texture*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

@@ -24,8 +24,8 @@ namespace ewol
 			int32_t      m_valueInt;
 			float        m_valuefloat;
 		public:
-			SimpleConfigElement(const etk::UString& name) :
-				m_paramName(name),
+			SimpleConfigElement(const etk::UString& _name) :
+				m_paramName(_name),
 				m_value(""),
 				m_valueInt(0),
 				m_valuefloat(0.0) { };
@@ -41,17 +41,31 @@ namespace ewol
 		private:
 			etk::Vector<ewol::SimpleConfigElement*> m_list;
 			etk::UString                            m_errorString;
-		public:
-			ConfigFile(const etk::UString& filename);
+		protected:
+			ConfigFile(const etk::UString& _filename);
 			virtual ~ConfigFile(void);
+		public:
 			const char* GetType(void) { return "ewol::SimpleConfigFile"; };
 			void Reload(void);
 			
-			int32_t Request(etk::UString paramName);
+			int32_t Request(const etk::UString& _paramName);
 			
 			int32_t       GetInteger(int32_t id) { if (id<0) { return 0; } return m_list[id]->GetInteger(); };
 			float         GetFloat(int32_t id)   { if (id<0) { return 0; } return m_list[id]->GetFloat();   };
 			etk::UString& GetString(int32_t id)  { if (id<0) { return m_errorString; } return m_list[id]->GetString();  };
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the configuration file.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::ConfigFile* Keep(const etk::UString& _filename);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::ConfigFile*& _object);
 	};
 };
 

@@ -15,7 +15,7 @@
 #include <ewol/resources/Resource.h>
 #include <ewol/renderer/openGL.h>
 
-#define NB_VBO_MAX   (4)
+#define NB_VBO_MAX   (20)
 
 namespace ewol
 {
@@ -25,20 +25,22 @@ namespace ewol
 	class VirtualBufferObject : public ewol::Resource
 	{
 		private :
-			bool               m_exist;  //!< This data is availlable in the Graphic card
-			GLuint             m_vbo[NB_VBO_MAX]; //!< OpenGl ID of this VBO
-			bool               m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...
+			int32_t m_nbVBO;
+			bool m_exist;  //!< This data is availlable in the Graphic card
+			GLuint m_vbo[NB_VBO_MAX]; //!< OpenGl ID of this VBO
+			bool m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...
 			etk::Vector<float> m_buffer[NB_VBO_MAX]; //!< data that is availlable in the VBO system ...
-		public:
+		protected:
 			/**
 			 * @brief Constructor of this VBO.
 			 * @param[in] accesMode Acces mode : ???
 			 */
-			VirtualBufferObject(const etk::UString& accesMode);
+			VirtualBufferObject(int32_t _number);
 			/**
 			 * @brief Destructor of this VBO.
 			 */
 			virtual ~VirtualBufferObject(void);
+		public:
 			/**
 			 * @brief Generic function that get the resouces name of his type.
 			 * @return The define char of his name.
@@ -96,6 +98,19 @@ namespace ewol
 			 * @note this is really usefull when we tested the new themes or shader developpements.
 			 */
 			void Reload(void);
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _number Number of VBO needed
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::VirtualBufferObject* Keep(int32_t _number);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::VirtualBufferObject*& _object);
 	};
 };
 #endif

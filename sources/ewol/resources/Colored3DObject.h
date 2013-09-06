@@ -21,12 +21,13 @@ namespace ewol
 	{
 		protected:
 			ewol::Program* m_GLprogram;
-			int32_t        m_GLPosition;
-			int32_t        m_GLMatrix;
-			int32_t        m_GLColor;
-		public:
-			Colored3DObject(etk::UString _genName);
+			int32_t m_GLPosition;
+			int32_t m_GLMatrix;
+			int32_t m_GLColor;
+		protected:
+			Colored3DObject(void);
 			virtual ~Colored3DObject(void);
+		public:
 			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
 			virtual void Draw(etk::Vector<vec3>& _vertices,
 			                  const etk::Color<float>& _color,
@@ -42,7 +43,18 @@ namespace ewol
 			                      mat4& _transformationMatrix,
 			                      bool _updateDepthBuffer=true,
 			                      bool _depthtest=true);
-			
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::Colored3DObject* Keep(void);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::Colored3DObject*& _object);
 	};
 };
 

@@ -26,7 +26,7 @@ namespace ewol
 			char*          m_fileData; //!< A copy of the data loaded from the file (usefull only when opengl context is removed)
 			GLuint         m_shader;   //!< Opengl id of this element
 			GLenum         m_type;     //!< Type of the current shader(vertex/fragment)
-		public:
+		protected:
 			/**
 			 * @brief Contructor of an opengl Shader
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
@@ -36,6 +36,7 @@ namespace ewol
 			 * @brief Destructor, remove the current Shader
 			 */
 			virtual ~Shader(void);
+		public:
 			/**
 			 * @brief Generic function that get the resouces name of his type.
 			 * @return The define char of his name.
@@ -68,6 +69,19 @@ namespace ewol
 			 * @note this is really usefull when we tested the new themes or shader developpements.
 			 */
 			void Reload(void);
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the openGL Shader.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::Shader* Keep(const etk::UString& _filename);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::Shader*& _object);
 	};
 };
 

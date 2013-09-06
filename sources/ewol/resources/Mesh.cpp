@@ -32,8 +32,8 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	m_light.SetSpecularColor(vec4(0.0,0.0,0.0,1));
 	
 	//EWOL_DEBUG(m_name << "  " << m_light);
-	
-	if (true == ewol::resource::Keep(_shaderName, m_GLprogram) ) {
+	m_GLprogram = ewol::Program::Keep(_shaderName);
+	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLtexture = m_GLprogram->GetAttribute("EW_texture2d");
 		m_GLNormal = m_GLprogram->GetAttribute("EW_normal");
@@ -44,7 +44,7 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 		m_light.Link(m_GLprogram, "EW_directionalLight");
 	}
 	// this is the properties of the buffer requested : "r"/"w" + "-" + buffer type "f"=flaot "i"=integer
-	ewol::resource::Keep("w-fff", m_verticesVBO);
+	m_verticesVBO = ewol::VirtualBufferObject::Keep(4);
 	
 	// load the curent file :
 	etk::UString tmpName = _fileName.ToLower();
@@ -68,8 +68,8 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 ewol::Mesh::~Mesh(void)
 {
 	// remove dynamics dependencies :
-	ewol::resource::Release(m_GLprogram);
-	ewol::resource::Release(m_verticesVBO);
+	ewol::Program::Release(m_GLprogram);
+	ewol::VirtualBufferObject::Release(m_verticesVBO);
 	if (m_functionFreeShape!=NULL) {
 		m_functionFreeShape(m_pointerShape);
 		m_pointerShape = NULL;
@@ -1011,3 +1011,32 @@ void ewol::Mesh::SetShape(void* _shape)
 	}
 	m_pointerShape=_shape;
 };
+
+
+
+
+
+ewol::Mesh* ewol::Mesh::Keep(const etk::UString& _meshName)
+{
+	ewol::Mesh* object = static_cast<ewol::Mesh*>(GetManager().LocalKeep(_meshName));
+	if (NULL != object) {
+		return object;
+	}
+	object = new ewol::Mesh(_meshName);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh??" << _meshName);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::Mesh::Release(ewol::Mesh*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

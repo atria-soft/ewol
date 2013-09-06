@@ -288,10 +288,7 @@ void ewol::Drawing::ResetCount(void)
 
 void ewol::Drawing::UnLoadProgram(void)
 {
-	if (NULL!=m_GLprogram) {
-		ewol::resource::Release(m_GLprogram);
-		m_GLprogram = NULL;
-	}
+	ewol::Program::Release(m_GLprogram);
 }
 
 void ewol::Drawing::LoadProgram(void)
@@ -299,9 +296,9 @@ void ewol::Drawing::LoadProgram(void)
 	// remove previous loading ... in case
 	UnLoadProgram();
 	// oad the new ...
-	etk::UString tmpString("DATA:color3.prog");
+	m_GLprogram = ewol::Program::Keep("DATA:color3.prog");
 	// get the shader resource :
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");

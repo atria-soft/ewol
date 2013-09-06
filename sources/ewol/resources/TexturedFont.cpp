@@ -14,6 +14,7 @@
 
 #include <ewol/resources/font/FontBase.h>
 #include <ewol/resources/TexturedFont.h>
+#include <ewol/resources/FontFreeType.h>
 
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj)
@@ -213,7 +214,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			continue;
 		}
 		EWOL_INFO("Load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size);
-		ewol::resource::Keep(m_fileName[iiiFontId], m_font[iiiFontId]);
+		m_font[iiiFontId] = ewol::FontFreeType::Keep(m_fileName[iiiFontId]);
 		if (NULL == m_font[iiiFontId]) {
 			return;
 		}
@@ -323,10 +324,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 ewol::TexturedFont::~TexturedFont(void)
 {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		if (NULL!= m_font[iiiFontId]) {
-			ewol::resource::Release(m_font[iiiFontId]);
-			m_font[iiiFontId] = NULL;
-		}
+		ewol::FontFreeType::Release(m_font[iiiFontId]);
 	}
 }
 
@@ -376,4 +374,33 @@ ewol::GlyphProperty* ewol::TexturedFont::GetGlyphPointer(const uniChar_t& _charc
 	//EWOL_ERROR("      m_advance=" << m_listElement[_displayMode][index].m_advance);
 	//EWOL_ERROR("      m_bearing=" << m_listElement[_displayMode][index].m_bearing);
 	return &((m_listElement[_displayMode])[index]);
+}
+
+
+
+ewol::TexturedFont* ewol::TexturedFont::Keep(const etk::UString& _filename)
+{
+	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << _filename << "\"");
+	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(GetManager().LocalKeep(_filename));
+	if (NULL != object) {
+		return object;
+	}
+	// need to crate a new one ...
+	object = new ewol::TexturedFont(_filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::TexturedFont::Release(ewol::TexturedFont*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
 }

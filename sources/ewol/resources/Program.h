@@ -54,7 +54,7 @@ namespace ewol
 			etk::Vector<ewol::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
 			bool                                    m_hasTexture;  //!< A texture has been set to the current shader
 			bool                                    m_hasTexture1; //!< A texture has been set to the current shader
-		public:
+		protected:
 			/**
 			 * @brief Contructor of an opengl Program.
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
@@ -64,6 +64,7 @@ namespace ewol
 			 * @brief Destructor, remove the current Program.
 			 */
 			virtual ~Program(void);
+		public:
 			/**
 			 * @brief Generic function that get the resouces name of his type.
 			 * @return The define char of his name.
@@ -267,6 +268,19 @@ namespace ewol
 			 * @note this is really usefull when we tested the new themes or shader developpements.
 			 */
 			void Reload(void);
+		public:
+			/**
+			 * @brief Keep the resource pointer.
+			 * @note Never free this pointer by your own...
+			 * @param[in] _filename Name of the openGL program.
+			 * @return pointer on the resource or NULL if an error occured.
+			 */
+			static ewol::Program* Keep(const etk::UString& _filename);
+			/**
+			 * @brief Release the keeped resources
+			 * @param[in,out] reference on the object pointer
+			 */
+			static void Release(ewol::Program*& _object);
 	};
 };
 

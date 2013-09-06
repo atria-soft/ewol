@@ -14,14 +14,13 @@
 #define __class__	"Colored3DObject"
 
 
-ewol::Colored3DObject::Colored3DObject(etk::UString _genName) :
-	ewol::Resource(_genName),
+ewol::Colored3DObject::Colored3DObject(void) :
 	m_GLprogram(NULL)
 {
-	etk::UString tmpString("DATA:simple3D.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	m_GLprogram = ewol::Program::Keep("DATA:simple3D.prog");
+	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->GetUniform("EW_color");
 		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
@@ -31,7 +30,7 @@ ewol::Colored3DObject::Colored3DObject(etk::UString _genName) :
 ewol::Colored3DObject::~Colored3DObject(void)
 {
 	// remove dynamics dependencies :
-	ewol::resource::Release(m_GLprogram);
+	ewol::Program::Release(m_GLprogram);
 }
 
 
@@ -158,4 +157,29 @@ void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& _vertices,
 		}
 		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
+}
+
+
+
+ewol::Colored3DObject* ewol::Colored3DObject::Keep(void)
+{
+	EWOL_VERBOSE("KEEP : direct Colored3DObject");
+	// need to crate a new one ...
+	ewol::Colored3DObject* object = new ewol::Colored3DObject();
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::Colored3DObject::Release(ewol::Colored3DObject*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
 }

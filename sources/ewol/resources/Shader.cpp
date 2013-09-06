@@ -10,7 +10,7 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/resources/Shader.h>
-
+#include <ewol/resources/ResourceManager.h>
 
 #undef __class__
 #define __class__	"Shader"
@@ -159,3 +159,29 @@ void ewol::Shader::Reload(void)
 
 
 
+ewol::Shader* ewol::Shader::Keep(const etk::UString& _filename)
+{
+	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
+	ewol::Shader* object = static_cast<ewol::Shader*>(GetManager().LocalKeep(_filename));
+	if (NULL != object) {
+		return object;
+	}
+	// need to crate a new one ...
+	object = new ewol::Shader(_filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::Shader::Release(ewol::Shader*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

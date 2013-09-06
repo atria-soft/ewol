@@ -34,3 +34,92 @@ ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfi
 	Flush();
 }
 
+
+#ifdef __TARGET_OS__Android
+/**
+ * @brief get the next power 2 if the input
+ * @param[in] _value Value that we want the next power of 2
+ * @return result value
+ */
+static int32_t nextP2(int32_t _value)
+{
+	int32_t val=1;
+	for (int32_t iii=1; iii<31; iii++) {
+		if (_value <= val) {
+			return val;
+		}
+		val *=2;
+	}
+	EWOL_CRITICAL("impossible CASE.... request P2 of " << _value);
+	return val;
+}
+#endif
+
+
+
+ewol::TextureFile* ewol::TextureFile::Keep(const etk::UString& _filename, ivec2 _size)
+{
+	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
+	if (_filename == "") {
+		ewol::TextureFile* object = new ewol::TextureFile("");
+		if (NULL == object) {
+			EWOL_ERROR("allocation error of a resource : ??TEX??");
+			return NULL;
+		}
+		GetManager().LocalAdd(object);
+		return object;
+	}
+	if (_size.x()==0) {
+		_size.setX(-1);
+		//EWOL_ERROR("Error Request the image size.x() =0 ???");
+	}
+	if (_size.y()==0) {
+		_size.setY(-1);
+		//EWOL_ERROR("Error Request the image size.y() =0 ???");
+	}
+	etk::UString TmpFilename = _filename;
+	if (false == _filename.EndWith(".svg") ) {
+		_size = ivec2(-1,-1);
+	}
+	#ifdef __TARGET_OS__MacOs
+		EWOL_ERROR("TODO : Remove this strange hack");
+		_size = ivec2(64,64);
+	#endif
+	if (_size.x()>0 && _size.y()>0) {
+		EWOL_VERBOSE("    ==> specific size : " << _size);
+		#ifdef __TARGET_OS__Android
+			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
+		#endif
+		TmpFilename += ":";
+		TmpFilename += _size.x();
+		TmpFilename += "x";
+		TmpFilename += _size.y();
+	}
+	
+	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" new size=" << _size);
+	ewol::TextureFile* object = static_cast<ewol::TextureFile*>(GetManager().LocalKeep(TmpFilename));
+	if (NULL != object) {
+		return object;
+	}
+	EWOL_INFO("        ==> create new one...");
+	// need to crate a new one ...
+	object = new ewol::TextureFile(TmpFilename, _filename, _size);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : " << _filename);
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+
+void ewol::TextureFile::Release(ewol::TextureFile*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}
+

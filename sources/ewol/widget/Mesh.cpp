@@ -31,7 +31,8 @@ widget::Mesh::Mesh(const etk::UString& filename) :
 	// Limit event at 1:
 	SetMouseLimit(1);
 	if (filename!="") {
-		if (false==ewol::resource::Keep(m_meshName, m_object)) {
+		m_object = ewol::Mesh::Keep(m_meshName);
+		if (NULL == m_object) {
 			EWOL_ERROR("Can not load the resource : \"" << m_meshName << "\"");
 		}
 	}
@@ -40,10 +41,7 @@ widget::Mesh::Mesh(const etk::UString& filename) :
 
 widget::Mesh::~Mesh(void)
 {
-	if (NULL != m_object) {
-		ewol::resource::Release(m_object);
-		m_object = NULL;
-	}
+	ewol::Mesh::Release(m_object);
 }
 void widget::Mesh::OnDraw(void)
 {
@@ -102,14 +100,14 @@ bool widget::Mesh::OnEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-void widget::Mesh::SetFile(const etk::UString& filename)
+void widget::Mesh::SetFile(const etk::UString& _filename)
 {
-	if (filename!="") {
-		if (NULL != m_object) {
-			ewol::resource::Release(m_object);
-			m_object = NULL;
-		}
-		if (false==ewol::resource::Keep(m_meshName, m_object)) {
+	if(    _filename!=""
+	    && m_meshName != _filename ) {
+		ewol::Mesh::Release(m_object);
+		m_meshName = _filename;
+		m_object = ewol::Mesh::Keep(m_meshName);
+		if (NULL == m_object) {
 			EWOL_ERROR("Can not load the resource : \"" << m_meshName << "\"");
 		}
 	}

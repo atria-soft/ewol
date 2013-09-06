@@ -18,6 +18,7 @@
 
 namespace ewol
 {
+	class ResourceManager;
 	// class resources is pure virtual
 	class Resource {
 		/*
@@ -26,7 +27,7 @@ namespace ewol
 			void  operator delete(void* elementPointer);
 		*/
 		private:
-			static uint32_t valBase;
+			static uint32_t m_valBase;
 		protected:
 			etk::UString m_name;
 			uint32_t     m_counter;
@@ -38,22 +39,22 @@ namespace ewol
 				m_counter(1),
 				m_resourceLevel(MAX_RESOURCE_LEVEL-1)
 			{
-				m_uniqueId = valBase;
-				valBase++;
+				m_uniqueId = m_valBase;
+				m_valBase++;
 			};
-			Resource(const etk::UString& filename) :
-				m_name(filename),
+			Resource(const etk::UString& _filename) :
+				m_name(_filename),
 				m_counter(1),
 				m_resourceLevel(MAX_RESOURCE_LEVEL-1)
 			{
-				m_uniqueId = valBase;
-				valBase++;
+				m_uniqueId = m_valBase;
+				m_valBase++;
 			};
 			virtual ~Resource(void) { };
-			virtual bool HasName(const etk::UString& fileName)
+			virtual bool HasName(const etk::UString& _fileName)
 			{
-				EWOL_VERBOSE("G : check : " << fileName << " ?= " << m_name << " = " << (fileName==m_name) );
-				return fileName==m_name;
+				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName==m_name) );
+				return _fileName==m_name;
 			};
 			virtual etk::UString GetName(void) { return m_name; };
 			void Increment(void) { m_counter++; };
@@ -62,10 +63,12 @@ namespace ewol
 			uint32_t GetUID(void) { return m_uniqueId; };
 			uint8_t  GetResourceLevel(void) { return m_resourceLevel; };
 			virtual const char* GetType(void) { return "unknow"; };
-			virtual void UpdateContext(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
-			virtual void RemoveContext(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
-			virtual void RemoveContextToLate(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
-			virtual void Reload(void) { EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)"); };
+			virtual void UpdateContext(void);
+			virtual void RemoveContext(void);
+			virtual void RemoveContextToLate(void);
+			virtual void Reload(void);
+			
+			static ewol::ResourceManager& GetManager(void);
 	};
 };
 

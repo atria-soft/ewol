@@ -45,7 +45,7 @@ ewol::Material::Material(void) :
 ewol::Material::~Material(void)
 {
 	if(NULL!=m_texture0) {
-		ewol::resource::Release(m_texture0);
+		ewol::TextureFile::Release(m_texture0);
 	}
 }
 
@@ -65,8 +65,8 @@ void ewol::Material::SetTexture0(const etk::UString& _filename)
 	ivec2 tmpSize(256, 256);
 	// prevent overloard error :
 	ewol::TextureFile* tmpCopy = m_texture0;
-	m_texture0 = NULL;
-	if (false == ewol::resource::Keep(_filename, m_texture0, tmpSize)) {
+	m_texture0 = ewol::TextureFile::Keep(_filename, tmpSize);
+	if (NULL == m_texture0 ) {
 		EWOL_ERROR("Can not load specific texture : " << _filename);
 		// retreave previous texture:
 		m_texture0 = tmpCopy;
@@ -74,7 +74,7 @@ void ewol::Material::SetTexture0(const etk::UString& _filename)
 	}
 	if (NULL != tmpCopy) {
 		// really release previous texture. In case of same texture loading, then we did not have reload it .. just increase and decrease index...
-		ewol::resource::Release(tmpCopy);
+		ewol::TextureFile::Release(tmpCopy);
 	}
 }
 

@@ -55,9 +55,9 @@ namespace ewol
 			void ReLoadResources(void);
 			/**
 			 * @brief Call by the system to send all the needed data on the graphic card chen they change ...
-			 * @param[in] object The resources that might be updated
+			 * @param[in] _object The resources that might be updated
 			 */
-			void Update(ewol::Resource* object);
+			void Update(ewol::Resource* _object);
 			/**
 			 * @brief Call by the system chen the openGL Context has been unexpectially removed ==> This reload all the texture, VBO and other ....
 			 */
@@ -68,69 +68,14 @@ namespace ewol
 			void ContextHasBeenDestroyed(void);
 		public:
 			// internal API to extent eResources in extern Soft
-			ewol::Resource* LocalKeep(const etk::UString& filename);
-			void LocalAdd(ewol::Resource* object);
+			ewol::Resource* LocalKeep(const etk::UString& _filename);
+			void LocalAdd(ewol::Resource* _object);
 		public:
 			/**
 			 * @brief Release a resources and free it if the Last release is call.
-			 * @param[in,out] object element to realease ==> is return at NULL value.
+			 * @param[in,out] _object element to realease ==> is return at NULL value.
 			 */
-			void Release(ewol::Resource*& object);
-	};
-	namespace resource
-	{
-		/**
-		 * @brief Load the specify resources type
-		 * @param[in] filename The filename of the resources
-		 * @param[in,out] object The resources that might be instanciate.
-		 * @return true if the resource has been loaded corectly.
-		 * @return false An error occured ...
-		 * @note when you call the Keep function, you must call the Realease function ==> otherwise the resources will never be freed
-		 * @note The resources with the same name are loaded only one time, a counter prevent multiple loading...
-		 */
-		bool Keep(const etk::UString& filename, ewol::TexturedFont*& object);
-		bool Keep(const etk::UString& filename, ewol::FontBase*& object);
-		bool Keep(const etk::UString& filename, ewol::Program*& object);
-		bool Keep(const etk::UString& filename, ewol::Shader*& object);
-		bool Keep(ewol::Texture*& object); // no name needed here ...
-		bool Keep(const etk::UString& filename, ewol::TextureFile*& object, ivec2 size=ivec2(-1,-1));
-		bool Keep(const etk::UString& accesMode, ewol::VirtualBufferObject*& object);
-		bool Keep(const etk::UString& meshName, ewol::Mesh*& object);
-		bool Keep(const etk::UString& filename, ewol::ConfigFile*& object);
-		bool Keep(ewol::Colored3DObject*& object);
-		
-		// must became :
-		/*
-		ewol::Font* KeepFont(const etk::UString& _filename);
-		ewol::Program* KeepProgram(const etk::UString& _filename);
-		ewol::Shader* KeepShader(const etk::UString& _filename);
-		ewol::Texture* KeepTexture(void);
-		ewol::Texture* KeepTexture(const etk::UString& _filename, const ivec2& size=ivec2(-1,-1));
-		void AddTextureResourceCreator(pf* _plop, const etk::UString& _ext);
-		ewol::Audio* KeepAudio(const etk::UString& _filename, bool _inRam=false);
-		void AddAudioResourceCreator(pf* _plop, const etk::UString& _ext);
-		ewol::VirtualBufferObject* KeepVBO(const etk::UString& _accesMode);
-		ewol::Mesh* KeepMesh(const etk::UString& _filename);
-		ewol::ConfigFile* KeepConfigFile(const etk::UString& _filename);
-		ewol::Colored3DObject* Keep3DObject(void);
-		
-		void Release(ewol::Resource*& object);
-		*/
-		/**
-		 * @brief Release a resources and free it if the Last release is call.
-		 * @param[in,out] object element to realease ==> is return at NULL value.
-		 */
-		void Release(ewol::Resource*& object);
-		void Release(ewol::TexturedFont*& object);
-		void Release(ewol::FontBase*& object);
-		void Release(ewol::Program*& object);
-		void Release(ewol::Shader*& object);
-		void Release(ewol::Texture*& object);
-		void Release(ewol::TextureFile*& object);
-		void Release(ewol::VirtualBufferObject*& object);
-		void Release(ewol::Mesh*& object);
-		void Release(ewol::ConfigFile*& object);
-		void Release(ewol::Colored3DObject*& object);
+			void Release(ewol::Resource*& _object);
 	};
 };
 

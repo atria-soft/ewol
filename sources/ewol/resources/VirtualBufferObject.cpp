@@ -15,16 +15,16 @@
 #undef __class__
 #define __class__	"VirtualBufferObject"
 
-ewol::VirtualBufferObject::VirtualBufferObject(const etk::UString& accesMode): 
-	ewol::Resource(),
+ewol::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
 	m_exist(false)
 {
+	m_nbVBO = etk_avg(1, _number, NB_VBO_MAX);
 	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii]=0;
 		m_vboUsed[iii]=false;
 	}
 	m_resourceLevel = 3;
-	EWOL_DEBUG("OGL : load VBO mode=\"" << accesMode << "\"");
+	EWOL_DEBUG("OGL : load VBO count=\"" << _number << "\"");
 }
 
 
@@ -44,10 +44,10 @@ void ewol::VirtualBufferObject::UpdateContext(void)
 {
 	if (false==m_exist) {
 		// Allocate and assign a Vertex Array Object to our handle
-		glGenBuffers(NB_VBO_MAX, m_vbo);
+		glGenBuffers(m_nbVBO, m_vbo);
 	}
 	m_exist = true;
-	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
+	for (int32_t iii=0; iii<m_nbVBO; iii++) {
 		EWOL_INFO("VBO    : Add [" << m_uniqueId << "]=" << m_buffer[iii].Size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		if (true == m_vboUsed[iii]) {
 			// select the buffer to set data inside it ...
@@ -68,7 +68,7 @@ void ewol::VirtualBufferObject::RemoveContext(void)
 		                                                << "/" << m_vbo[1]
 		                                                << "/" << m_vbo[2]
 		                                                << "/" << m_vbo[3]);
-		glDeleteBuffers(NB_VBO_MAX, m_vbo);
+		glDeleteBuffers(m_nbVBO, m_vbo);
 		m_exist = false;
 		for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
 			m_vbo[iii] = 0;
@@ -140,3 +140,26 @@ int32_t ewol::VirtualBufferObject::SizeOnBufferVec2(int32_t id)
 	return m_buffer[id].Size()/2;
 }
 
+
+
+ewol::VirtualBufferObject* ewol::VirtualBufferObject::Keep(int32_t _number)
+{
+	// this element create a new one every time ....
+	ewol::VirtualBufferObject* object = new ewol::VirtualBufferObject(_number);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??VBO??");
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::VirtualBufferObject::Release(ewol::VirtualBufferObject*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}

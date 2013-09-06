@@ -9,6 +9,7 @@
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/resources/ConfigFile.h>
+#include <ewol/resources/ResourceManager.h>
 
 #undef __class__
 #define __class__	"ConfigFile"
@@ -26,10 +27,10 @@ void ewol::SimpleConfigElement::Parse(const etk::UString& value)
 
 
 
-ewol::ConfigFile::ConfigFile(const etk::UString& filename): 
-	ewol::Resource(filename)
+ewol::ConfigFile::ConfigFile(const etk::UString& _filename): 
+	ewol::Resource(_filename)
 {
-	EWOL_DEBUG("SFP : load \"" << filename << "\"");
+	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	Reload();
 }
 
@@ -132,17 +133,17 @@ void ewol::ConfigFile::Reload(void)
 }
 
 
-int32_t ewol::ConfigFile::Request(etk::UString paramName)
+int32_t ewol::ConfigFile::Request(const etk::UString& _paramName)
 {
 	// check if the parameters existed :
 	for (int32_t iii=0; iii<m_list.Size(); iii++){
 		if (NULL != m_list[iii]) {
-			if (m_list[iii]->m_paramName == paramName) {
+			if (m_list[iii]->m_paramName == _paramName) {
 				return iii;
 			}
 		}
 	}
-	ewol::SimpleConfigElement* tmpElement = new ewol::SimpleConfigElement(paramName);
+	ewol::SimpleConfigElement* tmpElement = new ewol::SimpleConfigElement(_paramName);
 	if (NULL == tmpElement) {
 		EWOL_DEBUG("error while allocation");
 	} else {
@@ -150,4 +151,34 @@ int32_t ewol::ConfigFile::Request(etk::UString paramName)
 	}
 	return m_list.Size()-1;
 }
+
+
+ewol::ConfigFile* ewol::ConfigFile::Keep(const etk::UString& _filename)
+{
+	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
+	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(GetManager().LocalKeep(_filename));
+	if (NULL != object) {
+		return object;
+	}
+	// this element create a new one every time ....
+	object = new ewol::ConfigFile(_filename);
+	if (NULL == object) {
+		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
+		return NULL;
+	}
+	GetManager().LocalAdd(object);
+	return object;
+}
+
+void ewol::ConfigFile::Release(ewol::ConfigFile*& _object)
+{
+	if (NULL == _object) {
+		return;
+	}
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	GetManager().Release(object2);
+	_object = NULL;
+}
+
+
 

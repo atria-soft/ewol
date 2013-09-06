@@ -47,20 +47,16 @@ ewol::Text::Text(const etk::UString& _fontName, int32_t _fontSize) :
 
 ewol::Text::~Text(void)
 {
-	
-	if (NULL != m_font) {
-		ewol::resource::Release(m_font);
-		m_font = NULL;
-	}
-	ewol::resource::Release(m_GLprogram);
+	ewol::TexturedFont::Release(m_font);
+	ewol::Program::Release(m_GLprogram);
 }
 
 void ewol::Text::LoadProgram(void)
 {
-	etk::UString tmpString("DATA:text.prog");
 	// get the shader resource :
 	m_GLPosition = 0;
-	if (true == ewol::resource::Keep(tmpString, m_GLprogram) ) {
+	m_GLprogram = ewol::Program::Keep("DATA:text.prog");
+	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->GetAttribute("EW_coord2d");
 		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
@@ -315,10 +311,7 @@ void ewol::Text::SetFont(etk::UString _fontName, int32_t _fontSize)
 {
 	Clear();
 	// remove old one
-	if (NULL != m_font) {
-		ewol::resource::Release(m_font);
-		m_font = NULL;
-	}
+	ewol::TexturedFont * previousFont = m_font;
 	if (_fontSize <= 0) {
 		_fontSize = ewol::GetContext().GetFontDefault().GetSize();
 	}
@@ -328,8 +321,12 @@ void ewol::Text::SetFont(etk::UString _fontName, int32_t _fontSize)
 	_fontName += ":";
 	_fontName += _fontSize;
 	// link to new One
-	if (false == ewol::resource::Keep(_fontName, m_font)) {
+	m_font = ewol::TexturedFont::Keep(_fontName);
+	if (NULL == m_font) {
 		EWOL_ERROR("Can not get font resource");
+		m_font = previousFont;
+	} else {
+		ewol::TexturedFont::Release(previousFont);
 	}
 }
 
