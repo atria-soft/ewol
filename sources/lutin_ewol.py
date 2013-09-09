@@ -49,6 +49,7 @@ def Create(target):
 		'ewol/resources/Texture.cpp',
 		'ewol/resources/Colored3DObject.cpp',
 		'ewol/resources/Image.cpp',
+		'ewol/resources/Resource.cpp',
 		'ewol/resources/ResourceManager.cpp'])
 	
 	# physical shape parser

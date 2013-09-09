@@ -107,7 +107,7 @@ namespace ewol
 			etk::Vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ... (independent of bullet lib)
 		protected:
 			ewol::VirtualBufferObject* m_verticesVBO;
-		private:
+		protected:
 			Mesh(const etk::UString& _fileName, const etk::UString& _shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
 		public:

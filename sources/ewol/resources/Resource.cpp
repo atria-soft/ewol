@@ -39,7 +39,7 @@ void ewol::Resource::Reload(void)
 	EWOL_DEBUG("Not Set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)");
 }
 
-ewol::ResourceManager ewol::Resource::GetManager(void)
+ewol::ResourceManager& ewol::Resource::GetManager(void)
 {
 	return ewol::GetContext().GetResourcesManager();
 }
