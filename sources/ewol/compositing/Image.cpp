@@ -51,7 +51,7 @@ void ewol::Image::LoadProgram(void)
 	}
 }
 
-void ewol::Image::Draw(void)
+void ewol::Image::Draw(bool _disableDepthTest)
 {
 	if (m_coord.Size()<=0) {
 		//EWOL_WARNING("Nothink to draw...");
@@ -65,7 +65,11 @@ void ewol::Image::Draw(void)
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (_disableDepthTest == true) {
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	} else {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 	// set Matrix : translation/positionMatrix
 	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
 	m_GLprogram->Use(); 

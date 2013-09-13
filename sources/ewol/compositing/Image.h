@@ -55,8 +55,9 @@ namespace ewol
 		public:
 			/**
 			 * @brief Draw All the refistered text in the current element on openGL
+			 * @param[in] _disableDepthTest Disable the Depth test for display
 			 */
-			void Draw(void);
+			void Draw(bool _disableDepthTest=true);
 			/**
 			 * @brief Clear alll tre registered element in the current element
 			 */

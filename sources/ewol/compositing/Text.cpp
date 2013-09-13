@@ -110,7 +110,7 @@ void ewol::Text::Draw(const mat4& _transformationMatrix, bool _enableDepthTest)
 }
 
 
-void ewol::Text::Draw(void)
+void ewol::Text::Draw(bool _disableDepthTest)
 {
 	// draw BG in any case:
 	m_vectorialDraw.Draw();

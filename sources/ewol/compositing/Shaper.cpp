@@ -103,7 +103,7 @@ void ewol::Shaper::LoadProgram(void)
 }
 
 
-void ewol::Shaper::Draw(void)
+void ewol::Shaper::Draw(bool _disableDepthTest)
 {
 	if (m_config == NULL) {
 		// this is a normale case ... the user can choice to have no config basic file ...

@@ -305,7 +305,7 @@ void ewol::Drawing::LoadProgram(void)
 	}
 }
 
-void ewol::Drawing::Draw(void)
+void ewol::Drawing::Draw(bool _disableDepthTest)
 {
 	if (m_coord.Size()<=0) {
 		// TODO : a remÃštre ...

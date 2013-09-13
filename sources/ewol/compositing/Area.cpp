@@ -49,7 +49,7 @@ void ewol::Area::LoadProgram(void)
 	}
 }
 
-void ewol::Area::Draw(void)
+void ewol::Area::Draw(bool _disableDepthTest)
 {
 	if (m_coord.Size()<=0) {
 		//EWOL_WARNING("Nothink to draw...");

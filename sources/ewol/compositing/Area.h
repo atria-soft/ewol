@@ -51,7 +51,7 @@ namespace ewol
 			/**
 			 * @brief Draw All the refistered text in the current element on openGL
 			 */
-			void Draw(void);
+			void Draw(bool _disableDepthTest=true);
 			/**
 			 * @brief Clear alll the registered element in the current element
 			 */

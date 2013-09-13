@@ -78,14 +78,21 @@ ewol::Mesh::~Mesh(void)
 
 //#define DISPLAY_NB_VERTEX_DISPLAYED
 
-void ewol::Mesh::Draw(mat4& positionMatrix)
+void ewol::Mesh::Draw(mat4& _positionMatrix, bool _enableDepthTest, bool _enableDepthUpdate)
 {
 	if (m_GLprogram==NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
 	//EWOL_DEBUG(m_name << "  " << m_light);
-	ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (_enableDepthTest==true) {
+		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false==_enableDepthUpdate) {
+			glDepthMask(GL_FALSE);
+		}
+	} else {
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
 	m_GLprogram->Use();
 	// set Matrix : translation/positionMatrix
@@ -93,7 +100,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix;
 	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
-	m_GLprogram->UniformMatrix4fv(m_GLMatrixPosition, 1, positionMatrix.m_mat);
+	m_GLprogram->UniformMatrix4fv(m_GLMatrixPosition, 1, _positionMatrix.m_mat);
 	// position :
 	m_GLprogram->SendAttributePointer(m_GLPosition, 3/*x,y,z*/, m_verticesVBO, MESH_VBO_VERTICES);
 	// Texture :
@@ -119,7 +126,7 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 				nbElementDrawTheoric += m_listFaces.GetValue(kkk).m_index.Size();
 			#endif
 		} else {
-			mat4 mattttt = (projMatrix * camMatrix) * positionMatrix;
+			mat4 mattttt = (projMatrix * camMatrix) * _positionMatrix;
 			mattttt.m_mat[3] = 0;
 			mattttt.m_mat[7] = 0;
 			mattttt.m_mat[11] = 0;
@@ -160,7 +167,12 @@ void ewol::Mesh::Draw(mat4& positionMatrix)
 		EWOL_DEBUG(((float)nbElementDraw/(float)nbElementDrawTheoric*100.0f) << "% Request Draw : " << m_listFaces.Size() << ":" << nbElementDraw << "/" << nbElementDrawTheoric << " elements [" << m_name << "]");
 	#endif
 	m_GLprogram->UnUse();
-	ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	if (_enableDepthTest==true){
+		if (false==_enableDepthUpdate) {
+			glDepthMask(GL_TRUE);
+		}
+		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+	}
 	// TODO : UNDERSTAND why ... it is needed
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }

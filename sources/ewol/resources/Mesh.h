@@ -112,7 +112,7 @@ namespace ewol
 			virtual ~Mesh(void);
 		public:
 			virtual const char* GetType(void) { return "ewol::Mesh"; };
-			virtual void Draw(mat4& positionMatrix);
+			virtual void Draw(mat4& _positionMatrix, bool _enableDepthTest=true, bool _enableDepthUpdate=true);
 			void GenerateVBO(void);
 		private:
 			void CalculateNormaleFace(void);
@@ -125,7 +125,16 @@ namespace ewol
 		public:
 			void AddMaterial(const etk::UString& _name, ewol::Material* _data);
 		public:
-			
+			/**
+			 * @brief Set the check of normal position befor sending it to the openGl card
+			 * @param[in] _status New state.
+			 */
+			void SetCheckNormal(bool _status) { m_checkNormal=_status; };
+			/**
+			 * @brief Get the check value of normal position befor sending it to the openGl card
+			 * @return Get the chcking stus of normal or not
+			 */
+			bool GetCheckNormal(void) { return m_checkNormal; };
 			const etk::Vector<ewol::PhysicsShape*>& GetPhysicalProperties(void) const { return m_physics; };
 		private:
 			void* m_pointerShape; //!< all mesh have a basic shape (bullet or other) the void pointer mermit to not depent on the bullet lib
