@@ -49,6 +49,8 @@ namespace ewol
 			} aligneMode_te;
 		private:
 			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
+		public:
+			ewol::Drawing& GetDrawing(void) { return m_vectorialDraw; };
 		private:
 			int32_t m_nbCharDisplayed; //!< prevent some error in calculation size.
 			vec3 m_sizeDisplayStart; //!< The start windows of the display.

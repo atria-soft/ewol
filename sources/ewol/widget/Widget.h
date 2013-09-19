@@ -158,7 +158,7 @@ namespace ewol {
 			 */
 			virtual vec2 RelativePosition(const vec2& _pos);
 			/**
-			 * @brief Parrent set the possible diplay size of the current widget whith his own possibilities
+			 * @brief Parent set the possible diplay size of the current widget whith his own possibilities
 			 *        By default this save the widget available size in the widget size
 			 * @param[in] _available Available x&y pixel size
 			 * @note : INTERNAL EWOL SYSTEM
@@ -549,13 +549,13 @@ namespace ewol {
 			virtual void ShortCutClean(void);
 		public:
 			/**
-			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb)
-			 * @param[in] _special all the special kay pressed at this time
-			 * @param[in] _unicodeValue key pressed by the user not used if the kbMove!=ewol::EVENT_KB_MOVE_TYPE_NONE
-			 * @param[in] _kbMove special key of the keyboard
-			 * @return true if the event has been used
-			 * @return false if the event has not been used
-			 * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error
+			 * @brief Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function @ref OnEventKb).
+			 * @param[in] _special All the special kay pressed at this time.
+			 * @param[in] _unicodeValue Key pressed by the user not used if the kbMove!=ewol::EVENT_KB_MOVE_TYPE_NONE.
+			 * @param[in] _kbMove Special key of the keyboard.
+			 * @return true if the event has been used.
+			 * @return false if the event has not been used.
+			 * @note To prevent some error when you get an event get it if it is down and Up ... ==> like this it could not generate some ununderstanding error.
 			 */
 			virtual bool OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicodeValue, ewol::keyEvent::keyboard_te _kbMove, bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------

@@ -88,7 +88,7 @@ void ewol::clipBoard::Set(ewol::clipBoard::clipboardListe_te _clipboardID, const
 	
 	if(    ewol::clipBoard::clipboardStd == _clipboardID
 	    || ewol::clipBoard::clipboardSelection == _clipboardID) {
-		//guiInterface::ClipBoardSet(_clipboardID);
+		ewol::GetContext().ClipBoardSet(_clipboardID);
 		EWOL_TODO("Set ClipBoard");
 	}
 }
@@ -103,11 +103,11 @@ void ewol::clipBoard::Request(ewol::clipBoard::clipboardListe_te _clipboardID)
 	
 	if(    ewol::clipBoard::clipboardStd == _clipboardID
 	    || ewol::clipBoard::clipboardSelection == _clipboardID) {
-		//guiInterface::ClipBoardGet(_clipboardID);
+		ewol::GetContext().ClipBoardGet(_clipboardID);
 		EWOL_TODO("Get ClipBoard");
 	} else {
 		// generate an event on the main thread ...
-		//eSystem::ClipBoardArrive(_clipboardID);
+		ewol::GetContext().OS_ClipBoardArrive(_clipboardID);
 		EWOL_TODO("ClipBoard arrive");
 	}
 }
