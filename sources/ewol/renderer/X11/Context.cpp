@@ -13,6 +13,7 @@
 #include <ewol/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
+#include <etk/os/FSNode.h>
 #include <ewol/widget/WidgetManager.h>
 
 #include <ewol/resources/ResourceManager.h>
@@ -1285,6 +1286,7 @@ class X11Interface : public ewol::eContext
  */
 int ewol::Run(int _argc, const char *_argv[])
 {
+	etk::SetArgZero(_argv[0]);
 	X11Interface* interface = new X11Interface(_argc, _argv);
 	if (NULL == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");

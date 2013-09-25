@@ -10,15 +10,17 @@
 #include <ewol/debug.h>
 #include <ewol/ewol.h>
 #include <ewol/key.h>
-#include <ewol/config.h>
 #include <ewol/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
+#include <etk/os/FSNode.h>
 #include <ewol/widget/WidgetManager.h>
 
-#include <ewol/renderer/ResourceManager.h>
-#include <ewol/renderer/eSystem.h>
+#include <ewol/resources/ResourceManager.h>
+#include <ewol/renderer/eContext.h>
 
+#include <ewol/renderer/MacOs/Interface.h>
+#include <ewol/renderer/MacOs/Context.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +32,7 @@
 #include <mach/mach.h>
 
 
-int64_t guiInterface::GetTime(void)
+int64_t ewol::GetTime(void)
 {
 	struct timespec now;
 	clock_serv_t cclock;
@@ -45,145 +47,122 @@ int64_t guiInterface::GetTime(void)
 }
 
 #undef __class__
-#define __class__	"guiInterface"
+#define __class__	"MacOSInterface"
 
 
 
-static ewol::SpecialKey guiKeyBoardMode;
-
-
-
-
-
-
-/**
- * @brief Set the new title of the windows
- * @param title New desired title
- * @return ---
- */
-void guiInterface::SetTitle(etk::UString& title)
+class MacOSInterface : public ewol::eContext
 {
-	EWOL_INFO("X11: Set Title (START)");
-	EWOL_INFO("X11: Set Title (END)");
-}
+	private:
+		ewol::SpecialKey m_guiKeyBoardMode;
+	public:
+		MacOSInterface(int32_t _argc, const char* _argv[]) :
+			ewol::eContext(_argc, _argv)
+		{
+			mm_main(_argc, _argv);
+		}
+		
+		int32_t Run(void)
+		{
+    		return mm_run();
+		}
+	public:
+		//interface MacOS :
+		
+		bool MAC_Draw(bool _displayEveryTime)
+		{
+			return OS_Draw(_displayEveryTime);
+		}
+		void MAC_Resize(float _x, float _y)
+		{
+			OS_Resize(vec2(_x,_y));
+		}
+		void MAC_SetMouseState(int32_t _id, bool _isDown, float _x, float _y)
+		{
+			OS_SetMouseState(_id, _isDown, vec2(_x, _y));
+		}
+		void MAC_SetMouseMotion(int32_t _id, float _x, float _y)
+		{
+			OS_SetMouseMotion(_id, vec2(_x, _y));
+		}
+		void MAC_SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
+		{
+			if (_unichar == '\r') {
+				_unichar = '\n';
+			}
+			EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
+			OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
+		}
+};
 
-void guiInterface::SetIcon(etk::UString inputFile)
+
+MacOSInterface* interface = NULL;
+
+
+
+bool MacOs::Draw(bool _displayEveryTime)
 {
-	EWOL_TODO("plop");	
-}
-
-
-void RemoveDecoration(void)
-{
-	EWOL_TODO("X11:RemoveDecoration");
-}
-
-void AddDecoration(void)
-{
-	EWOL_TODO("X11:AddDecoration");
-}
-
-
-
-// -------------------------------------------------------------------------
-//         ClipBoard AREA :
-// -------------------------------------------------------------------------
-
-
-void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
-{
-	
-}
-
-
-void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
-{
-	
-}
-
-
-
-#undef __class__
-#define __class__ "guiInterface"
-
-
-void guiInterface::Stop(void)
-{
-	EWOL_INFO("X11-API: Stop");
-}
-
-void guiInterface::KeyboardShow(void)
-{
-	// nothing to do : No keyboard on computer ...
-}
-
-
-void guiInterface::KeyboardHide(void)
-{
-	// nothing to do : No keyboard on computer ...
-}
-
-
-void guiInterface::ChangeSize(ivec2 size)
-{
-	EWOL_INFO("X11-API: ChangeSize=" << size);
-}
-
-
-void guiInterface::ChangePos(ivec2 pos)
-{
-	EWOL_INFO("X11-API: ChangePos=" << pos);
-}
-
-
-void guiInterface::GetAbsPos(ivec2& pos)
-{
-	EWOL_INFO("X11-API: GetAbsPos");
-}
-
-// select the current cursor to display :
-static ewol::cursorDisplay_te l_currentCursor = ewol::cursorArrow;
-
-void guiInterface::SetCursor(ewol::cursorDisplay_te newCursor)
-{
-	if (newCursor != l_currentCursor) {
-		EWOL_DEBUG("X11-API: Set New Cursor : " << newCursor);
-		// set the new one :
-		l_currentCursor = newCursor;
+	if (interface == NULL) {
+		return false;
 	}
+	return interface->MAC_Draw(_displayEveryTime);
 }
 
-void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
+void MacOs::Resize(float _x, float _y)
 {
-	
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_Resize(_x, _y);
 }
 
-#include <ewol/renderer/os/gui.MacOs.Interface.h>
+
+void MacOs::SetMouseState(int32_t _id, bool _isDown, float _x, float _y)
+{
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetMouseState(_id, _isDown, _x, _y);
+}
+
+void MacOs::SetMouseMotion(int32_t _id, float _x, float _y)
+{
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetMouseMotion(_id, _x, _y);
+}
+
+void MacOs::SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
+{
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
+}
+
+
 
 /**
  * @brief Main of the program
  * @param std IO
  * @return std IO
  */
-int guiInterface::main(int argc, const char *argv[])
+int ewol::Run(int _argc, const char *_argv[])
 {
-	//start the basic thread : 
-	eSystem::Init();
-	// Run ...
-	int ret = mm_main(argc, argv);
-	EWOL_INFO("Return main value=" << ret);
-	// close X11 :
-	guiInterface::Stop();
-	// uninit ALL :
-	eSystem::UnInit();
-	return 0;
+	etk::SetArgZero(_argv[0]);
+	interface = new MacOSInterface(_argc, _argv);
+	if (NULL == interface) {
+		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
+		return -2;
+	}
+	
+	int32_t retValue = interface->Run();
+	delete(interface);
+	interface = NULL;
+	return retValue;
 }
 
-
-void guiInterface::ForceOrientation(ewol::orientation_te orientation)
-{
-	// nothing to do ...
-}
 
 
 

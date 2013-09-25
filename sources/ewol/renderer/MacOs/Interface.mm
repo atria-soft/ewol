@@ -6,26 +6,11 @@
  * @license BSD v3 (see license file)
  */
 
-
-/*
-
 #import <Cocoa/Cocoa.h>
-#import <ewol/renderer/os/gui.MacOs.Interface.h>
-#include <ewol/renderer/os/gui.MacOs.AppDelegate.h>
+#include "ewol/renderer/MacOs/Interface.h"
 
-int mm_main(int argc, const char *argv[])
-{
-	return NSApplicationMain(argc, (const char **)argv);
-}
-*/
-
-
-
-#import <Cocoa/Cocoa.h>
-#include "ewol/renderer/os/gui.MacOs.Interface.h"
-
-#import <ewol/renderer/os/gui.MacOs.OpenglView.h>
-#import <ewol/renderer/os/gui.MacOs.AppDelegate.h>
+#import <ewol/renderer/MacOs/OpenglView.h>
+#import <ewol/renderer/MacOs/AppDelegate.h>
 
 int mm_main(int argc, const char *argv[])
 {
@@ -92,58 +77,14 @@ int mm_main(int argc, const char *argv[])
     //[window makeKeyAndVisible];
     
     [window setDelegate:view];
-    // start application :
-    [NSApp run];
     // return no error
     return 0;
 } 
  
- 
- 
- /*
- 
-NSView* view0 = ...; // a view made with IB 
-NSView* view1 = ... ;// another view made with IB
-NSWindow* window = [self window];
-
-NSRect window_frame = [window frame];
-
-NSView* cv = [[[NSView alloc] initWithFrame:window_frame] autorelease];
-[window setContentView:cv];
-[cv setAutoresizesSubviews:YES];
-
-// add subview so it fits within the contentview frame
-{
-    NSView* v = view0;
-    NSRect vframe = [v frame];
-    [v setHidden:YES];
-    [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-
-    NSView* tmp_superview = [[[NSView alloc] initWithFrame:vframe] autorelease];
-    [tmp_superview addSubview:v];
-    [tmp_superview setAutoresizesSubviews:YES];
-    [tmp_superview setFrame:window_frame];
-
-    [v removeFromSuperview];
-       [cv addSubview:v];
+ int mm_run(void)
+ {
+    [NSApp run];
+    // return no error
+    return 0;
 }
-
-// add subview so it fits within the contentview frame
-{
-    NSView* v = view1;
-    NSRect vframe = [v frame];
-    [v setHidden:YES];
-    [v setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-
-    NSView* tmp_superview = [[[NSView alloc] initWithFrame:vframe] autorelease];
-    [tmp_superview addSubview:v];
-    [tmp_superview setAutoresizesSubviews:YES];
-    [tmp_superview setFrame:window_frame];
-
-    [v removeFromSuperview];
-    [cv addSubview:v];
-}
-
-[view0 setHidden:NO];
-
-*/
+ 
