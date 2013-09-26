@@ -280,7 +280,7 @@ int16_t * ewol::audio::wav::LoadData(etk::UString filename, int8_t nbChan, int32
 			}
 		}
 		if (nbChan == 1) {
-			*tmpOut++ = (int16_t)((left>>1 + right>>1)>>16);
+			*tmpOut++ = (int16_t)(((left>>1) + (right>>1))>>16);
 		} else {
 			*tmpOut++ = (int16_t)(left>>16);
 			*tmpOut++ = (int16_t)(left>>16);

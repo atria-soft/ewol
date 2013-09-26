@@ -136,7 +136,7 @@ void ewol::Mesh::Draw(mat4& _positionMatrix, bool _enableDepthTest, bool _enable
 			// remove face that is notin the view ...
 			etk::Vector<uint32_t> tmpIndexResult;
 			etk::Vector<ewol::Face>& tmppFaces = m_listFaces.GetValue(kkk).m_faces;
-			etk::Vector<uint32_t>& tmppIndex = m_listFaces.GetValue(kkk).m_index;
+			//etk::Vector<uint32_t>& tmppIndex = m_listFaces.GetValue(kkk).m_index;
 			if (normalModeFace == m_normalMode) {
 				for(int32_t iii=0; iii<tmppFaces.Size() ; ++iii) {
 					if(btDot(mattttt * m_listFacesNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f) {

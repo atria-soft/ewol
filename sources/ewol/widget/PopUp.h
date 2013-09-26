@@ -66,7 +66,7 @@ namespace widget {
 			 */
 			bool GetRemoveOnExternClick(void) const { return m_closeOutEvent; };
 		private:
-			float m_slidingProgress; //!< ratio progression of a sliding
+			//float m_slidingProgress; //!< ratio progression of a sliding
 		public:
 			typedef enum {
 				animationNone, //!< No annimation
