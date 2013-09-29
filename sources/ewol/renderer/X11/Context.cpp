@@ -111,6 +111,8 @@ class X11Interface : public ewol::eContext
 		Atom m_delAtom;
 		Display* m_display;
 		Window m_WindowHandle;
+		XIM m_xim;
+		XIC m_xic;
 		int32_t m_originX;
 		int32_t m_originY;
 		int32_t m_cursorEventX;
@@ -653,8 +655,9 @@ class X11Interface : public ewol::eContext
 													event.xkey.state = event.xkey.state & 0xFFFFFFFB;
 												}
 												KeySym keysym;
-												XComposeStatus status;
-												int count = XLookupString(&event.xkey, buf, 10, &keysym, &status);
+												Status status = 0;
+												//int count = Xutf8LookupString(m_xic, (XKeyPressedEvent*)&event, buf, 10, &keysym, &status);
+												int count = Xutf8LookupString(m_xic, &event.xkey, buf, 10, &keysym, &status);
 												// retreave real keystate
 												event.xkey.state = keyStateSave;
 												buf[count] = '\0';
@@ -665,8 +668,8 @@ class X11Interface : public ewol::eContext
 												}
 												if (count>0) {
 													// transform it in unicode
-													uniChar_t tmpChar = 0;
-													unicode::convertIsoToUnicode(unicode::EDN_CHARSET_ISO_8859_15, buf[0], tmpChar);
+													etk::UniChar tmpChar = 0;
+													tmpChar.SetUtf8(buf);
 													//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type==KeyPress), thisIsAReapeateKey);
 													if (true==thisIsAReapeateKey) {
@@ -1008,6 +1011,33 @@ class X11Interface : public ewol::eContext
 			/* Open it, wait for it to appear */
 			XMapWindow(m_display, m_WindowHandle);
 			//XIfEvent(m_display, &event, WaitForMapNotify, (char*)&m_WindowHandle);
+			
+			
+			m_xim = XOpenIM(m_display, NULL, NULL, NULL);
+			if (m_xim == NULL) {
+				EWOL_ERROR("Could not open input method");
+				return false;
+			}
+			XIMStyles *styles=NULL;
+			// XIMStyle xim_requested_style;
+			
+			char* failed_arg = XGetIMValues(m_xim, XNQueryInputStyle, &styles, NULL);
+			
+			if (failed_arg != NULL) {
+				EWOL_ERROR("XIM Can't get styles");
+				return false;
+			}
+			
+			for (int32_t iii=0; iii<styles->count_styles; ++iii) {
+				EWOL_INFO("style " << styles->supported_styles[iii]);
+			}
+			m_xic = XCreateIC(m_xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, XNClientWindow, m_WindowHandle, NULL);
+			if (m_xic == NULL) {
+				EWOL_ERROR("Could not open IC");
+				return false;
+			}
+			
+			XSetICFocus(m_xic);
 			
 			// Set the kill atom so we get a message when the user tries to close the window
 			if ((m_delAtom = XInternAtom(m_display, "WM_DELETE_WINDOW", 0)) != None) {
