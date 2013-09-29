@@ -8,6 +8,7 @@
 
 #include <etk/types.h>
 #include <etk/os/FSNode.h>
+#include <egami/egami.h>
 
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/renderer/eContext.h>
@@ -42,33 +43,6 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj)
 #undef __class__
 #define __class__	"TexturedFont"
 
-static int32_t nextP2(int32_t value)
-{
-	int32_t val=1;
-	for (int32_t iii=1; iii<31; iii++) {
-		if (value <= val) {
-			return val;
-		}
-		val *=2;
-	}
-	EWOL_CRITICAL("impossible CASE.... request power 2 of "<< value);
-	return val;
-}
-
-static int32_t simpleSQRT(int32_t value)
-{
-	int32_t val=1;
-	for (int32_t iii=1; iii<1000; iii++) {
-		val =iii*iii;
-		if (value <= val) {
-			return iii;
-		}
-	}
-	EWOL_CRITICAL("impossible CASE....");
-	return val;
-}
-
-
 ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
 	ewol::Texture(fontName)
 {
@@ -82,10 +56,10 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	m_modeWraping[2] = ewol::font::Regular;
 	m_modeWraping[3] = ewol::font::Regular;
 	
-	m_lastGlyphPos[0].setValue(0,0);
-	m_lastGlyphPos[1].setValue(0,0);
-	m_lastGlyphPos[2].setValue(0,0);
-	m_lastGlyphPos[3].setValue(0,0);
+	m_lastGlyphPos[0].setValue(1,1);
+	m_lastGlyphPos[1].setValue(1,1);
+	m_lastGlyphPos[2].setValue(1,1);
+	m_lastGlyphPos[3].setValue(1,1);
 	
 	m_lastRawHeigh[0] = 0;
 	m_lastRawHeigh[1] = 0;
@@ -215,104 +189,34 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		}
 		EWOL_INFO("Load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size);
 		m_font[iiiFontId] = ewol::FontFreeType::Keep(m_fileName[iiiFontId]);
-		if (NULL == m_font[iiiFontId]) {
-			return;
+		if (m_font[iiiFontId] == NULL) {
+			EWOL_DEBUG("error in loading FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\" ==> size=" << m_size );
 		}
-		
+	}
+	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		// set the bassic charset:
 		m_listElement[iiiFontId].Clear();
-		GlyphProperty tmpchar1;
-		tmpchar1.m_UVal = 0;
-		m_listElement[iiiFontId].PushBack(tmpchar1);
-		for (int32_t iii=0x20; iii<0xFF; iii++) {
-			GlyphProperty tmpchar;
-			tmpchar.m_UVal = iii;
-			m_listElement[iiiFontId].PushBack(tmpchar);
-			if (0x7F == iii) {
-				iii = 0x9F;
-			}
-		}
-		
-		/* this is a bad code for now ... */
-		// ==> determine the texture Size
-		GlyphProperty tmpproperty;
-		tmpproperty.m_UVal = 'A';
-		m_font[iiiFontId]->GetGlyphProperty(m_size, tmpproperty);
-		
-		int32_t nbElement = 0xFF - 0x20 + 1;
-		int32_t coter = simpleSQRT(nbElement);
-		// note : +1 is for the overlapping of the glyph (Part 1)
-		int32_t glyphMaxWidth = tmpproperty.m_advance.x() +1;
-		int32_t glyphMaxHeight = tmpproperty.m_advance.y() +1;
-		int32_t textureWidth = nextP2(coter*glyphMaxWidth);
-		int32_t nbRaws = textureWidth / glyphMaxWidth;
-		if (nbRaws <= 0) {
-			EWOL_ERROR("devide by 0");
-			nbRaws = 1;
-		}
-		int32_t nbLine = (nbElement / nbRaws) + 1;
-		int32_t textureHeight = nextP2(nbLine*glyphMaxHeight);
-		// for android : 
-		textureHeight = etk_max(textureHeight, textureWidth);
-		textureWidth = textureHeight;
-		
-		if (iiiFontId == 0) {
-			EWOL_DEBUG("Generate a text texture for char(" << nbRaws << "," << nbLine << ") with size=(" << textureWidth << "," << textureHeight << ")");
-			// resize must be done on the texture ...
-			SetImageSize(ivec2(textureWidth,textureHeight));
-			// now we can acces directly on the image
-			m_data.Clear(etk::Color<>(0x00000000));
+		if (m_font[iiiFontId] == NULL) {
+			continue;
 		}
 		m_height[iiiFontId] = m_font[iiiFontId]->GetHeight(m_size);
-		
-		int32_t CurrentLineHigh = 0;
-		ivec2    glyphPosition(1,1);
-		for (int32_t iii=0; iii<m_listElement[iiiFontId].Size(); iii++) {
-			if (true == m_font[iiiFontId]->GetGlyphProperty(m_size, (m_listElement[iiiFontId])[iii])) {
-				// change line if needed ...
-				if (glyphPosition.x()+(m_listElement[iiiFontId])[iii].m_sizeTexture.x() > textureWidth) {
-					glyphPosition.setX(0);
-					glyphPosition.setY(glyphPosition.y()+CurrentLineHigh);
-					CurrentLineHigh = 0;
-				}
-				// draw the glyph
-				m_font[iiiFontId]->DrawGlyph(m_data, m_size, glyphPosition, (m_listElement[iiiFontId])[iii], iiiFontId);
-				// set video position
-				(m_listElement[iiiFontId])[iii].m_texturePosStart.setValue( (float)(glyphPosition.x()) / (float)textureWidth,
-				                                                            (float)(glyphPosition.y()) / (float)textureHeight );
-				(m_listElement[iiiFontId])[iii].m_texturePosStop.setValue( (float)(glyphPosition.x() + (m_listElement[iiiFontId])[iii].m_sizeTexture.x()) / (float)textureWidth,
-				                                                           (float)(glyphPosition.y() + (m_listElement[iiiFontId])[iii].m_sizeTexture.y()) / (float)textureHeight );
-				
-				// update the maximum of the line hight : 
-				if (CurrentLineHigh<(m_listElement[iiiFontId])[iii].m_sizeTexture.y()) {
-					// note : +1 is for the overlapping of the glyph (Part 2)
-					CurrentLineHigh = (m_listElement[iiiFontId])[iii].m_sizeTexture.y()+1;
-				}
-				// note : +1 is for the overlapping of the glyph (Part 3)
-				// update the Bitmap position drawing : 
-				glyphPosition.setX(glyphPosition.x() + (m_listElement[iiiFontId])[iii].m_sizeTexture.x()+1);
-			}
-			
-		}
-		//m_font[iiiFontId]->Display();
-		// generate the kerning for all the characters : 
-		m_font[iiiFontId]->GenerateKerning(m_size, m_listElement[iiiFontId]);
+		// TODO : basic font use 512 is better ... ==> maybe estimate it with the dpi ???
+		SetImageSize(ivec2(256,32));
+		// now we can acces directly on the image
+		m_data.Clear(etk::Color<>(0x00000000));
 	}
-	// For testing cheree the box are set)
-	#if 0
-	draw::Color tlpppp(0xFF,0xFF,0xFF,0x00);
-	for(int32_t jjj=0; jjj < textureHeight;jjj++) {
-		for(int32_t iii=0; iii < textureWidth; iii++){
-			tlpppp = m_data.Get(ivec2(iii, jjj) );
-			// set only alpha :
-			tlpppp.a = etk_min( tlpppp.a+0x60, 0xFF);
-			// real set of color
-			m_data.Set(ivec2(iii, jjj), tlpppp );
-		}
+	// Add error glyph
+	{
+		etk::UniChar tmpchar;
+		tmpchar.Set(0);
+		AddGlyph(tmpchar);
 	}
-	#endif
-	EWOL_DEBUG("End generation of the Fond bitmap, start adding texture");
-	//m_data.DistanceField();
+	// by default we set only the first AINSI char availlable
+	for (int32_t iii=0x20; iii<0x7F; iii++) {
+		etk::UniChar tmpchar;
+		tmpchar.Set(iii);
+		AddGlyph(tmpchar);
+	}
 	Flush();
 	EWOL_DEBUG("Wrapping properties : ");
 	EWOL_DEBUG("    " << ewol::font::Regular << "==>" << GetWrappingMode(ewol::font::Regular));
@@ -328,6 +232,75 @@ ewol::TexturedFont::~TexturedFont(void)
 	}
 }
 
+bool ewol::TexturedFont::AddGlyph(const etk::UniChar& _val)
+{
+	bool hasChange = false;
+	// for each font :
+	for (int32_t iii=0; iii<4 ; iii++) {
+		if (m_font[iii] == NULL) {
+			continue;
+		}
+		// add the curent "char"
+		GlyphProperty tmpchar;
+		tmpchar.m_UVal = _val;
+		
+		if (true == m_font[iii]->GetGlyphProperty(m_size, tmpchar)) {
+			//EWOL_DEBUG("load char : '" << _val << "'=" << _val.Get());
+			hasChange = true;
+			// change line if needed ...
+			if (m_lastGlyphPos[iii].x()+tmpchar.m_sizeTexture.x() > m_data.GetSize().x()) {
+				m_lastGlyphPos[iii].setX(1);
+				m_lastGlyphPos[iii] += ivec2(0, m_lastRawHeigh[iii]);
+				m_lastRawHeigh[iii] = 0;
+			}
+			while(m_lastGlyphPos[iii].y()+tmpchar.m_sizeTexture.y() > m_data.GetSize().y()) {
+				ivec2 size = m_data.GetSize();
+				size.setY(size.y()*2);
+				m_data.Resize(size, etk::Color<>(0));
+				// note : need to rework all the lyer due to the fact that the texture is used by the faur type...
+				for (int32_t kkk=0; kkk<4 ; kkk++) {
+					// change the coordonate on the element in the texture
+					for (int32_t jjj=0 ; jjj<m_listElement[kkk].Size() ; ++jjj) {
+						m_listElement[kkk][jjj].m_texturePosStart *= vec2(1.0f, 0.5f);
+						m_listElement[kkk][jjj].m_texturePosSize *= vec2(1.0f, 0.5f);
+					}
+				}
+			}
+			// draw the glyph
+			m_font[iii]->DrawGlyph(m_data, m_size, m_lastGlyphPos[iii], tmpchar, iii);
+			// set video position
+			tmpchar.m_texturePosStart.setValue( (float)m_lastGlyphPos[iii].x() / (float)m_data.GetSize().x(),
+			                                    (float)m_lastGlyphPos[iii].y() / (float)m_data.GetSize().y() );
+			tmpchar.m_texturePosSize.setValue(  (float)tmpchar.m_sizeTexture.x() / (float)m_data.GetSize().x(),
+			                                    (float)tmpchar.m_sizeTexture.y() / (float)m_data.GetSize().y() );
+			
+			// update the maximum of the line hight : 
+			if (m_lastRawHeigh[iii]<tmpchar.m_sizeTexture.y()) {
+				// note : +1 is for the overlapping of the glyph (Part 2)
+				m_lastRawHeigh[iii] = tmpchar.m_sizeTexture.y()+1;
+			}
+			// note : +1 is for the overlapping of the glyph (Part 3)
+			// update the Bitmap position drawing : 
+			m_lastGlyphPos[iii] += ivec2(tmpchar.m_sizeTexture.x()+1, 0);
+		} else {
+			EWOL_WARNING("Did not find char : '" << _val << "'=" << _val.Get());
+			tmpchar.SetNotExist();
+		}
+		m_listElement[iii].PushBack(tmpchar);
+		//m_font[iii]->Display();
+		// generate the kerning for all the characters :
+		if (tmpchar.Exist() == true) {
+			// TODO : Set the kerning back ...
+			//m_font[iii]->GenerateKerning(m_size, m_listElement[iii]);
+		}
+	}
+	if (hasChange==true) {
+		Flush();
+		egami::Store(m_data, "fileFont.bmp");
+	}
+	return hasChange;
+}
+
 
 bool ewol::TexturedFont::HasName(const etk::UString& fileName)
 {
@@ -339,18 +312,29 @@ bool ewol::TexturedFont::HasName(const etk::UString& fileName)
 }
 
 
-int32_t ewol::TexturedFont::GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode) const
+int32_t ewol::TexturedFont::GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode)
 {
-	if (charcode < 0x20) {
+	if (charcode.Get() < 0x20) {
 		return 0;
-	} else if (charcode < 0x80) {
+	} else if (charcode.Get() < 0x80) {
 		return charcode.Get() - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement[displayMode].Size(); iii++) {
+			//EWOL_DEBUG("search : '" << charcode << "' =?= '" << (m_listElement[displayMode])[iii].m_UVal << "'");
 			if (charcode == (m_listElement[displayMode])[iii].m_UVal) {
-				return iii;
+				//EWOL_DEBUG("search : '" << charcode << "'");
+				if ((m_listElement[displayMode])[iii].Exist()) {
+					//EWOL_DEBUG("return " << iii);
+					return iii;
+				} else {
+					return 0;
+				}
 			}
 		}
+	}
+	if (AddGlyph(charcode) == true) {
+		// TODO : This does not work due to the fact that the update of open GL is not done in the context main cycle !!!
+		ewol::GetContext().ForceRedrawAll();
 	}
 	return 0;
 }
@@ -360,8 +344,8 @@ ewol::GlyphProperty* ewol::TexturedFont::GetGlyphPointer(const uniChar_t& _charc
 {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << " ==> wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = GetIndex(_charcode, _displayMode);
-	if(    index <0 
-	    || index >=m_listElement[_displayMode].Size() ) {
+	if(    index < 0
+	    || index >= m_listElement[_displayMode].Size() ) {
 		EWOL_ERROR(" Try to get glyph index inexistant ... ==> return the index 0 ... id=" << index);
 		if (m_listElement[_displayMode].Size()>=0) {
 			return &((m_listElement[_displayMode])[0]);

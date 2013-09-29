@@ -739,7 +739,7 @@ void ewol::Text::Print(const etk::UniChar& _charcode)
 		return;
 	}
 	// get a pointer on the glyph property : 
-	ewol::GlyphProperty * myGlyph = m_font->GetGlyphPointer(_charcode, m_mode);
+	ewol::GlyphProperty* myGlyph = m_font->GetGlyphPointer(_charcode, m_mode);
 	if (NULL==myGlyph) {
 		EWOL_ERROR(" font does not really existed ...");
 		return;
@@ -756,7 +756,7 @@ void ewol::Text::Print(const etk::UniChar& _charcode)
 		}
 	}
 	// 0x01 == 0x20 == ' ';
-	if (_charcode != 0x01) {
+	if (_charcode.Get() != 0x01) {
 		/* Bitmap position
 		 *      xA     xB
 		 *   yC *------*
@@ -770,9 +770,9 @@ void ewol::Text::Print(const etk::UniChar& _charcode)
 		float dyD = dyC - myGlyph->m_sizeTexture.y();
 		
 		float tuA = myGlyph->m_texturePosStart.x();
-		float tuB = myGlyph->m_texturePosStop.x();
+		float tuB = tuA + myGlyph->m_texturePosSize.x();
 		float tvC = myGlyph->m_texturePosStart.y();
-		float tvD = myGlyph->m_texturePosStop.y();
+		float tvD = tvC + myGlyph->m_texturePosSize.y();
 		
 		
 		// Clipping and drawing area

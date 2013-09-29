@@ -67,7 +67,7 @@ namespace ewol
 			 * @param[in] displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode) const;
+			int32_t GetIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode);
 			/**
 			 * @brief Get the pointer on the coresponding glyph
 			 * @param[in] charcode The unicodeValue
@@ -95,6 +95,13 @@ namespace ewol
 			 * @param[in,out] reference on the object pointer
 			 */
 			static void Release(ewol::TexturedFont*& _object);
+		private:
+			/**
+			 * @brief Add a glyph in a texture font.
+			 * @param[in] _val Char value to add.
+			 * @return true if the image size have change, false otherwise
+			 */
+			bool AddGlyph(const etk::UniChar& _val);
 	};
 	
 	
