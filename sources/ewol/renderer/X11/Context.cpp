@@ -1018,19 +1018,17 @@ class X11Interface : public ewol::eContext
 				EWOL_ERROR("Could not open input method");
 				return false;
 			}
+			/*
 			XIMStyles *styles=NULL;
-			// XIMStyle xim_requested_style;
-			
 			char* failed_arg = XGetIMValues(m_xim, XNQueryInputStyle, &styles, NULL);
-			
 			if (failed_arg != NULL) {
 				EWOL_ERROR("XIM Can't get styles");
 				return false;
 			}
-			
 			for (int32_t iii=0; iii<styles->count_styles; ++iii) {
 				EWOL_INFO("style " << styles->supported_styles[iii]);
 			}
+			*/
 			m_xic = XCreateIC(m_xim, XNInputStyle, XIMPreeditNothing | XIMStatusNothing, XNClientWindow, m_WindowHandle, NULL);
 			if (m_xic == NULL) {
 				EWOL_ERROR("Could not open IC");
