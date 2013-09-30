@@ -223,6 +223,7 @@ void ewol::eContext::SetArchiveDir(int mode, const char* str)
 ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	m_previousDisplayTime(0),
 	m_input(*this),
+	m_displayFps(false),
 	m_FpsSystemEvent(  "Event     ", false),
 	m_FpsSystemContext("Context   ", false),
 	m_FpsSystem(       "Draw      ", true),
@@ -253,6 +254,8 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 		           || m_commandLine.Get(iii) == "-l8"
 		           || m_commandLine.Get(iii) == "-l9") {
 			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
+		} else if (m_commandLine.Get(iii) == "-fps") {
+			m_displayFps=true;
 		} else {
 			continue;
 		}
@@ -444,7 +447,9 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	m_previousDisplayTime = currentTime;
 	
 	// process the events
-	m_FpsSystemEvent.Tic();
+	if (m_displayFps==true) {
+		m_FpsSystemEvent.Tic();
+	}
 	bool needRedraw = false;
 	//! Event management section ...
 	{
@@ -462,8 +467,10 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 			// Redraw all needed elements
 			m_windowsCurrent->OnRegenerateDisplay();
 		}
-		m_FpsSystemEvent.IncrementCounter();
-		m_FpsSystemEvent.Toc();
+		if (m_displayFps==true) {
+			m_FpsSystemEvent.IncrementCounter();
+			m_FpsSystemEvent.Toc();
+		}
 		//! bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
 		needRedraw = m_widgetManager.IsDrawingNeeded();
 		// release the curent interface :
@@ -474,16 +481,22 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	{
 		// Lock OpenGl context:
 		ewol::openGL::Lock();
-		m_FpsSystemContext.Tic();
+		if (m_displayFps==true) {
+			m_FpsSystemContext.Tic();
+		}
 		if (NULL != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
 				m_resourceManager.UpdateContext();
-				m_FpsSystemContext.IncrementCounter();
+				if (m_displayFps==true) {
+					m_FpsSystemContext.IncrementCounter();
+				}
 			}
 		}
-		m_FpsSystemContext.Toc();
-		m_FpsSystem.Tic();
+		if (m_displayFps==true) {
+			m_FpsSystemContext.Toc();
+			m_FpsSystem.Tic();
+		}
 		if (NULL != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
@@ -492,20 +505,25 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 				hasDisplayDone = true;
 			}
 		}
-		m_FpsSystem.Toc();
-		
-		m_FpsFlush.Tic();
-		m_FpsFlush.IncrementCounter();
+		if (m_displayFps==true) {
+			m_FpsSystem.Toc();
+			m_FpsFlush.Tic();
+			m_FpsFlush.IncrementCounter();
+		}
 		glFlush();
 		//glFinish();
-		m_FpsFlush.Toc();
+		if (m_displayFps==true) {
+			m_FpsFlush.Toc();
+		}
 		// Release Open GL Context
 		ewol::openGL::UnLock();
 	}
-	m_FpsSystemEvent.Draw();
-	m_FpsSystemContext.Draw();
-	m_FpsSystem.Draw();
-	m_FpsFlush.Draw();
+	if (m_displayFps==true) {
+		m_FpsSystemEvent.Draw();
+		m_FpsSystemContext.Draw();
+		m_FpsSystem.Draw();
+		m_FpsFlush.Draw();
+	}
 	return hasDisplayDone;
 }
 

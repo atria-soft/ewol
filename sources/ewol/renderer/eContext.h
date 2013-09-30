@@ -123,6 +123,7 @@ namespace ewol
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::eInput m_input;
 			etk::MessageFifo<eSystemMessage> m_msgSystem;
+			bool m_displayFps;
 			ewol::Fps m_FpsSystemEvent;
 			ewol::Fps m_FpsSystemContext;
 			ewol::Fps m_FpsSystem;
