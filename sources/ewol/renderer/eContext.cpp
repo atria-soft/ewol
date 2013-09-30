@@ -122,11 +122,6 @@ void ewol::eContext::ProcessEvents(void)
 			case THREAD_KEYBORAD_KEY:
 			case THREAD_KEYBORAD_MOVE:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
-				{
-					ewol::SpecialKey& specialCurrentKey = ewol::GetCurrentSpecialKeyStatus();
-					specialCurrentKey = data.keyboardSpecial;
-					//EWOL_DEBUG("newStatus Key" << specialCurrentKey);
-				}
 				if (NULL != m_windowsCurrent) {
 					if (false==m_windowsCurrent->OnEventShortCut(data.keyboardSpecial,
 					                                             data.keyboardChar,
@@ -147,14 +142,20 @@ void ewol::eContext::ProcessEvents(void)
 								                                      data.stateIsDown) ) {
 									// generate the direct event ...
 									if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
-										ewol::EventEntrySystem tmpEntryEvent(ewol::keyEvent::keyboardChar, ewol::keyEvent::statusUp, data.keyboardChar);
+										ewol::EventEntrySystem tmpEntryEvent(ewol::keyEvent::keyboardChar,
+										                                     ewol::keyEvent::statusUp,
+										                                     data.keyboardSpecial,
+										                                     data.keyboardChar);
 										if(true == data.stateIsDown) {
 											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
 										}
 										tmpWidget->SystemEventEntry(tmpEntryEvent);
 									} else { // THREAD_KEYBORAD_MOVE
 										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
-										ewol::EventEntrySystem tmpEntryEvent(data.keyboardMove, ewol::keyEvent::statusUp, 0);
+										ewol::EventEntrySystem tmpEntryEvent(data.keyboardMove,
+										                                     ewol::keyEvent::statusUp,
+										                                     data.keyboardSpecial,
+										                                     0);
 										if(true == data.stateIsDown) {
 											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
 										}

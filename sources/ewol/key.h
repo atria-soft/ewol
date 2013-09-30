@@ -127,49 +127,47 @@ namespace ewol
 			 * @brief Get the current CapLock Status
 			 * @return The status value
 			 */
-			bool IsSetCapsLock(void);
+			bool IsSetCapsLock(void) const;
 			/**
 			 * @brief Get the current Shift key status
 			 * @return The status value
 			 */
-			bool IsSetShift(void);
+			bool IsSetShift(void) const;
 			/**
 			 * @brief Get the Current Control key status
 			 * @return The status value
 			 */
-			bool IsSetCtrl(void);
+			bool IsSetCtrl(void) const;
 			/**
 			 * @brief Get the current Meta key status (also named windows or apple key)
 			 * @return The status value
 			 */
-			bool IsSetMeta(void);
+			bool IsSetMeta(void) const;
 			/**
 			 * @brief Get the current Alt key status
 			 * @return The status value
 			 */
-			bool IsSetAlt(void);
+			bool IsSetAlt(void) const;
 			/**
 			 * @brief Get the current Alt-Gr key status
 			 * @return The status value
 			 */
-			bool IsSetAltGr(void);
+			bool IsSetAltGr(void) const;
 			/**
 			 * @brief Get the current Ver-num key status
 			 * @return The status value
 			 */
-			bool IsSetNumLock(void);
+			bool IsSetNumLock(void) const;
 			/**
 			 * @brief Get the current Intert key status
 			 * @return The status value
 			 */
-			bool IsSetInsert(void);
+			bool IsSetInsert(void) const;
 	};
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information
 	 */
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::SpecialKey _obj);
-	
-	SpecialKey& GetCurrentSpecialKeyStatus(void);
 };
 
 

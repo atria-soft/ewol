@@ -106,55 +106,47 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::t
 	return _os;
 }
 
-static ewol::SpecialKey l_LocalKeyStatus;
-
-ewol::SpecialKey& ewol::GetCurrentSpecialKeyStatus(void)
-{
-	return l_LocalKeyStatus;
-}
-
-
 ewol::SpecialKey::SpecialKey(void) :
 	value(0)
 {
 	
 }
 
-bool ewol::SpecialKey::IsSetCapsLock(void)
+bool ewol::SpecialKey::IsSetCapsLock(void) const
 {
 	return capLock;
 }
 
-bool ewol::SpecialKey::IsSetShift(void)
+bool ewol::SpecialKey::IsSetShift(void) const
 {
 	return shift;
 }
 
-bool ewol::SpecialKey::IsSetCtrl(void)
+bool ewol::SpecialKey::IsSetCtrl(void) const
 {
 	return ctrl;
 }
 
-bool ewol::SpecialKey::IsSetMeta(void)
+bool ewol::SpecialKey::IsSetMeta(void) const
 {
 	return meta;
 }
 
-bool ewol::SpecialKey::IsSetAlt(void)
+bool ewol::SpecialKey::IsSetAlt(void) const
 {
 	return alt;
 }
 
-bool ewol::SpecialKey::IsSetAltGr(void)
+bool ewol::SpecialKey::IsSetAltGr(void) const
 {
 	return altGr;
 }
 
-bool ewol::SpecialKey::IsSetNumLock(void)
+bool ewol::SpecialKey::IsSetNumLock(void) const
 {
 	return numLock;
 }
-bool ewol::SpecialKey::IsSetInsert(void)
+bool ewol::SpecialKey::IsSetInsert(void) const
 {
 	return insert;
 }
