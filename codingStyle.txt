@@ -1,0 +1,157 @@
+last update:02/10/2013
+
+=========================
+==  Ewol coding style  ==
+=========================
+
+We need to use the same coding style in c and c++ to simplify inter-reading code.
+
+------------------
+--  1: Comment  --
+------------------
+	- One line comment: (never in #define xxx ==> too dangerous)
+		//
+	- Multiple line comment
+		/*
+		 * xxxx yyyy
+		 * zzzz
+		 */
+	- Documentation : doxygen (do not set un-nneded field)
+		/**
+		 * @brief my summery
+		 * @param[in,out] _xxxx Comment on the variable
+		 * @return my return explanation
+		 */
+	- enumeration comment:
+		xxxxx, //!< my comment
+
+---------------------------
+--  2: number of colomn  --
+---------------------------
+	I do not linit the number of colomn, but it could be good to limit at 
+	150 char. Many screen have the main display like this
+
+
+-------------------------------
+--  3: Indentation & braces  --
+-------------------------------
+	Tab size is a personal choice then, when you write code, you might be
+	tab proof. If someone want to have the golden number for theire tabs,
+	he will be able to do it.
+	When you set a brace '{' you need to add a brace, and when you set a
+	stop brace '}' you need to remove a tab
+	
+	To be simple : (tab stop at the 'if' start)
+		if:
+			if (    xxx == yyy
+			     && xxx == kkk) {
+				your action ...;
+			}
+		switch:
+			switch (suffix) {
+				case 'G':
+				case 'g':
+					mem <<= 30;
+					break;
+				case 'M':
+				case 'm':
+					mem <<= 20;
+					break;
+				case 'K':
+				case 'k':
+					mem <<= 10;
+					// fall through
+				default:
+					break;
+			}
+		function:
+			void myFunction(void) {
+				actions ...;
+			}
+		classes:
+			class MyClass {
+				public:
+					MyClass(void);
+					~MyClass(void);
+				private:
+					const char* getName(void);
+			};
+		namespace:
+			namespace appl {
+				void get(void);
+			};
+
+----------------
+--  4: types  --
+----------------
+	the element 'typedef' must not be use, like this it is not needed to add
+	special element like '_te' or '_ts' to say respectively 'tpedef enum' and
+	'typedef struct'
+	Structure is not availlable in c++, just use normal class, this is the same.
+
+
+------------------------
+--  5: star position  --
+------------------------
+	The star will be near the type :
+		void* myVariableName;
+
+--------------------
+--  6: C and c++  --
+--------------------
+	All C header files might have :
+		#ifdef __cplusplus
+		extern "C" {
+		#endif
+		
+		...
+		
+		#ifdef __cplusplus
+		}
+		#endif
+
+-----------------
+--  7: Naming  --
+-----------------
+	- Fonction/Methods:
+		Camel case with first letter in lower case.
+			void myExampleFontionName(void);
+	- Valiable:
+		Camel case with first letter in lower case.
+			int32_t myVariableExample;
+	- namespace:
+		one world in lower case
+			namspace ewol {
+	- Class:
+		Camel case with first letter in upper case.
+			class MyClass;
+	- Members fields :
+		put a 'm' prefix and then a normal Variable name
+			int32_t m_memberField;
+	- enum:
+		Camel case with first letter in lower case.
+			enum myEnum {
+	- structure (C only)
+		use naming like Classes (and for mamber too)
+	
+
+--------------------------
+--  8: C++ specificity  --
+--------------------------
+	- STL
+		You can use the Stl, but the porting and the result can be
+		different depending on the board you are.
+	- Heritage:
+		Simple Heritage is a good use of the C++, multiple heritage is
+		not really supported in every compilators.
+	- const:
+		Set the parameter and fonction const all time you can, this
+		permit to avaoid re-copy.
+	- exception:
+		They are not manage in all platforms, then by restriction, do
+		not use it.
+	- -rtti & cast
+		Runtime type information : not available on all systems
+		(android), so don't use dynamic_cast. (only one availlable :
+		static_cast<xxx>(****) )
+
