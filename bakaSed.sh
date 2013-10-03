@@ -1,0 +1,120 @@
+#!/bin/bash
+
+replaceSed.sh "==" " == "
+replaceSed.sh "==" " == "
+replaceSed.sh "==" " == "
+replaceSed.sh "  ==  " " == "
+replaceSed.sh "  ==  " " == "
+replaceSed.sh "  ==  " " == "
+replaceSed.sh "  ==  " " == "
+
+replaceSed.sh "\.PushBack(" ".pushBack("
+replaceSed.sh "->PushBack(" "->pushBack("
+replaceSed.sh " PushBack" " pushBack"
+replaceSed.sh "\tPushBack" "\tpushBack"
+replaceSed.sh "::PushBack" "::pushBack"
+
+replaceSed.sh "\.PopBack(" ".popBack("
+replaceSed.sh "->PopBack(" "->popBack("
+replaceSed.sh " PopBack" " popBack"
+replaceSed.sh "\tPopBack" "\tpopBack"
+replaceSed.sh "::PopBack" "::popBack"
+
+replaceSed.sh "\.Size" ".size"
+replaceSed.sh "->Size" "->size"
+replaceSed.sh " Size" " size"
+replaceSed.sh "\tSize" "\tsize"
+replaceSed.sh "::Size" "::size"
+
+replaceSed.sh "\.Clear()" ".clear()"
+replaceSed.sh "->Clear()" "->clear()"
+replaceSed.sh " Clear" " clear"
+replaceSed.sh "\tClear" "\tclear"
+replaceSed.sh "::Clear" "::clear"
+
+replaceSed.sh "\.To" ".to"
+replaceSed.sh "->To" "->to"
+replaceSed.sh " To" " to"
+replaceSed.sh "\tTo" "\tto"
+replaceSed.sh "::To" "::to"
+
+replaceSed.sh "\.Is" ".is"
+replaceSed.sh "->Is" "->is"
+replaceSed.sh " Is" " is"
+replaceSed.sh "\tIs" "\tis"
+replaceSed.sh "::Is" "::is"
+
+replaceSed.sh "\.Exist()" ".exist()"
+replaceSed.sh "->Exist()" "->exist()"
+replaceSed.sh " Exist" " exist"
+replaceSed.sh "\tExist" "\texist"
+replaceSed.sh "::Exist" "::exist"
+
+replaceSed.sh "\.Add" ".add"
+replaceSed.sh "->Add" "->add"
+replaceSed.sh " Add" " add"
+replaceSed.sh "\tAdd" "\tadd"
+replaceSed.sh "::Add" "::add"
+
+replaceSed.sh "\.Get" ".get"
+replaceSed.sh "->Get" "->get"
+replaceSed.sh " Get" " get"
+replaceSed.sh "\tGet" "\tget"
+replaceSed.sh "::Get" "::get"
+
+replaceSed.sh "\.Set" ".set"
+replaceSed.sh "->Set" "->set"
+replaceSed.sh " Set" " set"
+replaceSed.sh "\tSet" "\tset"
+replaceSed.sh "::Set" "::set"
+
+replaceSed.sh "\.Insert" ".insert"
+replaceSed.sh "->Insert" "->insert"
+replaceSed.sh " Insert" " insert"
+replaceSed.sh "\tInsert" "\tinsert"
+replaceSed.sh "::Insert" "::insert"
+
+replaceSed.sh "\.Parse" ".parse"
+replaceSed.sh "->Parse" "->parse"
+replaceSed.sh " Parse" " parse"
+replaceSed.sh "\tParse" "\tparse"
+replaceSed.sh "::Parse" "::parse"
+
+replaceSed.sh "\.Generate" ".generate"
+replaceSed.sh "->Generate" "->generate"
+replaceSed.sh " Generate" " generate"
+replaceSed.sh "\tGenerate" "\tgenerate"
+replaceSed.sh "::Generate" "::generate"
+
+
+replaceSed.sh "\.Transfert" ".transfert"
+replaceSed.sh "->Transfert" "->transfert"
+replaceSed.sh " Transfert" " transfert"
+replaceSed.sh "\tTransfert" "\ttransfert"
+replaceSed.sh "::Transfert" "::transfert"
+
+replaceSed.sh "\.Duplicate" ".duplicate"
+replaceSed.sh "->Duplicate" "->duplicate"
+replaceSed.sh " Duplicate" " duplicate"
+replaceSed.sh "\tDuplicate" "\tduplicate"
+replaceSed.sh "::Duplicate" "::duplicate"
+
+
+replaceSed.sh "\.Draw" ".draw"
+replaceSed.sh "->Draw" "->draw"
+replaceSed.sh " Draw" " draw"
+replaceSed.sh "\tDraw" "\tdraw"
+replaceSed.sh "::Draw" "::draw"
+
+replaceSed.sh "\.Check" ".check"
+replaceSed.sh "->Check" "->check"
+replaceSed.sh " Check" " check"
+replaceSed.sh "\tCheck" "\tcheck"
+replaceSed.sh "::Check" "::check"
+
+
+replaceSed.sh "\.Count" ".count"
+replaceSed.sh "->Count" "->count"
+replaceSed.sh " Count" " count"
+replaceSed.sh "\tCount" "\tcount"
+replaceSed.sh "::Count" "::count"

@@ -22,7 +22,7 @@ We need to use the same coding style in c and c++ to simplify inter-reading code
 		 * @param[in,out] _xxxx Comment on the variable
 		 * @return my return explanation
 		 */
-	- enumeration comment:
+	- one line documlentation:
 		xxxxx, //!< my comment
 
 ---------------------------
@@ -40,7 +40,6 @@ We need to use the same coding style in c and c++ to simplify inter-reading code
 	he will be able to do it.
 	When you set a brace '{' you need to add a brace, and when you set a
 	stop brace '}' you need to remove a tab
-	
 	To be simple : (tab stop at the 'if' start)
 		if:
 			if (    xxx == yyy
@@ -80,6 +79,17 @@ We need to use the same coding style in c and c++ to simplify inter-reading code
 			namespace appl {
 				void get(void);
 			};
+	For special element like : you might add a tabulation too
+		case xxx:
+			actions...
+		public:
+			definition ...
+	An exception for the inline function inside c++ header:
+		class Plop {
+			private:
+				int32_t m_value; //!< my value of money gain
+			public:
+				int32_t getValue(void) const { return m_value; };
 
 ----------------
 --  4: types  --
@@ -131,12 +141,41 @@ We need to use the same coding style in c and c++ to simplify inter-reading code
 	- enum:
 		Camel case with first letter in lower case.
 			enum myEnum {
+				myEnumDef1,
+				myEnumDef2,
+				myEnumDef3,
+			};
 	- structure (C only)
 		use naming like Classes (and for mamber too)
-	
+	- minimum size : Do not use variable with size <3, the for a iterator 
+	for a 'for' :
+		for (int32_t iii=0; iii<xxx; ++iii) {
+			actions ...
+		}
+
+----------------
+--  8: types  --
+----------------
+	Une stanndard Type :
+		bool
+		int8_t / uint8_t
+		int16_t / uint16_t
+		int32_t / uint32_t
+		int64_t / uint64_t
+		size_t
+		int (some case needed)
+		float / double
+		float_t to automatic match whith the compilation choice between float or double
+
+-----------------------
+--  9: return value  --
+-----------------------
+	use the best simple way to check the return value :
+	use 'int' type and return 0 whenall is ok, or -errno if an error
+	occured, note thet the >0 value, you can set what you want.
 
 --------------------------
---  8: C++ specificity  --
+--  9: C++ specificity  --
 --------------------------
 	- STL
 		You can use the Stl, but the porting and the result can be
