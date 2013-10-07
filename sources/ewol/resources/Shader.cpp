@@ -26,15 +26,15 @@ ewol::Shader::Shader(const etk::UString& _filename):
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
-	if (true == m_name.EndWith(".frag") ) {
+	if (true == m_name.endWith(".frag") ) {
 		m_type = GL_FRAGMENT_SHADER;
-	} else if (true == m_name.EndWith(".vert") ) {
+	} else if (true == m_name.endWith(".vert") ) {
 		m_type = GL_VERTEX_SHADER;
 	} else {
 		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << m_name << "\"");
 		return;
 	}
-	Reload();
+	reload();
 }
 
 
@@ -61,10 +61,10 @@ static void checkGlError(const char* op)
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-void ewol::Shader::UpdateContext(void)
+void ewol::Shader::updateContext(void)
 {
-	if (true==m_exist) {
-		// Do nothing ==> too dangerous ...
+	if (true == m_exist) {
+		// Do nothing  == > too dangerous ...
 	} else {
 		// create the Shader
 		if (NULL == m_fileData) {
@@ -92,8 +92,8 @@ void ewol::Shader::UpdateContext(void)
 				}
 				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
 				EWOL_ERROR("Error " << l_bufferDisplayError);
-				etk::Vector<etk::UString> lines = etk::UString(m_fileData).Split('\n');
-				for (esize_t iii=0 ; iii<lines.Size() ; iii++) {
+				etk::Vector<etk::UString> lines = etk::UString(m_fileData).split('\n');
+				for (esize_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}
 				return;
@@ -103,39 +103,39 @@ void ewol::Shader::UpdateContext(void)
 	}
 }
 
-void ewol::Shader::RemoveContext(void)
+void ewol::Shader::removeContext(void)
 {
-	if (true==m_exist) {
+	if (true == m_exist) {
 		glDeleteShader(m_shader);
 		m_exist = false;
 		m_shader = 0;
 	}
 }
 
-void ewol::Shader::RemoveContextToLate(void)
+void ewol::Shader::removeContextToLate(void)
 {
 	m_exist = false;
 	m_shader = 0;
 }
 
-void ewol::Shader::Reload(void)
+void ewol::Shader::reload(void)
 {
 	etk::FSNode file(m_name);
-	if (false == file.Exist()) {
+	if (false == file.exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
 	
-	int64_t fileSize = file.FileSize();
-	if (0==fileSize) {
+	int64_t fileSize = file.fileSize();
+	if (0 == fileSize) {
 		EWOL_ERROR("This file is empty : " << file);
 		return;
 	}
-	if (false == file.FileOpenRead()) {
+	if (false == file.fileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << file);
 		return;
 	}
-	// Remove previous data ...
+	// remove previous data ...
 	if (NULL != m_fileData) {
 		delete[] m_fileData;
 		m_fileData = 0;
@@ -148,21 +148,21 @@ void ewol::Shader::Reload(void)
 	}
 	memset(m_fileData, 0, (fileSize+5)*sizeof(char));
 	// load data from the file :
-	file.FileRead(m_fileData, 1, fileSize);
+	file.fileRead(m_fileData, 1, fileSize);
 	// close the file:
-	file.FileClose();
+	file.fileClose();
 	
 	// now change the OGL context ...
-	RemoveContext();
-	UpdateContext();
+	removeContext();
+	updateContext();
 }
 
 
 
-ewol::Shader* ewol::Shader::Keep(const etk::UString& _filename)
+ewol::Shader* ewol::Shader::keep(const etk::UString& _filename)
 {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
-	ewol::Shader* object = static_cast<ewol::Shader*>(GetManager().LocalKeep(_filename));
+	ewol::Shader* object = static_cast<ewol::Shader*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
@@ -172,16 +172,16 @@ ewol::Shader* ewol::Shader::Keep(const etk::UString& _filename)
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::Shader::Release(ewol::Shader*& _object)
+void ewol::Shader::release(ewol::Shader*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }

@@ -13,8 +13,8 @@
 
 namespace ewol {
 	namespace portAudio {
-		void Init(void);
-		void UnInit(void);
+		void init(void);
+		void unInit(void);
 	};
 };
 

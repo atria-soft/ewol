@@ -25,37 +25,37 @@ ewol::Compositing::~Compositing(void)
 }
 
 
-void ewol::Compositing::ResetMatrix(void)
+void ewol::Compositing::resetMatrix(void)
 {
-	m_matrixApply.Identity();
+	m_matrixApply.identity();
 }
 
 
-void ewol::Compositing::Translate(const vec3& _vect)
+void ewol::Compositing::translate(const vec3& _vect)
 {
 	m_matrixApply *= etk::matTranslate(_vect);
 }
 
 
-void ewol::Compositing::Rotate(const vec3& _vect, float _angle)
+void ewol::Compositing::rotate(const vec3& _vect, float _angle)
 {
 	m_matrixApply *= etk::matRotate(_vect, _angle);
 }
 
 
-void ewol::Compositing::Scale(const vec3& _vect)
+void ewol::Compositing::scale(const vec3& _vect)
 {
 	m_matrixApply *= etk::matScale(_vect);
 }
 
 
-void ewol::Compositing::Clear(void)
+void ewol::Compositing::clear(void)
 {
-	m_matrixApply.Identity();
+	m_matrixApply.identity();
 }
 
 
-void ewol::Compositing::SetMatrix(const mat4& _mat)
+void ewol::Compositing::setMatrix(const mat4& _mat)
 {
 	m_matrixApply = _mat;
 }

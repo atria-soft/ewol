@@ -9,12 +9,12 @@
 #include <ewol/physicsShape/PhysicsCylinder.h>
 
 
-bool ewol::PhysicsCylinder::Parse(const char* _line)
+bool ewol::PhysicsCylinder::parse(const char* _line)
 {
-	if (true== ewol::PhysicsShape::Parse(_line)) {
+	if (true ==  ewol::PhysicsShape::parse(_line)) {
 		return true;
 	}
-	if(0==strncmp(_line, "half-extents : ", 15) ) {
+	if(0 == strncmp(_line, "half-extents : ", 15) ) {
 		sscanf(&_line[15], "%f %f %f", &m_size.m_floats[0], &m_size.m_floats[1], &m_size.m_floats[2] );
 		EWOL_DEBUG("                halfSize=" << m_size);
 		return true;

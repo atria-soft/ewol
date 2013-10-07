@@ -29,17 +29,17 @@ namespace widget {
 			Parameter(void);
 			~Parameter(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolParameter"; };
+			virtual const char * const getObjectType(void) { return "EwolParameter"; };
 			// Derived function
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
+			virtual void onObjectRemove(ewol::EObject * removeObject);
 			
-			void SetTitle(etk::UString label);
-			void MenuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget);
-			void MenuAddGroup(etk::UString label);
-			void MenuClear(void);
-			void MenuSeparator(void);
+			void setTitle(etk::UString label);
+			void menuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget);
+			void menuAddGroup(etk::UString label);
+			void menuClear(void);
+			void menuSeparator(void);
 		private:
 			int32_t                 m_currentIdList;
 			widget::Label*          m_widgetTitle;

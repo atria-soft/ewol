@@ -14,14 +14,14 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::ProgressBar();
 }
 
-void widget::ProgressBar::Init(ewol::WidgetManager& _widgetManager)
+void widget::ProgressBar::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
@@ -36,8 +36,8 @@ widget::ProgressBar::ProgressBar(void)
 	m_textColorBgOn = 0x00FF00FF;
 	
 	m_textColorBgOff = etk::color::black;
-	m_textColorBgOff.SetA(0x3F);
-	SetCanHaveFocus(true);
+	m_textColorBgOff.setA(0x3F);
+	setCanHaveFocus(true);
 }
 
 widget::ProgressBar::~ProgressBar(void)
@@ -46,55 +46,55 @@ widget::ProgressBar::~ProgressBar(void)
 }
 
 
-void widget::ProgressBar::CalculateMinMaxSize(void)
+void widget::ProgressBar::calculateMinMaxSize(void)
 {
-	vec2 tmpMin = m_userMinSize.GetPixel();
+	vec2 tmpMin = m_userMinSize.getPixel();
 	m_minSize.setValue( etk_max(tmpMin.x(), 40),
 	                    etk_max(tmpMin.y(), dotRadius*2) );
-	MarkToRedraw();
+	markToRedraw();
 }
 
 
-void widget::ProgressBar::ValueSet(float val)
+void widget::ProgressBar::valueSet(float val)
 {
 	m_value = etk_avg(0, val, 1);
-	MarkToRedraw();
+	markToRedraw();
 }
 
 
-float widget::ProgressBar::ValueGet(void)
+float widget::ProgressBar::valueGet(void)
 {
 	return m_value;
 }
 
 
-void widget::ProgressBar::OnDraw(void)
+void widget::ProgressBar::onDraw(void)
 {
-	m_draw.Draw();
+	m_draw.draw();
 }
 
-void widget::ProgressBar::OnRegenerateDisplay(void)
+void widget::ProgressBar::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
+	if (true == needRedraw()) {
 		// clean the object list ...
-		m_draw.Clear();
+		m_draw.clear();
 		
-		m_draw.SetColor(m_textColorFg);
+		m_draw.setColor(m_textColorFg);
 		
 		int32_t tmpSizeX = m_size.x() - 10;
 		int32_t tmpSizeY = m_size.y() - 10;
 		int32_t tmpOriginX = 5;
 		int32_t tmpOriginY = 5;
-		m_draw.SetColor(m_textColorBgOn);
-		m_draw.SetPos(vec3(tmpOriginX, tmpOriginY, 0) );
-		m_draw.RectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
-		m_draw.SetColor(m_textColorBgOff);
-		m_draw.SetPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
-		m_draw.RectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
+		m_draw.setColor(m_textColorBgOn);
+		m_draw.setPos(vec3(tmpOriginX, tmpOriginY, 0) );
+		m_draw.rectangleWidth(vec3(tmpSizeX*m_value, tmpSizeY, 0) );
+		m_draw.setColor(m_textColorBgOff);
+		m_draw.setPos(vec3(tmpOriginX+tmpSizeX*m_value, tmpOriginY, 0) );
+		m_draw.rectangleWidth(vec3(tmpSizeX*(1.0-m_value), tmpSizeY, 0) );
 		
 		// TODO : Create a better progress Bar ...
-		//m_draw.SetColor(m_textColorFg);
-		//m_draw.RectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
+		//m_draw.setColor(m_textColorFg);
+		//m_draw.rectangleBorder( tmpOriginX, tmpOriginY, tmpSizeX, tmpSizeY, 1);
 	}
 }
 

@@ -21,15 +21,15 @@ namespace widget {
 	class Slider :public widget::Drawable
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		public:
 			Slider(void);
 			virtual ~Slider(void);
-			void SetValue(int32_t val);
-			int32_t GetValue(void);
-			void SetMin(int32_t val);
-			void SetMax(int32_t val);
-			void SetColor(etk::Color<> newColor) { m_textColorFg = newColor; };
+			void setValue(int32_t val);
+			int32_t getValue(void);
+			void setMin(int32_t val);
+			void setMax(int32_t val);
+			void setColor(etk::Color<> newColor) { m_textColorFg = newColor; };
 		private:
 			int32_t m_value;
 			int32_t m_min;
@@ -38,10 +38,10 @@ namespace widget {
 			etk::Color<> m_textColorBg; //!< Background color
 		public:
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::Slider"; } ;
-			virtual void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual const char * const getObjectType(void) { return "Ewol::Slider"; } ;
+			virtual void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
 	};
 	
 };

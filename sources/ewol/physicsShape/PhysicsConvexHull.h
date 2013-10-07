@@ -22,21 +22,21 @@ namespace ewol
 			PhysicsConvexHull(void) {};
 			virtual ~PhysicsConvexHull(void) {};
 		public:
-			virtual bool Parse(const char* _line);
-			virtual void Display(void) {};
+			virtual bool parse(const char* _line);
+			virtual void display(void) {};
 		public:
-			virtual type_te GetType(void) { return ewol::PhysicsShape::convexHull; };
+			virtual type_te getType(void) { return ewol::PhysicsShape::convexHull; };
 		private:
 			vec3 m_scale;
 		public:
-			vec3 GetScale(void) const { return m_scale; };
+			vec3 getScale(void) const { return m_scale; };
 		private:
 			etk::Vector<vec3> m_points;
 		public:
-			const etk::Vector<vec3>& GetPointList(void) const { return m_points; };
+			const etk::Vector<vec3>& getPointList(void) const { return m_points; };
 		public:
-			virtual const PhysicsConvexHull* ToConvexHull(void) const { return this; };
-			virtual PhysicsConvexHull* ToConvexHull(void) { return this; };
+			virtual const PhysicsConvexHull* toConvexHull(void) const { return this; };
+			virtual PhysicsConvexHull* toConvexHull(void) { return this; };
 	};
 };
 

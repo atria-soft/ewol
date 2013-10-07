@@ -23,19 +23,19 @@ namespace widget {
 		public:
 			ColorBar(void);
 			virtual ~ColorBar(void);
-			etk::Color<> GetCurrentColor(void);
-			void SetCurrentColor(etk::Color<> _newOne);
+			etk::Color<> getCurrentColor(void);
+			void setCurrentColor(etk::Color<> _newOne);
 		private:
 			ewol::Drawing m_draw; //!< Compositing drawing element
 			etk::Color<> m_currentColor;
 			vec2 m_currentUserPos;
 		protected: // Derived function
-			virtual void OnDraw(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "widget::ColorBar"; };
-			virtual void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual const char * const getObjectType(void) { return "widget::ColorBar"; };
+			virtual void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
 	};
 	
 };

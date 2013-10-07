@@ -22,14 +22,14 @@ const char* const widget::PopUp::configRemoveOnExternClick="out-click-remove";
 const char* const widget::PopUp::configAnimation="animation";
 const char* const widget::PopUp::configLockExpand="lock";
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::PopUp();
 }
 
-void widget::PopUp::Init(ewol::WidgetManager& _widgetManager)
+void widget::PopUp::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
@@ -39,13 +39,13 @@ widget::PopUp::PopUp(const etk::UString& _shaperName) :
 	m_closeOutEvent(false)
 {
 	m_userExpand.setValue(false, false);
-	SetMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
-	RegisterConfig(configShaper, "string", NULL, "The shaper properties");
-	RegisterConfig(configRemoveOnExternClick, "bool", NULL, "Remove the widget if the use click outside");
-	RegisterConfig(configLockExpand, "bool", NULL, "Lock expand contamination");
-	RegisterConfig(configAnimation, "list", "none;increase", "Remove the widget if the use click outside");
+	setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
+	registerConfig(configShaper, "string", NULL, "The shaper properties");
+	registerConfig(configRemoveOnExternClick, "bool", NULL, "Remove the widget if the use click outside");
+	registerConfig(configLockExpand, "bool", NULL, "Lock expand contamination");
+	registerConfig(configAnimation, "list", "none;increase", "Remove the widget if the use click outside");
 	
-	SetAnimationMode(animationNone);
+	setAnimationMode(animationNone);
 }
 
 widget::PopUp::~PopUp(void)
@@ -53,36 +53,36 @@ widget::PopUp::~PopUp(void)
 	
 }
 
-void widget::PopUp::LockExpand(const bvec2& _lockExpand)
+void widget::PopUp::lockExpand(const bvec2& _lockExpand)
 {
 	if (_lockExpand != m_lockExpand) {
 		m_lockExpand = _lockExpand;
-		MarkToRedraw();
-		RequestUpdateSize();
+		markToRedraw();
+		requestUpdateSize();
 	}
 }
 
-void widget::PopUp::SetShaperName(const etk::UString& _shaperName)
+void widget::PopUp::setShaperName(const etk::UString& _shaperName)
 {
-	m_shaper.SetSource(_shaperName);
-	MarkToRedraw();
+	m_shaper.setSource(_shaperName);
+	markToRedraw();
 }
 
-void widget::PopUp::CalculateSize(const vec2& _available)
+void widget::PopUp::calculateSize(const vec2& _available)
 {
-	ewol::Widget::CalculateSize(_available);
+	ewol::Widget::calculateSize(_available);
 	if (NULL != m_subWidget) {
-		vec2 padding = m_shaper.GetPadding();
-		vec2 subWidgetSize = m_subWidget->GetCalculateMinSize();
-		if (true == m_subWidget->CanExpand().x()) {
-			if (m_lockExpand.x()==true) {
+		vec2 padding = m_shaper.getPadding();
+		vec2 subWidgetSize = m_subWidget->getCalculateMinSize();
+		if (true == m_subWidget->canExpand().x()) {
+			if (m_lockExpand.x() == true) {
 				subWidgetSize.setX(m_minSize.x());
 			} else {
 				subWidgetSize.setX(m_size.x()-padding.x());
 			}
 		}
-		if (true == m_subWidget->CanExpand().y()) {
-			if (m_lockExpand.y()==true) {
+		if (true == m_subWidget->canExpand().y()) {
+			if (m_lockExpand.y() == true) {
 				subWidgetSize.setY(m_minSize.y());
 			} else {
 				subWidgetSize.setY(m_size.y()-padding.y());
@@ -97,43 +97,43 @@ void widget::PopUp::CalculateSize(const vec2& _available)
 		vec2 subWidgetOrigin = m_origin + (m_size-subWidgetSize)/2.0f;
 		subWidgetOrigin = vec2ClipInt32(subWidgetOrigin);
 		
-		m_subWidget->SetOrigin(subWidgetOrigin);
-		m_subWidget->CalculateSize(subWidgetSize);
+		m_subWidget->setOrigin(subWidgetOrigin);
+		m_subWidget->calculateSize(subWidgetSize);
 	}
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::PopUp::SystemDraw(const ewol::DrawProperty& _displayProp)
+void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp)
 {
-	if (true==m_hide){
+	if (true == m_hide){
 		// widget is hidden ...
 		return;
 	}
-	ewol::Widget::SystemDraw(_displayProp);
+	ewol::Widget::systemDraw(_displayProp);
 	if (NULL!=m_subWidget) {
-		if(    m_shaper.GetNextDisplayedStatus() == -1
-		    && m_shaper.GetTransitionStatus() >= 1.0) {
-			ewol::DrawProperty prop = _displayProp;
-			prop.Limit(m_origin, m_size);
-			m_subWidget->SystemDraw(prop);
+		if(    m_shaper.getNextDisplayedStatus() == -1
+		    && m_shaper.getTransitionStatus() >= 1.0) {
+			ewol::drawProperty prop = _displayProp;
+			prop.limit(m_origin, m_size);
+			m_subWidget->systemDraw(prop);
 		}
 	}
 }
 
 
-void widget::PopUp::OnDraw(void)
+void widget::PopUp::onDraw(void)
 {
-	m_shaper.Draw();
+	m_shaper.draw();
 }
 
-void widget::PopUp::OnRegenerateDisplay(void)
+void widget::PopUp::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
-		m_shaper.Clear();
-		vec2 padding = m_shaper.GetPadding();
+	if (true == needRedraw()) {
+		m_shaper.clear();
+		vec2 padding = m_shaper.getPadding();
 		vec2 tmpSize(0,0);
-		bvec2 expand = CanExpand();
-		bvec2 fill = CanFill();
+		bvec2 expand = canExpand();
+		bvec2 fill = canFill();
 		if (fill.x()) {
 			tmpSize.setX(m_size.x()-padding.x()*2);
 		}
@@ -141,25 +141,25 @@ void widget::PopUp::OnRegenerateDisplay(void)
 			tmpSize.setY(m_size.y()-padding.y()*2);
 		}
 		if (NULL != m_subWidget) {
-			vec2 tmpSize = m_subWidget->GetSize();
+			vec2 tmpSize = m_subWidget->getSize();
 		}
 		tmpSize.setMax(m_minSize);
 		vec2 tmpOrigin = (m_size-tmpSize)/2.0f;
 		
-		m_shaper.SetOrigin(vec2(0,0));
-		m_shaper.SetSize(vec2ClipInt32(m_size));
-		m_shaper.SetInsidePos(vec2ClipInt32(tmpOrigin-padding));
-		m_shaper.SetInsideSize(vec2ClipInt32(tmpSize + padding*2.0f));
+		m_shaper.setOrigin(vec2(0,0));
+		m_shaper.setSize(vec2ClipInt32(m_size));
+		m_shaper.setInsidePos(vec2ClipInt32(tmpOrigin-padding));
+		m_shaper.setInsideSize(vec2ClipInt32(tmpSize + padding*2.0f));
 	}
 	// SUBwIDGET GENERATION ...
 	if (NULL != m_subWidget) {
-		m_subWidget->OnRegenerateDisplay();
+		m_subWidget->onRegenerateDisplay();
 	}
 }
 
-ewol::Widget* widget::PopUp::GetWidgetAtPos(const vec2& pos)
+ewol::Widget* widget::PopUp::getWidgetAtPos(const vec2& pos)
 {
-	ewol::Widget* val = widget::Container::GetWidgetAtPos(pos);
+	ewol::Widget* val = widget::Container::getWidgetAtPos(pos);
 	if (NULL != val) {
 		return val;
 	}
@@ -167,41 +167,41 @@ ewol::Widget* widget::PopUp::GetWidgetAtPos(const vec2& pos)
 }
 
 
-bool widget::PopUp::OnSetConfig(const ewol::EConfig& _conf)
+bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf)
 {
-	if (true == widget::Container::OnSetConfig(_conf)) {
+	if (true == widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
-	if (_conf.GetConfig() == configShaper) {
-		SetShaperName(_conf.GetData());
+	if (_conf.getConfig() == configShaper) {
+		setShaperName(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == configRemoveOnExternClick) {
-		SetRemoveOnExternClick(_conf.GetData().ToBool());
+	if (_conf.getConfig() == configRemoveOnExternClick) {
+		setRemoveOnExternClick(_conf.getData().toBool());
 		return true;
 	}
-	if (_conf.GetConfig() == configLockExpand) {
-		LockExpand(_conf.GetData());
+	if (_conf.getConfig() == configLockExpand) {
+		lockExpand(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == configAnimation) {
-		if (_conf.GetData().CompareNoCase("increase")==true) {
-			SetAnimationMode(animationIncrease);
+	if (_conf.getConfig() == configAnimation) {
+		if (_conf.getData().compareNoCase("increase") == true) {
+			setAnimationMode(animationIncrease);
 		} else {
-			SetAnimationMode(animationNone);
+			setAnimationMode(animationNone);
 		}
 		return true;
 	}
 	return false;
 }
 
-bool widget::PopUp::OnGetConfig(const char* _config, etk::UString& _result) const
+bool widget::PopUp::onGetConfig(const char* _config, etk::UString& _result) const
 {
-	if (true == widget::Container::OnGetConfig(_config, _result)) {
+	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configShaper) {
-		_result = m_shaper.GetSource();
+		_result = m_shaper.getSource();
 		return true;
 	}
 	if (_config == configLockExpand) {
@@ -209,7 +209,7 @@ bool widget::PopUp::OnGetConfig(const char* _config, etk::UString& _result) cons
 		return true;
 	}
 	if (_config == configRemoveOnExternClick) {
-		if (GetRemoveOnExternClick()==true) {
+		if (getRemoveOnExternClick() == true) {
 			_result = "true";
 		} else {
 			_result = "false";
@@ -228,26 +228,26 @@ bool widget::PopUp::OnGetConfig(const char* _config, etk::UString& _result) cons
 }
 
 
-bool widget::PopUp::OnEventInput(const ewol::EventInput& _event)
+bool widget::PopUp::onEventInput(const ewol::EventInput& _event)
 {
-	if (0 != _event.GetId()) {
-		if (true==m_closeOutEvent) {
-			vec2 padding = m_shaper.GetPadding();
+	if (0 != _event.getId()) {
+		if (true == m_closeOutEvent) {
+			vec2 padding = m_shaper.getPadding();
 			vec2 tmpSize(0,0);
 			if (NULL != m_subWidget) {
-				vec2 tmpSize = m_subWidget->GetSize();
+				vec2 tmpSize = m_subWidget->getSize();
 			}
 			tmpSize.setMax(m_minSize);
 			vec2 tmpOrigin = (m_size-tmpSize)/2.0f;
 			
 			tmpOrigin-=padding;
 			tmpSize += padding*2.0f;
-			vec2 pos=RelativePosition(_event.GetPos());
+			vec2 pos = relativePosition(_event.getPos());
 			if(    pos.x() < tmpOrigin.x()
 			    || pos.y() < tmpOrigin.y()
 			    || pos.x() > tmpOrigin.x()+tmpSize.x()
 			    || pos.y() > tmpOrigin.y()+tmpSize.y() ) {
-				AutoDestroy();
+				autoDestroy();
 				return true;
 			}
 		}
@@ -255,19 +255,19 @@ bool widget::PopUp::OnEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-void widget::PopUp::SetAnimationMode(animation_te _animation)
+void widget::PopUp::setAnimationMode(animation_te _animation)
 {
 	m_animation = _animation;
-	if (true == m_shaper.ChangeStatusIn((int32_t)_animation) ) {
-		PeriodicCallEnable();
+	if (true == m_shaper.changeStatusIn((int32_t)_animation) ) {
+		periodicCallEnable();
 	}
 }
 
-void widget::PopUp::PeriodicCall(const ewol::EventTime& _event)
+void widget::PopUp::periodicCall(const ewol::EventTime& _event)
 {
-	if (false == m_shaper.PeriodicCall(_event) ) {
-		PeriodicCallDisable();
+	if (false == m_shaper.periodicCall(_event) ) {
+		periodicCallDisable();
 	}
-	MarkToRedraw();
+	markToRedraw();
 }
 

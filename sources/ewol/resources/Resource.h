@@ -51,24 +51,24 @@ namespace ewol
 				m_valBase++;
 			};
 			virtual ~Resource(void) { };
-			virtual bool HasName(const etk::UString& _fileName)
+			virtual bool hasName(const etk::UString& _fileName)
 			{
-				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName==m_name) );
-				return _fileName==m_name;
+				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName == m_name) );
+				return _fileName == m_name;
 			};
-			virtual etk::UString GetName(void) { return m_name; };
-			void Increment(void) { m_counter++; };
-			bool Decrement(void) { m_counter--; return (m_counter==0)?true:false; };
-			int32_t GetCounter(void) { return m_counter; };
-			uint32_t GetUID(void) { return m_uniqueId; };
-			uint8_t  GetResourceLevel(void) { return m_resourceLevel; };
-			virtual const char* GetType(void) { return "unknow"; };
-			virtual void UpdateContext(void);
-			virtual void RemoveContext(void);
-			virtual void RemoveContextToLate(void);
-			virtual void Reload(void);
+			virtual etk::UString getName(void) { return m_name; };
+			void increment(void) { m_counter++; };
+			bool decrement(void) { m_counter--; return (m_counter == 0)?true:false; };
+			int32_t getCounter(void) { return m_counter; };
+			uint32_t getUID(void) { return m_uniqueId; };
+			uint8_t  getResourceLevel(void) { return m_resourceLevel; };
+			virtual const char* getType(void) { return "unknow"; };
+			virtual void updateContext(void);
+			virtual void removeContext(void);
+			virtual void removeContextToLate(void);
+			virtual void reload(void);
 			
-			static ewol::ResourceManager& GetManager(void);
+			static ewol::ResourceManager& getManager(void);
 	};
 };
 

@@ -27,7 +27,7 @@ static const char* statusDescriptionString[ewol::keyEvent::statusCount+1] = {
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj)
 {
-	if (_obj>=0 && _obj <ewol::keyEvent::statusCount) {
+	if (_obj >= 0 && _obj <ewol::keyEvent::statusCount) {
 		_os << statusDescriptionString[_obj];
 	} else {
 		_os << "[ERROR]";
@@ -79,7 +79,7 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj)
 {
-	if (_obj>=0 && _obj <ewol::keyEvent::keyboardCount) {
+	if (_obj >= 0 && _obj <ewol::keyEvent::keyboardCount) {
 		_os << keyboardDescriptionString[_obj];
 	} else {
 		_os << "[ERROR]";
@@ -98,7 +98,7 @@ static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 
 etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj)
 {
-	if (_obj>=0 && _obj < ewol::keyEvent::typeCount) {
+	if (_obj >= 0 && _obj < ewol::keyEvent::typeCount) {
 		_os << typeDescriptionString[_obj];
 	} else {
 		_os << "[ERROR]";
@@ -112,41 +112,41 @@ ewol::SpecialKey::SpecialKey(void) :
 	
 }
 
-bool ewol::SpecialKey::IsSetCapsLock(void) const
+bool ewol::SpecialKey::isSetCapsLock(void) const
 {
 	return capLock;
 }
 
-bool ewol::SpecialKey::IsSetShift(void) const
+bool ewol::SpecialKey::isSetShift(void) const
 {
 	return shift;
 }
 
-bool ewol::SpecialKey::IsSetCtrl(void) const
+bool ewol::SpecialKey::isSetCtrl(void) const
 {
 	return ctrl;
 }
 
-bool ewol::SpecialKey::IsSetMeta(void) const
+bool ewol::SpecialKey::isSetMeta(void) const
 {
 	return meta;
 }
 
-bool ewol::SpecialKey::IsSetAlt(void) const
+bool ewol::SpecialKey::isSetAlt(void) const
 {
 	return alt;
 }
 
-bool ewol::SpecialKey::IsSetAltGr(void) const
+bool ewol::SpecialKey::isSetAltGr(void) const
 {
 	return altGr;
 }
 
-bool ewol::SpecialKey::IsSetNumLock(void) const
+bool ewol::SpecialKey::isSetNumLock(void) const
 {
 	return numLock;
 }
-bool ewol::SpecialKey::IsSetInsert(void) const
+bool ewol::SpecialKey::isSetInsert(void) const
 {
 	return insert;
 }

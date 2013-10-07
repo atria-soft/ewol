@@ -23,16 +23,16 @@ namespace ewol {
 				m_config(_config),
 				m_data(_data)
 			{ };
-			void SetConfig(const char* _config) { m_config = _config; };
-			inline const char* GetConfig(void) const { return m_config; };
-			void SetData(const etk::UString& _data) { m_data = _data; };
-			inline const etk::UString& GetData(void) const { return m_data; };
+			void setConfig(const char* _config) { m_config = _config; };
+			inline const char* getConfig(void) const { return m_config; };
+			void setData(const etk::UString& _data) { m_data = _data; };
+			inline const etk::UString& getData(void) const { return m_data; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EConfig& _obj);
 	
 	class EConfigElement {
 		private:
-			const char* m_config; //!< config properties (used for XML properties ==> only : "[0-9a-zA-Z\-]" ==> this is a regExp control.
+			const char* m_config; //!< config properties (used for XML properties  == > only : "[0-9a-zA-Z\-]" ==> this is a regExp control.
 			const char* m_type; //!< type of the config[integer,float,string,reg-exp,list].
 			const char* m_control; //!< control the type of the type set ( integer:[0..256], regExp: "[0-9a-zA-Z]", list:[plop,plop2,plop3] )
 			const char* m_description; //!< description to help user to configure it.
@@ -50,11 +50,11 @@ namespace ewol {
 				m_description(_description),
 				m_default(_default)
 			{ };
-			inline const char* GetConfig(void) const { return m_config; };
-			inline const char* GetType(void) const { return m_type; };
-			inline const char* GetControl(void) const { return m_control; };
-			inline const char* GetDescription(void) const { return m_description; };
-			inline const char* GetDefault(void) const { return m_default; };
+			inline const char* getConfig(void) const { return m_config; };
+			inline const char* getType(void) const { return m_type; };
+			inline const char* getControl(void) const { return m_control; };
+			inline const char* getDescription(void) const { return m_description; };
+			inline const char* getDefault(void) const { return m_default; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EConfigElement& _obj);
 };

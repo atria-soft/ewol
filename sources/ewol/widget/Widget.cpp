@@ -16,13 +16,13 @@
 #undef __class__
 #define __class__ "DrawProperty"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj)
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::drawProperty& _obj)
 {
 	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";
 	return _os;
 }
 
-void ewol::DrawProperty::Limit(const vec2& _origin, const vec2& _size)
+void ewol::drawProperty::limit(const vec2& _origin, const vec2& _size)
 {
 	m_size += m_origin;
 	m_origin.setMax(_origin);
@@ -34,7 +34,7 @@ void ewol::DrawProperty::Limit(const vec2& _origin, const vec2& _size)
 #define __class__ "gravity"
 
 
-etk::UString ewol::GravityToString(const ewol::gravity_te _obj)
+etk::UString ewol::gravityToString(const ewol::gravity_te _obj)
 {
 	switch(_obj) {
 		case ewol::gravityCenter:
@@ -59,7 +59,7 @@ etk::UString ewol::GravityToString(const ewol::gravity_te _obj)
 	return "unknow";
 }
 
-ewol::gravity_te ewol::StringToGravity(const etk::UString& _obj)
+ewol::gravity_te ewol::stringToGravity(const etk::UString& _obj)
 {
 	if (_obj == "center") {
 		return ewol::gravityCenter;
@@ -85,7 +85,7 @@ ewol::gravity_te ewol::StringToGravity(const etk::UString& _obj)
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::gravity_te _obj)
 {
-	_os << ewol::GravityToString(_obj);
+	_os << ewol::gravityToString(_obj);
 	return _os;
 }
 
@@ -125,25 +125,25 @@ ewol::Widget::Widget(void) :
 	m_cursorDisplay(ewol::cursorArrow)
 {
 	// set all the config in the list :
-	RegisterConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget available size");
-	RegisterConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is available");
-	RegisterConfig(ewol::Widget::configHide, "bool", NULL, "The widget start hided");
-	RegisterConfig(ewol::Widget::configFocus, "bool", NULL, "The widget request focus");
-	RegisterConfig(ewol::Widget::configMinSize, "dimension", NULL, "User minimum size");
-	RegisterConfig(ewol::Widget::configMaxSize, "dimension", NULL, "User maximum size");
-	RegisterConfig(ewol::Widget::configGravity, "list", "center;top-left;top;top-right;right;buttom-right;buttom;buttom-left;left", "User maximum size");
+	registerConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget available size");
+	registerConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is available");
+	registerConfig(ewol::Widget::configHide, "bool", NULL, "The widget start hided");
+	registerConfig(ewol::Widget::configFocus, "bool", NULL, "The widget request focus");
+	registerConfig(ewol::Widget::configMinSize, "dimension", NULL, "User minimum size");
+	registerConfig(ewol::Widget::configMaxSize, "dimension", NULL, "User maximum size");
+	registerConfig(ewol::Widget::configGravity, "list", "center;top-left;top;top-right;right;buttom-right;buttom;buttom-left;left", "User maximum size");
 }
 
 
 ewol::Widget::~Widget(void)
 {
-	// Remove his own focus...
-	GetWidgetManager().Rm(this);
+	// remove his own focus...
+	getWidgetManager().rm(this);
 	// clean all the short-cut ...
-	ShortCutClean();
+	shortCutClean();
 }
 
-void ewol::Widget::SetUpperWidget(ewol::Widget* _upper)
+void ewol::Widget::setUpperWidget(ewol::Widget* _upper)
 {
 	if (NULL == _upper) {
 		//just remove father :
@@ -151,84 +151,84 @@ void ewol::Widget::SetUpperWidget(ewol::Widget* _upper)
 		return;
 	}
 	if (NULL != m_up) {
-		EWOL_WARNING("[" << GetId() << "] Replace upper widget of this one ...");
+		EWOL_WARNING("[" << getId() << "] Replace upper widget of this one ...");
 	}
 	m_up = _upper;
 }
 
-void ewol::Widget::OnObjectRemove(ewol::EObject* _removeObject)
+void ewol::Widget::onObjectRemove(ewol::EObject* _removeObject)
 {
 	if (_removeObject == m_up) {
-		EWOL_WARNING("[" << GetId() << "] Remove upper widget befor removing this widget ...");
+		EWOL_WARNING("[" << getId() << "] remove upper widget befor removing this widget ...");
 		m_up = NULL;
 	}
 }
 
-void ewol::Widget::Hide(void)
+void ewol::Widget::hide(void)
 {
 	m_hide = true;
-	MarkToRedraw();
-	RequestUpdateSize();
+	markToRedraw();
+	requestUpdateSize();
 }
 
 
-void ewol::Widget::Show(void)
+void ewol::Widget::show(void)
 {
 	m_hide = false;
-	MarkToRedraw();
-	RequestUpdateSize();
+	markToRedraw();
+	requestUpdateSize();
 }
 
 
-void ewol::Widget::CalculateSize(const vec2& _available)
+void ewol::Widget::calculateSize(const vec2& _available)
 {
 	m_size = _available;
 	m_size.setMax(m_minSize);
-	MarkToRedraw();
+	markToRedraw();
 }
 
 
-bool ewol::Widget::SetFocus(void)
+bool ewol::Widget::setFocus(void)
 {
 	if (true == m_canFocus) {
 		m_hasFocus = true;
-		OnGetFocus();
+		onGetFocus();
 		return true;
 	}
 	return false;
 }
 
 
-bool ewol::Widget::RmFocus(void)
+bool ewol::Widget::rmFocus(void)
 {
 	if (true == m_canFocus) {
 		m_hasFocus = false;
-		OnLostFocus();
+		onLostFocus();
 		return true;
 	}
 	return false;
 }
 
 
-void ewol::Widget::SetCanHaveFocus(bool _canFocusState)
+void ewol::Widget::setCanHaveFocus(bool _canFocusState)
 {
 	m_canFocus = _canFocusState;
 	if (true == m_hasFocus) {
-		(void)RmFocus();
+		(void)rmFocus();
 	}
 }
 
 
-void ewol::Widget::KeepFocus(void)
+void ewol::Widget::keepFocus(void)
 {
-	GetWidgetManager().FocusKeep(this);
+	getWidgetManager().focusKeep(this);
 }
 
-void ewol::Widget::SetOffset(const vec2& _newVal)
+void ewol::Widget::setOffset(const vec2& _newVal)
 {
 	if (m_offset != _newVal) {
 		m_offset = _newVal;
-		MarkToRedraw();
+		markToRedraw();
 	}
 }
 
@@ -259,9 +259,9 @@ void ewol::Widget::SetOffset(const vec2& _newVal)
      /
    (0,0)
 */
-void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
+void ewol::Widget::systemDraw(const drawProperty& _displayProp)
 {
-	if (true==m_hide){
+	if (true == m_hide){
 		// widget is hidden ...
 		return;
 	}
@@ -270,12 +270,12 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 	// check if the element is displayable in the windows : 
 	if(    _displayProp.m_windowsSize.x() < m_origin.x()
 	    || _displayProp.m_windowsSize.y() < m_origin.y() ) {
-		// out of the windows ==> nothing to display ...
+		// out of the windows  == > nothing to display ...
 		return;
 	}
 	
-	DrawProperty tmpSize = _displayProp;
-	tmpSize.Limit(m_origin, m_size);
+	drawProperty tmpSize = _displayProp;
+	tmpSize.limit(m_origin, m_size);
 	if (tmpSize.m_size.x() <= 0 || tmpSize.m_size.y() <= 0) {
 		return;
 	}
@@ -300,16 +300,16 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 	                                   (int32_t)( 1));
 	mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 
-	ewol::openGL::Push();
+	ewol::openGL::push();
 	// set internal matrix system :
-	ewol::openGL::SetMatrix(tmpMat);
-	//int64_t ___startTime = ewol::GetTime();
-	OnDraw();
+	ewol::openGL::setMatrix(tmpMat);
+	//int64_t ___startTime = ewol::getTime();
+	onDraw();
 	
 	#ifdef old_PLOP
 	if(    (_displayProp.m_origin.x() > m_origin.x())
 	    || (_displayProp.m_origin.x() + _displayProp.m_size.x() < m_size.x() + m_origin.x()) ) {
-		// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 		int32_t tmpOriginX = etk_max(_displayProp.m_origin.x(), m_origin.x());
 		int32_t tmppp1 = _displayProp.m_origin.x() + _displayProp.m_size.x();
 		int32_t tmppp2 = m_origin.x() + m_size.x();
@@ -329,10 +329,10 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 		mat4 tmpProjection = etk::matOrtho(-tmpclipX/2, tmpclipX/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::SetMatrix(tmpMat);
-		//int64_t ___startTime = ewol::GetTime();
-		OnDraw();
-		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
+		ewol::openGL::setMatrix(tmpMat);
+		//int64_t ___startTime = ewol::getTime();
+		onDraw();
+		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget1  : " << ___localTime << "ms ");
 	} else {
 		EWOL_DEBUG("rasta..");
@@ -345,103 +345,103 @@ void ewol::Widget::SystemDraw(const DrawProperty& _displayProp)
 		mat4 tmpProjection = etk::matOrtho(-m_size.x()/2, m_size.x()/2, -m_size.y()/2, m_size.y()/2, -1, 1);
 		mat4 tmpMat = tmpProjection * tmpScale * tmpTranslate;
 		// set internal matrix system :
-		ewol::openGL::SetMatrix(tmpMat);
-		//int64_t ___startTime = ewol::GetTime();
-		OnDraw();
-		//float ___localTime = (float)(ewol::GetTime() - ___startTime) / 1000.0f;
+		ewol::openGL::setMatrix(tmpMat);
+		//int64_t ___startTime = ewol::getTime();
+		onDraw();
+		//float ___localTime = (float)(ewol::getTime() - ___startTime) / 1000.0f;
 		//EWOL_DEBUG("      Widget2  : " << ___localTime << "ms ");
 	}
 	#endif
-	ewol::openGL::Pop();
+	ewol::openGL::pop();
 	return;
 }
 
-void ewol::Widget::PeriodicCallDisable(void)
+void ewol::Widget::periodicCallDisable(void)
 {
 	m_periodicCallDeltaTime=0;
 	m_periodicCallTime=-1;
-	GetWidgetManager().PeriodicCallRm(this);
+	getWidgetManager().periodicCallRm(this);
 }
 
-void ewol::Widget::PeriodicCallEnable(float _callInSecond)
+void ewol::Widget::periodicCallEnable(float _callInSecond)
 {
 	if (_callInSecond < 0) {
-		PeriodicCallDisable();
+		periodicCallDisable();
 	} else {
-		GetWidgetManager().PeriodicCallAdd(this);
+		getWidgetManager().periodicCallAdd(this);
 		m_periodicCallDeltaTime = _callInSecond*1000000.0;
-		m_periodicCallTime = ewol::GetTime();
+		m_periodicCallTime = ewol::getTime();
 	}
 }
 
 
-void ewol::Widget::MarkToRedraw(void)
+void ewol::Widget::markToRedraw(void)
 {
 	m_needRegenerateDisplay = true;
-	GetWidgetManager().MarkDrawingIsNeeded();
+	getWidgetManager().markDrawingIsNeeded();
 }
 
 
-void ewol::Widget::SetZoom(float _newVal)
+void ewol::Widget::setZoom(float _newVal)
 {
 	m_zoom = etk_avg(0.0000001,_newVal,1000000.0);
-	MarkToRedraw();
+	markToRedraw();
 }
 
-float ewol::Widget::GetZoom(void)
+float ewol::Widget::getZoom(void)
 {
 	return m_zoom;
 }
 
-void ewol::Widget::SetOrigin(const vec2& _pos)
+void ewol::Widget::setOrigin(const vec2& _pos)
 {
 	#if DEBUG_LEVEL > 2
 		if(    m_origin.x() < -5000
 		    || m_origin.y() < -5000) {
-			EWOL_WARNING("[" << GetId() << "] Set origin < 5000 : " << m_origin);
+			EWOL_WARNING("[" << getId() << "] set origin < 5000 : " << m_origin);
 		}
 	#endif
 	m_origin = _pos;
 }
 
-vec2 ewol::Widget::GetOrigin(void)
+vec2 ewol::Widget::getOrigin(void)
 {
 	return m_origin;
 }
 
-vec2 ewol::Widget::RelativePosition(const vec2& _pos)
+vec2 ewol::Widget::relativePosition(const vec2& _pos)
 {
 	return _pos - m_origin;
 }
 
-void ewol::Widget::CalculateMinMaxSize(void)
+void ewol::Widget::calculateMinMaxSize(void)
 {
-	m_minSize = m_userMinSize.GetPixel();
-	//EWOL_ERROR("[" << GetId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
-	m_maxSize = m_userMaxSize.GetPixel();
-	MarkToRedraw();
+	m_minSize = m_userMinSize.getPixel();
+	//EWOL_ERROR("[" << getId() << "] convert in min size : " << m_userMinSize << " out=" << m_minSize);
+	m_maxSize = m_userMaxSize.getPixel();
+	markToRedraw();
 }
 
-vec2 ewol::Widget::GetCalculateMinSize(void)
+vec2 ewol::Widget::getCalculateMinSize(void)
 {
-	if (false==IsHide()) {
+	if (false == isHide()) {
 		return m_minSize;
 	}
 	return vec2(0,0);
 }
 
-vec2 ewol::Widget::GetCalculateMaxSize(void)
+vec2 ewol::Widget::getCalculateMaxSize(void)
 {
-	if (false==IsHide()) {
+	if (false == isHide()) {
 		return m_maxSize;
 	}
 	return vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE);
 }
 
-void ewol::Widget::SetMinSize(const ewol::Dimension& _size)
+void ewol::Widget::setMinSize(const ewol::Dimension& _size)
 {
-	vec2 pixelMin = _size.GetPixel();
-	vec2 pixelMax = m_userMaxSize.GetPixel();
+	vec2 pixelMin = _size.getPixel();
+	vec2 pixelMax = m_userMaxSize.getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
 	if (pixelMin.x()>pixelMax.x()) {
@@ -450,30 +450,30 @@ void ewol::Widget::SetMinSize(const ewol::Dimension& _size)
 	if (pixelMin.y()>pixelMax.y()) {
 		error=true;
 	}
-	if (error==true) {
-		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
+	if (error == true) {
+		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
 		return;
 	}
 	m_userMinSize = _size;
-	RequestUpdateSize();
+	requestUpdateSize();
 }
 
-void ewol::Widget::SetNoMinSize(void)
+void ewol::Widget::setNoMinSize(void)
 {
-	m_userMinSize.Set(vec2(0,0),ewol::Dimension::Pixel);
+	m_userMinSize.set(vec2(0,0),ewol::Dimension::Pixel);
 }
 
-void ewol::Widget::CheckMinSize(void)
+void ewol::Widget::checkMinSize(void)
 {
-	vec2 pixelSize = m_userMinSize.GetPixel();
+	vec2 pixelSize = m_userMinSize.getPixel();
 	m_minSize.setX(etk_max(m_minSize.x(), pixelSize.x()));
 	m_minSize.setY(etk_max(m_minSize.y(), pixelSize.y()));
 }
 
-void ewol::Widget::SetMaxSize(const ewol::Dimension& _size)
+void ewol::Widget::setMaxSize(const ewol::Dimension& _size)
 {
-	vec2 pixelMin = m_userMinSize.GetPixel();
-	vec2 pixelMax = _size.GetPixel();
+	vec2 pixelMin = m_userMinSize.getPixel();
+	vec2 pixelMax = _size.getPixel();
 	// check minimum & maximum compatibility :
 	bool error=false;
 	if (pixelMin.x()>pixelMax.x()) {
@@ -482,64 +482,64 @@ void ewol::Widget::SetMaxSize(const ewol::Dimension& _size)
 	if (pixelMin.y()>pixelMax.y()) {
 		error=true;
 	}
-	if (error==true) {
-		EWOL_ERROR("Can not set a 'min Size' > 'max size' set nothing ...");
+	if (error == true) {
+		EWOL_ERROR("Can not set a 'min size' > 'max size' set nothing ...");
 		return;
 	}
 	m_userMaxSize = _size;
-	RequestUpdateSize();
+	requestUpdateSize();
 }
 
-void ewol::Widget::SetNoMaxSize(void)
+void ewol::Widget::setNoMaxSize(void)
 {
-	m_userMaxSize.Set(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
+	m_userMaxSize.set(vec2(ULTIMATE_MAX_SIZE,ULTIMATE_MAX_SIZE),ewol::Dimension::Pixel);
 }
 
-void ewol::Widget::CheckMaxSize(void)
+void ewol::Widget::checkMaxSize(void)
 {
-	vec2 pixelSize = m_userMaxSize.GetPixel();
+	vec2 pixelSize = m_userMaxSize.getPixel();
 	m_maxSize.setX(etk_min(m_maxSize.x(), pixelSize.x()));
 	m_maxSize.setY(etk_min(m_maxSize.y(), pixelSize.y()));
 }
 
-vec2 ewol::Widget::GetSize(void)
+vec2 ewol::Widget::getSize(void)
 {
-	if (false==IsHide()) {
+	if (false == isHide()) {
 		return m_size;
 	}
 	return vec2(0,0);
 }
 
-void ewol::Widget::SetExpand(const bvec2& _newExpand)
+void ewol::Widget::setExpand(const bvec2& _newExpand)
 {
 	if(    m_userExpand.x() != _newExpand.x()
 	    || m_userExpand.y() != _newExpand.y()) {
 		m_userExpand = _newExpand;
-		RequestUpdateSize();
-		MarkToRedraw();
+		requestUpdateSize();
+		markToRedraw();
 	}
 }
 
-bvec2 ewol::Widget::CanExpand(void)
+bvec2 ewol::Widget::canExpand(void)
 {
-	if (false==IsHide()) {
+	if (false == isHide()) {
 		return m_userExpand;
 	}
 	return bvec2(false,false);
 }
 
 
-void ewol::Widget::SetFill(const bvec2& _newFill)
+void ewol::Widget::setFill(const bvec2& _newFill)
 {
 	if(    m_userFill.x() != _newFill.x()
 	    || m_userFill.y() != _newFill.y()) {
 		m_userFill = _newFill;
-		RequestUpdateSize();
-		MarkToRedraw();
+		requestUpdateSize();
+		markToRedraw();
 	}
 }
 
-const bvec2& ewol::Widget::CanFill(void)
+const bvec2& ewol::Widget::canFill(void)
 {
 	return m_userFill;
 }
@@ -548,10 +548,10 @@ const bvec2& ewol::Widget::CanFill(void)
 // -- Shortcut : management of the shortcut
 // ----------------------------------------------------------------------------------------------------------------
 
-void ewol::Widget::ShortCutAdd(const char * _descriptiveString, const char * _generateEventId, etk::UString _data, bool _broadcast)
+void ewol::Widget::shortCutAdd(const char * _descriptiveString, const char * _generateEventId, etk::UString _data, bool _broadcast)
 {
-	if(		NULL==_descriptiveString
-		||	0==strlen(_descriptiveString))
+	if(		NULL == _descriptiveString
+		||	0 == strlen(_descriptiveString))
 	{
 		EWOL_ERROR("try to add shortcut with no descriptive string ...");
 		return;
@@ -641,29 +641,29 @@ void ewol::Widget::ShortCutAdd(const char * _descriptiveString, const char * _ge
 		tmpElement->unicodeValue = _descriptiveString[strlen(_descriptiveString) -1];
 	}
 	// add it on the List ...
-	m_localShortcut.PushBack(tmpElement);
+	m_localShortcut.pushBack(tmpElement);
 }
 
 
-void ewol::Widget::ShortCutClean(void)
+void ewol::Widget::shortCutClean(void)
 {
-	for (int32_t iii=0; iii<m_localShortcut.Size(); iii++) {
+	for (int32_t iii=0; iii<m_localShortcut.size(); iii++) {
 		if (NULL != m_localShortcut[iii]) {
 			delete(m_localShortcut[iii]);
 			m_localShortcut[iii]=NULL;
 		}
 	}
-	m_localShortcut.Clear();
+	m_localShortcut.clear();
 }
 
 
-bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicodeValue, ewol::keyEvent::keyboard_te _kbMove, bool _isDown)
+bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicodeValue, ewol::keyEvent::keyboard_te _kbMove, bool _isDown)
 {
-	if (_unicodeValue >= 'A' && _unicodeValue <='Z') {
+	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
 		_unicodeValue += 'a' - 'A';
 	}
 	//EWOL_INFO("Try to find generic shortcut ...");
-	for(int32_t iii=m_localShortcut.Size()-1; iii>=0; iii--) {
+	for(int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
 		if(NULL != m_localShortcut[iii]) {
 			if(    m_localShortcut[iii]->specialKey.shift == _special.shift
 			    && m_localShortcut[iii]->specialKey.ctrl  == _special.ctrl
@@ -673,16 +673,15 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicod
 			              && m_localShortcut[iii]->unicodeValue == _unicodeValue)
 			         || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
 			              && m_localShortcut[iii]->unicodeValue == 0)
-			       ) )
-			{
+			       ) ) {
 				if (_isDown) {
 					if (true == m_localShortcut[iii]->broadcastEvent) {
 						// send message at all the widget (exepted this one)
-						SendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+						sendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
 					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
 					ewol::EMessage tmpMsg(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
-					OnReceiveMessage(tmpMsg);
+					onReceiveMessage(tmpMsg);
 				} // no else
 				return true;
 			}
@@ -692,135 +691,135 @@ bool ewol::Widget::OnEventShortCut(ewol::SpecialKey& _special, uniChar_t _unicod
 }
 
 
-void ewol::Widget::GrabCursor(void)
+void ewol::Widget::grabCursor(void)
 {
 	if (false == m_grabCursor) {
-		GetContext().InputEventGrabPointer(this);
+		getContext().inputEventGrabPointer(this);
 		m_grabCursor = true;
 	}
 }
 
-void ewol::Widget::UnGrabCursor(void)
+void ewol::Widget::unGrabCursor(void)
 {
-	if (true==m_grabCursor) {
-		GetContext().InputEventUnGrabPointer();
+	if (true == m_grabCursor) {
+		getContext().inputEventUnGrabPointer();
 		m_grabCursor = false;
 	}
 }
 
 
-bool ewol::Widget::GetGrabStatus(void)
+bool ewol::Widget::getGrabStatus(void)
 {
 	return m_grabCursor;
 }
 
 
 
-void ewol::Widget::SetCursor(ewol::cursorDisplay_te _newCursor)
+void ewol::Widget::setCursor(ewol::cursorDisplay_te _newCursor)
 {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
-	GetContext().SetCursor(m_cursorDisplay);
+	getContext().setCursor(m_cursorDisplay);
 }
 
-ewol::cursorDisplay_te ewol::Widget::GetCursor(void)
+ewol::cursorDisplay_te ewol::Widget::getCursor(void)
 {
 	return m_cursorDisplay;
 }
 
-bool ewol::Widget::LoadXML(exml::Element* _node)
+bool ewol::Widget::loadXML(exml::Element* _node)
 {
 	// Call EObject basic parser
-	ewol::EObject::LoadXML(_node); // note : Load standard parameters (attribute in XML)
-	MarkToRedraw();
+	ewol::EObject::loadXML(_node); // note : load standard parameters (attribute in XML)
+	markToRedraw();
 	return true;
 }
 
-ewol::Widget* ewol::Widget::GetWidgetNamed(const etk::UString& _widgetName)
+ewol::Widget* ewol::Widget::getWidgetNamed(const etk::UString& _widgetName)
 {
-	EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} compare : " << GetName() << "==" << _widgetName );
-	if (GetName()==_widgetName) {
+	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
+	if (getName() == _widgetName) {
 		return this;
 	}
 	return NULL;
 }
 
 
-bool ewol::Widget::SystemEventEntry(ewol::EventEntrySystem& _event)
+bool ewol::Widget::systemEventEntry(ewol::EventEntrySystem& _event)
 {
 	if (NULL != m_up) {
-		if (true==m_up->SystemEventEntry(_event)) {
+		if (true == m_up->systemEventEntry(_event)) {
 			return true;
 		}
 	}
-	return OnEventEntry(_event.m_event);
+	return onEventEntry(_event.m_event);
 }
 
-bool ewol::Widget::SystemEventInput(ewol::EventInputSystem& _event)
+bool ewol::Widget::systemEventInput(ewol::EventInputSystem& _event)
 {
 	if (NULL != m_up) {
-		if (true==m_up->SystemEventInput(_event)) {
+		if (true == m_up->systemEventInput(_event)) {
 			return true;
 		}
 	}
-	return OnEventInput(_event.m_event);
+	return onEventInput(_event.m_event);
 }
 
 
-void ewol::Widget::SetGravity(gravity_te _gravity)
+void ewol::Widget::setGravity(gravity_te _gravity)
 {
 	m_gravity = _gravity;
-	MarkToRedraw();
+	markToRedraw();
 }
 
 
-bool ewol::Widget::OnSetConfig(const ewol::EConfig& _conf)
+bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf)
 {
-	if (true == ewol::EObject::OnSetConfig(_conf)) {
+	if (true == ewol::EObject::onSetConfig(_conf)) {
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configFill) {
-		SetFill(_conf.GetData());
+	if (_conf.getConfig() == ewol::Widget::configFill) {
+		setFill(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configExpand) {
-		SetExpand(_conf.GetData());
+	if (_conf.getConfig() == ewol::Widget::configExpand) {
+		setExpand(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configHide) {
-		if(true == _conf.GetData().ToBool()) {
-			Hide();
+	if (_conf.getConfig() == ewol::Widget::configHide) {
+		if(true == _conf.getData().toBool()) {
+			hide();
 		} else {
-			Show();
+			show();
 		}
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configFocus) {
-		if(true == _conf.GetData().ToBool()) {
-			KeepFocus();
+	if (_conf.getConfig() == ewol::Widget::configFocus) {
+		if(true == _conf.getData().toBool()) {
+			keepFocus();
 		} else {
 			//nothing to do ...
 		}
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configMinSize) {
-		m_userMinSize = _conf.GetData();
+	if (_conf.getConfig() == ewol::Widget::configMinSize) {
+		m_userMinSize = _conf.getData();
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configMaxSize) {
-		m_userMaxSize = _conf.GetData();
+	if (_conf.getConfig() == ewol::Widget::configMaxSize) {
+		m_userMaxSize = _conf.getData();
 		return true;
 	}
-	if (_conf.GetConfig() == ewol::Widget::configGravity) {
-		m_gravity = StringToGravity(_conf.GetData());
+	if (_conf.getConfig() == ewol::Widget::configGravity) {
+		m_gravity = stringToGravity(_conf.getData());
 		return true;
 	}
 	return false;
 }
 
-bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
+bool ewol::Widget::onGetConfig(const char* _config, etk::UString& _result) const
 {
-	if (true == ewol::EObject::OnGetConfig(_config, _result)) {
+	if (true == ewol::EObject::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == ewol::Widget::configFill) {
@@ -833,7 +832,7 @@ bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
 	}
 	if (_config == ewol::Widget::configHide) {
 		// TODO : Understand why it does not work : _result = m_hide;
-		if (true==m_hide) {
+		if (true == m_hide) {
 			_result = "true";
 		} else {
 			_result = "false";
@@ -849,37 +848,37 @@ bool ewol::Widget::OnGetConfig(const char* _config, etk::UString& _result) const
 		return true;
 	}
 	if (_config == ewol::Widget::configGravity) {
-		_result = GravityToString(m_gravity);
+		_result = gravityToString(m_gravity);
 		return true;
 	}
 	return false;
 }
 
-void ewol::Widget::RequestUpdateSize(void)
+void ewol::Widget::requestUpdateSize(void)
 {
-	GetContext().RequestUpdateSize();
+	getContext().requestUpdateSize();
 }
 
 
-ewol::WidgetManager& ewol::Widget::GetWidgetManager(void)
+ewol::WidgetManager& ewol::Widget::getWidgetManager(void)
 {
-	return GetContext().GetWidgetManager();
+	return getContext().getWidgetManager();
 }
 
 
-ewol::Windows* ewol::Widget::GetWindows(void)
+ewol::Windows* ewol::Widget::getWindows(void)
 {
-	return GetContext().GetWindows();
+	return getContext().getWindows();
 }
 
 
-void ewol::Widget::ShowKeyboard(void)
+void ewol::Widget::showKeyboard(void)
 {
-	GetContext().KeyboardShow();
+	getContext().keyboardShow();
 }
 
-void ewol::Widget::HideKeyboard(void)
+void ewol::Widget::hideKeyboard(void)
 {
-	GetContext().KeyboardHide();
+	getContext().keyboardHide();
 }
 

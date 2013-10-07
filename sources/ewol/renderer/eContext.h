@@ -24,7 +24,7 @@
 #include <ewol/commandLine.h>
 
 
-// TODO : Remove this from here ...
+// TODO : remove this from here ...
 typedef enum {
 	THREAD_NONE,
 	THREAD_INIT,
@@ -41,7 +41,7 @@ typedef enum {
 	
 	THREAD_CLIPBOARD_ARRIVE,
 } theadMessage_te;
-// TODO : Remove this from here ...
+// TODO : remove this from here ...
 class eSystemMessage {
 	public :
 		// specify the message type
@@ -88,37 +88,37 @@ namespace ewol
 		private:
 			ewol::CommandLine m_commandLine; //!< Start command line information
 		public:
-			ewol::CommandLine& GetCmd(void) { return m_commandLine; };
+			ewol::CommandLine& getCmd(void) { return m_commandLine; };
 		private:
 			ewol::ConfigFont m_configFont; //!< global font configuration
 		public:
-			ewol::ConfigFont& GetFontDefault(void) { return m_configFont; };
+			ewol::ConfigFont& getFontDefault(void) { return m_configFont; };
 		private:
 			ewol::WidgetManager m_widgetManager; //!< global widget manager
 		public:
-			ewol::WidgetManager& GetWidgetManager(void) { return m_widgetManager; };
+			ewol::WidgetManager& getWidgetManager(void) { return m_widgetManager; };
 		private:
 			ewol::EObjectManager m_EObjectManager; //!< eObject Manager main instance
 		public:
-			ewol::EObjectManager& GetEObjectManager(void) { return m_EObjectManager; };
+			ewol::EObjectManager& getEObjectManager(void) { return m_EObjectManager; };
 		private:
 			ewol::ResourceManager m_resourceManager; //!< global resources Manager
 		public:
-			ewol::ResourceManager& GetResourcesManager(void) { return m_resourceManager; };
+			ewol::ResourceManager& getResourcesManager(void) { return m_resourceManager; };
 		public:
 			eContext(int32_t _argc=0, const char* _argv[]=NULL);
 			virtual ~eContext(void);
 		protected:
 			/**
-			 * @brief Set the curent interface.
+			 * @brief set the curent interface.
 			 * @note this lock the main mutex
 			 */
-			void LockContext(void);
+			void lockContext(void);
 			/**
-			 * @brief Set the curent interface at NULL.
+			 * @brief set the curent interface at NULL.
 			 * @note this un-lock the main mutex
 			 */
-			void UnLockContext(void);
+			void unLockContext(void);
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::eInput m_input;
@@ -131,10 +131,10 @@ namespace ewol
 			/**
 			 * @brief Processing all the event arrived ... (commoly called in draw function)
 			 */
-			void ProcessEvents(void);
+			void processEvents(void);
 		public:
 			
-			virtual void SetArchiveDir(int _mode, const char* _str);
+			virtual void setArchiveDir(int _mode, const char* _str);
 			
 			
 			virtual void OS_SetInputMotion(int _pointerID, const vec2& _pos);
@@ -156,28 +156,28 @@ namespace ewol
 			 */
 			virtual void OS_Suspend(void);
 			/**
-			 * @brief The current context is Resumed
+			 * @brief The current context is resumed
 			 */
 			virtual void OS_Resume(void);
 			
 			//virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			
-			void RequestUpdateSize(void);
+			void requestUpdateSize(void);
 			
 			// return true if a flush is needed
 			bool OS_Draw(bool _displayEveryTime);
 			/**
 			 * @brief Inform object that an other object is removed ...
-			 * @param[in] removeObject Pointer on the EObject removed ==> the user must remove all reference on this EObject
+			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void OnObjectRemove(ewol::EObject * removeObject);
+			void onObjectRemove(ewol::EObject * removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
-			void ResetIOEvent(void);
+			void resetIOEvent(void);
 			/**
-			 * @brief The OS inform that the OpenGL constext has been destroy ==> use to automaticly reload the texture and other thinks ...
+			 * @brief The OS inform that the openGL constext has been destroy  == > use to automaticly reload the texture and other thinks ...
 			 */
 			void OS_OpenGlContextDestroy(void);
 			/**
@@ -187,7 +187,7 @@ namespace ewol
 			/**
 			 * @brief The application request that the Window will be killed
 			 */
-			virtual void Stop(void) { };
+			virtual void stop(void) { };
 		private:
 			ewol::Windows* m_windowsCurrent; //!< curent displayed windows
 		public:
@@ -195,20 +195,20 @@ namespace ewol
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void SetWindows(ewol::Windows* _windows);
+			void setWindows(ewol::Windows* _windows);
 			/**
-			 * @brief Get the current windows that is displayed
+			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::Windows* GetWindows(void) { return m_windowsCurrent; };
+			ewol::Windows* getWindows(void) { return m_windowsCurrent; };
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
 			/**
-			 * @brief Get the current windows size
+			 * @brief get the current windows size
 			 * @return the current size ...
 			 */
-			const vec2& GetSize(void) { return m_windowsSize; };
+			const vec2& getSize(void) { return m_windowsSize; };
 			/**
 			 * @brief The OS inform that the current windows has change his size.
 			 * @param[in] _size new size of the windows.
@@ -218,7 +218,7 @@ namespace ewol
 			 * @brief The application request a change of his curent size.
 			 * @param[in] _size new Requested size of the windows.
 			 */
-			virtual void SetSize(const vec2& _size) { };
+			virtual void setSize(const vec2& _size) { };
 			/**
 			 * @brief The OS inform that the current windows has change his position.
 			 * @param[in] _pos New position of the Windows.
@@ -228,7 +228,7 @@ namespace ewol
 			 * @brief The Application request that the current windows will change his position.
 			 * @param[in] _pos New position of the Windows requested.
 			 */
-			virtual void SetPos(const vec2& _pos) { };
+			virtual void setPos(const vec2& _pos) { };
 			/**
 			 * @brief The OS inform that the Windows is now Hidden.
 			 */
@@ -236,7 +236,7 @@ namespace ewol
 			/**
 			 * @brief The Application request that the Windows will be Hidden.
 			 */
-			virtual void Hide(void) { };
+			virtual void hide(void) { };
 			/**
 			 * @brief The OS inform that the Windows is now visible.
 			 */
@@ -244,11 +244,11 @@ namespace ewol
 			/**
 			 * @brief The Application request that the Windows will be visible.
 			 */
-			virtual void Show(void) { };
+			virtual void show(void) { };
 			/**
 			 * @brief Redraw all the windows
 			 */
-			void ForceRedrawAll(void);
+			void forceRedrawAll(void);
 			
 			// TODO : Later ...
 			/**
@@ -256,75 +256,75 @@ namespace ewol
 			 * @param source the widget where the event came from
 			 * @param destination the widget where the event mitgh be generated now
 			 */
-			void InputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination);
+			void inputEventTransfertWidget(ewol::Widget* _source, ewol::Widget* _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
 			 * @param[in] widget The widget that lock the pointer events
 			 */
-			void InputEventGrabPointer(ewol::Widget* _widget);
+			void inputEventGrabPointer(ewol::Widget* _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */
-			void InputEventUnGrabPointer(void);
+			void inputEventUnGrabPointer(void);
 			
 			/**
-			 * @brief Display the virtal keyboard (for touch system only)
+			 * @brief display the virtal keyboard (for touch system only)
 			 */
-			void KeyboardShow(void) {};
+			void keyboardShow(void) {};
 			/**
 			 * @brief Hide the virtal keyboard (for touch system only)
 			 */
-			void KeyboardHide(void) {};
+			void keyboardHide(void) {};
 			
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
+			virtual void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
 			/**
 			 * @brief Inform the Gui that we are the new owner of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
+			virtual void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
 			/**
 			 * @brief Call by the OS when a clipboard arrive to US (previously requested by a widget)
 			 * @param[in] Id of the clipboard
 			 */
 			void OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID);
 			/**
-			 * @brief Set the new title of the windows
+			 * @brief set the new title of the windows
 			 * @param[in] title New desired title
 			 */
-			virtual void SetTitle(const etk::UString& _title) { };
+			virtual void setTitle(const etk::UString& _title) { };
 			/**
-			 * @brief Force the screen orientation (availlable on portable elements ...
+			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.
 			 */
-			virtual void ForceOrientation(ewol::orientation_te _orientation) { };
+			virtual void forceOrientation(ewol::orientation_te _orientation) { };
 			/**
-			 * @brief Get all the event from the X system
+			 * @brief get all the event from the X system
 			 * @param[in] _isGrabbed "true" if all the event will be get, false if we want only ours.
 			 * @param[in] _forcedPosition the position where the mouse might be reset at  every events ...
 			 */
-			virtual void GrabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) { };
+			virtual void grabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) { };
 			/**
-			 * @brief Set the cursor display type.
+			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void SetCursor(ewol::cursorDisplay_te _newCursor) { };
+			virtual void setCursor(ewol::cursorDisplay_te _newCursor) { };
 			/**
-			 * @brief Set the Icon of the program
+			 * @brief set the Icon of the program
 			 * @param[in] _inputFile new filename icon of the curent program.
 			 */
-			virtual void SetIcon(const etk::UString& _inputFile) { };
+			virtual void setIcon(const etk::UString& _inputFile) { };
 			/**
-			 * @brief Get the curent time in micro-second
+			 * @brief get the curent time in micro-second
 			 * @note : must be implemented in all system OS implementation
 			 * @return The curent time of the process
 			 */
-			static int64_t GetTime(void);
+			static int64_t getTime(void);
 		private:
-			// TODO : Set user argument here ....
+			// TODO : set user argument here ....
 			
 		public:
 			/**
@@ -345,7 +345,7 @@ namespace ewol
 	 * @brief From everyware in the program, we can get the context inteface.
 	 * @return current reference on the instance.
 	 */
-	eContext& GetContext(void);
+	eContext& getContext(void);
 };
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application

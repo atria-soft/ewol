@@ -32,7 +32,7 @@
 #include <mach/mach.h>
 
 
-int64_t ewol::GetTime(void)
+int64_t ewol::getTime(void)
 {
 	struct timespec now;
 	clock_serv_t cclock;
@@ -100,7 +100,7 @@ MacOSInterface* interface = NULL;
 
 
 
-bool MacOs::Draw(bool _displayEveryTime)
+bool MacOs::draw(bool _displayEveryTime)
 {
 	if (interface == NULL) {
 		return false;
@@ -117,7 +117,7 @@ void MacOs::Resize(float _x, float _y)
 }
 
 
-void MacOs::SetMouseState(int32_t _id, bool _isDown, float _x, float _y)
+void MacOs::setMouseState(int32_t _id, bool _isDown, float _x, float _y)
 {
 	if (interface == NULL) {
 		return;
@@ -125,7 +125,7 @@ void MacOs::SetMouseState(int32_t _id, bool _isDown, float _x, float _y)
 	interface->MAC_SetMouseState(_id, _isDown, _x, _y);
 }
 
-void MacOs::SetMouseMotion(int32_t _id, float _x, float _y)
+void MacOs::setMouseMotion(int32_t _id, float _x, float _y)
 {
 	if (interface == NULL) {
 		return;
@@ -133,7 +133,7 @@ void MacOs::SetMouseMotion(int32_t _id, float _x, float _y)
 	interface->MAC_SetMouseMotion(_id, _x, _y);
 }
 
-void MacOs::SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
+void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
 {
 	if (interface == NULL) {
 		return;
@@ -150,7 +150,7 @@ void MacOs::SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _
  */
 int ewol::Run(int _argc, const char *_argv[])
 {
-	etk::SetArgZero(_argv[0]);
+	etk::setArgZero(_argv[0]);
 	interface = new MacOSInterface(_argc, _argv);
 	if (NULL == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");

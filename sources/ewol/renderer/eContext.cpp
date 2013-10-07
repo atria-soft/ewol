@@ -29,11 +29,11 @@
 #include <date/date.h>
 
 /**
- * @brief Get the main ewol mutex (event or periodic call mutex).
+ * @brief get the main ewol mutex (event or periodic call mutex).
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& MutexInterface(void)
+static etk::Mutex& mutexInterface(void)
 {
 	static etk::Mutex s_interfaceMutex;
 	return s_interfaceMutex;
@@ -41,7 +41,7 @@ static etk::Mutex& MutexInterface(void)
 
 
 static ewol::eContext* l_curentInterface=NULL;
-ewol::eContext& ewol::GetContext(void)
+ewol::eContext& ewol::getContext(void)
 {
 	#if DEBUG_LEVEL > 2
 		if(NULL == l_curentInterface){
@@ -52,50 +52,50 @@ ewol::eContext& ewol::GetContext(void)
 }
 
 /**
- * @brief Set the curent interface.
+ * @brief set the curent interface.
  * @note this lock the main mutex
  */
-void ewol::eContext::LockContext(void)
+void ewol::eContext::lockContext(void)
 {
-	MutexInterface().Lock();
+	mutexInterface().lock();
 	l_curentInterface = this;
 }
 
 /**
- * @brief Set the curent interface at NULL.
+ * @brief set the curent interface at NULL.
  * @note this un-lock the main mutex
  */
-void ewol::eContext::UnLockContext(void)
+void ewol::eContext::unLockContext(void)
 {
 	l_curentInterface = NULL;
-	MutexInterface().UnLock();
+	mutexInterface().unLock();
 }
 
-void ewol::eContext::InputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
+void ewol::eContext::inputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
 {
-	m_input.TransfertEvent(source, destination);
+	m_input.transfertEvent(source, destination);
 }
 
 
-void ewol::eContext::InputEventGrabPointer(ewol::Widget* widget)
+void ewol::eContext::inputEventGrabPointer(ewol::Widget* widget)
 {
-	m_input.GrabPointer(widget);
+	m_input.grabPointer(widget);
 }
 
-void ewol::eContext::InputEventUnGrabPointer(void)
+void ewol::eContext::inputEventUnGrabPointer(void)
 {
-	m_input.UnGrabPointer();
+	m_input.unGrabPointer();
 }
 
-void ewol::eContext::ProcessEvents(void)
+void ewol::eContext::processEvents(void)
 {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
 	eSystemMessage data;
-	while (m_msgSystem.Count()>0) 
+	while (m_msgSystem.count()>0) 
 	{
 		nbEvent++;
-		m_msgSystem.Wait(data);
+		m_msgSystem.wait(data);
 		//EWOL_DEBUG("EVENT");
 		switch (data.TypeMessage) {
 			case THREAD_INIT:
@@ -103,40 +103,40 @@ void ewol::eContext::ProcessEvents(void)
 				/*bool returnVal = */APP_Init(*this);
 				break;
 			case THREAD_RECALCULATE_SIZE:
-				ForceRedrawAll();
+				forceRedrawAll();
 				break;
 			case THREAD_RESIZE:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
 				m_windowsSize = data.dimention;
-				ewol::dimension::SetPixelWindowsSize(m_windowsSize);
-				ForceRedrawAll();
+				ewol::dimension::setPixelWindowsSize(m_windowsSize);
+				forceRedrawAll();
 				break;
 			case THREAD_INPUT_MOTION:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
-				m_input.Motion(data.inputType, data.inputId, data.dimention);
+				m_input.motion(data.inputType, data.inputId, data.dimention);
 				break;
 			case THREAD_INPUT_STATE:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
-				m_input.State(data.inputType, data.inputId, data.stateIsDown, data.dimention);
+				m_input.state(data.inputType, data.inputId, data.stateIsDown, data.dimention);
 				break;
 			case THREAD_KEYBORAD_KEY:
 			case THREAD_KEYBORAD_MOVE:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				if (NULL != m_windowsCurrent) {
-					if (false==m_windowsCurrent->OnEventShortCut(data.keyboardSpecial,
+					if (false == m_windowsCurrent->onEventShortCut(data.keyboardSpecial,
 					                                             data.keyboardChar,
 					                                             data.keyboardMove,
 					                                             data.stateIsDown) ) {
-						// Get the current Focused Widget :
-						ewol::Widget * tmpWidget = m_widgetManager.FocusGet();
+						// get the current focused Widget :
+						ewol::Widget * tmpWidget = m_widgetManager.focusGet();
 						if (NULL != tmpWidget) {
 							// check if the widget allow repeating key events.
-							//EWOL_DEBUG("repeating test :" << data.repeateKey << " widget=" << tmpWidget->GetKeyboardRepeate() << " state=" << data.stateIsDown);
-							if(    false==data.repeateKey
-							    || (    true==data.repeateKey
-							         && true==tmpWidget->GetKeyboardRepeate()) ) {
+							//EWOL_DEBUG("repeating test :" << data.repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data.stateIsDown);
+							if(    false == data.repeateKey
+							    || (    true == data.repeateKey
+							         && true == tmpWidget->getKeyboardRepeate()) ) {
 								// check Widget shortcut
-								if (false==tmpWidget->OnEventShortCut(data.keyboardSpecial,
+								if (false == tmpWidget->onEventShortCut(data.keyboardSpecial,
 								                                      data.keyboardChar,
 								                                      data.keyboardMove,
 								                                      data.stateIsDown) ) {
@@ -147,9 +147,9 @@ void ewol::eContext::ProcessEvents(void)
 										                                     data.keyboardSpecial,
 										                                     data.keyboardChar);
 										if(true == data.stateIsDown) {
-											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
+											tmpEntryEvent.m_event.setStatus(ewol::keyEvent::statusDown);
 										}
-										tmpWidget->SystemEventEntry(tmpEntryEvent);
+										tmpWidget->systemEventEntry(tmpEntryEvent);
 									} else { // THREAD_KEYBORAD_MOVE
 										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
 										ewol::EventEntrySystem tmpEntryEvent(data.keyboardMove,
@@ -157,9 +157,9 @@ void ewol::eContext::ProcessEvents(void)
 										                                     data.keyboardSpecial,
 										                                     0);
 										if(true == data.stateIsDown) {
-											tmpEntryEvent.m_event.SetStatus(ewol::keyEvent::statusDown);
+											tmpEntryEvent.m_event.setStatus(ewol::keyEvent::statusDown);
 										}
-										tmpWidget->SystemEventEntry(tmpEntryEvent);
+										tmpWidget->systemEventEntry(tmpEntryEvent);
 									}
 								} else {
 									EWOL_DEBUG("remove Repeate key ...");
@@ -171,9 +171,9 @@ void ewol::eContext::ProcessEvents(void)
 				break;
 			case THREAD_CLIPBOARD_ARRIVE:
 				{
-					ewol::Widget * tmpWidget = m_widgetManager.FocusGet();
+					ewol::Widget * tmpWidget = m_widgetManager.focusGet();
 					if (tmpWidget != NULL) {
-						tmpWidget->OnEventClipboard(data.clipboardID);
+						tmpWidget->onEventClipboard(data.clipboardID);
 					}
 				}
 				break;
@@ -194,21 +194,21 @@ void ewol::eContext::ProcessEvents(void)
 	}
 }
 
-void ewol::eContext::SetArchiveDir(int mode, const char* str)
+void ewol::eContext::setArchiveDir(int mode, const char* str)
 {
 	switch(mode)
 	{
 		case 0:
 			EWOL_DEBUG("Directory APK : path=" << str);
-			etk::SetBaseFolderData(str);
+			etk::setBaseFolderData(str);
 			break;
 		case 1:
 			EWOL_DEBUG("Directory mode=FILE path=" << str);
-			etk::SetBaseFolderDataUser(str);
+			etk::setBaseFolderDataUser(str);
 			break;
 		case 2:
 			EWOL_DEBUG("Directory mode=CACHE path=" << str);
-			etk::SetBaseFolderCache(str);
+			etk::setBaseFolderCache(str);
 			break;
 		case 3:
 			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << str);
@@ -232,98 +232,98 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	m_windowsCurrent(NULL),
 	m_windowsSize(320,480)
 {
-	m_commandLine.Parse(_argc, _argv);
-	EWOL_INFO("==> Ewol System Init (BEGIN)");
+	m_commandLine.parse(_argc, _argv);
+	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// set the curent interface :
-	LockContext();
+	lockContext();
 	// parse the debug level:
-	for(esize_t iii=m_commandLine.Size()-1 ; iii>=0 ; --iii) {
-		if (m_commandLine.Get(iii) == "-l0") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_NONE);
-		} else if (m_commandLine.Get(iii) == "-l1") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_CRITICAL);
-		} else if (m_commandLine.Get(iii) == "-l2") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_ERROR);
-		} else if (m_commandLine.Get(iii) == "-l3") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_WARNING);
-		} else if (m_commandLine.Get(iii) == "-l4") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_INFO);
-		} else if (m_commandLine.Get(iii) == "-l5") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_DEBUG);
-		} else if(    m_commandLine.Get(iii) == "-l6"
-		           || m_commandLine.Get(iii) == "-l7"
-		           || m_commandLine.Get(iii) == "-l8"
-		           || m_commandLine.Get(iii) == "-l9") {
-			GeneralDebugSetLevel(etk::LOG_LEVEL_VERBOSE);
-		} else if (m_commandLine.Get(iii) == "-fps") {
+	for(esize_t iii=m_commandLine.size()-1 ; iii >= 0 ; --iii) {
+		if (m_commandLine.get(iii) == "-l0") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_NONE);
+		} else if (m_commandLine.get(iii) == "-l1") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_CRITICAL);
+		} else if (m_commandLine.get(iii) == "-l2") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_ERROR);
+		} else if (m_commandLine.get(iii) == "-l3") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_WARNING);
+		} else if (m_commandLine.get(iii) == "-l4") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_INFO);
+		} else if (m_commandLine.get(iii) == "-l5") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_DEBUG);
+		} else if(    m_commandLine.get(iii) == "-l6"
+		           || m_commandLine.get(iii) == "-l7"
+		           || m_commandLine.get(iii) == "-l8"
+		           || m_commandLine.get(iii) == "-l9") {
+			debug::setGeneralLevel(etk::LOG_LEVEL_VERBOSE);
+		} else if (m_commandLine.get(iii) == "-fps") {
 			m_displayFps=true;
 		} else {
 			continue;
 		}
-		m_commandLine.Remove(iii);
+		m_commandLine.remove(iii);
 	}
 	
-	EWOL_INFO("v:" << ewol::GetVersion());
-	EWOL_INFO("Build Date: " << date::GetYear() << "/" << date::GetMonth() << "/" << date::GetDay() << " " << date::GetHour() << "h" << date::GetMinute());
-	// TODO : Remove this ...
-	etk::InitDefaultFolder("ewolApplNoName");
+	EWOL_INFO("v:" << ewol::getVersion());
+	EWOL_INFO("Build Date: " << date::getYear() << "/" << date::getMonth() << "/" << date::getDay() << " " << date::getHour() << "h" << date::getMinute());
+	// TODO : remove this ...
+	etk::initDefaultFolder("ewolApplNoName");
 	// request the init of the application in the main context of openGL ...
 	{
 		eSystemMessage data;
 		data.TypeMessage = THREAD_INIT;
-		m_msgSystem.Post(data);
+		m_msgSystem.post(data);
 	}
 	// force a recalculation
-	RequestUpdateSize();
+	requestUpdateSize();
 	#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
-		ForceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
+		forceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
 	#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
-		ForceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
+		forceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
 	#else
-		ForceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
+		forceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
 	#endif
 	// release the curent interface :
-	UnLockContext();
-	EWOL_INFO("==> Ewol System Init (END)");
+	unLockContext();
+	EWOL_INFO(" == > Ewol system init (END)");
 }
 
 ewol::eContext::~eContext(void)
 {
-	EWOL_INFO("==> Ewol System Un-Init (BEGIN)");
+	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
 	// set the curent interface :
-	LockContext();
+	lockContext();
 	// call application to uninit
 	APP_UnInit(*this);
 	if (NULL!=m_windowsCurrent) {
-		EWOL_ERROR("Main windows has not been removed... ==> memory leek");
+		EWOL_ERROR("Main windows has not been removed...  == > memory leek");
 	}
 	// unset all windows
 	m_windowsCurrent = NULL;
-	m_msgSystem.Clean();
+	m_msgSystem.clean();
 	
-	m_EObjectManager.UnInit();
-	m_resourceManager.UnInit();
+	m_EObjectManager.unInit();
+	m_resourceManager.unInit();
 	// release the curent interface :
-	UnLockContext();
-	EWOL_INFO("==> Ewol System Un-Init (END)");
+	unLockContext();
+	EWOL_INFO(" == > Ewol system Un-Init (END)");
 }
 
 
-void ewol::eContext::RequestUpdateSize(void)
+void ewol::eContext::requestUpdateSize(void)
 {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_RECALCULATE_SIZE;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Resize(const vec2& _size)
 {
-	// TODO : Better in the thread ... ==> but generate some init error ...
-	ewol::dimension::SetPixelWindowsSize(_size);
+	// TODO : Better in the thread ...  == > but generate some init error ...
+	ewol::dimension::setPixelWindowsSize(_size);
 	eSystemMessage data;
 	data.TypeMessage = THREAD_RESIZE;
 	data.dimention = _size;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 void ewol::eContext::OS_Move(const vec2& _pos)
 {
@@ -343,7 +343,7 @@ void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos )
 	data.inputType = ewol::keyEvent::typeFinger;
 	data.inputId = _pointerID;
 	data.dimention = _pos;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -355,7 +355,7 @@ void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& 
 	data.inputId = _pointerID;
 	data.stateIsDown = _isDown;
 	data.dimention = _pos;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -366,7 +366,7 @@ void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos )
 	data.inputType = ewol::keyEvent::typeMouse;
 	data.inputId = _pointerID;
 	data.dimention = _pos;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -378,7 +378,7 @@ void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& 
 	data.inputId = _pointerID;
 	data.stateIsDown = _isDown;
 	data.dimention = _pos;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -393,7 +393,7 @@ void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
 	data.keyboardChar = _myChar;
 	data.keyboardSpecial = _special;
 	data.repeateKey = _isARepeateKey;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
@@ -407,7 +407,7 @@ void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
 	data.keyboardMove = _move;
 	data.keyboardSpecial = _special;
 	data.repeateKey = _isARepeateKey;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -415,14 +415,14 @@ void ewol::eContext::OS_Hide(void)
 {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_HIDE;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Show(void)
 {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_SHOW;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 
@@ -431,12 +431,12 @@ void ewol::eContext::OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clip
 	eSystemMessage data;
 	data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
 	data.clipboardID = _clipboardID;
-	m_msgSystem.Post(data);
+	m_msgSystem.post(data);
 }
 
 bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 {
-	int64_t currentTime = ewol::GetTime();
+	int64_t currentTime = ewol::getTime();
 	// this is to prevent the multiple display at the a high frequency ...
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__Windows))
 	if(currentTime - m_previousDisplayTime < 1000000/120) {
@@ -448,124 +448,124 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	m_previousDisplayTime = currentTime;
 	
 	// process the events
-	if (m_displayFps==true) {
-		m_FpsSystemEvent.Tic();
+	if (m_displayFps == true) {
+		m_FpsSystemEvent.tic();
 	}
 	bool needRedraw = false;
 	//! Event management section ...
 	{
 		// set the curent interface :
-		LockContext();
-		ProcessEvents();
+		lockContext();
+		processEvents();
 		// call all the widget that neded to do something periodicly
-		//! ewol::widgetManager::PeriodicCall(currentTime);
-		m_widgetManager.PeriodicCall(currentTime);
-		// Remove all widget that they are no more usefull (these who decided to destroy themself)
-		//! ewol::EObjectManager::RemoveAllAutoRemove();
-		m_EObjectManager.RemoveAllAutoRemove();
+		//! ewol::widgetManager::periodicCall(currentTime);
+		m_widgetManager.periodicCall(currentTime);
+		// remove all widget that they are no more usefull (these who decided to destroy themself)
+		//! ewol::EObjectManager::removeAllAutoRemove();
+		m_EObjectManager.removeAllAutoRemove();
 		// check if the user selected a windows
 		if (NULL != m_windowsCurrent) {
 			// Redraw all needed elements
-			m_windowsCurrent->OnRegenerateDisplay();
+			m_windowsCurrent->onRegenerateDisplay();
 		}
-		if (m_displayFps==true) {
-			m_FpsSystemEvent.IncrementCounter();
-			m_FpsSystemEvent.Toc();
+		if (m_displayFps == true) {
+			m_FpsSystemEvent.incrementCounter();
+			m_FpsSystemEvent.toc();
 		}
-		//! bool needRedraw = ewol::widgetManager::IsDrawingNeeded();
-		needRedraw = m_widgetManager.IsDrawingNeeded();
+		//! bool needRedraw = ewol::widgetManager::isDrawingNeeded();
+		needRedraw = m_widgetManager.isDrawingNeeded();
 		// release the curent interface :
-		UnLockContext();
+		unLockContext();
 	}
 	bool hasDisplayDone = false;
-	//! Drawing section :
+	//! drawing section :
 	{
-		// Lock OpenGl context:
-		ewol::openGL::Lock();
-		if (m_displayFps==true) {
-			m_FpsSystemContext.Tic();
+		// Lock openGl context:
+		ewol::openGL::lock();
+		if (m_displayFps == true) {
+			m_FpsSystemContext.tic();
 		}
 		if (NULL != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
-				m_resourceManager.UpdateContext();
-				if (m_displayFps==true) {
-					m_FpsSystemContext.IncrementCounter();
+				m_resourceManager.updateContext();
+				if (m_displayFps == true) {
+					m_FpsSystemContext.incrementCounter();
 				}
 			}
 		}
-		if (m_displayFps==true) {
-			m_FpsSystemContext.Toc();
-			m_FpsSystem.Tic();
+		if (m_displayFps == true) {
+			m_FpsSystemContext.toc();
+			m_FpsSystem.tic();
 		}
 		if (NULL != m_windowsCurrent) {
 			if(    true == needRedraw
 			    || true == _displayEveryTime) {
-				m_FpsSystem.IncrementCounter();
-				m_windowsCurrent->SysDraw();
+				m_FpsSystem.incrementCounter();
+				m_windowsCurrent->sysDraw();
 				hasDisplayDone = true;
 			}
 		}
-		if (m_displayFps==true) {
-			m_FpsSystem.Toc();
-			m_FpsFlush.Tic();
-			m_FpsFlush.IncrementCounter();
+		if (m_displayFps == true) {
+			m_FpsSystem.toc();
+			m_FpsFlush.tic();
+			m_FpsFlush.incrementCounter();
 		}
 		glFlush();
 		//glFinish();
-		if (m_displayFps==true) {
-			m_FpsFlush.Toc();
+		if (m_displayFps == true) {
+			m_FpsFlush.toc();
 		}
-		// Release Open GL Context
-		ewol::openGL::UnLock();
+		// release open GL Context
+		ewol::openGL::unLock();
 	}
-	if (m_displayFps==true) {
-		m_FpsSystemEvent.Draw();
-		m_FpsSystemContext.Draw();
-		m_FpsSystem.Draw();
-		m_FpsFlush.Draw();
+	if (m_displayFps == true) {
+		m_FpsSystemEvent.draw();
+		m_FpsSystemContext.draw();
+		m_FpsSystem.draw();
+		m_FpsFlush.draw();
 	}
 	return hasDisplayDone;
 }
 
 
-void ewol::eContext::OnObjectRemove(ewol::EObject * _removeObject)
+void ewol::eContext::onObjectRemove(ewol::EObject * _removeObject)
 {
 	//EWOL_CRITICAL("element removed");
-	m_input.OnObjectRemove(_removeObject);
+	m_input.onObjectRemove(_removeObject);
 }
 
 
-void ewol::eContext::ResetIOEvent(void)
+void ewol::eContext::resetIOEvent(void)
 {
-	m_input.NewLayerSet();
+	m_input.newLayerSet();
 }
 
 
 void ewol::eContext::OS_OpenGlContextDestroy(void)
 {
-	m_resourceManager.ContextHasBeenDestroyed();
+	m_resourceManager.contextHasBeenDestroyed();
 }
 
 
-void ewol::eContext::SetWindows(ewol::Windows* _windows)
+void ewol::eContext::setWindows(ewol::Windows* _windows)
 {
-	// Remove current Focus :
-	m_widgetManager.FocusSetDefault(NULL);
-	m_widgetManager.FocusRelease();
+	// remove current focus :
+	m_widgetManager.focusSetDefault(NULL);
+	m_widgetManager.focusRelease();
 	// set the new pointer as windows system
 	m_windowsCurrent = _windows;
-	// Set the new default Focus :
-	m_widgetManager.FocusSetDefault(_windows);
+	// set the new default focus :
+	m_widgetManager.focusSetDefault(_windows);
 	// request all the widget redrawing
-	ForceRedrawAll();
+	forceRedrawAll();
 }
 
 
-void ewol::eContext::ForceRedrawAll(void)
+void ewol::eContext::forceRedrawAll(void)
 {
 	if (NULL != m_windowsCurrent) {
-		m_windowsCurrent->CalculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
+		m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
 	}
 }
 
@@ -573,7 +573,7 @@ void ewol::eContext::ForceRedrawAll(void)
 void ewol::eContext::OS_Stop(void)
 {
 	if (NULL != m_windowsCurrent) {
-		m_windowsCurrent->SysOnKill();
+		m_windowsCurrent->sysOnKill();
 	}
 }
 
@@ -584,6 +584,6 @@ void ewol::eContext::OS_Suspend(void)
 
 void ewol::eContext::OS_Resume(void)
 {
-	m_previousDisplayTime = ewol::GetTime();
-	m_widgetManager.PeriodicCallResume(m_previousDisplayTime);
+	m_previousDisplayTime = ewol::getTime();
+	m_widgetManager.periodicCallResume(m_previousDisplayTime);
 }

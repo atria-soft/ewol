@@ -28,14 +28,14 @@ namespace widget {
 			ColorChooser(void);
 			~ColorChooser(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "widget::ColorChooser"; };
+			virtual const char * const getObjectType(void) { return "widget::ColorChooser"; };
 			// Derived function
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function
-			virtual void OnObjectRemove(ewol::EObject* _removeObject);
+			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			
-			void SetColor(etk::Color<> newColor);
-			etk::Color<> GetColor(void);
+			void setColor(etk::Color<> newColor);
+			etk::Color<> getColor(void);
 		private:;
 			widget::ColorBar* m_widgetColorBar;
 			widget::Slider* m_widgetRed;

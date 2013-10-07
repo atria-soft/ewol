@@ -22,17 +22,17 @@ namespace ewol
 			PhysicsCylinder(void) {};
 			virtual ~PhysicsCylinder(void) {};
 		public:
-			virtual bool Parse(const char* _line);
-			virtual void Display(void) {};
+			virtual bool parse(const char* _line);
+			virtual void display(void) {};
 		public:
-			virtual type_te GetType(void) { return ewol::PhysicsShape::cylinder; };
+			virtual type_te getType(void) { return ewol::PhysicsShape::cylinder; };
 		private:
 			vec3 m_size;
 		public:
-			vec3 GetSize(void) const { return m_size; };
+			vec3 getSize(void) const { return m_size; };
 		public:
-			virtual const PhysicsCylinder* ToCylinder(void) const { return this; };
-			virtual PhysicsCylinder* ToCylinder(void) { return this; };
+			virtual const PhysicsCylinder* toCylinder(void) const { return this; };
+			virtual PhysicsCylinder* toCylinder(void) { return this; };
 	};
 };
 

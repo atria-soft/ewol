@@ -19,7 +19,7 @@ namespace widget {
 	class WSlider :public widget::ContainerN
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 			// Event list of properties
 			static const char* const eventStartSlide;
 			static const char* const eventStopSlide;
@@ -43,52 +43,52 @@ namespace widget {
 			 * @brief Select a new subwidget to display
 			 * @param[in] _id Id of the subwidget requested
 			 */
-			void SubWidgetSelectSet(int32_t _id);
+			void subWidgetSelectSet(int32_t _id);
 			/** 
 			 * @brief Select a new subwidget to display
 			 * @param[in] _widgetPointer Pointer on the widget selected (must be added before)
 			 */
-			void SubWidgetSelectSet(ewol::Widget* _widgetPointer);
+			void subWidgetSelectSet(ewol::Widget* _widgetPointer);
 			/** 
 			 * @brief Select a new subwidget to display
 			 * @param[in] _widgetName Name of the subwidget name
 			 */
-			void SubWidgetSelectSet(const etk::UString& _widgetName);
+			void subWidgetSelectSet(const etk::UString& _widgetName);
 		private:
-			float m_transitionSpeed; //!< speed of the transition (default 1 ==> 1s)
+			float m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
 		public:
 			/** 
-			 * @brief Set transition speed element.
+			 * @brief set transition speed element.
 			 * @param[in] _timeSecond number of second needed to do the transition.
 			 */
-			void SetTransitionSpeed(float _timeSecond) { m_transitionSpeed = _timeSecond; };
+			void setTransitionSpeed(float _timeSecond) { m_transitionSpeed = _timeSecond; };
 			/** 
-			 * @brief Get transition speed element.
+			 * @brief get transition speed element.
 			 * @return number of second needed to do the transition.
 			 */
-			float GetTransitionSpeed(void) { return m_transitionSpeed; };
+			float getTransitionSpeed(void) { return m_transitionSpeed; };
 		private:
 			sladingMode_te m_transitionSlide; //!< mode to slide the widgets
 		public:
 			/** 
-			 * @brief Set a new mode of sliding element
+			 * @brief set a new mode of sliding element
 			 * @param[in] _mode new display mode
 			 */
-			void SetTransitionMode(sladingMode_te _mode);
+			void setTransitionMode(sladingMode_te _mode);
 			/** 
-			 * @brief Get a new mode of sliding element
+			 * @brief get a new mode of sliding element
 			 * @return The current sliding mode
 			 */
-			sladingMode_te GetTransitionMode(void) { return m_transitionSlide; };
+			sladingMode_te getTransitionMode(void) { return m_transitionSlide; };
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::WSlider"; };
-			virtual void CalculateSize(const vec2& _availlable);
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
-			virtual void OnRegenerateDisplay(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
-			virtual void PeriodicCall(const ewol::EventTime& _event);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual const char * const getObjectType(void) { return "Ewol::WSlider"; };
+			virtual void calculateSize(const vec2& _availlable);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void onRegenerateDisplay(void);
+			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+			virtual void periodicCall(const ewol::EventTime& _event);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 	etk::CCout& operator <<(etk::CCout& _os, const widget::WSlider::sladingMode_te _obj);

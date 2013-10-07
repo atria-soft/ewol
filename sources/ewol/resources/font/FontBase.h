@@ -27,24 +27,24 @@ namespace ewol
 			
 			virtual ~FontBase(void) { };
 			
-			const char* GetType(void) { return "ewol::Font"; };
+			const char* getType(void) { return "ewol::Font"; };
 			
-			virtual bool GetGlyphProperty(int32_t _fontSize,
+			virtual bool getGlyphProperty(int32_t _fontSize,
 			                              ewol::GlyphProperty& _property) = 0;
 			
-			virtual bool DrawGlyph(egami::Image& _imageOut,
+			virtual bool drawGlyph(egami::Image& _imageOut,
 			                       int32_t _fontSize,
 			                       ivec2 _glyphPosition,
 			                       ewol::GlyphProperty& _property,
 			                       int8_t _posInImage) = 0;
 			
-			virtual vec2 GetSize(int32_t _fontSize, const etk::UString& _unicodeString) = 0;
+			virtual vec2 getSize(int32_t _fontSize, const etk::UString& _unicodeString) = 0;
 			
-			virtual int32_t GetHeight(int32_t _fontSize) = 0;
+			virtual int32_t getHeight(int32_t _fontSize) = 0;
 			
-			virtual void GenerateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph) { };
+			virtual void generateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph) { };
 			
-			virtual void Display(void) {};
+			virtual void display(void) {};
 	};
 };
 

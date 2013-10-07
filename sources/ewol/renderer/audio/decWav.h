@@ -15,7 +15,7 @@
 namespace ewol {
 	namespace audio {
 		namespace wav {
-			int16_t * LoadData(etk::UString filename, int8_t nbChan, int32_t frequency, int32_t & nbSampleOut);
+			int16_t * loadData(etk::UString filename, int8_t nbChan, int32_t frequency, int32_t & nbSampleOut);
 		};
 	};
 };

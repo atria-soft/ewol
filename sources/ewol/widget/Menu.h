@@ -35,24 +35,24 @@ namespace widget {
 			Menu(void);
 			virtual ~Menu(void);
 			// Derived functionv
-			virtual const char * const GetObjectType(void) { return "EwolMenu"; };
+			virtual const char * const getObjectType(void) { return "EwolMenu"; };
 		private:
-			virtual void SubWidgetRemoveAll(void);
-			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
-			virtual void SubWidgetRemove(ewol::Widget* _newWidget);
-			virtual void SubWidgetUnLink(ewol::Widget* _newWidget);
+			virtual void subWidgetRemoveAll(void);
+			virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
+			virtual void subWidgetRemove(ewol::Widget* _newWidget);
+			virtual void subWidgetUnLink(ewol::Widget* _newWidget);
 		private:
 			etk::Vector<widget::MenuElement*> m_listElement;
 			int32_t m_staticId; // unique ID for every element of the menu ...
 			widget::ContextMenu* m_widgetContextMenu;
 		public:
-			void Clear(void);
-			int32_t AddTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
-			int32_t Add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
-			void AddSpacer(void);
+			void clear(void);
+			int32_t addTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
+			int32_t add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
+			void addSpacer(void);
 			// Derived function
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
-			virtual void OnObjectRemove(ewol::EObject * _removeObject);
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onObjectRemove(ewol::EObject * _removeObject);
 	};
 	
 };

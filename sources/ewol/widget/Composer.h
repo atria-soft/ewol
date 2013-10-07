@@ -24,7 +24,7 @@ namespace widget
 			typedef enum {
 				None,
 				String,
-				File
+				file
 			} composerMode_te;
 		public:
 			/**
@@ -34,7 +34,7 @@ namespace widget
 			/**
 			 * @brief Constructor
 			 * @param[in] mode mode of parsing the string
-			 * @param[in] data File/directString data to generate compositing of the widget..
+			 * @param[in] data file/directString data to generate compositing of the widget..
 			 */
 			Composer(composerMode_te mode, const etk::UString& data);
 			/**
@@ -42,47 +42,47 @@ namespace widget
 			 */
 			~Composer(void);
 			/**
-			 * @brief Load a composition with a file
+			 * @brief load a composition with a file
 			 * @param[in] fileName Name of the file
-			 * @return true ==> all done OK
-			 * @return false ==> some error occured
+			 * @return true  == > all done OK
+			 * @return false  == > some error occured
 			 */
-			bool LoadFromFile(const etk::UString& fileName);
+			bool loadFromFile(const etk::UString& fileName);
 			/**
-			 * @brief Load a composition with a file
+			 * @brief load a composition with a file
 			 * @param[in] composerXmlString xml to parse directly
-			 * @return true ==> all done OK
-			 * @return false ==> some error occured
+			 * @return true  == > all done OK
+			 * @return false  == > some error occured
 			 */
-			bool LoadFromString(const etk::UString& composerXmlString);
+			bool loadFromString(const etk::UString& composerXmlString);
 			/**
-			 * @brief Register an Event an named widget. @see RegisterOnEvent
+			 * @brief Register an Event an named widget. @see registerOnEvent
 			 * @param[in] _subWidgetName Name of the subWidget.
 			 * @param[in] _eventId Event generate inside the object.
-			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 * @note : To used when herited from this object.
 			 */
-			void RegisterOnEventNameWidget(const etk::UString& _subWidgetName,
+			void registerOnEventNameWidget(const etk::UString& _subWidgetName,
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
 			                               const etk::UString& _overloadData="");
 			/**
-			 * @brief Register an Event an named widget. @see RegisterOnEvent
+			 * @brief Register an Event an named widget. @see registerOnEvent
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
 			 * @param[in] _subWidgetName Name of the subWidget.
 			 * @param[in] _eventId Event generate inside the object.
-			 * @param[in] _eventIdgenerated event generated when call the distant EObject.OnReceiveMessage(...)
+			 * @param[in] _eventIdgenerated event generated when call the distant EObject.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 * @note : To used when NOT herited from this object.
 			 */
-			void RegisterOnEventNameWidget(ewol::EObject * _destinationObject,
+			void registerOnEventNameWidget(ewol::EObject * _destinationObject,
 			                               const etk::UString& _subWidgetName,
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
 			                               const etk::UString& _overloadData="");
 		public: // herited functions:
-			virtual const char * const GetObjectType(void) { return "ewol::widget::Composer"; };
+			virtual const char * const getObjectType(void) { return "ewol::widget::Composer"; };
 	};
 };
 

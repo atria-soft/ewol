@@ -18,16 +18,16 @@ ewol::ConfigFont::ConfigFont(void) :
 	m_size(10),
 	m_useExternal(false)
 {
-	ewol::FreeTypeInit();
+	ewol::freeTypeInit();
 }
 
 ewol::ConfigFont::~ConfigFont(void)
 {
 	// UnInit FreeTypes
-	ewol::FreeTypeUnInit();
+	ewol::freeTypeUnInit();
 }
 
-void ewol::ConfigFont::Set(const etk::UString& _fontName, int32_t _size)
+void ewol::ConfigFont::set(const etk::UString& _fontName, int32_t _size)
 {
 	m_name = _fontName;
 	m_size = _size;

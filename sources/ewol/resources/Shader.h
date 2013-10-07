@@ -24,7 +24,7 @@ namespace ewol
 		private :
 			bool           m_exist;    //!< The shader file existed and has been loaded
 			char*          m_fileData; //!< A copy of the data loaded from the file (usefull only when opengl context is removed)
-			GLuint         m_shader;   //!< Opengl id of this element
+			GLuint         m_shader;   //!< opengl id of this element
 			GLenum         m_type;     //!< Type of the current shader(vertex/fragment)
 		protected:
 			/**
@@ -41,47 +41,47 @@ namespace ewol
 			 * @brief Generic function that get the resouces name of his type.
 			 * @return The define char of his name.
 			 */
-			const char* GetType(void) { return "ewol::Shader"; };
+			const char* getType(void) { return "ewol::Shader"; };
 			/**
-			 * @brief Get the opengl reference id of this shader.
+			 * @brief get the opengl reference id of this shader.
 			 * @return The opengl id.
 			 */
-			GLuint GetGL_ID(void) { return m_shader; };
+			GLuint getGL_ID(void) { return m_shader; };
 			/**
-			 * @brief Get the opengl type of this shader.
+			 * @brief get the opengl type of this shader.
 			 * @return The type of this loaded shader.
 			 */
-			GLenum GetShaderType(void) { return m_type; };
+			GLenum getShaderType(void) { return m_type; };
 			/**
 			 * @brief This load/reload the data in the opengl context, needed when removed previously.
 			 */
-			void UpdateContext(void);
+			void updateContext(void);
 			/**
-			 * @brief Remove the data from the opengl context.
+			 * @brief remove the data from the opengl context.
 			 */
-			void RemoveContext(void);
+			void removeContext(void);
 			/**
 			 * @brief Special android spec! It inform us that all context is removed and after notify us...
 			 */
-			void RemoveContextToLate(void);
+			void removeContextToLate(void);
 			/**
 			 * @brief Relode the shader from the file. used when a request of resouces reload is done.
 			 * @note this is really usefull when we tested the new themes or shader developpements.
 			 */
-			void Reload(void);
+			void reload(void);
 		public:
 			/**
-			 * @brief Keep the resource pointer.
+			 * @brief keep the resource pointer.
 			 * @note Never free this pointer by your own...
 			 * @param[in] _filename Name of the openGL Shader.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Shader* Keep(const etk::UString& _filename);
+			static ewol::Shader* keep(const etk::UString& _filename);
 			/**
-			 * @brief Release the keeped resources
+			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
 			 */
-			static void Release(ewol::Shader*& _object);
+			static void release(ewol::Shader*& _object);
 	};
 };
 

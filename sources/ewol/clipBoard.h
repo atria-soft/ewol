@@ -17,16 +17,16 @@ namespace ewol {
 	namespace clipBoard
 	{
 		typedef enum {
-			clipboard0,         //!< Internal clipboard 0
-			clipboard1,         //!< Internal clipboard 1
-			clipboard2,         //!< Internal clipboard 2
-			clipboard3,         //!< Internal clipboard 3
-			clipboard4,         //!< Internal clipboard 4
-			clipboard5,         //!< Internal clipboard 5
-			clipboard6,         //!< Internal clipboard 6
-			clipboard7,         //!< Internal clipboard 7
-			clipboard8,         //!< Internal clipboard 8
-			clipboard9,         //!< Internal clipboard 9
+			clipboard0,         //!< internal clipboard 0
+			clipboard1,         //!< internal clipboard 1
+			clipboard2,         //!< internal clipboard 2
+			clipboard3,         //!< internal clipboard 3
+			clipboard4,         //!< internal clipboard 4
+			clipboard5,         //!< internal clipboard 5
+			clipboard6,         //!< internal clipboard 6
+			clipboard7,         //!< internal clipboard 7
+			clipboard8,         //!< internal clipboard 8
+			clipboard9,         //!< internal clipboard 9
 			clipboardStd,       //!< External clipboard represent the Copy/Cut/Past buffer
 			clipboardSelection, //!< External or internal clipboard depending on the OS, represent the middle button
 			clipboardCount,     //!< Total number of clipboard
@@ -38,11 +38,11 @@ namespace ewol {
 		etk::CCout& operator <<(etk::CCout& _os, const ewol::clipBoard::clipboardListe_te _obj);
 		
 		/**
-		 * @brief Set the string data on a specific clipboard. The Gui system is notify that the clipboard "SELECTION" and "COPY" are change
+		 * @brief set the string data on a specific clipboard. The Gui system is notify that the clipboard "SELECTION" and "COPY" are change
 		 * @param[in] _clipboardID Select the specific ID of the clipboard
 		 * @param[in] _data The string that might be send to the clipboard
 		 */
-		void Set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data);
+		void set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data);
 		/**
 		 * @brief Call system to request the current clipboard.
 		 * @note Due to some system that manage the clipboard request asynchronous (like X11) and ewol managing the system with only one thread,
@@ -50,33 +50,33 @@ namespace ewol {
 		 *       notification of the arrival of this buffer id
 		 * @param[in] _clipboardID the needed clipboard ID
 		 */
-		void Request(ewol::clipBoard::clipboardListe_te _clipboardID);
+		void request(ewol::clipBoard::clipboardListe_te _clipboardID);
 		/**
-		 * @brief Set the ewol internal buffer (no notification at the GUI). This fuction might be use by the 
+		 * @brief set the ewol internal buffer (no notification at the GUI). This fuction might be use by the 
 		 *        Gui abstraction to set the buffer we receive. The end user must not use it.
 		 * @param[in] _clipboardID selected clipboard ID
 		 * @param[in] _data new buffer data
 		 */
-		void SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID,const etk::UString& _data);
+		void setSystem(ewol::clipBoard::clipboardListe_te _clipboardID,const etk::UString& _data);
 		/**
-		 * @brief Get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
-		 *        the widget : @ref OnEventClipboard ==> we can nothe this function is the only one which permit it.
+		 * @brief get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
+		 *        the widget : @ref onEventClipboard  == > we can nothe this function is the only one which permit it.
 		 * @note if we call this fuction withoutcallin @ref ewol::clipBoard::Request, we only get the previous clipboard
 		 * @param[in] _clipboardID selected clipboard ID
 		 * @return the requested buffer
 		 */
-		const etk::UString& Get(ewol::clipBoard::clipboardListe_te _clipboardID);
+		const etk::UString& get(ewol::clipBoard::clipboardListe_te _clipboardID);
 		
 		// internal section
 		
 		/**
-		 * @brief Initialize the clipboard system (done by ewol)
+		 * @brief initialize the clipboard system (done by ewol)
 		 */
-		void Init(void);
+		void init(void);
 		/**
 		 * @brief Un-Initialize the clipboard system (done by ewol)
 		 */
-		void UnInit(void);
+		void unInit(void);
 	};
 };
 

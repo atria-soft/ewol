@@ -24,7 +24,7 @@ namespace widget {
 	class ButtonColor : public ewol::Widget
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 			ewol::Text m_text; //!< Compositing Test display.
@@ -34,7 +34,7 @@ namespace widget {
 			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 			// hover area :
 			vec2 m_selectableAreaPos; //!< Start position of the events
-			vec2 m_selectableAreaSize; //!< Size of the event positions
+			vec2 m_selectableAreaSize; //!< size of the event positions
 		public:
 			/**
 			 * @brief Main constructor.
@@ -47,36 +47,36 @@ namespace widget {
 			 */
 			virtual ~ButtonColor(void);
 			/**
-			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper).
+			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper).
 			 * @param[in] _shaperName The new shaper filename.
 			 */
-			void SetShaperName(etk::UString _shaperName);
+			void setShaperName(etk::UString _shaperName);
 			/**
-			 * @brief Get the current color of the color selection widget
+			 * @brief get the current color of the color selection widget
 			 * @return The current color
 			 */
-			etk::Color<> GetValue(void);
+			etk::Color<> getValue(void);
 			/**
 			 * @brief Specify the current color.
 			 * @param[in] _color The new display color.
 			 */
-			void SetValue(etk::Color<> _color);
+			void setValue(etk::Color<> _color);
 		protected: // Derived function
-			virtual void OnDraw(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual void CalculateMinMaxSize(void);
-			virtual const char * const GetObjectType(void) { return "widget::ButtonColor"; };
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
+			virtual void calculateMinMaxSize(void);
+			virtual const char * const getObjectType(void) { return "widget::ButtonColor"; };
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 		private:
 			/**
-			 * @brief Internal system to Change the property of the current status
+			 * @brief internal system to change the property of the current status
 			 * @param[in] _newStatusId new state
 			 */
-			void ChangeStatusIn(int32_t _newStatusId);
+			void changeStatusIn(int32_t _newStatusId);
 			// Derived function
-			virtual void PeriodicCall(const ewol::EventTime& _event);
+			virtual void periodicCall(const ewol::EventTime& _event);
 	};
 };
 

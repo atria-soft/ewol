@@ -32,61 +32,61 @@ namespace widget
 			 */
 			~ContainerN(void);
 		protected:
-			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one ==> this permit to limit bigger subWidget
+			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 			bvec2 m_subExpend; //!< reference of the sub element expention requested.
 		public:
 			/**
 			 * @brief Limit the expend properties to the current widget (no contamination)
 			 * @param[in] _lockExpend Lock mode of the expend properties
 			 */
-			void LockExpand(const bvec2& _lockExpand);
+			void lockExpand(const bvec2& _lockExpand);
 			// herited function
-			virtual bvec2 CanExpand(void);
+			virtual bvec2 canExpand(void);
 		public:
 			/**
-			 * @brief Remove all sub element from the widget.
+			 * @brief remove all sub element from the widget.
 			 */
-			virtual void SubWidgetRemoveAll(void);
+			virtual void subWidgetRemoveAll(void);
 			/**
-			 * @brief Remove all sub element from the widget (delayed to prevent remove in the callbback).
+			 * @brief remove all sub element from the widget (delayed to prevent remove in the callbback).
 			 */
-			virtual void SubWidgetRemoveAllDelayed(void);
+			virtual void subWidgetRemoveAllDelayed(void);
 			/**
-			 * @brief Add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+			 * @brief add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
 			 * @return the ID of the set element
 			 */
-			virtual int32_t SubWidgetAdd(ewol::Widget* _newWidget);
-			inline  int32_t SubWidgetAddBack(ewol::Widget* _newWidget) { return SubWidgetAdd(_newWidget); };
-			inline  int32_t SubWidgetAddEnd(ewol::Widget* _newWidget)  { return SubWidgetAdd(_newWidget); };
+			virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
+			inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) { return subWidgetAdd(_newWidget); };
+			inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget)  { return subWidgetAdd(_newWidget); };
 			/**
-			 * @brief Add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
+			 * @brief add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
 			 * @return the ID of the set element
 			 */
-			virtual int32_t SubWidgetAddStart(ewol::Widget* _newWidget);
-			inline  int32_t SubWidgetAddFront(ewol::Widget* _newWidget) { return SubWidgetAddStart(_newWidget); };
+			virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
+			inline  int32_t subWidgetAddFront(ewol::Widget* _newWidget) { return subWidgetAddStart(_newWidget); };
 			/**
-			 * @brief Remove definitly a widget from the system and this layer.
+			 * @brief remove definitly a widget from the system and this layer.
 			 * @param[in] _newWidget the element pointer.
 			 */
-			virtual void SubWidgetRemove(ewol::Widget* _newWidget);
+			virtual void subWidgetRemove(ewol::Widget* _newWidget);
 			/**
 			 * @brief Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...)
 			 * @param[in] _newWidget the element pointer.
 			 */
-			virtual void SubWidgetUnLink(ewol::Widget* _newWidget);
+			virtual void subWidgetUnLink(ewol::Widget* _newWidget);
 		public:// Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
-			virtual void OnRegenerateDisplay(void);
-			virtual void OnObjectRemove(ewol::EObject* _removeObject);
-			virtual void CalculateSize(const vec2& _availlable);
-			virtual void CalculateMinMaxSize(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
-			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
-			virtual const char * const GetObjectType(void) { return "Ewol::ContainerN"; };
-			virtual bool LoadXML(exml::Element* _node);
-			virtual void SetOffset(const vec2& _newVal);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void onRegenerateDisplay(void);
+			virtual void onObjectRemove(ewol::EObject* _removeObject);
+			virtual void calculateSize(const vec2& _availlable);
+			virtual void calculateMinMaxSize(void);
+			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
+			virtual const char * const getObjectType(void) { return "Ewol::ContainerN"; };
+			virtual bool loadXML(exml::Element* _node);
+			virtual void setOffset(const vec2& _newVal);
 	};
 };
 

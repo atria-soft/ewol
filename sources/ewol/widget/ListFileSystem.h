@@ -32,26 +32,26 @@ namespace widget {
 			ListFileSystem(void);
 			~ListFileSystem(void);
 			// Derived function
-			virtual etk::Color<> GetBasicBG(void);
-			uint32_t GetNuberOfColomn(void);
-			bool GetTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
-			uint32_t GetNuberOfRaw(void);
-			bool GetElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
-			bool OnItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
-			const char * const GetObjectType(void) { return "EwolListFileSystem"; };
+			virtual etk::Color<> getBasicBG(void);
+			uint32_t getNuberOfColomn(void);
+			bool getTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
+			uint32_t getNuberOfRaw(void);
+			bool getElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
+			bool onItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
+			const char * const getObjectType(void) { return "EwolListFileSystem"; };
 		public:
 			// extern API :
-			void SetFolder(etk::UString _newFolder);
-			etk::UString GetFolder(void);
+			void setFolder(etk::UString _newFolder);
+			etk::UString getFolder(void);
 			// select the specific file
-			void SetSelect(etk::UString _data);
-			etk::UString GetSelect(void);
+			void setSelect(etk::UString _data);
+			etk::UString getSelect(void);
 			// regenerate the view ....
-			void RegenerateView(void);
-			void SetShowFiles(bool _state);
-			void SetShowFolder(bool _state);
-			void SetShowHiddenFiles(bool _state);
-			void SetShowTemporaryFiles(bool _state);
+			void regenerateView(void);
+			void setShowFiles(bool _state);
+			void setShowFolder(bool _state);
+			void setShowHiddenFiles(bool _state);
+			void setShowTemporaryFiles(bool _state);
 	};
 };
 

@@ -10,7 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
  
-@interface OpenGLView : NSOpenGLView<NSWindowDelegate>
+@interface openGLView : NSOpenGLView<NSWindowDelegate>
 {
 }
 - (void)prepareOpenGL;

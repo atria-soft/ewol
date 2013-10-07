@@ -15,7 +15,7 @@
 #define __class__	"ConfigFile"
 
 
-void ewol::SimpleConfigElement::Parse(const etk::UString& value)
+void ewol::SimpleConfigElement::parse(const etk::UString& value)
 {
 	etk::Char tmp = value.c_str();
 	m_valueInt = 0;
@@ -31,50 +31,50 @@ ewol::ConfigFile::ConfigFile(const etk::UString& _filename):
 	ewol::Resource(_filename)
 {
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
-	Reload();
+	reload();
 }
 
 
 ewol::ConfigFile::~ConfigFile(void)
 {
 	// remove all element
-	for (int32_t iii=0; iii<m_list.Size(); iii++){
+	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
 		}
 	}
-	m_list.Clear();
+	m_list.clear();
 }
 
 
-void ewol::ConfigFile::Reload(void)
+void ewol::ConfigFile::reload(void)
 {
-	// Reset all parameters
-	for (int32_t iii=0; iii<m_list.Size(); iii++){
+	// reset all parameters
+	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
-			m_list[iii]->Parse("");
+			m_list[iii]->parse("");
 		}
 	}
 	// acess of the file :
 	etk::FSNode file(m_name);
 	
-	if (false == file.Exist()) {
+	if (false == file.exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
-	etk::UString fileExtention = file.FileGetExtention();
+	etk::UString fileExtention = file.fileGetExtention();
 	if (fileExtention != "conf") {
 		EWOL_ERROR("File does not have extention \".conf\" for program but : \"" << fileExtention << "\"");
 		return;
 	}
-	if (false == file.FileOpenRead()) {
+	if (false == file.fileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << file);
 		return;
 	}
 	#define MAX_LINE_SIZE   (2048)
 	char tmpData[MAX_LINE_SIZE];
-	while (file.FileGets(tmpData, MAX_LINE_SIZE) != NULL) {
+	while (file.fileGets(tmpData, MAX_LINE_SIZE) != NULL) {
 		int32_t len = strlen(tmpData);
 		if(    tmpData[len-1] == '\n'
 			|| tmpData[len-1] == '\r') {
@@ -87,30 +87,30 @@ void ewol::ConfigFile::Reload(void)
 		}
 		etk::UString tmpData2(tmpData);
 		etk::UString tmppp("#");
-		if (true == tmpData2.StartWith(tmppp)) {
+		if (true == tmpData2.startWith(tmppp)) {
 			// comment ...
 			continue;
 		}
 		tmppp="//";
-		if (true == tmpData2.StartWith(tmppp)) {
+		if (true == tmpData2.startWith(tmppp)) {
 			// comment ...
 			continue;
 		}
 		// get parameters :
-		int32_t pos = tmpData2.FindForward('=');
+		int32_t pos = tmpData2.findForward('=');
 		if (pos == -1){
 			//the element "=" is not find ...
 			continue;
 		}
-		etk::UString paramName = tmpData2.Extract(0, pos);
-		etk::UString paramValue = tmpData2.Extract(pos+1, 0x7FFFF);
+		etk::UString paramName = tmpData2.extract(0, pos);
+		etk::UString paramValue = tmpData2.extract(pos+1, 0x7FFFF);
 		EWOL_DEBUG("        param name=\"" << paramName << "\" val=\"" << paramValue << "\"");
 		// check if the parameters existed :
 		bool findParam = false;
-		for (int32_t iii=0; iii<m_list.Size(); iii++){
+		for (int32_t iii=0; iii<m_list.size(); iii++){
 			if (NULL != m_list[iii]) {
 				if (m_list[iii]->m_paramName == paramName) {
-					m_list[iii]->Parse(paramValue);
+					m_list[iii]->parse(paramValue);
 					findParam = true;
 					// stop parsing ...
 					break;
@@ -122,21 +122,21 @@ void ewol::ConfigFile::Reload(void)
 			if (NULL == tmpElement) {
 				EWOL_DEBUG("error while allocation");
 			} else {
-				tmpElement->Parse(paramValue);
-				m_list.PushBack(tmpElement);
+				tmpElement->parse(paramValue);
+				m_list.pushBack(tmpElement);
 			}
 		}
 	}
 	// close the file:
-	file.FileClose();
+	file.fileClose();
 	
 }
 
 
-int32_t ewol::ConfigFile::Request(const etk::UString& _paramName)
+int32_t ewol::ConfigFile::request(const etk::UString& _paramName)
 {
 	// check if the parameters existed :
-	for (int32_t iii=0; iii<m_list.Size(); iii++){
+	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
 			if (m_list[iii]->m_paramName == _paramName) {
 				return iii;
@@ -147,16 +147,16 @@ int32_t ewol::ConfigFile::Request(const etk::UString& _paramName)
 	if (NULL == tmpElement) {
 		EWOL_DEBUG("error while allocation");
 	} else {
-		m_list.PushBack(tmpElement);
+		m_list.pushBack(tmpElement);
 	}
-	return m_list.Size()-1;
+	return m_list.size()-1;
 }
 
 
-ewol::ConfigFile* ewol::ConfigFile::Keep(const etk::UString& _filename)
+ewol::ConfigFile* ewol::ConfigFile::keep(const etk::UString& _filename)
 {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
-	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(GetManager().LocalKeep(_filename));
+	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
@@ -166,17 +166,17 @@ ewol::ConfigFile* ewol::ConfigFile::Keep(const etk::UString& _filename)
 		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::ConfigFile::Release(ewol::ConfigFile*& _object)
+void ewol::ConfigFile::release(ewol::ConfigFile*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }
 

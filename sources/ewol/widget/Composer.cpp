@@ -27,10 +27,10 @@ widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::US
 			// nothing to do ...
 			break;
 		case widget::Composer::String:
-			LoadFromString(fileName);
+			loadFromString(fileName);
 			break;
-		case widget::Composer::File:
-			LoadFromFile(fileName);
+		case widget::Composer::file:
+			loadFromFile(fileName);
 			break;
 	}
 }
@@ -41,78 +41,78 @@ widget::Composer::~Composer(void)
 	
 }
 
-bool widget::Composer::LoadFromFile(const etk::UString& _fileName)
+bool widget::Composer::loadFromFile(const etk::UString& _fileName)
 {
 	exml::Document doc;
-	if (doc.Load(_fileName)==false) {
+	if (doc.load(_fileName) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
 		return false;
 	}
-	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
+	exml::Element* root = (exml::Element*)doc.getNamed("composer");
 	if (NULL == root ) {
 		// Maybe a multiple node XML for internal config:
-		root = doc.ToElement();
+		root = doc.toElement();
 		if (NULL == root ) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
-		if (root->Size()==0) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) no node in the Container XML element.");
+		if (root->size() == 0) {
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) no node in the Container XML element.");
 			return false;
 		}
 	}
 	// call upper class to parse his elements ...
-	widget::Container::LoadXML(root);
+	widget::Container::loadXML(root);
 	
 	return true;
 }
 
-bool widget::Composer::LoadFromString(const etk::UString& _composerXmlString)
+bool widget::Composer::loadFromString(const etk::UString& _composerXmlString)
 {
 	exml::Document doc;
-	if (doc.Parse(_composerXmlString)==false) {
+	if (doc.parse(_composerXmlString) == false) {
 		EWOL_ERROR(" can not load file XML string...");
 		return false;
 	}
-	exml::Element* root = (exml::Element*)doc.GetNamed("composer");
+	exml::Element* root = (exml::Element*)doc.getNamed("composer");
 	if (NULL == root ) {
 		// Maybe a multiple node XML for internal config:
-		root = doc.ToElement();
+		root = doc.toElement();
 		if (NULL == root ) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) main node not find: \"composer\" ...");
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) main node not find: \"composer\" ...");
 			return false;
 		}
-		if (root->Size()==0) {
-			EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} (l ?) no node in the Container XML element.");
+		if (root->size() == 0) {
+			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l ?) no node in the Container XML element.");
 			return false;
 		}
 	}
 	// call upper class to parse his elements ...
-	widget::Container::LoadXML(root);
+	widget::Container::loadXML(root);
 	
 	return true;
 }
 
 
-void widget::Composer::RegisterOnEventNameWidget(const etk::UString& _subWidgetName,
+void widget::Composer::registerOnEventNameWidget(const etk::UString& _subWidgetName,
                                                  const char * _eventId,
                                                  const char * _eventIdgenerated,
                                                  const etk::UString& _overloadData)
 {
-	RegisterOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
+	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
-void widget::Composer::RegisterOnEventNameWidget(ewol::EObject * _destinationObject,
+void widget::Composer::registerOnEventNameWidget(ewol::EObject * _destinationObject,
                                                  const etk::UString& _subWidgetName,
                                                  const char * _eventId,
                                                  const char * _eventIdgenerated,
                                                  const etk::UString& _overloadData)
 {
-	ewol::Widget* tmpWidget = GetWidgetNamed(_subWidgetName);
+	ewol::Widget* tmpWidget = getWidgetNamed(_subWidgetName);
 	if (NULL != tmpWidget) {
 		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
-		tmpWidget->RegisterOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
+		tmpWidget->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
 	} else {
-		EWOL_WARNING("[" << GetId() << "] {" << GetObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
+		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");
 	}
 }

@@ -14,14 +14,14 @@
 #undef __class__
 #define __class__	"Sizer"
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::Sizer();
 }
 
-void widget::Sizer::Init(ewol::WidgetManager& _widgetManager)
+void widget::Sizer::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
@@ -39,52 +39,52 @@ widget::Sizer::~Sizer(void)
 	// disable annimation to remore "remove" error
 	m_animation = animationNone;
 	m_animationTime = 0;
-	//EWOL_DEBUG("[" << GetId() << "]={" << GetObjectType() << "}  Sizer : destroy (mode=" << (m_mode==widget::Sizer::modeVert?"Vert":"Hori") << ")");
+	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (m_mode == widget::sizer::modeVert?"Vert":"Hori") << ")");
 }
 
 
-void widget::Sizer::SetBorderSize(const ewol::Dimension& _newBorderSize)
+void widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize)
 {
 	m_borderSize = _newBorderSize;
-	MarkToRedraw();
-	RequestUpdateSize();
+	markToRedraw();
+	requestUpdateSize();
 }
 
-void widget::Sizer::SetMode(widget::Sizer::displayMode_te _mode)
+void widget::Sizer::setMode(widget::Sizer::displayMode_te _mode)
 {
 	m_mode = _mode;
-	MarkToRedraw();
-	RequestUpdateSize();
+	markToRedraw();
+	requestUpdateSize();
 }
 
-widget::Sizer::displayMode_te widget::Sizer::GetMode(void)
+widget::Sizer::displayMode_te widget::Sizer::getMode(void)
 {
 	return m_mode;
 }
 
-void widget::Sizer::CalculateSize(const vec2& _availlable)
+void widget::Sizer::calculateSize(const vec2& _availlable)
 {
-	ewol::Widget::CalculateSize(_availlable);
-	vec2 tmpBorderSize = m_borderSize.GetPixel();
-	//EWOL_DEBUG("[" << GetId() << "] Update Size : " << _availlable << " nbElement : " << m_subWidget.Size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
+	ewol::Widget::calculateSize(_availlable);
+	vec2 tmpBorderSize = m_borderSize.getPixel();
+	//EWOL_DEBUG("[" << getId() << "] update size : " << _availlable << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
 	m_size -= tmpBorderSize*2;
-	// calculate unExpandable Size :
+	// calculate unExpandable size :
 	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
-			if (m_mode==widget::Sizer::modeVert) {
+			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+			if (m_mode == widget::Sizer::modeVert) {
 				unexpandableSize += tmpSize.y();
-				if (false == m_subWidget[iii]->CanExpand().y()) {
+				if (false == m_subWidget[iii]->canExpand().y()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
 				}
 			} else {
 				unexpandableSize += tmpSize.x();
-				if (false == m_subWidget[iii]->CanExpand().x()) {
+				if (false == m_subWidget[iii]->canExpand().x()) {
 					nbWidgetFixedSize++;
 				} else {
 					nbWidgetNotFixedSize++;
@@ -96,7 +96,7 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expand, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
-		if (m_mode==widget::Sizer::modeVert) {
+		if (m_mode == widget::Sizer::modeVert) {
 			sizeToAddAtEveryOne = (m_size.y() - unexpandableSize) / nbWidgetNotFixedSize;
 		} else {
 			sizeToAddAtEveryOne = (m_size.x() - unexpandableSize) / nbWidgetNotFixedSize;
@@ -106,58 +106,58 @@ void widget::Sizer::CalculateSize(const vec2& _availlable)
 		}
 	}
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
-			// Set the origin :
-			//EWOL_DEBUG("[" << GetId() << "] Set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
-			m_subWidget[iii]->SetOrigin(vec2ClipInt32(tmpOrigin+m_offset));
-			// Now Update his Size  his size in X and the curent sizer size in Y:
-			if (m_mode==widget::Sizer::modeVert) {
-				if (true == m_subWidget[iii]->CanExpand().y()) {
-					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
+			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+			// set the origin :
+			//EWOL_DEBUG("[" << getId() << "] set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
+			m_subWidget[iii]->setOrigin(vec2ClipInt32(tmpOrigin+m_offset));
+			// Now update his size  his size in X and the curent sizer size in Y:
+			if (m_mode == widget::Sizer::modeVert) {
+				if (true == m_subWidget[iii]->canExpand().y()) {
+					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
+					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y())));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y());
 				}
 			} else {
-				if (true == m_subWidget[iii]->CanExpand().x()) {
-					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y())));
+				if (true == m_subWidget[iii]->canExpand().x()) {
+					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(tmpSize.x()+sizeToAddAtEveryOne, m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x()+sizeToAddAtEveryOne);
 				} else {
-					m_subWidget[iii]->CalculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
+					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(tmpSize.x(), m_size.y())));
 					tmpOrigin.setX(tmpOrigin.x() + tmpSize.x());
 				}
 			}
 		}
 	}
 	m_size += tmpBorderSize*2;
-	MarkToRedraw();
+	markToRedraw();
 }
 
 
-void widget::Sizer::CalculateMinMaxSize(void)
+void widget::Sizer::calculateMinMaxSize(void)
 {
-	//EWOL_DEBUG("[" << GetId() << "] Update minimum Size");
+	//EWOL_DEBUG("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
-	m_minSize = m_userMinSize.GetPixel();
-	vec2 tmpBorderSize = m_borderSize.GetPixel();
-	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Set min size : " <<  m_minSize);
+	m_minSize = m_userMinSize.getPixel();
+	vec2 tmpBorderSize = m_borderSize.getPixel();
+	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} set min size : " <<  m_minSize);
 	m_minSize += tmpBorderSize*2;
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			m_subWidget[iii]->CalculateMinMaxSize();
-			if (true == m_subWidget[iii]->CanExpand().x()) {
+			m_subWidget[iii]->calculateMinMaxSize();
+			if (true == m_subWidget[iii]->canExpand().x()) {
 				m_subExpend.setX(true);
 			}
-			if (true == m_subWidget[iii]->CanExpand().y()) {
+			if (true == m_subWidget[iii]->canExpand().y()) {
 				m_subExpend.setY(true);
 			}
-			vec2 tmpSize = m_subWidget[iii]->GetCalculateMinSize();
-			//EWOL_DEBUG("[" << GetId() << "] NewMinSize=" << tmpSize);
-			//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "}     Get minSize[" << iii << "] "<< tmpSize);
-			if (m_mode==widget::Sizer::modeVert) {
+			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
+			//EWOL_DEBUG("[" << getId() << "] NewMinSize=" << tmpSize);
+			//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     Get minSize[" << iii << "] "<< tmpSize);
+			if (m_mode == widget::Sizer::modeVert) {
 				m_minSize.setY(m_minSize.y() + tmpSize.y());
 				if (tmpSize.x()>m_minSize.x()) {
 					m_minSize.setX(tmpSize.x());
@@ -170,25 +170,25 @@ void widget::Sizer::CalculateMinMaxSize(void)
 			}
 		}
 	}
-	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
+	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-bool widget::Sizer::LoadXML(exml::Element* _node)
+bool widget::Sizer::loadXML(exml::Element* _node)
 {
-	if (NULL==_node) {
+	if (NULL == _node) {
 		return false;
 	}
 	// parse generic properties :
-	widget::ContainerN::LoadXML(_node);
+	widget::ContainerN::loadXML(_node);
 	
-	etk::UString tmpAttributeValue = _node->GetAttribute("border");
-	if (tmpAttributeValue.Size()!=0) {
+	etk::UString tmpAttributeValue = _node->getAttribute("border");
+	if (tmpAttributeValue.size()!=0) {
 		m_borderSize = tmpAttributeValue;
 	}
-	tmpAttributeValue = _node->GetAttribute("mode");
-	if (tmpAttributeValue.Size()!=0) {
-		if(    tmpAttributeValue.CompareNoCase("vert")
-		    || tmpAttributeValue.CompareNoCase("vertical")) {
+	tmpAttributeValue = _node->getAttribute("mode");
+	if (tmpAttributeValue.size()!=0) {
+		if(    tmpAttributeValue.compareNoCase("vert")
+		    || tmpAttributeValue.compareNoCase("vertical")) {
 			m_mode = widget::Sizer::modeVert;
 		} else {
 			m_mode = widget::Sizer::modeHori;
@@ -199,42 +199,42 @@ bool widget::Sizer::LoadXML(exml::Element* _node)
 
 
 
-int32_t widget::Sizer::SubWidgetAdd(ewol::Widget* _newWidget)
+int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget)
 {
 	if (m_animation == animationNone) {
-		return widget::ContainerN::SubWidgetAdd(_newWidget);
+		return widget::ContainerN::subWidgetAdd(_newWidget);
 	}
 	// TODO : ...
-	return widget::ContainerN::SubWidgetAdd(_newWidget);
+	return widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
-int32_t widget::Sizer::SubWidgetAddStart(ewol::Widget* _newWidget)
+int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget)
 {
 	if (m_animation == animationNone) {
-		return widget::ContainerN::SubWidgetAddStart(_newWidget);
+		return widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
 	// TODO : ...
-	return widget::ContainerN::SubWidgetAddStart(_newWidget);
+	return widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
-void widget::Sizer::SubWidgetRemove(ewol::Widget* _newWidget)
+void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget)
 {
 	if (m_animation == animationNone) {
-		widget::ContainerN::SubWidgetRemove(_newWidget);
+		widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
 	}
 	// TODO : ...
-	widget::ContainerN::SubWidgetRemove(_newWidget);
+	widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
-void widget::Sizer::SubWidgetUnLink(ewol::Widget* _newWidget)
+void widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget)
 {
 	if (m_animation == animationNone) {
-		widget::ContainerN::SubWidgetUnLink(_newWidget);
+		widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;
 	}
 	// TODO : ...
-	widget::ContainerN::SubWidgetUnLink(_newWidget);
+	widget::ContainerN::subWidgetUnLink(_newWidget);
 }
 
 

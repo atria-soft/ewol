@@ -27,26 +27,26 @@ namespace ewol
 	 */
 	int32_t Run(int32_t _argc, const char* _argv[]);
 	/**
-	 * @brief Get EWOL version
+	 * @brief get EWOL version
 	 * @return The string that describe ewol version
 	 */
-	etk::UString GetVersion(void);
+	etk::UString getVersion(void);
 	/**
-	 * @brief Get current time in us...
+	 * @brief get current time in us...
 	 * @return The current time
 	 * @note is implemented by the OS implementation cf renderer/X11/...
 	 */
-	int64_t GetTime(void);
+	int64_t getTime(void);
 	/**
-	 * @brief Get compilation mode (release/debug)
+	 * @brief get compilation mode (release/debug)
 	 * @return the string of the mode of commpilation
 	 */
-	etk::UString GetCompilationMode(void);
+	etk::UString getCompilationMode(void);
 	/**
-	 * @brief Get the board type (Android/Linux/MacOs/...)
+	 * @brief get the board type (Android/Linux/MacOs/...)
 	 * @return the string of the mode of commpilation
 	 */
-	etk::UString GetBoardType(void);
+	etk::UString getBoardType(void);
 };
 
 #endif

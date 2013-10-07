@@ -26,12 +26,12 @@ widget::Mesh::Mesh(const etk::UString& filename) :
 	m_angleSpeed(0,0,0),
 	m_cameraDistance(10.0)
 {
-	AddEventId(ewolEventMeshPressed);
+	addEventId(ewolEventMeshPressed);
 	m_meshName = filename;
 	// Limit event at 1:
-	SetMouseLimit(1);
+	setMouseLimit(1);
 	if (filename!="") {
-		m_object = ewol::Mesh::Keep(m_meshName);
+		m_object = ewol::Mesh::keep(m_meshName);
 		if (NULL == m_object) {
 			EWOL_ERROR("Can not load the resource : \"" << m_meshName << "\"");
 		}
@@ -41,9 +41,9 @@ widget::Mesh::Mesh(const etk::UString& filename) :
 
 widget::Mesh::~Mesh(void)
 {
-	ewol::Mesh::Release(m_object);
+	ewol::Mesh::release(m_object);
 }
-void widget::Mesh::OnDraw(void)
+void widget::Mesh::onDraw(void)
 {
 	mat4 transformationMatrix =   etk::matTranslate(vec3(0,0,-m_cameraDistance))
 	                            * etk::matTranslate(m_position)
@@ -51,14 +51,14 @@ void widget::Mesh::OnDraw(void)
 	                            * etk::matRotate(vec3(0,1,0),m_angle.y())
 	                            * etk::matRotate(vec3(0,0,1),m_angle.z());
 	if (NULL != m_object) {
-		m_object->Draw(transformationMatrix);
+		m_object->draw(transformationMatrix);
 	}
 }
 
-void widget::Mesh::SystemDraw(const ewol::DrawProperty& displayProp)
+void widget::Mesh::systemDraw(const ewol::drawProperty& displayProp)
 {
-	ewol::openGL::Push();
-	// here we invert the reference of the standard OpenGl view because the reference in the common display is Top left and not buttom left
+	ewol::openGL::push();
+	// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 	glViewport( m_origin.x(),
 	            m_origin.y(),
 	            m_size.x(),
@@ -66,79 +66,79 @@ void widget::Mesh::SystemDraw(const ewol::DrawProperty& displayProp)
 	float ratio = m_size.x() / m_size.y();
 	//EWOL_INFO("ratio : " << ratio);
 	mat4 tmpProjection = etk::matPerspective(M_PI/3.0, ratio, 0.5, 100);
-	//mat4 tmpMat = tmpProjection * m_camera.GetMatrix();
+	//mat4 tmpMat = tmpProjection * m_camera.getMatrix();
 	// set internal matrix system :
-	//ewol::openGL::SetMatrix(tmpMat);
-	ewol::openGL::SetMatrix(tmpProjection);
+	//ewol::openGL::setMatrix(tmpMat);
+	ewol::openGL::setMatrix(tmpProjection);
 	
-	OnDraw();
-	ewol::openGL::Pop();
+	onDraw();
+	ewol::openGL::pop();
 }
 
-void widget::Mesh::OnRegenerateDisplay(void)
+void widget::Mesh::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
+	if (true == needRedraw()) {
 		
 	}
 }
 
-void widget::Mesh::PeriodicCall(const ewol::EventTime& _event)
+void widget::Mesh::periodicCall(const ewol::EventTime& _event)
 {
-	m_angle += m_angleSpeed*_event.GetDeltaCall();
-	MarkToRedraw();
+	m_angle += m_angleSpeed*_event.getDeltaCall();
+	markToRedraw();
 }
 
-bool widget::Mesh::OnEventInput(const ewol::EventInput& _event)
+bool widget::Mesh::onEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == _event.GetId()) {
-		if(ewol::keyEvent::statusSingle == _event.GetStatus()) {
-			GenerateEventId(ewolEventMeshPressed);
+	if (1 == _event.getId()) {
+		if(ewol::keyEvent::statusSingle == _event.getStatus()) {
+			generateEventId(ewolEventMeshPressed);
 			return true;
 		}
 	}
 	return false;
 }
 
-void widget::Mesh::SetFile(const etk::UString& _filename)
+void widget::Mesh::setFile(const etk::UString& _filename)
 {
 	if(    _filename!=""
 	    && m_meshName != _filename ) {
-		ewol::Mesh::Release(m_object);
+		ewol::Mesh::release(m_object);
 		m_meshName = _filename;
-		m_object = ewol::Mesh::Keep(m_meshName);
+		m_object = ewol::Mesh::keep(m_meshName);
 		if (NULL == m_object) {
 			EWOL_ERROR("Can not load the resource : \"" << m_meshName << "\"");
 		}
 	}
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::Mesh::SetPosition(const vec3& pos)
+void widget::Mesh::setPosition(const vec3& pos)
 {
 	m_position = pos;
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::Mesh::SetAngle(const vec3& angle)
+void widget::Mesh::setAngle(const vec3& angle)
 {
 	m_angle = angle;
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::Mesh::SetAngleSpeed(const vec3& speed)
+void widget::Mesh::setAngleSpeed(const vec3& speed)
 {
 	if (speed!=vec3(0,0,0)) {
-		PeriodicCallEnable();
+		periodicCallEnable();
 	} else {
-		PeriodicCallDisable();
+		periodicCallDisable();
 	}
 	m_angleSpeed = speed;
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::Mesh::SetDistance(float distance)
+void widget::Mesh::setDistance(float distance)
 {
 	m_cameraDistance = distance;
-	MarkToRedraw();
+	markToRedraw();
 }

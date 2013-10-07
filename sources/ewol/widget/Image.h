@@ -33,7 +33,7 @@ namespace widget {
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		protected:
 			ewol::Image m_compositing; //!< compositing element of the image.
 		public:
@@ -47,73 +47,73 @@ namespace widget {
 			 */
 			virtual ~Image(void) { };
 			/**
-			 * @brief Set All the configuration of the current image
+			 * @brief set All the configuration of the current image
 			 * @param[in] _file Filaneme of the new image
 			 * @param[in] _border New border size to set
 			 */
-			void Set(const etk::UString& _file, const ewol::Dimension& _border);
+			void set(const etk::UString& _file, const ewol::Dimension& _border);
 		protected:
-			etk::UString m_fileName; //!< File name of the image.
+			etk::UString m_fileName; //!< file name of the image.
 		public:
 			/**
-			 * @brief Set the new filename
+			 * @brief set the new filename
 			 * @param[in] _file Filaneme of the new image
 			 */
-			void SetFile(const etk::UString& _file);
+			void setFile(const etk::UString& _file);
 			/**
-			 * @brief Get the file displayed
+			 * @brief get the file displayed
 			 * @return the filename of the image
 			 */
-			const etk::UString& GetFile(void) const { return m_fileName; };
+			const etk::UString& getFile(void) const { return m_fileName; };
 		protected:
 			ewol::Dimension m_border; //!< border to add at the image.
 		public:
 			/**
-			 * @brief Set tge Border size around the image
+			 * @brief set tge Border size around the image
 			 * @param[in] _border New border size to set
 			 */
-			void SetBorder(const ewol::Dimension& _border);
+			void setBorder(const ewol::Dimension& _border);
 			/**
-			 * @brief Get the current border request at the image
+			 * @brief get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& GetBorder(void) const { return m_border; };
+			const ewol::Dimension& getBorder(void) const { return m_border; };
 		protected:
 			ewol::Dimension m_imageSize; //!< border to add at the image.
 		public:
 			/**
-			 * @brief Set tge Border size around the image
+			 * @brief set tge Border size around the image
 			 * @param[in] _size New border size to set
 			 */
-			void SetImageSize(const ewol::Dimension& _size);
+			void setImageSize(const ewol::Dimension& _size);
 			/**
-			 * @brief Get the current border request at the image
+			 * @brief get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& GetImageSize(void) const { return m_imageSize; };
+			const ewol::Dimension& getImageSize(void) const { return m_imageSize; };
 		protected:
-			bool m_keepRatio; //!< Keep the image ratio between width and hight
+			bool m_keepRatio; //!< keep the image ratio between width and hight
 		public:
 			/**
-			 * @brief Set the current status of keeping ratio.
+			 * @brief set the current status of keeping ratio.
 			 * @param[in] _keep The new status of keeping the ratio of this image.
 			 */
-			void SetKeepRatio(bool _keep);
+			void setKeepRatio(bool _keep);
 			/**
-			 * @brief Get the current status of keeping ratio.
+			 * @brief get the current status of keeping ratio.
 			 * @return The status of keeping the ratio of this image.
 			 */
-			bool GetKeepRatio(void) const { return m_keepRatio; };
+			bool getKeepRatio(void) const { return m_keepRatio; };
 		protected: // Derived function
-			virtual void OnDraw(void);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::Image"; };
-			virtual void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual bool LoadXML(exml::Element* _node);
+			virtual const char * const getObjectType(void) { return "Ewol::Image"; };
+			virtual void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual bool loadXML(exml::Element* _node);
 	};
 };
 

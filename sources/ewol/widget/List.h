@@ -21,17 +21,17 @@ namespace widget {
 		public:
 			List(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "ewol::List"; };
+			virtual const char * const getObjectType(void) { return "ewol::List"; };
 			virtual ~List(void);
-			virtual void CalculateMinMaxSize(void);
-			void SetLabel(etk::UString _newLabel);
-		// Drawing capabilities ....
+			virtual void calculateMinMaxSize(void);
+			void setLabel(etk::UString _newLabel);
+		// drawing capabilities ....
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 			etk::Vector<ivec2 > m_lineSize;
 		public:
-			void AddOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
-			void ClearOObjectList(void);
+			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
+			void clearOObjectList(void);
 		// list properties ...
 		private:
 			int32_t m_paddingSizeX;
@@ -41,20 +41,20 @@ namespace widget {
 			int32_t m_nbVisibleRaw; // set the number of visible raw (calculate don display)
 		protected:
 			// function call to display the list :
-			virtual etk::Color<> GetBasicBG(void) {
+			virtual etk::Color<> getBasicBG(void) {
 				return etk::Color<>(0xFFFFFFFF);
 			}
-			virtual uint32_t GetNuberOfColomn(void) {
+			virtual uint32_t getNuberOfColomn(void) {
 				return 1;
 			};
-			virtual bool GetTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
+			virtual bool getTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
 				_myTitle = "";
 				return false;
 			};
-			virtual uint32_t GetNuberOfRaw(void) {
+			virtual uint32_t getNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool GetElement(int32_t _colomn, int32_t _raw, etk::UString &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
+			virtual bool getElement(int32_t _colomn, int32_t _raw, etk::UString &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
 				_myTextToWrite = "";
 				_bg = 0xFFFFFFFF;
 				_fg = 0x000000FF;
@@ -65,21 +65,21 @@ namespace widget {
 				}
 				return false;
 			};
-			virtual bool OnItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
+			virtual bool onItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
 				return false;
 			}
 			/**
-			 * @brief Set a raw visible in the main display
+			 * @brief set a raw visible in the main display
 			 * @param[in] _id Id of the raw that might be visible.
 			 */
-			void SetRawVisible(int32_t _id);
+			void setRawVisible(int32_t _id);
 		protected: // Derived function
-			virtual void OnGetFocus(void);
-			virtual void OnLostFocus(void);
-			virtual void OnDraw(void);
+			virtual void onGetFocus(void);
+			virtual void onLostFocus(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
 	};
 	
 };

@@ -25,9 +25,9 @@ namespace ewol
 	class TextDecoration
 	{
 		public:
-			etk::Color<> m_colorBg; //!< Display background color
-			etk::Color<> m_colorFg; //!< Display foreground color
-			ewol::font::mode_te m_mode; //!< Display mode Regular/Bold/Italic/BoldItalic
+			etk::Color<> m_colorBg; //!< display background color
+			etk::Color<> m_colorFg; //!< display foreground color
+			ewol::font::mode_te m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
 			TextDecoration(void)
 			{
 				m_colorBg = etk::color::blue;
@@ -50,7 +50,7 @@ namespace ewol
 		private:
 			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 		public:
-			ewol::Drawing& GetDrawing(void) { return m_vectorialDraw; };
+			ewol::Drawing& getDrawing(void) { return m_vectorialDraw; };
 		private:
 			int32_t m_nbCharDisplayed; //!< prevent some error in calculation size.
 			vec3 m_sizeDisplayStart; //!< The start windows of the display.
@@ -68,7 +68,7 @@ namespace ewol
 		private:
 			ewol::font::mode_te m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool m_kerning; //!< Kerning enable or disable on the next elements displayed
-			bool m_distanceField; //!< Texture in distance Field mode ==> maybe move this in the font property.
+			bool m_distanceField; //!< Texture in distance Field mode  == > maybe move this in the font property.
 			uniChar_t m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
 		private:
 			float m_startTextpos; //!< start position of the Alignement (when \n the text return at this position)
@@ -83,7 +83,7 @@ namespace ewol
 			int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 		private:
 			int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
-			int32_t m_cursorPos; //!< Cursor position (default no cursor ==> -100)
+			int32_t m_cursorPos; //!< Cursor position (default no cursor  == > -100)
 		private:
 			ewol::TexturedFont* m_font; //!< Font resources
 		private: // Text
@@ -92,14 +92,14 @@ namespace ewol
 			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
-			 * @brief Load the openGL program and get all the ID needed
+			 * @brief load the openGL program and get all the ID needed
 			 */
-			void LoadProgram(void);
+			void loadProgram(void);
 		public:
 			/**
 			 * @brief generic constructor
 			 * @param[in] _fontName Name of the font that might be loaded
-			 * @param[in] _fontSize Size of the font that might be loaded
+			 * @param[in] _fontSize size of the font that might be loaded
 			 */
 			Text(const etk::UString& _fontName="", int32_t _fontSize=-1);
 			/**
@@ -108,126 +108,126 @@ namespace ewol
 			~Text(void);
 		public:
 			// Derived function
-			virtual void Translate(const vec3& _vect);
+			virtual void translate(const vec3& _vect);
 			// Derived function
-			virtual void Rotate(const vec3& _vect, float _angle);
+			virtual void rotate(const vec3& _vect, float _angle);
 			// Derived function
-			virtual void Scale(const vec3& _vect);
+			virtual void scale(const vec3& _vect);
 		public:
 			/**
-			 * @brief Draw All the refistered text in the current element on openGL
+			 * @brief draw All the refistered text in the current element on openGL
 			 */
-			void Draw(bool _disableDepthTest=true);
-			void Draw(const mat4& _transformationMatrix, bool _enableDepthTest=false);
+			void draw(bool _disableDepthTest=true);
+			void draw(const mat4& _transformationMatrix, bool _enableDepthTest=false);
 			/**
-			 * @brief Clear all the registered element in the current element
+			 * @brief clear all the registered element in the current element
 			 */
-			void Clear(void);
+			void clear(void);
 			/**
-			 * @brief Clear all the intermediate result detween 2 prints
+			 * @brief clear all the intermediate result detween 2 prints
 			 */
-			void Reset(void);
+			void reset(void);
 			/**
-			 * @brief Get the current display position (sometime needed in the gui control)
+			 * @brief get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			const vec3& GetPos(void) { return m_position; };
+			const vec3& getPos(void) { return m_position; };
 			/**
-			 * @brief Set position for the next text writen
+			 * @brief set position for the next text writen
 			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(const vec3& _pos);
-			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y(),0)); };
+			void setPos(const vec3& _pos);
+			inline void setPos(const vec2& _pos) { setPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
-			 * @brief Set relative position for the next text writen
+			 * @brief set relative position for the next text writen
 			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(const vec3& _pos);
-			inline void SetRelPos(const vec2& _pos) { SetRelPos(vec3(_pos.x(),_pos.y(),0)); };
+			void setRelPos(const vec3& _pos);
+			inline void setRelPos(const vec2& _pos) { setRelPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
-			 * @brief Set the Color of the current foreground font
+			 * @brief set the Color of the current foreground font
 			 * @param[in] _color Color to set on foreground (for next print)
 			 */
-			void SetColor(const etk::Color<>& _color) { m_color = _color; };
+			void setColor(const etk::Color<>& _color) { m_color = _color; };
 			/**
-			 * @brief Set the background color of the font (for selected Text (not the global BG))
+			 * @brief set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] _color Color to set on background (for next print)
 			 */
-			void SetColorBg(const etk::Color<>& _color);
+			void setColorBg(const etk::Color<>& _color);
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping
 			 * @param[in] _width Width size of the clipping
 			 */
-			void SetClippingWidth(const vec3& _pos, const vec3& _width) { SetClipping(_pos, _pos+_width); }
-			void SetClippingWidth(const vec2& _pos, const vec2& _width) { SetClipping(_pos, _pos+_width); };
+			void setClippingWidth(const vec3& _pos, const vec3& _width) { setClipping(_pos, _pos+_width); }
+			void setClippingWidth(const vec2& _pos, const vec2& _width) { setClipping(_pos, _pos+_width); };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping
 			 * @param[in] _posEnd End position of the clipping
 			 */
-			void SetClipping(const vec3& _pos, const vec3& _posEnd);
-			void SetClipping(const vec2& _pos, const vec2& _posEnd) { SetClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) ); };
+			void setClipping(const vec3& _pos, const vec3& _posEnd);
+			void setClipping(const vec2& _pos, const vec2& _posEnd) { setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) ); };
 			/**
-			 * @brief Enable/Disable the clipping (without lose the current clipping position)
+			 * @brief enable/Disable the clipping (without lose the current clipping position)
 			 * @brief _newMode The new status of the clipping
 			 */
-			// TODO : Rename SetClippingActivity
-			void SetClippingMode(bool _newMode);
+			// TODO : Rename setClippingActivity
+			void setClippingMode(bool _newMode);
 			/**
 			 * @brief Specify the font size (this reset the internal element of the current text (system requirement)
 			 * @param[in] _fontSize New font size
 			 */
-			void SetFontSize(int32_t _fontSize);
+			void setFontSize(int32_t _fontSize);
 			/**
 			 * @brief Specify the font name (this reset the internal element of the current text (system requirement)
 			 * @param[in] _fontName Current name of the selected font
 			 */
-			void SetFontName(const etk::UString& _fontName);
+			void setFontName(const etk::UString& _fontName);
 			/**
 			 * @brief Specify the font property (this reset the internal element of the current text (system requirement)
 			 * @param[in] fontName Current name of the selected font
 			 * @param[in] fontSize New font size
 			 */
-			void SetFont(etk::UString _fontName, int32_t _fontSize);
+			void setFont(etk::UString _fontName, int32_t _fontSize);
 			/**
-			 * @brief Specify the font mode for the next @ref Print
+			 * @brief Specify the font mode for the next @ref print
 			 * @param[in] mode The font mode requested
 			 */
-			void SetFontMode(ewol::font::mode_te _mode);
+			void setFontMode(ewol::font::mode_te _mode);
 			/**
-			 * @brief Get the current font mode
+			 * @brief get the current font mode
 			 * @return The font mode applied
 			 */
-			ewol::font::mode_te GetFontMode(void);
+			ewol::font::mode_te getFontMode(void);
 			/**
-			 * @brief Enable or disable the bold mode
+			 * @brief enable or disable the bold mode
 			 * @param[in] _status The new status for this display property
 			 */
-			void SetFontBold(bool _status);
+			void setFontBold(bool _status);
 			/**
-			 * @brief Enable or disable the italic mode
+			 * @brief enable or disable the italic mode
 			 * @param[in] _status The new status for this display property
 			 */
-			void SetFontItalic(bool _status);
+			void setFontItalic(bool _status);
 			/**
-			 * @brief Set the activation of the Kerning for the display (if it existed)
-			 * @param[in] _newMode Enable/Diasable the kerning on this font.
+			 * @brief set the activation of the Kerning for the display (if it existed)
+			 * @param[in] _newMode enable/Diasable the kerning on this font.
 			 */
-			void SetKerningMode(bool _newMode);
+			void setKerningMode(bool _newMode);
 			/**
 			 * @brief Request the distance field mode for this text display
-			 * @param[in] _newMode Enable/Diasable the Distance Field on this font.
+			 * @param[in] _newMode enable/Diasable the Distance Field on this font.
 			 * @todo : not implemented for now
 			 */
-			void SetDistanceFieldMode(bool _newMode);
+			void setDistanceFieldMode(bool _newMode);
 			/**
-			 * @brief Display a compleat string in the current element.
+			 * @brief display a compleat string in the current element.
 			 * @param[in] _text The string to display.
 			 */
-			void Print(const etk::UString& _text);
+			void print(const etk::UString& _text);
 			/**
-			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
+			 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
 			 *	<br/>
 			 *	<br/><br/><br/>
@@ -253,9 +253,9 @@ namespace ewol
 			 * @param[in] _text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintDecorated(const etk::UString& _text);
+			void printDecorated(const etk::UString& _text);
 			/**
-			 * @brief Display a compleat string in the current element with the generic decoration specification. (basic html data)
+			 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
 			 *	<html>
 			 *		<body>
@@ -285,28 +285,28 @@ namespace ewol
 			 * @param[in] _text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void PrintHTML(const etk::UString& _text);
+			void printHTML(const etk::UString& _text);
 			/**
-			 * @brief Display a compleat string in the current element whith specific decorations (advence mode).
+			 * @brief display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] _text The string to display.
 			 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 			 */
-			void Print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration);
+			void print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration);
 			/**
-			 * @brief Display the current char in the current element (note that the kerning is availlable if the position is not changed)
+			 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] _charcode Char that might be dispalyed
 			 */
-			void Print(const uniChar_t& _charcode);
+			void print(const uniChar_t& _charcode);
 			/**
-			 * @brief This Generate the line return ==> it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
+			 * @brief This generate the line return  == > it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 			 */
-			void ForceLineReturn(void);
+			void forceLineReturn(void);
 		private:
 			/**
 			 * @brief This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
 			 * @param[in] _element the exml element.
 			 */
-			void ParseHtmlNode(exml::Element* _element);
+			void parseHtmlNode(exml::Element* _element);
 		public:
 			/**
 			 * @brief This generate the possibility to generate the big text property
@@ -315,48 +315,48 @@ namespace ewol
 			 * @param[in] _alignement mode of alignement for the Text.
 			 * @note The text align in center change of line every display done (even if it was just a char)
 			 */
-			void SetTextAlignement(float _startTextpos, float _stopTextPos, ewol::Text::aligneMode_te _alignement=ewol::Text::alignDisable);
+			void setTextAlignement(float _startTextpos, float _stopTextPos, ewol::Text::aligneMode_te _alignement=ewol::Text::alignDisable);
 			/**
-			 * @brief Disable the alignement system
+			 * @brief disable the alignement system
 			 */
-			void DisableAlignement(void);
+			void disableAlignement(void);
 			/**
-			 * @brief Get the current alignement property
+			 * @brief get the current alignement property
 			 * @return the curent alignement type
 			 */
-			ewol::Text::aligneMode_te GetAlignement(void);
+			ewol::Text::aligneMode_te getAlignement(void);
 			/**
-			 * @brief Calculate a theoric text size
+			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 CalculateSizeHTML(const etk::UString& _text);
+			vec3 calculateSizeHTML(const etk::UString& _text);
 			/**
-			 * @brief Calculate a theoric text size
+			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 CalculateSizeDecorated(const etk::UString& _text);
+			vec3 calculateSizeDecorated(const etk::UString& _text);
 			/**
-			 * @brief Calculate a theoric text size
+			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 CalculateSize(const etk::UString& _text);
+			vec3 calculateSize(const etk::UString& _text);
 			/**
-			 * @brief Calculate a theoric charcode size
+			 * @brief calculate a theoric charcode size
 			 * @param[in] _charcode The µUnicode value to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 CalculateSize(const uniChar_t& _charcode);
+			vec3 calculateSize(const uniChar_t& _charcode);
 			/**
-			 * @brief Draw a cursor at the specify position
+			 * @brief draw a cursor at the specify position
 			 * @param[in] _isInsertMode True if the insert mode is activated
 			 */
-			void PrintCursor(bool _isInsertMode);
+			void printCursor(bool _isInsertMode);
 		private:
 			/**
-			 * @brief Calculate the element number that is the first out the alignement range 
+			 * @brief calculate the element number that is the first out the alignement range 
 			 *        (start at the specify ID, and use start pos with current one)
 			 * @param[in] _text The string that might be parsed.
 			 * @param[in] _start The first elemnt that might be used to calculate.
@@ -365,7 +365,7 @@ namespace ewol
 			 * @parma[out] _freespace This represent the number of pixel present in the right white space.
 			 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
 			 */
-			bool ExtrapolateLastId(const etk::UString& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
+			bool extrapolateLastId(const etk::UString& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 		private:
 			// this section is reserved for HTML parsing and display:
 			etk::UString                 m_htmlCurrrentLine; //!< current line for HTML display
@@ -375,37 +375,37 @@ namespace ewol
 			 * @brief add a line with the current m_htmlDecoTmp decoration
 			 * @param[in] _data The cuurent data to add.
 			 */
-			void HtmlAddData(const etk::UString& _data);
+			void htmlAddData(const etk::UString& _data);
 			/**
-			 * @brief Draw the current line
+			 * @brief draw the current line
 			 */
-			void HtmlFlush(void);
+			void htmlFlush(void);
 		public:
 			/**
-			 * @brief Remove the cursor display
+			 * @brief remove the cursor display
 			 */
-			void DisableCursor(void);
+			void disableCursor(void);
 			/**
-			 * @brief Set a cursor at a specific position:
+			 * @brief set a cursor at a specific position:
 			 * @param[in] _cursorPos id of the cursor position
 			 */
-			void SetCursorPos(int32_t _cursorPos);
+			void setCursorPos(int32_t _cursorPos);
 			/**
-			 * @brief Set a cursor at a specific position with his associated selection:
+			 * @brief set a cursor at a specific position with his associated selection:
 			 * @param[in] _cursorPos id of the cursor position
 			 * @param[in] _selectionStartPos id of the starting of the selection
 			 */
-			void SetCursorSelection(int32_t _cursorPos, int32_t _selectionStartPos);
+			void setCursorSelection(int32_t _cursorPos, int32_t _selectionStartPos);
 			/**
-			 * @brief Change the selection color
+			 * @brief change the selection color
 			 * @param[in] _color New color for the Selection
 			 */
-			void SetSelectionColor(const etk::Color<>& _color);
+			void setSelectionColor(const etk::Color<>& _color);
 			/**
-			 * @brief Change the cursor color
+			 * @brief change the cursor color
 			 * @param[in] _color New color for the Selection
 			 */
-			void SetCursorColor(const etk::Color<>& _color);
+			void setCursorColor(const etk::Color<>& _color);
 	};
 };
 

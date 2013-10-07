@@ -67,10 +67,10 @@ namespace ewol
 			keyboardPageDown,      //!< page down key
 			keyboardStart,         //!< Start key
 			keyboardEnd,           //!< End key
-			keyboardPrint,         //!< Print screen key.
+			keyboardPrint,         //!< print screen key.
 			keyboardStopDefil,     //!< Stop display key.
 			keyboardWait,          //!< Wait key.
-			keyboardInsert,        //!< Insert key.
+			keyboardInsert,        //!< insert key.
 			keyboardF1,            //!< F1 key.
 			keyboardF2,            //!< F2 key.
 			keyboardF3,            //!< F3 key.
@@ -124,45 +124,45 @@ namespace ewol
 			 */
 			SpecialKey(void);
 			/**
-			 * @brief Get the current CapLock Status
+			 * @brief get the current CapLock Status
 			 * @return The status value
 			 */
-			bool IsSetCapsLock(void) const;
+			bool isSetCapsLock(void) const;
 			/**
-			 * @brief Get the current Shift key status
+			 * @brief get the current Shift key status
 			 * @return The status value
 			 */
-			bool IsSetShift(void) const;
+			bool isSetShift(void) const;
 			/**
-			 * @brief Get the Current Control key status
+			 * @brief get the Current Control key status
 			 * @return The status value
 			 */
-			bool IsSetCtrl(void) const;
+			bool isSetCtrl(void) const;
 			/**
-			 * @brief Get the current Meta key status (also named windows or apple key)
+			 * @brief get the current Meta key status (also named windows or apple key)
 			 * @return The status value
 			 */
-			bool IsSetMeta(void) const;
+			bool isSetMeta(void) const;
 			/**
-			 * @brief Get the current Alt key status
+			 * @brief get the current Alt key status
 			 * @return The status value
 			 */
-			bool IsSetAlt(void) const;
+			bool isSetAlt(void) const;
 			/**
-			 * @brief Get the current Alt-Gr key status
+			 * @brief get the current Alt-Gr key status
 			 * @return The status value
 			 */
-			bool IsSetAltGr(void) const;
+			bool isSetAltGr(void) const;
 			/**
-			 * @brief Get the current Ver-num key status
+			 * @brief get the current Ver-num key status
 			 * @return The status value
 			 */
-			bool IsSetNumLock(void) const;
+			bool isSetNumLock(void) const;
 			/**
-			 * @brief Get the current Intert key status
+			 * @brief get the current Intert key status
 			 * @return The status value
 			 */
-			bool IsSetInsert(void) const;
+			bool isSetInsert(void) const;
 	};
 	/**
 	 * @brief Debug operator To display the curent element in a Human redeable information

@@ -19,7 +19,7 @@
 #define __class__	"ewol"
 
 
-etk::UString ewol::GetCompilationMode(void)
+etk::UString ewol::getCompilationMode(void)
 {
 	#ifdef MODE_RELEASE
 		return "Release";
@@ -28,7 +28,7 @@ etk::UString ewol::GetCompilationMode(void)
 	#endif
 }
 
-etk::UString ewol::GetBoardType(void)
+etk::UString ewol::getBoardType(void)
 {
 	#ifdef __TARGET_OS__Linux
 		return "Linux";
@@ -45,14 +45,14 @@ etk::UString ewol::GetBoardType(void)
 	#endif
 }
 
-etk::UString ewol::GetVersion(void)
+etk::UString ewol::getVersion(void)
 {
 	#define FIRST_YEAR (2011)
-	etk::UString tmpOutput = (date::GetYear()-FIRST_YEAR);
+	etk::UString tmpOutput = (date::getYear()-FIRST_YEAR);
 	tmpOutput += ".";
-	tmpOutput += date::GetMonth();
+	tmpOutput += date::getMonth();
 	tmpOutput += ".";
-	tmpOutput += date::GetDay();
+	tmpOutput += date::getDay();
 	return tmpOutput;
 }
 

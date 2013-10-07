@@ -29,15 +29,15 @@ namespace ewol {
 				m_timeDeltaCall(_timeDeltaCall)
 			{ };
 		public:
-			void SetTime(int64_t _timeSystem) { m_timeSystem=_timeSystem; };
-			inline int64_t GetTime(void) const { return m_timeSystem; };
-			void SetApplWakeUpTime(int64_t _timeUpAppl) { m_timeUpAppl=_timeUpAppl; };
-			inline int64_t GetApplWakeUpTime(void) const { return m_timeUpAppl; };
-			inline int64_t GetApplUpTime(void) const { return m_timeSystem-m_timeUpAppl; };
-			void SetDelta(float _timeDelta) { m_timeDelta=_timeDelta; };
-			inline float GetDelta(void) const { return m_timeDelta; };
-			void SetDeltaCall(float _timeDeltaCall) { m_timeDeltaCall=_timeDeltaCall; };
-			inline float GetDeltaCall(void) const { return m_timeDeltaCall; };
+			void setTime(int64_t _timeSystem) { m_timeSystem=_timeSystem; };
+			inline int64_t getTime(void) const { return m_timeSystem; };
+			void setApplWakeUpTime(int64_t _timeUpAppl) { m_timeUpAppl=_timeUpAppl; };
+			inline int64_t getApplWakeUpTime(void) const { return m_timeUpAppl; };
+			inline int64_t getApplUpTime(void) const { return m_timeSystem-m_timeUpAppl; };
+			void setDelta(float _timeDelta) { m_timeDelta=_timeDelta; };
+			inline float getDelta(void) const { return m_timeDelta; };
+			void setDeltaCall(float _timeDeltaCall) { m_timeDeltaCall=_timeDeltaCall; };
+			inline float getDeltaCall(void) const { return m_timeDeltaCall; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventTime& _obj);
 };

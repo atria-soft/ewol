@@ -13,8 +13,6 @@ namespace ewol
 {
 	/**
 	 * @brief This class is designed to count the number of frame per second in the main renderer system
-	 * @param ---
-	 * @return ---
 	 */
 	class Fps
 	{
@@ -38,11 +36,8 @@ namespace ewol
 		public:
 			/**
 			 * @brief Constructor
-			 * @param ---
-			 * @return ---
 			 */
-			Fps(const char * displayName, bool displayFPS)
-			{
+			Fps(const char * displayName, bool displayFPS) {
 				startTime = -1;
 				nbCallTime = 0;
 				nbDisplayTime = 0;
@@ -60,21 +55,15 @@ namespace ewol
 			}
 			/**
 			 * @brief Destructor
-			 * @param ---
-			 * @return ---
 			 */
-			~Fps(void)
-			{
+			~Fps(void) {
 				
 			}
 			/**
 			 * @brief this might be call every time a diplay start
-			 * @param ---
-			 * @return ---
 			 */
-			void Tic(void)
-			{
-				int64_t currentTime = ewol::GetTime();
+			void tic(void) {
+				int64_t currentTime = ewol::getTime();
 				ticTime = currentTime;
 				nbCallTime++;
 				if (startTime<0) {
@@ -87,14 +76,12 @@ namespace ewol
 			}
 			/**
 			 * @brief this might be call every time a diplay stop, it do the display every second
-			 * @param[in] displayTime Display curent time of the frame.
-			 * @return ---
+			 * @param[in] displayTime display curent time of the frame.
 			 */
-			void Toc(bool displayTime=false)
-			{
-				int64_t currentTime = ewol::GetTime();
+			void toc(bool displayTime = false) {
+				int64_t currentTime = ewol::getTime();
 				int64_t processTimeLocal = (currentTime - ticTime);
-				if (displayTime==true) {
+				if (displayTime == true) {
 					EWOL_DEBUG(m_displayName << " : processTime : " << (float)((float)processTimeLocal / 1000.0) << "ms ");
 				}
 				if (drwingDone) {
@@ -111,16 +98,14 @@ namespace ewol
 			/**
 			 * @brief this might be call when a display is really done
 			 */
-			void IncrementCounter(void)
-			{
+			void incrementCounter(void) {
 				nbDisplayTime++;
 				drwingDone = true;
 			}
 			/**
-			 * @brief Draw debug display ...
+			 * @brief draw debug display ...
 			 */
-			void Draw(void)
-			{
+			void draw(void) {
 				if (true == display) {
 					if (nbDisplayTime>0) {
 						EWOL_DEBUG(m_displayName << " : Active : "
@@ -151,14 +136,5 @@ namespace ewol
 			}
 	};
 };
-
-/**
- * @brief This fuction display and calculate the curent frame per second of the display
- * @note this function must be call 2 time the first at the start of the display and the second at the end of this one
- * @param[in] Represent the mode of the counter
- * @param[in] the curent system time
- * @ return ---
- */
-
 #endif
 
