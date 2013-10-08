@@ -10,25 +10,22 @@
 #include <ewol/resources/FontFreeType.h>
 
 #undef __class__
-#define __class__	"ConfigFont"
+#define __class__ "ConfigFont"
 
-ewol::ConfigFont::ConfigFont(void) : 
-	m_folder("DATA:fonts"),
-	m_name("Arial;Helvetica"),
-	m_size(10),
-	m_useExternal(false)
-{
+ewol::ConfigFont::ConfigFont(void) :
+  m_folder("DATA:fonts"),
+  m_name("Arial;Helvetica"),
+  m_size(10),
+  m_useExternal(false) {
 	ewol::freeTypeInit();
 }
 
-ewol::ConfigFont::~ConfigFont(void)
-{
+ewol::ConfigFont::~ConfigFont(void) {
 	// UnInit FreeTypes
 	ewol::freeTypeUnInit();
 }
 
-void ewol::ConfigFont::set(const etk::UString& _fontName, int32_t _size)
-{
+void ewol::ConfigFont::set(const etk::UString& _fontName, int32_t _size) {
 	m_name = _fontName;
 	m_size = _size;
 }

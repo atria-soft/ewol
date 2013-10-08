@@ -17,23 +17,19 @@
 
 
 widget::Container::Container(ewol::Widget* _subElement) :
-	m_subWidget(_subElement)
-{
+  m_subWidget(_subElement) {
 	// nothing to do ...
 }
 
-widget::Container::~Container(void)
-{
+widget::Container::~Container(void) {
 	subWidgetRemove();
 }
 
-ewol::Widget* widget::Container::getSubWidget(void)
-{
+ewol::Widget* widget::Container::getSubWidget(void) {
 	return m_subWidget;
 }
 
-void widget::Container::setSubWidget(ewol::Widget* _newWidget)
-{
+void widget::Container::setSubWidget(ewol::Widget* _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}
@@ -46,9 +42,7 @@ void widget::Container::setSubWidget(ewol::Widget* _newWidget)
 	requestUpdateSize();
 }
 
-
-void widget::Container::subWidgetRemove(void)
-{
+void widget::Container::subWidgetRemove(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->removeUpperWidget();
 		delete(m_subWidget);
@@ -61,8 +55,7 @@ void widget::Container::subWidgetRemove(void)
 	}
 }
 
-void widget::Container::subWidgetRemoveDelayed(void)
-{
+void widget::Container::subWidgetRemoveDelayed(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->removeUpperWidget();
 		m_subWidget->removeObject();
@@ -72,8 +65,7 @@ void widget::Container::subWidgetRemoveDelayed(void)
 	}
 }
 
-ewol::Widget* widget::Container::getWidgetNamed(const etk::UString& _widgetName)
-{
+ewol::Widget* widget::Container::getWidgetNamed(const etk::UString& _widgetName) {
 	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (NULL!=tmpUpperWidget) {
 		return tmpUpperWidget;
@@ -84,8 +76,7 @@ ewol::Widget* widget::Container::getWidgetNamed(const etk::UString& _widgetName)
 	return NULL;
 }
 
-void widget::Container::onObjectRemove(ewol::EObject* _removeObject)
-{
+void widget::Container::onObjectRemove(ewol::EObject* _removeObject) {
 	if (m_subWidget == _removeObject) {
 		m_subWidget=NULL;
 		markToRedraw();
@@ -93,8 +84,7 @@ void widget::Container::onObjectRemove(ewol::EObject* _removeObject)
 	}
 }
 
-void widget::Container::systemDraw(const ewol::drawProperty& _displayProp)
-{
+void widget::Container::systemDraw(const ewol::drawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -107,8 +97,7 @@ void widget::Container::systemDraw(const ewol::drawProperty& _displayProp)
 	}
 }
 
-void widget::Container::calculateSize(const vec2& _availlable)
-{
+void widget::Container::calculateSize(const vec2& _availlable) {
 	if (NULL!=m_subWidget) {
 		vec2 origin = m_origin+m_offset;
 		vec2 minSize = m_subWidget->getCalculateMinSize();
@@ -135,8 +124,7 @@ void widget::Container::calculateSize(const vec2& _availlable)
 	ewol::Widget::calculateSize(_availlable);
 }
 
-void widget::Container::calculateMinMaxSize(void)
-{
+void widget::Container::calculateMinMaxSize(void) {
 	// call main class
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
@@ -148,15 +136,13 @@ void widget::Container::calculateMinMaxSize(void)
 	//EWOL_ERROR("[" << getId() << "] Result min size : " <<  m_minSize);
 }
 
-void widget::Container::onRegenerateDisplay(void)
-{
+void widget::Container::onRegenerateDisplay(void) {
 	if (NULL!=m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
 }
 
-ewol::Widget* widget::Container::getWidgetAtPos(const vec2& _pos)
-{
+ewol::Widget* widget::Container::getWidgetAtPos(const vec2& _pos) {
 	if (false == isHide()) {
 		if (NULL!=m_subWidget) {
 			return m_subWidget->getWidgetAtPos(_pos);
@@ -166,8 +152,7 @@ ewol::Widget* widget::Container::getWidgetAtPos(const vec2& _pos)
 };
 
 
-bool widget::Container::loadXML(exml::Element* _node)
-{
+bool widget::Container::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -208,8 +193,7 @@ bool widget::Container::loadXML(exml::Element* _node)
 	return true;
 }
 
-void widget::Container::setOffset(const vec2& _newVal)
-{
+void widget::Container::setOffset(const vec2& _newVal) {
 	if (m_offset != _newVal) {
 		ewol::Widget::setOffset(_newVal);
 		// recalculate the new sise and position of sub widget ...

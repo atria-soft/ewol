@@ -17,8 +17,7 @@ extern const char * const ewolEventMeshPressed;
 
 
 namespace widget {
-	class Mesh :public ewol::Widget
-	{
+	class Mesh :public ewol::Widget {
 		private:
 			// mesh name :
 			etk::UString m_meshName;

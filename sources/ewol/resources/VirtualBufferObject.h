@@ -17,13 +17,11 @@
 
 #define NB_VBO_MAX   (20)
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief VirtualBufferObject is a specific resources for opengl, this load the data directly in the graphic card ad keep these inside
 	 */
-	class VirtualBufferObject : public ewol::Resource
-	{
+	class VirtualBufferObject : public ewol::Resource {
 		private :
 			int32_t m_nbVBO;
 			bool m_exist;  //!< This data is availlable in the Graphic card

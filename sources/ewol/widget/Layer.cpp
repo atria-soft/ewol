@@ -11,30 +11,25 @@
 
 
 #undef __class__
-#define __class__	"Layer"
+#define __class__ "Layer"
 
-static ewol::Widget* create(void)
-{
+static ewol::Widget* create(void) {
 	return new widget::Layer();
 }
 
-void widget::Layer::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::Layer::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::Layer::Layer(void)
-{
+widget::Layer::Layer(void) {
 	// nothing to do ...
 }
 
-widget::Layer::~Layer(void)
-{
+widget::Layer::~Layer(void) {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::Widget* widget::Layer::getWidgetAtPos(const vec2& _pos)
-{
+ewol::Widget* widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return NULL;
 	}

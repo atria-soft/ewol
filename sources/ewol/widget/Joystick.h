@@ -23,8 +23,7 @@ namespace widget {
 		JOYSTICK_NORMAL_MODE,
 		JOYSTICK_ARROW_MODE,
 	} joystickMode_te;
-	class Joystick :public widget::Drawable
-	{
+	class Joystick :public widget::Drawable {
 		private:
 			draw::Color m_colorFg; //!< Forground  color
 			draw::Color m_colorBg; //!< Background color

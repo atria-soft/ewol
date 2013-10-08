@@ -19,7 +19,7 @@
 #include <ewol/ewol.h>
 
 #undef __class__
-#define __class__	"Parameter"
+#define __class__ "Parameter"
 
 
 extern const char * const ewolEventParameterValidate            = "ewol-event-parameter-validate";
@@ -28,20 +28,19 @@ extern const char * const ewolEventParameterSave                = "ewol-event-pa
 
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
-widget::Parameter::Parameter(void) : 
-	m_currentIdList(0),
-	m_widgetTitle(NULL),
-	m_paramList(NULL)
-{
+widget::Parameter::Parameter(void) :
+  m_currentIdList(0),
+  m_widgetTitle(NULL),
+  m_paramList(NULL) {
 	addEventId(ewolEventParameterClose);
 	
 	widget::Sizer * mySizerVert = NULL;
 	widget::Sizer * mySizerHori = NULL;
 	widget::Spacer * mySpacer = NULL;
 	#ifdef __TARGET_OS__Android
-		setMinSize(ewol::Dimension(vec2(90,90),ewol::Dimension::Pourcent));
+		setMinSize(ewol::Dimension(vec2(90, 90), ewol::Dimension::Pourcent));
 	#else
-		setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
+		setMinSize(ewol::Dimension(vec2(80, 80), ewol::Dimension::Pourcent));
 	#endif
 	
 	mySizerVert = new widget::Sizer(widget::Sizer::modeVert);
@@ -183,27 +182,20 @@ widget::Parameter::Parameter(void) :
 		}
 	}
 	markToRedraw();
-
 }
 
-
-widget::Parameter::~Parameter(void)
-{
+widget::Parameter::~Parameter(void) {
 	
 }
 
-
-void widget::Parameter::setTitle(etk::UString label)
-{
+void widget::Parameter::setTitle(etk::UString _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
-	m_widgetTitle->setLabel(label);
+	m_widgetTitle->setLabel(_label);
 }
 
-
-void widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg)
-{
+void widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg) {
 	widget::PopUp::onReceiveMessage(_msg);
 	EWOL_DEBUG("event on the parameter : " << _msg);
 	if (_msg.getMessage() == ewolEventParameterClose) {
@@ -222,38 +214,33 @@ void widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg)
 			m_wSlider->subWidgetSelectSet(value);
 		}
 	}
-	
 	return;
-};
+}
 
-
-void widget::Parameter::onObjectRemove(ewol::EObject * removeObject)
-{
+void widget::Parameter::onObjectRemove(ewol::EObject * _removeObject) {
 	// First step call parrent : 
-	widget::PopUp::onObjectRemove(removeObject);
+	widget::PopUp::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
-	if(removeObject == m_widgetTitle) {
+	if(_removeObject == m_widgetTitle) {
 		m_widgetTitle = NULL;
 	}
-	if(removeObject == m_paramList) {
+	if(_removeObject == m_paramList) {
 		m_paramList = NULL;
 	}
-	if(removeObject == m_wSlider) {
+	if(_removeObject == m_wSlider) {
 		m_wSlider = NULL;
 	}
 }
 
-
-void widget::Parameter::menuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget)
-{
+void widget::Parameter::menuAdd(etk::UString _label, etk::UString _image, ewol::Widget* _associateWidget) {
 	if (NULL != m_paramList) {
-		m_paramList->menuAdd(label, m_currentIdList, image);
+		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (NULL != m_wSlider) {
-			if (NULL != associateWidget) {
-				m_wSlider->subWidgetAdd(associateWidget);
-			} else {
+			if (NULL != _associateWidget) {
+				m_wSlider->subWidgetAdd(_associateWidget);
+			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
-				widget::Label * myLabel = new widget::Label((etk::UString("No widget for : ") + label));
+				widget::Label * myLabel = new widget::Label((etk::UString("No widget for : ") + _label));
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
@@ -268,24 +255,21 @@ void widget::Parameter::menuAdd(etk::UString label, etk::UString image, ewol::Wi
 		m_currentIdList++;
 	}
 }
-void widget::Parameter::menuAddGroup(etk::UString label)
-{
+void widget::Parameter::menuAddGroup(etk::UString _label) {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
-		m_paramList->menuAddGroup(label);
+		m_paramList->menuAddGroup(_label);
 	}
 }
 
-void widget::Parameter::menuClear(void)
-{
+void widget::Parameter::menuClear(void) {
 	if (NULL != m_paramList) {
 		m_paramList->menuClear();
 		m_currentIdList = 0;
 	}
 }
 
-void widget::Parameter::menuSeparator(void)
-{
+void widget::Parameter::menuSeparator(void) {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
 	}

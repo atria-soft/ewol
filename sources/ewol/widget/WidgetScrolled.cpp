@@ -15,8 +15,7 @@
 
 
 
-widget::WidgetScrooled::WidgetScrooled(void)
-{
+widget::WidgetScrooled::WidgetScrooled(void) {
 	m_originScrooled.setValue(0,0);
 	m_pixelScrolling = 20;
 	m_highSpeedMode = SCROLL_DISABLE;
@@ -26,16 +25,14 @@ widget::WidgetScrooled::WidgetScrooled(void)
 	m_limitScrolling = 0.5;
 }
 
-widget::WidgetScrooled::~WidgetScrooled(void)
-{
+widget::WidgetScrooled::~WidgetScrooled(void) {
 	
 }
 
 
 #define SCROLL_BAR_SPACE      (15)
 
-void widget::WidgetScrooled::onRegenerateDisplay(void)
-{
+void widget::WidgetScrooled::onRegenerateDisplay(void) {
 	clearOObjectList();
 	if (SCROLL_MODE_GAME == m_scroollingMode) {
 		
@@ -77,9 +74,7 @@ void widget::WidgetScrooled::onRegenerateDisplay(void)
 	}
 }
 
-
-bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 	EWOL_VERBOSE("event XXX " << _event);
 	vec2 relativePos = relativePosition(_event.getPos());
 	// corection due to the open Gl invertion ...
@@ -310,8 +305,7 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-void widget::WidgetScrooled::addOObject(ewol::Compositing* _newObject, int32_t _pos)
-{
+void widget::WidgetScrooled::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 	if (NULL == _newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
@@ -323,9 +317,7 @@ void widget::WidgetScrooled::addOObject(ewol::Compositing* _newObject, int32_t _
 	}
 }
 
-
-void widget::WidgetScrooled::clearOObjectList(void)
-{
+void widget::WidgetScrooled::clearOObjectList(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -333,8 +325,7 @@ void widget::WidgetScrooled::clearOObjectList(void)
 	m_listOObject.clear();
 }
 
-void widget::WidgetScrooled::onDraw(void)
-{
+void widget::WidgetScrooled::onDraw(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
@@ -342,9 +333,7 @@ void widget::WidgetScrooled::onDraw(void)
 	}
 }
 
-
-void widget::WidgetScrooled::systemDraw(const ewol::drawProperty& displayProp)
-{
+void widget::WidgetScrooled::systemDraw(const ewol::drawProperty& _displayProp) {
 	ewol::openGL::push();
 	if (SCROLL_MODE_CENTER == m_scroollingMode) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
@@ -375,40 +364,36 @@ void widget::WidgetScrooled::systemDraw(const ewol::drawProperty& displayProp)
 		// Call the widget drawing methode
 		onDraw();
 	} else {
-		ewol::Widget::systemDraw(displayProp);
+		ewol::Widget::systemDraw(_displayProp);
 	}
 	ewol::openGL::pop();
 }
 
-
-void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 borderWidth, vec2 currentPosition, bool center)
-{
-	if (true == center) {
-		borderWidth.setValue(m_size.x() / 2 - borderWidth.x(),
-		                     m_size.y() / 2 - borderWidth.y() );
+void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, vec2 _currentPosition, bool _center) {
+	if (true == _center) {
+		_borderWidth.setValue(m_size.x() / 2 - _borderWidth.x(),
+		                      m_size.y() / 2 - _borderWidth.y() );
 	}
 	// check scrooling in X
-	if( currentPosition.x() < (m_originScrooled.x()+borderWidth.x()) ) {
-		m_originScrooled.setX(currentPosition.x() - borderWidth.x());
+	if (_currentPosition.x() < (m_originScrooled.x() + _borderWidth.x()) ) {
+		m_originScrooled.setX(_currentPosition.x() - _borderWidth.x());
 		m_originScrooled.setX(etk_max(0.0, m_originScrooled.x()));
-	} else if( currentPosition.x() > (m_originScrooled.x()+m_size.x()-2*borderWidth.x()) ) {
-		m_originScrooled.setX(currentPosition.x() - m_size.x() + 2*borderWidth.x());
+	} else if (_currentPosition.x() > (m_originScrooled.x()+m_size.x()-2*_borderWidth.x()) ) {
+		m_originScrooled.setX(_currentPosition.x() - m_size.x() + 2*_borderWidth.x());
 		m_originScrooled.setX(etk_max(0.0, m_originScrooled.x()));
 	}
 	// check scrooling in Y
-	if( currentPosition.y() < (m_originScrooled.y()+borderWidth.y()) ) {
-		m_originScrooled.setY(currentPosition.y() - borderWidth.y());
+	if (_currentPosition.y() < (m_originScrooled.y() + _borderWidth.y()) ) {
+		m_originScrooled.setY(_currentPosition.y() - _borderWidth.y());
 		m_originScrooled.setY(etk_max(0.0, m_originScrooled.y()));
-	} else if( currentPosition.y() > (m_originScrooled.y()+m_size.y()-2*borderWidth.y()) ) {
-		m_originScrooled.setY(currentPosition.y() - m_size.y() + 2*borderWidth.y());
+	} else if (_currentPosition.y() > (m_originScrooled.y()+m_size.y()-2*_borderWidth.y()) ) {
+		m_originScrooled.setY(_currentPosition.y() - m_size.y() + 2*_borderWidth.y());
 		m_originScrooled.setY(etk_max(0.0, m_originScrooled.y()));
 	}
 }
 
-
-void widget::WidgetScrooled::scroolingMode(scrollingMode_te newMode)
-{
-	m_scroollingMode = newMode;
+void widget::WidgetScrooled::scroolingMode(scrollingMode_te _newMode) {
+	m_scroollingMode = _newMode;
 	if (SCROLL_MODE_GAME == m_scroollingMode) {
 		// set the scene maximum size :
 		m_maxSize.setValue(etk_max(m_size.x(), m_size.y()),

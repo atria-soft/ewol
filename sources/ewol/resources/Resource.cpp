@@ -19,27 +19,22 @@
 uint32_t ewol::Resource::m_valBase=0;
 
 
-void ewol::Resource::updateContext(void)
-{
+void ewol::Resource::updateContext(void) {
 	EWOL_DEBUG("Not set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::removeContext(void)
-{
+void ewol::Resource::removeContext(void) {
 	EWOL_DEBUG("Not set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::removeContextToLate(void)
-{
+void ewol::Resource::removeContextToLate(void) {
 	EWOL_DEBUG("Not set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)");
 }
 
-void ewol::Resource::reload(void)
-{
+void ewol::Resource::reload(void) {
 	EWOL_DEBUG("Not set for : [" << m_uniqueId << "]" << m_name << " loaded " << m_counter << " time(s)");
 }
 
-ewol::ResourceManager& ewol::Resource::getManager(void)
-{
+ewol::ResourceManager& ewol::Resource::getManager(void) {
 	return ewol::getContext().getResourcesManager();
 }

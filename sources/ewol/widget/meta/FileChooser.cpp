@@ -24,16 +24,10 @@ extern "C" {
 	#include <dirent.h>
 }
 
-#undef __class__
-#define __class__	"FileChooser(FolderList)"
-
-
 #include <ewol/ewol.h>
 
-
-
 #undef __class__
-#define __class__	"FileChooser"
+#define __class__ "FileChooser"
 
 
 extern const char * const ewolEventFileChooserCancel           = "ewol-event-file-chooser-cancel";
@@ -49,8 +43,7 @@ extern const char * const ewolEventFileChooserListFileValidate = "ewol-event-fil
 extern const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
-widget::FileChooser::FileChooser(void)
-{
+widget::FileChooser::FileChooser(void) {
 	addEventId(ewolEventFileChooserCancel);
 	addEventId(ewolEventFileChooserValidate);
 	
@@ -77,8 +70,6 @@ widget::FileChooser::FileChooser(void)
 		setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));;
 	#endif
 	m_file = "";
-	
-	
 	
 	/*
 	SubWidgetSet(new widget::Composer(widget::Composer::String,
@@ -299,22 +290,18 @@ widget::FileChooser::FileChooser(void)
 }
 
 
-widget::FileChooser::~FileChooser(void)
-{
+widget::FileChooser::~FileChooser(void) {
 	
 }
 
-
-void widget::FileChooser::setTitle(etk::UString label)
-{
+void widget::FileChooser::setTitle(etk::UString _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
-	m_widgetTitle->setLabel(label);
+	m_widgetTitle->setLabel(_label);
 }
 
-void widget::FileChooser::setValidateLabel(etk::UString label)
-{
+void widget::FileChooser::setValidateLabel(etk::UString _label) {
 	if (NULL == m_widgetValidate) {
 		return;
 	}
@@ -324,8 +311,7 @@ void widget::FileChooser::setValidateLabel(etk::UString label)
 	*/
 }
 
-void widget::FileChooser::setCancelLabel(etk::UString label)
-{
+void widget::FileChooser::setCancelLabel(etk::UString _label) {
 	if (NULL == m_widgetCancel) {
 		return;
 	}
@@ -335,23 +321,20 @@ void widget::FileChooser::setCancelLabel(etk::UString label)
 	*/
 }
 
-void widget::FileChooser::setFolder(etk::UString folder)
-{
-	m_folder = folder + "/";
+void widget::FileChooser::setFolder(etk::UString _folder) {
+	m_folder = _folder + "/";
 	updateCurrentFolder();
 }
 
-void widget::FileChooser::setFileName(etk::UString filename)
-{
-	m_file = filename;
+void widget::FileChooser::setFileName(etk::UString _filename) {
+	m_file = _filename;
 	if (NULL == m_widgetCurrentFileName) {
 		return;
 	}
-	m_widgetCurrentFileName->setValue(filename);
+	m_widgetCurrentFileName->setValue(_filename);
 }
 
-void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg)
-{
+void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 	EWOL_INFO("Receive Event from the LIST ... : " << _msg);
 	if (ewolEventFileChooserEntryFolder == _msg.getMessage()) {
 		// == > change the folder name
@@ -420,10 +403,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg)
 	return;
 };
 
-
-
-void widget::FileChooser::updateCurrentFolder(void)
-{
+void widget::FileChooser::updateCurrentFolder(void) {
 	if (m_folder != "" ) {
 		if (m_folder[m_folder.size()-1] != '/') {
 			m_folder +=  "/";
@@ -441,15 +421,12 @@ void widget::FileChooser::updateCurrentFolder(void)
 	markToRedraw();
 }
 
-
-etk::UString widget::FileChooser::getCompleateFileName(void)
-{
+etk::UString widget::FileChooser::getCompleateFileName(void) {
 	etk::UString tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;
 	return tmpString;
 }
-
 
 /**
  * @brief Inform object that an other object is removed ...
@@ -457,8 +434,7 @@ etk::UString widget::FileChooser::getCompleateFileName(void)
  * @note : Sub classes must call this class
  * @return ---
  */
-void widget::FileChooser::onObjectRemove(ewol::EObject * removeObject)
-{
+void widget::FileChooser::onObjectRemove(ewol::EObject * removeObject) {
 	// First step call parrent : 
 	widget::PopUp::onObjectRemove(removeObject);
 	// second step find if in all the elements ...

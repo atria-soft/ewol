@@ -16,8 +16,7 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	class Label : public ewol::Widget
-	{
+	class Label : public ewol::Widget {
 		public:
 			// Event list of properties
 			static const char * const eventPressed;
@@ -59,7 +58,6 @@ namespace widget {
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual bool loadXML(exml::Element* _node);
 	};
-	
 };
 
 #endif

@@ -16,8 +16,7 @@
 #include <etk/math/Vector3D.h>
 
 
-namespace ewol
-{
+namespace ewol {
 	class PhysicsBox;
 	class PhysicsCylinder;
 	class PhysicsCapsule;
@@ -25,8 +24,7 @@ namespace ewol
 	class PhysicsConvexHull;
 	class PhysicsSphere;
 	
-	class PhysicsShape
-	{
+	class PhysicsShape {
 		public:
 			static PhysicsShape* create(const etk::UString& _name);
 		public:

@@ -23,17 +23,16 @@ extern const char * const ewolEventFileStdPopUpButton5;
 extern const char * const ewolEventFileStdPopUpButton6;
 
 namespace widget {
-	class StdPopUp : public widget::PopUp
-	{
+	class StdPopUp : public widget::PopUp {
 		public:
 			StdPopUp(void);
 			~StdPopUp(void);
 			// Derived function
 			virtual const char * const getObjectType(void) { return "EwolPopUp"; };
-			virtual bool onEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y);
-			void setTitle(etk::UString text);
-			void setComment(etk::UString text);
-			void setButtonLabel(int32_t btId, etk::UString text); // note : if no label no bt...
+			virtual bool onEventAreaExternal(int32_t _widgetID, const char *_generateEventId, const char *_eventExternId, float _x, float _y);
+			void setTitle(etk::UString _text);
+			void setComment(etk::UString _text);
+			void setButtonLabel(int32_t _btId, etk::UString _text); // note : if no label no bt...
 		private:
 			ewol::widget::Label*  m_title;
 			ewol::widget::Label*  m_comment;

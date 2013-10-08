@@ -18,15 +18,13 @@
 #define __class__ "TextureFile"
 
 ewol::TextureFile::TextureFile(const etk::UString& _genName) :
-	Texture(_genName)
-{
+  Texture(_genName) {
 	
 }
 
 
 ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfileName, const ivec2& _size) :
-	Texture(_genName)
-{
+  Texture(_genName) {
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}
@@ -42,8 +40,7 @@ ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfi
  * @param[in] _value Value that we want the next power of 2
  * @return result value
  */
-static int32_t nextP2(int32_t _value)
-{
+static int32_t nextP2(int32_t _value) {
 	int32_t val=1;
 	for (int32_t iii=1; iii<31; iii++) {
 		if (_value <= val) {
@@ -58,8 +55,7 @@ static int32_t nextP2(int32_t _value)
 
 
 
-ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 _size)
-{
+ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 _size) {
 	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
 	if (_filename == "") {
 		ewol::TextureFile* object = new ewol::TextureFile("");
@@ -114,8 +110,7 @@ ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 
 }
 
 
-void ewol::TextureFile::release(ewol::TextureFile*& _object)
-{
+void ewol::TextureFile::release(ewol::TextureFile*& _object) {
 	if (NULL == _object) {
 		return;
 	}

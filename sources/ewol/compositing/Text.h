@@ -17,19 +17,16 @@
 #include <ewol/resources/ResourceManager.h>
 #include <exml/exml.h>
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief This class represent the specific display for every char in the string ...
 	 */
-	class TextDecoration
-	{
+	class TextDecoration {
 		public:
 			etk::Color<> m_colorBg; //!< display background color
 			etk::Color<> m_colorFg; //!< display foreground color
 			ewol::font::mode_te m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
-			TextDecoration(void)
-			{
+			TextDecoration(void) {
 				m_colorBg = etk::color::blue;
 				m_colorBg = etk::color::green;
 				m_mode = ewol::font::Regular;
@@ -37,8 +34,7 @@ namespace ewol
 			}
 	};
 	
-	class Text : public ewol::Compositing
-	{
+	class Text : public ewol::Compositing {
 		public:
 			typedef enum {
 				alignDisable,
@@ -368,9 +364,9 @@ namespace ewol
 			bool extrapolateLastId(const etk::UString& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 		private:
 			// this section is reserved for HTML parsing and display:
-			etk::UString                 m_htmlCurrrentLine; //!< current line for HTML display
-			etk::Vector<TextDecoration>  m_htmlDecoration;   //!< current decoration for the HTML display
-			TextDecoration               m_htmlDecoTmp;      //!< current decoration
+			etk::UString m_htmlCurrrentLine; //!< current line for HTML display
+			etk::Vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
+			TextDecoration m_htmlDecoTmp; //!< current decoration
 			/**
 			 * @brief add a line with the current m_htmlDecoTmp decoration
 			 * @param[in] _data The cuurent data to add.

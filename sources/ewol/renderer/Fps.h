@@ -9,13 +9,11 @@
 #ifndef __EWOL_FPS_H__
 #define __EWOL_FPS_H__
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief This class is designed to count the number of frame per second in the main renderer system
 	 */
-	class Fps
-	{
+	class Fps {
 		// display every second ...
 		#define DISPLAY_PERIODE_US       (1000000)
 		private:

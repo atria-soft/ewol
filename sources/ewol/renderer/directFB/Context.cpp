@@ -47,8 +47,7 @@
 #include <directfbgl.h>
 
 
-int64_t guiInterface::getTime(void)
-{
+int64_t guiInterface::getTime(void) {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
@@ -92,20 +91,17 @@ static int screen_height = 600;
  * @param title New desired title
  * @return ---
  */
-void guiInterface::setTitle(etk::UString& title)
-{
+void guiInterface::setTitle(etk::UString& title) {
 	// TODO : ...
 }
 
 
-void guiInterface::setIcon(etk::UString inputFile)
-{
+void guiInterface::setIcon(etk::UString inputFile) {
 	// TODO : ...
 }
 
 
-void DirectFB_Init(int argc, const char *argv[])
-{
+void DirectFB_Init(int argc, const char *argv[]) {
 	EWOL_INFO("DirectFB init (START)");
 	DFBResult err;
 	DFBSurfaceDescription dsc;
@@ -194,8 +190,7 @@ void DirectFB_Init(int argc, const char *argv[])
 	EWOL_INFO("DirectFB init (STOP)");
 }
 
-void DirectFB_UnInit(void)
-{
+void DirectFB_UnInit(void) {
 	// release our interfaces to shutdown DirectFB
 	primary_gl->release(primary_gl);
 	primary->release(primary);
@@ -203,8 +198,7 @@ void DirectFB_UnInit(void)
 	dfb->release(dfb);
 }
 
-void DirectFB_Run(void)
-{
+void DirectFB_Run(void) {
 	EWOL_INFO("X11 configure windows size : (" << screen_height << "," << screen_width << ")");
 	eSystem::Resize(screen_width, screen_height);
 	
@@ -375,14 +369,12 @@ void DirectFB_Run(void)
 // -------------------------------------------------------------------------
 
 
-void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te clipboardID)
-{
+void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 	// TODO : ...
 }
 
 
-void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
-{
+void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 	// TODO : ...
 }
 
@@ -392,49 +384,41 @@ void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te clipboardID)
 #define __class__ "guiInterface"
 
 
-void guiInterface::Stop(void)
-{
+void guiInterface::Stop(void) {
 	EWOL_INFO("X11-API: Stop");
 	m_run = false;
 }
 
-void guiInterface::KeyboardShow(void)
-{
+void guiInterface::KeyboardShow(void) {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-void guiInterface::KeyboardHide(void)
-{
+void guiInterface::KeyboardHide(void) {
 	// nothing to do : No keyboard on computer ...
 }
 
 
-void guiInterface::changeSize(ivec2 size)
-{
+void guiInterface::changeSize(ivec2 _size) {
 	// TODO : ...
 }
 
 
-void guiInterface::changePos(ivec2 pos)
-{
+void guiInterface::changePos(ivec2 _pos) {
 	// TODO : ...
 }
 
 
-void guiInterface::getAbsPos(ivec2& pos)
-{
+void guiInterface::getAbsPos(ivec2& _pos) {
 	// TODO : ...
 }
 
 
-void guiInterface::setCursor(ewol::cursorDisplay_te newCursor)
-{
+void guiInterface::setCursor(ewol::cursorDisplay_te _newCursor) {
 	// TODO : ...
 }
 
-void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
-{
+void guiInterface::GrabPointerEvents(bool _isGrabbed, vec2 _forcedPosition) {
 	// TODO : ...
 }
 
@@ -444,8 +428,7 @@ void guiInterface::GrabPointerEvents(bool isGrabbed, vec2 forcedPosition)
  * @param std IO
  * @return std IO
  */
-int guiInterface::main(int argc, const char *argv[])
-{
+int guiInterface::main(int argc, const char *argv[]) {
 	EWOL_INFO("Main (START)");
 	for (int32_t iii=0; iii<NB_MAX_INPUT; iii++) {
 		inputIsPressed[iii] = false;
@@ -468,15 +451,13 @@ int guiInterface::main(int argc, const char *argv[])
 }
 
 
-void guiInterface::forceOrientation(ewol::orientation_te orientation)
-{
+void guiInterface::forceOrientation(ewol::orientation_te orientation) {
 	// nothing to do ...
 }
 
 
 /*
-static void init(int argc, char *argv[])
-{
+static void init(int argc, char *argv[]) {
 
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_CULL_FACE);

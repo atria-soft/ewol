@@ -29,14 +29,30 @@ namespace ewol {
 				m_specialKey(_specialKey),
 				m_unicodeData(_char)
 			{ };
-			void setType(ewol::keyEvent::keyboard_te _type) { m_type = _type; };
-			inline const ewol::keyEvent::keyboard_te& getType(void) const { return m_type; };
-			void setStatus(ewol::keyEvent::status_te _status) { m_status = _status; };
-			inline const ewol::keyEvent::status_te& getStatus(void) const { return m_status; };
-			void setSpecialKey(const ewol::SpecialKey& _specialKey) { m_specialKey = _specialKey; };
-			inline const ewol::SpecialKey& getSpecialKey(void) const { return m_specialKey; };
-			void setChar(uniChar_t _char) { m_unicodeData = _char; };
-			inline const uniChar_t& getChar(void) const { return m_unicodeData; };
+			void setType(ewol::keyEvent::keyboard_te _type) {
+				m_type = _type;
+			};
+			inline const ewol::keyEvent::keyboard_te& getType(void) const {
+				return m_type;
+			};
+			void setStatus(ewol::keyEvent::status_te _status) {
+				m_status = _status;
+			};
+			inline const ewol::keyEvent::status_te& getStatus(void) const {
+				return m_status;
+			};
+			void setSpecialKey(const ewol::SpecialKey& _specialKey) {
+				m_specialKey = _specialKey;
+			};
+			inline const ewol::SpecialKey& getSpecialKey(void) const {
+				return m_specialKey;
+			};
+			void setChar(uniChar_t _char) {
+				m_unicodeData = _char;
+			};
+			inline const uniChar_t& getChar(void) const {
+				return m_unicodeData;
+			};
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EventEntry& _obj);
 	

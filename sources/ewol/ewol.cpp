@@ -16,11 +16,10 @@
 #include <date/date.h>
 
 #undef __class__
-#define __class__	"ewol"
+#define __class__ "ewol"
 
 
-etk::UString ewol::getCompilationMode(void)
-{
+etk::UString ewol::getCompilationMode(void) {
 	#ifdef MODE_RELEASE
 		return "Release";
 	#else
@@ -28,8 +27,7 @@ etk::UString ewol::getCompilationMode(void)
 	#endif
 }
 
-etk::UString ewol::getBoardType(void)
-{
+etk::UString ewol::getBoardType(void) {
 	#ifdef __TARGET_OS__Linux
 		return "Linux";
 	#elif defined(__TARGET_OS__Android)
@@ -45,8 +43,7 @@ etk::UString ewol::getBoardType(void)
 	#endif
 }
 
-etk::UString ewol::getVersion(void)
-{
+etk::UString ewol::getVersion(void) {
 	#define FIRST_YEAR (2011)
 	etk::UString tmpOutput = (date::getYear()-FIRST_YEAR);
 	tmpOutput += ".";

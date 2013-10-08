@@ -16,14 +16,12 @@
 #include <ewol/compositing/Compositing.h>
 
 namespace widget {
-	
 	typedef enum {
 		SCROLL_MODE_NORMAL, //!< No Zoom , can UP and down, left and right
 		SCROLL_MODE_CENTER, //!< Zoom enable, no move left and right
 		SCROLL_MODE_GAME, //!< Zoom enable, no move left and right
 	} scrollingMode_te;
-	class WidgetScrooled : public ewol::Widget
-	{
+	class WidgetScrooled : public ewol::Widget {
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
@@ -48,35 +46,41 @@ namespace widget {
 			virtual const char * const getObjectType(void) { return "EwolWidgetScrooled"; };
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
-			virtual void systemDraw(const ewol::drawProperty& displayProp);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
 		protected:
 			/**
 			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled
-			 * @param[in] nbPixel number of pixel scrolling
+			 * @param[in] _nbPixel number of pixel scrolling
 			 */
-			void setScrollingSize(float nbPixel) { m_pixelScrolling = nbPixel; };
+			void setScrollingSize(float _nbPixel) {
+				m_pixelScrolling = _nbPixel;
+			};
 			/**
 			 * @brief Specify the mode of scrolling for this windows
-			 * @param[in] newMode the selected mode for the scrolling...
+			 * @param[in] _newMode the selected mode for the scrolling...
 			 */
-			void scroolingMode(scrollingMode_te newMode);
+			void scroolingMode(scrollingMode_te _newMode);
 			/**
 			 * @brief set the specific mawimum size of the widget
-			 * @param[in] localSize new Maximum size
+			 * @param[in] _localSize new Maximum size
 			 */
-			void setMaxSize(vec2  localSize) { m_maxSize = localSize; };
+			void setMaxSize(vec2 _localSize) {
+				m_maxSize = _localSize;
+			};
 			/**
 			 * @brief Request a specific position for the scrolling of the current windows.
-			 * @param[in] borderWidth size of the border that requested the element might not to be
-			 * @param[in] currentPosition Position that is requested to view
-			 * @param[in] center True if the position might be at the center of the widget
+			 * @param[in] _borderWidth size of the border that requested the element might not to be
+			 * @param[in] _currentPosition Position that is requested to view
+			 * @param[in] _center True if the position might be at the center of the widget
 			 */
-			void setScrollingPositionDynamic(vec2  borderWidth, vec2  currentPosition, bool center = false);
+			void setScrollingPositionDynamic(vec2 _borderWidth, vec2 _currentPosition, bool _center = false);
 			/**
 			 * @brief set the scrolling limit when arriving at he end of the widget
-			 * @param[in] poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
+			 * @param[in] _poucentageLimit pourcent of the limit of view nothing in the widget when arriving at the end ...
 			 */
-			void setLimitScrolling(float poucentageLimit) { m_limitScrolling = etk_avg(0.1, poucentageLimit,0.9); };
+			void setLimitScrolling(float _poucentageLimit) {
+				m_limitScrolling = etk_avg(0.1, _poucentageLimit,0.9);
+			};
 	};
 	
 };

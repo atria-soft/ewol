@@ -15,8 +15,7 @@
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexOpenGl(void)
-{
+static etk::Mutex& mutexOpenGl(void) {
 	static etk::Mutex s_drawMutex;
 	return s_drawMutex;
 }
@@ -41,32 +40,28 @@ void ewol::openGL::lock(void) {
 	l_programId = -1;
 }
 
-void ewol::openGL::unLock(void)
-{
+void ewol::openGL::unLock(void) {
 	mutexOpenGl().unLock();
 }
 
-void ewol::openGL::setBasicMatrix(const mat4& newOne)
-{
+void ewol::openGL::setBasicMatrix(const mat4& _newOne) {
 	if (l_matrixList.size()!=1) {
 		EWOL_ERROR("matrix is not corect size in the stack : " << l_matrixList.size());
 	}
 	l_matrixList.clear();
-	l_matrixList.pushBack(newOne);
+	l_matrixList.pushBack(_newOne);
 }
 
-void ewol::openGL::setMatrix(const mat4& newOne)
-{
+void ewol::openGL::setMatrix(const mat4& _newOne) {
 	if (l_matrixList.size() == 0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
-		l_matrixList.pushBack(newOne);
+		l_matrixList.pushBack(_newOne);
 		return;
 	}
-	l_matrixList[l_matrixList.size()-1] = newOne;
+	l_matrixList[l_matrixList.size()-1] = _newOne;
 }
 
-void ewol::openGL::push(void)
-{
+void ewol::openGL::push(void) {
 	if (l_matrixList.size() == 0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		mat4 tmp;
@@ -77,8 +72,7 @@ void ewol::openGL::push(void)
 	l_matrixList.pushBack(tmp);
 }
 
-void ewol::openGL::pop(void)
-{
+void ewol::openGL::pop(void) {
 	if (l_matrixList.size() <= 1) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		l_matrixList.clear();
@@ -91,8 +85,7 @@ void ewol::openGL::pop(void)
 	l_matrixCamera.identity();
 }
 
-const mat4& ewol::openGL::getMatrix(void)
-{
+const mat4& ewol::openGL::getMatrix(void) {
 	if (l_matrixList.size() == 0) {
 		EWOL_ERROR("set matrix list is not corect size in the stack : " << l_matrixList.size());
 		mat4 tmp;
@@ -101,31 +94,25 @@ const mat4& ewol::openGL::getMatrix(void)
 	return l_matrixList[l_matrixList.size()-1];
 }
 
-const mat4& ewol::openGL::getCameraMatrix(void)
-{
+const mat4& ewol::openGL::getCameraMatrix(void) {
 	return l_matrixCamera;
 }
 
-void ewol::openGL::setCameraMatrix(const mat4& newOne)
-{
-	l_matrixCamera = newOne;
+void ewol::openGL::setCameraMatrix(const mat4& _newOne) {
+	l_matrixCamera = _newOne;
 }
 
-void ewol::openGL::finish(void)
-{
+void ewol::openGL::finish(void) {
 	l_programId = -1;
 	l_textureflags = 0;
 }
 
-void ewol::openGL::flush(void)
-{
+void ewol::openGL::flush(void) {
 	l_programId = -1;
 	l_textureflags = 0;
-	
 }
 
-void ewol::openGL::swap(void)
-{
+void ewol::openGL::swap(void) {
 	
 }
 
@@ -195,40 +182,35 @@ static correspondenceTable_ts basicFlag[] = {
 static int32_t basicFlagCount = sizeof(basicFlag) / sizeof(correspondenceTable_ts);
 
 
-void ewol::openGL::enable(ewol::openGL::openGlFlags_te flagID)
-{
+void ewol::openGL::enable(ewol::openGL::openGlFlags_te _flagID) {
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
-		if ( basicFlag[iii].curentFlag == (uint32_t)flagID ) {
+		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
 			glEnable(basicFlag[iii].OGlFlag);
 		}
 	}
 	# else
 		//EWOL_DEBUG("Enable FLAGS = " << l_flagsMustBeSet);
-		l_flagsMustBeSet |= (uint32_t)flagID;
+		l_flagsMustBeSet |= (uint32_t)_flagID;
 		//EWOL_DEBUG("             == >" << l_flagsMustBeSet);
 	#endif
 }
 
-void ewol::openGL::disable(ewol::openGL::openGlFlags_te flagID)
-{
+void ewol::openGL::disable(ewol::openGL::openGlFlags_te _flagID) {
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
-		if ( basicFlag[iii].curentFlag == (uint32_t)flagID ) {
+		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
 			glDisable(basicFlag[iii].OGlFlag);
 		}
 	}
 	# else
 		//EWOL_DEBUG("Disable FLAGS = " << l_flagsMustBeSet);
-		l_flagsMustBeSet &= ~((uint32_t)flagID);
+		l_flagsMustBeSet &= ~((uint32_t)_flagID);
 		//EWOL_DEBUG("              == >" << l_flagsMustBeSet);
 	#endif
 }
 
-
-
-void ewol::openGL::updateAllFlags(void)
-{
+void ewol::openGL::updateAllFlags(void) {
 	#ifdef DIRECT_MODE
 		return;
 	#endif
@@ -251,75 +233,67 @@ void ewol::openGL::updateAllFlags(void)
 }
 
 
-void ewol::openGL::activeTexture(uint32_t flagID)
-{
+void ewol::openGL::activeTexture(uint32_t _flagID) {
 	if (l_programId >= 0) {
-		glActiveTexture(flagID);
+		glActiveTexture(_flagID);
 	}
 }
 
-void ewol::openGL::desActiveTexture(uint32_t flagID)
-{
+void ewol::openGL::desActiveTexture(uint32_t _flagID) {
 	if (l_programId >= 0) {
 		
 	}
 }
 
-void ewol::openGL::drawArrays(uint32_t mode, int32_t first, int32_t count)
-{
+void ewol::openGL::drawArrays(uint32_t _mode, int32_t _first, int32_t _count) {
 	if (l_programId >= 0) {
 		updateAllFlags();
-		glDrawArrays(mode, first, count);
+		glDrawArrays(_mode, _first, _count);
 	}
 }
 
-void ewol::openGL::drawElements(uint32_t mode, const etk::Vector<uint32_t>& indices)
-{
+void ewol::openGL::drawElements(uint32_t _mode, const etk::Vector<uint32_t>& _indices) {
 	if (l_programId >= 0) {
 		updateAllFlags();
 		//EWOL_DEBUG("Request draw of " << indices.size() << "elements");
-		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, &indices[0]);
+		glDrawElements(_mode, _indices.size(), GL_UNSIGNED_INT, &_indices[0]);
 	}
 }
 
-void ewol::openGL::drawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices)
-{
+void ewol::openGL::drawElements16(uint32_t _mode, const etk::Vector<uint16_t>& _indices) {
 	if (l_programId >= 0) {
 		updateAllFlags();
-		glDrawElements(mode, indices.size(), GL_UNSIGNED_SHORT, &indices[0]);
+		glDrawElements(_mode, _indices.size(), GL_UNSIGNED_SHORT, &_indices[0]);
 	}
 }
 
-void ewol::openGL::drawElements8(uint32_t mode, const etk::Vector<uint8_t>& indices)
-{
+void ewol::openGL::drawElements8(uint32_t _mode, const etk::Vector<uint8_t>& _indices) {
 	if (l_programId >= 0) {
 		updateAllFlags();
-		glDrawElements(mode, indices.size(), GL_UNSIGNED_BYTE, &indices[0]);
+		glDrawElements(_mode, _indices.size(), GL_UNSIGNED_BYTE, &_indices[0]);
 	}
 }
 
-
-void ewol::openGL::useProgram(int32_t id)
-{
+void ewol::openGL::useProgram(int32_t _id) {
 	//EWOL_DEBUG("USE prog : " << id);
 	#if 1
 		// note : In normal openGL case, the system might call with the program ID and at the end with 0, 
 		//        here, we wrap this use to prevent over call of glUseProgram  == > then we set -1 when the 
 		//        user no more use this program, and just stop grnerating. (chen 0  == > this is an errored program ...
-		if (-1 == id) {
+		if (-1 == _id) {
 			// not used  == > because it is unneded
 			return;
 		}
-		if (l_programId != id) {
-			l_programId = id;
+		if (l_programId != _id) {
+			l_programId = _id;
 			glUseProgram(l_programId);
 		}
 	#else
-		if (-1 == id) {
+		if (-1 == _id) {
 			glUseProgram(0);
 		} else {
-			l_programId = id;
-			glUseProgram(id);
+			l_programId = _id;
+			glUseProgram(_id);
 		}
 	#endif
 }

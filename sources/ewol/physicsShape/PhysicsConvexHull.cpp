@@ -10,8 +10,7 @@
 
 
 
-bool ewol::PhysicsConvexHull::parse(const char* _line)
-{
+bool ewol::PhysicsConvexHull::parse(const char* _line) {
 	if (true ==  ewol::PhysicsShape::parse(_line)) {
 		return true;
 	}

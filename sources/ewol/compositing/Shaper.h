@@ -14,15 +14,13 @@
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/renderer/EventTime.h>
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief the Shaper system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files
 	 */
 	// TODO : load image
 	// TODO : Abstaraction between states (call by name and the system greate IDs
-	class Shaper : public ewol::Compositing
-	{
+	class Shaper : public ewol::Compositing {
 		private:
 			etk::UString m_name; //!< Name of the configuration of the shaper.
 			// External theme config:

@@ -30,10 +30,8 @@
 // 4 "float" elements
 #define MESH_VBO_COLOR     (4)
 
-namespace ewol
-{
-	class Face
-	{
+namespace ewol {
+	class Face {
 		public:
 			int32_t m_vertex[3];
 			int32_t m_uv[3];
@@ -42,8 +40,7 @@ namespace ewol
 			Face(void) {};
 			Face(int32_t v1, int32_t t1,
 			     int32_t v2, int32_t t2,
-			     int32_t v3, int32_t t3)
-			{
+			     int32_t v3, int32_t t3) {
 				m_vertex[0] = v1;
 				m_vertex[1] = v2;
 				m_vertex[2] = v3;
@@ -56,8 +53,7 @@ namespace ewol
 			};
 			Face(int32_t v1, int32_t t1, int32_t n1,
 			     int32_t v2, int32_t t2, int32_t n2,
-			     int32_t v3, int32_t t3, int32_t n3)
-			{
+			     int32_t v3, int32_t t3, int32_t n3) {
 				m_vertex[0] = v1;
 				m_vertex[1] = v2;
 				m_vertex[2] = v3;
@@ -69,14 +65,12 @@ namespace ewol
 				m_normal[2] = n3;
 			};
 	};
-	class FaceIndexing
-	{
+	class FaceIndexing {
 		public:
 			etk::Vector<Face> m_faces;
 			etk::Vector<uint32_t> m_index;
 	};
-	class Mesh : public ewol::Resource
-	{
+	class Mesh : public ewol::Resource {
 		public:
 			typedef enum {
 				normalModeNone,

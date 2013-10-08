@@ -13,10 +13,8 @@
 #include <ewol/compositing/Compositing.h>
 #include <ewol/resources/ResourceManager.h>
 
-namespace ewol
-{
-	class Mesh : public ewol::Compositing
-	{
+namespace ewol {
+	class Mesh : public ewol::Compositing {
 		protected:
 			
 		public:

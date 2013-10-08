@@ -13,10 +13,8 @@
 #include <ewol/resources/Texture.h>
 #include <ewol/resources/Resource.h>
 
-namespace ewol
-{
-	namespace font
-	{
+namespace ewol {
+	namespace font {
 		typedef enum {
 			Regular=0,
 			Italic,
@@ -27,7 +25,6 @@ namespace ewol
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj);
 	
 	class TexturedFont : public ewol::Texture {
-		
 		private:
 			etk::UString m_fileName[4];
 			int32_t m_size;
@@ -44,17 +41,17 @@ namespace ewol
 			ivec2 m_lastGlyphPos[4];
 			int32_t m_lastRawHeigh[4];
 		protected:
-			TexturedFont(etk::UString fontName);
+			TexturedFont(etk::UString _fontName);
 			~TexturedFont(void);
 		public:
-			virtual bool hasName(const etk::UString& fileName);
+			virtual bool hasName(const etk::UString& _fileName);
 			const char* getType(void) { return "ewol::TexturedFont"; };
 			/**
 			 * @brief get the display height of this font
-			 * @param[in] displayMode Mode to display the currrent font
+			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return Dimention of the font need between 2 lines
 			 */
-			int32_t getHeight(const ewol::font::mode_te displayMode = ewol::font::Regular) { return m_height[displayMode]; };
+			int32_t getHeight(const ewol::font::mode_te _displayMode = ewol::font::Regular) { return m_height[_displayMode]; };
 			/**
 			 * @brief get the font height (user friendly)
 			 * @return Dimention of the font the user requested
@@ -62,25 +59,25 @@ namespace ewol
 			int32_t getFontSize(void) { return m_size; };
 			/**
 			 * @brief get the ID of a unicode charcode
-			 * @param[in] charcode The unicodeValue
-			 * @param[in] displayMode Mode to display the currrent font
+			 * @param[in] _charcode The unicodeValue
+			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t getIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode);
+			int32_t getIndex(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode);
 			/**
 			 * @brief get the pointer on the coresponding glyph
-			 * @param[in] charcode The unicodeValue
-			 * @param[in] displayMode Mode to display the currrent font
+			 * @param[in] _charcode The unicodeValue
+			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The pointer on the glyph  == > never NULL
 			 */
-			ewol::GlyphProperty* getGlyphPointer(const uniChar_t& charcode, const ewol::font::mode_te displayMode);
+			ewol::GlyphProperty* getGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode);
 			/**
 			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 			 *        For exemple when a blod mode does not exist, this resend a regular mode.
-			 * @param[in] source The requested mode.
+			 * @param[in] _source The requested mode.
 			 * @return the best mode we have in stock.
 			 */
-			ewol::font::mode_te getWrappingMode(ewol::font::mode_te source) { return m_modeWraping[source]; };
+			ewol::font::mode_te getWrappingMode(ewol::font::mode_te _source) { return m_modeWraping[_source]; };
 		public:
 			/**
 			 * @brief keep the resource pointer.

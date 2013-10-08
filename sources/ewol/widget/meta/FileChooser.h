@@ -22,8 +22,7 @@ extern const char * const ewolEventFileChooserCancel;
 extern const char * const ewolEventFileChooserValidate;
 
 namespace widget {
-	class FileChooser : public widget::PopUp
-	{
+	class FileChooser : public widget::PopUp {
 		public:
 			FileChooser(void);
 			virtual ~FileChooser(void);

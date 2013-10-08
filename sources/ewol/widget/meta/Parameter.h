@@ -23,8 +23,7 @@
 extern const char * const ewolEventParameterClose;
 
 namespace widget {
-	class Parameter : public widget::PopUp
-	{
+	class Parameter : public widget::PopUp {
 		public:
 			Parameter(void);
 			~Parameter(void);
@@ -33,11 +32,11 @@ namespace widget {
 			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function
-			virtual void onObjectRemove(ewol::EObject * removeObject);
+			virtual void onObjectRemove(ewol::EObject * _removeObject);
 			
-			void setTitle(etk::UString label);
-			void menuAdd(etk::UString label, etk::UString image, ewol::Widget* associateWidget);
-			void menuAddGroup(etk::UString label);
+			void setTitle(etk::UString _label);
+			void menuAdd(etk::UString _label, etk::UString _image, ewol::Widget* _associateWidget);
+			void menuAddGroup(etk::UString _label);
 			void menuClear(void);
 			void menuSeparator(void);
 		private:

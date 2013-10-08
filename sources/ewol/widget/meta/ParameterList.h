@@ -18,37 +18,35 @@ extern const char * const ewolEventParameterListSelect;
 
 
 namespace widget {
-	
-	class elementPL
-	{
+	class elementPL {
 		public :
 			bool            m_group;
 			etk::UString    m_label;
 			int32_t         m_refId;
 			etk::UString    m_image;
-			elementPL(etk::UString& label, int32_t refId, etk::UString& image, bool isGroup) :
-				m_group(isGroup),
-				m_label(label),
-				m_refId(refId),
-				m_image(image)
-			{ };
+			elementPL(etk::UString& _label, int32_t _refId, etk::UString& _image, bool _isGroup) :
+			  m_group(_isGroup),
+			  m_label(_label),
+			  m_refId(_refId),
+			  m_image(_image) {
+				
+			};
 			~elementPL(void) {};
 	};
 	
-	class ParameterList :public widget::WidgetScrooled
-	{
+	class ParameterList :public widget::WidgetScrooled {
 		private:
 			int32_t m_idSelected;
 			etk::Vector<widget::elementPL *> m_list;
 		public:
 			ParameterList(void);
 			virtual ~ParameterList(void);
-			void setLabel(etk::UString newLabel);
+			void setLabel(etk::UString _newLabel);
 		// drawing capabilities ....
 		private:
-			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
+			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 		public:
-			void addOObject(ewol::Compositing* newObject, int32_t pos=-1);
+			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 			void clearOObjectList(void);
 		// list properties ...
 		private:
@@ -57,8 +55,8 @@ namespace widget {
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
-			void menuAdd(etk::UString& label, int32_t refId, etk::UString& image);
-			void menuAddGroup(etk::UString& label);
+			void menuAdd(etk::UString& _label, int32_t _refId, etk::UString& _image);
+			void menuAddGroup(etk::UString& _label);
 			void menuClear(void);
 			void menuSeparator(void);
 			

@@ -18,16 +18,16 @@ namespace ewol {
 		void init(void);
 		void unInit(void);
 		
-		typedef void (*AudioCallback)(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
-		void addCallbackOutput(AudioCallback userCallback);
+		typedef void (*AudioCallback)(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels);
+		void addCallbackOutput(AudioCallback _userCallback);
 		
-		void getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
+		void getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels);
 		
 		namespace music {
-			void fading(int32_t timeMs);
+			void fading(int32_t _timeMs);
 			// list playing system : is cyclic ...
-			bool  listAdd(etk::UString file);
-			bool  listRm(etk::UString file);
+			bool  listAdd(etk::UString _file);
+			bool  listRm(etk::UString _file);
 			bool  listClean(void);
 			bool  listPrevious(void);
 			bool  listNext(void);
@@ -36,30 +36,30 @@ namespace ewol {
 			bool  listPlay(void); // List playing
 			bool  listStop(void); // List stopping
 			
-			bool  play(etk::UString file); // play specific file ... pause the list element;
+			bool  play(etk::UString _file); // play specific file ... pause the list element;
 			bool  stop(void);
 			
 			// in db
 			float volumeGet(void);
-			void  volumeSet(float newVolume);
+			void  volumeSet(float _newVolume);
 			bool  muteGet(void);
-			void  muteSet(bool newMute);
-			void  getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
+			void  muteSet(bool _newMute);
+			void  getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels);
 			
 		};
 		// note effect is loaded in memory (then don't create long effect) and unload only when requested
 		namespace effects {
 			// note : support file (Mono, 16bit, 48kHz) : .raw or .wav (no encodage) or .ogg (decoded with tremor lib)
-			int32_t add(etk::UString file);
-			void    rm(int32_t effectId);
-			void    play(int32_t effectId, float xxx, float yyy);
+			int32_t add(etk::UString _file);
+			void    rm(int32_t _effectId);
+			void    play(int32_t _effectId, float _xxx, float _yyy);
 			
 			// in db
 			float volumeGet(void);
-			void  volumeSet(float newVolume);
+			void  volumeSet(float _newVolume);
 			bool  muteGet(void);
-			void  muteSet(bool newMute);
-			void  getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels);
+			void  muteSet(bool _newMute);
+			void  getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels);
 			
 		};
 	};

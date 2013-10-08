@@ -15,10 +15,8 @@
 #include <ewol/resources/Shader.h>
 #include <ewol/resources/Program.h>
 
-namespace ewol
-{
-	class Colored3DObject : public ewol::Resource
-	{
+namespace ewol {
+	class Colored3DObject : public ewol::Resource {
 		protected:
 			ewol::Program* m_GLprogram;
 			int32_t m_GLPosition;

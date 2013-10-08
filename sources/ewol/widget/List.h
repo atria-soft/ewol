@@ -16,8 +16,7 @@
 #include <ewol/compositing/Compositing.h>
 
 namespace widget {
-	class List : public widget::WidgetScrooled
-	{
+	class List : public widget::WidgetScrooled {
 		public:
 			List(void);
 			// Derived function
@@ -81,7 +80,6 @@ namespace widget {
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 	};
-	
 };
 
 #endif

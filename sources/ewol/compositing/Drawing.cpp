@@ -218,19 +218,18 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 #endif
 
 ewol::Drawing::Drawing(void) :
-	m_position(0.0, 0.0, 0.0),
-	m_clippingPosStart(0.0, 0.0, 0.0),
-	m_clippingPosStop(0.0, 0.0, 0.0),
-	m_clippingEnable(false),
-	m_color(etk::color::black),
-	m_colorBg(etk::color::none),
-	m_GLprogram(NULL),
-	m_GLPosition(-1),
-	m_GLMatrix(-1),
-	m_GLColor(-1),
-	m_thickness(0.0),
-	m_triElement(0)
-{
+  m_position(0.0, 0.0, 0.0),
+  m_clippingPosStart(0.0, 0.0, 0.0),
+  m_clippingPosStop(0.0, 0.0, 0.0),
+  m_clippingEnable(false),
+  m_color(etk::color::black),
+  m_colorBg(etk::color::none),
+  m_GLprogram(NULL),
+  m_GLPosition(-1),
+  m_GLMatrix(-1),
+  m_GLColor(-1),
+  m_thickness(0.0),
+  m_triElement(0) {
 	loadProgram();
 	for (int32_t iii=0; iii<3; iii++) {
 		m_triangle[iii] = m_position;
@@ -238,15 +237,11 @@ ewol::Drawing::Drawing(void) :
 	}
 }
 
-
-ewol::Drawing::~Drawing(void)
-{
+ewol::Drawing::~Drawing(void) {
 	unLoadProgram();
 }
 
-
-void ewol::Drawing::generateTriangle(void)
-{
+void ewol::Drawing::generateTriangle(void) {
 	m_triElement = 0;
 	
 	m_coord.pushBack(m_triangle[0]);
@@ -257,8 +252,7 @@ void ewol::Drawing::generateTriangle(void)
 	m_coordColor.pushBack(m_tricolor[2]);
 }
 
-void ewol::Drawing::internalSetColor(const etk::Color<>& _color)
-{
+void ewol::Drawing::internalSetColor(const etk::Color<>& _color) {
 	if (m_triElement < 1) {
 		m_tricolor[0] = _color;
 	}
@@ -270,9 +264,7 @@ void ewol::Drawing::internalSetColor(const etk::Color<>& _color)
 	}
 }
 
-
-void ewol::Drawing::setPoint(const vec3& _point)
-{
+void ewol::Drawing::setPoint(const vec3& _point) {
 	m_triangle[m_triElement] = _point;
 	m_triElement++;
 	if (m_triElement >= 3) {
@@ -280,19 +272,15 @@ void ewol::Drawing::setPoint(const vec3& _point)
 	}
 }
 
-
-void ewol::Drawing::resetCount(void)
-{
+void ewol::Drawing::resetCount(void) {
 	m_triElement = 0;
 }
 
-void ewol::Drawing::unLoadProgram(void)
-{
+void ewol::Drawing::unLoadProgram(void) {
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Drawing::loadProgram(void)
-{
+void ewol::Drawing::loadProgram(void) {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
@@ -305,8 +293,7 @@ void ewol::Drawing::loadProgram(void)
 	}
 }
 
-void ewol::Drawing::draw(bool _disableDepthTest)
-{
+void ewol::Drawing::draw(bool _disableDepthTest) {
 	if (m_coord.size() <= 0) {
 		// TODO : a remÃštre ...
 		//EWOL_WARNING("Nothink to draw...");
@@ -329,8 +316,7 @@ void ewol::Drawing::draw(bool _disableDepthTest)
 	m_GLprogram->unUse();
 }
 
-void ewol::Drawing::clear(void)
-{
+void ewol::Drawing::clear(void) {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -352,8 +338,7 @@ void ewol::Drawing::clear(void)
 	}
 }
 
-void ewol::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd)
-{
+void ewol::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -379,9 +364,7 @@ void ewol::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd)
 	m_clippingEnable = true;
 }
 
-
-void ewol::Drawing::setThickness(float _thickness)
-{
+void ewol::Drawing::setThickness(float _thickness) {
 	m_thickness = _thickness;
 	// thickness must be positive
 	if (m_thickness < 0) {
@@ -389,14 +372,12 @@ void ewol::Drawing::setThickness(float _thickness)
 	}
 }
 
-void ewol::Drawing::addVertex(void)
-{
+void ewol::Drawing::addVertex(void) {
 	internalSetColor(m_color);
 	setPoint(m_position);
 }
 
-void ewol::Drawing::lineTo(const vec3& _dest)
-{
+void ewol::Drawing::lineTo(const vec3& _dest) {
 	resetCount();
 	internalSetColor(m_color);
 	EWOL_VERBOSE("DrawLine : " << m_position << " to " << _dest);
@@ -419,7 +400,6 @@ void ewol::Drawing::lineTo(const vec3& _dest)
 	//EWOL_DEBUG("teta = " << (teta*180/(M_PI)) << " deg." );
 	float offsety = sin(teta-M_PI/2) * (m_thickness/2);
 	float offsetx = cos(teta-M_PI/2) * (m_thickness/2);
-
 	setPoint(vec3(m_position.x() - offsetx, m_position.y() - offsety, m_position.z()) );
 	setPoint(vec3(m_position.x() + offsetx, m_position.y() + offsety, m_position.z()) );
 	setPoint(vec3(_dest.x()      + offsetx, _dest.y()      + offsety, m_position.z()) );
@@ -431,8 +411,7 @@ void ewol::Drawing::lineTo(const vec3& _dest)
 	m_position = _dest;
 }
 
-void ewol::Drawing::rectangle(const vec3& _dest)
-{
+void ewol::Drawing::rectangle(const vec3& _dest) {
 	resetCount();
 	internalSetColor(m_color);
 	/* Bitmap position
@@ -485,13 +464,11 @@ void ewol::Drawing::rectangle(const vec3& _dest)
 	setPoint(vec3(dxA, dyD, 0) );
 }
 
-void ewol::Drawing::cube(const vec3& _dest)
-{
+void ewol::Drawing::cube(const vec3& _dest) {
 	
 }
 
-void ewol::Drawing::circle(float _radius, float _angleStart, float _angleStop)
-{
+void ewol::Drawing::circle(float _radius, float _angleStart, float _angleStop) {
 	resetCount();
 	
 	if (_radius<0) {

@@ -15,9 +15,7 @@
 #include <etk/Color.h>
 
 namespace ewol {
-	
-	class Windows :public ewol::Widget
-	{
+	class Windows :public ewol::Widget {
 		public:
 			Windows(void);
 			virtual ~Windows(void);
@@ -30,19 +28,19 @@ namespace ewol {
 		public:
 			virtual void onShow(void) { };
 			virtual void onHide(void) { };
-			virtual bool onKill(void) { return true; };
+			virtual bool onKill(void) {
+				return true;
+			};
 			virtual void onReduce(void) { };
 			virtual void on(void) { };
 		private:
 			bool m_hasDecoration;
 		public:
-			void setDecorationDisable(void)
-			{
+			void setDecorationDisable(void) {
 				m_hasDecoration = false;
 			}
 			
-			void setDecorationEnable(void)
-			{
+			void setDecorationEnable(void) {
 				m_hasDecoration = true;
 			}
 		private:
@@ -69,9 +67,9 @@ namespace ewol {
 		public: // Derived function
 			virtual const char * const getObjectType(void) { return "ewol::Windows"; };
 			virtual void onRegenerateDisplay(void);
-			virtual void onObjectRemove(ewol::EObject * removeObject);
-			virtual void calculateSize(const vec2& availlable);
-			virtual ewol::Widget * getWidgetAtPos(const vec2& pos);
+			virtual void onObjectRemove(ewol::EObject * _removeObject);
+			virtual void calculateSize(const vec2& _availlable);
+			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos);
 			void setTitle(const etk::UString& _title);
 	};
 	

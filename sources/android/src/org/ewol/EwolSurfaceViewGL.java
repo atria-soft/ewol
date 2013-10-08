@@ -216,8 +216,7 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		return true;
 	}
 		
-	private boolean keyboardEvent(int keyCode, KeyEvent event, boolean isDown)
-	{
+	private boolean keyboardEvent(int keyCode, KeyEvent event, boolean isDown) {
 		int actionDone = event.getAction();
 		switch(keyCode)
 			{
@@ -287,13 +286,11 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		return false;
 	}
 		
-	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return keyboardEvent(keyCode, event, true);
 	}
 		
-	public boolean onKeyUp(int keyCode, KeyEvent event)
-	{
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		return keyboardEvent(keyCode, event, false);
 	}
 		

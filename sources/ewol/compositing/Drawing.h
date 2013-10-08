@@ -16,10 +16,8 @@
 #include <ewol/resources/ResourceManager.h>
 
 
-namespace ewol
-{
-	class Drawing : public ewol::Compositing
-	{
+namespace ewol {
+	class Drawing : public ewol::Compositing {
 		private:
 			vec3 m_position;         //!< The current position to draw
 			vec3 m_clippingPosStart; //!< Clipping start position

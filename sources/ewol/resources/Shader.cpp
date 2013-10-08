@@ -13,15 +13,14 @@
 #include <ewol/resources/ResourceManager.h>
 
 #undef __class__
-#define __class__	"Shader"
+#define __class__ "Shader"
 
-ewol::Shader::Shader(const etk::UString& _filename): 
-	ewol::Resource(_filename),
-	m_exist(false),
-	m_fileData(NULL),
-	m_shader(0),
-	m_type(0)
-{
+ewol::Shader::Shader(const etk::UString& _filename) :
+  ewol::Resource(_filename),
+  m_exist(false),
+  m_fileData(NULL),
+  m_shader(0),
+  m_type(0) {
 	m_resourceLevel = 0;
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
@@ -37,9 +36,7 @@ ewol::Shader::Shader(const etk::UString& _filename):
 	reload();
 }
 
-
-ewol::Shader::~Shader(void)
-{
+ewol::Shader::~Shader(void) {
 	if (NULL != m_fileData) {
 		delete [] m_fileData;
 		m_fileData = NULL;
@@ -51,18 +48,15 @@ ewol::Shader::~Shader(void)
 	m_exist = false;
 }
 
-
-static void checkGlError(const char* op)
-{
+static void checkGlError(const char* _op) {
 	for (GLint error = glGetError(); error; error = glGetError()) {
-		EWOL_INFO("after " << op << "() glError (" << error << ")");
+		EWOL_INFO("after " << _op << "() glError (" << error << ")");
 	}
 }
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-void ewol::Shader::updateContext(void)
-{
+void ewol::Shader::updateContext(void) {
 	if (true == m_exist) {
 		// Do nothing  == > too dangerous ...
 	} else {
@@ -103,8 +97,7 @@ void ewol::Shader::updateContext(void)
 	}
 }
 
-void ewol::Shader::removeContext(void)
-{
+void ewol::Shader::removeContext(void) {
 	if (true == m_exist) {
 		glDeleteShader(m_shader);
 		m_exist = false;
@@ -112,14 +105,12 @@ void ewol::Shader::removeContext(void)
 	}
 }
 
-void ewol::Shader::removeContextToLate(void)
-{
+void ewol::Shader::removeContextToLate(void) {
 	m_exist = false;
 	m_shader = 0;
 }
 
-void ewol::Shader::reload(void)
-{
+void ewol::Shader::reload(void) {
 	etk::FSNode file(m_name);
 	if (false == file.exist()) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
@@ -157,10 +148,7 @@ void ewol::Shader::reload(void)
 	updateContext();
 }
 
-
-
-ewol::Shader* ewol::Shader::keep(const etk::UString& _filename)
-{
+ewol::Shader* ewol::Shader::keep(const etk::UString& _filename) {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
 	ewol::Shader* object = static_cast<ewol::Shader*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -176,8 +164,7 @@ ewol::Shader* ewol::Shader::keep(const etk::UString& _filename)
 	return object;
 }
 
-void ewol::Shader::release(ewol::Shader*& _object)
-{
+void ewol::Shader::release(ewol::Shader*& _object) {
 	if (NULL == _object) {
 		return;
 	}

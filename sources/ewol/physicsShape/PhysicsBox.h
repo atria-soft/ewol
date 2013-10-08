@@ -13,10 +13,8 @@
 #include <etk/types.h>
 #include <ewol/physicsShape/PhysicsShape.h>
 
-namespace ewol
-{
-	class PhysicsBox : public ewol::PhysicsShape
-	{
+namespace ewol {
+	class PhysicsBox : public ewol::PhysicsShape {
 		public:
 			PhysicsBox(void) {};
 			virtual ~PhysicsBox(void) {};

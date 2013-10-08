@@ -33,17 +33,13 @@ const char * const eventColorSpecificHasChange     = "event-color-specific-has-c
 
 
 widget::ColorChooser::ColorChooser(void) :
-	widget::Sizer(widget::Sizer::modeVert)
-{
+  widget::Sizer(widget::Sizer::modeVert) {
 	addEventId(ewolEventColorChooserChange);
-	
-	
 	m_widgetColorBar = NULL;
 	m_widgetRed = NULL;
 	m_widgetGreen = NULL;
 	m_widgetBlue = NULL;
 	m_widgetAlpha = NULL;
-	
 	lockExpand(bvec2(true,true));
 		m_widgetColorBar = new widget::ColorBar();
 			m_widgetColorBar->registerOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
@@ -96,14 +92,12 @@ widget::ColorChooser::ColorChooser(void) :
 }
 
 
-widget::ColorChooser::~ColorChooser(void)
-{
+widget::ColorChooser::~ColorChooser(void) {
 	
 }
 
 
-void widget::ColorChooser::setColor(etk::Color<> _newColor)
-{
+void widget::ColorChooser::setColor(etk::Color<> _newColor) {
 	m_currentColor = _newColor;
 	if (NULL != m_widgetRed) {
 		m_widgetRed->setValue(m_currentColor.r());
@@ -123,14 +117,12 @@ void widget::ColorChooser::setColor(etk::Color<> _newColor)
 }
 
 
-etk::Color<> widget::ColorChooser::getColor(void)
-{
+etk::Color<> widget::ColorChooser::getColor(void) {
 	return m_currentColor;
 }
 
 
-void widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg)
-{
+void widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 	if (NULL == _msg.getCaller()) {
 		return;
 	}
@@ -178,8 +170,7 @@ void widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg)
 };
 
 
-void widget::ColorChooser::onObjectRemove(ewol::EObject * _removeObject)
-{
+void widget::ColorChooser::onObjectRemove(ewol::EObject * _removeObject) {
 	// First step call parrent : 
 	widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

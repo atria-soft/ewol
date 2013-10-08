@@ -14,21 +14,18 @@
 #undef __class__
 #define __class__	"ProgressBar"
 
-static ewol::Widget* create(void)
-{
+static ewol::Widget* create(void) {
 	return new widget::ProgressBar();
 }
 
-void widget::ProgressBar::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::ProgressBar::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
 const int32_t dotRadius = 6;
 
-widget::ProgressBar::ProgressBar(void)
-{
+widget::ProgressBar::ProgressBar(void) {
 	m_value = 0.0;
 	
 	m_textColorFg = etk::color::black;
@@ -40,41 +37,31 @@ widget::ProgressBar::ProgressBar(void)
 	setCanHaveFocus(true);
 }
 
-widget::ProgressBar::~ProgressBar(void)
-{
+widget::ProgressBar::~ProgressBar(void) {
 	
 }
 
-
-void widget::ProgressBar::calculateMinMaxSize(void)
-{
+void widget::ProgressBar::calculateMinMaxSize(void) {
 	vec2 tmpMin = m_userMinSize.getPixel();
 	m_minSize.setValue( etk_max(tmpMin.x(), 40),
 	                    etk_max(tmpMin.y(), dotRadius*2) );
 	markToRedraw();
 }
 
-
-void widget::ProgressBar::valueSet(float val)
-{
-	m_value = etk_avg(0, val, 1);
+void widget::ProgressBar::valueSet(float _val) {
+	m_value = etk_avg(0, _val, 1);
 	markToRedraw();
 }
 
-
-float widget::ProgressBar::valueGet(void)
-{
+float widget::ProgressBar::valueGet(void) {
 	return m_value;
 }
 
-
-void widget::ProgressBar::onDraw(void)
-{
+void widget::ProgressBar::onDraw(void) {
 	m_draw.draw();
 }
 
-void widget::ProgressBar::onRegenerateDisplay(void)
-{
+void widget::ProgressBar::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		m_draw.clear();

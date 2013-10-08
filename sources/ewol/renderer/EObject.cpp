@@ -19,8 +19,7 @@ const char* const ewol::EObject::configName = "name";
 
 
 ewol::EObject::EObject(void) :
-	m_static(false)
-{
+  m_static(false) {
 	static int32_t ss_globalUniqueId = 0;
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = ss_globalUniqueId++;
@@ -29,8 +28,7 @@ ewol::EObject::EObject(void) :
 	registerConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
 }
 
-ewol::EObject::~EObject(void)
-{
+ewol::EObject::~EObject(void) {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
 	getEObjectManager().rm(this);
 	getMultiCast().rm(this);
@@ -45,25 +43,21 @@ ewol::EObject::~EObject(void)
 	m_uniqueId = -1;
 }
 
-
-void ewol::EObject::autoDestroy(void)
-{
-	getEObjectManager().autoRemove(this);
-}
-void ewol::EObject::removeObject(void)
-{
+void ewol::EObject::autoDestroy(void) {
 	getEObjectManager().autoRemove(this);
 }
 
-void ewol::EObject::addEventId(const char * _generateEventId)
-{
+void ewol::EObject::removeObject(void) {
+	getEObjectManager().autoRemove(this);
+}
+
+void ewol::EObject::addEventId(const char * _generateEventId) {
 	if (NULL != _generateEventId) {
 		m_availlableEventId.pushBack(_generateEventId);
 	}
 }
 
-void ewol::EObject::generateEventId(const char * _generateEventId, const etk::UString& _data)
-{
+void ewol::EObject::generateEventId(const char * _generateEventId, const etk::UString& _data) {
 	int32_t nbObject = getEObjectManager().getNumberObject();
 	// for every element registered ...
 	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
@@ -88,8 +82,7 @@ void ewol::EObject::generateEventId(const char * _generateEventId, const etk::US
 	}
 }
 
-void ewol::EObject::sendMultiCast(const char* const _messageId, const etk::UString& _data)
-{
+void ewol::EObject::sendMultiCast(const char* const _messageId, const etk::UString& _data) {
 	int32_t nbObject = getEObjectManager().getNumberObject();
 	getMultiCast().send(this, _messageId, _data);
 	if (nbObject > getEObjectManager().getNumberObject()) {
@@ -97,16 +90,14 @@ void ewol::EObject::sendMultiCast(const char* const _messageId, const etk::UStri
 	}
 }
 
-void ewol::EObject::registerMultiCast(const char* const _messageId)
-{
+void ewol::EObject::registerMultiCast(const char* const _messageId) {
 	getMultiCast().add(this, _messageId);
 }
 
 void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
-                                    const etk::UString& _overloadData)
-{
+                                    const etk::UString& _overloadData) {
 	if (NULL == _destinationObject) {
 		EWOL_ERROR("Input ERROR NULL pointer EObject ...");
 		return;
@@ -154,8 +145,7 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 }
 
 
-void ewol::EObject::onObjectRemove(ewol::EObject * _removeObject)
-{
+void ewol::EObject::onObjectRemove(ewol::EObject * _removeObject) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
 		if (NULL == m_externEvent[iii]) {
 			m_externEvent.erase(iii);
@@ -166,8 +156,11 @@ void ewol::EObject::onObjectRemove(ewol::EObject * _removeObject)
 }
 
 
-void ewol::EObject::registerConfig(const char* _config, const char* _type, const char* _control, const char* _description, const char* _default)
-{
+void ewol::EObject::registerConfig(const char* _config,
+                                   const char* _type,
+                                   const char* _control,
+                                   const char* _description,
+                                   const char* _default) {
 	if (NULL == _config) {
 		EWOL_ERROR("Try to add NULL config");
 		return;
@@ -183,8 +176,7 @@ void ewol::EObject::registerConfig(const char* _config, const char* _type, const
 }
 
 
-bool ewol::EObject::loadXML(exml::Element* _node)
-{
+bool ewol::EObject::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -205,8 +197,7 @@ bool ewol::EObject::loadXML(exml::Element* _node)
 	return errorOccured;
 }
 
-bool ewol::EObject::storeXML(exml::Element* _node) const
-{
+bool ewol::EObject::storeXML(exml::Element* _node) const {
 	if (NULL == _node) {
 		return false;
 	}
@@ -229,8 +220,7 @@ bool ewol::EObject::storeXML(exml::Element* _node) const
 }
 
 
-bool ewol::EObject::onSetConfig(const ewol::EConfig& _conf)
-{
+bool ewol::EObject::onSetConfig(const ewol::EConfig& _conf) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
 	if (_conf.getConfig() == ewol::EObject::configName) {
 		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
@@ -240,17 +230,15 @@ bool ewol::EObject::onSetConfig(const ewol::EConfig& _conf)
 	return false;
 }
 
-bool ewol::EObject::onGetConfig(const char* _config, etk::UString& _result) const
-{
+bool ewol::EObject::onGetConfig(const char* _config, etk::UString& _result) const {
 	if (_config == ewol::EObject::configName) {
 		_result = getName();
 		return true;
 	}
 	return false;
-};
+}
 
-bool ewol::EObject::setConfig(const etk::UString& _config, const etk::UString& _value)
-{
+bool ewol::EObject::setConfig(const etk::UString& _config, const etk::UString& _value) {
 	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
@@ -263,17 +251,15 @@ bool ewol::EObject::setConfig(const etk::UString& _config, const etk::UString& _
 	return false;
 }
 
-etk::UString ewol::EObject::getConfig(const char* _config) const
-{
+etk::UString ewol::EObject::getConfig(const char* _config) const {
 	etk::UString res="";
 	if (NULL != _config) {
 		(void)onGetConfig(_config, res);
 	}
 	return res;
-};
+}
 
-etk::UString ewol::EObject::getConfig(const etk::UString& _config) const
-{
+etk::UString ewol::EObject::getConfig(const etk::UString& _config) const {
 	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
@@ -286,9 +272,7 @@ etk::UString ewol::EObject::getConfig(const etk::UString& _config) const
 	return "";
 }
 
-
-bool ewol::EObject::setConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf)
-{
+bool ewol::EObject::setConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf) {
 	ewol::EObject* object = getEObjectManager().get(_name);
 	if (object == NULL) {
 		return false;
@@ -296,8 +280,7 @@ bool ewol::EObject::setConfigNamed(const etk::UString& _name, const ewol::EConfi
 	return object->setConfig(_conf);
 }
 
-bool ewol::EObject::setConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value)
-{
+bool ewol::EObject::setConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value) {
 	ewol::EObject* object = getEObjectManager().get(_name);
 	if (object == NULL) {
 		return false;
@@ -305,18 +288,14 @@ bool ewol::EObject::setConfigNamed(const etk::UString& _name, const etk::UString
 	return object->setConfig(_config, _value);
 }
 
-
-ewol::EObjectManager& ewol::EObject::getEObjectManager(void)
-{
+ewol::EObjectManager& ewol::EObject::getEObjectManager(void) {
 	return ewol::getContext().getEObjectManager();
 }
 
-ewol::EMultiCast& ewol::EObject::getMultiCast(void)
-{
+ewol::EMultiCast& ewol::EObject::getMultiCast(void) {
 	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::eContext& ewol::EObject::getContext(void)
-{
+ewol::eContext& ewol::EObject::getContext(void) {
 	return ewol::getContext();
 }

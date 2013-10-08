@@ -22,10 +22,8 @@
 #include <ewol/resources/Mesh.h>
 #include <ewol/resources/Colored3DObject.h>
 
-namespace ewol
-{
-	class ResourceManager
-	{
+namespace ewol {
+	class ResourceManager {
 		private:
 			etk::Vector<ewol::Resource*> m_resourceList;
 			etk::Vector<ewol::Resource*> m_resourceListToUpdate;

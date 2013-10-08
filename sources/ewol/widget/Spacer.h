@@ -17,8 +17,7 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	class Spacer :public ewol::Widget
-	{
+	class Spacer :public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties

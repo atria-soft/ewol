@@ -11,18 +11,16 @@
 #include <ewol/ewol.h>
 
 #undef __class__
-#define __class__	"EObjectManager"
+#define __class__ "EObjectManager"
 
-ewol::EObjectManager::EObjectManager(void)
-{
+ewol::EObjectManager::EObjectManager(void) {
 	EWOL_DEBUG(" == > init EObject-Manager");
 	// Can create mlemory leak ...  == > but not predictable comportement otherwise ...
 	m_eObjectAutoRemoveList.clear();
 	m_eObjectList.clear();
 }
 
-ewol::EObjectManager::~EObjectManager(void)
-{
+ewol::EObjectManager::~EObjectManager(void) {
 	bool hasError = false;
 	if (m_eObjectAutoRemoveList.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject to auto-remove !!!");
@@ -37,8 +35,7 @@ ewol::EObjectManager::~EObjectManager(void)
 	}
 }
 
-void ewol::EObjectManager::unInit(void)
-{
+void ewol::EObjectManager::unInit(void) {
 	EWOL_DEBUG(" == > Un-Init EObject-Manager");
 	removeAllAutoRemove();
 	EWOL_INFO(" remove missing user widget");
@@ -58,8 +55,7 @@ void ewol::EObjectManager::unInit(void)
 	}
 }
 
-void ewol::EObjectManager::add(ewol::EObject* _object)
-{
+void ewol::EObjectManager::add(ewol::EObject* _object) {
 	if (NULL != _object) {
 		m_eObjectList.pushBack(_object);
 	} else {
@@ -67,13 +63,11 @@ void ewol::EObjectManager::add(ewol::EObject* _object)
 	}
 }
 
-int32_t ewol::EObjectManager::getNumberObject(void)
-{
+int32_t ewol::EObjectManager::getNumberObject(void) {
 	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
 
-void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object)
-{
+void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object) {
 	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
 			m_eObjectList[iii]->onObjectRemove(_object);
@@ -89,8 +83,7 @@ void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object)
 	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::EObjectManager::rm(ewol::EObject* _object)
-{
+void ewol::EObjectManager::rm(ewol::EObject* _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove (NULL) EObject");
 		return;
@@ -115,8 +108,7 @@ void ewol::EObjectManager::rm(ewol::EObject* _object)
 	EWOL_ERROR("Try to remove EObject that is not referenced ...");
 }
 
-void ewol::EObjectManager::autoRemove(ewol::EObject* _object)
-{
+void ewol::EObjectManager::autoRemove(ewol::EObject* _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to Auto-Remove (NULL) EObject");
 		return;
@@ -137,8 +129,7 @@ void ewol::EObjectManager::autoRemove(ewol::EObject* _object)
 }
 
 // clean all EObject that request an autoRemove ...
-void ewol::EObjectManager::removeAllAutoRemove(void)
-{
+void ewol::EObjectManager::removeAllAutoRemove(void) {
 	//EWOL_DEBUG("Auto-Remove EObject section : " << m_eObjectAutoRemoveList.size() << " elemeents");
 	while(0<m_eObjectAutoRemoveList.size()) {
 		if (m_eObjectAutoRemoveList[0]!=NULL) {
@@ -152,8 +143,7 @@ void ewol::EObjectManager::removeAllAutoRemove(void)
 	m_eObjectAutoRemoveList.clear();
 }
 
-ewol::EObject* ewol::EObjectManager::get(const etk::UString& _name)
-{
+ewol::EObject* ewol::EObjectManager::get(const etk::UString& _name) {
 	if (_name == "") {
 		return NULL;
 	}

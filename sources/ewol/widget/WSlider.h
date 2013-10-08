@@ -16,8 +16,7 @@
 
 
 namespace widget {
-	class WSlider :public widget::ContainerN
-	{
+	class WSlider :public widget::ContainerN {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 			// Event list of properties
@@ -61,12 +60,16 @@ namespace widget {
 			 * @brief set transition speed element.
 			 * @param[in] _timeSecond number of second needed to do the transition.
 			 */
-			void setTransitionSpeed(float _timeSecond) { m_transitionSpeed = _timeSecond; };
+			void setTransitionSpeed(float _timeSecond) {
+				m_transitionSpeed = _timeSecond;
+			};
 			/** 
 			 * @brief get transition speed element.
 			 * @return number of second needed to do the transition.
 			 */
-			float getTransitionSpeed(void) { return m_transitionSpeed; };
+			float getTransitionSpeed(void) {
+				return m_transitionSpeed;
+			};
 		private:
 			sladingMode_te m_transitionSlide; //!< mode to slide the widgets
 		public:
@@ -79,9 +82,13 @@ namespace widget {
 			 * @brief get a new mode of sliding element
 			 * @return The current sliding mode
 			 */
-			sladingMode_te getTransitionMode(void) { return m_transitionSlide; };
+			sladingMode_te getTransitionMode(void) {
+				return m_transitionSlide;
+			};
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::WSlider"; };
+			virtual const char * const getObjectType(void) {
+				return "Ewol::WSlider";
+			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void systemDraw(const ewol::drawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);

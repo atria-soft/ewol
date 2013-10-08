@@ -18,42 +18,34 @@
 #undef __class__
 #define __class__ "Menu"
 
-widget::Menu::Menu(void)
-{
+widget::Menu::Menu(void) {
 	m_staticId = 0;
 	m_widgetContextMenu = NULL;
 }
 
-widget::Menu::~Menu(void)
-{
+widget::Menu::~Menu(void) {
 	clear();
 }
 
-
-void widget::Menu::subWidgetRemoveAll(void)
-{
+void widget::Menu::subWidgetRemoveAll(void) {
 	clear();
 	widget::Sizer::subWidgetRemoveAll();
 }
 
-int32_t widget::Menu::subWidgetAdd(ewol::Widget* _newWidget)
-{
+int32_t widget::Menu::subWidgetAdd(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 	return -1;
 }
 
-void widget::Menu::subWidgetRemove(ewol::Widget* _newWidget)
-{
+void widget::Menu::subWidgetRemove(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget)
-{
+void widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void widget::Menu::clear(void)
-{
+void widget::Menu::clear(void) {
 	for( int32_t iii=0; iii < m_listElement.size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
@@ -63,28 +55,33 @@ void widget::Menu::clear(void)
 	m_listElement.clear();
 }
 
-int32_t widget::Menu::addTitle(etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
-{
-	return add(-1, label, image, generateEvent, message);
+int32_t widget::Menu::addTitle(etk::UString _label,
+                               etk::UString _image,
+                               const char * _generateEvent,
+                               const etk::UString _message) {
+	return add(-1, _label, _image, _generateEvent, _message);
 }
 
-int32_t widget::Menu::add(int32_t parent, etk::UString label, etk::UString image, const char * generateEvent, const etk::UString message)
-{
-	widget::MenuElement * tmpObject = new widget::MenuElement();
+int32_t widget::Menu::add(int32_t _parent,
+                          etk::UString _label,
+                          etk::UString _image,
+                          const char *_generateEvent,
+                          const etk::UString _message) {
+	widget::MenuElement *tmpObject = new widget::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
 		return -1;
 	}
 	tmpObject->m_localId = m_staticId++;
-	tmpObject->m_parentId = parent;
+	tmpObject->m_parentId = _parent;
 	tmpObject->m_widgetPointer = NULL;
-	tmpObject->m_label = etk::UString("<left>") + label + "</left>";
-	tmpObject->m_image = image;
-	tmpObject->m_generateEvent = generateEvent;
-	tmpObject->m_message = message;
+	tmpObject->m_label = etk::UString("<left>") + _label + "</left>";
+	tmpObject->m_image = _image;
+	tmpObject->m_generateEvent = _generateEvent;
+	tmpObject->m_message = _message;
 	m_listElement.pushBack(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
-		widget::Button * myButton = NULL;
+		widget::Button *myButton = NULL;
 		myButton = new widget::Button();
 		if (NULL == myButton) {
 			EWOL_ERROR("Allocation button error");
@@ -96,11 +93,11 @@ int32_t widget::Menu::add(int32_t parent, etk::UString label, etk::UString image
 			        etk::UString("<composer>\n") + 
 			        "	<sizer mode=\"hori\">\n"
 			        "		<image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n"
-			        "		<label>" + label + "</label>\n"
+			        "		<label>" + tmpObject->m_label + "</label>\n"
 			        "	</sizer>\n"
 			        "</composer>\n"));
 		} else {
-			myButton->setSubWidget( new widget::Label(label) );
+			myButton->setSubWidget( new widget::Label(tmpObject->m_label) );
 		}
 		
 		// add it in the widget list
@@ -112,14 +109,12 @@ int32_t widget::Menu::add(int32_t parent, etk::UString label, etk::UString image
 	return tmpObject->m_localId;
 }
 
-void widget::Menu::addSpacer(void)
-{
+void widget::Menu::addSpacer(void) {
 	EWOL_TODO("NOT now...");
 }
 
 
-void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg)
-{
+void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 	/*
 	if (true == ewol::sizer::onReceiveMessage(_msg) {
 		return true;
@@ -255,8 +250,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg)
 }
 
 
-void widget::Menu::onObjectRemove(ewol::EObject * _removeObject)
-{
+void widget::Menu::onObjectRemove(ewol::EObject * _removeObject) {
 	widget::Sizer::onObjectRemove(_removeObject);
 	if (m_widgetContextMenu == _removeObject) {
 		m_widgetContextMenu = NULL;

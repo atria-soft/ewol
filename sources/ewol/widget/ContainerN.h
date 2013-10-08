@@ -13,13 +13,11 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
-namespace widget
-{
+namespace widget {
 	/**
 	 * @brief the Cotainer widget is a widget that have an only one subWidget
 	 */
-	class ContainerN : public ewol::Widget
-	{
+	class ContainerN : public ewol::Widget {
 		protected:
 			etk::Vector<ewol::Widget*> m_subWidget;
 		public:
@@ -58,7 +56,7 @@ namespace widget
 			 */
 			virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
 			inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) { return subWidgetAdd(_newWidget); };
-			inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget)  { return subWidgetAdd(_newWidget); };
+			inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget) { return subWidgetAdd(_newWidget); };
 			/**
 			 * @brief add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer

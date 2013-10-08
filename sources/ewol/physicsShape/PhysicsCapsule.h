@@ -14,10 +14,8 @@
 #include <ewol/physicsShape/PhysicsShape.h>
 
 
-namespace ewol
-{
-	class PhysicsCapsule : public ewol::PhysicsShape
-	{
+namespace ewol {
+	class PhysicsCapsule : public ewol::PhysicsShape {
 		public:
 			PhysicsCapsule(void) {};
 			virtual ~PhysicsCapsule(void) {};

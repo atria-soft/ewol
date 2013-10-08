@@ -17,20 +17,18 @@
 #include <ewol/widget/ContextMenu.h>
 
 namespace widget {
-	
 	class MenuElement {
 		public : 
 			MenuElement(void) : m_widgetPointer(NULL) { };
-			int32_t        m_localId;
-			int32_t        m_parentId;
+			int32_t m_localId;
+			int32_t m_parentId;
 			ewol::EObject* m_widgetPointer;
-			etk::UString   m_label;
-			etk::UString   m_image;
-			const char *   m_generateEvent;
-			etk::UString   m_message;
+			etk::UString m_label;
+			etk::UString m_image;
+			const char *m_generateEvent;
+			etk::UString m_message;
 	};
-	class Menu :public widget::Sizer
-	{
+	class Menu :public widget::Sizer {
 		public:
 			Menu(void);
 			virtual ~Menu(void);
@@ -47,14 +45,13 @@ namespace widget {
 			widget::ContextMenu* m_widgetContextMenu;
 		public:
 			void clear(void);
-			int32_t addTitle(etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
-			int32_t add(int32_t parent, etk::UString label, etk::UString image="", const char * generateEvent = NULL, const etk::UString message = "");
+			int32_t addTitle(etk::UString _label, etk::UString _image="", const char * _generateEvent = NULL, const etk::UString _message = "");
+			int32_t add(int32_t parent, etk::UString _label, etk::UString _image="", const char * _generateEvent = NULL, const etk::UString _message = "");
 			void addSpacer(void);
 			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
 	};
-	
 };
 
 #endif

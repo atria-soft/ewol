@@ -18,8 +18,7 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	class PopUp : public widget::Container
-	{
+	class PopUp : public widget::Container {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties

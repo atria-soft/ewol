@@ -26,8 +26,7 @@ namespace widget {
 		SCROLL_GREP_END_EVENT,
 	}highSpeedMode_te;
 	
-	class Scroll : public widget::Container
-	{
+	class Scroll : public widget::Container {
 		public:
 			// Cinfig parameter list:
 			static const char* const configLimit;
@@ -70,7 +69,6 @@ namespace widget {
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
-	
 };
 
 #endif

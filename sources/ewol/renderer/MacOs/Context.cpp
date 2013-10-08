@@ -32,8 +32,7 @@
 #include <mach/mach.h>
 
 
-int64_t ewol::getTime(void)
-{
+int64_t ewol::getTime(void) {
 	struct timespec now;
 	clock_serv_t cclock;
 	mach_timespec_t mts;
@@ -51,42 +50,34 @@ int64_t ewol::getTime(void)
 
 
 
-class MacOSInterface : public ewol::eContext
-{
+class MacOSInterface : public ewol::eContext {
 	private:
 		ewol::SpecialKey m_guiKeyBoardMode;
 	public:
 		MacOSInterface(int32_t _argc, const char* _argv[]) :
-			ewol::eContext(_argc, _argv)
-		{
+		  ewol::eContext(_argc, _argv) {
 			mm_main(_argc, _argv);
 		}
 		
-		int32_t Run(void)
-		{
-    		return mm_run();
+		int32_t Run(void) {
+			return mm_run();
 		}
 	public:
 		//interface MacOS :
 		
-		bool MAC_Draw(bool _displayEveryTime)
-		{
+		bool MAC_Draw(bool _displayEveryTime) {
 			return OS_Draw(_displayEveryTime);
 		}
-		void MAC_Resize(float _x, float _y)
-		{
+		void MAC_Resize(float _x, float _y) {
 			OS_Resize(vec2(_x,_y));
 		}
-		void MAC_SetMouseState(int32_t _id, bool _isDown, float _x, float _y)
-		{
+		void MAC_SetMouseState(int32_t _id, bool _isDown, float _x, float _y) {
 			OS_SetMouseState(_id, _isDown, vec2(_x, _y));
 		}
-		void MAC_SetMouseMotion(int32_t _id, float _x, float _y)
-		{
+		void MAC_SetMouseMotion(int32_t _id, float _x, float _y) {
 			OS_SetMouseMotion(_id, vec2(_x, _y));
 		}
-		void MAC_SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
-		{
+		void MAC_SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
 			if (_unichar == '\r') {
 				_unichar = '\n';
 			}
@@ -100,16 +91,14 @@ MacOSInterface* interface = NULL;
 
 
 
-bool MacOs::draw(bool _displayEveryTime)
-{
+bool MacOs::draw(bool _displayEveryTime) {
 	if (interface == NULL) {
 		return false;
 	}
 	return interface->MAC_Draw(_displayEveryTime);
 }
 
-void MacOs::Resize(float _x, float _y)
-{
+void MacOs::Resize(float _x, float _y) {
 	if (interface == NULL) {
 		return;
 	}
@@ -117,24 +106,21 @@ void MacOs::Resize(float _x, float _y)
 }
 
 
-void MacOs::setMouseState(int32_t _id, bool _isDown, float _x, float _y)
-{
+void MacOs::setMouseState(int32_t _id, bool _isDown, float _x, float _y) {
 	if (interface == NULL) {
 		return;
 	}
 	interface->MAC_SetMouseState(_id, _isDown, _x, _y);
 }
 
-void MacOs::setMouseMotion(int32_t _id, float _x, float _y)
-{
+void MacOs::setMouseMotion(int32_t _id, float _x, float _y) {
 	if (interface == NULL) {
 		return;
 	}
 	interface->MAC_SetMouseMotion(_id, _x, _y);
 }
 
-void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey)
-{
+void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
 	if (interface == NULL) {
 		return;
 	}
@@ -148,8 +134,7 @@ void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _
  * @param std IO
  * @return std IO
  */
-int ewol::Run(int _argc, const char *_argv[])
-{
+int ewol::Run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	interface = new MacOSInterface(_argc, _argv);
 	if (NULL == interface) {

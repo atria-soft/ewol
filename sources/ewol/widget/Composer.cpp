@@ -15,13 +15,11 @@
 #undef __class__
 #define __class__	"widget::Composer"
 
-widget::Composer::Composer(void)
-{
+widget::Composer::Composer(void) {
 	// nothing to do ...
 }
 
-widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::UString& fileName)
-{
+widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::UString& fileName) {
 	switch(mode) {
 		case widget::Composer::None:
 			// nothing to do ...
@@ -35,14 +33,11 @@ widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::US
 	}
 }
 
-
-widget::Composer::~Composer(void)
-{
+widget::Composer::~Composer(void) {
 	
 }
 
-bool widget::Composer::loadFromFile(const etk::UString& _fileName)
-{
+bool widget::Composer::loadFromFile(const etk::UString& _fileName) {
 	exml::Document doc;
 	if (doc.load(_fileName) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
@@ -67,8 +62,7 @@ bool widget::Composer::loadFromFile(const etk::UString& _fileName)
 	return true;
 }
 
-bool widget::Composer::loadFromString(const etk::UString& _composerXmlString)
-{
+bool widget::Composer::loadFromString(const etk::UString& _composerXmlString) {
 	exml::Document doc;
 	if (doc.parse(_composerXmlString) == false) {
 		EWOL_ERROR(" can not load file XML string...");
@@ -97,8 +91,7 @@ bool widget::Composer::loadFromString(const etk::UString& _composerXmlString)
 void widget::Composer::registerOnEventNameWidget(const etk::UString& _subWidgetName,
                                                  const char * _eventId,
                                                  const char * _eventIdgenerated,
-                                                 const etk::UString& _overloadData)
-{
+                                                 const etk::UString& _overloadData) {
 	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
@@ -106,8 +99,7 @@ void widget::Composer::registerOnEventNameWidget(ewol::EObject * _destinationObj
                                                  const etk::UString& _subWidgetName,
                                                  const char * _eventId,
                                                  const char * _eventIdgenerated,
-                                                 const etk::UString& _overloadData)
-{
+                                                 const etk::UString& _overloadData) {
 	ewol::Widget* tmpWidget = getWidgetNamed(_subWidgetName);
 	if (NULL != tmpWidget) {
 		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");

@@ -14,49 +14,45 @@
 #define __class__	"ewol::Shaper"
 
 ewol::Shaper::Shaper(const etk::UString& _shaperName) :
-	m_name(_shaperName),
-	m_config(NULL),
-	m_confIdPaddingX(-1),
-	m_confIdPaddingY(-1),
-	m_confIdChangeTime(-1),
-	m_confProgramFile(-1),
-	m_GLprogram(NULL),
-	m_GLPosition(-1),
-	m_GLMatrix(-1),
-	m_GLPropertySize(-1),
-	m_GLPropertyInsidePos(-1),
-	m_GLPropertyInsideSize(-1),
-	m_GLStateOld(-1),
-	m_GLStateNew(-1),
-	m_GLStateTransition(-1),
-	m_resourceTexture(NULL),
-	m_nextStatusRequested(-1),
-	m_propertyOrigin(0,0),
-	m_propertySize(0,0),
-	m_propertyInsidePosition(0,0),
-	m_propertyInsideSize(0,0),
-	m_stateOld(0),
-	m_stateNew(0),
-	m_stateTransition(1.0)
-{
+  m_name(_shaperName),
+  m_config(NULL),
+  m_confIdPaddingX(-1),
+  m_confIdPaddingY(-1),
+  m_confIdChangeTime(-1),
+  m_confProgramFile(-1),
+  m_GLprogram(NULL),
+  m_GLPosition(-1),
+  m_GLMatrix(-1),
+  m_GLPropertySize(-1),
+  m_GLPropertyInsidePos(-1),
+  m_GLPropertyInsideSize(-1),
+  m_GLStateOld(-1),
+  m_GLStateNew(-1),
+  m_GLStateTransition(-1),
+  m_resourceTexture(NULL),
+  m_nextStatusRequested(-1),
+  m_propertyOrigin(0,0),
+  m_propertySize(0,0),
+  m_propertyInsidePosition(0,0),
+  m_propertyInsideSize(0,0),
+  m_stateOld(0),
+  m_stateNew(0),
+  m_stateTransition(1.0) {
 	loadProgram();
 	updateVertex();
 }
 
-ewol::Shaper::~Shaper(void)
-{
+ewol::Shaper::~Shaper(void) {
 	unLoadProgram();
 }
 
-void ewol::Shaper::unLoadProgram(void)
-{
+void ewol::Shaper::unLoadProgram(void) {
 	ewol::Program::release(m_GLprogram);
 	ewol::TextureFile::release(m_resourceTexture);
 	ewol::ConfigFile::release(m_config);
 }
 
-void ewol::Shaper::loadProgram(void)
-{
+void ewol::Shaper::loadProgram(void) {
 	if (m_name == "") {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
@@ -102,9 +98,7 @@ void ewol::Shaper::loadProgram(void)
 	}
 }
 
-
-void ewol::Shaper::draw(bool _disableDepthTest)
-{
+void ewol::Shaper::draw(bool _disableDepthTest) {
 	if (m_config == NULL) {
 		// this is a normale case ... the user can choice to have no config basic file ...
 		return;
@@ -138,13 +132,11 @@ void ewol::Shaper::draw(bool _disableDepthTest)
 	m_GLprogram->unUse();
 }
 
-void ewol::Shaper::clear(void)
-{
+void ewol::Shaper::clear(void) {
 	// nothing to do ...
 }
 
-bool ewol::Shaper::changeStatusIn(int32_t _newStatusId)
-{
+bool ewol::Shaper::changeStatusIn(int32_t _newStatusId) {
 	if (_newStatusId != m_stateNew) {
 		m_nextStatusRequested = _newStatusId;
 		return true;
@@ -156,8 +148,7 @@ bool ewol::Shaper::changeStatusIn(int32_t _newStatusId)
 	return false;
 }
 
-bool ewol::Shaper::periodicCall(const ewol::EventTime& _event)
-{
+bool ewol::Shaper::periodicCall(const ewol::EventTime& _event) {
 	//EWOL_DEBUG("call=" << _event);
 	// start :
 	if (m_stateTransition >= 1.0) {
@@ -195,9 +186,7 @@ bool ewol::Shaper::periodicCall(const ewol::EventTime& _event)
 	return true;
 }
 
-
-void ewol::Shaper::updateVertex(void)
-{
+void ewol::Shaper::updateVertex(void) {
 	// set coord  == > must be a static VBO ...
 	m_coord[0].setValue( m_propertyOrigin.x(),
 	                     m_propertyOrigin.y()+m_propertySize.y());
@@ -214,36 +203,29 @@ void ewol::Shaper::updateVertex(void)
 	                     m_propertyOrigin.y()+m_propertySize.y());
 }
 
-void ewol::Shaper::setOrigin(const vec2& _newOri)
-{
+void ewol::Shaper::setOrigin(const vec2& _newOri) {
 	if (m_propertyOrigin != _newOri) {
 		m_propertyOrigin = _newOri;
 		updateVertex();
 	}
-
 }
 
-void ewol::Shaper::setSize(const vec2& _newSize)
-{
+void ewol::Shaper::setSize(const vec2& _newSize) {
 	if (m_propertySize != _newSize) {
 		m_propertySize = _newSize;
 		updateVertex();
 	}
 }
 
-void ewol::Shaper::setInsideSize(const vec2& _newInsideSize)
-{
+void ewol::Shaper::setInsideSize(const vec2& _newInsideSize) {
 	m_propertyInsideSize = _newInsideSize;
 }
 
-void ewol::Shaper::setInsidePos(const vec2& _newInsidePos)
-{
+void ewol::Shaper::setInsidePos(const vec2& _newInsidePos) {
 	m_propertyInsidePosition = _newInsidePos;
 }
 
-
-vec2 ewol::Shaper::getPadding(void)
-{
+vec2 ewol::Shaper::getPadding(void) {
 	vec2 padding(0,0);
 	if (m_config!=NULL) {
 		padding.setValue(m_config->getFloat(m_confIdPaddingX),
@@ -252,17 +234,14 @@ vec2 ewol::Shaper::getPadding(void)
 	return padding;
 }
 
-
-void ewol::Shaper::setSource(const etk::UString& _newFile)
-{
+void ewol::Shaper::setSource(const etk::UString& _newFile) {
 	clear();
 	unLoadProgram();
 	m_name = _newFile;
 	loadProgram();
 }
 
-bool ewol::Shaper::hasSources(void)
-{
+bool ewol::Shaper::hasSources(void) {
 	return m_GLprogram!=NULL;
 }
 

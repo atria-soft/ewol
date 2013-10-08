@@ -18,8 +18,7 @@
 #include <ewol/resources/FontFreeType.h>
 
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj) {
 	switch(_obj) {
 		default :
 			_os << "error";
@@ -41,11 +40,10 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj)
 }
 
 #undef __class__
-#define __class__	"TexturedFont"
+#define __class__ "TexturedFont"
 
-ewol::TexturedFont::TexturedFont(etk::UString fontName) : 
-	ewol::Texture(fontName)
-{
+ewol::TexturedFont::TexturedFont(etk::UString fontName) :
+  ewol::Texture(fontName) {
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;
@@ -225,15 +223,13 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	EWOL_DEBUG("    " << ewol::font::BoldItalic << " == >" << getWrappingMode(ewol::font::BoldItalic));
 }
 
-ewol::TexturedFont::~TexturedFont(void)
-{
+ewol::TexturedFont::~TexturedFont(void) {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		ewol::FontFreeType::release(m_font[iiiFontId]);
 	}
 }
 
-bool ewol::TexturedFont::addGlyph(const etk::UniChar& _val)
-{
+bool ewol::TexturedFont::addGlyph(const etk::UniChar& _val) {
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
@@ -301,29 +297,26 @@ bool ewol::TexturedFont::addGlyph(const etk::UniChar& _val)
 	return hasChange;
 }
 
-
-bool ewol::TexturedFont::hasName(const etk::UString& fileName)
-{
+bool ewol::TexturedFont::hasName(const etk::UString& _fileName) {
 	etk::UString tmpName = m_name;
 	tmpName += ":";
 	tmpName += m_size;
-	EWOL_VERBOSE("S : check : " << fileName << " ?= " << tmpName << " = " << (fileName == tmpName) );
-	return (fileName == tmpName);
+	EWOL_VERBOSE("S : check : " << _fileName << " ?= " << tmpName << " = " << (_fileName == tmpName) );
+	return (_fileName == tmpName);
 }
 
 
-int32_t ewol::TexturedFont::getIndex(const uniChar_t& charcode, const ewol::font::mode_te displayMode)
-{
-	if (charcode.get() < 0x20) {
+int32_t ewol::TexturedFont::getIndex(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode) {
+	if (_charcode.get() < 0x20) {
 		return 0;
-	} else if (charcode.get() < 0x80) {
-		return charcode.get() - 0x1F;
+	} else if (_charcode.get() < 0x80) {
+		return _charcode.get() - 0x1F;
 	} else {
-		for (int32_t iii=0x80-0x20; iii < m_listElement[displayMode].size(); iii++) {
+		for (int32_t iii=0x80-0x20; iii < m_listElement[_displayMode].size(); iii++) {
 			//EWOL_DEBUG("search : '" << charcode << "' =?= '" << (m_listElement[displayMode])[iii].m_UVal << "'");
-			if (charcode == (m_listElement[displayMode])[iii].m_UVal) {
+			if (_charcode == (m_listElement[_displayMode])[iii].m_UVal) {
 				//EWOL_DEBUG("search : '" << charcode << "'");
-				if ((m_listElement[displayMode])[iii].exist()) {
+				if ((m_listElement[_displayMode])[iii].exist()) {
 					//EWOL_DEBUG("return " << iii);
 					return iii;
 				} else {
@@ -332,16 +325,14 @@ int32_t ewol::TexturedFont::getIndex(const uniChar_t& charcode, const ewol::font
 			}
 		}
 	}
-	if (addGlyph(charcode) == true) {
+	if (addGlyph(_charcode) == true) {
 		// TODO : This does not work due to the fact that the update of open GL is not done in the context main cycle !!!
 		ewol::getContext().forceRedrawAll();
 	}
 	return 0;
 }
 
-
-ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode)
-{
+ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
@@ -360,10 +351,7 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const uniChar_t& _charc
 	return &((m_listElement[_displayMode])[index]);
 }
 
-
-
-ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename)
-{
+ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename) {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << _filename << "\"");
 	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -379,8 +367,7 @@ ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename)
 	return object;
 }
 
-void ewol::TexturedFont::release(ewol::TexturedFont*& _object)
-{
+void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
 	if (NULL == _object) {
 		return;
 	}

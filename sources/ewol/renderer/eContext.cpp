@@ -33,16 +33,14 @@
  * @note due ti the fact that the system can be called for multiple instance, for naw we just limit the acces to one process at a time.
  * @return the main inteface Mutex
  */
-static etk::Mutex& mutexInterface(void)
-{
+static etk::Mutex& mutexInterface(void) {
 	static etk::Mutex s_interfaceMutex;
 	return s_interfaceMutex;
 }
 
 
 static ewol::eContext* l_curentInterface=NULL;
-ewol::eContext& ewol::getContext(void)
-{
+ewol::eContext& ewol::getContext(void) {
 	#if DEBUG_LEVEL > 2
 		if(NULL == l_curentInterface){
 			EWOL_CRITICAL("[CRITICAL] try acces at an empty interface");
@@ -55,8 +53,7 @@ ewol::eContext& ewol::getContext(void)
  * @brief set the curent interface.
  * @note this lock the main mutex
  */
-void ewol::eContext::lockContext(void)
-{
+void ewol::eContext::lockContext(void) {
 	mutexInterface().lock();
 	l_curentInterface = this;
 }
@@ -65,35 +62,30 @@ void ewol::eContext::lockContext(void)
  * @brief set the curent interface at NULL.
  * @note this un-lock the main mutex
  */
-void ewol::eContext::unLockContext(void)
-{
+void ewol::eContext::unLockContext(void) {
 	l_curentInterface = NULL;
 	mutexInterface().unLock();
 }
 
-void ewol::eContext::inputEventTransfertWidget(ewol::Widget* source, ewol::Widget* destination)
-{
-	m_input.transfertEvent(source, destination);
+void ewol::eContext::inputEventTransfertWidget(ewol::Widget* _source,
+                                               ewol::Widget* _destination) {
+	m_input.transfertEvent(_source, _destination);
 }
 
 
-void ewol::eContext::inputEventGrabPointer(ewol::Widget* widget)
-{
-	m_input.grabPointer(widget);
+void ewol::eContext::inputEventGrabPointer(ewol::Widget* _widget) {
+	m_input.grabPointer(_widget);
 }
 
-void ewol::eContext::inputEventUnGrabPointer(void)
-{
+void ewol::eContext::inputEventUnGrabPointer(void) {
 	m_input.unGrabPointer();
 }
 
-void ewol::eContext::processEvents(void)
-{
+void ewol::eContext::processEvents(void) {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
 	eSystemMessage data;
-	while (m_msgSystem.count()>0) 
-	{
+	while (m_msgSystem.count()>0) {
 		nbEvent++;
 		m_msgSystem.wait(data);
 		//EWOL_DEBUG("EVENT");
@@ -194,27 +186,25 @@ void ewol::eContext::processEvents(void)
 	}
 }
 
-void ewol::eContext::setArchiveDir(int mode, const char* str)
-{
-	switch(mode)
-	{
+void ewol::eContext::setArchiveDir(int _mode, const char* _str) {
+	switch(_mode) {
 		case 0:
-			EWOL_DEBUG("Directory APK : path=" << str);
-			etk::setBaseFolderData(str);
+			EWOL_DEBUG("Directory APK : path=" << _str);
+			etk::setBaseFolderData(_str);
 			break;
 		case 1:
-			EWOL_DEBUG("Directory mode=FILE path=" << str);
-			etk::setBaseFolderDataUser(str);
+			EWOL_DEBUG("Directory mode=FILE path=" << _str);
+			etk::setBaseFolderDataUser(_str);
 			break;
 		case 2:
-			EWOL_DEBUG("Directory mode=CACHE path=" << str);
-			etk::setBaseFolderCache(str);
+			EWOL_DEBUG("Directory mode=CACHE path=" << _str);
+			etk::setBaseFolderCache(_str);
 			break;
 		case 3:
-			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << str);
+			EWOL_DEBUG("Directory mode=EXTERNAL_CACHE path=" << _str);
 			break;
 		default:
-			EWOL_DEBUG("Directory mode=???? path=" << str);
+			EWOL_DEBUG("Directory mode=???? path=" << _str);
 			break;
 	}
 }
@@ -222,16 +212,15 @@ void ewol::eContext::setArchiveDir(int mode, const char* str)
 
 
 ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
-	m_previousDisplayTime(0),
-	m_input(*this),
-	m_displayFps(false),
-	m_FpsSystemEvent(  "Event     ", false),
-	m_FpsSystemContext("Context   ", false),
-	m_FpsSystem(       "Draw      ", true),
-	m_FpsFlush(        "Flush     ", false),
-	m_windowsCurrent(NULL),
-	m_windowsSize(320,480)
-{
+  m_previousDisplayTime(0),
+  m_input(*this),
+  m_displayFps(false),
+  m_FpsSystemEvent(  "Event     ", false),
+  m_FpsSystemContext("Context   ", false),
+  m_FpsSystem(       "Draw      ", true),
+  m_FpsFlush(        "Flush     ", false),
+  m_windowsCurrent(NULL),
+  m_windowsSize(320,480) {
 	m_commandLine.parse(_argc, _argv);
 	EWOL_INFO(" == > Ewol system init (BEGIN)");
 	// set the curent interface :
@@ -287,8 +276,7 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	EWOL_INFO(" == > Ewol system init (END)");
 }
 
-ewol::eContext::~eContext(void)
-{
+ewol::eContext::~eContext(void) {
 	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
 	// set the curent interface :
 	lockContext();
@@ -308,16 +296,13 @@ ewol::eContext::~eContext(void)
 	EWOL_INFO(" == > Ewol system Un-Init (END)");
 }
 
-
-void ewol::eContext::requestUpdateSize(void)
-{
+void ewol::eContext::requestUpdateSize(void) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_RECALCULATE_SIZE;
 	m_msgSystem.post(data);
 }
 
-void ewol::eContext::OS_Resize(const vec2& _size)
-{
+void ewol::eContext::OS_Resize(const vec2& _size) {
 	// TODO : Better in the thread ...  == > but generate some init error ...
 	ewol::dimension::setPixelWindowsSize(_size);
 	eSystemMessage data;
@@ -325,8 +310,7 @@ void ewol::eContext::OS_Resize(const vec2& _size)
 	data.dimention = _size;
 	m_msgSystem.post(data);
 }
-void ewol::eContext::OS_Move(const vec2& _pos)
-{
+void ewol::eContext::OS_Move(const vec2& _pos) {
 	/*
 	eSystemMessage data;
 	data.TypeMessage = THREAD_RESIZE;
@@ -336,8 +320,7 @@ void ewol::eContext::OS_Move(const vec2& _pos)
 	*/
 }
 
-void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos )
-{
+void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_INPUT_MOTION;
 	data.inputType = ewol::keyEvent::typeFinger;
@@ -346,9 +329,7 @@ void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos )
 	m_msgSystem.post(data);
 }
 
-
-void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos )
-{
+void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_INPUT_STATE;
 	data.inputType = ewol::keyEvent::typeFinger;
@@ -358,9 +339,7 @@ void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& 
 	m_msgSystem.post(data);
 }
 
-
-void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos )
-{
+void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_INPUT_MOTION;
 	data.inputType = ewol::keyEvent::typeMouse;
@@ -369,9 +348,7 @@ void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos )
 	m_msgSystem.post(data);
 }
 
-
-void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos )
-{
+void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_INPUT_STATE;
 	data.inputType = ewol::keyEvent::typeMouse;
@@ -380,13 +357,11 @@ void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& 
 	data.dimention = _pos;
 	m_msgSystem.post(data);
 }
-
 
 void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
                                     uniChar_t _myChar,
                                     bool _isDown,
-                                    bool _isARepeateKey)
-{
+                                    bool _isARepeateKey) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_KEYBORAD_KEY;
 	data.stateIsDown = _isDown;
@@ -399,8 +374,7 @@ void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
 void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
                                         ewol::keyEvent::keyboard_te _move,
                                         bool _isDown,
-                                        bool _isARepeateKey)
-{
+                                        bool _isARepeateKey) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_KEYBORAD_MOVE;
 	data.stateIsDown = _isDown;
@@ -410,32 +384,27 @@ void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
 	m_msgSystem.post(data);
 }
 
-
-void ewol::eContext::OS_Hide(void)
-{
+void ewol::eContext::OS_Hide(void) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_HIDE;
 	m_msgSystem.post(data);
 }
 
-void ewol::eContext::OS_Show(void)
-{
+void ewol::eContext::OS_Show(void) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_SHOW;
 	m_msgSystem.post(data);
 }
 
 
-void ewol::eContext::OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID)
-{
+void ewol::eContext::OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID) {
 	eSystemMessage data;
 	data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
 	data.clipboardID = _clipboardID;
 	m_msgSystem.post(data);
 }
 
-bool ewol::eContext::OS_Draw(bool _displayEveryTime)
-{
+bool ewol::eContext::OS_Draw(bool _displayEveryTime) {
 	int64_t currentTime = ewol::getTime();
 	// this is to prevent the multiple display at the a high frequency ...
 	#if (!defined(__TARGET_OS__Android) && !defined(__TARGET_OS__Windows))
@@ -528,28 +497,20 @@ bool ewol::eContext::OS_Draw(bool _displayEveryTime)
 	return hasDisplayDone;
 }
 
-
-void ewol::eContext::onObjectRemove(ewol::EObject * _removeObject)
-{
+void ewol::eContext::onObjectRemove(ewol::EObject * _removeObject) {
 	//EWOL_CRITICAL("element removed");
 	m_input.onObjectRemove(_removeObject);
 }
 
-
-void ewol::eContext::resetIOEvent(void)
-{
+void ewol::eContext::resetIOEvent(void) {
 	m_input.newLayerSet();
 }
 
-
-void ewol::eContext::OS_OpenGlContextDestroy(void)
-{
+void ewol::eContext::OS_OpenGlContextDestroy(void) {
 	m_resourceManager.contextHasBeenDestroyed();
 }
 
-
-void ewol::eContext::setWindows(ewol::Windows* _windows)
-{
+void ewol::eContext::setWindows(ewol::Windows* _windows) {
 	// remove current focus :
 	m_widgetManager.focusSetDefault(NULL);
 	m_widgetManager.focusRelease();
@@ -561,29 +522,24 @@ void ewol::eContext::setWindows(ewol::Windows* _windows)
 	forceRedrawAll();
 }
 
-
-void ewol::eContext::forceRedrawAll(void)
-{
+void ewol::eContext::forceRedrawAll(void) {
 	if (NULL != m_windowsCurrent) {
 		m_windowsCurrent->calculateSize(vec2(m_windowsSize.x(), m_windowsSize.y()));
 	}
 }
 
-
-void ewol::eContext::OS_Stop(void)
-{
+void ewol::eContext::OS_Stop(void) {
 	if (NULL != m_windowsCurrent) {
 		m_windowsCurrent->sysOnKill();
 	}
 }
 
-void ewol::eContext::OS_Suspend(void)
-{
+void ewol::eContext::OS_Suspend(void) {
 	m_previousDisplayTime = -1;
 }
 
-void ewol::eContext::OS_Resume(void)
-{
+void ewol::eContext::OS_Resume(void) {
 	m_previousDisplayTime = ewol::getTime();
 	m_widgetManager.periodicCallResume(m_previousDisplayTime);
 }
+

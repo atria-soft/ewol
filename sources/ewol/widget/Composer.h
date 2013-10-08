@@ -36,7 +36,7 @@ namespace widget
 			 * @param[in] mode mode of parsing the string
 			 * @param[in] data file/directString data to generate compositing of the widget..
 			 */
-			Composer(composerMode_te mode, const etk::UString& data);
+			Composer(composerMode_te _mode, const etk::UString& _data);
 			/**
 			 * @brief Destructor
 			 */
@@ -47,14 +47,14 @@ namespace widget
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */
-			bool loadFromFile(const etk::UString& fileName);
+			bool loadFromFile(const etk::UString& _fileName);
 			/**
 			 * @brief load a composition with a file
 			 * @param[in] composerXmlString xml to parse directly
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */
-			bool loadFromString(const etk::UString& composerXmlString);
+			bool loadFromString(const etk::UString& _composerXmlString);
 			/**
 			 * @brief Register an Event an named widget. @see registerOnEvent
 			 * @param[in] _subWidgetName Name of the subWidget.

@@ -34,7 +34,7 @@ namespace widget {
 			// Derived function
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			
-			void setColor(etk::Color<> newColor);
+			void setColor(etk::Color<> _newColor);
 			etk::Color<> getColor(void);
 		private:;
 			widget::ColorBar* m_widgetColorBar;

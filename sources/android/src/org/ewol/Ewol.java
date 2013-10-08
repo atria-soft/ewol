@@ -17,19 +17,16 @@ import android.util.Log;
 public class Ewol {
 	private int instanceID = -1; // local and private instance ID
 	
-	public <T extends EwolCallback> Ewol(T activityInstance, int typeApplication)
-	{
+	public <T extends EwolCallback> Ewol(T activityInstance, int typeApplication) {
 		instanceID = -1;
 		instanceID = EWsetJavaVirtualMachineStart(activityInstance, typeApplication);
 		Log.d("Ewol", "new : " + instanceID);
 	}
 	
-	public void setJavaVirtualMachineStop()
-	{
+	public void setJavaVirtualMachineStop() {
 		EWsetJavaVirtualMachineStop(instanceID);
 	}
-	public void paramSetArchiveDir(int mode, String myString)
-	{
+	public void paramSetArchiveDir(int mode, String myString) {
 		EWparamSetArchiveDir(instanceID, mode, myString);
 	}
 	
@@ -42,65 +39,52 @@ public class Ewol {
 	public void onStop()    { EWonStop(instanceID); }
 	public void onDestroy() { EWonDestroy(instanceID); }
 	// set display properties :
-	public void displayPropertyMetrics(float ratioX, float ratioY)
-	{
+	public void displayPropertyMetrics(float ratioX, float ratioY) {
 		EWdisplayPropertyMetrics(instanceID, ratioX, ratioY);
 	}
 	// IO native function :
 	// Specific for the type of input : TOOL_TYPE_FINGER and TOOL_TYPE_STYLUS (work as the same)
-	public void inputEventMotion(int pointerID, float x, float y)
-	{
+	public void inputEventMotion(int pointerID, float x, float y) {
 		EWinputEventMotion(instanceID, pointerID, x, y);
 	}
-	public void inputEventState(int pointerID, boolean isDown, float x, float y)
-	{
+	public void inputEventState(int pointerID, boolean isDown, float x, float y) {
 		EWinputEventState(instanceID, pointerID, isDown, x, y);
 	}
 	// Specific for the type of input : TOOL_TYPE_MOUSE
-	public void mouseEventMotion(int pointerID, float x, float y)
-	{
+	public void mouseEventMotion(int pointerID, float x, float y) {
 		EWmouseEventMotion(instanceID, pointerID, x, y);
 	}
-	public void mouseEventState(int pointerID, boolean isDown, float x, float y)
-	{
+	public void mouseEventState(int pointerID, boolean isDown, float x, float y) {
 		EWmouseEventState(instanceID, pointerID, isDown, x, y);
 	}
 	// other unknow event ...
-	public void unknowEvent(int eventID)
-	{
+	public void unknowEvent(int eventID) {
 		EWunknowEvent(instanceID, eventID);
 	}
 	
-	public void keyboardEventMove(int type, boolean isDown)
-	{
+	public void keyboardEventMove(int type, boolean isDown) {
 		EWkeyboardEventMove(instanceID, type, isDown);
 	}
-	public void keyboardEventKey(int uniChar, boolean isDown)
-	{
+	public void keyboardEventKey(int uniChar, boolean isDown) {
 		EWkeyboardEventKey(instanceID, uniChar, isDown);
 	}
 	
 	// Audio section ...
-	public void audioPlayback(short[] bufferData, int frames, int nbChannels)
-	{
+	public void audioPlayback(short[] bufferData, int frames, int nbChannels) {
 		EWaudioPlayback(instanceID, bufferData, frames, nbChannels);
 	}
 	
-	public void keyboardEventKeySystem(int keyVal, boolean isDown)
-	{
+	public void keyboardEventKeySystem(int keyVal, boolean isDown) {
 		EWkeyboardEventKeySystem(instanceID, keyVal, isDown);
 	}
 	// renderer Event : 
-	public void renderInit()
-	{
+	public void renderInit() {
 		EWrenderInit(instanceID);
 	}
-	public void renderResize(int w, int h)
-	{
+	public void renderResize(int w, int h) {
 		EWrenderResize(instanceID, w, h);
 	}
-	public void renderDraw()
-	{
+	public void renderDraw() {
 		EWrenderDraw(instanceID);
 	}
 	

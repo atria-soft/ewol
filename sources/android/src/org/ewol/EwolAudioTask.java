@@ -27,14 +27,12 @@ public class EwolAudioTask implements Runnable, EwolConstants
 	private AudioTrack      m_musicTrack       = null;
 	private Ewol EWOL;
 	
-	// constructor : 
-	public EwolAudioTask(Ewol ewolInstance)
-	{
+	// constructor :
+	public EwolAudioTask(Ewol ewolInstance) {
 		EWOL = ewolInstance;
 	}
 	
-	public void run()
-	{
+	public void run() {
 		if(m_musicTrack != null) {
 			return;
 		}
@@ -67,22 +65,19 @@ public class EwolAudioTask implements Runnable, EwolConstants
 		m_musicTrack.flush();
 		m_musicTrack.stop();
 	}
-	public void Pause()
-	{
+	public void Pause() {
 		if(m_musicTrack == null) {
 			return;
 		}
 		m_musicTrack.pause();
 	}
-	public void Resume()
-	{
+	public void Resume() {
 		if(m_musicTrack == null) {
 			return;
 		}
 		m_musicTrack.play();
 	}
-	public void AutoStop()
-	{
+	public void AutoStop() {
 		if(m_musicTrack == null) {
 			return;
 		}

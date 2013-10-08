@@ -17,11 +17,9 @@ extern "C" {
 }
 #include FT_FREETYPE_H
 
-namespace ewol
-{
+namespace ewol {
 	// show : http://www.freetype.org/freetype2/docs/tutorial/step2.html
-	class FontFreeType : public ewol::FontBase
-	{
+	class FontFreeType : public ewol::FontBase {
 		private:
 			FT_Byte* m_FileBuffer;
 			int32_t m_FileSize;
@@ -63,7 +61,6 @@ namespace ewol
 	};
 	void freeTypeInit(void);
 	void freeTypeUnInit(void);
-	
 };
 
 #endif

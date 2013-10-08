@@ -13,16 +13,14 @@
 #include <ewol/debug.h>
 #include <ewol/resources/Resource.h>
 
-namespace ewol
-{
-	class SimpleConfigElement
-	{
+namespace ewol {
+	class SimpleConfigElement {
 		public:
 			etk::UString m_paramName;
 		private:
 			etk::UString m_value;
-			int32_t      m_valueInt;
-			float        m_valuefloat;
+			int32_t m_valueInt;
+			float m_valuefloat;
 		public:
 			SimpleConfigElement(const etk::UString& _name) :
 				m_paramName(_name),
@@ -36,11 +34,10 @@ namespace ewol
 			etk::UString& getString(void)  { return m_value; };
 	};
 	
-	class ConfigFile : public ewol::Resource
-	{
+	class ConfigFile : public ewol::Resource {
 		private:
 			etk::Vector<ewol::SimpleConfigElement*> m_list;
-			etk::UString                            m_errorString;
+			etk::UString m_errorString;
 		protected:
 			ConfigFile(const etk::UString& _filename);
 			virtual ~ConfigFile(void);
@@ -50,9 +47,9 @@ namespace ewol
 			
 			int32_t request(const etk::UString& _paramName);
 			
-			int32_t       getInteger(int32_t id) { if (id<0) { return 0; } return m_list[id]->getInteger(); };
-			float         getFloat(int32_t id)   { if (id<0) { return 0; } return m_list[id]->getFloat();   };
-			etk::UString& getString(int32_t id)  { if (id<0) { return m_errorString; } return m_list[id]->getString();  };
+			int32_t getInteger(int32_t _id) { if (_id<0) { return 0; } return m_list[_id]->getInteger(); };
+			float getFloat(int32_t _id) { if (_id<0) { return 0; } return m_list[_id]->getFloat(); };
+			etk::UString& getString(int32_t _id)  { if (_id<0) { return m_errorString; } return m_list[_id]->getString(); };
 		public:
 			/**
 			 * @brief keep the resource pointer.

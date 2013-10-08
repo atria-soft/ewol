@@ -15,8 +15,7 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	class Layer : public widget::ContainerN
-	{
+	class Layer : public widget::ContainerN {
 		public:
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"

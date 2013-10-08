@@ -11,23 +11,20 @@
 #include <ewol/renderer/eContext.h>
 
 #undef __class__
-#define __class__	"EMultiCast"
+#define __class__ "EMultiCast"
 
-ewol::EMultiCast::EMultiCast(void)
-{
+ewol::EMultiCast::EMultiCast(void) {
 	EWOL_INFO("EObject message Multi-Cast");
 }
 
 
-ewol::EMultiCast::~EMultiCast(void)
-{
+ewol::EMultiCast::~EMultiCast(void) {
 	EWOL_INFO("EObject message Multi-Cast");
 	m_messageList.clear();
 }
 
 
-void ewol::EMultiCast::add(ewol::EObject* _object, const char* const _message)
-{
+void ewol::EMultiCast::add(ewol::EObject* _object, const char* const _message) {
 	if (NULL == _object) {
 		EWOL_ERROR("Add with NULL object");
 		return;
@@ -41,8 +38,7 @@ void ewol::EMultiCast::add(ewol::EObject* _object, const char* const _message)
 }
 
 
-void ewol::EMultiCast::rm(ewol::EObject* _object)
-{
+void ewol::EMultiCast::rm(ewol::EObject* _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Rm with NULL object");
 		return;
@@ -58,8 +54,7 @@ void ewol::EMultiCast::rm(ewol::EObject* _object)
 	}
 }
 
-void ewol::EMultiCast::send(ewol::EObject* _object, const char* const _message, const etk::UString& _data)
-{
+void ewol::EMultiCast::send(ewol::EObject* _object, const char* const _message, const etk::UString& _data) {
 	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
 	
 	// send the message at all registered widget ...

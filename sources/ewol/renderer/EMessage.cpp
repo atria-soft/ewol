@@ -9,10 +9,9 @@
 #include <ewol/renderer/EObject.h>
 
 #undef __class__
-#define __class__	"EMessage"
+#define __class__ "EMessage"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EMessage& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EMessage& _obj) {
 	_os << "{";
 	if (NULL != _obj.getMessage()) {
 		_os << "msg=\"" << _obj.getMessage() << "\"";

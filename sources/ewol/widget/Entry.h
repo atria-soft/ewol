@@ -29,8 +29,7 @@ namespace widget {
 	 *  ----------------------------------------------
 	 * @endcode
 	 */
-	class Entry : public ewol::Widget
-	{
+	class Entry : public ewol::Widget {
 		public:
 			// Event list of properties
 			static const char * const eventClick;

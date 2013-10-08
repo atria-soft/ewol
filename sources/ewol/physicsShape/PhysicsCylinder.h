@@ -14,10 +14,8 @@
 #include <ewol/physicsShape/PhysicsShape.h>
 
 
-namespace ewol
-{
-	class PhysicsCylinder : public ewol::PhysicsShape
-	{
+namespace ewol {
+	class PhysicsCylinder : public ewol::PhysicsShape {
 		public:
 			PhysicsCylinder(void) {};
 			virtual ~PhysicsCylinder(void) {};

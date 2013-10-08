@@ -11,7 +11,7 @@
 #include <ewol/widget/Button.h>
 
 #undef __class__
-#define __class__	"Button"
+#define __class__ "Button"
 
 
 const char* const widget::Button::eventPressed    = "ewol-widget-button-event-Pressed";
@@ -34,26 +34,23 @@ const char* const widget::Button::configShaper = "shaper";
 #define STATUS_DOWN      (3)
 
 
-static ewol::Widget* Create(void)
-{
+static ewol::Widget* Create(void) {
 	return new widget::Button();
 }
 
-void widget::Button::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::Button::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
 widget::Button::Button(const etk::UString& _shaperName) :
-	m_shaper(_shaperName),
-	m_value(false),
-	m_lock(widget::Button::lockNone),
-	m_toggleMode(false),
-	m_mouseHover(false),
-	m_buttonPressed(false),
-	m_selectableAreaPos(0,0),
-	m_selectableAreaSize(0,0)
-{
+  m_shaper(_shaperName),
+  m_value(false),
+  m_lock(widget::Button::lockNone),
+  m_toggleMode(false),
+  m_mouseHover(false),
+  m_buttonPressed(false),
+  m_selectableAreaPos(0,0),
+  m_selectableAreaSize(0,0) {
 	// by default set no widget :
 	m_subWidget[0] = NULL;
 	m_subWidget[1] = NULL;
@@ -79,20 +76,17 @@ widget::Button::Button(const etk::UString& _shaperName) :
 }
 
 
-widget::Button::~Button(void)
-{
+widget::Button::~Button(void) {
 	
 }
 
 
-void widget::Button::setShaperName(const etk::UString& _shaperName)
-{
+void widget::Button::setShaperName(const etk::UString& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
 
-void widget::Button::setSubWidget(ewol::Widget* _subWidget)
-{
+void widget::Button::setSubWidget(ewol::Widget* _subWidget) {
 	int32_t idWidget=0;
 	if (NULL!=m_subWidget[idWidget]) {
 		delete(m_subWidget[idWidget]);
@@ -109,8 +103,7 @@ void widget::Button::setSubWidget(ewol::Widget* _subWidget)
 	markToRedraw();
 }
 
-void widget::Button::setSubWidgetToggle(ewol::Widget* _subWidget)
-{
+void widget::Button::setSubWidgetToggle(ewol::Widget* _subWidget) {
 	int32_t idWidget=1;
 	if (NULL!=m_subWidget[idWidget]) {
 		delete(m_subWidget[idWidget]);
@@ -126,8 +119,7 @@ void widget::Button::setSubWidgetToggle(ewol::Widget* _subWidget)
 	requestUpdateSize();
 }
 
-void widget::Button::calculateSize(const vec2& _availlable)
-{
+void widget::Button::calculateSize(const vec2& _availlable) {
 	vec2 padding = m_shaper.getPadding();
 	// set minimal size
 	m_size = m_minSize;
@@ -173,8 +165,7 @@ void widget::Button::calculateSize(const vec2& _availlable)
 }
 
 
-void widget::Button::calculateMinMaxSize(void)
-{
+void widget::Button::calculateMinMaxSize(void) {
 	vec2 padding = m_shaper.getPadding();
 	vec2 minimumSizeBase(0,0);
 	vec2 minimumSizeToggle(0,0);
@@ -198,8 +189,7 @@ void widget::Button::calculateMinMaxSize(void)
 	markToRedraw();
 }
 
-void widget::Button::systemDraw(const ewol::drawProperty& _displayProp)
-{
+void widget::Button::systemDraw(const ewol::drawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -218,14 +208,12 @@ void widget::Button::systemDraw(const ewol::drawProperty& _displayProp)
 		}
 	}
 }
-void widget::Button::onDraw(void)
-{
+void widget::Button::onDraw(void) {
 	// draw the shaaper (if needed indeed)
 	m_shaper.draw();
 }
 
-void widget::Button::onRegenerateDisplay(void)
-{
+void widget::Button::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		vec2 padding = m_shaper.getPadding();
 		m_shaper.clear();
@@ -247,8 +235,7 @@ void widget::Button::onRegenerateDisplay(void)
 	}
 }
 
-void widget::Button::setLock(buttonLock_te _lock)
-{
+void widget::Button::setLock(buttonLock_te _lock) {
 	if (m_lock != _lock) {
 		m_lock = _lock;
 		if(widget::Button::lockAccess == _lock) {
@@ -260,8 +247,7 @@ void widget::Button::setLock(buttonLock_te _lock)
 	}
 }
 
-void widget::Button::setValue(bool _val)
-{
+void widget::Button::setValue(bool _val) {
 	if (m_value != _val) {
 		m_value = _val;
 		CheckStatus();
@@ -269,8 +255,7 @@ void widget::Button::setValue(bool _val)
 	}
 }
 
-void widget::Button::setToggleMode(bool _togg)
-{
+void widget::Button::setToggleMode(bool _togg) {
 	if (m_toggleMode != _togg) {
 		m_toggleMode = _togg;
 		if (m_value == true) {
@@ -282,8 +267,7 @@ void widget::Button::setToggleMode(bool _togg)
 	}
 }
 
-bool widget::Button::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::Button::onEventInput(const ewol::EventInput& _event) {
 	// disable event in the lock access mode :
 	if(widget::Button::lockAccess == m_lock) {
 		return false;
@@ -355,8 +339,7 @@ bool widget::Button::onEventInput(const ewol::EventInput& _event)
 }
 
 
-bool widget::Button::onEventEntry(const ewol::EventEntry& _event)
-{
+bool widget::Button::onEventEntry(const ewol::EventEntry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    _event.getType() == ewol::keyEvent::keyboardChar
 	    && _event.getStatus() == ewol::keyEvent::statusDown
@@ -367,8 +350,7 @@ bool widget::Button::onEventEntry(const ewol::EventEntry& _event)
 	return false;
 }
 
-void widget::Button::CheckStatus(void)
-{
+void widget::Button::CheckStatus(void) {
 	if (true == m_buttonPressed) {
 		changeStatusIn(STATUS_PRESSED);
 	} else {
@@ -384,8 +366,7 @@ void widget::Button::CheckStatus(void)
 	}
 }
 
-void widget::Button::changeStatusIn(int32_t _newStatusId)
-{
+void widget::Button::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
@@ -393,8 +374,7 @@ void widget::Button::changeStatusIn(int32_t _newStatusId)
 }
 
 
-void widget::Button::periodicCall(const ewol::EventTime& _event)
-{
+void widget::Button::periodicCall(const ewol::EventTime& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}
@@ -402,8 +382,7 @@ void widget::Button::periodicCall(const ewol::EventTime& _event)
 }
 
 
-ewol::Widget* widget::Button::getWidgetNamed(const etk::UString& _widgetName)
-{
+ewol::Widget* widget::Button::getWidgetNamed(const etk::UString& _widgetName) {
 	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (NULL!=tmpUpperWidget) {
 		return tmpUpperWidget;
@@ -424,8 +403,7 @@ ewol::Widget* widget::Button::getWidgetNamed(const etk::UString& _widgetName)
 }
 
 
-bool widget::Button::loadXML(exml::Element* _element)
-{
+bool widget::Button::loadXML(exml::Element* _element) {
 	if (NULL == _element) {
 		return false;
 	}
@@ -476,8 +454,7 @@ bool widget::Button::loadXML(exml::Element* _element)
 	return true;
 }
 
-bool widget::Button::onSetConfig(const ewol::EConfig& _conf)
-{
+bool widget::Button::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -511,8 +488,7 @@ bool widget::Button::onSetConfig(const ewol::EConfig& _conf)
 	return false;
 }
 
-bool widget::Button::onGetConfig(const char* _config, etk::UString& _result) const
-{
+bool widget::Button::onGetConfig(const char* _config, etk::UString& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

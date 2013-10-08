@@ -75,16 +75,14 @@ class eSystemMessage {
 		}
 };
 
-namespace ewol
-{
+namespace ewol {
 	typedef enum {
 		SCREEN_ORIENTATION_AUTO = 0,
 		SCREEN_ORIENTATION_LANDSCAPE,
 		SCREEN_ORIENTATION_PORTRAIT,
 	} orientation_te;
 	
-	class eContext
-	{
+	class eContext {
 		private:
 			ewol::CommandLine m_commandLine; //!< Start command line information
 		public:

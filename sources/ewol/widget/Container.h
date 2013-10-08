@@ -13,13 +13,11 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 
-namespace widget
-{
+namespace widget {
 	/**
 	 * @brief the Cotainer widget is a widget that have an only one subWidget
 	 */
-	class Container : public ewol::Widget
-	{
+	class Container : public ewol::Widget {
 		protected:
 			ewol::Widget* m_subWidget;
 		public:

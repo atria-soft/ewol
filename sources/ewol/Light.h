@@ -14,10 +14,8 @@
 #include <etk/math/Vector4D.h>
 #include <ewol/resources/Program.h>
 
-namespace ewol
-{
-	class Light
-	{
+namespace ewol {
+	class Light {
 		private:
 			// values
 			vec3 m_direction;
@@ -35,8 +33,8 @@ namespace ewol
 		public:
 			Light(void);
 			~Light(void);
-			void link(ewol::Program* prog, const etk::UString& baseName);
-			void draw(ewol::Program* prog);
+			void link(ewol::Program* _prog, const etk::UString& _baseName);
+			void draw(ewol::Program* _prog);
 			void setDirection(const vec3& val) {
 				m_direction = val;
 			}
@@ -56,7 +54,6 @@ namespace ewol
 		friend etk::CCout& operator <<(etk::CCout& _os, const ewol::Light& _obj);
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Light& _obj);
-	
 };
 
 

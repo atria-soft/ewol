@@ -9,8 +9,7 @@
 #include <ewol/physicsShape/PhysicsCylinder.h>
 
 
-bool ewol::PhysicsCylinder::parse(const char* _line)
-{
+bool ewol::PhysicsCylinder::parse(const char* _line) {
 	if (true ==  ewol::PhysicsShape::parse(_line)) {
 		return true;
 	}

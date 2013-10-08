@@ -60,8 +60,7 @@ typedef struct {
 #define COMPR_G721   (64)
 #define COMPR_MPEG   (80)
 
-int16_t * ewol::audio::wav::loadData(etk::UString filename, int8_t nbChan, int32_t frequency, int32_t & nbSampleOut)
-{
+int16_t * ewol::audio::wav::loadData(etk::UString filename, int8_t nbChan, int32_t frequency, int32_t & nbSampleOut) {
 	nbSampleOut = 0;
 	waveHeader myHeader;
 	memset(&myHeader, 0, sizeof(waveHeader));

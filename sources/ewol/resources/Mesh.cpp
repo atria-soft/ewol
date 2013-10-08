@@ -15,12 +15,11 @@
 #define __class__	"Mesh"
 
 ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
-	ewol::Resource(_fileName),
-	m_normalMode(normalModeNone),
-	m_checkNormal(false),
-	m_pointerShape(NULL),
-	m_functionFreeShape(NULL)
-{
+  ewol::Resource(_fileName),
+  m_normalMode(normalModeNone),
+  m_checkNormal(false),
+  m_pointerShape(NULL),
+  m_functionFreeShape(NULL) {
 	EWOL_DEBUG("Load a new mesh : '" << _fileName << "'");
 	// get the shader resource :
 	m_GLPosition = 0;
@@ -65,8 +64,7 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	}
 }
 
-ewol::Mesh::~Mesh(void)
-{
+ewol::Mesh::~Mesh(void) {
 	// remove dynamics dependencies :
 	ewol::Program::release(m_GLprogram);
 	ewol::VirtualBufferObject::release(m_verticesVBO);
@@ -78,8 +76,9 @@ ewol::Mesh::~Mesh(void)
 
 //#define DISPLAY_NB_VERTEX_DISPLAYED
 
-void ewol::Mesh::draw(mat4& _positionMatrix, bool _enableDepthTest, bool _enableDepthUpdate)
-{
+void ewol::Mesh::draw(mat4& _positionMatrix,
+                      bool _enableDepthTest,
+                      bool _enableDepthUpdate) {
 	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -178,8 +177,7 @@ void ewol::Mesh::draw(mat4& _positionMatrix, bool _enableDepthTest, bool _enable
 }
 
 // normal calculation of the normal face is really easy :
-void ewol::Mesh::calculateNormaleFace(void)
-{
+void ewol::Mesh::calculateNormaleFace(void) {
 	m_listFacesNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeFace) {
 		etk::Vector<Face>& tmpFaceList = m_listFaces.getValue(0).m_faces;
@@ -193,8 +191,7 @@ void ewol::Mesh::calculateNormaleFace(void)
 	}
 }
 
-void ewol::Mesh::calculateNormaleEdge(void)
-{
+void ewol::Mesh::calculateNormaleEdge(void) {
 	m_listVertexNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeVertex) {
 		for(int32_t iii=0 ; iii<m_listVertex.size() ; iii++) {
@@ -223,8 +220,7 @@ void ewol::Mesh::calculateNormaleEdge(void)
 //#define PRINT_HALF (1)
 //#define TRY_MINIMAL_VBO
 
-void ewol::Mesh::generateVBO(void)
-{
+void ewol::Mesh::generateVBO(void) {
 	// calculate the normal of all faces if needed
 	if (m_normalMode == ewol::Mesh::normalModeNone) {
 		// when no normal detected  == > auto generate Face normal ....
@@ -287,8 +283,7 @@ void ewol::Mesh::generateVBO(void)
 }
 
 
-void ewol::Mesh::createViewBox(const etk::UString& _materialName,float _size)
-{
+void ewol::Mesh::createViewBox(const etk::UString& _materialName,float _size) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 	// This is the direct generation basis on the .obj system
 	/*
@@ -381,8 +376,7 @@ void ewol::Mesh::createViewBox(const etk::UString& _materialName,float _size)
 }
 
 
-bool ewol::Mesh::loadOBJ(const etk::UString& _fileName)
-{
+bool ewol::Mesh::loadOBJ(const etk::UString& _fileName) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 #if 0
 	etk::FSNode fileName(_fileName);
@@ -505,8 +499,7 @@ bool ewol::Mesh::loadOBJ(const etk::UString& _fileName)
 	return true;
 }
 
-void jumpEndLine(etk::FSNode& _file)
-{
+void jumpEndLine(etk::FSNode& _file) {
 	char current=_file.fileGet();
 	while(    current != '\0'
 	       && current != '\n') {
@@ -515,8 +508,7 @@ void jumpEndLine(etk::FSNode& _file)
 	}
 }
 
-int32_t countIndent(etk::FSNode& _file)
-{
+int32_t countIndent(etk::FSNode& _file) {
 	int32_t nbIndent=0;
 	int32_t nbSpacesTab=0;
 	int32_t nbChar=0;
@@ -547,8 +539,12 @@ int32_t countIndent(etk::FSNode& _file)
 	return nbIndent;
 }
 
-char* loadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, bool _removeTabs=false, bool _stopColomn=false, bool _stopPipe=true)
-{
+char* loadNextData(char* _elementLine,
+                   int64_t _maxData,
+                   etk::FSNode& _file,
+                   bool _removeTabs=false,
+                   bool _stopColomn=false,
+                   bool _stopPipe=true) {
 	memset(_elementLine, 0, _maxData);
 	char * element = _elementLine;
 	int64_t outSize = 0;
@@ -596,8 +592,7 @@ char* loadNextData(char* _elementLine, int64_t _maxData, etk::FSNode& _file, boo
 	return NULL;
 }
 
-void removeEndLine(char* _val)
-{
+void removeEndLine(char* _val) {
 	int32_t len = strlen(_val);
 	if(    len>0
 	    && (    _val[len-1] == '\n'
@@ -611,6 +606,7 @@ void removeEndLine(char* _val)
 		_val[len-1] = '\0';
 	}
 }
+
 typedef enum {
 	EMFModuleNone,
 	EMFModuleMesh,
@@ -629,8 +625,7 @@ typedef enum {
 	EMFModuleMaterial_END,
 } emfModuleMode_te;
 
-bool ewol::Mesh::loadEMF(const etk::UString& _fileName)
-{
+bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
 	m_checkNormal = true;
 	m_normalMode = ewol::Mesh::normalModeNone;
 	etk::FSNode fileName(_fileName);
@@ -997,10 +992,7 @@ bool ewol::Mesh::loadEMF(const etk::UString& _fileName)
 	return true;
 }
 
-
-
-void ewol::Mesh::addMaterial(const etk::UString& _name, ewol::Material* _data)
-{
+void ewol::Mesh::addMaterial(const etk::UString& _name, ewol::Material* _data) {
 	if (NULL == _data) {
 		EWOL_ERROR(" can not add material with null pointer");
 		return;
@@ -1013,23 +1005,15 @@ void ewol::Mesh::addMaterial(const etk::UString& _name, ewol::Material* _data)
 	m_materials.add(_name, _data);
 }
 
-
-
-void ewol::Mesh::setShape(void* _shape)
-{
+void ewol::Mesh::setShape(void* _shape) {
 	if (m_functionFreeShape!=NULL) {
 		m_functionFreeShape(m_pointerShape);
 		m_pointerShape = NULL;
 	}
 	m_pointerShape=_shape;
-};
+}
 
-
-
-
-
-ewol::Mesh* ewol::Mesh::keep(const etk::UString& _meshName)
-{
+ewol::Mesh* ewol::Mesh::keep(const etk::UString& _meshName) {
 	ewol::Mesh* object = static_cast<ewol::Mesh*>(getManager().localKeep(_meshName));
 	if (NULL != object) {
 		return object;
@@ -1043,8 +1027,7 @@ ewol::Mesh* ewol::Mesh::keep(const etk::UString& _meshName)
 	return object;
 }
 
-void ewol::Mesh::release(ewol::Mesh*& _object)
-{
+void ewol::Mesh::release(ewol::Mesh*& _object) {
 	if (NULL == _object) {
 		return;
 	}

@@ -25,7 +25,6 @@ namespace ewol {
 #include <ewol/renderer/EMessage.h>
 
 namespace ewol {
-	
 	/**
 	 * local class for event generation
 	 */
@@ -36,7 +35,6 @@ namespace ewol {
 			const char* destEventId; //!< generated event ID on the distant widget
 			etk::UString overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 	};
-	
 	/**
 	 * @brief Basic message classes for ewol system
 	 * this class mermit at every EObject to communicate between them.
@@ -56,34 +54,28 @@ namespace ewol {
 			 * @brief Constructor
 			 */
 			EObject(void);
-			
 			/**
 			 * @brief Destructor
 			 */
 			virtual ~EObject(void);
-			
 			/**
 			 * @brief get the static status of the EObject  == > mark at true if the user set the object mark as static allocated element ==> not auto remove element
 			 * @return true if it might not be removed  == > usefull for conficuration class
 			 */
 			bool getStatic(void){ return m_static; };
-			
 			/**
 			 * @brief get the UniqueId of the EObject
 			 * @return the requested ID
 			 */
 			int32_t getId(void){ return m_uniqueId; };
-			
 			/**
 			 * @brief Auto-destroy the object
 			 */
 			void autoDestroy(void);
-			
 			/**
 			 * @brief Asynchronous removing the object
 			 */
 			void removeObject(void);
-			
 			/**
 			 * @brief get the current Object type of the EObject
 			 * @note In Embended platforme, it is many time no -rtti flag, then it is not possible to use dynamic cast  == > this will replace it
@@ -97,21 +89,18 @@ namespace ewol {
 			 * @param[in] _generateEventId event Id to add
 			 */
 			void addEventId(const char * _generateEventId);
-			
 			/**
 			 * @brief generate event on all registered EObject
 			 * @param[in] _generateEventId event Id that is curetly generated
 			 * @param[in] _data data associated with the event
 			 */
 			void generateEventId(const char * _generateEventId, const etk::UString& _data = "");
-			
 			/**
 			 * @brief generate Multicast event on all EObject requested the event
 			 * @param[in] _messageId Event Id that is generated
 			 * @param[in] _data String that is send at all the destinations
 			 */
 			void sendMultiCast(const char* const _messageId, const etk::UString& _data = "");
-			
 			/**
 			 * @brief Register of the arrival of a Multicast message
 			 * @param[in] _messageId Event Id waiting for...
@@ -129,14 +118,12 @@ namespace ewol {
 			                     const char * _eventId,
 			                     const char * _eventIdgenerated = NULL,
 			                     const etk::UString& _overloadData="");
-			
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] _removeObject Pointer on the EObject remeved  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
-			
 			/**
 			 * @brief Receive a message from an other EObject with a specific eventId and data
 			 * @param[in] _msg Message handle

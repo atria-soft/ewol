@@ -50,8 +50,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		EWOL.paramSetArchiveDir(0, apkFilePath);
 	}
 	
-	@Override public Engine onCreateEngine()
-	{
+	@Override public Engine onCreateEngine() {
 		// set the java evironement in the C sources :
 		EWOL = new Ewol(this, EWOL_APPL_TYPE_WALLPAPER);
 		
@@ -76,32 +75,24 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		return mGLView;
 	}
 	
-	
-	
-	public class GLEngine extends Engine
-	{
+	public class GLEngine extends Engine {
 		private Ewol EWOL;
-		public GLEngine(Ewol ewolInstance)
-		{
+		public GLEngine(Ewol ewolInstance) {
 			EWOL = ewolInstance;
 		}
 		
 		class WallpaperGLSurfaceView extends EwolSurfaceViewGL
 		{
 			private static final String TAG = "WallpaperGLSurfaceView";
-			WallpaperGLSurfaceView(Context context, Ewol ewolInstance)
-			{
+			WallpaperGLSurfaceView(Context context, Ewol ewolInstance) {
 				super(context, ewolInstance);
 				Log.d(TAG, "WallpaperGLSurfaceView(" + context + ")");
 			}
-			@Override
-			public SurfaceHolder getHolder()
-			{
+			@Override public SurfaceHolder getHolder() {
 				Log.d(TAG, "getHolder(): returning " + getSurfaceHolder());
 				return getSurfaceHolder();
 			}
-			public void onDestroy()
-			{
+			public void onDestroy() {
 				Log.d(TAG, "onDestroy()");
 				super.onDetachedFromWindow();
 			}
@@ -110,8 +101,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 		private static final String TAG = "GLEngine";
 		private WallpaperGLSurfaceView glSurfaceView;
 		
-		@Override public void onCreate(SurfaceHolder surfaceHolder)
-		{
+		@Override public void onCreate(SurfaceHolder surfaceHolder) {
 			Log.d(TAG, "onCreate(" + surfaceHolder + ")");
 			super.onCreate(surfaceHolder);
 			
@@ -135,13 +125,11 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			
 		}
 		
-		@Override public void onTouchEvent(MotionEvent event)
-		{
+		@Override public void onTouchEvent(MotionEvent event) {
 			glSurfaceView.onTouchEvent(event);
 		}
 		
-		@Override public void onVisibilityChanged(boolean visible)
-		{
+		@Override public void onVisibilityChanged(boolean visible) {
 			Log.d(TAG, "onVisibilityChanged(" + visible + ")");
 			super.onVisibilityChanged(visible);
 			if (true==visible) {
@@ -155,8 +143,7 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			}
 		}
 		
-		@Override public void onDestroy()
-		{
+		@Override public void onDestroy() {
 			Log.d(TAG, "onDestroy()");
 			super.onDestroy();
 			// call C
@@ -165,46 +152,40 @@ public abstract class EwolWallpaper extends WallpaperService implements EwolCall
 			glSurfaceView.onDestroy();
 		}
 		
-		protected void setPreserveEGLContextOnPause(boolean preserve)
-		{
+		protected void setPreserveEGLContextOnPause(boolean preserve) {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 				Log.d(TAG, "setPreserveEGLContextOnPause(" + preserve + ")");
 				glSurfaceView.setPreserveEGLContextOnPause(preserve);
 			}
 		}
 		
-		protected void setEGLContextClientVersion(int version)
-		{
+		protected void setEGLContextClientVersion(int version) {
 			Log.d(TAG, "setEGLContextClientVersion(" + version + ")");
 			glSurfaceView.setEGLContextClientVersion(version);
 		}
 	}
 	
-	public void keyboardUpdate(boolean show)
-	{
+	public void keyboardUpdate(boolean show) {
 		// never display keyboard on wallpaer...
 		Log.d("EwolCallback", "KEABOARD UPDATE is not implemented ...");
 	}
 	
-	public void eventNotifier(String[] args)
-	{
+	public void eventNotifier(String[] args) {
 		// just for the test ...
 		Log.d("EwolCallback", "EVENT NOTIFIER is not implemented ...");
 		
 	}
 	
-	public void orientationUpdate(int screenMode)
-	{
+	public void orientationUpdate(int screenMode) {
 		Log.d("EwolCallback", "SET ORIENTATION is not implemented ...");
 	}
 	
-	public void titleSet(String value)
-	{
+	public void titleSet(String value) {
 		// no title in the wallpaper ...
 		Log.d("EwolCallback", "SET TITLE is not implemented ...");
 	}
-	public void stop()
-	{
+	
+	public void stop() {
 		Log.d("EwolCallback", "STOP is not implemented ...");
 	}
 }

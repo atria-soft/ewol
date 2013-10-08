@@ -17,11 +17,8 @@
 #include <ewol/resources/font/GlyphProperty.h>
 
 
-namespace ewol
-{
-	class FontBase : public ewol::Resource
-	{
-		protected:
+namespace ewol {
+	class FontBase : public ewol::Resource {
 		public:
 			FontBase(const etk::UString& _fontName) : ewol::Resource(_fontName) {};
 			

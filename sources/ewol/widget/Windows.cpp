@@ -23,21 +23,18 @@ extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKey
 
 
 ewol::Windows::Windows(void) :
-	m_backgroundColor(0.750, 0.750, 0.750, 0.5)
-{
+  m_backgroundColor(0.750, 0.750, 0.750, 0.5) {
 	setCanHaveFocus(true);
 	m_subWidget = NULL;
 	setDecorationDisable();
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
-ewol::Windows::~Windows(void)
-{
+ewol::Windows::~Windows(void) {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
 		m_subWidget=NULL;
 	}
-	
 	for(int32_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			delete(m_popUpWidgetList[iii]);
@@ -47,9 +44,7 @@ ewol::Windows::~Windows(void)
 	m_popUpWidgetList.clear();
 }
 
-
-void ewol::Windows::calculateSize(const vec2& _availlable)
-{
+void ewol::Windows::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (NULL != m_subWidget) {
@@ -66,21 +61,19 @@ void ewol::Windows::calculateSize(const vec2& _availlable)
 	}
 }
 
-
-ewol::Widget * ewol::Windows::getWidgetAtPos(const vec2& pos)
-{
+ewol::Widget * ewol::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
-	vec2 relativePos = relativePosition(pos);
+	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList.size()) {
 		if (NULL == m_popUpWidgetList[m_popUpWidgetList.size()-1]) {
 			m_popUpWidgetList.popBack();
 		} else {
-			return m_popUpWidgetList[m_popUpWidgetList.size()-1]->getWidgetAtPos(pos);
+			return m_popUpWidgetList[m_popUpWidgetList.size()-1]->getWidgetAtPos(_pos);
 		}
 	// otherwise in the normal windows
 	} else if (NULL != m_subWidget) {
-		return m_subWidget->getWidgetAtPos(pos);
+		return m_subWidget->getWidgetAtPos(_pos);
 	}
 	// otherwise the event go to this widget ...
 	return this;
@@ -118,8 +111,7 @@ void ewol::Windows::sysDraw(void) {
 	return;
 }
 
-void ewol::Windows::onRegenerateDisplay(void)
-{
+void ewol::Windows::onRegenerateDisplay(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
@@ -132,8 +124,7 @@ void ewol::Windows::onRegenerateDisplay(void)
 
 //#define TEST_PERFO_WINDOWS
 
-void ewol::Windows::systemDraw(const ewol::drawProperty& _displayProp)
-{
+void ewol::Windows::systemDraw(const ewol::drawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();
@@ -176,40 +167,36 @@ void ewol::Windows::systemDraw(const ewol::drawProperty& _displayProp)
 	#endif
 }
 
-void ewol::Windows::setSubWidget(ewol::Widget * widget)
-{
+void ewol::Windows::setSubWidget(ewol::Widget* _widget) {
 	if (NULL != m_subWidget) {
 		EWOL_INFO("Remove current main windows Widget...");
 		delete(m_subWidget);
 		m_subWidget = NULL;
 	}
-	m_subWidget = widget;
+	m_subWidget = _widget;
 	// Regenerate the size calculation :
 	calculateSize(m_size);
 }
 
-void ewol::Windows::popUpWidgetPush(ewol::Widget * widget)
-{
-	m_popUpWidgetList.pushBack(widget);
+void ewol::Windows::popUpWidgetPush(ewol::Widget* _widget) {
+	m_popUpWidgetList.pushBack(_widget);
 	// Regenerate the size calculation :
 	calculateSize(m_size);
 	// TODO : it is dansgerous to access directly to the system ...
 	getContext().resetIOEvent();
 }
 
-
-void ewol::Windows::onObjectRemove(ewol::EObject * removeObject)
-{
+void ewol::Windows::onObjectRemove(ewol::EObject* _removeObject) {
 	// First step call parrent : 
-	ewol::Widget::onObjectRemove(removeObject);
+	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
 	
-	if (m_subWidget == removeObject) {
+	if (m_subWidget == _removeObject) {
 		EWOL_DEBUG("Remove main element of the windows  == > destroyed object");
 		m_subWidget = NULL;
 	}
-	for(int32_t iii=m_popUpWidgetList.size()-1; iii >= 0; iii--) {
-		if(m_popUpWidgetList[iii] == removeObject) {
+	for(int32_t iii=m_popUpWidgetList.size()-1; iii >= 0; --iii) {
+		if(m_popUpWidgetList[iii] == _removeObject) {
 			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows  == > destroyed object");
 			m_popUpWidgetList[iii] = NULL;
 			m_popUpWidgetList.erase(iii);
@@ -217,17 +204,14 @@ void ewol::Windows::onObjectRemove(ewol::EObject * removeObject)
 	}
 }
 
-
-void ewol::Windows::setBackgroundColor(const etk::Color<float>& _color)
-{
+void ewol::Windows::setBackgroundColor(const etk::Color<float>& _color) {
 	if (m_backgroundColor != _color) {
 		m_backgroundColor = _color;
 		markToRedraw();
 	}
 }
 
-void ewol::Windows::setTitle(const etk::UString& _title)
-{
+void ewol::Windows::setTitle(const etk::UString& _title) {
 	// TODO : remove this ...
 	etk::UString title = _title;
 	getContext().setTitle(title);

@@ -15,8 +15,7 @@
 #include <ewol/physicsShape/PhysicsSphere.h>
 
 
-ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name)
-{
+ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name) {
 	ewol::PhysicsShape* tmpp = NULL;
 	etk::UString name = _name.toLower();
 	if (name == "box") {
@@ -42,8 +41,7 @@ ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name)
 }
 
 
-bool ewol::PhysicsShape::parse(const char* _line)
-{
+bool ewol::PhysicsShape::parse(const char* _line) {
 	if(0 == strncmp(_line, "origin : ", 9) ) {
 		sscanf(&_line[9], "%f %f %f", &m_origin.m_floats[0], &m_origin.m_floats[1], &m_origin.m_floats[2] );
 		EWOL_DEBUG("                Origin=" << m_origin);

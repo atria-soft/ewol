@@ -13,10 +13,8 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/resources/ResourceManager.h>
 
-namespace ewol
-{
-	class Sprite : public ewol::Image
-	{
+namespace ewol {
+	class Sprite : public ewol::Image {
 		protected:
 			ivec2 m_nbSprite; //!< number of sprite in vertical and horizontal
 			vec2 m_unitarySpriteSize; //!< size of a unique sprite

@@ -18,8 +18,7 @@ extern const char * const ewolEventFSFolderSelect;
 extern const char * const ewolEventFSFolderValidate;
 
 namespace widget {
-	class ListFileSystem : public widget::List
-	{
+	class ListFileSystem : public widget::List {
 		private:
 			etk::Vector<etk::FSNode *> m_list;
 			etk::UString m_folder;

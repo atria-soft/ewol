@@ -18,18 +18,17 @@
 extern const char * const ewolEventSliderChange;
 
 namespace widget {
-	class Slider :public widget::Drawable
-	{
+	class Slider :public widget::Drawable {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 		public:
 			Slider(void);
 			virtual ~Slider(void);
-			void setValue(int32_t val);
+			void setValue(int32_t _val);
 			int32_t getValue(void);
-			void setMin(int32_t val);
-			void setMax(int32_t val);
-			void setColor(etk::Color<> newColor) { m_textColorFg = newColor; };
+			void setMin(int32_t _val);
+			void setMax(int32_t _val);
+			void setColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
 		private:
 			int32_t m_value;
 			int32_t m_min;

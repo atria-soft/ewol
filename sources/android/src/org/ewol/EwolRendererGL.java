@@ -27,8 +27,7 @@ public class EwolRendererGL implements GLSurfaceView.Renderer
 {
 	private Ewol EWOL;
 	
-	public EwolRendererGL(Ewol ewolInstance)
-	{
+	public EwolRendererGL(Ewol ewolInstance) {
 		EWOL = ewolInstance;
 	}
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {

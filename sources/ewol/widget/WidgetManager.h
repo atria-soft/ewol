@@ -15,10 +15,8 @@
 #include <etk/Hach.h>
 #include <ewol/widget/Widget.h>
 
-namespace ewol
-{
-	class WidgetManager
-	{
+namespace ewol {
+	class WidgetManager {
 		public:
 			typedef ewol::Widget* (*creator_tf)(void);
 		private:

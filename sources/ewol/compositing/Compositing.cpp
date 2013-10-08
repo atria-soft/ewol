@@ -13,49 +13,41 @@
 #include <ewol/compositing/Compositing.h>
 
 
-ewol::Compositing::Compositing(void)
-{
+ewol::Compositing::Compositing(void) {
 	// nothing to do
 }
 
 
-ewol::Compositing::~Compositing(void)
-{
+ewol::Compositing::~Compositing(void) {
 	// nothing to do
 }
 
 
-void ewol::Compositing::resetMatrix(void)
-{
+void ewol::Compositing::resetMatrix(void) {
 	m_matrixApply.identity();
 }
 
 
-void ewol::Compositing::translate(const vec3& _vect)
-{
+void ewol::Compositing::translate(const vec3& _vect) {
 	m_matrixApply *= etk::matTranslate(_vect);
 }
 
 
-void ewol::Compositing::rotate(const vec3& _vect, float _angle)
-{
+void ewol::Compositing::rotate(const vec3& _vect, float _angle) {
 	m_matrixApply *= etk::matRotate(_vect, _angle);
 }
 
 
-void ewol::Compositing::scale(const vec3& _vect)
-{
+void ewol::Compositing::scale(const vec3& _vect) {
 	m_matrixApply *= etk::matScale(_vect);
 }
 
 
-void ewol::Compositing::clear(void)
-{
+void ewol::Compositing::clear(void) {
 	m_matrixApply.identity();
 }
 
 
-void ewol::Compositing::setMatrix(const mat4& _mat)
-{
+void ewol::Compositing::setMatrix(const mat4& _mat) {
 	m_matrixApply = _mat;
 }

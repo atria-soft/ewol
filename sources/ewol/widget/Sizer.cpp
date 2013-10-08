@@ -10,32 +10,27 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/WidgetManager.h>
 
-
 #undef __class__
-#define __class__	"Sizer"
+#define __class__ "Sizer"
 
-static ewol::Widget* create(void)
-{
+static ewol::Widget* create(void) {
 	return new widget::Sizer();
 }
 
-void widget::Sizer::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::Sizer::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
 widget::Sizer::Sizer(widget::Sizer::displayMode_te _mode):
-	m_mode(_mode),
-	m_borderSize(),
-	m_animation(animationNone),
-	m_animationTime(0)
-{
+  m_mode(_mode),
+  m_borderSize(),
+  m_animation(animationNone),
+  m_animationTime(0) {
 	
 }
 
-widget::Sizer::~Sizer(void)
-{
+widget::Sizer::~Sizer(void) {
 	// disable annimation to remore "remove" error
 	m_animation = animationNone;
 	m_animationTime = 0;
@@ -43,27 +38,23 @@ widget::Sizer::~Sizer(void)
 }
 
 
-void widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize)
-{
+void widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
 	m_borderSize = _newBorderSize;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-void widget::Sizer::setMode(widget::Sizer::displayMode_te _mode)
-{
+void widget::Sizer::setMode(widget::Sizer::displayMode_te _mode) {
 	m_mode = _mode;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-widget::Sizer::displayMode_te widget::Sizer::getMode(void)
-{
+widget::Sizer::displayMode_te widget::Sizer::getMode(void) {
 	return m_mode;
 }
 
-void widget::Sizer::calculateSize(const vec2& _availlable)
-{
+void widget::Sizer::calculateSize(const vec2& _availlable) {
 	ewol::Widget::calculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] update size : " << _availlable << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
@@ -136,9 +127,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable)
 	markToRedraw();
 }
 
-
-void widget::Sizer::calculateMinMaxSize(void)
-{
+void widget::Sizer::calculateMinMaxSize(void) {
 	//EWOL_DEBUG("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
 	m_minSize = m_userMinSize.getPixel();
@@ -173,8 +162,7 @@ void widget::Sizer::calculateMinMaxSize(void)
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-bool widget::Sizer::loadXML(exml::Element* _node)
-{
+bool widget::Sizer::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -197,10 +185,7 @@ bool widget::Sizer::loadXML(exml::Element* _node)
 	return true;
 }
 
-
-
-int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget)
-{
+int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		return widget::ContainerN::subWidgetAdd(_newWidget);
 	}
@@ -208,8 +193,7 @@ int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget)
 	return widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
-int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget)
-{
+int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		return widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
@@ -217,8 +201,7 @@ int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget)
 	return widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
-void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget)
-{
+void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
@@ -227,8 +210,7 @@ void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget)
 	widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
-void widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget)
-{
+void widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;

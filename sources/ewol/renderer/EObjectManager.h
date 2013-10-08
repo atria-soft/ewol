@@ -13,10 +13,8 @@
 #include <ewol/renderer/EObject.h>
 #include <ewol/renderer/EMultiCast.h>
 
-namespace ewol
-{
-	class EObjectManager
-	{
+namespace ewol {
+	class EObjectManager {
 		private:
 			etk::Vector<ewol::EObject*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 			etk::Vector<ewol::EObject*> m_eObjectAutoRemoveList; // all widget allocated

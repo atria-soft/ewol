@@ -18,17 +18,14 @@
 #include <ewol/resources/font/FontBase.h>
 #include <ewol/resources/ResourceManager.h>
 
-
 #undef __class__
-#define __class__	"FontFreeType"
-
+#define __class__ "FontFreeType"
 
 // free Font hnadle of librairies ... entry for acces ...
 static int32_t l_countLoaded=0;
 static FT_Library library;
 
-void ewol::freeTypeInit(void)
-{
+void ewol::freeTypeInit(void) {
 	EWOL_DEBUG(" == > init Font-Manager");
 	l_countLoaded++;
 	if (l_countLoaded>1) {
@@ -41,8 +38,7 @@ void ewol::freeTypeInit(void)
 	}
 }
 
-void ewol::freeTypeUnInit(void)
-{
+void ewol::freeTypeUnInit(void) {
 	EWOL_DEBUG(" == > Un-Init Font-Manager");
 	l_countLoaded--;
 	if (l_countLoaded>0) {
@@ -56,11 +52,8 @@ void ewol::freeTypeUnInit(void)
 	}
 }
 
-
-
 ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
-	FontBase(_fontName)
-{
+  FontBase(_fontName) {
 	m_init = false;
 	m_FileBuffer = NULL;
 	m_FileSize = 0;
@@ -103,8 +96,7 @@ ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
 	}
 }
 
-ewol::FontFreeType::~FontFreeType(void)
-{
+ewol::FontFreeType::~FontFreeType(void) {
 	// clean the tmp memory
 	if (NULL != m_FileBuffer) {
 		delete[] m_FileBuffer;
@@ -114,9 +106,7 @@ ewol::FontFreeType::~FontFreeType(void)
 	FT_Done_Face( m_fftFace );
 }
 
-
-vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const etk::UString& _unicodeString)
-{
+vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const etk::UString& _unicodeString) {
 	if(false == m_init) {
 		return vec2(0,0);
 	}
@@ -125,13 +115,11 @@ vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const etk::UString& _unicode
 	return outputSize;
 }
 
-int32_t ewol::FontFreeType::getHeight(int32_t _fontSize)
-{
+int32_t ewol::FontFreeType::getHeight(int32_t _fontSize) {
 	return _fontSize*1.43f; // this is a really "magic" number ...
 }
 
-bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property)
-{
+bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property) {
 	if(false == m_init) {
 		return false;
 	}
@@ -175,8 +163,7 @@ bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                    int32_t _fontSize,
                                    ivec2 _glyphPosition,
                                    ewol::GlyphProperty& _property,
-                                   int8_t _posInImage)
-{
+                                   int8_t _posInImage) {
 	if(false == m_init) {
 		return false;
 	}
@@ -236,8 +223,7 @@ bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
 }
 
 
-void ewol::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph)
-{
+void ewol::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph) {
 	if(false == m_init) {
 		return;
 	}
@@ -270,8 +256,7 @@ void ewol::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::Gly
 }
 
 
-void ewol::FontFreeType::display(void)
-{
+void ewol::FontFreeType::display(void) {
 	if(false == m_init) {
 		return;
 	}
@@ -357,10 +342,7 @@ void ewol::FontFreeType::display(void)
 	//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
 }
 
-
-
-ewol::FontBase* ewol::FontFreeType::keep(const etk::UString& _filename)
-{
+ewol::FontBase* ewol::FontFreeType::keep(const etk::UString& _filename) {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
 	ewol::FontBase* object = static_cast<ewol::FontBase*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -376,8 +358,7 @@ ewol::FontBase* ewol::FontFreeType::keep(const etk::UString& _filename)
 	return object;
 }
 
-void ewol::FontFreeType::release(ewol::FontBase*& _object)
-{
+void ewol::FontFreeType::release(ewol::FontBase*& _object) {
 	if (NULL == _object) {
 		return;
 	}
@@ -385,3 +366,4 @@ void ewol::FontFreeType::release(ewol::FontBase*& _object)
 	getManager().release(object2);
 	_object = NULL;
 }
+

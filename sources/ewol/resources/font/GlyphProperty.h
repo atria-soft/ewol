@@ -12,8 +12,7 @@
 #include <ewol/resources/font/Kerning.h>
 
 
-namespace ewol
-{
+namespace ewol {
 	/*
 	                             |            |          |            |            
 	                             |            |          |            |            
@@ -49,8 +48,7 @@ namespace ewol
 	                       
 	*/
 	
-	class GlyphProperty
-	{
+	class GlyphProperty {
 		public:
 			uniChar_t m_UVal; //!< Unicode value
 		private:
@@ -66,27 +64,27 @@ namespace ewol
 			etk::Vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
 			GlyphProperty(void) :
-				m_UVal(0),
-				m_exist(true),
-				m_glyphIndex(0),
-				m_sizeTexture(0,0),
-				m_bearing(0,0),
-				m_advance(0,0),
-				m_texturePosStart(0,0),
-				m_texturePosSize(0,0)
-			{ };
-			float kerningGet(const uniChar_t charcode)
-			{
+			  m_UVal(0),
+			  m_exist(true),
+			  m_glyphIndex(0),
+			  m_sizeTexture(0,0),
+			  m_bearing(0,0),
+			  m_advance(0,0),
+			  m_texturePosStart(0,0),
+			  m_texturePosSize(0,0) {
+				
+			};
+			float kerningGet(const uniChar_t _charcode) {
 				for(esize_t iii=0; iii<m_kerning.size(); iii++ ) {
-					if (m_kerning[iii].m_UVal == charcode) {
+					if (m_kerning[iii].m_UVal == _charcode) {
 						return m_kerning[iii].m_value;
 					}
 				}
 				return 0;
 			};
-			void kerningAdd(const uniChar_t charcode, float value)
+			void kerningAdd(const uniChar_t _charcode, float _value)
 			{
-				m_kerning.pushBack(ewol::Kerning(charcode, value));
+				m_kerning.pushBack(ewol::Kerning(_charcode, _value));
 			};
 			void kerningClear(void)
 			{

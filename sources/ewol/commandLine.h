@@ -12,10 +12,8 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 
-namespace ewol
-{
-	class CommandLine
-	{
+namespace ewol {
+	class CommandLine {
 		private:
 			etk::Vector<etk::UString> m_listArgs; //!< list of all argument parsed
 		public:

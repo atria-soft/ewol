@@ -25,8 +25,7 @@ static const char* statusDescriptionString[ewol::keyEvent::statusCount+1] = {
 	"statusCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj)
-{
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj) {
 	if (_obj >= 0 && _obj <ewol::keyEvent::statusCount) {
 		_os << statusDescriptionString[_obj];
 	} else {
@@ -77,8 +76,7 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 	"keyboardCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj)
-{
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj) {
 	if (_obj >= 0 && _obj <ewol::keyEvent::keyboardCount) {
 		_os << keyboardDescriptionString[_obj];
 	} else {
@@ -86,7 +84,6 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::k
 	}
 	return _os;
 }
-
 
 static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 	"typeUnknow",
@@ -96,8 +93,7 @@ static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 	"typeCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj)
-{
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj) {
 	if (_obj >= 0 && _obj < ewol::keyEvent::typeCount) {
 		_os << typeDescriptionString[_obj];
 	} else {
@@ -107,54 +103,42 @@ etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::t
 }
 
 ewol::SpecialKey::SpecialKey(void) :
-	value(0)
-{
+  value(0) {
 	
 }
 
-bool ewol::SpecialKey::isSetCapsLock(void) const
-{
+bool ewol::SpecialKey::isSetCapsLock(void) const {
 	return capLock;
 }
 
-bool ewol::SpecialKey::isSetShift(void) const
-{
+bool ewol::SpecialKey::isSetShift(void) const {
 	return shift;
 }
 
-bool ewol::SpecialKey::isSetCtrl(void) const
-{
+bool ewol::SpecialKey::isSetCtrl(void) const {
 	return ctrl;
 }
 
-bool ewol::SpecialKey::isSetMeta(void) const
-{
+bool ewol::SpecialKey::isSetMeta(void) const {
 	return meta;
 }
 
-bool ewol::SpecialKey::isSetAlt(void) const
-{
+bool ewol::SpecialKey::isSetAlt(void) const {
 	return alt;
 }
 
-bool ewol::SpecialKey::isSetAltGr(void) const
-{
+bool ewol::SpecialKey::isSetAltGr(void) const {
 	return altGr;
 }
 
-bool ewol::SpecialKey::isSetNumLock(void) const
-{
+bool ewol::SpecialKey::isSetNumLock(void) const {
 	return numLock;
 }
-bool ewol::SpecialKey::isSetInsert(void) const
-{
+bool ewol::SpecialKey::isSetInsert(void) const {
 	return insert;
 }
 
-
-
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::SpecialKey _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::SpecialKey _obj) {
 	_os << " capLock=" << _obj.capLock;
 	_os << " shift=" << _obj.shift;
 	_os << " ctrl=" << _obj.ctrl;

@@ -14,10 +14,8 @@
 #include <ewol/physicsShape/PhysicsShape.h>
 
 
-namespace ewol
-{
-	class PhysicsConvexHull : public ewol::PhysicsShape
-	{
+namespace ewol {
+	class PhysicsConvexHull : public ewol::PhysicsShape {
 		public:
 			PhysicsConvexHull(void) {};
 			virtual ~PhysicsConvexHull(void) {};

@@ -16,8 +16,7 @@
 
 #define MAX_RESOURCE_LEVEL (5)
 
-namespace ewol
-{
+namespace ewol {
 	class ResourceManager;
 	// class resources is pure virtual
 	class Resource {
@@ -35,24 +34,21 @@ namespace ewol
 			uint8_t      m_resourceLevel;
 		public:
 			Resource(void) :
-				m_name(""),
-				m_counter(1),
-				m_resourceLevel(MAX_RESOURCE_LEVEL-1)
-			{
+			  m_name(""),
+			  m_counter(1),
+			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
 				m_uniqueId = m_valBase;
 				m_valBase++;
 			};
 			Resource(const etk::UString& _filename) :
-				m_name(_filename),
-				m_counter(1),
-				m_resourceLevel(MAX_RESOURCE_LEVEL-1)
-			{
+			  m_name(_filename),
+			  m_counter(1),
+			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
 				m_uniqueId = m_valBase;
 				m_valBase++;
 			};
 			virtual ~Resource(void) { };
-			virtual bool hasName(const etk::UString& _fileName)
-			{
+			virtual bool hasName(const etk::UString& _fileName) {
 				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName == m_name) );
 				return _fileName == m_name;
 			};

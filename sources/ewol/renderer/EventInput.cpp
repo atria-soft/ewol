@@ -9,10 +9,9 @@
 #include <ewol/widget/Widget.h>
 
 #undef __class__
-#define __class__	"EventInput"
+#define __class__ "EventInput"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInput& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInput& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
 	_os << " id=" << _obj.getId();
@@ -21,8 +20,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInput& _obj)
 	return _os;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInputSystem& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInputSystem& _obj) {
 	_os << _obj.m_event;
 	return _os;
 }

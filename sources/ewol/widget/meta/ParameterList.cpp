@@ -15,18 +15,13 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/WidgetManager.h>
 
-#undef __class__
-#define __class__	"ParameterList"
-
 extern const char * const ewolEventParameterListSelect     = "ewol-event-parameter-list-select";
 
-
 #undef __class__
-#define __class__	"List"
+#define __class__ "List"
 
 
-widget::ParameterList::ParameterList(void)
-{
+widget::ParameterList::ParameterList(void) {
 	addEventId(ewolEventParameterListSelect);
 	
 	m_idSelected = -1;
@@ -39,8 +34,7 @@ widget::ParameterList::ParameterList(void)
 	setCanHaveFocus(true);
 }
 
-widget::ParameterList::~ParameterList(void)
-{
+widget::ParameterList::~ParameterList(void) {
 	//clean all the object
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -50,9 +44,7 @@ widget::ParameterList::~ParameterList(void)
 	menuClear();
 }
 
-
-void widget::ParameterList::calculateMinMaxSize(void)
-{
+void widget::ParameterList::calculateMinMaxSize(void) {
 	/*int32_t fontId = getDefaultFontId();
 	int32_t minWidth = ewol::getWidth(fontId, m_label);
 	int32_t minHeight = ewol::getHeight(fontId);
@@ -62,23 +54,19 @@ void widget::ParameterList::calculateMinMaxSize(void)
 	m_minSize.setValue(150, 150);
 }
 
-
-void widget::ParameterList::addOObject(ewol::Compositing* newObject, int32_t pos)
-{
-	if (NULL == newObject) {
+void widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
+	if (NULL == _newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (pos < 0 || pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(newObject);
+	if (_pos < 0 || _pos >= m_listOObject.size() ) {
+		m_listOObject.pushBack(_newObject);
 	} else {
-		m_listOObject.insert(pos, newObject);
+		m_listOObject.insert(_pos, _newObject);
 	}
 }
 
-
-void widget::ParameterList::clearOObjectList(void)
-{
+void widget::ParameterList::clearOObjectList(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -86,8 +74,7 @@ void widget::ParameterList::clearOObjectList(void)
 	m_listOObject.clear();
 }
 
-void widget::ParameterList::onDraw(void)
-{
+void widget::ParameterList::onDraw(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
@@ -96,13 +83,8 @@ void widget::ParameterList::onDraw(void)
 	WidgetScrooled::onDraw();
 }
 
-
-
-
-void widget::ParameterList::onRegenerateDisplay(void)
-{
+void widget::ParameterList::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
-		
 		// clean the object list ...
 		clearOObjectList();
 		//EWOL_DEBUG("OnRegenerateDisplay(" << m_size.x << "," << m_size.y << ")");
@@ -184,8 +166,7 @@ void widget::ParameterList::onRegenerateDisplay(void)
 }
 
 
-bool widget::ParameterList::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::ParameterList::onEventInput(const ewol::EventInput& _event) {
 	if (true == WidgetScrooled::onEventInput(_event)) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
@@ -218,44 +199,35 @@ bool widget::ParameterList::onEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-
-
-void widget::ParameterList::onGetFocus(void)
-{
+void widget::ParameterList::onGetFocus(void) {
 	EWOL_DEBUG("Ewol::List get focus");
 }
 
-void widget::ParameterList::onLostFocus(void)
-{
+void widget::ParameterList::onLostFocus(void) {
 	EWOL_DEBUG("Ewol::List Lost focus");
 }
 
-void widget::ParameterList::menuAdd(etk::UString& label, int32_t refId, etk::UString& image)
-{
-	widget::elementPL* tmpEmement = new widget::elementPL(label, refId, image, false);
+void widget::ParameterList::menuAdd(etk::UString& _label, int32_t _refId, etk::UString& _image) {
+	widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
 	if (NULL != tmpEmement) {
 		m_list.pushBack(tmpEmement);
-		if (m_idSelected == -1 && label != "---" && refId>0) {
+		if (m_idSelected == -1 && _label != "---" && _refId>0) {
 			m_idSelected = m_list.size()-1;
 		}
 		markToRedraw();
 	}
 }
 
-
-void widget::ParameterList::menuAddGroup(etk::UString& label)
-{
+void widget::ParameterList::menuAddGroup(etk::UString& _label) {
 	etk::UString image = "";
-	widget::elementPL* tmpEmement = new widget::elementPL(label, -1, image, true);
+	widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
 	if (NULL != tmpEmement) {
 		m_list.pushBack(tmpEmement);
 		markToRedraw();
 	}
 }
 
-
-void widget::ParameterList::menuClear(void)
-{
+void widget::ParameterList::menuClear(void) {
 	m_idSelected = -1;
 	for (int32_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
@@ -266,9 +238,7 @@ void widget::ParameterList::menuClear(void)
 	m_list.clear();
 }
 
-
-void widget::ParameterList::menuSeparator(void)
-{
+void widget::ParameterList::menuSeparator(void) {
 	if (m_list.size()>0) {
 		etk::UString label = "";
 		etk::UString image = "";

@@ -17,15 +17,14 @@
 #define LOCAL_DEBUG  EWOL_DEBUG
 
 #undef __class__
-#define __class__	"Program"
+#define __class__ "Program"
 
-ewol::Program::Program(const etk::UString& filename) :
-	ewol::Resource(filename),
-	m_exist(false),
-	m_program(0),
-	m_hasTexture(false),
-	m_hasTexture1(false)
-{
+ewol::Program::Program(const etk::UString& _filename) :
+  ewol::Resource(_filename),
+  m_exist(false),
+  m_program(0),
+  m_hasTexture(false),
+  m_hasTexture1(false) {
 	m_resourceLevel = 1;
 	EWOL_DEBUG("OGL : load PROGRAM '" << m_name << "'");
 	// load data from file "all the time ..."
@@ -95,9 +94,7 @@ ewol::Program::Program(const etk::UString& filename) :
 	updateContext();
 }
 
-
-ewol::Program::~Program(void)
-{
+ewol::Program::~Program(void) {
 	for (int32_t iii=0; iii<m_shaderList.size(); iii++) {
 		ewol::Shader::release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
@@ -109,27 +106,24 @@ ewol::Program::~Program(void)
 	m_hasTexture1 = false;
 }
 
-static void checkGlError(const char* op, int32_t localLine)
-{
+static void checkGlError(const char* _op, int32_t _localLine) {
 	for (GLint error = glGetError(); error; error = glGetError()) {
-		EWOL_INFO("after " << op << "():" << localLine << " glError(" << error << ")");
+		EWOL_INFO("after " << _op << "():" << _localLine << " glError(" << error << ")");
 	}
 }
 
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-
-int32_t ewol::Program::getAttribute(etk::UString elementName)
-{
+int32_t ewol::Program::getAttribute(etk::UString _elementName) {
 	// check if it exist previously :
 	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
-		if (m_elementList[iii].m_name == elementName) {
+		if (m_elementList[iii].m_name == _elementName) {
 			return iii;
 		}
 	}
 	progAttributeElement tmp;
-	tmp.m_name = elementName;
+	tmp.m_name = _elementName;
 	tmp.m_isAttribute = true;
 	tmp.m_elementId = glGetAttribLocation(m_program, tmp.m_name.c_str());
 	tmp.m_isLinked = true;
@@ -142,18 +136,15 @@ int32_t ewol::Program::getAttribute(etk::UString elementName)
 	return m_elementList.size()-1;
 }
 
-
-
-int32_t ewol::Program::getUniform(etk::UString elementName)
-{
+int32_t ewol::Program::getUniform(etk::UString _elementName) {
 	// check if it exist previously :
 	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
-		if (m_elementList[iii].m_name == elementName) {
+		if (m_elementList[iii].m_name == _elementName) {
 			return iii;
 		}
 	}
 	progAttributeElement tmp;
-	tmp.m_name = elementName;
+	tmp.m_name = _elementName;
 	tmp.m_isAttribute = false;
 	tmp.m_elementId = glGetUniformLocation(m_program, tmp.m_name.c_str());
 	tmp.m_isLinked = true;
@@ -166,9 +157,7 @@ int32_t ewol::Program::getUniform(etk::UString elementName)
 	return m_elementList.size()-1;
 }
 
-
-void ewol::Program::updateContext(void)
-{
+void ewol::Program::updateContext(void) {
 	if (true == m_exist) {
 		// Do nothing  == > too dangerous ...
 	} else {
@@ -256,8 +245,7 @@ void ewol::Program::updateContext(void)
 	}
 }
 
-void ewol::Program::removeContext(void)
-{
+void ewol::Program::removeContext(void) {
 	if (true == m_exist) {
 		glDeleteProgram(m_program);
 		m_program = 0;
@@ -268,14 +256,12 @@ void ewol::Program::removeContext(void)
 	}
 }
 
-void ewol::Program::removeContextToLate(void)
-{
+void ewol::Program::removeContextToLate(void) {
 	m_exist = false;
 	m_program = 0;
 }
 
-void ewol::Program::reload(void)
-{
+void ewol::Program::reload(void) {
 /* TODO : ...
 	etk::file file(m_name, etk::FILE_TYPE_DATA);
 	if (false == file.Exist()) {
@@ -316,389 +302,378 @@ void ewol::Program::reload(void)
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::sendAttribute(int32_t idElem, int32_t nbElement, void* pointer, int32_t jumpBetweenSample)
-{
+void ewol::Program::sendAttribute(int32_t _idElem,
+                                  int32_t _nbElement,
+                                  void* _pointer,
+                                  int32_t _jumpBetweenSample) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glVertexAttribPointer(m_elementList[idElem].m_elementId,  // attribute ID of openGL
-	                      nbElement,                          // number of elements per vertex, here (r,g,b,a)
-	                      GL_FLOAT,                           // the type of each element
-	                      GL_FALSE,                           // take our values as-is
-	                      jumpBetweenSample,                  // no extra data between each position
-	                      pointer);                           // Pointer on the buffer
+	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
+	                      _nbElement, // number of elements per vertex, here (r,g,b,a)
+	                      GL_FLOAT, // the type of each element
+	                      GL_FALSE, // take our values as-is
+	                      _jumpBetweenSample, // no extra data between each position
+	                      _pointer); // Pointer on the buffer
 	//checkGlError("glVertexAttribPointer", __LINE__);
-	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
+	glEnableVertexAttribArray(m_elementList[_idElem].m_elementId);
 	//checkGlError("glEnableVertexAttribArray", __LINE__);
 }
 
-void ewol::Program::sendAttributePointer(int32_t idElem, int32_t nbElement, ewol::VirtualBufferObject* vbo, int32_t index, int32_t jumpBetweenSample, int32_t offset)
-{
+void ewol::Program::sendAttributePointer(int32_t _idElem,
+                                         int32_t _nbElement,
+                                         ewol::VirtualBufferObject* _vbo,
+                                         int32_t _index,
+                                         int32_t _jumpBetweenSample,
+                                         int32_t _offset) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glBindBuffer(GL_ARRAY_BUFFER, vbo->getGL_ID(index));
-	glVertexAttribPointer(m_elementList[idElem].m_elementId,  // attribute ID of openGL
-	                      nbElement,                          // number of elements per vertex, here (r,g,b,a)
-	                      GL_FLOAT,                           // the type of each element
-	                      GL_FALSE,                           // take our values as-is
-	                      jumpBetweenSample,                  // no extra data between each position
-	                      (GLvoid *)offset);                            // Pointer on the buffer
+	glBindBuffer(GL_ARRAY_BUFFER, _vbo->getGL_ID(_index));
+	glVertexAttribPointer(m_elementList[_idElem].m_elementId, // attribute ID of openGL
+	                      _nbElement, // number of elements per vertex, here (r,g,b,a)
+	                      GL_FLOAT, // the type of each element
+	                      GL_FALSE, // take our values as-is
+	                      _jumpBetweenSample, // no extra data between each position
+	                      (GLvoid *)_offset); // Pointer on the buffer
 	//checkGlError("glVertexAttribPointer", __LINE__);
-	glEnableVertexAttribArray(m_elementList[idElem].m_elementId);
+	glEnableVertexAttribArray(m_elementList[_idElem].m_elementId);
 	//checkGlError("glEnableVertexAttribArray", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::uniformMatrix4fv(int32_t idElem, int32_t nbElement, mat4 _matrix, bool transpose)
-{
+void ewol::Program::uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _matrix, bool _transpose) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
 	// note : Android des not supported the transposition of the matrix, then we will done it oursef:
-	if (true == transpose) {
+	if (true == _transpose) {
 		_matrix.transpose();
 	}
-	glUniformMatrix4fv(m_elementList[idElem].m_elementId, nbElement, GL_FALSE, _matrix.m_mat);
+	glUniformMatrix4fv(m_elementList[_idElem].m_elementId, _nbElement, GL_FALSE, _matrix.m_mat);
 	//checkGlError("glUniformMatrix4fv", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::uniform1f(int32_t idElem, float value1)
-{
+void ewol::Program::uniform1f(int32_t _idElem, float _value1) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform1f(m_elementList[idElem].m_elementId, value1);
+	glUniform1f(m_elementList[_idElem].m_elementId, _value1);
 	//checkGlError("glUniform1f", __LINE__);
 }
-void ewol::Program::uniform2f(int32_t idElem, float value1, float value2)
-{
+void ewol::Program::uniform2f(int32_t _idElem, float  _value1, float _value2) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform2f(m_elementList[idElem].m_elementId, value1, value2);
+	glUniform2f(m_elementList[_idElem].m_elementId, _value1, _value2);
 	//checkGlError("glUniform2f", __LINE__);
 }
-void ewol::Program::uniform3f(int32_t idElem, float value1, float value2, float value3)
-{
+void ewol::Program::uniform3f(int32_t _idElem, float _value1, float _value2, float _value3) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform3f(m_elementList[idElem].m_elementId, value1, value2, value3);
+	glUniform3f(m_elementList[_idElem].m_elementId, _value1, _value2, _value3);
 	//checkGlError("glUniform3f", __LINE__);
 }
-void ewol::Program::uniform4f(int32_t idElem, float value1, float value2, float value3, float value4)
-{
+void ewol::Program::uniform4f(int32_t _idElem, float _value1, float _value2, float _value3, float _value4) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform4f(m_elementList[idElem].m_elementId, value1, value2, value3, value4);
+	glUniform4f(m_elementList[_idElem].m_elementId, _value1, _value2, _value3, _value4);
 	//checkGlError("glUniform4f", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::uniform1i(int32_t idElem, int32_t value1)
-{
+void ewol::Program::uniform1i(int32_t _idElem, int32_t _value1) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform1i(m_elementList[idElem].m_elementId, value1);
+	glUniform1i(m_elementList[_idElem].m_elementId, _value1);
 	//checkGlError("glUniform1i", __LINE__);
 }
-void ewol::Program::uniform2i(int32_t idElem, int32_t value1, int32_t value2)
-{
+void ewol::Program::uniform2i(int32_t _idElem, int32_t _value1, int32_t _value2) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform2i(m_elementList[idElem].m_elementId, value1, value2);
+	glUniform2i(m_elementList[_idElem].m_elementId, _value1, _value2);
 	//checkGlError("glUniform2i", __LINE__);
 }
-void ewol::Program::uniform3i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3)
-{
+void ewol::Program::uniform3i(int32_t _idElem, int32_t _value1, int32_t _value2, int32_t _value3) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform3i(m_elementList[idElem].m_elementId, value1, value2, value3);
+	glUniform3i(m_elementList[_idElem].m_elementId, _value1, _value2, _value3);
 	//checkGlError("glUniform3i", __LINE__);
 }
-void ewol::Program::uniform4i(int32_t idElem, int32_t value1, int32_t value2, int32_t value3, int32_t value4)
-{
+void ewol::Program::uniform4i(int32_t _idElem, int32_t _value1, int32_t _value2, int32_t _value3, int32_t _value4) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	glUniform4i(m_elementList[idElem].m_elementId, value1, value2, value3, value4);
+	glUniform4i(m_elementList[_idElem].m_elementId, _value1, _value2, _value3, _value4);
 	//checkGlError("glUniform4i", __LINE__);
 }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::uniform1fv(int32_t idElem, int32_t nbElement, const float *value)
-{
+void ewol::Program::uniform1fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform1fv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform1fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform1fv", __LINE__);
 }
-void ewol::Program::uniform2fv(int32_t idElem, int32_t nbElement, const float *value)
-{
+void ewol::Program::uniform2fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform2fv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform2fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform2fv", __LINE__);
 }
-void ewol::Program::uniform3fv(int32_t idElem, int32_t nbElement, const float *value)
-{
+void ewol::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform3fv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform3fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform3fv", __LINE__);
 }
-void ewol::Program::uniform4fv(int32_t idElem, int32_t nbElement, const float *value)
-{
+void ewol::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, const float *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform4fv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform4fv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform4fv", __LINE__);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-void ewol::Program::uniform1iv(int32_t idElem, int32_t nbElement, const int32_t *value)
-{
+void ewol::Program::uniform1iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform1iv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform1iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform1iv", __LINE__);
 }
-void ewol::Program::uniform2iv(int32_t idElem, int32_t nbElement, const int32_t *value)
-{
+void ewol::Program::uniform2iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform2iv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform2iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform2iv", __LINE__);
 }
-void ewol::Program::uniform3iv(int32_t idElem, int32_t nbElement, const int32_t *value)
-{
+void ewol::Program::uniform3iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform3iv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform3iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform3iv", __LINE__);
 }
-void ewol::Program::uniform4iv(int32_t idElem, int32_t nbElement, const int32_t *value)
-{
+void ewol::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, const int32_t *_value) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
-		EWOL_ERROR("idElem = " << idElem << " not in [0.." << (m_elementList.size()-1) << "]");
+	if (_idElem<0 || _idElem>m_elementList.size()) {
+		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
-	if (0 == nbElement) {
+	if (0 == _nbElement) {
 		EWOL_ERROR("No element to send at open GL ...");
 		return;
 	}
-	if (NULL == value) {
+	if (NULL == _value) {
 		EWOL_ERROR("NULL Input pointer to send at open GL ...");
 		return;
 	}
-	glUniform4iv(m_elementList[idElem].m_elementId, nbElement, value);
+	glUniform4iv(m_elementList[_idElem].m_elementId, _nbElement, _value);
 	//checkGlError("glUniform4iv", __LINE__);
 }
 
@@ -710,8 +685,7 @@ void ewol::Program::uniform4iv(int32_t idElem, int32_t nbElement, const int32_t 
 #endif
 
 
-void ewol::Program::use(void)
-{
+void ewol::Program::use(void) {
 	#ifdef PROGRAM_DISPLAY_SPEED
 		g_startTime = ewol::getTime();
 	#endif
@@ -721,15 +695,14 @@ void ewol::Program::use(void)
 }
 
 
-void ewol::Program::setTexture0(int32_t idElem, GLint textureOpenGlID)
-{
+void ewol::Program::setTexture0(int32_t _idElem, GLint _textureOpenGlID) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
+	if (_idElem<0 || _idElem>m_elementList.size()) {
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
 	#if 0
@@ -739,23 +712,22 @@ void ewol::Program::setTexture0(int32_t idElem, GLint textureOpenGlID)
 	ewol::openGL::activeTexture(GL_TEXTURE0);
 	//checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
-	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
+	glBindTexture(GL_TEXTURE_2D, _textureOpenGlID);
 	//checkGlError("glBindTexture", __LINE__);
 	// set the texture on the uniform attribute
-	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/0);
+	glUniform1i(m_elementList[_idElem].m_elementId, /*GL_TEXTURE*/0);
 	//checkGlError("glUniform1i", __LINE__);
 	m_hasTexture = true;
 }
 
-void ewol::Program::setTexture1(int32_t idElem, GLint textureOpenGlID)
-{
+void ewol::Program::setTexture1(int32_t _idElem, GLint _textureOpenGlID) {
 	if (0 == m_program) {
 		return;
 	}
-	if (idElem<0 || idElem>m_elementList.size()) {
+	if (_idElem<0 || _idElem>m_elementList.size()) {
 		return;
 	}
-	if (false == m_elementList[idElem].m_isLinked) {
+	if (false == m_elementList[_idElem].m_isLinked) {
 		return;
 	}
 	#if 0
@@ -765,17 +737,16 @@ void ewol::Program::setTexture1(int32_t idElem, GLint textureOpenGlID)
 	ewol::openGL::activeTexture(GL_TEXTURE1);
 	//checkGlError("glActiveTexture", __LINE__);
 	// set the textureID
-	glBindTexture(GL_TEXTURE_2D, textureOpenGlID);
+	glBindTexture(GL_TEXTURE_2D, _textureOpenGlID);
 	//checkGlError("glBindTexture", __LINE__);
 	// set the texture on the uniform attribute
-	glUniform1i(m_elementList[idElem].m_elementId, /*GL_TEXTURE*/1);
+	glUniform1i(m_elementList[_idElem].m_elementId, /*GL_TEXTURE*/1);
 	//checkGlError("glUniform1i", __LINE__);
 	m_hasTexture1 = true;
 }
 
 
-void ewol::Program::unUse(void)
-{
+void ewol::Program::unUse(void) {
 	//EWOL_WARNING("Will use program : " << m_program);
 	if (0 == m_program) {
 		return;
@@ -802,8 +773,7 @@ void ewol::Program::unUse(void)
 
 
 
-ewol::Program* ewol::Program::keep(const etk::UString& _filename)
-{
+ewol::Program* ewol::Program::keep(const etk::UString& _filename) {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
 	ewol::Program* object = static_cast<ewol::Program*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -820,8 +790,7 @@ ewol::Program* ewol::Program::keep(const etk::UString& _filename)
 }
 
 
-void ewol::Program::release(ewol::Program*& _object)
-{
+void ewol::Program::release(ewol::Program*& _object) {
 	if (NULL == _object) {
 		return;
 	}

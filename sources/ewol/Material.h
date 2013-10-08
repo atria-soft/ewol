@@ -15,10 +15,8 @@
 #include <ewol/resources/Program.h>
 #include <ewol/resources/Image.h>
 
-namespace ewol
-{
-	class MaterialGlId
-	{
+namespace ewol {
+	class MaterialGlId {
 		public:
 			// GL index
 			int32_t m_GL_ambientFactor;
@@ -29,8 +27,7 @@ namespace ewol
 			MaterialGlId(void);
 			void link(ewol::Program* _prog, const etk::UString& _baseName);
 	};
-	class Material
-	{
+	class Material {
 		private:
 			// values
 			vec4 m_ambientFactor;

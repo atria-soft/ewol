@@ -54,8 +54,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	static {
 		System.loadLibrary("ewol");
 	}
-	public EwolActivity()
-	{
+	public EwolActivity() {
 		// set the java evironement in the C sources :
 		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
 	}
@@ -78,8 +77,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		EWOL.paramSetArchiveDir(0, apkFilePath);
 	}
 	
-	@Override protected void onCreate(Bundle savedInstanceState)
-	{
+	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		// Load the application directory
@@ -114,22 +112,19 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		setContentView(mGLView);
 	}
 	
-	@Override protected void onStart()
-	{
+	@Override protected void onStart() {
 		super.onStart();
 		// call C
 		EWOL.onStart();
 	}
 	
-	@Override protected void onRestart()
-	{
+	@Override protected void onRestart() {
 		super.onRestart();
 		// call C
 		EWOL.onReStart();
 	}
 	
-	@Override protected void onResume()
-	{
+	@Override protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
 		mAudioThread = new Thread(mStreams);
@@ -140,8 +135,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		EWOL.onResume();
 	}
 	
-	@Override protected void onPause()
-	{
+	@Override protected void onPause() {
 		super.onPause();
 		mGLView.onPause();
 		if (mAudioThread != null) {
@@ -156,14 +150,12 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		EWOL.onPause();
 	}
 	
-	@Override protected void onStop()
-	{
+	@Override protected void onStop() {
 		super.onStop();
 		// call C
 		EWOL.onStop();
 	}
-	@Override protected void onDestroy()
-	{
+	@Override protected void onDestroy() {
 		super.onDestroy();
 		// call C
 		EWOL.onDestroy();
@@ -171,19 +163,16 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		EWOL.setJavaVirtualMachineStop();
 	}
 	
-	@Override protected void finalize() throws Throwable
-	{
+	@Override protected void finalize() throws Throwable {
 		super.finalize();
 		// cleanup your object here
 	}
 	
-	public void onConfigurationChanged(Configuration newConfig)
-	{
+	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 	}
 	
-	public void keyboardUpdate(boolean show)
-	{
+	public void keyboardUpdate(boolean show) {
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if(show) {
 			//EWOL.touchEvent();
@@ -194,13 +183,11 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		}
 	}
 	
-	public void eventNotifier(String[] args)
-	{
+	public void eventNotifier(String[] args) {
 		// TODO : ...
 	}
 	
-	public void orientationUpdate(int screenMode)
-	{
+	public void orientationUpdate(int screenMode) {
 		if (screenMode == EWOL_ORIENTATION_LANDSCAPE) {
 			//Force landscape
 			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -213,13 +200,11 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		}
 	}
 	
-	public void titleSet(String value)
-	{
+	public void titleSet(String value) {
 		setTitle(value);
 	}
 	
-	public void stop()
-	{
+	public void stop() {
 		// end application is requested ...
 		finish();
 	}

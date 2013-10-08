@@ -10,48 +10,43 @@
 #include <ewol/debug.h>
 
 ewol::Light::Light(void) :
-	m_direction(0,0,0),
-	m_halfplane(0,0,0),
-	m_ambientColor(0,0,0,0),
-	m_diffuseColor(0,0,0,0),
-	m_specularColor(0,0,0,0),
-	m_GL_direction(0),
-	m_GL_halfplane(0),
-	m_GL_ambientColor(0),
-	m_GL_diffuseColor(0),
-	m_GL_specularColor(0)
-{
+  m_direction(0,0,0),
+  m_halfplane(0,0,0),
+  m_ambientColor(0,0,0,0),
+  m_diffuseColor(0,0,0,0),
+  m_specularColor(0,0,0,0),
+  m_GL_direction(0),
+  m_GL_halfplane(0),
+  m_GL_ambientColor(0),
+  m_GL_diffuseColor(0),
+  m_GL_specularColor(0) {
 	// nothing to do else ...
 }
 
-ewol::Light::~Light(void)
-{
+ewol::Light::~Light(void) {
 	
 }
 
-void ewol::Light::link(ewol::Program* prog, const etk::UString& baseName)
-{
-	if (NULL == prog) {
+void ewol::Light::link(ewol::Program* _prog, const etk::UString& _baseName) {
+	if (NULL == _prog) {
 		return;
 	}
-	m_GL_direction = prog->getUniform(baseName+".direction");
-	m_GL_halfplane = prog->getUniform(baseName+".halfplane");
-	m_GL_ambientColor = prog->getUniform(baseName+".ambientColor");
-	m_GL_diffuseColor = prog->getUniform(baseName+".diffuseColor");
-	m_GL_specularColor = prog->getUniform(baseName+".specularColor");
+	m_GL_direction = _prog->getUniform(_baseName+".direction");
+	m_GL_halfplane = _prog->getUniform(_baseName+".halfplane");
+	m_GL_ambientColor = _prog->getUniform(_baseName+".ambientColor");
+	m_GL_diffuseColor = _prog->getUniform(_baseName+".diffuseColor");
+	m_GL_specularColor = _prog->getUniform(_baseName+".specularColor");
 }
 
-void ewol::Light::draw(ewol::Program* prog)
-{
-	prog->uniform3(m_GL_direction, m_direction);
-	prog->uniform3(m_GL_halfplane, m_halfplane);
-	prog->uniform4(m_GL_ambientColor, m_ambientColor);
-	prog->uniform4(m_GL_diffuseColor, m_diffuseColor);
-	prog->uniform4(m_GL_specularColor, m_specularColor);
+void ewol::Light::draw(ewol::Program* _prog) {
+	_prog->uniform3(m_GL_direction, m_direction);
+	_prog->uniform3(m_GL_halfplane, m_halfplane);
+	_prog->uniform4(m_GL_ambientColor, m_ambientColor);
+	_prog->uniform4(m_GL_diffuseColor, m_diffuseColor);
+	_prog->uniform4(m_GL_specularColor, m_specularColor);
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Light& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Light& _obj) {
 	_os << "light:{";
 	_os << "dir=" << _obj.m_direction;
 	_os << " halfplan=" << _obj.m_halfplane;

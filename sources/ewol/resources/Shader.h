@@ -14,18 +14,16 @@
 #include <ewol/renderer/openGL.h>
 #include <ewol/resources/Resource.h>
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief Shader is a specific resources for opengl, used only in @ref Program. This are components of the renderer pipe-line
 	 */
-	class Shader : public ewol::Resource
-	{
+	class Shader : public ewol::Resource {
 		private :
-			bool           m_exist;    //!< The shader file existed and has been loaded
-			char*          m_fileData; //!< A copy of the data loaded from the file (usefull only when opengl context is removed)
-			GLuint         m_shader;   //!< opengl id of this element
-			GLenum         m_type;     //!< Type of the current shader(vertex/fragment)
+			bool m_exist; //!< The shader file existed and has been loaded
+			char* m_fileData; //!< A copy of the data loaded from the file (usefull only when opengl context is removed)
+			GLuint m_shader; //!< opengl id of this element
+			GLenum m_type; //!< Type of the current shader(vertex/fragment)
 		protected:
 			/**
 			 * @brief Contructor of an opengl Shader

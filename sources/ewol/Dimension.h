@@ -13,14 +13,12 @@
 #include <etk/UString.h>
 #include <etk/math/Vector2D.h>
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief in the dimention class we store the data as the more usefull unit (pixel) 
 	 * but one case need to be dynamic the %, then when requested in % the register the % value
 	 */
-	class Dimension
-	{
+	class Dimension {
 		public:
 			typedef enum {
 				Pourcent=0,
@@ -165,8 +163,7 @@ namespace ewol
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension::distance_te& _obj);
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension& _obj);
 	
-	namespace dimension
-	{
+	namespace dimension {
 		
 		/**
 		 * @brief basic init

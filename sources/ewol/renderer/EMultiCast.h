@@ -17,8 +17,7 @@
 #include <ewol/renderer/EObject.h>
 
 namespace ewol {
-	class EMultiCast
-	{
+	class EMultiCast {
 		private:
 			class MessageList {
 				public:

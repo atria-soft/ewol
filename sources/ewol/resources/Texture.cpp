@@ -14,15 +14,14 @@
 #include <ewol/renderer/eContext.h>
 
 #undef __class__
-#define __class__	"Texture"
+#define __class__ "Texture"
 
 /**
  * @brief get the next power 2 if the input
  * @param[in] value Value that we want the next power of 2
  * @return result value
  */
-static int32_t nextP2(int32_t _value)
-{
+static int32_t nextP2(int32_t _value) {
 	int32_t val=1;
 	for (int32_t iii=1; iii<31; iii++) {
 		if (_value <= val) {
@@ -36,29 +35,23 @@ static int32_t nextP2(int32_t _value)
 
 
 ewol::Texture::Texture(const etk::UString& _filename) :
-	ewol::Resource(_filename)
-{
+ ewol::Resource(_filename) {
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-ewol::Texture::Texture(void)
-{
+ewol::Texture::Texture(void) {
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-
-ewol::Texture::~Texture(void)
-{
+ewol::Texture::~Texture(void) {
 	removeContext();
 }
 
-
-void ewol::Texture::updateContext(void)
-{
+void ewol::Texture::updateContext(void) {
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
@@ -89,9 +82,7 @@ void ewol::Texture::updateContext(void)
 	m_loaded = true;
 }
 
-
-void ewol::Texture::removeContext(void)
-{
+void ewol::Texture::removeContext(void) {
 	if (true == m_loaded) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << m_uniqueId << "] texId=" << m_texId);
@@ -100,29 +91,22 @@ void ewol::Texture::removeContext(void)
 	}
 }
 
-
-void ewol::Texture::removeContextToLate(void)
-{
+void ewol::Texture::removeContextToLate(void) {
 	m_loaded = false;
 	m_texId=0;
 }
 
-
-void ewol::Texture::flush(void)
-{
+void ewol::Texture::flush(void) {
 	// request to the manager to be call at the next update ...
 	getManager().update(this);
 }
 
-
-void ewol::Texture::setImageSize(ivec2 _newSize)
-{
+void ewol::Texture::setImageSize(ivec2 _newSize) {
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }
 
-ewol::Texture* ewol::Texture::keep(void)
-{
+ewol::Texture* ewol::Texture::keep(void) {
 	// this element create a new one every time ....
 	ewol::Texture* object = new ewol::Texture();
 	if (NULL == object) {
@@ -133,8 +117,7 @@ ewol::Texture* ewol::Texture::keep(void)
 	return object;
 }
 
-void ewol::Texture::release(ewol::Texture*& _object)
-{
+void ewol::Texture::release(ewol::Texture*& _object) {
 	if (NULL == _object) {
 		return;
 	}

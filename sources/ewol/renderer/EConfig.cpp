@@ -11,16 +11,14 @@
 #undef __class__
 #define __class__	"EConfig"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfig& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfig& _obj) {
 	_os << "{";
 	_os << "config=\"" << _obj.getConfig() << "\"";
 	_os << " data=\"" << _obj.getData() << "\"}";
 	return _os;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfigElement& _obj)
-{
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfigElement& _obj) {
 	_os << "{";
 	if (NULL != _obj.getConfig()) {
 		_os << "config=\"" << _obj.getConfig() << "\"";

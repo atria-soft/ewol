@@ -13,32 +13,29 @@
 #define __class__	"ewol::Image"
 
 ewol::Image::Image(const etk::UString& _imageName) :
-	m_position(0.0, 0.0, 0.0),
-	m_clippingPosStart(0.0, 0.0, 0.0),
-	m_clippingPosStop(0.0, 0.0, 0.0),
-	m_clippingEnable(false),
-	m_color(etk::color::white),
-	m_angle(0.0),
-	m_GLprogram(NULL),
-	m_GLPosition(-1),
-	m_GLMatrix(-1),
-	m_GLColor(-1),
-	m_GLtexture(-1),
-	m_GLtexID(-1),
-	m_resource(NULL)
-{
+  m_position(0.0, 0.0, 0.0),
+  m_clippingPosStart(0.0, 0.0, 0.0),
+  m_clippingPosStop(0.0, 0.0, 0.0),
+  m_clippingEnable(false),
+  m_color(etk::color::white),
+  m_angle(0.0),
+  m_GLprogram(NULL),
+  m_GLPosition(-1),
+  m_GLMatrix(-1),
+  m_GLColor(-1),
+  m_GLtexture(-1),
+  m_GLtexID(-1),
+  m_resource(NULL) {
 	setSource(_imageName);
 	loadProgram();
 }
 
-ewol::Image::~Image(void)
-{
+ewol::Image::~Image(void) {
 	ewol::TextureFile::release(m_resource);
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Image::loadProgram(void)
-{
+void ewol::Image::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
@@ -51,8 +48,7 @@ void ewol::Image::loadProgram(void)
 	}
 }
 
-void ewol::Image::draw(bool _disableDepthTest)
-{
+void ewol::Image::draw(bool _disableDepthTest) {
 	if (m_coord.size() <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -87,8 +83,7 @@ void ewol::Image::draw(bool _disableDepthTest)
 	m_GLprogram->unUse();
 }
 
-void ewol::Image::clear(void)
-{
+void ewol::Image::clear(void) {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -104,8 +99,7 @@ void ewol::Image::clear(void)
 	m_angle = 0.0;
 }
 
-void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd)
-{
+void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -131,20 +125,17 @@ void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd)
 	m_clippingEnable = true;
 }
 
-void ewol::Image::setAngle(float _angle)
-{
+void ewol::Image::setAngle(float _angle) {
 	m_angle = _angle;
 }
 
-void ewol::Image::print(const vec2& _size)
-{
+void ewol::Image::print(const vec2& _size) {
 	printPart(_size, vec2(0,0), vec2(1,1));
 }
 
 void ewol::Image::printPart(const vec2& _size,
                             const vec2& _sourcePosStart,
-                            const vec2& _sourcePosStop)
-{
+                            const vec2& _sourcePosStop) {
 	if (m_angle == 0.0f) {
 		vec3 point = m_position;
 		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
@@ -235,8 +226,7 @@ void ewol::Image::printPart(const vec2& _size,
 	m_coordColor.pushBack(m_color);
 }
 
-void ewol::Image::setSource(const etk::UString& _newFile, const vec2& _size)
-{
+void ewol::Image::setSource(const etk::UString& _newFile, const vec2& _size) {
 	clear();
 	// remove old one
 	ewol::TextureFile::release(m_resource);
@@ -251,14 +241,12 @@ void ewol::Image::setSource(const etk::UString& _newFile, const vec2& _size)
 	}
 }
 
-bool ewol::Image::hasSources(void)
-{
+bool ewol::Image::hasSources(void) {
 	return m_resource!=NULL;
 }
 
 
-vec2 ewol::Image::getRealSize(void)
-{
+vec2 ewol::Image::getRealSize(void) {
 	if (NULL == m_resource) {
 		return vec2(0,0);
 	}

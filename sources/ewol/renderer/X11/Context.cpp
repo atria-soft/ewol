@@ -51,8 +51,8 @@ bool hasDisplay = false;
 	#define X11_INFO       EWOL_VERBOSE
 	#define X11_CRITICAL   EWOL_VERBOSE
 #endif
-int64_t ewol::getTime(void)
-{
+
+int64_t ewol::getTime(void) {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
 	if (ret != 0) {
@@ -86,8 +86,7 @@ static int attrListDbl[] = {
 };
 
 extern "C" {
-	typedef struct Hints
-	{
+	typedef struct Hints {
 		unsigned long   flags;
 		unsigned long   functions;
 		unsigned long   decorations;
@@ -103,8 +102,7 @@ extern "C" {
 #undef __class__
 #define __class__ "x11Interface"
 
-class X11Interface : public ewol::eContext
-{
+class X11Interface : public ewol::eContext {
 	private:
 		ewol::SpecialKey m_guiKeyBoardMode;
 		// for double and triple click selection, we need to save the previous click up and down position , and the previous time ...
@@ -143,33 +141,32 @@ class X11Interface : public ewol::eContext
 		ewol::cursorDisplay_te m_currentCursor; //!< select the current cursor to display :
 	public:
 		X11Interface(int32_t _argc, const char* _argv[]) :
-			ewol::eContext(_argc, _argv),
-			m_display(NULL),
-			m_originX(0),
-			m_originY(0),
-			m_cursorEventX(0),
-			m_cursorEventY(0),
-			m_currentHeight(0),
-			m_currentWidth(0),
-			m_visual(NULL),
-			m_doubleBuffered(0),
-			m_run(false),
-			m_grabAllEvent(false),
-			m_forcePos(0,0),
-			m_positionChangeRequested(false),
-			m_curentGrabDelta(0,0),
-			m_clipBoardRequestPrimary(false),
-			m_clipBoardOwnerPrimary(false),
-			m_clipBoardOwnerStd(false),
-			XAtomeSelection(0),
-			XAtomeClipBoard(0),
-			XAtomeTargetString(0),
-			XAtomeTargetStringUTF8(0),
-			XAtomeTargetTarget(0),
-			XAtomeEWOL(0),
-			XAtomeDeleteWindows(0),
-			m_currentCursor(ewol::cursorArrow)
-		{
+		  ewol::eContext(_argc, _argv),
+		  m_display(NULL),
+		  m_originX(0),
+		  m_originY(0),
+		  m_cursorEventX(0),
+		  m_cursorEventY(0),
+		  m_currentHeight(0),
+		  m_currentWidth(0),
+		  m_visual(NULL),
+		  m_doubleBuffered(0),
+		  m_run(false),
+		  m_grabAllEvent(false),
+		  m_forcePos(0,0),
+		  m_positionChangeRequested(false),
+		  m_curentGrabDelta(0,0),
+		  m_clipBoardRequestPrimary(false),
+		  m_clipBoardOwnerPrimary(false),
+		  m_clipBoardOwnerStd(false),
+		  XAtomeSelection(0),
+		  XAtomeClipBoard(0),
+		  XAtomeTargetString(0),
+		  XAtomeTargetStringUTF8(0),
+		  XAtomeTargetTarget(0),
+		  XAtomeEWOL(0),
+		  XAtomeDeleteWindows(0),
+		  m_currentCursor(ewol::cursorArrow) {
 			X11_INFO("X11:INIT");
 			for (int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 				m_inputIsPressed[iii] = false;
@@ -191,13 +188,11 @@ class X11Interface : public ewol::eContext
 			m_run = true;
 		}
 		
-		~X11Interface(void)
-		{
+		~X11Interface(void) {
 			// TODO : ...
 		}
 		
-		int32_t Run(void)
-		{
+		int32_t Run(void) {
 			bool specialEventThatNeedARedraw = false;
 			// main cycle
 			while(true == m_run) {
@@ -207,45 +202,42 @@ class X11Interface : public ewol::eContext
 				// main X boucle :
 				while (XPending(m_display)) {
 					XNextEvent(m_display, &event);
-					switch (event.type)
-					{
-						case ClientMessage:
-							{
-								X11_INFO("Receive : ClientMessage");
-								if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
-									EWOL_INFO("     == > Kill Requested ...");
-									OS_Stop();
-									m_run = false;
-								}
+					switch (event.type) {
+						case ClientMessage: {
+							X11_INFO("Receive : ClientMessage");
+							if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
+								EWOL_INFO("     == > Kill Requested ...");
+								OS_Stop();
+								m_run = false;
 							}
 							break;
+						}
 						///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						//                               Selection AREA                                                              //
 						///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-						case SelectionClear:
+						case SelectionClear: {
 							// Selection has been done on an other program  == > clear ours ...
 							X11_INFO("X11 event SelectionClear");
+							#ifdef DEBUG_X11_EVENT
 							{
-								#ifdef DEBUG_X11_EVENT
-								{
-									XSelectionRequestEvent *req=&(event.xselectionrequest);
-									char * atomNameProperty = XGetAtomName(m_display, req->property);
-									char * atomNameTarget = XGetAtomName(m_display, req->target);
-									EWOL_INFO("X11    property: \"" << atomNameProperty << "\"");
-									EWOL_INFO("X11    target:   \"" << atomNameTarget << "\"");
-									if (NULL != atomNameProperty) { XFree(atomNameProperty); }
-									if (NULL != atomNameTarget) { XFree(atomNameTarget); }
-								}
-								#endif
-								if (true == m_clipBoardOwnerPrimary) {
-									m_clipBoardOwnerPrimary = false;
-								} else if (true == m_clipBoardOwnerStd) {
-									m_clipBoardOwnerStd = false;
-								} else {
-									EWOL_ERROR("X11 event SelectionClear  == > but no selection requested anymore ...");
-								}
+								XSelectionRequestEvent *req=&(event.xselectionrequest);
+								char * atomNameProperty = XGetAtomName(m_display, req->property);
+								char * atomNameTarget = XGetAtomName(m_display, req->target);
+								EWOL_INFO("X11    property: \"" << atomNameProperty << "\"");
+								EWOL_INFO("X11    target:   \"" << atomNameTarget << "\"");
+								if (NULL != atomNameProperty) { XFree(atomNameProperty); }
+								if (NULL != atomNameTarget) { XFree(atomNameTarget); }
+							}
+							#endif
+							if (true == m_clipBoardOwnerPrimary) {
+								m_clipBoardOwnerPrimary = false;
+							} else if (true == m_clipBoardOwnerStd) {
+								m_clipBoardOwnerStd = false;
+							} else {
+								EWOL_ERROR("X11 event SelectionClear  == > but no selection requested anymore ...");
 							}
 							break;
+						}
 						case SelectionNotify:
 							X11_INFO("X11 event SelectionNotify");
 							if (event.xselection.property == None) {
@@ -281,86 +273,85 @@ class X11Interface : public ewol::eContext
 								}
 							}
 							break;
-						case SelectionRequest:
+						case SelectionRequest: {
 							X11_INFO("X11 event SelectionRequest");
+							XSelectionRequestEvent *req=&(event.xselectionrequest);
+							#ifdef DEBUG_X11_EVENT
 							{
-								XSelectionRequestEvent *req=&(event.xselectionrequest);
-								#ifdef DEBUG_X11_EVENT
-								{
-									char * atomNameProperty = XGetAtomName(m_display, req->property);
-									char * atomNameSelection = XGetAtomName(m_display, req->selection);
-									char * atomNameTarget = XGetAtomName(m_display, req->target);
-									EWOL_INFO("    from: " << atomNameProperty << "  request=" << atomNameSelection << " in " << atomNameTarget);
-									if (NULL != atomNameProperty) { XFree(atomNameProperty); }
-									if (NULL != atomNameSelection) { XFree(atomNameSelection); }
-									if (NULL != atomNameTarget) { XFree(atomNameTarget); }
-								}
-								#endif
-								
-								etk::UString tmpData = "";
-								if (req->selection == XAtomeSelection) {
-									tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardSelection);
-								} else if (req->selection == XAtomeClipBoard) {
-									tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardStd);
-								}
-								etk::Char tmpValueStoredTimeToSend = tmpData.c_str();
-								const char * magatTextToSend = tmpValueStoredTimeToSend;
-								Atom listOfAtom[4];
-								if(strlen(magatTextToSend) == 0 ) {
-									respond.xselection.property= None;
-								} else if(XAtomeTargetTarget == req->target) {
-									// We need to generate the list of the possibles target element of atom
-									int32_t nbAtomSupported = 0;
-									listOfAtom[nbAtomSupported++] = XAtomeTargetTarget;
-									listOfAtom[nbAtomSupported++] = XAtomeTargetString;
-									listOfAtom[nbAtomSupported++] = XAtomeTargetStringUTF8;
-									listOfAtom[nbAtomSupported++] = None;
-									XChangeProperty( m_display,
-									                 req->requestor,
-									                 req->property,
-									                 XA_ATOM,
-									                 32,
-									                 PropModeReplace,
-									                 (unsigned char*)listOfAtom,
-									                 nbAtomSupported );
-									respond.xselection.property=req->property;
-									EWOL_INFO("             == > Respond ... (test)");
-								} else if(XAtomeTargetString == req->target) {
-									XChangeProperty( m_display,
-									                 req->requestor,
-									                 req->property,
-									                 req->target,
-									                 8,
-									                 PropModeReplace,
-									                 (unsigned char*)magatTextToSend,
-									                 strlen(magatTextToSend));
-									respond.xselection.property=req->property;
-									EWOL_INFO("             == > Respond ...");
-								} else if (XAtomeTargetStringUTF8 == req->target) {
-									XChangeProperty( m_display,
-									                 req->requestor,
-									                 req->property,
-									                 req->target,
-									                 8,
-									                 PropModeReplace,
-									                 (unsigned char*)magatTextToSend,
-									                 strlen(magatTextToSend));
-									respond.xselection.property=req->property;
-									EWOL_INFO("             == > Respond ...");
-								} else {
-									respond.xselection.property= None;
-								}
-								respond.xselection.type= SelectionNotify;
-								respond.xselection.display= req->display;
-								respond.xselection.requestor= req->requestor;
-								respond.xselection.selection=req->selection;
-								respond.xselection.target= req->target;
-								respond.xselection.time = req->time;
-								XSendEvent (m_display, req->requestor,0,0,&respond);
-								// flush the message on the pipe ...
-								XFlush (m_display);
+								char * atomNameProperty = XGetAtomName(m_display, req->property);
+								char * atomNameSelection = XGetAtomName(m_display, req->selection);
+								char * atomNameTarget = XGetAtomName(m_display, req->target);
+								EWOL_INFO("    from: " << atomNameProperty << "  request=" << atomNameSelection << " in " << atomNameTarget);
+								if (NULL != atomNameProperty) { XFree(atomNameProperty); }
+								if (NULL != atomNameSelection) { XFree(atomNameSelection); }
+								if (NULL != atomNameTarget) { XFree(atomNameTarget); }
 							}
+							#endif
+							
+							etk::UString tmpData = "";
+							if (req->selection == XAtomeSelection) {
+								tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardSelection);
+							} else if (req->selection == XAtomeClipBoard) {
+								tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardStd);
+							}
+							etk::Char tmpValueStoredTimeToSend = tmpData.c_str();
+							const char * magatTextToSend = tmpValueStoredTimeToSend;
+							Atom listOfAtom[4];
+							if(strlen(magatTextToSend) == 0 ) {
+								respond.xselection.property= None;
+							} else if(XAtomeTargetTarget == req->target) {
+								// We need to generate the list of the possibles target element of atom
+								int32_t nbAtomSupported = 0;
+								listOfAtom[nbAtomSupported++] = XAtomeTargetTarget;
+								listOfAtom[nbAtomSupported++] = XAtomeTargetString;
+								listOfAtom[nbAtomSupported++] = XAtomeTargetStringUTF8;
+								listOfAtom[nbAtomSupported++] = None;
+								XChangeProperty( m_display,
+								                 req->requestor,
+								                 req->property,
+								                 XA_ATOM,
+								                 32,
+								                 PropModeReplace,
+								                 (unsigned char*)listOfAtom,
+								                 nbAtomSupported );
+								respond.xselection.property=req->property;
+								EWOL_INFO("             == > Respond ... (test)");
+							} else if(XAtomeTargetString == req->target) {
+								XChangeProperty( m_display,
+								                 req->requestor,
+								                 req->property,
+								                 req->target,
+								                 8,
+								                 PropModeReplace,
+								                 (unsigned char*)magatTextToSend,
+								                 strlen(magatTextToSend));
+								respond.xselection.property=req->property;
+								EWOL_INFO("             == > Respond ...");
+							} else if (XAtomeTargetStringUTF8 == req->target) {
+								XChangeProperty( m_display,
+								                 req->requestor,
+								                 req->property,
+								                 req->target,
+								                 8,
+								                 PropModeReplace,
+								                 (unsigned char*)magatTextToSend,
+								                 strlen(magatTextToSend));
+								respond.xselection.property=req->property;
+								EWOL_INFO("             == > Respond ...");
+							} else {
+								respond.xselection.property= None;
+							}
+							respond.xselection.type= SelectionNotify;
+							respond.xselection.display= req->display;
+							respond.xselection.requestor= req->requestor;
+							respond.xselection.selection=req->selection;
+							respond.xselection.target= req->target;
+							respond.xselection.time = req->time;
+							XSendEvent (m_display, req->requestor,0,0,&respond);
+							// flush the message on the pipe ...
+							XFlush (m_display);
 							break;
+						}
 						///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						case Expose:
 							X11_INFO("X11 event Expose");
@@ -498,199 +489,198 @@ class X11Interface : public ewol::eContext
 							specialEventThatNeedARedraw=true;
 							break;
 						case KeyPress:
-						case KeyRelease:
-							{
-								bool thisIsAReapeateKey = false;
-								// filter repeate key : 
-								if(    event.type == KeyRelease
-								    && XEventsQueued(m_display, QueuedAfterReading)) {
-									XEvent nev;
-									XPeekEvent(m_display, &nev);
-									if(    nev.type == KeyPress
-									    && nev.xkey.time == event.xkey.time
-									    && nev.xkey.keycode == event.xkey.keycode) {
-										// Key was not actually released
-										// remove next event too ...
-										
-										//This remove repeate key
-										XNextEvent(m_display, &nev);
-										//break;
-										
-										thisIsAReapeateKey = true;
-									}
+						case KeyRelease: {
+							bool thisIsAReapeateKey = false;
+							// filter repeate key : 
+							if(    event.type == KeyRelease
+							    && XEventsQueued(m_display, QueuedAfterReading)) {
+								XEvent nev;
+								XPeekEvent(m_display, &nev);
+								if(    nev.type == KeyPress
+								    && nev.xkey.time == event.xkey.time
+								    && nev.xkey.keycode == event.xkey.keycode) {
+									// Key was not actually released
+									// remove next event too ...
+									
+									//This remove repeate key
+									XNextEvent(m_display, &nev);
+									//break;
+									
+									thisIsAReapeateKey = true;
 								}
-								X11_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
-								{
-									X11_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
-									if (event.xkey.state & (1<<0) ) {
-										//EWOL_DEBUG("    Special Key : SHIFT");
-										m_guiKeyBoardMode.shift = true;
-									} else {
-										m_guiKeyBoardMode.shift = false;
-									}
-									if (event.xkey.state & (1<<1) ) {
-										//EWOL_DEBUG("    Special Key : CAPS_LOCK");
-										m_guiKeyBoardMode.capLock = true;
-									} else {
-										m_guiKeyBoardMode.capLock = false;
-									}
-									if (event.xkey.state & (1<<2) ) {
-										//EWOL_DEBUG("    Special Key : Ctrl");
-										m_guiKeyBoardMode.ctrl = true;
-									} else {
-										m_guiKeyBoardMode.ctrl = false;
-									}
-									if (event.xkey.state & (1<<3) ) {
-										//EWOL_DEBUG("    Special Key : Alt");
-										m_guiKeyBoardMode.alt = true;
-									} else {
-										m_guiKeyBoardMode.alt = false;
-									}
-									if (event.xkey.state & (1<<4) ) {
-										//EWOL_DEBUG("    Special Key : VER_num");
-										m_guiKeyBoardMode.numLock = true;
-									} else {
-										m_guiKeyBoardMode.numLock = false;
-									}
-									if (event.xkey.state & (1<<5) ) {
-										EWOL_DEBUG("    Special Key : MOD");
-									}
-									if (event.xkey.state & (1<<6) ) {
-										//EWOL_DEBUG("    Special Key : META");
-										m_guiKeyBoardMode.meta = true;
-									} else {
-										m_guiKeyBoardMode.meta = false;
-									}
-									if (event.xkey.state & (1<<7) ) {
-										//EWOL_DEBUG("    Special Key : ALT_GR");
-										m_guiKeyBoardMode.altGr = true;
-									} else {
-										m_guiKeyBoardMode.altGr = false;
-									}
-									bool find = true;
-									ewol::keyEvent::keyboard_te keyInput;
-									switch (event.xkey.keycode) {
-										//case 80: // keypad
-										case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
-										//case 83: // keypad
-										case 113:	keyInput = ewol::keyEvent::keyboardLeft;          break;
-										//case 85: // keypad
-										case 114:	keyInput = ewol::keyEvent::keyboardRight;         break;
-										//case 88: // keypad
-										case 116:	keyInput = ewol::keyEvent::keyboardDown;          break;
-										//case 81: // keypad
-										case 112:	keyInput = ewol::keyEvent::keyboardPageUp;        break;
-										//case 89: // keypad
-										case 117:	keyInput = ewol::keyEvent::keyboardPageDown;      break;
-										//case 79: // keypad
-										case 110:	keyInput = ewol::keyEvent::keyboardStart;         break;
-										//case 87: // keypad
-										case 115:	keyInput = ewol::keyEvent::keyboardEnd;           break;
-										case 78:	keyInput = ewol::keyEvent::keyboardStopDefil;     break;
-										case 127:	keyInput = ewol::keyEvent::keyboardWait;          break;
-										//case 90: // keypad
-										case 118:
-											keyInput = ewol::keyEvent::keyboardInsert;
-											if(event.type == KeyRelease) {
-												if (true == m_guiKeyBoardMode.insert) {
-													m_guiKeyBoardMode.insert = false;
-												} else {
-													m_guiKeyBoardMode.insert = true;
-												}
+							}
+							X11_INFO("X11 event : " << event.type << " = \"KeyPress/KeyRelease\" ");
+							{
+								X11_DEBUG("eventKey : " << event.xkey.keycode << " state : " << event.xkey.state);
+								if (event.xkey.state & (1<<0) ) {
+									//EWOL_DEBUG("    Special Key : SHIFT");
+									m_guiKeyBoardMode.shift = true;
+								} else {
+									m_guiKeyBoardMode.shift = false;
+								}
+								if (event.xkey.state & (1<<1) ) {
+									//EWOL_DEBUG("    Special Key : CAPS_LOCK");
+									m_guiKeyBoardMode.capLock = true;
+								} else {
+									m_guiKeyBoardMode.capLock = false;
+								}
+								if (event.xkey.state & (1<<2) ) {
+									//EWOL_DEBUG("    Special Key : Ctrl");
+									m_guiKeyBoardMode.ctrl = true;
+								} else {
+									m_guiKeyBoardMode.ctrl = false;
+								}
+								if (event.xkey.state & (1<<3) ) {
+									//EWOL_DEBUG("    Special Key : Alt");
+									m_guiKeyBoardMode.alt = true;
+								} else {
+									m_guiKeyBoardMode.alt = false;
+								}
+								if (event.xkey.state & (1<<4) ) {
+									//EWOL_DEBUG("    Special Key : VER_num");
+									m_guiKeyBoardMode.numLock = true;
+								} else {
+									m_guiKeyBoardMode.numLock = false;
+								}
+								if (event.xkey.state & (1<<5) ) {
+									EWOL_DEBUG("    Special Key : MOD");
+								}
+								if (event.xkey.state & (1<<6) ) {
+									//EWOL_DEBUG("    Special Key : META");
+									m_guiKeyBoardMode.meta = true;
+								} else {
+									m_guiKeyBoardMode.meta = false;
+								}
+								if (event.xkey.state & (1<<7) ) {
+									//EWOL_DEBUG("    Special Key : ALT_GR");
+									m_guiKeyBoardMode.altGr = true;
+								} else {
+									m_guiKeyBoardMode.altGr = false;
+								}
+								bool find = true;
+								ewol::keyEvent::keyboard_te keyInput;
+								switch (event.xkey.keycode) {
+									//case 80: // keypad
+									case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
+									//case 83: // keypad
+									case 113:	keyInput = ewol::keyEvent::keyboardLeft;          break;
+									//case 85: // keypad
+									case 114:	keyInput = ewol::keyEvent::keyboardRight;         break;
+									//case 88: // keypad
+									case 116:	keyInput = ewol::keyEvent::keyboardDown;          break;
+									//case 81: // keypad
+									case 112:	keyInput = ewol::keyEvent::keyboardPageUp;        break;
+									//case 89: // keypad
+									case 117:	keyInput = ewol::keyEvent::keyboardPageDown;      break;
+									//case 79: // keypad
+									case 110:	keyInput = ewol::keyEvent::keyboardStart;         break;
+									//case 87: // keypad
+									case 115:	keyInput = ewol::keyEvent::keyboardEnd;           break;
+									case 78:	keyInput = ewol::keyEvent::keyboardStopDefil;     break;
+									case 127:	keyInput = ewol::keyEvent::keyboardWait;          break;
+									//case 90: // keypad
+									case 118:
+										keyInput = ewol::keyEvent::keyboardInsert;
+										if(event.type == KeyRelease) {
+											if (true == m_guiKeyBoardMode.insert) {
+												m_guiKeyBoardMode.insert = false;
+											} else {
+												m_guiKeyBoardMode.insert = true;
 											}
-											break;
-										//case 84:  keyInput = ewol::keyEvent::keyboardCenter; break; // Keypad
-										case 67:    keyInput = ewol::keyEvent::keyboardF1; break;
-										case 68:    keyInput = ewol::keyEvent::keyboardF2; break;
-										case 69:    keyInput = ewol::keyEvent::keyboardF3; break;
-										case 70:    keyInput = ewol::keyEvent::keyboardF4; break;
-										case 71:    keyInput = ewol::keyEvent::keyboardF5; break;
-										case 72:    keyInput = ewol::keyEvent::keyboardF6; break;
-										case 73:    keyInput = ewol::keyEvent::keyboardF7; break;
-										case 74:    keyInput = ewol::keyEvent::keyboardF8; break;
-										case 75:    keyInput = ewol::keyEvent::keyboardF9; break;
-										case 76:    keyInput = ewol::keyEvent::keyboardF10; break;
-										case 95:    keyInput = ewol::keyEvent::keyboardF11; break;
-										case 96:    keyInput = ewol::keyEvent::keyboardF12; break;
-										case 66:    keyInput = ewol::keyEvent::keyboardCapLock;     m_guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
-										case 50:    keyInput = ewol::keyEvent::keyboardShiftLeft;   m_guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-										case 62:    keyInput = ewol::keyEvent::keyboardShiftRight;  m_guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
-										case 37:    keyInput = ewol::keyEvent::keyboardCtrlLeft;    m_guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-										case 105:   keyInput = ewol::keyEvent::keyboardCtrlRight;   m_guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
-										case 133:   keyInput = ewol::keyEvent::keyboardMetaLeft;    m_guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-										case 134:   keyInput = ewol::keyEvent::keyboardMetaRight;   m_guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
-										case 64:    keyInput = ewol::keyEvent::keyboardAlt;         m_guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
-										case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       m_guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
-										case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
-										case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     m_guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
-										case 91: // Suppr on keypad
-											find = false;
-											if(m_guiKeyBoardMode.numLock == true){
-												OS_SetKeyboard(m_guiKeyBoardMode, '.', (event.type == KeyPress), thisIsAReapeateKey);
+										}
+										break;
+									//case 84:  keyInput = ewol::keyEvent::keyboardCenter; break; // Keypad
+									case 67:    keyInput = ewol::keyEvent::keyboardF1; break;
+									case 68:    keyInput = ewol::keyEvent::keyboardF2; break;
+									case 69:    keyInput = ewol::keyEvent::keyboardF3; break;
+									case 70:    keyInput = ewol::keyEvent::keyboardF4; break;
+									case 71:    keyInput = ewol::keyEvent::keyboardF5; break;
+									case 72:    keyInput = ewol::keyEvent::keyboardF6; break;
+									case 73:    keyInput = ewol::keyEvent::keyboardF7; break;
+									case 74:    keyInput = ewol::keyEvent::keyboardF8; break;
+									case 75:    keyInput = ewol::keyEvent::keyboardF9; break;
+									case 76:    keyInput = ewol::keyEvent::keyboardF10; break;
+									case 95:    keyInput = ewol::keyEvent::keyboardF11; break;
+									case 96:    keyInput = ewol::keyEvent::keyboardF12; break;
+									case 66:    keyInput = ewol::keyEvent::keyboardCapLock;     m_guiKeyBoardMode.capLock = (event.type == KeyPress) ? true : false; break;
+									case 50:    keyInput = ewol::keyEvent::keyboardShiftLeft;   m_guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+									case 62:    keyInput = ewol::keyEvent::keyboardShiftRight;  m_guiKeyBoardMode.shift   = (event.type == KeyPress) ? true : false; break;
+									case 37:    keyInput = ewol::keyEvent::keyboardCtrlLeft;    m_guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+									case 105:   keyInput = ewol::keyEvent::keyboardCtrlRight;   m_guiKeyBoardMode.ctrl    = (event.type == KeyPress) ? true : false; break;
+									case 133:   keyInput = ewol::keyEvent::keyboardMetaLeft;    m_guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+									case 134:   keyInput = ewol::keyEvent::keyboardMetaRight;   m_guiKeyBoardMode.meta    = (event.type == KeyPress) ? true : false; break;
+									case 64:    keyInput = ewol::keyEvent::keyboardAlt;         m_guiKeyBoardMode.alt     = (event.type == KeyPress) ? true : false; break;
+									case 108:   keyInput = ewol::keyEvent::keyboardAltGr;       m_guiKeyBoardMode.altGr   = (event.type == KeyPress) ? true : false; break;
+									case 135:   keyInput = ewol::keyEvent::keyboardContextMenu; break;
+									case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     m_guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
+									case 91: // Suppr on keypad
+										find = false;
+										if(m_guiKeyBoardMode.numLock == true){
+											OS_SetKeyboard(m_guiKeyBoardMode, '.', (event.type == KeyPress), thisIsAReapeateKey);
+											if (true == thisIsAReapeateKey) {
+												OS_SetKeyboard(m_guiKeyBoardMode, '.', !(event.type == KeyPress), thisIsAReapeateKey);
+											}
+										} else {
+											OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, (event.type == KeyPress), thisIsAReapeateKey);
+											if (true == thisIsAReapeateKey) {
+												OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, !(event.type == KeyPress), thisIsAReapeateKey);
+											}
+										}
+										break;
+									case 23: // special case for TAB
+										find = false;
+										OS_SetKeyboard(m_guiKeyBoardMode, 0x09, (event.type == KeyPress), thisIsAReapeateKey);
+										if (true == thisIsAReapeateKey) {
+											OS_SetKeyboard(m_guiKeyBoardMode, 0x09, !(event.type == KeyPress), thisIsAReapeateKey);
+										}
+										break;
+									default:
+										find = false;
+										{
+											char buf[11];
+											//EWOL_DEBUG("Keycode: " << event.xkey.keycode);
+											// change keystate for simple reson of the ctrl error...
+											int32_t keyStateSave = event.xkey.state;
+											if (event.xkey.state & (1<<2) ) {
+												event.xkey.state = event.xkey.state & 0xFFFFFFFB;
+											}
+											KeySym keysym;
+											Status status = 0;
+											//int count = Xutf8LookupString(m_xic, (XKeyPressedEvent*)&event, buf, 10, &keysym, &status);
+											int count = Xutf8LookupString(m_xic, &event.xkey, buf, 10, &keysym, &status);
+											// retreave real keystate
+											event.xkey.state = keyStateSave;
+											buf[count] = '\0';
+											// Replace \r error ...
+											if (buf[0] == '\r') {
+												buf[0] = '\n';
+												buf[1] = '\0';
+											}
+											if (count>0) {
+												// transform it in unicode
+												etk::UniChar tmpChar = 0;
+												tmpChar.setUtf8(buf);
+												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
+												OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);
 												if (true == thisIsAReapeateKey) {
-													OS_SetKeyboard(m_guiKeyBoardMode, '.', !(event.type == KeyPress), thisIsAReapeateKey);
+													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, !(event.type == KeyPress), thisIsAReapeateKey);
 												}
 											} else {
-												OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, (event.type == KeyPress), thisIsAReapeateKey);
-												if (true == thisIsAReapeateKey) {
-													OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, !(event.type == KeyPress), thisIsAReapeateKey);
-												}
+												EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
 											}
-											break;
-										case 23: // special case for TAB
-											find = false;
-											OS_SetKeyboard(m_guiKeyBoardMode, 0x09, (event.type == KeyPress), thisIsAReapeateKey);
-											if (true == thisIsAReapeateKey) {
-												OS_SetKeyboard(m_guiKeyBoardMode, 0x09, !(event.type == KeyPress), thisIsAReapeateKey);
-											}
-											break;
-										default:
-											find = false;
-											{
-												char buf[11];
-												//EWOL_DEBUG("Keycode: " << event.xkey.keycode);
-												// change keystate for simple reson of the ctrl error...
-												int32_t keyStateSave = event.xkey.state;
-												if (event.xkey.state & (1<<2) ) {
-													event.xkey.state = event.xkey.state & 0xFFFFFFFB;
-												}
-												KeySym keysym;
-												Status status = 0;
-												//int count = Xutf8LookupString(m_xic, (XKeyPressedEvent*)&event, buf, 10, &keysym, &status);
-												int count = Xutf8LookupString(m_xic, &event.xkey, buf, 10, &keysym, &status);
-												// retreave real keystate
-												event.xkey.state = keyStateSave;
-												buf[count] = '\0';
-												// Replace \r error ...
-												if (buf[0] == '\r') {
-													buf[0] = '\n';
-													buf[1] = '\0';
-												}
-												if (count>0) {
-													// transform it in unicode
-													etk::UniChar tmpChar = 0;
-													tmpChar.setUtf8(buf);
-													//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
-													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);
-													if (true == thisIsAReapeateKey) {
-														OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, !(event.type == KeyPress), thisIsAReapeateKey);
-													}
-												} else {
-													EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
-												}
-											}
-											break;
-									}
-									if (true == find) {
-										//EWOL_DEBUG("eventKey Move type : " << getCharTypeMoveEvent(keyInput) );
-										OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, (event.type == KeyPress), thisIsAReapeateKey);
-										if (true == thisIsAReapeateKey) {
-											OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, !(event.type == KeyPress), thisIsAReapeateKey);
 										}
+										break;
+								}
+								if (true == find) {
+									//EWOL_DEBUG("eventKey Move type : " << getCharTypeMoveEvent(keyInput) );
+									OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, (event.type == KeyPress), thisIsAReapeateKey);
+									if (true == thisIsAReapeateKey) {
+										OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, !(event.type == KeyPress), thisIsAReapeateKey);
 									}
 								}
 							}
 							break;
+						}
 						//case DestroyNotify:
 						//	break;
 						case MapNotify:
@@ -722,22 +712,19 @@ class X11Interface : public ewol::eContext
 			return 0;
 		}
 		/****************************************************************************************/
-		virtual void Stop(void)
-		{
+		virtual void Stop(void) {
 			X11_INFO("X11-API: Stop");
 			m_run = false;
 		}
 		/****************************************************************************************/
-		virtual void setSize(const vec2& _size)
-		{
+		virtual void setSize(const vec2& _size) {
 			X11_INFO("X11-API: changeSize=" << _size);
 			m_currentHeight = _size.y();
 			m_currentWidth = _size.x();
 			XResizeWindow(m_display, m_WindowHandle, _size.x(), _size.y());
 		}
 		/****************************************************************************************/
-		virtual void setPos(const vec2& _pos)
-		{
+		virtual void setPos(const vec2& _pos) {
 			X11_INFO("X11-API: changePos=" << _pos);
 			XMoveWindow(m_display, m_WindowHandle, _pos.x(), _pos.y());
 			m_originX = _pos.x();
@@ -745,8 +732,7 @@ class X11Interface : public ewol::eContext
 		}
 		/****************************************************************************************/
 		/*
-		virtual void getAbsPos(ivec2& pos)
-		{
+		virtual void getAbsPos(ivec2& pos) {
 			X11_INFO("X11-API: getAbsPos");
 			int tmp;
 			unsigned int tmp2;
@@ -755,8 +741,7 @@ class X11Interface : public ewol::eContext
 		}
 		*/
 		/****************************************************************************************/
-		virtual void setCursor(ewol::cursorDisplay_te _newCursor)
-		{
+		virtual void setCursor(ewol::cursorDisplay_te _newCursor) {
 			if (_newCursor != m_currentCursor) {
 				X11_DEBUG("X11-API: set New Cursor : " << _newCursor);
 				// undefine previous cursors ...
@@ -846,8 +831,7 @@ class X11Interface : public ewol::eContext
 			}
 		}
 		/****************************************************************************************/
-		void GrabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition)
-		{
+		void GrabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) {
 			if (true == _isGrabbed) {
 				X11_DEBUG("X11-API: Grab Events");
 				int32_t test = XGrabPointer(m_display,RootWindow(m_display, DefaultScreen(m_display)), True,
@@ -897,8 +881,7 @@ class X11Interface : public ewol::eContext
 			}
 		}
 		/****************************************************************************************/
-		bool CreateX11Context(void)
-		{
+		bool CreateX11Context(void) {
 			X11_INFO("X11: CreateX11Context");
 			int x,y, attr_mask;
 			XSizeHints hints;
@@ -1048,8 +1031,7 @@ class X11Interface : public ewol::eContext
 			return true;
 		}
 		/****************************************************************************************/
-		void setIcon(const etk::UString& _inputFile)
-		{
+		void setIcon(const etk::UString& _inputFile) {
 			egami::Image dataImage;
 			// load data
 			if (false == egami::load(dataImage, _inputFile)) {
@@ -1187,8 +1169,7 @@ class X11Interface : public ewol::eContext
 			
 		}
 		/****************************************************************************************/
-		static void setVSync(bool _sync)
-		{
+		static void setVSync(bool _sync) {
 			// Function pointer for the wgl extention function we need to enable/disable
 			typedef int32_t (APIENTRY *PFNWGLSWAPINTERVALPROC)( int );
 			PFNWGLSWAPINTERVALPROC wglSwapIntervalEXT = 0;
@@ -1206,8 +1187,7 @@ class X11Interface : public ewol::eContext
 			}
 		}
 		/****************************************************************************************/
-		bool CreateOGlContext(void)
-		{
+		bool CreateOGlContext(void) {
 			X11_INFO("X11:CreateOGlContext");
 			/* create a GLX context */
 			GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
@@ -1225,8 +1205,7 @@ class X11Interface : public ewol::eContext
 			return true;
 		}
 		/****************************************************************************************/
-		void setTitle(const etk::UString& _title)
-		{
+		void setTitle(const etk::UString& _title) {
 			X11_INFO("X11: set Title (START)");
 			XTextProperty tp;
 			etk::Char tmpChar = _title.c_str();
@@ -1241,8 +1220,7 @@ class X11Interface : public ewol::eContext
 			X11_INFO("X11: set Title (END)");
 		}
 		/****************************************************************************************/
-		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
-		{
+		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:
@@ -1281,8 +1259,7 @@ class X11Interface : public ewol::eContext
 			}
 		}
 		/****************************************************************************************/
-		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID)
-		{
+		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:
@@ -1312,15 +1289,13 @@ class X11Interface : public ewol::eContext
  * @param std IO
  * @return std IO
  */
-int ewol::Run(int _argc, const char *_argv[])
-{
+int ewol::Run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	X11Interface* interface = new X11Interface(_argc, _argv);
 	if (NULL == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
-	
 	int32_t retValue = interface->Run();
 	delete(interface);
 	interface = NULL;

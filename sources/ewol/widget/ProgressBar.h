@@ -17,8 +17,7 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	class ProgressBar : public ewol::Widget
-	{
+	class ProgressBar : public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 		private:
@@ -26,7 +25,7 @@ namespace widget {
 		public:
 			ProgressBar(void);
 			virtual ~ProgressBar(void);
-			void valueSet(float val);
+			void valueSet(float _val);
 			float valueGet(void);
 			void setColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
 		private:

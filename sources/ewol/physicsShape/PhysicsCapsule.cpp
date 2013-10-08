@@ -10,8 +10,7 @@
 
 
 
-bool ewol::PhysicsCapsule::parse(const char* _line)
-{
+bool ewol::PhysicsCapsule::parse(const char* _line) {
 	if (true ==  ewol::PhysicsShape::parse(_line)) {
 		return true;
 	}

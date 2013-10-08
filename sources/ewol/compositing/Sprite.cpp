@@ -10,13 +10,12 @@
 #include <ewol/compositing/Sprite.h>
 
 #undef __class__
-#define __class__	"ewol::Sprite"
+#define __class__ "ewol::Sprite"
 
 ewol::Sprite::Sprite(const etk::UString& _imageName, const ivec2& _nbSprite) :
-	ewol::Image(_imageName),
-	m_nbSprite(_nbSprite),
-	m_unitarySpriteSize(0,0)
-{
+  ewol::Image(_imageName),
+  m_nbSprite(_nbSprite),
+  m_unitarySpriteSize(0,0) {
 	/*
 	vec2 imageSize = getRealSize();
 	m_unitarySpriteSize.setValue(imageSize.x()/(float)m_nbSprite.x(),
@@ -24,12 +23,10 @@ ewol::Sprite::Sprite(const etk::UString& _imageName, const ivec2& _nbSprite) :
 	*/
 	m_unitarySpriteSize.setValue(1.0/(float)m_nbSprite.x(),
 	                             1.0/(float)m_nbSprite.y());
-	
 }
 
 
-void ewol::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size)
-{
+void ewol::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size) {
 	if(    _spriteID.x()<0
 	    || _spriteID.y()<0
 	    || _spriteID.x() >= m_nbSprite.x()

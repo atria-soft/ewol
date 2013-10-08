@@ -9,19 +9,16 @@
 #include <ewol/widget/Drawable.h>
 
 
-widget::Drawable::Drawable(void)
-{
+widget::Drawable::Drawable(void) {
 	// nothing to do ...
 }
 
-widget::Drawable::~Drawable(void)
-{
+widget::Drawable::~Drawable(void) {
 	clearOObjectList();
 }
 
 
-void widget::Drawable::addOObject(ewol::Compositing* newObject, int32_t pos)
-{
+void widget::Drawable::addOObject(ewol::Compositing* newObject, int32_t pos) {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
@@ -34,8 +31,7 @@ void widget::Drawable::addOObject(ewol::Compositing* newObject, int32_t pos)
 }
 
 
-void widget::Drawable::clearOObjectList(void)
-{
+void widget::Drawable::clearOObjectList(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -43,8 +39,7 @@ void widget::Drawable::clearOObjectList(void)
 	m_listOObject.clear();
 }
 
-void widget::Drawable::onDraw(void)
-{
+void widget::Drawable::onDraw(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();

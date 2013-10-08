@@ -19,8 +19,7 @@
 extern const char * const ewolEventImagePressed;
 
 namespace widget {
-	class Image :public ewol::Widget
-	{
+	class Image :public ewol::Widget {
 		public:
 			// Event list of properties
 			static const char * const eventPressed;

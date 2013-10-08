@@ -11,18 +11,16 @@
 #include <ewol/debug.h>
 
 ewol::MaterialGlId::MaterialGlId(void) :
-	m_GL_ambientFactor(0),
-	m_GL_diffuseFactor(0),
-	m_GL_specularFactor(0),
-	m_GL_shininess(0),
-	m_GL_texture0(0)
-{
+  m_GL_ambientFactor(0),
+  m_GL_diffuseFactor(0),
+  m_GL_specularFactor(0),
+  m_GL_shininess(0),
+  m_GL_texture0(0) {
 	// nothing to do else ...
 }
 
 
-void ewol::MaterialGlId::link(ewol::Program* _prog, const etk::UString& _baseName)
-{
+void ewol::MaterialGlId::link(ewol::Program* _prog, const etk::UString& _baseName) {
 	if (NULL == _prog) {
 		return;
 	}
@@ -34,23 +32,20 @@ void ewol::MaterialGlId::link(ewol::Program* _prog, const etk::UString& _baseNam
 }
 
 ewol::Material::Material(void) :
-	m_ambientFactor(1,1,1,1),
-	m_diffuseFactor(0,0,0,1),
-	m_specularFactor(0,0,0,1),
-	m_shininess(1),
-	m_texture0(NULL)
-{
+  m_ambientFactor(1,1,1,1),
+  m_diffuseFactor(0,0,0,1),
+  m_specularFactor(0,0,0,1),
+  m_shininess(1),
+  m_texture0(NULL) {
 	// nothing to do else ...
 }
-ewol::Material::~Material(void)
-{
+ewol::Material::~Material(void) {
 	if(NULL!=m_texture0) {
 		ewol::TextureFile::release(m_texture0);
 	}
 }
 
-void ewol::Material::draw(ewol::Program* _prog, const MaterialGlId& _glID)
-{
+void ewol::Material::draw(ewol::Program* _prog, const MaterialGlId& _glID) {
 	_prog->uniform4(_glID.m_GL_ambientFactor, m_ambientFactor);
 	_prog->uniform4(_glID.m_GL_diffuseFactor, m_diffuseFactor);
 	_prog->uniform4(_glID.m_GL_specularFactor, m_specularFactor);
@@ -60,8 +55,7 @@ void ewol::Material::draw(ewol::Program* _prog, const MaterialGlId& _glID)
 	}
 }
 
-void ewol::Material::setTexture0(const etk::UString& _filename)
-{
+void ewol::Material::setTexture0(const etk::UString& _filename) {
 	ivec2 tmpSize(256, 256);
 	// prevent overloard error :
 	ewol::TextureFile* tmpCopy = m_texture0;

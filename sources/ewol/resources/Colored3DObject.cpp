@@ -15,8 +15,7 @@
 
 
 ewol::Colored3DObject::Colored3DObject(void) :
-	m_GLprogram(NULL)
-{
+  m_GLprogram(NULL) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:simple3D.prog");
@@ -27,8 +26,7 @@ ewol::Colored3DObject::Colored3DObject(void) :
 	}
 }
 
-ewol::Colored3DObject::~Colored3DObject(void)
-{
+ewol::Colored3DObject::~Colored3DObject(void) {
 	// remove dynamics dependencies :
 	ewol::Program::release(m_GLprogram);
 }
@@ -37,8 +35,7 @@ ewol::Colored3DObject::~Colored3DObject(void)
 void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  bool _updateDepthBuffer,
-                                 bool _depthtest)
-{
+                                 bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -81,8 +78,7 @@ void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  mat4& _transformationMatrix,
                                  bool _updateDepthBuffer,
-                                 bool _depthtest)
-{
+                                 bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -122,8 +118,7 @@ void ewol::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
                                      const etk::Color<float>& _color,
                                      mat4& _transformationMatrix,
                                      bool _updateDepthBuffer,
-                                     bool _depthtest)
-{
+                                     bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -159,10 +154,7 @@ void ewol::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
 	}
 }
 
-
-
-ewol::Colored3DObject* ewol::Colored3DObject::keep(void)
-{
+ewol::Colored3DObject* ewol::Colored3DObject::keep(void) {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
 	ewol::Colored3DObject* object = new ewol::Colored3DObject();
@@ -174,8 +166,7 @@ ewol::Colored3DObject* ewol::Colored3DObject::keep(void)
 	return object;
 }
 
-void ewol::Colored3DObject::release(ewol::Colored3DObject*& _object)
-{
+void ewol::Colored3DObject::release(ewol::Colored3DObject*& _object) {
 	if (NULL == _object) {
 		return;
 	}

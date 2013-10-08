@@ -14,7 +14,6 @@
 
 
 namespace widget {
-	
 	class Drawable : public ewol::Widget {
 		public:
 			Drawable(void);

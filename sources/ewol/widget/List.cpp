@@ -13,11 +13,10 @@
 #include <ewol/widget/WidgetManager.h>
 
 #undef __class__
-#define __class__	"List"
+#define __class__ "List"
 
 
-widget::List::List(void)
-{
+widget::List::List(void) {
 	m_paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
 		m_paddingSizeY = 10;
@@ -28,8 +27,7 @@ widget::List::List(void)
 	setCanHaveFocus(true);
 }
 
-widget::List::~List(void)
-{
+widget::List::~List(void) {
 	//clean all the object
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
@@ -38,9 +36,7 @@ widget::List::~List(void)
 	m_listOObject.clear();
 }
 
-
-void widget::List::setRawVisible(int32_t _id)
-{
+void widget::List::setRawVisible(int32_t _id) {
 	EWOL_DEBUG("Set Raw visible : " << _id);
 	if (_id<0) {
 		return;
@@ -66,9 +62,7 @@ void widget::List::setRawVisible(int32_t _id)
 	markToRedraw();
 }
 
-
-void widget::List::calculateMinMaxSize(void)
-{
+void widget::List::calculateMinMaxSize(void) {
 	/*int32_t fontId = getDefaultFontId();
 	int32_t minWidth = ewol::getWidth(fontId, m_label);
 	int32_t minHeight = ewol::getHeight(fontId);
@@ -78,9 +72,7 @@ void widget::List::calculateMinMaxSize(void)
 	m_minSize.setValue(200, 150);
 }
 
-
-void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
-{
+void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 	if (NULL == _newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
@@ -92,9 +84,7 @@ void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos)
 	}
 }
 
-
-void widget::List::clearOObjectList(void)
-{
+void widget::List::clearOObjectList(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
@@ -102,8 +92,7 @@ void widget::List::clearOObjectList(void)
 	m_listOObject.clear();
 }
 
-void widget::List::onDraw(void)
-{
+void widget::List::onDraw(void) {
 	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
@@ -112,8 +101,7 @@ void widget::List::onDraw(void)
 	WidgetScrooled::onDraw();
 }
 
-void widget::List::onRegenerateDisplay(void)
-{
+void widget::List::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		
 		// clean the object list ...
@@ -223,8 +211,7 @@ void widget::List::onRegenerateDisplay(void)
 	}
 }
 
-bool widget::List::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::List::onEventInput(const ewol::EventInput& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	
 	if (true == WidgetScrooled::onEventInput(_event)) {
@@ -252,14 +239,10 @@ bool widget::List::onEventInput(const ewol::EventInput& _event)
 	return isUsed;
 }
 
-
-
-void widget::List::onGetFocus(void)
-{
+void widget::List::onGetFocus(void) {
 	EWOL_DEBUG("Ewol::List get focus");
 }
 
-void widget::List::onLostFocus(void)
-{
+void widget::List::onLostFocus(void) {
 	EWOL_DEBUG("Ewol::List Lost focus");
 }

@@ -25,8 +25,7 @@ namespace widget {
 		CONTEXT_MENU_MARK_LEFT,
 		CONTEXT_MENU_MARK_NONE
 	}markPosition_te;
-	class ContextMenu : public widget::Container
-	{
+	class ContextMenu : public widget::Container {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
@@ -68,7 +67,6 @@ namespace widget {
 			virtual const char * const getObjectType(void) { return "ewol::ContextMenu"; };
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
-	
 };
 
 #endif

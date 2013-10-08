@@ -20,8 +20,7 @@
 
 
 
-int64_t ewol::getTime(void)
-{
+int64_t ewol::getTime(void) {
 	struct timeval	now;
 	gettimeofday(&now, NULL);
 	//EWOL_VERBOSE("current time : " << now.tv_sec << "s " << now.tv_usec << "us");
@@ -41,8 +40,7 @@ void java_check_exception(JNIEnv* _env) {
 	}
 }
 
-class AndroidContext : public ewol::eContext
-{
+class AndroidContext : public ewol::eContext {
 	public:
 		typedef enum {
 			appl_unknow,
@@ -66,8 +64,7 @@ class AndroidContext : public ewol::eContext
 		ewol::SpecialKey m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
 		bool m_clipBoardOwnerStd;
 	private:
-		bool SafeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign)
-		{
+		bool SafeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign) {
 			_mid = m_JavaVirtualMachinePointer->getMethodID(_cls, _name, _sign);
 			if(_mid == NULL) {
 				EWOL_ERROR("C->java : Can't find the method " << _name);
@@ -79,20 +76,19 @@ class AndroidContext : public ewol::eContext
 		}
 	public:
 		AndroidContext(JNIEnv* _env, jclass _classBase, jobject _objCallback, application_te _typeAPPL) :
-			m_javaApplicationType(_typeAPPL),
-			m_JavaVirtualMachinePointer(NULL),
-			m_javaClassEwol(0),
-			m_javaClassEwolCallback(0),
-			m_javaObjectEwolCallback(0),
-			m_javaMethodEwolCallbackStop(0),
-			m_javaMethodEwolCallbackEventNotifier(0),
-			m_javaMethodEwolCallbackKeyboardUpdate(0),
-			m_javaMethodEwolCallbackOrientationUpdate(0),
-			m_javaMethodEwolActivitySetTitle(0),
-			m_javaDefaultClassString(0),
-			m_currentHeight(0),
-			m_clipBoardOwnerStd(false)
-		{
+		  m_javaApplicationType(_typeAPPL),
+		  m_JavaVirtualMachinePointer(NULL),
+		  m_javaClassEwol(0),
+		  m_javaClassEwolCallback(0),
+		  m_javaObjectEwolCallback(0),
+		  m_javaMethodEwolCallbackStop(0),
+		  m_javaMethodEwolCallbackEventNotifier(0),
+		  m_javaMethodEwolCallbackKeyboardUpdate(0),
+		  m_javaMethodEwolCallbackOrientationUpdate(0),
+		  m_javaMethodEwolActivitySetTitle(0),
+		  m_javaDefaultClassString(0),
+		  m_currentHeight(0),
+		  m_clipBoardOwnerStd(false) {
 			EWOL_DEBUG("*******************************************");
 			if (m_javaApplicationType == appl_application) {
 				EWOL_DEBUG("** set JVM Pointer (application)         **");
@@ -177,26 +173,21 @@ class AndroidContext : public ewol::eContext
 			}
 		}
 		
-		~AndroidContext(void)
-		{
+		~AndroidContext(void) {
 			// TODO ...
 		}
 		
-		void UnInit(JNIEnv* _env)
-		{
+		void UnInit(JNIEnv* _env) {
 			_env->DeleteGlobalRef(m_javaObjectEwolCallback);
 			m_javaObjectEwolCallback = NULL;
 		}
 		
-		
-		int32_t Run(void)
-		{
+		int32_t Run(void) {
 			// might never be called !!!
 			return -1;
 		}
 		
-		void Stop(void)
-		{
+		void Stop(void) {
 			EWOL_DEBUG("C->java : send message to the java : STOP REQUESTED");
 			int status;
 			if(!java_attach_current_thread(&status)) {
@@ -209,13 +200,11 @@ class AndroidContext : public ewol::eContext
 			java_detach_current_thread(status);
 		}
 		
-		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
-		{
+		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			// this is to force the local system to think we have the buffer
 			// TODO : remove this 2 line when code will be writen
 			m_clipBoardOwnerStd = true;
-			switch (_clipboardID)
-			{
+			switch (_clipboardID) {
 				case ewol::clipBoard::clipboardSelection:
 					// NOTE : Windows does not support the middle button the we do it internaly
 					// just transmit an event , we have the data in the system
@@ -236,10 +225,8 @@ class AndroidContext : public ewol::eContext
 			}
 		}
 		
-		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID)
-		{
-			switch (_clipboardID)
-			{
+		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+			switch (_clipboardID) {
 				case ewol::clipBoard::clipboardSelection:
 					// NOTE : nothing to do : Windows deas ot supported Middle button
 					break;
@@ -255,10 +242,7 @@ class AndroidContext : public ewol::eContext
 					break;
 			}
 		}
-
 	private:
-		
-		
 		bool java_attach_current_thread(int *_rstatus) {
 			EWOL_DEBUG("C->java : call java");
 			if (NULL == g_JavaVM) {
@@ -289,8 +273,7 @@ class AndroidContext : public ewol::eContext
 		}
 		
 		
-		void SendJavaKeyboardUpdate(jboolean _showIt)
-		{
+		void SendJavaKeyboardUpdate(jboolean _showIt) {
 			int status;
 			if(!java_attach_current_thread(&status)) {
 				return;
@@ -302,12 +285,15 @@ class AndroidContext : public ewol::eContext
 			java_check_exception(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
-		void KeyboardShow(void) { SendJavaKeyboardUpdate(JNI_TRUE); };
-		void KeyboardHide(void) { SendJavaKeyboardUpdate(JNI_FALSE); };
+		void KeyboardShow(void) {
+			SendJavaKeyboardUpdate(JNI_TRUE);
+		};
+		void KeyboardHide(void) {
+			SendJavaKeyboardUpdate(JNI_FALSE);
+		};
 		
 		// mode 0 : auto; 1 landscape, 2 portrait
-		void forceOrientation(ewol::orientation_te _orientation)
-		{
+		void forceOrientation(ewol::orientation_te _orientation) {
 		#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
 			EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
 			return;
@@ -327,8 +313,7 @@ class AndroidContext : public ewol::eContext
 		#endif
 		}
 		
-		void setTitle(etk::UString& _title)
-		{
+		void setTitle(etk::UString& _title) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _title << "\"");
 			if (m_javaApplicationType == appl_application) {
 				int status;
@@ -350,8 +335,7 @@ class AndroidContext : public ewol::eContext
 		
 		
 		
-		void SendSystemMessage(const char* _dataString)
-		{
+		void SendSystemMessage(const char* _dataString) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _dataString << "\"");
 			int status;
 			if(!java_attach_current_thread(&status)) {
@@ -385,31 +369,27 @@ class AndroidContext : public ewol::eContext
 			java_detach_current_thread(status);
 		}
 	public:
-		void OS_SetInputMotion(int _pointerID, const vec2& _pos)
-		{
+		void OS_SetInputMotion(int _pointerID, const vec2& _pos) {
 			ewol::eContext::OS_SetInputMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
-		void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos)
-		{
+		void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos) {
 			ewol::eContext::OS_SetInputState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
-		void OS_SetMouseMotion(int _pointerID, const vec2& _pos)
-		{
+		void OS_SetMouseMotion(int _pointerID, const vec2& _pos) {
 			ewol::eContext::OS_SetMouseMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
-		void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos)
-		{
+		void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos) {
 			ewol::eContext::OS_SetMouseState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
-		void ANDROID_SetKeyboard(uniChar_t _myChar, bool _isDown, bool _isARepeateKey=false)
-		{
+		
+		void ANDROID_SetKeyboard(uniChar_t _myChar, bool _isDown, bool _isARepeateKey=false) {
 			OS_SetKeyboard(m_guiKeyBoardSpecialKeyMode, _myChar, _isDown, _isARepeateKey);
 		}
-		void OS_Resize(const vec2& _size)
-		{
+		
+		void OS_Resize(const vec2& _size) {
 			m_currentHeight = _size.y();
 			ewol::eContext::OS_Resize(_size);
 		}
@@ -420,23 +400,24 @@ static etk::Vector<AndroidContext*> s_listInstance;
 extern "C"
 {
 	// JNI onLoad
-	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved)
-	{
+	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
 		// get the java virtual machine handle ...
 		g_JavaVM = _jvm;
 		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
 	}
 	// JNI onUnLoad
-	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved)
-	{
+	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved) {
 		g_JavaVM = NULL;
 		EWOL_DEBUG("JNI-> Un-load the jvm ..." );
 	}
 	
 	/* Call to initialize the graphics state */
-	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env, jclass _cls, jint _id, jint _mode, jstring _myString)
-	{
+	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env,
+	                                             jclass _cls,
+	                                             jint _id,
+	                                             jint _mode,
+	                                             jstring _myString) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -456,8 +437,10 @@ extern "C"
 		}
 	}
 	
-	jint Java_org_ewol_Ewol_EWsetJavaVirtualMachineStart(JNIEnv* _env, jclass _classBase, jobject _objCallback, int _typeApplication)
-	{
+	jint Java_org_ewol_Ewol_EWsetJavaVirtualMachineStart(JNIEnv* _env,
+	                                                     jclass _classBase,
+	                                                     jobject _objCallback,
+	                                                     int _typeApplication) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Creating EWOL context                 **");
 		EWOL_DEBUG("*******************************************");
@@ -480,8 +463,7 @@ extern "C"
 		return newID;
 	}
 	
-	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStop(JNIEnv* _env, jclass _cls, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStop(JNIEnv* _env, jclass _cls, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
@@ -498,8 +480,7 @@ extern "C"
 		delete(s_listInstance[_id]);
 		s_listInstance[_id]=NULL;
 	}
-	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("  == > Touch Event");
 		if(    _id >= s_listInstance.size()
 		    || _id<0
@@ -511,8 +492,7 @@ extern "C"
 		java_check_exception(_env);
 	}
 	
-	void Java_org_ewol_Ewol_EWonCreate(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonCreate(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Create                    **");
 		EWOL_DEBUG("*******************************************");
@@ -526,8 +506,7 @@ extern "C"
 		//s_listInstance[_id]->init();
 	}
 	
-	void Java_org_ewol_Ewol_EWonStart(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonStart(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Start                     **");
 		EWOL_DEBUG("*******************************************");
@@ -540,8 +519,7 @@ extern "C"
 		}
 		//SendSystemMessage(" testmessages ... ");
 	}
-	void Java_org_ewol_Ewol_EWonReStart(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonReStart(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Re-Start                  **");
 		EWOL_DEBUG("*******************************************");
@@ -553,8 +531,7 @@ extern "C"
 			return;
 		}
 	}
-	void Java_org_ewol_Ewol_EWonResume(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonResume(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on resume                    **");
 		EWOL_DEBUG("*******************************************");
@@ -567,8 +544,7 @@ extern "C"
 		}
 		s_listInstance[_id]->OS_Resume();
 	}
-	void Java_org_ewol_Ewol_EWonPause(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonPause(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on pause                     **");
 		EWOL_DEBUG("*******************************************");
@@ -583,8 +559,7 @@ extern "C"
 		s_listInstance[_id]->getResourcesManager().ContextHasBeenDestroyed();
 		s_listInstance[_id]->OS_Suspend();
 	}
-	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Stop                      **");
 		EWOL_DEBUG("*******************************************");
@@ -597,8 +572,7 @@ extern "C"
 		}
 		s_listInstance[_id]->OS_Stop();
 	}
-	void Java_org_ewol_Ewol_EWonDestroy(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWonDestroy(JNIEnv* _env, jobject _thiz, jint _id) {
 		EWOL_DEBUG("*******************************************");
 		EWOL_DEBUG("** Activity on Destroy                   **");
 		EWOL_DEBUG("*******************************************");
@@ -617,8 +591,12 @@ extern "C"
 	/* **********************************************************************************************
 	 * ** IO section :
 	 * ********************************************************************************************** */
-	void Java_org_ewol_Ewol_EWinputEventMotion(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jfloat _x, jfloat _y )
-	{
+	void Java_org_ewol_Ewol_EWinputEventMotion(JNIEnv* _env,
+	                                           jobject _thiz,
+	                                           jint _id,
+	                                           jint _pointerID,
+	                                           jfloat _x,
+	                                           jfloat _y) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -629,8 +607,13 @@ extern "C"
 		s_listInstance[_id]->OS_SetInputMotion(_pointerID+1, vec2(_x,_y));
 	}
 	
-	void Java_org_ewol_Ewol_EWinputEventState(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jboolean _isUp, jfloat _x, jfloat _y)
-	{
+	void Java_org_ewol_Ewol_EWinputEventState(JNIEnv* _env,
+	                                          jobject _thiz,
+	                                          jint _id,
+	                                          jint _pointerID,
+	                                          jboolean _isUp,
+	                                          jfloat _x,
+	                                          jfloat _y) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -641,8 +624,12 @@ extern "C"
 		s_listInstance[_id]->OS_SetInputState(_pointerID+1, _isUp, vec2(_x,_y));
 	}
 	
-	void Java_org_ewol_Ewol_EWmouseEventMotion(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jfloat _x, jfloat _y)
-	{
+	void Java_org_ewol_Ewol_EWmouseEventMotion(JNIEnv* _env,
+	                                           jobject _thiz,
+	                                           jint _id,
+	                                           jint _pointerID,
+	                                           jfloat _x,
+	                                           jfloat _y) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -653,8 +640,13 @@ extern "C"
 		s_listInstance[_id]->OS_SetMouseMotion(_pointerID+1, vec2(_x,_y));
 	}
 	
-	void Java_org_ewol_Ewol_EWmouseEventState(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jboolean _isUp, jfloat _x, jfloat _y)
-	{
+	void Java_org_ewol_Ewol_EWmouseEventState(JNIEnv* _env,
+	                                          jobject _thiz,
+	                                          jint _id,
+	                                          jint _pointerID,
+	                                          jboolean _isUp,
+	                                          jfloat _x,
+	                                          jfloat _y) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -665,8 +657,10 @@ extern "C"
 		s_listInstance[_id]->OS_SetMouseState(_pointerID+1, _isUp, vec2(_x,_y));
 	}
 	
-	void Java_org_ewol_Ewol_EWunknowEvent(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID)
-	{
+	void Java_org_ewol_Ewol_EWunknowEvent(JNIEnv* _env,
+	                                      jobject _thiz,
+	                                      jint _id,
+	                                      jint _pointerID) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -677,8 +671,11 @@ extern "C"
 		EWOL_DEBUG("Unknown IO event : " << _pointerID << " ???");
 	}
 	
-	void Java_org_ewol_Ewol_EWkeyboardEventMove(JNIEnv* _env, jobject _thiz, jint _id, jint _type, jboolean _isdown)
-	{
+	void Java_org_ewol_Ewol_EWkeyboardEventMove(JNIEnv* _env,
+	                                            jobject _thiz,
+	                                            jint _id,
+	                                            jint _type,
+	                                            jboolean _isdown) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -689,8 +686,11 @@ extern "C"
 		EWOL_DEBUG("IO keyboard Move event : \"" << _type << "\" is down=" << _isdown);
 	}
 	
-	void Java_org_ewol_Ewol_EWkeyboardEventKey(JNIEnv* _env, jobject _thiz, jint _id, jint _uniChar, jboolean _isdown)
-	{
+	void Java_org_ewol_Ewol_EWkeyboardEventKey(JNIEnv* _env,
+	                                           jobject _thiz,
+	                                           jint _id,
+	                                           jint _uniChar,
+	                                           jboolean _isdown) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -702,8 +702,11 @@ extern "C"
 		s_listInstance[_id]->ANDROID_SetKeyboard(_uniChar, _isdown);
 	}
 	
-	void Java_org_ewol_Ewol_EWdisplayPropertyMetrics(JNIEnv* _env, jobject _thiz, jint _id, jfloat _ratioX, jfloat _ratioY)
-	{
+	void Java_org_ewol_Ewol_EWdisplayPropertyMetrics(JNIEnv* _env,
+	                                                 jobject _thiz,
+	                                                 jint _id,
+	                                                 jfloat _ratioX,
+	                                                 jfloat _ratioY) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -716,8 +719,11 @@ extern "C"
 	}
 	
 	// TODO : set a return true or false if we want to grep this event ...
-	void Java_org_ewol_Ewol_EWkeyboardEventKeySystem(JNIEnv* _env, jobject _thiz, jint _id, jint _keyVal, jboolean _isdown)
-	{
+	void Java_org_ewol_Ewol_EWkeyboardEventKeySystem(JNIEnv* _env,
+	                                                 jobject _thiz,
+	                                                 jint _id,
+	                                                 jint _keyVal,
+	                                                 jboolean _isdown) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -754,8 +760,9 @@ extern "C"
 	/* **********************************************************************************************
 	 * **	Renderer section :
 	 * ********************************************************************************************** */
-	void Java_org_ewol_Ewol_EWrenderInit(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWrenderInit(JNIEnv* _env,
+	                                     jobject _thiz,
+	                                     jint _id) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -766,8 +773,11 @@ extern "C"
 		
 	}
 	
-	void Java_org_ewol_Ewol_EWrenderResize( JNIEnv* _env, jobject _thiz, jint _id, jint _w, jint _h )
-	{
+	void Java_org_ewol_Ewol_EWrenderResize(JNIEnv* _env,
+	                                       jobject _thiz,
+	                                       jint _id,
+	                                       jint _w,
+	                                       jint _h) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -779,8 +789,9 @@ extern "C"
 	}
 	
 	// TODO : Return tur or foalse to not redraw when the under draw has not be done (processing gain of time)
-	void Java_org_ewol_Ewol_EWrenderDraw(JNIEnv* _env, jobject _thiz, jint _id)
-	{
+	void Java_org_ewol_Ewol_EWrenderDraw(JNIEnv* _env,
+	                                     jobject _thiz,
+	                                     jint _id) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -791,8 +802,12 @@ extern "C"
 		s_listInstance[_id]->OS_Draw(true);
 	}
 	
-	void Java_org_ewol_Ewol_EWaudioPlayback(JNIEnv* _env, void* _reserved, jint _id, jshortArray _location, jint _frameRate, jint _nbChannels)
-	{
+	void Java_org_ewol_Ewol_EWaudioPlayback(JNIEnv* _env,
+	                                        void* _reserved,
+	                                        jint _id,
+	                                        jshortArray _location,
+	                                        jint _frameRate,
+	                                        jint _nbChannels) {
 		if(    _id >= s_listInstance.size()
 		    || _id<0
 		    || NULL == s_listInstance[_id] ) {
@@ -816,7 +831,6 @@ extern "C"
 };
 
 
-int ewol::Run(int _argc, const char *_argv[])
-{
+int ewol::Run(int _argc, const char *_argv[]) {
 	// Never call but needed ...
 }

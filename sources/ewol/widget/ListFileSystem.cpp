@@ -13,7 +13,7 @@
 
 
 #undef __class__
-#define __class__	"ListFileSystem"
+#define __class__ "ListFileSystem"
 
 extern const char * const ewolEventFSFileSelect     = "ewol-event-file-system-file-select";
 extern const char * const ewolEventFSFileValidate   = "ewol-event-file-system-file-validate";
@@ -21,8 +21,7 @@ extern const char * const ewolEventFSFolderSelect   = "ewol-event-file-system-fo
 extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-folder-validate";
 
 
-widget::ListFileSystem::ListFileSystem(void)
-{
+widget::ListFileSystem::ListFileSystem(void) {
 	m_selectedLine = -1;
 	m_showFile = true;
 	m_showTemporaryFile = true;
@@ -40,8 +39,7 @@ widget::ListFileSystem::ListFileSystem(void)
 	setMouseLimit(1);
 };
 
-widget::ListFileSystem::~ListFileSystem(void)
-{
+widget::ListFileSystem::~ListFileSystem(void) {
 	for (int32_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
@@ -55,8 +53,7 @@ etk::Color<> widget::ListFileSystem::getBasicBG(void) {
 }
 
 
-void widget::ListFileSystem::regenerateView(void)
-{
+void widget::ListFileSystem::regenerateView(void) {
 	// clean the list of files : 
 	for (esize_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
@@ -75,46 +72,36 @@ void widget::ListFileSystem::regenerateView(void)
 	markToRedraw();
 }
 
-void widget::ListFileSystem::setShowHiddenFiles(bool _state)
-{
+void widget::ListFileSystem::setShowHiddenFiles(bool _state) {
 	m_showHidden = _state;
 	regenerateView();
 }
 
-void widget::ListFileSystem::setShowTemporaryFiles(bool _state)
-{
+void widget::ListFileSystem::setShowTemporaryFiles(bool _state) {
 	m_showTemporaryFile = _state;
 	regenerateView();
 }
 
-void widget::ListFileSystem::setShowFiles(bool _state)
-{
+void widget::ListFileSystem::setShowFiles(bool _state) {
 	m_showFile = _state;
 	regenerateView();
 }
 
-void widget::ListFileSystem::setShowFolder(bool _state)
-{
+void widget::ListFileSystem::setShowFolder(bool _state) {
 	m_showFolder = _state;
 	regenerateView();
 }
 
-
-void widget::ListFileSystem::setFolder(etk::UString _newFolder)
-{
+void widget::ListFileSystem::setFolder(etk::UString _newFolder) {
 	m_folder = _newFolder;
 	regenerateView();
 }
 
-
-etk::UString widget::ListFileSystem::getFolder(void)
-{
+etk::UString widget::ListFileSystem::getFolder(void) {
 	return m_folder;
 }
 
-
-etk::UString widget::ListFileSystem::getSelect(void)
-{
+etk::UString widget::ListFileSystem::getSelect(void) {
 	etk::UString tmpVal = "";
 	if (m_selectedLine >= 0) {
 		if (m_list[m_selectedLine] != NULL) {
@@ -143,21 +130,22 @@ void widget::ListFileSystem::setSelect( etk::UString _data) {
 
 uint32_t widget::ListFileSystem::getNuberOfColomn(void) {
 	return 1;
-};
+}
+
 bool widget::ListFileSystem::getTitle(int32_t _colomn, etk::UString &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
 	_myTitle = "title";
 	return true;
-};
-uint32_t widget::ListFileSystem::getNuberOfRaw(void)
-{
+}
+
+uint32_t widget::ListFileSystem::getNuberOfRaw(void) {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;
 	}
 	return m_list.size() + offset;
-};
-bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg)
-{
+}
+
+bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;
@@ -191,8 +179,12 @@ bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::UStr
 };
 
 
-bool widget::ListFileSystem::onItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y)
-{
+bool widget::ListFileSystem::onItemEvent(int32_t _IdInput,
+                                         ewol::keyEvent::status_te _typeEvent,
+                                         int32_t _colomn,
+                                         int32_t _raw,
+                                         float _x,
+                                         float _y) {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;

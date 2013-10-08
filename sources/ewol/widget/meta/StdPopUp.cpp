@@ -15,10 +15,8 @@
 #include <ewol/widget/WidgetManager.h>
 #include <etk/Vector.h>
 
-
 #undef __class__
-#define __class__	"ewol::StdPopUp"
-
+#define __class__ "ewol::StdPopUp"
 
 extern const char * const ewolEventFileStdPopUpCancel   = "ewol event std_pop_up cancel";
 extern const char * const ewolEventFileStdPopUpValidate = "ewol event std_pop_up validate";
@@ -27,9 +25,7 @@ extern const char * const ewolEventFileStdPopUpButton2 = "ewol event std_pop_up 
 extern const char * const ewolEventFileStdPopUpButton3 = "ewol event std_pop_up BT3";
 extern const char * const ewolEventFileStdPopUpButton4 = "ewol event std_pop_up BT4";
 
-
-widget::StdPopUp::StdPopUp(void)
-{
+widget::StdPopUp::StdPopUp(void) {
 	addEventId(ewolEventFileStdPopUpCancel);
 	addEventId(ewolEventFileStdPopUpValidate);
 	addEventId(ewolEventFileStdPopUpButton1);
@@ -105,53 +101,43 @@ widget::StdPopUp::StdPopUp(void)
 				mySizerHori->subWidgetAdd(myButton);
 }
 
-
-widget::StdPopUp::~StdPopUp(void)
-{
+widget::StdPopUp::~StdPopUp(void) {
 	
 }
 
-
-void widget::StdPopUp::setTitle(etk::UString label)
-{
+void widget::StdPopUp::setTitle(etk::UString _label) {
 	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::get(m_widgetTitleId);
 	if (NULL == tmpWidget) {
 		return;
 	}
-	tmpWidget->setLabel(label);
+	tmpWidget->setLabel(_label);
 }
 
-void widget::StdPopUp::setValidateLabel(etk::UString label)
-{
+void widget::StdPopUp::setValidateLabel(etk::UString _label) {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetValidateId);
 	if (NULL == tmpWidget) {
 		return;
 	}
-	tmpWidget->setLabel(label);
+	tmpWidget->setLabel(_label);
 }
 
-void widget::StdPopUp::setCancelLabel(etk::UString label)
-{
+void widget::StdPopUp::setCancelLabel(etk::UString _label) {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetCancelId);
 	if (NULL == tmpWidget) {
 		return;
 	}
-	tmpWidget->setLabel(label);
+	tmpWidget->setLabel(_label);
 }
 
-void widget::StdPopUp::setFolder(etk::UString folder)
-{
-	m_folder = folder;
+void widget::StdPopUp::setFolder(etk::UString _folder) {
+	m_folder = _folder;
 }
 
-
-
-bool widget::StdPopUp::onEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y)
-{
-	EWOL_INFO("Receive Event from the BT ... : widgetid=" << widgetID << "\"" << generateEventId << "\"  == > internalEvent=\"" << eventExternId << "\"" );
-	if (ewolEventFileChooserCancel == eventExternId) {
+bool widget::StdPopUp::onEventAreaExternal(int32_t _widgetID, const char *_generateEventId, const char *_eventExternId, float _x, float _y) {
+	EWOL_INFO("Receive Event from the BT ... : widgetid=" << _widgetID << "\"" << _generateEventId << "\"  == > internalEvent=\"" << _eventExternId << "\"" );
+	if (ewolEventFileChooserCancel == _eventExternId) {
 		// == > Auto remove ...
 		
 	}
-	return genEventInputExternal(eventExternId, x, y);
-};
+	return genEventInputExternal(_eventExternId, _x, _y);
+}

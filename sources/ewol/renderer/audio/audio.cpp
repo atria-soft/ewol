@@ -30,8 +30,7 @@ static bool isInit = false;
 #	include <ewol/renderer/audio/interfacePortAudio.h>
 #endif
 
-void ewol::audio::init(void)
-{
+void ewol::audio::init(void) {
 	if (isInit == true) {
 		EWOL_ERROR("multiple init requested ... at the audio system ...");
 	}
@@ -47,8 +46,7 @@ void ewol::audio::init(void)
 }
 
 
-void ewol::audio::unInit(void)
-{
+void ewol::audio::unInit(void) {
 	if (false == isInit) {
 		EWOL_ERROR("multiple un-init requested ... at the audio system ...");
 		return;
@@ -65,122 +63,106 @@ void ewol::audio::unInit(void)
 
 static ewol::audio::AudioCallback userLocalCallback = NULL;
 
-void ewol::audio::getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
-{
+void ewol::audio::getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels) {
 	// TODO : set the real playing time ...
 	currentTimePlaying += 10;
-	if (nbChannels != 2) {
+	if (_nbChannels != 2) {
 		EWOL_ERROR("TODO : Support the signal mono or more tha stereo ...");
 		return;
 	}
 	// reset the current buffer
-	memset(bufferInterlace, 0, nbSample*sizeof(int16_t)*nbChannels);
+	memset(_bufferInterlace, 0, _nbSample*sizeof(int16_t)*_nbChannels);
 	// get user data ...
 	if (NULL != userLocalCallback) {
-		(*userLocalCallback)(bufferInterlace, nbSample, nbChannels);
+		(*userLocalCallback)(_bufferInterlace, _nbSample, _nbChannels);
 	}
 	// get background music :
-	ewol::audio::music::getData(bufferInterlace, nbSample, nbChannels);
+	ewol::audio::music::getData(_bufferInterlace, _nbSample, _nbChannels);
 	// add effects :
-	ewol::audio::effects::getData(bufferInterlace, nbSample, nbChannels);
+	ewol::audio::effects::getData(_bufferInterlace, _nbSample, _nbChannels);
 	static FILE * plop = fopen("/home/edupin/testFile48khzstereo.raw", "w");
 	if (plop!=NULL) {
-		fwrite(bufferInterlace, sizeof(int16_t), nbSample*nbChannels, plop);
+		fwrite(_bufferInterlace, sizeof(int16_t), _nbSample*_nbChannels, plop);
 	}
 }
 
 
-void ewol::audio::addCallbackOutput(ewol::audio::AudioCallback userCallback)
-{
-	userLocalCallback = userCallback;
+void ewol::audio::addCallbackOutput(ewol::audio::AudioCallback _userCallback) {
+	userLocalCallback = _userCallback;
 }
 
-void ewol::audio::music::fading(int32_t timeMs)
-{
-	musicFadingTime = timeMs;
+void ewol::audio::music::fading(int32_t _timeMs) {
+	musicFadingTime = _timeMs;
 	musicFadingTime = etk_avg(-100, musicFadingTime, 20);
-	EWOL_INFO("Set music fading time at " << timeMs << "ms  == > " << musicFadingTime << "ms");
+	EWOL_INFO("Set music fading time at " << _timeMs << "ms  == > " << musicFadingTime << "ms");
 }
 
 
-bool ewol::audio::music::listAdd(etk::UString file)
-{
+bool ewol::audio::music::listAdd(etk::UString _file) {
 	return false;
 }
 
 
-bool ewol::audio::music::listRm(etk::UString file)
-{
+bool ewol::audio::music::listRm(etk::UString _file) {
 	return false;
 }
 
 
-bool ewol::audio::music::listClean(void)
-{
+bool ewol::audio::music::listClean(void) {
 	return false;
 }
 
 
-bool ewol::audio::music::listPrevious(void)
-{
+bool ewol::audio::music::listPrevious(void) {
 	return false;
 }
 
 
-bool ewol::audio::music::listNext(void)
-{
+bool ewol::audio::music::listNext(void) {
 	return false;
 }
 
 
-bool ewol::audio::music::listFirst(void)
-{
+bool ewol::audio::music::listFirst(void) {
 	return false;
 }
 
 
-bool ewol::audio::music::listLast(void)
-{
+bool ewol::audio::music::listLast(void) {
 	return false;
 }
 
 
 
-bool ewol::audio::music::listPlay(void)
-{
+bool ewol::audio::music::listPlay(void) {
 	return false;
 }
 
 
-bool ewol::audio::music::listStop(void)
-{
+bool ewol::audio::music::listStop(void) {
 	return false;
 }
 
 
 
 
-bool ewol::audio::music::play(etk::UString file)
-{
+bool ewol::audio::music::play(etk::UString _file) {
 	return false;
 }
 
 
-bool ewol::audio::music::stop(void)
-{
+bool ewol::audio::music::stop(void) {
 	return false;
 }
 
 
 
-float ewol::audio::music::volumeGet(void)
-{
+float ewol::audio::music::volumeGet(void) {
 	return musicVolume;
 }
 
 
-static void uptateMusicVolume(void)
-{
+static void uptateMusicVolume(void) {
 	if (musicMute == true) {
 		musicVolumeApply = 0;
 	} else {
@@ -191,31 +173,27 @@ static void uptateMusicVolume(void)
 	}
 }
 
-void ewol::audio::music::volumeSet(float newVolume)
-{
-	musicVolume = newVolume;
+void ewol::audio::music::volumeSet(float _newVolume) {
+	musicVolume = _newVolume;
 	musicVolume = etk_avg(-1000, musicVolume, 40);
-	EWOL_INFO("Set music Volume at " << newVolume << "dB  == > " << musicVolume << "dB");
+	EWOL_INFO("Set music Volume at " << _newVolume << "dB  == > " << musicVolume << "dB");
 	uptateMusicVolume();
 }
 
 
-bool ewol::audio::music::muteGet(void)
-{
+bool ewol::audio::music::muteGet(void) {
 	return musicMute;
 }
 
 
-void ewol::audio::music::muteSet(bool newMute)
-{
-	musicMute = newMute;
-	EWOL_INFO("Set music Mute at " << newMute);
+void ewol::audio::music::muteSet(bool _newMute) {
+	musicMute = _newMute;
+	EWOL_INFO("Set music Mute at " << _newMute);
 	uptateMusicVolume();
 }
 
 
-void ewol::audio::music::getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
-{
+void ewol::audio::music::getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels) {
 	/*static int32_t maxValue = 0;
 	static float angle = 0;
 	maxValue +=10;
@@ -240,11 +218,11 @@ void ewol::audio::music::getData(int16_t * bufferInterlace, int32_t nbSample, in
 //liste d'effet
 class EffectsLoaded {
 	public :
-		EffectsLoaded(etk::UString file)
+		EffectsLoaded(etk::UString _file)
 		{
-			m_file = file;
+			m_file = _file;
 			m_requestedTime = 1;
-			m_data = ewol::audio::wav::loadData(file, 1, 48000, m_nbSamples);
+			m_data = ewol::audio::wav::loadData(_file, 1, 48000, m_nbSamples);
 			if (m_data == NULL) {
 				// write an error ...
 			}
@@ -257,14 +235,14 @@ class EffectsLoaded {
 
 class RequestPlay {
 	private:
-		bool            m_freeSlot;
-		EffectsLoaded * m_effect; // reference to the effects
-		int32_t         m_playTime; // position in sample playing in the audio effects
+		bool m_freeSlot;
+		EffectsLoaded* m_effect; // reference to the effects
+		int32_t m_playTime; // position in sample playing in the audio effects
 	public :
-		RequestPlay(EffectsLoaded * effect) : m_freeSlot(false), m_effect(effect), m_playTime(0) { };
-		void reset(EffectsLoaded * effect) { m_effect=effect; m_playTime=0; m_freeSlot=false; };
+		RequestPlay(EffectsLoaded * _effect) : m_freeSlot(false), m_effect(_effect), m_playTime(0) { };
+		void reset(EffectsLoaded * _effect) { m_effect=_effect; m_playTime=0; m_freeSlot=false; };
 		bool isFree(void) { return m_freeSlot; };
-		void play(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
+		void play(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels)
 		{
 			if (true == m_freeSlot) {
 				return;
@@ -273,14 +251,14 @@ class RequestPlay {
 				m_freeSlot = true;
 				return;
 			}
-			int32_t processTimeMax = etk_min(nbSample, m_effect->m_nbSamples - m_playTime);
+			int32_t processTimeMax = etk_min(_nbSample, m_effect->m_nbSamples - m_playTime);
 			processTimeMax = etk_max(0, processTimeMax);
-			int16_t * pointer = bufferInterlace;
+			int16_t * pointer = _bufferInterlace;
 			int16_t * newData = &m_effect->m_data[m_playTime];
 			//EWOL_DEBUG("AUDIO : Play slot... nb sample : " << processTimeMax << " playTime=" <<m_playTime << " nbCannels=" << nbChannels);
 			for (int32_t iii=0; iii<processTimeMax; iii++) {
 				// TODO : set volume and spacialisation ...
-				for (int32_t jjj=0; jjj<nbChannels; jjj++) {
+				for (int32_t jjj=0; jjj<_nbChannels; jjj++) {
 					int32_t tmppp = *pointer + ((((int32_t)*newData)*effectsVolumeApply)>>16);
 					*pointer = etk_avg(-32767, tmppp, 32766);
 					//EWOL_DEBUG("AUDIO : element : " << *pointer);
@@ -301,20 +279,19 @@ etk::Vector<EffectsLoaded*> ListEffects;
 etk::Vector<RequestPlay*>   ListEffectsPlaying;
 
 
-int32_t ewol::audio::effects::add(etk::UString file)
-{
+int32_t ewol::audio::effects::add(etk::UString _file) {
 	for (int32_t iii=0; iii<ListEffects.size(); iii++) {
 		if (NULL != ListEffects[iii]) {
-			if (ListEffects[iii]->m_file == file) {
+			if (ListEffects[iii]->m_file == _file) {
 				ListEffects[iii]->m_requestedTime++;
 				return iii;
 			}
 		}
 	}
 	// effect does not exist ... create a new one ...
-	EffectsLoaded * tmpEffect = new EffectsLoaded(file);
+	EffectsLoaded * tmpEffect = new EffectsLoaded(_file);
 	if (NULL == tmpEffect) {
-		EWOL_ERROR("Error to load the effects : \"" << file << "\"");
+		EWOL_ERROR("Error to load the effects : \"" << _file << "\"");
 		return -1;
 	}
 	ListEffects.pushBack(tmpEffect);
@@ -322,63 +299,59 @@ int32_t ewol::audio::effects::add(etk::UString file)
 }
 
 
-void ewol::audio::effects::rm(int32_t effectId)
-{
+void ewol::audio::effects::rm(int32_t _effectId) {
 	// find element ...
-	if (effectId <0 || effectId >= ListEffects.size()) {
-		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not remove it ...");
+	if (_effectId <0 || _effectId >= ListEffects.size()) {
+		EWOL_ERROR("Wrong effect ID : " << _effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not remove it ...");
 		return;
 	}
-	if (ListEffects[effectId] == NULL) {
-		EWOL_ERROR("effect ID : " << effectId << "  == > has already been removed");
+	if (ListEffects[_effectId] == NULL) {
+		EWOL_ERROR("effect ID : " << _effectId << "  == > has already been removed");
 		return;
 	}
 	// check number of requested
-	if (ListEffects[effectId]->m_requestedTime  <= 0) {
-		EWOL_ERROR("effect ID : " << effectId << "  == > request more than predicted a removed of an effects");
+	if (ListEffects[_effectId]->m_requestedTime  <= 0) {
+		EWOL_ERROR("effect ID : " << _effectId << "  == > request more than predicted a removed of an effects");
 		return;
 	}
-	ListEffects[effectId]->m_requestedTime--;
+	ListEffects[_effectId]->m_requestedTime--;
 	// mark to be removed ... TODO : Really removed it when no other element readed it ...
 	// TODO : ...
 }
 
 
-void ewol::audio::effects::play(int32_t effectId, float xxx, float yyy)
-{
-	if (effectId <0 || effectId >= ListEffects.size()) {
-		EWOL_ERROR("Wrong effect ID : " << effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not play it ...");
+void ewol::audio::effects::play(int32_t _effectId, float _xxx, float _yyy) {
+	if (_effectId <0 || _effectId >= ListEffects.size()) {
+		EWOL_ERROR("Wrong effect ID : " << _effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not play it ...");
 		return;
 	}
-	if (ListEffects[effectId] == NULL) {
-		EWOL_ERROR("effect ID : " << effectId << "  == > has been removed");
+	if (ListEffects[_effectId] == NULL) {
+		EWOL_ERROR("effect ID : " << _effectId << "  == > has been removed");
 		return;
 	}
-	EWOL_VERBOSE("effect play : " << effectId );
+	EWOL_VERBOSE("effect play : " << _effectId );
 	// try to find an empty slot :
 	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
 		if (ListEffectsPlaying[iii]->isFree()) {
-			ListEffectsPlaying[iii]->reset(ListEffects[effectId]);
+			ListEffectsPlaying[iii]->reset(ListEffects[_effectId]);
 			return;
 		}
 	}
-	RequestPlay* newPlay = new RequestPlay(ListEffects[effectId]);
+	RequestPlay* newPlay = new RequestPlay(ListEffects[_effectId]);
 	if (NULL == newPlay) {
-		EWOL_CRITICAL("Allocation error of a playing element : " << effectId);
+		EWOL_CRITICAL("Allocation error of a playing element : " << _effectId);
 		return;
 	}
 	ListEffectsPlaying.pushBack(newPlay);
 }
 
 
-float ewol::audio::effects::volumeGet(void)
-{
+float ewol::audio::effects::volumeGet(void) {
 	return effectsVolume;
 }
 
 
-static void uptateEffectVolume(void)
-{
+static void uptateEffectVolume(void) {
 	if (effectsMute == true) {
 		effectsVolumeApply = 0;
 	} else {
@@ -389,34 +362,30 @@ static void uptateEffectVolume(void)
 	}
 }
 
-void ewol::audio::effects::volumeSet(float newVolume)
-{
-	effectsVolume = newVolume;
+void ewol::audio::effects::volumeSet(float _newVolume) {
+	effectsVolume = _newVolume;
 	effectsVolume = etk_avg(-100, effectsVolume, 20);
-	EWOL_INFO("Set music Volume at " << newVolume << "dB  == > " << effectsVolume << "dB");
+	EWOL_INFO("Set music Volume at " << _newVolume << "dB  == > " << effectsVolume << "dB");
 	uptateEffectVolume();
 }
 
 
-bool ewol::audio::effects::muteGet(void)
-{
+bool ewol::audio::effects::muteGet(void) {
 	return effectsMute;
 }
 
 
-void ewol::audio::effects::muteSet(bool newMute)
-{
-	effectsMute = newMute;
-	EWOL_INFO("Set effects Mute at " << newMute);
+void ewol::audio::effects::muteSet(bool _newMute) {
+	effectsMute = _newMute;
+	EWOL_INFO("Set effects Mute at " << _newMute);
 }
 
 
 
-void ewol::audio::effects::getData(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
-{
+void ewol::audio::effects::getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels) {
 	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
 		if (ListEffectsPlaying[iii]!= NULL) {
-			ListEffectsPlaying[iii]->play(bufferInterlace, nbSample, nbChannels);
+			ListEffectsPlaying[iii]->play(_bufferInterlace, _nbSample, _nbChannels);
 		}
 	}
 }

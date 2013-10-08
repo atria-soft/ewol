@@ -14,10 +14,8 @@
 #include <ewol/physicsShape/PhysicsShape.h>
 
 
-namespace ewol
-{
-	class PhysicsCone : public ewol::PhysicsShape
-	{
+namespace ewol {
+	class PhysicsCone : public ewol::PhysicsShape {
 		public:
 			PhysicsCone(void) {};
 			virtual ~PhysicsCone(void) {};

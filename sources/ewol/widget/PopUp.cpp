@@ -12,32 +12,26 @@
 #include <ewol/widget/WidgetManager.h>
 #include <ewol/ewol.h>
 
-
-
 #undef __class__
-#define __class__	"PopUp"
+#define __class__ "PopUp"
 
 const char* const widget::PopUp::configShaper="shaper";
 const char* const widget::PopUp::configRemoveOnExternClick="out-click-remove";
 const char* const widget::PopUp::configAnimation="animation";
 const char* const widget::PopUp::configLockExpand="lock";
 
-static ewol::Widget* create(void)
-{
+static ewol::Widget* create(void) {
 	return new widget::PopUp();
 }
 
-void widget::PopUp::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::PopUp::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-
 widget::PopUp::PopUp(const etk::UString& _shaperName) :
-	m_shaper(_shaperName),
-	m_lockExpand(true,true),
-	m_closeOutEvent(false)
-{
+  m_shaper(_shaperName),
+  m_lockExpand(true,true),
+  m_closeOutEvent(false) {
 	m_userExpand.setValue(false, false);
 	setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	registerConfig(configShaper, "string", NULL, "The shaper properties");
@@ -48,13 +42,11 @@ widget::PopUp::PopUp(const etk::UString& _shaperName) :
 	setAnimationMode(animationNone);
 }
 
-widget::PopUp::~PopUp(void)
-{
+widget::PopUp::~PopUp(void) {
 	
 }
 
-void widget::PopUp::lockExpand(const bvec2& _lockExpand)
-{
+void widget::PopUp::lockExpand(const bvec2& _lockExpand) {
 	if (_lockExpand != m_lockExpand) {
 		m_lockExpand = _lockExpand;
 		markToRedraw();
@@ -62,14 +54,12 @@ void widget::PopUp::lockExpand(const bvec2& _lockExpand)
 	}
 }
 
-void widget::PopUp::setShaperName(const etk::UString& _shaperName)
-{
+void widget::PopUp::setShaperName(const etk::UString& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
 
-void widget::PopUp::calculateSize(const vec2& _available)
-{
+void widget::PopUp::calculateSize(const vec2& _available) {
 	ewol::Widget::calculateSize(_available);
 	if (NULL != m_subWidget) {
 		vec2 padding = m_shaper.getPadding();
@@ -103,8 +93,7 @@ void widget::PopUp::calculateSize(const vec2& _available)
 	markToRedraw();
 }
 
-void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp)
-{
+void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -120,14 +109,11 @@ void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp)
 	}
 }
 
-
-void widget::PopUp::onDraw(void)
-{
+void widget::PopUp::onDraw(void) {
 	m_shaper.draw();
 }
 
-void widget::PopUp::onRegenerateDisplay(void)
-{
+void widget::PopUp::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		m_shaper.clear();
 		vec2 padding = m_shaper.getPadding();
@@ -157,18 +143,15 @@ void widget::PopUp::onRegenerateDisplay(void)
 	}
 }
 
-ewol::Widget* widget::PopUp::getWidgetAtPos(const vec2& pos)
-{
-	ewol::Widget* val = widget::Container::getWidgetAtPos(pos);
+ewol::Widget* widget::PopUp::getWidgetAtPos(const vec2& _pos) {
+	ewol::Widget* val = widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
 	}
 	return this;
 }
 
-
-bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf)
-{
+bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
@@ -195,8 +178,7 @@ bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf)
 	return false;
 }
 
-bool widget::PopUp::onGetConfig(const char* _config, etk::UString& _result) const
-{
+bool widget::PopUp::onGetConfig(const char* _config, etk::UString& _result) const {
 	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
@@ -227,9 +209,7 @@ bool widget::PopUp::onGetConfig(const char* _config, etk::UString& _result) cons
 	return false;
 }
 
-
-bool widget::PopUp::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::PopUp::onEventInput(const ewol::EventInput& _event) {
 	if (0 != _event.getId()) {
 		if (true == m_closeOutEvent) {
 			vec2 padding = m_shaper.getPadding();
@@ -255,16 +235,14 @@ bool widget::PopUp::onEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-void widget::PopUp::setAnimationMode(animation_te _animation)
-{
+void widget::PopUp::setAnimationMode(animation_te _animation) {
 	m_animation = _animation;
 	if (true == m_shaper.changeStatusIn((int32_t)_animation) ) {
 		periodicCallEnable();
 	}
 }
 
-void widget::PopUp::periodicCall(const ewol::EventTime& _event)
-{
+void widget::PopUp::periodicCall(const ewol::EventTime& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}

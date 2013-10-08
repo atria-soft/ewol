@@ -20,8 +20,7 @@ extern "C" {
 	#include <portaudio/portaudio.h>
 }
 
-typedef struct
-{
+typedef struct {
     int32_t sampleRate;
     int32_t nbChanelsInput;
     int32_t nbChanelsOutput;
@@ -39,20 +38,18 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
                            unsigned long framesPerBuffer,
                            const PaStreamCallbackTimeInfo* timeInfo,
                            PaStreamCallbackFlags statusFlags,
-                           void *userData )
-{
-    /* Cast data passed through stream to our structure. */
-    userOutputData *data = (userOutputData*)userData; 
-    // no use of the input buffer ... (mightt be NULL)
-    (void) inputBuffer;
-    ewol::audio::getData((int16_t*)outputBuffer, framesPerBuffer, data->nbChanelsOutput);
-    return 0;
+                           void *userData ) {
+	/* Cast data passed through stream to our structure. */
+	userOutputData *data = (userOutputData*)userData; 
+	// no use of the input buffer ... (mightt be NULL)
+	(void) inputBuffer;
+	ewol::audio::getData((int16_t*)outputBuffer, framesPerBuffer, data->nbChanelsOutput);
+	return 0;
 }
 
 #define SAMPLE_RATE (44100)
 
-void ewol::portAudio::init(void)
-{
+void ewol::portAudio::init(void) {
 	PaError err;
 	EWOL_DEBUG("Create Audio Thread...");
 	
@@ -81,8 +78,7 @@ void ewol::portAudio::init(void)
 	EWOL_DEBUG("Create Audio Thread ... might have start");
 }
 
-void ewol::portAudio::unInit(void)
-{
+void ewol::portAudio::unInit(void) {
 	PaError err;
 	// destroy the thread ...
 	EWOL_DEBUG("Wait end of the thread ...");

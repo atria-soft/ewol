@@ -12,8 +12,7 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief This is the only one things the User might done in his main();
 	 * @note To answare you before you ask the question, this is really simple:

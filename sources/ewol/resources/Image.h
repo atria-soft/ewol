@@ -15,10 +15,8 @@
 #include <ewol/resources/Texture.h>
 #include <ewol/resources/Resource.h>
 
-namespace ewol
-{
-	class TextureFile : public ewol::Texture
-	{
+namespace ewol {
+	class TextureFile : public ewol::Texture {
 		private:
 			vec2 m_realImageSize;
 		private:

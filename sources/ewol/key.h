@@ -12,10 +12,8 @@
 #include <etk/types.h>
 #include <etk/Stream.h>
 
-namespace ewol
-{
-	namespace keyEvent
-	{
+namespace ewol {
+	namespace keyEvent {
 		/**
 		 * @brief type of input : Note that the keyboard is not prevent due to the fact that data is too different
 		 */

@@ -65,15 +65,15 @@ namespace ewol {
 		void unLock(void);
 		/**
 		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
-		 * @param[in] newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
+		 * @param[in] _newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
 		 */
-		void setBasicMatrix(const mat4& newOne);
+		void setBasicMatrix(const mat4& _newOne);
 		/**
 		 * @brief this funtion configure the current use matrix for the renderer (call @ref Push before, and @ref Pop when no more needed).
-		 * @param[in] newOne The new current matrix use for the render.
+		 * @param[in] _newOne The new current matrix use for the render.
 		 * @note We did not use opengl standard system, due to the fact that is not supported in opengl ES-2
 		 */
-		void setMatrix(const mat4& newOne);
+		void setMatrix(const mat4& _newOne);
 		/**
 		 * @brief store current matrix in the matrix stack.
 		 */
@@ -94,9 +94,9 @@ namespace ewol {
 		const mat4& getCameraMatrix(void);
 		/**
 		 * @brief set a reference on the current camera to opengl renderer.
-		 * @param[in] newOne The requested matrix.
+		 * @param[in] _newOne The requested matrix.
 		 */
-		void setCameraMatrix(const mat4& newOne);
+		void setCameraMatrix(const mat4& _newOne);
 		/**
 		 * @brief
 		 */
@@ -146,12 +146,12 @@ namespace ewol {
 		 * @brief enable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void enable(openGlFlags_te flagID);
+		void enable(openGlFlags_te _flagID);
 		/**
 		 * @brief disable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void disable(openGlFlags_te flagID);
+		void disable(openGlFlags_te _flagID);
 		/**
 		 * @brieg update all the internal flag needed to be set from tre previous element set ...
 		 */
@@ -160,24 +160,24 @@ namespace ewol {
 		 * @brief enable Texture on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void activeTexture(uint32_t flagID);
+		void activeTexture(uint32_t _flagID);
 		/**
 		 * @brief disable Texture on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void desActiveTexture(uint32_t flagID);
+		void desActiveTexture(uint32_t _flagID);
 		/**
 		 * @brief draw a specific array  == > this enable mode difference ...
 		 */
-		void drawArrays(uint32_t mode, int32_t first, int32_t count);
-		void drawElements  (uint32_t mode, const etk::Vector<uint32_t>& indices);
-		void drawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices);
-		void drawElements8 (uint32_t mode, const etk::Vector<uint8_t>& indices);
+		void drawArrays(uint32_t _mode, int32_t _first, int32_t _count);
+		void drawElements  (uint32_t _mode, const etk::Vector<uint32_t>& _indices);
+		void drawElements16(uint32_t _mode, const etk::Vector<uint16_t>& _indices);
+		void drawElements8 (uint32_t _mode, const etk::Vector<uint8_t>& _indices);
 		/**
 		 * @brief Use openGL program
 		 * @param[in] id Id of the program that might be used
 		 */
-		void useProgram(int32_t id);
+		void useProgram(int32_t _id);
 	};
 };
 

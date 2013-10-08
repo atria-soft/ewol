@@ -9,8 +9,7 @@
 #ifndef __EWOL_FONT_KERNING_H__
 #define __EWOL_FONT_KERNING_H__
 
-namespace ewol
-{
+namespace ewol {
 	/**
 	 * @brief Kerning properties of one specific Glyph with an other
 	 * @note The "Kerning" is the methode to provide a better display for some string like
@@ -37,8 +36,7 @@ namespace ewol
 	 *        v        a v        a        
 	 * 
 	 */
-	class Kerning
-	{
+	class Kerning {
 		public:
 			uniChar_t m_UVal;  //!< unicode value (the previous character that must be before)
 			float     m_value; //!< kerning real offset
@@ -47,18 +45,20 @@ namespace ewol
 			 * @brief Simple constructor that allow to allocate the etk::Vector element
 			 */
 			Kerning(void) :
-				m_UVal(0),
-				m_value(0)
-			{ };
+			  m_UVal(0),
+			  m_value(0) {
+				
+			};
 			/**
 			 * @brief Normal constructor
-			 * @param[in] charcode The Unicode value of the coresponding character that might be before
-			 * @param[in] value The Kerning value of the offset (nb pixel number)
+			 * @param[in] _charcode The Unicode value of the coresponding character that might be before
+			 * @param[in] _value The Kerning value of the offset (nb pixel number)
 			 */
-			Kerning(const uniChar_t charcode, const float value) :
-				m_UVal(charcode),
-				m_value(value)
-			{ };
+			Kerning(const uniChar_t _charcode, const float _value) :
+			  m_UVal(_charcode),
+			  m_value(_value) {
+				
+			};
 			/**
 			 * @brief normal destructor
 			 */

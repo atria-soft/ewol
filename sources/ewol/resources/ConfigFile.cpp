@@ -15,8 +15,7 @@
 #define __class__	"ConfigFile"
 
 
-void ewol::SimpleConfigElement::parse(const etk::UString& value)
-{
+void ewol::SimpleConfigElement::parse(const etk::UString& value) {
 	etk::Char tmp = value.c_str();
 	m_valueInt = 0;
 	m_valuefloat = 0;
@@ -28,15 +27,13 @@ void ewol::SimpleConfigElement::parse(const etk::UString& value)
 
 
 ewol::ConfigFile::ConfigFile(const etk::UString& _filename): 
-	ewol::Resource(_filename)
-{
+  ewol::Resource(_filename) {
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
 }
 
 
-ewol::ConfigFile::~ConfigFile(void)
-{
+ewol::ConfigFile::~ConfigFile(void) {
 	// remove all element
 	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -48,8 +45,7 @@ ewol::ConfigFile::~ConfigFile(void)
 }
 
 
-void ewol::ConfigFile::reload(void)
-{
+void ewol::ConfigFile::reload(void) {
 	// reset all parameters
 	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -129,12 +125,10 @@ void ewol::ConfigFile::reload(void)
 	}
 	// close the file:
 	file.fileClose();
-	
 }
 
 
-int32_t ewol::ConfigFile::request(const etk::UString& _paramName)
-{
+int32_t ewol::ConfigFile::request(const etk::UString& _paramName) {
 	// check if the parameters existed :
 	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -153,8 +147,7 @@ int32_t ewol::ConfigFile::request(const etk::UString& _paramName)
 }
 
 
-ewol::ConfigFile* ewol::ConfigFile::keep(const etk::UString& _filename)
-{
+ewol::ConfigFile* ewol::ConfigFile::keep(const etk::UString& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
 	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -170,8 +163,7 @@ ewol::ConfigFile* ewol::ConfigFile::keep(const etk::UString& _filename)
 	return object;
 }
 
-void ewol::ConfigFile::release(ewol::ConfigFile*& _object)
-{
+void ewol::ConfigFile::release(ewol::ConfigFile*& _object) {
 	if (NULL == _object) {
 		return;
 	}

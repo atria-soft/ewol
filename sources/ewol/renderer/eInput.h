@@ -13,9 +13,7 @@
 
 #define MAX_MANAGE_INPUT (15)
 
-namespace ewol
-{
-	
+namespace ewol {
 	// internal structure
 	typedef struct {
 		bool                 isUsed;
@@ -36,8 +34,7 @@ namespace ewol
 		int32_t DpiOffset;
 	} inputLimit_ts;
 	class eContext;
-	class eInput
-	{
+	class eInput {
 		// special grab pointer mode : 
 		private:
 			ewol::Widget*   m_grabWidget;      //!< widget that grab the curent pointer.
@@ -116,7 +113,6 @@ namespace ewol
 			 */
 			void unGrabPointer(void);
 	};
-	
 };
 #endif
 

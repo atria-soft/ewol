@@ -16,13 +16,11 @@
 #undef __class__
 #define __class__ "Image"
 
-static ewol::Widget* create(void)
-{
+static ewol::Widget* create(void) {
 	return new widget::Image();
 }
 
-void widget::Image::init(ewol::WidgetManager& _widgetManager)
-{
+void widget::Image::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -35,9 +33,8 @@ const char * const widget::Image::configBorder = "border";
 const char * const widget::Image::configSource = "src";
 
 widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) :
-	m_imageSize(vec2(0,0)),
-	m_keepRatio(true)
-{
+  m_imageSize(vec2(0,0)),
+  m_keepRatio(true) {
 	addEventId(eventPressed);
 	registerConfig(configRatio, "bool", NULL, "Keep ratio of the image");
 	registerConfig(configSize, "Dimension", NULL, "Basic display size of the image");
@@ -47,8 +44,7 @@ widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) 
 }
 
 
-void widget::Image::setFile(const etk::UString& _file)
-{
+void widget::Image::setFile(const etk::UString& _file) {
 	EWOL_VERBOSE("Set Image : " << _file);
 	if (m_fileName != _file) {
 		// copy data :
@@ -60,8 +56,7 @@ void widget::Image::setFile(const etk::UString& _file)
 	}
 }
 
-void widget::Image::setBorder(const ewol::Dimension& _border)
-{
+void widget::Image::setBorder(const ewol::Dimension& _border) {
 	EWOL_VERBOSE("Set border=" << _border);
 	// copy data :
 	m_border = _border;
@@ -71,8 +66,7 @@ void widget::Image::setBorder(const ewol::Dimension& _border)
 	requestUpdateSize();
 }
 
-void widget::Image::setKeepRatio(bool _keep)
-{
+void widget::Image::setKeepRatio(bool _keep) {
 	if (m_keepRatio != _keep) {
 		// copy data :
 		m_keepRatio = _keep;
@@ -82,8 +76,7 @@ void widget::Image::setKeepRatio(bool _keep)
 	}
 }
 
-void widget::Image::setImageSize(const ewol::Dimension& _size)
-{
+void widget::Image::setImageSize(const ewol::Dimension& _size) {
 	EWOL_VERBOSE("Set Image size : " << _size);
 	if (_size != m_imageSize) {
 		m_imageSize = _size;
@@ -94,8 +87,7 @@ void widget::Image::setImageSize(const ewol::Dimension& _size)
 	}
 }
 
-void widget::Image::set(const etk::UString& _file, const ewol::Dimension& _border)
-{
+void widget::Image::set(const etk::UString& _file, const ewol::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	// copy data :
 	if (m_border != _border) {
@@ -106,14 +98,11 @@ void widget::Image::set(const etk::UString& _file, const ewol::Dimension& _borde
 	setFile(_file);
 }
 
-
-void widget::Image::onDraw(void)
-{
+void widget::Image::onDraw(void) {
 	m_compositing.draw();
 }
 
-void widget::Image::onRegenerateDisplay(void)
-{
+void widget::Image::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// remove data of the previous composition :
 		m_compositing.clear();
@@ -144,8 +133,7 @@ void widget::Image::onRegenerateDisplay(void)
 	}
 }
 
-void widget::Image::calculateMinMaxSize(void)
-{
+void widget::Image::calculateMinMaxSize(void) {
 	vec2 imageBoder = m_border.getPixel()*2.0f;
 	vec2 imageSize = m_imageSize.getPixel();
 	if (imageSize!=vec2(0,0)) {
@@ -166,8 +154,7 @@ void widget::Image::calculateMinMaxSize(void)
 }
 
 
-bool widget::Image::onEventInput(const ewol::EventInput& _event)
-{
+bool widget::Image::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
 		if(ewol::keyEvent::statusSingle == _event.getStatus()) {
@@ -178,8 +165,7 @@ bool widget::Image::onEventInput(const ewol::EventInput& _event)
 	return false;
 }
 
-bool widget::Image::loadXML(exml::Element* _node)
-{
+bool widget::Image::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -218,9 +204,7 @@ bool widget::Image::loadXML(exml::Element* _node)
 	return true;
 }
 
-
-bool widget::Image::onSetConfig(const ewol::EConfig& _conf)
-{
+bool widget::Image::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
@@ -243,8 +227,7 @@ bool widget::Image::onSetConfig(const ewol::EConfig& _conf)
 	return false;
 }
 
-bool widget::Image::onGetConfig(const char* _config, etk::UString& _result) const
-{
+bool widget::Image::onGetConfig(const char* _config, etk::UString& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}
