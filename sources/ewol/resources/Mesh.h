@@ -111,61 +111,61 @@ namespace ewol
 			Mesh(const etk::UString& _fileName, const etk::UString& _shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
 		public:
-			virtual const char* GetType(void) { return "ewol::Mesh"; };
-			virtual void Draw(mat4& _positionMatrix, bool _enableDepthTest=true, bool _enableDepthUpdate=true);
-			void GenerateVBO(void);
+			virtual const char* getType(void) { return "ewol::Mesh"; };
+			virtual void draw(mat4& _positionMatrix, bool _enableDepthTest=true, bool _enableDepthUpdate=true);
+			void generateVBO(void);
 		private:
-			void CalculateNormaleFace(void);
-			void CalculateNormaleEdge(void);
+			void calculateNormaleFace(void);
+			void calculateNormaleEdge(void);
 		public :
-			void CreateViewBox(const etk::UString& _materialName,float _size=1.0);
+			void createViewBox(const etk::UString& _materialName,float _size=1.0);
 		private:
-			bool LoadOBJ(const etk::UString& _fileName);
-			bool LoadEMF(const etk::UString& _fileName);
+			bool loadOBJ(const etk::UString& _fileName);
+			bool loadEMF(const etk::UString& _fileName);
 		public:
-			void AddMaterial(const etk::UString& _name, ewol::Material* _data);
+			void addMaterial(const etk::UString& _name, ewol::Material* _data);
 		public:
 			/**
-			 * @brief Set the check of normal position befor sending it to the openGl card
+			 * @brief set the check of normal position befor sending it to the openGl card
 			 * @param[in] _status New state.
 			 */
-			void SetCheckNormal(bool _status) { m_checkNormal=_status; };
+			void setCheckNormal(bool _status) { m_checkNormal=_status; };
 			/**
-			 * @brief Get the check value of normal position befor sending it to the openGl card
-			 * @return Get the chcking stus of normal or not
+			 * @brief get the check value of normal position befor sending it to the openGl card
+			 * @return get the chcking stus of normal or not
 			 */
-			bool GetCheckNormal(void) { return m_checkNormal; };
-			const etk::Vector<ewol::PhysicsShape*>& GetPhysicalProperties(void) const { return m_physics; };
+			bool getCheckNormal(void) { return m_checkNormal; };
+			const etk::Vector<ewol::PhysicsShape*>& getPhysicalProperties(void) const { return m_physics; };
 		private:
 			void* m_pointerShape; //!< all mesh have a basic shape (bullet or other) the void pointer mermit to not depent on the bullet lib
 		public:
 			/**
-			 * @brief Set the shape pointer (no type ==> user might know it ...)
+			 * @brief set the shape pointer (no type  == > user might know it ...)
 			 * @param[in] _shape The new shape (this remove the previous one)
 			 */
-			void SetShape(void* _shape);
+			void setShape(void* _shape);
 			/**
-			 * @brief Get the pointer on the shame (no type)
+			 * @brief get the pointer on the shame (no type)
 			 * @return Pointer on shape.
 			 */
-			void* GetShape(void) { return m_pointerShape; };
+			void* getShape(void) { return m_pointerShape; };
 		private:
 			void (*m_functionFreeShape)(void* _pointer);
 		public:
-			void SetFreeShapeFunction(void (*_functionFreeShape)(void* _pointer)) { m_functionFreeShape = _functionFreeShape; };
+			void setFreeShapeFunction(void (*_functionFreeShape)(void* _pointer)) { m_functionFreeShape = _functionFreeShape; };
 		public:
 			/**
-			 * @brief Keep the resource pointer.
+			 * @brief keep the resource pointer.
 			 * @note Never free this pointer by your own...
 			 * @param[in] _filename Name of the ewol mesh file.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Mesh* Keep(const etk::UString& _meshname);
+			static ewol::Mesh* keep(const etk::UString& _meshname);
 			/**
-			 * @brief Release the keeped resources
+			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
 			 */
-			static void Release(ewol::Mesh*& _object);
+			static void release(ewol::Mesh*& _object);
 	};
 };
 

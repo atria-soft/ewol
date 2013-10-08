@@ -15,16 +15,16 @@ namespace MacOs
 {
 	
 			// return true if a flush is needed
-			bool Draw(bool _displayEveryTime);
+			bool draw(bool _displayEveryTime);
 			/**
 			 * @brief The OS inform that the current windows has change his size.
 			 * @param[in] _size new size of the windows.
 			 */
 			void Resize(float _x, float _y);
 			
-			void SetMouseState(int32_t _id, bool _isDown, float _x, float _y);
-			void SetMouseMotion(int32_t _id, float _x, float _y);
-			void SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
+			void setMouseState(int32_t _id, bool _isDown, float _x, float _y);
+			void setMouseMotion(int32_t _id, float _x, float _y);
+			void setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
 	
 };
 

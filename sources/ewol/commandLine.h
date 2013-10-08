@@ -22,27 +22,27 @@ namespace ewol
 			/**
 			 * @brief Parse the command line parameters
 			 */
-			void Parse(int32_t _argc, const char* _argv[]);
+			void parse(int32_t _argc, const char* _argv[]);
 			/**
-			 * @brief Get the number of element in the Command Line
+			 * @brief get the number of element in the Command line
 			 * @return the number of element
 			 */
-			esize_t Size(void);
+			esize_t size(void);
 			/**
-			 * @brief Get an element with a specific ID
+			 * @brief get an element with a specific ID
 			 * @return _id The cmdLine Id element
 			 */
-			const etk::UString& Get(int32_t _id);
+			const etk::UString& get(int32_t _id);
 			/**
-			 * @brief Add one element at the Command Line
+			 * @brief add one element at the Command line
 			 * @param[in] _newElement String in the input that might be added.
 			 */
-			void Add(const etk::UString& _newElement);
+			void add(const etk::UString& _newElement);
 			/**
-			 * @brief Remove an element
+			 * @brief remove an element
 			 * @param[in] _id Id of the element
 			 */
-			void Remove(esize_t _id);
+			void remove(esize_t _id);
 	};
 };
 

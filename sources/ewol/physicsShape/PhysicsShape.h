@@ -28,7 +28,7 @@ namespace ewol
 	class PhysicsShape
 	{
 		public:
-			static PhysicsShape* Create(const etk::UString& _name);
+			static PhysicsShape* create(const etk::UString& _name);
 		public:
 			typedef enum {
 				unknow,
@@ -43,44 +43,44 @@ namespace ewol
 			PhysicsShape(void) : m_quaternion(1,0,0,0), m_origin(0,0,0) {};
 			virtual ~PhysicsShape(void) {};
 		public:
-			virtual type_te GetType(void) { return ewol::PhysicsShape::unknow; };
+			virtual type_te getType(void) { return ewol::PhysicsShape::unknow; };
 			
 		public:
-			virtual bool Parse(const char* _line);
-			virtual void Display(void) {};
+			virtual bool parse(const char* _line);
+			virtual void display(void) {};
 		private:
 			vec4 m_quaternion;
 		public:
-			vec4 GetQuaternion(void) const { return m_quaternion; };
+			vec4 getQuaternion(void) const { return m_quaternion; };
 		private:
 			vec3 m_origin;
 		public:
-			vec3 GetOrigin(void) const { return m_origin; };
+			vec3 getOrigin(void) const { return m_origin; };
 		public:
-			bool IsBox(void) { return GetType()==ewol::PhysicsShape::box; };
-			bool IsCylinder(void) { return GetType()==ewol::PhysicsShape::cylinder; };
-			bool IsCapsule(void) { return GetType()==ewol::PhysicsShape::capsule; };
-			bool IsCone(void) { return GetType()==ewol::PhysicsShape::cone; };
-			bool IsConvexHull(void) { return GetType()==ewol::PhysicsShape::convexHull; };
-			bool IsSphere(void) { return GetType()==ewol::PhysicsShape::sphere; };
+			bool isBox(void) { return getType() == ewol::PhysicsShape::box; };
+			bool isCylinder(void) { return getType() == ewol::PhysicsShape::cylinder; };
+			bool isCapsule(void) { return getType() == ewol::PhysicsShape::capsule; };
+			bool isCone(void) { return getType() == ewol::PhysicsShape::cone; };
+			bool isConvexHull(void) { return getType() == ewol::PhysicsShape::convexHull; };
+			bool isSphere(void) { return getType() == ewol::PhysicsShape::sphere; };
 			
-			virtual const PhysicsBox* ToBox(void) const { return NULL; };
-			virtual PhysicsBox* ToBox(void) { return NULL; };
+			virtual const PhysicsBox* toBox(void) const { return NULL; };
+			virtual PhysicsBox* toBox(void) { return NULL; };
 			
-			virtual const PhysicsCylinder* ToCylinder(void) const { return NULL; };
-			virtual PhysicsCylinder* ToCylinder(void) { return NULL; };
+			virtual const PhysicsCylinder* toCylinder(void) const { return NULL; };
+			virtual PhysicsCylinder* toCylinder(void) { return NULL; };
 			
-			virtual const PhysicsCapsule* ToCapsule(void) const { return NULL; };
-			virtual PhysicsCapsule* ToCapsule(void) { return NULL; };
+			virtual const PhysicsCapsule* toCapsule(void) const { return NULL; };
+			virtual PhysicsCapsule* toCapsule(void) { return NULL; };
 			
-			virtual const PhysicsCone* ToCone(void) const { return NULL; };
-			virtual PhysicsCone* ToCone(void) { return NULL; };
+			virtual const PhysicsCone* toCone(void) const { return NULL; };
+			virtual PhysicsCone* toCone(void) { return NULL; };
 			
-			virtual const PhysicsConvexHull* ToConvexHull(void) const { return NULL; };
-			virtual PhysicsConvexHull* ToConvexHull(void) { return NULL; };
+			virtual const PhysicsConvexHull* toConvexHull(void) const { return NULL; };
+			virtual PhysicsConvexHull* toConvexHull(void) { return NULL; };
 			
-			virtual const PhysicsSphere* ToSphere(void) const { return NULL; };
-			virtual PhysicsSphere* ToSphere(void) { return NULL; };
+			virtual const PhysicsSphere* toSphere(void) const { return NULL; };
+			virtual PhysicsSphere* toSphere(void) { return NULL; };
 			
 	};
 };

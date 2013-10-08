@@ -19,149 +19,149 @@ ewol::Colored3DObject::Colored3DObject(void) :
 {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::Keep("DATA:simple3D.prog");
+	m_GLprogram = ewol::Program::keep("DATA:simple3D.prog");
 	if (NULL != m_GLprogram ) {
-		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->GetUniform("EW_color");
-		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
+		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
+		m_GLColor    = m_GLprogram->getUniform("EW_color");
+		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
 	}
 }
 
 ewol::Colored3DObject::~Colored3DObject(void)
 {
 	// remove dynamics dependencies :
-	ewol::Program::Release(m_GLprogram);
+	ewol::Program::release(m_GLprogram);
 }
 
 
-void ewol::Colored3DObject::Draw(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  bool _updateDepthBuffer,
                                  bool _depthtest)
 {
-	if (_vertices.Size()<=0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram==NULL) {
+	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==_depthtest) {
-		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==_updateDepthBuffer) {
+	if (true == _depthtest) {
+		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
-	m_GLprogram->Use();
+	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::GetMatrix();
-	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 projMatrix = ewol::openGL::getMatrix();
+	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix;
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, _vertices.Size());
-	m_GLprogram->UnUse();
+	ewol::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	m_GLprogram->unUse();
 	// Request the draw od the elements : 
-	//glDrawArrays(GL_LINES, 0, vertices.Size());
+	//glDrawArrays(GL_LINES, 0, vertices.size());
 	//m_GLprogram->UnUse();
-	if (true==_depthtest) {
-		if (false==_updateDepthBuffer) {
+	if (true == _depthtest) {
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
-void ewol::Colored3DObject::Draw(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  mat4& _transformationMatrix,
                                  bool _updateDepthBuffer,
                                  bool _depthtest)
 {
-	if (_vertices.Size()<=0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram==NULL) {
+	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==_depthtest) {
-		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==_updateDepthBuffer) {
+	if (true == _depthtest) {
+		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
-	m_GLprogram->Use();
+	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::GetMatrix();
-	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 projMatrix = ewol::openGL::getMatrix();
+	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, _vertices.Size());
-	m_GLprogram->UnUse();
-	if (true==_depthtest) {
-		if (false==_updateDepthBuffer) {
+	ewol::openGL::drawArrays(GL_TRIANGLES, 0, _vertices.size());
+	m_GLprogram->unUse();
+	if (true == _depthtest) {
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
-void ewol::Colored3DObject::DrawLine(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
                                      const etk::Color<float>& _color,
                                      mat4& _transformationMatrix,
                                      bool _updateDepthBuffer,
                                      bool _depthtest)
 {
-	if (_vertices.Size()<=0) {
+	if (_vertices.size() <= 0) {
 		return;
 	}
-	if (m_GLprogram==NULL) {
+	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true==_depthtest) {
-		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
-		if (false==_updateDepthBuffer) {
+	if (true == _depthtest) {
+		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_FALSE);
 		}
 	}
-	//EWOL_DEBUG("    Display " << m_coord.Size() << " elements" );
-	m_GLprogram->Use();
+	//EWOL_DEBUG("    display " << m_coord.size() << " elements" );
+	m_GLprogram->use();
 	// set Matrix : translation/positionMatrix
-	mat4 projMatrix = ewol::openGL::GetMatrix();
-	mat4 camMatrix = ewol::openGL::GetCameraMatrix();
+	mat4 projMatrix = ewol::openGL::getMatrix();
+	mat4 camMatrix = ewol::openGL::getCameraMatrix();
 	mat4 tmpMatrix = projMatrix * camMatrix * _transformationMatrix;
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z*/, &_vertices[0], 4*sizeof(float));
 	// color :
-	m_GLprogram->Uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
+	m_GLprogram->uniform4fv(m_GLColor, 1/*r,g,b,a*/, (float*)&_color);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_LINES, 0, _vertices.Size());
-	m_GLprogram->UnUse();
-	if (true==_depthtest) {
-		if (false==_updateDepthBuffer) {
+	ewol::openGL::drawArrays(GL_LINES, 0, _vertices.size());
+	m_GLprogram->unUse();
+	if (true == _depthtest) {
+		if (false == _updateDepthBuffer) {
 			glDepthMask(GL_TRUE);
 		}
-		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
 
 
 
-ewol::Colored3DObject* ewol::Colored3DObject::Keep(void)
+ewol::Colored3DObject* ewol::Colored3DObject::keep(void)
 {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
@@ -170,16 +170,16 @@ ewol::Colored3DObject* ewol::Colored3DObject::Keep(void)
 		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::Colored3DObject::Release(ewol::Colored3DObject*& _object)
+void ewol::Colored3DObject::release(ewol::Colored3DObject*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }

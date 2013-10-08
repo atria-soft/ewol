@@ -29,25 +29,25 @@ ewol::Light::~Light(void)
 	
 }
 
-void ewol::Light::Link(ewol::Program* prog, const etk::UString& baseName)
+void ewol::Light::link(ewol::Program* prog, const etk::UString& baseName)
 {
 	if (NULL == prog) {
 		return;
 	}
-	m_GL_direction = prog->GetUniform(baseName+".direction");
-	m_GL_halfplane = prog->GetUniform(baseName+".halfplane");
-	m_GL_ambientColor = prog->GetUniform(baseName+".ambientColor");
-	m_GL_diffuseColor = prog->GetUniform(baseName+".diffuseColor");
-	m_GL_specularColor = prog->GetUniform(baseName+".specularColor");
+	m_GL_direction = prog->getUniform(baseName+".direction");
+	m_GL_halfplane = prog->getUniform(baseName+".halfplane");
+	m_GL_ambientColor = prog->getUniform(baseName+".ambientColor");
+	m_GL_diffuseColor = prog->getUniform(baseName+".diffuseColor");
+	m_GL_specularColor = prog->getUniform(baseName+".specularColor");
 }
 
-void ewol::Light::Draw(ewol::Program* prog)
+void ewol::Light::draw(ewol::Program* prog)
 {
-	prog->Uniform3(m_GL_direction, m_direction);
-	prog->Uniform3(m_GL_halfplane, m_halfplane);
-	prog->Uniform4(m_GL_ambientColor, m_ambientColor);
-	prog->Uniform4(m_GL_diffuseColor, m_diffuseColor);
-	prog->Uniform4(m_GL_specularColor, m_specularColor);
+	prog->uniform3(m_GL_direction, m_direction);
+	prog->uniform3(m_GL_halfplane, m_halfplane);
+	prog->uniform4(m_GL_ambientColor, m_ambientColor);
+	prog->uniform4(m_GL_diffuseColor, m_diffuseColor);
+	prog->uniform4(m_GL_specularColor, m_specularColor);
 }
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Light& _obj)

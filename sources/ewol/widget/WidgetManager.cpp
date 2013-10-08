@@ -37,57 +37,57 @@ ewol::WidgetManager::WidgetManager(void) :
 	m_applWakeUpTime(0),
 	m_lastPeriodicCallTime(0)
 {
-	EWOL_DEBUG("==> Init Widget-Manager");
+	EWOL_DEBUG(" == > init Widget-Manager");
 	// set the basic time properties :
-	m_applWakeUpTime = ewol::GetTime();
-	m_lastPeriodicCallTime = ewol::GetTime();
+	m_applWakeUpTime = ewol::getTime();
+	m_lastPeriodicCallTime = ewol::getTime();
 	
-	widget::Button::Init(*this);
-	widget::ButtonColor::Init(*this);
-	widget::Spacer::Init(*this);
-	widget::Slider::Init(*this);
-	widget::Sizer::Init(*this);
-	widget::ProgressBar::Init(*this);
-	widget::Layer::Init(*this);
-	widget::Label::Init(*this);
-	widget::Image::Init(*this);
-	widget::Gird::Init(*this);
-	widget::Entry::Init(*this);
-	widget::CheckBox::Init(*this);
-	widget::Scroll::Init(*this);
-	widget::ContextMenu::Init(*this);
-	widget::PopUp::Init(*this);
+	widget::Button::init(*this);
+	widget::ButtonColor::init(*this);
+	widget::Spacer::init(*this);
+	widget::Slider::init(*this);
+	widget::Sizer::init(*this);
+	widget::ProgressBar::init(*this);
+	widget::Layer::init(*this);
+	widget::Label::init(*this);
+	widget::Image::init(*this);
+	widget::Gird::init(*this);
+	widget::Entry::init(*this);
+	widget::CheckBox::init(*this);
+	widget::Scroll::init(*this);
+	widget::ContextMenu::init(*this);
+	widget::PopUp::init(*this);
 }
 
 ewol::WidgetManager::~WidgetManager(void)
 {
-	EWOL_DEBUG("==> Un-Init Widget-Manager");
+	EWOL_DEBUG(" == > Un-Init Widget-Manager");
 	EWOL_INFO("Realease all FOCUS");
-	FocusSetDefault(NULL);
-	FocusRelease();
+	focusSetDefault(NULL);
+	focusRelease();
 	
-	m_listOfPeriodicWidget.Clear();
-	m_creatorList.Clear();
+	m_listOfPeriodicWidget.clear();
+	m_creatorList.clear();
 }
 
-void ewol::WidgetManager::Rm(ewol::Widget* _newWidget)
+void ewol::WidgetManager::rm(ewol::Widget* _newWidget)
 {
-	PeriodicCallRm(_newWidget);
-	FocusRemoveIfRemove(_newWidget);
+	periodicCallRm(_newWidget);
+	focusRemoveIfRemove(_newWidget);
 }
 
 /* *************************************************************************
- * Focus Area : 
+ * focus Area : 
  * *************************************************************************/
 
-void ewol::WidgetManager::FocusKeep(ewol::Widget* _newWidget)
+void ewol::WidgetManager::focusKeep(ewol::Widget* _newWidget)
 {
 	if (NULL == _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	if (false == _newWidget->CanHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << 9999999999.999);
+	if (false == _newWidget->canHaveFocus()) {
+		EWOL_VERBOSE("Widget can not have focus, id=" << 9999999999.999);
 		return;
 	}
 	if (_newWidget == m_focusWidgetCurrent) {
@@ -95,97 +95,97 @@ void ewol::WidgetManager::FocusKeep(ewol::Widget* _newWidget)
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-		m_focusWidgetCurrent->RmFocus();
+		EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+		m_focusWidgetCurrent->rmFocus();
 	}
 	m_focusWidgetCurrent = _newWidget;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-		m_focusWidgetCurrent->SetFocus();
+		EWOL_DEBUG("Set focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+		m_focusWidgetCurrent->setFocus();
 	}
 }
 
 
-void ewol::WidgetManager::FocusSetDefault(ewol::Widget * _newWidget)
+void ewol::WidgetManager::focusSetDefault(ewol::Widget * _newWidget)
 {
 	if(    NULL != _newWidget
-	    && false == _newWidget->CanHaveFocus() ) {
-		EWOL_VERBOSE("Widget can not have Focus, id=" << _newWidget->GetId() );
+	    && false == _newWidget->canHaveFocus() ) {
+		EWOL_VERBOSE("Widget can not have focus, id=" << _newWidget->getId() );
 		return;
 	}
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-			m_focusWidgetCurrent->RmFocus();
+			EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+			m_focusWidgetCurrent->rmFocus();
 		}
 		m_focusWidgetCurrent = _newWidget;
 		if (NULL != m_focusWidgetCurrent) {
-			EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-			m_focusWidgetCurrent->SetFocus();
+			EWOL_DEBUG("Set focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+			m_focusWidgetCurrent->setFocus();
 		}
 	}
 	m_focusWidgetDefault = _newWidget;
 }
 
 
-void ewol::WidgetManager::FocusRelease(void)
+void ewol::WidgetManager::focusRelease(void)
 {
 	if (m_focusWidgetDefault == m_focusWidgetCurrent) {
 		// nothink to do ...
 		return;
 	}
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Rm Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-		m_focusWidgetCurrent->RmFocus();
+		EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+		m_focusWidgetCurrent->rmFocus();
 	}
 	m_focusWidgetCurrent = m_focusWidgetDefault;
 	if (NULL != m_focusWidgetCurrent) {
-		EWOL_DEBUG("Set Focus on WidgetID=" << m_focusWidgetCurrent->GetId() );
-		m_focusWidgetCurrent->SetFocus();
+		EWOL_DEBUG("Set focus on WidgetID=" << m_focusWidgetCurrent->getId() );
+		m_focusWidgetCurrent->setFocus();
 	}
 }
 
 
-ewol::Widget * ewol::WidgetManager::FocusGet(void)
+ewol::Widget * ewol::WidgetManager::focusGet(void)
 {
 	return m_focusWidgetCurrent;
 }
 
-void ewol::WidgetManager::FocusRemoveIfRemove(ewol::Widget* _newWidget)
+void ewol::WidgetManager::focusRemoveIfRemove(ewol::Widget* _newWidget)
 {
 	if (m_focusWidgetCurrent == _newWidget) {
-		EWOL_WARNING("Release Focus when remove widget");
-		FocusRelease();
+		EWOL_WARNING("Release focus when remove widget");
+		focusRelease();
 	}
 	if (m_focusWidgetDefault == _newWidget) {
-		EWOL_WARNING("Release default Focus when remove widget");
-		FocusSetDefault(NULL);
+		EWOL_WARNING("Release default focus when remove widget");
+		focusSetDefault(NULL);
 	}
 }
 
 
 
-void ewol::WidgetManager::PeriodicCallAdd(ewol::Widget* _pWidget)
+void ewol::WidgetManager::periodicCallAdd(ewol::Widget* _pWidget)
 {
-	for (int32_t iii=0; iii < m_listOfPeriodicWidget.Size(); iii++) {
+	for (int32_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
 		if (m_listOfPeriodicWidget[iii] == _pWidget) {
 			return;
 		}
 	}
-	for (int32_t iii=0; iii < m_listOfPeriodicWidget.Size(); iii++) {
+	for (int32_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
 		if (NULL == m_listOfPeriodicWidget[iii]) {
 			m_listOfPeriodicWidget[iii] = _pWidget;
 			return;
 		}
 	}
-	m_listOfPeriodicWidget.PushBack(_pWidget);
+	m_listOfPeriodicWidget.pushBack(_pWidget);
 	m_havePeriodic = true;
 }
 
-void ewol::WidgetManager::PeriodicCallRm(ewol::Widget * _pWidget)
+void ewol::WidgetManager::periodicCallRm(ewol::Widget * _pWidget)
 {
 	int32_t nbElement = 0;
-	for (int32_t iii=m_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
+	for (int32_t iii=m_listOfPeriodicWidget.size()-1; iii >= 0 ; iii--) {
 		if (m_listOfPeriodicWidget[iii] == _pWidget) {
 			m_listOfPeriodicWidget[iii] = NULL;
 		} else {
@@ -197,16 +197,16 @@ void ewol::WidgetManager::PeriodicCallRm(ewol::Widget * _pWidget)
 	}
 }
 
-void ewol::WidgetManager::PeriodicCallResume(int64_t _localTime)
+void ewol::WidgetManager::periodicCallResume(int64_t _localTime)
 {
 	m_lastPeriodicCallTime = _localTime;
 }
 
-void ewol::WidgetManager::PeriodicCall(int64_t _localTime)
+void ewol::WidgetManager::periodicCall(int64_t _localTime)
 {
 	int64_t previousTime = m_lastPeriodicCallTime;
 	m_lastPeriodicCallTime = _localTime;
-	if (m_listOfPeriodicWidget.Size() <= 0) {
+	if (m_listOfPeriodicWidget.size() <= 0) {
 		return;
 	}
 	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
@@ -214,43 +214,43 @@ void ewol::WidgetManager::PeriodicCall(int64_t _localTime)
 	EventTime myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
 	
 	EWOL_VERBOSE("periodic : " << _localTime);
-	for (int32_t iii=m_listOfPeriodicWidget.Size()-1; iii>=0 ; iii--) {
+	for (int32_t iii=m_listOfPeriodicWidget.size()-1; iii >= 0 ; iii--) {
 		if (NULL != m_listOfPeriodicWidget[iii]) {
-			int64_t deltaTimeCallUser = m_listOfPeriodicWidget[iii]->SystemGetCallDeltaTime();
-			if (deltaTimeCallUser<=0) {
-				myTime.SetDeltaCall(deltaTime);
+			int64_t deltaTimeCallUser = m_listOfPeriodicWidget[iii]->systemGetCallDeltaTime();
+			if (deltaTimeCallUser <= 0) {
+				myTime.setDeltaCall(deltaTime);
 				EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
-				m_listOfPeriodicWidget[iii]->SystemSetLastCallTime(_localTime);
-				m_listOfPeriodicWidget[iii]->PeriodicCall(myTime);
+				m_listOfPeriodicWidget[iii]->systemSetLastCallTime(_localTime);
+				m_listOfPeriodicWidget[iii]->periodicCall(myTime);
 			} else {
-				int64_t lastCallTime = m_listOfPeriodicWidget[iii]->SystemGetLastCallTime();
+				int64_t lastCallTime = m_listOfPeriodicWidget[iii]->systemGetLastCallTime();
 				if (lastCallTime == 0) {
 					lastCallTime = _localTime;
 				}
 				float deltaLocalTime = (float)(_localTime-lastCallTime)/1000000.0;;
-				if (deltaLocalTime>= lastCallTime) {
-					myTime.SetDeltaCall(deltaLocalTime);
+				if (deltaLocalTime >=  lastCallTime) {
+					myTime.setDeltaCall(deltaLocalTime);
 					EWOL_VERBOSE("[" << iii << "] periodic : " << myTime);
-					m_listOfPeriodicWidget[iii]->SystemSetLastCallTime(_localTime);
-					m_listOfPeriodicWidget[iii]->PeriodicCall(myTime);
+					m_listOfPeriodicWidget[iii]->systemSetLastCallTime(_localTime);
+					m_listOfPeriodicWidget[iii]->periodicCall(myTime);
 				}
 			}
 		}
 	}
 }
 
-bool ewol::WidgetManager::PeriodicCallHave(void)
+bool ewol::WidgetManager::periodicCallHave(void)
 {
 	return m_havePeriodic;
 }
 
 
-void ewol::WidgetManager::MarkDrawingIsNeeded(void)
+void ewol::WidgetManager::markDrawingIsNeeded(void)
 {
 	m_haveRedraw = true;
 }
 
-bool ewol::WidgetManager::IsDrawingNeeded(void)
+bool ewol::WidgetManager::isDrawingNeeded(void)
 {
 	bool tmp = m_haveRedraw;
 	m_haveRedraw = false;
@@ -260,26 +260,26 @@ bool ewol::WidgetManager::IsDrawingNeeded(void)
 
 
 // element that generate the list of elements
-void ewol::WidgetManager::AddWidgetCreator(const etk::UString& _name, ewol::WidgetManager::creator_tf _pointer)
+void ewol::WidgetManager::addWidgetCreator(const etk::UString& _name, ewol::WidgetManager::creator_tf _pointer)
 {
-	if (NULL==_pointer) {
+	if (NULL == _pointer) {
 		return;
 	}
 	//Keep name in lower case :
-	etk::UString nameLower = _name.ToLower();
-	if (true==m_creatorList.Exist(nameLower)) {
+	etk::UString nameLower = _name.toLower();
+	if (true == m_creatorList.exist(nameLower)) {
 		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
 		m_creatorList[nameLower] = _pointer;
 		return;
 	}
 	EWOL_INFO("Add Creator of a specify widget : " << nameLower);
-	m_creatorList.Add(nameLower, _pointer);
+	m_creatorList.add(nameLower, _pointer);
 }
 
-ewol::Widget* ewol::WidgetManager::Create(const etk::UString& _name)
+ewol::Widget* ewol::WidgetManager::create(const etk::UString& _name)
 {
-	etk::UString nameLower = _name.ToLower();
-	if (true==m_creatorList.Exist(nameLower)) {
+	etk::UString nameLower = _name.toLower();
+	if (true == m_creatorList.exist(nameLower)) {
 		ewol::WidgetManager::creator_tf pointerFunction = m_creatorList[nameLower];
 		if (NULL != pointerFunction) {
 			return pointerFunction();
@@ -289,17 +289,17 @@ ewol::Widget* ewol::WidgetManager::Create(const etk::UString& _name)
 	return NULL;
 }
 
-bool ewol::WidgetManager::Exist(const etk::UString& _name)
+bool ewol::WidgetManager::exist(const etk::UString& _name)
 {
-	etk::UString nameLower = _name.ToLower();
-	return m_creatorList.Exist(nameLower);
+	etk::UString nameLower = _name.toLower();
+	return m_creatorList.exist(nameLower);
 }
 
-etk::UString ewol::WidgetManager::List(void)
+etk::UString ewol::WidgetManager::list(void)
 {
 	etk::UString tmpVal;
-	for (int32_t iii=0; iii<m_creatorList.Size() ; iii++) {
-		tmpVal += m_creatorList.GetKey(iii);
+	for (int32_t iii=0; iii<m_creatorList.size() ; iii++) {
+		tmpVal += m_creatorList.getKey(iii);
 		tmpVal += ",";
 	}
 	return tmpVal;

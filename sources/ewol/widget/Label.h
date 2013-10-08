@@ -24,7 +24,7 @@ namespace widget {
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Text m_text; //!< Compositing text element.
 			etk::UString m_label; //!< decorated text to display.
@@ -39,25 +39,25 @@ namespace widget {
 			 */
 			virtual ~Label(void) { };
 			/**
-			 * @brief Change the label displayed
+			 * @brief change the label displayed
 			 * @param[in] _newLabel The displayed decorated text.
 			 */
-			void SetLabel(const etk::UString& _newLabel);
-			inline void SetValue(const etk::UString& _newLabel) { SetLabel(_newLabel); };
+			void setLabel(const etk::UString& _newLabel);
+			inline void setValue(const etk::UString& _newLabel) { setLabel(_newLabel); };
 			/**
-			 * @brief Get the current displayed label
+			 * @brief get the current displayed label
 			 * @return The displayed decorated text.
 			 */
-			etk::UString GetLabel(void);
-			inline etk::UString GetValue(void) { return GetLabel(); };
+			etk::UString getLabel(void);
+			inline etk::UString getValue(void) { return getLabel(); };
 		protected: // Derived function
-			virtual void OnDraw(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::Label"; };
-			virtual void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual bool LoadXML(exml::Element* _node);
+			virtual const char * const getObjectType(void) { return "Ewol::Label"; };
+			virtual void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual bool loadXML(exml::Element* _node);
 	};
 	
 };

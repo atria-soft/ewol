@@ -13,10 +13,10 @@
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventInput& _obj)
 {
-	_os << "{type=" << _obj.GetType();
-	_os << " status=" << _obj.GetStatus();
-	_os << " id=" << _obj.GetId();
-	_os << " pos=" << _obj.GetPos();
+	_os << "{type=" << _obj.getType();
+	_os << " status=" << _obj.getStatus();
+	_os << " id=" << _obj.getId();
+	_os << " pos=" << _obj.getPos();
 	_os << "}";
 	return _os;
 }

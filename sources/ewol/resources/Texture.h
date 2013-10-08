@@ -20,46 +20,46 @@ namespace ewol {
 		protected:
 			// openGl Context propoerties :
 			egami::Image m_data;
-			// OpenGl textureID :
+			// openGl textureID :
 			GLuint m_texId;
-			// some image are not square ==> we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
+			// some image are not square  == > we need to sqared it to prevent some openGl api error the the displayable size is not all the time 0.0 -> 1.0
 			vec2 m_endPointSize;
 			// internal state of the openGl system :
 			bool m_loaded;
 		// Ewol internal API:
 		public:
-			void UpdateContext(void);
-			void RemoveContext(void);
-			void RemoveContextToLate(void);
+			void updateContext(void);
+			void removeContext(void);
+			void removeContextToLate(void);
 		// middleware interface:
 		public:
-			GLuint GetId(void) { return m_texId; };
-			vec2 GetUsableSize(void) { return m_endPointSize; };
+			GLuint getId(void) { return m_texId; };
+			vec2 getUsableSize(void) { return m_endPointSize; };
 		// Public API:
 		protected:
 			Texture(const etk::UString& _filename);
 			Texture(void);
 			~Texture(void);
 		public:
-			virtual const char* GetType(void) { return "ewol::Texture"; };
+			virtual const char* getType(void) { return "ewol::Texture"; };
 			// you must set the size here, because it will be set in multiple of pow(2)
-			void SetImageSize(ivec2 newSize);
+			void setImageSize(ivec2 newSize);
 			// get the reference on this image to draw nomething on it ...
-			inline egami::Image& Get(void) { return m_data; };
-			// Flush the data to send it at the OpenGl system
-			void Flush(void);
+			inline egami::Image& get(void) { return m_data; };
+			// flush the data to send it at the openGl system
+			void flush(void);
 		public:
 			/**
-			 * @brief Keep the resource pointer.
+			 * @brief keep the resource pointer.
 			 * @note Never free this pointer by your own...
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Texture* Keep(void);
+			static ewol::Texture* keep(void);
 			/**
-			 * @brief Release the keeped resources
+			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
 			 */
-			static void Release(ewol::Texture*& _object);
+			static void release(ewol::Texture*& _object);
 	};
 	
 };

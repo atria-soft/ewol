@@ -28,7 +28,7 @@ namespace widget {
 	class ContextMenu : public widget::Container
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
 			static const char* const configArrowPosition;
 			static const char* const configArrowMode;
@@ -40,10 +40,10 @@ namespace widget {
 			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
 			/**
-			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
+			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 			 * @param[in] _shaperName The new shaper filename
 			 */
-			void SetShaperName(const etk::UString& _shaperName);
+			void setShaperName(const etk::UString& _shaperName);
 		private:
 			// TODO : Rework the displayer ....
 			ewol::Drawing m_compositing;
@@ -55,18 +55,18 @@ namespace widget {
 			vec2 m_arrowPos;
 			markPosition_te m_arrawBorder;
 		public:
-			void SetPositionMark(markPosition_te position, vec2 arrowPos);
+			void setPositionMark(markPosition_te position, vec2 arrowPos);
 		protected: // Derived function
-			virtual void OnDraw(void);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void CalculateSize(const vec2& availlable);
-			virtual void CalculateMinMaxSize(void);
-			virtual const char * const GetObjectType(void) { return "ewol::ContextMenu"; };
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual void calculateSize(const vec2& availlable);
+			virtual void calculateMinMaxSize(void);
+			virtual const char * const getObjectType(void) { return "ewol::ContextMenu"; };
+			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
 	
 };

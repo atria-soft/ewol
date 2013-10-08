@@ -14,28 +14,28 @@
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfig& _obj)
 {
 	_os << "{";
-	_os << "config=\"" << _obj.GetConfig() << "\"";
-	_os << " data=\"" << _obj.GetData() << "\"}";
+	_os << "config=\"" << _obj.getConfig() << "\"";
+	_os << " data=\"" << _obj.getData() << "\"}";
 	return _os;
 }
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EConfigElement& _obj)
 {
 	_os << "{";
-	if (NULL != _obj.GetConfig()) {
-		_os << "config=\"" << _obj.GetConfig() << "\"";
+	if (NULL != _obj.getConfig()) {
+		_os << "config=\"" << _obj.getConfig() << "\"";
 	}
-	if (NULL != _obj.GetType()) {
-		_os << " type=\"" << _obj.GetType() << "\"";
+	if (NULL != _obj.getType()) {
+		_os << " type=\"" << _obj.getType() << "\"";
 	}
-	if (NULL != _obj.GetControl()) {
-		_os << " ctrl=\"" << _obj.GetControl() << "\"";
+	if (NULL != _obj.getControl()) {
+		_os << " ctrl=\"" << _obj.getControl() << "\"";
 	}
-	if (NULL != _obj.GetDescription()) {
-		_os << " desc=\"" << _obj.GetDescription() << "\"";
+	if (NULL != _obj.getDescription()) {
+		_os << " desc=\"" << _obj.getDescription() << "\"";
 	}
-	if (NULL != _obj.GetDefault()) {
-		_os << " default=\"" << _obj.GetDefault() << "\"";
+	if (NULL != _obj.getDefault()) {
+		_os << " default=\"" << _obj.getDefault() << "\"";
 	}
 	_os << "}";
 	return _os;

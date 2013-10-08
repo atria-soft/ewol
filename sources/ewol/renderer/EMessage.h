@@ -16,7 +16,7 @@ namespace ewol {
 	class EMessage {
 		private:
 			ewol::EObject* m_callerObject; //!< Caller class.
-			const char* m_event; //!< Event pointer ==> unique Id define by the system ...
+			const char* m_event; //!< Event pointer  == > unique Id define by the system ...
 			etk::UString m_data; //!< compositing additionnal message Value.
 		public:
 			EMessage(ewol::EObject* _caller,
@@ -26,12 +26,12 @@ namespace ewol {
 				m_event(_message),
 				m_data(_data)
 			{ };
-			void SetCaller(ewol::EObject* _caller) { m_callerObject = _caller; };
-			inline ewol::EObject* GetCaller(void) const { return m_callerObject; };
-			void SetMessage(const char* _message) { m_event = _message; };
-			inline const char* GetMessage(void) const { return m_event; };
-			void SetData(const etk::UString& _data) { m_data = _data; };
-			inline const etk::UString& GetData(void) const { return m_data; };
+			void setCaller(ewol::EObject* _caller) { m_callerObject = _caller; };
+			inline ewol::EObject* getCaller(void) const { return m_callerObject; };
+			void setMessage(const char* _message) { m_event = _message; };
+			inline const char* getMessage(void) const { return m_event; };
+			void setData(const etk::UString& _data) { m_data = _data; };
+			inline const etk::UString& getData(void) const { return m_data; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EMessage& _obj);
 };

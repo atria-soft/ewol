@@ -15,97 +15,97 @@
 
 ewol::EObjectManager::EObjectManager(void)
 {
-	EWOL_DEBUG("==> Init EObject-Manager");
-	// Can create mlemory leak ... ==> but not predictable comportement otherwise ...
-	m_eObjectAutoRemoveList.Clear();
-	m_eObjectList.Clear();
+	EWOL_DEBUG(" == > init EObject-Manager");
+	// Can create mlemory leak ...  == > but not predictable comportement otherwise ...
+	m_eObjectAutoRemoveList.clear();
+	m_eObjectList.clear();
 }
 
 ewol::EObjectManager::~EObjectManager(void)
 {
 	bool hasError = false;
-	if (m_eObjectAutoRemoveList.Size()!=0) {
+	if (m_eObjectAutoRemoveList.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject to auto-remove !!!");
 		hasError = true;
 	}
-	if (m_eObjectList.Size()!=0) {
+	if (m_eObjectList.size()!=0) {
 		EWOL_ERROR("Must not have anymore eObject !!!");
 		hasError = true;
 	}
-	if (true==hasError) {
+	if (true == hasError) {
 		EWOL_ERROR("Check if the function UnInit has been called !!!");
 	}
 }
 
-void ewol::EObjectManager::UnInit(void)
+void ewol::EObjectManager::unInit(void)
 {
-	EWOL_DEBUG("==> Un-Init EObject-Manager");
-	RemoveAllAutoRemove();
-	EWOL_INFO(" Remove missing user widget");
+	EWOL_DEBUG(" == > Un-Init EObject-Manager");
+	removeAllAutoRemove();
+	EWOL_INFO(" remove missing user widget");
 	int32_t iii=0;
-	while(iii<m_eObjectList.Size()) {
+	while(iii<m_eObjectList.size()) {
 		if (m_eObjectList[iii]!=NULL) {
-			if (m_eObjectList[iii]->GetStatic() == true) {
+			if (m_eObjectList[iii]->getStatic() == true) {
 				iii++;
 			} else {
-				EWOL_WARNING("Un-INIT : Remove EObject type=\"" << m_eObjectList[iii]->GetObjectType() << "\"");
+				EWOL_WARNING("Un-INIT : remove EObject type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
 				delete(m_eObjectList[iii]);
 				m_eObjectList[iii] = NULL;
 			}
 		} else {
-			m_eObjectList.Erase(iii);
+			m_eObjectList.erase(iii);
 		}
 	}
 }
 
-void ewol::EObjectManager::Add(ewol::EObject* _object)
+void ewol::EObjectManager::add(ewol::EObject* _object)
 {
 	if (NULL != _object) {
-		m_eObjectList.PushBack(_object);
+		m_eObjectList.pushBack(_object);
 	} else {
 		EWOL_ERROR("try to add an inexistant EObject in manager");
 	}
 }
 
-int32_t ewol::EObjectManager::GetNumberObject(void)
+int32_t ewol::EObjectManager::getNumberObject(void)
 {
-	return m_eObjectList.Size() + m_eObjectAutoRemoveList.Size();
+	return m_eObjectList.size() + m_eObjectAutoRemoveList.size();
 }
 
 void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object)
 {
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
-			m_eObjectList[iii]->OnObjectRemove(_object);
+			m_eObjectList[iii]->onObjectRemove(_object);
 		}
 	}
-	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] != _object) {
-			m_eObjectAutoRemoveList[iii]->OnObjectRemove(_object);
+			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
 		}
 	}
 	// call input event manager to remove linked widget ...
-	ewol::GetContext().OnObjectRemove(_object);
+	ewol::getContext().onObjectRemove(_object);
 }
 
-void ewol::EObjectManager::Rm(ewol::EObject* _object)
+void ewol::EObjectManager::rm(ewol::EObject* _object)
 {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove (NULL) EObject");
 		return;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == _object) {
-			// Remove Element
+			// remove Element
 			m_eObjectList[iii] = NULL;
-			m_eObjectList.Erase(iii);
+			m_eObjectList.erase(iii);
 			informOneObjectIsRemoved(_object);
 			return;
 		}
 	}
 	// check if the object has not been auto removed ... or remove in defered time ...
-	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] == _object) {
 			return;
@@ -115,21 +115,21 @@ void ewol::EObjectManager::Rm(ewol::EObject* _object)
 	EWOL_ERROR("Try to remove EObject that is not referenced ...");
 }
 
-void ewol::EObjectManager::AutoRemove(ewol::EObject* _object)
+void ewol::EObjectManager::autoRemove(ewol::EObject* _object)
 {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to Auto-Remove (NULL) EObject");
 		return;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == _object) {
-			// Remove Element
+			// remove Element
 			m_eObjectList[iii] = NULL;
-			m_eObjectList.Erase(iii);
-			EWOL_DEBUG("Auto-Remove EObject : [" << _object->GetId() << "] type=\"" << _object->GetObjectType() << "\"");
+			m_eObjectList.erase(iii);
+			EWOL_DEBUG("Auto-Remove EObject : [" << _object->getId() << "] type=\"" << _object->getObjectType() << "\"");
 			informOneObjectIsRemoved(_object);
-			m_eObjectAutoRemoveList.PushBack(_object);
-			ewol::GetContext().ForceRedrawAll();
+			m_eObjectAutoRemoveList.pushBack(_object);
+			ewol::getContext().forceRedrawAll();
 			return;
 		}
 	}
@@ -137,29 +137,29 @@ void ewol::EObjectManager::AutoRemove(ewol::EObject* _object)
 }
 
 // clean all EObject that request an autoRemove ...
-void ewol::EObjectManager::RemoveAllAutoRemove(void)
+void ewol::EObjectManager::removeAllAutoRemove(void)
 {
-	//EWOL_DEBUG("Auto-Remove EObject section : " << m_eObjectAutoRemoveList.Size() << " elemeents");
-	while(0<m_eObjectAutoRemoveList.Size()) {
+	//EWOL_DEBUG("Auto-Remove EObject section : " << m_eObjectAutoRemoveList.size() << " elemeents");
+	while(0<m_eObjectAutoRemoveList.size()) {
 		if (m_eObjectAutoRemoveList[0]!=NULL) {
-			EWOL_DEBUG("Real Auto-Remove EObject type=\"" << m_eObjectAutoRemoveList[0]->GetObjectType() << "\"");
+			EWOL_DEBUG("Real Auto-Remove EObject type=\"" << m_eObjectAutoRemoveList[0]->getObjectType() << "\"");
 			delete(m_eObjectAutoRemoveList[0]);
 			m_eObjectAutoRemoveList[0] = NULL;
 		} else {
-			m_eObjectAutoRemoveList.Erase(0);
+			m_eObjectAutoRemoveList.erase(0);
 		}
 	}
-	m_eObjectAutoRemoveList.Clear();
+	m_eObjectAutoRemoveList.clear();
 }
 
-ewol::EObject* ewol::EObjectManager::Get(const etk::UString& _name)
+ewol::EObject* ewol::EObjectManager::get(const etk::UString& _name)
 {
-	if (_name=="") {
+	if (_name == "") {
 		return NULL;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
-			if (m_eObjectList[iii]->GetName() == _name) {
+			if (m_eObjectList[iii]->getName() == _name) {
 				return m_eObjectList[iii];
 			}
 		}

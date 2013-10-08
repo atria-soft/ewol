@@ -28,33 +28,33 @@ namespace ewol
 			Colored3DObject(void);
 			virtual ~Colored3DObject(void);
 		public:
-			virtual const char* GetType(void) { return "ewol::Colored3DObject"; };
-			virtual void Draw(etk::Vector<vec3>& _vertices,
+			virtual const char* getType(void) { return "ewol::Colored3DObject"; };
+			virtual void draw(etk::Vector<vec3>& _vertices,
 			                  const etk::Color<float>& _color,
 			                  bool _updateDepthBuffer=true,
 			                  bool _depthtest=true);
-			virtual void Draw(etk::Vector<vec3>& _vertices,
+			virtual void draw(etk::Vector<vec3>& _vertices,
 			                  const etk::Color<float>& _color,
 			                  mat4& _transformationMatrix,
 			                  bool _updateDepthBuffer=true,
 			                  bool _depthtest=true);
-			virtual void DrawLine(etk::Vector<vec3>& _vertices,
+			virtual void drawLine(etk::Vector<vec3>& _vertices,
 			                      const etk::Color<float>& _color,
 			                      mat4& _transformationMatrix,
 			                      bool _updateDepthBuffer=true,
 			                      bool _depthtest=true);
 		public:
 			/**
-			 * @brief Keep the resource pointer.
+			 * @brief keep the resource pointer.
 			 * @note Never free this pointer by your own...
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Colored3DObject* Keep(void);
+			static ewol::Colored3DObject* keep(void);
 			/**
-			 * @brief Release the keeped resources
+			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
 			 */
-			static void Release(ewol::Colored3DObject*& _object);
+			static void release(ewol::Colored3DObject*& _object);
 	};
 };
 

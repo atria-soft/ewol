@@ -16,14 +16,14 @@
 #undef __class__
 #define __class__ "Image"
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::Image();
 }
 
-void widget::Image::Init(ewol::WidgetManager& _widgetManager)
+void widget::Image::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
@@ -38,94 +38,94 @@ widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) 
 	m_imageSize(vec2(0,0)),
 	m_keepRatio(true)
 {
-	AddEventId(eventPressed);
-	RegisterConfig(configRatio, "bool", NULL, "Keep ratio of the image");
-	RegisterConfig(configSize, "Dimension", NULL, "Basic display size of the image");
-	RegisterConfig(configBorder, "Dimension", NULL, "Border of the image");
-	RegisterConfig(configSource, "string", "Image source path");
-	Set(_file, _border);
+	addEventId(eventPressed);
+	registerConfig(configRatio, "bool", NULL, "Keep ratio of the image");
+	registerConfig(configSize, "Dimension", NULL, "Basic display size of the image");
+	registerConfig(configBorder, "Dimension", NULL, "Border of the image");
+	registerConfig(configSource, "string", "Image source path");
+	set(_file, _border);
 }
 
 
-void widget::Image::SetFile(const etk::UString& _file)
+void widget::Image::setFile(const etk::UString& _file)
 {
 	EWOL_VERBOSE("Set Image : " << _file);
 	if (m_fileName != _file) {
 		// copy data :
 		m_fileName = _file;
-		// Force redraw all :
-		MarkToRedraw();
+		// force redraw all :
+		markToRedraw();
 		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
-		m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
+		m_compositing.setSource(m_fileName, m_imageSize.getPixel());
 	}
 }
 
-void widget::Image::SetBorder(const ewol::Dimension& _border)
+void widget::Image::setBorder(const ewol::Dimension& _border)
 {
 	EWOL_VERBOSE("Set border=" << _border);
 	// copy data :
 	m_border = _border;
-	// Force redraw all :
-	MarkToRedraw();
-	// TODO : Change the size with no size requested ...
-	RequestUpdateSize();
+	// force redraw all :
+	markToRedraw();
+	// TODO : change the size with no size requested ...
+	requestUpdateSize();
 }
 
-void widget::Image::SetKeepRatio(bool _keep)
+void widget::Image::setKeepRatio(bool _keep)
 {
 	if (m_keepRatio != _keep) {
 		// copy data :
 		m_keepRatio = _keep;
-		// Force redraw all :
-		MarkToRedraw();
-		RequestUpdateSize();
+		// force redraw all :
+		markToRedraw();
+		requestUpdateSize();
 	}
 }
 
-void widget::Image::SetImageSize(const ewol::Dimension& _size)
+void widget::Image::setImageSize(const ewol::Dimension& _size)
 {
 	EWOL_VERBOSE("Set Image size : " << _size);
 	if (_size != m_imageSize) {
 		m_imageSize = _size;
-		MarkToRedraw();
-		RequestUpdateSize();
+		markToRedraw();
+		requestUpdateSize();
 		EWOL_VERBOSE("Set sources : " << m_fileName << " size=" << m_imageSize);
-		m_compositing.SetSource(m_fileName, m_imageSize.GetPixel());
+		m_compositing.setSource(m_fileName, m_imageSize.getPixel());
 	}
 }
 
-void widget::Image::Set(const etk::UString& _file, const ewol::Dimension& _border)
+void widget::Image::set(const etk::UString& _file, const ewol::Dimension& _border)
 {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	// copy data :
 	if (m_border != _border) {
 		m_border = _border;
-		RequestUpdateSize();
-		MarkToRedraw();
+		requestUpdateSize();
+		markToRedraw();
 	}
-	SetFile(_file);
+	setFile(_file);
 }
 
 
-void widget::Image::OnDraw(void)
+void widget::Image::onDraw(void)
 {
-	m_compositing.Draw();
+	m_compositing.draw();
 }
 
-void widget::Image::OnRegenerateDisplay(void)
+void widget::Image::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
+	if (true == needRedraw()) {
 		// remove data of the previous composition :
-		m_compositing.Clear();
+		m_compositing.clear();
 		
 		// calculate the new position and size :
-		vec2 imageBoder = m_border.GetPixel();
+		vec2 imageBoder = m_border.getPixel();
 		vec2 origin = imageBoder;
 		imageBoder *= 2.0f;
 		vec2 imageRealSize = m_minSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
-		vec2 tmpSize = m_compositing.GetRealSize();
+		vec2 tmpSize = m_compositing.getRealSize();
 		if (m_userFill.x()) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
@@ -138,57 +138,57 @@ void widget::Image::OnRegenerateDisplay(void)
 		}
 		
 		// set the somposition properties :
-		m_compositing.SetPos(origin);
-		m_compositing.Print(imageRealSize);
+		m_compositing.setPos(origin);
+		m_compositing.print(imageRealSize);
 		//EWOL_DEBUG("Paint Image at : " << origin << " size=" << imageRealSize << "  origin=" << origin);
 	}
 }
 
-void widget::Image::CalculateMinMaxSize(void)
+void widget::Image::calculateMinMaxSize(void)
 {
-	vec2 imageBoder = m_border.GetPixel()*2.0f;
-	vec2 imageSize = m_imageSize.GetPixel();
+	vec2 imageBoder = m_border.getPixel()*2.0f;
+	vec2 imageSize = m_imageSize.getPixel();
 	if (imageSize!=vec2(0,0)) {
 		m_minSize = imageBoder+imageSize;
 		m_maxSize = m_minSize;
 	} else {
-		vec2 imageSizeReal = m_compositing.GetRealSize();
-		vec2 min1 = imageBoder+m_userMinSize.GetPixel();
+		vec2 imageSizeReal = m_compositing.getRealSize();
+		vec2 min1 = imageBoder+m_userMinSize.getPixel();
 		m_minSize = imageBoder+imageSizeReal;
 		//EWOL_DEBUG(" set max : " << m_minSize << " " << min1);
 		m_minSize.setMax(min1);
 		//EWOL_DEBUG("     result : " << m_minSize);
-		m_maxSize = imageBoder+m_userMaxSize.GetPixel();
+		m_maxSize = imageBoder+m_userMaxSize.getPixel();
 		m_minSize.setMin(m_maxSize);
 	}
-	//EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image Size=" << imageSizeReal);
-	MarkToRedraw();
+	//EWOL_DEBUG("set widget min=" << m_minSize << " max=" << m_maxSize << " with real Image size=" << imageSizeReal);
+	markToRedraw();
 }
 
 
-bool widget::Image::OnEventInput(const ewol::EventInput& _event)
+bool widget::Image::onEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == _event.GetId()) {
-		if(    ewol::keyEvent::statusSingle == _event.GetStatus()) {
-			GenerateEventId(eventPressed);
+	if (1 == _event.getId()) {
+		if(ewol::keyEvent::statusSingle == _event.getStatus()) {
+			generateEventId(eventPressed);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool widget::Image::LoadXML(exml::Element* _node)
+bool widget::Image::loadXML(exml::Element* _node)
 {
-	if (NULL==_node) {
+	if (NULL == _node) {
 		return false;
 	}
-	ewol::Widget::LoadXML(_node);
+	ewol::Widget::loadXML(_node);
 	// get internal data : 
 	
-	etk::UString tmpAttributeValue = _node->GetAttribute("ratio");
-	if (tmpAttributeValue.Size()!=0) {
-		if (tmpAttributeValue.CompareNoCase("true")==true) {
+	etk::UString tmpAttributeValue = _node->getAttribute("ratio");
+	if (tmpAttributeValue.size()!=0) {
+		if (tmpAttributeValue.compareNoCase("true") == true) {
 			m_keepRatio = true;
 		} else if (tmpAttributeValue == "1") {
 			m_keepRatio = true;
@@ -196,60 +196,60 @@ bool widget::Image::LoadXML(exml::Element* _node)
 			m_keepRatio = false;
 		}
 	}
-	tmpAttributeValue = _node->GetAttribute("size");
-	if (tmpAttributeValue.Size()!=0) {
+	tmpAttributeValue = _node->getAttribute("size");
+	if (tmpAttributeValue.size()!=0) {
 		//EWOL_CRITICAL(" Parse SIZE : " << tmpAttributeValue);
 		m_imageSize = tmpAttributeValue;
-		//EWOL_CRITICAL("              ==> " << m_imageSize);
+		//EWOL_CRITICAL("               == > " << m_imageSize);
 	}
-	tmpAttributeValue = _node->GetAttribute("border");
-	if (tmpAttributeValue.Size()!=0) {
+	tmpAttributeValue = _node->getAttribute("border");
+	if (tmpAttributeValue.size()!=0) {
 		m_border = tmpAttributeValue;
 	}
-	//EWOL_DEBUG("Load label:" << node->ToElement()->GetText());
-	if (_node->Size()!=0) {
-		SetFile(_node->GetText());
+	//EWOL_DEBUG("Load label:" << node->ToElement()->getText());
+	if (_node->size()!=0) {
+		setFile(_node->getText());
 	} else {
-		tmpAttributeValue = _node->GetAttribute("src");
-		if (tmpAttributeValue.Size()!=0) {
-			SetFile(tmpAttributeValue);
+		tmpAttributeValue = _node->getAttribute("src");
+		if (tmpAttributeValue.size()!=0) {
+			setFile(tmpAttributeValue);
 		}
 	}
 	return true;
 }
 
 
-bool widget::Image::OnSetConfig(const ewol::EConfig& _conf)
+bool widget::Image::onSetConfig(const ewol::EConfig& _conf)
 {
-	if (true == ewol::Widget::OnSetConfig(_conf)) {
+	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}
-	if (_conf.GetConfig() == configRatio) {
-		SetKeepRatio(_conf.GetData().ToBool());
+	if (_conf.getConfig() == configRatio) {
+		setKeepRatio(_conf.getData().toBool());
 		return true;
 	}
-	if (_conf.GetConfig() == configSize) {
-		SetImageSize(_conf.GetData());
+	if (_conf.getConfig() == configSize) {
+		setImageSize(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == configBorder) {
-		SetBorder(_conf.GetData());
+	if (_conf.getConfig() == configBorder) {
+		setBorder(_conf.getData());
 		return true;
 	}
-	if (_conf.GetConfig() == configSource) {
-		SetFile(_conf.GetData());
+	if (_conf.getConfig() == configSource) {
+		setFile(_conf.getData());
 		return true;
 	}
 	return false;
 }
 
-bool widget::Image::OnGetConfig(const char* _config, etk::UString& _result) const
+bool widget::Image::onGetConfig(const char* _config, etk::UString& _result) const
 {
-	if (true == ewol::Widget::OnGetConfig(_config, _result)) {
+	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configRatio) {
-		if (true==GetKeepRatio()) {
+		if (true == getKeepRatio()) {
 			_result = "true";
 		} else {
 			_result = "false";
@@ -257,15 +257,15 @@ bool widget::Image::OnGetConfig(const char* _config, etk::UString& _result) cons
 		return true;
 	}
 	if (_config == configSize) {
-		_result = GetImageSize();
+		_result = getImageSize();
 		return true;
 	}
 	if (_config == configBorder) {
-		_result = GetBorder();
+		_result = getBorder();
 		return true;
 	}
 	if (_config == configSource) {
-		_result = GetFile();
+		_result = getFile();
 		return true;
 	}
 	return false;

@@ -51,7 +51,7 @@ bool hasDisplay = false;
 	#define X11_INFO       EWOL_VERBOSE
 	#define X11_CRITICAL   EWOL_VERBOSE
 #endif
-int64_t ewol::GetTime(void)
+int64_t ewol::getTime(void)
 {
 	struct timespec now;
 	int ret = clock_gettime(CLOCK_REALTIME, &now);
@@ -213,7 +213,7 @@ class X11Interface : public ewol::eContext
 							{
 								X11_INFO("Receive : ClientMessage");
 								if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
-									EWOL_INFO("    ==> Kill Requested ...");
+									EWOL_INFO("     == > Kill Requested ...");
 									OS_Stop();
 									m_run = false;
 								}
@@ -223,7 +223,7 @@ class X11Interface : public ewol::eContext
 						//                               Selection AREA                                                              //
 						///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 						case SelectionClear:
-							// Selection has been done on an other program ==> clear ours ...
+							// Selection has been done on an other program  == > clear ours ...
 							X11_INFO("X11 event SelectionClear");
 							{
 								#ifdef DEBUG_X11_EVENT
@@ -242,14 +242,14 @@ class X11Interface : public ewol::eContext
 								} else if (true == m_clipBoardOwnerStd) {
 									m_clipBoardOwnerStd = false;
 								} else {
-									EWOL_ERROR("X11 event SelectionClear ==> but no selection requested anymore ...");
+									EWOL_ERROR("X11 event SelectionClear  == > but no selection requested anymore ...");
 								}
 							}
 							break;
 						case SelectionNotify:
 							X11_INFO("X11 event SelectionNotify");
 							if (event.xselection.property == None) {
-								EWOL_VERBOSE("    ==> no data ...");
+								EWOL_VERBOSE("     == > no data ...");
 							} else {
 								unsigned char *buf = 0;
 								Atom type;
@@ -270,12 +270,12 @@ class X11Interface : public ewol::eContext
 								                   );
 								if (true == m_clipBoardRequestPrimary) {
 									etk::UString tmpppp((char*)buf);
-									ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardSelection, tmpppp);
+									ewol::clipBoard::setSystem(ewol::clipBoard::clipboardSelection, tmpppp);
 									// just transmit an event , we have the data in the system
 									OS_ClipBoardArrive(ewol::clipBoard::clipboardSelection);
 								} else {
 									etk::UString tmpppp((char*)buf);
-									ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardStd, tmpppp);
+									ewol::clipBoard::setSystem(ewol::clipBoard::clipboardStd, tmpppp);
 									// just transmit an event , we have the data in the system
 									OS_ClipBoardArrive(ewol::clipBoard::clipboardStd);
 								}
@@ -299,9 +299,9 @@ class X11Interface : public ewol::eContext
 								
 								etk::UString tmpData = "";
 								if (req->selection == XAtomeSelection) {
-									tmpData = ewol::clipBoard::Get(ewol::clipBoard::clipboardSelection);
+									tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardSelection);
 								} else if (req->selection == XAtomeClipBoard) {
-									tmpData = ewol::clipBoard::Get(ewol::clipBoard::clipboardStd);
+									tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardStd);
 								}
 								etk::Char tmpValueStoredTimeToSend = tmpData.c_str();
 								const char * magatTextToSend = tmpValueStoredTimeToSend;
@@ -324,7 +324,7 @@ class X11Interface : public ewol::eContext
 									                 (unsigned char*)listOfAtom,
 									                 nbAtomSupported );
 									respond.xselection.property=req->property;
-									EWOL_INFO("            ==> Respond ... (test)");
+									EWOL_INFO("             == > Respond ... (test)");
 								} else if(XAtomeTargetString == req->target) {
 									XChangeProperty( m_display,
 									                 req->requestor,
@@ -335,7 +335,7 @@ class X11Interface : public ewol::eContext
 									                 (unsigned char*)magatTextToSend,
 									                 strlen(magatTextToSend));
 									respond.xselection.property=req->property;
-									EWOL_INFO("            ==> Respond ...");
+									EWOL_INFO("             == > Respond ...");
 								} else if (XAtomeTargetStringUTF8 == req->target) {
 									XChangeProperty( m_display,
 									                 req->requestor,
@@ -346,7 +346,7 @@ class X11Interface : public ewol::eContext
 									                 (unsigned char*)magatTextToSend,
 									                 strlen(magatTextToSend));
 									respond.xselection.property=req->property;
-									EWOL_INFO("            ==> Respond ...");
+									EWOL_INFO("             == > Respond ...");
 								} else {
 									respond.xselection.property= None;
 								}
@@ -357,7 +357,7 @@ class X11Interface : public ewol::eContext
 								respond.xselection.target= req->target;
 								respond.xselection.time = req->time;
 								XSendEvent (m_display, req->requestor,0,0,&respond);
-								// Flush the message on the pipe ...
+								// flush the message on the pipe ...
 								XFlush (m_display);
 							}
 							break;
@@ -446,7 +446,7 @@ class X11Interface : public ewol::eContext
 							break;
 						case MotionNotify:
 							X11_INFO("X11 event MotionNotify");
-							if(    true==m_grabAllEvent
+							if(    true == m_grabAllEvent
 							    && event.xmotion.x == (int32_t)m_forcePos.x()
 							    && event.xmotion.y == (int32_t)m_forcePos.y()) {
 								X11_VERBOSE("X11 reject mouse move (grab mode)");
@@ -456,12 +456,12 @@ class X11Interface : public ewol::eContext
 							} else {
 								m_cursorEventX = event.xmotion.x;
 								m_cursorEventY = (m_currentHeight-event.xmotion.y);
-								if(true==m_grabAllEvent) {
+								if(true == m_grabAllEvent) {
 									m_cursorEventX -= m_forcePos.x();
 									m_cursorEventY -= (m_currentHeight-m_forcePos.y());
 								}
 								vec2 newDelta = vec2(m_cursorEventX, m_cursorEventY);
-								if(true==m_grabAllEvent) {
+								if(true == m_grabAllEvent) {
 									m_cursorEventX -= m_curentGrabDelta.x();
 									m_cursorEventY -= m_curentGrabDelta.y();
 								}
@@ -479,9 +479,9 @@ class X11Interface : public ewol::eContext
 									X11_DEBUG("X11 event: bt=" << 0 << " " << event.type << " = \"MotionNotify\" (" << m_cursorEventX << "," << m_cursorEventY << ")");
 									OS_SetMouseMotion(0, vec2(m_cursorEventX, m_cursorEventY));
 								}
-								if (true==m_grabAllEvent) {
+								if (true == m_grabAllEvent) {
 									if (m_positionChangeRequested == false) {
-										X11_DEBUG("X11 Set pointer position : " << m_forcePos);
+										X11_DEBUG("X11 set pointer position : " << m_forcePos);
 										XWarpPointer(m_display, None, m_WindowHandle, 0,0, 0, 0, m_forcePos.x(), m_forcePos.y());
 										XFlush(m_display);
 										m_positionChangeRequested = true;
@@ -490,11 +490,11 @@ class X11Interface : public ewol::eContext
 							}
 							break;
 						case FocusIn:
-							X11_INFO("X11 event FocusIn");
+							X11_INFO("X11 event focusIn");
 							specialEventThatNeedARedraw=true;
 							break;
 						case FocusOut:
-							X11_INFO("X11 event : FocusOut");
+							X11_INFO("X11 event : focusOut");
 							specialEventThatNeedARedraw=true;
 							break;
 						case KeyPress:
@@ -625,23 +625,23 @@ class X11Interface : public ewol::eContext
 										case 77:    keyInput = ewol::keyEvent::keyboardNumLock;     m_guiKeyBoardMode.numLock = (event.type == KeyPress) ? true : false; break;
 										case 91: // Suppr on keypad
 											find = false;
-											if(m_guiKeyBoardMode.numLock==true){
-												OS_SetKeyboard(m_guiKeyBoardMode, '.', (event.type==KeyPress), thisIsAReapeateKey);
-												if (true==thisIsAReapeateKey) {
-													OS_SetKeyboard(m_guiKeyBoardMode, '.', !(event.type==KeyPress), thisIsAReapeateKey);
+											if(m_guiKeyBoardMode.numLock == true){
+												OS_SetKeyboard(m_guiKeyBoardMode, '.', (event.type == KeyPress), thisIsAReapeateKey);
+												if (true == thisIsAReapeateKey) {
+													OS_SetKeyboard(m_guiKeyBoardMode, '.', !(event.type == KeyPress), thisIsAReapeateKey);
 												}
 											} else {
-												OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, (event.type==KeyPress), thisIsAReapeateKey);
-												if (true==thisIsAReapeateKey) {
-													OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, !(event.type==KeyPress), thisIsAReapeateKey);
+												OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, (event.type == KeyPress), thisIsAReapeateKey);
+												if (true == thisIsAReapeateKey) {
+													OS_SetKeyboard(m_guiKeyBoardMode, 0x7F, !(event.type == KeyPress), thisIsAReapeateKey);
 												}
 											}
 											break;
 										case 23: // special case for TAB
 											find = false;
-											OS_SetKeyboard(m_guiKeyBoardMode, 0x09, (event.type==KeyPress), thisIsAReapeateKey);
-											if (true==thisIsAReapeateKey) {
-												OS_SetKeyboard(m_guiKeyBoardMode, 0x09, !(event.type==KeyPress), thisIsAReapeateKey);
+											OS_SetKeyboard(m_guiKeyBoardMode, 0x09, (event.type == KeyPress), thisIsAReapeateKey);
+											if (true == thisIsAReapeateKey) {
+												OS_SetKeyboard(m_guiKeyBoardMode, 0x09, !(event.type == KeyPress), thisIsAReapeateKey);
 											}
 											break;
 										default:
@@ -669,11 +669,11 @@ class X11Interface : public ewol::eContext
 												if (count>0) {
 													// transform it in unicode
 													etk::UniChar tmpChar = 0;
-													tmpChar.SetUtf8(buf);
+													tmpChar.setUtf8(buf);
 													//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
-													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type==KeyPress), thisIsAReapeateKey);
-													if (true==thisIsAReapeateKey) {
-														OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, !(event.type==KeyPress), thisIsAReapeateKey);
+													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);
+													if (true == thisIsAReapeateKey) {
+														OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, !(event.type == KeyPress), thisIsAReapeateKey);
 													}
 												} else {
 													EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
@@ -682,10 +682,10 @@ class X11Interface : public ewol::eContext
 											break;
 									}
 									if (true == find) {
-										//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
-										OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, (event.type==KeyPress), thisIsAReapeateKey);
-										if (true==thisIsAReapeateKey) {
-											OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, !(event.type==KeyPress), thisIsAReapeateKey);
+										//EWOL_DEBUG("eventKey Move type : " << getCharTypeMoveEvent(keyInput) );
+										OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, (event.type == KeyPress), thisIsAReapeateKey);
+										if (true == thisIsAReapeateKey) {
+											OS_SetKeyboardMove(m_guiKeyBoardMode, keyInput, !(event.type == KeyPress), thisIsAReapeateKey);
 										}
 									}
 								}
@@ -728,26 +728,26 @@ class X11Interface : public ewol::eContext
 			m_run = false;
 		}
 		/****************************************************************************************/
-		virtual void SetSize(const vec2& _size)
+		virtual void setSize(const vec2& _size)
 		{
-			X11_INFO("X11-API: ChangeSize=" << _size);
+			X11_INFO("X11-API: changeSize=" << _size);
 			m_currentHeight = _size.y();
 			m_currentWidth = _size.x();
 			XResizeWindow(m_display, m_WindowHandle, _size.x(), _size.y());
 		}
 		/****************************************************************************************/
-		virtual void SetPos(const vec2& _pos)
+		virtual void setPos(const vec2& _pos)
 		{
-			X11_INFO("X11-API: ChangePos=" << _pos);
+			X11_INFO("X11-API: changePos=" << _pos);
 			XMoveWindow(m_display, m_WindowHandle, _pos.x(), _pos.y());
 			m_originX = _pos.x();
 			m_originY = _pos.y();
 		}
 		/****************************************************************************************/
 		/*
-		virtual void GetAbsPos(ivec2& pos)
+		virtual void getAbsPos(ivec2& pos)
 		{
-			X11_INFO("X11-API: GetAbsPos");
+			X11_INFO("X11-API: getAbsPos");
 			int tmp;
 			unsigned int tmp2;
 			Window fromroot, tmpwin;
@@ -755,10 +755,10 @@ class X11Interface : public ewol::eContext
 		}
 		*/
 		/****************************************************************************************/
-		virtual void SetCursor(ewol::cursorDisplay_te _newCursor)
+		virtual void setCursor(ewol::cursorDisplay_te _newCursor)
 		{
 			if (_newCursor != m_currentCursor) {
-				X11_DEBUG("X11-API: Set New Cursor : " << _newCursor);
+				X11_DEBUG("X11-API: set New Cursor : " << _newCursor);
 				// undefine previous cursors ...
 				XUndefineCursor(m_display, m_WindowHandle);
 				// set the new one :
@@ -883,7 +883,7 @@ class X11Interface : public ewol::eContext
 				m_forcePos.setY(m_currentHeight - m_forcePos.y());
 				m_grabAllEvent = true;
 				// change the pointer position to generate a good mouving at the start ...
-				X11_DEBUG("X11-API: Set pointer position : " << m_forcePos);
+				X11_DEBUG("X11-API: set pointer position : " << m_forcePos);
 				XWarpPointer(m_display, None, m_WindowHandle, 0,0, 0, 0, m_forcePos.x(), m_forcePos.y());
 				XFlush(m_display);
 				m_positionChangeRequested = true;
@@ -918,7 +918,7 @@ class X11Interface : public ewol::eContext
 			}
 			int Xscreen = DefaultScreen(m_display);
 			// set the DPI for the current screen :
-			ewol::dimension::SetPixelRatio(vec2((float)DisplayWidth(m_display, Xscreen)/(float)DisplayWidthMM(m_display, Xscreen),
+			ewol::dimension::setPixelRatio(vec2((float)DisplayWidth(m_display, Xscreen)/(float)DisplayWidthMM(m_display, Xscreen),
 			                                    (float)DisplayHeight(m_display, Xscreen)/(float)DisplayHeightMM(m_display, Xscreen)),
 			                               ewol::Dimension::Millimeter);
 			// get an appropriate visual
@@ -1008,7 +1008,7 @@ class X11Interface : public ewol::eContext
 			
 			XFree(StartupState);
 			
-			/* Open it, wait for it to appear */
+			/* open it, wait for it to appear */
 			XMapWindow(m_display, m_WindowHandle);
 			//XIfEvent(m_display, &event, WaitForMapNotify, (char*)&m_WindowHandle);
 			
@@ -1037,7 +1037,7 @@ class X11Interface : public ewol::eContext
 			
 			XSetICFocus(m_xic);
 			
-			// Set the kill atom so we get a message when the user tries to close the window
+			// set the kill atom so we get a message when the user tries to close the window
 			if ((m_delAtom = XInternAtom(m_display, "WM_DELETE_WINDOW", 0)) != None) {
 				XSetWMProtocols(m_display, m_WindowHandle, &m_delAtom, 1);
 			}
@@ -1048,19 +1048,19 @@ class X11Interface : public ewol::eContext
 			return true;
 		}
 		/****************************************************************************************/
-		void SetIcon(const etk::UString& _inputFile)
+		void setIcon(const etk::UString& _inputFile)
 		{
 			egami::Image dataImage;
 			// load data
-			if (false == egami::Load(dataImage, _inputFile)) {
+			if (false == egami::load(dataImage, _inputFile)) {
 				EWOL_ERROR("Error when loading Icon");
 				return;
 			}
 			int32_t depth = DefaultDepth(m_display, DefaultScreen(m_display) );
-			EWOL_DEBUG("X11 Create icon Size=(" << dataImage.GetWidth() << "," << dataImage.GetHeight() << ") depth=" << depth);
+			EWOL_DEBUG("X11 Create icon size=(" << dataImage.getWidth() << "," << dataImage.getHeight() << ") depth=" << depth);
 			switch(depth) {
 				case 8:
-					EWOL_CRITICAL("Not manage pixmap in 8 bit... ==> no icon ...");
+					EWOL_CRITICAL("Not manage pixmap in 8 bit...  == > no icon ...");
 					return;
 				case 16:
 					break;
@@ -1072,7 +1072,7 @@ class X11Interface : public ewol::eContext
 					EWOL_CRITICAL("Unknow thys type of bitDepth : " << depth);
 					return;
 			}
-			char* tmpVal = new char[4*dataImage.GetWidth()*dataImage.GetHeight()];
+			char* tmpVal = new char[4*dataImage.getWidth()*dataImage.getHeight()];
 			if (NULL == tmpVal) {
 				EWOL_CRITICAL("Allocation error ...");
 				return;
@@ -1080,9 +1080,9 @@ class X11Interface : public ewol::eContext
 			char* tmpPointer = tmpVal;
 			switch(depth) {
 				case 16:
-					for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
-						for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-							etk::Color<> tmpColor = dataImage.Get(pos);
+					for(ivec2 pos(0,0); pos.y()<dataImage.getHeight(); pos.setY(pos.y()+1)) {
+						for(pos.setX(0); pos.x()<dataImage.getHeight();  pos.setX(pos.x()+1)) {
+							etk::Color<> tmpColor = dataImage.get(pos);
 							int16_t tmpVal =   (((uint16_t)((uint16_t)tmpColor.r()>>3))<<11)
 							                 + (((uint16_t)((uint16_t)tmpColor.g()>>2))<<5)
 							                 +  ((uint16_t)((uint16_t)tmpColor.b()>>3));
@@ -1092,9 +1092,9 @@ class X11Interface : public ewol::eContext
 					}
 					break;
 				case 24:
-					for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
-						for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-							etk::Color<> tmpColor = dataImage.Get(pos);
+					for(ivec2 pos(0,0); pos.y()<dataImage.getHeight(); pos.setY(pos.y()+1)) {
+						for(pos.setX(0); pos.x()<dataImage.getHeight();  pos.setX(pos.x()+1)) {
+							etk::Color<> tmpColor = dataImage.get(pos);
 							*tmpPointer++ = tmpColor.b();
 							*tmpPointer++ = tmpColor.g();
 							*tmpPointer++ = tmpColor.r();
@@ -1103,9 +1103,9 @@ class X11Interface : public ewol::eContext
 					}
 					break;
 				case 32:
-					for(ivec2 pos(0,0); pos.y()<dataImage.GetHeight(); pos.setY(pos.y()+1)) {
-						for(pos.setX(0); pos.x()<dataImage.GetHeight();  pos.setX(pos.x()+1)) {
-							etk::Color<> tmpColor = dataImage.Get(pos);
+					for(ivec2 pos(0,0); pos.y()<dataImage.getHeight(); pos.setY(pos.y()+1)) {
+						for(pos.setX(0); pos.x()<dataImage.getHeight();  pos.setX(pos.x()+1)) {
+							etk::Color<> tmpColor = dataImage.get(pos);
 							*tmpPointer++ = tmpColor.a();
 							*tmpPointer++ = tmpColor.b();
 							*tmpPointer++ = tmpColor.g();
@@ -1123,12 +1123,12 @@ class X11Interface : public ewol::eContext
 			                              ZPixmap,
 			                              0,
 			                              (char*)tmpVal,
-			                              dataImage.GetWidth(),
-			                              dataImage.GetHeight(),
+			                              dataImage.getWidth(),
+			                              dataImage.getHeight(),
 			                              32,
 			                              0);
 			
-			Pixmap tmpPixmap = XCreatePixmap(m_display, m_WindowHandle, dataImage.GetWidth(), dataImage.GetHeight(), depth);
+			Pixmap tmpPixmap = XCreatePixmap(m_display, m_WindowHandle, dataImage.getWidth(), dataImage.getHeight(), depth);
 			switch(tmpPixmap) {
 				case BadAlloc:
 					EWOL_ERROR("X11: BadAlloc");
@@ -1144,7 +1144,7 @@ class X11Interface : public ewol::eContext
 					break;
 			}
 			GC tmpGC = DefaultGC(m_display, DefaultScreen(m_display) );
-			int error = XPutImage(m_display, tmpPixmap, tmpGC, myImage, 0, 0, 0, 0, dataImage.GetWidth(), dataImage.GetHeight());
+			int error = XPutImage(m_display, tmpPixmap, tmpGC, myImage, 0, 0, 0, 0, dataImage.getWidth(), dataImage.getHeight());
 			switch(error) {
 				case BadDrawable:
 					EWOL_ERROR("X11: BadDrawable");
@@ -1174,11 +1174,11 @@ class X11Interface : public ewol::eContext
 			win_hints->icon_pixmap = tmpPixmap;
 			// pass the hints to the window manager.
 			XSetWMHints(m_display, m_WindowHandle, win_hints);
-			EWOL_INFO("    ==> might be done ");
+			EWOL_INFO("     == > might be done ");
 			// finally, we can free the WM hints structure.
 			XFree(win_hints);
 			
-			// Note when we free the pixmap ... the icon is removed ... ==> this is a real memory leek ...
+			// Note when we free the pixmap ... the icon is removed ...  == > this is a real memory leek ...
 			//XFreePixmap(m_display, tmpPixmap);
 			
 			myImage->data = NULL;
@@ -1219,15 +1219,15 @@ class X11Interface : public ewol::eContext
 				EWOL_INFO("XF86 DRI NOT available\n");
 			}
 			
-			// Enable vertical synchronisation : (some computer has synchronisation disable)
+			// enable vertical synchronisation : (some computer has synchronisation disable)
 			setVSync(true);
 			
 			return true;
 		}
 		/****************************************************************************************/
-		void SetTitle(const etk::UString& _title)
+		void setTitle(const etk::UString& _title)
 		{
-			X11_INFO("X11: Set Title (START)");
+			X11_INFO("X11: set Title (START)");
 			XTextProperty tp;
 			etk::Char tmpChar = _title.c_str();
 			tp.value = (unsigned char *)((const char*)tmpChar);
@@ -1238,7 +1238,7 @@ class X11Interface : public ewol::eContext
 			XStoreName(m_display, m_WindowHandle, (const char*)tp.value);
 			XSetIconName(m_display, m_WindowHandle, (const char*)tp.value);
 			XSetWMIconName(m_display, m_WindowHandle, &tp);
-			X11_INFO("X11: Set Title (END)");
+			X11_INFO("X11: set Title (END)");
 		}
 		/****************************************************************************************/
 		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
@@ -1248,7 +1248,7 @@ class X11Interface : public ewol::eContext
 				case ewol::clipBoard::clipboardSelection:
 					if (false == m_clipBoardOwnerPrimary) {
 						m_clipBoardRequestPrimary = true;
-						// Generate a request on X11
+						// generate a request on X11
 						XConvertSelection(m_display,
 						                  XAtomeSelection,
 						                  XAtomeTargetStringUTF8,
@@ -1263,7 +1263,7 @@ class X11Interface : public ewol::eContext
 				case ewol::clipBoard::clipboardStd:
 					if (false == m_clipBoardOwnerStd) {
 						m_clipBoardRequestPrimary = false;
-						// Generate a request on X11
+						// generate a request on X11
 						XConvertSelection(m_display,
 						                  XAtomeClipBoard,
 						                  XAtomeTargetStringUTF8,
@@ -1314,7 +1314,7 @@ class X11Interface : public ewol::eContext
  */
 int ewol::Run(int _argc, const char *_argv[])
 {
-	etk::SetArgZero(_argv[0]);
+	etk::setArgZero(_argv[0]);
 	X11Interface* interface = new X11Interface(_argc, _argv);
 	if (NULL == interface) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");

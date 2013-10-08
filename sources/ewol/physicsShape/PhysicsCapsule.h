@@ -22,21 +22,21 @@ namespace ewol
 			PhysicsCapsule(void) {};
 			virtual ~PhysicsCapsule(void) {};
 		public:
-			virtual bool Parse(const char* _line);
-			virtual void Display(void) {};
+			virtual bool parse(const char* _line);
+			virtual void display(void) {};
 		public:
-			virtual type_te GetType(void) { return ewol::PhysicsShape::capsule; };
+			virtual type_te getType(void) { return ewol::PhysicsShape::capsule; };
 		private:
 			float m_radius;
 		public:
-			float GetRadius(void) const { return m_radius; };
+			float getRadius(void) const { return m_radius; };
 		private:
 			float m_height;
 		public:
-			float GetHeight(void) const { return m_height; };
+			float getHeight(void) const { return m_height; };
 		public:
-			virtual const PhysicsCapsule* ToCapsule(void) const { return this; };
-			virtual PhysicsCapsule* ToCapsule(void) { return this; };
+			virtual const PhysicsCapsule* toCapsule(void) const { return this; };
+			virtual PhysicsCapsule* toCapsule(void) { return this; };
 	};
 };
 

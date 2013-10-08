@@ -44,7 +44,7 @@ static const char* clipboardDescriptionString[ewol::clipBoard::clipboardCount+1]
 
 etk::CCout& ewol::clipBoard::operator <<(etk::CCout& _os, const ewol::clipBoard::clipboardListe_te _obj)
 {
-	if (_obj>=0 && _obj <ewol::clipBoard::clipboardCount) {
+	if (_obj >= 0 && _obj <ewol::clipBoard::clipboardCount) {
 		_os << clipboardDescriptionString[_obj];
 	} else {
 		_os << "[ERROR]";
@@ -53,28 +53,28 @@ etk::CCout& ewol::clipBoard::operator <<(etk::CCout& _os, const ewol::clipBoard:
 }
 
 
-void ewol::clipBoard::Init(void)
+void ewol::clipBoard::init(void)
 {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::clipBoard::clipboardCount; i++) {
-		mesCopy[i].Clear();
+		mesCopy[i].clear();
 	}
 }
 
 
-void ewol::clipBoard::UnInit(void)
+void ewol::clipBoard::unInit(void)
 {
 	EWOL_INFO("Initialyse ClipBoards");
 	for(int32_t i=0; i<ewol::clipBoard::clipboardCount; i++) {
-		mesCopy[i].Clear();
+		mesCopy[i].clear();
 	}
 }
 
 
-void ewol::clipBoard::Set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data)
+void ewol::clipBoard::set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data)
 {
 	// check if ID is correct
-	if(0 == _data.Size()) {
+	if(0 == _data.size()) {
 		EWOL_INFO("request a copy of nothing");
 		return;
 	} else 
@@ -84,17 +84,17 @@ void ewol::clipBoard::Set(ewol::clipBoard::clipboardListe_te _clipboardID, const
 		return;
 	}
 	
-	ewol::clipBoard::SetSystem(_clipboardID, _data);
+	ewol::clipBoard::setSystem(_clipboardID, _data);
 	
 	if(    ewol::clipBoard::clipboardStd == _clipboardID
 	    || ewol::clipBoard::clipboardSelection == _clipboardID) {
-		ewol::GetContext().ClipBoardSet(_clipboardID);
+		ewol::getContext().clipBoardSet(_clipboardID);
 		EWOL_TODO("Set ClipBoard");
 	}
 }
 
 
-void ewol::clipBoard::Request(ewol::clipBoard::clipboardListe_te _clipboardID)
+void ewol::clipBoard::request(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
@@ -103,17 +103,17 @@ void ewol::clipBoard::Request(ewol::clipBoard::clipboardListe_te _clipboardID)
 	
 	if(    ewol::clipBoard::clipboardStd == _clipboardID
 	    || ewol::clipBoard::clipboardSelection == _clipboardID) {
-		ewol::GetContext().ClipBoardGet(_clipboardID);
+		ewol::getContext().clipBoardGet(_clipboardID);
 		EWOL_TODO("Get ClipBoard");
 	} else {
 		// generate an event on the main thread ...
-		ewol::GetContext().OS_ClipBoardArrive(_clipboardID);
+		ewol::getContext().OS_ClipBoardArrive(_clipboardID);
 		EWOL_TODO("ClipBoard arrive");
 	}
 }
 
 
-void ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data)
+void ewol::clipBoard::setSystem(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data)
 {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
@@ -124,7 +124,7 @@ void ewol::clipBoard::SetSystem(ewol::clipBoard::clipboardListe_te _clipboardID,
 }
 
 
-const etk::UString& ewol::clipBoard::Get(ewol::clipBoard::clipboardListe_te _clipboardID)
+const etk::UString& ewol::clipBoard::get(ewol::clipBoard::clipboardListe_te _clipboardID)
 {
 	static const etk::UString emptyString("");
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {

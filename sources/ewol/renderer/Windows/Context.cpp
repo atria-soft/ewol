@@ -27,7 +27,7 @@
 
 
 
-int64_t ewol::GetTime(void)
+int64_t ewol::getTime(void)
 {
     struct timeval now;
     gettimeofday(&now, NULL);
@@ -78,8 +78,8 @@ class WindowsContext : public ewol::eContext
 			wc.cbClsExtra = 0;
 			wc.cbWndExtra = 0;
 			wc.hInstance = hInstance;
-			wc.hIcon = LoadIcon( NULL, IDI_APPLICATION );
-			wc.hCursor = LoadCursor( NULL, IDC_ARROW );
+			wc.hIcon = loadIcon( NULL, IDI_APPLICATION );
+			wc.hCursor = loadCursor( NULL, IDC_ARROW );
 			wc.hbrBackground = (HBRUSH)GetStockObject( BLACK_BRUSH );
 			wc.lpszMenuName = NULL;
 			wc.lpszClassName = "EwolMainWindows";
@@ -90,13 +90,13 @@ class WindowsContext : public ewol::eContext
 			                     WS_CAPTION | WS_POPUPWINDOW | WS_VISIBLE | WS_SIZEBOX,
 			                     0, 0, 800, 600,
 			                     NULL, NULL, hInstance, NULL );
-			int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
-			int title_size = GetSystemMetrics(SM_CYCAPTION);
+			int border_thickness = getSystemMetrics(SM_CXSIZEFRAME);
+			int title_size = getSystemMetrics(SM_CYCAPTION);
 			m_currentHeight = 600-2*border_thickness -title_size;
 			OS_Resize(800-2*border_thickness, m_currentHeight);
 			
-			// enable OpenGL for the window
-			EnableOpenGL( hWnd, &hDC, &hRC );
+			// enable openGL for the window
+			enableOpenGL( hWnd, &hDC, &hRC );
 			
 			// program main loop
 			while(true == m_run) {
@@ -106,7 +106,7 @@ class WindowsContext : public ewol::eContext
 					if ( msg.message == WM_QUIT ) {
 						m_run = false;
 					} else {
-						TranslateMessage( &msg );
+						translateMessage( &msg );
 						DispatchMessage( &msg );
 					}
 				} else {
@@ -114,8 +114,8 @@ class WindowsContext : public ewol::eContext
 					SwapBuffers( hDC );
 				}
 			}
-			// shutdown OpenGL
-			DisableOpenGL( hWnd, hDC, hRC );
+			// shutdown openGL
+			disableOpenGL( hWnd, hDC, hRC );
 			// destroy the window explicitly
 			DestroyWindow( hWnd );
 			return msg.wParam;
@@ -128,10 +128,10 @@ class WindowsContext : public ewol::eContext
 			PostQuitMessage(0);
 		}
 		
-		void SetSize(const vec2& _size)
+		void setSize(const vec2& _size)
 		{
-			int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
-			int title_size = GetSystemMetrics(SM_CYCAPTION);
+			int border_thickness = getSystemMetrics(SM_CXSIZEFRAME);
+			int title_size = getSystemMetrics(SM_CYCAPTION);
 			size.setValue(_size.x() + border_thickness*2,
 			              _size.y() + border_thickness*2 + title_size);
 			//m_currentHeight = size.y;
@@ -141,7 +141,7 @@ class WindowsContext : public ewol::eContext
 		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
 		{
 			// this is to force the local system to think we have the buffer
-			// TODO : Remove this 2 Line when code will be writen
+			// TODO : remove this 2 line when code will be writen
 			l_clipBoardOwnerStd = true;
 			switch (_clipboardID)
 			{
@@ -152,7 +152,7 @@ class WindowsContext : public ewol::eContext
 					break;
 				case ewol::clipBoard::clipboardStd:
 					if (false == l_clipBoardOwnerStd) {
-						// Generate a request TO the OS
+						// generate a request TO the OS
 						// TODO : Send the message to the OS "We disire to receive the copy buffer ...
 					} else {
 						// just transmit an event , we have the data in the system
@@ -187,11 +187,11 @@ class WindowsContext : public ewol::eContext
 		
 		
 		
-		// Enable OpenGL
-		void EnableOpenGL(HWND _hWnd, HDC* _hDC, HGLRC* _hRC)
+		// enable openGL
+		void enableOpenGL(HWND _hWnd, HDC* _hDC, HGLRC* _hRC)
 		{
 			// get the device context (DC)
-			*hDC = GetDC( _hWnd );
+			*hDC = getDC( _hWnd );
 			
 			PIXELFORMATDESCRIPTOR pfd;
 			// set the pixel format for the DC
@@ -204,7 +204,7 @@ class WindowsContext : public ewol::eContext
 			pfd.cDepthBits = 16;
 			pfd.iLayerType = PFD_MAIN_PLANE;
 			int format = ChoosePixelFormat( *_hDC, &pfd );
-			SetPixelFormat( *_hDC, format, &pfd );
+			setPixelFormat( *_hDC, format, &pfd );
 			
 			// create and enable the render context (RC)
 			*_hRC = wglCreateContext( *_hDC );
@@ -212,20 +212,20 @@ class WindowsContext : public ewol::eContext
 			
 		}
 		
-		// Disable OpenGL
+		// disable openGL
 		
-		void DisableOpenGL(HWND _hWnd, HDC _hDC, HGLRC _hRC)
+		void disableOpenGL(HWND _hWnd, HDC _hDC, HGLRC _hRC)
 		{
 			wglMakeCurrent( NULL, NULL );
 			wglDeleteContext( _hRC );
-			ReleaseDC( _hWnd, _hDC );
+			releaseDC( _hWnd, _hDC );
 		}
 		
 		
 		// Window Procedure
 		static LRESULT CALLBACK WndProc(HWND _hWnd, UINT _message, WPARAM _wParam, LPARAM _lParam)
 		{
-			// TODO : Set this function really work...
+			// TODO : set this function really work...
 			classPointer->WndProcReal(_hWnd, _message, _wParam, _lParam);
 		}
 		
@@ -274,8 +274,8 @@ class WindowsContext : public ewol::eContext
 						if (NULL != tmpVal) {
 							//EWOL_DEBUG("WM_WINDOWPOSCHANGING : : (" << tmpVal->x << "," << tmpVal->y << ") ( " << tmpVal->cx << "," << tmpVal->cy << ")");
 							// in windows system, we need to remove the size of the border elements : 
-							int border_thickness = GetSystemMetrics(SM_CXSIZEFRAME);
-							int title_size = GetSystemMetrics(SM_CYCAPTION);
+							int border_thickness = getSystemMetrics(SM_CXSIZEFRAME);
+							int title_size = getSystemMetrics(SM_CYCAPTION);
 							m_currentHeight = tmpVal->cy - 2*border_thickness - title_size;
 							OS_Resize(tmpVal->cx-2*border_thickness, m_currentHeight);
 						}
@@ -362,14 +362,14 @@ class WindowsContext : public ewol::eContext
 							//case :   keyInput = ewol::keyEvent::keyboardContextMenu; break;
 							case VK_NUMLOCK:   keyInput = ewol::keyEvent::keyboardNumLock;    guiKeyBoardMode.numLock = buttonIsDown; break;
 							case VK_BACK: // DEL
-								tmpChar.Set(0x08);
+								tmpChar.set(0x08);
 								break;
 							// TODO : Really strang, need to understand why ...
 							case 46: // Suppr
-								tmpChar.Set(0x7F);
+								tmpChar.set(0x7F);
 								break;
 							case VK_TAB: // special case for TAB
-								tmpChar.Set(0x09);
+								tmpChar.set(0x09);
 								break;
 							case VK_RETURN: // special case for TAB
 								tmpChar = '\n';
@@ -377,18 +377,18 @@ class WindowsContext : public ewol::eContext
 							default:
 								{
 									BYTE kbd[256];
-									GetKeyboardState(kbd);
+									getKeyboardState(kbd);
 									const int BUFFER_LENGTH = 8; //Length of the buffer
 									WCHAR chars[BUFFER_LENGTH];
 									
 									ToUnicode(wParam,lParam,kbd,chars,BUFFER_LENGTH,0);
-									tmpChar.SetUtf8((char*)chars);
+									tmpChar.setUtf8((char*)chars);
 								}
 								break;
 						}
 						EWOL_DEBUG("kjhkjhkjhkjhkj = " << _wParam);
 						if (tmpChar == 0) {
-							//EWOL_DEBUG("eventKey Move type : " << GetCharTypeMoveEvent(keyInput) );
+							//EWOL_DEBUG("eventKey Move type : " << getCharTypeMoveEvent(keyInput) );
 							OS_SetKeyboardMove(guiKeyBoardMode, keyInput, buttonIsDown);
 						} else {
 							OS_SetKeyboard(guiKeyBoardMode, tmpChar, buttonIsDown);

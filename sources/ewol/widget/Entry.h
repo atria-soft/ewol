@@ -43,7 +43,7 @@ namespace widget {
 			static const char* const configColorBg;
 			static const char* const configEmptyMessage;
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Shaper m_shaper;
 			ewol::Text m_oObjectText; //!< text display m_text
@@ -65,18 +65,18 @@ namespace widget {
 			 * @brief internal check the value with RegExp checking
 			 * @param[in] _newData The new string to display
 			 */
-			void SetInternalValue(const etk::UString& _newData);
+			void setInternalValue(const etk::UString& _newData);
 		public:
 			/**
 			 * @brief set a new value on the entry.
 			 * @param[in] _newData the new string to display.
 			 */
-			void SetValue(const etk::UString& _newData);
+			void setValue(const etk::UString& _newData);
 			/**
-			 * @brief Get the current value in the entry
+			 * @brief get the current value in the entry
 			 * @return The current display value
 			 */
-			etk::UString GetValue(void) const { return m_data; };
+			etk::UString getValue(void) const { return m_data; };
 		
 		private:
 			int32_t m_maxCharacter; //!< number max of xharacter in the list
@@ -85,12 +85,12 @@ namespace widget {
 			 * @brief Limit the number of Unicode character in the entry
 			 * @param[in] _nbMax Number of max character set in the List (0x7FFFFFFF for no limit)
 			 */
-			void SetMaxChar(int32_t _nbMax);
+			void setMaxChar(int32_t _nbMax);
 			/**
 			 * @brief Limit the number of Unicode character in the entry
 			 * @return Number of max character set in the List.
 			 */
-			int32_t GetMaxChar(void) const { return m_maxCharacter; };
+			int32_t getMaxChar(void) const { return m_maxCharacter; };
 		
 		private:
 			etk::RegExp<etk::UString> m_regExp; //!< regular expression to limit the input of an entry
@@ -99,12 +99,12 @@ namespace widget {
 			 * @brief Limit the input entry at a regular expression... (by default it is "*")
 			 * @param _expression New regular expression
 			 */
-			void SetRegExp(const etk::UString& _expression);
+			void setRegExp(const etk::UString& _expression);
 			/**
-			 * @brief Get the regualar expression limitation
+			 * @brief get the regualar expression limitation
 			 * @param The regExp string
 			 */
-			const etk::UString& GetRegExp(void) const { return m_regExp.GetRegExp(); };
+			const etk::UString& getRegExp(void) const { return m_regExp.getRegExp(); };
 		
 		private:
 			bool m_needUpdateTextPos; //!< text position can have change
@@ -116,88 +116,88 @@ namespace widget {
 			/**
 			 * @brief informe the system thet the text change and the start position change
 			 */
-			virtual void MarkToUpdateTextPosition(void);
+			virtual void markToUpdateTextPosition(void);
 			/**
-			 * @brief Update the display position start ==> depending of the position of the Cursor and the size of the Data inside
-			 * @change m_displayStartPosition <== updated
+			 * @brief update the display position start  == > depending of the position of the Cursor and the size of the Data inside
+			 * @change m_displayStartPosition < ==  updated
 			 */
-			virtual void UpdateTextPosition(void);
+			virtual void updateTextPosition(void);
 			/**
-			 * @brief Change the cursor position with the curent position requested on the display
+			 * @brief change the cursor position with the curent position requested on the display
 			 * @param[in] _pos Absolute position of the event
 			 * @note The display is automaticly requested when change apear.
 			 */
-			virtual void UpdateCursorPosition(const vec2& _pos, bool _Selection=false);
+			virtual void updateCursorPosition(const vec2& _pos, bool _Selection=false);
 		
 		public:
 			/**
 			 * @brief Copy the selected data on the specify clipboard
 			 * @param[in] _clipboardID Selected clipboard
 			 */
-			virtual void CopySelectionToClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			virtual void copySelectionToClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			/**
-			 * @brief Remove the selected area
+			 * @brief remove the selected area
 			 * @note This request a regeneration of the display
 			 */
-			virtual void RemoveSelected(void);
+			virtual void removeSelected(void);
 		
 		private:
 			etk::Color<> m_textColorFg; //!< Text color.
 		public:
 			/**
-			 * @brief Set text color.
+			 * @brief set text color.
 			 * @param _color Color that is selected.
 			 */
-			void SetColorText(const etk::Color<>& _color);
+			void setColorText(const etk::Color<>& _color);
 			/**
-			 * @brief Get the color for the text.
+			 * @brief get the color for the text.
 			 * @return The color requested.
 			 */
-			const etk::Color<>& GetColorText(void) const { return m_textColorFg; };
+			const etk::Color<>& getColorText(void) const { return m_textColorFg; };
 		
 		private:
 			etk::Color<> m_textColorBg; //!< Background color.
 		public:
 			/**
-			 * @brief Set text backgroung color when selected.
+			 * @brief set text backgroung color when selected.
 			 * @param _color Color that is selected.
 			 */
-			void SetColorTextSelected(const etk::Color<>& _color);
+			void setColorTextSelected(const etk::Color<>& _color);
 			/**
-			 * @brief Get the selected color for the text in selection mode.
+			 * @brief get the selected color for the text in selection mode.
 			 * @return The color requested.
 			 */
-			const etk::Color<>& GetColorTextSelected(void) const { return m_textColorBg; };
+			const etk::Color<>& getColorTextSelected(void) const { return m_textColorBg; };
 		
 		private:
 			etk::UString m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 		public:
 			/**
-			 * @brief Set The text displayed when nothing is in the entry.
+			 * @brief set The text displayed when nothing is in the entry.
 			 * @param _text Text to display when the entry box is empty (this text can be decorated).
 			 */
-			void SetEmptyText(const etk::UString& _text);
+			void setEmptyText(const etk::UString& _text);
 			/**
-			 * @brief Get The text displayed when nothing is in the entry.
+			 * @brief get The text displayed when nothing is in the entry.
 			 * @return Text display when nothing
 			 */
-			const etk::UString& GetEmptyText(void) const { return m_textWhenNothing; };
+			const etk::UString& getEmptyText(void) const { return m_textWhenNothing; };
 		public: // Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual bool OnEventEntry(const ewol::EventEntry& _event);
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
-			virtual void OnEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
-			virtual const char * const GetObjectType(void) { return "EwolEntry"; };
-			virtual void CalculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual bool onEventEntry(const ewol::EventEntry& _event);
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			virtual const char * const getObjectType(void) { return "EwolEntry"; };
+			virtual void calculateMinMaxSize(void);
 		protected: // Derived function
-			virtual void OnDraw(void);
-			virtual void OnGetFocus(void);
-			virtual void OnLostFocus(void);
-			virtual void ChangeStatusIn(int32_t _newStatusId);
-			virtual void PeriodicCall(const ewol::EventTime& _event);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual void onDraw(void);
+			virtual void onGetFocus(void);
+			virtual void onLostFocus(void);
+			virtual void changeStatusIn(int32_t _newStatusId);
+			virtual void periodicCall(const ewol::EventTime& _event);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };

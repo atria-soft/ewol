@@ -13,14 +13,14 @@
 #undef __class__
 #define __class__	"Layer"
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::Layer();
 }
 
-void widget::Layer::Init(ewol::WidgetManager& _widgetManager)
+void widget::Layer::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 widget::Layer::Layer(void)
@@ -30,23 +30,23 @@ widget::Layer::Layer(void)
 
 widget::Layer::~Layer(void)
 {
-	EWOL_DEBUG("[" << GetId() << "] Layer : destroy");
+	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::Widget* widget::Layer::GetWidgetAtPos(const vec2& _pos)
+ewol::Widget* widget::Layer::getWidgetAtPos(const vec2& _pos)
 {
-	if (true == IsHide()) {
+	if (true == isHide()) {
 		return NULL;
 	}
 	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
-			vec2 tmpSize = m_subWidget[iii]->GetSize();
-			vec2 tmpOrigin = m_subWidget[iii]->GetOrigin();
+			vec2 tmpSize = m_subWidget[iii]->getSize();
+			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::Widget * tmpWidget = m_subWidget[iii]->GetWidgetAtPos(_pos);
+				ewol::Widget * tmpWidget = m_subWidget[iii]->getWidgetAtPos(_pos);
 				if (NULL != tmpWidget) {
 					return tmpWidget;
 				}

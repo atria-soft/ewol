@@ -20,26 +20,26 @@ namespace widget {
 	class ProgressBar : public ewol::Widget
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Drawing m_draw; // basic drawing element
 		public:
 			ProgressBar(void);
 			virtual ~ProgressBar(void);
-			void ValueSet(float val);
-			float ValueGet(void);
-			void SetColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
+			void valueSet(float val);
+			float valueGet(void);
+			void setColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
 		private:
 			float m_value; //!< % used
 			etk::Color<> m_textColorFg; //!< forder bar color
 			etk::Color<> m_textColorBgOn; //!< bar color enable
 			etk::Color<> m_textColorBgOff; //!< bar color disable
 		protected: // Derived function
-			virtual void OnDraw(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual void OnRegenerateDisplay(void);
-			virtual const char * const GetObjectType(void) { return "EwolProgressBar"; };
-			virtual void CalculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual const char * const getObjectType(void) { return "EwolProgressBar"; };
+			virtual void calculateMinMaxSize(void);
 	};
 	
 };

@@ -13,10 +13,10 @@
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventTime& _obj)
 {
-	_os << "{time=" << _obj.GetTime();
-	_os << " uptime=" << _obj.GetApplUpTime();
-	_os << " delta=" << _obj.GetDelta();
-	_os << " deltaCall=" << _obj.GetDeltaCall();
+	_os << "{time=" << _obj.getTime();
+	_os << " uptime=" << _obj.getApplUpTime();
+	_os << " delta=" << _obj.getDelta();
+	_os << " deltaCall=" << _obj.getDeltaCall();
 	_os << "}";
 	return _os;
 }

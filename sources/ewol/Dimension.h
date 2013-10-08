@@ -50,12 +50,12 @@ namespace ewol
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const etk::UString& _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { Set(_config); };
+			Dimension(const etk::UString& _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { set(_config); };
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const char* _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { Set(_config); };
+			Dimension(const char* _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { set(_config); };
 			/**
 			 * @brief Destructor
 			 */
@@ -67,65 +67,65 @@ namespace ewol
 			operator etk::UString(void) const;
 			
 			/**
-			 * @brief Get the current dimention in requested type
+			 * @brief get the current dimention in requested type
 			 * @param[in] _type Type of unit requested.
 			 * @return dimention requested.
 			 */
-			vec2 Get(ewol::Dimension::distance_te _type) const;
+			vec2 get(ewol::Dimension::distance_te _type) const;
 			/**
-			 * @brief Set the current dimention in requested type
+			 * @brief set the current dimention in requested type
 			 * @param[in] _size Dimention to set
 			 * @param[in] _type Type of unit requested.
 			 */
-			void Set(const vec2& _size, ewol::Dimension::distance_te _type);
+			void set(const vec2& _size, ewol::Dimension::distance_te _type);
 			
 		private:
 			/**
-			 * @brief Set the current dimention in requested type
+			 * @brief set the current dimention in requested type
 			 * @param[in] _config dimension configuration.
 			 */
-			void Set(etk::UString _config);
+			void set(etk::UString _config);
 		public:
 			/**
-			 * @brief Get the current dimention in pixel
+			 * @brief get the current dimention in pixel
 			 * @return dimention in Pixel
 			 */
-			vec2 GetPixel(void) const;
+			vec2 getPixel(void) const;
 			/**
-			 * @brief Get the current dimention in Pourcent
+			 * @brief get the current dimention in Pourcent
 			 * @return dimention in Pourcent
 			 */
-			vec2 GetPourcent(void) const;
+			vec2 getPourcent(void) const;
 			/**
-			 * @brief Get the current dimention in Meter
+			 * @brief get the current dimention in Meter
 			 * @return dimention in Meter
 			 */
-			vec2 GetMeter(void) const;
+			vec2 getMeter(void) const;
 			/**
-			 * @brief Get the current dimention in Centimeter
+			 * @brief get the current dimention in Centimeter
 			 * @return dimention in Centimeter
 			 */
-			vec2 GetCentimeter(void) const;
+			vec2 getCentimeter(void) const;
 			/**
-			 * @brief Get the current dimention in Millimeter
+			 * @brief get the current dimention in Millimeter
 			 * @return dimention in Millimeter
 			 */
-			vec2 GetMillimeter(void) const;
+			vec2 getMillimeter(void) const;
 			/**
-			 * @brief Get the current dimention in Kilometer
+			 * @brief get the current dimention in Kilometer
 			 * @return dimention in Kilometer
 			 */
-			vec2 GetKilometer(void) const;
+			vec2 getKilometer(void) const;
 			/**
-			 * @brief Get the current dimention in Inch
+			 * @brief get the current dimention in Inch
 			 * @return dimention in Inch
 			 */
-			vec2 GetInch(void) const;
+			vec2 getInch(void) const;
 			/**
-			 * @brief Get the current dimention in Foot
+			 * @brief get the current dimention in Foot
 			 * @return dimention in Foot
 			 */
-			vec2 GetFoot(void) const;
+			vec2 getFoot(void) const;
 			/*****************************************************
 			 *    = assigment
 			 *****************************************************/
@@ -139,7 +139,7 @@ namespace ewol
 			/*****************************************************
 			 *    == operator
 			 *****************************************************/
-			bool operator== (const Dimension& _obj) const {
+			bool operator ==  (const Dimension& _obj) const {
 				if(    m_data == _obj.m_data
 				    && m_type == _obj.m_type) {
 					return true;
@@ -160,7 +160,7 @@ namespace ewol
 			 * @breif get the dimension type
 			 * @return the type
 			 */
-			ewol::Dimension::distance_te GetType(void) const { return m_type; };
+			ewol::Dimension::distance_te getType(void) const { return m_type; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension::distance_te& _obj);
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension& _obj);
@@ -171,35 +171,35 @@ namespace ewol
 		/**
 		 * @brief basic init
 		 */
-		void Init(void);
+		void init(void);
 		/**
 		 * @brief basic un-init
 		 */
-		void UnInit(void);
+		void unInit(void);
 		/**
-		 * @brief Set the Milimeter ratio for calculation
+		 * @brief set the Milimeter ratio for calculation
 		 * @param[in] Ratio Milimeter ration for the screen calculation interpolation
 		 * @param[in] type Unit type requested.
-		 * @note: same as @ref SetPixelPerInch (internal manage convertion)
+		 * @note: same as @ref setPixelPerInch (internal manage convertion)
 		 */
-		void SetPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type);
+		void setPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type);
 		/**
-		 * @brief Set the current Windows Size
-		 * @param[in] size Size of the current windows in pixel.
+		 * @brief set the current Windows size
+		 * @param[in] size size of the current windows in pixel.
 		 */
-		void SetPixelWindowsSize(const vec2& _size);
+		void setPixelWindowsSize(const vec2& _size);
 		/**
-		 * @brief Get the Windows Size in the request unit
+		 * @brief get the Windows size in the request unit
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		vec2 GetWindowsSize(ewol::Dimension::distance_te _type);
+		vec2 getWindowsSize(ewol::Dimension::distance_te _type);
 		/**
-		 * @brief Get the Windows diagonal size in the request unit
+		 * @brief get the Windows diagonal size in the request unit
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		float GetWindowsDiag(ewol::Dimension::distance_te _type);
+		float getWindowsDiag(ewol::Dimension::distance_te _type);
 	};
 };
 

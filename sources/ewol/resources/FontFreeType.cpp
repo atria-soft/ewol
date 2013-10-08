@@ -27,9 +27,9 @@
 static int32_t l_countLoaded=0;
 static FT_Library library;
 
-void ewol::FreeTypeInit(void)
+void ewol::freeTypeInit(void)
 {
-	EWOL_DEBUG("==> Init Font-Manager");
+	EWOL_DEBUG(" == > init Font-Manager");
 	l_countLoaded++;
 	if (l_countLoaded>1) {
 		// already loaded ...
@@ -41,9 +41,9 @@ void ewol::FreeTypeInit(void)
 	}
 }
 
-void ewol::FreeTypeUnInit(void)
+void ewol::freeTypeUnInit(void)
 {
-	EWOL_DEBUG("==> Un-Init Font-Manager");
+	EWOL_DEBUG(" == > Un-Init Font-Manager");
 	l_countLoaded--;
 	if (l_countLoaded>0) {
 		// already needed ...
@@ -66,16 +66,16 @@ ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
 	m_FileSize = 0;
 	
 	etk::FSNode myfile(_fontName);
-	if (false == myfile.Exist()) {
+	if (false == myfile.exist()) {
 		EWOL_ERROR("File Does not exist : " << myfile);
 		return;
 	}
-	m_FileSize = myfile.FileSize();
-	if (0==m_FileSize) {
+	m_FileSize = myfile.fileSize();
+	if (0 == m_FileSize) {
 		EWOL_ERROR("This file is empty : " << myfile);
 		return;
 	}
-	if (false == myfile.FileOpenRead()) {
+	if (false == myfile.fileOpenRead()) {
 		EWOL_ERROR("Can not open the file : " << myfile);
 		return;
 	}
@@ -86,9 +86,9 @@ ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
 		return;
 	}
 	// load data from the file :
-	myfile.FileRead(m_FileBuffer, 1, m_FileSize);
+	myfile.fileRead(m_FileBuffer, 1, m_FileSize);
 	// close the file:
-	myfile.FileClose();
+	myfile.fileClose();
 	// load Face ...
 	int32_t error = FT_New_Memory_Face( library, m_FileBuffer, m_FileSize, 0, &m_fftFace );
 	if( FT_Err_Unknown_File_Format == error) {
@@ -115,9 +115,9 @@ ewol::FontFreeType::~FontFreeType(void)
 }
 
 
-vec2 ewol::FontFreeType::GetSize(int32_t _fontSize, const etk::UString& _unicodeString)
+vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const etk::UString& _unicodeString)
 {
-	if(false==m_init) {
+	if(false == m_init) {
 		return vec2(0,0);
 	}
 	// TODO : ...
@@ -125,29 +125,29 @@ vec2 ewol::FontFreeType::GetSize(int32_t _fontSize, const etk::UString& _unicode
 	return outputSize;
 }
 
-int32_t ewol::FontFreeType::GetHeight(int32_t _fontSize)
+int32_t ewol::FontFreeType::getHeight(int32_t _fontSize)
 {
 	return _fontSize*1.43f; // this is a really "magic" number ...
 }
 
-bool ewol::FontFreeType::GetGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property)
+bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property)
 {
-	if(false==m_init) {
+	if(false == m_init) {
 		return false;
 	}
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
-	// Select Size ...
-	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+	// Select size ...
+	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
 		return false;
 	}
 	// a small shortcut
 	FT_GlyphSlot slot = m_fftFace->glyph;
 	// retrieve glyph index from character code 
-	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, _property.m_UVal.Get());
+	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, _property.m_UVal.get());
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
 	                      glyph_index, // glyph index
@@ -171,23 +171,22 @@ bool ewol::FontFreeType::GetGlyphProperty(int32_t _fontSize, ewol::GlyphProperty
 	return true;
 }
 
-bool ewol::FontFreeType::DrawGlyph(egami::Image& _imageOut,
+bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                    int32_t _fontSize,
                                    ivec2 _glyphPosition,
                                    ewol::GlyphProperty& _property,
                                    int8_t _posInImage)
 {
-
-	if(false==m_init) {
+	if(false == m_init) {
 		return false;
 	}
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
-	// Select Size ...
-	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+	// Select size ...
+	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
 		return false;
 	}
 	// a small shortcut
@@ -210,59 +209,59 @@ bool ewol::FontFreeType::DrawGlyph(egami::Image& _imageOut,
 	etk::Color<> tlpppp(0xFFFFFF00);
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
-			tlpppp = _imageOut.Get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
+			tlpppp = _imageOut.get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
 			switch(_posInImage)
 			{
 				default:
 				case 0:
-					tlpppp.SetA(valueColor);
+					tlpppp.setA(valueColor);
 					break;
 				case 1:
-					tlpppp.SetR(valueColor);
+					tlpppp.setR(valueColor);
 					break;
 				case 2:
-					tlpppp.SetG(valueColor);
+					tlpppp.setG(valueColor);
 					break;
 				case 3:
-					tlpppp.SetB(valueColor);
+					tlpppp.setB(valueColor);
 					break;
 			}
 			// real set of color
-			_imageOut.Set(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj), tlpppp );
+			_imageOut.set(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj), tlpppp );
 		}
 	}
 	return true;
 }
 
 
-void ewol::FontFreeType::GenerateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph)
+void ewol::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph)
 {
-	if(false==m_init) {
+	if(false == m_init) {
 		return;
 	}
 	if ((FT_FACE_FLAG_KERNING & m_fftFace->face_flags) == 0) {
-		EWOL_INFO("No kerning generation (Disable) in the font");
+		EWOL_INFO("No kerning generation (disable) in the font");
 	}
 	// 300dpi (hight quality) 96 dpi (normal quality)
 	int32_t fontQuality = 96;
-	// Select Size ...
-	// note tha <<6==*64 corespond with the 1/64th of points calculation of freetype
+	// Select size ...
+	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
 	int32_t error = FT_Set_Char_Size(m_fftFace, fontSize<<6, fontSize<<6, fontQuality, fontQuality);
 	if (0!=error ) {
-		EWOL_ERROR("FT_Set_Char_Size ==> error in settings ...");
+		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
 		return;
 	}
 	// For all the kerning element we get the kerning value :
-	for(int32_t iii=0; iii<listGlyph.Size(); iii++) {
-		listGlyph[iii].KerningClear();
-		for(int32_t kkk=0; kkk<listGlyph.Size(); kkk++) {
+	for(int32_t iii=0; iii<listGlyph.size(); iii++) {
+		listGlyph[iii].kerningClear();
+		for(int32_t kkk=0; kkk<listGlyph.size(); kkk++) {
 			FT_Vector kerning;
 			FT_Get_Kerning(m_fftFace, listGlyph[kkk].m_glyphIndex, listGlyph[iii].m_glyphIndex, FT_KERNING_UNFITTED, &kerning );
 			// add the kerning only if != 0 ... 
 			if (kerning.x != 0) {
-				listGlyph[iii].KerningAdd(listGlyph[kkk].m_UVal,
+				listGlyph[iii].kerningAdd(listGlyph[kkk].m_UVal,
 				                          kerning.x/32.0f );
 				//EWOL_DEBUG("Kerning between : '" << (char)listGlyph[iii].m_UVal << "'&'" << (char)listGlyph[kkk].m_UVal << "' value : " << kerning.x << " => " << (kerning.x/64.0f));
 			}
@@ -271,9 +270,9 @@ void ewol::FontFreeType::GenerateKerning(int32_t fontSize, etk::Vector<ewol::Gly
 }
 
 
-void ewol::FontFreeType::Display(void)
+void ewol::FontFreeType::display(void)
 {
-	if(false==m_init) {
+	if(false == m_init) {
 		return;
 	}
 	EWOL_INFO("    nuber of glyph       = " << (int)m_fftFace->num_glyphs);
@@ -360,10 +359,10 @@ void ewol::FontFreeType::Display(void)
 
 
 
-ewol::FontBase* ewol::FontFreeType::Keep(const etk::UString& _filename)
+ewol::FontBase* ewol::FontFreeType::keep(const etk::UString& _filename)
 {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
-	ewol::FontBase* object = static_cast<ewol::FontBase*>(GetManager().LocalKeep(_filename));
+	ewol::FontBase* object = static_cast<ewol::FontBase*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
@@ -373,16 +372,16 @@ ewol::FontBase* ewol::FontFreeType::Keep(const etk::UString& _filename)
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::FontFreeType::Release(ewol::FontBase*& _object)
+void ewol::FontFreeType::release(ewol::FontBase*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }

@@ -21,7 +21,7 @@ namespace widget {
 			/**
 			 * @brief Main call of recording the widget on the List of "widget named creator"
 			 */
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		public:
 			/**
 			 * @brief Constructor
@@ -32,8 +32,8 @@ namespace widget {
 			 */
 			virtual ~Layer(void);
 		public:
-			virtual const char * const GetObjectType(void) { return "Ewol::Layer"; };
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
+			virtual const char * const getObjectType(void) { return "Ewol::Layer"; };
+			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 	};
 	
 };

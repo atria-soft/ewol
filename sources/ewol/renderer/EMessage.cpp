@@ -14,12 +14,12 @@
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EMessage& _obj)
 {
 	_os << "{";
-	if (NULL != _obj.GetMessage()) {
-		_os << "msg=\"" << _obj.GetMessage() << "\"";
+	if (NULL != _obj.getMessage()) {
+		_os << "msg=\"" << _obj.getMessage() << "\"";
 	} else {
 		_os << "msg=\"NULL\"";
 	}
-	_os << " data=\"" << _obj.GetData() << "\"}";
+	_os << " data=\"" << _obj.getData() << "\"}";
 	return _os;
 }
 

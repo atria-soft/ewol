@@ -34,9 +34,9 @@ namespace ewol
 			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
-			 * @brief Load the openGL program and get all the ID needed
+			 * @brief load the openGL program and get all the ID needed
 			 */
-			void LoadProgram(void);
+			void loadProgram(void);
 		public:
 			/**
 			 * @brief generic constructor
@@ -49,38 +49,38 @@ namespace ewol
 			~Area(void);
 		public:
 			/**
-			 * @brief Draw All the refistered text in the current element on openGL
+			 * @brief draw All the refistered text in the current element on openGL
 			 */
-			void Draw(bool _disableDepthTest=true);
+			void draw(bool _disableDepthTest=true);
 			/**
-			 * @brief Clear alll the registered element in the current element
+			 * @brief clear alll the registered element in the current element
 			 */
-			void Clear(void);
+			void clear(void);
 			/**
-			 * @brief Get the current display position (sometime needed in the gui control)
+			 * @brief get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			const vec3& GetPos(void) { return m_position; };
+			const vec3& getPos(void) { return m_position; };
 			/**
-			 * @brief Set position for the next text writen
+			 * @brief set position for the next text writen
 			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(const vec3& _pos) { m_position = _pos; };
-			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(),_pos.y(),0)); };
+			void setPos(const vec3& _pos) { m_position = _pos; };
+			inline void setPos(const vec2& _pos) { setPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
-			 * @brief Set relative position for the next text writen
+			 * @brief set relative position for the next text writen
 			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(const vec3& _pos) { m_position += _pos; };
-			inline void SetRelPos(const vec2& _pos) { SetRelPos(vec3(_pos.x(),_pos.y(),0)); };
+			void setRelPos(const vec3& _pos) { m_position += _pos; };
+			inline void setRelPos(const vec2& _pos) { setRelPos(vec3(_pos.x(),_pos.y(),0)); };
 			/**
-			 * @brief Add a compleate of the image to display with the requested size
-			 * @param[in] _size Size of the output image
+			 * @brief add a compleate of the image to display with the requested size
+			 * @param[in] _size size of the output image
 			 */
-			void Print(const ivec2& _size);
+			void print(const ivec2& _size);
 			
-			egami::Image& Get(void) { return m_resource->Get(); };
-			void Flush(void) { m_resource->Flush(); };
+			egami::Image& get(void) { return m_resource->get(); };
+			void flush(void) { m_resource->flush(); };
 			
 	};
 };

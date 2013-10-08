@@ -20,7 +20,7 @@ namespace widget {
 	class Spacer :public ewol::Widget
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
 			static const char* const configColor;
 		private:
@@ -41,15 +41,15 @@ namespace widget {
 			 * @brief Spziby the background color (basicly transparent)
 			 * @param[in] newColor the display background color
 			 */
-			void SetColor(etk::Color<> _newColor) { m_color = _newColor; MarkToRedraw(); };
+			void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
 		public:
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "ewol::spacer"; };
-			virtual ewol::Widget * GetWidgetAtPos(const vec2& _pos) { return NULL; };
-			virtual void OnRegenerateDisplay(void);
-			virtual void OnDraw(void);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual const char * const getObjectType(void) { return "ewol::spacer"; };
+			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
+			virtual void onRegenerateDisplay(void);
+			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };

@@ -19,7 +19,7 @@ namespace ewol
 	/**
 	 * @brief the Shaper system is a basic theme configuration for every widget, it corespond at a background display described by a pool of files
 	 */
-	// TODO : Load image
+	// TODO : load image
 	// TODO : Abstaraction between states (call by name and the system greate IDs
 	class Shaper : public ewol::Compositing
 	{
@@ -30,9 +30,9 @@ namespace ewol
 			int32_t           m_confIdPaddingX;   //!< ConfigFile padding property X
 			int32_t           m_confIdPaddingY;   //!< ConfigFile padding property Y
 			int32_t           m_confIdChangeTime; //!< ConfigFile padding transition time property
-			int32_t           m_confProgramFile;  //!< ConfigFile OpengGl program Name
-			int32_t           m_confImageFile;    //!< ConfigFile OpengGl program Name
-			// OpenGL shaders programs:
+			int32_t           m_confProgramFile;  //!< ConfigFile opengGl program Name
+			int32_t           m_confImageFile;    //!< ConfigFile opengGl program Name
+			// openGL shaders programs:
 			ewol::Program* m_GLprogram;            //!< pointer on the opengl display program
 			int32_t        m_GLPosition;           //!< openGL id on the element (vertex buffer)
 			int32_t        m_GLMatrix;             //!< openGL id on the element (transformation matrix)
@@ -58,13 +58,13 @@ namespace ewol
 			vec2    m_coord[6];               //!< the double triangle coordonates
 		private:
 			/**
-			 * @brief Load the openGL program and get all the ID needed
+			 * @brief load the openGL program and get all the ID needed
 			 */
-			void LoadProgram(void);
+			void loadProgram(void);
 			/**
 			 * @brief Un-Load the openGL program and get all the ID needed
 			 */
-			void UnLoadProgram(void);
+			void unLoadProgram(void);
 		public:
 			/**
 			 * @brief generic constructor
@@ -77,87 +77,87 @@ namespace ewol
 			~Shaper(void);
 		public:
 			/**
-			 * @brief Draw All the refistered text in the current element on openGL
+			 * @brief draw All the refistered text in the current element on openGL
 			 */
-			void Draw(bool _disableDepthTest=true);
+			void draw(bool _disableDepthTest=true);
 			/**
-			 * @brief Clear alll tre registered element in the current element
+			 * @brief clear alll tre registered element in the current element
 			 */
-			void Clear(void);
+			void clear(void);
 			/**
 			 * @brief change the current status in an other
 			 * @param[in] _newStatusId the next new status requested
 			 * @return true The widget must call this fuction periodicly (and redraw itself)
 			 * @return false No need to request the periodic call.
 			 */
-			bool ChangeStatusIn(int32_t _newStatusId);
+			bool changeStatusIn(int32_t _newStatusId);
 			/**
-			 * @brief Get the current displayed status of the shaper
+			 * @brief get the current displayed status of the shaper
 			 * @return The Status Id
 			 */
-			int32_t GetCurrentDisplayedStatus(void) { return m_stateNew; };
+			int32_t getCurrentDisplayedStatus(void) { return m_stateNew; };
 			/**
-			 * @brief Get the next displayed status of the shaper
+			 * @brief get the next displayed status of the shaper
 			 * @return The next status Id (-1 if no status in next)
 			 */
-			int32_t GetNextDisplayedStatus(void) { return m_nextStatusRequested; };
+			int32_t getNextDisplayedStatus(void) { return m_nextStatusRequested; };
 			/**
-			 * @brief Get the current trasion status
+			 * @brief get the current trasion status
 			 * @return value of the transition status (0.0f when no activity)
 			 */
-			float GetTransitionStatus(void) { return m_stateTransition; };
+			float getTransitionStatus(void) { return m_stateTransition; };
 			/**
 			 * @brief Same as the widfget periodic call (this is for change display)
 			 * @param[in] _event The current time of the call.
 			 * @return true The widget must call this fuction periodicly (and redraw itself)
 			 * @return false No need to request the periodic call.
 			 */
-			bool PeriodicCall(const ewol::EventTime& _event);
+			bool periodicCall(const ewol::EventTime& _event);
 			/**
-			 * @brief Set the widget origin (needed fot the display)
+			 * @brief set the widget origin (needed fot the display)
 			 * @param[in] _newOri : the new widget origin
 			 */
-			void SetOrigin(const vec2& _newOri);
+			void setOrigin(const vec2& _newOri);
 			/**
-			 * @brief Set the widget size (needed fot the display)
+			 * @brief set the widget size (needed fot the display)
 			 * @param[in] _newSize : the new widget size
 			 */
-			void SetSize(const vec2& _newSize);
+			void setSize(const vec2& _newSize);
 			/**
-			 * @brief Set the internal widget size
+			 * @brief set the internal widget size
 			 * @param[in] _newInsidePos : the subelement size.
 			 */
-			void SetInsideSize(const vec2& _newInsideSize);
+			void setInsideSize(const vec2& _newInsideSize);
 			/**
-			 * @brief Set the internal widget position
+			 * @brief set the internal widget position
 			 * @param[in] _newInsidePos : the subelement position
 			 */
-			void SetInsidePos(const vec2& _newInsidePos);
+			void setInsidePos(const vec2& _newInsidePos);
 			/**
-			 * @brief Get the padding declared by the user in the config file
+			 * @brief get the padding declared by the user in the config file
 			 * @return the padding property
 			 */
-			vec2 GetPadding(void);
+			vec2 getPadding(void);
 			/**
-			 * @brief Change the shaper Source
+			 * @brief change the shaper Source
 			 * @param[in] _newFile New file of the shaper
 			 */
-			void SetSource(const etk::UString& _newFile);
+			void setSource(const etk::UString& _newFile);
 			/**
-			 * @brief Get the shaper file Source
+			 * @brief get the shaper file Source
 			 * @return the shapper file name
 			 */
-			const etk::UString& GetSource(void) const { return m_name; };
+			const etk::UString& getSource(void) const { return m_name; };
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.
 			 */
-			bool HasSources(void);
+			bool hasSources(void);
 		private:
 			/**
-			 * @brief Update the internal vertex table.
+			 * @brief update the internal vertex table.
 			 */
-			void UpdateVertex(void);
+			void updateVertex(void);
 	};
 };
 

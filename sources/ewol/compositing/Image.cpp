@@ -27,33 +27,33 @@ ewol::Image::Image(const etk::UString& _imageName) :
 	m_GLtexID(-1),
 	m_resource(NULL)
 {
-	SetSource(_imageName);
-	LoadProgram();
+	setSource(_imageName);
+	loadProgram();
 }
 
 ewol::Image::~Image(void)
 {
-	ewol::TextureFile::Release(m_resource);
-	ewol::Program::Release(m_GLprogram);
+	ewol::TextureFile::release(m_resource);
+	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Image::LoadProgram(void)
+void ewol::Image::loadProgram(void)
 {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::Keep("DATA:textured3D.prog");
+	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
 	if (NULL!=m_GLprogram) {
-		m_GLPosition = m_GLprogram->GetAttribute("EW_coord3d");
-		m_GLColor    = m_GLprogram->GetAttribute("EW_color");
-		m_GLtexture  = m_GLprogram->GetAttribute("EW_texture2d");
-		m_GLMatrix   = m_GLprogram->GetUniform("EW_MatrixTransformation");
-		m_GLtexID    = m_GLprogram->GetUniform("EW_texID");
+		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
+		m_GLColor    = m_GLprogram->getAttribute("EW_color");
+		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
+		m_GLMatrix   = m_GLprogram->getUniform("EW_MatrixTransformation");
+		m_GLtexID    = m_GLprogram->getUniform("EW_texID");
 	}
 }
 
-void ewol::Image::Draw(bool _disableDepthTest)
+void ewol::Image::draw(bool _disableDepthTest)
 {
-	if (m_coord.Size()<=0) {
+	if (m_coord.size() <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
 	}
@@ -61,41 +61,41 @@ void ewol::Image::Draw(bool _disableDepthTest)
 		// this is a normale case ... the user can choice to have no image ...
 		return;
 	}
-	if (m_GLprogram==NULL) {
+	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
 	}
 	if (_disableDepthTest == true) {
-		ewol::openGL::Disable(ewol::openGL::FLAG_DEPTH_TEST);
+		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	} else {
-		ewol::openGL::Enable(ewol::openGL::FLAG_DEPTH_TEST);
+		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 	// set Matrix : translation/positionMatrix
-	mat4 tmpMatrix = ewol::openGL::GetMatrix()*m_matrixApply;
-	m_GLprogram->Use(); 
-	m_GLprogram->UniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
+	mat4 tmpMatrix = ewol::openGL::getMatrix()*m_matrixApply;
+	m_GLprogram->use(); 
+	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// TextureID
-	m_GLprogram->SetTexture0(m_GLtexID, m_resource->GetId());
+	m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
 	// position :
-	m_GLprogram->SendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4*sizeof(btScalar));
+	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4*sizeof(btScalar));
 	// Texture :
-	m_GLprogram->SendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
+	m_GLprogram->sendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
 	// color :
-	m_GLprogram->SendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
 	// Request the draw od the elements : 
-	ewol::openGL::DrawArrays(GL_TRIANGLES, 0, m_coord.Size());
-	m_GLprogram->UnUse();
+	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
+	m_GLprogram->unUse();
 }
 
-void ewol::Image::Clear(void)
+void ewol::Image::clear(void)
 {
 	// call upper class
-	ewol::Compositing::Clear();
-	// Reset Buffer :
-	m_coord.Clear();
-	m_coordTex.Clear();
-	m_coordColor.Clear();
-	// Reset temporal variables :
+	ewol::Compositing::clear();
+	// reset Buffer :
+	m_coord.clear();
+	m_coordTex.clear();
+	m_coordColor.clear();
+	// reset temporal variables :
 	m_position = vec3(0.0, 0.0, 0.0);
 	m_clippingPosStart = vec3(0.0, 0.0, 0.0);
 	m_clippingPosStop = vec3(0.0, 0.0, 0.0);
@@ -104,7 +104,7 @@ void ewol::Image::Clear(void)
 	m_angle = 0.0;
 }
 
-void ewol::Image::SetClipping(const vec3& _pos, vec3 _posEnd)
+void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd)
 {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
@@ -131,61 +131,61 @@ void ewol::Image::SetClipping(const vec3& _pos, vec3 _posEnd)
 	m_clippingEnable = true;
 }
 
-void ewol::Image::SetAngle(float _angle)
+void ewol::Image::setAngle(float _angle)
 {
 	m_angle = _angle;
 }
 
-void ewol::Image::Print(const vec2& _size)
+void ewol::Image::print(const vec2& _size)
 {
-	PrintPart(_size, vec2(0,0), vec2(1,1));
+	printPart(_size, vec2(0,0), vec2(1,1));
 }
 
-void ewol::Image::PrintPart(const vec2& _size,
+void ewol::Image::printPart(const vec2& _size,
                             const vec2& _sourcePosStart,
                             const vec2& _sourcePosStop)
 {
-	if (m_angle==0.0f) {
+	if (m_angle == 0.0f) {
 		vec3 point = m_position;
 		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
 		
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		
 		
 		tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
 		point.setX(m_position.x() + _size.x());
 		point.setY(m_position.y());
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		
 		
 		tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
 		point.setX(m_position.x() + _size.x());
 		point.setY(m_position.y() + _size.y());
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		
 		tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
 		point.setX(m_position.x());
 		point.setY(m_position.y() + _size.y());
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		
 		tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
 		point.setX(m_position.x());
 		point.setY(m_position.y());
-		m_coord.PushBack(point);
-		m_coordTex.PushBack(tex);
-		m_coordColor.PushBack(m_color);
+		m_coord.pushBack(point);
+		m_coordTex.pushBack(tex);
+		m_coordColor.pushBack(m_color);
 		return;
 	}
 	vec3 center = m_position + vec3(_size.x(),_size.y(),0)/2.0f;
@@ -196,73 +196,73 @@ void ewol::Image::PrintPart(const vec2& _size,
 	
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 	
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStop.y());
 	point.setValue(limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 	
 	
 	tex.setValue(_sourcePosStop.x(),_sourcePosStart.y());
 	point.setValue(limitedSize.x(), limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 	
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStart.y());
 	point.setValue(-limitedSize.x(), limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 	
 	tex.setValue(_sourcePosStart.x(),_sourcePosStop.y());
 	point.setValue(-limitedSize.x(), -limitedSize.y(), 0);
 	point = point.rotate(vec3(0,0,1), m_angle) + center;
-	m_coord.PushBack(point);
-	m_coordTex.PushBack(tex);
-	m_coordColor.PushBack(m_color);
+	m_coord.pushBack(point);
+	m_coordTex.pushBack(tex);
+	m_coordColor.pushBack(m_color);
 }
 
-void ewol::Image::SetSource(const etk::UString& _newFile, const vec2& _size)
+void ewol::Image::setSource(const etk::UString& _newFile, const vec2& _size)
 {
-	Clear();
+	clear();
 	// remove old one
-	ewol::TextureFile::Release(m_resource);
+	ewol::TextureFile::release(m_resource);
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
-		// link to new One
-		m_resource = ewol::TextureFile::Keep(_newFile, tmpSize);
+		// link to new one
+		m_resource = ewol::TextureFile::keep(_newFile, tmpSize);
 		if (NULL == m_resource) {
 			EWOL_ERROR("Can not get Image resource");
 		}
 	}
 }
 
-bool ewol::Image::HasSources(void)
+bool ewol::Image::hasSources(void)
 {
 	return m_resource!=NULL;
 }
 
 
-vec2 ewol::Image::GetRealSize(void)
+vec2 ewol::Image::getRealSize(void)
 {
-	if (NULL==m_resource) {
+	if (NULL == m_resource) {
 		return vec2(0,0);
 	}
-	return m_resource->GetRealSize();
+	return m_resource->getRealSize();
 }
 
 

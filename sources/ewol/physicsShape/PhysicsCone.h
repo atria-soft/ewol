@@ -22,21 +22,21 @@ namespace ewol
 			PhysicsCone(void) {};
 			virtual ~PhysicsCone(void) {};
 		public:
-			virtual bool Parse(const char* _line);
-			virtual void Display(void) {};
+			virtual bool parse(const char* _line);
+			virtual void display(void) {};
 		public:
-			virtual type_te GetType(void) { return ewol::PhysicsShape::cone; };
+			virtual type_te getType(void) { return ewol::PhysicsShape::cone; };
 		private:
 			float m_radius;
 		public:
-			float GetRadius(void) const { return m_radius; };
+			float getRadius(void) const { return m_radius; };
 		private:
 			float m_height;
 		public:
-			float GetHeight(void) const { return m_height; };
+			float getHeight(void) const { return m_height; };
 		public:
-			virtual const PhysicsCone* ToCone(void) const { return this; };
-			virtual PhysicsCone* ToCone(void) { return this; };
+			virtual const PhysicsCone* toCone(void) const { return this; };
+			virtual PhysicsCone* toCone(void) { return this; };
 	};
 };
 

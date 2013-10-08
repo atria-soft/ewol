@@ -25,77 +25,77 @@ ewol::ResourceManager::ResourceManager(void) :
 ewol::ResourceManager::~ResourceManager(void)
 {
 	bool hasError = false;
-	if (m_resourceListToUpdate.Size()!=0) {
+	if (m_resourceListToUpdate.size()!=0) {
 		EWOL_ERROR("Must not have anymore resources to update !!!");
 		hasError = true;
 	}
-	if (m_resourceList.Size()!=0) {
+	if (m_resourceList.size()!=0) {
 		EWOL_ERROR("Must not have anymore resources !!!");
 		hasError = true;
 	}
-	if (true==hasError) {
+	if (true == hasError) {
 		EWOL_ERROR("Check if the function UnInit has been called !!!");
 	}
 }
-void ewol::ResourceManager::UnInit(void)
+void ewol::ResourceManager::unInit(void)
 {
-	Display();
-	m_resourceListToUpdate.Clear();
+	display();
+	m_resourceListToUpdate.clear();
 	// remove all resources ...
-	for (int32_t iii=m_resourceList.Size()-1; iii>=0; iii--) {
+	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
-			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->GetUID() << "]"
-			             << "=\"" << m_resourceList[iii]->GetName() << "\" "
-			             << m_resourceList[iii]->GetCounter() << " elements");
+			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->getUID() << "]"
+			             << "=\"" << m_resourceList[iii]->getName() << "\" "
+			             << m_resourceList[iii]->getCounter() << " elements");
 			delete(m_resourceList[iii]);
 			m_resourceList[iii] = NULL;
 		}
 	}
-	m_resourceList.Clear();
+	m_resourceList.clear();
 }
 
 
-void ewol::ResourceManager::Display(void)
+void ewol::ResourceManager::display(void)
 {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
-	for (int32_t iii=m_resourceList.Size()-1; iii>=0; iii--) {
+	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
-			EWOL_INFO("    [" << m_resourceList[iii]->GetUID() << "]"
-			          << m_resourceList[iii]->GetType()
-			          << "=\"" << m_resourceList[iii]->GetName() << "\" "
-			          << m_resourceList[iii]->GetCounter() << " elements");
+			EWOL_INFO("    [" << m_resourceList[iii]->getUID() << "]"
+			          << m_resourceList[iii]->getType()
+			          << "=\"" << m_resourceList[iii]->getName() << "\" "
+			          << m_resourceList[iii]->getCounter() << " elements");
 		}
 	}
 	EWOL_INFO("Resources ---");
 }
 
-void ewol::ResourceManager::ReLoadResources(void)
+void ewol::ResourceManager::reLoadResources(void)
 {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...
-	if (m_resourceList.Size() != 0) {
+	if (m_resourceList.size() != 0) {
 		for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-			for (int32_t iii=m_resourceList.Size()-1; iii>=0; iii--) {
+			for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 				if(m_resourceList[iii] != NULL) {
-					if (jjj==m_resourceList[iii]->GetResourceLevel()) {
-						m_resourceList[iii]->Reload();
-						EWOL_INFO("        [" << m_resourceList[iii]->GetUID() << "]="<< m_resourceList[iii]->GetType());
+					if (jjj == m_resourceList[iii]->getResourceLevel()) {
+						m_resourceList[iii]->reload();
+						EWOL_INFO("        [" << m_resourceList[iii]->getUID() << "]="<< m_resourceList[iii]->getType());
 					}
 				}
 			}
 		}
 	}
 	// TODO : UNderstand why it is set here ...
-	//ewol::RequestUpdateSize();
+	//ewol::requestUpdateSize();
 	EWOL_INFO("-------------  Resources  -------------");
 }
 
-void ewol::ResourceManager::Update(ewol::Resource* _object)
+void ewol::ResourceManager::update(ewol::Resource* _object)
 {
 	// chek if not added before
-	for (int32_t iii=0; iii<m_resourceListToUpdate.Size(); iii++) {
+	for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] != NULL) {
 			if (m_resourceListToUpdate[iii] == _object) {
 				// just prevent some double add ...
@@ -104,36 +104,36 @@ void ewol::ResourceManager::Update(ewol::Resource* _object)
 		}
 	}
 	// add it ...
-	m_resourceListToUpdate.PushBack(_object);
+	m_resourceListToUpdate.pushBack(_object);
 }
 
-// Specific to load or update the data in the openGl context ==> system use only
-void ewol::ResourceManager::UpdateContext(void)
+// Specific to load or update the data in the openGl context  == > system use only
+void ewol::ResourceManager::updateContext(void)
 {
 	if (true == m_contextHasBeenRemoved) {
 		// need to update all ...
 		m_contextHasBeenRemoved = false;
-		if (m_resourceList.Size() != 0) {
+		if (m_resourceList.size() != 0) {
 			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
-				EWOL_INFO("    UpdateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-				for (int32_t iii=0; iii<m_resourceList.Size(); iii++) {
+				EWOL_INFO("    updateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
+				for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 					if(m_resourceList[iii] != NULL) {
-						if (jjj==m_resourceList[iii]->GetResourceLevel()) {
-							//EWOL_DEBUG("Update context of " << iii << " named : " << l_resourceList[iii]->GetName());
-							m_resourceList[iii]->UpdateContext();
+						if (jjj == m_resourceList[iii]->getResourceLevel()) {
+							//EWOL_DEBUG("Update context of " << iii << " named : " << l_resourceList[iii]->getName());
+							m_resourceList[iii]->updateContext();
 						}
 					}
 				}
 			}
 		}
 	}else {
-		if (m_resourceListToUpdate.Size() != 0) {
+		if (m_resourceListToUpdate.size() != 0) {
 			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
-				EWOL_INFO("    UpdateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-				for (int32_t iii=0; iii<m_resourceListToUpdate.Size(); iii++) {
+				EWOL_INFO("    updateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
+				for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 					if(m_resourceListToUpdate[iii] != NULL) {
-						if (jjj==m_resourceListToUpdate[iii]->GetResourceLevel()) {
-							m_resourceListToUpdate[iii]->UpdateContext();
+						if (jjj == m_resourceListToUpdate[iii]->getResourceLevel()) {
+							m_resourceListToUpdate[iii]->updateContext();
 						}
 					}
 				}
@@ -141,15 +141,15 @@ void ewol::ResourceManager::UpdateContext(void)
 		}
 	}
 	// Clean the update list
-	m_resourceListToUpdate.Clear();
+	m_resourceListToUpdate.clear();
 }
 
 // in this case, it is really too late ...
-void ewol::ResourceManager::ContextHasBeenDestroyed(void)
+void ewol::ResourceManager::contextHasBeenDestroyed(void)
 {
-	for (int32_t iii=0; iii<m_resourceList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
-			m_resourceList[iii]->RemoveContextToLate();
+			m_resourceList[iii]->removeContextToLate();
 		}
 	}
 	// no context preent ...
@@ -161,13 +161,13 @@ void ewol::ResourceManager::ContextHasBeenDestroyed(void)
 
 
 // internal generic keeper ...
-ewol::Resource* ewol::ResourceManager::LocalKeep(const etk::UString& _filename)
+ewol::Resource* ewol::ResourceManager::localKeep(const etk::UString& _filename)
 {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
-	for (int32_t iii=0; iii<m_resourceList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
-			if(m_resourceList[iii]->HasName(_filename)) {
-				m_resourceList[iii]->Increment();
+			if(m_resourceList[iii]->hasName(_filename)) {
+				m_resourceList[iii]->increment();
 				return m_resourceList[iii];
 			}
 		}
@@ -177,36 +177,36 @@ ewol::Resource* ewol::ResourceManager::LocalKeep(const etk::UString& _filename)
 }
 
 // internal generic keeper ...
-void ewol::ResourceManager::LocalAdd(ewol::Resource* _object)
+void ewol::ResourceManager::localAdd(ewol::Resource* _object)
 {
 	//Add ... find empty slot
-	for (int32_t iii=0; iii<m_resourceList.Size(); iii++) {
+	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] == NULL) {
 			m_resourceList[iii] = _object;
 			return;
 		}
 	}
 	// add at the end if no slot is free
-	m_resourceList.PushBack(_object);
+	m_resourceList.pushBack(_object);
 }
 
-void ewol::ResourceManager::Release(ewol::Resource*& _object)
+void ewol::ResourceManager::release(ewol::Resource*& _object)
 {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return;
 	}
-	for (int32_t iii=0; iii<m_resourceListToUpdate.Size(); iii++) {
+	for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] == _object) {
 			m_resourceListToUpdate[iii] = NULL;
 			//l_resourceListToUpdate.Erase(iii);
 		}
 	}
-	EWOL_VERBOSE("RELEASE (default) : file : \"" << _object->GetName() << "\"");
-	for (int32_t iii=m_resourceList.Size()-1; iii>=0; iii--) {
+	EWOL_VERBOSE("RELEASE (default) : file : \"" << _object->getName() << "\"");
+	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
 			if(m_resourceList[iii] == _object) {
-				if (true == m_resourceList[iii]->Decrement()) {
+				if (true == m_resourceList[iii]->decrement()) {
 					// delete element
 					delete(m_resourceList[iii]);
 					// remove element from the list :

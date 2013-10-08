@@ -53,14 +53,14 @@ ewol::Texture::Texture(void)
 
 ewol::Texture::~Texture(void)
 {
-	RemoveContext();
+	removeContext();
 }
 
 
-void ewol::Texture::UpdateContext(void)
+void ewol::Texture::updateContext(void)
 {
 	if (false == m_loaded) {
-		// Request a new texture at OpenGl :
+		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
 	}
 	// in all case we set the texture properties :
@@ -75,22 +75,22 @@ void ewol::Texture::UpdateContext(void)
 	//--- Mode linear
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	EWOL_INFO("TEXTURE: Add [" << m_uniqueId << "]=" << m_data.GetSize() << " OGl_Id=" <<m_texId);
+	EWOL_INFO("TEXTURE: add [" << m_uniqueId << "]=" << m_data.getSize() << " OGl_Id=" <<m_texId);
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
 	             GL_RGBA, // Format internal
-	             m_data.GetWidth(),
-	             m_data.GetHeight(),
+	             m_data.getWidth(),
+	             m_data.getHeight(),
 	             0, // Border
 	             GL_RGBA, // format
 	             GL_UNSIGNED_BYTE, // type
-	             m_data.GetTextureDataPointer() );
+	             m_data.getTextureDataPointer() );
 	// now the data is loaded
 	m_loaded = true;
 }
 
 
-void ewol::Texture::RemoveContext(void)
+void ewol::Texture::removeContext(void)
 {
 	if (true == m_loaded) {
 		// Request remove texture ...
@@ -101,27 +101,27 @@ void ewol::Texture::RemoveContext(void)
 }
 
 
-void ewol::Texture::RemoveContextToLate(void)
+void ewol::Texture::removeContextToLate(void)
 {
 	m_loaded = false;
 	m_texId=0;
 }
 
 
-void ewol::Texture::Flush(void)
+void ewol::Texture::flush(void)
 {
 	// request to the manager to be call at the next update ...
-	GetManager().Update(this);
+	getManager().update(this);
 }
 
 
-void ewol::Texture::SetImageSize(ivec2 _newSize)
+void ewol::Texture::setImageSize(ivec2 _newSize)
 {
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
-	m_data.Resize(_newSize);
+	m_data.resize(_newSize);
 }
 
-ewol::Texture* ewol::Texture::Keep(void)
+ewol::Texture* ewol::Texture::keep(void)
 {
 	// this element create a new one every time ....
 	ewol::Texture* object = new ewol::Texture();
@@ -129,16 +129,16 @@ ewol::Texture* ewol::Texture::Keep(void)
 		EWOL_ERROR("allocation error of a resource : ??TEX??");
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::Texture::Release(ewol::Texture*& _object)
+void ewol::Texture::release(ewol::Texture*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }

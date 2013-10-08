@@ -32,9 +32,9 @@ namespace widget {
 			// Cinfig parameter list:
 			static const char* const configLimit;
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		private:
-			ewol::Drawing m_draw; // TODO : Change in shaper ... ==> better for annimation and dynamic display ...
+			ewol::Drawing m_draw; // TODO : change in shaper ...  == > better for annimation and dynamic display ...
 		protected:
 			vec2 m_limit;
 		private:
@@ -47,28 +47,28 @@ namespace widget {
 			Scroll(void);
 			virtual ~Scroll(void);
 			/**
-			 * @brief Set the limit of scrolling
+			 * @brief set the limit of scrolling
 			 * @note This permit to scoll element upper the end of the display
 			 * @param[in] _limit scrolling limit [0..1] (represent a pourcent)
 			 */
-			void SetLimit(const vec2& _limit);
+			void setLimit(const vec2& _limit);
 			/**
-			 * @brief Get the limit of scrolling
+			 * @brief get the limit of scrolling
 			 * @return scrolling limit
 			 */
-			const vec2& GetLimit(void) const { return m_limit; };
+			const vec2& getLimit(void) const { return m_limit; };
 			
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "ewol::widget::Scroll"; };
-			void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
+			virtual const char * const getObjectType(void) { return "ewol::widget::Scroll"; };
+			void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 		protected: // Derived function
-			virtual void OnDraw(void);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
 };

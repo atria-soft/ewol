@@ -16,38 +16,38 @@ widget::Drawable::Drawable(void)
 
 widget::Drawable::~Drawable(void)
 {
-	ClearOObjectList();
+	clearOObjectList();
 }
 
 
-void widget::Drawable::AddOObject(ewol::Compositing* newObject, int32_t pos)
+void widget::Drawable::addOObject(ewol::Compositing* newObject, int32_t pos)
 {
 	if (NULL == newObject) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (pos < 0 || pos >= m_listOObject.Size() ) {
-		m_listOObject.PushBack(newObject);
+	if (pos < 0 || pos >= m_listOObject.size() ) {
+		m_listOObject.pushBack(newObject);
 	} else {
-		m_listOObject.Insert(pos, newObject);
+		m_listOObject.insert(pos, newObject);
 	}
 }
 
 
-void widget::Drawable::ClearOObjectList(void)
+void widget::Drawable::clearOObjectList(void)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
 	}
-	m_listOObject.Clear();
+	m_listOObject.clear();
 }
 
-void widget::Drawable::OnDraw(void)
+void widget::Drawable::onDraw(void)
 {
-	for (int32_t iii=0; iii<m_listOObject.Size(); iii++) {
+	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
-			m_listOObject[iii]->Draw();
+			m_listOObject[iii]->draw();
 		}
 	}
 }

@@ -35,21 +35,21 @@ namespace ewol
 		public:
 			Light(void);
 			~Light(void);
-			void Link(ewol::Program* prog, const etk::UString& baseName);
-			void Draw(ewol::Program* prog);
-			void SetDirection(const vec3& val) {
+			void link(ewol::Program* prog, const etk::UString& baseName);
+			void draw(ewol::Program* prog);
+			void setDirection(const vec3& val) {
 				m_direction = val;
 			}
-			void SetHalfPlane(const vec3& val) {
+			void setHalfPlane(const vec3& val) {
 				m_halfplane = val;
 			}
-			void SetAmbientColor(const vec4& val) {
+			void setAmbientColor(const vec4& val) {
 				m_ambientColor = val;
 			}
-			void SetDiffuseColor(const vec4& val) {
+			void setDiffuseColor(const vec4& val) {
 				m_diffuseColor = val;
 			}
-			void SetSpecularColor(const vec4& val) {
+			void setSpecularColor(const vec4& val) {
 				m_specularColor = val;
 			}
 			

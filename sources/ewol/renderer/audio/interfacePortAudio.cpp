@@ -45,13 +45,13 @@ static int patestCallback( const void *inputBuffer, void *outputBuffer,
     userOutputData *data = (userOutputData*)userData; 
     // no use of the input buffer ... (mightt be NULL)
     (void) inputBuffer;
-    ewol::audio::GetData((int16_t*)outputBuffer, framesPerBuffer, data->nbChanelsOutput);
+    ewol::audio::getData((int16_t*)outputBuffer, framesPerBuffer, data->nbChanelsOutput);
     return 0;
 }
 
 #define SAMPLE_RATE (44100)
 
-void ewol::portAudio::Init(void)
+void ewol::portAudio::init(void)
 {
 	PaError err;
 	EWOL_DEBUG("Create Audio Thread...");
@@ -65,7 +65,7 @@ void ewol::portAudio::Init(void)
 	data.nbChanelsInput = 0;
 	data.nbChanelsOutput = 2;
 	data.frameSize = 256;
-	/* Open an audio I/O stream. */
+	/* open an audio I/O stream. */
 	err = Pa_OpenDefaultStream( &stream, data.nbChanelsInput, data.nbChanelsOutput,
 	                            paInt16, data.sampleRate, data.frameSize,
 	                            patestCallback, &data );
@@ -81,7 +81,7 @@ void ewol::portAudio::Init(void)
 	EWOL_DEBUG("Create Audio Thread ... might have start");
 }
 
-void ewol::portAudio::UnInit(void)
+void ewol::portAudio::unInit(void)
 {
 	PaError err;
 	// destroy the thread ...

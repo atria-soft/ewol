@@ -33,35 +33,35 @@ namespace widget
 			~Container(void);
 		public:
 			/**
-			 * @brief Get the main node widget
+			 * @brief get the main node widget
 			 * @return the requested pointer on the node
 			 */
-			ewol::Widget* GetSubWidget(void);
+			ewol::Widget* getSubWidget(void);
 			/**
-			 * @brief Set the subWidget node widget.
-			 * @param[in] _newWidget The widget to Add.
+			 * @brief set the subWidget node widget.
+			 * @param[in] _newWidget The widget to add.
 			 */
-			void SetSubWidget(ewol::Widget* _newWidget);
+			void setSubWidget(ewol::Widget* _newWidget);
 			/**
-			 * @brief Remove the subWidget node.
+			 * @brief remove the subWidget node.
 			 */
-			void SubWidgetRemove(void);
+			void subWidgetRemove(void);
 			/**
-			 * @brief Remove the subWidget node (delayed to prevent remove in the callbback).
+			 * @brief remove the subWidget node (delayed to prevent remove in the callbback).
 			 */
-			virtual void SubWidgetRemoveDelayed(void);
+			virtual void subWidgetRemoveDelayed(void);
 			
 		public: // Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
-			virtual void OnRegenerateDisplay(void);
-			virtual void OnObjectRemove(ewol::EObject* _removeObject);
-			virtual void CalculateSize(const vec2& _availlable);
-			virtual void CalculateMinMaxSize(void);
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& _pos);
-			virtual ewol::Widget* GetWidgetNamed(const etk::UString& _widgetName);
-			virtual const char * const GetObjectType(void) { return "ewol::widget::Container"; };
-			virtual bool LoadXML(exml::Element* _node);
-			virtual void SetOffset(const vec2& _newVal);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void onRegenerateDisplay(void);
+			virtual void onObjectRemove(ewol::EObject* _removeObject);
+			virtual void calculateSize(const vec2& _availlable);
+			virtual void calculateMinMaxSize(void);
+			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
+			virtual const char * const getObjectType(void) { return "ewol::widget::Container"; };
+			virtual bool loadXML(exml::Element* _node);
+			virtual void setOffset(const vec2& _newVal);
 	};
 };
 

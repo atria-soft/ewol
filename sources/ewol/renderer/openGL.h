@@ -22,7 +22,7 @@ extern "C" {
 	#define GL_GLEXT_PROTOTYPES
 	#include <GL/gl.h>
 	// TODO : Check it it work
-	// This is to prevent the use of these element that is not allowed in the OpenGL ES
+	// This is to prevent the use of these element that is not allowed in the openGL ES
 	#undef glVertexPointer
 	#undef glTexCoordPointer
 	#undef glColorPointer
@@ -56,59 +56,59 @@ extern "C" {
 namespace ewol {
 	namespace openGL {
 		/**
-		 * @brief Lock the OpenGL context for one user only ==> better to keep flags and other things ...
+		 * @brief Lock the openGL context for one user only  == > better to keep flags and other things ...
 		 */
-		void Lock(void);
+		void lock(void);
 		/**
-		 * @brief Un-lock the OpenGL context for an other user...
+		 * @brief Un-lock the openGL context for an other user...
 		 */
-		void UnLock(void);
+		void unLock(void);
 		/**
 		 * @brief When you will done an opengl rendering, you might call this reset matrix first. It remove all the stach of the matrix pushed.
 		 * @param[in] newOne the default matrix that might be set for the graphic card for renderer. if too more pop will be done, this is the last that mmight survived
 		 */
-		void SetBasicMatrix(const mat4& newOne);
+		void setBasicMatrix(const mat4& newOne);
 		/**
 		 * @brief this funtion configure the current use matrix for the renderer (call @ref Push before, and @ref Pop when no more needed).
 		 * @param[in] newOne The new current matrix use for the render.
 		 * @note We did not use opengl standard system, due to the fact that is not supported in opengl ES-2
 		 */
-		void SetMatrix(const mat4& newOne);
+		void setMatrix(const mat4& newOne);
 		/**
-		 * @brief Store current matrix in the matrix stack.
+		 * @brief store current matrix in the matrix stack.
 		 */
-		void Push(void);
+		void push(void);
 		/**
-		 * @brief Remove the current matrix and get the last one from the matrix stack.
+		 * @brief remove the current matrix and get the last one from the matrix stack.
 		 */
-		void Pop(void);
+		void pop(void);
 		/**
-		 * @brief Get a reference on the current matrix destinate to opengl renderer.
+		 * @brief get a reference on the current matrix destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		const mat4& GetMatrix(void);
+		const mat4& getMatrix(void);
 		/**
-		 * @brief Get a reference on the current matrix camera destinate to opengl renderer.
+		 * @brief get a reference on the current matrix camera destinate to opengl renderer.
 		 * @return The requested matrix.
 		 */
-		const mat4& GetCameraMatrix(void);
+		const mat4& getCameraMatrix(void);
 		/**
-		 * @brief Set a reference on the current camera to opengl renderer.
+		 * @brief set a reference on the current camera to opengl renderer.
 		 * @param[in] newOne The requested matrix.
 		 */
-		void SetCameraMatrix(const mat4& newOne);
+		void setCameraMatrix(const mat4& newOne);
 		/**
 		 * @brief
 		 */
-		void Finish(void);
+		void finish(void);
 		/**
 		 * @brief
 		 */
-		void Flush(void);
+		void flush(void);
 		/**
 		 * @brief
 		 */
-		void Swap(void);
+		void swap(void);
 		
 		typedef enum {
 			FLAG_BLEND = 1<<0, //!< If enabled, blend the computed fragment color values with the values in the color buffers. See glBlendFunc.
@@ -127,8 +127,8 @@ namespace ewol {
 			FLAG_POLYGON_OFFSET_LINE = 1<<13, //!< If enabled, and if the polygon is rendered in GL_LINE mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See glPolygonOffset.
 			FLAG_POLYGON_OFFSET_POINT = 1<<14, //!< If enabled, an offset is added to depth values of a polygon's fragments before the depth comparison is performed, if the polygon is rendered in GL_POINT mode. See glPolygonOffset.
 			FLAG_POLYGON_SMOOTH = 1<<15, //!< If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.
-			FLAG_PRIMITIVE_RESTART = 1<<16, //!< Enables primitive restarting.  If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See glPrimitiveRestartIndex.
-			FLAG_PRIMITIVE_RESTART_FIXED_INDEX = 1<<17, //!< Enables primitive restarting with a fixed index. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the fixed primitive index for the specified index type. The fixed index is equal to 2n−1 where n is equal to 8 for GL_UNSIGNED_BYTE, 16 for GL_UNSIGNED_SHORT and 32 for GL_UNSIGNED_INT.
+			FLAG_PRIMITIVE_RESTART = 1<<16, //!< enables primitive restarting.  If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See glPrimitiveRestartIndex.
+			FLAG_PRIMITIVE_RESTART_FIXED_INDEX = 1<<17, //!< enables primitive restarting with a fixed index. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the fixed primitive index for the specified index type. The fixed index is equal to 2n−1 where n is equal to 8 for GL_UNSIGNED_BYTE, 16 for GL_UNSIGNED_SHORT and 32 for GL_UNSIGNED_INT.
 			FLAG_SAMPLE_ALPHA_TO_COVERAGE = 1<<18, //!< If enabled, compute a temporary coverage value where each bit is determined by the alpha value at the corresponding sample location.  The temporary coverage value is then ANDed with the fragment coverage value.
 			FLAG_SAMPLE_ALPHA_TO_ONE = 1<<19, //!< If enabled, each sample alpha value is replaced by the maximum representable alpha value.
 			FLAG_SAMPLE_COVERAGE = 1<<20, //!< If enabled, the fragment's coverage is ANDed with the temporary coverage value. If GL_SAMPLE_COVERAGE_INVERT is set to GL_TRUE, invert the coverage value. See glSampleCoverage.
@@ -143,41 +143,41 @@ namespace ewol {
 		} openGlFlags_te;
 		
 		/**
-		 * @brief Enable a flag on the system
+		 * @brief enable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void Enable(openGlFlags_te flagID);
+		void enable(openGlFlags_te flagID);
 		/**
-		 * @brief Disable a flag on the system
+		 * @brief disable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void Disable(openGlFlags_te flagID);
+		void disable(openGlFlags_te flagID);
 		/**
-		 * @brieg Update all the internal flag needed to be set from tre previous element set ...
+		 * @brieg update all the internal flag needed to be set from tre previous element set ...
 		 */
-		void UpdateAllFlags(void);
+		void updateAllFlags(void);
 		/**
-		 * @brief Enable Texture on the system
+		 * @brief enable Texture on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void ActiveTexture(uint32_t flagID);
+		void activeTexture(uint32_t flagID);
 		/**
-		 * @brief Disable Texture on the system
+		 * @brief disable Texture on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void DesActiveTexture(uint32_t flagID);
+		void desActiveTexture(uint32_t flagID);
 		/**
-		 * @brief draw a specific array ==> this enable mode difference ...
+		 * @brief draw a specific array  == > this enable mode difference ...
 		 */
-		void DrawArrays(uint32_t mode, int32_t first, int32_t count);
-		void DrawElements  (uint32_t mode, const etk::Vector<uint32_t>& indices);
-		void DrawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices);
-		void DrawElements8 (uint32_t mode, const etk::Vector<uint8_t>& indices);
+		void drawArrays(uint32_t mode, int32_t first, int32_t count);
+		void drawElements  (uint32_t mode, const etk::Vector<uint32_t>& indices);
+		void drawElements16(uint32_t mode, const etk::Vector<uint16_t>& indices);
+		void drawElements8 (uint32_t mode, const etk::Vector<uint8_t>& indices);
 		/**
 		 * @brief Use openGL program
 		 * @param[in] id Id of the program that might be used
 		 */
-		void UseProgram(int32_t id);
+		void useProgram(int32_t id);
 	};
 };
 

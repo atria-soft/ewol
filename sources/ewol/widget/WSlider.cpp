@@ -33,14 +33,14 @@ const char* const widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-s
 const char* const widget::WSlider::configMode = "mode";
 
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::WSlider();
 }
 
-void widget::WSlider::Init(ewol::WidgetManager& _widgetManager)
+void widget::WSlider::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 widget::WSlider::WSlider(void) : 
@@ -51,10 +51,10 @@ widget::WSlider::WSlider(void) :
 	m_transitionSpeed(1.0f),
 	m_transitionSlide(sladingTransitionHori)
 {
-	AddEventId(eventStartSlide);
-	AddEventId(eventStopSlide);
-	// Add configuration
-	RegisterConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
+	addEventId(eventStartSlide);
+	addEventId(eventStopSlide);
+	// add configuration
+	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
 }
 
 widget::WSlider::~WSlider(void)
@@ -63,17 +63,17 @@ widget::WSlider::~WSlider(void)
 }
 
 
-void widget::WSlider::CalculateSize(const vec2& _availlable)
+void widget::WSlider::calculateSize(const vec2& _availlable)
 {
-	//EWOL_DEBUG("Update Size");
-	widget::ContainerN::CalculateSize(_availlable);
+	//EWOL_DEBUG("Update size");
+	widget::ContainerN::calculateSize(_availlable);
 	
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
-		if (iii < m_subWidget.Size()) {
+		if (iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SetOrigin(m_origin+m_offset);
-				m_subWidget[iii]->CalculateSize(m_size);
+				m_subWidget[iii]->setOrigin(m_origin+m_offset);
+				m_subWidget[iii]->calculateSize(m_size);
 			}
 		}
 	} else {
@@ -82,46 +82,46 @@ void widget::WSlider::CalculateSize(const vec2& _availlable)
 			factor = 1.0f;
 		}
 		int32_t iii = m_windowsSources;
-		if (iii < m_subWidget.Size()) {
+		if (iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
 				if (m_transitionSlide == sladingTransitionHori) {
-					m_subWidget[iii]->SetOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress),
+					m_subWidget[iii]->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress),
 					                                    m_origin.y())
 					                             + m_offset);
 				} else {
-					m_subWidget[iii]->SetOrigin(   vec2(m_origin.x(),
+					m_subWidget[iii]->setOrigin(   vec2(m_origin.x(),
 					                                    m_origin.y() + factor*(m_size.y()*m_slidingProgress))
 					                             + m_offset);
 				}
-				m_subWidget[iii]->CalculateSize(m_size);
+				m_subWidget[iii]->calculateSize(m_size);
 			}
 		}
 		iii = m_windowsDestination;
-		if (iii < m_subWidget.Size()) {
+		if (iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
 				if (m_transitionSlide == sladingTransitionHori) {
-					m_subWidget[iii]->SetOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress - m_size.x()),
+					m_subWidget[iii]->setOrigin(   vec2(m_origin.x() + factor*(m_size.x()*m_slidingProgress - m_size.x()),
 					                                    m_origin.y())
 					                             + m_offset);
 				} else {
-					m_subWidget[iii]->SetOrigin(   vec2(m_origin.x(),
+					m_subWidget[iii]->setOrigin(   vec2(m_origin.x(),
 					                                    m_origin.y() + factor*(m_size.y()*m_slidingProgress - m_size.y()))
 					                             + m_offset);
 				}
-				m_subWidget[iii]->CalculateSize(m_size);
+				m_subWidget[iii]->calculateSize(m_size);
 			}
 		}
 	}
-	MarkToRedraw();
+	markToRedraw();
 }
 
-void widget::WSlider::SubWidgetSelectSet(int32_t _id)
+void widget::WSlider::subWidgetSelectSet(int32_t _id)
 {
 	int32_t elementID = -1;
 	// search element in the list : 
-	for( int32_t iii=0 ; iii<m_subWidget.Size() ; iii++) {
+	for( int32_t iii=0 ; iii<m_subWidget.size() ; iii++) {
 		if (m_subWidget[iii] != NULL) {
-			if (m_subWidget[iii]->GetId()==_id) {
+			if (m_subWidget[iii]->getId() == _id) {
 				elementID = iii;
 				break;
 			}
@@ -134,22 +134,22 @@ void widget::WSlider::SubWidgetSelectSet(int32_t _id)
 	}
 	if (elementID != m_windowsDestination) {
 		m_windowsRequested = elementID;
-		GenerateEventId(eventStartSlide);
-		PeriodicCallEnable();
-		MarkToRedraw();
+		generateEventId(eventStartSlide);
+		periodicCallEnable();
+		markToRedraw();
 	}
 }
 
-void widget::WSlider::SubWidgetSelectSet(ewol::Widget* _widgetPointer)
+void widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer)
 {
 	if (_widgetPointer == NULL) {
 		EWOL_ERROR("Can not change to a widget NULL");
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii] != NULL) {
 			if (m_subWidget[iii] == _widgetPointer) {
-				SubWidgetSelectSet(iii);
+				subWidgetSelectSet(iii);
 				return;
 			}
 		}
@@ -157,16 +157,16 @@ void widget::WSlider::SubWidgetSelectSet(ewol::Widget* _widgetPointer)
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void widget::WSlider::SubWidgetSelectSet(const etk::UString& _widgetName)
+void widget::WSlider::subWidgetSelectSet(const etk::UString& _widgetName)
 {
 	if (_widgetName == "") {
 		EWOL_ERROR("Can not change to a widget with no name (input)");
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget.Size(); iii++) {
+	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii] != NULL) {
-			if (m_subWidget[iii]->GetName() == _widgetName) {
-				SubWidgetSelectSet(iii);
+			if (m_subWidget[iii]->getName() == _widgetName) {
+				subWidgetSelectSet(iii);
 				return;
 			}
 		}
@@ -176,17 +176,17 @@ void widget::WSlider::SubWidgetSelectSet(const etk::UString& _widgetName)
 
 
 
-void widget::WSlider::SetTransitionMode(widget::WSlider::sladingMode_te _mode)
+void widget::WSlider::setTransitionMode(widget::WSlider::sladingMode_te _mode)
 {
 	if (m_transitionSlide != _mode) {
 		m_transitionSlide = _mode;
-		MarkToRedraw();
+		markToRedraw();
 	}
 }
 
 
 
-void widget::WSlider::PeriodicCall(const ewol::EventTime& _event)
+void widget::WSlider::periodicCall(const ewol::EventTime& _event)
 {
 	if (m_slidingProgress >= 1.0) {
 		m_windowsSources = m_windowsDestination;
@@ -196,8 +196,8 @@ void widget::WSlider::PeriodicCall(const ewol::EventTime& _event)
 			m_slidingProgress = 0.0;
 		} else {
 			// end of periodic :
-			PeriodicCallDisable();
-			GenerateEventId(eventStopSlide);
+			periodicCallDisable();
+			generateEventId(eventStopSlide);
 		}
 		m_windowsRequested = -1;
 	}
@@ -213,101 +213,101 @@ void widget::WSlider::PeriodicCall(const ewol::EventTime& _event)
 				m_windowsRequested = -1;
 			}
 		}
-		m_slidingProgress += _event.GetDeltaCall()/m_transitionSpeed;
+		m_slidingProgress += _event.getDeltaCall()/m_transitionSpeed;
 		m_slidingProgress = etk_avg(0.0f, m_slidingProgress, 1.0f);
 	}
-	CalculateSize(m_size);
-	MarkToRedraw();
+	calculateSize(m_size);
+	markToRedraw();
 }
 
 
-void widget::WSlider::SystemDraw(const ewol::DrawProperty& _displayProp)
+void widget::WSlider::systemDraw(const ewol::drawProperty& _displayProp)
 {
-	if (true==m_hide){
+	if (true == m_hide){
 		// widget is hidden ...
 		return;
 	}
-	// note : do not call the widget container ==> overload this one ...
-	ewol::Widget::SystemDraw(_displayProp);
+	// note : do not call the widget container  == > overload this one ...
+	ewol::Widget::systemDraw(_displayProp);
 	
 	// subwidget draw
-	ewol::DrawProperty prop = _displayProp;
-	prop.Limit(m_origin, m_size);
+	ewol::drawProperty prop = _displayProp;
+	prop.limit(m_origin, m_size);
 	
 	if (m_windowsDestination == m_windowsSources) {
 		//EWOL_DEBUG("Draw : " << m_windowsDestination);
 		int32_t iii = m_windowsDestination;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SystemDraw(prop);
+				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
 	} else {
 		//EWOL_DEBUG("Draw : " << m_windowsSources << "=>" << m_windowsDestination << "progress=" << ((float)m_slidingProgress/1000.) );
 		// draw Sources :
 		int32_t iii = m_windowsSources;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SystemDraw(prop);
+				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
-		// Draw Destination : 
+		// draw Destination : 
 		iii = m_windowsDestination;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->SystemDraw(prop);
+				m_subWidget[iii]->systemDraw(prop);
 			}
 		}
 	}
 }
 
-void widget::WSlider::OnRegenerateDisplay(void)
+void widget::WSlider::onRegenerateDisplay(void)
 {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->OnRegenerateDisplay();
+				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
 	} else {
 		int32_t iii = m_windowsSources;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->OnRegenerateDisplay();
+				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
 		iii = m_windowsDestination;
-		if (iii>=0 || iii < m_subWidget.Size()) {
+		if (iii >= 0 || iii < m_subWidget.size()) {
 			if (NULL != m_subWidget[iii]) {
-				m_subWidget[iii]->OnRegenerateDisplay();
+				m_subWidget[iii]->onRegenerateDisplay();
 			}
 		}
 	}
 }
 
 
-bool widget::WSlider::OnSetConfig(const ewol::EConfig& _conf)
+bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf)
 {
-	if (true == widget::ContainerN::OnSetConfig(_conf)) {
+	if (true == widget::ContainerN::onSetConfig(_conf)) {
 		return true;
 	}
-	if (_conf.GetConfig() == configMode) {
+	if (_conf.getConfig() == configMode) {
 		sladingMode_te tmpTransition = sladingTransitionHori;
-		if(true == _conf.GetData().CompareNoCase("vert")) {
+		if(true == _conf.getData().compareNoCase("vert")) {
 			tmpTransition = sladingTransitionVert;
-		} else if(true == _conf.GetData().CompareNoCase("hori")) {
+		} else if(true == _conf.getData().compareNoCase("hori")) {
 			tmpTransition = sladingTransitionHori;
 		}
-		SetTransitionMode(tmpTransition);
+		setTransitionMode(tmpTransition);
 		return true;
 	}
 	return false;
 }
 
-bool widget::WSlider::OnGetConfig(const char* _config, etk::UString& _result) const
+bool widget::WSlider::onGetConfig(const char* _config, etk::UString& _result) const
 {
-	if (true == widget::ContainerN::OnGetConfig(_config, _result)) {
+	if (true == widget::ContainerN::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configMode) {
@@ -326,19 +326,19 @@ bool widget::WSlider::OnGetConfig(const char* _config, etk::UString& _result) co
 }
 
 
-ewol::Widget* widget::WSlider::GetWidgetAtPos(const vec2& _pos)
+ewol::Widget* widget::WSlider::getWidgetAtPos(const vec2& _pos)
 {
-	if (true == IsHide()) {
+	if (true == isHide()) {
 		return NULL;
 	}
 	if (m_windowsDestination == m_windowsSources) {
-		if (m_windowsDestination<m_subWidget.Size()) {
-			vec2 tmpSize = m_subWidget[m_windowsDestination]->GetSize();
-			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->GetOrigin();
+		if (m_windowsDestination<m_subWidget.size()) {
+			vec2 tmpSize = m_subWidget[m_windowsDestination]->getSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->GetWidgetAtPos(_pos);
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->getWidgetAtPos(_pos);
 				if (NULL != tmpWidget) {
 					return tmpWidget;
 				}
@@ -346,26 +346,26 @@ ewol::Widget* widget::WSlider::GetWidgetAtPos(const vec2& _pos)
 			}
 		}
 	} else {
-		if (m_windowsDestination<m_subWidget.Size()) {
-			vec2 tmpSize = m_subWidget[m_windowsDestination]->GetSize();
-			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->GetOrigin();
+		if (m_windowsDestination<m_subWidget.size()) {
+			vec2 tmpSize = m_subWidget[m_windowsDestination]->getSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsDestination]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->GetWidgetAtPos(_pos);
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsDestination]->getWidgetAtPos(_pos);
 				if (NULL != tmpWidget) {
 					return tmpWidget;
 				}
 				return NULL;
 			}
 		}
-		if (m_windowsSources<m_subWidget.Size()) {
-			vec2 tmpSize = m_subWidget[m_windowsSources]->GetSize();
-			vec2 tmpOrigin = m_subWidget[m_windowsSources]->GetOrigin();
+		if (m_windowsSources<m_subWidget.size()) {
+			vec2 tmpSize = m_subWidget[m_windowsSources]->getSize();
+			vec2 tmpOrigin = m_subWidget[m_windowsSources]->getOrigin();
 			if(    (tmpOrigin.x() <= _pos.x() && tmpOrigin.x() + tmpSize.x() >= _pos.x())
 			    && (tmpOrigin.y() <= _pos.y() && tmpOrigin.y() + tmpSize.y() >= _pos.y()) )
 			{
-				ewol::Widget * tmpWidget = m_subWidget[m_windowsSources]->GetWidgetAtPos(_pos);
+				ewol::Widget * tmpWidget = m_subWidget[m_windowsSources]->getWidgetAtPos(_pos);
 				if (NULL != tmpWidget) {
 					return tmpWidget;
 				}

@@ -32,38 +32,38 @@ namespace widget {
 			Mesh(const etk::UString& filename); // automatic considering in the appl Data older
 			virtual ~Mesh(void);
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "widget::Mesh"; };
-			virtual void OnRegenerateDisplay(void);
-			virtual void SystemDraw(const ewol::DrawProperty& displayProp);
-			virtual void OnDraw(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void PeriodicCall(const ewol::EventTime& _event);
+			virtual const char * const getObjectType(void) { return "widget::Mesh"; };
+			virtual void onRegenerateDisplay(void);
+			virtual void systemDraw(const ewol::drawProperty& displayProp);
+			virtual void onDraw(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual void periodicCall(const ewol::EventTime& _event);
 		public:
 			/**
-			 * @brief Set a mesh name file
+			 * @brief set a mesh name file
 			 * @param[in] filename Name of the new mesh
 			 */
-			void SetFile(const etk::UString& filename);
+			void setFile(const etk::UString& filename);
 			/**
-			 * @brief Set the mesh position
+			 * @brief set the mesh position
 			 * @param[in] pos The new position of the mesh
 			 */
-			void SetPosition(const vec3& pos);
+			void setPosition(const vec3& pos);
 			/**
-			 * @brief Set the mesh angle of view
+			 * @brief set the mesh angle of view
 			 * @param[in] angle view angle of the mesh
 			 */
-			void SetAngle(const vec3& angle);
+			void setAngle(const vec3& angle);
 			/**
-			 * @brief Set the mesh angle speed
+			 * @brief set the mesh angle speed
 			 * @param[in] spped radian speed of the mesh
 			 */
-			void SetAngleSpeed(const vec3& speed);
+			void setAngleSpeed(const vec3& speed);
 			/**
-			 * @brief Set the camera distance of the mesh
+			 * @brief set the camera distance of the mesh
 			 * @param[in] dist Diatance of the mesh
 			 */
-			void SetDistance(float distance);
+			void setDistance(float distance);
 	};
 };
 

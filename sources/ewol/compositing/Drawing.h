@@ -47,13 +47,13 @@ namespace ewol
 			~Drawing(void);
 		private:
 			/**
-			 * @brief Load the openGL program and get all the ID needed
+			 * @brief load the openGL program and get all the ID needed
 			 */
-			void LoadProgram(void);
+			void loadProgram(void);
 			/**
 			 * @brief Un-Load the openGL program and get all the ID needed
 			 */
-			void UnLoadProgram(void);
+			void unLoadProgram(void);
 			float        m_thickness;     //!< when drawing line and other things
 			int32_t      m_triElement;    //!< special counter of the single dot generated
 			vec3         m_triangle[3];   //!< Register every system with a combinaison of tiangle
@@ -62,122 +62,122 @@ namespace ewol
 			/**
 			 * @brief Lunch the generation of triangle
 			 */
-			void GenerateTriangle(void);
+			void generateTriangle(void);
 			/**
 			 * @brief in case of some error the count can be reset
 			 */
-			void ResetCount(void);
+			void resetCount(void);
 			/**
-			 * @brief Set the Color of the current triangle drawing
+			 * @brief set the Color of the current triangle drawing
 			 * @param[in] _color Color to current dots generated
 			 */
-			void InternalSetColor(const etk::Color<>& _color);
+			void internalSetColor(const etk::Color<>& _color);
 			/**
 			 * @brief internal add of the specific point
 			 * @param[in] _point The requeste dpoint to add
 			 */
-			void SetPoint(const vec3& point);
+			void setPoint(const vec3& point);
 			
 		public:
 			/**
-			 * @brief Draw All the refistered text in the current element on openGL
+			 * @brief draw All the refistered text in the current element on openGL
 			 */
-			void Draw(bool _disableDepthTest=true);
+			void draw(bool _disableDepthTest=true);
 			/**
-			 * @brief Clear alll tre registered element in the current element
+			 * @brief clear alll tre registered element in the current element
 			 */
-			void Clear(void);
+			void clear(void);
 			/**
-			 * @brief Get the current display position (sometime needed in the gui control)
+			 * @brief get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			const vec3& GetPos(void) { return m_position; };
+			const vec3& getPos(void) { return m_position; };
 			/**
-			 * @brief Set position for the next text writen
+			 * @brief set position for the next text writen
 			 * @param[in] _pos Position of the text (in 3D)
 			 */
-			void SetPos(const vec3& _pos) { m_position = _pos; };
-			inline void SetPos(const vec2& _pos) { SetPos(vec3(_pos.x(), _pos.y(), 0)); };
+			void setPos(const vec3& _pos) { m_position = _pos; };
+			inline void setPos(const vec2& _pos) { setPos(vec3(_pos.x(), _pos.y(), 0)); };
 			/**
-			 * @brief Set relative position for the next text writen
+			 * @brief set relative position for the next text writen
 			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
-			void SetRelPos(const vec3& _pos) { m_position += _pos; };
-			inline void SetRelPos(const vec2& _pos) { SetRelPos(vec3(_pos.x(), _pos.y(), 0)); };
+			void setRelPos(const vec3& _pos) { m_position += _pos; };
+			inline void setRelPos(const vec2& _pos) { setRelPos(vec3(_pos.x(), _pos.y(), 0)); };
 			/**
-			 * @brief Set the Color of the current foreground font
+			 * @brief set the Color of the current foreground font
 			 * @param[in] _color Color to set on foreground (for next print)
 			 */
-			void SetColor(const etk::Color<>& _color) { m_color = _color; };
+			void setColor(const etk::Color<>& _color) { m_color = _color; };
 			/**
-			 * @brief Set the background color of the font (for selected Text (not the global BG))
+			 * @brief set the background color of the font (for selected Text (not the global BG))
 			 * @param[in] _color Color to set on background (for next print)
 			 */
-			void SetColorBg(const etk::Color<>& _color) { m_colorBg = _color; };
+			void setColorBg(const etk::Color<>& _color) { m_colorBg = _color; };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in]_ pos Start position of the clipping
 			 * @param[in] _width Width size of the clipping
 			 */
-			void SetClippingWidth(const vec3& _pos, const vec3& _width) { SetClipping(_pos, _pos+_width); };
-			inline void SetClippingWidth(const vec2& _pos, const vec2& _width) { SetClippingWidth(vec3(_pos.x(),_pos.y(),-1), vec3(_width.x(),_width.y(), 2)); };
+			void setClippingWidth(const vec3& _pos, const vec3& _width) { setClipping(_pos, _pos+_width); };
+			inline void setClippingWidth(const vec2& _pos, const vec2& _width) { setClippingWidth(vec3(_pos.x(),_pos.y(),-1), vec3(_width.x(),_width.y(), 2)); };
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping
 			 * @param[in] _posEnd End position of the clipping
 			 */
-			void SetClipping(const vec3& _pos, const vec3& _posEnd);
-			inline void SetClipping(const vec2& _pos, const vec2& _posEnd) { SetClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(), 1)); };
+			void setClipping(const vec3& _pos, const vec3& _posEnd);
+			inline void setClipping(const vec2& _pos, const vec2& _posEnd) { setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(), 1)); };
 			/**
-			 * @brief Enable/Disable the clipping (without lose the current clipping position)
+			 * @brief enable/Disable the clipping (without lose the current clipping position)
 			 * @brief _newMode The new status of the clipping
 			 */
-			void SetClippingMode(bool _newMode) { m_clippingEnable = _newMode; };
+			void setClippingMode(bool _newMode) { m_clippingEnable = _newMode; };
 			/**
 			 * @brief Specify the line thickness for the next elements
 			 * @param[in] _thickness The thickness disired for the next print
 			 */
-			void SetThickness(float _thickness);
+			void setThickness(float _thickness);
 			/**
-			 * @brief Add a point reference at the current position (this is a vertex reference at the current position
+			 * @brief add a point reference at the current position (this is a vertex reference at the current position
 			 */
-			void AddVertex(void);
+			void addVertex(void);
 			/**
-			 * @brief Draw a line to a specific position
+			 * @brief draw a line to a specific position
 			 * @param[in] _dest Position of the end of the line.
 			 */
-			void LineTo(const vec3& _dest);
-			inline void LineTo(const vec2& _dest) { LineTo(vec3(_dest.x(), _dest.y(), 0)); };
+			void lineTo(const vec3& _dest);
+			inline void lineTo(const vec2& _dest) { lineTo(vec3(_dest.x(), _dest.y(), 0)); };
 			/**
 			 * @brief Relative drawing a line (spacial vector)
 			 * @param[in] _vect Vector of the curent line.
 			 */
-			void LineRel(const vec3& _vect) { LineTo(m_position+_vect); };
-			inline void LineRel(const vec2& _vect) { LineRel(vec3(_vect.x(), _vect.y(), 0)); };
+			void lineRel(const vec3& _vect) { lineTo(m_position+_vect); };
+			inline void lineRel(const vec2& _vect) { lineRel(vec3(_vect.x(), _vect.y(), 0)); };
 			/**
-			 * @brief Draw a 2D rectangle to the position requested.
+			 * @brief draw a 2D rectangle to the position requested.
 			 * @param[in] _dest Position the the end of the rectangle
 			 */
-			void Rectangle(const vec3& _dest);
-			inline void Rectangle(const vec2& _dest) { Rectangle(vec3(_dest.x(), _dest.y(), 0)); };
+			void rectangle(const vec3& _dest);
+			inline void rectangle(const vec2& _dest) { rectangle(vec3(_dest.x(), _dest.y(), 0)); };
 			/**
-			 * @brief Draw a 2D rectangle to the requested size.
+			 * @brief draw a 2D rectangle to the requested size.
 			 * @param[in] _size size of the rectangle
 			 */
-			void RectangleWidth(const vec3& _size) { Rectangle(m_position+_size); };
-			inline void RectangleWidth(const vec2& _size) { RectangleWidth(vec3(_size.x(), _size.y(), 0)); };
+			void rectangleWidth(const vec3& _size) { rectangle(m_position+_size); };
+			inline void rectangleWidth(const vec2& _size) { rectangleWidth(vec3(_size.x(), _size.y(), 0)); };
 			/**
-			 * @brief Draw a 3D rectangle to the position requested.
+			 * @brief draw a 3D rectangle to the position requested.
 			 * @param[in] _dest Position the the end of the rectangle
 			 */
-			void Cube(const vec3& _dest);
+			void cube(const vec3& _dest);
 			/**
-			 * @brief Draw a 2D circle with the specify rafdius parameter.
+			 * @brief draw a 2D circle with the specify rafdius parameter.
 			 * @param[in] _radius Distence to the dorder
-			 * @param[in] _angleStart start angle of this circle ([0..2PI] otherwithe ==> disable)
-			 * @param[in] _angleStop stop angle of this circle ([0..2PI] otherwithe ==> disable)
+			 * @param[in] _angleStart start angle of this circle ([0..2PI] otherwithe  == > disable)
+			 * @param[in] _angleStop stop angle of this circle ([0..2PI] otherwithe  == > disable)
 			 */
-			void Circle(float _radius, float _angleStart = 0, float _angleStop = 2*M_PI);
+			void circle(float _radius, float _angleStart = 0, float _angleStop = 2*M_PI);
 	};
 };
 

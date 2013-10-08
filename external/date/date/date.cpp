@@ -8,33 +8,27 @@
 
 #include <date/date.h>
 
-int32_t date::GetYear(void)
-{
+int32_t date::getYear(void) {
 	return BUILD_YEAR;
 }
 
-int32_t date::GetMonth(void)
-{
+int32_t date::getMonth(void) {
 	return BUILD_MONTH;
 }
 
-int32_t date::GetDay(void)
-{
+int32_t date::getDay(void) {
 	return BUILD_DAY;
 }
 
-int32_t date::GetHour(void)
-{
+int32_t date::getHour(void) {
 	return BUILD_HOUR;
 }
 
-int32_t date::GetMinute(void)
-{
+int32_t date::getMinute(void) {
 	return BUILD_MINUTE;
 }
 
-int32_t date::GetSecond(void)
-{
+int32_t date::getSecond(void) {
 	return BUILD_SECOND;
 }
 

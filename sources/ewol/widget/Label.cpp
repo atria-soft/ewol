@@ -13,73 +13,73 @@
 #include <ewol/ewol.h>
 
 #undef __class__
-#define __class__	"Label"
+#define __class__ "Label"
 
-const char * const widget::Label::eventPressed    = "ewol-widget-label-event-pressed";
+const char * const widget::Label::eventPressed = "ewol-widget-label-event-pressed";
 
-static ewol::Widget* Create(void)
+static ewol::Widget* create(void)
 {
 	return new widget::Label();
 }
 
-void widget::Label::Init(ewol::WidgetManager& _widgetManager)
+void widget::Label::init(ewol::WidgetManager& _widgetManager)
 {
-	_widgetManager.AddWidgetCreator(__class__,&Create);
+	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 widget::Label::Label(etk::UString _newLabel)
 {
 	m_label = _newLabel;
-	AddEventId(eventPressed);
-	SetCanHaveFocus(false);
+	addEventId(eventPressed);
+	setCanHaveFocus(false);
 }
 
-void widget::Label::CalculateMinMaxSize(void)
+void widget::Label::calculateMinMaxSize(void)
 {
-	vec2 tmpMax = m_userMaxSize.GetPixel();
-	//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} tmpMax : " << tmpMax);
+	vec2 tmpMax = m_userMaxSize.getPixel();
+	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
-		m_text.SetTextAlignement(0, tmpMax.x()-4, ewol::Text::alignLeft);
-		//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "}     Forcez Alignement ");
+		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::Text::alignLeft);
+		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
-	vec3 minSize = m_text.CalculateSizeDecorated(m_label);
-	//EWOL_DEBUG("[" << GetId() << "] {" << GetObjectType() << "} minSize : " << minSize);
+	vec3 minSize = m_text.calculateSizeDecorated(m_label);
+	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
 	m_minSize.setX(etk_min(4 + minSize.x(), tmpMax.x()));
 	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
-	//EWOL_ERROR("[" << GetId() << "] {" << GetObjectType() << "} Result min size : " <<  m_minSize);
+	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-void widget::Label::SetLabel(const etk::UString& _newLabel)
+void widget::Label::setLabel(const etk::UString& _newLabel)
 {
 	m_label = _newLabel;
-	MarkToRedraw();
-	RequestUpdateSize();
+	markToRedraw();
+	requestUpdateSize();
 }
 
-etk::UString widget::Label::GetLabel(void)
+etk::UString widget::Label::getLabel(void)
 {
 	return m_label;
 }
 
-void widget::Label::OnDraw(void)
+void widget::Label::onDraw(void)
 {
-	m_text.Draw();
+	m_text.draw();
 }
 
-void widget::Label::OnRegenerateDisplay(void)
+void widget::Label::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
-		m_text.Clear();
+	if (true == needRedraw()) {
+		m_text.clear();
 		int32_t paddingSize = 2;
 		
-		vec2 tmpMax = m_userMaxSize.GetPixel();
-		// to know the size of one Line : 
-		vec3 minSize = m_text.CalculateSize(etk::UniChar('A'));
+		vec2 tmpMax = m_userMaxSize.getPixel();
+		// to know the size of one line : 
+		vec3 minSize = m_text.calculateSize(etk::UniChar('A'));
 		if (tmpMax.x() <= 999999) {
-			m_text.SetTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
+			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
 		}
-		vec3 curentTextSize = m_text.CalculateSizeDecorated(m_label);
+		vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
 		
 		ivec2 localSize = m_minSize;
 		
@@ -88,11 +88,11 @@ void widget::Label::OnRegenerateDisplay(void)
 		                   (m_size.y() - m_minSize.y()) / 2.0,
 		                   0);
 		
-		if (true==m_userFill.x()) {
+		if (true == m_userFill.x()) {
 			localSize.setX(m_size.x());
 			tmpTextOrigin.setX(0);
 		}
-		if (true==m_userFill.y()) {
+		if (true == m_userFill.y()) {
 			localSize.setY(m_size.y());
 			tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
 		}
@@ -109,35 +109,35 @@ void widget::Label::OnRegenerateDisplay(void)
 		                      1);
 		
 		// clean the element
-		m_text.Reset();
-		m_text.SetPos(tmpTextOrigin);
-		m_text.SetTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignLeft);
-		m_text.SetClipping(drawClippingPos, drawClippingSize);
-		m_text.PrintDecorated(m_label);
+		m_text.reset();
+		m_text.setPos(tmpTextOrigin);
+		m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignLeft);
+		m_text.setClipping(drawClippingPos, drawClippingSize);
+		m_text.printDecorated(m_label);
 	}
 }
 
-bool widget::Label::OnEventInput(const ewol::EventInput& _event)
+bool widget::Label::onEventInput(const ewol::EventInput& _event)
 {
 	//EWOL_DEBUG("Event on Label ...");
-	if (1 == _event.GetId()) {
-		if (ewol::keyEvent::statusSingle == _event.GetStatus()) {
+	if (1 == _event.getId()) {
+		if (ewol::keyEvent::statusSingle == _event.getStatus()) {
 			// nothing to do ...
-			GenerateEventId(eventPressed);
+			generateEventId(eventPressed);
 			return true;
 		}
 	}
 	return false;
 }
 
-bool widget::Label::LoadXML(exml::Element* _node)
+bool widget::Label::loadXML(exml::Element* _node)
 {
-	if (NULL==_node) {
+	if (NULL == _node) {
 		return false;
 	}
-	ewol::Widget::LoadXML(_node);
+	ewol::Widget::loadXML(_node);
 	// get internal data : 
-	EWOL_DEBUG("Load label:" << _node->GetText());
-	SetLabel(_node->GetText());
+	EWOL_DEBUG("Load label:" << _node->getText());
+	setLabel(_node->getText());
 	return true;
 }

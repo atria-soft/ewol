@@ -22,13 +22,13 @@ namespace widget {
 	class CheckBox : public ewol::Widget
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 		public:
 			CheckBox(const etk::UString& newLabel = "No Label");
 			virtual ~CheckBox(void);
-			void SetLabel(etk::UString newLabel);
-			void SetValue(bool val);
-			bool GetValue(void);
+			void setLabel(etk::UString newLabel);
+			void setValue(bool val);
+			bool getValue(void);
 		private:
 			ewol::Text m_oObjectText;
 			ewol::Drawing m_oObjectDecoration;
@@ -37,13 +37,13 @@ namespace widget {
 			etk::Color<> m_textColorFg; //!< Text color
 			etk::Color<> m_textColorBg; //!< Background color
 		protected: // Derived function
-			virtual void OnDraw(void);
+			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::CheckBox"; };
-			virtual void CalculateMinMaxSize(void);
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual bool OnEventEntry(const ewol::EventEntry& _event);
+			virtual const char * const getObjectType(void) { return "Ewol::CheckBox"; };
+			virtual void calculateMinMaxSize(void);
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual bool onEventEntry(const ewol::EventEntry& _event);
 	};
 	
 };

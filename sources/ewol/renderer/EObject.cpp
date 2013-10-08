@@ -25,84 +25,84 @@ ewol::EObject::EObject(void) :
 	// note this is nearly atomic ... (but it is enough)
 	m_uniqueId = ss_globalUniqueId++;
 	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
-	GetEObjectManager().Add(this);
-	RegisterConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
+	getEObjectManager().add(this);
+	registerConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
 }
 
 ewol::EObject::~EObject(void)
 {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
-	GetEObjectManager().Rm(this);
-	GetMultiCast().Rm(this);
-	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
+	getEObjectManager().rm(this);
+	getMultiCast().rm(this);
+	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
 			m_externEvent[iii] = NULL;
 		}
 	}
-	m_externEvent.Clear();
-	m_availlableEventId.Clear();
+	m_externEvent.clear();
+	m_availlableEventId.clear();
 	m_uniqueId = -1;
 }
 
 
-void ewol::EObject::AutoDestroy(void)
+void ewol::EObject::autoDestroy(void)
 {
-	GetEObjectManager().AutoRemove(this);
+	getEObjectManager().autoRemove(this);
 }
-void ewol::EObject::RemoveObject(void)
+void ewol::EObject::removeObject(void)
 {
-	GetEObjectManager().AutoRemove(this);
+	getEObjectManager().autoRemove(this);
 }
 
-void ewol::EObject::AddEventId(const char * _generateEventId)
+void ewol::EObject::addEventId(const char * _generateEventId)
 {
 	if (NULL != _generateEventId) {
-		m_availlableEventId.PushBack(_generateEventId);
+		m_availlableEventId.pushBack(_generateEventId);
 	}
 }
 
-void ewol::EObject::GenerateEventId(const char * _generateEventId, const etk::UString& _data)
+void ewol::EObject::generateEventId(const char * _generateEventId, const etk::UString& _data)
 {
-	int32_t nbObject = GetEObjectManager().GetNumberObject();
+	int32_t nbObject = getEObjectManager().getNumberObject();
 	// for every element registered ...
-	for (int32_t iii=0; iii<m_externEvent.Size(); iii++) {
+	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			// if we find the event ...
 			if (m_externEvent[iii]->localEventId == _generateEventId) {
 				if (NULL != m_externEvent[iii]->destEObject) {
-					if (m_externEvent[iii]->overloadData.Size()<=0){
+					if (m_externEvent[iii]->overloadData.size() <= 0){
 						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, _data);
-						m_externEvent[iii]->destEObject->OnReceiveMessage(tmpMsg);
+						m_externEvent[iii]->destEObject->onReceiveMessage(tmpMsg);
 					} else {
 						// set the user requested data ...
 						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
-						m_externEvent[iii]->destEObject->OnReceiveMessage(tmpMsg);
+						m_externEvent[iii]->destEObject->onReceiveMessage(tmpMsg);
 					}
 				}
 			}
 		}
 	}
-	if (nbObject > GetEObjectManager().GetNumberObject()) {
-		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
+	if (nbObject > getEObjectManager().getNumberObject()) {
+		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removeObject() which is asynchronous");
 	}
 }
 
-void ewol::EObject::SendMultiCast(const char* const _messageId, const etk::UString& _data)
+void ewol::EObject::sendMultiCast(const char* const _messageId, const etk::UString& _data)
 {
-	int32_t nbObject = GetEObjectManager().GetNumberObject();
-	GetMultiCast().Send(this, _messageId, _data);
-	if (nbObject > GetEObjectManager().GetNumberObject()) {
-		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->RemoveObject() which is asynchronous");
+	int32_t nbObject = getEObjectManager().getNumberObject();
+	getMultiCast().send(this, _messageId, _data);
+	if (nbObject > getEObjectManager().getNumberObject()) {
+		EWOL_CRITICAL("It if really dangerous ro remove (delete) element inside a callback ... use ->removeObject() which is asynchronous");
 	}
 }
 
-void ewol::EObject::RegisterMultiCast(const char* const _messageId)
+void ewol::EObject::registerMultiCast(const char* const _messageId)
 {
-	GetMultiCast().Add(this, _messageId);
+	getMultiCast().add(this, _messageId);
 }
 
-void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
+void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
                                     const char * _eventId,
                                     const char * _eventIdgenerated,
                                     const etk::UString& _overloadData)
@@ -117,7 +117,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
 	}
 	// check if event existed :
 	bool findIt = false;
-	for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
+	for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
 		if (m_availlableEventId[iii] == _eventId) {
 			findIt = true;
 			break;
@@ -125,7 +125,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
 	}
 	if (false == findIt) {
 		EWOL_DEBUG("Try to register with a NON direct string name");
-		for(int32_t iii=0; iii<m_availlableEventId.Size(); iii++) {
+		for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
 			if (0 == strncmp(m_availlableEventId[iii], _eventId, 1024)) {
 				findIt = true;
 				_eventIdgenerated = m_availlableEventId[iii];
@@ -134,7 +134,7 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
 		}
 	}
 	if (false == findIt) {
-		EWOL_ERROR("Can not register event on this WidgetType=" << GetObjectType() << " event=\"" << _eventId << "\" ==> unknow event");
+		EWOL_ERROR("Can not register event on this WidgetType=" << getObjectType() << " event=\"" << _eventId << "\"  == > unknow event");
 		return;
 	}
 	ewol::EventExtGen * tmpEvent = new ewol::EventExtGen();
@@ -150,112 +150,112 @@ void ewol::EObject::RegisterOnEvent(ewol::EObject * _destinationObject,
 	} else {
 		tmpEvent->destEventId = _eventId;
 	}
-	m_externEvent.PushBack(tmpEvent);
+	m_externEvent.pushBack(tmpEvent);
 }
 
 
-void ewol::EObject::OnObjectRemove(ewol::EObject * _removeObject)
+void ewol::EObject::onObjectRemove(ewol::EObject * _removeObject)
 {
-	for(int32_t iii=m_externEvent.Size()-1; iii>=0; iii--) {
-		if (NULL==m_externEvent[iii]) {
-			m_externEvent.Erase(iii);
+	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {
+		if (NULL == m_externEvent[iii]) {
+			m_externEvent.erase(iii);
 		} else if (m_externEvent[iii]->destEObject == _removeObject) {
-			m_externEvent.Erase(iii);
+			m_externEvent.erase(iii);
 		}
 	}
 }
 
 
-void ewol::EObject::RegisterConfig(const char* _config, const char* _type, const char* _control, const char* _description, const char* _default)
+void ewol::EObject::registerConfig(const char* _config, const char* _type, const char* _control, const char* _description, const char* _default)
 {
 	if (NULL == _config) {
 		EWOL_ERROR("Try to add NULL config");
 		return;
 	}
-	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
-		if (NULL != m_listConfig[iii].GetConfig()) {
-			if (0==strcmp(m_listConfig[iii].GetConfig(), _config) ) {
+	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+		if (NULL != m_listConfig[iii].getConfig()) {
+			if (0 == strcmp(m_listConfig[iii].getConfig(), _config) ) {
 				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
 			}
 		}
 	}
-	m_listConfig.PushBack(ewol::EConfigElement(_config, _type, _control, _description, _default));
+	m_listConfig.pushBack(ewol::EConfigElement(_config, _type, _control, _description, _default));
 }
 
 
-bool ewol::EObject::LoadXML(exml::Element* _node)
+bool ewol::EObject::loadXML(exml::Element* _node)
 {
-	if (NULL==_node) {
+	if (NULL == _node) {
 		return false;
 	}
 	bool errorOccured = true;
-	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
-		if (m_listConfig[iii].GetConfig() == NULL) {
+	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+		if (m_listConfig[iii].getConfig() == NULL) {
 			continue;
 		}
-		etk::UString value = _node->GetAttribute(m_listConfig[iii].GetConfig());
+		etk::UString value = _node->getAttribute(m_listConfig[iii].getConfig());
 		// check existance :
-		if (value.Size()==0) {
+		if (value.size() == 0) {
 			continue;
 		}
-		if (false==SetConfig(ewol::EConfig(m_listConfig[iii].GetConfig(), value) ) ) {
+		if (false == setConfig(ewol::EConfig(m_listConfig[iii].getConfig(), value) ) ) {
 			errorOccured = false;
 		}
 	}
 	return errorOccured;
 }
 
-bool ewol::EObject::StoreXML(exml::Element* _node) const
+bool ewol::EObject::storeXML(exml::Element* _node) const
 {
-	if (NULL==_node) {
+	if (NULL == _node) {
 		return false;
 	}
 	bool errorOccured = true;
-	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
-		if (m_listConfig[iii].GetConfig() == NULL) {
+	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+		if (m_listConfig[iii].getConfig() == NULL) {
 			continue;
 		}
-		etk::UString value = GetConfig(m_listConfig[iii].GetConfig());
-		if (NULL != m_listConfig[iii].GetDefault() ) {
-			if (value == m_listConfig[iii].GetDefault() ) {
+		etk::UString value = getConfig(m_listConfig[iii].getConfig());
+		if (NULL != m_listConfig[iii].getDefault() ) {
+			if (value == m_listConfig[iii].getDefault() ) {
 				// nothing to add on the XML :
 				continue;
 			}
 		}
-		// add attribute ... ==> note : Add special element when '"' element detected ...
-		_node->SetAttribute(m_listConfig[iii].GetConfig(), value);
+		// add attribute ...  == > note : add special element when '"' element detected ...
+		_node->setAttribute(m_listConfig[iii].getConfig(), value);
 	}
 	return errorOccured;
 }
 
 
-bool ewol::EObject::OnSetConfig(const ewol::EConfig& _conf)
+bool ewol::EObject::onSetConfig(const ewol::EConfig& _conf)
 {
-	EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} set config : " << _conf);
-	if (_conf.GetConfig() == ewol::EObject::configName) {
-		EWOL_VERBOSE("[" << GetId() << "] {" << GetObjectType() << "} Set config name : \"" << _conf.GetData() << "\"");
-		SetName(_conf.GetData());
+	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
+	if (_conf.getConfig() == ewol::EObject::configName) {
+		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
+		setName(_conf.getData());
 		return true;
 	}
 	return false;
 }
 
-bool ewol::EObject::OnGetConfig(const char* _config, etk::UString& _result) const
+bool ewol::EObject::onGetConfig(const char* _config, etk::UString& _result) const
 {
 	if (_config == ewol::EObject::configName) {
-		_result = GetName();
+		_result = getName();
 		return true;
 	}
 	return false;
 };
 
-bool ewol::EObject::SetConfig(const etk::UString& _config, const etk::UString& _value)
+bool ewol::EObject::setConfig(const etk::UString& _config, const etk::UString& _value)
 {
-	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
-		if (NULL != m_listConfig[iii].GetConfig()) {
-			if (_config == m_listConfig[iii].GetConfig() ) {
+	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+		if (NULL != m_listConfig[iii].getConfig()) {
+			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
-				return SetConfig(ewol::EConfig(m_listConfig[iii].GetConfig(), _value));
+				return setConfig(ewol::EConfig(m_listConfig[iii].getConfig(), _value));
 			}
 		}
 	}
@@ -263,22 +263,22 @@ bool ewol::EObject::SetConfig(const etk::UString& _config, const etk::UString& _
 	return false;
 }
 
-etk::UString ewol::EObject::GetConfig(const char* _config) const
+etk::UString ewol::EObject::getConfig(const char* _config) const
 {
 	etk::UString res="";
 	if (NULL != _config) {
-		(void)OnGetConfig(_config, res);
+		(void)onGetConfig(_config, res);
 	}
 	return res;
 };
 
-etk::UString ewol::EObject::GetConfig(const etk::UString& _config) const
+etk::UString ewol::EObject::getConfig(const etk::UString& _config) const
 {
-	for(int32_t iii=0 ; iii<m_listConfig.Size() ; iii++) {
-		if (NULL != m_listConfig[iii].GetConfig()) {
-			if (_config == m_listConfig[iii].GetConfig() ) {
+	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+		if (NULL != m_listConfig[iii].getConfig()) {
+			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
-				return GetConfig(m_listConfig[iii].GetConfig());
+				return getConfig(m_listConfig[iii].getConfig());
 			}
 		}
 	}
@@ -287,36 +287,36 @@ etk::UString ewol::EObject::GetConfig(const etk::UString& _config) const
 }
 
 
-bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf)
+bool ewol::EObject::setConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf)
 {
-	ewol::EObject* object = GetEObjectManager().Get(_name);
+	ewol::EObject* object = getEObjectManager().get(_name);
 	if (object == NULL) {
 		return false;
 	}
-	return object->SetConfig(_conf);
+	return object->setConfig(_conf);
 }
 
-bool ewol::EObject::SetConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value)
+bool ewol::EObject::setConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value)
 {
-	ewol::EObject* object = GetEObjectManager().Get(_name);
+	ewol::EObject* object = getEObjectManager().get(_name);
 	if (object == NULL) {
 		return false;
 	}
-	return object->SetConfig(_config, _value);
+	return object->setConfig(_config, _value);
 }
 
 
-ewol::EObjectManager& ewol::EObject::GetEObjectManager(void)
+ewol::EObjectManager& ewol::EObject::getEObjectManager(void)
 {
-	return ewol::GetContext().GetEObjectManager();
+	return ewol::getContext().getEObjectManager();
 }
 
-ewol::EMultiCast& ewol::EObject::GetMultiCast(void)
+ewol::EMultiCast& ewol::EObject::getMultiCast(void)
 {
-	return ewol::GetContext().GetEObjectManager().MultiCast();
+	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::eContext& ewol::EObject::GetContext(void)
+ewol::eContext& ewol::EObject::getContext(void)
 {
-	return ewol::GetContext();
+	return ewol::getContext();
 }

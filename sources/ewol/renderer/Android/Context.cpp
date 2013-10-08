@@ -20,7 +20,7 @@
 
 
 
-int64_t ewol::GetTime(void)
+int64_t ewol::getTime(void)
 {
 	struct timeval	now;
 	gettimeofday(&now, NULL);
@@ -68,7 +68,7 @@ class AndroidContext : public ewol::eContext
 	private:
 		bool SafeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign)
 		{
-			_mid = m_JavaVirtualMachinePointer->GetMethodID(_cls, _name, _sign);
+			_mid = m_JavaVirtualMachinePointer->getMethodID(_cls, _name, _sign);
 			if(_mid == NULL) {
 				EWOL_ERROR("C->java : Can't find the method " << _name);
 				/* remove access on the virtual machine : */
@@ -95,16 +95,16 @@ class AndroidContext : public ewol::eContext
 		{
 			EWOL_DEBUG("*******************************************");
 			if (m_javaApplicationType == appl_application) {
-				EWOL_DEBUG("** Set JVM Pointer (application)         **");
+				EWOL_DEBUG("** set JVM Pointer (application)         **");
 			} else {
-				EWOL_DEBUG("** Set JVM Pointer (LiveWallpaper)       **");
+				EWOL_DEBUG("** set JVM Pointer (LiveWallpaper)       **");
 			}
 			EWOL_DEBUG("*******************************************");
 			m_JavaVirtualMachinePointer = _env;
 			// get default needed all time elements : 
 			if (NULL != m_JavaVirtualMachinePointer) {
 				EWOL_DEBUG("C->java : try load org/ewol/Ewol class");
-				m_javaClassEwol = m_JavaVirtualMachinePointer->FindClass("org/ewol/Ewol" );
+				m_javaClassEwol = m_JavaVirtualMachinePointer->findClass("org/ewol/Ewol" );
 				if (m_javaClassEwol == 0) {
 					EWOL_ERROR("C->java : Can't find org/ewol/Ewol class");
 					// remove access on the virtual machine : 
@@ -112,7 +112,7 @@ class AndroidContext : public ewol::eContext
 					return;
 				}
 				/* The object field extends Activity and implement EwolCallback */
-				m_javaClassEwolCallback = m_JavaVirtualMachinePointer->GetObjectClass(_objCallback);
+				m_javaClassEwolCallback = m_JavaVirtualMachinePointer->getObjectClass(_objCallback);
 				if(m_javaClassEwolCallback == NULL) {
 					EWOL_ERROR("C->java : Can't find org/ewol/EwolCallback class");
 					// remove access on the virtual machine : 
@@ -124,7 +124,7 @@ class AndroidContext : public ewol::eContext
 				                     m_javaClassEwolCallback,
 				                     "titleSet",
 				                     "(Ljava/lang/String;)V");
-				if (ret==false) {
+				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
@@ -132,7 +132,7 @@ class AndroidContext : public ewol::eContext
 				                     m_javaClassEwolCallback,
 				                     "stop",
 				                     "()V");
-				if (ret==false) {
+				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
@@ -141,7 +141,7 @@ class AndroidContext : public ewol::eContext
 				                     m_javaClassEwolCallback,
 				                     "eventNotifier",
 				                     "([Ljava/lang/String;)V");
-				if (ret==false) {
+				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
@@ -150,7 +150,7 @@ class AndroidContext : public ewol::eContext
 				                     m_javaClassEwolCallback,
 				                     "keyboardUpdate",
 				                     "(Z)V");
-				if (ret==false) {
+				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
@@ -159,7 +159,7 @@ class AndroidContext : public ewol::eContext
 				                     m_javaClassEwolCallback,
 				                     "orientationUpdate",
 				                     "(I)V");
-				if (ret==false) {
+				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
@@ -167,7 +167,7 @@ class AndroidContext : public ewol::eContext
 				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
 				
-				m_javaDefaultClassString = m_JavaVirtualMachinePointer->FindClass("java/lang/String" );
+				m_javaDefaultClassString = m_JavaVirtualMachinePointer->findClass("java/lang/String" );
 				if (m_javaDefaultClassString == 0) {
 					EWOL_ERROR("C->java : Can't find java/lang/String" );
 					// remove access on the virtual machine : 
@@ -212,7 +212,7 @@ class AndroidContext : public ewol::eContext
 		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID)
 		{
 			// this is to force the local system to think we have the buffer
-			// TODO : Remove this 2 Line when code will be writen
+			// TODO : remove this 2 line when code will be writen
 			m_clipBoardOwnerStd = true;
 			switch (_clipboardID)
 			{
@@ -223,7 +223,7 @@ class AndroidContext : public ewol::eContext
 					break;
 				case ewol::clipBoard::clipboardStd:
 					if (false == m_clipBoardOwnerStd) {
-						// Generate a request TO the OS
+						// generate a request TO the OS
 						// TODO : Send the message to the OS "We disire to receive the copy buffer ...
 					} else {
 						// just transmit an event , we have the data in the system
@@ -266,7 +266,7 @@ class AndroidContext : public ewol::eContext
 				return false;
 			}
 			JNIEnv *JavaVirtualMachinePointer_tmp;
-			*_rstatus = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+			*_rstatus = g_JavaVM->getEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
 			if (*_rstatus == JNI_EDETACHED) {
 				JavaVMAttachArgs lJavaVMAttachArgs;
 				lJavaVMAttachArgs.version = JNI_VERSION_1_6;
@@ -306,7 +306,7 @@ class AndroidContext : public ewol::eContext
 		void KeyboardHide(void) { SendJavaKeyboardUpdate(JNI_FALSE); };
 		
 		// mode 0 : auto; 1 landscape, 2 portrait
-		void ForceOrientation(ewol::orientation_te _orientation)
+		void forceOrientation(ewol::orientation_te _orientation)
 		{
 		#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
 			EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
@@ -327,7 +327,7 @@ class AndroidContext : public ewol::eContext
 		#endif
 		}
 		
-		void SetTitle(etk::UString& _title)
+		void setTitle(etk::UString& _title)
 		{
 			EWOL_DEBUG("C->java : send message to the java : \"" << _title << "\"");
 			if (m_javaApplicationType == appl_application) {
@@ -419,7 +419,7 @@ static etk::Vector<AndroidContext*> s_listInstance;
 
 extern "C"
 {
-	// JNI OnLoad
+	// JNI onLoad
 	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved)
 	{
 		// get the java virtual machine handle ...
@@ -427,7 +427,7 @@ extern "C"
 		EWOL_DEBUG("JNI-> load the jvm ..." );
 		return JNI_VERSION_1_6;
 	}
-	// JNI OnUnLoad
+	// JNI onUnLoad
 	JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* _vm, void *_reserved)
 	{
 		g_JavaVM = NULL;
@@ -437,21 +437,21 @@ extern "C"
 	/* Call to initialize the graphics state */
 	void Java_org_ewol_Ewol_EWparamSetArchiveDir(JNIEnv* _env, jclass _cls, jint _id, jint _mode, jstring _myString)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		//EWOL_CRITICAL(" call with ID : " << _id);
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
-		const char* str = _env->GetStringUTFChars(_myString, &isCopy);
-		s_listInstance[_id]->SetArchiveDir(_mode, str);
+		const char* str = _env->getStringUTFChars(_myString, &isCopy);
+		s_listInstance[_id]->setArchiveDir(_mode, str);
 		if (isCopy == JNI_TRUE) {
 			// from here str is reset ...
-			_env->ReleaseStringUTFChars(_myString, str);
+			_env->releaseStringUTFChars(_myString, str);
 			str = NULL;
 		}
 	}
@@ -471,26 +471,26 @@ extern "C"
 			return -1;
 		}
 		if (NULL == tmpContext) {
-			EWOL_ERROR("Can not allocate the main context instance _id=" << (s_listInstance.Size()-1));
+			EWOL_ERROR("Can not allocate the main context instance _id=" << (s_listInstance.size()-1));
 			return -1;
 		}
 		// for future case : all time this ...
-		s_listInstance.PushBack(tmpContext);
-		int32_t newID = s_listInstance.Size()-1;
+		s_listInstance.pushBack(tmpContext);
+		int32_t newID = s_listInstance.size()-1;
 		return newID;
 	}
 	
 	void Java_org_ewol_Ewol_EWsetJavaVirtualMachineStop(JNIEnv* _env, jclass _cls, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Remove JVM Pointer                    **");
+		EWOL_DEBUG("** remove JVM Pointer                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
 			return;
 		}
-		if (NULL==s_listInstance[_id]) {
+		if (NULL == s_listInstance[_id]) {
 			EWOL_ERROR("the requested instance _id=" << (int32_t)_id << " is already removed ...");
 			return;
 		}
@@ -500,12 +500,12 @@ extern "C"
 	}
 	void Java_org_ewol_Ewol_EWtouchEvent(JNIEnv* _env, jobject _thiz, jint _id)
 	{
-		EWOL_DEBUG(" ==> Touch Event");
-		if(    _id>=s_listInstance.Size()
+		EWOL_DEBUG("  == > Touch Event");
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		java_check_exception(_env);
@@ -514,28 +514,28 @@ extern "C"
 	void Java_org_ewol_Ewol_EWonCreate(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Create                    **");
+		EWOL_DEBUG("** Activity on Create                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
-		//s_listInstance[_id]->Init();
+		//s_listInstance[_id]->init();
 	}
 	
 	void Java_org_ewol_Ewol_EWonStart(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Start                     **");
+		EWOL_DEBUG("** Activity on Start                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		//SendSystemMessage(" testmessages ... ");
@@ -543,26 +543,26 @@ extern "C"
 	void Java_org_ewol_Ewol_EWonReStart(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Re-Start                  **");
+		EWOL_DEBUG("** Activity on Re-Start                  **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 	}
 	void Java_org_ewol_Ewol_EWonResume(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Resume                    **");
+		EWOL_DEBUG("** Activity on resume                    **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_Resume();
@@ -570,29 +570,29 @@ extern "C"
 	void Java_org_ewol_Ewol_EWonPause(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Pause                     **");
+		EWOL_DEBUG("** Activity on pause                     **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		// All the openGl has been destroyed ...
-		s_listInstance[_id]->GetResourcesManager().ContextHasBeenDestroyed();
+		s_listInstance[_id]->getResourcesManager().ContextHasBeenDestroyed();
 		s_listInstance[_id]->OS_Suspend();
 	}
 	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Stop                      **");
+		EWOL_DEBUG("** Activity on Stop                      **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_Stop();
@@ -600,13 +600,13 @@ extern "C"
 	void Java_org_ewol_Ewol_EWonDestroy(JNIEnv* _env, jobject _thiz, jint _id)
 	{
 		EWOL_DEBUG("*******************************************");
-		EWOL_DEBUG("** Activity On Destroy                   **");
+		EWOL_DEBUG("** Activity on Destroy                   **");
 		EWOL_DEBUG("*******************************************");
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		//s_listInstance[_id]->UnInit();
@@ -619,11 +619,11 @@ extern "C"
 	 * ********************************************************************************************** */
 	void Java_org_ewol_Ewol_EWinputEventMotion(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jfloat _x, jfloat _y )
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_SetInputMotion(_pointerID+1, vec2(_x,_y));
@@ -631,11 +631,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWinputEventState(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jboolean _isUp, jfloat _x, jfloat _y)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_SetInputState(_pointerID+1, _isUp, vec2(_x,_y));
@@ -643,11 +643,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWmouseEventMotion(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jfloat _x, jfloat _y)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_SetMouseMotion(_pointerID+1, vec2(_x,_y));
@@ -655,11 +655,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWmouseEventState(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID, jboolean _isUp, jfloat _x, jfloat _y)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_SetMouseState(_pointerID+1, _isUp, vec2(_x,_y));
@@ -667,11 +667,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWunknowEvent(JNIEnv* _env, jobject _thiz, jint _id, jint _pointerID)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		EWOL_DEBUG("Unknown IO event : " << _pointerID << " ???");
@@ -679,11 +679,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWkeyboardEventMove(JNIEnv* _env, jobject _thiz, jint _id, jint _type, jboolean _isdown)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		EWOL_DEBUG("IO keyboard Move event : \"" << _type << "\" is down=" << _isdown);
@@ -691,11 +691,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWkeyboardEventKey(JNIEnv* _env, jobject _thiz, jint _id, jint _uniChar, jboolean _isdown)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		EWOL_DEBUG("IO keyboard Key event : \"" << _uniChar << "\" is down=" << _isdown);
@@ -704,48 +704,48 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWdisplayPropertyMetrics(JNIEnv* _env, jobject _thiz, jint _id, jfloat _ratioX, jfloat _ratioY)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		// set the internal system ratio properties ...
-		ewol::dimension::SetPixelRatio(vec2(_ratioX,_ratioY), ewol::Dimension::Inch);
+		ewol::dimension::setPixelRatio(vec2(_ratioX,_ratioY), ewol::Dimension::Inch);
 	}
 	
-	// TODO : Set a return true or false if we want to grep this event ...
+	// TODO : set a return true or false if we want to grep this event ...
 	void Java_org_ewol_Ewol_EWkeyboardEventKeySystem(JNIEnv* _env, jobject _thiz, jint _id, jint _keyVal, jboolean _isdown)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		switch (_keyVal) {
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_UP:
-				EWOL_DEBUG("IO keyboard Key System \"VOLUME_UP\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"VOLUME_UP\" is down=" << _isdown);
 				break;
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_VOLUME_DOWN:
-				EWOL_DEBUG("IO keyboard Key System \"VOLUME_DOWN\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"VOLUME_DOWN\" is down=" << _isdown);
 				break;
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_MENU:
-				EWOL_DEBUG("IO keyboard Key System \"MENU\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"MENU\" is down=" << _isdown);
 				break;
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_CAMERA:
-				EWOL_DEBUG("IO keyboard Key System \"CAMERA\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"CAMERA\" is down=" << _isdown);
 				break;
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_HOME:
-				EWOL_DEBUG("IO keyboard Key System \"HOME\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"HOME\" is down=" << _isdown);
 				break;
 			case org_ewol_EwolConstants_EWOL_SYSTEM_KEY_POWER:
-				EWOL_DEBUG("IO keyboard Key System \"POWER\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system \"POWER\" is down=" << _isdown);
 				break;
 			default:
-				EWOL_DEBUG("IO keyboard Key System event : \"" << _keyVal << "\" is down=" << _isdown);
+				EWOL_DEBUG("IO keyboard Key system event : \"" << _keyVal << "\" is down=" << _isdown);
 				break;
 		}
 	}
@@ -756,11 +756,11 @@ extern "C"
 	 * ********************************************************************************************** */
 	void Java_org_ewol_Ewol_EWrenderInit(JNIEnv* _env, jobject _thiz, jint _id)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		
@@ -768,11 +768,11 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWrenderResize( JNIEnv* _env, jobject _thiz, jint _id, jint _w, jint _h )
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_Resize(vec2(_w, _h));
@@ -781,11 +781,11 @@ extern "C"
 	// TODO : Return tur or foalse to not redraw when the under draw has not be done (processing gain of time)
 	void Java_org_ewol_Ewol_EWrenderDraw(JNIEnv* _env, jobject _thiz, jint _id)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
 		s_listInstance[_id]->OS_Draw(true);
@@ -793,24 +793,24 @@ extern "C"
 	
 	void Java_org_ewol_Ewol_EWaudioPlayback(JNIEnv* _env, void* _reserved, jint _id, jshortArray _location, jint _frameRate, jint _nbChannels)
 	{
-		if(    _id>=s_listInstance.Size()
+		if(    _id >= s_listInstance.size()
 		    || _id<0
-		    || NULL==s_listInstance[_id] ) {
+		    || NULL == s_listInstance[_id] ) {
 			EWOL_ERROR("Call C With an incorrect instance _id=" << (int32_t)_id);
-			// TODO : Generate error in java to stop the current instance
+			// TODO : generate error in java to stop the current instance
 			return;
 		}
-		// Get the short* pointer from the Java array
+		// get the short* pointer from the Java array
 		jboolean isCopy;
-		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
+		jshort* dst = _env->getShortArrayElements(_location, &isCopy);
 		if (NULL != dst) {
-			ewol::audio::GetData(dst, _frameRate, _nbChannels);
+			ewol::audio::getData(dst, _frameRate, _nbChannels);
 		}
 		//APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
 		// TODO : Understand why it did not work corectly ...
 		//if (isCopy == JNI_TRUE) {
-		// Release the short* pointer
-		_env->ReleaseShortArrayElements(_location, dst, 0);
+		// release the short* pointer
+		_env->releaseShortArrayElements(_location, dst, 0);
 		//}
 	}
 };

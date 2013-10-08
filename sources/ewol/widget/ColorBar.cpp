@@ -22,11 +22,11 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 
 widget::ColorBar::ColorBar(void)
 {
-	AddEventId(ewolEventColorBarChange);
+	addEventId(ewolEventColorBarChange);
 	m_currentUserPos.setValue(0,0);
 	m_currentColor = etk::color::black;
-	SetCanHaveFocus(true);
-	SetMouseLimit(1);
+	setCanHaveFocus(true);
+	setMouseLimit(1);
 }
 
 widget::ColorBar::~ColorBar(void)
@@ -35,10 +35,10 @@ widget::ColorBar::~ColorBar(void)
 }
 
 
-void widget::ColorBar::CalculateMinMaxSize(void)
+void widget::ColorBar::calculateMinMaxSize(void)
 {
 	m_minSize.setValue(160, 80);
-	MarkToRedraw();
+	markToRedraw();
 }
 static etk::Color<> s_listColorWhite(0xFFFFFFFF);
 static etk::Color<> s_listColorBlack(0x000000FF);
@@ -53,40 +53,40 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF
 };
 
-etk::Color<> widget::ColorBar::GetCurrentColor(void)
+etk::Color<> widget::ColorBar::getCurrentColor(void)
 {
 	return m_currentColor;
 }
-void widget::ColorBar::SetCurrentColor(etk::Color<> newOne)
+void widget::ColorBar::setCurrentColor(etk::Color<> newOne)
 {
 	m_currentColor = newOne;
-	m_currentColor.SetA(0xFF);
+	m_currentColor.setA(0xFF);
 	// estimate the cursor position :
 	// TODO : Later when really needed ...
 }
 
-void widget::ColorBar::OnDraw(void)
+void widget::ColorBar::onDraw(void)
 {
-	m_draw.Draw();
+	m_draw.draw();
 }
 
 
-void widget::ColorBar::OnRegenerateDisplay(void)
+void widget::ColorBar::onRegenerateDisplay(void)
 {
-	if (true == NeedRedraw()) {
+	if (true == needRedraw()) {
 		// clean the object list ...
-		m_draw.Clear();
+		m_draw.clear();
 		
 		int32_t tmpSizeX = m_minSize.x();
 		int32_t tmpSizeY = m_minSize.y();
 		int32_t tmpOriginX = (m_size.x() - m_minSize.x()) / 2;
 		int32_t tmpOriginY = (m_size.y() - m_minSize.y()) / 2;
 		
-		if (true==m_userFill.x()) {
+		if (true == m_userFill.x()) {
 			tmpSizeX = m_size.x();
 			tmpOriginX = 0;
 		}
-		if (true==m_userFill.y()) {
+		if (true == m_userFill.y()) {
 			tmpSizeY = m_size.y();
 			tmpOriginY = 0;
 		}
@@ -99,15 +99,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(vec3(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-			m_draw.AddVertex();
+			m_draw.setColor(s_listColorWhite);
+			m_draw.setPos(vec3(tmpOriginX + (iii)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+			m_draw.addVertex();
+			m_draw.setColor(s_listColor[iii+1]);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+			m_draw.addVertex();
+			m_draw.setColor(s_listColor[iii]);
+			m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+			m_draw.addVertex();
 			/* Step 2 : 
 			 *   ********     
 			 *     ******     
@@ -115,15 +115,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColorWhite);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
-			m_draw.AddVertex();
+			m_draw.setColor(s_listColorWhite);
+			m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+			m_draw.addVertex();
+			m_draw.setColor(s_listColorWhite);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY, 0) );
+			m_draw.addVertex();
+			m_draw.setColor(s_listColor[iii+1]);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0) );
+			m_draw.addVertex();
 			/* Step 3 : 
 			 *              
 			 *   **         
@@ -131,15 +131,15 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *   ******     
 			 *   ********   
 			 */
-			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-			m_draw.AddVertex();
+			m_draw.setColor(s_listColor[iii]);
+			m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+			m_draw.addVertex();
+			m_draw.setColor(s_listColorBlack);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+			m_draw.addVertex();
+			m_draw.setColor(s_listColorBlack);
+			m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+			m_draw.addVertex();
 			/* Step 4 : 
 			 *   ********     
 			 *     ******     
@@ -147,43 +147,43 @@ void widget::ColorBar::OnRegenerateDisplay(void)
 			 *         **     
 			 *                
 			 */
-			m_draw.SetColor(s_listColor[iii]);
-			m_draw.SetPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColor[iii+1]);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
-			m_draw.AddVertex();
-			m_draw.SetColor(s_listColorBlack);
-			m_draw.SetPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
-			m_draw.AddVertex();
+			m_draw.setColor(s_listColor[iii]);
+			m_draw.setPos(vec3(tmpOriginX + iii*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+			m_draw.addVertex();
+			m_draw.setColor(s_listColor[iii+1]);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY/2, 0));
+			m_draw.addVertex();
+			m_draw.setColor(s_listColorBlack);
+			m_draw.setPos(vec3(tmpOriginX + (iii+1)*(tmpSizeX/NB_BAND_COLOR), tmpOriginY+tmpSizeY, 0));
+			m_draw.addVertex();
 		}
 		if (m_currentUserPos.y() > 0.5) {
-			m_draw.SetColor(etk::color::white);
+			m_draw.setColor(etk::color::white);
 		} else {
-			m_draw.SetColor(etk::color::black);
+			m_draw.setColor(etk::color::black);
 		}
-		m_draw.SetPos(vec3(m_currentUserPos.x()*m_size.x(), m_currentUserPos.y()*m_size.y(), 0) );
-		m_draw.SetThickness(1);
-		m_draw.Circle(3.0);
+		m_draw.setPos(vec3(m_currentUserPos.x()*m_size.x(), m_currentUserPos.y()*m_size.y(), 0) );
+		m_draw.setThickness(1);
+		m_draw.circle(3.0);
 		
 	}
 }
 
 
-bool widget::ColorBar::OnEventInput(const ewol::EventInput& _event)
+bool widget::ColorBar::onEventInput(const ewol::EventInput& _event)
 {
-	vec2 relativePos = RelativePosition(_event.GetPos());
+	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on BT ...");
-	if (1 == _event.GetId()) {
+	if (1 == _event.getId()) {
 		relativePos.setValue( etk_max(etk_min(relativePos.x(), m_size.x()),0),
 		                      etk_max(etk_min(relativePos.y(), m_size.y()),0));
-		if(    ewol::keyEvent::statusSingle == _event.GetStatus()
-		    || ewol::keyEvent::statusMove   == _event.GetStatus()) {
+		if(    ewol::keyEvent::statusSingle == _event.getStatus()
+		    || ewol::keyEvent::statusMove   == _event.getStatus()) {
 			// nothing to do ...
 			m_currentUserPos.setValue( relativePos.x()/m_size.x(),
 			                           relativePos.y()/m_size.y() );
-			MarkToRedraw();
-			//==> try to estimate color
+			markToRedraw();
+			// == > try to estimate color
 			EWOL_VERBOSE("event on (" << relativePos.x() << "," << relativePos.y() << ")");
 			int32_t bandID = (int32_t)(relativePos.x()/(m_size.x()/6));
 			float localPos = relativePos.x() - (m_size.x()/6) * bandID;
@@ -191,43 +191,43 @@ bool widget::ColorBar::OnEventInput(const ewol::EventInput& _event)
 			EWOL_VERBOSE("bandId=" << bandID << "  relative pos=" << localPos);
 			etk::Color<> estimateColor = etk::color::white;
 			if (s_listColor[bandID].r() == s_listColor[bandID+1].r()) {
-				estimateColor.SetR(s_listColor[bandID].r());
+				estimateColor.setR(s_listColor[bandID].r());
 			} else if (s_listColor[bandID].r() < s_listColor[bandID+1].r()) {
-				estimateColor.SetR(s_listColor[bandID].r() + (s_listColor[bandID+1].r()-s_listColor[bandID].r())*poroportionnalPos);
+				estimateColor.setR(s_listColor[bandID].r() + (s_listColor[bandID+1].r()-s_listColor[bandID].r())*poroportionnalPos);
 			} else {
-				estimateColor.SetR(s_listColor[bandID+1].r() + (s_listColor[bandID].r()-s_listColor[bandID+1].r())*(1-poroportionnalPos));
+				estimateColor.setR(s_listColor[bandID+1].r() + (s_listColor[bandID].r()-s_listColor[bandID+1].r())*(1-poroportionnalPos));
 			}
 			if (s_listColor[bandID].g() == s_listColor[bandID+1].g()) {
-				estimateColor.SetG(s_listColor[bandID].g());
+				estimateColor.setG(s_listColor[bandID].g());
 			} else if (s_listColor[bandID].g() < s_listColor[bandID+1].g()) {
-				estimateColor.SetG(s_listColor[bandID].g() + (s_listColor[bandID+1].g()-s_listColor[bandID].g())*poroportionnalPos);
+				estimateColor.setG(s_listColor[bandID].g() + (s_listColor[bandID+1].g()-s_listColor[bandID].g())*poroportionnalPos);
 			} else {
-				estimateColor.SetG(s_listColor[bandID+1].g() + (s_listColor[bandID].g()-s_listColor[bandID+1].g())*(1-poroportionnalPos));
+				estimateColor.setG(s_listColor[bandID+1].g() + (s_listColor[bandID].g()-s_listColor[bandID+1].g())*(1-poroportionnalPos));
 			}
 			if (s_listColor[bandID].b() == s_listColor[bandID+1].b()) {
-				estimateColor.SetB(s_listColor[bandID].b());
+				estimateColor.setB(s_listColor[bandID].b());
 			} else if (s_listColor[bandID].b() < s_listColor[bandID+1].b()) {
-				estimateColor.SetB(s_listColor[bandID].b() + (s_listColor[bandID+1].b()-s_listColor[bandID].b())*poroportionnalPos);
+				estimateColor.setB(s_listColor[bandID].b() + (s_listColor[bandID+1].b()-s_listColor[bandID].b())*poroportionnalPos);
 			} else {
-				estimateColor.SetB(s_listColor[bandID+1].b() + (s_listColor[bandID].b()-s_listColor[bandID+1].b())*(1-poroportionnalPos));
+				estimateColor.setB(s_listColor[bandID+1].b() + (s_listColor[bandID].b()-s_listColor[bandID+1].b())*(1-poroportionnalPos));
 			}
 			// step 2 generate the white and black ...
 			if (m_currentUserPos.y() == 0.5) {
 				// nothing to do ... just get the current color ...
 			} else if (m_currentUserPos.y() < 0.5) {
 				float poroportionnalWhite = (0.5-m_currentUserPos.y())*2.0;
-				estimateColor.SetR(estimateColor.r() + (0xFF-estimateColor.r())*poroportionnalWhite);
-				estimateColor.SetG(estimateColor.g() + (0xFF-estimateColor.g())*poroportionnalWhite);
-				estimateColor.SetB(estimateColor.b() + (0xFF-estimateColor.b())*poroportionnalWhite);
+				estimateColor.setR(estimateColor.r() + (0xFF-estimateColor.r())*poroportionnalWhite);
+				estimateColor.setG(estimateColor.g() + (0xFF-estimateColor.g())*poroportionnalWhite);
+				estimateColor.setB(estimateColor.b() + (0xFF-estimateColor.b())*poroportionnalWhite);
 			} else {
 				float poroportionnalBlack = (m_currentUserPos.y()-0.5)*2.0;
-				estimateColor.SetR(estimateColor.r() - estimateColor.r()*poroportionnalBlack);
-				estimateColor.SetG(estimateColor.g() - estimateColor.g()*poroportionnalBlack);
-				estimateColor.SetB(estimateColor.b() - estimateColor.b()*poroportionnalBlack);
+				estimateColor.setR(estimateColor.r() - estimateColor.r()*poroportionnalBlack);
+				estimateColor.setG(estimateColor.g() - estimateColor.g()*poroportionnalBlack);
+				estimateColor.setB(estimateColor.b() - estimateColor.b()*poroportionnalBlack);
 			}
 			if(m_currentColor != estimateColor) {
 				m_currentColor = estimateColor;
-				GenerateEventId(ewolEventColorBarChange);
+				generateEventId(ewolEventColorBarChange);
 			}
 			return true;
 		}

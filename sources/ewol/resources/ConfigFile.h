@@ -30,10 +30,10 @@ namespace ewol
 				m_valueInt(0),
 				m_valuefloat(0.0) { };
 			~SimpleConfigElement(void) { };
-			void          Parse(const etk::UString& value);
-			int32_t       GetInteger(void) { return m_valueInt; };
-			float         GetFloat(void)   { return m_valuefloat; };
-			etk::UString& GetString(void)  { return m_value; };
+			void          parse(const etk::UString& value);
+			int32_t       getInteger(void) { return m_valueInt; };
+			float         getFloat(void)   { return m_valuefloat; };
+			etk::UString& getString(void)  { return m_value; };
 	};
 	
 	class ConfigFile : public ewol::Resource
@@ -45,27 +45,27 @@ namespace ewol
 			ConfigFile(const etk::UString& _filename);
 			virtual ~ConfigFile(void);
 		public:
-			const char* GetType(void) { return "ewol::SimpleConfigFile"; };
-			void Reload(void);
+			const char* getType(void) { return "ewol::SimpleConfigFile"; };
+			void reload(void);
 			
-			int32_t Request(const etk::UString& _paramName);
+			int32_t request(const etk::UString& _paramName);
 			
-			int32_t       GetInteger(int32_t id) { if (id<0) { return 0; } return m_list[id]->GetInteger(); };
-			float         GetFloat(int32_t id)   { if (id<0) { return 0; } return m_list[id]->GetFloat();   };
-			etk::UString& GetString(int32_t id)  { if (id<0) { return m_errorString; } return m_list[id]->GetString();  };
+			int32_t       getInteger(int32_t id) { if (id<0) { return 0; } return m_list[id]->getInteger(); };
+			float         getFloat(int32_t id)   { if (id<0) { return 0; } return m_list[id]->getFloat();   };
+			etk::UString& getString(int32_t id)  { if (id<0) { return m_errorString; } return m_list[id]->getString();  };
 		public:
 			/**
-			 * @brief Keep the resource pointer.
+			 * @brief keep the resource pointer.
 			 * @note Never free this pointer by your own...
 			 * @param[in] _filename Name of the configuration file.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::ConfigFile* Keep(const etk::UString& _filename);
+			static ewol::ConfigFile* keep(const etk::UString& _filename);
 			/**
-			 * @brief Release the keeped resources
+			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
 			 */
-			static void Release(ewol::ConfigFile*& _object);
+			static void release(ewol::ConfigFile*& _object);
 	};
 };
 

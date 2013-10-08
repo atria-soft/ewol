@@ -43,13 +43,13 @@ namespace widget {
 		public:
 			ParameterList(void);
 			virtual ~ParameterList(void);
-			void SetLabel(etk::UString newLabel);
-		// Drawing capabilities ....
+			void setLabel(etk::UString newLabel);
+		// drawing capabilities ....
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
 		public:
-			void AddOObject(ewol::Compositing* newObject, int32_t pos=-1);
-			void ClearOObjectList(void);
+			void addOObject(ewol::Compositing* newObject, int32_t pos=-1);
+			void clearOObjectList(void);
 		// list properties ...
 		private:
 			int32_t m_paddingSizeX;
@@ -57,24 +57,23 @@ namespace widget {
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
-			void MenuAdd(etk::UString& label, int32_t refId, etk::UString& image);
-			void MenuAddGroup(etk::UString& label);
-			void MenuClear(void);
-			void MenuSeparator(void);
+			void menuAdd(etk::UString& label, int32_t refId, etk::UString& image);
+			void menuAddGroup(etk::UString& label);
+			void menuClear(void);
+			void menuSeparator(void);
 			
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "EwolParameterList"; };
-			virtual void OnRegenerateDisplay(void);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			virtual void CalculateMinMaxSize(void);
+			virtual const char * const getObjectType(void) { return "EwolParameterList"; };
+			virtual void onRegenerateDisplay(void);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			virtual void calculateMinMaxSize(void);
 		protected: // Derived function
-			virtual void OnGetFocus(void);
-			virtual void OnLostFocus(void);
-			virtual void OnDraw(void);
+			virtual void onGetFocus(void);
+			virtual void onLostFocus(void);
+			virtual void onDraw(void);
 	};
 };
 
-#define EWOL_CAST_WIDGET_PARAMETER_LIST(curentPointer) EWOL_CAST(ewol::TYPE_EOBJECT_WIDGET_PARAMETER_LIST,ParameterList,curentPointer)
 
 #endif
 

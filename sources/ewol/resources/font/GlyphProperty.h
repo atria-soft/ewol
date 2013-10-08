@@ -75,32 +75,32 @@ namespace ewol
 				m_texturePosStart(0,0),
 				m_texturePosSize(0,0)
 			{ };
-			float KerningGet(const uniChar_t charcode)
+			float kerningGet(const uniChar_t charcode)
 			{
-				for(esize_t iii=0; iii<m_kerning.Size(); iii++ ) {
+				for(esize_t iii=0; iii<m_kerning.size(); iii++ ) {
 					if (m_kerning[iii].m_UVal == charcode) {
 						return m_kerning[iii].m_value;
 					}
 				}
 				return 0;
 			};
-			void KerningAdd(const uniChar_t charcode, float value)
+			void kerningAdd(const uniChar_t charcode, float value)
 			{
-				m_kerning.PushBack(ewol::Kerning(charcode, value));
+				m_kerning.pushBack(ewol::Kerning(charcode, value));
 			};
-			void KerningClear(void)
+			void kerningClear(void)
 			{
-				m_kerning.Clear();
+				m_kerning.clear();
 			};
 			/**
-			 * @brief Get the status of the char, if it exist or not in the FONT
+			 * @brief get the status of the char, if it exist or not in the FONT
 			 * @return true if the char is availlable, false otherwise
 			 */
-			bool Exist(void) const { return m_exist; };
+			bool exist(void) const { return m_exist; };
 			/**
-			 * @brief Set the element doen not exist !!!
+			 * @brief set the element doen not exist !!!
 			 */
-			void SetNotExist(void) { m_exist = false; };
+			void setNotExist(void) { m_exist = false; };
 	};
 };
 

@@ -29,11 +29,11 @@ namespace widget {
 			StdPopUp(void);
 			~StdPopUp(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "EwolPopUp"; };
-			virtual bool OnEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y);
-			void SetTitle(etk::UString text);
-			void SetComment(etk::UString text);
-			void SetButtonLabel(int32_t btId, etk::UString text); // note : if no label no bt...
+			virtual const char * const getObjectType(void) { return "EwolPopUp"; };
+			virtual bool onEventAreaExternal(int32_t widgetID, const char * generateEventId, const char * eventExternId, float x, float y);
+			void setTitle(etk::UString text);
+			void setComment(etk::UString text);
+			void setButtonLabel(int32_t btId, etk::UString text); // note : if no label no bt...
 		private:
 			ewol::widget::Label*  m_title;
 			ewol::widget::Label*  m_comment;

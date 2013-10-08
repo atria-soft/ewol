@@ -18,7 +18,7 @@ namespace ewol
 	class EObjectManager
 	{
 		private:
-			etk::Vector<ewol::EObject*> m_eObjectList; // all widget allocated ==> all time increment ... never removed ...
+			etk::Vector<ewol::EObject*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
 			etk::Vector<ewol::EObject*> m_eObjectAutoRemoveList; // all widget allocated
 		public:
 			EObjectManager(void);
@@ -26,22 +26,22 @@ namespace ewol
 			/**
 			 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 			 */
-			void UnInit(void);
+			void unInit(void);
 			
-			void Add(ewol::EObject* _object);
-			void Rm(ewol::EObject* _object);
-			int32_t GetNumberObject(void);
+			void add(ewol::EObject* _object);
+			void rm(ewol::EObject* _object);
+			int32_t getNumberObject(void);
 			
-			void AutoRemove(ewol::EObject* _object);
-			void RemoveAllAutoRemove(void);
+			void autoRemove(ewol::EObject* _object);
+			void removeAllAutoRemove(void);
 			
-			ewol::EObject* Get(const etk::UString& _name);
+			ewol::EObject* get(const etk::UString& _name);
 		private:
 			void informOneObjectIsRemoved(ewol::EObject* _object);
 		private:
 			ewol::EMultiCast m_multiCast; //!< muticast manager
 		public:
-			ewol::EMultiCast& MultiCast(void) { return m_multiCast; };
+			ewol::EMultiCast& multiCast(void) { return m_multiCast; };
 	};
 };
 

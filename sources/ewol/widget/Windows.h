@@ -23,25 +23,25 @@ namespace ewol {
 			virtual ~Windows(void);
 		// internal event at ewol system : 
 		public:
-			void SysDraw(void);
-			void SysOnShow(void) {};
-			void SysOnHide(void) {};
-			void SysOnKill(void) {};
+			void sysDraw(void);
+			void sysOnShow(void) {};
+			void sysOnHide(void) {};
+			void sysOnKill(void) {};
 		public:
-			virtual void OnShow(void) { };
-			virtual void OnHide(void) { };
-			virtual bool OnKill(void) { return true; };
-			virtual void OnReduce(void) { };
-			virtual void On(void) { };
+			virtual void onShow(void) { };
+			virtual void onHide(void) { };
+			virtual bool onKill(void) { return true; };
+			virtual void onReduce(void) { };
+			virtual void on(void) { };
 		private:
 			bool m_hasDecoration;
 		public:
-			void SetDecorationDisable(void)
+			void setDecorationDisable(void)
 			{
 				m_hasDecoration = false;
 			}
 			
-			void SetDecorationEnable(void)
+			void setDecorationEnable(void)
 			{
 				m_hasDecoration = true;
 			}
@@ -49,30 +49,30 @@ namespace ewol {
 			ewol::Widget* m_subWidget;
 			etk::Vector<ewol::Widget*> m_popUpWidgetList;
 		public:
-			void SetSubWidget(ewol::Widget * widget);
-			void PopUpWidgetPush(ewol::Widget * widget);
+			void setSubWidget(ewol::Widget * widget);
+			void popUpWidgetPush(ewol::Widget * widget);
 		private:
 			etk::Color<float> m_backgroundColor; //!< reset color of the Main windows
 		public:
 			/**
-			 * @brief Get the background color.
+			 * @brief get the background color.
 			 * @return A reference on the color
 			 */
-			const etk::Color<float>& GetBackgroundColor(void) { return m_backgroundColor; };
+			const etk::Color<float>& getBackgroundColor(void) { return m_backgroundColor; };
 			/**
-			 * @brief Set the background color.
+			 * @brief set the background color.
 			 * @param[IN] the new requested color.
 			 */
-			void SetBackgroundColor(const etk::Color<float>& _color);
+			void setBackgroundColor(const etk::Color<float>& _color);
 		protected: // Derived function
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
 		public: // Derived function
-			virtual const char * const GetObjectType(void) { return "ewol::Windows"; };
-			virtual void OnRegenerateDisplay(void);
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
-			virtual void CalculateSize(const vec2& availlable);
-			virtual ewol::Widget * GetWidgetAtPos(const vec2& pos);
-			void SetTitle(const etk::UString& _title);
+			virtual const char * const getObjectType(void) { return "ewol::Windows"; };
+			virtual void onRegenerateDisplay(void);
+			virtual void onObjectRemove(ewol::EObject * removeObject);
+			virtual void calculateSize(const vec2& availlable);
+			virtual ewol::Widget * getWidgetAtPos(const vec2& pos);
+			void setTitle(const etk::UString& _title);
 	};
 	
 };

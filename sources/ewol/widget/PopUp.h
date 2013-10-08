@@ -21,7 +21,7 @@ namespace widget {
 	class PopUp : public widget::Container
 	{
 		public:
-			static void Init(ewol::WidgetManager& _widgetManager);
+			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
 			static const char* const configShaper;
 			static const char* const configRemoveOnExternClick;
@@ -40,18 +40,18 @@ namespace widget {
 			 */
 			virtual ~PopUp(void);
 			/**
-			 * @brief Set the shaper name (use the contructer one this permit to not noad unused shaper)
+			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 			 * @param[in] _shaperName The new shaper filename
 			 */
-			void SetShaperName(const etk::UString& _shaperName);
+			void setShaperName(const etk::UString& _shaperName);
 		protected:
-			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one ==> this permit to limit bigger subWidget
+			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 		public:
 			/**
 			 * @brief Limit the expend properties to the current widget (no contamination)
 			 * @param[in] _lockExpend Lock mode of the expend properties
 			 */
-			void LockExpand(const bvec2& _lockExpand);
+			void lockExpand(const bvec2& _lockExpand);
 		private:
 			bool m_closeOutEvent; //!< ratio progression of a sliding
 		public:
@@ -59,12 +59,12 @@ namespace widget {
 			 * @brief Request the Auto-remove when the event input is set outside the widget
 			 * @param[in] _state New status
 			 */
-			void SetRemoveOnExternClick(bool _state) { m_closeOutEvent = _state; };
+			void setRemoveOnExternClick(bool _state) { m_closeOutEvent = _state; };
 			/**
-			 * @brief Get the status of the request the Auto-remove when the event input is set outside the widget.
+			 * @brief get the status of the request the Auto-remove when the event input is set outside the widget.
 			 * @return the status of the removing
 			 */
-			bool GetRemoveOnExternClick(void) const { return m_closeOutEvent; };
+			bool getRemoveOnExternClick(void) const { return m_closeOutEvent; };
 		private:
 			//float m_slidingProgress; //!< ratio progression of a sliding
 		public:
@@ -76,29 +76,29 @@ namespace widget {
 			animation_te m_animation; //!< Methode add and remove element (animation)
 		public:
 			/**
-			 * @brief Set an animation mode for the new element set in the Widget container.
+			 * @brief set an animation mode for the new element set in the Widget container.
 			 * @param[in] _animation The new animation mode.
 			 */
-			void SetAnimationMode(animation_te _animation);
+			void setAnimationMode(animation_te _animation);
 			/**
-			 * @brief Get the current animation mode.
+			 * @brief get the current animation mode.
 			 * @return The animation mode.
 			 */
-			animation_te GetAnimationMode(void) { return m_animation;};
+			animation_te getAnimationMode(void) { return m_animation;};
 			
 		protected: // Derived function
-			virtual void OnDraw(void);
-			virtual bool OnSetConfig(const ewol::EConfig& _conf);
-			virtual bool OnGetConfig(const char* _config, etk::UString& _result) const;
+			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual void PeriodicCall(const ewol::EventTime& _event);
-			virtual void SystemDraw(const ewol::DrawProperty& _displayProp);
-			virtual void OnRegenerateDisplay(void);
-			virtual void CalculateSize(const vec2& _available);
-			virtual bool OnEventInput(const ewol::EventInput& _event);
-			//virtual void CalculateMinMaxSize(void);
-			virtual const char * const GetObjectType(void) { return "ewol::PopUp"; };
-			virtual ewol::Widget* GetWidgetAtPos(const vec2& pos);
+			virtual void periodicCall(const ewol::EventTime& _event);
+			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void onRegenerateDisplay(void);
+			virtual void calculateSize(const vec2& _available);
+			virtual bool onEventInput(const ewol::EventInput& _event);
+			//virtual void calculateMinMaxSize(void);
+			virtual const char * const getObjectType(void) { return "ewol::PopUp"; };
+			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
 	
 };

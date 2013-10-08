@@ -15,10 +15,10 @@
 #include <ewol/physicsShape/PhysicsSphere.h>
 
 
-ewol::PhysicsShape* ewol::PhysicsShape::Create(const etk::UString& _name)
+ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name)
 {
 	ewol::PhysicsShape* tmpp = NULL;
-	etk::UString name = _name.ToLower();
+	etk::UString name = _name.toLower();
 	if (name == "box") {
 		tmpp = new ewol::PhysicsBox();
 	} else if (name == "sphere") {
@@ -35,23 +35,23 @@ ewol::PhysicsShape* ewol::PhysicsShape::Create(const etk::UString& _name)
 		EWOL_ERROR("Create an unknow element : '" << _name << "' availlable : [BOX,SPHERE,CONE,CYLINDER,CAPSULE,CONVEXHULL]");
 		return NULL;
 	}
-	if (tmpp==NULL) {
+	if (tmpp == NULL) {
 		EWOL_ERROR("Allocation error for physical element : '" << _name << "'");
 	}
 	return tmpp;
 }
 
 
-bool ewol::PhysicsShape::Parse(const char* _line)
+bool ewol::PhysicsShape::parse(const char* _line)
 {
-	if(0==strncmp(_line, "origin : ", 9) ) {
+	if(0 == strncmp(_line, "origin : ", 9) ) {
 		sscanf(&_line[9], "%f %f %f", &m_origin.m_floats[0], &m_origin.m_floats[1], &m_origin.m_floats[2] );
 		EWOL_DEBUG("                Origin=" << m_origin);
 		return true;
 	}
-	if(0==strncmp(_line, "rotate : ", 9) ) {
+	if(0 == strncmp(_line, "rotate : ", 9) ) {
 		sscanf(&_line[9], "%f %f %f %f", &m_quaternion.m_floats[0], &m_quaternion.m_floats[1], &m_quaternion.m_floats[2], &m_quaternion.m_floats[3] );
-		EWOL_DEBUG("                Rotate=" << m_quaternion);
+		EWOL_DEBUG("                rotate=" << m_quaternion);
 		return true;
 	}
 	return false;

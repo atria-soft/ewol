@@ -35,7 +35,7 @@ const char * const eventColorSpecificHasChange     = "event-color-specific-has-c
 widget::ColorChooser::ColorChooser(void) :
 	widget::Sizer(widget::Sizer::modeVert)
 {
-	AddEventId(ewolEventColorChooserChange);
+	addEventId(ewolEventColorChooserChange);
 	
 	
 	m_widgetColorBar = NULL;
@@ -44,53 +44,53 @@ widget::ColorChooser::ColorChooser(void) :
 	m_widgetBlue = NULL;
 	m_widgetAlpha = NULL;
 	
-	LockExpand(bvec2(true,true));
+	lockExpand(bvec2(true,true));
 		m_widgetColorBar = new widget::ColorBar();
-			m_widgetColorBar->RegisterOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
-			m_widgetColorBar->SetFill(bvec2(true,true));
+			m_widgetColorBar->registerOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
+			m_widgetColorBar->setFill(bvec2(true,true));
 			/*
-			m_widgetColorBar->SetWidth(200);
-			m_widgetColorBar->SetHeigh(200);
+			m_widgetColorBar->setWidth(200);
+			m_widgetColorBar->setHeigh(200);
 			*/
-			SubWidgetAdd(m_widgetColorBar);
+			subWidgetAdd(m_widgetColorBar);
 		
 		etk::Color<> sliderColor;
 		sliderColor = etk::color::black;
 		
 		m_widgetRed = new widget::Slider();
-			m_widgetRed->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetRed->SetExpand(bvec2(true,false));
-			m_widgetRed->SetFill(bvec2(true,false));
-			m_widgetRed->SetMin(0);
-			m_widgetRed->SetMax(255);
+			m_widgetRed->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetRed->setExpand(bvec2(true,false));
+			m_widgetRed->setFill(bvec2(true,false));
+			m_widgetRed->setMin(0);
+			m_widgetRed->setMax(255);
 			sliderColor = 0xFF0000FF;
-			m_widgetRed->SetColor(sliderColor);
-			SubWidgetAdd(m_widgetRed);
+			m_widgetRed->setColor(sliderColor);
+			subWidgetAdd(m_widgetRed);
 		m_widgetGreen = new widget::Slider();
-			m_widgetGreen->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetGreen->SetExpand(bvec2(true,false));
-			m_widgetGreen->SetFill(bvec2(true,false));
-			m_widgetGreen->SetMin(0);
+			m_widgetGreen->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetGreen->setExpand(bvec2(true,false));
+			m_widgetGreen->setFill(bvec2(true,false));
+			m_widgetGreen->setMin(0);
 			sliderColor = 0x00FF00FF;
-			m_widgetGreen->SetColor(sliderColor);
-			m_widgetGreen->SetMax(255);
-			SubWidgetAdd(m_widgetGreen);
+			m_widgetGreen->setColor(sliderColor);
+			m_widgetGreen->setMax(255);
+			subWidgetAdd(m_widgetGreen);
 		m_widgetBlue = new widget::Slider();
-			m_widgetBlue->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetBlue->SetExpand(bvec2(true,false));
-			m_widgetBlue->SetFill(bvec2(true,false));
-			m_widgetBlue->SetMin(0);
+			m_widgetBlue->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetBlue->setExpand(bvec2(true,false));
+			m_widgetBlue->setFill(bvec2(true,false));
+			m_widgetBlue->setMin(0);
 			sliderColor = 0x0000FFFF;
-			m_widgetBlue->SetColor(sliderColor);
-			m_widgetBlue->SetMax(255);
-			SubWidgetAdd(m_widgetBlue);
+			m_widgetBlue->setColor(sliderColor);
+			m_widgetBlue->setMax(255);
+			subWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = new widget::Slider();
-			m_widgetAlpha->RegisterOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
-			m_widgetAlpha->SetExpand(bvec2(true,false));
-			m_widgetAlpha->SetFill(bvec2(true,false));
-			m_widgetAlpha->SetMin(0);
-			m_widgetAlpha->SetMax(255);
-			SubWidgetAdd(m_widgetAlpha);
+			m_widgetAlpha->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetAlpha->setExpand(bvec2(true,false));
+			m_widgetAlpha->setFill(bvec2(true,false));
+			m_widgetAlpha->setMin(0);
+			m_widgetAlpha->setMax(255);
+			subWidgetAdd(m_widgetAlpha);
 	
 	m_currentColor = etk::color::white;
 }
@@ -102,86 +102,86 @@ widget::ColorChooser::~ColorChooser(void)
 }
 
 
-void widget::ColorChooser::SetColor(etk::Color<> _newColor)
+void widget::ColorChooser::setColor(etk::Color<> _newColor)
 {
 	m_currentColor = _newColor;
 	if (NULL != m_widgetRed) {
-		m_widgetRed->SetValue(m_currentColor.r());
+		m_widgetRed->setValue(m_currentColor.r());
 	}
 	if (NULL != m_widgetGreen) {
-		m_widgetGreen->SetValue(m_currentColor.g());
+		m_widgetGreen->setValue(m_currentColor.g());
 	}
 	if (NULL != m_widgetBlue) {
-		m_widgetBlue->SetValue(m_currentColor.b());
+		m_widgetBlue->setValue(m_currentColor.b());
 	}
 	if (NULL != m_widgetAlpha) {
-		m_widgetAlpha->SetValue(m_currentColor.a());
+		m_widgetAlpha->setValue(m_currentColor.a());
 	}
 	if (NULL != m_widgetColorBar) {
-		m_widgetColorBar->SetCurrentColor(m_currentColor);
+		m_widgetColorBar->setCurrentColor(m_currentColor);
 	}
 }
 
 
-etk::Color<> widget::ColorChooser::GetColor(void)
+etk::Color<> widget::ColorChooser::getColor(void)
 {
 	return m_currentColor;
 }
 
 
-void widget::ColorChooser::OnReceiveMessage(const ewol::EMessage& _msg)
+void widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg)
 {
-	if (NULL == _msg.GetCaller()) {
+	if (NULL == _msg.getCaller()) {
 		return;
 	}
-	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\" ==> data=\"" << data << "\"" );
-	if (eventColorBarHasChange == _msg.GetMessage()) {
-		//==> colorBar has change ...
+	//EWOL_INFO("Receive Extern Event ... : widgetPointer=" << CallerObject << "\"" << eventId << "\"  == > data=\"" << data << "\"" );
+	if (eventColorBarHasChange == _msg.getMessage()) {
+		// == > colorBar has change ...
 		uint8_t tmpAlpha = m_currentColor.a();
-		// the colorbar has no notion of the alpha ==> keep it ...
+		// the colorbar has no notion of the alpha  == > keep it ...
 		if (NULL != m_widgetColorBar) {
-			m_currentColor = m_widgetColorBar->GetCurrentColor();
+			m_currentColor = m_widgetColorBar->getCurrentColor();
 		}
-		m_currentColor.SetA(tmpAlpha);
+		m_currentColor.setA(tmpAlpha);
 		if (NULL != m_widgetRed) {
-			m_widgetRed->SetValue(m_currentColor.r());
+			m_widgetRed->setValue(m_currentColor.r());
 		}
 		if (NULL != m_widgetGreen) {
-			m_widgetGreen->SetValue(m_currentColor.g());
+			m_widgetGreen->setValue(m_currentColor.g());
 		}
 		if (NULL != m_widgetBlue) {
-			m_widgetBlue->SetValue(m_currentColor.b());
+			m_widgetBlue->setValue(m_currentColor.b());
 		}
 		if (NULL != m_widgetAlpha) {
-			m_widgetAlpha->SetValue(m_currentColor.a());
+			m_widgetAlpha->setValue(m_currentColor.a());
 		}
-		GenerateEventId(ewolEventColorChooserChange, m_currentColor.GetString());
-	} else if (eventColorSpecificHasChange == _msg.GetMessage()) {
-		// Slider has changes his color ==> get the one change ...
-		if (_msg.GetCaller() == m_widgetRed) {
-			m_currentColor.SetR(m_widgetRed->GetValue());
+		generateEventId(ewolEventColorChooserChange, m_currentColor.getString());
+	} else if (eventColorSpecificHasChange == _msg.getMessage()) {
+		// Slider has changes his color  == > get the one change ...
+		if (_msg.getCaller() == m_widgetRed) {
+			m_currentColor.setR(m_widgetRed->getValue());
 		}
-		if (_msg.GetCaller() == m_widgetGreen) {
-			m_currentColor.SetG(m_widgetGreen->GetValue());
+		if (_msg.getCaller() == m_widgetGreen) {
+			m_currentColor.setG(m_widgetGreen->getValue());
 		}
-		if (_msg.GetCaller() == m_widgetBlue) {
-			m_currentColor.SetB(m_widgetBlue->GetValue());
+		if (_msg.getCaller() == m_widgetBlue) {
+			m_currentColor.setB(m_widgetBlue->getValue());
 		}
-		if (_msg.GetCaller() == m_widgetAlpha) {
-			m_currentColor.SetA(m_widgetAlpha->GetValue());
+		if (_msg.getCaller() == m_widgetAlpha) {
+			m_currentColor.setA(m_widgetAlpha->getValue());
 		}
 		if (NULL != m_widgetColorBar) {
-			m_widgetColorBar->SetCurrentColor(m_currentColor);
+			m_widgetColorBar->setCurrentColor(m_currentColor);
 		}
-		GenerateEventId(ewolEventColorChooserChange, m_currentColor.GetString());
+		generateEventId(ewolEventColorChooserChange, m_currentColor.getString());
 	}
 };
 
 
-void widget::ColorChooser::OnObjectRemove(ewol::EObject * _removeObject)
+void widget::ColorChooser::onObjectRemove(ewol::EObject * _removeObject)
 {
 	// First step call parrent : 
-	widget::Sizer::OnObjectRemove(_removeObject);
+	widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
 	if(_removeObject == m_widgetRed) {
 		m_widgetRed = NULL;

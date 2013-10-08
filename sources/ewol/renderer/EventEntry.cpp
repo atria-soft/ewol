@@ -13,10 +13,10 @@
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::EventEntry& _obj)
 {
-	_os << "{type=" << _obj.GetType();
-	_os << " status=" << _obj.GetStatus();
-	if (_obj.GetType() == ewol::keyEvent::keyboardChar) {
-		_os << " char=" << _obj.GetChar();
+	_os << "{type=" << _obj.getType();
+	_os << " status=" << _obj.getStatus();
+	if (_obj.getType() == ewol::keyEvent::keyboardChar) {
+		_os << " char=" << _obj.getChar();
 	}
 	_os << "}";
 	return _os;

@@ -30,30 +30,30 @@ ewol::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
 
 ewol::VirtualBufferObject::~VirtualBufferObject(void)
 {
-	RemoveContext();
+	removeContext();
 }
 
 
-void ewol::VirtualBufferObject::RetreiveData(void)
+void ewol::VirtualBufferObject::retreiveData(void)
 {
 	EWOL_ERROR("TODO ... ");
 }
 
 
-void ewol::VirtualBufferObject::UpdateContext(void)
+void ewol::VirtualBufferObject::updateContext(void)
 {
-	if (false==m_exist) {
+	if (false == m_exist) {
 		// Allocate and assign a Vertex Array Object to our handle
 		glGenBuffers(m_nbVBO, m_vbo);
 	}
 	m_exist = true;
 	for (int32_t iii=0; iii<m_nbVBO; iii++) {
-		EWOL_INFO("VBO    : Add [" << m_uniqueId << "]=" << m_buffer[iii].Size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
+		EWOL_INFO("VBO    : add [" << m_uniqueId << "]=" << m_buffer[iii].size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		if (true == m_vboUsed[iii]) {
 			// select the buffer to set data inside it ...
-			if (m_buffer[iii].Size()>0) {
+			if (m_buffer[iii].size()>0) {
 				glBindBuffer(GL_ARRAY_BUFFER, m_vbo[iii]);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer[iii].Size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float)*m_buffer[iii].size(), &((m_buffer[iii])[0]), GL_STATIC_DRAW);
 			}
 		}
 	}
@@ -61,10 +61,10 @@ void ewol::VirtualBufferObject::UpdateContext(void)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void ewol::VirtualBufferObject::RemoveContext(void)
+void ewol::VirtualBufferObject::removeContext(void)
 {
-	if (true==m_exist) {
-		EWOL_INFO("VBO: Remove [" << m_uniqueId << "] OGl_Id=" << m_vbo[0]
+	if (true == m_exist) {
+		EWOL_INFO("VBO: remove [" << m_uniqueId << "] OGl_Id=" << m_vbo[0]
 		                                                << "/" << m_vbo[1]
 		                                                << "/" << m_vbo[2]
 		                                                << "/" << m_vbo[3]);
@@ -76,7 +76,7 @@ void ewol::VirtualBufferObject::RemoveContext(void)
 	}
 }
 
-void ewol::VirtualBufferObject::RemoveContextToLate(void)
+void ewol::VirtualBufferObject::removeContextToLate(void)
 {
 	m_exist = false;
 	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
@@ -84,65 +84,65 @@ void ewol::VirtualBufferObject::RemoveContextToLate(void)
 	}
 }
 
-void ewol::VirtualBufferObject::Reload(void)
+void ewol::VirtualBufferObject::reload(void)
 {
-	RemoveContext();
-	UpdateContext();
+	removeContext();
+	updateContext();
 }
 
 
-void ewol::VirtualBufferObject::Flush(void)
+void ewol::VirtualBufferObject::flush(void)
 {
 	// request to the manager to be call at the next update ...
-	ewol::GetContext().GetResourcesManager().Update(this);
+	ewol::getContext().getResourcesManager().update(this);
 }
 
-void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const vec3& data)
+void ewol::VirtualBufferObject::pushOnBuffer(int32_t id, const vec3& data)
 {
 	m_vboUsed[id] = true;
-	m_buffer[id].PushBack(data.x());
-	m_buffer[id].PushBack(data.y());
-	m_buffer[id].PushBack(data.z());
+	m_buffer[id].pushBack(data.x());
+	m_buffer[id].pushBack(data.y());
+	m_buffer[id].pushBack(data.z());
 }
 
-vec3 ewol::VirtualBufferObject::GetOnBufferVec3(int32_t id, int32_t elementID)
+vec3 ewol::VirtualBufferObject::getOnBufferVec3(int32_t id, int32_t elementID)
 {
-	if (elementID*3>m_buffer[id].Size()) {
+	if (elementID*3>m_buffer[id].size()) {
 		return vec3(0,0,0);
 	}
 	return vec3(m_buffer[id][3*elementID],
 	            m_buffer[id][3*elementID+1],
 	            m_buffer[id][3*elementID+2]);
 }
-int32_t ewol::VirtualBufferObject::SizeOnBufferVec3(int32_t id)
+int32_t ewol::VirtualBufferObject::sizeOnBufferVec3(int32_t id)
 {
-	return m_buffer[id].Size()/3;
+	return m_buffer[id].size()/3;
 }
 
-void ewol::VirtualBufferObject::PushOnBuffer(int32_t id, const vec2& data)
+void ewol::VirtualBufferObject::pushOnBuffer(int32_t id, const vec2& data)
 {
 	m_vboUsed[id] = true;
-	m_buffer[id].PushBack(data.x());
-	m_buffer[id].PushBack(data.y());
+	m_buffer[id].pushBack(data.x());
+	m_buffer[id].pushBack(data.y());
 }
 
-vec2 ewol::VirtualBufferObject::GetOnBufferVec2(int32_t id, int32_t elementID)
+vec2 ewol::VirtualBufferObject::getOnBufferVec2(int32_t id, int32_t elementID)
 {
-	if (elementID*2>m_buffer[id].Size()) {
+	if (elementID*2>m_buffer[id].size()) {
 		return vec2(0,0);
 	}
 	return vec2(m_buffer[id][2*elementID],
 	            m_buffer[id][2*elementID+1]);
 }
 
-int32_t ewol::VirtualBufferObject::SizeOnBufferVec2(int32_t id)
+int32_t ewol::VirtualBufferObject::sizeOnBufferVec2(int32_t id)
 {
-	return m_buffer[id].Size()/2;
+	return m_buffer[id].size()/2;
 }
 
 
 
-ewol::VirtualBufferObject* ewol::VirtualBufferObject::Keep(int32_t _number)
+ewol::VirtualBufferObject* ewol::VirtualBufferObject::keep(int32_t _number)
 {
 	// this element create a new one every time ....
 	ewol::VirtualBufferObject* object = new ewol::VirtualBufferObject(_number);
@@ -150,16 +150,16 @@ ewol::VirtualBufferObject* ewol::VirtualBufferObject::Keep(int32_t _number)
 		EWOL_ERROR("allocation error of a resource : ??VBO??");
 		return NULL;
 	}
-	GetManager().LocalAdd(object);
+	getManager().localAdd(object);
 	return object;
 }
 
-void ewol::VirtualBufferObject::Release(ewol::VirtualBufferObject*& _object)
+void ewol::VirtualBufferObject::release(ewol::VirtualBufferObject*& _object)
 {
 	if (NULL == _object) {
 		return;
 	}
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	GetManager().Release(object2);
+	getManager().release(object2);
 	_object = NULL;
 }

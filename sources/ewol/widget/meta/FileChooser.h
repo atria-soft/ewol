@@ -28,16 +28,16 @@ namespace widget {
 			FileChooser(void);
 			virtual ~FileChooser(void);
 			// Derived function
-			virtual const char * const GetObjectType(void) { return "Ewol::FileChooser"; };
-			virtual void OnReceiveMessage(const ewol::EMessage& _msg);
-			virtual void OnObjectRemove(ewol::EObject * removeObject);
-			void SetTitle(etk::UString label);
-			void SetValidateLabel(etk::UString label);
-			void SetCancelLabel(etk::UString label);
-			void SetFolder(etk::UString folder);
-			void SetFileName(etk::UString filename);
-			etk::UString GetCompleateFileName(void);
-			void UpdateCurrentFolder(void);
+			virtual const char * const getObjectType(void) { return "Ewol::fileChooser"; };
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onObjectRemove(ewol::EObject * removeObject);
+			void setTitle(etk::UString label);
+			void setValidateLabel(etk::UString label);
+			void setCancelLabel(etk::UString label);
+			void setFolder(etk::UString folder);
+			void setFileName(etk::UString filename);
+			etk::UString getCompleateFileName(void);
+			void updateCurrentFolder(void);
 		private:
 			widget::Label* m_widgetTitle;
 			widget::Button* m_widgetValidate;

@@ -32,50 +32,50 @@ namespace ewol
 			bool m_contextHasBeenRemoved;
 		public:
 			/**
-			 * @brief Initialize the internal variable
+			 * @brief initialize the internal variable
 			 */
 			ResourceManager(void);
 			/**
 			 * @brief Uninitiamize the resource manager, free all resources previously requested
-			 * @note when not free ==> generate warning, because the segfault can appear after...
+			 * @note when not free  == > generate warning, because the segfault can appear after...
 			 */
 			~ResourceManager(void);
 			/**
 			 * @brief remove all resources (un-init) out of the destructor (due to the system implementation)
 			 */
-			void UnInit(void);
+			void unInit(void);
 			/**
-			 * @brief Display in the log all the resources loaded ...
+			 * @brief display in the log all the resources loaded ...
 			 */
-			void Display(void);
+			void display(void);
 			/**
 			 * @brief Reload all resources from files, and send there in openGL card if needed.
-			 * @note If File is reference at THEME:XXX:filename if the Theme change the file will reload the newOne
+			 * @note If file is reference at THEME:XXX:filename if the Theme change the file will reload the newOne
 			 */
-			void ReLoadResources(void);
+			void reLoadResources(void);
 			/**
 			 * @brief Call by the system to send all the needed data on the graphic card chen they change ...
 			 * @param[in] _object The resources that might be updated
 			 */
-			void Update(ewol::Resource* _object);
+			void update(ewol::Resource* _object);
 			/**
-			 * @brief Call by the system chen the openGL Context has been unexpectially removed ==> This reload all the texture, VBO and other ....
+			 * @brief Call by the system chen the openGL Context has been unexpectially removed  == > This reload all the texture, VBO and other ....
 			 */
-			void UpdateContext(void);
+			void updateContext(void);
 			/**
 			 * @brief This is to inform the resources manager that we have no more openGl context ...
 			 */
-			void ContextHasBeenDestroyed(void);
+			void contextHasBeenDestroyed(void);
 		public:
 			// internal API to extent eResources in extern Soft
-			ewol::Resource* LocalKeep(const etk::UString& _filename);
-			void LocalAdd(ewol::Resource* _object);
+			ewol::Resource* localKeep(const etk::UString& _filename);
+			void localAdd(ewol::Resource* _object);
 		public:
 			/**
-			 * @brief Release a resources and free it if the Last release is call.
-			 * @param[in,out] _object element to realease ==> is return at NULL value.
+			 * @brief release a resources and free it if the Last release is call.
+			 * @param[in,out] _object element to realease  == > is return at NULL value.
 			 */
-			void Release(ewol::Resource*& _object);
+			void release(ewol::Resource*& _object);
 	};
 };
 

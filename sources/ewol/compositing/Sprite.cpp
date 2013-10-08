@@ -18,7 +18,7 @@ ewol::Sprite::Sprite(const etk::UString& _imageName, const ivec2& _nbSprite) :
 	m_unitarySpriteSize(0,0)
 {
 	/*
-	vec2 imageSize = GetRealSize();
+	vec2 imageSize = getRealSize();
 	m_unitarySpriteSize.setValue(imageSize.x()/(float)m_nbSprite.x(),
 	                             imageSize.y()/(float)m_nbSprite.y());
 	*/
@@ -28,15 +28,15 @@ ewol::Sprite::Sprite(const etk::UString& _imageName, const ivec2& _nbSprite) :
 }
 
 
-void ewol::Sprite::PrintSprite(const ivec2& _spriteID, const vec3& _size)
+void ewol::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size)
 {
 	if(    _spriteID.x()<0
 	    || _spriteID.y()<0
-	    || _spriteID.x()>=m_nbSprite.x()
-	    || _spriteID.y()>=m_nbSprite.y()) {
+	    || _spriteID.x() >= m_nbSprite.x()
+	    || _spriteID.y() >= m_nbSprite.y()) {
 		return;
 	}
-	PrintPart(vec2(_size.x(),_size.y()),
+	printPart(vec2(_size.x(),_size.y()),
 	          vec2((float)(_spriteID.x()  )*m_unitarySpriteSize.x(), (float)(_spriteID.y()  )*m_unitarySpriteSize.y()),
 	          vec2((float)(_spriteID.x()+1)*m_unitarySpriteSize.x(), (float)(_spriteID.y()+1)*m_unitarySpriteSize.y()));
 }
