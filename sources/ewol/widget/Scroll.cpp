@@ -54,12 +54,12 @@ void widget::Scroll::calculateMinMaxSize(void) {
 	}
 }
 
-void widget::Scroll::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (m_hide == true) {
 		return;
 	}
 	if (NULL!=m_subWidget) {
-		ewol::drawProperty prop = _displayProp;
+		ewol::DrawProperty prop = _displayProp;
 		prop.limit(m_origin, m_size);
 		m_subWidget->systemDraw(prop);
 	}

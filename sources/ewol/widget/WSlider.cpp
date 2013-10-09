@@ -201,7 +201,7 @@ void widget::WSlider::periodicCall(const ewol::EventTime& _event) {
 	markToRedraw();
 }
 
-void widget::WSlider::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -210,7 +210,7 @@ void widget::WSlider::systemDraw(const ewol::drawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	
 	// subwidget draw
-	ewol::drawProperty prop = _displayProp;
+	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
 	
 	if (m_windowsDestination == m_windowsSources) {

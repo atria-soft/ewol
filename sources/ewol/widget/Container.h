@@ -50,7 +50,7 @@ namespace widget {
 			virtual void subWidgetRemoveDelayed(void);
 			
 		public: // Derived function
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			virtual void calculateSize(const vec2& _availlable);

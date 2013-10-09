@@ -134,7 +134,7 @@ void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _
  * @param std IO
  * @return std IO
  */
-int ewol::Run(int _argc, const char *_argv[]) {
+int ewol::run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	interface = new MacOSInterface(_argc, _argv);
 	if (NULL == interface) {

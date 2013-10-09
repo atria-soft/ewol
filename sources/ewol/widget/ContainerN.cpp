@@ -182,7 +182,7 @@ void widget::ContainerN::onObjectRemove(ewol::EObject* _removeObject) {
 	}
 }
 
-void widget::ContainerN::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::ContainerN::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -190,7 +190,7 @@ void widget::ContainerN::systemDraw(const ewol::drawProperty& _displayProp) {
 	// local widget draw
 	ewol::Widget::systemDraw(_displayProp);
 	// subwidget draw
-	ewol::drawProperty prop = _displayProp;
+	ewol::DrawProperty prop = _displayProp;
 	prop.limit(m_origin, m_size);
 	for (int32_t iii=m_subWidget.size()-1; iii >= 0; iii--) {
 		if (NULL != m_subWidget[iii]) {

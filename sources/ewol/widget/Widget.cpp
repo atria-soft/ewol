@@ -16,12 +16,12 @@
 #undef __class__
 #define __class__ "DrawProperty"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::drawProperty& _obj) {
+etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj) {
 	_os << "{ windowsSize=" << _obj.m_windowsSize << " start=" << _obj.m_origin << " stop=" << (_obj.m_origin+_obj.m_size) << "}";
 	return _os;
 }
 
-void ewol::drawProperty::limit(const vec2& _origin, const vec2& _size) {
+void ewol::DrawProperty::limit(const vec2& _origin, const vec2& _size) {
 	m_size += m_origin;
 	m_origin.setMax(_origin);
 	m_size.setMin(_origin+_size);
@@ -235,7 +235,7 @@ void ewol::Widget::setOffset(const vec2& _newVal) {
      /
    (0,0)
 */
-void ewol::Widget::systemDraw(const drawProperty& _displayProp) {
+void ewol::Widget::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -249,7 +249,7 @@ void ewol::Widget::systemDraw(const drawProperty& _displayProp) {
 		return;
 	}
 	
-	drawProperty tmpSize = _displayProp;
+	ewol::DrawProperty tmpSize = _displayProp;
 	tmpSize.limit(m_origin, m_size);
 	if (tmpSize.m_size.x() <= 0 || tmpSize.m_size.y() <= 0) {
 		return;

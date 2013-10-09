@@ -24,7 +24,7 @@ namespace ewol {
 	 * @param[in] _argv Standard argv
 	 * @return normal error int for the application error management
 	 */
-	int32_t Run(int32_t _argc, const char* _argv[]);
+	int32_t run(int32_t _argc, const char* _argv[]);
 	/**
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version

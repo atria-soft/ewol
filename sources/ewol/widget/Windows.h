@@ -63,7 +63,7 @@ namespace ewol {
 			 */
 			void setBackgroundColor(const etk::Color<float>& _color);
 		protected: // Derived function
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 		public: // Derived function
 			virtual const char * const getObjectType(void) { return "ewol::Windows"; };
 			virtual void onRegenerateDisplay(void);

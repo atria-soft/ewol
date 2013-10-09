@@ -1289,7 +1289,7 @@ class X11Interface : public ewol::eContext {
  * @param std IO
  * @return std IO
  */
-int ewol::Run(int _argc, const char *_argv[]) {
+int ewol::run(int _argc, const char *_argv[]) {
 	etk::setArgZero(_argv[0]);
 	X11Interface* interface = new X11Interface(_argc, _argv);
 	if (NULL == interface) {

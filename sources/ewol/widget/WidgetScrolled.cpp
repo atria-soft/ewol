@@ -333,7 +333,7 @@ void widget::WidgetScrooled::onDraw(void) {
 	}
 }
 
-void widget::WidgetScrooled::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::push();
 	if (SCROLL_MODE_CENTER == m_scroollingMode) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left

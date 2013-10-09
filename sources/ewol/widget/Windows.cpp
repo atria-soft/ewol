@@ -102,7 +102,7 @@ void ewol::Windows::sysDraw(void) {
 	mat4 newOne;
 	ewol::openGL::setBasicMatrix(newOne);
 	
-	ewol::drawProperty displayProp;
+	ewol::DrawProperty displayProp;
 	displayProp.m_windowsSize = m_size;
 	displayProp.m_origin.setValue(0,0);
 	displayProp.m_size = m_size;
@@ -124,7 +124,7 @@ void ewol::Windows::onRegenerateDisplay(void) {
 
 //#define TEST_PERFO_WINDOWS
 
-void ewol::Windows::systemDraw(const ewol::drawProperty& _displayProp) {
+void ewol::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();

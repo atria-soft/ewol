@@ -46,7 +46,7 @@ namespace widget {
 			virtual const char * const getObjectType(void) { return "EwolWidgetScrooled"; };
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 		protected:
 			/**
 			 * @brief For mouse event when we have a scrolling UP and dows, specify the number of pixel that we scrooled

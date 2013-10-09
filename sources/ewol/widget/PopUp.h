@@ -91,7 +91,7 @@ namespace widget {
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual void periodicCall(const ewol::EventTime& _event);
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);
 			virtual void calculateSize(const vec2& _available);
 			virtual bool onEventInput(const ewol::EventInput& _event);

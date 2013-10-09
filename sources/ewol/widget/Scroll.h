@@ -62,7 +62,7 @@ namespace widget {
 			void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 		protected: // Derived function
 			virtual void onDraw(void);

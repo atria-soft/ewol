@@ -130,7 +130,7 @@ namespace widget {
 			 */
 			const ivec2& getBorderSize(void) { return m_borderSize; };
 		public: // Derived function
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 			virtual void onObjectRemove(ewol::EObject* _removeObject);

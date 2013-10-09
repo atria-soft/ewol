@@ -189,7 +189,7 @@ void widget::Button::calculateMinMaxSize(void) {
 	markToRedraw();
 }
 
-void widget::Button::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::Button::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;

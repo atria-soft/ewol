@@ -31,7 +31,7 @@ namespace ewol {
 #define ULTIMATE_MAX_SIZE  (99999999)
 
 namespace ewol {
-	class drawProperty{
+	class DrawProperty{
 		/*
 		                                                          /--> m_windowsSize
 		      *--------------------------------------------------*
@@ -62,7 +62,7 @@ namespace ewol {
 			ivec2 m_size; //!< Windows clipping upper widget (can not be <0 and >m_windowsSize)
 			void limit(const vec2& _origin, const vec2& _size);
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::drawProperty& _obj);
+	etk::CCout& operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj);
 	
 	typedef enum {
 		gravityCenter=0x00,
@@ -635,7 +635,7 @@ namespace ewol {
 			 * @param[in] _displayProp properties of the current display
 			 * @note : INTERNAL EWOL SYSTEM
 			 */
-			virtual void systemDraw(const drawProperty& _displayProp);
+			virtual void systemDraw(const DrawProperty& _displayProp);
 		protected:
 			/**
 			 * @brief Common widget drawing function (called by the drawing thread [Android, X11, ...])

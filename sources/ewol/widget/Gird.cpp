@@ -340,7 +340,7 @@ void widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 	EWOL_WARNING("[" << getId() << "] Can not unLink unExistant widget");
 }
 
-void widget::Gird::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {

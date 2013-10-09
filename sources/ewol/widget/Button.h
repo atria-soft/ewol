@@ -151,7 +151,7 @@ namespace widget {
 			virtual void calculateMinMaxSize(void);
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void onRegenerateDisplay(void);
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual bool onEventEntry(const ewol::EventEntry& _event);
 			virtual bool loadXML(exml::Element* _node);

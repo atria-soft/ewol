@@ -90,7 +90,7 @@ namespace widget {
 				return "Ewol::WSlider";
 			};
 			virtual void calculateSize(const vec2& _availlable);
-			virtual void systemDraw(const ewol::drawProperty& _displayProp);
+			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			virtual void periodicCall(const ewol::EventTime& _event);

@@ -51,7 +51,7 @@ void widget::Mesh::onDraw(void) {
 	}
 }
 
-void widget::Mesh::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::Mesh::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::push();
 	// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 	glViewport( m_origin.x(),

@@ -93,7 +93,7 @@ void widget::PopUp::calculateSize(const vec2& _available) {
 	markToRedraw();
 }
 
-void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp) {
+void widget::PopUp::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -102,7 +102,7 @@ void widget::PopUp::systemDraw(const ewol::drawProperty& _displayProp) {
 	if (NULL!=m_subWidget) {
 		if(    m_shaper.getNextDisplayedStatus() == -1
 		    && m_shaper.getTransitionStatus() >= 1.0) {
-			ewol::drawProperty prop = _displayProp;
+			ewol::DrawProperty prop = _displayProp;
 			prop.limit(m_origin, m_size);
 			m_subWidget->systemDraw(prop);
 		}
