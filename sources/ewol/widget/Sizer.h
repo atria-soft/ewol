@@ -60,7 +60,9 @@ namespace widget {
 			 * @brief get the current border size of the current element:
 			 * @return the border size (0 if not used)
 			 */
-			const ewol::Dimension& getBorderSize(void) { return m_borderSize; };
+			const ewol::Dimension& getBorderSize(void) {
+				return m_borderSize;
+			};
 		public:
 			typedef enum {
 				animationNone, //!< No annimation
@@ -77,12 +79,16 @@ namespace widget {
 			 * @brief set an animation mode for the new element set in the Widget container.
 			 * @param[in] _animation The new animation mode.
 			 */
-			void setAnimationMode(animation_te _animation) { m_animation = _animation; };
+			void setAnimationMode(animation_te _animation) {
+				m_animation = _animation;
+			};
 			/**
 			 * @brief get the current animation mode.
 			 * @return The animation mode.
 			 */
-			animation_te getAnimationMode(void) { return m_animation;};
+			animation_te getAnimationMode(void) {
+				return m_animation;
+			};
 		private:
 			float m_animationTime; //!< Time in second to generate animation
 		public:
@@ -90,14 +96,20 @@ namespace widget {
 			 * @brief set the time to produce animation.
 			 * @param[in] _time The new animation time.
 			 */
-			void setAnimationTime(float _time) { m_animationTime = _time; };
+			void setAnimationTime(float _time) {
+				m_animationTime = _time;
+			};
 			/**
 			 * @brief get the current animation time.
 			 * @return The time to produce the animation.
 			 */
-			float getAnimationTime(void) { return m_animationTime;};
+			float getAnimationTime(void) {
+				return m_animationTime;
+			};
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "ewol::widget::sizer"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::widget::Sizer";
+			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void calculateMinMaxSize(void);
 			virtual bool loadXML(exml::Element* _node);

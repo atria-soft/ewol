@@ -543,3 +543,27 @@ void ewol::eContext::OS_Resume(void) {
 	m_widgetManager.periodicCallResume(m_previousDisplayTime);
 }
 
+
+void ewol::eContext::stop(void) {
+	
+}
+
+void ewol::eContext::setSize(const vec2& _size) {
+	EWOL_INFO("NOT implemented ...");
+};
+
+void ewol::eContext::setPos(const vec2& _pos) {
+	EWOL_INFO("NOT implemented ...");
+}
+
+void ewol::eContext::hide(void) {
+	EWOL_INFO("NOT implemented ...");
+};
+
+void ewol::eContext::show(void) {
+	EWOL_INFO("NOT implemented ...");
+}
+
+void ewol::eContext::setTitle(const etk::UString& _title) {
+	EWOL_INFO("NOT implemented ...");
+}

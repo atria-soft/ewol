@@ -185,7 +185,7 @@ namespace ewol {
 			/**
 			 * @brief The application request that the Window will be killed
 			 */
-			virtual void stop(void) { };
+			virtual void stop(void);
 		private:
 			ewol::Windows* m_windowsCurrent; //!< curent displayed windows
 		public:
@@ -198,7 +198,9 @@ namespace ewol {
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::Windows* getWindows(void) { return m_windowsCurrent; };
+			ewol::Windows* getWindows(void) {
+				return m_windowsCurrent;
+			};
 		private:
 			vec2 m_windowsSize; //!< current size of the system
 		public:
@@ -206,7 +208,9 @@ namespace ewol {
 			 * @brief get the current windows size
 			 * @return the current size ...
 			 */
-			const vec2& getSize(void) { return m_windowsSize; };
+			const vec2& getSize(void) {
+				return m_windowsSize;
+			};
 			/**
 			 * @brief The OS inform that the current windows has change his size.
 			 * @param[in] _size new size of the windows.
@@ -216,7 +220,7 @@ namespace ewol {
 			 * @brief The application request a change of his curent size.
 			 * @param[in] _size new Requested size of the windows.
 			 */
-			virtual void setSize(const vec2& _size) { };
+			virtual void setSize(const vec2& _size);
 			/**
 			 * @brief The OS inform that the current windows has change his position.
 			 * @param[in] _pos New position of the Windows.
@@ -226,7 +230,7 @@ namespace ewol {
 			 * @brief The Application request that the current windows will change his position.
 			 * @param[in] _pos New position of the Windows requested.
 			 */
-			virtual void setPos(const vec2& _pos) { };
+			virtual void setPos(const vec2& _pos);
 			/**
 			 * @brief The OS inform that the Windows is now Hidden.
 			 */
@@ -234,7 +238,7 @@ namespace ewol {
 			/**
 			 * @brief The Application request that the Windows will be Hidden.
 			 */
-			virtual void hide(void) { };
+			virtual void hide(void);
 			/**
 			 * @brief The OS inform that the Windows is now visible.
 			 */
@@ -242,7 +246,7 @@ namespace ewol {
 			/**
 			 * @brief The Application request that the Windows will be visible.
 			 */
-			virtual void show(void) { };
+			virtual void show(void);
 			/**
 			 * @brief Redraw all the windows
 			 */
@@ -293,7 +297,7 @@ namespace ewol {
 			 * @brief set the new title of the windows
 			 * @param[in] title New desired title
 			 */
-			virtual void setTitle(const etk::UString& _title) { };
+			virtual void setTitle(const etk::UString& _title);
 			/**
 			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.

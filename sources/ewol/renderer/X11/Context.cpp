@@ -175,8 +175,8 @@ class X11Interface : public ewol::eContext {
 				glXSwapBuffers(m_display, m_WindowHandle);
 				XSync(m_display,0);
 			}
-			CreateX11Context();
-			CreateOGlContext();
+			createX11Context();
+			createOGlContext();
 			// reset the Atom properties ...
 			XAtomeSelection        = XInternAtom(m_display, "PRIMARY", 0);
 			XAtomeClipBoard        = XInternAtom(m_display, "CLIPBOARD", 0);
@@ -192,7 +192,7 @@ class X11Interface : public ewol::eContext {
 			// TODO : ...
 		}
 		
-		int32_t Run(void) {
+		int32_t run(void) {
 			bool specialEventThatNeedARedraw = false;
 			// main cycle
 			while(true == m_run) {
@@ -712,7 +712,7 @@ class X11Interface : public ewol::eContext {
 			return 0;
 		}
 		/****************************************************************************************/
-		virtual void Stop(void) {
+		virtual void stop(void) {
 			X11_INFO("X11-API: Stop");
 			m_run = false;
 		}
@@ -831,7 +831,7 @@ class X11Interface : public ewol::eContext {
 			}
 		}
 		/****************************************************************************************/
-		void GrabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) {
+		void grabPointerEvents(bool _isGrabbed, const vec2& _forcedPosition) {
 			if (true == _isGrabbed) {
 				X11_DEBUG("X11-API: Grab Events");
 				int32_t test = XGrabPointer(m_display,RootWindow(m_display, DefaultScreen(m_display)), True,
@@ -881,7 +881,7 @@ class X11Interface : public ewol::eContext {
 			}
 		}
 		/****************************************************************************************/
-		bool CreateX11Context(void) {
+		bool createX11Context(void) {
 			X11_INFO("X11: CreateX11Context");
 			int x,y, attr_mask;
 			XSizeHints hints;
@@ -1187,7 +1187,7 @@ class X11Interface : public ewol::eContext {
 			}
 		}
 		/****************************************************************************************/
-		bool CreateOGlContext(void) {
+		bool createOGlContext(void) {
 			X11_INFO("X11:CreateOGlContext");
 			/* create a GLX context */
 			GLXContext RenderContext = glXCreateContext(m_display, m_visual, 0, GL_TRUE);
@@ -1220,7 +1220,7 @@ class X11Interface : public ewol::eContext {
 			X11_INFO("X11: set Title (END)");
 		}
 		/****************************************************************************************/
-		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:
@@ -1259,7 +1259,7 @@ class X11Interface : public ewol::eContext {
 			}
 		}
 		/****************************************************************************************/
-		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:
@@ -1296,7 +1296,7 @@ int ewol::run(int _argc, const char *_argv[]) {
 		EWOL_CRITICAL("Can not create the X11 interface ... MEMORY allocation error");
 		return -2;
 	}
-	int32_t retValue = interface->Run();
+	int32_t retValue = interface->run();
 	delete(interface);
 	interface = NULL;
 	return retValue;
