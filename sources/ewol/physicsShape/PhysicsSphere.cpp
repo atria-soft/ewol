@@ -16,7 +16,7 @@ bool ewol::PhysicsSphere::parse(const char* _line) {
 	}
 	if(0 == strncmp(_line, "radius : ", 9) ) {
 		sscanf(&_line[9], "%f", &m_radius );
-		EWOL_DEBUG("                radius=" << m_radius);
+		EWOL_VERBOSE("                radius=" << m_radius);
 		return true;
 	}
 	return false;

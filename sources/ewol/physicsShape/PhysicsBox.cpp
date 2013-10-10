@@ -16,7 +16,7 @@ bool ewol::PhysicsBox::parse(const char* _line) {
 	}
 	if(0 == strncmp(_line, "half-extents : ", 15) ) {
 		sscanf(&_line[15], "%f %f %f", &m_size.m_floats[0], &m_size.m_floats[1], &m_size.m_floats[2] );
-		EWOL_DEBUG("                halfSize=" << m_size);
+		EWOL_VERBOSE("                halfSize=" << m_size);
 		return true;
 	}
 	return false;

@@ -214,7 +214,11 @@ void ewol::eContext::setArchiveDir(int _mode, const char* _str) {
 ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
   m_previousDisplayTime(0),
   m_input(*this),
+#if defined(__TARGET_OS__Android)
+  m_displayFps(true),
+#else
   m_displayFps(false),
+#endif
   m_FpsSystemEvent(  "Event     ", false),
   m_FpsSystemContext("Context   ", false),
   m_FpsSystem(       "Draw      ", true),
@@ -549,21 +553,30 @@ void ewol::eContext::stop(void) {
 }
 
 void ewol::eContext::setSize(const vec2& _size) {
-	EWOL_INFO("NOT implemented ...");
+	EWOL_INFO("setSize: NOT implemented ...");
 };
 
 void ewol::eContext::setPos(const vec2& _pos) {
-	EWOL_INFO("NOT implemented ...");
+	EWOL_INFO("setPos: NOT implemented ...");
 }
 
 void ewol::eContext::hide(void) {
-	EWOL_INFO("NOT implemented ...");
+	EWOL_INFO("hide: NOT implemented ...");
 };
 
 void ewol::eContext::show(void) {
-	EWOL_INFO("NOT implemented ...");
+	EWOL_INFO("show: NOT implemented ...");
 }
 
 void ewol::eContext::setTitle(const etk::UString& _title) {
-	EWOL_INFO("NOT implemented ...");
+	EWOL_INFO("setTitle: NOT implemented ...");
+}
+
+void ewol::eContext::keyboardShow(void) {
+	EWOL_INFO("keyboardShow: NOT implemented ...");
+}
+
+
+void ewol::eContext::keyboardHide(void) {
+	EWOL_INFO("keyboardHide: NOT implemented ...");
 }

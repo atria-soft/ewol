@@ -45,18 +45,24 @@ namespace ewol {
 			~TexturedFont(void);
 		public:
 			virtual bool hasName(const etk::UString& _fileName);
-			const char* getType(void) { return "ewol::TexturedFont"; };
+			const char* getType(void) {
+				return "ewol::TexturedFont";
+			};
 			/**
 			 * @brief get the display height of this font
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return Dimention of the font need between 2 lines
 			 */
-			int32_t getHeight(const ewol::font::mode_te _displayMode = ewol::font::Regular) { return m_height[_displayMode]; };
+			int32_t getHeight(const ewol::font::mode_te _displayMode = ewol::font::Regular) {
+				return m_height[_displayMode];
+			};
 			/**
 			 * @brief get the font height (user friendly)
 			 * @return Dimention of the font the user requested
 			 */
-			int32_t getFontSize(void) { return m_size; };
+			int32_t getFontSize(void) {
+				return m_size;
+			};
 			/**
 			 * @brief get the ID of a unicode charcode
 			 * @param[in] _charcode The unicodeValue
@@ -77,7 +83,9 @@ namespace ewol {
 			 * @param[in] _source The requested mode.
 			 * @return the best mode we have in stock.
 			 */
-			ewol::font::mode_te getWrappingMode(ewol::font::mode_te _source) { return m_modeWraping[_source]; };
+			ewol::font::mode_te getWrappingMode(ewol::font::mode_te _source) {
+				return m_modeWraping[_source];
+			};
 		public:
 			/**
 			 * @brief keep the resource pointer.

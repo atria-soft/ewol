@@ -30,14 +30,14 @@ bool ewol::PhysicsConvexHull::parse(const char* _line) {
 		m_points.pushBack(pos);
 		/*
 		for (int32_t iii=0; iii<m_points.size(); iii++) {
-			EWOL_DEBUG("    parsed " << m_points[iii]);
+			EWOL_VERBOSE("    parsed " << m_points[iii]);
 		}
 		*/
 		return true;
 	}
 	if(0 == strncmp(_line, "scale : ", 8) ) {
 		sscanf(&_line[8], "%f %f %f", &m_scale.m_floats[0], &m_scale.m_floats[1], &m_scale.m_floats[2] );
-		EWOL_DEBUG("                scale=" << m_scale);
+		EWOL_VERBOSE("                scale=" << m_scale);
 		return true;
 	}
 	return false;

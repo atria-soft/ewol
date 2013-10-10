@@ -35,6 +35,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 
 import java.io.IOException;
@@ -173,6 +174,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	}
 	
 	public void keyboardUpdate(boolean show) {
+		Log.e("EwolActivity", "keyboardUpdate(" + show + ")");
 		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		if(show) {
 			//EWOL.touchEvent();

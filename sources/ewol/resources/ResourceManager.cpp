@@ -176,10 +176,10 @@ void ewol::ResourceManager::localAdd(ewol::Resource* _object) {
 	m_resourceList.pushBack(_object);
 }
 
-void ewol::ResourceManager::release(ewol::Resource*& _object) {
+bool ewol::ResourceManager::release(ewol::Resource*& _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
-		return;
+		return false;
 	}
 	for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] == _object) {
@@ -199,11 +199,12 @@ void ewol::ResourceManager::release(ewol::Resource*& _object) {
 				}
 				// insidiously remove the pointer for the caller ...
 				_object = NULL;
-				return;
+				return true;
 			}
 		}
 	}
 	EWOL_ERROR("Can not find the resources in the list : " << (int64_t)_object);
 	// insidiously remove the pointer for the caller ...
 	_object = NULL;
+	return false;
 }

@@ -272,11 +272,11 @@ namespace ewol {
 			/**
 			 * @brief display the virtal keyboard (for touch system only)
 			 */
-			void keyboardShow(void) {};
+			virtual void keyboardShow(void);
 			/**
 			 * @brief Hide the virtal keyboard (for touch system only)
 			 */
-			void keyboardHide(void) {};
+			virtual void keyboardHide(void);
 			
 			/**
 			 * @brief Inform the Gui that we want to have a copy of the clipboard

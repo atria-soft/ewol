@@ -44,12 +44,12 @@ ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name) {
 bool ewol::PhysicsShape::parse(const char* _line) {
 	if(0 == strncmp(_line, "origin : ", 9) ) {
 		sscanf(&_line[9], "%f %f %f", &m_origin.m_floats[0], &m_origin.m_floats[1], &m_origin.m_floats[2] );
-		EWOL_DEBUG("                Origin=" << m_origin);
+		EWOL_VERBOSE("                Origin=" << m_origin);
 		return true;
 	}
 	if(0 == strncmp(_line, "rotate : ", 9) ) {
 		sscanf(&_line[9], "%f %f %f %f", &m_quaternion.m_floats[0], &m_quaternion.m_floats[1], &m_quaternion.m_floats[2], &m_quaternion.m_floats[3] );
-		EWOL_DEBUG("                rotate=" << m_quaternion);
+		EWOL_VERBOSE("                rotate=" << m_quaternion);
 		return true;
 	}
 	return false;

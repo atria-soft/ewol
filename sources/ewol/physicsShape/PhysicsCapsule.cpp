@@ -16,12 +16,12 @@ bool ewol::PhysicsCapsule::parse(const char* _line) {
 	}
 	if(0 == strncmp(_line, "radius : ", 9) ) {
 		sscanf(&_line[9], "%f", &m_radius );
-		EWOL_DEBUG("                radius=" << m_radius);
+		EWOL_VERBOSE("                radius=" << m_radius);
 		return true;
 	}
 	if(0 == strncmp(_line, "height : ", 9) ) {
 		sscanf(&_line[9], "%f", &m_height );
-		EWOL_DEBUG("                height=" << m_height);
+		EWOL_VERBOSE("                height=" << m_height);
 		return true;
 	}
 	return false;

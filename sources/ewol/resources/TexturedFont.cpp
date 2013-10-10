@@ -81,7 +81,7 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 			return;
 		}
 	}
-	m_name = fontName.extract(0, (tmpPos - tmpData));
+	etk::UString localName = fontName.extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
 	
 	etk::Vector<etk::UString> folderList;
@@ -98,8 +98,8 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 		// find the real Font name :
 		etk::Vector<etk::UString> output;
 		myFolder.folderGetRecursiveFiles(output);
-		etk::Vector<etk::UString> split = m_name.split(';');
-		EWOL_INFO("try to find font named : '" << split << "' in : '" << myFolder <<"'");
+		etk::Vector<etk::UString> split = localName.split(';');
+		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
 		for (int32_t jjj=0; jjj<split.size(); jjj++) {
@@ -292,7 +292,7 @@ bool ewol::TexturedFont::addGlyph(const etk::UniChar& _val) {
 	}
 	if (hasChange == true) {
 		flush();
-		egami::store(m_data, "fileFont.bmp");
+		//egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
 	}
 	return hasChange;
 }
@@ -352,12 +352,13 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const uniChar_t& _charc
 }
 
 ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename) {
-	EWOL_VERBOSE("KEEP : TexturedFont : file : \"" << _filename << "\"");
+	EWOL_DEBUG("KEEP : TexturedFont : file : '" << _filename << "'");
 	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
 	// need to crate a new one ...
+	EWOL_DEBUG("CREATE: TexturedFont : file : '" << _filename << "'");
 	object = new ewol::TexturedFont(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
@@ -371,7 +372,11 @@ void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
 	if (NULL == _object) {
 		return;
 	}
+	etk::UString name = _object->getName();
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
-	getManager().release(object2);
+	if (getManager().release(object2) == true) {
+		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "'");
+		etk::displayBacktrace(false);
+	}
 	_object = NULL;
 }

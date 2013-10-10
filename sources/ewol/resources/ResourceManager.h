@@ -72,8 +72,9 @@ namespace ewol {
 			/**
 			 * @brief release a resources and free it if the Last release is call.
 			 * @param[in,out] _object element to realease  == > is return at NULL value.
+			 * @return true, if element is removed, and false for just decreasing counter
 			 */
-			void release(ewol::Resource*& _object);
+			bool release(ewol::Resource*& _object);
 	};
 };
 

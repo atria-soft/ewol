@@ -56,7 +56,7 @@ static int32_t nextP2(int32_t _value) {
 
 
 ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 _size) {
-	EWOL_INFO("KEEP : TextureFile : file : " << _filename << " basic size=" << _size);
+	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
 		ewol::TextureFile* object = new ewol::TextureFile("");
 		if (NULL == object) {
@@ -93,12 +93,12 @@ ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 
 		TmpFilename += _size.y();
 	}
 	
-	EWOL_INFO("KEEP : TextureFile : file : \"" << TmpFilename << "\" new size=" << _size);
+	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
 	ewol::TextureFile* object = static_cast<ewol::TextureFile*>(getManager().localKeep(TmpFilename));
 	if (NULL != object) {
 		return object;
 	}
-	EWOL_INFO("         == > create new one...");
+	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
 	object = new ewol::TextureFile(TmpFilename, _filename, _size);
 	if (NULL == object) {

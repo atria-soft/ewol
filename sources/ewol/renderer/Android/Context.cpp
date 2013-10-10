@@ -64,8 +64,8 @@ class AndroidContext : public ewol::eContext {
 		ewol::SpecialKey m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
 		bool m_clipBoardOwnerStd;
 	private:
-		bool SafeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign) {
-			_mid = m_JavaVirtualMachinePointer->getMethodID(_cls, _name, _sign);
+		bool safeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign) {
+			_mid = m_JavaVirtualMachinePointer->GetMethodID(_cls, _name, _sign);
 			if(_mid == NULL) {
 				EWOL_ERROR("C->java : Can't find the method " << _name);
 				/* remove access on the virtual machine : */
@@ -100,7 +100,7 @@ class AndroidContext : public ewol::eContext {
 			// get default needed all time elements : 
 			if (NULL != m_JavaVirtualMachinePointer) {
 				EWOL_DEBUG("C->java : try load org/ewol/Ewol class");
-				m_javaClassEwol = m_JavaVirtualMachinePointer->findClass("org/ewol/Ewol" );
+				m_javaClassEwol = m_JavaVirtualMachinePointer->FindClass("org/ewol/Ewol" );
 				if (m_javaClassEwol == 0) {
 					EWOL_ERROR("C->java : Can't find org/ewol/Ewol class");
 					// remove access on the virtual machine : 
@@ -108,7 +108,7 @@ class AndroidContext : public ewol::eContext {
 					return;
 				}
 				/* The object field extends Activity and implement EwolCallback */
-				m_javaClassEwolCallback = m_JavaVirtualMachinePointer->getObjectClass(_objCallback);
+				m_javaClassEwolCallback = m_JavaVirtualMachinePointer->GetObjectClass(_objCallback);
 				if(m_javaClassEwolCallback == NULL) {
 					EWOL_ERROR("C->java : Can't find org/ewol/EwolCallback class");
 					// remove access on the virtual machine : 
@@ -116,45 +116,45 @@ class AndroidContext : public ewol::eContext {
 					return;
 				}
 				bool ret= false;
-				ret=SafeInitMethodID(m_javaMethodEwolActivitySetTitle,
-				                     m_javaClassEwolCallback,
-				                     "titleSet",
-				                     "(Ljava/lang/String;)V");
+				ret = safeInitMethodID(m_javaMethodEwolActivitySetTitle,
+				                       m_javaClassEwolCallback,
+				                       "titleSet",
+				                       "(Ljava/lang/String;)V");
 				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
-				ret=SafeInitMethodID(m_javaMethodEwolCallbackStop,
-				                     m_javaClassEwolCallback,
-				                     "stop",
-				                     "()V");
-				if (ret == false) {
-					java_check_exception(_env);
-					return;
-				}
-				
-				ret=SafeInitMethodID(m_javaMethodEwolCallbackEventNotifier,
-				                     m_javaClassEwolCallback,
-				                     "eventNotifier",
-				                     "([Ljava/lang/String;)V");
+				ret = safeInitMethodID(m_javaMethodEwolCallbackStop,
+				                       m_javaClassEwolCallback,
+				                       "stop",
+				                       "()V");
 				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
 				
-				ret=SafeInitMethodID(m_javaMethodEwolCallbackKeyboardUpdate,
-				                     m_javaClassEwolCallback,
-				                     "keyboardUpdate",
-				                     "(Z)V");
+				ret = safeInitMethodID(m_javaMethodEwolCallbackEventNotifier,
+				                       m_javaClassEwolCallback,
+				                       "eventNotifier",
+				                       "([Ljava/lang/String;)V");
 				if (ret == false) {
 					java_check_exception(_env);
 					return;
 				}
 				
-				ret=SafeInitMethodID(m_javaMethodEwolCallbackOrientationUpdate,
-				                     m_javaClassEwolCallback,
-				                     "orientationUpdate",
-				                     "(I)V");
+				ret = safeInitMethodID(m_javaMethodEwolCallbackKeyboardUpdate,
+				                       m_javaClassEwolCallback,
+				                       "keyboardUpdate",
+				                       "(Z)V");
+				if (ret == false) {
+					java_check_exception(_env);
+					return;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolCallbackOrientationUpdate,
+				                       m_javaClassEwolCallback,
+				                       "orientationUpdate",
+				                       "(I)V");
 				if (ret == false) {
 					java_check_exception(_env);
 					return;
@@ -163,7 +163,7 @@ class AndroidContext : public ewol::eContext {
 				m_javaObjectEwolCallback = _env->NewGlobalRef(_objCallback);
 				//javaObjectEwolCallbackAndActivity = objCallback;
 				
-				m_javaDefaultClassString = m_JavaVirtualMachinePointer->findClass("java/lang/String" );
+				m_javaDefaultClassString = m_JavaVirtualMachinePointer->FindClass("java/lang/String" );
 				if (m_javaDefaultClassString == 0) {
 					EWOL_ERROR("C->java : Can't find java/lang/String" );
 					// remove access on the virtual machine : 
@@ -177,17 +177,17 @@ class AndroidContext : public ewol::eContext {
 			// TODO ...
 		}
 		
-		void UnInit(JNIEnv* _env) {
+		void unInit(JNIEnv* _env) {
 			_env->DeleteGlobalRef(m_javaObjectEwolCallback);
 			m_javaObjectEwolCallback = NULL;
 		}
 		
-		int32_t Run(void) {
+		int32_t run(void) {
 			// might never be called !!!
 			return -1;
 		}
 		
-		void Stop(void) {
+		void stop(void) {
 			EWOL_DEBUG("C->java : send message to the java : STOP REQUESTED");
 			int status;
 			if(!java_attach_current_thread(&status)) {
@@ -200,7 +200,7 @@ class AndroidContext : public ewol::eContext {
 			java_detach_current_thread(status);
 		}
 		
-		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			// this is to force the local system to think we have the buffer
 			// TODO : remove this 2 line when code will be writen
 			m_clipBoardOwnerStd = true;
@@ -225,7 +225,7 @@ class AndroidContext : public ewol::eContext {
 			}
 		}
 		
-		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
 			switch (_clipboardID) {
 				case ewol::clipBoard::clipboardSelection:
 					// NOTE : nothing to do : Windows deas ot supported Middle button
@@ -250,7 +250,7 @@ class AndroidContext : public ewol::eContext {
 				return false;
 			}
 			JNIEnv *JavaVirtualMachinePointer_tmp;
-			*_rstatus = g_JavaVM->getEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
+			*_rstatus = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
 			if (*_rstatus == JNI_EDETACHED) {
 				JavaVMAttachArgs lJavaVMAttachArgs;
 				lJavaVMAttachArgs.version = JNI_VERSION_1_6;
@@ -273,7 +273,7 @@ class AndroidContext : public ewol::eContext {
 		}
 		
 		
-		void SendJavaKeyboardUpdate(jboolean _showIt) {
+		void sendJavaKeyboardUpdate(jboolean _showIt) {
 			int status;
 			if(!java_attach_current_thread(&status)) {
 				return;
@@ -285,11 +285,11 @@ class AndroidContext : public ewol::eContext {
 			java_check_exception(m_JavaVirtualMachinePointer);
 			java_detach_current_thread(status);
 		}
-		void KeyboardShow(void) {
-			SendJavaKeyboardUpdate(JNI_TRUE);
+		void keyboardShow(void) {
+			sendJavaKeyboardUpdate(JNI_TRUE);
 		};
-		void KeyboardHide(void) {
-			SendJavaKeyboardUpdate(JNI_FALSE);
+		void keyboardHide(void) {
+			sendJavaKeyboardUpdate(JNI_FALSE);
 		};
 		
 		// mode 0 : auto; 1 landscape, 2 portrait
@@ -335,7 +335,7 @@ class AndroidContext : public ewol::eContext {
 		
 		
 		
-		void SendSystemMessage(const char* _dataString) {
+		void sendSystemMessage(const char* _dataString) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _dataString << "\"");
 			int status;
 			if(!java_attach_current_thread(&status)) {
@@ -428,11 +428,11 @@ extern "C"
 		//EWOL_CRITICAL(" call with ID : " << _id);
 		// direct setting of the date in the string system ...
 		jboolean isCopy;
-		const char* str = _env->getStringUTFChars(_myString, &isCopy);
+		const char* str = _env->GetStringUTFChars(_myString, &isCopy);
 		s_listInstance[_id]->setArchiveDir(_mode, str);
 		if (isCopy == JNI_TRUE) {
 			// from here str is reset ...
-			_env->releaseStringUTFChars(_myString, str);
+			_env->ReleaseStringUTFChars(_myString, str);
 			str = NULL;
 		}
 	}
@@ -476,7 +476,7 @@ extern "C"
 			EWOL_ERROR("the requested instance _id=" << (int32_t)_id << " is already removed ...");
 			return;
 		}
-		s_listInstance[_id]->UnInit(_env);
+		s_listInstance[_id]->unInit(_env);
 		delete(s_listInstance[_id]);
 		s_listInstance[_id]=NULL;
 	}
@@ -556,7 +556,7 @@ extern "C"
 			return;
 		}
 		// All the openGl has been destroyed ...
-		s_listInstance[_id]->getResourcesManager().ContextHasBeenDestroyed();
+		s_listInstance[_id]->getResourcesManager().contextHasBeenDestroyed();
 		s_listInstance[_id]->OS_Suspend();
 	}
 	void Java_org_ewol_Ewol_EWonStop(JNIEnv* _env, jobject _thiz, jint _id) {
@@ -817,7 +817,7 @@ extern "C"
 		}
 		// get the short* pointer from the Java array
 		jboolean isCopy;
-		jshort* dst = _env->getShortArrayElements(_location, &isCopy);
+		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
 		if (NULL != dst) {
 			ewol::audio::getData(dst, _frameRate, _nbChannels);
 		}
@@ -825,12 +825,13 @@ extern "C"
 		// TODO : Understand why it did not work corectly ...
 		//if (isCopy == JNI_TRUE) {
 		// release the short* pointer
-		_env->releaseShortArrayElements(_location, dst, 0);
+		_env->ReleaseShortArrayElements(_location, dst, 0);
 		//}
 	}
 };
 
 
-int ewol::Run(int _argc, const char *_argv[]) {
+int ewol::run(int _argc, const char *_argv[]) {
 	// Never call but needed ...
+	return -1;
 }
