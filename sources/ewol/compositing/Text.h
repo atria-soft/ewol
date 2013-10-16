@@ -46,7 +46,9 @@ namespace ewol {
 		private:
 			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 		public:
-			ewol::Drawing& getDrawing(void) { return m_vectorialDraw; };
+			ewol::Drawing& getDrawing(void) {
+				return m_vectorialDraw;
+			};
 		private:
 			int32_t m_nbCharDisplayed; //!< prevent some error in calculation size.
 			vec3 m_sizeDisplayStart; //!< The start windows of the display.
@@ -127,19 +129,25 @@ namespace ewol {
 			 * @brief get the current display position (sometime needed in the gui control)
 			 * @return the current position.
 			 */
-			const vec3& getPos(void) { return m_position; };
+			const vec3& getPos(void) {
+				return m_position;
+			};
 			/**
 			 * @brief set position for the next text writen
 			 * @param[in] _pos Position of the text (in 3D)
 			 */
 			void setPos(const vec3& _pos);
-			inline void setPos(const vec2& _pos) { setPos(vec3(_pos.x(),_pos.y(),0)); };
+			inline void setPos(const vec2& _pos) {
+				setPos(vec3(_pos.x(),_pos.y(),0));
+			};
 			/**
 			 * @brief set relative position for the next text writen
 			 * @param[in] _pos ofset apply of the text (in 3D)
 			 */
 			void setRelPos(const vec3& _pos);
-			inline void setRelPos(const vec2& _pos) { setRelPos(vec3(_pos.x(),_pos.y(),0)); };
+			inline void setRelPos(const vec2& _pos) {
+				setRelPos(vec3(_pos.x(),_pos.y(),0));
+			};
 			/**
 			 * @brief set the Color of the current foreground font
 			 * @param[in] _color Color to set on foreground (for next print)
@@ -155,15 +163,21 @@ namespace ewol {
 			 * @param[in] _pos Start position of the clipping
 			 * @param[in] _width Width size of the clipping
 			 */
-			void setClippingWidth(const vec3& _pos, const vec3& _width) { setClipping(_pos, _pos+_width); }
-			void setClippingWidth(const vec2& _pos, const vec2& _width) { setClipping(_pos, _pos+_width); };
+			void setClippingWidth(const vec3& _pos, const vec3& _width) {
+				setClipping(_pos, _pos+_width);
+			}
+			void setClippingWidth(const vec2& _pos, const vec2& _width) {
+				setClipping(_pos, _pos+_width);
+			};
 			/**
 			 * @brief Request a clipping area for the text (next draw only)
 			 * @param[in] _pos Start position of the clipping
 			 * @param[in] _posEnd End position of the clipping
 			 */
 			void setClipping(const vec3& _pos, const vec3& _posEnd);
-			void setClipping(const vec2& _pos, const vec2& _posEnd) { setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) ); };
+			void setClipping(const vec2& _pos, const vec2& _posEnd) {
+				setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) );
+			};
 			/**
 			 * @brief enable/Disable the clipping (without lose the current clipping position)
 			 * @brief _newMode The new status of the clipping

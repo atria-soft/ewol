@@ -53,7 +53,7 @@ void ewol::Text::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:text.prog");
-	if (NULL != m_GLprogram ) {
+	if (m_GLprogram != NULL) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord2d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
 		m_GLtexture  = m_GLprogram->getAttribute("EW_texture2d");
@@ -67,7 +67,7 @@ void ewol::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) 
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || NULL == m_font) {
+	if (m_coord.size() <= 0 || m_font == NULL) {
 		// TODO : a remÃštre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -80,7 +80,7 @@ void ewol::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) 
 		EWOL_ERROR("No shader ...");
 		return;
 	}
-	if (true == _enableDepthTest) {
+	if (_enableDepthTest == true) {
 		ewol::openGL::enable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 	// set Matrix : translation/positionMatrix
@@ -100,7 +100,7 @@ void ewol::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) 
 	// Request the draw od the elements : 
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
-	if (true == _enableDepthTest) {
+	if (_enableDepthTest == true) {
 		ewol::openGL::disable(ewol::openGL::FLAG_DEPTH_TEST);
 	}
 }
@@ -110,7 +110,7 @@ void ewol::Text::draw(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
-	if (m_coord.size() <= 0 || NULL == m_font) {
+	if (m_coord.size() <= 0 || m_font == NULL) {
 		// TODO : a remètre ...
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -267,7 +267,7 @@ void ewol::Text::setClippingMode(bool _newMode) {
 void ewol::Text::setFontSize(int32_t _fontSize) {
 	// get old size
 	etk::UString fontName = "";
-	if (NULL != m_font) {
+	if (m_font != NULL) {
 		fontName = m_font->getName();
 	}
 	setFont(fontName, _fontSize);
@@ -276,7 +276,7 @@ void ewol::Text::setFontSize(int32_t _fontSize) {
 void ewol::Text::setFontName(const etk::UString& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
-	if (NULL != m_font) {
+	if (m_font != NULL) {
 		fontSize = m_font->getFontSize();
 	}
 	setFont(_fontName, fontSize);
@@ -296,7 +296,7 @@ void ewol::Text::setFont(etk::UString _fontName, int32_t _fontSize) {
 	_fontName += _fontSize;
 	// link to new one
 	m_font = ewol::TexturedFont::keep(_fontName);
-	if (NULL == m_font) {
+	if (m_font == NULL) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;
 	} else {
@@ -305,7 +305,7 @@ void ewol::Text::setFont(etk::UString _fontName, int32_t _fontSize) {
 }
 
 void ewol::Text::setFontMode(ewol::font::mode_te _mode) {
-	if (NULL!=m_font) {
+	if (m_font != NULL) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
 }
@@ -315,7 +315,7 @@ ewol::font::mode_te ewol::Text::getFontMode(void) {
 }
 
 void ewol::Text::setFontBold(bool _status) {
-	if (true == _status) {
+	if (_status == true) {
 		// enable
 		if (m_mode == ewol::font::Regular) {
 			setFontMode(ewol::font::Bold);
@@ -333,7 +333,7 @@ void ewol::Text::setFontBold(bool _status) {
 }
 
 void ewol::Text::setFontItalic(bool _status) {
-	if (true == _status) {
+	if (_status == true) {
 		// enable
 		if (m_mode == ewol::font::Regular) {
 			setFontMode(ewol::font::Italic);
@@ -366,11 +366,10 @@ void ewol::Text::print(const etk::UString& _text) {
 
 void ewol::Text::parseHtmlNode(exml::Element* _element) {
 	// get the static real pointer
-	if (NULL == _element) {
+	if (_element == NULL) {
 		EWOL_ERROR( "Error Input node does not existed ...");
 	}
 	for(int32_t iii=0; iii< _element->size(); iii++) {
-		
 		if (_element->getType(iii) == exml::typeComment) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
@@ -387,11 +386,11 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
-		if(true == elem->getValue().compareNoCase("br")) {
+		if(elem->getValue().compareNoCase("br") == true) {
 			htmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			forceLineReturn();
-		} else if (true == elem->getValue().compareNoCase("font")) {
+		} else if (elem->getValue().compareNoCase("font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			etk::UString colorValue = elem->getAttribute("color");
@@ -400,8 +399,8 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			m_htmlDecoTmp.m_colorBg = colorValue;
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    true == elem->getValue().compareNoCase("b")
-		           || true == elem->getValue().compareNoCase("bold")) {
+		} else if(    elem->getValue().compareNoCase("b") == true
+		           || elem->getValue().compareNoCase("bold") == true) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -411,8 +410,8 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    true == elem->getValue().compareNoCase("i")
-		           || true == elem->getValue().compareNoCase("italic")) {
+		} else if(    elem->getValue().compareNoCase("i") == true
+		           || elem->getValue().compareNoCase("italic") == true) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -422,34 +421,34 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    true == elem->getValue().compareNoCase("u")
-		           || true == elem->getValue().compareNoCase("underline")) {
+		} else if(    elem->getValue().compareNoCase("u") == true
+		           || elem->getValue().compareNoCase("underline") == true) {
 			EWOL_VERBOSE("XML underline ...");
 			parseHtmlNode(elem);
-		} else if(    true == elem->getValue().compareNoCase("p")
-		           || true == elem->getValue().compareNoCase("paragraph")) {
+		} else if(    elem->getValue().compareNoCase("p") == true
+		           || elem->getValue().compareNoCase("paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
-		} else if (true == elem->getValue().compareNoCase("center")) {
+		} else if (elem->getValue().compareNoCase("center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignCenter;
 			parseHtmlNode(elem);
-		} else if (true == elem->getValue().compareNoCase("left")) {
+		} else if (elem->getValue().compareNoCase("left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignLeft;
 			parseHtmlNode(elem);
-		} else if (true == elem->getValue().compareNoCase("right")) {
+		} else if (elem->getValue().compareNoCase("right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignRight;
 			parseHtmlNode(elem);
-		} else if (true == elem->getValue().compareNoCase("justify")) {
+		} else if (elem->getValue().compareNoCase("justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignJustify;
@@ -476,19 +475,19 @@ void ewol::Text::printHTML(const etk::UString& _text) {
 	m_htmlDecoTmp.m_colorFg = etk::color::black;
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
-	if (false == doc.parse(_text)) {
+	if (doc.parse(_text) == false) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
 	
 	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
-	if (NULL == root) {
+	if (root == NULL) {
 		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
 		doc.display();
 		return;
 	}
 	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
-	if (NULL == root) {
+	if (root == NULL) {
 		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
 		return;
 	}
@@ -506,7 +505,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 	if (m_alignement == ewol::Text::alignDisable) {
 		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
-		if (true == m_needDisplay) {
+		if (m_needDisplay == true) {
 			if (0 == m_cursorPos) {
 				m_vectorialDraw.setPos(m_position);
 				setColorBg(m_colorCursor);
@@ -522,7 +521,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 				setFontMode(_decoration[iii].m_mode);
 			}
 			// if real display : ( not display is for size calculation)
-			if (true == m_needDisplay) {
+			if (m_needDisplay == true) {
 				if(    (    m_selectionStartPos-1<iii
 				         && iii  <= m_cursorPos-1)
 				    || (    m_selectionStartPos-1 >= iii
@@ -534,7 +533,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					setColorBg(tmpBg);
 				}
 			}
-			if(    true == m_needDisplay
+			if(    m_needDisplay == true
 			    && m_colorBg.a() != 0) {
 				vec3 pos = m_position;
 				m_vectorialDraw.setPos(pos);
@@ -547,7 +546,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 				m_nbCharDisplayed++;
 			}
 			// display the cursor if needed (if it is at the other position...)
-			if (true == m_needDisplay) {
+			if (m_needDisplay == true) {
 				if (iii == m_cursorPos-1) {
 					m_vectorialDraw.setPos(m_position);
 					setColorBg(m_colorCursor);
@@ -569,10 +568,8 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 		int32_t freeSpace;
 		while (currentId < _text.size()) {
 			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
-			
 			float interpolation = basicSpaceWidth;
-			switch (m_alignement)
-			{
+			switch (m_alignement) {
 				case ewol::Text::alignJustify:
 					if (needNoJustify == false) {
 						interpolation += (float)freeSpace / (float)(space-1);
@@ -600,8 +597,8 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					break;
 			}
 			// display all the elements
-			if(    true == m_needDisplay
-			    && 0 == m_cursorPos) {
+			if(    m_needDisplay == true
+			    && m_cursorPos == 0) {
 				m_vectorialDraw.setPos(m_position);
 				setColorBg(m_colorCursor);
 				printCursor(false);
@@ -614,7 +611,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					tmpBg = _decoration[iii].m_colorBg;
 					setFontMode(_decoration[iii].m_mode);
 				}
-				if (true == m_needDisplay) {
+				if (m_needDisplay == true) {
 					if(    (    m_selectionStartPos-1<iii
 					         && iii  <= m_cursorPos-1)
 					    || (    m_selectionStartPos-1 >= iii
@@ -627,9 +624,9 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					}
 				}
 				// special for the justify mode
-				if (_text[iii] == etk::UniChar(' ')) {
+				if (_text[iii] == etk::UniChar::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
-					if(    true == m_needDisplay
+					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.setPos(m_position);
 					}
@@ -637,13 +634,13 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					setPos(vec3(m_position.x() + interpolation,
 					            m_position.y(),
 					            m_position.z()) );
-					if(    true == m_needDisplay
+					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
 						m_vectorialDraw.rectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
 					}
 				} else {
 					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
-					if(    true == m_needDisplay
+					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
 						vec3 pos = m_position;
 						m_vectorialDraw.setPos(pos);
@@ -665,16 +662,16 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if(_text[stop] == etk::UniChar(' ')) {
+			} else if(_text[stop] == etk::UniChar::Space) {
 				currentId = stop+1;
-				// reset position : 
+				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
-			} else if(_text[stop] == etk::UniChar('\n')) {
+			} else if(_text[stop] == etk::UniChar::Return) {
 				currentId = stop+1;
-				// reset position : 
+				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
@@ -731,14 +728,14 @@ void ewol::Text::print(const etk::UniChar& _charcode) {
 		
 		
 		// Clipping and drawing area
-		if(     true == m_clippingEnable
+		if(    m_clippingEnable == true
 		    && (    dxB < m_clippingPosStart.x()
 		         || dxA > m_clippingPosStop.x()
 		         || dyC < m_clippingPosStart.y()
 		         || dyD > m_clippingPosStop.y() ) ) {
 			// Nothing to diplay ...
 		} else {
-			if (true == m_clippingEnable) {
+			if (m_clippingEnable == true) {
 				// generata positions...
 				float TexSizeX = tuB - tuA;
 				if (dxA < m_clippingPosStart.x()) {
@@ -993,7 +990,7 @@ bool ewol::Text::extrapolateLastId(const etk::UString& _text,
 	bool endOfLine = false;
 	
 	float stopPosition = m_stopTextPos;
-	if(    false == m_needDisplay
+	if(    m_needDisplay == false
 	    || m_stopTextPos == m_startTextpos) {
 		stopPosition = m_startTextpos + 3999999999.0;
 	}
@@ -1006,11 +1003,11 @@ bool ewol::Text::extrapolateLastId(const etk::UString& _text,
 			break;
 		}
 		// save number of space :
-		if (_text[iii] == etk::UniChar(' ')) {
+		if (_text[iii] == etk::UniChar::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if (_text[iii] == etk::UniChar('\n')) {
+		} else if (_text[iii] == etk::UniChar::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;
