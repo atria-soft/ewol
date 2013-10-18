@@ -561,7 +561,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 		if (m_stopTextPos < m_position.x()) {
 			forceLineReturn();
 		}
-		float basicSpaceWidth = calculateSize(etk::UniChar(' ')).x();
+		float basicSpaceWidth = calculateSize(etk::UChar(' ')).x();
 		int32_t currentId = 0;
 		int32_t stop;
 		int32_t space;
@@ -624,7 +624,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 					}
 				}
 				// special for the justify mode
-				if (_text[iii] == etk::UniChar::Space) {
+				if (_text[iii] == etk::UChar::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
@@ -662,14 +662,14 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if(_text[stop] == etk::UniChar::Space) {
+			} else if(_text[stop] == etk::UChar::Space) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
-			} else if(_text[stop] == etk::UniChar::Return) {
+			} else if(_text[stop] == etk::UChar::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
@@ -685,7 +685,7 @@ void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecorati
 }
 
 
-void ewol::Text::print(const etk::UniChar& _charcode) {
+void ewol::Text::print(const etk::UChar& _charcode) {
 	if (NULL == m_font) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -936,7 +936,7 @@ vec3 ewol::Text::calculateSize(const etk::UString& _text) {
 	return outputSize;
 }
 
-vec3 ewol::Text::calculateSize(const etk::UniChar& _charcode) {
+vec3 ewol::Text::calculateSize(const etk::UChar& _charcode) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -978,7 +978,7 @@ bool ewol::Text::extrapolateLastId(const etk::UString& _text,
                                    int32_t& _space,
                                    int32_t& _freeSpace) {
 	// store previous :
-	etk::UniChar storePrevious = m_previousCharcode;
+	etk::UChar storePrevious = m_previousCharcode;
 	
 	_stop = _text.size();
 	_space = 0;
@@ -1003,11 +1003,11 @@ bool ewol::Text::extrapolateLastId(const etk::UString& _text,
 			break;
 		}
 		// save number of space :
-		if (_text[iii] == etk::UniChar::Space) {
+		if (_text[iii] == etk::UChar::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if (_text[iii] == etk::UniChar::Return) {
+		} else if (_text[iii] == etk::UChar::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;

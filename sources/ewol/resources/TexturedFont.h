@@ -69,14 +69,14 @@ namespace ewol {
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t getIndex(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode);
+			int32_t getIndex(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode);
 			/**
 			 * @brief get the pointer on the coresponding glyph
 			 * @param[in] _charcode The unicodeValue
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The pointer on the glyph  == > never NULL
 			 */
-			ewol::GlyphProperty* getGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode);
+			ewol::GlyphProperty* getGlyphPointer(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode);
 			/**
 			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 			 *        For exemple when a blod mode does not exist, this resend a regular mode.
@@ -105,7 +105,7 @@ namespace ewol {
 			 * @param[in] _val Char value to add.
 			 * @return true if the image size have change, false otherwise
 			 */
-			bool addGlyph(const etk::UniChar& _val);
+			bool addGlyph(const etk::UChar& _val);
 	};
 	
 	

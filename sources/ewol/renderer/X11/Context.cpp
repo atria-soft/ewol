@@ -658,7 +658,7 @@ class X11Interface : public ewol::eContext {
 											}
 											if (count>0) {
 												// transform it in unicode
-												etk::UniChar tmpChar = 0;
+												etk::UChar tmpChar = 0;
 												tmpChar.setUtf8(buf);
 												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 												OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);

@@ -85,7 +85,7 @@ namespace ewol {
 			const char* generateEventId; //!< Local generated event
 			etk::UString eventData; //!< data link with the event
 			ewol::SpecialKey specialKey; //!< special board key
-			uniChar_t unicodeValue; //!< 0 if not used
+			etk::UChar unicodeValue; //!< 0 if not used
 			ewol::keyEvent::keyboard_te keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut(void) {
 				broadcastEvent = false;
@@ -605,7 +605,7 @@ namespace ewol {
 			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
 			 */
 			virtual bool onEventShortCut(ewol::SpecialKey& _special,
-			                             uniChar_t _unicodeValue,
+			                             etk::UChar _unicodeValue,
 			                             ewol::keyEvent::keyboard_te _kbMove,
 			                             bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------

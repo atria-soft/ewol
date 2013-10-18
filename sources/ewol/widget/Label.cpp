@@ -67,7 +67,7 @@ void widget::Label::onRegenerateDisplay(void) {
 		
 		vec2 tmpMax = m_userMaxSize.getPixel();
 		// to know the size of one line : 
-		vec3 minSize = m_text.calculateSize(etk::UniChar('A'));
+		vec3 minSize = m_text.calculateSize(etk::UChar('A'));
 		if (tmpMax.x() <= 999999) {
 			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
 		}

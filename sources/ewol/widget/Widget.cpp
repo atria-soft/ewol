@@ -605,7 +605,7 @@ void ewol::Widget::shortCutClean(void) {
 }
 
 bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
-                                   uniChar_t _unicodeValue,
+                                   etk::UChar _unicodeValue,
                                    ewol::keyEvent::keyboard_te _kbMove,
                                    bool _isDown) {
 	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {

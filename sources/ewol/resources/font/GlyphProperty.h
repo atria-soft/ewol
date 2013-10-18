@@ -50,7 +50,7 @@ namespace ewol {
 	
 	class GlyphProperty {
 		public:
-			uniChar_t m_UVal; //!< Unicode value
+			etk::UChar m_UVal; //!< Unicode value
 		private:
 			bool m_exist;
 		public:
@@ -74,7 +74,7 @@ namespace ewol {
 			  m_texturePosSize(0,0) {
 				
 			};
-			float kerningGet(const uniChar_t _charcode) {
+			float kerningGet(const etk::UChar _charcode) {
 				for(esize_t iii=0; iii<m_kerning.size(); iii++ ) {
 					if (m_kerning[iii].m_UVal == _charcode) {
 						return m_kerning[iii].m_value;
@@ -82,7 +82,7 @@ namespace ewol {
 				}
 				return 0;
 			};
-			void kerningAdd(const uniChar_t _charcode, float _value)
+			void kerningAdd(const etk::UChar _charcode, float _value)
 			{
 				m_kerning.pushBack(ewol::Kerning(_charcode, _value));
 			};

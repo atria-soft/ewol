@@ -12,7 +12,7 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <etk/Vector.h>
-#include <etk/Hach.h>
+#include <etk/Hash.h>
 #include <ewol/widget/Widget.h>
 
 namespace ewol {

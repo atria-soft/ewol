@@ -363,7 +363,7 @@ void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& 
 }
 
 void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
-                                    uniChar_t _myChar,
+                                    etk::UChar _myChar,
                                     bool _isDown,
                                     bool _isARepeateKey) {
 	eSystemMessage data;

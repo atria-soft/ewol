@@ -101,7 +101,7 @@ void widget::Entry::calculateMinMaxSize(void) {
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
 	vec2 padding = m_shaper.getPadding();
-	int32_t minHeight = m_oObjectText.calculateSize(etk::UniChar('A')).y();
+	int32_t minHeight = m_oObjectText.calculateSize(etk::UChar('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
 	minimumSizeBase += padding*2.0f;
@@ -153,7 +153,7 @@ void widget::Entry::onRegenerateDisplay(void) {
 		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
 		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		int32_t minHeight = m_oObjectText.calculateSize(etk::UniChar('A')).y();
+		int32_t minHeight = m_oObjectText.calculateSize(etk::UChar('A')).y();
 		if (tmpSizeText.y()>minHeight) {
 			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}

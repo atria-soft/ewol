@@ -56,7 +56,7 @@ class eSystemMessage {
 		// keyboard events :
 		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
 		bool                        stateIsDown;
-		uniChar_t                   keyboardChar;
+		etk::UChar                   keyboardChar;
 		ewol::keyEvent::keyboard_te keyboardMove;
 		ewol::SpecialKey            keyboardSpecial;
 		
@@ -142,7 +142,7 @@ namespace ewol {
 			virtual void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
 			
 			virtual void OS_SetKeyboard(ewol::SpecialKey& _special,
-			                            uniChar_t _myChar,
+			                            etk::UChar _myChar,
 			                            bool _isDown,
 			                            bool _isARepeateKey=false);
 			virtual void OS_SetKeyboardMove(ewol::SpecialKey& _special,

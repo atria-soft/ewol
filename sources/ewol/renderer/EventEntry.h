@@ -18,12 +18,12 @@ namespace ewol {
 			ewol::keyEvent::keyboard_te m_type; //!< type of hardware event
 			ewol::keyEvent::status_te m_status; //!< status of hardware event
 			ewol::SpecialKey m_specialKey; //!< input key status (prevent change in time..)
-			uniChar_t m_unicodeData; //!< Unicode data (in some case)
+			etk::UChar m_unicodeData; //!< Unicode data (in some case)
 		public:
 			EventEntry(ewol::keyEvent::keyboard_te _type,
 			           ewol::keyEvent::status_te _status,
 			           ewol::SpecialKey _specialKey,
-			           uniChar_t _char) :
+			           etk::UChar _char) :
 				m_type(_type),
 				m_status(_status),
 				m_specialKey(_specialKey),
@@ -47,10 +47,10 @@ namespace ewol {
 			inline const ewol::SpecialKey& getSpecialKey(void) const {
 				return m_specialKey;
 			};
-			void setChar(uniChar_t _char) {
+			void setChar(etk::UChar _char) {
 				m_unicodeData = _char;
 			};
-			inline const uniChar_t& getChar(void) const {
+			inline const etk::UChar& getChar(void) const {
 				return m_unicodeData;
 			};
 	};
@@ -61,7 +61,7 @@ namespace ewol {
 			EventEntrySystem(ewol::keyEvent::keyboard_te _type,
 			                 ewol::keyEvent::status_te _status,
 			                 ewol::SpecialKey _specialKey,
-			                 uniChar_t _char) :
+			                 etk::UChar _char) :
 				m_event(_type, _status, _specialKey, _char)
 			{ };
 			ewol::EventEntry m_event;

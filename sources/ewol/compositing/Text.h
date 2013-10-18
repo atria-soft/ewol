@@ -67,7 +67,7 @@ namespace ewol {
 			ewol::font::mode_te m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool m_kerning; //!< Kerning enable or disable on the next elements displayed
 			bool m_distanceField; //!< Texture in distance Field mode  == > maybe move this in the font property.
-			uniChar_t m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
+			etk::UChar m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
 		private:
 			float m_startTextpos; //!< start position of the Alignement (when \n the text return at this position)
 			float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
@@ -306,7 +306,7 @@ namespace ewol {
 			 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] _charcode Char that might be dispalyed
 			 */
-			void print(const uniChar_t& _charcode);
+			void print(const etk::UChar& _charcode);
 			/**
 			 * @brief This generate the line return  == > it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 			 */
@@ -358,7 +358,7 @@ namespace ewol {
 			 * @param[in] _charcode The µUnicode value to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 calculateSize(const uniChar_t& _charcode);
+			vec3 calculateSize(const etk::UChar& _charcode);
 			/**
 			 * @brief draw a cursor at the specify position
 			 * @param[in] _isInsertMode True if the insert mode is activated

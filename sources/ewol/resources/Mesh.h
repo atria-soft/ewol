@@ -10,7 +10,7 @@
 #define __MESH_H__
 
 #include <etk/types.h>
-#include <etk/Hach.h>
+#include <etk/Hash.h>
 #include <ewol/resources/Resource.h>
 #include <ewol/resources/Image.h>
 #include <ewol/resources/Shader.h>

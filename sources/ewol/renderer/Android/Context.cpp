@@ -385,7 +385,7 @@ class AndroidContext : public ewol::eContext {
 			ewol::eContext::OS_SetMouseState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
-		void ANDROID_SetKeyboard(uniChar_t _myChar, bool _isDown, bool _isARepeateKey=false) {
+		void ANDROID_SetKeyboard(etk::UChar _myChar, bool _isDown, bool _isARepeateKey=false) {
 			OS_SetKeyboard(m_guiKeyBoardSpecialKeyMode, _myChar, _isDown, _isARepeateKey);
 		}
 		

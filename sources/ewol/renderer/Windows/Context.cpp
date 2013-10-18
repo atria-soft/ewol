@@ -277,7 +277,7 @@ class WindowsContext : public ewol::eContext {
 				case WM_KEYUP:
 					buttonIsDown = false;
 				case WM_KEYDOWN: {
-					etk::UniChar tmpChar = 0;
+					etk::UChar tmpChar = 0;
 					ewol::keyEvent::keyboard_te keyInput;
 					switch (_wParam) {
 						//case 80: // keypad

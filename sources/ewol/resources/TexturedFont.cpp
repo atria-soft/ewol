@@ -205,13 +205,13 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	}
 	// add error glyph
 	{
-		etk::UniChar tmpchar;
+		etk::UChar tmpchar;
 		tmpchar.set(0);
 		addGlyph(tmpchar);
 	}
 	// by default we set only the first AINSI char availlable
 	for (int32_t iii=0x20; iii<0x7F; iii++) {
-		etk::UniChar tmpchar;
+		etk::UChar tmpchar;
 		tmpchar.set(iii);
 		addGlyph(tmpchar);
 	}
@@ -229,7 +229,7 @@ ewol::TexturedFont::~TexturedFont(void) {
 	}
 }
 
-bool ewol::TexturedFont::addGlyph(const etk::UniChar& _val) {
+bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
@@ -306,7 +306,7 @@ bool ewol::TexturedFont::hasName(const etk::UString& _fileName) {
 }
 
 
-int32_t ewol::TexturedFont::getIndex(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode) {
+int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode) {
 	if (_charcode.get() < 0x20) {
 		return 0;
 	} else if (_charcode.get() < 0x80) {
@@ -332,7 +332,7 @@ int32_t ewol::TexturedFont::getIndex(const uniChar_t& _charcode, const ewol::fon
 	return 0;
 }
 
-ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const uniChar_t& _charcode, const ewol::font::mode_te _displayMode) {
+ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
