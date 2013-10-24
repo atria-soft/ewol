@@ -26,7 +26,7 @@ void ewol::SimpleConfigElement::parse(const etk::UString& value) {
 
 
 
-ewol::ConfigFile::ConfigFile(const etk::UString& _filename): 
+ewol::ConfigFile::ConfigFile(const etk::UString& _filename) :
   ewol::Resource(_filename) {
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
@@ -43,7 +43,6 @@ ewol::ConfigFile::~ConfigFile(void) {
 	}
 	m_list.clear();
 }
-
 
 void ewol::ConfigFile::reload(void) {
 	// reset all parameters

@@ -47,9 +47,24 @@ namespace ewol {
 			
 			int32_t request(const etk::UString& _paramName);
 			
-			int32_t getInteger(int32_t _id) { if (_id<0) { return 0; } return m_list[_id]->getInteger(); };
-			float getFloat(int32_t _id) { if (_id<0) { return 0; } return m_list[_id]->getFloat(); };
-			etk::UString& getString(int32_t _id)  { if (_id<0) { return m_errorString; } return m_list[_id]->getString(); };
+			int32_t getInteger(int32_t _id) {
+				if (_id<0) {
+					return 0;
+				}
+				return m_list[_id]->getInteger();
+			};
+			float getFloat(int32_t _id) {
+				if (_id<0) {
+					return 0;
+				}
+				return m_list[_id]->getFloat();
+			};
+			etk::UString& getString(int32_t _id) {
+				if (_id<0) {
+					return m_errorString;
+				}
+				return m_list[_id]->getString();
+			};
 		public:
 			/**
 			 * @brief keep the resource pointer.
