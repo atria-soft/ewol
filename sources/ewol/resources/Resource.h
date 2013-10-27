@@ -52,7 +52,7 @@ namespace ewol {
 				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName == m_name) );
 				return _fileName == m_name;
 			};
-			virtual etk::UString getName(void) { return m_name; };
+			virtual const etk::UString& getName(void) { return m_name; };
 			void increment(void) { m_counter++; };
 			bool decrement(void) { m_counter--; return (m_counter == 0)?true:false; };
 			int32_t getCounter(void) { return m_counter; };
