@@ -13,13 +13,14 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <ewol/debug.h>
+#include <ewol/renderer/EObject.h>
 
 #define MAX_RESOURCE_LEVEL (5)
 
 namespace ewol {
 	class ResourceManager;
 	// class resources is pure virtual
-	class Resource {
+	class Resource : public ewol::EObject {
 		/*
 		public:
 			void* operator new(size_t elmeentSize);
