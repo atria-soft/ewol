@@ -42,8 +42,8 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj) 
 #undef __class__
 #define __class__ "TexturedFont"
 
-ewol::TexturedFont::TexturedFont(etk::UString fontName) :
-  ewol::Texture(fontName) {
+ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
+  ewol::Texture(_fontName) {
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;
@@ -66,22 +66,22 @@ ewol::TexturedFont::TexturedFont(etk::UString fontName) :
 	
 	int32_t tmpSize = 0;
 	// extarct name and size :
-	etk::Char tmpChar = fontName.c_str();
+	etk::Char tmpChar = _fontName.c_str();
 	const char * tmpData = tmpChar;
 	const char * tmpPos = strchr(tmpData, ':');
 	
 	if (tmpPos == NULL) {
 		m_size = 1;
-		EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\" ??? ':' " );
+		EWOL_CRITICAL("Can not parse the font name : \"" << _fontName << "\" ??? ':' " );
 		return;
 	} else {
 		if (sscanf(tmpPos+1, "%d", &tmpSize)!=1) {
 			m_size = 1;
-			EWOL_CRITICAL("Can not parse the font name : \"" << fontName << "\"  == > size ???");
+			EWOL_CRITICAL("Can not parse the font name : \"" << _fontName << "\"  == > size ???");
 			return;
 		}
 	}
-	etk::UString localName = fontName.extract(0, (tmpPos - tmpData));
+	etk::UString localName = _fontName.extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
 	
 	etk::Vector<etk::UString> folderList;
@@ -297,15 +297,6 @@ bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 	return hasChange;
 }
 
-bool ewol::TexturedFont::hasName(const etk::UString& _fileName) {
-	etk::UString tmpName = m_name;
-	tmpName += ":";
-	tmpName += m_size;
-	EWOL_VERBOSE("S : check : " << _fileName << " ?= " << tmpName << " = " << (_fileName == tmpName) );
-	return (_fileName == tmpName);
-}
-
-
 int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode) {
 	if (_charcode.get() < 0x20) {
 		return 0;
@@ -352,7 +343,7 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _char
 }
 
 ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename) {
-	EWOL_DEBUG("KEEP : TexturedFont : file : '" << _filename << "'");
+	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
 	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
@@ -373,10 +364,11 @@ void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
 		return;
 	}
 	etk::UString name = _object->getName();
+	int32_t count = _object->m_counter - 1;
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	if (getManager().release(object2) == true) {
-		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "'");
-		etk::displayBacktrace(false);
+		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
+		//etk::displayBacktrace(false);
 	}
 	_object = NULL;
 }

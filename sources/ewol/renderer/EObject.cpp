@@ -144,6 +144,27 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 	m_externEvent.pushBack(tmpEvent);
 }
 
+void ewol::EObject::unRegisterOnEvent(ewol::EObject * _destinationObject,
+                                      const char * _eventId) {
+	if (NULL == _destinationObject) {
+		EWOL_ERROR("Input ERROR NULL pointer EObject ...");
+		return;
+	}
+	// check if event existed :
+	for(int64_t iii = m_externEvent.size()-1; iii >= 0; --iii) {
+		if (m_externEvent[iii] == NULL) {
+			continue;
+		}
+		if (m_externEvent[iii]->destEObject != _destinationObject) {
+			continue;
+		}
+		if (_eventId == NULL) {
+			m_externEvent.remove(iii);
+		} else if (m_externEvent[iii]->localEventId == _eventId) {
+			m_externEvent.remove(iii);
+		}
+	}
+}
 
 void ewol::EObject::onObjectRemove(ewol::EObject * _removeObject) {
 	for(int32_t iii=m_externEvent.size()-1; iii >= 0; iii--) {

@@ -41,10 +41,9 @@ namespace ewol {
 			ivec2 m_lastGlyphPos[4];
 			int32_t m_lastRawHeigh[4];
 		protected:
-			TexturedFont(etk::UString _fontName);
+			TexturedFont(const etk::UString& _fontName);
 			~TexturedFont(void);
 		public:
-			virtual bool hasName(const etk::UString& _fileName);
 			const char* getType(void) {
 				return "ewol::TexturedFont";
 			};

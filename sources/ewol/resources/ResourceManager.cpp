@@ -189,19 +189,22 @@ bool ewol::ResourceManager::release(ewol::Resource*& _object) {
 	}
 	EWOL_VERBOSE("RELEASE (default) : file : \"" << _object->getName() << "\"");
 	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
-		if (m_resourceList[iii] != NULL) {
-			if(m_resourceList[iii] == _object) {
-				if (true == m_resourceList[iii]->decrement()) {
-					// delete element
-					delete(m_resourceList[iii]);
-					// remove element from the list :
-					m_resourceList[iii] = NULL;
-				}
-				// insidiously remove the pointer for the caller ...
-				_object = NULL;
-				return true;
-			}
+		if (m_resourceList[iii] == NULL) {
+			continue;
 		}
+		if(m_resourceList[iii] != _object) {
+			continue;
+		}
+		// insidiously remove the pointer for the caller ...
+		_object = NULL;
+		if (true == m_resourceList[iii]->decrement()) {
+			// delete element
+			delete(m_resourceList[iii]);
+			// remove element from the list :
+			m_resourceList[iii] = NULL;
+			return true; // object really removed
+		}
+		return false; // just decrement ...
 	}
 	EWOL_ERROR("Can not find the resources in the list : " << (int64_t)_object);
 	// insidiously remove the pointer for the caller ...

@@ -119,6 +119,13 @@ namespace ewol {
 			                     const char * _eventIdgenerated = NULL,
 			                     const etk::UString& _overloadData="");
 			/**
+			 * @brief Un-Register an EObject over an other.
+			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
+			 * @param[in] _eventId Event generate inside the object (NULL to remove all event on this object)
+			 */
+			void unRegisterOnEvent(ewol::EObject * _destinationObject,
+			                       const char * _eventId = NULL);
+			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] _removeObject Pointer on the EObject remeved  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
