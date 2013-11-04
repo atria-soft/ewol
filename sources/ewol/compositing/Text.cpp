@@ -269,6 +269,9 @@ void ewol::Text::setFontSize(int32_t _fontSize) {
 	etk::UString fontName = "";
 	if (m_font != NULL) {
 		fontName = m_font->getName();
+		// Remove the :XX for the size ...
+		int32_t pos = fontName.findForward(':');
+		fontName.remove(pos, fontName.size()-pos);
 	}
 	setFont(fontName, _fontSize);
 }

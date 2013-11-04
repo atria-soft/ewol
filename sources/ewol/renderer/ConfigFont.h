@@ -29,12 +29,16 @@ namespace ewol
 			 * @brief Specify the default font folder for the Ewol search system (only needed when embended font)
 			 * @param[in] _folder basic folder of the font (ex: DATA:fonts)
 			 */
-			void setFolder(const etk::UString& _folder) { m_folder = _folder; };
+			void setFolder(const etk::UString& _folder) {
+				m_folder = _folder;
+			};
 			/**
 			 * @brief get the default font folder.
 			 * @return The default font folder.
 			 */
-			const etk::UString& getFolder(void) { return m_folder; };
+			const etk::UString& getFolder(void) {
+				return m_folder;
+			};
 		private:
 			etk::UString m_name;
 			int32_t m_size;
@@ -49,12 +53,16 @@ namespace ewol
 			 * @brief get the current default font name
 			 * @raturn a reference on the font name string
 			 */
-			const etk::UString& getName(void) { return m_name; };
+			const etk::UString& getName(void) {
+				return m_name;
+			};
 			/**
 			 * @brief get the default font size.
 			 * @return the font size.
 			 */
-			int32_t getSize(void) { return m_size; };
+			int32_t getSize(void) {
+				return m_size;
+			};
 		private:
 			bool m_useExternal;
 		public:
@@ -62,12 +70,16 @@ namespace ewol
 			 * @brief set use of internal/external Font
 			 * @param[in] _val true to enable search of internal data.
 			 */
-			void setUseExternal(bool _val) { m_useExternal=_val; };
+			void setUseExternal(bool _val) {
+				m_useExternal=_val;
+			};
 			/**
 			 * @brief get the use of internal/external Font
 			 * @return true to enable search of internal data.
 			 */
-			bool getUseExternal(void) { return m_useExternal; };
+			bool getUseExternal(void) {
+				return m_useExternal;
+			};
 	};
 };
 
