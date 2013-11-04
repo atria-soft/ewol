@@ -131,3 +131,4 @@ bool widget::Label::loadXML(exml::Element* _node) {
 	setLabel(_node->getText());
 	return true;
 }
+

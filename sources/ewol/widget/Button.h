@@ -79,12 +79,16 @@ namespace widget {
 			 * @brief get the current displayed composition
 			 * @return The base widget
 			 */
-			ewol::Widget* getSubWidget(void) const { return m_subWidget[0]; };
+			ewol::Widget* getSubWidget(void) const {
+				return m_subWidget[0];
+			};
 			/**
 			 * @brief get the current displayed composition
 			 * @return The toggle widget
 			 */
-			ewol::Widget* getSubWidgetToggle(void) const { return m_subWidget[1]; };
+			ewol::Widget* getSubWidgetToggle(void) const {
+				return m_subWidget[1];
+			};
 		protected:
 			bool m_value; //!< Current state of the button.
 		public:
@@ -99,7 +103,9 @@ namespace widget {
 			 * @return True : The button is pressed.
 			 * @return false : The button is released.
 			 */
-			bool getValue(void) const { return m_value; };
+			bool getValue(void) const {
+				return m_value;
+			};
 		protected:
 			buttonLock_te m_lock; //!< Current lock state of the button.
 		public:
@@ -112,7 +118,9 @@ namespace widget {
 			 * @brief get the current button lock value.
 			 * @return The requested lock mode
 			 */
-			buttonLock_te getLock(void) const { return m_lock; };
+			buttonLock_te getLock(void) const {
+				return m_lock;
+			};
 		protected:
 			bool m_toggleMode; //!< The button is able to toggle.
 		public:
@@ -125,7 +133,9 @@ namespace widget {
 			 * @brief get the current toggle mode.
 			 * @return the current toggle mode.
 			 */
-			bool getToggleMode(void) const { return m_toggleMode; };
+			bool getToggleMode(void) const {
+				return m_toggleMode;
+			};
 		private:
 			bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 			bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
@@ -147,7 +157,9 @@ namespace widget {
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "widget::Button"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::Button";
+			};
 			virtual void calculateMinMaxSize(void);
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void onRegenerateDisplay(void);

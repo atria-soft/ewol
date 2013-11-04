@@ -503,7 +503,9 @@ namespace ewol {
 			 * @brief periodic call of this widget
 			 * @param _event Current time property
 			 */
-			virtual void periodicCall(const ewol::EventTime& _event) { };
+			virtual void periodicCall(const ewol::EventTime& _event) {
+				
+			};
 		public:
 			/**
 			 * @brief get the widget at the specific windows absolute position

@@ -36,23 +36,31 @@ namespace widget {
 			/**
 			 * @brief destructor
 			 */
-			virtual ~Label(void) { };
+			virtual ~Label(void) {
+				
+			};
 			/**
 			 * @brief change the label displayed
 			 * @param[in] _newLabel The displayed decorated text.
 			 */
 			void setLabel(const etk::UString& _newLabel);
-			inline void setValue(const etk::UString& _newLabel) { setLabel(_newLabel); };
+			inline void setValue(const etk::UString& _newLabel) {
+				setLabel(_newLabel);
+			};
 			/**
 			 * @brief get the current displayed label
 			 * @return The displayed decorated text.
 			 */
 			etk::UString getLabel(void);
-			inline etk::UString getValue(void) { return getLabel(); };
+			inline etk::UString getValue(void) {
+				return getLabel();
+			};
 		protected: // Derived function
 			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::Label"; };
+			virtual const char * const getObjectType(void) {
+				return "Ewol::Label";
+			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

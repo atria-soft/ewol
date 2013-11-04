@@ -21,7 +21,10 @@ namespace ewol {
 		private:
 			class MessageList {
 				public:
-					MessageList(const char* _message=NULL, ewol::EObject* _object=NULL) : m_message(_message), m_object(_object) { }
+					MessageList(const char* _message=NULL, ewol::EObject* _object=NULL) :
+					  m_message(_message), m_object(_object) {
+						
+					}
 					const char* m_message;
 					ewol::EObject* m_object;
 			};
@@ -29,7 +32,9 @@ namespace ewol {
 		public:
 			EMultiCast();
 			~EMultiCast(void);
-			void anonymousSend(const char* const _messageId, const etk::UString& _data) { send(NULL, _messageId, _data); };
+			void anonymousSend(const char* const _messageId, const etk::UString& _data) {
+				send(NULL, _messageId, _data);
+			};
 			void send(ewol::EObject* _object, const char* const _message, const etk::UString& _data);
 			void rm(ewol::EObject* _object);
 			void add(ewol::EObject* _object, const char* const _message);
