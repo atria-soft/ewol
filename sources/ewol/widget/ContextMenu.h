@@ -64,7 +64,9 @@ namespace widget {
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual void calculateSize(const vec2& availlable);
 			virtual void calculateMinMaxSize(void);
-			virtual const char * const getObjectType(void) { return "ewol::ContextMenu"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::ContextMenu";
+			};
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
 };

@@ -55,15 +55,21 @@ namespace widget {
 			 * @return the ID of the set element
 			 */
 			virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
-			inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) { return subWidgetAdd(_newWidget); };
-			inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget) { return subWidgetAdd(_newWidget); };
+			inline  int32_t subWidgetAddBack(ewol::Widget* _newWidget) {
+				return subWidgetAdd(_newWidget);
+			};
+			inline  int32_t subWidgetAddEnd(ewol::Widget* _newWidget) {
+				return subWidgetAdd(_newWidget);
+			};
 			/**
 			 * @brief add at start position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)
 			 * @param[in] _newWidget the element pointer
 			 * @return the ID of the set element
 			 */
 			virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
-			inline  int32_t subWidgetAddFront(ewol::Widget* _newWidget) { return subWidgetAddStart(_newWidget); };
+			inline  int32_t subWidgetAddFront(ewol::Widget* _newWidget) {
+				return subWidgetAddStart(_newWidget);
+			};
 			/**
 			 * @brief remove definitly a widget from the system and this layer.
 			 * @param[in] _newWidget the element pointer.
@@ -82,7 +88,9 @@ namespace widget {
 			virtual void calculateMinMaxSize(void);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
-			virtual const char * const getObjectType(void) { return "Ewol::ContainerN"; };
+			virtual const char * const getObjectType(void) {
+				return "Ewol::ContainerN";
+			};
 			virtual bool loadXML(exml::Element* _node);
 			virtual void setOffset(const vec2& _newVal);
 	};

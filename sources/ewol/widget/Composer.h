@@ -82,7 +82,9 @@ namespace widget
 			                               const char * _eventIdgenerated = NULL,
 			                               const etk::UString& _overloadData="");
 		public: // herited functions:
-			virtual const char * const getObjectType(void) { return "ewol::widget::Composer"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::widget::Composer";
+			};
 	};
 };
 

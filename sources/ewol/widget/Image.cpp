@@ -114,16 +114,36 @@ void widget::Image::onRegenerateDisplay(void) {
 		vec2 imageRealSize = m_minSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
-		vec2 tmpSize = m_compositing.getRealSize();
-		if (m_userFill.x()) {
+		bool xSizeBigger = false;
+		if (imageRealSize.x() > imageRealSize.y()) {
+			xSizeBigger = true;
+		}
+		
+		if (m_userFill.x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {
 			origin.setX(origin.x() + (m_size.x()-m_minSize.x())*0.5f);
 		}
-		if (m_userFill.y()) {
+		if (m_userFill.y() == true) {
 			imageRealSize.setY(imageRealSizeMax.y());
 		} else {
 			origin.setY(origin.y() + (m_size.y()-m_minSize.y())*0.5f);
+		}
+		if (m_keepRatio == true) {
+			vec2 tmpSize = m_compositing.getRealSize();
+			float ratio = tmpSize.x() / tmpSize.y();
+			float ratioCurrent = imageRealSize.x() / imageRealSize.y();
+			if (ratio == ratioCurrent) {
+				// nothing to do ...
+			} else if (ratio < ratioCurrent) {
+				float oldX = imageRealSize.x();
+				imageRealSize.setX(imageRealSize.y()*ratio);
+				origin += vec2((oldX - imageRealSize.x()) * 0.5f, 0);
+			} else {
+				float oldY = imageRealSize.y();
+				imageRealSize.setY(imageRealSize.x()/ratio);
+				origin += vec2(0, (oldY - imageRealSize.y()) * 0.5f);
+			}
 		}
 		
 		// set the somposition properties :

@@ -22,6 +22,10 @@ void widget::ProgressBar::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
+const char* const widget::ProgressBar::configColorBg = "color-bg";
+const char* const widget::ProgressBar::configColorFgOn = "color-on";
+const char* const widget::ProgressBar::configColorFgOff = "color-off";
+const char* const widget::ProgressBar::configValue = "value";
 
 const int32_t dotRadius = 6;
 
@@ -35,6 +39,11 @@ widget::ProgressBar::ProgressBar(void) {
 	m_textColorBgOff = etk::color::black;
 	m_textColorBgOff.setA(0x3F);
 	setCanHaveFocus(true);
+	registerConfig(configColorBg, "color", NULL, "Background color");
+	registerConfig(configColorFgOn, "color", NULL, "Corlor of the true value");
+	registerConfig(configColorFgOff, "color", NULL, "Corlor of the false value");
+	registerConfig(configValue, "integer", NULL, "Value of the progress bar");
+	
 }
 
 widget::ProgressBar::~ProgressBar(void) {
@@ -85,5 +94,52 @@ void widget::ProgressBar::onRegenerateDisplay(void) {
 	}
 }
 
+
+
+bool widget::ProgressBar::onSetConfig(const ewol::EConfig& _conf) {
+	if (true == ewol::Widget::onSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.getConfig() == configColorBg) {
+		m_textColorFg = _conf.getData();
+		return true;
+	}
+	if (_conf.getConfig() == configColorFgOn) {
+		m_textColorBgOn = _conf.getData();
+		return true;
+	}
+	if (_conf.getConfig() == configColorFgOff) {
+		m_textColorBgOff = _conf.getData();
+		return true;
+	}
+	if (_conf.getConfig() == configValue) {
+		m_value = _conf.getData().toFloat();
+		return true;
+	}
+	return false;
+}
+
+bool widget::ProgressBar::onGetConfig(const char* _config, etk::UString& _result) const {
+	if (true == ewol::Widget::onGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configColorBg) {
+		_result = m_textColorFg.getString();
+		return true;
+	}
+	if (_config == configColorFgOn) {
+		_result = m_textColorBgOn.getString();
+		return true;
+	}
+	if (_config == configColorFgOff) {
+		_result = m_textColorBgOff.getString();
+		return true;
+	}
+	if (_config == configValue) {
+		_result = m_value;
+		return true;
+	}
+	return false;
+}
 
 

@@ -63,7 +63,9 @@ namespace widget {
 			 * @brief get the file displayed
 			 * @return the filename of the image
 			 */
-			const etk::UString& getFile(void) const { return m_fileName; };
+			const etk::UString& getFile(void) const {
+				return m_fileName;
+			};
 		protected:
 			ewol::Dimension m_border; //!< border to add at the image.
 		public:
@@ -76,7 +78,9 @@ namespace widget {
 			 * @brief get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& getBorder(void) const { return m_border; };
+			const ewol::Dimension& getBorder(void) const {
+				return m_border;
+			};
 		protected:
 			ewol::Dimension m_imageSize; //!< border to add at the image.
 		public:
@@ -89,7 +93,9 @@ namespace widget {
 			 * @brief get the current border request at the image
 			 * @return the border size
 			 */
-			const ewol::Dimension& getImageSize(void) const { return m_imageSize; };
+			const ewol::Dimension& getImageSize(void) const {
+				return m_imageSize;
+			};
 		protected:
 			bool m_keepRatio; //!< keep the image ratio between width and hight
 		public:
@@ -102,13 +108,17 @@ namespace widget {
 			 * @brief get the current status of keeping ratio.
 			 * @return The status of keeping the ratio of this image.
 			 */
-			bool getKeepRatio(void) const { return m_keepRatio; };
+			bool getKeepRatio(void) const {
+				return m_keepRatio;
+			};
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::Image"; };
+			virtual const char * const getObjectType(void) {
+				return "Ewol::Image";
+			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

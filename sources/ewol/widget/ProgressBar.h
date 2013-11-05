@@ -20,6 +20,11 @@ namespace widget {
 	class ProgressBar : public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
+			// Config list of properties
+			static const char* const configColorBg;
+			static const char* const configColorFgOn;
+			static const char* const configColorFgOff;
+			static const char* const configValue;
 		private:
 			ewol::Drawing m_draw; // basic drawing element
 		public:
@@ -27,7 +32,9 @@ namespace widget {
 			virtual ~ProgressBar(void);
 			void valueSet(float _val);
 			float valueGet(void);
-			void setColor(etk::Color<> _newColor) { m_textColorFg = _newColor; };
+			void setColor(etk::Color<> _newColor) {
+				m_textColorFg = _newColor;
+			};
 		private:
 			float m_value; //!< % used
 			etk::Color<> m_textColorFg; //!< forder bar color
@@ -35,9 +42,13 @@ namespace widget {
 			etk::Color<> m_textColorBgOff; //!< bar color disable
 		protected: // Derived function
 			virtual void onDraw(void);
+			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
-			virtual const char * const getObjectType(void) { return "EwolProgressBar"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::progressBar";
+			};
 			virtual void calculateMinMaxSize(void);
 	};
 	

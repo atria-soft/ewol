@@ -75,7 +75,9 @@ namespace widget {
 			 * @brief get the current value in the entry
 			 * @return The current display value
 			 */
-			etk::UString getValue(void) const { return m_data; };
+			etk::UString getValue(void) const {
+				return m_data;
+			};
 		
 		private:
 			int32_t m_maxCharacter; //!< number max of xharacter in the list
@@ -89,7 +91,9 @@ namespace widget {
 			 * @brief Limit the number of Unicode character in the entry
 			 * @return Number of max character set in the List.
 			 */
-			int32_t getMaxChar(void) const { return m_maxCharacter; };
+			int32_t getMaxChar(void) const {
+				return m_maxCharacter;
+			};
 		
 		private:
 			etk::RegExp<etk::UString> m_regExp; //!< regular expression to limit the input of an entry
@@ -103,7 +107,9 @@ namespace widget {
 			 * @brief get the regualar expression limitation
 			 * @param The regExp string
 			 */
-			const etk::UString& getRegExp(void) const { return m_regExp.getRegExp(); };
+			const etk::UString& getRegExp(void) const {
+				return m_regExp.getRegExp();
+			};
 		
 		private:
 			bool m_needUpdateTextPos; //!< text position can have change
@@ -152,7 +158,9 @@ namespace widget {
 			 * @brief get the color for the text.
 			 * @return The color requested.
 			 */
-			const etk::Color<>& getColorText(void) const { return m_textColorFg; };
+			const etk::Color<>& getColorText(void) const {
+				return m_textColorFg;
+			};
 		
 		private:
 			etk::Color<> m_textColorBg; //!< Background color.
@@ -166,7 +174,9 @@ namespace widget {
 			 * @brief get the selected color for the text in selection mode.
 			 * @return The color requested.
 			 */
-			const etk::Color<>& getColorTextSelected(void) const { return m_textColorBg; };
+			const etk::Color<>& getColorTextSelected(void) const {
+				return m_textColorBg;
+			};
 		
 		private:
 			etk::UString m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
@@ -180,14 +190,18 @@ namespace widget {
 			 * @brief get The text displayed when nothing is in the entry.
 			 * @return Text display when nothing
 			 */
-			const etk::UString& getEmptyText(void) const { return m_textWhenNothing; };
+			const etk::UString& getEmptyText(void) const {
+				return m_textWhenNothing;
+			};
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual bool onEventEntry(const ewol::EventEntry& _event);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			virtual void onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
-			virtual const char * const getObjectType(void) { return "EwolEntry"; };
+			virtual const char * const getObjectType(void) {
+				return "EwolEntry";
+			};
 			virtual void calculateMinMaxSize(void);
 		protected: // Derived function
 			virtual void onDraw(void);
