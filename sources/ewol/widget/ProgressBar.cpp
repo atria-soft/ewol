@@ -57,13 +57,9 @@ void widget::ProgressBar::calculateMinMaxSize(void) {
 	markToRedraw();
 }
 
-void widget::ProgressBar::valueSet(float _val) {
+void widget::ProgressBar::setValue(float _val) {
 	m_value = etk_avg(0, _val, 1);
 	markToRedraw();
-}
-
-float widget::ProgressBar::valueGet(void) {
-	return m_value;
 }
 
 void widget::ProgressBar::onDraw(void) {

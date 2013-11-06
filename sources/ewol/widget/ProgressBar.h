@@ -30,8 +30,10 @@ namespace widget {
 		public:
 			ProgressBar(void);
 			virtual ~ProgressBar(void);
-			void valueSet(float _val);
-			float valueGet(void);
+			void setValue(float _val);
+			float getValue(void) const {
+				return m_value;
+			};
 			void setColor(etk::Color<> _newColor) {
 				m_textColorFg = _newColor;
 			};
