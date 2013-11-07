@@ -18,24 +18,13 @@
 #undef __class__
 #define __class__ "ewol::StdPopUp"
 
-extern const char * const ewolEventFileStdPopUpCancel   = "ewol event std_pop_up cancel";
-extern const char * const ewolEventFileStdPopUpValidate = "ewol event std_pop_up validate";
-extern const char * const ewolEventFileStdPopUpButton1 = "ewol event std_pop_up BT1";
-extern const char * const ewolEventFileStdPopUpButton2 = "ewol event std_pop_up BT2";
-extern const char * const ewolEventFileStdPopUpButton3 = "ewol event std_pop_up BT3";
-extern const char * const ewolEventFileStdPopUpButton4 = "ewol event std_pop_up BT4";
+const char * const widget::StdPopUp::eventButton = "ewol-event-pop-up-button";
 
-widget::StdPopUp::StdPopUp(void) {
-	addEventId(ewolEventFileStdPopUpCancel);
-	addEventId(ewolEventFileStdPopUpValidate);
-	addEventId(ewolEventFileStdPopUpButton1);
-	addEventId(ewolEventFileStdPopUpButton2);
-	addEventId(ewolEventFileStdPopUpButton3);
-	addEventId(ewolEventFileStdPopUpButton4);
+widget::StdPopUp::StdPopUp(void) :
+  m_title(NULL),
+  m_comment(NULL) {
+	addEventId(eventButton);
 	
-	m_widgetTitleId = -1;
-	m_widgetValidateId = -1;
-	m_widgetCancelId = -1;
 	
 	
 	ewol::sizerVert * mySizerVert = NULL;
@@ -105,7 +94,7 @@ widget::StdPopUp::~StdPopUp(void) {
 	
 }
 
-void widget::StdPopUp::setTitle(etk::UString _label) {
+void widget::StdPopUp::setTitle(const etk::UString& _label) {
 	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::get(m_widgetTitleId);
 	if (NULL == tmpWidget) {
 		return;
@@ -113,7 +102,7 @@ void widget::StdPopUp::setTitle(etk::UString _label) {
 	tmpWidget->setLabel(_label);
 }
 
-void widget::StdPopUp::setValidateLabel(etk::UString _label) {
+void widget::StdPopUp::setValidateLabel(const etk::UString& _label) {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetValidateId);
 	if (NULL == tmpWidget) {
 		return;
@@ -121,16 +110,12 @@ void widget::StdPopUp::setValidateLabel(etk::UString _label) {
 	tmpWidget->setLabel(_label);
 }
 
-void widget::StdPopUp::setCancelLabel(etk::UString _label) {
+void widget::StdPopUp::setCancelLabel(const etk::UString& _label) {
 	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetCancelId);
 	if (NULL == tmpWidget) {
 		return;
 	}
 	tmpWidget->setLabel(_label);
-}
-
-void widget::StdPopUp::setFolder(etk::UString _folder) {
-	m_folder = _folder;
 }
 
 bool widget::StdPopUp::onEventAreaExternal(int32_t _widgetID, const char *_generateEventId, const char *_eventExternId, float _x, float _y) {

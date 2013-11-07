@@ -110,6 +110,7 @@ def Create(target):
 		'ewol/widget/WSlider.cpp',
 		'ewol/widget/Spacer.cpp',
 		'ewol/widget/WidgetScrolled.cpp',
+		'ewol/widget/meta/StdPopUp.cpp',
 		'ewol/widget/meta/FileChooser.cpp',
 		'ewol/widget/meta/ColorChooser.cpp',
 		'ewol/widget/meta/Parameter.cpp',

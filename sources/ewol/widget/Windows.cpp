@@ -216,3 +216,30 @@ void ewol::Windows::setTitle(const etk::UString& _title) {
 	etk::UString title = _title;
 	getContext().setTitle(title);
 }
+
+
+void ewol::Windows::createPopUpMessage(enum popUpMessageType _type, const etk::UString& _message)
+{
+	widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
+	if (tmpPopUp == NULL) {
+		EWOL_ERROR("Can not create a simple pop-up");
+		return;
+	}
+	switch(_type) {
+		case messageTypeInfo:
+			tmpPopUp->setTitle("Info");
+			break;
+		case messageTypeWarning:
+			tmpPopUp->setTitle("Warning");
+			break;
+		case messageTypeError:
+			tmpPopUp->setTitle("Error");
+			break;
+		case messageTypeCritical:
+			tmpPopUp->setTitle("Critical");
+			break;
+	}
+	tmpPopUp->setComment(_message);
+	tmpPopUp->setButtonLabel(0, "close");
+	popUpWidgetPush(tmpPopUp);
+}

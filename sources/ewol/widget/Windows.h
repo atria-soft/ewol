@@ -71,8 +71,20 @@ namespace ewol {
 			virtual void calculateSize(const vec2& _availlable);
 			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos);
 			void setTitle(const etk::UString& _title);
+		public:
+			enum popUpMessageType {
+				messageTypeInfo, //!< information message pop-up
+				messageTypeWarning, //!< warning message pop-up
+				messageTypeError, //!< Error message pop-up
+				messageTypeCritical //!< Critical message pop-up
+			};
+			/**
+			 * @brief Create a simple pop-up message on the screen for application error.
+			 * @param[in] _type Type of the error.
+			 * @param[in] _message message to display (decorated)
+			 */
+			virtual void createPopUpMessage(enum popUpMessageType _type, const etk::UString& _message);
 	};
-	
 };
 
 #endif
