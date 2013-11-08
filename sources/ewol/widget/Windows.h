@@ -47,8 +47,8 @@ namespace ewol {
 			ewol::Widget* m_subWidget;
 			etk::Vector<ewol::Widget*> m_popUpWidgetList;
 		public:
-			void setSubWidget(ewol::Widget * widget);
-			void popUpWidgetPush(ewol::Widget * widget);
+			void setSubWidget(ewol::Widget* _widget);
+			void popUpWidgetPush(ewol::Widget* _widget);
 		private:
 			etk::Color<float> m_backgroundColor; //!< reset color of the Main windows
 		public:
@@ -56,7 +56,9 @@ namespace ewol {
 			 * @brief get the background color.
 			 * @return A reference on the color
 			 */
-			const etk::Color<float>& getBackgroundColor(void) { return m_backgroundColor; };
+			const etk::Color<float>& getBackgroundColor(void) {
+				return m_backgroundColor;
+			};
 			/**
 			 * @brief set the background color.
 			 * @param[IN] the new requested color.
@@ -65,7 +67,9 @@ namespace ewol {
 		protected: // Derived function
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "ewol::Windows"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::Windows";
+			};
 			virtual void onRegenerateDisplay(void);
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
 			virtual void calculateSize(const vec2& _availlable);

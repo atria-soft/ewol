@@ -6,10 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/widget/meta/stdPopUp.h>
-#include <ewol/widget/Button.h>
-#include <ewol/widget/SizerHori.h>
-#include <ewol/widget/SizerVert.h>
+#include <ewol/widget/meta/StdPopUp.h>
+#include <ewol/widget/Sizer.h>
 #include <ewol/widget/Spacer.h>
 #include <ewol/widget/Label.h>
 #include <ewol/widget/WidgetManager.h>
@@ -18,111 +16,124 @@
 #undef __class__
 #define __class__ "ewol::StdPopUp"
 
-const char * const widget::StdPopUp::eventButton = "ewol-event-pop-up-button";
+static const char * const eventButtonExit = "ewol-event-pop-up-exit-button";
 
 widget::StdPopUp::StdPopUp(void) :
   m_title(NULL),
-  m_comment(NULL) {
-	addEventId(eventButton);
+  m_comment(NULL),
+  m_subBar(NULL) {
+	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
+	widget::Sizer* mySizerVert = NULL;
+	widget::Spacer* mySpacer = NULL;
 	
-	
-	ewol::sizerVert * mySizerVert = NULL;
-	ewol::sizerHori * mySizerHori = NULL;
-	ewol::Button * myButton = NULL;
-	ewol::Entry * myEntry = NULL;
-	ewol::Spacer * mySpacer = NULL;
-	fileChooserFileList * myListFile = NULL;
-	fileChooserFolderList * myListFolder = NULL;
-	ewol::Label * myLabel = NULL;
-	
-	mySizerVert = new ewol::sizerVert();
+	mySizerVert = new widget::Sizer(widget::Sizer::modeVert);
 		// set it in the pop-up-system : 
-		subWidgetSet(mySizerVert);
+		setSubWidget(mySizerVert);
 		
-		myLabel = new ewol::Label("File chooser ...");
-			m_widgetTitleId = myLabel->getWidgetId();
-			mySizerVert->subWidgetAdd(myLabel);
+		m_subBar = new widget::Sizer(widget::Sizer::modeHori);
+			m_subBar->lockExpand(bvec2(true,true));
+			m_subBar->setExpand(bvec2(true,false));
+			mySizerVert->subWidgetAdd(m_subBar);
+			mySpacer = new widget::Spacer();
+				mySpacer->setExpand(bvec2(true,false));
+				m_subBar->subWidgetAdd(mySpacer);
 		
-		mySizerHori = new ewol::sizerHori();
-			mySizerHori->lockExpendContamination(true);
-			mySizerVert->subWidgetAdd(mySizerHori);
-			myButton = new ewol::Button("<-");
-				myButton->externLinkOnEvent("ewol Button Pressed", getWidgetId(), ewolEventFileChooserFolderUp );
-				mySizerHori->subWidgetAdd(myButton);
-			myEntry = new ewol::Entry("~/");
-				m_widgetCurrentFolderId = myEntry->getWidgetId();
-				myEntry->setExpendX(true);
-				myEntry->setFillX(true);
-				myEntry->setWidth(200);
-				mySizerHori->subWidgetAdd(myEntry);
-			
-		mySizerHori = new ewol::sizerHori();
-			mySizerHori->lockExpendContamination(true);
-			mySizerVert->subWidgetAdd(mySizerHori);
-			myListFolder = new fileChooserFolderList();
-				m_widgetListFolderId = myListFolder->getWidgetId();
-				//myList->setExpendX(true);
-				myListFolder->setExpendY(true);
-				myListFolder->setFillY(true);
-				mySizerHori->subWidgetAdd(myListFolder);
-			myListFile = new fileChooserFileList();
-				m_widgetListFileId = myListFile->getWidgetId();
-				myListFile->setExpendY(true);
-				myListFile->setFillX(true);
-				myListFile->setExpendY(true);
-				myListFile->setFillY(true);
-				mySizerHori->subWidgetAdd(myListFile);
-			
-		mySizerHori = new ewol::sizerHori();
-			mySizerHori->lockExpendContamination(true);
-			mySizerVert->subWidgetAdd(mySizerHori);
-			mySpacer = new ewol::Spacer();
-				mySpacer->setExpendX(true);
-				mySizerHori->subWidgetAdd(mySpacer);
-			myButton = new ewol::Button("Open");
-				m_widgetValidateId = myButton->getWidgetId();
-				myButton->externLinkOnEvent("ewol Button Pressed", getWidgetId(), ewolEventFileChooserValidate);
-				mySizerHori->subWidgetAdd(myButton);
-			myButton = new ewol::Button("Cancel");
-				m_widgetCancelId = myButton->getWidgetId();
-				myButton->externLinkOnEvent("ewol Button Pressed", getWidgetId(), ewolEventFileChooserCancel);
-				mySizerHori->subWidgetAdd(myButton);
+		mySpacer = new widget::Spacer();
+			mySpacer->setExpand(bvec2(true,false));
+			mySpacer->setColor(etk::Color<>(0x888888FF));
+			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
+			mySizerVert->subWidgetAdd(mySpacer);
+		
+		mySpacer = new widget::Spacer();
+			mySpacer->setExpand(bvec2(true,false));
+			mySpacer->setMinSize(ewol::Dimension(vec2(0,5),ewol::Dimension::Pixel));
+			mySizerVert->subWidgetAdd(mySpacer);
+		
+		m_comment = new widget::Label("No Label");
+			m_comment->setExpand(bvec2(true,true));
+			mySizerVert->subWidgetAdd(m_comment);
+		
+		mySpacer = new widget::Spacer();
+			mySpacer->setExpand(bvec2(true,false));
+			mySpacer->setMinSize(ewol::Dimension(vec2(0,5),ewol::Dimension::Pixel));
+			mySizerVert->subWidgetAdd(mySpacer);
+		
+		mySpacer = new widget::Spacer();
+			mySpacer->setExpand(bvec2(true,false));
+			mySpacer->setColor(etk::Color<>(0x888888FF));
+			mySpacer->setMinSize(ewol::Dimension(vec2(0,3),ewol::Dimension::Pixel));
+			mySizerVert->subWidgetAdd(mySpacer);
+		
+		m_title = new widget::Label("<bold>Message</bold>");
+			m_title->setExpand(bvec2(true,false));
+			m_title->setFill(bvec2(true,true));
+			mySizerVert->subWidgetAdd(m_title);
 }
 
 widget::StdPopUp::~StdPopUp(void) {
 	
 }
 
-void widget::StdPopUp::setTitle(const etk::UString& _label) {
-	ewol::Label * tmpWidget = (ewol::Label*)ewol::widgetManager::get(m_widgetTitleId);
-	if (NULL == tmpWidget) {
+void widget::StdPopUp::setTitle(const etk::UString& _text) {
+	if (m_title == NULL) {
 		return;
 	}
-	tmpWidget->setLabel(_label);
+	m_title->setLabel(_text);
+	markToRedraw();
 }
 
-void widget::StdPopUp::setValidateLabel(const etk::UString& _label) {
-	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetValidateId);
-	if (NULL == tmpWidget) {
+void widget::StdPopUp::setComment(const etk::UString& _text) {
+	if (m_comment == NULL) {
 		return;
 	}
-	tmpWidget->setLabel(_label);
+	m_comment->setLabel(_text);
+	markToRedraw();
 }
 
-void widget::StdPopUp::setCancelLabel(const etk::UString& _label) {
-	ewol::Button * tmpWidget = (ewol::Button*)ewol::widgetManager::get(m_widgetCancelId);
-	if (NULL == tmpWidget) {
+widget::Button* widget::StdPopUp::addButton(const etk::UString& _text, bool _autoExit) {
+	if (m_subBar == NULL) {
+		EWOL_ERROR("button-bar does not existed ...");
+		return NULL;
+	}
+	widget::Button* myButton = new widget::Button();
+	if (myButton == NULL) {
+		EWOL_ERROR("Can not allocate new button ...");
+		return NULL;
+	}
+	myButton->setSubWidget(new widget::Label(_text));
+	if(_autoExit == true) {
+		myButton->registerOnEvent(this, widget::Button::eventPressed, eventButtonExit);
+	}
+	m_subBar->subWidgetAdd(myButton);
+	markToRedraw();
+	return myButton;
+}
+
+void widget::StdPopUp::onObjectRemove(ewol::EObject* _removeObject) {
+	// call parent:
+	widget::PopUp::onObjectRemove(_removeObject);
+	if (_removeObject == m_subBar) {
+		m_subBar = NULL;
+		markToRedraw();
 		return;
 	}
-	tmpWidget->setLabel(_label);
+	if (_removeObject == m_comment) {
+		m_comment = NULL;
+		markToRedraw();
+		return;
+	}
+	if (_removeObject == m_title) {
+		m_title = NULL;
+		markToRedraw();
+		return;
+	}
 }
 
-bool widget::StdPopUp::onEventAreaExternal(int32_t _widgetID, const char *_generateEventId, const char *_eventExternId, float _x, float _y) {
-	EWOL_INFO("Receive Event from the BT ... : widgetid=" << _widgetID << "\"" << _generateEventId << "\"  == > internalEvent=\"" << _eventExternId << "\"" );
-	if (ewolEventFileChooserCancel == _eventExternId) {
-		// == > Auto remove ...
-		
+void widget::StdPopUp::onReceiveMessage(const ewol::EMessage& _msg) {
+	// call parent:
+	widget::PopUp::onReceiveMessage(_msg);
+	if (_msg.getMessage() == eventButtonExit) {
+		autoDestroy();
 	}
-	return genEventInputExternal(_eventExternId, _x, _y);
 }

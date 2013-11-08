@@ -337,7 +337,7 @@ void ewol::eInput::state(ewol::keyEvent::type_te _type,
 		// reject pointer  == > out of IDs...
 		return;
 	}
-	EWOL_DEBUG("event pointerId=" << _pointerID);
+	EVENT_DEBUG("event pointerId=" << _pointerID);
 	// convert position in open-GL coordonates ...
 	InputPoperty_ts *eventTable = NULL;
 	inputLimit_ts   localLimit;
@@ -361,7 +361,7 @@ void ewol::eInput::state(ewol::keyEvent::type_te _type,
 	ewol::Windows* tmpWindows = m_context.getWindows();
 	
 	if (true == _isDown) {
-		EWOL_VERBOSE("GUI : Input ID=" << _pointerID
+		EVENT_DEBUG("GUI : Input ID=" << _pointerID
 		             << " == >" << eventTable[_pointerID].destinationInputId
 		             << " [DOWN] " << _pos);
 		if(true == eventTable[_pointerID].isUsed) {
@@ -424,7 +424,7 @@ void ewol::eInput::state(ewol::keyEvent::type_te _type,
 			                _pos);
 		}
 	} else {
-		EWOL_VERBOSE("GUI : Input ID=" << _pointerID
+		EVENT_DEBUG("GUI : Input ID=" << _pointerID
 		             << " == >" << eventTable[_pointerID].destinationInputId
 		             << " [UP]     " << _pos);
 		if(false == eventTable[_pointerID].isUsed) {

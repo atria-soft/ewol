@@ -18,25 +18,16 @@
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/ListFileSystem.h>
 
-extern const char * const ewolEventFileChooserCancel;
-extern const char * const ewolEventFileChooserValidate;
-
 namespace widget {
 	class FileChooser : public widget::PopUp {
 		public:
+			// Event list of properties
+			static const char* const eventCancel;
+			static const char* const eventValidate;
+			// Config list of properties
+		public:
 			FileChooser(void);
 			virtual ~FileChooser(void);
-			// Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::fileChooser"; };
-			virtual void onReceiveMessage(const ewol::EMessage& _msg);
-			virtual void onObjectRemove(ewol::EObject * removeObject);
-			void setTitle(etk::UString label);
-			void setValidateLabel(etk::UString label);
-			void setCancelLabel(etk::UString label);
-			void setFolder(etk::UString folder);
-			void setFileName(etk::UString filename);
-			etk::UString getCompleateFileName(void);
-			void updateCurrentFolder(void);
 		private:
 			widget::Label* m_widgetTitle;
 			widget::Button* m_widgetValidate;
@@ -48,6 +39,20 @@ namespace widget {
 			widget::CheckBox* m_widgetCheckBox;
 			etk::UString m_folder;
 			etk::UString m_file;
+		public:
+			void setTitle(const etk::UString& _label);
+			void setValidateLabel(const etk::UString& _label);
+			void setCancelLabel(const etk::UString& _label);
+			void setFolder(const etk::UString& _folder);
+			void setFileName(const etk::UString& _filename);
+			etk::UString getCompleateFileName(void);
+			void updateCurrentFolder(void);
+		public: // Derived function
+			virtual const char * const getObjectType(void) {
+				return "Ewol::fileChooser";
+			};
+			virtual void onReceiveMessage(const ewol::EMessage& _msg);
+			virtual void onObjectRemove(ewol::EObject* _removeObject);
 	};
 	
 };

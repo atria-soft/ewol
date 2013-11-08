@@ -30,8 +30,8 @@ extern "C" {
 #define __class__ "FileChooser"
 
 
-extern const char * const ewolEventFileChooserCancel           = "ewol-event-file-chooser-cancel";
-extern const char * const ewolEventFileChooserValidate         = "ewol-event-file-chooser-validate";
+extern const char * const widget::FileChooser::eventCancel     = "ewol-event-file-chooser-cancel";
+extern const char * const widget::FileChooser::eventValidate   = "ewol-event-file-chooser-validate";
 extern const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
 extern const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
 extern const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
@@ -44,8 +44,8 @@ extern const char * const ewolEventFileChooserHome             = "ewol-event-fil
 
 
 widget::FileChooser::FileChooser(void) {
-	addEventId(ewolEventFileChooserCancel);
-	addEventId(ewolEventFileChooserValidate);
+	addEventId(eventCancel);
+	addEventId(eventValidate);
 	
 	m_widgetTitle = NULL;
 	m_widgetValidate = NULL;
@@ -146,7 +146,7 @@ widget::FileChooser::FileChooser(void) {
 				        "		<label>Validate</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				m_widgetValidate->registerOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserValidate);
+				m_widgetValidate->registerOnEvent(this, widget::Button::eventPressed, eventValidate);
 				mySizerHori->subWidgetAdd(m_widgetValidate);
 			}
 			m_widgetCancel = new widget::Button();
@@ -161,7 +161,7 @@ widget::FileChooser::FileChooser(void) {
 				        "		<label>Cancel</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				m_widgetCancel->registerOnEvent(this, widget::Button::eventPressed, ewolEventFileChooserCancel);
+				m_widgetCancel->registerOnEvent(this, widget::Button::eventPressed, eventCancel);
 				mySizerHori->subWidgetAdd(m_widgetCancel);
 			}
 		}
@@ -294,14 +294,14 @@ widget::FileChooser::~FileChooser(void) {
 	
 }
 
-void widget::FileChooser::setTitle(etk::UString _label) {
+void widget::FileChooser::setTitle(const etk::UString& _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
 	m_widgetTitle->setLabel(_label);
 }
 
-void widget::FileChooser::setValidateLabel(etk::UString _label) {
+void widget::FileChooser::setValidateLabel(const etk::UString& _label) {
 	if (NULL == m_widgetValidate) {
 		return;
 	}
@@ -311,7 +311,7 @@ void widget::FileChooser::setValidateLabel(etk::UString _label) {
 	*/
 }
 
-void widget::FileChooser::setCancelLabel(etk::UString _label) {
+void widget::FileChooser::setCancelLabel(const etk::UString& _label) {
 	if (NULL == m_widgetCancel) {
 		return;
 	}
@@ -321,12 +321,12 @@ void widget::FileChooser::setCancelLabel(etk::UString _label) {
 	*/
 }
 
-void widget::FileChooser::setFolder(etk::UString _folder) {
+void widget::FileChooser::setFolder(const etk::UString& _folder) {
 	m_folder = _folder + "/";
 	updateCurrentFolder();
 }
 
-void widget::FileChooser::setFileName(etk::UString _filename) {
+void widget::FileChooser::setFileName(const etk::UString& _filename) {
 	m_file = _filename;
 	if (NULL == m_widgetCurrentFileName) {
 		return;
@@ -346,7 +346,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		if (m_widgetListFile != NULL) {
 			m_widgetListFile->setSelect(m_file);
 		}
-	} else if (ewolEventFileChooserCancel == _msg.getMessage()) {
+	} else if (eventCancel == _msg.getMessage()) {
 		// == > Auto remove ...
 		generateEventId(_msg.getMessage());
 		autoDestroy();
@@ -380,7 +380,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		tmpFileCompleatName += m_file;
 		generateEventId(_msg.getMessage(), tmpFileCompleatName);
 	} else if(     _msg.getMessage() == ewolEventFileChooserListFileValidate 
-	           || (_msg.getMessage() == ewolEventFileChooserValidate       && m_file != "" )
+	           || (_msg.getMessage() == eventValidate       && m_file != "" )
 	           || (_msg.getMessage() == ewolEventFileChooserEntryFileEnter && m_file != "" ) ) {
 		// select the file  == > generate a validate
 		if (_msg.getData() != "") {
@@ -389,7 +389,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
 		etk::UString tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
-		generateEventId(ewolEventFileChooserValidate, tmpFileCompleatName);
+		generateEventId(eventValidate, tmpFileCompleatName);
 		autoDestroy();
 	} else if(ewolEventFileChooserHome == _msg.getMessage()) {
 		etk::UString tmpUserFolder = etk::getUserHomeFolder();

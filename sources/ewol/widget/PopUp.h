@@ -58,12 +58,16 @@ namespace widget {
 			 * @brief Request the Auto-remove when the event input is set outside the widget
 			 * @param[in] _state New status
 			 */
-			void setRemoveOnExternClick(bool _state) { m_closeOutEvent = _state; };
+			void setRemoveOnExternClick(bool _state) {
+				m_closeOutEvent = _state;
+			};
 			/**
 			 * @brief get the status of the request the Auto-remove when the event input is set outside the widget.
 			 * @return the status of the removing
 			 */
-			bool getRemoveOnExternClick(void) const { return m_closeOutEvent; };
+			bool getRemoveOnExternClick(void) const {
+				return m_closeOutEvent;
+			};
 		private:
 			//float m_slidingProgress; //!< ratio progression of a sliding
 		public:
@@ -96,7 +100,9 @@ namespace widget {
 			virtual void calculateSize(const vec2& _available);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			//virtual void calculateMinMaxSize(void);
-			virtual const char * const getObjectType(void) { return "ewol::PopUp"; };
+			virtual const char * const getObjectType(void) {
+				return "ewol::PopUp";
+			};
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
 	

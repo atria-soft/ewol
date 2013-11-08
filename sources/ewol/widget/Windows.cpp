@@ -14,6 +14,7 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/meta/StdPopUp.h>
 
 #undef __class__
 #define __class__ "Windows"
@@ -227,19 +228,20 @@ void ewol::Windows::createPopUpMessage(enum popUpMessageType _type, const etk::U
 	}
 	switch(_type) {
 		case messageTypeInfo:
-			tmpPopUp->setTitle("Info");
+			tmpPopUp->setTitle("<bold>Info</bold>");
 			break;
 		case messageTypeWarning:
-			tmpPopUp->setTitle("Warning");
+			tmpPopUp->setTitle("<bold><font color=\"orange\">Warning</font></bold>");
 			break;
 		case messageTypeError:
-			tmpPopUp->setTitle("Error");
+			tmpPopUp->setTitle("<bold><font color=\"red\">Error</font></bold>");
 			break;
 		case messageTypeCritical:
-			tmpPopUp->setTitle("Critical");
+			tmpPopUp->setTitle("<bold><font colorBg=\"red\">Critical</font></bold>");
 			break;
 	}
 	tmpPopUp->setComment(_message);
-	tmpPopUp->setButtonLabel(0, "close");
+	tmpPopUp->addButton("close", true);
+	tmpPopUp->setRemoveOnExternClick(true);
 	popUpWidgetPush(tmpPopUp);
 }
