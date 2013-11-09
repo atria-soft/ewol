@@ -26,6 +26,9 @@ namespace widget {
 		SCROLL_GREP_END_EVENT,
 	}highSpeedMode_te;
 	
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Scroll : public widget::Container {
 		public:
 			// Cinfig parameter list:
@@ -58,7 +61,7 @@ namespace widget {
 			const vec2& getLimit(void) const { return m_limit; };
 			
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "ewol::widget::Scroll"; };
+			virtual const char * const getObjectType(void) { return "widget::Scroll"; };
 			void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

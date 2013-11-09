@@ -16,6 +16,9 @@
 
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class WSlider :public widget::ContainerN {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -87,7 +90,7 @@ namespace widget {
 			};
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
-				return "Ewol::WSlider";
+				return "widget::WSlider";
 			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);

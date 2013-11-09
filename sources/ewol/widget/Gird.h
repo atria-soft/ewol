@@ -16,6 +16,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Gird :public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -135,7 +138,7 @@ namespace widget {
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			virtual const char * const getObjectType(void) {
-				return "ewol::gird";
+				return "widget::Gird";
 			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void calculateMinMaxSize(void);

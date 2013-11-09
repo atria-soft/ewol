@@ -93,7 +93,6 @@ def Create(target):
 		'ewol/widget/Composer.cpp',
 		'ewol/widget/Container.cpp',
 		'ewol/widget/ContainerN.cpp',
-		'ewol/widget/Drawable.cpp',
 		'ewol/widget/Entry.cpp',
 		'ewol/widget/Joystick.cpp',
 		'ewol/widget/Label.cpp',

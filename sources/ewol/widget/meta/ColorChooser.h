@@ -22,13 +22,17 @@
 extern const char * const ewolEventColorChooserChange;
 
 namespace widget {
-	class ColorChooser : public widget::Sizer
-	{
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
+	class ColorChooser : public widget::Sizer {
 		public:
 			ColorChooser(void);
 			~ColorChooser(void);
 			// Derived function
-			virtual const char * const getObjectType(void) { return "widget::ColorChooser"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::ColorChooser";
+			};
 			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function

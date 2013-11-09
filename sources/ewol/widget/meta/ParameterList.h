@@ -12,7 +12,6 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
-#include <ewol/widget/Drawable.h>
 
 extern const char * const ewolEventParameterListSelect;
 
@@ -34,6 +33,9 @@ namespace widget {
 			~elementPL(void) {};
 	};
 	
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class ParameterList :public widget::WidgetScrooled {
 		private:
 			int32_t m_idSelected;
@@ -61,7 +63,9 @@ namespace widget {
 			void menuSeparator(void);
 			
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "EwolParameterList"; };
+			virtual const char * const getObjectType(void) {
+				return "widgetParameterList";
+			};
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual void calculateMinMaxSize(void);

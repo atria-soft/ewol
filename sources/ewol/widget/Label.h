@@ -16,6 +16,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Label : public ewol::Widget {
 		public:
 			// Event list of properties
@@ -59,7 +62,7 @@ namespace widget {
 			virtual void onDraw(void);
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
-				return "Ewol::Label";
+				return "widget::Label";
 			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);

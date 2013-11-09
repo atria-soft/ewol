@@ -21,6 +21,9 @@ namespace widget {
 		SCROLL_MODE_CENTER, //!< Zoom enable, no move left and right
 		SCROLL_MODE_GAME, //!< Zoom enable, no move left and right
 	} scrollingMode_te;
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class WidgetScrooled : public ewol::Widget {
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
@@ -43,7 +46,9 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "EwolWidgetScrooled"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::Scrooled";
+			};
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);

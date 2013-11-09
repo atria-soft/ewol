@@ -19,8 +19,10 @@
 extern const char* const ewolEventCheckBoxClicked;
 
 namespace widget {
-	class CheckBox : public ewol::Widget
-	{
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
+	class CheckBox : public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 		public:
@@ -39,7 +41,9 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::CheckBox"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::CheckBox";
+			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

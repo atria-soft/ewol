@@ -18,6 +18,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class PopUp : public widget::Container {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -87,7 +90,9 @@ namespace widget {
 			 * @brief get the current animation mode.
 			 * @return The animation mode.
 			 */
-			animation_te getAnimationMode(void) { return m_animation;};
+			animation_te getAnimationMode(void) const {
+				return m_animation;
+			};
 			
 		protected: // Derived function
 			virtual void onDraw(void);

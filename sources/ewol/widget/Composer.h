@@ -16,6 +16,7 @@
 namespace widget
 {
 	/**
+	 * @ingroup ewolWidgetGroup
 	 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 	 */
 	class Composer : public widget::Container
@@ -83,7 +84,7 @@ namespace widget
 			                               const etk::UString& _overloadData="");
 		public: // herited functions:
 			virtual const char * const getObjectType(void) {
-				return "ewol::widget::Composer";
+				return "widget::Composer";
 			};
 	};
 };

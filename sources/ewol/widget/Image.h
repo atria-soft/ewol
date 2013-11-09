@@ -19,6 +19,9 @@
 extern const char * const ewolEventImagePressed;
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Image :public ewol::Widget {
 		public:
 			// Event list of properties
@@ -117,7 +120,7 @@ namespace widget {
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
-				return "Ewol::Image";
+				return "widget::Image";
 			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);

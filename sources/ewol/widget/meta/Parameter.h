@@ -23,12 +23,17 @@
 extern const char * const ewolEventParameterClose;
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Parameter : public widget::PopUp {
 		public:
 			Parameter(void);
 			~Parameter(void);
 			// Derived function
-			virtual const char * const getObjectType(void) { return "EwolParameter"; };
+			virtual const char * const getObjectType(void) {
+				return "EwolParameter";
+			};
 			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function

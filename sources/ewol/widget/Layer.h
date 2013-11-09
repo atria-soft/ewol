@@ -15,6 +15,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Layer : public widget::ContainerN {
 		public:
 			/**
@@ -32,7 +35,7 @@ namespace widget {
 			virtual ~Layer(void);
 		public:
 			virtual const char * const getObjectType(void) {
-				return "Ewol::Layer";
+				return "widget::Layer";
 			};
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 	};

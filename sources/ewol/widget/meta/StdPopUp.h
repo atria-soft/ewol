@@ -13,14 +13,12 @@
 #include <ewol/widget/Label.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/Sizer.h>
-
 namespace widget {
 	/**
+	 * @ingroup ewolWidgetGroup
 	 * @brief The std pop up widget is a siple message widget to notyfy user of some simple things, like:
-	 */
-/**
- * @page DSP_Perfo Performances : 
-	 * <pre>
+	 *
+	 * ~~~~~~~~~~~~~~~~~~~~~
 	 * 	+---------------------------------+---+---+---+
 	 * 	| Windows name...                 | _ | O | X |
 	 * 	+---------------------------------+---+---+---+
@@ -39,7 +37,7 @@ namespace widget {
 	 * 	|                                             |
 	 * 	|                                             |
 	 * 	+---------------------------------------------+
-	 * </pre>
+	 * ~~~~~~~~~~~~~~~~~~~~~
 	 */
 	class StdPopUp : public widget::PopUp {
 		public:
@@ -77,11 +75,14 @@ namespace widget {
 			widget::Button* addButton(const etk::UString& _text, bool _autoExit=false);
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
-				return "ewol::StdPopUp";
+				return "widget::StdPopUp";
 			};
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 	};
+	/**
+	 * @}
+	 */
 };
 
 #endif

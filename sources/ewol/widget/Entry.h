@@ -21,13 +21,14 @@
 
 namespace widget {
 	/**
+	 * @ingroup ewolWidgetGroup
 	 * @brief Entry box display :
 	 *
-	 * @code
-	 *  ----------------------------------------------
-	 *  | Editable Text                              |
-	 *  ----------------------------------------------
-	 * @endcode
+	 * ~~~~~~~~~~~~~~~~~~~~~~
+	 * 	----------------------------------------------
+	 * 	| Editable Text                              |
+	 * 	----------------------------------------------
+	 * ~~~~~~~~~~~~~~~~~~~~~~
 	 */
 	class Entry : public ewol::Widget {
 		public:
@@ -200,7 +201,7 @@ namespace widget {
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			virtual void onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
 			virtual const char * const getObjectType(void) {
-				return "EwolEntry";
+				return "widget::Entry";
 			};
 			virtual void calculateMinMaxSize(void);
 		protected: // Derived function

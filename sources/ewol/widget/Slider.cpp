@@ -8,10 +8,9 @@
 
 #include <ewol/widget/Slider.h>
 
-#include <ewol/compositing/Drawing.h>
 #include <ewol/widget/WidgetManager.h>
 
-extern const char * const ewolEventSliderChange    = "ewol-event-slider-change";
+extern const char * const ewolEventSliderChange = "ewol-event-slider-change";
 
 #undef __class__
 #define __class__ "Slider"
@@ -74,29 +73,30 @@ void widget::Slider::setMax(int32_t _val) {
 	markToRedraw();
 }
 
+void widget::Slider::onDraw(void) {
+	m_draw.draw();
+}
+
 void widget::Slider::onRegenerateDisplay(void) {
-	if (true == needRedraw()) {
-		// clean the object list ...
-		clearOObjectList();
-		
-		ewol::Drawing * tmpDraw = new ewol::Drawing;
-		
-		tmpDraw->setColor(m_textColorFg);
-		// draw a line :
-		tmpDraw->setThickness(1);
-		tmpDraw->setPos(vec3(dotRadius, m_size.y()/2, 0) );
-		tmpDraw->lineTo(vec3(m_size.x()-dotRadius, m_size.y()/2, 0) );
-		tmpDraw->setThickness(0);
-		
-		etk::Color<> borderDot = m_textColorFg;
-		borderDot.setA(borderDot.a()/2);
-		tmpDraw->setPos(vec3(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
-		tmpDraw->setColorBg(borderDot);
-		tmpDraw->circle(dotRadius);
-		tmpDraw->setColorBg(m_textColorFg);
-		tmpDraw->circle(dotRadius/1.6);
-		addOObject(tmpDraw);
+	if (needRedraw() == false) {
+		return;
 	}
+	// clean the object list ...
+	m_draw.clear();
+	m_draw.setColor(m_textColorFg);
+	// draw a line :
+	m_draw.setThickness(1);
+	m_draw.setPos(vec3(dotRadius, m_size.y()/2, 0) );
+	m_draw.lineTo(vec3(m_size.x()-dotRadius, m_size.y()/2, 0) );
+	m_draw.setThickness(0);
+	
+	etk::Color<> borderDot = m_textColorFg;
+	borderDot.setA(borderDot.a()/2);
+	m_draw.setPos(vec3(4+((float)(m_value-m_min)/(float)(m_max-m_min))*(float)(m_size.x()-2*dotRadius), m_size.y()/2, 0) );
+	m_draw.setColorBg(borderDot);
+	m_draw.circle(dotRadius);
+	m_draw.setColorBg(m_textColorFg);
+	m_draw.circle(dotRadius/1.6);
 }
 
 bool widget::Slider::onEventInput(const ewol::EventInput& _event) {

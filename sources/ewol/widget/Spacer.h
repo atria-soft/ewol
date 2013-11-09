@@ -17,6 +17,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Spacer :public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -43,7 +46,9 @@ namespace widget {
 			void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
 		public:
 			// Derived function
-			virtual const char * const getObjectType(void) { return "ewol::spacer"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::Spacer";
+			};
 			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
 			virtual void onRegenerateDisplay(void);
 			virtual void onDraw(void);

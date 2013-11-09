@@ -15,6 +15,7 @@
 
 namespace widget {
 	/**
+	 * @ingroup ewolWidgetGroup
 	 * @brief the Cotainer widget is a widget that have an only one subWidget
 	 */
 	class Container : public ewol::Widget {
@@ -58,7 +59,7 @@ namespace widget {
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
 			virtual const char * const getObjectType(void) {
-				return "ewol::widget::Container";
+				return "widget::Container";
 			};
 			virtual bool loadXML(exml::Element* _node);
 			virtual void setOffset(const vec2& _newVal);

@@ -25,6 +25,9 @@ namespace widget {
 		CONTEXT_MENU_MARK_LEFT,
 		CONTEXT_MENU_MARK_NONE
 	}markPosition_te;
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class ContextMenu : public widget::Container {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -65,7 +68,7 @@ namespace widget {
 			virtual void calculateSize(const vec2& availlable);
 			virtual void calculateMinMaxSize(void);
 			virtual const char * const getObjectType(void) {
-				return "ewol::ContextMenu";
+				return "widget::ContextMenu";
 			};
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};

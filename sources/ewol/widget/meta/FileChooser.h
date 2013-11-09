@@ -19,6 +19,9 @@
 #include <ewol/widget/ListFileSystem.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class FileChooser : public widget::PopUp {
 		public:
 			// Event list of properties

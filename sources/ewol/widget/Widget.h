@@ -96,6 +96,9 @@ namespace ewol {
 			};
 			~EventShortCut(void) { };
 	};
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Widget : public EObject {
 		public:
 			// Config list of properties
@@ -122,7 +125,7 @@ namespace ewol {
 			 * @return true if the object is compatible, otherwise false
 			 */
 			virtual const char * const getObjectType(void) {
-				return "Ewol::Widget";
+				return "ewol::Widget";
 			};
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Hierarchy management:

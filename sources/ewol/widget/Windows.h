@@ -15,6 +15,9 @@
 #include <etk/Color.h>
 
 namespace ewol {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Windows :public ewol::Widget {
 		public:
 			Windows(void);

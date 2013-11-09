@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/widget/Drawable.h>
+#include <ewol/widget/Widget.h>
 #include <draw/Color.h>
 
 extern const char * const ewolEventJoystickEnable;
@@ -23,7 +23,10 @@ namespace widget {
 		JOYSTICK_NORMAL_MODE,
 		JOYSTICK_ARROW_MODE,
 	} joystickMode_te;
-	class Joystick :public widget::Drawable {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
+	class Joystick :public ewol::Widget {
 		private:
 			draw::Color m_colorFg; //!< Forground  color
 			draw::Color m_colorBg; //!< Background color
@@ -42,7 +45,9 @@ namespace widget {
 			Joystick(void);
 			virtual ~Joystick(void);
 			// Derived function
-			virtual const char * const getObjectType(void) { return "Ewol::Joystick"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::Joystick";
+			};
 			virtual void calculateSize(const vec2& availlable);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

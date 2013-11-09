@@ -28,13 +28,16 @@ namespace widget {
 			const char *m_generateEvent;
 			etk::UString m_message;
 	};
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Menu :public widget::Sizer {
 		public:
 			Menu(void);
 			virtual ~Menu(void);
 			// Derived functionv
 			virtual const char * const getObjectType(void) {
-				return "ewol::menu";
+				return "widget::Menu";
 			};
 		private:
 			virtual void subWidgetRemoveAll(void);

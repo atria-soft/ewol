@@ -18,6 +18,9 @@ extern const char * const ewolEventFSFolderSelect;
 extern const char * const ewolEventFSFolderValidate;
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class ListFileSystem : public widget::List {
 		private:
 			etk::Vector<etk::FSNode *> m_list;
@@ -37,7 +40,9 @@ namespace widget {
 			uint32_t getNuberOfRaw(void);
 			bool getElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
 			bool onItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
-			const char * const getObjectType(void) { return "EwolListFileSystem"; };
+			const char * const getObjectType(void) {
+				return "widget::ListFileSystem";
+			};
 		public:
 			// extern API :
 			void setFolder(etk::UString _newFolder);

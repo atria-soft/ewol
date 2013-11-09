@@ -17,6 +17,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class ProgressBar : public ewol::Widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
@@ -49,7 +52,7 @@ namespace widget {
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
 			virtual const char * const getObjectType(void) {
-				return "ewol::progressBar";
+				return "widget::ProgressBar";
 			};
 			virtual void calculateMinMaxSize(void);
 	};

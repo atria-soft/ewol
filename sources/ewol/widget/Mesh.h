@@ -17,6 +17,9 @@ extern const char * const ewolEventMeshPressed;
 
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Mesh :public ewol::Widget {
 		private:
 			// mesh name :
@@ -31,7 +34,9 @@ namespace widget {
 			Mesh(const etk::UString& filename); // automatic considering in the appl Data older
 			virtual ~Mesh(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "widget::Mesh"; };
+			virtual const char * const getObjectType(void) {
+				return "widget::Mesh";
+			};
 			virtual void onRegenerateDisplay(void);
 			virtual void systemDraw(const ewol::DrawProperty& displayProp);
 			virtual void onDraw(void);

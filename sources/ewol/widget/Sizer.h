@@ -15,6 +15,9 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
 	class Sizer : public widget::ContainerN {
 		public:
 			/**
@@ -108,7 +111,7 @@ namespace widget {
 			};
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
-				return "ewol::widget::Sizer";
+				return "widget::Sizer";
 			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void calculateMinMaxSize(void);

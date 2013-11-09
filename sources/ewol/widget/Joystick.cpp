@@ -64,7 +64,7 @@ void widget::Joystick::calculateSize(const vec2& availlable) {
 void widget::Joystick::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// clean the object list ...
-		clearOObjectList();
+		
 		/*
 		ewol::OObject2DColored * tmpOObjects = NULL;
 		ewol::OObject2DTextured * tmpOOtexBg = NULL;

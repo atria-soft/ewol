@@ -18,8 +18,10 @@
 extern const char * const ewolEventColorBarChange;
 
 namespace widget {
-	class ColorBar :public ewol::Widget
-	{
+	/**
+	 * @ingroup ewolWidgetGroup
+	 */
+	class ColorBar :public ewol::Widget {
 		public:
 			ColorBar(void);
 			virtual ~ColorBar(void);
