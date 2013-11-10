@@ -49,7 +49,7 @@ void ewol::dimension::unInit(void) {
 	windowsSize.set(vec2(9999999,88888), ewol::Dimension::Pixel);
 }
 
-void ewol::dimension::setPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type) {
+void ewol::dimension::setPixelRatio(const vec2& _ratio, enum ewol::Dimension::distance _type) {
 	ewol::dimension::init();
 	EWOL_INFO("Set a new screen ratio for the screen : ratio=" << _ratio << " type=" << _type);
 	ewol::Dimension conversion(_ratio, _type);
@@ -64,11 +64,11 @@ void ewol::dimension::setPixelWindowsSize(const vec2& _size) {
 	EWOL_VERBOSE("Set a new Windows property size " << windowsSize << "px");
 }
 
-vec2 ewol::dimension::getWindowsSize(ewol::Dimension::distance_te _type) {
+vec2 ewol::dimension::getWindowsSize(enum ewol::Dimension::distance _type) {
 	return windowsSize.get(_type);
 }
 
-float ewol::dimension::getWindowsDiag(ewol::Dimension::distance_te _type) {
+float ewol::dimension::getWindowsDiag(enum ewol::Dimension::distance _type) {
 	vec2 size = ewol::dimension::getWindowsSize(_type);
 	return size.length();
 }
@@ -79,7 +79,7 @@ ewol::Dimension::Dimension(void) :
 	// notinh to do ...
 }
 
-ewol::Dimension::Dimension(const vec2& _size, ewol::Dimension::distance_te _type) :
+ewol::Dimension::Dimension(const vec2& _size, enum ewol::Dimension::distance _type) :
   m_data(0,0),
   m_type(ewol::Dimension::Pixel) {
 	set(_size, _type);
@@ -88,7 +88,7 @@ ewol::Dimension::Dimension(const vec2& _size, ewol::Dimension::distance_te _type
 void ewol::Dimension::set(etk::UString _config) {
 	m_data.setValue(0,0);
 	m_type = ewol::Dimension::Pixel;
-	distance_te type = ewol::Dimension::Pixel;
+	enum distance type = ewol::Dimension::Pixel;
 	if (_config.endWith("%",false) == true) {
 		type = ewol::Dimension::Pourcent;
 		_config.remove(_config.size()-1, 1);
@@ -159,7 +159,7 @@ ewol::Dimension::operator etk::UString(void) const {
 	return str;
 }
 
-vec2 ewol::Dimension::get(ewol::Dimension::distance_te _type) const {
+vec2 ewol::Dimension::get(enum ewol::Dimension::distance _type) const {
 	switch(_type) {
 		case ewol::Dimension::Pourcent:
 			return getPourcent();
@@ -180,7 +180,7 @@ vec2 ewol::Dimension::get(ewol::Dimension::distance_te _type) const {
 	}
 }
 
-void ewol::Dimension::set(const vec2& _size, ewol::Dimension::distance_te _type) {
+void ewol::Dimension::set(const vec2& _size, enum ewol::Dimension::distance _type) {
 	// set min max on input to limit error : 
 	vec2 size(etk_avg(0.0f,_size.x(),9999999.0f),
 	          etk_avg(0.0f,_size.y(),9999999.0f));
@@ -263,34 +263,34 @@ vec2 ewol::Dimension::getFoot(void) const {
 	return ewol::Dimension::getMillimeter()*millimeterToFoot;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout &os, const ewol::Dimension::distance_te& obj) {
-	switch(obj) {
+etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::Dimension::distance _obj) {
+	switch(_obj) {
 		case ewol::Dimension::Pourcent:
-			os << "%";
+			_os << "%";
 			break;
 		case ewol::Dimension::Pixel:
-			os << "px";
+			_os << "px";
 			break;
 		case ewol::Dimension::Meter:
-			os << "m";
+			_os << "m";
 			break;
 		case ewol::Dimension::Centimeter:
-			os << "cm";
+			_os << "cm";
 			break;
 		case ewol::Dimension::Millimeter:
-			os << "mm";
+			_os << "mm";
 			break;
 		case ewol::Dimension::Kilometer:
-			os << "km";
+			_os << "km";
 			break;
 		case ewol::Dimension::Inch:
-			os << "in";
+			_os << "in";
 			break;
 		case ewol::Dimension::foot:
-			os << "ft";
+			_os << "ft";
 			break;
 	}
-	return os;
+	return _os;
 }
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::Dimension& _obj) {

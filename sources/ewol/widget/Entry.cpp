@@ -241,7 +241,7 @@ void widget::Entry::removeSelected(void) {
 }
 
 
-void widget::Entry::copySelectionToClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void widget::Entry::copySelectionToClipBoard(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	if (m_displayCursorPosSelection == m_displayCursorPos) {
 		// nothing to cut ...
 		return;
@@ -441,7 +441,7 @@ void widget::Entry::setInternalValue(const etk::UString& _newData) {
 	m_data = _newData;
 }
 
-void widget::Entry::onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void widget::Entry::onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :

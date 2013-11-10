@@ -30,7 +30,7 @@ widget::Joystick::Joystick(void) {
 	addEventId(ewolEventJoystickMove);
 	// by default the joy does not lock when free out
 	m_lock = false;
-	m_displayMode = widget::JOYSTICK_NORMAL_MODE;
+	m_displayMode = modeNormal;
 	
 	m_colorFg = draw::color::blue;
 	

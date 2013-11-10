@@ -23,18 +23,28 @@ namespace ewol {
 			virtual bool parse(const char* _line);
 			virtual void display(void) {};
 		public:
-			virtual type_te getType(void) { return ewol::PhysicsShape::capsule; };
+			virtual enum type getType(void) {
+				return ewol::PhysicsShape::capsule;
+			};
 		private:
 			float m_radius;
 		public:
-			float getRadius(void) const { return m_radius; };
+			float getRadius(void) const {
+				return m_radius;
+			};
 		private:
 			float m_height;
 		public:
-			float getHeight(void) const { return m_height; };
+			float getHeight(void) const {
+				return m_height;
+			};
 		public:
-			virtual const PhysicsCapsule* toCapsule(void) const { return this; };
-			virtual PhysicsCapsule* toCapsule(void) { return this; };
+			virtual const PhysicsCapsule* toCapsule(void) const {
+				return this;
+			};
+			virtual PhysicsCapsule* toCapsule(void) {
+				return this;
+			};
 	};
 };
 

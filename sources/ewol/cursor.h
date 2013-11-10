@@ -13,7 +13,7 @@
 #include <etk/Stream.h>
 namespace ewol
 {
-	typedef enum {
+	enum cursorDisplay {
 		cursorArrow, //  this is the normal arrow ...
 		cursorLeftArrow,
 		cursorInfo,
@@ -37,11 +37,11 @@ namespace ewol
 		cursorNone,
 		// just for the count:
 		cursorCount
-	} cursorDisplay_te;
+	};
 	/**
 	 * @brief Debug operator To display the curent element in a Human readable information
 	 */
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::cursorDisplay_te _obj);
+	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::cursorDisplay _obj);
 };
 
 #endif

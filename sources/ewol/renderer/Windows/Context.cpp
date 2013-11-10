@@ -130,7 +130,7 @@ class WindowsContext : public ewol::eContext {
 			// TODO : Later
 		}
 		
-		void ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void ClipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 			// this is to force the local system to think we have the buffer
 			// TODO : remove this 2 line when code will be writen
 			l_clipBoardOwnerStd = true;
@@ -156,7 +156,7 @@ class WindowsContext : public ewol::eContext {
 			}
 		}
 		
-		void ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void ClipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:
@@ -278,7 +278,7 @@ class WindowsContext : public ewol::eContext {
 					buttonIsDown = false;
 				case WM_KEYDOWN: {
 					etk::UChar tmpChar = 0;
-					ewol::keyEvent::keyboard_te keyInput;
+					enum ewol::keyEvent::keyboard keyInput;
 					switch (_wParam) {
 						//case 80: // keypad
 						case VK_UP:     keyInput = ewol::keyEvent::keyboardUp; break;

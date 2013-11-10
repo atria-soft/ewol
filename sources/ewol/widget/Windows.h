@@ -18,11 +18,11 @@ namespace ewol {
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
-	class Windows :public ewol::Widget {
+	class Windows : public ewol::Widget {
 		public:
 			Windows(void);
 			virtual ~Windows(void);
-		// internal event at ewol system : 
+		// internal event at ewol system :
 		public:
 			void sysDraw(void);
 			void sysOnShow(void) {};

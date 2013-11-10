@@ -39,12 +39,12 @@ namespace widget {
 			static const char* const configLock;
 			static const char* const configValue;
 			static const char* const configShaper;
-			typedef enum {
+			enum buttonLock{
 				lockNone, //!< normal status of the button
 				lockWhenPressed, //!< When the state is set in pressed, the status stay in this one
 				lockWhenReleased, //!< When the state is set in not pressed, the status stay in this one
 				lockAccess, //!< all event are trashed  == > acctivity of the button is disable
-			} buttonLock_te;
+			};
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
 		public:
@@ -107,18 +107,18 @@ namespace widget {
 				return m_value;
 			};
 		protected:
-			buttonLock_te m_lock; //!< Current lock state of the button.
+			enum buttonLock m_lock; //!< Current lock state of the button.
 		public:
 			/**
 			 * @brief set the button lock state.
 			 * @param[in] _lock New lock mode of the button
 			 */
-			void setLock(buttonLock_te _lock);
+			void setLock(enum buttonLock _lock);
 			/**
 			 * @brief get the current button lock value.
 			 * @return The requested lock mode
 			 */
-			buttonLock_te getLock(void) const {
+			enum buttonLock getLock(void) const {
 				return m_lock;
 			};
 		protected:

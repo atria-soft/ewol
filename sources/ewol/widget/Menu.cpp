@@ -165,7 +165,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 						                     tmpOri.y() );
 					}
 					
-					m_widgetContextMenu->setPositionMark(widget::CONTEXT_MENU_MARK_TOP, newPosition );
+					m_widgetContextMenu->setPositionMark(widget::ContextMenu::markTop, newPosition );
 					
 					widget::Sizer * mySizer = NULL;
 					widget::Button * myButton = NULL;

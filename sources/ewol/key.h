@@ -17,21 +17,21 @@ namespace ewol {
 		/**
 		 * @brief type of input : Note that the keyboard is not prevent due to the fact that data is too different
 		 */
-		typedef enum {
+		enum type {
 			typeUnknow = 0, //!< Unknow input Type
 			typeMouse,      //!< Mouse type
 			typeFinger,     //!< Finger type
 			typeStylet,     //!< Stylet type
 			typeCount       //!< number of types
-		} type_te;
+		};
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj);
+		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::keyEvent::type _obj);
 		/**
 		 * @brief Keybord event or joyestick event
 		 */
-		typedef enum {
+		enum status {
 			statusUnknow = 0,
 			statusDown, // availlable on Keyboard too
 			statusMove,
@@ -46,15 +46,15 @@ namespace ewol {
 			statusAbort, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has lost the events)
 			statusTransfert, // Appeare when an event is tranfert betwwen widgets (the widget which receive this has receive the transfert of the event)
 			statusCount, // number max of imput possible
-		} status_te;
+		};
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj);
+		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::keyEvent::status _obj);
 		/**
 		 * @brief Keybord event or joyestick event
 		 */
-		typedef enum {
+		enum keyboard {
 			keyboardUnknow = 0,    //!< Unknown keyboard key
 			keyboardChar,          //!< Char input is arrived ...
 			keyboardLeft,          //!< Left key <--
@@ -93,11 +93,11 @@ namespace ewol {
 			keyboardContextMenu,   //!< Contextual menu key.
 			keyboardNumLock,       //!< Numerical Lock key.
 			keyboardCount          //!< number of posible key
-		} keyboard_te;
+		};
 		/**
 		 * @brief Debug operator To display the curent element in a Human redeable information
 		 */
-		etk::CCout& operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj);
+		etk::CCout& operator <<(etk::CCout& _os, const enum ewol::keyEvent::keyboard _obj);
 		
 	};
 	

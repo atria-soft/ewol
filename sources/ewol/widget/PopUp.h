@@ -74,23 +74,23 @@ namespace widget {
 		private:
 			//float m_slidingProgress; //!< ratio progression of a sliding
 		public:
-			typedef enum {
+			enum animation {
 				animationNone, //!< No annimation
 				animationIncrease, //!< element came strart with no size and increase with the corect size.
-			} animation_te;
+			};
 		private:
-			animation_te m_animation; //!< Methode add and remove element (animation)
+			enum animation m_animation; //!< Methode add and remove element (animation)
 		public:
 			/**
 			 * @brief set an animation mode for the new element set in the Widget container.
 			 * @param[in] _animation The new animation mode.
 			 */
-			void setAnimationMode(animation_te _animation);
+			void setAnimationMode(enum animation _animation);
 			/**
 			 * @brief get the current animation mode.
 			 * @return The animation mode.
 			 */
-			animation_te getAnimationMode(void) const {
+			enum animation getAnimationMode(void) const {
 				return m_animation;
 			};
 			

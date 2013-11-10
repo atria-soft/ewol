@@ -16,15 +16,16 @@
 #include <ewol/compositing/Compositing.h>
 
 namespace widget {
-	typedef enum {
-		SCROLL_MODE_NORMAL, //!< No Zoom , can UP and down, left and right
-		SCROLL_MODE_CENTER, //!< Zoom enable, no move left and right
-		SCROLL_MODE_GAME, //!< Zoom enable, no move left and right
-	} scrollingMode_te;
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
 	class WidgetScrooled : public ewol::Widget {
+		public:
+			enum scrollingMode {
+				scroolModeNormal, //!< No Zoom , can UP and down, left and right
+				scroolModeCenter, //!< Zoom enable, no move left and right
+				scroolModeGame, //!< Zoom enable, no move left and right
+			};
 		private:
 			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
@@ -34,12 +35,12 @@ namespace widget {
 			vec2 m_maxSize;
 			float m_limitScrolling;
 		private:
-			scrollingMode_te m_scroollingMode; //!< mode of management of the scrooling
+			enum scrollingMode m_scroollingMode; //!< mode of management of the scrooling
 			float m_pixelScrolling;
 			vec2 m_highSpeedStartPos;
-			highSpeedMode_te m_highSpeedMode;
+			enum Scroll::highSpeedMode m_highSpeedMode;
 			int32_t m_highSpeedButton;
-			ewol::keyEvent::type_te m_highSpeedType;
+			enum ewol::keyEvent::type m_highSpeedType;
 		public:
 			WidgetScrooled(void);
 			virtual ~WidgetScrooled(void);
@@ -64,7 +65,7 @@ namespace widget {
 			 * @brief Specify the mode of scrolling for this windows
 			 * @param[in] _newMode the selected mode for the scrolling...
 			 */
-			void scroolingMode(scrollingMode_te _newMode);
+			void scroolingMode(enum scrollingMode _newMode);
 			/**
 			 * @brief set the specific mawimum size of the widget
 			 * @param[in] _localSize new Maximum size

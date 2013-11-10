@@ -15,7 +15,7 @@ static const char* l_listsladingMode[widget::WSlider::sladingTransition_count] =
 	"transition horisantal"
 };
 
-etk::CCout& operator <<(etk::CCout& _os, const widget::WSlider::sladingMode_te _obj) {
+etk::CCout& operator <<(etk::CCout& _os, const enum widget::WSlider::sladingMode _obj) {
 	_os << l_listsladingMode[_obj];
 	return _os;
 }
@@ -161,7 +161,7 @@ void widget::WSlider::subWidgetSelectSet(const etk::UString& _widgetName) {
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void widget::WSlider::setTransitionMode(widget::WSlider::sladingMode_te _mode) {
+void widget::WSlider::setTransitionMode(enum sladingMode _mode) {
 	if (m_transitionSlide != _mode) {
 		m_transitionSlide = _mode;
 		markToRedraw();
@@ -269,7 +269,7 @@ bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configMode) {
-		sladingMode_te tmpTransition = sladingTransitionHori;
+		enum sladingMode tmpTransition = sladingTransitionHori;
 		if(true == _conf.getData().compareNoCase("vert")) {
 			tmpTransition = sladingTransitionVert;
 		} else if(true == _conf.getData().compareNoCase("hori")) {

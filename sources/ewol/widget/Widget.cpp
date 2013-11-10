@@ -31,7 +31,7 @@ void ewol::DrawProperty::limit(const vec2& _origin, const vec2& _size) {
 #undef __class__
 #define __class__ "gravity"
 
-etk::UString ewol::gravityToString(const ewol::gravity_te _obj) {
+etk::UString ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {
 		case ewol::gravityCenter:
 			return "center";
@@ -55,7 +55,7 @@ etk::UString ewol::gravityToString(const ewol::gravity_te _obj) {
 	return "unknow";
 }
 
-ewol::gravity_te ewol::stringToGravity(const etk::UString& _obj) {
+enum ewol::gravity ewol::stringToGravity(const etk::UString& _obj) {
 	if (_obj == "center") {
 		return ewol::gravityCenter;
 	} else if (_obj == "top-left") {
@@ -78,7 +78,7 @@ ewol::gravity_te ewol::stringToGravity(const etk::UString& _obj) {
 	return ewol::gravityCenter;
 }
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::gravity_te _obj) {
+etk::CCout& ewol::operator <<(etk::CCout& _os, const enum ewol::gravity _obj) {
 	_os << ewol::gravityToString(_obj);
 	return _os;
 }
@@ -606,7 +606,7 @@ void ewol::Widget::shortCutClean(void) {
 
 bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
                                    etk::UChar _unicodeValue,
-                                   ewol::keyEvent::keyboard_te _kbMove,
+                                   enum ewol::keyEvent::keyboard _kbMove,
                                    bool _isDown) {
 	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
 		_unicodeValue += 'a' - 'A';
@@ -658,13 +658,13 @@ bool ewol::Widget::getGrabStatus(void) {
 	return m_grabCursor;
 }
 
-void ewol::Widget::setCursor(ewol::cursorDisplay_te _newCursor) {
+void ewol::Widget::setCursor(enum ewol::cursorDisplay _newCursor) {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
 	getContext().setCursor(m_cursorDisplay);
 }
 
-ewol::cursorDisplay_te ewol::Widget::getCursor(void) {
+enum ewol::cursorDisplay ewol::Widget::getCursor(void) {
 	return m_cursorDisplay;
 }
 
@@ -701,8 +701,7 @@ bool ewol::Widget::systemEventInput(ewol::EventInputSystem& _event) {
 	return onEventInput(_event.m_event);
 }
 
-
-void ewol::Widget::setGravity(gravity_te _gravity) {
+void ewol::Widget::setGravity(enum gravity _gravity) {
 	m_gravity = _gravity;
 	markToRedraw();
 }

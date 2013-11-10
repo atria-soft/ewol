@@ -42,13 +42,13 @@ void java_check_exception(JNIEnv* _env) {
 
 class AndroidContext : public ewol::eContext {
 	public:
-		typedef enum {
+		enum application {
 			appl_unknow,
 			appl_application,
 			appl_wallpaper
-		} application_te;
+		};
 	private:
-		application_te m_javaApplicationType;
+		enum application m_javaApplicationType;
 		// get a resources from the java environement : 
 		JNIEnv* m_JavaVirtualMachinePointer; //!< the JVM
 		jclass m_javaClassEwol; //!< main activity class (android ...)
@@ -75,7 +75,7 @@ class AndroidContext : public ewol::eContext {
 			return true;
 		}
 	public:
-		AndroidContext(JNIEnv* _env, jclass _classBase, jobject _objCallback, application_te _typeAPPL) :
+		AndroidContext(JNIEnv* _env, jclass _classBase, jobject _objCallback, enum application _typeAPPL) :
 		  m_javaApplicationType(_typeAPPL),
 		  m_JavaVirtualMachinePointer(NULL),
 		  m_javaClassEwol(0),
@@ -200,7 +200,7 @@ class AndroidContext : public ewol::eContext {
 			java_detach_current_thread(status);
 		}
 		
-		void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 			// this is to force the local system to think we have the buffer
 			// TODO : remove this 2 line when code will be writen
 			m_clipBoardOwnerStd = true;
@@ -225,7 +225,7 @@ class AndroidContext : public ewol::eContext {
 			}
 		}
 		
-		void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 			switch (_clipboardID) {
 				case ewol::clipBoard::clipboardSelection:
 					// NOTE : nothing to do : Windows deas ot supported Middle button
@@ -293,7 +293,7 @@ class AndroidContext : public ewol::eContext {
 		};
 		
 		// mode 0 : auto; 1 landscape, 2 portrait
-		void forceOrientation(ewol::orientation_te _orientation) {
+		void forceOrientation(enum ewol::orientation _orientation) {
 		#ifndef __ANDROID_PERMISSION__SET_ORIENTATION__
 			EWOL_ERROR("C->java : call set orientation without Allow application to do it ... Break...");
 			return;

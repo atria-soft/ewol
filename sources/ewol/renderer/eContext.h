@@ -23,33 +23,32 @@
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/commandLine.h>
 
-
-// TODO : remove this from here ...
-typedef enum {
-	THREAD_NONE,
-	THREAD_INIT,
-	THREAD_RECALCULATE_SIZE,
-	THREAD_RESIZE,
-	THREAD_HIDE,
-	THREAD_SHOW,
-	
-	THREAD_INPUT_MOTION,
-	THREAD_INPUT_STATE,
-	
-	THREAD_KEYBORAD_KEY,
-	THREAD_KEYBORAD_MOVE,
-	
-	THREAD_CLIPBOARD_ARRIVE,
-} theadMessage_te;
-// TODO : remove this from here ...
+// TODO : Remove this from here ...
 class eSystemMessage {
+	public:
+		enum theadMessage {
+			msgNone,
+			msgInit,
+			msgRecalculateSize,
+			msgResize,
+			msgHide,
+			msgShow,
+			
+			msgInputMotion,
+			msgInputState,
+			
+			msgKeyboardKey,
+			msgKeyboardMove,
+			
+			msgClipboardArrive
+		};
 	public :
 		// specify the message type
-		theadMessage_te TypeMessage;
+		enum theadMessage TypeMessage;
 		// can not set a union ...
-		ewol::clipBoard::clipboardListe_te clipboardID;
+		enum ewol::clipBoard::clipboardListe clipboardID;
 		// InputId
-		ewol::keyEvent::type_te inputType;
+		enum ewol::keyEvent::type inputType;
 		int32_t                 inputId;
 		// generic dimentions
 		vec2 dimention;
@@ -57,11 +56,11 @@ class eSystemMessage {
 		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
 		bool                        stateIsDown;
 		etk::UChar                   keyboardChar;
-		ewol::keyEvent::keyboard_te keyboardMove;
+		enum ewol::keyEvent::keyboard keyboardMove;
 		ewol::SpecialKey            keyboardSpecial;
 		
 		eSystemMessage(void) :
-			TypeMessage(THREAD_NONE),
+			TypeMessage(msgNone),
 			clipboardID(ewol::clipBoard::clipboardStd),
 			inputType(ewol::keyEvent::typeUnknow),
 			inputId(-1),
@@ -76,33 +75,43 @@ class eSystemMessage {
 };
 
 namespace ewol {
-	typedef enum {
-		SCREEN_ORIENTATION_AUTO = 0,
-		SCREEN_ORIENTATION_LANDSCAPE,
-		SCREEN_ORIENTATION_PORTRAIT,
-	} orientation_te;
+	enum orientation{
+		screenAuto = 0,
+		screenLandscape,
+		screenPortrait
+	};
 	
 	class eContext {
 		private:
 			ewol::CommandLine m_commandLine; //!< Start command line information
 		public:
-			ewol::CommandLine& getCmd(void) { return m_commandLine; };
+			ewol::CommandLine& getCmd(void) {
+				return m_commandLine;
+			};
 		private:
 			ewol::ConfigFont m_configFont; //!< global font configuration
 		public:
-			ewol::ConfigFont& getFontDefault(void) { return m_configFont; };
+			ewol::ConfigFont& getFontDefault(void) {
+				return m_configFont;
+			};
 		private:
 			ewol::WidgetManager m_widgetManager; //!< global widget manager
 		public:
-			ewol::WidgetManager& getWidgetManager(void) { return m_widgetManager; };
+			ewol::WidgetManager& getWidgetManager(void) {
+				return m_widgetManager;
+			};
 		private:
 			ewol::EObjectManager m_EObjectManager; //!< eObject Manager main instance
 		public:
-			ewol::EObjectManager& getEObjectManager(void) { return m_EObjectManager; };
+			ewol::EObjectManager& getEObjectManager(void) {
+				return m_EObjectManager;
+			};
 		private:
 			ewol::ResourceManager m_resourceManager; //!< global resources Manager
 		public:
-			ewol::ResourceManager& getResourcesManager(void) { return m_resourceManager; };
+			ewol::ResourceManager& getResourcesManager(void) {
+				return m_resourceManager;
+			};
 		public:
 			eContext(int32_t _argc=0, const char* _argv[]=NULL);
 			virtual ~eContext(void);
@@ -134,7 +143,6 @@ namespace ewol {
 			
 			virtual void setArchiveDir(int _mode, const char* _str);
 			
-			
 			virtual void OS_SetInputMotion(int _pointerID, const vec2& _pos);
 			virtual void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos);
 			
@@ -146,7 +154,7 @@ namespace ewol {
 			                            bool _isDown,
 			                            bool _isARepeateKey=false);
 			virtual void OS_SetKeyboardMove(ewol::SpecialKey& _special,
-			                                ewol::keyEvent::keyboard_te _move,
+			                                enum ewol::keyEvent::keyboard _move,
 			                                bool _isDown,
 			                                bool _isARepeateKey=false);
 			/**
@@ -158,8 +166,6 @@ namespace ewol {
 			 */
 			virtual void OS_Resume(void);
 			
-			//virtual void OS_SetClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
-			
 			void requestUpdateSize(void);
 			
 			// return true if a flush is needed
@@ -169,7 +175,7 @@ namespace ewol {
 			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void onObjectRemove(ewol::EObject * removeObject);
+			void onObjectRemove(ewol::EObject* _removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
@@ -282,17 +288,17 @@ namespace ewol {
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
+			virtual void clipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) { };
 			/**
 			 * @brief Inform the Gui that we are the new owner of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) { };
+			virtual void clipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) { };
 			/**
 			 * @brief Call by the OS when a clipboard arrive to US (previously requested by a widget)
 			 * @param[in] Id of the clipboard
 			 */
-			void OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID);
+			void OS_ClipBoardArrive(enum ewol::clipBoard::clipboardListe _clipboardID);
 			/**
 			 * @brief set the new title of the windows
 			 * @param[in] title New desired title
@@ -302,7 +308,7 @@ namespace ewol {
 			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.
 			 */
-			virtual void forceOrientation(ewol::orientation_te _orientation) { };
+			virtual void forceOrientation(enum ewol::orientation _orientation) { };
 			/**
 			 * @brief get all the event from the X system
 			 * @param[in] _isGrabbed "true" if all the event will be get, false if we want only ours.
@@ -313,7 +319,7 @@ namespace ewol {
 			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void setCursor(ewol::cursorDisplay_te _newCursor) { };
+			virtual void setCursor(enum ewol::cursorDisplay _newCursor) { };
 			/**
 			 * @brief set the Icon of the program
 			 * @param[in] _inputFile new filename icon of the curent program.

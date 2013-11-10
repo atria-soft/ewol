@@ -25,7 +25,7 @@ static const char* statusDescriptionString[ewol::keyEvent::statusCount+1] = {
 	"statusCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::status_te _obj) {
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const enum ewol::keyEvent::status _obj) {
 	if (_obj >= 0 && _obj <ewol::keyEvent::statusCount) {
 		_os << statusDescriptionString[_obj];
 	} else {
@@ -76,7 +76,7 @@ static const char* keyboardDescriptionString[ewol::keyEvent::keyboardCount+1] = 
 	"keyboardCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::keyboard_te _obj) {
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const enum ewol::keyEvent::keyboard _obj) {
 	if (_obj >= 0 && _obj <ewol::keyEvent::keyboardCount) {
 		_os << keyboardDescriptionString[_obj];
 	} else {
@@ -93,7 +93,7 @@ static const char* typeDescriptionString[ewol::keyEvent::typeCount+1] = {
 	"typeCount"
 };
 
-etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const ewol::keyEvent::type_te _obj) {
+etk::CCout& ewol::keyEvent::operator <<(etk::CCout& _os, const enum ewol::keyEvent::type _obj) {
 	if (_obj >= 0 && _obj < ewol::keyEvent::typeCount) {
 		_os << typeDescriptionString[_obj];
 	} else {

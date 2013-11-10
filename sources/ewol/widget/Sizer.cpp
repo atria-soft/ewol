@@ -22,7 +22,7 @@ void widget::Sizer::init(ewol::WidgetManager& _widgetManager) {
 }
 
 
-widget::Sizer::Sizer(widget::Sizer::displayMode_te _mode):
+widget::Sizer::Sizer(enum displayMode _mode):
   m_mode(_mode),
   m_borderSize(),
   m_animation(animationNone),
@@ -44,13 +44,13 @@ void widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
 	requestUpdateSize();
 }
 
-void widget::Sizer::setMode(widget::Sizer::displayMode_te _mode) {
+void widget::Sizer::setMode(enum displayMode _mode) {
 	m_mode = _mode;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-widget::Sizer::displayMode_te widget::Sizer::getMode(void) {
+enum widget::Sizer::displayMode widget::Sizer::getMode(void) {
 	return m_mode;
 }
 

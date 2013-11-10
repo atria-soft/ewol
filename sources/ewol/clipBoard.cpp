@@ -41,7 +41,7 @@ static const char* clipboardDescriptionString[ewol::clipBoard::clipboardCount+1]
 	"clipboardCount"
 };
 
-etk::CCout& ewol::clipBoard::operator <<(etk::CCout& _os, const ewol::clipBoard::clipboardListe_te _obj) {
+etk::CCout& ewol::clipBoard::operator <<(etk::CCout& _os, const enum ewol::clipBoard::clipboardListe _obj) {
 	if (_obj >= 0 && _obj <ewol::clipBoard::clipboardCount) {
 		_os << clipboardDescriptionString[_obj];
 	} else {
@@ -67,7 +67,7 @@ void ewol::clipBoard::unInit(void) {
 }
 
 
-void ewol::clipBoard::set(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data) {
+void ewol::clipBoard::set(enum ewol::clipBoard::clipboardListe _clipboardID, const etk::UString& _data) {
 	// check if ID is correct
 	if(0 == _data.size()) {
 		EWOL_INFO("request a copy of nothing");
@@ -89,7 +89,7 @@ void ewol::clipBoard::set(ewol::clipBoard::clipboardListe_te _clipboardID, const
 }
 
 
-void ewol::clipBoard::request(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void ewol::clipBoard::request(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
 		return;
@@ -107,7 +107,7 @@ void ewol::clipBoard::request(ewol::clipBoard::clipboardListe_te _clipboardID) {
 }
 
 
-void ewol::clipBoard::setSystem(ewol::clipBoard::clipboardListe_te _clipboardID, const etk::UString& _data) {
+void ewol::clipBoard::setSystem(enum ewol::clipBoard::clipboardListe _clipboardID, const etk::UString& _data) {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
 		return;
@@ -117,7 +117,7 @@ void ewol::clipBoard::setSystem(ewol::clipBoard::clipboardListe_te _clipboardID,
 }
 
 
-const etk::UString& ewol::clipBoard::get(ewol::clipBoard::clipboardListe_te _clipboardID) {
+const etk::UString& ewol::clipBoard::get(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	static const etk::UString emptyString("");
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");

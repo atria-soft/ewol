@@ -90,29 +90,29 @@ void ewol::eContext::processEvents(void) {
 		m_msgSystem.wait(data);
 		//EWOL_DEBUG("EVENT");
 		switch (data.TypeMessage) {
-			case THREAD_INIT:
+			case eSystemMessage::msgInit:
 				// this is due to the openGL context
 				/*bool returnVal = */APP_Init(*this);
 				break;
-			case THREAD_RECALCULATE_SIZE:
+			case eSystemMessage::msgRecalculateSize:
 				forceRedrawAll();
 				break;
-			case THREAD_RESIZE:
+			case eSystemMessage::msgResize:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
 				m_windowsSize = data.dimention;
 				ewol::dimension::setPixelWindowsSize(m_windowsSize);
 				forceRedrawAll();
 				break;
-			case THREAD_INPUT_MOTION:
+			case eSystemMessage::msgInputMotion:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
 				m_input.motion(data.inputType, data.inputId, data.dimention);
 				break;
-			case THREAD_INPUT_STATE:
+			case eSystemMessage::msgInputState:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
 				m_input.state(data.inputType, data.inputId, data.stateIsDown, data.dimention);
 				break;
-			case THREAD_KEYBORAD_KEY:
-			case THREAD_KEYBORAD_MOVE:
+			case eSystemMessage::msgKeyboardKey:
+			case eSystemMessage::msgKeyboardMove:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				if (NULL != m_windowsCurrent) {
 					if (false == m_windowsCurrent->onEventShortCut(data.keyboardSpecial,
@@ -133,7 +133,7 @@ void ewol::eContext::processEvents(void) {
 								                                      data.keyboardMove,
 								                                      data.stateIsDown) ) {
 									// generate the direct event ...
-									if (data.TypeMessage == THREAD_KEYBORAD_KEY) {
+									if (data.TypeMessage == eSystemMessage::msgKeyboardKey) {
 										ewol::EventEntrySystem tmpEntryEvent(ewol::keyEvent::keyboardChar,
 										                                     ewol::keyEvent::statusUp,
 										                                     data.keyboardSpecial,
@@ -161,7 +161,7 @@ void ewol::eContext::processEvents(void) {
 					}
 				}
 				break;
-			case THREAD_CLIPBOARD_ARRIVE:
+			case eSystemMessage::msgClipboardArrive:
 				{
 					ewol::Widget * tmpWidget = m_widgetManager.focusGet();
 					if (tmpWidget != NULL) {
@@ -169,13 +169,13 @@ void ewol::eContext::processEvents(void) {
 					}
 				}
 				break;
-			case THREAD_HIDE:
-				EWOL_DEBUG("Receive MSG : THREAD_HIDE");
+			case eSystemMessage::msgHide:
+				EWOL_DEBUG("Receive MSG : msgHide");
 				//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
 				//gui_uniqueWindows->SysOnHide();
 				break;
-			case THREAD_SHOW:
-				EWOL_DEBUG("Receive MSG : THREAD_SHOW");
+			case eSystemMessage::msgShow:
+				EWOL_DEBUG("Receive MSG : msgShow");
 				//guiAbstraction::SendKeyboardEventMove(tmpData->isDown, tmpData->move);
 				//gui_uniqueWindows->SysOnShow();
 				break;
@@ -232,22 +232,22 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	// parse the debug level:
 	for(esize_t iii=m_commandLine.size()-1 ; iii >= 0 ; --iii) {
 		if (m_commandLine.get(iii) == "-l0") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_NONE);
+			debug::setGeneralLevel(etk::logLevelNone);
 		} else if (m_commandLine.get(iii) == "-l1") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_CRITICAL);
+			debug::setGeneralLevel(etk::logLevelCritical);
 		} else if (m_commandLine.get(iii) == "-l2") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_ERROR);
+			debug::setGeneralLevel(etk::logLevelError);
 		} else if (m_commandLine.get(iii) == "-l3") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_WARNING);
+			debug::setGeneralLevel(etk::logLevelWarning);
 		} else if (m_commandLine.get(iii) == "-l4") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_INFO);
+			debug::setGeneralLevel(etk::logLevelInfo);
 		} else if (m_commandLine.get(iii) == "-l5") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_DEBUG);
+			debug::setGeneralLevel(etk::logLevelDebug);
 		} else if(    m_commandLine.get(iii) == "-l6"
 		           || m_commandLine.get(iii) == "-l7"
 		           || m_commandLine.get(iii) == "-l8"
 		           || m_commandLine.get(iii) == "-l9") {
-			debug::setGeneralLevel(etk::LOG_LEVEL_VERBOSE);
+			debug::setGeneralLevel(etk::logLevelVerbose);
 		} else if (m_commandLine.get(iii) == "-fps") {
 			m_displayFps=true;
 		} else {
@@ -263,17 +263,17 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	// request the init of the application in the main context of openGL ...
 	{
 		eSystemMessage data;
-		data.TypeMessage = THREAD_INIT;
+		data.TypeMessage = eSystemMessage::msgInit;
 		m_msgSystem.post(data);
 	}
 	// force a recalculation
 	requestUpdateSize();
 	#if defined(__EWOL_ANDROID_ORIENTATION_LANDSCAPE__)
-		forceOrientation(ewol::SCREEN_ORIENTATION_LANDSCAPE);
+		forceOrientation(ewol::screenLandscape);
 	#elif defined(__EWOL_ANDROID_ORIENTATION_PORTRAIT__)
-		forceOrientation(ewol::SCREEN_ORIENTATION_PORTRAIT);
+		forceOrientation(ewol::screenPortrait);
 	#else
-		forceOrientation(ewol::SCREEN_ORIENTATION_AUTO);
+		forceOrientation(ewol::screenAuto);
 	#endif
 	// release the curent interface :
 	unLockContext();
@@ -302,7 +302,7 @@ ewol::eContext::~eContext(void) {
 
 void ewol::eContext::requestUpdateSize(void) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_RECALCULATE_SIZE;
+	data.TypeMessage = eSystemMessage::msgRecalculateSize;
 	m_msgSystem.post(data);
 }
 
@@ -310,14 +310,14 @@ void ewol::eContext::OS_Resize(const vec2& _size) {
 	// TODO : Better in the thread ...  == > but generate some init error ...
 	ewol::dimension::setPixelWindowsSize(_size);
 	eSystemMessage data;
-	data.TypeMessage = THREAD_RESIZE;
+	data.TypeMessage = eSystemMessage::msgResize;
 	data.dimention = _size;
 	m_msgSystem.post(data);
 }
 void ewol::eContext::OS_Move(const vec2& _pos) {
 	/*
 	eSystemMessage data;
-	data.TypeMessage = THREAD_RESIZE;
+	data.TypeMessage = eSystemMessage::msgResize;
 	data.resize.w = w;
 	data.resize.h = h;
 	m_msgSystem.Post(data);
@@ -326,7 +326,7 @@ void ewol::eContext::OS_Move(const vec2& _pos) {
 
 void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_INPUT_MOTION;
+	data.TypeMessage = eSystemMessage::msgInputMotion;
 	data.inputType = ewol::keyEvent::typeFinger;
 	data.inputId = _pointerID;
 	data.dimention = _pos;
@@ -335,7 +335,7 @@ void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
 
 void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_INPUT_STATE;
+	data.TypeMessage = eSystemMessage::msgInputState;
 	data.inputType = ewol::keyEvent::typeFinger;
 	data.inputId = _pointerID;
 	data.stateIsDown = _isDown;
@@ -345,7 +345,7 @@ void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& 
 
 void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_INPUT_MOTION;
+	data.TypeMessage = eSystemMessage::msgInputMotion;
 	data.inputType = ewol::keyEvent::typeMouse;
 	data.inputId = _pointerID;
 	data.dimention = _pos;
@@ -354,7 +354,7 @@ void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
 
 void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos ) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_INPUT_STATE;
+	data.TypeMessage = eSystemMessage::msgInputState;
 	data.inputType = ewol::keyEvent::typeMouse;
 	data.inputId = _pointerID;
 	data.stateIsDown = _isDown;
@@ -367,7 +367,7 @@ void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
                                     bool _isDown,
                                     bool _isARepeateKey) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_KEYBORAD_KEY;
+	data.TypeMessage = eSystemMessage::msgKeyboardKey;
 	data.stateIsDown = _isDown;
 	data.keyboardChar = _myChar;
 	data.keyboardSpecial = _special;
@@ -376,11 +376,11 @@ void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
 }
 
 void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
-                                        ewol::keyEvent::keyboard_te _move,
+                                        enum ewol::keyEvent::keyboard _move,
                                         bool _isDown,
                                         bool _isARepeateKey) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_KEYBORAD_MOVE;
+	data.TypeMessage = eSystemMessage::msgKeyboardMove;
 	data.stateIsDown = _isDown;
 	data.keyboardMove = _move;
 	data.keyboardSpecial = _special;
@@ -390,20 +390,20 @@ void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
 
 void ewol::eContext::OS_Hide(void) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_HIDE;
+	data.TypeMessage = eSystemMessage::msgHide;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Show(void) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_SHOW;
+	data.TypeMessage = eSystemMessage::msgShow;
 	m_msgSystem.post(data);
 }
 
 
-void ewol::eContext::OS_ClipBoardArrive(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void ewol::eContext::OS_ClipBoardArrive(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	eSystemMessage data;
-	data.TypeMessage = THREAD_CLIPBOARD_ARRIVE;
+	data.TypeMessage = eSystemMessage::msgClipboardArrive;
 	data.clipboardID = _clipboardID;
 	m_msgSystem.post(data);
 }

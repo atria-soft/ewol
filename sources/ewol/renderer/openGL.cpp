@@ -182,7 +182,7 @@ static correspondenceTable_ts basicFlag[] = {
 static int32_t basicFlagCount = sizeof(basicFlag) / sizeof(correspondenceTable_ts);
 
 
-void ewol::openGL::enable(ewol::openGL::openGlFlags_te _flagID) {
+void ewol::openGL::enable(enum ewol::openGL::openGlFlags _flagID) {
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {
@@ -196,7 +196,7 @@ void ewol::openGL::enable(ewol::openGL::openGlFlags_te _flagID) {
 	#endif
 }
 
-void ewol::openGL::disable(ewol::openGL::openGlFlags_te _flagID) {
+void ewol::openGL::disable(enum ewol::openGL::openGlFlags _flagID) {
 	#ifdef DIRECT_MODE
 	for (int32_t iii=0; iii<basicFlagCount ; iii++) {
 		if ( basicFlag[iii].curentFlag == (uint32_t)_flagID ) {

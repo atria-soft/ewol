@@ -23,14 +23,22 @@ namespace ewol {
 			virtual bool parse(const char* _line);
 			virtual void display(void) {};
 		public:
-			virtual type_te getType(void) { return ewol::PhysicsShape::cylinder; };
+			virtual enum type getType(void) {
+				return ewol::PhysicsShape::cylinder;
+			};
 		private:
 			vec3 m_size;
 		public:
-			vec3 getSize(void) const { return m_size; };
+			vec3 getSize(void) const {
+				return m_size;
+			};
 		public:
-			virtual const PhysicsCylinder* toCylinder(void) const { return this; };
-			virtual PhysicsCylinder* toCylinder(void) { return this; };
+			virtual const PhysicsCylinder* toCylinder(void) const {
+				return this;
+			};
+			virtual PhysicsCylinder* toCylinder(void) {
+				return this;
+			};
 	};
 };
 

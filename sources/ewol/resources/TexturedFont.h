@@ -15,14 +15,14 @@
 
 namespace ewol {
 	namespace font {
-		typedef enum {
+		enum mode {
 			Regular=0,
 			Italic,
 			Bold,
 			BoldItalic,
-		} mode_te;
+		};
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj);
+	etk::CCout& operator <<(etk::CCout& _os, enum ewol::font::mode _obj);
 	
 	class TexturedFont : public ewol::Texture {
 		private:
@@ -33,7 +33,7 @@ namespace ewol {
 			//  == > otherwise I can just generate italic ...
 			//  == > Bold is a little more complicated (maybe with the bordersize)
 			ewol::FontBase* m_font[4];
-			ewol::font::mode_te m_modeWraping[4];     //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
+			enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 		public:
 			etk::Vector<GlyphProperty> m_listElement[4];
 		private:
@@ -52,7 +52,7 @@ namespace ewol {
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return Dimention of the font need between 2 lines
 			 */
-			int32_t getHeight(const ewol::font::mode_te _displayMode = ewol::font::Regular) {
+			int32_t getHeight(const enum ewol::font::mode _displayMode = ewol::font::Regular) {
 				return m_height[_displayMode];
 			};
 			/**
@@ -68,21 +68,21 @@ namespace ewol {
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t getIndex(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode);
+			int32_t getIndex(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode);
 			/**
 			 * @brief get the pointer on the coresponding glyph
 			 * @param[in] _charcode The unicodeValue
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The pointer on the glyph  == > never NULL
 			 */
-			ewol::GlyphProperty* getGlyphPointer(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode);
+			ewol::GlyphProperty* getGlyphPointer(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode);
 			/**
 			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 			 *        For exemple when a blod mode does not exist, this resend a regular mode.
 			 * @param[in] _source The requested mode.
 			 * @return the best mode we have in stock.
 			 */
-			ewol::font::mode_te getWrappingMode(ewol::font::mode_te _source) {
+			enum ewol::font::mode getWrappingMode(const enum ewol::font::mode _source) {
 				return m_modeWraping[_source];
 			};
 		public:

@@ -15,13 +15,13 @@
 namespace ewol {
 	class EventEntry {
 		private:
-			ewol::keyEvent::keyboard_te m_type; //!< type of hardware event
-			ewol::keyEvent::status_te m_status; //!< status of hardware event
+			enum ewol::keyEvent::keyboard m_type; //!< type of hardware event
+			enum ewol::keyEvent::status m_status; //!< status of hardware event
 			ewol::SpecialKey m_specialKey; //!< input key status (prevent change in time..)
 			etk::UChar m_unicodeData; //!< Unicode data (in some case)
 		public:
-			EventEntry(ewol::keyEvent::keyboard_te _type,
-			           ewol::keyEvent::status_te _status,
+			EventEntry(enum ewol::keyEvent::keyboard _type,
+			           enum ewol::keyEvent::status _status,
 			           ewol::SpecialKey _specialKey,
 			           etk::UChar _char) :
 				m_type(_type),
@@ -29,16 +29,16 @@ namespace ewol {
 				m_specialKey(_specialKey),
 				m_unicodeData(_char)
 			{ };
-			void setType(ewol::keyEvent::keyboard_te _type) {
+			void setType(enum ewol::keyEvent::keyboard _type) {
 				m_type = _type;
 			};
-			inline const ewol::keyEvent::keyboard_te& getType(void) const {
+			inline const enum ewol::keyEvent::keyboard& getType(void) const {
 				return m_type;
 			};
-			void setStatus(ewol::keyEvent::status_te _status) {
+			void setStatus(enum ewol::keyEvent::status _status) {
 				m_status = _status;
 			};
-			inline const ewol::keyEvent::status_te& getStatus(void) const {
+			inline const enum ewol::keyEvent::status& getStatus(void) const {
 				return m_status;
 			};
 			void setSpecialKey(const ewol::SpecialKey& _specialKey) {
@@ -58,8 +58,8 @@ namespace ewol {
 	
 	class EventEntrySystem {
 		public:
-			EventEntrySystem(ewol::keyEvent::keyboard_te _type,
-			                 ewol::keyEvent::status_te _status,
+			EventEntrySystem(enum ewol::keyEvent::keyboard _type,
+			                 enum ewol::keyEvent::status _status,
 			                 ewol::SpecialKey _specialKey,
 			                 etk::UChar _char) :
 				m_event(_type, _status, _specialKey, _char)

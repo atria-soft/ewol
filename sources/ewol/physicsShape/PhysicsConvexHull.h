@@ -23,18 +23,28 @@ namespace ewol {
 			virtual bool parse(const char* _line);
 			virtual void display(void) {};
 		public:
-			virtual type_te getType(void) { return ewol::PhysicsShape::convexHull; };
+			virtual enum type getType(void) {
+				return ewol::PhysicsShape::convexHull;
+			};
 		private:
 			vec3 m_scale;
 		public:
-			vec3 getScale(void) const { return m_scale; };
+			vec3 getScale(void) const {
+				return m_scale;
+			};
 		private:
 			etk::Vector<vec3> m_points;
 		public:
-			const etk::Vector<vec3>& getPointList(void) const { return m_points; };
+			const etk::Vector<vec3>& getPointList(void) const {
+				return m_points;
+			};
 		public:
-			virtual const PhysicsConvexHull* toConvexHull(void) const { return this; };
-			virtual PhysicsConvexHull* toConvexHull(void) { return this; };
+			virtual const PhysicsConvexHull* toConvexHull(void) const {
+				return this;
+			};
+			virtual PhysicsConvexHull* toConvexHull(void) {
+				return this;
+			};
 	};
 };
 

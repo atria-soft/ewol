@@ -181,7 +181,7 @@ bool widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
 				}
 				vec2 tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
 				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
-				m_widgetContextMenu->setPositionMark(widget::CONTEXT_MENU_MARK_BOTTOM, tmpPos );
+				m_widgetContextMenu->setPositionMark(widget::ContextMenu::markButtom, tmpPos );
 				
 				widget::ColorChooser * myColorChooser = new widget::ColorChooser();
 				myColorChooser->setColor(m_textColorFg);

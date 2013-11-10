@@ -37,41 +37,42 @@ namespace ewol {
 	class eInput {
 		// special grab pointer mode : 
 		private:
-			ewol::Widget*   m_grabWidget;      //!< widget that grab the curent pointer.
+			ewol::Widget* m_grabWidget; //!< widget that grab the curent pointer.
 		private:
-			int32_t         m_dpi;
-			inputLimit_ts   m_eventInputLimit;
-			inputLimit_ts   m_eventMouseLimit;
+			int32_t m_dpi;
+			inputLimit_ts m_eventInputLimit;
+			inputLimit_ts m_eventMouseLimit;
 			void calculateLimit(void);
 			InputPoperty_ts m_eventInputSaved[MAX_MANAGE_INPUT];
 			InputPoperty_ts m_eventMouseSaved[MAX_MANAGE_INPUT];
-			void abortElement(InputPoperty_ts *eventTable, int32_t idInput, ewol::keyEvent::type_te _type);
-			void cleanElement(InputPoperty_ts *eventTable, int32_t idInput);
+			void abortElement(InputPoperty_ts* _eventTable, int32_t _idInput, enum ewol::keyEvent::type _type);
+			void cleanElement(InputPoperty_ts* _eventTable, int32_t _idInput);
 			/**
 			 * @brief generate the event on the destinated widget.
-			 * @param[in] type Type of the event that might be sended.
-			 * @param[in] destWidget Pointer on the requested widget that element might be sended
-			 * @param[in] IdInput Id of the event (PC : [0..9] and touch : [1..9])
-			 * @param[in] typeEvent type of the eventg generated
-			 * @param[in] pos position of the event
+			 * @param[in] _type Type of the event that might be sended.
+			 * @param[in] _destWidget Pointer on the requested widget that element might be sended
+			 * @param[in] _IdInput Id of the event (PC : [0..9] and touch : [1..9])
+			 * @param[in] _typeEvent type of the eventg generated
+			 * @param[in] _pos position of the event
 			 * @return true if event has been greped
 			 */
-			bool localEventInput(ewol::keyEvent::type_te type,
-			                     ewol::Widget* destWidget,
-			                     int32_t IdInput,
-			                     ewol::keyEvent::status_te typeEvent,
-			                     vec2 pos);
+			bool localEventInput(enum ewol::keyEvent::type _type,
+			                     ewol::Widget* _destWidget,
+			                     int32_t _IdInput,
+			                     enum ewol::keyEvent::status _typeEvent,
+			                     vec2 _pos);
 			/**
 			 * @brief convert the system event id in the correct EWOL id depending of the system management mode
 			 *        This function find the next input id unused on the specifiic widget
 			 *             == > on PC, the ID does not change (GUI is not the same)
-			 * @param[in] destWidget Pointer of the widget destination
-			 * @param[in] realInputId system Id
+			 * @param[in] _type Type of the kay event.
+			 * @param[in] _destWidget Pointer of the widget destination
+			 * @param[in] _realInputId system Id
 			 * @return the ewol input id
 			 */
-			int32_t localGetDestinationId(ewol::keyEvent::type_te type,
-			                              ewol::Widget* destWidget,
-			                              int32_t realInputId);
+			int32_t localGetDestinationId(enum ewol::keyEvent::type _type,
+			                              ewol::Widget* _destWidget,
+			                              int32_t _realInputId);
 		private:
 			ewol::eContext& m_context;
 		public:
@@ -80,34 +81,30 @@ namespace ewol {
 			void setDpi(int32_t newDPI);
 			
 			// note if id<0  == > the it was finger event ...
-			void motion(ewol::keyEvent::type_te type, int pointerID, vec2  pos );
-			void state(ewol::keyEvent::type_te type, int pointerID, bool isDown, vec2  pos);
+			void motion(enum ewol::keyEvent::type _type, int _pointerID, vec2 _pos );
+			void state(enum ewol::keyEvent::type _type, int _pointerID, bool _isDown, vec2 _pos);
 			
 			/**
 			 * @brief Inform object that an other object is removed ...
 			 * @param[in] removeObject Pointer on the EObject remeved  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
-			 * @return ---
 			 */
-			void onObjectRemove(ewol::EObject * removeObject);
+			void onObjectRemove(ewol::EObject* _removeObject);
 			/**
 			 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
-			 * @param ---
-			 * @return ---
 			 */
 			void newLayerSet(void);
 			/**
 			 * @brief This is to transfert the event from one widget to another one
-			 * @param source the widget where the event came from
-			 * @param destination the widget where the event mitgh be generated now
-			 * @return ---
+			 * @param _source the widget where the event came from
+			 * @param _destination the widget where the event mitgh be generated now
 			 */
-			void transfertEvent(ewol::Widget* source, ewol::Widget* destination);
+			void transfertEvent(ewol::Widget* _source, ewol::Widget* _destination);
 			/**
 			 * @brief This fonction lock the pointer properties to move in relative instead of absolute
-			 * @param[in] widget The widget that lock the pointer events
+			 * @param[in] _widget The widget that lock the pointer events
 			 */
-			void grabPointer(ewol::Widget* widget);
+			void grabPointer(ewol::Widget* _widget);
 			/**
 			 * @brief This fonction un-lock the pointer properties to move in relative instead of absolute
 			 */

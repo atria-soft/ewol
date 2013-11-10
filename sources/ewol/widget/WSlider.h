@@ -27,11 +27,11 @@ namespace widget {
 			static const char* const eventStopSlide;
 			// Config list of properties
 			static const char* const configMode;
-			typedef enum {
+			enum sladingMode {
 				sladingTransitionVert,
 				sladingTransitionHori,
 				sladingTransition_count,
-			} sladingMode_te;
+			};
 		public:
 			WSlider(void);
 			virtual ~WSlider(void);
@@ -74,18 +74,18 @@ namespace widget {
 				return m_transitionSpeed;
 			};
 		private:
-			sladingMode_te m_transitionSlide; //!< mode to slide the widgets
+			enum sladingMode m_transitionSlide; //!< mode to slide the widgets
 		public:
 			/** 
 			 * @brief set a new mode of sliding element
 			 * @param[in] _mode new display mode
 			 */
-			void setTransitionMode(sladingMode_te _mode);
+			void setTransitionMode(enum sladingMode _mode);
 			/** 
 			 * @brief get a new mode of sliding element
 			 * @return The current sliding mode
 			 */
-			sladingMode_te getTransitionMode(void) {
+			enum sladingMode getTransitionMode(void) {
 				return m_transitionSlide;
 			};
 		public: // Derived function
@@ -101,7 +101,7 @@ namespace widget {
 			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
 	};
 	
-	etk::CCout& operator <<(etk::CCout& _os, const widget::WSlider::sladingMode_te _obj);
+	etk::CCout& operator <<(etk::CCout& _os, const enum widget::WSlider::sladingMode _obj);
 };
 
 #endif

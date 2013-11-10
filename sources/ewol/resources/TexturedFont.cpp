@@ -18,7 +18,7 @@
 #include <ewol/resources/FontFreeType.h>
 
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::font::mode_te& _obj) {
+etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 	switch(_obj) {
 		default :
 			_os << "error";
@@ -162,10 +162,10 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 		}
 	}
 	// try to find the reference mode :
-	ewol::font::mode_te refMode = ewol::font::Regular;
+	enum ewol::font::mode refMode = ewol::font::Regular;
 	for(int32_t iii=3; iii >= 0; iii--) {
 		if (m_fileName[iii].isEmpty() == false) {
-			refMode = (ewol::font::mode_te)iii;
+			refMode = (enum ewol::font::mode)iii;
 		}
 	}
 	
@@ -173,7 +173,7 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	// generate the wrapping on the preventing error
 	for(int32_t iii=3; iii >= 0; iii--) {
 		if (m_fileName[iii].isEmpty() == false) {
-			m_modeWraping[iii] = (ewol::font::mode_te)iii;
+			m_modeWraping[iii] = (enum ewol::font::mode)iii;
 		} else {
 			m_modeWraping[iii] = refMode;
 		}
@@ -297,7 +297,7 @@ bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 	return hasChange;
 }
 
-int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode) {
+int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode) {
 	if (_charcode.get() < 0x20) {
 		return 0;
 	} else if (_charcode.get() < 0x80) {
@@ -323,7 +323,7 @@ int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const ewol::fo
 	return 0;
 }
 
-ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _charcode, const ewol::font::mode_te _displayMode) {
+ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0

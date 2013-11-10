@@ -72,13 +72,13 @@ namespace ewol {
 	};
 	class Mesh : public ewol::Resource {
 		public:
-			typedef enum {
+			enum normalMode {
 				normalModeNone,
 				normalModeFace,
 				normalModeVertex,
-			} normalMode_te;
+			};
 		protected:
-			normalMode_te m_normalMode; // select the normal mode of display
+			enum normalMode m_normalMode; // select the normal mode of display
 			bool m_checkNormal; //!< when enable, this check the normal of the mesh before sending it at the 3d card
 		protected:
 			ewol::Program* m_GLprogram;

@@ -140,7 +140,7 @@ namespace widget {
 			 * @brief Copy the selected data on the specify clipboard
 			 * @param[in] _clipboardID Selected clipboard
 			 */
-			virtual void copySelectionToClipBoard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			virtual void copySelectionToClipBoard(enum ewol::clipBoard::clipboardListe _clipboardID);
 			/**
 			 * @brief remove the selected area
 			 * @note This request a regeneration of the display
@@ -199,7 +199,7 @@ namespace widget {
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual bool onEventEntry(const ewol::EventEntry& _event);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
-			virtual void onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID);
+			virtual void onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID);
 			virtual const char * const getObjectType(void) {
 				return "widget::Entry";
 			};

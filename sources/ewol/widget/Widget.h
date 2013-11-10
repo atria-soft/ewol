@@ -64,7 +64,7 @@ namespace ewol {
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj);
 	
-	typedef enum {
+	enum gravity {
 		gravityCenter=0x00,
 		gravityTopLeft=0x05,
 		gravityTop=0x01,
@@ -74,10 +74,10 @@ namespace ewol {
 		gravityButtom=0x04,
 		gravityButtomLeft=0x0C,
 		gravityLeft=0x08,
-	}gravity_te;
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::gravity_te _obj);
-	etk::UString gravityToString(const ewol::gravity_te _obj);
-	ewol::gravity_te stringToGravity(const etk::UString& _obj);
+	};
+	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::gravity _obj);
+	etk::UString gravityToString(const enum ewol::gravity _obj);
+	enum ewol::gravity stringToGravity(const etk::UString& _obj);
 	
 	class EventShortCut {
 		public:
@@ -86,7 +86,7 @@ namespace ewol {
 			etk::UString eventData; //!< data link with the event
 			ewol::SpecialKey specialKey; //!< special board key
 			etk::UChar unicodeValue; //!< 0 if not used
-			ewol::keyEvent::keyboard_te keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
+			enum ewol::keyEvent::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut(void) {
 				broadcastEvent = false;
 				generateEventId = NULL;
@@ -346,21 +346,23 @@ namespace ewol {
 			 * @brief get the visibility of the widget
 			 * @return true: if the widget is hiden, false: it is visible
 			 */
-			virtual bool isHide(void) { return m_hide; };
+			virtual bool isHide(void) {
+				return m_hide;
+			};
 		
 		protected:
-			gravity_te m_gravity; //!< Gravity of the widget
+			enum gravity m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
 			 * @param[in] _gravity New gravity of the widget
 			 */
-			virtual void setGravity(gravity_te _gravity);
+			virtual void setGravity(enum gravity _gravity);
 			/**
 			 * @brief get the widget gravity
 			 * @return the gravity type
 			 */
-			virtual gravity_te getGravity(void) {
+			virtual enum gravity getGravity(void) {
 				return m_gravity;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
@@ -577,7 +579,7 @@ namespace ewol {
 			 * @note : need to have focus ...
 			 * @param[in] mode Mode of data requested
 			 */
-			virtual void onEventClipboard(ewol::clipBoard::clipboardListe_te _clipboardID) { };
+			virtual void onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID) { };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Shortcut : management of the shortcut
@@ -611,7 +613,7 @@ namespace ewol {
 			 */
 			virtual bool onEventShortCut(ewol::SpecialKey& _special,
 			                             etk::UChar _unicodeValue,
-			                             ewol::keyEvent::keyboard_te _kbMove,
+			                             enum ewol::keyEvent::keyboard _kbMove,
 			                             bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
@@ -671,18 +673,18 @@ namespace ewol {
 			 */
 			virtual bool getGrabStatus(void);
 		private:
-			ewol::cursorDisplay_te m_cursorDisplay;
+			enum ewol::cursorDisplay m_cursorDisplay;
 		public:
 			/**
 			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void setCursor(ewol::cursorDisplay_te _newCursor);
+			virtual void setCursor(enum ewol::cursorDisplay _newCursor);
 			/**
 			 * @brief get the currrent cursor.
 			 * @return the type of the cursor.
 			 */
-			virtual ewol::cursorDisplay_te getCursor(void);
+			virtual enum ewol::cursorDisplay getCursor(void);
 		public: // Derived function
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			virtual bool loadXML(exml::Element* _node);

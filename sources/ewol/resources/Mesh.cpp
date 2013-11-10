@@ -607,7 +607,7 @@ void removeEndLine(char* _val) {
 	}
 }
 
-typedef enum {
+enum emfModuleMode {
 	EMFModuleNone,
 	EMFModuleMesh,
 	EMFModuleMeshNamed,
@@ -623,7 +623,7 @@ typedef enum {
 	EMFModuleMaterial,
 	EMFModuleMaterialNamed,
 	EMFModuleMaterial_END,
-} emfModuleMode_te;
+};
 
 bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
 	m_checkNormal = true;
@@ -651,7 +651,7 @@ bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
 		EWOL_ERROR(" file mode is not supported now : 'EMF(? ? ?)' = '" << inputDataLine << "'");
 		return false;
 	}
-	emfModuleMode_te currentMode = EMFModuleNone;
+	enum emfModuleMode currentMode = EMFModuleNone;
 	EWOL_VERBOSE("Start parsing Mesh file : " << fileName);
 	// mesh global param :
 	etk::UString currentMeshName = "";

@@ -138,7 +138,7 @@ class X11Interface : public ewol::eContext {
 		Atom XAtomeTargetTarget;
 		Atom XAtomeEWOL;
 		Atom XAtomeDeleteWindows;
-		ewol::cursorDisplay_te m_currentCursor; //!< select the current cursor to display :
+		enum ewol::cursorDisplay m_currentCursor; //!< select the current cursor to display :
 	public:
 		X11Interface(int32_t _argc, const char* _argv[]) :
 		  ewol::eContext(_argc, _argv),
@@ -558,7 +558,7 @@ class X11Interface : public ewol::eContext {
 									m_guiKeyBoardMode.altGr = false;
 								}
 								bool find = true;
-								ewol::keyEvent::keyboard_te keyInput;
+								enum ewol::keyEvent::keyboard keyInput;
 								switch (event.xkey.keycode) {
 									//case 80: // keypad
 									case 111:	keyInput = ewol::keyEvent::keyboardUp;            break;
@@ -741,7 +741,7 @@ class X11Interface : public ewol::eContext {
 		}
 		*/
 		/****************************************************************************************/
-		virtual void setCursor(ewol::cursorDisplay_te _newCursor) {
+		virtual void setCursor(enum ewol::cursorDisplay _newCursor) {
 			if (_newCursor != m_currentCursor) {
 				X11_DEBUG("X11-API: set New Cursor : " << _newCursor);
 				// undefine previous cursors ...
@@ -1220,9 +1220,8 @@ class X11Interface : public ewol::eContext {
 			X11_INFO("X11: set Title (END)");
 		}
 		/****************************************************************************************/
-		void clipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
-			switch (_clipboardID)
-			{
+		void clipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
+			switch (_clipboardID) {
 				case ewol::clipBoard::clipboardSelection:
 					if (false == m_clipBoardOwnerPrimary) {
 						m_clipBoardRequestPrimary = true;
@@ -1259,7 +1258,7 @@ class X11Interface : public ewol::eContext {
 			}
 		}
 		/****************************************************************************************/
-		void clipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+		void clipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 			switch (_clipboardID)
 			{
 				case ewol::clipBoard::clipboardSelection:

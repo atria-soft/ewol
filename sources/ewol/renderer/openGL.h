@@ -110,7 +110,7 @@ namespace ewol {
 		 */
 		void swap(void);
 		
-		typedef enum {
+		enum openGlFlags {
 			FLAG_BLEND = 1<<0, //!< If enabled, blend the computed fragment color values with the values in the color buffers. See glBlendFunc.
 			FLAG_CLIP_DISTANCE_I = 1<<1, //!< If enabled, clip geometry against user-defined half space i.
 			FLAG_COLOR_LOGIC_OP = 1<<2, //!< If enabled, apply the currently selected logical operation to the computed fragment color and color buffer values. See glLogicOp.
@@ -140,18 +140,18 @@ namespace ewol {
 			FLAG_TEXTURE_2D = 1<<26, //!< 
 			FLAG_ALPHA_TEST = 1<<27, //!< 
 			FLAG_FOG = 1<<28, //!< 
-		} openGlFlags_te;
+		};
 		
 		/**
 		 * @brief enable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void enable(openGlFlags_te _flagID);
+		void enable(enum openGlFlags _flagID);
 		/**
 		 * @brief disable a flag on the system
 		 * @param[in] flagID The flag requested
 		 */
-		void disable(openGlFlags_te _flagID);
+		void disable(enum openGlFlags _flagID);
 		/**
 		 * @brieg update all the internal flag needed to be set from tre previous element set ...
 		 */

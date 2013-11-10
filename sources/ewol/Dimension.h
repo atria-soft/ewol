@@ -20,7 +20,7 @@ namespace ewol {
 	 */
 	class Dimension {
 		public:
-			typedef enum {
+			enum distance {
 				Pourcent=0,
 				Pixel,
 				Meter,
@@ -29,10 +29,10 @@ namespace ewol {
 				Kilometer,
 				Inch,
 				foot,
-			} distance_te;
+			};
 		private:
 			vec2 m_data;
-			distance_te m_type;
+			enum distance m_type;
 		public:
 			/**
 			 * @brief Constructor (default :0,0 mode pixel)
@@ -43,17 +43,25 @@ namespace ewol {
 			 * @param[in] _size Requested dimention
 			 * @param[in] _type Unit of the Dimention
 			 */
-			Dimension(const vec2& _size, ewol::Dimension::distance_te _type=ewol::Dimension::Pixel);
+			Dimension(const vec2& _size, enum ewol::Dimension::distance _type=ewol::Dimension::Pixel);
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const etk::UString& _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { set(_config); };
+			Dimension(const etk::UString& _config) :
+			  m_data(0,0),
+			  m_type(ewol::Dimension::Pixel) {
+				set(_config);
+			};
 			/**
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const char* _config) : m_data(0,0),m_type(ewol::Dimension::Pixel) { set(_config); };
+			Dimension(const char* _config) :
+			  m_data(0,0),
+			  m_type(ewol::Dimension::Pixel) {
+				set(_config);
+			};
 			/**
 			 * @brief Destructor
 			 */
@@ -69,13 +77,13 @@ namespace ewol {
 			 * @param[in] _type Type of unit requested.
 			 * @return dimention requested.
 			 */
-			vec2 get(ewol::Dimension::distance_te _type) const;
+			vec2 get(enum distance _type) const;
 			/**
 			 * @brief set the current dimention in requested type
 			 * @param[in] _size Dimention to set
 			 * @param[in] _type Type of unit requested.
 			 */
-			void set(const vec2& _size, ewol::Dimension::distance_te _type);
+			void set(const vec2& _size, enum distance _type);
 			
 		private:
 			/**
@@ -158,9 +166,11 @@ namespace ewol {
 			 * @breif get the dimension type
 			 * @return the type
 			 */
-			ewol::Dimension::distance_te getType(void) const { return m_type; };
+			enum distance getType(void) const {
+				return m_type;
+			};
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension::distance_te& _obj);
+	etk::CCout& operator <<(etk::CCout& _os, enum ewol::Dimension::distance _obj);
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::Dimension& _obj);
 	
 	namespace dimension {
@@ -179,7 +189,7 @@ namespace ewol {
 		 * @param[in] type Unit type requested.
 		 * @note: same as @ref setPixelPerInch (internal manage convertion)
 		 */
-		void setPixelRatio(const vec2& _ratio, ewol::Dimension::distance_te _type);
+		void setPixelRatio(const vec2& _ratio, enum ewol::Dimension::distance _type);
 		/**
 		 * @brief set the current Windows size
 		 * @param[in] size size of the current windows in pixel.
@@ -190,13 +200,13 @@ namespace ewol {
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		vec2 getWindowsSize(ewol::Dimension::distance_te _type);
+		vec2 getWindowsSize(enum ewol::Dimension::distance _type);
 		/**
 		 * @brief get the Windows diagonal size in the request unit
 		 * @param[in] type Unit type requested.
 		 * @return the requested size
 		 */
-		float getWindowsDiag(ewol::Dimension::distance_te _type);
+		float getWindowsDiag(enum ewol::Dimension::distance _type);
 	};
 };
 

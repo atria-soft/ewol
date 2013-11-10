@@ -18,17 +18,18 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	typedef enum {
-		CONTEXT_MENU_MARK_TOP,
-		CONTEXT_MENU_MARK_RIGHT,
-		CONTEXT_MENU_MARK_BOTTOM,
-		CONTEXT_MENU_MARK_LEFT,
-		CONTEXT_MENU_MARK_NONE
-	}markPosition_te;
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
 	class ContextMenu : public widget::Container {
+		public:
+			enum markPosition {
+				markTop,
+				markRight,
+				markButtom,
+				markLeft,
+				markNone
+			};
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 			// Config list of properties
@@ -55,9 +56,9 @@ namespace widget {
 			float m_offset;
 		private:
 			vec2 m_arrowPos;
-			markPosition_te m_arrawBorder;
+			enum markPosition m_arrawBorder;
 		public:
-			void setPositionMark(markPosition_te position, vec2 arrowPos);
+			void setPositionMark(enum markPosition position, vec2 arrowPos);
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);

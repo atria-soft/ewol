@@ -307,13 +307,13 @@ void ewol::Text::setFont(etk::UString _fontName, int32_t _fontSize) {
 	}
 }
 
-void ewol::Text::setFontMode(ewol::font::mode_te _mode) {
+void ewol::Text::setFontMode(enum ewol::font::mode _mode) {
 	if (m_font != NULL) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
 }
 
-ewol::font::mode_te ewol::Text::getFontMode(void) {
+enum ewol::font::mode ewol::Text::getFontMode(void) {
 	return m_mode;
 }
 
@@ -864,7 +864,7 @@ void ewol::Text::forceLineReturn(void) {
 	setPos(vec3(m_startTextpos, m_position.y() - m_font->getHeight(m_mode), 0) );
 }
 
-void ewol::Text::setTextAlignement(float _startTextpos, float _stopTextPos, ewol::Text::aligneMode_te _alignement) {
+void ewol::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement) {
 	m_startTextpos = _startTextpos;
 	m_stopTextPos = _stopTextPos+1;
 	m_alignement = _alignement;
@@ -873,7 +873,7 @@ void ewol::Text::setTextAlignement(float _startTextpos, float _stopTextPos, ewol
 	}
 }
 
-ewol::Text::aligneMode_te ewol::Text::getAlignement(void) {
+enum ewol::Text::aligneMode ewol::Text::getAlignement(void) {
 	return m_alignement;
 }
 

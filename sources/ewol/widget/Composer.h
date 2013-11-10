@@ -22,11 +22,11 @@ namespace widget
 	class Composer : public widget::Container
 	{
 		public:
-			typedef enum {
+			enum composerMode {
 				None,
 				String,
 				file
-			} composerMode_te;
+			};
 		public:
 			/**
 			 * @brief Constructor
@@ -34,24 +34,24 @@ namespace widget
 			Composer(void);
 			/**
 			 * @brief Constructor
-			 * @param[in] mode mode of parsing the string
-			 * @param[in] data file/directString data to generate compositing of the widget..
+			 * @param[in] _mode mode of parsing the string
+			 * @param[in] _data file/directString data to generate compositing of the widget..
 			 */
-			Composer(composerMode_te _mode, const etk::UString& _data);
+			Composer(enum composerMode _mode, const etk::UString& _data);
 			/**
 			 * @brief Destructor
 			 */
 			~Composer(void);
 			/**
 			 * @brief load a composition with a file
-			 * @param[in] fileName Name of the file
+			 * @param[in] _fileName Name of the file
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */
 			bool loadFromFile(const etk::UString& _fileName);
 			/**
 			 * @brief load a composition with a file
-			 * @param[in] composerXmlString xml to parse directly
+			 * @param[in] _composerXmlString xml to parse directly
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */

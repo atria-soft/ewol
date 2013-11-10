@@ -25,7 +25,7 @@ namespace ewol {
 		public:
 			etk::Color<> m_colorBg; //!< display background color
 			etk::Color<> m_colorFg; //!< display foreground color
-			ewol::font::mode_te m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
+			enum ewol::font::mode m_mode; //!< display mode Regular/Bold/Italic/BoldItalic
 			TextDecoration(void) {
 				m_colorBg = etk::color::blue;
 				m_colorBg = etk::color::green;
@@ -36,13 +36,13 @@ namespace ewol {
 	
 	class Text : public ewol::Compositing {
 		public:
-			typedef enum {
+			enum aligneMode {
 				alignDisable,
 				alignRight,
 				alignLeft,
 				alignCenter,
 				alignJustify
-			} aligneMode_te;
+			};
 		private:
 			ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 		public:
@@ -64,14 +64,14 @@ namespace ewol {
 			etk::Color<> m_colorCursor; //!< The text cursor color
 			etk::Color<> m_colorSelection; //!< The text Selection color
 		private:
-			ewol::font::mode_te m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
+			enum ewol::font::mode m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool m_kerning; //!< Kerning enable or disable on the next elements displayed
 			bool m_distanceField; //!< Texture in distance Field mode  == > maybe move this in the font property.
 			etk::UChar m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
 		private:
 			float m_startTextpos; //!< start position of the Alignement (when \n the text return at this position)
 			float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
-			aligneMode_te m_alignement; //!< Current Alignement mode (justify/left/right ...)
+			enum aligneMode m_alignement; //!< Current Alignement mode (justify/left/right ...)
 		private:
 			ewol::Program* m_GLprogram; //!< pointer on the opengl display program
 			int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
@@ -204,12 +204,12 @@ namespace ewol {
 			 * @brief Specify the font mode for the next @ref print
 			 * @param[in] mode The font mode requested
 			 */
-			void setFontMode(ewol::font::mode_te _mode);
+			void setFontMode(enum ewol::font::mode _mode);
 			/**
 			 * @brief get the current font mode
 			 * @return The font mode applied
 			 */
-			ewol::font::mode_te getFontMode(void);
+			enum ewol::font::mode getFontMode(void);
 			/**
 			 * @brief enable or disable the bold mode
 			 * @param[in] _status The new status for this display property
@@ -325,7 +325,7 @@ namespace ewol {
 			 * @param[in] _alignement mode of alignement for the Text.
 			 * @note The text align in center change of line every display done (even if it was just a char)
 			 */
-			void setTextAlignement(float _startTextpos, float _stopTextPos, ewol::Text::aligneMode_te _alignement=ewol::Text::alignDisable);
+			void setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement=ewol::Text::alignDisable);
 			/**
 			 * @brief disable the alignement system
 			 */
@@ -334,7 +334,7 @@ namespace ewol {
 			 * @brief get the current alignement property
 			 * @return the curent alignement type
 			 */
-			ewol::Text::aligneMode_te getAlignement(void);
+			enum ewol::Text::aligneMode getAlignement(void);
 			/**
 			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.

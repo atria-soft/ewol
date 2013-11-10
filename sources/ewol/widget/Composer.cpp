@@ -19,16 +19,16 @@ widget::Composer::Composer(void) {
 	// nothing to do ...
 }
 
-widget::Composer::Composer(widget::Composer::composerMode_te mode, const etk::UString& fileName) {
-	switch(mode) {
+widget::Composer::Composer(enum composerMode _mode, const etk::UString& _fileName) {
+	switch(_mode) {
 		case widget::Composer::None:
 			// nothing to do ...
 			break;
 		case widget::Composer::String:
-			loadFromString(fileName);
+			loadFromString(_fileName);
 			break;
 		case widget::Composer::file:
-			loadFromFile(fileName);
+			loadFromFile(_fileName);
 			break;
 	}
 }

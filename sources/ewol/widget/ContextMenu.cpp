@@ -47,7 +47,7 @@ widget::ContextMenu::ContextMenu(const etk::UString& _shaperName) :
 	m_colorBorder.setA(0x7F);
 	
 	m_arrowPos.setValue(0,0);
-	m_arrawBorder = widget::CONTEXT_MENU_MARK_TOP;
+	m_arrawBorder = markTop;
 	setMouseLimit(1);
 }
 
@@ -85,16 +85,16 @@ void widget::ContextMenu::calculateSize(const vec2& _availlable) {
 		
 		// set config to the Sub-widget
 		switch (m_arrawBorder) {
-			case widget::CONTEXT_MENU_MARK_TOP:
+			case markTop:
 				subWidgetOrigin.setX((int32_t)(m_arrowPos.x() - subWidgetSize.x()/2));
 				subWidgetOrigin.setY((int32_t)(m_arrowPos.y() - m_offset - subWidgetSize.y()));
 				break;
-			case widget::CONTEXT_MENU_MARK_BOTTOM:
+			case markButtom:
 				subWidgetOrigin.setX((int32_t)(m_arrowPos.x() - subWidgetSize.x()/2));
 				subWidgetOrigin.setY((int32_t)(m_arrowPos.y() + m_offset));
 				break;
-			case widget::CONTEXT_MENU_MARK_RIGHT:
-			case widget::CONTEXT_MENU_MARK_LEFT:
+			case markRight:
+			case markLeft:
 			default:
 				subWidgetOrigin.setX((int32_t)(m_size.x() - m_origin.x() - subWidgetSize.x())/2 + m_origin.x());
 				subWidgetOrigin.setY((int32_t)(m_size.y() - m_origin.y() - subWidgetSize.y())/2 + m_origin.y());
@@ -108,14 +108,14 @@ void widget::ContextMenu::calculateSize(const vec2& _availlable) {
 		switch (m_arrawBorder)
 		{
 			default:
-			case widget::CONTEXT_MENU_MARK_TOP:
-			case widget::CONTEXT_MENU_MARK_BOTTOM:
+			case markTop:
+			case markButtom:
 				if (m_arrowPos.x() <= m_offset ) {
 					subWidgetOrigin.setX(m_arrowPos.x()+padding.x());
 				}
 				break;
-			case widget::CONTEXT_MENU_MARK_RIGHT:
-			case widget::CONTEXT_MENU_MARK_LEFT:
+			case markRight:
+			case markLeft:
 				if (m_arrowPos.y() <= m_offset ) {
 					subWidgetOrigin.setY(m_arrowPos.y()+padding.y());
 				}
@@ -160,7 +160,7 @@ void widget::ContextMenu::onRegenerateDisplay(void) {
 			// display border ...
 			m_compositing.setColor(m_colorBorder);
 			switch (m_arrawBorder) {
-				case widget::CONTEXT_MENU_MARK_TOP:
+				case markTop:
 					m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
 					m_compositing.addVertex();
 					if (m_arrowPos.x() <= tmpOrigin.x() ) {
@@ -177,7 +177,7 @@ void widget::ContextMenu::onRegenerateDisplay(void) {
 						m_compositing.addVertex();
 					}
 					break;
-				case widget::CONTEXT_MENU_MARK_BOTTOM:
+				case markButtom:
 					m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
 					m_compositing.addVertex();
 					if (m_arrowPos.x() <= tmpOrigin.x() ) {
@@ -195,8 +195,8 @@ void widget::ContextMenu::onRegenerateDisplay(void) {
 					}
 					break;
 				default:
-				case widget::CONTEXT_MENU_MARK_RIGHT:
-				case widget::CONTEXT_MENU_MARK_LEFT:
+				case markRight:
+				case markLeft:
 					EWOL_TODO("later");
 					break;
 			}
@@ -231,7 +231,7 @@ bool widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-void widget::ContextMenu::setPositionMark(markPosition_te _position, vec2 _arrowPos) {
+void widget::ContextMenu::setPositionMark(enum markPosition _position, vec2 _arrowPos) {
 	EWOL_DEBUG("set context menu at the position : " << _arrowPos);
 	m_arrawBorder = _position;
 	m_arrowPos = _arrowPos;
@@ -257,15 +257,15 @@ bool widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 	}
 	if (_conf.getConfig() == configArrowMode) {
 		if(true == _conf.getData().compareNoCase("top")) {
-			m_arrawBorder = CONTEXT_MENU_MARK_TOP;
+			m_arrawBorder = markTop;
 		} else if(true == _conf.getData().compareNoCase("right")) {
-			m_arrawBorder = CONTEXT_MENU_MARK_RIGHT;
+			m_arrawBorder = markRight;
 		} else if(true == _conf.getData().compareNoCase("buttom")) {
-			m_arrawBorder = CONTEXT_MENU_MARK_BOTTOM;
+			m_arrawBorder = markButtom;
 		} else if(true == _conf.getData().compareNoCase("left")) {
-			m_arrawBorder = CONTEXT_MENU_MARK_LEFT;
+			m_arrawBorder = markLeft;
 		} else {
-			m_arrawBorder = CONTEXT_MENU_MARK_NONE;
+			m_arrawBorder = markNone;
 		}
 		return true;
 	}
@@ -286,20 +286,20 @@ bool widget::ContextMenu::onGetConfig(const char* _config, etk::UString& _result
 	}
 	if (_config == configArrowMode) {
 		switch(m_arrawBorder) {
-			case CONTEXT_MENU_MARK_TOP:
+			case markTop:
 				_result = "top";
 				break;
-			case CONTEXT_MENU_MARK_RIGHT:
+			case markRight:
 				_result = "right";
 				break;
-			case CONTEXT_MENU_MARK_BOTTOM:
+			case markButtom:
 				_result = "buttom";
 				break;
-			case CONTEXT_MENU_MARK_LEFT:
+			case markLeft:
 				_result = "left";
 				break;
 			default:
-			case CONTEXT_MENU_MARK_NONE:
+			case markNone:
 				_result = "none";
 				break;
 		}

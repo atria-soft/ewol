@@ -25,18 +25,18 @@ namespace widget {
 			 */
 			static void init(ewol::WidgetManager& _widgetManager);
 		public:
-			typedef enum {
+			enum displayMode {
 				modeVert, //!< Vertical mode
 				modeHori, //!< Horizontal mode
-			} displayMode_te;
+			};
 		private:
-			displayMode_te m_mode; //!< Methode to display the widget list (vert/hory ...)
+			enum displayMode m_mode; //!< Methode to display the widget list (vert/hory ...)
 		public:
 			/**
 			 * @brief Constructor
 			 * @param[in] _mode The mode to display the elements
 			 */
-			Sizer(displayMode_te _mode=widget::Sizer::modeHori);
+			Sizer(enum displayMode _mode=widget::Sizer::modeHori);
 			/**
 			 * @brief Desstructor
 			 */
@@ -45,12 +45,12 @@ namespace widget {
 			 * @brief set the mode to display elements.
 			 * @param[in] _mode The mode to display the elements.
 			 */
-			void setMode(displayMode_te _mode);
+			void setMode(enum displayMode _mode);
 			/**
 			 * @brief get the mode to display elements.
 			 * @return The current mode to display the elements.
 			 */
-			displayMode_te getMode(void);
+			enum displayMode getMode(void);
 		private:
 			ewol::Dimension m_borderSize; //!< Border size needed for all the display
 		public:
@@ -67,29 +67,29 @@ namespace widget {
 				return m_borderSize;
 			};
 		public:
-			typedef enum {
+			enum animation {
 				animationNone, //!< No annimation
 				animationTop, //!< element came from the top
 				animationbuttom, //!< element came from the buttom
 				animationLeft, //!< element came from the Left
 				animationRight //!< element came from the right
 				//animationZoom //!< element came from zooming
-			} animation_te;
+			};
 		private:
-			animation_te m_animation; //!< Methode add and remove element (animation)
+			enum animation m_animation; //!< Methode add and remove element (animation)
 		public:
 			/**
 			 * @brief set an animation mode for the new element set in the Widget container.
 			 * @param[in] _animation The new animation mode.
 			 */
-			void setAnimationMode(animation_te _animation) {
+			void setAnimationMode(enum animation _animation) {
 				m_animation = _animation;
 			};
 			/**
 			 * @brief get the current animation mode.
 			 * @return The animation mode.
 			 */
-			animation_te getAnimationMode(void) {
+			enum animation getAnimationMode(void) {
 				return m_animation;
 			};
 		private:

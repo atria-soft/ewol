@@ -14,13 +14,13 @@
 namespace ewol {
 	class EventInput {
 		private:
-			ewol::keyEvent::type_te m_type;
-			ewol::keyEvent::status_te m_status;
+			enum ewol::keyEvent::type m_type;
+			enum ewol::keyEvent::status m_status;
 			uint8_t m_inputId;
 			vec2 m_pos;
 		public:
-			EventInput(ewol::keyEvent::type_te _type,
-			           ewol::keyEvent::status_te _status,
+			EventInput(enum ewol::keyEvent::type _type,
+			           enum ewol::keyEvent::status _status,
 			           uint8_t _id,
 			           const vec2& _pos):
 				m_type(_type),
@@ -28,16 +28,16 @@ namespace ewol {
 				m_inputId(_id),
 				m_pos(_pos)
 			{ };
-			void setType(ewol::keyEvent::type_te _type) {
+			void setType(enum ewol::keyEvent::type _type) {
 				m_type = _type;
 			};
-			inline const ewol::keyEvent::type_te& getType(void) const {
+			inline const enum ewol::keyEvent::type& getType(void) const {
 				return m_type;
 			};
-			void setStatus(ewol::keyEvent::status_te _status) {
+			void setStatus(enum ewol::keyEvent::status _status) {
 				m_status = _status;
 			};
-			inline const ewol::keyEvent::status_te& getStatus(void) const {
+			inline const enum ewol::keyEvent::status& getStatus(void) const {
 				return m_status;
 			};
 			void setId(uint8_t _id) {
@@ -57,8 +57,8 @@ namespace ewol {
 	
 	class EventInputSystem {
 		public:
-			EventInputSystem(ewol::keyEvent::type_te _type,
-			                 ewol::keyEvent::status_te _status,
+			EventInputSystem(enum ewol::keyEvent::type _type,
+			                 enum ewol::keyEvent::status _status,
 			                 uint8_t _id,
 			                 const vec2& _pos,
 			                 ewol::Widget* _dest,

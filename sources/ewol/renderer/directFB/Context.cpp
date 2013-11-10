@@ -369,12 +369,12 @@ void DirectFB_Run(void) {
 // -------------------------------------------------------------------------
 
 
-void guiInterface::ClipBoardGet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void guiInterface::ClipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	// TODO : ...
 }
 
 
-void guiInterface::ClipBoardSet(ewol::clipBoard::clipboardListe_te _clipboardID) {
+void guiInterface::ClipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
 	// TODO : ...
 }
 
@@ -414,7 +414,7 @@ void guiInterface::getAbsPos(ivec2& _pos) {
 }
 
 
-void guiInterface::setCursor(ewol::cursorDisplay_te _newCursor) {
+void guiInterface::setCursor(enum ewol::cursorDisplay _newCursor) {
 	// TODO : ...
 }
 
@@ -451,7 +451,7 @@ int guiInterface::main(int argc, const char *argv[]) {
 }
 
 
-void guiInterface::forceOrientation(ewol::orientation_te orientation) {
+void guiInterface::forceOrientation(enum ewol::orientation _orientation) {
 	// nothing to do ...
 }
 

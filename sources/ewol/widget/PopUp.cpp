@@ -235,7 +235,7 @@ bool widget::PopUp::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-void widget::PopUp::setAnimationMode(animation_te _animation) {
+void widget::PopUp::setAnimationMode(enum animation _animation) {
 	m_animation = _animation;
 	if (true == m_shaper.changeStatusIn((int32_t)_animation) ) {
 		periodicCallEnable();

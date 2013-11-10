@@ -17,19 +17,19 @@
 #include <ewol/widget/WidgetManager.h>
 
 namespace widget {
-	typedef enum {
-		SCROLL_DISABLE,
-		SCROLL_INIT,
-		SCROLL_ENABLE_FINGER,     // Specific for touchpad
-		SCROLL_ENABLE_HORIZONTAL, // Specific for mouse
-		SCROLL_ENABLE_VERTICAL,   // Specific for mouse
-		SCROLL_GREP_END_EVENT,
-	}highSpeedMode_te;
-	
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
 	class Scroll : public widget::Container {
+		public:
+			enum highSpeedMode {
+				speedModeDisable,
+				speedModeInit,
+				speedModeEnableFinger,     // Specific for touchpad
+				speedModeEnableHorizontal, // Specific for mouse
+				speedModeEnableVertical,   // Specific for mouse
+				speedModeGrepEndEvent
+			};
 		public:
 			// Cinfig parameter list:
 			static const char* const configLimit;
@@ -42,9 +42,9 @@ namespace widget {
 		private:
 			float m_pixelScrolling;
 			vec2 m_highSpeedStartPos;
-			highSpeedMode_te m_highSpeedMode;
+			enum highSpeedMode m_highSpeedMode;
 			int32_t m_highSpeedButton;
-			ewol::keyEvent::type_te m_highSpeedType;
+			enum ewol::keyEvent::type m_highSpeedType;
 		public:
 			Scroll(void);
 			virtual ~Scroll(void);

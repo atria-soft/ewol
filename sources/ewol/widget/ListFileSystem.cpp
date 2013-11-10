@@ -180,7 +180,7 @@ bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::UStr
 
 
 bool widget::ListFileSystem::onItemEvent(int32_t _IdInput,
-                                         ewol::keyEvent::status_te _typeEvent,
+                                         enum ewol::keyEvent::status _typeEvent,
                                          int32_t _colomn,
                                          int32_t _raw,
                                          float _x,

@@ -22,14 +22,22 @@ namespace ewol {
 			virtual bool parse(const char* _line);
 			virtual void display(void) {};
 		public:
-			virtual type_te getType(void) { return ewol::PhysicsShape::box; };
+			virtual enum type getType(void) {
+				return ewol::PhysicsShape::box;
+			};
 		private:
 			vec3 m_size; // Box size property in X, Y and Z
 		public:
-			const vec3& getSize(void) const { return m_size; };
+			const vec3& getSize(void) const {
+				return m_size;
+			};
 		public:
-			virtual const PhysicsBox* toBox(void) const { return this; };
-			virtual PhysicsBox* toBox(void) { return this; };
+			virtual const PhysicsBox* toBox(void) const {
+				return this;
+			};
+			virtual PhysicsBox* toBox(void) {
+				return this;
+			};
 	};
 };
 

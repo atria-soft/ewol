@@ -69,7 +69,7 @@ namespace widget {
 				}
 				return false;
 			};
-			virtual bool onItemEvent(int32_t _IdInput, ewol::keyEvent::status_te _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
+			virtual bool onItemEvent(int32_t _IdInput, enum ewol::keyEvent::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
 				return false;
 			}
 			/**

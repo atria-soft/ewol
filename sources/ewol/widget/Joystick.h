@@ -19,14 +19,15 @@ extern const char * const ewolEventJoystickDisable;
 extern const char * const ewolEventJoystickMove;
 
 namespace widget {
-	typedef enum {
-		JOYSTICK_NORMAL_MODE,
-		JOYSTICK_ARROW_MODE,
-	} joystickMode_te;
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
 	class Joystick :public ewol::Widget {
+		public:
+			enum joystickMode {
+				modeNormal,
+				modeArrow,
+			};
 		private:
 			draw::Color m_colorFg; //!< Forground  color
 			draw::Color m_colorBg; //!< Background color
@@ -34,7 +35,7 @@ namespace widget {
 			float m_distance; //!< dintance from the center
 			float m_angle; //!< angle of the arraw (if < 0 : No arraw...) 0 is the TOP ...
 			bool m_lock; //!< flag to mark the lock when the cursor is free when we are outside the circle
-			joystickMode_te m_displayMode; //!< Type of fonctionnal mode of the joystick
+			enum joystickMode m_displayMode; //!< Type of fonctionnal mode of the joystick
 		private:
 			// generic property of the joystick:
 			bool m_displayBackground;
@@ -44,41 +45,43 @@ namespace widget {
 		public:
 			Joystick(void);
 			virtual ~Joystick(void);
-			// Derived function
+		public:
+			void setLockMode(bool _lockWhenOut) {
+				m_lock = _lockWhenOut;
+			};
+			void setDisplayMode(enum joystickMode _newMode) {
+				m_displayMode = _newMode;
+			};
+			/**
+			 * @brief set the ratio of the widget joystick
+			 * @param[in] _newRatio the new ratio that might be set
+			 */
+			void ratio(float _newRatio);
+			/**
+			 * @brief set the Background of the widget joystick
+			 * @param[in] _imageNameInData the new rbackground that might be set
+			 * @param[in] _display
+			 */
+			void background(etk::UString _imageNameInData, bool _display=true);
+			/**
+			 * @brief set the Foreground of the widget joystick
+			 * @param[in] _imageNameInData the new Foreground that might be set
+			 */
+			void foreground(etk::UString _imageNameInData);
+			/**
+			 * @brief get the property of the joystick
+			 * @param[out] _distance distance to the center
+			 * @param[out] _angle angle of the joy
+			 */
+			void getProperty(float& _distance, float& _angle);
+			
+		public: // Derived function
 			virtual const char * const getObjectType(void) {
 				return "widget::Joystick";
 			};
-			virtual void calculateSize(const vec2& availlable);
+			virtual void calculateSize(const vec2& _availlable);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
-			
-			void setLockMode(bool lockWhenOut) { m_lock = lockWhenOut; };
-			void setDisplayMode(joystickMode_te newMode) { m_displayMode = newMode; };
-			/**
-			 * @brief set the ratio of the widget joystick
-			 * @param[in] newRatio the new ratio that might be set
-			 */
-			void ratio(float newRatio);
-			
-			/**
-			 * @brief set the Background of the widget joystick
-			 * @param[in] imageNameInData the new rbackground that might be set
-			 */
-			void background(etk::UString imageNameInData, bool display=true);
-			
-			/**
-			 * @brief set the Foreground of the widget joystick
-			 * @param[in] imageNameInData the new Foreground that might be set
-			 */
-			void foreground(etk::UString imageNameInData);
-			
-			/**
-			 * @brief get the property of the joystick
-			 * @param[out] distance distance to the center
-			 * @param[out] angle angle of the joy
-			 */
-			void getProperty(float& distance, float& angle);
-			
 	};
 };
 

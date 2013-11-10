@@ -235,7 +235,7 @@ void widget::Button::onRegenerateDisplay(void) {
 	}
 }
 
-void widget::Button::setLock(buttonLock_te _lock) {
+void widget::Button::setLock(enum buttonLock _lock) {
 	if (m_lock != _lock) {
 		m_lock = _lock;
 		if(widget::Button::lockAccess == _lock) {
@@ -463,7 +463,7 @@ bool widget::Button::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configLock) {
-		buttonLock_te tmpLock = lockNone;
+		enum buttonLock tmpLock = lockNone;
 		if(    true == _conf.getData().compareNoCase("true")
 		    || true == _conf.getData().compareNoCase("1")) {
 			tmpLock = lockAccess;

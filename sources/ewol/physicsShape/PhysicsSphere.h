@@ -23,14 +23,20 @@ namespace ewol {
 			virtual bool parse(const char* _line);
 			virtual void display(void) {};
 		public:
-			virtual type_te getType(void) { return ewol::PhysicsShape::sphere; };
+			virtual enum type getType(void) {
+				return ewol::PhysicsShape::sphere;
+			};
 		private:
 			float m_radius; // props["radius"] = obj.scale.x
 		public:
 			float getRadius(void) const { return m_radius; };
 		private:
-			virtual const PhysicsSphere* toSphere(void) const { return this; };
-			virtual PhysicsSphere* toSphere(void) { return this; };
+			virtual const PhysicsSphere* toSphere(void) const {
+				return this;
+			};
+			virtual PhysicsSphere* toSphere(void) {
+				return this;
+			};
 	};
 };
 

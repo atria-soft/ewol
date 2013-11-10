@@ -41,11 +41,11 @@ void ewol::eInput::setDpi(int32_t newDPI) {
 	calculateLimit();
 }
 
-bool ewol::eInput::localEventInput(ewol::keyEvent::type_te _type,
-                                         ewol::Widget* _destWidget,
-                                         int32_t _IdInput,
-                                         ewol::keyEvent::status_te _status,
-                                         vec2 _pos) {
+bool ewol::eInput::localEventInput(enum ewol::keyEvent::type _type,
+                                   ewol::Widget* _destWidget,
+                                   int32_t _IdInput,
+                                   enum ewol::keyEvent::status _status,
+                                   vec2 _pos) {
 	if (NULL != _destWidget) {
 		if (_type == ewol::keyEvent::typeMouse || _type == ewol::keyEvent::typeFinger) {
 			// create the system Event :
@@ -61,7 +61,7 @@ bool ewol::eInput::localEventInput(ewol::keyEvent::type_te _type,
 
 void ewol::eInput::abortElement(InputPoperty_ts *_eventTable,
                                 int32_t _idInput,
-                                ewol::keyEvent::type_te _type) {
+                                enum ewol::keyEvent::type _type) {
 	if (NULL == _eventTable) {
 		return;
 	}
@@ -179,7 +179,7 @@ ewol::eInput::~eInput(void) {
 	EWOL_INFO("Un-Init (end)");
 }
 
-int32_t ewol::eInput::localGetDestinationId(ewol::keyEvent::type_te _type,
+int32_t ewol::eInput::localGetDestinationId(enum ewol::keyEvent::type _type,
                                             ewol::Widget* _destWidget,
                                             int32_t _realInputId) {
 	if (_type == ewol::keyEvent::typeFinger) {
@@ -199,7 +199,7 @@ int32_t ewol::eInput::localGetDestinationId(ewol::keyEvent::type_te _type,
 }
 
 // note if id<0  == > the it was finger event ...
-void ewol::eInput::motion(ewol::keyEvent::type_te _type,
+void ewol::eInput::motion(enum ewol::keyEvent::type _type,
                           int _pointerID,
                           vec2 _pos) {
 	EVENT_DEBUG("motion event : " << _type << " " << _pointerID << " " << _pos);
@@ -328,7 +328,7 @@ void ewol::eInput::motion(ewol::keyEvent::type_te _type,
 	}
 }
 
-void ewol::eInput::state(ewol::keyEvent::type_te _type,
+void ewol::eInput::state(enum ewol::keyEvent::type _type,
                          int _pointerID,
                          bool _isDown,
                          vec2 _pos)
@@ -472,7 +472,7 @@ void ewol::eInput::state(ewol::keyEvent::type_te _type,
 					localEventInput(_type,
 					                eventTable[_pointerID].curentWidgetEvent,
 					                eventTable[_pointerID].destinationInputId,
-					                (ewol::keyEvent::status_te)(ewol::keyEvent::statusSingle + eventTable[_pointerID].nbClickEvent-1),
+					                (enum ewol::keyEvent::status)(ewol::keyEvent::statusSingle + eventTable[_pointerID].nbClickEvent-1),
 					                _pos);
 					if( eventTable[_pointerID].nbClickEvent >= nbClickMax) {
 						eventTable[_pointerID].nbClickEvent = 0;
