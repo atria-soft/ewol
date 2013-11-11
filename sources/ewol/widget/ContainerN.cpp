@@ -59,7 +59,7 @@ int32_t widget::ContainerN::subWidgetAdd(ewol::Widget* _newWidget) {
 	if (_newWidget!=NULL) {
 		_newWidget->setUpperWidget(this);
 	}
-	m_subWidget.pushBack(_newWidget);
+	m_subWidget.push_back(_newWidget);
 	markToRedraw();
 	requestUpdateSize();
 	// added at the last eelement :

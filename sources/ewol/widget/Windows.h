@@ -48,7 +48,7 @@ namespace ewol {
 			}
 		private:
 			ewol::Widget* m_subWidget;
-			etk::Vector<ewol::Widget*> m_popUpWidgetList;
+			std::vector<ewol::Widget*> m_popUpWidgetList;
 		public:
 			void setSubWidget(ewol::Widget* _widget);
 			void popUpWidgetPush(ewol::Widget* _widget);

@@ -16,8 +16,8 @@
 namespace ewol {
 	class EObjectManager {
 		private:
-			etk::Vector<ewol::EObject*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
-			etk::Vector<ewol::EObject*> m_eObjectAutoRemoveList; // all widget allocated
+			std::vector<ewol::EObject*> m_eObjectList; // all widget allocated  == > all time increment ... never removed ...
+			std::vector<ewol::EObject*> m_eObjectAutoRemoveList; // all widget allocated
 		public:
 			EObjectManager(void);
 			~EObjectManager(void);

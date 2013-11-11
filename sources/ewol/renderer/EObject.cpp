@@ -53,7 +53,7 @@ void ewol::EObject::removeObject(void) {
 
 void ewol::EObject::addEventId(const char * _generateEventId) {
 	if (NULL != _generateEventId) {
-		m_availlableEventId.pushBack(_generateEventId);
+		m_availlableEventId.push_back(_generateEventId);
 	}
 }
 
@@ -141,7 +141,7 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 	} else {
 		tmpEvent->destEventId = _eventId;
 	}
-	m_externEvent.pushBack(tmpEvent);
+	m_externEvent.push_back(tmpEvent);
 }
 
 void ewol::EObject::unRegisterOnEvent(ewol::EObject * _destinationObject,
@@ -193,7 +193,7 @@ void ewol::EObject::registerConfig(const char* _config,
 			}
 		}
 	}
-	m_listConfig.pushBack(ewol::EConfigElement(_config, _type, _control, _description, _default));
+	m_listConfig.push_back(ewol::EConfigElement(_config, _type, _control, _description, _default));
 }
 
 

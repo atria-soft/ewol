@@ -35,7 +35,7 @@ namespace ewol {
 			ewol::FontBase* m_font[4];
 			enum ewol::font::mode m_modeWraping[4]; //!< This is a wrapping mode to prevent the fact that no font is define for a specific mode
 		public:
-			etk::Vector<GlyphProperty> m_listElement[4];
+			std::vector<GlyphProperty> m_listElement[4];
 		private:
 			// for the texture generation :
 			ivec2 m_lastGlyphPos[4];

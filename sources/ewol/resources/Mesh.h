@@ -67,8 +67,8 @@ namespace ewol {
 	};
 	class FaceIndexing {
 		public:
-			etk::Vector<Face> m_faces;
-			etk::Vector<uint32_t> m_index;
+			std::vector<Face> m_faces;
+			std::vector<uint32_t> m_index;
 	};
 	class Mesh : public ewol::Resource {
 		public:
@@ -92,13 +92,13 @@ namespace ewol {
 			MaterialGlId   m_GLMaterial;
 			ewol::Light    m_light;
 		protected:
-			etk::Vector<vec3> m_listVertex; //!< List of all vertex in the element
-			etk::Vector<vec2> m_listUV; //!< List of all UV point in the mesh (for the specify texture)
-			etk::Vector<vec3> m_listFacesNormal; //!< List of all Face normal, when calculated
-			etk::Vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
+			std::vector<vec3> m_listVertex; //!< List of all vertex in the element
+			std::vector<vec2> m_listUV; //!< List of all UV point in the mesh (for the specify texture)
+			std::vector<vec3> m_listFacesNormal; //!< List of all Face normal, when calculated
+			std::vector<vec3> m_listVertexNormal; //!< List of all Face normal, when calculated
 			etk::Hash<FaceIndexing> m_listFaces; //!< List of all Face for the mesh
 			etk::Hash<ewol::Material*> m_materials;
-			etk::Vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ... (independent of bullet lib)
+			std::vector<ewol::PhysicsShape*> m_physics; //!< collision shape module ... (independent of bullet lib)
 		protected:
 			ewol::VirtualBufferObject* m_verticesVBO;
 		protected:
@@ -129,7 +129,7 @@ namespace ewol {
 			 * @return get the chcking stus of normal or not
 			 */
 			bool getCheckNormal(void) { return m_checkNormal; };
-			const etk::Vector<ewol::PhysicsShape*>& getPhysicalProperties(void) const { return m_physics; };
+			const std::vector<ewol::PhysicsShape*>& getPhysicalProperties(void) const { return m_physics; };
 		private:
 			void* m_pointerShape; //!< all mesh have a basic shape (bullet or other) the void pointer mermit to not depent on the bullet lib
 		public:

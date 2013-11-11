@@ -78,7 +78,7 @@ void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 		return;
 	}
 	if (_pos < 0 || _pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(_newObject);
+		m_listOObject.push_back(_newObject);
 	} else {
 		m_listOObject.insert(_pos, _newObject);
 	}
@@ -128,7 +128,7 @@ void widget::List::onRegenerateDisplay(void) {
 		                  (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
-		etk::Vector<int32_t> listSizeColomn;
+		std::vector<int32_t> listSizeColomn;
 		
 		ewol::Drawing * BGOObjects = new ewol::Drawing();
 		etk::Color<> basicBG = getBasicBG();
@@ -159,7 +159,7 @@ void widget::List::onRegenerateDisplay(void) {
 		int32_t displayPositionX = 0;
 		ivec2 tmpRegister(startRaw, displayPositionY);
 		// add the default position raw :
-		m_lineSize.pushBack(tmpRegister);
+		m_lineSize.push_back(tmpRegister);
 		
 		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
 			int32_t sizeColom = 0;
@@ -196,14 +196,14 @@ void widget::List::onRegenerateDisplay(void) {
 					// add the raw position to remember it ...
 					tmpRegister.setX(tmpRegister.x()+1);
 					tmpRegister.setY(displayPositionY);
-					m_lineSize.pushBack(tmpRegister);
+					m_lineSize.push_back(tmpRegister);
 					//EWOL_DEBUG("List indexation:" << tmpRegister);
 				}
 			}
 			displayPositionX += sizeColom;
 			tmpOriginX += m_paddingSizeX*2*2;
 		}
-		//m_lineSize.pushBack(tmpOriginY);
+		//m_lineSize.push_back(tmpOriginY);
 		addOObject(BGOObjects, 0);
 		
 		// call the herited class...

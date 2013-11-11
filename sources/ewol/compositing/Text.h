@@ -85,9 +85,9 @@ namespace ewol {
 		private:
 			ewol::TexturedFont* m_font; //!< Font resources
 		private: // Text
-			etk::Vector<vec2 > m_coord; //!< internal coord of the object
-			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
+			std::vector<vec2 > m_coord; //!< internal coord of the object
+			std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
+			std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief load the openGL program and get all the ID needed
@@ -301,7 +301,7 @@ namespace ewol {
 			 * @param[in] _text The string to display.
 			 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 			 */
-			void print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration);
+			void print(const etk::UString& _text, const std::vector<TextDecoration>& _decoration);
 			/**
 			 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] _charcode Char that might be dispalyed
@@ -379,7 +379,7 @@ namespace ewol {
 		private:
 			// this section is reserved for HTML parsing and display:
 			etk::UString m_htmlCurrrentLine; //!< current line for HTML display
-			etk::Vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
+			std::vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
 			TextDecoration m_htmlDecoTmp; //!< current decoration
 			/**
 			 * @brief add a line with the current m_htmlDecoTmp decoration

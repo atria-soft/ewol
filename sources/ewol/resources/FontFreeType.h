@@ -44,7 +44,7 @@ namespace ewol {
 			
 			int32_t getHeight(int32_t _fontSize);
 			
-			void generateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph);
+			void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph);
 		public:
 			/**
 			 * @brief keep the resource pointer.

@@ -57,7 +57,7 @@ void ewol::EObjectManager::unInit(void) {
 
 void ewol::EObjectManager::add(ewol::EObject* _object) {
 	if (NULL != _object) {
-		m_eObjectList.pushBack(_object);
+		m_eObjectList.push_back(_object);
 	} else {
 		EWOL_ERROR("try to add an inexistant EObject in manager");
 	}
@@ -120,7 +120,7 @@ void ewol::EObjectManager::autoRemove(ewol::EObject* _object) {
 			m_eObjectList.erase(iii);
 			EWOL_DEBUG("Auto-Remove EObject : [" << _object->getId() << "] type=\"" << _object->getObjectType() << "\"");
 			informOneObjectIsRemoved(_object);
-			m_eObjectAutoRemoveList.pushBack(_object);
+			m_eObjectAutoRemoveList.push_back(_object);
 			ewol::getContext().forceRedrawAll();
 			return;
 		}

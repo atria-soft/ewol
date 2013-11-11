@@ -10,7 +10,7 @@
 #define __EWOL_WIDGET_GIRD_H__
 
 #include <etk/types.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/WidgetManager.h>
@@ -31,8 +31,8 @@ namespace widget {
 			};
 			int32_t m_sizeRow; //!< size of all lines (row) (if set (otherwise 0))  == > we have a only one size ==> multiple size will have no use ...
 			int32_t m_uniformSizeRow;
-			etk::Vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
-			etk::Vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
+			std::vector<int32_t> m_sizeCol; //!< size of all colomn (if set (otherwise 0))
+			std::vector<GirdProperties> m_subWidget; //!< all sub widget are contained in this element
 			ewol::Widget* m_tmpWidget; //!< use when replace a widget ...
 			bool m_gavityButtom;
 		public:

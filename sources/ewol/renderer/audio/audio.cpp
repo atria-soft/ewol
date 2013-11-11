@@ -274,9 +274,9 @@ class RequestPlay {
 		}
 };
 
-#include <etk/Vector.h>
-etk::Vector<EffectsLoaded*> ListEffects;
-etk::Vector<RequestPlay*>   ListEffectsPlaying;
+#include <vector>
+std::vector<EffectsLoaded*> ListEffects;
+std::vector<RequestPlay*>   ListEffectsPlaying;
 
 
 int32_t ewol::audio::effects::add(etk::UString _file) {
@@ -294,7 +294,7 @@ int32_t ewol::audio::effects::add(etk::UString _file) {
 		EWOL_ERROR("Error to load the effects : \"" << _file << "\"");
 		return -1;
 	}
-	ListEffects.pushBack(tmpEffect);
+	ListEffects.push_back(tmpEffect);
 	return ListEffects.size()-1;
 }
 
@@ -342,7 +342,7 @@ void ewol::audio::effects::play(int32_t _effectId, float _xxx, float _yyy) {
 		EWOL_CRITICAL("Allocation error of a playing element : " << _effectId);
 		return;
 	}
-	ListEffectsPlaying.pushBack(newPlay);
+	ListEffectsPlaying.push_back(newPlay);
 }
 
 

@@ -87,9 +87,9 @@ void ewol::VirtualBufferObject::flush(void) {
 
 void ewol::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec3& _data) {
 	m_vboUsed[_id] = true;
-	m_buffer[_id].pushBack(_data.x());
-	m_buffer[_id].pushBack(_data.y());
-	m_buffer[_id].pushBack(_data.z());
+	m_buffer[_id].push_back(_data.x());
+	m_buffer[_id].push_back(_data.y());
+	m_buffer[_id].push_back(_data.z());
 }
 
 vec3 ewol::VirtualBufferObject::getOnBufferVec3(int32_t _id, int32_t _elementID) {
@@ -107,8 +107,8 @@ int32_t ewol::VirtualBufferObject::sizeOnBufferVec3(int32_t _id) {
 
 void ewol::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec2& _data) {
 	m_vboUsed[_id] = true;
-	m_buffer[_id].pushBack(_data.x());
-	m_buffer[_id].pushBack(_data.y());
+	m_buffer[_id].push_back(_data.x());
+	m_buffer[_id].push_back(_data.y());
 }
 
 vec2 ewol::VirtualBufferObject::getOnBufferVec2(int32_t _id, int32_t _elementID) {

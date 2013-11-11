@@ -60,7 +60,7 @@ void widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _p
 		return;
 	}
 	if (_pos < 0 || _pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(_newObject);
+		m_listOObject.push_back(_newObject);
 	} else {
 		m_listOObject.insert(_pos, _newObject);
 	}
@@ -116,7 +116,7 @@ void widget::ParameterList::onRegenerateDisplay(void) {
 		                   (minHeight + 2*m_paddingSizeY) * nbRaw );
 		
 		
-		etk::Vector<int32_t> listSizeColomn;
+		std::vector<int32_t> listSizeColomn;
 		
 		// set background color :
 		ewol::Drawing * tmpDraw = new ewol::Drawing();
@@ -210,7 +210,7 @@ void widget::ParameterList::onLostFocus(void) {
 void widget::ParameterList::menuAdd(etk::UString& _label, int32_t _refId, etk::UString& _image) {
 	widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
 	if (NULL != tmpEmement) {
-		m_list.pushBack(tmpEmement);
+		m_list.push_back(tmpEmement);
 		if (m_idSelected == -1 && _label != "---" && _refId>0) {
 			m_idSelected = m_list.size()-1;
 		}
@@ -222,7 +222,7 @@ void widget::ParameterList::menuAddGroup(etk::UString& _label) {
 	etk::UString image = "";
 	widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
 	if (NULL != tmpEmement) {
-		m_list.pushBack(tmpEmement);
+		m_list.push_back(tmpEmement);
 		markToRedraw();
 	}
 }

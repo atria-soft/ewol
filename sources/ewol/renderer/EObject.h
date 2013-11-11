@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/UString.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <exml/exml.h>
 namespace ewol {
 	// some class need to define element befor other ...
@@ -47,8 +47,8 @@ namespace ewol {
 			bool m_static; //!< set this variable at true if this element must not be auto destroy (exemple : use static object)
 		private:
 			int32_t m_uniqueId; //!< Object UniqueID  == > TODO : Check if it use is needed
-			etk::Vector<EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
-			etk::Vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
+			std::vector<EventExtGen*> m_externEvent; //!< Generic list of event generation for output link
+			std::vector<const char*> m_availlableEventId; //!< List of all event availlable for this widget
 		public:
 			/**
 			 * @brief Constructor
@@ -137,7 +137,7 @@ namespace ewol {
 			 */
 			virtual void onReceiveMessage(const ewol::EMessage& _msg) { };
 		private:
-			etk::Vector<ewol::EConfigElement> m_listConfig;
+			std::vector<ewol::EConfigElement> m_listConfig;
 		protected:
 			/**
 			 * @brief the EObject add a configuration capabilities
@@ -166,7 +166,7 @@ namespace ewol {
 			 * @brief get all the configuration list
 			 * @return The list of all parameter availlable in the widget
 			 */
-			virtual const etk::Vector<ewol::EConfigElement>& getConfigList(void) { return m_listConfig; };
+			virtual const std::vector<ewol::EConfigElement>& getConfigList(void) { return m_listConfig; };
 			/**
 			 * @brief Configuration requested to the curent EObject (systrem mode)
 			 * @param[in] _conf Configuration handle.

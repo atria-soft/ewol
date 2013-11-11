@@ -363,7 +363,7 @@ void ewol::Text::setDistanceFieldMode(bool _newMode) {
 }
 
 void ewol::Text::print(const etk::UString& _text) {
-	etk::Vector<TextDecoration> decorationEmpty;
+	std::vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
@@ -498,7 +498,7 @@ void ewol::Text::printHTML(const etk::UString& _text) {
 	htmlFlush();
 }
 
-void ewol::Text::print(const etk::UString& _text, const etk::Vector<TextDecoration>& _decoration) {
+void ewol::Text::print(const etk::UString& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -816,17 +816,17 @@ void ewol::Text::print(const etk::UChar& _charcode) {
 					 *                
 					 */
 					// set texture coordonates :
-					m_coordTex.pushBack(texturePos[0]);
-					m_coordTex.pushBack(texturePos[1]);
-					m_coordTex.pushBack(texturePos[2]);
+					m_coordTex.push_back(texturePos[0]);
+					m_coordTex.push_back(texturePos[1]);
+					m_coordTex.push_back(texturePos[2]);
 					// set display positions :
-					m_coord.pushBack(bitmapDrawPos[0]);
-					m_coord.pushBack(bitmapDrawPos[1]);
-					m_coord.pushBack(bitmapDrawPos[2]);
+					m_coord.push_back(bitmapDrawPos[0]);
+					m_coord.push_back(bitmapDrawPos[1]);
+					m_coord.push_back(bitmapDrawPos[2]);
 					// set the color
-					m_coordColor.pushBack(m_color);
-					m_coordColor.pushBack(m_color);
-					m_coordColor.pushBack(m_color);
+					m_coordColor.push_back(m_color);
+					m_coordColor.push_back(m_color);
+					m_coordColor.push_back(m_color);
 					/* Step 2 : 
 					 *              
 					 *   **         
@@ -835,17 +835,17 @@ void ewol::Text::print(const etk::UChar& _charcode) {
 					 *   ********   
 					 */
 					// set texture coordonates :
-					m_coordTex.pushBack(texturePos[0]);
-					m_coordTex.pushBack(texturePos[2]);
-					m_coordTex.pushBack(texturePos[3]);
+					m_coordTex.push_back(texturePos[0]);
+					m_coordTex.push_back(texturePos[2]);
+					m_coordTex.push_back(texturePos[3]);
 					// set display positions :
-					m_coord.pushBack(bitmapDrawPos[0]);
-					m_coord.pushBack(bitmapDrawPos[2]);
-					m_coord.pushBack(bitmapDrawPos[3]);
+					m_coord.push_back(bitmapDrawPos[0]);
+					m_coord.push_back(bitmapDrawPos[2]);
+					m_coord.push_back(bitmapDrawPos[3]);
 					// set the color
-					m_coordColor.pushBack(m_color);
-					m_coordColor.pushBack(m_color);
-					m_coordColor.pushBack(m_color);
+					m_coordColor.push_back(m_color);
+					m_coordColor.push_back(m_color);
+					m_coordColor.push_back(m_color);
 				}
 			}
 		}
@@ -1044,14 +1044,14 @@ void ewol::Text::htmlAddData(const etk::UString& _data) {
 		m_htmlCurrrentLine+=" ";
 		if(m_htmlDecoration.size()>0) {
 			TextDecoration tmp = m_htmlDecoration[m_htmlDecoration.size()-1];
-			m_htmlDecoration.pushBack(tmp);
+			m_htmlDecoration.push_back(tmp);
 		} else {
-			m_htmlDecoration.pushBack(m_htmlDecoTmp);
+			m_htmlDecoration.push_back(m_htmlDecoTmp);
 		}
 	}
 	m_htmlCurrrentLine += _data;
 	for(int32_t iii=0; iii<_data.size() ; iii++) {
-		m_htmlDecoration.pushBack(m_htmlDecoTmp);
+		m_htmlDecoration.push_back(m_htmlDecoTmp);
 	}
 }
 

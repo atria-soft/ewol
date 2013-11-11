@@ -39,14 +39,14 @@ namespace widget {
 	class ParameterList :public widget::WidgetScrooled {
 		private:
 			int32_t m_idSelected;
-			etk::Vector<widget::elementPL *> m_list;
+			std::vector<widget::elementPL *> m_list;
 		public:
 			ParameterList(void);
 			virtual ~ParameterList(void);
 			void setLabel(etk::UString _newLabel);
 		// drawing capabilities ....
 		private:
-			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
+			std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 		public:
 			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 			void clearOObjectList(void);

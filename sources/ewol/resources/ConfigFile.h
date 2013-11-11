@@ -36,7 +36,7 @@ namespace ewol {
 	
 	class ConfigFile : public ewol::Resource {
 		private:
-			etk::Vector<ewol::SimpleConfigElement*> m_list;
+			std::vector<ewol::SimpleConfigElement*> m_list;
 			etk::UString m_errorString;
 		protected:
 			ConfigFile(const etk::UString& _filename);

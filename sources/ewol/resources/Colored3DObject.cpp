@@ -32,7 +32,7 @@ ewol::Colored3DObject::~Colored3DObject(void) {
 }
 
 
-void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  bool _updateDepthBuffer,
                                  bool _depthtest) {
@@ -74,7 +74,7 @@ void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
 	}
 }
 
-void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
                                  const etk::Color<float>& _color,
                                  mat4& _transformationMatrix,
                                  bool _updateDepthBuffer,
@@ -114,7 +114,7 @@ void ewol::Colored3DObject::draw(etk::Vector<vec3>& _vertices,
 	}
 }
 
-void ewol::Colored3DObject::drawLine(etk::Vector<vec3>& _vertices,
+void ewol::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
                                      const etk::Color<float>& _color,
                                      mat4& _transformationMatrix,
                                      bool _updateDepthBuffer,

@@ -27,7 +27,7 @@ namespace widget {
 				scroolModeGame, //!< Zoom enable, no move left and right
 			};
 		private:
-			etk::Vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
+			std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 			void clearOObjectList(void);
 		protected:

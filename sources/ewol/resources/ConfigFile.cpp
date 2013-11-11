@@ -118,7 +118,7 @@ void ewol::ConfigFile::reload(void) {
 				EWOL_DEBUG("error while allocation");
 			} else {
 				tmpElement->parse(paramValue);
-				m_list.pushBack(tmpElement);
+				m_list.push_back(tmpElement);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ int32_t ewol::ConfigFile::request(const etk::UString& _paramName) {
 	if (NULL == tmpElement) {
 		EWOL_DEBUG("error while allocation");
 	} else {
-		m_list.pushBack(tmpElement);
+		m_list.push_back(tmpElement);
 	}
 	return m_list.size()-1;
 }

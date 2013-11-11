@@ -33,9 +33,9 @@ namespace ewol {
 				return m_scale;
 			};
 		private:
-			etk::Vector<vec3> m_points;
+			std::vector<vec3> m_points;
 		public:
-			const etk::Vector<vec3>& getPointList(void) const {
+			const std::vector<vec3>& getPointList(void) const {
 				return m_points;
 			};
 		public:

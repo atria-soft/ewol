@@ -84,21 +84,21 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	etk::UString localName = _fontName.extract(0, (tmpPos - tmpData));
 	m_size = tmpSize;
 	
-	etk::Vector<etk::UString> folderList;
+	std::vector<etk::UString> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
 		#if defined(__TARGET_OS__Android)
-			folderList.pushBack("/system/fonts");
+			folderList.push_back("/system/fonts");
 		#elif defined(__TARGET_OS__Linux)
-			folderList.pushBack("/usr/share/fonts/truetype");
+			folderList.push_back("/usr/share/fonts/truetype");
 		#endif
 	}
-	folderList.pushBack(ewol::getContext().getFontDefault().getFolder());
+	folderList.push_back(ewol::getContext().getFontDefault().getFolder());
 	for (int32_t folderID=0; folderID<folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
-		etk::Vector<etk::UString> output;
+		std::vector<etk::UString> output;
 		myFolder.folderGetRecursiveFiles(output);
-		etk::Vector<etk::UString> split = localName.split(';');
+		std::vector<etk::UString> split = localName.split(';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -282,7 +282,7 @@ bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 			EWOL_WARNING("Did not find char : '" << _val << "'=" << _val.get());
 			tmpchar.setNotExist();
 		}
-		m_listElement[iii].pushBack(tmpchar);
+		m_listElement[iii].push_back(tmpchar);
 		//m_font[iii]->display();
 		// generate the kerning for all the characters :
 		if (tmpchar.exist() == true) {

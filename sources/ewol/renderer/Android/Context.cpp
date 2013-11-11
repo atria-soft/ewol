@@ -395,7 +395,7 @@ class AndroidContext : public ewol::eContext {
 		}
 };
 
-static etk::Vector<AndroidContext*> s_listInstance;
+static std::vector<AndroidContext*> s_listInstance;
 
 extern "C"
 {
@@ -458,7 +458,7 @@ extern "C"
 			return -1;
 		}
 		// for future case : all time this ...
-		s_listInstance.pushBack(tmpContext);
+		s_listInstance.push_back(tmpContext);
 		int32_t newID = s_listInstance.size()-1;
 		return newID;
 	}

@@ -39,7 +39,7 @@ namespace ewol {
 			
 			virtual int32_t getHeight(int32_t _fontSize) = 0;
 			
-			virtual void generateKerning(int32_t _fontSize, etk::Vector<ewol::GlyphProperty>& _listGlyph) { };
+			virtual void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph) { };
 			
 			virtual void display(void) {};
 	};

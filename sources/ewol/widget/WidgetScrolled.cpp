@@ -326,7 +326,7 @@ void widget::WidgetScrooled::addOObject(ewol::Compositing* _newObject, int32_t _
 		return;
 	}
 	if (_pos < 0 || _pos >= m_listOObject.size() ) {
-		m_listOObject.pushBack(_newObject);
+		m_listOObject.push_back(_newObject);
 	} else {
 		m_listOObject.insert(_pos, _newObject);
 	}

@@ -25,8 +25,8 @@
 namespace ewol {
 	class ResourceManager {
 		private:
-			etk::Vector<ewol::Resource*> m_resourceList;
-			etk::Vector<ewol::Resource*> m_resourceListToUpdate;
+			std::vector<ewol::Resource*> m_resourceList;
+			std::vector<ewol::Resource*> m_resourceListToUpdate;
 			bool m_contextHasBeenRemoved;
 		public:
 			/**

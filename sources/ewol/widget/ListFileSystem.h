@@ -23,7 +23,7 @@ namespace widget {
 	 */
 	class ListFileSystem : public widget::List {
 		private:
-			etk::Vector<etk::FSNode *> m_list;
+			std::vector<etk::FSNode *> m_list;
 			etk::UString m_folder;
 			int32_t m_selectedLine;
 			bool m_showFile;

@@ -180,7 +180,7 @@ void ewol::Windows::setSubWidget(ewol::Widget* _widget) {
 }
 
 void ewol::Windows::popUpWidgetPush(ewol::Widget* _widget) {
-	m_popUpWidgetList.pushBack(_widget);
+	m_popUpWidgetList.push_back(_widget);
 	// Regenerate the size calculation :
 	calculateSize(m_size);
 	// TODO : it is dansgerous to access directly to the system ...

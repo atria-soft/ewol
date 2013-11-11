@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/UString.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <exml/exml.h>
 
 #include <ewol/renderer/EObject.h>
@@ -28,7 +28,7 @@ namespace ewol {
 					const char* m_message;
 					ewol::EObject* m_object;
 			};
-			etk::Vector<MessageList> m_messageList; //!< List of all message ...
+			std::vector<MessageList> m_messageList; //!< List of all message ...
 		public:
 			EMultiCast();
 			~EMultiCast(void);

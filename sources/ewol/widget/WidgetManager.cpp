@@ -24,7 +24,7 @@
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/Scroll.h>
 #include <ewol/widget/PopUp.h>
-#include <etk/Vector.h>
+#include <vector>
 
 #undef __class__
 #define __class__ "WidgetManager"
@@ -165,7 +165,7 @@ void ewol::WidgetManager::periodicCallAdd(ewol::Widget* _pWidget) {
 			return;
 		}
 	}
-	m_listOfPeriodicWidget.pushBack(_pWidget);
+	m_listOfPeriodicWidget.push_back(_pWidget);
 	m_havePeriodic = true;
 }
 

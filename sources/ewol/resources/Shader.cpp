@@ -86,7 +86,7 @@ void ewol::Shader::updateContext(void) {
 				}
 				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
 				EWOL_ERROR("Error " << l_bufferDisplayError);
-				etk::Vector<etk::UString> lines = etk::UString(m_fileData).split('\n');
+				std::vector<etk::UString> lines = etk::UString(m_fileData).split('\n');
 				for (esize_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}

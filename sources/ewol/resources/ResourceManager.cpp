@@ -98,7 +98,7 @@ void ewol::ResourceManager::update(ewol::Resource* _object) {
 		}
 	}
 	// add it ...
-	m_resourceListToUpdate.pushBack(_object);
+	m_resourceListToUpdate.push_back(_object);
 }
 
 // Specific to load or update the data in the openGl context  == > system use only
@@ -173,7 +173,7 @@ void ewol::ResourceManager::localAdd(ewol::Resource* _object) {
 		}
 	}
 	// add at the end if no slot is free
-	m_resourceList.pushBack(_object);
+	m_resourceList.push_back(_object);
 }
 
 bool ewol::ResourceManager::release(ewol::Resource*& _object) {

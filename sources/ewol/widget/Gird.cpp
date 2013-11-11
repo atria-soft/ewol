@@ -162,7 +162,7 @@ void widget::Gird::setColNumber(int32_t _colNumber) {
 	} else {
 		// just add the col size:
 		for (int32_t iii=m_sizeCol.size()-1; iii<_colNumber-1 ; iii++) {
-			m_sizeCol.pushBack(0);
+			m_sizeCol.push_back(0);
 		}
 	}
 }
@@ -256,7 +256,7 @@ void widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _n
 		}
 	}
 	// not find  == > just adding it ...
-	m_subWidget.pushBack(prop);
+	m_subWidget.push_back(prop);
 }
 
 void widget::Gird::subWidgetRemove(ewol::Widget* _newWidget)

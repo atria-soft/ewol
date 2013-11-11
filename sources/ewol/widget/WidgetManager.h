@@ -11,7 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <etk/Hash.h>
 #include <ewol/widget/Widget.h>
 
@@ -23,7 +23,7 @@ namespace ewol {
 			// For the focus Management
 			ewol::Widget* m_focusWidgetDefault;
 			ewol::Widget* m_focusWidgetCurrent;
-			etk::Vector<ewol::Widget*> m_listOfPeriodicWidget;
+			std::vector<ewol::Widget*> m_listOfPeriodicWidget;
 			bool m_havePeriodic;
 			bool m_haveRedraw;
 			etk::Hash<creator_tf> m_creatorList;

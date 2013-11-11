@@ -47,8 +47,8 @@ namespace ewol {
 		private :
 			bool m_exist; //!< the file existed
 			GLuint m_program; //!< openGL id of the current program
-			etk::Vector<ewol::Shader*> m_shaderList; //!< List of all the shader loaded
-			etk::Vector<ewol::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
+			std::vector<ewol::Shader*> m_shaderList; //!< List of all the shader loaded
+			std::vector<ewol::progAttributeElement> m_elementList; //!< List of all the attribute requested by the user
 			bool m_hasTexture; //!< A texture has been set to the current shader
 			bool m_hasTexture1; //!< A texture has been set to the current shader
 		protected:

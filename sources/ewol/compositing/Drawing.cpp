@@ -12,21 +12,21 @@
 
 #if 0
 
-static void generatePolyGone(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output )
+static void generatePolyGone(std::vector<vec2 > & input, std::vector<vec2 > & output )
 {
 	if (input.size()<3) {
 		return;
 	}
 	// TODO : Regenerate a linear poligone generation
 	for (int32_t iii=1; iii<input.size()-1; iii++) {
-		output.pushBack(input[0]);
-		output.pushBack(input[iii]);
-		output.pushBack(input[iii+1]);
+		output.push_back(input[0]);
+		output.push_back(input[iii]);
+		output.push_back(input[iii+1]);
 	}
 	//EWOL_DEBUG("generate Plygone : " << input.size() << "  == > " << output.size() );
 }
 
-static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & output, float sx, float sy, float ex, float ey)
+static void SutherlandHodgman(std::vector<vec2 > & input, std::vector<vec2 > & output, float sx, float sy, float ex, float ey)
 {
 	// with Sutherland-Hodgman-Algorithm
 	if (input.size() <0) {
@@ -51,7 +51,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
-				output.pushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT  == > OUT ");
 			}
@@ -59,7 +59,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN  == > IN ");
-				output.pushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT  == > IN ");
 				//new point intersection ...
@@ -68,8 +68,8 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*sx + bbb;
 				destPoint.x = sx;
-				output.pushBack(destPoint);
-				output.pushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -96,7 +96,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
-				output.pushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT  == > OUT ");
 			}
@@ -104,7 +104,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN  == > IN ");
-				output.pushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT  == > IN ");
 				//new point intersection ...
@@ -113,8 +113,8 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = sy;
 				destPoint.x = sy*aaa + bbb;
-				output.pushBack(destPoint);
-				output.pushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -141,7 +141,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
-				output.pushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT  == > OUT ");
 			}
@@ -149,7 +149,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN  == > IN ");
-				output.pushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT  == > IN ");
 				//new point intersection ...
@@ -158,8 +158,8 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.y - (aaa*lastElement.x);
 				destPoint.y = aaa*ex + bbb;
 				destPoint.x = ex;
-				output.pushBack(destPoint);
-				output.pushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -185,7 +185,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
-				output.pushBack(destPoint);
+				output.push_back(destPoint);
 			} else {
 				//EWOL_DEBUG("element OUT  == > OUT ");
 			}
@@ -193,7 +193,7 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 		} else {
 			if(true == inside) {
 				//EWOL_DEBUG("element IN  == > IN ");
-				output.pushBack(input[iii]);
+				output.push_back(input[iii]);
 			} else {
 				//EWOL_DEBUG("element OUT  == > IN ");
 				//new point intersection ...
@@ -202,8 +202,8 @@ static void SutherlandHodgman(etk::Vector<vec2 > & input, etk::Vector<vec2 > & o
 				float bbb = lastElement.x - (aaa*lastElement.y);
 				destPoint.y = ey;
 				destPoint.x = ey*aaa + bbb;
-				output.pushBack(destPoint);
-				output.pushBack(input[iii]);
+				output.push_back(destPoint);
+				output.push_back(input[iii]);
 			}
 			inside = true;
 		}
@@ -244,12 +244,12 @@ ewol::Drawing::~Drawing(void) {
 void ewol::Drawing::generateTriangle(void) {
 	m_triElement = 0;
 	
-	m_coord.pushBack(m_triangle[0]);
-	m_coordColor.pushBack(m_tricolor[0]);
-	m_coord.pushBack(m_triangle[1]);
-	m_coordColor.pushBack(m_tricolor[1]);
-	m_coord.pushBack(m_triangle[2]);
-	m_coordColor.pushBack(m_tricolor[2]);
+	m_coord.push_back(m_triangle[0]);
+	m_coordColor.push_back(m_tricolor[0]);
+	m_coord.push_back(m_triangle[1]);
+	m_coordColor.push_back(m_tricolor[1]);
+	m_coord.push_back(m_triangle[2]);
+	m_coordColor.push_back(m_tricolor[2]);
 }
 
 void ewol::Drawing::internalSetColor(const etk::Color<>& _color) {

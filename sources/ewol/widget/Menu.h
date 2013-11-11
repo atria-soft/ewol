@@ -45,7 +45,7 @@ namespace widget {
 			virtual void subWidgetRemove(ewol::Widget* _newWidget);
 			virtual void subWidgetUnLink(ewol::Widget* _newWidget);
 		private:
-			etk::Vector<widget::MenuElement*> m_listElement;
+			std::vector<widget::MenuElement*> m_listElement;
 			int32_t m_staticId; // unique ID for every element of the menu ...
 			widget::ContextMenu* m_widgetContextMenu;
 		public:

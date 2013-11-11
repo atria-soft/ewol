@@ -29,9 +29,9 @@ namespace ewol
 			int32_t        m_GLtexID;    //!< openGL id on the element (texture ID)
 		private:
 			ewol::Texture* m_resource; //!< texture resources
-			etk::Vector<vec3 > m_coord; //!< internal coord of the object
-			etk::Vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
-			etk::Vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
+			std::vector<vec3 > m_coord; //!< internal coord of the object
+			std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
+			std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point
 		private:
 			/**
 			 * @brief load the openGL program and get all the ID needed

@@ -27,7 +27,7 @@ namespace ewol {
 			bool m_exist;  //!< This data is availlable in the Graphic card
 			GLuint m_vbo[NB_VBO_MAX]; //!< openGl ID of this VBO
 			bool m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...
-			etk::Vector<float> m_buffer[NB_VBO_MAX]; //!< data that is availlable in the VBO system ...
+			std::vector<float> m_buffer[NB_VBO_MAX]; //!< data that is availlable in the VBO system ...
 		protected:
 			/**
 			 * @brief Constructor of this VBO.
@@ -54,7 +54,7 @@ namespace ewol {
 			 * @param[in] id Id of the buffer requested
 			 * @return A reference on the data.
 			 */
-			etk::Vector<float>& getRefBuffer(int32_t id) { m_vboUsed[id] = true; return m_buffer[id]; };
+			std::vector<float>& getRefBuffer(int32_t id) { m_vboUsed[id] = true; return m_buffer[id]; };
 			/**
 			 * @brief push data on a buffer with a custum type :
 			 * @param[in] id Id of the buffer requested.

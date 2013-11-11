@@ -18,7 +18,7 @@ namespace ewol {
 	class Windows;
 };
 #include <etk/types.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <etk/math/Vector2D.h>
 #include <ewol/debug.h>
 #include <ewol/clipBoard.h>
@@ -585,7 +585,7 @@ namespace ewol {
 		// -- Shortcut : management of the shortcut
 		// ----------------------------------------------------------------------------------------------------------------
 		private:
-			etk::Vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
+			std::vector<EventShortCut*> m_localShortcut; //!< list of all shortcut in the widget
 		protected:
 			/**
 			 * @brief add a specific shortcut with his description

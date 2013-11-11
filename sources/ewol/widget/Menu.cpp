@@ -79,7 +79,7 @@ int32_t widget::Menu::add(int32_t _parent,
 	tmpObject->m_image = _image;
 	tmpObject->m_generateEvent = _generateEvent;
 	tmpObject->m_message = _message;
-	m_listElement.pushBack(tmpObject);
+	m_listElement.push_back(tmpObject);
 	if (-1 == tmpObject->m_parentId) {
 		widget::Button *myButton = NULL;
 		myButton = new widget::Button();

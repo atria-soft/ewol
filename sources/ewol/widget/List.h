@@ -31,8 +31,8 @@ namespace widget {
 			void setLabel(etk::UString _newLabel);
 		// drawing capabilities ....
 		private:
-			etk::Vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
-			etk::Vector<ivec2 > m_lineSize;
+			std::vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
+			std::vector<ivec2 > m_lineSize;
 		public:
 			void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 			void clearOObjectList(void);

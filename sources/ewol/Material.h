@@ -36,7 +36,7 @@ namespace ewol {
 			float m_shininess;
 			ewol::TextureFile* m_texture0;
 		public:
-			etk::Vector<uint32_t> m_listIndexFaces;
+			std::vector<uint32_t> m_listIndexFaces;
 		public:
 			Material(void);
 			~Material(void);

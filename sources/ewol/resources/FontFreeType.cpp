@@ -7,7 +7,7 @@
  */
 
 #include <etk/unicode.h>
-#include <etk/Vector.h>
+#include <vector>
 #include <etk/os/FSNode.h>
 
 
@@ -223,7 +223,7 @@ bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
 }
 
 
-void ewol::FontFreeType::generateKerning(int32_t fontSize, etk::Vector<ewol::GlyphProperty>& listGlyph) {
+void ewol::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::GlyphProperty>& listGlyph) {
 	if(false == m_init) {
 		return;
 	}

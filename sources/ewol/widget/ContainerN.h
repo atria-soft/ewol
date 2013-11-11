@@ -20,7 +20,7 @@ namespace widget {
 	 */
 	class ContainerN : public ewol::Widget {
 		protected:
-			etk::Vector<ewol::Widget*> m_subWidget;
+			std::vector<ewol::Widget*> m_subWidget;
 		public:
 			/**
 			 * @brief Constructor

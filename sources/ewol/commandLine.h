@@ -15,7 +15,7 @@
 namespace ewol {
 	class CommandLine {
 		private:
-			etk::Vector<etk::UString> m_listArgs; //!< list of all argument parsed
+			std::vector<etk::UString> m_listArgs; //!< list of all argument parsed
 		public:
 			/**
 			 * @brief Parse the command line parameters
