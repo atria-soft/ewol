@@ -48,7 +48,7 @@ namespace ewol {
 			 * @brief Constructor
 			 * @param[in] _config dimension configuration.
 			 */
-			Dimension(const etk::UString& _config) :
+			Dimension(const std::string& _config) :
 			  m_data(0,0),
 			  m_type(ewol::Dimension::Pixel) {
 				set(_config);
@@ -70,7 +70,7 @@ namespace ewol {
 			/**
 			 * @brief string cast :
 			 */
-			operator etk::UString(void) const;
+			operator std::string(void) const;
 			
 			/**
 			 * @brief get the current dimention in requested type
@@ -90,7 +90,7 @@ namespace ewol {
 			 * @brief set the current dimention in requested type
 			 * @param[in] _config dimension configuration.
 			 */
-			void set(etk::UString _config);
+			void set(std::string _config);
 		public:
 			/**
 			 * @brief get the current dimention in pixel

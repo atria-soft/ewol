@@ -15,18 +15,15 @@
 #define __class__	"ConfigFile"
 
 
-void ewol::SimpleConfigElement::parse(const etk::UString& value) {
-	etk::Char tmp = value.c_str();
-	m_valueInt = 0;
-	m_valuefloat = 0;
-	sscanf(tmp, "%d", &m_valueInt);
-	sscanf(tmp, "%f", &m_valuefloat);
+void ewol::SimpleConfigElement::parse(const std::string& value) {
+	m_valueInt = std::stoi(value);
+	m_valuefloat = std::stof(value);
 	m_value = value;
 }
 
 
 
-ewol::ConfigFile::ConfigFile(const etk::UString& _filename) :
+ewol::ConfigFile::ConfigFile(const std::string& _filename) :
   ewol::Resource(_filename) {
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
@@ -58,7 +55,7 @@ void ewol::ConfigFile::reload(void) {
 		EWOL_ERROR("File does not Exist : \"" << file << "\"");
 		return;
 	}
-	etk::UString fileExtention = file.fileGetExtention();
+	std::string fileExtention = file.fileGetExtention();
 	if (fileExtention != "conf") {
 		EWOL_ERROR("File does not have extention \".conf\" for program but : \"" << fileExtention << "\"");
 		return;
@@ -80,25 +77,25 @@ void ewol::ConfigFile::reload(void) {
 		if (len == 0) {
 			continue;
 		}
-		etk::UString tmpData2(tmpData);
-		etk::UString tmppp("#");
-		if (true == tmpData2.startWith(tmppp)) {
+		std::string tmpData2(tmpData);
+		std::string tmppp("#");
+		if (start_with(tmpData2, tmppp) == true) {
 			// comment ...
 			continue;
 		}
 		tmppp="//";
-		if (true == tmpData2.startWith(tmppp)) {
+		if (start_with(tmpData2, tmppp) == true) {
 			// comment ...
 			continue;
 		}
 		// get parameters :
-		int32_t pos = tmpData2.findForward('=');
-		if (pos == -1){
+		size_t pos = tmpData2.find('=');
+		if (pos == 0){
 			//the element "=" is not find ...
 			continue;
 		}
-		etk::UString paramName = tmpData2.extract(0, pos);
-		etk::UString paramValue = tmpData2.extract(pos+1, 0x7FFFF);
+		std::string paramName = std::string(tmpData2, 0, pos);
+		std::string paramValue = std::string(tmpData2, pos+1, 0x7FFFF);
 		EWOL_DEBUG("        param name=\"" << paramName << "\" val=\"" << paramValue << "\"");
 		// check if the parameters existed :
 		bool findParam = false;
@@ -127,7 +124,7 @@ void ewol::ConfigFile::reload(void) {
 }
 
 
-int32_t ewol::ConfigFile::request(const etk::UString& _paramName) {
+int32_t ewol::ConfigFile::request(const std::string& _paramName) {
 	// check if the parameters existed :
 	for (int32_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -146,7 +143,7 @@ int32_t ewol::ConfigFile::request(const etk::UString& _paramName) {
 }
 
 
-ewol::ConfigFile* ewol::ConfigFile::keep(const etk::UString& _filename) {
+ewol::ConfigFile* ewol::ConfigFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
 	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(getManager().localKeep(_filename));
 	if (NULL != object) {

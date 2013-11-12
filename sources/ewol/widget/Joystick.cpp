@@ -17,8 +17,8 @@ extern const char * const ewolEventJoystickDisable  = "ewol-joystick-disable";
 extern const char * const ewolEventJoystickMove     = "ewol-joystick-move";
 
 static bool         l_displayBackground(true);
-static etk::UString l_background("");
-static etk::UString l_foreground("");
+static std::string l_background("");
+static std::string l_foreground("");
 static float   l_ratio(1.0/7.0);
 
 #undef __class__
@@ -145,7 +145,7 @@ bool widget::Joystick::onEventInput(const ewol::EventInput& _event) {
 			if(ewol::keyEvent::statusDown == typeEvent) {
 				generateEventId(ewolEventJoystickEnable);
 			} else {
-				etk::UString tmp = etk::UString("distance=") + etk::UString(m_distance) + etk::UString("angle=") + etk::UString(m_angle+M_PI/2);
+				std::string tmp = std::string("distance=") + std::string(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
 				generateEventId(ewolEventJoystickMove, tmp);
 			}
 			//teta += M_PI/2;
@@ -181,7 +181,7 @@ void widget::Joystick::ratio(float newRatio) {
 }
 
 
-void widget::Joystick::background(etk::UString imageNameInData, bool display) {
+void widget::Joystick::background(std::string imageNameInData, bool display) {
 	// TODO : check if it existed
 	m_background = imageNameInData;
 	m_displayBackground = display;
@@ -189,7 +189,7 @@ void widget::Joystick::background(etk::UString imageNameInData, bool display) {
 }
 
 
-void widget::Joystick::foreground(etk::UString imageNameInData) {
+void widget::Joystick::foreground(std::string imageNameInData) {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
 	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);

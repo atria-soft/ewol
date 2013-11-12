@@ -13,7 +13,7 @@
 #undef __class__
 #define __class__	"ewol::Shaper"
 
-ewol::Shaper::Shaper(const etk::UString& _shaperName) :
+ewol::Shaper::Shaper(const std::string& _shaperName) :
   m_name(_shaperName),
   m_config(NULL),
   m_confIdPaddingX(-1),
@@ -65,11 +65,11 @@ void ewol::Shaper::loadProgram(void) {
 		m_confProgramFile  = m_config->request("program");
 		m_confImageFile    = m_config->request("image");
 	}
-	etk::UString basicShaderFile = m_config->getString(m_confProgramFile);
+	std::string basicShaderFile = m_config->getString(m_confProgramFile);
 	if (basicShaderFile!="") {
 		// get the relative position of the current file ...
 		etk::FSNode file(m_name);
-		etk::UString tmpFilename = file.getRelativeFolder() + basicShaderFile;
+		std::string tmpFilename = file.getRelativeFolder() + basicShaderFile;
 		EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
 		// get the shader resource :
 		m_GLPosition = 0;
@@ -89,7 +89,7 @@ void ewol::Shaper::loadProgram(void) {
 			// for the texture ID : 
 			m_GLtexID              = m_GLprogram->getUniform("EW_texID");
 		}
-		etk::UString basicImageFile = m_config->getString(m_confImageFile);
+		std::string basicImageFile = m_config->getString(m_confImageFile);
 		if (basicImageFile != "") {
 			tmpFilename = file.getRelativeFolder() + basicImageFile;
 			ivec2 size(64,64);
@@ -234,7 +234,7 @@ vec2 ewol::Shaper::getPadding(void) {
 	return padding;
 }
 
-void ewol::Shaper::setSource(const etk::UString& _newFile) {
+void ewol::Shaper::setSource(const std::string& _newFile) {
 	clear();
 	unLoadProgram();
 	m_name = _newFile;

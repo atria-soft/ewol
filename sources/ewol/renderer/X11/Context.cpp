@@ -261,12 +261,12 @@ class X11Interface : public ewol::eContext {
 								                   &buf// **prop_return);
 								                   );
 								if (true == m_clipBoardRequestPrimary) {
-									etk::UString tmpppp((char*)buf);
+									std::string tmpppp((char*)buf);
 									ewol::clipBoard::setSystem(ewol::clipBoard::clipboardSelection, tmpppp);
 									// just transmit an event , we have the data in the system
 									OS_ClipBoardArrive(ewol::clipBoard::clipboardSelection);
 								} else {
-									etk::UString tmpppp((char*)buf);
+									std::string tmpppp((char*)buf);
 									ewol::clipBoard::setSystem(ewol::clipBoard::clipboardStd, tmpppp);
 									// just transmit an event , we have the data in the system
 									OS_ClipBoardArrive(ewol::clipBoard::clipboardStd);
@@ -288,14 +288,13 @@ class X11Interface : public ewol::eContext {
 							}
 							#endif
 							
-							etk::UString tmpData = "";
+							std::string tmpData = "";
 							if (req->selection == XAtomeSelection) {
 								tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardSelection);
 							} else if (req->selection == XAtomeClipBoard) {
 								tmpData = ewol::clipBoard::get(ewol::clipBoard::clipboardStd);
 							}
-							etk::Char tmpValueStoredTimeToSend = tmpData.c_str();
-							const char * magatTextToSend = tmpValueStoredTimeToSend;
+							const char * magatTextToSend = tmpData.c_str();
 							Atom listOfAtom[4];
 							if(strlen(magatTextToSend) == 0 ) {
 								respond.xselection.property= None;
@@ -658,8 +657,7 @@ class X11Interface : public ewol::eContext {
 											}
 											if (count>0) {
 												// transform it in unicode
-												etk::UChar tmpChar = 0;
-												tmpChar.setUtf8(buf);
+												char32_t tmpChar = etk::setUtf8(buf);
 												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 												OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);
 												if (true == thisIsAReapeateKey) {
@@ -1031,7 +1029,7 @@ class X11Interface : public ewol::eContext {
 			return true;
 		}
 		/****************************************************************************************/
-		void setIcon(const etk::UString& _inputFile) {
+		void setIcon(const std::string& _inputFile) {
 			egami::Image dataImage;
 			// load data
 			if (false == egami::load(dataImage, _inputFile)) {
@@ -1205,11 +1203,10 @@ class X11Interface : public ewol::eContext {
 			return true;
 		}
 		/****************************************************************************************/
-		void setTitle(const etk::UString& _title) {
+		void setTitle(const std::string& _title) {
 			X11_INFO("X11: set Title (START)");
 			XTextProperty tp;
-			etk::Char tmpChar = _title.c_str();
-			tp.value = (unsigned char *)((const char*)tmpChar);
+			tp.value = (unsigned char *)_title.c_str();
 			tp.encoding = XA_WM_NAME;
 			tp.format = 8;
 			tp.nitems = strlen((const char*)tp.value);

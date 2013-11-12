@@ -42,7 +42,7 @@ void widget::Button::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-widget::Button::Button(const etk::UString& _shaperName) :
+widget::Button::Button(const std::string& _shaperName) :
   m_shaper(_shaperName),
   m_value(false),
   m_lock(widget::Button::lockNone),
@@ -81,7 +81,7 @@ widget::Button::~Button(void) {
 }
 
 
-void widget::Button::setShaperName(const etk::UString& _shaperName) {
+void widget::Button::setShaperName(const std::string& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
@@ -382,7 +382,7 @@ void widget::Button::periodicCall(const ewol::EventTime& _event) {
 }
 
 
-ewol::Widget* widget::Button::getWidgetNamed(const etk::UString& _widgetName) {
+ewol::Widget* widget::Button::getWidgetNamed(const std::string& _widgetName) {
 	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (NULL!=tmpUpperWidget) {
 		return tmpUpperWidget;
@@ -420,7 +420,7 @@ bool widget::Button::loadXML(exml::Element* _element) {
 			// trash here all that is not element
 			continue;
 		}
-		etk::UString widgetName = pNode->getValue();
+		std::string widgetName = pNode->getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
 			continue;
@@ -488,7 +488,7 @@ bool widget::Button::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::Button::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::Button::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

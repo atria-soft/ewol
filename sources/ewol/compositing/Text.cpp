@@ -14,7 +14,7 @@
 #define __class__	"ewol::Text"
 
 
-ewol::Text::Text(const etk::UString& _fontName, int32_t _fontSize) :
+ewol::Text::Text(const std::string& _fontName, int32_t _fontSize) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -266,17 +266,17 @@ void ewol::Text::setClippingMode(bool _newMode) {
 
 void ewol::Text::setFontSize(int32_t _fontSize) {
 	// get old size
-	etk::UString fontName = "";
+	std::string fontName = "";
 	if (m_font != NULL) {
 		fontName = m_font->getName();
 		// Remove the :XX for the size ...
-		int32_t pos = fontName.findForward(':');
-		fontName.remove(pos, fontName.size()-pos);
+		size_t pos = fontName.rfind(':');
+		fontName.erase(pos, fontName.size()-pos);
 	}
 	setFont(fontName, _fontSize);
 }
 
-void ewol::Text::setFontName(const etk::UString& _fontName) {
+void ewol::Text::setFontName(const std::string& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
 	if (m_font != NULL) {
@@ -285,7 +285,7 @@ void ewol::Text::setFontName(const etk::UString& _fontName) {
 	setFont(_fontName, fontSize);
 }
 
-void ewol::Text::setFont(etk::UString _fontName, int32_t _fontSize) {
+void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
 	ewol::TexturedFont * previousFont = m_font;
@@ -362,7 +362,7 @@ void ewol::Text::setDistanceFieldMode(bool _newMode) {
 	EWOL_TODO("The Distance field mode is not availlable for now ...");
 }
 
-void ewol::Text::print(const etk::UString& _text) {
+void ewol::Text::print(const std::string& _text) {
 	std::vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
@@ -389,21 +389,21 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			EWOL_ERROR("Cast error ...");
 			continue;
 		}
-		if(elem->getValue().compareNoCase("br") == true) {
+		if(compare_no_case(elem->getValue(), "br") == true) {
 			htmlFlush();
 			EWOL_VERBOSE("XML flush & newLine");
 			forceLineReturn();
-		} else if (elem->getValue().compareNoCase("font") == true) {
+		} else if (compare_no_case(elem->getValue(), "font") == true) {
 			EWOL_VERBOSE("XML Font ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
-			etk::UString colorValue = elem->getAttribute("color");
+			std::string colorValue = elem->getAttribute("color");
 			m_htmlDecoTmp.m_colorFg = colorValue;
 			colorValue = elem->getAttribute("colorBg");
 			m_htmlDecoTmp.m_colorBg = colorValue;
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    elem->getValue().compareNoCase("b") == true
-		           || elem->getValue().compareNoCase("bold") == true) {
+		} else if(    compare_no_case(elem->getValue(), "b") == true
+		           || compare_no_case(elem->getValue(), "bold") == true) {
 			EWOL_VERBOSE("XML bold ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -413,8 +413,8 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    elem->getValue().compareNoCase("i") == true
-		           || elem->getValue().compareNoCase("italic") == true) {
+		} else if(    compare_no_case(elem->getValue(), "i") == true
+		           || compare_no_case(elem->getValue(), "italic") == true) {
 			EWOL_VERBOSE("XML italic ...");
 			TextDecoration tmpDeco = m_htmlDecoTmp;
 			if (m_htmlDecoTmp.m_mode == ewol::font::Regular) {
@@ -424,34 +424,34 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 			} 
 			parseHtmlNode(elem);
 			m_htmlDecoTmp = tmpDeco;
-		} else if(    elem->getValue().compareNoCase("u") == true
-		           || elem->getValue().compareNoCase("underline") == true) {
+		} else if(    compare_no_case(elem->getValue(), "u") == true
+		           || compare_no_case(elem->getValue(), "underline") == true) {
 			EWOL_VERBOSE("XML underline ...");
 			parseHtmlNode(elem);
-		} else if(    elem->getValue().compareNoCase("p") == true
-		           || elem->getValue().compareNoCase("paragraph") == true) {
+		} else if(    compare_no_case(elem->getValue(), "p") == true
+		           || compare_no_case(elem->getValue(), "paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
-		} else if (elem->getValue().compareNoCase("center") == true) {
+		} else if (compare_no_case(elem->getValue(), "center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignCenter;
 			parseHtmlNode(elem);
-		} else if (elem->getValue().compareNoCase("left") == true) {
+		} else if (compare_no_case(elem->getValue(), "left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignLeft;
 			parseHtmlNode(elem);
-		} else if (elem->getValue().compareNoCase("right") == true) {
+		} else if (compare_no_case(elem->getValue(), "right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignRight;
 			parseHtmlNode(elem);
-		} else if (elem->getValue().compareNoCase("justify") == true) {
+		} else if (compare_no_case(elem->getValue(), "justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
 			m_alignement = ewol::Text::alignJustify;
@@ -462,15 +462,15 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 	}
 }
 
-void ewol::Text::printDecorated(const etk::UString& _text) {
-	etk::UString tmpData("<html>\n<body>\n");
+void ewol::Text::printDecorated(const std::string& _text) {
+	std::string tmpData("<html>\n<body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body>\n</html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	printHTML(tmpData);
 }
 
-void ewol::Text::printHTML(const etk::UString& _text) {
+void ewol::Text::printHTML(const std::string& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
@@ -498,7 +498,7 @@ void ewol::Text::printHTML(const etk::UString& _text) {
 	htmlFlush();
 }
 
-void ewol::Text::print(const etk::UString& _text, const std::vector<TextDecoration>& _decoration) {
+void ewol::Text::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -564,7 +564,7 @@ void ewol::Text::print(const etk::UString& _text, const std::vector<TextDecorati
 		if (m_stopTextPos < m_position.x()) {
 			forceLineReturn();
 		}
-		float basicSpaceWidth = calculateSize(etk::UChar(' ')).x();
+		float basicSpaceWidth = calculateSize(char32_t(' ')).x();
 		int32_t currentId = 0;
 		int32_t stop;
 		int32_t space;
@@ -688,7 +688,7 @@ void ewol::Text::print(const etk::UString& _text, const std::vector<TextDecorati
 }
 
 
-void ewol::Text::print(const etk::UChar& _charcode) {
+void ewol::Text::print(const char32_t& _charcode) {
 	if (NULL == m_font) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -711,7 +711,7 @@ void ewol::Text::print(const etk::UChar& _charcode) {
 		}
 	}
 	// 0x01 == 0x20 == ' ';
-	if (_charcode.get() != 0x01) {
+	if (_charcode != 0x01) {
 		/* Bitmap position
 		 *      xA     xB
 		 *   yC *------*
@@ -881,7 +881,7 @@ void ewol::Text::disableAlignement(void) {
 	m_alignement = ewol::Text::alignDisable;
 }
 
-vec3 ewol::Text::calculateSizeHTML(const etk::UString& _text) {
+vec3 ewol::Text::calculateSizeHTML(const std::string& _text) {
 	// remove intermediate result 
 	reset();
 	//EWOL_DEBUG("        0 size for=\n" << text);
@@ -912,18 +912,18 @@ vec3 ewol::Text::calculateSizeHTML(const etk::UString& _text) {
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::Text::calculateSizeDecorated(const etk::UString& _text) {
+vec3 ewol::Text::calculateSizeDecorated(const std::string& _text) {
 	if (_text.size() == 0) {
 		return vec3(0,0,0);
 	}
-	etk::UString tmpData("<html><body>\n");
+	std::string tmpData("<html><body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body></html>\n";
 	vec3 tmpVal = calculateSizeHTML(tmpData);
 	return tmpVal;
 }
 
-vec3 ewol::Text::calculateSize(const etk::UString& _text) {
+vec3 ewol::Text::calculateSize(const std::string& _text) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -939,7 +939,7 @@ vec3 ewol::Text::calculateSize(const etk::UString& _text) {
 	return outputSize;
 }
 
-vec3 ewol::Text::calculateSize(const etk::UChar& _charcode) {
+vec3 ewol::Text::calculateSize(const char32_t& _charcode) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -975,13 +975,13 @@ void ewol::Text::printCursor(bool _isInsertMode) {
 }
 
 
-bool ewol::Text::extrapolateLastId(const etk::UString& _text,
+bool ewol::Text::extrapolateLastId(const std::string& _text,
                                    const int32_t _start,
                                    int32_t& _stop,
                                    int32_t& _space,
                                    int32_t& _freeSpace) {
 	// store previous :
-	etk::UChar storePrevious = m_previousCharcode;
+	char32_t storePrevious = m_previousCharcode;
 	
 	_stop = _text.size();
 	_space = 0;
@@ -1038,7 +1038,7 @@ bool ewol::Text::extrapolateLastId(const etk::UString& _text,
 	}
 }
 
-void ewol::Text::htmlAddData(const etk::UString& _data) {
+void ewol::Text::htmlAddData(const std::string& _data) {
 	if(    m_htmlCurrrentLine.size()>0
 	    && m_htmlCurrrentLine[m_htmlCurrrentLine.size()-1] != ' ') {
 		m_htmlCurrrentLine+=" ";

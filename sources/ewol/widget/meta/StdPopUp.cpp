@@ -75,7 +75,7 @@ widget::StdPopUp::~StdPopUp(void) {
 	
 }
 
-void widget::StdPopUp::setTitle(const etk::UString& _text) {
+void widget::StdPopUp::setTitle(const std::string& _text) {
 	if (m_title == NULL) {
 		return;
 	}
@@ -83,7 +83,7 @@ void widget::StdPopUp::setTitle(const etk::UString& _text) {
 	markToRedraw();
 }
 
-void widget::StdPopUp::setComment(const etk::UString& _text) {
+void widget::StdPopUp::setComment(const std::string& _text) {
 	if (m_comment == NULL) {
 		return;
 	}
@@ -91,7 +91,7 @@ void widget::StdPopUp::setComment(const etk::UString& _text) {
 	markToRedraw();
 }
 
-widget::Button* widget::StdPopUp::addButton(const etk::UString& _text, bool _autoExit) {
+widget::Button* widget::StdPopUp::addButton(const std::string& _text, bool _autoExit) {
 	if (m_subBar == NULL) {
 		EWOL_ERROR("button-bar does not existed ...");
 		return NULL;

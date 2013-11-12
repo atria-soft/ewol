@@ -52,31 +52,31 @@ namespace widget {
 			 * @brief Contuctor
 			 * @param[in] _newData The USting that might be set in the Entry box (no event generation!!)
 			 */
-			Entry(etk::UString _newData = "");
+			Entry(std::string _newData = "");
 			/**
 			 * @brief Destuctor
 			 */
 			virtual ~Entry(void);
 		
 		private:
-			etk::UString m_data; //!< sting that must be displayed
+			std::string m_data; //!< sting that must be displayed
 		protected:
 			/**
 			 * @brief internal check the value with RegExp checking
 			 * @param[in] _newData The new string to display
 			 */
-			void setInternalValue(const etk::UString& _newData);
+			void setInternalValue(const std::string& _newData);
 		public:
 			/**
 			 * @brief set a new value on the entry.
 			 * @param[in] _newData the new string to display.
 			 */
-			void setValue(const etk::UString& _newData);
+			void setValue(const std::string& _newData);
 			/**
 			 * @brief get the current value in the entry
 			 * @return The current display value
 			 */
-			etk::UString getValue(void) const {
+			std::string getValue(void) const {
 				return m_data;
 			};
 		
@@ -97,18 +97,18 @@ namespace widget {
 			};
 		
 		private:
-			etk::RegExp<etk::UString> m_regExp; //!< regular expression to limit the input of an entry
+			etk::RegExp<std::string> m_regExp; //!< regular expression to limit the input of an entry
 		public:
 			/**
 			 * @brief Limit the input entry at a regular expression... (by default it is "*")
 			 * @param _expression New regular expression
 			 */
-			void setRegExp(const etk::UString& _expression);
+			void setRegExp(const std::string& _expression);
 			/**
 			 * @brief get the regualar expression limitation
 			 * @param The regExp string
 			 */
-			const etk::UString& getRegExp(void) const {
+			const std::string& getRegExp(void) const {
 				return m_regExp.getRegExp();
 			};
 		
@@ -180,18 +180,18 @@ namespace widget {
 			};
 		
 		private:
-			etk::UString m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
+			std::string m_textWhenNothing; //!< Text to display when nothing in in the entry (decorated text...)
 		public:
 			/**
 			 * @brief set The text displayed when nothing is in the entry.
 			 * @param _text Text to display when the entry box is empty (this text can be decorated).
 			 */
-			void setEmptyText(const etk::UString& _text);
+			void setEmptyText(const std::string& _text);
 			/**
 			 * @brief get The text displayed when nothing is in the entry.
 			 * @return Text display when nothing
 			 */
-			const etk::UString& getEmptyText(void) const {
+			const std::string& getEmptyText(void) const {
 				return m_textWhenNothing;
 			};
 		public: // Derived function
@@ -211,7 +211,7 @@ namespace widget {
 			virtual void changeStatusIn(int32_t _newStatusId);
 			virtual void periodicCall(const ewol::EventTime& _event);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 	};
 	
 };

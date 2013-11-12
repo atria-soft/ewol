@@ -138,7 +138,7 @@ void widget::ParameterList::onRegenerateDisplay(void) {
 		tmpOriginY = m_size.y() - (-m_originScrooled.y() + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
 		
 		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
-			etk::UString myTextToWrite = "???";
+			std::string myTextToWrite = "???";
 			etk::Color<> fg(0x000000FF);
 			if (m_list[iii] != NULL) {
 				myTextToWrite = m_list[iii]->m_label;
@@ -207,7 +207,7 @@ void widget::ParameterList::onLostFocus(void) {
 	EWOL_DEBUG("Ewol::List Lost focus");
 }
 
-void widget::ParameterList::menuAdd(etk::UString& _label, int32_t _refId, etk::UString& _image) {
+void widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, std::string& _image) {
 	widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
 	if (NULL != tmpEmement) {
 		m_list.push_back(tmpEmement);
@@ -218,8 +218,8 @@ void widget::ParameterList::menuAdd(etk::UString& _label, int32_t _refId, etk::U
 	}
 }
 
-void widget::ParameterList::menuAddGroup(etk::UString& _label) {
-	etk::UString image = "";
+void widget::ParameterList::menuAddGroup(std::string& _label) {
+	std::string image = "";
 	widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
 	if (NULL != tmpEmement) {
 		m_list.push_back(tmpEmement);
@@ -240,8 +240,8 @@ void widget::ParameterList::menuClear(void) {
 
 void widget::ParameterList::menuSeparator(void) {
 	if (m_list.size()>0) {
-		etk::UString label = "";
-		etk::UString image = "";
+		std::string label = "";
+		std::string image = "";
 		menuAdd(label, -1, image);
 	}
 }

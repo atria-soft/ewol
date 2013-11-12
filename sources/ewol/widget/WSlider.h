@@ -55,7 +55,7 @@ namespace widget {
 			 * @brief Select a new subwidget to display
 			 * @param[in] _widgetName Name of the subwidget name
 			 */
-			void subWidgetSelectSet(const etk::UString& _widgetName);
+			void subWidgetSelectSet(const std::string& _widgetName);
 		private:
 			float m_transitionSpeed; //!< speed of the transition (default 1  == > 1s)
 		public:
@@ -98,7 +98,7 @@ namespace widget {
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			virtual void periodicCall(const ewol::EventTime& _event);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 	};
 	
 	etk::CCout& operator <<(etk::CCout& _os, const enum widget::WSlider::sladingMode _obj);

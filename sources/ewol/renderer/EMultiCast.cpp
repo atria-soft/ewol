@@ -49,12 +49,12 @@ void ewol::EMultiCast::rm(ewol::EObject* _object) {
 			EWOL_DEBUG("SendMulticast RM listener :" << _object->getId());
 			m_messageList[iii].m_message = NULL;
 			m_messageList[iii].m_object = NULL;
-			m_messageList.erase(iii);
+			m_messageList.erase(m_messageList.begin()+iii);
 		}
 	}
 }
 
-void ewol::EMultiCast::send(ewol::EObject* _object, const char* const _message, const etk::UString& _data) {
+void ewol::EMultiCast::send(ewol::EObject* _object, const char* const _message, const std::string& _data) {
 	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
 	
 	// send the message at all registered widget ...

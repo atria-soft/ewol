@@ -77,7 +77,7 @@ namespace ewol {
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
 			virtual void calculateSize(const vec2& _availlable);
 			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos);
-			void setTitle(const etk::UString& _title);
+			void setTitle(const std::string& _title);
 		public:
 			enum popUpMessageType {
 				messageTypeInfo, //!< information message pop-up
@@ -90,7 +90,7 @@ namespace ewol {
 			 * @param[in] _type Type of the error.
 			 * @param[in] _message message to display (decorated)
 			 */
-			virtual void createPopUpMessage(enum popUpMessageType _type, const etk::UString& _message);
+			virtual void createPopUpMessage(enum popUpMessageType _type, const std::string& _message);
 	};
 };
 

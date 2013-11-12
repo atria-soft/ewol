@@ -34,7 +34,7 @@ static int32_t nextP2(int32_t _value) {
 }
 
 
-ewol::Texture::Texture(const etk::UString& _filename) :
+ewol::Texture::Texture(const std::string& _filename) :
  ewol::Resource(_filename) {
 	m_loaded = false;
 	m_texId = 0;

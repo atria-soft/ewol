@@ -36,7 +36,7 @@ namespace widget {
 			 * @brief Constructor
 			 * @param[in] _shaperName Shaper file properties
 			 */
-			PopUp(const etk::UString& _shaperName="THEME:GUI:widgetPopUp.conf");
+			PopUp(const std::string& _shaperName="THEME:GUI:widgetPopUp.conf");
 			/**
 			 * @brief Destructor
 			 */
@@ -45,7 +45,7 @@ namespace widget {
 			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 			 * @param[in] _shaperName The new shaper filename
 			 */
-			void setShaperName(const etk::UString& _shaperName);
+			void setShaperName(const std::string& _shaperName);
 		protected:
 			bvec2 m_lockExpand; //!< Lock the expend of the sub widget to this one  == > this permit to limit bigger subWidget
 		public:
@@ -97,7 +97,7 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual void periodicCall(const ewol::EventTime& _event);
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);

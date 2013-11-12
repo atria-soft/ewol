@@ -294,14 +294,14 @@ widget::FileChooser::~FileChooser(void) {
 	
 }
 
-void widget::FileChooser::setTitle(const etk::UString& _label) {
+void widget::FileChooser::setTitle(const std::string& _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
 	m_widgetTitle->setLabel(_label);
 }
 
-void widget::FileChooser::setValidateLabel(const etk::UString& _label) {
+void widget::FileChooser::setValidateLabel(const std::string& _label) {
 	if (NULL == m_widgetValidate) {
 		return;
 	}
@@ -311,7 +311,7 @@ void widget::FileChooser::setValidateLabel(const etk::UString& _label) {
 	*/
 }
 
-void widget::FileChooser::setCancelLabel(const etk::UString& _label) {
+void widget::FileChooser::setCancelLabel(const std::string& _label) {
 	if (NULL == m_widgetCancel) {
 		return;
 	}
@@ -321,12 +321,12 @@ void widget::FileChooser::setCancelLabel(const etk::UString& _label) {
 	*/
 }
 
-void widget::FileChooser::setFolder(const etk::UString& _folder) {
+void widget::FileChooser::setFolder(const std::string& _folder) {
 	m_folder = _folder + "/";
 	updateCurrentFolder();
 }
 
-void widget::FileChooser::setFileName(const etk::UString& _filename) {
+void widget::FileChooser::setFileName(const std::string& _filename) {
 	m_file = _filename;
 	if (NULL == m_widgetCurrentFileName) {
 		return;
@@ -376,7 +376,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		updateCurrentFolder();
 	} else if (ewolEventFileChooserListFile == _msg.getMessage()) {
 		setFileName(_msg.getData());
-		etk::UString tmpFileCompleatName = m_folder;
+		std::string tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
 		generateEventId(_msg.getMessage(), tmpFileCompleatName);
 	} else if(     _msg.getMessage() == ewolEventFileChooserListFileValidate 
@@ -387,12 +387,12 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 			setFileName(_msg.getData());
 		}
 		EWOL_VERBOSE(" generate a fiel opening : \"" << m_folder << "\" / \"" << m_file << "\"");
-		etk::UString tmpFileCompleatName = m_folder;
+		std::string tmpFileCompleatName = m_folder;
 		tmpFileCompleatName += m_file;
 		generateEventId(eventValidate, tmpFileCompleatName);
 		autoDestroy();
 	} else if(ewolEventFileChooserHome == _msg.getMessage()) {
-		etk::UString tmpUserFolder = etk::getUserHomeFolder();
+		std::string tmpUserFolder = etk::getUserHomeFolder();
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
 		m_folder = etk::tool::simplifyPath(tmpUserFolder);
@@ -421,8 +421,8 @@ void widget::FileChooser::updateCurrentFolder(void) {
 	markToRedraw();
 }
 
-etk::UString widget::FileChooser::getCompleateFileName(void) {
-	etk::UString tmpString = m_folder;
+std::string widget::FileChooser::getCompleateFileName(void) {
+	std::string tmpString = m_folder;
 	tmpString += "/";
 	tmpString += m_file;
 	return tmpString;

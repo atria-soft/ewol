@@ -188,7 +188,7 @@ widget::Parameter::~Parameter(void) {
 	
 }
 
-void widget::Parameter::setTitle(etk::UString _label) {
+void widget::Parameter::setTitle(std::string _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
@@ -232,7 +232,7 @@ void widget::Parameter::onObjectRemove(ewol::EObject * _removeObject) {
 	}
 }
 
-void widget::Parameter::menuAdd(etk::UString _label, etk::UString _image, ewol::Widget* _associateWidget) {
+void widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget) {
 	if (NULL != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (NULL != m_wSlider) {
@@ -240,7 +240,7 @@ void widget::Parameter::menuAdd(etk::UString _label, etk::UString _image, ewol::
 				m_wSlider->subWidgetAdd(_associateWidget);
 			} else { 
 				EWOL_DEBUG("Associate an empty widget on it ...");
-				widget::Label * myLabel = new widget::Label((etk::UString("No widget for : ") + _label));
+				widget::Label * myLabel = new widget::Label((std::string("No widget for : ") + _label));
 				if (NULL == myLabel) {
 					EWOL_ERROR("Can not allocate widget  == > display might be in error");
 				} else {
@@ -255,7 +255,7 @@ void widget::Parameter::menuAdd(etk::UString _label, etk::UString _image, ewol::
 		m_currentIdList++;
 	}
 }
-void widget::Parameter::menuAddGroup(etk::UString _label) {
+void widget::Parameter::menuAddGroup(std::string _label) {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
 		m_paramList->menuAddGroup(_label);

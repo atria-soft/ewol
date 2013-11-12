@@ -19,7 +19,7 @@
 #undef __class__
 #define __class__ "Program"
 
-ewol::Program::Program(const etk::UString& _filename) :
+ewol::Program::Program(const std::string& _filename) :
   ewol::Resource(_filename),
   m_exist(false),
   m_program(0),
@@ -32,9 +32,9 @@ ewol::Program::Program(const etk::UString& _filename) :
 	etk::FSNode file(m_name);
 	if (false == file.exist()) {
 		EWOL_INFO("File does not Exist : \"" << file << "\"  == > automatic load of framment and shader with same names... ");
-		etk::UString tmpFilename = m_name;
+		std::string tmpFilename = m_name;
 		// remove extention ...
-		tmpFilename.remove(tmpFilename.size()-4, 4);
+		tmpFilename.erase(tmpFilename.size()-4, 4);
 		ewol::Shader* tmpShader = ewol::Shader::keep(tmpFilename+"vert");
 		if (NULL == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
@@ -52,7 +52,7 @@ ewol::Program::Program(const etk::UString& _filename) :
 			m_shaderList.push_back(tmpShader);
 		}
 	} else {
-		etk::UString fileExtention = file.fileGetExtention();
+		std::string fileExtention = file.fileGetExtention();
 		if (fileExtention != "prog") {
 			EWOL_ERROR("File does not have extention \".prog\" for program but : \"" << fileExtention << "\"");
 			return;
@@ -78,7 +78,7 @@ ewol::Program::Program(const etk::UString& _filename) :
 				continue;
 			}
 			// get it with relative position :
-			etk::UString tmpFilename = file.getRelativeFolder() + tmpData;
+			std::string tmpFilename = file.getRelativeFolder() + tmpData;
 			ewol::Shader* tmpShader = ewol::Shader::keep(tmpFilename);
 			if (NULL == tmpShader) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
@@ -115,7 +115,7 @@ static void checkGlError(const char* _op, int32_t _localLine) {
 #define LOG_OGL_INTERNAL_BUFFER_LEN    (8192)
 static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
-int32_t ewol::Program::getAttribute(etk::UString _elementName) {
+int32_t ewol::Program::getAttribute(std::string _elementName) {
 	// check if it exist previously :
 	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
 		if (m_elementList[iii].m_name == _elementName) {
@@ -136,7 +136,7 @@ int32_t ewol::Program::getAttribute(etk::UString _elementName) {
 	return m_elementList.size()-1;
 }
 
-int32_t ewol::Program::getUniform(etk::UString _elementName) {
+int32_t ewol::Program::getUniform(std::string _elementName) {
 	// check if it exist previously :
 	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
 		if (m_elementList[iii].m_name == _elementName) {
@@ -773,7 +773,7 @@ void ewol::Program::unUse(void) {
 
 
 
-ewol::Program* ewol::Program::keep(const etk::UString& _filename) {
+ewol::Program* ewol::Program::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Program : file : \"" << _filename << "\"");
 	ewol::Program* object = static_cast<ewol::Program*>(getManager().localKeep(_filename));
 	if (NULL != object) {

@@ -20,8 +20,8 @@ namespace ewol {
 		private:
 			vec2 m_realImageSize;
 		private:
-			TextureFile(const etk::UString& _genName);
-			TextureFile(etk::UString _genName, const etk::UString& _fileName, const ivec2& _size);
+			TextureFile(const std::string& _genName);
+			TextureFile(std::string _genName, const std::string& _fileName, const ivec2& _size);
 			~TextureFile(void) { };
 		public:
 			virtual const char* getType(void) { return "ewol::TextureFile"; };
@@ -34,7 +34,7 @@ namespace ewol {
 			 * @param[in] _requested size of the image (usefull when loading .svg to automatic rescale)
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::TextureFile* keep(const etk::UString& _filename, ivec2 _size=ivec2(-1,-1));
+			static ewol::TextureFile* keep(const std::string& _filename, ivec2 _size=ivec2(-1,-1));
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

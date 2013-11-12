@@ -92,17 +92,17 @@ void widget::ListFileSystem::setShowFolder(bool _state) {
 	regenerateView();
 }
 
-void widget::ListFileSystem::setFolder(etk::UString _newFolder) {
+void widget::ListFileSystem::setFolder(std::string _newFolder) {
 	m_folder = _newFolder;
 	regenerateView();
 }
 
-etk::UString widget::ListFileSystem::getFolder(void) {
+std::string widget::ListFileSystem::getFolder(void) {
 	return m_folder;
 }
 
-etk::UString widget::ListFileSystem::getSelect(void) {
-	etk::UString tmpVal = "";
+std::string widget::ListFileSystem::getSelect(void) {
+	std::string tmpVal = "";
 	if (m_selectedLine >= 0) {
 		if (m_list[m_selectedLine] != NULL) {
 			tmpVal = m_list[m_selectedLine]->getNameFile();
@@ -112,7 +112,7 @@ etk::UString widget::ListFileSystem::getSelect(void) {
 }
 
 // select the specific file
-void widget::ListFileSystem::setSelect( etk::UString _data) {
+void widget::ListFileSystem::setSelect( std::string _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
@@ -132,7 +132,7 @@ uint32_t widget::ListFileSystem::getNuberOfColomn(void) {
 	return 1;
 }
 
-bool widget::ListFileSystem::getTitle(int32_t _colomn, etk::UString &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool widget::ListFileSystem::getTitle(int32_t _colomn, std::string &_myTitle, etk::Color<>& _fg, etk::Color<>& _bg) {
 	_myTitle = "title";
 	return true;
 }
@@ -145,7 +145,7 @@ uint32_t widget::ListFileSystem::getNuberOfRaw(void) {
 	return m_list.size() + offset;
 }
 
-bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, etk::UString& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
+bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg) {
 	int32_t offset = 0;
 	if (true == m_showFolder) {
 		offset = 2;

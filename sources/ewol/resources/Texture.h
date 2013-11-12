@@ -37,7 +37,7 @@ namespace ewol {
 			vec2 getUsableSize(void) { return m_endPointSize; };
 		// Public API:
 		protected:
-			Texture(const etk::UString& _filename);
+			Texture(const std::string& _filename);
 			Texture(void);
 			~Texture(void);
 		public:

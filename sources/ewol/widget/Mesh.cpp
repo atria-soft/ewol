@@ -18,7 +18,7 @@ extern const char * const ewolEventMeshPressed    = "ewol-mesh-Pressed";
 
 
 
-widget::Mesh::Mesh(const etk::UString& _filename) :
+widget::Mesh::Mesh(const std::string& _filename) :
   m_meshName(_filename),
   m_object(NULL),
   m_position(0,0,0),
@@ -92,7 +92,7 @@ bool widget::Mesh::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-void widget::Mesh::setFile(const etk::UString& _filename) {
+void widget::Mesh::setFile(const std::string& _filename) {
 	if(    _filename!=""
 	    && m_meshName != _filename ) {
 		ewol::Mesh::release(m_object);

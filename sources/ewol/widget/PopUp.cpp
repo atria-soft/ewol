@@ -28,7 +28,7 @@ void widget::PopUp::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::PopUp::PopUp(const etk::UString& _shaperName) :
+widget::PopUp::PopUp(const std::string& _shaperName) :
   m_shaper(_shaperName),
   m_lockExpand(true,true),
   m_closeOutEvent(false) {
@@ -54,7 +54,7 @@ void widget::PopUp::lockExpand(const bvec2& _lockExpand) {
 	}
 }
 
-void widget::PopUp::setShaperName(const etk::UString& _shaperName) {
+void widget::PopUp::setShaperName(const std::string& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
@@ -178,7 +178,7 @@ bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::PopUp::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}

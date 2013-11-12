@@ -52,7 +52,7 @@ namespace widget {
 			 * @brief Constructor
 			 * @param[in] _shaperName Shaper file properties
 			 */
-			Button(const etk::UString& _shaperName="THEME:GUI:widgetButton.conf");
+			Button(const std::string& _shaperName="THEME:GUI:widgetButton.conf");
 			/**
 			 * @brief Destructor
 			 */
@@ -61,7 +61,7 @@ namespace widget {
 			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 			 * @param[in] _shaperName The new shaper filename
 			 */
-			void setShaperName(const etk::UString& _shaperName);
+			void setShaperName(const std::string& _shaperName);
 		protected:
 			ewol::Widget* m_subWidget[2]; //!< subwidget of the button
 		public:
@@ -155,7 +155,7 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
 				return "widget::Button";
@@ -167,7 +167,7 @@ namespace widget {
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual bool onEventEntry(const ewol::EventEntry& _event);
 			virtual bool loadXML(exml::Element* _node);
-			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
+			virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 		private: // derived function
 			virtual void periodicCall(const ewol::EventTime& _event);
 	};

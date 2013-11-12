@@ -28,7 +28,7 @@ namespace widget {
 			};
 			virtual ~List(void);
 			virtual void calculateMinMaxSize(void);
-			void setLabel(etk::UString _newLabel);
+			void setLabel(std::string _newLabel);
 		// drawing capabilities ....
 		private:
 			std::vector<ewol::Compositing*> m_listOObject;   //!< generic element to display...
@@ -51,14 +51,14 @@ namespace widget {
 			virtual uint32_t getNuberOfColomn(void) {
 				return 1;
 			};
-			virtual bool getTitle(int32_t _colomn, etk::UString& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
+			virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<> &_fg, etk::Color<> &_bg) {
 				_myTitle = "";
 				return false;
 			};
 			virtual uint32_t getNuberOfRaw(void) {
 				return 0;
 			};
-			virtual bool getElement(int32_t _colomn, int32_t _raw, etk::UString &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
+			virtual bool getElement(int32_t _colomn, int32_t _raw, std::string &_myTextToWrite, etk::Color<> &_fg, etk::Color<> &_bg) {
 				_myTextToWrite = "";
 				_bg = 0xFFFFFFFF;
 				_fg = 0x000000FF;

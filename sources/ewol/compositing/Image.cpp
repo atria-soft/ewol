@@ -12,7 +12,7 @@
 #undef __class__
 #define __class__	"ewol::Image"
 
-ewol::Image::Image(const etk::UString& _imageName) :
+ewol::Image::Image(const std::string& _imageName) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -226,7 +226,7 @@ void ewol::Image::printPart(const vec2& _size,
 	m_coordColor.push_back(m_color);
 }
 
-void ewol::Image::setSource(const etk::UString& _newFile, const vec2& _size) {
+void ewol::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
 	// remove old one
 	ewol::TextureFile::release(m_resource);

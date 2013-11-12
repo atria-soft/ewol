@@ -16,36 +16,36 @@
 namespace ewol {
 	class SimpleConfigElement {
 		public:
-			etk::UString m_paramName;
+			std::string m_paramName;
 		private:
-			etk::UString m_value;
+			std::string m_value;
 			int32_t m_valueInt;
 			float m_valuefloat;
 		public:
-			SimpleConfigElement(const etk::UString& _name) :
+			SimpleConfigElement(const std::string& _name) :
 				m_paramName(_name),
 				m_value(""),
 				m_valueInt(0),
 				m_valuefloat(0.0) { };
 			~SimpleConfigElement(void) { };
-			void          parse(const etk::UString& value);
+			void          parse(const std::string& value);
 			int32_t       getInteger(void) { return m_valueInt; };
 			float         getFloat(void)   { return m_valuefloat; };
-			etk::UString& getString(void)  { return m_value; };
+			std::string& getString(void)  { return m_value; };
 	};
 	
 	class ConfigFile : public ewol::Resource {
 		private:
 			std::vector<ewol::SimpleConfigElement*> m_list;
-			etk::UString m_errorString;
+			std::string m_errorString;
 		protected:
-			ConfigFile(const etk::UString& _filename);
+			ConfigFile(const std::string& _filename);
 			virtual ~ConfigFile(void);
 		public:
 			const char* getType(void) { return "ewol::SimpleConfigFile"; };
 			void reload(void);
 			
-			int32_t request(const etk::UString& _paramName);
+			int32_t request(const std::string& _paramName);
 			
 			int32_t getInteger(int32_t _id) {
 				if (_id<0) {
@@ -59,7 +59,7 @@ namespace ewol {
 				}
 				return m_list[_id]->getFloat();
 			};
-			etk::UString& getString(int32_t _id) {
+			std::string& getString(int32_t _id) {
 				if (_id<0) {
 					return m_errorString;
 				}
@@ -72,7 +72,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the configuration file.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::ConfigFile* keep(const etk::UString& _filename);
+			static ewol::ConfigFile* keep(const std::string& _filename);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

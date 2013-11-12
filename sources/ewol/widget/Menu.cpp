@@ -55,18 +55,18 @@ void widget::Menu::clear(void) {
 	m_listElement.clear();
 }
 
-int32_t widget::Menu::addTitle(etk::UString _label,
-                               etk::UString _image,
+int32_t widget::Menu::addTitle(std::string _label,
+                               std::string _image,
                                const char * _generateEvent,
-                               const etk::UString _message) {
+                               const std::string _message) {
 	return add(-1, _label, _image, _generateEvent, _message);
 }
 
 int32_t widget::Menu::add(int32_t _parent,
-                          etk::UString _label,
-                          etk::UString _image,
+                          std::string _label,
+                          std::string _image,
                           const char *_generateEvent,
-                          const etk::UString _message) {
+                          const std::string _message) {
 	widget::MenuElement *tmpObject = new widget::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
@@ -75,7 +75,7 @@ int32_t widget::Menu::add(int32_t _parent,
 	tmpObject->m_localId = m_staticId++;
 	tmpObject->m_parentId = _parent;
 	tmpObject->m_widgetPointer = NULL;
-	tmpObject->m_label = etk::UString("<left>") + _label + "</left>";
+	tmpObject->m_label = std::string("<left>") + _label + "</left>";
 	tmpObject->m_image = _image;
 	tmpObject->m_generateEvent = _generateEvent;
 	tmpObject->m_message = _message;
@@ -90,7 +90,7 @@ int32_t widget::Menu::add(int32_t _parent,
 		if (tmpObject->m_image.size()!=0) {
 			myButton->setSubWidget(
 			    new widget::Composer(widget::Composer::String,
-			        etk::UString("<composer>\n") + 
+			        std::string("<composer>\n") + 
 			        "	<sizer mode=\"hori\">\n"
 			        "		<image src=\"" + tmpObject->m_image + "\" size=\"8,8mm\"/>\n"
 			        "		<label>" + tmpObject->m_label + "</label>\n"
@@ -197,7 +197,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 										if (m_listElement[jjj]->m_image.size()!=0) {
 											myButton->setSubWidget(
 											    new widget::Composer(widget::Composer::String,
-											        etk::UString("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
+											        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
 											        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 											        "		<image src=\"" + m_listElement[jjj]->m_image + "\" size=\"8,8mm\"/>\n"
 											        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + " ]]></label>\n"
@@ -207,14 +207,14 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 											if (true == menuHaveImage) {
 												myButton->setSubWidget(
 												    new widget::Composer(widget::Composer::String,
-												        etk::UString("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
+												        std::string("<composer expand=\"true,false\" fill=\"true,true\">\n") + 
 												        "	<sizer mode=\"hori\" expand=\"true,false\" fill=\"true,true\" lock=\"true\">\n"
 												        "		<spacer min-size=\"8,0mm\"/>\n"
 												        "		<label exand=\"true,true\" fill=\"true,true\"><![CDATA[" + m_listElement[jjj]->m_label + "]]></label>\n"
 												        "	</sizer>\n"
 												        "</composer>\n"));
 											} else {
-												widget::Label* tmpLabel = new widget::Label(etk::UString("<left>") + m_listElement[jjj]->m_label + "</left>\n");
+												widget::Label* tmpLabel = new widget::Label(std::string("<left>") + m_listElement[jjj]->m_label + "</left>\n");
 												if (NULL != tmpLabel) {
 													tmpLabel->setExpand(bvec2(true,false));
 													tmpLabel->setFill(bvec2(true,true));

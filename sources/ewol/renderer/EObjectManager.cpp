@@ -50,7 +50,7 @@ void ewol::EObjectManager::unInit(void) {
 				m_eObjectList[iii] = NULL;
 			}
 		} else {
-			m_eObjectList.erase(iii);
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
 		}
 	}
 }
@@ -92,7 +92,7 @@ void ewol::EObjectManager::rm(ewol::EObject* _object) {
 		if (m_eObjectList[iii] == _object) {
 			// remove Element
 			m_eObjectList[iii] = NULL;
-			m_eObjectList.erase(iii);
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
 			informOneObjectIsRemoved(_object);
 			return;
 		}
@@ -117,7 +117,7 @@ void ewol::EObjectManager::autoRemove(ewol::EObject* _object) {
 		if (m_eObjectList[iii] == _object) {
 			// remove Element
 			m_eObjectList[iii] = NULL;
-			m_eObjectList.erase(iii);
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
 			EWOL_DEBUG("Auto-Remove EObject : [" << _object->getId() << "] type=\"" << _object->getObjectType() << "\"");
 			informOneObjectIsRemoved(_object);
 			m_eObjectAutoRemoveList.push_back(_object);
@@ -137,13 +137,13 @@ void ewol::EObjectManager::removeAllAutoRemove(void) {
 			delete(m_eObjectAutoRemoveList[0]);
 			m_eObjectAutoRemoveList[0] = NULL;
 		} else {
-			m_eObjectAutoRemoveList.erase(0);
+			m_eObjectAutoRemoveList.erase(m_eObjectAutoRemoveList.begin());
 		}
 	}
 	m_eObjectAutoRemoveList.clear();
 }
 
-ewol::EObject* ewol::EObjectManager::get(const etk::UString& _name) {
+ewol::EObject* ewol::EObjectManager::get(const std::string& _name) {
 	if (_name == "") {
 		return NULL;
 	}

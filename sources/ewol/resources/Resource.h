@@ -29,7 +29,7 @@ namespace ewol {
 		private:
 			static uint32_t m_valBase;
 		protected:
-			etk::UString m_name;
+			std::string m_name;
 			uint32_t     m_counter;
 			uint32_t     m_uniqueId;
 			uint8_t      m_resourceLevel;
@@ -41,7 +41,7 @@ namespace ewol {
 				m_uniqueId = m_valBase;
 				m_valBase++;
 			};
-			Resource(const etk::UString& _filename) :
+			Resource(const std::string& _filename) :
 			  m_name(_filename),
 			  m_counter(1),
 			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
@@ -49,11 +49,11 @@ namespace ewol {
 				m_valBase++;
 			};
 			virtual ~Resource(void) { };
-			virtual bool hasName(const etk::UString& _fileName) {
+			virtual bool hasName(const std::string& _fileName) {
 				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName == m_name) );
 				return _fileName == m_name;
 			};
-			virtual const etk::UString& getName(void) { return m_name; };
+			virtual const std::string& getName(void) { return m_name; };
 			void increment(void) { m_counter++; };
 			bool decrement(void) { m_counter--; return (m_counter == 0)?true:false; };
 			int32_t getCounter(void) { return m_counter; };

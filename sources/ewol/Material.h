@@ -25,7 +25,7 @@ namespace ewol {
 			int32_t m_GL_shininess;
 			int32_t m_GL_texture0;
 			MaterialGlId(void);
-			void link(ewol::Program* _prog, const etk::UString& _baseName);
+			void link(ewol::Program* _prog, const std::string& _baseName);
 	};
 	class Material {
 		private:
@@ -53,7 +53,7 @@ namespace ewol {
 			void setShininess(float _val) {
 				m_shininess = _val;
 			}
-			void setTexture0(const etk::UString& _filename);
+			void setTexture0(const std::string& _filename);
 			
 			void setImageSize(const ivec2& _newSize) { if (m_texture0 == NULL){return;} m_texture0->setImageSize(_newSize); };
 			// get the reference on this image to draw nomething on it ...

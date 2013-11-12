@@ -20,7 +20,7 @@
 namespace ewol {
 	class FontBase : public ewol::Resource {
 		public:
-			FontBase(const etk::UString& _fontName) : ewol::Resource(_fontName) {};
+			FontBase(const std::string& _fontName) : ewol::Resource(_fontName) {};
 			
 			virtual ~FontBase(void) { };
 			
@@ -35,7 +35,7 @@ namespace ewol {
 			                       ewol::GlyphProperty& _property,
 			                       int8_t _posInImage) = 0;
 			
-			virtual vec2 getSize(int32_t _fontSize, const etk::UString& _unicodeString) = 0;
+			virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
 			
 			virtual int32_t getHeight(int32_t _fontSize) = 0;
 			

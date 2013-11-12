@@ -167,7 +167,7 @@ void widget::List::onRegenerateDisplay(void) {
 			m_nbVisibleRaw = 0;
 			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				m_nbVisibleRaw++;
-				etk::UString myTextToWrite;
+				std::string myTextToWrite;
 				etk::Color<> fg;
 				etk::Color<> bg;
 				getElement(jjj, iii, myTextToWrite, fg, bg);
@@ -175,7 +175,7 @@ void widget::List::onRegenerateDisplay(void) {
 				ewol::Text * tmpText = new ewol::Text();
 				if (NULL != tmpText) {
 					// get font size : 
-					int32_t tmpFontHeight = tmpText->calculateSize(etk::UChar('A')).y();
+					int32_t tmpFontHeight = tmpText->calculateSize(char32_t('A')).y();
 					displayPositionY-=(tmpFontHeight+m_paddingSizeY);
 					
 					BGOObjects->setColor(bg);

@@ -15,7 +15,7 @@
 namespace ewol {
 	class CommandLine {
 		private:
-			std::vector<etk::UString> m_listArgs; //!< list of all argument parsed
+			std::vector<std::string> m_listArgs; //!< list of all argument parsed
 		public:
 			/**
 			 * @brief Parse the command line parameters
@@ -30,12 +30,12 @@ namespace ewol {
 			 * @brief get an element with a specific ID
 			 * @return _id The cmdLine Id element
 			 */
-			const etk::UString& get(int32_t _id);
+			const std::string& get(int32_t _id);
 			/**
 			 * @brief add one element at the Command line
 			 * @param[in] _newElement String in the input that might be added.
 			 */
-			void add(const etk::UString& _newElement);
+			void add(const std::string& _newElement);
 			/**
 			 * @brief remove an element
 			 * @param[in] _id Id of the element

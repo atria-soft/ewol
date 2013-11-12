@@ -29,13 +29,13 @@ namespace widget {
 			static void init(ewol::WidgetManager& _widgetManager);
 		private:
 			ewol::Text m_text; //!< Compositing text element.
-			etk::UString m_label; //!< decorated text to display.
+			std::string m_label; //!< decorated text to display.
 		public:
 			/**
 			 * @brief Constructor
 			 * @param[in] _newLabel The displayed decorated text.
 			 */
-			Label(etk::UString _newLabel="---");
+			Label(std::string _newLabel="---");
 			/**
 			 * @brief destructor
 			 */
@@ -46,16 +46,16 @@ namespace widget {
 			 * @brief change the label displayed
 			 * @param[in] _newLabel The displayed decorated text.
 			 */
-			void setLabel(const etk::UString& _newLabel);
-			inline void setValue(const etk::UString& _newLabel) {
+			void setLabel(const std::string& _newLabel);
+			inline void setValue(const std::string& _newLabel) {
 				setLabel(_newLabel);
 			};
 			/**
 			 * @brief get the current displayed label
 			 * @return The displayed decorated text.
 			 */
-			etk::UString getLabel(void);
-			inline etk::UString getValue(void) {
+			std::string getLabel(void);
+			inline std::string getValue(void) {
 				return getLabel();
 			};
 		protected: // Derived function

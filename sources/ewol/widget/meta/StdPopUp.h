@@ -56,7 +56,7 @@ namespace widget {
 			 * @brief Set the title string.
 			 * @param[in] _text Decorated text to diplay in title.
 			 */
-			void setTitle(const etk::UString& _text);
+			void setTitle(const std::string& _text);
 		protected:
 			widget::Label* m_comment; //!< Comment label widget
 		public:
@@ -64,7 +64,7 @@ namespace widget {
 			 * @brief Set the commentary string.
 			 * @param[in] _text Decorated text to diplay in Comment.
 			 */
-			void setComment(const etk::UString& _text);
+			void setComment(const std::string& _text);
 		protected:
 			widget::Sizer* m_subBar; //!< subwidget bar containing all the button.
 		public:
@@ -72,7 +72,7 @@ namespace widget {
 			 * @brief Add a buttom button.
 			 * @param[in] _text Decorated text to diplay in button.
 			 */
-			widget::Button* addButton(const etk::UString& _text, bool _autoExit=false);
+			widget::Button* addButton(const std::string& _text, bool _autoExit=false);
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
 				return "widget::StdPopUp";

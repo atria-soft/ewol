@@ -85,34 +85,34 @@ ewol::Dimension::Dimension(const vec2& _size, enum ewol::Dimension::distance _ty
 	set(_size, _type);
 }
 
-void ewol::Dimension::set(etk::UString _config) {
+void ewol::Dimension::set(std::string _config) {
 	m_data.setValue(0,0);
 	m_type = ewol::Dimension::Pixel;
 	enum distance type = ewol::Dimension::Pixel;
-	if (_config.endWith("%",false) == true) {
+	if (end_with(_config, "%", false) == true) {
 		type = ewol::Dimension::Pourcent;
-		_config.remove(_config.size()-1, 1);
-	} else if (_config.endWith("px",false) == true) {
+		_config.erase(_config.size()-1, 1);
+	} else if (end_with(_config, "px",false) == true) {
 		type = ewol::Dimension::Pixel;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("ft",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "ft",false) == true) {
 		type = ewol::Dimension::foot;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("in",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "in",false) == true) {
 		type = ewol::Dimension::Inch;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("km",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "km",false) == true) {
 		type = ewol::Dimension::Kilometer;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("mm",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "mm",false) == true) {
 		type = ewol::Dimension::Millimeter;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("cm",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "cm",false) == true) {
 		type = ewol::Dimension::Centimeter;
-		_config.remove(_config.size()-2, 2);
-	} else if (_config.endWith("m",false) == true) {
+		_config.erase(_config.size()-2, 2);
+	} else if (end_with(_config, "m",false) == true) {
 		type = ewol::Dimension::Meter;
-		_config.remove(_config.size()-1, 1);
+		_config.erase(_config.size()-1, 1);
 	} else {
 		EWOL_CRITICAL("Can not parse dimention : \"" << _config << "\"");
 		return;
@@ -126,8 +126,8 @@ ewol::Dimension::~Dimension(void) {
 	// nothing to do ...
 }
 
-ewol::Dimension::operator etk::UString(void) const {
-	etk::UString str;
+ewol::Dimension::operator std::string(void) const {
+	std::string str;
 	str = get(getType());
 	
 	switch(getType()) {

@@ -26,7 +26,7 @@ namespace ewol {
 	
 	class PhysicsShape {
 		public:
-			static PhysicsShape* create(const etk::UString& _name);
+			static PhysicsShape* create(const std::string& _name);
 		public:
 			enum type {
 				unknow,

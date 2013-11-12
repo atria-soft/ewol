@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__ "Shader"
 
-ewol::Shader::Shader(const etk::UString& _filename) :
+ewol::Shader::Shader(const std::string& _filename) :
   ewol::Resource(_filename),
   m_exist(false),
   m_fileData(NULL),
@@ -25,9 +25,9 @@ ewol::Shader::Shader(const etk::UString& _filename) :
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
-	if (true == m_name.endWith(".frag") ) {
+	if (end_with(m_name, ".frag") == true) {
 		m_type = GL_FRAGMENT_SHADER;
-	} else if (true == m_name.endWith(".vert") ) {
+	} else if (end_with(m_name, ".vert") == true) {
 		m_type = GL_VERTEX_SHADER;
 	} else {
 		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << m_name << "\"");
@@ -86,7 +86,7 @@ void ewol::Shader::updateContext(void) {
 				}
 				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
 				EWOL_ERROR("Error " << l_bufferDisplayError);
-				std::vector<etk::UString> lines = etk::UString(m_fileData).split('\n');
+				std::vector<std::string> lines = string_split(m_fileData, '\n');
 				for (esize_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}
@@ -148,7 +148,7 @@ void ewol::Shader::reload(void) {
 	updateContext();
 }
 
-ewol::Shader* ewol::Shader::keep(const etk::UString& _filename) {
+ewol::Shader* ewol::Shader::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Simpleshader : file : \"" << _filename << "\"");
 	ewol::Shader* object = static_cast<ewol::Shader*>(getManager().localKeep(_filename));
 	if (NULL != object) {

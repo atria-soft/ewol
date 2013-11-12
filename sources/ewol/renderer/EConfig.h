@@ -16,17 +16,17 @@ namespace ewol {
 	class EConfig {
 		private:
 			const char* m_config; //!< config properties.
-			etk::UString m_data; //!< compositing additionnal message Value.
+			std::string m_data; //!< compositing additionnal message Value.
 		public:
 			EConfig(const char* _config,
-			        const etk::UString& _data) :
+			        const std::string& _data) :
 				m_config(_config),
 				m_data(_data)
 			{ };
 			void setConfig(const char* _config) { m_config = _config; };
 			inline const char* getConfig(void) const { return m_config; };
-			void setData(const etk::UString& _data) { m_data = _data; };
-			inline const etk::UString& getData(void) const { return m_data; };
+			void setData(const std::string& _data) { m_data = _data; };
+			inline const std::string& getData(void) const { return m_data; };
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::EConfig& _obj);
 	

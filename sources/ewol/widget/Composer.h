@@ -37,7 +37,7 @@ namespace widget
 			 * @param[in] _mode mode of parsing the string
 			 * @param[in] _data file/directString data to generate compositing of the widget..
 			 */
-			Composer(enum composerMode _mode, const etk::UString& _data);
+			Composer(enum composerMode _mode, const std::string& _data);
 			/**
 			 * @brief Destructor
 			 */
@@ -48,14 +48,14 @@ namespace widget
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */
-			bool loadFromFile(const etk::UString& _fileName);
+			bool loadFromFile(const std::string& _fileName);
 			/**
 			 * @brief load a composition with a file
 			 * @param[in] _composerXmlString xml to parse directly
 			 * @return true  == > all done OK
 			 * @return false  == > some error occured
 			 */
-			bool loadFromString(const etk::UString& _composerXmlString);
+			bool loadFromString(const std::string& _composerXmlString);
 			/**
 			 * @brief Register an Event an named widget. @see registerOnEvent
 			 * @param[in] _subWidgetName Name of the subWidget.
@@ -64,10 +64,10 @@ namespace widget
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 * @note : To used when herited from this object.
 			 */
-			void registerOnEventNameWidget(const etk::UString& _subWidgetName,
+			void registerOnEventNameWidget(const std::string& _subWidgetName,
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
-			                               const etk::UString& _overloadData="");
+			                               const std::string& _overloadData="");
 			/**
 			 * @brief Register an Event an named widget. @see registerOnEvent
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
@@ -78,10 +78,10 @@ namespace widget
 			 * @note : To used when NOT herited from this object.
 			 */
 			void registerOnEventNameWidget(ewol::EObject * _destinationObject,
-			                               const etk::UString& _subWidgetName,
+			                               const std::string& _subWidgetName,
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
-			                               const etk::UString& _overloadData="");
+			                               const std::string& _overloadData="");
 		public: // herited functions:
 			virtual const char * const getObjectType(void) {
 				return "widget::Composer";

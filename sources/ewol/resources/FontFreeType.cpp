@@ -52,7 +52,7 @@ void ewol::freeTypeUnInit(void) {
 	}
 }
 
-ewol::FontFreeType::FontFreeType(const etk::UString& _fontName) :
+ewol::FontFreeType::FontFreeType(const std::string& _fontName) :
   FontBase(_fontName) {
 	m_init = false;
 	m_FileBuffer = NULL;
@@ -106,7 +106,7 @@ ewol::FontFreeType::~FontFreeType(void) {
 	FT_Done_Face( m_fftFace );
 }
 
-vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const etk::UString& _unicodeString) {
+vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const std::string& _unicodeString) {
 	if(false == m_init) {
 		return vec2(0,0);
 	}
@@ -135,7 +135,7 @@ bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty
 	// a small shortcut
 	FT_GlyphSlot slot = m_fftFace->glyph;
 	// retrieve glyph index from character code 
-	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, _property.m_UVal.get());
+	int32_t glyph_index = FT_Get_Char_Index(m_fftFace, _property.m_UVal);
 	// load glyph image into the slot (erase previous one)
 	error = FT_Load_Glyph(m_fftFace, // handle to face object
 	                      glyph_index, // glyph index
@@ -342,7 +342,7 @@ void ewol::FontFreeType::display(void) {
 	//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
 }
 
-ewol::FontBase* ewol::FontFreeType::keep(const etk::UString& _filename) {
+ewol::FontBase* ewol::FontFreeType::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
 	ewol::FontBase* object = static_cast<ewol::FontBase*>(getManager().localKeep(_filename));
 	if (NULL != object) {

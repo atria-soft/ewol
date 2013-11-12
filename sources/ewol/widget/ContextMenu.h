@@ -37,7 +37,7 @@ namespace widget {
 			static const char* const configArrowMode;
 			static const char* const configShaper;
 		public:
-			ContextMenu(const etk::UString& _shaperName="THEME:GUI:widgetContextMenu.conf");
+			ContextMenu(const std::string& _shaperName="THEME:GUI:widgetContextMenu.conf");
 			virtual ~ContextMenu(void);
 		private:
 			ewol::Shaper m_shaper; //!< Compositing theme.
@@ -46,7 +46,7 @@ namespace widget {
 			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper)
 			 * @param[in] _shaperName The new shaper filename
 			 */
-			void setShaperName(const etk::UString& _shaperName);
+			void setShaperName(const std::string& _shaperName);
 		private:
 			// TODO : Rework the displayer ....
 			ewol::Drawing m_compositing;
@@ -62,7 +62,7 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

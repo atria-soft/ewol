@@ -17,25 +17,23 @@ void ewol::CommandLine::parse(int32_t _argc, const char* _argv[]) {
 	}
 }
 
-
-
 esize_t ewol::CommandLine::size(void) {
 	return m_listArgs.size();
 }
 
-const etk::UString& ewol::CommandLine::get(int32_t _id) {
-	static const etk::UString errorArg("");
+const std::string& ewol::CommandLine::get(int32_t _id) {
+	static const std::string errorArg("");
 	if (_id<0 && _id >= m_listArgs.size()) {
 		return errorArg;
 	}
 	return m_listArgs[_id];
 }
 
-void ewol::CommandLine::add(const etk::UString& _newElement) {
+void ewol::CommandLine::add(const std::string& _newElement) {
 	m_listArgs.push_back(_newElement);
 }
 
 void ewol::CommandLine::remove(esize_t _id) {
-	m_listArgs.remove(_id);
+	m_listArgs.erase(m_listArgs.begin()+_id);
 }
 

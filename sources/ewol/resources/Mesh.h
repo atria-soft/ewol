@@ -102,7 +102,7 @@ namespace ewol {
 		protected:
 			ewol::VirtualBufferObject* m_verticesVBO;
 		protected:
-			Mesh(const etk::UString& _fileName, const etk::UString& _shaderName="DATA:textured3D2.prog");
+			Mesh(const std::string& _fileName, const std::string& _shaderName="DATA:textured3D2.prog");
 			virtual ~Mesh(void);
 		public:
 			virtual const char* getType(void) { return "ewol::Mesh"; };
@@ -112,12 +112,12 @@ namespace ewol {
 			void calculateNormaleFace(void);
 			void calculateNormaleEdge(void);
 		public :
-			void createViewBox(const etk::UString& _materialName,float _size=1.0);
+			void createViewBox(const std::string& _materialName,float _size=1.0);
 		private:
-			bool loadOBJ(const etk::UString& _fileName);
-			bool loadEMF(const etk::UString& _fileName);
+			bool loadOBJ(const std::string& _fileName);
+			bool loadEMF(const std::string& _fileName);
 		public:
-			void addMaterial(const etk::UString& _name, ewol::Material* _data);
+			void addMaterial(const std::string& _name, ewol::Material* _data);
 		public:
 			/**
 			 * @brief set the check of normal position befor sending it to the openGl card
@@ -154,7 +154,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the ewol mesh file.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Mesh* keep(const etk::UString& _meshname);
+			static ewol::Mesh* keep(const std::string& _meshname);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

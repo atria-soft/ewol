@@ -67,7 +67,7 @@ namespace ewol {
 			enum ewol::font::mode m_mode; //!< font display property : Regular/Bold/Italic/BoldItalic
 			bool m_kerning; //!< Kerning enable or disable on the next elements displayed
 			bool m_distanceField; //!< Texture in distance Field mode  == > maybe move this in the font property.
-			etk::UChar m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
+			char32_t m_previousCharcode; //!< we remember the previous charcode to perform the kerning. @ref Kerning
 		private:
 			float m_startTextpos; //!< start position of the Alignement (when \n the text return at this position)
 			float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
@@ -99,7 +99,7 @@ namespace ewol {
 			 * @param[in] _fontName Name of the font that might be loaded
 			 * @param[in] _fontSize size of the font that might be loaded
 			 */
-			Text(const etk::UString& _fontName="", int32_t _fontSize=-1);
+			Text(const std::string& _fontName="", int32_t _fontSize=-1);
 			/**
 			 * @brief generic destructor
 			 */
@@ -193,13 +193,13 @@ namespace ewol {
 			 * @brief Specify the font name (this reset the internal element of the current text (system requirement)
 			 * @param[in] _fontName Current name of the selected font
 			 */
-			void setFontName(const etk::UString& _fontName);
+			void setFontName(const std::string& _fontName);
 			/**
 			 * @brief Specify the font property (this reset the internal element of the current text (system requirement)
 			 * @param[in] fontName Current name of the selected font
 			 * @param[in] fontSize New font size
 			 */
-			void setFont(etk::UString _fontName, int32_t _fontSize);
+			void setFont(std::string _fontName, int32_t _fontSize);
 			/**
 			 * @brief Specify the font mode for the next @ref print
 			 * @param[in] mode The font mode requested
@@ -235,7 +235,7 @@ namespace ewol {
 			 * @brief display a compleat string in the current element.
 			 * @param[in] _text The string to display.
 			 */
-			void print(const etk::UString& _text);
+			void print(const std::string& _text);
 			/**
 			 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
@@ -263,7 +263,7 @@ namespace ewol {
 			 * @param[in] _text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void printDecorated(const etk::UString& _text);
+			void printDecorated(const std::string& _text);
 			/**
 			 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
@@ -295,18 +295,18 @@ namespace ewol {
 			 * @param[in] _text The string to display.
 			 * @TODO : implementation not done ....
 			 */
-			void printHTML(const etk::UString& _text);
+			void printHTML(const std::string& _text);
 			/**
 			 * @brief display a compleat string in the current element whith specific decorations (advence mode).
 			 * @param[in] _text The string to display.
 			 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 			 */
-			void print(const etk::UString& _text, const std::vector<TextDecoration>& _decoration);
+			void print(const std::string& _text, const std::vector<TextDecoration>& _decoration);
 			/**
 			 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] _charcode Char that might be dispalyed
 			 */
-			void print(const etk::UChar& _charcode);
+			void print(const char32_t& _charcode);
 			/**
 			 * @brief This generate the line return  == > it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
 			 */
@@ -340,25 +340,25 @@ namespace ewol {
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 calculateSizeHTML(const etk::UString& _text);
+			vec3 calculateSizeHTML(const std::string& _text);
 			/**
 			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 calculateSizeDecorated(const etk::UString& _text);
+			vec3 calculateSizeDecorated(const std::string& _text);
 			/**
 			 * @brief calculate a theoric text size
 			 * @param[in] _text The string to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 calculateSize(const etk::UString& _text);
+			vec3 calculateSize(const std::string& _text);
 			/**
 			 * @brief calculate a theoric charcode size
 			 * @param[in] _charcode The µUnicode value to calculate dimention.
 			 * @return The theoric size used.
 			 */
-			vec3 calculateSize(const etk::UChar& _charcode);
+			vec3 calculateSize(const char32_t& _charcode);
 			/**
 			 * @brief draw a cursor at the specify position
 			 * @param[in] _isInsertMode True if the insert mode is activated
@@ -375,17 +375,17 @@ namespace ewol {
 			 * @parma[out] _freespace This represent the number of pixel present in the right white space.
 			 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
 			 */
-			bool extrapolateLastId(const etk::UString& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
+			bool extrapolateLastId(const std::string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 		private:
 			// this section is reserved for HTML parsing and display:
-			etk::UString m_htmlCurrrentLine; //!< current line for HTML display
+			std::string m_htmlCurrrentLine; //!< current line for HTML display
 			std::vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
 			TextDecoration m_htmlDecoTmp; //!< current decoration
 			/**
 			 * @brief add a line with the current m_htmlDecoTmp decoration
 			 * @param[in] _data The cuurent data to add.
 			 */
-			void htmlAddData(const etk::UString& _data);
+			void htmlAddData(const std::string& _data);
 			/**
 			 * @brief draw the current line
 			 */

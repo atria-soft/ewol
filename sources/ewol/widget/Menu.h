@@ -23,10 +23,10 @@ namespace widget {
 			int32_t m_localId;
 			int32_t m_parentId;
 			ewol::EObject* m_widgetPointer;
-			etk::UString m_label;
-			etk::UString m_image;
+			std::string m_label;
+			std::string m_image;
 			const char *m_generateEvent;
-			etk::UString m_message;
+			std::string m_message;
 	};
 	/**
 	 * @ingroup ewolWidgetGroup
@@ -50,8 +50,8 @@ namespace widget {
 			widget::ContextMenu* m_widgetContextMenu;
 		public:
 			void clear(void);
-			int32_t addTitle(etk::UString _label, etk::UString _image="", const char * _generateEvent = NULL, const etk::UString _message = "");
-			int32_t add(int32_t parent, etk::UString _label, etk::UString _image="", const char * _generateEvent = NULL, const etk::UString _message = "");
+			int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
+			int32_t add(int32_t parent, std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
 			void addSpacer(void);
 			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);

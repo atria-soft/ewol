@@ -43,7 +43,7 @@ namespace widget {
 			 * @param[in] _baseColor basic displayed color.
 			 * @param[in] _shaperName The new shaper filename.
 			 */
-			ButtonColor(etk::Color<> _baseColor=etk::color::black, etk::UString _shaperName="THEME:GUI:widgetButton.conf");
+			ButtonColor(etk::Color<> _baseColor=etk::color::black, std::string _shaperName="THEME:GUI:widgetButton.conf");
 			/**
 			 * @brief Main destructor.
 			 */
@@ -52,7 +52,7 @@ namespace widget {
 			 * @brief set the shaper name (use the contructer one this permit to not noad unused shaper).
 			 * @param[in] _shaperName The new shaper filename.
 			 */
-			void setShaperName(etk::UString _shaperName);
+			void setShaperName(std::string _shaperName);
 			/**
 			 * @brief get the current color of the color selection widget
 			 * @return The current color

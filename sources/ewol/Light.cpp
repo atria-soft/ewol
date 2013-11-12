@@ -27,7 +27,7 @@ ewol::Light::~Light(void) {
 	
 }
 
-void ewol::Light::link(ewol::Program* _prog, const etk::UString& _baseName) {
+void ewol::Light::link(ewol::Program* _prog, const std::string& _baseName) {
 	if (NULL == _prog) {
 		return;
 	}

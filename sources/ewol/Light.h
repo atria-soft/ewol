@@ -33,7 +33,7 @@ namespace ewol {
 		public:
 			Light(void);
 			~Light(void);
-			void link(ewol::Program* _prog, const etk::UString& _baseName);
+			void link(ewol::Program* _prog, const std::string& _baseName);
 			void draw(ewol::Program* _prog);
 			void setDirection(const vec3& val) {
 				m_direction = val;

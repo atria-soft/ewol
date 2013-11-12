@@ -32,7 +32,7 @@ const char * const widget::Image::configSize = "size";
 const char * const widget::Image::configBorder = "border";
 const char * const widget::Image::configSource = "src";
 
-widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) :
+widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
   m_imageSize(vec2(0,0)),
   m_keepRatio(true) {
 	addEventId(eventPressed);
@@ -44,7 +44,7 @@ widget::Image::Image(const etk::UString& _file, const ewol::Dimension& _border) 
 }
 
 
-void widget::Image::setFile(const etk::UString& _file) {
+void widget::Image::setFile(const std::string& _file) {
 	EWOL_VERBOSE("Set Image : " << _file);
 	if (m_fileName != _file) {
 		// copy data :
@@ -87,7 +87,7 @@ void widget::Image::setImageSize(const ewol::Dimension& _size) {
 	}
 }
 
-void widget::Image::set(const etk::UString& _file, const ewol::Dimension& _border) {
+void widget::Image::set(const std::string& _file, const ewol::Dimension& _border) {
 	EWOL_VERBOSE("Set Image : " << _file << " border=" << _border);
 	// copy data :
 	if (m_border != _border) {
@@ -192,7 +192,7 @@ bool widget::Image::loadXML(exml::Element* _node) {
 	ewol::Widget::loadXML(_node);
 	// get internal data : 
 	
-	etk::UString tmpAttributeValue = _node->getAttribute("ratio");
+	std::string tmpAttributeValue = _node->getAttribute("ratio");
 	if (tmpAttributeValue.size()!=0) {
 		if (tmpAttributeValue.compareNoCase("true") == true) {
 			m_keepRatio = true;
@@ -247,7 +247,7 @@ bool widget::Image::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::Image::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::Image::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

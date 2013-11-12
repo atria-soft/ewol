@@ -19,7 +19,7 @@
 #define __class__ "ewol"
 
 
-etk::UString ewol::getCompilationMode(void) {
+std::string ewol::getCompilationMode(void) {
 	#ifdef MODE_RELEASE
 		return "Release";
 	#else
@@ -27,7 +27,7 @@ etk::UString ewol::getCompilationMode(void) {
 	#endif
 }
 
-etk::UString ewol::getBoardType(void) {
+std::string ewol::getBoardType(void) {
 	#ifdef __TARGET_OS__Linux
 		return "Linux";
 	#elif defined(__TARGET_OS__Android)
@@ -43,13 +43,13 @@ etk::UString ewol::getBoardType(void) {
 	#endif
 }
 
-etk::UString ewol::getVersion(void) {
+std::string ewol::getVersion(void) {
 	#define FIRST_YEAR (2011)
-	etk::UString tmpOutput = (date::getYear()-FIRST_YEAR);
+	std::string tmpOutput = std::to_string(date::getYear()-FIRST_YEAR);
 	tmpOutput += ".";
-	tmpOutput += date::getMonth();
+	tmpOutput += std::to_string(date::getMonth());
 	tmpOutput += ".";
-	tmpOutput += date::getDay();
+	tmpOutput += std::to_string(date::getDay());
 	return tmpOutput;
 }
 

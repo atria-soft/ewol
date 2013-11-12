@@ -20,10 +20,10 @@ namespace widget {
 	class elementPL {
 		public :
 			bool            m_group;
-			etk::UString    m_label;
+			std::string    m_label;
 			int32_t         m_refId;
-			etk::UString    m_image;
-			elementPL(etk::UString& _label, int32_t _refId, etk::UString& _image, bool _isGroup) :
+			std::string    m_image;
+			elementPL(std::string& _label, int32_t _refId, std::string& _image, bool _isGroup) :
 			  m_group(_isGroup),
 			  m_label(_label),
 			  m_refId(_refId),
@@ -43,7 +43,7 @@ namespace widget {
 		public:
 			ParameterList(void);
 			virtual ~ParameterList(void);
-			void setLabel(etk::UString _newLabel);
+			void setLabel(std::string _newLabel);
 		// drawing capabilities ....
 		private:
 			std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
@@ -57,8 +57,8 @@ namespace widget {
 			int32_t m_displayStartRaw; //!< Current starting diaplayed raw
 			int32_t m_displayCurrentNbLine; //!< Number of line in the display
 		public:
-			void menuAdd(etk::UString& _label, int32_t _refId, etk::UString& _image);
-			void menuAddGroup(etk::UString& _label);
+			void menuAdd(std::string& _label, int32_t _refId, std::string& _image);
+			void menuAddGroup(std::string& _label);
 			void menuClear(void);
 			void menuSeparator(void);
 			

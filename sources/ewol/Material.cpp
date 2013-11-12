@@ -20,7 +20,7 @@ ewol::MaterialGlId::MaterialGlId(void) :
 }
 
 
-void ewol::MaterialGlId::link(ewol::Program* _prog, const etk::UString& _baseName) {
+void ewol::MaterialGlId::link(ewol::Program* _prog, const std::string& _baseName) {
 	if (NULL == _prog) {
 		return;
 	}
@@ -55,7 +55,7 @@ void ewol::Material::draw(ewol::Program* _prog, const MaterialGlId& _glID) {
 	}
 }
 
-void ewol::Material::setTexture0(const etk::UString& _filename) {
+void ewol::Material::setTexture0(const std::string& _filename) {
 	ivec2 tmpSize(256, 256);
 	// prevent overloard error :
 	ewol::TextureFile* tmpCopy = m_texture0;

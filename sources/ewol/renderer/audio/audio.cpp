@@ -98,12 +98,12 @@ void ewol::audio::music::fading(int32_t _timeMs) {
 }
 
 
-bool ewol::audio::music::listAdd(etk::UString _file) {
+bool ewol::audio::music::listAdd(std::string _file) {
 	return false;
 }
 
 
-bool ewol::audio::music::listRm(etk::UString _file) {
+bool ewol::audio::music::listRm(std::string _file) {
 	return false;
 }
 
@@ -146,7 +146,7 @@ bool ewol::audio::music::listStop(void) {
 
 
 
-bool ewol::audio::music::play(etk::UString _file) {
+bool ewol::audio::music::play(std::string _file) {
 	return false;
 }
 
@@ -218,7 +218,7 @@ void ewol::audio::music::getData(int16_t * _bufferInterlace, int32_t _nbSample, 
 //liste d'effet
 class EffectsLoaded {
 	public :
-		EffectsLoaded(etk::UString _file)
+		EffectsLoaded(std::string _file)
 		{
 			m_file = _file;
 			m_requestedTime = 1;
@@ -227,7 +227,7 @@ class EffectsLoaded {
 				// write an error ...
 			}
 		}
-		etk::UString m_file;
+		std::string m_file;
 		int32_t      m_nbSamples;
 		int32_t      m_requestedTime;
 		int16_t*     m_data;
@@ -279,7 +279,7 @@ std::vector<EffectsLoaded*> ListEffects;
 std::vector<RequestPlay*>   ListEffectsPlaying;
 
 
-int32_t ewol::audio::effects::add(etk::UString _file) {
+int32_t ewol::audio::effects::add(std::string _file) {
 	for (int32_t iii=0; iii<ListEffects.size(); iii++) {
 		if (NULL != ListEffects[iii]) {
 			if (ListEffects[iii]->m_file == _file) {

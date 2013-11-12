@@ -363,7 +363,7 @@ void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& 
 }
 
 void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
-                                    etk::UChar _myChar,
+                                    char32_t _myChar,
                                     bool _isDown,
                                     bool _isARepeateKey) {
 	eSystemMessage data;
@@ -568,7 +568,7 @@ void ewol::eContext::show(void) {
 	EWOL_INFO("show: NOT implemented ...");
 }
 
-void ewol::eContext::setTitle(const etk::UString& _title) {
+void ewol::eContext::setTitle(const std::string& _title) {
 	EWOL_INFO("setTitle: NOT implemented ...");
 }
 

@@ -23,7 +23,7 @@ note: la copy dans le :
        10 : bouton du milieux
 */
 //!< Local copy of the clipboards
-static etk::UString mesCopy[ewol::clipBoard::clipboardCount];
+static std::string mesCopy[ewol::clipBoard::clipboardCount];
 
 static const char* clipboardDescriptionString[ewol::clipBoard::clipboardCount+1] = {
 	"clipboard0",
@@ -67,7 +67,7 @@ void ewol::clipBoard::unInit(void) {
 }
 
 
-void ewol::clipBoard::set(enum ewol::clipBoard::clipboardListe _clipboardID, const etk::UString& _data) {
+void ewol::clipBoard::set(enum ewol::clipBoard::clipboardListe _clipboardID, const std::string& _data) {
 	// check if ID is correct
 	if(0 == _data.size()) {
 		EWOL_INFO("request a copy of nothing");
@@ -107,7 +107,7 @@ void ewol::clipBoard::request(enum ewol::clipBoard::clipboardListe _clipboardID)
 }
 
 
-void ewol::clipBoard::setSystem(enum ewol::clipBoard::clipboardListe _clipboardID, const etk::UString& _data) {
+void ewol::clipBoard::setSystem(enum ewol::clipBoard::clipboardListe _clipboardID, const std::string& _data) {
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
 		return;
@@ -117,8 +117,8 @@ void ewol::clipBoard::setSystem(enum ewol::clipBoard::clipboardListe _clipboardI
 }
 
 
-const etk::UString& ewol::clipBoard::get(enum ewol::clipBoard::clipboardListe _clipboardID) {
-	static const etk::UString emptyString("");
+const std::string& ewol::clipBoard::get(enum ewol::clipBoard::clipboardListe _clipboardID) {
+	static const std::string emptyString("");
 	if(_clipboardID >= ewol::clipBoard::clipboardCount) {
 		EWOL_WARNING("request ClickBoard id error");
 		return emptyString;

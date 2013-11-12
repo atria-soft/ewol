@@ -26,7 +26,7 @@ namespace ewol {
 	
 	class TexturedFont : public ewol::Texture {
 		private:
-			etk::UString m_fileName[4];
+			std::string m_fileName[4];
 			int32_t m_size;
 			int32_t m_height[4];
 			// specific element to have the the know if the specify element is known...
@@ -41,7 +41,7 @@ namespace ewol {
 			ivec2 m_lastGlyphPos[4];
 			int32_t m_lastRawHeigh[4];
 		protected:
-			TexturedFont(const etk::UString& _fontName);
+			TexturedFont(const std::string& _fontName);
 			~TexturedFont(void);
 		public:
 			const char* getType(void) {
@@ -68,14 +68,14 @@ namespace ewol {
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t getIndex(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode);
+			int32_t getIndex(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
 			/**
 			 * @brief get the pointer on the coresponding glyph
 			 * @param[in] _charcode The unicodeValue
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The pointer on the glyph  == > never NULL
 			 */
-			ewol::GlyphProperty* getGlyphPointer(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode);
+			ewol::GlyphProperty* getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
 			/**
 			 * @brief The wrapping mode is used to prevent the non existance of a specific mode.
 			 *        For exemple when a blod mode does not exist, this resend a regular mode.
@@ -92,7 +92,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the texture font.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::TexturedFont* keep(const etk::UString& _filename);
+			static ewol::TexturedFont* keep(const std::string& _filename);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer
@@ -104,7 +104,7 @@ namespace ewol {
 			 * @param[in] _val Char value to add.
 			 * @return true if the image size have change, false otherwise
 			 */
-			bool addGlyph(const etk::UChar& _val);
+			bool addGlyph(const char32_t& _val);
 	};
 	
 	

@@ -31,7 +31,7 @@ void ewol::DrawProperty::limit(const vec2& _origin, const vec2& _size) {
 #undef __class__
 #define __class__ "gravity"
 
-etk::UString ewol::gravityToString(const enum ewol::gravity _obj) {
+std::string ewol::gravityToString(const enum ewol::gravity _obj) {
 	switch(_obj) {
 		case ewol::gravityCenter:
 			return "center";
@@ -55,7 +55,7 @@ etk::UString ewol::gravityToString(const enum ewol::gravity _obj) {
 	return "unknow";
 }
 
-enum ewol::gravity ewol::stringToGravity(const etk::UString& _obj) {
+enum ewol::gravity ewol::stringToGravity(const std::string& _obj) {
 	if (_obj == "center") {
 		return ewol::gravityCenter;
 	} else if (_obj == "top-left") {
@@ -500,7 +500,7 @@ const bvec2& ewol::Widget::canFill(void) {
 
 void ewol::Widget::shortCutAdd(const char * _descriptiveString,
                                const char * _generateEventId,
-                               etk::UString _data,
+                               std::string _data,
                                bool _broadcast) {
 	if (    _descriptiveString == NULL
 	     || strlen(_descriptiveString) == 0) {
@@ -605,7 +605,7 @@ void ewol::Widget::shortCutClean(void) {
 }
 
 bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
-                                   etk::UChar _unicodeValue,
+                                   char32_t _unicodeValue,
                                    enum ewol::keyEvent::keyboard _kbMove,
                                    bool _isDown) {
 	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
@@ -675,7 +675,7 @@ bool ewol::Widget::loadXML(exml::Element* _node) {
 	return true;
 }
 
-ewol::Widget* ewol::Widget::getWidgetNamed(const etk::UString& _widgetName) {
+ewol::Widget* ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} compare : " << getName() << " == " << _widgetName );
 	if (getName() == _widgetName) {
 		return this;
@@ -749,7 +749,7 @@ bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool ewol::Widget::onGetConfig(const char* _config, etk::UString& _result) const {
+bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::EObject::onGetConfig(_config, _result)) {
 		return true;
 	}

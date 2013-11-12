@@ -169,7 +169,7 @@ bool widget::Sizer::loadXML(exml::Element* _node) {
 	// parse generic properties :
 	widget::ContainerN::loadXML(_node);
 	
-	etk::UString tmpAttributeValue = _node->getAttribute("border");
+	std::string tmpAttributeValue = _node->getAttribute("border");
 	if (tmpAttributeValue.size()!=0) {
 		m_borderSize = tmpAttributeValue;
 	}

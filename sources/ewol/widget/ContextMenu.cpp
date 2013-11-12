@@ -30,7 +30,7 @@ void widget::ContextMenu::init(ewol::WidgetManager& _widgetManager) {
 
 
 
-widget::ContextMenu::ContextMenu(const etk::UString& _shaperName) :
+widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
   m_shaper(_shaperName) {
 	// add basic configurations :
 	registerConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
@@ -55,7 +55,7 @@ widget::ContextMenu::~ContextMenu(void) {
 	
 }
 
-void widget::ContextMenu::setShaperName(const etk::UString& _shaperName) {
+void widget::ContextMenu::setShaperName(const std::string& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
@@ -276,7 +276,7 @@ bool widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::ContextMenu::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::ContextMenu::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}

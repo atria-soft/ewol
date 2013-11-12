@@ -238,13 +238,13 @@ bool ewol::WidgetManager::isDrawingNeeded(void) {
 }
 
 // element that generate the list of elements
-void ewol::WidgetManager::addWidgetCreator(const etk::UString& _name,
+void ewol::WidgetManager::addWidgetCreator(const std::string& _name,
                                            ewol::WidgetManager::creator_tf _pointer) {
 	if (NULL == _pointer) {
 		return;
 	}
 	//Keep name in lower case :
-	etk::UString nameLower = _name.toLower();
+	std::string nameLower = _name.toLower();
 	if (true == m_creatorList.exist(nameLower)) {
 		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
 		m_creatorList[nameLower] = _pointer;
@@ -254,8 +254,8 @@ void ewol::WidgetManager::addWidgetCreator(const etk::UString& _name,
 	m_creatorList.add(nameLower, _pointer);
 }
 
-ewol::Widget* ewol::WidgetManager::create(const etk::UString& _name) {
-	etk::UString nameLower = _name.toLower();
+ewol::Widget* ewol::WidgetManager::create(const std::string& _name) {
+	std::string nameLower = _name.toLower();
 	if (true == m_creatorList.exist(nameLower)) {
 		ewol::WidgetManager::creator_tf pointerFunction = m_creatorList[nameLower];
 		if (NULL != pointerFunction) {
@@ -266,13 +266,13 @@ ewol::Widget* ewol::WidgetManager::create(const etk::UString& _name) {
 	return NULL;
 }
 
-bool ewol::WidgetManager::exist(const etk::UString& _name) {
-	etk::UString nameLower = _name.toLower();
+bool ewol::WidgetManager::exist(const std::string& _name) {
+	std::string nameLower = _name.toLower();
 	return m_creatorList.exist(nameLower);
 }
 
-etk::UString ewol::WidgetManager::list(void) {
-	etk::UString tmpVal;
+std::string ewol::WidgetManager::list(void) {
+	std::string tmpVal;
 	for (int32_t iii=0; iii<m_creatorList.size() ; iii++) {
 		tmpVal += m_creatorList.getKey(iii);
 		tmpVal += ",";

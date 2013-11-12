@@ -38,7 +38,7 @@ namespace ewol {
 	 */
 	class Kerning {
 		public:
-			etk::UChar m_UVal;  //!< unicode value (the previous character that must be before)
+			char32_t m_UVal;  //!< unicode value (the previous character that must be before)
 			float     m_value; //!< kerning real offset
 		public:
 			/**
@@ -54,7 +54,7 @@ namespace ewol {
 			 * @param[in] _charcode The Unicode value of the coresponding character that might be before
 			 * @param[in] _value The Kerning value of the offset (nb pixel number)
 			 */
-			Kerning(const etk::UChar _charcode, const float _value) :
+			Kerning(const char32_t _charcode, const float _value) :
 			  m_UVal(_charcode),
 			  m_value(_value) {
 				

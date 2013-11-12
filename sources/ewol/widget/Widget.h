@@ -76,16 +76,16 @@ namespace ewol {
 		gravityLeft=0x08,
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const enum ewol::gravity _obj);
-	etk::UString gravityToString(const enum ewol::gravity _obj);
-	enum ewol::gravity stringToGravity(const etk::UString& _obj);
+	std::string gravityToString(const enum ewol::gravity _obj);
+	enum ewol::gravity stringToGravity(const std::string& _obj);
 	
 	class EventShortCut {
 		public:
 			bool broadcastEvent; //!< if it is true, then the message is sent to all the system
 			const char* generateEventId; //!< Local generated event
-			etk::UString eventData; //!< data link with the event
+			std::string eventData; //!< data link with the event
 			ewol::SpecialKey specialKey; //!< special board key
-			etk::UChar unicodeValue; //!< 0 if not used
+			char32_t unicodeValue; //!< 0 if not used
 			enum ewol::keyEvent::keyboard keyboardMoveValue; //!< ewol::EVENT_KB_MOVE_TYPE_NONE if not used
 			EventShortCut(void) {
 				broadcastEvent = false;
@@ -530,7 +530,7 @@ namespace ewol {
 			 * @param[in] _widgetName name of the widget
 			 * @return the requested pointer on the node (or NULL pointer)
 			 */
-			virtual ewol::Widget* getWidgetNamed(const etk::UString& _widgetName);
+			virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 		
 		// event section:
 		public:
@@ -595,7 +595,7 @@ namespace ewol {
 			 */
 			virtual void shortCutAdd(const char * _descriptiveString,
 			                         const char * _generateEventId,
-			                         etk::UString _data="",
+			                         std::string _data="",
 			                         bool _broadcast=false);
 			/**
 			 * @brief remove all curent shortCut
@@ -612,7 +612,7 @@ namespace ewol {
 			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
 			 */
 			virtual bool onEventShortCut(ewol::SpecialKey& _special,
-			                             etk::UChar _unicodeValue,
+			                             char32_t _unicodeValue,
 			                             enum ewol::keyEvent::keyboard _kbMove,
 			                             bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------
@@ -690,7 +690,7 @@ namespace ewol {
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public:
 			/**
 			 * @brief need to be call When the size of the current widget have change  == > this force the system to recalculate all the widget positions

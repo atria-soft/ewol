@@ -33,7 +33,7 @@ namespace ewol {
 			const char* localEventId; //!< local event Id generation
 			ewol::EObject* destEObject; //!< destination widget that might be call
 			const char* destEventId; //!< generated event ID on the distant widget
-			etk::UString overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
+			std::string overloadData; //!< sometimes the user prefer to receive some specific data on an event (instead of the one sed by the widget)
 	};
 	/**
 	 * @brief Basic message classes for ewol system
@@ -94,13 +94,13 @@ namespace ewol {
 			 * @param[in] _generateEventId event Id that is curetly generated
 			 * @param[in] _data data associated with the event
 			 */
-			void generateEventId(const char * _generateEventId, const etk::UString& _data = "");
+			void generateEventId(const char * _generateEventId, const std::string& _data = "");
 			/**
 			 * @brief generate Multicast event on all EObject requested the event
 			 * @param[in] _messageId Event Id that is generated
 			 * @param[in] _data String that is send at all the destinations
 			 */
-			void sendMultiCast(const char* const _messageId, const etk::UString& _data = "");
+			void sendMultiCast(const char* const _messageId, const std::string& _data = "");
 			/**
 			 * @brief Register of the arrival of a Multicast message
 			 * @param[in] _messageId Event Id waiting for...
@@ -117,7 +117,7 @@ namespace ewol {
 			void registerOnEvent(ewol::EObject * _destinationObject,
 			                     const char * _eventId,
 			                     const char * _eventIdgenerated = NULL,
-			                     const etk::UString& _overloadData="");
+			                     const std::string& _overloadData="");
 			/**
 			 * @brief Un-Register an EObject over an other.
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
@@ -160,7 +160,7 @@ namespace ewol {
 			 * @param[out] _result Result of the request.
 			 * @return true if the config is set
 			 */
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const ;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const ;
 		public:
 			/** 
 			 * @brief get all the configuration list
@@ -173,29 +173,29 @@ namespace ewol {
 			 * @return true if config set correctly...
 			 */
 			bool setConfig(const ewol::EConfig& _conf) { return onSetConfig(_conf); };
-			bool setConfig(const etk::UString& _config, const etk::UString& _value); // need a search ...
-			bool setConfigNamed(const etk::UString& _name, const etk::UString& _config, const etk::UString& _value); // need a search ...
-			bool setConfigNamed(const etk::UString& _name, const ewol::EConfig& _conf);
+			bool setConfig(const std::string& _config, const std::string& _value); // need a search ...
+			bool setConfigNamed(const std::string& _name, const std::string& _config, const std::string& _value); // need a search ...
+			bool setConfigNamed(const std::string& _name, const ewol::EConfig& _conf);
 			/**
 			 * @brief Configuration get from the curent EObject (systrem mode)
 			 * @param[in] _config Configuration name.
 			 * @return the config properties
 			 */
-			etk::UString getConfig(const char* _config) const;
-			etk::UString getConfig(const etk::UString& _config) const; // need search
+			std::string getConfig(const char* _config) const;
+			std::string getConfig(const std::string& _config) const; // need search
 		protected:
-			etk::UString m_name; //!< name of the element ...
+			std::string m_name; //!< name of the element ...
 		public:
 			/**
 			 * @brief get the eObject name
 			 * @return The requested name
 			 */
-			const etk::UString& getName(void) const { return m_name; };
+			const std::string& getName(void) const { return m_name; };
 			/**
 			 * @brief get the Widget name
 			 * @param[in] _name The new name
 			 */
-			void setName(const etk::UString& _name) { m_name=_name; };
+			void setName(const std::string& _name) { m_name=_name; };
 		public:
 			/**
 			 * @brief load properties with an XML node.

@@ -39,9 +39,9 @@ namespace widget {
 			// Derived function
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
 			
-			void setTitle(etk::UString _label);
-			void menuAdd(etk::UString _label, etk::UString _image, ewol::Widget* _associateWidget);
-			void menuAddGroup(etk::UString _label);
+			void setTitle(std::string _label);
+			void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
+			void menuAddGroup(std::string _label);
 			void menuClear(void);
 			void menuSeparator(void);
 		private:

@@ -17,13 +17,13 @@
 #undef __class__
 #define __class__ "TextureFile"
 
-ewol::TextureFile::TextureFile(const etk::UString& _genName) :
+ewol::TextureFile::TextureFile(const std::string& _genName) :
   Texture(_genName) {
 	
 }
 
 
-ewol::TextureFile::TextureFile(etk::UString _genName, const etk::UString& _tmpfileName, const ivec2& _size) :
+ewol::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
   Texture(_genName) {
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
@@ -55,7 +55,7 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 _size) {
+ewol::TextureFile* ewol::TextureFile::keep(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
 		ewol::TextureFile* object = new ewol::TextureFile("");
@@ -74,8 +74,8 @@ ewol::TextureFile* ewol::TextureFile::keep(const etk::UString& _filename, ivec2 
 		_size.setY(-1);
 		//EWOL_ERROR("Error Request the image size.y() =0 ???");
 	}
-	etk::UString TmpFilename = _filename;
-	if (false == _filename.endWith(".svg") ) {
+	std::string TmpFilename = _filename;
+	if (false == end_with(_filename, ".svg") ) {
 		_size = ivec2(-1,-1);
 	}
 	#ifdef __TARGET_OS__MacOs

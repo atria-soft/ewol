@@ -29,7 +29,7 @@ namespace ewol {
 	 * @brief get EWOL version
 	 * @return The string that describe ewol version
 	 */
-	etk::UString getVersion(void);
+	std::string getVersion(void);
 	/**
 	 * @brief get current time in us...
 	 * @return The current time
@@ -40,12 +40,12 @@ namespace ewol {
 	 * @brief get compilation mode (release/debug)
 	 * @return the string of the mode of commpilation
 	 */
-	etk::UString getCompilationMode(void);
+	std::string getCompilationMode(void);
 	/**
 	 * @brief get the board type (Android/Linux/MacOs/...)
 	 * @return the string of the mode of commpilation
 	 */
-	etk::UString getBoardType(void);
+	std::string getBoardType(void);
 };
 
 #endif

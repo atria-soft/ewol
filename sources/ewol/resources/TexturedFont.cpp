@@ -42,7 +42,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 #undef __class__
 #define __class__ "TexturedFont"
 
-ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
+ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
   ewol::Texture(_fontName) {
 	m_font[0] = NULL;
 	m_font[1] = NULL;
@@ -66,8 +66,7 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	
 	int32_t tmpSize = 0;
 	// extarct name and size :
-	etk::Char tmpChar = _fontName.c_str();
-	const char * tmpData = tmpChar;
+	const char * tmpData = _fontName.c_str();
 	const char * tmpPos = strchr(tmpData, ':');
 	
 	if (tmpPos == NULL) {
@@ -81,10 +80,10 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 			return;
 		}
 	}
-	etk::UString localName = _fontName.extract(0, (tmpPos - tmpData));
+	std::string localName(_fontName, 0, (tmpPos - tmpData));
 	m_size = tmpSize;
 	
-	std::vector<etk::UString> folderList;
+	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
 		#if defined(__TARGET_OS__Android)
 			folderList.push_back("/system/fonts");
@@ -96,9 +95,9 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	for (int32_t folderID=0; folderID<folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
-		std::vector<etk::UString> output;
+		std::vector<std::string> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<etk::UString> split = localName.split(';');
+		std::vector<std::string> split = string_split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
@@ -106,42 +105,42 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
 			for (int32_t iii=0; iii<output.size(); iii++) {
 				//EWOL_DEBUG(" file : " << output[iii]);
-				if(    true == output[iii].endWith(split[jjj]+"-"+"bold"+".ttf", false)
-				    || true == output[iii].endWith(split[jjj]+"-"+"b"+".ttf", false)
-				    || true == output[iii].endWith(split[jjj]+"-"+"bd"+".ttf", false)
-				    || true == output[iii].endWith(split[jjj]+"bold"+".ttf", false)
-				    || true == output[iii].endWith(split[jjj]+"bd"+".ttf", false)
-				    || true == output[iii].endWith(split[jjj]+"b"+".ttf", false)) {
+				if(    true == end_with(output[iii], split[jjj]+"-"+"bold"+".ttf", false)
+				    || true == end_with(output[iii], split[jjj]+"-"+"b"+".ttf", false)
+				    || true == end_with(output[iii], split[jjj]+"-"+"bd"+".ttf", false)
+				    || true == end_with(output[iii], split[jjj]+"bold"+".ttf", false)
+				    || true == end_with(output[iii], split[jjj]+"bd"+".ttf", false)
+				    || true == end_with(output[iii], split[jjj]+"b"+".ttf", false)) {
 					EWOL_INFO(" find Font [Bold]        : " << output[iii]);
 					m_fileName[ewol::font::Bold] = output[iii];
 					hasFindAFont=true;
-				} else if(    true == output[iii].endWith(split[jjj]+"-"+"oblique"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"italic"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"Light"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"i"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"oblique"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"italic"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"light"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"i"+".ttf", false)) {
+				} else if(    true == end_with(output[iii], split[jjj]+"-"+"oblique"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"italic"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"Light"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"i"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"oblique"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"italic"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"light"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"i"+".ttf", false)) {
 					EWOL_INFO(" find Font [Italic]      : " << output[iii]);
 					m_fileName[ewol::font::Italic] = output[iii];
 					hasFindAFont=true;
-				} else if(    true == output[iii].endWith(split[jjj]+"-"+"bolditalic"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"boldoblique"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"bi"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"z"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"bolditalic"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"boldoblique"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"bi"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"z"+".ttf", false)) {
+				} else if(    true == end_with(output[iii], split[jjj]+"-"+"bolditalic"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"boldoblique"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"bi"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"z"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"bolditalic"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"boldoblique"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"bi"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"z"+".ttf", false)) {
 					EWOL_INFO(" find Font [Bold-Italic] : " << output[iii]);
 					m_fileName[ewol::font::BoldItalic] = output[iii];
 					hasFindAFont=true;
-				} else if(    true == output[iii].endWith(split[jjj]+"-"+"regular"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"-"+"r"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"regular"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+"r"+".ttf", false)
-				           || true == output[iii].endWith(split[jjj]+".ttf", false)) {
+				} else if(    true == end_with(output[iii], split[jjj]+"-"+"regular"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"-"+"r"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"regular"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+"r"+".ttf", false)
+				           || true == end_with(output[iii], split[jjj]+".ttf", false)) {
 					EWOL_INFO(" find Font [Regular]     : " << output[iii]);
 					m_fileName[ewol::font::Regular] = output[iii];
 					hasFindAFont=true;
@@ -164,7 +163,7 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	// try to find the reference mode :
 	enum ewol::font::mode refMode = ewol::font::Regular;
 	for(int32_t iii=3; iii >= 0; iii--) {
-		if (m_fileName[iii].isEmpty() == false) {
+		if (m_fileName[iii].size() != 0) {
 			refMode = (enum ewol::font::mode)iii;
 		}
 	}
@@ -172,7 +171,7 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	EWOL_DEBUG("         set reference mode : " << refMode);
 	// generate the wrapping on the preventing error
 	for(int32_t iii=3; iii >= 0; iii--) {
-		if (m_fileName[iii].isEmpty() == false) {
+		if (m_fileName[iii].size() != 0) {
 			m_modeWraping[iii] = (enum ewol::font::mode)iii;
 		} else {
 			m_modeWraping[iii] = refMode;
@@ -180,7 +179,7 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 	}
 	
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		if (m_fileName[iiiFontId].isEmpty() == true) {
+		if (m_fileName[iiiFontId].size() == 0) {
 			EWOL_DEBUG("can not load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
 			m_font[iiiFontId] = NULL;
 			continue;
@@ -204,16 +203,10 @@ ewol::TexturedFont::TexturedFont(const etk::UString& _fontName) :
 		m_data.clear(etk::Color<>(0x00000000));
 	}
 	// add error glyph
-	{
-		etk::UChar tmpchar;
-		tmpchar.set(0);
-		addGlyph(tmpchar);
-	}
+	addGlyph(0);
 	// by default we set only the first AINSI char availlable
 	for (int32_t iii=0x20; iii<0x7F; iii++) {
-		etk::UChar tmpchar;
-		tmpchar.set(iii);
-		addGlyph(tmpchar);
+		addGlyph(iii);
 	}
 	flush();
 	EWOL_DEBUG("Wrapping properties : ");
@@ -229,7 +222,7 @@ ewol::TexturedFont::~TexturedFont(void) {
 	}
 }
 
-bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
+bool ewol::TexturedFont::addGlyph(const char32_t& _val) {
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
@@ -279,7 +272,7 @@ bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 			// update the Bitmap position drawing : 
 			m_lastGlyphPos[iii] += ivec2(tmpchar.m_sizeTexture.x()+1, 0);
 		} else {
-			EWOL_WARNING("Did not find char : '" << _val << "'=" << _val.get());
+			EWOL_WARNING("Did not find char : '" << _val << "'=" << _val);
 			tmpchar.setNotExist();
 		}
 		m_listElement[iii].push_back(tmpchar);
@@ -297,11 +290,11 @@ bool ewol::TexturedFont::addGlyph(const etk::UChar& _val) {
 	return hasChange;
 }
 
-int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode) {
-	if (_charcode.get() < 0x20) {
+int32_t ewol::TexturedFont::getIndex(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
+	if (_charcode < 0x20) {
 		return 0;
-	} else if (_charcode.get() < 0x80) {
-		return _charcode.get() - 0x1F;
+	} else if (_charcode < 0x80) {
+		return _charcode - 0x1F;
 	} else {
 		for (int32_t iii=0x80-0x20; iii < m_listElement[_displayMode].size(); iii++) {
 			//EWOL_DEBUG("search : '" << charcode << "' =?= '" << (m_listElement[displayMode])[iii].m_UVal << "'");
@@ -323,7 +316,7 @@ int32_t ewol::TexturedFont::getIndex(const etk::UChar& _charcode, const enum ewo
 	return 0;
 }
 
-ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _charcode, const enum ewol::font::mode _displayMode) {
+ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
@@ -342,7 +335,7 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const etk::UChar& _char
 	return &((m_listElement[_displayMode])[index]);
 }
 
-ewol::TexturedFont* ewol::TexturedFont::keep(const etk::UString& _filename) {
+ewol::TexturedFont* ewol::TexturedFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
 	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(getManager().localKeep(_filename));
 	if (NULL != object) {
@@ -363,7 +356,7 @@ void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	etk::UString name = _object->getName();
+	std::string name = _object->getName();
 	int32_t count = _object->m_counter - 1;
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	if (getManager().release(object2) == true) {

@@ -39,8 +39,8 @@ namespace widget {
 		private:
 			// generic property of the joystick:
 			bool m_displayBackground;
-			etk::UString m_background;
-			etk::UString m_foreground;
+			std::string m_background;
+			std::string m_foreground;
 			float m_ratio;
 		public:
 			Joystick(void);
@@ -62,12 +62,12 @@ namespace widget {
 			 * @param[in] _imageNameInData the new rbackground that might be set
 			 * @param[in] _display
 			 */
-			void background(etk::UString _imageNameInData, bool _display=true);
+			void background(std::string _imageNameInData, bool _display=true);
 			/**
 			 * @brief set the Foreground of the widget joystick
 			 * @param[in] _imageNameInData the new Foreground that might be set
 			 */
-			void foreground(etk::UString _imageNameInData);
+			void foreground(std::string _imageNameInData);
 			/**
 			 * @brief get the property of the joystick
 			 * @param[out] _distance distance to the center

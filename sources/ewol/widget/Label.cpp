@@ -25,7 +25,7 @@ void widget::Label::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::Label::Label(etk::UString _newLabel) {
+widget::Label::Label(std::string _newLabel) {
 	m_label = _newLabel;
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
@@ -46,13 +46,13 @@ void widget::Label::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-void widget::Label::setLabel(const etk::UString& _newLabel) {
+void widget::Label::setLabel(const std::string& _newLabel) {
 	m_label = _newLabel;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-etk::UString widget::Label::getLabel(void) {
+std::string widget::Label::getLabel(void) {
 	return m_label;
 }
 
@@ -67,7 +67,7 @@ void widget::Label::onRegenerateDisplay(void) {
 		
 		vec2 tmpMax = m_userMaxSize.getPixel();
 		// to know the size of one line : 
-		vec3 minSize = m_text.calculateSize(etk::UChar('A'));
+		vec3 minSize = m_text.calculateSize(char32_t('A'));
 		if (tmpMax.x() <= 999999) {
 			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
 		}

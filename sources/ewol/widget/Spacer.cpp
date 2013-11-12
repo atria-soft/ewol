@@ -67,7 +67,7 @@ bool widget::Spacer::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::Spacer::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::Spacer::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}

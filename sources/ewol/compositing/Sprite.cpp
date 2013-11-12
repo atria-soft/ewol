@@ -12,7 +12,7 @@
 #undef __class__
 #define __class__ "ewol::Sprite"
 
-ewol::Sprite::Sprite(const etk::UString& _imageName, const ivec2& _nbSprite) :
+ewol::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite) :
   ewol::Image(_imageName),
   m_nbSprite(_nbSprite),
   m_unitarySpriteSize(0,0) {

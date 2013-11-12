@@ -212,14 +212,14 @@ void ewol::Windows::setBackgroundColor(const etk::Color<float>& _color) {
 	}
 }
 
-void ewol::Windows::setTitle(const etk::UString& _title) {
+void ewol::Windows::setTitle(const std::string& _title) {
 	// TODO : remove this ...
-	etk::UString title = _title;
+	std::string title = _title;
 	getContext().setTitle(title);
 }
 
 
-void ewol::Windows::createPopUpMessage(enum popUpMessageType _type, const etk::UString& _message)
+void ewol::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
 	widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
 	if (tmpPopUp == NULL) {

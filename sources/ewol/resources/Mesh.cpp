@@ -14,7 +14,7 @@
 #undef __class__
 #define __class__	"Mesh"
 
-ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName) :
+ewol::Mesh::Mesh(const std::string& _fileName, const std::string& _shaderName) :
   ewol::Resource(_fileName),
   m_normalMode(normalModeNone),
   m_checkNormal(false),
@@ -46,15 +46,15 @@ ewol::Mesh::Mesh(const etk::UString& _fileName, const etk::UString& _shaderName)
 	m_verticesVBO = ewol::VirtualBufferObject::keep(4);
 	
 	// load the curent file :
-	etk::UString tmpName = _fileName.toLower();
+	std::string tmpName = to_lower(_fileName);
 	// select the corect loader :
-	if (true == tmpName.endWith(".obj") ) {
-		if (false == loadOBJ(_fileName)) {
+	if (end_with(tmpName, ".obj") == true) {
+		if (loadOBJ(_fileName) == false) {
 			EWOL_ERROR("Error To load OBJ file " << tmpName );
 			return;
 		}
-	} else if (true == tmpName.endWith(".emf") ) {
-		if (false == loadEMF(_fileName)) {
+	} else if (end_with(tmpName, ".emf") ) {
+		if (loadEMF(_fileName) == false) {
 			EWOL_ERROR("Error To load EMF file " << tmpName );
 			return;
 		}
@@ -283,7 +283,7 @@ void ewol::Mesh::generateVBO(void) {
 }
 
 
-void ewol::Mesh::createViewBox(const etk::UString& _materialName,float _size) {
+void ewol::Mesh::createViewBox(const std::string& _materialName,float _size) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 	// This is the direct generation basis on the .obj system
 	/*
@@ -376,7 +376,7 @@ void ewol::Mesh::createViewBox(const etk::UString& _materialName,float _size) {
 }
 
 
-bool ewol::Mesh::loadOBJ(const etk::UString& _fileName) {
+bool ewol::Mesh::loadOBJ(const std::string& _fileName) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 #if 0
 	etk::FSNode fileName(_fileName);
@@ -482,7 +482,7 @@ bool ewol::Mesh::loadOBJ(const etk::UString& _fileName) {
 				}
 				inputDataLine[strlen(inputDataLine)-1] = '\0';
 			}
-			etk::UString tmpVal(&inputDataLine[7]);
+			std::string tmpVal(&inputDataLine[7]);
 			setTexture(fileName.getRelativeFolder() + tmpVal);
 		} else if(    inputDataLine[0] == 'm'
 		           && inputDataLine[1] == 't'
@@ -625,7 +625,7 @@ enum emfModuleMode {
 	EMFModuleMaterial_END,
 };
 
-bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
+bool ewol::Mesh::loadEMF(const std::string& _fileName) {
 	m_checkNormal = true;
 	m_normalMode = ewol::Mesh::normalModeNone;
 	etk::FSNode fileName(_fileName);
@@ -654,10 +654,10 @@ bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
 	enum emfModuleMode currentMode = EMFModuleNone;
 	EWOL_VERBOSE("Start parsing Mesh file : " << fileName);
 	// mesh global param :
-	etk::UString currentMeshName = "";
+	std::string currentMeshName = "";
 	int32_t meshFaceMaterialID = -1;
 	// material global param :
-	etk::UString materialName = "";
+	std::string materialName = "";
 	ewol::Material* material = NULL;
 	// physical shape:
 	ewol::PhysicsShape* physics = NULL;
@@ -992,7 +992,7 @@ bool ewol::Mesh::loadEMF(const etk::UString& _fileName) {
 	return true;
 }
 
-void ewol::Mesh::addMaterial(const etk::UString& _name, ewol::Material* _data) {
+void ewol::Mesh::addMaterial(const std::string& _name, ewol::Material* _data) {
 	if (NULL == _data) {
 		EWOL_ERROR(" can not add material with null pointer");
 		return;
@@ -1013,7 +1013,7 @@ void ewol::Mesh::setShape(void* _shape) {
 	m_pointerShape=_shape;
 }
 
-ewol::Mesh* ewol::Mesh::keep(const etk::UString& _meshName) {
+ewol::Mesh* ewol::Mesh::keep(const std::string& _meshName) {
 	ewol::Mesh* object = static_cast<ewol::Mesh*>(getManager().localKeep(_meshName));
 	if (NULL != object) {
 		return object;

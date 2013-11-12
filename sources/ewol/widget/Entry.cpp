@@ -46,7 +46,7 @@ const char* const widget::Entry::configColorFg = "color";
 const char* const widget::Entry::configColorBg = "background";
 const char* const widget::Entry::configEmptyMessage = "emptytext";
 
-widget::Entry::Entry(etk::UString _newData) :
+widget::Entry::Entry(std::string _newData) :
   m_shaper("THEME:GUI:widgetEntry.conf"),
   m_data(""),
   m_maxCharacter(0x7FFFFFFF),
@@ -101,7 +101,7 @@ void widget::Entry::calculateMinMaxSize(void) {
 	ewol::Widget::calculateMinMaxSize();
 	// get generic padding
 	vec2 padding = m_shaper.getPadding();
-	int32_t minHeight = m_oObjectText.calculateSize(etk::UChar('A')).y();
+	int32_t minHeight = m_oObjectText.calculateSize(char32_t('A')).y();
 	vec2 minimumSizeBase(20, minHeight);
 	// add padding :
 	minimumSizeBase += padding*2.0f;
@@ -111,8 +111,8 @@ void widget::Entry::calculateMinMaxSize(void) {
 }
 
 
-void widget::Entry::setValue(const etk::UString& _newData) {
-	etk::UString newData = _newData;
+void widget::Entry::setValue(const std::string& _newData) {
+	std::string newData = _newData;
 	if (newData.size()>m_maxCharacter) {
 		newData = _newData.extract(0, m_maxCharacter);
 		EWOL_DEBUG("Limit entry set of data... " << _newData.extract(m_maxCharacter));
@@ -153,7 +153,7 @@ void widget::Entry::onRegenerateDisplay(void) {
 		vec2 tmpSizeText = tmpSizeShaper - padding * 2.0f;
 		vec2 tmpOriginText = (m_size - tmpSizeText) / 2.0f;
 		// sometimes, the user define an height bigger than the real size needed  == > in this case we need to center the text in the shaper ...
-		int32_t minHeight = m_oObjectText.calculateSize(etk::UChar('A')).y();
+		int32_t minHeight = m_oObjectText.calculateSize(char32_t('A')).y();
 		if (tmpSizeText.y()>minHeight) {
 			tmpOriginText += vec2(0,(tmpSizeText.y()-minHeight)/2.0f);
 		}
@@ -191,7 +191,7 @@ void widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
 	vec2 relPos = relativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
 	// try to find the new cursor position :
-	etk::UString tmpDisplay = m_data.extract(0, m_displayStartPosition);
+	std::string tmpDisplay = m_data.extract(0, m_displayStartPosition);
 	int32_t displayHidenSize = m_oObjectText.calculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
@@ -253,7 +253,7 @@ void widget::Entry::copySelectionToClipBoard(enum ewol::clipBoard::clipboardList
 		pos1 = m_displayCursorPos;
 	}
 	// Copy
-	etk::UString tmpData = m_data.extract(pos1, pos2);
+	std::string tmpData = m_data.extract(pos1, pos2);
 	ewol::clipBoard::set(_clipboardID, tmpData);
 }
 
@@ -381,7 +381,7 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 				if (m_data.size() > m_maxCharacter) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
-					etk::UString newData = m_data;
+					std::string newData = m_data;
 					newData.add(m_displayCursorPos, _event.getChar());
 					setInternalValue(newData);
 					if (m_data == newData) {
@@ -423,8 +423,8 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 	return false;
 }
 
-void widget::Entry::setInternalValue(const etk::UString& _newData) {
-	etk::UString previous = m_data;
+void widget::Entry::setInternalValue(const std::string& _newData) {
+	std::string previous = m_data;
 	// check the RegExp :
 	if (_newData.size()>0) {
 		if (false == m_regExp.processOneElement(_newData,0,_newData.size()) ) {
@@ -445,10 +445,10 @@ void widget::Entry::onEventClipboard(enum ewol::clipBoard::clipboardListe _clipb
 	// remove curent selected data ...
 	removeSelected();
 	// get current selection / Copy :
-	etk::UString tmpData = get(_clipboardID);
+	std::string tmpData = get(_clipboardID);
 	// add it on the current display :
 	if (tmpData.size() >= 0) {
-		etk::UString newData = m_data;
+		std::string newData = m_data;
 		newData.add(m_displayCursorPos, &tmpData[0]);
 		setInternalValue(newData);
 		if (m_data == newData) {
@@ -514,7 +514,7 @@ void widget::Entry::updateTextPosition(void) {
 		m_displayStartPosition = 0;
 	} else {
 		// all can not be set :
-		etk::UString tmpDisplay = m_data.extract(0, m_displayCursorPos);
+		std::string tmpDisplay = m_data.extract(0, m_displayCursorPos);
 		int32_t pixelCursorPos = m_oObjectText.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
@@ -559,8 +559,8 @@ void widget::Entry::periodicCall(const ewol::EventTime& _event) {
 	markToRedraw();
 }
 
-void widget::Entry::setRegExp(const etk::UString& _expression) {
-	etk::UString previousRegExp = m_regExp.getRegExp();
+void widget::Entry::setRegExp(const std::string& _expression) {
+	std::string previousRegExp = m_regExp.getRegExp();
 	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\"  == > \"" << _expression << "\"");
 	m_regExp.setRegExp(_expression);
 	if (m_regExp.getStatus() == false) {
@@ -579,7 +579,7 @@ void widget::Entry::setColorTextSelected(const etk::Color<>& _color) {
 	markToRedraw();
 }
 
-void widget::Entry::setEmptyText(const etk::UString& _text) {
+void widget::Entry::setEmptyText(const std::string& _text) {
 	m_textWhenNothing = _text;
 	markToRedraw();
 }
@@ -611,12 +611,12 @@ bool widget::Entry::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::Entry::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::Entry::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == ewol::Widget::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configMaxChar) {
-		_result = etk::UString(getMaxChar());
+		_result = std::string(getMaxChar());
 		return true;
 	}
 	if (_config == configRegExp) {

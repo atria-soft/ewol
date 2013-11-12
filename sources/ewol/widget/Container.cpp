@@ -65,7 +65,7 @@ void widget::Container::subWidgetRemoveDelayed(void) {
 	}
 }
 
-ewol::Widget* widget::Container::getWidgetNamed(const etk::UString& _widgetName) {
+ewol::Widget* widget::Container::getWidgetNamed(const std::string& _widgetName) {
 	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (NULL!=tmpUpperWidget) {
 		return tmpUpperWidget;
@@ -168,7 +168,7 @@ bool widget::Container::loadXML(exml::Element* _node) {
 			// trash here all that is not element
 			continue;
 		}
-		etk::UString widgetName = pNode->getValue();
+		std::string widgetName = pNode->getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("(l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
 			continue;

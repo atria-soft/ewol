@@ -25,7 +25,7 @@ ewol::ConfigFont::~ConfigFont(void) {
 	ewol::freeTypeUnInit();
 }
 
-void ewol::ConfigFont::set(const etk::UString& _fontName, int32_t _size) {
+void ewol::ConfigFont::set(const std::string& _fontName, int32_t _size) {
 	m_name = _fontName;
 	m_size = _size;
 	EWOL_INFO("Set default Font : '" << _fontName << "' size=" << _size);

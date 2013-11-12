@@ -26,8 +26,8 @@ namespace ewol {
 		namespace music {
 			void fading(int32_t _timeMs);
 			// list playing system : is cyclic ...
-			bool  listAdd(etk::UString _file);
-			bool  listRm(etk::UString _file);
+			bool  listAdd(std::string _file);
+			bool  listRm(std::string _file);
 			bool  listClean(void);
 			bool  listPrevious(void);
 			bool  listNext(void);
@@ -36,7 +36,7 @@ namespace ewol {
 			bool  listPlay(void); // List playing
 			bool  listStop(void); // List stopping
 			
-			bool  play(etk::UString _file); // play specific file ... pause the list element;
+			bool  play(std::string _file); // play specific file ... pause the list element;
 			bool  stop(void);
 			
 			// in db
@@ -50,7 +50,7 @@ namespace ewol {
 		// note effect is loaded in memory (then don't create long effect) and unload only when requested
 		namespace effects {
 			// note : support file (Mono, 16bit, 48kHz) : .raw or .wav (no encodage) or .ogg (decoded with tremor lib)
-			int32_t add(etk::UString _file);
+			int32_t add(std::string _file);
 			void    rm(int32_t _effectId);
 			void    play(int32_t _effectId, float _xxx, float _yyy);
 			

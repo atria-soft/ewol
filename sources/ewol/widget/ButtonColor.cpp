@@ -38,7 +38,7 @@ void widget::ButtonColor::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, etk::UString _shaperName) :
+widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :
   m_shaper(_shaperName),
   m_textColorFg(_baseColor),
   m_widgetContextMenu(NULL) {
@@ -55,14 +55,14 @@ widget::ButtonColor::~ButtonColor(void) {
 }
 
 
-void widget::ButtonColor::setShaperName(etk::UString _shaperName) {
+void widget::ButtonColor::setShaperName(std::string _shaperName) {
 	m_shaper.setSource(_shaperName);
 }
 
 
 void widget::ButtonColor::calculateMinMaxSize(void) {
 	vec2 padding = m_shaper.getPadding();
-	etk::UString label = m_textColorFg.getString();
+	std::string label = m_textColorFg.getString();
 	vec3 minSize = m_text.calculateSize(label);
 	m_minSize.setX(padding.x()*2 + minSize.x() + 7);
 	m_minSize.setY(padding.y()*2 + minSize.y() );
@@ -84,7 +84,7 @@ void widget::ButtonColor::onRegenerateDisplay(void) {
 		
 		vec2 padding = m_shaper.getPadding();
 		
-		etk::UString label = m_textColorFg.getString();
+		std::string label = m_textColorFg.getString();
 		
 		ivec2 localSize = m_minSize;
 		

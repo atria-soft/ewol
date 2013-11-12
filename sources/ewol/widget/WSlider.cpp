@@ -145,7 +145,7 @@ void widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void widget::WSlider::subWidgetSelectSet(const etk::UString& _widgetName) {
+void widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 	if (_widgetName == "") {
 		EWOL_ERROR("Can not change to a widget with no name (input)");
 		return;
@@ -281,7 +281,7 @@ bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::WSlider::onGetConfig(const char* _config, etk::UString& _result) const {
+bool widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::ContainerN::onGetConfig(_config, _result)) {
 		return true;
 	}

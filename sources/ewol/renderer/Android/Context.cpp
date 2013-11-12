@@ -313,7 +313,7 @@ class AndroidContext : public ewol::eContext {
 		#endif
 		}
 		
-		void setTitle(etk::UString& _title) {
+		void setTitle(std::string& _title) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _title << "\"");
 			if (m_javaApplicationType == appl_application) {
 				int status;
@@ -385,7 +385,7 @@ class AndroidContext : public ewol::eContext {
 			ewol::eContext::OS_SetMouseState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
-		void ANDROID_SetKeyboard(etk::UChar _myChar, bool _isDown, bool _isARepeateKey=false) {
+		void ANDROID_SetKeyboard(char32_t _myChar, bool _isDown, bool _isARepeateKey=false) {
 			OS_SetKeyboard(m_guiKeyBoardSpecialKeyMode, _myChar, _isDown, _isARepeateKey);
 		}
 		

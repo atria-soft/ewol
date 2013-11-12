@@ -29,7 +29,7 @@ namespace ewol {
 			 * @brief Contructor of an opengl Shader
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
 			 */
-			Shader(const etk::UString& _filename);
+			Shader(const std::string& _filename);
 			/**
 			 * @brief Destructor, remove the current Shader
 			 */
@@ -74,7 +74,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the openGL Shader.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Shader* keep(const etk::UString& _filename);
+			static ewol::Shader* keep(const std::string& _filename);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

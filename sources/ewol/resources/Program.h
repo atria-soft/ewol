@@ -25,7 +25,7 @@ namespace ewol {
 	 */
 	class progAttributeElement {
 		public :
-			etk::UString m_name; //!< Name of the element
+			std::string m_name; //!< Name of the element
 			GLint m_elementId; //!< openGl Id if this element  == > can not exist ==> @ref m_isLinked
 			bool m_isAttribute; //!< true if it was an attribute element, otherwite it was an uniform
 			bool m_isLinked; //!< if this element does not exist this is false
@@ -56,7 +56,7 @@ namespace ewol {
 			 * @brief Contructor of an opengl Program.
 			 * @param[in] filename Standard file name format. see @ref etk::FSNode
 			 */
-			Program(const etk::UString& filename);
+			Program(const std::string& filename);
 			/**
 			 * @brief Destructor, remove the current Program.
 			 */
@@ -73,7 +73,7 @@ namespace ewol {
 			 * @param[in] _elementName Name of the requested attribute.
 			 * @return An abstract ID of the current attribute (this value is all time availlable, even if the program will be reloaded)
 			 */
-			int32_t getAttribute(etk::UString _elementName);
+			int32_t getAttribute(std::string _elementName);
 			/**
 			 * @brief Send attribute table to the spefified ID attribure (not send if does not really exist in the openGL program).
 			 * @param[in] _idElem Id of the Attribute that might be sended.
@@ -97,7 +97,7 @@ namespace ewol {
 			 * @param[in] _elementName Name of the requested uniform.
 			 * @return An abstract ID of the current uniform (this value is all time availlable, even if the program will be reloaded)
 			 */
-			int32_t getUniform(etk::UString _elementName);
+			int32_t getUniform(std::string _elementName);
 			/**
 			 * @brief Send a uniform element to the spefified ID (not send if does not really exist in the openGL program)
 			 * @param[in] _idElem Id of the uniform that might be sended.
@@ -272,7 +272,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the openGL program.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::Program* keep(const etk::UString& _filename);
+			static ewol::Program* keep(const std::string& _filename);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

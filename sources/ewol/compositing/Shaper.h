@@ -22,7 +22,7 @@ namespace ewol {
 	// TODO : Abstaraction between states (call by name and the system greate IDs
 	class Shaper : public ewol::Compositing {
 		private:
-			etk::UString m_name; //!< Name of the configuration of the shaper.
+			std::string m_name; //!< Name of the configuration of the shaper.
 			// External theme config:
 			ewol::ConfigFile* m_config;           //!< pointer on the config file resources
 			int32_t           m_confIdPaddingX;   //!< ConfigFile padding property X
@@ -68,7 +68,7 @@ namespace ewol {
 			 * @brief generic constructor
 			 * @param[in] _shaperName Name of the file that might be loaded
 			 */
-			Shaper(const etk::UString& _shaperName="");
+			Shaper(const std::string& _shaperName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -140,12 +140,12 @@ namespace ewol {
 			 * @brief change the shaper Source
 			 * @param[in] _newFile New file of the shaper
 			 */
-			void setSource(const etk::UString& _newFile);
+			void setSource(const std::string& _newFile);
 			/**
 			 * @brief get the shaper file Source
 			 * @return the shapper file name
 			 */
-			const etk::UString& getSource(void) const { return m_name; };
+			const std::string& getSource(void) const { return m_name; };
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

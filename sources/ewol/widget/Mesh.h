@@ -23,7 +23,7 @@ namespace widget {
 	class Mesh :public ewol::Widget {
 		private:
 			// mesh name :
-			etk::UString m_meshName;
+			std::string m_meshName;
 			ewol::Mesh* m_object;
 			// mesh display properties:
 			vec3 m_position;
@@ -31,7 +31,7 @@ namespace widget {
 			vec3 m_angleSpeed;
 			float m_cameraDistance;
 		public:
-			Mesh(const etk::UString& filename); // automatic considering in the appl Data older
+			Mesh(const std::string& filename); // automatic considering in the appl Data older
 			virtual ~Mesh(void);
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
@@ -47,7 +47,7 @@ namespace widget {
 			 * @brief set a mesh name file
 			 * @param[in] filename Name of the new mesh
 			 */
-			void setFile(const etk::UString& filename);
+			void setFile(const std::string& filename);
 			/**
 			 * @brief set the mesh position
 			 * @param[in] pos The new position of the mesh

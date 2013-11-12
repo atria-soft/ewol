@@ -55,7 +55,7 @@ class eSystemMessage {
 		// keyboard events :
 		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
 		bool                        stateIsDown;
-		etk::UChar                   keyboardChar;
+		char32_t                   keyboardChar;
 		enum ewol::keyEvent::keyboard keyboardMove;
 		ewol::SpecialKey            keyboardSpecial;
 		
@@ -150,7 +150,7 @@ namespace ewol {
 			virtual void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
 			
 			virtual void OS_SetKeyboard(ewol::SpecialKey& _special,
-			                            etk::UChar _myChar,
+			                            char32_t _myChar,
 			                            bool _isDown,
 			                            bool _isARepeateKey=false);
 			virtual void OS_SetKeyboardMove(ewol::SpecialKey& _special,
@@ -303,7 +303,7 @@ namespace ewol {
 			 * @brief set the new title of the windows
 			 * @param[in] title New desired title
 			 */
-			virtual void setTitle(const etk::UString& _title);
+			virtual void setTitle(const std::string& _title);
 			/**
 			 * @brief force the screen orientation (availlable on portable elements ...
 			 * @param[in] _orientation Selected orientation.
@@ -324,7 +324,7 @@ namespace ewol {
 			 * @brief set the Icon of the program
 			 * @param[in] _inputFile new filename icon of the curent program.
 			 */
-			virtual void setIcon(const etk::UString& _inputFile) { };
+			virtual void setIcon(const std::string& _inputFile) { };
 			/**
 			 * @brief get the curent time in micro-second
 			 * @note : must be implemented in all system OS implementation

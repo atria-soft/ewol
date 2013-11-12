@@ -42,7 +42,7 @@ namespace widget {
 			/**
 			 * @brief 
 			 */
-			Image(const etk::UString& _file="",
+			Image(const std::string& _file="",
 			      const ewol::Dimension& _border=ewol::Dimension(vec2(0,0),ewol::Dimension::Millimeter));
 			/**
 			 * @brief 
@@ -53,20 +53,20 @@ namespace widget {
 			 * @param[in] _file Filaneme of the new image
 			 * @param[in] _border New border size to set
 			 */
-			void set(const etk::UString& _file, const ewol::Dimension& _border);
+			void set(const std::string& _file, const ewol::Dimension& _border);
 		protected:
-			etk::UString m_fileName; //!< file name of the image.
+			std::string m_fileName; //!< file name of the image.
 		public:
 			/**
 			 * @brief set the new filename
 			 * @param[in] _file Filaneme of the new image
 			 */
-			void setFile(const etk::UString& _file);
+			void setFile(const std::string& _file);
 			/**
 			 * @brief get the file displayed
 			 * @return the filename of the image
 			 */
-			const etk::UString& getFile(void) const {
+			const std::string& getFile(void) const {
 				return m_fileName;
 			};
 		protected:
@@ -117,7 +117,7 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual const char * const getObjectType(void) {
 				return "widget::Image";

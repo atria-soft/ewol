@@ -27,7 +27,7 @@ namespace ewol {
 			bool m_init;
 			void display(void);
 		protected:
-			FontFreeType(const etk::UString& _fontName);
+			FontFreeType(const std::string& _fontName);
 			~FontFreeType(void);
 		public:
 			
@@ -40,7 +40,7 @@ namespace ewol {
 			               ewol::GlyphProperty& _property,
 			               int8_t _posInImage);
 			
-			vec2 getSize(int32_t _fontSize, const etk::UString& _unicodeString);
+			vec2 getSize(int32_t _fontSize, const std::string& _unicodeString);
 			
 			int32_t getHeight(int32_t _fontSize);
 			
@@ -52,7 +52,7 @@ namespace ewol {
 			 * @param[in] _filename Name of the base font.
 			 * @return pointer on the resource or NULL if an error occured.
 			 */
-			static ewol::FontBase* keep(const etk::UString& _filename);
+			static ewol::FontBase* keep(const std::string& _filename);
 			/**
 			 * @brief release the keeped resources
 			 * @param[in,out] reference on the object pointer

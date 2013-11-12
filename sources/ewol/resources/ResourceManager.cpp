@@ -149,7 +149,7 @@ void ewol::ResourceManager::contextHasBeenDestroyed(void) {
 }
 
 // internal generic keeper ...
-ewol::Resource* ewol::ResourceManager::localKeep(const etk::UString& _filename) {
+ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
 	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {

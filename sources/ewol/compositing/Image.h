@@ -45,7 +45,7 @@ namespace ewol {
 			 * @brief generic constructor
 			 * @param[in] _imageName Name of the file that might be loaded
 			 */
-			Image(const etk::UString& _imageName="");
+			Image(const std::string& _imageName="");
 			/**
 			 * @brief generic destructor
 			 */
@@ -126,8 +126,8 @@ namespace ewol {
 			 * @param[in] _newFile New file of the Image
 			 * @param[in] _size for the image when Verctorial image loading is requested
 			 */
-			void setSource(const etk::UString& _newFile, int32_t _size=32) { setSource(_newFile, vec2(_size,_size)); };
-			void setSource(const etk::UString& _newFile, const vec2& _size);
+			void setSource(const std::string& _newFile, int32_t _size=32) { setSource(_newFile, vec2(_size,_size)); };
+			void setSource(const std::string& _newFile, const vec2& _size);
 			/**
 			 * @brief Sometimes the user declare an image but not allocate the ressources all the time, this is to know it ..
 			 * @return the validity od the resources.

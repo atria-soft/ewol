@@ -33,7 +33,7 @@ namespace ewol {
 			void autoRemove(ewol::EObject* _object);
 			void removeAllAutoRemove(void);
 			
-			ewol::EObject* get(const etk::UString& _name);
+			ewol::EObject* get(const std::string& _name);
 		private:
 			void informOneObjectIsRemoved(ewol::EObject* _object);
 		private:

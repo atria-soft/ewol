@@ -153,7 +153,7 @@ void widget::ContainerN::subWidgetRemoveAllDelayed(void) {
 	m_subWidget.clear();
 }
 
-ewol::Widget* widget::ContainerN::getWidgetNamed(const etk::UString& _widgetName) {
+ewol::Widget* widget::ContainerN::getWidgetNamed(const std::string& _widgetName) {
 	ewol::Widget* tmpUpperWidget = ewol::Widget::getWidgetNamed(_widgetName);
 	if (NULL!=tmpUpperWidget) {
 		return tmpUpperWidget;
@@ -275,7 +275,7 @@ bool widget::ContainerN::loadXML(exml::Element* _node) {
 	// remove previous element :
 	subWidgetRemoveAll();
 	
-	etk::UString tmpAttributeValue = _node->getAttribute("lock");
+	std::string tmpAttributeValue = _node->getAttribute("lock");
 	if (tmpAttributeValue.size()!=0) {
 		m_lockExpand = tmpAttributeValue;
 	}
@@ -291,7 +291,7 @@ bool widget::ContainerN::loadXML(exml::Element* _node) {
 			// trash here all that is not element
 			continue;
 		}
-		etk::UString widgetName = pNode->getValue();
+		std::string widgetName = pNode->getValue();
 		if (getWidgetManager().exist(widgetName) == false) {
 			EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} (l "<<pNode->getPos()<<") Unknown basic node=\"" << widgetName << "\" not in : [" << getWidgetManager().list() << "]" );
 			continue;

@@ -48,7 +48,7 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
-			virtual bool onGetConfig(const char* _config, etk::UString& _result) const;
+			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
 			virtual const char * const getObjectType(void) {

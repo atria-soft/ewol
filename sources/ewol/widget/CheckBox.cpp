@@ -23,7 +23,7 @@ void widget::CheckBox::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-widget::CheckBox::CheckBox(const etk::UString& _newLabel) {
+widget::CheckBox::CheckBox(const std::string& _newLabel) {
 	m_label = _newLabel;
 	addEventId(ewolEventCheckBoxClicked);
 	m_textColorFg = etk::color::black;
@@ -48,7 +48,7 @@ void widget::CheckBox::calculateMinMaxSize(void) {
 }
 
 
-void widget::CheckBox::setLabel(etk::UString _newLabel) {
+void widget::CheckBox::setLabel(std::string _newLabel) {
 	m_label = _newLabel;
 	markToRedraw();
 }

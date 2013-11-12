@@ -40,15 +40,15 @@ namespace widget {
 			widget::ListFileSystem* m_widgetListFolder;
 			widget::ListFileSystem* m_widgetListFile;
 			widget::CheckBox* m_widgetCheckBox;
-			etk::UString m_folder;
-			etk::UString m_file;
+			std::string m_folder;
+			std::string m_file;
 		public:
-			void setTitle(const etk::UString& _label);
-			void setValidateLabel(const etk::UString& _label);
-			void setCancelLabel(const etk::UString& _label);
-			void setFolder(const etk::UString& _folder);
-			void setFileName(const etk::UString& _filename);
-			etk::UString getCompleateFileName(void);
+			void setTitle(const std::string& _label);
+			void setValidateLabel(const std::string& _label);
+			void setCancelLabel(const std::string& _label);
+			void setFolder(const std::string& _folder);
+			void setFileName(const std::string& _filename);
+			std::string getCompleateFileName(void);
 			void updateCurrentFolder(void);
 		public: // Derived function
 			virtual const char * const getObjectType(void) {

@@ -15,9 +15,9 @@
 #include <ewol/physicsShape/PhysicsSphere.h>
 
 
-ewol::PhysicsShape* ewol::PhysicsShape::create(const etk::UString& _name) {
+ewol::PhysicsShape* ewol::PhysicsShape::create(const std::string& _name) {
 	ewol::PhysicsShape* tmpp = NULL;
-	etk::UString name = _name.toLower();
+	std::string name = to_lower(_name);
 	if (name == "box") {
 		tmpp = new ewol::PhysicsBox();
 	} else if (name == "sphere") {

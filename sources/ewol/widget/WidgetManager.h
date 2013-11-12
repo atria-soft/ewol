@@ -51,10 +51,10 @@ namespace ewol {
 			bool isDrawingNeeded(void);
 			
 			// element that generate the list of elements
-			void addWidgetCreator(const etk::UString& _name, creator_tf _pointer);
-			ewol::Widget* create(const etk::UString& _name);
-			bool exist(const etk::UString& _name);
-			etk::UString list(void);
+			void addWidgetCreator(const std::string& _name, creator_tf _pointer);
+			ewol::Widget* create(const std::string& _name);
+			bool exist(const std::string& _name);
+			std::string list(void);
 	};
 };
 

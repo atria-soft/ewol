@@ -26,15 +26,15 @@ namespace widget {
 		public:
 			static void init(ewol::WidgetManager& _widgetManager);
 		public:
-			CheckBox(const etk::UString& newLabel = "No Label");
+			CheckBox(const std::string& newLabel = "No Label");
 			virtual ~CheckBox(void);
-			void setLabel(etk::UString newLabel);
+			void setLabel(std::string newLabel);
 			void setValue(bool val);
 			bool getValue(void);
 		private:
 			ewol::Text m_oObjectText;
 			ewol::Drawing m_oObjectDecoration;
-			etk::UString m_label;
+			std::string m_label;
 			bool m_value;
 			etk::Color<> m_textColorFg; //!< Text color
 			etk::Color<> m_textColorBg; //!< Background color

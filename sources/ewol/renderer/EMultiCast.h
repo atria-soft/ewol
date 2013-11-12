@@ -32,10 +32,10 @@ namespace ewol {
 		public:
 			EMultiCast();
 			~EMultiCast(void);
-			void anonymousSend(const char* const _messageId, const etk::UString& _data) {
+			void anonymousSend(const char* const _messageId, const std::string& _data) {
 				send(NULL, _messageId, _data);
 			};
-			void send(ewol::EObject* _object, const char* const _message, const etk::UString& _data);
+			void send(ewol::EObject* _object, const char* const _message, const std::string& _data);
 			void rm(ewol::EObject* _object);
 			void add(ewol::EObject* _object, const char* const _message);
 	};
