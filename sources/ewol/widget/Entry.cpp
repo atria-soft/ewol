@@ -114,8 +114,8 @@ void widget::Entry::calculateMinMaxSize(void) {
 void widget::Entry::setValue(const std::string& _newData) {
 	std::string newData = _newData;
 	if (newData.size()>m_maxCharacter) {
-		newData = _newData.extract(0, m_maxCharacter);
-		EWOL_DEBUG("Limit entry set of data... " << _newData.extract(m_maxCharacter));
+		newData = std::string(_newData, 0, m_maxCharacter);
+		EWOL_DEBUG("Limit entry set of data... " << std::string(_newData, m_maxCharacter));
 	}
 	// set the value with the check of the RegExp ...
 	setInternalValue(newData);
@@ -191,13 +191,13 @@ void widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
 	vec2 relPos = relativePosition(_pos);
 	relPos.setX(relPos.x()-m_displayStartPosition - padding.x());
 	// try to find the new cursor position :
-	std::string tmpDisplay = m_data.extract(0, m_displayStartPosition);
+	std::string tmpDisplay = std::string(m_data, 0, m_displayStartPosition);
 	int32_t displayHidenSize = m_oObjectText.calculateSize(tmpDisplay).x();
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.x();
 	for (int32_t iii=0; iii<m_data.size(); iii++) {
-		tmpDisplay = m_data.extract(0, iii);
+		tmpDisplay = std::string(m_data, 0, iii);
 		int32_t tmpWidth = m_oObjectText.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
 			newCursorPosition = iii;
@@ -236,7 +236,7 @@ void widget::Entry::removeSelected(void) {
 	// remove data ...
 	m_displayCursorPos = pos1;
 	m_displayCursorPosSelection = pos1;
-	m_data.remove(pos1, pos2-pos1);
+	m_data.erase(pos1, pos2-pos1);
 	markToRedraw();
 }
 
@@ -253,7 +253,7 @@ void widget::Entry::copySelectionToClipBoard(enum ewol::clipBoard::clipboardList
 		pos1 = m_displayCursorPos;
 	}
 	// Copy
-	std::string tmpData = m_data.extract(pos1, pos2);
+	std::string tmpData = std::string(m_data, pos1, pos2);
 	ewol::clipBoard::set(_clipboardID, tmpData);
 }
 
@@ -365,14 +365,14 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
 				if (m_data.size() > 0 && m_displayCursorPos<m_data.size()) {
-					m_data.remove(m_displayCursorPos, 1);
+					m_data.erase(m_displayCursorPos, 1);
 					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if (_event.getChar() == 0x08) {
 				// DEL :
 				if (m_data.size() > 0 && m_displayCursorPos != 0) {
-					m_data.remove(m_displayCursorPos-1, 1);
+					m_data.erase(m_displayCursorPos-1, 1);
 					m_displayCursorPos--;
 					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
@@ -382,7 +382,7 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
 					std::string newData = m_data;
-					newData.add(m_displayCursorPos, _event.getChar());
+					newData.insert(newData.begin()+m_displayCursorPos, _event.getChar());
 					setInternalValue(newData);
 					if (m_data == newData) {
 						m_displayCursorPos++;
@@ -447,9 +447,9 @@ void widget::Entry::onEventClipboard(enum ewol::clipBoard::clipboardListe _clipb
 	// get current selection / Copy :
 	std::string tmpData = get(_clipboardID);
 	// add it on the current display :
-	if (tmpData.size() >= 0) {
+	if (tmpData.size() != 0) {
 		std::string newData = m_data;
-		newData.add(m_displayCursorPos, &tmpData[0]);
+		newData.insert(m_displayCursorPos, &tmpData[0]);
 		setInternalValue(newData);
 		if (m_data == newData) {
 			if (m_data.size() == tmpData.size()) {
@@ -514,7 +514,7 @@ void widget::Entry::updateTextPosition(void) {
 		m_displayStartPosition = 0;
 	} else {
 		// all can not be set :
-		std::string tmpDisplay = m_data.extract(0, m_displayCursorPos);
+		std::string tmpDisplay = std::string(m_data, 0, m_displayCursorPos);
 		int32_t pixelCursorPos = m_oObjectText.calculateSize(tmpDisplay).x();
 		// check if the Cussor is visible at 10px nearest the border :
 		int32_t tmp1 = pixelCursorPos+m_displayStartPosition;
@@ -589,7 +589,7 @@ bool widget::Entry::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configMaxChar) {
-		setMaxChar(_conf.getData().toInt32());
+		setMaxChar(stoi(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configRegExp) {
@@ -616,7 +616,7 @@ bool widget::Entry::onGetConfig(const char* _config, std::string& _result) const
 		return true;
 	}
 	if (_config == configMaxChar) {
-		_result = std::string(getMaxChar());
+		_result = std::to_string(getMaxChar());
 		return true;
 	}
 	if (_config == configRegExp) {

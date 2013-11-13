@@ -175,8 +175,8 @@ bool widget::Sizer::loadXML(exml::Element* _node) {
 	}
 	tmpAttributeValue = _node->getAttribute("mode");
 	if (tmpAttributeValue.size()!=0) {
-		if(    tmpAttributeValue.compareNoCase("vert")
-		    || tmpAttributeValue.compareNoCase("vertical")) {
+		if(    compare_no_case(tmpAttributeValue, "vert") == true
+		    || compare_no_case(tmpAttributeValue, "vertical") == true) {
 			m_mode = widget::Sizer::modeVert;
 		} else {
 			m_mode = widget::Sizer::modeHori;

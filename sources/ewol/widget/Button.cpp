@@ -318,13 +318,13 @@ bool widget::Button::onEventInput(const ewol::EventInput& _event) {
 					m_value = (m_value)?false:true;
 					//EWOL_DEBUG("Generate event : " << eventPressed);
 					generateEventId(eventPressed);
-					//EWOL_DEBUG("Generate event : " << eventValue << " val=" << m_value);
-					generateEventId(eventValue, m_value);
+					EWOL_CRITICAL("Generate event : " << eventValue << " val=" << m_value << " plop : " << std::to_string(m_value));
+					generateEventId(eventValue, std::to_string(m_value));
 					if(    false == m_toggleMode
 					    && true == m_value) {
 						m_value = false;
 						//EWOL_DEBUG("Generate event : " << widget::Button::eventValue << " val=" << m_value);
-						generateEventId(eventValue, m_value);
+						generateEventId(eventValue, std::to_string(m_value));
 					}
 				}
 				markToRedraw();
@@ -459,26 +459,26 @@ bool widget::Button::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configToggle) {
-		setToggleMode(_conf.getData().toBool());
+		setToggleMode(stobool(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configLock) {
 		enum buttonLock tmpLock = lockNone;
-		if(    true == _conf.getData().compareNoCase("true")
-		    || true == _conf.getData().compareNoCase("1")) {
+		if(    compare_no_case(_conf.getData(), "true") == true
+		    || compare_no_case(_conf.getData(), "1") == true) {
 			tmpLock = lockAccess;
-		} else if(    true == _conf.getData().compareNoCase("down")
-		           || true == _conf.getData().compareNoCase("pressed")) {
+		} else if(    compare_no_case(_conf.getData(), "down") == true
+		           || compare_no_case(_conf.getData(), "pressed") == true) {
 			tmpLock = lockWhenPressed;
-		} else if(    true == _conf.getData().compareNoCase("up")
-		           || true == _conf.getData().compareNoCase("released")) {
+		} else if(    compare_no_case(_conf.getData(), "up") == true
+		           || compare_no_case(_conf.getData(), "released") == true) {
 			tmpLock = lockWhenReleased;
 		}
 		setLock(tmpLock);
 		return true;
 	}
 	if (_conf.getConfig() == configValue) {
-		setValue(_conf.getData().toBool());
+		setValue(stobool(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configShaper) {
@@ -493,7 +493,7 @@ bool widget::Button::onGetConfig(const char* _config, std::string& _result) cons
 		return true;
 	}
 	if (_config == configToggle) {
-		if (true == getToggleMode()) {
+		if (getToggleMode() == true) {
 			_result = "true";
 		} else {
 			_result = "false";
@@ -519,7 +519,7 @@ bool widget::Button::onGetConfig(const char* _config, std::string& _result) cons
 		return true;
 	}
 	if (_config == configValue) {
-		if (true == getValue()) {
+		if (getValue() == true) {
 			_result = "true";
 		} else {
 			_result = "false";

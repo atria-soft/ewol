@@ -62,7 +62,7 @@ void widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _p
 	if (_pos < 0 || _pos >= m_listOObject.size() ) {
 		m_listOObject.push_back(_newObject);
 	} else {
-		m_listOObject.insert(_pos, _newObject);
+		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
 	}
 }
 
@@ -188,7 +188,7 @@ bool widget::ParameterList::onEventInput(const ewol::EventInput& _event) {
 		if (rawID  >= 0 && rawID<m_list.size()) {
 			if (m_list[rawID]!=NULL) {
 				if (m_list[rawID]->m_refId >= 0) {
-					generateEventId(ewolEventParameterListSelect, m_list[rawID]->m_refId);
+					generateEventId(ewolEventParameterListSelect, std::to_string(m_list[rawID]->m_refId));
 					m_idSelected = rawID;
 					markToRedraw();
 					return true;

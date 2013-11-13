@@ -112,7 +112,7 @@ bool widget::Slider::onEventInput(const ewol::EventInput& _event) {
 			m_value = etk_max(etk_min(m_value, m_max), m_min);
 			if (oldValue != m_value) {
 				EWOL_DEBUG(" new value : " << m_value << " in [" << m_min << ".." << m_max << "]");
-				generateEventId(ewolEventSliderChange, m_value);
+				generateEventId(ewolEventSliderChange, std::to_string(m_value));
 				markToRedraw();
 			}
 			return true;

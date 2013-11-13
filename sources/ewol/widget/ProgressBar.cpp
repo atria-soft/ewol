@@ -109,7 +109,7 @@ bool widget::ProgressBar::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configValue) {
-		m_value = _conf.getData().toFloat();
+		m_value = stof(_conf.getData());
 		return true;
 	}
 	return false;

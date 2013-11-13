@@ -152,13 +152,13 @@ void widget::Gird::setColNumber(int32_t _colNumber) {
 					}
 				} else {
 					EWOL_WARNING("[" << getId() << "] Must not have null pointer on the subWidget list ...");
-					m_subWidget.erase(iii);
+					m_subWidget.erase(m_subWidget.begin()+iii);
 				}
 				errorControl = m_subWidget.size();
 			}
 		}
 		// just add the col size:
-		m_sizeCol.erase(m_sizeCol.size()-1, 0x7FFFFFFF);
+		m_sizeCol.erase(m_sizeCol.end());
 	} else {
 		// just add the col size:
 		for (int32_t iii=m_sizeCol.size()-1; iii<_colNumber-1 ; iii++) {
@@ -209,7 +209,7 @@ void widget::Gird::subWidgetRemoveAll(void) {
 			}
 		} else {
 			EWOL_WARNING("[" << getId() << "] Must not have null pointer on the subWidget list ...");
-			m_subWidget.erase(0);
+			m_subWidget.erase(m_subWidget.begin());
 		}
 		errorControl = m_subWidget.size();
 	}
@@ -232,14 +232,14 @@ void widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _n
 			continue;
 		} else if (m_subWidget[iii].row > prop.row) {
 			// find a new position;
-			m_subWidget.insert(iii, prop);
+			m_subWidget.insert(m_subWidget.begin()+iii, prop);
 			return;
 		} else {
 			if (m_subWidget[iii].col < prop.col) {
 				continue;
 			} else if (m_subWidget[iii].col > prop.col) {
 				// find a new position;
-				m_subWidget.insert(iii, prop);
+				m_subWidget.insert(m_subWidget.begin()+iii, prop);
 				return;
 			} else {
 				// The element already exist  == > replace it ...
@@ -272,7 +272,7 @@ void widget::Gird::subWidgetRemove(ewol::Widget* _newWidget)
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 				m_subWidget[iii].widget = NULL;
-				m_subWidget.erase(iii);
+				m_subWidget.erase(m_subWidget.begin()+iii);
 			}
 			return;
 		}
@@ -292,7 +292,7 @@ void widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 		    && m_subWidget[iii].col == _colId) {
 			if (m_subWidget[iii].widget == NULL) {
 				EWOL_WARNING("[" << getId() << "] remove NULL widget");
-				m_subWidget.erase(iii);
+				m_subWidget.erase(m_subWidget.begin()+iii);
 			} else {
 				// The element already exist  == > replace it ...
 				if (m_subWidget[iii].widget != NULL) {
@@ -300,7 +300,7 @@ void widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 					if (errorControl == m_subWidget.size()) {
 						EWOL_CRITICAL("[" << getId() << "] The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 						m_subWidget[iii].widget = NULL;
-						m_subWidget.erase(iii);
+						m_subWidget.erase(m_subWidget.begin()+iii);
 					}
 				}
 			}
@@ -317,7 +317,7 @@ void widget::Gird::subWidgetUnLink(ewol::Widget* _newWidget) {
 	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii].widget) {
 			m_subWidget[iii].widget = NULL;
-			m_subWidget.erase(iii);
+			m_subWidget.erase(m_subWidget.begin()+iii);
 			return;
 		}
 	}
@@ -333,7 +333,7 @@ void widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 		if(    m_subWidget[iii].row == _rowId
 		    && m_subWidget[iii].col == _colId) {
 			m_subWidget[iii].widget = NULL;
-			m_subWidget.erase(iii);
+			m_subWidget.erase(m_subWidget.begin()+iii);
 			return;
 		}
 	}
@@ -389,7 +389,7 @@ void widget::Gird::onObjectRemove(ewol::EObject * _removeObject) {
 		if(m_subWidget[iii].widget == _removeObject) {
 			EWOL_VERBOSE("[" << getId() << "]={" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
 			m_subWidget[iii].widget = NULL;
-			m_subWidget.erase(iii);
+			m_subWidget.erase(m_subWidget.begin()+iii);
 		}
 	}
 	if (m_tmpWidget == _removeObject) {

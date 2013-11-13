@@ -148,67 +148,69 @@ void widget::ContextMenu::onDraw(void) {
 void widget::ContextMenu::onRegenerateDisplay(void) {
 	// call upper class :
 	widget::Container::onRegenerateDisplay();
-	if (true == needRedraw()) {
-		m_compositing.clear();
-		m_shaper.clear();
-		vec2 padding = m_shaper.getPadding();
-		
-		if (NULL != m_subWidget) {
-			vec2 tmpSize = m_subWidget->getSize();
-			vec2 tmpOrigin = m_subWidget->getOrigin();
-			
-			// display border ...
-			m_compositing.setColor(m_colorBorder);
-			switch (m_arrawBorder) {
-				case markTop:
-					m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
-					m_compositing.addVertex();
-					if (m_arrowPos.x() <= tmpOrigin.x() ) {
-						float laking = m_offset - padding.y();
-						m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
-						m_compositing.addVertex();
-						m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
-						m_compositing.addVertex();
-					} else {
-						float laking = m_offset - padding.y();
-						m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
-						m_compositing.addVertex();
-						m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
-						m_compositing.addVertex();
-					}
-					break;
-				case markButtom:
-					m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
-					m_compositing.addVertex();
-					if (m_arrowPos.x() <= tmpOrigin.x() ) {
-						int32_t laking = m_offset - padding.y();
-						m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
-						m_compositing.addVertex();
-						m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
-						m_compositing.addVertex();
-					} else {
-						int32_t laking = m_offset - padding.y();
-						m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
-						m_compositing.addVertex();
-						m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
-						m_compositing.addVertex();
-					}
-					break;
-				default:
-				case markRight:
-				case markLeft:
-					EWOL_TODO("later");
-					break;
-			}
-			
-			vec2 shaperOrigin = tmpOrigin-padding;
-			vec2 shaperSize = tmpSize+padding*2.0f;
-			m_shaper.setOrigin(vec2ClipInt32(shaperOrigin));
-			m_shaper.setSize(vec2ClipInt32(shaperSize));
-			m_shaper.setInsidePos(vec2ClipInt32(shaperOrigin+padding));
-			m_shaper.setInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
-		}
+	if (needRedraw() == false) {
+		return;
 	}
+	m_compositing.clear();
+	m_shaper.clear();
+	vec2 padding = m_shaper.getPadding();
+	
+	if (m_subWidget == NULL) {
+		return;
+	}
+	vec2 tmpSize = m_subWidget->getSize();
+	vec2 tmpOrigin = m_subWidget->getOrigin();
+	
+	// display border ...
+	m_compositing.setColor(m_colorBorder);
+	switch (m_arrawBorder) {
+		case markTop:
+			m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0.0f) );
+			m_compositing.addVertex();
+			if (m_arrowPos.x() <= tmpOrigin.x() ) {
+				float laking = m_offset - padding.y();
+				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
+				m_compositing.addVertex();
+				m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()-laking, 0.0f) );
+				m_compositing.addVertex();
+			} else {
+				float laking = m_offset - padding.y();
+				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()-laking, 0.0f) );
+				m_compositing.addVertex();
+				m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()-laking, 0.0f) );
+				m_compositing.addVertex();
+			}
+			break;
+		case markButtom:
+			m_compositing.setPos(vec3(m_arrowPos.x(), m_arrowPos.y(), 0) );
+			m_compositing.addVertex();
+			if (m_arrowPos.x() <= tmpOrigin.x() ) {
+				int32_t laking = m_offset - padding.y();
+				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
+				m_compositing.addVertex();
+				m_compositing.setPos(vec3(m_arrowPos.x(),        m_arrowPos.y()+laking, 0.0f) );
+				m_compositing.addVertex();
+			} else {
+				int32_t laking = m_offset - padding.y();
+				m_compositing.setPos(vec3(m_arrowPos.x()+laking, m_arrowPos.y()+laking, 0.0f) );
+				m_compositing.addVertex();
+				m_compositing.setPos(vec3(m_arrowPos.x()-laking, m_arrowPos.y()+laking, 0.0f) );
+				m_compositing.addVertex();
+			}
+			break;
+		default:
+		case markRight:
+		case markLeft:
+			EWOL_TODO("later");
+			break;
+	}
+	
+	vec2 shaperOrigin = tmpOrigin-padding;
+	vec2 shaperSize = tmpSize+padding*2.0f;
+	m_shaper.setOrigin(vec2ClipInt32(shaperOrigin));
+	m_shaper.setSize(vec2ClipInt32(shaperSize));
+	m_shaper.setInsidePos(vec2ClipInt32(shaperOrigin+padding));
+	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
 }
 
 bool widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
@@ -256,13 +258,13 @@ bool widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configArrowMode) {
-		if(true == _conf.getData().compareNoCase("top")) {
+		if(compare_no_case(_conf.getData(), "top") == true) {
 			m_arrawBorder = markTop;
-		} else if(true == _conf.getData().compareNoCase("right")) {
+		} else if(compare_no_case(_conf.getData(), "right") == true) {
 			m_arrawBorder = markRight;
-		} else if(true == _conf.getData().compareNoCase("buttom")) {
+		} else if(compare_no_case(_conf.getData(), "buttom") == true) {
 			m_arrawBorder = markButtom;
-		} else if(true == _conf.getData().compareNoCase("left")) {
+		} else if(compare_no_case(_conf.getData(), "left") == true) {
 			m_arrawBorder = markLeft;
 		} else {
 			m_arrawBorder = markNone;

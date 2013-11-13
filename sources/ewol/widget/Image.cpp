@@ -194,7 +194,7 @@ bool widget::Image::loadXML(exml::Element* _node) {
 	
 	std::string tmpAttributeValue = _node->getAttribute("ratio");
 	if (tmpAttributeValue.size()!=0) {
-		if (tmpAttributeValue.compareNoCase("true") == true) {
+		if (compare_no_case(tmpAttributeValue, "true") == true) {
 			m_keepRatio = true;
 		} else if (tmpAttributeValue == "1") {
 			m_keepRatio = true;
@@ -229,7 +229,7 @@ bool widget::Image::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configRatio) {
-		setKeepRatio(_conf.getData().toBool());
+		setKeepRatio(stobool(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configSize) {

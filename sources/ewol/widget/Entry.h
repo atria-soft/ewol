@@ -95,7 +95,6 @@ namespace widget {
 			int32_t getMaxChar(void) const {
 				return m_maxCharacter;
 			};
-		
 		private:
 			etk::RegExp<std::string> m_regExp; //!< regular expression to limit the input of an entry
 		public:
@@ -108,10 +107,9 @@ namespace widget {
 			 * @brief get the regualar expression limitation
 			 * @param The regExp string
 			 */
-			const std::string& getRegExp(void) const {
+			std::string getRegExp(void) const {
 				return m_regExp.getRegExp();
 			};
-		
 		private:
 			bool m_needUpdateTextPos; //!< text position can have change
 			int32_t m_displayStartPosition; //!< ofset in pixel of the display of the UString

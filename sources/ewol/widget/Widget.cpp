@@ -719,7 +719,7 @@ bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configHide) {
-		if(true == _conf.getData().toBool()) {
+		if(true == stobool(_conf.getData())) {
 			hide();
 		} else {
 			show();
@@ -727,7 +727,7 @@ bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configFocus) {
-		if(true == _conf.getData().toBool()) {
+		if(true == stobool(_conf.getData())) {
 			keepFocus();
 		} else {
 			//nothing to do ...

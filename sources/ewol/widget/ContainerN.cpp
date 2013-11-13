@@ -74,7 +74,7 @@ int32_t widget::ContainerN::subWidgetAddStart(ewol::Widget* _newWidget) {
 	if (_newWidget!=NULL) {
 		_newWidget->setUpperWidget(this);
 	}
-	m_subWidget.pushFront(_newWidget);
+	m_subWidget.insert(m_subWidget.begin(), _newWidget);
 	markToRedraw();
 	requestUpdateSize();
 	return _newWidget->getId();
@@ -93,7 +93,7 @@ void widget::ContainerN::subWidgetRemove(ewol::Widget* _newWidget) {
 			if (errorControl == m_subWidget.size()) {
 				EWOL_CRITICAL("[" << getId() << "] {" << getObjectType() << "} The number of element might have been reduced ...  == > it is not the case ==> the herited class must call the \"OnObjectRemove\" function...");
 				m_subWidget[iii] = NULL;
-				m_subWidget.erase(iii);
+				m_subWidget.erase(m_subWidget.begin()+iii);
 			}
 			markToRedraw();
 			requestUpdateSize();
@@ -110,7 +110,7 @@ void widget::ContainerN::subWidgetUnLink(ewol::Widget* _newWidget) {
 		if (_newWidget == m_subWidget[iii]) {
 			m_subWidget[iii]->removeUpperWidget();
 			m_subWidget[iii] = NULL;
-			m_subWidget.erase(iii);
+			m_subWidget.erase(m_subWidget.begin()+iii);
 			markToRedraw();
 			requestUpdateSize();
 			return;
@@ -132,7 +132,7 @@ void widget::ContainerN::subWidgetRemoveAll(void) {
 			}
 		} else {
 			EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Must not have null pointer on the subWidget list ...");
-			m_subWidget.erase(0);
+			m_subWidget.erase(m_subWidget.begin());
 		}
 		errorControl = m_subWidget.size();
 	}
@@ -177,7 +177,7 @@ void widget::ContainerN::onObjectRemove(ewol::EObject* _removeObject) {
 		if(m_subWidget[iii] == _removeObject) {
 			EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} remove sizer sub Element [" << iii << "/" << m_subWidget.size()-1 << "]  == > destroyed object");
 			m_subWidget[iii] = NULL;
-			m_subWidget.erase(iii);
+			m_subWidget.erase(m_subWidget.begin()+iii);
 		}
 	}
 }
@@ -281,7 +281,7 @@ bool widget::ContainerN::loadXML(exml::Element* _node) {
 	}
 	bool invertAdding=false;
 	tmpAttributeValue = _node->getAttribute("addmode");
-	if(tmpAttributeValue.compareNoCase("invert")) {
+	if(compare_no_case(tmpAttributeValue, "invert")) {
 		invertAdding=true;
 	}
 	// parse all the elements :

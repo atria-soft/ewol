@@ -160,7 +160,7 @@ bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configRemoveOnExternClick) {
-		setRemoveOnExternClick(_conf.getData().toBool());
+		setRemoveOnExternClick(stobool(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configLockExpand) {
@@ -168,7 +168,7 @@ bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configAnimation) {
-		if (_conf.getData().compareNoCase("increase") == true) {
+		if (compare_no_case(_conf.getData(), "increase") == true) {
 			setAnimationMode(animationIncrease);
 		} else {
 			setAnimationMode(animationNone);

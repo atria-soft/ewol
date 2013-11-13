@@ -371,7 +371,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		EWOL_DEBUG(" old PATH : \"" << m_folder << "\" + \"" << _msg.getData() << "\"");
 		m_folder = m_folder + _msg.getData();
 		EWOL_DEBUG("new PATH : \"" << m_folder << "\"");
-		m_folder = etk::tool::simplifyPath(m_folder);
+		m_folder = etk::simplifyPath(m_folder);
 		setFileName("");
 		updateCurrentFolder();
 	} else if (ewolEventFileChooserListFile == _msg.getMessage()) {
@@ -395,7 +395,7 @@ void widget::FileChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 		std::string tmpUserFolder = etk::getUserHomeFolder();
 		EWOL_DEBUG("new PATH : \"" << tmpUserFolder << "\"");
 		
-		m_folder = etk::tool::simplifyPath(tmpUserFolder);
+		m_folder = etk::simplifyPath(tmpUserFolder);
 		
 		setFileName("");
 		updateCurrentFolder();

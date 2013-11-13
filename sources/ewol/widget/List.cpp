@@ -80,7 +80,7 @@ void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 	if (_pos < 0 || _pos >= m_listOObject.size() ) {
 		m_listOObject.push_back(_newObject);
 	} else {
-		m_listOObject.insert(_pos, _newObject);
+		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
 	}
 }
 

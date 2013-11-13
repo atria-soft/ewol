@@ -270,9 +270,9 @@ bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 	}
 	if (_conf.getConfig() == configMode) {
 		enum sladingMode tmpTransition = sladingTransitionHori;
-		if(true == _conf.getData().compareNoCase("vert")) {
+		if(compare_no_case(_conf.getData(), "vert") == true) {
 			tmpTransition = sladingTransitionVert;
-		} else if(true == _conf.getData().compareNoCase("hori")) {
+		} else if(compare_no_case(_conf.getData(), "hori") == true) {
 			tmpTransition = sladingTransitionHori;
 		}
 		setTransitionMode(tmpTransition);

@@ -68,7 +68,7 @@ ewol::Widget * ewol::Windows::getWidgetAtPos(const vec2& _pos) {
 	// event go directly on the pop-up
 	if (0 < m_popUpWidgetList.size()) {
 		if (NULL == m_popUpWidgetList[m_popUpWidgetList.size()-1]) {
-			m_popUpWidgetList.popBack();
+			m_popUpWidgetList.pop_back();
 		} else {
 			return m_popUpWidgetList[m_popUpWidgetList.size()-1]->getWidgetAtPos(_pos);
 		}
@@ -200,7 +200,7 @@ void ewol::Windows::onObjectRemove(ewol::EObject* _removeObject) {
 		if(m_popUpWidgetList[iii] == _removeObject) {
 			EWOL_DEBUG("Remove Pop-up [" << iii << "] element of the windows  == > destroyed object");
 			m_popUpWidgetList[iii] = NULL;
-			m_popUpWidgetList.erase(iii);
+			m_popUpWidgetList.erase(m_popUpWidgetList.begin()+iii);
 		}
 	}
 }
