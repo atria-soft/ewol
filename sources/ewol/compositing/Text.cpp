@@ -296,7 +296,7 @@ void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
 		_fontName = ewol::getContext().getFontDefault().getName();
 	}
 	_fontName += ":";
-	_fontName += _fontSize;
+	_fontName += std::to_string(_fontSize);
 	// link to new one
 	m_font = ewol::TexturedFont::keep(_fontName);
 	if (m_font == NULL) {
