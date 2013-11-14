@@ -88,9 +88,37 @@ namespace ewol {
 			/**
 			 * @brief Create a simple pop-up message on the screen for application error.
 			 * @param[in] _type Type of the error.
-			 * @param[in] _message message to display (decorated)
+			 * @param[in] _message message to display (decorated text)
 			 */
 			virtual void createPopUpMessage(enum popUpMessageType _type, const std::string& _message);
+			/**
+			 * @brief Create a simple information message
+			 * @param[in] _message message to display (decorated text)
+			 */
+			void displayInfoMessage(const std::string& _message) {
+				createPopUpMessage(messageTypeInfo, _message);
+			}
+			/**
+			 * @brief Create a simple warning message
+			 * @param[in] _message message to display (decorated text)
+			 */
+			void displayWarningMessage(const std::string& _message) {
+				createPopUpMessage(messageTypeWarning, _message);
+			}
+			/**
+			 * @brief Create a simple error message
+			 * @param[in] _message message to display (decorated text)
+			 */
+			void displayErrorMessage(const std::string& _message) {
+				createPopUpMessage(messageTypeError, _message);
+			}
+			/**
+			 * @brief Create a simple critical message
+			 * @param[in] _message message to display (decorated text)
+			 */
+			void displayCriticalMessage(const std::string& _message) {
+				createPopUpMessage(messageTypeCritical, _message);
+			}
 	};
 };
 
