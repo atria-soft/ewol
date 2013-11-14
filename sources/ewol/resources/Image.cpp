@@ -88,9 +88,9 @@ ewol::TextureFile* ewol::TextureFile::keep(const std::string& _filename, ivec2 _
 			_size.setValue(nextP2(_size.x()), nextP2(_size.y()));
 		#endif
 		TmpFilename += ":";
-		TmpFilename += _size.x();
+		TmpFilename += std::to_string(_size.x());
 		TmpFilename += "x";
-		TmpFilename += _size.y();
+		TmpFilename += std::to_string(_size.y());
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);

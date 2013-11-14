@@ -67,10 +67,12 @@ void ewol::EObject::generateEventId(const char * _generateEventId, const std::st
 				if (NULL != m_externEvent[iii]->destEObject) {
 					if (m_externEvent[iii]->overloadData.size() <= 0){
 						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, _data);
+						EWOL_VERBOSE("send message " << tmpMsg);
 						m_externEvent[iii]->destEObject->onReceiveMessage(tmpMsg);
 					} else {
 						// set the user requested data ...
 						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+						EWOL_VERBOSE("send message " << tmpMsg);
 						m_externEvent[iii]->destEObject->onReceiveMessage(tmpMsg);
 					}
 				}

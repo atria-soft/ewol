@@ -16,6 +16,7 @@
 #include <ewol/compositing/Drawing.h>
 #include <ewol/resources/ResourceManager.h>
 #include <exml/exml.h>
+#include <string>
 
 namespace ewol {
 	/**
@@ -236,6 +237,7 @@ namespace ewol {
 			 * @param[in] _text The string to display.
 			 */
 			void print(const std::string& _text);
+			void print(const std::u32string& _text);
 			/**
 			 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 			 * <pre>
@@ -302,6 +304,7 @@ namespace ewol {
 			 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 			 */
 			void print(const std::string& _text, const std::vector<TextDecoration>& _decoration);
+			void print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration);
 			/**
 			 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
 			 * @param[in] _charcode Char that might be dispalyed
@@ -376,6 +379,7 @@ namespace ewol {
 			 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
 			 */
 			bool extrapolateLastId(const std::string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
+			bool extrapolateLastId(const std::u32string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 		private:
 			// this section is reserved for HTML parsing and display:
 			std::string m_htmlCurrrentLine; //!< current line for HTML display

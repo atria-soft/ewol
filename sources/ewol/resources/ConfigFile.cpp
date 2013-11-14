@@ -10,15 +10,22 @@
 #include <ewol/debug.h>
 #include <ewol/resources/ConfigFile.h>
 #include <ewol/resources/ResourceManager.h>
+#include <stdexcept>
 
 #undef __class__
 #define __class__	"ConfigFile"
 
 
-void ewol::SimpleConfigElement::parse(const std::string& value) {
-	m_valueInt = std::stoi(value);
-	m_valuefloat = std::stof(value);
-	m_value = value;
+void ewol::SimpleConfigElement::parse(const std::string& _value) {
+	m_value = _value;
+	try {
+		m_valueInt = std::stoi(_value);
+		m_valuefloat = std::stof(_value);
+	} catch (const std::invalid_argument& ia) {
+		EWOL_VERBOSE(" invalid argument= " << ia.what() << "val='" << _value << "'");
+		m_valueInt = 0;
+		m_valuefloat = 0;
+	}
 }
 
 

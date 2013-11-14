@@ -78,65 +78,67 @@ void widget::ButtonColor::onDraw(void) {
 
 
 void widget::ButtonColor::onRegenerateDisplay(void) {
-	if (true == needRedraw()) {
-		m_text.clear();
-		m_shaper.clear();
-		
-		vec2 padding = m_shaper.getPadding();
-		
-		std::string label = m_textColorFg.getString();
-		
-		ivec2 localSize = m_minSize;
-		
-		vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
-		               (m_size.y() - m_minSize.y()) / 2.0,
-		               0);
-		// no change for the text orogin : 
-		vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
-		                   (m_size.y() - m_minSize.y()) / 2.0,
-		                   0);
-		
-		if (true == m_userFill.x()) {
-			localSize.setX(m_size.x());
-			tmpOrigin.setX(0);
-			tmpTextOrigin.setX(0);
-		}
-		if (true == m_userFill.y()) {
-			localSize.setY(m_size.y());
-		}
-		tmpOrigin += vec3(padding.x(), padding.y(), 0);
-		tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
-		localSize -= ivec2(2*padding.x(), 2*padding.y());
-		
-		// clean the element
-		m_text.reset();
-		if(    m_textColorFg.r() < 100
-		    || m_textColorFg.g() < 100
-		    || m_textColorFg.b() < 100) {
-			m_text.setColor(etk::color::white);
-		} else {
-			m_text.setColor(etk::color::black);
-		}
-		m_text.setPos(tmpTextOrigin);
-		m_text.setColorBg(m_textColorFg);
-		m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
-		m_text.print(label);
-		
-		
-		if (true == m_userFill.y()) {
-			tmpOrigin.setY(padding.y());
-		}
-		
-		// selection area :
-		m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
-		m_selectableAreaSize = localSize + vec2(2,2)*padding;
-		m_shaper.setOrigin(m_selectableAreaPos );
-		m_shaper.setSize(m_selectableAreaSize);
-		m_shaper.setInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
-		vec3 tmpp = m_text.calculateSize(label);
-		vec2 tmpp2(tmpp.x(), tmpp.y());
-		m_shaper.setInsideSize(tmpp2);
+	if (needRedraw() == false) {
+		return;
 	}
+	EWOL_DEBUG("redraw");
+	m_text.clear();
+	m_shaper.clear();
+	
+	vec2 padding = m_shaper.getPadding();
+	
+	std::string label = m_textColorFg.getString();
+	
+	ivec2 localSize = m_minSize;
+	
+	vec3 tmpOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	               (m_size.y() - m_minSize.y()) / 2.0,
+	               0);
+	// no change for the text orogin : 
+	vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	                   (m_size.y() - m_minSize.y()) / 2.0,
+	                   0);
+	
+	if (true == m_userFill.x()) {
+		localSize.setX(m_size.x());
+		tmpOrigin.setX(0);
+		tmpTextOrigin.setX(0);
+	}
+	if (true == m_userFill.y()) {
+		localSize.setY(m_size.y());
+	}
+	tmpOrigin += vec3(padding.x(), padding.y(), 0);
+	tmpTextOrigin += vec3(padding.x(), padding.y(), 0);
+	localSize -= ivec2(2*padding.x(), 2*padding.y());
+	
+	// clean the element
+	m_text.reset();
+	if(    m_textColorFg.r() < 100
+	    || m_textColorFg.g() < 100
+	    || m_textColorFg.b() < 100) {
+		m_text.setColor(etk::color::white);
+	} else {
+		m_text.setColor(etk::color::black);
+	}
+	m_text.setPos(tmpTextOrigin);
+	m_text.setColorBg(m_textColorFg);
+	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
+	m_text.print(label);
+	
+	
+	if (true == m_userFill.y()) {
+		tmpOrigin.setY(padding.y());
+	}
+	
+	// selection area :
+	m_selectableAreaPos = vec2(tmpOrigin.x()-padding.x(), tmpOrigin.y()-padding.y());
+	m_selectableAreaSize = localSize + vec2(2,2)*padding;
+	m_shaper.setOrigin(m_selectableAreaPos );
+	m_shaper.setSize(m_selectableAreaSize);
+	m_shaper.setInsidePos(vec2(tmpTextOrigin.x(), tmpTextOrigin.y()) );
+	vec3 tmpp = m_text.calculateSize(label);
+	vec2 tmpp2(tmpp.x(), tmpp.y());
+	m_shaper.setInsideSize(tmpp2);
 }
 
 

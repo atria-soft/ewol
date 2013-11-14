@@ -362,10 +362,16 @@ void ewol::Text::setDistanceFieldMode(bool _newMode) {
 	EWOL_TODO("The Distance field mode is not availlable for now ...");
 }
 
+void ewol::Text::print(const std::u32string& _text) {
+	std::vector<TextDecoration> decorationEmpty;
+	print(_text, decorationEmpty);
+}
+
 void ewol::Text::print(const std::string& _text) {
 	std::vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
+
 
 void ewol::Text::parseHtmlNode(exml::Element* _element) {
 	// get the static real pointer
@@ -499,6 +505,194 @@ void ewol::Text::printHTML(const std::string& _text) {
 }
 
 void ewol::Text::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
+	if (m_font == NULL) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return;
+	}
+	etk::Color<> tmpFg(m_color);
+	etk::Color<> tmpBg(m_colorBg);
+	if (m_alignement == ewol::Text::alignDisable) {
+		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		// display the cursor if needed (if it is at the start position...)
+		if (m_needDisplay == true) {
+			if (0 == m_cursorPos) {
+				m_vectorialDraw.setPos(m_position);
+				setColorBg(m_colorCursor);
+				printCursor(false);
+			}
+		}
+		// note this is faster when nothing is requested ...
+		for(int32_t iii=0; iii<_text.size(); iii++) {
+			// check if ve have decoration
+			if (iii<_decoration.size()) {
+				tmpFg = _decoration[iii].m_colorFg;
+				tmpBg = _decoration[iii].m_colorBg;
+				setFontMode(_decoration[iii].m_mode);
+			}
+			// if real display : ( not display is for size calculation)
+			if (m_needDisplay == true) {
+				if(    (    m_selectionStartPos-1<iii
+				         && iii  <= m_cursorPos-1)
+				    || (    m_selectionStartPos-1 >= iii
+				         && iii > m_cursorPos-1) ) {
+					setColor(  0x000000FF);
+					setColorBg(m_colorSelection);
+				} else {
+					setColor(  tmpFg);
+					setColorBg(tmpBg);
+				}
+			}
+			if(    m_needDisplay == true
+			    && m_colorBg.a() != 0) {
+				vec3 pos = m_position;
+				m_vectorialDraw.setPos(pos);
+				print(_text[iii]);
+				float fontHeigh = m_font->getHeight(m_mode);
+				m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+				m_nbCharDisplayed++;
+			} else {
+				print(_text[iii]);
+				m_nbCharDisplayed++;
+			}
+			// display the cursor if needed (if it is at the other position...)
+			if (m_needDisplay == true) {
+				if (iii == m_cursorPos-1) {
+					m_vectorialDraw.setPos(m_position);
+					setColorBg(m_colorCursor);
+					printCursor(false);
+				}
+			}
+		}
+		//EWOL_DEBUG(" 2 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+	} else {
+		//EWOL_DEBUG(" 3 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+		// special start case at the right of the endpoint :
+		if (m_stopTextPos < m_position.x()) {
+			forceLineReturn();
+		}
+		float basicSpaceWidth = calculateSize(char32_t(' ')).x();
+		int32_t currentId = 0;
+		int32_t stop;
+		int32_t space;
+		int32_t freeSpace;
+		while (currentId < _text.size()) {
+			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
+			float interpolation = basicSpaceWidth;
+			switch (m_alignement) {
+				case ewol::Text::alignJustify:
+					if (needNoJustify == false) {
+						interpolation += (float)freeSpace / (float)(space-1);
+					}
+					break;
+				case ewol::Text::alignDisable: // must not came from here ...
+				case ewol::Text::alignLeft:
+					// nothing to do ...
+					break;
+				case ewol::Text::alignRight:
+					if (m_needDisplay == true) {
+						// Move the first char at the right :
+						setPos(vec3(m_position.x() + freeSpace,
+						            m_position.y(),
+						            m_position.z()) );
+					}
+					break;
+				case ewol::Text::alignCenter:
+					if (m_needDisplay == true) {
+						// Move the first char at the right :
+						setPos(vec3(m_position.x() + freeSpace/2,
+						            m_position.y(),
+						            m_position.z()) );
+					}
+					break;
+			}
+			// display all the elements
+			if(    m_needDisplay == true
+			    && m_cursorPos == 0) {
+				m_vectorialDraw.setPos(m_position);
+				setColorBg(m_colorCursor);
+				printCursor(false);
+			}
+			for(int32_t iii=currentId; iii<stop && iii<_text.size(); iii++) {
+				float fontHeigh = m_font->getHeight(m_mode);
+				// get specific decoration if provided
+				if (iii<_decoration.size()) {
+					tmpFg = _decoration[iii].m_colorFg;
+					tmpBg = _decoration[iii].m_colorBg;
+					setFontMode(_decoration[iii].m_mode);
+				}
+				if (m_needDisplay == true) {
+					if(    (    m_selectionStartPos-1<iii
+					         && iii  <= m_cursorPos-1)
+					    || (    m_selectionStartPos-1 >= iii
+					         && iii > m_cursorPos-1) ) {
+						setColor(  0x000000FF);
+						setColorBg(m_colorSelection);
+					} else {
+						setColor(  tmpFg);
+						setColorBg(tmpBg);
+					}
+				}
+				// special for the justify mode
+				if (_text[iii] == etk::UChar::Space) {
+					//EWOL_DEBUG(" generateString : \" \"");
+					if(    m_needDisplay == true
+					    && m_colorBg.a() != 0) {
+						m_vectorialDraw.setPos(m_position);
+					}
+					// Must generate a dynamic space : 
+					setPos(vec3(m_position.x() + interpolation,
+					            m_position.y(),
+					            m_position.z()) );
+					if(    m_needDisplay == true
+					    && m_colorBg.a() != 0) {
+						m_vectorialDraw.rectangleWidth(vec3(interpolation,fontHeigh,0.0f) );
+					}
+				} else {
+					//EWOL_DEBUG(" generateString : \"" << (char)text[iii] << "\"");
+					if(    m_needDisplay == true
+					    && m_colorBg.a() != 0) {
+						vec3 pos = m_position;
+						m_vectorialDraw.setPos(pos);
+						print(_text[iii]);
+						m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
+						m_nbCharDisplayed++;
+					} else {
+						print(_text[iii]);
+						m_nbCharDisplayed++;
+					}
+				}
+				if (m_needDisplay == true) {
+					if (iii == m_cursorPos-1) {
+						m_vectorialDraw.setPos(m_position);
+						setColorBg(m_colorCursor);
+						printCursor(false);
+					}
+				}
+			}
+			if (currentId == stop) {
+				currentId++;
+			} else if(_text[stop] == etk::UChar::Space) {
+				currentId = stop+1;
+				// reset position :
+				setPos(vec3(m_startTextpos,
+				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            m_position.z()) );
+				m_nbCharDisplayed++;
+			} else if(_text[stop] == etk::UChar::Return) {
+				currentId = stop+1;
+				// reset position :
+				setPos(vec3(m_startTextpos,
+				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            m_position.z()) );
+				m_nbCharDisplayed++;
+			} else {
+				currentId = stop;
+			}
+		}
+		//EWOL_DEBUG(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
+	}
+}
+void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -976,6 +1170,69 @@ void ewol::Text::printCursor(bool _isInsertMode) {
 
 
 bool ewol::Text::extrapolateLastId(const std::string& _text,
+                                   const int32_t _start,
+                                   int32_t& _stop,
+                                   int32_t& _space,
+                                   int32_t& _freeSpace) {
+	// store previous :
+	char32_t storePrevious = m_previousCharcode;
+	
+	_stop = _text.size();
+	_space = 0;
+	
+	int32_t lastSpacePosition = _start;
+	int32_t lastSpacefreeSize;
+	
+	float endPos = m_position.x();
+	bool endOfLine = false;
+	
+	float stopPosition = m_stopTextPos;
+	if(    m_needDisplay == false
+	    || m_stopTextPos == m_startTextpos) {
+		stopPosition = m_startTextpos + 3999999999.0;
+	}
+	
+	for (int32_t iii=_start; iii<_text.size(); iii++) {
+		vec3 tmpSize = calculateSize(_text[iii]);
+		// check oveflow :
+		if (endPos + tmpSize.x() > stopPosition) {
+			_stop = iii;
+			break;
+		}
+		// save number of space :
+		if (_text[iii] == etk::UChar::Space) {
+			_space++;
+			lastSpacePosition = iii;
+			lastSpacefreeSize = stopPosition - endPos;
+		} else if (_text[iii] == etk::UChar::Return) {
+			_stop = iii;
+			endOfLine = true;
+			break;
+		}
+		// update local size :
+		endPos += tmpSize.x();
+	}
+	_freeSpace = stopPosition - endPos;
+	// retore previous :
+	m_previousCharcode = storePrevious;
+	// need to align left or right ...
+	if(_stop == _text.size()) {
+		return true;
+	} else {
+		if (endOfLine) {
+			return true;
+		} else {
+			if (_space == 0) {
+				return true;
+			}
+			_stop = lastSpacePosition;
+			_freeSpace = lastSpacefreeSize;
+			return false;
+		}
+	}
+}
+
+bool ewol::Text::extrapolateLastId(const std::u32string& _text,
                                    const int32_t _start,
                                    int32_t& _stop,
                                    int32_t& _space,

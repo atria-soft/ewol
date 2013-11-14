@@ -89,12 +89,8 @@ void widget::Button::setShaperName(const std::string& _shaperName) {
 void widget::Button::setSubWidget(ewol::Widget* _subWidget) {
 	int32_t idWidget=0;
 	if (NULL!=m_subWidget[idWidget]) {
-		delete(m_subWidget[idWidget]);
-		// the pointer might already set at NULL:
-		if (NULL != m_subWidget[idWidget]) {
-			EWOL_ERROR("error while removing previous widget...");
-			m_subWidget[idWidget]=NULL;
-		}
+		m_subWidget[idWidget]->removeObject();
+		m_subWidget[idWidget]=NULL;
 	}
 	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
@@ -106,12 +102,8 @@ void widget::Button::setSubWidget(ewol::Widget* _subWidget) {
 void widget::Button::setSubWidgetToggle(ewol::Widget* _subWidget) {
 	int32_t idWidget=1;
 	if (NULL!=m_subWidget[idWidget]) {
-		delete(m_subWidget[idWidget]);
-		// the pointer might already set at NULL:
-		if (NULL != m_subWidget[idWidget]) {
-			EWOL_ERROR("error while removing previous widget...");
-			m_subWidget[idWidget]=NULL;
-		}
+		m_subWidget[idWidget]->removeObject();
+		m_subWidget[idWidget]=NULL;
 	}
 	EWOL_VERBOSE("Add button : " << idWidget << " element : " << (int64_t)_subWidget);
 	m_subWidget[idWidget] = _subWidget;
@@ -318,7 +310,7 @@ bool widget::Button::onEventInput(const ewol::EventInput& _event) {
 					m_value = (m_value)?false:true;
 					//EWOL_DEBUG("Generate event : " << eventPressed);
 					generateEventId(eventPressed);
-					EWOL_CRITICAL("Generate event : " << eventValue << " val=" << m_value << " plop : " << std::to_string(m_value));
+					//EWOL_DEBUG("Generate event : " << eventValue << " val=" << m_value );
 					generateEventId(eventValue, std::to_string(m_value));
 					if(    false == m_toggleMode
 					    && true == m_value) {
