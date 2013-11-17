@@ -320,9 +320,8 @@ class AndroidContext : public ewol::eContext {
 				if(!java_attach_current_thread(&status)) {
 					return;
 				}
-				etk::Char tmpChar = _title.c_str();
 				//Call java ...
-				jstring title = m_JavaVirtualMachinePointer->NewStringUTF(tmpChar);
+				jstring title = m_JavaVirtualMachinePointer->NewStringUTF(_title.c_str());
 				m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivitySetTitle, title);
 				m_JavaVirtualMachinePointer->DeleteLocalRef(title);
 				// manage execption : 

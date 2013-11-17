@@ -75,7 +75,7 @@ namespace ewol {
 				
 			};
 			float kerningGet(const char32_t _charcode) {
-				for(esize_t iii=0; iii<m_kerning.size(); iii++ ) {
+				for(size_t iii=0; iii<m_kerning.size(); iii++ ) {
 					if (m_kerning[iii].m_UVal == _charcode) {
 						return m_kerning[iii].m_value;
 					}
