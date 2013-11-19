@@ -25,6 +25,7 @@ ewol::Program::Program(const std::string& _filename) :
   m_program(0),
   m_hasTexture(false),
   m_hasTexture1(false) {
+	addObjectType("ewol::Program");
 	m_resourceLevel = 1;
 	EWOL_DEBUG("OGL : load PROGRAM '" << m_name << "'");
 	// load data from file "all the time ..."

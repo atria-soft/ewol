@@ -42,6 +42,7 @@ widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperNam
   m_shaper(_shaperName),
   m_textColorFg(_baseColor),
   m_widgetContextMenu(NULL) {
+	addObjectType("widget::ButtonColor");
 	addEventId(ewolEventButtonColorChange);
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);

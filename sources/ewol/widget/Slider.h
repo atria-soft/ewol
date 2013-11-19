@@ -42,9 +42,6 @@ namespace widget {
 			etk::Color<> m_textColorFg; //!< Text color
 			etk::Color<> m_textColorBg; //!< Background color
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Slider";
-			}
 			virtual void onDraw(void);
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);

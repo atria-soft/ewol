@@ -22,6 +22,7 @@ extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-fo
 
 
 widget::ListFileSystem::ListFileSystem(void) {
+	addObjectType("widget::ListFileSystem");
 	m_selectedLine = -1;
 	m_showFile = true;
 	m_showTemporaryFile = true;

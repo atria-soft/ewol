@@ -21,50 +21,46 @@ namespace ewol {
 	class ResourceManager;
 	// class resources is pure virtual
 	class Resource : public ewol::EObject {
-		/*
-		public:
-			void* operator new(size_t elmeentSize);
-			void  operator delete(void* elementPointer);
-		*/
-		private:
-			static uint32_t m_valBase;
-		protected:
-			std::string m_name;
-			uint32_t     m_counter;
-			uint32_t     m_uniqueId;
-			uint8_t      m_resourceLevel;
 		public:
 			Resource(void) :
-			  m_name(""),
 			  m_counter(1),
 			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
-				m_uniqueId = m_valBase;
-				m_valBase++;
+				addObjectType("ewol::Resource");
+				setStatusResource(true);
 			};
-			Resource(const std::string& _filename) :
-			  m_name(_filename),
+			Resource(const std::string& _name) :
+			  ewol::EObject(_name),
 			  m_counter(1),
 			  m_resourceLevel(MAX_RESOURCE_LEVEL-1) {
-				m_uniqueId = m_valBase;
-				m_valBase++;
+				addObjectType("ewol::Resource");
+				setStatusResource(true);
 			};
-			virtual ~Resource(void) { };
-			virtual bool hasName(const std::string& _fileName) {
-				EWOL_VERBOSE("G : check : " << _fileName << " ?= " << m_name << " = " << (_fileName == m_name) );
-				return _fileName == m_name;
+			virtual ~Resource(void) {
+				
 			};
-			virtual const std::string& getName(void) { return m_name; };
-			void increment(void) { m_counter++; };
-			bool decrement(void) { m_counter--; return (m_counter == 0)?true:false; };
-			int32_t getCounter(void) { return m_counter; };
-			uint32_t getUID(void) { return m_uniqueId; };
-			uint8_t  getResourceLevel(void) { return m_resourceLevel; };
-			virtual const char* getType(void) { return "unknow"; };
+		private:
+			uint32_t m_counter; //!< number of time the element was loaded.
+		public:
+			void increment(void) {
+				m_counter++;
+			};
+			bool decrement(void) {
+				m_counter--;
+				return (m_counter == 0)?true:false;
+			};
+			int32_t getCounter(void) {
+				return m_counter;
+			};
+		protected:
+			uint8_t m_resourceLevel; //!< Level of the resource ==> for updata priority [0..5] 0 must be update first.
+		public:
+			uint8_t  getResourceLevel(void) {
+				return m_resourceLevel;
+			};
 			virtual void updateContext(void);
 			virtual void removeContext(void);
 			virtual void removeContextToLate(void);
 			virtual void reload(void);
-			
 			static ewol::ResourceManager& getManager(void);
 	};
 };

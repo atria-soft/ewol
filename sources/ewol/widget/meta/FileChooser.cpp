@@ -44,6 +44,7 @@ extern const char * const ewolEventFileChooserHome             = "ewol-event-fil
 
 
 widget::FileChooser::FileChooser(void) {
+	addObjectType("widget::FileChooser");
 	addEventId(eventCancel);
 	addEventId(eventValidate);
 	

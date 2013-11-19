@@ -22,10 +22,6 @@ namespace widget {
 	class List : public widget::WidgetScrooled {
 		public:
 			List(void);
-			// Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::List";
-			};
 			virtual ~List(void);
 			virtual void calculateMinMaxSize(void);
 			void setLabel(std::string _newLabel);

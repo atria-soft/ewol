@@ -42,7 +42,7 @@ void ewol::ResourceManager::unInit(void) {
 	// remove all resources ...
 	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
-			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->getUID() << "]"
+			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->getId() << "]"
 			             << "=\"" << m_resourceList[iii]->getName() << "\" "
 			             << m_resourceList[iii]->getCounter() << " elements");
 			delete(m_resourceList[iii]);
@@ -57,8 +57,8 @@ void ewol::ResourceManager::display(void) {
 	// remove all resources ...
 	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
-			EWOL_INFO("    [" << m_resourceList[iii]->getUID() << "]"
-			          << m_resourceList[iii]->getType()
+			EWOL_INFO("    [" << m_resourceList[iii]->getId() << "]"
+			          << m_resourceList[iii]->getObjectType()
 			          << "=\"" << m_resourceList[iii]->getName() << "\" "
 			          << m_resourceList[iii]->getCounter() << " elements");
 		}
@@ -76,7 +76,7 @@ void ewol::ResourceManager::reLoadResources(void) {
 				if(m_resourceList[iii] != NULL) {
 					if (jjj == m_resourceList[iii]->getResourceLevel()) {
 						m_resourceList[iii]->reload();
-						EWOL_INFO("        [" << m_resourceList[iii]->getUID() << "]="<< m_resourceList[iii]->getType());
+						EWOL_INFO("        [" << m_resourceList[iii]->getId() << "]="<< m_resourceList[iii]->getObjectType());
 					}
 				}
 			}
@@ -153,7 +153,7 @@ ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
 	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
-			if(m_resourceList[iii]->hasName(_filename)) {
+			if(m_resourceList[iii]->getName() == _filename) {
 				m_resourceList[iii]->increment();
 				return m_resourceList[iii];
 			}

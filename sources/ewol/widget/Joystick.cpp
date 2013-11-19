@@ -25,6 +25,7 @@ static float   l_ratio(1.0/7.0);
 #define __class__ "Joystick"
 
 widget::Joystick::Joystick(void) {
+	addObjectType("widget::Joystick");
 	addEventId(ewolEventJoystickEnable);
 	addEventId(ewolEventJoystickDisable);
 	addEventId(ewolEventJoystickMove);

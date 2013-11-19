@@ -42,6 +42,22 @@ void ewol::EObjectManager::unInit(void) {
 	int32_t iii=0;
 	while(iii<m_eObjectList.size()) {
 		if (m_eObjectList[iii]!=NULL) {
+			if (    m_eObjectList[iii]->getStatic() == true
+			     || m_eObjectList[iii]->getStatusResource() == true) {
+				iii++;
+			} else {
+				EWOL_WARNING("Un-INIT : remove EObject type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
+				delete(m_eObjectList[iii]);
+				m_eObjectList[iii] = NULL;
+			}
+		} else {
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
+		}
+	}
+	removeAllAutoRemove();
+	EWOL_INFO(" remove resources user widgets");
+	while(iii<m_eObjectList.size()) {
+		if (m_eObjectList[iii]!=NULL) {
 			if (m_eObjectList[iii]->getStatic() == true) {
 				iii++;
 			} else {
@@ -49,6 +65,17 @@ void ewol::EObjectManager::unInit(void) {
 				delete(m_eObjectList[iii]);
 				m_eObjectList[iii] = NULL;
 			}
+		} else {
+			m_eObjectList.erase(m_eObjectList.begin()+iii);
+		}
+	}
+	removeAllAutoRemove();
+	EWOL_INFO(" remove static user widgets");
+	while(iii<m_eObjectList.size()) {
+		if (m_eObjectList[iii]!=NULL) {
+			EWOL_WARNING("Un-INIT : remove EObject type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
+			delete(m_eObjectList[iii]);
+			m_eObjectList[iii] = NULL;
 		} else {
 			m_eObjectList.erase(m_eObjectList.begin()+iii);
 		}

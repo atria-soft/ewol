@@ -51,9 +51,6 @@ namespace widget {
 			std::string getCompleateFileName(void);
 			void updateCurrentFolder(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "Ewol::fileChooser";
-			};
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 	};

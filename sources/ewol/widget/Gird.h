@@ -137,9 +137,6 @@ namespace widget {
 			virtual void onRegenerateDisplay(void);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
-			virtual const char * const getObjectType(void) {
-				return "widget::Gird";
-			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void calculateMinMaxSize(void);
 	};

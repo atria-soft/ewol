@@ -26,6 +26,7 @@ void widget::Label::init(ewol::WidgetManager& _widgetManager) {
 }
 
 widget::Label::Label(std::string _newLabel) {
+	addObjectType("widget::Label");
 	m_label = _newLabel;
 	addEventId(eventPressed);
 	setCanHaveFocus(false);

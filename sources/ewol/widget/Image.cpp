@@ -35,6 +35,7 @@ const char * const widget::Image::configSource = "src";
 widget::Image::Image(const std::string& _file, const ewol::Dimension& _border) :
   m_imageSize(vec2(0,0)),
   m_keepRatio(true) {
+	addObjectType("widget::Image");
 	addEventId(eventPressed);
 	registerConfig(configRatio, "bool", NULL, "Keep ratio of the image");
 	registerConfig(configSize, "Dimension", NULL, "Basic display size of the image");

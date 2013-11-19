@@ -32,6 +32,7 @@ widget::PopUp::PopUp(const std::string& _shaperName) :
   m_shaper(_shaperName),
   m_lockExpand(true,true),
   m_closeOutEvent(false) {
+	addObjectType("widget::PopUp");
 	m_userExpand.setValue(false, false);
 	setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));
 	registerConfig(configShaper, "string", NULL, "The shaper properties");

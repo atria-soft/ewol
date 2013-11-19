@@ -39,7 +39,9 @@ namespace ewol {
 		private:
 			ewol::EMultiCast m_multiCast; //!< muticast manager
 		public:
-			ewol::EMultiCast& multiCast(void) { return m_multiCast; };
+			ewol::EMultiCast& multiCast(void) {
+				return m_multiCast;
+			};
 	};
 };
 

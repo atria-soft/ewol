@@ -18,20 +18,27 @@
 
 void ewol::SimpleConfigElement::parse(const std::string& _value) {
 	m_value = _value;
-	try {
+	#ifdef __EXCEPTIONS
+		try {
+			m_valueInt = std::stoi(_value);
+			m_valuefloat = std::stof(_value);
+		}
+		catch (const std::invalid_argument& ia) {
+			EWOL_VERBOSE(" invalid argument= " << ia.what() << "val='" << _value << "'");
+			m_valueInt = 0;
+			m_valuefloat = 0;
+		}
+	#else
 		m_valueInt = std::stoi(_value);
 		m_valuefloat = std::stof(_value);
-	} catch (const std::invalid_argument& ia) {
-		EWOL_VERBOSE(" invalid argument= " << ia.what() << "val='" << _value << "'");
-		m_valueInt = 0;
-		m_valuefloat = 0;
-	}
+	#endif
 }
 
 
 
 ewol::ConfigFile::ConfigFile(const std::string& _filename) :
   ewol::Resource(_filename) {
+	addObjectType("ewol::ConfigFile");
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
 }

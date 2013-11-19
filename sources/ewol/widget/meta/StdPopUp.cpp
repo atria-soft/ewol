@@ -22,6 +22,7 @@ widget::StdPopUp::StdPopUp(void) :
   m_title(NULL),
   m_comment(NULL),
   m_subBar(NULL) {
+	addObjectType("widget::StdPopUp");
 	setMinSize(ewol::Dimension(vec2(20,10),ewol::Dimension::Pourcent));
 	
 	widget::Sizer* mySizerVert = NULL;

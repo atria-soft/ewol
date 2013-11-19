@@ -198,9 +198,6 @@ namespace widget {
 			virtual bool onEventEntry(const ewol::EventEntry& _event);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			virtual void onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID);
-			virtual const char * const getObjectType(void) {
-				return "widget::Entry";
-			};
 			virtual void calculateMinMaxSize(void);
 		protected: // Derived function
 			virtual void onDraw(void);

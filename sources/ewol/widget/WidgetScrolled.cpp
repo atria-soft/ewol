@@ -16,6 +16,7 @@
 
 
 widget::WidgetScrooled::WidgetScrooled(void) {
+	addObjectType("widget::WidgetScrooled");
 	m_originScrooled.setValue(0,0);
 	m_pixelScrolling = 20;
 	m_highSpeedMode = widget::Scroll::speedModeDisable;
@@ -145,6 +146,24 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 						markToRedraw();
 						return true;
 					}
+				}
+			} else if (    _event.getId() == 11
+			            && _event.getStatus() == ewol::keyEvent::statusUp) {
+				// Scrool Left
+				if(m_size.x() < m_maxSize.x()) {
+					m_originScrooled.setX(m_originScrooled.x()-m_pixelScrolling);
+					m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
+					markToRedraw();
+					return true;
+				}
+			} else if (    _event.getId() == 10
+			            && _event.getStatus() == ewol::keyEvent::statusUp) {
+				// Scrool Right
+				if(m_size.x() < m_maxSize.x()) {
+					m_originScrooled.setX(m_originScrooled.x()+m_pixelScrolling);
+					m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
+					markToRedraw();
+					return true;
 				}
 			}else if (_event.getId() == 2) {
 				/*

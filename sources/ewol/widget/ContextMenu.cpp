@@ -32,6 +32,7 @@ void widget::ContextMenu::init(ewol::WidgetManager& _widgetManager) {
 
 widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
   m_shaper(_shaperName) {
+	addObjectType("widget::ContextMenu");
 	// add basic configurations :
 	registerConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
 	registerConfig(configArrowMode, "list", "none;left;buttom;right;top", "Position of the arrow in the pop-up");

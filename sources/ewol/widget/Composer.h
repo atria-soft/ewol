@@ -19,8 +19,7 @@ namespace widget
 	 * @ingroup ewolWidgetGroup
 	 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 	 */
-	class Composer : public widget::Container
-	{
+	class Composer : public widget::Container {
 		public:
 			enum composerMode {
 				None,
@@ -82,10 +81,6 @@ namespace widget
 			                               const char * _eventId,
 			                               const char * _eventIdgenerated = NULL,
 			                               const std::string& _overloadData="");
-		public: // herited functions:
-			virtual const char * const getObjectType(void) {
-				return "widget::Composer";
-			};
 	};
 };
 

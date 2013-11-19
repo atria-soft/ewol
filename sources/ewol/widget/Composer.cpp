@@ -20,6 +20,7 @@ widget::Composer::Composer(void) {
 }
 
 widget::Composer::Composer(enum composerMode _mode, const std::string& _fileName) {
+	addObjectType("widget::Composer");
 	switch(_mode) {
 		case widget::Composer::None:
 			// nothing to do ...

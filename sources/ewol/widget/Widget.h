@@ -119,14 +119,6 @@ namespace ewol {
 			 * @brief Destructor of the widget classes
 			 */
 			virtual ~Widget(void);
-			/**
-			 * @brief get the current Object type of the EObject
-			 * @param[in] objectType type description
-			 * @return true if the object is compatible, otherwise false
-			 */
-			virtual const char * const getObjectType(void) {
-				return "ewol::Widget";
-			};
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Hierarchy management:
 		// ----------------------------------------------------------------------------------------------------------------

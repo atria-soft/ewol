@@ -67,9 +67,6 @@ namespace widget {
 			virtual void onDraw(void);
 		public: // Derived function
 			virtual void calculateMinMaxSize(void);
-			virtual const char * const getObjectType(void) {
-				return "widget::ButtonColor";
-			};
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);

@@ -31,6 +31,7 @@ widget::Scroll::Scroll(void) :
   m_highSpeedMode(speedModeDisable),
   m_highSpeedButton(-1),
   m_highSpeedType(ewol::keyEvent::typeUnknow) {
+	addObjectType("widget::Scroll");
 	registerConfig(configLimit, "vec2", NULL, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 }
 

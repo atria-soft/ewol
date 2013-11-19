@@ -117,6 +117,7 @@ ewol::Widget::Widget(void) :
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
   m_cursorDisplay(ewol::cursorArrow) {
+	addObjectType("ewol::Widget");
 	// set all the config in the list :
 	registerConfig(ewol::Widget::configFill, "bvec2", NULL, "Fill the widget available size");
 	registerConfig(ewol::Widget::configExpand, "bvec2", NULL, "Request the widget Expand size wile space is available");

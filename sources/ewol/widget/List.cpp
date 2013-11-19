@@ -17,6 +17,7 @@
 
 
 widget::List::List(void) {
+	addObjectType("widget::List");
 	m_paddingSizeX = 2;
 	#ifdef __TARGET_OS__Android
 		m_paddingSizeY = 10;

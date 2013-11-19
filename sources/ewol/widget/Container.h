@@ -58,9 +58,6 @@ namespace widget {
 			virtual void calculateMinMaxSize(void);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
-			virtual const char * const getObjectType(void) {
-				return "widget::Container";
-			};
 			virtual bool loadXML(exml::Element* _node);
 			virtual void setOffset(const vec2& _newVal);
 	};

@@ -104,10 +104,6 @@ namespace widget {
 			virtual void onRegenerateDisplay(void);
 			virtual void calculateSize(const vec2& _available);
 			virtual bool onEventInput(const ewol::EventInput& _event);
-			//virtual void calculateMinMaxSize(void);
-			virtual const char * const getObjectType(void) {
-				return "ewol::PopUp";
-			};
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 	};
 	

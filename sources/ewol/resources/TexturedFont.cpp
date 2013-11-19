@@ -44,6 +44,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 
 ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
   ewol::Texture(_fontName) {
+	addObjectType("ewol::TexturedFont");
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;
@@ -357,7 +358,7 @@ void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
 		return;
 	}
 	std::string name = _object->getName();
-	int32_t count = _object->m_counter - 1;
+	int32_t count = _object->getCounter() - 1;
 	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	if (getManager().release(object2) == true) {
 		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "' count=" << count);

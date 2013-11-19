@@ -21,6 +21,7 @@ ewol::Shader::Shader(const std::string& _filename) :
   m_fileData(NULL),
   m_shader(0),
   m_type(0) {
+	addObjectType("ewol::Shader");
 	m_resourceLevel = 0;
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."

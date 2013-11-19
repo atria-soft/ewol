@@ -51,6 +51,7 @@ widget::Button::Button(const std::string& _shaperName) :
   m_buttonPressed(false),
   m_selectableAreaPos(0,0),
   m_selectableAreaSize(0,0) {
+	addObjectType("widget::Button");
 	// by default set no widget :
 	m_subWidget[0] = NULL;
 	m_subWidget[1] = NULL;

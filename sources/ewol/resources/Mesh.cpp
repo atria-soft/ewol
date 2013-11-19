@@ -20,6 +20,7 @@ ewol::Mesh::Mesh(const std::string& _fileName, const std::string& _shaderName) :
   m_checkNormal(false),
   m_pointerShape(NULL),
   m_functionFreeShape(NULL) {
+	addObjectType("ewol::Mesh");
 	EWOL_VERBOSE("Load a new mesh : '" << _fileName << "'");
 	// get the shader resource :
 	m_GLPosition = 0;

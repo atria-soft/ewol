@@ -89,9 +89,6 @@ namespace widget {
 				return m_transitionSlide;
 			};
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::WSlider";
-			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			virtual void onRegenerateDisplay(void);

@@ -25,6 +25,7 @@ extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKey
 
 ewol::Windows::Windows(void) :
   m_backgroundColor(0.750, 0.750, 0.750, 0.5) {
+	addObjectType("ewol::Windows");
 	setCanHaveFocus(true);
 	m_subWidget = NULL;
 	setDecorationDisable();

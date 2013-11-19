@@ -34,6 +34,7 @@ const char * const eventColorSpecificHasChange     = "event-color-specific-has-c
 
 widget::ColorChooser::ColorChooser(void) :
   widget::Sizer(widget::Sizer::modeVert) {
+	addObjectType("widget::ColorChooser");
 	addEventId(ewolEventColorChooserChange);
 	m_widgetColorBar = NULL;
 	m_widgetRed = NULL;

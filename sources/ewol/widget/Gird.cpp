@@ -29,6 +29,7 @@ widget::Gird::Gird(int32_t _colNumber) :
   m_tmpWidget(NULL),
   m_gavityButtom(true),
   m_borderSize(0,0) {
+	addObjectType("widget::Gird");
 	setColNumber(_colNumber);
 	requestUpdateSize();
 }

@@ -16,20 +16,30 @@
 
 
 const char* const ewol::EObject::configName = "name";
-
+size_t ewol::EObject::m_valUID = 0;
 
 ewol::EObject::EObject(void) :
-  m_static(false) {
-	static int32_t ss_globalUniqueId = 0;
+  m_static(false),
+  m_isResource(false) {
 	// note this is nearly atomic ... (but it is enough)
-	m_uniqueId = ss_globalUniqueId++;
+	m_uniqueId = m_valUID++;
+	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
+	getEObjectManager().add(this);
+	registerConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
+}
+ewol::EObject::EObject(const std::string& _name) :
+  m_static(false),
+  m_name(_name),
+  m_isResource(false) {
+	// note this is nearly atomic ... (but it is enough)
+	m_uniqueId = m_valUID++;
 	EWOL_DEBUG("new EObject : [" << m_uniqueId << "]");
 	getEObjectManager().add(this);
 	registerConfig(ewol::EObject::configName, "string", NULL, "EObject name, might be a unique reference in all the program");
 }
 
 ewol::EObject::~EObject(void) {
-	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "]");
+	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "] : " << getTypeDescription());
 	getEObjectManager().rm(this);
 	getMultiCast().rm(this);
 	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
@@ -41,6 +51,41 @@ ewol::EObject::~EObject(void) {
 	m_externEvent.clear();
 	m_availlableEventId.clear();
 	m_uniqueId = -1;
+}
+
+const char * const ewol::EObject::getObjectType(void) {
+	if (m_listType.size() == 0) {
+		return "ewol::EObject";
+	}
+	return m_listType.back();
+}
+
+void ewol::EObject::addObjectType(const char* _type) {
+	if (_type == NULL) {
+		EWOL_ERROR(" try to add a type with no value...");
+		return;
+	}
+	m_listType.push_back(_type);
+}
+std::string ewol::EObject::getTypeDescription(void) {
+	std::string ret("ewol::EObject");
+	for(auto element : m_listType) {
+		ret += "|";
+		ret += element;
+	}
+	return ret;
+}
+
+bool ewol::EObject::isTypeCompatible(const std::string& _type) {
+	if (_type == "ewol::EObject") {
+		return true;
+	}
+	for(auto element : m_listType) {
+		if (_type == element) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void ewol::EObject::autoDestroy(void) {
@@ -127,7 +172,7 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 		}
 	}
 	if (false == findIt) {
-		EWOL_ERROR("Can not register event on this WidgetType=" << getObjectType() << " event=\"" << _eventId << "\"  == > unknow event");
+		EWOL_ERROR("Can not register event on this Type=" << getObjectType() << " event=\"" << _eventId << "\"  == > unknow event");
 		return;
 	}
 	ewol::EventExtGen * tmpEvent = new ewol::EventExtGen();

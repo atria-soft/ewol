@@ -22,6 +22,7 @@ extern const char * const ewolEventParameterListSelect     = "ewol-event-paramet
 
 
 widget::ParameterList::ParameterList(void) {
+	addObjectType("widget::ParameterList");
 	addEventId(ewolEventParameterListSelect);
 	
 	m_idSelected = -1;

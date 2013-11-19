@@ -9,6 +9,7 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/renderer/eContext.h>
+#include <etk/UString.h>
 
 #undef __class__
 #define __class__	"ewol::Text"
@@ -297,6 +298,7 @@ void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	}
 	_fontName += ":";
 	_fontName += std::to_string(_fontSize);
+	EWOL_WARNING("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::TexturedFont::keep(_fontName);
 	if (m_font == NULL) {
@@ -522,7 +524,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 			}
 		}
 		// note this is faster when nothing is requested ...
-		for(int32_t iii=0; iii<_text.size(); iii++) {
+		for(size_t iii=0; iii<_text.size(); iii++) {
 			// check if ve have decoration
 			if (iii<_decoration.size()) {
 				tmpFg = _decoration[iii].m_colorFg;
@@ -612,7 +614,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 				setColorBg(m_colorCursor);
 				printCursor(false);
 			}
-			for(int32_t iii=currentId; iii<stop && iii<_text.size(); iii++) {
+			for(size_t iii=currentId; iii<stop && iii<_text.size(); iii++) {
 				float fontHeigh = m_font->getHeight(m_mode);
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
@@ -710,7 +712,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 			}
 		}
 		// note this is faster when nothing is requested ...
-		for(int32_t iii=0; iii<_text.size(); iii++) {
+		for(size_t iii=0; iii<_text.size(); iii++) {
 			// check if ve have decoration
 			if (iii<_decoration.size()) {
 				tmpFg = _decoration[iii].m_colorFg;
@@ -1123,8 +1125,8 @@ vec3 ewol::Text::calculateSize(const std::string& _text) {
 		return vec3(0,0,0);
 	}
 	vec3 outputSize(0, 0, 0);
-	for(int32_t iii=0; iii<_text.size(); iii++) {
-		vec3 tmpp = calculateSize(_text[iii]);
+	for(auto element : _text) {
+		vec3 tmpp = calculateSize(element);
 		if (outputSize.y() == 0) {
 			outputSize.setY(tmpp.y());
 		}
@@ -1192,7 +1194,7 @@ bool ewol::Text::extrapolateLastId(const std::string& _text,
 		stopPosition = m_startTextpos + 3999999999.0;
 	}
 	
-	for (int32_t iii=_start; iii<_text.size(); iii++) {
+	for (size_t iii=_start; iii<_text.size(); iii++) {
 		vec3 tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {
@@ -1255,7 +1257,7 @@ bool ewol::Text::extrapolateLastId(const std::u32string& _text,
 		stopPosition = m_startTextpos + 3999999999.0;
 	}
 	
-	for (int32_t iii=_start; iii<_text.size(); iii++) {
+	for (size_t iii=_start; iii<_text.size(); iii++) {
 		vec3 tmpSize = calculateSize(_text[iii]);
 		// check oveflow :
 		if (endPos + tmpSize.x() > stopPosition) {

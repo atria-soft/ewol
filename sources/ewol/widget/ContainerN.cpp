@@ -18,6 +18,7 @@
 widget::ContainerN::ContainerN(void) :
   m_lockExpand(false,false),
   m_subExpend(false,false) {
+	addObjectType("widget::ContainerN");
 	// nothing to do ...
 }
 

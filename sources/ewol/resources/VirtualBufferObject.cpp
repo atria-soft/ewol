@@ -17,6 +17,7 @@
 
 ewol::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
   m_exist(false) {
+	addObjectType("ewol::VirtualBufferObject");
 	m_nbVBO = etk_avg(1, _number, NB_VBO_MAX);
 	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii]=0;
@@ -41,7 +42,7 @@ void ewol::VirtualBufferObject::updateContext(void) {
 	}
 	m_exist = true;
 	for (int32_t iii=0; iii<m_nbVBO; iii++) {
-		EWOL_INFO("VBO    : add [" << m_uniqueId << "]=" << m_buffer[iii].size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
+		EWOL_INFO("VBO    : add [" << getId() << "]=" << m_buffer[iii].size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		if (true == m_vboUsed[iii]) {
 			// select the buffer to set data inside it ...
 			if (m_buffer[iii].size()>0) {
@@ -56,10 +57,10 @@ void ewol::VirtualBufferObject::updateContext(void) {
 
 void ewol::VirtualBufferObject::removeContext(void) {
 	if (true == m_exist) {
-		EWOL_INFO("VBO: remove [" << m_uniqueId << "] OGl_Id=" << m_vbo[0]
-		                                                << "/" << m_vbo[1]
-		                                                << "/" << m_vbo[2]
-		                                                << "/" << m_vbo[3]);
+		EWOL_INFO("VBO: remove [" << getId() << "] OGl_Id=" << m_vbo[0]
+		                                             << "/" << m_vbo[1]
+		                                             << "/" << m_vbo[2]
+		                                             << "/" << m_vbo[3]);
 		glDeleteBuffers(m_nbVBO, m_vbo);
 		m_exist = false;
 		for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {

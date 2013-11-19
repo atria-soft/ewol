@@ -36,12 +36,14 @@ static int32_t nextP2(int32_t _value) {
 
 ewol::Texture::Texture(const std::string& _filename) :
  ewol::Resource(_filename) {
+	addObjectType("ewol::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
 ewol::Texture::Texture(void) {
+	addObjectType("ewol::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
@@ -68,7 +70,7 @@ void ewol::Texture::updateContext(void) {
 	//--- Mode linear
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	EWOL_INFO("TEXTURE: add [" << m_uniqueId << "]=" << m_data.getSize() << " OGl_Id=" <<m_texId);
+	EWOL_INFO("TEXTURE: add [" << getId() << "]=" << m_data.getSize() << " OGl_Id=" <<m_texId);
 	glTexImage2D(GL_TEXTURE_2D, // Target
 	             0, // Level
 	             GL_RGBA, // Format internal
@@ -85,7 +87,7 @@ void ewol::Texture::updateContext(void) {
 void ewol::Texture::removeContext(void) {
 	if (true == m_loaded) {
 		// Request remove texture ...
-		EWOL_INFO("TEXTURE: Rm [" << m_uniqueId << "] texId=" << m_texId);
+		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
 		glDeleteTextures(1, &m_texId);
 		m_loaded = false;
 	}

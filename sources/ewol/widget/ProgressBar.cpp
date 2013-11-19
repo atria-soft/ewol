@@ -30,6 +30,7 @@ const char* const widget::ProgressBar::configValue = "value";
 const int32_t dotRadius = 6;
 
 widget::ProgressBar::ProgressBar(void) {
+	addObjectType("widget::ProgressBar");
 	m_value = 0.0;
 	
 	m_textColorFg = etk::color::black;

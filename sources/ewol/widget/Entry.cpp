@@ -59,6 +59,7 @@ widget::Entry::Entry(std::string _newData) :
   m_textColorFg(etk::color::black),
   m_textColorBg(etk::color::white),
   m_textWhenNothing("") {
+	addObjectType("widget::Entry");
 	m_textColorBg.setA(0xAF);
 	setCanHaveFocus(true);
 	addEventId(eventClick);

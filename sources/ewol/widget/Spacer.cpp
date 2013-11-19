@@ -25,6 +25,7 @@ void widget::Spacer::init(ewol::WidgetManager& _widgetManager) {
 }
 
 widget::Spacer::Spacer(void) {
+	addObjectType("widget::Spacer");
 	m_userMinSize = ewol::Dimension(vec2(10,10));
 	setCanHaveFocus(false);
 	m_color = etk::color::black;

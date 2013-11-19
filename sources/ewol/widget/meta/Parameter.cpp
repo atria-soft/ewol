@@ -32,6 +32,7 @@ widget::Parameter::Parameter(void) :
   m_currentIdList(0),
   m_widgetTitle(NULL),
   m_paramList(NULL) {
+	addObjectType("widget::Parameter");
 	addEventId(ewolEventParameterClose);
 	
 	widget::Sizer * mySizerVert = NULL;

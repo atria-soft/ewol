@@ -25,6 +25,7 @@ ewol::TextureFile::TextureFile(const std::string& _genName) :
 
 ewol::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
   Texture(_genName) {
+	addObjectType("ewol::TextureFile");
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}

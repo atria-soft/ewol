@@ -54,6 +54,7 @@ void ewol::freeTypeUnInit(void) {
 
 ewol::FontFreeType::FontFreeType(const std::string& _fontName) :
   FontBase(_fontName) {
+	addObjectType("ewol::FontFreeType");
 	m_init = false;
 	m_FileBuffer = NULL;
 	m_FileSize = 0;

@@ -396,8 +396,7 @@ class AndroidContext : public ewol::eContext {
 
 static std::vector<AndroidContext*> s_listInstance;
 
-extern "C"
-{
+extern "C" {
 	// JNI onLoad
 	JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* _jvm, void* _reserved) {
 		// get the java virtual machine handle ...

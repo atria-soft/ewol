@@ -74,9 +74,6 @@ namespace widget {
 			 */
 			widget::Button* addButton(const std::string& _text, bool _autoExit=false);
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::StdPopUp";
-			};
 			virtual void onObjectRemove(ewol::EObject* _removeObject);
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 	};

@@ -35,10 +35,6 @@ namespace widget {
 		public:
 			Menu(void);
 			virtual ~Menu(void);
-			// Derived functionv
-			virtual const char * const getObjectType(void) {
-				return "widget::Menu";
-			};
 		private:
 			virtual void subWidgetRemoveAll(void);
 			virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);

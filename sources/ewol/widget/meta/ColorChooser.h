@@ -30,10 +30,6 @@ namespace widget {
 			ColorChooser(void);
 			~ColorChooser(void);
 			// Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::ColorChooser";
-			};
-			// Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
 			// Derived function
 			virtual void onObjectRemove(ewol::EObject* _removeObject);

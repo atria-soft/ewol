@@ -25,6 +25,7 @@ widget::Mesh::Mesh(const std::string& _filename) :
   m_angle(0,0,0),
   m_angleSpeed(0,0,0),
   m_cameraDistance(10.0) {
+	addObjectType("widget::Mesh");
 	addEventId(ewolEventMeshPressed);
 	// Limit event at 1:
 	setMouseLimit(1);

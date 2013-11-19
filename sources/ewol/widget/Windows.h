@@ -70,9 +70,6 @@ namespace ewol {
 		protected: // Derived function
 			virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "ewol::Windows";
-			};
 			virtual void onRegenerateDisplay(void);
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
 			virtual void calculateSize(const vec2& _availlable);

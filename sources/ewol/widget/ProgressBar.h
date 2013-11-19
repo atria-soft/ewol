@@ -51,9 +51,6 @@ namespace widget {
 			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
 			virtual void onRegenerateDisplay(void);
-			virtual const char * const getObjectType(void) {
-				return "widget::ProgressBar";
-			};
 			virtual void calculateMinMaxSize(void);
 	};
 	

@@ -34,9 +34,6 @@ namespace widget {
 			Mesh(const std::string& filename); // automatic considering in the appl Data older
 			virtual ~Mesh(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Mesh";
-			};
 			virtual void onRegenerateDisplay(void);
 			virtual void systemDraw(const ewol::DrawProperty& displayProp);
 			virtual void onDraw(void);

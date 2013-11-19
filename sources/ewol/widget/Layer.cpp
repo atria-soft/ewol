@@ -22,7 +22,7 @@ void widget::Layer::init(ewol::WidgetManager& _widgetManager) {
 }
 
 widget::Layer::Layer(void) {
-	// nothing to do ...
+	addObjectType("widget::Layer");
 }
 
 widget::Layer::~Layer(void) {

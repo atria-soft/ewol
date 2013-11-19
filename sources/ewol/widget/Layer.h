@@ -33,10 +33,7 @@ namespace widget {
 			 * @brief Desstructor
 			 */
 			virtual ~Layer(void);
-		public:
-			virtual const char * const getObjectType(void) {
-				return "widget::Layer";
-			};
+		public: // Derived function
 			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 	};
 	

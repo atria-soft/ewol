@@ -157,9 +157,6 @@ namespace widget {
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
 			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Button";
-			};
 			virtual void calculateMinMaxSize(void);
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void onRegenerateDisplay(void);

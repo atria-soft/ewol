@@ -16,6 +16,7 @@
 
 ewol::Colored3DObject::Colored3DObject(void) :
   m_GLprogram(NULL) {
+	addObjectType("ewol::Colored3DObject");
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:simple3D.prog");

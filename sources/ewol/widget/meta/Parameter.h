@@ -30,15 +30,10 @@ namespace widget {
 		public:
 			Parameter(void);
 			~Parameter(void);
-			// Derived function
-			virtual const char * const getObjectType(void) {
-				return "EwolParameter";
-			};
-			// Derived function
+		public: // Derived function
 			virtual void onReceiveMessage(const ewol::EMessage& _msg);
-			// Derived function
 			virtual void onObjectRemove(ewol::EObject * _removeObject);
-			
+		public:
 			void setTitle(std::string _label);
 			void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
 			void menuAddGroup(std::string _label);

@@ -76,9 +76,6 @@ namespace widget {
 			void getProperty(float& _distance, float& _angle);
 			
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Joystick";
-			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

@@ -27,6 +27,7 @@ widget::Sizer::Sizer(enum displayMode _mode):
   m_borderSize(),
   m_animation(animationNone),
   m_animationTime(0) {
+	addObjectType("widget::Sizer");
 	
 }
 

@@ -44,6 +44,7 @@ widget::WSlider::WSlider(void) :
   m_slidingProgress(1.0f),
   m_transitionSpeed(1.0f),
   m_transitionSlide(sladingTransitionHori) {
+	addObjectType("widget::WSlider");
 	addEventId(eventStartSlide);
 	addEventId(eventStopSlide);
 	// add configuration

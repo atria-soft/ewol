@@ -44,11 +44,7 @@ namespace widget {
 			 * @param[in] newColor the display background color
 			 */
 			void setColor(etk::Color<> _newColor) { m_color = _newColor; markToRedraw(); };
-		public:
-			// Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Spacer";
-			};
+		public: // Derived function
 			virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
 			virtual void onRegenerateDisplay(void);
 			virtual void onDraw(void);

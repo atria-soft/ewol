@@ -24,6 +24,7 @@ void widget::CheckBox::init(ewol::WidgetManager& _widgetManager) {
 }
 
 widget::CheckBox::CheckBox(const std::string& _newLabel) {
+	addObjectType("widget::CheckBox");
 	m_label = _newLabel;
 	addEventId(ewolEventCheckBoxClicked);
 	m_textColorFg = etk::color::black;

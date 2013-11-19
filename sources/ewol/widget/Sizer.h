@@ -110,9 +110,6 @@ namespace widget {
 				return m_animationTime;
 			};
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::Sizer";
-			};
 			virtual void calculateSize(const vec2& _availlable);
 			virtual void calculateMinMaxSize(void);
 			virtual bool loadXML(exml::Element* _node);

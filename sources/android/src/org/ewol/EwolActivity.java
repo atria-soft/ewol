@@ -46,14 +46,17 @@ import org.ewol.Ewol;
  * @brief Class : 
  *
  */
-public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants
-{
+public abstract class EwolActivity extends Activity implements EwolCallback, EwolConstants {
 	private EwolSurfaceViewGL mGLView;
 	private EwolAudioTask     mStreams;
 	private Thread            mAudioThread;
 	private Ewol              EWOL;
 	static {
-		System.loadLibrary("ewol");
+		try {
+			System.loadLibrary("ewol");
+		} catch (UnsatisfiedLinkError e) {
+			Log.e("EwolActivity", "error getting lib(): " + e);
+		}
 	}
 	public EwolActivity() {
 		// set the java evironement in the C sources :

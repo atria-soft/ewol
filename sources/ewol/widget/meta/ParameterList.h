@@ -63,9 +63,6 @@ namespace widget {
 			void menuSeparator(void);
 			
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widgetParameterList";
-			};
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual void calculateMinMaxSize(void);

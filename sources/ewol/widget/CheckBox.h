@@ -41,9 +41,6 @@ namespace widget {
 		protected: // Derived function
 			virtual void onDraw(void);
 		public: // Derived function
-			virtual const char * const getObjectType(void) {
-				return "widget::CheckBox";
-			};
 			virtual void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

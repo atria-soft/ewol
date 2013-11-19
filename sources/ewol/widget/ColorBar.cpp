@@ -21,6 +21,7 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 #define __class__ "ColorBar"
 
 widget::ColorBar::ColorBar(void) {
+	addObjectType("widget::ColorBar");
 	addEventId(ewolEventColorBarChange);
 	m_currentUserPos.setValue(0,0);
 	m_currentColor = etk::color::black;

@@ -19,6 +19,7 @@
 #define __class__ "Menu"
 
 widget::Menu::Menu(void) {
+	addObjectType("widget::Menu");
 	m_staticId = 0;
 	m_widgetContextMenu = NULL;
 }

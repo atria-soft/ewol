@@ -61,7 +61,6 @@ namespace widget {
 			const vec2& getLimit(void) const { return m_limit; };
 			
 		public: // Derived function
-			virtual const char * const getObjectType(void) { return "widget::Scroll"; };
 			void calculateMinMaxSize(void);
 			virtual void onRegenerateDisplay(void);
 			virtual bool onEventInput(const ewol::EventInput& _event);

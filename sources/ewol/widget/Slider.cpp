@@ -26,6 +26,7 @@ void widget::Slider::init(ewol::WidgetManager& _widgetManager) {
 const int32_t dotRadius = 6;
 
 widget::Slider::Slider(void) {
+	addObjectType("widget::Slider");
 	addEventId(ewolEventSliderChange);
 	
 	m_value = 0;

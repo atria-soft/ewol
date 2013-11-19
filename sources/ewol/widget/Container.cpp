@@ -18,6 +18,7 @@
 
 widget::Container::Container(ewol::Widget* _subElement) :
   m_subWidget(_subElement) {
+	addObjectType("widget::Container");
 	// nothing to do ...
 }
 
