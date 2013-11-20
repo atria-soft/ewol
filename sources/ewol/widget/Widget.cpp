@@ -349,11 +349,17 @@ void ewol::Widget::periodicCallEnable(float _callInSecond) {
 }
 
 void ewol::Widget::markToRedraw(void) {
+	if (m_needRegenerateDisplay == true) {
+		return;
+	}
 	m_needRegenerateDisplay = true;
 	getWidgetManager().markDrawingIsNeeded();
 }
 
 void ewol::Widget::setZoom(float _newVal) {
+	if (m_zoom == _newVal) {
+		return;
+	}
 	m_zoom = etk_avg(0.0000001,_newVal,1000000.0);
 	markToRedraw();
 }

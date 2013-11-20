@@ -298,7 +298,7 @@ void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	}
 	_fontName += ":";
 	_fontName += std::to_string(_fontSize);
-	EWOL_WARNING("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
+	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
 	m_font = ewol::TexturedFont::keep(_fontName);
 	if (m_font == NULL) {
