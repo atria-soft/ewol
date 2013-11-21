@@ -34,44 +34,36 @@ widget::WidgetScrooled::~WidgetScrooled(void) {
 #define SCROLL_BAR_SPACE      (15)
 
 void widget::WidgetScrooled::onRegenerateDisplay(void) {
-	clearOObjectList();
+	m_drawing.clear();
 	if (m_scroollingMode == scroolModeGame) {
 		
 	} else {
-		ewol::Drawing* tmpDraw = NULL;
-		if(m_size.y() < m_maxSize.y() || m_size.x() < m_maxSize.x()) {
-			tmpDraw = new ewol::Drawing();
-			tmpDraw->setColor(0xFF00007F);
-		}
-		if (NULL == tmpDraw) {
-			return;
-		}
-		tmpDraw->setThickness(1);
+		m_drawing.setColor(0xFF00007F);
+		m_drawing.setThickness(1);
 		if(    m_size.y() < m_maxSize.y()
 		    || m_originScrooled.y()!=0) {
-			tmpDraw->setPos(vec3(m_size.x()-(SCROLL_BAR_SPACE/2), 0, 0) );
-			tmpDraw->lineTo(vec3(m_size.x()-(SCROLL_BAR_SPACE/2), m_size.y(), 0 ) );
+			m_drawing.setPos(vec3(m_size.x()-(SCROLL_BAR_SPACE/2), 0, 0) );
+			m_drawing.lineTo(vec3(m_size.x()-(SCROLL_BAR_SPACE/2), m_size.y(), 0 ) );
 			float lenScrollBar = m_size.y()*m_size.y() / m_maxSize.y();
 			lenScrollBar = etk_avg(10, lenScrollBar, m_size.y());
 			float originScrollBar = m_originScrooled.y() / (m_maxSize.y()-m_size.y()*m_limitScrolling);
 			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 			originScrollBar *= (m_size.y()-lenScrollBar);
-			tmpDraw->setPos(vec3(m_size.x()-SCROLL_BAR_SPACE, m_size.y() - originScrollBar - lenScrollBar, 0) );
-			tmpDraw->rectangleWidth(vec3(SCROLL_BAR_SPACE, lenScrollBar, 0));
+			m_drawing.setPos(vec3(m_size.x()-SCROLL_BAR_SPACE, m_size.y() - originScrollBar - lenScrollBar, 0) );
+			m_drawing.rectangleWidth(vec3(SCROLL_BAR_SPACE, lenScrollBar, 0));
 		}
 		if(    m_size.x() < m_maxSize.x()
 		    || m_originScrooled.x()!=0) {
-			tmpDraw->setPos(vec3(0, (SCROLL_BAR_SPACE/2), 0) );
-			tmpDraw->lineTo(vec3(m_size.x()-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2), 0 ) );
-			float lenScrollBar = m_size.x()*(m_size.x()-SCROLL_BAR_SPACE) / m_maxSize.x();
+			m_drawing.setPos(vec3(0, (SCROLL_BAR_SPACE/2), 0) );
+			m_drawing.lineTo(vec3(m_size.x()-SCROLL_BAR_SPACE, (SCROLL_BAR_SPACE/2), 0 ) );
+			float lenScrollBar = (m_size.x()-SCROLL_BAR_SPACE)*(m_size.x()-SCROLL_BAR_SPACE) / m_maxSize.x();
 			lenScrollBar = etk_avg(10, lenScrollBar, (m_size.x()-SCROLL_BAR_SPACE));
 			float originScrollBar = m_originScrooled.x() / (m_maxSize.x()-m_size.x()*m_limitScrolling);
 			originScrollBar = etk_avg(0.0, originScrollBar, 1.0);
 			originScrollBar *= (m_size.x()-SCROLL_BAR_SPACE-lenScrollBar);
-			tmpDraw->setPos(vec3(originScrollBar, 0, 0) );
-			tmpDraw->rectangle(vec3(lenScrollBar, SCROLL_BAR_SPACE, 0) );
+			m_drawing.setPos(vec3(originScrollBar, 0, 0) );
+			m_drawing.rectangleWidth(vec3(lenScrollBar, SCROLL_BAR_SPACE, 0) );
 		}
-		addOObject(tmpDraw);
 	}
 }
 
@@ -125,7 +117,9 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 					zoom = etk_avg(0.1, zoom, 5000);
 					setZoom(zoom);
 				} else */{
-					if(m_size.y() < m_maxSize.y()) {
+					if(m_size.y() < m_maxSize.y()
+					    || m_originScrooled.y() != 0
+					    || m_size.y()*m_limitScrolling < m_maxSize.y() ) {
 						m_originScrooled.setY(m_originScrooled.y()-m_pixelScrolling);
 						m_originScrooled.setY(etk_avg(0, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling)));
 						markToRedraw();
@@ -140,7 +134,9 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 					zoom = etk_avg(0.1, zoom, 5000);
 					setZoom(zoom);
 				} else */{
-					if(m_size.y() < m_maxSize.y()) {
+					if(m_size.y() < m_maxSize.y()
+					    || m_originScrooled.y()!=0
+					    || m_size.y()*m_limitScrolling < m_maxSize.y() ) {
 						m_originScrooled.setY(m_originScrooled.y()+m_pixelScrolling);
 						m_originScrooled.setY(etk_avg(0, m_originScrooled.y(), (m_maxSize.y() - m_size.y()*m_limitScrolling)));
 						markToRedraw();
@@ -150,7 +146,9 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 			} else if (    _event.getId() == 11
 			            && _event.getStatus() == ewol::keyEvent::statusUp) {
 				// Scrool Left
-				if(m_size.x() < m_maxSize.x()) {
+				if(m_size.x() < m_maxSize.x()
+				    || m_originScrooled.x()!=0
+				    || m_size.x()*m_limitScrolling < m_maxSize.x() ) {
 					m_originScrooled.setX(m_originScrooled.x()-m_pixelScrolling);
 					m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
 					markToRedraw();
@@ -159,7 +157,9 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 			} else if (    _event.getId() == 10
 			            && _event.getStatus() == ewol::keyEvent::statusUp) {
 				// Scrool Right
-				if(m_size.x() < m_maxSize.x()) {
+				if(m_size.x() < m_maxSize.x()
+				    || m_originScrooled.x()!=0
+				    || m_size.x()*m_limitScrolling < m_maxSize.x() ) {
 					m_originScrooled.setX(m_originScrooled.x()+m_pixelScrolling);
 					m_originScrooled.setX(etk_avg(0, m_originScrooled.x(), (m_maxSize.x() - m_size.x()*m_limitScrolling)));
 					markToRedraw();
@@ -339,32 +339,9 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-void widget::WidgetScrooled::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
-	if (NULL == _newObject) {
-		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
-		return;
-	}
-	if (_pos < 0 || _pos >= m_listOObject.size() ) {
-		m_listOObject.push_back(_newObject);
-	} else {
-		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
-	}
-}
-
-void widget::WidgetScrooled::clearOObjectList(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
-		delete(m_listOObject[iii]);
-		m_listOObject[iii] = NULL;
-	}
-	m_listOObject.clear();
-}
 
 void widget::WidgetScrooled::onDraw(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
-		if (NULL != m_listOObject[iii]) {
-			m_listOObject[iii]->draw();
-		}
-	}
+	m_drawing.draw();
 }
 
 void widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) {
@@ -403,7 +380,7 @@ void widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) 
 	ewol::openGL::pop();
 }
 
-void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, vec2 _currentPosition, bool _center) {
+void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {
 	if (true == _center) {
 		_borderWidth.setValue(m_size.x() / 2 - _borderWidth.x(),
 		                      m_size.y() / 2 - _borderWidth.y() );
