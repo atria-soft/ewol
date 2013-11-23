@@ -14,12 +14,12 @@
 #define __class__ "Button"
 
 
-const char* const widget::Button::eventPressed    = "ewol-widget-button-event-Pressed";
-const char* const widget::Button::eventDown       = "ewol-widget-button-event-down";
-const char* const widget::Button::eventUp         = "ewol-widget-button-event-up";
-const char* const widget::Button::eventEnter      = "ewol-widget-button-event-enter";
-const char* const widget::Button::eventLeave      = "ewol-widget-button-event-leave";
-const char* const widget::Button::eventValue      = "ewol-widget-button-event-value";
+const char* const widget::Button::eventPressed    = "pressed";
+const char* const widget::Button::eventDown       = "down";
+const char* const widget::Button::eventUp         = "up";
+const char* const widget::Button::eventEnter      = "enter";
+const char* const widget::Button::eventLeave      = "leave";
+const char* const widget::Button::eventValue      = "value";
 
 const char* const widget::Button::configToggle = "toggle";
 const char* const widget::Button::configLock   = "lock";

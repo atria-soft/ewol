@@ -36,9 +36,9 @@ void widget::Entry::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-const char * const widget::Entry::eventClick  = "ewol-widget-entry-event-click";
-const char * const widget::Entry::eventEnter  = "ewol-widget-entry-event-enter";
-const char * const widget::Entry::eventModify = "ewol-widget-entry-event-modify";
+const char * const widget::Entry::eventClick  = "click";
+const char * const widget::Entry::eventEnter  = "enter";
+const char * const widget::Entry::eventModify = "modify";
 
 const char* const widget::Entry::configMaxChar = "max";
 const char* const widget::Entry::configRegExp  = "regExp";

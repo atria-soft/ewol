@@ -340,16 +340,16 @@ std::string ewol::EObject::getConfig(const std::string& _config) const {
 	return "";
 }
 
-bool ewol::EObject::setConfigNamed(const std::string& _name, const ewol::EConfig& _conf) {
-	ewol::EObject* object = getEObjectManager().get(_name);
+bool ewol::EObject::setConfigNamed(const std::string& _objectName, const ewol::EConfig& _conf) {
+	ewol::EObject* object = getEObjectManager().get(_objectName);
 	if (object == NULL) {
 		return false;
 	}
 	return object->setConfig(_conf);
 }
 
-bool ewol::EObject::setConfigNamed(const std::string& _name, const std::string& _config, const std::string& _value) {
-	ewol::EObject* object = getEObjectManager().get(_name);
+bool ewol::EObject::setConfigNamed(const std::string& _objectName, const std::string& _config, const std::string& _value) {
+	ewol::EObject* object = getEObjectManager().get(_objectName);
 	if (object == NULL) {
 		return false;
 	}
