@@ -139,6 +139,7 @@ class X11Interface : public ewol::eContext {
 		Atom XAtomeEWOL;
 		Atom XAtomeDeleteWindows;
 		enum ewol::cursorDisplay m_currentCursor; //!< select the current cursor to display :
+		char32_t m_lastKeyPressed; //!< The last element key presed...
 	public:
 		X11Interface(int32_t _argc, const char* _argv[]) :
 		  ewol::eContext(_argc, _argv),
@@ -166,7 +167,8 @@ class X11Interface : public ewol::eContext {
 		  XAtomeTargetTarget(0),
 		  XAtomeEWOL(0),
 		  XAtomeDeleteWindows(0),
-		  m_currentCursor(ewol::cursorArrow) {
+		  m_currentCursor(ewol::cursorArrow),
+		  m_lastKeyPressed(0) {
 			X11_INFO("X11:INIT");
 			for (int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 				m_inputIsPressed[iii] = false;
@@ -655,16 +657,19 @@ class X11Interface : public ewol::eContext {
 												buf[0] = '\n';
 												buf[1] = '\0';
 											}
-											if (count>0) {
-												// transform it in unicode
-												char32_t tmpChar = etk::setUtf8(buf);
+											if (count >= 0) {
+												// repeated kay from previous element :
+												if (count>0) {
+													// transform it in unicode
+													m_lastKeyPressed = etk::setUtf8(buf);
+												}
 												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
-												OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, (event.type == KeyPress), thisIsAReapeateKey);
+												OS_SetKeyboard(m_guiKeyBoardMode, m_lastKeyPressed, (event.type == KeyPress), thisIsAReapeateKey);
 												if (true == thisIsAReapeateKey) {
-													OS_SetKeyboard(m_guiKeyBoardMode, tmpChar, !(event.type == KeyPress), thisIsAReapeateKey);
+													OS_SetKeyboard(m_guiKeyBoardMode, m_lastKeyPressed, !(event.type == KeyPress), thisIsAReapeateKey);
 												}
 											} else {
-												EWOL_WARNING("Unknow event Key : " << event.xkey.keycode);
+												EWOL_WARNING("Unknow event Key : " << event.xkey.keycode << " res='" << buf << "' repeate=" << thisIsAReapeateKey);
 											}
 										}
 										break;
