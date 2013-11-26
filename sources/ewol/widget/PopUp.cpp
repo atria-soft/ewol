@@ -20,6 +20,8 @@ const char* const widget::PopUp::configRemoveOnExternClick="out-click-remove";
 const char* const widget::PopUp::configAnimation="animation";
 const char* const widget::PopUp::configLockExpand="lock";
 
+static const char* annimationIncrease = "increase";
+
 static ewol::Widget* create(void) {
 	return new widget::PopUp();
 }
@@ -38,9 +40,11 @@ widget::PopUp::PopUp(const std::string& _shaperName) :
 	registerConfig(configShaper, "string", NULL, "The shaper properties");
 	registerConfig(configRemoveOnExternClick, "bool", NULL, "Remove the widget if the use click outside");
 	registerConfig(configLockExpand, "bool", NULL, "Lock expand contamination");
-	registerConfig(configAnimation, "list", "none;increase", "Remove the widget if the use click outside");
+	registerConfig(configAnimation, "list", "none;increase", "Annimation type");
 	
 	setAnimationMode(animationNone);
+	// Add annimations :
+	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
 
 widget::PopUp::~PopUp(void) {

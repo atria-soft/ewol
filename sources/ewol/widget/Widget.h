@@ -696,7 +696,75 @@ namespace ewol {
 			 * @brief get the curent Windows
 			 */
 			ewol::Windows* getWindows(void);
-	}; // end of the class Widget declaration
+		/*
+		 * Annimation section :
+		 */
+		public:
+			// configuration :
+			static const char* const configAnnimationAddType;
+			static const char* const configAnnimationAddTime;
+			static const char* const configAnnimationRemoveType;
+			static const char* const configAnnimationRemoveTime;
+			// event generated :
+			static const char* const eventAnnimationStart; //!< event when start annimation
+			static const char* const eventAnnimationRatio; //!< event when % of annimation change (integer)
+			static const char* const eventAnnimationStop;  //!< event when stop annimation
+		protected:
+			enum annimationMode {
+				annimationModeEnableAdd,
+				annimationModeEnableRemove,
+				annimationModeDisable
+			};
+			enum annimationMode m_annimationMode; //!< true when the annimation is started
+			float m_annimationratio; //!< Ratio of the annimation [0..1]
+		private:
+			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
+			const char* m_annimationType[2]; //!< type of start annimation (default NULL ==> no annimation)
+			float m_annimationTime[2]; //!< time to produce start annimation
+		protected:
+			/**
+			 * @brief Add a annimation type capabilities of this widget.
+			 * @param[in] _mode Configuring mode.
+			 * @param[in] _type Type of the annimation.
+			 */
+			void addAnnimationType(enum annimationMode _mode, const char* _type);
+		public:
+			/**
+			 * @brief set a annimation type.
+			 * @param[in] _mode Configuring mode.
+			 * @param[in] _type type of the annimation
+			 */
+			void setAnnimationType(enum annimationMode _mode, const std::string& _type);
+			/**
+			 * @brief set a annimation time to produce.
+			 * @param[in] _mode Configuring mode.
+			 * @param[in] _time Time in second of the annimation display
+			 */
+			void setAnnimationTime(enum annimationMode _mode, float _time);
+			/**
+			 * @brief Start the annimation.
+			 * @param[in] _mode Configuring mode.
+			 * @return true if an annimation will be started, false ==> no annimation and no event
+			 */
+			bool startAnnimation(enum annimationMode _mode);
+			/**
+			 * @brief Stop/Break the annimation.
+			 * @return true if an annimation will be stoped, false ==> no curent annimation and no event wil be generated
+			 */
+			bool stopAnnimation(void);
+		protected:
+			/**
+			 * @brief Event when start the annimation.
+			 * @param[in] _mode Configuring mode.
+			 * @return true need to add periodic call.
+			 */
+			virtual bool onStartAnnimation(enum annimationMode _mode) { return false; };
+			/**
+			 * @brief Event when Stop the annimation.
+			 */
+			virtual void onStopAnnimation(void) { };
+			
+	};
 
 };// end of namespace
 
