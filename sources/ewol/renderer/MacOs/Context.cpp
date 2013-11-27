@@ -78,11 +78,35 @@ class MacOSInterface : public ewol::eContext {
 			OS_SetMouseMotion(_id, vec2(_x, _y));
 		}
 		void MAC_SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
-			if (_unichar == '\r') {
-				_unichar = '\n';
+			if (_unichar == etk::UChar::Delete) {
+				_unichar = etk::UChar::Suppress;
+			} else if (_unichar == etk::UChar::Suppress) {
+				_unichar = etk::UChar::Delete;
+			}
+			if (_unichar == etk::UChar::CarrierReturn) {
+				_unichar = etk::UChar::Return;
 			}
 			EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
-			OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
+			if (_unichar <= 4) {
+				enum ewol::keyEvent::keyboard move;
+				switch(_unichar) {
+					case 0:
+						move = ewol::keyEvent::keyboardUp;
+						break;
+					case 1:
+						move = ewol::keyEvent::keyboardDown;
+						break;
+					case 2:
+						move = ewol::keyEvent::keyboardLeft;
+						break;
+					case 3:
+						move = ewol::keyEvent::keyboardRight;
+						break;
+				}
+				OS_SetKeyboardMove(_keyboardMode, move, !_isDown, _isAReapeateKey);
+			} else {
+				OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
+			}
 		}
 };
 
@@ -98,7 +122,7 @@ bool MacOs::draw(bool _displayEveryTime) {
 	return interface->MAC_Draw(_displayEveryTime);
 }
 
-void MacOs::Resize(float _x, float _y) {
+void MacOs::resize(float _x, float _y) {
 	if (interface == NULL) {
 		return;
 	}

@@ -31,7 +31,7 @@ static ewol::SpecialKey guiKeyBoardMode;
 	NSSize displayPixelSize = [[description objectForKey:NSDeviceSize] sizeValue];
 	CGSize displayPhysicalSize = CGDisplayScreenSize([[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
 	
-	ewol::dimension::SetPixelRatio(vec2((float)displayPixelSize.width/(float)displayPhysicalSize.width,
+	ewol::dimension::setPixelRatio(vec2((float)displayPixelSize.width/(float)displayPhysicalSize.width,
 	                                    (float)displayPixelSize.height/(float)displayPhysicalSize.height),
 	                               ewol::Dimension::Millimeter);
   
@@ -39,7 +39,7 @@ static ewol::SpecialKey guiKeyBoardMode;
 
 -(void) drawRect: (NSRect) bounds
 {
-    MacOs::Draw(true);
+    MacOs::draw(true);
     glFlush();
 }
 
@@ -50,7 +50,7 @@ static ewol::SpecialKey guiKeyBoardMode;
     // but they are floats
     float width = [self frame].size.width;
     float height = [self frame].size.height;
-	MacOs::Resize(width,height);
+	MacOs::resize(width,height);
 }
 
 
@@ -58,22 +58,22 @@ static ewol::SpecialKey guiKeyBoardMode;
 	NSPoint point = [event locationInWindow];
 	//float x = [event locationInWindow].x; //point.x;
 	//EWOL_INFO("mouseDown : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseState(1, true, point.x, point.y);
+	MacOs::setMouseState(1, true, point.x, point.y);
 }
 -(void)mouseDragged:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("mouseDragged : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseMotion(1, point.x, point.y);
+	MacOs::setMouseMotion(1, point.x, point.y);
 }
 -(void)mouseUp:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("mouseUp : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseState(1, false, point.x, point.y);
+	MacOs::setMouseState(1, false, point.x, point.y);
 }
 -(void)mouseMoved:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("mouseMoved : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseMotion(0, point.x, point.y);
+	MacOs::setMouseMotion(0, point.x, point.y);
 }
 -(void)mouseEntered:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -86,17 +86,17 @@ static ewol::SpecialKey guiKeyBoardMode;
 -(void)rightMouseDown:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("rightMouseDown : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseState(3, true, point.x, point.y);
+	MacOs::setMouseState(3, true, point.x, point.y);
 }
 -(void)rightMouseDragged:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("rightMouseDragged : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseMotion(3, point.x, point.y);
+	MacOs::setMouseMotion(3, point.x, point.y);
 }
 -(void)rightMouseUp:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	//EWOL_INFO("rightMouseUp : " << (float)point.x << " " << (float)point.y);
-	MacOs::SetMouseState(3, false, point.x, point.y);
+	MacOs::setMouseState(3, false, point.x, point.y);
 }
 -(void)otherMouseDown:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -108,7 +108,14 @@ static ewol::SpecialKey guiKeyBoardMode;
 }
 -(void)otherMouseUp:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
-	EWOL_INFO("otherMouseUp : " << (float)point.x << " " << (float)point.y);
+	int32_t btNumber = [event buttonNumber];
+	EWOL_INFO("otherMouseUp : " << (float)point.x << " " << (float)point.y << " bt id=" << btNumber );
+	// 2 : Middle button
+	// 3 : border button DOWN
+	// 4 : border button UP
+	// 7 : Red button
+	// 5 : horizontal scroll Right to left
+	// 6 : horizontal scroll left to Right
 }
 - (void)scrollWheel:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -123,8 +130,8 @@ static ewol::SpecialKey guiKeyBoardMode;
 		return;
 	}
 	for (float iii=abs(deltaY) ; iii>=0.0f ; iii-=1.0f) {
-		MacOs::SetMouseState(idEvent, true , point.x, point.y);
-		MacOs::SetMouseState(idEvent, false, point.x, point.y);
+		MacOs::setMouseState(idEvent, true , point.x, point.y);
+		MacOs::setMouseState(idEvent, false, point.x, point.y);
 	}
 }
 /*
@@ -155,9 +162,9 @@ static ewol::SpecialKey guiKeyBoardMode;
     }
     */
     //EWOL_DEBUG("KeyDown " << (char)c);
-    MacOs::SetKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
+    MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
     if (true==thisIsAReapeateKey) {
-		MacOs::SetKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
+		MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
 	}
 }
 
@@ -175,9 +182,9 @@ static ewol::SpecialKey guiKeyBoardMode;
         return;
     }
     */
-    MacOs::SetKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
+    MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
     if (true==thisIsAReapeateKey) {
-		MacOs::SetKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
+		MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
 	}
 }
 
