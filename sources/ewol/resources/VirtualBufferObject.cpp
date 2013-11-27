@@ -19,7 +19,7 @@ ewol::VirtualBufferObject::VirtualBufferObject(int32_t _number) :
   m_exist(false) {
 	addObjectType("ewol::VirtualBufferObject");
 	m_nbVBO = etk_avg(1, _number, NB_VBO_MAX);
-	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
+	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii]=0;
 		m_vboUsed[iii]=false;
 	}
@@ -41,7 +41,7 @@ void ewol::VirtualBufferObject::updateContext(void) {
 		glGenBuffers(m_nbVBO, m_vbo);
 	}
 	m_exist = true;
-	for (int32_t iii=0; iii<m_nbVBO; iii++) {
+	for (size_t iii=0; iii<m_nbVBO; iii++) {
 		EWOL_INFO("VBO    : add [" << getId() << "]=" << m_buffer[iii].size() << "*sizeof(float) OGl_Id=" << m_vbo[iii]);
 		if (true == m_vboUsed[iii]) {
 			// select the buffer to set data inside it ...
@@ -63,7 +63,7 @@ void ewol::VirtualBufferObject::removeContext(void) {
 		                                             << "/" << m_vbo[3]);
 		glDeleteBuffers(m_nbVBO, m_vbo);
 		m_exist = false;
-		for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
+		for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 			m_vbo[iii] = 0;
 		}
 	}
@@ -71,7 +71,7 @@ void ewol::VirtualBufferObject::removeContext(void) {
 
 void ewol::VirtualBufferObject::removeContextToLate(void) {
 	m_exist = false;
-	for (int32_t iii=0; iii<NB_VBO_MAX; iii++) {
+	for (size_t iii=0; iii<NB_VBO_MAX; iii++) {
 		m_vbo[iii] = 0;
 	}
 }
@@ -94,7 +94,7 @@ void ewol::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec3& _data) {
 }
 
 vec3 ewol::VirtualBufferObject::getOnBufferVec3(int32_t _id, int32_t _elementID) {
-	if (_elementID*3>m_buffer[_id].size()) {
+	if ((size_t)_elementID*3 > m_buffer[_id].size()) {
 		return vec3(0,0,0);
 	}
 	return vec3(m_buffer[_id][3*_elementID],
@@ -113,7 +113,7 @@ void ewol::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec2& _data) {
 }
 
 vec2 ewol::VirtualBufferObject::getOnBufferVec2(int32_t _id, int32_t _elementID) {
-	if (_elementID*2>m_buffer[_id].size()) {
+	if ((size_t)_elementID*2 > m_buffer[_id].size()) {
 		return vec2(0,0);
 	}
 	return vec2(m_buffer[_id][2*_elementID],

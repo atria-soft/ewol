@@ -40,7 +40,7 @@ void ewol::ResourceManager::unInit(void) {
 	display();
 	m_resourceListToUpdate.clear();
 	// remove all resources ...
-	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
+	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
 			EWOL_WARNING("Find a resource that is not removed : [" << m_resourceList[iii]->getId() << "]"
 			             << "=\"" << m_resourceList[iii]->getName() << "\" "
@@ -55,7 +55,7 @@ void ewol::ResourceManager::unInit(void) {
 void ewol::ResourceManager::display(void) {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
-	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
+	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] != NULL) {
 			EWOL_INFO("    [" << m_resourceList[iii]->getId() << "]"
 			          << m_resourceList[iii]->getObjectType()
@@ -70,9 +70,9 @@ void ewol::ResourceManager::reLoadResources(void) {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...
 	if (m_resourceList.size() != 0) {
-		for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+		for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 			EWOL_INFO("    Reload level : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-			for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
+			for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 				if(m_resourceList[iii] != NULL) {
 					if (jjj == m_resourceList[iii]->getResourceLevel()) {
 						m_resourceList[iii]->reload();
@@ -89,7 +89,7 @@ void ewol::ResourceManager::reLoadResources(void) {
 
 void ewol::ResourceManager::update(ewol::Resource* _object) {
 	// chek if not added before
-	for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
+	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] != NULL) {
 			if (m_resourceListToUpdate[iii] == _object) {
 				// just prevent some double add ...
@@ -107,9 +107,9 @@ void ewol::ResourceManager::updateContext(void) {
 		// need to update all ...
 		m_contextHasBeenRemoved = false;
 		if (m_resourceList.size() != 0) {
-			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+			for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    updateContext level (D) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-				for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
+				for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 					if(m_resourceList[iii] != NULL) {
 						if (jjj == m_resourceList[iii]->getResourceLevel()) {
 							//EWOL_DEBUG("Update context of " << iii << " named : " << l_resourceList[iii]->getName());
@@ -121,9 +121,9 @@ void ewol::ResourceManager::updateContext(void) {
 		}
 	}else {
 		if (m_resourceListToUpdate.size() != 0) {
-			for (int32_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
+			for (size_t jjj=0; jjj<MAX_RESOURCE_LEVEL; jjj++) {
 				EWOL_INFO("    updateContext level (U) : " << jjj << "/" << (MAX_RESOURCE_LEVEL-1));
-				for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
+				for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 					if(m_resourceListToUpdate[iii] != NULL) {
 						if (jjj == m_resourceListToUpdate[iii]->getResourceLevel()) {
 							m_resourceListToUpdate[iii]->updateContext();
@@ -139,7 +139,7 @@ void ewol::ResourceManager::updateContext(void) {
 
 // in this case, it is really too late ...
 void ewol::ResourceManager::contextHasBeenDestroyed(void) {
-	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
+	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
 			m_resourceList[iii]->removeContextToLate();
 		}
@@ -151,7 +151,7 @@ void ewol::ResourceManager::contextHasBeenDestroyed(void) {
 // internal generic keeper ...
 ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
-	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
+	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
 			if(m_resourceList[iii]->getName() == _filename) {
 				m_resourceList[iii]->increment();
@@ -166,7 +166,7 @@ ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
 // internal generic keeper ...
 void ewol::ResourceManager::localAdd(ewol::Resource* _object) {
 	//Add ... find empty slot
-	for (int32_t iii=0; iii<m_resourceList.size(); iii++) {
+	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] == NULL) {
 			m_resourceList[iii] = _object;
 			return;
@@ -181,14 +181,14 @@ bool ewol::ResourceManager::release(ewol::Resource*& _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return false;
 	}
-	for (int32_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
+	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] == _object) {
 			m_resourceListToUpdate[iii] = NULL;
 			//l_resourceListToUpdate.Erase(iii);
 		}
 	}
 	EWOL_VERBOSE("RELEASE (default) : file : \"" << _object->getName() << "\"");
-	for (int32_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
+	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
 		if (m_resourceList[iii] == NULL) {
 			continue;
 		}

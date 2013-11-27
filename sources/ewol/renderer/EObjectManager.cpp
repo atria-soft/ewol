@@ -39,9 +39,9 @@ void ewol::EObjectManager::unInit(void) {
 	EWOL_DEBUG(" == > Un-Init EObject-Manager");
 	removeAllAutoRemove();
 	EWOL_INFO(" remove missing user widget");
-	int32_t iii=0;
-	while(iii<m_eObjectList.size()) {
-		if (m_eObjectList[iii]!=NULL) {
+	size_t iii=0;
+	while(iii < m_eObjectList.size()) {
+		if (m_eObjectList[iii] != NULL) {
 			if (    m_eObjectList[iii]->getStatic() == true
 			     || m_eObjectList[iii]->getStatusResource() == true) {
 				iii++;
@@ -56,8 +56,8 @@ void ewol::EObjectManager::unInit(void) {
 	}
 	removeAllAutoRemove();
 	EWOL_INFO(" remove resources user widgets");
-	while(iii<m_eObjectList.size()) {
-		if (m_eObjectList[iii]!=NULL) {
+	while(iii < m_eObjectList.size()) {
+		if (m_eObjectList[iii] != NULL) {
 			if (m_eObjectList[iii]->getStatic() == true) {
 				iii++;
 			} else {
@@ -71,8 +71,8 @@ void ewol::EObjectManager::unInit(void) {
 	}
 	removeAllAutoRemove();
 	EWOL_INFO(" remove static user widgets");
-	while(iii<m_eObjectList.size()) {
-		if (m_eObjectList[iii]!=NULL) {
+	while(iii < m_eObjectList.size()) {
+		if (m_eObjectList[iii] != NULL) {
 			EWOL_WARNING("Un-INIT : remove EObject type=\"" << m_eObjectList[iii]->getObjectType() << "\"");
 			delete(m_eObjectList[iii]);
 			m_eObjectList[iii] = NULL;
@@ -95,12 +95,12 @@ int32_t ewol::EObjectManager::getNumberObject(void) {
 }
 
 void ewol::EObjectManager::informOneObjectIsRemoved(ewol::EObject* _object) {
-	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
 			m_eObjectList[iii]->onObjectRemove(_object);
 		}
 	}
-	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] != _object) {
 			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
@@ -115,7 +115,7 @@ void ewol::EObjectManager::rm(ewol::EObject* _object) {
 		EWOL_ERROR("Try to remove (NULL) EObject");
 		return;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == _object) {
 			// remove Element
 			m_eObjectList[iii] = NULL;
@@ -125,7 +125,7 @@ void ewol::EObjectManager::rm(ewol::EObject* _object) {
 		}
 	}
 	// check if the object has not been auto removed ... or remove in defered time ...
-	for (int32_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] == _object) {
 			return;
@@ -140,7 +140,7 @@ void ewol::EObjectManager::autoRemove(ewol::EObject* _object) {
 		EWOL_ERROR("Try to Auto-Remove (NULL) EObject");
 		return;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] == _object) {
 			// remove Element
 			m_eObjectList[iii] = NULL;
@@ -174,7 +174,7 @@ ewol::EObject* ewol::EObjectManager::get(const std::string& _name) {
 	if (_name == "") {
 		return NULL;
 	}
-	for (int32_t iii=0; iii<m_eObjectList.size(); iii++) {
+	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
 			if (m_eObjectList[iii]->getName() == _name) {
 				return m_eObjectList[iii];

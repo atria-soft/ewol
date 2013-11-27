@@ -719,6 +719,7 @@ namespace ewol {
 			float m_annimationratio; //!< Ratio of the annimation [0..1]
 		private:
 			std::vector<const char*> m_annimationList[2]; //!< List of all annimation type ADD
+		protected:
 			const char* m_annimationType[2]; //!< type of start annimation (default NULL ==> no annimation)
 			float m_annimationTime[2]; //!< time to produce start annimation
 		protected:

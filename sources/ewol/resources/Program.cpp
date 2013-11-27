@@ -96,7 +96,7 @@ ewol::Program::Program(const std::string& _filename) :
 }
 
 ewol::Program::~Program(void) {
-	for (int32_t iii=0; iii<m_shaderList.size(); iii++) {
+	for (size_t iii=0; iii<m_shaderList.size(); iii++) {
 		ewol::Shader::release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
 	}
@@ -118,7 +118,7 @@ static char l_bufferDisplayError[LOG_OGL_INTERNAL_BUFFER_LEN] = "";
 
 int32_t ewol::Program::getAttribute(std::string _elementName) {
 	// check if it exist previously :
-	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
+	for(size_t iii=0; iii<m_elementList.size(); iii++) {
 		if (m_elementList[iii].m_name == _elementName) {
 			return iii;
 		}
@@ -139,7 +139,7 @@ int32_t ewol::Program::getAttribute(std::string _elementName) {
 
 int32_t ewol::Program::getUniform(std::string _elementName) {
 	// check if it exist previously :
-	for(int32_t iii=0; iii<m_elementList.size(); iii++) {
+	for(size_t iii=0; iii<m_elementList.size(); iii++) {
 		if (m_elementList[iii].m_name == _elementName) {
 			return iii;
 		}
@@ -172,7 +172,7 @@ void ewol::Program::updateContext(void) {
 		}
 		EWOL_DEBUG("Create program with oglID=" << m_program);
 		// first attach vertex shader, and after fragment shader
-		for (int32_t iii=0; iii<m_shaderList.size(); iii++) {
+		for (size_t iii=0; iii<m_shaderList.size(); iii++) {
 			if (NULL != m_shaderList[iii]) {
 				if (m_shaderList[iii]->getShaderType() == GL_VERTEX_SHADER) {
 					glAttachShader(m_program, m_shaderList[iii]->getGL_ID());
@@ -180,7 +180,7 @@ void ewol::Program::updateContext(void) {
 				}
 			}
 		}
-		for (int32_t iii=0; iii<m_shaderList.size(); iii++) {
+		for (size_t iii=0; iii<m_shaderList.size(); iii++) {
 			if (NULL != m_shaderList[iii]) {
 				if (m_shaderList[iii]->getShaderType() == GL_FRAGMENT_SHADER) {
 					glAttachShader(m_program, m_shaderList[iii]->getGL_ID());
@@ -200,7 +200,7 @@ void ewol::Program::updateContext(void) {
 			char tmpLog[256];
 			int32_t idOut=0;
 			EWOL_ERROR("Could not compile \"PROGRAM\": \"" << m_name << "\"");
-			for (int32_t iii=0; iii<LOG_OGL_INTERNAL_BUFFER_LEN ; iii++) {
+			for (size_t iii=0; iii<LOG_OGL_INTERNAL_BUFFER_LEN ; iii++) {
 				tmpLog[idOut] = l_bufferDisplayError[iii];
 				if (tmpLog[idOut] == '\n' || tmpLog[idOut] == '\0' || idOut >= 256) {
 					tmpLog[idOut] = '\0';
@@ -224,7 +224,7 @@ void ewol::Program::updateContext(void) {
 		}
 		m_exist = true;
 		// now get the old attribute requested priviously ...
-		for(int32_t iii=0; iii<m_elementList.size(); iii++) {
+		for(size_t iii=0; iii<m_elementList.size(); iii++) {
 			if (true == m_elementList[iii].m_isAttribute) {
 				m_elementList[iii].m_elementId = glGetAttribLocation(m_program, m_elementList[iii].m_name.c_str());
 				m_elementList[iii].m_isLinked = true;
@@ -251,7 +251,7 @@ void ewol::Program::removeContext(void) {
 		glDeleteProgram(m_program);
 		m_program = 0;
 		m_exist = false;
-		for(int32_t iii=0; iii<m_elementList.size(); iii++) {
+		for(size_t iii=0; iii<m_elementList.size(); iii++) {
 			m_elementList[iii].m_elementId=0;
 		}
 	}
@@ -310,7 +310,7 @@ void ewol::Program::sendAttribute(int32_t _idElem,
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -337,7 +337,7 @@ void ewol::Program::sendAttributePointer(int32_t _idElem,
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -362,7 +362,7 @@ void ewol::Program::uniformMatrix4fv(int32_t _idElem, int32_t _nbElement, mat4 _
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -383,7 +383,7 @@ void ewol::Program::uniform1f(int32_t _idElem, float _value1) {
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -397,7 +397,7 @@ void ewol::Program::uniform2f(int32_t _idElem, float  _value1, float _value2) {
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -411,7 +411,7 @@ void ewol::Program::uniform3f(int32_t _idElem, float _value1, float _value2, flo
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -425,7 +425,7 @@ void ewol::Program::uniform4f(int32_t _idElem, float _value1, float _value2, flo
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -442,7 +442,7 @@ void ewol::Program::uniform1i(int32_t _idElem, int32_t _value1) {
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -456,7 +456,7 @@ void ewol::Program::uniform2i(int32_t _idElem, int32_t _value1, int32_t _value2)
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -470,7 +470,7 @@ void ewol::Program::uniform3i(int32_t _idElem, int32_t _value1, int32_t _value2,
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -484,7 +484,7 @@ void ewol::Program::uniform4i(int32_t _idElem, int32_t _value1, int32_t _value2,
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -502,7 +502,7 @@ void ewol::Program::uniform1fv(int32_t _idElem, int32_t _nbElement, const float 
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -524,7 +524,7 @@ void ewol::Program::uniform2fv(int32_t _idElem, int32_t _nbElement, const float 
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -546,7 +546,7 @@ void ewol::Program::uniform3fv(int32_t _idElem, int32_t _nbElement, const float 
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -568,7 +568,7 @@ void ewol::Program::uniform4fv(int32_t _idElem, int32_t _nbElement, const float 
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -593,7 +593,7 @@ void ewol::Program::uniform1iv(int32_t _idElem, int32_t _nbElement, const int32_
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -615,7 +615,7 @@ void ewol::Program::uniform2iv(int32_t _idElem, int32_t _nbElement, const int32_
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -637,7 +637,7 @@ void ewol::Program::uniform3iv(int32_t _idElem, int32_t _nbElement, const int32_
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -659,7 +659,7 @@ void ewol::Program::uniform4iv(int32_t _idElem, int32_t _nbElement, const int32_
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		EWOL_ERROR("idElem = " << _idElem << " not in [0.." << (m_elementList.size()-1) << "]");
 		return;
 	}
@@ -700,7 +700,7 @@ void ewol::Program::setTexture0(int32_t _idElem, GLint _textureOpenGlID) {
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		return;
 	}
 	if (false == m_elementList[_idElem].m_isLinked) {
@@ -725,7 +725,7 @@ void ewol::Program::setTexture1(int32_t _idElem, GLint _textureOpenGlID) {
 	if (0 == m_program) {
 		return;
 	}
-	if (_idElem<0 || _idElem>m_elementList.size()) {
+	if (_idElem<0 || (size_t)_idElem>m_elementList.size()) {
 		return;
 	}
 	if (false == m_elementList[_idElem].m_isLinked) {

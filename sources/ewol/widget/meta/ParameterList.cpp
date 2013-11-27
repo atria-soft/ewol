@@ -37,7 +37,7 @@ widget::ParameterList::ParameterList(void) {
 
 widget::ParameterList::~ParameterList(void) {
 	//clean all the object
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
 	}
@@ -60,7 +60,7 @@ void widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _p
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (_pos < 0 || _pos >= m_listOObject.size() ) {
+	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
 		m_listOObject.push_back(_newObject);
 	} else {
 		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
@@ -68,7 +68,7 @@ void widget::ParameterList::addOObject(ewol::Compositing* _newObject, int32_t _p
 }
 
 void widget::ParameterList::clearOObjectList(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
 	}
@@ -76,7 +76,7 @@ void widget::ParameterList::clearOObjectList(void) {
 }
 
 void widget::ParameterList::onDraw(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
 		}
@@ -138,7 +138,7 @@ void widget::ParameterList::onRegenerateDisplay(void) {
 		// calculate the real position ...
 		tmpOriginY = m_size.y() - (-m_originScrooled.y() + (startRaw+1)*(minHeight + 2*m_paddingSizeY));
 		
-		for(int32_t iii=startRaw; iii<nbRaw && iii<(startRaw+displayableRaw); iii++) {
+		for (int32_t iii=startRaw; iii<nbRaw && iii<(int32_t)(startRaw+displayableRaw); iii++) {
 			std::string myTextToWrite = "???";
 			etk::Color<> fg(0x000000FF);
 			if (m_list[iii] != NULL) {
@@ -186,7 +186,7 @@ bool widget::ParameterList::onEventInput(const ewol::EventInput& _event) {
 		int32_t minHeight = 20;
 		int32_t rawID = (relativePos.y()+m_originScrooled.y()) / (minHeight + 2*m_paddingSizeY);
 		// generate an event on a rawId if the element request change and Select it ...
-		if (rawID  >= 0 && rawID<m_list.size()) {
+		if (rawID >= 0 && (size_t)rawID < m_list.size()) {
 			if (m_list[rawID]!=NULL) {
 				if (m_list[rawID]->m_refId >= 0) {
 					generateEventId(ewolEventParameterListSelect, std::to_string(m_list[rawID]->m_refId));
@@ -230,7 +230,7 @@ void widget::ParameterList::menuAddGroup(std::string& _label) {
 
 void widget::ParameterList::menuClear(void) {
 	m_idSelected = -1;
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;

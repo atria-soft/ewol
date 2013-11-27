@@ -230,7 +230,7 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	// set the curent interface :
 	lockContext();
 	// parse the debug level:
-	for(esize_t iii=m_commandLine.size()-1 ; iii >= 0 ; --iii) {
+	for(int32_t iii=m_commandLine.size()-1 ; iii >= 0 ; --iii) {
 		if (m_commandLine.get(iii) == "-l0") {
 			debug::setGeneralLevel(etk::logLevelNone);
 		} else if (m_commandLine.get(iii) == "-l1") {

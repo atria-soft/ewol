@@ -82,7 +82,7 @@ int16_t * ewol::audio::wav::loadData(std::string filename, int8_t nbChan, int32_
 		return NULL;
 	}
 	// try to find endienness :
-	if (fileSize < sizeof(waveHeader)) {
+	if (fileSize < (int64_t)sizeof(waveHeader)) {
 		EWOL_ERROR("File : \"" << fileAccess << "\"  == > has not enouth data inside might be minumum of " << (int32_t)(sizeof(waveHeader)));
 		return NULL;
 	}

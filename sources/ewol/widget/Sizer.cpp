@@ -64,7 +64,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 	float unexpandableSize=0.0;
 	int32_t nbWidgetFixedSize=0;
 	int32_t nbWidgetNotFixedSize=0;
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
 			if (m_mode == widget::Sizer::modeVert) {
@@ -98,7 +98,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 		}
 	}
 	vec2 tmpOrigin = m_origin + tmpBorderSize;
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
 			// set the origin :

@@ -163,7 +163,7 @@ bool widget::Container::loadXML(exml::Element* _node) {
 	subWidgetRemoveDelayed();
 	
 	// parse all the elements :
-	for(int32_t iii=0; iii< _node->size(); iii++) {
+	for(size_t iii=0; iii< _node->size(); iii++) {
 		exml::Element* pNode = _node->getElement(iii);
 		if (pNode == NULL) {
 			// trash here all that is not element

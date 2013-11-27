@@ -58,7 +58,7 @@ void widget::Gird::calculateSize(const vec2& _availlable) {
 	m_size = _availlable;
 	m_size -= m_borderSize*2;
 	
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			//calculate the origin :
 			vec2 tmpOrigin = m_origin + m_borderSize;
@@ -92,7 +92,7 @@ void widget::Gird::calculateSize(const vec2& _availlable) {
 }
 
 void widget::Gird::calculateMinMaxSize(void) {
-	for (int32_t iii=0; iii<m_sizeCol.size(); iii++ ){
+	for (size_t iii=0; iii<m_sizeCol.size(); iii++ ){
 		if (m_sizeCol[iii] <= 0) {
 			m_sizeCol[iii] = 0;
 		}
@@ -103,7 +103,7 @@ void widget::Gird::calculateMinMaxSize(void) {
 	m_uniformSizeRow = 0;
 	m_minSize += m_borderSize*2;
 	int32_t lastLineID = 0;
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii].row > lastLineID) {
 			// change of line : 
 			lastLineID = m_subWidget[iii].row;
@@ -125,7 +125,7 @@ void widget::Gird::calculateMinMaxSize(void) {
 		m_uniformSizeRow = m_sizeRow;
 	}
 	int32_t tmpSizeWidth = 0;
-	for (int32_t iii=0; iii<m_sizeCol.size(); iii++ ){
+	for (size_t iii=0; iii<m_sizeCol.size(); iii++ ){
 		tmpSizeWidth += abs(m_sizeCol[iii]);
 	}
 	EWOL_DEBUG("     tmpSizeWidth=" << tmpSizeWidth);
@@ -138,10 +138,10 @@ void widget::Gird::calculateMinMaxSize(void) {
 }
 
 void widget::Gird::setColNumber(int32_t _colNumber) {
-	if (m_sizeCol.size() > _colNumber) {
-		int32_t errorControl = m_subWidget.size();
+	if ((int64_t)m_sizeCol.size() > _colNumber) {
+		size_t errorControl = m_subWidget.size();
 		// remove subWidget :
-		for (int32_t iii=m_subWidget.size(); iii >= 0; iii--) {
+		for (int64_t iii=m_subWidget.size(); iii >= 0; iii--) {
 			if (m_subWidget[iii].col>(_colNumber-1)) {
 				// out of bounds : must remove it ...
 				if (m_subWidget[iii].widget != NULL) {
@@ -169,7 +169,7 @@ void widget::Gird::setColNumber(int32_t _colNumber) {
 }
 
 void widget::Gird::setColSize(int32_t _colId, int32_t _size) {
-	if (m_sizeCol.size() > _colId) {
+	if ((int64_t)m_sizeCol.size() > _colId) {
 		m_sizeCol[_colId] = _size;
 	} else {
 		EWOL_ERROR("Can not set the Colomn size : " << _colId+1
@@ -183,7 +183,7 @@ void widget::Gird::setRowSize(int32_t _size) {
 }
 
 int32_t widget::Gird::getColSize(int32_t _colId) {
-	if (m_sizeCol.size() > _colId) {
+	if ((int64_t)m_sizeCol.size() > _colId) {
 		if (m_sizeCol[_colId] <= 0) {
 			return 0;
 		}
@@ -198,7 +198,7 @@ int32_t widget::Gird::getRowSize(void) {
 }
 
 void widget::Gird::subWidgetRemoveAll(void) {
-	int32_t errorControl = m_subWidget.size();
+	size_t errorControl = m_subWidget.size();
 	// the size automaticly decrement with the auto call of the onObjectRemove function
 	while (m_subWidget.size() > 0 ) {
 		if (NULL != m_subWidget[0].widget) {
@@ -228,7 +228,7 @@ void widget::Gird::subWidgetAdd(int32_t _colId, int32_t _rowId, ewol::Widget* _n
 	prop.widget = _newWidget;
 	
 	// need to find the correct position : 
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii].row < prop.row) {
 			continue;
 		} else if (m_subWidget[iii].row > prop.row) {
@@ -265,8 +265,8 @@ void widget::Gird::subWidgetRemove(ewol::Widget* _newWidget)
 	if (NULL == _newWidget) {
 		return;
 	}
-	int32_t errorControl = m_subWidget.size();
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	size_t errorControl = m_subWidget.size();
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii].widget) {
 			delete(m_subWidget[iii].widget);
 			// no remove, this element is removed with the function onObjectRemove  == > it does not exist anymore ...
@@ -286,9 +286,9 @@ void widget::Gird::subWidgetRemove(int32_t _colId, int32_t _rowId) {
 		EWOL_WARNING("[" << getId() << "] try to remove widget with id < 0 col=" << _colId << " row=" << _rowId);
 		return;
 	}
-	int32_t errorControl = m_subWidget.size();
+	size_t errorControl = m_subWidget.size();
 	// try to find it ...
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if(    m_subWidget[iii].row == _rowId
 		    && m_subWidget[iii].col == _colId) {
 			if (m_subWidget[iii].widget == NULL) {
@@ -315,7 +315,7 @@ void widget::Gird::subWidgetUnLink(ewol::Widget* _newWidget) {
 	if (NULL == _newWidget) {
 		return;
 	}
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (_newWidget == m_subWidget[iii].widget) {
 			m_subWidget[iii].widget = NULL;
 			m_subWidget.erase(m_subWidget.begin()+iii);
@@ -330,7 +330,7 @@ void widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 		return;
 	}
 	// try to find it ...
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if(    m_subWidget[iii].row == _rowId
 		    && m_subWidget[iii].col == _colId) {
 			m_subWidget[iii].widget = NULL;
@@ -343,7 +343,7 @@ void widget::Gird::subWidgetUnLink(int32_t _colId, int32_t _rowId) {
 
 void widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->systemDraw(_displayProp);
 		}
@@ -351,7 +351,7 @@ void widget::Gird::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void widget::Gird::onRegenerateDisplay(void) {
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			m_subWidget[iii].widget->onRegenerateDisplay();
 		}
@@ -363,7 +363,7 @@ ewol::Widget * widget::Gird::getWidgetAtPos(const vec2& _pos) {
 		return NULL;
 	}
 	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii].widget) {
 			vec2 tmpSize = m_subWidget[iii].widget->getSize();
 			vec2 tmpOrigin = m_subWidget[iii].widget->getOrigin();

@@ -625,7 +625,7 @@ void ewol::Widget::shortCutAdd(const char * _descriptiveString,
 }
 
 void ewol::Widget::shortCutClean(void) {
-	for (int32_t iii=0; iii<m_localShortcut.size(); iii++) {
+	for (size_t iii=0; iii<m_localShortcut.size(); iii++) {
 		if (NULL != m_localShortcut[iii]) {
 			delete(m_localShortcut[iii]);
 			m_localShortcut[iii]=NULL;

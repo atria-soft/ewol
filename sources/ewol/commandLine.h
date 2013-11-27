@@ -25,7 +25,7 @@ namespace ewol {
 			 * @brief get the number of element in the Command line
 			 * @return the number of element
 			 */
-			esize_t size(void);
+			int32_t size(void);
 			/**
 			 * @brief get an element with a specific ID
 			 * @return _id The cmdLine Id element
@@ -40,7 +40,7 @@ namespace ewol {
 			 * @brief remove an element
 			 * @param[in] _id Id of the element
 			 */
-			void remove(esize_t _id);
+			void remove(int32_t _id);
 	};
 };
 

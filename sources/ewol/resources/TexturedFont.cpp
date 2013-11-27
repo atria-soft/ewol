@@ -93,7 +93,7 @@ ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
 		#endif
 	}
 	folderList.push_back(ewol::getContext().getFontDefault().getFolder());
-	for (int32_t folderID=0; folderID<folderList.size() ; folderID++) {
+	for (size_t folderID=0; folderID<folderList.size() ; folderID++) {
 		etk::FSNode myFolder(folderList[folderID]);
 		// find the real Font name :
 		std::vector<std::string> output;
@@ -102,9 +102,9 @@ ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;
-		for (int32_t jjj=0; jjj<split.size(); jjj++) {
+		for (size_t jjj=0; jjj<split.size(); jjj++) {
 			EWOL_INFO("    try with : '" << split[jjj] << "'");
-			for (int32_t iii=0; iii<output.size(); iii++) {
+			for (size_t iii=0; iii<output.size(); iii++) {
 				//EWOL_DEBUG(" file : " << output[iii]);
 				if(    true == end_with(output[iii], split[jjj]+"-"+"bold"+".ttf", false)
 				    || true == end_with(output[iii], split[jjj]+"-"+"b"+".ttf", false)
@@ -248,9 +248,9 @@ bool ewol::TexturedFont::addGlyph(const char32_t& _val) {
 				size.setY(size.y()*2);
 				m_data.resize(size, etk::Color<>(0));
 				// note : need to rework all the lyer due to the fact that the texture is used by the faur type...
-				for (int32_t kkk=0; kkk<4 ; kkk++) {
+				for (size_t kkk=0; kkk<4 ; kkk++) {
 					// change the coordonate on the element in the texture
-					for (int32_t jjj=0 ; jjj<m_listElement[kkk].size() ; ++jjj) {
+					for (size_t jjj=0 ; jjj<m_listElement[kkk].size() ; ++jjj) {
 						m_listElement[kkk][jjj].m_texturePosStart *= vec2(1.0f, 0.5f);
 						m_listElement[kkk][jjj].m_texturePosSize *= vec2(1.0f, 0.5f);
 					}
@@ -291,13 +291,13 @@ bool ewol::TexturedFont::addGlyph(const char32_t& _val) {
 	return hasChange;
 }
 
-int32_t ewol::TexturedFont::getIndex(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
+int32_t ewol::TexturedFont::getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode) {
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
 		return _charcode - 0x1F;
 	} else {
-		for (int32_t iii=0x80-0x20; iii < m_listElement[_displayMode].size(); iii++) {
+		for (size_t iii=0x80-0x20; iii < m_listElement[_displayMode].size(); iii++) {
 			//EWOL_DEBUG("search : '" << charcode << "' =?= '" << (m_listElement[displayMode])[iii].m_UVal << "'");
 			if (_charcode == (m_listElement[_displayMode])[iii].m_UVal) {
 				//EWOL_DEBUG("search : '" << charcode << "'");
@@ -321,9 +321,9 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const char32_t& _charco
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
-	    || index >= m_listElement[_displayMode].size() ) {
+	    || (size_t)index >= m_listElement[_displayMode].size() ) {
 		EWOL_ERROR(" Try to get glyph index inexistant ...  == > return the index 0 ... id=" << index);
-		if (m_listElement[_displayMode].size() >= 0) {
+		if (m_listElement[_displayMode].size() > 0) {
 			return &((m_listElement[_displayMode])[0]);
 		}
 		return NULL;

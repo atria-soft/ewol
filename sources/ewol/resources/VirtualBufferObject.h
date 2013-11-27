@@ -23,7 +23,7 @@ namespace ewol {
 	 */
 	class VirtualBufferObject : public ewol::Resource {
 		private :
-			int32_t m_nbVBO;
+			size_t m_nbVBO;
 			bool m_exist;  //!< This data is availlable in the Graphic card
 			GLuint m_vbo[NB_VBO_MAX]; //!< openGl ID of this VBO
 			bool m_vboUsed[NB_VBO_MAX]; //!< true if the VBO is allocated or used ...

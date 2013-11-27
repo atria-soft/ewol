@@ -71,29 +71,6 @@ namespace widget {
 			bool getRemoveOnExternClick(void) const {
 				return m_closeOutEvent;
 			};
-		private:
-			//float m_slidingProgress; //!< ratio progression of a sliding
-		public:
-			enum animation {
-				animationNone, //!< No annimation
-				animationIncrease, //!< element came strart with no size and increase with the corect size.
-			};
-		private:
-			enum animation m_animation; //!< Methode add and remove element (animation)
-		public:
-			/**
-			 * @brief set an animation mode for the new element set in the Widget container.
-			 * @param[in] _animation The new animation mode.
-			 */
-			void setAnimationMode(enum animation _animation);
-			/**
-			 * @brief get the current animation mode.
-			 * @return The animation mode.
-			 */
-			enum animation getAnimationMode(void) const {
-				return m_animation;
-			};
-			
 		protected: // Derived function
 			virtual void onDraw(void);
 			virtual bool onSetConfig(const ewol::EConfig& _conf);
@@ -105,6 +82,9 @@ namespace widget {
 			virtual void calculateSize(const vec2& _available);
 			virtual bool onEventInput(const ewol::EventInput& _event);
 			virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
+		protected:
+			virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);
+			virtual void onStopAnnimation(void);
 	};
 	
 };

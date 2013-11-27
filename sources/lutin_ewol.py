@@ -10,6 +10,8 @@ def Create(target):
 	
 	# module name is 'edn' and type binary.
 	myModule = lutinModule.module(__file__, 'ewol', 'LIBRARY')
+	# add extra compilation flags :
+	#myModule.add_extra_compile_flags()
 	# add the file to compile:
 	myModule.AddSrcFile([
 		'ewol/ewol.cpp',
@@ -135,18 +137,7 @@ def Create(target):
 	# name of the dependency
 	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
 	
-	#ifeq ("$(CONFIG_BUILD_LUA)","y")
-	#myModule.AddModuleDepend('lua')
-	#endif
-	#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
-	#myModule.AddModuleDepend('portaudio')
-	#endif
-	
 	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-	
-	myModule.CompileFlags_CC([
-		'-Wno-write-strings',
-		'-Wall'])
 	
 	if target.name=="Linux":
 		myModule.AddExportflag_LD('-lGL')

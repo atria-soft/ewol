@@ -154,12 +154,12 @@ void ewol::WidgetManager::focusRemoveIfRemove(ewol::Widget* _newWidget) {
 }
 
 void ewol::WidgetManager::periodicCallAdd(ewol::Widget* _pWidget) {
-	for (int32_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
+	for (size_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
 		if (m_listOfPeriodicWidget[iii] == _pWidget) {
 			return;
 		}
 	}
-	for (int32_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
+	for (size_t iii=0; iii < m_listOfPeriodicWidget.size(); iii++) {
 		if (NULL == m_listOfPeriodicWidget[iii]) {
 			m_listOfPeriodicWidget[iii] = _pWidget;
 			return;

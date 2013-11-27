@@ -30,7 +30,7 @@ widget::List::List(void) {
 
 widget::List::~List(void) {
 	//clean all the object
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
 	}
@@ -53,7 +53,7 @@ void widget::List::setRawVisible(int32_t _id) {
 			m_displayStartRaw = _id - m_nbVisibleRaw + 2;
 		}
 	}
-	if (m_displayStartRaw>getNuberOfRaw()) {
+	if (m_displayStartRaw > (int32_t)getNuberOfRaw()) {
 		m_displayStartRaw = getNuberOfRaw()-2;
 	}
 	if (m_displayStartRaw<0) {
@@ -78,7 +78,7 @@ void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 		EWOL_ERROR("Try to add an empty object in the Widget generic display system");
 		return;
 	}
-	if (_pos < 0 || _pos >= m_listOObject.size() ) {
+	if (_pos < 0 || (size_t)_pos >= m_listOObject.size() ) {
 		m_listOObject.push_back(_newObject);
 	} else {
 		m_listOObject.insert(m_listOObject.begin()+_pos, _newObject);
@@ -86,7 +86,7 @@ void widget::List::addOObject(ewol::Compositing* _newObject, int32_t _pos) {
 }
 
 void widget::List::clearOObjectList(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		delete(m_listOObject[iii]);
 		m_listOObject[iii] = NULL;
 	}
@@ -94,7 +94,7 @@ void widget::List::clearOObjectList(void) {
 }
 
 void widget::List::onDraw(void) {
-	for (int32_t iii=0; iii<m_listOObject.size(); iii++) {
+	for (size_t iii=0; iii<m_listOObject.size(); iii++) {
 		if (NULL != m_listOObject[iii]) {
 			m_listOObject[iii]->draw();
 		}
@@ -162,11 +162,11 @@ void widget::List::onRegenerateDisplay(void) {
 		// add the default position raw :
 		m_lineSize.push_back(tmpRegister);
 		
-		for(int32_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
+		for (size_t jjj=0; jjj<nbColomn && displayPositionX < m_size.x() ; jjj++) {
 			int32_t sizeColom = 0;
 			displayPositionY = m_size.y();
 			m_nbVisibleRaw = 0;
-			for(int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
+			for (int32_t iii=startRaw; iii<nbRaw && displayPositionY >= 0; iii++) {
 				m_nbVisibleRaw++;
 				std::string myTextToWrite;
 				etk::Color<> fg;
@@ -222,7 +222,7 @@ bool widget::List::onEventInput(const ewol::EventInput& _event) {
 	}
 	// parse all the loged row position to find the good one...
 	int32_t rawID = -1;
-	for(int32_t iii=0; iii<m_lineSize.size()-1; iii++) {
+	for (size_t iii=0; iii<m_lineSize.size()-1; iii++) {
 		if(    relativePos.y()<m_lineSize[iii].y()
 		    && relativePos.y() >= m_lineSize[iii+1].y() ) {
 			// we find the raw :

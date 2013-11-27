@@ -41,7 +41,7 @@ widget::ListFileSystem::ListFileSystem(void) {
 };
 
 widget::ListFileSystem::~ListFileSystem(void) {
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
@@ -56,7 +56,7 @@ etk::Color<> widget::ListFileSystem::getBasicBG(void) {
 
 void widget::ListFileSystem::regenerateView(void) {
 	// clean the list of files : 
-	for (esize_t iii=0; iii<m_list.size(); iii++) {
+	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
@@ -117,7 +117,7 @@ void widget::ListFileSystem::setSelect( std::string _data) {
 	// remove selected line
 	m_selectedLine = -1;
 	// search the coresponding file :
-	for (int32_t iii=0; iii<m_list.size(); iii++) {
+	for (size_t iii=0; iii<m_list.size(); iii++) {
 		if (NULL!=m_list[iii]) {
 			if (m_list[iii]->getNameFile() == _data) {
 				// we find the line :
@@ -157,7 +157,7 @@ bool widget::ListFileSystem::getElement(int32_t _colomn, int32_t _raw, std::stri
 		}
 	}
 	if(    _raw-offset >= 0
-	    && _raw-offset < m_list.size()
+	    && _raw-offset < (int32_t)m_list.size()
 	    && NULL != m_list[_raw-offset]) {
 		/*if (etk::FSN_FILE == m_list[raw-offset]->getNodeType()) {
 			myTextToWrite = m_list[raw-offset]->getRight().getRight();
@@ -194,26 +194,25 @@ bool widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 		EWOL_INFO("Event on List : IdInput=" << _IdInput << " colomn=" << _colomn << " raw=" << _raw );
 		if (1 == _IdInput) {
 			int32_t previousRaw = m_selectedLine;
-			if (_raw > m_list.size()+offset ) {
+			if (_raw > (int32_t)m_list.size()+offset ) {
 				m_selectedLine = -1;
 			} else {
 				m_selectedLine = _raw;
 			}
 			if (previousRaw != m_selectedLine) {
-				if(    true == m_showFolder
-				    && m_selectedLine  == 0) {
+				if(    m_showFolder == true
+				    && m_selectedLine == 0) {
 					// "." folder
 					generateEventId(ewolEventFSFolderSelect, ".");
-				} else if (    true == m_showFolder
-				            && m_selectedLine  == 1) {
+				} else if (    m_showFolder == true
+				            && m_selectedLine == 1) {
 					// ".." folder
 					generateEventId(ewolEventFSFolderSelect, "..");
 				} else if(    m_selectedLine-offset  >= 0
-				           && m_selectedLine-offset < m_list.size()
+				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && NULL != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
-					switch(m_list[m_selectedLine-offset]->getNodeType())
-					{
+					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
 							generateEventId(ewolEventFSFileSelect, m_list[m_selectedLine-offset]->getNameFile());
 							break;
@@ -226,16 +225,16 @@ bool widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 					}
 				}
 			} else {
-				if(    true == m_showFolder
-				    && m_selectedLine  == 0) {
+				if(    m_showFolder == true
+				    && m_selectedLine == 0) {
 					// "." folder
 					generateEventId(ewolEventFSFolderValidate, ".");
-				} else if (    true == m_showFolder
-				            && m_selectedLine  == 1) {
+				} else if (    m_showFolder == true
+				            && m_selectedLine == 1) {
 					// ".." folder
 					generateEventId(ewolEventFSFolderValidate, "..");
-				} else if(    m_selectedLine-offset  >= 0
-				           && m_selectedLine-offset < m_list.size()
+				} else if(    m_selectedLine-offset >= 0
+				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && NULL != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType())
 					{

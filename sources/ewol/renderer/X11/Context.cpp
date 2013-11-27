@@ -207,7 +207,7 @@ class X11Interface : public ewol::eContext {
 					switch (event.type) {
 						case ClientMessage: {
 							X11_INFO("Receive : ClientMessage");
-							if(XAtomeDeleteWindows == (int64_t)event.xclient.data.l[0]) {
+							if(XAtomeDeleteWindows == (uint64_t)event.xclient.data.l[0]) {
 								EWOL_INFO("     == > Kill Requested ...");
 								OS_Stop();
 								m_run = false;

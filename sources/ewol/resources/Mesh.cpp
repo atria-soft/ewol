@@ -113,7 +113,7 @@ void ewol::Mesh::draw(mat4& _positionMatrix,
 	int32_t nbElementDrawTheoric = 0;
 	int32_t nbElementDraw = 0;
 	#endif
-	for (esize_t kkk=0; kkk<m_listFaces.size(); kkk++) {
+	for (int32_t kkk=0; kkk<m_listFaces.size(); kkk++) {
 		if (false == m_materials.exist(m_listFaces.getKey(kkk))) {
 			EWOL_WARNING("missing materials : '" << m_listFaces.getKey(kkk) << "'");
 			continue;
@@ -138,7 +138,7 @@ void ewol::Mesh::draw(mat4& _positionMatrix,
 			std::vector<ewol::Face>& tmppFaces = m_listFaces.getValue(kkk).m_faces;
 			//std::vector<uint32_t>& tmppIndex = m_listFaces.getValue(kkk).m_index;
 			if (normalModeFace == m_normalMode) {
-				for(int32_t iii=0; iii<tmppFaces.size() ; ++iii) {
+				for(size_t iii=0; iii<tmppFaces.size() ; ++iii) {
 					if(btDot(mattttt * m_listFacesNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= 0.0f) {
 						tmpIndexResult.push_back(iii*3);
 						tmpIndexResult.push_back(iii*3+1);
@@ -146,7 +146,7 @@ void ewol::Mesh::draw(mat4& _positionMatrix,
 					}
 				}
 			} else {
-				for(int32_t iii=0; iii<tmppFaces.size() ; ++iii) {
+				for(size_t iii=0; iii<tmppFaces.size() ; ++iii) {
 					if(    (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[0]], cameraNormal) >= -0.2f)
 					    || (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[1]], cameraNormal) >= -0.2f)
 					    || (btDot(mattttt * m_listVertexNormal[tmppFaces[iii].m_normal[2]], cameraNormal) >= -0.2f) ) {
@@ -182,7 +182,7 @@ void ewol::Mesh::calculateNormaleFace(void) {
 	m_listFacesNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeFace) {
 		std::vector<Face>& tmpFaceList = m_listFaces.getValue(0).m_faces;
-		for(int32_t iii=0 ; iii<tmpFaceList.size() ; iii++) {
+		for(size_t iii=0 ; iii<tmpFaceList.size() ; iii++) {
 			// for all case, We use only the 3 vertex for quad element, in theory 3D modeler export element in triangle if it is not a real plane.
 			vec3 normal = btCross(m_listVertex[tmpFaceList[iii].m_vertex[0]]-m_listVertex[tmpFaceList[iii].m_vertex[1]],
 			                      m_listVertex[tmpFaceList[iii].m_vertex[1]]-m_listVertex[tmpFaceList[iii].m_vertex[2]]);
@@ -195,15 +195,15 @@ void ewol::Mesh::calculateNormaleFace(void) {
 void ewol::Mesh::calculateNormaleEdge(void) {
 	m_listVertexNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeVertex) {
-		for(int32_t iii=0 ; iii<m_listVertex.size() ; iii++) {
+		for(size_t iii=0 ; iii<m_listVertex.size() ; iii++) {
 			std::vector<Face>& tmpFaceList = m_listFaces.getValue(0).m_faces;
 			vec3 normal(0,0,0);
 			// add the vertex from all the element in the list for face when the element in the face ...
-			for(int32_t jjj=0 ; jjj<tmpFaceList.size() ; jjj++) {
+			for(size_t jjj=0 ; jjj<tmpFaceList.size() ; jjj++) {
 				m_verticesVBO->pushOnBuffer(MESH_VBO_VERTICES_NORMAL, normal);
-				if(    tmpFaceList[jjj].m_vertex[0] == iii
-				    || tmpFaceList[jjj].m_vertex[1] == iii
-				    || tmpFaceList[jjj].m_vertex[2] == iii) {
+				if(    tmpFaceList[jjj].m_vertex[0] == (int32_t)iii
+				    || tmpFaceList[jjj].m_vertex[1] == (int32_t)iii
+				    || tmpFaceList[jjj].m_vertex[2] == (int32_t)iii) {
 					normal += m_listFacesNormal[jjj];
 				}
 			}
@@ -230,16 +230,16 @@ void ewol::Mesh::generateVBO(void) {
 	// generate element in 2 pass : 
 	//    - create new index dependeng a vertex is a unique componenet of position, texture, normal
 	//    - the index list generation (can be dynamic ... (TODO later)
-	for (esize_t kkk=0; kkk<m_listFaces.size(); kkk++) {
+	for (int32_t kkk=0; kkk<m_listFaces.size(); kkk++) {
 		// clean faces indexes :
 		m_listFaces.getValue(kkk).m_index.clear();
 		#ifdef TRY_MINIMAL_VBO
 			int64_t tmpppppp=0;
 		#endif
 		FaceIndexing& tmpFaceList = m_listFaces.getValue(kkk);
-		for (int32_t iii=0; iii<tmpFaceList.m_faces.size() ; iii++) {
+		for (size_t iii=0; iii<tmpFaceList.m_faces.size() ; iii++) {
 			int32_t vertexVBOId[3];
-			for(int32_t indice=0 ; indice<3; indice++) {
+			for(size_t indice=0 ; indice<3; indice++) {
 				vec3 position = m_listVertex[tmpFaceList.m_faces[iii].m_vertex[indice]];
 				vec3 normal;
 				if (m_normalMode == ewol::Mesh::normalModeVertex) {
@@ -271,7 +271,7 @@ void ewol::Mesh::generateVBO(void) {
 					vertexVBOId[indice] = m_verticesVBO->sizeOnBufferVec3(MESH_VBO_VERTICES)-1;
 				}
 			}
-			for(int32_t indice=0 ; indice<3; indice++) {
+			for(size_t indice=0 ; indice<3; indice++) {
 				tmpFaceList.m_index.push_back(vertexVBOId[indice]);
 			}
 		}
@@ -826,7 +826,6 @@ bool ewol::Mesh::loadEMF(const std::string& _fileName) {
 								if (meshFaceMaterialID < 0) {
 									continue;
 								}
-								int32_t matches;
 								uint32_t vertexIndex[3], uvIndex[3], normalIndex[3];
 								vertexIndex[0] = 0;
 								vertexIndex[1] = 0;
@@ -837,10 +836,10 @@ bool ewol::Mesh::loadEMF(const std::string& _fileName) {
 								normalIndex[0] = 0;
 								normalIndex[1] = 0;
 								normalIndex[2] = 0;
-								matches = sscanf(inputDataLine, "%d/%d/%d %d/%d/%d %d/%d/%d",
-								                 &vertexIndex[0], &uvIndex[0], &normalIndex[0],
-								                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-								                 &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
+								scanf(inputDataLine, "%d/%d/%d %d/%d/%d %d/%d/%d",
+								      &vertexIndex[0], &uvIndex[0], &normalIndex[0],
+								      &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+								      &vertexIndex[2], &uvIndex[2], &normalIndex[2] );
 								m_listFaces.getValue(meshFaceMaterialID).m_faces.push_back(Face(vertexIndex[0], uvIndex[0], normalIndex[0],
 								                                                               vertexIndex[1], uvIndex[1], normalIndex[1],
 								                                                               vertexIndex[2], uvIndex[2], normalIndex[2]));

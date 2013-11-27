@@ -58,7 +58,7 @@ void ewol::EMultiCast::send(ewol::EObject* _object, const char* const _message, 
 	EWOL_VERBOSE("SendMulticast message \"" << _message << "\" data=\"" << _data << "\" to :");
 	
 	// send the message at all registered widget ...
-	for (int32_t iii=0; iii<m_messageList.size(); iii++) {
+	for (size_t iii=0; iii<m_messageList.size(); iii++) {
 		if(    m_messageList[iii].m_message == _message
 		    && m_messageList[iii].m_object != _object)
 		{

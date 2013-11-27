@@ -9,6 +9,8 @@ def Create(target):
 	myModule = lutinModule.module(__file__, 'bullet', 'LIBRARY')
 	
 	myModule.AddModuleDepend(['linearmath'])
+	#remove compilation warning (specific for external libs):
+	myModule.remove_compile_warning()
 	
 	myModule.CompileFlags_CC([
 		'-Wno-write-strings',

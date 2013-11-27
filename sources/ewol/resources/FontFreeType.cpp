@@ -241,9 +241,9 @@ void ewol::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::Gly
 		return;
 	}
 	// For all the kerning element we get the kerning value :
-	for(int32_t iii=0; iii<listGlyph.size(); iii++) {
+	for(size_t iii=0; iii<listGlyph.size(); iii++) {
 		listGlyph[iii].kerningClear();
-		for(int32_t kkk=0; kkk<listGlyph.size(); kkk++) {
+		for(size_t kkk=0; kkk<listGlyph.size(); kkk++) {
 			FT_Vector kerning;
 			FT_Get_Kerning(m_fftFace, listGlyph[kkk].m_glyphIndex, listGlyph[iii].m_glyphIndex, FT_KERNING_UNFITTED, &kerning );
 			// add the kerning only if != 0 ... 

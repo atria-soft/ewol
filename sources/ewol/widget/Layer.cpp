@@ -34,7 +34,7 @@ ewol::Widget* widget::Layer::getWidgetAtPos(const vec2& _pos) {
 		return NULL;
 	}
 	// for all element in the sizer ...
-	for (int32_t iii=0; iii<m_subWidget.size(); iii++) {
+	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getSize();
 			vec2 tmpOrigin = m_subWidget[iii]->getOrigin();

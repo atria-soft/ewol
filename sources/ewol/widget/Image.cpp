@@ -115,11 +115,6 @@ void widget::Image::onRegenerateDisplay(void) {
 		vec2 imageRealSize = m_minSize - imageBoder;
 		vec2 imageRealSizeMax = m_size - imageBoder;
 		
-		bool xSizeBigger = false;
-		if (imageRealSize.x() > imageRealSize.y()) {
-			xSizeBigger = true;
-		}
-		
 		if (m_userFill.x() == true) {
 			imageRealSize.setX(imageRealSizeMax.x());
 		} else {

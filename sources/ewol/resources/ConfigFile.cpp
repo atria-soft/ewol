@@ -46,7 +46,7 @@ ewol::ConfigFile::ConfigFile(const std::string& _filename) :
 
 ewol::ConfigFile::~ConfigFile(void) {
 	// remove all element
-	for (int32_t iii=0; iii<m_list.size(); iii++){
+	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
 			delete(m_list[iii]);
 			m_list[iii] = NULL;
@@ -57,7 +57,7 @@ ewol::ConfigFile::~ConfigFile(void) {
 
 void ewol::ConfigFile::reload(void) {
 	// reset all parameters
-	for (int32_t iii=0; iii<m_list.size(); iii++){
+	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
 			m_list[iii]->parse("");
 		}
@@ -113,7 +113,7 @@ void ewol::ConfigFile::reload(void) {
 		EWOL_DEBUG("        param name=\"" << paramName << "\" val=\"" << paramValue << "\"");
 		// check if the parameters existed :
 		bool findParam = false;
-		for (int32_t iii=0; iii<m_list.size(); iii++){
+		for (size_t iii=0; iii<m_list.size(); iii++){
 			if (NULL != m_list[iii]) {
 				if (m_list[iii]->m_paramName == paramName) {
 					m_list[iii]->parse(paramValue);
@@ -140,7 +140,7 @@ void ewol::ConfigFile::reload(void) {
 
 int32_t ewol::ConfigFile::request(const std::string& _paramName) {
 	// check if the parameters existed :
-	for (int32_t iii=0; iii<m_list.size(); iii++){
+	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
 			if (m_list[iii]->m_paramName == _paramName) {
 				return iii;

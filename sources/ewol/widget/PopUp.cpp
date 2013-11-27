@@ -42,7 +42,6 @@ widget::PopUp::PopUp(const std::string& _shaperName) :
 	registerConfig(configLockExpand, "bool", NULL, "Lock expand contamination");
 	registerConfig(configAnimation, "list", "none;increase", "Annimation type");
 	
-	setAnimationMode(animationNone);
 	// Add annimations :
 	addAnnimationType(ewol::Widget::annimationModeEnableAdd, annimationIncrease);
 }
@@ -172,14 +171,6 @@ bool widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 		lockExpand(_conf.getData());
 		return true;
 	}
-	if (_conf.getConfig() == configAnimation) {
-		if (compare_no_case(_conf.getData(), "increase") == true) {
-			setAnimationMode(animationIncrease);
-		} else {
-			setAnimationMode(animationNone);
-		}
-		return true;
-	}
 	return false;
 }
 
@@ -200,14 +191,6 @@ bool widget::PopUp::onGetConfig(const char* _config, std::string& _result) const
 			_result = "true";
 		} else {
 			_result = "false";
-		}
-		return true;
-	}
-	if (_config == configAnimation) {
-		if (m_animation == animationIncrease) {
-			_result = "increase";
-		} else {
-			_result = "none";
 		}
 		return true;
 	}
@@ -240,16 +223,25 @@ bool widget::PopUp::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-void widget::PopUp::setAnimationMode(enum animation _animation) {
-	m_animation = _animation;
-	if (true == m_shaper.changeStatusIn((int32_t)_animation) ) {
-		periodicCallEnable();
+
+bool widget::PopUp::onStartAnnimation(enum ewol::Widget::annimationMode _mode) {
+	if (m_annimationType[_mode] != annimationIncrease) {
+		return false;
 	}
+	if (true == m_shaper.changeStatusIn(1) ) {
+		periodicCallEnable();
+		return true;
+	}
+	return false;
+}
+
+void widget::PopUp::onStopAnnimation(void) {
+	periodicCallDisable();
 }
 
 void widget::PopUp::periodicCall(const ewol::EventTime& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
-		periodicCallDisable();
+		stopAnnimation();
 	}
 	markToRedraw();
 }

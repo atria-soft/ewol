@@ -114,7 +114,7 @@ void widget::Entry::calculateMinMaxSize(void) {
 
 void widget::Entry::setValue(const std::string& _newData) {
 	std::string newData = _newData;
-	if (newData.size()>m_maxCharacter) {
+	if ((int64_t)newData.size() > m_maxCharacter) {
 		newData = std::string(_newData, 0, m_maxCharacter);
 		EWOL_DEBUG("Limit entry set of data... " << std::string(_newData, m_maxCharacter));
 	}
@@ -197,7 +197,7 @@ void widget::Entry::updateCursorPosition(const vec2& _pos, bool _selection) {
 	//EWOL_DEBUG("hidenSize : " << displayHidenSize);
 	int32_t newCursorPosition = -1;
 	int32_t tmpTextOriginX = padding.x();
-	for (int32_t iii=0; iii<m_data.size(); iii++) {
+	for (size_t iii=0; iii<m_data.size(); iii++) {
 		tmpDisplay = std::string(m_data, 0, iii);
 		int32_t tmpWidth = m_oObjectText.calculateSize(tmpDisplay).x() - displayHidenSize;
 		if (tmpWidth >= relPos.x()-tmpTextOriginX) {
@@ -272,7 +272,7 @@ bool widget::Entry::onEventInput(const ewol::EventInput& _event) {
 			// select word
 			m_displayCursorPosSelection = m_displayCursorPos-1;
 			// search forward
-			for (int32_t iii=m_displayCursorPos; iii <= m_data.size(); iii++) {
+			for (size_t iii=m_displayCursorPos; iii <= m_data.size(); iii++) {
 				if(iii == m_data.size()) {
 					m_displayCursorPos = iii;
 					break;
@@ -291,7 +291,7 @@ bool widget::Entry::onEventInput(const ewol::EventInput& _event) {
 				}
 			}
 			// search backward
-			for (int32_t iii=m_displayCursorPosSelection; iii >= -1; iii--) {
+			for (int64_t iii=m_displayCursorPosSelection; iii >= -1; iii--) {
 				if(iii == -1) {
 					m_displayCursorPosSelection = 0;
 					break;
@@ -365,7 +365,7 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 				return true;
 			} else if (_event.getChar() == 0x7F) {
 				// SUPPR :
-				if (m_data.size() > 0 && m_displayCursorPos<m_data.size()) {
+				if (m_data.size() > 0 && m_displayCursorPos < (int64_t)m_data.size()) {
 					m_data.erase(m_displayCursorPos, 1);
 					m_displayCursorPos = etk_max(m_displayCursorPos, 0);
 					m_displayCursorPosSelection = m_displayCursorPos;
@@ -379,7 +379,7 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 					m_displayCursorPosSelection = m_displayCursorPos;
 				}
 			} else if(_event.getChar() >= 20) {
-				if (m_data.size() > m_maxCharacter) {
+				if ((int64_t)m_data.size() > m_maxCharacter) {
 					EWOL_INFO("Reject data for entry : '" << _event.getChar() << "'");
 				} else {
 					std::string newData = m_data;
@@ -415,7 +415,7 @@ bool widget::Entry::onEventEntry(const ewol::EventEntry& _event) {
 				default:
 					return false;
 			}
-			m_displayCursorPos = etk_avg(0, m_displayCursorPos, m_data.size());
+			m_displayCursorPos = etk_avg(0, m_displayCursorPos, (int64_t)m_data.size());
 			m_displayCursorPosSelection = m_displayCursorPos;
 			markToRedraw();
 			return true;
@@ -434,7 +434,7 @@ void widget::Entry::setInternalValue(const std::string& _newData) {
 		}
 		//EWOL_INFO("find regExp : \"" << m_data << "\" start=" << m_regExp.Start() << " stop=" << m_regExp.Stop() );
 		if(    0 != m_regExp.start()
-		    || _newData.size() != m_regExp.stop() ) {
+		    || _newData.size() != (size_t)m_regExp.stop() ) {
 			EWOL_INFO("The input data match not entirely with the regExp \"" << _newData << "\" RegExp=\"" << m_regExp.getRegExp() << "\" start=" << m_regExp.start() << " stop=" << m_regExp.stop() );
 			return;
 		}

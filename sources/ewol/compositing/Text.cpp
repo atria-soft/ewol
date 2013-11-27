@@ -380,7 +380,7 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 	if (_element == NULL) {
 		EWOL_ERROR( "Error Input node does not existed ...");
 	}
-	for(int32_t iii=0; iii< _element->size(); iii++) {
+	for(size_t iii=0; iii< _element->size(); iii++) {
 		if (_element->getType(iii) == exml::typeComment) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
@@ -533,10 +533,10 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 			}
 			// if real display : ( not display is for size calculation)
 			if (m_needDisplay == true) {
-				if(    (    m_selectionStartPos-1<iii
-				         && iii  <= m_cursorPos-1)
-				    || (    m_selectionStartPos-1 >= iii
-				         && iii > m_cursorPos-1) ) {
+				if(    (    m_selectionStartPos-1 < (int64_t)iii
+				         && (int64_t)iii  <= m_cursorPos-1)
+				    || (    m_selectionStartPos-1 >= (int64_t)iii
+				         && (int64_t)iii > m_cursorPos-1) ) {
 					setColor(  0x000000FF);
 					setColorBg(m_colorSelection);
 				} else {
@@ -558,7 +558,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 			}
 			// display the cursor if needed (if it is at the other position...)
 			if (m_needDisplay == true) {
-				if (iii == m_cursorPos-1) {
+				if ((int64_t)iii == m_cursorPos-1) {
 					m_vectorialDraw.setPos(m_position);
 					setColorBg(m_colorCursor);
 					printCursor(false);
@@ -577,7 +577,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 		int32_t stop;
 		int32_t space;
 		int32_t freeSpace;
-		while (currentId < _text.size()) {
+		while (currentId < (int64_t)_text.size()) {
 			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
 			switch (m_alignement) {
@@ -614,7 +614,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 				setColorBg(m_colorCursor);
 				printCursor(false);
 			}
-			for(size_t iii=currentId; iii<stop && iii<_text.size(); iii++) {
+			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
 				float fontHeigh = m_font->getHeight(m_mode);
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
@@ -623,10 +623,10 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 					setFontMode(_decoration[iii].m_mode);
 				}
 				if (m_needDisplay == true) {
-					if(    (    m_selectionStartPos-1<iii
-					         && iii  <= m_cursorPos-1)
-					    || (    m_selectionStartPos-1 >= iii
-					         && iii > m_cursorPos-1) ) {
+					if(    (    m_selectionStartPos-1<(int64_t)iii
+					         && (int64_t)iii  <= m_cursorPos-1)
+					    || (    m_selectionStartPos-1 >= (int64_t)iii
+					         && (int64_t)iii > m_cursorPos-1) ) {
 						setColor(  0x000000FF);
 						setColorBg(m_colorSelection);
 					} else {
@@ -635,7 +635,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 					}
 				}
 				// special for the justify mode
-				if (_text[iii] == etk::UChar::Space) {
+				if ((char32_t)_text[iii] == etk::UChar::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
@@ -664,7 +664,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 					}
 				}
 				if (m_needDisplay == true) {
-					if (iii == m_cursorPos-1) {
+					if ((int64_t)iii == m_cursorPos-1) {
 						m_vectorialDraw.setPos(m_position);
 						setColorBg(m_colorCursor);
 						printCursor(false);
@@ -673,14 +673,14 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if(_text[stop] == etk::UChar::Space) {
+			} else if((char32_t)_text[stop] == etk::UChar::Space) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
-			} else if(_text[stop] == etk::UChar::Return) {
+			} else if((char32_t)_text[stop] == etk::UChar::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
@@ -694,6 +694,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 		//EWOL_DEBUG(" 4 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 	}
 }
+
 void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
@@ -721,10 +722,10 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 			}
 			// if real display : ( not display is for size calculation)
 			if (m_needDisplay == true) {
-				if(    (    m_selectionStartPos-1<iii
-				         && iii  <= m_cursorPos-1)
-				    || (    m_selectionStartPos-1 >= iii
-				         && iii > m_cursorPos-1) ) {
+				if(    (    m_selectionStartPos-1<(int64_t)iii
+				         && (int64_t)iii  <= m_cursorPos-1)
+				    || (    m_selectionStartPos-1 >= (int64_t)iii
+				         && (int64_t)iii > m_cursorPos-1) ) {
 					setColor(  0x000000FF);
 					setColorBg(m_colorSelection);
 				} else {
@@ -746,7 +747,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 			}
 			// display the cursor if needed (if it is at the other position...)
 			if (m_needDisplay == true) {
-				if (iii == m_cursorPos-1) {
+				if ((int64_t)iii == m_cursorPos-1) {
 					m_vectorialDraw.setPos(m_position);
 					setColorBg(m_colorCursor);
 					printCursor(false);
@@ -765,7 +766,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 		int32_t stop;
 		int32_t space;
 		int32_t freeSpace;
-		while (currentId < _text.size()) {
+		while (currentId < (int64_t)_text.size()) {
 			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
 			switch (m_alignement) {
@@ -802,7 +803,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 				setColorBg(m_colorCursor);
 				printCursor(false);
 			}
-			for(int32_t iii=currentId; iii<stop && iii<_text.size(); iii++) {
+			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
 				float fontHeigh = m_font->getHeight(m_mode);
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
@@ -811,10 +812,10 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 					setFontMode(_decoration[iii].m_mode);
 				}
 				if (m_needDisplay == true) {
-					if(    (    m_selectionStartPos-1<iii
-					         && iii  <= m_cursorPos-1)
-					    || (    m_selectionStartPos-1 >= iii
-					         && iii > m_cursorPos-1) ) {
+					if(    (    m_selectionStartPos-1<(int64_t)iii
+					         && (int64_t)iii  <= m_cursorPos-1)
+					    || (    m_selectionStartPos-1 >= (int64_t)iii
+					         && (int64_t)iii > m_cursorPos-1) ) {
 						setColor(  0x000000FF);
 						setColorBg(m_colorSelection);
 					} else {
@@ -823,7 +824,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 					}
 				}
 				// special for the justify mode
-				if (_text[iii] == etk::UChar::Space) {
+				if ((char32_t)_text[iii] == etk::UChar::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
@@ -852,7 +853,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 					}
 				}
 				if (m_needDisplay == true) {
-					if (iii == m_cursorPos-1) {
+					if ((int64_t)iii == m_cursorPos-1) {
 						m_vectorialDraw.setPos(m_position);
 						setColorBg(m_colorCursor);
 						printCursor(false);
@@ -1202,11 +1203,11 @@ bool ewol::Text::extrapolateLastId(const std::string& _text,
 			break;
 		}
 		// save number of space :
-		if (_text[iii] == etk::UChar::Space) {
+		if ((char32_t)_text[iii] == etk::UChar::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if (_text[iii] == etk::UChar::Return) {
+		} else if ((char32_t)_text[iii] == etk::UChar::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;
@@ -1218,7 +1219,7 @@ bool ewol::Text::extrapolateLastId(const std::string& _text,
 	// retore previous :
 	m_previousCharcode = storePrevious;
 	// need to align left or right ...
-	if(_stop == _text.size()) {
+	if(_stop == (int64_t)_text.size()) {
 		return true;
 	} else {
 		if (endOfLine) {
@@ -1281,7 +1282,7 @@ bool ewol::Text::extrapolateLastId(const std::u32string& _text,
 	// retore previous :
 	m_previousCharcode = storePrevious;
 	// need to align left or right ...
-	if(_stop == _text.size()) {
+	if(_stop == (int64_t)_text.size()) {
 		return true;
 	} else {
 		if (endOfLine) {
@@ -1309,7 +1310,7 @@ void ewol::Text::htmlAddData(const std::string& _data) {
 		}
 	}
 	m_htmlCurrrentLine += _data;
-	for(int32_t iii=0; iii<_data.size() ; iii++) {
+	for(size_t iii=0; iii<_data.size() ; iii++) {
 		m_htmlDecoration.push_back(m_htmlDecoTmp);
 	}
 }

@@ -280,7 +280,7 @@ std::vector<RequestPlay*>   ListEffectsPlaying;
 
 
 int32_t ewol::audio::effects::add(std::string _file) {
-	for (int32_t iii=0; iii<ListEffects.size(); iii++) {
+	for (size_t iii=0; iii<ListEffects.size(); iii++) {
 		if (NULL != ListEffects[iii]) {
 			if (ListEffects[iii]->m_file == _file) {
 				ListEffects[iii]->m_requestedTime++;
@@ -301,7 +301,7 @@ int32_t ewol::audio::effects::add(std::string _file) {
 
 void ewol::audio::effects::rm(int32_t _effectId) {
 	// find element ...
-	if (_effectId <0 || _effectId >= ListEffects.size()) {
+	if (_effectId <0 || _effectId >= (int64_t)ListEffects.size()) {
 		EWOL_ERROR("Wrong effect ID : " << _effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not remove it ...");
 		return;
 	}
@@ -321,7 +321,7 @@ void ewol::audio::effects::rm(int32_t _effectId) {
 
 
 void ewol::audio::effects::play(int32_t _effectId, float _xxx, float _yyy) {
-	if (_effectId <0 || _effectId >= ListEffects.size()) {
+	if (_effectId <0 || _effectId >= (int64_t)ListEffects.size()) {
 		EWOL_ERROR("Wrong effect ID : " << _effectId << " != [0.." << ListEffects.size()-1 << "]  == > can not play it ...");
 		return;
 	}
@@ -331,7 +331,7 @@ void ewol::audio::effects::play(int32_t _effectId, float _xxx, float _yyy) {
 	}
 	EWOL_VERBOSE("effect play : " << _effectId );
 	// try to find an empty slot :
-	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
+	for (size_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
 		if (ListEffectsPlaying[iii]->isFree()) {
 			ListEffectsPlaying[iii]->reset(ListEffects[_effectId]);
 			return;
@@ -382,8 +382,8 @@ void ewol::audio::effects::muteSet(bool _newMute) {
 
 
 
-void ewol::audio::effects::getData(int16_t * _bufferInterlace, int32_t _nbSample, int32_t _nbChannels) {
-	for (int32_t iii=0; iii<ListEffectsPlaying.size(); iii++) {
+void ewol::audio::effects::getData(int16_t* _bufferInterlace, int32_t _nbSample, int32_t _nbChannels) {
+	for (size_t iii = 0; iii < ListEffectsPlaying.size(); ++iii) {
 		if (ListEffectsPlaying[iii]!= NULL) {
 			ListEffectsPlaying[iii]->play(_bufferInterlace, _nbSample, _nbChannels);
 		}

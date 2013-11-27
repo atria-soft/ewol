@@ -68,7 +68,7 @@ namespace ewol {
 			 * @param[in] _displayMode Mode to display the currrent font
 			 * @return The ID in the table (if it does not exist : return 0)
 			 */
-			int32_t getIndex(const char32_t& _charcode, const enum ewol::font::mode _displayMode);
+			int32_t getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode);
 			/**
 			 * @brief get the pointer on the coresponding glyph
 			 * @param[in] _charcode The unicodeValue

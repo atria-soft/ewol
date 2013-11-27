@@ -47,7 +47,7 @@ void widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget) {
 }
 
 void widget::Menu::clear(void) {
-	for( int32_t iii=0; iii < m_listElement.size(); iii++) {
+	for (size_t iii=0; iii < m_listElement.size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
 			m_listElement[iii] = NULL;
@@ -123,7 +123,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 	*/
 	EWOL_ERROR(" receive message : " << _msg);
 	if (_msg.getMessage() == widget::Button::eventPressed) {
-		for(int32_t iii=0; iii<m_listElement.size(); iii++) {
+		for (size_t iii=0; iii<m_listElement.size(); iii++) {
 			if (_msg.getCaller() == m_listElement[iii]->m_widgetPointer) {
 				// 2 posible case (have a message or have a child ...
 				if (m_listElement[iii]->m_generateEvent != NULL) {
@@ -139,7 +139,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 				} else{
 					EWOL_DEBUG("Menu  == > load Sub Menu");
 					bool findChild = false;
-					for(int32_t jjj=0; jjj<m_listElement.size(); jjj++) {
+					for (size_t jjj=0; jjj<m_listElement.size(); jjj++) {
 						if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
 							findChild = true;
 							break;
@@ -178,7 +178,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 						m_widgetContextMenu->setSubWidget(mySizer);
 						
 						bool menuHaveImage = false;
-						for(int32_t jjj=m_listElement.size()-1; jjj >= 0; jjj--) {
+						for (int64_t jjj=m_listElement.size()-1; jjj >= 0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
 									if (m_listElement[jjj]->m_image.size()!=0) {
@@ -188,7 +188,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 								}
 							}
 						}
-						for(int32_t jjj=m_listElement.size()-1; jjj >= 0; jjj--) {
+						for (int64_t jjj=m_listElement.size()-1; jjj >= 0; jjj--) {
 							if (m_listElement[iii]!=NULL) {
 								if (m_listElement[iii]->m_localId == m_listElement[jjj]->m_parentId) {
 									myButton = new widget::Button();
@@ -256,7 +256,7 @@ void widget::Menu::onObjectRemove(ewol::EObject * _removeObject) {
 	if (m_widgetContextMenu == _removeObject) {
 		m_widgetContextMenu = NULL;
 	}
-	for(int32_t jjj=0; jjj<m_listElement.size(); jjj++) {
+	for (size_t jjj=0; jjj<m_listElement.size(); jjj++) {
 		if (NULL != m_listElement[jjj]) {
 			if (m_listElement[jjj]->m_widgetPointer == _removeObject) {
 				m_listElement[jjj]->m_widgetPointer = NULL;

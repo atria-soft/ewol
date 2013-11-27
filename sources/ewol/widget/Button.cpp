@@ -407,7 +407,7 @@ bool widget::Button::loadXML(exml::Element* _element) {
 	setSubWidgetToggle(NULL);
 	
 	// parse all the elements :
-	for(int32_t iii=0; iii< _element->size(); iii++) {
+	for(size_t iii=0; iii< _element->size(); iii++) {
 		exml::Element* pNode = _element->getElement(iii);
 		if (pNode == NULL) {
 			// trash here all that is not element

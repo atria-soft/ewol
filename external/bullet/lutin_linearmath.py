@@ -7,6 +7,8 @@ import lutinTools
 
 def Create(target):
 	myModule = lutinModule.module(__file__, 'linearmath', 'LIBRARY')
+	#remove compilation warning (specific for external libs):
+	myModule.remove_compile_warning()
 	
 	myModule.AddSrcFile([
 		'bullet/src/LinearMath/btQuickprof.cpp',

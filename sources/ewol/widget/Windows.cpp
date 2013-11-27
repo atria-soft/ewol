@@ -37,7 +37,7 @@ ewol::Windows::~Windows(void) {
 		delete(m_subWidget);
 		m_subWidget=NULL;
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
+	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			delete(m_popUpWidgetList[iii]);
 			m_popUpWidgetList[iii]=NULL;
@@ -55,7 +55,7 @@ void ewol::Windows::calculateSize(const vec2& _availlable) {
 		// TODO : Herited from MinSize .. and expand ???
 		m_subWidget->calculateSize(m_size);
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
+	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			m_popUpWidgetList[iii]->calculateMinMaxSize();
 			m_popUpWidgetList[iii]->calculateSize(m_size);
@@ -117,7 +117,7 @@ void ewol::Windows::onRegenerateDisplay(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
-	for(int32_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
+	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			m_popUpWidgetList[iii]->onRegenerateDisplay();
 		}
@@ -157,7 +157,7 @@ void ewol::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	int64_t ___startTime2 = ewol::getTime();
 	#endif
 	// second display the pop-up
-	for(int32_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
+	for (size_t iii=0; iii<m_popUpWidgetList.size(); iii++) {
 		if (NULL != m_popUpWidgetList[iii]) {
 			m_popUpWidgetList[iii]->systemDraw(_displayProp);
 			//EWOL_DEBUG("Draw Pop-up");

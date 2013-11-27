@@ -178,6 +178,7 @@ vec2 ewol::Dimension::get(enum ewol::Dimension::distance _type) const {
 		case ewol::Dimension::foot:
 			return getFoot();
 	}
+	return vec2(0,0);
 }
 
 void ewol::Dimension::set(const vec2& _size, enum ewol::Dimension::distance _type) {

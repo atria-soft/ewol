@@ -42,7 +42,7 @@ ewol::EObject::~EObject(void) {
 	EWOL_DEBUG("delete EObject : [" << m_uniqueId << "] : " << getTypeDescription());
 	getEObjectManager().rm(this);
 	getMultiCast().rm(this);
-	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
+	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			delete(m_externEvent[iii]);
 			m_externEvent[iii] = NULL;
@@ -105,7 +105,7 @@ void ewol::EObject::addEventId(const char * _generateEventId) {
 void ewol::EObject::generateEventId(const char * _generateEventId, const std::string& _data) {
 	int32_t nbObject = getEObjectManager().getNumberObject();
 	// for every element registered ...
-	for (int32_t iii=0; iii<m_externEvent.size(); iii++) {
+	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
 		if (NULL!=m_externEvent[iii]) {
 			// if we find the event ...
 			if (m_externEvent[iii]->localEventId == _generateEventId) {
@@ -155,7 +155,7 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 	}
 	// check if event existed :
 	bool findIt = false;
-	for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
+	for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
 		if (m_availlableEventId[iii] == _eventId) {
 			findIt = true;
 			break;
@@ -163,7 +163,7 @@ void ewol::EObject::registerOnEvent(ewol::EObject * _destinationObject,
 	}
 	if (false == findIt) {
 		EWOL_DEBUG("Try to register with a NON direct string name");
-		for(int32_t iii=0; iii<m_availlableEventId.size(); iii++) {
+		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
 			if (0 == strncmp(m_availlableEventId[iii], _eventId, 1024)) {
 				findIt = true;
 				_eventIdgenerated = m_availlableEventId[iii];
@@ -233,7 +233,7 @@ void ewol::EObject::registerConfig(const char* _config,
 		EWOL_ERROR("Try to add NULL config");
 		return;
 	}
-	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (0 == strcmp(m_listConfig[iii].getConfig(), _config) ) {
 				EWOL_ERROR("Try to add config already added : " << _config << " at pos=" << iii);
@@ -249,7 +249,7 @@ bool ewol::EObject::loadXML(exml::Element* _node) {
 		return false;
 	}
 	bool errorOccured = true;
-	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (m_listConfig[iii].getConfig() == NULL) {
 			continue;
 		}
@@ -270,7 +270,7 @@ bool ewol::EObject::storeXML(exml::Element* _node) const {
 		return false;
 	}
 	bool errorOccured = true;
-	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (m_listConfig[iii].getConfig() == NULL) {
 			continue;
 		}
@@ -307,7 +307,7 @@ bool ewol::EObject::onGetConfig(const char* _config, std::string& _result) const
 }
 
 bool ewol::EObject::setConfig(const std::string& _config, const std::string& _value) {
-	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
@@ -328,7 +328,7 @@ std::string ewol::EObject::getConfig(const char* _config) const {
 }
 
 std::string ewol::EObject::getConfig(const std::string& _config) const {
-	for(int32_t iii=0 ; iii<m_listConfig.size() ; iii++) {
+	for(size_t iii=0 ; iii<m_listConfig.size() ; iii++) {
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
