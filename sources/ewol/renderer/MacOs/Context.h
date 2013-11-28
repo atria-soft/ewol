@@ -22,6 +22,7 @@ namespace MacOs {
 	void setMouseState(int32_t _id, bool _isDown, float _x, float _y);
 	void setMouseMotion(int32_t _id, float _x, float _y);
 	void setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
+	void setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::keyEvent::keyboard _move, bool _isDown);
 };
 
 #endif

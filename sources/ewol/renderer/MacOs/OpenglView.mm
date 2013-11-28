@@ -199,6 +199,7 @@ static ewol::SpecialKey guiKeyBoardMode;
 	}
 }
 /*
+// https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSEvent_Class/Reference/Reference.html
 // http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/EventOverview/EventArchitecture/EventArchitecture.html
 -(void)sendEvent:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -237,6 +238,95 @@ static ewol::SpecialKey guiKeyBoardMode;
 	MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
 	if (true==thisIsAReapeateKey) {
 		MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
+	}
+}
+
+- (void)flagsChanged:(NSEvent *)theEvent {
+	
+	if (([theEvent modifierFlags] & NSAlphaShiftKeyMask) != 0) {
+		EWOL_DEBUG("NSAlphaShiftKeyMask");
+		if (guiKeyBoardMode.capLock == 0) {
+			guiKeyBoardMode.capLock = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardCapLock, true);
+		}
+    } else {
+		if (guiKeyBoardMode.capLock == 1) {
+			guiKeyBoardMode.capLock = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardCapLock, false);
+		}
+	}
+	
+	if (([theEvent modifierFlags] & NSShiftKeyMask) != 0) {
+		EWOL_DEBUG("NSShiftKeyMask");
+		if (guiKeyBoardMode.shift == 0) {
+			guiKeyBoardMode.shift = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardShiftLeft, true);
+		}
+    } else {
+		if (guiKeyBoardMode.shift == 1) {
+			guiKeyBoardMode.shift = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardShiftLeft, false);
+		}
+	}
+	
+	if (([theEvent modifierFlags] & NSControlKeyMask) != 0) {
+		EWOL_DEBUG("NSControlKeyMask");
+		if (guiKeyBoardMode.ctrl == 0) {
+			guiKeyBoardMode.ctrl = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardCtrlLeft, true);
+		}
+    } else {
+		if (guiKeyBoardMode.ctrl == 1) {
+			guiKeyBoardMode.ctrl = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardCtrlLeft, false);
+		}
+	}
+	
+	if (([theEvent modifierFlags] & NSAlternateKeyMask) != 0) {
+		EWOL_DEBUG("NSAlternateKeyMask");
+		if (guiKeyBoardMode.alt == 0) {
+			guiKeyBoardMode.alt = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardAlt, true);
+		}
+    } else {
+		if (guiKeyBoardMode.alt == 1) {
+			guiKeyBoardMode.alt = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardAlt, false);
+		}
+	}
+	
+	if (([theEvent modifierFlags] & NSCommandKeyMask) != 0) {
+		EWOL_DEBUG("NSCommandKeyMask");
+		if (guiKeyBoardMode.meta == 0) {
+			guiKeyBoardMode.meta = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardMetaLeft, true);
+		}
+    } else {
+		if (guiKeyBoardMode.meta == 1) {
+			guiKeyBoardMode.meta = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardMetaLeft, false);
+		}
+	}
+	
+	if (([theEvent modifierFlags] & NSNumericPadKeyMask) != 0) {
+		EWOL_DEBUG("NSNumericPadKeyMask");
+		if (guiKeyBoardMode.numLock == 0) {
+			guiKeyBoardMode.numLock = 1;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardNumLock, true);
+		}
+    } else {
+		if (guiKeyBoardMode.numLock == 1) {
+			guiKeyBoardMode.numLock = 0;
+			MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardNumLock, false);
+		}
+	}
+	if (([theEvent modifierFlags] & NSHelpKeyMask) != 0) {
+		EWOL_DEBUG("NSHelpKeyMask");
+	}
+	if (([theEvent modifierFlags] & NSFunctionKeyMask) != 0) {
+		EWOL_DEBUG("NSFunctionKeyMask");
+		MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardContextMenu, true);
+		MacOs::setKeyboardMove(guiKeyBoardMode, ewol::keyEvent::keyboardContextMenu, false);
 	}
 }
 

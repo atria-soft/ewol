@@ -28,6 +28,7 @@
 - (void)otherMouseUp:(NSEvent *)event;
 //- (void)sendEvent:(NSEvent *)event
 - (void)keyDown:(NSEvent *)theEvent;
+- (void)flagsChanged:(NSEvent *)theEvent;
 @end
 
 

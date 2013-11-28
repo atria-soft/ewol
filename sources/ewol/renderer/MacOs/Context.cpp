@@ -86,7 +86,7 @@ class MacOSInterface : public ewol::eContext {
 			if (_unichar == etk::UChar::CarrierReturn) {
 				_unichar = etk::UChar::Return;
 			}
-			EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
+			//EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
 			if (_unichar <= 4) {
 				enum ewol::keyEvent::keyboard move;
 				switch(_unichar) {
@@ -107,6 +107,11 @@ class MacOSInterface : public ewol::eContext {
 			} else {
 				OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
 			}
+		}
+		void MAC_SetKeyboardMove(ewol::SpecialKey& _special,
+								enum ewol::keyEvent::keyboard _move,
+								 bool _isDown) {
+			OS_SetKeyboardMove(_special, _move, _isDown);
 		}
 };
 
@@ -151,6 +156,12 @@ void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _
 	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
 }
 
+void MacOs::setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::keyEvent::keyboard _move, bool _isDown) {
+	if (interface == NULL) {
+		return;
+	}
+	interface->MAC_SetKeyboardMove(_keyboardMode, _move, _isDown);
+}
 
 
 /**
