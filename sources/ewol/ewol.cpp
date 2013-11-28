@@ -44,12 +44,7 @@ std::string ewol::getBoardType(void) {
 }
 
 std::string ewol::getVersion(void) {
-	#define FIRST_YEAR (2011)
-	std::string tmpOutput = std::to_string(date::getYear()-FIRST_YEAR);
-	tmpOutput += ".";
-	tmpOutput += std::to_string(date::getMonth());
-	tmpOutput += ".";
-	tmpOutput += std::to_string(date::getDay());
+	tmpOutput = EWOL_VERSION;
 	return tmpOutput;
 }
 

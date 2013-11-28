@@ -139,6 +139,12 @@ def Create(target):
 	
 	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
 	
+	tagFile = lutinTools.GetCurrentPath(__file__) + "/tag"
+	ewolVersionID = lutinTools.FileReadData(tagFile)
+	myModule.CompileFlags_CC([
+		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
+		])
+	
 	if target.name=="Linux":
 		myModule.AddExportflag_LD('-lGL')
 		
