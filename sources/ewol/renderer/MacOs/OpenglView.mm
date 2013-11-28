@@ -13,18 +13,16 @@
 #include <ewol/debug.h>
 #include <ewol/Dimension.h>
 
- 
 @implementation OpenGLView
-
 
 static ewol::SpecialKey guiKeyBoardMode;
 
 - (void) prepareOpenGL
 {
 	EWOL_ERROR("prepare");
-  GLint swapInt = 1;
-  [[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
-  
+	GLint swapInt = 1;
+	[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
+	
 	// set system dpi size : 
 	NSScreen *screen = [NSScreen mainScreen];
 	NSDictionary *description = [screen deviceDescription];
@@ -33,26 +31,24 @@ static ewol::SpecialKey guiKeyBoardMode;
 	
 	ewol::dimension::setPixelRatio(vec2((float)displayPixelSize.width/(float)displayPhysicalSize.width,
 	                                    (float)displayPixelSize.height/(float)displayPhysicalSize.height),
-	                               ewol::Dimension::Millimeter);
-  
+	                                    ewol::Dimension::Millimeter);
 }
 
 -(void) drawRect: (NSRect) bounds
 {
-    MacOs::draw(true);
-    glFlush();
+	MacOs::draw(true);
+	glFlush();
 }
 
 -(void)reshape {
 	EWOL_INFO("view reshape (" << [self frame].size.width << "," << [self frame].size.height << ")" );
-    
-    // window resize; width and height are in pixel coordinates
-    // but they are floats
-    float width = [self frame].size.width;
-    float height = [self frame].size.height;
+	
+	// window resize; width and height are in pixel coordinates
+	// but they are floats
+	float width = [self frame].size.width;
+	float height = [self frame].size.height;
 	MacOs::resize(width,height);
 }
-
 
 -(void)mouseDown:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -100,22 +96,90 @@ static ewol::SpecialKey guiKeyBoardMode;
 }
 -(void)otherMouseDown:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
-	EWOL_INFO("otherMouseDown : " << (float)point.x << " " << (float)point.y);
+	int32_t btNumber = [event buttonNumber];
+	switch (btNumber) {
+		case 2: // 2 : Middle button
+			btNumber = 2;
+			break;
+		case 3: // 3 : border button DOWN
+			btNumber = 8;
+			break;
+		case 4: // 4 : border button UP
+			btNumber = 9;
+			break;
+		case 5: // 5 : horizontal scroll Right to left
+			btNumber = 11;
+			break;
+		case 6: // 6 : horizontal scroll left to Right
+			btNumber = 10;
+			break;
+		case 7: // 7 : Red button
+			btNumber = 12;
+			break;
+		default:
+			btNumber = 15;
+			break;
+	}
+	//EWOL_INFO("otherMouseDown : " << (float)point.x << " " << (float)point.y);
+	MacOs::setMouseState(btNumber, true, point.x, point.y);
 }
 -(void)otherMouseDragged:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
-	EWOL_INFO("otherMouseDragged : " << (float)point.x << " " << (float)point.y);
+	int32_t btNumber = [event buttonNumber];
+	switch (btNumber) {
+		case 2: // 2 : Middle button
+			btNumber = 2;
+			break;
+		case 3: // 3 : border button DOWN
+			btNumber = 8;
+			break;
+		case 4: // 4 : border button UP
+			btNumber = 9;
+			break;
+		case 5: // 5 : horizontal scroll Right to left
+			btNumber = 11;
+			break;
+		case 6: // 6 : horizontal scroll left to Right
+			btNumber = 10;
+			break;
+		case 7: // 7 : Red button
+			btNumber = 12;
+			break;
+		default:
+			btNumber = 15;
+			break;
+	}
+	//EWOL_INFO("otherMouseDragged : " << (float)point.x << " " << (float)point.y);
+	MacOs::setMouseMotion(btNumber, point.x, point.y);
 }
 -(void)otherMouseUp:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
 	int32_t btNumber = [event buttonNumber];
-	EWOL_INFO("otherMouseUp : " << (float)point.x << " " << (float)point.y << " bt id=" << btNumber );
-	// 2 : Middle button
-	// 3 : border button DOWN
-	// 4 : border button UP
-	// 7 : Red button
-	// 5 : horizontal scroll Right to left
-	// 6 : horizontal scroll left to Right
+	switch (btNumber) {
+		case 2: // 2 : Middle button
+			btNumber = 2;
+			break;
+		case 3: // 3 : border button DOWN
+			btNumber = 8;
+			break;
+		case 4: // 4 : border button UP
+			btNumber = 9;
+			break;
+		case 5: // 5 : horizontal scroll Right to left
+			btNumber = 11;
+			break;
+		case 6: // 6 : horizontal scroll left to Right
+			btNumber = 10;
+			break;
+		case 7: // 7 : Red button
+			btNumber = 12;
+			break;
+		default:
+			btNumber = 15;
+			break;
+	}
+	//EWOL_INFO("otherMouseUp : " << (float)point.x << " " << (float)point.y << " bt id=" << btNumber );
+	MacOs::setMouseState(btNumber, false, point.x, point.y);
 }
 - (void)scrollWheel:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
@@ -144,46 +208,34 @@ static ewol::SpecialKey guiKeyBoardMode;
 
 // this generate all the event entry availlable ==> like a big keep focus ...
 - (BOOL)acceptsFirstResponder {
-    return YES;
+	return YES;
 }
 
 - (void)keyDown:(NSEvent *)theEvent {
 	bool thisIsAReapeateKey = false;
-    if ([theEvent isARepeat]) {
-        thisIsAReapeateKey = true;
-    }
-    NSString *str = [theEvent charactersIgnoringModifiers];
-    // TODO : set if for every char in the string !!!
-    unichar c = [str characterAtIndex:0];
-    /*
-    if (c < ' ' || c > '~') {    // only ASCII please
-        c = 0;
-        return;
-    }
-    */
-    //EWOL_DEBUG("KeyDown " << (char)c);
-    MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
-    if (true==thisIsAReapeateKey) {
+	if ([theEvent isARepeat]) {
+		thisIsAReapeateKey = true;
+	}
+	NSString *str = [theEvent charactersIgnoringModifiers];
+	// TODO : set if for every char in the string !!!
+	unichar c = [str characterAtIndex:0];
+	//EWOL_DEBUG("KeyDown " << (char)c);
+	MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
+	if (true==thisIsAReapeateKey) {
 		MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
 	}
 }
 
 - (void)keyUp:(NSEvent *)theEvent {
 	bool thisIsAReapeateKey = false;
-    if ([theEvent isARepeat]) {
-        thisIsAReapeateKey = true;
-    }
-    //EWOL_DEBUG("KeyUp ");
-    NSString *str = [theEvent charactersIgnoringModifiers];
-    unichar c = [str characterAtIndex:0];
-    /*
-    if (c < ' ' || c > '~') {    // only ASCII please
-        c = 0;
-        return;
-    }
-    */
-    MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
-    if (true==thisIsAReapeateKey) {
+	if ([theEvent isARepeat]) {
+		thisIsAReapeateKey = true;
+	}
+	//EWOL_DEBUG("KeyUp ");
+	NSString *str = [theEvent charactersIgnoringModifiers];
+	unichar c = [str characterAtIndex:0];
+	MacOs::setKeyboard(guiKeyBoardMode, (char)c, false, thisIsAReapeateKey);
+	if (true==thisIsAReapeateKey) {
 		MacOs::setKeyboard(guiKeyBoardMode, (char)c, true, thisIsAReapeateKey);
 	}
 }
@@ -193,30 +245,30 @@ static ewol::SpecialKey guiKeyBoardMode;
 static NSTimer *timer = nil;
 
 - (void)windowDidResignMain:(NSNotification *)notification {
-//    NSLog(@"window did resign main");
-    [timer invalidate];
-    
-    //game_deactivate();      // freeze, pause
-    [self setNeedsDisplay:YES];
+//	NSLog(@"window did resign main");
+	[timer invalidate];
+	
+	//game_deactivate(); // freeze, pause
+	[self setNeedsDisplay:YES];
 }
 
 - (void)windowDidBecomeMain:(NSNotification *)notification {
-//    NSLog(@"window did become main");
-    
-    //game_activate();
-    [self setNeedsDisplay:YES];
-    
-    timer = [NSTimer timerWithTimeInterval:FRAME_INTERVAL 
-               target:self 
-               selector:@selector(timerEvent:) 
-               userInfo:nil 
-               repeats:YES];
-    
-    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+//	NSLog(@"window did become main");
+	
+	//game_activate();
+	[self setNeedsDisplay:YES];
+	
+	timer = [NSTimer timerWithTimeInterval:FRAME_INTERVAL 
+	                 target:self 
+	                 selector:@selector(timerEvent:) 
+	                 userInfo:nil 
+	                 repeats:YES];
+	
+	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
 }
 
 - (void)timerEvent:(NSTimer *)t {
-    //run_game();
-    [self setNeedsDisplay:YES];
+	//run_game();
+	[self setNeedsDisplay:YES];
 }
 @end

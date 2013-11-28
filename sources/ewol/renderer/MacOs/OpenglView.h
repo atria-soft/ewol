@@ -10,8 +10,7 @@
 
 #import <Cocoa/Cocoa.h>
  
-@interface OpenGLView : NSOpenGLView<NSWindowDelegate>
-{
+@interface OpenGLView : NSOpenGLView<NSWindowDelegate> {
 }
 - (void)prepareOpenGL;
 - (void)drawRect:(NSRect) bounds;
