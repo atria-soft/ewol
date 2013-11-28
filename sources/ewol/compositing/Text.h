@@ -365,8 +365,9 @@ namespace ewol {
 			/**
 			 * @brief draw a cursor at the specify position
 			 * @param[in] _isInsertMode True if the insert mode is activated
+			 * @param[in] _cursorSize The sizae of the cursor that might be set when insert mode is set [default 20]
 			 */
-			void printCursor(bool _isInsertMode);
+			void printCursor(bool _isInsertMode, float _cursorSize = 20.0f);
 		private:
 			/**
 			 * @brief calculate the element number that is the first out the alignement range 

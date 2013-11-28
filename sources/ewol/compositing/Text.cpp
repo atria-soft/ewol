@@ -1160,10 +1160,10 @@ vec3 ewol::Text::calculateSize(const char32_t& _charcode) {
 }
 
 
-void ewol::Text::printCursor(bool _isInsertMode) {
+void ewol::Text::printCursor(bool _isInsertMode, float _cursorSize) {
 	int32_t fontHeigh = m_font->getHeight(m_mode);
 	if (true == _isInsertMode) {
-		m_vectorialDraw.rectangleWidth(vec3(20, fontHeigh, 0) );
+		m_vectorialDraw.rectangleWidth(vec3(_cursorSize, fontHeigh, 0) );
 	} else {
 		m_vectorialDraw.setThickness(2);
 		m_vectorialDraw.lineRel( vec3(0, fontHeigh, 0) );
