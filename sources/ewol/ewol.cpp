@@ -44,8 +44,7 @@ std::string ewol::getBoardType(void) {
 }
 
 std::string ewol::getVersion(void) {
-	tmpOutput = EWOL_VERSION;
-	return tmpOutput;
+	return EWOL_VERSION;
 }
 
 

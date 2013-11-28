@@ -17,5 +17,5 @@ fi
 
 echo -n $tag > tag
 
-git commit -a -m "create a new release"
+git commit -a -m "Update version tag : $tag"
 git tag $tag

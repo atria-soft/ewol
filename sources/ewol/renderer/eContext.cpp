@@ -256,7 +256,7 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 		m_commandLine.remove(iii);
 	}
 	
-	EWOL_INFO("v:" << ewol::getVersion());
+	EWOL_INFO("EWOL v:" << ewol::getVersion());
 	EWOL_INFO("Build Date: " << date::getYear() << "/" << date::getMonth() << "/" << date::getDay() << " " << date::getHour() << "h" << date::getMinute());
 	// TODO : remove this ...
 	etk::initDefaultFolder("ewolApplNoName");
