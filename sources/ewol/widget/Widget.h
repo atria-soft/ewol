@@ -99,7 +99,7 @@ namespace ewol {
 	/**
 	 * @ingroup ewolWidgetGroup
 	 */
-	class Widget : public EObject {
+	class Widget : public ewol::EObject {
 		public:
 			// Config list of properties
 			static const char* const configFill;

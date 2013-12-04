@@ -76,7 +76,6 @@ def Create(target):
 		'ewol/compositing/Drawing.cpp',
 		'ewol/compositing/Image.cpp',
 		'ewol/compositing/Sprite.cpp',
-		'ewol/compositing/Mesh.cpp',
 		'ewol/compositing/Shaper.cpp',
 		'ewol/compositing/Area.cpp'])
 	
