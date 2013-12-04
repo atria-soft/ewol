@@ -63,9 +63,11 @@ namespace ewol {
 			void limit(const vec2& _origin, const vec2& _size);
 	};
 	etk::CCout& operator <<(etk::CCout& _os, const ewol::DrawProperty& _obj);
-	
+	/**
+	 * @brief Gravity of the widget property
+	 */
 	enum gravity {
-		gravityCenter=0x00,
+		gravityCenter=0x00, //!< gravity is in certer
 		gravityTopLeft=0x05,
 		gravityTop=0x01,
 		gravityTopRight=0x03,
@@ -343,18 +345,18 @@ namespace ewol {
 			};
 		
 		protected:
-			enum gravity m_gravity; //!< Gravity of the widget
+			enum ewol::gravity m_gravity; //!< Gravity of the widget
 		public:
 			/**
 			 * @brief set the widget gravity
 			 * @param[in] _gravity New gravity of the widget
 			 */
-			virtual void setGravity(enum gravity _gravity);
+			virtual void setGravity(enum ewol::gravity _gravity);
 			/**
 			 * @brief get the widget gravity
 			 * @return the gravity type
 			 */
-			virtual enum gravity getGravity(void) {
+			virtual enum ewol::gravity getGravity(void) {
 				return m_gravity;
 			};
 		// ----------------------------------------------------------------------------------------------------------------
