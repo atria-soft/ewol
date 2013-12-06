@@ -130,6 +130,134 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::Label</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-storage-keyword">static</span> <span class="code-type">void</span>         <a class="code-function" href="#init">init</a>                 (<a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> & <span class="code-argument">_widgetManager</span>);<br>+                      <a class="code-function" href="#Label">Label</a>                (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_newLabel</span>);<br>+                     ~<a class="code-function" href="#Label">Label</a>                (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#setLabel">setLabel</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newLabel</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#setValue">setValue</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newLabel</span>);<br>+  <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a>         <a class="code-function" href="#getLabel">getLabel</a>             (<span class="code-type">void</span>);<br>+  <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a>         <a class="code-function" href="#getValue">getValue</a>             (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#calculateMinMaxSize">calculateMinMaxSize</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#onRegenerateDisplay">onRegenerateDisplay</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                <a class="code-function" href="#onEventInput">onEventInput</a>         (<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">bool</span>                <a class="code-function" href="#loadXML">loadXML</a>              (<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_node</span>);<br>#  <span class="code-type">void</span>                <a class="code-function" href="#onDraw">onDraw</a>               (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <b>widget::Label</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+*/<h2>Detail:<h2>
+<h3>widget::<a id="init">init</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">void</span> <span class="code-function">init</span>(<a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> & <span class="code-argument">_widgetManager</span>);</pre>
+<br/>
+Main call of recording the widget on the List of "widget named creator"
+<br/><br/>
+
+<hr/>
+<h3>widget::<a id="Label">Label</a> ()</h3>
+
+<pre>
+<span class="code-function">Label</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_newLabel</span>);</pre>
+<br/>
+Constructor
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newLabel</span>  The displayed decorated text.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>widget::~<a id="Label">Label</a> ()</h3>
+
+<pre>
+~<span class="code-function">Label</span>(<span class="code-type">void</span>);</pre>
+<br/>
+destructor
+<br/><br/>
+
+<hr/>
+<h3><a id="setLabel">setLabel</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setLabel</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newLabel</span>);</pre>
+<br/>
+change the label displayed
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newLabel</span>  The displayed decorated text.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setValue">setValue</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setValue</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newLabel</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getLabel">getLabel</a> ()</h3>
+
+<pre>
+<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-function">getLabel</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current displayed label
+<br/><ul>
+<b>Return:</b> The displayed decorated text.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getValue">getValue</a> ()</h3>
+
+<pre>
+<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-function">getValue</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="calculateMinMaxSize">calculateMinMaxSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">calculateMinMaxSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onRegenerateDisplay">onRegenerateDisplay</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onRegenerateDisplay</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onEventInput">onEventInput</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">onEventInput</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="loadXML">loadXML</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">loadXML</span>(<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_node</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onDraw">onDraw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onDraw</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

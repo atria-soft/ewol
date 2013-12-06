@@ -130,6 +130,114 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::FileChooser</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++               <a class="code-function" href="#FileChooser">FileChooser</a>           (<span class="code-type">void</span>);<br>+              ~<a class="code-function" href="#FileChooser">FileChooser</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setTitle">setTitle</a>              (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setValidateLabel">setValidateLabel</a>      (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setCancelLabel">setCancelLabel</a>        (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setFolder">setFolder</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_folder</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setFileName">setFileName</a>           (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);<br>+  <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a>  <a class="code-function" href="#getCompleateFileName">getCompleateFileName</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#updateCurrentFolder">updateCurrentFolder</a>   (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#onReceiveMessage">onReceiveMessage</a>      (<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#onObjectRemove">onObjectRemove</a>        (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <a href="widget__Container.html">widget::Container</a>
+            +--> <a href="widget__PopUp.html">widget::PopUp</a>
+                +--> <b>widget::FileChooser</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+*/<h2>Detail:<h2>
+<h3>widget::<a id="FileChooser">FileChooser</a> ()</h3>
+
+<pre>
+<span class="code-function">FileChooser</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>widget::~<a id="FileChooser">FileChooser</a> ()</h3>
+
+<pre>
+~<span class="code-function">FileChooser</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setTitle">setTitle</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTitle</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setValidateLabel">setValidateLabel</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setValidateLabel</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setCancelLabel">setCancelLabel</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setCancelLabel</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_label</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setFolder">setFolder</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFolder</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_folder</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setFileName">setFileName</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFileName</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getCompleateFileName">getCompleateFileName</a> ()</h3>
+
+<pre>
+<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-function">getCompleateFileName</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="updateCurrentFolder">updateCurrentFolder</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">updateCurrentFolder</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onReceiveMessage">onReceiveMessage</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onReceiveMessage</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onObjectRemove">onObjectRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

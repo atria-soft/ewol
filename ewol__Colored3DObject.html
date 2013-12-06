@@ -130,6 +130,105 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Colored3DObject</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-storage-keyword">const</span> <span class="code-type">char</span> *                    <a class="code-function" href="#getType">getType</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#draw">draw</a>             (std::vector<vec3> & <span class="code-argument">_vertices</span>,<br/>                                                     <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#draw">draw</a>             (std::vector<vec3> & <span class="code-argument">_vertices</span>,<br/>                                                     <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,<br/>                                                     mat4 & <span class="code-argument">_transformationMatrix</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#drawLine">drawLine</a>         (std::vector<vec3> & <span class="code-argument">_vertices</span>,<br/>                                                     <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,<br/>                                                     mat4 & <span class="code-argument">_transformationMatrix</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);<br>+  <span class="code-storage-keyword">static</span> <a href="ewol__Colored3DObject.html" class="code-type">ewol::Colored3DObject</a> *  <a class="code-function" href="#keep">keep</a>             (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">static</span> <span class="code-type">void</span>                     <a class="code-function" href="#release">release</a>          (<a href="ewol__Colored3DObject.html" class="code-type">ewol::Colored3DObject</a> * & <span class="code-argument">_object</span>);<br>#                                  <a class="code-function" href="#Colored3DObject">Colored3DObject</a>  (<span class="code-type">void</span>);<br>#                                 ~<a class="code-function" href="#Colored3DObject">Colored3DObject</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Resource.html">ewol::Resource</a>
+        +--> <b>ewol::Colored3DObject</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3><a id="getType">getType</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-function">getType</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(std::vector<vec3> & <span class="code-argument">_vertices</span>,
+          <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,
+          <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,
+          <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(std::vector<vec3> & <span class="code-argument">_vertices</span>,
+          <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,
+          mat4 & <span class="code-argument">_transformationMatrix</span>,
+          <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,
+          <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="drawLine">drawLine</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">drawLine</span>(std::vector<vec3> & <span class="code-argument">_vertices</span>,
+              <span class="code-storage-keyword">const</span> etk::Color<<span class="code-type">float</span>> & <span class="code-argument">_color</span>,
+              mat4 & <span class="code-argument">_transformationMatrix</span>,
+              <span class="code-type">bool</span> <span class="code-argument">_updateDepthBuffer</span>,
+              <span class="code-type">bool</span> <span class="code-argument">_depthtest</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="keep">keep</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <a href="ewol__Colored3DObject.html" class="code-type">ewol::Colored3DObject</a> * <span class="code-function">keep</span>(<span class="code-type">void</span>);</pre>
+<br/>
+keep the resource pointer.
+<br/><b>Notes:</b> Never free this pointer by your own...
+<br/> <ul>
+<b>Return:</b> pointer on the resource or NULL if an error occured.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="release">release</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">void</span> <span class="code-function">release</span>(<a href="ewol__Colored3DObject.html" class="code-type">ewol::Colored3DObject</a> * & <span class="code-argument">_object</span>);</pre>
+<br/>
+release the keeped resources
+<br/><ul>
+<b>Parameter [input] [output]:</b> <span class="code-argument">reference</span>  on the object pointer
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="Colored3DObject">Colored3DObject</a> ()</h3>
+
+<pre>
+<span class="code-function">Colored3DObject</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Colored3DObject">Colored3DObject</a> ()</h3>
+
+<pre>
+~<span class="code-function">Colored3DObject</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

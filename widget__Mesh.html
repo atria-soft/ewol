@@ -130,6 +130,140 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::Mesh</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Mesh">Mesh</a>                 (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">filename</span>);<br>+       ~<a class="code-function" href="#Mesh">Mesh</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#onRegenerateDisplay">onRegenerateDisplay</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#systemDraw">systemDraw</a>           (<span class="code-storage-keyword">const</span> <a href="ewol__DrawProperty.html" class="code-type">ewol::DrawProperty</a> & <span class="code-argument">displayProp</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#onDraw">onDraw</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>  <a class="code-function" href="#onEventInput">onEventInput</a>         (<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#periodicCall">periodicCall</a>         (<span class="code-storage-keyword">const</span> <a href="ewol__EventTime.html" class="code-type">ewol::EventTime</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setFile">setFile</a>              (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">filename</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setPosition">setPosition</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">pos</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setAngle">setAngle</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">angle</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setAngleSpeed">setAngleSpeed</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">speed</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setDistance">setDistance</a>          (<span class="code-type">float</span> <span class="code-argument">distance</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <b>widget::Mesh</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+*/<h2>Detail:<h2>
+<h3>widget::<a id="Mesh">Mesh</a> ()</h3>
+
+<pre>
+<span class="code-function">Mesh</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">filename</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>widget::~<a id="Mesh">Mesh</a> ()</h3>
+
+<pre>
+~<span class="code-function">Mesh</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onRegenerateDisplay">onRegenerateDisplay</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onRegenerateDisplay</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="systemDraw">systemDraw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">systemDraw</span>(<span class="code-storage-keyword">const</span> <a href="ewol__DrawProperty.html" class="code-type">ewol::DrawProperty</a> & <span class="code-argument">displayProp</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onDraw">onDraw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onDraw</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onEventInput">onEventInput</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">onEventInput</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="periodicCall">periodicCall</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">periodicCall</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventTime.html" class="code-type">ewol::EventTime</a> & <span class="code-argument">_event</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setFile">setFile</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFile</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">filename</span>);</pre>
+<br/>
+set a mesh name file
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">filename</span>  Name of the new mesh
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPosition">setPosition</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPosition</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">pos</span>);</pre>
+<br/>
+set the mesh position
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">pos</span>  The new position of the mesh
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setAngle">setAngle</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setAngle</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">angle</span>);</pre>
+<br/>
+set the mesh angle of view
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">angle</span>  view angle of the mesh
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setAngleSpeed">setAngleSpeed</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setAngleSpeed</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">speed</span>);</pre>
+<br/>
+set the mesh angle speed
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">spped</span>  radian speed of the mesh
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setDistance">setDistance</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setDistance</span>(<span class="code-type">float</span> <span class="code-argument">distance</span>);</pre>
+<br/>
+set the camera distance of the mesh
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">dist</span>  Diatance of the mesh
+<br/></ul>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

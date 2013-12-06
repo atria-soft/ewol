@@ -130,6 +130,113 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::ConfigFont</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                       <a class="code-function" href="#ConfigFont">ConfigFont</a>      (<span class="code-type">void</span>);<br>+                      ~<a class="code-function" href="#ConfigFont">ConfigFont</a>      (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setFolder">setFolder</a>       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_folder</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> &  <a class="code-function" href="#getFolder">getFolder</a>       (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#set">set</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>,<br/>                                         <span class="code-type">int32_t</span> <span class="code-argument">_size</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> &  <a class="code-function" href="#getName">getName</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">int32_t</span>              <a class="code-function" href="#getSize">getSize</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setUseExternal">setUseExternal</a>  (<span class="code-type">bool</span> <span class="code-argument">_val</span>);<br>+  <span class="code-type">bool</span>                 <a class="code-function" href="#getUseExternal">getUseExternal</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="ConfigFont">ConfigFont</a> ()</h3>
+
+<pre>
+<span class="code-function">ConfigFont</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="ConfigFont">ConfigFont</a> ()</h3>
+
+<pre>
+~<span class="code-function">ConfigFont</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setFolder">setFolder</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFolder</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_folder</span>);</pre>
+<br/>
+Specify the default font folder for the Ewol search system (only needed when embended font)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_folder</span>  basic folder of the font (ex: DATA:fonts)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getFolder">getFolder</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-function">getFolder</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the default font folder.
+<br/><ul>
+<b>Return:</b> The default font folder.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="set">set</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">set</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>,
+         <span class="code-type">int32_t</span> <span class="code-argument">_size</span>);</pre>
+<br/>
+set the defaut font for all the widgets and basics display.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_fontName</span>  The font name requested (not case sensitive) ex "Arial" or multiple separate by ';' ex : "Arial;Helvetica".
+<br/><b>Parameter [input]:</b> <span class="code-argument">_size</span>  The default size of the font default=10.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getName">getName</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-function">getName</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current default font name
+<br/><br/>
+
+<hr/>
+<h3><a id="getSize">getSize</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the default font size.
+<br/><ul>
+<b>Return:</b> the font size.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setUseExternal">setUseExternal</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setUseExternal</span>(<span class="code-type">bool</span> <span class="code-argument">_val</span>);</pre>
+<br/>
+set use of internal/external Font
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_val</span>  true to enable search of internal data.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getUseExternal">getUseExternal</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">getUseExternal</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the use of internal/external Font
+<br/><ul>
+<b>Return:</b> true to enable search of internal data.
+<br/></ul>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

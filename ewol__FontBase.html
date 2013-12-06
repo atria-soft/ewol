@@ -130,6 +130,101 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::FontBase</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                <a class="code-function" href="#FontBase">FontBase</a>          (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>);<br>+               ~<a class="code-function" href="#FontBase">FontBase</a>          (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <span class="code-type">char</span> *  <a class="code-function" href="#getType">getType</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>          <a class="code-function" href="#getGlyphProperty">getGlyphProperty</a>  (<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,<br/>                                    <a href="ewol__GlyphProperty.html" class="code-type">ewol::GlyphProperty</a> & <span class="code-argument">_property</span>);<br>+  <span class="code-type">bool</span>          <a class="code-function" href="#drawGlyph">drawGlyph</a>         (<a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> & <span class="code-argument">_imageOut</span>,<br/>                                    <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,<br/>                                    ivec2 <span class="code-argument">_glyphPosition</span>,<br/>                                    <a href="ewol__GlyphProperty.html" class="code-type">ewol::GlyphProperty</a> & <span class="code-argument">_property</span>,<br/>                                    <span class="code-type">int8_t</span> <span class="code-argument">_posInImage</span>);<br>+  vec2          <a class="code-function" href="#getSize">getSize</a>           (<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,<br/>                                    <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_unicodeString</span>);<br>+  <span class="code-type">int32_t</span>       <a class="code-function" href="#getHeight">getHeight</a>         (<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);<br>+  <span class="code-type">void</span>          <a class="code-function" href="#generateKerning">generateKerning</a>   (<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,<br/>                                    std::vector<ewol::GlyphProperty> & <span class="code-argument">_listGlyph</span>);<br>+  <span class="code-type">void</span>          <a class="code-function" href="#display">display</a>           (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Resource.html">ewol::Resource</a>
+        +--> <b>ewol::FontBase</b>
+            +--> <a href="ewol__FontFreeType.html">ewol::FontFreeType</a>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3>ewol::<a id="FontBase">FontBase</a> ()</h3>
+
+<pre>
+<span class="code-function">FontBase</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="FontBase">FontBase</a> ()</h3>
+
+<pre>
+~<span class="code-function">FontBase</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getType">getType</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-function">getType</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getGlyphProperty">getGlyphProperty</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">getGlyphProperty</span>(<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,
+                      <a href="ewol__GlyphProperty.html" class="code-type">ewol::GlyphProperty</a> & <span class="code-argument">_property</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="drawGlyph">drawGlyph</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">drawGlyph</span>(<a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> & <span class="code-argument">_imageOut</span>,
+               <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,
+               ivec2 <span class="code-argument">_glyphPosition</span>,
+               <a href="ewol__GlyphProperty.html" class="code-type">ewol::GlyphProperty</a> & <span class="code-argument">_property</span>,
+               <span class="code-type">int8_t</span> <span class="code-argument">_posInImage</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getSize">getSize</a> ()</h3>
+
+<pre>
+vec2 <span class="code-function">getSize</span>(<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,
+             <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_unicodeString</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getHeight">getHeight</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getHeight</span>(<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="generateKerning">generateKerning</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">generateKerning</span>(<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>,
+                     std::vector<ewol::GlyphProperty> & <span class="code-argument">_listGlyph</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="display">display</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">display</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

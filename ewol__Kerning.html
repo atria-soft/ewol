@@ -130,6 +130,72 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Kerning</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Kerning">Kerning</a>  (<span class="code-type">void</span>);<br>+        <a class="code-function" href="#Kerning">Kerning</a>  (<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type">float</span> <span class="code-argument">_value</span>);<br>+       ~<a class="code-function" href="#Kerning">Kerning</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Description:</h2>
+/**
+* @brief Kerning properties of one specific Glyph with an other
+* @note The "Kerning" is the methode to provide a better display for some string like
+*       the "VA" has 2 letter that overlap themself. This name Kerning
+* 
+* Without Kerning :
+*                                     
+*        \          /      /\         
+*         \        /      /  \        
+*          \      /      /    \       
+*           \    /      /______\      
+*            \  /      /        \     
+*             \/      /          \    
+*        v          v a          a    
+*
+* With Kerning :
+*                                     
+*        \          /  /\             
+*         \        /  /  \            
+*          \      /  /    \           
+*           \    /  /______\          
+*            \  /  /        \         
+*             \/  /          \        
+*        v        a v        a        
+* 
+*/<h2>Detail:<h2>
+<h3>ewol::<a id="Kerning">Kerning</a> ()</h3>
+
+<pre>
+<span class="code-function">Kerning</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Simple constructor that allow to allocate the std::vector element
+<br/><br/>
+
+<hr/>
+<h3>ewol::<a id="Kerning">Kerning</a> ()</h3>
+
+<pre>
+<span class="code-function">Kerning</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>,
+        <span class="code-storage-keyword">const</span> <span class="code-type">float</span> <span class="code-argument">_value</span>);</pre>
+<br/>
+Normal constructor
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_charcode</span>  The Unicode value of the coresponding character that might be before
+<br/><b>Parameter [input]:</b> <span class="code-argument">_value</span>  The Kerning value of the offset (nb pixel number)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Kerning">Kerning</a> ()</h3>
+
+<pre>
+~<span class="code-function">Kerning</span>(<span class="code-type">void</span>);</pre>
+<br/>
+normal destructor
+<br/><br/>
+
+<hr/>
+	</div>
 </body>
 </html>

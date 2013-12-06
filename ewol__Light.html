@@ -130,6 +130,96 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Light</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                       <a class="code-function" href="#Light">Light</a>            (<span class="code-type">void</span>);<br>+                      ~<a class="code-function" href="#Light">Light</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#link">link</a>             (<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>,<br/>                                          <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_baseName</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#draw">draw</a>             (<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setDirection">setDirection</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">val</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setHalfPlane">setHalfPlane</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">val</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setAmbientColor">setAmbientColor</a>  (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setDiffuseColor">setDiffuseColor</a>  (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#setSpecularColor">setSpecularColor</a> (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);<br>+  <span class="code-storage-keyword">friend</span> <a href="http://HeeroYui.github.io/etk//etk__CCout.html" class="code-type">etk::CCout</a> &  <a class="code-function" href="#operator<<">operator<<</a>       (<a href="http://HeeroYui.github.io/etk//etk__CCout.html" class="code-type">etk::CCout</a> & <span class="code-argument">_os</span>,<br/>                                          <span class="code-storage-keyword">const</span> <a href="ewol__Light.html" class="code-type">ewol::Light</a> & <span class="code-argument">_obj</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="Light">Light</a> ()</h3>
+
+<pre>
+<span class="code-function">Light</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Light">Light</a> ()</h3>
+
+<pre>
+~<span class="code-function">Light</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="link">link</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">link</span>(<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>,
+          <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_baseName</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setDirection">setDirection</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setDirection</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setHalfPlane">setHalfPlane</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setHalfPlane</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setAmbientColor">setAmbientColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setAmbientColor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setDiffuseColor">setDiffuseColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setDiffuseColor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setSpecularColor">setSpecularColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setSpecularColor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="operator<<">operator<<</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">friend</span> <a href="http://HeeroYui.github.io/etk//etk__CCout.html" class="code-type">etk::CCout</a> & <span class="code-function">operator<<</span>(<a href="http://HeeroYui.github.io/etk//etk__CCout.html" class="code-type">etk::CCout</a> & <span class="code-argument">_os</span>,
+                               <span class="code-storage-keyword">const</span> <a href="ewol__Light.html" class="code-type">ewol::Light</a> & <span class="code-argument">_obj</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

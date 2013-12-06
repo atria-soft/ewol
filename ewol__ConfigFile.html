@@ -130,6 +130,111 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::ConfigFile</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-storage-keyword">const</span> <span class="code-type">char</span> *               <a class="code-function" href="#getType">getType</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                       <a class="code-function" href="#reload">reload</a>      (<span class="code-type">void</span>);<br>+  <span class="code-type">int32_t</span>                    <a class="code-function" href="#request">request</a>     (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_paramName</span>);<br>+  <span class="code-type">int32_t</span>                    <a class="code-function" href="#getInteger">getInteger</a>  (<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);<br>+  <span class="code-type">float</span>                      <a class="code-function" href="#getFloat">getFloat</a>    (<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);<br>+  <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> &              <a class="code-function" href="#getString">getString</a>   (<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);<br>+  <span class="code-storage-keyword">static</span> <a href="ewol__ConfigFile.html" class="code-type">ewol::ConfigFile</a> *  <a class="code-function" href="#keep">keep</a>        (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);<br>+  <span class="code-storage-keyword">static</span> <span class="code-type">void</span>                <a class="code-function" href="#release">release</a>     (<a href="ewol__ConfigFile.html" class="code-type">ewol::ConfigFile</a> * & <span class="code-argument">_object</span>);<br>#                             <a class="code-function" href="#ConfigFile">ConfigFile</a>  (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);<br>#                            ~<a class="code-function" href="#ConfigFile">ConfigFile</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Resource.html">ewol::Resource</a>
+        +--> <b>ewol::ConfigFile</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3><a id="getType">getType</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-function">getType</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="reload">reload</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">reload</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="request">request</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">request</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_paramName</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getInteger">getInteger</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getInteger</span>(<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getFloat">getFloat</a> ()</h3>
+
+<pre>
+<span class="code-type">float</span> <span class="code-function">getFloat</span>(<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getString">getString</a> ()</h3>
+
+<pre>
+<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-function">getString</span>(<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="keep">keep</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <a href="ewol__ConfigFile.html" class="code-type">ewol::ConfigFile</a> * <span class="code-function">keep</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);</pre>
+<br/>
+keep the resource pointer.
+<br/><b>Notes:</b> Never free this pointer by your own...
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_filename</span>  Name of the configuration file.
+<br/><b>Return:</b> pointer on the resource or NULL if an error occured.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="release">release</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">void</span> <span class="code-function">release</span>(<a href="ewol__ConfigFile.html" class="code-type">ewol::ConfigFile</a> * & <span class="code-argument">_object</span>);</pre>
+<br/>
+release the keeped resources
+<br/><ul>
+<b>Parameter [input] [output]:</b> <span class="code-argument">reference</span>  on the object pointer
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="ConfigFile">ConfigFile</a> ()</h3>
+
+<pre>
+<span class="code-function">ConfigFile</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="ConfigFile">ConfigFile</a> ()</h3>
+
+<pre>
+~<span class="code-function">ConfigFile</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

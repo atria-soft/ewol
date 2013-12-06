@@ -130,6 +130,120 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::Slider</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-storage-keyword">static</span> <span class="code-type">void</span>  <a class="code-function" href="#init">init</a>                 (<a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> & <span class="code-argument">_widgetManager</span>);<br>+               <a class="code-function" href="#Slider">Slider</a>               (<span class="code-type">void</span>);<br>+              ~<a class="code-function" href="#Slider">Slider</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setValue">setValue</a>             (<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);<br>+  <span class="code-type">int32_t</span>      <a class="code-function" href="#getValue">getValue</a>             (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setMin">setMin</a>               (<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setMax">setMax</a>               (<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#setColor">setColor</a>             (etk::Color<> <span class="code-argument">_newColor</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#onDraw">onDraw</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#calculateMinMaxSize">calculateMinMaxSize</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>         <a class="code-function" href="#onRegenerateDisplay">onRegenerateDisplay</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>         <a class="code-function" href="#onEventInput">onEventInput</a>         (<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <b>widget::Slider</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+*/<h2>Detail:<h2>
+<h3>widget::<a id="init">init</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">void</span> <span class="code-function">init</span>(<a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> & <span class="code-argument">_widgetManager</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>widget::<a id="Slider">Slider</a> ()</h3>
+
+<pre>
+<span class="code-function">Slider</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>widget::~<a id="Slider">Slider</a> ()</h3>
+
+<pre>
+~<span class="code-function">Slider</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setValue">setValue</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setValue</span>(<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getValue">getValue</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getValue</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setMin">setMin</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setMin</span>(<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setMax">setMax</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setMax</span>(<span class="code-type">int32_t</span> <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setColor">setColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setColor</span>(etk::Color<> <span class="code-argument">_newColor</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onDraw">onDraw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onDraw</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="calculateMinMaxSize">calculateMinMaxSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">calculateMinMaxSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onRegenerateDisplay">onRegenerateDisplay</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onRegenerateDisplay</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onEventInput">onEventInput</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">onEventInput</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

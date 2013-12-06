@@ -130,6 +130,124 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Resource</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                                  <a class="code-function" href="#Resource">Resource</a>             (<span class="code-type">void</span>);<br>+                                  <a class="code-function" href="#Resource">Resource</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_name</span>);<br>+                                 ~<a class="code-function" href="#Resource">Resource</a>             (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#increment">increment</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                            <a class="code-function" href="#decrement">decrement</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">int32_t</span>                         <a class="code-function" href="#getCounter">getCounter</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">uint8_t</span>                         <a class="code-function" href="#getResourceLevel">getResourceLevel</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#updateContext">updateContext</a>        (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#removeContext">removeContext</a>        (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#removeContextToLate">removeContextToLate</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                            <a class="code-function" href="#reload">reload</a>               (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">static</span> <a href="ewol__ResourceManager.html" class="code-type">ewol::ResourceManager</a> &  <a class="code-function" href="#getManager">getManager</a>           (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <b>ewol::Resource</b>
+        +--> <a href="ewol__FontBase.html">ewol::FontBase</a>
+        +--> <a href="ewol__VirtualBufferObject.html">ewol::VirtualBufferObject</a>
+        +--> <a href="ewol__Shader.html">ewol::Shader</a>
+        +--> <a href="ewol__Mesh.html">ewol::Mesh</a>
+        +--> <a href="ewol__Program.html">ewol::Program</a>
+        +--> <a href="ewol__Colored3DObject.html">ewol::Colored3DObject</a>
+        +--> <a href="ewol__Texture.html">ewol::Texture</a>
+        +--> <a href="ewol__ConfigFile.html">ewol::ConfigFile</a>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3>ewol::<a id="Resource">Resource</a> ()</h3>
+
+<pre>
+<span class="code-function">Resource</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="Resource">Resource</a> ()</h3>
+
+<pre>
+<span class="code-function">Resource</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_name</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Resource">Resource</a> ()</h3>
+
+<pre>
+~<span class="code-function">Resource</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="increment">increment</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">increment</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="decrement">decrement</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">decrement</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getCounter">getCounter</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getCounter</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getResourceLevel">getResourceLevel</a> ()</h3>
+
+<pre>
+<span class="code-type">uint8_t</span> <span class="code-function">getResourceLevel</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="updateContext">updateContext</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">updateContext</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="removeContext">removeContext</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">removeContext</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="removeContextToLate">removeContextToLate</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">removeContextToLate</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="reload">reload</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">reload</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="getManager">getManager</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <a href="ewol__ResourceManager.html" class="code-type">ewol::ResourceManager</a> & <span class="code-function">getManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

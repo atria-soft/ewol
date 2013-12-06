@@ -130,6 +130,148 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Area</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                  <a class="code-function" href="#Area">Area</a>         (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br>+                 ~<a class="code-function" href="#Area">Area</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#draw">draw</a>         (<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#clear">clear</a>        (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> vec3 &    <a class="code-function" href="#getPos">getPos</a>       (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setPos">setPos</a>       (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setPos">setPos</a>       (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setRelPos">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setRelPos">setRelPos</a>    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#print">print</a>        (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br>+  <a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> &  <a class="code-function" href="#get">get</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#flush">flush</a>        (<span class="code-type">void</span>);<br>-  <span class="code-type">void</span>            <a class="code-function" href="#loadProgram">loadProgram</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__Compositing.html">ewol::Compositing</a>
+    +--> <b>ewol::Area</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3>ewol::<a id="Area">Area</a> ()</h3>
+
+<pre>
+<span class="code-function">Area</span>(<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);</pre>
+<br/>
+generic constructor
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_size</span>  Basic size of the area.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Area">Area</a> ()</h3>
+
+<pre>
+~<span class="code-function">Area</span>(<span class="code-type">void</span>);</pre>
+<br/>
+generic destructor
+<br/><br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);</pre>
+<br/>
+draw All the refistered text in the current element on openGL
+<br/><br/>
+
+<hr/>
+<h3><a id="clear">clear</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">clear</span>(<span class="code-type">void</span>);</pre>
+<br/>
+clear alll the registered element in the current element
+<br/><br/>
+
+<hr/>
+<h3><a id="getPos">getPos</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current display position (sometime needed in the gui control)
+<br/><ul>
+<b>Return:</b> the current position.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPos">setPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPos</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+set position for the next text writen
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  Position of the text (in 3D)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPos">setPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPos</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setRelPos">setRelPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setRelPos</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+set relative position for the next text writen
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  ofset apply of the text (in 3D)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setRelPos">setRelPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setRelPos</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);</pre>
+<br/>
+add a compleate of the image to display with the requested size
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_size</span>  size of the output image
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="get">get</a> ()</h3>
+
+<pre>
+<a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> & <span class="code-function">get</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="flush">flush</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">flush</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="loadProgram">loadProgram</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">loadProgram</span>(<span class="code-type">void</span>);</pre>
+<br/>
+load the openGL program and get all the ID needed
+<br/><br/>
+
+<hr/>
+	</div>
 </body>
 </html>

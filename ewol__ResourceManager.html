@@ -130,6 +130,120 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::ResourceManager</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                    <a class="code-function" href="#ResourceManager">ResourceManager</a>          (<span class="code-type">void</span>);<br>+                   ~<a class="code-function" href="#ResourceManager">ResourceManager</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#unInit">unInit</a>                   (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#display">display</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#reLoadResources">reLoadResources</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#update">update</a>                   (<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * <span class="code-argument">_object</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#updateContext">updateContext</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#contextHasBeenDestroyed">contextHasBeenDestroyed</a>  (<span class="code-type">void</span>);<br>+  <a href="ewol__Resource.html" class="code-type">ewol::Resource</a> *  <a class="code-function" href="#localKeep">localKeep</a>                (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#localAdd">localAdd</a>                 (<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * <span class="code-argument">_object</span>);<br>+  <span class="code-type">bool</span>              <a class="code-function" href="#release">release</a>                  (<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * & <span class="code-argument">_object</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="ResourceManager">ResourceManager</a> ()</h3>
+
+<pre>
+<span class="code-function">ResourceManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+initialize the internal variable
+<br/><br/>
+
+<hr/>
+<h3>ewol::~<a id="ResourceManager">ResourceManager</a> ()</h3>
+
+<pre>
+~<span class="code-function">ResourceManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Uninitiamize the resource manager, free all resources previously requested
+<br/><b>Notes:</b> when not free  == > generate warning, because the segfault can appear after...
+<br/> <br/>
+
+<hr/>
+<h3><a id="unInit">unInit</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">unInit</span>(<span class="code-type">void</span>);</pre>
+<br/>
+remove all resources (un-init) out of the destructor (due to the system implementation)
+<br/><br/>
+
+<hr/>
+<h3><a id="display">display</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">display</span>(<span class="code-type">void</span>);</pre>
+<br/>
+display in the log all the resources loaded ...
+<br/><br/>
+
+<hr/>
+<h3><a id="reLoadResources">reLoadResources</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">reLoadResources</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Reload all resources from files, and send there in openGL card if needed.
+<br/><b>Notes:</b> If file is reference at THEME:XXX:filename if the Theme change the file will reload the newOne
+<br/> <br/>
+
+<hr/>
+<h3><a id="update">update</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">update</span>(<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+Call by the system to send all the needed data on the graphic card chen they change ...
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_object</span>  The resources that might be updated
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="updateContext">updateContext</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">updateContext</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Call by the system chen the openGL Context has been unexpectially removed  == > This reload all the texture, VBO and other ....
+<br/><br/>
+
+<hr/>
+<h3><a id="contextHasBeenDestroyed">contextHasBeenDestroyed</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">contextHasBeenDestroyed</span>(<span class="code-type">void</span>);</pre>
+<br/>
+This is to inform the resources manager that we have no more openGl context ...
+<br/><br/>
+
+<hr/>
+<h3><a id="localKeep">localKeep</a> ()</h3>
+
+<pre>
+<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * <span class="code-function">localKeep</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="localAdd">localAdd</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">localAdd</span>(<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="release">release</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">release</span>(<a href="ewol__Resource.html" class="code-type">ewol::Resource</a> * & <span class="code-argument">_object</span>);</pre>
+<br/>
+release a resources and free it if the Last release is call.
+<br/><ul>
+<b>Parameter [input] [output]:</b> <span class="code-argument">_object</span>  element to realease  == > is return at NULL value.
+<br/><b>Return:</b> true, if element is removed, and false for just decreasing counter
+<br/></ul>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

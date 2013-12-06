@@ -130,6 +130,75 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Fps</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Fps">Fps</a>               (<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">displayName</span>,<br/>                            <span class="code-type">bool</span> <span class="code-argument">displayFPS</span>);<br>+       ~<a class="code-function" href="#Fps">Fps</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#tic">tic</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#toc">toc</a>               (<span class="code-type">bool</span> <span class="code-argument">displayTime</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#incrementCounter">incrementCounter</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#draw">draw</a>              (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Description:</h2>
+/**
+* @brief This class is designed to count the number of frame per second in the main renderer system
+*/<h2>Detail:<h2>
+<h3>ewol::<a id="Fps">Fps</a> ()</h3>
+
+<pre>
+<span class="code-function">Fps</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">displayName</span>,
+    <span class="code-type">bool</span> <span class="code-argument">displayFPS</span>);</pre>
+<br/>
+Constructor
+<br/><br/>
+
+<hr/>
+<h3>ewol::~<a id="Fps">Fps</a> ()</h3>
+
+<pre>
+~<span class="code-function">Fps</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Destructor
+<br/><br/>
+
+<hr/>
+<h3><a id="tic">tic</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">tic</span>(<span class="code-type">void</span>);</pre>
+<br/>
+this might be call every time a diplay start
+<br/><br/>
+
+<hr/>
+<h3><a id="toc">toc</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">toc</span>(<span class="code-type">bool</span> <span class="code-argument">displayTime</span>);</pre>
+<br/>
+this might be call every time a diplay stop, it do the display every second
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">displayTime</span>  display curent time of the frame.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="incrementCounter">incrementCounter</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">incrementCounter</span>(<span class="code-type">void</span>);</pre>
+<br/>
+this might be call when a display is really done
+<br/><br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<span class="code-type">void</span>);</pre>
+<br/>
+draw debug display ...
+<br/><br/>
+
+<hr/>
+	</div>
 </body>
 </html>

@@ -130,6 +130,118 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Compositing</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Compositing">Compositing</a>  (<span class="code-type">void</span>);<br>+       ~<a class="code-function" href="#Compositing">Compositing</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#draw">draw</a>         (<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#clear">clear</a>        (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#resetMatrix">resetMatrix</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#translate">translate</a>    (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#rotate">rotate</a>       (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>,<br/>                       <span class="code-type">float</span> <span class="code-argument">_angle</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#scale">scale</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setMatrix">setMatrix</a>    (<span class="code-storage-keyword">const</span> mat4 & <span class="code-argument">_mat</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<b>ewol::Compositing</b>
+    +--> <a href="ewol__Shaper.html">ewol::Shaper</a>
+    +--> <a href="ewol__Drawing.html">ewol::Drawing</a>
+    +--> <a href="ewol__Text.html">ewol::Text</a>
+    +--> <a href="ewol__Image.html">ewol::Image</a>
+    +--> <a href="ewol__Area.html">ewol::Area</a>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3>ewol::<a id="Compositing">Compositing</a> ()</h3>
+
+<pre>
+<span class="code-function">Compositing</span>(<span class="code-type">void</span>);</pre>
+<br/>
+generic constructor
+<br/><br/>
+
+<hr/>
+<h3>ewol::~<a id="Compositing">Compositing</a> ()</h3>
+
+<pre>
+~<span class="code-function">Compositing</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Generic destructor
+<br/><br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);</pre>
+<br/>
+Virtal pure function that request the draw of all openGl elements
+<br/><br/>
+
+<hr/>
+<h3><a id="clear">clear</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">clear</span>(<span class="code-type">void</span>);</pre>
+<br/>
+clear alll tre registered element in the current element
+<br/><br/>
+
+<hr/>
+<h3><a id="resetMatrix">resetMatrix</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">resetMatrix</span>(<span class="code-type">void</span>);</pre>
+<br/>
+reset to the eye matrix the openGL mouving system
+<br/><br/>
+
+<hr/>
+<h3><a id="translate">translate</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">translate</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);</pre>
+<br/>
+translate the current display of this element
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_vect</span>  The translation vector to apply at the transformation matrix
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="rotate">rotate</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">rotate</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>,
+            <span class="code-type">float</span> <span class="code-argument">_angle</span>);</pre>
+<br/>
+rotate the curent display of this element
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_vect</span>  The rotation vector to apply at the transformation matrix
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="scale">scale</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">scale</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);</pre>
+<br/>
+scale the current diaplsy of this element
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_vect</span>  The scaling vector to apply at the transformation matrix
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setMatrix">setMatrix</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setMatrix</span>(<span class="code-storage-keyword">const</span> mat4 & <span class="code-argument">_mat</span>);</pre>
+<br/>
+set the transformation matrix
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_mat</span>  The new matrix.
+<br/></ul>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

@@ -130,6 +130,100 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::Parameter</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#Parameter">Parameter</a>         (<span class="code-type">void</span>);<br>+       ~<a class="code-function" href="#Parameter">Parameter</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#onReceiveMessage">onReceiveMessage</a>  (<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#onObjectRemove">onObjectRemove</a>    (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setTitle">setTitle</a>          (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#menuAdd">menuAdd</a>           (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>,<br/>                            <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_image</span>,<br/>                            <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_associateWidget</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#menuAddGroup">menuAddGroup</a>      (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#menuClear">menuClear</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#menuSeparator">menuSeparator</a>     (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <a href="widget__Container.html">widget::Container</a>
+            +--> <a href="widget__PopUp.html">widget::PopUp</a>
+                +--> <b>widget::Parameter</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+*/<h2>Detail:<h2>
+<h3>widget::<a id="Parameter">Parameter</a> ()</h3>
+
+<pre>
+<span class="code-function">Parameter</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>widget::~<a id="Parameter">Parameter</a> ()</h3>
+
+<pre>
+~<span class="code-function">Parameter</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onReceiveMessage">onReceiveMessage</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onReceiveMessage</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onObjectRemove">onObjectRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setTitle">setTitle</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTitle</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="menuAdd">menuAdd</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">menuAdd</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>,
+             <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_image</span>,
+             <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_associateWidget</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="menuAddGroup">menuAddGroup</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">menuAddGroup</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_label</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="menuClear">menuClear</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">menuClear</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="menuSeparator">menuSeparator</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">menuSeparator</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

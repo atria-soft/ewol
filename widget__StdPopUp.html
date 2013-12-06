@@ -130,6 +130,119 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: widget::StdPopUp</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                    <a class="code-function" href="#StdPopUp">StdPopUp</a>          (<span class="code-type">void</span>);<br>+                   ~<a class="code-function" href="#StdPopUp">StdPopUp</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#setTitle">setTitle</a>          (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#setComment">setComment</a>        (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  <a href="widget__Button.html" class="code-type">widget::Button</a> *  <a class="code-function" href="#addButton">addButton</a>         (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,<br/>                                        <span class="code-type">bool</span> <span class="code-argument">_autoExit</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#onObjectRemove">onObjectRemove</a>    (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);<br>+  <span class="code-type">void</span>              <a class="code-function" href="#onReceiveMessage">onReceiveMessage</a>  (<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Widget.html">ewol::Widget</a>
+        +--> <a href="widget__Container.html">widget::Container</a>
+            +--> <a href="widget__PopUp.html">widget::PopUp</a>
+                +--> <b>widget::StdPopUp</b>
+</pre>
+<br/>
+<h2>Description:</h2>
+/**
+* @ingroup ewolWidgetGroup
+* @brief The std pop up widget is a siple message widget to notyfy user of some simple things, like:
+*
+* ~~~~~~~~~~~~~~~~~~~~~
+* 	+---------------------------------+---+---+---+
+* 	| Windows name...                 | _ | O | X |
+* 	+---------------------------------+---+---+---+
+* 	|                                             |
+* 	|                                             |
+* 	|                                             |
+* 	|            +-------------------+            |
+* 	|            | Erreur:           |            |
+* 	|            |                   |            |
+* 	|            | Message to diplay |            |
+* 	|            | to user           |            |
+* 	|            |                   |            |
+* 	|            |             Close |            |
+* 	|            +-------------------+            |
+* 	|                                             |
+* 	|                                             |
+* 	|                                             |
+* 	+---------------------------------------------+
+* ~~~~~~~~~~~~~~~~~~~~~
+*/<h2>Detail:<h2>
+<h3>widget::<a id="StdPopUp">StdPopUp</a> ()</h3>
+
+<pre>
+<span class="code-function">StdPopUp</span>(<span class="code-type">void</span>);</pre>
+<br/>
+std-pop-up constructor.
+<br/><br/>
+
+<hr/>
+<h3>widget::~<a id="StdPopUp">StdPopUp</a> ()</h3>
+
+<pre>
+~<span class="code-function">StdPopUp</span>(<span class="code-type">void</span>);</pre>
+<br/>
+std-pop-up destructor.
+<br/><br/>
+
+<hr/>
+<h3><a id="setTitle">setTitle</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTitle</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+Set the title string.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  Decorated text to diplay in title.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setComment">setComment</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setComment</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+Set the commentary string.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  Decorated text to diplay in Comment.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="addButton">addButton</a> ()</h3>
+
+<pre>
+<a href="widget__Button.html" class="code-type">widget::Button</a> * <span class="code-function">addButton</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,
+                           <span class="code-type">bool</span> <span class="code-argument">_autoExit</span>);</pre>
+<br/>
+Add a buttom button.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  Decorated text to diplay in button.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="onObjectRemove">onObjectRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onReceiveMessage">onReceiveMessage</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onReceiveMessage</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EMessage.html" class="code-type">ewol::EMessage</a> & <span class="code-argument">_msg</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

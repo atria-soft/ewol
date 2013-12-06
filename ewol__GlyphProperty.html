@@ -130,6 +130,68 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::GlyphProperty</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++        <a class="code-function" href="#GlyphProperty">GlyphProperty</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">float</span> <a class="code-function" href="#kerningGet">kerningGet</a>     (<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#kerningAdd">kerningAdd</a>     (<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>,<br/>                         <span class="code-type">float</span> <span class="code-argument">_value</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#kerningClear">kerningClear</a>   (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>  <a class="code-function" href="#exist">exist</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>  <a class="code-function" href="#setNotExist">setNotExist</a>    (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="GlyphProperty">GlyphProperty</a> ()</h3>
+
+<pre>
+<span class="code-function">GlyphProperty</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="kerningGet">kerningGet</a> ()</h3>
+
+<pre>
+<span class="code-type">float</span> <span class="code-function">kerningGet</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="kerningAdd">kerningAdd</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">kerningAdd</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> <span class="code-argument">_charcode</span>,
+                <span class="code-type">float</span> <span class="code-argument">_value</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="kerningClear">kerningClear</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">kerningClear</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="exist">exist</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">exist</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the status of the char, if it exist or not in the FONT
+<br/><ul>
+<b>Return:</b> true if the char is availlable, false otherwise
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setNotExist">setNotExist</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setNotExist</span>(<span class="code-type">void</span>);</pre>
+<br/>
+set the element doen not exist !!!
+<br/><br/>
+
+<hr/>
+	</div>
 </body>
 </html>

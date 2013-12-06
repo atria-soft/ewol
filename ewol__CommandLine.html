@@ -130,6 +130,72 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::CommandLine</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-type">void</span>                 <a class="code-function" href="#parse">parse</a>  (<span class="code-type">int32_t</span> <span class="code-argument">_argc</span>,<br/>                                <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);<br>+  <span class="code-type">int32_t</span>              <a class="code-function" href="#size">size</a>   (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> &  <a class="code-function" href="#get">get</a>    (<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#add">add</a>    (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newElement</span>);<br>+  <span class="code-type">void</span>                 <a class="code-function" href="#remove">remove</a> (<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3><a id="parse">parse</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">parse</span>(<span class="code-type">int32_t</span> <span class="code-argument">_argc</span>,
+           <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);</pre>
+<br/>
+Parse the command line parameters
+<br/><br/>
+
+<hr/>
+<h3><a id="size">size</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">size</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the number of element in the Command line
+<br/><ul>
+<b>Return:</b> the number of element
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="get">get</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-function">get</span>(<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);</pre>
+<br/>
+get an element with a specific ID
+<br/><ul>
+<b>Return:</b> _id The cmdLine Id element
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="add">add</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">add</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_newElement</span>);</pre>
+<br/>
+add one element at the Command line
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newElement</span>  String in the input that might be added.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="remove">remove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">remove</span>(<span class="code-type">int32_t</span> <span class="code-argument">_id</span>);</pre>
+<br/>
+remove an element
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_id</span>  Id of the element
+<br/></ul>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

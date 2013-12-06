@@ -130,6 +130,92 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::TextureFile</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++  <span class="code-storage-keyword">const</span> <span class="code-type">char</span> *                <a class="code-function" href="#getType">getType</a>      (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> vec2 &                <a class="code-function" href="#getRealSize">getRealSize</a>  (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">static</span> <a href="ewol__TextureFile.html" class="code-type">ewol::TextureFile</a> *  <a class="code-function" href="#keep">keep</a>         (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>,<br/>                                             ivec2 <span class="code-argument">_size</span>);<br>+  <span class="code-storage-keyword">static</span> <span class="code-type">void</span>                 <a class="code-function" href="#release">release</a>      (<a href="ewol__TextureFile.html" class="code-type">ewol::TextureFile</a> * & <span class="code-argument">_object</span>);<br>-                              <a class="code-function" href="#TextureFile">TextureFile</a>  (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_genName</span>);<br>-                              <a class="code-function" href="#TextureFile">TextureFile</a>  (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_genName</span>,<br/>                                             <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fileName</span>,<br/>                                             <span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);<br>-                             ~<a class="code-function" href="#TextureFile">TextureFile</a>  (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__EObject.html">ewol::EObject</a>
+    +--> <a href="ewol__Resource.html">ewol::Resource</a>
+        +--> <a href="ewol__Texture.html">ewol::Texture</a>
+            +--> <b>ewol::TextureFile</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3><a id="getType">getType</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-function">getType</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getRealSize">getRealSize</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getRealSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="keep">keep</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <a href="ewol__TextureFile.html" class="code-type">ewol::TextureFile</a> * <span class="code-function">keep</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>,
+                                ivec2 <span class="code-argument">_size</span>);</pre>
+<br/>
+keep the resource pointer.
+<br/><b>Notes:</b> Never free this pointer by your own...
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_filename</span>  Name of the image file.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_requested</span>  size of the image (usefull when loading .svg to automatic rescale)
+<br/><b>Return:</b> pointer on the resource or NULL if an error occured.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="release">release</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">void</span> <span class="code-function">release</span>(<a href="ewol__TextureFile.html" class="code-type">ewol::TextureFile</a> * & <span class="code-argument">_object</span>);</pre>
+<br/>
+release the keeped resources
+<br/><ul>
+<b>Parameter [input] [output]:</b> <span class="code-argument">reference</span>  on the object pointer
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="TextureFile">TextureFile</a> ()</h3>
+
+<pre>
+<span class="code-function">TextureFile</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_genName</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="TextureFile">TextureFile</a> ()</h3>
+
+<pre>
+<span class="code-function">TextureFile</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_genName</span>,
+            <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fileName</span>,
+            <span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_size</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="TextureFile">TextureFile</a> ()</h3>
+
+<pre>
+~<span class="code-function">TextureFile</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

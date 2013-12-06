@@ -130,6 +130,103 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::Material</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                  <a class="code-function" href="#Material">Material</a>          (<span class="code-type">void</span>);<br>+                 ~<a class="code-function" href="#Material">Material</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#draw">draw</a>              (<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>,<br/>                                      <span class="code-storage-keyword">const</span> MaterialGlId & <span class="code-argument">_glID</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setAmbientFactor">setAmbientFactor</a>  (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setDiffuseFactor">setDiffuseFactor</a>  (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setSpecularFactor">setSpecularFactor</a> (<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setShininess">setShininess</a>      (<span class="code-type">float</span> <span class="code-argument">_val</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setTexture0">setTexture0</a>       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#setImageSize">setImageSize</a>      (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_newSize</span>);<br>+  <a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> *  <a class="code-function" href="#get">get</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>            <a class="code-function" href="#flush">flush</a>             (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="Material">Material</a> ()</h3>
+
+<pre>
+<span class="code-function">Material</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Material">Material</a> ()</h3>
+
+<pre>
+~<span class="code-function">Material</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<a href="ewol__Program.html" class="code-type">ewol::Program</a> * <span class="code-argument">_prog</span>,
+          <span class="code-storage-keyword">const</span> MaterialGlId & <span class="code-argument">_glID</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setAmbientFactor">setAmbientFactor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setAmbientFactor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setDiffuseFactor">setDiffuseFactor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setDiffuseFactor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setSpecularFactor">setSpecularFactor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setSpecularFactor</span>(<span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setShininess">setShininess</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setShininess</span>(<span class="code-type">float</span> <span class="code-argument">_val</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setTexture0">setTexture0</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTexture0</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_filename</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setImageSize">setImageSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setImageSize</span>(<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_newSize</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="get">get</a> ()</h3>
+
+<pre>
+<a href="http://HeeroYui.github.io/egami//egami__Image.html" class="code-type">egami::Image</a> * <span class="code-function">get</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="flush">flush</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">flush</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

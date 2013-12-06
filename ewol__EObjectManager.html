@@ -130,6 +130,103 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::EObjectManager</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                      <a class="code-function" href="#EObjectManager">EObjectManager</a>            (<span class="code-type">void</span>);<br>+                     ~<a class="code-function" href="#EObjectManager">EObjectManager</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#unInit">unInit</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#add">add</a>                       (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#rm">rm</a>                        (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);<br>+  <span class="code-type">int32_t</span>             <a class="code-function" href="#getNumberObject">getNumberObject</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#autoRemove">autoRemove</a>                (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);<br>+  <span class="code-type">void</span>                <a class="code-function" href="#removeAllAutoRemove">removeAllAutoRemove</a>       (<span class="code-type">void</span>);<br>+  <a href="ewol__EObject.html" class="code-type">ewol::EObject</a> *     <a class="code-function" href="#get">get</a>                       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_name</span>);<br>+  <a href="ewol__EMultiCast.html" class="code-type">ewol::EMultiCast</a> &  <a class="code-function" href="#multiCast">multiCast</a>                 (<span class="code-type">void</span>);<br>-  <span class="code-type">void</span>                <a class="code-function" href="#informOneObjectIsRemoved">informOneObjectIsRemoved</a>  (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="EObjectManager">EObjectManager</a> ()</h3>
+
+<pre>
+<span class="code-function">EObjectManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="EObjectManager">EObjectManager</a> ()</h3>
+
+<pre>
+~<span class="code-function">EObjectManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="unInit">unInit</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">unInit</span>(<span class="code-type">void</span>);</pre>
+<br/>
+remove all resources (un-init) out of the destructor (due to the system implementation)
+<br/><br/>
+
+<hr/>
+<h3><a id="add">add</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">add</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="rm">rm</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">rm</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getNumberObject">getNumberObject</a> ()</h3>
+
+<pre>
+<span class="code-type">int32_t</span> <span class="code-function">getNumberObject</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="autoRemove">autoRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">autoRemove</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="removeAllAutoRemove">removeAllAutoRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">removeAllAutoRemove</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="get">get</a> ()</h3>
+
+<pre>
+<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-function">get</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_name</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="multiCast">multiCast</a> ()</h3>
+
+<pre>
+<a href="ewol__EMultiCast.html" class="code-type">ewol::EMultiCast</a> & <span class="code-function">multiCast</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="informOneObjectIsRemoved">informOneObjectIsRemoved</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">informOneObjectIsRemoved</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_object</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>

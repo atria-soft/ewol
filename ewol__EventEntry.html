@@ -130,6 +130,89 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1>Class: ewol::EventEntry</h1>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++                                                <a class="code-function" href="#EventEntry">EventEntry</a>     (<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_type</span>,<br/>                                                                 <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> <span class="code-argument">_status</span>,<br/>                                                                 <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> <span class="code-argument">_specialKey</span>,<br/>                                                                 <span class="code-type">char32_t</span> <span class="code-argument">_char</span>);<br>+  <span class="code-type">void</span>                                          <a class="code-function" href="#setType">setType</a>        (<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_type</span>);<br>+  <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> &         <a class="code-function" href="#getType">getType</a>        (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                                          <a class="code-function" href="#setStatus">setStatus</a>      (<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> <span class="code-argument">_status</span>);<br>+  <span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> &           <a class="code-function" href="#getStatus">getStatus</a>      (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                                          <a class="code-function" href="#setSpecialKey">setSpecialKey</a>  (<span class="code-storage-keyword">const</span> <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> & <span class="code-argument">_specialKey</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> &                      <a class="code-function" href="#getSpecialKey">getSpecialKey</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                                          <a class="code-function" href="#setChar">setChar</a>        (<span class="code-type">char32_t</span> <span class="code-argument">_char</span>);<br>+  <span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> &                              <a class="code-function" href="#getChar">getChar</a>        (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3>ewol::<a id="EventEntry">EventEntry</a> ()</h3>
+
+<pre>
+<span class="code-function">EventEntry</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_type</span>,
+           <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> <span class="code-argument">_status</span>,
+           <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> <span class="code-argument">_specialKey</span>,
+           <span class="code-type">char32_t</span> <span class="code-argument">_char</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setType">setType</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setType</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_type</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getType">getType</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> & <span class="code-function">getType</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setStatus">setStatus</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setStatus</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> <span class="code-argument">_status</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getStatus">getStatus</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__status.html" class="code-type">ewol::keyEvent::status</a> & <span class="code-function">getStatus</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setSpecialKey">setSpecialKey</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setSpecialKey</span>(<span class="code-storage-keyword">const</span> <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> & <span class="code-argument">_specialKey</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getSpecialKey">getSpecialKey</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> & <span class="code-function">getSpecialKey</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setChar">setChar</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setChar</span>(<span class="code-type">char32_t</span> <span class="code-argument">_char</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getChar">getChar</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> & <span class="code-function">getChar</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+	</div>
 </body>
 </html>
