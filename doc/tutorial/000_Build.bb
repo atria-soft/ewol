@@ -1,6 +1,8 @@
-== [center]Ewol extract and build examples[/center] ==
+=?=Ewol extract and build examples=?=
 __________________________________________________
+[left][doc[001_bases | Previous: Doc]][/left] [right][tutorial[001_HelloWord | Next: Hello-Word]][/right]
 
+All developpement software will start by getting the dependency and the sources.
 
 === Linux dependency packages ===
 [code style=shell]
@@ -74,5 +76,29 @@ To run an application you will find it directly on the out 'staging' tree :
 	./out/Linux/debug/staging/clang/edn/usr/bin/edn
 [/code]
 
+== Simple explanation : ==
 
+The workspace is a simple folder that contain all the modules ans sub module.
+It will create a tree like this :
 
+:** workspace
+::** ewol
+:::** external [i](ewol external dependency sub-lib)[/i]
+::::** agg
+::::** bullet
+::::** date
+::::** egami
+::::** ege
+::::** ejson
+::::** etk
+::::** exml
+::::** freetype
+::::** glew
+::::** lua
+::::** ogg
+::::** png
+::::** portaudio
+::::** z
+:::** souces
+::::** ewol
+::** example
