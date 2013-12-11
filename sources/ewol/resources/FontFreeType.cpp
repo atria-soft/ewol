@@ -19,13 +19,13 @@
 #include <ewol/resources/ResourceManager.h>
 
 #undef __class__
-#define __class__ "FontFreeType"
+#define __class__ "resource::FontFreeType"
 
 // free Font hnadle of librairies ... entry for acces ...
 static int32_t l_countLoaded=0;
 static FT_Library library;
 
-void ewol::freeTypeInit(void) {
+void ewol::resource::freeTypeInit(void) {
 	EWOL_DEBUG(" == > init Font-Manager");
 	l_countLoaded++;
 	if (l_countLoaded>1) {
@@ -38,7 +38,7 @@ void ewol::freeTypeInit(void) {
 	}
 }
 
-void ewol::freeTypeUnInit(void) {
+void ewol::resource::freeTypeUnInit(void) {
 	EWOL_DEBUG(" == > Un-Init Font-Manager");
 	l_countLoaded--;
 	if (l_countLoaded>0) {
@@ -52,7 +52,7 @@ void ewol::freeTypeUnInit(void) {
 	}
 }
 
-ewol::FontFreeType::FontFreeType(const std::string& _fontName) :
+ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
   FontBase(_fontName) {
 	addObjectType("ewol::FontFreeType");
 	m_init = false;
@@ -97,7 +97,7 @@ ewol::FontFreeType::FontFreeType(const std::string& _fontName) :
 	}
 }
 
-ewol::FontFreeType::~FontFreeType(void) {
+ewol::resource::FontFreeType::~FontFreeType(void) {
 	// clean the tmp memory
 	if (NULL != m_FileBuffer) {
 		delete[] m_FileBuffer;
@@ -107,7 +107,7 @@ ewol::FontFreeType::~FontFreeType(void) {
 	FT_Done_Face( m_fftFace );
 }
 
-vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const std::string& _unicodeString) {
+vec2 ewol::resource::FontFreeType::getSize(int32_t _fontSize, const std::string& _unicodeString) {
 	if(false == m_init) {
 		return vec2(0,0);
 	}
@@ -116,11 +116,11 @@ vec2 ewol::FontFreeType::getSize(int32_t _fontSize, const std::string& _unicodeS
 	return outputSize;
 }
 
-int32_t ewol::FontFreeType::getHeight(int32_t _fontSize) {
+int32_t ewol::resource::FontFreeType::getHeight(int32_t _fontSize) {
 	return _fontSize*1.43f; // this is a really "magic" number ...
 }
 
-bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property) {
+bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty& _property) {
 	if(false == m_init) {
 		return false;
 	}
@@ -160,11 +160,11 @@ bool ewol::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::GlyphProperty
 	return true;
 }
 
-bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
-                                   int32_t _fontSize,
-                                   ivec2 _glyphPosition,
-                                   ewol::GlyphProperty& _property,
-                                   int8_t _posInImage) {
+bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
+                                             int32_t _fontSize,
+                                             ivec2 _glyphPosition,
+                                             ewol::resource::GlyphProperty& _property,
+                                             int8_t _posInImage) {
 	if(false == m_init) {
 		return false;
 	}
@@ -200,8 +200,7 @@ bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
 			tlpppp = _imageOut.get(ivec2(_glyphPosition.x()+iii, _glyphPosition.y()+jjj));
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// set only alpha :
-			switch(_posInImage)
-			{
+			switch(_posInImage) {
 				default:
 				case 0:
 					tlpppp.setA(valueColor);
@@ -224,7 +223,7 @@ bool ewol::FontFreeType::drawGlyph(egami::Image& _imageOut,
 }
 
 
-void ewol::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::GlyphProperty>& listGlyph) {
+void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::GlyphProperty>& listGlyph) {
 	if(false == m_init) {
 		return;
 	}
@@ -257,7 +256,7 @@ void ewol::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::Gly
 }
 
 
-void ewol::FontFreeType::display(void) {
+void ewol::resource::FontFreeType::display(void) {
 	if(false == m_init) {
 		return;
 	}
@@ -343,14 +342,14 @@ void ewol::FontFreeType::display(void) {
 	//EWOL_INFO("    Current size         = " << (int)m_fftFace->size);
 }
 
-ewol::FontBase* ewol::FontFreeType::keep(const std::string& _filename) {
+ewol::resource::FontBase* ewol::resource::FontFreeType::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : Font : file : \"" << _filename << "\"");
-	ewol::FontBase* object = static_cast<ewol::FontBase*>(getManager().localKeep(_filename));
+	ewol::resource::FontBase* object = static_cast<ewol::resource::FontBase*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
 	// need to crate a new one ...
-	object = new ewol::FontFreeType(_filename);
+	object = new ewol::resource::FontFreeType(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
@@ -359,11 +358,11 @@ ewol::FontBase* ewol::FontFreeType::keep(const std::string& _filename) {
 	return object;
 }
 
-void ewol::FontFreeType::release(ewol::FontBase*& _object) {
+void ewol::resource::FontFreeType::release(ewol::resource::FontBase*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

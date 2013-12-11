@@ -12,10 +12,10 @@
 #include <etk/UString.h>
 
 #undef __class__
-#define __class__	"ewol::Text"
+#define __class__	"ewol::compositing::Text"
 
 
-ewol::Text::Text(const std::string& _fontName, int32_t _fontSize) :
+ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -45,12 +45,12 @@ ewol::Text::Text(const std::string& _fontName, int32_t _fontSize) :
 }
 
 
-ewol::Text::~Text(void) {
+ewol::compositing::Text::~Text(void) {
 	ewol::TexturedFont::release(m_font);
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Text::loadProgram(void) {
+void ewol::compositing::Text::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:text.prog");
@@ -63,7 +63,7 @@ void ewol::Text::loadProgram(void) {
 	}
 }
 
-void ewol::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) {
+void ewol::compositing::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) {
 	
 	// draw BG in any case:
 	m_vectorialDraw.draw();
@@ -107,7 +107,7 @@ void ewol::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) 
 }
 
 
-void ewol::Text::draw(bool _disableDepthTest) {
+void ewol::compositing::Text::draw(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
@@ -141,22 +141,22 @@ void ewol::Text::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::Text::translate(const vec3& _vect) {
+void ewol::compositing::Text::translate(const vec3& _vect) {
 	ewol::Compositing::translate(_vect);
 	m_vectorialDraw.translate(_vect);
 }
 
-void ewol::Text::rotate(const vec3& _vect, float _angle) {
+void ewol::compositing::Text::rotate(const vec3& _vect, float _angle) {
 	ewol::Compositing::rotate(_vect, _angle);
 	m_vectorialDraw.rotate(_vect, _angle);
 }
 
-void ewol::Text::scale(const vec3& _vect) {
+void ewol::compositing::Text::scale(const vec3& _vect) {
 	ewol::Compositing::scale(_vect);
 	m_vectorialDraw.scale(_vect);
 }
 
-void ewol::Text::clear(void) {
+void ewol::compositing::Text::clear(void) {
 	// call upper class
 	ewol::Compositing::clear();
 	// remove sub draw system
@@ -169,7 +169,7 @@ void ewol::Text::clear(void) {
 	reset();
 }
 
-void ewol::Text::reset(void) {
+void ewol::compositing::Text::reset(void) {
 	m_position = vec3(0,0,0);
 	m_clippingPosStart = vec3(0,0,0);
 	m_clippingPosStop = vec3(0,0,0);
@@ -192,7 +192,7 @@ void ewol::Text::reset(void) {
 	m_nbCharDisplayed = 0;
 }
 
-void ewol::Text::setPos(const vec3& _pos) {
+void ewol::compositing::Text::setPos(const vec3& _pos) {
 	// check min max for display area
 	if (m_nbCharDisplayed != 0) {
 		EWOL_VERBOSE("update size 1 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
@@ -222,18 +222,18 @@ void ewol::Text::setPos(const vec3& _pos) {
 	}
 }
 
-void ewol::Text::setRelPos(const vec3& _pos) {
+void ewol::compositing::Text::setRelPos(const vec3& _pos) {
 	m_position += _pos;
 	m_previousCharcode = 0;
 	m_vectorialDraw.setPos(m_position);
 }
 
-void ewol::Text::setColorBg(const etk::Color<>& _color) {
+void ewol::compositing::Text::setColorBg(const etk::Color<>& _color) {
 	m_colorBg = _color;
 	m_vectorialDraw.setColor(_color);
 }
 
-void ewol::Text::setClipping(const vec3& _pos, const vec3& _posEnd) {
+void ewol::compositing::Text::setClipping(const vec3& _pos, const vec3& _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -260,12 +260,12 @@ void ewol::Text::setClipping(const vec3& _pos, const vec3& _posEnd) {
 	//m_vectorialDraw.setClipping(m_clippingPosStart, m_clippingPosStop);
 }
 
-void ewol::Text::setClippingMode(bool _newMode) {
+void ewol::compositing::Text::setClippingMode(bool _newMode) {
 	m_clippingEnable = _newMode;
 	//m_vectorialDraw.setClippingMode(m_clippingEnable);
 }
 
-void ewol::Text::setFontSize(int32_t _fontSize) {
+void ewol::compositing::Text::setFontSize(int32_t _fontSize) {
 	// get old size
 	std::string fontName = "";
 	if (m_font != NULL) {
@@ -277,7 +277,7 @@ void ewol::Text::setFontSize(int32_t _fontSize) {
 	setFont(fontName, _fontSize);
 }
 
-void ewol::Text::setFontName(const std::string& _fontName) {
+void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 	// get old size
 	int32_t fontSize = -1;
 	if (m_font != NULL) {
@@ -286,7 +286,7 @@ void ewol::Text::setFontName(const std::string& _fontName) {
 	setFont(_fontName, fontSize);
 }
 
-void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
+void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
 	ewol::TexturedFont * previousFont = m_font;
@@ -309,7 +309,7 @@ void ewol::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	}
 }
 
-void ewol::Text::setFontMode(enum ewol::font::mode _mode) {
+void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
 	if (m_font != NULL) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
@@ -319,7 +319,7 @@ enum ewol::font::mode ewol::Text::getFontMode(void) {
 	return m_mode;
 }
 
-void ewol::Text::setFontBold(bool _status) {
+void ewol::compositing::Text::setFontBold(bool _status) {
 	if (_status == true) {
 		// enable
 		if (m_mode == ewol::font::Regular) {
@@ -337,7 +337,7 @@ void ewol::Text::setFontBold(bool _status) {
 	}
 }
 
-void ewol::Text::setFontItalic(bool _status) {
+void ewol::compositing::Text::setFontItalic(bool _status) {
 	if (_status == true) {
 		// enable
 		if (m_mode == ewol::font::Regular) {
@@ -355,27 +355,27 @@ void ewol::Text::setFontItalic(bool _status) {
 	}
 }
 
-void ewol::Text::setKerningMode(bool _newMode) {
+void ewol::compositing::Text::setKerningMode(bool _newMode) {
 	m_kerning = _newMode;
 }
 
-void ewol::Text::setDistanceFieldMode(bool _newMode) {
+void ewol::compositing::Text::setDistanceFieldMode(bool _newMode) {
 	m_distanceField = _newMode;
 	EWOL_TODO("The Distance field mode is not availlable for now ...");
 }
 
-void ewol::Text::print(const std::u32string& _text) {
+void ewol::compositing::Text::print(const std::u32string& _text) {
 	std::vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
-void ewol::Text::print(const std::string& _text) {
+void ewol::compositing::Text::print(const std::string& _text) {
 	std::vector<TextDecoration> decorationEmpty;
 	print(_text, decorationEmpty);
 }
 
 
-void ewol::Text::parseHtmlNode(exml::Element* _element) {
+void ewol::compositing::Text::parseHtmlNode(exml::Element* _element) {
 	// get the static real pointer
 	if (_element == NULL) {
 		EWOL_ERROR( "Error Input node does not existed ...");
@@ -470,7 +470,7 @@ void ewol::Text::parseHtmlNode(exml::Element* _element) {
 	}
 }
 
-void ewol::Text::printDecorated(const std::string& _text) {
+void ewol::compositing::Text::printDecorated(const std::string& _text) {
 	std::string tmpData("<html>\n<body>\n");
 	tmpData+=_text;
 	tmpData+="\n</body>\n</html>\n";
@@ -478,7 +478,7 @@ void ewol::Text::printDecorated(const std::string& _text) {
 	printHTML(tmpData);
 }
 
-void ewol::Text::printHTML(const std::string& _text) {
+void ewol::compositing::Text::printHTML(const std::string& _text) {
 	exml::Document doc;
 	
 	// reset parameter :
@@ -506,7 +506,7 @@ void ewol::Text::printHTML(const std::string& _text) {
 	htmlFlush();
 }
 
-void ewol::Text::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
+void ewol::compositing::Text::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -695,7 +695,7 @@ void ewol::Text::print(const std::string& _text, const std::vector<TextDecoratio
 	}
 }
 
-void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
+void ewol::compositing::Text::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -885,7 +885,7 @@ void ewol::Text::print(const std::u32string& _text, const std::vector<TextDecora
 }
 
 
-void ewol::Text::print(const char32_t& _charcode) {
+void ewol::compositing::Text::print(const char32_t& _charcode) {
 	if (NULL == m_font) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return;
@@ -1056,12 +1056,12 @@ void ewol::Text::print(const char32_t& _charcode) {
 	return;
 }
 
-void ewol::Text::forceLineReturn(void) {
+void ewol::compositing::Text::forceLineReturn(void) {
 	// reset position : 
 	setPos(vec3(m_startTextpos, m_position.y() - m_font->getHeight(m_mode), 0) );
 }
 
-void ewol::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement) {
+void ewol::compositing::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement) {
 	m_startTextpos = _startTextpos;
 	m_stopTextPos = _stopTextPos+1;
 	m_alignement = _alignement;
@@ -1070,15 +1070,15 @@ void ewol::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum
 	}
 }
 
-enum ewol::Text::aligneMode ewol::Text::getAlignement(void) {
+enum ewol::compositing::Text::aligneMode ewol::compositing::Text::getAlignement(void) {
 	return m_alignement;
 }
 
-void ewol::Text::disableAlignement(void) {
+void ewol::compositing::Text::disableAlignement(void) {
 	m_alignement = ewol::Text::alignDisable;
 }
 
-vec3 ewol::Text::calculateSizeHTML(const std::string& _text) {
+vec3 ewol::compositing::Text::calculateSizeHTML(const std::string& _text) {
 	// remove intermediate result 
 	reset();
 	//EWOL_DEBUG("        0 size for=\n" << text);
@@ -1109,7 +1109,7 @@ vec3 ewol::Text::calculateSizeHTML(const std::string& _text) {
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
-vec3 ewol::Text::calculateSizeDecorated(const std::string& _text) {
+vec3 ewol::compositing::Text::calculateSizeDecorated(const std::string& _text) {
 	if (_text.size() == 0) {
 		return vec3(0,0,0);
 	}
@@ -1120,7 +1120,7 @@ vec3 ewol::Text::calculateSizeDecorated(const std::string& _text) {
 	return tmpVal;
 }
 
-vec3 ewol::Text::calculateSize(const std::string& _text) {
+vec3 ewol::compositing::Text::calculateSize(const std::string& _text) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -1136,7 +1136,7 @@ vec3 ewol::Text::calculateSize(const std::string& _text) {
 	return outputSize;
 }
 
-vec3 ewol::Text::calculateSize(const char32_t& _charcode) {
+vec3 ewol::compositing::Text::calculateSize(const char32_t& _charcode) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -1159,8 +1159,7 @@ vec3 ewol::Text::calculateSize(const char32_t& _charcode) {
 	return outputSize;
 }
 
-
-void ewol::Text::printCursor(bool _isInsertMode, float _cursorSize) {
+void ewol::compositing::Text::printCursor(bool _isInsertMode, float _cursorSize) {
 	int32_t fontHeigh = m_font->getHeight(m_mode);
 	if (true == _isInsertMode) {
 		m_vectorialDraw.rectangleWidth(vec3(_cursorSize, fontHeigh, 0) );
@@ -1171,12 +1170,11 @@ void ewol::Text::printCursor(bool _isInsertMode, float _cursorSize) {
 	}
 }
 
-
-bool ewol::Text::extrapolateLastId(const std::string& _text,
-                                   const int32_t _start,
-                                   int32_t& _stop,
-                                   int32_t& _space,
-                                   int32_t& _freeSpace) {
+bool ewol::compositing::Text::extrapolateLastId(const std::string& _text,
+                                                const int32_t _start,
+                                                int32_t& _stop,
+                                                int32_t& _space,
+                                                int32_t& _freeSpace) {
 	// store previous :
 	char32_t storePrevious = m_previousCharcode;
 	
@@ -1235,11 +1233,11 @@ bool ewol::Text::extrapolateLastId(const std::string& _text,
 	}
 }
 
-bool ewol::Text::extrapolateLastId(const std::u32string& _text,
-                                   const int32_t _start,
-                                   int32_t& _stop,
-                                   int32_t& _space,
-                                   int32_t& _freeSpace) {
+bool ewol::compositing::Text::extrapolateLastId(const std::u32string& _text,
+                                                const int32_t _start,
+                                                int32_t& _stop,
+                                                int32_t& _space,
+                                                int32_t& _freeSpace) {
 	// store previous :
 	char32_t storePrevious = m_previousCharcode;
 	
@@ -1298,7 +1296,7 @@ bool ewol::Text::extrapolateLastId(const std::u32string& _text,
 	}
 }
 
-void ewol::Text::htmlAddData(const std::string& _data) {
+void ewol::compositing::Text::htmlAddData(const std::string& _data) {
 	if(    m_htmlCurrrentLine.size()>0
 	    && m_htmlCurrrentLine[m_htmlCurrrentLine.size()-1] != ' ') {
 		m_htmlCurrrentLine+=" ";
@@ -1315,7 +1313,7 @@ void ewol::Text::htmlAddData(const std::string& _data) {
 	}
 }
 
-void ewol::Text::htmlFlush(void) {
+void ewol::compositing::Text::htmlFlush(void) {
 	if (m_htmlCurrrentLine.size()>0) {
 		print(m_htmlCurrrentLine, m_htmlDecoration);
 	}
@@ -1323,25 +1321,25 @@ void ewol::Text::htmlFlush(void) {
 	m_htmlDecoration.clear();
 }
 
-void ewol::Text::disableCursor(void) {
+void ewol::compositing::Text::disableCursor(void) {
 	m_selectionStartPos = -100;
 	m_cursorPos = -100;
 }
 
-void ewol::Text::setCursorPos(int32_t _cursorPos) {
+void ewol::compositing::Text::setCursorPos(int32_t _cursorPos) {
 	m_selectionStartPos = _cursorPos;
 	m_cursorPos = _cursorPos;
 }
 
-void ewol::Text::setCursorSelection(int32_t _cursorPos, int32_t _selectionStartPos) {
+void ewol::compositing::Text::setCursorSelection(int32_t _cursorPos, int32_t _selectionStartPos) {
 	m_selectionStartPos = _selectionStartPos;
 	m_cursorPos = _cursorPos;
 }
 
-void ewol::Text::setSelectionColor(const etk::Color<>& _color) {
+void ewol::compositing::Text::setSelectionColor(const etk::Color<>& _color) {
 	m_colorSelection = _color;
 }
 
-void ewol::Text::setCursorColor(const etk::Color<>& _color) {
+void ewol::compositing::Text::setCursorColor(const etk::Color<>& _color) {
 	m_colorCursor = _color;
 }

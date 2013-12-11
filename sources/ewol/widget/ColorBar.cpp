@@ -20,8 +20,8 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 #undef __class__
 #define __class__ "ColorBar"
 
-widget::ColorBar::ColorBar(void) {
-	addObjectType("widget::ColorBar");
+ewol::widget::ColorBar::ColorBar(void) {
+	addObjectType("ewol::widget::ColorBar");
 	addEventId(ewolEventColorBarChange);
 	m_currentUserPos.setValue(0,0);
 	m_currentColor = etk::color::black;
@@ -29,12 +29,12 @@ widget::ColorBar::ColorBar(void) {
 	setMouseLimit(1);
 }
 
-widget::ColorBar::~ColorBar(void) {
+ewol::widget::ColorBar::~ColorBar(void) {
 	
 }
 
 
-void widget::ColorBar::calculateMinMaxSize(void) {
+void ewol::widget::ColorBar::calculateMinMaxSize(void) {
 	m_minSize.setValue(160, 80);
 	markToRedraw();
 }
@@ -52,22 +52,22 @@ static etk::Color<> s_listColor[NB_BAND_COLOR+1] = {
 	0xFF0000FF
 };
 
-etk::Color<> widget::ColorBar::getCurrentColor(void) {
+etk::Color<> ewol::widget::ColorBar::getCurrentColor(void) {
 	return m_currentColor;
 }
-void widget::ColorBar::setCurrentColor(etk::Color<> newOne) {
+void ewol::widget::ColorBar::setCurrentColor(etk::Color<> newOne) {
 	m_currentColor = newOne;
 	m_currentColor.setA(0xFF);
 	// estimate the cursor position :
 	// TODO : Later when really needed ...
 }
 
-void widget::ColorBar::onDraw(void) {
+void ewol::widget::ColorBar::onDraw(void) {
 	m_draw.draw();
 }
 
 
-void widget::ColorBar::onRegenerateDisplay(void) {
+void ewol::widget::ColorBar::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		m_draw.clear();
@@ -165,7 +165,7 @@ void widget::ColorBar::onRegenerateDisplay(void) {
 }
 
 
-bool widget::ColorBar::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ColorBar::onEventInput(const ewol::EventInput& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {

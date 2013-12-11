@@ -12,10 +12,10 @@
 #include <etk/os/FSNode.h>
 
 #undef __class__
-#define __class__	"Mesh"
+#define __class__	"resource::Mesh"
 
-ewol::Mesh::Mesh(const std::string& _fileName, const std::string& _shaderName) :
-  ewol::Resource(_fileName),
+ewol::resource::Mesh::Mesh(const std::string& _fileName, const std::string& _shaderName) :
+  ewol::resource::Resource(_fileName),
   m_normalMode(normalModeNone),
   m_checkNormal(false),
   m_pointerShape(NULL),
@@ -65,10 +65,10 @@ ewol::Mesh::Mesh(const std::string& _fileName, const std::string& _shaderName) :
 	}
 }
 
-ewol::Mesh::~Mesh(void) {
+ewol::resource::Mesh::~Mesh(void) {
 	// remove dynamics dependencies :
-	ewol::Program::release(m_GLprogram);
-	ewol::VirtualBufferObject::release(m_verticesVBO);
+	ewol::resource::Program::release(m_GLprogram);
+	ewol::resource::VirtualBufferObject::release(m_verticesVBO);
 	if (m_functionFreeShape!=NULL) {
 		m_functionFreeShape(m_pointerShape);
 		m_pointerShape = NULL;
@@ -77,9 +77,9 @@ ewol::Mesh::~Mesh(void) {
 
 //#define DISPLAY_NB_VERTEX_DISPLAYED
 
-void ewol::Mesh::draw(mat4& _positionMatrix,
-                      bool _enableDepthTest,
-                      bool _enableDepthUpdate) {
+void ewol::resource::Mesh::draw(mat4& _positionMatrix,
+                                bool _enableDepthTest,
+                                bool _enableDepthUpdate) {
 	if (m_GLprogram == NULL) {
 		EWOL_ERROR("No shader ...");
 		return;
@@ -178,7 +178,7 @@ void ewol::Mesh::draw(mat4& _positionMatrix,
 }
 
 // normal calculation of the normal face is really easy :
-void ewol::Mesh::calculateNormaleFace(void) {
+void ewol::resource::Mesh::calculateNormaleFace(void) {
 	m_listFacesNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeFace) {
 		std::vector<Face>& tmpFaceList = m_listFaces.getValue(0).m_faces;
@@ -192,7 +192,7 @@ void ewol::Mesh::calculateNormaleFace(void) {
 	}
 }
 
-void ewol::Mesh::calculateNormaleEdge(void) {
+void ewol::resource::Mesh::calculateNormaleEdge(void) {
 	m_listVertexNormal.clear();
 	if (m_normalMode != ewol::Mesh::normalModeVertex) {
 		for(size_t iii=0 ; iii<m_listVertex.size() ; iii++) {
@@ -221,7 +221,7 @@ void ewol::Mesh::calculateNormaleEdge(void) {
 //#define PRINT_HALF (1)
 //#define TRY_MINIMAL_VBO
 
-void ewol::Mesh::generateVBO(void) {
+void ewol::resource::Mesh::generateVBO(void) {
 	// calculate the normal of all faces if needed
 	if (m_normalMode == ewol::Mesh::normalModeNone) {
 		// when no normal detected  == > auto generate Face normal ....
@@ -284,7 +284,7 @@ void ewol::Mesh::generateVBO(void) {
 }
 
 
-void ewol::Mesh::createViewBox(const std::string& _materialName,float _size) {
+void ewol::resource::Mesh::createViewBox(const std::string& _materialName,float _size) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 	// This is the direct generation basis on the .obj system
 	/*
@@ -377,7 +377,7 @@ void ewol::Mesh::createViewBox(const std::string& _materialName,float _size) {
 }
 
 
-bool ewol::Mesh::loadOBJ(const std::string& _fileName) {
+bool ewol::resource::Mesh::loadOBJ(const std::string& _fileName) {
 	m_normalMode = ewol::Mesh::normalModeNone;
 #if 0
 	etk::FSNode fileName(_fileName);
@@ -626,7 +626,7 @@ enum emfModuleMode {
 	EMFModuleMaterial_END,
 };
 
-bool ewol::Mesh::loadEMF(const std::string& _fileName) {
+bool ewol::resource::Mesh::loadEMF(const std::string& _fileName) {
 	m_checkNormal = true;
 	m_normalMode = ewol::Mesh::normalModeNone;
 	etk::FSNode fileName(_fileName);
@@ -992,7 +992,7 @@ bool ewol::Mesh::loadEMF(const std::string& _fileName) {
 	return true;
 }
 
-void ewol::Mesh::addMaterial(const std::string& _name, ewol::Material* _data) {
+void ewol::resource::Mesh::addMaterial(const std::string& _name, ewol::Material* _data) {
 	if (NULL == _data) {
 		EWOL_ERROR(" can not add material with null pointer");
 		return;
@@ -1005,7 +1005,7 @@ void ewol::Mesh::addMaterial(const std::string& _name, ewol::Material* _data) {
 	m_materials.add(_name, _data);
 }
 
-void ewol::Mesh::setShape(void* _shape) {
+void ewol::resource::Mesh::setShape(void* _shape) {
 	if (m_functionFreeShape!=NULL) {
 		m_functionFreeShape(m_pointerShape);
 		m_pointerShape = NULL;
@@ -1013,13 +1013,13 @@ void ewol::Mesh::setShape(void* _shape) {
 	m_pointerShape=_shape;
 }
 
-ewol::Mesh* ewol::Mesh::keep(const std::string& _meshName) {
-	ewol::Mesh* object = static_cast<ewol::Mesh*>(getManager().localKeep(_meshName));
+ewol::resource::Mesh* ewol::resource::Mesh::keep(const std::string& _meshName) {
+	ewol::resource::Mesh* object = static_cast<ewol::resource::Mesh*>(getManager().localKeep(_meshName));
 	if (NULL != object) {
 		return object;
 	}
 	EWOL_DEBUG("CREATE: Mesh: '" << _meshName << "'");
-	object = new ewol::Mesh(_meshName);
+	object = new ewol::resource::Mesh(_meshName);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : ??Mesh??" << _meshName);
 		return NULL;
@@ -1028,11 +1028,11 @@ ewol::Mesh* ewol::Mesh::keep(const std::string& _meshName) {
 	return object;
 }
 
-void ewol::Mesh::release(ewol::Mesh*& _object) {
+void ewol::resource::Mesh::release(ewol::Mesh*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

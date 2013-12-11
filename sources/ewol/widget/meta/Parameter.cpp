@@ -28,11 +28,11 @@ extern const char * const ewolEventParameterSave                = "ewol-event-pa
 
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
-widget::Parameter::Parameter(void) :
+ewol::widget::Parameter::Parameter(void) :
   m_currentIdList(0),
   m_widgetTitle(NULL),
   m_paramList(NULL) {
-	addObjectType("widget::Parameter");
+	addObjectType("ewol::widget::Parameter");
 	addEventId(ewolEventParameterClose);
 	
 	widget::Sizer * mySizerVert = NULL;
@@ -116,7 +116,7 @@ widget::Parameter::Parameter(void) :
 		} else {
 			mySizerVert->subWidgetAdd(mySizerHori);
 			
-			m_paramList = new widget::ParameterList();
+			m_paramList = new ewol::widget::ParameterList();
 			if (NULL == m_paramList) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
@@ -185,18 +185,18 @@ widget::Parameter::Parameter(void) :
 	markToRedraw();
 }
 
-widget::Parameter::~Parameter(void) {
+ewol::widget::Parameter::~Parameter(void) {
 	
 }
 
-void widget::Parameter::setTitle(std::string _label) {
+void ewol::widget::Parameter::setTitle(std::string _label) {
 	if (NULL == m_widgetTitle) {
 		return;
 	}
 	m_widgetTitle->setLabel(_label);
 }
 
-void widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg) {
+void ewol::widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg) {
 	widget::PopUp::onReceiveMessage(_msg);
 	EWOL_DEBUG("event on the parameter : " << _msg);
 	if (_msg.getMessage() == ewolEventParameterClose) {
@@ -218,7 +218,7 @@ void widget::Parameter::onReceiveMessage(const ewol::EMessage& _msg) {
 	return;
 }
 
-void widget::Parameter::onObjectRemove(ewol::EObject * _removeObject) {
+void ewol::widget::Parameter::onObjectRemove(ewol::EObject * _removeObject) {
 	// First step call parrent : 
 	widget::PopUp::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
@@ -233,7 +233,7 @@ void widget::Parameter::onObjectRemove(ewol::EObject * _removeObject) {
 	}
 }
 
-void widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget) {
+void ewol::widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget) {
 	if (NULL != m_paramList) {
 		m_paramList->menuAdd(_label, m_currentIdList, _image);
 		if (NULL != m_wSlider) {
@@ -256,21 +256,21 @@ void widget::Parameter::menuAdd(std::string _label, std::string _image, ewol::Wi
 		m_currentIdList++;
 	}
 }
-void widget::Parameter::menuAddGroup(std::string _label) {
+void ewol::widget::Parameter::menuAddGroup(std::string _label) {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
 		m_paramList->menuAddGroup(_label);
 	}
 }
 
-void widget::Parameter::menuClear(void) {
+void ewol::widget::Parameter::menuClear(void) {
 	if (NULL != m_paramList) {
 		m_paramList->menuClear();
 		m_currentIdList = 0;
 	}
 }
 
-void widget::Parameter::menuSeparator(void) {
+void ewol::widget::Parameter::menuSeparator(void) {
 	if (NULL != m_paramList) {
 		m_paramList->menuSeparator();
 	}

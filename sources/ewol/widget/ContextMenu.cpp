@@ -16,23 +16,23 @@
 #define __class__	"ContextMenu"
 
 
-const char* const widget::ContextMenu::configArrowPosition = "arrow-position";
-const char* const widget::ContextMenu::configArrowMode     = "arrow-mode";
-const char* const widget::ContextMenu::configShaper        = "shaper";
+const char* const ewol::widget::ContextMenu::configArrowPosition = "arrow-position";
+const char* const ewol::widget::ContextMenu::configArrowMode     = "arrow-mode";
+const char* const ewol::widget::ContextMenu::configShaper        = "shaper";
 
 static ewol::Widget* Create(void) {
-	return new widget::ContextMenu();
+	return new ewol::widget::ContextMenu();
 }
 
-void widget::ContextMenu::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::ContextMenu::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
 
 
-widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
+ewol::widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
   m_shaper(_shaperName) {
-	addObjectType("widget::ContextMenu");
+	addObjectType("ewol::widget::ContextMenu");
 	// add basic configurations :
 	registerConfig(configArrowPosition, "vec2", NULL, "position of the arrow");
 	registerConfig(configArrowMode, "list", "none;left;buttom;right;top", "Position of the arrow in the pop-up");
@@ -52,17 +52,17 @@ widget::ContextMenu::ContextMenu(const std::string& _shaperName) :
 	setMouseLimit(1);
 }
 
-widget::ContextMenu::~ContextMenu(void) {
+ewol::widget::ContextMenu::~ContextMenu(void) {
 	
 }
 
-void widget::ContextMenu::setShaperName(const std::string& _shaperName) {
+void ewol::widget::ContextMenu::setShaperName(const std::string& _shaperName) {
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }
 
 
-void widget::ContextMenu::calculateSize(const vec2& _availlable) {
+void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("CalculateSize=" << availlable);
 	// pop-up fill all the display :
 	m_size = _availlable;
@@ -130,7 +130,7 @@ void widget::ContextMenu::calculateSize(const vec2& _availlable) {
 }
 
 
-void widget::ContextMenu::calculateMinMaxSize(void) {
+void ewol::widget::ContextMenu::calculateMinMaxSize(void) {
 	// call main class to calculate the min size...
 	widget::Container::calculateMinMaxSize();
 	// add padding of the display
@@ -140,13 +140,13 @@ void widget::ContextMenu::calculateMinMaxSize(void) {
 }
 
 
-void widget::ContextMenu::onDraw(void) {
+void ewol::widget::ContextMenu::onDraw(void) {
 	m_compositing.draw();
 	m_shaper.draw();
 }
 
 
-void widget::ContextMenu::onRegenerateDisplay(void) {
+void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 	// call upper class :
 	widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {
@@ -214,7 +214,7 @@ void widget::ContextMenu::onRegenerateDisplay(void) {
 	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
 }
 
-bool widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
 	if (_event.getId() > 0) {
 		if (NULL != widget::Container::getWidgetAtPos(_event.getPos())) {
 			return false;
@@ -234,14 +234,14 @@ bool widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-void widget::ContextMenu::setPositionMark(enum markPosition _position, vec2 _arrowPos) {
+void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, vec2 _arrowPos) {
 	EWOL_DEBUG("set context menu at the position : " << _arrowPos);
 	m_arrawBorder = _position;
 	m_arrowPos = _arrowPos;
 	markToRedraw();
 }
 
-ewol::Widget* widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
+ewol::Widget* ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 	ewol::Widget* val = widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
@@ -250,7 +250,7 @@ ewol::Widget* widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 }
 
 
-bool widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
@@ -279,7 +279,7 @@ bool widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::ContextMenu::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::ContextMenu::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}

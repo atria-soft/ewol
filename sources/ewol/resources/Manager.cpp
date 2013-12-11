@@ -16,12 +16,12 @@
 
 
 
-ewol::ResourceManager::ResourceManager(void) :
+ewol::resource::Manager::Manager(void) :
   m_contextHasBeenRemoved(true) {
 	// nothing to do ...
 }
 
-ewol::ResourceManager::~ResourceManager(void) {
+ewol::resource::Manager::~Manager(void) {
 	bool hasError = false;
 	if (m_resourceListToUpdate.size()!=0) {
 		EWOL_ERROR("Must not have anymore resources to update !!!");
@@ -36,7 +36,7 @@ ewol::ResourceManager::~ResourceManager(void) {
 	}
 }
 
-void ewol::ResourceManager::unInit(void) {
+void ewol::resource::Manager::unInit(void) {
 	display();
 	m_resourceListToUpdate.clear();
 	// remove all resources ...
@@ -52,7 +52,7 @@ void ewol::ResourceManager::unInit(void) {
 	m_resourceList.clear();
 }
 
-void ewol::ResourceManager::display(void) {
+void ewol::resource::Manager::display(void) {
 	EWOL_INFO("Resources loaded : ");
 	// remove all resources ...
 	for (int64_t iii=m_resourceList.size()-1; iii >= 0; iii--) {
@@ -66,7 +66,7 @@ void ewol::ResourceManager::display(void) {
 	EWOL_INFO("Resources ---");
 }
 
-void ewol::ResourceManager::reLoadResources(void) {
+void ewol::resource::Manager::reLoadResources(void) {
 	EWOL_INFO("-------------  Resources re-loaded  -------------");
 	// remove all resources ...
 	if (m_resourceList.size() != 0) {
@@ -87,7 +87,7 @@ void ewol::ResourceManager::reLoadResources(void) {
 	EWOL_INFO("-------------  Resources  -------------");
 }
 
-void ewol::ResourceManager::update(ewol::Resource* _object) {
+void ewol::resource::Manager::update(ewol::resource::Resource* _object) {
 	// chek if not added before
 	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] != NULL) {
@@ -102,7 +102,7 @@ void ewol::ResourceManager::update(ewol::Resource* _object) {
 }
 
 // Specific to load or update the data in the openGl context  == > system use only
-void ewol::ResourceManager::updateContext(void) {
+void ewol::resource::Manager::updateContext(void) {
 	if (true == m_contextHasBeenRemoved) {
 		// need to update all ...
 		m_contextHasBeenRemoved = false;
@@ -138,7 +138,7 @@ void ewol::ResourceManager::updateContext(void) {
 }
 
 // in this case, it is really too late ...
-void ewol::ResourceManager::contextHasBeenDestroyed(void) {
+void ewol::resource::Manager::contextHasBeenDestroyed(void) {
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
 			m_resourceList[iii]->removeContextToLate();
@@ -149,7 +149,7 @@ void ewol::ResourceManager::contextHasBeenDestroyed(void) {
 }
 
 // internal generic keeper ...
-ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
+ewol::resource::Resource* ewol::resource::Manager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
@@ -164,7 +164,7 @@ ewol::Resource* ewol::ResourceManager::localKeep(const std::string& _filename) {
 }
 
 // internal generic keeper ...
-void ewol::ResourceManager::localAdd(ewol::Resource* _object) {
+void ewol::resource::Manager::localAdd(ewol::resource::Resource* _object) {
 	//Add ... find empty slot
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] == NULL) {
@@ -176,7 +176,7 @@ void ewol::ResourceManager::localAdd(ewol::Resource* _object) {
 	m_resourceList.push_back(_object);
 }
 
-bool ewol::ResourceManager::release(ewol::Resource*& _object) {
+bool ewol::resource::Manager::release(ewol::resource::Resource*& _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return false;

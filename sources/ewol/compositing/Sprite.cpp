@@ -10,9 +10,9 @@
 #include <ewol/compositing/Sprite.h>
 
 #undef __class__
-#define __class__ "ewol::Sprite"
+#define __class__ "ewol::compositing::Sprite"
 
-ewol::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite) :
+ewol::compositing::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite) :
   ewol::Image(_imageName),
   m_nbSprite(_nbSprite),
   m_unitarySpriteSize(0,0) {
@@ -26,7 +26,7 @@ ewol::Sprite::Sprite(const std::string& _imageName, const ivec2& _nbSprite) :
 }
 
 
-void ewol::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size) {
+void ewol::compositing::Sprite::printSprite(const ivec2& _spriteID, const vec3& _size) {
 	if(    _spriteID.x()<0
 	    || _spriteID.y()<0
 	    || _spriteID.x() >= m_nbSprite.x()

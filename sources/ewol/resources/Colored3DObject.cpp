@@ -11,10 +11,10 @@
 #include <ewol/resources/ResourceManager.h>
 
 #undef __class__
-#define __class__	"Colored3DObject"
+#define __class__	"resource::Colored3DObject"
 
 
-ewol::Colored3DObject::Colored3DObject(void) :
+ewol::resource::Colored3DObject::Colored3DObject(void) :
   m_GLprogram(NULL) {
 	addObjectType("ewol::Colored3DObject");
 	// get the shader resource :
@@ -27,16 +27,16 @@ ewol::Colored3DObject::Colored3DObject(void) :
 	}
 }
 
-ewol::Colored3DObject::~Colored3DObject(void) {
+ewol::resource::Colored3DObject::~Colored3DObject(void) {
 	// remove dynamics dependencies :
 	ewol::Program::release(m_GLprogram);
 }
 
 
-void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
-                                 const etk::Color<float>& _color,
-                                 bool _updateDepthBuffer,
-                                 bool _depthtest) {
+void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+                                           const etk::Color<float>& _color,
+                                           bool _updateDepthBuffer,
+                                           bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -75,11 +75,11 @@ void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	}
 }
 
-void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
-                                 const etk::Color<float>& _color,
-                                 mat4& _transformationMatrix,
-                                 bool _updateDepthBuffer,
-                                 bool _depthtest) {
+void ewol::resource::Colored3DObject::draw(std::vector<vec3>& _vertices,
+                                           const etk::Color<float>& _color,
+                                           mat4& _transformationMatrix,
+                                           bool _updateDepthBuffer,
+                                           bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -115,11 +115,11 @@ void ewol::Colored3DObject::draw(std::vector<vec3>& _vertices,
 	}
 }
 
-void ewol::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
-                                     const etk::Color<float>& _color,
-                                     mat4& _transformationMatrix,
-                                     bool _updateDepthBuffer,
-                                     bool _depthtest) {
+void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
+                                               const etk::Color<float>& _color,
+                                               mat4& _transformationMatrix,
+                                               bool _updateDepthBuffer,
+                                               bool _depthtest) {
 	if (_vertices.size() <= 0) {
 		return;
 	}
@@ -155,10 +155,10 @@ void ewol::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
-ewol::Colored3DObject* ewol::Colored3DObject::keep(void) {
+ewol::resource::Colored3DObject* ewol::Colored3DObject::keep(void) {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
-	ewol::Colored3DObject* object = new ewol::Colored3DObject();
+	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : Colored3DObject ");
 		return NULL;
@@ -167,11 +167,11 @@ ewol::Colored3DObject* ewol::Colored3DObject::keep(void) {
 	return object;
 }
 
-void ewol::Colored3DObject::release(ewol::Colored3DObject*& _object) {
+void ewol::resource::Colored3DObject::release(ewol::resource::Colored3DObject*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

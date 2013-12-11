@@ -18,43 +18,44 @@
 #include <ewol/widget/CheckBox.h>
 #include <ewol/widget/ListFileSystem.h>
 
-namespace widget {
-	/**
-	 * @ingroup ewolWidgetGroup
-	 */
-	class FileChooser : public widget::PopUp {
-		public:
-			// Event list of properties
-			static const char* const eventCancel;
-			static const char* const eventValidate;
-			// Config list of properties
-		public:
-			FileChooser(void);
-			virtual ~FileChooser(void);
-		private:
-			widget::Label* m_widgetTitle;
-			widget::Button* m_widgetValidate;
-			widget::Button* m_widgetCancel;
-			widget::Entry* m_widgetCurrentFolder;
-			widget::Entry* m_widgetCurrentFileName;
-			widget::ListFileSystem* m_widgetListFolder;
-			widget::ListFileSystem* m_widgetListFile;
-			widget::CheckBox* m_widgetCheckBox;
-			std::string m_folder;
-			std::string m_file;
-		public:
-			void setTitle(const std::string& _label);
-			void setValidateLabel(const std::string& _label);
-			void setCancelLabel(const std::string& _label);
-			void setFolder(const std::string& _folder);
-			void setFileName(const std::string& _filename);
-			std::string getCompleateFileName(void);
-			void updateCurrentFolder(void);
-		public: // Derived function
-			virtual void onReceiveMessage(const ewol::EMessage& _msg);
-			virtual void onObjectRemove(ewol::EObject* _removeObject);
+namespace ewol {
+	namespace widget {
+		/**
+		 * @ingroup ewolWidgetGroup
+		 */
+		class FileChooser : public ewol::widget::PopUp {
+			public:
+				// Event list of properties
+				static const char* const eventCancel;
+				static const char* const eventValidate;
+				// Config list of properties
+			public:
+				FileChooser(void);
+				virtual ~FileChooser(void);
+			private:
+				ewol::widget::Label* m_widgetTitle;
+				ewol::widget::Button* m_widgetValidate;
+				ewol::widget::Button* m_widgetCancel;
+				ewol::widget::Entry* m_widgetCurrentFolder;
+				ewol::widget::Entry* m_widgetCurrentFileName;
+				ewol::widget::ListFileSystem* m_widgetListFolder;
+				ewol::widget::ListFileSystem* m_widgetListFile;
+				ewol::widget::CheckBox* m_widgetCheckBox;
+				std::string m_folder;
+				std::string m_file;
+			public:
+				void setTitle(const std::string& _label);
+				void setValidateLabel(const std::string& _label);
+				void setCancelLabel(const std::string& _label);
+				void setFolder(const std::string& _folder);
+				void setFileName(const std::string& _filename);
+				std::string getCompleateFileName(void);
+				void updateCurrentFolder(void);
+			public: // Derived function
+				virtual void onReceiveMessage(const ewol::EMessage& _msg);
+				virtual void onObjectRemove(ewol::EObject* _removeObject);
+		};
 	};
-	
 };
 
 #endif

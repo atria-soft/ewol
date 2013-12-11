@@ -13,32 +13,32 @@
 #include <ewol/widget/WidgetManager.h>
 
 #undef __class__
-#define __class__	"widget::Composer"
+#define __class__	"ewol::widget::Composer"
 
-widget::Composer::Composer(void) {
+ewol::widget::Composer::Composer(void) {
 	// nothing to do ...
 }
 
-widget::Composer::Composer(enum composerMode _mode, const std::string& _fileName) {
-	addObjectType("widget::Composer");
+ewol::widget::Composer::Composer(enum composerMode _mode, const std::string& _fileName) {
+	addObjectType("ewol::widget::Composer");
 	switch(_mode) {
-		case widget::Composer::None:
+		case ewol::widget::Composer::None:
 			// nothing to do ...
 			break;
-		case widget::Composer::String:
+		case ewol::widget::Composer::String:
 			loadFromString(_fileName);
 			break;
-		case widget::Composer::file:
+		case ewol::widget::Composer::file:
 			loadFromFile(_fileName);
 			break;
 	}
 }
 
-widget::Composer::~Composer(void) {
+ewol::widget::Composer::~Composer(void) {
 	
 }
 
-bool widget::Composer::loadFromFile(const std::string& _fileName) {
+bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 	exml::Document doc;
 	if (doc.load(_fileName) == false) {
 		EWOL_ERROR(" can not load file XML : " << _fileName);
@@ -63,7 +63,7 @@ bool widget::Composer::loadFromFile(const std::string& _fileName) {
 	return true;
 }
 
-bool widget::Composer::loadFromString(const std::string& _composerXmlString) {
+bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlString) {
 	exml::Document doc;
 	if (doc.parse(_composerXmlString) == false) {
 		EWOL_ERROR(" can not load file XML string...");
@@ -89,18 +89,18 @@ bool widget::Composer::loadFromString(const std::string& _composerXmlString) {
 }
 
 
-void widget::Composer::registerOnEventNameWidget(const std::string& _subWidgetName,
-                                                 const char * _eventId,
-                                                 const char * _eventIdgenerated,
-                                                 const std::string& _overloadData) {
+void ewol::widget::Composer::registerOnEventNameWidget(const std::string& _subWidgetName,
+                                                       const char * _eventId,
+                                                       const char * _eventIdgenerated,
+                                                       const std::string& _overloadData) {
 	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
-void widget::Composer::registerOnEventNameWidget(ewol::EObject * _destinationObject,
-                                                 const std::string& _subWidgetName,
-                                                 const char * _eventId,
-                                                 const char * _eventIdgenerated,
-                                                 const std::string& _overloadData) {
+void ewol::widget::Composer::registerOnEventNameWidget(ewol::EObject * _destinationObject,
+                                                       const std::string& _subWidgetName,
+                                                       const char * _eventId,
+                                                       const char * _eventIdgenerated,
+                                                       const std::string& _overloadData) {
 	ewol::Widget* tmpWidget = getWidgetNamed(_subWidgetName);
 	if (NULL != tmpWidget) {
 		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");

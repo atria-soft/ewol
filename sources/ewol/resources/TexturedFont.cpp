@@ -40,10 +40,10 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 }
 
 #undef __class__
-#define __class__ "TexturedFont"
+#define __class__ "resource::TexturedFont"
 
-ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
-  ewol::Texture(_fontName) {
+ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
+  ewol::resource::Texture(_fontName) {
 	addObjectType("ewol::TexturedFont");
 	m_font[0] = NULL;
 	m_font[1] = NULL;
@@ -217,13 +217,13 @@ ewol::TexturedFont::TexturedFont(const std::string& _fontName) :
 	EWOL_DEBUG("    " << ewol::font::BoldItalic << " == >" << getWrappingMode(ewol::font::BoldItalic));
 }
 
-ewol::TexturedFont::~TexturedFont(void) {
+ewol::resource::TexturedFont::~TexturedFont(void) {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
 		ewol::FontFreeType::release(m_font[iiiFontId]);
 	}
 }
 
-bool ewol::TexturedFont::addGlyph(const char32_t& _val) {
+bool ewol::resource::TexturedFont::addGlyph(const char32_t& _val) {
 	bool hasChange = false;
 	// for each font :
 	for (int32_t iii=0; iii<4 ; iii++) {
@@ -291,7 +291,7 @@ bool ewol::TexturedFont::addGlyph(const char32_t& _val) {
 	return hasChange;
 }
 
-int32_t ewol::TexturedFont::getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode) {
+int32_t ewol::resource::TexturedFont::getIndex(char32_t _charcode, const enum ewol::font::mode _displayMode) {
 	if (_charcode < 0x20) {
 		return 0;
 	} else if (_charcode < 0x80) {
@@ -317,7 +317,7 @@ int32_t ewol::TexturedFont::getIndex(char32_t _charcode, const enum ewol::font::
 	return 0;
 }
 
-ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
+ewol::resource::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
@@ -336,15 +336,15 @@ ewol::GlyphProperty* ewol::TexturedFont::getGlyphPointer(const char32_t& _charco
 	return &((m_listElement[_displayMode])[index]);
 }
 
-ewol::TexturedFont* ewol::TexturedFont::keep(const std::string& _filename) {
+ewol::resource::TexturedFont* ewol::resource::TexturedFont::keep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP : TexturedFont : file : '" << _filename << "'");
-	ewol::TexturedFont* object = static_cast<ewol::TexturedFont*>(getManager().localKeep(_filename));
+	ewol::resource::TexturedFont* object = static_cast<ewol::resource::TexturedFont*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
 	// need to crate a new one ...
 	EWOL_DEBUG("CREATE: TexturedFont : file : '" << _filename << "'");
-	object = new ewol::TexturedFont(_filename);
+	object = new ewol::resource::TexturedFont(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
@@ -353,13 +353,13 @@ ewol::TexturedFont* ewol::TexturedFont::keep(const std::string& _filename) {
 	return object;
 }
 
-void ewol::TexturedFont::release(ewol::TexturedFont*& _object) {
+void ewol::resource::TexturedFont::release(ewol::resource::TexturedFont*& _object) {
 	if (NULL == _object) {
 		return;
 	}
 	std::string name = _object->getName();
 	int32_t count = _object->getCounter() - 1;
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	if (getManager().release(object2) == true) {
 		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
 		//etk::displayBacktrace(false);

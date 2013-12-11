@@ -16,45 +16,47 @@
 #include <ewol/widget/Widget.h>
 
 namespace ewol {
-	class WidgetManager {
-		public:
-			typedef ewol::Widget* (*creator_tf)(void);
-		private:
-			// For the focus Management
-			ewol::Widget* m_focusWidgetDefault;
-			ewol::Widget* m_focusWidgetCurrent;
-			std::vector<ewol::Widget*> m_listOfPeriodicWidget;
-			bool m_havePeriodic;
-			bool m_haveRedraw;
-			etk::Hash<creator_tf> m_creatorList;
-			int64_t m_applWakeUpTime; //!< Time of the application initialize
-			int64_t m_lastPeriodicCallTime; //!< last call time ...
-		public:
-			WidgetManager(void);
-			~WidgetManager(void);
-			// need to call when remove a widget to clear all dependency of the focus system
-			void rm(ewol::Widget* _newWidget);
-			
-			void focusKeep(ewol::Widget* _newWidget); // set the focus at the specific widget
-			void focusSetDefault(ewol::Widget* _newWidget); // select the default focus getter
-			void focusRelease(void); // release focus from the current widget to the default
-			ewol::Widget* focusGet(void);
-			void focusRemoveIfRemove(ewol::Widget* _newWidget);
-			
-			void periodicCallAdd(ewol::Widget* _pWidget);
-			void periodicCallRm(ewol::Widget* _pWidget);
-			void periodicCall(int64_t _localTime);
-			void periodicCallResume(int64_t _localTime);
-			bool periodicCallHave(void);
-			
-			void markDrawingIsNeeded(void);
-			bool isDrawingNeeded(void);
-			
-			// element that generate the list of elements
-			void addWidgetCreator(const std::string& _name, creator_tf _pointer);
-			ewol::Widget* create(const std::string& _name);
-			bool exist(const std::string& _name);
-			std::string list(void);
+	namespace widget {
+		class Manager {
+			public:
+				typedef ewol::Widget* (*creator_tf)(void);
+			private:
+				// For the focus Management
+				ewol::Widget* m_focusWidgetDefault;
+				ewol::Widget* m_focusWidgetCurrent;
+				std::vector<ewol::Widget*> m_listOfPeriodicWidget;
+				bool m_havePeriodic;
+				bool m_haveRedraw;
+				etk::Hash<creator_tf> m_creatorList;
+				int64_t m_applWakeUpTime; //!< Time of the application initialize
+				int64_t m_lastPeriodicCallTime; //!< last call time ...
+			public:
+				Manager(void);
+				~Manager(void);
+				// need to call when remove a widget to clear all dependency of the focus system
+				void rm(ewol::Widget* _newWidget);
+				
+				void focusKeep(ewol::Widget* _newWidget); // set the focus at the specific widget
+				void focusSetDefault(ewol::Widget* _newWidget); // select the default focus getter
+				void focusRelease(void); // release focus from the current widget to the default
+				ewol::Widget* focusGet(void);
+				void focusRemoveIfRemove(ewol::Widget* _newWidget);
+				
+				void periodicCallAdd(ewol::Widget* _pWidget);
+				void periodicCallRm(ewol::Widget* _pWidget);
+				void periodicCall(int64_t _localTime);
+				void periodicCallResume(int64_t _localTime);
+				bool periodicCallHave(void);
+				
+				void markDrawingIsNeeded(void);
+				bool isDrawingNeeded(void);
+				
+				// element that generate the list of elements
+				void addWidgetCreator(const std::string& _name, creator_tf _pointer);
+				ewol::Widget* create(const std::string& _name);
+				bool exist(const std::string& _name);
+				std::string list(void);
+		};
 	};
 };
 

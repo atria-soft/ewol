@@ -21,30 +21,30 @@
 
 extern const char * const ewolEventColorChooserChange;
 
-namespace widget {
-	/**
-	 * @ingroup ewolWidgetGroup
-	 */
-	class ColorChooser : public widget::Sizer {
-		public:
-			ColorChooser(void);
-			~ColorChooser(void);
-			// Derived function
-			virtual void onReceiveMessage(const ewol::EMessage& _msg);
-			// Derived function
-			virtual void onObjectRemove(ewol::EObject* _removeObject);
-			
-			void setColor(etk::Color<> _newColor);
-			etk::Color<> getColor(void);
-		private:;
-			widget::ColorBar* m_widgetColorBar;
-			widget::Slider* m_widgetRed;
-			widget::Slider* m_widgetGreen;
-			widget::Slider* m_widgetBlue;
-			widget::Slider* m_widgetAlpha;
-			etk::Color<> m_currentColor;
+namespace ewol {
+	namespace widget {
+		/**
+		 * @ingroup ewolWidgetGroup
+		 */
+		class ColorChooser : public ewol::widget::Sizer {
+			public:
+				ColorChooser(void);
+				~ColorChooser(void);
+			public: // Derived function
+				virtual void onReceiveMessage(const ewol::EMessage& _msg);
+				virtual void onObjectRemove(ewol::EObject* _removeObject);
+			public:
+				void setColor(etk::Color<> _newColor);
+				etk::Color<> getColor(void);
+			private:
+				ewol::widget::ColorBar* m_widgetColorBar;
+				ewol::widget::Slider* m_widgetRed;
+				ewol::widget::Slider* m_widgetGreen;
+				ewol::widget::Slider* m_widgetBlue;
+				ewol::widget::Slider* m_widgetAlpha;
+				etk::Color<> m_currentColor;
+		};
 	};
-	
 };
 
 #endif

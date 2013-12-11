@@ -23,58 +23,8 @@
 #include <ewol/resources/ResourceManager.h>
 #include <ewol/commandLine.h>
 
-// TODO : Remove this from here ...
-class eSystemMessage {
-	public:
-		enum theadMessage {
-			msgNone,
-			msgInit,
-			msgRecalculateSize,
-			msgResize,
-			msgHide,
-			msgShow,
-			
-			msgInputMotion,
-			msgInputState,
-			
-			msgKeyboardKey,
-			msgKeyboardMove,
-			
-			msgClipboardArrive
-		};
-	public :
-		// specify the message type
-		enum theadMessage TypeMessage;
-		// can not set a union ...
-		enum ewol::clipBoard::clipboardListe clipboardID;
-		// InputId
-		enum ewol::keyEvent::type inputType;
-		int32_t                 inputId;
-		// generic dimentions
-		vec2 dimention;
-		// keyboard events :
-		bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
-		bool                        stateIsDown;
-		char32_t                   keyboardChar;
-		enum ewol::keyEvent::keyboard keyboardMove;
-		ewol::SpecialKey            keyboardSpecial;
-		
-		eSystemMessage(void) :
-			TypeMessage(msgNone),
-			clipboardID(ewol::clipBoard::clipboardStd),
-			inputType(ewol::keyEvent::typeUnknow),
-			inputId(-1),
-			dimention(0,0),
-			repeateKey(false),
-			stateIsDown(false),
-			keyboardChar(0),
-			keyboardMove(ewol::keyEvent::keyboardUnknow)
-		{
-			
-		}
-};
-
 namespace ewol {
+	class eSystemMessage;
 	enum orientation{
 		screenAuto = 0,
 		screenLandscape,
@@ -129,7 +79,7 @@ namespace ewol {
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::eInput m_input;
-			etk::MessageFifo<eSystemMessage> m_msgSystem;
+			etk::MessageFifo<ewol::eSystemMessage*> m_msgSystem;
 			bool m_displayFps;
 			ewol::Fps m_FpsSystemEvent;
 			ewol::Fps m_FpsSystemContext;

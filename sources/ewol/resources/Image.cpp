@@ -15,16 +15,16 @@
 
 
 #undef __class__
-#define __class__ "TextureFile"
+#define __class__ "resource::TextureFile"
 
-ewol::TextureFile::TextureFile(const std::string& _genName) :
+ewol::resource::TextureFile::TextureFile(const std::string& _genName) :
   Texture(_genName) {
 	
 }
 
 
-ewol::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
-  Texture(_genName) {
+ewol::resource::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
+  ewol::resource::Texture(_genName) {
 	addObjectType("ewol::TextureFile");
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
@@ -56,10 +56,10 @@ static int32_t nextP2(int32_t _value) {
 
 
 
-ewol::TextureFile* ewol::TextureFile::keep(const std::string& _filename, ivec2 _size) {
+ewol::resource::TextureFile* ewol::resource::TextureFile::keep(const std::string& _filename, ivec2 _size) {
 	EWOL_VERBOSE("KEEP: TextureFile: '" << _filename << "' size=" << _size);
 	if (_filename == "") {
-		ewol::TextureFile* object = new ewol::TextureFile("");
+		ewol::resource::TextureFile* object = new ewol::resource::TextureFile("");
 		if (NULL == object) {
 			EWOL_ERROR("allocation error of a resource : ??TEX??");
 			return NULL;
@@ -95,13 +95,13 @@ ewol::TextureFile* ewol::TextureFile::keep(const std::string& _filename, ivec2 _
 	}
 	
 	EWOL_VERBOSE("KEEP: TextureFile: '" << TmpFilename << "' new size=" << _size);
-	ewol::TextureFile* object = static_cast<ewol::TextureFile*>(getManager().localKeep(TmpFilename));
+	ewol::resource::TextureFile* object = static_cast<ewol::resource::TextureFile*>(getManager().localKeep(TmpFilename));
 	if (NULL != object) {
 		return object;
 	}
 	EWOL_INFO("CREATE: TextureFile: '" << TmpFilename << "' size=" << _size);
 	// need to crate a new one ...
-	object = new ewol::TextureFile(TmpFilename, _filename, _size);
+	object = new ewol::resource::TextureFile(TmpFilename, _filename, _size);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
@@ -111,11 +111,11 @@ ewol::TextureFile* ewol::TextureFile::keep(const std::string& _filename, ivec2 _
 }
 
 
-void ewol::TextureFile::release(ewol::TextureFile*& _object) {
+void ewol::resource::TextureFile::release(ewol::resource::TextureFile*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

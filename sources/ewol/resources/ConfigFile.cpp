@@ -13,10 +13,10 @@
 #include <stdexcept>
 
 #undef __class__
-#define __class__	"ConfigFile"
+#define __class__	"resource::ConfigFile"
 
 
-void ewol::SimpleConfigElement::parse(const std::string& _value) {
+void ewol::resource::SimpleConfigElement::parse(const std::string& _value) {
 	m_value = _value;
 	#ifdef __EXCEPTIONS
 		try {
@@ -36,15 +36,15 @@ void ewol::SimpleConfigElement::parse(const std::string& _value) {
 
 
 
-ewol::ConfigFile::ConfigFile(const std::string& _filename) :
-  ewol::Resource(_filename) {
+ewol::resource::ConfigFile::ConfigFile(const std::string& _filename) :
+  ewol::resource::Resource(_filename) {
 	addObjectType("ewol::ConfigFile");
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
 }
 
 
-ewol::ConfigFile::~ConfigFile(void) {
+ewol::resource::ConfigFile::~ConfigFile(void) {
 	// remove all element
 	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -55,7 +55,7 @@ ewol::ConfigFile::~ConfigFile(void) {
 	m_list.clear();
 }
 
-void ewol::ConfigFile::reload(void) {
+void ewol::resource::ConfigFile::reload(void) {
 	// reset all parameters
 	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -138,7 +138,7 @@ void ewol::ConfigFile::reload(void) {
 }
 
 
-int32_t ewol::ConfigFile::request(const std::string& _paramName) {
+int32_t ewol::resource::ConfigFile::request(const std::string& _paramName) {
 	// check if the parameters existed :
 	for (size_t iii=0; iii<m_list.size(); iii++){
 		if (NULL != m_list[iii]) {
@@ -147,7 +147,7 @@ int32_t ewol::ConfigFile::request(const std::string& _paramName) {
 			}
 		}
 	}
-	ewol::SimpleConfigElement* tmpElement = new ewol::SimpleConfigElement(_paramName);
+	ewol::resource::SimpleConfigElement* tmpElement = new ewol::resource::SimpleConfigElement(_paramName);
 	if (NULL == tmpElement) {
 		EWOL_DEBUG("error while allocation");
 	} else {
@@ -157,14 +157,14 @@ int32_t ewol::ConfigFile::request(const std::string& _paramName) {
 }
 
 
-ewol::ConfigFile* ewol::ConfigFile::keep(const std::string& _filename) {
+ewol::resource::ConfigFile* ewol::resource::ConfigFile::keep(const std::string& _filename) {
 	EWOL_INFO("KEEP : SimpleConfig : file : \"" << _filename << "\"");
-	ewol::ConfigFile* object = static_cast<ewol::ConfigFile*>(getManager().localKeep(_filename));
+	ewol::resource::ConfigFile* object = static_cast<ewol::resource::ConfigFile*>(getManager().localKeep(_filename));
 	if (NULL != object) {
 		return object;
 	}
 	// this element create a new one every time ....
-	object = new ewol::ConfigFile(_filename);
+	object = new ewol::resource::ConfigFile(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : ??Mesh.obj??");
 		return NULL;
@@ -173,11 +173,11 @@ ewol::ConfigFile* ewol::ConfigFile::keep(const std::string& _filename) {
 	return object;
 }
 
-void ewol::ConfigFile::release(ewol::ConfigFile*& _object) {
+void ewol::resource::ConfigFile::release(ewol::resource::ConfigFile*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

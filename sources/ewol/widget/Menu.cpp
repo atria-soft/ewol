@@ -18,35 +18,35 @@
 #undef __class__
 #define __class__ "Menu"
 
-widget::Menu::Menu(void) {
-	addObjectType("widget::Menu");
+ewol::widget::Menu::Menu(void) {
+	addObjectType("ewol::widget::Menu");
 	m_staticId = 0;
 	m_widgetContextMenu = NULL;
 }
 
-widget::Menu::~Menu(void) {
+ewol::widget::Menu::~Menu(void) {
 	clear();
 }
 
-void widget::Menu::subWidgetRemoveAll(void) {
+void ewol::widget::Menu::subWidgetRemoveAll(void) {
 	clear();
 	widget::Sizer::subWidgetRemoveAll();
 }
 
-int32_t widget::Menu::subWidgetAdd(ewol::Widget* _newWidget) {
+int32_t ewol::widget::Menu::subWidgetAdd(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 	return -1;
 }
 
-void widget::Menu::subWidgetRemove(ewol::Widget* _newWidget) {
+void ewol::widget::Menu::subWidgetRemove(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget) {
+void ewol::widget::Menu::subWidgetUnLink(ewol::Widget* _newWidget) {
 	EWOL_ERROR("Not availlable");
 }
 
-void widget::Menu::clear(void) {
+void ewol::widget::Menu::clear(void) {
 	for (size_t iii=0; iii < m_listElement.size(); iii++) {
 		if (m_listElement[iii] != NULL) {
 			delete(m_listElement[iii]);
@@ -56,19 +56,19 @@ void widget::Menu::clear(void) {
 	m_listElement.clear();
 }
 
-int32_t widget::Menu::addTitle(std::string _label,
+int32_t ewol::widget::Menu::addTitle(std::string _label,
                                std::string _image,
                                const char * _generateEvent,
                                const std::string _message) {
 	return add(-1, _label, _image, _generateEvent, _message);
 }
 
-int32_t widget::Menu::add(int32_t _parent,
+int32_t ewol::widget::Menu::add(int32_t _parent,
                           std::string _label,
                           std::string _image,
                           const char *_generateEvent,
                           const std::string _message) {
-	widget::MenuElement *tmpObject = new widget::MenuElement();
+	ewol::widget::MenuElement *tmpObject = new ewol::widget::MenuElement();
 	if (NULL == tmpObject) {
 		EWOL_ERROR("Allocation problem");
 		return -1;
@@ -110,12 +110,12 @@ int32_t widget::Menu::add(int32_t _parent,
 	return tmpObject->m_localId;
 }
 
-void widget::Menu::addSpacer(void) {
+void ewol::widget::Menu::addSpacer(void) {
 	EWOL_TODO("NOT now...");
 }
 
 
-void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
+void ewol::widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 	/*
 	if (true == ewol::sizer::onReceiveMessage(_msg) {
 		return true;
@@ -251,7 +251,7 @@ void widget::Menu::onReceiveMessage(const ewol::EMessage& _msg) {
 }
 
 
-void widget::Menu::onObjectRemove(ewol::EObject * _removeObject) {
+void ewol::widget::Menu::onObjectRemove(ewol::EObject * _removeObject) {
 	widget::Sizer::onObjectRemove(_removeObject);
 	if (m_widgetContextMenu == _removeObject) {
 		m_widgetContextMenu = NULL;

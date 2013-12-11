@@ -10,12 +10,12 @@
 #include <ewol/ewol.h>
 
 
-static const char* l_listsladingMode[widget::WSlider::sladingTransition_count] = {
+static const char* l_listsladingMode[ewol::widget::WSlider::sladingTransition_count] = {
 	"transition vertical",
 	"transition horisantal"
 };
 
-etk::CCout& operator <<(etk::CCout& _os, const enum widget::WSlider::sladingMode _obj) {
+etk::CCout& operator <<(etk::CCout& _os, const enum ewol::widget::WSlider::sladingMode _obj) {
 	_os << l_listsladingMode[_obj];
 	return _os;
 }
@@ -24,39 +24,39 @@ etk::CCout& operator <<(etk::CCout& _os, const enum widget::WSlider::sladingMode
 #define __class__ "WSlider"
 
 // Event list of properties
-const char* const widget::WSlider::eventStartSlide = "ewol-widget-wslider-event-start-slide";
-const char* const widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-stop-slide";
+const char* const ewol::widget::WSlider::eventStartSlide = "ewol-widget-wslider-event-start-slide";
+const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-stop-slide";
 // Config list of properties
-const char* const widget::WSlider::configMode = "mode";
+const char* const ewol::widget::WSlider::configMode = "mode";
 
 static ewol::Widget* create(void) {
-	return new widget::WSlider();
+	return new ewol::widget::WSlider();
 }
 
-void widget::WSlider::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::WSlider::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::WSlider::WSlider(void) :
+ewol::widget::WSlider::WSlider(void) :
   m_windowsSources(0),
   m_windowsDestination(0),
   m_windowsRequested(-1),
   m_slidingProgress(1.0f),
   m_transitionSpeed(1.0f),
   m_transitionSlide(sladingTransitionHori) {
-	addObjectType("widget::WSlider");
+	addObjectType("ewol::widget::WSlider");
 	addEventId(eventStartSlide);
 	addEventId(eventStopSlide);
 	// add configuration
 	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
 }
 
-widget::WSlider::~WSlider(void) {
+ewol::widget::WSlider::~WSlider(void) {
 	
 }
 
 
-void widget::WSlider::calculateSize(const vec2& _availlable) {
+void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("Update size");
 	widget::ContainerN::calculateSize(_availlable);
 	
@@ -107,7 +107,7 @@ void widget::WSlider::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
-void widget::WSlider::subWidgetSelectSet(int32_t _id) {
+void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	int32_t elementID = -1;
 	// search element in the list : 
 	for (size_t iii=0 ; iii<m_subWidget.size() ; iii++) {
@@ -130,7 +130,7 @@ void widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	}
 }
 
-void widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
+void ewol::widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
 	if (_widgetPointer == NULL) {
 		EWOL_ERROR("Can not change to a widget NULL");
 		return;
@@ -146,7 +146,7 @@ void widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
+void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 	if (_widgetName == "") {
 		EWOL_ERROR("Can not change to a widget with no name (input)");
 		return;
@@ -162,14 +162,14 @@ void widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 	EWOL_ERROR("Can not change to a widget not present");
 }
 
-void widget::WSlider::setTransitionMode(enum sladingMode _mode) {
+void ewol::widget::WSlider::setTransitionMode(enum sladingMode _mode) {
 	if (m_transitionSlide != _mode) {
 		m_transitionSlide = _mode;
 		markToRedraw();
 	}
 }
 
-void widget::WSlider::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::WSlider::periodicCall(const ewol::EventTime& _event) {
 	if (m_slidingProgress >= 1.0) {
 		m_windowsSources = m_windowsDestination;
 		if(    m_windowsRequested != -1
@@ -202,7 +202,7 @@ void widget::WSlider::periodicCall(const ewol::EventTime& _event) {
 	markToRedraw();
 }
 
-void widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (true == m_hide){
 		// widget is hidden ...
 		return;
@@ -241,7 +241,7 @@ void widget::WSlider::systemDraw(const ewol::DrawProperty& _displayProp) {
 	}
 }
 
-void widget::WSlider::onRegenerateDisplay(void) {
+void ewol::widget::WSlider::onRegenerateDisplay(void) {
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
 		if (iii >= 0 || (size_t)iii < m_subWidget.size()) {
@@ -265,7 +265,7 @@ void widget::WSlider::onRegenerateDisplay(void) {
 	}
 }
 
-bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == widget::ContainerN::onSetConfig(_conf)) {
 		return true;
 	}
@@ -282,7 +282,7 @@ bool widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::ContainerN::onGetConfig(_config, _result)) {
 		return true;
 	}
@@ -301,7 +301,7 @@ bool widget::WSlider::onGetConfig(const char* _config, std::string& _result) con
 	return false;
 }
 
-ewol::Widget* widget::WSlider::getWidgetAtPos(const vec2& _pos) {
+ewol::Widget* ewol::widget::WSlider::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return NULL;
 	}

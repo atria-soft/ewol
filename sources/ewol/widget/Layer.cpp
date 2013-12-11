@@ -14,22 +14,22 @@
 #define __class__ "Layer"
 
 static ewol::Widget* create(void) {
-	return new widget::Layer();
+	return new ewol::widget::Layer();
 }
 
-void widget::Layer::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Layer::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::Layer::Layer(void) {
-	addObjectType("widget::Layer");
+ewol::widget::Layer::Layer(void) {
+	addObjectType("ewol::widget::Layer");
 }
 
-widget::Layer::~Layer(void) {
+ewol::widget::Layer::~Layer(void) {
 	EWOL_DEBUG("[" << getId() << "] Layer : destroy");
 }
 
-ewol::Widget* widget::Layer::getWidgetAtPos(const vec2& _pos) {
+ewol::Widget* ewol::widget::Layer::getWidgetAtPos(const vec2& _pos) {
 	if (true == isHide()) {
 		return NULL;
 	}

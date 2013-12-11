@@ -17,28 +17,29 @@
 
 extern const char * const ewolEventColorBarChange;
 
-namespace widget {
-	/**
-	 * @ingroup ewolWidgetGroup
-	 */
-	class ColorBar :public ewol::Widget {
-		public:
-			ColorBar(void);
-			virtual ~ColorBar(void);
-			etk::Color<> getCurrentColor(void);
-			void setCurrentColor(etk::Color<> _newOne);
-		private:
-			ewol::Drawing m_draw; //!< Compositing drawing element
-			etk::Color<> m_currentColor;
-			vec2 m_currentUserPos;
-		protected: // Derived function
-			virtual void onDraw(void);
-		public: // Derived function
-			virtual void calculateMinMaxSize(void);
-			virtual void onRegenerateDisplay(void);
-			virtual bool onEventInput(const ewol::EventInput& _event);
+namespace ewol {
+	namespace widget {
+		/**
+		 * @ingroup ewolWidgetGroup
+		 */
+		class ColorBar :public ewol::Widget {
+			public:
+				ColorBar(void);
+				virtual ~ColorBar(void);
+				etk::Color<> getCurrentColor(void);
+				void setCurrentColor(etk::Color<> _newOne);
+			private:
+				ewol::Drawing m_draw; //!< Compositing drawing element
+				etk::Color<> m_currentColor;
+				vec2 m_currentUserPos;
+			protected: // Derived function
+				virtual void onDraw(void);
+			public: // Derived function
+				virtual void calculateMinMaxSize(void);
+				virtual void onRegenerateDisplay(void);
+				virtual bool onEventInput(const ewol::EventInput& _event);
+		};
 	};
-	
 };
 
 #endif

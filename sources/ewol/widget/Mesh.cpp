@@ -18,14 +18,14 @@ extern const char * const ewolEventMeshPressed    = "ewol-mesh-Pressed";
 
 
 
-widget::Mesh::Mesh(const std::string& _filename) :
+ewol::widget::Mesh::Mesh(const std::string& _filename) :
   m_meshName(_filename),
   m_object(NULL),
   m_position(0,0,0),
   m_angle(0,0,0),
   m_angleSpeed(0,0,0),
   m_cameraDistance(10.0) {
-	addObjectType("widget::Mesh");
+	addObjectType("ewol::widget::Mesh");
 	addEventId(ewolEventMeshPressed);
 	// Limit event at 1:
 	setMouseLimit(1);
@@ -37,11 +37,11 @@ widget::Mesh::Mesh(const std::string& _filename) :
 	}
 }
 
-widget::Mesh::~Mesh(void) {
+ewol::widget::Mesh::~Mesh(void) {
 	ewol::Mesh::release(m_object);
 }
 
-void widget::Mesh::onDraw(void) {
+void ewol::widget::Mesh::onDraw(void) {
 	mat4 transformationMatrix =   etk::matTranslate(vec3(0,0,-m_cameraDistance))
 	                            * etk::matTranslate(m_position)
 	                            * etk::matRotate(vec3(1,0,0),m_angle.x())
@@ -52,7 +52,7 @@ void widget::Mesh::onDraw(void) {
 	}
 }
 
-void widget::Mesh::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Mesh::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::push();
 	// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
 	glViewport( m_origin.x(),
@@ -71,18 +71,18 @@ void widget::Mesh::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::pop();
 }
 
-void widget::Mesh::onRegenerateDisplay(void) {
+void ewol::widget::Mesh::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		
 	}
 }
 
-void widget::Mesh::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::Mesh::periodicCall(const ewol::EventTime& _event) {
 	m_angle += m_angleSpeed*_event.getDeltaCall();
 	markToRedraw();
 }
 
-bool widget::Mesh::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Mesh::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
 		if(ewol::keyEvent::statusSingle == _event.getStatus()) {
@@ -93,7 +93,7 @@ bool widget::Mesh::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-void widget::Mesh::setFile(const std::string& _filename) {
+void ewol::widget::Mesh::setFile(const std::string& _filename) {
 	if(    _filename!=""
 	    && m_meshName != _filename ) {
 		ewol::Mesh::release(m_object);
@@ -106,17 +106,17 @@ void widget::Mesh::setFile(const std::string& _filename) {
 	markToRedraw();
 }
 
-void widget::Mesh::setPosition(const vec3& _pos) {
+void ewol::widget::Mesh::setPosition(const vec3& _pos) {
 	m_position = _pos;
 	markToRedraw();
 }
 
-void widget::Mesh::setAngle(const vec3& _angle) {
+void ewol::widget::Mesh::setAngle(const vec3& _angle) {
 	m_angle = _angle;
 	markToRedraw();
 }
 
-void widget::Mesh::setAngleSpeed(const vec3& _speed) {
+void ewol::widget::Mesh::setAngleSpeed(const vec3& _speed) {
 	if (_speed!=vec3(0,0,0)) {
 		periodicCallEnable();
 	} else {
@@ -126,7 +126,7 @@ void widget::Mesh::setAngleSpeed(const vec3& _speed) {
 	markToRedraw();
 }
 
-void widget::Mesh::setDistance(float _distance)
+void ewol::widget::Mesh::setDistance(float _distance)
 {
 	m_cameraDistance = _distance;
 	markToRedraw();

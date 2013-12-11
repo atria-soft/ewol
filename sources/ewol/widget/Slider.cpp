@@ -16,17 +16,17 @@ extern const char * const ewolEventSliderChange = "ewol-event-slider-change";
 #define __class__ "Slider"
 
 static ewol::Widget* create(void) {
-	return new widget::Slider();
+	return new ewol::widget::Slider();
 }
 
-void widget::Slider::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Slider::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 const int32_t dotRadius = 6;
 
-widget::Slider::Slider(void) {
-	addObjectType("widget::Slider");
+ewol::widget::Slider::Slider(void) {
+	addObjectType("ewol::widget::Slider");
 	addEventId(ewolEventSliderChange);
 	
 	m_value = 0;
@@ -42,43 +42,43 @@ widget::Slider::Slider(void) {
 	setMouseLimit(1);
 }
 
-widget::Slider::~Slider(void) {
+ewol::widget::Slider::~Slider(void) {
 	
 }
 
-void widget::Slider::calculateMinMaxSize(void) {
+void ewol::widget::Slider::calculateMinMaxSize(void) {
 	vec2 minTmp = m_userMinSize.getPixel();
 	m_minSize.setValue(etk_max(minTmp.x(), 40),
 	                   etk_max(minTmp.y(), dotRadius*2) );
 	markToRedraw();
 }
 
-void widget::Slider::setValue(int32_t _val) {
+void ewol::widget::Slider::setValue(int32_t _val) {
 	m_value = etk_max(etk_min(_val, m_max), m_min);
 	markToRedraw();
 }
 
-int32_t widget::Slider::getValue(void) {
+int32_t ewol::widget::Slider::getValue(void) {
 	return m_value;
 }
 
-void widget::Slider::setMin(int32_t _val) {
+void ewol::widget::Slider::setMin(int32_t _val) {
 	m_min = _val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
 	markToRedraw();
 }
 
-void widget::Slider::setMax(int32_t _val) {
+void ewol::widget::Slider::setMax(int32_t _val) {
 	m_max = _val;
 	m_value = etk_max(etk_min(m_value, m_max), m_min);
 	markToRedraw();
 }
 
-void widget::Slider::onDraw(void) {
+void ewol::widget::Slider::onDraw(void) {
 	m_draw.draw();
 }
 
-void widget::Slider::onRegenerateDisplay(void) {
+void ewol::widget::Slider::onRegenerateDisplay(void) {
 	if (needRedraw() == false) {
 		return;
 	}
@@ -100,7 +100,7 @@ void widget::Slider::onRegenerateDisplay(void) {
 	m_draw.circle(dotRadius/1.6);
 }
 
-bool widget::Slider::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Slider::onEventInput(const ewol::EventInput& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on Slider ...");
 	if (1 == _event.getId()) {

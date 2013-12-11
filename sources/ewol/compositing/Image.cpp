@@ -10,9 +10,9 @@
 #include <ewol/compositing/Image.h>
 
 #undef __class__
-#define __class__	"ewol::Image"
+#define __class__	"ewol::compositing::Image"
 
-ewol::Image::Image(const std::string& _imageName) :
+ewol::compositing::Image::Image(const std::string& _imageName) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -30,12 +30,12 @@ ewol::Image::Image(const std::string& _imageName) :
 	loadProgram();
 }
 
-ewol::Image::~Image(void) {
+ewol::compositing::Image::~Image(void) {
 	ewol::TextureFile::release(m_resource);
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Image::loadProgram(void) {
+void ewol::compositing::Image::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
@@ -48,7 +48,7 @@ void ewol::Image::loadProgram(void) {
 	}
 }
 
-void ewol::Image::draw(bool _disableDepthTest) {
+void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	if (m_coord.size() <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -83,9 +83,9 @@ void ewol::Image::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::Image::clear(void) {
+void ewol::compositing::Image::clear(void) {
 	// call upper class
-	ewol::Compositing::clear();
+	ewol::compositing::Compose::clear();
 	// reset Buffer :
 	m_coord.clear();
 	m_coordTex.clear();
@@ -99,7 +99,7 @@ void ewol::Image::clear(void) {
 	m_angle = 0.0;
 }
 
-void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd) {
+void ewol::compositing::Image::setClipping(const vec3& _pos, vec3 _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -125,17 +125,17 @@ void ewol::Image::setClipping(const vec3& _pos, vec3 _posEnd) {
 	m_clippingEnable = true;
 }
 
-void ewol::Image::setAngle(float _angle) {
+void ewol::compositing::Image::setAngle(float _angle) {
 	m_angle = _angle;
 }
 
-void ewol::Image::print(const vec2& _size) {
+void ewol::compositing::Image::print(const vec2& _size) {
 	printPart(_size, vec2(0,0), vec2(1,1));
 }
 
-void ewol::Image::printPart(const vec2& _size,
-                            const vec2& _sourcePosStart,
-                            const vec2& _sourcePosStop) {
+void ewol::compositing::Image::printPart(const vec2& _size,
+                                         const vec2& _sourcePosStart,
+                                         const vec2& _sourcePosStop) {
 	if (m_angle == 0.0f) {
 		vec3 point = m_position;
 		vec2 tex(_sourcePosStart.x(),_sourcePosStop.y());
@@ -226,7 +226,7 @@ void ewol::Image::printPart(const vec2& _size,
 	m_coordColor.push_back(m_color);
 }
 
-void ewol::Image::setSource(const std::string& _newFile, const vec2& _size) {
+void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
 	// remove old one
 	ewol::TextureFile::release(m_resource);
@@ -241,12 +241,12 @@ void ewol::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	}
 }
 
-bool ewol::Image::hasSources(void) {
+bool ewol::compositing::Image::hasSources(void) {
 	return m_resource!=NULL;
 }
 
 
-vec2 ewol::Image::getRealSize(void) {
+vec2 ewol::compositing::Image::getRealSize(void) {
 	if (NULL == m_resource) {
 		return vec2(0,0);
 	}

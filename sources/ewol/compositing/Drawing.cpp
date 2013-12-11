@@ -217,7 +217,7 @@ static void SutherlandHodgman(std::vector<vec2 > & input, std::vector<vec2 > & o
 }
 #endif
 
-ewol::Drawing::Drawing(void) :
+ewol::compositing::Drawing::Drawing(void) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -237,11 +237,11 @@ ewol::Drawing::Drawing(void) :
 	}
 }
 
-ewol::Drawing::~Drawing(void) {
+ewol::compositing::Drawing::~Drawing(void) {
 	unLoadProgram();
 }
 
-void ewol::Drawing::generateTriangle(void) {
+void ewol::compositing::Drawing::generateTriangle(void) {
 	m_triElement = 0;
 	
 	m_coord.push_back(m_triangle[0]);
@@ -252,7 +252,7 @@ void ewol::Drawing::generateTriangle(void) {
 	m_coordColor.push_back(m_tricolor[2]);
 }
 
-void ewol::Drawing::internalSetColor(const etk::Color<>& _color) {
+void ewol::compositing::Drawing::internalSetColor(const etk::Color<>& _color) {
 	if (m_triElement < 1) {
 		m_tricolor[0] = _color;
 	}
@@ -264,7 +264,7 @@ void ewol::Drawing::internalSetColor(const etk::Color<>& _color) {
 	}
 }
 
-void ewol::Drawing::setPoint(const vec3& _point) {
+void ewol::compositing::Drawing::setPoint(const vec3& _point) {
 	m_triangle[m_triElement] = _point;
 	m_triElement++;
 	if (m_triElement >= 3) {
@@ -272,15 +272,15 @@ void ewol::Drawing::setPoint(const vec3& _point) {
 	}
 }
 
-void ewol::Drawing::resetCount(void) {
+void ewol::compositing::Drawing::resetCount(void) {
 	m_triElement = 0;
 }
 
-void ewol::Drawing::unLoadProgram(void) {
+void ewol::compositing::Drawing::unLoadProgram(void) {
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Drawing::loadProgram(void) {
+void ewol::compositing::Drawing::loadProgram(void) {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
@@ -293,7 +293,7 @@ void ewol::Drawing::loadProgram(void) {
 	}
 }
 
-void ewol::Drawing::draw(bool _disableDepthTest) {
+void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	if (m_coord.size() <= 0) {
 		// TODO : a remÃštre ...
 		//EWOL_WARNING("Nothink to draw...");
@@ -316,7 +316,7 @@ void ewol::Drawing::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::Drawing::clear(void) {
+void ewol::compositing::Drawing::clear(void) {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -338,7 +338,7 @@ void ewol::Drawing::clear(void) {
 	}
 }
 
-void ewol::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd) {
+void ewol::compositing::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd) {
 	// note the internal system all time request to have a bounding all time in the same order
 	if (_pos.x() <= _posEnd.x()) {
 		m_clippingPosStart.setX(_pos.x());
@@ -364,7 +364,7 @@ void ewol::Drawing::setClipping(const vec3& _pos, const vec3& _posEnd) {
 	m_clippingEnable = true;
 }
 
-void ewol::Drawing::setThickness(float _thickness) {
+void ewol::compositing::Drawing::setThickness(float _thickness) {
 	m_thickness = _thickness;
 	// thickness must be positive
 	if (m_thickness < 0) {
@@ -372,12 +372,12 @@ void ewol::Drawing::setThickness(float _thickness) {
 	}
 }
 
-void ewol::Drawing::addVertex(void) {
+void ewol::compositing::Drawing::addVertex(void) {
 	internalSetColor(m_color);
 	setPoint(m_position);
 }
 
-void ewol::Drawing::lineTo(const vec3& _dest) {
+void ewol::compositing::Drawing::lineTo(const vec3& _dest) {
 	resetCount();
 	internalSetColor(m_color);
 	EWOL_VERBOSE("DrawLine : " << m_position << " to " << _dest);
@@ -411,7 +411,7 @@ void ewol::Drawing::lineTo(const vec3& _dest) {
 	m_position = _dest;
 }
 
-void ewol::Drawing::rectangle(const vec3& _dest) {
+void ewol::compositing::Drawing::rectangle(const vec3& _dest) {
 	resetCount();
 	internalSetColor(m_color);
 	/* Bitmap position
@@ -464,11 +464,11 @@ void ewol::Drawing::rectangle(const vec3& _dest) {
 	setPoint(vec3(dxA, dyD, 0) );
 }
 
-void ewol::Drawing::cube(const vec3& _dest) {
+void ewol::compositing::Drawing::cube(const vec3& _dest) {
 	
 }
 
-void ewol::Drawing::circle(float _radius, float _angleStart, float _angleStop) {
+void ewol::compositing::Drawing::circle(float _radius, float _angleStart, float _angleStop) {
 	resetCount();
 	
 	if (_radius<0) {

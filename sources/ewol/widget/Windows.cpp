@@ -23,16 +23,16 @@
 extern const char * const ewolEventWindowsHideKeyboard   = "ewol Windows hideKeyboard";
 
 
-ewol::Windows::Windows(void) :
+ewol::widget::Windows::Windows(void) :
   m_backgroundColor(0.750, 0.750, 0.750, 0.5) {
-	addObjectType("ewol::Windows");
+	addObjectType("ewol::widget::Windows");
 	setCanHaveFocus(true);
 	m_subWidget = NULL;
 	setDecorationDisable();
 	//KeyboardShow(KEYBOARD_MODE_CODE);
 }
 
-ewol::Windows::~Windows(void) {
+ewol::widget::Windows::~Windows(void) {
 	if (NULL != m_subWidget) {
 		delete(m_subWidget);
 		m_subWidget=NULL;
@@ -46,7 +46,7 @@ ewol::Windows::~Windows(void) {
 	m_popUpWidgetList.clear();
 }
 
-void ewol::Windows::calculateSize(const vec2& _availlable) {
+void ewol::widget::Windows::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG(" _availlable : " << _availlable);
 	m_size = _availlable;
 	if (NULL != m_subWidget) {
@@ -63,7 +63,7 @@ void ewol::Windows::calculateSize(const vec2& _availlable) {
 	}
 }
 
-ewol::Widget * ewol::Windows::getWidgetAtPos(const vec2& _pos) {
+ewol::Widget * ewol::widget::Windows::getWidgetAtPos(const vec2& _pos) {
 	// calculate relative position
 	vec2 relativePos = relativePosition(_pos);
 	// event go directly on the pop-up
@@ -81,7 +81,7 @@ ewol::Widget * ewol::Windows::getWidgetAtPos(const vec2& _pos) {
 	return this;
 }
 
-void ewol::Windows::sysDraw(void) {
+void ewol::widget::Windows::sysDraw(void) {
 	//EWOL_DEBUG("Drow on (" << m_size.x << "," << m_size.y << ")");
 	// set the size of the open GL system
 	glViewport(0,0,m_size.x(),m_size.y());
@@ -113,7 +113,7 @@ void ewol::Windows::sysDraw(void) {
 	return;
 }
 
-void ewol::Windows::onRegenerateDisplay(void) {
+void ewol::widget::Windows::onRegenerateDisplay(void) {
 	if (NULL != m_subWidget) {
 		m_subWidget->onRegenerateDisplay();
 	}
@@ -126,7 +126,7 @@ void ewol::Windows::onRegenerateDisplay(void) {
 
 //#define TEST_PERFO_WINDOWS
 
-void ewol::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 	#ifdef TEST_PERFO_WINDOWS
 	int64_t ___startTime0 = ewol::getTime();
@@ -169,7 +169,7 @@ void ewol::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 	#endif
 }
 
-void ewol::Windows::setSubWidget(ewol::Widget* _widget) {
+void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
 	if (NULL != m_subWidget) {
 		EWOL_INFO("Remove current main windows Widget...");
 		delete(m_subWidget);
@@ -180,7 +180,7 @@ void ewol::Windows::setSubWidget(ewol::Widget* _widget) {
 	calculateSize(m_size);
 }
 
-void ewol::Windows::popUpWidgetPush(ewol::Widget* _widget) {
+void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	m_popUpWidgetList.push_back(_widget);
 	// Regenerate the size calculation :
 	calculateSize(m_size);
@@ -188,7 +188,7 @@ void ewol::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	getContext().resetIOEvent();
 }
 
-void ewol::Windows::onObjectRemove(ewol::EObject* _removeObject) {
+void ewol::widget::Windows::onObjectRemove(ewol::EObject* _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
@@ -206,21 +206,21 @@ void ewol::Windows::onObjectRemove(ewol::EObject* _removeObject) {
 	}
 }
 
-void ewol::Windows::setBackgroundColor(const etk::Color<float>& _color) {
+void ewol::widget::Windows::setBackgroundColor(const etk::Color<float>& _color) {
 	if (m_backgroundColor != _color) {
 		m_backgroundColor = _color;
 		markToRedraw();
 	}
 }
 
-void ewol::Windows::setTitle(const std::string& _title) {
+void ewol::widget::Windows::setTitle(const std::string& _title) {
 	// TODO : remove this ...
 	std::string title = _title;
 	getContext().setTitle(title);
 }
 
 
-void ewol::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
+void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
 	widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
 	if (tmpPopUp == NULL) {

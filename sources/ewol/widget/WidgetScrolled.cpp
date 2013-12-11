@@ -15,8 +15,8 @@
 
 
 
-widget::WidgetScrooled::WidgetScrooled(void) {
-	addObjectType("widget::WidgetScrooled");
+ewol::widget::WidgetScrooled::WidgetScrooled(void) {
+	addObjectType("ewol::widget::WidgetScrooled");
 	m_originScrooled.setValue(0,0);
 	m_pixelScrolling = 20;
 	m_highSpeedMode = widget::Scroll::speedModeDisable;
@@ -26,14 +26,14 @@ widget::WidgetScrooled::WidgetScrooled(void) {
 	m_limitScrolling = 0.5;
 }
 
-widget::WidgetScrooled::~WidgetScrooled(void) {
+ewol::widget::WidgetScrooled::~WidgetScrooled(void) {
 	
 }
 
 
 #define SCROLL_BAR_SPACE      (15)
 
-void widget::WidgetScrooled::onRegenerateDisplay(void) {
+void ewol::widget::WidgetScrooled::onRegenerateDisplay(void) {
 	m_drawing.clear();
 	if (m_scroollingMode == scroolModeGame) {
 		
@@ -67,7 +67,7 @@ void widget::WidgetScrooled::onRegenerateDisplay(void) {
 	}
 }
 
-bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 	EWOL_VERBOSE("event XXX " << _event);
 	vec2 relativePos = relativePosition(_event.getPos());
 	// corection due to the open Gl invertion ...
@@ -340,11 +340,11 @@ bool widget::WidgetScrooled::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-void widget::WidgetScrooled::onDraw(void) {
+void ewol::widget::WidgetScrooled::onDraw(void) {
 	m_drawing.draw();
 }
 
-void widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::openGL::push();
 	if (m_scroollingMode == scroolModeCenter) {
 		// here we invert the reference of the standard openGl view because the reference in the common display is Top left and not buttom left
@@ -380,7 +380,7 @@ void widget::WidgetScrooled::systemDraw(const ewol::DrawProperty& _displayProp) 
 	ewol::openGL::pop();
 }
 
-void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {
+void ewol::widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, const vec2& _currentPosition, bool _center) {
 	if (true == _center) {
 		_borderWidth.setValue(m_size.x() / 2 - _borderWidth.x(),
 		                      m_size.y() / 2 - _borderWidth.y() );
@@ -403,7 +403,7 @@ void widget::WidgetScrooled::setScrollingPositionDynamic(vec2 _borderWidth, cons
 	}
 }
 
-void widget::WidgetScrooled::scroolingMode(enum scrollingMode _newMode) {
+void ewol::widget::WidgetScrooled::scroolingMode(enum scrollingMode _newMode) {
 	m_scroollingMode = _newMode;
 	if (m_scroollingMode == scroolModeGame) {
 		// set the scene maximum size :

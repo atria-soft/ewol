@@ -14,48 +14,48 @@
 #define __class__ "Sizer"
 
 static ewol::Widget* create(void) {
-	return new widget::Sizer();
+	return new ewol::widget::Sizer();
 }
 
-void widget::Sizer::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Sizer::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
 
-widget::Sizer::Sizer(enum displayMode _mode):
+ewol::widget::Sizer::Sizer(enum displayMode _mode):
   m_mode(_mode),
   m_borderSize(),
   m_animation(animationNone),
   m_animationTime(0) {
-	addObjectType("widget::Sizer");
+	addObjectType("ewol::widget::Sizer");
 	
 }
 
-widget::Sizer::~Sizer(void) {
+ewol::widget::Sizer::~Sizer(void) {
 	// disable annimation to remore "remove" error
 	m_animation = animationNone;
 	m_animationTime = 0;
-	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (m_mode == widget::sizer::modeVert?"Vert":"Hori") << ")");
+	//EWOL_DEBUG("[" << getId() << "]={" << getObjectType() << "}  sizer : destroy (mode=" << (m_mode == ewol::widget::Sizer::modeVert?"Vert":"Hori") << ")");
 }
 
 
-void widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
+void ewol::widget::Sizer::setBorderSize(const ewol::Dimension& _newBorderSize) {
 	m_borderSize = _newBorderSize;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-void widget::Sizer::setMode(enum displayMode _mode) {
+void ewol::widget::Sizer::setMode(enum displayMode _mode) {
 	m_mode = _mode;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-enum widget::Sizer::displayMode widget::Sizer::getMode(void) {
+enum ewol::widget::Sizer::displayMode ewol::widget::Sizer::getMode(void) {
 	return m_mode;
 }
 
-void widget::Sizer::calculateSize(const vec2& _availlable) {
+void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
 	ewol::Widget::calculateSize(_availlable);
 	vec2 tmpBorderSize = m_borderSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] update size : " << _availlable << " nbElement : " << m_subWidget.size() << " borderSize=" << tmpBorderSize << " from border=" << m_borderSize);
@@ -67,7 +67,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (NULL != m_subWidget[iii]) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
-			if (m_mode == widget::Sizer::modeVert) {
+			if (m_mode == ewol::widget::Sizer::modeVert) {
 				unexpandableSize += tmpSize.y();
 				if (false == m_subWidget[iii]->canExpand().y()) {
 					nbWidgetFixedSize++;
@@ -88,7 +88,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 	float sizeToAddAtEveryOne = 0;
 	// 2 cases : 1 or more can Expand, or all is done ...
 	if (0 != nbWidgetNotFixedSize) {
-		if (m_mode == widget::Sizer::modeVert) {
+		if (m_mode == ewol::widget::Sizer::modeVert) {
 			sizeToAddAtEveryOne = (m_size.y() - unexpandableSize) / nbWidgetNotFixedSize;
 		} else {
 			sizeToAddAtEveryOne = (m_size.x() - unexpandableSize) / nbWidgetNotFixedSize;
@@ -105,7 +105,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 			//EWOL_DEBUG("[" << getId() << "] set iii=" << iii << " ORIGIN : " << tmpOrigin << " & offset=" << m_offset);
 			m_subWidget[iii]->setOrigin(vec2ClipInt32(tmpOrigin+m_offset));
 			// Now update his size  his size in X and the curent sizer size in Y:
-			if (m_mode == widget::Sizer::modeVert) {
+			if (m_mode == ewol::widget::Sizer::modeVert) {
 				if (true == m_subWidget[iii]->canExpand().y()) {
 					m_subWidget[iii]->calculateSize(vec2ClipInt32(vec2(m_size.x(), tmpSize.y()+sizeToAddAtEveryOne)));
 					tmpOrigin.setY(tmpOrigin.y() + tmpSize.y()+sizeToAddAtEveryOne);
@@ -128,7 +128,7 @@ void widget::Sizer::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
-void widget::Sizer::calculateMinMaxSize(void) {
+void ewol::widget::Sizer::calculateMinMaxSize(void) {
 	//EWOL_DEBUG("[" << getId() << "] update minimum size");
 	m_subExpend.setValue(false, false);
 	m_minSize = m_userMinSize.getPixel();
@@ -147,7 +147,7 @@ void widget::Sizer::calculateMinMaxSize(void) {
 			vec2 tmpSize = m_subWidget[iii]->getCalculateMinSize();
 			//EWOL_DEBUG("[" << getId() << "] NewMinSize=" << tmpSize);
 			//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     Get minSize[" << iii << "] "<< tmpSize);
-			if (m_mode == widget::Sizer::modeVert) {
+			if (m_mode == ewol::widget::Sizer::modeVert) {
 				m_minSize.setY(m_minSize.y() + tmpSize.y());
 				if (tmpSize.x()>m_minSize.x()) {
 					m_minSize.setX(tmpSize.x());
@@ -163,7 +163,7 @@ void widget::Sizer::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-bool widget::Sizer::loadXML(exml::Element* _node) {
+bool ewol::widget::Sizer::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}
@@ -178,15 +178,15 @@ bool widget::Sizer::loadXML(exml::Element* _node) {
 	if (tmpAttributeValue.size()!=0) {
 		if(    compare_no_case(tmpAttributeValue, "vert") == true
 		    || compare_no_case(tmpAttributeValue, "vertical") == true) {
-			m_mode = widget::Sizer::modeVert;
+			m_mode = ewol::widget::Sizer::modeVert;
 		} else {
-			m_mode = widget::Sizer::modeHori;
+			m_mode = ewol::widget::Sizer::modeHori;
 		}
 	}
 	return true;
 }
 
-int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		return widget::ContainerN::subWidgetAdd(_newWidget);
 	}
@@ -194,7 +194,7 @@ int32_t widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	return widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
-int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
+int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		return widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
@@ -202,7 +202,7 @@ int32_t widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
 	return widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
-void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
+void ewol::widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
@@ -211,7 +211,7 @@ void widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
 	widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
-void widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
+void ewol::widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;

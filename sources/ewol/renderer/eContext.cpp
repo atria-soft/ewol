@@ -67,6 +67,60 @@ void ewol::eContext::unLockContext(void) {
 	mutexInterface().unLock();
 }
 
+
+namespace ewol {
+	class eSystemMessage {
+		public:
+			enum theadMessage {
+				msgNone,
+				msgInit,
+				msgRecalculateSize,
+				msgResize,
+				msgHide,
+				msgShow,
+				
+				msgInputMotion,
+				msgInputState,
+				
+				msgKeyboardKey,
+				msgKeyboardMove,
+				
+				msgClipboardArrive
+			};
+		public :
+			// specify the message type
+			enum theadMessage TypeMessage;
+			// can not set a union ...
+			enum ewol::clipBoard::clipboardListe clipboardID;
+			// InputId
+			enum ewol::keyEvent::type inputType;
+			int32_t                 inputId;
+			// generic dimentions
+			vec2 dimention;
+			// keyboard events :
+			bool                        repeateKey;  //!< special flag for the repeating key on the PC interface
+			bool                        stateIsDown;
+			char32_t                   keyboardChar;
+			enum ewol::keyEvent::keyboard keyboardMove;
+			ewol::SpecialKey            keyboardSpecial;
+			
+			eSystemMessage(void) :
+				TypeMessage(msgNone),
+				clipboardID(ewol::clipBoard::clipboardStd),
+				inputType(ewol::keyEvent::typeUnknow),
+				inputId(-1),
+				dimention(0,0),
+				repeateKey(false),
+				stateIsDown(false),
+				keyboardChar(0),
+				keyboardMove(ewol::keyEvent::keyboardUnknow)
+			{
+				
+			}
+	};
+};
+
+
 void ewol::eContext::inputEventTransfertWidget(ewol::Widget* _source,
                                                ewol::Widget* _destination) {
 	m_input.transfertEvent(_source, _destination);
@@ -84,71 +138,76 @@ void ewol::eContext::inputEventUnGrabPointer(void) {
 void ewol::eContext::processEvents(void) {
 	int32_t nbEvent = 0;
 	//EWOL_DEBUG(" ********  Event");
-	eSystemMessage data;
+	ewol::eSystemMessage* data = NULL;
 	while (m_msgSystem.count()>0) {
 		nbEvent++;
+		if (data != NULL) {
+			delete(data);
+			data = NULL;
+		}
 		m_msgSystem.wait(data);
 		//EWOL_DEBUG("EVENT");
-		switch (data.TypeMessage) {
+		switch (data->TypeMessage) {
 			case eSystemMessage::msgInit:
 				// this is due to the openGL context
-				/*bool returnVal = */APP_Init(*this);
+				/*bool returnVal = */
+				APP_Init(*this);
 				break;
 			case eSystemMessage::msgRecalculateSize:
 				forceRedrawAll();
 				break;
 			case eSystemMessage::msgResize:
 				//EWOL_DEBUG("Receive MSG : THREAD_RESIZE");
-				m_windowsSize = data.dimention;
+				m_windowsSize = data->dimention;
 				ewol::dimension::setPixelWindowsSize(m_windowsSize);
 				forceRedrawAll();
 				break;
 			case eSystemMessage::msgInputMotion:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_MOTION");
-				m_input.motion(data.inputType, data.inputId, data.dimention);
+				m_input.motion(data->inputType, data->inputId, data->dimention);
 				break;
 			case eSystemMessage::msgInputState:
 				//EWOL_DEBUG("Receive MSG : THREAD_INPUT_STATE");
-				m_input.state(data.inputType, data.inputId, data.stateIsDown, data.dimention);
+				m_input.state(data->inputType, data->inputId, data->stateIsDown, data->dimention);
 				break;
 			case eSystemMessage::msgKeyboardKey:
 			case eSystemMessage::msgKeyboardMove:
 				//EWOL_DEBUG("Receive MSG : THREAD_KEYBORAD_KEY");
 				if (NULL != m_windowsCurrent) {
-					if (false == m_windowsCurrent->onEventShortCut(data.keyboardSpecial,
-					                                             data.keyboardChar,
-					                                             data.keyboardMove,
-					                                             data.stateIsDown) ) {
+					if (false == m_windowsCurrent->onEventShortCut(data->keyboardSpecial,
+					                                             data->keyboardChar,
+					                                             data->keyboardMove,
+					                                             data->stateIsDown) ) {
 						// get the current focused Widget :
 						ewol::Widget * tmpWidget = m_widgetManager.focusGet();
 						if (NULL != tmpWidget) {
 							// check if the widget allow repeating key events.
-							//EWOL_DEBUG("repeating test :" << data.repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data.stateIsDown);
-							if(    false == data.repeateKey
-							    || (    true == data.repeateKey
+							//EWOL_DEBUG("repeating test :" << data->repeateKey << " widget=" << tmpWidget->getKeyboardRepeate() << " state=" << data->stateIsDown);
+							if(    false == data->repeateKey
+							    || (    true == data->repeateKey
 							         && true == tmpWidget->getKeyboardRepeate()) ) {
 								// check Widget shortcut
-								if (false == tmpWidget->onEventShortCut(data.keyboardSpecial,
-								                                      data.keyboardChar,
-								                                      data.keyboardMove,
-								                                      data.stateIsDown) ) {
+								if (false == tmpWidget->onEventShortCut(data->keyboardSpecial,
+								                                      data->keyboardChar,
+								                                      data->keyboardMove,
+								                                      data->stateIsDown) ) {
 									// generate the direct event ...
-									if (data.TypeMessage == eSystemMessage::msgKeyboardKey) {
+									if (data->TypeMessage == eSystemMessage::msgKeyboardKey) {
 										ewol::EventEntrySystem tmpEntryEvent(ewol::keyEvent::keyboardChar,
 										                                     ewol::keyEvent::statusUp,
-										                                     data.keyboardSpecial,
-										                                     data.keyboardChar);
-										if(true == data.stateIsDown) {
+										                                     data->keyboardSpecial,
+										                                     data->keyboardChar);
+										if(true == data->stateIsDown) {
 											tmpEntryEvent.m_event.setStatus(ewol::keyEvent::statusDown);
 										}
 										tmpWidget->systemEventEntry(tmpEntryEvent);
 									} else { // THREAD_KEYBORAD_MOVE
-										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data.keyboardMove << " " << data.stateIsDown);
-										ewol::EventEntrySystem tmpEntryEvent(data.keyboardMove,
+										EWOL_DEBUG("THREAD_KEYBORAD_MOVE" << data->keyboardMove << " " << data->stateIsDown);
+										ewol::EventEntrySystem tmpEntryEvent(data->keyboardMove,
 										                                     ewol::keyEvent::statusUp,
-										                                     data.keyboardSpecial,
+										                                     data->keyboardSpecial,
 										                                     0);
-										if(true == data.stateIsDown) {
+										if(true == data->stateIsDown) {
 											tmpEntryEvent.m_event.setStatus(ewol::keyEvent::statusDown);
 										}
 										tmpWidget->systemEventEntry(tmpEntryEvent);
@@ -165,7 +224,7 @@ void ewol::eContext::processEvents(void) {
 				{
 					ewol::Widget * tmpWidget = m_widgetManager.focusGet();
 					if (tmpWidget != NULL) {
-						tmpWidget->onEventClipboard(data.clipboardID);
+						tmpWidget->onEventClipboard(data->clipboardID);
 					}
 				}
 				break;
@@ -262,9 +321,13 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 	etk::initDefaultFolder("ewolApplNoName");
 	// request the init of the application in the main context of openGL ...
 	{
-		eSystemMessage data;
-		data.TypeMessage = eSystemMessage::msgInit;
-		m_msgSystem.post(data);
+		ewol::eSystemMessage *data = new ewol::eSystemMessage();
+		if (data == NULL) {
+			EWOL_ERROR("allocationerror of message");
+		} else {
+			data->TypeMessage = eSystemMessage::msgInit;
+			m_msgSystem.post(data);
+		}
 	}
 	// force a recalculation
 	requestUpdateSize();
@@ -282,6 +345,7 @@ ewol::eContext::eContext(int32_t _argc, const char* _argv[]) :
 
 ewol::eContext::~eContext(void) {
 	EWOL_INFO(" == > Ewol system Un-Init (BEGIN)");
+	// TODO : Clean the message list ...
 	// set the curent interface :
 	lockContext();
 	// call application to uninit
@@ -301,64 +365,88 @@ ewol::eContext::~eContext(void) {
 }
 
 void ewol::eContext::requestUpdateSize(void) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgRecalculateSize;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgRecalculateSize;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Resize(const vec2& _size) {
 	// TODO : Better in the thread ...  == > but generate some init error ...
 	ewol::dimension::setPixelWindowsSize(_size);
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgResize;
-	data.dimention = _size;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgResize;
+	data->dimention = _size;
 	m_msgSystem.post(data);
 }
 void ewol::eContext::OS_Move(const vec2& _pos) {
 	/*
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgResize;
-	data.resize.w = w;
-	data.resize.h = h;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	data->TypeMessage = eSystemMessage::msgResize;
+	data->resize.w = w;
+	data->resize.h = h;
 	m_msgSystem.Post(data);
 	*/
 }
 
 void ewol::eContext::OS_SetInputMotion(int _pointerID, const vec2& _pos ) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgInputMotion;
-	data.inputType = ewol::keyEvent::typeFinger;
-	data.inputId = _pointerID;
-	data.dimention = _pos;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgInputMotion;
+	data->inputType = ewol::keyEvent::typeFinger;
+	data->inputId = _pointerID;
+	data->dimention = _pos;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos ) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgInputState;
-	data.inputType = ewol::keyEvent::typeFinger;
-	data.inputId = _pointerID;
-	data.stateIsDown = _isDown;
-	data.dimention = _pos;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgInputState;
+	data->inputType = ewol::keyEvent::typeFinger;
+	data->inputId = _pointerID;
+	data->stateIsDown = _isDown;
+	data->dimention = _pos;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_SetMouseMotion(int _pointerID, const vec2& _pos ) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgInputMotion;
-	data.inputType = ewol::keyEvent::typeMouse;
-	data.inputId = _pointerID;
-	data.dimention = _pos;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgInputMotion;
+	data->inputType = ewol::keyEvent::typeMouse;
+	data->inputId = _pointerID;
+	data->dimention = _pos;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos ) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgInputState;
-	data.inputType = ewol::keyEvent::typeMouse;
-	data.inputId = _pointerID;
-	data.stateIsDown = _isDown;
-	data.dimention = _pos;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgInputState;
+	data->inputType = ewol::keyEvent::typeMouse;
+	data->inputId = _pointerID;
+	data->stateIsDown = _isDown;
+	data->dimention = _pos;
 	m_msgSystem.post(data);
 }
 
@@ -366,12 +454,16 @@ void ewol::eContext::OS_SetKeyboard(ewol::SpecialKey& _special,
                                     char32_t _myChar,
                                     bool _isDown,
                                     bool _isARepeateKey) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgKeyboardKey;
-	data.stateIsDown = _isDown;
-	data.keyboardChar = _myChar;
-	data.keyboardSpecial = _special;
-	data.repeateKey = _isARepeateKey;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgKeyboardKey;
+	data->stateIsDown = _isDown;
+	data->keyboardChar = _myChar;
+	data->keyboardSpecial = _special;
+	data->repeateKey = _isARepeateKey;
 	m_msgSystem.post(data);
 }
 
@@ -379,32 +471,48 @@ void ewol::eContext::OS_SetKeyboardMove(ewol::SpecialKey& _special,
                                         enum ewol::keyEvent::keyboard _move,
                                         bool _isDown,
                                         bool _isARepeateKey) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgKeyboardMove;
-	data.stateIsDown = _isDown;
-	data.keyboardMove = _move;
-	data.keyboardSpecial = _special;
-	data.repeateKey = _isARepeateKey;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgKeyboardMove;
+	data->stateIsDown = _isDown;
+	data->keyboardMove = _move;
+	data->keyboardSpecial = _special;
+	data->repeateKey = _isARepeateKey;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Hide(void) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgHide;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgHide;
 	m_msgSystem.post(data);
 }
 
 void ewol::eContext::OS_Show(void) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgShow;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgShow;
 	m_msgSystem.post(data);
 }
 
 
 void ewol::eContext::OS_ClipBoardArrive(enum ewol::clipBoard::clipboardListe _clipboardID) {
-	eSystemMessage data;
-	data.TypeMessage = eSystemMessage::msgClipboardArrive;
-	data.clipboardID = _clipboardID;
+	ewol::eSystemMessage *data = new ewol::eSystemMessage();
+	if (data == NULL) {
+		EWOL_ERROR("allocationerror of message");
+		return;
+	}
+	data->TypeMessage = eSystemMessage::msgClipboardArrive;
+	data->clipboardID = _clipboardID;
 	m_msgSystem.post(data);
 }
 

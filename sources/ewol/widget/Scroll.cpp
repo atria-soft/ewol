@@ -15,38 +15,38 @@
 #define __class__ "Scroll"
 
 static ewol::Widget* create(void) {
-	return new widget::Scroll();
+	return new ewol::widget::Scroll();
 }
 
-void widget::Scroll::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Scroll::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-const char* const widget::Scroll::configLimit = "limit";
+const char* const ewol::widget::Scroll::configLimit = "limit";
 
-widget::Scroll::Scroll(void) :
+ewol::widget::Scroll::Scroll(void) :
   m_limit(0.15,0.5),
   m_pixelScrolling(20),
   m_highSpeedStartPos(0,0),
   m_highSpeedMode(speedModeDisable),
   m_highSpeedButton(-1),
   m_highSpeedType(ewol::keyEvent::typeUnknow) {
-	addObjectType("widget::Scroll");
+	addObjectType("ewol::widget::Scroll");
 	registerConfig(configLimit, "vec2", NULL, "Limit the scroll maximum position [0..1]% represent the free space in the scoll when arrive at the end");
 }
 
-widget::Scroll::~Scroll(void) {
+ewol::widget::Scroll::~Scroll(void) {
 	
 }
 
-void widget::Scroll::setLimit(const vec2& _limit) {
+void ewol::widget::Scroll::setLimit(const vec2& _limit) {
 	m_limit = _limit;
 	markToRedraw();
 }
 
 #define SCROLL_BAR_SPACE      (15)
 
-void widget::Scroll::calculateMinMaxSize(void) {
+void ewol::widget::Scroll::calculateMinMaxSize(void) {
 	// call main class !! and not containter class ...
 	ewol::Widget::calculateMinMaxSize();
 	// call sub classes
@@ -55,7 +55,7 @@ void widget::Scroll::calculateMinMaxSize(void) {
 	}
 }
 
-void widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
+void ewol::widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	if (m_hide == true) {
 		return;
 	}
@@ -67,11 +67,11 @@ void widget::Scroll::systemDraw(const ewol::DrawProperty& _displayProp) {
 	ewol::Widget::systemDraw(_displayProp);
 }
 
-void widget::Scroll::onDraw(void) {
+void ewol::widget::Scroll::onDraw(void) {
 	m_draw.draw();
 }
 
-void widget::Scroll::onRegenerateDisplay(void) {
+void ewol::widget::Scroll::onRegenerateDisplay(void) {
 	// call upper class
 	widget::Container::onRegenerateDisplay();
 	if (true == needRedraw()) {
@@ -115,7 +115,7 @@ void widget::Scroll::onRegenerateDisplay(void) {
 	}
 }
 
-bool widget::Scroll::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Scroll::onEventInput(const ewol::EventInput& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	vec2 scrollOffset(0,0);
 	vec2 scrollSize(0,0);
@@ -332,7 +332,7 @@ bool widget::Scroll::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-ewol::Widget* widget::Scroll::getWidgetAtPos(const vec2& _pos) {
+ewol::Widget* ewol::widget::Scroll::getWidgetAtPos(const vec2& _pos) {
 	ewol::Widget* tmpWidget = widget::Container::getWidgetAtPos(_pos);
 	if (NULL != tmpWidget) {
 		return tmpWidget;
@@ -340,7 +340,7 @@ ewol::Widget* widget::Scroll::getWidgetAtPos(const vec2& _pos) {
 	return this;
 }
 
-bool widget::Scroll::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::Scroll::onSetConfig(const ewol::EConfig& _conf) {
 	if (true == widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
@@ -351,7 +351,7 @@ bool widget::Scroll::onSetConfig(const ewol::EConfig& _conf) {
 	return false;
 }
 
-bool widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
+bool ewol::widget::Scroll::onGetConfig(const char* _config, std::string& _result) const {
 	if (true == widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}

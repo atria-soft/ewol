@@ -10,9 +10,9 @@
 #include <ewol/compositing/Area.h>
 
 #undef __class__
-#define __class__	"ewol::Area"
+#define __class__	"ewol::compositing::Area"
 
-ewol::Area::Area(const ivec2& _size) :
+ewol::compositing::Area::Area(const ivec2& _size) :
     m_position(0.0, 0.0, 0.0),
     m_color(etk::color::white),
     m_GLprogram(NULL),
@@ -28,12 +28,12 @@ ewol::Area::Area(const ivec2& _size) :
 	loadProgram();
 }
 
-ewol::Area::~Area(void) {
+ewol::compositing::Area::~Area(void) {
 	ewol::Texture::release(m_resource);
 	ewol::Program::release(m_GLprogram);
 }
 
-void ewol::Area::loadProgram(void) {
+void ewol::compositing::Area::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
 	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
@@ -46,7 +46,7 @@ void ewol::Area::loadProgram(void) {
 	}
 }
 
-void ewol::Area::draw(bool _disableDepthTest) {
+void ewol::compositing::Area::draw(bool _disableDepthTest) {
 	if (m_coord.size() <= 0) {
 		//EWOL_WARNING("Nothink to draw...");
 		return;
@@ -76,7 +76,7 @@ void ewol::Area::draw(bool _disableDepthTest) {
 	m_GLprogram->unUse();
 }
 
-void ewol::Area::clear(void) {
+void ewol::compositing::Area::clear(void) {
 	// call upper class
 	ewol::Compositing::clear();
 	// reset Buffer :
@@ -87,7 +87,7 @@ void ewol::Area::clear(void) {
 	m_position = vec3(0.0, 0.0, 0.0);
 }
 
-void ewol::Area::print(const ivec2& _size) {
+void ewol::compositing::Area::print(const ivec2& _size) {
 	vec3 point(0,0,0);
 	vec2 tex(0,1);
 	point.setX(m_position.x());

@@ -15,24 +15,24 @@
 #undef __class__
 #define __class__ "Label"
 
-const char * const widget::Label::eventPressed = "ewol-widget-label-event-pressed";
+const char * const ewol::widget::Label::eventPressed = "ewol-widget-label-event-pressed";
 
 static ewol::Widget* create(void) {
-	return new widget::Label();
+	return new ewol::widget::Label();
 }
 
-void widget::Label::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Label::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
-widget::Label::Label(std::string _newLabel) {
-	addObjectType("widget::Label");
+ewol::widget::Label::Label(std::string _newLabel) {
+	addObjectType("ewol::widget::Label");
 	m_label = _newLabel;
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
 }
 
-void widget::Label::calculateMinMaxSize(void) {
+void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec2 tmpMax = m_userMaxSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
@@ -47,21 +47,21 @@ void widget::Label::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-void widget::Label::setLabel(const std::string& _newLabel) {
+void ewol::widget::Label::setLabel(const std::string& _newLabel) {
 	m_label = _newLabel;
 	markToRedraw();
 	requestUpdateSize();
 }
 
-std::string widget::Label::getLabel(void) {
+std::string ewol::widget::Label::getLabel(void) {
 	return m_label;
 }
 
-void widget::Label::onDraw(void) {
+void ewol::widget::Label::onDraw(void) {
 	m_text.draw();
 }
 
-void widget::Label::onRegenerateDisplay(void) {
+void ewol::widget::Label::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		m_text.clear();
 		int32_t paddingSize = 2;
@@ -110,7 +110,7 @@ void widget::Label::onRegenerateDisplay(void) {
 	}
 }
 
-bool widget::Label::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Label::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == _event.getId()) {
 		if (ewol::keyEvent::statusSingle == _event.getStatus()) {
@@ -122,7 +122,7 @@ bool widget::Label::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-bool widget::Label::loadXML(exml::Element* _node) {
+bool ewol::widget::Label::loadXML(exml::Element* _node) {
 	if (NULL == _node) {
 		return false;
 	}

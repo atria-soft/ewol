@@ -24,8 +24,8 @@ static float   l_ratio(1.0/7.0);
 #undef __class__
 #define __class__ "Joystick"
 
-widget::Joystick::Joystick(void) {
-	addObjectType("widget::Joystick");
+ewol::widget::Joystick::Joystick(void) {
+	addObjectType("ewol::widget::Joystick");
 	addEventId(ewolEventJoystickEnable);
 	addEventId(ewolEventJoystickDisable);
 	addEventId(ewolEventJoystickMove);
@@ -51,18 +51,18 @@ widget::Joystick::Joystick(void) {
 }
 
 
-widget::Joystick::~Joystick(void) {
+ewol::widget::Joystick::~Joystick(void) {
 	
 }
 
 
-void widget::Joystick::calculateSize(const vec2& availlable) {
+void ewol::widget::Joystick::calculateSize(const vec2& availlable) {
 	float minimumSize = etk_min(availlable.x(), availlable.y());
 	m_size.setValue(minimumSize, minimumSize);
 	markToRedraw();
 }
 
-void widget::Joystick::onRegenerateDisplay(void) {
+void ewol::widget::Joystick::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		// clean the object list ...
 		
@@ -114,7 +114,7 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool widget::Joystick::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Joystick::onEventInput(const ewol::EventInput& _event) {
 /*
 	if (1 == IdInput) {
 		if(    ewol::keyEvent::statusDown == typeEvent
@@ -173,7 +173,7 @@ bool widget::Joystick::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-void widget::Joystick::ratio(float newRatio) {
+void ewol::widget::Joystick::ratio(float newRatio) {
 	if (newRatio > 1) {
 		newRatio = 1;
 	}
@@ -182,7 +182,7 @@ void widget::Joystick::ratio(float newRatio) {
 }
 
 
-void widget::Joystick::background(std::string imageNameInData, bool display) {
+void ewol::widget::Joystick::background(std::string imageNameInData, bool display) {
 	// TODO : check if it existed
 	m_background = imageNameInData;
 	m_displayBackground = display;
@@ -190,14 +190,14 @@ void widget::Joystick::background(std::string imageNameInData, bool display) {
 }
 
 
-void widget::Joystick::foreground(std::string imageNameInData) {
+void ewol::widget::Joystick::foreground(std::string imageNameInData) {
 	// TODO : check if it existed
 	m_foreground = imageNameInData;
 	EWOL_INFO("Set default Joystick Foreground at " << m_foreground);
 }
 
 
-void widget::Joystick::getProperty(float& distance, float& angle) {
+void ewol::widget::Joystick::getProperty(float& distance, float& angle) {
 	distance = m_distance;
 	angle = m_angle+M_PI/2;
 }

@@ -31,18 +31,18 @@ extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Cha
 
 
 static ewol::Widget* Create(void) {
-	return new widget::ButtonColor();
+	return new ewol::widget::ButtonColor();
 }
 
-void widget::ButtonColor::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::ButtonColor::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :
+ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperName) :
   m_shaper(_shaperName),
   m_textColorFg(_baseColor),
   m_widgetContextMenu(NULL) {
-	addObjectType("widget::ButtonColor");
+	addObjectType("ewol::widget::ButtonColor");
 	addEventId(ewolEventButtonColorChange);
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);
@@ -51,17 +51,17 @@ widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _shaperNam
 }
 
 
-widget::ButtonColor::~ButtonColor(void) {
+ewol::widget::ButtonColor::~ButtonColor(void) {
 	
 }
 
 
-void widget::ButtonColor::setShaperName(std::string _shaperName) {
+void ewol::widget::ButtonColor::setShaperName(std::string _shaperName) {
 	m_shaper.setSource(_shaperName);
 }
 
 
-void widget::ButtonColor::calculateMinMaxSize(void) {
+void ewol::widget::ButtonColor::calculateMinMaxSize(void) {
 	vec2 padding = m_shaper.getPadding();
 	std::string label = m_textColorFg.getString();
 	vec3 minSize = m_text.calculateSize(label);
@@ -72,13 +72,13 @@ void widget::ButtonColor::calculateMinMaxSize(void) {
 
 
 
-void widget::ButtonColor::onDraw(void) {
+void ewol::widget::ButtonColor::onDraw(void) {
 	m_shaper.draw();
 	m_text.draw();
 }
 
 
-void widget::ButtonColor::onRegenerateDisplay(void) {
+void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	if (needRedraw() == false) {
 		return;
 	}
@@ -143,7 +143,7 @@ void widget::ButtonColor::onRegenerateDisplay(void) {
 }
 
 
-bool widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
 	bool previousHoverState = m_mouseHover;
 	if(ewol::keyEvent::statusLeave == _event.getStatus()) {
 		m_mouseHover = false;
@@ -219,17 +219,17 @@ bool widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-void widget::ButtonColor::setValue(etk::Color<> _color) {
+void ewol::widget::ButtonColor::setValue(etk::Color<> _color) {
 	m_textColorFg = _color;
 	markToRedraw();
 }
 
-etk::Color<> widget::ButtonColor::getValue(void) {
+etk::Color<> ewol::widget::ButtonColor::getValue(void) {
 	return m_textColorFg;
 }
 
 
-void widget::ButtonColor::onReceiveMessage(const ewol::EMessage& _msg) {
+void ewol::widget::ButtonColor::onReceiveMessage(const ewol::EMessage& _msg) {
 	EWOL_INFO("Receive MSG : " <<  _msg.getData());
 	if (_msg.getMessage() == ewolEventColorChooserChange) {
 		m_textColorFg = _msg.getData();
@@ -239,7 +239,7 @@ void widget::ButtonColor::onReceiveMessage(const ewol::EMessage& _msg) {
 }
 
 
-void widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
+void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 	if (true == m_shaper.changeStatusIn(_newStatusId) ) {
 		periodicCallEnable();
 		markToRedraw();
@@ -248,7 +248,7 @@ void widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 
 
 
-void widget::ButtonColor::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::ButtonColor::periodicCall(const ewol::EventTime& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}

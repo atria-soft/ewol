@@ -16,15 +16,15 @@ extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
 #define __class__	"CheckBox"
 
 static ewol::Widget* Create(void) {
-	return new widget::CheckBox();
+	return new ewol::widget::CheckBox();
 }
 
-void widget::CheckBox::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::CheckBox::init(ewol::WidgetManager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
-widget::CheckBox::CheckBox(const std::string& _newLabel) {
-	addObjectType("widget::CheckBox");
+ewol::widget::CheckBox::CheckBox(const std::string& _newLabel) {
+	addObjectType("ewol::widget::CheckBox");
 	m_label = _newLabel;
 	addEventId(ewolEventCheckBoxClicked);
 	m_textColorFg = etk::color::black;
@@ -35,12 +35,12 @@ widget::CheckBox::CheckBox(const std::string& _newLabel) {
 }
 
 
-widget::CheckBox::~CheckBox(void) {
+ewol::widget::CheckBox::~CheckBox(void) {
 	
 }
 
 
-void widget::CheckBox::calculateMinMaxSize(void) {
+void ewol::widget::CheckBox::calculateMinMaxSize(void) {
 	vec3 minSize = m_oObjectText.calculateSize(m_label);
 	float boxSize = etk_max(20, minSize.y()) + 5;
 	m_minSize.setX(boxSize+minSize.x());
@@ -49,12 +49,12 @@ void widget::CheckBox::calculateMinMaxSize(void) {
 }
 
 
-void widget::CheckBox::setLabel(std::string _newLabel) {
+void ewol::widget::CheckBox::setLabel(std::string _newLabel) {
 	m_label = _newLabel;
 	markToRedraw();
 }
 
-void widget::CheckBox::setValue(bool _val) {
+void ewol::widget::CheckBox::setValue(bool _val) {
 	if (m_value == _val) {
 		return;
 	}
@@ -62,16 +62,16 @@ void widget::CheckBox::setValue(bool _val) {
 	markToRedraw();
 }
 
-bool widget::CheckBox::getValue(void) {
+bool ewol::widget::CheckBox::getValue(void) {
 	return m_value;
 }
 
-void widget::CheckBox::onDraw(void) {
+void ewol::widget::CheckBox::onDraw(void) {
 	m_oObjectDecoration.draw();
 	m_oObjectText.draw();
 }
 
-void widget::CheckBox::onRegenerateDisplay(void) {
+void ewol::widget::CheckBox::onRegenerateDisplay(void) {
 	if (true == needRedraw()) {
 		m_oObjectDecoration.clear();
 		m_oObjectText.clear();
@@ -99,7 +99,7 @@ void widget::CheckBox::onRegenerateDisplay(void) {
 	}
 }
 
-bool widget::CheckBox::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::CheckBox::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on checkbox ...");
 	if (1 == _event.getId()) {
 		if (ewol::keyEvent::statusSingle == _event.getStatus()) {
@@ -118,7 +118,7 @@ bool widget::CheckBox::onEventInput(const ewol::EventInput& _event) {
 	return false;
 }
 
-bool widget::CheckBox::onEventEntry(const ewol::EventEntry& _event) {
+bool ewol::widget::CheckBox::onEventEntry(const ewol::EventEntry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
 	if(    _event.getType() == ewol::keyEvent::keyboardChar
 	    && _event.getStatus() == ewol::keyEvent::statusDown

@@ -14,7 +14,7 @@
 #include <ewol/renderer/eContext.h>
 
 #undef __class__
-#define __class__ "Texture"
+#define __class__ "resource::Texture"
 
 /**
  * @brief get the next power 2 if the input
@@ -34,26 +34,26 @@ static int32_t nextP2(int32_t _value) {
 }
 
 
-ewol::Texture::Texture(const std::string& _filename) :
- ewol::Resource(_filename) {
+ewol::resource::Texture::Texture(const std::string& _filename) :
+ ewol::resource::Resource(_filename) {
 	addObjectType("ewol::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-ewol::Texture::Texture(void) {
+ewol::resource::Texture::Texture(void) {
 	addObjectType("ewol::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
-ewol::Texture::~Texture(void) {
+ewol::resource::Texture::~Texture(void) {
 	removeContext();
 }
 
-void ewol::Texture::updateContext(void) {
+void ewol::resource::Texture::updateContext(void) {
 	if (false == m_loaded) {
 		// Request a new texture at openGl :
 		glGenTextures(1, &m_texId);
@@ -84,7 +84,7 @@ void ewol::Texture::updateContext(void) {
 	m_loaded = true;
 }
 
-void ewol::Texture::removeContext(void) {
+void ewol::resource::Texture::removeContext(void) {
 	if (true == m_loaded) {
 		// Request remove texture ...
 		EWOL_INFO("TEXTURE: Rm [" << getId() << "] texId=" << m_texId);
@@ -93,24 +93,24 @@ void ewol::Texture::removeContext(void) {
 	}
 }
 
-void ewol::Texture::removeContextToLate(void) {
+void ewol::resource::Texture::removeContextToLate(void) {
 	m_loaded = false;
 	m_texId=0;
 }
 
-void ewol::Texture::flush(void) {
+void ewol::resource::Texture::flush(void) {
 	// request to the manager to be call at the next update ...
 	getManager().update(this);
 }
 
-void ewol::Texture::setImageSize(ivec2 _newSize) {
+void ewol::resource::Texture::setImageSize(ivec2 _newSize) {
 	_newSize.setValue( nextP2(_newSize.x()), nextP2(_newSize.y()) );
 	m_data.resize(_newSize);
 }
 
-ewol::Texture* ewol::Texture::keep(void) {
+ewol::resource::Texture* ewol::resource::Texture::keep(void) {
 	// this element create a new one every time ....
-	ewol::Texture* object = new ewol::Texture();
+	ewol::resource::Texture* object = new ewol::resource::Texture();
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : ??TEX??");
 		return NULL;
@@ -119,11 +119,11 @@ ewol::Texture* ewol::Texture::keep(void) {
 	return object;
 }
 
-void ewol::Texture::release(ewol::Texture*& _object) {
+void ewol::resource::Texture::release(ewol::resource::Texture*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

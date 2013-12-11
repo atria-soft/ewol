@@ -14,29 +14,30 @@
 #include <ewol/widget/ContainerN.h>
 #include <ewol/widget/WidgetManager.h>
 
-namespace widget {
-	/**
-	 * @ingroup ewolWidgetGroup
-	 */
-	class Layer : public widget::ContainerN {
-		public:
-			/**
-			 * @brief Main call of recording the widget on the List of "widget named creator"
-			 */
-			static void init(ewol::WidgetManager& _widgetManager);
-		public:
-			/**
-			 * @brief Constructor
-			 */
-			Layer(void);
-			/**
-			 * @brief Desstructor
-			 */
-			virtual ~Layer(void);
-		public: // Derived function
-			virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+namespace ewol {
+	namespace widget {
+		/**
+		 * @ingroup ewolWidgetGroup
+		 */
+		class Layer : public widget::ContainerN {
+			public:
+				/**
+				 * @brief Main call of recording the widget on the List of "widget named creator"
+				 */
+				static void init(ewol::WidgetManager& _widgetManager);
+			public:
+				/**
+				 * @brief Constructor
+				 */
+				Layer(void);
+				/**
+				 * @brief Desstructor
+				 */
+				virtual ~Layer(void);
+			public: // Derived function
+				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
+		};
 	};
-	
 };
 
 #endif

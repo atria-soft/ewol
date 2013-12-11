@@ -18,30 +18,32 @@
 
 
 namespace ewol {
-	class FontBase : public ewol::Resource {
-		public:
-			FontBase(const std::string& _fontName) : ewol::Resource(_fontName) {};
-			
-			virtual ~FontBase(void) { };
-			
-			const char* getType(void) { return "ewol::Font"; };
-			
-			virtual bool getGlyphProperty(int32_t _fontSize,
-			                              ewol::GlyphProperty& _property) = 0;
-			
-			virtual bool drawGlyph(egami::Image& _imageOut,
-			                       int32_t _fontSize,
-			                       ivec2 _glyphPosition,
-			                       ewol::GlyphProperty& _property,
-			                       int8_t _posInImage) = 0;
-			
-			virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
-			
-			virtual int32_t getHeight(int32_t _fontSize) = 0;
-			
-			virtual void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph) { };
-			
-			virtual void display(void) {};
+	namespace resource {
+		class FontBase : public ewol::resource::Resource {
+			public:
+				FontBase(const std::string& _fontName) : ewol::Resource(_fontName) {};
+				
+				virtual ~FontBase(void) { };
+				
+				const char* getType(void) { return "ewol::Font"; };
+				
+				virtual bool getGlyphProperty(int32_t _fontSize,
+				                              ewol::GlyphProperty& _property) = 0;
+				
+				virtual bool drawGlyph(egami::Image& _imageOut,
+				                       int32_t _fontSize,
+				                       ivec2 _glyphPosition,
+				                       ewol::GlyphProperty& _property,
+				                       int8_t _posInImage) = 0;
+				
+				virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
+				
+				virtual int32_t getHeight(int32_t _fontSize) = 0;
+				
+				virtual void generateKerning(int32_t _fontSize, std::vector<ewol::GlyphProperty>& _listGlyph) { };
+				
+				virtual void display(void) {};
+		};
 	};
 };
 
