@@ -31,14 +31,14 @@ ewol::compositing::Image::Image(const std::string& _imageName) :
 }
 
 ewol::compositing::Image::~Image(void) {
-	ewol::TextureFile::release(m_resource);
-	ewol::Program::release(m_GLprogram);
+	ewol::resource::TextureFile::release(m_resource);
+	ewol::resource::Program::release(m_GLprogram);
 }
 
 void ewol::compositing::Image::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
+	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
 	if (NULL!=m_GLprogram) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
@@ -85,7 +85,7 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 
 void ewol::compositing::Image::clear(void) {
 	// call upper class
-	ewol::compositing::Compose::clear();
+	ewol::Compositing::clear();
 	// reset Buffer :
 	m_coord.clear();
 	m_coordTex.clear();
@@ -229,12 +229,12 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
 	// remove old one
-	ewol::TextureFile::release(m_resource);
+	ewol::resource::TextureFile::release(m_resource);
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
 		// link to new one
-		m_resource = ewol::TextureFile::keep(_newFile, tmpSize);
+		m_resource = ewol::resource::TextureFile::keep(_newFile, tmpSize);
 		if (NULL == m_resource) {
 			EWOL_ERROR("Can not get Image resource");
 		}

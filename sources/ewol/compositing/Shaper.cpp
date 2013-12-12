@@ -47,9 +47,9 @@ ewol::compositing::Shaper::~Shaper(void) {
 }
 
 void ewol::compositing::Shaper::unLoadProgram(void) {
-	ewol::Program::release(m_GLprogram);
-	ewol::TextureFile::release(m_resourceTexture);
-	ewol::ConfigFile::release(m_config);
+	ewol::resource::Program::release(m_GLprogram);
+	ewol::resource::TextureFile::release(m_resourceTexture);
+	ewol::resource::ConfigFile::release(m_config);
 }
 
 void ewol::compositing::Shaper::loadProgram(void) {
@@ -57,7 +57,7 @@ void ewol::compositing::Shaper::loadProgram(void) {
 		EWOL_DEBUG("no Shaper set for loading resources ...");
 		return;
 	}
-	m_config = ewol::ConfigFile::keep(m_name);
+	m_config = ewol::resource::ConfigFile::keep(m_name);
 	if (NULL != m_config) {
 		m_confIdPaddingX   = m_config->request("PaddingX");
 		m_confIdPaddingY   = m_config->request("PaddingY");
@@ -73,7 +73,7 @@ void ewol::compositing::Shaper::loadProgram(void) {
 		EWOL_DEBUG("Shaper try load shader : " << tmpFilename << " with base : " << basicShaderFile);
 		// get the shader resource :
 		m_GLPosition = 0;
-		m_GLprogram = ewol::Program::keep(tmpFilename);
+		m_GLprogram = ewol::resource::Program::keep(tmpFilename);
 		if (NULL !=m_GLprogram) {
 			m_GLPosition        = m_GLprogram->getAttribute("EW_coord2d");
 			m_GLMatrix          = m_GLprogram->getUniform("EW_MatrixTransformation");
@@ -93,7 +93,7 @@ void ewol::compositing::Shaper::loadProgram(void) {
 		if (basicImageFile != "") {
 			tmpFilename = file.getRelativeFolder() + basicImageFile;
 			ivec2 size(64,64);
-			m_resourceTexture = ewol::TextureFile::keep(tmpFilename, size);
+			m_resourceTexture = ewol::resource::TextureFile::keep(tmpFilename, size);
 		}
 	}
 }
@@ -148,7 +148,7 @@ bool ewol::compositing::Shaper::changeStatusIn(int32_t _newStatusId) {
 	return false;
 }
 
-bool ewol::compositing::Shaper::periodicCall(const ewol::EventTime& _event) {
+bool ewol::compositing::Shaper::periodicCall(const ewol::event::Time& _event) {
 	//EWOL_DEBUG("call=" << _event);
 	// start :
 	if (m_stateTransition >= 1.0) {
@@ -177,8 +177,8 @@ bool ewol::compositing::Shaper::periodicCall(const ewol::EventTime& _event) {
 				m_nextStatusRequested = -1;
 			}
 		}
-		float timeRelativity = m_config->getFloat(m_confIdChangeTime)/1000.0;
-		m_stateTransition += _event.getDeltaCall()/timeRelativity;
+		float timeRelativity = m_config->getFloat(m_confIdChangeTime) / 1000.0;
+		m_stateTransition += _event.getDeltaCall() / timeRelativity;
 		//m_stateTransition += _event.getDeltaCall();
 		m_stateTransition = etk_avg(0.0f, m_stateTransition, 1.0f);
 		//EWOL_DEBUG("relative=" << timeRelativity << " Transition : " << m_stateTransition);

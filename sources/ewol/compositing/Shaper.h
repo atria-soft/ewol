@@ -10,9 +10,11 @@
 #define __EWOL_COMPOSITING_SHAPER_H__
 
 #include <ewol/debug.h>
-#include <ewol/compositing/Compose.h>
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/renderer/EventTime.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/resource/Program.h>
+#include <ewol/resource/ConfigFile.h>
+#include <ewol/resource/Image.h>
+#include <ewol/event/Time.h>
 
 namespace ewol {
 	namespace compositing {
@@ -21,30 +23,30 @@ namespace ewol {
 		 */
 		// TODO : load image
 		// TODO : Abstaraction between states (call by name and the system greate IDs
-		class Shaper : public ewol::compositing::Compose {
+		class Shaper : public ewol::Compositing {
 			private:
 				std::string m_name; //!< Name of the configuration of the shaper.
 				// External theme config:
-				ewol::ConfigFile* m_config;           //!< pointer on the config file resources
-				int32_t           m_confIdPaddingX;   //!< ConfigFile padding property X
-				int32_t           m_confIdPaddingY;   //!< ConfigFile padding property Y
-				int32_t           m_confIdChangeTime; //!< ConfigFile padding transition time property
-				int32_t           m_confProgramFile;  //!< ConfigFile opengGl program Name
-				int32_t           m_confImageFile;    //!< ConfigFile opengGl program Name
+				ewol::resource::ConfigFile* m_config; //!< pointer on the config file resources
+				int32_t m_confIdPaddingX;   //!< ConfigFile padding property X
+				int32_t m_confIdPaddingY;   //!< ConfigFile padding property Y
+				int32_t m_confIdChangeTime; //!< ConfigFile padding transition time property
+				int32_t m_confProgramFile;  //!< ConfigFile opengGl program Name
+				int32_t m_confImageFile;    //!< ConfigFile opengGl program Name
 				// openGL shaders programs:
-				ewol::Program* m_GLprogram;            //!< pointer on the opengl display program
-				int32_t        m_GLPosition;           //!< openGL id on the element (vertex buffer)
-				int32_t        m_GLMatrix;             //!< openGL id on the element (transformation matrix)
-				int32_t        m_GLPropertySize;       //!< openGL id on the element (widget size)
-				int32_t        m_GLPropertyOrigin;     //!< openGL id on the element (widget origin)
-				int32_t        m_GLPropertyInsidePos;  //!< openGL id on the element (widget internal element position)
-				int32_t        m_GLPropertyInsideSize; //!< openGL id on the element (widget internal element size)
-				int32_t        m_GLStateOld;           //!< openGL id on the element (old state displayed)
-				int32_t        m_GLStateNew;           //!< openGL id on the element (new state displayed)
-				int32_t        m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
-				int32_t        m_GLtexID;              //!< openGL id on the element (texture image)
+				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
+				int32_t m_GLPosition;           //!< openGL id on the element (vertex buffer)
+				int32_t m_GLMatrix;             //!< openGL id on the element (transformation matrix)
+				int32_t m_GLPropertySize;       //!< openGL id on the element (widget size)
+				int32_t m_GLPropertyOrigin;     //!< openGL id on the element (widget origin)
+				int32_t m_GLPropertyInsidePos;  //!< openGL id on the element (widget internal element position)
+				int32_t m_GLPropertyInsideSize; //!< openGL id on the element (widget internal element size)
+				int32_t m_GLStateOld;           //!< openGL id on the element (old state displayed)
+				int32_t m_GLStateNew;           //!< openGL id on the element (new state displayed)
+				int32_t m_GLStateTransition;    //!< openGL id on the element (transition ofset [0.0..1.0] )
+				int32_t m_GLtexID;              //!< openGL id on the element (texture image)
 				// For the Image :
-				ewol::TextureFile* m_resourceTexture; //!< texture resources (for the image)
+				ewol::resource::TextureFile* m_resourceTexture; //!< texture resources (for the image)
 				// internal needed data :
 				int32_t m_nextStatusRequested;    //!< when status is changing, this represent the next step of it
 				vec2    m_propertyOrigin;         //!< widget origin
@@ -117,7 +119,7 @@ namespace ewol {
 				 * @return true The widget must call this fuction periodicly (and redraw itself)
 				 * @return false No need to request the periodic call.
 				 */
-				bool periodicCall(const ewol::EventTime& _event);
+				bool periodicCall(const ewol::event::Time& _event);
 				/**
 				 * @brief set the widget origin (needed fot the display)
 				 * @param[in] _newOri : the new widget origin

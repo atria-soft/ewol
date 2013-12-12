@@ -13,30 +13,30 @@
 #define __class__	"ewol::compositing::Area"
 
 ewol::compositing::Area::Area(const ivec2& _size) :
-    m_position(0.0, 0.0, 0.0),
-    m_color(etk::color::white),
-    m_GLprogram(NULL),
-    m_GLPosition(-1),
-    m_GLMatrix(-1),
-    m_GLColor(-1),
-    m_GLtexture(-1),
-    m_GLtexID(-1),
-    m_resource(NULL) {
-	m_resource = ewol::Texture::keep();
+  m_position(0.0, 0.0, 0.0),
+  m_color(etk::color::white),
+  m_GLprogram(NULL),
+  m_GLPosition(-1),
+  m_GLMatrix(-1),
+  m_GLColor(-1),
+  m_GLtexture(-1),
+  m_GLtexID(-1),
+  m_resource(NULL) {
+	m_resource = ewol::resource::Texture::keep();
 	m_resource->setImageSize(_size);
 	m_resource->flush();
 	loadProgram();
 }
 
 ewol::compositing::Area::~Area(void) {
-	ewol::Texture::release(m_resource);
-	ewol::Program::release(m_GLprogram);
+	ewol::resource::Texture::release(m_resource);
+	ewol::resource::Program::release(m_GLprogram);
 }
 
 void ewol::compositing::Area::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::keep("DATA:textured3D.prog");
+	m_GLprogram = ewol::resource::Program::keep("DATA:textured3D.prog");
 	if (NULL != m_GLprogram) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");

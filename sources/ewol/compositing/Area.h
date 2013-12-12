@@ -9,25 +9,27 @@
 #ifndef __EWOL_COMPOSITING_AREA_H__
 #define __EWOL_COMPOSITING_AREA_H__
 
+#include <etk/Color.h>
 #include <ewol/debug.h>
-#include <ewol/compositing/Compose.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/resource/Program.h>
+#include <ewol/resource/Texture.h>
 
 namespace ewol {
 	namespace compositing {
-		class Area : public ewol::compositing::Compose {
+		class Area : public ewol::Compositing {
 			private:
 				vec3 m_position; //!< The current position to draw
 				etk::Color<> m_color; //!< The text foreground color
 			private:
-				ewol::Program* m_GLprogram;  //!< pointer on the opengl display program
-				int32_t        m_GLPosition; //!< openGL id on the element (vertex buffer)
-				int32_t        m_GLMatrix;   //!< openGL id on the element (transformation matrix)
-				int32_t        m_GLColor;    //!< openGL id on the element (color buffer)
-				int32_t        m_GLtexture;  //!< openGL id on the element (Texture position)
-				int32_t        m_GLtexID;    //!< openGL id on the element (texture ID)
+				ewol::resource::Program* m_GLprogram;  //!< pointer on the opengl display program
+				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
+				int32_t m_GLMatrix;   //!< openGL id on the element (transformation matrix)
+				int32_t m_GLColor;    //!< openGL id on the element (color buffer)
+				int32_t m_GLtexture;  //!< openGL id on the element (Texture position)
+				int32_t m_GLtexID;    //!< openGL id on the element (texture ID)
 			private:
-				ewol::Texture* m_resource; //!< texture resources
+				ewol::resource::Texture* m_resource; //!< texture resources
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point

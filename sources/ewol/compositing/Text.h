@@ -12,9 +12,9 @@
 #include <etk/Color.h>
 
 #include <ewol/debug.h>
-#include <ewol/compositing/Compose.h>
+#include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/TexturedFont.h>
 #include <exml/exml.h>
 #include <string>
 
@@ -22,6 +22,7 @@ namespace ewol {
 	namespace compositing {
 		/**
 		 * @brief This class represent the specific display for every char in the string ...
+		 * @not-in-doc
 		 */
 		class TextDecoration {
 			public:
@@ -35,7 +36,7 @@ namespace ewol {
 				}
 		};
 		
-		class Text : public ewol::compositing::Compose {
+		class Text : public ewol::Compositing {
 			public:
 				enum aligneMode {
 					alignDisable,
@@ -45,9 +46,9 @@ namespace ewol {
 					alignJustify
 				};
 			private:
-				ewol::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
+				ewol::compositing::Drawing m_vectorialDraw; //!< This is used to draw background selection and other things ...
 			public:
-				ewol::Drawing& getDrawing(void) {
+				ewol::compositing::Drawing& getDrawing(void) {
 					return m_vectorialDraw;
 				};
 			private:
@@ -74,7 +75,7 @@ namespace ewol {
 				float m_stopTextPos; //!< end of the alignement (when a string is too hight it cut at the word previously this virtual line and the center is perform with this one)
 				enum aligneMode m_alignement; //!< Current Alignement mode (justify/left/right ...)
 			private:
-				ewol::Program* m_GLprogram; //!< pointer on the opengl display program
+				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
@@ -84,7 +85,7 @@ namespace ewol {
 				int32_t m_selectionStartPos; //!< start position of the Selection (if == m_cursorPos ==> no selection)
 				int32_t m_cursorPos; //!< Cursor position (default no cursor  == > -100)
 			private:
-				ewol::TexturedFont* m_font; //!< Font resources
+				ewol::resource::TexturedFont* m_font; //!< Font resources
 			private: // Text
 				std::vector<vec2 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
@@ -325,7 +326,7 @@ namespace ewol {
 				 * @param[in] _alignement mode of alignement for the Text.
 				 * @note The text align in center change of line every display done (even if it was just a char)
 				 */
-				void setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement=ewol::Text::alignDisable);
+				void setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::compositing::Text::aligneMode _alignement=ewol::compositing::Text::alignDisable);
 				/**
 				 * @brief disable the alignement system
 				 */
@@ -334,7 +335,7 @@ namespace ewol {
 				 * @brief get the current alignement property
 				 * @return the curent alignement type
 				 */
-				enum ewol::Text::aligneMode getAlignement(void);
+				enum ewol::compositing::Text::aligneMode getAlignement(void);
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.

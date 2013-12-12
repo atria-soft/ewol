@@ -21,61 +21,10 @@ def Create(target):
 	# add the file to compile:
 	myModule.AddSrcFile([
 		'ewol/ewol.cpp',
-		'ewol/clipBoard.cpp',
-		'ewol/debug.cpp',
-		'ewol/commandLine.cpp',
-		'ewol/key.cpp',
-		'ewol/cursor.cpp',
-		'ewol/Dimension.cpp',
-		'ewol/Light.cpp',
-		'ewol/Material.cpp'])
+		'ewol/debug.cpp'
+		])
 	
-	#openGl Basic access abstraction (for the model matrix and include
-	myModule.AddSrcFile([
-		'ewol/renderer/EConfig.cpp',
-		'ewol/renderer/EMessage.cpp',
-		'ewol/renderer/EObject.cpp',
-		'ewol/renderer/EObjectManager.cpp',
-		'ewol/renderer/EMultiCast.cpp',
-		'ewol/renderer/openGL.cpp',
-		'ewol/renderer/ConfigFont.cpp',
-		'ewol/renderer/EventInput.cpp',
-		'ewol/renderer/EventEntry.cpp',
-		'ewol/renderer/EventTime.cpp',
-		'ewol/renderer/eContext.cpp',
-		'ewol/renderer/eInput.cpp'])
-	
-	# resources : 
-	myModule.AddSrcFile([
-		'ewol/resources/Shader.cpp',
-		'ewol/resources/Program.cpp',
-		'ewol/resources/VirtualBufferObject.cpp',
-		'ewol/resources/ConfigFile.cpp',
-		'ewol/resources/FontFreeType.cpp',
-		'ewol/resources/TexturedFont.cpp',
-		'ewol/resources/Mesh.cpp',
-		'ewol/resources/Texture.cpp',
-		'ewol/resources/Colored3DObject.cpp',
-		'ewol/resources/Image.cpp',
-		'ewol/resources/Resource.cpp',
-		'ewol/resources/ResourceManager.cpp'])
-	
-	# physical shape parser
-	myModule.AddSrcFile([
-		'ewol/physicsShape/PhysicsShape.cpp',
-		'ewol/physicsShape/PhysicsBox.cpp',
-		'ewol/physicsShape/PhysicsCapsule.cpp',
-		'ewol/physicsShape/PhysicsCone.cpp',
-		'ewol/physicsShape/PhysicsConvexHull.cpp',
-		'ewol/physicsShape/PhysicsCylinder.cpp',
-		'ewol/physicsShape/PhysicsSphere.cpp'])
-	
-	# Audio system
-	myModule.AddSrcFile([
-		'ewol/renderer/audio/audio.cpp',
-		'ewol/renderer/audio/decWav.cpp'])
-	
-	# Compositing
+	# compositing :
 	myModule.AddSrcFile([
 		'ewol/compositing/Compositing.cpp',
 		'ewol/compositing/Text.cpp',
@@ -83,44 +32,107 @@ def Create(target):
 		'ewol/compositing/Image.cpp',
 		'ewol/compositing/Sprite.cpp',
 		'ewol/compositing/Shaper.cpp',
-		'ewol/compositing/Area.cpp'])
+		'ewol/compositing/Area.cpp'
+		])
 	
-	# all widgets
+	# context :
 	myModule.AddSrcFile([
-		'ewol/widget/Widget.cpp',
-		'ewol/widget/WidgetManager.cpp',
-		'ewol/widget/Windows.cpp',
-		'ewol/widget/Button.cpp',
-		'ewol/widget/Gird.cpp',
-		'ewol/widget/Image.cpp',
+		'ewol/context/clipBoard.cpp',
+		'ewol/context/commandLine.cpp',
+		'ewol/context/ConfigFont.cpp',
+		'ewol/context/Context.cpp',
+		'ewol/context/cursor.cpp',
+		'ewol/context/Dimension.cpp',
+		'ewol/context/InputManager.cpp'
+		])
+	if target.name=="Linux":
+		myModule.AddSrcFile('ewol/context/X11/Context.cpp')
+	elif target.name=="Android":
+		myModule.AddSrcFile("ewol/context/Android/Context.cpp")
+	elif target.name=="Windows":
+		myModule.AddSrcFile("ewol/context/Windows/Context.cpp")
+	elif target.name=="MacOs":
+		myModule.AddSrcFile([
+			"ewol/context/MacOs/Context.cpp",
+			"ewol/context/MacOs/Interface.mm",
+			"ewol/context/MacOs/AppDelegate.mm",
+			"ewol/context/MacOs/OpenglView.mm"])
+	else:
+		debug.error("unknow mode...")
+	
+	# Key properties :
+	myModule.AddSrcFile([
+		'ewol/key/keyboard.cpp',
+		'ewol/key/Special.cpp',
+		'ewol/key/status.cpp',
+		'ewol/key/type.cpp'
+		])
+	
+	# object :
+	myModule.AddSrcFile([
+		'ewol/object/Config.cpp',
+		'ewol/object/ConfigElement.cpp',
+		'ewol/object/Manager.cpp',
+		'ewol/object/Message.cpp',
+		'ewol/object/MultiCast.cpp',
+		'ewol/object/Object.cpp'
+		])
+	
+	# OpenGL interface :
+	myModule.AddSrcFile([
+		'ewol/openGL/openGL.cpp'
+		])
+	
+	# resources :
+	myModule.AddSrcFile([
+		'ewol/resource/Colored3DObject.cpp',
+		'ewol/resource/ConfigFile.cpp',
+		'ewol/resource/FontFreeType.cpp',
+		'ewol/resource/Image.cpp',
+		'ewol/resource/Manager.cpp',
+		'ewol/resource/Program.cpp',
+		'ewol/resource/Resource.cpp',
+		'ewol/resource/Shader.cpp',
+		'ewol/resource/Texture.cpp',
+		'ewol/resource/TexturedFont.cpp',
+		'ewol/resource/VirtualBufferObject.cpp'
+		])
+	
+	# widget :
+	myModule.AddSrcFile([
 		'ewol/widget/ButtonColor.cpp',
+		'ewol/widget/Button.cpp',
 		'ewol/widget/CheckBox.cpp',
 		'ewol/widget/ColorBar.cpp',
-		'ewol/widget/ContextMenu.cpp',
 		'ewol/widget/Composer.cpp',
 		'ewol/widget/Container.cpp',
 		'ewol/widget/ContainerN.cpp',
+		'ewol/widget/ContextMenu.cpp',
 		'ewol/widget/Entry.cpp',
+		'ewol/widget/Gird.cpp',
+		'ewol/widget/Image.cpp',
 		'ewol/widget/Joystick.cpp',
 		'ewol/widget/Label.cpp',
+		'ewol/widget/Layer.cpp',
 		'ewol/widget/List.cpp',
 		'ewol/widget/ListFileSystem.cpp',
-		'ewol/widget/Layer.cpp',
+		'ewol/widget/Manager.cpp',
 		'ewol/widget/Menu.cpp',
-		'ewol/widget/Mesh.cpp',
+		'ewol/widget/meta/ColorChooser.cpp',
+		'ewol/widget/meta/FileChooser.cpp',
+		'ewol/widget/meta/Parameter.cpp',
+		'ewol/widget/meta/ParameterList.cpp',
+		'ewol/widget/meta/StdPopUp.cpp',
 		'ewol/widget/PopUp.cpp',
 		'ewol/widget/ProgressBar.cpp',
 		'ewol/widget/Scroll.cpp',
 		'ewol/widget/Sizer.cpp',
 		'ewol/widget/Slider.cpp',
-		'ewol/widget/WSlider.cpp',
 		'ewol/widget/Spacer.cpp',
 		'ewol/widget/WidgetScrolled.cpp',
-		'ewol/widget/meta/StdPopUp.cpp',
-		'ewol/widget/meta/FileChooser.cpp',
-		'ewol/widget/meta/ColorChooser.cpp',
-		'ewol/widget/meta/Parameter.cpp',
-		'ewol/widget/meta/ParameterList.cpp'])
+		'ewol/widget/Windows.cpp',
+		'ewol/widget/WSlider.cpp',
+		])
 	
 	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
 	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')

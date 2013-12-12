@@ -10,12 +10,13 @@
 #define __EWOL_COMPOSITING_IMAGE_H__
 
 #include <ewol/debug.h>
-#include <ewol/compositing/Compose.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/resource/Program.h>
+#include <ewol/resource/Image.h>
 
 namespace ewol {
 	namespace compositing {
-		class Image : public ewol::compositing::Compose {
+		class Image : public ewol::Compositing {
 			private:
 				vec3 m_position; //!< The current position to draw
 				vec3 m_clippingPosStart; //!< Clipping start position
@@ -25,14 +26,14 @@ namespace ewol {
 				etk::Color<> m_color; //!< The text foreground color
 				float m_angle; //!< Angle to set at the axes
 			private:
-				ewol::Program* m_GLprogram; //!< pointer on the opengl display program
+				ewol::resource::Program* m_GLprogram; //!< pointer on the opengl display program
 				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
 				int32_t m_GLMatrix; //!< openGL id on the element (transformation matrix)
 				int32_t m_GLColor; //!< openGL id on the element (color buffer)
 				int32_t m_GLtexture; //!< openGL id on the element (Texture position)
 				int32_t m_GLtexID; //!< openGL id on the element (texture ID)
 			private:
-				ewol::TextureFile* m_resource; //!< texture resources
+				ewol::resource::TextureFile* m_resource; //!< texture resources
 				std::vector<vec3 > m_coord; //!< internal coord of the object
 				std::vector<vec2 > m_coordTex; //!< internal texture coordinate for every point
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the different point

@@ -12,13 +12,13 @@
 #include <etk/Color.h>
 
 #include <ewol/debug.h>
-#include <ewol/compositing/Compose.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/compositing/Compositing.h>
+#include <ewol/resource/Program.h>
 
 
 namespace ewol {
 	namespace compositing {
-		class Drawing : public ewol::compositing::Compose {
+		class Drawing : public ewol::Compositing {
 			private:
 				vec3 m_position;         //!< The current position to draw
 				vec3 m_clippingPosStart; //!< Clipping start position
@@ -28,10 +28,10 @@ namespace ewol {
 				etk::Color<> m_color;   //!< The text foreground color
 				etk::Color<> m_colorBg; //!< The text background color
 			private:
-				ewol::Program*  m_GLprogram;  //!< pointer on the opengl display program
-				int32_t         m_GLPosition; //!< openGL id on the element (vertex buffer)
-				int32_t         m_GLMatrix;   //!< openGL id on the element (transformation matrix)
-				int32_t         m_GLColor;    //!< openGL id on the element (color buffer)
+				ewol::resource::Program*  m_GLprogram;  //!< pointer on the opengl display program
+				int32_t m_GLPosition; //!< openGL id on the element (vertex buffer)
+				int32_t m_GLMatrix;   //!< openGL id on the element (transformation matrix)
+				int32_t m_GLColor;    //!< openGL id on the element (color buffer)
 			private: // Background Color (display only when needed)
 				std::vector<vec3 > m_coord; //!< internal position for the text display
 				std::vector<etk::Color<float> > m_coordColor; //!< internal color of the background
@@ -53,10 +53,10 @@ namespace ewol {
 				 * @brief Un-Load the openGL program and get all the ID needed
 				 */
 				void unLoadProgram(void);
-				float m_thickness;     //!< when drawing line and other things
-				int32_t m_triElement;    //!< special counter of the single dot generated
-				vec3 m_triangle[3];   //!< Register every system with a combinaison of tiangle
-				etk::Color<float> m_tricolor[3];   //!< Register every the associated color foreground
+				float m_thickness; //!< when drawing line and other things
+				int32_t m_triElement; //!< special counter of the single dot generated
+				vec3 m_triangle[3]; //!< Register every system with a combinaison of tiangle
+				etk::Color<float> m_tricolor[3]; //!< Register every the associated color foreground
 			// internal API for the generation abstraction of triangles
 				/**
 				 * @brief Lunch the generation of triangle

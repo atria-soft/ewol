@@ -277,14 +277,14 @@ void ewol::compositing::Drawing::resetCount(void) {
 }
 
 void ewol::compositing::Drawing::unLoadProgram(void) {
-	ewol::Program::release(m_GLprogram);
+	ewol::resource::Program::release(m_GLprogram);
 }
 
 void ewol::compositing::Drawing::loadProgram(void) {
 	// remove previous loading ... in case
 	unLoadProgram();
 	// oad the new ...
-	m_GLprogram = ewol::Program::keep("DATA:color3.prog");
+	m_GLprogram = ewol::resource::Program::keep("DATA:color3.prog");
 	// get the shader resource :
 	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");

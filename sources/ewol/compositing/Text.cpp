@@ -8,7 +8,7 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/context/Context.h>
 #include <etk/UString.h>
 
 #undef __class__
@@ -30,7 +30,7 @@ ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
   m_previousCharcode(0),
   m_startTextpos(0),
   m_stopTextPos(0),
-  m_alignement(ewol::Text::alignDisable),
+  m_alignement(alignDisable),
   m_GLprogram(NULL),
   m_GLPosition(-1),
   m_GLMatrix(-1),
@@ -46,14 +46,14 @@ ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
 
 
 ewol::compositing::Text::~Text(void) {
-	ewol::TexturedFont::release(m_font);
-	ewol::Program::release(m_GLprogram);
+	ewol::resource::TexturedFont::release(m_font);
+	ewol::resource::Program::release(m_GLprogram);
 }
 
 void ewol::compositing::Text::loadProgram(void) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::keep("DATA:text.prog");
+	m_GLprogram = ewol::resource::Program::keep("DATA:text.prog");
 	if (m_GLprogram != NULL) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord2d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");

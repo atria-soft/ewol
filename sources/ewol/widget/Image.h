@@ -14,7 +14,7 @@
 #include <draw/Color.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Image.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char * const ewolEventImagePressed;
 

@@ -11,11 +11,11 @@
 
 #include <ewol/debug.h>
 #include <ewol/compositing/Image.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Manager.h>
 
 namespace ewol {
 	namespace compositing {
-		class Sprite : public ewol::compositing::Compose {
+		class Sprite : public ewol::compositing::Image {
 			protected:
 				ivec2 m_nbSprite; //!< number of sprite in vertical and horizontal
 				vec2 m_unitarySpriteSize; //!< size of a unique sprite
