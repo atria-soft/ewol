@@ -13,15 +13,15 @@
 
 #include <ewol/ewol.h>
 
-#include <ewol/renderer/EObject.h>
-#include <ewol/renderer/EObjectManager.h>
-#include <ewol/renderer/eContext.h>
-#include <ewol/renderer/InputManager.h>
-#include <ewol/resources/Texture.h>
+#include <ewol/object/Object.h>
+#include <ewol/object/Manager.h>
+#include <ewol/context/Context.h>
+#include <ewol/context/InputManager.h>
+#include <ewol/resource/Texture.h>
 
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 
 
@@ -41,15 +41,15 @@ void ewol::context::InputManager::setDpi(int32_t newDPI) {
 	calculateLimit();
 }
 
-bool ewol::context::InputManager::localEventInput(enum ewol::keyEvent::type _type,
+bool ewol::context::InputManager::localEventInput(enum ewol::key::type _type,
                                                   ewol::Widget* _destWidget,
                                                   int32_t _IdInput,
-                                                  enum ewol::keyEvent::status _status,
+                                                  enum ewol::key::status _status,
                                                   vec2 _pos) {
 	if (NULL != _destWidget) {
-		if (_type == ewol::keyEvent::typeMouse || _type == ewol::keyEvent::typeFinger) {
+		if (_type == ewol::key::typeMouse || _type == ewol::key::typeFinger) {
 			// create the system Event :
-			ewol::EventInputSystem tmpEventSystem(_type, _status, _IdInput, _pos, _destWidget, 0); // TODO : set the real ID ...
+			ewol::event::InputSystem tmpEventSystem(_type, _status, _IdInput, _pos, _destWidget, 0); // TODO : set the real ID ...
 			// generate the event :
 			return _destWidget->systemEventInput(tmpEventSystem);
 		} else {
@@ -61,7 +61,7 @@ bool ewol::context::InputManager::localEventInput(enum ewol::keyEvent::type _typ
 
 void ewol::context::InputManager::abortElement(InputPoperty *_eventTable,
                                                int32_t _idInput,
-                                               enum ewol::keyEvent::type _type) {
+                                               enum ewol::key::type _type) {
 	if (NULL == _eventTable) {
 		return;
 	}
@@ -69,7 +69,7 @@ void ewol::context::InputManager::abortElement(InputPoperty *_eventTable,
 		localEventInput(_type, 
 		                _eventTable[_idInput].curentWidgetEvent,
 		                _eventTable[_idInput].destinationInputId,
-		                ewol::keyEvent::statusAbort,
+		                ewol::key::statusAbort,
 		                _eventTable[_idInput].posEvent);
 	}
 }
@@ -103,22 +103,22 @@ void ewol::context::InputManager::transfertEvent(ewol::Widget* _source, ewol::Wi
 		if (m_eventInputSaved[iii].curentWidgetEvent == _source) {
 			// inform the widget that it does not receive the event now
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventInputSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_ABORT] " << m_eventInputSaved[iii].posEvent);
-			localEventInput(ewol::keyEvent::typeFinger, m_eventInputSaved[iii].curentWidgetEvent, m_eventInputSaved[iii].destinationInputId, ewol::keyEvent::statusAbort, m_eventInputSaved[iii].posEvent);
+			localEventInput(ewol::key::typeFinger, m_eventInputSaved[iii].curentWidgetEvent, m_eventInputSaved[iii].destinationInputId, ewol::key::statusAbort, m_eventInputSaved[iii].posEvent);
 			// set the new widget ...
 			m_eventInputSaved[iii].curentWidgetEvent = _destination;
 			// inform the widget that he receive the event property now...
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventInputSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_TRANSFERT] " << m_eventInputSaved[iii].posEvent);
-			localEventInput(ewol::keyEvent::typeFinger, m_eventInputSaved[iii].curentWidgetEvent, m_eventInputSaved[iii].destinationInputId, ewol::keyEvent::statusTransfert, m_eventInputSaved[iii].posEvent);
+			localEventInput(ewol::key::typeFinger, m_eventInputSaved[iii].curentWidgetEvent, m_eventInputSaved[iii].destinationInputId, ewol::key::statusTransfert, m_eventInputSaved[iii].posEvent);
 		}
 		if (m_eventMouseSaved[iii].curentWidgetEvent == _source) {
 			// inform the widget that it does not receive the event now
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventMouseSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_ABORT] " << m_eventMouseSaved[iii].posEvent);
-			localEventInput(ewol::keyEvent::typeMouse, m_eventMouseSaved[iii].curentWidgetEvent, m_eventMouseSaved[iii].destinationInputId, ewol::keyEvent::statusAbort, m_eventMouseSaved[iii].posEvent);
+			localEventInput(ewol::key::typeMouse, m_eventMouseSaved[iii].curentWidgetEvent, m_eventMouseSaved[iii].destinationInputId, ewol::key::statusAbort, m_eventMouseSaved[iii].posEvent);
 			// set the new widget ...
 			m_eventMouseSaved[iii].curentWidgetEvent = _destination;
 			// inform the widget that he receive the event property now...
 			EVENT_DEBUG("GUI : Input ID=" << iii << " == >" << m_eventMouseSaved[iii].destinationInputId << " [EVENT_INPUT_TYPE_TRANSFERT] " << m_eventMouseSaved[iii].posEvent);
-			localEventInput(ewol::keyEvent::typeMouse, m_eventMouseSaved[iii].curentWidgetEvent, m_eventMouseSaved[iii].destinationInputId, ewol::keyEvent::statusTransfert, m_eventMouseSaved[iii].posEvent);
+			localEventInput(ewol::key::typeMouse, m_eventMouseSaved[iii].curentWidgetEvent, m_eventMouseSaved[iii].destinationInputId, ewol::key::statusTransfert, m_eventMouseSaved[iii].posEvent);
 		}
 	}
 }
@@ -138,7 +138,7 @@ void ewol::context::InputManager::unGrabPointer(void) {
 	m_context.grabPointerEvents(false, vec2(0,0));
 }
 
-void ewol::context::InputManager::onObjectRemove(ewol::EObject * removeObject) {
+void ewol::context::InputManager::onObjectRemove(ewol::Object * removeObject) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		if (m_eventInputSaved[iii].curentWidgetEvent == removeObject) {
 			// remove the property of this input ...
@@ -154,14 +154,14 @@ void ewol::context::InputManager::onObjectRemove(ewol::EObject * removeObject) {
 void ewol::context::InputManager::newLayerSet(void) {
 	for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 		// remove the property of this input ...
-		abortElement(m_eventInputSaved, iii, ewol::keyEvent::typeFinger);
+		abortElement(m_eventInputSaved, iii, ewol::key::typeFinger);
 		cleanElement(m_eventInputSaved, iii);
-		abortElement(m_eventMouseSaved, iii, ewol::keyEvent::typeMouse);
+		abortElement(m_eventMouseSaved, iii, ewol::key::typeMouse);
 		cleanElement(m_eventMouseSaved, iii);
 	}
 }
 
-ewol::context::InputManager::InputManager(ewol::eContext& _context) :
+ewol::context::InputManager::InputManager(ewol::Context& _context) :
   m_grabWidget(NULL),
   m_context(_context) {
 	setDpi(200);
@@ -179,10 +179,10 @@ ewol::context::InputManager::~InputManager(void) {
 	EWOL_INFO("Un-Init (end)");
 }
 
-int32_t ewol::context::InputManager::localGetDestinationId(enum ewol::keyEvent::type _type,
+int32_t ewol::context::InputManager::localGetDestinationId(enum ewol::key::type _type,
                                                            ewol::Widget* _destWidget,
                                                            int32_t _realInputId) {
-	if (_type == ewol::keyEvent::typeFinger) {
+	if (_type == ewol::key::typeFinger) {
 		int32_t lastMinimum = 0;
 		for(int32_t iii=0; iii<MAX_MANAGE_INPUT; iii++) {
 			if (true == m_eventInputSaved[iii].isUsed) {
@@ -199,7 +199,7 @@ int32_t ewol::context::InputManager::localGetDestinationId(enum ewol::keyEvent::
 }
 
 // note if id<0  == > the it was finger event ...
-void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
+void ewol::context::InputManager::motion(enum ewol::key::type _type,
                                          int _pointerID,
                                          vec2 _pos) {
 	EVENT_DEBUG("motion event : " << _type << " " << _pointerID << " " << _pos);
@@ -208,9 +208,9 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 		return;
 	}
 	InputPoperty *eventTable = NULL;
-	if (_type == ewol::keyEvent::typeMouse) {
+	if (_type == ewol::key::typeMouse) {
 		eventTable = m_eventMouseSaved;
-	} else if (_type == ewol::keyEvent::typeFinger) {
+	} else if (_type == ewol::key::typeFinger) {
 		eventTable = m_eventInputSaved;
 	} else {
 		EWOL_ERROR("Unknown type of event");
@@ -221,9 +221,9 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 		// not manage input
 		return;
 	}
-	ewol::Windows* tmpWindows = m_context.getWindows();
+	ewol::widget::Windows* tmpWindows = m_context.getWindows();
 	// special case for the mouse event 0 that represent the hover event of the system :
-	if (_type == ewol::keyEvent::typeMouse && _pointerID == 0) {
+	if (_type == ewol::key::typeMouse && _pointerID == 0) {
 		// this event is all time on the good widget ... and manage the enter and leave ...
 		// NOTE : the "layer widget" force us to get the widget at the specific position all the time :
 		ewol::Widget* tmpWidget = NULL;
@@ -247,7 +247,7 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent,
 			                eventTable[_pointerID].destinationInputId,
-			                ewol::keyEvent::statusLeave,
+			                ewol::key::statusLeave,
 			                _pos);
 		}
 		if (false == eventTable[_pointerID].isInside) {
@@ -270,7 +270,7 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent,
 			                eventTable[_pointerID].destinationInputId,
-			                ewol::keyEvent::statusEnter,
+			                ewol::key::statusEnter,
 			                _pos);
 		}
 		EVENT_DEBUG("GUI : Input ID=" << _pointerID
@@ -280,7 +280,7 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 		localEventInput(_type,
 		                eventTable[_pointerID].curentWidgetEvent,
 		                eventTable[_pointerID].destinationInputId,
-		                ewol::keyEvent::statusMove,
+		                ewol::key::statusMove,
 		                _pos);
 	} else if (true == eventTable[_pointerID].isUsed) {
 		if (true == eventTable[_pointerID].isInside) {
@@ -296,7 +296,7 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 				localEventInput(_type,
 				                eventTable[_pointerID].curentWidgetEvent,
 				                eventTable[_pointerID].destinationInputId,
-				                ewol::keyEvent::statusLeave,
+				                ewol::key::statusLeave,
 				                _pos);
 			}
 		} else {
@@ -312,7 +312,7 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 				localEventInput(_type,
 				                eventTable[_pointerID].curentWidgetEvent,
 				                eventTable[_pointerID].destinationInputId,
-				                ewol::keyEvent::statusEnter,
+				                ewol::key::statusEnter,
 				                _pos);
 			}
 		}
@@ -323,12 +323,12 @@ void ewol::context::InputManager::motion(enum ewol::keyEvent::type _type,
 		localEventInput(_type,
 		                eventTable[_pointerID].curentWidgetEvent,
 		                eventTable[_pointerID].destinationInputId,
-		                ewol::keyEvent::statusMove,
+		                ewol::key::statusMove,
 		                _pos);
 	}
 }
 
-void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
+void ewol::context::InputManager::state(enum ewol::key::type _type,
                                         int _pointerID,
                                         bool _isDown,
                                         vec2 _pos)
@@ -341,10 +341,10 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 	// convert position in open-GL coordonates ...
 	InputPoperty *eventTable = NULL;
 	InputLimit   localLimit;
-	if (_type == ewol::keyEvent::typeMouse) {
+	if (_type == ewol::key::typeMouse) {
 		eventTable = m_eventMouseSaved;
 		localLimit = m_eventMouseLimit;
-	} else if (_type == ewol::keyEvent::typeFinger) {
+	} else if (_type == ewol::key::typeFinger) {
 		eventTable = m_eventInputSaved;
 		localLimit = m_eventInputLimit;
 	} else {
@@ -358,7 +358,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 	}
 	// get the curent time ...
 	int64_t currentTime = ewol::getTime();
-	ewol::Windows* tmpWindows = m_context.getWindows();
+	ewol::widget::Windows* tmpWindows = m_context.getWindows();
 	
 	if (true == _isDown) {
 		EVENT_DEBUG("GUI : Input ID=" << _pointerID
@@ -384,7 +384,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent,
 			                eventTable[_pointerID].destinationInputId,
-			                ewol::keyEvent::statusDown,
+			                ewol::key::statusDown,
 			                _pos);
 		} else {
 			// Mark it used :
@@ -397,7 +397,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 			eventTable[_pointerID].isInside = true;
 			// get destination widget :
 			if(NULL != tmpWindows) {
-				if (m_grabWidget != NULL && _type == ewol::keyEvent::typeMouse) {
+				if (m_grabWidget != NULL && _type == ewol::key::typeMouse) {
 					eventTable[_pointerID].curentWidgetEvent = m_grabWidget;
 				} else {
 					eventTable[_pointerID].curentWidgetEvent = tmpWindows->getWidgetAtPos(_pos);
@@ -420,7 +420,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent,
 			                eventTable[_pointerID].destinationInputId,
-			                ewol::keyEvent::statusDown,
+			                ewol::key::statusDown,
 			                _pos);
 		}
 	} else {
@@ -443,7 +443,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 			localEventInput(_type,
 			                eventTable[_pointerID].curentWidgetEvent,
 			                _pointerID,
-			                ewol::keyEvent::statusUp,
+			                ewol::key::statusUp,
 			                _pos);
 			// generate event (single)
 			if(    abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
@@ -461,7 +461,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 				}
 				// in grab mode the single to quinte event are not generated ....
 				if(    (    m_grabWidget == NULL
-				         || _type != ewol::keyEvent::typeMouse )
+				         || _type != ewol::key::typeMouse )
 				    && eventTable[_pointerID].nbClickEvent < nbClickMax) {
 					// generate event SINGLE :
 					eventTable[_pointerID].nbClickEvent++;
@@ -472,7 +472,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 					localEventInput(_type,
 					                eventTable[_pointerID].curentWidgetEvent,
 					                eventTable[_pointerID].destinationInputId,
-					                (enum ewol::keyEvent::status)(ewol::keyEvent::statusSingle + eventTable[_pointerID].nbClickEvent-1),
+					                (enum ewol::key::status)(ewol::key::statusSingle + eventTable[_pointerID].nbClickEvent-1),
 					                _pos);
 					if( eventTable[_pointerID].nbClickEvent >= nbClickMax) {
 						eventTable[_pointerID].nbClickEvent = 0;
@@ -482,7 +482,7 @@ void ewol::context::InputManager::state(enum ewol::keyEvent::type _type,
 				}
 			}
 			// specific for tuch event
-			if (_type == ewol::keyEvent::typeFinger) {
+			if (_type == ewol::key::typeFinger) {
 				cleanElement(eventTable, _pointerID);
 			}
 		}

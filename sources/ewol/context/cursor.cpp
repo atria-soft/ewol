@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/cursor.h>
+#include <ewol/context/cursor.h>
 
 static const char* cursorDescriptionString[ewol::context::cursorCount+1] = {
 	"cursorArrow",

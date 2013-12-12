@@ -39,8 +39,9 @@ namespace ewol {
 		 * @not-in-doc
 		 */
 		class InputLimit {
-			int32_t sepatateTime;
-			int32_t DpiOffset;
+			public:
+				int32_t sepatateTime;
+				int32_t DpiOffset;
 		};
 		class Context;
 		class InputManager {
@@ -65,10 +66,10 @@ namespace ewol {
 				 * @param[in] _pos position of the event
 				 * @return true if event has been greped
 				 */
-				bool localEventInput(enum ewol::keyEvent::type _type,
+				bool localEventInput(enum ewol::key::type _type,
 				                     ewol::Widget* _destWidget,
 				                     int32_t _IdInput,
-				                     enum ewol::keyEvent::status _typeEvent,
+				                     enum ewol::key::status _typeEvent,
 				                     vec2 _pos);
 				/**
 				 * @brief convert the system event id in the correct EWOL id depending of the system management mode
@@ -79,26 +80,26 @@ namespace ewol {
 				 * @param[in] _realInputId system Id
 				 * @return the ewol input id
 				 */
-				int32_t localGetDestinationId(enum ewol::keyEvent::type _type,
+				int32_t localGetDestinationId(enum ewol::key::type _type,
 				                              ewol::Widget* _destWidget,
 				                              int32_t _realInputId);
 			private:
-				ewol::eContext& m_context;
+				ewol::Context& m_context;
 			public:
-				InputManager(ewol::eContext& _context);
+				InputManager(ewol::Context& _context);
 				~InputManager(void);
 				void setDpi(int32_t newDPI);
 				
 				// note if id<0  == > the it was finger event ...
-				void motion(enum ewol::keyEvent::type _type, int _pointerID, vec2 _pos );
-				void state(enum ewol::keyEvent::type _type, int _pointerID, bool _isDown, vec2 _pos);
+				void motion(enum ewol::key::type _type, int _pointerID, vec2 _pos );
+				void state(enum ewol::key::type _type, int _pointerID, bool _isDown, vec2 _pos);
 				
 				/**
 				 * @brief Inform object that an other object is removed ...
-				 * @param[in] removeObject Pointer on the EObject remeved  == > the user must remove all reference on this EObject
+				 * @param[in] removeObject Pointer on the Object remeved  == > the user must remove all reference on this Object
 				 * @note : Sub classes must call this class
 				 */
-				void onObjectRemove(ewol::EObject* _removeObject);
+				void onObjectRemove(ewol::Object* _removeObject);
 				/**
 				 * @brief a new layer on the windows is set  == > might remove all the property of the current element ...
 				 */

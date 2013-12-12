@@ -10,7 +10,7 @@
 #define __EWOL_FONT_FREE_TYPE_H__
 
 #include <etk/types.h>
-#include <ewol/resources/font/FontBase.h>
+#include <ewol/resource/font/FontBase.h>
 
 extern "C" {
 	#include <freetype/ft2build.h>
@@ -53,12 +53,12 @@ namespace ewol {
 				 * @param[in] _filename Name of the base font.
 				 * @return pointer on the resource or NULL if an error occured.
 				 */
-				static ewol::FontBase* keep(const std::string& _filename);
+				static ewol::resource::FontBase* keep(const std::string& _filename);
 				/**
 				 * @brief release the keeped resources
 				 * @param[in,out] reference on the object pointer
 				 */
-				static void release(ewol::FontBase*& _object);
+				static void release(ewol::resource::FontBase*& _object);
 		};
 		void freeTypeInit(void);
 		void freeTypeUnInit(void);

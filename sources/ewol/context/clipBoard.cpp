@@ -9,8 +9,8 @@
 #include <etk/types.h>
 
 #include <ewol/debug.h>
-#include <ewol/clipBoard.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/context/clipBoard.h>
+#include <ewol/context/Context.h>
 
 #undef __class__
 #define __class__ "ClipBoard"
@@ -23,9 +23,9 @@ note: la copy dans le :
        10 : bouton du milieux
 */
 //!< Local copy of the clipboards
-static std::string mesCopy[ewol::clipBoard::context::clipboardCount];
+static std::string mesCopy[ewol::context::clipBoard::clipboardCount];
 
-static const char* clipboardDescriptionString[ewol::clipBoard::context::clipboardCount+1] = {
+static const char* clipboardDescriptionString[ewol::context::clipBoard::clipboardCount+1] = {
 	"clipboard0",
 	"clipboard1",
 	"clipboard2",

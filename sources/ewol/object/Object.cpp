@@ -10,6 +10,7 @@
 #include <ewol/object/Manager.h>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
+#include <ewol/object/MultiCast.h>
 
 #undef __class__
 #define __class__	"ewol::Object"
@@ -92,7 +93,7 @@ void ewol::Object::autoDestroy(void) {
 	getObjectManager().autoRemove(this);
 }
 
-void ewol::Object::removObject(void) {
+void ewol::Object::removeObject(void) {
 	getObjectManager().autoRemove(this);
 }
 
@@ -111,12 +112,12 @@ void ewol::Object::generateEventId(const char * _generateEventId, const std::str
 			if (m_externEvent[iii]->localEventId == _generateEventId) {
 				if (NULL != m_externEvent[iii]->destObject) {
 					if (m_externEvent[iii]->overloadData.size() <= 0){
-						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, _data);
+						ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, _data);
 						EWOL_VERBOSE("send message " << tmpMsg);
 						m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
 					} else {
 						// set the user requested data ...
-						ewol::EMessage tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+						ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
 						EWOL_VERBOSE("send message " << tmpMsg);
 						m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
 					}
@@ -240,7 +241,7 @@ void ewol::Object::registerConfig(const char* _config,
 			}
 		}
 	}
-	m_listConfig.push_back(ewol::EConfigElement(_config, _type, _control, _description, _default));
+	m_listConfig.push_back(ewol::object::ConfigElement(_config, _type, _control, _description, _default));
 }
 
 
@@ -258,7 +259,7 @@ bool ewol::Object::loadXML(exml::Element* _node) {
 		if (value.size() == 0) {
 			continue;
 		}
-		if (false == setConfig(ewol::EConfig(m_listConfig[iii].getConfig(), value) ) ) {
+		if (false == setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), value) ) ) {
 			errorOccured = false;
 		}
 	}
@@ -288,7 +289,7 @@ bool ewol::Object::storeXML(exml::Element* _node) const {
 }
 
 
-bool ewol::Object::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::Object::onSetConfig(const ewol::object::Config& _conf) {
 	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config : " << _conf);
 	if (_conf.getConfig() == ewol::Object::configName) {
 		EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} set config name : \"" << _conf.getData() << "\"");
@@ -311,7 +312,7 @@ bool ewol::Object::setConfig(const std::string& _config, const std::string& _val
 		if (NULL != m_listConfig[iii].getConfig()) {
 			if (_config == m_listConfig[iii].getConfig() ) {
 				// call config with standard parameter
-				return setConfig(ewol::EConfig(m_listConfig[iii].getConfig(), _value));
+				return setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), _value));
 			}
 		}
 	}
@@ -340,7 +341,7 @@ std::string ewol::Object::getConfig(const std::string& _config) const {
 	return "";
 }
 
-bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::EConfig& _conf) {
+bool ewol::Object::setConfigNamed(const std::string& _objectName, const ewol::object::Config& _conf) {
 	ewol::Object* object = getObjectManager().get(_objectName);
 	if (object == NULL) {
 		return false;
@@ -356,14 +357,14 @@ bool ewol::Object::setConfigNamed(const std::string& _objectName, const std::str
 	return object->setConfig(_config, _value);
 }
 
-ewol::ObjectManager& ewol::Object::getObjectManager(void) {
-	return ewol::getContext().getObjectManager();
+ewol::object::Manager& ewol::Object::getObjectManager(void) {
+	return ewol::getContext().getEObjectManager();
 }
 
-ewol::EMultiCast& ewol::Object::getMultiCast(void) {
-	return ewol::getContext().getObjectManager().multiCast();
+ewol::object::MultiCast& ewol::Object::getMultiCast(void) {
+	return ewol::getContext().getEObjectManager().multiCast();
 }
 
-ewol::eContext& ewol::Object::getContext(void) {
+ewol::Context& ewol::Object::getContext(void) {
 	return ewol::getContext();
 }

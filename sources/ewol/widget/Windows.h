@@ -19,7 +19,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Windows : public ewol::widget::Widget {
+		class Windows : public ewol::Widget {
 			public:
 				Windows(void);
 				virtual ~Windows(void);
@@ -72,7 +72,7 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);
-				virtual void onObjectRemove(ewol::EObject * _removeObject);
+				virtual void onObjectRemove(ewol::Object * _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual ewol::Widget * getWidgetAtPos(const vec2& _pos);
 				void setTitle(const std::string& _title);

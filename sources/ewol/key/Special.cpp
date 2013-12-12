@@ -18,7 +18,7 @@
 #define EWOL_FLAG_KEY_INSERT    0x00000080
 
 
-ewol::key::Special::SpecialKey(void) :
+ewol::key::Special::Special(void) :
   m_value(0) {
 	
 }

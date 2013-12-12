@@ -27,6 +27,10 @@ namespace ewol {
 	/**
 	 * @not-in-doc
 	 */
+	class eSystemMessage;
+	/**
+	 * @not-in-doc
+	 */
 	enum orientation{
 		screenAuto = 0,
 		screenLandscape,
@@ -80,7 +84,7 @@ namespace ewol {
 			void unLockContext(void);
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
-			ewol::InputManager m_input;
+			ewol::context::InputManager m_input;
 			etk::MessageFifo<ewol::eSystemMessage*> m_msgSystem;
 			bool m_displayFps;
 			ewol::context::Fps m_FpsSystemEvent;
@@ -101,12 +105,12 @@ namespace ewol {
 			virtual void OS_SetMouseMotion(int _pointerID, const vec2& _pos);
 			virtual void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos);
 			
-			virtual void OS_SetKeyboard(ewol::SpecialKey& _special,
+			virtual void OS_SetKeyboard(ewol::key::Special& _special,
 			                            char32_t _myChar,
 			                            bool _isDown,
 			                            bool _isARepeateKey=false);
-			virtual void OS_SetKeyboardMove(ewol::SpecialKey& _special,
-			                                enum ewol::keyEvent::keyboard _move,
+			virtual void OS_SetKeyboardMove(ewol::key::Special& _special,
+			                                enum ewol::key::keyboard _move,
 			                                bool _isDown,
 			                                bool _isARepeateKey=false);
 			/**
@@ -127,7 +131,7 @@ namespace ewol {
 			 * @param[in] removeObject Pointer on the EObject removed  == > the user must remove all reference on this EObject
 			 * @note : Sub classes must call this class
 			 */
-			void onObjectRemove(ewol::EObject* _removeObject);
+			void onObjectRemove(ewol::Object* _removeObject);
 			/**
 			 * @brief reset event management for the IO like Input ou Mouse or keyborad
 			 */
@@ -145,18 +149,18 @@ namespace ewol {
 			 */
 			virtual void stop(void);
 		private:
-			ewol::Windows* m_windowsCurrent; //!< curent displayed windows
+			ewol::widget::Windows* m_windowsCurrent; //!< curent displayed windows
 		public:
 			/**
 			 * @brief set the current windows to display :
 			 * @param _windows Windows that might be displayed
 			 */
-			void setWindows(ewol::Windows* _windows);
+			void setWindows(ewol::widget::Windows* _windows);
 			/**
 			 * @brief get the current windows that is displayed
 			 * @return the current handle on the windows (can be null)
 			 */
-			ewol::Windows* getWindows(void) {
+			ewol::widget::Windows* getWindows(void) {
 				return m_windowsCurrent;
 			};
 		private:
@@ -240,17 +244,17 @@ namespace ewol {
 			 * @brief Inform the Gui that we want to have a copy of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) { };
+			virtual void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
 			/**
 			 * @brief Inform the Gui that we are the new owner of the clipboard
 			 * @param[in] _clipboardID ID of the clipboard (STD/SELECTION) only apear here
 			 */
-			virtual void clipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) { };
+			virtual void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
 			/**
 			 * @brief Call by the OS when a clipboard arrive to US (previously requested by a widget)
 			 * @param[in] Id of the clipboard
 			 */
-			void OS_ClipBoardArrive(enum ewol::clipBoard::clipboardListe _clipboardID);
+			void OS_ClipBoardArrive(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 			/**
 			 * @brief set the new title of the windows
 			 * @param[in] title New desired title
@@ -271,7 +275,7 @@ namespace ewol {
 			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void setCursor(enum ewol::cursorDisplay _newCursor) { };
+			virtual void setCursor(enum ewol::context::cursorDisplay _newCursor) { };
 			/**
 			 * @brief set the Icon of the program
 			 * @param[in] _inputFile new filename icon of the curent program.
@@ -310,7 +314,7 @@ namespace ewol {
 
 //!< must be define in CPP by the application ... this are the main init and unInit of the Application
 // return false if an error occured
-bool APP_Init(ewol::eContext& _context);
+bool APP_Init(ewol::Context& _context);
 void APP_UnInit(ewol::Context& _context);
 
 

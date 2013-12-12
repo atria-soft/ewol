@@ -7,7 +7,7 @@
  */
 
 #include <ewol/debug.h>
-#include <ewol/commandLine.h>
+#include <ewol/context/commandLine.h>
 #include <vector>
 
 void ewol::context::CommandLine::parse(int32_t _argc, const char* _argv[]) {

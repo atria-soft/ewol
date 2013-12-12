@@ -21,7 +21,8 @@ def Create(target):
 	# add the file to compile:
 	myModule.AddSrcFile([
 		'ewol/ewol.cpp',
-		'ewol/debug.cpp'
+		'ewol/debug.cpp',
+		'ewol/Dimension.cpp'
 		])
 	
 	# compositing :
@@ -42,7 +43,6 @@ def Create(target):
 		'ewol/context/ConfigFont.cpp',
 		'ewol/context/Context.cpp',
 		'ewol/context/cursor.cpp',
-		'ewol/context/Dimension.cpp',
 		'ewol/context/InputManager.cpp'
 		])
 	if target.name=="Linux":
@@ -180,14 +180,6 @@ def Create(target):
 		#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
 		#myModule.AddSrcFile('ewol/renderer/audio/interfacePortAudio.cpp')
 		#endif
-		
-		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-		myModule.AddSrcFile('ewol/renderer/X11/Context.cpp')
-		#endif
-		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-		#myModule.CompileFlags_CC('-I/usr/local/include/directfb')
-		#myModule.AddSrcFile('ewol/renderer/os/gui.directFB.cpp')
-		#endif
 	
 	elif target.name=="Android":
 		myModule.AddExportflag_LD("-lGLESv2")
@@ -195,7 +187,6 @@ def Create(target):
 		myModule.AddExportflag_LD("-ldl")
 		myModule.AddExportflag_LD("-llog")
 		myModule.AddExportflag_LD("-landroid")
-
 		java_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/../../ewol/sources/android/src/"
 		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
@@ -203,25 +194,14 @@ def Create(target):
 		lutinMultiprocess.RunCommand("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
 		lutinTools.CopyFile(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
 		lutinTools.RemoveFile(java_tmp_src + ".class")
-		
-		myModule.AddSrcFile("ewol/renderer/Android/Context.cpp")
-	
 	elif target.name=="Windows":
 		myModule.AddModuleDepend("glew")
-		myModule.AddSrcFile("ewol/renderer/Windows/Context.cpp")
 	elif target.name=="MacOs":
 		myModule.AddExportflag_LD([
 			"-framework Cocoa",
 			"-framework OpenGL",
 			"-framework QuartzCore",
 			"-framework AppKit"])
-		myModule.AddSrcFile([
-			"ewol/renderer/MacOs/Context.cpp",
-			"ewol/renderer/MacOs/Interface.mm",
-			"ewol/renderer/MacOs/AppDelegate.mm",
-			"ewol/renderer/MacOs/OpenglView.mm"])
-	else:
-		debug.error("unknow mode...")
 	
 	# add the currrent module at the 
 	return myModule

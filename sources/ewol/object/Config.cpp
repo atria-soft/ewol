@@ -7,6 +7,8 @@
  */
 
 #include <ewol/object/Config.h>
+#include <etk/UString.h>
+
 
 #undef __class__
 #define __class__ "object::Config"

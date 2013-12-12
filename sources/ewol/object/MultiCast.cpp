@@ -65,7 +65,7 @@ void ewol::object::MultiCast::send(ewol::Object* _object, const char* const _mes
 			if (NULL != m_messageList[iii].m_object) {
 				EWOL_VERBOSE("        id = " << m_messageList[iii].m_object->getId() << " type=" << m_messageList[iii].m_object->getObjectType());
 				// generate event ... (create message before ...
-				ewol::EMessage tmpMsg(_object, m_messageList[iii].m_message, _data);
+				ewol::object::Message tmpMsg(_object, m_messageList[iii].m_message, _data);
 				m_messageList[iii].m_object->onReceiveMessage(tmpMsg);
 			}
 		}

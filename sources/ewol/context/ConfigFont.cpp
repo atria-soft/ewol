@@ -6,8 +6,8 @@
  * @license BSD v3 (see license file)
  */
 
-#include <ewol/renderer/ConfigFont.h>
-#include <ewol/resources/FontFreeType.h>
+#include <ewol/context/ConfigFont.h>
+#include <ewol/resource/FontFreeType.h>
 
 #undef __class__
 #define __class__ "context::ConfigFont"
@@ -17,12 +17,12 @@ ewol::context::ConfigFont::ConfigFont(void) :
   m_name("Arial;Helvetica"),
   m_size(10),
   m_useExternal(false) {
-	ewol::freeTypeInit();
+	ewol::resource::freeTypeInit();
 }
 
 ewol::context::ConfigFont::~ConfigFont(void) {
 	// UnInit FreeTypes
-	ewol::freeTypeUnInit();
+	ewol::resource::freeTypeUnInit();
 }
 
 void ewol::context::ConfigFont::set(const std::string& _fontName, int32_t _size) {

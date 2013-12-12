@@ -183,7 +183,7 @@ void ewol::compositing::Text::reset(void) {
 	m_previousCharcode = 0;
 	m_startTextpos = 0;
 	m_stopTextPos = 0;
-	m_alignement = ewol::Text::alignDisable;
+	m_alignement = alignDisable;
 	m_htmlCurrrentLine = "";
 	m_selectionStartPos = -100;
 	m_cursorPos = -100;
@@ -289,7 +289,7 @@ void ewol::compositing::Text::setFontName(const std::string& _fontName) {
 void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) {
 	clear();
 	// remove old one
-	ewol::TexturedFont * previousFont = m_font;
+	ewol::resource::TexturedFont * previousFont = m_font;
 	if (_fontSize <= 0) {
 		_fontSize = ewol::getContext().getFontDefault().getSize();
 	}
@@ -300,12 +300,12 @@ void ewol::compositing::Text::setFont(std::string _fontName, int32_t _fontSize) 
 	_fontName += std::to_string(_fontSize);
 	EWOL_VERBOSE("plop : " << _fontName << " size=" << _fontSize << " result :" << _fontName);
 	// link to new one
-	m_font = ewol::TexturedFont::keep(_fontName);
+	m_font = ewol::resource::TexturedFont::keep(_fontName);
 	if (m_font == NULL) {
 		EWOL_ERROR("Can not get font resource");
 		m_font = previousFont;
 	} else {
-		ewol::TexturedFont::release(previousFont);
+		ewol::resource::TexturedFont::release(previousFont);
 	}
 }
 
@@ -315,7 +315,7 @@ void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
 	}
 }
 
-enum ewol::font::mode ewol::Text::getFontMode(void) {
+enum ewol::font::mode ewol::compositing::Text::getFontMode(void) {
 	return m_mode;
 }
 
@@ -440,29 +440,29 @@ void ewol::compositing::Text::parseHtmlNode(exml::Element* _element) {
 		           || compare_no_case(elem->getValue(), "paragraph") == true) {
 			EWOL_VERBOSE("XML paragraph ...");
 			htmlFlush();
-			m_alignement = ewol::Text::alignLeft;
+			m_alignement = alignLeft;
 			forceLineReturn();
 			parseHtmlNode(elem);
 			forceLineReturn();
 		} else if (compare_no_case(elem->getValue(), "center") == true) {
 			EWOL_VERBOSE("XML center ...");
 			htmlFlush();
-			m_alignement = ewol::Text::alignCenter;
+			m_alignement = alignCenter;
 			parseHtmlNode(elem);
 		} else if (compare_no_case(elem->getValue(), "left") == true) {
 			EWOL_VERBOSE("XML left ...");
 			htmlFlush();
-			m_alignement = ewol::Text::alignLeft;
+			m_alignement = alignLeft;
 			parseHtmlNode(elem);
 		} else if (compare_no_case(elem->getValue(), "right") == true) {
 			EWOL_VERBOSE("XML right ...");
 			htmlFlush();
-			m_alignement = ewol::Text::alignRight;
+			m_alignement = alignRight;
 			parseHtmlNode(elem);
 		} else if (compare_no_case(elem->getValue(), "justify") == true) {
 			EWOL_VERBOSE("XML justify ...");
 			htmlFlush();
-			m_alignement = ewol::Text::alignJustify;
+			m_alignement = alignJustify;
 			parseHtmlNode(elem);
 		} else {
 			EWOL_ERROR("(l "<< elem->getPos() << ") node not suported type : " << elem->getType() << " val=\""<< elem->getValue() << "\"" );
@@ -513,7 +513,7 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 	}
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
-	if (m_alignement == ewol::Text::alignDisable) {
+	if (m_alignement == alignDisable) {
 		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
 		if (m_needDisplay == true) {
@@ -581,16 +581,16 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
 			switch (m_alignement) {
-				case ewol::Text::alignJustify:
+				case alignJustify:
 					if (needNoJustify == false) {
 						interpolation += (float)freeSpace / (float)(space-1);
 					}
 					break;
-				case ewol::Text::alignDisable: // must not came from here ...
-				case ewol::Text::alignLeft:
+				case alignDisable: // must not came from here ...
+				case alignLeft:
 					// nothing to do ...
 					break;
-				case ewol::Text::alignRight:
+				case alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
 						setPos(vec3(m_position.x() + freeSpace,
@@ -598,7 +598,7 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 						            m_position.z()) );
 					}
 					break;
-				case ewol::Text::alignCenter:
+				case alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
 						setPos(vec3(m_position.x() + freeSpace/2,
@@ -702,7 +702,7 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 	}
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
-	if (m_alignement == ewol::Text::alignDisable) {
+	if (m_alignement == alignDisable) {
 		//EWOL_DEBUG(" 1 print in not alligned mode : start=" << m_sizeDisplayStart << " stop=" << m_sizeDisplayStop << " pos=" << m_position);
 		// display the cursor if needed (if it is at the start position...)
 		if (m_needDisplay == true) {
@@ -770,16 +770,16 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 			bool needNoJustify = extrapolateLastId(_text, currentId, stop, space, freeSpace);
 			float interpolation = basicSpaceWidth;
 			switch (m_alignement) {
-				case ewol::Text::alignJustify:
+				case alignJustify:
 					if (needNoJustify == false) {
 						interpolation += (float)freeSpace / (float)(space-1);
 					}
 					break;
-				case ewol::Text::alignDisable: // must not came from here ...
-				case ewol::Text::alignLeft:
+				case alignDisable: // must not came from here ...
+				case alignLeft:
 					// nothing to do ...
 					break;
-				case ewol::Text::alignRight:
+				case alignRight:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
 						setPos(vec3(m_position.x() + freeSpace,
@@ -787,7 +787,7 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 						            m_position.z()) );
 					}
 					break;
-				case ewol::Text::alignCenter:
+				case alignCenter:
 					if (m_needDisplay == true) {
 						// Move the first char at the right :
 						setPos(vec3(m_position.x() + freeSpace/2,
@@ -1061,7 +1061,7 @@ void ewol::compositing::Text::forceLineReturn(void) {
 	setPos(vec3(m_startTextpos, m_position.y() - m_font->getHeight(m_mode), 0) );
 }
 
-void ewol::compositing::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::Text::aligneMode _alignement) {
+void ewol::compositing::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::compositing::Text::aligneMode _alignement) {
 	m_startTextpos = _startTextpos;
 	m_stopTextPos = _stopTextPos+1;
 	m_alignement = _alignement;
@@ -1075,7 +1075,7 @@ enum ewol::compositing::Text::aligneMode ewol::compositing::Text::getAlignement(
 }
 
 void ewol::compositing::Text::disableAlignement(void) {
-	m_alignement = ewol::Text::alignDisable;
+	m_alignement = alignDisable;
 }
 
 vec3 ewol::compositing::Text::calculateSizeHTML(const std::string& _text) {

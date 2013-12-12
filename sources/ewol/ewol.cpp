@@ -7,10 +7,10 @@
  */
 
 #include <ewol/ewol.h>
-#include <ewol/widget/WidgetManager.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/widget/Manager.h>
+#include <ewol/context/Context.h>
 
-#include <ewol/commandLine.h>
+#include <ewol/context/commandLine.h>
 #include <etk/os/FSNode.h>
 #include <ewol/Dimension.h>
 #include <date/date.h>

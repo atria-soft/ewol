@@ -19,8 +19,6 @@ namespace ewol {
 	class Object;
 	namespace object {
 		class Manager;
-	};
-	namespace context {
 		class MultiCast;
 	};
 	class Context;
@@ -279,7 +277,7 @@ namespace ewol {
 			 * @breif get the current Object Message Multicast manager.
 			 * @return the requested object manager.
 			 */
-			ewol::context::MultiCast& getMultiCast(void);
+			ewol::object::MultiCast& getMultiCast(void);
 			/**
 			 * @brief get the curent the system inteface.
 			 * @return current reference on the instance.

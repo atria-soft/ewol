@@ -10,7 +10,7 @@
 #define __EWOL_WIDGET_H__
 
 #include <ewol/object/Object.h>
-#include <ewol/context/Dimension.h>
+#include <ewol/Dimension.h>
 
 namespace ewol {
 	class Widget;
@@ -510,7 +510,7 @@ namespace ewol {
 			 * @brief periodic call of this widget
 			 * @param _event Current time property
 			 */
-			virtual void periodicCall(const ewol::EventTime& _event) {
+			virtual void periodicCall(const ewol::event::Time& _event) {
 				
 			};
 		public:
@@ -542,7 +542,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool systemEventInput(ewol::EventInputSystem& _event);
+			virtual bool systemEventInput(ewol::event::InputSystem& _event);
 		protected:
 			/**
 			 * @brief Event on an input of this Widget (finger, mouse, stilet)
@@ -550,7 +550,7 @@ namespace ewol {
 			 * @return true the event is used
 			 * @return false the event is not used
 			 */
-			virtual bool onEventInput(const ewol::EventInput& _event) {
+			virtual bool onEventInput(const ewol::event::Input& _event) {
 				return false;
 			};
 		public:
@@ -560,7 +560,7 @@ namespace ewol {
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool systemEventEntry(ewol::EventEntrySystem& _event);
+			virtual bool systemEventEntry(ewol::event::EntrySystem& _event);
 		protected:
 			/**
 			 * @brief Entry event.
@@ -572,7 +572,7 @@ namespace ewol {
 			 * @return true if the event has been used
 			 * @return false if the event has not been used
 			 */
-			virtual bool onEventEntry(const ewol::EventEntry& _event) {
+			virtual bool onEventEntry(const ewol::event::Entry& _event) {
 				return false;
 			};
 		public:
@@ -581,7 +581,7 @@ namespace ewol {
 			 * @note : need to have focus ...
 			 * @param[in] mode Mode of data requested
 			 */
-			virtual void onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID) { };
+			virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID) { };
 		
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- Shortcut : management of the shortcut
@@ -613,9 +613,9 @@ namespace ewol {
 			 * @return false if the event has not been used.
 			 * @note To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
 			 */
-			virtual bool onEventShortCut(ewol::SpecialKey& _special,
+			virtual bool onEventShortCut(ewol::key::Special& _special,
 			                             char32_t _unicodeValue,
-			                             enum ewol::keyEvent::keyboard _kbMove,
+			                             enum ewol::key::keyboard _kbMove,
 			                             bool _isDown);
 		// ----------------------------------------------------------------------------------------------------------------
 		// -- drawing : All drawing must be done in 2 separate buffer 1 for the current display and 1 for the working...
@@ -632,8 +632,8 @@ namespace ewol {
 			 * @return false if we have no need to redraw
 			 */
 			virtual bool needRedraw(void) {
-				bool tmpData=m_needRegenerateDisplay;
-				m_needRegenerateDisplay=false;
+				bool tmpData = m_needRegenerateDisplay;
+				m_needRegenerateDisplay = false;
 				return tmpData;
 			};
 		public:
@@ -675,23 +675,23 @@ namespace ewol {
 			 */
 			virtual bool getGrabStatus(void);
 		private:
-			enum ewol::cursorDisplay m_cursorDisplay;
+			enum ewol::context::cursorDisplay m_cursorDisplay;
 		public:
 			/**
 			 * @brief set the cursor display type.
 			 * @param[in] _newCursor selected new cursor.
 			 */
-			virtual void setCursor(enum ewol::cursorDisplay _newCursor);
+			virtual void setCursor(enum ewol::context::cursorDisplay _newCursor);
 			/**
 			 * @brief get the currrent cursor.
 			 * @return the type of the cursor.
 			 */
-			virtual enum ewol::cursorDisplay getCursor(void);
+			virtual enum ewol::context::cursorDisplay getCursor(void);
 		public: // Derived function
-			virtual void onObjectRemove(ewol::EObject* _removeObject);
+			virtual void onObjectRemove(ewol::Object* _removeObject);
 			virtual bool loadXML(exml::Element* _node);
 		protected: // Derived function
-			virtual bool onSetConfig(const ewol::EConfig& _conf);
+			virtual bool onSetConfig(const ewol::object::Config& _conf);
 			virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		public:
 			/**
@@ -701,11 +701,11 @@ namespace ewol {
 			/**
 			 * @brief get the current Widget Manager
 			 */
-			ewol::WidgetManager& getWidgetManager(void);
+			ewol::widget::Manager& getWidgetManager(void);
 			/**
 			 * @brief get the curent Windows
 			 */
-			ewol::Windows* getWindows(void);
+			ewol::widget::Windows* getWindows(void);
 		/*
 		 * Annimation section :
 		 */
