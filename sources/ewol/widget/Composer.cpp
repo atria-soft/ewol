@@ -10,7 +10,7 @@
 #include <ewol/ewol.h>
 #include <ewol/widget/Composer.h>
 #include <etk/os/FSNode.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__	"ewol::widget::Composer"
@@ -58,7 +58,7 @@ bool ewol::widget::Composer::loadFromFile(const std::string& _fileName) {
 		}
 	}
 	// call upper class to parse his elements ...
-	widget::Container::loadXML(root);
+	ewol::widget::Container::loadXML(root);
 	
 	return true;
 }
@@ -83,7 +83,7 @@ bool ewol::widget::Composer::loadFromString(const std::string& _composerXmlStrin
 		}
 	}
 	// call upper class to parse his elements ...
-	widget::Container::loadXML(root);
+	ewol::widget::Container::loadXML(root);
 	
 	return true;
 }
@@ -96,7 +96,7 @@ void ewol::widget::Composer::registerOnEventNameWidget(const std::string& _subWi
 	registerOnEventNameWidget(this, _subWidgetName, _eventId, _eventIdgenerated, _overloadData);
 }
 
-void ewol::widget::Composer::registerOnEventNameWidget(ewol::EObject * _destinationObject,
+void ewol::widget::Composer::registerOnEventNameWidget(ewol::Object * _destinationObject,
                                                        const std::string& _subWidgetName,
                                                        const char * _eventId,
                                                        const char * _eventIdgenerated,

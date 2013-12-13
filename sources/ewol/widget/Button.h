@@ -16,7 +16,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Shaper.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 
 namespace ewol {
@@ -27,7 +27,7 @@ namespace ewol {
 		 */
 		class Button : public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;
 				static const char* const eventDown;
@@ -47,7 +47,7 @@ namespace ewol {
 					lockAccess, //!< all event are trashed  == > acctivity of the button is disable
 				};
 			private:
-				ewol::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			public:
 				/**
 				 * @brief Constructor
@@ -155,20 +155,21 @@ namespace ewol {
 				void CheckStatus(void);
 			protected: // Derived function
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void onRegenerateDisplay(void);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
-				virtual bool onEventInput(const ewol::EventInput& _event);
-				virtual bool onEventEntry(const ewol::EventEntry& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual bool onEventEntry(const ewol::event::Entry& _event);
 				virtual bool loadXML(exml::Element* _node);
 				virtual ewol::Widget* getWidgetNamed(const std::string& _widgetName);
 			private: // derived function
-				virtual void periodicCall(const ewol::EventTime& _event);
+				virtual void periodicCall(const ewol::event::Time& _event);
 		};
+	};
 };
 
 #endif

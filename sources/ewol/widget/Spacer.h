@@ -14,7 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
@@ -23,11 +23,11 @@ namespace ewol {
 		 */
 		class Spacer :public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configColor;
 			private:
-				ewol::Drawing m_draw; //!< Compositing drawing element
+				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 			public:
 				/**
 				 * @brief Main constructer
@@ -49,7 +49,7 @@ namespace ewol {
 				virtual ewol::Widget * getWidgetAtPos(const vec2& _pos) { return NULL; };
 				virtual void onRegenerateDisplay(void);
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};

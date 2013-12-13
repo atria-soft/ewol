@@ -40,16 +40,16 @@ namespace ewol {
 		class ParameterList :public ewol::widget::WidgetScrooled {
 			private:
 				int32_t m_idSelected;
-				std::vector<widget::elementPL *> m_list;
+				std::vector<ewol::widget::elementPL *> m_list;
 			public:
 				ParameterList(void);
 				virtual ~ParameterList(void);
 				void setLabel(std::string _newLabel);
 			// drawing capabilities ....
 			private:
-				std::vector<ewol::compositing::Compose*> m_listOObject; //!< generic element to display...
+				std::vector<ewol::Compositing*> m_listOObject; //!< generic element to display...
 			public:
-				void addOObject(ewol::compositing::Compose* _newObject, int32_t _pos=-1);
+				void addOObject(ewol::Compositing* _newObject, int32_t _pos=-1);
 				void clearOObjectList(void);
 			// list properties ...
 			private:
@@ -65,7 +65,7 @@ namespace ewol {
 				
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void calculateMinMaxSize(void);
 			protected: // Derived function
 				virtual void onGetFocus(void);

@@ -38,7 +38,7 @@ static ewol::Widget* Create(void) {
 	return new ewol::widget::Button();
 }
 
-void ewol::widget::Button::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Button::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
@@ -260,14 +260,14 @@ void ewol::widget::Button::setToggleMode(bool _togg) {
 	}
 }
 
-bool ewol::widget::Button::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 	// disable event in the lock access mode :
 	if(ewol::widget::Button::lockAccess == m_lock) {
 		return false;
 	}
 	bool previousHoverState = m_mouseHover;
-	if(    ewol::keyEvent::statusLeave == _event.getStatus()
-	    || ewol::keyEvent::statusAbort == _event.getStatus()) {
+	if(    ewol::key::statusLeave == _event.getStatus()
+	    || ewol::key::statusAbort == _event.getStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -287,19 +287,19 @@ bool ewol::widget::Button::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
-			if(ewol::keyEvent::statusDown == _event.getStatus()) {
+			if(ewol::key::statusDown == _event.getStatus()) {
 				//EWOL_DEBUG("Generate event : " << eventDown);
 				generateEventId(eventDown);
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(ewol::keyEvent::statusUp == _event.getStatus()) {
+			if(ewol::key::statusUp == _event.getStatus()) {
 				//EWOL_DEBUG("Generate event : " << eventUp);
 				generateEventId(eventUp);
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(ewol::keyEvent::statusSingle == _event.getStatus()) {
+			if(ewol::key::statusSingle == _event.getStatus()) {
 				if(    (    m_value == true
 				         && ewol::widget::Button::lockWhenPressed == m_lock)
 				    || (    m_value == false
@@ -332,10 +332,10 @@ bool ewol::widget::Button::onEventInput(const ewol::EventInput& _event) {
 }
 
 
-bool ewol::widget::Button::onEventEntry(const ewol::EventEntry& _event) {
+bool ewol::widget::Button::onEventEntry(const ewol::event::Entry& _event) {
 	//EWOL_DEBUG("BT PRESSED : \"" << UTF8_data << "\" size=" << strlen(UTF8_data));
-	if(    _event.getType() == ewol::keyEvent::keyboardChar
-	    && _event.getStatus() == ewol::keyEvent::statusDown
+	if(    _event.getType() == ewol::key::keyboardChar
+	    && _event.getStatus() == ewol::key::statusDown
 	    && _event.getChar() == '\r') {
 		generateEventId(eventEnter);
 		return true;
@@ -367,7 +367,7 @@ void ewol::widget::Button::changeStatusIn(int32_t _newStatusId) {
 }
 
 
-void ewol::widget::Button::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::Button::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}
@@ -447,7 +447,7 @@ bool ewol::widget::Button::loadXML(exml::Element* _element) {
 	return true;
 }
 
-bool ewol::widget::Button::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}

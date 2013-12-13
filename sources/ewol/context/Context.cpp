@@ -351,14 +351,15 @@ ewol::Context::~Context(void) {
 	lockContext();
 	// call application to uninit
 	APP_UnInit(*this);
-	if (NULL!=m_windowsCurrent) {
-		EWOL_ERROR("Main windows has not been removed...  == > memory leek");
+	if (m_windowsCurrent != NULL) {
+		EWOL_DEBUG("Main windows has not been auto-removed...");
+		m_windowsCurrent->removeObject();
+		m_windowsCurrent = NULL;
 	}
 	// unset all windows
-	m_windowsCurrent = NULL;
 	m_msgSystem.clean();
 	
-	m_EObjectManager.unInit();
+	m_objectManager.unInit();
 	m_resourceManager.unInit();
 	// release the curent interface :
 	unLockContext();
@@ -544,7 +545,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		m_widgetManager.periodicCall(currentTime);
 		// remove all widget that they are no more usefull (these who decided to destroy themself)
 		//! ewol::ObjectManager::removeAllAutoRemove();
-		m_EObjectManager.removeAllAutoRemove();
+		m_objectManager.removeAllAutoRemove();
 		// check if the user selected a windows
 		if (NULL != m_windowsCurrent) {
 			// Redraw all needed elements

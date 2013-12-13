@@ -22,7 +22,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class ListFileSystem : public widget::List {
+		class ListFileSystem : public ewol::widget::List {
 			private:
 				std::vector<etk::FSNode *> m_list;
 				std::string m_folder;
@@ -40,7 +40,7 @@ namespace ewol {
 				bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
 				uint32_t getNuberOfRaw(void);
 				bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
-				bool onItemEvent(int32_t _IdInput, enum ewol::keyEvent::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
+				bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
 			public:
 				// extern API :
 				void setFolder(std::string _newFolder);

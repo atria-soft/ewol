@@ -9,7 +9,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/ContainerN.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__	"ContainerN"
@@ -170,7 +170,7 @@ ewol::Widget* ewol::widget::ContainerN::getWidgetNamed(const std::string& _widge
 	return NULL;
 }
 
-void ewol::widget::ContainerN::onObjectRemove(ewol::EObject* _removeObject) {
+void ewol::widget::ContainerN::onObjectRemove(ewol::Object* _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

@@ -9,7 +9,7 @@
 #include <ewol/widget/Image.h>
 #include <ewol/compositing/Image.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
 
 
@@ -20,7 +20,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Image();
 }
 
-void ewol::widget::Image::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Image::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -170,10 +170,10 @@ void ewol::widget::Image::calculateMinMaxSize(void) {
 }
 
 
-bool ewol::widget::Image::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Image::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
-		if(ewol::keyEvent::statusSingle == _event.getStatus()) {
+		if(ewol::key::statusSingle == _event.getStatus()) {
 			generateEventId(eventPressed);
 			return true;
 		}
@@ -220,7 +220,7 @@ bool ewol::widget::Image::loadXML(exml::Element* _node) {
 	return true;
 }
 
-bool ewol::widget::Image::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::Image::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}

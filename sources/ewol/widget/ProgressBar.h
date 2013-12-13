@@ -14,7 +14,7 @@
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
@@ -23,14 +23,14 @@ namespace ewol {
 		 */
 		class ProgressBar : public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configColorBg;
 				static const char* const configColorFgOn;
 				static const char* const configColorFgOff;
 				static const char* const configValue;
 			private:
-				ewol::Drawing m_draw; // basic drawing element
+				ewol::compositing::Drawing m_draw; // basic drawing element
 			public:
 				ProgressBar(void);
 				virtual ~ProgressBar(void);
@@ -48,7 +48,7 @@ namespace ewol {
 				etk::Color<> m_textColorBgOff; //!< bar color disable
 			protected: // Derived function
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);

@@ -11,12 +11,12 @@
 #include <etk/os/FSNode.h>
 
 
-#include <ewol/renderer/openGL.h>
+#include <ewol/openGL/openGL.h>
 
-#include <ewol/resources/Texture.h>
-#include <ewol/resources/FontFreeType.h>
-#include <ewol/resources/font/FontBase.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Texture.h>
+#include <ewol/resource/FontFreeType.h>
+#include <ewol/resource/font/FontBase.h>
+#include <ewol/resource/Manager.h>
 
 #undef __class__
 #define __class__ "resource::FontFreeType"
@@ -163,7 +163,7 @@ bool ewol::resource::FontFreeType::getGlyphProperty(int32_t _fontSize, ewol::Gly
 bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
                                              int32_t _fontSize,
                                              ivec2 _glyphPosition,
-                                             ewol::resource::GlyphProperty& _property,
+                                             ewol::GlyphProperty& _property,
                                              int8_t _posInImage) {
 	if(false == m_init) {
 		return false;
@@ -362,7 +362,7 @@ void ewol::resource::FontFreeType::release(ewol::resource::FontBase*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

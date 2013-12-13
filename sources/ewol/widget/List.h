@@ -20,7 +20,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class List : public widget::WidgetScrooled {
+		class List : public ewol::widget::WidgetScrooled {
 			public:
 				List(void);
 				virtual ~List(void);
@@ -66,7 +66,7 @@ namespace ewol {
 					}
 					return false;
 				};
-				virtual bool onItemEvent(int32_t _IdInput, enum ewol::keyEvent::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
+				virtual bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y) {
 					return false;
 				}
 				/**
@@ -80,7 +80,7 @@ namespace ewol {
 				virtual void onDraw(void);
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};
 };

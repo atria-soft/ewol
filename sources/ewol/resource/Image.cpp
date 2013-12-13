@@ -9,9 +9,9 @@
 
 #include <etk/types.h>
 #include <egami/egami.h>
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/resources/Image.h>
-#include <ewol/resources/Texture.h>
+#include <ewol/resource/Manager.h>
+#include <ewol/resource/Image.h>
+#include <ewol/resource/Texture.h>
 
 
 #undef __class__
@@ -25,7 +25,7 @@ ewol::resource::TextureFile::TextureFile(const std::string& _genName) :
 
 ewol::resource::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
   ewol::resource::Texture(_genName) {
-	addObjectType("ewol::TextureFile");
+	addObjectType("ewol::compositing::TextureFile");
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}
@@ -115,7 +115,7 @@ void ewol::resource::TextureFile::release(ewol::resource::TextureFile*& _object)
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

@@ -9,7 +9,7 @@
 #include <ewol/widget/ColorBar.h>
 
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #include <etk/Color.h>
 
@@ -165,14 +165,14 @@ void ewol::widget::ColorBar::onRegenerateDisplay(void) {
 }
 
 
-bool ewol::widget::ColorBar::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on BT ...");
 	if (1 == _event.getId()) {
 		relativePos.setValue( etk_max(etk_min(relativePos.x(), m_size.x()),0),
 		                      etk_max(etk_min(relativePos.y(), m_size.y()),0));
-		if(    ewol::keyEvent::statusSingle == _event.getStatus()
-		    || ewol::keyEvent::statusMove   == _event.getStatus()) {
+		if(    ewol::key::statusSingle == _event.getStatus()
+		    || ewol::key::statusMove   == _event.getStatus()) {
 			// nothing to do ...
 			m_currentUserPos.setValue( relativePos.x()/m_size.x(),
 			                           relativePos.y()/m_size.y() );

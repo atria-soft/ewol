@@ -9,7 +9,7 @@
 #include <ewol/widget/Spacer.h>
 
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__ "Spacer"
@@ -20,7 +20,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Spacer();
 }
 
-void ewol::widget::Spacer::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Spacer::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -56,7 +56,7 @@ void ewol::widget::Spacer::onRegenerateDisplay(void) {
 	m_draw.rectangleWidth(vec3(m_size.x(), m_size.y(),0) );
 }
 
-bool ewol::widget::Spacer::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::Spacer::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}

@@ -9,7 +9,7 @@
 #include <ewol/widget/Label.h>
 
 #include <ewol/compositing/Text.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
 
 #undef __class__
@@ -21,7 +21,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Label();
 }
 
-void ewol::widget::Label::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -36,7 +36,7 @@ void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec2 tmpMax = m_userMaxSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
-		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::Text::alignLeft);
+		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::Text::alignLeft);
 		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
 	vec3 minSize = m_text.calculateSizeDecorated(m_label);
@@ -70,7 +70,7 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 		// to know the size of one line : 
 		vec3 minSize = m_text.calculateSize(char32_t('A'));
 		if (tmpMax.x() <= 999999) {
-			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::Text::alignLeft);
+			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::Text::alignLeft);
 		}
 		vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
 		
@@ -104,16 +104,16 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 		// clean the element
 		m_text.reset();
 		m_text.setPos(tmpTextOrigin);
-		m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignLeft);
+		m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignLeft);
 		m_text.setClipping(drawClippingPos, drawClippingSize);
 		m_text.printDecorated(m_label);
 	}
 }
 
-bool ewol::widget::Label::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
 	//EWOL_DEBUG("Event on Label ...");
 	if (1 == _event.getId()) {
-		if (ewol::keyEvent::statusSingle == _event.getStatus()) {
+		if (ewol::key::statusSingle == _event.getStatus()) {
 			// nothing to do ...
 			generateEventId(eventPressed);
 			return true;

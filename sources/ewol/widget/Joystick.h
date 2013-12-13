@@ -79,7 +79,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};
 };

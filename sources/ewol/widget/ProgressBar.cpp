@@ -9,7 +9,7 @@
 #include <ewol/widget/ProgressBar.h>
 
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__	"ProgressBar"
@@ -18,7 +18,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::ProgressBar();
 }
 
-void ewol::widget::ProgressBar::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::ProgressBar::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -93,7 +93,7 @@ void ewol::widget::ProgressBar::onRegenerateDisplay(void) {
 
 
 
-bool ewol::widget::ProgressBar::onSetConfig(const ewol::EConfig& _conf) {
+bool ewol::widget::ProgressBar::onSetConfig(const ewol::object::Config& _conf) {
 	if (true == ewol::Widget::onSetConfig(_conf)) {
 		return true;
 	}

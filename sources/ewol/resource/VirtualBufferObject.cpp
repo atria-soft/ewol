@@ -8,9 +8,8 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/resources/VirtualBufferObject.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/resource/Manager.h>
+#include <ewol/resource/VirtualBufferObject.h>
 
 #undef __class__
 #define __class__ "resource::VirtualBufferObject"
@@ -83,7 +82,7 @@ void ewol::resource::VirtualBufferObject::reload(void) {
 
 void ewol::resource::VirtualBufferObject::flush(void) {
 	// request to the manager to be call at the next update ...
-	ewol::getContext().getResourcesManager().update(this);
+	getManager().update(this);
 }
 
 void ewol::resource::VirtualBufferObject::pushOnBuffer(int32_t _id, const vec3& _data) {
@@ -139,7 +138,7 @@ void ewol::resource::VirtualBufferObject::release(ewol::resource::VirtualBufferO
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

@@ -8,11 +8,11 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/resources/FontFreeType.h>
+#include <ewol/resource/Manager.h>
+#include <ewol/resource/FontFreeType.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/openGL/openGL.h>
+#include <ewol/context/Context.h>
 
 
 
@@ -87,7 +87,7 @@ void ewol::resource::Manager::reLoadResources(void) {
 	EWOL_INFO("-------------  Resources  -------------");
 }
 
-void ewol::resource::Manager::update(ewol::resource::Resource* _object) {
+void ewol::resource::Manager::update(ewol::Resource* _object) {
 	// chek if not added before
 	for (size_t iii=0; iii<m_resourceListToUpdate.size(); iii++) {
 		if (m_resourceListToUpdate[iii] != NULL) {
@@ -149,7 +149,7 @@ void ewol::resource::Manager::contextHasBeenDestroyed(void) {
 }
 
 // internal generic keeper ...
-ewol::resource::Resource* ewol::resource::Manager::localKeep(const std::string& _filename) {
+ewol::Resource* ewol::resource::Manager::localKeep(const std::string& _filename) {
 	EWOL_VERBOSE("KEEP (DEFAULT) : file : \"" << _filename << "\"");
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] != NULL) {
@@ -164,7 +164,7 @@ ewol::resource::Resource* ewol::resource::Manager::localKeep(const std::string& 
 }
 
 // internal generic keeper ...
-void ewol::resource::Manager::localAdd(ewol::resource::Resource* _object) {
+void ewol::resource::Manager::localAdd(ewol::Resource* _object) {
 	//Add ... find empty slot
 	for (size_t iii=0; iii<m_resourceList.size(); iii++) {
 		if (m_resourceList[iii] == NULL) {
@@ -176,7 +176,7 @@ void ewol::resource::Manager::localAdd(ewol::resource::Resource* _object) {
 	m_resourceList.push_back(_object);
 }
 
-bool ewol::resource::Manager::release(ewol::resource::Resource*& _object) {
+bool ewol::resource::Manager::release(ewol::Resource*& _object) {
 	if (NULL == _object) {
 		EWOL_ERROR("Try to remove a resource that have null pointer ...");
 		return false;

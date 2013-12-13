@@ -9,7 +9,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Container.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 
 #undef __class__
@@ -77,7 +77,7 @@ ewol::Widget* ewol::widget::Container::getWidgetNamed(const std::string& _widget
 	return NULL;
 }
 
-void ewol::widget::Container::onObjectRemove(ewol::EObject* _removeObject) {
+void ewol::widget::Container::onObjectRemove(ewol::Object* _removeObject) {
 	if (m_subWidget == _removeObject) {
 		m_subWidget=NULL;
 		markToRedraw();

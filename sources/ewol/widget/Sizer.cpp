@@ -8,7 +8,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Sizer.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__ "Sizer"
@@ -17,7 +17,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Sizer();
 }
 
-void ewol::widget::Sizer::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Sizer::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -168,7 +168,7 @@ bool ewol::widget::Sizer::loadXML(exml::Element* _node) {
 		return false;
 	}
 	// parse generic properties :
-	widget::ContainerN::loadXML(_node);
+	ewol::widget::ContainerN::loadXML(_node);
 	
 	std::string tmpAttributeValue = _node->getAttribute("border");
 	if (tmpAttributeValue.size()!=0) {
@@ -188,36 +188,36 @@ bool ewol::widget::Sizer::loadXML(exml::Element* _node) {
 
 int32_t ewol::widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
-		return widget::ContainerN::subWidgetAdd(_newWidget);
+		return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 	}
 	// TODO : ...
-	return widget::ContainerN::subWidgetAdd(_newWidget);
+	return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
 }
 
 int32_t ewol::widget::Sizer::subWidgetAddStart(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
-		return widget::ContainerN::subWidgetAddStart(_newWidget);
+		return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 	}
 	// TODO : ...
-	return widget::ContainerN::subWidgetAddStart(_newWidget);
+	return ewol::widget::ContainerN::subWidgetAddStart(_newWidget);
 }
 
 void ewol::widget::Sizer::subWidgetRemove(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
-		widget::ContainerN::subWidgetRemove(_newWidget);
+		ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 		return;
 	}
 	// TODO : ...
-	widget::ContainerN::subWidgetRemove(_newWidget);
+	ewol::widget::ContainerN::subWidgetRemove(_newWidget);
 }
 
 void ewol::widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
-		widget::ContainerN::subWidgetUnLink(_newWidget);
+		ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 		return;
 	}
 	// TODO : ...
-	widget::ContainerN::subWidgetUnLink(_newWidget);
+	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
 
 

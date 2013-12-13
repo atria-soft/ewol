@@ -60,6 +60,13 @@ def Create(target):
 	else:
 		debug.error("unknow mode...")
 	
+	# event properties :
+	myModule.AddSrcFile([
+		'ewol/event/Entry.cpp',
+		'ewol/event/Time.cpp',
+		'ewol/event/Input.cpp'
+		])
+	
 	# Key properties :
 	myModule.AddSrcFile([
 		'ewol/key/keyboard.cpp',
@@ -129,6 +136,7 @@ def Create(target):
 		'ewol/widget/Sizer.cpp',
 		'ewol/widget/Slider.cpp',
 		'ewol/widget/Spacer.cpp',
+		'ewol/widget/Widget.cpp',
 		'ewol/widget/WidgetScrolled.cpp',
 		'ewol/widget/Windows.cpp',
 		'ewol/widget/WSlider.cpp',

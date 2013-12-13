@@ -25,8 +25,9 @@ namespace ewol {
 				TextureFile(std::string _genName, const std::string& _fileName, const ivec2& _size);
 				~TextureFile(void) { };
 			public:
-				virtual const char* getType(void) { return "ewol::TextureFile"; };
-				const vec2& getRealSize(void) { return m_realImageSize; };
+				const vec2& getRealSize(void) {
+					return m_realImageSize;
+				};
 			public:
 				/**
 				 * @brief keep the resource pointer.

@@ -8,7 +8,7 @@
 
 #include <ewol/widget/Slider.h>
 
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char * const ewolEventSliderChange = "ewol-event-slider-change";
 
@@ -19,7 +19,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Slider();
 }
 
-void ewol::widget::Slider::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Slider::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -100,12 +100,12 @@ void ewol::widget::Slider::onRegenerateDisplay(void) {
 	m_draw.circle(dotRadius/1.6);
 }
 
-bool ewol::widget::Slider::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Slider::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	//EWOL_DEBUG("Event on Slider ...");
 	if (1 == _event.getId()) {
-		if(    ewol::keyEvent::statusSingle == _event.getStatus()
-		    || ewol::keyEvent::statusMove   == _event.getStatus()) {
+		if(    ewol::key::statusSingle == _event.getStatus()
+		    || ewol::key::statusMove   == _event.getStatus()) {
 			// get the new position :
 			EWOL_VERBOSE("Event on Slider (" << relativePos.x() << "," << relativePos.y() << ")");
 			int32_t oldValue = m_value;

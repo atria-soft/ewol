@@ -36,9 +36,9 @@ namespace ewol {
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			protected:
-				ewol::Image m_compositing; //!< compositing element of the image.
+				ewol::compositing::Image m_compositing; //!< compositing element of the image.
 			public:
 				/**
 				 * @brief 
@@ -117,12 +117,12 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool loadXML(exml::Element* _node);
 		};
 	};

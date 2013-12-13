@@ -8,8 +8,8 @@
 
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
-#include <ewol/resources/ConfigFile.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/ConfigFile.h>
+#include <ewol/resource/Manager.h>
 #include <stdexcept>
 
 #undef __class__
@@ -37,7 +37,7 @@ void ewol::resource::SimpleConfigElement::parse(const std::string& _value) {
 
 
 ewol::resource::ConfigFile::ConfigFile(const std::string& _filename) :
-  ewol::resource::Resource(_filename) {
+  ewol::Resource(_filename) {
 	addObjectType("ewol::ConfigFile");
 	EWOL_DEBUG("SFP : load \"" << _filename << "\"");
 	reload();
@@ -124,7 +124,7 @@ void ewol::resource::ConfigFile::reload(void) {
 			}
 		}
 		if (false == findParam) {
-			ewol::SimpleConfigElement* tmpElement = new ewol::SimpleConfigElement(paramName);
+			ewol::resource::SimpleConfigElement* tmpElement = new ewol::resource::SimpleConfigElement(paramName);
 			if (NULL == tmpElement) {
 				EWOL_DEBUG("error while allocation");
 			} else {
@@ -177,7 +177,7 @@ void ewol::resource::ConfigFile::release(ewol::resource::ConfigFile*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

@@ -12,19 +12,19 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Layer : public widget::ContainerN {
+		class Layer : public ewol::widget::ContainerN {
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				/**
 				 * @brief Constructor

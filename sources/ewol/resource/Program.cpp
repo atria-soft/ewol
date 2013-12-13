@@ -8,8 +8,8 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/resources/Program.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Program.h>
+#include <ewol/resource/Manager.h>
 #include <etk/os/FSNode.h>
 #include <ewol/ewol.h>
 
@@ -19,13 +19,13 @@
 #undef __class__
 #define __class__ "resource::Program"
 
-ewol::resource::resource::Program::Program(const std::string& _filename) :
-  ewol::resource::Resource(_filename),
+ewol::resource::Program::Program(const std::string& _filename) :
+  ewol::Resource(_filename),
   m_exist(false),
   m_program(0),
   m_hasTexture(false),
   m_hasTexture1(false) {
-	addObjectType("ewol::Program");
+	addObjectType("ewol::resource::Program");
 	m_resourceLevel = 1;
 	EWOL_DEBUG("OGL : load PROGRAM '" << m_name << "'");
 	// load data from file "all the time ..."
@@ -36,7 +36,7 @@ ewol::resource::resource::Program::Program(const std::string& _filename) :
 		std::string tmpFilename = m_name;
 		// remove extention ...
 		tmpFilename.erase(tmpFilename.size()-4, 4);
-		ewol::Shader* tmpShader = ewol::Shader::keep(tmpFilename+"vert");
+		ewol::resource::Shader* tmpShader = ewol::resource::Shader::keep(tmpFilename+"vert");
 		if (NULL == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
@@ -44,7 +44,7 @@ ewol::resource::resource::Program::Program(const std::string& _filename) :
 			EWOL_DEBUG("Add shader on program : "<< tmpFilename << "vert");
 			m_shaderList.push_back(tmpShader);
 		}
-		tmpShader = ewol::Shader::keep(tmpFilename+"frag");
+		tmpShader = ewol::resource::Shader::keep(tmpFilename+"frag");
 		if (NULL == tmpShader) {
 			EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			return;
@@ -80,7 +80,7 @@ ewol::resource::resource::Program::Program(const std::string& _filename) :
 			}
 			// get it with relative position :
 			std::string tmpFilename = file.getRelativeFolder() + tmpData;
-			ewol::Shader* tmpShader = ewol::Shader::keep(tmpFilename);
+			ewol::resource::Shader* tmpShader = ewol::resource::Shader::keep(tmpFilename);
 			if (NULL == tmpShader) {
 				EWOL_CRITICAL("Error while getting a specific shader filename : " << tmpFilename);
 			} else {
@@ -97,7 +97,7 @@ ewol::resource::resource::Program::Program(const std::string& _filename) :
 
 ewol::resource::Program::~Program(void) {
 	for (size_t iii=0; iii<m_shaderList.size(); iii++) {
-		ewol::Shader::release(m_shaderList[iii]);
+		ewol::resource::Shader::release(m_shaderList[iii]);
 		m_shaderList[iii] = 0;
 	}
 	m_shaderList.clear();
@@ -781,7 +781,7 @@ ewol::resource::Program* ewol::resource::Program::keep(const std::string& _filen
 		return object;
 	}
 	// need to crate a new one ...
-	object = new ewol::Program(_filename);
+	object = new ewol::resource::Program(_filename);
 	if (NULL == object) {
 		EWOL_ERROR("allocation error of a resource : " << _filename);
 		return NULL;
@@ -795,7 +795,7 @@ void ewol::resource::Program::release(ewol::resource::Program*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

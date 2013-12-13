@@ -7,11 +7,11 @@
  */
 
 #include <ewol/widget/Widget.h>
-#include <ewol/renderer/EObjectManager.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/object/Manager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/openGL/openGL.h>
+#include <ewol/context/Context.h>
 
 #undef __class__
 #define __class__ "DrawProperty"
@@ -126,7 +126,7 @@ ewol::Widget::Widget(void) :
   m_periodicCallTime(0),
   m_needRegenerateDisplay(true),
   m_grabCursor(false),
-  m_cursorDisplay(ewol::cursorArrow),
+  m_cursorDisplay(ewol::context::cursorArrow),
   m_annimationMode(annimationModeDisable),
   m_annimationratio(0.0f) {
 	m_annimationType[0] = NULL;
@@ -171,7 +171,7 @@ void ewol::Widget::setUpperWidget(ewol::Widget* _upper) {
 	m_up = _upper;
 }
 
-void ewol::Widget::onObjectRemove(ewol::EObject* _removeObject) {
+void ewol::Widget::onObjectRemove(ewol::Object* _removeObject) {
 	if (_removeObject == m_up) {
 		EWOL_WARNING("[" << getId() << "] remove upper widget befor removing this widget ...");
 		m_up = NULL;
@@ -549,74 +549,74 @@ void ewol::Widget::shortCutAdd(const char * _descriptiveString,
 	//"ctrl+shift+alt+meta+s"
 	const char * tmp = strstr(_descriptiveString, "ctrl");
 	if(NULL != tmp) {
-		tmpElement->specialKey.ctrl = true;
+		tmpElement->specialKey.setCtrl(true);
 	}
 	tmp = strstr(_descriptiveString, "shift");
 	if(NULL != tmp) {
-		tmpElement->specialKey.shift = true;
+		tmpElement->specialKey.setShift(true);
 	}
 	tmp = strstr(_descriptiveString, "alt");
 	if(NULL != tmp) {
-		tmpElement->specialKey.alt = true;
+		tmpElement->specialKey.setAlt(true);
 	}
 	tmp = strstr(_descriptiveString, "meta");
 	if(NULL != tmp) {
-		tmpElement->specialKey.meta = true;
+		tmpElement->specialKey.setMeta(true);
 	}
 	if(NULL != strstr(_descriptiveString, "F12") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF12;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF12;
 	} else if(NULL != strstr(_descriptiveString, "F11") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF11;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF11;
 	} else if(NULL != strstr(_descriptiveString, "F10") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF10;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF10;
 	} else if(NULL != strstr(_descriptiveString, "F9") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF9;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF9;
 	} else if(NULL != strstr(_descriptiveString, "F8") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF8;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF8;
 	} else if(NULL != strstr(_descriptiveString, "F7") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF7;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF7;
 	} else if(NULL != strstr(_descriptiveString, "F6") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF6;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF6;
 	} else if(NULL != strstr(_descriptiveString, "F5") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF5;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF5;
 	} else if(NULL != strstr(_descriptiveString, "F4") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF4;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF4;
 	} else if(NULL != strstr(_descriptiveString, "F3") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF3;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF3;
 	} else if(NULL != strstr(_descriptiveString, "F2") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF2;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF2;
 	} else if(NULL != strstr(_descriptiveString, "F1") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardF1;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardF1;
 	} else if(NULL != strstr(_descriptiveString, "LEFT") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardLeft;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardLeft;
 	} else if(NULL != strstr(_descriptiveString, "RIGHT") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardRight;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardRight;
 	} else if(NULL != strstr(_descriptiveString, "UP") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardUp;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardUp;
 	} else if(NULL != strstr(_descriptiveString, "DOWN") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardDown;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardDown;
 	} else if(NULL != strstr(_descriptiveString, "PAGE_UP") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPageUp;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardPageUp;
 	} else if(NULL != strstr(_descriptiveString, "PAGE_DOWN") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPageDown;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardPageDown;
 	} else if(NULL != strstr(_descriptiveString, "START") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStart;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardStart;
 	} else if(NULL != strstr(_descriptiveString, "END") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardEnd;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardEnd;
 	} else if(NULL != strstr(_descriptiveString, "PRINT") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardPrint;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardPrint;
 	} else if(NULL != strstr(_descriptiveString, "ARRET_DEFIL") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardStopDefil;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardStopDefil;
 	} else if(NULL != strstr(_descriptiveString, "WAIT") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardWait;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardWait;
 	} else if(NULL != strstr(_descriptiveString, "INSERT") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardInsert;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardInsert;
 	} else if(NULL != strstr(_descriptiveString, "CAPLOCK") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardCapLock;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardCapLock;
 	} else if(NULL != strstr(_descriptiveString, "CONTEXT_MENU") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardContextMenu;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardContextMenu;
 	} else if(NULL != strstr(_descriptiveString, "NUM_LOCK") ) {
-		tmpElement->keyboardMoveValue = ewol::keyEvent::keyboardNumLock;
+		tmpElement->keyboardMoveValue = ewol::key::keyboardNumLock;
 	} else {
 		tmpElement->unicodeValue = _descriptiveString[strlen(_descriptiveString) -1];
 	}
@@ -634,9 +634,9 @@ void ewol::Widget::shortCutClean(void) {
 	m_localShortcut.clear();
 }
 
-bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
+bool ewol::Widget::onEventShortCut(ewol::key::Special& _special,
                                    char32_t _unicodeValue,
-                                   enum ewol::keyEvent::keyboard _kbMove,
+                                   enum ewol::key::keyboard _kbMove,
                                    bool _isDown) {
 	if (_unicodeValue >= 'A' && _unicodeValue  <= 'Z') {
 		_unicodeValue += 'a' - 'A';
@@ -644,11 +644,11 @@ bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
 	//EWOL_INFO("Try to find generic shortcut ...");
 	for(int32_t iii=m_localShortcut.size()-1; iii >= 0; iii--) {
 		if(NULL != m_localShortcut[iii]) {
-			if(    m_localShortcut[iii]->specialKey.shift == _special.shift
-			    && m_localShortcut[iii]->specialKey.ctrl  == _special.ctrl
-			    && m_localShortcut[iii]->specialKey.alt   == _special.alt
-			    && m_localShortcut[iii]->specialKey.meta  == _special.meta
-			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::keyEvent::keyboardUnknow
+			if(    m_localShortcut[iii]->specialKey.getShift() == _special.getShift()
+			    && m_localShortcut[iii]->specialKey.getCtrl()  == _special.getCtrl()
+			    && m_localShortcut[iii]->specialKey.getAlt()   == _special.getAlt()
+			    && m_localShortcut[iii]->specialKey.getMeta()  == _special.getMeta()
+			    && (    (    m_localShortcut[iii]->keyboardMoveValue == ewol::key::keyboardUnknow
 			              && m_localShortcut[iii]->unicodeValue == _unicodeValue)
 			         || (    m_localShortcut[iii]->keyboardMoveValue == _kbMove
 			              && m_localShortcut[iii]->unicodeValue == 0)
@@ -659,7 +659,7 @@ bool ewol::Widget::onEventShortCut(ewol::SpecialKey& _special,
 						sendMultiCast(m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					}
 					// send message direct to the current widget (in every case, really useful for some generic windows shortcut)
-					ewol::EMessage tmpMsg(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
+					ewol::object::Message tmpMsg(this, m_localShortcut[iii]->generateEventId, m_localShortcut[iii]->eventData);
 					onReceiveMessage(tmpMsg);
 				} // no else
 				return true;
@@ -688,19 +688,19 @@ bool ewol::Widget::getGrabStatus(void) {
 	return m_grabCursor;
 }
 
-void ewol::Widget::setCursor(enum ewol::cursorDisplay _newCursor) {
+void ewol::Widget::setCursor(enum ewol::context::cursorDisplay _newCursor) {
 	EWOL_DEBUG("Change Cursor in " << _newCursor);
 	m_cursorDisplay = _newCursor;
 	getContext().setCursor(m_cursorDisplay);
 }
 
-enum ewol::cursorDisplay ewol::Widget::getCursor(void) {
+enum ewol::context::cursorDisplay ewol::Widget::getCursor(void) {
 	return m_cursorDisplay;
 }
 
 bool ewol::Widget::loadXML(exml::Element* _node) {
 	// Call EObject basic parser
-	ewol::EObject::loadXML(_node); // note : load standard parameters (attribute in XML)
+	ewol::Object::loadXML(_node); // note : load standard parameters (attribute in XML)
 	markToRedraw();
 	return true;
 }
@@ -713,7 +713,7 @@ ewol::Widget* ewol::Widget::getWidgetNamed(const std::string& _widgetName) {
 	return NULL;
 }
 
-bool ewol::Widget::systemEventEntry(ewol::EventEntrySystem& _event) {
+bool ewol::Widget::systemEventEntry(ewol::event::EntrySystem& _event) {
 	if (NULL != m_up) {
 		if (true == m_up->systemEventEntry(_event)) {
 			return true;
@@ -722,7 +722,7 @@ bool ewol::Widget::systemEventEntry(ewol::EventEntrySystem& _event) {
 	return onEventEntry(_event.m_event);
 }
 
-bool ewol::Widget::systemEventInput(ewol::EventInputSystem& _event) {
+bool ewol::Widget::systemEventInput(ewol::event::InputSystem& _event) {
 	if (NULL != m_up) {
 		if (true == m_up->systemEventInput(_event)) {
 			return true;
@@ -736,8 +736,8 @@ void ewol::Widget::setGravity(enum gravity _gravity) {
 	markToRedraw();
 }
 
-bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf) {
-	if (true == ewol::EObject::onSetConfig(_conf)) {
+bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::Object::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configFill) {
@@ -796,7 +796,7 @@ bool ewol::Widget::onSetConfig(const ewol::EConfig& _conf) {
 }
 
 bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == ewol::EObject::onGetConfig(_config, _result)) {
+	if (true == ewol::Object::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == ewol::Widget::configFill) {
@@ -861,11 +861,11 @@ void ewol::Widget::requestUpdateSize(void) {
 	getContext().requestUpdateSize();
 }
 
-ewol::WidgetManager& ewol::Widget::getWidgetManager(void) {
+ewol::widget::Manager& ewol::Widget::getWidgetManager(void) {
 	return getContext().getWidgetManager();
 }
 
-ewol::Windows* ewol::Widget::getWindows(void) {
+ewol::widget::Windows* ewol::Widget::getWindows(void) {
 	return getContext().getWindows();
 }
 

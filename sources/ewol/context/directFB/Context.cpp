@@ -32,11 +32,11 @@
 #include <ewol/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #include <ewol/renderer/ResourceManager.h>
 #include <ewol/renderer/eSystem.h>
-#include <ewol/renderer/openGL.h>
+#include <ewol/openGL/openGL.h>
 
 #include <unistd.h>
 #include <stdlib.h>
@@ -369,12 +369,12 @@ void DirectFB_Run(void) {
 // -------------------------------------------------------------------------
 
 
-void guiInterface::ClipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
+void guiInterface::ClipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 	// TODO : ...
 }
 
 
-void guiInterface::ClipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
+void guiInterface::ClipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 	// TODO : ...
 }
 

@@ -57,10 +57,10 @@ namespace ewol {
 				return m_widgetManager;
 			};
 		private:
-			ewol::object::Manager m_EObjectManager; //!< eObject Manager main instance
+			ewol::object::Manager m_objectManager; //!< Object Manager main instance
 		public:
 			ewol::object::Manager& getEObjectManager(void) {
-				return m_EObjectManager;
+				return m_objectManager;
 			};
 		private:
 			ewol::resource::Manager m_resourceManager; //!< global resources Manager

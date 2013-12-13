@@ -14,7 +14,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char* const ewolEventCheckBoxClicked;
 
@@ -25,7 +25,7 @@ namespace ewol {
 		 */
 		class CheckBox : public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				CheckBox(const std::string& newLabel = "No Label");
 				virtual ~CheckBox(void);
@@ -33,8 +33,8 @@ namespace ewol {
 				void setValue(bool val);
 				bool getValue(void);
 			private:
-				ewol::Text m_oObjectText;
-				ewol::Drawing m_oObjectDecoration;
+				ewol::compositing::Text m_oObjectText;
+				ewol::compositing::Drawing m_oObjectDecoration;
 				std::string m_label;
 				bool m_value;
 				etk::Color<> m_textColorFg; //!< Text color
@@ -44,8 +44,8 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
-				virtual bool onEventEntry(const ewol::EventEntry& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual bool onEventEntry(const ewol::event::Entry& _event);
 		};
 	};
 };

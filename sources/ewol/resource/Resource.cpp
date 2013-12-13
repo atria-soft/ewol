@@ -8,11 +8,10 @@
 
 #include <etk/types.h>
 #include <ewol/debug.h>
-#include <ewol/resources/Resource.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Resource.h>
+#include <ewol/resource/Manager.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/context/Context.h>
 
 
 void ewol::Resource::updateContext(void) {

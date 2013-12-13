@@ -29,7 +29,7 @@ namespace ewol {
 				etk::Color<> getCurrentColor(void);
 				void setCurrentColor(etk::Color<> _newOne);
 			private:
-				ewol::Drawing m_draw; //!< Compositing drawing element
+				ewol::compositing::Drawing m_draw; //!< Compositing drawing element
 				etk::Color<> m_currentColor;
 				vec2 m_currentUserPos;
 			protected: // Derived function
@@ -37,7 +37,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};
 };

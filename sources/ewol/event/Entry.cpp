@@ -9,9 +9,9 @@
 #include <ewol/widget/Widget.h>
 
 #undef __class__
-#define __class__ "EventEntry"
+#define __class__ "event::Entry"
 
-etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::event::Entry& _obj) {
+etk::CCout& ewol::event::operator <<(etk::CCout& _os, const ewol::event::Entry& _obj) {
 	_os << "{type=" << _obj.getType();
 	_os << " status=" << _obj.getStatus();
 	if (_obj.getType() == ewol::key::keyboardChar) {
@@ -21,7 +21,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, const ewol::event::Entry& _obj) {
 	return _os;
 }
 
-etk::CCout& operator <<(etk::CCout& _os, const ewol::event::EntrySystem& _obj) {
+etk::CCout& ewol::event::operator <<(etk::CCout& _os, const ewol::event::EntrySystem& _obj) {
 	_os << _obj.m_event;
 	return _os;
 }

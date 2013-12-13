@@ -9,11 +9,11 @@
 #include <etk/types.h>
 #include <etk/UString.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/openGL.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/openGL/openGL.h>
+#include <ewol/context/Context.h>
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Windows.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/widget/meta/StdPopUp.h>
 
 #undef __class__
@@ -188,7 +188,7 @@ void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
 	getContext().resetIOEvent();
 }
 
-void ewol::widget::Windows::onObjectRemove(ewol::EObject* _removeObject) {
+void ewol::widget::Windows::onObjectRemove(ewol::Object* _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
@@ -222,7 +222,7 @@ void ewol::widget::Windows::setTitle(const std::string& _title) {
 
 void ewol::widget::Windows::createPopUpMessage(enum popUpMessageType _type, const std::string& _message)
 {
-	widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
+	ewol::widget::StdPopUp* tmpPopUp = new widget::StdPopUp();
 	if (tmpPopUp == NULL) {
 		EWOL_ERROR("Can not create a simple pop-up");
 		return;

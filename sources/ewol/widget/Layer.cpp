@@ -7,7 +7,7 @@
  */
 
 #include <ewol/widget/Layer.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 
 #undef __class__
@@ -17,7 +17,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Layer();
 }
 
-void ewol::widget::Layer::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Layer::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 

@@ -13,7 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
@@ -27,9 +27,9 @@ namespace ewol {
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::Text m_text; //!< Compositing text element.
+				ewol::compositing::Text m_text; //!< Compositing text element.
 				std::string m_label; //!< decorated text to display.
 			public:
 				/**
@@ -64,7 +64,7 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual bool loadXML(exml::Element* _node);
 		};
 	};

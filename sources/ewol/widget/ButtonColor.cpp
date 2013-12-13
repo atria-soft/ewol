@@ -10,7 +10,7 @@
 #include <ewol/widget/ButtonColor.h>
 
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/widget/meta/ColorChooser.h>
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
@@ -34,7 +34,7 @@ static ewol::Widget* Create(void) {
 	return new ewol::widget::ButtonColor();
 }
 
-void ewol::widget::ButtonColor::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::ButtonColor::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
@@ -123,7 +123,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	}
 	m_text.setPos(tmpTextOrigin);
 	m_text.setColorBg(m_textColorFg);
-	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::Text::alignCenter);
+	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignCenter);
 	m_text.print(label);
 	
 	
@@ -143,9 +143,9 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 }
 
 
-bool ewol::widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 	bool previousHoverState = m_mouseHover;
-	if(ewol::keyEvent::statusLeave == _event.getStatus()) {
+	if(ewol::key::statusLeave == _event.getStatus()) {
 		m_mouseHover = false;
 		m_buttonPressed = false;
 	} else {
@@ -165,33 +165,33 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::EventInput& _event) {
 	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
-			if(ewol::keyEvent::statusDown == _event.getStatus()) {
+			if(ewol::key::statusDown == _event.getStatus()) {
 				m_buttonPressed = true;
 				markToRedraw();
 			}
-			if(ewol::keyEvent::statusUp == _event.getStatus()) {
+			if(ewol::key::statusUp == _event.getStatus()) {
 				m_buttonPressed = false;
 				markToRedraw();
 			}
-			if(ewol::keyEvent::statusSingle == _event.getStatus()) {
+			if(ewol::key::statusSingle == _event.getStatus()) {
 				m_buttonPressed = false;
 				m_mouseHover = false;
 				// create a context menu : 
-				m_widgetContextMenu = new widget::ContextMenu();
+				m_widgetContextMenu = new ewol::widget::ContextMenu();
 				if (NULL == m_widgetContextMenu) {
 					EWOL_ERROR("Allocation Error");
 					return true;
 				}
 				vec2 tmpPos = m_origin + m_selectableAreaPos + m_selectableAreaSize;
 				tmpPos.setX( tmpPos.x() - m_minSize.x()/2.0);
-				m_widgetContextMenu->setPositionMark(widget::ContextMenu::markButtom, tmpPos );
+				m_widgetContextMenu->setPositionMark(ewol::widget::ContextMenu::markButtom, tmpPos );
 				
-				widget::ColorChooser * myColorChooser = new widget::ColorChooser();
+				ewol::widget::ColorChooser * myColorChooser = new widget::ColorChooser();
 				myColorChooser->setColor(m_textColorFg);
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
 				myColorChooser->registerOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
-				ewol::Windows* currentWindows = getWindows();
+				ewol::widget::Windows* currentWindows = getWindows();
 				if (NULL == currentWindows) {
 					EWOL_ERROR("Can not get the curent Windows...");
 					delete(m_widgetContextMenu);
@@ -229,7 +229,7 @@ etk::Color<> ewol::widget::ButtonColor::getValue(void) {
 }
 
 
-void ewol::widget::ButtonColor::onReceiveMessage(const ewol::EMessage& _msg) {
+void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _msg) {
 	EWOL_INFO("Receive MSG : " <<  _msg.getData());
 	if (_msg.getMessage() == ewolEventColorChooserChange) {
 		m_textColorFg = _msg.getData();
@@ -248,7 +248,7 @@ void ewol::widget::ButtonColor::changeStatusIn(int32_t _newStatusId) {
 
 
 
-void ewol::widget::ButtonColor::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::ButtonColor::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		periodicCallDisable();
 	}

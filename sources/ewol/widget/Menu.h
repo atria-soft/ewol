@@ -23,7 +23,7 @@ namespace ewol {
 				MenuElement(void) : m_widgetPointer(NULL) { };
 				int32_t m_localId;
 				int32_t m_parentId;
-				ewol::EObject* m_widgetPointer;
+				ewol::Object* m_widgetPointer;
 				std::string m_label;
 				std::string m_image;
 				const char *m_generateEvent;
@@ -32,7 +32,7 @@ namespace ewol {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Menu :public widget::Sizer {
+		class Menu :public ewol::widget::Sizer {
 			public:
 				Menu(void);
 				virtual ~Menu(void);
@@ -42,17 +42,17 @@ namespace ewol {
 				virtual void subWidgetRemove(ewol::Widget* _newWidget);
 				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
 			private:
-				std::vector<widget::MenuElement*> m_listElement;
+				std::vector<ewol::widget::MenuElement*> m_listElement;
 				int32_t m_staticId; // unique ID for every element of the menu ...
-				widget::ContextMenu* m_widgetContextMenu;
+				ewol::widget::ContextMenu* m_widgetContextMenu;
 			public:
 				void clear(void);
 				int32_t addTitle(std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
 				int32_t add(int32_t parent, std::string _label, std::string _image="", const char * _generateEvent = NULL, const std::string _message = "");
 				void addSpacer(void);
 				// Derived function
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
-				virtual void onObjectRemove(ewol::EObject * _removeObject);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+				virtual void onObjectRemove(ewol::Object * _removeObject);
 		};
 	};
 };

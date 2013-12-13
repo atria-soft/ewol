@@ -12,16 +12,16 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class WSlider :public widget::ContainerN {
+		class WSlider :public ewol::widget::ContainerN {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
@@ -93,8 +93,8 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay(void);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
-				virtual void periodicCall(const ewol::EventTime& _event);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual void periodicCall(const ewol::event::Time& _event);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};

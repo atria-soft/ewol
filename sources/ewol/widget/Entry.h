@@ -17,7 +17,7 @@
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
 #include <etk/Color.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
@@ -44,10 +44,10 @@ namespace ewol {
 				static const char* const configColorBg;
 				static const char* const configEmptyMessage;
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::Shaper m_shaper;
-				ewol::Text m_oObjectText; //!< text display m_text
+				ewol::compositing::Shaper m_shaper;
+				ewol::compositing::Text m_oObjectText; //!< text display m_text
 			public:
 				/**
 				 * @brief Contuctor
@@ -139,7 +139,7 @@ namespace ewol {
 				 * @brief Copy the selected data on the specify clipboard
 				 * @param[in] _clipboardID Selected clipboard
 				 */
-				virtual void copySelectionToClipBoard(enum ewol::clipBoard::clipboardListe _clipboardID);
+				virtual void copySelectionToClipBoard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 				/**
 				 * @brief remove the selected area
 				 * @note This request a regeneration of the display
@@ -195,18 +195,18 @@ namespace ewol {
 				};
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
-				virtual bool onEventEntry(const ewol::EventEntry& _event);
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
-				virtual void onEventClipboard(enum ewol::clipBoard::clipboardListe _clipboardID);
+				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual bool onEventEntry(const ewol::event::Entry& _event);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+				virtual void onEventClipboard(enum ewol::context::clipBoard::clipboardListe _clipboardID);
 				virtual void calculateMinMaxSize(void);
 			protected: // Derived function
 				virtual void onDraw(void);
 				virtual void onGetFocus(void);
 				virtual void onLostFocus(void);
 				virtual void changeStatusIn(int32_t _newStatusId);
-				virtual void periodicCall(const ewol::EventTime& _event);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual void periodicCall(const ewol::event::Time& _event);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};

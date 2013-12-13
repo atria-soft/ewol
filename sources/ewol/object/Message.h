@@ -47,8 +47,8 @@ namespace ewol {
 					return m_data;
 				};
 		};
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::object::Message& _obj);
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::object::Message& _obj);
 };
 
 

@@ -7,8 +7,8 @@
  */
 
 #include <ewol/debug.h>
-#include <ewol/resources/Colored3DObject.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Colored3DObject.h>
+#include <ewol/resource/Manager.h>
 
 #undef __class__
 #define __class__	"resource::Colored3DObject"
@@ -19,7 +19,7 @@ ewol::resource::Colored3DObject::Colored3DObject(void) :
 	addObjectType("ewol::Colored3DObject");
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::Program::keep("DATA:simple3D.prog");
+	m_GLprogram = ewol::resource::Program::keep("DATA:simple3D.prog");
 	if (NULL != m_GLprogram ) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord3d");
 		m_GLColor    = m_GLprogram->getUniform("EW_color");
@@ -29,7 +29,7 @@ ewol::resource::Colored3DObject::Colored3DObject(void) :
 
 ewol::resource::Colored3DObject::~Colored3DObject(void) {
 	// remove dynamics dependencies :
-	ewol::Program::release(m_GLprogram);
+	ewol::resource::Program::release(m_GLprogram);
 }
 
 
@@ -155,7 +155,7 @@ void ewol::resource::Colored3DObject::drawLine(std::vector<vec3>& _vertices,
 	}
 }
 
-ewol::resource::Colored3DObject* ewol::Colored3DObject::keep(void) {
+ewol::resource::Colored3DObject* ewol::resource::Colored3DObject::keep(void) {
 	EWOL_VERBOSE("KEEP : direct Colored3DObject");
 	// need to crate a new one ...
 	ewol::resource::Colored3DObject* object = new ewol::resource::Colored3DObject();
@@ -171,7 +171,7 @@ void ewol::resource::Colored3DObject::release(ewol::resource::Colored3DObject*& 
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

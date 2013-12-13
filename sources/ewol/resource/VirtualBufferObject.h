@@ -41,11 +41,6 @@ namespace ewol {
 				virtual ~VirtualBufferObject(void);
 			public:
 				/**
-				 * @brief Generic function that get the resouces name of his type.
-				 * @return The define char of his name.
-				 */
-				const char* getType(void) { return "ewol::VirtualBufferObject"; };
-				/**
 				 * @brief get the real openGL ID.
 				 * @return the Ogl id reference of this VBO.
 				 */

@@ -7,9 +7,9 @@
  */
 
 #include <ewol/widget/PopUp.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
 
 #undef __class__
@@ -26,7 +26,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::PopUp();
 }
 
-void ewol::widget::PopUp::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::PopUp::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -148,15 +148,15 @@ void ewol::widget::PopUp::onRegenerateDisplay(void) {
 }
 
 ewol::Widget* ewol::widget::PopUp::getWidgetAtPos(const vec2& _pos) {
-	ewol::Widget* val = widget::Container::getWidgetAtPos(_pos);
+	ewol::Widget* val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
 	}
 	return this;
 }
 
-bool ewol::widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
-	if (true == widget::Container::onSetConfig(_conf)) {
+bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configShaper) {
@@ -175,7 +175,7 @@ bool ewol::widget::PopUp::onSetConfig(const ewol::EConfig& _conf) {
 }
 
 bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == widget::Container::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configShaper) {
@@ -197,7 +197,7 @@ bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result)
 	return false;
 }
 
-bool ewol::widget::PopUp::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::PopUp::onEventInput(const ewol::event::Input& _event) {
 	if (0 != _event.getId()) {
 		if (true == m_closeOutEvent) {
 			vec2 padding = m_shaper.getPadding();
@@ -239,7 +239,7 @@ void ewol::widget::PopUp::onStopAnnimation(void) {
 	periodicCallDisable();
 }
 
-void ewol::widget::PopUp::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::PopUp::periodicCall(const ewol::event::Time& _event) {
 	if (false == m_shaper.periodicCall(_event) ) {
 		stopAnnimation();
 	}

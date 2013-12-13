@@ -32,8 +32,8 @@ namespace ewol {
 				Parameter(void);
 				~Parameter(void);
 			public: // Derived function
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
-				virtual void onObjectRemove(ewol::EObject * _removeObject);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+				virtual void onObjectRemove(ewol::Object * _removeObject);
 			public:
 				void setTitle(std::string _label);
 				void menuAdd(std::string _label, std::string _image, ewol::Widget* _associateWidget);
@@ -42,9 +42,9 @@ namespace ewol {
 				void menuSeparator(void);
 			private:
 				int32_t                 m_currentIdList;
-				widget::Label*          m_widgetTitle;
-				widget::ParameterList*  m_paramList;
-				widget::WSlider*        m_wSlider;
+				ewol::widget::Label*          m_widgetTitle;
+				ewol::widget::ParameterList*  m_paramList;
+				ewol::widget::WSlider*        m_wSlider;
 		};
 	};
 };

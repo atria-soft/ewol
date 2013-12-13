@@ -59,8 +59,8 @@ namespace ewol {
 					return m_timeDeltaCall;
 				};
 		};
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Time& _obj);
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Time& _obj);
 };
 
 #endif

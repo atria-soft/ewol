@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <ewol/debug.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/context/Context.h>
 #include <ewol/renderer/audio/audio.h>
 #include <ewol/Dimension.h>
 /* include auto generated file */
@@ -200,17 +200,17 @@ class AndroidContext : public ewol::eContext {
 			java_detach_current_thread(status);
 		}
 		
-		void clipBoardGet(enum ewol::clipBoard::clipboardListe _clipboardID) {
+		void clipBoardGet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 			// this is to force the local system to think we have the buffer
 			// TODO : remove this 2 line when code will be writen
 			m_clipBoardOwnerStd = true;
 			switch (_clipboardID) {
-				case ewol::clipBoard::clipboardSelection:
+				case ewol::context::clipBoard::clipboardSelection:
 					// NOTE : Windows does not support the middle button the we do it internaly
 					// just transmit an event , we have the data in the system
 					OS_ClipBoardArrive(_clipboardID);
 					break;
-				case ewol::clipBoard::clipboardStd:
+				case ewol::context::clipBoard::clipboardStd:
 					if (false == m_clipBoardOwnerStd) {
 						// generate a request TO the OS
 						// TODO : Send the message to the OS "We disire to receive the copy buffer ...
@@ -225,12 +225,12 @@ class AndroidContext : public ewol::eContext {
 			}
 		}
 		
-		void clipBoardSet(enum ewol::clipBoard::clipboardListe _clipboardID) {
+		void clipBoardSet(enum ewol::context::clipBoard::clipboardListe _clipboardID) {
 			switch (_clipboardID) {
-				case ewol::clipBoard::clipboardSelection:
+				case ewol::context::clipBoard::clipboardSelection:
 					// NOTE : nothing to do : Windows deas ot supported Middle button
 					break;
-				case ewol::clipBoard::clipboardStd:
+				case ewol::context::clipBoard::clipboardStd:
 					// Request the clipBoard :
 					if (false == m_clipBoardOwnerStd) {
 						// TODO : Inform the OS that we have the current buffer of copy ...

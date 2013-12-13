@@ -33,7 +33,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::WSlider();
 }
 
-void ewol::widget::WSlider::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::WSlider::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -58,7 +58,7 @@ ewol::widget::WSlider::~WSlider(void) {
 
 void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 	//EWOL_DEBUG("Update size");
-	widget::ContainerN::calculateSize(_availlable);
+	ewol::widget::ContainerN::calculateSize(_availlable);
 	
 	if (m_windowsDestination == m_windowsSources) {
 		int32_t iii = m_windowsDestination;
@@ -169,7 +169,7 @@ void ewol::widget::WSlider::setTransitionMode(enum sladingMode _mode) {
 	}
 }
 
-void ewol::widget::WSlider::periodicCall(const ewol::EventTime& _event) {
+void ewol::widget::WSlider::periodicCall(const ewol::event::Time& _event) {
 	if (m_slidingProgress >= 1.0) {
 		m_windowsSources = m_windowsDestination;
 		if(    m_windowsRequested != -1
@@ -265,8 +265,8 @@ void ewol::widget::WSlider::onRegenerateDisplay(void) {
 	}
 }
 
-bool ewol::widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
-	if (true == widget::ContainerN::onSetConfig(_conf)) {
+bool ewol::widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configMode) {
@@ -283,7 +283,7 @@ bool ewol::widget::WSlider::onSetConfig(const ewol::EConfig& _conf) {
 }
 
 bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == widget::ContainerN::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::ContainerN::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configMode) {

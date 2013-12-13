@@ -14,14 +14,14 @@
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Scroll : public widget::Container {
+		class Scroll : public ewol::widget::Container {
 			public:
 				enum highSpeedMode {
 					speedModeDisable,
@@ -35,9 +35,9 @@ namespace ewol {
 				// Cinfig parameter list:
 				static const char* const configLimit;
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::Drawing m_draw; // TODO : change in shaper ...  == > better for annimation and dynamic display ...
+				ewol::compositing::Drawing m_draw; // TODO : change in shaper ...  == > better for annimation and dynamic display ...
 			protected:
 				vec2 m_limit;
 			private:
@@ -45,7 +45,7 @@ namespace ewol {
 				vec2 m_highSpeedStartPos;
 				enum highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
-				enum ewol::keyEvent::type m_highSpeedType;
+				enum ewol::key::type m_highSpeedType;
 			public:
 				Scroll(void);
 				virtual ~Scroll(void);
@@ -64,12 +64,12 @@ namespace ewol {
 			public: // Derived function
 				void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& _pos);
 			protected: // Derived function
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};

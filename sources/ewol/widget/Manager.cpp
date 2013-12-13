@@ -7,7 +7,7 @@
  */
 
 #include <ewol/ewol.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/widget/Joystick.h>
 #include <ewol/widget/Button.h>
 #include <ewol/widget/ContextMenu.h>
@@ -41,21 +41,21 @@ ewol::widget::Manager::Manager(void) :
 	m_applWakeUpTime = ewol::getTime();
 	m_lastPeriodicCallTime = ewol::getTime();
 	
-	widget::Button::init(*this);
-	widget::ButtonColor::init(*this);
-	widget::Spacer::init(*this);
-	widget::Slider::init(*this);
-	widget::Sizer::init(*this);
-	widget::ProgressBar::init(*this);
-	widget::Layer::init(*this);
-	widget::Label::init(*this);
-	widget::Image::init(*this);
-	widget::Gird::init(*this);
-	widget::Entry::init(*this);
-	widget::CheckBox::init(*this);
-	widget::Scroll::init(*this);
-	widget::ContextMenu::init(*this);
-	widget::PopUp::init(*this);
+	ewol::widget::Button::init(*this);
+	ewol::widget::ButtonColor::init(*this);
+	ewol::widget::Spacer::init(*this);
+	ewol::widget::Slider::init(*this);
+	ewol::widget::Sizer::init(*this);
+	ewol::widget::ProgressBar::init(*this);
+	ewol::widget::Layer::init(*this);
+	ewol::widget::Label::init(*this);
+	ewol::widget::Image::init(*this);
+	ewol::widget::Gird::init(*this);
+	ewol::widget::Entry::init(*this);
+	ewol::widget::CheckBox::init(*this);
+	ewol::widget::Scroll::init(*this);
+	ewol::widget::ContextMenu::init(*this);
+	ewol::widget::PopUp::init(*this);
 }
 
 ewol::widget::Manager::~Manager(void) {
@@ -195,7 +195,7 @@ void ewol::widget::Manager::periodicCall(int64_t _localTime) {
 	}
 	float deltaTime = (float)(_localTime - previousTime)/1000000.0;
 	
-	EventTime myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
+	ewol::event::Time myTime(_localTime, m_applWakeUpTime, deltaTime, deltaTime);
 	
 	EWOL_VERBOSE("periodic : " << _localTime);
 	for (int32_t iii=m_listOfPeriodicWidget.size()-1; iii >= 0 ; iii--) {

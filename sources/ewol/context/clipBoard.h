@@ -56,7 +56,7 @@ namespace ewol {
 			/**
 			 * @brief get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
 			 *        the widget : @ref onEventClipboard  == > we can nothe this function is the only one which permit it.
-			 * @note if we call this fuction withoutcallin @ref ewol::clipBoard::Request, we only get the previous clipboard
+			 * @note if we call this fuction withoutcallin @ref ewol::context::clipBoard::Request, we only get the previous clipboard
 			 * @param[in] _clipboardID selected clipboard ID
 			 * @return the requested buffer
 			 */

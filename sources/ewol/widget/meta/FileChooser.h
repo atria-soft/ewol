@@ -52,8 +52,8 @@ namespace ewol {
 				std::string getCompleateFileName(void);
 				void updateCurrentFolder(void);
 			public: // Derived function
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
-				virtual void onObjectRemove(ewol::EObject* _removeObject);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
+				virtual void onObjectRemove(ewol::Object* _removeObject);
 		};
 	};
 };

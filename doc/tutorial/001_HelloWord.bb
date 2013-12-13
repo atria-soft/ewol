@@ -32,11 +32,11 @@ Then the first question, is where is the input of the application:
 
 [code style=c++]
 	// application start:
-	bool APP_Init(ewol::eContext& _context) {
+	bool APP_Init(ewol::Context& _context) {
 		return true;
 	}
 	// application stop:
-	void APP_UnInit(ewol::eContext& _context) {
+	void APP_UnInit(ewol::Context& _context) {
 	}
 [/code]
 
@@ -70,7 +70,7 @@ For this point we will create a class that herited form the basic windows class:
 	#include <ewol/widget/Windows.h>
 	
 	namespace appl {
-		class Windows : public ewol::Windows {
+		class Windows : public ewol::widget::Windows {
 			public:
 				Windows(void);
 			public:
@@ -91,7 +91,7 @@ For this point we will create a class that herited form the basic windows class:
 	
 	appl::Windows::Windows(void) {
 		setTitle("example 001_HelloWord");
-		widget::Label* tmpWidget = new widget::Label();
+		ewol::widget::Label* tmpWidget = new ewol::widget::Label();
 		if (NULL == tmpWidget) {
 			APPL_ERROR("Can not allocate widget ==> display might be in error");
 		} else {
@@ -110,7 +110,7 @@ The fist basic property to set is the Title:
 After we simple create a [class[widget::Label]] in the main windows constructor.
 And we set the widget property (label).
 [code style=c++]
-	widget::Label* tmpWidget = new widget::Label();
+	ewol::widget::Label* tmpWidget = new ewol::widget::Label();
 	tmpWidget->setLabel("Hello <font color=\"blue\">Word</font>");
 	tmpWidget->setExpand(bvec2(true,true));
 [/code]
@@ -146,7 +146,7 @@ Then we create windows and set it in the main contect main (in the APPL_init()):
 
 Then the init fuction is :
 [code style=c++]
-bool APP_Init(ewol::eContext& _context) {
+bool APP_Init(ewol::Context& _context) {
 	// select internal data for font ...
 	_context.getFontDefault().setUseExternal(true);
 	_context.getFontDefault().set("FreeSerif;DejaVuSansMono", 19);
@@ -161,14 +161,7 @@ bool APP_Init(ewol::eContext& _context) {
 To un-init the application, the context call a generic function [b]APP_UnInit[/b].
 In this function we just need to remove the windows and un-init all needed by the system.
 [code style=c++]
-void APP_UnInit(ewol::eContext& _context) {
-	// Remove windows :
-	ewol::Windows* basicWindows = _context.getWindows();
-	
-	if (NULL != basicWindows) {
-		delete(basicWindows);
-		basicWindows = NULL;
-	}
-	_context.setWindows(NULL);
+void APP_UnInit(ewol::Context& _context) {
+	// The main windows will be auto-remove after this call if it is not done...
 }
 [/code]

@@ -10,12 +10,12 @@
 #include <etk/os/FSNode.h>
 #include <egami/egami.h>
 
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/resource/Manager.h>
 
-#include <ewol/resources/font/FontBase.h>
-#include <ewol/resources/TexturedFont.h>
-#include <ewol/resources/FontFreeType.h>
+#include <ewol/resource/font/FontBase.h>
+#include <ewol/resource/TexturedFont.h>
+#include <ewol/resource/FontFreeType.h>
+#include <ewol/context/Context.h>
 
 
 etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
@@ -44,7 +44,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 
 ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName) {
-	addObjectType("ewol::TexturedFont");
+	addObjectType("ewol::compositing::TexturedFont");
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;
@@ -186,7 +186,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 			continue;
 		}
 		EWOL_INFO("Load FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size);
-		m_font[iiiFontId] = ewol::FontFreeType::keep(m_fileName[iiiFontId]);
+		m_font[iiiFontId] = ewol::resource::FontFreeType::keep(m_fileName[iiiFontId]);
 		if (m_font[iiiFontId] == NULL) {
 			EWOL_DEBUG("error in loading FONT [" << iiiFontId << "] name : \"" << m_fileName[iiiFontId] << "\"  == > size=" << m_size );
 		}
@@ -219,7 +219,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 
 ewol::resource::TexturedFont::~TexturedFont(void) {
 	for (int32_t iiiFontId=0; iiiFontId<4 ; iiiFontId++) {
-		ewol::FontFreeType::release(m_font[iiiFontId]);
+		ewol::resource::FontFreeType::release(m_font[iiiFontId]);
 	}
 }
 
@@ -317,7 +317,7 @@ int32_t ewol::resource::TexturedFont::getIndex(char32_t _charcode, const enum ew
 	return 0;
 }
 
-ewol::resource::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
+ewol::GlyphProperty* ewol::resource::TexturedFont::getGlyphPointer(const char32_t& _charcode, const enum ewol::font::mode _displayMode) {
 	//EWOL_DEBUG("Get glyph property for mode: " << _displayMode << "  == > wrapping index : " << m_modeWraping[_displayMode]);
 	int32_t index = getIndex(_charcode, _displayMode);
 	if(    index < 0
@@ -359,7 +359,7 @@ void ewol::resource::TexturedFont::release(ewol::resource::TexturedFont*& _objec
 	}
 	std::string name = _object->getName();
 	int32_t count = _object->getCounter() - 1;
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	if (getManager().release(object2) == true) {
 		EWOL_DEBUG("REMOVE: TexturedFont : file : '" << name << "' count=" << count);
 		//etk::displayBacktrace(false);

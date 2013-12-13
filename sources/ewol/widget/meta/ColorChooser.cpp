@@ -10,7 +10,7 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/List.h>
 #include <ewol/widget/Spacer.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 //#include <vector>
 #include <vector>
 
@@ -123,7 +123,7 @@ etk::Color<> ewol::widget::ColorChooser::getColor(void) {
 }
 
 
-void ewol::widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg) {
+void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _msg) {
 	if (NULL == _msg.getCaller()) {
 		return;
 	}
@@ -171,7 +171,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::EMessage& _msg) {
 };
 
 
-void ewol::widget::ColorChooser::onObjectRemove(ewol::EObject * _removeObject) {
+void ewol::widget::ColorChooser::onObjectRemove(ewol::Object * _removeObject) {
 	// First step call parrent : 
 	ewol::widget::Sizer::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

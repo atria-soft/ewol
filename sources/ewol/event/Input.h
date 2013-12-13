@@ -55,6 +55,7 @@ namespace ewol {
 					return m_pos;
 				};
 		};
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Input& _obj);
 		
 		class InputSystem {
 			public:
@@ -85,9 +86,8 @@ namespace ewol {
 					return m_realIdEvent;
 				};
 		};
+		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::InputSystem& _obj);
 	};
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Input& _obj);
-	etk::CCout& operator <<(etk::CCout& _os, const ewol::event::InputSystem& _obj);
 };
 
 #endif

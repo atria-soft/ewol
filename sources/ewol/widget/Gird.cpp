@@ -8,7 +8,7 @@
 
 #include <ewol/ewol.h>
 #include <ewol/widget/Gird.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 
 #undef __class__
@@ -19,7 +19,7 @@ static ewol::Widget* create(void) {
 	return new ewol::widget::Gird();
 }
 
-void ewol::widget::Gird::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::Gird::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&create);
 }
 
@@ -382,7 +382,7 @@ ewol::Widget * ewol::widget::Gird::getWidgetAtPos(const vec2& _pos) {
 	return NULL;
 }
 
-void ewol::widget::Gird::onObjectRemove(ewol::EObject * _removeObject) {
+void ewol::widget::Gird::onObjectRemove(ewol::Object * _removeObject) {
 	// First step call parrent : 
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...

@@ -14,10 +14,10 @@
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <etk/os/FSNode.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #include <ewol/resources/ResourceManager.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/context/Context.h>
 
 #include <ewol/renderer/MacOs/Interface.h>
 #include <ewol/renderer/MacOs/Context.h>
@@ -88,19 +88,19 @@ class MacOSInterface : public ewol::eContext {
 			}
 			//EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
 			if (_unichar <= 4) {
-				enum ewol::keyEvent::keyboard move;
+				enum ewol::key::keyboard move;
 				switch(_unichar) {
 					case 0:
-						move = ewol::keyEvent::keyboardUp;
+						move = ewol::key::keyboardUp;
 						break;
 					case 1:
-						move = ewol::keyEvent::keyboardDown;
+						move = ewol::key::keyboardDown;
 						break;
 					case 2:
-						move = ewol::keyEvent::keyboardLeft;
+						move = ewol::key::keyboardLeft;
 						break;
 					case 3:
-						move = ewol::keyEvent::keyboardRight;
+						move = ewol::key::keyboardRight;
 						break;
 				}
 				OS_SetKeyboardMove(_keyboardMode, move, !_isDown, _isAReapeateKey);
@@ -109,7 +109,7 @@ class MacOSInterface : public ewol::eContext {
 			}
 		}
 		void MAC_SetKeyboardMove(ewol::SpecialKey& _special,
-								enum ewol::keyEvent::keyboard _move,
+								enum ewol::key::keyboard _move,
 								 bool _isDown) {
 			OS_SetKeyboardMove(_special, _move, _isDown);
 		}
@@ -156,7 +156,7 @@ void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _
 	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
 }
 
-void MacOs::setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::keyEvent::keyboard _move, bool _isDown) {
+void MacOs::setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown) {
 	if (interface == NULL) {
 		return;
 	}

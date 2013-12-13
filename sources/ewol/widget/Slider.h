@@ -24,7 +24,7 @@ namespace ewol {
 		 */
 		class Slider :public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				Slider(void);
 				virtual ~Slider(void);
@@ -36,7 +36,7 @@ namespace ewol {
 					m_textColorFg = _newColor;
 				};
 			protected:
-				ewol::Drawing m_draw; //!< drawing tool.
+				ewol::compositing::Drawing m_draw; //!< drawing tool.
 				int32_t m_value;
 				int32_t m_min;
 				int32_t m_max;
@@ -46,7 +46,7 @@ namespace ewol {
 				virtual void onDraw(void);
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 		};
 	};
 };

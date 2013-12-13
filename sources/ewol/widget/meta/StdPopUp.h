@@ -72,10 +72,10 @@ namespace ewol {
 				 * @brief Add a buttom button.
 				 * @param[in] _text Decorated text to diplay in button.
 				 */
-				widget::Button* addButton(const std::string& _text, bool _autoExit=false);
+				ewol::widget::Button* addButton(const std::string& _text, bool _autoExit=false);
 			public: // Derived function
-				virtual void onObjectRemove(ewol::EObject* _removeObject);
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
+				virtual void onObjectRemove(ewol::Object* _removeObject);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 		};
 	};
 };

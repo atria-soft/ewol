@@ -7,10 +7,10 @@
  */
 
 #include <ewol/ewol.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 #include <ewol/widget/ContextMenu.h>
 #include <ewol/compositing/Drawing.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__	"ContextMenu"
@@ -24,7 +24,7 @@ static ewol::Widget* Create(void) {
 	return new ewol::widget::ContextMenu();
 }
 
-void ewol::widget::ContextMenu::init(ewol::WidgetManager& _widgetManager) {
+void ewol::widget::ContextMenu::init(ewol::widget::Manager& _widgetManager) {
 	_widgetManager.addWidgetCreator(__class__,&Create);
 }
 
@@ -132,7 +132,7 @@ void ewol::widget::ContextMenu::calculateSize(const vec2& _availlable) {
 
 void ewol::widget::ContextMenu::calculateMinMaxSize(void) {
 	// call main class to calculate the min size...
-	widget::Container::calculateMinMaxSize();
+	ewol::widget::Container::calculateMinMaxSize();
 	// add padding of the display
 	m_minSize += m_shaper.getPadding();
 	//EWOL_DEBUG("CalculateMinSize=>>" << m_minSize);
@@ -148,7 +148,7 @@ void ewol::widget::ContextMenu::onDraw(void) {
 
 void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 	// call upper class :
-	widget::Container::onRegenerateDisplay();
+	ewol::widget::Container::onRegenerateDisplay();
 	if (needRedraw() == false) {
 		return;
 	}
@@ -214,17 +214,17 @@ void ewol::widget::ContextMenu::onRegenerateDisplay(void) {
 	m_shaper.setInsideSize(vec2ClipInt32(shaperSize-padding*2.0f));
 }
 
-bool ewol::widget::ContextMenu::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ContextMenu::onEventInput(const ewol::event::Input& _event) {
 	if (_event.getId() > 0) {
-		if (NULL != widget::Container::getWidgetAtPos(_event.getPos())) {
+		if (NULL != ewol::widget::Container::getWidgetAtPos(_event.getPos())) {
 			return false;
 		}
-		if(    _event.getStatus() == ewol::keyEvent::statusDown
-		    || _event.getStatus() == ewol::keyEvent::statusMove
-		    || _event.getStatus() == ewol::keyEvent::statusSingle
-		    || _event.getStatus() == ewol::keyEvent::statusUp
-		    || _event.getStatus() == ewol::keyEvent::statusEnter
-		    || _event.getStatus() == ewol::keyEvent::statusLeave ) {
+		if(    _event.getStatus() == ewol::key::statusDown
+		    || _event.getStatus() == ewol::key::statusMove
+		    || _event.getStatus() == ewol::key::statusSingle
+		    || _event.getStatus() == ewol::key::statusUp
+		    || _event.getStatus() == ewol::key::statusEnter
+		    || _event.getStatus() == ewol::key::statusLeave ) {
 			// Auto-remove ...
 			autoDestroy();
 			return true;
@@ -242,7 +242,7 @@ void ewol::widget::ContextMenu::setPositionMark(enum markPosition _position, vec
 }
 
 ewol::Widget* ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
-	ewol::Widget* val = widget::Container::getWidgetAtPos(_pos);
+	ewol::Widget* val = ewol::widget::Container::getWidgetAtPos(_pos);
 	if (NULL != val) {
 		return val;
 	}
@@ -250,8 +250,8 @@ ewol::Widget* ewol::widget::ContextMenu::getWidgetAtPos(const vec2& _pos) {
 }
 
 
-bool ewol::widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
-	if (true == widget::Container::onSetConfig(_conf)) {
+bool ewol::widget::ContextMenu::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::widget::Container::onSetConfig(_conf)) {
 		return true;
 	}
 	if (_conf.getConfig() == configArrowPosition) {
@@ -280,7 +280,7 @@ bool ewol::widget::ContextMenu::onSetConfig(const ewol::EConfig& _conf) {
 }
 
 bool ewol::widget::ContextMenu::onGetConfig(const char* _config, std::string& _result) const {
-	if (true == widget::Container::onGetConfig(_config, _result)) {
+	if (true == ewol::widget::Container::onGetConfig(_config, _result)) {
 		return true;
 	}
 	if (_config == configArrowPosition) {

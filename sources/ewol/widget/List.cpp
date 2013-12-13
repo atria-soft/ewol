@@ -10,7 +10,7 @@
 
 #include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Text.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 #undef __class__
 #define __class__ "List"
@@ -131,7 +131,7 @@ void ewol::widget::List::onRegenerateDisplay(void) {
 		
 		std::vector<int32_t> listSizeColomn;
 		
-		ewol::Drawing * BGOObjects = new ewol::Drawing();
+		ewol::compositing::Drawing * BGOObjects = new ewol::compositing::Drawing();
 		etk::Color<> basicBG = getBasicBG();
 		BGOObjects->setColor(basicBG);
 		BGOObjects->setPos(vec3(0, 0, 0) );
@@ -173,7 +173,7 @@ void ewol::widget::List::onRegenerateDisplay(void) {
 				etk::Color<> bg;
 				getElement(jjj, iii, myTextToWrite, fg, bg);
 				
-				ewol::Text * tmpText = new ewol::Text();
+				ewol::compositing::Text * tmpText = new ewol::compositing::Text();
 				if (NULL != tmpText) {
 					// get font size : 
 					int32_t tmpFontHeight = tmpText->calculateSize(char32_t('A')).y();
@@ -212,7 +212,7 @@ void ewol::widget::List::onRegenerateDisplay(void) {
 	}
 }
 
-bool ewol::widget::List::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::List::onEventInput(const ewol::event::Input& _event) {
 	vec2 relativePos = relativePosition(_event.getPos());
 	
 	if (true == WidgetScrooled::onEventInput(_event)) {

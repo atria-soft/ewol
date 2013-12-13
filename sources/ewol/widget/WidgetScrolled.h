@@ -28,7 +28,7 @@ namespace ewol {
 					scroolModeGame, //!< Zoom enable, no move left and right
 				};
 			private:
-				ewol::Drawing m_drawing; //!< generic element to display...
+				ewol::compositing::Drawing m_drawing; //!< generic element to display...
 			protected:
 				vec2 m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
 				vec2 m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
@@ -39,7 +39,7 @@ namespace ewol {
 				vec2 m_highSpeedStartPos;
 				enum Scroll::highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
-				enum ewol::keyEvent::type m_highSpeedType;
+				enum ewol::key::type m_highSpeedType;
 			public:
 				/**
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)
@@ -53,7 +53,7 @@ namespace ewol {
 				virtual void onDraw(void);
 			public: // Derived function
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 			protected:
 				/**

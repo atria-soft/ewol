@@ -12,19 +12,19 @@
 #include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/ContainerN.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class Sizer : public widget::ContainerN {
+		class Sizer : public ewol::widget::ContainerN {
 			public:
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			public:
 				enum displayMode {
 					modeVert, //!< Vertical mode
@@ -37,7 +37,7 @@ namespace ewol {
 				 * @brief Constructor
 				 * @param[in] _mode The mode to display the elements
 				 */
-				Sizer(enum displayMode _mode=widget::Sizer::modeHori);
+				Sizer(enum displayMode _mode=ewol::widget::Sizer::modeHori);
 				/**
 				 * @brief Desstructor
 				 */

@@ -13,7 +13,7 @@
 #include <vector>
 #include <ewol/debug.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
@@ -22,7 +22,7 @@ namespace ewol {
 		 */
 		class Gird :public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				class GirdProperties {
 					public:
@@ -137,7 +137,7 @@ namespace ewol {
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay(void);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
-				virtual void onObjectRemove(ewol::EObject* _removeObject);
+				virtual void onObjectRemove(ewol::Object* _removeObject);
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize(void);
 		};

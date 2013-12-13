@@ -9,14 +9,14 @@
 #include <etk/types.h>
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
-#include <ewol/resources/Shader.h>
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Shader.h>
+#include <ewol/resource/Manager.h>
 
 #undef __class__
 #define __class__ "resource::Shader"
 
 ewol::resource::Shader::Shader(const std::string& _filename) :
-  ewol::resource::Resource(_filename),
+  ewol::Resource(_filename),
   m_exist(false),
   m_fileData(NULL),
   m_shader(0),
@@ -169,7 +169,7 @@ void ewol::resource::Shader::release(ewol::resource::Shader*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::resource::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

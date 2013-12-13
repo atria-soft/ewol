@@ -19,7 +19,7 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 * @brief the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree
 		 */
-		class Composer : public widget::Container {
+		class Composer : public ewol::widget::Container {
 			public:
 				enum composerMode {
 					None,
@@ -76,7 +76,7 @@ namespace ewol {
 				 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 				 * @note : To used when NOT herited from this object.
 				 */
-				void registerOnEventNameWidget(ewol::EObject * _destinationObject,
+				void registerOnEventNameWidget(ewol::Object * _destinationObject,
 				                               const std::string& _subWidgetName,
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = NULL,

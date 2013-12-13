@@ -13,7 +13,7 @@
 
 #include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Text.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char * const ewolEventParameterListSelect     = "ewol-event-parameter-list-select";
 
@@ -120,7 +120,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay(void) {
 		std::vector<int32_t> listSizeColomn;
 		
 		// set background color :
-		ewol::Drawing * tmpDraw = new ewol::Drawing();
+		ewol::compositing::Drawing * tmpDraw = new ewol::compositing::Drawing();
 		tmpDraw->setColor(0xFFFFFFFF);
 		tmpDraw->setPos(vec3(0,0,0) );
 		tmpDraw->rectangleWidth(vec3(m_size.x(), m_size.y(), 0) );
@@ -145,7 +145,7 @@ void ewol::widget::ParameterList::onRegenerateDisplay(void) {
 				myTextToWrite = m_list[iii]->m_label;
 			}
 			
-			ewol::Text * tmpText = new ewol::Text();
+			ewol::compositing::Text * tmpText = new ewol::compositing::Text();
 			
 			vec3 textPos;
 			textPos.setX((int32_t)tmpOriginX);
@@ -162,18 +162,18 @@ void ewol::widget::ParameterList::onRegenerateDisplay(void) {
 		addOObject(tmpDraw, 0);
 		
 		// call the herited class...
-		widget::WidgetScrooled::onRegenerateDisplay();
+		ewol::widget::WidgetScrooled::onRegenerateDisplay();
 	}
 }
 
 
-bool ewol::widget::ParameterList::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::ParameterList::onEventInput(const ewol::event::Input& _event) {
 	if (true == WidgetScrooled::onEventInput(_event)) {
 		keepFocus();
 		// nothing to do ... done on upper widet ...
 		return true;
 	}
-	if (_event.getId() == 1 && _event.getStatus() == ewol::keyEvent::statusSingle) {
+	if (_event.getId() == 1 && _event.getStatus() == ewol::key::statusSingle) {
 		vec2 relativePos = relativePosition(_event.getPos());
 		// corection for the openGl abstraction
 		relativePos.setY(m_size.y() - relativePos.y());
@@ -209,7 +209,7 @@ void ewol::widget::ParameterList::onLostFocus(void) {
 }
 
 void ewol::widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, std::string& _image) {
-	widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
+	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, _refId, _image, false);
 	if (NULL != tmpEmement) {
 		m_list.push_back(tmpEmement);
 		if (m_idSelected == -1 && _label != "---" && _refId>0) {
@@ -221,7 +221,7 @@ void ewol::widget::ParameterList::menuAdd(std::string& _label, int32_t _refId, s
 
 void ewol::widget::ParameterList::menuAddGroup(std::string& _label) {
 	std::string image = "";
-	widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
+	ewol::widget::elementPL* tmpEmement = new widget::elementPL(_label, -1, image, true);
 	if (NULL != tmpEmement) {
 		m_list.push_back(tmpEmement);
 		markToRedraw();

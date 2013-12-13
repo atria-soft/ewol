@@ -48,9 +48,6 @@ namespace ewol {
 				TexturedFont(const std::string& _fontName);
 				~TexturedFont(void);
 			public:
-				const char* getType(void) {
-					return "ewol::TexturedFont";
-				};
 				/**
 				 * @brief get the display height of this font
 				 * @param[in] _displayMode Mode to display the currrent font

@@ -10,7 +10,7 @@
 #include <math.h>
 
 #include <ewol/compositing/Image.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char * const ewolEventJoystickEnable   = "ewol-joystick-enable";
 extern const char * const ewolEventJoystickDisable  = "ewol-joystick-disable";
@@ -114,11 +114,11 @@ Sine Function:    sin(teta) = Opposite / Hypotenuse
 Cosine Function:  cos(teta) = Adjacent / Hypotenuse
 Tangent Function: tan(teta) = Opposite / Adjacent
 */
-bool ewol::widget::Joystick::onEventInput(const ewol::EventInput& _event) {
+bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 /*
 	if (1 == IdInput) {
-		if(    ewol::keyEvent::statusDown == typeEvent
-		    || ewol::keyEvent::statusMove == typeEvent) {
+		if(    ewol::key::statusDown == typeEvent
+		    || ewol::key::statusMove == typeEvent) {
 			// get local relative position
 			vec2 relativePos = relativePosition(pos);
 			float sizeElement = m_size.x*m_ratio;
@@ -143,7 +143,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::EventInput& _event) {
 				m_displayPos.y = sin(m_angle)*m_distance;
 			}
 			markToRedraw();
-			if(ewol::keyEvent::statusDown == typeEvent) {
+			if(ewol::key::statusDown == typeEvent) {
 				generateEventId(ewolEventJoystickEnable);
 			} else {
 				std::string tmp = std::string("distance=") + std::string(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
@@ -152,7 +152,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::EventInput& _event) {
 			//teta += M_PI/2;
 			//EWOL_DEBUG("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
 			return true;
-		} else if( ewol::keyEvent::statusUp == typeEvent) {
+		} else if( ewol::key::statusUp == typeEvent) {
 			if(    true == m_lock
 			    && m_distance == 1) {
 				// nothing to do ...

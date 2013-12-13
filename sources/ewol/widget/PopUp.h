@@ -15,23 +15,23 @@
 #include <ewol/widget/Container.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/compositing/Shaper.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
-		class PopUp : public widget::Container {
+		class PopUp : public ewol::widget::Container {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Config list of properties
 				static const char* const configShaper;
 				static const char* const configRemoveOnExternClick;
 				static const char* const configAnimation;
 				static const char* const configLockExpand;
 			private:
-				ewol::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
 			public:
 				/**
 				 * @brief Constructor
@@ -74,14 +74,14 @@ namespace ewol {
 				};
 			protected: // Derived function
 				virtual void onDraw(void);
-				virtual bool onSetConfig(const ewol::EConfig& _conf);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
 				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
-				virtual void periodicCall(const ewol::EventTime& _event);
+				virtual void periodicCall(const ewol::event::Time& _event);
 				virtual void systemDraw(const ewol::DrawProperty& _displayProp);
 				virtual void onRegenerateDisplay(void);
 				virtual void calculateSize(const vec2& _available);
-				virtual bool onEventInput(const ewol::EventInput& _event);
+				virtual bool onEventInput(const ewol::event::Input& _event);
 				virtual ewol::Widget* getWidgetAtPos(const vec2& pos);
 			protected:
 				virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode);

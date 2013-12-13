@@ -8,10 +8,9 @@
 
 #include <etk/types.h>
 #include <ewol/ewol.h>
-#include <ewol/renderer/openGL.h>
-#include <ewol/resources/ResourceManager.h>
-#include <ewol/resources/Texture.h>
-#include <ewol/renderer/eContext.h>
+#include <ewol/openGL/openGL.h>
+#include <ewol/resource/Manager.h>
+#include <ewol/resource/Texture.h>
 
 #undef __class__
 #define __class__ "resource::Texture"
@@ -35,15 +34,15 @@ static int32_t nextP2(int32_t _value) {
 
 
 ewol::resource::Texture::Texture(const std::string& _filename) :
- ewol::resource::Resource(_filename) {
-	addObjectType("ewol::Texture");
+ ewol::Resource(_filename) {
+	addObjectType("ewol::compositing::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
 }
 
 ewol::resource::Texture::Texture(void) {
-	addObjectType("ewol::Texture");
+	addObjectType("ewol::compositing::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);
@@ -123,7 +122,7 @@ void ewol::resource::Texture::release(ewol::resource::Texture*& _object) {
 	if (NULL == _object) {
 		return;
 	}
-	ewol::Resource* object2 = static_cast<ewol::resource::Resource*>(_object);
+	ewol::Resource* object2 = static_cast<ewol::Resource*>(_object);
 	getManager().release(object2);
 	_object = NULL;
 }

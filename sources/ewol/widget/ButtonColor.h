@@ -16,7 +16,7 @@
 #include <ewol/compositing/Text.h>
 #include <ewol/compositing/Shaper.h>
 #include <ewol/widget/Widget.h>
-#include <ewol/widget/WidgetManager.h>
+#include <ewol/widget/Manager.h>
 
 extern const char * const ewolEventButtonColorChange;
 
@@ -27,12 +27,12 @@ namespace ewol {
 		 */
 		class ButtonColor : public ewol::Widget {
 			public:
-				static void init(ewol::WidgetManager& _widgetManager);
+				static void init(ewol::widget::Manager& _widgetManager);
 			private:
-				ewol::Shaper m_shaper; //!< Compositing theme.
-				ewol::Text m_text; //!< Compositing Test display.
+				ewol::compositing::Shaper m_shaper; //!< Compositing theme.
+				ewol::compositing::Text m_text; //!< Compositing Test display.
 				etk::Color<> m_textColorFg; //!< Current color.
-				widget::ContextMenu* m_widgetContextMenu; //!< Specific context menu.
+				ewol::widget::ContextMenu* m_widgetContextMenu; //!< Specific context menu.
 				bool m_mouseHover; //!< Flag to know where the mouse is (inside the displayed widget (if not fill)).
 				bool m_buttonPressed; //!< Flag to know if the button is curently pressed.
 				// hover area :
@@ -69,8 +69,8 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);
-				virtual bool onEventInput(const ewol::EventInput& _event);
-				virtual void onReceiveMessage(const ewol::EMessage& _msg);
+				virtual bool onEventInput(const ewol::event::Input& _event);
+				virtual void onReceiveMessage(const ewol::object::Message& _msg);
 			private:
 				/**
 				 * @brief internal system to change the property of the current status
@@ -78,7 +78,7 @@ namespace ewol {
 				 */
 				void changeStatusIn(int32_t _newStatusId);
 				// Derived function
-				virtual void periodicCall(const ewol::EventTime& _event);
+				virtual void periodicCall(const ewol::event::Time& _event);
 		};
 	};
 };
