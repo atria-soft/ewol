@@ -7,10 +7,10 @@
  */
 
 #import <Cocoa/Cocoa.h>
-#include "ewol/renderer/MacOs/Interface.h"
+#include "ewol/context/MacOs/Interface.h"
 
-#import <ewol/renderer/MacOs/OpenglView.h>
-#import <ewol/renderer/MacOs/AppDelegate.h>
+#import <ewol/context/MacOs/OpenglView.h>
+#import <ewol/context/MacOs/AppDelegate.h>
 
 int mm_main(int argc, const char *argv[]) {
 	[NSAutoreleasePool new];

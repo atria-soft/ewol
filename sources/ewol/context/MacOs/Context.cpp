@@ -9,18 +9,18 @@
 
 #include <ewol/debug.h>
 #include <ewol/ewol.h>
-#include <ewol/key.h>
-#include <ewol/commandLine.h>
+#include <ewol/key/key.h>
+#include <ewol/context/commandLine.h>
 #include <etk/UString.h>
 #include <etk/unicode.h>
 #include <etk/os/FSNode.h>
 #include <ewol/widget/Manager.h>
 
-#include <ewol/resources/ResourceManager.h>
+#include <ewol/resource/Manager.h>
 #include <ewol/context/Context.h>
 
-#include <ewol/renderer/MacOs/Interface.h>
-#include <ewol/renderer/MacOs/Context.h>
+#include <ewol/context/MacOs/Interface.h>
+#include <ewol/context/MacOs/Context.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -50,12 +50,12 @@ int64_t ewol::getTime(void) {
 
 
 
-class MacOSInterface : public ewol::eContext {
+class MacOSInterface : public ewol::Context {
 	private:
-		ewol::SpecialKey m_guiKeyBoardMode;
+	ewol::key::Special m_guiKeyBoardMode;
 	public:
 		MacOSInterface(int32_t _argc, const char* _argv[]) :
-		  ewol::eContext(_argc, _argv) {
+		  ewol::Context(_argc, _argv) {
 			mm_main(_argc, _argv);
 		}
 		
@@ -77,7 +77,7 @@ class MacOSInterface : public ewol::eContext {
 		void MAC_SetMouseMotion(int32_t _id, float _x, float _y) {
 			OS_SetMouseMotion(_id, vec2(_x, _y));
 		}
-		void MAC_SetKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
+		void MAC_SetKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
 			if (_unichar == etk::UChar::Delete) {
 				_unichar = etk::UChar::Suppress;
 			} else if (_unichar == etk::UChar::Suppress) {
@@ -108,7 +108,7 @@ class MacOSInterface : public ewol::eContext {
 				OS_SetKeyboard(_keyboardMode, _unichar, !_isDown, _isAReapeateKey);
 			}
 		}
-		void MAC_SetKeyboardMove(ewol::SpecialKey& _special,
+	void MAC_SetKeyboardMove(ewol::key::Special& _special,
 								enum ewol::key::keyboard _move,
 								 bool _isDown) {
 			OS_SetKeyboardMove(_special, _move, _isDown);
@@ -149,14 +149,14 @@ void MacOs::setMouseMotion(int32_t _id, float _x, float _y) {
 	interface->MAC_SetMouseMotion(_id, _x, _y);
 }
 
-void MacOs::setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
+void MacOs::setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
 	if (interface == NULL) {
 		return;
 	}
 	interface->MAC_SetKeyboard(_keyboardMode, _unichar, _isDown, _isAReapeateKey);
 }
 
-void MacOs::setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown) {
+void MacOs::setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown) {
 	if (interface == NULL) {
 		return;
 	}

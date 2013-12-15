@@ -7,8 +7,8 @@
  */
 
 
-#import <ewol/renderer/MacOs/AppDelegate.h>
-#import <ewol/renderer/MacOs/OpenglView.h>
+#import <ewol/context/MacOs/AppDelegate.h>
+#import <ewol/context/MacOs/OpenglView.h>
 
 #include <ewol/debug.h>
 

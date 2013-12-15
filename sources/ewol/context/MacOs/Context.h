@@ -9,7 +9,7 @@
 #ifndef __MAC_OS_CONTEXT_H__
 #define __MAC_OS_CONTEXT_H__
 
-#include <ewol/key.h>
+#include <ewol/key/key.h>
 
 namespace MacOs {
 	// return true if a flush is needed
@@ -21,8 +21,8 @@ namespace MacOs {
 	void resize(float _x, float _y);
 	void setMouseState(int32_t _id, bool _isDown, float _x, float _y);
 	void setMouseMotion(int32_t _id, float _x, float _y);
-	void setKeyboard(ewol::SpecialKey _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
-	void setKeyboardMove(ewol::SpecialKey& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown);
+	void setKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey);
+	void setKeyboardMove(ewol::key::Special& _keyboardMode, enum ewol::key::keyboard _move, bool _isDown);
 };
 
 #endif
