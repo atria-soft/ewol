@@ -13,7 +13,7 @@
 #include <pthread.h>
 #include <ewol/debug.h>
 #include <ewol/context/Context.h>
-#include <ewol/renderer/audio/audio.h>
+//#include <ewol/renderer/audio/audio.h>
 #include <ewol/Dimension.h>
 /* include auto generated file */
 #include <ewol/renderer/Android/org_ewol_EwolConstants.h>
@@ -40,7 +40,7 @@ void java_check_exception(JNIEnv* _env) {
 	}
 }
 
-class AndroidContext : public ewol::eContext {
+class AndroidContext : public ewol::Context {
 	public:
 		enum application {
 			appl_unknow,
@@ -61,10 +61,10 @@ class AndroidContext : public ewol::eContext {
 		jmethodID m_javaMethodEwolActivitySetTitle;
 		jclass m_javaDefaultClassString; //!< default string class
 		int32_t m_currentHeight;
-		ewol::SpecialKey m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
+		ewol::key::Special m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
 		bool m_clipBoardOwnerStd;
 	private:
-		bool safeInitMethodID(jmethodID& _mid, jclass& _cls, char* _name, char* _sign) {
+		bool safeInitMethodID(jmethodID& _mid, jclass& _cls, const char* _name, const char* _sign) {
 			_mid = m_JavaVirtualMachinePointer->GetMethodID(_cls, _name, _sign);
 			if(_mid == NULL) {
 				EWOL_ERROR("C->java : Can't find the method " << _name);
@@ -369,19 +369,19 @@ class AndroidContext : public ewol::eContext {
 		}
 	public:
 		void OS_SetInputMotion(int _pointerID, const vec2& _pos) {
-			ewol::eContext::OS_SetInputMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
+			ewol::Context::OS_SetInputMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
 		void OS_SetInputState(int _pointerID, bool _isDown, const vec2& _pos) {
-			ewol::eContext::OS_SetInputState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
+			ewol::Context::OS_SetInputState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
 		void OS_SetMouseMotion(int _pointerID, const vec2& _pos) {
-			ewol::eContext::OS_SetMouseMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
+			ewol::Context::OS_SetMouseMotion(_pointerID, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
 		void OS_SetMouseState(int _pointerID, bool _isDown, const vec2& _pos) {
-			ewol::eContext::OS_SetMouseState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
+			ewol::Context::OS_SetMouseState(_pointerID, _isDown, vec2(_pos.x(),m_currentHeight-_pos.y()) );
 		}
 		
 		void ANDROID_SetKeyboard(char32_t _myChar, bool _isDown, bool _isARepeateKey=false) {
@@ -390,7 +390,7 @@ class AndroidContext : public ewol::eContext {
 		
 		void OS_Resize(const vec2& _size) {
 			m_currentHeight = _size.y();
-			ewol::eContext::OS_Resize(_size);
+			ewol::Context::OS_Resize(_size);
 		}
 };
 
@@ -713,7 +713,7 @@ extern "C" {
 			return;
 		}
 		// set the internal system ratio properties ...
-		ewol::dimension::setPixelRatio(vec2(_ratioX,_ratioY), ewol::Dimension::Inch);
+		ewol::Dimension::setPixelRatio(vec2(_ratioX,_ratioY), ewol::Dimension::Inch);
 	}
 	
 	// TODO : set a return true or false if we want to grep this event ...
@@ -817,7 +817,7 @@ extern "C" {
 		jboolean isCopy;
 		jshort* dst = _env->GetShortArrayElements(_location, &isCopy);
 		if (NULL != dst) {
-			ewol::audio::getData(dst, _frameRate, _nbChannels);
+			//ewol::audio::getData(dst, _frameRate, _nbChannels);
 		}
 		//APPL_DEBUG("IO Audio event request: Frames=" << frameRate << " channels=" << nbChannels);
 		// TODO : Understand why it did not work corectly ...
