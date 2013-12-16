@@ -26,6 +26,7 @@ namespace ewol {
 				static const char* const eventStartSlide;
 				static const char* const eventStopSlide;
 				// Config list of properties
+				// TODO : remove the dynamic transition and set this in annimation ...
 				static const char* const configMode;
 				enum sladingMode {
 					sladingTransitionVert,
@@ -40,6 +41,12 @@ namespace ewol {
 				int32_t m_windowsDestination; //!< widget destinated viewed
 				int32_t m_windowsRequested; //!< widget destination requested when change in modification in progress
 				float m_slidingProgress; //!< ratio progression of a sliding
+			protected:
+				/**
+				 * @brief Generate the move on the specific vector ID (This is not a public acces, because the vector can have some null pointer inside ...)
+				 * @param[in] _id Id in the vector
+				 */
+				void subWidgetSelectSetVectorId(int32_t _id);
 			public:
 				/** 
 				 * @brief Select a new subwidget to display

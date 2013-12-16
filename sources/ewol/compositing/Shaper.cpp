@@ -50,6 +50,11 @@ void ewol::compositing::Shaper::unLoadProgram(void) {
 	ewol::resource::Program::release(m_GLprogram);
 	ewol::resource::TextureFile::release(m_resourceTexture);
 	ewol::resource::ConfigFile::release(m_config);
+	m_confIdPaddingX = -1;
+	m_confIdPaddingY = -1;
+	m_confIdChangeTime = -1;
+	m_confProgramFile = -1;
+	m_confImageFile = -1;
 }
 
 void ewol::compositing::Shaper::loadProgram(void) {

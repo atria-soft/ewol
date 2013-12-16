@@ -55,6 +55,7 @@ namespace ewol {
 				 * @return false  == > some error occured
 				 */
 				bool loadFromString(const std::string& _composerXmlString);
+			protected:
 				/**
 				 * @brief Register an Event an named widget. @see registerOnEvent
 				 * @param[in] _subWidgetName Name of the subWidget.
@@ -67,6 +68,7 @@ namespace ewol {
 				                               const char * _eventId,
 				                               const char * _eventIdgenerated = NULL,
 				                               const std::string& _overloadData="");
+			public:
 				/**
 				 * @brief Register an Event an named widget. @see registerOnEvent
 				 * @param[in] _destinationObject pointer on the object that might be call when an event is generated

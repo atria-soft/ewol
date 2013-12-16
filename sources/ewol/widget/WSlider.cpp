@@ -107,6 +107,19 @@ void ewol::widget::WSlider::calculateSize(const vec2& _availlable) {
 	markToRedraw();
 }
 
+void ewol::widget::WSlider::subWidgetSelectSetVectorId(int32_t _id) {
+	if (_id<0) {
+		EWOL_ERROR("Can not change to a widget not present : vectID=" << _id);
+		return;
+	}
+	if (_id != m_windowsDestination) {
+		m_windowsRequested = _id;
+		generateEventId(eventStartSlide);
+		periodicCallEnable();
+		markToRedraw();
+	}
+}
+
 void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 	int32_t elementID = -1;
 	// search element in the list : 
@@ -118,16 +131,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(int32_t _id) {
 			}
 		}
 	}
-	if (elementID<0) {
-		EWOL_ERROR("Can not change to a widget not present : uid="<<_id);
-		return;
-	}
-	if (elementID != m_windowsDestination) {
-		m_windowsRequested = elementID;
-		generateEventId(eventStartSlide);
-		periodicCallEnable();
-		markToRedraw();
-	}
+	subWidgetSelectSetVectorId(elementID);
 }
 
 void ewol::widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
@@ -138,7 +142,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(ewol::Widget* _widgetPointer) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii] != NULL) {
 			if (m_subWidget[iii] == _widgetPointer) {
-				subWidgetSelectSet(iii);
+				subWidgetSelectSetVectorId(iii);
 				return;
 			}
 		}
@@ -154,7 +158,7 @@ void ewol::widget::WSlider::subWidgetSelectSet(const std::string& _widgetName) {
 	for (size_t iii=0; iii<m_subWidget.size(); iii++) {
 		if (m_subWidget[iii] != NULL) {
 			if (m_subWidget[iii]->getName() == _widgetName) {
-				subWidgetSelectSet(iii);
+				subWidgetSelectSetVectorId(iii);
 				return;
 			}
 		}
