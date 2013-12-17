@@ -4,132 +4,176 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>ewol Library</title>
 	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
 </head>
 <body>
 	<div class="navbar navbar-fixed-top">
 		<div class="container">
 			<h1>ewol Library</h1>
-				<li><a href="eSystemMessage.html">eSystemMessage</a></li>
-				<li>ewol</li>
+			<div id="menu">
+				<h2>ewol</h2>
+				<ul class="niveau1">
+					<li class="sousmenu"><a>compositing</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Compositing.html">Compositing</a></li>
+							<li><a href="ewol__compositing__Area.html">Area</a></li>
+							<li><a href="ewol__compositing__Drawing.html">Drawing</a></li>
+							<li><a href="ewol__compositing__Image.html">Image</a></li>
+							<li><a href="ewol__compositing__Shaper.html">Shaper</a></li>
+							<li><a href="ewol__compositing__Sprite.html">Sprite</a></li>
+							<li><a href="ewol__compositing__Text.html">Text</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>context</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Context.html">Context</a></li>
+							<li><a href="ewol__context__CommandLine.html">CommandLine</a></li>
+							<li><a href="ewol__context__ConfigFont.html">ConfigFont</a></li>
+							<li><a href="ewol__context__InputManager.html">InputManager</a></li>
+							<li class="sousmenu"><a href="ewol__context__clipBoard.html">clipBoard</a>
+								<ul class="niveau3">
+							<li><a href="ewol__context__clipBoard.html::clipboardListe">clipboardListe</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__context__cursorDisplay.html">cursorDisplay</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>event</a>
+						<ul class="niveau2">
+							<li><a href="ewol__event__Entry.html">Entry</a></li>
+							<li><a href="ewol__event__EntrySystem.html">EntrySystem</a></li>
+							<li><a href="ewol__event__Input.html">Input</a></li>
+							<li><a href="ewol__event__InputSystem.html">InputSystem</a></li>
+							<li><a href="ewol__event__Time.html">Time</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>key</a>
+						<ul class="niveau2">
+							<li><a href="ewol__key__Special.html">Special</a></li>
+							<li><a href="ewol__key__keyboard.html">keyboard</a></li>
+							<li><a href="ewol__key__status.html">status</a></li>
+							<li><a href="ewol__key__type.html">type</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>object</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Object.html">Object</a></li>
+							<li><a href="ewol__object__Config.html">Config</a></li>
+							<li><a href="ewol__object__ConfigElement.html">ConfigElement</a></li>
+							<li><a href="ewol__object__Manager.html">Manager</a></li>
+							<li><a href="ewol__object__Message.html">Message</a></li>
+							<li class="sousmenu"><a href="ewol__object__MultiCast.html">MultiCast</a>
+								<ul class="niveau3">
+							<li><a href="ewol__object__MultiCast.html::MessageList">MessageList</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>openGL</a>
+						<ul class="niveau2">
+							<li><a href="ewol__openGL__openGlFlags.html">openGlFlags</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>resource</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Resource.html">Resource</a></li>
+							<li><a href="ewol__resource__Colored3DObject.html">Colored3DObject</a></li>
+							<li><a href="ewol__resource__ConfigFile.html">ConfigFile</a></li>
+							<li><a href="ewol__resource__FontBase.html">FontBase</a></li>
+							<li><a href="ewol__resource__FontFreeType.html">FontFreeType</a></li>
+							<li><a href="ewol__resource__Manager.html">Manager</a></li>
+							<li><a href="ewol__resource__Program.html">Program</a></li>
+							<li><a href="ewol__resource__Shader.html">Shader</a></li>
+							<li><a href="ewol__resource__Texture.html">Texture</a></li>
+							<li><a href="ewol__resource__TextureFile.html">TextureFile</a></li>
+							<li><a href="ewol__resource__TexturedFont.html">TexturedFont</a></li>
+							<li><a href="ewol__resource__VirtualBufferObject.html">VirtualBufferObject</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>widget</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Widget.html">Widget</a></li>
+							<li><a href="ewol__widget__Button.html">Button</a></li>
+							<li><a href="ewol__widget__ButtonColor.html">ButtonColor</a></li>
+							<li><a href="ewol__widget__CheckBox.html">CheckBox</a></li>
+							<li><a href="ewol__widget__ColorBar.html">ColorBar</a></li>
+							<li><a href="ewol__widget__ColorChooser.html">ColorChooser</a></li>
+							<li><a href="ewol__widget__Composer.html">Composer</a></li>
+							<li><a href="ewol__widget__Container.html">Container</a></li>
+							<li><a href="ewol__widget__ContainerN.html">ContainerN</a></li>
+							<li><a href="ewol__widget__ContextMenu.html">ContextMenu</a></li>
+							<li><a href="ewol__widget__Entry.html">Entry</a></li>
+							<li><a href="ewol__widget__FileChooser.html">FileChooser</a></li>
+							<li class="sousmenu"><a href="ewol__widget__Gird.html">Gird</a>
+								<ul class="niveau3">
+							<li><a href="ewol__widget__Gird.html::GirdProperties">GirdProperties</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__widget__Image.html">Image</a></li>
+							<li><a href="ewol__widget__Joystick.html">Joystick</a></li>
+							<li><a href="ewol__widget__Label.html">Label</a></li>
+							<li><a href="ewol__widget__Layer.html">Layer</a></li>
+							<li><a href="ewol__widget__List.html">List</a></li>
+							<li><a href="ewol__widget__ListFileSystem.html">ListFileSystem</a></li>
+							<li><a href="ewol__widget__Manager.html">Manager</a></li>
+							<li><a href="ewol__widget__Menu.html">Menu</a></li>
+							<li><a href="ewol__widget__MenuElement.html">MenuElement</a></li>
+							<li><a href="ewol__widget__Parameter.html">Parameter</a></li>
+							<li><a href="ewol__widget__ParameterList.html">ParameterList</a></li>
+							<li><a href="ewol__widget__PopUp.html">PopUp</a></li>
+							<li><a href="ewol__widget__ProgressBar.html">ProgressBar</a></li>
+							<li><a href="ewol__widget__Scroll.html">Scroll</a></li>
+							<li><a href="ewol__widget__Sizer.html">Sizer</a></li>
+							<li><a href="ewol__widget__Slider.html">Slider</a></li>
+							<li><a href="ewol__widget__Spacer.html">Spacer</a></li>
+							<li><a href="ewol__widget__StdPopUp.html">StdPopUp</a></li>
+							<li><a href="ewol__widget__WSlider.html">WSlider</a></li>
+							<li><a href="ewol__widget__WidgetScrooled.html">WidgetScrooled</a></li>
+							<li><a href="ewol__widget__Windows.html">Windows</a></li>
+							<li><a href="ewol__widget__elementPL.html">elementPL</a></li>
+						</ul>
+					</li>
 				<ul>
-				<li><a href="ewol__Area.html">Area</a></li>
-				<li><a href="ewol__Colored3DObject.html">Colored3DObject</a></li>
-				<li><a href="ewol__CommandLine.html">CommandLine</a></li>
-				<li><a href="ewol__Compositing.html">Compositing</a></li>
-				<li><a href="ewol__ConfigFile.html">ConfigFile</a></li>
-				<li><a href="ewol__ConfigFont.html">ConfigFont</a></li>
-				<li><a href="ewol__Dimension.html">Dimension</a></li>
-				<li><a href="ewol__DrawProperty.html">DrawProperty</a></li>
-				<li><a href="ewol__Drawing.html">Drawing</a></li>
-				<li><a href="ewol__EConfig.html">EConfig</a></li>
-				<li><a href="ewol__EConfigElement.html">EConfigElement</a></li>
-				<li><a href="ewol__EMessage.html">EMessage</a></li>
-				<li><a href="ewol__EMultiCast.html">EMultiCast</a></li>
-				<li><a href="ewol__EMultiCast__MessageList.html">EMultiCast::MessageList</a></li>
-				<li><a href="ewol__EObject.html">EObject</a></li>
-				<li><a href="ewol__EObjectManager.html">EObjectManager</a></li>
-				<li><a href="ewol__EventEntry.html">EventEntry</a></li>
-				<li><a href="ewol__EventEntrySystem.html">EventEntrySystem</a></li>
-				<li><a href="ewol__EventExtGen.html">EventExtGen</a></li>
-				<li><a href="ewol__EventInput.html">EventInput</a></li>
-				<li><a href="ewol__EventInputSystem.html">EventInputSystem</a></li>
-				<li><a href="ewol__EventShortCut.html">EventShortCut</a></li>
-				<li><a href="ewol__EventTime.html">EventTime</a></li>
-				<li><a href="ewol__Face.html">Face</a></li>
-				<li><a href="ewol__FaceIndexing.html">FaceIndexing</a></li>
-				<li><a href="ewol__FontBase.html">FontBase</a></li>
-				<li><a href="ewol__FontFreeType.html">FontFreeType</a></li>
-				<li><a href="ewol__Fps.html">Fps</a></li>
-				<li><a href="ewol__GlyphProperty.html">GlyphProperty</a></li>
-				<li><a href="ewol__Image.html">Image</a></li>
-				<li><a href="ewol__Kerning.html">Kerning</a></li>
-				<li><a href="ewol__Light.html">Light</a></li>
-				<li><a href="ewol__Material.html">Material</a></li>
-				<li><a href="ewol__MaterialGlId.html">MaterialGlId</a></li>
-				<li><a href="ewol__Mesh.html">Mesh</a></li>
-				<li><a href="ewol__PhysicsBox.html">PhysicsBox</a></li>
-				<li><a href="ewol__PhysicsCapsule.html">PhysicsCapsule</a></li>
-				<li><a href="ewol__PhysicsCone.html">PhysicsCone</a></li>
-				<li><a href="ewol__PhysicsConvexHull.html">PhysicsConvexHull</a></li>
-				<li><a href="ewol__PhysicsCylinder.html">PhysicsCylinder</a></li>
-				<li><a href="ewol__PhysicsShape.html">PhysicsShape</a></li>
-				<li><a href="ewol__PhysicsSphere.html">PhysicsSphere</a></li>
-				<li><a href="ewol__Program.html">Program</a></li>
-				<li><a href="ewol__Resource.html">Resource</a></li>
-				<li><a href="ewol__ResourceManager.html">ResourceManager</a></li>
-				<li><a href="ewol__Shader.html">Shader</a></li>
-				<li><a href="ewol__Shaper.html">Shaper</a></li>
-				<li><a href="ewol__SimpleConfigElement.html">SimpleConfigElement</a></li>
-				<li><a href="ewol__SpecialKey.html">SpecialKey</a></li>
-				<li><a href="ewol__SpecialKey__SpecialKey__union__.html">SpecialKey::SpecialKey::union ::</a></li>
-				<li><a href="ewol__SpecialKey__union.html">SpecialKey::union </a></li>
-				<li><a href="ewol__Sprite.html">Sprite</a></li>
-				<li><a href="ewol__Text.html">Text</a></li>
-				<li><a href="ewol__TextDecoration.html">TextDecoration</a></li>
-				<li><a href="ewol__Texture.html">Texture</a></li>
-				<li><a href="ewol__TextureFile.html">TextureFile</a></li>
-				<li><a href="ewol__TexturedFont.html">TexturedFont</a></li>
-				<li><a href="ewol__VirtualBufferObject.html">VirtualBufferObject</a></li>
-				<li><a href="ewol__Widget.html">Widget</a></li>
-				<li><a href="ewol__WidgetManager.html">WidgetManager</a></li>
-				<li><a href="ewol__Windows.html">Windows</a></li>
-				<li><a href="ewol__eContext.html">eContext</a></li>
-				<li><a href="ewol__eInput.html">eInput</a></li>
-				<li><a href="ewol__progAttributeElement.html">progAttributeElement</a></li>
-				</ul>
-				<li>widget</li>
-				<ul>
-				<li><a href="widget__Button.html">Button</a></li>
-				<li><a href="widget__ButtonColor.html">ButtonColor</a></li>
-				<li><a href="widget__CheckBox.html">CheckBox</a></li>
-				<li><a href="widget__ColorBar.html">ColorBar</a></li>
-				<li><a href="widget__ColorChooser.html">ColorChooser</a></li>
-				<li><a href="widget__Composer.html">Composer</a></li>
-				<li><a href="widget__Container.html">Container</a></li>
-				<li><a href="widget__ContainerN.html">ContainerN</a></li>
-				<li><a href="widget__ContextMenu.html">ContextMenu</a></li>
-				<li><a href="widget__Entry.html">Entry</a></li>
-				<li><a href="widget__FileChooser.html">FileChooser</a></li>
-				<li><a href="widget__Gird.html">Gird</a></li>
-				<li><a href="widget__Gird__GirdProperties.html">Gird::GirdProperties</a></li>
-				<li><a href="widget__Image.html">Image</a></li>
-				<li><a href="widget__Joystick.html">Joystick</a></li>
-				<li><a href="widget__Label.html">Label</a></li>
-				<li><a href="widget__Layer.html">Layer</a></li>
-				<li><a href="widget__List.html">List</a></li>
-				<li><a href="widget__ListFileSystem.html">ListFileSystem</a></li>
-				<li><a href="widget__Menu.html">Menu</a></li>
-				<li><a href="widget__MenuElement.html">MenuElement</a></li>
-				<li><a href="widget__Mesh.html">Mesh</a></li>
-				<li><a href="widget__Parameter.html">Parameter</a></li>
-				<li><a href="widget__ParameterList.html">ParameterList</a></li>
-				<li><a href="widget__PopUp.html">PopUp</a></li>
-				<li><a href="widget__ProgressBar.html">ProgressBar</a></li>
-				<li><a href="widget__Scroll.html">Scroll</a></li>
-				<li><a href="widget__Sizer.html">Sizer</a></li>
-				<li><a href="widget__Slider.html">Slider</a></li>
-				<li><a href="widget__Spacer.html">Spacer</a></li>
-				<li><a href="widget__StdPopUp.html">StdPopUp</a></li>
-				<li><a href="widget__WSlider.html">WSlider</a></li>
-				<li><a href="widget__WidgetScrooled.html">WidgetScrooled</a></li>
-				<li><a href="widget__elementPL.html">elementPL</a></li>
-				</ul>
-				</ul>
-				<li>ewol</li>
-				<ul>
-				<li><a href="ewol__clipBoard__clipboardListe.html">clipBoard::clipboardListe</a></li>
-				<li><a href="ewol__cursorDisplay.html">cursorDisplay</a></li>
-				<li><a href="ewol__font__mode.html">font::mode</a></li>
-				<li><a href="ewol__gravity.html">gravity</a></li>
-				<li><a href="ewol__keyEvent__keyboard.html">keyEvent::keyboard</a></li>
-				<li><a href="ewol__keyEvent__status.html">keyEvent::status</a></li>
-				<li><a href="ewol__keyEvent__type.html">keyEvent::type</a></li>
-				<li><a href="ewol__openGL__openGlFlags.html">openGL::openGlFlags</a></li>
-				<li><a href="ewol__orientation.html">orientation</a></li>
-				</ul>
+			<h3> </h3>
+		</div>
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1>ewol</h1><br/>TODO : Main page ...<br/><br/>	</div>
+<h1> <div align="center">Ewol library</div> </h1>
+<hr>
+<h2>What is EWOL, and how can I use it?</h2>
+EWOL, or Edn Widget OpenGl Layer, is a multi-platform library for creating graphical user interfaces in OpenGL. Offering a complete set of widgets.<br/>
+<h2>Where can I use it?</h2>
+Everywhere! EWOL is cross-platform devolopped to support bases OS:
+<ul> <li> Linux (X11) (mouse)</li> <li> Windows (mouse)</li> <li> MacOs (mouse)</li> <li> Android (mouse + touch)</li> <li> IOs (in-progress)</li></ul>
+<h2>What languages are supported?</h2>
+EWOL is written in C++ and is not (for now) supported for other languages.<br/>
+<h2>Are there any licensing restrictions?</h2>
+EWOL is <span style="font-weight: bold;">FREE software</span> and <span style="font-style: italic;">all sub-library are FREE and staticly linkable !!!</span><br/>
+That allow you to use it for every program you want, including those developing proprietary software, without any license fees or royalties.<br/>
+[note]The static support is important for some platform like IOs, and this limit the external library use at some license like :
+<ul><li> BSD*</li><li> MIT</li><li> APPACHE</li><li> PNG</li><li> ZLIB</li></ul>This exclude the classical extern library with licence:
+<ul><li> L-GPL</li><li> GPL</li></ul>[/note]<br/>
+<h3> License (DSB) </h3>
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:<br/>
+<ul><li> Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</li><li> Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</li><li> The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.</li></ul>
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.<br/>
+
+<h3> Sub library: </h3>
+<h4> License: </h4>
+<ul><li> <span style="font-weight: bold;"><a href="../etk">e-tk</a></span> : BSD 3 clauses</li><ul><li> <span style="font-weight: bold;"><a href="../linearmath">Linear-Math</a></span> : z-lib (subset of bullet lib)</li><li> <span style="font-weight: bold;"><a href="../earchive">e-Archive</a></span> : BSD 3 clauses</li><ul><li> <span style="font-weight: bold;"><a href="../z">Z lib</a></span> : z-lib</li></ul></ul><li> <span style="font-weight: bold;"><a href="../egami">e-gami</a></span> : BSD 3 clauses</li><ul><li> <span style="font-weight: bold;"><a href="../esvg">e-svg</a></span> : BSD 3 clauses</li><ul><li> <span style="font-weight: bold;"><a href="../agg">AGG</a></span> : BSD-like</li></ul><li> <span style="font-weight: bold;"><a href="../png">libPNG</a></span> : PNG</li></ul><li> <span style="font-weight: bold;"><a href="../portaudio">portaudio</a></span> : MIT</li><li> <span style="font-weight: bold;"><a href="../ogg">ogg</a></span> : BSD-like</li><li> <span style="font-weight: bold;"><a href="../freetype">Free-Type</a></span> : BSD-like</li><li> <span style="font-weight: bold;"><a href="../ejson">e-json</a></span> : BSD 3 clauses</li><li> <span style="font-weight: bold;"><a href="../exml">e-xml</a></span> : BSD 3 clauses</li></ul><br/>
+<h3> Description : </h3>
+<h4> Internal: </h4>
+<ul><li> <span style="font-weight: bold;"><a href="../etk">e-tk</a></span> : Generic toolkit to acces on file, standardize acces on string (for Android and MacOs) ...</li><li> <span style="font-weight: bold;"><a href="../earchive">e-Archive</a></span> : Generic access to a zip file (used to access on file on Android)</li><li> <span style="font-weight: bold;"><a href="../eggami">e-gami</a></span> : generic image accessor for PNG, svg and bmp image (might add some other type ...)</li><li> <span style="font-weight: bold;"><a href="../esvg">e-svg</a></span> : Generic SVG image parser and displayer</li><li> <span style="font-weight: bold;"><a href="../ejson">e-json</a></span> : JSON file access (read and write)</li><li> <span style="font-weight: bold;"><a href="../exml">e-xml</a></span> : XML file access (read and write)</li><li> <span style="font-weight: bold;"><a href="../ege">e-ge</a></span> : (library in BSDv3) Ewol Game engine is a wrapper on the the bullet physical engine and ewol renderer engin. this is in developpement for now (the simple objective is to produce game to make profitable all my work)</li></ul>
+<h4> External: </h4>
+<ul><li> <span style="font-weight: bold;"><a href="../linearmath">Linear-Math</a></span> : bullet mathamatical sub lib (for using same vec3).</li><li> <span style="font-weight: bold;"><a href="../z">Z lib</a></span> : Clkassical zlib lib.</li><li> <span style="font-weight: bold;"><a href="../agg">AGG</a></span> : A c++ drawing lib.</li><li> <span style="font-weight: bold;"><a href="../png">libPNG</a></span> : the classical png display lib.</li><li> <span style="font-weight: bold;"><a href="../portaudio">portaudio</a></span> : The classical audio wrapper lib.</li><li> <span style="font-weight: bold;"><a href="../ogg">ogg</a></span> : The classical Ogg coder reader lib.</li><li> <span style="font-weight: bold;"><a href="../freetype">Free-Type</a></span> : The classicle true-type reader lib.</li><li> <span style="font-weight: bold;"><a href="../bullet">bullet</a></span> : the classical bullet library physical engine. (dependence by ege)</li></ul>
+<h4> Program Using EWOL </h4>
+<ul><li> <span style="font-weight: bold;"><a href="../edn">edn</a></span> : (Application in GPLv3) Edn is the main application using this lib and designed for (in the first time). This is a "Code editor".</li></ul>
+<h1> Main documentation: </h1><br/>
+<a href="001_bases.html">Global Documantation</a><br/>
+<a href="tutorial_000_Build.html">Tutorials</a>
+	</div>
 </body>
 </html>

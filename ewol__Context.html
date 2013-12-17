@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1>ewol Library</h1>
+			<div id="menu">
+				<h2>ewol</h2>
+				<ul class="niveau1">
+					<li class="sousmenu"><a>compositing</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Compositing.html">Compositing</a></li>
+							<li><a href="ewol__compositing__Area.html">Area</a></li>
+							<li><a href="ewol__compositing__Drawing.html">Drawing</a></li>
+							<li><a href="ewol__compositing__Image.html">Image</a></li>
+							<li><a href="ewol__compositing__Shaper.html">Shaper</a></li>
+							<li><a href="ewol__compositing__Sprite.html">Sprite</a></li>
+							<li><a href="ewol__compositing__Text.html">Text</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>context</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Context.html">Context</a></li>
+							<li><a href="ewol__context__CommandLine.html">CommandLine</a></li>
+							<li><a href="ewol__context__ConfigFont.html">ConfigFont</a></li>
+							<li><a href="ewol__context__InputManager.html">InputManager</a></li>
+							<li class="sousmenu"><a href="ewol__context__clipBoard.html">clipBoard</a>
+								<ul class="niveau3">
+							<li><a href="ewol__context__clipBoard.html::clipboardListe">clipboardListe</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__context__cursorDisplay.html">cursorDisplay</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>event</a>
+						<ul class="niveau2">
+							<li><a href="ewol__event__Entry.html">Entry</a></li>
+							<li><a href="ewol__event__EntrySystem.html">EntrySystem</a></li>
+							<li><a href="ewol__event__Input.html">Input</a></li>
+							<li><a href="ewol__event__InputSystem.html">InputSystem</a></li>
+							<li><a href="ewol__event__Time.html">Time</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>key</a>
+						<ul class="niveau2">
+							<li><a href="ewol__key__Special.html">Special</a></li>
+							<li><a href="ewol__key__keyboard.html">keyboard</a></li>
+							<li><a href="ewol__key__status.html">status</a></li>
+							<li><a href="ewol__key__type.html">type</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>object</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Object.html">Object</a></li>
+							<li><a href="ewol__object__Config.html">Config</a></li>
+							<li><a href="ewol__object__ConfigElement.html">ConfigElement</a></li>
+							<li><a href="ewol__object__Manager.html">Manager</a></li>
+							<li><a href="ewol__object__Message.html">Message</a></li>
+							<li class="sousmenu"><a href="ewol__object__MultiCast.html">MultiCast</a>
+								<ul class="niveau3">
+							<li><a href="ewol__object__MultiCast.html::MessageList">MessageList</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>openGL</a>
+						<ul class="niveau2">
+							<li><a href="ewol__openGL__openGlFlags.html">openGlFlags</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>resource</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Resource.html">Resource</a></li>
+							<li><a href="ewol__resource__Colored3DObject.html">Colored3DObject</a></li>
+							<li><a href="ewol__resource__ConfigFile.html">ConfigFile</a></li>
+							<li><a href="ewol__resource__FontBase.html">FontBase</a></li>
+							<li><a href="ewol__resource__FontFreeType.html">FontFreeType</a></li>
+							<li><a href="ewol__resource__Manager.html">Manager</a></li>
+							<li><a href="ewol__resource__Program.html">Program</a></li>
+							<li><a href="ewol__resource__Shader.html">Shader</a></li>
+							<li><a href="ewol__resource__Texture.html">Texture</a></li>
+							<li><a href="ewol__resource__TextureFile.html">TextureFile</a></li>
+							<li><a href="ewol__resource__TexturedFont.html">TexturedFont</a></li>
+							<li><a href="ewol__resource__VirtualBufferObject.html">VirtualBufferObject</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>widget</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Widget.html">Widget</a></li>
+							<li><a href="ewol__widget__Button.html">Button</a></li>
+							<li><a href="ewol__widget__ButtonColor.html">ButtonColor</a></li>
+							<li><a href="ewol__widget__CheckBox.html">CheckBox</a></li>
+							<li><a href="ewol__widget__ColorBar.html">ColorBar</a></li>
+							<li><a href="ewol__widget__ColorChooser.html">ColorChooser</a></li>
+							<li><a href="ewol__widget__Composer.html">Composer</a></li>
+							<li><a href="ewol__widget__Container.html">Container</a></li>
+							<li><a href="ewol__widget__ContainerN.html">ContainerN</a></li>
+							<li><a href="ewol__widget__ContextMenu.html">ContextMenu</a></li>
+							<li><a href="ewol__widget__Entry.html">Entry</a></li>
+							<li><a href="ewol__widget__FileChooser.html">FileChooser</a></li>
+							<li class="sousmenu"><a href="ewol__widget__Gird.html">Gird</a>
+								<ul class="niveau3">
+							<li><a href="ewol__widget__Gird.html::GirdProperties">GirdProperties</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__widget__Image.html">Image</a></li>
+							<li><a href="ewol__widget__Joystick.html">Joystick</a></li>
+							<li><a href="ewol__widget__Label.html">Label</a></li>
+							<li><a href="ewol__widget__Layer.html">Layer</a></li>
+							<li><a href="ewol__widget__List.html">List</a></li>
+							<li><a href="ewol__widget__ListFileSystem.html">ListFileSystem</a></li>
+							<li><a href="ewol__widget__Manager.html">Manager</a></li>
+							<li><a href="ewol__widget__Menu.html">Menu</a></li>
+							<li><a href="ewol__widget__MenuElement.html">MenuElement</a></li>
+							<li><a href="ewol__widget__Parameter.html">Parameter</a></li>
+							<li><a href="ewol__widget__ParameterList.html">ParameterList</a></li>
+							<li><a href="ewol__widget__PopUp.html">PopUp</a></li>
+							<li><a href="ewol__widget__ProgressBar.html">ProgressBar</a></li>
+							<li><a href="ewol__widget__Scroll.html">Scroll</a></li>
+							<li><a href="ewol__widget__Sizer.html">Sizer</a></li>
+							<li><a href="ewol__widget__Slider.html">Slider</a></li>
+							<li><a href="ewol__widget__Spacer.html">Spacer</a></li>
+							<li><a href="ewol__widget__StdPopUp.html">StdPopUp</a></li>
+							<li><a href="ewol__widget__WSlider.html">WSlider</a></li>
+							<li><a href="ewol__widget__WidgetScrooled.html">WidgetScrooled</a></li>
+							<li><a href="ewol__widget__Windows.html">Windows</a></li>
+							<li><a href="ewol__widget__elementPL.html">elementPL</a></li>
+						</ul>
+					</li>
+				<ul>
+			<h3> </h3>
+		</div>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>Class: ewol::Context</h1>
+<br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                                <a class="code-function" href="#Context">Context</a>                    (<span class="code-type">int32_t</span> <span class="code-argument">_argc</span>,<br/>                                                             <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);<br>+                               ~<a class="code-function" href="#Context">Context</a>                    (<span class="code-type">void</span>);<br></pre>
+<h2>Synopsis:</h2>
+<pre>
++  <a href="ewol__context__CommandLine.html" class="code-type">ewol::context::CommandLine</a> &  <a class="code-function" href="#getCmd">getCmd</a>                     (<span class="code-type">void</span>);<br>+  <a href="ewol__context__ConfigFont.html" class="code-type">ewol::context::ConfigFont</a> &   <a class="code-function" href="#getFontDefault">getFontDefault</a>             (<span class="code-type">void</span>);<br>+  <a href="ewol__widget__Manager.html" class="code-type">ewol::widget::Manager</a> &       <a class="code-function" href="#getWidgetManager">getWidgetManager</a>           (<span class="code-type">void</span>);<br>+  <a href="ewol__object__Manager.html" class="code-type">ewol::object::Manager</a> &       <a class="code-function" href="#getEObjectManager">getEObjectManager</a>          (<span class="code-type">void</span>);<br>+  <a href="ewol__resource__Manager.html" class="code-type">ewol::resource::Manager</a> &     <a class="code-function" href="#getResourcesManager">getResourcesManager</a>        (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setArchiveDir">setArchiveDir</a>              (<span class="code-type">int</span> <span class="code-argument">_mode</span>,<br/>                                                             <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_str</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetInputMotion">OS_SetInputMotion</a>          (<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,<br/>                                                             <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetInputState">OS_SetInputState</a>           (<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,<br/>                                                             <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetMouseMotion">OS_SetMouseMotion</a>          (<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,<br/>                                                             <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetMouseState">OS_SetMouseState</a>           (<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,<br/>                                                             <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetKeyboard">OS_SetKeyboard</a>             (<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                             <span class="code-type">char32_t</span> <span class="code-argument">_myChar</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isARepeateKey</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_SetKeyboardMove">OS_SetKeyboardMove</a>         (<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                             <span class="code-storage-keyword">enum</span> <a href="ewol__key__keyboard.html" class="code-type">ewol::key::keyboard</a> <span class="code-argument">_move</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,<br/>                                                             <span class="code-type">bool</span> <span class="code-argument">_isARepeateKey</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Suspend">OS_Suspend</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Resume">OS_Resume</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#requestUpdateSize">requestUpdateSize</a>          (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                          <a class="code-function" href="#OS_Draw">OS_Draw</a>                    (<span class="code-type">bool</span> <span class="code-argument">_displayEveryTime</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#onObjectRemove">onObjectRemove</a>             (<a href="ewol__Object.html" class="code-type">ewol::Object</a> * <span class="code-argument">_removeObject</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#resetIOEvent">resetIOEvent</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_OpenGlContextDestroy">OS_OpenGlContextDestroy</a>    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Stop">OS_Stop</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#stop">stop</a>                       (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setWindows">setWindows</a>                 (<a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> * <span class="code-argument">_windows</span>);<br>+  <a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> *       <a class="code-function" href="#getWindows">getWindows</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> vec2 &                  <a class="code-function" href="#getSize">getSize</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Resize">OS_Resize</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setSize">setSize</a>                    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Move">OS_Move</a>                    (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setPos">setPos</a>                     (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Hide">OS_Hide</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#hide">hide</a>                       (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_Show">OS_Show</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#show">show</a>                       (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#forceRedrawAll">forceRedrawAll</a>             (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#inputEventTransfertWidget">inputEventTransfertWidget</a>  (<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_source</span>,<br/>                                                             <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_destination</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#inputEventGrabPointer">inputEventGrabPointer</a>      (<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_widget</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#inputEventUnGrabPointer">inputEventUnGrabPointer</a>    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#keyboardShow">keyboardShow</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#keyboardHide">keyboardHide</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#clipBoardGet">clipBoardGet</a>               (<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#clipBoardSet">clipBoardSet</a>               (<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#OS_ClipBoardArrive">OS_ClipBoardArrive</a>         (<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setTitle">setTitle</a>                   (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_title</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#forceOrientation">forceOrientation</a>           (<span class="code-storage-keyword">enum</span> <a href="ewol__orientation.html" class="code-type">ewol::orientation</a> <span class="code-argument">_orientation</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#grabPointerEvents">grabPointerEvents</a>          (<span class="code-type">bool</span> <span class="code-argument">_isGrabbed</span>,<br/>                                                             <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_forcedPosition</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setCursor">setCursor</a>                  (<span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setIcon">setIcon</a>                    (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_inputFile</span>);<br>+  <span class="code-storage-keyword">static</span> <span class="code-type">int64_t</span>                <a class="code-function" href="#getTime">getTime</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">static</span> <span class="code-type">int</span>                    <a class="code-function" href="#main">main</a>                       (<span class="code-type">int</span> <span class="code-argument">_argc</span>,<br/>                                                             <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);<br>#  <span class="code-type">void</span>                          <a class="code-function" href="#lockContext">lockContext</a>                (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                          <a class="code-function" href="#unLockContext">unLockContext</a>              (<span class="code-type">void</span>);<br>-  <span class="code-type">void</span>                          <a class="code-function" href="#processEvents">processEvents</a>              (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Detail:<h2>
+<h3><a id="getCmd">getCmd</a> ()</h3>
+
+<pre>
+<a href="ewol__context__CommandLine.html" class="code-type">ewol::context::CommandLine</a> & <span class="code-function">getCmd</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getFontDefault">getFontDefault</a> ()</h3>
+
+<pre>
+<a href="ewol__context__ConfigFont.html" class="code-type">ewol::context::ConfigFont</a> & <span class="code-function">getFontDefault</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getWidgetManager">getWidgetManager</a> ()</h3>
+
+<pre>
+<a href="ewol__widget__Manager.html" class="code-type">ewol::widget::Manager</a> & <span class="code-function">getWidgetManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getEObjectManager">getEObjectManager</a> ()</h3>
+
+<pre>
+<a href="ewol__object__Manager.html" class="code-type">ewol::object::Manager</a> & <span class="code-function">getEObjectManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="getResourcesManager">getResourcesManager</a> ()</h3>
+
+<pre>
+<a href="ewol__resource__Manager.html" class="code-type">ewol::resource::Manager</a> & <span class="code-function">getResourcesManager</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="Context">Context</a> ()</h3>
+
+<pre>
+<span class="code-function">Context</span>(<span class="code-type">int32_t</span> <span class="code-argument">_argc</span>,
+        <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::~<a id="Context">Context</a> ()</h3>
+
+<pre>
+~<span class="code-function">Context</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setArchiveDir">setArchiveDir</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setArchiveDir</span>(<span class="code-type">int</span> <span class="code-argument">_mode</span>,
+                   <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_str</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetInputMotion">OS_SetInputMotion</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetInputMotion</span>(<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,
+                       <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetInputState">OS_SetInputState</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetInputState</span>(<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,
+                      <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,
+                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetMouseMotion">OS_SetMouseMotion</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetMouseMotion</span>(<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,
+                       <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetMouseState">OS_SetMouseState</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetMouseState</span>(<span class="code-type">int</span> <span class="code-argument">_pointerID</span>,
+                      <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,
+                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetKeyboard">OS_SetKeyboard</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetKeyboard</span>(<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,
+                    <span class="code-type">char32_t</span> <span class="code-argument">_myChar</span>,
+                    <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,
+                    <span class="code-type">bool</span> <span class="code-argument">_isARepeateKey</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_SetKeyboardMove">OS_SetKeyboardMove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_SetKeyboardMove</span>(<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,
+                        <span class="code-storage-keyword">enum</span> <a href="ewol__key__keyboard.html" class="code-type">ewol::key::keyboard</a> <span class="code-argument">_move</span>,
+                        <span class="code-type">bool</span> <span class="code-argument">_isDown</span>,
+                        <span class="code-type">bool</span> <span class="code-argument">_isARepeateKey</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_Suspend">OS_Suspend</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Suspend</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The current context is suspended
+<br/><br/>
+
+<hr/>
+<h3><a id="OS_Resume">OS_Resume</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Resume</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The current context is resumed
+<br/><br/>
+
+<hr/>
+<h3><a id="requestUpdateSize">requestUpdateSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">requestUpdateSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="OS_Draw">OS_Draw</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">OS_Draw</span>(<span class="code-type">bool</span> <span class="code-argument">_displayEveryTime</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="onObjectRemove">onObjectRemove</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__Object.html" class="code-type">ewol::Object</a> * <span class="code-argument">_removeObject</span>);</pre>
+<br/>
+Inform object that an other object is removed ...
+<br/><b>Notes:</b> : Sub classes must call this class
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">removeObject</span>  Pointer on the EObject removed  == > the user must remove all reference on this EObject
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="resetIOEvent">resetIOEvent</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">resetIOEvent</span>(<span class="code-type">void</span>);</pre>
+<br/>
+reset event management for the IO like Input ou Mouse or keyborad
+<br/><br/>
+
+<hr/>
+<h3><a id="OS_OpenGlContextDestroy">OS_OpenGlContextDestroy</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_OpenGlContextDestroy</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The OS inform that the openGL constext has been destroy  == > use to automaticly reload the texture and other thinks ...
+<br/><br/>
+
+<hr/>
+<h3><a id="OS_Stop">OS_Stop</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Stop</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The OS Inform that the Window has been killed
+<br/><br/>
+
+<hr/>
+<h3><a id="stop">stop</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">stop</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The application request that the Window will be killed
+<br/><br/>
+
+<hr/>
+<h3><a id="setWindows">setWindows</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setWindows</span>(<a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> * <span class="code-argument">_windows</span>);</pre>
+<br/>
+set the current windows to display :
+<br/><ul>
+<b>Parameter:</b> <span class="code-argument">_windows</span>  Windows that might be displayed
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getWindows">getWindows</a> ()</h3>
+
+<pre>
+<a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> * <span class="code-function">getWindows</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current windows that is displayed
+<br/><ul>
+<b>Return:</b> the current handle on the windows (can be null)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="getSize">getSize</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> vec2 & <span class="code-function">getSize</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current windows size
+<br/><ul>
+<b>Return:</b> the current size ...
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="OS_Resize">OS_Resize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Resize</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);</pre>
+<br/>
+The OS inform that the current windows has change his size.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_size</span>  new size of the windows.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setSize">setSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setSize</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);</pre>
+<br/>
+The application request a change of his curent size.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_size</span>  new Requested size of the windows.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="OS_Move">OS_Move</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Move</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+The OS inform that the current windows has change his position.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  New position of the Windows.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPos">setPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPos</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+The Application request that the current windows will change his position.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  New position of the Windows requested.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="OS_Hide">OS_Hide</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Hide</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The OS inform that the Windows is now Hidden.
+<br/><br/>
+
+<hr/>
+<h3><a id="hide">hide</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">hide</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The Application request that the Windows will be Hidden.
+<br/><br/>
+
+<hr/>
+<h3><a id="OS_Show">OS_Show</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_Show</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The OS inform that the Windows is now visible.
+<br/><br/>
+
+<hr/>
+<h3><a id="show">show</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">show</span>(<span class="code-type">void</span>);</pre>
+<br/>
+The Application request that the Windows will be visible.
+<br/><br/>
+
+<hr/>
+<h3><a id="forceRedrawAll">forceRedrawAll</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">forceRedrawAll</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Redraw all the windows
+<br/><br/>
+
+<hr/>
+<h3><a id="inputEventTransfertWidget">inputEventTransfertWidget</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">inputEventTransfertWidget</span>(<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_source</span>,
+                               <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_destination</span>);</pre>
+<br/>
+This is to transfert the event from one widget to another one
+<br/><ul>
+<b>Parameter:</b> <span class="code-argument">source</span>  the widget where the event came from
+<br/><b>Parameter:</b> <span class="code-argument">destination</span>  the widget where the event mitgh be generated now
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="inputEventGrabPointer">inputEventGrabPointer</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">inputEventGrabPointer</span>(<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_widget</span>);</pre>
+<br/>
+This fonction lock the pointer properties to move in relative instead of absolute
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">widget</span>  The widget that lock the pointer events
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="inputEventUnGrabPointer">inputEventUnGrabPointer</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">inputEventUnGrabPointer</span>(<span class="code-type">void</span>);</pre>
+<br/>
+This fonction un-lock the pointer properties to move in relative instead of absolute
+<br/><br/>
+
+<hr/>
+<h3><a id="keyboardShow">keyboardShow</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">keyboardShow</span>(<span class="code-type">void</span>);</pre>
+<br/>
+display the virtal keyboard (for touch system only)
+<br/><br/>
+
+<hr/>
+<h3><a id="keyboardHide">keyboardHide</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">keyboardHide</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Hide the virtal keyboard (for touch system only)
+<br/><br/>
+
+<hr/>
+<h3><a id="clipBoardGet">clipBoardGet</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">clipBoardGet</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);</pre>
+<br/>
+Inform the Gui that we want to have a copy of the clipboard
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_clipboardID</span>  ID of the clipboard (STD/SELECTION) only apear here
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="clipBoardSet">clipBoardSet</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">clipBoardSet</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);</pre>
+<br/>
+Inform the Gui that we are the new owner of the clipboard
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_clipboardID</span>  ID of the clipboard (STD/SELECTION) only apear here
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="OS_ClipBoardArrive">OS_ClipBoardArrive</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">OS_ClipBoardArrive</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);</pre>
+<br/>
+Call by the OS when a clipboard arrive to US (previously requested by a widget)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">Id</span>  of the clipboard
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setTitle">setTitle</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTitle</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_title</span>);</pre>
+<br/>
+set the new title of the windows
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">title</span>  New desired title
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="forceOrientation">forceOrientation</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">forceOrientation</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__orientation.html" class="code-type">ewol::orientation</a> <span class="code-argument">_orientation</span>);</pre>
+<br/>
+force the screen orientation (availlable on portable elements ...
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_orientation</span>  Selected orientation.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="grabPointerEvents">grabPointerEvents</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">grabPointerEvents</span>(<span class="code-type">bool</span> <span class="code-argument">_isGrabbed</span>,
+                       <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_forcedPosition</span>);</pre>
+<br/>
+get all the event from the X system
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_isGrabbed</span>  "true" if all the event will be get, false if we want only ours.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_forcedPosition</span>  the position where the mouse might be reset at  every events ...
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setCursor">setCursor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setCursor</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);</pre>
+<br/>
+set the cursor display type.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newCursor</span>  selected new cursor.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setIcon">setIcon</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setIcon</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_inputFile</span>);</pre>
+<br/>
+set the Icon of the program
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_inputFile</span>  new filename icon of the curent program.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="getTime">getTime</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">int64_t</span> <span class="code-function">getTime</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the curent time in micro-second
+<br/><b>Notes:</b> : must be implemented in all system OS implementation
+<br/> <ul>
+<b>Return:</b> The curent time of the process
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::<a id="main">main</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">static</span> <span class="code-type">int</span> <span class="code-function">main</span>(<span class="code-type">int</span> <span class="code-argument">_argc</span>,
+                <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_argv</span>);</pre>
+<br/>
+This is the only one things the User might done in his main();
+<br/><b>Notes:</b> : must be implemented in all system OPS implementation
+<br/> <b>Notes:</b> To answare you before you ask the question, this is really simple:
+      Due to the fect that the current system is multiple-platform, you "main"
+      Does not exist in the android platform, then ewol call other start 
+      and stop function, to permit to have only one code
+<br/> <b>Notes:</b> The main can not be in the ewol, due to the fact thet is an librairy
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_argc</span>  Standard argc
+<br/><b>Parameter [input]:</b> <span class="code-argument">_argv</span>  Standard argv
+<br/><b>Return:</b> normal error int for the application error management
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="lockContext">lockContext</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">lockContext</span>(<span class="code-type">void</span>);</pre>
+<br/>
+set the curent interface.
+<br/><b>Notes:</b> this lock the main mutex
+<br/> <br/>
+
+<hr/>
+<h3><a id="unLockContext">unLockContext</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">unLockContext</span>(<span class="code-type">void</span>);</pre>
+<br/>
+set the curent interface at NULL.
+<br/><b>Notes:</b> this un-lock the main mutex
+<br/> <br/>
+
+<hr/>
+<h3><a id="processEvents">processEvents</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">processEvents</span>(<span class="code-type">void</span>);</pre>
+<br/>
+Processing all the event arrived ... (commoly called in draw function)
+<br/><br/>
+
+<hr/>
+	</div>
+</body>
+</html>

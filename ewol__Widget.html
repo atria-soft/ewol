@@ -4,160 +4,171 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>ewol Library</title>
 	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
 </head>
 <body>
 	<div class="navbar navbar-fixed-top">
 		<div class="container">
 			<h1>ewol Library</h1>
-				<li><a href="eSystemMessage.html">eSystemMessage</a></li>
-				<li>ewol</li>
+			<div id="menu">
+				<h2>ewol</h2>
+				<ul class="niveau1">
+					<li class="sousmenu"><a>compositing</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Compositing.html">Compositing</a></li>
+							<li><a href="ewol__compositing__Area.html">Area</a></li>
+							<li><a href="ewol__compositing__Drawing.html">Drawing</a></li>
+							<li><a href="ewol__compositing__Image.html">Image</a></li>
+							<li><a href="ewol__compositing__Shaper.html">Shaper</a></li>
+							<li><a href="ewol__compositing__Sprite.html">Sprite</a></li>
+							<li><a href="ewol__compositing__Text.html">Text</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>context</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Context.html">Context</a></li>
+							<li><a href="ewol__context__CommandLine.html">CommandLine</a></li>
+							<li><a href="ewol__context__ConfigFont.html">ConfigFont</a></li>
+							<li><a href="ewol__context__InputManager.html">InputManager</a></li>
+							<li class="sousmenu"><a href="ewol__context__clipBoard.html">clipBoard</a>
+								<ul class="niveau3">
+							<li><a href="ewol__context__clipBoard.html::clipboardListe">clipboardListe</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__context__cursorDisplay.html">cursorDisplay</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>event</a>
+						<ul class="niveau2">
+							<li><a href="ewol__event__Entry.html">Entry</a></li>
+							<li><a href="ewol__event__EntrySystem.html">EntrySystem</a></li>
+							<li><a href="ewol__event__Input.html">Input</a></li>
+							<li><a href="ewol__event__InputSystem.html">InputSystem</a></li>
+							<li><a href="ewol__event__Time.html">Time</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>key</a>
+						<ul class="niveau2">
+							<li><a href="ewol__key__Special.html">Special</a></li>
+							<li><a href="ewol__key__keyboard.html">keyboard</a></li>
+							<li><a href="ewol__key__status.html">status</a></li>
+							<li><a href="ewol__key__type.html">type</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>object</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Object.html">Object</a></li>
+							<li><a href="ewol__object__Config.html">Config</a></li>
+							<li><a href="ewol__object__ConfigElement.html">ConfigElement</a></li>
+							<li><a href="ewol__object__Manager.html">Manager</a></li>
+							<li><a href="ewol__object__Message.html">Message</a></li>
+							<li class="sousmenu"><a href="ewol__object__MultiCast.html">MultiCast</a>
+								<ul class="niveau3">
+							<li><a href="ewol__object__MultiCast.html::MessageList">MessageList</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>openGL</a>
+						<ul class="niveau2">
+							<li><a href="ewol__openGL__openGlFlags.html">openGlFlags</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>resource</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Resource.html">Resource</a></li>
+							<li><a href="ewol__resource__Colored3DObject.html">Colored3DObject</a></li>
+							<li><a href="ewol__resource__ConfigFile.html">ConfigFile</a></li>
+							<li><a href="ewol__resource__FontBase.html">FontBase</a></li>
+							<li><a href="ewol__resource__FontFreeType.html">FontFreeType</a></li>
+							<li><a href="ewol__resource__Manager.html">Manager</a></li>
+							<li><a href="ewol__resource__Program.html">Program</a></li>
+							<li><a href="ewol__resource__Shader.html">Shader</a></li>
+							<li><a href="ewol__resource__Texture.html">Texture</a></li>
+							<li><a href="ewol__resource__TextureFile.html">TextureFile</a></li>
+							<li><a href="ewol__resource__TexturedFont.html">TexturedFont</a></li>
+							<li><a href="ewol__resource__VirtualBufferObject.html">VirtualBufferObject</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>widget</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Widget.html">Widget</a></li>
+							<li><a href="ewol__widget__Button.html">Button</a></li>
+							<li><a href="ewol__widget__ButtonColor.html">ButtonColor</a></li>
+							<li><a href="ewol__widget__CheckBox.html">CheckBox</a></li>
+							<li><a href="ewol__widget__ColorBar.html">ColorBar</a></li>
+							<li><a href="ewol__widget__ColorChooser.html">ColorChooser</a></li>
+							<li><a href="ewol__widget__Composer.html">Composer</a></li>
+							<li><a href="ewol__widget__Container.html">Container</a></li>
+							<li><a href="ewol__widget__ContainerN.html">ContainerN</a></li>
+							<li><a href="ewol__widget__ContextMenu.html">ContextMenu</a></li>
+							<li><a href="ewol__widget__Entry.html">Entry</a></li>
+							<li><a href="ewol__widget__FileChooser.html">FileChooser</a></li>
+							<li class="sousmenu"><a href="ewol__widget__Gird.html">Gird</a>
+								<ul class="niveau3">
+							<li><a href="ewol__widget__Gird.html::GirdProperties">GirdProperties</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__widget__Image.html">Image</a></li>
+							<li><a href="ewol__widget__Joystick.html">Joystick</a></li>
+							<li><a href="ewol__widget__Label.html">Label</a></li>
+							<li><a href="ewol__widget__Layer.html">Layer</a></li>
+							<li><a href="ewol__widget__List.html">List</a></li>
+							<li><a href="ewol__widget__ListFileSystem.html">ListFileSystem</a></li>
+							<li><a href="ewol__widget__Manager.html">Manager</a></li>
+							<li><a href="ewol__widget__Menu.html">Menu</a></li>
+							<li><a href="ewol__widget__MenuElement.html">MenuElement</a></li>
+							<li><a href="ewol__widget__Parameter.html">Parameter</a></li>
+							<li><a href="ewol__widget__ParameterList.html">ParameterList</a></li>
+							<li><a href="ewol__widget__PopUp.html">PopUp</a></li>
+							<li><a href="ewol__widget__ProgressBar.html">ProgressBar</a></li>
+							<li><a href="ewol__widget__Scroll.html">Scroll</a></li>
+							<li><a href="ewol__widget__Sizer.html">Sizer</a></li>
+							<li><a href="ewol__widget__Slider.html">Slider</a></li>
+							<li><a href="ewol__widget__Spacer.html">Spacer</a></li>
+							<li><a href="ewol__widget__StdPopUp.html">StdPopUp</a></li>
+							<li><a href="ewol__widget__WSlider.html">WSlider</a></li>
+							<li><a href="ewol__widget__WidgetScrooled.html">WidgetScrooled</a></li>
+							<li><a href="ewol__widget__Windows.html">Windows</a></li>
+							<li><a href="ewol__widget__elementPL.html">elementPL</a></li>
+						</ul>
+					</li>
 				<ul>
-				<li><a href="ewol__Area.html">Area</a></li>
-				<li><a href="ewol__Colored3DObject.html">Colored3DObject</a></li>
-				<li><a href="ewol__CommandLine.html">CommandLine</a></li>
-				<li><a href="ewol__Compositing.html">Compositing</a></li>
-				<li><a href="ewol__ConfigFile.html">ConfigFile</a></li>
-				<li><a href="ewol__ConfigFont.html">ConfigFont</a></li>
-				<li><a href="ewol__Dimension.html">Dimension</a></li>
-				<li><a href="ewol__DrawProperty.html">DrawProperty</a></li>
-				<li><a href="ewol__Drawing.html">Drawing</a></li>
-				<li><a href="ewol__EConfig.html">EConfig</a></li>
-				<li><a href="ewol__EConfigElement.html">EConfigElement</a></li>
-				<li><a href="ewol__EMessage.html">EMessage</a></li>
-				<li><a href="ewol__EMultiCast.html">EMultiCast</a></li>
-				<li><a href="ewol__EMultiCast__MessageList.html">EMultiCast::MessageList</a></li>
-				<li><a href="ewol__EObject.html">EObject</a></li>
-				<li><a href="ewol__EObjectManager.html">EObjectManager</a></li>
-				<li><a href="ewol__EventEntry.html">EventEntry</a></li>
-				<li><a href="ewol__EventEntrySystem.html">EventEntrySystem</a></li>
-				<li><a href="ewol__EventExtGen.html">EventExtGen</a></li>
-				<li><a href="ewol__EventInput.html">EventInput</a></li>
-				<li><a href="ewol__EventInputSystem.html">EventInputSystem</a></li>
-				<li><a href="ewol__EventShortCut.html">EventShortCut</a></li>
-				<li><a href="ewol__EventTime.html">EventTime</a></li>
-				<li><a href="ewol__Face.html">Face</a></li>
-				<li><a href="ewol__FaceIndexing.html">FaceIndexing</a></li>
-				<li><a href="ewol__FontBase.html">FontBase</a></li>
-				<li><a href="ewol__FontFreeType.html">FontFreeType</a></li>
-				<li><a href="ewol__Fps.html">Fps</a></li>
-				<li><a href="ewol__GlyphProperty.html">GlyphProperty</a></li>
-				<li><a href="ewol__Image.html">Image</a></li>
-				<li><a href="ewol__Kerning.html">Kerning</a></li>
-				<li><a href="ewol__Light.html">Light</a></li>
-				<li><a href="ewol__Material.html">Material</a></li>
-				<li><a href="ewol__MaterialGlId.html">MaterialGlId</a></li>
-				<li><a href="ewol__Mesh.html">Mesh</a></li>
-				<li><a href="ewol__PhysicsBox.html">PhysicsBox</a></li>
-				<li><a href="ewol__PhysicsCapsule.html">PhysicsCapsule</a></li>
-				<li><a href="ewol__PhysicsCone.html">PhysicsCone</a></li>
-				<li><a href="ewol__PhysicsConvexHull.html">PhysicsConvexHull</a></li>
-				<li><a href="ewol__PhysicsCylinder.html">PhysicsCylinder</a></li>
-				<li><a href="ewol__PhysicsShape.html">PhysicsShape</a></li>
-				<li><a href="ewol__PhysicsSphere.html">PhysicsSphere</a></li>
-				<li><a href="ewol__Program.html">Program</a></li>
-				<li><a href="ewol__Resource.html">Resource</a></li>
-				<li><a href="ewol__ResourceManager.html">ResourceManager</a></li>
-				<li><a href="ewol__Shader.html">Shader</a></li>
-				<li><a href="ewol__Shaper.html">Shaper</a></li>
-				<li><a href="ewol__SimpleConfigElement.html">SimpleConfigElement</a></li>
-				<li><a href="ewol__SpecialKey.html">SpecialKey</a></li>
-				<li><a href="ewol__SpecialKey__SpecialKey__union__.html">SpecialKey::SpecialKey::union ::</a></li>
-				<li><a href="ewol__SpecialKey__union.html">SpecialKey::union </a></li>
-				<li><a href="ewol__Sprite.html">Sprite</a></li>
-				<li><a href="ewol__Text.html">Text</a></li>
-				<li><a href="ewol__TextDecoration.html">TextDecoration</a></li>
-				<li><a href="ewol__Texture.html">Texture</a></li>
-				<li><a href="ewol__TextureFile.html">TextureFile</a></li>
-				<li><a href="ewol__TexturedFont.html">TexturedFont</a></li>
-				<li><a href="ewol__VirtualBufferObject.html">VirtualBufferObject</a></li>
-				<li><a href="ewol__Widget.html">Widget</a></li>
-				<li><a href="ewol__WidgetManager.html">WidgetManager</a></li>
-				<li><a href="ewol__Windows.html">Windows</a></li>
-				<li><a href="ewol__eContext.html">eContext</a></li>
-				<li><a href="ewol__eInput.html">eInput</a></li>
-				<li><a href="ewol__progAttributeElement.html">progAttributeElement</a></li>
-				</ul>
-				<li>widget</li>
-				<ul>
-				<li><a href="widget__Button.html">Button</a></li>
-				<li><a href="widget__ButtonColor.html">ButtonColor</a></li>
-				<li><a href="widget__CheckBox.html">CheckBox</a></li>
-				<li><a href="widget__ColorBar.html">ColorBar</a></li>
-				<li><a href="widget__ColorChooser.html">ColorChooser</a></li>
-				<li><a href="widget__Composer.html">Composer</a></li>
-				<li><a href="widget__Container.html">Container</a></li>
-				<li><a href="widget__ContainerN.html">ContainerN</a></li>
-				<li><a href="widget__ContextMenu.html">ContextMenu</a></li>
-				<li><a href="widget__Entry.html">Entry</a></li>
-				<li><a href="widget__FileChooser.html">FileChooser</a></li>
-				<li><a href="widget__Gird.html">Gird</a></li>
-				<li><a href="widget__Gird__GirdProperties.html">Gird::GirdProperties</a></li>
-				<li><a href="widget__Image.html">Image</a></li>
-				<li><a href="widget__Joystick.html">Joystick</a></li>
-				<li><a href="widget__Label.html">Label</a></li>
-				<li><a href="widget__Layer.html">Layer</a></li>
-				<li><a href="widget__List.html">List</a></li>
-				<li><a href="widget__ListFileSystem.html">ListFileSystem</a></li>
-				<li><a href="widget__Menu.html">Menu</a></li>
-				<li><a href="widget__MenuElement.html">MenuElement</a></li>
-				<li><a href="widget__Mesh.html">Mesh</a></li>
-				<li><a href="widget__Parameter.html">Parameter</a></li>
-				<li><a href="widget__ParameterList.html">ParameterList</a></li>
-				<li><a href="widget__PopUp.html">PopUp</a></li>
-				<li><a href="widget__ProgressBar.html">ProgressBar</a></li>
-				<li><a href="widget__Scroll.html">Scroll</a></li>
-				<li><a href="widget__Sizer.html">Sizer</a></li>
-				<li><a href="widget__Slider.html">Slider</a></li>
-				<li><a href="widget__Spacer.html">Spacer</a></li>
-				<li><a href="widget__StdPopUp.html">StdPopUp</a></li>
-				<li><a href="widget__WSlider.html">WSlider</a></li>
-				<li><a href="widget__WidgetScrooled.html">WidgetScrooled</a></li>
-				<li><a href="widget__elementPL.html">elementPL</a></li>
-				</ul>
-				</ul>
-				<li>ewol</li>
-				<ul>
-				<li><a href="ewol__clipBoard__clipboardListe.html">clipBoard::clipboardListe</a></li>
-				<li><a href="ewol__cursorDisplay.html">cursorDisplay</a></li>
-				<li><a href="ewol__font__mode.html">font::mode</a></li>
-				<li><a href="ewol__gravity.html">gravity</a></li>
-				<li><a href="ewol__keyEvent__keyboard.html">keyEvent::keyboard</a></li>
-				<li><a href="ewol__keyEvent__status.html">keyEvent::status</a></li>
-				<li><a href="ewol__keyEvent__type.html">keyEvent::type</a></li>
-				<li><a href="ewol__openGL__openGlFlags.html">openGL::openGlFlags</a></li>
-				<li><a href="ewol__orientation.html">orientation</a></li>
-				</ul>
+			<h3> </h3>
+		</div>
 		</div>
 	</div>
 	<div class="container" id="content">
 <h1>Class: ewol::Widget</h1>
 <br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                                     <a class="code-function" href="#Widget">Widget</a>                  (<span class="code-type">void</span>);<br>+                                    ~<a class="code-function" href="#Widget">Widget</a>                  (<span class="code-type">void</span>);<br></pre>
 <h2>Synopsis:</h2>
 <pre>
-+                           <a class="code-function" href="#Widget">Widget</a>                  (<span class="code-type">void</span>);<br>+                          ~<a class="code-function" href="#Widget">Widget</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setUpperWidget">setUpperWidget</a>          (<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_upper</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#removeUpperWidget">removeUpperWidget</a>       (<span class="code-type">void</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *           <a class="code-function" href="#getUpperWidget">getUpperWidget</a>          (<span class="code-type">void</span>);<br>+  vec2                     <a class="code-function" href="#relativePosition">relativePosition</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#calculateSize">calculateSize</a>           (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_available</span>);<br>+  vec2                     <a class="code-function" href="#getSize">getSize</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#calculateMinMaxSize">calculateMinMaxSize</a>     (<span class="code-type">void</span>);<br>+  vec2                     <a class="code-function" href="#getCalculateMinSize">getCalculateMinSize</a>     (<span class="code-type">void</span>);<br>+  vec2                     <a class="code-function" href="#getCalculateMaxSize">getCalculateMaxSize</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setOffset">setOffset</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newVal</span>);<br>+  <span class="code-storage-keyword">const</span> vec2 &             <a class="code-function" href="#getOffset">getOffset</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setZoom">setZoom</a>                 (<span class="code-type">float</span> <span class="code-argument">_newVal</span>);<br>+  <span class="code-type">float</span>                    <a class="code-function" href="#getZoom">getZoom</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setOrigin">setOrigin</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  vec2                     <a class="code-function" href="#getOrigin">getOrigin</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setMinSize">setMinSize</a>              (<span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setNoMinSize">setNoMinSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> &  <a class="code-function" href="#getMinSize">getMinSize</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#checkMinSize">checkMinSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setMaxSize">setMaxSize</a>              (<span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setNoMaxSize">setNoMaxSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> &  <a class="code-function" href="#getMaxSize">getMaxSize</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#checkMaxSize">checkMaxSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setExpand">setExpand</a>               (<span class="code-storage-keyword">const</span> bvec2 & <span class="code-argument">_newExpand</span>);<br>+  bvec2                    <a class="code-function" href="#getExpand">getExpand</a>               (<span class="code-type">void</span>);<br>+  bvec2                    <a class="code-function" href="#canExpand">canExpand</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setFill">setFill</a>                 (<span class="code-storage-keyword">const</span> bvec2 & <span class="code-argument">_newFill</span>);<br>+  <span class="code-storage-keyword">const</span> bvec2 &            <a class="code-function" href="#getFill">getFill</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> bvec2 &            <a class="code-function" href="#canFill">canFill</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#hide">hide</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#show">show</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#isHide">isHide</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setGravity">setGravity</a>              (<span class="code-storage-keyword">enum</span> <a href="ewol__gravity.html" class="code-type">ewol::gravity</a> <span class="code-argument">_gravity</span>);<br>+  <span class="code-storage-keyword">enum</span> <a href="ewol__gravity.html" class="code-type">ewol::gravity</a>       <a class="code-function" href="#getGravity">getGravity</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#getFocus">getFocus</a>                (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#canHaveFocus">canHaveFocus</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#setFocus">setFocus</a>                (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#rmFocus">rmFocus</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setCanHaveFocus">setCanHaveFocus</a>         (<span class="code-type">bool</span> <span class="code-argument">_canFocusState</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#keepFocus">keepFocus</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">int32_t</span>                  <a class="code-function" href="#getMouseLimit">getMouseLimit</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setMouseLimit">setMouseLimit</a>           (<span class="code-type">int32_t</span> <span class="code-argument">_numberState</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#getKeyboardRepeate">getKeyboardRepeate</a>      (<span class="code-type">void</span>);<br>+  <span class="code-type">int64_t</span>                  <a class="code-function" href="#systemGetCallDeltaTime">systemGetCallDeltaTime</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">int64_t</span>                  <a class="code-function" href="#systemGetLastCallTime">systemGetLastCallTime</a>   (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#systemSetLastCallTime">systemSetLastCallTime</a>   (<span class="code-type">int64_t</span> <span class="code-argument">_time</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#periodicCall">periodicCall</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__EventTime.html" class="code-type">ewol::EventTime</a> & <span class="code-argument">_event</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *           <a class="code-function" href="#getWidgetAtPos">getWidgetAtPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *           <a class="code-function" href="#getWidgetNamed">getWidgetNamed</a>          (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_widgetName</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#systemEventInput">systemEventInput</a>        (<a href="ewol__EventInputSystem.html" class="code-type">ewol::EventInputSystem</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#systemEventEntry">systemEventEntry</a>        (<a href="ewol__EventEntrySystem.html" class="code-type">ewol::EventEntrySystem</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#onEventClipboard">onEventClipboard</a>        (<span class="code-storage-keyword">enum</span> <a href="ewol__clipBoard__clipboardListe.html" class="code-type">ewol::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#onEventShortCut">onEventShortCut</a>         (<a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> & <span class="code-argument">_special</span>,<br/>                                                     <span class="code-type">char32_t</span> <span class="code-argument">_unicodeValue</span>,<br/>                                                     <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_kbMove</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_isDown</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#systemDraw">systemDraw</a>              (<span class="code-storage-keyword">const</span> DrawProperty & <span class="code-argument">_displayProp</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#onRegenerateDisplay">onRegenerateDisplay</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#grabCursor">grabCursor</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#unGrabCursor">unGrabCursor</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#getGrabStatus">getGrabStatus</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setCursor">setCursor</a>               (<span class="code-storage-keyword">enum</span> <a href="ewol__cursorDisplay.html" class="code-type">ewol::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br>+  <span class="code-storage-keyword">enum</span> <a href="ewol__cursorDisplay.html" class="code-type">ewol::cursorDisplay</a> <a class="code-function" href="#getCursor">getCursor</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#onObjectRemove">onObjectRemove</a>          (<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#loadXML">loadXML</a>                 (<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_node</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#requestUpdateSize">requestUpdateSize</a>       (<span class="code-type">void</span>);<br>+  <a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> &    <a class="code-function" href="#getWidgetManager">getWidgetManager</a>        (<span class="code-type">void</span>);<br>+  <a href="ewol__Windows.html" class="code-type">ewol::Windows</a> *          <a class="code-function" href="#getWindows">getWindows</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setAnnimationType">setAnnimationType</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                     <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_type</span>);<br>+  <span class="code-type">void</span>                     <a class="code-function" href="#setAnnimationTime">setAnnimationTime</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                     <span class="code-type">float</span> <span class="code-argument">_time</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#startAnnimation">startAnnimation</a>         (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>);<br>+  <span class="code-type">bool</span>                     <a class="code-function" href="#stopAnnimation">stopAnnimation</a>          (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#onGetFocus">onGetFocus</a>              (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#onLostFocus">onLostFocus</a>             (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#setKeyboardRepeate">setKeyboardRepeate</a>      (<span class="code-type">bool</span> <span class="code-argument">_state</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#showKeyboard">showKeyboard</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#hideKeyboard">hideKeyboard</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#periodicCallDisable">periodicCallDisable</a>     (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#periodicCallEnable">periodicCallEnable</a>      (<span class="code-type">float</span> <span class="code-argument">_callInSecond</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#onEventInput">onEventInput</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#onEventEntry">onEventEntry</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__EventEntry.html" class="code-type">ewol::EventEntry</a> & <span class="code-argument">_event</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#shortCutAdd">shortCutAdd</a>             (<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_descriptiveString</span>,<br/>                                                     <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_generateEventId</span>,<br/>                                                     <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_data</span>,<br/>                                                     <span class="code-type">bool</span> <span class="code-argument">_broadcast</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#shortCutClean">shortCutClean</a>           (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#markToRedraw">markToRedraw</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#needRedraw">needRedraw</a>              (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#onDraw">onDraw</a>                  (<span class="code-type">void</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#onSetConfig">onSetConfig</a>             (<span class="code-storage-keyword">const</span> <a href="ewol__EConfig.html" class="code-type">ewol::EConfig</a> & <span class="code-argument">_conf</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#onGetConfig">onGetConfig</a>             (<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_config</span>,<br/>                                                     <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_result</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#addAnnimationType">addAnnimationType</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                     <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_type</span>);<br>#  <span class="code-type">bool</span>                     <a class="code-function" href="#onStartAnnimation">onStartAnnimation</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>);<br>#  <span class="code-type">void</span>                     <a class="code-function" href="#onStopAnnimation">onStopAnnimation</a>        (<span class="code-type">void</span>);<br></pre>
++  <span class="code-type">void</span>                               <a class="code-function" href="#setUpperWidget">setUpperWidget</a>          (<a href="ewol__Widget.html" class="code-type">ewol::Widget</a> * <span class="code-argument">_upper</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#removeUpperWidget">removeUpperWidget</a>       (<span class="code-type">void</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *                     <a class="code-function" href="#getUpperWidget">getUpperWidget</a>          (<span class="code-type">void</span>);<br>+  vec2                               <a class="code-function" href="#relativePosition">relativePosition</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#calculateSize">calculateSize</a>           (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_available</span>);<br>+  vec2                               <a class="code-function" href="#getSize">getSize</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#calculateMinMaxSize">calculateMinMaxSize</a>     (<span class="code-type">void</span>);<br>+  vec2                               <a class="code-function" href="#getCalculateMinSize">getCalculateMinSize</a>     (<span class="code-type">void</span>);<br>+  vec2                               <a class="code-function" href="#getCalculateMaxSize">getCalculateMaxSize</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setOffset">setOffset</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_newVal</span>);<br>+  <span class="code-storage-keyword">const</span> vec2 &                       <a class="code-function" href="#getOffset">getOffset</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setZoom">setZoom</a>                 (<span class="code-type">float</span> <span class="code-argument">_newVal</span>);<br>+  <span class="code-type">float</span>                              <a class="code-function" href="#getZoom">getZoom</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setOrigin">setOrigin</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  vec2                               <a class="code-function" href="#getOrigin">getOrigin</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setMinSize">setMinSize</a>              (<span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setNoMinSize">setNoMinSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> &            <a class="code-function" href="#getMinSize">getMinSize</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#checkMinSize">checkMinSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setMaxSize">setMaxSize</a>              (<span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> & <span class="code-argument">_size</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setNoMaxSize">setNoMaxSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> <a href="ewol__Dimension.html" class="code-type">ewol::Dimension</a> &            <a class="code-function" href="#getMaxSize">getMaxSize</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#checkMaxSize">checkMaxSize</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setExpand">setExpand</a>               (<span class="code-storage-keyword">const</span> bvec2 & <span class="code-argument">_newExpand</span>);<br>+  bvec2                              <a class="code-function" href="#getExpand">getExpand</a>               (<span class="code-type">void</span>);<br>+  bvec2                              <a class="code-function" href="#canExpand">canExpand</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setFill">setFill</a>                 (<span class="code-storage-keyword">const</span> bvec2 & <span class="code-argument">_newFill</span>);<br>+  <span class="code-storage-keyword">const</span> bvec2 &                      <a class="code-function" href="#getFill">getFill</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> bvec2 &                      <a class="code-function" href="#canFill">canFill</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#hide">hide</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#show">show</a>                    (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#isHide">isHide</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setGravity">setGravity</a>              (<span class="code-storage-keyword">enum</span> <a href="ewol__gravity.html" class="code-type">ewol::gravity</a> <span class="code-argument">_gravity</span>);<br>+  <span class="code-storage-keyword">enum</span> <a href="ewol__gravity.html" class="code-type">ewol::gravity</a>                 <a class="code-function" href="#getGravity">getGravity</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#getFocus">getFocus</a>                (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#canHaveFocus">canHaveFocus</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#setFocus">setFocus</a>                (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#rmFocus">rmFocus</a>                 (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setCanHaveFocus">setCanHaveFocus</a>         (<span class="code-type">bool</span> <span class="code-argument">_canFocusState</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#keepFocus">keepFocus</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">int32_t</span>                            <a class="code-function" href="#getMouseLimit">getMouseLimit</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setMouseLimit">setMouseLimit</a>           (<span class="code-type">int32_t</span> <span class="code-argument">_numberState</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#getKeyboardRepeate">getKeyboardRepeate</a>      (<span class="code-type">void</span>);<br>+  <span class="code-type">int64_t</span>                            <a class="code-function" href="#systemGetCallDeltaTime">systemGetCallDeltaTime</a>  (<span class="code-type">void</span>);<br>+  <span class="code-type">int64_t</span>                            <a class="code-function" href="#systemGetLastCallTime">systemGetLastCallTime</a>   (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#systemSetLastCallTime">systemSetLastCallTime</a>   (<span class="code-type">int64_t</span> <span class="code-argument">_time</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#periodicCall">periodicCall</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__event__Time.html" class="code-type">ewol::event::Time</a> & <span class="code-argument">_event</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *                     <a class="code-function" href="#getWidgetAtPos">getWidgetAtPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <a href="ewol__Widget.html" class="code-type">ewol::Widget</a> *                     <a class="code-function" href="#getWidgetNamed">getWidgetNamed</a>          (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_widgetName</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#systemEventInput">systemEventInput</a>        (<a href="ewol__event__InputSystem.html" class="code-type">ewol::event::InputSystem</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#systemEventEntry">systemEventEntry</a>        (<a href="ewol__event__EntrySystem.html" class="code-type">ewol::event::EntrySystem</a> & <span class="code-argument">_event</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#onEventClipboard">onEventClipboard</a>        (<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#onEventShortCut">onEventShortCut</a>         (<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,<br/>                                                               <span class="code-type">char32_t</span> <span class="code-argument">_unicodeValue</span>,<br/>                                                               <span class="code-storage-keyword">enum</span> <a href="ewol__key__keyboard.html" class="code-type">ewol::key::keyboard</a> <span class="code-argument">_kbMove</span>,<br/>                                                               <span class="code-type">bool</span> <span class="code-argument">_isDown</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#systemDraw">systemDraw</a>              (<span class="code-storage-keyword">const</span> DrawProperty & <span class="code-argument">_displayProp</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#onRegenerateDisplay">onRegenerateDisplay</a>     (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#grabCursor">grabCursor</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#unGrabCursor">unGrabCursor</a>            (<span class="code-type">void</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#getGrabStatus">getGrabStatus</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setCursor">setCursor</a>               (<span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);<br>+  <span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a>  <a class="code-function" href="#getCursor">getCursor</a>               (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#onObjectRemove">onObjectRemove</a>          (<a href="ewol__Object.html" class="code-type">ewol::Object</a> * <span class="code-argument">_removeObject</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#loadXML">loadXML</a>                 (<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_node</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#requestUpdateSize">requestUpdateSize</a>       (<span class="code-type">void</span>);<br>+  <a href="ewol__widget__Manager.html" class="code-type">ewol::widget::Manager</a> &            <a class="code-function" href="#getWidgetManager">getWidgetManager</a>        (<span class="code-type">void</span>);<br>+  <a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> *            <a class="code-function" href="#getWindows">getWindows</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setAnnimationType">setAnnimationType</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                               <span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_type</span>);<br>+  <span class="code-type">void</span>                               <a class="code-function" href="#setAnnimationTime">setAnnimationTime</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                               <span class="code-type">float</span> <span class="code-argument">_time</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#startAnnimation">startAnnimation</a>         (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>);<br>+  <span class="code-type">bool</span>                               <a class="code-function" href="#stopAnnimation">stopAnnimation</a>          (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#onGetFocus">onGetFocus</a>              (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#onLostFocus">onLostFocus</a>             (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#setKeyboardRepeate">setKeyboardRepeate</a>      (<span class="code-type">bool</span> <span class="code-argument">_state</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#showKeyboard">showKeyboard</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#hideKeyboard">hideKeyboard</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#periodicCallDisable">periodicCallDisable</a>     (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#periodicCallEnable">periodicCallEnable</a>      (<span class="code-type">float</span> <span class="code-argument">_callInSecond</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#onEventInput">onEventInput</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__event__Input.html" class="code-type">ewol::event::Input</a> & <span class="code-argument">_event</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#onEventEntry">onEventEntry</a>            (<span class="code-storage-keyword">const</span> <a href="ewol__event__Entry.html" class="code-type">ewol::event::Entry</a> & <span class="code-argument">_event</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#shortCutAdd">shortCutAdd</a>             (<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_descriptiveString</span>,<br/>                                                               <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_generateEventId</span>,<br/>                                                               <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_data</span>,<br/>                                                               <span class="code-type">bool</span> <span class="code-argument">_broadcast</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#shortCutClean">shortCutClean</a>           (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#markToRedraw">markToRedraw</a>            (<span class="code-type">void</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#needRedraw">needRedraw</a>              (<span class="code-type">void</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#onDraw">onDraw</a>                  (<span class="code-type">void</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#onSetConfig">onSetConfig</a>             (<span class="code-storage-keyword">const</span> <a href="ewol__object__Config.html" class="code-type">ewol::object::Config</a> & <span class="code-argument">_conf</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#onGetConfig">onGetConfig</a>             (<span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_config</span>,<br/>                                                               <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_result</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#addAnnimationType">addAnnimationType</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>,<br/>                                                               <span class="code-storage-keyword">const</span> <span class="code-type">char</span> * <span class="code-argument">_type</span>);<br>#  <span class="code-type">bool</span>                               <a class="code-function" href="#onStartAnnimation">onStartAnnimation</a>       (<span class="code-storage-keyword">enum</span> annimationMode <span class="code-argument">_mode</span>);<br>#  <span class="code-type">void</span>                               <a class="code-function" href="#onStopAnnimation">onStopAnnimation</a>        (<span class="code-type">void</span>);<br></pre>
 
 
 <h2>Object Hierarchy:</h2>
 <pre>
-<a href="ewol__EObject.html">ewol::EObject</a>
+<a href="ewol__Object.html">ewol::Object</a>
     +--> <b>ewol::Widget</b>
-        +--> <a href="widget__Spacer.html">widget::Spacer</a>
-        +--> <a href="widget__ContainerN.html">widget::ContainerN</a>
-        +--> <a href="widget__ProgressBar.html">widget::ProgressBar</a>
-        +--> <a href="widget__Slider.html">widget::Slider</a>
-        +--> <a href="widget__Entry.html">widget::Entry</a>
-        +--> <a href="widget__Joystick.html">widget::Joystick</a>
-        +--> <a href="widget__Container.html">widget::Container</a>
-        +--> <a href="ewol__Windows.html">ewol::Windows</a>
-        +--> <a href="widget__ColorBar.html">widget::ColorBar</a>
-        +--> <a href="widget__ButtonColor.html">widget::ButtonColor</a>
-        +--> <a href="widget__Label.html">widget::Label</a>
-        +--> <a href="widget__Mesh.html">widget::Mesh</a>
-        +--> <a href="widget__Button.html">widget::Button</a>
-        +--> <a href="widget__WidgetScrooled.html">widget::WidgetScrooled</a>
-        +--> <a href="widget__Image.html">widget::Image</a>
-        +--> <a href="widget__Gird.html">widget::Gird</a>
-        +--> <a href="widget__CheckBox.html">widget::CheckBox</a>
+        +--> <a href="ewol__widget__ProgressBar.html">ewol::widget::ProgressBar</a>
+        +--> <a href="ewol__widget__ContainerN.html">ewol::widget::ContainerN</a>
+        +--> <a href="ewol__widget__Image.html">ewol::widget::Image</a>
+        +--> <a href="ewol__widget__WidgetScrooled.html">ewol::widget::WidgetScrooled</a>
+        +--> <a href="ewol__widget__Slider.html">ewol::widget::Slider</a>
+        +--> <a href="ewol__widget__ColorBar.html">ewol::widget::ColorBar</a>
+        +--> <a href="ewol__widget__Button.html">ewol::widget::Button</a>
+        +--> <a href="ewol__widget__Spacer.html">ewol::widget::Spacer</a>
+        +--> <a href="ewol__widget__Joystick.html">ewol::widget::Joystick</a>
+        +--> <a href="ewol__widget__Label.html">ewol::widget::Label</a>
+        +--> <a href="ewol__widget__Container.html">ewol::widget::Container</a>
+        +--> <a href="ewol__widget__ButtonColor.html">ewol::widget::ButtonColor</a>
+        +--> <a href="ewol__widget__Windows.html">ewol::widget::Windows</a>
+        +--> <a href="ewol__widget__CheckBox.html">ewol::widget::CheckBox</a>
+        +--> <a href="ewol__widget__Entry.html">ewol::widget::Entry</a>
+        +--> <a href="ewol__widget__Gird.html">ewol::widget::Gird</a>
 </pre>
 <br/>
 <h2>Description:</h2>
@@ -726,7 +737,7 @@ get the keyboard repeating event supporting.
 <h3><a id="periodicCall">periodicCall</a> ()</h3>
 
 <pre>
-<span class="code-type">void</span> <span class="code-function">periodicCall</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventTime.html" class="code-type">ewol::EventTime</a> & <span class="code-argument">_event</span>);</pre>
+<span class="code-type">void</span> <span class="code-function">periodicCall</span>(<span class="code-storage-keyword">const</span> <a href="ewol__event__Time.html" class="code-type">ewol::event::Time</a> & <span class="code-argument">_event</span>);</pre>
 <br/>
 periodic call of this widget
 <br/><ul>
@@ -766,7 +777,7 @@ get the widget if it have this name or one of the subwidget with the same name
 <h3><a id="systemEventInput">systemEventInput</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">systemEventInput</span>(<a href="ewol__EventInputSystem.html" class="code-type">ewol::EventInputSystem</a> & <span class="code-argument">_event</span>);</pre>
+<span class="code-type">bool</span> <span class="code-function">systemEventInput</span>(<a href="ewol__event__InputSystem.html" class="code-type">ewol::event::InputSystem</a> & <span class="code-argument">_event</span>);</pre>
 <br/>
 {SYSTEM} system event input (only meta widget might overwrite this function).
 <br/><ul>
@@ -780,7 +791,7 @@ get the widget if it have this name or one of the subwidget with the same name
 <h3><a id="systemEventEntry">systemEventEntry</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">systemEventEntry</span>(<a href="ewol__EventEntrySystem.html" class="code-type">ewol::EventEntrySystem</a> & <span class="code-argument">_event</span>);</pre>
+<span class="code-type">bool</span> <span class="code-function">systemEventEntry</span>(<a href="ewol__event__EntrySystem.html" class="code-type">ewol::event::EntrySystem</a> & <span class="code-argument">_event</span>);</pre>
 <br/>
 {SYSTEM} Entry event (only meta widget might overwrite this function).
 <br/><ul>
@@ -794,7 +805,7 @@ get the widget if it have this name or one of the subwidget with the same name
 <h3><a id="onEventClipboard">onEventClipboard</a> ()</h3>
 
 <pre>
-<span class="code-type">void</span> <span class="code-function">onEventClipboard</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__clipBoard__clipboardListe.html" class="code-type">ewol::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);</pre>
+<span class="code-type">void</span> <span class="code-function">onEventClipboard</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__clipBoard__clipboardListe.html" class="code-type">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);</pre>
 <br/>
 Event on a past event  == > this event is asynchronous due to all system does not support direct getting datas
 <br/><b>Notes:</b> : need to have focus ...
@@ -807,9 +818,9 @@ Event on a past event  == > this event is asynchronous due to all system does no
 <h3><a id="onEventShortCut">onEventShortCut</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">onEventShortCut</span>(<a href="ewol__SpecialKey.html" class="code-type">ewol::SpecialKey</a> & <span class="code-argument">_special</span>,
+<span class="code-type">bool</span> <span class="code-function">onEventShortCut</span>(<a href="ewol__key__Special.html" class="code-type">ewol::key::Special</a> & <span class="code-argument">_special</span>,
                      <span class="code-type">char32_t</span> <span class="code-argument">_unicodeValue</span>,
-                     <span class="code-storage-keyword">enum</span> <a href="ewol__keyEvent__keyboard.html" class="code-type">ewol::keyEvent::keyboard</a> <span class="code-argument">_kbMove</span>,
+                     <span class="code-storage-keyword">enum</span> <a href="ewol__key__keyboard.html" class="code-type">ewol::key::keyboard</a> <span class="code-argument">_kbMove</span>,
                      <span class="code-type">bool</span> <span class="code-argument">_isDown</span>);</pre>
 <br/>
 Event on a short-cut of this Widget (in case of return false, the event on the keyevent will arrive in the function <br/><b>Notes:</b> To prevent some error when you get an event get it if it is down and Up ...  == > like this it could not generate some ununderstanding error.
@@ -882,7 +893,7 @@ get the grabbing status of the cursor.
 <h3><a id="setCursor">setCursor</a> ()</h3>
 
 <pre>
-<span class="code-type">void</span> <span class="code-function">setCursor</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__cursorDisplay.html" class="code-type">ewol::cursorDisplay</a> <span class="code-argument">_newCursor</span>);</pre>
+<span class="code-type">void</span> <span class="code-function">setCursor</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a> <span class="code-argument">_newCursor</span>);</pre>
 <br/>
 set the cursor display type.
 <br/><ul>
@@ -894,7 +905,7 @@ set the cursor display type.
 <h3><a id="getCursor">getCursor</a> ()</h3>
 
 <pre>
-<span class="code-storage-keyword">enum</span> <a href="ewol__cursorDisplay.html" class="code-type">ewol::cursorDisplay</a> <span class="code-function">getCursor</span>(<span class="code-type">void</span>);</pre>
+<span class="code-storage-keyword">enum</span> <a href="ewol__context__cursorDisplay.html" class="code-type">ewol::context::cursorDisplay</a> <span class="code-function">getCursor</span>(<span class="code-type">void</span>);</pre>
 <br/>
 get the currrent cursor.
 <br/><ul>
@@ -906,7 +917,7 @@ get the currrent cursor.
 <h3><a id="onObjectRemove">onObjectRemove</a> ()</h3>
 
 <pre>
-<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__EObject.html" class="code-type">ewol::EObject</a> * <span class="code-argument">_removeObject</span>);</pre>
+<span class="code-type">void</span> <span class="code-function">onObjectRemove</span>(<a href="ewol__Object.html" class="code-type">ewol::Object</a> * <span class="code-argument">_removeObject</span>);</pre>
 <br/>
 <br/>
 
@@ -931,7 +942,7 @@ need to be call When the size of the current widget have change  == > this force
 <h3><a id="getWidgetManager">getWidgetManager</a> ()</h3>
 
 <pre>
-<a href="ewol__WidgetManager.html" class="code-type">ewol::WidgetManager</a> & <span class="code-function">getWidgetManager</span>(<span class="code-type">void</span>);</pre>
+<a href="ewol__widget__Manager.html" class="code-type">ewol::widget::Manager</a> & <span class="code-function">getWidgetManager</span>(<span class="code-type">void</span>);</pre>
 <br/>
 get the current Widget Manager
 <br/><br/>
@@ -940,7 +951,7 @@ get the current Widget Manager
 <h3><a id="getWindows">getWindows</a> ()</h3>
 
 <pre>
-<a href="ewol__Windows.html" class="code-type">ewol::Windows</a> * <span class="code-function">getWindows</span>(<span class="code-type">void</span>);</pre>
+<a href="ewol__widget__Windows.html" class="code-type">ewol::widget::Windows</a> * <span class="code-function">getWindows</span>(<span class="code-type">void</span>);</pre>
 <br/>
 get the curent Windows
 <br/><br/>
@@ -1071,7 +1082,7 @@ disable the periodic call.
 <h3><a id="onEventInput">onEventInput</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">onEventInput</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventInput.html" class="code-type">ewol::EventInput</a> & <span class="code-argument">_event</span>);</pre>
+<span class="code-type">bool</span> <span class="code-function">onEventInput</span>(<span class="code-storage-keyword">const</span> <a href="ewol__event__Input.html" class="code-type">ewol::event::Input</a> & <span class="code-argument">_event</span>);</pre>
 <br/>
 Event on an input of this Widget (finger, mouse, stilet)
 <br/><ul>
@@ -1085,7 +1096,7 @@ Event on an input of this Widget (finger, mouse, stilet)
 <h3><a id="onEventEntry">onEventEntry</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">onEventEntry</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EventEntry.html" class="code-type">ewol::EventEntry</a> & <span class="code-argument">_event</span>);</pre>
+<span class="code-type">bool</span> <span class="code-function">onEventEntry</span>(<span class="code-storage-keyword">const</span> <a href="ewol__event__Entry.html" class="code-type">ewol::event::Entry</a> & <span class="code-argument">_event</span>);</pre>
 <br/>
 Entry event.
        represent the physical event :
@@ -1160,7 +1171,7 @@ Common widget drawing function (called by the drawing thread [Android, X11, ...]
 <h3><a id="onSetConfig">onSetConfig</a> ()</h3>
 
 <pre>
-<span class="code-type">bool</span> <span class="code-function">onSetConfig</span>(<span class="code-storage-keyword">const</span> <a href="ewol__EConfig.html" class="code-type">ewol::EConfig</a> & <span class="code-argument">_conf</span>);</pre>
+<span class="code-type">bool</span> <span class="code-function">onSetConfig</span>(<span class="code-storage-keyword">const</span> <a href="ewol__object__Config.html" class="code-type">ewol::object::Config</a> & <span class="code-argument">_conf</span>);</pre>
 <br/>
 <br/>
 

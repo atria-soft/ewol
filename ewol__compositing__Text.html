@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1>ewol Library</h1>
+			<div id="menu">
+				<h2>ewol</h2>
+				<ul class="niveau1">
+					<li class="sousmenu"><a>compositing</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Compositing.html">Compositing</a></li>
+							<li><a href="ewol__compositing__Area.html">Area</a></li>
+							<li><a href="ewol__compositing__Drawing.html">Drawing</a></li>
+							<li><a href="ewol__compositing__Image.html">Image</a></li>
+							<li><a href="ewol__compositing__Shaper.html">Shaper</a></li>
+							<li><a href="ewol__compositing__Sprite.html">Sprite</a></li>
+							<li><a href="ewol__compositing__Text.html">Text</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>context</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Context.html">Context</a></li>
+							<li><a href="ewol__context__CommandLine.html">CommandLine</a></li>
+							<li><a href="ewol__context__ConfigFont.html">ConfigFont</a></li>
+							<li><a href="ewol__context__InputManager.html">InputManager</a></li>
+							<li class="sousmenu"><a href="ewol__context__clipBoard.html">clipBoard</a>
+								<ul class="niveau3">
+							<li><a href="ewol__context__clipBoard.html::clipboardListe">clipboardListe</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__context__cursorDisplay.html">cursorDisplay</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>event</a>
+						<ul class="niveau2">
+							<li><a href="ewol__event__Entry.html">Entry</a></li>
+							<li><a href="ewol__event__EntrySystem.html">EntrySystem</a></li>
+							<li><a href="ewol__event__Input.html">Input</a></li>
+							<li><a href="ewol__event__InputSystem.html">InputSystem</a></li>
+							<li><a href="ewol__event__Time.html">Time</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>key</a>
+						<ul class="niveau2">
+							<li><a href="ewol__key__Special.html">Special</a></li>
+							<li><a href="ewol__key__keyboard.html">keyboard</a></li>
+							<li><a href="ewol__key__status.html">status</a></li>
+							<li><a href="ewol__key__type.html">type</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>object</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Object.html">Object</a></li>
+							<li><a href="ewol__object__Config.html">Config</a></li>
+							<li><a href="ewol__object__ConfigElement.html">ConfigElement</a></li>
+							<li><a href="ewol__object__Manager.html">Manager</a></li>
+							<li><a href="ewol__object__Message.html">Message</a></li>
+							<li class="sousmenu"><a href="ewol__object__MultiCast.html">MultiCast</a>
+								<ul class="niveau3">
+							<li><a href="ewol__object__MultiCast.html::MessageList">MessageList</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>openGL</a>
+						<ul class="niveau2">
+							<li><a href="ewol__openGL__openGlFlags.html">openGlFlags</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>resource</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Resource.html">Resource</a></li>
+							<li><a href="ewol__resource__Colored3DObject.html">Colored3DObject</a></li>
+							<li><a href="ewol__resource__ConfigFile.html">ConfigFile</a></li>
+							<li><a href="ewol__resource__FontBase.html">FontBase</a></li>
+							<li><a href="ewol__resource__FontFreeType.html">FontFreeType</a></li>
+							<li><a href="ewol__resource__Manager.html">Manager</a></li>
+							<li><a href="ewol__resource__Program.html">Program</a></li>
+							<li><a href="ewol__resource__Shader.html">Shader</a></li>
+							<li><a href="ewol__resource__Texture.html">Texture</a></li>
+							<li><a href="ewol__resource__TextureFile.html">TextureFile</a></li>
+							<li><a href="ewol__resource__TexturedFont.html">TexturedFont</a></li>
+							<li><a href="ewol__resource__VirtualBufferObject.html">VirtualBufferObject</a></li>
+						</ul>
+					</li>
+					<li class="sousmenu"><a>widget</a>
+						<ul class="niveau2">
+							<li><a href="ewol__Widget.html">Widget</a></li>
+							<li><a href="ewol__widget__Button.html">Button</a></li>
+							<li><a href="ewol__widget__ButtonColor.html">ButtonColor</a></li>
+							<li><a href="ewol__widget__CheckBox.html">CheckBox</a></li>
+							<li><a href="ewol__widget__ColorBar.html">ColorBar</a></li>
+							<li><a href="ewol__widget__ColorChooser.html">ColorChooser</a></li>
+							<li><a href="ewol__widget__Composer.html">Composer</a></li>
+							<li><a href="ewol__widget__Container.html">Container</a></li>
+							<li><a href="ewol__widget__ContainerN.html">ContainerN</a></li>
+							<li><a href="ewol__widget__ContextMenu.html">ContextMenu</a></li>
+							<li><a href="ewol__widget__Entry.html">Entry</a></li>
+							<li><a href="ewol__widget__FileChooser.html">FileChooser</a></li>
+							<li class="sousmenu"><a href="ewol__widget__Gird.html">Gird</a>
+								<ul class="niveau3">
+							<li><a href="ewol__widget__Gird.html::GirdProperties">GirdProperties</a></li>
+								</ul>
+							</li>
+							<li><a href="ewol__widget__Image.html">Image</a></li>
+							<li><a href="ewol__widget__Joystick.html">Joystick</a></li>
+							<li><a href="ewol__widget__Label.html">Label</a></li>
+							<li><a href="ewol__widget__Layer.html">Layer</a></li>
+							<li><a href="ewol__widget__List.html">List</a></li>
+							<li><a href="ewol__widget__ListFileSystem.html">ListFileSystem</a></li>
+							<li><a href="ewol__widget__Manager.html">Manager</a></li>
+							<li><a href="ewol__widget__Menu.html">Menu</a></li>
+							<li><a href="ewol__widget__MenuElement.html">MenuElement</a></li>
+							<li><a href="ewol__widget__Parameter.html">Parameter</a></li>
+							<li><a href="ewol__widget__ParameterList.html">ParameterList</a></li>
+							<li><a href="ewol__widget__PopUp.html">PopUp</a></li>
+							<li><a href="ewol__widget__ProgressBar.html">ProgressBar</a></li>
+							<li><a href="ewol__widget__Scroll.html">Scroll</a></li>
+							<li><a href="ewol__widget__Sizer.html">Sizer</a></li>
+							<li><a href="ewol__widget__Slider.html">Slider</a></li>
+							<li><a href="ewol__widget__Spacer.html">Spacer</a></li>
+							<li><a href="ewol__widget__StdPopUp.html">StdPopUp</a></li>
+							<li><a href="ewol__widget__WSlider.html">WSlider</a></li>
+							<li><a href="ewol__widget__WidgetScrooled.html">WidgetScrooled</a></li>
+							<li><a href="ewol__widget__Windows.html">Windows</a></li>
+							<li><a href="ewol__widget__elementPL.html">elementPL</a></li>
+						</ul>
+					</li>
+				<ul>
+			<h3> </h3>
+		</div>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>Class: ewol::compositing::Text</h1>
+<br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                                <a class="code-function" href="#Text">Text</a>                    (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>,<br/>                                                          <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);<br>+                               ~<a class="code-function" href="#Text">Text</a>                    (<span class="code-type">void</span>);<br></pre>
+<h2>Synopsis:</h2>
+<pre>
++  <a href="ewol__compositing__Drawing.html" class="code-type">ewol::compositing::Drawing</a> &  <a class="code-function" href="#getDrawing">getDrawing</a>              (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#translate">translate</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#rotate">rotate</a>                  (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>,<br/>                                                          <span class="code-type">float</span> <span class="code-argument">_angle</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#scale">scale</a>                   (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#draw">draw</a>                    (<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#draw">draw</a>                    (<span class="code-storage-keyword">const</span> mat4 & <span class="code-argument">_transformationMatrix</span>,<br/>                                                          <span class="code-type">bool</span> <span class="code-argument">_enableDepthTest</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#clear">clear</a>                   (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#reset">reset</a>                   (<span class="code-type">void</span>);<br>+  <span class="code-storage-keyword">const</span> vec3 &                  <a class="code-function" href="#getPos">getPos</a>                  (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setPos">setPos</a>                  (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setPos">setPos</a>                  (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setRelPos">setRelPos</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setRelPos">setRelPos</a>               (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setColor">setColor</a>                (<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setColorBg">setColorBg</a>              (<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setClippingWidth">setClippingWidth</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                          <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setClippingWidth">setClippingWidth</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setClipping">setClipping</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                          <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setClipping">setClipping</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setClippingMode">setClippingMode</a>         (<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFontSize">setFontSize</a>             (<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFontName">setFontName</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFont">setFont</a>                 (<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_fontName</span>,<br/>                                                          <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFontMode">setFontMode</a>             (<span class="code-storage-keyword">enum</span> <a href="ewol__font__mode.html" class="code-type">ewol::font::mode</a> <span class="code-argument">_mode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFontBold">setFontBold</a>             (<span class="code-type">bool</span> <span class="code-argument">_status</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setFontItalic">setFontItalic</a>           (<span class="code-type">bool</span> <span class="code-argument">_status</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setKerningMode">setKerningMode</a>          (<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setDistanceFieldMode">setDistanceFieldMode</a>    (<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#print">print</a>                   (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#print">print</a>                   (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#printDecorated">printDecorated</a>          (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#printHTML">printHTML</a>               (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#print">print</a>                   (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,<br/>                                                          <span class="code-storage-keyword">const</span> std::vector<TextDecoration> & <span class="code-argument">_decoration</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#print">print</a>                   (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>,<br/>                                                          <span class="code-storage-keyword">const</span> std::vector<TextDecoration> & <span class="code-argument">_decoration</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#print">print</a>                   (<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> & <span class="code-argument">_charcode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#forceLineReturn">forceLineReturn</a>         (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setTextAlignement">setTextAlignement</a>       (<span class="code-type">float</span> <span class="code-argument">_startTextpos</span>,<br/>                                                          <span class="code-type">float</span> <span class="code-argument">_stopTextPos</span>,<br/>                                                          <span class="code-storage-keyword">enum</span> ewol::compositing::Text::aligneMode <span class="code-argument">_alignement</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#disableAlignement">disableAlignement</a>       (<span class="code-type">void</span>);<br>+  vec3                          <a class="code-function" href="#calculateSizeHTML">calculateSizeHTML</a>       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  vec3                          <a class="code-function" href="#calculateSizeDecorated">calculateSizeDecorated</a>  (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  vec3                          <a class="code-function" href="#calculateSize">calculateSize</a>           (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);<br>+  vec3                          <a class="code-function" href="#calculateSize">calculateSize</a>           (<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> & <span class="code-argument">_charcode</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#printCursor">printCursor</a>             (<span class="code-type">bool</span> <span class="code-argument">_isInsertMode</span>,<br/>                                                          <span class="code-type">float</span> <span class="code-argument">_cursorSize</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#disableCursor">disableCursor</a>           (<span class="code-type">void</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setCursorPos">setCursorPos</a>            (<span class="code-type">int32_t</span> <span class="code-argument">_cursorPos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setCursorSelection">setCursorSelection</a>      (<span class="code-type">int32_t</span> <span class="code-argument">_cursorPos</span>,<br/>                                                          <span class="code-type">int32_t</span> <span class="code-argument">_selectionStartPos</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setSelectionColor">setSelectionColor</a>       (<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);<br>+  <span class="code-type">void</span>                          <a class="code-function" href="#setCursorColor">setCursorColor</a>          (<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);<br>-  <span class="code-type">void</span>                          <a class="code-function" href="#loadProgram">loadProgram</a>             (<span class="code-type">void</span>);<br>-  <span class="code-type">void</span>                          <a class="code-function" href="#parseHtmlNode">parseHtmlNode</a>           (<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_element</span>);<br>-  <span class="code-type">bool</span>                          <a class="code-function" href="#extrapolateLastId">extrapolateLastId</a>       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,<br/>                                                          <span class="code-storage-keyword">const</span> <span class="code-type">int32_t</span> <span class="code-argument">_start</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_stop</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_space</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_freeSpace</span>);<br>-  <span class="code-type">bool</span>                          <a class="code-function" href="#extrapolateLastId">extrapolateLastId</a>       (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>,<br/>                                                          <span class="code-storage-keyword">const</span> <span class="code-type">int32_t</span> <span class="code-argument">_start</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_stop</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_space</span>,<br/>                                                          <span class="code-type">int32_t</span> & <span class="code-argument">_freeSpace</span>);<br>-  <span class="code-type">void</span>                          <a class="code-function" href="#htmlAddData">htmlAddData</a>             (<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_data</span>);<br>-  <span class="code-type">void</span>                          <a class="code-function" href="#htmlFlush">htmlFlush</a>               (<span class="code-type">void</span>);<br></pre>
+
+
+<h2>Object Hierarchy:</h2>
+<pre>
+<a href="ewol__Compositing.html">ewol::Compositing</a>
+    +--> <b>ewol::compositing::Text</b>
+</pre>
+<br/>
+<h2>Detail:<h2>
+<h3><a id="getDrawing">getDrawing</a> ()</h3>
+
+<pre>
+<a href="ewol__compositing__Drawing.html" class="code-type">ewol::compositing::Drawing</a> & <span class="code-function">getDrawing</span>(<span class="code-type">void</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3>ewol::compositing::<a id="Text">Text</a> ()</h3>
+
+<pre>
+<span class="code-function">Text</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>,
+     <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);</pre>
+<br/>
+generic constructor
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_fontName</span>  Name of the font that might be loaded
+<br/><b>Parameter [input]:</b> <span class="code-argument">_fontSize</span>  size of the font that might be loaded
+<br/></ul>
+<br/>
+
+<hr/>
+<h3>ewol::compositing::~<a id="Text">Text</a> ()</h3>
+
+<pre>
+~<span class="code-function">Text</span>(<span class="code-type">void</span>);</pre>
+<br/>
+generic destructor
+<br/><br/>
+
+<hr/>
+<h3><a id="translate">translate</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">translate</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="rotate">rotate</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">rotate</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>,
+            <span class="code-type">float</span> <span class="code-argument">_angle</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="scale">scale</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">scale</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<span class="code-type">bool</span> <span class="code-argument">_disableDepthTest</span>);</pre>
+<br/>
+draw All the refistered text in the current element on openGL
+<br/><br/>
+
+<hr/>
+<h3><a id="draw">draw</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">draw</span>(<span class="code-storage-keyword">const</span> mat4 & <span class="code-argument">_transformationMatrix</span>,
+          <span class="code-type">bool</span> <span class="code-argument">_enableDepthTest</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="clear">clear</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">clear</span>(<span class="code-type">void</span>);</pre>
+<br/>
+clear all the registered element in the current element
+<br/><br/>
+
+<hr/>
+<h3><a id="reset">reset</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">reset</span>(<span class="code-type">void</span>);</pre>
+<br/>
+clear all the intermediate result detween 2 prints
+<br/><br/>
+
+<hr/>
+<h3><a id="getPos">getPos</a> ()</h3>
+
+<pre>
+<span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span>(<span class="code-type">void</span>);</pre>
+<br/>
+get the current display position (sometime needed in the gui control)
+<br/><ul>
+<b>Return:</b> the current position.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPos">setPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPos</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+set position for the next text writen
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  Position of the text (in 3D)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setPos">setPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setPos</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setRelPos">setRelPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setRelPos</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+set relative position for the next text writen
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  ofset apply of the text (in 3D)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setRelPos">setRelPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setRelPos</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setColor">setColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setColor</span>(<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);</pre>
+<br/>
+set the Color of the current foreground font
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_color</span>  Color to set on foreground (for next print)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setColorBg">setColorBg</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setColorBg</span>(<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);</pre>
+<br/>
+set the background color of the font (for selected Text (not the global BG))
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_color</span>  Color to set on background (for next print)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setClippingWidth">setClippingWidth</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setClippingWidth</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,
+                      <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);</pre>
+<br/>
+Request a clipping area for the text (next draw only)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  Start position of the clipping
+<br/><b>Parameter [input]:</b> <span class="code-argument">_width</span>  Width size of the clipping
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setClippingWidth">setClippingWidth</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setClippingWidth</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,
+                      <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setClipping">setClipping</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setClipping</span>(<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,
+                 <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);</pre>
+<br/>
+Request a clipping area for the text (next draw only)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_pos</span>  Start position of the clipping
+<br/><b>Parameter [input]:</b> <span class="code-argument">_posEnd</span>  End position of the clipping
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setClipping">setClipping</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setClipping</span>(<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,
+                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="setClippingMode">setClippingMode</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setClippingMode</span>(<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);</pre>
+<br/>
+enable/Disable the clipping (without lose the current clipping position)
+<br/>_newMode The new status of the clipping
+<br/><br/>
+
+<hr/>
+<h3><a id="setFontSize">setFontSize</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFontSize</span>(<span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);</pre>
+<br/>
+Specify the font size (this reset the internal element of the current text (system requirement)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_fontSize</span>  New font size
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setFontName">setFontName</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFontName</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_fontName</span>);</pre>
+<br/>
+Specify the font name (this reset the internal element of the current text (system requirement)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_fontName</span>  Current name of the selected font
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setFont">setFont</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFont</span>(<a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> <span class="code-argument">_fontName</span>,
+             <span class="code-type">int32_t</span> <span class="code-argument">_fontSize</span>);</pre>
+<br/>
+Specify the font property (this reset the internal element of the current text (system requirement)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">fontName</span>  Current name of the selected font
+<br/><b>Parameter [input]:</b> <span class="code-argument">fontSize</span>  New font size
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setFontMode">setFontMode</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFontMode</span>(<span class="code-storage-keyword">enum</span> <a href="ewol__font__mode.html" class="code-type">ewol::font::mode</a> <span class="code-argument">_mode</span>);</pre>
+<br/>
+Specify the font mode for the next <br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">mode</span>  The font mode requested
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setFontBold">setFontBold</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFontBold</span>(<span class="code-type">bool</span> <span class="code-argument">_status</span>);</pre>
+<br/>
+enable or disable the bold mode
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_status</span>  The new status for this display property
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setFontItalic">setFontItalic</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setFontItalic</span>(<span class="code-type">bool</span> <span class="code-argument">_status</span>);</pre>
+<br/>
+enable or disable the italic mode
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_status</span>  The new status for this display property
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setKerningMode">setKerningMode</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setKerningMode</span>(<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);</pre>
+<br/>
+set the activation of the Kerning for the display (if it existed)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newMode</span>  enable/Diasable the kerning on this font.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setDistanceFieldMode">setDistanceFieldMode</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setDistanceFieldMode</span>(<span class="code-type">bool</span> <span class="code-argument">_newMode</span>);</pre>
+<br/>
+Request the distance field mode for this text display
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_newMode</span>  enable/Diasable the Distance Field on this font.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+display a compleat string in the current element.
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to display.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="printDecorated">printDecorated</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">printDecorated</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+display a compleat string in the current element with the generic decoration specification. (basic html data)
+<pre>
+	<br/>
+	<br/><br/><br/>
+	<center>
+		text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+		<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+		an an other thext
+	</center>
+	<br/><br/><br/>
+	<left>
+		plop 1
+	</left>
+	<br/><br/><br/>
+	<right>
+		plop 2
+	</right>
+	<br/><br/><br/>
+	<justify>
+		Un exemple de text
+	</justify>
+</pre>
+<br/><b>Notes:</b> This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to display.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="printHTML">printHTML</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">printHTML</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+display a compleat string in the current element with the generic decoration specification. (basic html data)
+<pre>
+	<html>
+		<body>
+			<br/>
+			<br/><br/><br/>
+			<center>
+				text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+				<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+				an an other thext
+			</center>
+			<br/><br/><br/>
+			<left>
+				plop 1
+			</left>
+			<br/><br/><br/>
+			<right>
+				plop 2
+			</right>
+			<br/><br/><br/>
+			<justify>
+				Un exemple de text
+			</justify>
+		</body>
+	</html>
+</pre>
+<br/><b>Notes:</b> This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to display.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,
+           <span class="code-storage-keyword">const</span> std::vector<TextDecoration> & <span class="code-argument">_decoration</span>);</pre>
+<br/>
+display a compleat string in the current element whith specific decorations (advence mode).
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to display.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_decoration</span>  The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>,
+           <span class="code-storage-keyword">const</span> std::vector<TextDecoration> & <span class="code-argument">_decoration</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="print">print</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">print</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> & <span class="code-argument">_charcode</span>);</pre>
+<br/>
+display the current char in the current element (note that the kerning is availlable if the position is not changed)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_charcode</span>  Char that might be dispalyed
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="forceLineReturn">forceLineReturn</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">forceLineReturn</span>(<span class="code-type">void</span>);</pre>
+<br/>
+This generate the line return  == > it return to the alignement position start and at the correct line position ==> it might be use to not know the line height
+<br/><br/>
+
+<hr/>
+<h3><a id="setTextAlignement">setTextAlignement</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setTextAlignement</span>(<span class="code-type">float</span> <span class="code-argument">_startTextpos</span>,
+                       <span class="code-type">float</span> <span class="code-argument">_stopTextPos</span>,
+                       <span class="code-storage-keyword">enum</span> ewol::compositing::Text::aligneMode <span class="code-argument">_alignement</span>);</pre>
+<br/>
+This generate the possibility to generate the big text property
+<br/><b>Notes:</b> The text align in center change of line every display done (even if it was just a char)
+<br/> <ul>
+<b>Parameter [input]:</b> <span class="code-argument">_startTextpos</span>  The x text start position of the display.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_stopTextPos</span>  The x text stop position of the display.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_alignement</span>  mode of alignement for the Text.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="disableAlignement">disableAlignement</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">disableAlignement</span>(<span class="code-type">void</span>);</pre>
+<br/>
+disable the alignement system
+<br/><br/>
+
+<hr/>
+<h3><a id="calculateSizeHTML">calculateSizeHTML</a> ()</h3>
+
+<pre>
+vec3 <span class="code-function">calculateSizeHTML</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+calculate a theoric text size
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to calculate dimention.
+<br/><b>Return:</b> The theoric size used.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="calculateSizeDecorated">calculateSizeDecorated</a> ()</h3>
+
+<pre>
+vec3 <span class="code-function">calculateSizeDecorated</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+calculate a theoric text size
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to calculate dimention.
+<br/><b>Return:</b> The theoric size used.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="calculateSize">calculateSize</a> ()</h3>
+
+<pre>
+vec3 <span class="code-function">calculateSize</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>);</pre>
+<br/>
+calculate a theoric text size
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string to calculate dimention.
+<br/><b>Return:</b> The theoric size used.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="calculateSize">calculateSize</a> ()</h3>
+
+<pre>
+vec3 <span class="code-function">calculateSize</span>(<span class="code-storage-keyword">const</span> <span class="code-type">char32_t</span> & <span class="code-argument">_charcode</span>);</pre>
+<br/>
+calculate a theoric charcode size
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_charcode</span>  The µUnicode value to calculate dimention.
+<br/><b>Return:</b> The theoric size used.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="printCursor">printCursor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">printCursor</span>(<span class="code-type">bool</span> <span class="code-argument">_isInsertMode</span>,
+                 <span class="code-type">float</span> <span class="code-argument">_cursorSize</span>);</pre>
+<br/>
+draw a cursor at the specify position
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_isInsertMode</span>  True if the insert mode is activated
+<br/><b>Parameter [input]:</b> <span class="code-argument">_cursorSize</span>  The sizae of the cursor that might be set when insert mode is set [default 20]
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="disableCursor">disableCursor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">disableCursor</span>(<span class="code-type">void</span>);</pre>
+<br/>
+remove the cursor display
+<br/><br/>
+
+<hr/>
+<h3><a id="setCursorPos">setCursorPos</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setCursorPos</span>(<span class="code-type">int32_t</span> <span class="code-argument">_cursorPos</span>);</pre>
+<br/>
+set a cursor at a specific position:
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_cursorPos</span>  id of the cursor position
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setCursorSelection">setCursorSelection</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setCursorSelection</span>(<span class="code-type">int32_t</span> <span class="code-argument">_cursorPos</span>,
+                        <span class="code-type">int32_t</span> <span class="code-argument">_selectionStartPos</span>);</pre>
+<br/>
+set a cursor at a specific position with his associated selection:
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_cursorPos</span>  id of the cursor position
+<br/><b>Parameter [input]:</b> <span class="code-argument">_selectionStartPos</span>  id of the starting of the selection
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setSelectionColor">setSelectionColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setSelectionColor</span>(<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);</pre>
+<br/>
+change the selection color
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_color</span>  New color for the Selection
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="setCursorColor">setCursorColor</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">setCursorColor</span>(<span class="code-storage-keyword">const</span> etk::Color<> & <span class="code-argument">_color</span>);</pre>
+<br/>
+change the cursor color
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_color</span>  New color for the Selection
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="loadProgram">loadProgram</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">loadProgram</span>(<span class="code-type">void</span>);</pre>
+<br/>
+load the openGL program and get all the ID needed
+<br/><br/>
+
+<hr/>
+<h3><a id="parseHtmlNode">parseHtmlNode</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">parseHtmlNode</span>(<a href="http://HeeroYui.github.io/exml//exml__Element.html" class="code-type">exml::Element</a> * <span class="code-argument">_element</span>);</pre>
+<br/>
+This parse a tinyXML node (void pointer to permit to hide tiny XML in include).
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_element</span>  the exml element.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="extrapolateLastId">extrapolateLastId</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">extrapolateLastId</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_text</span>,
+                       <span class="code-storage-keyword">const</span> <span class="code-type">int32_t</span> <span class="code-argument">_start</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_stop</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_space</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_freeSpace</span>);</pre>
+<br/>
+calculate the element number that is the first out the alignement range 
+       (start at the specify ID, and use start pos with current one)
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_text</span>  The string that might be parsed.
+<br/><b>Parameter [input]:</b> <span class="code-argument">_start</span>  The first elemnt that might be used to calculate.
+<br/><b>Parameter [output]:</b> <span class="code-argument">_stop</span>  The last Id availlable in the current string.
+<br/><b>Parameter [output]:</b> <span class="code-argument">_space</span>  Number of space in the string.
+<br/><b>Return:</b> true if the rifht has free space that can be use for jystify (return false if we find \n
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="extrapolateLastId">extrapolateLastId</a> ()</h3>
+
+<pre>
+<span class="code-type">bool</span> <span class="code-function">extrapolateLastId</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/u32string/" class="code-type">std::u32string</a> & <span class="code-argument">_text</span>,
+                       <span class="code-storage-keyword">const</span> <span class="code-type">int32_t</span> <span class="code-argument">_start</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_stop</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_space</span>,
+                       <span class="code-type">int32_t</span> & <span class="code-argument">_freeSpace</span>);</pre>
+<br/>
+<br/>
+
+<hr/>
+<h3><a id="htmlAddData">htmlAddData</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">htmlAddData</span>(<span class="code-storage-keyword">const</span> <a href="http://www.cplusplus.com/reference/string/string/" class="code-type">std::string</a> & <span class="code-argument">_data</span>);</pre>
+<br/>
+add a line with the current m_htmlDecoTmp decoration
+<br/><ul>
+<b>Parameter [input]:</b> <span class="code-argument">_data</span>  The cuurent data to add.
+<br/></ul>
+<br/>
+
+<hr/>
+<h3><a id="htmlFlush">htmlFlush</a> ()</h3>
+
+<pre>
+<span class="code-type">void</span> <span class="code-function">htmlFlush</span>(<span class="code-type">void</span>);</pre>
+<br/>
+draw the current line
+<br/><br/>
+
+<hr/>
+	</div>
+</body>
+</html>
