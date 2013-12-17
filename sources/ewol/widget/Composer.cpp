@@ -103,7 +103,7 @@ void ewol::widget::Composer::registerOnEventNameWidget(ewol::Object * _destinati
                                                        const std::string& _overloadData) {
 	ewol::Widget* tmpWidget = getWidgetNamed(_subWidgetName);
 	if (NULL != tmpWidget) {
-		//EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
+		EWOL_DEBUG("Find widget named : \"" << _subWidgetName << "\" register event=\"" << _eventId << "\"");
 		tmpWidget->registerOnEvent(_destinationObject, _eventId, _eventIdgenerated, _overloadData);
 	} else {
 		EWOL_WARNING("[" << getId() << "] {" << getObjectType() << "} Can not register event : \"" << _eventId << "\" the widget named=\"" << _subWidgetName << "\" does not exist");

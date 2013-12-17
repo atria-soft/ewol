@@ -105,24 +105,31 @@ void ewol::Object::addEventId(const char * _generateEventId) {
 
 void ewol::Object::generateEventId(const char * _generateEventId, const std::string& _data) {
 	int32_t nbObject = getObjectManager().getNumberObject();
+	EWOL_VERBOSE("try send message '" << _generateEventId << "'");
 	// for every element registered ...
 	for (size_t iii=0; iii<m_externEvent.size(); iii++) {
-		if (NULL!=m_externEvent[iii]) {
-			// if we find the event ...
-			if (m_externEvent[iii]->localEventId == _generateEventId) {
-				if (NULL != m_externEvent[iii]->destObject) {
-					if (m_externEvent[iii]->overloadData.size() <= 0){
-						ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, _data);
-						EWOL_VERBOSE("send message " << tmpMsg);
-						m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
-					} else {
-						// set the user requested data ...
-						ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
-						EWOL_VERBOSE("send message " << tmpMsg);
-						m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
-					}
-				}
-			}
+		if (NULL==m_externEvent[iii]) {
+			EWOL_VERBOSE("    Null pointer");
+			continue;
+		}
+		// if we find the event ...
+		if (m_externEvent[iii]->localEventId != _generateEventId) {
+			EWOL_VERBOSE("    wrong event '" << m_externEvent[iii]->localEventId << "' != '" << _generateEventId << "'");
+			continue;
+		}
+		if (m_externEvent[iii]->destObject == NULL) {
+			EWOL_VERBOSE("    NULL dest");
+			continue;
+		}
+		if (m_externEvent[iii]->overloadData.size() <= 0){
+			ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, _data);
+			EWOL_VERBOSE("send message " << tmpMsg);
+			m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
+		} else {
+			// set the user requested data ...
+			ewol::object::Message tmpMsg(this, m_externEvent[iii]->destEventId, m_externEvent[iii]->overloadData);
+			EWOL_VERBOSE("send message " << tmpMsg);
+			m_externEvent[iii]->destObject->onReceiveMessage(tmpMsg);
 		}
 	}
 	if (nbObject > getObjectManager().getNumberObject()) {
@@ -163,11 +170,12 @@ void ewol::Object::registerOnEvent(ewol::Object * _destinationObject,
 		}
 	}
 	if (false == findIt) {
-		EWOL_DEBUG("Try to register with a NON direct string name");
+		EWOL_VERBOSE("Try to register with a NON direct string name");
 		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
 			if (0 == strncmp(m_availlableEventId[iii], _eventId, 1024)) {
 				findIt = true;
-				_eventIdgenerated = m_availlableEventId[iii];
+				_eventId = m_availlableEventId[iii];
+				EWOL_VERBOSE("find event ID : '" << _eventId << "' ==> '" << _eventIdgenerated << "'");
 				break;
 			}
 		}

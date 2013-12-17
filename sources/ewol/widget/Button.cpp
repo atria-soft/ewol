@@ -261,6 +261,7 @@ void ewol::widget::Button::setToggleMode(bool _togg) {
 }
 
 bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
+	EWOL_VERBOSE("Event on BT : " << _event);
 	// disable event in the lock access mode :
 	if(ewol::widget::Button::lockAccess == m_lock) {
 		return false;
@@ -284,17 +285,17 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 		}
 	}
 	bool previousPressed = m_buttonPressed;
-	//EWOL_DEBUG("Event on BT ... mouse position : " << m_mouseHover);
+	EWOL_VERBOSE("Event on BT ... mouse hover : " << m_mouseHover);
 	if (true == m_mouseHover) {
 		if (1 == _event.getId()) {
 			if(ewol::key::statusDown == _event.getStatus()) {
-				//EWOL_DEBUG("Generate event : " << eventDown);
+				EWOL_VERBOSE(getName() << " : Generate event : " << eventDown);
 				generateEventId(eventDown);
 				m_buttonPressed = true;
 				markToRedraw();
 			}
 			if(ewol::key::statusUp == _event.getStatus()) {
-				//EWOL_DEBUG("Generate event : " << eventUp);
+				EWOL_VERBOSE(getName() << " : Generate event : " << eventUp);
 				generateEventId(eventUp);
 				m_buttonPressed = false;
 				markToRedraw();
@@ -309,14 +310,14 @@ bool ewol::widget::Button::onEventInput(const ewol::event::Input& _event) {
 				} else {
 					// inverse value :
 					m_value = (m_value)?false:true;
-					//EWOL_DEBUG("Generate event : " << eventPressed);
+					EWOL_VERBOSE(getName() << " : Generate event : " << eventPressed);
 					generateEventId(eventPressed);
-					//EWOL_DEBUG("Generate event : " << eventValue << " val=" << m_value );
+					EWOL_VERBOSE(getName() << " : Generate event : " << eventValue << " val=" << m_value );
 					generateEventId(eventValue, std::to_string(m_value));
 					if(    false == m_toggleMode
 					    && true == m_value) {
 						m_value = false;
-						//EWOL_DEBUG("Generate event : " << ewol::widget::Button::eventValue << " val=" << m_value);
+						EWOL_VERBOSE(getName() << " : Generate event : " << ewol::widget::Button::eventValue << " val=" << m_value);
 						generateEventId(eventValue, std::to_string(m_value));
 					}
 				}
