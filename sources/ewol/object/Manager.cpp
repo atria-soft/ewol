@@ -97,15 +97,15 @@ int32_t ewol::object::Manager::getNumberObject(void) {
 void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
 	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
-			EWOL_DEBUG("inform " << iii << "/" << m_eObjectList.size());
-			EWOL_DEBUG("    named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
+			//EWOL_DEBUG("inform " << iii << "/" << m_eObjectList.size());
+			//EWOL_DEBUG("    named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
 			m_eObjectList[iii]->onObjectRemove(_object);
 		}
 	}
 	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] != _object) {
-			EWOL_DEBUG("inform2 " << iii << "/" << m_eObjectList.size());
+			//EWOL_DEBUG("inform2 " << iii << "/" << m_eObjectList.size());
 			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
 		}
 	}
