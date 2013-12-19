@@ -67,6 +67,8 @@ namespace ewol {
 				 * @return true, if element is removed, and false for just decreasing counter
 				 */
 				bool release(ewol::Resource*& _object);
+			public: // herited function
+				virtual void onObjectRemove(ewol::Object * _removeObject);
 		};
 	};
 };

@@ -195,19 +195,37 @@ bool ewol::resource::Manager::release(ewol::Resource*& _object) {
 		if(m_resourceList[iii] != _object) {
 			continue;
 		}
-		// insidiously remove the pointer for the caller ...
-		_object = NULL;
-		if (true == m_resourceList[iii]->decrement()) {
-			// delete element
-			delete(m_resourceList[iii]);
+		if (m_resourceList[iii]->decrement() == true) {
 			// remove element from the list :
 			m_resourceList[iii] = NULL;
+			// delete element
+			_object->removeObject();
+			// insidiously remove the pointer for the caller ...
+			_object = NULL;
 			return true; // object really removed
 		}
+		// insidiously remove the pointer for the caller ...
+		_object = NULL;
 		return false; // just decrement ...
 	}
 	EWOL_ERROR("Can not find the resources in the list : " << (int64_t)_object);
 	// insidiously remove the pointer for the caller ...
 	_object = NULL;
 	return false;
+}
+
+// in case of error ...
+void ewol::resource::Manager::onObjectRemove(ewol::Object * _removeObject) {
+	for (size_t iii=0; iii<m_resourceList.size(); ++iii) {
+		if (m_resourceList[iii] == _removeObject) {
+			EWOL_WARNING("Remove Resource that is not removed ... ");
+			m_resourceList[iii] = NULL;
+		}
+	}
+	for (size_t iii=0; iii<m_resourceListToUpdate.size(); ++iii) {
+		if (m_resourceListToUpdate[iii] == _removeObject) {
+			EWOL_WARNING("Remove Resource that is not removed .2. ");
+			m_resourceListToUpdate[iii] = NULL;
+		}
+	}
 }

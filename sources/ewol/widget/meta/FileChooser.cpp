@@ -223,12 +223,12 @@ ewol::widget::FileChooser::FileChooser(void) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			mySizerVert->subWidgetAdd(mySizerHori);
-			myImage = new ewol::widget::Image("THEME:GUI:File.svg");
+			myImage = new ewol::widget::Image("THEME:GUI:File.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				//myImage->setExpand(bvec2(false,true));
+				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
+				myImage->setExpand(bvec2(false,false));
 				mySizerHori->subWidgetAdd(myImage);
 			}
 			m_widgetCurrentFileName = new ewol::widget::Entry(m_file);
@@ -248,12 +248,12 @@ ewol::widget::FileChooser::FileChooser(void) {
 			EWOL_ERROR("Can not allocate widget  == > display might be in error");
 		} else {
 			mySizerVert->subWidgetAdd(mySizerHori);
-			myImage = new ewol::widget::Image("THEME:GUI:Folder.svg");
+			myImage = new ewol::widget::Image("THEME:GUI:Folder.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				//myImage->setExpand(bvec2(false,true));
+				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
+				myImage->setExpand(bvec2(false,false));
 				mySizerHori->subWidgetAdd(myImage);
 			}
 			
@@ -268,13 +268,13 @@ ewol::widget::FileChooser::FileChooser(void) {
 				//m_widgetCurrentFolder->setWidth(200);
 				mySizerHori->subWidgetAdd(m_widgetCurrentFolder);
 			}
-			myImage = new ewol::widget::Image("THEME:GUI:Home.svg");
+			myImage = new ewol::widget::Image("THEME:GUI:Home.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
 			if (NULL == myImage) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
+				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
 				myImage->registerOnEvent(this, ewol::widget::Image::eventPressed, ewolEventFileChooserHome);
-				//myImage->setExpand(bvec2(false,true));
+				myImage->setExpand(bvec2(false,false));
 				mySizerHori->subWidgetAdd(myImage);
 			}
 		}

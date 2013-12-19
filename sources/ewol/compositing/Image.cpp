@@ -228,8 +228,8 @@ void ewol::compositing::Image::printPart(const vec2& _size,
 
 void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2& _size) {
 	clear();
-	// remove old one
-	ewol::resource::TextureFile::release(m_resource);
+	ewol::resource::TextureFile* resource = m_resource;
+	m_resource = NULL;
 	ivec2 tmpSize(_size.x(),_size.y());
 	// note that no image can be loaded...
 	if (_newFile != "") {
@@ -239,10 +239,20 @@ void ewol::compositing::Image::setSource(const std::string& _newFile, const vec2
 			EWOL_ERROR("Can not get Image resource");
 		}
 	}
+	if (m_resource == NULL) {
+		if (resource != NULL) {
+			EWOL_WARNING("Retrive previous resource");
+			m_resource = resource;
+		}
+	} else {
+		if (resource != NULL) {
+			ewol::resource::TextureFile::release(resource);
+		}
+	}
 }
 
 bool ewol::compositing::Image::hasSources(void) {
-	return m_resource!=NULL;
+	return m_resource != NULL;
 }
 
 

@@ -171,7 +171,7 @@ ewol::Widget* ewol::widget::ContainerN::getWidgetNamed(const std::string& _widge
 }
 
 void ewol::widget::ContainerN::onObjectRemove(ewol::Object* _removeObject) {
-	// First step call parrent : 
+	// First step call parrent :
 	ewol::Widget::onObjectRemove(_removeObject);
 	// second step find if in all the elements ...
 	for (int64_t iii=m_subWidget.size()-1; iii >= 0; iii--) {

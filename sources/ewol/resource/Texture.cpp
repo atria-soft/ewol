@@ -35,7 +35,7 @@ static int32_t nextP2(int32_t _value) {
 
 ewol::resource::Texture::Texture(const std::string& _filename) :
  ewol::Resource(_filename) {
-	addObjectType("ewol::compositing::Texture");
+	addObjectType("ewol::resource::Texture");
 	m_loaded = false;
 	m_texId = 0;
 	m_endPointSize.setValue(1.0,1.0);

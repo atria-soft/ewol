@@ -19,13 +19,15 @@
 
 ewol::resource::TextureFile::TextureFile(const std::string& _genName) :
   Texture(_genName) {
+	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=--- size=---");
 	
 }
 
 
 ewol::resource::TextureFile::TextureFile(std::string _genName, const std::string& _tmpfileName, const ivec2& _size) :
   ewol::resource::Texture(_genName) {
-	addObjectType("ewol::compositing::TextureFile");
+	addObjectType("ewol::resource::Image");
+	EWOL_DEBUG("create a new resource::Image : _genName=" << _genName << " _tmpfileName=" << _tmpfileName << " size=" << _size);
 	if (false == egami::load(m_data, _tmpfileName, _size)) {
 		EWOL_ERROR("ERROR when loading the image : " << _tmpfileName);
 	}

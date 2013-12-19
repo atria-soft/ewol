@@ -97,12 +97,15 @@ int32_t ewol::object::Manager::getNumberObject(void) {
 void ewol::object::Manager::informOneObjectIsRemoved(ewol::Object* _object) {
 	for (size_t iii=0; iii<m_eObjectList.size(); iii++) {
 		if (m_eObjectList[iii] != NULL) {
+			EWOL_DEBUG("inform " << iii << "/" << m_eObjectList.size());
+			EWOL_DEBUG("    named '" << m_eObjectList[iii]->getName() << "' type=" << m_eObjectList[iii]->getObjectType());
 			m_eObjectList[iii]->onObjectRemove(_object);
 		}
 	}
 	for (size_t iii=0; iii<m_eObjectAutoRemoveList.size(); iii++) {
 		if(    m_eObjectAutoRemoveList[iii] != NULL
 		    && m_eObjectAutoRemoveList[iii] != _object) {
+			EWOL_DEBUG("inform2 " << iii << "/" << m_eObjectList.size());
 			m_eObjectAutoRemoveList[iii]->onObjectRemove(_object);
 		}
 	}
@@ -149,6 +152,7 @@ void ewol::object::Manager::autoRemove(ewol::Object* _object) {
 			informOneObjectIsRemoved(_object);
 			m_eObjectAutoRemoveList.push_back(_object);
 			ewol::getContext().forceRedrawAll();
+			EWOL_DEBUG("Auto-Remove Object ... done");
 			return;
 		}
 	}
@@ -159,7 +163,7 @@ void ewol::object::Manager::autoRemove(ewol::Object* _object) {
 void ewol::object::Manager::removeAllAutoRemove(void) {
 	//EWOL_DEBUG("Auto-Remove Object section : " << m_eObjectAutoRemoveList.size() << " elemeents");
 	while(0<m_eObjectAutoRemoveList.size()) {
-		if (m_eObjectAutoRemoveList[0]!=NULL) {
+		if (m_eObjectAutoRemoveList[0] != NULL) {
 			EWOL_DEBUG("Real Auto-Remove Object type=\"" << m_eObjectAutoRemoveList[0]->getObjectType() << "\"");
 			delete(m_eObjectAutoRemoveList[0]);
 			m_eObjectAutoRemoveList[0] = NULL;

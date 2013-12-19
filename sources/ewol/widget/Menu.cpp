@@ -238,7 +238,7 @@ void ewol::widget::Menu::onReceiveMessage(const ewol::object::Message& _msg) {
 					ewol::widget::Windows* currentWindows = getWindows();
 					if (NULL == currentWindows) {
 						EWOL_ERROR("Can not get the curent Windows...");
-						delete(m_widgetContextMenu);
+						m_widgetContextMenu->removeObject();
 						m_widgetContextMenu=NULL;
 					} else {
 						currentWindows->popUpWidgetPush(m_widgetContextMenu);
