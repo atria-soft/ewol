@@ -29,7 +29,7 @@ namespace ewol {
 			/**
 			 * @brief Virtal pure function that request the draw of all openGl elements
 			 */
-			virtual void draw(bool _disableDepthTest=true)=0;
+			virtual void draw(bool _disableDepthTest = true) = 0;
 			/**
 			 * @brief clear alll tre registered element in the current element
 			 */

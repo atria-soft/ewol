@@ -91,9 +91,9 @@ ewol::resource::FontFreeType::FontFreeType(const std::string& _fontName) :
 		EWOL_ERROR("... another error code means that the font file could not ... be opened or read, or simply that it is broken...");
 	} else {
 		// all OK
-		EWOL_INFO("load font : \"" << _fontName << "\" ");
-		//Display();
+		EWOL_INFO("load font : \"" << _fontName << "\" glyph count = " << (int)m_fftFace->num_glyphs);
 		m_init = true;
+		//display();
 	}
 }
 
@@ -260,7 +260,7 @@ void ewol::resource::FontFreeType::display(void) {
 	if(false == m_init) {
 		return;
 	}
-	EWOL_INFO("    nuber of glyph       = " << (int)m_fftFace->num_glyphs);
+	EWOL_INFO("    number of glyph       = " << (int)m_fftFace->num_glyphs);
 	if ((FT_FACE_FLAG_SCALABLE & m_fftFace->face_flags) != 0) {
 		EWOL_INFO("    flags                = FT_FACE_FLAG_SCALABLE (enable)");
 	} else {
