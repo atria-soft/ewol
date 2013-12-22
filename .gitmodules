@@ -47,3 +47,6 @@
 [submodule "external/ege"]
 	path = external/ege
 	url = https://github.com/HeeroYui/ege.git
+[submodule "monk"]
+	path = monk
+	url = https://github.com/HeeroYui/monk.git

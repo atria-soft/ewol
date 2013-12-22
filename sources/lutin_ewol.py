@@ -10,12 +10,7 @@ def Create(target):
 	
 	# module name is 'edn' and type binary.
 	myModule = lutinModule.module(__file__, 'ewol', 'LIBRARY')
-	# enable doculentation :
-	myModule.doc_enable()
-	myModule.documentation.set_website("http://HeeroYui.github.io/ewol/")
-	myModule.documentation.set_path(lutinTools.GetCurrentPath(__file__) + "/ewol/")
-	myModule.documentation.set_path_general_doc(lutinTools.GetCurrentPath(__file__) + "/../doc/")
-	myModule.documentation.set_external_link(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
+	
 	# add extra compilation flags :
 	#myModule.add_extra_compile_flags()
 	# add the file to compile:
