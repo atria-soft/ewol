@@ -1,27 +1,32 @@
 #!/usr/bin/python
-import lutinModule
-import lutinTools
+import lutinModule as module
+import lutinTools as tools
 import os
 import lutinMultiprocess
 
-def Create(target):
+def get_desc():
+	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
+
+
+
+def create(target):
 	# set the ewol folder for Android basic sources ...
-	target.SetEwolFolder(lutinTools.GetCurrentPath(__file__) + "/../")
+	target.set_ewol_folder(tools.get_current_path(__file__) + "/../")
 	
 	# module name is 'edn' and type binary.
-	myModule = lutinModule.module(__file__, 'ewol', 'LIBRARY')
+	myModule = module.Module(__file__, 'ewol', 'LIBRARY')
 	
 	# add extra compilation flags :
 	#myModule.add_extra_compile_flags()
 	# add the file to compile:
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/ewol.cpp',
 		'ewol/debug.cpp',
 		'ewol/Dimension.cpp'
 		])
 	
 	# compositing :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/compositing/Compositing.cpp',
 		'ewol/compositing/Text.cpp',
 		'ewol/compositing/Drawing.cpp',
@@ -32,7 +37,7 @@ def Create(target):
 		])
 	
 	# context :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/context/clipBoard.cpp',
 		'ewol/context/commandLine.cpp',
 		'ewol/context/ConfigFont.cpp',
@@ -41,13 +46,13 @@ def Create(target):
 		'ewol/context/InputManager.cpp'
 		])
 	if target.name=="Linux":
-		myModule.AddSrcFile('ewol/context/X11/Context.cpp')
+		myModule.add_src_file('ewol/context/X11/Context.cpp')
 	elif target.name=="Android":
-		myModule.AddSrcFile("ewol/context/Android/Context.cpp")
+		myModule.add_src_file("ewol/context/Android/Context.cpp")
 	elif target.name=="Windows":
-		myModule.AddSrcFile("ewol/context/Windows/Context.cpp")
+		myModule.add_src_file("ewol/context/Windows/Context.cpp")
 	elif target.name=="MacOs":
-		myModule.AddSrcFile([
+		myModule.add_src_file([
 			"ewol/context/MacOs/Context.cpp",
 			"ewol/context/MacOs/Interface.mm",
 			"ewol/context/MacOs/AppDelegate.mm",
@@ -56,14 +61,14 @@ def Create(target):
 		debug.error("unknow mode...")
 	
 	# event properties :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/event/Entry.cpp',
 		'ewol/event/Time.cpp',
 		'ewol/event/Input.cpp'
 		])
 	
 	# Key properties :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/key/keyboard.cpp',
 		'ewol/key/Special.cpp',
 		'ewol/key/status.cpp',
@@ -71,7 +76,7 @@ def Create(target):
 		])
 	
 	# object :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/object/Config.cpp',
 		'ewol/object/ConfigElement.cpp',
 		'ewol/object/Manager.cpp',
@@ -81,12 +86,12 @@ def Create(target):
 		])
 	
 	# OpenGL interface :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/openGL/openGL.cpp'
 		])
 	
 	# resources :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/resource/Colored3DObject.cpp',
 		'ewol/resource/ConfigFile.cpp',
 		'ewol/resource/FontFreeType.cpp',
@@ -101,7 +106,7 @@ def Create(target):
 		])
 	
 	# widget :
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'ewol/widget/ButtonColor.cpp',
 		'ewol/widget/Button.cpp',
 		'ewol/widget/CheckBox.cpp',
@@ -137,70 +142,70 @@ def Create(target):
 		'ewol/widget/WSlider.cpp',
 		])
 	
-	myModule.CopyFolder('../data/theme/default/widgetEntry.*','theme/default')
-	myModule.CopyFolder('../data/theme/rounded/widgetEntry.*','theme/rounded')
-	myModule.CopyFolder('../data/theme/default/widgetButton.*','theme/default')
-	myModule.CopyFolder('../data/theme/rounded/widgetButton.*','theme/rounded')
-	myModule.CopyFolder('../data/theme/default/widgetContextMenu.*','theme/default')
-	myModule.CopyFolder('../data/theme/rounded/widgetContextMenu.*','theme/rounded')
-	myModule.CopyFolder('../data/theme/default/widgetPopUp.*','theme/default')
-	myModule.CopyFolder('../data/theme/rounded/widgetPopUp.*','theme/rounded')
-	myModule.CopyFolder('../data/textured.*','')
-	myModule.CopyFolder('../data/texturedNoMaterial.*','')
-	myModule.CopyFolder('../data/text.*','')
-	myModule.CopyFolder('../data/simple3D.*','')
-	myModule.CopyFolder('../data/color.*','')
-	myModule.CopyFolder('../data/color3.*','')
-	myModule.CopyFolder('../data/textured3D2.*','')
-	myModule.CopyFolder('../data/textured3D.*','')
+	myModule.copy_folder('../data/theme/default/widgetEntry.*','theme/default')
+	myModule.copy_folder('../data/theme/rounded/widgetEntry.*','theme/rounded')
+	myModule.copy_folder('../data/theme/default/widgetButton.*','theme/default')
+	myModule.copy_folder('../data/theme/rounded/widgetButton.*','theme/rounded')
+	myModule.copy_folder('../data/theme/default/widgetContextMenu.*','theme/default')
+	myModule.copy_folder('../data/theme/rounded/widgetContextMenu.*','theme/rounded')
+	myModule.copy_folder('../data/theme/default/widgetPopUp.*','theme/default')
+	myModule.copy_folder('../data/theme/rounded/widgetPopUp.*','theme/rounded')
+	myModule.copy_folder('../data/textured.*','')
+	myModule.copy_folder('../data/texturedNoMaterial.*','')
+	myModule.copy_folder('../data/text.*','')
+	myModule.copy_folder('../data/simple3D.*','')
+	myModule.copy_folder('../data/color.*','')
+	myModule.copy_folder('../data/color3.*','')
+	myModule.copy_folder('../data/textured3D2.*','')
+	myModule.copy_folder('../data/textured3D.*','')
 	
 	# name of the dependency
-	myModule.AddModuleDepend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
+	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
 	
-	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
+	myModule.add_export_path(tools.get_current_path(__file__))
 	
-	tagFile = lutinTools.GetCurrentPath(__file__) + "/tag"
-	ewolVersionID = lutinTools.FileReadData(tagFile)
-	myModule.CompileFlags_CC([
+	tagFile = tools.get_current_path(__file__) + "/tag"
+	ewolVersionID = tools.file_read_data(tagFile)
+	myModule.compile_flags_CC([
 		"-DEWOL_VERSION=\"\\\""+ewolVersionID+"\\\"\""
 		])
 	
 	if target.name=="Linux":
-		myModule.AddExportflag_LD('-lGL')
+		myModule.add_export_flag_LD('-lGL')
 		
 		#`pkg-config --cflags directfb` `pkg-config --libs directfb`
 		
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_X11__)","y")
-		myModule.AddExportflag_LD('-lX11')
+		myModule.add_export_flag_LD('-lX11')
 		#endif
 		#ifeq ("$(CONFIG___EWOL_LINUX_GUI_MODE_DIRECT_FB__)","y")
-		#myModule.AddExportflag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
+		#myModule.add_export_flag_LD(['-L/usr/local/lib', '-ldirectfb', '-lfusion', '-ldirect'])
 		#endif
 		
 		#http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Introduction
 		# needed package on linux : libgl1-mesa-dev libglew1.5-dev
 		
 		#ifeq ("$(CONFIG_BUILD_PORTAUDIO)","y")
-		#myModule.AddSrcFile('ewol/renderer/audio/interfacePortAudio.cpp')
+		#myModule.add_src_file('ewol/renderer/audio/interfacePortAudio.cpp')
 		#endif
 	
 	elif target.name=="Android":
-		myModule.AddExportflag_LD("-lGLESv2")
+		myModule.add_export_flag_LD("-lGLESv2")
 		
-		myModule.AddExportflag_LD("-ldl")
-		myModule.AddExportflag_LD("-llog")
-		myModule.AddExportflag_LD("-landroid")
-		java_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/../../ewol/sources/android/src/"
-		cpp_tmp_dir = lutinTools.GetCurrentPath(__file__) + "/ewol/renderer/Android/"
+		myModule.add_export_flag_LD("-ldl")
+		myModule.add_export_flag_LD("-llog")
+		myModule.add_export_flag_LD("-landroid")
+		java_tmp_dir = tools.get_current_path(__file__) + "/../../ewol/sources/android/src/"
+		cpp_tmp_dir = tools.get_current_path(__file__) + "/ewol/renderer/Android/"
 		java_tmp_src = java_tmp_dir + "org/ewol/EwolConstants"
-		lutinMultiprocess.RunCommand("javac " + java_tmp_src + ".java")
-		lutinMultiprocess.RunCommand("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
-		lutinTools.CopyFile(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
-		lutinTools.RemoveFile(java_tmp_src + ".class")
+		lutinMultiprocess.run_command("javac " + java_tmp_src + ".java")
+		lutinMultiprocess.run_command("cd " + java_tmp_dir + " && javah org.ewol.EwolConstants")
+		tools.copy_file(java_tmp_dir + "org_ewol_EwolConstants.h", cpp_tmp_dir + "org_ewol_EwolConstants.h", True)
+		tools.remove_file(java_tmp_src + ".class")
 	elif target.name=="Windows":
-		myModule.AddModuleDepend("glew")
+		myModule.add_module_depend("glew")
 	elif target.name=="MacOs":
-		myModule.AddExportflag_LD([
+		myModule.add_export_flag_LD([
 			"-framework Cocoa",
 			"-framework OpenGL",
 			"-framework QuartzCore",
@@ -208,8 +213,4 @@ def Create(target):
 	
 	# add the currrent module at the 
 	return myModule
-
-
-def GetDesc():
-	return "ewol is a main library to use widget in the openGl environement and manage all the wraping os"
 

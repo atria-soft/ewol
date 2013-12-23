@@ -2,27 +2,31 @@
 # --------------------------------------------------------
 # -- Bullet librairy
 # --------------------------------------------------------
-import lutinModule
-import lutinTools
+import lutinModule as module
+import lutinTools as tools
 
-def Create(target):
-	myModule = lutinModule.module(__file__, 'bullet', 'LIBRARY')
+def get_desc():
+	return "Bullet lib : C++ physic engine"
+
+
+def create(target):
+	myModule = module.Module(__file__, 'bullet', 'LIBRARY')
 	
-	myModule.AddModuleDepend(['linearmath'])
+	myModule.add_module_depend(['linearmath'])
 	#remove compilation warning (specific for external libs):
 	myModule.remove_compile_warning()
 	
-	myModule.CompileFlags_CC([
+	myModule.compile_flags_CC([
 		'-Wno-write-strings',
 		'-DHAVE_CONFIG_H',
 		'-O2'])
 	
-	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__)+"/bullet/src/")
-	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-	myModule.AddPath(lutinTools.GetCurrentPath(__file__)+"/bullet/Extras/ConvexDecomposition")
+	myModule.add_export_path(tools.get_current_path(__file__)+"/bullet/src/")
+	myModule.add_export_path(tools.get_current_path(__file__))
+	myModule.add_path(tools.get_current_path(__file__)+"/bullet/Extras/ConvexDecomposition")
 	
 	# lib BulletCollision
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btRaycastCallback.cpp',
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.cpp',
 		'bullet/src/BulletCollision/NarrowPhaseCollision/btSubSimplexConvexCast.cpp',
@@ -119,7 +123,7 @@ def Create(target):
 	
 	
 	# lib BulletDynamics
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/src/BulletDynamics/Dynamics/btRigidBody.cpp',
 		'bullet/src/BulletDynamics/Dynamics/btSimpleDynamicsWorld.cpp',
 		'bullet/src/BulletDynamics/Dynamics/Bullet-C-API.cpp',
@@ -143,7 +147,7 @@ def Create(target):
 	
 	
 	# lib BulletSoftBody
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/src/BulletSoftBody/btDefaultSoftBodySolver.cpp',
 		'bullet/src/BulletSoftBody/btSoftBodyRigidBodyCollisionConfiguration.cpp',
 		'bullet/src/BulletSoftBody/btSoftBody.cpp',
@@ -154,17 +158,17 @@ def Create(target):
 		'bullet/src/BulletSoftBody/btSoftSoftCollisionAlgorithm.cpp'])
 	
 	# lib gimpactutils
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/Extras/GIMPACTUtils/btGImpactConvexDecompositionShape.cpp'])
 	
 	"""
 	# lib convexdecomposition
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/Extras/ConvexDecomposition/concavity.cpp',
 		'bullet/Extras/ConvexDecomposition/ConvexDecomposition.cpp',
 		'bullet/Extras/ConvexDecomposition/vlookup.cpp',
 		'bullet/Extras/ConvexDecomposition/bestfit.cpp',
-		'bullet/Extras/ConvexDecomposition/ConvexBuilder.cpp',
+		'bullet/Extras/ConvexDecomposition/Convexbuilder.cpp',
 		'bullet/Extras/ConvexDecomposition/cd_hull.cpp',
 		'bullet/Extras/ConvexDecomposition/raytri.cpp',
 		'bullet/Extras/ConvexDecomposition/splitplane.cpp',
@@ -178,7 +182,7 @@ def Create(target):
 	
 	"""
 	# lib HACD
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/Extras/HACD/hacdGraph.cpp',
 		'bullet/Extras/HACD/hacdHACD.cpp',
 		'bullet/Extras/HACD/hacdICHull.cpp',

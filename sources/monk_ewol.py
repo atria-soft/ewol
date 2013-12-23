@@ -2,8 +2,11 @@
 import monkModule
 import monkTools as tools
 
+def get_desc():
+	return "EWOL main library (Edn Widget on OpenGl Layer)"
+
 def create():
-	# module name is 'edn' and type binary.
+	# module name is 'ewol' and type binary.
 	myModule = monkModule.Module(__file__, 'ewol', 'LIBRARY')
 	# enable doculentation :
 	myModule.set_website("http://heeroyui.github.io/ewol/")
@@ -12,6 +15,3 @@ def create():
 	# add the currrent module at the 
 	return myModule
 
-
-def get_desc():
-	return "EWOL main node"

@@ -2,15 +2,19 @@
 # --------------------------------------------------------
 # -- Linear Math librairy
 # --------------------------------------------------------
-import lutinModule
-import lutinTools
+import lutinModule as module
+import lutinTools as tools
 
-def Create(target):
-	myModule = lutinModule.module(__file__, 'linearmath', 'LIBRARY')
+def get_desc():
+	return "Bullet lib linar Mathematic interface"
+
+
+def create(target):
+	myModule = module.Module(__file__, 'linearmath', 'LIBRARY')
 	#remove compilation warning (specific for external libs):
 	myModule.remove_compile_warning()
 	
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'bullet/src/LinearMath/btQuickprof.cpp',
 		'bullet/src/LinearMath/btGeometryUtil.cpp',
 		'bullet/src/LinearMath/btAlignedAllocator.cpp',
@@ -20,12 +24,12 @@ def Create(target):
 		'bullet/src/LinearMath/btVector3.cpp',
 		'bullet/src/LinearMath/btConvexHullComputer.cpp'])
 	
-	myModule.CompileFlags_CC([
+	myModule.compile_flags_CC([
 		'-Wno-write-strings',
 		'-DHAVE_CONFIG_H',
 		'-O2'])
 	
-	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__)+"/bullet/src/")
+	myModule.add_export_path(tools.get_current_path(__file__)+"/bullet/src/")
 	
 	# add the currrent module at the 
 	return myModule

@@ -1,11 +1,15 @@
 #!/usr/bin/python
-import lutinModule
-import lutinTools
+import lutinModule as module
+import lutinTools as tools
 
-def Create(target):
+def get_desc():
+	return "z-lib library (for windows)"
+
+
+def create(target):
 	if target.name=="Windows":
-		myModule = lutinModule.module(__file__, 'z', 'LIBRARY')
-		myModule.AddSrcFile([
+		myModule = module.Module(__file__, 'z', 'LIBRARY')
+		myModule.add_src_file([
 			"zlib/adler32.c",
 			"zlib/crc32.c",
 			"zlib/deflate.c",
@@ -22,19 +26,19 @@ def Create(target):
 			"zlib/gzread.c",
 			"zlib/gzwrite.c"])
 		
-		myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
-		myModule.AddExportPath(lutinTools.GetCurrentPath(__file__) + "/zlib")
+		myModule.add_export_path(tools.get_current_path(__file__))
+		myModule.add_export_path(tools.get_current_path(__file__) + "/zlib")
 		
-		myModule.CompileFlags_CC([
+		myModule.compile_flags_CC([
 			"-D_LARGEFILE64_SOURCE=1",
 			"-DHAVE_HIDDEN"])
 		
 		# add the currrent module at the 
 		return myModule
 	else:
-		myModule = lutinModule.module(__file__, 'z', 'PREBUILD')
+		myModule = module.Module(__file__, 'z', 'PREBUILD')
 		
-		myModule.AddExportflag_LD('-lz')
+		myModule.add_export_flag_LD('-lz')
 		# add the currrent module at the 
 		return myModule
 

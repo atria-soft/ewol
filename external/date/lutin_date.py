@@ -1,20 +1,24 @@
 #!/usr/bin/python
-import lutinModule
-import lutinTools
+import lutinModule as module
+import lutinTools as tools
 import datetime
 
-def Create(target):
+def get_desc():
+	return "Date buid date of the program"
+
+
+def create(target):
 	# module name is 'edn' and type binary.
-	myModule = lutinModule.module(__file__, 'date', 'LIBRARY')
+	myModule = module.Module(__file__, 'date', 'LIBRARY')
 	# add the file to compile:
 	
 	
-	myModule.AddSrcFile([
+	myModule.add_src_file([
 		'date/date.cpp'])
 	
 	now = datetime.datetime.now()
 	
-	myModule.CompileFlags_CC([
+	myModule.compile_flags_CC([
 		'-Wno-write-strings',
 		'-Wall',
 		"-DBUILD_DAY=\""+str(now.day)+"\"",
@@ -24,7 +28,7 @@ def Create(target):
 		"-DBUILD_MINUTE=\""+str(now.minute)+"\"",
 		"-DBUILD_SECOND=\""+str(now.second)+"\""])
 	
-	myModule.AddExportPath(lutinTools.GetCurrentPath(__file__))
+	myModule.add_export_path(tools.get_current_path(__file__))
 	
 	# add the currrent module at the 
 	return myModule
