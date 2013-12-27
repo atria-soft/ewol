@@ -115,6 +115,9 @@ namespace ewol {
 				 * @brief draw All the refistered text in the current element on openGL
 				 */
 				void draw(bool _disableDepthTest=true);
+				/**
+				 * @previous
+				 */
 				void draw(const mat4& _transformationMatrix, bool _enableDepthTest=false);
 				/**
 				 * @brief clear all the registered element in the current element
@@ -136,6 +139,9 @@ namespace ewol {
 				 * @param[in] _pos Position of the text (in 3D)
 				 */
 				void setPos(const vec3& _pos);
+				/**
+				 * @previous
+				 */
 				inline void setPos(const vec2& _pos) {
 					setPos(vec3(_pos.x(),_pos.y(),0));
 				};
@@ -144,6 +150,9 @@ namespace ewol {
 				 * @param[in] _pos ofset apply of the text (in 3D)
 				 */
 				void setRelPos(const vec3& _pos);
+				/**
+				 * @previous
+				 */
 				inline void setRelPos(const vec2& _pos) {
 					setRelPos(vec3(_pos.x(),_pos.y(),0));
 				};
@@ -165,6 +174,9 @@ namespace ewol {
 				void setClippingWidth(const vec3& _pos, const vec3& _width) {
 					setClipping(_pos, _pos+_width);
 				}
+				/**
+				 * @previous
+				 */
 				void setClippingWidth(const vec2& _pos, const vec2& _width) {
 					setClipping(_pos, _pos+_width);
 				};
@@ -174,6 +186,9 @@ namespace ewol {
 				 * @param[in] _posEnd End position of the clipping
 				 */
 				void setClipping(const vec3& _pos, const vec3& _posEnd);
+				/**
+				 * @previous
+				 */
 				void setClipping(const vec2& _pos, const vec2& _posEnd) {
 					setClipping(vec3(_pos.x(),_pos.y(),-1), vec3(_posEnd.x(),_posEnd.y(),1) );
 				};
@@ -235,30 +250,35 @@ namespace ewol {
 				 * @param[in] _text The string to display.
 				 */
 				void print(const std::string& _text);
+				/**
+				 * @previous
+				 */
 				void print(const std::u32string& _text);
 				/**
 				 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
-				 * <pre>
-				 *	<br/>
-				 *	<br/><br/><br/>
-				 *	<center>
-				 *		text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
-				 *		<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
-				 *		an an other thext
-				 *	</center>
-				 *	<br/><br/><br/>
-				 *	<left>
-				 *		plop 1
-				 *	</left>
-				 *	<br/><br/><br/>
-				 *	<right>
-				 *		plop 2
-				 *	</right>
-				 *	<br/><br/><br/>
-				 *	<justify>
-				 *		Un exemple de text
-				 *	</justify>
-				 * </pre>
+				 * 
+				 * [code style=xml]
+				 * <br/>
+				 * <br/><br/><br/>
+				 * <center>
+				 * 	text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+				 * 	<font color="#FF0000">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+				 * 	an an other thext
+				 * </center>
+				 * <br/><br/><br/>
+				 * <left>
+				 * 	plop 1
+				 * </left>
+				 * <br/><br/><br/>
+				 * <right>
+				 * 	plop 2
+				 * </right>
+				 * <br/><br/><br/>
+				 * <justify>
+				 * 	Un exemple de text
+				 * </justify>
+				 * [/code]
+				 * 
 				 * @note This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
 				 * @param[in] _text The string to display.
 				 * @TODO : implementation not done ....
@@ -266,31 +286,33 @@ namespace ewol {
 				void printDecorated(const std::string& _text);
 				/**
 				 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
-				 * <pre>
-				 *	<html>
-				 *		<body>
-				 *			<br/>
-				 *			<br/><br/><br/>
-				 *			<center>
-				 *				text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
-				 *				<font color=\"#FF0000\">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
-				 *				an an other thext
-				 *			</center>
-				 *			<br/><br/><br/>
-				 *			<left>
-				 *				plop 1
-				 *			</left>
-				 *			<br/><br/><br/>
-				 *			<right>
-				 *				plop 2
-				 *			</right>
-				 *			<br/><br/><br/>
-				 *			<justify>
-				 *				Un exemple de text
-				 *			</justify>
-				 *		</body>
-				 *	</html>
-				 * </pre>
+				 * 
+				 * [code style=xml]
+				 * <html>
+				 * 	<body>
+				 * 		<br/>
+				 * 		<br/><br/><br/>
+				 * 		<center>
+				 * 			text exemple <b>in bold</b> other text <b>bold part <i>boldItalic part</i></b> an other thext
+				 * 			<font color="#FF0000">colored text <b>bold color text</b> <i>bold italic text</i> normal color text</font> the end of the string<br/>
+				 * 			an an other thext
+				 * 		</center>
+				 * 		<br/><br/><br/>
+				 * 		<left>
+				 * 			plop 1
+				 * 		</left>
+				 * 		<br/><br/><br/>
+				 * 		<right>
+				 * 			plop 2
+				 * 		</right>
+				 * 		<br/><br/><br/>
+				 * 		<justify>
+				 * 			Un exemple de text
+				 * 		</justify>
+				 * 	</body>
+				 * </html>
+				 * [/code]
+				 * 
 				 * @note This is parsed with tiny xml, then be carfull that the XML is correct, and all balises are closed ... otherwite the display can not be done
 				 * @param[in] _text The string to display.
 				 * @TODO : implementation not done ....
@@ -302,6 +324,9 @@ namespace ewol {
 				 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 				 */
 				void print(const std::string& _text, const std::vector<TextDecoration>& _decoration);
+				/**
+				 * @previous
+				 */
 				void print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration);
 				/**
 				 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
@@ -374,10 +399,14 @@ namespace ewol {
 				 * @param[in] _start The first elemnt that might be used to calculate.
 				 * @param[out] _stop The last Id availlable in the current string.
 				 * @param[out] _space Number of space in the string.
-				 * @parma[out] _freespace This represent the number of pixel present in the right white space.
-				 * @return true if the rifht has free space that can be use for jystify (return false if we find \n
+				 * @param[out] _freespace This represent the number of pixel present in the right white space.
+				 * @return true if the rifht has free space that can be use for jystify.
+				 * @return false if we find '\n'
 				 */
 				bool extrapolateLastId(const std::string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
+				/**
+				 * @previous
+				 */
 				bool extrapolateLastId(const std::u32string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 			private:
 				// this section is reserved for HTML parsing and display:

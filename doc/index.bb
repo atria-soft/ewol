@@ -31,7 +31,7 @@ This exclude the classical extern library with licence:
 :** GPL
 [/note]
 
-==== License (DSB) ====
+==== License (BSD) ====
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
 are met:

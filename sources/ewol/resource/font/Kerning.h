@@ -13,10 +13,9 @@ namespace ewol {
 	/**
 	 * @not-in-doc
 	 * @brief Kerning properties of one specific Glyph with an other
-	 * @note The "Kerning" is the methode to provide a better display for some string like
-	 *       the "VA" has 2 letter that overlap themself. This name Kerning
 	 * 
 	 * Without Kerning :
+	 * [pre]
 	 *                                     
 	 *        \          /      /\         
 	 *         \        /      /  \        
@@ -25,8 +24,10 @@ namespace ewol {
 	 *            \  /      /        \     
 	 *             \/      /          \    
 	 *        v          v a          a    
-	 *
+	 * [/pre]
+	 * 
 	 * With Kerning :
+	 * [pre]
 	 *                                     
 	 *        \          /  /\             
 	 *         \        /  /  \            
@@ -35,7 +36,10 @@ namespace ewol {
 	 *            \  /  /        \         
 	 *             \/  /          \        
 	 *        v        a v        a        
+	 * [/pre]
 	 * 
+	 * @note The "Kerning" is the methode to provide a better display for some string like
+	 *       the "VA" has 2 letter that overlap themself. This name Kerning
 	 */
 	class Kerning {
 		public:

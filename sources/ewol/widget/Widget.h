@@ -738,26 +738,26 @@ namespace ewol {
 			 * @param[in] _mode Configuring mode.
 			 * @param[in] _type Type of the annimation.
 			 */
-			void addAnnimationType(enum annimationMode _mode, const char* _type);
+			void addAnnimationType(enum ewol::Widget::annimationMode _mode, const char* _type);
 		public:
 			/**
 			 * @brief set a annimation type.
 			 * @param[in] _mode Configuring mode.
 			 * @param[in] _type type of the annimation
 			 */
-			void setAnnimationType(enum annimationMode _mode, const std::string& _type);
+			void setAnnimationType(enum ewol::Widget::annimationMode _mode, const std::string& _type);
 			/**
 			 * @brief set a annimation time to produce.
 			 * @param[in] _mode Configuring mode.
 			 * @param[in] _time Time in second of the annimation display
 			 */
-			void setAnnimationTime(enum annimationMode _mode, float _time);
+			void setAnnimationTime(enum ewol::Widget::annimationMode _mode, float _time);
 			/**
 			 * @brief Start the annimation.
 			 * @param[in] _mode Configuring mode.
 			 * @return true if an annimation will be started, false ==> no annimation and no event
 			 */
-			bool startAnnimation(enum annimationMode _mode);
+			bool startAnnimation(enum ewol::Widget::annimationMode _mode);
 			/**
 			 * @brief Stop/Break the annimation.
 			 * @return true if an annimation will be stoped, false ==> no curent annimation and no event wil be generated
@@ -769,7 +769,9 @@ namespace ewol {
 			 * @param[in] _mode Configuring mode.
 			 * @return true need to add periodic call.
 			 */
-			virtual bool onStartAnnimation(enum annimationMode _mode) { return false; };
+			virtual bool onStartAnnimation(enum ewol::Widget::annimationMode _mode) {
+				return false;
+			};
 			/**
 			 * @brief Event when Stop the annimation.
 			 */
