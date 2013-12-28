@@ -25,7 +25,7 @@ void ewol::widget::Image::init(ewol::widget::Manager& _widgetManager) {
 }
 
 
-const char * const ewol::widget::Image::eventPressed = "ewol-widget-image-event-pressed";
+const char * const ewol::widget::Image::eventPressed = "pressed";
 
 const char * const ewol::widget::Image::configRatio = "ratio";
 const char * const ewol::widget::Image::configSize = "size";

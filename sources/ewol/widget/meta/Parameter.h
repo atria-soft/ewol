@@ -20,7 +20,6 @@
 #include <ewol/widget/WSlider.h>
 #include <ewol/widget/meta/ParameterList.h>
 
-extern const char * const ewolEventParameterClose;
 
 namespace ewol {
 	namespace widget {
@@ -28,6 +27,9 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Parameter : public ewol::widget::PopUp {
+			public:
+				// Event list of properties
+				static const char * const eventClose;
 			public:
 				Parameter(void);
 				~Parameter(void);

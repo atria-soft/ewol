@@ -22,8 +22,8 @@
 namespace ewol {
 	namespace widget {
 		/**
-		 * @ingroup ewolWidgetGroup
-		 * @brief a composed button is a button with an inside composed with the specify XML element  == > this permit to generate standard element simple
+		 * @brief a composed button is a button with an inside composed with the specify XML element 
+		 * ==> this permit to generate standard element simple
 		 */
 		class Button : public ewol::Widget {
 			public:

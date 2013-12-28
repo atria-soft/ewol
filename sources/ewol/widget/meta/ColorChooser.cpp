@@ -23,19 +23,17 @@ extern "C" {
 #define __class__	"ColorChooser"
 
 
+const char * const ewol::widget::ColorChooser::eventChange = "change";
 
 
-extern const char * const ewolEventColorChooserChange          = "ewol-event-color-chooser-change";
-
-
-const char * const eventColorBarHasChange          = "event-color-bar-has-change";
-const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
+static const char * const eventColorBarHasChange          = "event-color-bar-has-change";
+static const char * const eventColorSpecificHasChange     = "event-color-specific-has-change";
 
 
 ewol::widget::ColorChooser::ColorChooser(void) :
   ewol::widget::Sizer(ewol::widget::Sizer::modeVert) {
 	addObjectType("ewol::widget::ColorChooser");
-	addEventId(ewolEventColorChooserChange);
+	addEventId(eventChange);
 	m_widgetColorBar = NULL;
 	m_widgetRed = NULL;
 	m_widgetGreen = NULL;
@@ -43,7 +41,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 	m_widgetAlpha = NULL;
 	lockExpand(bvec2(true,true));
 		m_widgetColorBar = new ewol::widget::ColorBar();
-			m_widgetColorBar->registerOnEvent(this, ewolEventColorBarChange, eventColorBarHasChange);
+			m_widgetColorBar->registerOnEvent(this, "change", eventColorBarHasChange);
 			m_widgetColorBar->setFill(bvec2(true,true));
 			/*
 			m_widgetColorBar->setWidth(200);
@@ -55,7 +53,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 		sliderColor = etk::color::black;
 		
 		m_widgetRed = new ewol::widget::Slider();
-			m_widgetRed->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetRed->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetRed->setExpand(bvec2(true,false));
 			m_widgetRed->setFill(bvec2(true,false));
 			m_widgetRed->setMin(0);
@@ -64,7 +62,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 			m_widgetRed->setColor(sliderColor);
 			subWidgetAdd(m_widgetRed);
 		m_widgetGreen = new ewol::widget::Slider();
-			m_widgetGreen->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetGreen->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetGreen->setExpand(bvec2(true,false));
 			m_widgetGreen->setFill(bvec2(true,false));
 			m_widgetGreen->setMin(0);
@@ -73,7 +71,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 			m_widgetGreen->setMax(255);
 			subWidgetAdd(m_widgetGreen);
 		m_widgetBlue = new ewol::widget::Slider();
-			m_widgetBlue->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetBlue->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetBlue->setExpand(bvec2(true,false));
 			m_widgetBlue->setFill(bvec2(true,false));
 			m_widgetBlue->setMin(0);
@@ -82,7 +80,7 @@ ewol::widget::ColorChooser::ColorChooser(void) :
 			m_widgetBlue->setMax(255);
 			subWidgetAdd(m_widgetBlue);
 		m_widgetAlpha = new ewol::widget::Slider();
-			m_widgetAlpha->registerOnEvent(this, ewolEventSliderChange, eventColorSpecificHasChange);
+			m_widgetAlpha->registerOnEvent(this, "change", eventColorSpecificHasChange);
 			m_widgetAlpha->setExpand(bvec2(true,false));
 			m_widgetAlpha->setFill(bvec2(true,false));
 			m_widgetAlpha->setMin(0);
@@ -148,7 +146,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 		if (NULL != m_widgetAlpha) {
 			m_widgetAlpha->setValue(m_currentColor.a());
 		}
-		generateEventId(ewolEventColorChooserChange, m_currentColor.getString());
+		generateEventId(eventChange, m_currentColor.getString());
 	} else if (eventColorSpecificHasChange == _msg.getMessage()) {
 		// Slider has changes his color  == > get the one change ...
 		if (_msg.getCaller() == m_widgetRed) {
@@ -166,7 +164,7 @@ void ewol::widget::ColorChooser::onReceiveMessage(const ewol::object::Message& _
 		if (NULL != m_widgetColorBar) {
 			m_widgetColorBar->setCurrentColor(m_currentColor);
 		}
-		generateEventId(ewolEventColorChooserChange, m_currentColor.getString());
+		generateEventId(eventChange, m_currentColor.getString());
 	}
 };
 

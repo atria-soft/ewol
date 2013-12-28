@@ -12,10 +12,6 @@
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
 
-extern const char * const ewolEventFSFileSelect;
-extern const char * const ewolEventFSFileValidate;
-extern const char * const ewolEventFSFolderSelect;
-extern const char * const ewolEventFSFolderValidate;
 
 namespace ewol {
 	namespace widget {
@@ -23,6 +19,12 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ListFileSystem : public ewol::widget::List {
+			public:
+				// Event list of properties
+				static const char * const eventFileSelect;
+				static const char * const eventFileValidate;
+				static const char * const eventFolderSelect;
+				static const char * const eventFolderValidate;
 			private:
 				std::vector<etk::FSNode *> m_list;
 				std::string m_folder;

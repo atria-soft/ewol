@@ -15,14 +15,15 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
 
-extern const char * const ewolEventSliderChange;
-
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Slider :public ewol::Widget {
+			public:
+				// Event list of properties
+				static const char * const eventChange;
 			public:
 				static void init(ewol::widget::Manager& _widgetManager);
 			public:

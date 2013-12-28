@@ -14,9 +14,6 @@
 #include <ewol/widget/Widget.h>
 #include <draw/Color.h>
 
-extern const char * const ewolEventJoystickEnable;
-extern const char * const ewolEventJoystickDisable;
-extern const char * const ewolEventJoystickMove;
 
 namespace ewol {
 	namespace widget {
@@ -24,6 +21,11 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class Joystick :public ewol::Widget {
+			public:
+				// Event list of properties
+				static const char * const eventEnable;
+				static const char * const eventDisable;
+				static const char * const eventMove;
 			public:
 				enum joystickMode {
 					modeNormal,

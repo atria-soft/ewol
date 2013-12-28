@@ -15,10 +15,10 @@
 #undef __class__
 #define __class__ "ListFileSystem"
 
-extern const char * const ewolEventFSFileSelect     = "ewol-event-file-system-file-select";
-extern const char * const ewolEventFSFileValidate   = "ewol-event-file-system-file-validate";
-extern const char * const ewolEventFSFolderSelect   = "ewol-event-file-system-folder-select";
-extern const char * const ewolEventFSFolderValidate = "ewol-event-file-system-folder-validate";
+const char * const ewol::widget::ListFileSystem::eventFileSelect     = "file-select";
+const char * const ewol::widget::ListFileSystem::eventFileValidate   = "file-validate";
+const char * const ewol::widget::ListFileSystem::eventFolderSelect   = "folder-select";
+const char * const ewol::widget::ListFileSystem::eventFolderValidate = "folder-validate";
 
 
 ewol::widget::ListFileSystem::ListFileSystem(void) {
@@ -33,10 +33,10 @@ ewol::widget::ListFileSystem::ListFileSystem(void) {
 	#else
 		m_folder = "/";
 	#endif
-	addEventId(ewolEventFSFileSelect);
-	addEventId(ewolEventFSFileValidate);
-	addEventId(ewolEventFSFolderSelect);
-	addEventId(ewolEventFSFolderValidate);
+	addEventId(eventFileSelect);
+	addEventId(eventFileValidate);
+	addEventId(eventFolderSelect);
+	addEventId(eventFolderValidate);
 	setMouseLimit(1);
 };
 
@@ -203,21 +203,21 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					generateEventId(ewolEventFSFolderSelect, ".");
+					generateEventId(eventFolderSelect, ".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					generateEventId(ewolEventFSFolderSelect, "..");
+					generateEventId(eventFolderSelect, "..");
 				} else if(    m_selectedLine-offset  >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && NULL != m_list[m_selectedLine-offset] ) {
 					// generate event extern : 
 					switch(m_list[m_selectedLine-offset]->getNodeType()) {
 						case etk::FSN_FILE :
-							generateEventId(ewolEventFSFileSelect, m_list[m_selectedLine-offset]->getNameFile());
+							generateEventId(eventFileSelect, m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							generateEventId(ewolEventFSFolderSelect, m_list[m_selectedLine-offset]->getNameFile());
+							generateEventId(eventFolderSelect, m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");
@@ -228,21 +228,21 @@ bool ewol::widget::ListFileSystem::onItemEvent(int32_t _IdInput,
 				if(    m_showFolder == true
 				    && m_selectedLine == 0) {
 					// "." folder
-					generateEventId(ewolEventFSFolderValidate, ".");
+					generateEventId(eventFolderValidate, ".");
 				} else if (    m_showFolder == true
 				            && m_selectedLine == 1) {
 					// ".." folder
-					generateEventId(ewolEventFSFolderValidate, "..");
+					generateEventId(eventFolderValidate, "..");
 				} else if(    m_selectedLine-offset >= 0
 				           && m_selectedLine-offset < (int32_t)m_list.size()
 				           && NULL != m_list[m_selectedLine-offset] ) {
 					switch(m_list[m_selectedLine-offset]->getNodeType())
 					{
 						case etk::FSN_FILE :
-							generateEventId(ewolEventFSFileValidate, m_list[m_selectedLine-offset]->getNameFile());
+							generateEventId(eventFileValidate, m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						case etk::FSN_FOLDER :
-							generateEventId(ewolEventFSFolderValidate, m_list[m_selectedLine-offset]->getNameFile());
+							generateEventId(eventFolderValidate, m_list[m_selectedLine-offset]->getNameFile());
 							break;
 						default:
 							EWOL_ERROR("Can not generate event on an unknow type");

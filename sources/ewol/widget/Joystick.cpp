@@ -12,9 +12,9 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/widget/Manager.h>
 
-extern const char * const ewolEventJoystickEnable   = "ewol-joystick-enable";
-extern const char * const ewolEventJoystickDisable  = "ewol-joystick-disable";
-extern const char * const ewolEventJoystickMove     = "ewol-joystick-move";
+const char * const ewol::widget::Joystick::eventEnable   = "enable";
+const char * const ewol::widget::Joystick::eventDisable  = "disable";
+const char * const ewol::widget::Joystick::eventMove     = "move";
 
 static bool         l_displayBackground(true);
 static std::string l_background("");
@@ -26,9 +26,9 @@ static float   l_ratio(1.0/7.0);
 
 ewol::widget::Joystick::Joystick(void) {
 	addObjectType("ewol::widget::Joystick");
-	addEventId(ewolEventJoystickEnable);
-	addEventId(ewolEventJoystickDisable);
-	addEventId(ewolEventJoystickMove);
+	addEventId(eventEnable);
+	addEventId(eventDisable);
+	addEventId(eventMove);
 	// by default the joy does not lock when free out
 	m_lock = false;
 	m_displayMode = modeNormal;
@@ -144,10 +144,10 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 			}
 			markToRedraw();
 			if(ewol::key::statusDown == typeEvent) {
-				generateEventId(ewolEventJoystickEnable);
+				generateEventId(eventEnable);
 			} else {
 				std::string tmp = std::string("distance=") + std::string(m_distance) + std::string("angle=") + std::string(m_angle+M_PI/2);
-				generateEventId(ewolEventJoystickMove, tmp);
+				generateEventId(eventMove, tmp);
 			}
 			//teta += M_PI/2;
 			//EWOL_DEBUG("TETA = " << (m_angle*180/M_PI) << " deg distance = " << m_distance);
@@ -163,7 +163,7 @@ bool ewol::widget::Joystick::onEventInput(const ewol::event::Input& _event) {
 				m_distance = 0;
 			}
 			markToRedraw();
-			generateEventId(ewolEventJoystickDisable);
+			generateEventId(eventDisable);
 			return true;
 		}
 		return false;

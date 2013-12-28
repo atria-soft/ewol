@@ -10,7 +10,7 @@
 #include <ewol/widget/Manager.h>
 
 
-extern const char * const ewolEventCheckBoxClicked    = "ewol CheckBox Clicked";
+const char * const ewol::widget::CheckBox::eventClicked = "clicked";
 
 #undef __class__
 #define __class__	"CheckBox"
@@ -26,7 +26,7 @@ void ewol::widget::CheckBox::init(ewol::widget::Manager& _widgetManager) {
 ewol::widget::CheckBox::CheckBox(const std::string& _newLabel) {
 	addObjectType("ewol::widget::CheckBox");
 	m_label = _newLabel;
-	addEventId(ewolEventCheckBoxClicked);
+	addEventId(eventClicked);
 	m_textColorFg = etk::color::black;
 	m_textColorBg = etk::color::white;
 	m_value = false;
@@ -105,10 +105,10 @@ bool ewol::widget::CheckBox::onEventInput(const ewol::event::Input& _event) {
 		if (ewol::key::statusSingle == _event.getStatus()) {
 			if(true == m_value) {
 				m_value = false;
-				generateEventId(ewolEventCheckBoxClicked, "false");
+				generateEventId(eventClicked, "false");
 			} else {
 				m_value = true;
-				generateEventId(ewolEventCheckBoxClicked, "true");
+				generateEventId(eventClicked, "true");
 			}
 			keepFocus();
 			markToRedraw();
@@ -127,10 +127,10 @@ bool ewol::widget::CheckBox::onEventEntry(const ewol::event::Entry& _event) {
 	       ) {
 		if(true == m_value) {
 			m_value = false;
-			generateEventId(ewolEventCheckBoxClicked, "false");
+			generateEventId(eventClicked, "false");
 		} else {
 			m_value = true;
-			generateEventId(ewolEventCheckBoxClicked, "true");
+			generateEventId(eventClicked, "true");
 		}
 		markToRedraw();
 		return true;

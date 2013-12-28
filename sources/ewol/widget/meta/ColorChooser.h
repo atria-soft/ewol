@@ -19,14 +19,15 @@
 #include <ewol/widget/ColorBar.h>
 #include <ewol/widget/Slider.h>
 
-extern const char * const ewolEventColorChooserChange;
-
 namespace ewol {
 	namespace widget {
 		/**
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ColorChooser : public ewol::widget::Sizer {
+			public:
+				// Event list of properties
+				static const char * const eventChange;
 			public:
 				ColorChooser(void);
 				~ColorChooser(void);

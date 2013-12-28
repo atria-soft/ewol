@@ -13,7 +13,6 @@
 #include <ewol/debug.h>
 #include <ewol/widget/WidgetScrolled.h>
 
-extern const char * const ewolEventParameterListSelect;
 
 
 namespace ewol {
@@ -38,6 +37,9 @@ namespace ewol {
 		 * @ingroup ewolWidgetGroup
 		 */
 		class ParameterList :public ewol::widget::WidgetScrooled {
+			public:
+				// Event list of properties
+				static const char * const eventSelect;
 			private:
 				int32_t m_idSelected;
 				std::vector<ewol::widget::elementPL *> m_list;

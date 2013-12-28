@@ -30,17 +30,18 @@ extern "C" {
 #define __class__ "FileChooser"
 
 
-extern const char * const ewol::widget::FileChooser::eventCancel     = "ewol-event-file-chooser-cancel";
-extern const char * const ewol::widget::FileChooser::eventValidate   = "ewol-event-file-chooser-validate";
-extern const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
-extern const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
-extern const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
-extern const char * const ewolEventFileChooserEntryFile        = "ewol-event-file-chooser-modify-entry-file";
-extern const char * const ewolEventFileChooserEntryFileEnter   = "ewol-event-file-chooser-modify-entry-file-enter";
-extern const char * const ewolEventFileChooserListFolder       = "ewol-event-file-chooser-modify-list-folder";
-extern const char * const ewolEventFileChooserListFile         = "ewol-event-file-chooser-modify-list-file";
-extern const char * const ewolEventFileChooserListFileValidate = "ewol-event-file-chooser-modify-list-file-validate";
-extern const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
+const char * const ewol::widget::FileChooser::eventCancel     = "cancel";
+const char * const ewol::widget::FileChooser::eventValidate   = "validate";
+
+static const char * const ewolEventFileChooserHidenFileChange  = "ewol-event-file-chooser-Show/Hide-hiden-Files";
+static const char * const ewolEventFileChooserEntryFolder      = "ewol-event-file-chooser-modify-entry-folder";
+static const char * const ewolEventFileChooserEntryFolderEnter = "ewol-event-file-chooser-modify-entry-folder-enter";
+static const char * const ewolEventFileChooserEntryFile        = "ewol-event-file-chooser-modify-entry-file";
+static const char * const ewolEventFileChooserEntryFileEnter   = "ewol-event-file-chooser-modify-entry-file-enter";
+static const char * const ewolEventFileChooserListFolder       = "ewol-event-file-chooser-modify-list-folder";
+static const char * const ewolEventFileChooserListFile         = "ewol-event-file-chooser-modify-list-file";
+static const char * const ewolEventFileChooserListFileValidate = "ewol-event-file-chooser-modify-list-file-validate";
+static const char * const ewolEventFileChooserHome             = "ewol-event-file-chooser-home";
 
 
 ewol::widget::FileChooser::FileChooser(void) {
@@ -124,7 +125,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 			if (NULL == m_widgetCheckBox) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				m_widgetCheckBox->registerOnEvent(this, ewolEventCheckBoxClicked, ewolEventFileChooserHidenFileChange);
+				m_widgetCheckBox->registerOnEvent(this, "clicked", ewolEventFileChooserHidenFileChange);
 				m_widgetCheckBox->setValue(false);
 				mySizerHori->subWidgetAdd(m_widgetCheckBox);
 			}
@@ -147,7 +148,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 				        "		<label>Validate</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				m_widgetValidate->registerOnEvent(this, ewol::widget::Button::eventPressed, eventValidate);
+				m_widgetValidate->registerOnEvent(this, "pressed", eventValidate);
 				mySizerHori->subWidgetAdd(m_widgetValidate);
 			}
 			m_widgetCancel = new ewol::widget::Button();
@@ -162,7 +163,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 				        "		<label>Cancel</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				m_widgetCancel->registerOnEvent(this, ewol::widget::Button::eventPressed, eventCancel);
+				m_widgetCancel->registerOnEvent(this, "pressed", eventCancel);
 				mySizerHori->subWidgetAdd(m_widgetCancel);
 			}
 		}
@@ -185,7 +186,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 				m_widgetListFolder->setShowFolder(true);
 				m_widgetListFolder->setShowFiles(false);
 				m_widgetListFolder->setShowHiddenFiles(false);
-				m_widgetListFolder->registerOnEvent(this, ewolEventFSFolderValidate, ewolEventFileChooserListFolder);
+				m_widgetListFolder->registerOnEvent(this, "folder-validate", ewolEventFileChooserListFolder);
 				m_widgetListFolder->setExpand(bvec2(false,true));
 				m_widgetListFolder->setFill(bvec2(false,true));
 				mySizerHori->subWidgetAdd(m_widgetListFolder);
@@ -204,8 +205,8 @@ ewol::widget::FileChooser::FileChooser(void) {
 				m_widgetListFile->setShowFolder(false);
 				m_widgetListFile->setShowFiles(true);
 				m_widgetListFile->setShowHiddenFiles(false);
-				m_widgetListFile->registerOnEvent(this, ewolEventFSFileSelect, ewolEventFileChooserListFile);
-				m_widgetListFile->registerOnEvent(this, ewolEventFSFileValidate, ewolEventFileChooserListFileValidate);
+				m_widgetListFile->registerOnEvent(this, "file-select", ewolEventFileChooserListFile);
+				m_widgetListFile->registerOnEvent(this, "file-validate", ewolEventFileChooserListFileValidate);
 				m_widgetListFile->setExpand(bvec2(true,true));
 				m_widgetListFile->setFill(bvec2(true,true));
 				mySizerHori->subWidgetAdd(m_widgetListFile);
@@ -235,8 +236,8 @@ ewol::widget::FileChooser::FileChooser(void) {
 			if (NULL == m_widgetCurrentFileName) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				m_widgetCurrentFileName->registerOnEvent(this, ewol::widget::Entry::eventModify, ewolEventFileChooserEntryFile);
-				m_widgetCurrentFileName->registerOnEvent(this, ewol::widget::Entry::eventEnter,  ewolEventFileChooserEntryFileEnter);
+				m_widgetCurrentFileName->registerOnEvent(this, "modify", ewolEventFileChooserEntryFile);
+				m_widgetCurrentFileName->registerOnEvent(this, "enter",  ewolEventFileChooserEntryFileEnter);
 				m_widgetCurrentFileName->setExpand(bvec2(true,false));
 				m_widgetCurrentFileName->setFill(bvec2(true,false));
 				//m_widgetCurrentFileName->setWidth(200);
@@ -261,8 +262,8 @@ ewol::widget::FileChooser::FileChooser(void) {
 			if (NULL == m_widgetCurrentFolder) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
-				m_widgetCurrentFolder->registerOnEvent(this, ewol::widget::Entry::eventModify, ewolEventFileChooserEntryFolder);
-				m_widgetCurrentFolder->registerOnEvent(this, ewol::widget::Entry::eventEnter,  ewolEventFileChooserEntryFolderEnter);
+				m_widgetCurrentFolder->registerOnEvent(this, "modify", ewolEventFileChooserEntryFolder);
+				m_widgetCurrentFolder->registerOnEvent(this, "enter",  ewolEventFileChooserEntryFolderEnter);
 				m_widgetCurrentFolder->setExpand(bvec2(true,false));
 				m_widgetCurrentFolder->setFill(bvec2(true,false));
 				//m_widgetCurrentFolder->setWidth(200);
@@ -273,7 +274,7 @@ ewol::widget::FileChooser::FileChooser(void) {
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				myImage->registerOnEvent(this, ewol::widget::Image::eventPressed, ewolEventFileChooserHome);
+				myImage->registerOnEvent(this, "pressed", ewolEventFileChooserHome);
 				myImage->setExpand(bvec2(false,false));
 				mySizerHori->subWidgetAdd(myImage);
 			}

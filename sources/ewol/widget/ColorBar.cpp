@@ -13,7 +13,7 @@
 
 #include <etk/Color.h>
 
-extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
+const char * const ewol::widget::ColorBar::eventChange    = "change";
 
 
 
@@ -22,7 +22,7 @@ extern const char * const ewolEventColorBarChange    = "ewol-color-bar-change";
 
 ewol::widget::ColorBar::ColorBar(void) {
 	addObjectType("ewol::widget::ColorBar");
-	addEventId(ewolEventColorBarChange);
+	addEventId(eventChange);
 	m_currentUserPos.setValue(0,0);
 	m_currentColor = etk::color::black;
 	setCanHaveFocus(true);
@@ -221,7 +221,7 @@ bool ewol::widget::ColorBar::onEventInput(const ewol::event::Input& _event) {
 			}
 			if(m_currentColor != estimateColor) {
 				m_currentColor = estimateColor;
-				generateEventId(ewolEventColorBarChange);
+				generateEventId(eventChange);
 			}
 			return true;
 		}

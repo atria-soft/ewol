@@ -21,11 +21,10 @@
 #undef __class__
 #define __class__ "Parameter"
 
+const char * const ewol::widget::Parameter::eventClose = "close";
 
-extern const char * const ewolEventParameterValidate            = "ewol-event-parameter-validate";
-extern const char * const ewolEventParameterClose               = "ewol-event-parameter-close";
-extern const char * const ewolEventParameterSave                = "ewol-event-parameter-save";
-
+static const char * const ewolEventParameterValidate = "ewol-event-parameter-validate";
+static const char * const ewolEventParameterSave     = "ewol-event-parameter-save";
 static const char * const l_eventMenuSelected = "local-event-menu-selected";
 
 ewol::widget::Parameter::Parameter(void) :
@@ -33,7 +32,7 @@ ewol::widget::Parameter::Parameter(void) :
   m_widgetTitle(NULL),
   m_paramList(NULL) {
 	addObjectType("ewol::widget::Parameter");
-	addEventId(ewolEventParameterClose);
+	addEventId(eventClose);
 	
 	ewol::widget::Sizer * mySizerVert = NULL;
 	ewol::widget::Sizer * mySizerHori = NULL;
@@ -80,7 +79,7 @@ ewol::widget::Parameter::Parameter(void) :
 				        "		<label>Save</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->registerOnEvent(this, ewol::widget::Button::eventPressed, ewolEventParameterSave);
+				tmpButton->registerOnEvent(this, "pressed", ewolEventParameterSave);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 			
@@ -105,7 +104,7 @@ ewol::widget::Parameter::Parameter(void) :
 				        "		<label>Close</label>\n"
 				        "	</sizer>\n"
 				        "</composer>\n"));
-				tmpButton->registerOnEvent(this, ewol::widget::Button::eventPressed, ewolEventParameterClose);
+				tmpButton->registerOnEvent(this, "pressed", eventClose);
 				mySizerHori->subWidgetAdd(tmpButton);
 			}
 		}
@@ -121,7 +120,7 @@ ewol::widget::Parameter::Parameter(void) :
 				EWOL_ERROR("Can not allocate widget  == > display might be in error");
 			} else {
 			
-				m_paramList->registerOnEvent(this, ewolEventParameterListSelect, l_eventMenuSelected);
+				m_paramList->registerOnEvent(this, "select", l_eventMenuSelected);
 				m_paramList->setFill(bvec2(false,true));
 				m_paramList->setExpand(bvec2(false,true));
 				mySizerHori->subWidgetAdd(m_paramList);
@@ -199,9 +198,9 @@ void ewol::widget::Parameter::setTitle(std::string _label) {
 void ewol::widget::Parameter::onReceiveMessage(const ewol::object::Message& _msg) {
 	ewol::widget::PopUp::onReceiveMessage(_msg);
 	EWOL_DEBUG("event on the parameter : " << _msg);
-	if (_msg.getMessage() == ewolEventParameterClose) {
+	if (_msg.getMessage() == eventClose) {
 		// inform that the parameter windows is closed
-		generateEventId(ewolEventParameterClose);
+		generateEventId(eventClose);
 		// close this widget ...
 		autoDestroy();
 	} else if (_msg.getMessage() == ewolEventParameterSave) {

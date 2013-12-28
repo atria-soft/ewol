@@ -151,7 +151,7 @@ namespace ewol {
 			/**
 			 * @brief Register an Object over an other to get event on the second...
 			 * @param[in] _destinationObject pointer on the object that might be call when an event is generated
-			 * @param[in] _eventId Event generate inside the object
+			 * @param[in] _eventId Event generate inside the object (note : "*" event register on all event generated )
 			 * @param[in] _eventIdgenerated event generated when call the distant Object.onReceiveMessage(...)
 			 * @param[in] _overloadData When the user prever to receive a data specificly for this event ...
 			 */

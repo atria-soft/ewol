@@ -161,6 +161,27 @@ void ewol::Object::registerOnEvent(ewol::Object * _destinationObject,
 		EWOL_ERROR("Input ERROR NULL pointer Event Id...");
 		return;
 	}
+	if (    _eventId[0] == '*'
+	     && _eventId[1] == '\0') {
+		EWOL_VERBOSE("Register on all event ...");
+		for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {
+			ewol::object::EventExtGen * tmpEvent = new ewol::object::EventExtGen();
+			if (NULL == tmpEvent) {
+				EWOL_ERROR("Allocation error in Register Event...");
+				continue;
+			}
+			tmpEvent->localEventId = m_availlableEventId[iii];
+			tmpEvent->destObject = _destinationObject;
+			tmpEvent->overloadData = _overloadData;
+			if (NULL != _eventIdgenerated) {
+				tmpEvent->destEventId = _eventIdgenerated;
+			} else {
+				tmpEvent->destEventId = m_availlableEventId[iii];
+			}
+			m_externEvent.push_back(tmpEvent);
+		}
+		return;
+	}
 	// check if event existed :
 	bool findIt = false;
 	for(size_t iii=0; iii<m_availlableEventId.size(); iii++) {

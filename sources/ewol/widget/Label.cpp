@@ -15,7 +15,7 @@
 #undef __class__
 #define __class__ "Label"
 
-const char * const ewol::widget::Label::eventPressed = "ewol-widget-label-event-pressed";
+const char * const ewol::widget::Label::eventPressed = "pressed";
 
 static ewol::Widget* create(void) {
 	return new ewol::widget::Label();

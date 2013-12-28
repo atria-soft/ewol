@@ -15,7 +15,7 @@
 #include <ewol/widget/Windows.h>
 #include <ewol/ewol.h>
 
-extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Change";
+const char * const ewol::widget::ButtonColor::eventChange = "change";
 
 
 // DEFINE for the shader display system :
@@ -28,7 +28,7 @@ extern const char * const ewolEventButtonColorChange    = "ewol-Button-Color-Cha
 #undef __class__
 #define __class__	"ButtonColor"
 
-
+static const char* const eventColorHasChange = "ewol-widget-ButtonColor-colorChange";
 
 static ewol::Widget* Create(void) {
 	return new ewol::widget::ButtonColor();
@@ -43,7 +43,7 @@ ewol::widget::ButtonColor::ButtonColor(etk::Color<> _baseColor, std::string _sha
   m_textColorFg(_baseColor),
   m_widgetContextMenu(NULL) {
 	addObjectType("ewol::widget::ButtonColor");
-	addEventId(ewolEventButtonColorChange);
+	addEventId(eventChange);
 	changeStatusIn(STATUS_UP);
 	setCanHaveFocus(true);
 	// Limit event at 1:
@@ -190,7 +190,7 @@ bool ewol::widget::ButtonColor::onEventInput(const ewol::event::Input& _event) {
 				myColorChooser->setColor(m_textColorFg);
 				// set it in the pop-up-system : 
 				m_widgetContextMenu->setSubWidget(myColorChooser);
-				myColorChooser->registerOnEvent(this, ewolEventColorChooserChange, ewolEventColorChooserChange);
+				myColorChooser->registerOnEvent(this, "change", eventColorHasChange);
 				ewol::widget::Windows* currentWindows = getWindows();
 				if (NULL == currentWindows) {
 					EWOL_ERROR("Can not get the curent Windows...");
@@ -231,9 +231,9 @@ etk::Color<> ewol::widget::ButtonColor::getValue(void) {
 
 void ewol::widget::ButtonColor::onReceiveMessage(const ewol::object::Message& _msg) {
 	EWOL_INFO("Receive MSG : " <<  _msg.getData());
-	if (_msg.getMessage() == ewolEventColorChooserChange) {
+	if (_msg.getMessage() == eventColorHasChange) {
 		m_textColorFg = _msg.getData();
-		generateEventId(ewolEventButtonColorChange, _msg.getData());
+		generateEventId(eventChange, _msg.getData());
 		markToRedraw();
 	}
 }

@@ -15,14 +15,13 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/compositing/Drawing.h>
 
-extern const char * const ewolEventColorBarChange;
 
 namespace ewol {
 	namespace widget {
-		/**
-		 * @ingroup ewolWidgetGroup
-		 */
 		class ColorBar :public ewol::Widget {
+			public:
+				// Event list of properties
+				static const char * const eventChange;
 			public:
 				ColorBar(void);
 				virtual ~ColorBar(void);

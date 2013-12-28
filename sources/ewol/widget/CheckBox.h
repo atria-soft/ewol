@@ -16,14 +16,13 @@
 #include <ewol/widget/Widget.h>
 #include <ewol/widget/Manager.h>
 
-extern const char* const ewolEventCheckBoxClicked;
 
 namespace ewol {
 	namespace widget {
-		/**
-		 * @ingroup ewolWidgetGroup
-		 */
 		class CheckBox : public ewol::Widget {
+			public:
+				// Event list of properties
+				static const char* const eventClicked;
 			public:
 				static void init(ewol::widget::Manager& _widgetManager);
 			public:

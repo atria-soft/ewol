@@ -16,8 +16,6 @@
 #include <ewol/compositing/Image.h>
 #include <ewol/widget/Manager.h>
 
-extern const char * const ewolEventImagePressed;
-
 namespace ewol {
 	namespace widget {
 		/**
