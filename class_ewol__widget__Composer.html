@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::widget::Composer</h1><hr/><h2>Description:</h2>
+the composer widget is a widget that create a link on a string.file to parse the data and generate some widget tree<br/><br/>
+<h2>enum:</h2>
+<ul>
+<li><a href="enum_ewol__widget__Composer__composerMode.html">composerMode</a></li></ul>
+<h2>Constructor and Destructor:</h2>
+<pre>
++      <a class="code-function" href="#2757">Composer</a>                  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+      <a class="code-function" href="#2759">Composer</a>                  (<span class="code-storage-keyword">enum</span> composerMode <span class="code-argument">_mode</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/>+      <a class="code-function" href="#2762">~Composer</a>                 (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++ <span class="code-type" >bool</span> <a class="code-function" href="#2764">loadFromFile</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/>+ <span class="code-type" >bool</span> <a class="code-function" href="#2766">loadFromString</a>            (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_composerXmlString</span>);<br/># <span class="code-type" >void</span> <a class="code-function" href="#2768">registerOnEventNameWidget</a> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_subWidgetName</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/>+ <span class="code-type" >void</span> <a class="code-function" href="#2773">registerOnEventNameWidget</a> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_subWidgetName</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> +<a href="class_ewol__widget__Container.html">ewol::widget::Container</a><br/>                +--> ewol::widget::Composer<br/></pre>
+<h2>Detail:</h2>
+<a id="2757"/><a id="2759"/><h3>Composer</h3><pre>
++  <span class="code-function">Composer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Constructor<br/>
+<br/>
+<hr/>
+<a id="2762"/><h3>Composer</h3><pre>
++  <span class="code-function">Composer</span> (<span class="code-storage-keyword">enum</span> composerMode <span class="code-argument">_mode</span>,<br/>             <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/></pre>
+Constructor<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_mode</span> </td><td> mode of parsing the string</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_data</span> </td><td> file/directString data to generate compositing of the widget..</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2764"/><h3>~Composer</h3><pre>
++  <span class="code-function">~Composer</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Destructor<br/>
+<br/>
+<hr/>
+<a id="2766"/><h3>loadFromFile</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">loadFromFile</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_fileName</span>);<br/></pre>
+load a composition with a file<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_fileName</span> </td><td> Name of the file</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>true  == &gt; all done OK&lt;br/&gt;false  == &gt; some error occured</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2768"/><h3>loadFromString</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">loadFromString</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_composerXmlString</span>);<br/></pre>
+load a composition with a file<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_composerXmlString</span> </td><td> xml to parse directly</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>true  == &gt; all done OK&lt;br/&gt;false  == &gt; some error occured</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="2773"/><h3>registerOnEventNameWidget</h3><pre>
+# <span class="code-type" >void</span> <span class="code-function">registerOnEventNameWidget</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_subWidgetName</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/></pre>
+Register an Event an named widget. @see registerOnEvent<br/><b>Note:</b> : To used when herited from this object.<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_subWidgetName</span> </td><td> Name of the subWidget.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventId</span> </td><td> Event generate inside the object.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventIdgenerated</span> </td><td> event generated when call the distant EObject.onReceiveMessage(...)</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_overloadData</span> </td><td> When the user prever to receive a data specificly for this event ...</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>registerOnEventNameWidget</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">registerOnEventNameWidget</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_destinationObject</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_subWidgetName</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventId</span>,<br/>                                  <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-argument">_eventIdgenerated</span>,<br/>                                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_overloadData</span>);<br/></pre>
+Register an Event an named widget. @see registerOnEvent<br/><b>Note:</b> : To used when NOT herited from this object.<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_destinationObject</span> </td><td> pointer on the object that might be call when an event is generated</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_subWidgetName</span> </td><td> Name of the subWidget.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventId</span> </td><td> Event generate inside the object.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_eventIdgenerated</span> </td><td> event generated when call the distant EObject.onReceiveMessage(...)</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_overloadData</span> </td><td> When the user prever to receive a data specificly for this event ...</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

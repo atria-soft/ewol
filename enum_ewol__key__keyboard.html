@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>enum: ewol::key::keyboard</h1><hr/><h2>Description:</h2>
+Keybord event or joystick event<br/><br/>
+<h2>Value list</h2>
+<ul>
+<table class="enumeration-list"><tr>
+<tr>
+<td><a href="#keyboardUnknow">keyboardUnknow</a></td><td><a href="#keyboardChar">keyboardChar</a></td><td><a href="#keyboardLeft">keyboardLeft</a></td></tr>
+<tr>
+<td><a href="#keyboardRight">keyboardRight</a></td><td><a href="#keyboardUp">keyboardUp</a></td><td><a href="#keyboardDown">keyboardDown</a></td></tr>
+<tr>
+<td><a href="#keyboardPageUp">keyboardPageUp</a></td><td><a href="#keyboardPageDown">keyboardPageDown</a></td><td><a href="#keyboardStart">keyboardStart</a></td></tr>
+<tr>
+<td><a href="#keyboardEnd">keyboardEnd</a></td><td><a href="#keyboardPrint">keyboardPrint</a></td><td><a href="#keyboardStopDefil">keyboardStopDefil</a></td></tr>
+<tr>
+<td><a href="#keyboardWait">keyboardWait</a></td><td><a href="#keyboardInsert">keyboardInsert</a></td><td><a href="#keyboardF1">keyboardF1</a></td></tr>
+<tr>
+<td><a href="#keyboardF2">keyboardF2</a></td><td><a href="#keyboardF3">keyboardF3</a></td><td><a href="#keyboardF4">keyboardF4</a></td></tr>
+<tr>
+<td><a href="#keyboardF5">keyboardF5</a></td><td><a href="#keyboardF6">keyboardF6</a></td><td><a href="#keyboardF7">keyboardF7</a></td></tr>
+<tr>
+<td><a href="#keyboardF8">keyboardF8</a></td><td><a href="#keyboardF9">keyboardF9</a></td><td><a href="#keyboardF10">keyboardF10</a></td></tr>
+<tr>
+<td><a href="#keyboardF11">keyboardF11</a></td><td><a href="#keyboardF12">keyboardF12</a></td><td><a href="#keyboardCapLock">keyboardCapLock</a></td></tr>
+<tr>
+<td><a href="#keyboardShiftLeft">keyboardShiftLeft</a></td><td><a href="#keyboardShiftRight">keyboardShiftRight</a></td><td><a href="#keyboardCtrlLeft">keyboardCtrlLeft</a></td></tr>
+<tr>
+<td><a href="#keyboardCtrlRight">keyboardCtrlRight</a></td><td><a href="#keyboardMetaLeft">keyboardMetaLeft</a></td><td><a href="#keyboardMetaRight">keyboardMetaRight</a></td></tr>
+<tr>
+<td><a href="#keyboardAlt">keyboardAlt</a></td><td><a href="#keyboardAltGr">keyboardAltGr</a></td><td><a href="#keyboardContextMenu">keyboardContextMenu</a></td></tr>
+<tr>
+<td><a href="#keyboardNumLock">keyboardNumLock</a></td><td><a href="#keyboardCount">keyboardCount</a></td></tr>
+</table>
+</ul>
+<h2>Detail:</h2>
+<h3><a id="keyboardUnknow"/>keyboardUnknow</h3><pre>
+keyboardUnknow      = <span class="code-type">0<span></pre>
+
+Unknown keyboard key<br/><hr/>
+<h3><a id="keyboardChar"/>keyboardChar</h3><pre>
+keyboardChar        = <span class="code-type">1<span></pre>
+
+Char input is arrived ...<br/><hr/>
+<h3><a id="keyboardLeft"/>keyboardLeft</h3><pre>
+keyboardLeft        = <span class="code-type">2<span></pre>
+
+Left key &lt;--<br/><hr/>
+<h3><a id="keyboardRight"/>keyboardRight</h3><pre>
+keyboardRight       = <span class="code-type">3<span></pre>
+
+Right key --&gt;<br/><hr/>
+<h3><a id="keyboardUp"/>keyboardUp</h3><pre>
+keyboardUp          = <span class="code-type">4<span></pre>
+
+Up key ^<br/><hr/>
+<h3><a id="keyboardDown"/>keyboardDown</h3><pre>
+keyboardDown        = <span class="code-type">5<span></pre>
+
+Down key \/<br/><hr/>
+<h3><a id="keyboardPageUp"/>keyboardPageUp</h3><pre>
+keyboardPageUp      = <span class="code-type">6<span></pre>
+
+Page Up key<br/><hr/>
+<h3><a id="keyboardPageDown"/>keyboardPageDown</h3><pre>
+keyboardPageDown    = <span class="code-type">7<span></pre>
+
+page down key<br/><hr/>
+<h3><a id="keyboardStart"/>keyboardStart</h3><pre>
+keyboardStart       = <span class="code-type">8<span></pre>
+
+Start key<br/><hr/>
+<h3><a id="keyboardEnd"/>keyboardEnd</h3><pre>
+keyboardEnd         = <span class="code-type">9<span></pre>
+
+End key<br/><hr/>
+<h3><a id="keyboardPrint"/>keyboardPrint</h3><pre>
+keyboardPrint       = <span class="code-type">10<span></pre>
+
+print screen key.<br/><hr/>
+<h3><a id="keyboardStopDefil"/>keyboardStopDefil</h3><pre>
+keyboardStopDefil   = <span class="code-type">11<span></pre>
+
+Stop display key.<br/><hr/>
+<h3><a id="keyboardWait"/>keyboardWait</h3><pre>
+keyboardWait        = <span class="code-type">12<span></pre>
+
+Wait key.<br/><hr/>
+<h3><a id="keyboardInsert"/>keyboardInsert</h3><pre>
+keyboardInsert      = <span class="code-type">13<span></pre>
+
+insert key.<br/><hr/>
+<h3><a id="keyboardF1"/>keyboardF1</h3><pre>
+keyboardF1          = <span class="code-type">14<span></pre>
+
+F1 key.<br/><hr/>
+<h3><a id="keyboardF2"/>keyboardF2</h3><pre>
+keyboardF2          = <span class="code-type">15<span></pre>
+
+F2 key.<br/><hr/>
+<h3><a id="keyboardF3"/>keyboardF3</h3><pre>
+keyboardF3          = <span class="code-type">16<span></pre>
+
+F3 key.<br/><hr/>
+<h3><a id="keyboardF4"/>keyboardF4</h3><pre>
+keyboardF4          = <span class="code-type">17<span></pre>
+
+F4 key.<br/><hr/>
+<h3><a id="keyboardF5"/>keyboardF5</h3><pre>
+keyboardF5          = <span class="code-type">18<span></pre>
+
+F5 key.<br/><hr/>
+<h3><a id="keyboardF6"/>keyboardF6</h3><pre>
+keyboardF6          = <span class="code-type">19<span></pre>
+
+F6 key.<br/><hr/>
+<h3><a id="keyboardF7"/>keyboardF7</h3><pre>
+keyboardF7          = <span class="code-type">20<span></pre>
+
+F7 key.<br/><hr/>
+<h3><a id="keyboardF8"/>keyboardF8</h3><pre>
+keyboardF8          = <span class="code-type">21<span></pre>
+
+F8 key.<br/><hr/>
+<h3><a id="keyboardF9"/>keyboardF9</h3><pre>
+keyboardF9          = <span class="code-type">22<span></pre>
+
+F9 key.<br/><hr/>
+<h3><a id="keyboardF10"/>keyboardF10</h3><pre>
+keyboardF10         = <span class="code-type">23<span></pre>
+
+F10 key.<br/><hr/>
+<h3><a id="keyboardF11"/>keyboardF11</h3><pre>
+keyboardF11         = <span class="code-type">24<span></pre>
+
+F11 key.<br/><hr/>
+<h3><a id="keyboardF12"/>keyboardF12</h3><pre>
+keyboardF12         = <span class="code-type">25<span></pre>
+
+F12 key.<br/><hr/>
+<h3><a id="keyboardCapLock"/>keyboardCapLock</h3><pre>
+keyboardCapLock     = <span class="code-type">26<span></pre>
+
+Capital Letter Lock key.<br/><hr/>
+<h3><a id="keyboardShiftLeft"/>keyboardShiftLeft</h3><pre>
+keyboardShiftLeft   = <span class="code-type">27<span></pre>
+
+Shift left key.<br/><hr/>
+<h3><a id="keyboardShiftRight"/>keyboardShiftRight</h3><pre>
+keyboardShiftRight  = <span class="code-type">28<span></pre>
+
+Shift right key.<br/><hr/>
+<h3><a id="keyboardCtrlLeft"/>keyboardCtrlLeft</h3><pre>
+keyboardCtrlLeft    = <span class="code-type">29<span></pre>
+
+Control left key.<br/><hr/>
+<h3><a id="keyboardCtrlRight"/>keyboardCtrlRight</h3><pre>
+keyboardCtrlRight   = <span class="code-type">30<span></pre>
+
+Control right key.<br/><hr/>
+<h3><a id="keyboardMetaLeft"/>keyboardMetaLeft</h3><pre>
+keyboardMetaLeft    = <span class="code-type">31<span></pre>
+
+Meta left key (apple key or windows key).<br/><hr/>
+<h3><a id="keyboardMetaRight"/>keyboardMetaRight</h3><pre>
+keyboardMetaRight   = <span class="code-type">32<span></pre>
+
+Meta right key (apple key or windows key).<br/><hr/>
+<h3><a id="keyboardAlt"/>keyboardAlt</h3><pre>
+keyboardAlt         = <span class="code-type">33<span></pre>
+
+Alt key.<br/><hr/>
+<h3><a id="keyboardAltGr"/>keyboardAltGr</h3><pre>
+keyboardAltGr       = <span class="code-type">34<span></pre>
+
+Alt ground key.<br/><hr/>
+<h3><a id="keyboardContextMenu"/>keyboardContextMenu</h3><pre>
+keyboardContextMenu = <span class="code-type">35<span></pre>
+
+Contextual menu key.<br/><hr/>
+<h3><a id="keyboardNumLock"/>keyboardNumLock</h3><pre>
+keyboardNumLock     = <span class="code-type">36<span></pre>
+
+Numerical Lock key.<br/><hr/>
+<h3><a id="keyboardCount"/>keyboardCount</h3><pre>
+keyboardCount       = <span class="code-type">37<span></pre>
+
+number of posible key<br/>	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::resource::Program</h1><hr/><h2>Description:</h2>
+Program is a compilation of some fragment Shader and vertex Shader. This construct automaticly this assiciation
+The input file must have the form : "myFile.prog"
+The data is simple :
+&lt;pre&gt;
+# Comment line ... paid attention at the space at the end of lines, they are considered like a part of the file ...
+# The folder is automaticly get from the program file basic folder
+filename1.vert
+filename2.frag
+filename3.vert
+filename4.frag
+&lt;/pre&gt;<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
+#                                                   <a class="code-function" href="#5144">Program</a>              (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">filename</span>);<br/># <span class="code-storage-keyword">virtual</span>                                                   <a class="code-function" href="#5146">~Program</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++ <span class="code-type" >int32_t</span>                                           <a class="code-function" href="#5148">getAttribute</a>         (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_elementName</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5150">sendAttribute</a>        (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-type" >void</span>* <span class="code-argument">_pointer</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_jumpBetweenSample</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5155">sendAttributePointer</a> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <a class="code-type" href="class_ewol__resource__VirtualBufferObject.html">ewol::resource::VirtualBufferObject</a>* <span class="code-argument">_vbo</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_index</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_jumpBetweenSample</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_offset</span>);<br/>+ <span class="code-type" >int32_t</span>                                           <a class="code-function" href="#5162">getUniform</a>           (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_elementName</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5164">uniformMatrix4fv</a>     (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          mat4 <span class="code-argument">_pointer</span>,<br/>                                                                          <span class="code-type" >bool</span> <span class="code-argument">_transpose</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5169">uniform1f</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value1</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5172">uniform2f</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value2</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5176">uniform3f</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value2</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value3</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5181">uniform4f</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value2</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value3</span>,<br/>                                                                          <span class="code-type" >float</span> <span class="code-argument">_value4</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5187">uniform1i</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5190">uniform2i</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5194">uniform3i</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value3</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5199">uniform4i</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value3</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_value4</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5205">uniform1fv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5209">uniform2fv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5213">uniform3fv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5217">uniform4fv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5221">uniform1iv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5225">uniform2iv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5229">uniform3iv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5233">uniform4iv</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5237">uniform2</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5240">uniform3</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5243">uniform4</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5246">uniform2</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5249">uniform3</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> ivec3 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5252">uniform4</a>             (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          <span class="code-storage-keyword">const</span> ivec4 & <span class="code-argument">_value</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5255">use</a>                  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5257">setTexture0</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          GLint <span class="code-argument">_textureOpenGlID</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5260">setTexture1</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                                                                          GLint <span class="code-argument">_textureOpenGlID</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5263">unUse</a>                (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5265">updateContext</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5267">removeContext</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5269">removeContextToLate</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5271">reload</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <a class="code-type" href="class_ewol__resource__Program.html">ewol::resource::Program</a>*                          <a class="code-function" href="#5273">keep</a>                 (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5275">release</a>              (<a class="code-type" href="class_ewol__resource__Program.html">ewol::resource::Program</a>* & <span class="code-argument">_object</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Resource.html">ewol::Resource</a><br/>         +--> ewol::resource::Program<br/></pre>
+<h2>Detail:</h2>
+<a id="5144"/><a id="5146"/><h3>Program</h3><pre>
+#  <span class="code-function">Program</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">filename</span>);<br/></pre>
+Contructor of an opengl Program.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">filename</span> </td><td> Standard file name format. see @ref etk::FSNode</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5148"/><h3>~Program</h3><pre>
+# <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Program</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Destructor, remove the current Program.<br/>
+<br/>
+<hr/>
+<a id="5150"/><h3>getAttribute</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getAttribute</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_elementName</span>);<br/></pre>
+User request an attribute on this program.<br/><b>Note:</b> The attribute is send to the fragment shaders<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_elementName</span> </td><td> Name of the requested attribute.</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>An abstract ID of the current attribute (this value is all time availlable, even if the program will be reloaded)</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5155"/><h3>sendAttribute</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sendAttribute</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                      <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                      <span class="code-type" >void</span>* <span class="code-argument">_pointer</span>,<br/>                      <span class="code-type" >int32_t</span> <span class="code-argument">_jumpBetweenSample</span>);<br/></pre>
+Send attribute table to the spefified ID attribure (not send if does not really exist in the openGL program).<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the Attribute that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Specifies the number of elements that are to be modified.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pointer</span> </td><td> Pointer on the data that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_jumpBetweenSample</span> </td><td> Number of byte to jump between 2 vertex (this permit to enterlace informations)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5162"/><h3>sendAttributePointer</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">sendAttributePointer</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                             <a class="code-type" href="class_ewol__resource__VirtualBufferObject.html">ewol::resource::VirtualBufferObject</a>* <span class="code-argument">_vbo</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_index</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_jumpBetweenSample</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_offset</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5164"/><h3>getUniform</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getUniform</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_elementName</span>);<br/></pre>
+User request an Uniform on this program.<br/><b>Note:</b> uniform value is availlable for all the fragment shader in the program (only one value for all)<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_elementName</span> </td><td> Name of the requested uniform.</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>An abstract ID of the current uniform (this value is all time availlable, even if the program will be reloaded)</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5169"/><h3>uniformMatrix4fv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniformMatrix4fv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                         <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                         mat4 <span class="code-argument">_pointer</span>,<br/>                         <span class="code-type" >bool</span> <span class="code-argument">_transpose</span>);<br/></pre>
+Send a uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Specifies the number of elements that are to be modified. This should be 1 if the targeted uniform variable is not an array, and 1 or more if it is an array.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pointer</span> </td><td> Pointer on the data that might be sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_transpose</span> </td><td> Transpose the matrix (needed all the taime in the normal openGl access (only not done in the openGL-ES2 due to the fact we must done it ourself)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5172"/><h3>uniform1f</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform1f</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value1</span>);<br/></pre>
+Send 1 float uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5176"/><h3>uniform2f</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2f</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value2</span>);<br/></pre>
+Send 2 float uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5181"/><h3>uniform3f</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3f</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value2</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value3</span>);<br/></pre>
+Send 3 float uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value3</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5187"/><h3>uniform4f</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4f</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value2</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value3</span>,<br/>                  <span class="code-type" >float</span> <span class="code-argument">_value4</span>);<br/></pre>
+Send 4 float uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value3</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value4</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5190"/><h3>uniform1i</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform1i</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>);<br/></pre>
+Send 1 signed integer uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5194"/><h3>uniform2i</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2i</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>);<br/></pre>
+Send 2 signed integer uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5199"/><h3>uniform3i</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3i</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value3</span>);<br/></pre>
+Send 3 signed integer uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value3</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5205"/><h3>uniform4i</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4i</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value1</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value2</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value3</span>,<br/>                  <span class="code-type" >int32_t</span> <span class="code-argument">_value4</span>);<br/></pre>
+Send 4 signed integer uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value1</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value2</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value3</span> </td><td> Value to send at the Uniform</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value4</span> </td><td> Value to send at the Uniform</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5209"/><h3>uniform1fv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform1fv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "vec1" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5213"/><h3>uniform2fv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2fv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "vec2" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5217"/><h3>uniform3fv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3fv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "vec3" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5221"/><h3>uniform4fv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4fv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >float</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "vec4" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5225"/><h3>uniform1iv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform1iv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "ivec1" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5229"/><h3>uniform2iv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2iv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "ivec2" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the Attribute that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5233"/><h3>uniform3iv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3iv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "ivec3" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5237"/><h3>uniform4iv</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4iv</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_nbElement</span>,<br/>                   <span class="code-storage-keyword">const</span> <span class="code-type" >int32_t</span>* <span class="code-argument">_value</span>);<br/></pre>
+Send "ivec4" uniform element to the spefified ID (not send if does not really exist in the openGL program)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_nbElement</span> </td><td> Number of element sended</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_value</span> </td><td> Pointer on the data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5240"/><h3>uniform2</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5243"/><h3>uniform3</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5246"/><h3>uniform4</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> vec4 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5249"/><h3>uniform2</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform2</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5252"/><h3>uniform3</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform3</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> ivec3 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5255"/><h3>uniform4</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">uniform4</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                 <span class="code-storage-keyword">const</span> ivec4 & <span class="code-argument">_value</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5257"/><h3>use</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">use</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Request the processing of this program<br/>
+<br/>
+<hr/>
+<a id="5260"/><h3>setTexture0</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setTexture0</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                    GLint <span class="code-argument">_textureOpenGlID</span>);<br/></pre>
+set the testure Id on the specify uniform element.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_idElem</span> </td><td> Id of the uniform that might be sended.</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_textureOpenGlID</span> </td><td> Real openGL texture ID</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="5263"/><h3>setTexture1</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setTexture1</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_idElem</span>,<br/>                    GLint <span class="code-argument">_textureOpenGlID</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5265"/><h3>unUse</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">unUse</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Stop the processing of this program<br/>
+<br/>
+<hr/>
+<a id="5267"/><h3>updateContext</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">updateContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+This load/reload the data in the opengl context, needed when removed previously.<br/>
+<br/>
+<hr/>
+<a id="5269"/><h3>removeContext</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">removeContext</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+remove the data from the opengl context.<br/>
+<br/>
+<hr/>
+<a id="5271"/><h3>removeContextToLate</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">removeContextToLate</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Special android spec! It inform us that all context is removed and after notify us...<br/>
+<br/>
+<hr/>
+<a id="5273"/><h3>reload</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">reload</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Relode the shader from the file. used when a request of resouces reload is done.<br/><b>Note:</b> this is really usefull when we tested the new themes or shader developpements.<br/> 
+<br/>
+<hr/>
+<a id="5275"/><h3>keep</h3><pre>
++ <a class="code-type" href="class_ewol__resource__Program.html">ewol::resource::Program</a>* <span class="code-function">keep</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
+keep the resource pointer.<br/><b>Note:</b> Never free this pointer by your own...<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_filename</span> </td><td> Name of the openGL program.</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>pointer on the resource or NULL if an error occured.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<h3>release</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">release</span> (<a class="code-type" href="class_ewol__resource__Program.html">ewol::resource::Program</a>* & <span class="code-argument">_object</span>);<br/></pre>
+release the keeped resources<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input] [output]:</b></td><td><span class="code-argument">reference</span> </td><td> on the object pointer</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

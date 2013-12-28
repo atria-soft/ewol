@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::resource::ConfigFile</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
+#                                                   <a class="code-function" href="#5459">ConfigFile</a>    (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/># <span class="code-storage-keyword">virtual</span>                                                   <a class="code-function" href="#5461">~ConfigFile</a>   (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++ <span class="code-type" >void</span>                                              <a class="code-function" href="#5463">reload</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >int32_t</span>                                           <a class="code-function" href="#5465">request</a>       (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_paramName</span>);<br/>+ <span class="code-type" >int32_t</span>                                           <a class="code-function" href="#5467">getInteger</a>    (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/>+ <span class="code-type" >float</span>                                             <a class="code-function" href="#5469">getFloat</a>      (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/>+ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> &                                     <a class="code-function" href="#5471">getString</a>     (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/>+ <a class="code-type" href="class_ewol__resource__ConfigFile.html">ewol::resource::ConfigFile</a>*                       <a class="code-function" href="#5473">keep</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/>+ <span class="code-type" >void</span>                                              <a class="code-function" href="#5475">release</a>       (<a class="code-type" href="class_ewol__resource__ConfigFile.html">ewol::resource::ConfigFile</a>* & <span class="code-argument">_object</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Resource.html">ewol::Resource</a><br/>         +--> ewol::resource::ConfigFile<br/></pre>
+<h2>Detail:</h2>
+<a id="5459"/><a id="5461"/><h3>ConfigFile</h3><pre>
+#  <span class="code-function">ConfigFile</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5463"/><h3>~ConfigFile</h3><pre>
+# <span class="code-storage-keyword">virtual</span>  <span class="code-function">~ConfigFile</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5465"/><h3>reload</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">reload</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5467"/><h3>request</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">request</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_paramName</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5469"/><h3>getInteger</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getInteger</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5471"/><h3>getFloat</h3><pre>
++ <span class="code-type" >float</span> <span class="code-function">getFloat</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5473"/><h3>getString</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">getString</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_id</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="5475"/><h3>keep</h3><pre>
++ <a class="code-type" href="class_ewol__resource__ConfigFile.html">ewol::resource::ConfigFile</a>* <span class="code-function">keep</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_filename</span>);<br/></pre>
+keep the resource pointer.<br/><b>Note:</b> Never free this pointer by your own...<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_filename</span> </td><td> Name of the configuration file.</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>pointer on the resource or NULL if an error occured.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<h3>release</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">release</span> (<a class="code-type" href="class_ewol__resource__ConfigFile.html">ewol::resource::ConfigFile</a>* & <span class="code-argument">_object</span>);<br/></pre>
+release the keeped resources<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input] [output]:</b></td><td><span class="code-argument">reference</span> </td><td> on the object pointer</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

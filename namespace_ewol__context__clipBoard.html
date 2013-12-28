@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>namespace: ewol::context::clipBoard</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>enum:</h2>
+<ul>
+<li><a href="enum_ewol__context__clipBoard__clipboardListe.html">clipboardListe</a></li></ul>
+<h2>Synopsis:</h2>
+<pre>
+  <span class="code-type" >void</span>                <a class="code-function" href="#4180">set</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>,<br/>                                 <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/>  <span class="code-type" >void</span>                <a class="code-function" href="#4183">request</a>   (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>  <span class="code-type" >void</span>                <a class="code-function" href="#4185">setSystem</a> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>,<br/>                                 <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/>  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <a class="code-function" href="#4188">get</a>       (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/>  <span class="code-type" >void</span>                <a class="code-function" href="#4190">init</a>      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <span class="code-type" >void</span>                <a class="code-function" href="#4192">unInit</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Detail:</h2>
+<a id="4180"/><a id="4183"/><h3>set</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">set</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>,<br/>            <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/></pre>
+set the string data on a specific clipboard. The Gui system is notify that the clipboard "SELECTION" and "COPY" are change<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_clipboardID</span> </td><td> Select the specific ID of the clipboard</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_data</span> </td><td> The string that might be send to the clipboard</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4185"/><h3>request</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">request</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/></pre>
+Call system to request the current clipboard.<br/><b>Note:</b> Due to some system that manage the clipboard request asynchronous (like X11) and ewol managing the system with only one thread,
+      we need the call the system to send us the buffer, this is really ambigous, but the widget (who has focus) receive the 
+      notification of the arrival of this buffer id<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_clipboardID</span> </td><td> the needed clipboard ID</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4188"/><h3>setSystem</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">setSystem</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>,<br/>                  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_data</span>);<br/></pre>
+set the ewol internal buffer (no notification at the GUI). This fuction might be use by the 
+       Gui abstraction to set the buffer we receive. The end user must not use it.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_clipboardID</span> </td><td> selected clipboard ID</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_data</span> </td><td> new buffer data</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4190"/><h3>get</h3><pre>
+  <span class="code-storage-keyword">const</span> <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-function">get</span> (<span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__context__clipBoard__clipboardListe.html">ewol::context::clipBoard::clipboardListe</a> <span class="code-argument">_clipboardID</span>);<br/></pre>
+get the ewol internal buffer of the curent clipboard. The end user can use it when he receive the event in 
+       the widget : @ref onEventClipboard  == &gt; we can nothe this function is the only one which permit it.<br/><b>Note:</b> if we call this fuction withoutcallin @ref ewol::context::clipBoard::Request, we only get the previous clipboard<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_clipboardID</span> </td><td> selected clipboard ID</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>the requested buffer</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4192"/><h3>init</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+initialize the clipboard system (done by ewol)<br/>
+<br/>
+<hr/>
+<h3>unInit</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">unInit</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Un-Initialize the clipboard system (done by ewol)<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

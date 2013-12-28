@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::compositing::Drawing</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Constructor and Destructor:</h2>
+<pre>
++                                <a class="code-function" href="#4336">Drawing</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                                <a class="code-function" href="#4338">~Drawing</a>           (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++ <span class="code-type" >void</span>                           <a class="code-function" href="#4356">draw</a>               (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4358">clear</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">const</span> vec3 &                   <a class="code-function" href="#4360">getPos</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4362">setPos</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4364">setPos</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4366">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4368">setRelPos</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4370">setColor</a>           (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4372">setColorBg</a>         (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4374">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4377">setClippingWidth</a>   (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4380">setClipping</a>        (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4383">setClipping</a>        (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                                                     <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4386">setClippingMode</a>    (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4388">setThickness</a>       (<span class="code-type" >float</span> <span class="code-argument">_thickness</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4390">addVertex</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4392">lineTo</a>             (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4394">lineTo</a>             (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4396">lineRel</a>            (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4398">lineRel</a>            (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_vect</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4400">rectangle</a>          (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4402">rectangle</a>          (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4404">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4406">rectangleWidth</a>     (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4408">cube</a>               (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/>+ <span class="code-type" >void</span>                           <a class="code-function" href="#4410">circle</a>             (<span class="code-type" >float</span> <span class="code-argument">_radius</span>,<br/>                                                     <span class="code-type" >float</span> <span class="code-argument">_angleStart</span>,<br/>                                                     <span class="code-type" >float</span> <span class="code-argument">_angleStop</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Compositing.html">ewol::Compositing</a><br/>  +--> ewol::compositing::Drawing<br/></pre>
+<h2>Detail:</h2>
+<a id="4336"/><a id="4338"/><h3>Drawing</h3><pre>
++  <span class="code-function">Drawing</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Basic constructor<br/>
+<br/>
+<hr/>
+<a id="4356"/><h3>~Drawing</h3><pre>
++  <span class="code-function">~Drawing</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Basic destructor<br/>
+<br/>
+<hr/>
+<a id="4358"/><h3>draw</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">draw</span> (<span class="code-type" >bool</span> <span class="code-argument">_disableDepthTest</span>);<br/></pre>
+draw All the refistered text in the current element on openGL<br/>
+<br/>
+<hr/>
+<a id="4360"/><h3>clear</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">clear</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+clear alll tre registered element in the current element<br/>
+<br/>
+<hr/>
+<a id="4362"/><h3>getPos</h3><pre>
++ <span class="code-storage-keyword">const</span> vec3 & <span class="code-function">getPos</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+get the current display position (sometime needed in the gui control)<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>the current position.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4364"/><h3>setPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
+set position for the next text writen<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> Position of the text (in 3D)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4366"/><h3>setPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4368"/><h3>setRelPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>);<br/></pre>
+set relative position for the next text writen<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> ofset apply of the text (in 3D)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4370"/><h3>setRelPos</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setRelPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4372"/><h3>setColor</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setColor</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/></pre>
+set the Color of the current foreground font<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_color</span> </td><td> Color to set on foreground (for next print)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4374"/><h3>setColorBg</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setColorBg</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_color</span>);<br/></pre>
+set the background color of the font (for selected Text (not the global BG))<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_color</span> </td><td> Color to set on background (for next print)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4377"/><h3>setClippingWidth</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                         <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_width</span>);<br/></pre>
+Request a clipping area for the text (next draw only)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_width</span> </td><td> Width size of the clipping</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4380"/><h3>setClippingWidth</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setClippingWidth</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                         <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_width</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4383"/><h3>setClipping</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_pos</span>,<br/>                    <span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_posEnd</span>);<br/></pre>
+Request a clipping area for the text (next draw only)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> Start position of the clipping</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_posEnd</span> </td><td> End position of the clipping</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4386"/><h3>setClipping</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setClipping</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_pos</span>,<br/>                    <span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_posEnd</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4388"/><h3>setClippingMode</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setClippingMode</span> (<span class="code-type" >bool</span> <span class="code-argument">_newMode</span>);<br/></pre>
+enable/Disable the clipping (without lose the current clipping position)<br/>_newMode The new status of the clipping<br/>
+<br/>
+<hr/>
+<a id="4390"/><h3>setThickness</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setThickness</span> (<span class="code-type" >float</span> <span class="code-argument">_thickness</span>);<br/></pre>
+Specify the line thickness for the next elements<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_thickness</span> </td><td> The thickness disired for the next print</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4392"/><h3>addVertex</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">addVertex</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+add a point reference at the current position (this is a vertex reference at the current position<br/>
+<br/>
+<hr/>
+<a id="4394"/><h3>lineTo</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">lineTo</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
+draw a line to a specific position<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_dest</span> </td><td> Position of the end of the line.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4396"/><h3>lineTo</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">lineTo</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4398"/><h3>lineRel</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">lineRel</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_vect</span>);<br/></pre>
+Relative drawing a line (spacial vector)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_vect</span> </td><td> Vector of the curent line.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4400"/><h3>lineRel</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">lineRel</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_vect</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4402"/><h3>rectangle</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">rectangle</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
+draw a 2D rectangle to the position requested.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_dest</span> </td><td> Position the the end of the rectangle</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4404"/><h3>rectangle</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">rectangle</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_dest</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4406"/><h3>rectangleWidth</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">rectangleWidth</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_size</span>);<br/></pre>
+draw a 2D rectangle to the requested size.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_size</span> </td><td> size of the rectangle</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="4408"/><h3>rectangleWidth</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">rectangleWidth</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_size</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4410"/><h3>cube</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">cube</span> (<span class="code-storage-keyword">const</span> vec3 & <span class="code-argument">_dest</span>);<br/></pre>
+draw a 3D rectangle to the position requested.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_dest</span> </td><td> Position the the end of the rectangle</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>circle</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">circle</span> (<span class="code-type" >float</span> <span class="code-argument">_radius</span>,<br/>               <span class="code-type" >float</span> <span class="code-argument">_angleStart</span>,<br/>               <span class="code-type" >float</span> <span class="code-argument">_angleStop</span>);<br/></pre>
+draw a 2D circle with the specify rafdius parameter.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_radius</span> </td><td> Distence to the dorder</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_angleStart</span> </td><td> start angle of this circle ([0..2PI] otherwithe  == &gt; disable)</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_angleStop</span> </td><td> stop angle of this circle ([0..2PI] otherwithe  == &gt; disable)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

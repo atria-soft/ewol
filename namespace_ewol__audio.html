@@ -79,74 +79,48 @@
 		</div>
 	</div>
 	<div class="container" id="content">
-<h1><center>Ewol extract and build examples</center></h1>
-<hr><div align="left"><a href="001_bases.html">Previous: Doc</a></div> <div align="right"><a href="tutorial_001_HelloWord.html">Next: Hello-Word</a></div><br/>
-All developpement software will start by getting the dependency and the sources.<br/>
-<h2> Linux dependency packages </h2>
-<pre>
-	sudo apt-get install g++ libgl1-mesa-dev zlib1g-dev libasound2-dev
-	<span class="code-preproc"># if you want to compile with clang :</span>
-	sudo apt-get install clang
-	<span class="code-preproc"># For andoid compilation (jdk 7 does not work...)</span>
-	sudo apt-get install javacc openjdk-6-jdk
-	<span class="code-preproc"># if you want to compile for windows :</span>
-	sudo apt-get install mingw32
-	<span class="code-preproc"># on 64 bits processor for compatibility</span>
-	sudo apt-get install ia32-libs
-</pre><br/>
+<h1>namespace: ewol::audio</h1><hr/><h2>Description:</h2>
 
-<h2> Download instructions </h2><br/>
-Download the software :
+<br/><br/>
+<h2>namespace:</h2>
+<ul>
+<li><a href="namespace_ewol__audio__wav.html">wav</a></li><li><a href="namespace_ewol__audio__music.html">music</a></li><li><a href="namespace_ewol__audio__effects.html">effects</a></li></ul>
+<h2>Synopsis:</h2>
 <pre>
-	<span class="code-preproc"># create a working directory path</span>
-	mkdir your_workspace_path
-	cd your_workspace_path
-	<span class="code-preproc"># clone ewol and all sub-library</span>
-	git clone git://github.com/HeeroYui/ewol.git
-	cd ewol
-	git submodule init
-	git submodule update
-	cd ..
-	<span class="code-preproc"># clone the exemple repository</span>
-	git clone git://github.com/HeeroYui/example.git
-</pre><br/>
+  <span class="code-type" >void</span>    <a class="code-function" href="#4249">init</a>              (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  <span class="code-type" >void</span>    <a class="code-function" href="#4251">unInit</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>  typedef <a class="code-function" href="#4253">void</a>              (*AudioCallback)(int16_t*_bufferInterlace,int32_t_nbSample,int32_t <span class="code-argument">_nbChannels</span>);<br/>  <span class="code-type" >void</span>    <a class="code-function" href="#4255">addCallbackOutput</a> (AudioCallback <span class="code-argument">_userCallback</span>);<br/>  <span class="code-type" >void</span>    <a class="code-function" href="#4257">getData</a>           (<span class="code-type" >int16_t</span>* <span class="code-argument">_bufferInterlace</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_nbSample</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_nbChannels</span>);<br/></pre>
 <br/>
-<b>Note:</b><pre>
-The full build tool documentation is availlable here : <a href="http://heeroyui.github.io/lutin/">lutin</a>
-</pre><br/>
-<h2> Common build instructions </h2><br/>
-Compile software in debug for the curent platform :
-<pre>
-	./ewol/build/lutin.py -mdebug
-</pre><br/>
-You can specify the platform with:
-<pre>
-	./ewol/build/lutin.py -mdebug -tAndroid
-</pre><br/>
-It coud be usefull to disable the package generation in local debug :
-<pre>
-	./ewol/build/lutin.py -mdebug -p
-</pre><br/>
-Build with clang instead of gcc:
-<pre>
-	./ewol/build/lutin.py -C -cclang
-</pre><br/>
-Display the build in color :
-<pre>
-	./ewol/build/lutin.py -C -mdebug -p
-</pre><br/>
-Build in realease and install the program named 'edn'
-<pre>
-	./ewol/build/lutin.py -C edn-install
-</pre><br/>
-To run an application you will find it directly on the out 'staging' tree :
-<pre>
-	./out/Linux/debug/staging/clang/edn/usr/bin/edn
-</pre><br/>
-<h1> Simple explanation : </h1><br/>
-The workspace is a simple folder that contain all the modules ans sub module.
-It will create a tree like this :<br/>
-<ul><li> workspace</li><ul><li> ewol</li><ul><li> external <span style="font-style: italic;">(ewol external dependency sub-lib)</span></li><ul><li> agg</li><li> bullet</li><li> date</li><li> egami</li><li> ege</li><li> ejson</li><li> etk</li><li> exml</li><li> freetype</li><li> glew</li><li> lua</li><li> ogg</li><li> png</li><li> portaudio</li><li> z</li></ul><li> souces</li><ul><li> ewol</li></ul></ul><li> example</li></ul></ul>	</div>
+<h2>Detail:</h2>
+<a id="4249"/><a id="4251"/><h3>init</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">init</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4253"/><h3>unInit</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">unInit</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4255"/><h3>void</h3><pre>
+  typedef <span class="code-function">void</span> (*AudioCallback)(int16_t*_bufferInterlace,int32_t_nbSample,int32_t <span class="code-argument">_nbChannels</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="4257"/><h3>addCallbackOutput</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">addCallbackOutput</span> (AudioCallback <span class="code-argument">_userCallback</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>getData</h3><pre>
+  <span class="code-type" >void</span> <span class="code-function">getData</span> (<span class="code-type" >int16_t</span>* <span class="code-argument">_bufferInterlace</span>,<br/>                <span class="code-type" >int32_t</span> <span class="code-argument">_nbSample</span>,<br/>                <span class="code-type" >int32_t</span> <span class="code-argument">_nbChannels</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
 <script>
 	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

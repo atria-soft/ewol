@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::widget::Gird</h1><hr/><h2>Constructor and Destructor:</h2>
+<pre>
++                                     <a class="code-function" href="#3482">Gird</a>                (<span class="code-type" >int32_t</span> <span class="code-argument">_colNumber</span>);<br/>+ <span class="code-storage-keyword">virtual</span>                             <a class="code-function" href="#3484">~Gird</a>               (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++         <span class="code-type" >void</span>                        <a class="code-function" href="#3470">init</a>                (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3486">setColNumber</a>        (<span class="code-type" >int32_t</span> <span class="code-argument">_colNumber</span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3488">setColSize</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3491">setRowSize</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/>+         <span class="code-type" >int32_t</span>                     <a class="code-function" href="#3493">getColSize</a>          (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>);<br/>+         <span class="code-type" >int32_t</span>                     <a class="code-function" href="#3495">getRowSize</a>          (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3497">setGravityButtom</a>    (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3499">setGravityTop</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3501">subWidgetRemoveAll</a>  (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3503">subWidgetAdd</a>        (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>,<br/>                                                           <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3507">subWidgetRemove</a>     (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3509">subWidgetRemove</a>     (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3512">subWidgetUnLink</a>     (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3514">subWidgetUnLink</a>     (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>);<br/>+         <span class="code-type" >void</span>                        <a class="code-function" href="#3518">setBorderSize</a>       (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_newBorderSize</span>);<br/>+         <span class="code-storage-keyword">const</span> ivec2 &               <a class="code-function" href="#3520">getBorderSize</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3522">systemDraw</a>          (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3524">onRegenerateDisplay</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>*               <a class="code-function" href="#3526">getWidgetAtPos</a>      (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">pos</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3528">onObjectRemove</a>      (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3530">calculateSize</a>       (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/>+ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span>                        <a class="code-function" href="#3532">calculateMinMaxSize</a> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> ewol::widget::Gird<br/></pre>
+<h2>Detail:</h2>
+<a id="3470"/><a id="3482"/><h3>init</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">init</span> (<a class="code-type" href="class_ewol__widget__Manager.html">ewol::widget::Manager</a> & <span class="code-argument">_widgetManager</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3484"/><h3>Gird</h3><pre>
++  <span class="code-function">Gird</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colNumber</span>);<br/></pre>
+Constructor<br/>
+<br/>
+<hr/>
+<a id="3486"/><h3>~Gird</h3><pre>
++ <span class="code-storage-keyword">virtual</span>  <span class="code-function">~Gird</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Desstructor<br/>
+<br/>
+<hr/>
+<a id="3488"/><h3>setColNumber</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setColNumber</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colNumber</span>);<br/></pre>
+set the number of colomn<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">colNumber</span> </td><td> Nuber of colomn</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3491"/><h3>setColSize</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setColSize</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/></pre>
+change a size view of a colomn.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">colId</span> </td><td> Id of the colomn [0..x].</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">size</span> </td><td> size of the colomn.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3493"/><h3>setRowSize</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setRowSize</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_size</span>);<br/></pre>
+change a size view of a line.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">size</span> </td><td> size of the line.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3495"/><h3>getColSize</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getColSize</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>);<br/></pre>
+get the size view of a colomn.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">colId</span> </td><td> Id of the colomn [0..x].</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>The size of the colomn.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3497"/><h3>getRowSize</h3><pre>
++ <span class="code-type" >int32_t</span> <span class="code-function">getRowSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+get the size view of the lines.<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>The size of the lines.</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3499"/><h3>setGravityButtom</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setGravityButtom</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+set the gravity of the widget on the Button (index 0 is on buttom)<br/>
+<br/>
+<hr/>
+<a id="3501"/><h3>setGravityTop</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setGravityTop</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+set the gravity of the widget on the Top (index 0 is on top)<br/>
+<br/>
+<hr/>
+<a id="3503"/><h3>subWidgetRemoveAll</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetRemoveAll</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+remove all sub element from the widget.<br/>
+<br/>
+<hr/>
+<a id="3507"/><h3>subWidgetAdd</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetAdd</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                             <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>,<br/>                             <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+add at end position a Widget (note : This system use an inverted phylisophie (button to top, and left to right)<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_colId</span> </td><td> Id of the colomn [0..x].</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_rowId</span> </td><td> Id of the row [0..y].</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newWidget</span> </td><td> the element pointer</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3509"/><h3>subWidgetRemove</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetRemove</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+remove definitly a widget from the system and this Gird.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newWidget</span> </td><td> the element pointer.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3512"/><h3>subWidgetRemove</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetRemove</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>);<br/></pre>
+remove definitly a widget from the system and this Gird.<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_colId</span> </td><td> Id of the colomn [0..x].</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_rowId</span> </td><td> Id of the row [0..y].</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3514"/><h3>subWidgetUnLink</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetUnLink</span> (<a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-argument">_newWidget</span>);<br/></pre>
+Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newWidget</span> </td><td> the element pointer.</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3518"/><h3>subWidgetUnLink</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">subWidgetUnLink</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colId</span>,<br/>                                <span class="code-type" >int32_t</span> <span class="code-argument">_rowId</span>);<br/></pre>
+Just unlick the specify widget, this function does not remove it from the system (if you can, do nt use it ...).<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_colId</span> </td><td> Id of the colomn [0..x].</td></tr>
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_rowId</span> </td><td> Id of the row [0..y].</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3520"/><h3>setBorderSize</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setBorderSize</span> (<span class="code-storage-keyword">const</span> ivec2 & <span class="code-argument">_newBorderSize</span>);<br/></pre>
+set the current border size of the current element:<br/><ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_newBorderSize</span> </td><td> The border size to set (0 if not used)</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3522"/><h3>getBorderSize</h3><pre>
++ <span class="code-storage-keyword">const</span> ivec2 & <span class="code-function">getBorderSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+get the current border size of the current element:<br/><ul>
+<table class="parameter-list">
+<tr><td><b>Return: </b></td><td></td><td>the border size (0 if not used)</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3524"/><h3>systemDraw</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">systemDraw</span> (<span class="code-storage-keyword">const</span> <a class="code-type" href="class_ewol__DrawProperty.html">ewol::DrawProperty</a> & <span class="code-argument">_displayProp</span>);<br/></pre>
+{SYSTEM} extern interface to request a draw ...  (called by the drawing thread [Android, X11, ...])
+This function generate a clipping with the viewport openGL system. Like this a widget draw can not draw over an other widget<br/><b>Note:</b> This function is virtual for the scrolled widget, and the more complicated openGl widget<br/> <b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_displayProp</span> </td><td> properties of the current display</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3526"/><h3>onRegenerateDisplay</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onRegenerateDisplay</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+Event generated when a redraw is needed<br/>
+<br/>
+<hr/>
+<a id="3528"/><h3>getWidgetAtPos</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_ewol__Widget.html">ewol::Widget</a>* <span class="code-function">getWidgetAtPos</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">pos</span>);<br/></pre>
+get the widget at the specific windows absolute position<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_pos</span> </td><td> gAbsolute position of the requested widget knowledge</td></tr>
+<tr><td><b>Return: </b></td><td></td><td>NULL No widget found&lt;br/&gt;pointer on the widget found</td></tr></table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3530"/><h3>onObjectRemove</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">onObjectRemove</span> (<a class="code-type" href="class_ewol__Object.html">ewol::Object</a>* <span class="code-argument">_removeObject</span>);<br/></pre>
+Inform object that an other object is removed ...<br/><b>Note:</b> : Sub classes must call this class<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_removObject</span> </td><td> Pointer on the Object remeved  == &gt; the user must remove all reference on this Object</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<a id="3532"/><h3>calculateSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateSize</span> (<span class="code-storage-keyword">const</span> vec2 & <span class="code-argument">_availlable</span>);<br/></pre>
+Parent set the possible diplay size of the current widget whith his own possibilities
+       By default this save the widget available size in the widget size<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> <ul>
+<table class="parameter-list">
+<td><b>Parameter [input]:</b></td><td><span class="code-argument">_available</span> </td><td> Available x&y pixel size</td></tr>
+</table>
+</ul>
+
+<br/>
+<hr/>
+<h3>calculateMinMaxSize</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <span class="code-type" >void</span> <span class="code-function">calculateMinMaxSize</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+calculate the minimum and maximum size (need to estimate expend properties of the widget)<br/><b>Note:</b> : INTERNAL EWOL SYSTEM<br/> 
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

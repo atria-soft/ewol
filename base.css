@@ -55,14 +55,15 @@ body {
 	text-shadow: 0 1px 0 #ce4213;
 	padding: 10px 20px 10px;
 	margin-left: -20px;
-	//overflow:scroll;
-	//overflow-x:hidden;
+	overflow:scroll;
+	overflow-y:auto;
+	overflow-x:hidden;
 }
-/*
-.navbar ul {
-	font-size: 15px;
-};
-*/
+.navbar-fixed-top a {
+	text-decoration: none;
+	color: #000000;
+}
+
 h1, h2, h3, h4, h5, h6 {
 	display: block;
 	margin: 10px 0;
@@ -95,7 +96,15 @@ pre {
 	border-radius: 4px;
 }
 
+.enumeration-list td {
+	padding-left:10px;
+	padding-right:10px;
+}
 
+.parameter-list td {
+	padding-left:5px;
+	padding-right:5px;
+}
 
 .code-function {
 	text-decoration:none;

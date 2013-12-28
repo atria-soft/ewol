@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>enum: ewol::openGL::openGlFlags</h1><hr/><h2>Description:</h2>
+
+<br/><br/>
+<h2>Value list</h2>
+<ul>
+<table class="enumeration-list"><tr>
+<tr>
+<td><a href="#FLAG_BLEND">FLAG_BLEND</a></td><td><a href="#FLAG_CLIP_DISTANCE_I">FLAG_CLIP_DISTANCE_I</a></td><td><a href="#FLAG_COLOR_LOGIC_OP">FLAG_COLOR_LOGIC_OP</a></td></tr>
+<tr>
+<td><a href="#FLAG_CULL_FACE">FLAG_CULL_FACE</a></td><td><a href="#FLAG_DEBUG_OUTPUT">FLAG_DEBUG_OUTPUT</a></td><td><a href="#FLAG_DEBUG_OUTPUT_SYNCHRONOUS">FLAG_DEBUG_OUTPUT_SYNCHRONOUS</a></td></tr>
+<tr>
+<td><a href="#FLAG_DEPTH_CLAMP">FLAG_DEPTH_CLAMP</a></td><td><a href="#FLAG_DEPTH_TEST">FLAG_DEPTH_TEST</a></td><td><a href="#FLAG_DITHER">FLAG_DITHER</a></td></tr>
+<tr>
+<td><a href="#FLAG_FRAMEBUFFER_SRGB">FLAG_FRAMEBUFFER_SRGB</a></td><td><a href="#FLAG_LINE_SMOOTH">FLAG_LINE_SMOOTH</a></td><td><a href="#FLAG_MULTISAMPLE">FLAG_MULTISAMPLE</a></td></tr>
+<tr>
+<td><a href="#FLAG_POLYGON_OFFSET_FILL">FLAG_POLYGON_OFFSET_FILL</a></td><td><a href="#FLAG_POLYGON_OFFSET_LINE">FLAG_POLYGON_OFFSET_LINE</a></td><td><a href="#FLAG_POLYGON_OFFSET_POINT">FLAG_POLYGON_OFFSET_POINT</a></td></tr>
+<tr>
+<td><a href="#FLAG_POLYGON_SMOOTH">FLAG_POLYGON_SMOOTH</a></td><td><a href="#FLAG_PRIMITIVE_RESTART">FLAG_PRIMITIVE_RESTART</a></td><td><a href="#FLAG_PRIMITIVE_RESTART_FIXED_INDEX">FLAG_PRIMITIVE_RESTART_FIXED_INDEX</a></td></tr>
+<tr>
+<td><a href="#FLAG_SAMPLE_ALPHA_TO_COVERAGE">FLAG_SAMPLE_ALPHA_TO_COVERAGE</a></td><td><a href="#FLAG_SAMPLE_ALPHA_TO_ONE">FLAG_SAMPLE_ALPHA_TO_ONE</a></td><td><a href="#FLAG_SAMPLE_COVERAGE">FLAG_SAMPLE_COVERAGE</a></td></tr>
+<tr>
+<td><a href="#FLAG_SAMPLE_SHADING">FLAG_SAMPLE_SHADING</a></td><td><a href="#FLAG_SAMPLE_MASK">FLAG_SAMPLE_MASK</a></td><td><a href="#FLAG_SCISSOR_TEST">FLAG_SCISSOR_TEST</a></td></tr>
+<tr>
+<td><a href="#FLAG_STENCIL_TEST">FLAG_STENCIL_TEST</a></td><td><a href="#FLAG_PROGRAM_POINT_SIZE">FLAG_PROGRAM_POINT_SIZE</a></td><td><a href="#FLAG_TEXTURE_2D">FLAG_TEXTURE_2D</a></td></tr>
+<tr>
+<td><a href="#FLAG_ALPHA_TEST">FLAG_ALPHA_TEST</a></td><td><a href="#FLAG_FOG">FLAG_FOG</a></td></tr>
+</table>
+</ul>
+<h2>Detail:</h2>
+<h3><a id="FLAG_BLEND"/>FLAG_BLEND</h3><pre>
+FLAG_BLEND                         = <span class="code-type"><0<span></pre>
+
+If enabled, blend the computed fragment color values with the values in the color buffers. See glBlendFunc.<br/><hr/>
+<h3><a id="FLAG_CLIP_DISTANCE_I"/>FLAG_CLIP_DISTANCE_I</h3><pre>
+FLAG_CLIP_DISTANCE_I               = <span class="code-type"><1<span></pre>
+
+If enabled, clip geometry against user-defined half space i.<br/><hr/>
+<h3><a id="FLAG_COLOR_LOGIC_OP"/>FLAG_COLOR_LOGIC_OP</h3><pre>
+FLAG_COLOR_LOGIC_OP                = <span class="code-type"><2<span></pre>
+
+If enabled, apply the currently selected logical operation to the computed fragment color and color buffer values. See glLogicOp.<br/><hr/>
+<h3><a id="FLAG_CULL_FACE"/>FLAG_CULL_FACE</h3><pre>
+FLAG_CULL_FACE                     = <span class="code-type"><3<span></pre>
+
+If enabled, cull polygons based on their winding in window coordinates. See glCullFace.<br/><hr/>
+<h3><a id="FLAG_DEBUG_OUTPUT"/>FLAG_DEBUG_OUTPUT</h3><pre>
+FLAG_DEBUG_OUTPUT                  = <span class="code-type"><4<span></pre>
+
+If enabled, debug messages are produced by a debug context. When disabled, the debug message log is silenced. Note that in a non-debug context, very few, if any messages might be produced, even when GL_DEBUG_OUTPUT is enabled.<br/><hr/>
+<h3><a id="FLAG_DEBUG_OUTPUT_SYNCHRONOUS"/>FLAG_DEBUG_OUTPUT_SYNCHRONOUS</h3><pre>
+FLAG_DEBUG_OUTPUT_SYNCHRONOUS      = <span class="code-type"><5<span></pre>
+
+If enabled, debug messages are produced synchronously by a debug context. If disabled, debug messages may be produced asynchronously. In particular, they may be delayed relative to the execution of GL commands, and the debug callback function may be called from a thread other than that in which the commands are executed. See glDebugMessageCallback.<br/><hr/>
+<h3><a id="FLAG_DEPTH_CLAMP"/>FLAG_DEPTH_CLAMP</h3><pre>
+FLAG_DEPTH_CLAMP                   = <span class="code-type"><6<span></pre>
+
+If enabled, the -wc≤zc≤wc plane equation is ignored by view volume clipping (effectively, there is no near or far plane clipping). See glDepthRange.<br/><hr/>
+<h3><a id="FLAG_DEPTH_TEST"/>FLAG_DEPTH_TEST</h3><pre>
+FLAG_DEPTH_TEST                    = <span class="code-type"><7<span></pre>
+
+If enabled, do depth comparisons and update the depth buffer. Note that even if the depth buffer exists and the depth mask is non-zero, the depth buffer is not updated if the depth test is disabled. See glDepthFunc and glDepthRange.<br/><hr/>
+<h3><a id="FLAG_DITHER"/>FLAG_DITHER</h3><pre>
+FLAG_DITHER                        = <span class="code-type"><8<span></pre>
+
+If enabled, dither color components or indices before they are written to the color buffer.<br/><hr/>
+<h3><a id="FLAG_FRAMEBUFFER_SRGB"/>FLAG_FRAMEBUFFER_SRGB</h3><pre>
+FLAG_FRAMEBUFFER_SRGB              = <span class="code-type"><9<span></pre>
+
+If enabled and the value of GL_FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING for the framebuffer attachment corresponding to the destination buffer is GL_SRGB, the R, G, and B destination color values (after conversion from fixed-point to floating-point) are considered to be encoded for the sRGB color space and hence are linearized prior to their use in blending.<br/><hr/>
+<h3><a id="FLAG_LINE_SMOOTH"/>FLAG_LINE_SMOOTH</h3><pre>
+FLAG_LINE_SMOOTH                   = <span class="code-type"><10<span></pre>
+
+If enabled, draw lines with correct filtering. Otherwise, draw aliased lines. See glLineWidth.<br/><hr/>
+<h3><a id="FLAG_MULTISAMPLE"/>FLAG_MULTISAMPLE</h3><pre>
+FLAG_MULTISAMPLE                   = <span class="code-type"><11<span></pre>
+
+If enabled, use multiple fragment samples in computing the final color of a pixel. See glSampleCoverage.<br/><hr/>
+<h3><a id="FLAG_POLYGON_OFFSET_FILL"/>FLAG_POLYGON_OFFSET_FILL</h3><pre>
+FLAG_POLYGON_OFFSET_FILL           = <span class="code-type"><12<span></pre>
+
+If enabled, and if the polygon is rendered in GL_FILL mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See glPolygonOffset.<br/><hr/>
+<h3><a id="FLAG_POLYGON_OFFSET_LINE"/>FLAG_POLYGON_OFFSET_LINE</h3><pre>
+FLAG_POLYGON_OFFSET_LINE           = <span class="code-type"><13<span></pre>
+
+If enabled, and if the polygon is rendered in GL_LINE mode, an offset is added to depth values of a polygon's fragments before the depth comparison is performed. See glPolygonOffset.<br/><hr/>
+<h3><a id="FLAG_POLYGON_OFFSET_POINT"/>FLAG_POLYGON_OFFSET_POINT</h3><pre>
+FLAG_POLYGON_OFFSET_POINT          = <span class="code-type"><14<span></pre>
+
+If enabled, an offset is added to depth values of a polygon's fragments before the depth comparison is performed, if the polygon is rendered in GL_POINT mode. See glPolygonOffset.<br/><hr/>
+<h3><a id="FLAG_POLYGON_SMOOTH"/>FLAG_POLYGON_SMOOTH</h3><pre>
+FLAG_POLYGON_SMOOTH                = <span class="code-type"><15<span></pre>
+
+If enabled, draw polygons with proper filtering. Otherwise, draw aliased polygons. For correct antialiased polygons, an alpha buffer is needed and the polygons must be sorted front to back.<br/><hr/>
+<h3><a id="FLAG_PRIMITIVE_RESTART"/>FLAG_PRIMITIVE_RESTART</h3><pre>
+FLAG_PRIMITIVE_RESTART             = <span class="code-type"><16<span></pre>
+
+enables primitive restarting.  If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the primitive restart index. See glPrimitiveRestartIndex.<br/><hr/>
+<h3><a id="FLAG_PRIMITIVE_RESTART_FIXED_INDEX"/>FLAG_PRIMITIVE_RESTART_FIXED_INDEX</h3><pre>
+FLAG_PRIMITIVE_RESTART_FIXED_INDEX = <span class="code-type"><17<span></pre>
+
+enables primitive restarting with a fixed index. If enabled, any one of the draw commands which transfers a set of generic attribute array elements to the GL will restart the primitive when the index of the vertex is equal to the fixed primitive index for the specified index type. The fixed index is equal to 2n−1 where n is equal to 8 for GL_UNSIGNED_BYTE, 16 for GL_UNSIGNED_SHORT and 32 for GL_UNSIGNED_INT.<br/><hr/>
+<h3><a id="FLAG_SAMPLE_ALPHA_TO_COVERAGE"/>FLAG_SAMPLE_ALPHA_TO_COVERAGE</h3><pre>
+FLAG_SAMPLE_ALPHA_TO_COVERAGE      = <span class="code-type"><18<span></pre>
+
+If enabled, compute a temporary coverage value where each bit is determined by the alpha value at the corresponding sample location.  The temporary coverage value is then ANDed with the fragment coverage value.<br/><hr/>
+<h3><a id="FLAG_SAMPLE_ALPHA_TO_ONE"/>FLAG_SAMPLE_ALPHA_TO_ONE</h3><pre>
+FLAG_SAMPLE_ALPHA_TO_ONE           = <span class="code-type"><19<span></pre>
+
+If enabled, each sample alpha value is replaced by the maximum representable alpha value.<br/><hr/>
+<h3><a id="FLAG_SAMPLE_COVERAGE"/>FLAG_SAMPLE_COVERAGE</h3><pre>
+FLAG_SAMPLE_COVERAGE               = <span class="code-type"><20<span></pre>
+
+If enabled, the fragment's coverage is ANDed with the temporary coverage value. If GL_SAMPLE_COVERAGE_INVERT is set to GL_TRUE, invert the coverage value. See glSampleCoverage.<br/><hr/>
+<h3><a id="FLAG_SAMPLE_SHADING"/>FLAG_SAMPLE_SHADING</h3><pre>
+FLAG_SAMPLE_SHADING                = <span class="code-type"><21<span></pre>
+
+If enabled, the active fragment shader is run once for each covered sample, or at fraction of this rate as determined by the current value of GL_MIN_SAMPLE_SHADING_VALUE. See glMinSampleShading.<br/><hr/>
+<h3><a id="FLAG_SAMPLE_MASK"/>FLAG_SAMPLE_MASK</h3><pre>
+FLAG_SAMPLE_MASK                   = <span class="code-type"><22<span></pre>
+
+If enabled, the sample coverage mask generated for a fragment during rasterization will be ANDed with the value of GL_SAMPLE_MASK_VALUE before shading occurs. See glSampleMaski.<br/><hr/>
+<h3><a id="FLAG_SCISSOR_TEST"/>FLAG_SCISSOR_TEST</h3><pre>
+FLAG_SCISSOR_TEST                  = <span class="code-type"><23<span></pre>
+
+If enabled, discard fragments that are outside the scissor rectangle. See glScissor.<br/><hr/>
+<h3><a id="FLAG_STENCIL_TEST"/>FLAG_STENCIL_TEST</h3><pre>
+FLAG_STENCIL_TEST                  = <span class="code-type"><24<span></pre>
+
+If enabled, do stencil testing and update the stencil buffer. See glStencilFunc and glStencilOp. GL_TEXTURE_CUBE_MAP_SEAMLESS = 1&lt;&lt;0, //!&lt; If enabled, cubemap textures are sampled such that when linearly sampling from the border between two adjacent faces, texels from both faces are used to generate the final sample value. When disabled, texels from only a single face are used to construct the final sample value.<br/><hr/>
+<h3><a id="FLAG_PROGRAM_POINT_SIZE"/>FLAG_PROGRAM_POINT_SIZE</h3><pre>
+FLAG_PROGRAM_POINT_SIZE            = <span class="code-type"><25<span></pre>
+
+If enabled and a vertex or geometry shader is active, then the derived point size is taken from the (potentially clipped) shader builtin gl_PointSize and clamped to the implementation-dependent point size range.<br/><hr/>
+<h3><a id="FLAG_TEXTURE_2D"/>FLAG_TEXTURE_2D</h3><pre>
+FLAG_TEXTURE_2D                    = <span class="code-type"><26<span></pre>
+
+ 
+<br/><hr/>
+<h3><a id="FLAG_ALPHA_TEST"/>FLAG_ALPHA_TEST</h3><pre>
+FLAG_ALPHA_TEST                    = <span class="code-type"><27<span></pre>
+
+ 
+<br/><hr/>
+<h3><a id="FLAG_FOG"/>FLAG_FOG</h3><pre>
+FLAG_FOG                           = <span class="code-type"><28<span></pre>
+
+ 
+<br/>	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>

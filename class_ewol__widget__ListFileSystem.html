@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>ewol Library</title>
+	<link rel="stylesheet" href="base.css">
+	<link rel="stylesheet" href="menu.css">
+</head>
+<body>
+	<div class="navbar navbar-fixed-top">
+		<div class="container">
+			<h1><a href="index.html">ewol library</a></h1>
+			<h4><a href="http://github.com/heeroyui/ewol/">&nbsp;&nbsp;&nbsp;[ sources ]</a></h4>
+<h3>API:</h3>			<div id="menu">
+<ul class="niveau1">
+	<li class="sousmenu"><a href="namespace_ewol.html">ewol</a>
+<ul class="niveau2">
+	<li><a href="namespace_ewol__key.html">key</a>
+	</li>
+	<li><a href="namespace_ewol__widget.html">widget</a>
+	</li>
+	<li><a href="namespace_ewol__openGL.html">openGL</a>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__context.html">context</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__context__clipBoard.html">clipBoard</a>
+	</li>
+</ul>
+	</li>
+	<li class="sousmenu"><a href="namespace_ewol__audio.html">audio</a>
+<ul class="niveau3">
+	<li><a href="namespace_ewol__audio__wav.html">wav</a>
+	</li>
+	<li><a href="namespace_ewol__audio__music.html">music</a>
+	</li>
+	<li><a href="namespace_ewol__audio__effects.html">effects</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_ewol__portAudio.html">portAudio</a>
+	</li>
+	<li><a href="namespace_ewol__compositing.html">compositing</a>
+	</li>
+	<li><a href="namespace_ewol__object.html">object</a>
+	</li>
+	<li><a href="namespace_ewol__resource.html">resource</a>
+	</li>
+	<li><a href="namespace_ewol__font.html">font</a>
+	</li>
+	<li><a href="namespace_ewol__event.html">event</a>
+	</li>
+</ul>
+	</li>
+	<li><a href="namespace_MacOs.html">MacOs</a>
+	</li>
+</ul>
+			</div>
+<h3>Documentation:</h3><div id="menu">
+<ul class="niveau1"><li><a href="001_bases.html">bases</a></li>
+</ul></div>
+<h3>Tutorials:</h3><div id="menu">
+<ul class="niveau1"><li><a href="tutorial_000_Build.html">Build</a></li>
+</ul><ul class="niveau1"><li><a href="tutorial_001_HelloWord.html">HelloWord</a></li>
+</ul></div>
+<br/><h3>Associate libraries:</h3><div id="menu">
+<ul class="niveau1"><li><a href="../ejson/index.html">ejson</a></li>
+</ul><ul class="niveau1"><li><a href="../egami/index.html">egami</a></li>
+</ul><ul class="niveau1"><li><a href="../ege/index.html">ege</a></li>
+</ul><ul class="niveau1"><li><a href="../esvg/index.html">esvg</a></li>
+</ul><ul class="niveau1"><li><a href="../etk/index.html">etk</a></li>
+</ul><ul class="niveau1"><li><a href="../exml/index.html">exml</a></li>
+</ul></div>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+		</div>
+	</div>
+	<div class="container" id="content">
+<h1>class: ewol::widget::ListFileSystem</h1><hr/><h2>Constructor and Destructor:</h2>
+<pre>
++                                   <a class="code-function" href="#3367">ListFileSystem</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+                                   <a class="code-function" href="#3369">~ListFileSystem</a>       (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+<br/>
+<h2>Synopsis:</h2>
+<pre>
++         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>         <a class="code-member" href="#3356">eventFileSelect</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>         <a class="code-member" href="#3357">eventFileValidate</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>         <a class="code-member" href="#3358">eventFolderSelect</a>;<br/>+         <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span>         <a class="code-member" href="#3359">eventFolderValidate</a>;<br/>+ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt;              <a class="code-function" href="#3371">getBasicBG</a>            (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >uint32_t</span>                  <a class="code-function" href="#3373">getNuberOfColomn</a>      (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                      <a class="code-function" href="#3375">getTitle</a>              (<span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                                                           <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_myTitle</span>,<br/>                                                           <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_fg</span>,<br/>                                                           <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_bg</span>);<br/>+         <span class="code-type" >uint32_t</span>                  <a class="code-function" href="#3380">getNuberOfRaw</a>         (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >bool</span>                      <a class="code-function" href="#3382">getElement</a>            (<span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_raw</span>,<br/>                                                           <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_myTextToWrite</span>,<br/>                                                           <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_fg</span>,<br/>                                                           <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_bg</span>);<br/>+         <span class="code-type" >bool</span>                      <a class="code-function" href="#3388">onItemEvent</a>           (<span class="code-type" >int32_t</span> <span class="code-argument">_IdInput</span>,<br/>                                                           <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_typeEvent</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                                                           <span class="code-type" >int32_t</span> <span class="code-argument">_raw</span>,<br/>                                                           <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                                                           <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3395">setFolder</a>             (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_newFolder</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>               <a class="code-function" href="#3397">getFolder</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3399">setSelect</a>             (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_data</span>);<br/>+         <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a>               <a class="code-function" href="#3401">getSelect</a>             (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3403">regenerateView</a>        (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3405">setShowFiles</a>          (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3407">setShowFolder</a>         (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3409">setShowHiddenFiles</a>    (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/>+         <span class="code-type" >void</span>                      <a class="code-function" href="#3411">setShowTemporaryFiles</a> (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/></pre>
+<br/>
+<h2>Object Hierarchy:<h2>
+<pre>
++<a href="class_ewol__Object.html">ewol::Object</a><br/>  +--> +<a href="class_ewol__Widget.html">ewol::Widget</a><br/>         +--> +<a href="class_ewol__widget__WidgetScrooled.html">ewol::widget::WidgetScrooled</a><br/>                +--> +<a href="class_ewol__widget__List.html">ewol::widget::List</a><br/>                       +--> ewol::widget::ListFileSystem<br/></pre>
+<h2>Detail:</h2>
+<a id="3356"/><a id="3357"/><h3>eventFileSelect</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventFileSelect</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3358"/><h3>eventFileValidate</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventFileValidate</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3359"/><h3>eventFolderSelect</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventFolderSelect</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3367"/><h3>eventFolderValidate</h3><pre>
++ <span class="code-storage-keyword">const</span> <span class="code-type" >char</span>* <span class="code-storage-keyword">const</span> <span class="code-member">eventFolderValidate</span>;<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3369"/><h3>ListFileSystem</h3><pre>
++  <span class="code-function">ListFileSystem</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3371"/><h3>~ListFileSystem</h3><pre>
++  <span class="code-function">~ListFileSystem</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3373"/><h3>getBasicBG</h3><pre>
++ <span class="code-storage-keyword">virtual</span> <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; <span class="code-function">getBasicBG</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3375"/><h3>getNuberOfColomn</h3><pre>
++ <span class="code-type" >uint32_t</span> <span class="code-function">getNuberOfColomn</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3380"/><h3>getTitle</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getTitle</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                 <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_myTitle</span>,<br/>                 <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_fg</span>,<br/>                 <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_bg</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3382"/><h3>getNuberOfRaw</h3><pre>
++ <span class="code-type" >uint32_t</span> <span class="code-function">getNuberOfRaw</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3388"/><h3>getElement</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">getElement</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                   <span class="code-type" >int32_t</span> <span class="code-argument">_raw</span>,<br/>                   <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> & <span class="code-argument">_myTextToWrite</span>,<br/>                   <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_fg</span>,<br/>                   <a class="code-type" href="class_etk__Color.html">etk::Color</a>&lt;&gt; & <span class="code-argument">_bg</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3395"/><h3>onItemEvent</h3><pre>
++ <span class="code-type" >bool</span> <span class="code-function">onItemEvent</span> (<span class="code-type" >int32_t</span> <span class="code-argument">_IdInput</span>,<br/>                    <span class="code-storage-keyword">enum</span> <a class="code-type" href="enum_ewol__key__status.html">ewol::key::status</a> <span class="code-argument">_typeEvent</span>,<br/>                    <span class="code-type" >int32_t</span> <span class="code-argument">_colomn</span>,<br/>                    <span class="code-type" >int32_t</span> <span class="code-argument">_raw</span>,<br/>                    <span class="code-type" >float</span> <span class="code-argument">_x</span>,<br/>                    <span class="code-type" >float</span> <span class="code-argument">_y</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3397"/><h3>setFolder</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setFolder</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_newFolder</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3399"/><h3>getFolder</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getFolder</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3401"/><h3>setSelect</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setSelect</span> (<a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-argument">_data</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3403"/><h3>getSelect</h3><pre>
++ <a class="code-type" href="http://www.cplusplus.com/reference/string/string/">std::string</a> <span class="code-function">getSelect</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3405"/><h3>regenerateView</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">regenerateView</span> (<span class="code-type" >void</span> <span class="code-argument"></span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3407"/><h3>setShowFiles</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShowFiles</span> (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3409"/><h3>setShowFolder</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShowFolder</span> (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<a id="3411"/><h3>setShowHiddenFiles</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShowHiddenFiles</span> (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+<h3>setShowTemporaryFiles</h3><pre>
++ <span class="code-type" >void</span> <span class="code-function">setShowTemporaryFiles</span> (<span class="code-type" >bool</span> <span class="code-argument">_state</span>);<br/></pre>
+
+<br/>
+<br/>
+<hr/>
+	</div>
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-46753803-1', 'heeroyui.github.io');
+	ga('send', 'pageview');
+</script>
+</body>
+</html>
