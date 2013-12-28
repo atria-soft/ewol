@@ -7,7 +7,7 @@
  */
 
 #include <ewol/object/Config.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 
 #undef __class__

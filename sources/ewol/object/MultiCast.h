@@ -10,7 +10,7 @@
 #define __EWOL_OBJECT_MULTICAST_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <vector>
 #include <exml/exml.h>
 

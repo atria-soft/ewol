@@ -9,7 +9,7 @@
 #include <ewol/debug.h>
 #include <ewol/compositing/Text.h>
 #include <ewol/context/Context.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 #undef __class__
 #define __class__	"ewol::compositing::Text"
@@ -635,7 +635,7 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 					}
 				}
 				// special for the justify mode
-				if ((char32_t)_text[iii] == etk::UChar::Space) {
+				if ((char32_t)_text[iii] == u32char::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
@@ -673,14 +673,14 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if((char32_t)_text[stop] == etk::UChar::Space) {
+			} else if((char32_t)_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
-			} else if((char32_t)_text[stop] == etk::UChar::Return) {
+			} else if((char32_t)_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
@@ -824,7 +824,7 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 					}
 				}
 				// special for the justify mode
-				if ((char32_t)_text[iii] == etk::UChar::Space) {
+				if ((char32_t)_text[iii] == u32char::Space) {
 					//EWOL_DEBUG(" generateString : \" \"");
 					if(    m_needDisplay == true
 					    && m_colorBg.a() != 0) {
@@ -862,14 +862,14 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 			}
 			if (currentId == stop) {
 				currentId++;
-			} else if(_text[stop] == etk::UChar::Space) {
+			} else if(_text[stop] == u32char::Space) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
 				            (float)(m_position.y() - m_font->getHeight(m_mode)),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
-			} else if(_text[stop] == etk::UChar::Return) {
+			} else if(_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
@@ -1201,11 +1201,11 @@ bool ewol::compositing::Text::extrapolateLastId(const std::string& _text,
 			break;
 		}
 		// save number of space :
-		if ((char32_t)_text[iii] == etk::UChar::Space) {
+		if ((char32_t)_text[iii] == u32char::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if ((char32_t)_text[iii] == etk::UChar::Return) {
+		} else if ((char32_t)_text[iii] == u32char::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;
@@ -1264,11 +1264,11 @@ bool ewol::compositing::Text::extrapolateLastId(const std::u32string& _text,
 			break;
 		}
 		// save number of space :
-		if (_text[iii] == etk::UChar::Space) {
+		if (_text[iii] == u32char::Space) {
 			_space++;
 			lastSpacePosition = iii;
 			lastSpacefreeSize = stopPosition - endPos;
-		} else if (_text[iii] == etk::UChar::Return) {
+		} else if (_text[iii] == u32char::Return) {
 			_stop = iii;
 			endOfLine = true;
 			break;

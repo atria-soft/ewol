@@ -453,7 +453,7 @@ bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configToggle) {
-		setToggleMode(stobool(_conf.getData()));
+		setToggleMode(std::stob(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configLock) {
@@ -472,7 +472,7 @@ bool ewol::widget::Button::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configValue) {
-		setValue(stobool(_conf.getData()));
+		setValue(std::stob(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configShaper) {
@@ -487,11 +487,7 @@ bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result
 		return true;
 	}
 	if (_config == configToggle) {
-		if (getToggleMode() == true) {
-			_result = "true";
-		} else {
-			_result = "false";
-		}
+		_result = std::to_string(getToggleMode());
 		return true;
 	}
 	if (_config == configLock) {
@@ -513,11 +509,7 @@ bool ewol::widget::Button::onGetConfig(const char* _config, std::string& _result
 		return true;
 	}
 	if (_config == configValue) {
-		if (getValue() == true) {
-			_result = "true";
-		} else {
-			_result = "false";
-		}
+		_result = std::to_string(getValue());
 		return true;
 	}
 	if (_config == configShaper) {

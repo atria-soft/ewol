@@ -246,7 +246,7 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 		return;
 	}
 	//Keep name in lower case :
-	std::string nameLower = to_lower(_name);
+	std::string nameLower = std::tolower(_name);
 	if (true == m_creatorList.exist(nameLower)) {
 		EWOL_WARNING("Replace Creator of a specify widget : " << nameLower);
 		m_creatorList[nameLower] = _pointer;
@@ -257,7 +257,7 @@ void ewol::widget::Manager::addWidgetCreator(const std::string& _name,
 }
 
 ewol::Widget* ewol::widget::Manager::create(const std::string& _name) {
-	std::string nameLower = to_lower(_name);
+	std::string nameLower = std::tolower(_name);
 	if (true == m_creatorList.exist(nameLower)) {
 		ewol::widget::Manager::creator_tf pointerFunction = m_creatorList[nameLower];
 		if (NULL != pointerFunction) {
@@ -269,7 +269,7 @@ ewol::Widget* ewol::widget::Manager::create(const std::string& _name) {
 }
 
 bool ewol::widget::Manager::exist(const std::string& _name) {
-	std::string nameLower = to_lower(_name);
+	std::string nameLower = std::tolower(_name);
 	return m_creatorList.exist(nameLower);
 }
 

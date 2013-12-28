@@ -11,7 +11,7 @@
 #define __EWOL_AUDIO_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 namespace ewol {
 	namespace audio {

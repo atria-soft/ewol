@@ -225,7 +225,7 @@ bool ewol::widget::Image::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configRatio) {
-		setKeepRatio(stobool(_conf.getData()));
+		setKeepRatio(std::stob(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configSize) {
@@ -248,11 +248,7 @@ bool ewol::widget::Image::onGetConfig(const char* _config, std::string& _result)
 		return true;
 	}
 	if (_config == configRatio) {
-		if (true == getKeepRatio()) {
-			_result = "true";
-		} else {
-			_result = "false";
-		}
+		_result = std::to_string(getKeepRatio());
 		return true;
 	}
 	if (_config == configSize) {

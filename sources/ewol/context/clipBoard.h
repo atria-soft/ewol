@@ -10,7 +10,7 @@
 #define __EWOL_CLIPBOARD_H__
 
 #include <ewol/debug.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 // TODO : Remove this ... ==> set it in the context ....
 namespace ewol {

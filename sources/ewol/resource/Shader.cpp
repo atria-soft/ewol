@@ -26,9 +26,9 @@ ewol::resource::Shader::Shader(const std::string& _filename) :
 	EWOL_DEBUG("OGL : load SHADER \"" << _filename << "\"");
 	// load data from file "all the time ..."
 	
-	if (end_with(m_name, ".frag") == true) {
+	if (std::end_with(m_name, ".frag") == true) {
 		m_type = GL_FRAGMENT_SHADER;
-	} else if (end_with(m_name, ".vert") == true) {
+	} else if (std::end_with(m_name, ".vert") == true) {
 		m_type = GL_VERTEX_SHADER;
 	} else {
 		EWOL_ERROR("File does not have extention \".vert\" for Vertex Shader or \".frag\" for Fragment Shader. but : \"" << m_name << "\"");
@@ -87,7 +87,7 @@ void ewol::resource::Shader::updateContext(void) {
 				}
 				EWOL_ERROR("Could not compile \"" << tmpShaderType << "\" name='" << m_name << "'");
 				EWOL_ERROR("Error " << l_bufferDisplayError);
-				std::vector<std::string> lines = string_split(m_fileData, '\n');
+				std::vector<std::string> lines = std::split(m_fileData, '\n');
 				for (size_t iii=0 ; iii<lines.size() ; iii++) {
 					EWOL_ERROR("file " << (iii+1) << "|" << lines[iii]);
 				}

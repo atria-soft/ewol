@@ -30,7 +30,7 @@
 #include <ewol/key.h>
 #include <ewol/config.h>
 #include <ewol/commandLine.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/unicode.h>
 #include <ewol/widget/Manager.h>
 

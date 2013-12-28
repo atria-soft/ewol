@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/unicode.h>
+#include <etk/types.h>
 #include <vector>
 #include <etk/os/FSNode.h>
 

@@ -7,7 +7,7 @@
  */
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/os/FSNode.h>
 #include <ewol/debug.h>
 #include <ewol/renderer/audio/decWav.h>

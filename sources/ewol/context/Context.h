@@ -10,7 +10,7 @@
 #define __EWOL_CONTEXT_H__
 
 #include <etk/types.h>
-#include <etk/MessageFifo.h>
+#include <etk/os/Fifo.h>
 #include <ewol/ewol.h>
 #include <ewol/key/key.h>
 #include <ewol/object/Manager.h>
@@ -85,7 +85,7 @@ namespace ewol {
 		private:
 			int64_t m_previousDisplayTime;  // this is to limit framerate ... in case...
 			ewol::context::InputManager m_input;
-			etk::MessageFifo<ewol::eSystemMessage*> m_msgSystem;
+			etk::Fifo<ewol::eSystemMessage*> m_msgSystem;
 			bool m_displayFps;
 			ewol::context::Fps m_FpsSystemEvent;
 			ewol::context::Fps m_FpsSystemContext;

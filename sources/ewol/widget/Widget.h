@@ -107,7 +107,12 @@ namespace ewol {
 			~EventShortCut(void) { };
 	};
 	/**
-	 * @ingroup ewolWidgetGroup
+	 * @brief Widget class is the main widget interface, it hase some generic properties: 
+	 * :** known his parent
+	 * :** Can be display at a special position with a special scale
+	 * :** Can get focus
+	 * :** Receive Event (keyboard / mouse / ...)
+	 * 
 	 */
 	class Widget : public ewol::Object {
 		public:

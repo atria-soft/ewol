@@ -164,7 +164,7 @@ bool ewol::widget::PopUp::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == configRemoveOnExternClick) {
-		setRemoveOnExternClick(stobool(_conf.getData()));
+		setRemoveOnExternClick(std::stob(_conf.getData()));
 		return true;
 	}
 	if (_conf.getConfig() == configLockExpand) {
@@ -187,11 +187,7 @@ bool ewol::widget::PopUp::onGetConfig(const char* _config, std::string& _result)
 		return true;
 	}
 	if (_config == configRemoveOnExternClick) {
-		if (getRemoveOnExternClick() == true) {
-			_result = "true";
-		} else {
-			_result = "false";
-		}
+		_result = std::to_string(getRemoveOnExternClick());
 		return true;
 	}
 	return false;

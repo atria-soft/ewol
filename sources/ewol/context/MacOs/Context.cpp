@@ -11,7 +11,7 @@
 #include <ewol/ewol.h>
 #include <ewol/key/key.h>
 #include <ewol/context/commandLine.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/unicode.h>
 #include <etk/os/FSNode.h>
 #include <ewol/widget/Manager.h>
@@ -78,13 +78,13 @@ class MacOSInterface : public ewol::Context {
 			OS_SetMouseMotion(_id, vec2(_x, _y));
 		}
 		void MAC_SetKeyboard(ewol::key::Special _keyboardMode, int32_t _unichar, bool _isDown, bool _isAReapeateKey) {
-			if (_unichar == etk::UChar::Delete) {
-				_unichar = etk::UChar::Suppress;
-			} else if (_unichar == etk::UChar::Suppress) {
-				_unichar = etk::UChar::Delete;
+			if (_unichar == u32char::Delete) {
+				_unichar = u32char::Suppress;
+			} else if (_unichar == u32char::Suppress) {
+				_unichar = u32char::Delete;
 			}
-			if (_unichar == etk::UChar::CarrierReturn) {
-				_unichar = etk::UChar::Return;
+			if (_unichar == u32char::CarrierReturn) {
+				_unichar = u32char::Return;
 			}
 			//EWOL_DEBUG("key: " << _unichar << " up=" << !_isDown);
 			if (_unichar <= 4) {

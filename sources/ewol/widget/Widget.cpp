@@ -749,7 +749,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configHide) {
-		if(true == stobool(_conf.getData())) {
+		if(true == std::stob(_conf.getData())) {
 			hide();
 		} else {
 			show();
@@ -757,7 +757,7 @@ bool ewol::Widget::onSetConfig(const ewol::object::Config& _conf) {
 		return true;
 	}
 	if (_conf.getConfig() == ewol::Widget::configFocus) {
-		if(true == stobool(_conf.getData())) {
+		if(true == std::stob(_conf.getData())) {
 			keepFocus();
 		} else {
 			//nothing to do ...
@@ -808,12 +808,7 @@ bool ewol::Widget::onGetConfig(const char* _config, std::string& _result) const 
 		return true;
 	}
 	if (_config == ewol::Widget::configHide) {
-		// TODO : Understand why it does not work : _result = m_hide;
-		if (true == m_hide) {
-			_result = "true";
-		} else {
-			_result = "false";
-		}
+		_result = std::to_string(m_hide);
 		return true;
 	}
 	if (_config == ewol::Widget::configMinSize) {

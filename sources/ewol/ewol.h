@@ -10,7 +10,7 @@
 #define __EWOL_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 namespace ewol {
 	/**

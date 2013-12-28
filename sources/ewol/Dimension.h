@@ -10,7 +10,7 @@
 #define __EWOL_DIMENSION_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/math/Vector2D.h>
 
 namespace ewol {

@@ -10,7 +10,7 @@
 #define __EWOL_TEXTURE_FILE_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <egami/Image.h>
 #include <ewol/resource/Texture.h>
 #include <ewol/resource/Resource.h>

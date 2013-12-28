@@ -10,7 +10,7 @@
 #define __EWOL_COMMAND_LINE_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 namespace ewol {
 	namespace context {

@@ -10,7 +10,7 @@
 #define __EWOL_COMPOSITING_H__
 
 #include <ewol/debug.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <etk/math/Matrix4.h>
 
 namespace ewol {

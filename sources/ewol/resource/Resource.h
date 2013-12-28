@@ -11,7 +11,7 @@
 #define __RESOURCES_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/object/Object.h>
 

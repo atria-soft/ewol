@@ -10,7 +10,7 @@
 #define __EWOL_WIDGET_PARAMETER_H__
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 #include <ewol/debug.h>
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/Button.h>

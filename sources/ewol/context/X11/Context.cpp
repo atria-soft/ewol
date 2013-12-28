@@ -13,8 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <etk/UString.h>
-#include <etk/unicode.h>
+#include <etk/types.h>
 #include <etk/os/FSNode.h>
 
 #include <ewol/debug.h>
@@ -663,7 +662,7 @@ class X11Interface : public ewol::Context {
 												// repeated kay from previous element :
 												if (count>0) {
 													// transform it in unicode
-													m_lastKeyPressed = etk::setUtf8(buf);
+													m_lastKeyPressed = utf8::convertChar32(buf);
 												}
 												//EWOL_INFO("event Key : " << event.xkey.keycode << " char=\"" << buf << "\"'len=" << strlen(buf) << " unicode=" << unicodeValue);
 												OS_SetKeyboard(m_guiKeyBoardMode, m_lastKeyPressed, (event.type == KeyPress), thisIsAReapeateKey);

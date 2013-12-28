@@ -98,7 +98,7 @@ ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
 		// find the real Font name :
 		std::vector<std::string> output;
 		myFolder.folderGetRecursiveFiles(output);
-		std::vector<std::string> split = string_split(localName, ';');
+		std::vector<std::string> split = std::split(localName, ';');
 		EWOL_INFO("try to find font named : " << split << " in: " << myFolder);
 		//EWOL_CRITICAL("parse string : " << split);
 		bool hasFindAFont = false;

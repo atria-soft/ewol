@@ -7,7 +7,7 @@
  */
 
 #include <etk/types.h>
-#include <etk/UString.h>
+#include <etk/types.h>
 
 #include <ewol/debug.h>
 

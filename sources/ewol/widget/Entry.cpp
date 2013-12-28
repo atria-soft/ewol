@@ -6,7 +6,7 @@
  * @license BSD v3 (see license file)
  */
 
-#include <etk/unicode.h>
+#include <etk/types.h>
 #include <ewol/widget/Entry.h>
 #include <ewol/widget/Manager.h>
 #include <ewol/ewol.h>
@@ -563,10 +563,10 @@ void ewol::widget::Entry::periodicCall(const ewol::event::Time& _event) {
 void ewol::widget::Entry::setRegExp(const std::string& _expression) {
 	std::string previousRegExp = m_regExp.getRegExp();
 	EWOL_DEBUG("change input regExp \"" << previousRegExp << "\"  == > \"" << _expression << "\"");
-	m_regExp.setRegExp(_expression);
+	m_regExp.compile(_expression);
 	if (m_regExp.getStatus() == false) {
 		EWOL_ERROR("error when adding regExp ...  == > set the previous back ...");
-		m_regExp.setRegExp(previousRegExp);
+		m_regExp.compile(previousRegExp);
 	}
 }
 
