@@ -28,6 +28,7 @@ namespace ewol {
 				// Config list of properties
 				// TODO : remove the dynamic transition and set this in annimation ...
 				static const char* const configMode;
+				static const char* const configSpeed;
 				enum sladingMode {
 					sladingTransitionVert,
 					sladingTransitionHori,
@@ -77,7 +78,7 @@ namespace ewol {
 				 * @brief get transition speed element.
 				 * @return number of second needed to do the transition.
 				 */
-				float getTransitionSpeed(void) {
+				float getTransitionSpeed(void) const {
 					return m_transitionSpeed;
 				};
 			private:

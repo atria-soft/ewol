@@ -283,11 +283,10 @@ bool ewol::Object::loadXML(exml::Element* _node) {
 		if (m_listConfig[iii].getConfig() == NULL) {
 			continue;
 		}
-		std::string value = _node->getAttribute(m_listConfig[iii].getConfig());
-		// check existance :
-		if (value.size() == 0) {
+		if (_node->existAttribute(m_listConfig[iii].getConfig()) == false) {
 			continue;
 		}
+		std::string value = _node->getAttribute(m_listConfig[iii].getConfig());
 		if (false == setConfig(ewol::object::Config(m_listConfig[iii].getConfig(), value) ) ) {
 			errorOccured = false;
 		}

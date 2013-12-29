@@ -16,6 +16,7 @@
 #define __class__ "Label"
 
 const char * const ewol::widget::Label::eventPressed = "pressed";
+const char* const ewol::widget::Label::configValue  = "value";
 
 static ewol::Widget* create(void) {
 	return new ewol::widget::Label();
@@ -30,10 +31,12 @@ ewol::widget::Label::Label(std::string _newLabel) {
 	m_label = _newLabel;
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
+	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
 }
 
 void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec2 tmpMax = m_userMaxSize.getPixel();
+	vec2 tmpMin = m_userMinSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
 		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::Text::alignLeft);
@@ -42,9 +45,9 @@ void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec3 minSize = m_text.calculateSizeDecorated(m_label);
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} minSize : " << minSize);
 	
-	m_minSize.setX(etk_min(4 + minSize.x(), tmpMax.x()));
-	m_minSize.setY(etk_min(4 + minSize.y(), tmpMax.y()));
-	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
+	m_minSize.setX(etk_avg(tmpMin.x(), 4 + minSize.x(), tmpMax.x()));
+	m_minSize.setY(etk_avg(tmpMin.y(), 4 + minSize.y(), tmpMax.y()));
+	EWOL_VERBOSE("[" << getId() << "] {" << getObjectType() << "} Result min size : " << tmpMin << " < " << m_minSize << " < " << tmpMax);
 }
 
 void ewol::widget::Label::setLabel(const std::string& _newLabel) {
@@ -53,7 +56,7 @@ void ewol::widget::Label::setLabel(const std::string& _newLabel) {
 	requestUpdateSize();
 }
 
-std::string ewol::widget::Label::getLabel(void) {
+std::string ewol::widget::Label::getLabel(void) const {
 	return m_label;
 }
 
@@ -62,52 +65,57 @@ void ewol::widget::Label::onDraw(void) {
 }
 
 void ewol::widget::Label::onRegenerateDisplay(void) {
-	if (true == needRedraw()) {
-		m_text.clear();
-		int32_t paddingSize = 2;
-		
-		vec2 tmpMax = m_userMaxSize.getPixel();
-		// to know the size of one line : 
-		vec3 minSize = m_text.calculateSize(char32_t('A'));
-		if (tmpMax.x() <= 999999) {
-			m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::Text::alignLeft);
-		}
-		vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
-		
-		ivec2 localSize = m_minSize;
-		
-		// no change for the text orogin : 
-		vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
-		                   (m_size.y() - m_minSize.y()) / 2.0,
-		                   0);
-		
-		if (true == m_userFill.x()) {
-			localSize.setX(m_size.x());
-			tmpTextOrigin.setX(0);
-		}
-		if (true == m_userFill.y()) {
-			localSize.setY(m_size.y());
-			tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
-		}
-		tmpTextOrigin += vec3(paddingSize, paddingSize, 0);
-		localSize -= vec2(2*paddingSize,2*paddingSize);
-		
-		tmpTextOrigin.setY( tmpTextOrigin.y() + (m_minSize.y()-2*paddingSize) - minSize.y());
-		
-		vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
-		
-		vec3 drawClippingPos(paddingSize, paddingSize, -0.5);
-		vec3 drawClippingSize((m_size.x() - paddingSize),
-		                      (m_size.y() - paddingSize),
-		                      1);
-		
-		// clean the element
-		m_text.reset();
-		m_text.setPos(tmpTextOrigin);
-		m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignLeft);
-		m_text.setClipping(drawClippingPos, drawClippingSize);
-		m_text.printDecorated(m_label);
+	if (needRedraw() == false) {
+		return;
 	}
+	m_text.clear();
+	int32_t paddingSize = 2;
+	
+	vec2 tmpMax = m_userMaxSize.getPixel();
+	// to know the size of one line : 
+	vec3 minSize = m_text.calculateSize(char32_t('A'));
+	
+	minSize.setX(etk_max(minSize.x(), m_minSize.x()));
+	minSize.setY(etk_max(minSize.y(), m_minSize.y()));
+	if (tmpMax.x() <= 999999) {
+		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::Text::alignLeft);
+	}
+	vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
+	
+	ivec2 localSize = m_minSize;
+	
+	// no change for the text orogin : 
+	vec3 tmpTextOrigin((m_size.x() - m_minSize.x()) / 2.0,
+	                   (m_size.y() - m_minSize.y()) / 2.0,
+	                   0);
+	
+	if (true == m_userFill.x()) {
+		localSize.setX(m_size.x());
+		tmpTextOrigin.setX(0);
+	}
+	if (true == m_userFill.y()) {
+		localSize.setY(m_size.y());
+		tmpTextOrigin.setY(m_size.y() - 2*paddingSize - curentTextSize.y());
+	}
+	tmpTextOrigin += vec3(paddingSize, paddingSize, 0);
+	localSize -= vec2(2*paddingSize,2*paddingSize);
+	
+	tmpTextOrigin.setY( tmpTextOrigin.y() + (m_minSize.y()-2*paddingSize) - minSize.y());
+	
+	vec2 textPos(tmpTextOrigin.x(), tmpTextOrigin.y());
+	
+	vec3 drawClippingPos(paddingSize, paddingSize, -0.5);
+	vec3 drawClippingSize((m_size.x() - paddingSize),
+	                      (m_size.y() - paddingSize),
+	                      1);
+	
+	// clean the element
+	m_text.reset();
+	m_text.setPos(tmpTextOrigin);
+	EWOL_VERBOSE("[" << getId() << "] {" << m_label << "} display at pos : " << tmpTextOrigin);
+	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignLeft);
+	m_text.setClipping(drawClippingPos, drawClippingSize);
+	m_text.printDecorated(m_label);
 }
 
 bool ewol::widget::Label::onEventInput(const ewol::event::Input& _event) {
@@ -132,4 +140,28 @@ bool ewol::widget::Label::loadXML(exml::Element* _node) {
 	setLabel(_node->getText());
 	return true;
 }
+
+
+bool ewol::widget::Label::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::Widget::onSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.getConfig() == configValue) {
+		setLabel(_conf.getData());
+		return true;
+	}
+	return false;
+}
+
+bool ewol::widget::Label::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::Widget::onGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configValue) {
+		_result = getLabel();
+		return true;
+	}
+	return false;
+}
+
 

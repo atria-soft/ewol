@@ -83,6 +83,7 @@ ewol::widget::Button::~Button(void) {
 
 
 void ewol::widget::Button::setShaperName(const std::string& _shaperName) {
+	EWOL_WARNING("set shaper name : '" << _shaperName << "'");
 	m_shaper.setSource(_shaperName);
 	markToRedraw();
 }

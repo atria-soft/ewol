@@ -24,6 +24,8 @@ namespace ewol {
 			public:
 				// Event list of properties
 				static const char * const eventPressed;
+				// Config list of properties
+				static const char* const configValue;
 				/**
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
@@ -48,6 +50,7 @@ namespace ewol {
 				 * @param[in] _newLabel The displayed decorated text.
 				 */
 				void setLabel(const std::string& _newLabel);
+				//! @previous
 				inline void setValue(const std::string& _newLabel) {
 					setLabel(_newLabel);
 				};
@@ -55,12 +58,15 @@ namespace ewol {
 				 * @brief get the current displayed label
 				 * @return The displayed decorated text.
 				 */
-				std::string getLabel(void);
-				inline std::string getValue(void) {
+				std::string getLabel(void) const;
+				//! @previous
+				inline std::string getValue(void) const {
 					return getLabel();
 				};
 			protected: // Derived function
 				virtual void onDraw(void);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
+				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 			public: // Derived function
 				virtual void calculateMinMaxSize(void);
 				virtual void onRegenerateDisplay(void);

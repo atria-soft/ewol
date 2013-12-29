@@ -28,6 +28,7 @@ const char* const ewol::widget::WSlider::eventStartSlide = "ewol-widget-wslider-
 const char* const ewol::widget::WSlider::eventStopSlide = "ewol-widget-wslider-event-stop-slide";
 // Config list of properties
 const char* const ewol::widget::WSlider::configMode = "mode";
+const char* const ewol::widget::WSlider::configSpeed = "speed";
 
 static ewol::Widget* create(void) {
 	return new ewol::widget::WSlider();
@@ -49,6 +50,7 @@ ewol::widget::WSlider::WSlider(void) :
 	addEventId(eventStopSlide);
 	// add configuration
 	registerConfig(configMode, "list", "vert;hori", "Transition mode of the slider");
+	registerConfig(configSpeed, "float", NULL, "Transition speed of the slider");
 }
 
 ewol::widget::WSlider::~WSlider(void) {
@@ -283,6 +285,10 @@ bool ewol::widget::WSlider::onSetConfig(const ewol::object::Config& _conf) {
 		setTransitionMode(tmpTransition);
 		return true;
 	}
+	if (_conf.getConfig() == configSpeed) {
+		setTransitionSpeed(std::stof(_conf.getData()));
+		return true;
+	}
 	return false;
 }
 
@@ -300,6 +306,10 @@ bool ewol::widget::WSlider::onGetConfig(const char* _config, std::string& _resul
 				_result = "vert";
 				break;
 		}
+		return true;
+	}
+	if (_config == configMode) {
+		_result = std::to_string(getTransitionSpeed());
 		return true;
 	}
 	return false;
