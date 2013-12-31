@@ -10,6 +10,9 @@
 #include <ewol/widget/Sizer.h>
 #include <ewol/widget/Manager.h>
 
+const char* const ewol::widget::Sizer::configBorder = "border";
+const char* const ewol::widget::Sizer::configMode = "mode";
+
 #undef __class__
 #define __class__ "Sizer"
 
@@ -28,6 +31,8 @@ ewol::widget::Sizer::Sizer(enum displayMode _mode):
   m_animation(animationNone),
   m_animationTime(0) {
 	addObjectType("ewol::widget::Sizer");
+	registerConfig(configBorder, "dimension", NULL, "The sizer border size");
+	registerConfig(configMode, "list", "{vert,hori}", "The display mode");
 	
 }
 
@@ -49,10 +54,6 @@ void ewol::widget::Sizer::setMode(enum displayMode _mode) {
 	m_mode = _mode;
 	markToRedraw();
 	requestUpdateSize();
-}
-
-enum ewol::widget::Sizer::displayMode ewol::widget::Sizer::getMode(void) {
-	return m_mode;
 }
 
 void ewol::widget::Sizer::calculateSize(const vec2& _availlable) {
@@ -163,29 +164,6 @@ void ewol::widget::Sizer::calculateMinMaxSize(void) {
 	//EWOL_ERROR("[" << getId() << "] {" << getObjectType() << "} Result min size : " <<  m_minSize);
 }
 
-bool ewol::widget::Sizer::loadXML(exml::Element* _node) {
-	if (NULL == _node) {
-		return false;
-	}
-	// parse generic properties :
-	ewol::widget::ContainerN::loadXML(_node);
-	
-	std::string tmpAttributeValue = _node->getAttribute("border");
-	if (tmpAttributeValue.size()!=0) {
-		m_borderSize = tmpAttributeValue;
-	}
-	tmpAttributeValue = _node->getAttribute("mode");
-	if (tmpAttributeValue.size()!=0) {
-		if(    compare_no_case(tmpAttributeValue, "vert") == true
-		    || compare_no_case(tmpAttributeValue, "vertical") == true) {
-			m_mode = ewol::widget::Sizer::modeVert;
-		} else {
-			m_mode = ewol::widget::Sizer::modeHori;
-		}
-	}
-	return true;
-}
-
 int32_t ewol::widget::Sizer::subWidgetAdd(ewol::Widget* _newWidget) {
 	if (m_animation == animationNone) {
 		return ewol::widget::ContainerN::subWidgetAdd(_newWidget);
@@ -220,5 +198,42 @@ void ewol::widget::Sizer::subWidgetUnLink(ewol::Widget* _newWidget) {
 	ewol::widget::ContainerN::subWidgetUnLink(_newWidget);
 }
 
+bool ewol::widget::Sizer::onSetConfig(const ewol::object::Config& _conf) {
+	if (true == ewol::widget::ContainerN::onSetConfig(_conf)) {
+		return true;
+	}
+	if (_conf.getConfig() == configBorder) {
+		setBorderSize(_conf.getData());
+		return true;
+	}
+	if (_conf.getConfig() == configMode) {
+		if (_conf.getData() == "vert") {
+			setMode(modeVert);
+		} else {
+			setMode(modeHori);
+		}
+		return true;
+	}
+	return false;
+}
+
+bool ewol::widget::Sizer::onGetConfig(const char* _config, std::string& _result) const {
+	if (true == ewol::widget::ContainerN::onGetConfig(_config, _result)) {
+		return true;
+	}
+	if (_config == configBorder) {
+		_result = (std::string)getBorderSize();
+		return true;
+	}
+	if (_config == configMode) {
+		if (getMode() == modeVert) {
+			_result = "vert";
+		} else {
+			_result = "hori";
+		}
+		return true;
+	}
+	return false;
+}
 
 

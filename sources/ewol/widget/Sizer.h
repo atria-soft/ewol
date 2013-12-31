@@ -25,6 +25,9 @@ namespace ewol {
 				 * @brief Main call of recording the widget on the List of "widget named creator"
 				 */
 				static void init(ewol::widget::Manager& _widgetManager);
+				// Config list of properties
+				static const char* const configBorder;
+				static const char* const configMode;
 			public:
 				enum displayMode {
 					modeVert, //!< Vertical mode
@@ -51,7 +54,9 @@ namespace ewol {
 				 * @brief get the mode to display elements.
 				 * @return The current mode to display the elements.
 				 */
-				enum displayMode getMode(void);
+				enum displayMode getMode(void) const {
+					return m_mode;
+				}
 			private:
 				ewol::Dimension m_borderSize; //!< Border size needed for all the display
 			public:
@@ -64,7 +69,7 @@ namespace ewol {
 				 * @brief get the current border size of the current element:
 				 * @return the border size (0 if not used)
 				 */
-				const ewol::Dimension& getBorderSize(void) {
+				const ewol::Dimension& getBorderSize(void) const {
 					return m_borderSize;
 				};
 			public:
@@ -113,12 +118,13 @@ namespace ewol {
 			public: // Derived function
 				virtual void calculateSize(const vec2& _availlable);
 				virtual void calculateMinMaxSize(void);
-				virtual bool loadXML(exml::Element* _node);
 				// overwrite the set fuction to start annimations ...
 				virtual int32_t subWidgetAdd(ewol::Widget* _newWidget);
 				virtual int32_t subWidgetAddStart(ewol::Widget* _newWidget);
 				virtual void subWidgetRemove(ewol::Widget* _newWidget);
 				virtual void subWidgetUnLink(ewol::Widget* _newWidget);
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
+				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};
 };
