@@ -284,6 +284,8 @@ namespace ewol {
 				 * @TODO : implementation not done ....
 				 */
 				void printDecorated(const std::string& _text);
+				//! @previous
+				void printDecorated(const std::u32string& _text);
 				/**
 				 * @brief display a compleat string in the current element with the generic decoration specification. (basic html data)
 				 * 
@@ -318,15 +320,15 @@ namespace ewol {
 				 * @TODO : implementation not done ....
 				 */
 				void printHTML(const std::string& _text);
+				//! @previous
+				void printHTML(const std::u32string& _text);
 				/**
 				 * @brief display a compleat string in the current element whith specific decorations (advence mode).
 				 * @param[in] _text The string to display.
 				 * @param[in] _decoration The text decoration for the text that might be display (if the vector is smaller, the last parameter is get)
 				 */
 				void print(const std::string& _text, const std::vector<TextDecoration>& _decoration);
-				/**
-				 * @previous
-				 */
+				//! @previous
 				void print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration);
 				/**
 				 * @brief display the current char in the current element (note that the kerning is availlable if the position is not changed)
@@ -367,18 +369,24 @@ namespace ewol {
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSizeHTML(const std::string& _text);
+				//!@previous
+				vec3 calculateSizeHTML(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSizeDecorated(const std::string& _text);
+				//!@previous
+				vec3 calculateSizeDecorated(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric text size
 				 * @param[in] _text The string to calculate dimention.
 				 * @return The theoric size used.
 				 */
 				vec3 calculateSize(const std::string& _text);
+				//!@previous
+				vec3 calculateSize(const std::u32string& _text);
 				/**
 				 * @brief calculate a theoric charcode size
 				 * @param[in] _charcode The µUnicode value to calculate dimention.
@@ -410,14 +418,14 @@ namespace ewol {
 				bool extrapolateLastId(const std::u32string& _text, const int32_t _start, int32_t& _stop, int32_t& _space, int32_t& _freeSpace);
 			private:
 				// this section is reserved for HTML parsing and display:
-				std::string m_htmlCurrrentLine; //!< current line for HTML display
+				std::u32string m_htmlCurrrentLine; //!< current line for HTML display
 				std::vector<TextDecoration> m_htmlDecoration; //!< current decoration for the HTML display
 				TextDecoration m_htmlDecoTmp; //!< current decoration
 				/**
 				 * @brief add a line with the current m_htmlDecoTmp decoration
 				 * @param[in] _data The cuurent data to add.
 				 */
-				void htmlAddData(const std::string& _data);
+				void htmlAddData(const std::u32string& _data);
 				/**
 				 * @brief draw the current line
 				 */

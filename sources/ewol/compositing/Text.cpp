@@ -184,7 +184,7 @@ void ewol::compositing::Text::reset(void) {
 	m_startTextpos = 0;
 	m_stopTextPos = 0;
 	m_alignement = alignDisable;
-	m_htmlCurrrentLine = "";
+	m_htmlCurrrentLine = U"";
 	m_selectionStartPos = -100;
 	m_cursorPos = -100;
 	m_htmlDecoration.clear();
@@ -385,7 +385,7 @@ void ewol::compositing::Text::parseHtmlNode(exml::Element* _element) {
 			// nothing to do ...
 		} else if (_element->getType(iii) == exml::typeText) {
 			exml::Node* child = _element->getNode(iii);
-			htmlAddData(child->getValue() );
+			htmlAddData(std::to_u32string(child->getValue()));
 			EWOL_VERBOSE("XML add : " << child->getValue());
 			continue;
 		} else if (_element->getType(iii)!=exml::typeElement) {
@@ -472,8 +472,16 @@ void ewol::compositing::Text::parseHtmlNode(exml::Element* _element) {
 
 void ewol::compositing::Text::printDecorated(const std::string& _text) {
 	std::string tmpData("<html>\n<body>\n");
-	tmpData+=_text;
-	tmpData+="\n</body>\n</html>\n";
+	tmpData += _text;
+	tmpData += "\n</body>\n</html>\n";
+	//EWOL_DEBUG("plop : " << tmpData);
+	printHTML(tmpData);
+}
+
+void ewol::compositing::Text::printDecorated(const std::u32string& _text) {
+	std::u32string tmpData(U"<html>\n<body>\n");
+	tmpData += _text;
+	tmpData += U"\n</body>\n</html>\n";
 	//EWOL_DEBUG("plop : " << tmpData);
 	printHTML(tmpData);
 }
@@ -487,6 +495,34 @@ void ewol::compositing::Text::printHTML(const std::string& _text) {
 	m_htmlDecoTmp.m_mode = ewol::font::Regular;
 	
 	if (doc.parse(_text) == false) {
+		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
+		return;
+	}
+	
+	exml::Element* root = (exml::Element*)doc.getNamed( "html" );
+	if (root == NULL) {
+		EWOL_ERROR( "can not load XML: main node not find: \"html\"");
+		doc.display();
+		return;
+	}
+	exml::Element* bodyNode = (exml::Element*)root->getNamed( "body" );
+	if (root == NULL) {
+		EWOL_ERROR( "can not load XML: main node not find: \"body\"");
+		return;
+	}
+	(void)parseHtmlNode(bodyNode);
+	htmlFlush();
+}
+
+void ewol::compositing::Text::printHTML(const std::u32string& _text) {
+	exml::Document doc;
+	
+	// reset parameter :
+	m_htmlDecoTmp.m_colorBg = etk::color::none;
+	m_htmlDecoTmp.m_colorFg = etk::color::black;
+	m_htmlDecoTmp.m_mode = ewol::font::Regular;
+	// TODO : Create an instance of xml parser to manage std::u32string...
+	if (doc.parse(std::to_string(_text)) == false) {
 		EWOL_ERROR( "can not load XML: PARSING error: Decorated text ");
 		return;
 	}
@@ -1109,6 +1145,37 @@ vec3 ewol::compositing::Text::calculateSizeHTML(const std::string& _text) {
 	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
 }
 
+vec3 ewol::compositing::Text::calculateSizeHTML(const std::u32string& _text) {
+	// remove intermediate result 
+	reset();
+	//EWOL_DEBUG("        0 size for=\n" << text);
+	// disable display system
+	m_needDisplay = false;
+	
+	setPos(vec3(0,0,0) );
+	// same as print without the end display ...
+	printHTML(_text);
+	//EWOL_DEBUG("        1 Start pos=" << m_sizeDisplayStart);
+	//EWOL_DEBUG("        1 Stop pos=" << m_sizeDisplayStop);
+	
+	// get the last elements
+	m_sizeDisplayStop.setValue(etk_max(m_position.x(), m_sizeDisplayStop.x()) ,
+	                           etk_max(m_position.y(), m_sizeDisplayStop.y()) ,
+	                           0);
+	m_sizeDisplayStart.setValue(etk_min(m_position.x(), m_sizeDisplayStart.x()) ,
+	                            etk_min(m_position.y(), m_sizeDisplayStart.y()) ,
+	                            0);
+	
+	//EWOL_DEBUG("        2 Start pos=" << m_sizeDisplayStart);
+	//EWOL_DEBUG("        2 Stop pos=" << m_sizeDisplayStop);
+	// set back the display system
+	m_needDisplay = true;
+	
+	return vec3( m_sizeDisplayStop.x()-m_sizeDisplayStart.x(),
+	             m_sizeDisplayStop.y()-m_sizeDisplayStart.y(),
+	             m_sizeDisplayStop.z()-m_sizeDisplayStart.z());
+}
+
 vec3 ewol::compositing::Text::calculateSizeDecorated(const std::string& _text) {
 	if (_text.size() == 0) {
 		return vec3(0,0,0);
@@ -1120,7 +1187,34 @@ vec3 ewol::compositing::Text::calculateSizeDecorated(const std::string& _text) {
 	return tmpVal;
 }
 
+vec3 ewol::compositing::Text::calculateSizeDecorated(const std::u32string& _text) {
+	if (_text.size() == 0) {
+		return vec3(0,0,0);
+	}
+	std::u32string tmpData(U"<html><body>\n");
+	tmpData += _text;
+	tmpData += U"\n</body></html>\n";
+	vec3 tmpVal = calculateSizeHTML(tmpData);
+	return tmpVal;
+}
+
 vec3 ewol::compositing::Text::calculateSize(const std::string& _text) {
+	if (m_font == NULL) {
+		EWOL_ERROR("Font Id is not corectly defined");
+		return vec3(0,0,0);
+	}
+	vec3 outputSize(0, 0, 0);
+	for(auto element : _text) {
+		vec3 tmpp = calculateSize(element);
+		if (outputSize.y() == 0) {
+			outputSize.setY(tmpp.y());
+		}
+		outputSize.setX( outputSize.x() + tmpp.x());
+	}
+	return outputSize;
+}
+
+vec3 ewol::compositing::Text::calculateSize(const std::u32string& _text) {
 	if (m_font == NULL) {
 		EWOL_ERROR("Font Id is not corectly defined");
 		return vec3(0,0,0);
@@ -1296,10 +1390,10 @@ bool ewol::compositing::Text::extrapolateLastId(const std::u32string& _text,
 	}
 }
 
-void ewol::compositing::Text::htmlAddData(const std::string& _data) {
+void ewol::compositing::Text::htmlAddData(const std::u32string& _data) {
 	if(    m_htmlCurrrentLine.size()>0
 	    && m_htmlCurrrentLine[m_htmlCurrrentLine.size()-1] != ' ') {
-		m_htmlCurrrentLine+=" ";
+		m_htmlCurrrentLine += U" ";
 		if(m_htmlDecoration.size()>0) {
 			TextDecoration tmp = m_htmlDecoration[m_htmlDecoration.size()-1];
 			m_htmlDecoration.push_back(tmp);
@@ -1317,7 +1411,7 @@ void ewol::compositing::Text::htmlFlush(void) {
 	if (m_htmlCurrrentLine.size()>0) {
 		print(m_htmlCurrrentLine, m_htmlDecoration);
 	}
-	m_htmlCurrrentLine = "";
+	m_htmlCurrrentLine = U"";
 	m_htmlDecoration.clear();
 }
 

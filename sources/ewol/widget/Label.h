@@ -32,7 +32,7 @@ namespace ewol {
 				static void init(ewol::widget::Manager& _widgetManager);
 			private:
 				ewol::compositing::Text m_text; //!< Compositing text element.
-				std::string m_label; //!< decorated text to display.
+				std::u32string m_label; //!< decorated text to display.
 			public:
 				/**
 				 * @brief Constructor

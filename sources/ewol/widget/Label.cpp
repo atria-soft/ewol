@@ -28,7 +28,7 @@ void ewol::widget::Label::init(ewol::widget::Manager& _widgetManager) {
 
 ewol::widget::Label::Label(std::string _newLabel) {
 	addObjectType("ewol::widget::Label");
-	m_label = _newLabel;
+	m_label = std::to_u32string(_newLabel);
 	addEventId(eventPressed);
 	setCanHaveFocus(false);
 	registerConfig(configValue, "string", NULL, "displayed value string"); // TODO : do not store in attibute...
@@ -51,13 +51,13 @@ void ewol::widget::Label::calculateMinMaxSize(void) {
 }
 
 void ewol::widget::Label::setLabel(const std::string& _newLabel) {
-	m_label = _newLabel;
+	m_label = std::to_u32string(_newLabel);
 	markToRedraw();
 	requestUpdateSize();
 }
 
 std::string ewol::widget::Label::getLabel(void) const {
-	return m_label;
+	return std::to_string(m_label);
 }
 
 void ewol::widget::Label::onDraw(void) {
