@@ -136,10 +136,12 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onResume() {
 		super.onResume();
 		mGLView.onResume();
+		/*
 		mAudioThread = new Thread(mStreams);
 		if (mAudioThread != null) {
 			mAudioThread.start();
 		}
+		*/
 		// call C
 		EWOL.onResume();
 	}
@@ -147,6 +149,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	@Override protected void onPause() {
 		super.onPause();
 		mGLView.onPause();
+		/*
 		if (mAudioThread != null) {
 			// request audio stop
 			mStreams.AutoStop();
@@ -155,6 +158,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 				mAudioThread.join();
 			} catch(InterruptedException e) { }
 		}
+		*/
 		// call C
 		EWOL.onPause();
 	}

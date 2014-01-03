@@ -170,7 +170,7 @@ void ewol::widget::Windows::systemDraw(const ewol::DrawProperty& _displayProp) {
 }
 
 void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
-	if (NULL != m_subWidget) {
+	if (m_subWidget != NULL) {
 		EWOL_INFO("Remove current main windows Widget...");
 		delete(m_subWidget);
 		m_subWidget = NULL;
@@ -181,10 +181,17 @@ void ewol::widget::Windows::setSubWidget(ewol::Widget* _widget) {
 }
 
 void ewol::widget::Windows::popUpWidgetPush(ewol::Widget* _widget) {
+	if (_widget == NULL) {
+		// nothing to do an error appear :
+		EWOL_ERROR("can not set widget pop-up (null pointer)");
+		return;
+	}
 	m_popUpWidgetList.push_back(_widget);
+	// force the focus on the basic widget ==> this remove many time the virual keyboard area
+	_widget->keepFocus();
 	// Regenerate the size calculation :
 	calculateSize(m_size);
-	// TODO : it is dansgerous to access directly to the system ...
+	// TODO : it is dangerous to access directly to the system ...
 	getContext().resetIOEvent();
 }
 

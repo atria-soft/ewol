@@ -84,10 +84,6 @@ void ewol::widget::Manager::focusKeep(ewol::Widget* _newWidget) {
 		// nothing to do ...
 		return;
 	}
-	if (false == _newWidget->canHaveFocus()) {
-		EWOL_VERBOSE("Widget can not have focus, id=" << 9999999999.999);
-		return;
-	}
 	if (_newWidget == m_focusWidgetCurrent) {
 		// nothing to do ...
 		return;
@@ -95,6 +91,10 @@ void ewol::widget::Manager::focusKeep(ewol::Widget* _newWidget) {
 	if (NULL != m_focusWidgetCurrent) {
 		EWOL_DEBUG("Rm focus on WidgetID=" << m_focusWidgetCurrent->getId() );
 		m_focusWidgetCurrent->rmFocus();
+	}
+	if (false == _newWidget->canHaveFocus()) {
+		EWOL_VERBOSE("Widget can not have focus, id=" << 9999999999.999);
+		return;
 	}
 	m_focusWidgetCurrent = _newWidget;
 	if (NULL != m_focusWidgetCurrent) {
