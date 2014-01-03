@@ -39,8 +39,11 @@ import android.util.Log;
 
 
 import java.io.IOException;
+//import activityRootView
 
 import org.ewol.Ewol;
+
+
 
 /**
  * @brief Class : 
@@ -58,6 +61,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 			Log.e("EwolActivity", "error getting lib(): " + e);
 		}
 	}
+	
 	public EwolActivity() {
 		// set the java evironement in the C sources :
 		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
@@ -83,6 +87,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//setListnerToRootView();
 		
 		// Load the application directory
 		EWOL.paramSetArchiveDir(1, getFilesDir().toString());
@@ -172,19 +177,51 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		// cleanup your object here
 	}
 	
+	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
+		Log.e("EwolActivity", "Receive event ... ");
 		super.onConfigurationChanged(newConfig);
+		// Checks whether a hardware keyboard is available
+		if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+			EWOL.setHardKeyboardHidden(false);
+			Log.e("EwolActivity", "HARD Keyboard active = " + !EWOL.getHardKeyboardHidden() + " (visible)");
+		} else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+			EWOL.setHardKeyboardHidden(true);
+			Log.e("EwolActivity", "HARD Keyboard active = " + !EWOL.getHardKeyboardHidden() + " (hidden)");
+		}
 	}
 	
 	public void keyboardUpdate(boolean show) {
-		Log.e("EwolActivity", "keyboardUpdate(" + show + ")");
-		final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		if(show) {
-			//EWOL.touchEvent();
-			imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+		Log.i("EwolActivity", "set keyboard status visibility :" + show);
+		final InputMethodManager imm;
+		try {
+			imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		} catch(Exception e) {
+			Log.e("EwolActivity", "Can not get keyboard manager ...");
+			return;
+		}
+		Log.i("EwolActivity", "Get input manager done");
+		if(show == true) {
+			try {
+				imm.showSoftInput(mGLView, InputMethodManager.SHOW_IMPLICIT);
+			} catch(Exception e) {
+				Log.e("EwolActivity", "Can not set keyboard state ... (exeption !!!!)");
+			}
+			Log.i("EwolActivity", "Display it Done");
 		} else {
-		imm.toggleSoftInput(0 ,InputMethodManager.HIDE_IMPLICIT_ONLY + InputMethodManager.HIDE_NOT_ALWAYS);
-		//imm.hideSoftInputFromWindow(view.getWindowToken(),0); 
+			// this is a little sutid this ==> display keyboard to be sure that it toggle in the hide state ...
+			try {
+				imm.showSoftInput(mGLView, InputMethodManager.SHOW_IMPLICIT);
+			} catch(Exception e) {
+				Log.e("EwolActivity", "Can not set keyboard state ... (exeption !!!!)");
+			}
+			Log.i("EwolActivity", "Display it Done");
+			try {
+				imm.toggleSoftInput(0 ,InputMethodManager.HIDE_IMPLICIT_ONLY + InputMethodManager.HIDE_NOT_ALWAYS);
+			} catch(Exception e) {
+				Log.e("EwolActivity", "Can not set keyboard state ... (exeption !!!!)");
+			}
+			Log.i("EwolActivity", "Toggle it Done");
 		}
 	}
 	

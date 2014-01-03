@@ -8,17 +8,12 @@
 
 package org.ewol;
 
-// import the ewol package :
-/* No need in same package... */
-//import org.ewol.Ewol;
-//import org.ewol.EwolRendererGL;
-
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.KeyEvent;
+import android.util.Log;
 
 import org.ewol.Ewol;
 
@@ -215,7 +210,7 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 		}
 		return true;
 	}
-		
+	
 	private boolean keyboardEvent(int keyCode, KeyEvent event, boolean isDown) {
 		int actionDone = event.getAction();
 		switch(keyCode)
@@ -285,13 +280,12 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 			}
 		return false;
 	}
-		
+	
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		return keyboardEvent(keyCode, event, true);
 	}
-		
+	
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		return keyboardEvent(keyCode, event, false);
 	}
-		
 }

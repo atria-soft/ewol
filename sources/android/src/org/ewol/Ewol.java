@@ -11,14 +11,15 @@ package org.ewol;
 import android.app.Activity;
 import android.service.wallpaper.WallpaperService;
 import android.service.wallpaper.WallpaperService.Engine;
-
 import android.util.Log;
 
 public class Ewol {
 	private int instanceID = -1; // local and private instance ID
+	private boolean m_hardKeyboardHidden = true;
 	
 	public <T extends EwolCallback> Ewol(T activityInstance, int typeApplication) {
 		instanceID = -1;
+		m_hardKeyboardHidden = true;
 		instanceID = EWsetJavaVirtualMachineStart(activityInstance, typeApplication);
 		Log.d("Ewol", "new : " + instanceID);
 	}
@@ -28,6 +29,13 @@ public class Ewol {
 	}
 	public void paramSetArchiveDir(int mode, String myString) {
 		EWparamSetArchiveDir(instanceID, mode, myString);
+	}
+	
+	public boolean getHardKeyboardHidden() {
+		return m_hardKeyboardHidden;
+	}
+	public void setHardKeyboardHidden(boolean val) {
+		m_hardKeyboardHidden = val;
 	}
 	
 	// activity status
