@@ -277,45 +277,16 @@ class AndroidContext : public ewol::Context {
 			}
 		}
 		
-		
 		void sendJavaKeyboardUpdate(jboolean _showIt) {
 			int status;
-			#if 1
-				if(!java_attach_current_thread(&status)) {
-					return;
-				}
-			#else
-				EWOL_DEBUG("C->java : call java");
-				if (g_JavaVM == NULL) {
-					EWOL_ERROR("C->java : JVM not initialised");
-					return;
-				}//jvm->AttachCurrentThread(&env, 0);
-				JNIEnv *JavaVirtualMachinePointer_tmp;
-				status = g_JavaVM->GetEnv((void **) &JavaVirtualMachinePointer_tmp, JNI_VERSION_1_6);
-				if (status == JNI_EDETACHED) {
-					JavaVMAttachArgs lJavaVMAttachArgs;
-					lJavaVMAttachArgs.version = JNI_VERSION_1_6;
-					lJavaVMAttachArgs.name = "EwolNativeThread";
-					lJavaVMAttachArgs.group = NULL; 
-					int status = g_JavaVM->AttachCurrentThread(&JavaVirtualMachinePointer_tmp, &lJavaVMAttachArgs);
-					java_check_exception(JavaVirtualMachinePointer_tmp);
-					if (status != JNI_OK) {
-						EWOL_ERROR("C->java : AttachCurrentThread failed : " << status);
-						return;
-					}
-				}
-			#endif
+			if(!java_attach_current_thread(&status)) {
+				return;
+			}
 			//Call java ...
 			m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolCallbackKeyboardUpdate, _showIt);
 			// manage execption : 
 			java_check_exception(m_JavaVirtualMachinePointer);
-			#if 1
-				java_detach_current_thread(status);
-			#else
-				if(status == JNI_EDETACHED) {
-					g_JavaVM->DetachCurrentThread();
-				}
-			#endif
+			java_detach_current_thread(status);
 		}
 		void keyboardShow(void) {
 			sendJavaKeyboardUpdate(JNI_TRUE);
@@ -363,8 +334,6 @@ class AndroidContext : public ewol::Context {
 				EWOL_ERROR("C->java : can not set title on appliation that is not real application");
 			}
 		}
-		
-		
 		
 		void sendSystemMessage(const char* _dataString) {
 			EWOL_DEBUG("C->java : send message to the java : \"" << _dataString << "\"");
