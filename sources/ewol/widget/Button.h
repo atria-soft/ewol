@@ -27,6 +27,7 @@ namespace ewol {
 		 */
 		class Button : public ewol::Widget {
 			public:
+				//! @not-in-doc
 				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
 				static const char* const eventPressed;

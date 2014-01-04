@@ -45,6 +45,7 @@ const char* const ewol::widget::Entry::configRegExp  = "regExp";
 const char* const ewol::widget::Entry::configColorFg = "color";
 const char* const ewol::widget::Entry::configColorBg = "background";
 const char* const ewol::widget::Entry::configEmptyMessage = "emptytext";
+const char* const ewol::widget::Entry::configValue = "value";
 
 ewol::widget::Entry::Entry(std::string _newData) :
   m_shaper("THEME:GUI:widgetEntry.conf"),
@@ -77,6 +78,7 @@ ewol::widget::Entry::Entry(std::string _newData) :
 	registerConfig(configColorFg, "color", NULL, "Color of the text displayed");
 	registerConfig(configColorBg, "color", NULL, "Color of the text selected");
 	registerConfig(configEmptyMessage, "string", NULL, "Text that is displayed when the Entry is empty (decorated text)");
+	registerConfig(configValue, "string", NULL, "Value display in the entry (decorated text)");
 	
 	setValue(_newData);
 	markToRedraw();
@@ -123,7 +125,7 @@ void ewol::widget::Entry::setValue(const std::string& _newData) {
 	if (m_data == newData) {
 		m_displayCursorPos = m_data.size();
 		m_displayCursorPosSelection = m_displayCursorPos;
-		EWOL_DEBUG("Set ... " << newData);
+		EWOL_VERBOSE("Set : '" << newData << "'");
 	}
 	markToRedraw();
 }
@@ -609,6 +611,10 @@ bool ewol::widget::Entry::onSetConfig(const ewol::object::Config& _conf) {
 		setEmptyText(_conf.getData());
 		return true;
 	}
+	if (_conf.getConfig() == configValue) {
+		setValue(_conf.getData());
+		return true;
+	}
 	return false;
 }
 
@@ -634,6 +640,10 @@ bool ewol::widget::Entry::onGetConfig(const char* _config, std::string& _result)
 	}
 	if (_config == configEmptyMessage) {
 		_result = getEmptyText();
+		return true;
+	}
+	if (_config == configValue) {
+		_result = getValue();
 		return true;
 	}
 	return false;

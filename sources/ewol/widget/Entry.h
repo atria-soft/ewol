@@ -43,6 +43,7 @@ namespace ewol {
 				static const char* const configColorFg;
 				static const char* const configColorBg;
 				static const char* const configEmptyMessage;
+				static const char* const configValue;
 			public:
 				static void init(ewol::widget::Manager& _widgetManager);
 			private:
