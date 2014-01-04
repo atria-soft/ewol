@@ -440,11 +440,6 @@ void ewol::context::InputManager::state(enum ewol::key::type _type,
 			            << " == >" << eventTable[_pointerID].destinationInputId
 			            << " [UP]     " << _pos);
 			eventTable[_pointerID].posEvent = _pos;
-			localEventInput(_type,
-			                eventTable[_pointerID].curentWidgetEvent,
-			                _pointerID,
-			                ewol::key::statusUp,
-			                _pos);
 			// generate event (single)
 			if(    abs(eventTable[_pointerID].downStart.x() - _pos.x()) < localLimit.DpiOffset
 			    && abs(eventTable[_pointerID].downStart.y() - _pos.y()) < localLimit.DpiOffset ){
@@ -481,6 +476,12 @@ void ewol::context::InputManager::state(enum ewol::key::type _type,
 					eventTable[_pointerID].nbClickEvent = 0;
 				}
 			}
+			// send up event after the single event to prevent multiple widget getting elements
+			localEventInput(_type,
+			                eventTable[_pointerID].curentWidgetEvent,
+			                _pointerID,
+			                ewol::key::statusUp,
+			                _pos);
 			// specific for tuch event
 			if (_type == ewol::key::typeFinger) {
 				cleanElement(eventTable, _pointerID);

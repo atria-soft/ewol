@@ -15,10 +15,12 @@
 #include <ewol/widget/Scroll.h>
 #include <ewol/compositing/Drawing.h>
 
+#define CALCULATE_SIMULTANEOUS_FINGER (5)
+
 namespace ewol {
 	namespace widget {
 		/**
-		 * @ingroup ewolWidgetGroup
+		 * @brief Widget to integrate a scrool bar in a widget. This is not a stadalone widget.
 		 */
 		class WidgetScrooled : public ewol::Widget {
 			public:
@@ -33,13 +35,17 @@ namespace ewol {
 				vec2 m_originScrooled; //!< pixel distance from the origin of the display (Bottum left)
 				vec2 m_maxSize; //!< Maximum size of the Widget ==> to display scrollbar
 				float m_limitScrolling; //!< Mimit scrolling represent the propertion of the minimel scrolling activate (0.2 ==> 20% migt all time be visible)
-			private:
+			private: // Mouse section :
 				enum scrollingMode m_scroollingMode; //!< mode of management of the scrooling
 				float m_pixelScrolling;
 				vec2 m_highSpeedStartPos;
 				enum Scroll::highSpeedMode m_highSpeedMode;
 				int32_t m_highSpeedButton;
 				enum ewol::key::type m_highSpeedType;
+			private: // finger section:
+				bool m_fingerPresent[CALCULATE_SIMULTANEOUS_FINGER];
+				bool m_fingerScoolActivated;
+				vec2 m_fingerMoveStartPos[CALCULATE_SIMULTANEOUS_FINGER];
 			public:
 				/**
 				 * @brief Scroll Widget main constructor to be herited from an other widget (this is not a stand-alone widget)

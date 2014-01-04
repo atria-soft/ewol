@@ -54,6 +54,12 @@ namespace ewol {
 				inline const vec2& getPos(void) const {
 					return m_pos;
 				};
+				/**
+				 * @brief Reset the input property of the curent event.
+				 */
+				void reset(void) const {
+					// TODO : Call the entry element ant rest it ...
+				}
 		};
 		etk::CCout& operator <<(etk::CCout& _os, const ewol::event::Input& _obj);
 		

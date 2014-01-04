@@ -88,7 +88,7 @@ namespace ewol {
 			public:
 				InputManager(ewol::Context& _context);
 				~InputManager(void);
-				void setDpi(int32_t newDPI);
+				void setDpi(int32_t _newDPI);
 				
 				// note if id<0  == > the it was finger event ...
 				void motion(enum ewol::key::type _type, int _pointerID, vec2 _pos );
