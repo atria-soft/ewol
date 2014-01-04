@@ -12,50 +12,154 @@
 #include <ewol/widget/List.h>
 #include <etk/os/FSNode.h>
 
-
 namespace ewol {
 	namespace widget {
 		/**
-		 * @ingroup ewolWidgetGroup
+		 * @brief Generic display folder class. This widget display the content of a single folder :
 		 */
 		class ListFileSystem : public ewol::widget::List {
 			public:
+				//! @not-in-doc
+				static void init(ewol::widget::Manager& _widgetManager);
 				// Event list of properties
-				static const char * const eventFileSelect;
-				static const char * const eventFileValidate;
+				static const char * const eventFileSelect; //!< @event "file-select" Generated when a file is selected.
+				static const char * const eventFileValidate; //!< @event "file-validate" Generate when the user validate (return) or double click on the element
 				static const char * const eventFolderSelect;
 				static const char * const eventFolderValidate;
-			private:
-				std::vector<etk::FSNode *> m_list;
-				std::string m_folder;
-				int32_t m_selectedLine;
-				bool m_showFile;
-				bool m_showTemporaryFile;
-				bool m_showFolder;
-				bool m_showHidden;
+				// Config list of properties
+				static const char* const configShowHidden; //!< @config "show-hidden"
+				static const char* const configShowFile;
+				static const char* const configShowFolder;
+				static const char* const configShowTemporary;
+				static const char* const configPath;
+				static const char* const configSelect;
+				// TODO : Add a standalone configuration ..
 			public:
 				ListFileSystem(void);
 				~ListFileSystem(void);
-				// Derived function
+			protected : // Derived function from the List...
 				virtual etk::Color<> getBasicBG(void);
-				uint32_t getNuberOfColomn(void);
-				bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
-				uint32_t getNuberOfRaw(void);
-				bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
-				bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
+				virtual uint32_t getNuberOfColomn(void);
+				virtual bool getTitle(int32_t _colomn, std::string& _myTitle, etk::Color<>& _fg, etk::Color<>& _bg);
+				virtual uint32_t getNuberOfRaw(void);
+				virtual bool getElement(int32_t _colomn, int32_t _raw, std::string& _myTextToWrite, etk::Color<>& _fg, etk::Color<>& _bg);
+				virtual bool onItemEvent(int32_t _IdInput, enum ewol::key::status _typeEvent, int32_t _colomn, int32_t _raw, float _x, float _y);
+			protected:
+				std::vector<etk::FSNode *> m_list; //!< List of all element in the path. (they are filtered)
+				/**
+				 * @brief Clean the list of element.
+				 */
+				void clearList(void);
+				/**
+				 * @brief Regenerate the content of the view. this is actually not automation on the system update.
+				 */
+				virtual void regenerateView(void);
+			protected:
+				int32_t m_selectedLine; //!< Current Line ID that is selected
 			public:
-				// extern API :
-				void setFolder(std::string _newFolder);
-				std::string getFolder(void);
-				// select the specific file
-				void setSelect(std::string _data);
-				std::string getSelect(void);
-				// regenerate the view ....
-				void regenerateView(void);
-				void setShowFiles(bool _state);
-				void setShowFolder(bool _state);
-				void setShowHiddenFiles(bool _state);
-				void setShowTemporaryFiles(bool _state);
+				/**
+				 * @brief Select a specific file in the path
+				 * @param[in] _data File to selested.
+				 */
+				virtual void setSelect(const std::string& _data);
+				/**
+				 * @brief Get the current selected file/folder/... in the list
+				 * @return the String of the element selected.
+				 */
+				std::string getSelect(void) const ;
+			protected:
+				std::string m_folder; //!< Current folder that display point on.
+			public:
+				/**
+				 * @brief Set a folder to display (might be a valid folder !!!)
+				 * @param[in] _newFolder Path on the folder to display content.
+				 */
+				void setFolder(const std::string& _newFolder) {
+					m_folder = _newFolder;
+					regenerateView();
+				};
+				/**
+				 * @brief Get the element current displaying folder path.
+				 * @return Path on the folder.
+				 */
+				const std::string& getFolder(void) const {
+					return m_folder;
+				};
+			protected:
+				bool m_showFile; //!< Show files elements
+			public:
+				/**
+				 * @brief Set the status of the displaying files or Not.
+				 * @param[in] _state New state to apply on display the 'file'.
+				 */
+				void setShowFiles(bool _state) {
+					m_showFile = _state;
+					regenerateView();
+				};
+				/**
+				 * @brief Get the status of the displaying files or Not.
+				 * @return The status on displaying the 'file'.
+				 */
+				bool getShowFiles(void) const {
+					return m_showFile;
+				};
+			protected:
+				bool m_showFolder; //!< Display the folders elements
+			public:
+				/**
+				 * @brief Set the status of the displaying fodlers or Not.
+				 * @param[in] _state New state to apply on display the 'folder'.
+				 */
+				void setShowFolder(bool _state) {
+					m_showFolder = _state;
+					regenerateView();
+				};
+				/**
+				 * @brief Get the status of the displaying fodlers or Not.
+				 * @return The status on displaying the 'folder'.
+				 */
+				bool getShowFolder(void) const {
+					return m_showFile;
+				};
+			protected:
+				bool m_showHidden; //!< Display hidden elements
+			public:
+				/**
+				 * @brief Set the status of the displaying hidden files or folder or Not.
+				 * @param[in] _state New state to apply on display the hidden element.
+				 */
+				void setShowHidden(bool _state) {
+					m_showHidden = _state;
+					regenerateView();
+				};
+				/**
+				 * @brief Get the status of the displaying hidden files or folder or Not.
+				 * @return The status on displaying the hidden element.
+				 */
+				bool getShowHidden(void) const {
+					return m_showFile;
+				};
+			protected:
+				bool m_showTemporaryFile; //!< show the temporary files elements (XXX~, XXX.bck, XXX.pyc ...)
+			public:
+				/**
+				 * @brief Set the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
+				 * @param[in] _state New state to apply on display temporary files.
+				 */
+				void setShowTemporaryFiles(bool _state) {
+					m_showTemporaryFile = _state;
+					regenerateView();
+				};
+				/**
+				 * @brief Get the status of the displaying temporary file (xxx~, xxx.bck, xxx.pyc) or Not.
+				 * @return The status on displaying temporary files.
+				 */
+				bool getShowTemporaryFiles(void) const {
+					return m_showFile;
+				};
+			public: // glocal derived functions
+				virtual bool onSetConfig(const ewol::object::Config& _conf);
+				virtual bool onGetConfig(const char* _config, std::string& _result) const;
 		};
 	};
 };

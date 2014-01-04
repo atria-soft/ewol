@@ -25,6 +25,7 @@
 #include <ewol/widget/Scroll.h>
 #include <ewol/widget/PopUp.h>
 #include <ewol/widget/WSlider.h>
+#include <ewol/widget/ListFileSystem.h>
 #include <vector>
 
 #undef __class__
@@ -58,6 +59,7 @@ ewol::widget::Manager::Manager(void) :
 	ewol::widget::ContextMenu::init(*this);
 	ewol::widget::PopUp::init(*this);
 	ewol::widget::WSlider::init(*this);
+	ewol::widget::ListFileSystem::init(*this);
 }
 
 ewol::widget::Manager::~Manager(void) {

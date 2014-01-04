@@ -49,21 +49,13 @@ ewol::widget::FileChooser::FileChooser(void) {
 	addEventId(eventCancel);
 	addEventId(eventValidate);
 	
-	m_widgetTitle = NULL;
-	m_widgetValidate = NULL;
-	m_widgetCancel = NULL;
-	m_widgetCurrentFolder = NULL;
-	m_widgetCurrentFileName = NULL;
-	m_widgetListFolder = NULL;
-	m_widgetListFile = NULL;
-	m_widgetCheckBox = NULL;
-	
 	ewol::widget::Sizer * mySizerVert = NULL;
 	ewol::widget::Sizer * mySizerHori = NULL;
 	ewol::widget::Spacer * mySpacer = NULL;
 	//ewol::widget::Label * myLabel = NULL;
 	ewol::widget::Image * myImage = NULL;
 	m_folder = etk::getUserHomeFolder();
+	/*
 	#if defined(__TARGET_OS__Android)
 		setMinSize(ewol::Dimension(vec2(90,90),ewol::Dimension::Pourcent));;
 	#elif defined(__TARGET_OS__Windows)
@@ -71,222 +63,70 @@ ewol::widget::FileChooser::FileChooser(void) {
 	#else
 		setMinSize(ewol::Dimension(vec2(80,80),ewol::Dimension::Pourcent));;
 	#endif
-	m_file = "";
-	
-	/*
-	SubWidgetSet(new ewol::widget::Composer(widget::Composer::String,
-	        "<composer>\n"
-	        "	<sizer mode=\"vert\" lock=\"true\">\n"
-	        "		<sizer mode=\"hori\">\n"
-	        "			<checkbox name=\"EWOL:file-shooser:show-hiden-file\"/>\n"
-	        "			<label>Show hiden files</label>\n"
-	        "			<spacer expand=\"true,false\"/>\n"
-	        "			<button name=\"EWOL:file-shooser:button-validate\">\n"
-	        "				<sizer mode=\"hori\">\n"
-	        "					<image src=\"THEME:GUI:Load.svg\" fill=\"true\" size=\"70,70mm\"/>\n"
-	        "					<label>Validate</label>\n"
-	        "				</sizer>\n"
-	        "			</button>\n"
-	        "			<button name=\"EWOL:file-shooser:button-cancel\">\n"
-	        "				<sizer mode=\"hori\">\n"
-	        "					<image src=\"THEME:GUI:Remove.svg\" fill=\"true\" size=\"70,70mm\"/>\n"
-	        "					<label>Cancel</label>\n"
-	        "				</sizer>\n"
-	        "			</button>\n"
-	        "		</sizer>\n"
-	        "		<sizer mode=\"hori\">\n"
-	        "			<spacer min-size=\"2,2mm\"/>\n"
-	        "			<ListFileSystem name=\"EWOL:file-shooser:list-folder\" min-size=\"20,0%\" expand=\"false,true\"/>\n"
-	        "			<spacer min-size=\"2,2mm\"/>\n"
-	        "			<ListFileSystem name=\"EWOL:file-shooser:list-files\" expand=\"true,true\"/>\n"
-	        "			<spacer min-size=\"2,2mm\"/>\n"
-	        "		</sizer>\n"
-	        "		<sizer mode=\"hori\">\n"
-	        "			\n"
-	        "		</sizer>\n"
-	        "	</sizer>\n"
-	        "</composer\n"));
 	*/
-	mySizerVert = new ewol::widget::Sizer(ewol::widget::Sizer::modeVert);
-	if (NULL == mySizerVert) {
-		EWOL_ERROR("Can not allocate widget  == > display might be in error");
-	} else {
-		mySizerVert->lockExpand(bvec2(true,true));
-		mySizerVert->setExpand(bvec2(true,true));
-		// set it in the pop-up-system : 
-		setSubWidget(mySizerVert);
-		
-		mySizerHori = new ewol::widget::Sizer(ewol::widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
-			EWOL_ERROR("Can not allocate widget  == > display might be in error");
-		} else {
-			mySizerVert->subWidgetAdd(mySizerHori);
-			m_widgetCheckBox = new ewol::widget::CheckBox("Show hiden files");
-			if (NULL == m_widgetCheckBox) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetCheckBox->registerOnEvent(this, "clicked", ewolEventFileChooserHidenFileChange);
-				m_widgetCheckBox->setValue(false);
-				mySizerHori->subWidgetAdd(m_widgetCheckBox);
-			}
-			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				mySpacer->setExpand(bvec2(true,false));
-				mySizerHori->subWidgetAdd(mySpacer);
-			}
-			m_widgetValidate = new ewol::widget::Button();
-			if (NULL == m_widgetValidate) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetValidate->setSubWidget(
-				    new ewol::widget::Composer(widget::Composer::String,
-				        "<composer>\n"
-				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Load.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "		<label>Validate</label>\n"
-				        "	</sizer>\n"
-				        "</composer>\n"));
-				m_widgetValidate->registerOnEvent(this, "pressed", eventValidate);
-				mySizerHori->subWidgetAdd(m_widgetValidate);
-			}
-			m_widgetCancel = new ewol::widget::Button();
-			if (NULL == m_widgetCancel) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetCancel->setSubWidget(
-				    new ewol::widget::Composer(widget::Composer::String,
-				        "<composer>\n"
-				        "	<sizer mode=\"hori\">\n"
-				        "		<image src=\"THEME:GUI:Remove.svg\" expand=\"true\" size=\"8,8mm\"/>\n"
-				        "		<label>Cancel</label>\n"
-				        "	</sizer>\n"
-				        "</composer>\n"));
-				m_widgetCancel->registerOnEvent(this, "pressed", eventCancel);
-				mySizerHori->subWidgetAdd(m_widgetCancel);
-			}
-		}
-		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
-			EWOL_ERROR("Can not allocate widget  == > display might be in error");
-		} else {
-			mySizerVert->subWidgetAdd(mySizerHori);
-			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				mySpacer->setMinSize(vec2(2,2));
-				mySizerHori->subWidgetAdd(mySpacer);
-			}
-			m_widgetListFolder = new ewol::widget::ListFileSystem();
-			if (NULL == m_widgetListFolder) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetListFolder->setShowFolder(true);
-				m_widgetListFolder->setShowFiles(false);
-				m_widgetListFolder->setShowHiddenFiles(false);
-				m_widgetListFolder->registerOnEvent(this, "folder-validate", ewolEventFileChooserListFolder);
-				m_widgetListFolder->setExpand(bvec2(false,true));
-				m_widgetListFolder->setFill(bvec2(false,true));
-				mySizerHori->subWidgetAdd(m_widgetListFolder);
-			}
-			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				mySpacer->setMinSize(vec2(2,2));
-				mySizerHori->subWidgetAdd(mySpacer);
-			}
-			m_widgetListFile = new ewol::widget::ListFileSystem();
-			if (NULL == m_widgetListFile) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetListFile->setShowFolder(false);
-				m_widgetListFile->setShowFiles(true);
-				m_widgetListFile->setShowHiddenFiles(false);
-				m_widgetListFile->registerOnEvent(this, "file-select", ewolEventFileChooserListFile);
-				m_widgetListFile->registerOnEvent(this, "file-validate", ewolEventFileChooserListFileValidate);
-				m_widgetListFile->setExpand(bvec2(true,true));
-				m_widgetListFile->setFill(bvec2(true,true));
-				mySizerHori->subWidgetAdd(m_widgetListFile);
-			}
-			mySpacer = new ewol::widget::Spacer();
-			if (NULL == mySpacer) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				mySpacer->setMinSize(vec2(2,2));
-				mySizerHori->subWidgetAdd(mySpacer);
-			}
-		}
-		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
-			EWOL_ERROR("Can not allocate widget  == > display might be in error");
-		} else {
-			mySizerVert->subWidgetAdd(mySizerHori);
-			myImage = new ewol::widget::Image("THEME:GUI:File.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-			if (NULL == myImage) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				myImage->setExpand(bvec2(false,false));
-				mySizerHori->subWidgetAdd(myImage);
-			}
-			m_widgetCurrentFileName = new ewol::widget::Entry(m_file);
-			if (NULL == m_widgetCurrentFileName) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetCurrentFileName->registerOnEvent(this, "modify", ewolEventFileChooserEntryFile);
-				m_widgetCurrentFileName->registerOnEvent(this, "enter",  ewolEventFileChooserEntryFileEnter);
-				m_widgetCurrentFileName->setExpand(bvec2(true,false));
-				m_widgetCurrentFileName->setFill(bvec2(true,false));
-				//m_widgetCurrentFileName->setWidth(200);
-				mySizerHori->subWidgetAdd(m_widgetCurrentFileName);
-			}
-		}
-		mySizerHori = new ewol::widget::Sizer(widget::Sizer::modeHori);
-		if (NULL == mySizerHori) {
-			EWOL_ERROR("Can not allocate widget  == > display might be in error");
-		} else {
-			mySizerVert->subWidgetAdd(mySizerHori);
-			myImage = new ewol::widget::Image("THEME:GUI:Folder.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-			if (NULL == myImage) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				myImage->setExpand(bvec2(false,false));
-				mySizerHori->subWidgetAdd(myImage);
-			}
-			
-			m_widgetCurrentFolder = new ewol::widget::Entry(m_folder);
-			if (NULL == m_widgetCurrentFolder) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				m_widgetCurrentFolder->registerOnEvent(this, "modify", ewolEventFileChooserEntryFolder);
-				m_widgetCurrentFolder->registerOnEvent(this, "enter",  ewolEventFileChooserEntryFolderEnter);
-				m_widgetCurrentFolder->setExpand(bvec2(true,false));
-				m_widgetCurrentFolder->setFill(bvec2(true,false));
-				//m_widgetCurrentFolder->setWidth(200);
-				mySizerHori->subWidgetAdd(m_widgetCurrentFolder);
-			}
-			myImage = new ewol::widget::Image("THEME:GUI:Home.svg", ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-			if (NULL == myImage) {
-				EWOL_ERROR("Can not allocate widget  == > display might be in error");
-			} else {
-				//myImage->setImageSize(ewol::Dimension(vec2(8,8),ewol::Dimension::Millimeter));
-				myImage->registerOnEvent(this, "pressed", ewolEventFileChooserHome);
-				myImage->setExpand(bvec2(false,false));
-				mySizerHori->subWidgetAdd(myImage);
-			}
-		}
-		
-		m_widgetTitle = new ewol::widget::Label("File chooser ...");
-		if (NULL == m_widgetTitle) {
-			EWOL_ERROR("Can not allocate widget  == > display might be in error");
-		} else {
-			mySizerVert->subWidgetAdd(m_widgetTitle);
-		}
-	}
+	m_file = "";
+	std::string myDescription = std::string("")
+	      + "<popup >\n"
+	      + "	<sizer mode='vert' lock='true' fill='true' expand='true'>\n"
+	      + "		<sizer mode='hori'>\n"
+	      + "			<checkbox name='[" + std::to_string(getId()) + "]file-shooser:show-hiden-file'/>\n"
+	      + "			<label>Show hiden files</label>\n"
+	      + "			<spacer expand='true,false'/>\n"
+	      + "			<button name='[" + std::to_string(getId()) + "]file-shooser:button-validate'>\n"
+	      + "				<sizer mode='hori'>\n"
+	      + "					<image src='THEME:GUI:Load.svg' fill='true' size='7,7mm'/>\n"
+	      + "					<label name='[" + std::to_string(getId()) + "]file-shooser:validate-label'>Validate</label>\n"
+	      + "				</sizer>\n"
+	      + "			</button>\n"
+	      + "			<button name='[" + std::to_string(getId()) + "]file-shooser:button-cancel'>\n"
+	      + "				<sizer mode='hori'>\n"
+	      + "					<image src='THEME:GUI:Remove.svg' fill='true' size='7,7mm'/>\n"
+	      + "					<label name='[" + std::to_string(getId()) + "]file-shooser:cancel-label'>Cancel</label>\n"
+	      + "				</sizer>\n"
+	      + "			</button>\n"
+	      + "		</sizer>\n"
+	      + "		<sizer mode='hori'>\n"
+	      + "			<spacer min-size='2,2mm'/>\n"
+	      + "			<ListFileSystem name='[" + std::to_string(getId()) + "]file-shooser:list-folder'\n"
+	      + "			                min-size='20,0%'\n"
+	      + "			                expand='false,true'\n"
+	      + "			                show-hidden='false'\n"
+	      + "			                show-file='false'\n"
+	      + "			                show-folder='true'\n"
+	      + "			                show-temporary='false'/>\n"
+	      + "			<spacer min-size='2,2mm'/>\n"
+	      + "			<ListFileSystem name='[" + std::to_string(getId()) + "]file-shooser:list-files'\n"
+	      + "			                expand='true,true'\n"
+	      + "			                show-hidden='false'\n"
+	      + "			                show-file='true'\n"
+	      + "			                show-folder='false'\n"
+	      + "			                show-temporary='false'/>\n"
+	      + "			<spacer min-size='2,2mm'/>\n"
+	      + "		</sizer>\n"
+	      + "		<sizer mode='hori'>\n"
+	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-file' src='THEME:GUI:File.svg' expand='false' size='8,8mm'/>\n"
+	      + "			<entry name='[" + std::to_string(getId()) + "]file-shooser:entry-file' expand='true,false' fill='true,false'/>\n"
+	      + "		</sizer>\n"
+	      + "		<sizer mode='hori'>\n"
+	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-folder' src='THEME:GUI:Folder.svg' expand='false' size='8,8mm'/>\n"
+	      + "			<entry name='[" + std::to_string(getId()) + "]file-shooser:entry-folder' expand='true,false' fill='true,false'/>\n"
+	      + "			<image name='[" + std::to_string(getId()) + "]file-shooser:img-home' src='THEME:GUI:Home.svg' expand='false' size='8,8mm'/>\n"
+	      + "		</sizer>\n"
+	      + "		<label name='[" + std::to_string(getId()) + "]file-shooser:title-label'>File chooser ...</label>\n"
+	      + "	</sizer>\n"
+	      + "</popup>";
+	loadFromString(myDescription);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:show-hiden-file", "clicked", ewolEventFileChooserHidenFileChange);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-validate", "pressed", eventValidate);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:button-cancel", "pressed", eventCancel);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-folder", "folder-validate", ewolEventFileChooserListFolder);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-files", "file-select", ewolEventFileChooserListFile);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:list-files", "file-validate", ewolEventFileChooserListFileValidate);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-file", "modify", ewolEventFileChooserEntryFile);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-file", "enter",  ewolEventFileChooserEntryFileEnter);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "modify", ewolEventFileChooserEntryFolder);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "enter",  ewolEventFileChooserEntryFolderEnter);
+	registerOnEventNameWidget("[" + std::to_string(getId()) + "]file-shooser:img-home", "pressed", ewolEventFileChooserHome);
 	// set the default Folder properties:
 	updateCurrentFolder();
 }
@@ -297,30 +137,15 @@ ewol::widget::FileChooser::~FileChooser(void) {
 }
 
 void ewol::widget::FileChooser::setTitle(const std::string& _label) {
-	if (NULL == m_widgetTitle) {
-		return;
-	}
-	m_widgetTitle->setLabel(_label);
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:title-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setValidateLabel(const std::string& _label) {
-	if (NULL == m_widgetValidate) {
-		return;
-	}
-	// TODO : set if back :
-	/*
-	m_widgetValidate->setLabel(label);
-	*/
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:validate-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setCancelLabel(const std::string& _label) {
-	if (NULL == m_widgetCancel) {
-		return;
-	}
-	// TODO : set if back :
-	/*
-	m_widgetCancel->setLabel(label);
-	*/
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:cancel-label", "value", _label);
 }
 
 void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
@@ -330,10 +155,7 @@ void ewol::widget::FileChooser::setFolder(const std::string& _folder) {
 
 void ewol::widget::FileChooser::setFileName(const std::string& _filename) {
 	m_file = _filename;
-	if (NULL == m_widgetCurrentFileName) {
-		return;
-	}
-	m_widgetCurrentFileName->setValue(_filename);
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-file", "value", _filename);
 }
 
 void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _msg) {
@@ -344,29 +166,19 @@ void ewol::widget::FileChooser::onReceiveMessage(const ewol::object::Message& _m
 	} else if (ewolEventFileChooserEntryFile == _msg.getMessage()) {
 		// == > change the file name
 		m_file = _msg.getData();
-		// update the selected file in the list : 
-		if (m_widgetListFile != NULL) {
-			m_widgetListFile->setSelect(m_file);
-		}
+		// update the selected file in the list :
+		setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "select", m_file);
 	} else if (eventCancel == _msg.getMessage()) {
 		// == > Auto remove ...
 		generateEventId(_msg.getMessage());
 		autoDestroy();
 	} else if (ewolEventFileChooserHidenFileChange == _msg.getMessage()) {
 		if (_msg.getData() == "true") {
-			if (NULL!=m_widgetListFolder) {
-				m_widgetListFolder->setShowHiddenFiles(true);
-			}
-			if (NULL!=m_widgetListFile) {
-				m_widgetListFile->setShowHiddenFiles(true);
-			}
+			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "true");
+			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "true");
 		} else {
-			if (NULL!=m_widgetListFolder) {
-				m_widgetListFolder->setShowHiddenFiles(false);
-			}
-			if (NULL!=m_widgetListFile) {
-				m_widgetListFile->setShowHiddenFiles(false);
-			}
+			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "show-hidden", "false");
+			setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "show-hidden", "false");
 		}
 	} else if (ewolEventFileChooserListFolder == _msg.getMessage()) {
 		// == > this is an internal event ...
@@ -411,15 +223,9 @@ void ewol::widget::FileChooser::updateCurrentFolder(void) {
 			m_folder +=  "/";
 		}
 	}
-	if (NULL != m_widgetListFile) {
-		m_widgetListFile->setFolder(m_folder);
-	}
-	if (NULL != m_widgetListFolder) {
-		m_widgetListFolder->setFolder(m_folder);
-	}
-	if (NULL != m_widgetCurrentFolder) {
-		m_widgetCurrentFolder->setValue(m_folder);
-	}
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-files", "path", m_folder);
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:list-folder", "path", m_folder);
+	setConfigNamed("[" + std::to_string(getId()) + "]file-shooser:entry-folder", "value", m_folder);
 	markToRedraw();
 }
 
@@ -429,39 +235,3 @@ std::string ewol::widget::FileChooser::getCompleateFileName(void) {
 	tmpString += m_file;
 	return tmpString;
 }
-
-/**
- * @brief Inform object that an other object is removed ...
- * @param[in] removeObject Pointer on the EObject remeved  == > the user must remove all reference on this EObject
- * @note : Sub classes must call this class
- */
-void ewol::widget::FileChooser::onObjectRemove(ewol::Object * removeObject) {
-	// First step call parrent : 
-	ewol::widget::PopUp::onObjectRemove(removeObject);
-	// second step find if in all the elements ...
-	if(removeObject == m_widgetTitle) {
-		m_widgetTitle = NULL;
-	}
-	if(removeObject == m_widgetValidate) {
-		m_widgetValidate = NULL;
-	}
-	if(removeObject == m_widgetCancel) {
-		m_widgetCancel = NULL;
-	}
-	if(removeObject == m_widgetCurrentFolder) {
-		m_widgetCurrentFolder = NULL;
-	}
-	if(removeObject == m_widgetCurrentFileName) {
-		m_widgetCurrentFileName = NULL;
-	}
-	if(removeObject == m_widgetListFolder) {
-		m_widgetListFolder = NULL;
-	}
-	if(removeObject == m_widgetListFile) {
-		m_widgetListFile = NULL;
-	}
-	if(removeObject == m_widgetCheckBox) {
-		m_widgetCheckBox = NULL;
-	}
-}
-
