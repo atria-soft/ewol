@@ -17,10 +17,41 @@
 #define EWOL_FLAG_KEY_NUM_LOCK  0x00000040
 #define EWOL_FLAG_KEY_INSERT    0x00000080
 
+// TODO : Update to support the Left and right of some key ...
 
 ewol::key::Special::Special(void) :
   m_value(0) {
 	
+}
+void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
+	switch (move) {
+		case keyboardInsert:
+			setInsert(_isDown);
+			break;
+		case keyboardCapLock:
+			setCapsLock(_isDown);
+			break;
+		case keyboardShiftLeft:
+		case keyboardShiftRight:
+			setShift(_isDown);
+			break;
+		case keyboardCtrlLeft:
+		case keyboardCtrlRight
+			setCtrl(_isDown);
+			break;
+		case keyboardMetaLeft:
+		case keyboardMetaRight:
+			setMeta(_isDown);
+			break;
+		case keyboardAlt:
+			setAlt(_isDown);
+			break;
+		case keyboardAltGr:
+			setAltGr(_isDown);
+			break;
+		case keyboardNumLock:
+			setNumLock(_isDown);
+			break;
 }
 
 bool ewol::key::Special::getCapsLock(void) const {

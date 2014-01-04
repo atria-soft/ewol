@@ -105,6 +105,12 @@ namespace ewol {
 				 * @param[in] _value The new Insert value
 				 */
 				void setInsert(bool _value);
+				/**
+				 * @brief Update the internal value with the input moving key.
+				 * @param[in] _move Moving key.
+				 * @param[in] _isFown The Key is pressed or not.
+				 */
+				void update(enum ewol::key::keyboard _move, bool _isDown);
 		};
 		etk::CCout& operator <<(etk::CCout& _os, const ewol::key::Special _obj);
 	};
