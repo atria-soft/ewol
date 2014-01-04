@@ -213,8 +213,8 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 	
 	private boolean keyboardEvent(int keyCode, KeyEvent event, boolean isDown) {
 		int actionDone = event.getAction();
-		switch(keyCode)
-			{
+		Log.i("Surface GL", "get event : " + keyCode + " is down : " + isDown);
+		switch(keyCode) {
 			case KeyEvent.KEYCODE_VOLUME_DOWN:
 				EWOL.keyboardEventKeySystem(EWOL_SYSTEM_KEY_VOLUME_DOWN, isDown);
 				return false;
@@ -240,26 +240,42 @@ public class EwolSurfaceViewGL extends GLSurfaceView implements EwolConstants {
 			case KeyEvent.KEYCODE_DEL:
 				EWOL.keyboardEventKey(EWOL_SYSTEM_KEY_DEL, isDown);
 				return true;
-			case KeyEvent.KEYCODE_ALT_LEFT:
-				// TODO : ...
-				break;
-			case KeyEvent.KEYCODE_SHIFT_LEFT:
-				// TODO : ...
-				break;
-			case KeyEvent.KEYCODE_ENTER:
-				// TODO : ...
-				break;
 				// Joystick event :
-			case KeyEvent.KEYCODE_DPAD_UP:
-				break;
-			case KeyEvent.KEYCODE_DPAD_DOWN:
-				break;
-			case KeyEvent.KEYCODE_DPAD_LEFT:
-				break;
-			case KeyEvent.KEYCODE_DPAD_RIGHT:
-				break;
-			case KeyEvent.KEYCODE_DPAD_CENTER:
-				break;
+			case KeyEvent.KEYCODE_DPAD_UP:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_UP, isDown);        return true;
+			case KeyEvent.KEYCODE_DPAD_DOWN:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_DOWN, isDown);      return true;
+			case KeyEvent.KEYCODE_DPAD_LEFT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_LEFT, isDown);      return true;
+			case KeyEvent.KEYCODE_DPAD_RIGHT: EWOL.keyboardEventMove(EWOL_MOVE_KEY_RIGHT, isDown);     return true;
+			case KeyEvent.KEYCODE_PAGE_UP:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_PAGE_UP, isDown);   return true;
+			case KeyEvent.KEYCODE_PAGE_DOWN:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_PAGE_DOWN, isDown); return true;
+			case KeyEvent.KEYCODE_MOVE_HOME:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_START, isDown);     return true;
+			case KeyEvent.KEYCODE_MOVE_END:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_END, isDown);       return true;
+			case KeyEvent.KEYCODE_SYSRQ:      EWOL.keyboardEventMove(EWOL_MOVE_KEY_PRINT, isDown);     return true;
+			//case KeyEvent.:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_STOP_DEFIL, isDown); return true;
+			case KeyEvent.KEYCODE_BREAK:      EWOL.keyboardEventMove(EWOL_MOVE_KEY_WAIT, isDown);      return true;
+			case KeyEvent.KEYCODE_INSERT:     EWOL.keyboardEventMove(EWOL_MOVE_KEY_INSERT, isDown);    return true;
+			case KeyEvent.KEYCODE_F1:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F1, isDown);  return true;
+			case KeyEvent.KEYCODE_F2:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F2, isDown);  return true;
+			case KeyEvent.KEYCODE_F3:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F3, isDown);  return true;
+			case KeyEvent.KEYCODE_F4:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F4, isDown);  return true;
+			case KeyEvent.KEYCODE_F5:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F5, isDown);  return true;
+			case KeyEvent.KEYCODE_F6:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F6, isDown);  return true;
+			case KeyEvent.KEYCODE_F7:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F7, isDown);  return true;
+			case KeyEvent.KEYCODE_F8:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F8, isDown);  return true;
+			case KeyEvent.KEYCODE_F9:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_F9, isDown);  return true;
+			case KeyEvent.KEYCODE_F10: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F10, isDown); return true;
+			case KeyEvent.KEYCODE_F11: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F11, isDown); return true;
+			case KeyEvent.KEYCODE_F12: EWOL.keyboardEventMove(EWOL_MOVE_KEY_F12, isDown); return true;
+			case KeyEvent.KEYCODE_CAPS_LOCK:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_CAP_LOCK, isDown);     return true;
+			case KeyEvent.KEYCODE_SHIFT_LEFT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_LEFT, isDown);   return true;
+			case KeyEvent.KEYCODE_SHIFT_RIGHT: EWOL.keyboardEventMove(EWOL_MOVE_KEY_SHIFT_RIGHT, isDown);  return true;
+			case KeyEvent.KEYCODE_CTRL_LEFT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_CTRL_LEFT, isDown);    return true;
+			case KeyEvent.KEYCODE_CTRL_RIGHT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_CTRL_RIGHT, isDown);   return true;
+			case KeyEvent.KEYCODE_META_LEFT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_META_LEFT, isDown);    return true;
+			case KeyEvent.KEYCODE_META_RIGHT:  EWOL.keyboardEventMove(EWOL_MOVE_KEY_META_RIGHT, isDown);   return true;
+			case KeyEvent.KEYCODE_ALT_LEFT:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT, isDown);          return true;
+			case KeyEvent.KEYCODE_ALT_RIGHT:   EWOL.keyboardEventMove(EWOL_MOVE_KEY_ALT_GR, isDown);       return true;
+			//case KeyEvent.KEYCODE_MENU:        EWOL.keyboardEventMove(EWOL_MOVE_KEY_CONTEXT_MENU, isDown); return true;
+			case KeyEvent.KEYCODE_NUM_LOCK:    EWOL.keyboardEventMove(EWOL_MOVE_KEY_NUM_LOCK, isDown);     return true;
 			default:
 				break;
 			}

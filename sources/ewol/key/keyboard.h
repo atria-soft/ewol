@@ -16,6 +16,7 @@ namespace ewol {
 	namespace key {
 		/**
 		 * @brief Keybord event or joystick event
+		 * @warning If you modify Id of these element check the java interface file of constant : EwolConstant.java
 		 */
 		enum keyboard {
 			keyboardUnknow = 0,    //!< Unknown keyboard key

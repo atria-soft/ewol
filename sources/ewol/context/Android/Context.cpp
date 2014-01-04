@@ -389,6 +389,13 @@ class AndroidContext : public ewol::Context {
 			OS_SetKeyboard(m_guiKeyBoardSpecialKeyMode, _myChar, _isDown, _isARepeateKey);
 		}
 		
+		void ANDROID_SetKeyboardMove(int _move, bool _isDown, bool _isARepeateKey=false) {
+			// direct wrapping :
+			enum ewol::key::keyboard move = (enum ewol::key::keyboard)_move;
+			m_guiKeyBoardSpecialKeyMode.update(move, _isDown);
+			OS_SetKeyboardMove(m_guiKeyBoardSpecialKeyMode, move, _isDown, _isARepeateKey);
+		}
+		
 		void OS_Resize(const vec2& _size) {
 			m_currentHeight = _size.y();
 			ewol::Context::OS_Resize(_size);
@@ -702,6 +709,7 @@ extern "C" {
 			return;
 		}
 		EWOL_DEBUG("IO keyboard Move event : \"" << _type << "\" is down=" << _isdown);
+		s_listInstance[_id]->ANDROID_SetKeyboardMove(_type, _isdown);
 	}
 	
 	void Java_org_ewol_Ewol_EWkeyboardEventKey(JNIEnv* _env,
