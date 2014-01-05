@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <etk/Stream.h>
+#include <ewol/key/keyboard.h>
 
 namespace ewol {
 	namespace key {

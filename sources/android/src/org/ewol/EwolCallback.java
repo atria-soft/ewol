@@ -9,11 +9,12 @@
 package org.ewol;
 import android.util.Log;
 
-public interface EwolCallback
-{
+public interface EwolCallback {
 	public void keyboardUpdate(boolean show);
 	public void eventNotifier(String[] args);
 	public void orientationUpdate(int screenMode);
 	public void titleSet(String value);
 	public void stop();
+	public String getClipBoardString();
+	public void setClipBoardString(String data);
 }

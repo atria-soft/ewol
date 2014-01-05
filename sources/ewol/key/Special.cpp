@@ -24,7 +24,7 @@ ewol::key::Special::Special(void) :
 	
 }
 void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
-	switch (move) {
+	switch (_move) {
 		case keyboardInsert:
 			setInsert(_isDown);
 			break;
@@ -36,7 +36,7 @@ void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
 			setShift(_isDown);
 			break;
 		case keyboardCtrlLeft:
-		case keyboardCtrlRight
+		case keyboardCtrlRight:
 			setCtrl(_isDown);
 			break;
 		case keyboardMetaLeft:
@@ -52,6 +52,7 @@ void ewol::key::Special::update(enum ewol::key::keyboard _move, bool _isDown) {
 		case keyboardNumLock:
 			setNumLock(_isDown);
 			break;
+	}
 }
 
 bool ewol::key::Special::getCapsLock(void) const {

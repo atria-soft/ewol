@@ -36,7 +36,9 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-
+// copy past events :
+import android.content.ClipboardManager;
+import android.content.ClipData;
 
 import java.io.IOException;
 //import activityRootView
@@ -54,6 +56,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	private EwolAudioTask     mStreams;
 	private Thread            mAudioThread;
 	private Ewol              EWOL;
+	private String tmpClipBoard; // TODO : Remove this ==> clipboard acces does not work
 	static {
 		try {
 			System.loadLibrary("ewol");
@@ -65,6 +68,7 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 	public EwolActivity() {
 		// set the java evironement in the C sources :
 		EWOL = new Ewol(this, EWOL_APPL_TYPE_ACTIVITY);
+		tmpClipBoard = "";
 	}
 	
 	protected void initApkPath(String org, String vendor, String project) {
@@ -254,6 +258,49 @@ public abstract class EwolActivity extends Activity implements EwolCallback, Ewo
 		// end application is requested ...
 		finish();
 	}
+	
+	//http://developer.android.com/guide/topics/text/copy-paste.html
+	public String getClipBoardString() {
+		return tmpClipBoard;
+		// TODO : Rework this it does not work
+		/*
+		// Gets a handle to the clipboard service.
+		ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+		// If the clipboard doesn't contain data, disable the paste menu item.
+		// If it does contain data, decide if you can handle the data.
+		if (!(clipboard.hasPrimaryClip())) {
+			return "";
+		}
+		// Examines the item on the clipboard. If getText() does not return null, the clip item contains the
+		// text. Assumes that this application can only handle one item at a time.
+		ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
+		if (item == null) {
+			return "";
+		}
+		// Gets the clipboard as text.
+		String pasteData = item.getText().toString();;
+		// If the string contains data, then the paste operation is done
+		if (pasteData != null) {
+			return pasteData;
+		}
+		return "";
+		*/
+	}
+	
+	public void setClipBoardString(String data) {
+		tmpClipBoard = data;
+		return;
+		// TODO : Rework this it does not work
+		/*
+		// Gets a handle to the clipboard service.
+		ClipboardManager clipboard = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+		// Creates a new text clip to put on the clipboard
+		ClipData clip = ClipData.newPlainText("simple text", data);
+		// Set the clipboard's primary clip.
+		clipboard.setPrimaryClip(clip);
+		*/
+	}
+	
 }
 
 

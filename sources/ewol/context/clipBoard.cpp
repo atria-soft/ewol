@@ -84,7 +84,6 @@ void ewol::context::clipBoard::set(enum ewol::context::clipBoard::clipboardListe
 	if(    ewol::context::clipBoard::clipboardStd == _clipboardID
 	    || ewol::context::clipBoard::clipboardSelection == _clipboardID) {
 		ewol::getContext().clipBoardSet(_clipboardID);
-		EWOL_TODO("Set ClipBoard");
 	}
 }
 
@@ -98,11 +97,9 @@ void ewol::context::clipBoard::request(enum ewol::context::clipBoard::clipboardL
 	if(    ewol::context::clipBoard::clipboardStd == _clipboardID
 	    || ewol::context::clipBoard::clipboardSelection == _clipboardID) {
 		ewol::getContext().clipBoardGet(_clipboardID);
-		EWOL_TODO("Get ClipBoard");
 	} else {
 		// generate an event on the main thread ...
 		ewol::getContext().OS_ClipBoardArrive(_clipboardID);
-		EWOL_TODO("ClipBoard arrive");
 	}
 }
 

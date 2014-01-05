@@ -62,6 +62,8 @@ class AndroidContext : public ewol::Context {
 		jmethodID m_javaMethodEwolCallbackKeyboardUpdate; //!< basic methode to call ...
 		jmethodID m_javaMethodEwolCallbackOrientationUpdate;
 		jmethodID m_javaMethodEwolActivitySetTitle;
+		jmethodID m_javaMethodEwolActivitySetClipBoardString;
+		jmethodID m_javaMethodEwolActivityGetClipBoardString;
 		jclass m_javaDefaultClassString; //!< default string class
 		int32_t m_currentHeight;
 		ewol::key::Special m_guiKeyBoardSpecialKeyMode;//!< special key of the android system :
@@ -89,6 +91,8 @@ class AndroidContext : public ewol::Context {
 		  m_javaMethodEwolCallbackKeyboardUpdate(0),
 		  m_javaMethodEwolCallbackOrientationUpdate(0),
 		  m_javaMethodEwolActivitySetTitle(0),
+		  m_javaMethodEwolActivitySetClipBoardString(0),
+		  m_javaMethodEwolActivityGetClipBoardString(0),
 		  m_javaDefaultClassString(0),
 		  m_currentHeight(0),
 		  m_clipBoardOwnerStd(false) {
@@ -127,6 +131,7 @@ class AndroidContext : public ewol::Context {
 					java_check_exception(_env);
 					return;
 				}
+				
 				ret = safeInitMethodID(m_javaMethodEwolCallbackStop,
 				                       m_javaClassEwolCallback,
 				                       "stop",
@@ -158,6 +163,24 @@ class AndroidContext : public ewol::Context {
 				                       m_javaClassEwolCallback,
 				                       "orientationUpdate",
 				                       "(I)V");
+				if (ret == false) {
+					java_check_exception(_env);
+					return;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolActivitySetClipBoardString,
+				                       m_javaClassEwolCallback,
+				                       "setClipBoardString",
+				                       "(Ljava/lang/String;)V");
+				if (ret == false) {
+					java_check_exception(_env);
+					return;
+				}
+				
+				ret = safeInitMethodID(m_javaMethodEwolActivityGetClipBoardString,
+				                       m_javaClassEwolCallback,
+				                       "getClipBoardString",
+				                       "()Ljava/lang/String;");
 				if (ret == false) {
 					java_check_exception(_env);
 					return;
@@ -234,10 +257,23 @@ class AndroidContext : public ewol::Context {
 					// NOTE : nothing to do : Windows deas ot supported Middle button
 					break;
 				case ewol::context::clipBoard::clipboardStd:
+					
 					// Request the clipBoard :
-					if (false == m_clipBoardOwnerStd) {
-						// TODO : Inform the OS that we have the current buffer of copy ...
-						m_clipBoardOwnerStd = true;
+					EWOL_DEBUG("C->java : set clipboard");
+					if (m_javaApplicationType == appl_application) {
+						int status;
+						if(!java_attach_current_thread(&status)) {
+							return;
+						}
+						//Call java ...
+						jstring data = m_JavaVirtualMachinePointer->NewStringUTF(ewol::context::clipBoard::get(_clipboardID).c_str());
+						m_JavaVirtualMachinePointer->CallVoidMethod(m_javaObjectEwolCallback, m_javaMethodEwolActivityGetClipBoardString, data);
+						m_JavaVirtualMachinePointer->DeleteLocalRef(data);
+						// manage execption : 
+						java_check_exception(m_JavaVirtualMachinePointer);
+						java_detach_current_thread(status);
+					} else {
+						EWOL_ERROR("C->java : can not set clipboard");
 					}
 					break;
 				default:
