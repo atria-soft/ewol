@@ -310,6 +310,8 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 			debug::setGeneralLevel(etk::logLevelVerbose);
 		} else if (m_commandLine.get(iii) == "-fps") {
 			m_displayFps=true;
+		} else if (m_commandLine.get(iii) == "--dbg-file") {
+			etk::cout.setOutputFile(true);
 		} else {
 			continue;
 		}
