@@ -47,16 +47,17 @@ def create(target):
 		])
 	if target.name=="Linux":
 		myModule.add_src_file('ewol/context/X11/Context.cpp')
-	elif target.name=="Android":
-		myModule.add_src_file("ewol/context/Android/Context.cpp")
 	elif target.name=="Windows":
-		myModule.add_src_file("ewol/context/Windows/Context.cpp")
+		myModule.add_src_file('ewol/context/Windows/Context.cpp')
+	elif target.name=="Android":
+		myModule.add_src_file('ewol/context/Android/Context.cpp')
 	elif target.name=="MacOs":
 		myModule.add_src_file([
-			"ewol/context/MacOs/Context.cpp",
-			"ewol/context/MacOs/Interface.mm",
-			"ewol/context/MacOs/AppDelegate.mm",
-			"ewol/context/MacOs/OpenglView.mm"])
+			'ewol/context/MacOs/Context.cpp',
+			'ewol/context/MacOs/Interface.mm',
+			'ewol/context/MacOs/Windows.mm',
+			'ewol/context/MacOs/OpenglView.mm',
+			'ewol/context/MacOs/AppDelegate.mm'])
 	else:
 		debug.error("unknow mode...")
 	
@@ -163,7 +164,7 @@ def create(target):
 	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
 	
 	myModule.add_export_path(tools.get_current_path(__file__))
-	
+
 	tagFile = tools.get_current_path(__file__) + "/tag"
 	ewolVersionID = tools.file_read_data(tagFile)
 	myModule.compile_flags_CC([

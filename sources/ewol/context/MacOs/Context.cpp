@@ -12,7 +12,6 @@
 #include <ewol/key/key.h>
 #include <ewol/context/commandLine.h>
 #include <etk/types.h>
-#include <etk/unicode.h>
 #include <etk/os/FSNode.h>
 #include <ewol/widget/Manager.h>
 

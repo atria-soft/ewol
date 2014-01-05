@@ -10,6 +10,7 @@
 #include "ewol/context/MacOs/Interface.h"
 
 #import <ewol/context/MacOs/OpenglView.h>
+#import <ewol/context/MacOs/Windows.h>
 #import <ewol/context/MacOs/AppDelegate.h>
 
 int mm_main(int argc, const char *argv[]) {
@@ -47,10 +48,14 @@ int mm_main(int argc, const char *argv[]) {
 	// -- basic windows creation :
 	// ---------------------------------------------------------------
 	// create a windows of size 800/600
-	id window = [ [ [NSWindow alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
-	                styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
-	                autorelease];
-	// set the windows at a specific position :
+#if 1
+	id window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
+				styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
+				 autorelease];
+	
+	//id window = [ [MacOsAppDelegate alloc] autorelease];
+	
+	 // set the windows at a specific position :
 	[window cascadeTopLeftFromPoint:NSMakePoint(50,50)];
 	// set the windows resizable
 	[window setStyleMask:[window styleMask] | NSResizableWindowMask];
@@ -75,6 +80,19 @@ int mm_main(int argc, const char *argv[]) {
 	//[window makeKeyAndVisible];
 	
 	[window setDelegate:view];
+#else
+    @autoreleasepool
+    {
+        const ProcessSerialNumber psn = { 0, kCurrentProcess };
+        TransformProcessType(&psn, kProcessTransformToForegroundApplication);
+        SetFrontProcess(&psn);
+		
+        [MyApplication sharedApplication];
+        [NSApp setDelegate: NSApp];
+		
+        [NSApp run];
+    }
+#endif
 	// return no error
 	return 0;
 }
