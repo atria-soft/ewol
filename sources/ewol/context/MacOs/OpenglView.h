@@ -6,11 +6,13 @@
  * @license BSD v3 (see license file)
  */
 
-
-
 #import <Cocoa/Cocoa.h>
- 
+#import <OpenGL/OpenGL.h>
+#import <OpenGL/gl.h>
+
+
 @interface OpenGLView : NSOpenGLView<NSWindowDelegate> {
+    NSTimer* _refreshTimer;
 }
 - (void)prepareOpenGL;
 - (void)drawRect:(NSRect) bounds;
@@ -30,5 +32,3 @@
 - (void)keyDown:(NSEvent *)theEvent;
 - (void)flagsChanged:(NSEvent *)theEvent;
 @end
-
-

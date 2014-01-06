@@ -8,7 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface EwolMainWindows : NSWindow
+@interface EwolMainWindows : NSWindow {
+	
+}
 + (id)alloc;
 - (id)init;
 + (void)dealloc;

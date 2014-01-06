@@ -290,7 +290,7 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 	// set the curent interface :
 	lockContext();
 	// parse the debug level:
-	for(int32_t iii=m_commandLine.size()-1 ; iii >= 0 ; --iii) {
+	for(int32_t iii = 0; iii < m_commandLine.size() ; ++iii) {
 		if (m_commandLine.get(iii) == "-l0") {
 			debug::setGeneralLevel(etk::logLevelNone);
 		} else if (m_commandLine.get(iii) == "-l1") {
@@ -316,7 +316,9 @@ ewol::Context::Context(int32_t _argc, const char* _argv[]) :
 			continue;
 		}
 		m_commandLine.remove(iii);
+		--iii;
 	}
+	//etk::cout.setOutputFile(true);
 	
 	EWOL_INFO("EWOL v:" << ewol::getVersion());
 	EWOL_INFO("Build Date: " << date::getYear() << "/" << date::getMonth() << "/" << date::getDay() << " " << date::getHour() << "h" << date::getMinute());
@@ -529,7 +531,7 @@ bool ewol::Context::OS_Draw(bool _displayEveryTime) {
 		return false;
 	}
 	#endif
-	
+	//EWOL_DEBUG("DRAW");
 	m_previousDisplayTime = currentTime;
 	
 	// process the events

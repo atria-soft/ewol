@@ -13,6 +13,8 @@
 #import <ewol/context/MacOs/Windows.h>
 #import <ewol/context/MacOs/AppDelegate.h>
 
+
+
 int mm_main(int argc, const char *argv[]) {
 	[NSAutoreleasePool new];
 	
@@ -46,13 +48,13 @@ int mm_main(int argc, const char *argv[]) {
 	
 	// ---------------------------------------------------------------
 	// -- basic windows creation :
-	// ---------------------------------------------------------------
+	// -----------------------		----------------------------------------
 	// create a windows of size 800/600
 #if 1
 	id window = [ [ [EwolMainWindows alloc] initWithContentRect:NSMakeRect(0, 0, 800, 600)
 				styleMask:(NSTitledWindowMask|NSMiniaturizableWindowMask|NSClosableWindowMask) backing:NSBackingStoreBuffered defer:NO]
 				 autorelease];
-	
+	[window setAcceptsMouseMovedEvents:YES];
 	//id window = [ [MacOsAppDelegate alloc] autorelease];
 	
 	 // set the windows at a specific position :
@@ -71,6 +73,9 @@ int mm_main(int argc, const char *argv[]) {
 	NSRect window_frame = [window frame];
 	
 	OpenGLView* view=[[OpenGLView alloc]initWithFrame:window_frame]; //NSMakeRect(0, 0, 800, 600)];
+    NSTrackingArea *track = [[NSTrackingArea alloc] initWithRect:window_frame options: NSTrackingMouseMoved | NSTrackingActiveWhenFirstResponder | NSTrackingActiveInKeyWindow
+														   owner:window userInfo:nil];
+    [view addTrackingArea:track];
 	[window setContentView:view];
 	[view setAutoresizesSubviews:YES];
 	

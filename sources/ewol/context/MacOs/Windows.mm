@@ -9,6 +9,7 @@
 
 #import <ewol/context/MacOs/Windows.h>
 #import <ewol/context/MacOs/OpenglView.h>
+#include <ewol/context/MacOS/Context.h>
 
 #include <ewol/debug.h>
 
@@ -70,12 +71,38 @@
 	//[_window release];
 	[super dealloc];
 }
-/*
 
+/*
 - (void)sendEvent:(NSEvent *)event {
 	EWOL_WARNING(" EVENT ... ");
 }
 */
+
+
+// this generate all the event entry availlable ==> like a big keep focus ...
+- (BOOL)acceptsFirstResponder {
+	return YES;
+}
+- (BOOL)becomeFirstResponder {
+	return YES;
+}
+
+-(void)mouseMoved:(NSEvent *)event {
+	NSPoint point = [event locationInWindow];
+	EWOL_INFO("mouseMoved : " << (float)point.x << " " << (float)point.y);
+	MacOs::setMouseMotion(0, point.x, point.y);
+}
+-(void)mouseEntered:(NSEvent *)event {
+	NSPoint point = [event locationInWindow];
+	EWOL_INFO("mouseEntered : " << (float)point.x << " " << (float)point.y);
+}
+-(void)mouseExited:(NSEvent *)event {
+	NSPoint point = [event locationInWindow];
+	EWOL_INFO("mouseExited : " << (float)point.x << " " << (float)point.y);
+}
+
+
+
 
 @end
 

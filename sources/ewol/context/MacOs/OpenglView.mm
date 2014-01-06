@@ -13,6 +13,7 @@
 #include <ewol/debug.h>
 #include <ewol/Dimension.h>
 
+
 @implementation OpenGLView
 
 static ewol::key::Special guiKeyBoardMode;
@@ -22,7 +23,6 @@ static ewol::key::Special guiKeyBoardMode;
 	EWOL_ERROR("prepare");
 	GLint swapInt = 1;
 	[[self openGLContext] setValues:&swapInt forParameter:NSOpenGLCPSwapInterval]; // set to vbl sync
-	
 	// set system dpi size : 
 	NSScreen *screen = [NSScreen mainScreen];
 	NSDictionary *description = [screen deviceDescription];
@@ -32,12 +32,24 @@ static ewol::key::Special guiKeyBoardMode;
 	ewol::Dimension::setPixelRatio(vec2((float)displayPixelSize.width/(float)displayPhysicalSize.width,
 	                                    (float)displayPixelSize.height/(float)displayPhysicalSize.height),
 	                                    ewol::Dimension::Millimeter);
+	_refreshTimer=[ [ NSTimer scheduledTimerWithTimeInterval:0.017 target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES ] retain ] ;
+	
 }
 
--(void) drawRect: (NSRect) bounds
-{
+-(void) drawRect: (NSRect) bounds {
+	if ( ! _refreshTimer ) {
+		_refreshTimer=[ [ NSTimer scheduledTimerWithTimeInterval:0.017 target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES ] retain ] ;
+	}
 	MacOs::draw(true);
 	glFlush();
+}
+
+/**
+ * Service the animation timer.
+ */
+- (void) animationTimerFired: (NSTimer *) timer {
+	[ self setNeedsDisplay: YES ];
+	//EWOL_INFO("view refresh ..." );
 }
 
 -(void)reshape {
@@ -68,7 +80,7 @@ static ewol::key::Special guiKeyBoardMode;
 }
 -(void)mouseMoved:(NSEvent *)event {
 	NSPoint point = [event locationInWindow];
-	//EWOL_INFO("mouseMoved : " << (float)point.x << " " << (float)point.y);
+	EWOL_INFO("mouseMoved : " << (float)point.x << " " << (float)point.y);
 	MacOs::setMouseMotion(0, point.x, point.y);
 }
 -(void)mouseEntered:(NSEvent *)event {
@@ -206,12 +218,15 @@ static ewol::key::Special guiKeyBoardMode;
 	EWOL_INFO("sendEvent : " << (float)point.x << " " << (float)point.y);
 }
 */
-
+/*
 // this generate all the event entry availlable ==> like a big keep focus ...
 - (BOOL)acceptsFirstResponder {
 	return YES;
 }
-
+- (BOOL)becomeFirstResponder {
+	return YES;
+}
+*/
 - (void)keyDown:(NSEvent *)theEvent {
 	bool thisIsAReapeateKey = false;
 	if ([theEvent isARepeat]) {
@@ -242,7 +257,6 @@ static ewol::key::Special guiKeyBoardMode;
 }
 
 - (void)flagsChanged:(NSEvent *)theEvent {
-	
 	if (([theEvent modifierFlags] & NSAlphaShiftKeyMask) != 0) {
 		EWOL_DEBUG("NSAlphaShiftKeyMask");
 		if (guiKeyBoardMode.getCapsLock() == false) {
@@ -339,15 +353,13 @@ static NSTimer *timer = nil;
 	[timer invalidate];
 	
 	//game_deactivate(); // freeze, pause
-	[self setNeedsDisplay:YES];
 }
 
 - (void)windowDidBecomeMain:(NSNotification *)notification {
 //	NSLog(@"window did become main");
 	
 	//game_activate();
-	[self setNeedsDisplay:YES];
-	
+	/*
 	timer = [NSTimer timerWithTimeInterval:FRAME_INTERVAL 
 	                 target:self 
 	                 selector:@selector(timerEvent:) 
@@ -355,10 +367,13 @@ static NSTimer *timer = nil;
 	                 repeats:YES];
 	
 	[[NSRunLoop mainRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
+	*/
 }
 
 - (void)timerEvent:(NSTimer *)t {
 	//run_game();
-	[self setNeedsDisplay:YES];
 }
+
+
 @end
+
