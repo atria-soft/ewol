@@ -11,6 +11,7 @@
 
 #include <etk/types.h>
 #include <ewol/resource/font/FontBase.h>
+#include <egami/egami.h>
 
 extern "C" {
 	#include <freetype/ft2build.h>
@@ -40,6 +41,10 @@ namespace ewol {
 				               ivec2 _glyphPosition,
 				               ewol::GlyphProperty& _property,
 				               int8_t _posInImage);
+				
+				bool drawGlyph(egami::ImageMono& _imageOut,
+				               int32_t _fontSize,
+				               ewol::GlyphProperty& _property);
 				
 				vec2 getSize(int32_t _fontSize, const std::string& _unicodeString);
 				

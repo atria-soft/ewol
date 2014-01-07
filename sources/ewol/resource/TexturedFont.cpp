@@ -44,7 +44,7 @@ etk::CCout& ewol::operator <<(etk::CCout& _os, enum ewol::font::mode _obj) {
 
 ewol::resource::TexturedFont::TexturedFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName) {
-	addObjectType("ewol::compositing::TexturedFont");
+	addObjectType("ewol::resource::TexturedFont");
 	m_font[0] = NULL;
 	m_font[1] = NULL;
 	m_font[2] = NULL;

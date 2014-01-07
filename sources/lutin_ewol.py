@@ -103,6 +103,7 @@ def create(target):
 		'ewol/resource/Shader.cpp',
 		'ewol/resource/Texture.cpp',
 		'ewol/resource/TexturedFont.cpp',
+		'ewol/resource/DistanceFieldFont.cpp',
 		'ewol/resource/VirtualBufferObject.cpp'
 		])
 	

@@ -222,6 +222,50 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 	return true;
 }
 
+bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
+                                             int32_t _fontSize,
+                                             ewol::GlyphProperty& _property) {
+	if(false == m_init) {
+		return false;
+	}
+	// 300dpi (hight quality) 96 dpi (normal quality)
+	int32_t fontQuality = 96;
+	// Select size ...
+	// note tha <<6 == *64 corespond with the 1/64th of points calculation of freetype
+	int32_t error = FT_Set_Char_Size(m_fftFace, _fontSize<<6, _fontSize<<6, fontQuality, fontQuality);
+	if (0!=error ) {
+		EWOL_ERROR("FT_Set_Char_Size  == > error in settings ...");
+		return false;
+	}
+	// a small shortcut
+	FT_GlyphSlot slot = m_fftFace->glyph;
+	// load glyph image into the slot (erase previous one)
+	error = FT_Load_Glyph(m_fftFace, // handle to face object
+	                      _property.m_glyphIndex, // glyph index
+	                      FT_LOAD_DEFAULT );
+	if (0!=error ) {
+		EWOL_ERROR("FT_Load_Glyph specify Glyph");
+		return false;
+	}
+	// convert to an anti-aliased bitmap
+	error = FT_Render_Glyph(slot, FT_RENDER_MODE_NORMAL ); // TODO : set FT_RENDER_MODE_MONO ==> 1 bit value ==> faster generation ...
+	if (0!=error) {
+		EWOL_ERROR("FT_Render_Glyph");
+		return false;
+	}
+	// resize output image :
+	_imageOut.resize(ivec2(slot->bitmap.width, slot->bitmap.rows), 0);
+	
+	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
+		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
+			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
+			// real set of color
+			_imageOut.set(ivec2(iii, jjj), valueColor );
+		}
+	}
+	return true;
+}
+
 
 void ewol::resource::FontFreeType::generateKerning(int32_t fontSize, std::vector<ewol::GlyphProperty>& listGlyph) {
 	if(false == m_init) {
