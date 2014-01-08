@@ -17,6 +17,7 @@
 #include <ewol/resource/FontFreeType.h>
 #include <ewol/context/Context.h>
 #include <ewol/resource/DistanceFieldFont.h>
+#include <edtaa3/edtaa3func.h>
 
 #undef __class__
 #define __class__ "resource::DistanceFieldFont"
@@ -27,7 +28,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	m_font = NULL;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
-	m_size = 36;
+	m_size = 70;
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
@@ -112,45 +113,41 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont(void) {
 	ewol::resource::FontFreeType::release(m_font);
 }
 
-void ewol::resource::DistanceFieldFont::GenerateSoftDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
-	unsigned char *img = &_input[0];
-	unsigned int width = _input.getSize().x();
-	unsigned int height = _input.getSize().y();
-	std::vector<short> xdist;
-	std::vector<short> ydist;
-	std::vector<double> gx;
-	std::vector<double> gy;
-	std::vector<double> data;
-	std::vector<double> outside;
-	std::vector<double> inside;
-	xdist.resize(width*height, 0);
-	ydist.resize(width*height, 0);
-	gx.resize(width*height, 0.0);
-	gy.resize(width*height, 0.0);
-	data.resize(width*height, 0.0);
-	outside.resize(width*height, 0.0);
-	inside.resize(width*height, 0.0);
-	
+void ewol::resource::DistanceFieldFont::GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	int32_t size = _input.getSize().x() * _input.getSize().y();
+	std::vector<short> xdist(size);
+	std::vector<short> ydist(size);
+	std::vector<double> gx(size);
+	std::vector<double> gy(size);
+	std::vector<double> data(size);
+	std::vector<double> outside(size);
+	std::vector<double> inside(size);
 	// Convert img into double (data)
 	double img_min = 255, img_max = -255;
-	for(size_t iii = 0; iii < data.size(); ++iii) {
-		double v = img[iii];
-		data[iii] = v;
-		if (v > img_max) {
-			img_max = v;
-		}
-		if (v < img_min) {
-			img_min = v;
+	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
+		for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
+			int32_t iii = yyy * _input.getSize().x() + xxx;
+			double v = _input.get(ivec2(xxx, yyy));
+			data[iii] = v;
+			if (v > img_max) {
+				img_max = v;
+			}
+			if (v < img_min) {
+				img_min = v;
+			}
 		}
 	}
 	// Rescale image levels between 0 and 1
-	for(size_t iii = 0; iii < data.size(); ++iii) {
-		data[iii] = (img[iii]-img_min)/img_max;
+	for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
+		for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
+			int32_t iii = yyy * _input.getSize().x() + xxx;
+			data[iii] = (_input.get(ivec2(xxx, yyy))-img_min)/img_max;
+		}
 	}
 	
 	// Compute outside = edtaa3(bitmap); % Transform background (0's)
 	computegradient(&data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
-	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().y(), _input.getSize().x(), &xdist[0], &ydist[0], &outside[0]);
+	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().x(), _input.getSize().y(), &xdist[0], &ydist[0], &outside[0]);
 	for(size_t iii = 0; iii < outside.size(); ++iii) {
 		if( outside[iii] < 0 ) {
 			outside[iii] = 0.0;
@@ -168,7 +165,7 @@ void ewol::resource::DistanceFieldFont::GenerateSoftDistanceField(const egami::I
 		data[iii] = 1 - data[iii];
 	}
 	computegradient( &data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
-	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().y(), _input.getSize().x(), &xdist[0], &ydist[0], &inside[0]);
+	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().x(), _input.getSize().y(), &xdist[0], &ydist[0], &inside[0]);
 	for(size_t iii = 0; iii < inside.size(); ++iii) {
 		if( inside[iii] < 0 ) {
 			inside[iii] = 0.0;
@@ -191,106 +188,6 @@ void ewol::resource::DistanceFieldFont::GenerateSoftDistanceField(const egami::I
 			uint8_t val = 255 - (unsigned char) outside[iii];
 			// TODO : Remove multiple size of the map ...
 			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,256));
-		}
-	}
-}
-
-class GirdDF {
-	private:
-		std::vector<ivec2> m_data;
-		ivec2 m_size;
-		ivec2 m_error;
-	public:
-		GirdDF(const ivec2& _size, const ivec2& _base = ivec2(0,0), const ivec2& _error = ivec2(0,0)) {
-			m_size = _size;
-			m_data.resize(m_size.x()*m_size.y(), _base);
-			m_error = _error;
-		}
-		const ivec2& get(const ivec2& _pos) const {
-			if(    _pos.x()>0 && _pos.x()<m_size.x()
-			    && _pos.y()>0 && _pos.y()<m_size.y()) {
-				return m_data[_pos.x()+_pos.y()*m_size.x()];
-			}
-			return m_error;
-		}
-		void set(const ivec2& _pos, const ivec2& _data) {
-			if(    _pos.x()>0 && _pos.x()<m_size.x()
-			    && _pos.y()>0 && _pos.y()<m_size.y()) {
-				m_data[_pos.x()+_pos.y()*m_size.x()] = _data;
-			}
-		}
-		
-		void compare(ivec2& _data, ivec2 _pos, ivec2 _offset) {
-			ivec2 other = get(_pos + _offset) + _offset;
-			if (other.length2() < _data.length2()) {
-				_data = other;
-			}
-		}
-		void GenerateSoftDistanceField(void) {
-			// First pass :
-			for (int32_t yyy = 0; yyy < m_size.y(); ++yyy) {
-				for (int32_t xxx = 0; xxx < m_size.x(); ++xxx) {
-					ivec2 data = get(ivec2(xxx, yyy));
-					compare(data, ivec2(xxx, yyy), ivec2(-1,  0));
-					compare(data, ivec2(xxx, yyy), ivec2( 0, -1));
-					compare(data, ivec2(xxx, yyy), ivec2(-1, -1));
-					compare(data, ivec2(xxx, yyy), ivec2( 1, -1));
-					set(ivec2(xxx, yyy), data);
-				}
-				for (int32_t xxx = m_size.y()-1; xxx >= 0;--xxx) {
-					ivec2 data = get(ivec2(xxx, yyy));
-					compare(data, ivec2(xxx, yyy), ivec2(1, 0));
-					set(ivec2(xxx, yyy), data );
-				}
-			}
-			// Second pass
-			for (int32_t yyy = m_size.y()-1; yyy >= 0; --yyy) {
-				for (int32_t xxx = m_size.x()-1; xxx >= 0; --xxx) {
-					ivec2 data = get(ivec2(xxx, yyy));
-					compare(data, ivec2(xxx, yyy), ivec2( 1,  0));
-					compare(data, ivec2(xxx, yyy), ivec2( 0,  1));
-					compare(data, ivec2(xxx, yyy), ivec2(-1,  1));
-					compare(data, ivec2(xxx, yyy), ivec2( 1,  1));
-					set(ivec2(xxx, yyy), data );
-				}
-				for (int32_t xxx = 0; xxx < m_size.x(); ++xxx) {
-					ivec2 data = get(ivec2(xxx, yyy));
-					compare(data, ivec2(xxx, yyy), ivec2(-1, 0));
-					set(ivec2(xxx, yyy), data);
-				}
-			}
-		}
-};
-
-void ewol::resource::DistanceFieldFont::GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
-	GirdDF myGird1(_input.getSize(), ivec2(0,0), ivec2(0, 0));
-	GirdDF myGird2(_input.getSize(), ivec2(0,0), ivec2(9999, 9999));
-	
-	// Reformat gird :
-	for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
-		for (int32_t yyy = 0; yyy < _input.getSize().y(); ++yyy) {
-			if ( _input.get(ivec2(xxx, yyy)) < 128 ) {
-				myGird1.set(ivec2(xxx, yyy), ivec2(0, 0));
-				myGird2.set(ivec2(xxx, yyy), ivec2(9999, 9999));
-			} else {
-				myGird1.set(ivec2(xxx, yyy), ivec2(9999, 9999));
-				myGird2.set(ivec2(xxx, yyy), ivec2(0, 0));
-			}
-		}
-	}
-	// Create internal distance of the 2 layer mode :
-	myGird1.GenerateSoftDistanceField();
-	myGird2.GenerateSoftDistanceField();
-	// Generate output :
-	_output.resize(_input.getSize(), etk::Color<>(0));
-	_output.clear(etk::Color<>(0));
-	for (int32_t xxx = 0; xxx < _output.getSize().x(); ++xxx) {
-		for (int32_t yyy = 0; yyy < _output.getSize().y(); ++yyy) {
-			float dist1 = myGird1.get(ivec2(xxx, yyy)).length();
-			float dist2 = myGird2.get(ivec2(xxx, yyy)).length();
-			float dist = dist1 - dist2;
-			float value = etk_avg(0.0f, dist*15.0f + 128.0f, 256.0f);
-			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)value,(int32_t)value,(int32_t)value,256));
 		}
 	}
 }

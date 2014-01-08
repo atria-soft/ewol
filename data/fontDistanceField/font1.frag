@@ -12,37 +12,44 @@ uniform int       EW_SoftEdge;
 varying vec2 f_texcoord;
 varying vec4 f_color;
 
-void main(void) {
-	vec4 tmpcolor = texture2D(EW_texID, f_texcoord);
-	vec4 outColor = vec4(0,0,0,0);
-	// compare distance with 0.5 that represent the middle ...
-	/*
-	if (tmpcolor[0]>0.5) {
-		outColor = f_color;
-		outColor[3] = 1.0;
-	} else if (tmpcolor[0]>0.49) {
-		// antialiasing :
-		outColor = f_color;
-		outColor[3] = 0.0;//(tmpcolor[3]-0.49)*1.0/0.02;
-	}
-	*/
-	outColor = f_color;
-	outColor[3] = smoothstep(0.35, 0.65, tmpcolor[0]);
-	/*
-	outColor = f_color;// * tmpcolor[3];
-	if (1==EW_SoftEdge) {
-		outColor[3] = smoothstep(EW_SoftEdgeMin, EW_SoftEdgeMax, tmpcolor[3]);
-	} else {
-		if (tmpcolor[3]>0.5) {
-			outColor[3] = 1.0;
-		} else {
-			outColor[3] = 0.0;
-		}
-	}
-	*/
-	//outColor = vec4(0,0,0,0);
-	//outColor[3] = tmpcolor[3];
-	gl_FragColor = outColor;
-	//gl_FragColor = tmpcolor;
-}
+       vec3 glyph_color    = vec3(1.0,1.0,1.0);
+const float glyph_center   = 0.50;
+       vec3 outline_color  = vec3(0.0,0.0,0.0);
+const float outline_center = 0.55;
+       vec3 glow_color     = vec3(1.0,1.0,1.0);
+const float glow_center    = 1.25;
 
+void main(void) {
+	//vec4 color = texture2D(EW_texID, vec2(int(f_texcoord[0]*256.0)/256.0,int(f_texcoord[1]*256.0)/256.0) );
+	vec4 color = texture2D(EW_texID, f_texcoord );
+	float dist  = color.r;
+	float width = fwidth(dist);
+	float alpha = smoothstep(glyph_center-width, glyph_center+width, dist);
+	
+	// Smooth
+	
+	gl_FragColor = vec4(glyph_color, alpha);
+	
+	// Outline
+	/*
+	float mu = smoothstep(outline_center-width, outline_center+width, dist);
+	vec3 rgb = mix(outline_color, glyph_color, mu);
+	gl_FragColor = vec4(rgb, max(alpha,mu));
+	*/
+	// Glow
+	/*
+	vec3 rgb = mix(glow_color, glyph_color, alpha);
+	float mu = smoothstep(glyph_center, glow_center, sqrt(dist));
+	gl_FragColor = vec4(rgb, max(alpha,mu));
+	*/
+	
+	// Glow + outline
+	/*
+	vec3 rgb = mix(glow_color, glyph_color, alpha);
+	float mu = smoothstep(glyph_center, glow_center, sqrt(dist));
+	color = vec4(rgb, max(alpha,mu));
+	float beta = smoothstep(outline_center-width, outline_center+width, dist);
+	rgb = mix(outline_color, color.rgb, beta);
+	gl_FragColor = vec4(rgb, max(color.a,beta));
+	*/
+}

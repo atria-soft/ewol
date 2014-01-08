@@ -21,6 +21,7 @@ void main(void) {
 	f_color = EW_color;
 }
 
+
 /*
 // Distance map contour texturing according to Green (2007),
 // implementation by Stefan Gustavson 2009.
