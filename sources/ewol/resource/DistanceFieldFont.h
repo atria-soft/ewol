@@ -86,7 +86,7 @@ namespace ewol {
 				 */
 				bool addGlyph(const char32_t& _val);
 				
-				void GenerateDistanceField(egami::ImageMono _input, egami::Image _output);
+				void GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
 		};
 	};
 };

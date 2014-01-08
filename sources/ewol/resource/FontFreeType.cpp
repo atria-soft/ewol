@@ -224,7 +224,8 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::Image& _imageOut,
 
 bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
                                              int32_t _fontSize,
-                                             ewol::GlyphProperty& _property) {
+                                             ewol::GlyphProperty& _property,
+                                             int32_t _borderSize) {
 	if(false == m_init) {
 		return false;
 	}
@@ -254,13 +255,13 @@ bool ewol::resource::FontFreeType::drawGlyph(egami::ImageMono& _imageOut,
 		return false;
 	}
 	// resize output image :
-	_imageOut.resize(ivec2(slot->bitmap.width, slot->bitmap.rows), 0);
+	_imageOut.resize(ivec2(slot->bitmap.width+2*_borderSize, slot->bitmap.rows+2*_borderSize), 0);
 	
 	for(int32_t jjj=0; jjj < slot->bitmap.rows;jjj++) {
 		for(int32_t iii=0; iii < slot->bitmap.width; iii++){
 			uint8_t valueColor = slot->bitmap.buffer[iii + slot->bitmap.width*jjj];
 			// real set of color
-			_imageOut.set(ivec2(iii, jjj), valueColor );
+			_imageOut.set(ivec2(_borderSize+iii, _borderSize+jjj), valueColor );
 		}
 	}
 	return true;

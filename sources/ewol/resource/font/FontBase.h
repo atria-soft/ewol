@@ -37,7 +37,8 @@ namespace ewol {
 				
 				virtual bool drawGlyph(egami::ImageMono& _imageOut,
 				                       int32_t _fontSize,
-				                       ewol::GlyphProperty& _property) = 0;
+				                       ewol::GlyphProperty& _property,
+				                       int32_t _borderSize = 0) = 0;
 				
 				virtual vec2 getSize(int32_t _fontSize, const std::string& _unicodeString) = 0;
 				

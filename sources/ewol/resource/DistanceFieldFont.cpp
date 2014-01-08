@@ -27,7 +27,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	m_font = NULL;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
-	m_size = 15;
+	m_size = 36;
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
@@ -95,7 +95,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	}
 	m_height = m_font->getHeight(m_size);
 	// TODO : basic font use 512 is better ...  == > maybe estimate it with the dpi ???
-	setImageSize(ivec2(512,32));
+	setImageSize(ivec2(256,32));
 	// now we can acces directly on the image
 	m_data.clear(etk::Color<>(0x00000000));
 	
@@ -112,22 +112,106 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont(void) {
 	ewol::resource::FontFreeType::release(m_font);
 }
 
+void ewol::resource::DistanceFieldFont::GenerateSoftDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	unsigned char *img = &_input[0];
+	unsigned int width = _input.getSize().x();
+	unsigned int height = _input.getSize().y();
+	std::vector<short> xdist;
+	std::vector<short> ydist;
+	std::vector<double> gx;
+	std::vector<double> gy;
+	std::vector<double> data;
+	std::vector<double> outside;
+	std::vector<double> inside;
+	xdist.resize(width*height, 0);
+	ydist.resize(width*height, 0);
+	gx.resize(width*height, 0.0);
+	gy.resize(width*height, 0.0);
+	data.resize(width*height, 0.0);
+	outside.resize(width*height, 0.0);
+	inside.resize(width*height, 0.0);
+	
+	// Convert img into double (data)
+	double img_min = 255, img_max = -255;
+	for(size_t iii = 0; iii < data.size(); ++iii) {
+		double v = img[iii];
+		data[iii] = v;
+		if (v > img_max) {
+			img_max = v;
+		}
+		if (v < img_min) {
+			img_min = v;
+		}
+	}
+	// Rescale image levels between 0 and 1
+	for(size_t iii = 0; iii < data.size(); ++iii) {
+		data[iii] = (img[iii]-img_min)/img_max;
+	}
+	
+	// Compute outside = edtaa3(bitmap); % Transform background (0's)
+	computegradient(&data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
+	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().y(), _input.getSize().x(), &xdist[0], &ydist[0], &outside[0]);
+	for(size_t iii = 0; iii < outside.size(); ++iii) {
+		if( outside[iii] < 0 ) {
+			outside[iii] = 0.0;
+		}
+	}
+	
+	// Compute inside = edtaa3(1-bitmap); % Transform foreground (1's)
+	for(size_t iii = 0; iii < gx.size(); ++iii) {
+		gx[iii] = 0;
+	}
+	for(size_t iii = 0; iii < gy.size(); ++iii) {
+		gy[iii] = 0;
+	}
+	for(size_t iii = 0; iii < data.size(); ++iii) {
+		data[iii] = 1 - data[iii];
+	}
+	computegradient( &data[0], _input.getSize().x(), _input.getSize().y(), &gx[0], &gy[0]);
+	edtaa3(&data[0], &gx[0], &gy[0], _input.getSize().y(), _input.getSize().x(), &xdist[0], &ydist[0], &inside[0]);
+	for(size_t iii = 0; iii < inside.size(); ++iii) {
+		if( inside[iii] < 0 ) {
+			inside[iii] = 0.0;
+		}
+	}
+	
+	_output.resize(_input.getSize(), etk::Color<>(0));
+	_output.clear(etk::Color<>(0));
+	for (int32_t xxx = 0; xxx < _output.getSize().x(); ++xxx) {
+		for (int32_t yyy = 0; yyy < _output.getSize().y(); ++yyy) {
+			int32_t iii = yyy * _output.getSize().x() + xxx;
+			outside[iii] -= inside[iii];
+			outside[iii] = 128+outside[iii]*16;
+			if( outside[iii] < 0 ) {
+				outside[iii] = 0;
+			}
+			if( outside[iii] > 255 ) {
+				outside[iii] = 255;
+			}
+			uint8_t val = 255 - (unsigned char) outside[iii];
+			// TODO : Remove multiple size of the map ...
+			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)val,(int32_t)val,(int32_t)val,256));
+		}
+	}
+}
+
 class GirdDF {
 	private:
 		std::vector<ivec2> m_data;
 		ivec2 m_size;
+		ivec2 m_error;
 	public:
-		GirdDF(const ivec2& _size, const ivec2& _base = ivec2(0,0)) {
+		GirdDF(const ivec2& _size, const ivec2& _base = ivec2(0,0), const ivec2& _error = ivec2(0,0)) {
 			m_size = _size;
 			m_data.resize(m_size.x()*m_size.y(), _base);
+			m_error = _error;
 		}
 		const ivec2& get(const ivec2& _pos) const {
-			static const ivec2 error(0, 0);
 			if(    _pos.x()>0 && _pos.x()<m_size.x()
 			    && _pos.y()>0 && _pos.y()<m_size.y()) {
 				return m_data[_pos.x()+_pos.y()*m_size.x()];
 			}
-			return error;
+			return m_error;
 		}
 		void set(const ivec2& _pos, const ivec2& _data) {
 			if(    _pos.x()>0 && _pos.x()<m_size.x()
@@ -178,9 +262,9 @@ class GirdDF {
 		}
 };
 
-void ewol::resource::DistanceFieldFont::GenerateDistanceField(egami::ImageMono _input, egami::Image _output) {
-	GirdDF myGird1(_input.getSize());
-	GirdDF myGird2(_input.getSize());
+void ewol::resource::DistanceFieldFont::GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+	GirdDF myGird1(_input.getSize(), ivec2(0,0), ivec2(0, 0));
+	GirdDF myGird2(_input.getSize(), ivec2(0,0), ivec2(9999, 9999));
 	
 	// Reformat gird :
 	for (int32_t xxx = 0; xxx < _input.getSize().x(); ++xxx) {
@@ -205,8 +289,8 @@ void ewol::resource::DistanceFieldFont::GenerateDistanceField(egami::ImageMono _
 			float dist1 = myGird1.get(ivec2(xxx, yyy)).length();
 			float dist2 = myGird2.get(ivec2(xxx, yyy)).length();
 			float dist = dist1 - dist2;
-			float value = etk_avg(0.0f, dist*3.0f + 128.0f, 256.0f);
-			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)value,(int32_t)value,(int32_t)value,255));
+			float value = etk_avg(0.0f, dist*15.0f + 128.0f, 256.0f);
+			_output.set(ivec2(xxx, yyy), etk::Color<>((int32_t)value,(int32_t)value,(int32_t)value,256));
 		}
 	}
 }
@@ -243,25 +327,33 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 			}
 		}
 		// draw the glyph
-		m_font->drawGlyph(imageGlyphRaw, m_size*10, tmpchar);
+		m_font->drawGlyph(imageGlyphRaw, m_size, tmpchar, 5);
 		
 		GenerateDistanceField(imageGlyphRaw, imageGlyphDistanceField);
+		if (_val == 'Z') {
+			for (int32_t yyy = 0; yyy < imageGlyphDistanceField.getSize().y(); ++yyy) {
+				for (int32_t xxx = 0; xxx < imageGlyphDistanceField.getSize().x(); ++xxx) {
+					std::cout << (int)(imageGlyphDistanceField.get(ivec2(xxx, yyy)).r()) << "	";
+				}
+				//std::cout << std::endl;
+			}
+		}
 		m_data.insert(m_lastGlyphPos, imageGlyphDistanceField);
 		
 		// set image position
 		tmpchar.m_texturePosStart.setValue( (float)m_lastGlyphPos.x() / (float)m_data.getSize().x(),
 		                                    (float)m_lastGlyphPos.y() / (float)m_data.getSize().y() );
-		tmpchar.m_texturePosSize.setValue(  (float)tmpchar.m_sizeTexture.x() / (float)m_data.getSize().x(),
-		                                    (float)tmpchar.m_sizeTexture.y() / (float)m_data.getSize().y() );
+		tmpchar.m_texturePosSize.setValue(  (float)imageGlyphRaw.getSize().x() / (float)m_data.getSize().x(),
+		                                    (float)imageGlyphRaw.getSize().y() / (float)m_data.getSize().y() );
 		
 		// update the maximum of the line hight : 
-		if (m_lastRawHeigh < tmpchar.m_sizeTexture.y()) {
+		if (m_lastRawHeigh < imageGlyphRaw.getSize().y()) {
 			// note : +1 is for the overlapping of the glyph (Part 2)
-			m_lastRawHeigh = tmpchar.m_sizeTexture.y()+1;
+			m_lastRawHeigh = imageGlyphRaw.getSize().y()+1;
 		}
 		// note : +1 is for the overlapping of the glyph (Part 3)
 		// update the Bitmap position drawing : 
-		m_lastGlyphPos += ivec2(tmpchar.m_sizeTexture.x()+1, 0);
+		m_lastGlyphPos += ivec2(imageGlyphRaw.getSize().x()+1, 0);
 	} else {
 		EWOL_WARNING("Did not find char : '" << _val << "'=" << _val);
 		tmpchar.setNotExist();

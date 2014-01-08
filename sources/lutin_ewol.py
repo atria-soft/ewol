@@ -160,9 +160,10 @@ def create(target):
 	myModule.copy_folder('../data/color3.*','')
 	myModule.copy_folder('../data/textured3D2.*','')
 	myModule.copy_folder('../data/textured3D.*','')
+	myModule.copy_folder('../data/fontDistanceField/*','fontDistanceField')
 	
 	# name of the dependency
-	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'date'])
+	myModule.add_module_depend(['etk', 'freetype', 'exml', 'ejson', 'egami', 'edtaa3', 'date'])
 	
 	myModule.add_export_path(tools.get_current_path(__file__))
 
