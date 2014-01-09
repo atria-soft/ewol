@@ -22,13 +22,15 @@
 #undef __class__
 #define __class__ "resource::DistanceFieldFont"
 
+#define SIZE_GENERATION (70)
+
 ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontName) :
   ewol::resource::Texture(_fontName) {
 	addObjectType("ewol::resource::DistanceFieldFont");
 	m_font = NULL;
 	m_lastGlyphPos.setValue(1,1);
 	m_lastRawHeigh = 0;
-	m_size = 70;
+	m_sizeRatio = 1.0f;
 	std::string localName = _fontName;
 	std::vector<std::string> folderList;
 	if (true == ewol::getContext().getFontDefault().getUseExternal()) {
@@ -79,14 +81,14 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	}
 	
 	if (m_fileName.size() == 0) {
-		EWOL_ERROR("can not load FONT name : '" << m_fileName << "' ==> size=" << m_size );
+		EWOL_ERROR("can not load FONT name : '" << m_fileName << "'" );
 		m_font = NULL;
 		return;
 	}
-	EWOL_INFO("Load FONT name : '" << m_fileName << "' ==> size=" << m_size);
+	EWOL_INFO("Load FONT name : '" << m_fileName << "'");
 	m_font = ewol::resource::FontFreeType::keep(m_fileName);
 	if (m_font == NULL) {
-		EWOL_ERROR("Pb Loading FONT name : '" << m_fileName << "' ==> size=" << m_size );
+		EWOL_ERROR("Pb Loading FONT name : '" << m_fileName << "'" );
 	}
 	
 	// set the bassic charset:
@@ -94,7 +96,7 @@ ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontNam
 	if (m_font == NULL) {
 		return;
 	}
-	m_height = m_font->getHeight(m_size);
+	m_sizeRatio = ((float)SIZE_GENERATION) / ((float)m_font->getHeight(SIZE_GENERATION));
 	// TODO : basic font use 512 is better ...  == > maybe estimate it with the dpi ???
 	setImageSize(ivec2(256,32));
 	// now we can acces directly on the image
@@ -204,7 +206,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	egami::Image imageGlyphDistanceField;
 	EWOL_DEBUG("Generate Glyph : " << _val);
 	
-	if (m_font->getGlyphProperty(m_size, tmpchar) == true) {
+	if (m_font->getGlyphProperty(SIZE_GENERATION, tmpchar) == true) {
 		//EWOL_DEBUG("load char : '" << _val << "'=" << _val.get());
 		hasChange = true;
 		// change line if needed ...
@@ -224,7 +226,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 			}
 		}
 		// draw the glyph
-		m_font->drawGlyph(imageGlyphRaw, m_size, tmpchar, 5);
+		m_font->drawGlyph(imageGlyphRaw, SIZE_GENERATION, tmpchar, 5);
 		
 		GenerateDistanceField(imageGlyphRaw, imageGlyphDistanceField);
 		if (_val == 'Z') {

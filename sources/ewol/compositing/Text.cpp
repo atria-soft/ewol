@@ -15,7 +15,7 @@
 #define __class__	"ewol::compositing::Text"
 
 
-ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
+ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize, bool _tmpInit) :
   m_position(0.0, 0.0, 0.0),
   m_clippingPosStart(0.0, 0.0, 0.0),
   m_clippingPosStop(0.0, 0.0, 0.0),
@@ -40,8 +40,10 @@ ewol::compositing::Text::Text(const std::string& _fontName, int32_t _fontSize) :
   m_selectionStartPos(-100),
   m_cursorPos(-100),
   m_font(NULL) {
-	setFont(_fontName, _fontSize);
-	loadProgram();
+	if (_tmpInit == true) {
+		setFont(_fontName, _fontSize);
+		loadProgram();
+	}
 }
 
 
@@ -50,10 +52,10 @@ ewol::compositing::Text::~Text(void) {
 	ewol::resource::Program::release(m_GLprogram);
 }
 
-void ewol::compositing::Text::loadProgram(void) {
+void ewol::compositing::Text::loadProgram(const std::string& _shaderName) {
 	// get the shader resource :
 	m_GLPosition = 0;
-	m_GLprogram = ewol::resource::Program::keep("DATA:text.prog");
+	m_GLprogram = ewol::resource::Program::keep(_shaderName);
 	if (m_GLprogram != NULL) {
 		m_GLPosition = m_GLprogram->getAttribute("EW_coord2d");
 		m_GLColor    = m_GLprogram->getAttribute("EW_color");
@@ -63,7 +65,7 @@ void ewol::compositing::Text::loadProgram(void) {
 	}
 }
 
-void ewol::compositing::Text::draw(const mat4& _transformationMatrix, bool _enableDepthTest) {
+void ewol::compositing::Text::drawMT(const mat4& _transformationMatrix, bool _enableDepthTest) {
 	
 	// draw BG in any case:
 	m_vectorialDraw.draw();
@@ -106,8 +108,7 @@ void ewol::compositing::Text::draw(const mat4& _transformationMatrix, bool _enab
 	}
 }
 
-
-void ewol::compositing::Text::draw(bool _disableDepthTest) {
+void ewol::compositing::Text::drawD(bool _disableDepthTest) {
 	// draw BG in any case:
 	m_vectorialDraw.draw();
 	
@@ -140,6 +141,29 @@ void ewol::compositing::Text::draw(bool _disableDepthTest) {
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();
 }
+
+float ewol::compositing::Text::getSize(void) {
+	if (m_font == NULL) {
+		EWOL_WARNING("no font...");
+		return 1.0f;
+	}
+	return m_font->getFontSize();
+}
+float ewol::compositing::Text::getHeight(void) {
+	if (m_font == NULL) {
+		EWOL_WARNING("no font...");
+		return 10.0f;
+	}
+	return m_font->getHeight(m_mode);
+}
+ewol::GlyphProperty * ewol::compositing::Text::getGlyphPointer(char32_t _charcode) {
+	if (m_font == NULL) {
+		EWOL_WARNING("no font...");
+		return NULL;
+	}
+	return m_font->getGlyphPointer(_charcode, m_mode);
+}
+
 
 void ewol::compositing::Text::translate(const vec3& _vect) {
 	ewol::Compositing::translate(_vect);
@@ -210,7 +234,7 @@ void ewol::compositing::Text::setPos(const vec3& _pos) {
 	if (m_nbCharDisplayed == 0) {
 		m_sizeDisplayStart = m_position;
 		m_sizeDisplayStop = m_position;
-		m_sizeDisplayStop.setY( m_sizeDisplayStop.y()+ m_font->getHeight(m_mode));
+		m_sizeDisplayStop.setY( m_sizeDisplayStop.y()+ getHeight());
 		EWOL_VERBOSE("update size 0 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
 	} else {
 		EWOL_VERBOSE("update size 3 " << m_sizeDisplayStart << " " << m_sizeDisplayStop);
@@ -313,10 +337,6 @@ void ewol::compositing::Text::setFontMode(enum ewol::font::mode _mode) {
 	if (m_font != NULL) {
 		m_mode = m_font->getWrappingMode(_mode);
 	}
-}
-
-enum ewol::font::mode ewol::compositing::Text::getFontMode(void) {
-	return m_mode;
 }
 
 void ewol::compositing::Text::setFontBold(bool _status) {
@@ -543,10 +563,6 @@ void ewol::compositing::Text::printHTML(const std::u32string& _text) {
 }
 
 void ewol::compositing::Text::print(const std::string& _text, const std::vector<TextDecoration>& _decoration) {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return;
-	}
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
@@ -585,7 +601,7 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 				vec3 pos = m_position;
 				m_vectorialDraw.setPos(pos);
 				print(_text[iii]);
-				float fontHeigh = m_font->getHeight(m_mode);
+				float fontHeigh = getHeight();
 				m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
@@ -651,7 +667,7 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 				printCursor(false);
 			}
 			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
-				float fontHeigh = m_font->getHeight(m_mode);
+				float fontHeigh = getHeight();
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
 					tmpFg = _decoration[iii].m_colorFg;
@@ -713,14 +729,14 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
-				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else if((char32_t)_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
-				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else {
@@ -732,10 +748,6 @@ void ewol::compositing::Text::print(const std::string& _text, const std::vector<
 }
 
 void ewol::compositing::Text::print(const std::u32string& _text, const std::vector<TextDecoration>& _decoration) {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return;
-	}
 	etk::Color<> tmpFg(m_color);
 	etk::Color<> tmpBg(m_colorBg);
 	if (m_alignement == alignDisable) {
@@ -774,7 +786,7 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 				vec3 pos = m_position;
 				m_vectorialDraw.setPos(pos);
 				print(_text[iii]);
-				float fontHeigh = m_font->getHeight(m_mode);
+				float fontHeigh = getHeight();
 				m_vectorialDraw.rectangleWidth(vec3(m_position.x()-pos.x(),fontHeigh,0.0f) );
 				m_nbCharDisplayed++;
 			} else {
@@ -840,7 +852,7 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 				printCursor(false);
 			}
 			for(size_t iii=currentId; (int64_t)iii<stop && iii<_text.size(); iii++) {
-				float fontHeigh = m_font->getHeight(m_mode);
+				float fontHeigh = getHeight();
 				// get specific decoration if provided
 				if (iii<_decoration.size()) {
 					tmpFg = _decoration[iii].m_colorFg;
@@ -902,14 +914,14 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
-				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else if(_text[stop] == u32char::Return) {
 				currentId = stop+1;
 				// reset position :
 				setPos(vec3(m_startTextpos,
-				            (float)(m_position.y() - m_font->getHeight(m_mode)),
+				            (float)(m_position.y() - getHeight()),
 				            m_position.z()) );
 				m_nbCharDisplayed++;
 			} else {
@@ -922,18 +934,14 @@ void ewol::compositing::Text::print(const std::u32string& _text, const std::vect
 
 
 void ewol::compositing::Text::print(const char32_t& _charcode) {
-	if (NULL == m_font) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return;
-	}
 	// get a pointer on the glyph property : 
-	ewol::GlyphProperty* myGlyph = m_font->getGlyphPointer(_charcode, m_mode);
+	ewol::GlyphProperty* myGlyph = getGlyphPointer(_charcode);
 	if (NULL == myGlyph) {
 		EWOL_ERROR(" font does not really existed ...");
 		return;
 	}
-	int32_t fontSize = m_font->getFontSize();
-	int32_t fontHeigh = m_font->getHeight(m_mode);
+	int32_t fontSize = getSize();
+	int32_t fontHeigh = getHeight();
 	
 	// get the kerning ofset :
 	float kerningOffset = 0;
@@ -1094,7 +1102,7 @@ void ewol::compositing::Text::print(const char32_t& _charcode) {
 
 void ewol::compositing::Text::forceLineReturn(void) {
 	// reset position : 
-	setPos(vec3(m_startTextpos, m_position.y() - m_font->getHeight(m_mode), 0) );
+	setPos(vec3(m_startTextpos, m_position.y() - getHeight(), 0) );
 }
 
 void ewol::compositing::Text::setTextAlignement(float _startTextpos, float _stopTextPos, enum ewol::compositing::Text::aligneMode _alignement) {
@@ -1199,10 +1207,6 @@ vec3 ewol::compositing::Text::calculateSizeDecorated(const std::u32string& _text
 }
 
 vec3 ewol::compositing::Text::calculateSize(const std::string& _text) {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return vec3(0,0,0);
-	}
 	vec3 outputSize(0, 0, 0);
 	for(auto element : _text) {
 		vec3 tmpp = calculateSize(element);
@@ -1215,10 +1219,6 @@ vec3 ewol::compositing::Text::calculateSize(const std::string& _text) {
 }
 
 vec3 ewol::compositing::Text::calculateSize(const std::u32string& _text) {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return vec3(0,0,0);
-	}
 	vec3 outputSize(0, 0, 0);
 	for(auto element : _text) {
 		vec3 tmpp = calculateSize(element);
@@ -1231,13 +1231,9 @@ vec3 ewol::compositing::Text::calculateSize(const std::u32string& _text) {
 }
 
 vec3 ewol::compositing::Text::calculateSize(const char32_t& _charcode) {
-	if (m_font == NULL) {
-		EWOL_ERROR("Font Id is not corectly defined");
-		return vec3(0,0,0);
-	}
 	// get a pointer on the glyph property : 
-	ewol::GlyphProperty * myGlyph = m_font->getGlyphPointer(_charcode, m_mode);
-	int32_t fontHeigh = m_font->getHeight(m_mode);
+	ewol::GlyphProperty * myGlyph = getGlyphPointer(_charcode);
+	int32_t fontHeigh = getHeight();
 	
 	// get the kerning ofset :
 	float kerningOffset = 0.0;
@@ -1254,7 +1250,7 @@ vec3 ewol::compositing::Text::calculateSize(const char32_t& _charcode) {
 }
 
 void ewol::compositing::Text::printCursor(bool _isInsertMode, float _cursorSize) {
-	int32_t fontHeigh = m_font->getHeight(m_mode);
+	int32_t fontHeigh = getHeight();
 	if (true == _isInsertMode) {
 		m_vectorialDraw.rectangleWidth(vec3(_cursorSize, fontHeigh, 0) );
 	} else {

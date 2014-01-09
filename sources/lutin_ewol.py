@@ -29,6 +29,7 @@ def create(target):
 	myModule.add_src_file([
 		'ewol/compositing/Compositing.cpp',
 		'ewol/compositing/Text.cpp',
+		'ewol/compositing/TextDF.cpp',
 		'ewol/compositing/Drawing.cpp',
 		'ewol/compositing/Image.cpp',
 		'ewol/compositing/Sprite.cpp',

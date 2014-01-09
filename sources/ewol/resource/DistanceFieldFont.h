@@ -19,8 +19,7 @@ namespace ewol {
 		class DistanceFieldFont : public ewol::resource::Texture {
 			private:
 				std::string m_fileName;
-				int32_t m_size;
-				int32_t m_height;
+				float m_sizeRatio;
 				// specific element to have the the know if the specify element is known...
 				//  == > otherwise I can just generate italic ...
 				//  == > Bold is a little more complicated (maybe with the bordersize)
@@ -37,22 +36,12 @@ namespace ewol {
 			public:
 				/**
 				 * @brief get the display height of this font
-				 * @param[in] _displayMode Mode to display the currrent font
+				 * @param[in] _size Request font size
 				 * @return Dimention of the font need between 2 lines
 				 */
-				// TODO : Might be deprecated ... ==> no size for this font ...
-				int32_t getHeight(const enum ewol::font::mode _displayMode = ewol::font::Regular) {
-					return m_height;
+				float getHeight(float _size) {
+					return _size * m_sizeRatio;;
 				};
-				/**
-				 * @brief get the font height (user friendly)
-				 * @return Dimention of the font the user requested
-				 */
-				// TODO : Might be deprecated ... ==> no size for this font ...
-				int32_t getFontSize(void) {
-					return m_size;
-				};
-				// TODO : Need to convert a text size in a real size and this oposite ...
 				/**
 				 * @brief get the ID of a unicode charcode
 				 * @param[in] _charcode The unicodeValue
