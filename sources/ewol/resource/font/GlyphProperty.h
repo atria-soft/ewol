@@ -60,8 +60,8 @@ namespace ewol {
 			ivec2 m_sizeTexture; //!< size of the element to display
 			ivec2 m_bearing; //!< offset to display the data (can be negatif id the texture sise is bigger than the theoric places in the string)
 			ivec2 m_advance; //!< space use in the display for this specific char
-			vec2 m_texturePosStart; //!< Texture normalised position (START)
-			vec2 m_texturePosSize; //!< Texture normalised position (SIZE)
+			vec2 m_texturePosStart; //!< Texture normalized position (START)
+			vec2 m_texturePosSize; //!< Texture normalized position (SIZE)
 		private:
 			std::vector<ewol::Kerning> m_kerning; //!< kerning values of link of all elements
 		public:
@@ -84,23 +84,25 @@ namespace ewol {
 				}
 				return 0;
 			};
-			void kerningAdd(const char32_t _charcode, float _value)
-			{
+			void kerningAdd(const char32_t _charcode, float _value) {
 				m_kerning.push_back(ewol::Kerning(_charcode, _value));
 			};
-			void kerningClear(void)
-			{
+			void kerningClear(void) {
 				m_kerning.clear();
 			};
 			/**
 			 * @brief get the status of the char, if it exist or not in the FONT
 			 * @return true if the char is availlable, false otherwise
 			 */
-			bool exist(void) const { return m_exist; };
+			bool exist(void) const {
+				return m_exist;
+			};
 			/**
 			 * @brief set the element doen not exist !!!
 			 */
-			void setNotExist(void) { m_exist = false; };
+			void setNotExist(void) {
+				m_exist = false;
+			};
 	};
 };
 

@@ -123,7 +123,7 @@ void ewol::widget::ButtonColor::onRegenerateDisplay(void) {
 	}
 	m_text.setPos(tmpTextOrigin);
 	m_text.setColorBg(m_textColorFg);
-	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignCenter);
+	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignCenter);
 	m_text.print(label);
 	
 	

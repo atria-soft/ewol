@@ -16,6 +16,7 @@
 #include <ewol/resource/Resource.h>
 #include <ewol/resource/Shader.h>
 #include <ewol/resource/VirtualBufferObject.h>
+#include <etk/Color.h>
 
 namespace ewol {
 	namespace resource {
@@ -80,7 +81,7 @@ namespace ewol {
 				 */
 				void sendAttribute(int32_t _idElem,
 				                   int32_t _nbElement,
-				                   void* _pointer,
+				                   const void* _pointer,
 				                   int32_t _jumpBetweenSample=0);
 				void sendAttributePointer(int32_t _idElem,
 				                          int32_t _nbElement,
@@ -88,6 +89,15 @@ namespace ewol {
 				                          int32_t _index,
 				                          int32_t _jumpBetweenSample=0,
 				                          int32_t _offset=0);
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec2 >& _data) {
+					sendAttribute(_idElem, 2/*u,v / x,y*/, &_data[0]);
+				}
+				inline void sendAttribute(int32_t _idElem, const std::vector<vec3 >& _data) {
+					sendAttribute(_idElem, 3/*x,y,z,unused*/, &_data[0], 4*sizeof(btScalar));
+				}
+				inline void sendAttribute(int32_t _idElem, const std::vector<etk::Color<float> >& _data) {
+					sendAttribute(_idElem, 4/*r,g,b,a*/, &_data[0]);
+				}
 				/**
 				 * @brief User request an Uniform on this program.
 				 * @note uniform value is availlable for all the fragment shader in the program (only one value for all)

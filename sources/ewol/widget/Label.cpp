@@ -39,7 +39,7 @@ void ewol::widget::Label::calculateMinMaxSize(void) {
 	vec2 tmpMin = m_userMinSize.getPixel();
 	//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "} tmpMax : " << tmpMax);
 	if (tmpMax.x() <= 999999) {
-		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::Text::alignLeft);
+		m_text.setTextAlignement(0, tmpMax.x()-4, ewol::compositing::alignLeft);
 		//EWOL_DEBUG("[" << getId() << "] {" << getObjectType() << "}     forcez Alignement ");
 	}
 	vec3 minSize = m_text.calculateSizeDecorated(m_label);
@@ -78,7 +78,7 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	minSize.setX(etk_max(minSize.x(), m_minSize.x()));
 	minSize.setY(etk_max(minSize.y(), m_minSize.y()));
 	if (tmpMax.x() <= 999999) {
-		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::Text::alignLeft);
+		m_text.setTextAlignement(0, tmpMax.x()-2*paddingSize, ewol::compositing::alignLeft);
 	}
 	vec3 curentTextSize = m_text.calculateSizeDecorated(m_label);
 	
@@ -113,7 +113,7 @@ void ewol::widget::Label::onRegenerateDisplay(void) {
 	m_text.reset();
 	m_text.setPos(tmpTextOrigin);
 	EWOL_VERBOSE("[" << getId() << "] {" << m_label << "} display at pos : " << tmpTextOrigin);
-	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::Text::alignLeft);
+	m_text.setTextAlignement(tmpTextOrigin.x(), tmpTextOrigin.x()+localSize.x(), ewol::compositing::alignLeft);
 	m_text.setClipping(drawClippingPos, drawClippingSize);
 	m_text.printDecorated(m_label);
 }

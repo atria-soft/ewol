@@ -34,6 +34,7 @@ namespace ewol {
 				DistanceFieldFont(const std::string& _fontName);
 				~DistanceFieldFont(void);
 			public:
+				float getDisplayRatio(float _size);
 				/**
 				 * @brief get the display height of this font
 				 * @param[in] _size Request font size
@@ -75,7 +76,17 @@ namespace ewol {
 				 */
 				bool addGlyph(const char32_t& _val);
 				
-				void GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
+				void generateDistanceField(const egami::ImageMono& _input, egami::Image& _output);
+			private:
+				float m_borderSize; //!< number of pixel added on the border of a glyph
+				vec2 m_textureBorderSize; //!< Transformed the border size in the texture dimention
+			public:
+				float getPixelBorderSize(void) {
+					return m_borderSize;
+				}
+				const vec2& getTextureBorderSize(void) {
+					return m_textureBorderSize;
+				}
 		};
 	};
 };

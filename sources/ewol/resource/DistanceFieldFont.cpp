@@ -25,7 +25,9 @@
 #define SIZE_GENERATION (70)
 
 ewol::resource::DistanceFieldFont::DistanceFieldFont(const std::string& _fontName) :
-  ewol::resource::Texture(_fontName) {
+  ewol::resource::Texture(_fontName),
+  m_borderSize(10),
+  m_textureBorderSize(0,0) {
 	addObjectType("ewol::resource::DistanceFieldFont");
 	m_font = NULL;
 	m_lastGlyphPos.setValue(1,1);
@@ -115,7 +117,13 @@ ewol::resource::DistanceFieldFont::~DistanceFieldFont(void) {
 	ewol::resource::FontFreeType::release(m_font);
 }
 
-void ewol::resource::DistanceFieldFont::GenerateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
+
+float ewol::resource::DistanceFieldFont::getDisplayRatio(float _size) {
+	return _size / (float)SIZE_GENERATION;
+}
+
+
+void ewol::resource::DistanceFieldFont::generateDistanceField(const egami::ImageMono& _input, egami::Image& _output) {
 	int32_t size = _input.getSize().x() * _input.getSize().y();
 	std::vector<short> xdist(size);
 	std::vector<short> ydist(size);
@@ -225,10 +233,13 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 				m_listElement[jjj].m_texturePosSize *= vec2(1.0f, 0.5f);
 			}
 		}
+		m_textureBorderSize = vec2(m_borderSize/(float)m_data.getSize().x(),
+		                           m_borderSize/(float)m_data.getSize().y() );
 		// draw the glyph
-		m_font->drawGlyph(imageGlyphRaw, SIZE_GENERATION, tmpchar, 5);
+		m_font->drawGlyph(imageGlyphRaw, SIZE_GENERATION, tmpchar, m_borderSize);
 		
-		GenerateDistanceField(imageGlyphRaw, imageGlyphDistanceField);
+		generateDistanceField(imageGlyphRaw, imageGlyphDistanceField);
+		/*
 		if (_val == 'Z') {
 			for (int32_t yyy = 0; yyy < imageGlyphDistanceField.getSize().y(); ++yyy) {
 				for (int32_t xxx = 0; xxx < imageGlyphDistanceField.getSize().x(); ++xxx) {
@@ -237,13 +248,14 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 				//std::cout << std::endl;
 			}
 		}
+		*/
 		m_data.insert(m_lastGlyphPos, imageGlyphDistanceField);
 		
 		// set image position
-		tmpchar.m_texturePosStart.setValue( (float)m_lastGlyphPos.x() / (float)m_data.getSize().x(),
-		                                    (float)m_lastGlyphPos.y() / (float)m_data.getSize().y() );
-		tmpchar.m_texturePosSize.setValue(  (float)imageGlyphRaw.getSize().x() / (float)m_data.getSize().x(),
-		                                    (float)imageGlyphRaw.getSize().y() / (float)m_data.getSize().y() );
+		tmpchar.m_texturePosStart.setValue( ((float)m_lastGlyphPos.x()+(m_borderSize*0.5f)) / (float)m_data.getSize().x(),
+		                                    ((float)m_lastGlyphPos.y()+(m_borderSize*0.5f)) / (float)m_data.getSize().y() );
+		tmpchar.m_texturePosSize.setValue(  ((float)imageGlyphRaw.getSize().x()-m_borderSize) / (float)m_data.getSize().x(),
+		                                    ((float)imageGlyphRaw.getSize().y()-m_borderSize) / (float)m_data.getSize().y() );
 		
 		// update the maximum of the line hight : 
 		if (m_lastRawHeigh < imageGlyphRaw.getSize().y()) {
@@ -266,7 +278,7 @@ bool ewol::resource::DistanceFieldFont::addGlyph(const char32_t& _val) {
 	}
 	if (hasChange == true) {
 		flush();
-		//egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
+		egami::store(m_data, "fileFont.bmp"); // ==> for debug test only ...
 	}
 	return hasChange;
 }

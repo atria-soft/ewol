@@ -308,9 +308,9 @@ void ewol::compositing::Drawing::draw(bool _disableDepthTest) {
 	m_GLprogram->use();
 	m_GLprogram->uniformMatrix4fv(m_GLMatrix, 1, tmpMatrix.m_mat);
 	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4*sizeof(btScalar));
+	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// color :
-	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();

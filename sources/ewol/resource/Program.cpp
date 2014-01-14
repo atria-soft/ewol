@@ -305,7 +305,7 @@ void ewol::resource::Program::reload(void) {
 
 void ewol::resource::Program::sendAttribute(int32_t _idElem,
                                             int32_t _nbElement,
-                                            void* _pointer,
+                                            const void* _pointer,
                                             int32_t _jumpBetweenSample) {
 	if (0 == m_program) {
 		return;

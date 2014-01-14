@@ -73,11 +73,11 @@ void ewol::compositing::Image::draw(bool _disableDepthTest) {
 	// TextureID
 	m_GLprogram->setTexture0(m_GLtexID, m_resource->getId());
 	// position :
-	m_GLprogram->sendAttribute(m_GLPosition, 3/*x,y,z,unused*/, &m_coord[0], 4*sizeof(btScalar));
+	m_GLprogram->sendAttribute(m_GLPosition, m_coord);
 	// Texture :
-	m_GLprogram->sendAttribute(m_GLtexture, 2/*u,v*/, &m_coordTex[0]);
+	m_GLprogram->sendAttribute(m_GLtexture, m_coordTex);
 	// color :
-	m_GLprogram->sendAttribute(m_GLColor, 4/*r,g,b,a*/, &m_coordColor[0]);
+	m_GLprogram->sendAttribute(m_GLColor, m_coordColor);
 	// Request the draw od the elements : 
 	ewol::openGL::drawArrays(GL_TRIANGLES, 0, m_coord.size());
 	m_GLprogram->unUse();

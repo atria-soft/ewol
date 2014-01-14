@@ -12,15 +12,15 @@ uniform int       EW_SoftEdge;
 varying vec2 f_texcoord;
 varying vec4 f_color;
 
-       vec3 glyph_color    = vec3(1.0,1.0,1.0);
 const float glyph_center   = 0.50;
-       vec3 outline_color  = vec3(0.0,0.0,0.0);
 const float outline_center = 0.55;
-       vec3 glow_color     = vec3(1.0,1.0,1.0);
 const float glow_center    = 1.25;
 
+vec3 glyph_color    = vec3(1.0,1.0,1.0);
+vec3 outline_color  = vec3(0.0,0.0,0.0);
+vec3 glow_color     = vec3(0.0,1.0,0.0);
+
 void main(void) {
-	//vec4 color = texture2D(EW_texID, vec2(int(f_texcoord[0]*256.0)/256.0,int(f_texcoord[1]*256.0)/256.0) );
 	vec4 color = texture2D(EW_texID, f_texcoord );
 	float dist  = color.r;
 	float width = fwidth(dist);
@@ -28,7 +28,7 @@ void main(void) {
 	
 	// Smooth
 	
-	gl_FragColor = vec4(glyph_color, alpha);
+	gl_FragColor = vec4(f_color[0], f_color[1], f_color[2], f_color[3]*alpha);
 	
 	// Outline
 	/*

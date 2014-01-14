@@ -15,13 +15,13 @@
 #include <ewol/compositing/Compositing.h>
 #include <ewol/compositing/Drawing.h>
 #include <ewol/resource/DistanceFieldFont.h>
-#include <ewol/compositing/Text.h>
+#include <ewol/compositing/TextBase.h>
 #include <exml/exml.h>
 #include <string>
 
 namespace ewol {
 	namespace compositing {
-		class TextDF : public ewol::compositing::Text {
+		class TextDF : public ewol::compositing::TextBase {
 			protected:
 				ewol::resource::DistanceFieldFont* m_fontDF; //!< Font resources
 			public:
@@ -37,9 +37,6 @@ namespace ewol {
 				virtual ~TextDF(void);
 			public:
 				virtual void drawD(bool _disableDepthTest);
-				/**
-				 * @previous
-				 */
 				virtual void drawMT(const mat4& _transformationMatrix, bool _enableDepthTest);
 			protected:
 				float m_size;
@@ -55,6 +52,7 @@ namespace ewol {
 				virtual void setFontName(const std::string& _fontName);
 				virtual void setFont(std::string _fontName, int32_t _fontSize);
 				virtual void setFontMode(enum ewol::font::mode _mode);
+				virtual void printChar(const char32_t& _charcode);
 		};
 	};
 };
