@@ -59,6 +59,13 @@ def create(target):
 			'ewol/context/MacOs/Windows.mm',
 			'ewol/context/MacOs/OpenglView.mm',
 			'ewol/context/MacOs/AppDelegate.mm'])
+	elif target.name=="IOs":
+		myModule.add_src_file([
+			'ewol/context/MacOs/Context.cpp',
+			'ewol/context/MacOs/Interface.mm',
+			'ewol/context/MacOs/Windows.mm',
+			'ewol/context/MacOs/OpenglView.mm',
+			'ewol/context/MacOs/AppDelegate.mm'])
 	else:
 		debug.error("unknow mode...")
 	
